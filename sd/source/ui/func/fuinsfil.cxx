@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-11 17:11:29 $
+ *  last change: $Author: ka $ $Date: 2001-02-21 13:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,43 +177,39 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
 
     if (!pArgs)
     {
-        SfxFileDialog aFileDialog( pWin, SFXWB_INSERT | WB_3DLOOK | WB_STDMODAL );
-
-        SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+        SfxFileDialog       aFileDialog( pWin, SFXWB_INSERT | WB_3DLOOK | WB_STDMODAL );
+        SfxFilterMatcher&   rMatcher = SFX_APP()->GetFilterMatcher();
         SfxFilterContainer* pCont = NULL;
         SfxFilterContainer* pSecondCont = NULL;
-        const SfxFilter* pFilter = NULL;
+        String              aExt;
+        const SfxFilter*    pFilter = NULL;
+
+        aFileDialog.SetText( String( SdResId(STR_DLG_INSERT_PAGES_FROM_FILE ) ) );
 
         if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
-        {
             pCont = rMatcher.GetContainer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "simpress" ) ) );
-        }
         else
-        {
             pCont = rMatcher.GetContainer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sdraw" ) ) );
-        }
 
+        // Get filter for current format
         pFilter = pCont->GetFilter( 0 );
         if( pFilter )
         {
-            // Get filter for current format
             aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
             aFileDialog.SetCurFilter( pFilter->GetUIName() ); // set default-filter
         }
 
         // Get Draw filter for Impress and Impress filter for Draw as secondary
-        String aExt( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".sxi" ) ) );
         if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
             aExt = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".sxd" ) );
+        else
+            aExt = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".sxi" ) );
 
         pFilter = pCont->GetFilter4Extension( aExt );
         if( pFilter )
             aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
         // Get other filters
-        pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_60 );
-        if( pFilter )
-            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
         pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50 );
         if( pFilter )
             aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
@@ -221,9 +217,6 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
         if( pFilter )
             aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-        pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_60 );
-        if( pFilter )
-            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
         pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50 );
         if( pFilter )
             aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
@@ -245,44 +238,21 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
         if( pFilter )
             aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-        aFileDialog.SetText(String(SdResId(STR_DLG_INSERT_PAGES_FROM_FILE)));
+        aFileDialog.AddFilter( aPlainTextSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.txt" ) ) );
+        aFileDialog.AddFilter( aRTFSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.rtf" ) ));
+        aFileDialog.AddFilter( aHTMLSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.htm;*.html" ) ));
+        aFileDialog.AddFilter( aAllSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
 
-#ifdef MAC
-        aFileDialog.AddFilter( aPlainTextSpec,
-                               UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.TXT" ) ),
-                               UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "TEXT0" ) ) );
-        aFileDialog.AddFilter( aRTFSpec,
-                               UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.RTF" ) ),
-                               UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "RTF 0" ) ) );
-
-        // kein MAC-Dateityp, sonst werden *alle* TEXT-Dateien angezeigt
-        aFileDialog.AddFilter( aHTMLSpec,
-                               UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.htm;*.html" ) ) );
-
-        aFileDialog.AddFilter( aAllSpec,
-                               UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*" ) ) );
-#else
-        aFileDialog.AddFilter( aPlainTextSpec,
-                               UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.txt" ) ) );
-        aFileDialog.AddFilter( aRTFSpec,
-                               UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.rtf" ) ));
-        aFileDialog.AddFilter( aHTMLSpec,
-                               UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.htm;*.html" ) ));
-        aFileDialog.AddFilter( aAllSpec,
-                               UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
-#endif
-
-        aFileDialog.SetText(String(SdResId(STR_DLG_INSERT_PAGES_FROM_FILE)));
-
-        if (!aFileDialog.Execute ()) return;
+        if( !aFileDialog.Execute () )
+            return;
         else
         {
             aFilterName = aFileDialog.GetCurFilter();
-            aFile       = aFileDialog.GetPath();
-            INetURLObject::SetBaseURL(aFile);
-            aFile       = ::URIHelper::SmartRelToAbs( aFile, FALSE,
-                                                      INetURLObject::WAS_ENCODED,
-                                                      INetURLObject::DECODE_UNAMBIGUOUS );
+            aFile = aFileDialog.GetPath();
+            INetURLObject::SetBaseURL( aFile );
+            aFile = ::URIHelper::SmartRelToAbs( aFile, FALSE,
+                                                INetURLObject::WAS_ENCODED,
+                                                INetURLObject::DECODE_UNAMBIGUOUS );
         }
     }
     else
@@ -291,62 +261,51 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
         SFX_REQUEST_ARG (rReq, pFilterName, SfxStringItem, ID_VAL_DUMMY1, FALSE);
 
         aFile = pFileName->GetValue ();
-        if (pFilterName)
+
+        if( pFilterName )
             aFilterName = pFilterName->GetValue ();
         else
-        {
-
             aFilterName = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.sdd" ) );
-        }
     }
-
-    BOOL bDrawMode  = pViewSh->ISA(SdDrawViewShell);
 
     pDocSh->SetWaitCursor( TRUE );
 
-    // Das Medium muss ggf. mit READ/WRITE geoeffnet werden, daher wird
-    // ersteinmal nachgeschaut, ob es einen Storage enthaelt
+    // Das Medium muss ggf. mit READ/WRITE geoeffnet werden, daher wird ersteinmal nachgeschaut, ob es einen Storage enthaelt
+    SfxMedium*          pMedium = new SfxMedium( aFile, STREAM_READ | STREAM_NOCREATE, FALSE );
+    const SfxFilter*    pFilter = NULL;
+    ErrCode             nErr = SFX_APP()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
+    BOOL                bDrawMode = pViewSh->ISA(SdDrawViewShell);
 
-    SfxMedium* pMedium = new SfxMedium( aFile,
-                                        STREAM_READ | STREAM_NOCREATE,
-                                        FALSE);
+    if( pFilter )
+        pMedium->SetFilter( pFilter );
 
-    const SfxFilter* pFilter = NULL;
-    ErrCode nErr = SFX_APP()->GetFilterMatcher().
-                              GuessFilter(*pMedium, &pFilter, SFX_FILTER_IMPORT,
-                                          SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
-    if(pFilter)
-        pMedium->SetFilter(pFilter);
-
-    if (pMedium->IsStorage())
+    if( pMedium->IsStorage() )
     {
         // Storage
         SvStorage* pStorage = pMedium->GetStorage();
 
-        // Erkennung ueber contained streams (StarDraw 3.0)
         if( pStorage &&
-          ( ( pStorage->IsContained(pStarDrawDoc)  &&
-              pStorage->IsStream(pStarDrawDoc) )         ||
-            ( pStorage->IsContained(pStarDrawDoc3) &&
-              pStorage->IsStream(pStarDrawDoc3) ) ) )
+            ( pStorage->IsContained( pStarDrawDoc )  && pStorage->IsStream( pStarDrawDoc ) ) ||
+            ( pStorage->IsContained( pStarDrawDoc3 ) && pStorage->IsStream( pStarDrawDoc3 ) ) ||
+            ( pStorage->IsContained( pStarDrawXMLContent ) && pStorage->IsStream( pStarDrawXMLContent) ) )
         {
             pMedium->Close();
 
-            if (bDrawMode)
-                InsSDDinDrMode(pMedium);
+            if( bDrawMode )
+                InsSDDinDrMode( pMedium );
             else
-                InsSDDinOlMode(pMedium);
+                InsSDDinOlMode( pMedium );
         }
         else
         {
-            ErrorBox aErrorBox( pWindow, (WinBits)WB_OK,
-                      String(SdResId(STR_READ_DATA_ERROR)));
+            ErrorBox aErrorBox( pWindow, WB_OK, String(SdResId(STR_READ_DATA_ERROR)));
             aErrorBox.Execute();
         }
     }
-    else    // kein Storage-Format
+    else
     {
-        if (pFilter /* && !nErr */)
+        // no storage
+        if( pFilter )
         {
             aFilterName = pFilter->GetFilterName();
 
@@ -368,7 +327,6 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
     }
 
     delete pMedium;
-
     pDocSh->SetWaitCursor( FALSE );
 }
 
@@ -640,8 +598,8 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                     {
                         Paragraph* pPara = pOutliner->GetParagraph( 0 );
                         ULONG nLen = pOutliner->GetText( pPara, 1 ).Len();
-                        pOutliner->QuickDelete( ESelection( 0, nLen, 1, 0 ) );
-                        pOutliner->QuickInsertLineBreak( ESelection( 0, nLen, 0, nLen ) );
+                        pOutliner->QuickDelete( ESelection( 0, (USHORT) nLen, 1, 0 ) );
+                        pOutliner->QuickInsertLineBreak( ESelection( 0, (USHORT) nLen, 0, (USHORT) nLen ) );
                     }
                 }
             }
@@ -713,7 +671,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     Paragraph*     pPara     = (Paragraph*)pList->First();
 
     // wo soll eingefuegt werden?
-    while ( pDocliner->GetDepth( pDocliner->GetAbsPos( pPara ) ) != 0)
+    while ( pDocliner->GetDepth( (USHORT) pDocliner->GetAbsPos( pPara ) ) != 0)
     {
         pPara = pDocliner->GetParent(pPara);
     }
@@ -725,7 +683,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     while (pPara)
     {
         ULONG nPos = pDocliner->GetAbsPos( pPara );
-        if ( pDocliner->GetDepth( nPos ) == 0 )
+        if ( pDocliner->GetDepth( (USHORT) nPos ) == 0 )
             nPage++;
         pPara = pDocliner->GetParagraph( nPos - 1 );
     }
@@ -769,7 +727,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         while (pPara)
         {
             ULONG nPos = pOutliner->GetAbsPos( pPara );
-            if( pOutliner->GetDepth( nPos ) == 0 )
+            if( pOutliner->GetDepth( (USHORT) nPos ) == 0 )
                 nNewPages++;
             pPara = pOutliner->GetParagraph( ++nPos );
         }
@@ -791,7 +749,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         while (pSourcePara)
         {
             ULONG nPos = pOutliner->GetAbsPos( pSourcePara );
-            USHORT nDepth = pOutliner->GetDepth( nPos );
+            USHORT nDepth = pOutliner->GetDepth( (USHORT) nPos );
 
             // den letzte Absatz nur uebernehmen, wenn er gefuellt ist
             if (nSourcePos < nParaCount - 1 ||
