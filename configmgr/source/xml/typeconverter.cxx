@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:36:25 $
+ *  last change: $Author: jb $ $Date: 2001-04-05 09:19:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,17 +398,28 @@ namespace configmgr
 // *************************************************************************
     uno::Type parseTemplateName(::rtl::OUString const& sTypeName)
     {
+        uno::Type aRet;
+
         ::rtl::OUString sBasicTypeName;
         bool bList;
-        parseTemplateName(sTypeName, sBasicTypeName,bList);
-        return toType(sTypeName,bList);
+        if (parseTemplateName(sTypeName, sBasicTypeName,bList))
+            aRet = toType(sBasicTypeName,bList);
+        // else leave as void
+
+        return aRet;
     }
 
-    void parseTemplateName(::rtl::OUString const& sTypeName, uno::TypeClass& _rType, bool& bList)
+    bool parseTemplateName(::rtl::OUString const& sTypeName, uno::TypeClass& _rType, bool& bList)
     {
         ::rtl::OUString sBasicTypeName;
-        parseTemplateName(sTypeName, sBasicTypeName,bList);
-        _rType = toTypeClass(sTypeName);
+
+        if (parseTemplateName(sTypeName, sBasicTypeName,bList))
+            _rType = toTypeClass(sBasicTypeName);
+
+        else
+            _rType = uno::TypeClass_VOID;
+
+        return _rType != uno::TypeClass_VOID;
     }
 
 // *************************************************************************
@@ -420,7 +431,7 @@ namespace configmgr
         return sName;
     }
 
-    void parseTemplateName(::rtl::OUString const& sTypeName, ::rtl::OUString& _rBasicName, bool& bList)
+    bool parseTemplateName(::rtl::OUString const& sTypeName, ::rtl::OUString& _rBasicName, bool& bList)
     {
         ::rtl::OUString const sSuffix = TEMPLATE_LIST_SUFFIX;
 
@@ -435,6 +446,7 @@ namespace configmgr
             bList = false;
             _rBasicName = sTypeName;
         }
+        return true;
 
     }
 // *************************************************************************

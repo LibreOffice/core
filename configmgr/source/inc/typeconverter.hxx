@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-16 17:28:49 $
+ *  last change: $Author: jb $ $Date: 2001-04-05 09:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@ namespace configmgr
     ::rtl::OUString toTemplateName(const ::rtl::OUString& _rBasicTypeName, bool bList = false);
 
      uno::Type parseTemplateName(::rtl::OUString const& sTypeName);
-     void parseTemplateName(::rtl::OUString const& sTypeName, uno::TypeClass& _rType, bool& bList);
-     void parseTemplateName(::rtl::OUString const& sTypeName, ::rtl::OUString& _rBasicName, bool& bList);
+     bool parseTemplateName(::rtl::OUString const& sTypeName, uno::TypeClass& _rType, bool& bList);
+     bool parseTemplateName(::rtl::OUString const& sTypeName, ::rtl::OUString& _rBasicName, bool& bList);
 
 } // namespace configmgr
 
