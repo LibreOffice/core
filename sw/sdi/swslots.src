@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-19 18:07:07 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8320,11 +8320,11 @@ SfxSlotInfo FN_THESAURUS_DLG
     SlotName[ polish ] = "Tezaurus";
     SlotName[ portuguese_brazilian ] = "ToolsThesaurus";
     SlotName[ japanese ] = "ι΅ηΎ©θªθΎε…Έ";
-    SlotName[ chinese_simplified ] = "θ―ε…Έ";
-    SlotName[ chinese_traditional ] = "θ©ε…Έ";
+    SlotName[ chinese_simplified ] = "εδΉ‰θ―θ―ε…Έ";
+    SlotName[ chinese_traditional ] = "εηΎ©θ©θ©ε…Έ";
     SlotName[ arabic ] = "ήΗγζΣ ΗαγΡΗΟέΗΚ";
     SlotName[ dutch ] = "Thesaurus";
-    SlotName[ chinese_simplified ] = "θ―ε…Έ";
+    SlotName[ chinese_simplified ] = "εδΉ‰θ―θ―ε…Έ";
     SlotName[ greek ] = "Θησαυρός λέξεων";
     SlotName[ korean ] = "λ™μμ–΄ μ‚¬μ „";
     SlotName[ turkish ] = "Eώanlamlύlar";
@@ -9539,6 +9539,7 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName[ arabic ] = "Update Charts";
     SlotName[ catalan ] = "Update Charts";
 };
+
 
 
 
