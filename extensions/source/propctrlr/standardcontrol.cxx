@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 11:38:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,6 @@
 #endif
 //==================================================================
 
-#ifndef _OFF_APP_HXX
-#include <offmgr/app.hxx>
-#endif
 #include <memory>
 //............................................................................
 namespace pcr
@@ -519,7 +516,7 @@ namespace pcr
             }
             else    // BasicDocShell has no color item
             {
-                pColorTbl = OFF_APP()->GetStdColorTable();
+                pColorTbl = XColorTable::GetStdColorTable();
             }
 
             DBG_ASSERT(pColorTbl, "OColorControl::OColorControl: no color table!");
