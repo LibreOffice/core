@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabpagebasic.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:27:41 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     HelpId                  = RID_XML_FILTER_TABPAGE_BASIC;
     Hide                    = TRUE;
     Size                    = MAP_APPFONT ( TAB_PAGE_WIDTH , TAB_PAGE_HEIGHT );
-    Text                    = "Allgemein" ;
-    Text [ English_us ]     = "General";
+    Text [ de ] = "Allgemein" ;
+    Text [ en-US ]      = "General";
 
     // Filter Name ----------------------------------------------------
 
@@ -94,34 +94,8 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 0 * ROW_HEIGHT + 0 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text                = "Filtername";
-        Text[ english_us ]  = "Filter name";
-        Text[ french ] = "Nom du filtre";
-        Text[ spanish ] = "Nombre del filtro";
-        Text[ italian ] = "Nome del filtro";
-        Text[ swedish ] = "Filternamn";
-        Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿å";
-        Text[ korean ] = "í•„í„° ì´ë¦„";
-        Text[ chinese_simplified ] = "ç­›é€‰å™¨åç§°";
-        Text[ chinese_traditional ] = "ç¯©é¸å™¨åç¨±";
-        Text[ slovak ] = "NÃ¡zov filtra";
-        Text[ portuguese_brazilian ] = "Nome do filtro";
-        Text[ greek ] = "¼íïìá ößëôñïõ";
-        Text[ dutch ] = "Filternaam";
-        Text[ finnish ] = "Filter name";
-        Text[ czech ] = "NÃ¡zev filtru";
-        Text[ danish ] = "Filternavn";
-        Text[ arabic ] = "Filter name";
-        Text[ hebrew ] = "Filter name";
-        Text[ catalan ] = "Filter name";
-        Text[ hindi ] = "Filter name";
-        Text[ portuguese ] = "Filter name";
-        Text[ russian ] = "Filter name";
-        Text[ polish ] = "Filter name";
-        Text[ turkish ] = "Filter name";
-        Text[ thai ] = "Filter name";
-        Text[ hungarian ] = "SzÅ±rÅ‘ neve";
-        Text[ slovenian ] = "Ime filtra";
+        Text [ de ] = "Filtername";
+        Text [ en-US ]  = "Filter name";
     };
 
     Edit ED_XML_FILTER_NAME
@@ -138,34 +112,8 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text                = "Anwendung";
-        Text [english_us]   = "Application";
-        Text[ french ] = "Application";
-        Text[ spanish ] = "Aplicación";
-        Text[ italian ] = "Applicazione";
-        Text[ swedish ] = "Program";
-        Text[ japanese ] = "ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³";
-        Text[ korean ] = "ì‘ìš© í”„ë¡œê·¸ë¨";
-        Text[ chinese_simplified ] = "åº”ç”¨ç¨‹åº";
-        Text[ chinese_traditional ] = "æ‡‰ç”¨ç¨‹å¼";
-        Text[ portuguese ] = "Aplicação";
-        Text[ russian ] = "Ïğèëîæåíèå";
-        Text[ greek ] = "ÅöáñìïãŞ";
-        Text[ dutch ] = "Toepassing";
-        Text[ finnish ] = "Sovellus";
-        Text[ czech ] = "Aplikace";
-        Text[ polish ] = "Aplikacja";
-        Text[ portuguese_brazilian ] = "Aplicação";
-        Text[ turkish ] = "Uygulama";
-        Text[ arabic ] = "ÊØÈíŞ";
-        Text[ hebrew ] = "â€®×™×™×©×•×â€¬";
-        Text[ catalan ] = "Aplicació";
-        Text[ thai ] = "à¹‚à¸›à¸£à¹à¸à¸£à¸¡à¸›à¸£à¸°à¸¢à¸¸à¸à¸•à¹Œ";
-        Text[ slovak ] = "AplikÃ¡cia";
-        Text[ danish ] = "Program";
-        Text[ hindi ] = "à¤•à¤¾à¤°à¥à¤¯à¤•à¥à¤°à¤®";
-        Text[ hungarian ] = "AlkalmazÃ¡s";
-        Text[ slovenian ] = "Program";
+        Text [ de ] = "Anwendung";
+        Text [ en-US ]  = "Application";
     };
 
     ComboBox CB_XML_APPLICATION
@@ -185,34 +133,8 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING ) ; // + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 16 ) ;
-        Text                = "Name des\nDateityps";
-        Text [english_us]   = "Name of\nfile type";
-        Text[ french ] = "Nom du\ntype de fichier";
-        Text[ spanish ] = "Nombre del\ntipo de archivo";
-        Text[ italian ] = "Nome per\ntipo di file";
-        Text[ swedish ] = "Namn för\nfiltyp";
-        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¨®é¡\nåå‰";
-        Text[ korean ] = "íŒŒì¼ í˜•ì‹\nì´ë¦„";
-        Text[ chinese_simplified ] = "æ–‡ä»¶ç±»å‹åç§°";
-        Text[ chinese_traditional ] = "æª”æ¡ˆé¡å‹åç¨±";
-        Text[ slovak ] = "NÃ¡zov\ntypu sÃºboru";
-        Text[ portuguese_brazilian ] = "Nome \nTipo de arquivo";
-        Text[ greek ] = "¼íïìá ôïõ\nôığïõ áñ÷åßïõ";
-        Text[ dutch ] = "Naam van\nbestandstype";
-        Text[ finnish ] = "Name of\nfile type";
-        Text[ czech ] = "JmÃ©no\ntypu souboru";
-        Text[ danish ] = "Filtypenavn";
-        Text[ arabic ] = "Name of\nfile type";
-        Text[ hebrew ] = "Name of\nfile type";
-        Text[ catalan ] = "Name of\nfile type";
-        Text[ hindi ] = "Name of\nfile type";
-        Text[ portuguese ] = "Name of\nfile type";
-        Text[ russian ] = "Name of\nfile type";
-        Text[ polish ] = "Name of\nfile type";
-        Text[ turkish ] = "Name of\nfile type";
-        Text[ thai ] = "Name of\nfile type";
-        Text[ hungarian ] = "FÃ¡jltÃ­pus neve\n";
-        Text[ slovenian ] = "Ime\nvrste datoteke";
+        Text [ de ] = "Name des\nDateityps";
+        Text [ en-US ]  = "Name of\nfile type";
     };
 
     Edit ED_XML_INTERFACE_NAME
@@ -229,34 +151,8 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , 4 + FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING + FIXED_TEXT_OFFSET) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text                = "Dateiendung";
-        Text [English_us]   = "File extension";
-        Text[ french ] = "Extension de fichier";
-        Text[ spanish ] = "Extensión del archivo";
-        Text[ italian ] = "Estensione file";
-        Text[ swedish ] = "Filtillägg";
-        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«æ‹¡å¼µå­";
-        Text[ korean ] = "íŒŒì¼ í™•ì¥ì";
-        Text[ chinese_simplified ] = "æ–‡ä»¶æ‰©å±•å";
-        Text[ chinese_traditional ] = "æª”æ¡ˆå‰¯æª”å";
-        Text[ slovak ] = "PrÃ­pona k sÃºboru";
-        Text[ portuguese_brazilian ] = "Extensão do arquivo";
-        Text[ greek ] = "Åğİêôáóç áñ÷åßïõ";
-        Text[ dutch ] = "Bestandsextensie";
-        Text[ finnish ] = "File extension";
-        Text[ czech ] = "PÅ™Ã­pona souboru";
-        Text[ danish ] = "Filendelse";
-        Text[ arabic ] = "File extension";
-        Text[ hebrew ] = "File extension";
-        Text[ catalan ] = "File extension";
-        Text[ hindi ] = "File extension";
-        Text[ portuguese ] = "File extension";
-        Text[ russian ] = "File extension";
-        Text[ polish ] = "File extension";
-        Text[ turkish ] = "File extension";
-        Text[ thai ] = "File extension";
-        Text[ hungarian ] = "FÃ¡jlkiterjesztÃ©s";
-        Text[ slovenian ] = "DatoteÄna pripona";
+        Text [ de ] = "Dateiendung";
+        Text [ en-US ]  = "File extension";
     };
 
     Edit ED_XML_EXTENSION
@@ -273,34 +169,8 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , 4 + FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text                = "Kommentar";
-        Text [english_us]   = "Comments";
-        Text[ french ] = "Commentaires";
-        Text[ spanish ] = "Observaciones";
-        Text[ italian ] = "Annotazioni";
-        Text[ swedish ] = "Kommentar";
-        Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ";
-        Text[ korean ] = "ì„¤ëª…";
-        Text[ chinese_simplified ] = "æ³¨è§£";
-        Text[ chinese_traditional ] = "è¨»è§£";
-        Text[ portuguese ] = "Comentário";
-        Text[ russian ] = "Êîììåíòàğèé";
-        Text[ greek ] = "Ó÷üëéá";
-        Text[ dutch ] = "Opmerkingen";
-        Text[ finnish ] = "Huomautukset";
-        Text[ czech ] = "KomentÃ¡Å™e";
-        Text[ danish ] = "Kommentarer";
-        Text[ polish ] = "Komentarz";
-        Text[ portuguese_brazilian ] = "Comentários";
-        Text[ turkish ] = "Açıklama";
-        Text[ arabic ] = "ÊÚáíŞ";
-        Text[ hebrew ] = "â€®×”×¢×¨×•×ªâ€¬";
-        Text[ catalan ] = "Comentaris";
-        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™";
-        Text[ slovak ] = "PoznÃ¡mky";
-        Text[ hindi ] = "à¤…à¤ªà¤µà¤¾à¤¦";
-        Text[ hungarian ] = "MegjegyzÃ©sek";
-        Text[ slovenian ] = "Opombe";
+        Text [ de ] = "Kommentar";
+        Text [ en-US ]  = "Comments";
     };
 
     MultiLineEdit ED_XML_DESCRIPTION
@@ -311,32 +181,6 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Border              = TRUE;
         IgnoreTab = TRUE ;
     };
-    Text[ french ] = "Général";
-    Text[ spanish ] = "General";
-    Text[ italian ] = "Generale";
-    Text[ swedish ] = "Allmänt";
-    Text[ japanese ] = "å…¨èˆ¬";
-    Text[ korean ] = "ì¼ë°˜";
-    Text[ chinese_simplified ] = "å¸¸è§„";
-    Text[ chinese_traditional ] = "ä¸€èˆ¬";
-    Text[ portuguese ] = "Geral";
-    Text[ russian ] = "Îáùèå";
-    Text[ greek ] = "ÃåíéêÜ";
-    Text[ dutch ] = "Algemeen";
-    Text[ finnish ] = "Yleistä";
-    Text[ czech ] = "ObecnÃ©";
-    Text[ polish ] = "Ogólne";
-    Text[ portuguese_brazilian ] = "Geral";
-    Text[ arabic ] = "ÚÇã";
-    Text[ hebrew ] = "â€®×›×œ×œ×™â€¬";
-    Text[ catalan ] = "Continguts";
-    Text[ thai ] = "à¸—à¸±à¹ˆà¸§à¹„à¸›";
-    Text[ slovak ] = "VÅ¡eobecnÃ©";
-    Text[ danish ] = "Generelt";
-    Text[ hindi ] = "à¤¸à¤¾à¤®à¤¾à¤¨à¥à¤¯";
-    Text[ turkish ] = "General";
-    Text[ hungarian ] = "ÃltalÃ¡nos";
-    Text[ slovenian ] = "SploÅ¡no";
 };
 
 
