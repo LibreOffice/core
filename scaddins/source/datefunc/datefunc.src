@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-25 20:31:59 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Ber�knar antalet veckor i en specifik period.";
             Text[ polish ] = "Zwraca ilo�� tygodni w pewnym okresie czasu.";
             Text[ portuguese_brazilian ] = "Determines the number of weeks in a specific period.";
-            Text[ japanese ] = "Determines the number of weeks in a specific period.";
+            Text[ japanese ] = "指定された期間内の週数を返します。";
             Text[ korean ] = "Determines the number of weeks in a specific period.";
             Text[ chinese_simplified ] = "计算某一个周期内所包含的星期数目。";
             Text[ chinese_traditional ] = "傳回某一時期內的週數目。";
@@ -111,7 +111,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Startdatum";
             Text[ polish ] = "Data pocz�tkowa";
             Text[ portuguese_brazilian ] = "Start date";
-            Text[ japanese ] = "Start date";
+            Text[ japanese ] = "開始日";
             Text[ korean ] = "Start date";
             Text[ chinese_simplified ] = "start_date";
             Text[ chinese_traditional ] = "start_date";
@@ -137,7 +137,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "F�rsta dagen i perioden.";
             Text[ polish ] = "Liczba okre�laj�ca dat� pocz�tkow�.";
             Text[ portuguese_brazilian ] = "First day of the period.";
-            Text[ japanese ] = "First day of the period.";
+            Text[ japanese ] = "期間の開始日。";
             Text[ korean ] = "First day of the period.";
             Text[ chinese_simplified ] = "周期内的第一天。";
             Text[ chinese_traditional ] = "時期的第一天。";
@@ -163,7 +163,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Slutdatum";
             Text[ polish ] = "Data ko�cowa";
             Text[ portuguese_brazilian ] = "End date";
-            Text[ japanese ] = "End date";
+            Text[ japanese ] = "終了日";
             Text[ korean ] = "End date";
             Text[ chinese_simplified ] = "end_date";
             Text[ chinese_traditional ] = "end_date";
@@ -189,7 +189,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Sista dagen i perioden.";
             Text[ polish ] = "Liczba okre�laj�ca dat� ko�cow�.";
             Text[ portuguese_brazilian ] = "Last day of the period.";
-            Text[ japanese ] = "Last day of the period.";
+            Text[ japanese ] = "期間の終了日。";
             Text[ korean ] = "Last day of the period.";
             Text[ chinese_simplified ] = "周期内的最后一天。";
             Text[ chinese_traditional ] = "時期的最後一天。";
@@ -215,7 +215,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Typ";
             Text[ polish ] = "Typ";
             Text[ portuguese_brazilian ] = "Mode";
-            Text[ japanese ] = "Mode";
+            Text[ japanese ] = "単位";
             Text[ korean ] = "Mode";
             Text[ chinese_simplified ] = "type";
             Text[ chinese_traditional ] = "type";
@@ -241,7 +241,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Typ av ber�kning: typ=0 f�r veckoantal i intervallet, typ=1 f�r kalenderveckor.";
             Text[ polish ] = "Rodzaj obliczania: Typ=0 oznacza liczb� tygodni, Typ=1 - tygodnie kalendarzowe.";
             Text[ portuguese_brazilian ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar weeks.";
-            Text[ japanese ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar weeks.";
+            Text[ japanese ] = "戻り値の単位と種類: 単位=0 は期間内の週の数、単位=1 はｶﾚﾝﾀﾞｰの週。";
             Text[ korean ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar weeks.";
             Text[ chinese_simplified ] = "计算类型：Type=0 表示该周期内包含的星期数，Type=1 表示星期序列数。";
             Text[ chinese_traditional ] = "計算的類型：type=0 表示時期的週數目，type=1 表示週的序列數。";
@@ -271,7 +271,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Ber�knar antalet m�nader i en specifik period.";
             Text[ polish ] = "Zwraca ilo�� miesi�cy w pewnym okresie czasu.";
             Text[ portuguese_brazilian ] = "Determines the number of months in a specific period.";
-            Text[ japanese ] = "Determines the number of months in a specific period.";
+            Text[ japanese ] = "指定された期間内の月数を返します。";
             Text[ korean ] = "Determines the number of months in a specific period.";
             Text[ chinese_simplified ] = "计算指定时期内所包含的月份数。";
             Text[ chinese_traditional ] = "傳回某一時期的月份數目。";
@@ -297,7 +297,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Startdatum";
             Text[ polish ] = "Data pocz�tkowa";
             Text[ portuguese_brazilian ] = "Start date";
-            Text[ japanese ] = "Start date";
+            Text[ japanese ] = "開始日";
             Text[ korean ] = "Start date";
             Text[ chinese_simplified ] = "start_date";
             Text[ chinese_traditional ] = "start_date";
@@ -323,7 +323,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "F�rsta dagen i perioden.";
             Text[ polish ] = "Liczba okre�laj�ca dat� pocz�tkow�.";
             Text[ portuguese_brazilian ] = "First day of the period.";
-            Text[ japanese ] = "First day of the period.";
+            Text[ japanese ] = "期間の開始日。";
             Text[ korean ] = "First day of the period.";
             Text[ chinese_simplified ] = "该时期内的第一天。";
             Text[ chinese_traditional ] = "時期的第一天。";
@@ -349,7 +349,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Slutdatum";
             Text[ polish ] = "Data ko�cowa";
             Text[ portuguese_brazilian ] = "End date";
-            Text[ japanese ] = "End date";
+            Text[ japanese ] = "終了日";
             Text[ korean ] = "End date";
             Text[ chinese_simplified ] = "end_date";
             Text[ chinese_traditional ] = "end_date";
@@ -375,7 +375,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Sista dagen i perioden.";
             Text[ polish ] = "Liczba okre�laj�ca dat� ko�cow�.";
             Text[ portuguese_brazilian ] = "Last day of the period.";
-            Text[ japanese ] = "Last day of the period.";
+            Text[ japanese ] = "期間の終了日。";
             Text[ korean ] = "Last day of the period.";
             Text[ chinese_simplified ] = "该时期内的最后一天。";
             Text[ chinese_traditional ] = "時期的最後一天。";
@@ -401,7 +401,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Typ";
             Text[ polish ] = "Typ";
             Text[ portuguese_brazilian ] = "Mode";
-            Text[ japanese ] = "Mode";
+            Text[ japanese ] = "単位";
             Text[ korean ] = "Mode";
             Text[ chinese_simplified ] = "type";
             Text[ chinese_traditional ] = "type";
@@ -427,7 +427,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Typ av ber�kning: typ=0 f�r m�nadsantal i intervallet, typ=1 f�r kalenderm�nader.";
             Text[ polish ] = "Rodzaj obliczania: Typ=0 oznacza liczb� miesi�cy, Typ=1 - miesi�ce kalendarzowe.";
             Text[ portuguese_brazilian ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar months.";
-            Text[ japanese ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar months.";
+            Text[ japanese ] = "戻り値の単位と種類: 単位=0 は期間内の月数、単位=1 はｶﾚﾝﾀﾞｰの月。";
             Text[ korean ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar months.";
             Text[ chinese_simplified ] = "计算类型：Type=0 表示该时期内所包含的月份数，Type=1 表示月序列数。";
             Text[ chinese_traditional ] = "計算的類型：type=0 表示時期的月份數目，type=1 表示月份的序列數。";
@@ -457,7 +457,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Ber�knar antalet �r i en specifik period.";
             Text[ polish ] = "Zwraca ilo�� lat w pewnym okresie czasu.";
             Text[ portuguese_brazilian ] = "Determines the number of years in a specific period.";
-            Text[ japanese ] = "Determines the number of years in a specific period.";
+            Text[ japanese ] = "指定された期間内の年数を返します。";
             Text[ korean ] = "Determines the number of years in a specific period.";
             Text[ chinese_simplified ] = "计算某一个周期内所包含的年数。";
             Text[ chinese_traditional ] = "傳回某一時期的年份數目。";
@@ -483,7 +483,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Startdatum";
             Text[ polish ] = "Data pocz�tkowa";
             Text[ portuguese_brazilian ] = "Start date";
-            Text[ japanese ] = "Start date";
+            Text[ japanese ] = "開始日";
             Text[ korean ] = "Start date";
             Text[ chinese_simplified ] = "start_date";
             Text[ chinese_traditional ] = "start_date";
@@ -509,7 +509,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "F�rsta dagen i perioden.";
             Text[ polish ] = "Liczba okre�laj�ca dat� pocz�tkow�.";
             Text[ portuguese_brazilian ] = "First day of the period.";
-            Text[ japanese ] = "First day of the period.";
+            Text[ japanese ] = "期間の開始日。";
             Text[ korean ] = "First day of the period.";
             Text[ chinese_simplified ] = "周期内的第一天。";
             Text[ chinese_traditional ] = "時期的第一天。";
@@ -535,7 +535,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Slutdatum";
             Text[ polish ] = "Data ko�cowa";
             Text[ portuguese_brazilian ] = "End date";
-            Text[ japanese ] = "End date";
+            Text[ japanese ] = "終了日";
             Text[ korean ] = "End date";
             Text[ chinese_simplified ] = "end_date";
             Text[ chinese_traditional ] = "end_date";
@@ -561,7 +561,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Sista dagen i perioden.";
             Text[ polish ] = "Liczba okre�laj�ca dat� ko�cow�.";
             Text[ portuguese_brazilian ] = "Last day of the period.";
-            Text[ japanese ] = "Last day of the period.";
+            Text[ japanese ] = "期間の終了日。";
             Text[ korean ] = "Last day of the period.";
             Text[ chinese_simplified ] = "周期内的最后一天。";
             Text[ chinese_traditional ] = "時期的最後一天。";
@@ -587,7 +587,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Typ";
             Text[ polish ] = "Typ";
             Text[ portuguese_brazilian ] = "Mode";
-            Text[ japanese ] = "Mode";
+            Text[ japanese ] = "単位";
             Text[ korean ] = "Mode";
             Text[ chinese_simplified ] = "type";
             Text[ chinese_traditional ] = "type";
@@ -613,7 +613,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Typ av ber�kning: typ=0 f�r �rsantal i intervallet, typ=1 f�r kalender�r.";
             Text[ polish ] = "Rodzaj obliczania : Typ=0 oznacza liczb� lat, Typ=1 - lata kalendarzowe.";
             Text[ portuguese_brazilian ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar years.";
-            Text[ japanese ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar years.";
+            Text[ japanese ] = "戻り値の単位と種類: 単位=0 は期間内の年数、単位=1 はｶﾚﾝﾀﾞｰの年。";
             Text[ korean ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar years.";
             Text[ chinese_simplified ] = "计算类型：Type=0 表示该周期内包含的年数，Type=1 表示年序列数。";
             Text[ chinese_traditional ] = "計算的類型：type=0 表示時期的年份數目，type=1 表示年份的序列數。";
@@ -643,7 +643,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar 1 (SANT) om det angivna datumet ligger i ett skott�r, annars 0 (FALSKT).";
             Text[ polish ] = "Zwraca 1 (PRAWDA), je�eli podana data przypada na rok przest�pny. W innym wypadku zwraca 0 (FA�SZ).";
             Text[ portuguese_brazilian ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
-            Text[ japanese ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
+            Text[ japanese ] = "指定した日付が閏年に当たる場合は 1 (TRUE) を返します。そうでない場合は 0 (FALSE) を返します。";
             Text[ korean ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
             Text[ chinese_simplified ] = "反馈 1 (TRUE)，若该日期是闰年内的一个日期，否则反馈 0 (FALSE)。";
             Text[ chinese_traditional ] = "如果是閏年，傳回1(TRUE)，反之傳回0(FALSE)。";
@@ -664,12 +664,12 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Date";
             Text[ spanish ] = "Fecha";
             Text[ finnish ] = "Date";
-            Text[ italian ] = "Data";
+            Text[ italian ] = "Data ";
             Text[ danish ] = "Date";
             Text[ swedish ] = "Datum";
             Text[ polish ] = "Data";
             Text[ portuguese_brazilian ] = "Date";
-            Text[ japanese ] = "Date";
+            Text[ japanese ] = "日付";
             Text[ korean ] = "Date";
             Text[ chinese_simplified ] = "date";
             Text[ chinese_traditional ] = "date";
@@ -695,7 +695,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "En valfri dag p� det �nskade �ret.";
             Text[ polish ] = "Dowolny dzie� ��danego roku.";
             Text[ portuguese_brazilian ] = "Any day in the desired year.";
-            Text[ japanese ] = "Any day in the desired year.";
+            Text[ japanese ] = "任意の年月日。";
             Text[ korean ] = "Any day in the desired year.";
             Text[ chinese_simplified ] = "指定的一年中的任意一天。";
             Text[ chinese_traditional ] = "某一年份之中的任意一天。";
@@ -725,7 +725,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar antalet dagar i m�naden som ing�r i det angivna datumet.";
             Text[ polish ] = "Zwraca liczb� dni miesi�ca, na kt�ry przypada podana data.";
             Text[ portuguese_brazilian ] = "Returns the number of days of the month in relation to the date entered.";
-            Text[ japanese ] = "Returns the number of days of the month in relation to the date entered.";
+            Text[ japanese ] = "入力した日付を含むその月の日数を返します。";
             Text[ korean ] = "Returns the number of days of the month in relation to the date entered.";
             Text[ chinese_simplified ] = "反馈指定的日期所在月份的天数。";
             Text[ chinese_traditional ] = "傳回指定日期的月份所有的天數。";
@@ -751,7 +751,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Datum";
             Text[ polish ] = "Data";
             Text[ portuguese_brazilian ] = "Date";
-            Text[ japanese ] = "Date";
+            Text[ japanese ] = "日付";
             Text[ korean ] = "Date";
             Text[ chinese_simplified ] = "date";
             Text[ chinese_traditional ] = "date";
@@ -777,7 +777,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "En valfri dag i den �nskade m�naden.";
             Text[ polish ] = "Dowolny dzie� ��danego miesi�ca.";
             Text[ portuguese_brazilian ] = "Any day in the desired month.";
-            Text[ japanese ] = "Any day in the desired month.";
+            Text[ japanese ] = "任意の月日。";
             Text[ korean ] = "Any day in the desired month.";
             Text[ chinese_simplified ] = "指定的月份中的任意一天。";
             Text[ chinese_traditional ] = "某一月份的任意的一天。";
@@ -807,7 +807,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar antalet dagar p� �ret som ing�r i det angivna datumet.";
             Text[ polish ] = "Zwraca liczb� dni w roku, na kt�ry przypada podana data.";
             Text[ portuguese_brazilian ] = "Returns the number of days of the year in relation to the date entered.";
-            Text[ japanese ] = "Returns the number of days of the year in relation to the date entered.";
+            Text[ japanese ] = "入力した日付を含むその年の日数を返します。";
             Text[ korean ] = "Returns the number of days of the year in relation to the date entered.";
             Text[ chinese_simplified ] = "反馈指定的日期所在年份的天数。";
             Text[ chinese_traditional ] = "傳回指定日期的年份所有的天數。";
@@ -833,7 +833,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Datum";
             Text[ polish ] = "Data";
             Text[ portuguese_brazilian ] = "Date";
-            Text[ japanese ] = "Date";
+            Text[ japanese ] = "日付";
             Text[ korean ] = "Date";
             Text[ chinese_simplified ] = "date";
             Text[ chinese_traditional ] = "date";
@@ -859,7 +859,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "En valfri dag p� det �nskade �ret.";
             Text[ polish ] = "Dowolny dzie� ��danego roku.";
             Text[ portuguese_brazilian ] = "Any day in the desired year.";
-            Text[ japanese ] = "Any day in the desired year.";
+            Text[ japanese ] = "任意の年月日。";
             Text[ korean ] = "Any day in the desired year.";
             Text[ chinese_simplified ] = "指定的一年中的任意一天。";
             Text[ chinese_traditional ] = "某一年份的任意的一天。";
@@ -889,7 +889,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar antalet veckor p� �ret som ing�r i det angivna datumet.";
             Text[ polish ] = "Zwraca liczb� tygodni w roku, na kt�ry przypada podana data.";
             Text[ portuguese_brazilian ] = "Returns the number of weeks of the year in relation to the date entered.";
-            Text[ japanese ] = "Returns the number of weeks of the year in relation to the date entered.";
+            Text[ japanese ] = "入力した日付を含むその年の週数を返します。";
             Text[ korean ] = "Returns the number of weeks of the year in relation to the date entered.";
             Text[ chinese_simplified ] = "反馈指定的日期所在年份具有的星期数。";
             Text[ chinese_traditional ] = "傳回指定日期的月份所有的週數目。";
@@ -915,7 +915,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Datum";
             Text[ polish ] = "Data";
             Text[ portuguese_brazilian ] = "Date";
-            Text[ japanese ] = "Date";
+            Text[ japanese ] = "日付";
             Text[ korean ] = "Date";
             Text[ chinese_simplified ] = "date";
             Text[ chinese_traditional ] = "date";
@@ -941,7 +941,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "En valfri dag p� det �nskade �ret.";
             Text[ polish ] = "Dowolny dzie� ��danego roku.";
             Text[ portuguese_brazilian ] = "Any day in the desired year.";
-            Text[ japanese ] = "Any day in the desired year.";
+            Text[ japanese ] = "任意の年月日。";
             Text[ korean ] = "Any day in the desired year.";
             Text[ chinese_simplified ] = "指定的一年中的任意一天。";
             Text[ chinese_traditional ] = "某一年份的任意的一天。";
@@ -971,7 +971,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Krypterar text eller omvandlar krypterad text till klartext med hj�lp av ROT13-algoritmen.";
             Text[ polish ] = "Szyfruje i deszyfruje teksty za pomoc� algorytmu ROT13.";
             Text[ portuguese_brazilian ] = "Encrypts or decrypts a text using the ROT13 algorithm.";
-            Text[ japanese ] = "Encrypts or decrypts a text using the ROT13 algorithm.";
+            Text[ japanese ] = "ROT13 ｱﾙｺﾞﾘｽﾞﾑを使用したﾃｷｽﾄの暗号化、または複合化。";
             Text[ korean ] = "Encrypts or decrypts a text using the ROT13 algorithm.";
             Text[ chinese_simplified ] = "借助 ROT13 运算法则加密或者解密一个文本。";
             Text[ chinese_traditional ] = "透過ROT13程式加密或解密一個文字。";
@@ -1023,7 +1023,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Text som ska krypteras eller text som �r krypterad.";
             Text[ polish ] = "Tekst szyfruj�cy lub kt�ry ma zosta� zaszyfrowany.";
             Text[ portuguese_brazilian ] = "Text to be encrypted or encrypted text.";
-            Text[ japanese ] = "Text to be encrypted or encrypted text.";
+            Text[ japanese ] = "暗号化するﾃｷｽﾄ、または暗号化したﾃｷｽﾄ。";
             Text[ korean ] = "Text to be encrypted or encrypted text.";
             Text[ chinese_simplified ] = "需要加密的或者已经加密的文本。";
             Text[ chinese_traditional ] = "要加密或解密的文字。";
@@ -1104,7 +1104,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ finnish ] = "YEARS";
         Text[ italian ] = "ANNI";
         Text[ danish ] = "YEARS";
-        Text[ swedish ] = "�R";
+        Text[ swedish ] = "ANTAL�R";
         Text[ polish ] = "LATA";
         Text[ portuguese_brazilian ] = "YEARS";
         Text[ japanese ] = "YEARS";
@@ -1128,7 +1128,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ french ] = "ESTBISSEXTILE";
         Text[ spanish ] = "ESA�OBISIESTO";
         Text[ finnish ] = "ISLEAPYEAR";
-        Text[ italian ] = "ANNO.BISESTILE";
+        Text[ italian ] = "ANNO.BISESTILE ";
         Text[ danish ] = "ISLEAPYEAR";
         Text[ swedish ] = "�RSKOTT�R";
         Text[ polish ] = "ROKPRZEST�PNY";
@@ -1316,6 +1316,7 @@ Resource RID_DATE_DEFFUNCTION_NAMES
         };
     };
 };
+
 
 
 
