@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_extra_ooo.scp,v $
 *
-*  $Revision: 1.8 $
+*  $Revision: 1.9 $
 *
-*  last change: $Author: hr $ $Date: 2004-11-09 16:51:18 $
+*  last change: $Author: obo $ $Date: 2004-11-30 13:02:57 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -344,13 +344,6 @@ File gid_File_Extra_Tplwizdesktop_Lang
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
     EXTRA_ALL_LANG(tplwizdesktop);
-End
-
-File gid_File_Extra_Tplwizweb_Lang
-    Dir = gid_Dir_Template_Wizard_Web;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplwizweb);
 End
 
 File gid_File_Extra_Tplwizletter
