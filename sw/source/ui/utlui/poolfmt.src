@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:15:16 $
+ *  last change: $Author: obo $ $Date: 2001-03-21 21:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,7 +778,7 @@ String STR_POOLFRM_GRAPHIC
     Text [ french ] = "Image" ;
     Text [ swedish ] = "Grafik" ;
     Text [ danish ] = "Grafik" ;
-    Text [ portuguese ] = "Gráfico" ;
+    Text [ portuguese ] = "Imagem" ;
     Text [ portuguese_brazilian ] = "Grafik" ;
     Text[ chinese_simplified ] = "Í¼ĞÎ";
     Text[ russian ] = "Ãğàôèêà";
@@ -3768,7 +3768,7 @@ String STR_POOLCOLL_DOC_TITEL
     Text[ chinese_simplified ] = "´ó±êÌâ";
     Text[ russian ] = "Çàãîëîâîê";
     Text[ polish ] = "Tytu³";
-    Text[ japanese ] = "•\\‘è";
+    Text[ japanese ] = "À²ÄÙ";
     Text[ chinese_traditional ] = "¤j¼ĞÃD";
     Text[ arabic ] = "ÇáÚäæÇä";
     Text[ greek ] = "Ôßôëïò";
