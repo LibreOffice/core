@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:26:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
 
     OSL_ASSERT(strModuleName);
 
+    nRtldMode = nRtldMode; /* avoid warnings */
+
     nError = osl_getSystemPathFromFileURL(strModuleName, &Module);
 
     if ( osl_File_E_None != nError )
@@ -117,8 +119,20 @@ void SAL_CALL osl_unloadModule(oslModule Module)
 /*****************************************************************************/
 void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName)
 {
+    /* casting from a function pointer to a data pointer is invalid
+       be in this case unavoidable because the API has to stay
+       compitable we need to keep this function which returns a
+       void* by definition */
+    return (void*)(osl_getFunctionSymbol(Module, strSymbolName));
+}
+
+/*****************************************************************************/
+/* osl_getFunctionSymbol */
+/*****************************************************************************/
+oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString *strSymbolName )
+{
     rtl_String *symbolName = NULL;
-    void *address;
+    oslGenericFunction address;
 
     OSL_ASSERT(Module);
     OSL_ASSERT(strSymbolName);
@@ -131,12 +145,11 @@ void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName)
         OUSTRING_TO_OSTRING_CVTFLAGS
     );
 
-    address=(void*)GetProcAddress((HINSTANCE)Module, rtl_string_getStr(symbolName));
+    address=(oslGenericFunction)GetProcAddress((HINSTANCE)Module, rtl_string_getStr(symbolName));
     rtl_string_release(symbolName);
 
     return address;
 }
-
 
 /*****************************************************************************/
 /* osl_addressGetModuleURL */
@@ -174,7 +187,6 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_Windows( void *pv, rtl_uString
         if ( lpfnCreateToolhelp32Snapshot && lpfnModule32First && lpfnModule32Next )
         {
             HANDLE  hModuleSnap = NULL;
-            BOOL    fSuccess    = FALSE;
             DWORD   dwProcessId = GetCurrentProcessId();
 
             // Take a snapshot of all modules in the specified process.
@@ -302,7 +314,7 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT4( void *pv, rtl_uString **p
             ZeroMemory( &ModuleInfo, sizeof(ModuleInfo) );
             ModuleInfo.SizeOfStruct = sizeof(ModuleInfo);
 
-            bSuccess = !!lpfnSymGetModuleInfo( GetCurrentProcess(), (DWORD)pv, &ModuleInfo );
+            bSuccess = (sal_Bool)(!!lpfnSymGetModuleInfo( GetCurrentProcess(), (DWORD)pv, &ModuleInfo ));
 
             if ( bSuccess )
             {
@@ -419,6 +431,18 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL 
         return _osl_addressGetModuleURL_NT( pv, pustrURL ) || _osl_addressGetModuleURL_NT4( pv, pustrURL );
     else
         return _osl_addressGetModuleURL_Windows( pv, pustrURL );
+}
+
+/*****************************************************************************/
+/* osl_getModuleURLFromFunctionAddress */
+/*****************************************************************************/
+sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction addr, rtl_uString ** ppLibraryUrl )
+{
+    /* casting a function pointer to a data pointer (void*) is
+       not allowed according to the C/C++ standards. In this case
+       it is unavoidable because we have to stay compatible we
+       cannot remove any function. */
+    return osl_getModuleURLFromAddress((void*)addr, ppLibraryUrl);
 }
 
 
