@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:29:32 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 16:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,16 +120,11 @@ void ODataView::setToolBox(ToolBox* pTB)
         return;
 
     if (m_pToolBox)
-    {
-        SFX_IMAGEMANAGER()->ReleaseToolBox(m_pToolBox);
         delete m_pToolBox;
-    }
 
     m_pToolBox = pTB;
     if (m_pToolBox)
     {
-        SFX_IMAGEMANAGER()->RegisterToolBox(m_pToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
-
         m_pToolBox->SetParent(this);
         m_pToolBox->Show();
     }
