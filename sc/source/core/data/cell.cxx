@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-08-31 12:33:01 $
+ *  last change: $Author: er $ $Date: 2001-10-05 11:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1471,16 +1471,26 @@ void __EXPORT ScFormulaCell::SFX_NOTIFY( SfxBroadcaster& rBC,
         if( p && (p->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING |
                 SC_HINT_TABLEOPDIRTY)) )
         {
+            BOOL bForceTrack = FALSE;
             if ( p->GetId() & SC_HINT_TABLEOPDIRTY )
+            {
+                bForceTrack = !bTableOpDirty;
                 bTableOpDirty = TRUE;
+            }
             else
+            {
+                bForceTrack = !bDirty;
                 bDirty = TRUE;
-            // #35962# nicht ewig aus FormulaTree rausholen um in FormulaTrack
-            // zu stellen und wieder in FormulaTree reinzupacken..
-            // kann ausser bei RECALCMODE_ALWAYS jemals eine Zelle im
-            // FormulaTree sein, wenn sie durch FormulaTrack eine Zelle
-            // anstossen wuerde, die nicht in FormulaTrack/FormulaTree ist?!?
-            if ( (!pDocument->IsInFormulaTree( this )
+            }
+            // #35962# Don't remove from FormulaTree to put in FormulaTrack to
+            // put in FormulaTree again and again, only if necessary.
+            // Any other means except RECALCMODE_ALWAYS by which a cell could
+            // be in FormulaTree if it would notify other cells through
+            // FormulaTrack which weren't in FormulaTrack/FormulaTree before?!?
+            // #87866# Yes. The new TableOpDirty made it necessary to have a
+            // forced mode where formulas may still be in FormulaTree from
+            // TableOpDirty but have to notify dependents for normal dirty.
+            if ( (bForceTrack || !pDocument->IsInFormulaTree( this )
                     || pCode->IsRecalcModeAlways())
                     && !pDocument->IsInFormulaTrack( this ) )
                 pDocument->AppendToFormulaTrack( this );
