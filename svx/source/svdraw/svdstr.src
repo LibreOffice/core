@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:33:35 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:14:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3612,6 +3612,44 @@ String STR_ObjNamePluralGRAFBMPTRANSLNK
     Text[ slovak ] = "PriehÄ¾adnÃ© bitovÃ© mapy s odkazom";
     Text[ hungarian ] = "Csatolt bitkÃ©pek Ã¡tlÃ¡tszÃ³sÃ¡ggal";
     Text[ slovenian ] = "Povezane bitne slike s prosojnico";
+};
+String STR_ObjNameSingulCUSTOMSHAPE
+{
+    Text = "Form";
+    Text [ english ] =  "Shape";
+    Text [ english_us ] = "Shape";
+};
+String STR_ObjNamePluralCUSTOMSHAPE
+{
+    Text = "Formen";
+    Text [ english ] =  "Shapes";
+    Text [ english_us ] = "Shapes";
+    Text[ portuguese ] = "Formas";
+    Text[ russian ] = "Ôîğìû";
+    Text[ greek ] = "Ó÷Şìáôá";
+    Text[ dutch ] = "Vormen";
+    Text[ french ] = "Formes";
+    Text[ spanish ] = "Formas";
+    Text[ italian ] = "Forme";
+    Text[ danish ] = "Former";
+    Text[ swedish ] = "Former";
+    Text[ polish ] = "Kszta³ty";
+    Text[ portuguese_brazilian ] = "Formas";
+    Text[ japanese ] = "ã‚·ã‚§ã‚¤ãƒ—";
+    Text[ korean ] = "ë„í˜•";
+    Text[ chinese_simplified ] = "å½¢çŠ¶";
+    Text[ chinese_traditional ] = "å½¢ç‹€";
+    Text[ arabic ] = "ÃÔßÇá";
+    Text[ turkish ] = "Biçimler";
+    Text[ catalan ] = "Formes";
+    Text[ finnish ] = "Muoto-operaatio";
+    Text[ thai ] = "à¸£à¸¹à¸›à¸£à¹ˆà¸²à¸‡";
+    Text[ czech ] = "Tvary";
+    Text[ hebrew ] = "â€®×¦×•×¨×•×ªâ€¬";
+    Text[ hindi ] = "à¤†à¤•à¤¾à¤°";
+    Text[ slovak ] = "Tvary";
+    Text[ hungarian ] = "Alakzatok";
+    Text[ slovenian ] = "Oblike";
 };
 String STR_ObjNameSingulGRAFMAC
 {
@@ -14231,7 +14269,7 @@ String SIP_XA_FILLFLOATTRANSPARENCE
     Text[ slovenian ] = "Prosojni preliv";
 };
 
-String SIP_XA_FILLRESERVED2
+String SIP_XA_SECONDARYFILLCOLOR
 {
     Text = "Füllung Reserve 2";
     Text [ ENGLISH ] = "Fill reserved 2" ;
@@ -17362,37 +17400,11 @@ String SIP_SA_TEXT_CONTOURFRAME
     Text[ slovenian ] = "OriÅ¡i potek besedila";
 };
 
-String SIP_SA_AUTOSHAPE_ADJUSTMENT
+String SIP_SA_CUSTOMSHAPE_ADJUSTMENT
 {
-    Text = "Autoformen Justierung";
-    Text [ ENGLISH ] = "Autoshape Adjustment" ;
-    Text[ english_us ] = "AutoShape Adjustment";
-    Text[ portuguese ] = "Ajuste de formas automáticas";
-    Text[ russian ] = "Âûğàâíèâàíèå àâòîôîğì";
-    Text[ greek ] = "Ñıèìéóç Áõôüìáôùí Ìïñöşí";
-    Text[ dutch ] = "AutoVormen justeren";
-    Text[ french ] = "Cadrage des formes automatiques";
-    Text[ spanish ] = "Ajuste de formas automáticas";
-    Text[ italian ] = "Regolazione autoshape";
-    Text[ danish ] = "Autoformater justering";
-    Text[ swedish ] = "Justering av autoformer";
-    Text[ polish ] = "Dopasowanie Autofigur";
-    Text[ portuguese_brazilian ] = "Ajuste de Auto-Formas";
-    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆã‚·ã‚§ã‚¤ãƒ—èª¿æ•´";
-    Text[ korean ] = "ìë™ ë§ì¶¤";
-    Text[ chinese_simplified ] = "å½¢çŠ¶è‡ªåŠ¨è°ƒé€‚";
-    Text[ chinese_traditional ] = "å½¢ç‹€è‡ªå‹•èª¿é©";
-    Text[ turkish ] = "Otomatik Şekil Ayarı";
-    Text[ arabic ] = "ÖÈØ ÇáÃÔßÇá ÇáÊáŞÇÆíÉ";
-    Text[ catalan ] = "Ajust d'autoformes";
-    Text[ finnish ] = "Automaattinen muutosten muotoilu";
-    Text[ thai ] = "à¸›à¸£à¸±à¸šà¸£à¸¹à¸›à¸£à¹ˆà¸²à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-    Text[ czech ] = "UpravenÃ­ automatickÃ©ho tvaru";
-    Text[ hebrew ] = "â€®×¢×™×¦×•×‘ ×¦×•×¨×” ××•×˜×•××˜×™â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤µà¤¯à¤‚ à¤†à¤•à¤¾à¤° à¤•à¤¾ à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾";
-    Text[ slovak ] = "Upravenie automatickÃ©ho tvaru";
-    Text[ hungarian ] = "Alakzatok mÃ³dosÃ­tÃ¡sa";
-    Text[ slovenian ] = "Poravnava samooblike";
+    Text = "Formen Justierung";
+    Text [ ENGLISH ] = "Shape Adjustment" ;
+    Text[ english_us ] = "Shape Adjustment";
 };
 
 String SIP_SA_XMLATTRIBUTES
@@ -17432,74 +17444,18 @@ String SIP_SA_TEXT_USEFIXEDCELLHEIGHT
 {
     Text = "Schriftartunabhängigen Zeilenabstand verwenden";   Text [ ENGLISH ] = "Use font-independent line spacing";    Text [ english_us ] = "Use font-independent line spacing";  };
 
-String SIP_SA_RESERVE16
+String SIP_SA_WORDWRAP
 {
-    Text = "SvDraw Reserve 16";
-    Text [ ENGLISH ] = "SvDraw Reserve 16" ;
-    Text[ english_us ] = "SvDraw reserved for 16";
-    Text[ portuguese ] = "SvDraw Reserva 16";
-    Text[ russian ] = "Çàğåçåğâèğîâàííûé SvDraw 16";
-    Text[ dutch ] = "SvDraw reserve 16";
-    Text[ french ] = "Réservé pour SvDraw 16";
-    Text[ spanish ] = "SvDraw reserva 16";
-    Text[ italian ] = "Riservato per SvDraw 16";
-    Text[ danish ] = "SvDraw reserveret til 16";
-    Text[ swedish ] = "SvDraw reserverad för 16";
-    Text[ polish ] = "Zarezerwowane dla SvDraw 16";
-    Text[ portuguese_brazilian ] = "SvDraw Reservado em 16";
-    Text[ japanese ] = "SvDrawã®äºˆå‚™ 16";
-    Text[ chinese_simplified ] = "SvDraw Reserve 16";
-    Text[ chinese_traditional ] = "SvDraw é ç•™ 16";
-    Text[ arabic ] = "SvDraw ãÍÌæÒ áÜ 16";
-    Text[ dutch ] = "SvDraw reserve 16";
-    Text[ chinese_simplified ] = "SvDraw Reserve 16";
-    Text[ greek ] = "SvDraw åíáëëáêô. 16";
-    Text[ korean ] = "SvDraw ì˜ˆë¹„ 16";
-    Text[ turkish ] = "SvDraw - Yedek 16";
-    Text[ catalan ] = "SvDraw reservat per a 16";
-    Text[ finnish ] = "SvDraw varattu 16:lle";
-    Text[ thai ] = "à¸ªà¸‡à¸§à¸™ SvDraw à¹„à¸§à¹‰à¸ªà¸³à¸«à¸£à¸±à¸š  16";
-    Text[ czech ] = "SvDraw vyhrazen pro 16";
-    Text[ hebrew ] = "â€®SvDraw ×©××•×¨ ×œ 16â€¬";
-    Text[ hindi ] = "SvDraw 16 à¤•à¥‡à¤²à¤¿à¤ à¤°à¤•à¥à¤·à¤¿à¤¤";
-    Text[ slovak ] = "SvDraw vyhradenÃ½ pre 16";
-    Text[ hungarian ] = "Fenntartott SvDraw 16";
-    Text[ slovenian ] = "SvDraw rezerviran za 16";
+    Text = "Word Wrap Text in Shape";
+    Text [ ENGLISH ] = "Word wrap text in shape" ;
+    Text[ english_us ] = "Word wrap text in shape";
 };
 
-String SIP_SA_RESERVE17
+String SIP_SA_AUTOGROWSIZE
 {
-    Text = "SvDraw Reserve 17";
-    Text [ ENGLISH ] = "SvDraw Reserve 17" ;
-    Text[ english_us ] = "SvDraw reserved for 17";
-    Text[ portuguese ] = "SvDraw Reserva 17";
-    Text[ russian ] = "Çàğåçåğâèğîâàííûé SvDraw 17";
-    Text[ dutch ] = "SvDraw reserve 17";
-    Text[ french ] = "Réservé pour SvDraw 17";
-    Text[ spanish ] = "SvDraw reserva 17";
-    Text[ italian ] = "Riservato per SvDraw 17";
-    Text[ danish ] = "SvDraw reserveret til 17";
-    Text[ swedish ] = "SvDraw reserverad för 17";
-    Text[ polish ] = "Zarezerwowane dla SvDraw 17";
-    Text[ portuguese_brazilian ] = "SvDraw Reservado em 17";
-    Text[ japanese ] = "SvDrawã®äºˆå‚™ 17";
-    Text[ chinese_simplified ] = "SvDraw Reserve 17";
-    Text[ chinese_traditional ] = "SvDraw é ç•™17";
-    Text[ arabic ] = "SvDraw ãÍÌæÒ áÜ 17";
-    Text[ dutch ] = "SvDraw reserve 17";
-    Text[ chinese_simplified ] = "SvDraw Reserve 17";
-    Text[ greek ] = "SvDraw åíáëëáêô. 17";
-    Text[ korean ] = "SvDraw ì˜ˆë¹„ 17";
-    Text[ turkish ] = "SvDraw - Yedek 17";
-    Text[ catalan ] = "SvDraw reservat per a 17";
-    Text[ finnish ] = "SvDraw varattu 17:lle";
-    Text[ thai ] = "à¸ªà¸‡à¸§à¸™ SvDraw à¹„à¸§à¹‰à¸ªà¸³à¸«à¸£à¸±à¸š 17";
-    Text[ czech ] = "SvDraw vyhrazen pro 17";
-    Text[ hebrew ] = "â€®SvDraw ×©××•×¨ ×œ 17â€¬";
-    Text[ hindi ] = "SvDraw 17 à¤•à¥‡à¤²à¤¿à¤ à¤°à¤•à¥à¤·à¤¿à¤¤";
-    Text[ slovak ] = "SvDraw vyhradenÃ½ pre 17";
-    Text[ hungarian ] = "Fenntartott SvDraw 17";
-    Text[ slovenian ] = "SvDraw rezerviran za 17";
+    Text = "Auto Grow Size";
+    Text [ ENGLISH ] = "Auto grow shape to fit text" ;
+    Text[ english_us ] = "Auto grow shape to fit text";
 };
 
 String SIP_SA_RESERVE18
