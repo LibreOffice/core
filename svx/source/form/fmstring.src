@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:59:22 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1412,6 +1412,7 @@ String RID_STR_CLASSNAME_SCROLLBAR
     Text = "Bildlaufleiste" ;
     Text [ english ] = "Scrollbar" ;
     Text [ english_us ] = "Scrollbar" ;
+    Text[ chinese_simplified ] = "滚动条";
 };
 
 String RID_STR_CLASSNAME_SPINBUTTON
@@ -1419,6 +1420,7 @@ String RID_STR_CLASSNAME_SPINBUTTON
     Text = "Drehfeld" ;
     Text [ english ] = "SpinButton" ;
     Text [ english_us ] = "SpinButton" ;
+    Text[ chinese_simplified ] = "选值按钮";
 };
 
 String RID_STR_CONTROL
@@ -1572,7 +1574,7 @@ String RID_STR_FIELDSELECTION
     Text[ portuguese_brazilian ] = "Sele��o de campos:";
     Text[ japanese ] = "フィールドの挿入";
     Text[ korean ] = "필드 추가:";
-    Text[ chinese_simplified ] = "新增字段：";
+    Text[ chinese_simplified ] = "选择字段:";
     Text[ chinese_traditional ] = "新增欄位：";
     Text[ turkish ] = "Alan ekle:";
     Text[ arabic ] = "������ �����:";
@@ -4637,12 +4639,14 @@ String RID_STR_PROPTITLE_SCROLLBAR
     Text = "Bildlaufleiste" ;
     Text [ english ] = "Scroll bar" ;
     Text [ english_us ] = "Scroll bar" ;
+    Text[ chinese_simplified ] = "滚动条";
 };
 String RID_STR_PROPTITLE_SPINBUTTON
 {
     Text = "Drehfeld" ;
     Text [ english ] = "Spin Button" ;
     Text [ english_us ] = "Spin Button" ;
+    Text[ chinese_simplified ] = "选值按钮";
 };
 String RID_STR_PROPTITLE_NAVBAR
 {
@@ -5492,6 +5496,7 @@ String RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
 {
     Text = "Der eingegebene Wert ist kein g�ltiges Datum. Bitte geben Sie ein Datum in einem g�ltigen Format ein, z.B. TT.MM.JJ.";
     Text[ english_us ] = "The value entered is not a valid date. Please enter a date in a valid format, for example, MM/DD/YY.";
+    Text[ chinese_simplified ] = "输入的数不是有效的日期。请以有效的格式输入日期，例如，MM/DD/YY。";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_INT_NO_VALID
