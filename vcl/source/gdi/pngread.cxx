@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-24 11:08:58 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,15 +79,6 @@
 // - Defines -
 // -----------
 
-#define CHUNK_IS_OPEN       1
-#define CHUNK_IS_CLOSED     2
-#define CHUNK_IS_IN_USE     4
-
-#define PNG_TRANS_VAL       0x1
-
-#define VIEWING_GAMMA       2.5
-#define DISPLAY_GAMMA       1.25
-
 #define PNGCHUNK_IHDR       0x49484452
 #define PNGCHUNK_PLTE       0x504c5445
 #define PNGCHUNK_IDAT       0x49444154
@@ -103,6 +94,11 @@
 #define PNGCHUNK_tRNS       0x74524e53
 #define PNGCHUNK_zTXt       0x7a545874
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
+
+#define PNG_TRANS_VAL       0x1
+
+#define VIEWING_GAMMA       2.5
+#define DISPLAY_GAMMA       1.25
 
 namespace vcl
 {
@@ -143,13 +139,71 @@ static const BYTE mpDefaultColorTable[ 256 ] =
     0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff
 };
 
+/* ------------------------------------------------------------------------
+   SJ: InitChunkSeq reads all PNG chunks. The rStm stream position will be at
+   the end of the file afterwards.
+*/
+const sal_Bool InitChunkSeq( SvStream& rStm, std::vector< vcl::PNGReader::ChunkData >& rChunkSeq )
+{
+    sal_Bool    bRet = sal_True;
+    sal_uInt16  nIStmOldMode = rStm.GetNumberFormatInt();
+    rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+
+    sal_uInt32 nDummy[ 2 ];
+    rStm >> nDummy[0] >> nDummy[1];
+    if( ! ( nDummy[0] == 0x89504e47 ) && ( nDummy[1] == 0x0d0a1a0a ) )
+        bRet = sal_False;
+    else
+    {
+        sal_uInt32 nChunkLen, nCRC32, nCheck, nType = 0;
+        while( !rStm.IsEof() && ( rStm.GetError() == ERRCODE_NONE ) )
+        {
+            rChunkSeq.resize( rChunkSeq.size() + 1 );
+            vcl::PNGReader::ChunkData& rChunkData = rChunkSeq.back();
+            rStm >> nChunkLen
+                 >> nType;
+
+            rChunkData.nType = nType;
+            #if defined(__LITTLEENDIAN) || defined(OSL_LITENDIAN)
+                nType = SWAPLONG( nType );
+            #endif
+            nCRC32 = rtl_crc32( 0, &nType, 4 );
+            if ( nChunkLen && !rStm.IsEof() )
+            {
+                rChunkData.aData.resize( nChunkLen );
+                sal_uInt8* pPtr = &rChunkData.aData[ 0 ];
+                rStm.Read( pPtr, nChunkLen );
+                nCRC32 = rtl_crc32( nCRC32, pPtr, nChunkLen );
+            }
+            rStm >> nCheck;
+            if ( nCRC32 != nCheck )
+            {
+                bRet = sal_False;
+                break;
+            }
+            if ( rChunkData.nType == PNGCHUNK_IEND )
+                break;
+        }
+        if ( !rChunkSeq.size() || ( rChunkSeq[ 0 ].nType != PNGCHUNK_IHDR ) )
+            bRet = sal_False;
+    }
+    rStm.SetNumberFormatInt( nIStmOldMode );
+    return bRet;
+}
+
 // -------------
 // - PNGReaderImpl -
 // -------------
 
 class PNGReaderImpl
 {
-    SvStream*           mpIStm;
+    friend class vcl::PNGReader;
+
+    std::vector< vcl::PNGReader::ChunkData >    maChunkSeq;
+    std::vector< sal_uInt8 >::iterator          maDataIter;
+    std::vector< sal_uInt8 >::iterator          maDataEnd;
+    sal_Int32                                   mnChunkLen;
+
     Bitmap*             mpBmp;
     BitmapWriteAccess*  mpAcc;
     Bitmap*             mpMaskBmp;
@@ -161,13 +215,7 @@ class PNGReaderImpl
     BYTE*               mpTransTab;     //
     BYTE*               mpScan;         // pointer in the current scanline
     BYTE*               mpColorTable;   //
-    UINT32              mnChunkStatus;
-    UINT32              mnChunkStartPosition;
-    UINT32              mnIDATCRCCount;
     sal_uInt32          mnChunkType;    // Chunk which is currently open
-    sal_uInt32          mnCRC;
-    sal_Int32           mnChunkDatSizeOrg;
-    sal_Int32           mnChunkDatSize;
     sal_uInt32          mnWidth;
     sal_uInt32          mnHeight;
     sal_uInt32          mnBBP;          // number of bytes per pixel
@@ -180,7 +228,6 @@ class PNGReaderImpl
     BYTE                mnTransRed;
     BYTE                mnTransGreen;
     BYTE                mnTransBlue;
-    BYTE                mnDummy;
     BYTE                mnBitDepth;     // sample depth
     BYTE                mnColorType;
     BYTE                mnCompressionType;
@@ -190,8 +237,6 @@ class PNGReaderImpl
     BYTE                cTransIndex1;
     BYTE                cNonTransIndex1;
     BOOL                mbStatus;
-    BOOL                mbFinished;
-    BOOL                mbFirstEntry;
     BOOL                mbTransparent;  // graphic includes an tRNS Chunk or an alpha Channel
     BOOL                mbAlphaChannel;
     BOOL                mbRGBTriple;
@@ -201,7 +246,6 @@ class PNGReaderImpl
     BOOL                mbIDAT;         // TRUE if finished with the complete IDAT...
     BOOL                mbGamma;        // TRUE if Gamma Correction available
     BOOL                mbpHYs;         // TRUE if pysical size of pixel available
-
 
     void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor &, BOOL bTrans );
     void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, BYTE nPalIndex, BOOL bTrans );
@@ -216,28 +260,19 @@ class PNGReaderImpl
     BOOL                ImplReadHeader();
     BOOL                ImplReadPalette();
     void                ImplGetGrayPalette( sal_uInt32 );
-    void                ImplOpenChunk();
-    BYTE                ImplReadBYTE();
     sal_uInt32          ImplReadsal_uInt32();
-    void                ImplReadDAT( unsigned char* pSource, long nDatSize );
-    BOOL                ImplCloseChunk();
-    void                ImplSkipChunk();
 
 public:
 
-                        PNGReaderImpl( SvStream& rStm );
-                        ~PNGReaderImpl();
+                                    PNGReaderImpl( SvStream& rStm );
+                                    ~PNGReaderImpl();
 
-    BitmapEx            Read();
+    BitmapEx                        Read();
 };
 
 // ------------------------------------------------------------------------------
 
 PNGReaderImpl::PNGReaderImpl( SvStream& rPNG ) :
-    mnChunkStatus   ( CHUNK_IS_CLOSED ),
-    mbStatus        ( TRUE ),
-    mbFirstEntry    ( TRUE ),
-    mpIStm          ( &rPNG ),
     mpAcc           ( NULL ),
     mpMaskAcc       ( NULL ),
     mpInflateInBuf  ( NULL ),
@@ -246,13 +281,13 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNG ) :
     mpBmp           ( NULL ),
     mpMaskBmp       ( NULL ),
     mpAlphaMask     ( NULL ),
-    mnIDATCRCCount  ( 0 ),
     mbGamma         ( sal_False ),
     mbzCodecInUse   ( sal_False ),
     mbpHYs          ( sal_False ),
     mpColorTable    ( (sal_uInt8*) mpDefaultColorTable ),
     mpZCodec        ( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) )
 {
+    mbStatus = InitChunkSeq( rPNG, maChunkSeq );
 }
 
 // ------------------------------------------------------------------------
@@ -280,178 +315,106 @@ PNGReaderImpl::~PNGReaderImpl()
 BitmapEx PNGReaderImpl::Read()
 {
     BitmapEx    aRet;
-    BYTE        nDummy;
 
-    mnIStmOldMode = mpIStm->GetNumberFormatInt();
-    mpIStm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    std::vector< vcl::PNGReader::ChunkData >::iterator aIter( maChunkSeq.begin() );
+    std::vector< vcl::PNGReader::ChunkData >::iterator aEnd ( maChunkSeq.end() );
 
-    while( mbStatus )
+    while( mbStatus && ( aIter != aEnd ) && ( aIter->nType != PNGCHUNK_IEND ) )
     {
-        if ( mbFirstEntry )
-        {
-            if ( !ImplReadHeader() )
-            {
-                mbStatus = FALSE;
-                break;
-            }
+        maDataIter = aIter->aData.begin();
+        maDataEnd  = aIter->aData.end();
+        mnChunkLen = aIter->aData.size();
 
-            mbFirstEntry = FALSE;
+        switch ( aIter->nType )
+        {
+            case PNGCHUNK_IHDR :
+            {
+                mbStatus = ImplReadHeader();
+            }
+            break;
+
+            case PNGCHUNK_gAMA :                                // the gamma chunk must precede
+            {
+                if ( mbIDAT == FALSE )                          // the 'IDAT' and also the
+                    ImplGetGamma();                             // 'PLTE'(if available )
+            }
+            break;
+
+            case PNGCHUNK_PLTE :
+            {
+                if ( !mbPalette )
+                    mbStatus = ImplReadPalette();
+            }
+            break;
+
+            case PNGCHUNK_tRNS :
+                ImplReadTransparent();
+            break;
+
+            case PNGCHUNK_bKGD :                                // the background chunk must appear
+            {
+                if ( ( mbIDAT == FALSE ) && mbPalette )         // before the 'IDAT' and after the
+                    ImplGetBackground();                        // PLTE(if available ) chunk.
+            }
+            break;
+
+            case PNGCHUNK_IDAT :
+            {
+                if ( !mbIDAT )      // the gfx is finished, but there may be left a zlibCRC of about 4Bytes
+                    ImplReadIDAT();
+            }
+            break;
+
+            case PNGCHUNK_pHYs :
+            {
+                if ( !mbIDAT && mnChunkLen == 9 )
+                {
+                    mnPrefWidth = ImplReadsal_uInt32();
+                    mnPrefHeight= ImplReadsal_uInt32();
+
+                    sal_uInt8 nUnitSpecifier = *maDataIter++;
+
+                    if ( nUnitSpecifier == 1 )
+                        mbpHYs = sal_True;
+                }
+            }
+            break;
         }
+        aIter++;
+    }
+    if ( mpAcc )
+        mpBmp->ReleaseAccess( mpAcc ), mpAcc = NULL;
+
+    if ( mpMaskAcc )
+    {
+        if ( mbAlphaChannel )
+            mpAlphaMask->ReleaseAccess( mpMaskAcc );
         else
-        {
-            if ( ( mpBmp == NULL ) || ( ( mpMaskBmp == NULL ) && ( mpAlphaMask == NULL ) ) )
-                mbStatus = FALSE;
-            else
-            {
-                mpAcc = mpBmp->AcquireWriteAccess();
+            mpMaskBmp->ReleaseAccess( mpMaskAcc );
 
-                if ( !mpAcc )
-                    mbStatus = FALSE;
-
-                if ( mbAlphaChannel )
-                    mpMaskAcc = mpAlphaMask->AcquireWriteAccess();
-                else
-                    mpMaskAcc = mpMaskBmp->AcquireWriteAccess();
-
-                if ( !mpMaskAcc )
-                    mbStatus = FALSE;
-            }
-        }
-
-        while( mbStatus && !mbFinished )
-        {
-            if( mpIStm->GetError() != ERRCODE_NONE )
-            {
-                mbStatus = FALSE;
-                break;
-            }
-
-            if ( mpIStm->IsEof() )
-                break;
-
-            if ( mnChunkStatus == CHUNK_IS_CLOSED )
-                ImplOpenChunk();
-
-            switch ( mnChunkType )
-            {
-                case PNGCHUNK_gAMA :                                // the gamma chunk must precede
-                {
-                    if ( mbIDAT == FALSE )                          // the 'IDAT' and also the
-                        ImplGetGamma();                             // 'PLTE'(if available )
-                }
-                break;
-
-                case PNGCHUNK_PLTE :
-                {
-                    if ( mbPalette )
-                        ImplSkipChunk();
-                    else
-                        mbStatus = ImplReadPalette();
-                }
-                break;
-
-                case PNGCHUNK_tRNS :
-                    ImplReadTransparent();
-                break;
-
-                case PNGCHUNK_bKGD :                                // the background chunk must appear
-                {
-                    if ( ( mbIDAT == FALSE ) && mbPalette )         // before the 'IDAT' and after the
-                        ImplGetBackground();                        // PLTE(if available ) chunk.
-                }
-                break;
-
-                case PNGCHUNK_IDAT :
-                {
-                    if ( mbIDAT )       // the gfx is finished, but there may be left a zlibCRC of about 4Bytes
-                    {
-                        ImplSkipChunk();
-                        break;
-                    }
-                    else
-                    {
-                        ImplReadIDAT();
-
-                        if ( ( mpIStm->Tell() - mnChunkDatSizeOrg ) == mnChunkStartPosition )
-                        {
-                            mnChunkStatus = CHUNK_IS_OPEN;
-                            mnChunkDatSize = mnChunkDatSizeOrg;
-                        }
-                        else
-                            mnChunkStatus = CHUNK_IS_IN_USE;
-                    }
-                }
-                break;
-
-                case PNGCHUNK_pHYs :
-                {
-                    if ( !mbIDAT && mnChunkDatSizeOrg == 9 )
-                    {
-                        mnPrefWidth = ImplReadsal_uInt32();
-                        mnPrefHeight= ImplReadsal_uInt32();
-
-                        sal_uInt8 nUnitSpecifier = ImplReadBYTE();
-
-                        if ( nUnitSpecifier == 1 )
-                            mbpHYs = sal_True;
-                    }
-                }
-                break;
-
-                case PNGCHUNK_IEND :
-                    mbFinished = TRUE;
-                break;
-
-                default:
-                    ImplSkipChunk();
-                break;
-            }
-
-            if ( mbStatus && ( mnChunkStatus == CHUNK_IS_OPEN ) )
-                mbStatus = ImplCloseChunk();
-        }
-
-        if ( mpAcc )
-            mpBmp->ReleaseAccess( mpAcc ), mpAcc = NULL;
-
-        if ( mpMaskAcc )
-        {
-            if ( mbAlphaChannel )
-                mpAlphaMask->ReleaseAccess( mpMaskAcc );
-            else
-                mpMaskBmp->ReleaseAccess( mpMaskAcc );
-
-            mpMaskAcc = NULL;
-        }
-
-        if ( mbStatus )
-        {
-            if ( ( mbFinished == FALSE ) || mbAlphaChannel || mbTransparent )
-            {
-                if ( mbAlphaChannel )
-                    aRet = BitmapEx( *mpBmp, *mpAlphaMask );
-                else
-                    aRet = BitmapEx( *mpBmp, *mpMaskBmp );
-            }
-            else
-                aRet = *mpBmp;
-
-            if ( mbpHYs && mnPrefWidth && mnPrefHeight )
-            {
-                sal_Int32 nPrefSizeX = (sal_Int32)( 100000.0 * ( (double)mnWidth / mnPrefWidth ) );
-                sal_Int32 nPrefSizeY = (sal_Int32)( 100000.0 * ( (double)mnHeight / mnPrefHeight ) );
-
-                aRet.SetPrefMapMode( MAP_100TH_MM );
-                aRet.SetPrefSize( Size( nPrefSizeX, nPrefSizeY ) );
-            }
-        }
-        break;
+        mpMaskAcc = NULL;
     }
 
+    if ( mbStatus )
+    {
+        if ( mbAlphaChannel )
+            aRet = BitmapEx( *mpBmp, *mpAlphaMask );
+        else if ( mbTransparent )
+            aRet = BitmapEx( *mpBmp, *mpMaskBmp );
+        else
+            aRet = *mpBmp;
+
+        if ( mbpHYs && mnPrefWidth && mnPrefHeight )
+        {
+            sal_Int32 nPrefSizeX = (sal_Int32)( 100000.0 * ( (double)mnWidth / mnPrefWidth ) );
+            sal_Int32 nPrefSizeY = (sal_Int32)( 100000.0 * ( (double)mnHeight / mnPrefHeight ) );
+
+            aRet.SetPrefMapMode( MAP_100TH_MM );
+            aRet.SetPrefSize( Size( nPrefSizeX, nPrefSizeY ) );
+        }
+    }
     if( !mbStatus )
         aRet.Clear();
-
-    mpIStm->SetNumberFormatInt( mnIStmOldMode );
 
     return aRet;
 }
@@ -460,35 +423,22 @@ BitmapEx PNGReaderImpl::Read()
 
 BOOL PNGReaderImpl::ImplReadHeader()
 {
-    sal_uInt32 nDummy[ 2 ];
-
-    *mpIStm >> nDummy[0] >> nDummy[1];
-
-    if( ! ( nDummy[0] == 0x89504e47 ) && ( nDummy[1] == 0x0d0a1a0a ) )
-        return FALSE;
-
-    ImplOpenChunk();
-
-    // IHDR Cunk must appear first !
-    if ( mnChunkType != PNGCHUNK_IHDR )
-        return FALSE;
-
     mnWidth = ImplReadsal_uInt32();
     mnHeight = ImplReadsal_uInt32();
 
     if ( ( mnWidth == 0 ) || ( mnHeight == 0 ) )
         return FALSE;
 
-    mnBitDepth = ImplReadBYTE();
-    mnColorType = ImplReadBYTE();
+    mnBitDepth = *maDataIter++;
+    mnColorType = *maDataIter++;
 
-    if ( mnCompressionType = ImplReadBYTE() )
+    if ( mnCompressionType = *maDataIter++ )
         return FALSE;
 
-    if ( mnFilterType = ImplReadBYTE() )
+    if ( mnFilterType = *maDataIter++ )
         return FALSE;
 
-    switch ( mnInterlaceType = ImplReadBYTE() ) // filter type valid ?
+    switch ( mnInterlaceType = *maDataIter++ )  // filter type valid ?
     {
         case 0 :
             mnPass = 7;
@@ -499,13 +449,9 @@ BOOL PNGReaderImpl::ImplReadHeader()
         default:
             return FALSE;
     }
-
-    if ( !ImplCloseChunk() )
-        return FALSE;
-
     mnYpos = 0;
     mbPalette = TRUE;
-    mbFinished = mbIDAT = mbAlphaChannel = mbTransparent = FALSE;
+    mbIDAT = mbAlphaChannel = mbTransparent = FALSE;
     mbGrayScale = mbRGBTriple = FALSE;
     mnDepth = mnBitDepth;
     mnScansize = ( ( mnWidth * mnBitDepth ) + 7 ) >> 3;
@@ -668,27 +614,22 @@ void PNGReaderImpl::ImplGetGrayPalette( sal_uInt32 nDepth )
 
 BOOL PNGReaderImpl::ImplReadPalette()
 {
-    sal_uInt32 nCount = mnChunkDatSizeOrg / 3;
+    sal_uInt32 nCount = mnChunkLen / 3;
 
-    if ( ( ( mnChunkDatSizeOrg % 3 ) == 0 ) && ( ( 0 < nCount ) && ( nCount <= 256 ) ) && mpAcc )
+    if ( ( ( mnChunkLen % 3 ) == 0 ) && ( ( 0 < nCount ) && ( nCount <= 256 ) ) && mpAcc )
     {
-        BYTE*   pTempBuf = new BYTE[ mnChunkDatSizeOrg ];
-        BYTE*   pTmp = pTempBuf;
         BYTE    nRed, nGreen, nBlue;
 
         mbPalette = TRUE;
         mpAcc->SetPaletteEntryCount( (USHORT) nCount );
-        ImplReadDAT( pTempBuf, mnChunkDatSizeOrg );
 
         for ( USHORT i = 0; i < nCount; i++ )
         {
-            nRed = mpColorTable[ *pTmp++ ];
-            nGreen = mpColorTable[ *pTmp++ ];
-            nBlue = mpColorTable[ *pTmp++ ];
+            nRed =   mpColorTable[ *maDataIter++ ];
+            nGreen = mpColorTable[ *maDataIter++ ];
+            nBlue =  mpColorTable[ *maDataIter++ ];
             mpAcc->SetPaletteColor( i, Color( nRed, nGreen, nBlue ) );
         }
-
-        delete[] pTempBuf;
     }
     else
         mbStatus = FALSE;
@@ -706,9 +647,7 @@ void PNGReaderImpl::ImplReadTransparent()
         {
             case 0 :
             {
-                if ( mnChunkDatSizeOrg != 2 )
-                    ImplSkipChunk();
-                else
+                if ( mnChunkLen == 2 )
                 {
                     mpTransTab = new sal_uInt8[ 256 ];
                     rtl_fillMemory( mpTransTab, 256, 0xff );
@@ -723,9 +662,7 @@ void PNGReaderImpl::ImplReadTransparent()
 
             case 2 :
             {
-                if ( mnChunkDatSizeOrg != 6 )
-                    ImplSkipChunk();
-                else
+                if ( mnChunkLen == 6 )
                 {
                     mnTransRed = ImplScaleColor();
                     mnTransGreen = ImplScaleColor();
@@ -736,25 +673,18 @@ void PNGReaderImpl::ImplReadTransparent()
 
             case 3 :
             {
-                if ( mnChunkDatSizeOrg > 256 )
-                    ImplSkipChunk();
-                else
+                if ( mnChunkLen <= 256 )
                 {
                     mpTransTab = new BYTE [ 256 ];
-                    rtl_fillMemory(mpTransTab, 256, 0xff );
-                    ImplReadDAT( mpTransTab, mnChunkDatSizeOrg );
+                    rtl_fillMemory( mpTransTab, 256, 0xff );
+                    rtl_copyMemory( mpTransTab, maDataIter, mnChunkLen );
+                    maDataIter += mnChunkLen;
                     mbTransparent = TRUE;
                 }
             }
             break;
-
-            default :
-                ImplSkipChunk();
-            break;
         }
     }
-    else
-        ImplSkipChunk();
 }
 
 // ------------------------------------------------------------------------
@@ -791,9 +721,9 @@ void PNGReaderImpl::ImplGetBackground()
     {
         case 3 :
         {
-            if ( mnChunkDatSizeOrg == 1 )
+            if ( mnChunkLen == 1 )
             {
-                UINT16 nCol = ImplReadBYTE() ;
+                UINT16 nCol = *maDataIter++;
                 if ( nCol < mpAcc->GetPaletteEntryCount() )
                 {
                     mpAcc->SetFillColor( (const Color&)mpAcc->GetPaletteColor( (BYTE)nCol ) );
@@ -801,14 +731,13 @@ void PNGReaderImpl::ImplGetBackground()
                     break;
                 }
             }
-            ImplSkipChunk();
         }
         break;
 
         case 0 :
         case 4 :
         {
-            if ( mnChunkDatSizeOrg == 2 )
+            if ( mnChunkLen == 2 )
             {
                 // the color type 0 and 4 is always greyscale,
                 // so the return value can be used as index
@@ -816,15 +745,13 @@ void PNGReaderImpl::ImplGetBackground()
                 mpAcc->SetFillColor( (const Color&)mpAcc->GetPaletteColor( nIndex ) );
                 mpAcc->FillRect( aRectangle );
             }
-            else
-                ImplSkipChunk();
         }
         break;
 
         case 2 :
         case 6 :
         {
-            if ( mnChunkDatSizeOrg == 6 )
+            if ( mnChunkLen == 6 )
             {
                 sal_uInt8 nRed = ImplScaleColor();
                 sal_uInt8 nGreen = ImplScaleColor();
@@ -832,16 +759,9 @@ void PNGReaderImpl::ImplGetBackground()
                 mpAcc->SetFillColor( Color( nRed, nGreen, nBlue ) );
                 mpAcc->FillRect( aRectangle );
             }
-            else
-                ImplSkipChunk();
         }
         break;
-
-        default :
-            ImplSkipChunk();
-        break;
     }
-
 }
 
 // ------------------------------------------------------------------------
@@ -851,9 +771,9 @@ void PNGReaderImpl::ImplGetBackground()
 sal_uInt8 PNGReaderImpl::ImplScaleColor()
 {
     sal_uInt32 nMask = ( ( 1 << mnBitDepth ) - 1 );
-    sal_uInt16 nCol = ( ImplReadBYTE() << 8 );
+    sal_uInt16 nCol = ( *maDataIter++ << 8 );
 
-    nCol += ImplReadBYTE() & (sal_uInt16)nMask;
+    nCol += *maDataIter++ & (sal_uInt16)nMask;
 
     if ( mnBitDepth > 8 )   // convert 16bit graphics to 8
         nCol >>= 8;
@@ -867,31 +787,26 @@ sal_uInt8 PNGReaderImpl::ImplScaleColor()
 void PNGReaderImpl::ImplReadIDAT()
 {
     sal_uInt32 nToRead, nRead;
-
-    if ( mnChunkDatSizeOrg )                // Chunk empty ?
+    if ( mnChunkLen )       // Chunk empty ?
     {
         if ( mbzCodecInUse == FALSE )
         {
             mbzCodecInUse = TRUE;
             mpZCodec->BeginCompression( ZCODEC_PNG_DEFAULT );
         }
-
-        mpZCodec->SetCRC( mnCRC );
-
-        if ( mnChunkStartPosition == mpIStm->Tell() )
-            mpZCodec->SetBreak( mnChunkDatSizeOrg );
+        mpZCodec->SetBreak( mnChunkLen );
+        SvMemoryStream aIStrm( maDataIter, mnChunkLen, STREAM_READ );
 
         while ( ( mpZCodec->GetBreak() ) )
         {
             // get bytes needed to fill the current scanline
             nToRead = mnScansize - ( mpScan - mpInflateInBuf );
 
-            if ( ( nRead = mpZCodec->ReadAsynchron( *mpIStm, mpScan, nToRead ) ) < 0 )
+            if ( ( nRead = mpZCodec->ReadAsynchron( aIStrm, mpScan, nToRead ) ) < 0 )
             {
                 mbStatus = FALSE;
                 break;
             }
-
             if ( nRead < nToRead )
             {
                 mpScan += nRead;            // ZStream is Broken
@@ -982,8 +897,6 @@ void PNGReaderImpl::ImplReadIDAT()
                 }
             }
         }
-
-        mnCRC = mpZCodec->GetCRC();
     }
 
     if ( ( mnPass >= 7 ) && ( mnYpos >= mnHeight ) )
@@ -1538,106 +1451,20 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX, const Bitma
 
 // ------------------------------------------------------------------------
 
-void PNGReaderImpl::ImplOpenChunk()
-{
-    sal_uInt32 nChunkDatSizeOrg, nChunkType;
-
-    *mpIStm >> nChunkDatSizeOrg >> nChunkType;
-
-    if ( mpIStm->GetError() != ERRCODE_NONE )
-    {
-        mbStatus = FALSE;
-        return;
-    }
-
-    mnChunkDatSizeOrg = nChunkDatSizeOrg;
-    mnChunkType = nChunkType;
-
-#ifdef OSL_LITENDIAN
-    nChunkType = SWAPLONG( nChunkType );
-#endif
-    mnCRC = rtl_crc32( 0, &nChunkType, 4 );
-
-    mnChunkDatSize = 0;
-    mnChunkStatus = CHUNK_IS_OPEN;
-    mnChunkStartPosition = mpIStm->Tell();
-}
-
-// ------------------------------------------------------------------------
-
-BYTE PNGReaderImpl::ImplReadBYTE()
-{
-    BYTE nRet;
-
-    mnChunkDatSize++;
-    *mpIStm >> nRet;
-    mnCRC = rtl_crc32( mnCRC, &nRet, 1 );
-
-    return nRet;
-}
-
-// ------------------------------------------------------------------------
-
 sal_uInt32 PNGReaderImpl::ImplReadsal_uInt32()
 {
     sal_uInt32 nRet;
-
-    mnChunkDatSize+=4;
-    *mpIStm >> nRet;
-
-#ifdef OSL_LITENDIAN
-    sal_uInt32 nTemp = SWAPLONG( nRet );
-    mnCRC = rtl_crc32( mnCRC, &nTemp, 4 );
-#else
-    mnCRC = rtl_crc32( mnCRC, &nRet, 4 );
-#endif
-
+    nRet = *maDataIter++;
+    nRet <<= 8;
+    nRet |= *maDataIter++;
+    nRet <<= 8;
+    nRet |= *maDataIter++;
+    nRet <<= 8;
+    nRet |= *maDataIter++;
     return nRet;
 }
 
 // ------------------------------------------------------------------------
-
-void PNGReaderImpl::ImplReadDAT ( unsigned char* pDest, long nDatSize )
-{
-    mnChunkDatSize += nDatSize;
-    mpIStm->Read( pDest, nDatSize );
-    mnCRC = rtl_crc32( mnCRC, pDest, nDatSize );
-}
-
-// ------------------------------------------------------------------------
-
-BOOL PNGReaderImpl::ImplCloseChunk ( void )
-{
-    sal_uInt32 nCheck;
-
-    *mpIStm >> nCheck;
-
-    if ( mpIStm->GetError() != ERRCODE_NONE )
-    {
-        mbStatus = FALSE;
-        return FALSE;
-    }
-
-    mnChunkStatus = CHUNK_IS_CLOSED;
-
-    return ( ( nCheck == mnCRC ) && ( mnChunkDatSizeOrg == mnChunkDatSize ) ) ? mbStatus : FALSE;
-}
-
-// ------------------------------------------------------------------------
-
-void PNGReaderImpl::ImplSkipChunk( void )
-{
-    const long nSkipLen = mnChunkStartPosition + mnChunkDatSizeOrg + 4 - mpIStm->Tell();
-
-    if( nSkipLen )
-    {
-        sal_Char* pBuffer = new sal_Char[ nSkipLen ];
-        mpIStm->Read( pBuffer, nSkipLen );
-        delete[] pBuffer;
-    }
-
-    mnChunkStatus = CHUNK_IS_CLOSED;
-}
 
 // -------------
 // - PNGReader -
@@ -1660,6 +1487,13 @@ PNGReader::~PNGReader()
 BitmapEx PNGReader::Read()
 {
     return mpImpl->Read();
+}
+
+// ------------------------------------------------------------------------
+
+const std::vector< vcl::PNGReader::ChunkData >& PNGReader::GetChunks() const
+{
+    return mpImpl->maChunkSeq;
 }
 
 } // namespace vcl
