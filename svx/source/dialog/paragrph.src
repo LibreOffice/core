@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:31:13 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ portuguese ] = "~Superior" ;
         Text [ finnish ] = "~Yläosa" ;
         Text [ danish ] = "Foroven" ;
-        Text [ french ] = "En ~haut" ;
+        Text [ french ] = "En haut" ;
         Text [ swedish ] = "~Överkant" ;
         Text [ dutch ] = "~Boven" ;
         Text [ spanish ] = "~Arriba" ;
@@ -1210,7 +1210,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ polish ] = "Wyrównanie tekstu w pionie";
         Text[ portuguese_brazilian ] = "Vertical text alignment";
         Text[ japanese ] = "c‘‚«";
-        Text[ korean ] = "Vertical text alignment";
+        Text[ korean ] = "ÅØ½ºÆ® ¼¼·Î ¸ÂÃã";
         Text[ chinese_simplified ] = "Ö±Ê½ÎÄ×Ö·½Ïò";
         Text[ chinese_traditional ] = "ª½¦¡¤å¦r¹ï»ô";
         Text[ turkish ] = "Vertical text alignment";
@@ -1355,10 +1355,10 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     StringList [ korean ] =
     {
             < "ÀÚµ¿" ; > ;
-        < "±âÁØ¼±" ; > ;
+        < "±âÁØ¶óÀÎ" ; > ;
         < "À§" ; > ;
         < "°¡¿îµ¥" ; > ;
-        < "¹Ù´Ú" ; > ;
+        < "¾Æ·¡" ; > ;
     };
     StringList [ chinese_simplified ] =
     {
@@ -1540,7 +1540,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ chinese_traditional ] = "¦æ¥½¤å¦r";
         Text[ arabic ] = "ÃÍÑİ İí äåÇíÉ ÇáÓØÑ";
         Text[ greek ] = "×áñáêôŞñåò óôï ôİëïò ôçò ãñáììŞò";
-        Text[ korean ] = "ÁÙ ¸¶Áö¸·ºÎºĞ¿¡ ¹®ÀÚ";
+        Text[ korean ] = "ÁÙ ¸¶Áö¸·ºÎºĞ¿¡ ÀÖ´Â ¹®ÀÚ";
         Text[ turkish ] = "satırsonu karakteri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "carácter al final de la línea";
@@ -1617,7 +1617,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ chinese_traditional ] = "¦æ­º¤å¦r";
         Text[ arabic ] = "ÃÍÑİ İí ÈÏÇíÉ ÇáÓØÑ";
         Text[ greek ] = "×áñáêôŞñåò óôçí áñ÷Ş ôçò ãñáììŞò";
-        Text[ korean ] = "ÁÙ ½ÃÀÛºÎºĞ¿¡ ¹®ÀÚ";
+        Text[ korean ] = "ÁÙ ½ÃÀÛºÎºĞ¿¡ ÀÖ´Â ¹®ÀÚ";
         Text[ turkish ] = "satırbaşı karakteri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "carácter al comienzo de la línea";
@@ -1952,7 +1952,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ russian ] = "Íå ğàçäåëÿòü àáçàö";
         Text[ polish ] = "Nie dziel akapitu";
         Text[ japanese ] = "’i—‚ğ•ªŠ„‚µ‚È‚¢(~D)";
-        Text[ chinese_traditional ] = "¬q¸¨¤£¹j¶}(~D)";
+        Text[ chinese_traditional ] = "¬q¸¨¤£¤À¹j(~D)";
         Text[ arabic ] = "ÚÏã ÊŞÓíã ÇáİŞÑÉ";
         Text[ greek ] = "Íá ìç ÷ùñéóôåß ç ğáñÜãñáöïò";
         Text[ korean ] = "´Ü¶ô ³ª´©Áö ¾Ê±â(~D)";
@@ -2010,10 +2010,10 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ swedish ] = "Änkek~ontroll";
         Text[ polish ] = "Nie dziel ostatniego wiersza akapitu";
         Text[ portuguese_brazilian ] = "~?rf?os";
-        Text[ japanese ] = "‰üÍß°¼Ş‚Éc‚·s”(~W)";
-        Text[ korean ] = "¸¶Áö¸·  ÇÑÁÙ ºĞ¸® ¹æÁö(~W)";
-        Text[ chinese_simplified ] = "ÓëÏÂ¶ÎÍ¬Ò³";
-        Text[ chinese_traditional ] = "»P¤U¬q¦P­¶";
+        Text[ japanese ] = "‰üÍß°¼Ş‚Éc‚·s”(~O)";
+        Text[ korean ] = "Ã³À½ ÇÑÁÙ ºĞ¸® ¹æÁö(W)(~O)";
+        Text[ chinese_simplified ] = "ÓëÏÂ¶ÎÍ¬Ò³(~O)";
+        Text[ chinese_traditional ] = "»P¤U¬q¦P­¶(~O)";
         Text[ turkish ] = "So~n satırı paragrafla birleştir";
         Text[ arabic ] = "ÊÚÏíá ÇäİÕÇá ÓØÑ ÇáİŞÑÉ ÇáÃÎíÑ";
         Text[ catalan ] = "Ajuste de ~viudas";
@@ -2088,9 +2088,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ polish ] = "Nie dziel pierwszego wiersza akapitu";
         Text[ portuguese_brazilian ] = "~Vi?as";
         Text[ japanese ] = "’i—‘O‚Å‰üÍß°¼Ş(~W)";
-        Text[ korean ] = "Ã³À½ ÇÑÁÙ ºĞ¸® ¹æÁö(~O)";
-        Text[ chinese_simplified ] = "¶ÎÂäÖ®ÖĞ²»·ÖÒ³";
-        Text[ chinese_traditional ] = "¬q¸¨¤§¤¤¤£¤À­¶";
+        Text[ korean ] = "¸¶Áö¸· ÇÑÁÙ ºĞ¸® ¹æÁö(~W)";
+        Text[ chinese_simplified ] = "¶ÎÂäÖ®ÖĞ²»·ÖÒ³(~W)";
+        Text[ chinese_traditional ] = "¬q¸¨¤§¤¤¤£¤À­¶(~W)";
         Text[ turkish ] = "~İlk satırı paragrafla birleştir";
         Text[ arabic ] = "ÊÚÏíá ÇäİÕÇá ÓØÑ ÇáİŞÑÉ ÇáÃæá";
         Text[ catalan ] = "Ajuste de ~huérfanas";
@@ -2206,15 +2206,15 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ russian ] = "Ñìåíà ñòğîêè";
         Text[ greek ] = "ÁëëáãŞ ó~åéñÜò";
         Text[ dutch ] = "~Nieuwe regel";
-        Text[ french ] = "R~etour à la ligne";
+        Text[ french ] = "Retour à la ligne";
         Text[ spanish ] = "Cambio de fila";
         Text[ italian ] = "Cambio ~riga";
         Text[ danish ] = "Options";
         Text[ swedish ] = "Radbrytning";
-        Text[ polish ] = "Zmiana wiersza";
+        Text[ polish ] = "Podzia³ wiersza";
         Text[ portuguese_brazilian ] = "Options";
         Text[ japanese ] = "‰üs‚Ìˆ—(~I)";
-        Text[ korean ] = "¿É¼Ç(~I)";
+        Text[ korean ] = "¿É¼Ç";
         Text[ chinese_simplified ] = "»»ĞĞ(~I)";
         Text[ chinese_traditional ] = "´«¦æ(~I)";
         Text[ turkish ] = "Options";
@@ -2265,12 +2265,12 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ italian ] = "Sono ammessi i separatori all'interno di parole scritte con caratteri latini.";
         Text[ danish ] = "Allow break inside of words in latin text";
         Text[ swedish ] = "Tillåt ~textbrytning inuti ord i latinsk text";
-        Text[ polish ] = "Dopuœæ podzia³ wyrazów napisanych literami ³aciñskimi";
+        Text[ polish ] = "Dopuœæ podzia³ wyrazów w tekœcie napisanym literami ³aciñskimi";
         Text[ portuguese_brazilian ] = "Allow break inside of words in latin text";
-        Text[ japanese ] = "‰p’PŒê‚Ì“r’†‚Å‰üs‚·‚é";
-        Text[ korean ] = "¶óÆ¾¾î ÅØ½ºÆ®ÀÇ ´Ü¾î¿¡¼­ ¿öµå·¦ Çã¿ë";
-        Text[ chinese_simplified ] = "ÔÊĞíÎ÷ÎÄÖ®ÖĞµÄ×Ö´Ê»»ĞĞ·Ö¿ª";
-        Text[ chinese_traditional ] = "¤¹³\\¦è¤å¤§¤¤ªº¦rµü´«¦æ¤À¶}";
+        Text[ japanese ] = "‰p’PŒê‚Ì“r’†‚Å‰üs‚·‚é(~B)";
+        Text[ korean ] = "¶óÆ¾¾î ÅØ½ºÆ®ÀÇ ´Ü¾î¿¡¼­ ¿öµå·¦ Çã¿ë(~B)";
+        Text[ chinese_simplified ] = "ÔÊĞíÎ÷ÎÄÖ®ÖĞµÄ×Ö´Ê»»ĞĞ·Ö¿ª(~B)";
+        Text[ chinese_traditional ] = "¤¹³\\¦è¤å¤§¤¤ªº¦rµü´«¦æ¤À¶}(~B)";
         Text[ turkish ] = "Allow break inside of words in latin text";
         Text[ arabic ] = "ÇáÓãÇÍ ÈİÇÕá ÇáäÕ ÏÇÎá ÇáßáãÇÊ İí ÇáäÕæÕ ÇááÇÊíäíÉ";
         Text[ catalan ] = "Permitir salto dentro de palabras en texto con caracteres latinos.";
@@ -2322,7 +2322,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ polish ] = "Odstêpy miêdzy znakami";
         Text[ portuguese_brazilian ] = "Character distance";
         Text[ japanese ] = "•¶šŠÔŠu‚Ì’²®";
-        Text[ korean ] = "Character distance";
+        Text[ korean ] = "ÀÚ°£";
         Text[ chinese_simplified ] = "×Ö·û¼ä¸ô";
         Text[ chinese_traditional ] = "¦r¤¸¶¡¹j";
         Text[ turkish ] = "Character distance";
@@ -2373,7 +2373,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ italian ] = "Applica spazio tra testo asiatico, latino e complesso.";
         Text[ danish ] = "Apply distance between asian, latin and complex text";
         Text[ swedish ] = "Använd ~avstånd mellan asiatisk, latinsk och komplex text";
-        Text[ polish ] = "Utwórz odstêp miêdzy tekstem azjatyckim, ³aciñskim i kompleksowym";
+        Text[ polish ] = "Ustaw odstêp miêdzy tekstem azjatyckim, ³aciñskim i z³o¿onym";
         Text[ portuguese_brazilian ] = "Apply distance between asian, latin and complex text";
         Text[ japanese ] = "“ú–{ŒêA‰p•¶šA‚¨‚æ‚Ñ¬İ•¶Í‚Å•¶šŠÔŠu‚ğ’²®";
         Text[ korean ] = "¾Æ½Ã¾Æ¾î, ¶óÆ¾¾î ±×¸®°í È¥ÇÕ ÅØ½ºÆ®¿¡¼­ °£°İ Àû¿ë";
@@ -2430,7 +2430,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ polish ] = "Wyrównanie tekstu";
         Text[ portuguese_brazilian ] = "Text alignment";
         Text[ japanese ] = "Ã·½Ä‚Ì”z’u(~T)";
-        Text[ korean ] = "ÅØ½ºÆ® Á¤·Ä";
+        Text[ korean ] = "ÅØ½ºÆ® Á¤·Ä(~T)";
         Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÆë(~T)";
         Text[ chinese_traditional ] = "¤å¦r¹ï»ô(~T)";
         Text[ turkish ] = "Text alignment";
@@ -2531,12 +2531,12 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     StringList [ chinese_simplified ] =
     {
             < "×Ô¶¯" ; Default ; > ;
-        < "??ÊÖ¶¯" ; Default ; > ;
+        < "ÊÖ¶¯" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
             < "¦Û°Ê" ; Default ; > ;
-        < "??¤â°Ê" ; Default ; > ;
+        < "¤â°Ê" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -2582,6 +2582,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
 };
 
  // ********************************************************************** EOF
+
 
 
 
