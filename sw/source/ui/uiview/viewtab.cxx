@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: ama $ $Date: 2001-02-16 12:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,10 +960,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             aCoreSet.Put( aBoxInfo );
             rSh.GetFlyFrmAttr( aCoreSet );
             const SvxBoxItem& rBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
-            USHORT nDist = (USHORT)rBox.GetDistance();
-            aParaMargin.SetRight(Max((long)(aParaMargin.GetRight() - nDist), (long)0));
-            if(aParaMargin.GetLeft() < nDist)
-                nDist = aParaMargin.GetLeft();
+            long nDist = rBox.GetDistance();
+            aParaMargin.SetRight( aParaMargin.GetRight() - nDist );
             aParaMargin.SetTxtLeft(aParaMargin.GetTxtLeft() - nDist);
         }
         DEBUGPARAMARGIN(aParaMargin);
@@ -1236,8 +1234,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 rSet.Put( aLongLR );
             else
             {
-                SvxLRSpaceItem aLR((USHORT)aLongLR.GetLeft(),
-                                    (USHORT)aLongLR.GetRight(),
+                SvxLRSpaceItem aLR( aLongLR.GetLeft(),
+                                    aLongLR.GetRight(),
                                     nWhich);
                 rSet.Put(aLR);
             }
@@ -1786,6 +1784,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:49  hr
+    initial import
+
     Revision 1.130  2000/09/18 16:06:14  willem.vandorp
     OpenOffice header added.
 
