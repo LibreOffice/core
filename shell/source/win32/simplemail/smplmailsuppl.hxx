@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smplmailsuppl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-14 08:08:56 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,6 @@
 #ifndef _SMPLMAILSUPPL_HXX_
 #define _SMPLMAILSUPPL_HXX_
 
-//----------------------------------------------------------
-//  includes of other projects
-//----------------------------------------------------------
-
 #ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase2.hxx>
 #endif
@@ -86,9 +82,6 @@
 #include "simplemapi.hxx"
 #endif
 
-//----------------------------------------------------------
-// class declaration
-//----------------------------------------------------------
 
 class CSmplMailSupplBase
 {
@@ -106,17 +99,11 @@ public:
     CSmplMailSuppl( );
     ~CSmplMailSuppl( );
 
-    //------------------------------------------------
     // XSimpleMailClientSupplier
-    //------------------------------------------------
-
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailClient > SAL_CALL querySimpleMailClient(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
     // XServiceInfo
-    //------------------------------------------------
-
     virtual ::rtl::OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);
 
@@ -125,9 +112,6 @@ public:
 
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
         throw(::com::sun::star::uno::RuntimeException);
-
-private:
-    CSimpleMapi*    m_pSimpleMapi;
 };
 
 #endif
