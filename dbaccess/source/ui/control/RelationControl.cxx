@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:10:36 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ namespace dbaui
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         String sText;
-        if ( m_pConnData->GetConnLineDataList()->size() > nRow )
+        if ( m_pConnData->GetConnLineDataList()->size() > static_cast<size_t>(nRow) )
         {
             OConnectionLineDataRef pConnLineData = (*m_pConnData->GetConnLineDataList())[nRow];
             if( pConnLineData.isValid() )
@@ -352,10 +352,10 @@ namespace dbaui
                 switch( getColumnIdent( nColId ) )
                 {
                 case SOURCE_COLUMN:
-                    sText = pConnLineData->GetSourceFieldName();
+                    sText  =pConnLineData->GetSourceFieldName();
                     break;
                 case DEST_COLUMN:
-                    sText = pConnLineData->GetDestFieldName();
+                    sText  =pConnLineData->GetDestFieldName();
                     break;
                 }
             }
@@ -416,7 +416,7 @@ namespace dbaui
     void ORelationControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId ) const
     {
         DBG_CHKTHIS(ORelationControl,NULL);
-        String aText = const_cast< ORelationControl*>(this)->GetCellText( m_nDataPos, nColumnId );
+        String aText  =const_cast< ORelationControl*>(this)->GetCellText( m_nDataPos, nColumnId );
 
         Point aPos( rRect.TopLeft() );
         Size aTextSize( GetDataWindow().GetTextHeight(),GetDataWindow().GetTextWidth( aText ));
