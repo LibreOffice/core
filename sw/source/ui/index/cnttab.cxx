@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:03:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -2247,7 +2244,6 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     for( i = 0; i < AUTH_FIELD_END; i++)
     {
         String sTmp(SW_RES(STR_AUTH_FIELD_START + i));
-        sTmp.EraseAllChars('~');
         sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTmp);
         aAuthFieldsLB.SetEntryData(nPos, (void*)(i));
     }
@@ -2661,7 +2657,6 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
     //fill it into the ListBox
     sal_uInt32 nData = rToken.nAuthorityField;
     String sTemp(SW_RES(STR_AUTH_FIELD_START + nData));
-    sTemp.EraseAllChars('~');
     sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTemp);
     aAuthFieldsLB.SetEntryData(nPos, (void*)(nData));
 }
@@ -2769,7 +2764,6 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
         for( sal_uInt32 i = 0; i < AUTH_FIELD_END; i++)
         {
             String sTmp(SW_RES(STR_AUTH_FIELD_START + i));
-            sTmp.EraseAllChars('~');
             sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTmp);
             aAuthFieldsLB.SetEntryData(nPos, (void*)(i));
         }
