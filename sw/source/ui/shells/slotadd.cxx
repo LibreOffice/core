@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:49:48 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,9 +319,19 @@
 #pragma code_seg( "SWSTATICS" )
 #endif
 
-#define SvxDrawToolItem  SfxEnumItem
-#define SvxDrawAlignItem SfxEnumItem
-#define SvxDrawBezierItem SfxEnumItem
+#define ITEMID_DASH_LIST        SID_DASH_LIST
+#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
+#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
+#define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
+#define ITEMID_HATCH_LIST       SID_HATCH_LIST
+#define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
+#ifndef _SVX_DRAWITEM_HXX
+#include <svx/drawitem.hxx>
+#endif
+
+#define SvxDrawToolItem  SfxAllEnumItem
+#define SvxDrawAlignItem SfxAllEnumItem
+#define SvxDrawBezierItem SfxAllEnumItem
 
 #define SFX_TYPEMAP
 #include "itemdef.hxx"
