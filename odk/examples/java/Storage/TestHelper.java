@@ -379,9 +379,15 @@ public class TestHelper  {
         }
 
         // check size of stream data
-        if ( pContents.length == 0 || pBytes.length != pContents[0].length )
+        if ( pContents.length == 0 )
         {
-            Error( "SubStream '" + sName + "' contains wrong amount of data!" );
+            Error( "SubStream '" + sName + "' reading produced disaster!"  );
+            return false;
+        }
+
+        if ( pBytes.length != pContents[0].length )
+        {
+            Error( "SubStream '" + sName + "' contains wrong amount of data! (" + pContents[0].length + "/" + pBytes.length + ")" );
             return false;
         }
 
@@ -545,19 +551,22 @@ public class TestHelper  {
 
     public boolean commitStorage( XStorage xStorage )
     {
-        // if a storage supports XTransactedObject it must be commited explicitly
+        // XTransactedObject must be supported by storages
         XTransactedObject xTransact = (XTransactedObject) UnoRuntime.queryInterface( XTransactedObject.class, xStorage );
-        if ( xTransact != null )
+        if ( xTransact == null )
         {
-            try
-            {
-                xTransact.commit();
-            }
-            catch( Exception e )
-            {
-                Error( "Storage commit failed, exception:" + e );
-                return false;
-            }
+            Error( "Storage doesn't implement transacted access!" );
+            return false;
+        }
+
+        try
+        {
+            xTransact.commit();
+        }
+        catch( Exception e )
+        {
+            Error( "Storage commit failed, exception:" + e );
+            return false;
         }
 
         return true;
