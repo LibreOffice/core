@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:30:30 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #include "pivot.hrc"
 
@@ -680,7 +679,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ french ] = "Total - colonnes" ;
         Text [ dutch ] = "Saldo ~kolommen" ;
         Text [ portuguese_brazilian ] = "Total das ~colunas" ;
-        Text[ chinese_simplified ] = "æ€»è®¡çš„åˆ—";
+        Text[ chinese_simplified ] = "æ€»è®¡åˆ—æ•°";
         Text[ russian ] = "Âñåãî ñòîëáöîâ";
         Text[ polish ] = "Suma ~kolumn";
         Text[ japanese ] = "åˆ—ã®ç·è¨ˆ";
