@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:26:31 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:46:10 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -38,7 +38,7 @@
 #     
 #**************************************************************************
 
-# Builds the C++ FlatXMLFilter component example of the Developers Guide.
+# Builds the C++ FlatXmlFilter component example of the Developers Guide.
 
 PRJ=../../../../..
 SETTINGS=$(PRJ)/settings
@@ -54,9 +54,9 @@ OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
 OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
 OUT_COMP_SLO=$(OUT_SLO)/$(COMPONENT_NAME)
 COMPONENT_XML=$(COMPONENT_NAME).uno.xml
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).uno.zip
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).uno.zip")
-
+COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOPKG_EXT)
+COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOPKG_EXT)")
+COMPONENT_UNOPKG_MANIFEST = $(OUT_COMP_GEN)/$(COMPONENT_NAME)/META-INF/manifest.xml
 
 REGISTERFLAG = $(OUT_MISC)/devguide_$(COMPONENT_NAME)_register_component.flag
 COMPONENT_TYPEFLAG = $(OUT_MISC)/devguide_$(COMPONENT_NAME)_types.flag
@@ -76,46 +76,55 @@ ALL : \
 include $(SETTINGS)/stdtarget.mk
 
 $(COMPONENT_TYPEFLAG) : $(COMPONENT_XML)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
-	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(DKREGISTRYNAME)
+	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(OFFICE_TYPE_LIBRARY)
 	echo flagged > $@
 
 $(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(OUT_COMP_GEN)/%.def : exports.dxp
 ifeq "$(OS)" "WIN"
+$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo EXPORTS > $@
-	$(CAT) exports.dxp >> $@
-endif
-
-ifeq "$(OS)" "WIN"
-$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(OUT_COMP_GEN)/%.def
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(LINK) $(LIBRARY_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),map,$(@F)) \
-	/DEF:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),def,$(@F)) $(SLOFILES) \
+	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN))
+	$(LINK) $(COMP_LINK_FLAGS) /OUT:$@ \
+	/MAP:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),map,$(@F)) $(SLOFILES) \
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) msvcrt.lib kernel32.lib
 else
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(LINK) $(LIBRARY_LINK_FLAGS) $(LINK_LIBS) -o $@ $^\
+	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $^\
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
 endif	
 
-$(COMPONENT_PACKAGE) : $(SHAREDLIB_OUT)/$(COMPONENT_IMPL_NAME) TypeDetection.xcu
+# rule for component package manifest
+$(OUT_COMP_GEN)/%/manifest.xml :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN)/$(PACKAGE_LIB_DIR))	 
-	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_GEN)/$(PACKAGE_LIB_DIR))
-	$(COPY) TypeDetection.xcu $(subst /,$(PS),$(OUT_COMP_GEN)) 
-	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && $(SDK_JAR) cvfM ../../bin/$(@F) TypeDetection.xcu $(PACKAGE_LIB_DIR)/$(<F)
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
+	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)FlatXmlFilter_cpp.xcu$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=native;platform=$(UNOPKG_PLATFORM)$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_GEN)/,,$(UNOPKG_PLATFORM)/$(@D))).uno.$(SHAREDLIB_EXT)$(QM)"/$(CSEP) >> $@
+	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
+
+# rule for component package file
+$(COMPONENT_PACKAGE) : $(SHAREDLIB_OUT)/$(COMPONENT_IMPL_NAME) FlatXmlFilter_cpp.xcu $(COMPONENT_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN)/$(UNOPKG_PLATFORM))	 
+	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_GEN)/$(UNOPKG_PLATFORM))
+	$(SDK_ZIP) $@ FlatXmlFilter_cpp.xcu
+	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && $(SDK_ZIP) -u ../../bin/$(@F) $(UNOPKG_PLATFORM)/$(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_GEN)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
-	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
@@ -128,8 +137,9 @@ endif
 
 FlatXmlFilterCppExample : $(REGISTERFLAG) 
 	@echo --------------------------------------------------------------------------------
-	@echo The C++ FlatXmlFilter component was installed if SDK_AUTO_DEPLOYMENT = YES.
-	@echo You can use this filter component inside your office installation. 
+	@echo The C++ FlatXmlFilter component is installed if SDK_AUTO_DEPLOYMENT = YES.
+	@echo You can use the filters "$(QM)DevGuide FlatXML ...$(QM)" inside your office installation
+	@echo after you have installed the "$(QM)FlatXmlTypeDetection.uno.pkg"$(QM) as well.
 	@echo --------------------------------------------------------------------------------
 
 .PHONY: clean
