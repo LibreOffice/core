@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-13 17:35:52 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ ClassData##N WeakAggComponentImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 3 
 // The Mac OS X gcc compiler cannot handle assignments to static data members
 // of the generic template class. It can only handle assignments to specific
 // instantiations of a template class.
-#ifdef MACOSX
+#if defined(MACOSX) && ( __GNUC__ < 3 )
 /** @internal */
 #define __DEF_COMPIMPLHELPER( N ) \
 __DEF_COMPIMPLHELPER_A( N ) \
