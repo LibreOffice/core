@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:32:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ USHORT ScDataPilotConversion::FunctionBit( sheet::GeneralFunction eFunc )
 
 //------------------------------------------------------------------------
 
-ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, USHORT nTab, const String& rName )
+ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const String& rName )
 {
     if (pDocShell)
     {
@@ -245,7 +245,7 @@ String lcl_CreatePivotName( ScDocShell* pDocShell )
 
 //------------------------------------------------------------------------
 
-ScDataPilotTablesObj::ScDataPilotTablesObj(ScDocShell* pDocSh, USHORT nT) :
+ScDataPilotTablesObj::ScDataPilotTablesObj(ScDocShell* pDocSh, SCTAB nT) :
     pDocShell( pDocSh ),
     nTab( nT )
 {
@@ -271,7 +271,7 @@ void ScDataPilotTablesObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 // XDataPilotTables
 
-ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl(USHORT nIndex)
+ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl(SCSIZE nIndex)
 {
     if (pDocShell)
     {
@@ -282,7 +282,7 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl(USHORT nIndex)
             //  count tables on this sheet
             //  api only handles sheet data at this time
             //! allow all data sources!!!
-            USHORT nFound = 0;
+            SCSIZE nFound = 0;
             USHORT nCount = pColl->GetCount();
             for (USHORT i=0; i<nCount; i++)
             {
@@ -325,7 +325,6 @@ void lcl_SetSaveData(const uno::Reference<container::XIndexAccess>& xFields, ScD
 {
     if (xFields.is() && pSaveData)
     {
-        ScDPSaveDimension* pDim;
         sal_Int32 nFieldsCount(xFields->getCount());
         for (sal_Int32 i = 0; i < nFieldsCount; ++i)
         {
@@ -335,8 +334,7 @@ void lcl_SetSaveData(const uno::Reference<container::XIndexAccess>& xFields, ScD
             if ((aDim >>= xDim) && (aDim >>= xDimProps))
             {
                 rtl::OUString sName(xDim->getName());
-                if (sName.getLength())
-                    pDim = pSaveData->GetDimensionByName(sName);
+                ScDPSaveDimension* pDim = sName.getLength() ? pSaveData->GetDimensionByName(sName) : 0;
                 if (pDim)
                 {
                     uno::Any aAny = xDimProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)));
@@ -455,7 +453,7 @@ uno::Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XDataPilotTable> xTable = GetObjectByIndex_Impl((USHORT)nIndex);
+    uno::Reference<sheet::XDataPilotTable> xTable = GetObjectByIndex_Impl(static_cast<SCSIZE>(nIndex));
     uno::Any aAny;
     if (xTable.is())
         aAny <<= xTable;
@@ -909,7 +907,7 @@ ScDataPilotDescriptorBase* ScDataPilotDescriptorBase::getImplementation(
 
 //------------------------------------------------------------------------
 
-ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell* pDocSh, USHORT nT, const String& rN) :
+ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const String& rN) :
     ScDataPilotDescriptorBase( pDocSh ),
     nTab( nT ),
     aName( rN )
@@ -1154,13 +1152,13 @@ ScDataPilotFieldsObj::~ScDataPilotFieldsObj()
     pParent->release();
 }
 
-SCCOLROW lcl_GetFieldCount( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& rSource, USHORT nType )
+SCSIZE lcl_GetFieldCount( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& rSource, USHORT nType )
 {
-    SCCOLROW nRet = 0;
+    SCSIZE nRet = 0;
 
     uno::Reference<container::XNameAccess> xDimsName(rSource->getDimensions());
     uno::Reference<container::XIndexAccess> xIntDims(new ScNameToIndexAccess( xDimsName ));
-    SCCOLROW nIntCount = (SCCOLROW)xIntDims->getCount();
+    sal_Int32 nIntCount = xIntDims->getCount();
     if (nType != SC_FIELDORIENT_ALL)
     {
         uno::Reference<beans::XPropertySet> xDim;
@@ -1177,25 +1175,25 @@ SCCOLROW lcl_GetFieldCount( const com::sun::star::uno::Reference<com::sun::star:
         }
     }
     else
-        nRet = nIntCount;
+        nRet = static_cast<SCSIZE>(nIntCount);
 
     return nRet;
 }
 
 BOOL lcl_GetFieldDataByIndex( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& rSource,
-                                USHORT nType, SCCOLROW nIndex, SCCOLROW& rPos )
+                                USHORT nType, SCSIZE nIndex, SCSIZE& rPos )
 {
     BOOL bOk = FALSE;
-    SCCOLROW nPos = 0;
+    SCSIZE nPos = 0;
 
     uno::Reference<container::XNameAccess> xDimsName(rSource->getDimensions());
     uno::Reference<container::XIndexAccess> xIntDims(new ScNameToIndexAccess( xDimsName ));
-    SCCOLROW nIntCount = (SCCOLROW)xIntDims->getCount();
+    sal_Int32 nIntCount = xIntDims->getCount();
     if (nType != SC_FIELDORIENT_ALL)
     {
         uno::Reference<beans::XPropertySet> xDim;
         sheet::DataPilotFieldOrientation aOrient;
-        SCCOLROW i = 0;
+        sal_Int32 i = 0;
         while (i < nIntCount && !bOk)
         {
             xDim.set(xIntDims->getByIndex(i), uno::UNO_QUERY);
@@ -1207,7 +1205,7 @@ BOOL lcl_GetFieldDataByIndex( const com::sun::star::uno::Reference<com::sun::sta
                     if (nPos == nIndex)
                     {
                         bOk = sal_True;
-                        rPos = i;
+                        rPos = static_cast<SCSIZE>(i);
                     }
                     else
                         ++nPos;
@@ -1218,7 +1216,7 @@ BOOL lcl_GetFieldDataByIndex( const com::sun::star::uno::Reference<com::sun::sta
     }
     else
     {
-        if (nIndex < nIntCount)
+        if (nIndex < static_cast<SCSIZE>(nIntCount))
         {
             rPos = nIndex;
             bOk = sal_True;
@@ -1229,20 +1227,20 @@ BOOL lcl_GetFieldDataByIndex( const com::sun::star::uno::Reference<com::sun::sta
 }
 
 BOOL lcl_GetFieldDataByName( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& rSource,
-                            USHORT nType, const rtl::OUString& sName, SCCOLROW& nIndex )
+                            USHORT nType, const rtl::OUString& sName, SCSIZE& nIndex )
 {
     BOOL bOk = FALSE;
-    SCCOLROW nPos = 0;
+    SCSIZE nPos = 0;
 
     uno::Reference<container::XNameAccess> xDimsName(rSource->getDimensions());
     uno::Reference<container::XIndexAccess> xIntDims(new ScNameToIndexAccess( xDimsName ));
-    SCCOLROW nIntCount = (SCCOLROW)xIntDims->getCount();
+    sal_Int32 nIntCount = xIntDims->getCount();
     if (nType != SC_FIELDORIENT_ALL)
     {
         uno::Reference<container::XNamed> xDim;
         uno::Reference<beans::XPropertySet> xDimProp;
         sheet::DataPilotFieldOrientation aOrient;
-        SCCOLROW i = 0;
+        sal_Int32 i = 0;
         while (i < nIntCount && !bOk)
         {
             xDim.set(xIntDims->getByIndex(i), uno::UNO_QUERY);
@@ -1287,7 +1285,7 @@ BOOL lcl_GetFieldDataByName( const com::sun::star::uno::Reference<com::sun::star
 
 // XDataPilotFields
 
-ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByIndex_Impl(SCCOLROW nIndex) const
+ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByIndex_Impl(SCSIZE nIndex) const
 {
     ScDPObject* pObj = pParent->GetDPObject();
 
@@ -1295,7 +1293,7 @@ ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByIndex_Impl(SCCOLROW nIndex
     if (pObj)
     {
         ScDPSaveDimension* pDim = NULL;
-        SCCOLROW nSourceIndex;
+        SCSIZE nSourceIndex;
         BOOL bOk = lcl_GetFieldDataByIndex( pObj->GetSource(), nType, nIndex, nSourceIndex );
 
         if (bOk)
@@ -1315,10 +1313,10 @@ ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByName_Impl(const rtl::OUStr
     if (pDPObj)
     {
         ScDocShell* pDocSh = pParent->GetDocShell();
-        SCCOLROW nCount = lcl_GetFieldCount( pDPObj->GetSource(), nType );
-        SCCOLROW nIndex = 0;
+        SCSIZE nCount = lcl_GetFieldCount( pDPObj->GetSource(), nType );
+        SCSIZE nIndex = 0;
         ScDPSaveDimension* pDim = NULL;
-        for (SCCOLROW i=0; i<nCount; i++)
+        for (SCSIZE i=0; i<nCount; i++)
         {
             if (lcl_GetFieldDataByName( pDPObj->GetSource(), nType, aName, nIndex ))
             {
@@ -1346,7 +1344,7 @@ sal_Int32 SAL_CALL ScDataPilotFieldsObj::getCount() throw(uno::RuntimeException)
 // TODO
     ScDPObject* pDPObj(pParent->GetDPObject());
 
-    return pDPObj ? lcl_GetFieldCount( pDPObj->GetSource(), nType ) : 0;
+    return pDPObj ? static_cast<sal_Int32>(lcl_GetFieldCount( pDPObj->GetSource(), nType )) : 0;
 }
 
 uno::Any SAL_CALL ScDataPilotFieldsObj::getByIndex( sal_Int32 nIndex )
@@ -1354,7 +1352,7 @@ uno::Any SAL_CALL ScDataPilotFieldsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<beans::XPropertySet> xField(GetObjectByIndex_Impl((SCCOLROW)nIndex));
+    uno::Reference<beans::XPropertySet> xField(GetObjectByIndex_Impl(static_cast<SCSIZE>(nIndex)));
     if (xField.is())
         return uno::makeAny(xField);
     else
@@ -1397,7 +1395,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDataPilotFieldsObj::getElementNames()
     {
         ScDocShell* pDocSh = pParent->GetDocShell();
 
-        uno::Sequence<rtl::OUString> aSeq(lcl_GetFieldCount(pDPObj->GetSource(), nType));
+        uno::Sequence<rtl::OUString> aSeq(static_cast<sal_Int32>(lcl_GetFieldCount(pDPObj->GetSource(), nType)));
         rtl::OUString* pAry = aSeq.getArray();
         List aDimensions = pDPObj->GetSaveData()->GetDimensions();
         sal_Int32 nDimCount = aDimensions.Count();
@@ -1425,12 +1423,12 @@ sal_Bool SAL_CALL ScDataPilotFieldsObj::hasByName( const rtl::OUString& aName )
 
 //------------------------------------------------------------------------
 
-BOOL lcl_GetDim(ScDPObject* pDPObj, SCCOLROW nSourcePos, ScDPSaveDimension*& rpDim)
+BOOL lcl_GetDim(ScDPObject* pDPObj, SCSIZE nSourcePos, ScDPSaveDimension*& rpDim)
 {
     BOOL bRet = FALSE;
     uno::Reference<container::XNameAccess> xDimsName(pDPObj->GetSource()->getDimensions());
     uno::Reference<container::XIndexAccess> xIntDims(new ScNameToIndexAccess( xDimsName ));
-    uno::Reference<container::XNamed> xDim(xIntDims->getByIndex(nSourcePos), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xDim(xIntDims->getByIndex(static_cast<sal_Int32>(nSourcePos)), uno::UNO_QUERY);
     if (xDim.is())
     {
         ScDPSaveData* pSave = pDPObj->GetSaveData();
@@ -1445,7 +1443,7 @@ BOOL lcl_GetDim(ScDPObject* pDPObj, SCCOLROW nSourcePos, ScDPSaveDimension*& rpD
 }
 
 ScDataPilotFieldObj::ScDataPilotFieldObj( ScDataPilotDescriptorBase* pPar,
-                                            USHORT nST, SCCOLROW nSP ) :
+                                            USHORT nST, SCSIZE nSP ) :
     aPropSet( lcl_GetDataPilotFieldMap() ),
     pParent( pPar ),
     nSourceType( nST ),
@@ -1712,7 +1710,7 @@ void ScDataPilotFieldObj::setUseCurrentPage(sal_Bool bUse)
 
 //------------------------------------------------------------------------
 
-ScDataPilotItemsObj::ScDataPilotItemsObj(ScDataPilotDescriptorBase* pPar, SCCOLROW nSP) :
+ScDataPilotItemsObj::ScDataPilotItemsObj(ScDataPilotDescriptorBase* pPar, SCSIZE nSP) :
     pParent( pPar ),
     nSourcePos( nSP )
 {
@@ -1724,7 +1722,7 @@ ScDataPilotItemsObj::~ScDataPilotItemsObj()
     pParent->release();
 }
 
-BOOL lcl_GetMembers( ScDataPilotDescriptorBase* pParent, SCCOLROW nSP, uno::Reference<container::XNameAccess>& xMembers )
+BOOL lcl_GetMembers( ScDataPilotDescriptorBase* pParent, SCSIZE nSP, uno::Reference<container::XNameAccess>& xMembers )
 {
     BOOL bRet = FALSE;
     ScDPObject* pDPObj(pParent->GetDPObject());
@@ -1732,7 +1730,7 @@ BOOL lcl_GetMembers( ScDataPilotDescriptorBase* pParent, SCCOLROW nSP, uno::Refe
     {
         uno::Reference<container::XNameAccess> xDimsName(pDPObj->GetSource()->getDimensions());
         uno::Reference<container::XIndexAccess> xIntDims(new ScNameToIndexAccess( xDimsName ));
-        uno::Reference<beans::XPropertySet> xDim(xIntDims->getByIndex(nSP), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xDim(xIntDims->getByIndex(static_cast<sal_Int32>(nSP)), uno::UNO_QUERY);
         if (xDim.is())
         {
             sal_Int32 nUsedHier;
@@ -1765,15 +1763,15 @@ BOOL lcl_GetMembers( ScDataPilotDescriptorBase* pParent, SCCOLROW nSP, uno::Refe
     return bRet;
 }
 
-SCCOLROW lcl_GetItemCount( ScDataPilotDescriptorBase* pParent, SCCOLROW nSP )
+SCSIZE lcl_GetItemCount( ScDataPilotDescriptorBase* pParent, SCSIZE nSP )
 {
-    SCCOLROW nRet = 0;
+    SCSIZE nRet = 0;
 
     uno::Reference<container::XNameAccess> xMembers;
     if (lcl_GetMembers(pParent, nSP, xMembers))
     {
         uno::Reference<container::XIndexAccess> xMembersIndex(new ScNameToIndexAccess( xMembers ));
-        nRet = static_cast<SCCOLROW>(xMembersIndex->getCount());
+        nRet = static_cast<SCSIZE>(xMembersIndex->getCount());
     }
 
     return nRet;
@@ -1781,7 +1779,7 @@ SCCOLROW lcl_GetItemCount( ScDataPilotDescriptorBase* pParent, SCCOLROW nSP )
 
 // XDataPilotItemss
 
-ScDataPilotItemObj* ScDataPilotItemsObj::GetObjectByIndex_Impl(SCCOLROW nIndex) const
+ScDataPilotItemObj* ScDataPilotItemsObj::GetObjectByIndex_Impl(SCSIZE nIndex) const
 {
 // TODO
     if (nIndex < lcl_GetItemCount(pParent, nSourcePos))
@@ -1803,14 +1801,14 @@ uno::Any SAL_CALL ScDataPilotItemsObj::getByName( const rtl::OUString& aName )
         if (lcl_GetMembers(pParent, nSourcePos, xMembers))
         {
             uno::Reference<container::XIndexAccess> xMembersIndex(new ScNameToIndexAccess( xMembers ));
-            SCCOLROW nCount = static_cast<SCCOLROW>(xMembersIndex->getCount());
+            sal_Int32 nCount = xMembersIndex->getCount();
             sal_Bool bFound(sal_False);
-            SCCOLROW nItem = 0;
+            sal_Int32 nItem = 0;
             while (nItem < nCount && !bFound )
             {
                 uno::Reference<container::XNamed> xMember(xMembersIndex->getByIndex(nItem), uno::UNO_QUERY);
                 if (xMember.is() && aName == xMember->getName())
-                    return uno::makeAny(uno::Reference<beans::XPropertySet> (GetObjectByIndex_Impl(nItem)));
+                    return uno::makeAny(uno::Reference<beans::XPropertySet> (GetObjectByIndex_Impl(static_cast<SCSIZE>(nItem))));
                 else
                     nItem++;
             }
@@ -1835,11 +1833,11 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDataPilotItemsObj::getElementNames()
         if (lcl_GetMembers(pParent, nSourcePos, xMembers))
         {
             uno::Reference<container::XIndexAccess> xMembersIndex(new ScNameToIndexAccess( xMembers ));
-            SCCOLROW nCount = static_cast<SCCOLROW>(xMembersIndex->getCount());
+            sal_Int32 nCount = xMembersIndex->getCount();
             uno::Sequence<rtl::OUString> aSeq(nCount);
             rtl::OUString* pAry = aSeq.getArray();
             sal_Bool bFound(sal_False);
-            for (SCCOLROW nItem = 0; nItem < nCount; nItem++)
+            for (sal_Int32 nItem = 0; nItem < nCount; nItem++)
             {
                 uno::Reference<container::XNamed> xMember(xMembersIndex->getByIndex(nItem), uno::UNO_QUERY);
                 if (xMember.is())
@@ -1862,8 +1860,8 @@ sal_Bool SAL_CALL ScDataPilotItemsObj::hasByName( const rtl::OUString& aName )
         if (lcl_GetMembers(pParent, nSourcePos, xMembers))
         {
             uno::Reference<container::XIndexAccess> xMembersIndex(new ScNameToIndexAccess( xMembers ));
-            SCCOLROW nCount = static_cast<SCCOLROW>(xMembersIndex->getCount());
-            SCCOLROW nItem = 0;
+            sal_Int32 nCount = xMembersIndex->getCount();
+            sal_Int32 nItem = 0;
             while (nItem < nCount && !bFound )
             {
                 uno::Reference<container::XNamed> xMember(xMembersIndex->getByIndex(nItem), uno::UNO_QUERY);
@@ -1893,7 +1891,7 @@ sal_Int32 SAL_CALL ScDataPilotItemsObj::getCount() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
 // TODO
-    return lcl_GetItemCount( pParent, nSourcePos );
+    return static_cast<sal_Int32>(lcl_GetItemCount( pParent, nSourcePos ));
 }
 
 uno::Any SAL_CALL ScDataPilotItemsObj::getByIndex( sal_Int32 nIndex )
@@ -1901,7 +1899,7 @@ uno::Any SAL_CALL ScDataPilotItemsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<beans::XPropertySet> xItem(GetObjectByIndex_Impl((SCCOLROW)nIndex));
+    uno::Reference<beans::XPropertySet> xItem(GetObjectByIndex_Impl(static_cast<SCSIZE>(nIndex)));
     if (xItem.is())
         return uno::makeAny(xItem);
     else
@@ -1922,7 +1920,7 @@ sal_Bool SAL_CALL ScDataPilotItemsObj::hasElements() throw(uno::RuntimeException
 
 //------------------------------------------------------------------------
 
-ScDataPilotItemObj::ScDataPilotItemObj(ScDataPilotDescriptorBase* pPar, SCCOLROW nSP, SCCOLROW nI)
+ScDataPilotItemObj::ScDataPilotItemObj(ScDataPilotDescriptorBase* pPar, SCSIZE nSP, SCSIZE nI)
     : pParent(pPar),
     aPropSet( lcl_GetDataPilotItemMap() ),
     nSourcePos (nSP),
@@ -1949,10 +1947,10 @@ ScDataPilotItemObj::~ScDataPilotItemObj()
         if (lcl_GetMembers(pParent, nSourcePos, xMembers))
         {
             uno::Reference<container::XIndexAccess> xMembersIndex(new ScNameToIndexAccess( xMembers ));
-            SCCOLROW nCount = static_cast<SCCOLROW>(xMembersIndex->getCount());
-            if (nIndex < nCount )
+            sal_Int32 nCount = xMembersIndex->getCount();
+            if (nIndex < static_cast<SCSIZE>(nCount))
             {
-                uno::Reference<container::XNamed> xMember(xMembersIndex->getByIndex(nIndex), uno::UNO_QUERY);
+                uno::Reference<container::XNamed> xMember(xMembersIndex->getByIndex(static_cast<sal_Int32>(nIndex)), uno::UNO_QUERY);
                 sRet = xMember->getName();
             }
         }
@@ -1996,10 +1994,10 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const ::rtl::OUString& aProp
             if (lcl_GetMembers(pParent, nSourcePos, xMembers) && lcl_GetDim(pDPObj, nSourcePos, pDim))
             {
                 uno::Reference<container::XIndexAccess> xMembersIndex(new ScNameToIndexAccess( xMembers ));
-                SCCOLROW nCount = static_cast<SCCOLROW>(xMembersIndex->getCount());
-                if (nIndex < nCount )
+                sal_Int32 nCount = xMembersIndex->getCount();
+                if (nIndex < static_cast<SCSIZE>(nCount) )
                 {
-                    uno::Reference<container::XNamed> xMember(xMembersIndex->getByIndex(nIndex), uno::UNO_QUERY);
+                    uno::Reference<container::XNamed> xMember(xMembersIndex->getByIndex(static_cast<sal_Int32>(nIndex)), uno::UNO_QUERY);
                     String sName(xMember->getName());
                     ScDPSaveMember* pMember = pDim->GetMemberByName(sName);
                     if (pMember)
@@ -2032,10 +2030,10 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const ::rtl::OUString& aProp
             if (lcl_GetMembers(pParent, nSourcePos, xMembers) && lcl_GetDim(pDPObj, nSourcePos, pDim))
             {
                 uno::Reference<container::XIndexAccess> xMembersIndex(new ScNameToIndexAccess( xMembers ));
-                SCCOLROW nCount = static_cast<SCCOLROW>(xMembersIndex->getCount());
-                if (nIndex < nCount )
+                sal_Int32 nCount = xMembersIndex->getCount();
+                if (nIndex < static_cast<SCSIZE>(nCount) )
                 {
-                    uno::Reference<container::XNamed> xMember(xMembersIndex->getByIndex(nIndex), uno::UNO_QUERY);
+                    uno::Reference<container::XNamed> xMember(xMembersIndex->getByIndex(static_cast<sal_Int32>(nIndex)), uno::UNO_QUERY);
                     String sName(xMember->getName());
                     ScDPSaveMember* pMember = pDim->GetExistingMemberByName(sName);
                     if (pMember && pMember->HasShowDetails())
