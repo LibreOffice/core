@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-11 09:37:41 $
+ *  last change: $Author: dr $ $Date: 2001-01-17 15:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,12 @@
 
 #define EXC_SCEN_MAXCELL            32
 #define EXC_SCEN_MAXSTRINGLEN       0xFF
+
+//_________________________________________________________
+// (0x00E0) XF
+
+#define EXC_XF_LOCKED               0x0001
+#define EXC_XF_HIDDEN               0x0002
 
 //_________________________________________________________
 // (0x01B8) HLINK
