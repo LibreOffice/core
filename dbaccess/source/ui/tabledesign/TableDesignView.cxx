@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:53:03 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@
 #endif
 #ifndef DBAUI_TABLEFIELDDESCRIPTION_HXX
 #include "TableFieldDescWin.hxx"
-#endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
 #endif
 #ifndef DBAUI_TABLEROW_HXX
 #include "TableRow.hxx"
