@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-18 11:43:21 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 19:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ catalan ] = "Preview";
-        Text[ finnish ] = "Vorschau";
+        Text[ finnish ] = "Esikatselu";
     };
     CheckBox CB_PREVIEW_TIFF
     {
@@ -217,7 +217,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ korean ] = "¹öÀü";
         Text[ turkish ] = "Sürüm";
         Text[ catalan ] = "Version";
-        Text[ finnish ] = "Version";
+        Text[ finnish ] = "Versio";
     };
     RadioButton RB_LEVEL1
     {
@@ -307,7 +307,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ korean ] = "»ö ¼­½Ä";
         Text[ turkish ] = "Renk formatý";
         Text[ catalan ] = "Color format";
-        Text[ finnish ] = "Farb Format";
+        Text[ finnish ] = "Värimuoto";
     };
     RadioButton RB_COLOR
     {
@@ -357,7 +357,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ english_us ] = "~Grayscale";
         Text[ chinese_simplified ] = "»Ò¶È(~G)";
         Text[ russian ] = "Îòòåíêè ñåðîãî";
-        Text[ polish ] = "Odcienie szaro?ci";
+        Text[ polish ] = "Odcienie szaroœci";
         Text[ japanese ] = "¸ÞÚ°½¹°Ù(~G)";
         Text[ chinese_traditional ] = "¦Ç¶¥(~G)";
         Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
@@ -397,7 +397,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ korean ] = "¾ÐÃà";
         Text[ turkish ] = "Sýkýþtýrma";
         Text[ catalan ] = "Compression";
-        Text[ finnish ] = "Kompression";
+        Text[ finnish ] = "Tiivistys";
     };
     RadioButton RB_COMPRESSION_LZW
     {
