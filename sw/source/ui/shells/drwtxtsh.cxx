@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:50:57 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,6 +551,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             SfxItemSet aEmptyAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
             pSdrView->SetAttributes(aEmptyAttr, TRUE);
             pOLV->GetEditView().GetEditEngine()->RemoveFields(TRUE);
+            rReq.Done();
         }
         break;
 
