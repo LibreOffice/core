@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 16:10:59 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,8 +267,8 @@ namespace osl
         {
             if( pResetT )
             {
-                pT = pResetT;
-                pT->acquire();
+                this->pT = pResetT;
+                this->pT->acquire();
             }
         }
     };
