@@ -1,0 +1,144 @@
+/*************************************************************************
+ *
+ *  $RCSfile: cfgstrings.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:25:03 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef DBACCESS_SHARED_CFGSTRINGS_HRC
+#define DBACCESS_SHARED_CFGSTRINGS_HRC
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
+namespace dbacfg
+{
+#define STRINGCONSTANTS_INCLUDED_INDIRECT
+#include "stringconstants.hrc"
+#undef STRINGCONSTANTS_INCLUDED_INDIRECT
+
+    //============================================================
+    //= CFG
+    //============================================================
+    DECLARE_CONSTASCII_USTRING(CFG_DATASOURCEPATH);
+    //============================================================
+    //= configuration key names
+    //============================================================
+    // (we could use PROPERTY_* strings for this, but this would mean that
+    // our configuration scheme would change if a property name changes for
+    // any reason)
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DBLINK_CONNECTURL);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DBLINK_USER);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DBLINK_TABLEFILTER);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DBLINK_TABLETYEFILTER);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DBLINK_LOGINTIMEOUT);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DBLINK_PASSWORDREQUIRED);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DBLINK_SUPPRESSVERSIONCL);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DBLINK_INFO);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DBLINK_BOOKMARKS);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DBLINK_QUERYDOCUMENTS);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DBLINK_TABLES);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DBLINK_DOCUMENTLOCATION);
+
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_COMMAND);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_USE_ESCAPE_PROCESSING);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_UPDATE_TABLENAME);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_UPDATE_SCHEMANAME);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_UPDATE_CATALOGNAME);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_COLUMNS);
+
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FILTER);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_APPLYFILTER);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_ORDER);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_ROW_HEIGHT);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_TEXTCOLOR);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_NAME);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_HEIGHT);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_WIDTH);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_STYLENAME);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_FAMILY);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_CHARSET);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_PITCH);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_WEIGHT);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_SLANT);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_UNDERLINE);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_STRIKEOUT);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_ORIENTATION);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_KERNING);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_WORDLINEMODE);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_TYPE);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_UNDERLINECOLOR);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_CHARACTEREMPHASIS);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DEFSET_FONT_CHARACTERRELIEF);
+
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_DATASETTINGS_MAIN);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_SETTINGS);
+
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_ALIGNMENT);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_WIDTH);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_NUMBERFORMAT);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_FORMATSTRING);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_FORMATLOCALE);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_RELPOSITION);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_HIDDEN);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_LAYOUTINFORMATION);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_HELPTEXT);
+    DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_CONTROLDEFAULT);
+}
+
+#endif // DBACCESS_SHARED_CFGSTRINGS_HRC
