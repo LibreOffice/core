@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ToolbarController.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:20:18 $
+ *  last change: $Author: kz $ $Date: 2004-07-27 11:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef __com_sun_star_frame_ToolbarController_idl__
 #define __com_sun_star_frame_ToolbarController_idl__
-
 #ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
 #endif
@@ -141,7 +140,7 @@ service ToolbarController
         <p>
         Mostly used by a toolbar implementation to forward information to and request
         services from a toolbar controller component. This interface must be useable after
-        <member scope="com::sun::star::lang>XInitialitation::initialize</member> has been
+        <member scope="com::sun::star::lang">XInitialitation::initialize</member> has been
         called.  The behavior of the interface is undefined if the controller component hasn't been
         initialized.
         </p>
