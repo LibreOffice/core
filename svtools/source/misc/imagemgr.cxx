@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-29 11:02:23 $
+ *  last change: $Author: pb $ $Date: 2001-09-11 07:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
@@ -466,7 +469,10 @@ String GetDescriptionByFactory_Impl( const String& rFactory )
 
     String aRet;
     if ( nResId )
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         aRet = String( SvtResId( nResId ) );
+    }
     return aRet;
 }
 
@@ -482,13 +488,19 @@ Image SvFileInformationManager::GetImage( const INetURLObject& rObject, BOOL bBi
     if ( bBig )
     {
         if ( !_pBigImageList )
+        {
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             _pBigImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG ) );
+        }
         pList = _pBigImageList;
     }
     else
     {
         if ( !_pSmallImageList )
+        {
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             _pSmallImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL ) );
+        }
         pList = _pSmallImageList;
     }
 
@@ -497,7 +509,11 @@ Image SvFileInformationManager::GetImage( const INetURLObject& rObject, BOOL bBi
 
 String SvFileInformationManager::GetDescription( const INetURLObject& rObject )
 {
-    String aDescription( SvtResId( STR_DESCRIPTION_FOLDER ) );
+    String aDescription;
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        aDescription = String( SvtResId( STR_DESCRIPTION_FOLDER ) );
+    }
     sal_Bool bShowExt = sal_False;
     sal_Bool bDetected = sal_False;
     sal_Bool bFolder = ::utl::UCBContentHelper::IsFolder( rObject.GetMainURL() );
@@ -543,6 +559,7 @@ String SvFileInformationManager::GetDescription( const INetURLObject& rObject )
                 if ( !nResId )
                     nResId = STR_DESCRIPTION_FILE;
 
+                ::vos::OGuard aGuard( Application::GetSolarMutex() );
                 aDescription = String( SvtResId( nResId ) );
             }
 
