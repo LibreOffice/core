@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:22:39 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ ModalDialog DLG_NUM_NAMES
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
+        Text[ slovak ] = "Formát";
     };
     ListBox LB_FORM
     {
@@ -471,6 +472,18 @@ ModalDialog DLG_NUM_NAMES
         < "नाम रहित 8" ; > ;
         < "नाम रहित 9" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Bez_názvu 1" ; > ;
+        < "Bez_názvu 2" ; > ;
+        < "Bez_názvu 3" ; > ;
+        < "Bez_názvu 4" ; > ;
+        < "Bez_názvu 5" ; > ;
+        < "Bez_názvu 6" ; > ;
+        < "Bez_názvu 7" ; > ;
+        < "Bez_názvu 8" ; > ;
+        < "Bez_názvu 9" ; > ;
+    };
     };
     Edit ED_FORM
     {
@@ -491,6 +504,7 @@ ModalDialog DLG_NUM_NAMES
     Text[ czech ] = "Uložit jako";
     Text[ hebrew ] = "‮שמירה‬";
     Text[ hindi ] = "संचित करो जैसे";
+    Text[ slovak ] = "Uložiť ako";
 };
 /**************************************************************************/
 /*                                                                        */
@@ -550,6 +564,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ czech ] = "Číslování";
                 Text[ hebrew ] = "‮מיספור‬";
                 Text[ hindi ] = "संख्या देना";
+                Text[ slovak ] = "Číslovanie";
             };
             PageItem
             {
@@ -581,6 +596,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ czech ] = "Umístění";
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
+                Text[ slovak ] = "Umiestnenie";
             };
         };
     };
@@ -613,6 +629,7 @@ TabDialog DLG_TAB_OUTLINE
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "~रचना";
+        Text[ slovak ] = "~Formát";
     };
     Menu MN_FORM
     {
@@ -650,6 +667,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ czech ] = "Bez_názvu 1";
                 Text[ hebrew ] = "Unbenannt 1";
                 Text[ hindi ] = "नाम रहित 1";
+                Text[ slovak ] = "Bez_názvu 1";
             };
             MenuItem
             {
@@ -683,6 +701,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ czech ] = "Bez_názvu 2";
                 Text[ hebrew ] = "Unbenannt 2";
                 Text[ hindi ] = "नाम रहित 2";
+                Text[ slovak ] = "Bez_názvu 2";
             };
             MenuItem
             {
@@ -716,6 +735,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ czech ] = "Bez_názvu 3";
                 Text[ hebrew ] = "Unbenannt 3";
                 Text[ hindi ] = "नाम रहित 3";
+                Text[ slovak ] = "Bez_názvu 3";
             };
             MenuItem
             {
@@ -749,6 +769,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ czech ] = "Bez_názvu 4";
                 Text[ hebrew ] = "Unbenannt 4";
                 Text[ hindi ] = "नाम रहित 4";
+                Text[ slovak ] = "Bez_názvu 4";
             };
             MenuItem
             {
@@ -782,6 +803,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ czech ] = "Bez_názvu 5";
                 Text[ hebrew ] = "Unbenannt 5";
                 Text[ hindi ] = "नाम रहित 5";
+                Text[ slovak ] = "Bez_názvu 5";
             };
             MenuItem
             {
@@ -815,6 +837,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ czech ] = "Bez_názvu 6";
                 Text[ hebrew ] = "Unbenannt 6";
                 Text[ hindi ] = "नाम रहित 6";
+                Text[ slovak ] = "Bez_názvu 6";
             };
             MenuItem
             {
@@ -848,6 +871,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ czech ] = "Bez_názvu 7";
                 Text[ hebrew ] = "Unbenannt 7";
                 Text[ hindi ] = "नाम रहित 7";
+                Text[ slovak ] = "Bez_názvu 7";
             };
             MenuItem
             {
@@ -881,6 +905,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ czech ] = "Bez_názvu 8";
                 Text[ hebrew ] = "Unbenannt 8";
                 Text[ hindi ] = "नाम रहित 8";
+                Text[ slovak ] = "Bez_názvu 8";
             };
             MenuItem
             {
@@ -914,6 +939,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ czech ] = "Bez_názvu 9";
                 Text[ hebrew ] = "Unbenannt 9";
                 Text[ hindi ] = "नाम रहित 9";
+                Text[ slovak ] = "Bez_názvu 9";
             };
             MenuItem
             {
@@ -950,6 +976,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ czech ] = "Uložit jako...";
                 Text[ hebrew ] = "‮שמירה בשם...‬";
                 Text[ hindi ] = "संचि~त करो जैसे...";
+                Text[ slovak ] = "Uložiť ~ako...";
             };
         };
     };
@@ -968,6 +995,7 @@ TabDialog DLG_TAB_OUTLINE
     Text[ czech ] = "Číslování osnovy";
     Text[ hebrew ] = "‮מיספור פסקאות‬";
     Text[ hindi ] = "बाहरी रूपरेखा को संख्या देना";
+    Text[ slovak ] = "Číslovanie osnovy";
 };
 /**************************************************************************/
 /*                                                                        */
@@ -1020,6 +1048,7 @@ TabPage TP_OUTLINE_NUM
         Text[ czech ] = "Úroveň";
         Text[ hebrew ] = "Ebene";
         Text[ hindi ] = "स्तर";
+        Text[ slovak ] = "Úroveň";
     };
     FixedText FT_COLL
     {
@@ -1055,6 +1084,7 @@ TabPage TP_OUTLINE_NUM
         Text[ czech ] = "Styl odstavce";
         Text[ hebrew ] = "~Absatzvorlage";
         Text[ hindi ] = "~परिच्छेद शैली";
+        Text[ slovak ] = "Štýl o~dstavca";
     };
     ListBox LB_COLL
     {
@@ -1100,6 +1130,7 @@ TabPage TP_OUTLINE_NUM
         Text[ czech ] = "Číslo";
         Text[ hebrew ] = "~Nummer";
         Text[ hindi ] = "~संख्या";
+        Text[ slovak ] = "Čí~slo";
     };
     ListBox LB_NUMBER
     {
@@ -1141,6 +1172,7 @@ TabPage TP_OUTLINE_NUM
         Text[ czech ] = "Styl znaku";
         Text[ hebrew ] = "Zeichenv~orlage";
         Text[ hindi ] = "~अक्षर शैली";
+        Text[ slovak ] = "Štýl ~znaku";
     };
     ListBox LB_CHARFMT
     {
@@ -1181,6 +1213,7 @@ TabPage TP_OUTLINE_NUM
         Text[ czech ] = "Zobrazit vše";
         Text[ hebrew ] = "~Vollständig";
         Text[ hindi ] = "अ~धीन स्तरों को दिखाओ";
+        Text[ slovak ] = "Zobra~ziť všetko";
     };
     NumericField NF_ALL_LEVEL
     {
@@ -1230,6 +1263,7 @@ TabPage TP_OUTLINE_NUM
         Text[ czech ] = "Oddělovač";
         Text[ hebrew ] = "Trennzeichen";
         Text[ hindi ] = "अलगानेवाला";
+        Text[ slovak ] = "Oddeľovač";
     };
     FixedText FT_PREFIX
     {
@@ -1264,6 +1298,7 @@ TabPage TP_OUTLINE_NUM
         Text[ czech ] = "Před";
         Text[ hebrew ] = "לפני";
         Text[ hindi ] = "से प~हिले";
+        Text[ slovak ] = "P~red";
     };
     Edit ED_PREFIX
     {
@@ -1307,6 +1342,7 @@ TabPage TP_OUTLINE_NUM
         Text[ czech ] = "Za";
         Text[ hebrew ] = "אחרי";
         Text[ hindi ] = "के प~श्चात्";
+        Text[ slovak ] = "~Za";
     };
     Edit ED_SUFFIX
     {
@@ -1350,6 +1386,7 @@ TabPage TP_OUTLINE_NUM
         Text[ czech ] = "Začít od";
         Text[ hebrew ] = "~Beginn bei";
         Text[ hindi ] = "में प्रारं~भ";
+        Text[ slovak ] = "~Začať od";
     };
     NumericField ED_START
     {
@@ -1399,6 +1436,7 @@ TabPage TP_OUTLINE_NUM
         Text[ czech ] = "Číslování";
         Text[ hebrew ] = "‮מיספור‬";
         Text[ hindi ] = "संख्या देना";
+        Text[ slovak ] = "Číslovanie";
     };
     Window WIN_PREVIEW
     {
@@ -1435,8 +1473,11 @@ TabPage TP_OUTLINE_NUM
         TEXT[ czech ] = "(nic)";
         TEXT[ hebrew ] = "(keine)";
         TEXT[ hindi ] = "(कोई नहीं)";
+        TEXT[ slovak ] = "(nič)";
     };
 };
+
+
 
 
 
