@@ -2,9 +2,9 @@
  *
  *  $RCSfile: masterpasscrtdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:11:49 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
         Text[ hebrew ] = "Hauptkennwort";
         Text[ hindi ] = "मास्टर कूटशब्द";
         Text[ slovak ] = "Hlavné heslo";
+        Text[ hungarian ] = "Mesterjelszó";
+        Text[ slovenian ] = "Glavno geslo";
     };
     Edit ED_MASTERPASSWORD_CRT
     {
@@ -148,6 +150,8 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
         Text[ hebrew ] = "Hauptkennwort ~bestätigen";
         Text[ hindi ] = "मास्टर कूटशब्द को ~दृढ़ करो";
         Text[ slovak ] = "Potvrďte hl~avné heslo";
+        Text[ hungarian ] = "~Mesterjelszó megerősítése";
+        Text[ slovenian ] = "Po~trdite glavno geslo";
     };
     Edit ED_MASTERPASSWORD_REPEAT
     {
@@ -182,7 +186,7 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
     Text[ spanish ] = "Introduzca la contrase�a principal";
     Text[ finnish ] = "Please enter master password";
     Text[ italian ] = "Digitate la password principale";
-    Text[ danish ] = "Definer hovedadgangskode";
+    Text[ danish ] = "Indtast hovedadgangskode";
     Text[ swedish ] = "Definiera huvudl�senord";
     Text[ polish ] = "Zdefiniuj has�o g��wne";
     Text[ portuguese_brazilian ] = "Digite a senha principal";
@@ -198,7 +202,10 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
     Text[ hebrew ] = "Hauptkennwort festlegen";
     Text[ hindi ] = "Enter Master Password";
     Text[ slovak ] = "Zadajte hlavné heslo";
+    Text[ hungarian ] = "Mesterjelszó bevitele";
+    Text[ slovenian ] = "Vnesite glavno geslo";
 };
+
 
 
 
