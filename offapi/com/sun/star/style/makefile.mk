@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:44:12 $
+#   last change: $Author: os $ $Date: 2001-01-11 13:49:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,8 @@ IDLFILES=\
     BreakType.idl\
     CaseMap.idl\
     CharacterProperties.idl\
+    CharacterPropertiesAsian.idl\
+    CharacterPropertiesComplex.idl\
     CharacterStyle.idl\
     DropCapFormat.idl\
     GraphicLocation.idl\
