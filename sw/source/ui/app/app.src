@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2001-09-27 20:43:36 $
+ *  last change: $Author: os $ $Date: 2001-11-01 11:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,6 @@ String STR_PAGE_COUNT_MACRO
     IdList = {                          \
         SID_SELECTALL                   ;\
         SID_NEWDOCDIRECT                ;\
-        SID_DOCINFO                     ;\
         SID_CLOSEDOCS                   ;\
         SID_MAIL_SENDDOC                ;\
         SID_PRINTPREVIEW                ;\
@@ -327,7 +326,7 @@ String STR_PAGE_COUNT_MACRO
                                         \
         };                              \
     IdCount = {                         \
-        169;                            \
+        168;                            \
     };
 
 
