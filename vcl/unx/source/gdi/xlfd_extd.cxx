@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-13 20:36:59 $
+ *  last change: $Author: cp $ $Date: 2000-12-13 22:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,6 +987,8 @@ XlfdStorage::InterfaceFont (AttributeProvider* pFactory)
             }
         }
     }
+
+    pVirtualFont->Dump();
 
     if (pVirtualFont->NumEncodings() > 0)
         Add (pVirtualFont);
