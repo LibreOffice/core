@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:40:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ BOOL bErrorLog;
 BOOL bBreakWhenHelpText;
 BOOL bUnmerge;
 BOOL bUTF8;
+bool bQuiet;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sActFileName;
@@ -133,7 +134,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     Export::sLanguages = "";
     sTempFile = "";
     pTempFile = NULL;
-
+    bQuiet = false;
     USHORT nState = STATE_NON;
     BOOL bInput = FALSE;
 
@@ -148,6 +149,10 @@ extern char *GetOutputFile( int argc, char* argv[])
         else if (( ByteString( argv[ i ]) == "-p" ) || ( ByteString( argv[ i ] ) == "-P" )) {
             nState = STATE_PRJ; // next token specifies the cur. project
         }
+        else if (( ByteString( argv[ i ]) == "-qq" ) || ( ByteString( argv[ i ] ) == "-QQ" )) {
+            bQuiet = true;
+        }
+
         else if (( ByteString( argv[ i ]) == "-r" ) || ( ByteString( argv[ i ] ) == "-R" )) {
             nState = STATE_ROOT; // next token specifies path to project root
         }
@@ -226,7 +231,12 @@ extern char *GetOutputFile( int argc, char* argv[])
     // command line is not valid
     return NULL;
 }
-
+/*****************************************************************************/
+int isQuiet(){
+/*****************************************************************************/
+   if( bQuiet ) return 1;
+   else         return 0;
+}
 /*****************************************************************************/
 int InitExport( char *pOutput , char *pFileName )
 /*****************************************************************************/
@@ -304,7 +314,7 @@ extern FILE *GetNextFile()
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
 //          sActFileName.ToLowerAscii();
 
-            fprintf( stdout, "\nProcessing File %s ...\n", sOrigFile.GetBuffer());
+            if( !bQuiet ) fprintf( stdout, "\nProcessing File %s ...\n", sOrigFile.GetBuffer());
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );
             sFile = sActFileName;
@@ -1526,6 +1536,7 @@ ByteString Export::FullId()
     }
     if ( sFull.Len() > 255 ) {
         ByteString sError( "GroupId > 255 chars" );
+        printf("GroupID = %s\n",sFull.GetBuffer());
         yyerror( sError.GetBufferAccess());
         sError.ReleaseBufferAccess();
     }
