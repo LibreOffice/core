@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:01:12 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 16:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 
 
 #include "sc.hrc" // -> #include <sfx.hrc>
-//#include <basctl/basicide.hrc>
 #include <offmgr/offmenu.hrc>
 
 

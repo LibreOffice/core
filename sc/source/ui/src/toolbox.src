@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:50:22 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 16:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,11 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2000-11-03 16:50:22 $ $Revision: 1.4 $
+ // $Author: tbe $ $Date: 2000-11-10 16:11:17 $ $Revision: 1.5 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
 #include "sc.hrc" // -> #include <sfx.hrc>
-//#include <basctl/basicide.hrc>
 #include <offmgr/offmenu.hrc>
 #include "tbinsert.hrc" // Sub-IDs
 
