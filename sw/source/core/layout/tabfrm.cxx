@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:28:11 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,14 +164,14 @@ SwTabFrm::SwTabFrm( SwTable &rTab ):
 
     //Gleich die Zeilen erzeugen und einfuegen.
     const SwTableLines &rLines = rTab.GetTabLines();
-    SwFrm *pPrev = 0;
+    SwFrm *pTmpPrev = 0;
     for ( USHORT i = 0; i < rLines.Count(); ++i )
     {
         SwRowFrm *pNew = new SwRowFrm( *rLines[i] );
         if( pNew->Lower() )
         {
-            pNew->InsertBehind( this, pPrev );
-            pPrev = pNew;
+            pNew->InsertBehind( this, pTmpPrev );
+            pTmpPrev = pNew;
         }
         else
             delete pNew;
@@ -518,7 +518,7 @@ void lcl_PreprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
                     }
 
                     const SwFmtFrmSize &rSz = pTmpLastLineRow->GetFmt()->GetFrmSize();
-                    if ( rSz.GetSizeType() == ATT_MIN_SIZE )
+                    if ( rSz.GetHeightSizeType() == ATT_MIN_SIZE )
                         nMinHeight = Max( nMinHeight, rSz.GetHeight() );
                 }
 
@@ -1051,7 +1051,7 @@ bool SwTabFrm::Split( const SwTwips nCutPos )
 #endif
 
             // Change attributes:
-            ASSERT( false, "Weird layout! Row frame is to big but not allowed to split. I'll change the attributes now." )
+            ASSERT( false, "Weird layout! Row frame is too big but not allowed to split. I'll change the attributes now." )
             lcl_ChangeSplitAttribute( *(SwRowFrm*)pRow );
             bSplitRowAllowed = true;
 
@@ -1074,7 +1074,7 @@ bool SwTabFrm::Split( const SwTwips nCutPos )
                     nRemainingSpaceForLastRow )
                 {
                     // Change attributes:
-                    ASSERT( false, "Weird layout! Row frame is to big but not allowed to split. I'll change the attributes now." )
+                    ASSERT( false, "Weird layout! Row frame is too big but not allowed to split. I'll change the attributes now." )
                     lcl_ChangeSplitAttribute( *(SwRowFrm*)pLowerRow );
                 }
             }
@@ -3174,12 +3174,12 @@ SwRowFrm::SwRowFrm( const SwTableLine &rLine, bool bInsertContent ):
 
     //Gleich die Boxen erzeugen und einfuegen.
     const SwTableBoxes &rBoxes = rLine.GetTabBoxes();
-    SwFrm *pPrev = 0;
+    SwFrm *pTmpPrev = 0;
     for ( USHORT i = 0; i < rBoxes.Count(); ++i )
     {
         SwCellFrm *pNew = new SwCellFrm( *rBoxes[i], bInsertContent );
-        pNew->InsertBehind( this, pPrev );
-        pPrev = pNew;
+        pNew->InsertBehind( this, pTmpPrev );
+        pTmpPrev = pNew;
     }
 }
 
@@ -3389,7 +3389,7 @@ SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwRowFrm* _pRow )
 
     if ( _pRow->HasFixSize() )
     {
-        ASSERT( ATT_FIX_SIZE == rSz.GetSizeType(), "pRow claims to have fixed size" )
+        ASSERT( ATT_FIX_SIZE == rSz.GetHeightSizeType(), "pRow claims to have fixed size" )
         return rSz.GetHeight();
     }
 
@@ -3402,7 +3402,7 @@ SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwRowFrm* _pRow )
             nHeight = nTmp;
         pLow = static_cast<SwCellFrm*>(pLow->GetNext());
     }
-    if ( rSz.GetSizeType() == ATT_MIN_SIZE )
+    if ( rSz.GetHeightSizeType() == ATT_MIN_SIZE )
         nHeight = Max( nHeight, rSz.GetHeight() );
     return nHeight;
 }
@@ -3630,7 +3630,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     SwTwips nRealDist = nDist;
     {
         const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
-        SwTwips nMinHeight = rSz.GetSizeType() == ATT_MIN_SIZE ?
+        SwTwips nMinHeight = rSz.GetHeightSizeType() == ATT_MIN_SIZE ?
                              rSz.GetHeight() : 0;
         if( nMinHeight < (Frm().*fnRect->fnGetHeight)() )
         {
@@ -3715,7 +3715,7 @@ bool SwRowFrm::IsRowSplitAllowed() const
     if ( HasFixSize() )
     {
         const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
-        ASSERT( ATT_FIX_SIZE == rSz.GetSizeType(), "pRow claims to have fixed size" )
+        ASSERT( ATT_FIX_SIZE == rSz.GetHeightSizeType(), "pRow claims to have fixed size" )
         return false;
     }
 
@@ -3758,13 +3758,13 @@ SwCellFrm::SwCellFrm( const SwTableBox &rBox, bool bInsertContent ) :
     }
     else
     {
-        const SwTableLines &rLines = rBox.GetTabLines();
-        SwFrm *pPrev = 0;
+    const SwTableLines &rLines = rBox.GetTabLines();
+        SwFrm *pTmpPrev = 0;
         for ( USHORT i = 0; i < rLines.Count(); ++i )
         {
             SwRowFrm *pNew = new SwRowFrm( *rLines[i], bInsertContent );
-            pNew->InsertBehind( this, pPrev );
-            pPrev = pNew;
+            pNew->InsertBehind( this, pTmpPrev );
+            pTmpPrev = pNew;
         }
     }
 }
