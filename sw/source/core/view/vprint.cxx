@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-01 15:34:37 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-11 14:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1022,8 +1022,12 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
         //Shell zurueckgesetzt wird.
 
     SET_CURR_SHELL( pShell );
-    Link aLnk = LINK(pShell->Imp(), SwViewImp, SetStopPrt);
-    ((SfxPrintProgress &) rProgress).SetCancelHdl(aLnk);
+
+    if (!pPDFOut)
+    {
+        Link aLnk = LINK(pShell->Imp(), SwViewImp, SetStopPrt);
+        ((SfxPrintProgress &) rProgress).SetCancelHdl(aLnk);
+    }
 
 
     //JP 01.02.99: das ReadOnly Flag wird NIE mitkopiert; Bug 61335
@@ -1680,6 +1684,9 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2002/11/01 15:34:37  hbrinkm
+      #102110# stop printing in SwViewShell::CalcPagesForPrint
+
       Revision 1.12  2002/10/18 13:20:08  ama
       Fix #104331#: Print it again, sam
 
