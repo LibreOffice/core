@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:48:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,12 @@
 #include <localedata.hxx>
 #include <nativenumbersupplier.hxx>
 #include <stdio.h>
+
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
+
 #include <math.h>
 #include <rtl/ustring.hxx>
 #include <tools/string.hxx>
