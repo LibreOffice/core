@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:02:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ namespace basegfx
 
 namespace drafts { namespace com { namespace sun { namespace star { namespace geometry
 {
+    struct RealSize2D;
     struct AffineMatrix2D;
     struct Matrix2D;
 } } } } }
@@ -124,6 +125,11 @@ namespace canvas
 
             return ++x;
         }
+
+        /** Create a RealSize2D with both coordinate values set to +infinity
+         */
+        ::drafts::com::sun::star::geometry::RealSize2D createInfiniteSize2D();
+
 
         // View- and RenderState utilities
         // ===================================================================
