@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:45:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 
 #ifndef SC_XLESCHER_HXX
 #define SC_XLESCHER_HXX
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -220,9 +224,9 @@ struct XclEscherAnchor
     sal_uInt16                  mnRX;       /// X offset in right column (1/1024 of column width).
     sal_uInt16                  mnBRow;     /// Bottom row index.
     sal_uInt16                  mnBY;       /// Y offset in bottom row (1/256 of row height).
-    sal_uInt16                  mnScTab;    /// Calc sheet index.
+    SCTAB                       mnScTab;    /// Calc sheet index.
 
-    explicit                    XclEscherAnchor( sal_uInt16 nScTab );
+    explicit                    XclEscherAnchor( SCTAB nScTab );
 
     /** Calculates a rectangle from the contained coordinates. */
     Rectangle                   GetRect( ScDocument& rDoc, MapUnit eMapUnit ) const;
