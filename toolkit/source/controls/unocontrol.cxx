@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-03 13:09:19 $
+ *  last change: $Author: mt $ $Date: 2002-09-06 08:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,6 +424,7 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
                             ( nPType == BASEPROPERTY_DROPDOWN ) ||
                             ( nPType == BASEPROPERTY_HSCROLL ) ||
                             ( nPType == BASEPROPERTY_VSCROLL ) ||
+                            ( nPType == BASEPROPERTY_ORIENTATION ) ||
                             ( nPType == BASEPROPERTY_SPIN ) ||
                             ( nPType == BASEPROPERTY_ALIGN ) )
                     {
