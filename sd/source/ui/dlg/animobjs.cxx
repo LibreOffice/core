@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:58:31 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,7 +628,7 @@ void AnimationWindow::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
             const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
             aVD.SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
             //AdjustVDev( &aVD );
-            ExtOutputDevice aOut( &aVD );
+            XOutputDevice aOut( &aVD );
             aVD.SetDrawMode( GetDisplayBackground().GetColor().IsDark()
                 ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
                 : ViewShell::OUTPUT_DRAWMODE_COLOR );
