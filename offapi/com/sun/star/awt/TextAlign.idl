@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextAlign.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:40 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,28 +68,24 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::TextAlign
-/** specifies alignment of text.
+/** specifies the alignment of text.
  */
 constants TextAlign
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::TextAlign::LEFT
     /** specifies to left align text.
      */
     const long LEFT = 0;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::TextAlign::CENTER
     /** specifies to center text.
      */
     const long CENTER = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::TextAlign::RIGHT
     /** specifies to right align text.
      */
     const long RIGHT = 2;
