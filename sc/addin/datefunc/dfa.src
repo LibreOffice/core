@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:35:13 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ Resource RID_SC_ADDIN_DFA
     {
         Text = "Jьngeres Datum fьr die Wochendifferenz" ;
         Text [ english ] = "the older date for the week difference" ;
-        Text[ language_user1 ] = "J?geres Datum ist das Gegenteil von older date";
+        Text[ language_user1 ] = "; J?geres Datum ist das Gegenteil von older date";
         Text[ english_us ] = "The end date for calculating the difference in weeks";
         Text[ portuguese ] = "Data mais recente para a diferenзa em semanas";
         Text[ russian ] = "Конечная дата для определения разницы в неделях.";
@@ -984,6 +984,7 @@ Resource RID_SC_ADDIN_DFA
     };
 
 };
+
 
 
 
