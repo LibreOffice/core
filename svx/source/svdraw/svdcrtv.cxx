@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:27 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,11 +705,10 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
                         Size a2Pix(pOut->PixelToLogic(Size(2,2)));
                         MapMode aMap(pOut->GetMapMode());
                         aVDev.SetMapMode(aMap);
-                        #ifdef MAC
-                            Color aMixedColor( RGB_COLORDATA( 223, 223, 223 ) );
-                        #else
-                            Color aMixedColor( RGB_COLORDATA( 234, 234, 234 ) );
-                        #endif
+
+                        // #109585#
+                        Color aMixedColor = pCreatePV->GetApplicationBackgroundColor();
+
                         aVDev.SetBackground( Wallpaper( aMixedColor ) );
                         aVDev.SetOutputSize(pOut->GetOutputSize());
                         Rectangle aDirtyArea(aBound);
