@@ -2,9 +2,9 @@
  *
  *  $RCSfile: properties.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:32:26 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <sal/types.h>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
@@ -91,7 +95,7 @@ namespace sdr
 {
     namespace properties
     {
-        class BaseProperties
+        class SVX_DLLPUBLIC BaseProperties
         {
         protected:
             // the owner of this Properties. Set from constructor and not
