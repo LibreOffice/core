@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-26 15:19:05 $
+ *  last change: $Author: dl $ $Date: 2001-05-15 11:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,8 +564,6 @@ void SdDrawViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
 
                             if ( pOLV )
                             {
-                                BOOL bTest = pOLV->IsCursorAtWrongSpelledWord();
-
                                 if( (  rCEvt.IsMouseEvent() && pOLV->IsWrongSpelledWordAtPos(aPos) ) ||
                                     ( !rCEvt.IsMouseEvent() && pOLV->IsCursorAtWrongSpelledWord() ) )
                                 {
@@ -577,10 +575,8 @@ void SdDrawViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
                                     }
                                     pOLV->ExecuteSpellPopup(aPos, &aLink);
                                 }
-                            }
-                            else
-                            {
-                                nSdResId = RID_DRAW_TEXTOBJ_INSIDE_POPUP;
+                                else
+                                    nSdResId = RID_DRAW_TEXTOBJ_INSIDE_POPUP;
                             }
                         }
                         else
