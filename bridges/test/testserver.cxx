@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testserver.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-01 13:03:37 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 09:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #include <string.h>
 #include <assert.h>
+
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 
 #include <osl/mutex.hxx>
 #include <osl/conditn.h>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:53:24 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 09:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 #include <stdio.h>
+
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 
 #include <osl/diagnose.h>
 #include <vos/thread.hxx>

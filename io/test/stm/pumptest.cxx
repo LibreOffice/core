@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pumptest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:27:01 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 09:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 #include <stdio.h>
+
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 
 #include <osl/diagnose.h>
 #include <com/sun/star/test/XSimpleTest.hpp>

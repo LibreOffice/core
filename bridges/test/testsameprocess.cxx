@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsameprocess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 12:13:27 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 09:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 #include <assert.h>
+
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
