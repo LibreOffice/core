@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+#   last change: $Author: sab $ $Date: 2001-07-31 15:41:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,6 @@ CXXFILES = \
         xmlstyli.cxx \
         xmldpimp.cxx \
         xmlannoi.cxx \
-        xmlmapch.cxx \
         xmlsceni.cxx \
         xmlcvali.cxx \
         XMLTableMasterPageExport.cxx \
@@ -150,7 +149,6 @@ SLOFILES =  \
         $(SLO)$/xmlstyli.obj \
         $(SLO)$/xmldpimp.obj \
         $(SLO)$/xmlannoi.obj \
-        $(SLO)$/xmlmapch.obj \
         $(SLO)$/xmlsceni.obj \
         $(SLO)$/xmlcvali.obj \
         $(SLO)$/XMLTableMasterPageExport.obj \

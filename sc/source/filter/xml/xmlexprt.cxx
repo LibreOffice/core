@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-27 10:44:22 $
+ *  last change: $Author: sab $ $Date: 2001-07-31 15:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #include "xmlexprt.hxx"
 #endif
 
-#ifndef SC_XMLMAPCH_HXX_
-#include "xmlmapch.hxx"
-#endif
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
 #endif
@@ -426,7 +423,6 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     pNumberFormatAttributesExportHelper(NULL),
     pGroupColumns (NULL),
     pGroupRows (NULL),
-    xChartExportMapper(new ScExportMapper()),
     nOpenRow(-1),
     nCurrentTable(0),
     aTableStyles(),
@@ -1593,7 +1589,6 @@ void ScXMLExport::_ExportAutoStyles()
                 rtl::OUString SC_SROWPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX));
                 rtl::OUString SC_SCELLPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
                 rtl::OUString SC_NUMBERFORMAT(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT));
-                GetChartExport()->setTableAddressMapper(xChartExportMapper);
                 sal_Int32 nTableCount = xIndex->getCount();
                 pCellStyles->AddNewTable(nTableCount - 1);
                 CollectShapesAutoStyles(nTableCount);
@@ -1914,11 +1909,12 @@ void ScXMLExport::_ExportAutoStyles()
 
                 GetShapeExport()->exportAutoStyles();
             }
-            if (getExportFlags() & EXPORT_ALL)
+            if ((getExportFlags() & EXPORT_ALL) == EXPORT_ALL)
                 GetChartExport()->exportAutoStyles();
             if (getExportFlags() & EXPORT_MASTERSTYLES)
             {
                 GetPageExport()->collectAutoStyles(sal_True);
+                GetTextParagraphExport()->exportTextAutoStyles();
                   GetPageExport()->exportAutoStyles();
             }
         }
@@ -2340,7 +2336,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                     }
                     if(pChartListener)
                     {
-                        USHORT nIndex;
+                        USHORT nIndex(0);
                         pChartListener->SetString( sName );
                         if ( GetDocument()->GetChartListenerCollection()->Search( pChartListener, nIndex ) )
                         {
@@ -2358,7 +2354,11 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                             }
                         }
                         else
-                            DBG_ERROR("don't get the ChartListener for this Chart");
+                        {
+                            bMemChart = sal_True;
+                            AddAttribute(XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES, rtl::OUString());
+                            GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint);
+                        }
                     }
 /*                  SchMemChart* pMemChart = pDoc->FindChartData(sName);
                     if (pMemChart && pMemChart->GetSeriesAddresses().getLength())

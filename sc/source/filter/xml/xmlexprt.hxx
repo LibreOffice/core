@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-27 10:44:23 $
+ *  last change: $Author: sab $ $Date: 2001-07-31 15:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ class ScXMLExport : public SvXMLExport
 {
     ScDocument*                 pDoc;
     com::sun::star::uno::Reference <com::sun::star::frame::XModel> xModel;
-    com::sun::star::uno::Reference <com::sun::star::util::XStringMapping> xChartExportMapper;
     com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet> xCurrentTable;
 
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-23 15:24:06 $
+ *  last change: $Author: sab $ $Date: 2001-07-31 15:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,36 +112,46 @@ sal_Bool ScMyShapeResizer::IsOLE(uno::Reference< drawing::XShape >& rShape) cons
 
 void ScMyShapeResizer::CreateChartListener(ScDocument* pDoc,
     const rtl::OUString& rName,
-    const rtl::OUString& rRangeList)
+    const rtl::OUString* pRangeList)
 {
-    if (pDoc && rRangeList.getLength())
+    if(pDoc)
     {
-        if (!pCollection)
-            pCollection = pDoc->GetChartListenerCollection();//new ScChartListenerCollection(pDoc);
-        if (pCollection)
+        if (pRangeList)
         {
-            ScRangeListRef aRangeListRef = new ScRangeList();
-            ScXMLConverter::GetRangeListFromString(*aRangeListRef, rRangeList, pDoc);
-            if (aRangeListRef->Count())
+            if (pRangeList->getLength())
             {
-                ScChartListener* pCL = new ScChartListener(
-                                    rName, pDoc, aRangeListRef );
-                pCollection->Insert( pCL );
-                pCL->StartListeningTo();
+                if (!pCollection)
+                    pCollection = pDoc->GetChartListenerCollection();//new ScChartListenerCollection(pDoc);
+                if (pCollection)
+                {
+                    ScRangeListRef aRangeListRef = new ScRangeList();
+                    ScXMLConverter::GetRangeListFromString(*aRangeListRef, *pRangeList, pDoc);
+                    if (aRangeListRef->Count())
+                    {
+                        ScChartListener* pCL = new ScChartListener(
+                                            rName, pDoc, aRangeListRef );
+                        pCollection->Insert( pCL );
+                        pCL->StartListeningTo();
+                    }
+                }
+            }
+            else
+            {
+                pDoc->AddOLEObjectToCollection(rName);
             }
         }
     }
 }
 
 void ScMyShapeResizer::AddShape(uno::Reference <drawing::XShape>& rShape,
-    const rtl::OUString& rName, const rtl::OUString& rRangeList,
+    const rtl::OUString& rName, rtl::OUString* pRangeList,
     table::CellAddress& rStartAddress, table::CellAddress& rEndAddress,
     sal_Int32 nEndX, sal_Int32 nEndY)
 {
     ScMyToResizeShape aShape;
     aShape.xShape = rShape;
     aShape.sName = rName;
-    aShape.sRangeList = rRangeList;
+    aShape.pRangeList = pRangeList;
     aShape.aEndCell = rEndAddress;
     aShape.aStartCell = rStartAddress;
     aShape.nEndY = nEndY;
@@ -151,7 +161,7 @@ void ScMyShapeResizer::AddShape(uno::Reference <drawing::XShape>& rShape,
 
 void ScMyShapeResizer::ResizeShapes()
 {
-    if (aShapes.size())
+    if (!aShapes.empty())
     {
         rtl::OUString sRowHeight(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLHGT));
         uno::Reference<table::XCellRange> xTableRow;
@@ -245,7 +255,9 @@ void ScMyShapeResizer::ResizeShapes()
                     else
                         DBG_ERROR("something wents wrong");
                     if (IsOLE(aItr->xShape))
-                        CreateChartListener(pDoc, aItr->sName, aItr->sRangeList);
+                        CreateChartListener(pDoc, aItr->sName, aItr->pRangeList);
+                    if (aItr->pRangeList)
+                        delete aItr->pRangeList;
                     aItr = aShapes.erase(aItr);
                 }
 //              if (pCollection)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-23 15:24:06 $
+ *  last change: $Author: sab $ $Date: 2001-07-31 15:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #endif
-#ifndef __SGI_STL_VECTOR
-#include <vector>
+#ifndef __SGI_STL_LIST
+#include <list>
 #endif
 
 class ScXMLImport;
@@ -83,14 +83,16 @@ struct ScMyToResizeShape
 {
     com::sun::star::uno::Reference <com::sun::star::drawing::XShape> xShape;
     rtl::OUString sName;
-    rtl::OUString sRangeList;
+    rtl::OUString* pRangeList;
     com::sun::star::table::CellAddress  aEndCell;
     com::sun::star::table::CellAddress  aStartCell;
     sal_Int32 nEndX;
     sal_Int32 nEndY;
+
+    ScMyToResizeShape() : pRangeList(NULL) {}
 };
 
-typedef std::vector<ScMyToResizeShape> ScMyToResizeShapes;
+typedef std::list<ScMyToResizeShape> ScMyToResizeShapes;
 
 class ScMyShapeResizer
 {
@@ -101,14 +103,14 @@ class ScMyShapeResizer
     sal_Bool IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const;
     void CreateChartListener(ScDocument* pDoc,
         const rtl::OUString& rName,
-        const rtl::OUString& rRangeList);
+        const rtl::OUString* pRangeList);
 public:
     ScMyShapeResizer(ScXMLImport& rImport);
     ~ScMyShapeResizer();
 
     void    AddShape(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
                     const rtl::OUString& rName,
-                    const rtl::OUString& rRangeList,
+                    rtl::OUString* pRangeList,
                     com::sun::star::table::CellAddress& rStartAddress,
                     com::sun::star::table::CellAddress& rEndAddress,
                     sal_Int32 nEndX, sal_Int32 nEndY);
