@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-05 18:50:48 $
+ *  last change: $Author: mtg $ $Date: 2001-09-14 15:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _ENCRYPTION_DATA_HXX_
 #include <EncryptionData.hxx>
 #endif
+#ifndef _MEMORY_BYTE_GRABBER_HXX_
+#include <MemoryByteGrabber.hxx>
+#endif
 #include <string.h> // for memcpy
 #include <vector>
 
@@ -148,6 +151,8 @@ void ZipFile::setInputStream ( Reference < XInputStream > xNewStream )
 
 void ZipFile::StaticGetCipher ( const ORef < EncryptionData > & xEncryptionData, rtlCipher &rCipher )
 {
+    if ( xEncryptionData.isEmpty() )
+        return;
     Sequence < sal_uInt8 > aDerivedKey (16);
     rtlCipherError aResult;
     Sequence < sal_Int8 > aDecryptBuffer;
@@ -199,7 +204,7 @@ Reference < XInputStream > ZipFile::createMemoryStream(
     sal_Int32 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
     Sequence < sal_Int8 > aReadBuffer ( nSize ), aDecryptBuffer, aWriteBuffer;
     rtlCipher aCipher;
-    sal_Bool bMustDecrypt = rData->aSalt.getLength() ? sal_True : sal_False;
+    sal_Bool bMustDecrypt = (!rData.isEmpty() && rData->aSalt.getLength()) ? sal_True : sal_False;
 
     if ( bMustDecrypt )
     {
@@ -233,10 +238,6 @@ Reference < XInputStream > ZipFile::createMemoryStream(
     }
     return Reference < XInputStream > ( new XMemoryStream ( aWriteBuffer ) );
 }
-void SAL_CALL ZipFile::close(  )
-    throw(IOException, RuntimeException)
-{
-}
 
 ZipEnumeration * SAL_CALL ZipFile::entries(  )
 {
@@ -253,47 +254,6 @@ sal_Int32 SAL_CALL ZipFile::getSize(  )
     throw(RuntimeException)
 {
     return aEntries.size();
-}
-
-Type SAL_CALL ZipFile::getElementType(  )
-    throw(RuntimeException)
-{
-    return ::getCppuType((ZipEntry *) 0);
-}
-
-sal_Bool SAL_CALL ZipFile::hasElements(  )
-    throw(RuntimeException)
-{
-    return (aEntries.size()>0);
-}
-
-Any SAL_CALL ZipFile::getByName( const ::rtl::OUString& aName )
-        throw(container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
-{
-    Any aAny;
-    EntryHash::const_iterator aCI = aEntries.find(sName);
-    if (aCI == aEntries.end())
-        throw container::NoSuchElementException();
-    aAny <<= (*aCI).second;
-     return aAny;
-}
-
-Sequence< ::rtl::OUString > SAL_CALL ZipFile::getElementNames(  )
-        throw(RuntimeException)
-{
-    sal_uInt32 i=0, nSize = aEntries.size();
-    OUString *pNames = new OUString[aEntries.size()];
-    for ( EntryHash::const_iterator aIterator = aEntries.begin(), aEnd = aEntries.end();
-          aIterator != aEnd;
-          aIterator++,i++)
-        pNames[i] = (*aIterator).first;
-    return Sequence<OUString> (pNames, nSize);
-}
-
-sal_Bool SAL_CALL ZipFile::hasByName( const ::rtl::OUString& aName )
-        throw(RuntimeException)
-{
-    return aEntries.find(aName) != aEntries.end();
 }
 
 Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
@@ -376,25 +336,24 @@ sal_Int32 ZipFile::findEND( )
     }
     catch ( IllegalArgumentException& )
     {
-        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface> () );
+        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface > () );
     }
     catch ( NotConnectedException& )
     {
-        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface> () );
+        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface > () );
     }
     catch ( BufferSizeExceededException& )
     {
-        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface> () );
+        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface > () );
     }
-    throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface> () );
+    throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface > () );
 }
 
 sal_Int32 ZipFile::readCEN()
     throw(IOException, ZipException, RuntimeException)
 {
-    sal_Int32 nEndPos, nLocPos;
-    sal_Int16  nCount, nTotal;
-    sal_Int32 nCenLen, nCenPos = -1, nCenOff;
+    sal_Int32 nCenLen, nCenPos = -1, nCenOff, nEndPos, nLocPos;
+    sal_Int16 nCount, nTotal;
 
     try
     {
@@ -406,99 +365,83 @@ sal_Int32 ZipFile::readCEN()
         aGrabber >> nCenLen;
         aGrabber >> nCenOff;
 
-        if (nTotal<0 || nTotal * CENHDR > nCenLen)
-            throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "invalid END header (bad entry count)") ), Reference < XInterface > ());
+        if ( nTotal < 0 || nTotal * CENHDR > nCenLen )
+            throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "invalid END header (bad entry count)") ), Reference < XInterface > () );
 
-        if (nTotal > ZIP_MAXENTRIES)
-            throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "too many entries in ZIP File") ), Reference < XInterface > ());
+        if ( nTotal > ZIP_MAXENTRIES )
+            throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "too many entries in ZIP File") ), Reference < XInterface > () );
 
-        if (nCenLen < 0 || nCenLen > nEndPos)
-            throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid END header (bad central directory size)") ), Reference < XInterface > ());
+        if ( nCenLen < 0 || nCenLen > nEndPos )
+            throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid END header (bad central directory size)") ), Reference < XInterface > () );
 
         nCenPos = nEndPos - nCenLen;
 
-        if (nCenOff < 0 || nCenOff > nCenPos)
-            throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid END header (bad central directory size)") ), Reference < XInterface > ());
+        if ( nCenOff < 0 || nCenOff > nCenPos )
+            throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid END header (bad central directory size)") ), Reference < XInterface > () );
 
         nLocPos = nCenPos - nCenOff;
-        aGrabber.seek(nCenPos);
+        aGrabber.seek( nCenPos );
+        Sequence < sal_Int8 > aCENBuffer ( nCenLen );
+        sal_Int64 nRead = aGrabber.readBytes ( aCENBuffer, nCenLen );
+        if ( static_cast < sal_Int64 > ( nCenLen ) != nRead )
+            throw ZipException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Error reading CEN into memory buffer!") ), Reference < XInterface > () );
 
-        ZipEntry *pEntry = new ZipEntry;
+        MemoryByteGrabber aMemGrabber ( aCENBuffer );
+
+        ZipEntry aEntry;
+        sal_Int32 nTestSig;
+        sal_Int16 nNameLen, nExtraLen, nCommentLen;
+
         for (nCount = 0 ; nCount < nTotal; nCount++)
         {
-            sal_Int32 nTestSig, nCRC, nCompressedSize, nTime, nSize, nExtAttr, nOffset;
-            sal_Int16 nVerMade, nVersion, nFlag, nHow, nNameLen, nExtraLen, nCommentLen;
-            sal_Int16 nDisk, nIntAttr;
+            aMemGrabber >> nTestSig;
+            if ( nTestSig != CENSIG )
+                throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad signature)") ), Reference < XInterface > () );
 
-            if (aGrabber.getPosition() - nCenPos + CENHDR > nCenLen)
-                throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad header size check 1)") ), Reference < XInterface > ());
+            aMemGrabber.skipBytes ( 2 );
+            aMemGrabber >> aEntry.nVersion;
 
-            aGrabber >> nTestSig;
-            if (nTestSig != CENSIG)
-                throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad signature)") ), Reference < XInterface > ());
+            if ( ( aEntry.nVersion & 1 ) == 1 )
+                throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (encrypted entry)") ), Reference < XInterface > () );
 
-            aGrabber >> nVerMade;
-            aGrabber >> nVersion;
-            if ((nVersion & 1) == 1)
-                throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (encrypted entry)") ), Reference < XInterface > ());
+            aMemGrabber >> aEntry.nFlag;
+            aMemGrabber >> aEntry.nMethod;
 
-            aGrabber >> nFlag;
-            aGrabber >> nHow;
-            if (nHow != STORED && nHow != DEFLATED)
-                throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad compression method)") ), Reference < XInterface > ());
+            if ( aEntry.nMethod != STORED && aEntry.nMethod != DEFLATED)
+                throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad compression method)") ), Reference < XInterface > () );
 
-            aGrabber >> nTime;
-            aGrabber >> nCRC;
-            aGrabber >> nCompressedSize;
-            aGrabber >> nSize;
-            aGrabber >> nNameLen;
-            aGrabber >> nExtraLen;
-            aGrabber >> nCommentLen;
-            aGrabber >> nDisk;
-            aGrabber >> nIntAttr;
-            aGrabber >> nExtAttr;
-            aGrabber >> nOffset;
+            aMemGrabber >> aEntry.nTime;
+            aMemGrabber >> aEntry.nCrc;
+            aMemGrabber >> aEntry.nCompressedSize;
+            aMemGrabber >> aEntry.nSize;
+            aMemGrabber >> nNameLen;
+            aMemGrabber >> nExtraLen;
+            aMemGrabber >> nCommentLen;
+            aMemGrabber.skipBytes ( 8 );
+            aMemGrabber >> aEntry.nOffset;
 
-            if (aGrabber.getPosition() - nCenPos + nNameLen + nExtraLen + nCommentLen > nCenLen)
-                throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad header size check 2)") ), Reference < XInterface > ());
+            aEntry.nOffset += nLocPos;
+            aEntry.nOffset *= -1;
 
-            if (nNameLen > ZIP_MAXNAMELEN)
-                throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "name length exceeds 512 bytes" ) ), Reference < XInterface > ());
+            if ( nNameLen > ZIP_MAXNAMELEN )
+                throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "name length exceeds ZIP_MAXNAMELEN bytes" ) ), Reference < XInterface > () );
 
-            if (nExtraLen > ZIP_MAXEXTRA)
-                throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "extra header info exceeds 256 bytes") ), Reference < XInterface > ());
+            if ( nCommentLen > ZIP_MAXNAMELEN )
+                throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "comment length exceeds ZIP_MAXNAMELEN bytes" ) ), Reference < XInterface > () );
 
-            pEntry->nTime   = nTime;
-            pEntry->nCrc    = nCRC;
-            pEntry->nSize   = nSize;
-            pEntry->nCompressedSize = nCompressedSize;
-            pEntry->nMethod = nHow;
-            pEntry->nFlag   = nFlag;
-            pEntry->nVersion= nVersion;
-            pEntry->nOffset = nOffset + nLocPos;
+            if ( nExtraLen > ZIP_MAXEXTRA )
+                throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "extra header info exceeds ZIP_MAXEXTRA bytes") ), Reference < XInterface > () );
 
-            pEntry->nOffset *= -1;
-            /*
-            if (nHow == STORED)
-                pEntry->nCompressedSize = 0;
-            */
-            Sequence < sal_Int8> aSequence (nNameLen);
-            aGrabber.readBytes(aSequence, nNameLen);
-            pEntry->sName = OUString((sal_Char*)aSequence.getConstArray(), nNameLen, RTL_TEXTENCODING_ASCII_US);
+            aEntry.sName = OUString ( (sal_Char *) aMemGrabber.getCurrentPos(),
+                                      nNameLen,
+                                      RTL_TEXTENCODING_ASCII_US);
 
-            aGrabber.seek(aGrabber.getPosition() + nExtraLen);
-            if (nCommentLen>0)
-            {
-                Sequence < sal_Int8 > aCommentSeq( nCommentLen );
-                aGrabber.readBytes(aCommentSeq, nCommentLen);
-                pEntry->sComment = OUString((sal_Char*)aCommentSeq.getConstArray(), nNameLen, RTL_TEXTENCODING_ASCII_US);
-            }
-            aEntries[pEntry->sName] = *pEntry;
+            aMemGrabber.skipBytes( nNameLen + nExtraLen + nCommentLen );
+            aEntries[aEntry.sName] = aEntry;
         }
-        delete pEntry;
 
         if (nCount != nTotal)
-            throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Count != Total") ), Reference < XInterface > ());
+            throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Count != Total") ), Reference < XInterface > () );
     }
     catch ( IllegalArgumentException & )
     {
