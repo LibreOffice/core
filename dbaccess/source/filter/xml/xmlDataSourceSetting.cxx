@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlDataSourceSetting.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 09:28:38 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,9 +130,10 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                     if (!s_aTypeNameMap.size())
                     {
                         s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = ::getBooleanCppuType();
-                        s_aTypeNameMap[GetXMLToken( XML_FLOAT)] = ::getCppuType( static_cast< double* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = ::getCppuType( static_cast< double* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::getCppuType( static_cast< ::rtl::OUString* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_VOID)]  = ::getVoidCppuType();
+                        s_aTypeNameMap[GetXMLToken( XML_INT)]       = ::getCppuType( static_cast< sal_Int32* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_VOID)]      = ::getVoidCppuType();
                     }
 
                     const ConstMapString2TypeIterator aTypePos = s_aTypeNameMap.find(sValue);
