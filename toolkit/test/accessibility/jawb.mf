@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
 Main-Class: AccessibilityWorkBench
-Class-Path: classes.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar xt.jar jaxp.jar
+Class-Path: classes.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar xt.jar jaxp.jar
