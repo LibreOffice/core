@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stack.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 16:53:40 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,12 @@ namespace configmgr
     template <typename T_>
     struct Stack : public std::stack< T_, std::vector<T_> >
     {
+        typedef typename std::vector<T_>::const_iterator bottomup_iterator;
+        typedef typename std::vector<T_>::const_reverse_iterator topdown_iterator;
+        bottomup_iterator begin_up() const { return this->c.begin(); }
+        bottomup_iterator end_up() const { return this->c.end(); }
+        topdown_iterator begin_down() const { return this->c.rbegin(); }
+        topdown_iterator end_down() const { return this->c.rend(); }
     };
 }
 
