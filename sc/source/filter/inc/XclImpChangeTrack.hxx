@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:50:45 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ private:
     String                      sOldUsername;
 
     ScChangeTrack*              pChangeTrack;
-    SvStream*                   pInStrm;        // input stream
+    SvStorageStreamRef          xInStrm;        // input stream
     XclImpStream*               pStrm;          // stream import class
     sal_uInt16                  nTabIdCount;
     sal_Bool                    bGlobExit;      // global exit loop
@@ -169,7 +169,7 @@ private:
     void                        ReadRecords();
 
 public:
-                                XclImpChangeTrack( RootData* pRootData );
+                                XclImpChangeTrack( RootData* pRootData, const XclImpStream& rBookStrm );
                                 ~XclImpChangeTrack();
 
                                 // reads extended 3D ref info following the formulas, returns sc tab nums
@@ -214,7 +214,7 @@ inline void XclImpChangeTrack::Read2DRange( ScRange& rRange )
 
 inline void XclImpChangeTrack::ReadString( String& rString )
 {
-    pStrm->AppendUniString( rString );
+    rString = pStrm->ReadUniString();
 }
 
 inline void XclImpChangeTrack::IgnoreString()
