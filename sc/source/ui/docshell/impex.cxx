@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,7 +1296,7 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                 break;
             const sal_Unicode* p = aLine.GetBuffer();
             sal_Unicode cTag = *p++;
-            if( cTag == 'C' || cTag == 'F' )       // in F kann die Position gesetzt werden
+            if( cTag == 'C' )       // Content
             {
                 if( *p++ != ';' )
                     return FALSE;
@@ -1320,12 +1320,10 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                             break;
                         case 'K':
                         {
-                            if( cTag != 'C' )           // nur bei 'C'
-                                break;
                             if( !bSingle &&
-                              ( nCol < nStartCol || nCol > nEndCol
-                             || nRow < nStartRow || nRow > nEndRow
-                             || nCol > MAXCOL || nRow > MAXROW ) )
+                                    ( nCol < nStartCol || nCol > nEndCol
+                                      || nRow < nStartRow || nRow > nEndRow
+                                      || nCol > MAXCOL || nRow > MAXROW ) )
                                 break;
                             if( !bData )
                             {
@@ -1364,6 +1362,20 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                         case 'E':
                         case 'M':
                         {
+                            if ( ch == 'M' )
+                            {
+                                if ( nRefCol < nCol )
+                                    nRefCol = nCol;
+                                if ( nRefRow < nRow )
+                                    nRefRow = nRow;
+                                if ( !bData )
+                                {
+                                    if( nRefRow > nEndRow )
+                                        nEndRow = nRefRow;
+                                    if( nRefCol > nEndCol )
+                                        nEndCol = nRefCol;
+                                }
+                            }
                             if( !bMyDoc || !bData )
                                 break;
                             aText = '=';
@@ -1382,10 +1394,6 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                             ScTokenArray* pCode = aComp.CompileString( aText );
                             if ( ch == 'M' )
                             {
-                                if ( nRefCol < nCol )
-                                    nRefCol = nCol;
-                                if ( nRefRow < nRow )
-                                    nRefRow = nRow;
                                 ScMarkData aMark;
                                 aMark.SelectTable( aPos.Tab(), TRUE );
                                 pDoc->InsertMatrixFormula( nCol, nRow, nRefCol,
@@ -1399,23 +1407,6 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                             delete pCode;   // ctor/InsertMatrixFormula did copy TokenArray
                         }
                         break;
-                        case 'P' :
-                        {   // F;P<n> sets format code of P;P<code> at current position
-                            if ( cTag != 'F' )      // only in 'F'
-                                break;
-                            const sal_Unicode* p0 = p;
-                            while( *p && *p != ';' )
-                                p++;
-                            String aNumber( p0, p - p0 );
-                            USHORT nCode = (USHORT) aNumber.ToInt32();
-                            if ( nCode < aFormats.Count() )
-                            {
-                                ULONG nFormat = aFormats[nCode];
-                                pDoc->ApplyAttr( nCol, nRow, aRange.aStart.Tab(),
-                                    SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat ) );
-                            }
-                        }
-                        break;
                     }
                     while( *p && *p != ';' )
                         p++;
@@ -1423,11 +1414,70 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                         p++;
                 }
             }
+            else if( cTag == 'F' )      // Format
+            {
+                if( *p++ != ';' )
+                    return FALSE;
+                sal_Int32 nFormat = -1;
+                while( *p )
+                {
+                    sal_Unicode ch = *p++;
+                    ch = ScGlobal::ToUpperAlpha( ch );
+                    switch( ch )
+                    {
+                        case 'X':
+                            nCol = String( p ).ToInt32() + nStartCol - 1;
+                            break;
+                        case 'Y':
+                            nRow = String( p ).ToInt32() + nStartRow - 1;
+                            break;
+                        case 'P' :
+                            if ( bData )
+                            {
+                                // F;P<n> sets format code of P;P<code> at
+                                // current position, or at ;X;Y if specified.
+                                // Note that ;X;Y may appear after ;P
+                                const sal_Unicode* p0 = p;
+                                while( *p && *p != ';' )
+                                    p++;
+                                String aNumber( p0, p - p0 );
+                                nFormat = aNumber.ToInt32();
+                            }
+                            break;
+                    }
+                    while( *p && *p != ';' )
+                        p++;
+                    if( *p )
+                        p++;
+                }
+                if ( !bData )
+                {
+                    if( nRow > nEndRow )
+                        nEndRow = nRow;
+                    if( nCol > nEndCol )
+                        nEndCol = nCol;
+                }
+                if ( 0 <= nFormat && nFormat < aFormats.Count() )
+                {
+                    ULONG nKey = aFormats[(USHORT)nFormat];
+                    pDoc->ApplyAttr( nCol, nRow, aRange.aStart.Tab(),
+                            SfxUInt32Item( ATTR_VALUE_FORMAT, nKey ) );
+                }
+            }
             else if( cTag == 'P' )
             {
-                if ( *p == ';' && *(p+1) == 'P' )
+                if ( bData && *p == ';' && *(p+1) == 'P' )
                 {
                     String aCode( p+2 );
+                    // unescape doubled semicolons
+                    xub_StrLen nPos = 0;
+                    String aSemicolon( RTL_CONSTASCII_USTRINGPARAM(";;"));
+                    while ( (nPos = aCode.Search( aSemicolon, nPos )) != STRING_NOTFOUND )
+                        aCode.Erase( nPos++, 1 );
+                    // get rid of Xcl escape characters
+                    nPos = 0;
+                    while ( (nPos = aCode.Search( sal_Unicode(0x1b), nPos )) != STRING_NOTFOUND )
+                        aCode.Erase( nPos, 1 );
                     xub_StrLen nCheckPos;
                     short nType;
                     ULONG nKey;
