@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-24 09:21:04 $
+ *  last change: $Author: pl $ $Date: 2002-10-31 17:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,6 +435,13 @@ void PrinterInfoManager::initialize()
                 FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aPrinter.m_aFile );
                 aPrinter.m_bModified    = false;
                 aPrinter.m_aGroup       = aConfig.GetGroupName( nGroup );
+                std::hash_map< OUString, Printer, OUStringHash >::const_iterator find_it =
+                    m_aPrinters.find( aPrinterName );
+                if( find_it != m_aPrinters.end() )
+                {
+                    aPrinter.m_aAlternateFiles = find_it->second.m_aAlternateFiles;
+                    aPrinter.m_aAlternateFiles.push_front( find_it->second.m_aFile );
+                }
                 m_aPrinters[ aPrinterName ] = aPrinter;
             }
         }
@@ -732,14 +739,33 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
         if( it->second.m_aFile.getLength() )
         {
             // this printer already exists in a config file
-            // check writeability of config file
+
+
+            // check writeability of config file(s)
             if( ! checkWriteability( it->second.m_aFile ) )
                 bSuccess = false;
-            else if( ! bCheckOnly )
+            else
             {
+                for( std::list< OUString >::const_iterator file_it = it->second.m_aAlternateFiles.begin();
+                     file_it != it->second.m_aAlternateFiles.end() && bSuccess; ++file_it )
+                {
+                    if( ! checkWriteability( *file_it ) )
+                        bSuccess = false;
+                }
+            }
+            if( bSuccess && ! bCheckOnly )
+            {
+
                 Config aConfig( it->second.m_aFile );
                 aConfig.DeleteGroup( it->second.m_aGroup );
                 aConfig.Flush();
+                for( std::list< OUString >::const_iterator file_it = it->second.m_aAlternateFiles.begin();
+                     file_it != it->second.m_aAlternateFiles.end() && bSuccess; ++file_it )
+                {
+                    Config aConfig( *file_it );
+                    aConfig.DeleteGroup( it->second.m_aGroup );
+                    aConfig.Flush();
+                }
             }
         }
         if( bSuccess && ! bCheckOnly )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-15 11:06:33 $
+ *  last change: $Author: pl $ $Date: 2002-10-31 17:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,11 +130,14 @@ class PrinterInfoManager
         // configuration file containing this printer
         // empty means a freshly added printer that has to be saved yet
         ::rtl::OUString         m_aFile;
+        // details other config files that have this printer
+        // in case of removal all have to be removed
+        ::std::list< ::rtl::OUString > m_aAlternateFiles;
         // group in m_aFile containing the printer
         // this must be unique over all configuration files
         // it usually should be the printer name
         ::rtl::OString          m_aGroup;
-        // wether changes need to be saved
+        // whether changes need to be saved
         bool                    m_bModified;
         // the corresponding info and job data
         PrinterInfo             m_aInfo;
