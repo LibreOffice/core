@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 19:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,9 +1059,23 @@ void SwRedlineAcceptDlg::InsertParents(USHORT nStart, USHORT nEnd)
     if (nEnd == USHRT_MAX)
         return;     // Keine Redlines im Dokument
 
-    RedlinData *pData = 0;
-    SvLBoxEntry* pParent = 0;
-    SwRedlineDataParentPtr pRedlineParent = 0;
+    RedlinData *pData;
+    SvLBoxEntry *pParent, *pCurrEntry = 0;
+    SwRedlineDataParentPtr pRedlineParent;
+    const SwRedline* pCurrRedline;
+    if( !nStart && !pTable->FirstSelected() )
+    {
+        pCurrRedline = pSh->GetCurrRedline();
+        if( !pCurrRedline )
+        {
+            pSh->SwCrsrShell::Push();
+            if( 0 == (pCurrRedline = pSh->SelNextRedline()))
+                pCurrRedline = pSh->SelPrevRedline();
+            pSh->SwCrsrShell::Pop( FALSE );
+        }
+    }
+    else
+        pCurrRedline = 0;
 
     for (USHORT i = nStart; i <= nEnd; i++)
     {
@@ -1080,6 +1094,13 @@ void SwRedlineAcceptDlg::InsertParents(USHORT nStart, USHORT nEnd)
 
         sParent = GetRedlineText(rRedln, pData->aDateTime);
         pParent = pTable->InsertEntry(sParent, pData, 0, i);
+        if( pCurrRedline == &rRedln )
+        {
+            pTable->SetCurEntry( pParent );
+            pTable->Select( pParent );
+            pTable->MakeVisible( pParent );
+        }
+
         pRedlineParent->pTLBParent = pParent;
 
         InsertChilds(pRedlineParent, rRedln, nAutoFmt);
@@ -1539,6 +1560,9 @@ void SwRedlineAcceptDlg::FillInfo(String &rExtraData) const
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:45  hr
+    initial import
+
     Revision 1.54  2000/09/18 16:05:59  willem.vandorp
     OpenOffice header added.
 
