@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:35:34 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,10 @@
 #ifndef _VISCRS_HXX
 #include <viscrs.hxx>
 #endif
-
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
 SV_IMPL_OP_PTRARR_SORT(SwBookmarks, SwBookmarkPtr)
 
@@ -707,12 +710,12 @@ void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
             {
                 if( pFrm->GetDrawObjs() )
                 {
-                    const SwDrawObjs& rDObj = *pFrm->GetDrawObjs();
-                    for( USHORT n = rDObj.Count(); n; )
+                    const SwSortedObjs& rDObj = *pFrm->GetDrawObjs();
+                    for( sal_uInt32 n = rDObj.Count(); n; )
                     {
-                        SdrObject *pObj = rDObj[ --n ];
-                        SwFrmFmt* pFmt = ((SwContact*)GetUserCall(pObj))->GetFmt();
-                        const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
+                        SwAnchoredObject* pObj = rDObj[ --n ];
+                        const SwFrmFmt& rFmt = pObj->GetFrmFmt();
+                        const SwFmtAnchor& rAnchor = rFmt.GetAnchor();
                         if( ( ( nSaveFly && FLY_AT_CNTNT == rAnchor.GetAnchorId() ) ||
                               FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ) &&
                             ( 0 != ( pAPos = rAnchor.GetCntntAnchor() ) ) )
@@ -734,10 +737,10 @@ void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
                             }
                             aSave.SetCount( pDoc->GetSpzFrmFmts()->Count() );
                             while( aSave.GetCount() &&
-                                   pFmt != (*pDoc->GetSpzFrmFmts())[
+                                   &rFmt != (*pDoc->GetSpzFrmFmts())[
                                                 aSave.DecCount() ] )
                                 ; // nothing
-                            ASSERT( pFmt == (*pDoc->GetSpzFrmFmts())[
+                            ASSERT( &rFmt == (*pDoc->GetSpzFrmFmts())[
                                                     aSave.GetCount() ],
                                     "_SaveCntntIdx: Lost FrameFormat" );
                             aSave.Add( rSaveArr );
