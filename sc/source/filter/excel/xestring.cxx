@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestring.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:03:49 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,12 @@ sal_uInt32 XclExpString::GetSize() const
         (IsWriteFormats() ? (4 * GetFormatsCount()) : 0);   // richtext formattting
 }
 
+sal_uInt16 XclExpString::GetChar( sal_uInt16 nCharIdx ) const
+{
+    DBG_ASSERT( nCharIdx < Len(), "XclExpString::GetChar - invalid character index" );
+    return static_cast< sal_uInt16 >( mbIsBiff8 ? maUniBuffer[ nCharIdx ] : maCharBuffer[ nCharIdx ] );
+}
+
 sal_uInt16 XclExpString::GetHash() const
 {
     return
@@ -370,6 +376,14 @@ sal_uInt16 XclExpString::GetHash() const
 }
 
 // streaming ------------------------------------------------------------------
+
+void XclExpString::WriteLenField( XclExpStream& rStrm ) const
+{
+    if( mb8BitLen )
+        rStrm << static_cast< sal_uInt8 >( mnLen );
+    else
+        rStrm << mnLen;
+}
 
 void XclExpString::WriteFlagField( XclExpStream& rStrm ) const
 {
@@ -386,10 +400,7 @@ void XclExpString::WriteHeader( XclExpStream& rStrm ) const
     DBG_ASSERT( !mb8BitLen || (mnLen < 256), "XclExpString::WriteHeader - string too long" );
     PrepareWrite( rStrm, GetHeaderSize() );
     // length
-    if( mb8BitLen )
-        rStrm << static_cast< sal_uInt8 >( mnLen );
-    else
-        rStrm << mnLen;
+    WriteLenField( rStrm );
     // flag field
     if( IsWriteFlags() )
         rStrm << GetFlagField();
