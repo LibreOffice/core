@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 17:05:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,8 +722,6 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
     BOOL bAction = pBox && !pLbFillAttr->IsTravelSelect();
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
-//  SfxDispatcher* pDisp = ( (SvxFillToolBoxControl*)GetData() )->GetBindings().GetDispatcher();
-//  DBG_ASSERT( pDisp, "invalid Dispatcher" );
     if ( bAction )
     {
         Any a;
@@ -742,14 +740,6 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
         {
             case XFILL_NONE:
             {
-/*
-                aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ));
-                aXFillStyleItem.QueryValue( a );
-                aArgs[0].Value = a;
-                ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillStyle" )),
-                                                                aArgs );
-*/
-//                pDisp->Execute( SID_ATTR_FILL_STYLE, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L );
             }
             break;
 
@@ -771,9 +761,6 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                 aArgs[0].Value = a;
                 ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillColor" )),
                                                                aArgs );
-                // NEU
-//                pDisp->Execute(
-//                    SID_ATTR_FILL_COLOR, SFX_CALLMODE_RECORD, &aXFillColorItem, &aXFillStyleItem, 0L );
             }
             break;
             case XFILL_GRADIENT:
@@ -795,8 +782,6 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                         aArgs[0].Value = a;
                         ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillGradient" )),
                                                                        aArgs );
-//                        pDisp->Execute( SID_ATTR_FILL_GRADIENT, SFX_CALLMODE_RECORD,
-//                                        &aXFillGradientItem, &aXFillStyleItem, 0L );
                     }
                 }
             }
@@ -820,8 +805,6 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                         aArgs[0].Value = a;
                         ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillHatch" )),
                                                                        aArgs );
-//                        pDisp->Execute( SID_ATTR_FILL_HATCH, SFX_CALLMODE_RECORD,
-//                                        &aXFillHatchItem, &aXFillStyleItem, 0L );
                     }
                 }
             }
@@ -846,8 +829,6 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                         aArgs[0].Value = a;
                         ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillBitmap" )),
                                                                        aArgs );
-//                        pDisp->Execute( SID_ATTR_FILL_BITMAP, SFX_CALLMODE_RECORD,
-//                                        &aXFillBitmapItem, &aXFillStyleItem, 0L );
                     }
                 }
             }
