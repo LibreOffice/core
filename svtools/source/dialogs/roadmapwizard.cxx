@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmapwizard.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:38:02 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,11 +96,14 @@ namespace svt
         Paths       aPaths;
         PathId      nActivePath;
         bool        bActivePathIsDefinite;
+           FixedLine*   pFixedLine;
+
 
         StateSet    aDisabledStates;
 
         RoadmapWizardImpl()
             :pRoadmap( NULL )
+            ,pFixedLine(NULL)
             ,nActivePath( -1 )
             ,bActivePathIsDefinite( false )
         {
@@ -109,6 +112,7 @@ namespace svt
         ~RoadmapWizardImpl()
         {
             delete pRoadmap;
+            delete pFixedLine;
         }
 
         /// returns the index of the current state in given path, or -1
@@ -201,8 +205,8 @@ namespace svt
 #endif
 
     //--------------------------------------------------------------------
-    RoadmapWizard::RoadmapWizard( Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags, const ResId& _rRoadmapTitleResource )
-        :OWizardMachine( _pParent, _rRes, _nButtonFlags )
+    RoadmapWizard::RoadmapWizard( Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags, const ResId& _rRoadmapTitleResource, sal_Bool _bCheckButtonStates )
+        :OWizardMachine( _pParent, _rRes, _nButtonFlags, _bCheckButtonStates, sal_True, 1 )
         ,m_pImpl( new RoadmapWizardImpl )
     {
         DBG_CTOR( RoadmapWizard, CheckInvariants );
@@ -212,7 +216,7 @@ namespace svt
         m_pImpl->pRoadmap->SetPosPixel( Point( 0, 0 ) );
         m_pImpl->pRoadmap->SetItemSelectHdl( LINK( this, RoadmapWizard, OnRoadmapItemSelected ) );
 
-        Size aRoadmapSize( LogicToPixel( Size( 85, 0 ), MAP_APPFONT ) );
+        Size aRoadmapSize =( LogicToPixel( Size( 85, 0 ), MAP_APPFONT ) );
         aRoadmapSize.Height() = GetSizePixel().Height();
         m_pImpl->pRoadmap->SetSizePixel( aRoadmapSize );
 
@@ -404,9 +408,9 @@ namespace svt
                     WizardState nRequiredState = aActivePathPos->second[ nItemIndex ];
                     if ( nPresentItemId != nRequiredState )
                     {
-                        m_pImpl->pRoadmap->ChangeRoadmapItemLabel( nPresentItemId, getStateDisplayName( nRequiredState ) );
-                        m_pImpl->pRoadmap->EnableRoadmapItem( nPresentItemId, m_pImpl->aDisabledStates.find( nRequiredState ) == m_pImpl->aDisabledStates.end() );
-                        m_pImpl->pRoadmap->ChangeRoadmapItemID( nPresentItemId, (RoadmapTypes::ItemId)nRequiredState );
+                        m_pImpl->pRoadmap->ChangeRoadmapItemLabel( nPresentItemId, getStateDisplayName( nRequiredState ), nItemIndex  );
+                        m_pImpl->pRoadmap->EnableRoadmapItem( nPresentItemId, m_pImpl->aDisabledStates.find( nRequiredState ) == m_pImpl->aDisabledStates.end(), nItemIndex  );
+                        m_pImpl->pRoadmap->ChangeRoadmapItemID( nPresentItemId, (RoadmapTypes::ItemId)nRequiredState, nItemIndex );
                     }
                 }
             }
@@ -536,6 +540,26 @@ namespace svt
         // if the state is currently in the roadmap, reflect it's new status
         m_pImpl->pRoadmap->EnableRoadmapItem( (RoadmapTypes::ItemId)_nState, _bEnable );
     }
+
+    void RoadmapWizard::Resize()
+    {
+        OWizardMachine::Resize();
+        ShowFixedLine();
+    }
+
+
+
+    void RoadmapWizard::ShowFixedLine()
+    {
+        if ( !m_pImpl->pFixedLine )
+        {
+            m_pImpl->pFixedLine = new FixedLine( this, WB_VERT );
+            m_pImpl->pFixedLine->SetPosSizePixel( m_pImpl->pRoadmap->GetSizePixel().Width(), 0, 0, GetPageSizePixel().Height(),
+                                        WINDOW_POSSIZE_POS | WINDOW_POSSIZE_HEIGHT );
+            m_pImpl->pFixedLine->Show( );
+        }
+    }
+
     //--------------------------------------------------------------------
     void RoadmapWizard::updateRoadmapItemLabel( WizardState _nState )
     {
