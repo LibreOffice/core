@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
+#   last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,9 @@ CDEFS+=-DCOMPMOD_NAMESPACE=dbp
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=			listcombowizard.cxx	\
+CXXFILES=			dbptools.cxx	\
+                    gridwizard.cxx	\
+                    listcombowizard.cxx	\
                     optiongrouplayouter.cxx	\
                     commonpagesdbp.cxx	\
                     groupboxwiz.cxx	\
@@ -99,7 +101,9 @@ CXXFILES=			listcombowizard.cxx	\
                     moduledbp.cxx	\
                     dbpservices.cxx
 
-SLOFILES=			$(SLO)$/listcombowizard.obj	\
+SLOFILES=			$(SLO)$/dbptools.obj	\
+                    $(SLO)$/gridwizard.obj	\
+                    $(SLO)$/listcombowizard.obj	\
                     $(SLO)$/optiongrouplayouter.obj	\
                     $(SLO)$/commonpagesdbp.obj	\
                     $(SLO)$/groupboxwiz.obj	\
@@ -109,7 +113,8 @@ SLOFILES=			$(SLO)$/listcombowizard.obj	\
                     $(SLO)$/dbpservices.obj
 
 
-SRCFILES=			commonpagesdbp.src	\
+SRCFILES=			gridpages.src	\
+                    commonpagesdbp.src	\
                     dbpilots.src	\
                     groupboxpages.src	\
                     listcombopages.src

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
+ *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,8 +195,13 @@ namespace dbp
             _rList.Clear();
         const ::rtl::OUString* pItems = _rItems.getConstArray();
         const ::rtl::OUString* pEnd = pItems + _rItems.getLength();
-        for (;pItems < pEnd; ++pItems)
-            _rList.InsertEntry(*pItems);
+        sal_uInt16 nPos;
+        sal_Int32 nIndex = 0;
+        for (;pItems < pEnd; ++pItems, ++nIndex)
+        {
+            nPos = _rList.InsertEntry(*pItems);
+            _rList.SetEntryData(nPos, reinterpret_cast<void*>(nIndex));
+        }
     }
 
     //---------------------------------------------------------------------
@@ -206,8 +211,13 @@ namespace dbp
             _rList.Clear();
         const ::rtl::OUString* pItems = _rItems.getConstArray();
         const ::rtl::OUString* pEnd = pItems + _rItems.getLength();
+        sal_uInt16 nPos;
+        sal_Int32 nIndex = 0;
         for (;pItems < pEnd; ++pItems)
-            _rList.InsertEntry(*pItems);
+        {
+            nPos = _rList.InsertEntry(*pItems);
+            _rList.SetEntryData(nPos, reinterpret_cast<void*>(nIndex));
+        }
     }
 
     //=====================================================================
@@ -246,7 +256,7 @@ namespace dbp
         {
             DBG_ERROR("OControlWizard::activate: could not obtain the class id!");
         }
-        if (!approveControlType(nClassId))
+        if (!approveControl(nClassId))
         {
             // TODO: MessageBox or exception
             return RET_CANCEL;
@@ -414,6 +424,9 @@ namespace dbp
         m_aContext.xObjectShape.clear();
         m_aContext.aFieldNames.realloc(0);
 
+        m_aContext.xObjectContainer.clear();
+        m_aContext.xFields.clear();
+
         Any aSQLException;
         Reference< XPreparedStatement >  xStatement;
         try
@@ -492,7 +505,10 @@ namespace dbp
             }
 
             if (xColumns.is())
+            {
                 m_aContext.aFieldNames = xColumns->getElementNames();
+                m_aContext.xFields = xColumns;
+            }
         }
         catch(SQLContext& e) { aSQLException <<= e; }
         catch(SQLWarning& e) { aSQLException <<= e; }
@@ -631,6 +647,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/28 09:18:30  fs
+ *  finalized the list/combo wizard
+ *
  *  Revision 1.2  2001/02/23 15:19:08  fs
  *  some changes / centralizations - added the list-/combobox wizard
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-02 09:42:40 $
+ *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OGroupBoxWizard::approveControlType(sal_Int16 _nClassId)
+    sal_Bool OGroupBoxWizard::approveControl(sal_Int16 _nClassId)
     {
         return FormComponentType::GROUPBOX == _nClassId;
     }
@@ -588,6 +588,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/02 09:42:40  fs
+ *  #84540# #84541# corrected the Next button behaviour on the first and last tab page
+ *
  *  Revision 1.3  2001/02/28 09:18:30  fs
  *  finalized the list/combo wizard
  *

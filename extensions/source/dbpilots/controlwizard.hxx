@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
+ *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,27 +68,6 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
-#include <com/sun/star/drawing/XControlShape.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
@@ -116,6 +95,9 @@
 #ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
 #include "componentmodule.hxx"
 #endif
+#ifndef _EXTENSIONS_DBP_WIZARDCONTEXT_HXX_
+#include "wizardcontext.hxx"
+#endif
 
 class ResId;
 //.........................................................................
@@ -129,41 +111,6 @@ namespace dbp
     struct OControlWizardSettings
     {
         String      sControlLabel;
-    };
-
-    //=====================================================================
-    //= OControlWizardPage
-    //=====================================================================
-    struct OControlWizardContext
-    {
-        // the global data source context
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                    xDatasourceContext;
-
-        // the control mode
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    xObjectModel;
-        // the form the control model belongs to
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    xForm;
-        // the form as rowset
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
-                    xRowSet;
-        // the model of the document
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-                    xDocumentModel;
-        // the page where the control mode resides
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
-                    xDrawPage;
-        // the shape which carries the control
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XControlShape >
-                    xObjectShape;
-        // the tables or queries of the data source the form is bound to (if any)
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                    xObjectContainer;
-        // the column names of the object the form is bound to (table, query or SQL statement)
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
-                    aFieldNames;
     };
 
     //=====================================================================
@@ -235,7 +182,7 @@ namespace dbp
 
         sal_Bool needDatasourceSelection();
 
-        virtual sal_Bool approveControlType(sal_Int16 _nClassId) = 0;
+        virtual sal_Bool approveControl(sal_Int16 _nClassId) = 0;
 
         // ModalDialog overridables
         virtual short   Execute();
@@ -261,6 +208,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/28 09:18:30  fs
+ *  finalized the list/combo wizard
+ *
  *  Revision 1.2  2001/02/23 15:19:08  fs
  *  some changes / centralizations - added the list-/combobox wizard
  *

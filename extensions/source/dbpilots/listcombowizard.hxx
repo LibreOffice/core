@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
+ *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ namespace dbp
 
         virtual sal_Bool onFinish(sal_Int32 _nResult);
 
-        virtual sal_Bool approveControlType(sal_Int16 _nClassId);
+        virtual sal_Bool approveControl(sal_Int16 _nClassId);
 
         sal_uInt16 getFinalState() const { return isListBox() ? LCW_STATE_FIELDLINK : LCW_STATE_COMBODBFIELD; }
 
@@ -266,6 +266,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/28 09:18:30  fs
+ *  finalized the list/combo wizard
+ *
  *  Revision 1.1  2001/02/23 15:20:18  fs
  *  initial checkin - list-/combobox wizard (not comlpletely finished yet)
  *

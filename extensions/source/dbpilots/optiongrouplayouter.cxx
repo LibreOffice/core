@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optiongrouplayouter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 12:11:58 $
+ *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _EXTENSIONS_DBP_GROUPBOXWIZ_HXX_
 #include "groupboxwiz.hxx"
 #endif
+#ifndef _EXTENSIONS_DBP_DBPTOOLS_HXX_
+#include "dbptools.hxx"
+#endif
 
 //.........................................................................
 namespace dbp
@@ -126,30 +129,6 @@ namespace dbp
     OOptionGroupLayouter::OOptionGroupLayouter(const Reference< XMultiServiceFactory >& _rxORB)
         :m_xORB(_rxORB)
     {
-    }
-
-    //---------------------------------------------------------------------
-    void OOptionGroupLayouter::disambiguateName(const OControlWizardContext& _rContext, ::rtl::OUString& _rElementsName)
-    {
-        try
-        {
-            Reference< XNameAccess > xNameChecker(_rContext.xForm, UNO_QUERY);
-
-            ::rtl::OUString sBase(_rElementsName);
-            for (sal_Int32 i=1; i<0x7FFFFFFF; ++i)
-            {
-                _rElementsName = sBase;
-                _rElementsName += ::rtl::OUString::valueOf((sal_Int32)i);
-                if (!xNameChecker->hasByName(_rElementsName))
-                    return;
-            }
-            // can't do anything ... no free names
-            _rElementsName = sBase;
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("OOptionGroupLayouter::disambiguateName: something went (strangely) wrong!");
-        }
     }
 
     //---------------------------------------------------------------------
@@ -206,7 +185,7 @@ namespace dbp
         aButtonPosition.X = aShapePosition.X + OFFSET;
 
         ::rtl::OUString sElementsName = ::rtl::OUString::createFromAscii("RadioGroup");
-        disambiguateName(_rContext, sElementsName);
+        disambiguateName(Reference< XNameAccess >(_rContext.xForm, UNO_QUERY), sElementsName);
 
         const String* pLabels = _rSettings.aLabels.begin();
         const String* pValues = _rSettings.aValues.begin();
@@ -299,6 +278,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/21 12:11:58  fs
+ *  +disambiguateName
+ *
  *  Revision 1.1  2001/02/21 09:24:28  fs
  *  initial checkin - form control auto pilots
  *

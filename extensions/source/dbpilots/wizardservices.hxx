@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardservices.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
+ *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,20 @@ namespace dbp
     //=====================================================================
     //= OListComboSI
     //=====================================================================
-    /// service info for the group box wizard
+    /// service info for the list/combo box wizard
     struct OListComboSI
+    {
+    public:
+        ::rtl::OUString         getImplementationName() const;
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                getServiceNames() const;
+    };
+
+    //=====================================================================
+    //= OGridSI
+    //=====================================================================
+    /// service info for the grid wizard
+    struct OGridSI
     {
     public:
         ::rtl::OUString         getImplementationName() const;
@@ -107,6 +119,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/23 15:19:08  fs
+ *  some changes / centralizations - added the list-/combobox wizard
+ *
  *  Revision 1.1  2001/02/21 09:25:07  fs
  *  initial checkin - form control auto pilots
  *
