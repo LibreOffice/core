@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:38:14 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,7 +568,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     }
 
                     String aNoteText;
-                    ScPostIt aNote;
+                    ScPostIt aNote(pDoc);
                     if ( pDoc->GetNote( nNoteCol, nNoteRow, nNoteTab, aNote ) )
                         aNoteText = aNote.GetText();
 
@@ -907,7 +907,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case FID_NOTE_VISIBLE:
                 {
-                    ScPostIt aNote;
+                    ScPostIt aNote(pDoc);
                     if ( pDoc->IsBlockEditable( nTab, nPosX,nPosY, nPosX,nPosY ) &&
                          pDoc->GetNote( nPosX, nPosY, nTab, aNote ) )
                     {
