@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-17 11:22:12 $
+ *  last change: $Author: mt $ $Date: 2001-08-21 11:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1781,7 +1781,9 @@ Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust )
         Point aTopLeft;
         Size aBulletSize( ImplGetBulletSize( nPara ) );
 
-        const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_LRSPACE );
+        BOOL bOutlineMode = ( pEditEngine->GetControlWord() & EE_CNTRL_OUTLINER ) != 0;
+
+        const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&) pEditEngine->GetParaAttrib( nPara, bOutlineMode ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
         aTopLeft.X() = rLR.GetTxtLeft() + rLR.GetTxtFirstLineOfst();
 
 
@@ -1789,7 +1791,7 @@ Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust )
         if ( nBulletWidth < aBulletSize.Width() )   // Bullet macht sich Platz
             nBulletWidth = aBulletSize.Width();
 
-        if ( bAdjust && ( !( pEditEngine->GetControlWord() & EE_CNTRL_OUTLINER ) ) )
+        if ( bAdjust && !bOutlineMode )
         {
             // Bei zentriert/rechtsbuendig anpassen
             const SvxAdjustItem& rItem = (const SvxAdjustItem&)pEditEngine->GetParaAttrib( nPara, EE_PARA_JUST );
