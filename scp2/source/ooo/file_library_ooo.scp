@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.92 $
+*  $Revision: 1.93 $
 *
-*  last change: $Author: obo $ $Date: 2005-03-18 10:32:33 $
+*  last change: $Author: rt $ $Date: 2005-03-29 11:46:18 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -2107,8 +2107,12 @@ End
 
 File gid_File_Lib_LibXMLSec_xmlseccore
     TXT_FILE_BODY;
-	#ifdef UNX
-        Name = STRING(CONCAT3(libxmlsec1,UNXSUFFIX,.1.2.6));
+    #ifdef UNX
+        #ifdef MACOSX
+            Name = STRING(CONCAT2(libxmlsec1,UNXSUFFIX));
+        #else
+            Name = STRING(CONCAT3(libxmlsec1,UNXSUFFIX,.1.2.6));
+        #endif
     #else
         Name = "libxmlsec.dll";
     #endif
@@ -2128,7 +2132,11 @@ End
 #ifdef UNX
 File gid_File_Lib_LibXMLSec_xmlsecnss
     TXT_FILE_BODY;
-    Name = STRING(CONCAT3(libxmlsec1-nss,UNXSUFFIX,.1.2.6));
+    #ifdef MACOSX
+        Name = STRING(CONCAT2(libxmlsec1-nss,UNXSUFFIX));
+    #else
+        Name = STRING(CONCAT3(libxmlsec1-nss,UNXSUFFIX,.1.2.6));
+    #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
