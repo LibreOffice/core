@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-26 14:26:15 $
+ *  last change: $Author: ka $ $Date: 2000-11-26 15:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,9 @@ public:
 // ---------------------
 // - SvxGrafAttrHelper -
 // ---------------------
+
+class SdrView;
+class SfxRequest;
 
 class SvxGrafAttrHelper
 {
