@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscibas.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:24:03 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,20 +99,20 @@
 /****************** M A C R O S ******************************************/
 void RscTypCont::SETCONST( RscConst * pClass, char * szString, UINT32 nVal )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
     fprintf( stderr, "setconst : %s\n", szString );
 #endif
     pClass->SetConstant( aNmTb.Put( szString,
-                         (USHORT)CONSTNAME, nVal ), nVal );
+                         CONSTNAME, nVal ), nVal );
 }
 
-void RscTypCont::SETCONST( RscConst * pClass, HASHID nName, UINT32 nVal )
+void RscTypCont::SETCONST( RscConst * pClass, Atom nName, UINT32 nVal )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
     fprintf( stderr, "setconst hash: %d\n", nName );
 #endif
     pClass->SetConstant( aNmTb.Put( nName,
-                         (USHORT)CONSTNAME, nVal ), nVal );
+                         CONSTNAME, nVal ), nVal );
 }
 
 /****************** C O D E **********************************************/
@@ -125,7 +125,7 @@ void RscTypCont::SETCONST( RscConst * pClass, HASHID nName, UINT32 nVal )
 typedef std::hash_map< rtl::OString, sal_uInt32, rtl::OStringHash > langmap;
 static langmap ULong_Iso_map;
 
-USHORT GetLangId( const ByteString& aLang )
+sal_uInt32 GetLangId( const ByteString& aLang )
 {
     langmap::iterator pIter = ULong_Iso_map.find( aLang );
     if ( pIter != ULong_Iso_map.end())
@@ -135,8 +135,8 @@ USHORT GetLangId( const ByteString& aLang )
 
 void RscLangEnum::Init( RscNameTable& rNames )
 {
-    SetConstant( rNames.Put( "SYSTEM", (USHORT)CONSTNAME, (long)LANGUAGE_SYSTEM ), LANGUAGE_SYSTEM );
-    SetConstant( rNames.Put( "DONTKNOW", (USHORT)CONSTNAME, LANGUAGE_DONTKNOW ), LANGUAGE_DONTKNOW );
+    SetConstant( rNames.Put( "SYSTEM", CONSTNAME, (long)LANGUAGE_SYSTEM ), LANGUAGE_SYSTEM );
+    SetConstant( rNames.Put( "DONTKNOW", CONSTNAME, LANGUAGE_DONTKNOW ), LANGUAGE_DONTKNOW );
 
     sal_Int32 nIndex = 0;
     unsigned long nI = 0x400; // stay away from selfdefined...
@@ -146,7 +146,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
 
     while (( pLangEntry = GetIsoLangEntry( nIndex )) && ( pLangEntry->meLang != LANGUAGE_DONTKNOW ))
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
         fprintf( stderr, "ISO Language in : %d %d %s\n",
                  nIndex,
                  pLangEntry->meLang,
@@ -156,38 +156,38 @@ void RscLangEnum::Init( RscNameTable& rNames )
         aCountry = pLangEntry->maCountry;
         if ( aLang.EqualsIgnoreCaseAscii( aCountry ) ||  ! aCountry.Len() )
         {
-            SetConstant( rNames.Put( aLang.GetBuffer(), (USHORT)CONSTNAME, nI ), nI );
+            SetConstant( rNames.Put( aLang.GetBuffer(), CONSTNAME, nI ), nI );
             if ( ! GetLangId( aLang ))
                 ULong_Iso_map[ aLang ] = nI;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
             fprintf( stderr, "ISO Language out: %s 0x%hx\n", aLang.GetBuffer(), nI );
 #endif
             nI++;
         }
         else
         {
-            SetConstant( rNames.Put( aLang.GetBuffer(), (USHORT)CONSTNAME, nI ), nI );
+            SetConstant( rNames.Put( aLang.GetBuffer(), CONSTNAME, nI ), nI );
             if ( ! GetLangId( aLang ))
                 ULong_Iso_map[ aLang ] = nI;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
             fprintf( stderr, "ISO Language out: %s 0x%hx", aLang.GetBuffer(), nI );
 #endif
             nI++;
             aLang += csep;
             aLang += aCountry.ToUpperAscii();
-            SetConstant( rNames.Put( aLang.GetBuffer(), (USHORT)CONSTNAME, nI ), nI );
+            SetConstant( rNames.Put( aLang.GetBuffer(), CONSTNAME, nI ), nI );
             if ( ! GetLangId( aLang ))
                 ULong_Iso_map[ aLang ] = nI;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
             fprintf( stderr, " %s 0x%hx\n", aLang.GetBuffer(), nI );
 #endif
             nI++;
 // hack - survive "x-no-translate"
             if ( aLang == "en-US" )
             {
-//                SetConstant( rNames.Put( "x-no-translate", (USHORT)CONSTNAME, nI ), nI );
+//                SetConstant( rNames.Put( "x-no-translate", CONSTNAME, nI ), nI );
 //                nI++;
-                SetConstant( rNames.Put( "x-comment", (USHORT)CONSTNAME, nI ), nI );
+                SetConstant( rNames.Put( "x-comment", CONSTNAME, nI ), nI );
                 nI++;
             }
         }
@@ -205,10 +205,10 @@ void RscLangEnum::Init( RscNameTable& rNames )
             aIsoToken = aEnvIsoTokens.GetToken( nTokenCounter, ' ' );
             if ( aIsoToken.Len() )
             {
-                SetConstant( rNames.Put( aIsoToken.GetBuffer(), (USHORT)CONSTNAME, nI ), nI );
+                SetConstant( rNames.Put( aIsoToken.GetBuffer(), CONSTNAME, nI ), nI );
                 if ( ! GetLangId( aIsoToken ))
                     ULong_Iso_map[ aIsoToken ] = nI;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
                 fprintf( stderr, "Env ISO Language out: %s 0x%hx\n", aIsoToken.GetBuffer(), nI );
 #endif
                 nI++;
@@ -219,15 +219,15 @@ void RscLangEnum::Init( RscNameTable& rNames )
         }
     }
 
-    SetConstant( rNames.Put( "LANGUAGE_USER1", (USHORT)CONSTNAME, LANGUAGE_USER1 ), LANGUAGE_USER1 );
-    SetConstant( rNames.Put( "LANGUAGE_USER2", (USHORT)CONSTNAME, LANGUAGE_USER2 ), LANGUAGE_USER2 );
-    SetConstant( rNames.Put( "LANGUAGE_USER3", (USHORT)CONSTNAME, LANGUAGE_USER3 ), LANGUAGE_USER3 );
-    SetConstant( rNames.Put( "LANGUAGE_USER4", (USHORT)CONSTNAME, LANGUAGE_USER4 ), LANGUAGE_USER4 );
-    SetConstant( rNames.Put( "LANGUAGE_USER5", (USHORT)CONSTNAME, LANGUAGE_USER5 ), LANGUAGE_USER5 );
-    SetConstant( rNames.Put( "LANGUAGE_USER6", (USHORT)CONSTNAME, LANGUAGE_USER6 ), LANGUAGE_USER6 );
-    SetConstant( rNames.Put( "LANGUAGE_USER7", (USHORT)CONSTNAME, LANGUAGE_USER7 ), LANGUAGE_USER7 );
-    SetConstant( rNames.Put( "LANGUAGE_USER8", (USHORT)CONSTNAME, LANGUAGE_USER8 ), LANGUAGE_USER8 );
-    SetConstant( rNames.Put( "EXTERN", (USHORT)CONSTNAME, LANGUAGE_USER9 ), LANGUAGE_USER9 );
+    SetConstant( rNames.Put( "LANGUAGE_USER1", CONSTNAME, LANGUAGE_USER1 ), LANGUAGE_USER1 );
+    SetConstant( rNames.Put( "LANGUAGE_USER2", CONSTNAME, LANGUAGE_USER2 ), LANGUAGE_USER2 );
+    SetConstant( rNames.Put( "LANGUAGE_USER3", CONSTNAME, LANGUAGE_USER3 ), LANGUAGE_USER3 );
+    SetConstant( rNames.Put( "LANGUAGE_USER4", CONSTNAME, LANGUAGE_USER4 ), LANGUAGE_USER4 );
+    SetConstant( rNames.Put( "LANGUAGE_USER5", CONSTNAME, LANGUAGE_USER5 ), LANGUAGE_USER5 );
+    SetConstant( rNames.Put( "LANGUAGE_USER6", CONSTNAME, LANGUAGE_USER6 ), LANGUAGE_USER6 );
+    SetConstant( rNames.Put( "LANGUAGE_USER7", CONSTNAME, LANGUAGE_USER7 ), LANGUAGE_USER7 );
+    SetConstant( rNames.Put( "LANGUAGE_USER8", CONSTNAME, LANGUAGE_USER8 ), LANGUAGE_USER8 );
+    SetConstant( rNames.Put( "EXTERN", CONSTNAME, LANGUAGE_USER9 ), LANGUAGE_USER9 );
 }
 
 RscEnum * RscTypCont::InitLangType()
@@ -248,7 +248,7 @@ RscEnum * RscTypCont::InitLangType()
 RscEnum * RscTypCont::InitDateFormatType()
 {
     RscEnum * pDate;
-    pDate = new RscEnum( pHS->Insert( "EnumDateFormat" ), RSC_NOTYPE );
+    pDate = new RscEnum( pHS->getID( "EnumDateFormat" ), RSC_NOTYPE );
 
     SETCONST( pDate, "MDY", MDY );
     SETCONST( pDate, "DMY", DMY );
@@ -269,7 +269,7 @@ RscEnum * RscTypCont::InitDateFormatType()
 RscEnum * RscTypCont::InitTimeFormatType()
 {
     RscEnum * pTime;
-    pTime = new RscEnum( pHS->Insert( "EnumTimeFormat" ), RSC_NOTYPE );
+    pTime = new RscEnum( pHS->getID( "EnumTimeFormat" ), RSC_NOTYPE );
 
     SETCONST( pTime, "HOUR_12", HOUR_12 );
     SETCONST( pTime, "HOUR_24", HOUR_24 );
@@ -289,7 +289,7 @@ RscEnum * RscTypCont::InitTimeFormatType()
 RscEnum * RscTypCont::InitWeekDayFormatType()
 {
     RscEnum * pWeekDay;
-    pWeekDay = new RscEnum( pHS->Insert( "EnumWeekDayFormat" ), RSC_NOTYPE );
+    pWeekDay = new RscEnum( pHS->getID( "EnumWeekDayFormat" ), RSC_NOTYPE );
 
     SETCONST( pWeekDay, "DAYOFWEEK_NONE", DAYOFWEEK_NONE );
     SETCONST( pWeekDay, "DAYOFWEEK_SHORT", DAYOFWEEK_SHORT );
@@ -310,7 +310,7 @@ RscEnum * RscTypCont::InitWeekDayFormatType()
 RscEnum * RscTypCont::InitMonthFormatType()
 {
     RscEnum * pMonth;
-    pMonth = new RscEnum( pHS->Insert( "EnumMonthFormat" ), RSC_NOTYPE );
+    pMonth = new RscEnum( pHS->getID( "EnumMonthFormat" ), RSC_NOTYPE );
 
     SETCONST( pMonth, "MONTH_NORMAL", MONTH_NORMAL );
     SETCONST( pMonth, "MONTH_ZERO", MONTH_ZERO );
@@ -332,7 +332,7 @@ RscEnum * RscTypCont::InitMonthFormatType()
 RscEnum * RscTypCont::InitFieldUnitsType()
 {
     RscEnum * pFieldUnits;
-    pFieldUnits = new RscEnum( pHS->Insert( "EnumFieldUnit" ), RSC_NOTYPE );
+    pFieldUnits = new RscEnum( pHS->getID( "EnumFieldUnit" ), RSC_NOTYPE );
 
     SETCONST( pFieldUnits, "FUNIT_NONE", FUNIT_NONE );
     SETCONST( pFieldUnits, "FUNIT_MM", FUNIT_MM );
@@ -363,7 +363,7 @@ RscEnum * RscTypCont::InitFieldUnitsType()
 RscEnum * RscTypCont::InitDayOfWeekType()
 {
     RscEnum * pDayOfWeek;
-    pDayOfWeek = new RscEnum( pHS->Insert( "EnumDayOfWeek" ), RSC_NOTYPE );
+    pDayOfWeek = new RscEnum( pHS->getID( "EnumDayOfWeek" ), RSC_NOTYPE );
 
     SETCONST( pDayOfWeek, "MONDAY", MONDAY );
     SETCONST( pDayOfWeek, "TUESDAY", TUESDAY );
@@ -388,7 +388,7 @@ RscEnum * RscTypCont::InitDayOfWeekType()
 RscEnum * RscTypCont::InitTimeFieldFormat()
 {
     RscEnum * pTimeFieldFormat;
-    pTimeFieldFormat = new RscEnum( pHS->Insert( "EnumTimeFieldFormat" ),
+    pTimeFieldFormat = new RscEnum( pHS->getID( "EnumTimeFieldFormat" ),
                                     RSC_NOTYPE );
 
     SETCONST( pTimeFieldFormat, "TIMEF_NONE", TIMEF_NONE );
@@ -409,7 +409,7 @@ RscEnum * RscTypCont::InitTimeFieldFormat()
 *************************************************************************/
 RscEnum * RscTypCont::InitColor(){
     RscEnum * pColor;
-    pColor = new RscEnum( pHS->Insert( "EnumColor" ), RSC_NOTYPE );
+    pColor = new RscEnum( pHS->getID( "EnumColor" ), RSC_NOTYPE );
 
     SETCONST( pColor, "COL_BLACK",                  COL_BLACK );
     SETCONST( pColor, "COL_BLUE",                   COL_BLUE );
@@ -442,7 +442,7 @@ RscEnum * RscTypCont::InitColor(){
 *************************************************************************/
 RscEnum * RscTypCont::InitMapUnit(){
     RscEnum * pMapUnit;
-    pMapUnit = new RscEnum( pHS->Insert( "EnumMapUnit" ), RSC_NOTYPE );
+    pMapUnit = new RscEnum( pHS->getID( "EnumMapUnit" ), RSC_NOTYPE );
 
     SETCONST( pMapUnit, "MAP_PIXEL",                  MAP_PIXEL );
     SETCONST( pMapUnit, "MAP_SYSFONT",                MAP_SYSFONT );
@@ -472,7 +472,7 @@ RscEnum * RscTypCont::InitMapUnit(){
 *************************************************************************/
 RscEnum * RscTypCont::InitKey(){
     RscEnum * pKey;
-    pKey = new RscEnum( pHS->Insert( "EnumKey" ), RSC_NOTYPE );
+    pKey = new RscEnum( pHS->getID( "EnumKey" ), RSC_NOTYPE );
 
     SETCONST( pKey, "KEY_0",                    KEY_0 );
     SETCONST( pKey, "KEY_1",                    KEY_1 );
@@ -590,7 +590,7 @@ RscEnum * RscTypCont::InitKey(){
 *************************************************************************/
 RscEnum * RscTypCont::InitTriState(){
     RscEnum * pTriState;
-    pTriState = new RscEnum( pHS->Insert( "EnumTriState" ), RSC_NOTYPE );
+    pTriState = new RscEnum( pHS->getID( "EnumTriState" ), RSC_NOTYPE );
 
     SETCONST( pTriState, "STATE_NOCHECK",      STATE_NOCHECK  );
     SETCONST( pTriState, "STATE_CHECK",        STATE_CHECK    );
@@ -608,9 +608,10 @@ RscEnum * RscTypCont::InitTriState(){
 |*    Letzte Aenderung  MM 24.05.91
 |*
 *************************************************************************/
-RscEnum * RscTypCont::InitMessButtons(){
+RscEnum * RscTypCont::InitMessButtons()
+{
     RscEnum * pMessButtons;
-    pMessButtons = new RscEnum( pHS->Insert( "EnumMessButtons" ), RSC_NOTYPE, FALSE );
+    pMessButtons = new RscEnum( pHS->getID( "EnumMessButtons" ), RSC_NOTYPE );
     SETCONST( pMessButtons, "WB_OK",                      WB_OK );
     SETCONST( pMessButtons, "WB_OK_CANCEL",               WB_OK_CANCEL );
     SETCONST( pMessButtons, "WB_YES_NO",                  WB_YES_NO );
@@ -631,8 +632,8 @@ RscEnum * RscTypCont::InitMessButtons(){
 *************************************************************************/
 RscEnum * RscTypCont::InitMessDefButton(){
     RscEnum * pMessDefButton;
-    pMessDefButton = new RscEnum( pHS->Insert( "EnumMessDefButton" ),
-                                  RSC_NOTYPE, FALSE );
+    pMessDefButton = new RscEnum( pHS->getID( "EnumMessDefButton" ),
+                                  RSC_NOTYPE );
 
     SETCONST( pMessDefButton, "WB_DEF_OK",                  WB_DEF_OK );
     SETCONST( pMessDefButton, "WB_DEF_CANCEL",              WB_DEF_CANCEL );
@@ -655,10 +656,10 @@ RscEnum * RscTypCont::InitMessDefButton(){
 RscTupel * RscTypCont::InitGeometry()
 {
     RscTop *    pTupel;
-    HASHID      nId;
+    Atom        nId;
 
     // Clientvariablen einfuegen
-    pTupel = new RscTupel( pHS->Insert( "TupelDeltaSystem" ),
+    pTupel = new RscTupel( pHS->getID( "TupelDeltaSystem" ),
                                 RSC_NOTYPE, NULL );
     nId = aNmTb.Put( "X", VARNAME );
     pTupel->SetVariable( nId, &aShort );
@@ -683,7 +684,7 @@ RscTupel * RscTypCont::InitGeometry()
 *************************************************************************/
 RscArray * RscTypCont::InitLangGeometry( RscTupel * pGeo )
 {
-    return new RscArray( pHS->Insert( "Lang_TupelGeometry" ), RSC_NOTYPE, pGeo, &aLangType );
+    return new RscArray( pHS->getID( "Lang_TupelGeometry" ), RSC_NOTYPE, pGeo, &aLangType );
 }
 
 /*************************************************************************
@@ -699,7 +700,7 @@ RscCont * RscTypCont::InitStringList()
 {
     RscCont * pCont;
 
-    pCont = new RscCont( pHS->Insert( "Chars[]" ), RSC_NOTYPE );
+    pCont = new RscCont( pHS->getID( "Chars[]" ), RSC_NOTYPE );
     pCont->SetTypeClass( &aString );
 
     return pCont;
@@ -716,7 +717,7 @@ RscCont * RscTypCont::InitStringList()
 *************************************************************************/
 RscArray * RscTypCont::InitLangStringList( RscCont * pStrLst )
 {
-    return new RscArray( pHS->Insert( "Lang_CharsList" ),
+    return new RscArray( pHS->getID( "Lang_CharsList" ),
                          RSC_NOTYPE, pStrLst, &aLangType );
 }
 
@@ -732,10 +733,10 @@ RscArray * RscTypCont::InitLangStringList( RscCont * pStrLst )
 RscTupel * RscTypCont::InitStringTupel()
 {
     RscTop *    pTupel;
-    HASHID      nId;
+    Atom        nId;
 
     // Clientvariablen einfuegen
-    pTupel = new RscTupel( pHS->Insert( "CharsTupel" ), RSC_NOTYPE, NULL );
+    pTupel = new RscTupel( pHS->getID( "CharsTupel" ), RSC_NOTYPE, NULL );
     nId = aNmTb.Put( "FILTER", VARNAME );
     pTupel->SetVariable( nId, &aString );
     nId = aNmTb.Put( "MASK", VARNAME );
@@ -756,10 +757,10 @@ RscTupel * RscTypCont::InitStringTupel()
 RscTupel * RscTypCont::InitStringLongTupel()
 {
     RscTop *    pTupel;
-    HASHID      nId;
+    Atom        nId;
 
     // Clientvariablen einfuegen
-    pTupel = new RscTupel( pHS->Insert( "CharsLongTupel" ), RSC_NOTYPE, NULL );
+    pTupel = new RscTupel( pHS->getID( "CharsLongTupel" ), RSC_NOTYPE, NULL );
     nId = aNmTb.Put( "ItemText", VARNAME );
     pTupel->SetVariable( nId, &aString );
     nId = aNmTb.Put( "ItemId", VARNAME );
@@ -781,7 +782,7 @@ RscCont * RscTypCont::InitStringTupelList( RscTupel * pTupelString )
 {
     RscCont * pCont;
 
-    pCont = new RscCont( pHS->Insert( "CharsCharsTupel[]" ), RSC_NOTYPE );
+    pCont = new RscCont( pHS->getID( "CharsCharsTupel[]" ), RSC_NOTYPE );
     pCont->SetTypeClass( pTupelString );
 
     return pCont;
@@ -800,7 +801,7 @@ RscCont * RscTypCont::InitStringLongTupelList( RscTupel * pStringLong )
 {
     RscCont * pCont;
 
-    pCont = new RscCont( pHS->Insert( "CharsLongTupel[]" ), RSC_NOTYPE );
+    pCont = new RscCont( pHS->getID( "CharsLongTupel[]" ), RSC_NOTYPE );
     pCont->SetTypeClass( pStringLong );
 
     return pCont;
@@ -817,7 +818,7 @@ RscCont * RscTypCont::InitStringLongTupelList( RscTupel * pStringLong )
 *************************************************************************/
 RscArray * RscTypCont::InitLangStringTupelList( RscCont * pStrTupelLst )
 {
-    return new RscArray( pHS->Insert( "Lang_CharsCharsTupel" ),
+    return new RscArray( pHS->getID( "Lang_CharsCharsTupel" ),
                     RSC_NOTYPE, pStrTupelLst, &aLangType );
 }
 
@@ -832,7 +833,7 @@ RscArray * RscTypCont::InitLangStringTupelList( RscCont * pStrTupelLst )
 *************************************************************************/
 RscArray * RscTypCont::InitLangStringLongTupelList( RscCont * pStrLongTupelLst )
 {
-    return new RscArray( pHS->Insert( "Lang_CharsLongTupelList" ),
+    return new RscArray( pHS->getID( "Lang_CharsLongTupelList" ),
                          RSC_NOTYPE, pStrLongTupelLst, &aLangType );
 }
 
