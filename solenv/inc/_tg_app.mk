@@ -50,11 +50,13 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
     @+-$(RM) -R $@.app
-    @+if ( -f $@ ) \
-    echo "Making: $@.app" ; \
-    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
-    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
-    endif
+    @echo "Making: $@.app"
+    @$(MKDIRHIER) $@.app$/Contents$/MacOS
+    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
+    @$(RM) $@
+    @echo '#\!/bin/sh' >> $@
+    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
+    @chmod a+x $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -152,7 +154,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(APP2LINKTYPE)" != ""
@@ -205,11 +206,13 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
     @+-$(RM) -R $@.app
-    @+if ( -f $@ ) \
-    echo "Making: $@.app" ; \
-    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
-    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
-    endif
+    @echo "Making: $@.app"
+    @$(MKDIRHIER) $@.app$/Contents$/MacOS
+    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
+    @$(RM) $@
+    @echo '#\!/bin/sh' >> $@
+    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
+    @chmod a+x $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -307,7 +310,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(APP3LINKTYPE)" != ""
@@ -360,11 +362,13 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
     @+-$(RM) -R $@.app
-    @+if ( -f $@ ) \
-    echo "Making: $@.app" ; \
-    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
-    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
-    endif
+    @echo "Making: $@.app"
+    @$(MKDIRHIER) $@.app$/Contents$/MacOS
+    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
+    @$(RM) $@
+    @echo '#\!/bin/sh' >> $@
+    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
+    @chmod a+x $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -462,7 +466,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(APP4LINKTYPE)" != ""
@@ -515,11 +518,13 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
     @+-$(RM) -R $@.app
-    @+if ( -f $@ ) \
-    echo "Making: $@.app" ; \
-    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
-    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
-    endif
+    @echo "Making: $@.app"
+    @$(MKDIRHIER) $@.app$/Contents$/MacOS
+    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
+    @$(RM) $@
+    @echo '#\!/bin/sh' >> $@
+    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
+    @chmod a+x $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -617,7 +622,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(APP5LINKTYPE)" != ""
@@ -670,11 +674,13 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
     @+-$(RM) -R $@.app
-    @+if ( -f $@ ) \
-    echo "Making: $@.app" ; \
-    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
-    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
-    endif
+    @echo "Making: $@.app"
+    @$(MKDIRHIER) $@.app$/Contents$/MacOS
+    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
+    @$(RM) $@
+    @echo '#\!/bin/sh' >> $@
+    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
+    @chmod a+x $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -772,7 +778,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(APP6LINKTYPE)" != ""
@@ -825,11 +830,13 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
     @+-$(RM) -R $@.app
-    @+if ( -f $@ ) \
-    echo "Making: $@.app" ; \
-    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
-    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
-    endif
+    @echo "Making: $@.app"
+    @$(MKDIRHIER) $@.app$/Contents$/MacOS
+    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
+    @$(RM) $@
+    @echo '#\!/bin/sh' >> $@
+    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
+    @chmod a+x $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -927,7 +934,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(APP7LINKTYPE)" != ""
@@ -980,11 +986,13 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
     @+-$(RM) -R $@.app
-    @+if ( -f $@ ) \
-    echo "Making: $@.app" ; \
-    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
-    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
-    endif
+    @echo "Making: $@.app"
+    @$(MKDIRHIER) $@.app$/Contents$/MacOS
+    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
+    @$(RM) $@
+    @echo '#\!/bin/sh' >> $@
+    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
+    @chmod a+x $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1082,7 +1090,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(APP8LINKTYPE)" != ""
@@ -1135,11 +1142,13 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
     @+-$(RM) -R $@.app
-    @+if ( -f $@ ) \
-    echo "Making: $@.app" ; \
-    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
-    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
-    endif
+    @echo "Making: $@.app"
+    @$(MKDIRHIER) $@.app$/Contents$/MacOS
+    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
+    @$(RM) $@
+    @echo '#\!/bin/sh' >> $@
+    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
+    @chmod a+x $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1237,7 +1246,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(APP9LINKTYPE)" != ""
@@ -1290,11 +1298,13 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
     @+-$(RM) -R $@.app
-    @+if ( -f $@ ) \
-    echo "Making: $@.app" ; \
-    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
-    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
-    endif
+    @echo "Making: $@.app"
+    @$(MKDIRHIER) $@.app$/Contents$/MacOS
+    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
+    @$(RM) $@
+    @echo '#\!/bin/sh' >> $@
+    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
+    @chmod a+x $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1392,7 +1402,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(APP10LINKTYPE)" != ""
@@ -1445,11 +1454,13 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
     @+-$(RM) -R $@.app
-    @+if ( -f $@ ) \
-    echo "Making: $@.app" ; \
-    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
-    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
-    endif
+    @echo "Making: $@.app"
+    @$(MKDIRHIER) $@.app$/Contents$/MacOS
+    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
+    @$(RM) $@
+    @echo '#\!/bin/sh' >> $@
+    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
+    @chmod a+x $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1547,4 +1558,3 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 
 
 # Anweisungen fuer das Linken
-#next Target

@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-25 23:34:59 $
-#*    $Revision: 1.6 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-26 02:52:11 $
+#*    $Revision: 1.7 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -96,15 +96,13 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
     @+-$(RM) -R $@.app
-    @+if ( -f $@ ) \
-    echo "Making: $@.app" ; \
-    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
-    $(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f) ; \
-    $(RM) $@ ; \
-    echo '#\!/bin/sh' >> $@ ; \
-    echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@ ; \
-    chmod a+x $@ ; \
-    endif
+    @echo "Making: $@.app"
+    @$(MKDIRHIER) $@.app$/Contents$/MacOS
+    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
+    @$(RM) $@
+    @echo '#\!/bin/sh' >> $@
+    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
+    @chmod a+x $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
