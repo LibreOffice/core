@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:01:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,10 @@ WorkWindow* lcl_GetDefaultWindow()
 {
     static WorkWindow* pW = NULL;
     if ( !pW )
+    {
         pW = new WorkWindow( NULL, 0 );
+        pW->EnableChildTransparentMode();
+    }
     return pW;
 }
 
@@ -256,12 +259,12 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
 
     mbCreatingCompatiblePeer = sal_True;
 
-    Reference< XWindowPeer >    xP;
+    Reference< XWindowPeer > xCompatiblePeer;
 
     if ( bAcceptExistingPeer )
-        xP = getPeer();
+        xCompatiblePeer = getPeer();
 
-    if ( !xP.is() )
+    if ( !xCompatiblePeer.is() )
     {
         // Peer unsichtbar erzeugen...
         sal_Bool bVis = maComponentInfos.bVisible;
@@ -277,12 +280,19 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
 
         WorkWindow* pWW;
         {
-        osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
-        pWW = lcl_GetDefaultWindow();
+            osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
+            pWW = lcl_GetDefaultWindow();
         }
         xMe->createPeer( NULL, pWW->GetComponentInterface( sal_True ) );
-        xP = getPeer();
+        xCompatiblePeer = getPeer();
         setPeer( xCurrentPeer );
+
+        if ( xCompatiblePeer.is() && mxGraphics.is() )
+        {
+            Reference< XView > xPeerView( xCompatiblePeer, UNO_QUERY );
+            if ( xPeerView.is() )
+                xPeerView->setGraphics( mxGraphics );
+        }
 
         if( bVis )
             maComponentInfos.bVisible = sal_True;
@@ -290,7 +300,7 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
 
     mbCreatingCompatiblePeer = sal_False;
 
-    return xP;
+    return xCompatiblePeer;
 }
 
 void UnoControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const Any& rVal )
