@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 11:59:57 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
                 < "Listformatmallar" ; SWSTYLEBIT_LIST ; > ;
                 < "Fφrteckningsformatmallar" ; SWSTYLEBIT_IDX ; > ;
                 < "Formatmallar specialomrεde" ; SWSTYLEBIT_EXTRA ; > ;
-                < "HTML formatmallar" ; SWSTYLEBIT_HTML ; > ;
+                < "HTML-formatmallar" ; SWSTYLEBIT_HTML ; > ;
                 < "Villkorliga formatmallar" ; SWSTYLEBIT_CONDCOLL ; > ;
             };
             filterlist [ danish ] =
@@ -515,14 +515,14 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             };
             filterlist [ french ] =
             {
-                < "Automatiquement" ; SFXSTYLEBIT_AUTO ; > ;
+                < "Automatique" ; SFXSTYLEBIT_AUTO ; > ;
                 < "Tous les styles" ; SFXSTYLEBIT_ALL ; > ;
                 < "Styles utilisιs" ; SFXSTYLEBIT_USED ; > ;
                 < "Styles personnalisιs" ; SFXSTYLEBIT_USERDEF ; > ;
                 < "Styles de texte" ; SWSTYLEBIT_TEXT ; > ;
                 < "Styles de chapitre" ; SWSTYLEBIT_CHAPTER ; > ;
                 < "Styles de liste" ; SWSTYLEBIT_LIST ; > ;
-                < "Styles d'index/de tables des matiθres" ; SWSTYLEBIT_IDX ; > ;
+                < "Styles d'index" ; SWSTYLEBIT_IDX ; > ;
                 < "Styles pour zones spιciales" ; SWSTYLEBIT_EXTRA ; > ;
                 < "Styles HTML" ; SWSTYLEBIT_HTML ; > ;
                 < "Styles conditionnels" ; SWSTYLEBIT_CONDCOLL ; > ;
@@ -553,7 +553,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
                 < "Estilos de νndices" ; SWSTYLEBIT_IDX ; > ;
                 < "Estilos de αreas especiais" ; SWSTYLEBIT_EXTRA ; > ;
                 < "Estilos HTML" ; SWSTYLEBIT_HTML ; > ;
-                < "Estilos condicionados" ; SWSTYLEBIT_CONDCOLL ; > ;
+                < "Estilos condicionais" ; SWSTYLEBIT_CONDCOLL ; > ;
             };
             Text[ chinese_simplified ] = "¶ΞΒδΡωΚ½";
             FilterList [ chinese_simplified ] =
@@ -1677,7 +1677,7 @@ String STR_CANTCREATE
     TEXT[ portuguese ] = "Foi impossνvel criar documento.";
     TEXT[ danish ] = "Det var ikke muligt at oprette dokumentet.";
     TEXT[ french ] = "Impossible de crιer le document.";
-    TEXT[ swedish ] = "Dokumentet kunde inte skapas.";
+    TEXT[ swedish ] = "Det gick inte att skapa dokumentet.";
     TEXT[ dutch ] = "Het document kon niet worden gemaakt.";
     TEXT[ spanish ] = "El documento no pudo ser creado.";
     TEXT[ english_us ] = "Can't create document.";
@@ -1734,7 +1734,7 @@ String STR_UNBENANNT
     TEXT [ portuguese ] = "Sem nome" ;
     TEXT [ finnish ] = "Nimetφn" ;
     TEXT [ danish ] = "Ikke-navngivet" ;
-    TEXT [ french ] = "Sans titre" ;
+    TEXT [ french ] = "Sans nom" ;
     TEXT [ swedish ] = "Namnlφs" ;
     TEXT [ dutch ] = "Naamloos" ;
     TEXT [ spanish ] = "Sin nombre" ;
@@ -2791,7 +2791,7 @@ QueryBox MSG_CLPBRD_CLEAR
     MESSAGE[ arabic ] = "αήΟ ήγΚ ΘΝέΩ ίγνΗΚ ίΘνΡΙ γδ ΗαΘνΗδΗΚ έν ΗαΝΗέΩΙ.\nεα ΚΡνΟ ζΦΪ γΝΚζνΗΚ ΗαΝΗέΩΙ ΚΝΚ ΚΥΡέ ΚΨΘνήΗΚ ΓΞΡμΏ";
     MESSAGE[ dutch ] = "U hebt een groot aantal gegevens op het Klembord geplaatst.\nWilt u dat de inhoud van het Klembord beschikbaar blijft voor andere toepassingen?";
     MESSAGE[ chinese_simplified ] = "Δϊ½«Ò»Έφ½Ο΄σµΔΚύΎέΈ΄ΦΖµ½ΌτΜω°ε΅£\nΔϊΟλÒªΘΓΖδΛϋµΔΣ¦ΣΓ³ΜΠςÒ²ΔάΉ»ΚΉΣΓΥβΈφΚύΎέΒπ£Ώ";
-    MESSAGE[ greek ] = "Έχετε αποθηκεύσει μεγάλο αριθμό δεδομένων στο clipboard.\nΘέλετε να παραμείνει διαθέσιμο το περιεχόμενο του clipboard για άλλες εφαρμογές;";
+    MESSAGE[ greek ] = "Έχετε αποθηκεύσει μεγάλο αριθμό δεδομένων στο πρόχειρο.\nΘέλετε να παραμείνει διαθέσιμο το περιεχόμενό του και για άλλες εφαρμογές;";
     MESSAGE[ korean ] = "Ε¬Έ³ΊΈµεΎΘΏ΅ ΐϊΐεµΘ ΄λΏλ·®ΐΗ µ¥ΐΜΕΝ°΅ ΐΦ½ΐ΄Ο΄Ω.\nΕ¬Έ³ΊΈµεΐΗ ³»Ώλΐ» ΄ΩΈ¥ ΐΐΏλΗΑ·Ξ±Χ·¥Ώ΅Ό­ ΐ―ΘΏΗΟµµ·Ο ³²°άµΞ½Γ°Ϊ½ΐ΄Ο±ξ?";
     MESSAGE[ turkish ] = "Panoya bόyόk miktarda veri aktardύnύz.\nPano iηeriπini baώka uygulamalarda kullanmak istiyor musunuz?";
 };
@@ -2966,5 +2966,23 @@ String STR_REDLINE_UNKNOWN_AUTHOR
 {
     Text = "unbekannt" ;
     Text [ ENGLISH ] = "unknown" ;
+    Text[ english_us ] = "unknown";
+    Text[ portuguese ] = "unknown";
+    Text[ russian ] = "unknown";
+    Text[ greek ] = "άγνωστο";
+    Text[ dutch ] = "unknown";
+    Text[ french ] = "inconnu";
+    Text[ spanish ] = "desconocido";
+    Text[ italian ] = "unknown";
+    Text[ danish ] = "unknown";
+    Text[ swedish ] = "okδnd";
+    Text[ polish ] = "nieznany";
+    Text[ portuguese_brazilian ] = "unknown";
+    Text[ japanese ] = "•s–Ύ";
+    Text[ korean ] = "unknown";
+    Text[ chinese_simplified ] = "²»Γχ";
+    Text[ chinese_traditional ] = "unknown";
+    Text[ turkish ] = "unknown";
+    Text[ arabic ] = "ΫνΡ γΪΡζέ";
 };
 
