@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescGetter.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-05-03 08:48:30 $
+ *  last change:$Date: 2004-11-02 11:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,11 @@ public abstract class DescGetter {
         while (line != null) {
             try {
                 if (line.startsWith("-o")) {
-                    entryList.add(getDescriptionForSingleJob(
+                    DescEntry aEntry = getDescriptionForSingleJob(
                                           line.substring(3).trim(), descPath,
-                                          debug));
+                                          debug);
+                    if (aEntry != null)
+                        entryList.add(aEntry);
                 } else if (line.startsWith("-sce")) {
                     DescEntry[] subs = getScenario(line.substring(5,
                                                                   line.length())
@@ -123,7 +125,8 @@ public abstract class DescGetter {
                                                    perModule[i].substring(3)
                                                                .trim(),
                                                    descPath, debug);
-                        entryList.add(aEntry);
+                        if (aEntry != null)
+                            entryList.add(aEntry);
                     }
                 }
 
@@ -143,6 +146,8 @@ public abstract class DescGetter {
             }
         }
 
+        if (entryList.size() == 0)
+            return null;
         entries = new DescEntry[entryList.size()];
         entries = (DescEntry[]) entryList.toArray(entries);
 
