@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 09:07:08 $
+ *  last change: $Author: cl $ $Date: 2001-11-08 15:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,9 @@ struct XMLShapeImportHelperImpl
 
     // #88546# possibility to swich progress bar handling on/off
     sal_Bool                    mbHandleProgressBar;
+
+    // stores the capability of the current model to create presentation shapes
+    sal_Bool                    mbIsPresentationShapesSupported;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -260,6 +263,10 @@ XMLShapeImportHelper::XMLShapeImportHelper(
         // set lock to avoid deletion
         mpPresPagePropsMapper->acquire();
     }
+
+    uno::Reference< lang::XServiceInfo > xInfo( rImporter.GetModel(), uno::UNO_QUERY );
+    const OUString aSName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument") );
+    mpImpl->mbIsPresentationShapesSupported = xInfo.is() && xInfo->supportsService( aSName );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1260,3 +1267,10 @@ sal_Bool XMLShapeImportHelper::IsHandleProgressBarEnabled() const
 {
     return mpImpl->mbHandleProgressBar;
 }
+
+/** queries the capability of the current model to create presentation shapes */
+sal_Bool XMLShapeImportHelper::IsPresentationShapesSupported()
+{
+    return mpImpl->mbIsPresentationShapesSupported;
+}
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-24 15:22:21 $
+ *  last change: $Author: cl $ $Date: 2001-11-08 15:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,10 +566,6 @@ SdXMLImport::SdXMLImport( sal_Bool bIsDraw, sal_uInt16 nImportFlags )
         GetXMLToken(XML_NP_PRESENTATION),
         GetXMLToken(XML_N_PRESENTATION),
         XML_NAMESPACE_PRESENTATION);
-
-    // #88546# enable progress bar increments, SdXMLImport is only used for
-    // draw/impress import
-    GetShapeImport()->enableHandleProgressBar();
 }
 
 // XImporter
@@ -609,6 +605,10 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
         mxDocDrawPages->getByIndex(0) >>= xFormsSupp;
         mbIsFormsSupported = xFormsSupp.is();
     }
+
+    // #88546# enable progress bar increments, SdXMLImport is only used for
+    // draw/impress import
+    GetShapeImport()->enableHandleProgressBar();
 }
 
 // XInitialization

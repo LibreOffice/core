@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-26 09:59:04 $
+ *  last change: $Author: cl $ $Date: 2001-11-08 15:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1393,33 +1393,38 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     // create textbox shape
     sal_Bool bIsPresShape(FALSE);
 
-    char *pService;
+    char *pService = NULL;
 
     if(maPresentationClass.getLength())
     {
-        if( IsXMLToken( maPresentationClass, XML_PRESENTATION_SUBTITLE ))
+        // check if the current document supports presentation shapes
+        if( GetImport().GetShapeImport()->IsPresentationShapesSupported() )
         {
-            // XmlShapeTypePresSubtitleShape
-            pService = "com.sun.star.presentation.SubtitleShape";
+            if( IsXMLToken( maPresentationClass, XML_PRESENTATION_SUBTITLE ))
+            {
+                // XmlShapeTypePresSubtitleShape
+                pService = "com.sun.star.presentation.SubtitleShape";
+            }
+            else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OUTLINE ) )
+            {
+                // XmlShapeTypePresOutlinerShape
+                pService = "com.sun.star.presentation.OutlinerShape";
+            }
+            else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_NOTES ) )
+            {
+                // XmlShapeTypePresNotesShape
+                pService = "com.sun.star.presentation.NotesShape";
+            }
+            else //  IsXMLToken( maPresentationClass, XML_PRESENTATION_TITLE ) )
+            {
+                // XmlShapeTypePresTitleTextShape
+                pService = "com.sun.star.presentation.TitleTextShape";
+            }
+            bIsPresShape = TRUE;
         }
-        else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OUTLINE ) )
-        {
-            // XmlShapeTypePresOutlinerShape
-            pService = "com.sun.star.presentation.OutlinerShape";
-        }
-        else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_NOTES ) )
-        {
-            // XmlShapeTypePresNotesShape
-            pService = "com.sun.star.presentation.NotesShape";
-        }
-        else //  IsXMLToken( maPresentationClass, XML_PRESENTATION_TITLE ) )
-        {
-            // XmlShapeTypePresTitleTextShape
-            pService = "com.sun.star.presentation.TitleTextShape";
-        }
-        bIsPresShape = TRUE;
     }
-    else
+
+    if( NULL == pService )
     {
         // normal text shape
         pService = "com.sun.star.drawing.TextShape";
@@ -1856,7 +1861,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
     // #86163# take into account which type of PageShape needs to
     // be constructed. It's an pres shape if presentation:XML_CLASS == XML_PRESENTATION_PAGE.
-    sal_Bool bIsPresentation(maPresentationClass.getLength() != 0);
+    sal_Bool bIsPresentation = GetImport().GetShapeImport()->IsPresentationShapesSupported() && (maPresentationClass.getLength() != 0);
 
     uno::Reference< lang::XServiceInfo > xInfo( mxShapes, uno::UNO_QUERY );
     const sal_Bool bIsOnHandoutPage = xInfo.is() && xInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutMasterPage")) );
@@ -1867,8 +1872,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     }
     else
     {
-        if(bIsPresentation
-            && !IsXMLToken( maPresentationClass, XML_PRESENTATION_PAGE ) )
+        if(bIsPresentation && !IsXMLToken( maPresentationClass, XML_PRESENTATION_PAGE ) )
         {
             bIsPresentation = FALSE;
         }
@@ -2026,7 +2030,7 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
     // create graphic object shape
     char *pService;
 
-    if( IsXMLToken( maPresentationClass, XML_GRAPHIC ) )
+    if( IsXMLToken( maPresentationClass, XML_GRAPHIC ) && GetImport().GetShapeImport()->IsPresentationShapesSupported() )
     {
         pService = "com.sun.star.presentation.GraphicObjectShape";
     }
@@ -2187,7 +2191,8 @@ SdXMLChartShapeContext::~SdXMLChartShapeContext()
 
 void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    const sal_Bool bIsPresentation = maPresentationClass.getLength() != 0;
+    const sal_Bool bIsPresentation = (maPresentationClass.getLength() != 0) && GetImport().GetShapeImport()->IsPresentationShapesSupported();
+
     AddShape( bIsPresentation ? "com.sun.star.presentation.ChartShape" : "com.sun.star.drawing.OLE2Shape" );
 
     if(mxShape.is())
@@ -2288,7 +2293,8 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
 {
     char* pService = "com.sun.star.drawing.OLE2Shape";
 
-    sal_Bool bIsPresShape = maPresentationClass.getLength() != 0;
+    sal_Bool bIsPresShape = (maPresentationClass.getLength() != 0) && GetImport().GetShapeImport()->IsPresentationShapesSupported();
+
     if( bIsPresShape )
     {
         if( IsXMLToken( maPresentationClass, XML_PRESENTATION_CHART ) )
