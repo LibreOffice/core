@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:21:03 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#include "ViewShell.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -163,33 +165,50 @@
 #ifndef SD_WINDOW_UPDATER_HXX
 #include "WindowUpdater.hxx"
 #endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_SLIDE_VIEW_SHELL_HXX
+#include "SlideViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
+#include "drawview.hxx"
+#endif
 
 #include "sdattr.hxx"
-#include "viewshel.hxx"
 #include "drawdoc.hxx"
-#include "drawview.hxx"
 #include "sdpage.hxx"
 #include "unslprms.hxx"
-
-#include "slidchld.hxx"
+#ifndef SD_SLIDE_CHANGE_CHILD_WINDOW_HXX
+#include "SlideChangeChildWindow.hxx"
+#endif
+#ifndef SD_SLIDE_CHANGE_HXX
 #include "slidechg.hxx"
-
+#endif
 #include "unoaprms.hxx"                 // Undo-Action
 #include "sdundogr.hxx"                 // Undo Gruppe
-#include "prevchld.hxx"
-#include "preview.hxx"
-
-#include "sdwindow.hxx"
-#include "docshell.hxx"
-#include "drviewsh.hxx"
-#include "outlnvsh.hxx"
-#include "frmview.hxx"
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#include "DrawDocShell.hxx"
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 #include "prntopts.hxx"
 #include "printdlg.hxx"
 #include "optsitem.hxx"
-
-#include "slidvish.hxx"
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
 
 // #96090#
 #ifndef _SVXIDS_HXX
@@ -203,30 +222,33 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
+namespace sd {
+
 /*************************************************************************
 |*
 |* EffekteWindow updaten
 |*
 \************************************************************************/
 
-void SdViewShell::UpdateSlideChangeWindow()
+void ViewShell::UpdateSlideChangeWindow()
 {
-    USHORT nId = SdSlideChangeChildWindow::GetChildWindowId();
+    USHORT nId = SlideChangeChildWindow::GetChildWindowId();
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
     if( pWindow )
     {
-        SdSlideChangeWin* pSlideChangeWin = (SdSlideChangeWin*) pWindow->GetWindow();
+        SlideChangeWindow* pSlideChangeWin = static_cast<SlideChangeWindow*>(
+            pWindow->GetWindow());
         if( pSlideChangeWin && pSlideChangeWin->IsUpdateMode() )
         {
             SdPage* pPage      = NULL;
-            USHORT  nNoOfPages = pDoc->GetSdPageCount(PK_STANDARD);
+            USHORT  nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
             USHORT  nPage;
             BOOL    bPageSelected = FALSE;
 
             // falls nichts selektiert ist, machen wir das schnell selbst
             for (USHORT i = 0; i < nNoOfPages; i++)
             {
-                pPage = pDoc->GetSdPage(i, PK_STANDARD);
+                pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
                 if (pPage->IsSelected())
                 {
                     bPageSelected = TRUE;
@@ -235,7 +257,7 @@ void SdViewShell::UpdateSlideChangeWindow()
             }
 
             // ItemSet fuer Dialog (jetzt Window) fuellen
-            SfxItemSet aSet(pDoc->GetPool(), ATTR_DIA_START, ATTR_DIA_END);
+            SfxItemSet aSet(GetDoc()->GetPool(), ATTR_DIA_START, ATTR_DIA_END);
 
             if( bPageSelected )
             {
@@ -257,7 +279,7 @@ void SdViewShell::UpdateSlideChangeWindow()
                 // Attribute der ersten selektierten Seite
                 for (nPage = 0; nPage < nNoOfPages; nPage++)
                 {
-                    pPage = pDoc->GetSdPage(nPage, PK_STANDARD);
+                    pPage = GetDoc()->GetSdPage(nPage, PK_STANDARD);
                     if (pPage->IsSelected())
                     {
                         eLastEffect  = pPage->GetFadeEffect();
@@ -273,7 +295,7 @@ void SdViewShell::UpdateSlideChangeWindow()
                 // mit den anderen selektierten Seiten vergleichen
                 for (; nPage < nNoOfPages; nPage++)
                 {
-                    pPage = pDoc->GetSdPage(nPage, PK_STANDARD);
+                    pPage = GetDoc()->GetSdPage(nPage, PK_STANDARD);
                     if (pPage->IsSelected())
                     {
                         if (eLastEffect  != pPage->GetFadeEffect()) bSameEffect  = FALSE;
@@ -332,33 +354,34 @@ void SdViewShell::UpdateSlideChangeWindow()
 |*
 \************************************************************************/
 
-void SdViewShell::AssignFromSlideChangeWindow()
+void ViewShell::AssignFromSlideChangeWindow()
 {
-    USHORT nId = SdSlideChangeChildWindow::GetChildWindowId();
+    USHORT nId = SlideChangeChildWindow::GetChildWindowId();
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
     if( pWindow )
     {
-        SdSlideChangeWin* pSlideChangeWin = (SdSlideChangeWin*) pWindow->GetWindow();
+        SlideChangeWindow* pSlideChangeWin = static_cast<SlideChangeWindow*>(
+            pWindow->GetWindow());
         if( pSlideChangeWin )
         {
             SdPage* pPage      = NULL;
-            USHORT  nNoOfPages = pDoc->GetSdPageCount(PK_STANDARD);
+            USHORT  nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
             USHORT  nPage;
 
 
-            SfxItemSet aSet(pDoc->GetPool(), ATTR_DIA_START, ATTR_DIA_END );
+            SfxItemSet aSet(GetDoc()->GetPool(), ATTR_DIA_START, ATTR_DIA_END );
             pSlideChangeWin->GetAttr( aSet );
 
             // Auswertung des ItemSets
 
             // Undo Gruppe erzeugen
-            SdUndoGroup* pUndoGroup = new SdUndoGroup(pDoc);
+            SdUndoGroup* pUndoGroup = new SdUndoGroup(GetDoc());
             String aComment(SdResId(STR_UNDO_SLIDE_PARAMS));
             pUndoGroup->SetComment(aComment);
 
             for (nPage = 0; nPage < nNoOfPages; nPage++)
             {
-                pPage = pDoc->GetSdPage(nPage, PK_STANDARD);
+                pPage = GetDoc()->GetSdPage(nPage, PK_STANDARD);
                 if (pPage->IsSelected())
                 {
                     // alte Attribute fuer UndoAction merken
@@ -384,10 +407,11 @@ void SdViewShell::AssignFromSlideChangeWindow()
                               eNewEffect == presentation::FadeEffect_NONE)    ||
                              (eOldEffect == presentation::FadeEffect_NONE &&
                               eNewEffect != presentation::FadeEffect_NONE))  &&
-                            (this->ISA(SdSlideViewShell)))
+                            (this->ISA(SlideViewShell)))
                         {
-                            pView->InvalidateAllWin(((SdSlideView*)pView)->
-                                                          GetFadeIconArea(nPage));
+                            pView->InvalidateAllWin (
+                                static_cast<SlideView*>(pView)
+                                ->GetFadeIconArea(nPage));
                         }
                     }
 
@@ -415,7 +439,7 @@ void SdViewShell::AssignFromSlideChangeWindow()
 
                     // Undo-Action erzeugen und in Gruppe stellen
                     SdUndoAction* pUndoAction = new SlideParametersUndoAction
-                                    (pDoc, pPage,
+                                    (GetDoc(), pPage,
                                      eOldFadeSpeed,  pPage->GetFadeSpeed(),
                                      eOldFadeEffect, pPage->GetFadeEffect(),
                                      eOldChange,     pPage->GetPresChange(),
@@ -434,14 +458,15 @@ void SdViewShell::AssignFromSlideChangeWindow()
             |* ggfs. in Preview anzeigen
             \**************************************************************/
             SfxChildWindow* pPreviewChildWindow =
-                GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
+                GetViewFrame()->GetChildWindow(
+                    PreviewChildWindow::GetChildWindowId());
             if (pPreviewChildWindow)
             {
-                SdPreviewWin* pPreviewWin =
-                    (SdPreviewWin*)pPreviewChildWindow->GetWindow();
-                if (pPreviewWin && pPreviewWin->GetDoc() == pDoc)
+                PreviewWindow* pPreviewWindow = static_cast<PreviewWindow*>(
+                    pPreviewChildWindow->GetWindow());
+                if (pPreviewWindow!=NULL && pPreviewWindow->GetDoc()==GetDoc())
                 {
-                    pPreviewWin->AnimatePage();
+                    pPreviewWindow->AnimatePage();
                 }
             }
 
@@ -456,587 +481,9 @@ void SdViewShell::AssignFromSlideChangeWindow()
             GetViewFrame()->GetBindings().Invalidate( SidArray );
 
             // Model geaendert
-            pDoc->SetChanged();
+            GetDoc()->SetChanged();
         }
     }
-}
-
-/*************************************************************************
-|*
-|* aktuellen Drucker des Dokuments zurueckgeben
-|*
-\************************************************************************/
-SfxPrinter* SdViewShell::GetPrinter(BOOL bCreate)
-{
-    return ( pDocSh->GetPrinter(bCreate) );
-}
-
-/*************************************************************************
-|*
-|* neuen Drucker fuer die Applikation setzen
-|*
-\************************************************************************/
-USHORT  SdViewShell::SetPrinter(SfxPrinter* pNewPrinter,
-                USHORT nDiffFlags)
-{
-    return SetPrinterOptDlg(pNewPrinter,nDiffFlags);
-}
-
-USHORT SdViewShell::SetPrinterOptDlg(SfxPrinter* pNewPrinter,
-                 USHORT nDiffFlags,
-                BOOL _bShowDialog )
-{
-    pDocSh->SetPrinter(pNewPrinter);
-
-    if ( (nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ||
-          nDiffFlags & SFX_PRINTER_CHG_SIZE) && pNewPrinter  )
-    {
-        MapMode aMap = pNewPrinter->GetMapMode();
-        aMap.SetMapUnit(MAP_100TH_MM);
-        MapMode aOldMap = pNewPrinter->GetMapMode();
-        pNewPrinter->SetMapMode(aMap);
-        Size aNewSize = pNewPrinter->GetOutputSize();
-
-        BOOL bScaleAll = FALSE;
-        if ( _bShowDialog )
-        {
-            WarningBox aWarnBox(pWindow, (WinBits)(WB_YES_NO | WB_DEF_YES),
-                            String(SdResId(STR_SCALE_OBJS_TO_PAGE)));
-            bScaleAll = (aWarnBox.Execute() == RET_YES);
-        }
-
-        if( this->ISA( SdDrawViewShell ) )
-        {
-            SdPage* pPage = pDoc->GetSdPage( 0, PK_STANDARD );
-            SetPageSizeAndBorder( ( (SdDrawViewShell*)this )->GetPageKind(),
-                        aNewSize, -1,-1,-1,-1, bScaleAll,
-                        pNewPrinter->GetOrientation(), pPage->GetPaperBin(), pPage->IsBackgroundFullSize() );
-        }
-
-        pNewPrinter->SetMapMode(aOldMap);
-    }
-
-    return 0;
-}
-
-/*************************************************************************
-|*
-|* Druckdialog erzeugen; virtuell, wird vom SFX aufgerufen
-|*
-\************************************************************************/
-PrintDialog*  SdViewShell::CreatePrintDialog(Window *pParent)
-{
-    PrintDialog* pDlg;
-
-    pDlg = new PrintDialog(pParent );
-
-    if( !this->ISA( SdOutlineViewShell ) )
-    {
-
-        if( this->ISA( SdDrawViewShell ) )
-        {
-            pDlg->SetRangeText( UniString::CreateFromInt32(( (SdDrawViewShell*)this )->GetCurPageId() ));
-        }
-        else //if( this->ISA( SdSlideViewShell ) )
-        {
-            String aStrRange( ( (SdSlideViewShell*)this )->GetPageRangeString() );
-            if( aStrRange.Len() )
-            {
-                pDlg->SetRangeText( aStrRange );
-                // According #79749 always check PRINTDIALOG_ALL
-                // pDlg->CheckRange( PRINTDIALOG_RANGE );
-            }
-        }
-    }
-    else
-    {
-        String aStrRange( ( (SdOutlineViewShell*)this)->GetPageRangeString() );
-        if( aStrRange.Len() )
-        {
-            pDlg->SetRangeText( aStrRange );
-            // According #79749 always check PRINTDIALOG_ALL
-            // pDlg->CheckRange( PRINTDIALOG_RANGE );
-        }
-    }
-    pDlg->EnableRange( PRINTDIALOG_RANGE );
-    pDlg->EnableRange( PRINTDIALOG_ALL );
-    pDlg->EnableCollate();
-
-    if( this->ISA( SdDrawViewShell ) && pView->HasMarkedObj() )
-    {
-        pDlg->EnableRange( PRINTDIALOG_SELECTION );
-        // According #79749 always check PRINTDIALOG_ALL
-        // pDlg->CheckRange( PRINTDIALOG_SELECTION );
-    }
-
-    return pDlg;
-}
-
-/*************************************************************************
-|*
-|* Factory Methode Tabpage Zusaetze (vom Druckdialog)
-|*
-\************************************************************************/
-SfxTabPage*  SdViewShell::CreatePrintOptionsPage( Window *pParent,
-                                                 const SfxItemSet &rOptions )
-{
-    DocumentType eDocType = pDoc->GetDocumentType();
-    SdPrintOptions* pPage = new SdPrintOptions( pParent, rOptions );
-    if( eDocType == DOCUMENT_TYPE_DRAW )
-        pPage->SetDrawMode();
-    return( pPage );
-}
-
-
-/*************************************************************************
-|*
-|* Vorbereitung fuers Drucken; virtuell, wird vom SFX aufgerufen
-|*
-\************************************************************************/
-void SdViewShell::PreparePrint(PrintDialog* pPrintDialog)
-{
-    SfxPrinter* pPrinter = GetPrinter(TRUE);
-
-    if (!pPrinter)
-        return;
-
-    const SfxItemSet& rOptions = pPrinter->GetOptions();
-    SdOptionsPrintItem* pPrintOpts = NULL;
-
-    if (rOptions.GetItemState( ATTR_OPTIONS_PRINT, FALSE,
-        (const SfxPoolItem**) &pPrintOpts) != SFX_ITEM_SET)
-    {
-        pPrintOpts = NULL;
-    }
-
-    // Einstellungen der ersten zu druckenden Seite setzen
-
-    if (pPrintOpts)
-    {
-        if ( pPrintOpts->IsHandout() )
-        {
-            // Handzettel
-            SdPage* pPage = pDoc->GetSdPage(0, PK_HANDOUT);
-
-            // Papierschacht
-            if (!pPrintOpts->IsPaperbin()) // Drucken NICHT aus Druckereinstellung
-            {
-                pPrinter->SetPaperBin(pPage->GetPaperBin());
-            }
-
-            SdPage* pMaster = (SdPage*) pPage->GetMasterPage(0);
-            pPrinter->SetOrientation(pMaster->GetOrientation());
-        }
-        else if ( pPrintOpts->IsDraw() || pPrintOpts->IsNotes() )
-        {
-            // Standard- oder Notizseiten
-            if( !pPrintOpts->IsPaperbin() ) // Drucken NICHT aus Druckereinstellung
-            {
-                PageKind ePageKind = PK_NOTES;
-
-                if (pPrintOpts->IsDraw())
-                {
-                    ePageKind = PK_STANDARD;
-                }
-
-                SdPage* pPage = pDoc->GetSdPage(0, ePageKind);
-                pPrinter->SetPaperBin(pPage->GetPaperBin());
-
-                Orientation eOrientation = ORIENTATION_PORTRAIT;
-
-                if ( !pPrintOpts->IsBooklet() )
-                {
-                    eOrientation = pPage->GetOrientation();
-                }
-                else
-                {
-                    Size aPageSize(pPage->GetSize());
-
-                    if( aPageSize.Width() < aPageSize.Height() )
-                        eOrientation = ORIENTATION_LANDSCAPE;
-                }
-
-                pPrinter->SetOrientation(eOrientation);
-            }
-        }
-    }
-}
-
-
-/*************************************************************************
-|*
-|* Drucken; virtuell, wird vom SFX aufgerufen
-|*
-\************************************************************************/
-
-ErrCode SdViewShell::DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, BOOL bSilent )
-{
-    const SdrMarkList& rMarkList = pView->GetMarkList();
-
-    // retrieve range of marked pages if we are in the slideview
-    String sNewPageRange;
-    if( ISA( SdSlideViewShell ) )
-        sNewPageRange = ((SdSlideViewShell*)this)->GetPageRangeString();
-
-    // retrieve range of marked pages if we are in the outlineview
-    if( ISA( SdOutlineViewShell ) )
-        sNewPageRange = ((SdOutlineViewShell*)this)->GetPageRangeString();
-
-    bPrintDirectSelected = FALSE;
-
-    // #105477# Don't show query dialog if print dialog has been shown
-    if ( !pPrintDialog && !bSilent &&
-         (rMarkList.GetMarkCount() || sNewPageRange.Len()) )
-    {
-        SvxPrtQryBox aQuery( pWindow );
-        short nBtn = aQuery.Execute();
-
-        if ( nBtn == RET_CANCEL )
-            return ERRCODE_IO_ABORT;
-
-        if ( nBtn == RET_OK )
-        {
-            bPrintDirectSelected = TRUE;
-
-            sPageRange.Erase();
-            if( sNewPageRange.Len() )
-                sPageRange = sNewPageRange;
-        }
-    }
-
-    FuSlideShow *pShow = pFuSlideShow;
-
-    // Tell the printer which digit language to use.
-    if (mpWindowUpdater.get() != NULL)
-        mpWindowUpdater->Update (pPrinter, pDoc);
-
-    //  SfxViewShell::DoPrint calls Print (after StartJob etc.)
-    ErrCode nRet = SfxViewShell::DoPrint( pPrinter, pPrintDialog, bSilent );
-
-    bPrintDirectSelected = FALSE;
-
-    return nRet;
-}
-
-USHORT  SdViewShell::Print(SfxProgress& rProgress, PrintDialog* pDlg)
-{
-    SfxPrinter* pPrinter = GetPrinter(TRUE);
-
-    if( pPrinter )
-    {
-        const PrinterOptions    aOldPrinterOptions( pPrinter->GetPrinterOptions() );
-        MapMode                 aMap( pPrinter->GetMapMode() );
-        const MapMode           aOldMap( aMap );
-        USHORT                  nOldPaperBin = pPrinter->GetPaperBin();
-
-        aMap.SetMapUnit(MAP_100TH_MM);
-        pPrinter->SetMapMode(aMap);
-
-        Outliner& rOutliner = pDoc->GetDrawOutliner();
-        ULONG nOldCntrl = rOutliner.GetControlWord();
-        ULONG nCntrl = nOldCntrl;
-        nCntrl |= EE_CNTRL_NOREDLINES;
-        nCntrl &= ~EE_CNTRL_MARKFIELDS;
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
-        rOutliner.SetControlWord( nCntrl );
-
-        // Pruefen des Seitenformates und ggfs. Dialog hochbringen
-        const SfxItemSet&   rOptions = pPrinter->GetOptions();
-        SdOptionsPrintItem* pPrintOpts = NULL;
-        BOOL                bScalePage = TRUE;
-        BOOL                bTilePage = FALSE;
-        BOOL                bPrintBooklet = FALSE;
-
-        if( rOptions.GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrintOpts ) == SFX_ITEM_SET )
-        {
-            bScalePage = pPrintOpts->IsPagesize();
-            bPrintBooklet = pPrintOpts->IsBooklet();
-            pPrintOpts->SetCutPage( FALSE );
-        }
-        else
-            pPrintOpts = NULL;
-
-        SdPage* pPage = pDoc->GetSdPage( 0, PK_STANDARD );
-        Size    aPageSize( pPage->GetSize() );
-        Size    aPrintSize( pPrinter->GetOutputSize() );
-        long    nPageWidth = aPageSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder();
-        long    nPageHeight = aPageSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder();
-        long    nPrintWidth = aPrintSize.Width();
-        long    nPrintHeight = aPrintSize.Height();
-        USHORT  nRet = RET_OK;
-
-        if( !bScalePage && !bTilePage && !bPrintBooklet &&
-            ( ( nPageWidth > nPrintWidth || nPageHeight > nPrintHeight ) &&
-              ( nPageWidth > nPrintHeight || nPageHeight > nPrintWidth ) ) )
-        {
-            SdPrintDlg aDlg( pWindow );
-            nRet = aDlg.Execute();
-            if( nRet == RET_OK )
-            {
-                USHORT nOption = aDlg.GetAttr();
-
-                if( nOption == 1 )
-                    pPrintOpts->SetPagesize();
-
-                // ( nOption == 2 ) ist der Default
-
-                if( nOption == 3 )
-                    pPrintOpts->SetCutPage();
-            }
-        }
-
-        if( nRet == RET_CANCEL )
-        {
-            pPrinter->SetPrinterOptions( aOldPrinterOptions );
-            pPrinter->SetMapMode( aOldMap );
-            return 0;
-        }
-
-        // Wenn wir im Gliederungsmodus sind, muss das Model auf Stand gebracht werden
-        if( this->ISA( SdOutlineViewShell ) )
-            ( (SdOutlineViewShell*)this )->PrepareClose(FALSE, FALSE);
-
-        // Basisklasse rufen, um Basic anzusprechen
-        SfxViewShell::Print( rProgress, pDlg );
-
-        // Setzen des Textes des Druckmonitors
-        rProgress.SetText( String( SdResId( STR_STATSTR_PRINT ) ) );
-
-        PrintDialogRange    eOption;
-        MultiSelection      aPrintSelection;
-        String              aTimeDateStr;
-        Font                aTimeDateFont(FAMILY_SWISS, Size(0, 423));
-        PageKind            ePageKind = PK_STANDARD;
-        USHORT              nPage, nPageMax;
-        USHORT              nTotal, nCopies;
-        USHORT              nPrintCount = 0;
-        USHORT              nProgressOffset = 0;
-        USHORT              nCollateCopies = 1;
-        BOOL                bPrintMarkedOnly = FALSE;
-        BOOL                bPrintOutline = FALSE;
-        BOOL                bPrintHandout = FALSE;
-        BOOL                bPrintDraw = FALSE;
-        BOOL                bPrintNotes = FALSE;
-
-        Orientation eOldOrientation = pPrinter->GetOrientation();
-
-        if( pPrintOpts )
-        {
-            SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
-
-            if( pPrintOpts->IsDate() )
-            {
-                aTimeDateStr += GetSdrGlobalData().pLocaleData->getDate( Date() );
-                aTimeDateStr += (sal_Unicode)' ';
-            }
-
-            if( pPrintOpts->IsTime() )
-                aTimeDateStr += GetSdrGlobalData().pLocaleData->getTime( Time(), FALSE, FALSE );
-
-            if( pPrintOpts->IsOutline() )
-                bPrintOutline = TRUE;
-
-            if( pPrintOpts->IsHandout() )
-                bPrintHandout = TRUE;
-
-            if( pPrintOpts->IsDraw() )
-                bPrintDraw = TRUE;
-
-            if( pPrintOpts->IsNotes() )
-            {
-                bPrintNotes = TRUE;
-                ePageKind = PK_NOTES;
-            }
-
-            pPrintOpts->SetWarningPrinter( pMisc->IsNotFoundWarning() );
-            pPrintOpts->SetWarningSize( pMisc->IsPaperSizeWarning() );
-            pPrintOpts->SetWarningOrientation( pMisc->IsPaperOrientationWarning() );
-
-            UINT16  nQuality = pPrintOpts->GetOutputQuality();
-            ULONG   nMode = DRAWMODE_DEFAULT;
-
-            if( nQuality == 1 )
-                nMode = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT;
-            else if( nQuality == 2 )
-                nMode = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP | DRAWMODE_WHITEGRADIENT;
-
-            pPrinter->SetDrawMode( nMode );
-        }
-        else
-            bPrintDraw = TRUE;
-
-        if( pDlg )
-        {
-            eOption = pDlg->GetCheckedRange();
-
-            if( eOption == PRINTDIALOG_SELECTION )
-                bPrintMarkedOnly = TRUE;
-        }
-        else
-            // Bei PrintDirect wird gesamtes Dokument gedruckt
-            eOption = PRINTDIALOG_ALL;
-
-        // #72527 If we are in PrintDirect and any objects
-        // are selected, then a dialog (see SdViewShell::DoPrint)
-        // ask whether the total document should be printed
-        // or only the selected objects. If only the selected
-        // object, then the flag bPrintDirectSelected is TRUE
-        if( bPrintDirectSelected )
-        {
-            eOption = PRINTDIALOG_SELECTION;
-            bPrintMarkedOnly = TRUE;
-        }
-
-        nPageMax = pDoc->GetSdPageCount( ePageKind );
-        aPrintSelection.SetTotalRange( Range( 1, nPageMax ) );
-
-        switch( eOption )
-        {
-            case PRINTDIALOG_ALL:
-                aPrintSelection.Select(Range(1, nPageMax));
-            break;
-
-            case PRINTDIALOG_RANGE:
-                aPrintSelection = MultiSelection(pDlg->GetRangeText());
-            break;
-
-            default:
-            {
-                if( this->ISA( SdDrawViewShell ) )
-                    aPrintSelection.Select( ( (SdDrawViewShell*)this )->GetCurPageId() );
-                else
-                {
-                    if( sPageRange.Len() )
-                        aPrintSelection = MultiSelection( sPageRange );
-                    else
-                        aPrintSelection.Select(Range(1, nPageMax));
-                }
-            }
-            break;
-        }
-
-        nPage = Min(nPageMax, (USHORT) aPrintSelection.FirstSelected());
-
-        if ( nPage > 0 )
-            nPage--;
-
-        nPageMax = Min(nPageMax, (USHORT) aPrintSelection.LastSelected());
-
-        if( bPrintOutline )
-            nPrintCount++;
-
-        if( bPrintHandout )
-            nPrintCount++;
-
-        if( bPrintDraw )
-            nPrintCount++;
-
-        if( bPrintNotes )
-            nPrintCount++;
-
-        nCopies = (pDlg ? pDlg->GetCopyCount() : 1);
-
-        USHORT nSelectCount = (USHORT) aPrintSelection.GetSelectCount();
-        nTotal = nSelectCount * nCopies * nPrintCount;
-
-        if( pDlg && pDlg->IsCollateEnabled() && pDlg->IsCollateChecked() )
-            nCollateCopies = nCopies;
-
-        // check if selected range of pages contains transparent objects
-        BOOL bContainsTransparency = FALSE;
-        BOOL bPrintExcluded = TRUE;
-
-        if( bPrintNotes || bPrintDraw || bPrintHandout )
-        {
-            if( pPrintOpts )
-                bPrintExcluded = pPrintOpts->IsHiddenPages();
-
-            for( USHORT j = nPage; ( j < nPageMax && !bContainsTransparency ); j++ )
-            {
-                if( aPrintSelection.IsSelected( j + 1 ) )
-                {
-                    SdPage* pPage = pDoc->GetSdPage( j, PK_STANDARD );
-
-                    if( pPage && ( !pPage->IsExcluded() || bPrintExcluded ) )
-                    {
-                        if( !( bContainsTransparency = pPage->HasTransparentObjects() ) )
-                        {
-                            SdPage* pMaster = (SdPage*) pPage->GetMasterPage( 0 );
-
-                            if( pMaster )
-                                bContainsTransparency = pMaster->HasTransparentObjects();
-                        }
-                    }
-                }
-            }
-        }
-
-        if( pPrinter->InitJob( pWindow, bContainsTransparency ) )
-        {
-            for( USHORT n = 1; n <= nCollateCopies; n++ )
-            {
-                if ( bPrintOutline )
-                {
-                    // siehe unten in PrintOutline()
-                    pPrinter->SetPaperBin( nOldPaperBin );
-
-                    PrintOutline(*pPrinter, rProgress, aPrintSelection,
-                                  aTimeDateStr, aTimeDateFont, pPrintOpts,
-                                  nPage, nPageMax,
-                                  nCollateCopies > 1 ? 1 : nCopies,
-                                  nProgressOffset, nTotal );
-                    nProgressOffset += ( nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies) );
-                }
-
-                if ( bPrintHandout )
-                {
-                    PrintHandout(*pPrinter, rProgress, aPrintSelection,
-                                  aTimeDateStr, aTimeDateFont, pPrintOpts,
-                                  nPage, nPageMax,
-                                  nCollateCopies > 1 ? 1 : nCopies,
-                                  nProgressOffset, nTotal );
-                    nProgressOffset += ( nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies) );
-                }
-                if( bPrintDraw )
-                {
-                    PrintStdOrNotes(*pPrinter, rProgress, aPrintSelection,
-                                     aTimeDateStr, aTimeDateFont, pPrintOpts,
-                                     nPage, nPageMax,
-                                     nCollateCopies > 1 ? 1 : nCopies,
-                                     nProgressOffset, nTotal,
-                                     PK_STANDARD, bPrintMarkedOnly);
-                    nProgressOffset += ( nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies) );
-                }
-                if( bPrintNotes )
-                {
-                    PrintStdOrNotes(*pPrinter, rProgress, aPrintSelection,
-                                     aTimeDateStr, aTimeDateFont, pPrintOpts,
-                                     nPage, nPageMax,
-                                     nCollateCopies > 1 ? 1 : nCopies,
-                                     nProgressOffset, nTotal,
-                                     PK_NOTES, FALSE);
-                    nProgressOffset += ( nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies) );
-                }
-            }
-        }
-
-        pPrinter->SetOrientation( eOldOrientation );
-        pPrinter->SetPrinterOptions( aOldPrinterOptions );
-        pPrinter->SetMapMode( aOldMap );
-
-        rOutliner.SetControlWord(nOldCntrl);
-
-        // Druckerschach wieder zuruecksetzen
-        pPrinter->SetPaperBin( nOldPaperBin );
-
-        // 3D-Kontext wieder zerstoeren
-        Base3D *pBase3D = (Base3D*) pPrinter->Get3DContext();
-
-        if( pBase3D )
-            pBase3D->Destroy( pPrinter );
-    }
-
-    return 0;
 }
 
 /*************************************************************************
@@ -1044,7 +491,7 @@ USHORT  SdViewShell::Print(SfxProgress& rProgress, PrintDialog* pDlg)
 |* Drucken der Outlinerdaten
 |*
 \************************************************************************/
-void SdViewShell::PrintOutline(SfxPrinter& rPrinter,
+void ViewShell::PrintOutline(SfxPrinter& rPrinter,
                                SfxProgress& rProgress,
                                const MultiSelection& rSelPages,
                                const String& rTimeDateStr,
@@ -1060,7 +507,7 @@ void SdViewShell::PrintOutline(SfxPrinter& rPrinter,
     /*
     if( pPrintOpts && !pPrintOpts->IsPaperbin() ) // Drucken NICHT aus Druckereinstellung
     {
-        USHORT nPaperBin = pDoc->GetSdPage(nPage, PK_STANDARD)->GetPaperBin();
+        USHORT nPaperBin = GetDoc()->GetSdPage(nPage, PK_STANDARD)->GetPaperBin();
         rPrinter.SetPaperBin( nPaperBin );
     } */
     // Es wird jetzt (vorlaeufig ?) der Druckerschacht vom Drucker genommen
@@ -1084,12 +531,12 @@ void SdViewShell::PrintOutline(SfxPrinter& rPrinter,
     Rectangle aOutRect(aPageOfs, rPrinter.GetOutputSize());
 
     Link aOldLink;
-    Outliner* pOutliner = pDoc->GetInternalOutliner();
+    Outliner* pOutliner = GetDoc()->GetInternalOutliner();
     pOutliner->Init( OUTLINERMODE_OUTLINEVIEW );
     USHORT nOutlMode = pOutliner->GetMode();
     BOOL bOldUpdateMode = pOutliner->GetUpdateMode();
 
-    if ( this->ISA( SdOutlineViewShell ) )
+    if (this->ISA(OutlineViewShell))
         pOutliner->SetMinDepth(0);
 
     Size aPaperSize = pOutliner->GetPaperSize();
@@ -1122,7 +569,7 @@ void SdViewShell::PrintOutline(SfxPrinter& rPrinter,
                 nPageCount += nCopies;
 
                 SdPage* pPage = (SdPage*)
-                            pDoc->GetSdPage(nPage, PK_STANDARD);
+                            GetDoc()->GetSdPage(nPage, PK_STANDARD);
                 SdrTextObj* pTextObj = NULL;
                 ULONG nObj = 0;
 
@@ -1224,17 +671,21 @@ void SdViewShell::PrintOutline(SfxPrinter& rPrinter,
 |* Drucken der Handouts
 |*
 \************************************************************************/
-void SdViewShell::PrintHandout(SfxPrinter& rPrinter,
-                                   SfxProgress& rProgress,
-                                   const MultiSelection& rSelPages,
-                                   const String& rTimeDateStr,
-                                   const Font& rTimeDateFont,
-                                   const SdOptionsPrintItem* pPrintOpts,
-                                   USHORT nPage, USHORT nPageMax,
-                                   USHORT nCopies, USHORT nProgressOffset, USHORT nTotal )
+void ViewShell::PrintHandout (
+    SfxPrinter& rPrinter,
+    SfxProgress& rProgress,
+    const MultiSelection& rSelPages,
+    const String& rTimeDateStr,
+    const Font& rTimeDateFont,
+    const SdOptionsPrintItem* pPrintOpts,
+    USHORT nPage,
+    USHORT nPageMax,
+    USHORT nCopies,
+    USHORT nProgressOffset,
+    USHORT nTotal )
 {
     SdrObject* pObj;
-    SdPage* pPage = pDoc->GetSdPage(0, PK_HANDOUT);
+    SdPage* pPage = GetDoc()->GetSdPage(0, PK_HANDOUT);
     SdPage* pMaster = (SdPage*) pPage->GetMasterPage(0);
 
     // Papierschacht
@@ -1263,16 +714,17 @@ void SdViewShell::PrintHandout(SfxPrinter& rPrinter,
         const MapMode   aOldMap( rPrinter.GetMapMode() );
         MapMode         aMap( aOldMap );
         Point           aPageOfs( rPrinter.GetPageOffset() );
-        SdDrawView*     pPrintView;
+        DrawView* pPrintView;
         BOOL            bPrintExcluded = TRUE;
 
         aMap.SetOrigin(Point() - aPageOfs);
         rPrinter.SetMapMode(aMap);
 
-        if( this->ISA( SdDrawViewShell ) )
-            pPrintView = new SdDrawView( pDocSh, &rPrinter, (SdDrawViewShell*)this );
+        if (this->ISA(DrawViewShell))
+            pPrintView = new DrawView (GetDocSh(), &rPrinter,
+                static_cast<DrawViewShell*>(this));
         else
-            pPrintView = new SdDrawView( pDocSh, &rPrinter, NULL );
+            pPrintView = new DrawView (GetDocSh(), &rPrinter, NULL);
 
         List*   pList = pMaster->GetPresObjList();
         USHORT  nPageCount = nProgressOffset;
@@ -1289,7 +741,7 @@ void SdViewShell::PrintHandout(SfxPrinter& rPrinter,
             pObj = (SdrObject*) pList->First();
 
             // Anzahl ALLER Seiten im Dokument:
-            USHORT nAbsPageCnt = pDoc->GetPageCount();
+            USHORT nAbsPageCnt = GetDoc()->GetPageCount();
 
             while ( pObj && nPage < nPageMax )
             {
@@ -1304,7 +756,7 @@ void SdViewShell::PrintHandout(SfxPrinter& rPrinter,
 
                     nPageCount += nCopies;
 
-                    SdPage* pPg = pDoc->GetSdPage(nPage, PK_STANDARD);
+                    SdPage* pPg = GetDoc()->GetSdPage(nPage, PK_STANDARD);
 
                     if ( !pPg->IsExcluded() || bPrintExcluded )
                     {
@@ -1349,14 +801,15 @@ void SdViewShell::PrintHandout(SfxPrinter& rPrinter,
             pPrintView->HidePage(pPrintView->GetPageView(pPage));
         }
 
-        USHORT nRealPage = pDoc->GetSdPage(0, PK_STANDARD)->GetPageNum();
+        USHORT nRealPage = GetDoc()->GetSdPage(0, PK_STANDARD)->GetPageNum();
         pObj = (SdrObject*) pList->First();
 
         while ( pObj )
         {   // Seitenobjekte wieder auf erste Seite setzen
             if ( pObj->ISA(SdrPageObj) )
             {
-                ((SdrPageObj*) pObj)->SetReferencedPage(pDoc->GetPage(nRealPage));
+                ((SdrPageObj*) pObj)->SetReferencedPage(
+                    GetDoc()->GetPage(nRealPage));
                 nRealPage += 2;
             }
 
@@ -1374,7 +827,7 @@ void SdViewShell::PrintHandout(SfxPrinter& rPrinter,
 |* Drucken der normalen Seiten oder der Notizseiten
 |*
 \************************************************************************/
-void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
+void ViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
                                       SfxProgress& rProgress,
                                       const MultiSelection& rSelPages,
                                       const String& rTimeDateStr,
@@ -1393,7 +846,7 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
     BOOL        bPrintFrontPage = FALSE;
     BOOL        bPrintBackPage = FALSE;
 
-    SdPage* pPage = pDoc->GetSdPage(nPage, ePageKind);
+    SdPage* pPage = GetDoc()->GetSdPage(nPage, ePageKind);
 
     if ( pPrintOpts )
     {
@@ -1408,7 +861,7 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
         // Papierschacht
         if( !pPrintOpts->IsPaperbin() ) // Drucken NICHT aus Druckereinstellung
         {
-            USHORT nPaperBin = pDoc->GetSdPage(nPage, ePageKind)->GetPaperBin();
+            USHORT nPaperBin = GetDoc()->GetSdPage(nPage, ePageKind)->GetPaperBin();
             rPrinter.SetPaperBin( nPaperBin );
         }
 
@@ -1441,16 +894,17 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
         const MapMode   aOldMap( rPrinter.GetMapMode() );
         MapMode         aMap( aOldMap );
         Point           aPageOfs( rPrinter.GetPageOffset() );
-        SdDrawView*     pPrintView;
+        DrawView* pPrintView;
 
         aMap.SetOrigin(Point() - aPageOfs);
         rPrinter.SetMapMode(aMap);
         Size aPrintSize( rPrinter.GetOutputSize() );
 
-        if( this->ISA( SdDrawViewShell ) )
-            pPrintView = new SdDrawView( pDocSh, &rPrinter, (SdDrawViewShell*)this );
+        if (this->ISA(DrawViewShell))
+            pPrintView = new DrawView (GetDocSh(), &rPrinter,
+                static_cast<DrawViewShell*>(this));
         else
-            pPrintView = new SdDrawView( pDocSh, &rPrinter, NULL );
+            pPrintView = new DrawView (GetDocSh(), &rPrinter, NULL);
 
         USHORT nPageCount = nProgressOffset;
 
@@ -1506,7 +960,7 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
             {
                 if( rSelPages.IsSelected( nPage + 1 )  )
                 {
-                    SdPage* pPage = pDoc->GetSdPage( nPage, ePageKind );
+                    SdPage* pPage = GetDoc()->GetSdPage( nPage, ePageKind );
 
                     if( pPage && ( !pPage->IsExcluded() || bPrintExcluded ) )
                         aPageVector.push_back( nPage );
@@ -1542,7 +996,7 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
 
                     rPrinter.StartPage();
 
-                    pPage = pDoc->GetSdPage( aPair.first, ePageKind );
+                    pPage = GetDoc()->GetSdPage( aPair.first, ePageKind );
 
                     if( pPage )
                     {
@@ -1551,7 +1005,7 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
                         PrintPage( rPrinter, pPrintView, pPage, bPrintMarkedOnly );
                     }
 
-                    pPage = pDoc->GetSdPage( aPair.second, ePageKind );
+                    pPage = GetDoc()->GetSdPage( aPair.second, ePageKind );
 
                     if( pPage )
                     {
@@ -1583,7 +1037,7 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
             {
                 if ( rSelPages.IsSelected(nPage+1) )
                 {
-                    SdPage* pPage = pDoc->GetSdPage(nPage, ePageKind);
+                    SdPage* pPage = GetDoc()->GetSdPage(nPage, ePageKind);
                     // Kann sich die Seitengroesse geaendert haben?
                     aPageSize = pPage->GetSize();
 
@@ -1689,7 +1143,7 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
                                     aStdMap.SetOrigin( aPrintOrigin );
                                     rPrinter.SetMapMode( aStdMap );
 
-                                    if( this->ISA( SdDrawViewShell ) && bPrintMarkedOnly )
+                                    if (this->ISA(DrawViewShell) && bPrintMarkedOnly )
                                     {
                                         pView->DrawAllMarked( rPrinter, aPtZero );
                                     }
@@ -1756,7 +1210,7 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
                             pPageView->SetVisibleLayers( pFrameView->GetVisibleLayers() );
                             pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
 
-                            if( this->ISA( SdDrawViewShell ) && bPrintMarkedOnly )
+                            if (this->ISA(DrawViewShell) && bPrintMarkedOnly)
                                 pView->DrawAllMarked( rPrinter, aPtZero );
                             else
                                 pPrintView->InitRedraw(&rPrinter, Rectangle(Point(0,0),
@@ -1789,8 +1243,11 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
 |* Seite drucken
 |*
 \************************************************************************/
-void SdViewShell::PrintPage( SfxPrinter& rPrinter, SdView* pPrintView,
-                                 SdPage* pPage, BOOL bPrintMarkedOnly )
+void ViewShell::PrintPage (
+    SfxPrinter& rPrinter,
+    ::sd::View* pPrintView,
+    SdPage* pPage,
+    BOOL bPrintMarkedOnly )
 {
     Point aPtZero;
     pPrintView->ShowPage( pPage, aPtZero );
@@ -1799,7 +1256,7 @@ void SdViewShell::PrintPage( SfxPrinter& rPrinter, SdView* pPrintView,
     pPageView->SetVisibleLayers( pFrameView->GetVisibleLayers() );
     pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
 
-    if( this->ISA( SdDrawViewShell ) && bPrintMarkedOnly )
+    if (this->ISA(DrawViewShell) && bPrintMarkedOnly)
         pView->DrawAllMarked( rPrinter, aPtZero );
     else
         pPrintView->InitRedraw( &rPrinter, Rectangle( aPtZero,
@@ -1823,11 +1280,11 @@ void SdViewShell::PrintPage( SfxPrinter& rPrinter, SdView* pPrintView,
 |*
 \************************************************************************/
 
-void  SdViewShell::GetMenuState( SfxItemSet &rSet )
+void  ViewShell::GetMenuState( SfxItemSet &rSet )
 {
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STYLE_FAMILY ) )
     {
-        UINT16 nFamily = (SfxStyleFamily)pDocSh->GetStyleFamily();
+        UINT16 nFamily = (SfxStyleFamily)GetDocSh()->GetStyleFamily();
 
         SdrView* pDrView = GetDrawView();
 
@@ -1847,7 +1304,7 @@ void  SdViewShell::GetMenuState( SfxItemSet &rSet )
                     else
                         nFamily = 5;
 
-                    pDocSh->SetStyleFamily(nFamily);
+                    GetDocSh()->SetStyleFamily(nFamily);
                 }
             }
         }
@@ -1924,7 +1381,7 @@ void  SdViewShell::GetMenuState( SfxItemSet &rSet )
 }
 
 
-void SdViewShell::SetPreview( bool bVisible )
+void ViewShell::SetPreview( bool bVisible )
 {
     DBG_ASSERT( GetViewFrame(), "FATAL: no viewframe?" );
     DBG_ASSERT( pWindow, "FATAL: no window?" );
@@ -1933,7 +1390,8 @@ void SdViewShell::SetPreview( bool bVisible )
     {
         if ( ! bVisible)
             mpWindowUpdater->UnregisterPreview ();
-        GetViewFrame()->SetChildWindow(SdPreviewChildWindow::GetChildWindowId(), bVisible,false);
+        GetViewFrame()->SetChildWindow(
+            PreviewChildWindow::GetChildWindowId(), bVisible,false);
         if (bVisible)
             mpWindowUpdater->RegisterPreview ();
 
@@ -1957,6 +1415,9 @@ void SdViewShell::SetPreview( bool bVisible )
             GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SFX_CALLMODE_ASYNCHRON );
         }
 
+        if (bVisible)
+            UpdatePreview (GetActualPage());
+
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate(SID_PREVIEW_WIN);
         rBindings.Invalidate(SID_PREVIEW_QUALITY_COLOR);
@@ -1967,3 +1428,6 @@ void SdViewShell::SetPreview( bool bVisible )
     }
 }
 
+
+
+} // end of namespace sd
