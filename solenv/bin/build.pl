@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.133 $
+#   $Revision: 1.134 $
 #
-#   last change: $Author: vg $ $Date: 2005-01-17 11:38:06 $
+#   last change: $Author: vg $ $Date: 2005-02-01 17:32:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.133 $ ';
+    $id_str = ' $Revision: 1.134 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -501,8 +501,8 @@ sub get_prj_platform {
     foreach(@$build_list_ref) {
         s/\r\n//;
         $line++;
-        if ($_ =~ /nmake/) {
-            if ($' =~ /\s+-\s+(\w+)[,\S+]*\s+(\S+)/ ) {
+        if ($_ =~ /\snmake\s/) {
+            if ($' =~ /\s*-\s+(\w+)[,\S+]*\s+(\S+)/ ) {
                 my $platform = $1;
                 my $alias = $2;
                 &print_error ("There is no correct alias set in the line $line!") if ($alias eq 'NULL');
@@ -568,12 +568,12 @@ sub get_deps_hash {
                 $_ = $`;
             };
             s/\r\n//;
-            if ($_ =~ /nmake/o) {
+            if ($_ =~ /\s+nmake\s+/o) {
                 my ($Platform, $Dependencies, $Dir, $DirAlias);
                 my %deps_hash = ();
                 $Dependencies = $';
                 $dummy = $`;
-                $dummy =~ /(\S+)\s+(\S+)/o;
+                $dummy =~ /(\S+)\s+(\S*)/o;
                 $Dir = $2;
                 $Dependencies =~ /(\w+)/o;
                 $Platform = $1;
