@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-12 13:15:27 $
+ *  last change: $Author: fs $ $Date: 2002-08-16 09:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,10 +423,20 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_WINDOW_COMMAND:
         {
             CommandEvent* pCmdEvt = (CommandEvent*)rVclWindowEvent.GetData();
-            if ( GetMouseListeners().getLength() && pCmdEvt->IsMouseEvent() && ( pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU ) )
+            if ( GetMouseListeners().getLength() && ( pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU ) )
             {
                 // COMMAND_CONTEXTMENU als mousePressed mit PopupTrigger = sal_True versenden...
-                MouseEvent aMEvt( ((CommandEvent*)rVclWindowEvent.GetData())->GetMousePosPixel(), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT, 0 );
+                Point aWhere = static_cast< CommandEvent* >( rVclWindowEvent.GetData() )->GetMousePosPixel();
+                if ( !pCmdEvt->IsMouseEvent() )
+                {   // for keyboard events, we set the coordinates to -1,-1. This is a slight HACK, but the current API
+                    // handles a context menu command as special case of a mouse event, which is simply wrong.
+                    // Without extending the API, we would not have another chance to notify listeners of a
+                    // keyboard-triggered context menu request
+                    // 102205 - 16.08.2002 - fs@openoffice.org
+                    aWhere = Point( -1, -1 );
+                }
+
+                MouseEvent aMEvt( aWhere, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT, 0 );
                 ::com::sun::star::awt::MouseEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitMouseEvent( aEvent, aMEvt );
