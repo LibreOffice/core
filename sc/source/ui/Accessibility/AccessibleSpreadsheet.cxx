@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:09:52 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 08:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,9 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
     maVisCells(GetVisCells(GetVisArea(pViewShell, eSplitPos))),
     meSplitPos(eSplitPos),
     mbHasSelection(sal_False),
-    mpAccDoc(pAccDoc)
+    mpAccDoc(pAccDoc),
+    mbIsFocusSend(sal_False),
+    mpAccCell(NULL)
 {
     if (pViewShell)
     {
@@ -140,6 +142,9 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
         mbHasSelection = pViewShell->GetViewData()->GetMarkData().GetTableSelect(maActiveCell.Tab()) &&
                     (pViewShell->GetViewData()->GetMarkData().IsMarked() ||
                     pViewShell->GetViewData()->GetMarkData().IsMultiMarked());
+        mpAccCell = GetAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
+        mpAccCell->acquire();
+        mpAccCell->Init();
     }
 }
 
@@ -159,6 +164,11 @@ void SAL_CALL ScAccessibleSpreadsheet::disposing()
     {
         mpViewShell->RemoveAccessibilityObject(*this);
         mpViewShell = NULL;
+    }
+    if (mpAccCell)
+    {
+        mpAccCell->release();
+        mpAccCell = NULL;
     }
 
     ScAccessibleTableBase::disposing();
@@ -223,8 +233,14 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
                     aEvent.Source = uno::Reference< XAccessible >(this);
-                    aEvent.OldValue <<= getAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
-                    aEvent.NewValue <<= getAccessibleCellAt(aNewCell.Row(), aNewCell.Col());
+                    uno::Reference< XAccessible > xOld = mpAccCell;
+                    mpAccCell->release();
+                    aEvent.OldValue <<= xOld;
+                    mpAccCell = GetAccessibleCellAt(aNewCell.Row(), aNewCell.Col());
+                    mpAccCell->acquire();
+                    mpAccCell->Init();
+                    uno::Reference< XAccessible > xNew = mpAccCell;
+                    aEvent.NewValue <<= xNew;
 
                     maActiveCell = aNewCell;
 
@@ -238,6 +254,11 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 CommitTableModelChange(maRange.aStart.Row(), maRange.aStart.Col(), maRange.aEnd.Row(), maRange.aEnd.Col(), AccessibleTableModelChangeType::UPDATE);
             else
                 mbDelIns = sal_False;
+        }
+        else if ((rRef.GetId() == SC_HINT_ACC_EDITMODE))
+        {
+            if (mpAccCell)
+                mpAccCell->ChangeEditMode();
         }
         // commented out, because to use a ModelChangeEvent is not the right way
         // at the moment there is no way, but the Java/Gnome Api should be extended sometime
@@ -295,6 +316,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     uno::Sequence<sal_Int32> aSequence;
     if (mpViewShell && mpViewShell->GetViewData())
     {
@@ -321,6 +343,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     uno::Sequence<sal_Int32> aSequence;
     if (mpViewShell && mpViewShell->GetViewData())
     {
@@ -347,6 +370,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nR
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     sal_Bool bResult(sal_False);
     if (mpViewShell && mpViewShell->GetViewData())
     {
@@ -360,6 +384,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     sal_Bool bResult(sal_False);
     if (mpViewShell && mpViewShell->GetViewData())
     {
@@ -369,14 +394,29 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32
     return bResult;
 }
 
+ScAccessibleCell* ScAccessibleSpreadsheet::GetAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn)
+{
+    ScAccessibleCell* pAccessibleCell = NULL;
+    ScAddress aCellAddress(static_cast<sal_uInt16>(maRange.aStart.Col() + nColumn),
+        static_cast<sal_uInt16>(maRange.aStart.Row() + nRow), maRange.aStart.Tab());
+    if ((aCellAddress == maActiveCell) && mpAccCell)
+    {
+        pAccessibleCell = mpAccCell;
+    }
+    else
+        pAccessibleCell = new ScAccessibleCell(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos, mpAccDoc);
+
+    return pAccessibleCell;
+}
+
 uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScAddress aCellAddress(static_cast<sal_uInt16>(maRange.aStart.Col() + nColumn),
-        static_cast<sal_uInt16>(maRange.aStart.Row() + nRow), maRange.aStart.Tab());
-    ScAccessibleCell* pAccessibleCell = new ScAccessibleCell(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos, mpAccDoc);
-    uno::Reference < XAccessible > xAccessible = pAccessibleCell;
+    IsObjectValid();
+    uno::Reference<XAccessible> xAccessible;
+    ScAccessibleCell* pAccessibleCell = GetAccessibleCellAt(nRow, nColumn);
+    xAccessible = pAccessibleCell;
     pAccessibleCell->Init();
     return xAccessible;
 }
@@ -385,6 +425,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow,
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     sal_Bool bResult(sal_False);
     if (mpViewShell)
     {
@@ -401,6 +442,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAt(
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     uno::Reference< XAccessible > xAccessible;
     if (mpViewShell)
     {
@@ -447,18 +489,21 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
-    if (IsEditable(xParentStates))
-        pStateSet->AddState(AccessibleStateType::EDITABLE);
-    pStateSet->AddState(AccessibleStateType::ENABLED);
-    pStateSet->AddState(AccessibleStateType::MULTISELECTABLE);
-    pStateSet->AddState(AccessibleStateType::OPAQUE);
-    pStateSet->AddState(AccessibleStateType::SELECTABLE);
-    if (IsCompleteSheetSelected())
-        pStateSet->AddState(AccessibleStateType::SELECTED);
-    if (isShowing())
-        pStateSet->AddState(AccessibleStateType::SHOWING);
-    if (isVisible())
-        pStateSet->AddState(AccessibleStateType::VISIBLE);
+    else
+    {
+        if (IsEditable(xParentStates))
+            pStateSet->AddState(AccessibleStateType::EDITABLE);
+        pStateSet->AddState(AccessibleStateType::ENABLED);
+        pStateSet->AddState(AccessibleStateType::MULTISELECTABLE);
+        pStateSet->AddState(AccessibleStateType::OPAQUE);
+        pStateSet->AddState(AccessibleStateType::SELECTABLE);
+        if (IsCompleteSheetSelected())
+            pStateSet->AddState(AccessibleStateType::SELECTED);
+        if (isShowing())
+            pStateSet->AddState(AccessibleStateType::SHOWING);
+        if (isVisible())
+            pStateSet->AddState(AccessibleStateType::VISIBLE);
+    }
     return pStateSet;
 }
 
@@ -469,6 +514,7 @@ void SAL_CALL
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (mpViewShell)
     {
         sal_Int32 nCol(getAccessibleColumn(nChildIndex));
@@ -483,6 +529,7 @@ void SAL_CALL
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (mpViewShell)
     {
         mpViewShell->Unmark();
@@ -494,6 +541,7 @@ void SAL_CALL
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (mpViewShell)
     {
         mpViewShell->SelectAll();
@@ -505,6 +553,7 @@ sal_Int32 SAL_CALL
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     sal_Int32 nResult(0);
     if (mpViewShell)
     {
@@ -525,6 +574,7 @@ uno::Reference<XAccessible > SAL_CALL
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     uno::Reference < XAccessible > xAccessible;
     if (mpViewShell)
     {
@@ -555,6 +605,7 @@ void SAL_CALL
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (mpViewShell)
     {
         sal_Int32 nCol(getAccessibleColumn(nChildIndex));
@@ -649,6 +700,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {
@@ -656,6 +708,29 @@ uno::Sequence<sal_Int8> SAL_CALL
         rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
     }
     return aId;
+}
+
+///=====  XAccessibleEventBroadcaster  =====================================
+
+void SAL_CALL ScAccessibleSpreadsheet::addEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
+        throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    IsObjectValid();
+    ScAccessibleTableBase::addEventListener(xListener);
+
+    if (!mbIsFocusSend)
+    {
+        mbIsFocusSend = sal_True;
+        CommitFocusGained();
+
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
+        aEvent.Source = uno::Reference< XAccessible >(this);
+        aEvent.NewValue <<= getAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
+
+        CommitChange(aEvent);
+    }
 }
 
     //====  internal  =========================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:08:38 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 08:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ public:
 
 class ScTabViewShell;
 class ScAccessibleDocument;
+class ScAccessibleCell;
 
 /** @descr
         This base class provides an implementation of the
@@ -141,6 +142,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
                 getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (::com::sun::star::uno::RuntimeException);
+
+    ScAccessibleCell* GetAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn);
 
     /// Returns a boolean value indicating whether the accessible at a specified row and column is selected.
     virtual sal_Bool SAL_CALL
@@ -223,6 +226,17 @@ public:
         getImplementationId(void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    ///=====  XAccessibleEventBroadcaster  =====================================
+
+    /** Add listener that is informed of future changes of name,
+          description and so on events.
+    */
+    virtual void SAL_CALL
+        addEventListener(
+            const ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
+        throw (com::sun::star::uno::RuntimeException);
+
 protected:
     /// Return the object's current bounding box relative to the desktop.
     virtual Rectangle GetBoundingBoxOnScreen(void) const
@@ -236,11 +250,13 @@ private:
     ScRangeList*    mpMarkedRanges;
     std::vector<ScMyAddress>* mpSortedMarkedCells;
     ScAccessibleDocument* mpAccDoc;
+    ScAccessibleCell*   mpAccCell;
     Rectangle       maVisCells;
     ScSplitPos      meSplitPos;
     ScAddress       maActiveCell;
     sal_Bool        mbHasSelection;
     sal_Bool        mbDelIns;
+    sal_Bool        mbIsFocusSend;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
