@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:11:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,10 +765,20 @@ SwFrm *SwFrm::_FindNext()
             {
                 while ( pNxtCnt )
                 {
-                    BOOL bEndn = IsInSct() && !IsSctFrm();
+                    // OD 02.04.2003 #108446# - check for endnote, only if found
+                    // next content isn't contained in a section, that collect its
+                    // endnotes at its end.
+                    bool bEndn = IsInSct() && !IsSctFrm() &&
+                                 ( !pNxtCnt->IsInSct() ||
+                                   !pNxtCnt->FindSctFrm()->IsEndnAtEnd()
+                                 );
                     if ( ( bBody && pNxtCnt->IsInDocBody() ) ||
-                         ( pNxtCnt->IsInFtn() && ( bFtn || ( bEndn && pNxtCnt->
-                           FindFtnFrm()->GetAttr()->GetFtn().IsEndNote() ) ) ) )
+                         ( pNxtCnt->IsInFtn() &&
+                           ( bFtn ||
+                             ( bEndn && pNxtCnt->FindFtnFrm()->GetAttr()->GetFtn().IsEndNote() )
+                           )
+                         )
+                       )
                     {
                         pRet = pNxtCnt->IsInTab() ? pNxtCnt->FindTabFrm()
                                                     : (SwFrm*)pNxtCnt;
