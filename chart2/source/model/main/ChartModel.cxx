@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-28 10:32:04 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1217,7 +1217,7 @@ void SAL_CALL ChartModel::saveObject()
     }
 }
 
-void SAL_CALL ChartModel::onShowWindow( sal_Bool bVisible )
+void SAL_CALL ChartModel::visibilityChanged( sal_Bool bVisible )
     throw (embed::WrongStateException,
            uno::RuntimeException)
 {
@@ -1227,4 +1227,12 @@ void SAL_CALL ChartModel::onShowWindow( sal_Bool bVisible )
     }
 }
 
+uno::Reference< util::XCloseable > SAL_CALL ChartModel::getComponent()
+    throw (uno::RuntimeException)
+{
+    // the method should return the model of the container, for this implementation it means itself
+    return uno::Reference< util::XCloseable >( static_cast< ::cppu::OWeakObject* >( this ), uno::UNO_QUERY );
+}
+
 }  // namespace chart
+
