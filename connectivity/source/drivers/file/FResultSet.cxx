@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:36:55 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,19 +287,19 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 columnIndex ) throw(::com::su
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    columnIndex = mapColumn(columnIndex);
+    //columnIndex = mapColumn(columnIndex);
     checkIndex(columnIndex );
 
 
-    m_bWasNull = (*m_aRow)[columnIndex].isNull();
-    return (*m_aRow)[columnIndex];
+    m_bWasNull = (*m_aSelectRow)[columnIndex]->getValue().isNull();
+    return *(*m_aSelectRow)[columnIndex];
 }
 // -----------------------------------------------------------------------------
 void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException)
 {
     if (   columnIndex <= 0
         //  || columnIndex > (sal_Int32)m_xColumns->size()
-        || columnIndex >= (sal_Int32)m_aRow->size() )
+        || columnIndex >= (sal_Int32)m_aSelectRow->size() )
         ::dbtools::throwInvalidIndexException(*this);
 }
 // -------------------------------------------------------------------------
@@ -363,7 +363,7 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 
     OSL_ENSURE((m_bShowDeleted || !m_aRow->isDeleted()),"getRow called for deleted row");
 
-    return m_aSkipDeletedSet.getMappedPosition((*m_aRow)[0]);
+    return m_aSkipDeletedSet.getMappedPosition((*m_aRow)[0]->getValue());
 }
 // -------------------------------------------------------------------------
 
@@ -658,12 +658,12 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     m_bRowInserted = m_pTable->InsertRow(m_aInsertRow.getBody(), TRUE,Reference<XIndexAccess>(m_xColNames,UNO_QUERY));
     if(m_bRowInserted && m_pFileSet.isValid())
     {
-        sal_Int32 nPos = (*m_aInsertRow)[0];
+        sal_Int32 nPos = (*m_aInsertRow)[0]->getValue();
         m_pFileSet->push_back(nPos);
-        (*m_aInsertRow)[0] = sal_Int32(m_pFileSet->size());
+        *(*m_aInsertRow)[0] = sal_Int32(m_pFileSet->size());
         clearInsertRow();
 
-        m_aSkipDeletedSet.insertNewPosition((*m_aRow)[0]);
+        m_aSkipDeletedSet.insertNewPosition((*m_aRow)[0]->getValue());
     }
 }
 // -------------------------------------------------------------------------
@@ -675,7 +675,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
     if(!m_pTable || m_pTable->isReadOnly())
         throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     m_bRowUpdated = m_pTable->UpdateRow(m_aInsertRow.getBody(), m_aRow,Reference<XIndexAccess>(m_xColNames,UNO_QUERY));
-    (*m_aInsertRow)[0] = (sal_Int32)(*m_aRow)[0];
+    *(*m_aInsertRow)[0] = (sal_Int32)(*m_aRow)[0]->getValue();
 
     clearInsertRow();
 }
@@ -693,7 +693,7 @@ void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
     if(m_aRow->isDeleted())
         throw SQLException(::rtl::OUString::createFromAscii("Row was already deleted!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 
-    sal_Int32 nPos = (sal_Int32)(*m_aRow)[0];
+    sal_Int32 nPos = (sal_Int32)(*m_aRow)[0]->getValue();
     m_bRowDeleted = m_pTable->DeleteRow(m_xColumns.getBody());
     if(m_bRowDeleted && m_pFileSet.isValid())
     {
@@ -716,11 +716,11 @@ void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeExcept
 
     if(m_aInsertRow.isValid())
     {
-        OValueVector::iterator aIter = m_aInsertRow->begin()+1;
+        OValueRefVector::iterator aIter = m_aInsertRow->begin()+1;
         for(;aIter != m_aInsertRow->end();++aIter)
         {
-            aIter->setBound(sal_False);
-            aIter->setNull();
+            (*aIter)->setBound(sal_False);
+            (*aIter)->setNull();
         }
     }
 }
@@ -736,11 +736,11 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
 
     m_bInserted     = sal_True;
 
-    OValueVector::iterator aIter = m_aInsertRow->begin()+1;
+    OValueRefVector::iterator aIter = m_aInsertRow->begin()+1;
     for(;aIter != m_aInsertRow->end();++aIter)
     {
-        aIter->setBound(sal_False);
-        aIter->setNull();
+        (*aIter)->setBound(sal_False);
+        (*aIter)->setNull();
     }
 }
 // -------------------------------------------------------------------------
@@ -757,8 +757,8 @@ void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw
     columnIndex = mapColumn(columnIndex);
     checkIndex(columnIndex );
 
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = x;
+    (*m_aInsertRow)[columnIndex]->setBound(sal_True);
+    *(*m_aInsertRow)[columnIndex] = x;
 }
 // -----------------------------------------------------------------------------
 
@@ -772,8 +772,8 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
 
 
 
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex].setNull();
+    (*m_aInsertRow)[columnIndex]->setBound(sal_True);
+    (*m_aInsertRow)[columnIndex]->setNull();
 
 }
 // -------------------------------------------------------------------------
@@ -923,9 +923,6 @@ again:
     if (!bEvaluate) // Laeuft keine Auswertung, dann nur Ergebniszeile fuellen
     {
         m_pTable->fetchRow(m_aRow,m_pTable->getTableColumns().getBody(), sal_True,bRetrieveData);
-
-        //  if (bShowDeleted && m_aRow->isDeleted())
-            //  m_aRow->setState(ROW_DELETED);
     }
     else
     {
@@ -979,6 +976,11 @@ again:
             goto again;
         }
     }
+
+    if ( (bRetrieveData || m_pSQLAnalyzer->hasRestriction()) && m_pSQLAnalyzer->hasFunctions() )
+    {
+        m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
+    }
     // Evaluate darf nur gesetzt sein,
     // wenn der Keyset weiter aufgebaut werden soll
     if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT && !isCount() &&
@@ -992,7 +994,7 @@ again:
         else if (m_pFileSet.isValid())
         {
             //  OSL_ENSURE(!m_pFileSet->IsFrozen() , "Falsche CursorPosition!");
-            sal_uInt32 nBookmarkValue = Abs((sal_Int32)(*m_aEvaluateRow)[0]);
+            sal_uInt32 nBookmarkValue = Abs((sal_Int32)(*m_aEvaluateRow)[0]->getValue());
             m_pFileSet->push_back(nBookmarkValue);
         }
     }
@@ -1047,7 +1049,7 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
             ExecuteRow(eCursorPosition,nOffset,TRUE,FALSE,bRetrieveData);
 
             // now set the bookmark for outside this is the logical pos  and not the file pos
-            (*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
+            *(*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
         }
         else
         {
@@ -1093,7 +1095,7 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
                     ExecuteRow(IResultSetHelper::BOOKMARK,(*m_pFileSet)[m_nRowPos],TRUE,FALSE,bRetrieveData);
 
                     // now set the bookmark for outside
-                    (*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
+                    *(*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
                 }
                 else // Index muß weiter aufgebaut werden
                 {
@@ -1134,7 +1136,7 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
                         m_pTable->fetchRow(m_aRow, m_pTable->getTableColumns().getBody(), sal_True,bRetrieveData);
 
                         // now set the bookmark for outside
-                        (*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
+                        *(*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
                     }
                     else if (!m_pFileSet->isFrozen())                   // keinen gueltigen Satz gefunden
                     {
@@ -1182,9 +1184,10 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
             // (muss die erste und einzige Variable in der Row sein)
             if (m_aRow->size() >= 2)
             {
-                (*m_aRow)[1] = m_nRowCountResult;
-                (*m_aRow)[0] = sal_Int32(1);
-                (*m_aRow)[1].setBound(sal_True);
+                *(*m_aRow)[1] = m_nRowCountResult;
+                *(*m_aRow)[0] = sal_Int32(1);
+                (*m_aRow)[1]->setBound(sal_True);
+                (*m_aSelectRow)[1] = (*m_aRow)[1];
             }
         }
         else
@@ -1270,46 +1273,9 @@ BOOL OResultSet::OpenImpl()
 
     m_nResultSetConcurrency = (m_pTable->isReadOnly() || isCount()) ? ResultSetConcurrency::READ_ONLY : ResultSetConcurrency::UPDATABLE;
 
-//  if(m_aParameterRow.isValid())
-//      m_xParamColumns->reserve(m_aParameterRow->size());
-
-    //  sal_Int32 i=0;
-
-//  // Parameter substituieren (AssignValues und Kriterien):
-//  if (m_xParamColumns.isValid() && !m_xParamColumns->empty())
-//  {
-//      // Zunächst AssignValues
-//      USHORT nParaCount=0; // gibt die aktuelle Anzahl der bisher gesetzen Parameter an
-//
-//      // Nach zu substituierenden Parametern suchen:
-//      UINT16 nCount = m_aAssignValues.isValid() ? m_aAssignValues->size() : 1; // 1 ist wichtig für die Kriterien
-//      for (UINT16 j = 1; j < nCount; j++)
-//      {
-//          UINT32 nParameter = (*m_aAssignValues).getParameterIndex(j);
-//          if (nParameter == SQL_NO_PARAMETER)
-//              continue;   // dieser AssignValue ist kein Parameter
-//
-//          ++nParaCount; // ab hier ist der Parameter gueltig
-//          // Parameter ersetzen. Wenn Parameter nicht verfuegbar,
-//          // Value auf NULL setzen.
-//          (*m_aAssignValues)[j] = (*m_aParameterRow)[(UINT16)nParameter];
-//      }
-//
-//      if (m_aParameterRow.isValid() &&  nParaCount < m_aParameterRow->size())
-//      {
-//          //  setBoundedColumns(m_aEvaluateRow,m_xParamColumns,xNames,sal_False);
-//          m_pSQLAnalyzer->bindParameterRow(m_aParameterRow);
-//      }
-//  }
-
     // Neuen Index aufbauen:
     m_pFileSet = NULL;
     //  DELETEZ(m_pEvaluationKeySet);
-
-        // Row zur Auswertung binden, wenn Preprocessing erfolg, dann bereits ein Keyset
-    //  m_pEvaluationKeySet = m_pSQLAnalyzer->bindResultRow(m_aEvaluateRow);    // Werte im Code des Compilers setzen
-                                                    // (Verbindung zur ResultRow herstellen)
-
 
     // An den Anfang positionieren
     m_nRowPos = -1;
@@ -1385,12 +1351,12 @@ BOOL OResultSet::OpenImpl()
                 }
 
                 OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
-                OValueVector::iterator aRowIter = m_aRow->begin()+1;
+                OValueRefVector::iterator aRowIter = m_aRow->begin()+1;
                 ::std::vector<sal_Int32>::iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
                 for (::std::vector<sal_Int16>::size_type i=0;aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
                 {
                     OSL_ENSURE((sal_Int32)m_aRow->size() > *aOrderByIter,"Invalid Index");
-                    switch ((m_aRow->begin()+*aOrderByIter)->getTypeKind())
+                    switch ((*(m_aRow->begin()+*aOrderByIter))->getValue().getTypeKind())
                     {
                     case DataType::CHAR:
                         case DataType::VARCHAR:
@@ -1418,7 +1384,7 @@ BOOL OResultSet::OpenImpl()
                             OSL_ASSERT("OFILECursor::Execute: Datentyp nicht implementiert");
                             break;
                     }
-                    (*m_aEvaluateRow)[*aOrderByIter].setBound(sal_True);
+                    (*m_aEvaluateRow)[*aOrderByIter]->setBound(sal_True);
                 }
 
                 // Nur wenn Sortierung gewuenscht, ueber alle Datensaetze iterieren und
@@ -1509,12 +1475,12 @@ BOOL OResultSet::OpenImpl()
     DISTINCT:   if(bDistinct && m_pFileSet.isValid())   // sicher ist sicher
                 {
                     OValueRow aSearchRow = new OValueVector(m_aRow->size());
-                    OValueVector::iterator aRowIter = m_aRow->begin();
+                    OValueRefVector::iterator aRowIter = m_aRow->begin();
                     OValueVector::iterator aSearchIter = aSearchRow->begin();
                     for (   ++aRowIter,++aSearchIter;   // the first column is the bookmark column
                             aRowIter != m_aRow->end();
                             ++aRowIter,++aSearchIter)
-                                aSearchIter->setBound(aRowIter->isBound());
+                                aSearchIter->setBound((*aRowIter)->isBound());
 
                     INT32 nPos;
                     UINT16 nMaxRow = m_pFileSet->size();
@@ -1531,7 +1497,16 @@ BOOL OResultSet::OpenImpl()
                             if(!nWasAllwaysFound[j] && nPos) // nur falls noch nicht nach dieser Row gesucht wurde
                             {
                                 ExecuteRow(IResultSetHelper::BOOKMARK,nPos,TRUE,FALSE);
-                                *aSearchRow = *m_aRow;
+                                { // copy row values
+                                    OValueRefVector::iterator aRowIter = m_aRow->begin();
+                                    OValueVector::iterator aSearchIter = aSearchRow->begin();
+                                    for (   ++aRowIter,++aSearchIter;   // the first column is the bookmark column
+                                            aRowIter != m_aRow->end();
+                                            ++aRowIter,++aSearchIter)
+                                                *aSearchIter = *(*aRowIter);
+                                    // *aSearchRow = *m_aRow;
+                                }
+
                                 // jetzt den Rest nach doppelten durchsuchen
                                 INT32 nKey;
                                 nPrev_i = j;
@@ -1541,13 +1516,13 @@ BOOL OResultSet::OpenImpl()
                                     ExecuteRow(IResultSetHelper::BOOKMARK,nKey ,TRUE,FALSE);
                                     if(!nWasAllwaysFound[i])
                                     {
-                                        OValueVector::iterator aRowIter = m_aRow->begin();
+                                        OValueRefVector::iterator aRowIter = m_aRow->begin();
                                         OValueVector::iterator aSearchIter = aSearchRow->begin();
                                         for (   ++aRowIter,++aSearchIter;   // the first column is the bookmark column
                                                 aRowIter != m_aRow->end();
                                                 ++aRowIter,++aSearchIter)
                                         {
-                                            if(aRowIter->isBound() && !(*aRowIter == *aSearchIter))
+                                            if ( (*aRowIter)->isBound() && !( *(*aRowIter) == *aSearchIter) )
                                                 break;
                                         }
                                         if(aRowIter == m_aRow->end())
@@ -1673,7 +1648,8 @@ sal_Int64 OResultSet::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
             0;
 }
 // -----------------------------------------------------------------------------
-void OResultSet::setBoundedColumns(const OValueRow& _rRow,
+void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
+                                   const OValueRefRow& _rSelectRow,
                                    const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
                                    const Reference<XIndexAccess>& _xNames,
                                    sal_Bool _bSetColumnMapping,
@@ -1691,18 +1667,18 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
 
     typedef ::std::map<OSQLColumns::iterator,sal_Bool> IterMap;
     IterMap aSelectIters;
-    OValueVector::iterator aRowIter = _rRow->begin()+1;
+    OValueRefVector::iterator aRowIter = _rRow->begin()+1;
     for (sal_Int32 i=0; // the first column is the bookmark column
             aRowIter != _rRow->end();
             ++i, ++aRowIter
         )
     {
-        aRowIter->setBound(sal_False);
+        (*aRowIter)->setBound(sal_False);
         try
         {
             // get the table column and it's name
             _xNames->getByIndex(i) >>= xTableColumn;
-            OSL_ENSURE(xTableColumn.is(), "OResultSet::OpenImpl: invalid table column!");
+            OSL_ENSURE(xTableColumn.is(), "OResultSet::setBoundedColumns: invalid table column!");
             if (xTableColumn.is())
                 xTableColumn->getPropertyValue(sName) >>= sTableColumnName;
             else
@@ -1720,7 +1696,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                 else
                     (*aIter)->getPropertyValue(sName) >>= sSelectColumnRealName;
 
-                if ( aCase(sTableColumnName, sSelectColumnRealName) && !aRowIter->isBound() && aSelectIters.end() == aSelectIters.find(aIter) )
+                if ( aCase(sTableColumnName, sSelectColumnRealName) && !(*aRowIter)->isBound() && aSelectIters.end() == aSelectIters.find(aIter) )
                 {
                     aSelectIters.insert(IterMap::value_type(aIter,sal_True));
                     if(_bSetColumnMapping)
@@ -1730,13 +1706,14 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                         sal_Int32 nTableColumnPos = i + 1;
                             // get first table column is the bookmark column ...
                         _rColMapping[nSelectColumnPos] = nTableColumnPos;
+                        (*_rSelectRow)[nSelectColumnPos] = *aRowIter;
                     }
 
-                    aRowIter->setBound(sal_True);
+                    (*aRowIter)->setBound(sal_True);
                     sal_Int32 nType = DataType::OTHER;
                     if (xTableColumn.is())
                         xTableColumn->getPropertyValue(sType) >>= nType;
-                    aRowIter->setTypeKind(nType);
+                    (*aRowIter)->setTypeKind(nType);
 
                     break;
                 }
@@ -1744,7 +1721,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
         }
         catch (Exception&)
         {
-            OSL_ENSURE(sal_False, "OResultSet::OpenImpl: caught an Exception!");
+            OSL_ENSURE(sal_False, "OResultSet::setBoundedColumns: caught an Exception!");
         }
     }
     // in this case we got more select columns as columns exist in the table
@@ -1779,6 +1756,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                             sal_Int32 nTableColumnPos = i + 1;
                                 // get first table column is the bookmark column ...
                             _rColMapping[nSelectColumnPos] = nTableColumnPos;
+                            (*_rSelectRow)[nSelectColumnPos] = (*_rRow)[nTableColumnPos];
                             break;
                         }
                     }
@@ -1818,26 +1796,26 @@ void OResultSet::doTableSpecials(const OSQLTable& _xTable)
 void OResultSet::clearInsertRow()
 {
     m_aRow->setDeleted(sal_False); // set to false here because this is the new row
-    OValueVector::iterator aIter = m_aInsertRow->begin();
+    OValueRefVector::iterator aIter = m_aInsertRow->begin();
     for(sal_Int32 nPos = 0;aIter != m_aInsertRow->end();++aIter,++nPos)
     {
-        if (aIter->isBound())
+        if ( (*aIter)->isBound() )
         {
-            (*m_aRow)[nPos] = (*aIter);
+            (*m_aRow)[nPos]->setValue( (*aIter)->getValue() );
         }
-        aIter->setBound(nPos == 0);
-        aIter->setModified(sal_False);
-        aIter->setNull();
+        (*aIter)->setBound(nPos == 0);
+        (*aIter)->setModified(sal_False);
+        (*aIter)->setNull();
     }
 }
 // -----------------------------------------------------------------------------
-void OResultSet::initializeRow(OValueRow& _rRow,sal_Int32 _nColumnCount)
+void OResultSet::initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount)
 {
     if(!_rRow.isValid())
     {
-        _rRow   = new OValueVector(_nColumnCount);
-        (*_rRow)[0].setBound(sal_True);
-        ::std::for_each(_rRow->begin()+1,_rRow->end(),TSetBound(sal_False));
+        _rRow   = new OValueRefVector(_nColumnCount);
+        (*_rRow)[0]->setBound(sal_True);
+        ::std::for_each(_rRow->begin()+1,_rRow->end(),TSetRefBound(sal_False));
     }
 }
 // -----------------------------------------------------------------------------
@@ -1853,7 +1831,7 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
 // -----------------------------------------------------------------------------
 sal_Int32 OResultSet::getDriverPos() const
 {
-    return (*m_aRow)[0];
+    return (*m_aRow)[0]->getValue();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OResultSet::deletedVisible() const
