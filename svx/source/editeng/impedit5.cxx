@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-28 09:52:58 $
+ *  last change: $Author: cl $ $Date: 2001-08-28 12:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,9 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, BOOL bOnlyHardAttrib )
     USHORT nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
     USHORT nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
 
+const sal_uInt8 EditEngineAttribs_All   = 0;        /// returns all attributes even when theire not set
+const sal_uInt8 EditEngineAttribs_HardAndPara = 1;  /// returns all attributes set on paragraph and on portions
+const sal_uInt8 EditEngineAttribs_OnlyHard = 2;     /// returns only attributes hard set on portions
 
     // ueber die Absaetze iterieren...
     for ( USHORT nNode = nStartNode; nNode <= nEndNode; nNode++ )
@@ -427,53 +430,56 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, BOOL bOnlyHardAttrib )
         // Erst die ganz harte Formatierung...
         aEditDoc.FindAttribs( pNode, nStartPos, nEndPos, aCurSet );
 
-        // Und dann Absatzformatierung und Vorlage...
-        // SfxStyleSheet* pStyle = pNode->GetStyleSheet();
-        for ( USHORT nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
+        if( bOnlyHardAttrib != EditEngineAttribs_OnlyHard )
         {
-            if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
+            // Und dann Absatzformatierung und Vorlage...
+            // SfxStyleSheet* pStyle = pNode->GetStyleSheet();
+            for ( USHORT nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
             {
-                if ( !bOnlyHardAttrib )
+                if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
                 {
-                    const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItem( nWhich );
-                    aCurSet.Put( rItem );
+                    if ( bOnlyHardAttrib == EditEngineAttribs_All )
+                    {
+                        const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItem( nWhich );
+                        aCurSet.Put( rItem );
+                    }
+                    else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SFX_ITEM_ON )
+                    {
+                        const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItems().Get( nWhich );
+                        aCurSet.Put( rItem );
+                    }
                 }
-                else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SFX_ITEM_ON )
+                else if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_ON )
                 {
-                    const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItems().Get( nWhich );
-                    aCurSet.Put( rItem );
-                }
-            }
-            else if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_ON )
-            {
-                const SfxPoolItem* pItem = NULL;
-                if ( !bOnlyHardAttrib )
-                {
-                    pItem = &pNode->GetContentAttribs().GetItem( nWhich );
-                }
-                else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SFX_ITEM_ON )
-                {
-                    pItem = &pNode->GetContentAttribs().GetItems().Get( nWhich );
-                }
-                // pItem can only be NULL when bOnlyHardAttrib...
-                if ( !pItem || ( *pItem != aCurSet.Get( nWhich ) ) )
-                {
-                    // Problem: Wenn Absatzvorlage mit z.B. Font,
-                    // aber Font hart und anders und komplett in Selektion
-                    // Falsch, wenn invalidiert....
-                    // => Lieber nicht invalidieren, UMSTELLEN!
-                    // Besser waere, Absatzweise ein ItemSet zu fuellen
-                    // und dieses mit dem gesmten vergleichen.
-//                      aCurSet.InvalidateItem( nWhich );
-                    if ( nWhich <= EE_PARA_END )
-                        aCurSet.InvalidateItem( nWhich );
+                    const SfxPoolItem* pItem = NULL;
+                    if ( bOnlyHardAttrib == EditEngineAttribs_All )
+                    {
+                        pItem = &pNode->GetContentAttribs().GetItem( nWhich );
+                    }
+                    else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SFX_ITEM_ON )
+                    {
+                        pItem = &pNode->GetContentAttribs().GetItems().Get( nWhich );
+                    }
+                    // pItem can only be NULL when bOnlyHardAttrib...
+                    if ( !pItem || ( *pItem != aCurSet.Get( nWhich ) ) )
+                    {
+                        // Problem: Wenn Absatzvorlage mit z.B. Font,
+                        // aber Font hart und anders und komplett in Selektion
+                        // Falsch, wenn invalidiert....
+                        // => Lieber nicht invalidieren, UMSTELLEN!
+                        // Besser waere, Absatzweise ein ItemSet zu fuellen
+                        // und dieses mit dem gesmten vergleichen.
+    //                      aCurSet.InvalidateItem( nWhich );
+                        if ( nWhich <= EE_PARA_END )
+                            aCurSet.InvalidateItem( nWhich );
+                    }
                 }
             }
         }
     }
 
     // Leere Slots mit Defaults fuellen...
-    if ( !bOnlyHardAttrib )
+    if ( bOnlyHardAttrib == EditEngineAttribs_All )
     {
         for ( USHORT nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++ )
         {
