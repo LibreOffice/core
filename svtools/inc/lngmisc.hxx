@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmisc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:36:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 
 #define SVT_SOFT_HYPHEN ((sal_Unicode) 0x00AD)
 #define SVT_HARD_HYPHEN ((sal_Unicode) 0x2011)
+
+// the non-breaking space
+#define SVT_HARD_SPACE  ((sal_Unicode) 0x00A0)
 
 namespace linguistic
 {
