@@ -2,9 +2,9 @@
  *
  *  $RCSfile: codegen.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:05:45 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,10 +162,28 @@ void SbiCodeGen::Save()
     // OPTION EXPLICIT-Flag uebernehmen
     if( pParser->bExplicit )
         p->SetFlag( SBIMG_EXPLICIT );
+
+    int nIfaceCount = 0;
     if( pParser->bClassModule )
     {
         p->SetFlag( SBIMG_CLASSMODULE );
         pCLASSFAC->AddClassModule( &rMod );
+
+        nIfaceCount = pParser->aIfaceVector.size();
+        if( nIfaceCount )
+        {
+            if( !rMod.pClassData )
+                rMod.pClassData = new SbClassData;
+
+            for( int i = 0 ; i < nIfaceCount ; i++ )
+            {
+                const String& rIfaceName = pParser->aIfaceVector[i];
+                SbxVariable* pIfaceVar = new SbxVariable( SbxVARIANT );
+                pIfaceVar->SetName( rIfaceName );
+                SbxArray* pIfaces = rMod.pClassData->mxIfaces;
+                pIfaces->Insert( pIfaceVar, pIfaces->Count() );
+            }
+        }
     }
     else
     {
@@ -183,88 +201,138 @@ void SbiCodeGen::Save()
         SbiProcDef* pProc = pDef->GetProcDef();
         if( pProc && pProc->IsDefined() )
         {
-            PropertyMode ePropMode = pProc->getPropertyMode();
-            if( ePropMode != PROPERTY_MODE_NONE )
+            String aProcName = pProc->GetName();
+            String aIfaceProcName;
+            String aIfaceName;
+            USHORT nPassCount = 1;
+            if( nIfaceCount )
             {
-                SbxDataType ePropType;
-                switch( ePropMode )
+                int nPropPrefixFound =
+                    aProcName.Search( String( RTL_CONSTASCII_USTRINGPARAM("Property ") ) );
+                String aPureProcName = aProcName;
+                String aPropPrefix;
+                if( nPropPrefixFound == 0 )
                 {
-                    case PROPERTY_MODE_GET:
-                        ePropType = pProc->GetType();
-                        break;
-                    case PROPERTY_MODE_LET:
+                    aPropPrefix = aProcName.Copy( 0, 13 );      // 13 == Len( "Property ?et " )
+                    aPureProcName = aProcName.Copy( 13 );
+                }
+                for( int i = 0 ; i < nIfaceCount ; i++ )
+                {
+                    const String& rIfaceName = pParser->aIfaceVector[i];
+                    int nFound = aPureProcName.Search( rIfaceName );
+                    if( nFound == 0 && '_' == aPureProcName.GetChar( rIfaceName.Len() ) )
                     {
-                        // type == type of first parameter
-                        ePropType = SbxVARIANT;     // Default
-                        SbiSymPool* pPool = &pProc->GetParams();
-                        if( pPool->GetSize() > 1 )
-                        {
-                            SbiSymDef* pPar = pPool->Get( 1 );
-                            if( pPar )
-                                ePropType = pPar->GetType();
-                        }
+                        if( nPropPrefixFound == 0 )
+                            aIfaceProcName += aPropPrefix;
+                        aIfaceProcName += aPureProcName.Copy( rIfaceName.Len() + 1 );
+                        aIfaceName = rIfaceName;
+                        nPassCount = 2;
                         break;
                     }
-                    case PROPERTY_MODE_SET:
-                        ePropType = SbxOBJECT;
-                        break;
                 }
-                SbProcedureProperty* pProcedureProperty =
-                    rMod.GetProcedureProperty( pProc->GetPropName(), ePropType );
             }
-            SbMethod* pMeth = rMod.GetMethod( pProc->GetName(), pProc->GetType() );
-
-            // #110004
-            if( !pProc->IsPublic() )
-                pMeth->SetFlag( SBX_PRIVATE );
-
-            pMeth->nStart = pProc->GetAddr();
-            pMeth->nLine1 = pProc->GetLine1();
-            pMeth->nLine2 = pProc->GetLine2();
-            // Die Parameter:
-            SbxInfo* pInfo = pMeth->GetInfo();
-            String aHelpFile, aComment;
-            ULONG nHelpId = 0;
-            if( pInfo )
+            SbMethod* pMeth;
+            for( USHORT nPass = 0 ; nPass < nPassCount ; nPass++ )
             {
-                // Die Zusatzdaten retten
-                aHelpFile = pInfo->GetHelpFile();
-                aComment  = pInfo->GetComment();
-                nHelpId   = pInfo->GetHelpId();
-            }
-            // Und die Parameterliste neu aufbauen
-            pInfo = new SbxInfo( aHelpFile, nHelpId );
-            pInfo->SetComment( aComment );
-            SbiSymPool* pPool = &pProc->GetParams();
-            // Das erste Element ist immer der Funktionswert!
-            for( USHORT i = 1; i < pPool->GetSize(); i++ )
-            {
-                SbiSymDef* pPar = pPool->Get( i );
-                SbxDataType t = pPar->GetType();
-                if( !pPar->IsByVal() )
-                    t = (SbxDataType) ( t | SbxBYREF );
-                if( pPar->GetDims() )
-                    t = (SbxDataType) ( t | SbxARRAY );
-                // #33677 Optional-Info durchreichen
-                USHORT nFlags = SBX_READ;
-                if( pPar->IsOptional() )
-                    nFlags |= SBX_OPTIONAL;
+                if( nPass == 1 )
+                    aProcName = aIfaceProcName;
 
-                pInfo->AddParam( pPar->GetName(), t, nFlags );
-
-                UINT32 nUserData = 0;
-                USHORT nDefaultId = pPar->GetDefaultId();
-                if( nDefaultId )
-                    nUserData |= nDefaultId;
-                if( pPar->IsParamArray() )
-                    nUserData |= PARAM_INFO_PARAMARRAY;
-                if( nUserData )
+                PropertyMode ePropMode = pProc->getPropertyMode();
+                if( ePropMode != PROPERTY_MODE_NONE )
                 {
-                    SbxParamInfo* pParam = (SbxParamInfo*)pInfo->GetParam( i );
-                    pParam->nUserData = nUserData;
+                    SbxDataType ePropType;
+                    switch( ePropMode )
+                    {
+                        case PROPERTY_MODE_GET:
+                            ePropType = pProc->GetType();
+                            break;
+                        case PROPERTY_MODE_LET:
+                        {
+                            // type == type of first parameter
+                            ePropType = SbxVARIANT;     // Default
+                            SbiSymPool* pPool = &pProc->GetParams();
+                            if( pPool->GetSize() > 1 )
+                            {
+                                SbiSymDef* pPar = pPool->Get( 1 );
+                                if( pPar )
+                                    ePropType = pPar->GetType();
+                            }
+                            break;
+                        }
+                        case PROPERTY_MODE_SET:
+                            ePropType = SbxOBJECT;
+                            break;
+                    }
+                    String aPropName = pProc->GetPropName();
+                    if( nPass == 1 )
+                        aPropName = aPropName.Copy( aIfaceName.Len() + 1 );
+                    SbProcedureProperty* pProcedureProperty =
+                        rMod.GetProcedureProperty( aPropName, ePropType );
+                        // rMod.GetProcedureProperty( pProc->GetPropName(), ePropType );
                 }
-            }
-            pMeth->SetInfo( pInfo );
+                if( nPass == 1 )
+                {
+                    SbIfaceMapperMethod* pMapperMeth =
+                        rMod.GetIfaceMapperMethod( aProcName, pMeth );
+                }
+                else
+                {
+                    pMeth = rMod.GetMethod( aProcName, pProc->GetType() );
+
+                    // #110004
+                    if( !pProc->IsPublic() )
+                        pMeth->SetFlag( SBX_PRIVATE );
+
+                    pMeth->nStart = pProc->GetAddr();
+                    pMeth->nLine1 = pProc->GetLine1();
+                    pMeth->nLine2 = pProc->GetLine2();
+                    // Die Parameter:
+                    SbxInfo* pInfo = pMeth->GetInfo();
+                    String aHelpFile, aComment;
+                    ULONG nHelpId = 0;
+                    if( pInfo )
+                    {
+                        // Die Zusatzdaten retten
+                        aHelpFile = pInfo->GetHelpFile();
+                        aComment  = pInfo->GetComment();
+                        nHelpId   = pInfo->GetHelpId();
+                    }
+                    // Und die Parameterliste neu aufbauen
+                    pInfo = new SbxInfo( aHelpFile, nHelpId );
+                    pInfo->SetComment( aComment );
+                    SbiSymPool* pPool = &pProc->GetParams();
+                    // Das erste Element ist immer der Funktionswert!
+                    for( USHORT i = 1; i < pPool->GetSize(); i++ )
+                    {
+                        SbiSymDef* pPar = pPool->Get( i );
+                        SbxDataType t = pPar->GetType();
+                        if( !pPar->IsByVal() )
+                            t = (SbxDataType) ( t | SbxBYREF );
+                        if( pPar->GetDims() )
+                            t = (SbxDataType) ( t | SbxARRAY );
+                        // #33677 Optional-Info durchreichen
+                        USHORT nFlags = SBX_READ;
+                        if( pPar->IsOptional() )
+                            nFlags |= SBX_OPTIONAL;
+
+                        pInfo->AddParam( pPar->GetName(), t, nFlags );
+
+                        UINT32 nUserData = 0;
+                        USHORT nDefaultId = pPar->GetDefaultId();
+                        if( nDefaultId )
+                            nUserData |= nDefaultId;
+                        if( pPar->IsParamArray() )
+                            nUserData |= PARAM_INFO_PARAMARRAY;
+                        if( nUserData )
+                        {
+                            SbxParamInfo* pParam = (SbxParamInfo*)pInfo->GetParam( i );
+                            pParam->nUserData = nUserData;
+                        }
+                    }
+                    pMeth->SetInfo( pInfo );
+                }
+
+            }   // for( iPass...
         }
     }
     // Der Code
