@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceleratorinfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:39 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@ namespace framework
 {
 
 static pfunc_getCommandURLFromKeyCode   _pGetCommandURLFromKeyCode = NULL;
+static pfunc_getKeyCodeFromCommandURL   _pGetKeyCodeFromCommandURL = NULL;
 
 pfunc_getCommandURLFromKeyCode SAL_CALL SetCommandURLFromKeyCode( pfunc_getCommandURLFromKeyCode pNewFunc )
 {
@@ -74,13 +75,28 @@ pfunc_getCommandURLFromKeyCode SAL_CALL SetCommandURLFromKeyCode( pfunc_getComma
     return pOldFunc;
 }
 
-
 ::rtl::OUString SAL_CALL GetCommandURLFromKeyCode( const KeyCode& aKeyCode )
 {
     if ( _pGetCommandURLFromKeyCode )
         return _pGetCommandURLFromKeyCode( aKeyCode );
     else
         return rtl::OUString();
+}
+
+pfunc_getKeyCodeFromCommandURL SAL_CALL SetKeyCodeFromCommandURL( pfunc_getKeyCodeFromCommandURL pNewFunc )
+{
+    pfunc_getKeyCodeFromCommandURL  pOldFunc = _pGetKeyCodeFromCommandURL;
+    _pGetKeyCodeFromCommandURL = pNewFunc;
+
+    return pOldFunc;
+}
+
+KeyCode SAL_CALL GetKeyCodeFromCommandURL( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const rtl::OUString& aCommandURL )
+{
+    if ( _pGetKeyCodeFromCommandURL )
+        return _pGetKeyCodeFromCommandURL( rFrame, aCommandURL );
+    else
+        return KeyCode();
 }
 
 };
