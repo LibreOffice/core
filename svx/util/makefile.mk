@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-17 10:21:31 $
+#   last change: $Author: rt $ $Date: 2004-11-26 14:23:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -260,6 +260,8 @@ LIB1FILES       = \
             $(LIBPRE) $(SLB)$/customshapes.lib\
             $(LIBPRE) $(SLB)$/toolbars.lib \
             $(LIBPRE) $(SLB)$/init.lib
+
+#            $(SLO)$/docrecovery.obj
 
 .IF "$(BIG_SVX)"==""
 LIB2TARGET      =$(SLB)$/dl.lib
