@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-27 16:40:27 $
+ *  last change: $Author: pl $ $Date: 2002-05-28 14:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,12 +161,15 @@
 
 #include <unohelp.hxx>
 
+#include <map>
+
 namespace vcl
 {
 
 struct MenuLayoutData : public ControlLayoutData
 {
-    std::vector< USHORT >       m_aLineItemIds;
+    std::vector< USHORT >               m_aLineItemIds;
+    std::map< USHORT, Rectangle >       m_aVisibleItemBoundRects;
 };
 
 }
@@ -1624,6 +1627,14 @@ void Menu::SelectItem( USHORT nItemId )
         static_cast<PopupMenu*>(this)->SelectEntry( nItemId );
 }
 
+com::sun::star::uno::Reference< drafts::com::sun::star::accessibility::XAccessible > Menu::GetAccessible( BOOL bCreate ) const
+{
+    com::sun::star::uno::Reference< drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    if( pWindow )
+        xAcc = pWindow->GetAccessible( bCreate );
+    return xAcc;
+}
+
 Size Menu::ImplCalcSize( Window* pWin )
 {
     // | Checked| Image| Text| Accel/Popup|
@@ -1749,6 +1760,8 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
     Size aOutSz = pWin->GetOutputSizePixel();
     long nMaxY = aOutSz.Height() - nBorder;
     USHORT nCount = (USHORT)pItemList->Count();
+    if( bLayout )
+        mpLayoutData->m_aVisibleItemBoundRects.clear();
     for ( USHORT n = 0; n < nCount; n++ )
     {
         MenuItemData* pData = pItemList->GetDataFromPos( n );
@@ -1888,6 +1901,8 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 if ( pThisItemOnly && bHighlighted )
                     pWin->SetTextColor( rSettings.GetMenuTextColor() );
             }
+            if( bLayout )
+                mpLayoutData->m_aVisibleItemBoundRects[ pData->nId ] = Rectangle( aTopLeft, pData->aSz );
         }
 
         if ( !bIsMenuBar )
@@ -2119,6 +2134,21 @@ BOOL Menu::ConvertPoint( Point& rPoint, Window* pReferenceWindow ) const
         bRet = TRUE;
     }
     return bRet;
+}
+
+Rectangle Menu::GetBoundingRectangle( USHORT nItemId ) const
+{
+    Rectangle aRet;
+
+    if( ! mpLayoutData )
+        ImplFillLayoutData();
+    if( mpLayoutData )
+    {
+        std::map< USHORT, Rectangle >::const_iterator it = mpLayoutData->m_aVisibleItemBoundRects.find( nItemId );
+        if( it != mpLayoutData->m_aVisibleItemBoundRects.end() )
+            aRet = it->second;
+    }
+    return aRet;
 }
 
 // -----------
