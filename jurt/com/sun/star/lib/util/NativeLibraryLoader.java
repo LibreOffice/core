@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NativeLibraryLoader.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:16:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package com.sun.star.lib.util;
 
 import java.io.File;
@@ -117,7 +116,7 @@ public final class NativeLibraryLoader {
      */
     public static File getResource(ClassLoader loader, String name) {
         if (loader != null) {
-            File path = mapUrlToFile(loader.getResource(name));
+            File path = UrlToFileMapper.mapUrlToFile(loader.getResource(name));
             if (path != null) {
                 return path;
             }
@@ -132,7 +131,7 @@ public final class NativeLibraryLoader {
         if (loader instanceof URLClassLoader) {
             URL[] urls = ((URLClassLoader) loader).getURLs();
             for (int i = 0; i < urls.length; ++i) {
-                File path = mapUrlToFile(urls[i]);
+                File path = UrlToFileMapper.mapUrlToFile(urls[i]);
                 if (path != null) {
                     File dir = path.isDirectory() ? path : path.getParentFile();
                     if (dir != null) {
@@ -155,112 +154,4 @@ public final class NativeLibraryLoader {
     }
 
     private NativeLibraryLoader() {} // do not instantiate
-
-    // java.net.URLEncoder.encode(String, String) and java.net.URI are only
-    // available since Java 1.4:
-    private static Method urlEncoderEncode;
-    private static Constructor uriConstructor;
-    private static Constructor fileConstructor;
-    static {
-        try {
-            urlEncoderEncode = URLEncoder.class.getMethod(
-                "encode", new Class[] { String.class, String.class });
-            Class uriClass = Class.forName("java.net.URI");
-            uriConstructor = uriClass.getConstructor(
-                new Class[] { String.class });
-            fileConstructor = File.class.getConstructor(
-                new Class[] { uriClass });
-        } catch (ClassNotFoundException e) {
-        } catch (NoSuchMethodException e) {
-        }
-    }
-
-    private static File mapUrlToFile(URL url) {
-        if (url == null) {
-            return null;
-        } else if (fileConstructor == null) {
-            // If java.net.URI is not available, hope that the following works
-            // well:  First, check that the given URL has a certain form.
-            // Second, use the URLDecoder to decode the URL path (taking care
-            // not to change any plus signs to spaces), hoping that the used
-            // default encoding is the proper one for file URLs.  Third, create
-            // a File from the decoded path.
-            return url.getProtocol().equalsIgnoreCase("file")
-                && url.getAuthority() == null && url.getQuery() == null
-                && url.getRef() == null
-                ? new File(URLDecoder.decode(
-                               StringHelper.replace(url.getPath(), '+', "%2B")))
-                : null;
-        } else {
-            // If java.net.URI is avaliable, do
-            //   URI uri = new URI(encodedUrl);
-            //   try {
-            //       return new File(uri);
-            //   } catch (IllegalArgumentException e) {
-            //       return null;
-            //   }
-            // where encodedUrl is url.toString(), but since that may contain
-            // unsafe characters (e.g., space, " "), it is encoded, as otherwise
-            // the URI constructor might throw java.net.URISyntaxException (in
-            // Java 1.5, URL.toURI might be used instead).
-            String encodedUrl = encode(url.toString());
-            try {
-                Object uri = uriConstructor.newInstance(
-                    new Object[] { encodedUrl });
-                try {
-                    return (File) fileConstructor.newInstance(
-                        new Object[] { uri });
-                } catch (InvocationTargetException e) {
-                    if (e.getTargetException() instanceof
-                        IllegalArgumentException) {
-                        return null;
-                    } else {
-                        throw e;
-                    }
-                }
-            } catch (InstantiationException e) {
-                throw new RuntimeException("This cannot happen: " + e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("This cannot happen: " + e);
-            } catch (InvocationTargetException e) {
-                if (e.getTargetException() instanceof Error) {
-                    throw (Error) e.getTargetException();
-                } else if (e.getTargetException() instanceof RuntimeException) {
-                    throw (RuntimeException) e.getTargetException();
-                } else {
-                    throw new RuntimeException("This cannot happen: " + e);
-                }
-            }
-        }
-    }
-
-    private static String encode(String url) {
-        StringBuffer buf = new StringBuffer();
-        for (int i = 0; i < url.length(); ++i) {
-            char c = url.charAt(i);
-            // The RFC 2732 <uric> characters: !$&'()*+,-./:;=?@[]_~ plus digits
-            // and letters; additionally, do not encode % again.
-            if (c >= 'a' && c <= 'z' || c >= '?' && c <= '['
-                || c >= '$' && c <= ';' || c == '!' || c == '=' || c == ']'
-                || c == '_' || c == '~')
-            {
-                buf.append(c);
-            } else if (c == ' ') {
-                buf.append("%20");
-            } else {
-                String enc;
-                try {
-                    enc = (String) urlEncoderEncode.invoke(
-                        null,
-                        new Object[] { new Character(c).toString(), "UTF-8" });
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException("This cannot happen: " + e);
-                } catch (InvocationTargetException e) {
-                    throw new RuntimeException("This cannot happen: " + e);
-                }
-                buf.append(enc);
-            }
-        }
-        return buf.toString();
-    }
 }
