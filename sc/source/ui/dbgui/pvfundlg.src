@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-28 14:05:30 $
+ *  last change: $Author: kz $ $Date: 2001-06-01 19:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,16 +390,16 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     StringList [ polish ] =
     {
             < "Suma" ; Default ; > ;
-        < "Ilo?Ê" ; Default ; > ;
-        < "?rednia warto?Ê" ; Default ; > ;
+        < "IloúÊ" ; Default ; > ;
+        < "årednia wartoúÊ" ; Default ; > ;
         < "Max" ; Default ; > ;
         < "Min" ; Default ; > ;
         < "Iloczyn" ; Default ; > ;
-        < "Ilo?Ê (tylko liczby)" ; Default ; > ;
+        < "IloúÊ (tylko liczby)" ; Default ; > ;
         < "Odchylenie standardowe (PrÛbka)" ; Default ; > ;
         < "Odch.stdc (populacja)" ; Default ; > ;
         < "Wariancja (PrÛbka)" ; Default ; > ;
-        < "Wariancja (Zbiorowo?Ê generalna)" ; Default ; > ;
+        < "Wariancja (ZbiorowoúÊ generalna)" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -468,7 +468,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "∞≥ºˆ (º˝¿⁄∏∏)" ; Default ; > ;
         < "StDev («•∫ª)" ; Default ; > ;
         < "£”£Ù£¡£‚£˜£Œ (∏¡˝¥‹)" ; Default ; > ;
-        < "∫–ªÍ(«•∫ª)" ; Default ; > ;
+        < "∫–ªÍ («•∫ª)" ; Default ; > ;
         < "∫–ªÍ (∏¡˝¥‹)" ; Default ; > ;
     };
     StringList [ turkish ] =
@@ -618,7 +618,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ english_us ] = "Subtotals" ;
         Text[ chinese_simplified ] = "∑÷¿‡ª„◊‹";
         Text[ russian ] = "œÓÏÂÊÛÚÓ˜Ì˚Â ËÚÓ„Ë";
-        Text[ polish ] = "Sumy po?rednie";
+        Text[ polish ] = "Sumy poúrednie";
         Text[ japanese ] = "è¨åv";
         Text[ chinese_traditional ] = "§p≠p";
         Text[ arabic ] = "Subtotals";
