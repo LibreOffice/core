@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:16:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _SV_LINEINFO_HXX
 #include <lineinfo.hxx>
+#endif
+#ifndef _SV_WINDOW_H
+#include <window.h>
 #endif
 #include <unowrap.hxx>
 #include <salframe.hxx>
@@ -592,8 +595,8 @@ ImplPopupFloatWin::~ImplPopupFloatWin()
 
 Window* ImplPopupFloatWin::GetPreferredKeyInputWindow()
 {
-    if( mpClientWindow )
-        return mpClientWindow;
+    if( mpWindowImpl->mpClientWindow )
+        return mpWindowImpl->mpClientWindow;
     else
         return FloatingWindow::GetPreferredKeyInputWindow();
 }
@@ -605,10 +608,10 @@ void ImplPopupFloatWin::ImplSetBorder()
     //  we're using a special border for the grip
     // by setting those members the method SetOutputSizePixel() can
     //  be used to set the proper window size
-    mnTopBorder     = 1 + POPUP_DRAGHEIGHT+2;
-    mnBottomBorder  = 1;
-    mnLeftBorder    = 1;
-    mnRightBorder   = 1;
+    mpWindowImpl->mnTopBorder     = 1 + POPUP_DRAGHEIGHT+2;
+    mpWindowImpl->mnBottomBorder  = 1;
+    mpWindowImpl->mnLeftBorder    = 1;
+    mpWindowImpl->mnRightBorder   = 1;
 }
 
 void ImplPopupFloatWin::Resize()
@@ -900,7 +903,7 @@ void ImplDockingWindowWrapper::ImplInitData()
 {
     mpDockingWindow     = NULL;
 
-    //GetWindow()->mbDockWin  = TRUE;     // TODO: must be eliminated
+    //GetWindow()->mpWindowImpl->mbDockWin  = TRUE;     // TODO: must be eliminated
     mpFloatWin          = NULL;
     mbDockCanceled      = FALSE;
     mbFloatPrevented    = FALSE;
@@ -919,7 +922,7 @@ void DockingWindow::ImplInit( Window* pParent, WinBits nStyle )
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
 
-    mpParent                = pParent;
+    mpWindowImpl->mpParent                = pParent;
     mbDockable              = (nStyle & WB_DOCKABLE) != 0;
     mnFloatBits             = WB_BORDER | (nStyle & DOCKWIN_FLOATSTYLES);
     nStyle                 &= ~(DOCKWIN_FLOATSTYLES | WB_BORDER);
@@ -1213,7 +1216,7 @@ BOOL ImplDockingWindowWrapper::Close()
         return FALSE;
     ImplRemoveDel( &aDelData );
 
-    if ( mxWindowPeer.is() && IsCreatedWithToolkit() )
+    if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() )
         return FALSE;
 
     GetWindow()->Show( FALSE, SHOW_NOFOCUSCHANGE );
@@ -1348,11 +1351,11 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox )
 
     pWin->SetOutputSizePixel( GetWindow()->GetSizePixel() );
 
-    GetWindow()->mpBorderWindow  = NULL;
-    GetWindow()->mnLeftBorder    = 0;
-    GetWindow()->mnTopBorder     = 0;
-    GetWindow()->mnRightBorder   = 0;
-    GetWindow()->mnBottomBorder  = 0;
+    GetWindow()->mpWindowImpl->mpBorderWindow  = NULL;
+    GetWindow()->mpWindowImpl->mnLeftBorder    = 0;
+    GetWindow()->mpWindowImpl->mnTopBorder     = 0;
+    GetWindow()->mpWindowImpl->mnRightBorder   = 0;
+    GetWindow()->mpWindowImpl->mnBottomBorder  = 0;
 
     // position toolbox below dragrect
     GetWindow()->SetPosPixel( pWin->GetToolboxPosition() );
@@ -1363,9 +1366,9 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox )
     GetWindow()->SetParent( pWin );
 
     // correct border window pointers
-    GetWindow()->mpBorderWindow = pWin;
-    pWin->mpClientWindow = GetWindow();
-    GetWindow()->mpRealParent = pRealParent;
+    GetWindow()->mpWindowImpl->mpBorderWindow = pWin;
+    pWin->mpWindowImpl->mpClientWindow = GetWindow();
+    GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
 
     // set mpFloatWin not until all window positioning is done !!!
     // (SetPosPixel etc. check for valid mpFloatWin pointer)
@@ -1403,18 +1406,18 @@ IMPL_LINK( ImplDockingWindowWrapper, PopupModeEnd, void*, EMPTYARG )
 
     // before deleting change parent back, so we can delete the floating window alone
     Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT );
-    GetWindow()->mpBorderWindow = NULL;
+    GetWindow()->mpWindowImpl->mpBorderWindow = NULL;
     if ( mpOldBorderWin )
     {
         GetWindow()->SetParent( mpOldBorderWin );
         ((ImplBorderWindow*)mpOldBorderWin)->GetBorder(
-            GetWindow()->mnLeftBorder, GetWindow()->mnTopBorder,
-            GetWindow()->mnRightBorder, GetWindow()->mnBottomBorder );
+            GetWindow()->mpWindowImpl->mnLeftBorder, GetWindow()->mpWindowImpl->mnTopBorder,
+            GetWindow()->mpWindowImpl->mnRightBorder, GetWindow()->mpWindowImpl->mnBottomBorder );
         mpOldBorderWin->Resize();
     }
-    GetWindow()->mpBorderWindow = mpOldBorderWin;
+    GetWindow()->mpWindowImpl->mpBorderWindow = mpOldBorderWin;
     GetWindow()->SetParent( pRealParent );
-    GetWindow()->mpRealParent = pRealParent;
+    GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
 
     delete mpFloatWin;
     mpFloatWin = NULL;
@@ -1481,11 +1484,11 @@ void ImplDockingWindowWrapper::SetFloatingMode( BOOL bFloatMode )
                 mpFloatWin      = pWin;
 
 
-                GetWindow()->mpBorderWindow  = NULL;
-                GetWindow()->mnLeftBorder    = 0;
-                GetWindow()->mnTopBorder     = 0;
-                GetWindow()->mnRightBorder   = 0;
-                GetWindow()->mnBottomBorder  = 0;
+                GetWindow()->mpWindowImpl->mpBorderWindow  = NULL;
+                GetWindow()->mpWindowImpl->mnLeftBorder    = 0;
+                GetWindow()->mpWindowImpl->mnTopBorder     = 0;
+                GetWindow()->mpWindowImpl->mnRightBorder   = 0;
+                GetWindow()->mpWindowImpl->mnBottomBorder  = 0;
 
                 // Falls Parent zerstoert wird, muessen wir auch vom
                 // BorderWindow den Parent umsetzen
@@ -1494,9 +1497,9 @@ void ImplDockingWindowWrapper::SetFloatingMode( BOOL bFloatMode )
                 GetWindow()->SetParent( pWin );
                 pWin->SetPosPixel( Point() );
 
-                GetWindow()->mpBorderWindow = pWin;
-                pWin->mpClientWindow = mpDockingWindow;
-                GetWindow()->mpRealParent = pRealParent;
+                GetWindow()->mpWindowImpl->mpBorderWindow = pWin;
+                pWin->mpWindowImpl->mpClientWindow = mpDockingWindow;
+                GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
 
                 pWin->SetText( GetWindow()->GetText() );
                 pWin->SetOutputSizePixel( GetWindow()->GetSizePixel() );
@@ -1532,19 +1535,19 @@ void ImplDockingWindowWrapper::SetFloatingMode( BOOL bFloatMode )
                 maMinOutSize    = mpFloatWin->GetMinOutputSizePixel();
                 maMaxOutSize    = mpFloatWin->GetMaxOutputSizePixel();
 
-                Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT ); //mpRealParent;
-                GetWindow()->mpBorderWindow = NULL;
+                Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT ); //mpWindowImpl->mpRealParent;
+                GetWindow()->mpWindowImpl->mpBorderWindow = NULL;
                 if ( mpOldBorderWin )
                 {
                     GetWindow()->SetParent( mpOldBorderWin );
                     ((ImplBorderWindow*)mpOldBorderWin)->GetBorder(
-                        GetWindow()->mnLeftBorder, GetWindow()->mnTopBorder,
-                        GetWindow()->mnRightBorder, GetWindow()->mnBottomBorder );
+                        GetWindow()->mpWindowImpl->mnLeftBorder, GetWindow()->mpWindowImpl->mnTopBorder,
+                        GetWindow()->mpWindowImpl->mnRightBorder, GetWindow()->mpWindowImpl->mnBottomBorder );
                     mpOldBorderWin->Resize();
                 }
-                GetWindow()->mpBorderWindow = mpOldBorderWin;
+                GetWindow()->mpWindowImpl->mpBorderWindow = mpOldBorderWin;
                 GetWindow()->SetParent( pRealParent );
-                GetWindow()->mpRealParent = pRealParent;
+                GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
 
                 delete static_cast<ImplDockFloatWin2*>(mpFloatWin);
                 mpFloatWin = NULL;
