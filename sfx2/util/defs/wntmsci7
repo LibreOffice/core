@@ -8679,3 +8679,11 @@ _TI1?AVException@uno@star@sun@com@@
 ?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx24653111@@YAXABVSbxVariableRef@@PAX@Z
 ?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx2703124738@@YAXABVSbxVariableRef@@PAX@Z
 ?lcl_translateBasic2Uno@?%O:\SRC660\src\sfx2\source\doc\objmisc.cxx1087129248@@YAXABVSbxVariableRef@@PAX@Z
+?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx770031788@@YAXABVSbxVariableRef@@PAX@Z
+??0SfxRequest@@QAE@PAVSfxViewFrame@@G@Z
+?AllowRecording@SfxRequest@@QAEXE@Z
+?AllowsRecording@SfxRequest@@QBEEXZ
+?GetMacroRecorder@SfxRequest@@SA?AV?$Reference@VXDispatchRecorder@frame@star@sun@com@@@uno@star@sun@com@@PAVSfxViewFrame@@@Z
+?HasMacroRecorder@SfxRequest@@SAEPAVSfxViewFrame@@@Z
+??0?$Reference@VXDispatchRecorder@frame@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
+??0URL@util@star@sun@com@@QAE@ABU01234@@Z
