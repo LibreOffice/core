@@ -34,7 +34,7 @@ SDI0 SDI1 SDI2 SDI3 SDI4 SDI5 :
 dttt:
     echo $(TNR)------------
 
-$(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND)
+$(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND) $(SDI$(TNR)NAME).sdi
     @echo ------------------------------
     @echo Making: $@
     @+-$(RM) $@
