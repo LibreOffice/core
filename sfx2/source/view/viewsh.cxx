@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:21:46 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,11 @@
 #include "event.hxx"
 #include "appdata.hxx"
 #include "fcontnr.hxx"
+
+// #110897#
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -1840,7 +1845,10 @@ BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, Menu*& rpOut, ::com::s
     BOOL bModified = FALSE;
 
     // create container from menu
-    aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu( &rIn );
+    // #110897#
+    // aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu( &rIn );
+    aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
+        ::comphelper::getProcessServiceFactory(), &rIn );
 
     // get selection from controller
     aEvent.Selection = ::com::sun::star::uno::Reference < ::com::sun::star::view::XSelectionSupplier > ( GetController(), ::com::sun::star::uno::UNO_QUERY );
