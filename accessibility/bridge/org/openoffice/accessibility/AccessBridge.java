@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessBridge.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obr $ $Date: 2002-09-19 10:52:46 $
+ *  last change: $Author: obr $ $Date: 2002-09-24 17:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package org.openoffice.accessibility;
 
 import com.sun.star.awt.XTopWindow;
+import com.sun.star.awt.XTopWindowListener;
 import com.sun.star.awt.XWindow;
 
 import com.sun.star.lang.XInitialization;
@@ -84,6 +85,8 @@ import java.lang.reflect.InvocationTargetException;
 
 
 public class AccessBridge {
+    // Needed to attach the accessibility event monitor to all windows
+    static XTopWindowListener xTopWindowListener = null;
 
     //
     static public class _AccessBridge implements XAccessibleTopWindowMap, XInitialization {
@@ -135,6 +138,13 @@ public class AccessBridge {
                 if( ! frameMap.containsKey(handle) ) {
                     if( Build.DEBUG ) {
                         System.out.println("register native frame: " + handle);
+                    }
+
+                    // Needed to attach C++ accessibility event monitor. This is extremly important to avoid
+                    // deadlocks with frames that are not created in the VCL main thread, because they use a
+                    // synchronous SendMessage call with acquired SolarMutex !!!
+                    if( xTopWindowListener != null ) {
+                        xTopWindow.addTopWindowListener(xTopWindowListener);
                     }
 
                     // Add the window fake object as top window listener to receive activate/deactivate events
@@ -200,7 +210,7 @@ public class AccessBridge {
 
             catch(ClassNotFoundException e) {
                 // Forward this exception to UNO to indicate that the service will not work correctly.
-                throw new com.sun.star.uno.RuntimeException("Security exception caught: " + e.getMessage());
+                throw new com.sun.star.uno.RuntimeException("ClassNotFound exception caught: " + e.getMessage());
             }
 
             // Redirect output to log file on Windows for stdout / stderr are not visible
@@ -272,6 +282,13 @@ public class AccessBridge {
                 // The office sometimes registers frames more than once, so check here if already done
                 Integer handle = new Integer(AnyConverter.toInt(any));
                 if( ! frameMap.containsKey(handle) ) {
+                    // Needed to attach C++ accessibility event monitor. This is extremly important to avoid
+                    // deadlocks with frames that are not created in the VCL main thread, because they use a
+                    // synchronous SendMessage call with acquired SolarMutex !!!
+                    if( xTopWindowListener != null ) {
+                        xTopWindow.addTopWindowListener(xTopWindowListener);
+                    }
+
                     WindowFake w = new WindowFake(xAccessible, xTopWindow, false);
                     if( Build.DEBUG ) {
                         System.out.println("register native frame: " + handle);
@@ -334,6 +351,12 @@ public class AccessBridge {
                     } else {
                         System.err.println("InfoProvider does not implement XAccessibleInformationProvider.");
                     }
+
+                    xTopWindowListener = (XTopWindowListener) UnoRuntime.queryInterface(XTopWindowListener.class, instance);
+                    if( xTopWindowListener == null ) {
+                        System.err.println("InfoProvider does not implement XTopWindowListener.");
+                    }
+
                 } else {
                     System.err.println("InfoProvider service not found.");
                     throw new com.sun.star.uno.RuntimeException("RemoteAccessBridge service not found.\n");
