@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:51:28 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2744,6 +2744,7 @@ void PDFWriterImpl::drawShadow( SalLayout& rLayout, const String& rText, bool bT
     else
         rFont.SetColor( Color( COL_BLACK ) );
     rFont.SetShadow( FALSE );
+    rFont.SetOutline( FALSE );
     setFont( rFont );
     setTextLineColor( rFont.GetColor() );
     updateGraphicsState();
@@ -2786,8 +2787,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     long nGlyphFlags[nMaxGlyphs];
     int nGlyphs;
     int nIndex = 0;
-    Point aPos, aLastPos(0, 0), aCumulativePos(0,0);
-    bool bFirst = true;
+    Point aPos, aLastPos(0, 0), aCumulativePos(0,0), aGlyphPos;
+    bool bFirst = true, bWasYChange = false;
     int nMinCharPos = 0, nMaxCharPos = rText.Len()-1;
     double fXScale = 1.0;
     double fSkew = 0.0;
@@ -2887,16 +2888,28 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     // outline attribute ?
     if( m_aCurrentPDFState.m_aFont.IsOutline() || bABold )
     {
-        double fW = (double)m_aCurrentPDFState.m_aFont.GetHeight() / 30.0;
         // set correct text mode, set stroke width
         aLine.append( "2 Tr " ); // fill, then stroke
-        m_aPages.back().appendMappedLength( fW, aLine );
-        aLine.append ( " w\r\n" );
+
+        if( m_aCurrentPDFState.m_aFont.IsOutline() )
+        {
+            // unclear what to do in case of outline and artificial bold
+            // for the time being outline wins
+            aLine.append( "0.25 w \r\n" );
+        }
+        else
+        {
+            double fW = (double)m_aCurrentPDFState.m_aFont.GetHeight() / 30.0;
+            m_aPages.back().appendMappedLength( fW, aLine );
+            aLine.append ( " w\r\n" );
+        }
     }
 
     sal_Int32 nLastMappedFont = -1;
     while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, pAdvanceWidths, pCharPosAry )) )
     {
+        bWasYChange = (aGlyphPos.Y() != aPos.Y());
+        aGlyphPos = aPos;
         // back transformation to current coordinate system
         aPos = m_pReferenceDevice->PixelToLogic( aPos );
 
@@ -3012,6 +3025,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 {
                     m_aPages.back().appendPoint( aPos, aLine, false, &aCumulativePos );
                     bFirst = false;
+                    aLastPos = aPos;
                 }
                 else
                 {
@@ -3020,15 +3034,27 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                     m_aPages.back().appendMappedLength( aDiff.X(), aLine, false, &nDiffL );
                     aCumulativePos.X() += nDiffL;
                     aLine.append( ' ' );
-                    m_aPages.back().appendMappedLength( aDiff.Y(), aLine, true, &nDiffL );
-                    aCumulativePos.Y() += nDiffL;
+                    if( bWasYChange )
+                    {
+                        m_aPages.back().appendMappedLength( aDiff.Y(), aLine, true, &nDiffL );
+                        aCumulativePos.Y() += nDiffL;
+                    }
+                    else
+                    {
+                        aLine.append( '0' );
+                    }
+                    // back project last position to catch rounding errors
+                    Point aBackPos = lcl_convert( m_aMapMode,
+                                                  m_aGraphicsStack.front().m_aMapMode,
+                                                  getReferenceDevice(),
+                                                  aCumulativePos );
+                    // catch rounding error in back projection on Y axis;
+                    // else the back projection can produce a sinuous text baseline
+                    if( ! bWasYChange )
+                        aBackPos.Y() = aLastPos.Y();
+                    aLastPos = aBackPos;
                 }
                 aLine.append( " Td " );
-                // back project last position to catch rounding errors
-                aLastPos = lcl_convert( m_aMapMode,
-                                        m_aGraphicsStack.front().m_aMapMode,
-                                        getReferenceDevice(),
-                                        aCumulativePos );
             }
             else
             {
