@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numhead.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:29 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _DEBUG_HXX //autogen
 #include <tools/debug.hxx>
