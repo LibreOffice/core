@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberingType.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-31 12:20:50 $
+ *  last change: $Author: os $ $Date: 2002-09-06 12:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,96 @@ constants NumberingType
         native languages.
      */
     const short NATIVE_NUMBERING = 12;
+
+    //-------------------------------------------------------------------------
+    /** Numbering for fullwidth Arabic number
+     */
+    const short FULLWIDTH_ARABIC = 13;
+
+    //-------------------------------------------------------------------------
+    /** Bullet for Circle Number
+     */
+    const short CIRCLE_NUMBER = 14;
+
+    //-------------------------------------------------------------------------
+    /** Numbering for Chinese lower case number
+     */
+    const short NUMBER_LOWER_ZH = 15;
+
+    //-------------------------------------------------------------------------
+    /** Numbering for Chinese upper case number
+     */
+    const short NUMBER_UPPER_ZH = 16;
+
+    //-------------------------------------------------------------------------
+    /** Numbering for Traditional Chinese upper case number
+     */
+    const short NUMBER_UPPER_ZH_TW = 17;
+
+    //-------------------------------------------------------------------------
+    /** Bullet for Chinese Tian Gan
+     */
+    const short TIAN_GAN_ZH = 18;
+
+    //-------------------------------------------------------------------------
+    /** Bullet for Chinese Di Zi
+     */
+    const short DI_ZI_ZH = 19;
+
+    //-------------------------------------------------------------------------
+    /** Numbering for Japanese traditional number
+     */
+    const short NUMBER_TRADITIONAL_JA = 20;
+
+    //-------------------------------------------------------------------------
+    /** Bullet for Japanese AIU fullwidth
+     */
+    const short AIU_FULLWIDTH_JA = 21;
+
+    //-------------------------------------------------------------------------
+    /** Bullet for Japanese AIU halfwidth
+     */
+    const short AIU_HALFWIDTH_JA = 22;
+
+    //-------------------------------------------------------------------------
+    /** Bullet for Japanese IROHA fullwidth
+     */
+    const short IROHA_FULLWIDTH_JA = 23;
+
+    //-------------------------------------------------------------------------
+    /** Bullet for Japanese IROHA halfwidth
+     */
+    const short IROHA_HALFWIDTH_JA = 24;
+
+    //-------------------------------------------------------------------------
+    /** Numbering for Korean upper case number
+     */
+    const short NUMBER_UPPER_KO = 25;
+
+    //-------------------------------------------------------------------------
+    /** Numbering for Korean hangul number
+     */
+    const short NUMBER_HANGUL_KO = 26;
+
+    //-------------------------------------------------------------------------
+    /** Bullet for Korean Hangul Jamo
+     */
+    const short HANGUL_JAMO_KO = 27;
+
+    //-------------------------------------------------------------------------
+    /** Bullet for Korean Hangul Syllable
+     */
+    const short HANGUL_SYLLABLE_KO = 28;
+
+    //-------------------------------------------------------------------------
+    /** Bullet for Korean Hangul Circled Jamo
+     */
+    const short HANGUL_CIRCLED_JAMO_KO = 29;
+
+    //-------------------------------------------------------------------------
+    /** Bullet for Korean Hangul Circled Syllable
+     */
+    const short HANGUL_CIRCLED_SYLLABLE_KO = 30;
 
 };
 
