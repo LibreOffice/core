@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnControl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:56:37 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& rToolkit, 
             pPeer->setConnection(xCon);
             Reference<XPropertySet> xColumn(xProp->getPropertyValue(PROPERTY_COLUMN),UNO_QUERY);
             pPeer->setColumn(xColumn);
+            sal_Int32 nWidth = 50;
+            xProp->getPropertyValue(PROPERTY_EDIT_WIDTH) >>= nWidth;
+            pPeer->setEditWidth(nWidth);
         }
 
         if (aComponentInfos.bVisible)
