@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-15 09:12:57 $
+ *  last change: $Author: oj $ $Date: 2002-10-15 09:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,10 +644,12 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                                "FalscherTyp");
 
                     // In Standard-Notation (DezimalPUNKT ohne Tausender-Komma) umwandeln:
-                    for (xub_StrLen j = 0; j < aStr.Len(); j++)
+                    for (xub_StrLen j = 0; j < aStr.Len(); ++j)
                     {
                         if (cDecimalDelimiter && aStr.GetChar(j) == cDecimalDelimiter)
                             aStrConverted += '.';
+                        else if ( aStr.GetChar(j) == '.' ) // special case, if decimal seperator isn't '.' we have to vut the string after it
+                            break; // #99189# OJ
                         else if (cThousandDelimiter && aStr.GetChar(j) == cThousandDelimiter)
                         {
                             // weglassen
