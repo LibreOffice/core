@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-06 08:31:17 $
+ *  last change: $Author: jp $ $Date: 2001-08-14 16:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,6 +501,9 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, USHORT) const
     // UNICODE: rStrm >> aStyle;
     rStrm.ReadByteString(aStyle);
 
+    // Task 91008/90471: set the "correct" textencoding
+    eFontTextEncoding = GetSOLoadTextEncoding( eFontTextEncoding,
+                                                   rStrm.GetVersion() );
     // irgendwann wandelte sich der StarBats vom ANSI- zum SYMBOL-Font
     if ( RTL_TEXTENCODING_SYMBOL != eFontTextEncoding && aName.EqualsAscii("StarBats") )
         eFontTextEncoding = RTL_TEXTENCODING_SYMBOL;
