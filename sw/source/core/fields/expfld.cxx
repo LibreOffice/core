@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:17:12 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #endif
 #ifndef _FTNFRM_HXX
 #include <ftnfrm.hxx>
+#endif
+#ifndef _ROWFRM_HXX
+#include <rowfrm.hxx>
 #endif
 #ifndef _EXPFLD_HXX
 #include <expfld.hxx>
@@ -322,12 +325,11 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
                 const SwTabFrm *pTab;
                 if( 0 != ( pCntFrm = pPgFrm->FindFirstBodyCntnt()) &&
                     0 != (pTab = pCntFrm->FindTabFrm()) && pTab->IsFollow() &&
-                       pTab->GetTable()->IsHeadlineRepeat() &&
-                       ((SwLayoutFrm*)pTab->Lower())->IsAnLower( pCntFrm ))
+                    pTab->GetTable()->GetRowsToRepeat() > 0 &&
+                    pTab->IsInHeadline( *pCntFrm ) )
                 {
                     // take the next line
-                    const SwLayoutFrm* pRow = (SwLayoutFrm*)pTab->Lower();
-                    pRow = (SwLayoutFrm*)pRow->GetNext();
+                    const SwLayoutFrm* pRow = pTab->GetFirstNonHeadlineRow();
                     pCntFrm = pRow->ContainsCntnt();
                 }
             }
