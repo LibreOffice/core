@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContextImpl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cdt $ $Date: 2000-10-16 15:36:35 $
+ *  last change: $Author: cdt $ $Date: 2000-10-24 15:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ import sun.tools.jar.JarVerifierStream;
 
 final class ClassContextImpl extends ClassLoader implements ClassContext {
     private static int instances;
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private URL codeBase;
     private ProtectionDomain protectionDomain;
@@ -244,7 +244,7 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
                                                  + " " + codeBase);
             }
         }
-        }
+    }
         if (xClass != null && resolve)
             resolveClass(xClass);
 
