@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenernotification.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:32:08 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    bool OListenerContainer::notify( const EventObject& _rEvent ) SAL_THROW(())
+    bool OListenerContainer::notify( const EventObject& _rEvent ) SAL_THROW(( Exception ))
     {
         ::cppu::OInterfaceIteratorHelper aIter( m_aListeners );
         bool bCancelled = false;
@@ -143,10 +143,6 @@ namespace comphelper
                 // listener as well.
                 if ( e.Context == xListener || !e.Context.is() )
                     aIter.remove();
-            }
-            catch( const Exception& )
-            {
-                OSL_ENSURE( sal_False, "OListenerContainer::notify: caught an exception other than a DisposedException!" );
             }
         }
 
