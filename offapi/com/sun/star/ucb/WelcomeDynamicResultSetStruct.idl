@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WelcomeDynamicResultSetStruct.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com { module sun { module star { module ucb {
     @see ListActionType
 */
 
-struct WelcomeDynamicResultSetStruct
+published struct WelcomeDynamicResultSetStruct
 {
     //-------------------------------------------------------------------------
     /** The static resultset containing the previous version of resultset data.
