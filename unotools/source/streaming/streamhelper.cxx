@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 11:17:08 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,10 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(staruno::Sequence< sal_Int8 >& 
     ::osl::MutexGuard aGuard( m_aMutex );
     aData.realloc(nBytesToRead);
 
-    sal_uInt32 nRead;
+    sal_Size nRead;
     ErrCode nError = m_xLockBytes->ReadAt(m_nActPos, (void*)aData.getArray(), nBytesToRead, &nRead);
-    m_nActPos += nRead;
+    // FIXME  nRead could be truncated on 64-bit arches
+    m_nActPos += (sal_uInt32)nRead;
 
     if (nError != ERRCODE_NONE)
         throw stario::IOException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
@@ -193,9 +194,10 @@ void SAL_CALL OOutputStreamHelper::writeBytes(const staruno::Sequence< sal_Int8 
     if (!m_xLockBytes.Is())
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
 
-    ULONG nWritten;
+    sal_Size nWritten;
     ErrCode nError = m_xLockBytes->WriteAt( m_nActPos, aData.getConstArray(), aData.getLength(), &nWritten );
-    m_nActPos += nWritten;
+    // FIXME  nWritten could be truncated on 64-bit arches
+    m_nActPos += (sal_uInt32)nWritten;
 
     if (nError != ERRCODE_NONE ||
         nWritten != aData.getLength())
