@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-30 10:47:03 $
+ *  last change: $Author: ssa $ $Date: 2001-10-30 17:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,6 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     DWORD       nSysStyle = 0;
     DWORD       nExSysStyle = 0;
     BOOL        bSubFrame = FALSE;
-    BOOL        bSaveBits = FALSE;
 
     // determine creation data
     if ( nSalFrameStyle & SAL_FRAME_STYLE_CHILD )
@@ -238,9 +237,7 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     {
         nExSysStyle |= WS_EX_TOOLWINDOW;
         pFrame->maFrameData.mbFloatWin = TRUE;
-        bSaveBits = TRUE;
     }
-
     // init frame data
     pFrame->maFrameData.mnStyle = nSalFrameStyle;
 
@@ -754,12 +751,6 @@ SalFrame::~SalFrame()
 
 // -----------------------------------------------------------------------
 
-const SalFrame::Geometry& SalFrame::GetGeometry()
-{
-    return maGeometry;
-}
-
-// -----------------------------------------------------------------------
 SalGraphics* SalFrame::GetGraphics()
 {
     if ( maFrameData.mbGraphics )
@@ -1171,7 +1162,7 @@ void SalFrame::GetWorkArea( Rectangle &rRect )
 
 void SalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
-    Geometry rGeo = GetGeometry();
+    const Geometry& rGeo = GetGeometry();
     rWidth  = rGeo.nWidth;
     rHeight = rGeo.nHeight;
 }
@@ -3217,8 +3208,11 @@ static void ImplHandleMoveMsg( HWND hWnd )
 
             // Status merken
             ImplSaveFrameState( pFrame );
+            /*
             // Call Hdl
-            ImplCallMoveHdl( hWnd );
+            //#93851 if we call this handler, VCL floating windows are not updated correctly
+            //ImplCallMoveHdl( hWnd );
+            */
         }
 
         ImplSalYieldMutexRelease();
