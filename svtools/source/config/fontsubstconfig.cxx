@@ -1,0 +1,267 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fontsubstconfig.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:46:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#pragma hdrstop
+
+#include "fontsubstconfig.hxx"
+
+#ifndef _SVARRAY_HXX //autogen
+#include "svarray.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
+#include <vcl/outdev.hxx>
+
+using namespace utl;
+using namespace rtl;
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
+
+#define C2U(cChar) OUString::createFromAscii(cChar)
+
+const sal_Char cReplacement[] = "Replacement";
+const sal_Char cFontPairs[] = "FontPairs";
+
+const sal_Char cReplaceFont[]   = "ReplaceFont";
+const sal_Char cSubstituteFont[]= "SubstituteFont";
+const sal_Char cOnScreenOnly[]  = "OnScreenOnly";
+const sal_Char cAlways[]        = "Always";
+
+//-----------------------------------------------------------------------------
+typedef SubstitutionStruct* SubstitutionStructPtr;
+SV_DECL_PTRARR_DEL(SubstitutionStructArr, SubstitutionStructPtr, 2, 2);
+SV_IMPL_PTRARR(SubstitutionStructArr, SubstitutionStructPtr);
+//-----------------------------------------------------------------------------
+struct SvtFontSubstConfig_Impl
+{
+    SubstitutionStructArr   aSubstArr;
+};
+/* -----------------------------18.01.01 12:04--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SvtFontSubstConfig::SvtFontSubstConfig() :
+    ConfigItem(C2U("Office.Common/Font/Substitution")),
+    bIsEnabled(sal_False),
+    pImpl(new SvtFontSubstConfig_Impl)
+{
+    Sequence<OUString> aNames(1);
+    aNames.getArray()[0] = C2U(cReplacement);
+    Sequence<Any> aValues = GetProperties(aNames);
+    DBG_ASSERT(aValues.getConstArray()[0].hasValue(), "no value available");
+    if(aValues.getConstArray()[0].hasValue())
+        bIsEnabled = *(sal_Bool*)aValues.getConstArray()[0].getValue();
+
+    OUString sPropPrefix(C2U(cFontPairs));
+    Sequence<OUString> aNodeNames = GetNodeNames(sPropPrefix);
+    const OUString* pNodeNames = aNodeNames.getConstArray();
+    Sequence<OUString> aPropNames(aNodeNames.getLength() * 4);
+    OUString* pNames = aPropNames.getArray();
+    sal_Int32 nName = 0;
+    sPropPrefix += C2U("/");
+    sal_Int32 nNode;
+    for(nNode = 0; nNode < aNodeNames.getLength(); nNode++)
+    {
+        OUString sStart(sPropPrefix);
+        sStart += pNodeNames[nNode];
+        sStart += C2U("/");
+        pNames[nName] = sStart;     pNames[nName++] += C2U(cReplaceFont);
+        pNames[nName] = sStart;     pNames[nName++] += C2U(cSubstituteFont);
+        pNames[nName] = sStart;     pNames[nName++] += C2U(cAlways);
+        pNames[nName] = sStart;     pNames[nName++] += C2U(cOnScreenOnly);
+    }
+    Sequence<Any> aNodeValues = GetProperties(aPropNames);
+    const Any* pNodeValues = aNodeValues.getConstArray();
+    nName = 0;
+    for(nNode = 0; nNode < aNodeNames.getLength(); nNode++)
+    {
+        SubstitutionStructPtr pInsert = new SubstitutionStruct;
+        pNodeValues[nName++] >>= pInsert->sFont;
+        pNodeValues[nName++] >>= pInsert->sReplaceBy;
+        pInsert->bReplaceAlways = *(sal_Bool*)pNodeValues[nName++].getValue();
+        pInsert->bReplaceOnScreenOnly = *(sal_Bool*)pNodeValues[nName++].getValue();
+        pImpl->aSubstArr.Insert(pInsert, pImpl->aSubstArr.Count());
+    }
+}
+/* -----------------------------18.01.01 12:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SvtFontSubstConfig::~SvtFontSubstConfig()
+{
+    delete pImpl;
+}
+/*-- 18.01.01 12:08:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvtFontSubstConfig::Commit()
+{
+    Sequence<OUString> aNames(1);
+    aNames.getArray()[0] = C2U(cReplacement);
+    Sequence<Any> aValues(1);
+    aValues.getArray()[0].setValue(&bIsEnabled, ::getBooleanCppuType());
+    PutProperties(aNames, aValues);
+
+    OUString sNode(C2U(cFontPairs));
+    if(!pImpl->aSubstArr.Count())
+        ClearNodeSet(sNode);
+    else
+    {
+        Sequence<PropertyValue> aSetValues(4 * pImpl->aSubstArr.Count());
+        PropertyValue* pSetValues = aSetValues.getArray();
+        sal_Int32 nSetValue = 0;
+
+        const OUString sReplaceFont(C2U(cReplaceFont));
+        const OUString sSubstituteFont(C2U(cSubstituteFont));
+        const OUString sAlways(C2U(cAlways));
+        const OUString sOnScreenOnly(C2U(cOnScreenOnly));
+
+        const uno::Type& rBoolType = ::getBooleanCppuType();
+        for(sal_uInt16 i = 0; i < pImpl->aSubstArr.Count(); i++)
+        {
+            OUString sPrefix(sNode);
+            sPrefix += C2U("/_");
+            sPrefix += OUString::valueOf((sal_Int32)i);
+            sPrefix += C2U("/");
+
+            SubstitutionStructPtr pSubst = pImpl->aSubstArr[i];
+            pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sReplaceFont;
+            pSetValues[nSetValue++].Value <<= pSubst->sFont;
+            pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sSubstituteFont;
+            pSetValues[nSetValue++].Value <<= pSubst->sReplaceBy;
+            pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sAlways;
+            pSetValues[nSetValue++].Value.setValue(&pSubst->bReplaceAlways, rBoolType);
+            pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sOnScreenOnly;
+            pSetValues[nSetValue++].Value.setValue(&pSubst->bReplaceOnScreenOnly, rBoolType);
+        }
+        ReplaceSetProperties(sNode, aSetValues);
+    }
+}
+/*-- 18.01.01 12:08:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int32 SvtFontSubstConfig::SubstitutionCount() const
+{
+    return pImpl->aSubstArr.Count();
+}
+/*-- 18.01.01 12:08:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvtFontSubstConfig::ClearSubstitutions()
+{
+    pImpl->aSubstArr.DeleteAndDestroy(0, pImpl->aSubstArr.Count());
+}
+/*-- 18.01.01 12:08:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+const SubstitutionStruct* SvtFontSubstConfig::GetSubstitution(sal_Int32 nPos)
+{
+    DBG_ASSERT(nPos >= 0 && nPos < pImpl->aSubstArr.Count(), "illegal array index");
+    if(nPos >= 0 && nPos < pImpl->aSubstArr.Count())
+        return pImpl->aSubstArr[(sal_uInt16)nPos];
+    return 0;
+}
+/*-- 18.01.01 12:08:01---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvtFontSubstConfig::AddSubstitution(const SubstitutionStruct& rToAdd)
+{
+    SubstitutionStructPtr pInsert = new SubstitutionStruct(rToAdd);
+    pImpl->aSubstArr.Insert(pInsert, pImpl->aSubstArr.Count());
+}
+
+void SvtFontSubstConfig::Apply()
+{
+    OutputDevice::BeginFontSubstitution();
+
+    // Alte Substitution entfernen
+    sal_uInt16 nOldCount = OutputDevice::GetFontSubstituteCount();
+
+    while (nOldCount)
+        OutputDevice::RemoveFontSubstitute(--nOldCount);
+
+    // Neue Substitution einlesen
+    sal_Int32 nCount = IsEnabled() ? SubstitutionCount() : 0;
+
+    for (sal_Int32  i = 0; i < nCount; i++)
+    {
+        sal_uInt16 nFlags = 0;
+        const SubstitutionStruct* pSubs = GetSubstitution(i);
+        if(pSubs->bReplaceAlways)
+            nFlags |= FONT_SUBSTITUTE_ALWAYS;
+        if(pSubs->bReplaceOnScreenOnly)
+            nFlags |= FONT_SUBSTITUTE_SCREENONLY;
+        OutputDevice::AddFontSubstitute( String(pSubs->sFont), String(pSubs->sReplaceBy), nFlags );
+    }
+
+    OutputDevice::EndFontSubstitution();
+}
