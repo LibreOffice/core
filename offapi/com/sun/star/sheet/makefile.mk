@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: nn $ $Date: 2001-02-19 19:52:39 $
+#   last change: $Author: sab $ $Date: 2001-07-06 11:48:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -229,6 +229,7 @@ IDLFILES=\
     XSheetAuditing.idl\
     XSheetCellCursor.idl\
     XSheetCellRange.idl\
+    XSheetCellRangeContainer.idl\
     XSheetCellRanges.idl\
     XSheetCondition.idl\
     XSheetConditionalEntries.idl\
@@ -248,6 +249,7 @@ IDLFILES=\
     XSubTotalCalculatable.idl\
     XSubTotalDescriptor.idl\
     XSubTotalField.idl\
+    XUniqueCellFormatRangesSupplier.idl\
     XUsedAreaCursor.idl\
     XViewFreezable.idl\
     XViewPane.idl\
