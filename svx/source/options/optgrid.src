@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2002-02-01 11:14:10 $
+ *  last change: $Author: kz $ $Date: 2002-05-02 22:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "K�lavuz �izgiler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cuadr�cula";
+        Text[ thai ] = "เส้นตาราง";
     };
     CheckBox CBX_USE_GRIDSNAP
     {
@@ -109,8 +110,8 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH ] = "Snap to ~Grid" ;
         Text [ NORWEGIAN ] = "Snap to ~Grid" ;
         Text [ DANISH ] = "Fastg�r til gitter" ;
-        Text [ ENGLISH_US ] = "Snap to ~grid" ;
-        Text [ SPANISH ] = "~Usar cuadr�cula de captura" ;
+        Text [ ENGLISH_US ] = "Sn~ap to grid" ;
+        Text [ SPANISH ] = "Usar cuadr�cula de captura" ;
         Text [ FINNISH ] = "~Kohdista ruudukkoon" ;
         Text [ FRENCH ] = "Utiliser la ~grille de capture" ;
         Text [ ITALIAN ] = "Applica ~griglia" ;
@@ -129,6 +130,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "Kavrama k�lavuz �izgileri kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Usar cuadr�cula de captura";
+        Text[ thai ] = "จัด~ชิดเส้นตาราง";
     };
     CheckBox CBX_GRID_VISIBLE
     {
@@ -141,12 +143,12 @@ TabPage RID_SVXPAGE_GRID
         Text [ DANISH ] = "Synligt gitter" ;
         Text [ ENGLISH_US ] = "V~isible grid" ;
         Text [ SPANISH ] = "~Cuadr�cula visible" ;
-        Text [ FINNISH ] = "~N?kyv? ruudukko" ;
-        Text [ FRENCH ] = "Grille ~visible" ;
-        Text [ ITALIAN ] = "Griglia ~visibile" ;
+        Text [ FINNISH ] = "~N�kyv� ruudukko" ;
+        Text [ FRENCH ] = "Grille visible" ;
+        Text [ ITALIAN ] = "Griglia visibile" ;
         Text [ DUTCH ] = "~Raster zichtbaar" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Visible grid" ;
-        Text [ SWEDISH ] = "Synligt ~raster" ;
+        Text [ SWEDISH ] = "Synligt r~aster" ;
         Text [ PORTUGUESE ] = "~Quadr�cula vis�vel" ;
         Text[ chinese_simplified ] = "显示网格(~I)";
         Text[ russian ] = "�������� �����";
@@ -159,6 +161,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "K�lavuz �izgileri g�ster";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cuadr�cula visible";
+        Text[ thai ] = "เส้นตารางที่ม~องเห็น";
     };
     FixedLine FL_RESOLUTION
     {
@@ -188,6 +191,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "��z�n�rl�k";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "R~esoluci�n";
+        Text[ thai ] = "Resolution";
     };
     FixedText FT_DRAW_X
     {
@@ -216,6 +220,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ finnish ] = "~Vaakataso";
         Text[ catalan ] = "Eje ~X";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "แนวน~อน";
     };
     FixedText FT_DRAW_Y
     {
@@ -228,9 +233,9 @@ TabPage RID_SVXPAGE_GRID
         Text[ russian ] = "�����������";
         Text[ greek ] = "�������~���";
         Text[ dutch ] = "~Verticaal";
-        Text[ french ] = "~Vertical";
+        Text[ french ] = "Vertical";
         Text[ spanish ] = "~Vertical";
-        Text[ italian ] = "~Verticale";
+        Text[ italian ] = "Verticale";
         Text[ danish ] = "Y-akse";
         Text[ swedish ] = "~Vertikalt";
         Text[ polish ] = "~Pionowo";
@@ -244,6 +249,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ finnish ] = "~Pystytaso";
         Text[ catalan ] = "Eje ~Y";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "แนว~ตั้ง";
     };
     MetricField MTR_FLD_DRAW_X
     {
@@ -307,6 +313,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "B�l�mleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "S~ubdivisi�n";
+        Text[ thai ] = "Subdivision";
     };
     FixedText FT_DIVISION_X
     {
@@ -335,6 +342,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ finnish ] = "~Vaakataso";
         Text[ catalan ] = "Eje ~X";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "Horizont~al";
     };
     FixedText FT_DIVISION_Y
     {
@@ -363,6 +371,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ finnish ] = "~Pystytaso";
         Text[ catalan ] = "Eje ~Y";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "V~ertical";
     };
     NumericField NUM_FLD_DIVISION_X
     {
@@ -405,6 +414,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "Nokta";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Puntos";
+        Text[ thai ] = "points";
     };
     NumericField NUM_FLD_DIVISION_Y
     {
@@ -454,6 +464,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "Eksenleri e�itle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Sincronizar ejes";
+        Text[ thai ] = "แก~นที่ตรงกัน";
     };
     FixedLine GRP_SNAP
     {
@@ -484,6 +495,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "Kavrama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Capturar";
+        Text[ thai ] = "จัดชิด";
     };
 
     CheckBox CBX_SNAP_HELPLINES
@@ -516,6 +528,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "Kavrama �izgisinde";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "En ~l�neas de captura";
+        Text[ thai ] = "จัดชิดบรรทัด";
     };
     CheckBox CBX_SNAP_BORDER
     {
@@ -546,6 +559,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Sivun reunuksiin";
         Text[ catalan ] = "En los ~m�rgenes de p�gina";
+        Text[ thai ] = "ไปยังระยะขอบ~หน้า";
     };
     CheckBox CBX_SNAP_FRAME
     {
@@ -558,7 +572,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ NORWEGIAN ] = "Am Objektrahmen" ;
         Text [ DANISH ] = "P� objektrammen" ;
         Text [ ENGLISH_US ] = "To object ~frame" ;
-        Text [ SPANISH ] = "Al m~arco del objeto" ;
+        Text [ SPANISH ] = "Al marco del objeto" ;
         Text [ FINNISH ] = "Objektin ~kehykseen" ;
         Text [ FRENCH ] = "Au cadre de l'objet" ;
         Text [ ITALIAN ] = "Alla cornice dell'oggetto" ;
@@ -577,6 +591,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "Nesne �er�evesinde";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Al m~arco del objeto";
+        Text[ thai ] = "ไปยัง~กรอบวัตถุ";
     };
     CheckBox CBX_SNAP_POINTS
     {
@@ -608,6 +623,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "Nesne noktalar�nda";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "En los ~puntos del objeto";
+        Text[ thai ] = "ไปยังจุดวัต~ถุ";
     };
     FixedText FT_SNAP_AREA
     {
@@ -638,6 +654,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "Kavrama aral���";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "�rea de c~aptura";
+        Text[ thai ] = "~จัดชิดช่วง";
     };
     MetricField MTR_FLD_SNAP_AREA
     {
@@ -665,7 +682,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText [ ITALIAN ] = "Pixel" ;
         CustomUnitText [ DUTCH ] = "Pixels" ;
         CustomUnitText [ PORTUGUESE_BRAZILIAN ] = "Pixel" ;
-        CustomUnitText [ SWEDISH ] = "pixel" ;
+        CustomUnitText [ SWEDISH ] = " pixel" ;
         CustomUnitText [ PORTUGUESE ] = "Pixel" ;
         CustomUnitText[ chinese_simplified ] = "像素";
         CustomUnitText[ russian ] = "�������";
@@ -678,6 +695,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ turkish ] = "Piksel";
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ catalan ] = "P�xel";
+        CustomUnitText[ thai ] = " พิกเซล";
     };
     FixedLine FL_SEPARATOR
     {
@@ -715,6 +733,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "Kavrama y�n�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Encajar";
+        Text[ thai ] = "จัดชิดตำแหน่ง";
     };
     CheckBox CBX_ORTHO
     {
@@ -746,6 +765,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "Olu�turma ve ta��ma s�ras�nda";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Al crear ~y mover";
+        Text[ thai ] = "เ~มื่อสร้างหรือย้ายวัตถุ";
     };
     CheckBox CBX_BIGORTHO
     {
@@ -777,6 +797,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "Daha uzun kenar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aristas e~xtendidas";
+        Text[ thai ] = "~ขยายขอบ";
     };
     CheckBox CBX_ROTATE
     {
@@ -792,7 +813,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH_US ] = "When ro~tating" ;
         Text [ SPANISH ] = "Al g~irar" ;
         Text [ FINNISH ] = "Kier~rett�ess�" ;
-        Text [ FRENCH ] = "Lors de la ~rotation" ;
+        Text [ FRENCH ] = "Lors de la rotation" ;
         Text [ ITALIAN ] = "Nella rotazione" ;
         Text [ DUTCH ] = "T~ijdens draaien" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Beim Drehen" ;
@@ -809,6 +830,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "D�nd�r�rken";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Al g~irar";
+        Text[ thai ] = "เมื่อทำการห~มุน";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -833,7 +855,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText [ spanish ] = "grados" ;
         CustomUnitText [ french ] = " degr�s" ;
         CustomUnitText [ dutch ] = "graden" ;
-        CustomUnitText [ swedish ] = "grader" ;
+        CustomUnitText [ swedish ] = " grader" ;
         CustomUnitText [ danish ] = "grader" ;
         CustomUnitText [ portuguese ] = "Graus" ;
         CustomUnitText [ portuguese_brazilian ] = "Grad" ;
@@ -849,6 +871,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ finnish ] = " asteet";
         CustomUnitText[ catalan ] = "grados";
+        CustomUnitText[ thai ] = " องศา";
     };
     FixedText FT_BEZ_ANGLE
     {
@@ -860,8 +883,8 @@ TabPage RID_SVXPAGE_GRID
         Text [ dutch ] = "P~untreductie" ;
         Text [ english_us ] = "Point reducti~on" ;
         Text [ italian ] = "Riduzione punti" ;
-        Text [ spanish ] = "R~educci�n de puntos" ;
-        Text [ french ] = "R�~duction de point" ;
+        Text [ spanish ] = "Reducci�n de puntos" ;
+        Text [ french ] = "R�duction de point" ;
         Text [ swedish ] = "~Punktreduktion" ;
         Text [ danish ] = "Punktreduktion" ;
         Text [ portuguese ] = "Redu��o de pontos" ;
@@ -878,6 +901,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Pisteen pie~nennys";
         Text[ catalan ] = "R~educci�n de puntos";
+        Text[ thai ] = "ล~ดจุด";
     };
     MetricField MTR_FLD_BEZ_ANGLE
     {
@@ -901,7 +925,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText [ spanish ] = "grados" ;
         CustomUnitText [ french ] = " degr�s" ;
         CustomUnitText [ dutch ] = "graden" ;
-        CustomUnitText [ swedish ] = "grader" ;
+        CustomUnitText [ swedish ] = " grader" ;
         CustomUnitText [ danish ] = "grader" ;
         CustomUnitText [ portuguese ] = "Graus" ;
         CustomUnitText [ portuguese_brazilian ] = "Grad" ;
@@ -917,6 +941,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ finnish ] = " asteet";
         CustomUnitText[ catalan ] = "grados";
+        CustomUnitText[ thai ] = " องศา";
     };
 };
 
