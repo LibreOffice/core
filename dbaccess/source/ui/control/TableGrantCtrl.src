@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:14:05 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ String STR_TABLE_PRIV_NAME
     Text[ hebrew ] = "Tabellename";
     Text[ hindi ] = "सारणी नाम";
     Text[ slovak ] = "Názov tabuľky";
+    Text[ hungarian ] = "Tábla neve";
+    Text[ slovenian ] = "Ime tabele";
 };
 
 String STR_TABLE_PRIV_INSERT
@@ -123,6 +125,8 @@ String STR_TABLE_PRIV_INSERT
     Text[ hebrew ] = "Daten einfügen";
     Text[ hindi ] = "ड़ॉटा जोड़ो";
     Text[ slovak ] = "Vložiť dáta";
+    Text[ hungarian ] = "Adat beszúrása";
+    Text[ slovenian ] = "Vstavljanje podatkov";
 };
 
 String STR_TABLE_PRIV_DELETE
@@ -154,6 +158,8 @@ String STR_TABLE_PRIV_DELETE
     Text[ hebrew ] = "Daten löschen";
     Text[ hindi ] = "ड़ॉटा मिटाओ";
     Text[ slovak ] = "Odstrániť dáta";
+    Text[ hungarian ] = "Adatok törlése";
+    Text[ slovenian ] = "Brisanje podatkov";
 };
 
 String STR_TABLE_PRIV_UPDATE
@@ -185,6 +191,8 @@ String STR_TABLE_PRIV_UPDATE
     Text[ hebrew ] = "Daten ändern";
     Text[ hindi ] = "ड़ॉटा सुधारो";
     Text[ slovak ] = "Upraviť dáta";
+    Text[ hungarian ] = "Adatok módosítása";
+    Text[ slovenian ] = "Spreminjanje podatkov";
 };
 
 String STR_TABLE_PRIV_ALTER
@@ -216,6 +224,8 @@ String STR_TABLE_PRIV_ALTER
     Text[ hebrew ] = "Struktur ändern";
     Text[ hindi ] = "बनावट बदलना";
     Text[ slovak ] = "Zmeniť štruktúru";
+    Text[ hungarian ] = "Struktúra módosítása";
+    Text[ slovenian ] = "Spreminjanje strukture";
 };
 String STR_TABLE_PRIV_SELECT
 {
@@ -246,6 +256,8 @@ String STR_TABLE_PRIV_SELECT
     Text[ hebrew ] = "Daten lesen";
     Text[ hindi ] = "ड़ॉटा पढो";
     Text[ slovak ] = "Čítať údaje";
+    Text[ hungarian ] = "Adatok olvasása";
+    Text[ slovenian ] = "Branje podatkov";
 };
 
 String STR_TABLE_PRIV_REFERENCE
@@ -277,6 +289,8 @@ String STR_TABLE_PRIV_REFERENCE
     Text[ hebrew ] = "References ändern";
     Text[ hindi ] = "रेफरेन्स सुधारो";
     Text[ slovak ] = "Upraviť odkazy";
+    Text[ hungarian ] = "Hivatkozások módosítása";
+    Text[ slovenian ] = "Spreminjanje sklicev";
 };
 
 String STR_TABLE_PRIV_DROP
@@ -308,7 +322,10 @@ String STR_TABLE_PRIV_DROP
     Text[ hebrew ] = "Struktur löschen";
     Text[ hindi ] = "बनावट गिराओ";
     Text[ slovak ] = "Stránkovanie";
+    Text[ hungarian ] = "Struktúra törlése";
+    Text[ slovenian ] = "Ovrži strukturo";
 };
+
 
 
 
