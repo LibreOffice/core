@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaldx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-07 14:49:41 $
+ *  last change: $Author: jl $ $Date: 2004-05-14 13:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,15 @@
  *
  ************************************************************************/
 #include <stdio.h>
-#include <strings.h>
+#include <stdlib.h>
+#include <string.h>
 #include "osl/thread.h"
 #include "sal/types.h"
 #include "rtl/ustring.hxx"
 #include "rtl/byteseq.hxx"
 #include "jvmfwk/framework.h"
+
+
 
 using namespace rtl;
 
