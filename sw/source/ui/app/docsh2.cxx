@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2001-06-29 10:09:01 $
+ *  last change: $Author: os $ $Date: 2001-07-03 14:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,15 +844,27 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case SID_TEMPLATE_LOAD:
             {
                 String aFileName;
-                BOOL bText = FALSE;
-                BOOL bFrame = FALSE;
-                BOOL bPage = FALSE;
-                BOOL bOverwrite = FALSE;
-                BOOL bNumbering = FALSE;
+                static BOOL bText = TRUE;
+                static BOOL bFrame = FALSE;
+                static BOOL bPage =  FALSE;
+                static BOOL bNum =   FALSE;
+                static BOOL bMerge = FALSE;
                 USHORT nRet = USHRT_MAX;
                 SvtPathOptions aPathOpt;
                 SfxNewFileDialog* pNewFileDlg =
                     new SfxNewFileDialog(&GetView()->GetViewFrame()->GetWindow(), SFXWB_LOAD_TEMPLATE);
+
+                USHORT nFlags = bFrame ? SFX_LOAD_FRAME_STYLES : 0;
+                if(bPage)
+                    nFlags|= SFX_LOAD_PAGE_STYLES;
+                if(bNum)
+                    nFlags|= SFX_LOAD_NUM_STYLES;
+                if(!nFlags || bText)
+                    nFlags|= SFX_LOAD_TEXT_STYLES;
+                if(bMerge)
+                    nFlags|= SFX_MERGE_STYLES;
+                pNewFileDlg->SetTemplateFlags(nFlags);
+
                 nRet = pNewFileDlg->Execute();
                 if(RET_TEMPLATE_LOAD == nRet)
                 {
@@ -899,12 +911,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     aFileName = pNewFileDlg->GetTemplateFileName();
                 }
                 SwgReaderOption aOpt;
-                USHORT nFlags = pNewFileDlg->GetTemplateFlags();
-                aOpt.SetTxtFmts(    0 != (nFlags&SFX_LOAD_TEXT_STYLES ));
-                aOpt.SetFrmFmts(    0 != (nFlags&SFX_LOAD_FRAME_STYLES));
-                aOpt.SetPageDescs(  0 != (nFlags&SFX_LOAD_PAGE_STYLES ));
-                aOpt.SetNumRules(   0 != (nFlags&SFX_LOAD_NUM_STYLES  ));
-                aOpt.SetMerge(      0 != (nFlags&SFX_MERGE_STYLES     ));
+                nFlags = pNewFileDlg->GetTemplateFlags();
+                aOpt.SetTxtFmts(    bText = (0 != (nFlags&SFX_LOAD_TEXT_STYLES) ));
+                aOpt.SetFrmFmts(    bFrame = (0 != (nFlags&SFX_LOAD_FRAME_STYLES)));
+                aOpt.SetPageDescs(  bPage = (0 != (nFlags&SFX_LOAD_PAGE_STYLES )));
+                aOpt.SetNumRules(   bNum = (0 != (nFlags&SFX_LOAD_NUM_STYLES  )));
+                //different meaning between SFX_MERGE_STYLES and aOpt.SetMerge!
+                bMerge = 0 != (nFlags&SFX_MERGE_STYLES);
+                aOpt.SetMerge( !bMerge );
 
                 if( aFileName.Len() )
                     SetError( LoadStylesFromFile( aFileName, aOpt, FALSE ));
