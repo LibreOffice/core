@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-03-15 07:32:50 $
+ *  last change: $Author: os $ $Date: 2002-03-20 09:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,7 +900,7 @@ int SwPagePreViewWin::MovePage( int eMoveMode )
                         nSelectedPage += nPages;
                         break;
     case MV_DOC_STT:    nNewSttPage = nDefSttPg;
-                        nSelectedPage = nNewSttPage;
+        nSelectedPage = nNewSttPage ? nNewSttPage : 1;
                         break;
     case MV_DOC_END:    nNewSttPage = nLastSttPg;
                         nSelectedPage = nPageCount - 1;
@@ -953,7 +953,9 @@ void SwPagePreViewWin::SetWinSize( const Size& rNewSize )
                                             nSttPage, aPgSize,
                                             nVirtPage );
     if(nSelectedPage < nSttPage || nSelectedPage > nSttPage + (nRow * nCol) )
-        nSelectedPage = nSttPage;
+    {
+        nSelectedPage = nSttPage ? nSttPage : 1;
+    }
     nRow = BYTE( nRowCol >> 8 );
     nCol = BYTE( nRowCol & 0xff );
     SetPagePreview(nRow, nCol);
@@ -1145,11 +1147,10 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
 
         case FN_CHAR_LEFT:
             //change the display only when the selection is already at the first position
-            if(aViewWin.GetSelectedPage()-- > nSttPage)
+            if(aViewWin.GetSelectedPage() < 2 || aViewWin.GetSelectedPage()-- > nSttPage)
                 break;
             if( nDefSttPg == nSttPage-- )
             {
-                bRefresh = FALSE;
                 break;
             }
             aViewWin.SetSttPage( nSttPage );
@@ -1157,12 +1158,11 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
 
         case FN_CHAR_RIGHT:
             //change the display only when the selection is already at the last position
-            if(aViewWin.GetSelectedPage()++ < (nSttPage + nPages - 1))
+            if(aViewWin.GetSelectedPage() >= nPageCount)
                 break;
-            if( //aViewWin.GetRow() * aViewWin.GetCol() >= nPageCount ||
+            if((aViewWin.GetSelectedPage()++ < nSttPage + nPages - 1) ||
                 nLastSttPg == nSttPage++ )
             {
-                bRefresh = FALSE;
                 break;
             }
             aViewWin.SetSttPage( nSttPage );
@@ -1199,6 +1199,8 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
 
             aViewWin.SetSttPage( nSttPage );
             aViewWin.GetSelectedPage() -= (nOldSttPage - nSttPage);
+            if(!aViewWin.GetSelectedPage())
+                aViewWin.GetSelectedPage() = 1;
             eMvMode = SwPagePreViewWin::MV_CALC;
         }
         goto MOVEPAGE;
@@ -1210,7 +1212,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
 
         case FN_START_OF_LINE:
         case FN_START_OF_DOCUMENT:
-            aViewWin.GetSelectedPage() = 0;
+            aViewWin.GetSelectedPage() = 1;
             eMvMode = SwPagePreViewWin::MV_DOC_STT; bRetVal = TRUE; goto MOVEPAGE;
         case FN_END_OF_LINE:
         case FN_END_OF_DOCUMENT:
@@ -1267,7 +1269,12 @@ MOVEPAGE:
             break;
         case FN_INSERT_BREAK:
         {
-            SetNewPage( aViewWin.GetSelectedPage() );
+            USHORT nSelPage = aViewWin.GetSelectedPage();
+            //if a dummy page is selected (e.g. a non-existing right/left page)
+            //the direct neighbor is used
+            if(GetViewShell().IsDummyPage( nSelPage ) && GetViewShell().IsDummyPage( --nSelPage ))
+                nSelPage +=2;
+            SetNewPage( nSelPage );
             SfxViewFrame *pTmpFrm = GetViewFrame();
             pTmpFrm->GetBindings().Execute( SID_VIEWSHELL0, NULL, 0,
                                                     SFX_CALLMODE_ASYNCHRON );
@@ -2254,6 +2261,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2002/03/15 07:32:50  os
+      #97978# page preview accessiblity implemented
+
       Revision 1.11  2002/02/26 15:54:02  os
       #97682# prevent division by zero if no printer can be found
 
