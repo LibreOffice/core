@@ -1,6 +1,6 @@
-es	embeddedobj	:	offuh sal cppu cppuhelper sot svtools NULL
-es	embeddedobj									usr1	-	all	eo_mkout NULL
-es	embeddedobj\source\commonembedding			nmake	-	all	eo_commonembed NULL
-es	embeddedobj\source\general					nmake	-	all	eo_general NULL
-es	embeddedobj\source\msole					nmake	-	all	eo_msole NULL
-es	embeddedobj\util							nmake	-	all	eo_util eo_commonembed eo_general eo_msole NULL
+eo	embeddedobj	:	offuh sal cppu cppuhelper sot svtools NULL
+eo	embeddedobj									usr1	-	all	eo_mkout NULL
+eo	embeddedobj\source\commonembedding			nmake	-	all	eo_commonembed NULL
+eo	embeddedobj\source\general					nmake	-	all	eo_general NULL
+eo	embeddedobj\source\msole					nmake	-	all	eo_msole NULL
+eo	embeddedobj\util							nmake	-	all	eo_util eo_commonembed eo_general eo_msole NULL
