@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:48:55 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2047,10 +2047,12 @@ void SdrMarkView::ImplCollectCompleteSelection(SdrObject* pObj)
             ImplCollectCompleteSelection(pObj2);
         }
     }
-    else
-    {
-        maAllMarkedObjects.Insert(pObj, LIST_APPEND);
-    }
+
+    // #109870#
+    // always also add the group object or scene to the hull of
+    // the selection since connectors CAN directly connect to
+    // groups or scenes.
+    maAllMarkedObjects.Insert(pObj, LIST_APPEND);
 }
 
 void SdrMarkView::ForceEdgesOfMarkedNodes()
