@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-11 09:42:26 $
+ *  last change: $Author: dv $ $Date: 2001-07-17 16:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <unotools/localfilehelper.hxx>
+
 #include <vcl/cvtgrf.hxx>
 
 #ifndef _SV_MSGBOX_HXX
@@ -229,6 +231,7 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
     sal_Bool                mbHasLink       : 1;
     sal_Bool                mbHasPreview    : 1;
     sal_Bool                mbShowPreview   : 1;
+    sal_Bool                mbIsSaveDlg     : 1;
 
     sal_Bool                mbDeleteMatcher : 1;
     sal_Bool                mbInsert        : 1;
@@ -380,8 +383,8 @@ void FileDialogHelper_Impl::enablePasswordBox()
         const SfxFilter* pFilter = mpMatcher->GetFilter4UIName(
                             aFilterName, 0, SFX_FILTER_NOTINFILEDLG );
 
-        BOOL bEnablePasswd = pFilter && pFilter->UsesStorage() &&
-                             pFilter->IsOwnFormat();
+        BOOL bEnablePasswd = pFilter &&
+                             ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() );
 
         Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
@@ -615,6 +618,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
     mbHasLink       = sal_False;
     mbDeleteMatcher = sal_False;
     mbInsert        = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
+    mbIsSaveDlg     = sal_False;
 
     mpMatcher = NULL;
     mpGraphicFilter = NULL;
@@ -638,22 +642,27 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
         break;
     case FILESAVE_SIMPLE:
         aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
+        mbIsSaveDlg = sal_True;
         break;
     case FILESAVE_AUTOEXTENSION_PASSWORD:
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
         mbHasPassword = sal_True;
         mbHasAutoExt = sal_True;
+        mbIsSaveDlg = sal_True;
         break;
     case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS;
         mbHasPassword = sal_True;
         mbHasAutoExt = sal_True;
+        mbIsSaveDlg = sal_True;
         break;
     case FILESAVE_AUTOEXTENSION_SELECTION:
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
+        mbIsSaveDlg = sal_True;
         break;
     case FILESAVE_AUTOEXTENSION_TEMPLATE:
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
+        mbIsSaveDlg = sal_True;
         break;
     case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
         aServiceType[0] <<= TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
@@ -915,14 +924,45 @@ OUString FileDialogHelper_Impl::getRealFilter() const
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::setPath( const OUString& rPath )
 {
-    maPath = rPath;
+    // We set the display directory only, when it is on a local / remote(?)
+    // filesystem
+    /*
+    String aTmp;
+    utl::LocalFileHelper::ConvertURLToSystemPath( aPath, aTmp );
+    if ( aTmp.Len() )
+        ...
+    */
+    if ( ! rPath.getLength() ||
+         ! utl::LocalFileHelper::IsLocalFile( rPath ) )
+    {
+        return;
+    }
+
+    OUString aName;
+
+    INetURLObject aObj( rPath );
+
+    // if the given path isn't a folder, we cut off the last part
+    // and take it as filename and the rest of the path should be
+    // the folder
+
+    if ( ! utl::UCBContentHelper::IsFolder( rPath ) )
+    {
+        aName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
+        aObj.removeSegment();
+    }
+
+    maPath = aObj.GetMainURL( INetURLObject::NO_DECODE );
 
     // set the path
-    if ( maPath.getLength() && mxFileDlg.is() )
+    if ( mxFileDlg.is() )
     {
         try
         {
-            mxFileDlg->setDisplayDirectory( maPath );
+            if ( maPath.getLength() )
+                mxFileDlg->setDisplayDirectory( maPath );
+            if ( aName.getLength() )
+                mxFileDlg->setDefaultName( aName );
         }
         catch( IllegalArgumentException ){}
     }
@@ -1149,13 +1189,13 @@ void FileDialogHelper_Impl::saveConfig()
     }
     else
     {
+        sal_Bool bWriteConfig = sal_False;
         SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
            String aUserData = String::CreateFromAscii( STD_CONFIG_STR );
 
         if ( aDlgOpt.Exists() )
         {
-            String aOld = aDlgOpt.GetUserData();
-            aUserData.SetToken( 0, ' ', aOld.GetToken( 0, ' ' ) );
+            aUserData = aDlgOpt.GetUserData();
         }
 
         if ( mbHasAutoExt )
@@ -1166,16 +1206,24 @@ void FileDialogHelper_Impl::saveConfig()
                 sal_Bool bAutoExt = sal_True;
                 aValue >>= bAutoExt;
                 aUserData.SetToken( 0, ' ', String::CreateFromInt32( (sal_Int32) bAutoExt ) );
+                bWriteConfig = sal_True;
             }
             catch( IllegalArgumentException ){}
         }
 
-        INetURLObject aObj( getPath() );
+        if ( ! mbIsSaveDlg )
+        {
+            OUString aPath = getPath();
+            if ( aPath.getLength() &&
+                 utl::LocalFileHelper::IsLocalFile( aPath ) )
+            {
+                aUserData.SetToken( 1, ' ', aPath );
+                bWriteConfig = sal_True;
+            }
+        }
 
-        if ( aObj.GetProtocol() == INET_PROT_FILE )
-            aUserData.SetToken( 1, ' ', aObj.GetMainURL( INetURLObject::NO_DECODE ) );
-
-        aDlgOpt.SetUserData( aUserData );
+        if ( bWriteConfig )
+            aDlgOpt.SetUserData( aUserData );
     }
 }
 
@@ -1398,10 +1446,7 @@ ErrCode FileDialogHelper::GetGraphic( Graphic& rGraphic ) const
 // ------------------------------------------------------------------------
 void FileDialogHelper::SetDisplayDirectory( const String& rPath )
 {
-    INetURLObject aURL( rPath, INET_PROT_FILE );
-
-    if ( INET_PROT_NOT_VALID != aURL.GetProtocol() )
-        mpImp->setPath( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    mpImp->setPath( rPath );
 }
 
 // ------------------------------------------------------------------------
