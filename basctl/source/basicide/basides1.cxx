@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:26:27 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1207,9 +1207,10 @@ long BasicIDEShell::CallBasicBreakHdl( StarBASIC* pBasic )
         {
             if ( bAppWindowDisabled )
                 Application::GetDefDialogParent()->Enable( FALSE );
+        /*
             if ( bDispatcherLocked )
                 SFX_APP()->LockDispatcher( TRUE );
-
+        */
             if ( nWaitCount )
             {
                 BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
