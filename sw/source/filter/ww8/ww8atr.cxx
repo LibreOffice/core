@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:38:45 $
+ *  last change: $Author: er $ $Date: 2000-11-24 19:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1423,18 +1423,19 @@ BOOL SwWW8Writer::GetNumberFmt( const SwField& rFld, String& rStr )
             rKeyMap[ NF_KEY_MM      ].ASIGN_ASC( "MM" );
             rKeyMap[ NF_KEY_MMM     ].ASIGN_ASC( "MMM" );
             rKeyMap[ NF_KEY_MMMM    ].ASIGN_ASC( "MMMM" );
+            rKeyMap[ NF_KEY_MMMMM   ].ASIGN_ASC( "MMMMM" );
             rKeyMap[ NF_KEY_H       ].ASIGN_ASC( "H" );
             rKeyMap[ NF_KEY_HH      ].ASIGN_ASC( "HH" );
             rKeyMap[ NF_KEY_S       ].ASIGN_ASC( "s" );
             rKeyMap[ NF_KEY_SS      ].ASIGN_ASC( "ss" );
 //          aKeyMap[ NF_KEY_Q,
 //          aKeyMap[ NF_KEY_QQ,
-            rKeyMap[ NF_KEY_T       ].ASIGN_ASC( "t" );
-            rKeyMap[ NF_KEY_TT      ].ASIGN_ASC( "tt" );
-            rKeyMap[ NF_KEY_TTT     ].ASIGN_ASC( "ttt" );
-            rKeyMap[ NF_KEY_TTTT    ].ASIGN_ASC( "tttt" );
-            rKeyMap[ NF_KEY_JJ      ].ASIGN_ASC( "jj" );
-            rKeyMap[ NF_KEY_JJJJ    ].ASIGN_ASC( "jjjj" );
+            rKeyMap[ NF_KEY_D       ].ASIGN_ASC( "t" );
+            rKeyMap[ NF_KEY_DD      ].ASIGN_ASC( "tt" );
+            rKeyMap[ NF_KEY_DDD     ].ASIGN_ASC( "ttt" );
+            rKeyMap[ NF_KEY_DDDD    ].ASIGN_ASC( "tttt" );
+            rKeyMap[ NF_KEY_YY      ].ASIGN_ASC( "jj" );
+            rKeyMap[ NF_KEY_YYYY    ].ASIGN_ASC( "jjjj" );
             rKeyMap[ NF_KEY_NN      ].ASIGN_ASC( "ttt" );
             rKeyMap[ NF_KEY_NNNN    ].ASIGN_ASC( "tttt" );
 //          aKeyMap[ NF_KEY_CCC,
@@ -1445,6 +1446,13 @@ BOOL SwWW8Writer::GetNumberFmt( const SwField& rFld, String& rStr )
 //          aKeyMap[ NF_KEY_TRUE,
 //          aKeyMap[ NF_KEY_FALSE,
 //          aKeyMap[ NF_KEY_BOOLEAN,
+            rKeyMap[ NF_KEY_AAA     ].ASIGN_ASC( "aaa" );
+            rKeyMap[ NF_KEY_AAAA    ].ASIGN_ASC( "aaaa" );
+            rKeyMap[ NF_KEY_EC      ].ASIGN_ASC( "e" );
+            rKeyMap[ NF_KEY_EEC     ].ASIGN_ASC( "ee" );
+            rKeyMap[ NF_KEY_G       ].ASIGN_ASC( "g" );
+            rKeyMap[ NF_KEY_GG      ].ASIGN_ASC( "gg" );
+            rKeyMap[ NF_KEY_GGG     ].ASIGN_ASC( "ggg" );
         }
 
         String sFmt( pNumFmt->GetMappedFormatstring(
@@ -3420,6 +3428,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/20 09:38:45  jp
+      new para attributes - expand para range
+
       Revision 1.2  2000/11/04 21:49:59  er
       GetMappedFormatstring with LocaleDataWrapper instead of International
 
