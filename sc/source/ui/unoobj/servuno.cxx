@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-19 11:37:57 $
+ *  last change: $Author: aw $ $Date: 2002-07-18 13:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,15 @@
 #include "confuno.hxx"
 #include "shapeuno.hxx"
 
+// #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+#ifndef _XMLEOHLP_HXX
+#include <svx/xmleohlp.hxx>
+#endif
+
+#ifndef _XMLGRHLP_HXX
+#include <svx/xmlgrhlp.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 
@@ -118,7 +127,13 @@ static const sal_Char* __FAR_DATA aProvNames[SC_SERVICE_COUNT] =
         "com.sun.star.document.Settings",           // SC_SERVICE_DOCCONF
         "com.sun.star.image.ImageMapRectangleObject",// SC_SERVICE_IMAP_RECT
         "com.sun.star.image.ImageMapCircleObject",  // SC_SERVICE_IMAP_CIRC
-        "com.sun.star.image.ImageMapPolygonObject"  // SC_SERVICE_IMAP_POLY
+        "com.sun.star.image.ImageMapPolygonObject", // SC_SERVICE_IMAP_POLY
+
+        // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        "com.sun.star.document.ExportGraphicObjectResolver",    // SC_SERVICE_EXPORT_GOR
+        "com.sun.star.document.ImportGraphicObjectResolver",    // SC_SERVICE_IMPORT_GOR
+        "com.sun.star.document.ExportEmbeddedObjectResolver",   // SC_SERVICE_EXPORT_EOR
+        "com.sun.star.document.ImportEmbeddedObjectResolver"    // SC_SERVICE_IMPORT_EOR
     };
 
 //
@@ -154,7 +169,13 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_DOCCONF
         "",                                         // SC_SERVICE_IMAP_RECT
         "",                                         // SC_SERVICE_IMAP_CIRC
-        ""                                          // SC_SERVICE_IMAP_POLY
+        "",                                         // SC_SERVICE_IMAP_POLY
+
+        // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        "",                                         // SC_SERVICE_EXPORT_GOR
+        "",                                         // SC_SERVICE_IMPORT_GOR
+        "",                                         // SC_SERVICE_EXPORT_EOR
+        ""                                          // SC_SERVICE_IMPORT_EOR
     };
 
 
@@ -284,6 +305,25 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             break;
         case SC_SERVICE_IMAP_POLY:
             xRet = SvUnoImageMapPolygonObject_createInstance( ScShapeObj::GetSupportedMacroItems() );
+            break;
+
+        // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        case SC_SERVICE_EXPORT_GOR:
+            xRet = (::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE );
+            break;
+
+        case SC_SERVICE_IMPORT_GOR:
+            xRet = (::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ );
+            break;
+
+        case SC_SERVICE_EXPORT_EOR:
+            if (pDocShell)
+                xRet = (::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_WRITE );
+            break;
+
+        case SC_SERVICE_IMPORT_EOR:
+            if (pDocShell)
+                xRet = (::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_READ );
             break;
     }
     return xRet;

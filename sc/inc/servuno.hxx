@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-19 11:36:52 $
+ *  last change: $Author: aw $ $Date: 2002-07-18 13:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,13 @@ class ScDocShell;
 #define SC_SERVICE_IMAP_CIRC    25
 #define SC_SERVICE_IMAP_POLY    26
 
-#define SC_SERVICE_COUNT        27
+// #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+#define SC_SERVICE_EXPORT_GOR   27
+#define SC_SERVICE_IMPORT_GOR   28
+#define SC_SERVICE_EXPORT_EOR   29
+#define SC_SERVICE_IMPORT_EOR   30
+
+#define SC_SERVICE_COUNT        31
 #define SC_SERVICE_INVALID      USHRT_MAX
 
 
