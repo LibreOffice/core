@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-28 14:45:23 $
+ *  last change: $Author: as $ $Date: 2000-11-30 09:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,8 +243,8 @@ typedef TFilterHash::const_iterator                                 TConstFilter
 typedef TDetectorHash::const_iterator                               TConstDetectorIterator      ;
 typedef TLoaderHash::const_iterator                                 TConstLoaderIterator        ;
 typedef TPerformanceHash::const_iterator                            TConstPerformanceIterator   ;
-typedef CheckedIterator< TStringList, TConstStringIterator >        TCheckedStringListIterator  ;
-typedef CheckedIterator< TTypeHash, TConstTypeIterator >            TCheckedTypeIterator        ;
+typedef CheckedIterator< TStringList >                              TCheckedStringListIterator  ;
+typedef CheckedIterator< TTypeHash >                                TCheckedTypeIterator        ;
 
 /*-************************************************************************************************************//**
     @short          cache for all filter and type information

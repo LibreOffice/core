@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkediterator.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-28 14:45:23 $
+ *  last change: $Author: as $ $Date: 2000-11-30 09:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace framework{
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-template< class TContainer, class TIterator = typename TContainer::iterator >
+template< class TContainer >
 class CheckedIterator
 {
     //-------------------------------------------------------------------------------------------------------------
@@ -162,19 +162,17 @@ class CheckedIterator
             @onerror    An assertion is thrown.
         *//*-*****************************************************************************************************/
 
-        inline void initialize( const TContainer* pContainer )
+        inline void initialize( const TContainer* pContainer, sal_Bool bReverse = sal_False )
         {
             // Check incoming parameter. We don't accept all!
             LOG_ASSERT( !(pContainer==NULL), "CheckedIterator::initialize()\nInvalid parameter detected!\n" )
 
             // Set new container and actualize other member.
-            m_pContainer    = pContainer            ;
-            m_pPosition     = m_pContainer->begin() ;
-            m_eEndState     = E_BEFOREEND           ;
-            if( m_pPosition == m_pContainer->end() )
-            {
-                m_eEndState = E_END;
-            }
+            m_pContainer        = pContainer            ;
+            m_bReverse          = bReverse              ;
+            m_eEndState         = E_BEFOREEND           ;
+            m_nForward          = 0                     ;
+            m_nBackward         = pContainer->size()    ;
         }
 
         /*-****************************************************************************************************//**
@@ -192,8 +190,11 @@ class CheckedIterator
 
         inline void setAfterEnd()
         {
-            m_pContainer = NULL         ;
-            m_eEndState  = E_AFTEREND   ;
+            m_pContainer    = NULL          ;
+            m_eEndState     = E_AFTEREND    ;
+            m_bReverse      = sal_False     ;
+            m_nForward      = 0             ;
+            m_nBackward     = 0             ;
         }
 
         /*-****************************************************************************************************//**
@@ -220,8 +221,10 @@ class CheckedIterator
             switch( m_eEndState )
             {
                 case E_BEFOREEND:   {
-                                        ++m_pPosition;
-                                        if( m_pPosition == m_pContainer->end() )
+                                        ++m_nForward    ;
+                                        --m_nBackward   ;
+                                        // If one iterator reaching end ... other iterator must do the same automaticly!
+                                        if( m_nForward >= (sal_Int32)m_pContainer->size() )
                                         {
                                             m_eEndState = E_END;
                                         }
@@ -286,13 +289,24 @@ class CheckedIterator
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        inline TIterator& getEntry()
+        inline TContainer::const_iterator getEntry()
         {
             // Warn programmer if he forget to initialize these object ...
             LOG_ASSERT( !(m_pContainer==NULL)       , "CheckedIterator::getEntry()\nObject not initialized!\n"          )
             // or try to read a non existing element!
             LOG_ASSERT( !(m_eEndState!=E_BEFOREEND) , "CheckedIterator::getEntry()\nWrong using of class detected!\n"   )
-            return m_pPosition;
+
+            TContainer::const_iterator pEntry;
+            if( m_bReverse == sal_True )
+            {
+                pEntry = m_pContainer->end()-m_nBackward;
+            }
+            else
+            {
+                pEntry = m_pContainer->begin()+m_nForward;
+            }
+
+            return pEntry;
         }
 
     //-------------------------------------------------------------------------------------------------------------
@@ -303,10 +317,11 @@ class CheckedIterator
 
         enum EEndState{ E_BEFOREEND, E_END, E_AFTEREND };   // These enum defines our three states for an iterator position in curent container.
 
-        const TContainer*   m_pContainer    ;               // pointer to current container
-        TIterator           m_pPosition     ;               // current position in container
-        EEndState           m_eEndState     ;               // position state of iterator!
-
+        const TContainer*                   m_pContainer    ;               // pointer to current container
+        sal_Int32                           m_nForward      ;               // current position in container for forward orientation
+        sal_Int32                           m_nBackward     ;               // current position in container for backward orientation
+        EEndState                           m_eEndState     ;               // position state of iterator!
+        sal_Bool                            m_bReverse      ;               // orientation of stepping!
 };
 
 }       //  namespace framework
