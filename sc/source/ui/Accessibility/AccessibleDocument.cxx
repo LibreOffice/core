@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:44:47 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,10 @@ struct ScAccessibleShapeData
 ScAccessibleShapeData::~ScAccessibleShapeData()
 {
     if (pAccShape)
+    {
+        pAccShape->dispose();
         pAccShape->release();
+    }
 }
 
 struct ScShapeDataLess
