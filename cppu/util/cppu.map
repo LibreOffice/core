@@ -105,4 +105,5 @@ UDK_3.1 {
         typelib_typedescription_newExtendedInterfaceAttribute;
         typelib_typedescription_newMIInterface;
         typelib_typedescription_newStruct;
+    cppu_Any_extraction_failure_msg;
 } UDK_3_0_0;
