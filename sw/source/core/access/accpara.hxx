@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
+ *  last change: $Author: dvo $ $Date: 2002-04-24 14:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ public:
 
     //=====  XInterface  ======================================================
 
-    // (XInterface methods need to be implemented to disambigouate
+    // (XInterface methods need to be implemented to disambiguate
     // between those inherited through SwAcessibleContext and
     // XAccessibleEditableText).
 
