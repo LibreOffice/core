@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-23 11:23:31 $
+ *  last change: $Author: abi $ $Date: 2002-07-26 11:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2476,9 +2476,18 @@
             </prop>
         </group>
         <group oor:name="Help">
-            <!-- Responsible: ABI -->
-            <prop oor:name="Locale" oor:type="xs:string"/>
-            <prop oor:name="System" oor:type="xs:string"/>
+            <prop oor:name="Locale" oor:type="xs:string">
+	            <!-- Responsible: ABI -->
+			    <info>
+				    <desc xml:lang="en-US">Determines the locale for the help pages.</desc>
+				</info>
+			</prop>
+            <prop oor:name="System" oor:type="xs:string">
+	            <!-- Responsible: ABI -->
+			    <info>
+				    <desc xml:lang="en-US">Determines the operating system, on which the help system is dsplayed.</desc>
+				</info>
+			</prop>
             <prop oor:name="Tip" oor:type="xs:boolean">
                 <!-- OldLocation: Soffice.cfg -->
                 <!-- Responsible: MBA-->
@@ -2500,11 +2509,15 @@
                 </info>
             </prop>
             <prop oor:name="HelpStyleSheet" oor:type="xs:string">
+	            <!-- Responsible: ABI -->
                 <value>Default</value>
+				<info>
+				    <desc xml:lang="en-US">The name of the stylesheet used to display help content.</desc>
+				</info>
             </prop>
             <group oor:name="HelpAgent">
+                <!-- Responsible: MBA-->
                 <prop oor:name="Enabled" oor:type="xs:boolean">
-                    <!-- Responsible: MBA-->
                     <value>true</value>
                     <info>
                         <desc xml:lang="en-US">controls whether or not the HelpAgent is activate.</desc>
@@ -2512,7 +2525,6 @@
                     </info>
                 </prop>
                 <prop oor:name="Timeout" oor:type="xs:int">
-                    <!-- Responsible: MBA-->
                     <value>30</value>
                     <info>
                         <desc xml:lang="en-US">Specifies the timeout value (in seconds) after which the HelpAgent is closed automatically (if ignored by the user).</desc>
@@ -2520,7 +2532,6 @@
                     </info>
                 </prop>
                 <prop oor:name="RetryLimit" oor:type="xs:int">
-                    <!-- Responsible: MBA-->
                     <value>3</value>
                     <info>
                         <desc xml:lang="en-US">Specifies how often the user must ignore a given HelpAgent topic until it is disregarded in the future (any requests for this topic will be dropped silently).</desc>
