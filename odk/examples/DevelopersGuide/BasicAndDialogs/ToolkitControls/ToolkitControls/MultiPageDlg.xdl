@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="MultiPageDlg" dlg:title="Multi Page Dialog Demo" dlg:left="138" dlg:top="80" dlg:width="203" dlg:height="157" dlg:page="1">
+ <dlg:bulletinboard>
+  <dlg:button dlg:id="CancelButton" dlg:tab-index="0" dlg:left="6" dlg:top="135" dlg:width="50" dlg:height="14" dlg:value="Cancel" dlg:button-type="cancel"/>
+  <dlg:button dlg:id="BackButton" dlg:tab-index="1" dlg:left="76" dlg:top="135" dlg:width="50" dlg:height="14" dlg:value="&lt;&lt; Back">
+   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ToolkitControls.MultiPage.PreviousPage" script:language="StarBasic"/>
+  </dlg:button>
+  <dlg:button dlg:id="NextButton" dlg:tab-index="2" dlg:left="147" dlg:top="135" dlg:width="50" dlg:height="14" dlg:value="Next &gt;&gt;">
+   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ToolkitControls.MultiPage.NextPage" script:language="StarBasic"/>
+  </dlg:button>
+  <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="3" dlg:left="6" dlg:top="6" dlg:width="185" dlg:height="9" dlg:page="1" dlg:value="Select a Pizza"/>
+  <dlg:text dlg:id="Label1" dlg:tab-index="4" dlg:left="11" dlg:top="22" dlg:width="57" dlg:height="9" dlg:page="1" dlg:value="~Pizza"/>
+  <dlg:menulist dlg:id="ListBox1" dlg:tab-index="5" dlg:left="11" dlg:top="35" dlg:width="60" dlg:height="12" dlg:page="1" dlg:spin="true">
+   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ToolkitControls.MultiPage.CalculatePrize" script:language="StarBasic"/>
+  </dlg:menulist>
+  <dlg:text dlg:id="Label2" dlg:tab-index="6" dlg:left="11" dlg:top="61" dlg:width="60" dlg:height="11" dlg:page="1" dlg:value="Extra Toppings"/>
+  <dlg:checkbox dlg:id="CheckBox0" dlg:tab-index="7" dlg:left="11" dlg:top="75" dlg:width="60" dlg:height="9" dlg:page="1" dlg:value="CheckBox0" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ToolkitControls.MultiPage.CalculatePrize" script:language="StarBasic"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:id="CheckBox1" dlg:tab-index="8" dlg:left="11" dlg:top="88" dlg:width="60" dlg:height="9" dlg:page="1" dlg:value="CheckBox1" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ToolkitControls.MultiPage.CalculatePrize" script:language="StarBasic"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:id="CheckBox2" dlg:tab-index="9" dlg:left="11" dlg:top="101" dlg:width="60" dlg:height="9" dlg:page="1" dlg:value="CheckBox2" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ToolkitControls.MultiPage.CalculatePrize" script:language="StarBasic"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:id="CheckBox3" dlg:tab-index="10" dlg:left="11" dlg:top="114" dlg:width="60" dlg:height="9" dlg:page="1" dlg:value="CheckBox3" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ToolkitControls.MultiPage.CalculatePrize" script:language="StarBasic"/>
+  </dlg:checkbox>
+  <dlg:fixedline dlg:id="FixedLine2" dlg:tab-index="11" dlg:left="96" dlg:top="22" dlg:width="9" dlg:height="106" dlg:page="1" dlg:align="vertical"/>
+  <dlg:text dlg:id="Label3" dlg:tab-index="12" dlg:left="120" dlg:top="22" dlg:width="60" dlg:height="9" dlg:page="1" dlg:value="Size"/>
+  <dlg:radiogroup>
+   <dlg:radio dlg:id="OptionButton1" dlg:tab-index="13" dlg:left="120" dlg:top="36" dlg:width="60" dlg:height="9" dlg:page="1" dlg:value="Small">
+    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ToolkitControls.MultiPage.CalculatePrize" script:language="StarBasic"/>
+   </dlg:radio>
+   <dlg:radio dlg:id="OptionButton2" dlg:tab-index="14" dlg:left="120" dlg:top="49" dlg:width="60" dlg:height="9" dlg:page="1" dlg:value="Medium">
+    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ToolkitControls.MultiPage.CalculatePrize" script:language="StarBasic"/>
+   </dlg:radio>
+   <dlg:radio dlg:id="OptionButton3" dlg:tab-index="15" dlg:left="120" dlg:top="62" dlg:width="60" dlg:height="9" dlg:page="1" dlg:value="Large">
+    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ToolkitControls.MultiPage.CalculatePrize" script:language="StarBasic"/>
+   </dlg:radio>
+  </dlg:radiogroup>
+  <dlg:text dlg:id="Label4" dlg:tab-index="16" dlg:left="120" dlg:top="114" dlg:width="25" dlg:height="9" dlg:page="1" dlg:value="Prize"/>
+  <dlg:currencyfield dlg:id="CurrencyField1" dlg:tab-index="17" dlg:left="150" dlg:top="113" dlg:width="30" dlg:height="12" dlg:page="1"/>
+  <dlg:fixedline dlg:id="FixedLine3" dlg:tab-index="18" dlg:left="6" dlg:top="6" dlg:width="185" dlg:height="9" dlg:page="2" dlg:value="Enter the Delivery Address"/>
+  <dlg:text dlg:id="Label5" dlg:tab-index="19" dlg:left="11" dlg:top="27" dlg:width="50" dlg:height="9" dlg:page="2" dlg:value="Full Name"/>
+  <dlg:textfield dlg:id="TextField2" dlg:tab-index="20" dlg:left="70" dlg:top="25" dlg:width="110" dlg:height="12" dlg:page="2"/>
+  <dlg:text dlg:id="Label6" dlg:tab-index="21" dlg:left="11" dlg:top="47" dlg:width="50" dlg:height="9" dlg:page="2" dlg:value="Address"/>
+  <dlg:textfield dlg:id="TextField3" dlg:tab-index="22" dlg:left="70" dlg:top="45" dlg:width="110" dlg:height="12" dlg:page="2"/>
+  <dlg:text dlg:id="Label7" dlg:tab-index="23" dlg:left="11" dlg:top="67" dlg:width="50" dlg:height="9" dlg:page="2" dlg:value="City"/>
+  <dlg:textfield dlg:id="TextField4" dlg:tab-index="24" dlg:left="70" dlg:top="65" dlg:width="80" dlg:height="12" dlg:page="2"/>
+  <dlg:text dlg:id="Label8" dlg:tab-index="25" dlg:left="11" dlg:top="87" dlg:width="50" dlg:height="9" dlg:page="2" dlg:value="ZIP / Postal Code"/>
+  <dlg:numericfield dlg:id="NumericField1" dlg:tab-index="26" dlg:left="70" dlg:top="85" dlg:width="50" dlg:height="12" dlg:page="2"/>
+  <dlg:text dlg:id="Label9" dlg:tab-index="27" dlg:left="11" dlg:top="107" dlg:width="50" dlg:height="9" dlg:page="2" dlg:value="Phone Number"/>
+  <dlg:textfield dlg:id="TextField5" dlg:tab-index="28" dlg:left="70" dlg:top="105" dlg:width="80" dlg:height="12" dlg:page="2"/>
+  <dlg:fixedline dlg:id="FixedLine4" dlg:tab-index="29" dlg:left="6" dlg:top="6" dlg:width="185" dlg:height="9" dlg:page="3" dlg:value="Select a Payment Method"/>
+  <dlg:radiogroup>
+   <dlg:radio dlg:id="OptionButton4" dlg:tab-index="30" dlg:left="12" dlg:top="26" dlg:width="40" dlg:height="9" dlg:page="3" dlg:value="Credit Card">
+    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ToolkitControls.MultiPage.PaymentMethodChanged" script:language="StarBasic"/>
+   </dlg:radio>
+   <dlg:radio dlg:id="OptionButton5" dlg:tab-index="31" dlg:left="12" dlg:top="110" dlg:width="40" dlg:height="9" dlg:page="3" dlg:value="Check">
+    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ToolkitControls.MultiPage.PaymentMethodChanged" script:language="StarBasic"/>
+   </dlg:radio>
+  </dlg:radiogroup>
+  <dlg:combobox dlg:id="ComboBox1" dlg:tab-index="32" dlg:left="76" dlg:top="25" dlg:width="70" dlg:height="12" dlg:page="3" dlg:spin="true"/>
+  <dlg:text dlg:id="Label11" dlg:tab-index="33" dlg:left="21" dlg:top="46" dlg:width="50" dlg:height="9" dlg:page="3" dlg:value="Credit Card No."/>
+  <dlg:textfield dlg:id="TextField6" dlg:tab-index="34" dlg:left="76" dlg:top="45" dlg:width="70" dlg:height="12" dlg:page="3"/>
+  <dlg:text dlg:id="Label12" dlg:tab-index="35" dlg:left="21" dlg:top="66" dlg:width="50" dlg:height="9" dlg:page="3" dlg:value="Expiration Date"/>
+  <dlg:menulist dlg:id="ListBox2" dlg:tab-index="36" dlg:left="76" dlg:top="65" dlg:width="20" dlg:height="12" dlg:page="3" dlg:spin="true"/>
+  <dlg:menulist dlg:id="ListBox3" dlg:tab-index="37" dlg:left="100" dlg:top="65" dlg:width="27" dlg:height="12" dlg:page="3" dlg:spin="true"/>
+  <dlg:text dlg:id="Label13" dlg:tab-index="38" dlg:left="21" dlg:top="86" dlg:width="50" dlg:height="9" dlg:page="3" dlg:value="Cardholder&apos;s Name"/>
+  <dlg:textfield dlg:id="TextField7" dlg:tab-index="39" dlg:left="76" dlg:top="85" dlg:width="70" dlg:height="12" dlg:page="3"/>
+  <dlg:textfield dlg:id="TextField1" dlg:tab-index="40" dlg:left="-47" dlg:top="46" dlg:width="0" dlg:height="2" dlg:page="3"/>
+ </dlg:bulletinboard>
+</dlg:window>
