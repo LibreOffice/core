@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-21 21:13:10 $
+ *  last change: $Author: kz $ $Date: 2002-02-22 21:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -34123,7 +34123,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Kolom";
             Text[ chinese_simplified ] = "column_num";
             Text[ greek ] = "ÓôÞëç";
-            Text[ korean ] = "ì—´";
+            Text[ korean ] = "ë‹¨";
             Text[ turkish ] = "Sütun";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Columna";
@@ -35831,7 +35831,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Kolom";
             Text[ chinese_simplified ] = "column_num";
             Text[ greek ] = "ÓôÞëç";
-            Text[ korean ] = "ì—´";
+            Text[ korean ] = "ë‹¨";
             Text[ turkish ] = "Sütun";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "columna";
@@ -36626,7 +36626,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Kolommen";
             Text[ chinese_simplified ] = "columns";
             Text[ greek ] = "ÓôÞëåò";
-            Text[ korean ] = "ì—´";
+            Text[ korean ] = "ë‹¨";
             Text[ turkish ] = "Sütun";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "columnes";
