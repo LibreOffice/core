@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2002-09-25 12:25:24 $
+ *  last change: $Author: os $ $Date: 2002-09-27 11:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2959,14 +2959,12 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     SfxItemState eState;
     if( DLG_FRM_GRF != nDlgType && DLG_FRM_OLE != nDlgType &&
         SFX_ITEM_UNKNOWN != ( eState = rSet.GetItemState(
-                        GetWhich( SID_ATTR_FRAMEDIRECTION ), TRUE, &pItem )) )
+                                        RES_FRAMEDIR, TRUE )) )
     {
         aTextFlowFT.Show();
         aTextFlowLB.Show();
 
-        sal_uInt16 nPos, nVal = SFX_ITEM_SET == eState
-                                ? ((SvxFrameDirectionItem*)pItem)->GetValue()
-                                : 0;
+        sal_uInt16 nPos, nVal = ((SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR)).GetValue();
         for( nPos = aTextFlowLB.GetEntryCount(); nPos; )
             if( (sal_uInt16)(long)aTextFlowLB.GetEntryData( --nPos ) == nVal )
                 break;
