@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cmc $ $Date: 2001-02-08 13:13:20 $
+#   last change: $Author: os $ $Date: 2001-03-02 14:06:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,7 @@ CXXFILES = \
         insrule.cxx \
         linenum.cxx \
         num.cxx \
+        numberingtypelistbox.cxx \
         outline.cxx \
         pgfnote.cxx \
         redlndlg.cxx \
@@ -106,6 +107,7 @@ SRCFILES=\
     insrule.src \
     linenum.src \
     num.src \
+    numberingtypelistbox.src \
     outline.src \
     pgfnote.src \
     redlndlg.src \
@@ -124,6 +126,7 @@ SLOFILES =	\
         $(SLO)$/insrule.obj \
         $(SLO)$/linenum.obj \
         $(SLO)$/num.obj \
+        $(SLO)$/numberingtypelistbox.obj \
         $(SLO)$/outline.obj \
         $(SLO)$/pgfnote.obj \
         $(SLO)$/redlndlg.obj \
@@ -133,7 +136,8 @@ SLOFILES =	\
 EXCEPTIONSFILES = \
         $(SLO)$/glosdoc.obj \
         $(SLO)$/glosbib.obj \
-        $(SLO)$/glossary.obj
+        $(SLO)$/glossary.obj \
+        $(SLO)$/numberingtypelistbox.obj
 
 # --- Tagets -------------------------------------------------------
 
