@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:47:57 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ String STR_DROP_OVER
     Text [ dutch ] = "Initialen over" ;
     Text [ swedish ] = "Anfanger över" ;
     Text [ danish ] = "initialer på" ;
-    Text [ portuguese ] = "Iniciais sobre" ;
+    Text [ portuguese ] = "Capitulares sobre" ;
     Text [ portuguese_brazilian ] = "Initialen über" ;
     Text[ chinese_simplified ] = "´óĞ´×ÖÄ¸£¬¸ß¶ÈµÈÓÚ";
     Text[ russian ] = "Èíèöèàëû íàä";
@@ -128,7 +128,7 @@ String STR_NO_DROP_LINES
     Text [ french ] = "Pas de lettrine" ;
     Text [ swedish ] = "inga anfanger" ;
     Text [ danish ] = "ingen initialer" ;
-    Text [ portuguese ] = "Sem iniciais" ;
+    Text [ portuguese ] = "Sem capitulares" ;
     Text [ portuguese_brazilian ] = "keine Initialen" ;
     Text[ chinese_simplified ] = "×ÖÊ×²»´óĞ´";
     Text[ russian ] = "Áåç èíèöèàëîâ";
@@ -1330,7 +1330,7 @@ String STR_LINE_WIDTH
     Text [ dutch ] = "breedte scheidingslijn:" ;
     Text [ swedish ] = "Skiljelinjens bredd:" ;
     Text [ danish ] = "Separatorbredde:" ;
-    Text [ portuguese ] = "Largura do separador:" ;
+    Text [ portuguese ] = "Largura da linha de separação:" ;
     Text [ portuguese_brazilian ] = "Trennlinienbreite:" ;
     Text[ chinese_simplified ] = "·Ö¸ôÏß´Ö£º";
     Text[ russian ] = "Øèğèíà ğàçäåëèòåëüíîé ëèíèè:";
