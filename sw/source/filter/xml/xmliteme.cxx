@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmliteme.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:35:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,8 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
                 SwHoriOrient eHoriOrient =
                     ((const SwFmtHoriOrient *)pItem)->GetHoriOrient();
                 sal_Bool bExport = sal_False;
-                sal_uInt32 nMemberId = rEntry.nMemberId & MID_SW_FLAG_MASK;
+                sal_uInt16 nMemberId =
+                    static_cast<sal_uInt16>( rEntry.nMemberId & MID_SW_FLAG_MASK );
                 switch( nMemberId )
                 {
                 case MID_L_MARGIN:
@@ -248,7 +249,8 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
 
     case RES_FRM_SIZE:
         {
-            sal_uInt32 nMemberId = rEntry.nMemberId & MID_SW_FLAG_MASK;
+            sal_uInt16 nMemberId =
+                static_cast<sal_uInt16>( rEntry.nMemberId & MID_SW_FLAG_MASK );
             switch( nMemberId )
             {
             case MID_FRMSIZE_WIDTH:
