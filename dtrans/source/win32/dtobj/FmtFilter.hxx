@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:40:32 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,5 +109,12 @@ com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( com::sun::star
     Format
 ------------------------------------------------------------------------*/
 com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( com::sun::star::uno::Sequence< sal_Int8 >& aTextHtml );
+
+/**
+    Return a FileList in which Windows Shell Links (lnk) are resolved.
+    If for what ever reason a resolution is not possible leave the
+    original lnk file.
+*/
+com::sun::star::uno::Sequence< sal_Int8 > CF_HDROPToFileList(HGLOBAL hGlobal);
 
 #endif
