@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_imexp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-10-23 15:12:25 $
+ *  last change: $Author: ab $ $Date: 2001-11-07 18:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,17 @@ SAL_CALL exportLibraryContainer(
 
 SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
+        SAL_THROW( (::com::sun::star::uno::Exception) );
+
+
+SAL_DLLEXPORT void
+SAL_CALL exportLibrary(
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
+    const LibDescriptor& rLib )
+        SAL_THROW( (::com::sun::star::uno::Exception) );
+
+SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
+SAL_CALL importLibrary( LibDescriptor& rLib )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
 //==================================================================================================
