@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-19 13:16:04 $
+ *  last change: $Author: rt $ $Date: 2002-01-25 21:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog DLG_EXPORT_EPS
     Text[ spanish ] = "Opciones Exportación EPS";
     Text[ italian ] = "Opzioni d'esportazione EPS";
     Text[ danish ] = "EPS eksportindstillinger";
-    Text[ swedish ] = "EPS exportalternativ";
+    Text[ swedish ] = "EPS-exportalternativ";
     Text[ polish ] = "Opcje eksportowe EPS";
     Text[ english_us ] = "EPS Export Options";
     Text[ portuguese_brazilian ] = "EPS Export Optionen";
@@ -615,7 +615,7 @@ ModalDialog DLG_EXPORT_EPS
     Text[ portuguese ] = "Opções exportação EPS";
     Text[ danish ] = "EPS eksportindstillinger";
     Text[ french ] = "Options d'export EPS";
-    Text[ swedish ] = "EPS exportalternativ";
+    Text[ swedish ] = "EPS-exportalternativ";
     Text[ dutch ] = "EPS export opties";
     Text[ spanish ] = "Opciones Exportación EPS";
     Text[ english_us ] = "EPS Export Options";
