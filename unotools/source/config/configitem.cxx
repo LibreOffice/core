@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-10-13 14:01:18 $
+ *  last change: $Author: os $ $Date: 2000-11-03 15:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,8 +152,14 @@ sal_Bool lcl_Find(
         const OUString* pCheckPropertyNames,
         sal_Int32 nLength)
 {
+    //return true if the path is completely correct or if it is longer
+    //i.e ...Print/Content/Graphic and .../Print
     for(sal_Int32 nIndex = 0; nIndex < nLength; nIndex++)
-        if(pCheckPropertyNames[nIndex] == rTemp)
+        if(pCheckPropertyNames[nIndex] == rTemp ||
+            pCheckPropertyNames[nIndex].getLength() < rTemp.getLength() &&
+                rTemp[pCheckPropertyNames[nIndex].getLength()] == '/' &&
+                    0 == rTemp.compareTo(pCheckPropertyNames[nIndex], pCheckPropertyNames[nIndex].getLength())
+            )
             return sal_True;
     return sal_False;
 }
@@ -174,6 +180,15 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
     {
         OUString sTemp;
         pElementChanges[i].Accessor >>= sTemp;
+//#ifdef DEBUG // workaround to #79499#
+//      if(0 == sTemp.compareToAscii("/org.openoffice.Office.Writer/Print/", 36))
+//      {
+//          OUString sValue = sTemp.copy(36);
+//          sTemp = OUString::createFromAscii("/org.openoffice.Office.Writer/Print/");
+//          sTemp += OUString::createFromAscii("Content/");
+//          sTemp += sValue;
+//      }
+//#endif
         OSL_ENSHURE(nBaseTreeLen < sTemp.getLength(),"property name incorrect");
         sTemp = sTemp.copy(nBaseTreeLen);
         if(lcl_Find(sTemp, pCheckPropertyNames, aPropertyNames.getLength()))
