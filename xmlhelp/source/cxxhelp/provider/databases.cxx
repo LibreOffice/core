@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:25:38 $
+ *  last change: $Author: abi $ $Date: 2002-05-31 10:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,14 @@ Databases::Databases( const rtl::OUString& instPath,
                       const rtl::OUString& vendorName,
                       const rtl::OUString& vendorVersion,
                       const rtl::OUString& vendorShort,
+                      const rtl::OUString& styleSheet,
                       com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xSMgr )
     : m_xSMgr( xSMgr ),
       m_nErrorDocLength( 0 ),
       m_pErrorDoc( 0 ),
       m_nCustomCSSDocLength( 0 ),
       m_pCustomCSSDoc( 0 ),
+      m_aCSS(styleSheet.toAsciiLowerCase()),
       prodName( rtl::OUString::createFromAscii( "%PRODUCTNAME" ) ),
       prodVersion( rtl::OUString::createFromAscii( "%PRODUCTVERSION" ) ),
       vendName( rtl::OUString::createFromAscii( "%VENDORNAME" ) ),
@@ -917,6 +919,15 @@ void Databases::errorDocument( const rtl::OUString& Language,
 
 
 
+
+void Databases::changeCSS(const rtl::OUString& newStyleSheet)
+{
+    m_aCSS = newStyleSheet.toAsciiLowerCase();
+    delete m_pCustomCSSDoc, m_pCustomCSSDoc = 0,m_nCustomCSSDocLength = 0;
+}
+
+
+
 void Databases::cascadingStylesheet( const rtl::OUString& Language,
                                      char** buffer,
                                      int* byteCount )
@@ -933,11 +944,14 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
                 fileURL =
                     getInstallPathAsURL()  +
                     lang( Language )       +
-                    rtl::OUString::createFromAscii( "/custom.css" );
+                    rtl::OUString::createFromAscii( "/" ) +
+                    m_aCSS +
+                    rtl::OUString::createFromAscii( ".css" );
             else if( retry == 1 )
                 fileURL =
                     getInstallPathAsURL()  +
-                    rtl::OUString::createFromAscii( "custom.css" );
+                    m_aCSS +
+                    rtl::OUString::createFromAscii( ".css" );
 
             osl::DirectoryItem aDirItem;
             osl::File aFile( fileURL );
