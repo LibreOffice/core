@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-11 12:35:10 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdundo.hxx>
 #include <svx/svdvmark.hxx>
 #include <svx/xoutx.hxx>
 #include <sfx2/bindings.hxx>
@@ -343,22 +344,27 @@ void ScDrawView::DrawMarks( OutputDevice* pOut ) const
 
 void ScDrawView::SetMarkedToLayer( BYTE nLayerNo )
 {
-    //
-    //!         Undo !!!
-    //
-
     if (HasMarkedObj())
     {
+        //  #i11702# use SdrUndoObjectLayerChange for undo
+        //  STR_UNDO_SELATTR is "Attributes" - should use a different text later
+        BegUndo( ScGlobal::GetRscString( STR_UNDO_SELATTR ) );
+
         const SdrMarkList& rMark = GetMarkList();
         ULONG nCount = rMark.GetMarkCount();
         for (ULONG i=0; i<nCount; i++)
         {
             SdrObject* pObj = rMark.GetMark(i)->GetObj();
             if ( !pObj->ISA(SdrUnoObj) )
+            {
+                AddUndo( new SdrUndoObjectLayerChange( *pObj, pObj->GetLayer(), (SdrLayerID)nLayerNo) );
                 pObj->SetLayer( nLayerNo );
+            }
         }
 
-        //  Paint passiert beim SetLayer
+        EndUndo();
+
+        //  repaint is done in SetLayer
 
         pViewData->GetDocShell()->SetDrawModified();
 
