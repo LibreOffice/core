@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: pb $ $Date: 2000-11-10 13:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,6 @@
 #include <tools/rc.h>
 #endif
 
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
-#endif
-
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 
@@ -88,6 +84,10 @@
 #endif
 #ifndef _SVX_DIALOGS_HRC
 #include "dialogs.hrc"
+#endif
+
+#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
+#include <svtools/viewoptions.hxx>
 #endif
 
 #ifdef WNT
@@ -394,11 +394,9 @@ IconChoiceDialog ::~IconChoiceDialog ()
 
     // save configuration at INI-Manager
     // and remove pages
-    SfxIniManager* pIniMgr = SFX_APP()->GetAppIniManager();
-    String aDlgData( pIniMgr->GetString( GetPosPixel(), Size() ) );
-    aDlgData += (sal_Unicode)pIniMgr->GetToken();
-    aDlgData.Append( UniString::CreateFromInt32( mnCurrentPageId ) );
-    pIniMgr->Set( aDlgData, SFX_KEY_DIALOG, nResId );
+    SvtViewOptions aTabDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
+    aTabDlgOpt.SetPosition( GetPosPixel().X(), GetPosPixel().Y() );
+    aTabDlgOpt.SetPageID( mnCurrentPageId );
     const USHORT nCount = maPageList.Count();
 
     for ( i = 0; i < nCount; ++i )
@@ -411,7 +409,8 @@ IconChoiceDialog ::~IconChoiceDialog ()
             String aPageData(pData->pPage->GetUserData());
             if ( aPageData.Len() )
             {
-                pIniMgr->Set( aPageData, SFX_KEY_PAGE, pData->nId);
+                SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pData->nId ) );
+                aTabPageOpt.SetUserData( aPageData );
             }
 
             if ( pData->bOnDemand )
@@ -499,8 +498,8 @@ void IconChoiceDialog::RemoveTabPage( USHORT nId )
             String aPageData(pData->pPage->GetUserData());
             if ( aPageData.Len() )
             {
-                SfxIniManager* pIniMgr = SFX_APP()->GetAppIniManager();
-                pIniMgr->Set( aPageData, SFX_KEY_PAGE, pData->nId);
+                SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pData->nId ) );
+                aTabPageOpt.SetUserData( aPageData );
             }
         }
 
@@ -933,8 +932,6 @@ IMPL_LINK( IconChoiceDialog, CancelHdl, Button*, pButton )
 void IconChoiceDialog::ActivatePageImpl ()
 {
     DBG_ASSERT( maPageList.Count(), "keine Pages angemeldet" );
-    SfxIniManager* pIniMgr = SFX_APP()->GetAppIniManager();
-
     IconChoicePageData* pData = GetPageData ( mnCurrentPageId );
     DBG_ASSERT( pData, "Id nicht bekannt" );
     if ( pData )
@@ -954,13 +951,11 @@ void IconChoiceDialog::ActivatePageImpl ()
             if ( pTmpSet && !pData->bOnDemand )
                 pData->pPage = (pData->fnCreatePage)( this, *pTmpSet );
             else
-                pData->pPage = (pData->fnCreatePage)
-                               ( this, *CreateInputItemSet( mnCurrentPageId ) );
+                pData->pPage = (pData->fnCreatePage)( this, *CreateInputItemSet( mnCurrentPageId ) );
 
-            pData->pPage->SetUserData(pIniMgr->Get( SFX_KEY_PAGE, pData->nId ));
-
+            SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pData->nId ) );
+            pData->pPage->SetUserData( aTabPageOpt.GetUserData() );
             SetPosSizePages ( pData->nId );
-
             PageCreated( mnCurrentPageId, *(pData->pPage) );
 
             if ( pData->bOnDemand )
@@ -1249,20 +1244,16 @@ void IconChoiceDialog::Start_Impl()
         nActPage = mnCurrentPageId;
 
     // Konfiguration vorhanden?
-    SfxIniManager* pIniMgr = SFX_APP()->GetAppIniManager();
-    String aDlgData( pIniMgr->Get( SFX_KEY_DIALOG, nResId ) );
+    SvtViewOptions aTabDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
 
-    if ( aDlgData.Len() > 0 )
+    if ( aTabDlgOpt.Exists() )
     {
         // ggf. Position aus Konfig
-        Size aDummySize;
-
-        if ( pIniMgr->GetPosSize( aDlgData.GetToken( 0, pIniMgr->GetToken() ),
-                                                     aPos, aDummySize ) )
-            SetPosPixel( aPos );
+        aTabDlgOpt.GetPosition( aPos.X(), aPos.Y() );
+        SetPosPixel( aPos );
 
         // initiale TabPage aus Programm/Hilfe/Konfig
-        nActPage = (USHORT)aDlgData.GetToken( 1, pIniMgr->GetToken() ).ToInt32();
+        nActPage = (USHORT)aTabDlgOpt.GetPageID();
 
         if ( USHRT_MAX != mnCurrentPageId )
             nActPage = mnCurrentPageId;

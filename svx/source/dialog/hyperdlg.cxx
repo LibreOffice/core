@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-17 08:50:08 $
+ *  last change: $Author: pb $ $Date: 2000-11-10 13:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _SV_SETTINGS_HXX
 #include <vcl/settings.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
+#include <svtools/viewoptions.hxx>
 #endif
 
 #include "hyperdlg.hxx"
@@ -221,9 +224,9 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
 
 SvxHpLinkDlg::~SvxHpLinkDlg ()
 {
-    String aStrEntry = UniString::CreateFromInt32( SID_HYPERLINK_DIALOG );
-    aStrEntry += String ( RTL_CONSTASCII_USTRINGPARAM( "Window" ) );
-    SFX_APP()->GetIniManager()->Delete( SFX_GROUP_VIEW, aStrEntry );
+    // delete config item, so the base class (IconChoiceDialog) can not load it on the next start
+    SvtViewOptions aViewOpt( E_TABDIALOG, String::CreateFromInt32( SID_HYPERLINK_DIALOG ) );
+    aViewOpt.Delete();
 
     delete mpItemSet;
 }

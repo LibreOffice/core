@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 06:36:00 $
+ *  last change: $Author: pb $ $Date: 2000-11-10 13:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
-#ifndef _SFX_INIMGR_HXX
-#include <sfx2/inimgr.hxx>
+#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
+#include <svtools/viewoptions.hxx>
 #endif
 #pragma hdrstop
 
@@ -118,6 +118,7 @@ using namespace com::sun::star::uno;
 
 #define IMPGRF_INIKEY_ASLINK        "ImportGraphicAsLink"
 #define IMPGRF_INIKEY_PREVIEW       "ImportGraphicPreview"
+#define IMPGRF_CONFIGNAME           String(DEFINE_CONST_UNICODE("ImportGraphicDialog"))
 
 #ifdef MAC
 #define IMPGRF_GRAPHIC_FILTER_FILE  "Filterlist"
@@ -650,7 +651,10 @@ void SvxImportGraphicDialog::Construct_Impl( const String &rTitle, USHORT nEnabl
     pFilterButton->SetHelpId( HID_IMPGRF_BTN_FILTER );
     AddControl( pFilterButton );
     pFilterButton->Show();
-    SfxIniManager* pIniMgr = SFX_INIMANAGER();
+    SvtViewOptions aViewOpt( E_DIALOG, IMPGRF_CONFIGNAME );
+    String aUserData;
+    if ( aViewOpt.Exists() )
+        aUserData = aViewOpt.GetUserData();
 
     if ( ENABLE_LINK & nEnable )
     {
@@ -659,9 +663,9 @@ void SvxImportGraphicDialog::Construct_Impl( const String &rTitle, USHORT nEnabl
 
         if ( pLink )
             bLink = ( (const SfxBoolItem*)pLink )->GetValue();
-        else
-            bLink = (BOOL)pIniMgr->Get( SFX_GROUP_COMMON, UniString::CreateFromAscii(
-                           RTL_CONSTASCII_STRINGPARAM( IMPGRF_INIKEY_ASLINK ) ) ).ToInt32();
+        else if ( aUserData.Len() > 0 )
+            bLink = (BOOL)aUserData.GetToken(0).ToInt32();
+
         pLinkBox = new CheckBox( this );
         pLinkBox->SetText( pResImpl->pStrings[STR_LINK] );
         pLinkBox->Check( bLink );
@@ -676,9 +680,8 @@ void SvxImportGraphicDialog::Construct_Impl( const String &rTitle, USHORT nEnabl
 
     if ( pPrevItem )
         bShowPreview = ( (SfxBoolItem*)pPrevItem )->GetValue();
-    else
-        bShowPreview = (BOOL)pIniMgr->Get( SFX_GROUP_COMMON, UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM( IMPGRF_INIKEY_PREVIEW ) ) ).ToInt32();
+    else if ( aUserData.Len() > 0 )
+        bShowPreview = (BOOL)aUserData.GetToken(1).ToInt32();
 
     // "Vorschau"
     pPreviewBox = new CheckBox( this );
@@ -872,12 +875,12 @@ short SvxImportGraphicDialog::Execute()
             // merken, ob der Benutzer Linken und Preview eingeschaltet hat
             BOOL bLink = pLinkBox ? pLinkBox->IsChecked() : FALSE;
             pSfxApp->PutItem( SfxBoolItem( SID_IMPORT_GRAPH_LINK, bLink ) );
-            sal_Unicode cTemp = bLink ? '1' : '0';
-            SFX_INIMANAGER()->Set( String( cTemp ), SFX_GROUP_COMMON, UniString::CreateFromAscii(
-                                   RTL_CONSTASCII_STRINGPARAM( IMPGRF_INIKEY_ASLINK ) ) );
-            cTemp = pPreviewBox && pPreviewBox->IsChecked() ? '1' : '0';
-            SFX_INIMANAGER()->Set( String( cTemp ), SFX_GROUP_COMMON, UniString::CreateFromAscii(
-                                   RTL_CONSTASCII_STRINGPARAM( IMPGRF_INIKEY_PREVIEW ) ) );
+            String aUserData;
+            aUserData += bLink ? '1' : '0';
+            aUserData += ';';
+            aUserData += ( pPreviewBox && pPreviewBox->IsChecked() ) ? '1' : '0';
+            SvtViewOptions aViewOpt( E_DIALOG, IMPGRF_CONFIGNAME );
+            aViewOpt.SetUserData( aUserData );
 
             // Open?
             if ( !pResImpl->bSaveAs )

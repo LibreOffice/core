@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 11:52:11 $
+ *  last change: $Author: pb $ $Date: 2000-11-10 13:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,7 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
-#ifndef _SFXINIPROP_HXX
-#include <svtools/iniprop.hxx>
-#endif
 
-//#include <usr/ustring.hxx>
 #include "hlmailtp.hxx"
 #include "hyperdlg.hrc"
 
@@ -534,6 +530,7 @@ IMPL_LINK ( SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, void *, EMPTYARG )
     uno::Reference< frame::XDispatchProvider > xProv( pViewFrame->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
     if ( xProv.is() )
     {
+/*!!! (pb) we need a new config item here
         SfxAppIniManagerProperty aProp;
         GetpApp()->Property( aProp );
         if( !aProp.GetIniManager() )
@@ -572,6 +569,7 @@ IMPL_LINK ( SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, void *, EMPTYARG )
                 aDisp->dispatch( aURL, aArgs );
             }
         }
+*/
     }
 
     return( 0L );
