@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:36:35 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1449,222 +1449,183 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 
 void OfaTreeOptionsDialog::Initialize()
 {
-    USHORT nSlot = SID_OPTIONS_TREEDIALOG;
     OfaPageResource aDlgResource;
     sal_uInt16 nGroup = 0;
     SfxApplication* pApp = SFX_APP();
 
-    if(nSlot != SID_OPTPAGE_PROXY)
+    BOOL isSSOEnabled = EnableSSO();
+
+    ResStringArray& rGeneralArray = aDlgResource.GetGeneralArray();
+    nGroup = AddGroup(rGeneralArray.GetString(0), 0, 0, SID_GENERAL_OPTIONS );
+    sal_uInt16 nEnd = rGeneralArray.Count();
+
+    sal_uInt16 i;
+    for(i = 1; i < nEnd; i++)
     {
-        BOOL isSSOEnabled = EnableSSO();
-
-        ResStringArray& rGeneralArray = aDlgResource.GetGeneralArray();
-        nGroup = AddGroup(rGeneralArray.GetString(0), 0, 0, SID_GENERAL_OPTIONS );
-        sal_uInt16 nEnd = nSlot == SID_OPTIONS_TREEDIALOG ? rGeneralArray.Count() : 2;
-
-        sal_uInt16 i;
-        for(i = 1; i < nEnd; i++)
-        {
-            sal_uInt16 nPageId = (sal_uInt16)rGeneralArray.GetValue(i);
-            if ( nPageId != RID_SVXPAGE_SSO || isSSOEnabled )
-                AddTabPage( nPageId, rGeneralArray.GetString(i), nGroup );
-        }
-
-        //load/save
-        ResStringArray& rFilterArray = aDlgResource.GetFilterArray();
-        nGroup = AddGroup( rFilterArray.GetString(0), 0, 0, SID_FILTER_DLG );
-        for(i = 1; i < rFilterArray.Count(); ++i )
-            AddTabPage( (sal_uInt16)rFilterArray.GetValue(i),
-                                rFilterArray.GetString(i), nGroup );
-
-        // new spec: always show chart pages in general options
-        ResStringArray& rChartArray = aDlgResource.GetChartArray();
-        nGroup = AddGroup( rChartArray.GetString(0), 0, 0, SID_SCH_EDITOPTIONS );
-        for(USHORT i1 = 1; i1 < rChartArray.Count(); i1++)
-            AddTabPage( (sal_uInt16)rChartArray.GetValue(i1), rChartArray.GetString(i1), nGroup);
+        sal_uInt16 nPageId = (sal_uInt16)rGeneralArray.GetValue(i);
+        if ( nPageId != RID_SVXPAGE_SSO || isSSOEnabled )
+            AddTabPage( nPageId, rGeneralArray.GetString(i), nGroup );
     }
 
+    //load/save
+    ResStringArray& rFilterArray = aDlgResource.GetFilterArray();
+    nGroup = AddGroup( rFilterArray.GetString(0), 0, 0, SID_FILTER_DLG );
+    for(i = 1; i < rFilterArray.Count(); ++i )
+        AddTabPage( (sal_uInt16)rFilterArray.GetValue(i),
+                            rFilterArray.GetString(i), nGroup );
+
+    // language options
     SvtLanguageOptions aLanguageOptions;
-
-    if ( nSlot == SID_OPTIONS_TREEDIALOG )
+    ResStringArray& rLangArray = aDlgResource.GetLangArray();
+    nGroup = AddGroup( rLangArray.GetString(0), 0, 0, SID_LANGUAGE_OPTIONS );
+    for ( USHORT i = 1; i < rLangArray.Count(); ++i )
     {
-        // language options
-        ResStringArray& rLangArray = aDlgResource.GetLangArray();
-        nGroup = AddGroup( rLangArray.GetString(0), 0, 0, SID_LANGUAGE_OPTIONS );
-        for ( USHORT i = 1; i < rLangArray.Count(); ++i )
-        {
-            sal_uInt16 nValue = (sal_uInt16)rLangArray.GetValue(i);
-            if ( ( RID_SVXPAGE_JSEARCH_OPTIONS != nValue || aLanguageOptions.IsJapaneseFindEnabled() ) &&
-                 ( RID_SVXPAGE_ASIAN_LAYOUT != nValue    || aLanguageOptions.IsAsianTypographyEnabled() ) &&
-                 ( RID_SVXPAGE_OPTIONS_CTL != nValue     || aLanguageOptions.IsCTLFontEnabled() ) )
-                AddTabPage( nValue, rLangArray.GetString(i), nGroup );
-        }
+        sal_uInt16 nValue = (sal_uInt16)rLangArray.GetValue(i);
+        if ( ( RID_SVXPAGE_JSEARCH_OPTIONS != nValue || aLanguageOptions.IsJapaneseFindEnabled() ) &&
+             ( RID_SVXPAGE_ASIAN_LAYOUT != nValue    || aLanguageOptions.IsAsianTypographyEnabled() ) &&
+             ( RID_SVXPAGE_OPTIONS_CTL != nValue     || aLanguageOptions.IsCTLFontEnabled() ) )
+            AddTabPage( nValue, rLangArray.GetString(i), nGroup );
     }
-    if ( nSlot != SID_OPTPAGE_USERDATA )
-    {
-        // Internet
-        // f"ur SID_OPTPAGE_PROXY wird der komplett INet-Dlg angezeigt
-        ResStringArray& rInetArray = aDlgResource.GetInetArray();
-        nGroup = AddGroup(rInetArray.GetString(0), 0, 0, SID_INET_DLG );
-        //falls doch nur dir Proxy-Page gewuenscht wird, dann diese Zeile
-//      sal_uInt16 nEnd = nSlot == SID_OPTPAGE_PROXY ? 2 : rInetArray.Count();
-        sal_uInt16 nEnd = rInetArray.Count();
 
-        for ( sal_uInt16 i = 1; i < nEnd; i++ )
+
+    sal_Bool bHasAnyFilter = sal_False;
+    SvtModuleOptions aModuleOpt;
+    if ( aModuleOpt.IsWriter() )
+    {
+        // Textdokument
+        bHasAnyFilter = sal_True;
+        ResStringArray& rTextArray = aDlgResource.GetTextArray();
+        SfxModule *pSwMod = (*(SfxModule**) GetAppData(SHL_WRITER));
+        if ( pSwMod && pSwMod->IsActive() )
         {
-#if defined WNT
-            // Disable E-mail tab-page on Windows
-            if ( i == 3 )
-                continue;
+            nGroup = AddGroup(rTextArray.GetString(0), pSwMod, pSwMod, SID_SW_EDITOPTIONS );
+            USHORT i;
+            for(i = 1; i < rTextArray.Count(); i++)
+            {
+                sal_uInt16 nValue = (sal_uInt16)rTextArray.GetValue(i);
+                if((RID_SW_TP_STD_FONT_CJK != nValue || aLanguageOptions.IsCJKFontEnabled())&&
+                    (RID_SW_TP_STD_FONT_CTL != nValue || aLanguageOptions.IsCTLFontEnabled()))
+                    AddTabPage( nValue, rTextArray.GetString(i), nGroup);
+            }
+#ifndef PRODUCT
+            AddTabPage( RID_SW_TP_OPTTEST_PAGE, String::CreateFromAscii("Interner Test"), nGroup);
 #endif
-            sal_uInt16 nPageId = (sal_uInt16)rInetArray.GetValue(i);
-            AddTabPage( nPageId, rInetArray.GetString(i), nGroup );
+            // HTML-Dokument
+            ResStringArray& rHTMLArray = aDlgResource.GetHTMLArray();
+            nGroup = AddGroup(rHTMLArray.GetString(0), pSwMod, pSwMod, SID_SW_ONLINEOPTIONS );
+            for(i = 1; i < rHTMLArray.Count(); i++)
+                AddTabPage( (sal_uInt16)rHTMLArray.GetValue(i), rHTMLArray.GetString(i), nGroup);
+#ifndef PRODUCT
+            AddTabPage( RID_SW_TP_OPTTEST_PAGE, String::CreateFromAscii("Interner Test"), nGroup);
+#endif
         }
-        if ( nSlot == SID_OPTPAGE_PROXY )
-            ActivatePage(   RID_SVXPAGE_INET_PROXY );
     }
 
-    if ( nSlot == SID_OPTIONS_TREEDIALOG )
+    if ( aModuleOpt.IsCalc() )
     {
-        sal_Bool bHasAnyFilter = sal_False;
-        SvtModuleOptions aModuleOpt;
-        if ( aModuleOpt.IsWriter() )
+        // StarCalc-Dialog
+        bHasAnyFilter = sal_True;
+        SfxModule*      pScMod = ( *( SfxModule** ) GetAppData( SHL_CALC ) );
+        if ( pScMod && pScMod->IsActive() )
         {
-            // Textdokument
-            bHasAnyFilter = sal_True;
-            ResStringArray& rTextArray = aDlgResource.GetTextArray();
-            SfxModule *pSwMod = (*(SfxModule**) GetAppData(SHL_WRITER));
-            if ( pSwMod && pSwMod->IsActive() )
+            ResStringArray& rCalcArray = aDlgResource.GetCalcArray();
+            nGroup = AddGroup( rCalcArray.GetString( 0 ), pScMod, pScMod, SID_SC_EDITOPTIONS );
+            const sal_Bool  bCTL = aLanguageOptions.IsCTLFontEnabled();
+            sal_uInt16      nId;
+            const USHORT    nCount = rCalcArray.Count();
+            for( USHORT i = 1 ; i < nCount ; ++i )
             {
-                nGroup = AddGroup(rTextArray.GetString(0), pSwMod, pSwMod, SID_SW_EDITOPTIONS );
-                USHORT i;
-                for(i = 1; i < rTextArray.Count(); i++)
-                {
-                    sal_uInt16 nValue = (sal_uInt16)rTextArray.GetValue(i);
-                    if((RID_SW_TP_STD_FONT_CJK != nValue || aLanguageOptions.IsCJKFontEnabled())&&
-                        (RID_SW_TP_STD_FONT_CTL != nValue || aLanguageOptions.IsCTLFontEnabled()))
-                        AddTabPage( nValue, rTextArray.GetString(i), nGroup);
-                }
-    #ifndef PRODUCT
-                AddTabPage( RID_SW_TP_OPTTEST_PAGE, String::CreateFromAscii("Interner Test"), nGroup);
-    #endif
-                // HTML-Dokument
-                ResStringArray& rHTMLArray = aDlgResource.GetHTMLArray();
-                nGroup = AddGroup(rHTMLArray.GetString(0), pSwMod, pSwMod, SID_SW_ONLINEOPTIONS );
-                for(i = 1; i < rHTMLArray.Count(); i++)
-                    AddTabPage( (sal_uInt16)rHTMLArray.GetValue(i), rHTMLArray.GetString(i), nGroup);
-    #ifndef PRODUCT
-                AddTabPage( RID_SW_TP_OPTTEST_PAGE, String::CreateFromAscii("Interner Test"), nGroup);
-    #endif
+                nId = ( sal_uInt16 ) rCalcArray.GetValue( i );
+//              if( bCTL || nId != RID_OFA_TP_INTERNATIONAL )
+//              #103755# if an international tabpage is need one day, this should be used again... ;-)
+                if( nId != RID_OFA_TP_INTERNATIONAL )
+                    AddTabPage( nId, rCalcArray.GetString( i ), nGroup );
             }
         }
-
-        if ( aModuleOpt.IsCalc() )
-        {
-            // StarCalc-Dialog
-            bHasAnyFilter = sal_True;
-            SfxModule*      pScMod = ( *( SfxModule** ) GetAppData( SHL_CALC ) );
-            if ( pScMod && pScMod->IsActive() )
-            {
-                ResStringArray& rCalcArray = aDlgResource.GetCalcArray();
-                nGroup = AddGroup( rCalcArray.GetString( 0 ), pScMod, pScMod, SID_SC_EDITOPTIONS );
-                const sal_Bool  bCTL = aLanguageOptions.IsCTLFontEnabled();
-                sal_uInt16      nId;
-                const USHORT    nCount = rCalcArray.Count();
-                for( USHORT i = 1 ; i < nCount ; ++i )
-                {
-                    nId = ( sal_uInt16 ) rCalcArray.GetValue( i );
-    //              if( bCTL || nId != RID_OFA_TP_INTERNATIONAL )
-    //              #103755# if an international tabpage is need one day, this should be used again... ;-)
-                    if( nId != RID_OFA_TP_INTERNATIONAL )
-                        AddTabPage( nId, rCalcArray.GetString( i ), nGroup );
-                }
-            }
-        }
-
-        if ( aModuleOpt.IsImpress() )
-        {
-            //Praesentation
-            bHasAnyFilter = sal_True;
-            SfxModule*      pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
-            if ( pSdMod && pSdMod->IsActive() )
-            {
-                ResStringArray& rImpressArray = aDlgResource.GetImpressArray();
-                nGroup = AddGroup( rImpressArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
-                const sal_Bool  bCTL = aLanguageOptions.IsCTLFontEnabled();
-                sal_uInt16      nId;
-                const USHORT    nCount = rImpressArray.Count();
-                for( USHORT i = 1 ; i < nCount ; ++i )
-                {
-                    nId = ( sal_uInt16 ) rImpressArray.GetValue( i );
-                    if( bCTL || nId != RID_OFA_TP_INTERNATIONAL_IMPR )
-                        AddTabPage( nId, rImpressArray.GetString( i ), nGroup );
-                }
-            }
-        }
-
-        if ( aModuleOpt.IsDraw() )
-        {
-            //Zeichnung
-            SfxModule*      pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
-            if ( pSdMod && pSdMod->IsActive() )
-            {
-                ResStringArray& rDrawArray = aDlgResource.GetDrawArray();
-                nGroup = AddGroup( rDrawArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
-                const sal_Bool  bCTL = aLanguageOptions.IsCTLFontEnabled();
-                sal_uInt16      nId;
-                const USHORT    nCount = rDrawArray.Count();
-                for( USHORT i = 1 ; i < nCount ; ++i )
-                {
-                    nId = ( sal_uInt16 ) rDrawArray.GetValue( i );
-                    if( bCTL || nId != RID_OFA_TP_INTERNATIONAL_SD )
-                        AddTabPage( nId, rDrawArray.GetString( i ), nGroup );
-                }
-            }
-        }
-
-        if ( aModuleOpt.IsMath() )
-        {
-            // StarMath-Dialog
-            SfxModule *pSmMod = (*(SfxModule**) GetAppData(SHL_SM));
-            if ( pSmMod && pSmMod->IsActive() )
-            {
-                ResStringArray& rStarMathArray = aDlgResource.GetStarMathArray();
-                nGroup = AddGroup(rStarMathArray.GetString(0), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
-                for(USHORT i = 1; i < rStarMathArray.Count(); i++)
-                    AddTabPage( (sal_uInt16)rStarMathArray.GetValue(i), rStarMathArray.GetString(i), nGroup);
-            }
-        }
-/*
-        if ( aModuleOpt.IsChart() )
-        {
-            //Diagramm
-            SfxModule *pSchMod = (*(SfxModule**) GetAppData(SHL_SCH));
-            if ( pSchMod && pSchMod->IsActive() )
-            {
-                ResStringArray& rChartArray = aDlgResource.GetChartArray();
-                nGroup = AddGroup(rChartArray.GetString(0), pSchMod, pSchMod, SID_SCH_EDITOPTIONS );
-                for(USHORT i = 1; i < rChartArray.Count(); i++)
-                    AddTabPage( (sal_uInt16)rChartArray.GetValue(i), rChartArray.GetString(i), nGroup);
-            }
-        }
-*/
-        if (sal_True)
-        {   // Data access (always installed)
-            ResStringArray& rDSArray = aDlgResource.GetDatasourcesArray();
-            nGroup = AddGroup(rDSArray.GetString(0), 0, NULL, SID_SB_STARBASEOPTIONS );
-            for(USHORT i = 1; i < rDSArray.Count(); i++)
-                AddTabPage( (sal_uInt16)rDSArray.GetValue(i), rDSArray.GetString(i), nGroup);
-        }
-
-        ResizeTreeLB();
-        ActivateLastSelection();
     }
-    else
-        ResizeTreeLB();
 
-    if ( nSlot == SID_OPTPAGE_USERDATA )
-        ActivatePage( RID_SFXPAGE_GENERAL );
+    if ( aModuleOpt.IsImpress() )
+    {
+        //Praesentation
+        bHasAnyFilter = sal_True;
+        SfxModule*      pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
+        if ( pSdMod && pSdMod->IsActive() )
+        {
+            ResStringArray& rImpressArray = aDlgResource.GetImpressArray();
+            nGroup = AddGroup( rImpressArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
+            const sal_Bool  bCTL = aLanguageOptions.IsCTLFontEnabled();
+            sal_uInt16      nId;
+            const USHORT    nCount = rImpressArray.Count();
+            for( USHORT i = 1 ; i < nCount ; ++i )
+            {
+                nId = ( sal_uInt16 ) rImpressArray.GetValue( i );
+                if( bCTL || nId != RID_OFA_TP_INTERNATIONAL_IMPR )
+                    AddTabPage( nId, rImpressArray.GetString( i ), nGroup );
+            }
+        }
+    }
+
+    if ( aModuleOpt.IsDraw() )
+    {
+        //Zeichnung
+        SfxModule*      pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
+        if ( pSdMod && pSdMod->IsActive() )
+        {
+            ResStringArray& rDrawArray = aDlgResource.GetDrawArray();
+            nGroup = AddGroup( rDrawArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
+            const sal_Bool  bCTL = aLanguageOptions.IsCTLFontEnabled();
+            sal_uInt16      nId;
+            const USHORT    nCount = rDrawArray.Count();
+            for( USHORT i = 1 ; i < nCount ; ++i )
+            {
+                nId = ( sal_uInt16 ) rDrawArray.GetValue( i );
+                if( bCTL || nId != RID_OFA_TP_INTERNATIONAL_SD )
+                    AddTabPage( nId, rDrawArray.GetString( i ), nGroup );
+            }
+        }
+    }
+
+    if ( aModuleOpt.IsMath() )
+    {
+        // StarMath-Dialog
+        SfxModule *pSmMod = (*(SfxModule**) GetAppData(SHL_SM));
+        if ( pSmMod && pSmMod->IsActive() )
+        {
+            ResStringArray& rStarMathArray = aDlgResource.GetStarMathArray();
+            nGroup = AddGroup(rStarMathArray.GetString(0), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
+            for(USHORT i = 1; i < rStarMathArray.Count(); i++)
+                AddTabPage( (sal_uInt16)rStarMathArray.GetValue(i), rStarMathArray.GetString(i), nGroup);
+        }
+    }
+    // Data access (always installed)
+    ResStringArray& rDSArray = aDlgResource.GetDatasourcesArray();
+    nGroup = AddGroup(rDSArray.GetString(0), 0, NULL, SID_SB_STARBASEOPTIONS );
+    for(USHORT i = 1; i < rDSArray.Count(); i++)
+        AddTabPage( (sal_uInt16)rDSArray.GetValue(i), rDSArray.GetString(i), nGroup);
+
+    // new spec: always show chart pages in general options
+    ResStringArray& rChartArray = aDlgResource.GetChartArray();
+    nGroup = AddGroup( rChartArray.GetString(0), 0, 0, SID_SCH_EDITOPTIONS );
+    for(USHORT i1 = 1; i1 < rChartArray.Count(); i1++)
+        AddTabPage( (sal_uInt16)rChartArray.GetValue(i1), rChartArray.GetString(i1), nGroup);
+
+    // Internet
+    ResStringArray& rInetArray = aDlgResource.GetInetArray();
+    nGroup = AddGroup(rInetArray.GetString(0), 0, 0, SID_INET_DLG );
+
+    for ( sal_uInt16 i = 1; i < rInetArray.Count(); i++ )
+    {
+        sal_uInt16 nPageId = (sal_uInt16)rInetArray.GetValue(i);
+#if defined WNT
+        // Disable E-mail tab-page on Windows
+        if ( nPageId == RID_SVXPAGE_INET_MAIL )
+            continue;
+#endif
+        AddTabPage( nPageId, rInetArray.GetString(i), nGroup );
+    }
+
+    ResizeTreeLB();
+    ActivateLastSelection();
 }
 
 namespace
