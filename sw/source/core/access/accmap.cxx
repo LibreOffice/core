@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-03 12:34:00 $
+ *  last change: $Author: mib $ $Date: 2002-05-06 12:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #ifndef _NDTYP_HXX
 #include <ndtyp.hxx>
 #endif
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
+#include <svx/AccessibleShape.hxx>
+#endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -142,6 +145,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::drawing;
 using namespace ::rtl;
 
 struct SwFrmFunc
@@ -165,6 +169,32 @@ public:
     WeakReference < XAccessible > mxCursorContext;
 
     SwAccessibleContextMap_Impl()
+#ifndef PRODUCT
+        : mbLocked( sal_False )
+#endif
+    {}
+
+};
+
+//------------------------------------------------------------------------------
+struct SwShapeFunc
+{
+    sal_Bool operator()( const SdrObject * p1,
+                         const SdrObject * p2) const
+    {
+        return p1 < p2;
+    }
+};
+typedef ::std::map < const SdrObject *, WeakReference < XAccessible >, SwShapeFunc > _SwAccessibleShapeMap_Impl;
+
+class SwAccessibleShapeMap_Impl: public _SwAccessibleShapeMap_Impl
+{
+public:
+
+#ifndef PRODUCT
+    sal_Bool mbLocked;
+#endif
+    SwAccessibleShapeMap_Impl()
 #ifndef PRODUCT
         : mbLocked( sal_False )
 #endif
@@ -463,7 +493,8 @@ void SwAccessibleMap::InvalidateCursorPosition(
 
 
 SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
-    mpMap( 0  ),
+    mpFrmMap( 0  ),
+    mpShapeMap( 0  ),
     mpEvents( 0  ),
     mpEventMap( 0  ),
     mpVSh( pSh ),
@@ -479,11 +510,11 @@ SwAccessibleMap::~SwAccessibleMap()
     Reference < XAccessible > xAcc;
     {
         vos::OGuard aGuard( maMutex );
-        if( mpMap )
+        if( mpFrmMap )
         {
             const SwRootFrm *pRootFrm = GetShell()->GetLayout();
-            SwAccessibleContextMap_Impl::iterator aIter = mpMap->find( pRootFrm );
-            if( aIter != mpMap->end() )
+            SwAccessibleContextMap_Impl::iterator aIter = mpFrmMap->find( pRootFrm );
+            if( aIter != mpFrmMap->end() )
                 xAcc = (*aIter).second;
             if( !xAcc.is() )
                 xAcc = new SwAccessibleDocument( this );
@@ -497,12 +528,12 @@ SwAccessibleMap::~SwAccessibleMap()
     {
         vos::OGuard aGuard( maMutex );
 #ifndef PRODUCT
-        ASSERT( !mpMap || mpMap->empty(),
-                "Map should be empty after disposing the root frame" );
-        if( mpMap )
+        ASSERT( !mpFrmMap || mpFrmMap->empty(),
+                "Frame map should be empty after disposing the root frame" );
+        if( mpFrmMap )
         {
-            SwAccessibleContextMap_Impl::iterator aIter = mpMap->begin();
-            while( aIter != mpMap->end() )
+            SwAccessibleContextMap_Impl::iterator aIter = mpFrmMap->begin();
+            while( aIter != mpFrmMap->end() )
             {
                 Reference < XAccessible > xTmp = (*aIter).second;
                 if( xTmp.is() )
@@ -513,9 +544,27 @@ SwAccessibleMap::~SwAccessibleMap()
                 ++aIter;
             }
         }
+        ASSERT( !mpShapeMap || mpShapeMap->empty(),
+                "Object map should be empty after disposing the root frame" );
+        if( mpShapeMap )
+        {
+            SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->begin();
+            while( aIter != mpShapeMap->end() )
+            {
+                Reference < XAccessible > xTmp = (*aIter).second;
+                if( xTmp.is() )
+                {
+                    accessibility::AccessibleShape *pTmp =
+                        static_cast< accessibility::AccessibleShape* >( xTmp.get() );
+                }
+                ++aIter;
+            }
+        }
 #endif
-        delete mpMap;
-        mpMap = 0;
+        delete mpFrmMap;
+        mpFrmMap = 0;
+        delete mpShapeMap;
+        mpShapeMap = 0;
     }
 
     {
@@ -537,22 +586,22 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView()
     {
         vos::OGuard aGuard( maMutex );
 
-        if( !mpMap )
+        if( !mpFrmMap )
         {
-            mpMap = new SwAccessibleContextMap_Impl;
+            mpFrmMap = new SwAccessibleContextMap_Impl;
 #ifndef PRODUCT
-            mpMap->mbLocked = sal_False;
+            mpFrmMap->mbLocked = sal_False;
 #endif
         }
 
 #ifndef PRODUCT
-        ASSERT( !mpMap->mbLocked, "Map is locked" );
-        mpMap->mbLocked = sal_True;
+        ASSERT( !mpFrmMap->mbLocked, "Map is locked" );
+        mpFrmMap->mbLocked = sal_True;
 #endif
 
         const SwRootFrm *pRootFrm = GetShell()->GetLayout();
-        SwAccessibleContextMap_Impl::iterator aIter = mpMap->find( pRootFrm );
-        if( aIter != mpMap->end() )
+        SwAccessibleContextMap_Impl::iterator aIter = mpFrmMap->find( pRootFrm );
+        if( aIter != mpFrmMap->end() )
             xAcc = (*aIter).second;
         if( xAcc.is() )
         {
@@ -562,19 +611,19 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView()
         else
         {
             xAcc = new SwAccessibleDocument( this );
-            if( aIter != mpMap->end() )
+            if( aIter != mpFrmMap->end() )
             {
                 (*aIter).second = xAcc;
             }
             else
             {
                 SwAccessibleContextMap_Impl::value_type aEntry( pRootFrm, xAcc );
-                mpMap->insert( aEntry );
+                mpFrmMap->insert( aEntry );
             }
         }
 
 #ifndef PRODUCT
-        mpMap->mbLocked = sal_False;
+        mpFrmMap->mbLocked = sal_False;
 #endif
     }
 
@@ -597,12 +646,12 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
     {
         vos::OGuard aGuard( maMutex );
 
-        if( !mpMap && bCreate )
-            mpMap = new SwAccessibleContextMap_Impl;
-        if( mpMap )
+        if( !mpFrmMap && bCreate )
+            mpFrmMap = new SwAccessibleContextMap_Impl;
+        if( mpFrmMap )
         {
-            SwAccessibleContextMap_Impl::iterator aIter = mpMap->find( pFrm );
-            if( aIter != mpMap->end() )
+            SwAccessibleContextMap_Impl::iterator aIter = mpFrmMap->find( pFrm );
+            if( aIter != mpFrmMap->end() )
                 xAcc = (*aIter).second;
 
             if( !xAcc.is() && bCreate )
@@ -665,18 +714,18 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                 ASSERT( xAcc.is(), "unknown frame type" );
                 if( xAcc.is() )
                 {
-                    if( aIter != mpMap->end() )
+                    if( aIter != mpFrmMap->end() )
                     {
                         (*aIter).second = xAcc;
                     }
                     else
                     {
                         SwAccessibleContextMap_Impl::value_type aEntry( pFrm, xAcc );
-                        mpMap->insert( aEntry );
+                        mpFrmMap->insert( aEntry );
                     }
 
                     if( pAcc->HasCursor() &&
-                        !AreInSameTable( mpMap->mxCursorContext, pFrm ) )
+                        !AreInSameTable( mpFrmMap->mxCursorContext, pFrm ) )
                     {
                         // If the new context has the focus, and if we know
                         // another context that had the focus, then the focus
@@ -692,8 +741,8 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                         // the new context as the one that has the focus
                         // currently.
 
-                        xOldCursorAcc = mpMap->mxCursorContext;
-                        mpMap->mxCursorContext = xAcc;
+                        xOldCursorAcc = mpFrmMap->mxCursorContext;
+                        mpFrmMap->mxCursorContext = xAcc;
                     }
                 }
             }
@@ -719,20 +768,92 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
     return xAccImpl;
 }
 
+Reference< XAccessible> SwAccessibleMap::GetContext(
+        const SdrObject *pObj,
+        const SwAccessibleContext *pParentImpl,
+        sal_Bool bCreate )
+{
+    Reference < XAccessible > xAcc;
+    Reference < XAccessible > xOldCursorAcc;
+
+    {
+        vos::OGuard aGuard( maMutex );
+
+        if( !mpShapeMap && bCreate )
+            mpShapeMap = new SwAccessibleShapeMap_Impl;
+        if( mpShapeMap )
+        {
+            SwAccessibleShapeMap_Impl::iterator aIter =
+                   mpShapeMap->find( pObj );
+            if( aIter != mpShapeMap->end() )
+                xAcc = (*aIter).second;
+
+            if( !xAcc.is() && bCreate )
+            {
+                accessibility::AccessibleShape *pAcc = 0;
+                Reference < XShape > xShape(
+                    const_cast< SdrObject * >( pObj )->getUnoShape(),
+                    UNO_QUERY );
+                if( xShape.is() )
+                {
+                    // pAcc = ...
+                }
+                xAcc = pAcc;
+
+                ASSERT( xAcc.is(), "unknown shape type" );
+                if( xAcc.is() )
+                {
+                    if( aIter != mpShapeMap->end() )
+                    {
+                        (*aIter).second = xAcc;
+                    }
+                    else
+                    {
+                        SwAccessibleShapeMap_Impl::value_type aEntry( pObj,
+                                                                      xAcc );
+                        mpShapeMap->insert( aEntry );
+                    }
+                    // TODO: focus!!!
+                }
+            }
+        }
+    }
+
+    // Invalidate focus for old object when map is not locked
+    if( xOldCursorAcc.is() )
+        InvalidateCursorPosition( xOldCursorAcc );
+
+    return xAcc;
+}
+
+::vos::ORef < accessibility::AccessibleShape > SwAccessibleMap::GetContextImpl(
+            const SdrObject *pObj,
+            const SwAccessibleContext *pParentImpl,
+            sal_Bool bCreate )
+{
+    Reference < XAccessible > xAcc( GetContext( pObj, pParentImpl, bCreate ) );
+
+    ::vos::ORef < accessibility::AccessibleShape > xAccImpl(
+         static_cast< accessibility::AccessibleShape* >( xAcc.get() ) );
+
+    return xAccImpl;
+}
+
+
 void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
 {
     vos::OGuard aGuard( maMutex );
 
-    if( mpMap )
+    if( mpFrmMap )
     {
         SwAccessibleContextMap_Impl::iterator aIter =
-            mpMap->find( pFrm );
-        if( aIter != mpMap->end() )
+            mpFrmMap->find( pFrm );
+        if( aIter != mpFrmMap->end() )
         {
-            mpMap->erase( aIter );
+            mpFrmMap->erase( aIter );
 
             // Remove reference to old caret object
-            Reference < XAccessible > xOldAcc( mpMap->mxCursorContext );
+            Reference < XAccessible > xOldAcc( mpFrmMap->mxCursorContext );
             if( xOldAcc.is() )
             {
                 SwAccessibleContext *pOldAccImpl =
@@ -741,14 +862,14 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
                 if( pOldAccImpl->GetFrm() == pFrm )
                 {
                     xOldAcc.clear();    // get an empty ref
-                    mpMap->mxCursorContext = xOldAcc;
+                    mpFrmMap->mxCursorContext = xOldAcc;
                 }
             }
 
-            if( mpMap->empty() )
+            if( mpFrmMap->empty() )
             {
-                delete mpMap;
-                mpMap = 0;
+                delete mpFrmMap;
+                mpFrmMap = 0;
             }
         }
     }
@@ -773,11 +894,11 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm, sal_Bool bRecursive )
         {
             vos::OGuard aGuard( maMutex );
 
-            if( mpMap )
+            if( mpFrmMap )
             {
                 SwAccessibleContextMap_Impl::iterator aIter =
-                    mpMap->find( pFrm );
-                if( aIter != mpMap->end() )
+                    mpFrmMap->find( pFrm );
+                if( aIter != mpFrmMap->end() )
                 {
                     xAcc = (*aIter).second;
                 }
@@ -790,8 +911,8 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm, sal_Bool bRecursive )
 
                     if( pParent )
                     {
-                        aIter = mpMap->find( pParent );
-                        if( aIter != mpMap->end() )
+                        aIter = mpFrmMap->find( pParent );
+                        if( aIter != mpFrmMap->end() )
                         {
                             xParentAcc = (*aIter).second;
                         }
@@ -851,11 +972,11 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
         {
             vos::OGuard aGuard( maMutex );
 
-            if( mpMap )
+            if( mpFrmMap )
             {
                 SwAccessibleContextMap_Impl::iterator aIter =
-                    mpMap->find( aFrmOrObj.GetSwFrm() );
-                if( aIter != mpMap->end() )
+                    mpFrmMap->find( aFrmOrObj.GetSwFrm() );
+                if( aIter != mpFrmMap->end() )
                 {
                     // If there is an accesible object already it is
                     // notified directly.
@@ -870,8 +991,8 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
 
                     if( pParent )
                     {
-                        aIter = mpMap->find( pParent );
-                        if( aIter != mpMap->end() )
+                        aIter = mpFrmMap->find( pParent );
+                        if( aIter != mpFrmMap->end() )
                         {
                             xParentAcc = (*aIter).second;
                         }
@@ -926,11 +1047,11 @@ void SwAccessibleMap::InvalidateContent( const SwFrm *pFrm )
         {
             vos::OGuard aGuard( maMutex );
 
-            if( mpMap )
+            if( mpFrmMap )
             {
                 SwAccessibleContextMap_Impl::iterator aIter =
-                    mpMap->find( aFrmOrObj.GetSwFrm() );
-                if( aIter != mpMap->end() )
+                    mpFrmMap->find( aFrmOrObj.GetSwFrm() );
+                if( aIter != mpFrmMap->end() )
                     xAcc = (*aIter).second;
             }
         }
@@ -992,16 +1113,16 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
     {
         vos::OGuard aGuard( maMutex );
 
-        if( mpMap )
+        if( mpFrmMap )
         {
-            xOldAcc = mpMap->mxCursorContext;
-            mpMap->mxCursorContext = xAcc;  // clear reference
+            xOldAcc = mpFrmMap->mxCursorContext;
+            mpFrmMap->mxCursorContext = xAcc;   // clear reference
 
             if( aFrmOrObj.IsAccessible() )
             {
                 SwAccessibleContextMap_Impl::iterator aIter =
-                    mpMap->find( aFrmOrObj.GetSwFrm() );
-                if( aIter != mpMap->end() )
+                    mpFrmMap->find( aFrmOrObj.GetSwFrm() );
+                if( aIter != mpFrmMap->end() )
                     xAcc = (*aIter).second;
 
                 // For cells, some extra thoughts are necessary,
@@ -1044,10 +1165,10 @@ void SwAccessibleMap::SetCursorContext(
         const ::vos::ORef < SwAccessibleContext >& rCursorContext )
 {
     vos::OGuard aGuard( maMutex );
-    if( mpMap )
+    if( mpFrmMap )
     {
         Reference < XAccessible > xAcc( rCursorContext.getBodyPtr() );
-        mpMap->mxCursorContext = xAcc;
+        mpFrmMap->mxCursorContext = xAcc;
     }
 }
 
@@ -1081,11 +1202,11 @@ void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
         {
             vos::OGuard aGuard( maMutex );
 
-            if( mpMap )
+            if( mpFrmMap )
             {
                 SwAccessibleContextMap_Impl::iterator aIter =
-                    mpMap->find( aFrmOrObj.GetSwFrm() );
-                if( aIter != mpMap->end() )
+                    mpFrmMap->find( aFrmOrObj.GetSwFrm() );
+                if( aIter != mpFrmMap->end() )
                 {
                     xAcc = (*aIter).second;
                 }

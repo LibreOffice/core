@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-03 12:34:00 $
+ *  last change: $Author: mib $ $Date: 2002-05-06 12:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #endif
 #ifndef _ACCCONTEXT_HXX
 #include <acccontext.hxx>
+#endif
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
+#include <svx/AccessibleShape.hxx>
 #endif
 
 #if defined DEBUG && defined TEST_MIB
@@ -411,7 +414,14 @@ void SwAccessibleContext::DisposeChildren( const SwFrm *pFrm,
         }
         else
         {
-            // TODO: SdrObjects
+            Reference< XAccessible > xAcc( GetMap()->GetContext(
+                                           rLower.GetSdrObject(),
+                                           this, sal_False )  );
+            if( xAcc.is() )
+            {
+                Reference < XComponent > xComp( xAcc, UNO_QUERY );
+                xComp->dispose();
+            }
         }
         ++aIter;
     }
@@ -601,7 +611,11 @@ Reference< XAccessible> SAL_CALL
     }
     else
     {
-        // TODO: SdrObjects
+        ::vos::ORef < ::accessibility::AccessibleShape > xChildImpl(
+                GetMap()->GetContextImpl( aChild.GetSdrObject(),
+                                          this, !bDisposing )  );
+        if( xChildImpl.isValid() )
+            xChild = xChildImpl.getBodyPtr();
     }
 
     return xChild;
@@ -768,7 +782,7 @@ Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAt(
     }
     else if( aChild.GetSdrObject() )
     {
-        // TODO: SdrObjects
+        xAcc = GetMap()->GetContext( aChild.GetSdrObject(), this );
     }
 
     return xAcc;

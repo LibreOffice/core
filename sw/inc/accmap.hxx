@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-24 15:25:50 $
+ *  last change: $Author: mib $ $Date: 2002-05-06 12:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@ class SwAccessibleContext;
 class SwAccessibleContextMap_Impl;
 class SwAccessibleEventList_Impl;
 class SwAccessibleEventMap_Impl;
+class SdrObject;
+namespace accessibility { class AccessibleShape; }
+class SwAccessibleShapeMap_Impl;
 struct SwAccessibleEvent_Impl;
 class SwRect;
 class ViewShell;
@@ -106,7 +109,8 @@ class SwAccessibleMap
 {
     ::vos::OMutex maMutex;
     ::vos::OMutex maEventMutex;
-    SwAccessibleContextMap_Impl *mpMap;
+    SwAccessibleContextMap_Impl *mpFrmMap;
+    SwAccessibleShapeMap_Impl *mpShapeMap;
     SwAccessibleEventList_Impl *mpEvents;
     SwAccessibleEventMap_Impl *mpEventMap;
     ViewShell *mpVSh;
@@ -138,6 +142,16 @@ public:
         ::drafts::com::sun::star::accessibility::XAccessible> GetContext(
                                                  const SwFrm *pFrm,
                                                 sal_Bool bCreate = sal_True );
+
+    ::vos::ORef < ::accessibility::AccessibleShape > GetContextImpl(
+                                        const SdrObject *pObj,
+                                        const SwAccessibleContext *pParentImpl,
+                                        sal_Bool bCreate = sal_True );
+    ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible> GetContext(
+                                        const SdrObject *pObj,
+                                        const SwAccessibleContext *pParentImpl,
+                                        sal_Bool bCreate = sal_True );
 
     ViewShell *GetShell() const { return mpVSh; }
     const SwRect& GetVisArea() const { return mpVSh->VisArea(); }
