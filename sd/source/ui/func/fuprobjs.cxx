@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuprobjs.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: cl $ $Date: 2000-11-15 13:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,13 +172,14 @@ FuPresentationObjects::FuPresentationObjects(SdViewShell* pViewSh,
 
             if( pDlg->Execute() == RET_OK )
             {
+                const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                 // Undo-Action
                 StyleSheetUndoAction* pAction = new StyleSheetUndoAction
                                                 (pDoc, (SfxStyleSheet*)pStyleSheet,
-                                                    pDlg->GetOutputItemSet());
+                                                    pOutSet);
                 pDocSh->GetUndoManager()->AddUndoAction(pAction);
 
-                pStyleSheet->GetItemSet().Put( *( pDlg->GetOutputItemSet() ) );
+                pStyleSheet->GetItemSet().Put( *pOutSet );
                 ( (SfxStyleSheet*) pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
             }
             delete( pDlg );
