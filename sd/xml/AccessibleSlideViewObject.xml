@@ -19,14 +19,14 @@ title="Link to a general description of UNO accessibility"/>
 <language>c++</language>
 <status value="alpha"/>
 
-<supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-<supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
-<supported-service>drafts.com.sun.star.drawing.AccessibleSlideViewObject</supported-service>
+<supported-service>com.sun.star.accessibility.Accessible</supported-service>
+<supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
+<supported-service>com.sun.star.drawing.AccessibleSlideViewObject</supported-service>
 
-<type>drafts.com.sun.star.drawing.XAccessible</type>
-<type>drafts.com.sun.star.drawing.XAccessibleContext</type>
-<type>drafts.com.sun.star.drawing.XAccessibleEventBroadcaster</type>
-<type>drafts.com.sun.star.drawing.XAccessibleComponent</type>
+<type>com.sun.star.drawing.XAccessible</type>
+<type>com.sun.star.drawing.XAccessibleContext</type>
+<type>com.sun.star.drawing.XAccessibleEventBroadcaster</type>
+<type>com.sun.star.drawing.XAccessibleComponent</type>
 <type>com.sun.star.lang.XTypeProvider</type>
 <type>com.sun.star.lang.XUnoTunnel</type>
 
