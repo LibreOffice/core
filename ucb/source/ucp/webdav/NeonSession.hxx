@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:39:46 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,8 @@ class NeonSession : public DAVSession
         static bool getDataFromInputStream(
                             const com::sun::star::uno::Reference<
                                 com::sun::star::io::XInputStream > & xStream,
-                            com::sun::star::uno::Sequence< sal_Int8 > & rData );
+                            com::sun::star::uno::Sequence< sal_Int8 > & rData,
+                            bool bAppendTrailingZeroByte );
 };
 
 }; // namespace_ucp
