@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdump.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-30 07:22:03 $
+ *  last change: $Author: jsc $ $Date: 2001-11-09 10:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,9 +326,10 @@ sal_Bool AstService::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
                 case NT_service_member:
                 {
                     AstServiceMember* pServMember = (AstServiceMember*)pDecl;
+                    sal_uInt16 access = (pServMember->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID);
                     aBlob.setReferenceData(referenceIndex++,
                                OStringToOUString( pServMember->getRealService()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                               RT_REF_EXPORTS, pServMember->getDocumentation());
+                               RT_REF_EXPORTS, pServMember->getDocumentation(), access);
                 }
                     break;
                 case NT_observes:
