@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-09 07:59:42 $
+ *  last change: $Author: pb $ $Date: 2001-08-10 08:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,6 @@
 #include <unotools/configmgr.hxx>
 #endif
 
-#include <berkeleydb/db_cxx.h>
 #include <svtools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
 
@@ -131,6 +130,7 @@
 #include "objsh.hxx"
 #include "docfac.hxx"
 #include "sfxresid.hxx"
+#include "helper.hxx"
 #include "app.hrc"
 
 using namespace ::com::sun::star::beans;
@@ -142,9 +142,29 @@ using namespace ::rtl;
 #define ERROR_TAG   String( DEFINE_CONST_UNICODE("Error: ") )
 #define PATH_TAG    String( DEFINE_CONST_UNICODE("\nPath: ") )
 
-// class SfxHelp_Impl --------------------------------------------------
+// -----------------------------------------------------------------------
 
 #define STARTERLIST 0
+
+void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
+{
+    Any aLocale = ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+    ::rtl::OUString aLocaleStr;
+    if ( !( aLocale >>= aLocaleStr ) )
+        aLocaleStr = ::rtl::OUString( DEFINE_CONST_UNICODE("en") );
+
+    SvtHelpOptions aHelpOpt;
+    if ( bQuestionMark )
+        rURL += '?';
+    else
+        rURL += '&';
+    rURL += DEFINE_CONST_UNICODE("Language=");
+    rURL += String( aLocaleStr );
+    rURL += DEFINE_CONST_UNICODE("&System=");
+    rURL += aHelpOpt.GetSystem();
+}
+
+// -----------------------------------------------------------------------
 
 class SfxHelpOptions_Impl : public utl::ConfigItem
 {
@@ -224,30 +244,25 @@ SfxHelpOptions_Impl::~SfxHelpOptions_Impl()
     delete pIds;
 }
 
+// class SfxHelp_Impl ----------------------------------------------------
+
 class SfxHelp_Impl
 {
 private:
-    String      m_aDBPath;
-    String      m_aModule;
-    Db*         m_pDB;
-    sal_Bool    m_bIsDebug;
-    sal_Bool    m_bIsOpen;
-    SfxHelpOptions_Impl* m_pOpt;
+    sal_Bool                m_bIsDebug;
+    SfxHelpOptions_Impl*    m_pOpt;
 
 public:
     SfxHelp_Impl( const String& rPath, sal_Bool bDebug );
     ~SfxHelp_Impl();
 
-    String      GetHelpText( ULONG nHelpId, const String& rModule );
-    SfxHelpOptions_Impl* GetOptions();
+    String                  GetHelpText( ULONG nHelpId, const String& rModule );
+    SfxHelpOptions_Impl*    GetOptions();
 };
 
 SfxHelp_Impl::SfxHelp_Impl( const String& rPath, sal_Bool bDebug ) :
 
-    m_aDBPath   ( rPath ),
-    m_pDB       ( NULL ),
     m_bIsDebug  ( bDebug ),
-    m_bIsOpen   ( sal_False ),
     m_pOpt      ( 0 )
 
 {
@@ -255,9 +270,6 @@ SfxHelp_Impl::SfxHelp_Impl( const String& rPath, sal_Bool bDebug ) :
 
 SfxHelp_Impl::~SfxHelp_Impl()
 {
-    if ( m_bIsOpen )
-        m_pDB->close(0);
-    delete m_pDB;
     delete m_pOpt;
 }
 
@@ -270,100 +282,16 @@ SfxHelpOptions_Impl* SfxHelp_Impl::GetOptions()
 
 String SfxHelp_Impl::GetHelpText( ULONG nHelpId, const String& rModule )
 {
-    sal_Bool bOpenDB = sal_True;
-    String aHelpText;
-    ByteString aPathStr;
-
-    if ( !m_pDB )
-        m_pDB = new Db( NULL, 0 );
-
-    if ( m_aModule != rModule )
-    {
-        m_aModule = rModule;
-        INetURLObject aPath( m_aDBPath );
-        aPath.insertName( rModule );
-        aPath.setExtension( DEFINE_CONST_UNICODE("ht") );
-        aPathStr = ByteString( aPath.getFSysPath( INetURLObject::FSYS_DETECT ), osl_getThreadTextEncoding() );
-        try
-        {
-            int nError = m_pDB->open( aPathStr.GetBuffer(), NULL, DB_BTREE, DB_RDONLY, 0664 );
-
-            if ( nError )
-            {
-                bOpenDB = sal_False;
-                m_aModule.Erase();
-                if ( m_bIsDebug )
-                {
-                    aHelpText = ERROR_TAG;
-                    aHelpText += String::CreateFromInt32( nError );
-                }
-            }
-            else if ( !m_bIsOpen )
-                m_bIsOpen = sal_True;
-        }
-        catch( DbException& eDb )
-        {
-            bOpenDB = sal_False;
-            m_aModule.Erase();
-            if ( m_bIsDebug )
-            {
-                aHelpText = ERROR_TAG;
-                aHelpText += String::CreateFromAscii( eDb.what() );
-            }
-        }
-    }
-
-    if ( bOpenDB )
-    {
-        ByteString aKeyStr = ByteString::CreateFromInt64( nHelpId );
-        Dbt aKey( (void*)aKeyStr.GetBuffer(), aKeyStr.Len() );
-        Dbt aData;
-        aData.set_flags( DB_DBT_MALLOC );
-        try
-        {
-            if ( !m_pDB->get( NULL, &aKey, &aData, 0 ) )
-            {
-                ByteString aHelpStr( (sal_Char*)aData.get_data(), aData.get_size() );
-                aHelpText = String( aHelpStr, RTL_TEXTENCODING_UTF8 );
-            }
-        }
-        catch( DbException& eDb )
-        {
-            if ( m_bIsDebug )
-            {
-                aHelpText = ERROR_TAG;
-                aHelpText += String::CreateFromAscii( eDb.what() );
-                aHelpText += PATH_TAG;
-                aHelpText += String::CreateFromAscii( aPathStr.GetBuffer() );
-            }
-        }
-    }
-    else if ( m_bIsDebug )
-    {
-        aHelpText += PATH_TAG;
-        aHelpText += String::CreateFromAscii( aPathStr.GetBuffer() );
-    }
-
-    return aHelpText;
+    // create help url
+    String aHelpURL = SfxHelp::CreateHelpURL( nHelpId, rModule );
+    // added 'active' parameter
+    aHelpURL += '&';
+    aHelpURL += DEFINE_CONST_UNICODE("Active=true");
+    // load help string
+    return SfxContentHelper::GetActiveHelpString( aHelpURL );
 }
 
-void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
-{
-    Any aLocale = ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-    ::rtl::OUString aLocaleStr;
-    if ( !( aLocale >>= aLocaleStr ) )
-        aLocaleStr = ::rtl::OUString( DEFINE_CONST_UNICODE("en") );
-
-    SvtHelpOptions aHelpOpt;
-    if ( bQuestionMark )
-        rURL += '?';
-    else
-        rURL += '&';
-    rURL += DEFINE_CONST_UNICODE("Language=");
-    rURL += String( aLocaleStr );
-    rURL += DEFINE_CONST_UNICODE("&System=");
-    rURL += aHelpOpt.GetSystem();
-}
+// class SfxHelp ---------------------------------------------------------
 
 SfxHelp::SfxHelp() :
 
