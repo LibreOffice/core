@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualdbtools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:12 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,8 +203,10 @@ namespace connectivity
             ) const = 0;
 
             virtual ::rtl::OUString quoteTableName(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta,
-                const ::rtl::OUString& _rName
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta
+                ,const ::rtl::OUString& _rName
+                ,sal_Bool _bUseCatalogInSelect = sal_True
+                ,sal_Bool _bUseSchemaInSelect = sal_True
             ) const = 0;
 
             virtual ::com::sun::star::sdb::SQLContext prependContextInfo(
@@ -250,6 +252,20 @@ namespace connectivity
                 @param      _rxCursorSet    the property set
             */
             virtual sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
+
+            /** check if a specific property is enabled in the info sequence
+                @param  _xProp
+                    The datasource or a child of it.
+                @param  _sProperty
+                    The property to search in the info property of the data source.
+                @param  _bDefault
+                    This value will be returned, if the property doesn't exist in the data source.
+                @return
+                    <TRUE/> if so otherwise <FALSE/>
+            */
+            virtual sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
+                                        ,const ::rtl::OUString& _sProperty,
+                                        sal_Bool _bDefault = sal_False) const = 0;
         };
 
         //================================================================
