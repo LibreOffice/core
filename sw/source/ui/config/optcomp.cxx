@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcomp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:22:04 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
 #include "optcomp.hxx"
 
