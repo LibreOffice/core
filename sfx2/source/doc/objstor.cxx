@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-22 08:16:49 $
+ *  last change: $Author: mba $ $Date: 2001-09-04 10:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,23 +600,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     }
 
     if( bOk )
-    {
-        String aFacName = String::CreateFromAscii( GetFactory().GetShortName() );
-        if( ! aFacName.EqualsAscii( "swriter" ) &&
-            ! aFacName.EqualsAscii( "FrameSet" ) &&
-            ! aFacName.EqualsAscii( "swriter/web" ) )
-        {
-#ifdef DBG_UTIL
-            if( pImp->nLoadedFlags != SFX_LOADED_ALL )
-            {
-                ByteString aError( U2S( aFacName ) );
-                aError += " hat uralte Mussaenderung nicht gemacht. TLX fragen";
-                DBG_ERROR( aError.GetBuffer() );
-            }
-#endif
-            FinishedLoading( SFX_LOADED_ALL );
-        }
-    }
+        FinishedLoading( SFX_LOADED_ALL );
 
     if ( SFX_CREATE_MODE_EMBEDDED != eCreateMode )
         GetpApp()->HideStatusText();
