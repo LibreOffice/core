@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-09 10:11:18 $
+#   last change: $Author: obo $ $Date: 2004-06-03 14:35:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ		= ..$/..$/..$/..$/..$/..$/..
 PRJNAME = jurt
 PACKAGE = com$/sun$/star$/lib$/uno$/environments$/remote
@@ -72,10 +71,7 @@ TARGET  = com_sun_star_lib_uno_environments_remote
 # --- Files --------------------------------------------------------
 
 JAVACLASSFILES= 											\
-    $(CLASSDIR)$/$(PACKAGE)$/IMarshal.class					\
     $(CLASSDIR)$/$(PACKAGE)$/IMessage.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/IUnmarshal.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/IProtocol.class				\
     $(CLASSDIR)$/$(PACKAGE)$/Job.class						\
     $(CLASSDIR)$/$(PACKAGE)$/JobQueue.class					\
     $(CLASSDIR)$/$(PACKAGE)$/IReceiver.class				\
@@ -86,7 +82,8 @@ JAVACLASSFILES= 											\
     $(CLASSDIR)$/$(PACKAGE)$/JavaThreadPoolFactory.class	\
     $(CLASSDIR)$/$(PACKAGE)$/JavaThreadPool.class			\
     $(CLASSDIR)$/$(PACKAGE)$/NativeThreadPool.class \
-    $(CLASSDIR)$/$(PACKAGE)$/remote_environment.class
+    $(CLASSDIR)$/$(PACKAGE)$/remote_environment.class \
+    $(CLASSDIR)$/$(PACKAGE)$/IProtocol.class
 
 # --- Targets ------------------------------------------------------
 
