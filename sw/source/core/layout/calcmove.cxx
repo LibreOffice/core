@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:38:09 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,13 @@
 #include "sectfrm.hxx"
 #include "dbg_lay.hxx"
 
+// --> OD 2004-06-23 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
+#ifndef _LAYOUTER_HXX
+#include <layouter.hxx>
+#endif
 
 //------------------------------------------------------------------------
 //              Move-Methoden
@@ -674,19 +681,21 @@ void SwFrm::MakePos()
 |*  Letzte Aenderung    MA 20. Jul. 98
 |*
 |*************************************************************************/
-
-void lcl_CheckObjects( SwSortDrawObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
+// --> OD 2004-07-01 #i28701# - new type <SwSortedObjs>
+void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
 {
     //Und dann kann es natuerlich noch Absatzgebundene
     //Rahmen geben, die unterhalb ihres Absatzes stehen.
     long nMax = 0;
     for ( USHORT i = 0; i < pSortedObjs->Count(); ++i )
     {
-        SdrObject *pObj = (*pSortedObjs)[i];
+        // --> OD 2004-07-01 #i28701# - consider changed type of <SwSortedObjs>
+        // entries.
+        SwAnchoredObject* pObj = (*pSortedObjs)[i];
         long nTmp = 0;
-        if ( pObj->ISA(SwVirtFlyDrawObj) )
+        if ( pObj->ISA(SwFlyFrm) )
         {
-            SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+            SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pObj);
             if( pFly->Frm().Top() != WEIT_WECH &&
                 ( pFrm->IsPageFrm() ? pFly->IsFlyLayFrm() :
                   ( pFly->IsFlyAtCntFrm() &&
@@ -697,8 +706,9 @@ void lcl_CheckObjects( SwSortDrawObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
             }
         }
         else
-            nTmp = pObj->GetCurrentBoundRect().Bottom();
+            nTmp = pObj->GetObjRect().Bottom();
         nMax = Max( nTmp, nMax );
+        // <--
     }
     ++nMax; //Unterkante vs. Hoehe!
     rBot = Max( rBot, nMax );
@@ -980,18 +990,21 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 
                 for (USHORT i = 0; GetDrawObjs() && i < GetDrawObjs()->Count();++i)
                 {
-                    SdrObject *pObj = (*GetDrawObjs())[i];
-                    SwFrmFmt *pFmt = ::FindFrmFmt( pObj );
-                    const FASTBOOL bFly = pObj->ISA(SwVirtFlyDrawObj);
+                    // --> OD 2004-07-01 #i28701# - consider changed type of
+                    // <SwSortedObjs> entries
+                    SwAnchoredObject* pObj = (*GetDrawObjs())[i];
+                    const SwFrmFmt& rFmt = pObj->GetFrmFmt();
+                    const FASTBOOL bFly = pObj->ISA(SwFlyFrm);
                     if ( bFly &&
-                         WEIT_WECH == ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Frm().Width()||
-                         pFmt->GetFrmSize().GetWidthPercent() )
+                         WEIT_WECH == pObj->GetObjRect().Width()||
+                         rFmt.GetFrmSize().GetWidthPercent() )
                         continue;
 
-                    if ( FLY_IN_CNTNT == pFmt->GetAnchor().GetAnchorId() )
+                    if ( FLY_IN_CNTNT == rFmt.GetAnchor().GetAnchorId() )
                         nMinWidth = Max( nMinWidth,
-                                      bFly ? pFmt->GetFrmSize().GetWidth()
-                                           : pObj->GetCurrentBoundRect().GetWidth() );
+                                         bFly ? rFmt.GetFrmSize().GetWidth()
+                                              : pObj->GetObjRect().Width() );
+                    // <--
                 }
 
                 const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
@@ -1182,6 +1195,25 @@ void SwCntntFrm::MakeAll()
         }
     }
 
+    // --> OD 2004-06-23 #i28701# - move master forward, if it has to move,
+    // because of its object positioning.
+    if ( !static_cast<SwTxtFrm*>(this)->IsFollow() )
+    {
+        sal_uInt32 nToPageNum = 0L;
+        const bool bMoveFwdByObjPos = SwLayouter::FrmMovedFwdByObjPos(
+                                                    *(GetAttrSet()->GetDoc()),
+                                                    *(static_cast<SwTxtFrm*>(this)),
+                                                    nToPageNum );
+        if ( bMoveFwdByObjPos &&
+             FindPageFrm()->GetPhyPageNum() < nToPageNum &&
+             lcl_Prev( this ) && IsMoveable() )
+        {
+            bMovedFwd = TRUE;
+            MoveFwd( bMakePage, FALSE );
+        }
+    }
+    // <--
+
     //Wenn ein Follow neben seinem Master steht und nicht passt, kann er
     //gleich verschoben werden.
     if ( lcl_Prev( this ) && ((SwTxtFrm*)this)->IsFollow() && IsMoveable() )
@@ -1264,7 +1296,11 @@ void SwCntntFrm::MakeAll()
         }
 
         if ( aOldFrmPos != (Frm().*fnRect->fnGetPos)() )
-            CalcFlys( TRUE );
+        {
+            // OD 2004-07-01 #i28701# - use new method <SwFrm::InvalidateObjs(..)>
+            // No format is performed for the floating screen objects.
+            InvalidateObjs( true );
+        }
         //Damit die Witwen- und Waisen-Regelung eine Change bekommt muss der
         //CntntFrm benachrichtigt werden.
         //Kriterium:
@@ -1348,7 +1384,9 @@ void SwCntntFrm::MakeAll()
                 MakePos();
                 if( aOldPos != (Frm().*fnRect->fnGetPos)() )
                 {
-                    CalcFlys( TRUE );
+                    // OD 2004-07-01 #i28701# - use new method <SwFrm::InvalidateObjs(..)>
+                    // No format is performed for the floating screen objects.
+                    InvalidateObjs( true );
                     Prepare( PREP_POS_CHGD, (const void*)&bFormatted, FALSE );
                     if ( !bValidSize )
                     {
@@ -1596,22 +1634,6 @@ void SwCntntFrm::MakeAll()
             GetUpper()->ResetCompletePaint();
             if( pPre && !pPre->IsSctFrm() )
                 ::ValidateSz( pPre );
-        }
-
-        if ( bValidPos && bValidSize && bValidPrtArea && GetDrawObjs() &&
-             Prt().SSize() != pNotify->Prt().SSize() )
-        {
-            //Wenn sich meine PrtArea in der Groesse verandert hat, so ist die
-            //automatische Ausrichtung der Flys zum Teufel. Diese muss
-            //Waehrend der Fahrt korrigiert werden, weil sie mich ggf. wiederum
-            //invalidiert.
-            SwDrawObjs &rObjs = *GetDrawObjs();
-            for ( USHORT i = 0; i < rObjs.Count(); ++i )
-            {
-                SdrObject *pO = rObjs[i];
-                if ( pO->ISA(SwVirtFlyDrawObj) )
-                    ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->InvalidatePos();
-            }
         }
 
     } //while ( !bValidPos || !bValidSize || !bValidPrtArea )
