@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-24 12:38:09 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 07:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,8 +182,6 @@
 //========================================================================
 // bitmaps
 
-#define BMP_PLUSBUTTON                  RID_BITMAP_START +  0
-#define BMP_MINUSBUTTON                 RID_BITMAP_START +  1
 #define BMP_CHECKBUTTON_UNCHECKED       RID_BITMAP_START +  2
 #define BMP_CHECKBUTTON_CHECKED         RID_BITMAP_START +  3
 #define BMP_CHECKBUTTON_HICHECKED       RID_BITMAP_START +  4
@@ -191,8 +189,6 @@
 #define BMP_CHECKBUTTON_TRISTATE        RID_BITMAP_START +  6
 #define BMP_CHECKBUTTON_HITRISTATE      RID_BITMAP_START +  7
 
-#define BMP_PLUSBUTTON_SCH              RID_BITMAP_START +  8
-#define BMP_MINUSBUTTON_SCH             RID_BITMAP_START +  9
 #define BMP_CHECKBUTTON_UNCHECKED_SCH   RID_BITMAP_START + 10
 #define BMP_CHECKBUTTON_CHECKED_SCH     RID_BITMAP_START + 11
 #define BMP_CHECKBUTTON_HICHECKED_SCH   RID_BITMAP_START + 12
@@ -515,6 +511,8 @@
 #define STR_QRY_LIKE_LEFT_NO_COLUMN         RID_STRING_START + 208
 #define STR_QRY_CHECK_CASESENSITIVE         RID_STRING_START + 209
 #define STR_ERR_LIKE_COLUMN                 RID_STRING_START + 210
+#define STR_AUTOINCREMENT_VALUE             RID_STRING_START + 211
+#define STR_HELP_AUTOINCREMENT_VALUE        RID_STRING_START + 212
 
 
 //========================================================================
@@ -536,6 +534,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.76  2002/05/24 12:38:09  fs
+ *  #99226# separated menus which were misused way too often
+ *
  *  Revision 1.75  2002/05/14 13:15:34  fs
  *  #65293# added STR_ERR_LIKE_COLUMN which got (wrongly) lost from 1.71 to 1.72
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:27:33 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 07:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,15 +168,7 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart
     m_aExceptionList.SetSelectHdl(LINK(this, OExceptionChainDialog, OnExceptionSelected));
     sal_Bool bHiContrast = isHiContrast(this);
 
-    ModuleRes aPlusButton( bHiContrast ? BMP_PLUSBUTTON_SCH : BMP_PLUSBUTTON);
-    ModuleRes aMinusButton( bHiContrast ? BMP_MINUSBUTTON_SCH : BMP_MINUSBUTTON);
-    Bitmap  aPlusButtonBitmap(aPlusButton);
-    Bitmap  aMinusButtonBitmap(aMinusButton);
-    Image aCollapsedImage(aPlusButtonBitmap);
-    Image aExpandedImage(aMinusButtonBitmap);
-//  Image aCollapsedImage(Bitmap(ModuleRes(BMP_PLUSBUTTON)));
-//  Image aExpandedImage(Bitmap(ModuleRes(BMP_MINUSBUTTON)));
-    m_aExceptionList.SetNodeBitmaps( aCollapsedImage, aExpandedImage);
+    m_aExceptionList.SetNodeDefaultImages( );
 
     m_aExceptionText.SetReadOnly(sal_True);
 
@@ -580,6 +572,9 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2002/04/29 08:27:33  oj
+ *  #98772# impl toolbox hi contrast
+ *
  *  Revision 1.11  2001/12/10 11:19:16  fs
  *  #95540# for the 'more' dialog, use the error dialog as direct parent
  *

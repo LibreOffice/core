@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-24 09:54:45 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 07:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,9 +121,7 @@ void OMarkableTreeListBox::Paint(const Rectangle& _rRect)
 //------------------------------------------------------------------------
 void OMarkableTreeListBox::InitButtonData()
 {
-    sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
-    SetNodeBitmaps( Bitmap(ModuleRes( bHiContrast ? BMP_PLUSBUTTON_SCH : BMP_PLUSBUTTON)),
-        Bitmap(ModuleRes( bHiContrast ? BMP_MINUSBUTTON_SCH : BMP_MINUSBUTTON)));
+    SetNodeDefaultImages( );
 
     m_pCheckButton = new SvLBoxButtonData( this );
     OMarkableTreeListBox::notifyHiContrastChanged();
@@ -360,6 +358,9 @@ SvLBoxEntry* OMarkableTreeListBox::GetEntryPosByName(const String& aName,SvLBoxE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2002/05/24 09:54:45  gt
+ *  #99251# use of default images from SvLBoxButtonData
+ *
  *  Revision 1.6  2002/04/29 08:49:26  oj
  *  #98772# hi contrast changes
  *
