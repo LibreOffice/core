@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-07 17:56:05 $
+ *  last change: $Author: jp $ $Date: 2001-11-30 11:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,13 +1036,11 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
 
     // special treatment for combined characters field, because it is
     // exported as a style
-    const XMLPropertyState **pStates = NULL;
-    if ( nToken == FIELD_ID_COMBINED_CHARACTERS )
-    {
-        const XMLPropertyState* aStates[] =
-            { pCombinedCharactersPropertyState, 0 };
-        pStates = aStates;
-    }
+    const XMLPropertyState* aStates[] = { pCombinedCharactersPropertyState, 0 };
+    const XMLPropertyState **pStates =
+                FIELD_ID_COMBINED_CHARACTERS == nToken
+                    ? aStates
+                    : 0;
 
     // find out whether we need to set the style or hyperlink
     sal_Bool bHasHyperlink;
