@@ -1,0 +1,184 @@
+/*************************************************************************
+ *
+ *  $RCSfile: NavigationToolBar.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:10:38 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_component_NavigationToolBar_idl__
+#define __com_sun_star_form_component_NavigationToolBar_idl__
+
+#ifndef __com_sun_star_form_FormControlModel_idl__
+#include <com/sun/star/form/FormControlModel.idl>
+#endif
+#ifndef __com_sun_star_awt_FontDescriptor_idl__
+#include <com/sun/star/awt/FontDescriptor.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {  module component {
+
+//=============================================================================
+
+/** This service specifies the model for control which provides controller
+    functionality for a <type>DataForm</type>, such as navigating or filtering
+    the form.
+ */
+service NavigationToolBar
+{
+    service com::sun::star::form::FormControlModel;
+
+    //-------------------------------------------------------------------------
+    /** denotes the border style of the control.
+
+        Allowed values are
+        <ul><li><b>0</b>: no border at all</li>
+            <li><b>1</b>: 3D border</li>
+            <li><b>2</b>: simple flat</li>
+        </ul>
+     */
+    [property] short Border;
+
+    //-------------------------------------------------------------------------
+    /** determines whether the control is enabled or disabled.
+     */
+    [property] boolean Enabled;
+
+    //-------------------------------------------------------------------------
+    /** contains the font attributes for the text in the control
+     */
+    [property] com::sun::star::awt::FontDescriptor FontDescriptor;
+
+    //-------------------------------------------------------------------------
+    /** specifies the text color (as RGB value) of the control.
+     */
+    [property] long TextColor;
+
+    //-------------------------------------------------------------------------
+    /** specifies the text line color (as RGB value) of the control.
+
+        <p>This color is used if the <member>FontDescriptor</member> defines
+        that the text in the control should be underlined or stroke out.</p>
+     */
+    [property] long TextLineColor;
+
+    //-------------------------------------------------------------------------
+    /** specifies the relief for the font described in <member>FontDescriptor</member>
+
+        <p>The value must be one of the <type scope="com::sun::star::text">FontRelief</type>
+        constants.</p>
+     */
+    [property] long FontRelief;
+
+    //-------------------------------------------------------------------------
+    /** specifies the emphasis mark for the font described in <member>FontDescriptor</member>
+
+        <p>The value must be one of the <type scope="com::sun::star::text">FontEmphasis</type>
+        constants.</p>
+     */
+    [property] long FontEmphasisMark;
+
+    //-------------------------------------------------------------------------
+    /** specifies the size of the icons in the control
+
+        <p>At least the following values are to be supported:
+        <ul><li>0: small icons (16x16)</li>
+            <li>1: medium size icons (26x26)</li>
+        </ul>
+    */
+    [property] short IconSize;
+
+    //-------------------------------------------------------------------------
+    /** determines whether the control should provide functionality for positioning the
+        parent form
+    */
+    [property] boolean ShowPosition;
+
+    //-------------------------------------------------------------------------
+    /** determines whether the control should provide functionality for navigating the
+        parent form
+    */
+    [property] boolean ShowNavigation;
+
+    //-------------------------------------------------------------------------
+    /** determines whether the control should provide functionality for acting on the current record
+        of the parent form
+    */
+    [property] boolean ShowRecordActions;
+
+    //-------------------------------------------------------------------------
+    /** determines whether the control should provide functionality for filtering and sorting the
+        parent form
+    */
+    [property] boolean ShowFilterSort;
+
+    //-------------------------------------------------------------------------
+    /** specifies a repeat delay for the control
+
+        <p>Some buttons of a NavigationToolBar may show repeating behaviour, e.g. may be
+        repeatedly triggered when the user keeps the mouse pressed over such a button.<br/>
+        The delay between two such triggers (in milliseconds) is specified with this property.
+        </p>
+    */
+    [property] long RepeatDelay;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
