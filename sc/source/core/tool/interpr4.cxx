@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:59:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1577,14 +1577,36 @@ const String& ScInterpreter::GetString()
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
-                return pMat->GetString( 0, 0);  // x,y checks if string
+            {
+                if (pMat->IsString(0))
+                    return pMat->GetString(0);
+                else
+                {
+                    double fVal = pMat->GetDouble(0);
+                    ULONG nIndex = pFormatter->GetStandardFormat(
+                            NUMBERFORMAT_NUMBER, ScGlobal::eLnge);
+                    pFormatter->GetInputLineString( fVal, nIndex, aTempStr);
+                    return aTempStr;
+                }
+            }
             else
             {
                 SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
-                    return pMat->GetString( nC, nR);
+                {
+                    if (pMat->IsString( nC, nR))
+                        return pMat->GetString( nC, nR);
+                    else
+                    {
+                        double fVal = pMat->GetDouble( nC, nR);
+                        ULONG nIndex = pFormatter->GetStandardFormat(
+                                NUMBERFORMAT_NUMBER, ScGlobal::eLnge);
+                        pFormatter->GetInputLineString( fVal, nIndex, aTempStr);
+                        return aTempStr;
+                    }
+                }
                 else
                     SetError( errNoValue);
             }
