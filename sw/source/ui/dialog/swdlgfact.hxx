@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdlgfact.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2004-05-13 12:29:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,16 @@ class AbstractAuthMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 };
 //for SwAuthMarkFloatDlg end
 
+class SwMailMergeWizard;
+class AbstractMailMergeWizard_Impl : public AbstractMailMergeWizard
+{
+    DECL_ABSTDLG_BASE(AbstractMailMergeWizard_Impl, SwMailMergeWizard);
+    virtual void                SetReloadDocument(const String& rURL);
+    virtual const String&       GetReloadDocument() const;
+    virtual BOOL                ShowPage( USHORT nLevel );
+    virtual sal_uInt16          GetRestartPage() const;
+};
+
 //------------------------------------------------------------------------
 //AbstractDialogFactory_Impl implementations
 class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
@@ -585,6 +595,8 @@ public:
                                                        sal_Bool bNew=sal_True); //add for SwAuthMarkFloatDlg
     virtual VclAbstractDialog *         CreateIndexMarkModalDlg( const ResId& rResId,
                                                 Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark ); //add for SwIndexMarkModalDlg
+
+    virtual AbstractMailMergeWizard*    CreateMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem);
 
     //add for static func in SwGlossaryDlg
     virtual GlossaryGetCurrGroup        GetGlossaryCurrGroupFunc( USHORT nId );
