@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:59 $
+ *  last change: $Author: tl $ $Date: 2001-02-19 11:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,10 +208,12 @@ public:
     const SearchAttrItemList*   GetReplaceItemList() const
                                     { return pReplaceList; }
 
-    inline BOOL HasSearchAttributes() const;
-    inline BOOL HasReplaceAttributes() const;
+    inline BOOL     HasSearchAttributes() const;
+    inline BOOL     HasReplaceAttributes() const;
 
     PushButton&     GetReplaceBtn() { return aReplaceBtn; }
+
+    INT32           GetTransliterationSettings() const;
 
 private:
     FixedText       aSearchText;
@@ -248,6 +250,9 @@ private:
                     // "Ahnlichkeitssuche
     CheckBox        aSimilarityBox;
     PushButton      aSimilarityBtn;
+    CheckBox        aJapMatchFullHalfWidthCB;
+    CheckBox        aJapSoundsLikeCB;
+    PushButton      aJapOptionsBtn;
     GroupBox        aOptionsBox;
 
                     // nur f"ur Calc
@@ -290,6 +295,8 @@ private:
     SvxSearchController*    pSearchSetController;
     SvxSearchController*    pReplaceSetController;
 
+    INT32           nTransliterationSettings;
+
 #ifdef _SVX_SRCHDLG_CXX
     DECL_LINK( ModifyHdl_Impl, ComboBox* pEdit );
     DECL_LINK( FlagHdl_Impl, Button* pBtn );
@@ -317,6 +324,8 @@ private:
 
     void            SetModifyFlag_Impl( const Control* pCtrl );
     void            SaveToModule_Impl();
+
+    void            ApplyTransliterationSettings_Impl( INT32 nSettings );
 #endif
 };
 

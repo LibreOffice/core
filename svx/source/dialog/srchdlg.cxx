@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:20:14 $
+ *  last change: $Author: tl $ $Date: 2001-02-19 11:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
 #endif
+#ifndef _SVT_SEARCHOPT_HXX_
+#include <svtools/searchopt.hxx>
+#endif
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
@@ -94,6 +97,14 @@
 #ifndef _SFXVIEWSH_HXX //autogen
 #include <sfx2/viewsh.hxx>
 #endif
+#ifndef _BASEDLGS_HXX
+#include <sfx2/basedlgs.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
+#include <com/sun/star/i18n/transliterationmodules.hpp>
+#endif
+
 #pragma hdrstop
 
 #define _SVX_SRCHDLG_CXX
@@ -113,6 +124,9 @@
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
 
+#ifndef _SVX_OPTJSEARCH_HXX_
+#include <optjsearch.hxx>
+#endif
 #define ITEMID_BRUSH SID_ATTR_BRUSH
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <brshitem.hxx>
@@ -120,6 +134,8 @@
 #ifndef _SVX_BACKGRND_HXX //autogen
 #include <backgrnd.hxx>
 #endif
+
+using namespace com::sun::star::i18n;
 
 // -----------------------------------------------------------------------
 
@@ -333,6 +349,9 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     aLayoutBtn      ( this, ResId( BTN_LAYOUTS ) ),
     aSimilarityBox  ( this, ResId( CB_SIMILARITY) ),
     aSimilarityBtn  ( this, ResId( PB_SIMILARITY) ),
+    aJapMatchFullHalfWidthCB( this, ResId( CB_JAP_MATCH_FULL_HALF_WIDTH ) ),
+    aJapSoundsLikeCB( this, ResId( CB_JAP_SOUNDS_LIKE ) ),
+    aJapOptionsBtn  ( this, ResId( PB_JAP_OPTIONS ) ),
     aOptionsBox     ( this, ResId( GB_OPTIONS ) ),
 
     aFormulasBtn    ( this, ResId( BTN_FORMULAS ) ),
@@ -368,7 +387,8 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     pOptionsController      ( NULL ),
     pFamilyController       ( NULL ),
     pSearchSetController    ( NULL ),
-    pReplaceSetController   ( NULL )
+    pReplaceSetController   ( NULL ),
+    nTransliterationSettings( 0x00000000 )
 
 {
     Wallpaper aBackground = GetBackground();
@@ -471,9 +491,39 @@ BOOL SvxSearchDialog::Close()
 
     if ( aReplaceStrings.Count() )
         StrArrToList_Impl( SID_SEARCHDLG_REPLACESTRINGS, aReplaceStrings );
+
+    // save settings to configuration
+    SvtSearchOptions aOpt;
+    aOpt.SetWholeWordsOnly      ( aWordBtn                .IsChecked() );
+    aOpt.SetBackwards           ( aBackwardsBtn           .IsChecked() );
+    aOpt.SetUseRegularExpression( aRegExpBtn              .IsChecked() );
+    aOpt.SetMatchCase           ( aExactBtn               .IsChecked() );
+    aOpt.SetSearchForStyles     ( aLayoutBtn              .IsChecked() );
+    aOpt.SetSimilaritySearch    ( aSimilarityBox          .IsChecked() );
+    aOpt.SetMatchFullHalfWidth  ( aJapMatchFullHalfWidthCB.IsChecked() );
+    aOpt.SetSoundsLikeEnabled   ( aJapSoundsLikeCB        .IsChecked() );
+
     NotifyApp( FID_SEARCH_OFF );
     NotifyApp( SID_SEARCH_DLG );
     return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+INT32 SvxSearchDialog::GetTransliterationSettings() const
+{
+    return nTransliterationSettings;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxSearchDialog::ApplyTransliterationSettings_Impl( INT32 nSettings )
+{
+    nTransliterationSettings = nSettings;
+    BOOL bVal = 0 != (nSettings & TransliterationModules_IGNORE_CASE);
+    aExactBtn               .Check( bVal );
+    bVal = 0 != (nSettings & TransliterationModules_IGNORE_WIDTH);
+    aJapMatchFullHalfWidthCB.Check( bVal );
 }
 
 // -----------------------------------------------------------------------
@@ -511,6 +561,7 @@ void SvxSearchDialog::InitControls_Impl()
     aReplaceAllBtn.SetClickHdl( aLink );
     aCloseBtn.SetClickHdl( aLink );
     aSimilarityBtn.SetClickHdl( aLink );
+    aJapOptionsBtn.SetClickHdl( aLink );
 
     aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
     aWordBtn.SetClickHdl( aLink );
@@ -519,6 +570,8 @@ void SvxSearchDialog::InitControls_Impl()
     aRegExpBtn.SetClickHdl( aLink );
     aBackwardsBtn.SetClickHdl( aLink );
     aSimilarityBox.SetClickHdl( aLink );
+    aJapSoundsLikeCB.SetClickHdl( aLink );
+    aJapMatchFullHalfWidthCB.SetClickHdl( aLink );
 
     aLayoutBtn.SetClickHdl( LINK( this, SvxSearchDialog, TemplateHdl_Impl ) );
     aFormatBtn.SetClickHdl( LINK( this, SvxSearchDialog, FormatHdl_Impl ) );
@@ -526,6 +579,19 @@ void SvxSearchDialog::InitControls_Impl()
         LINK( this, SvxSearchDialog, NoFormatHdl_Impl ) );
     aAttributeBtn.SetClickHdl(
         LINK( this, SvxSearchDialog, AttributeHdl_Impl ) );
+
+    // apply settings from configuration
+    SvtSearchOptions aOpt;
+    aWordBtn                .Check( aOpt.IsWholeWordsOnly() );
+    aBackwardsBtn           .Check( aOpt.IsBackwards() );
+    aRegExpBtn              .Check( aOpt.IsUseRegularExpression() );
+    aExactBtn               .Check( aOpt.IsMatchCase() );
+    aLayoutBtn              .Check( aOpt.IsSearchForStyles() );
+    aSimilarityBox          .Check( aOpt.IsSimilaritySearch() );
+    aJapMatchFullHalfWidthCB.Check( aOpt.IsMatchFullHalfWidth() );
+    aJapSoundsLikeCB        .Check( aOpt.IsSoundsLikeEnabled() );
+    ApplyTransliterationSettings_Impl( aOpt.GetTransliterationSettings() );
+    FlagHdl_Impl( &aJapSoundsLikeCB );
 }
 
 // -----------------------------------------------------------------------
@@ -568,7 +634,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
 #endif
 
     if ( ( nModifyFlag & MODIFY_WORD ) == 0 )
-        aWordBtn.Check( pSearchItem->GetWordOnly() );
+         aWordBtn.Check( pSearchItem->GetWordOnly() );
     if ( ( nModifyFlag & MODIFY_EXACT ) == 0 )
         aExactBtn.Check( pSearchItem->GetExact() );
     if ( ( nModifyFlag & MODIFY_BACKWARDS ) == 0 )
@@ -905,7 +971,7 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
 
 IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Button *, pButton )
 {
-    if ( pButton && !bSet )
+     if ( pButton && !bSet )
         SetModifyFlag_Impl( pButton );
     else
         bSet = FALSE;
@@ -994,6 +1060,14 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Button *, pButton )
             bSet = TRUE;
             ModifyHdl_Impl( &aSearchLB );
         }
+    }
+
+    if ( &aJapSoundsLikeCB == pButton )
+    {
+        BOOL bEnableJapOpt = aJapSoundsLikeCB.IsChecked();
+        aExactBtn               .Enable( !bEnableJapOpt );
+        aJapMatchFullHalfWidthCB.Enable( !bEnableJapOpt );
+        aJapOptionsBtn          .Enable( bEnableJapOpt );
     }
 
     if ( pImpl->bSaveToModule )
@@ -1109,6 +1183,19 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         }
         delete pDlg;
     }
+    else if ( pBtn == &aJapOptionsBtn )
+    {
+        SfxItemSet aSet( SFX_APP()->GetPool() );
+        SfxSingleTabDialog aDlg( SfxSingleTabDialog( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS ) );
+        SvxJSearchOptionsPage *pPage = (SvxJSearchOptionsPage *)
+                    SvxJSearchOptionsPage::Create( &aDlg, aSet );
+        aDlg.SetTabPage( pPage );   //! implicitly calls pPage->Reset(...)!
+        pPage->EnableSaveOptions( FALSE );
+        pPage->SetTransliterationSettings( GetTransliterationSettings() );
+        aDlg.Execute();
+        ApplyTransliterationSettings_Impl( pPage->GetTransliterationSettings() );
+    }
+
     return 0;
 }
 

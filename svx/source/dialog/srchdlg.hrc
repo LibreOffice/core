@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: tl $ $Date: 2001-02-19 11:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@
 
 #define CB_SIMILARITY   51
 #define PB_SIMILARITY   52
+
+#define CB_JAP_MATCH_FULL_HALF_WIDTH    55
+#define CB_JAP_SOUNDS_LIKE              56
+#define PB_JAP_OPTIONS                  57
 
 #define ED_SEARCH_FORMATS   60
 #define ED_REPLACE_FORMATS  61
