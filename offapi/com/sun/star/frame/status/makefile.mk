@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-17 12:36:33 $
+#   last change: $Author: kz $ $Date: 2005-03-01 18:21:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,8 +73,15 @@ PACKAGE=com$/sun$/star$/frame$/status
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    ItemStatus.idl\
-    ItemState.idl\
+    FontHeight.idl              \
+    Verb.idl                    \
+    ClipboardFormats.idl        \
+    LeftRightMargin.idl         \
+    UpperLowerMargin.idl        \
+    UpperLowerMarginScale.idl   \
+    Template.idl                \
+    ItemStatus.idl              \
+    ItemState.idl               \
     Visibility.idl
 
 # ------------------------------------------------------------------
