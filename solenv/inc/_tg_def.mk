@@ -49,7 +49,7 @@ $(DEF1TARGETN) .PHONY : \
 .ENDIF				# "$(DEFLIB1NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs\$(OUTPATH)
+    +-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL1TARGET) 								 >$@
@@ -227,7 +227,7 @@ $(DEF2TARGETN) .PHONY : \
 .ENDIF				# "$(DEFLIB2NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs\$(OUTPATH)
+    +-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL2TARGET) 								 >$@
@@ -405,7 +405,7 @@ $(DEF3TARGETN) .PHONY : \
 .ENDIF				# "$(DEFLIB3NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs\$(OUTPATH)
+    +-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL3TARGET) 								 >$@
@@ -583,7 +583,7 @@ $(DEF4TARGETN) .PHONY : \
 .ENDIF				# "$(DEFLIB4NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs\$(OUTPATH)
+    +-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL4TARGET) 								 >$@
@@ -761,7 +761,7 @@ $(DEF5TARGETN) .PHONY : \
 .ENDIF				# "$(DEFLIB5NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs\$(OUTPATH)
+    +-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL5TARGET) 								 >$@
@@ -939,7 +939,7 @@ $(DEF6TARGETN) .PHONY : \
 .ENDIF				# "$(DEFLIB6NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs\$(OUTPATH)
+    +-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL6TARGET) 								 >$@
@@ -1117,7 +1117,7 @@ $(DEF7TARGETN) .PHONY : \
 .ENDIF				# "$(DEFLIB7NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs\$(OUTPATH)
+    +-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL7TARGET) 								 >$@
@@ -1295,7 +1295,7 @@ $(DEF8TARGETN) .PHONY : \
 .ENDIF				# "$(DEFLIB8NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs\$(OUTPATH)
+    +-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL8TARGET) 								 >$@
@@ -1473,7 +1473,7 @@ $(DEF9TARGETN) .PHONY : \
 .ENDIF				# "$(DEFLIB9NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs\$(OUTPATH)
+    +-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL9TARGET) 								 >$@
@@ -1651,7 +1651,7 @@ $(DEF10TARGETN) .PHONY : \
 .ENDIF				# "$(DEFLIB10NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs\$(OUTPATH)
+    +-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL10TARGET) 								 >$@

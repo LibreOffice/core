@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-27 16:18:11 $
+#   last change: $Author: hjs $ $Date: 2002-04-08 17:06:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -152,7 +152,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs\$(OUTPATH)
+    +-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL$(TNR)TARGET) 								 >$@

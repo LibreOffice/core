@@ -29,11 +29,11 @@ $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
     +-$(MKDIR) .$/META-INF >& $(NULLDEV)
     +-$(RM) $@ >& $(NULLDEV)
     +echo Manifest-Version: 1.0 > $@
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || $(USE_SHELL)"!="4nt"
     +echo "Solar-Version: $(RSCREVISION)" >> $@
-.ELSE			# "$(GUI)"=="UNX"
+.ELSE			# "$(GUI)"=="UNX"" || $(USE_SHELL)"!="4nt"
     +echo Solar-Version: $(RSCREVISION) >> $@
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(GUI)"=="UNX"" || $(USE_SHELL)"!="4nt"
 .IF "$(CUSTOMMANIFESTFILE)"!=""
     +$(TYPE) ..$/misc$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
