@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmddlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-03 13:33:00 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,24 +268,26 @@ void CommandStore::setFaxCommands( const ::std::list< String >& rCommands )
 RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
         TabPage( &pParent->m_aTabControl, PaResId( RID_RTS_COMMANDPAGE ) ),
         m_pParent( pParent ),
+        m_aCommandsCB( this, PaResId( RID_RTS_CMD_CB_COMMANDS ) ),
         m_aCommandTitle( this, PaResId( RID_RTS_CMD_FL_INSTALL ) ),
         m_aPrinterName( this, PaResId( RID_RTS_CMD_TXT_PRTNAME ) ),
+        m_aConnectedTo( this, PaResId( RID_RTS_CMD_TXT_CONNECT ) ),
         m_aPrinterFL( this, PaResId( RID_RTS_CMD_FL_DEFAULT ) ),
-        m_aCommandsCB( this, PaResId( RID_RTS_CMD_CB_COMMANDS ) ),
         m_aConfigureText( this, PaResId( RID_RTS_CMD_TXT_CONFIGURE ) ),
         m_aConfigureBox( this, PaResId( RID_RTS_CMD_LB_CONFIGURE ) ),
-        m_aHelpButton( this, PaResId( RID_RTS_CMD_BTN_HELP ) ),
-        m_aRemovePB( this, PaResId( RID_RTS_CMD_BTN_REMOVE ) ),
-        m_aConnectedTo( this, PaResId( RID_RTS_CMD_TXT_CONNECT ) ),
-        m_aFaxHelp( PaResId( RID_RTS_CMD_STR_FAXHELP ) ),
-        m_aPrinterHelp( PaResId( RID_RTS_CMD_STR_PRINTERHELP ) ),
-        m_aPdfHelp( PaResId( RID_RTS_CMD_STR_PDFHELP ) ),
+        m_aPdfDirectoryText( this, PaResId( RID_RTS_CMD_TXT_PDFDIR ) ),
         m_aPdfDirectoryButton( this, PaResId( RID_RTS_CMD_BTN_PDFDIR ) ),
         m_aPdfDirectoryEdit( this, PaResId( RID_RTS_CMD_EDT_PDFDIR ) ),
-        m_aPdfDirectoryText( this, PaResId( RID_RTS_CMD_TXT_PDFDIR ) ),
-        m_aFaxSwallowBox( this, PaResId( RID_RTS_CMD_BOX_SWALLOWFAXNO ) )
+        m_aFaxSwallowBox( this, PaResId( RID_RTS_CMD_BOX_SWALLOWFAXNO ) ),
+        m_aHelpButton( this, PaResId( RID_RTS_CMD_BTN_HELP ) ),
+        m_aRemovePB( this, PaResId( RID_RTS_CMD_BTN_REMOVE ) ),
+        m_aFaxHelp( PaResId( RID_RTS_CMD_STR_FAXHELP ) ),
+        m_aPrinterHelp( PaResId( RID_RTS_CMD_STR_PRINTERHELP ) ),
+        m_aPdfHelp( PaResId( RID_RTS_CMD_STR_PDFHELP ) )
 {
-    m_nPrinterEntry = m_aConfigureBox.InsertEntry( String( PaResId( RID_RTS_CMD_STR_CONFIGURE_PRINTER ) ) );
+    // configuring as printer is only sensible in default print system
+    if( PrinterInfoManager::get().getType() == PrinterInfoManager::Default )
+        m_nPrinterEntry = m_aConfigureBox.InsertEntry( String( PaResId( RID_RTS_CMD_STR_CONFIGURE_PRINTER ) ) );
     m_nFaxEntry = m_aConfigureBox.InsertEntry( String( PaResId( RID_RTS_CMD_STR_CONFIGURE_FAX ) ) );
     m_nPdfEntry = m_aConfigureBox.InsertEntry( String( PaResId( RID_RTS_CMD_STR_CONFIGURE_PDF ) ) );
 
