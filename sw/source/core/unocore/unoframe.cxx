@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 12:02:07 $
+ *  last change: $Author: os $ $Date: 2001-06-15 14:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,176 +251,66 @@ using namespace ::rtl;
 const sal_Char __FAR_DATA sPackageProtocol[] = "vnd.sun.star.Package:";
 const sal_Char __FAR_DATA sGraphicObjectProtocol[] = "vnd.sun.star.GraphicObject:";
 
-// unterscheidet sich von der Rahmenbeschreibung durch eine XTextPosition
-//{ UNO_NAME_CLIENT_MAP     ,       RES_URL,                &::getBooleanCppuType(),            PROPERTY_MAYBEVOID ,MID_URL_CLIENTMAP        },
-const SfxItemPropertyMap* GetFrameDescMap()
-{
-    static SfxItemPropertyMap aFrameDescPropertyMap_Impl[] =
-    {
-        { SW_PROP_NAME(UNO_NAME_ANCHOR_PAGE_NO),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_PAGENUM       },
-        { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},
-        { SW_PROP_NAME(UNO_NAME_BACK_COLOR    )  ,      RES_BACKGROUND,         &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_BACK_COLOR        },
-        { SW_PROP_NAME(UNO_NAME_CHAIN_NEXT_NAME),           RES_CHAIN,              &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID ,MID_CHAIN_NEXTNAME},
-        { SW_PROP_NAME(UNO_NAME_CHAIN_PREV_NAME),           RES_CHAIN,              &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID ,MID_CHAIN_PREVNAME},
-/*n.i.*/{ SW_PROP_NAME(UNO_NAME_CLIENT_MAP     )    ,       RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_CLIENTMAP         },
-        { SW_PROP_NAME(UNO_NAME_CONTENT_PROTECTED) ,        RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_CONTENT   },
-        { SW_PROP_NAME(UNO_NAME_EDIT_IN_READONLY),      RES_EDIT_IN_READONLY,   &::getBooleanCppuType(),            PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_FRAME_STYLE_NAME),          FN_UNO_FRAME_STYLE_NAME,&::getCppuType((const OUString*)0),         PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_URL)      ,    RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_GRAPHIC_URL    },
-        { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_FILTER)  ,     RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
-        { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_LOCATION)   ,  RES_BACKGROUND,         &::getCppuType((const style::GraphicLocation*)0), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
-        { SW_PROP_NAME(UNO_NAME_LEFT_MARGIN),           RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_RIGHT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_HEIGHT),                    RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS         },
-        { SW_PROP_NAME(UNO_NAME_SIZE_TYPE),                 RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
-        { SW_PROP_NAME(UNO_NAME_HORI_ORIENT)     ,          RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_ORIENT    },
-        { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_POSITION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_HORIORIENT_POSITION|CONVERT_TWIPS    },
-        { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_RELATION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_RELATION  },
-        { SW_PROP_NAME(UNO_NAME_HYPER_LINK_U_R_L  ) ,       RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_URL},
-        { SW_PROP_NAME(UNO_NAME_HYPER_LINK_TARGET ) ,       RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_TARGET},
-        { SW_PROP_NAME(UNO_NAME_HYPER_LINK_NAME ),      RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_HYPERLINKNAME     },
-        { SW_PROP_NAME(UNO_NAME_OPAQUE),                    RES_OPAQUE,             &::getBooleanCppuType(),            PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_PAGE_TOGGLE),               RES_HORI_ORIENT,        &::getBooleanCppuType(),            PROPERTY_NONE ,MID_HORIORIENT_PAGETOGGLE },
-        { SW_PROP_NAME(UNO_NAME_POSITION_PROTECTED),    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_POSITION},
-        { SW_PROP_NAME(UNO_NAME_PRINT),                     RES_PRINT,              &::getBooleanCppuType(),            PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_RELATIVE_HEIGHT),       RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_HEIGHT },
-        { SW_PROP_NAME(UNO_NAME_RELATIVE_WIDTH),            RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH  },
-        { SW_PROP_NAME(UNO_NAME_SHADOW_FORMAT),             RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_SERVER_MAP)     ,       RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_SERVERMAP         },
-        { SW_PROP_NAME(UNO_NAME_SIZE),                  RES_FRM_SIZE,           &::getCppuType((const awt::Size*)0),            PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_SIZE_PROTECTED)    ,    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_SIZE    },
-        { SW_PROP_NAME(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT    },
-        { SW_PROP_NAME(UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH },
-        { SW_PROP_NAME(UNO_NAME_SURROUND  )               , RES_SURROUND,           &::getCppuType((text::WrapTextMode*)0),         PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE },
-        { SW_PROP_NAME(UNO_NAME_SURROUND_ANCHORONLY),   RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_ANCHORONLY      },
-        { SW_PROP_NAME(UNO_NAME_TEXT_COLUMNS),          RES_COL,                &::getCppuType((const uno::Reference<XTextColumns>*)0),    PROPERTY_NONE, MID_COLUMNS},
-        //MID_COLUMN_SEPARATOR_LINE ???
-        { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),                RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_BOTTOM_MARGIN),             RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_BACK_TRANSPARENT) , RES_BACKGROUND,         &::getBooleanCppuType(),            PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
-        { SW_PROP_NAME(UNO_NAME_VERT_ORIENT  ),             RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_VERTORIENT_ORIENT    },
-        { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_POSITION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_VERTORIENT_POSITION|CONVERT_TWIPS    },
-        { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_RELATION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_VERTORIENT_RELATION  },
-        { SW_PROP_NAME(UNO_NAME_WIDTH),                     RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS          },
-        { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),                 RES_SURROUND,           &::getCppuType((text::WrapTextMode*)0),         PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE },
-        { SW_PROP_NAME(UNO_NAME_LEFT_BORDER),               RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, LEFT_BORDER  |CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER),          RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, RIGHT_BORDER |CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_TOP_BORDER),                RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, TOP_BORDER   |CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER),         RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, BOTTOM_BORDER|CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_BORDER_DISTANCE),         RES_BOX,              &::getCppuType((const sal_Int32*)0),    0, BORDER_DISTANCE|CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_LEFT_BORDER_DISTANCE),  RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_TOP_BORDER_DISTANCE),       RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
-        {0,0,0,0}
-    };
-    #define FRM_PROP_COUNT 55
-    return aFrameDescPropertyMap_Impl;
-}
-// unterscheidet sich von der Rahmenbeschreibung durch eine XTextPosition
-const SfxItemPropertyMap* GetGraphicDescMap()
-{
-    static SfxItemPropertyMap aGraphicDescPropertyMap_Impl[] =
-    {
-        { SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT),      FN_UNO_ALTERNATIVE_TEXT,    &::getCppuType((const OUString*)0),         PROPERTY_NONE , 0   },
-        { SW_PROP_NAME(UNO_NAME_ANCHOR_PAGE_NO),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_PAGENUM       },
-        { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},
-        { SW_PROP_NAME(UNO_NAME_BACK_COLOR     )     ,      RES_BACKGROUND,         &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_BACK_COLOR        },
-        { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_FILTER)  ,     RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
-        { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_LOCATION)   ,  RES_BACKGROUND,         &::getCppuType((const style::GraphicLocation*)0), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
-        { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_URL)      ,    RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_GRAPHIC_URL    },
-        { SW_PROP_NAME(UNO_NAME_CLIENT_MAP     )    ,       RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_CLIENTMAP         },
-        { SW_PROP_NAME(UNO_NAME_CONTENT_PROTECTED) ,        RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_CONTENT   },
-        { SW_PROP_NAME(UNO_NAME_CONTOUR_OUTSIDE),       RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_CONTOUROUTSIDE  },
-        { SW_PROP_NAME(UNO_NAME_FRAME_STYLE_NAME),      FN_UNO_FRAME_STYLE_NAME,  &::getCppuType((const OUString*)0),         PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_GRAPHIC_CROP),          RES_GRFATR_CROPGRF,     &::getCppuType((const GraphicCrop*)0),  PROPERTY_NONE, CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES),   RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,      MID_MIRROR_HORZ_EVEN_PAGES            },
-        { SW_PROP_NAME(UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES),    RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,      MID_MIRROR_HORZ_ODD_PAGES                 },
-        { SW_PROP_NAME(UNO_NAME_HEIGHT),                    RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS         },
-        { SW_PROP_NAME(UNO_NAME_HORI_ORIENT ) ,             RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_ORIENT    },
-        { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_POSITION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_HORIORIENT_POSITION|CONVERT_TWIPS    },
-        { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_RELATION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_RELATION  },
-        { SW_PROP_NAME(UNO_NAME_HYPER_LINK_U_R_L   ),       RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_URL},
-        { SW_PROP_NAME(UNO_NAME_HYPER_LINK_TARGET  ),       RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_TARGET},
-        { SW_PROP_NAME(UNO_NAME_HYPER_LINK_NAME ),      RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_HYPERLINKNAME     },
-        { SW_PROP_NAME(UNO_NAME_LEFT_MARGIN),           RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_RIGHT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_OPAQUE),                    RES_OPAQUE,             &::getBooleanCppuType(),            PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_PAGE_TOGGLE),               RES_VERT_ORIENT,        &::getBooleanCppuType(),            PROPERTY_NONE ,MID_HORIORIENT_PAGETOGGLE },
-        { SW_PROP_NAME(UNO_NAME_POSITION_PROTECTED),    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_POSITION},
-        { SW_PROP_NAME(UNO_NAME_PRINT),                     RES_PRINT,              &::getBooleanCppuType(),            PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_RELATIVE_HEIGHT),       RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_HEIGHT },
-        { SW_PROP_NAME(UNO_NAME_RELATIVE_WIDTH),            RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH  },
-        { SW_PROP_NAME(UNO_NAME_SERVER_MAP )        ,       RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_SERVERMAP         },
-        { SW_PROP_NAME(UNO_NAME_SHADOW_FORMAT),             RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_SIZE),                  RES_FRM_SIZE,           &::getCppuType((const awt::Size*)0),            PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT    },
-        { SW_PROP_NAME(UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH },
-        { SW_PROP_NAME(UNO_NAME_SIZE_PROTECTED)    ,    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_SIZE    },
-        { SW_PROP_NAME(UNO_NAME_SURROUND    )             , RES_SURROUND,           &::getCppuType((text::WrapTextMode*)0),         PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE },
-        { SW_PROP_NAME(UNO_NAME_SURROUND_ANCHORONLY),   RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_ANCHORONLY      },
-        { SW_PROP_NAME(UNO_NAME_SURROUND_CONTOUR )   ,  RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_CONTOUR         },
-        { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),                RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_BOTTOM_MARGIN),             RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_BACK_TRANSPARENT) , RES_BACKGROUND,         &::getBooleanCppuType(),            PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
-        { SW_PROP_NAME(UNO_NAME_VERT_MIRRORED),         RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,     MID_MIRROR_VERT            },
-        { SW_PROP_NAME(UNO_NAME_VERT_ORIENT  ),             RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_VERTORIENT_ORIENT    },
-        { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_POSITION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_VERTORIENT_POSITION|CONVERT_TWIPS    },
-        { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_RELATION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_VERTORIENT_RELATION  },
-        { SW_PROP_NAME(UNO_NAME_WIDTH),                     RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_WIDTH            },
-        { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),                 RES_SURROUND,           &::getCppuType((text::WrapTextMode*)0),         PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE },
-        { SW_PROP_NAME(UNO_NAME_LEFT_BORDER),               RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, LEFT_BORDER  |CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER),          RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, RIGHT_BORDER |CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_TOP_BORDER),                RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, TOP_BORDER   |CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER),         RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, BOTTOM_BORDER|CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_BORDER_DISTANCE),         RES_BOX,              &::getCppuType((const sal_Int32*)0),    0, BORDER_DISTANCE|CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_LEFT_BORDER_DISTANCE),  RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_TOP_BORDER_DISTANCE),       RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_ADJUST_BLUE),           RES_GRFATR_CHANNELB,     &::getCppuType((sal_Int16*)0), 0,   0},
-        { SW_PROP_NAME(UNO_NAME_GRAPHIC_COLOR_MODE),    RES_GRFATR_DRAWMODE,     &::getCppuType((drawing::ColorMode*)0),        0,   0},
-        { SW_PROP_NAME(UNO_NAME_ADJUST_CONTRAST),       RES_GRFATR_CONTRAST,     &::getCppuType((sal_Int16*)0), 0,   0},
-        { SW_PROP_NAME(UNO_NAME_GRAPHIC_FILTER),        FN_UNO_GRAPHIC_FILTER,  &::getCppuType((const OUString*)0), 0, 0 },
-        { SW_PROP_NAME(UNO_NAME_GAMMA),         RES_GRFATR_GAMMA,        &::getCppuType((double*)0),        0,   0},
-        { SW_PROP_NAME(UNO_NAME_ADJUST_GREEN),          RES_GRFATR_CHANNELG,     &::getCppuType((sal_Int16*)0), 0,   0},
-        { SW_PROP_NAME(UNO_NAME_GRAPHIC_IS_INVERTED),   RES_GRFATR_INVERT,       &::getBooleanCppuType(),   0,   0},
-        { SW_PROP_NAME(UNO_NAME_ADJUST_LUMINANCE),      RES_GRFATR_LUMINANCE,    &::getCppuType((sal_Int16*)0), 0,   0},
-        { SW_PROP_NAME(UNO_NAME_ADJUST_RED),            RES_GRFATR_CHANNELR,     &::getCppuType((sal_Int16*)0), 0,   0},
-        { SW_PROP_NAME(UNO_NAME_GRAPHIC_ROTATION),      RES_GRFATR_ROTATION,     &::getCppuType((sal_Int16*)0), 0,   0},
-        { SW_PROP_NAME(UNO_NAME_TRANSPARENCY),  RES_GRFATR_TRANSPARENCY, &::getCppuType((sal_Int16*)0), 0,   0},
-        { SW_PROP_NAME(UNO_NAME_GRAPHIC_URL),           FN_UNO_GRAPHIC_U_R_L,  &::getCppuType((const OUString*)0), 0, 0 },
-        { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
-        { SW_PROP_NAME(UNO_NAME_IS_PIXEL_CONTOUR), FN_UNO_IS_PIXEL_CONTOUR, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
-        { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_CONTOUR), FN_UNO_IS_AUTOMATIC_CONTOUR , &::getBooleanCppuType(), PROPERTY_NONE, 0 },
-        { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
-        {0,0,0,0}
-    };
-    #define GRPH_PROP_COUNT 72
-    return aGraphicDescPropertyMap_Impl;
-}
-
 /****************************************************************************
     Rahmenbeschreibung
 ****************************************************************************/
+DECLARE_TABLE(SwFrameAnyTable_Impl, uno::Any*)
 class BaseFrameProperties_Impl
 {
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertyMap*       _pMap;
+    SwFrameAnyTable_Impl            aAnyTbl;
+
 public:
 
     BaseFrameProperties_Impl(const SfxItemPropertyMap*  pMap) :
         _pMap(pMap){}
+    ~BaseFrameProperties_Impl();
 
-    virtual sal_Bool        SetProperty(const String& rName, uno::Any aVal) = 0;
-    virtual sal_Bool        GetProperty(const String& rName, uno::Any*& pAny )  = 0;
+    void            SetProperty(USHORT nWID, BYTE nMemberId, uno::Any aVal);
+    sal_Bool        GetProperty(USHORT nWID, BYTE nMemberId, uno::Any*& pAny );
 
-    const SfxItemPropertyMap*   GetMap() const {return _pMap;}
+    const SfxItemPropertyMap*       GetMap() const {return _pMap;}
     sal_Bool                        FillBaseProperties(SfxItemSet& rSet, sal_Bool& rSizeFound);
 
     virtual sal_Bool                AnyToItemSet(SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound) = 0;
 
 };
+/* -----------------------------12.06.01 15:46--------------------------------
+
+ ---------------------------------------------------------------------------*/
+BaseFrameProperties_Impl::~BaseFrameProperties_Impl()
+{
+    uno::Any* pVal = aAnyTbl.First();
+    while(pVal)
+    {
+        delete pVal;
+        pVal = aAnyTbl.Next();
+    }
+}
+/* -----------------------------12.06.01 15:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void BaseFrameProperties_Impl::SetProperty(USHORT nWID, BYTE nMemberId, uno::Any aVal)
+{
+    ULONG nKey = (nWID << 16) + nMemberId;
+    Any* pCurAny = aAnyTbl.Get(nKey);
+    if(!pCurAny)
+    {
+        pCurAny = new uno::Any;
+        aAnyTbl.Insert(nKey, pCurAny);
+    }
+    *pCurAny = aVal;
+}
+/* -----------------------------12.06.01 15:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool BaseFrameProperties_Impl::GetProperty(USHORT nWID, BYTE nMemberId, uno::Any*& pAny )
+{
+    ULONG nKey = (nWID << 16) + nMemberId;
+    Any* pCurAny = aAnyTbl.Get(nKey);
+    pAny = pCurAny;
+    return pCurAny != 0;
+}
 /* -----------------29.06.98 09:55-------------------
  *
  * --------------------------------------------------*/
@@ -431,26 +321,24 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     SwFmtAnchor aAnchor;
     {
         uno::Any* pAnchorPgNo;
-        if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_ANCHOR_PAGE_NO)), pAnchorPgNo))
+        if(GetProperty(RES_ANCHOR, MID_ANCHOR_PAGENUM, pAnchorPgNo))
             bRet &= ((SfxPoolItem&)aAnchor).PutValue(*pAnchorPgNo, MID_ANCHOR_PAGENUM);
         uno::Any* pAnchorType;
-        if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_ANCHOR_TYPE)), pAnchorType))
+        if(GetProperty(RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, pAnchorType))
             bRet &= ((SfxPoolItem&)aAnchor).PutValue(*pAnchorType, MID_ANCHOR_ANCHORTYPE);
     }
-//  if(aAnchor.GetAnchorId() == FLY_PAGE && !aAnchor.GetPageNum())
-//      aAnchor.SetPageNum(1);
     rSet.Put(aAnchor);
     {
         uno::Any* pCol = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BACK_COLOR)), pCol );
+        GetProperty(RES_BACKGROUND, MID_BACK_COLOR, pCol );
         uno::Any* pTrans = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BACK_TRANSPARENT)), pTrans );
+        GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENT, pTrans );
         uno::Any* pGrLoc = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BACK_GRAPHIC_LOCATION)), pGrLoc   );
+        GetProperty(RES_BACKGROUND, MID_GRAPHIC_POSITION, pGrLoc );
         uno::Any* pGrURL = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BACK_GRAPHIC_URL)), pGrURL     );
+        GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL, pGrURL     );
         uno::Any* pGrFilter = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BACK_GRAPHIC_FILTER)), pGrFilter     );
+        GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER, pGrFilter     );
 
         if(pCol || pTrans || pGrURL || pGrFilter || pGrLoc)
         {
@@ -470,11 +358,11 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     }
     {
         uno::Any* pCont = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_CONTENT_PROTECTED)), pCont );
+        GetProperty(RES_PROTECT, MID_PROTECT_CONTENT, pCont );
         uno::Any* pPos = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_POSITION_PROTECTED)), pPos );
+        GetProperty(RES_PROTECT,MID_PROTECT_POSITION, pPos );
         uno::Any* pName = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SIZE_PROTECTED)), pName );
+        GetProperty(RES_PROTECT, MID_PROTECT_SIZE, pName );
         if(pCont||pPos||pName)
         {
             SvxProtectItem aProt(RES_PROTECT);
@@ -489,13 +377,13 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     }
     {
         uno::Any* pHori  = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HORI_ORIENT)), pHori );
+        GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, pHori );
         uno::Any* pHoriP = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HORI_ORIENT_POSITION)), pHoriP );
+        GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_POSITION|CONVERT_TWIPS, pHoriP );
         uno::Any* pHoriR = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HORI_ORIENT_RELATION)), pHoriR );
+        GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_RELATION, pHoriR );
         uno::Any* pPageT = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_PAGE_TOGGLE)), pPageT);
+        GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_PAGETOGGLE, pPageT);
         if(pHori||pHoriP||pHoriR||pPageT)
         {
             SwFmtHoriOrient aOrient;
@@ -513,11 +401,11 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
 
     {
         uno::Any* pVert  = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT)), pVert);
+        GetProperty(RES_VERT_ORIENT, MID_VERTORIENT_ORIENT, pVert);
         uno::Any* pVertP = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT_POSITION)), pVertP );
+        GetProperty(RES_VERT_ORIENT, MID_VERTORIENT_POSITION|CONVERT_TWIPS, pVertP );
         uno::Any* pVertR = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT_RELATION)), pVertR );
+        GetProperty(RES_VERT_ORIENT, MID_VERTORIENT_RELATION, pVertR );
         if(pVert||pVertP||pVertR)
         {
             SwFmtVertOrient aOrient;
@@ -532,13 +420,13 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     }
     {
         uno::Any* pURL = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HYPER_LINK_U_R_L)), pURL );
+        GetProperty(RES_URL, MID_URL_URL, pURL );
         uno::Any* pTarget = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HYPER_LINK_TARGET)), pTarget );
+        GetProperty(RES_URL, MID_URL_TARGET, pTarget );
         uno::Any* pHyLNm = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HYPER_LINK_NAME)), pHyLNm );
+        GetProperty(RES_URL, MID_URL_HYPERLINKNAME, pHyLNm );
         uno::Any* pHySMp = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SERVER_MAP)), pHySMp );
+        GetProperty(RES_URL, MID_URL_SERVERMAP, pHySMp );
         if(pURL||pTarget||pHyLNm||pHySMp)
         {
             SwFmtURL aURL;
@@ -554,9 +442,9 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
         }
     }
     uno::Any* pL = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN)), pL );
+    GetProperty(RES_LR_SPACE, MID_L_MARGIN|CONVERT_TWIPS, pL );
     uno::Any* pR = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_RIGHT_MARGIN)), pR );
+    GetProperty(RES_LR_SPACE, MID_R_MARGIN|CONVERT_TWIPS, pR );
     if(pL||pR)
     {
         SvxLRSpaceItem aLR(RES_LR_SPACE);
@@ -567,9 +455,9 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
         rSet.Put(aLR);
     }
     uno::Any* pT = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_TOP_MARGIN)), pT );
+    GetProperty(RES_UL_SPACE, MID_UP_MARGIN|CONVERT_TWIPS, pT );
     uno::Any* pB = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BOTTOM_MARGIN)), pB );
+    GetProperty(RES_UL_SPACE, MID_LO_MARGIN|CONVERT_TWIPS, pB );
     if(pT||pB)
     {
         SvxULSpaceItem aTB(RES_UL_SPACE);
@@ -580,32 +468,30 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
         rSet.Put(aTB);
     }
     uno::Any* pOp;
-    if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_OPAQUE)), pOp))
+    if(GetProperty(RES_OPAQUE, 0, pOp))
     {
         SvxOpaqueItem aOp(RES_OPAQUE);
         bRet &= ((SfxPoolItem&)aOp).PutValue(*pOp, 0);
         rSet.Put(aOp);
     }
     uno::Any* pPrt;
-    if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_PRINT)), pPrt))
+    if(GetProperty(RES_PRINT, 0, pPrt))
     {
         SvxPrintItem aPrt(RES_PRINT);
         bRet &= ((SfxPoolItem&)aPrt).PutValue(*pPrt, 0);
         rSet.Put(aPrt);
     }
     uno::Any* pSh;
-    if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SHADOW_FORMAT)), pSh))
+    if(GetProperty(RES_SHADOW, CONVERT_TWIPS, pSh))
     {
         SvxShadowItem aSh(RES_SHADOW);
         bRet &= ((SfxPoolItem&)aSh).PutValue(*pSh, CONVERT_TWIPS);
         rSet.Put(aSh);
     }
     uno::Any* pSur   = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SURROUND)), pSur);
-    if( !pSur )
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_TEXT_WRAP)), pSur);
+    GetProperty(RES_SURROUND, MID_SURROUND_SURROUNDTYPE, pSur);
     uno::Any* pSurAnch = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SURROUND_ANCHORONLY)), pSurAnch);
+    GetProperty(RES_SURROUND, MID_SURROUND_ANCHORONLY, pSurAnch);
     if(pSur || pSurAnch)
     {
         SwFmtSurround aSrnd;
@@ -616,23 +502,23 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
         rSet.Put(aSrnd);
     }
     uno::Any* pLeft         = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_LEFT_BORDER))  ,  pLeft  );
+    GetProperty(RES_BOX, LEFT_BORDER  |CONVERT_TWIPS,    pLeft  );
     uno::Any* pRight        = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_RIGHT_BORDER)) ,  pRight );
+    GetProperty(RES_BOX, CONVERT_TWIPS|RIGHT_BORDER ,    pRight );
     uno::Any* pTop      = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_TOP_BORDER))    , pTop   );
+    GetProperty(RES_BOX, CONVERT_TWIPS|TOP_BORDER     , pTop   );
     uno::Any* pBottom   = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BOTTOM_BORDER)),  pBottom);
+    GetProperty(RES_BOX, CONVERT_TWIPS|BOTTOM_BORDER,    pBottom);
     uno::Any* pDistance     = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BORDER_DISTANCE)),    pDistance);
+    GetProperty(RES_BOX, CONVERT_TWIPS|BORDER_DISTANCE,  pDistance);
     uno::Any* pLeftDistance     = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_LEFT_BORDER_DISTANCE)),   pLeftDistance);
+    GetProperty(RES_BOX, CONVERT_TWIPS|LEFT_BORDER_DISTANCE, pLeftDistance);
     uno::Any* pRightDistance    = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_RIGHT_BORDER_DISTANCE)),  pRightDistance);
+    GetProperty(RES_BOX, CONVERT_TWIPS|RIGHT_BORDER_DISTANCE,    pRightDistance);
     uno::Any* pTopDistance  = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_TOP_BORDER_DISTANCE)),    pTopDistance);
+    GetProperty(RES_BOX, CONVERT_TWIPS|TOP_BORDER_DISTANCE,  pTopDistance);
     uno::Any* pBottomDistance   = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BOTTOM_BORDER_DISTANCE)), pBottomDistance);
+    GetProperty(RES_BOX, CONVERT_TWIPS|BOTTOM_BORDER_DISTANCE,   pBottomDistance);
     if( pLeft || pRight || pTop ||  pBottom || pDistance ||
         pLeftDistance  || pRightDistance || pTopDistance || pBottomDistance )
     {
@@ -659,21 +545,21 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     }
     {
         uno::Any* pRelH = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_RELATIVE_HEIGHT)), pRelH);
+        GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_HEIGHT, pRelH);
         uno::Any* pRelW = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_RELATIVE_WIDTH)), pRelW);
+        GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_WIDTH, pRelW);
         uno::Any* pSyncWidth = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT)), pSyncWidth);
+        GetProperty(RES_FRM_SIZE, MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT, pSyncWidth);
         uno::Any* pSyncHeight = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH)), pSyncHeight);
+        GetProperty(RES_FRM_SIZE, MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH, pSyncHeight);
         uno::Any* pWidth = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_WIDTH)), pWidth);
+        GetProperty(RES_FRM_SIZE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS, pWidth);
         uno::Any* pHeight = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HEIGHT)), pHeight);
+        GetProperty(RES_FRM_SIZE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS, pHeight);
         uno::Any* pSize = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SIZE)), pSize);
+        GetProperty(RES_FRM_SIZE, MID_FRMSIZE_SIZE|CONVERT_TWIPS, pSize);
         uno::Any* pSizeType = 0;
-        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SIZE_TYPE)), pSizeType);
+        GetProperty(RES_FRM_SIZE, MID_FRMSIZE_SIZE_TYPE, pSizeType);
         if( pWidth || pHeight ||pRelH || pRelW || pSize ||pSizeType ||
             pSyncWidth || pSyncHeight )
         {
@@ -694,7 +580,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
             if(pSize)
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pSize, MID_FRMSIZE_SIZE|CONVERT_TWIPS);
             if(pSizeType)
-                bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pSizeType, MID_FRMSIZE_SIZE_TYPE|CONVERT_TWIPS);
+                bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pSizeType, MID_FRMSIZE_SIZE_TYPE);
             if(!aFrmSz.GetWidth())
                 aFrmSz.SetWidth(MINFLY);
             if(!aFrmSz.GetHeight())
@@ -719,17 +605,13 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
 /* -----------------22.06.98 09:17-------------------
  *
  * --------------------------------------------------*/
+
 class SwFrameProperties_Impl : public BaseFrameProperties_Impl
 {
-    uno::Any*                   pAnyArr[FRM_PROP_COUNT];
-    sal_uInt16                      nArrLen;
 
 public:
     SwFrameProperties_Impl();
-    ~SwFrameProperties_Impl();
-
-    virtual sal_Bool        SetProperty(const String& rName, uno::Any aVal);
-    virtual sal_Bool        GetProperty(const String& rName, uno::Any*& pAny );
+    ~SwFrameProperties_Impl(){}
 
     virtual sal_Bool        AnyToItemSet(SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
 };
@@ -737,59 +619,8 @@ public:
  *
  * --------------------------------------------------*/
 SwFrameProperties_Impl::SwFrameProperties_Impl() :
-    BaseFrameProperties_Impl(GetFrameDescMap()),
-    nArrLen(FRM_PROP_COUNT)
+    BaseFrameProperties_Impl(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME))
 {
-    for(sal_uInt16 i = 0; i < nArrLen; i++)
-        pAnyArr[i] = 0;
-}
-/* -----------------22.06.98 09:17-------------------
- *
- * --------------------------------------------------*/
-SwFrameProperties_Impl::~SwFrameProperties_Impl()
-{
-    for(sal_uInt16 i = 0; i < nArrLen; i++)
-        delete pAnyArr[i];
-}
-
-/* -----------------22.06.98 09:51-------------------
- *
- * --------------------------------------------------*/
-sal_Bool SwFrameProperties_Impl::SetProperty(const String& rName, uno::Any aVal)
-{
-    sal_uInt16 nPos = 0;
-    const SfxItemPropertyMap* pTemp = GetMap();
-    while( pTemp->pName )
-    {
-        if(COMPARE_EQUAL == rName.CompareToAscii(pTemp->pName))
-            break;
-        ++nPos;
-        ++pTemp;
-    }
-    if(nPos < nArrLen)
-    {
-        delete pAnyArr[nPos];
-        pAnyArr[nPos] = new uno::Any(aVal);
-    }
-    return nPos < nArrLen;
-}
-/* -----------------22.06.98 09:51-------------------
- *
- * --------------------------------------------------*/
-sal_Bool SwFrameProperties_Impl::GetProperty(const String& rName, uno::Any*& pAny)
-{
-    sal_uInt16 nPos = 0;
-    const SfxItemPropertyMap* pTemp = GetMap();
-    while( pTemp->pName )
-    {
-        if(COMPARE_EQUAL == rName.CompareToAscii(pTemp->pName))
-            break;
-        ++nPos;
-        ++pTemp;
-    }
-    if(nPos < nArrLen)
-        pAny = pAnyArr[nPos];
-    return nPos < nArrLen && pAny;
 }
 /* -----------------22.06.98 11:27-------------------
  *
@@ -800,14 +631,14 @@ sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SfxItemSet& rSet, SfxItemSet&, 
     sal_Bool bRet = FillBaseProperties(rSet, rSizeFound);
 
     uno::Any* pEdit;
-    if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_EDIT_IN_READONLY)), pEdit))
+    if(GetProperty(RES_EDIT_IN_READONLY, 0, pEdit))
     {
         SfxBoolItem aBool(RES_EDIT_IN_READONLY);
         ((SfxPoolItem&)aBool).PutValue(*pEdit, 0);
         rSet.Put(aBool);
     }
     uno::Any* pColumns;
-    if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_TEXT_COLUMNS)), pColumns))
+    if(GetProperty(RES_COL, MID_COLUMNS, pColumns))
     {
         SwFmtCol aCol;
         ((SfxPoolItem&)aCol).PutValue(*pColumns, MID_COLUMNS);
@@ -820,16 +651,9 @@ sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SfxItemSet& rSet, SfxItemSet&, 
 ****************************************************************************/
 class SwGraphicProperties_Impl : public BaseFrameProperties_Impl
 {
-    uno::Any*                   pAnyArr[GRPH_PROP_COUNT];
-    sal_uInt16                      nArrLen;
-
 public:
     SwGraphicProperties_Impl();
-    ~SwGraphicProperties_Impl();
-
-    virtual sal_Bool        SetProperty(const String& rName, uno::Any aVal);
-    virtual sal_Bool        GetProperty(const String& rName, uno::Any*& pAny );
-    sal_Bool                GetSingleProperty(const USHORT nWhich, uno::Any*& pAny);
+    ~SwGraphicProperties_Impl(){}
 
     virtual sal_Bool                AnyToItemSet(SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
 };
@@ -837,76 +661,8 @@ public:
  *
  * --------------------------------------------------*/
 SwGraphicProperties_Impl::SwGraphicProperties_Impl() :
-    BaseFrameProperties_Impl(GetGraphicDescMap()),
-    nArrLen(GRPH_PROP_COUNT)
+    BaseFrameProperties_Impl(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_GRAPHIC))
 {
-    for(sal_uInt16 i = 0; i < nArrLen; i++)
-        pAnyArr[i] = 0;
-}
-/* -----------------27.06.98 14:54-------------------
- *
- * --------------------------------------------------*/
-SwGraphicProperties_Impl::~SwGraphicProperties_Impl()
-{
-    for(sal_uInt16 i = 0; i < nArrLen; i++)
-        delete pAnyArr[i];
-}
-/* -----------------27.06.98 14:53-------------------
- *
- * --------------------------------------------------*/
-sal_Bool SwGraphicProperties_Impl::SetProperty(const String& rName, uno::Any aVal)
-{
-    sal_uInt16 nPos = 0;
-    const SfxItemPropertyMap* pTemp = GetMap();
-    while( pTemp->pName )
-    {
-        if(rName.CompareToAscii(pTemp->pName) == COMPARE_EQUAL)
-            break;
-        ++nPos;
-        ++pTemp;
-    }
-    if(nPos < nArrLen)
-    {
-        delete pAnyArr[nPos];
-        pAnyArr[nPos] = new uno::Any(aVal);
-    }
-    return nPos < nArrLen;
-}
-/* -----------------27.06.98 14:53-------------------
- *
- * --------------------------------------------------*/
-sal_Bool SwGraphicProperties_Impl::GetProperty(const String& rName, uno::Any*& pAny)
-{
-    sal_uInt16 nPos = 0;
-    const SfxItemPropertyMap* pTemp = GetMap();
-    while( pTemp->pName )
-    {
-        if(COMPARE_EQUAL == rName.CompareToAscii(pTemp->pName))
-            break;
-        ++nPos;
-        ++pTemp;
-    }
-    if(nPos < nArrLen)
-        pAny = pAnyArr[nPos];
-    return pAny &&nPos < nArrLen;
-}
-/* -----------------------------13.12.00 14:45--------------------------------
-
- ---------------------------------------------------------------------------*/
-sal_Bool SwGraphicProperties_Impl::GetSingleProperty(const USHORT nWhich, uno::Any*& pAny)
-{
-    sal_uInt16 nPos = 0;
-    const SfxItemPropertyMap* pTemp = GetMap();
-    while( pTemp->pName )
-    {
-        if( nWhich == pTemp->nWID )
-            break;
-        ++nPos;
-        ++pTemp;
-    }
-    if(nPos < nArrLen)
-        pAny = pAnyArr[nPos];
-    return pAny &&nPos < nArrLen;
 }
 
 /* -----------------27.06.98 14:40-------------------
@@ -923,9 +679,9 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
     uno::Any* pHEvenMirror = 0;
     uno::Any* pHOddMirror = 0;
     uno::Any* pVMirror = 0;
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES)), pHEvenMirror);
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES)), pHOddMirror);
-    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_VERT_MIRRORED)), pVMirror);
+    GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_HORZ_EVEN_PAGES, pHEvenMirror);
+    GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_HORZ_ODD_PAGES, pHOddMirror);
+    GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_VERT, pVMirror);
     if(pHEvenMirror || pHOddMirror || pVMirror )
     {
         SwMirrorGrf aMirror;
@@ -956,10 +712,10 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
     uno::Any* pAny;
     for(sal_Int16 nIndex = 0; nIDs[nIndex]; nIndex++)
     {
-        if(GetSingleProperty(nIDs[nIndex], pAny ))
+        if(GetProperty(nIDs[nIndex], CONVERT_TWIPS, pAny ))
         {
             SfxPoolItem* pItem = ::GetDfltAttr( nIDs[nIndex] )->Clone();
-            bRet &= pItem->PutValue(*pAny, CONVERT_TWIPS);
+            bRet &= pItem->PutValue(*pAny, RES_GRFATR_CROPGRF == nIDs[nIndex] ? CONVERT_TWIPS : 0);
             rGrSet.Put(*pItem);
             delete pItem;
         }
@@ -1205,12 +961,12 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     SwFrmFmt* pFmt = GetFrmFmt();
+    const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
+    if(!pCur)
+        throw UnknownPropertyException();
     if(pFmt)
     {
         sal_Bool bNextFrame = sal_False;
-        const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
-        if(!pCur)
-            throw UnknownPropertyException();
         if ( pCur->nFlags & PropertyAttribute::READONLY)
         {
             IllegalArgumentException aExcept;
@@ -1481,10 +1237,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
         }
     }
     else if(IsDescriptor())
-    {
-        if(!pProps->SetProperty(rPropertyName, aValue))
-            throw IllegalArgumentException();
-    }
+        pProps->SetProperty(pCur->nWID, pCur->nMemberId, aValue);
     else
         throw RuntimeException();
 }
@@ -1497,7 +1250,10 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aAny;
     SwFrmFmt* pFmt = GetFrmFmt();
-    if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES)))
+    const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
+    if(!pCur)
+        throw UnknownPropertyException();
+    if(FN_UNO_ANCHOR_TYPES == pCur->nWID)
     {
         uno::Sequence<TextContentAnchorType> aTypes(5);
          TextContentAnchorType* pArray = aTypes.getArray();
@@ -1510,9 +1266,6 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     }
     else if(pFmt)
     {
-        const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
-        if(!pCur)
-            throw UnknownPropertyException();
         if(eType == FLYCNTTYPE_GRF &&
                 pCur &&
                 ((pCur->nWID >=  RES_GRFATR_BEGIN &&
@@ -1642,7 +1395,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     else if(IsDescriptor())
     {
         uno::Any* pAny = 0;
-        if(!pProps->GetProperty(rPropertyName, pAny))
+        if(!pProps->GetProperty(pCur->nWID, pCur->nMemberId, pAny))
         {
             throw IllegalArgumentException();
         }
@@ -1787,20 +1540,17 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
             pCur->nWID != FN_PARAM_LINK_DISPLAY_NAME)
         {
             if( eType == FLYCNTTYPE_GRF &&
-                        (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT))||
-                        (pCur &&
+                        (FN_UNO_ALTERNATIVE_TEXT == pCur->nWID||
                         (pCur->nWID >= RES_GRFATR_BEGIN &&
-                            pCur->nWID < RES_GRFATR_END))))
+                            pCur->nWID < RES_GRFATR_END)))
             {
                 const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
                 if(pIdx)
                 {
                     SwNodeIndex aIdx(*pIdx, 1);
                     SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-                    if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT)))
-                    {
+                    if(FN_UNO_ALTERNATIVE_TEXT == pCur->nWID)
                         pNoTxt->SetAlternateText(aEmptyStr);
-                    }
                     else
                     {
                         SfxItemSet aSet(pNoTxt->GetSwAttrSet());
@@ -2022,7 +1772,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
 
         uno::Any* pStyle;
         SwFrmFmt *pParentFrmFmt = 0;
-        if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_FRAME_STYLE_NAME)), pStyle))
+        if(pProps->GetProperty(FN_UNO_FRAME_STYLE_NAME, 0, pStyle))
             pParentFrmFmt = lcl_GetFrmFmt( *pStyle, pDoc );
 
         SwFlyFrmFmt* pFmt = 0;
@@ -2046,7 +1796,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             uno::Any* pGraphicURL;
             String sGraphicURL;
             GraphicObject *pGrfObj = 0;
-            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_URL)), pGraphicURL))
+            if(pProps->GetProperty(FN_UNO_GRAPHIC_U_R_L, 0, pGraphicURL))
             {
                 OUString uTemp;
                 (*pGraphicURL) >>= uTemp;
@@ -2071,7 +1821,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
 
             String sFltName;
             uno::Any* pFilter;
-            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_FILTER)), pFilter))
+            if(pProps->GetProperty(FN_UNO_GRAPHIC_FILTER, 0, pFilter))
             {
                 OUString uTemp;
                 (*pFilter) >>= uTemp;
@@ -2095,22 +1845,22 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
 
             }
             uno::Any* pSurroundContour;
-            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SURROUND_CONTOUR)), pSurroundContour))
+            if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUR, pSurroundContour))
                 setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SURROUND_CONTOUR)), *pSurroundContour);
             uno::Any* pContourOutside;
-            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_OUTSIDE)), pContourOutside))
+            if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUROUTSIDE, pContourOutside))
                 setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_OUTSIDE)), *pContourOutside);
             uno::Any* pContourPoly;
-            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_POLY_POLYGON)), pContourPoly))
+            if(pProps->GetProperty(FN_PARAM_COUNTOUR_PP, 0, pContourPoly))
                 setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_POLY_POLYGON)), *pContourPoly);
             uno::Any* pPixelContour;
-            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_IS_PIXEL_CONTOUR)), pPixelContour))
+            if(pProps->GetProperty(FN_UNO_IS_PIXEL_CONTOUR, 0, pPixelContour))
                 setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_IS_PIXEL_CONTOUR)), *pPixelContour);
             uno::Any* pAutoContour;
-            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_IS_AUTOMATIC_CONTOUR)), pAutoContour))
+            if(pProps->GetProperty(FN_UNO_IS_AUTOMATIC_CONTOUR, 0, pAutoContour))
                 setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_IS_AUTOMATIC_CONTOUR)), *pAutoContour);
             uno::Any* pAltText;
-            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_ALTERNATIVE_TEXT)), pAltText))
+            if(pProps->GetProperty(FN_UNO_ALTERNATIVE_TEXT, 0, pAltText))
                 setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ALTERNATIVE_TEXT)), *pAltText);
         }
         else
@@ -2122,11 +1872,8 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
         if( pFmt && pDoc->GetDrawModel() )
             lcl_GetOrCreateSdrObject( pFmt );
         uno::Any* pOrder;
-        if( pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_Z_ORDER)), pOrder) )
-        {
+        if( pProps->GetProperty(FN_UNO_Z_ORDER, 0, pOrder) )
             setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_Z_ORDER)), *pOrder);
-        }
-
     }
     else
         throw IllegalArgumentException();
