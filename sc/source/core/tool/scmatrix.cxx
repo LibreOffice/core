@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmatrix.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-02-28 21:21:19 $
+ *  last change: $Author: er $ $Date: 2001-03-01 14:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
+#ifndef _TOOLS_SOLMATH_HXX
+#include <tools/solmath.hxx>
+#endif
 
 //------------------------------------------------------------------------
 
@@ -87,8 +90,8 @@ void ScMatrix::CreateMatrix(USHORT nC, USHORT nR)       // nur fuer ctor
     if ( !nCount || nCount > GetElementsMax() )
     {
         DBG_ERRORFILE("ScMatrix::CreateMatrix: dimension error");
-        pMat = NULL;
-        nAnzCol = nAnzRow = 0;
+        nAnzCol = nAnzRow = 1;
+        pMat = new MatValue[1];
     }
     else
         pMat = new MatValue[nCount];
@@ -126,14 +129,15 @@ ScMatrix::ScMatrix(SvStream& rStream)
     String aMatStr;
     double fVal;
     rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
-    ULONG nCount = (ULONG) nC * nR;
-    for (ULONG i=0; i<nCount; i++)
+    ULONG nCount = (ULONG) nAnzCol * nAnzRow;
+    ULONG nReadCount = (ULONG) nC * nR;
+    for (ULONG i=0; i<nReadCount; i++)
     {
         BYTE nType;
         rStream >> nType;
         if ( nType == CELLTYPE_VALUE )
         {
-            if ( pMat )
+            if ( i < nCount )
                 rStream >> pMat[i].fVal;
             else
                 rStream >> fVal;
@@ -145,7 +149,7 @@ ScMatrix::ScMatrix(SvStream& rStream)
             if ( nType != CELLTYPE_NONE )
                 rStream.ReadByteString( aMatStr, eCharSet );
 
-            if ( pMat )
+            if ( i < nCount )
             {
                 if (!bIsString)
                     ResetIsString();        // init string flags
@@ -168,8 +172,15 @@ void ScMatrix::Store(SvStream& rStream) const
     if ( !pMat || nCount > ((USHORT)(~0)) )
     {
         DBG_ASSERT( pMat, "ScMatrix::Store: pMat == NULL" );
-        rStream << (USHORT) 0;
-        rStream << (USHORT) 0;
+        // We can't store a 0 dimension because old versions rely on some
+        // matrix being present, e.g. DDE link results, and old versions didn't
+        // create a matrix if dimension was 0. Store an error result.
+        rStream << (USHORT) 1;
+        rStream << (USHORT) 1;
+        rStream << (BYTE) CELLTYPE_VALUE;
+        double fVal;
+        SolarMath::SetNAN( fVal, FALSE );
+        rStream << fVal;
         return;
     }
 
