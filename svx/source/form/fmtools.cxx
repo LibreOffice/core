@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:17 $
+ *  last change: $Author: oj $ $Date: 2000-09-22 09:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2276,7 +2276,7 @@ DataColumn::DataColumn(const ::com::sun::star::uno::Reference< ::com::sun::star:
     m_xColumn = ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>(_rxIFace, ::com::sun::star::uno::UNO_QUERY);
     m_xColumnUpdate = ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>(_rxIFace, ::com::sun::star::uno::UNO_QUERY);
 
-    if (!m_xPropertySet.is() || !m_xColumn.is() || !m_xColumnUpdate.is())
+    if (!m_xPropertySet.is() || !m_xColumn.is())
     {
         m_xPropertySet = NULL;
         m_xColumn = NULL;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: oj $ $Date: 2000-09-22 09:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,6 +661,7 @@ public:
 
     sal_Bool is() const { return m_xColumn.is(); }
     sal_Bool Is() const { return m_xColumn.is(); }
+    sal_Bool supportsUpdate() const { return m_xColumnUpdate.is(); }
 
     DataColumn* operator ->() { return this; }
     //  operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> () const { return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> m_xColumn; }
