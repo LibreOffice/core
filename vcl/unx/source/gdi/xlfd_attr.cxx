@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
+ *  last change: $Author: cp $ $Date: 2001-03-29 14:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,8 @@ Attribute::TagFeature( unsigned short nFeature )
         // japanese
         if (   (strcmp(mpName, "hg mincho l")  == 0)    /* Solaris: jisx0208 jisx0201 */
             || (strcmp(mpName, "heiseimin")    == 0)    /* Solaris: jisx0212 */
-            || (strcmp(mpName, "minchol")      == 0))   /* TurboLinux */
+            || (strcmp(mpName, "minchol")      == 0)    /* TurboLinux */
+            || (strcmp(mpName, "mincho")       == 0))   /* Redhat 6.2 JP */
         {
             mnFeature |= XLFD_FEATURE_INTERFACE_FONT;
         }
