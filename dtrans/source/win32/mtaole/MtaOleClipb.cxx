@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:23:18 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,8 @@
 
 #include <wchar.h>
 #include <process.h>
-#include <comdef.h>
+
+#include <systools/win32/comtools.hxx>
 
 //----------------------------------------------------------------
 //  namespace directives
@@ -586,7 +587,7 @@ LRESULT CMtaOleClipboard::onSetClipboard( IDataObject* pIDataObject )
 
 LRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
 {
-    OSL_ASSERT( NULL != ppStream );
+    OSL_ASSERT(NULL != ppStream);
 
     IDataObjectPtr pIDataObject;
 
@@ -594,11 +595,10 @@ LRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
     HRESULT hr = OleGetClipboard( &pIDataObject );
     if ( SUCCEEDED( hr ) )
     {
-        hr = MarshalIDataObjectInStream( pIDataObject, ppStream );
-        OSL_ENSURE( SUCCEEDED( hr ), "marshalling cliboard data object failed" );
+        hr = MarshalIDataObjectInStream(pIDataObject.get(), ppStream);
+        OSL_ENSURE(SUCCEEDED(hr), "marshalling cliboard data object failed");
     }
-
-    return static_cast< LRESULT >( hr );
+    return static_cast<LRESULT>(hr);
 }
 
 //--------------------------------------------------------------------
@@ -699,87 +699,80 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
 {
     LRESULT lResult = 0;
 
-    __try
-    {
-        // get a connection to the class-instance via the static member
-        CMtaOleClipboard* pImpl = CMtaOleClipboard::s_theMtaOleClipboardInst;
-        OSL_ASSERT( NULL != pImpl );
+    // get a connection to the class-instance via the static member
+    CMtaOleClipboard* pImpl = CMtaOleClipboard::s_theMtaOleClipboardInst;
+    OSL_ASSERT( NULL != pImpl );
 
-        switch( uMsg )
+    switch( uMsg )
+    {
+    case MSG_SETCLIPBOARD:
         {
-        case MSG_SETCLIPBOARD:
-            {
-                IDataObject* pIDataObject = reinterpret_cast< IDataObject* >( wParam );
-                pImpl->onSetClipboard( pIDataObject );
+            IDataObject* pIDataObject = reinterpret_cast< IDataObject* >( wParam );
+            pImpl->onSetClipboard( pIDataObject );
 
-                // in setClipboard we did acquire the
-                // interface pointer in order to prevent
-                // destruction of the object before the
-                // ole clipboard can acquire the interface
-                // now we release the interface so that
-                // our lostOwnership mechanism works
-                // remember: pIDataObject may be NULL
-                if ( pIDataObject )
-                    pIDataObject->Release( );
-            }
-            break;
-
-        case MSG_GETCLIPBOARD:
-            {
-                MsgCtx* aMsgCtx = reinterpret_cast< MsgCtx* >( lParam );
-                OSL_ASSERT( aMsgCtx );
-
-                aMsgCtx->hr = pImpl->onGetClipboard( reinterpret_cast< LPSTREAM* >(wParam) );
-                aMsgCtx->aCondition.set( );
-            }
-            break;
-
-        case MSG_FLUSHCLIPBOARD:
-            {
-                MsgCtx* aMsgCtx = reinterpret_cast< MsgCtx* >( lParam );
-                OSL_ASSERT( aMsgCtx );
-
-                aMsgCtx->hr = pImpl->onFlushClipboard( );
-                aMsgCtx->aCondition.set( );
-            }
-            break;
-
-        case MSG_REGCLIPVIEWER:
-            {
-                MsgCtx* aMsgCtx = reinterpret_cast< MsgCtx* >( lParam );
-                OSL_ASSERT( aMsgCtx );
-
-                pImpl->onRegisterClipViewer( reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam) );
-                aMsgCtx->aCondition.set( );
-            }
-            break;
-
-        case WM_CHANGECBCHAIN:
-            lResult = pImpl->onChangeCBChain(
-                reinterpret_cast< HWND >( wParam ), reinterpret_cast< HWND >( lParam ) );
-            break;
-
-        case WM_DRAWCLIPBOARD:
-            lResult = pImpl->onDrawClipboard( );
-            break;
-
-        case MSG_SHUTDOWN:
-            DestroyWindow( pImpl->m_hwndMtaOleReqWnd );
-            break;
-
-        // force the sta thread to end
-        case WM_DESTROY:
-            PostQuitMessage( 0 );
-            break;
-
-        default:
-            lResult = DefWindowProcA( hWnd, uMsg, wParam, lParam );
-            break;
+            // in setClipboard we did acquire the
+            // interface pointer in order to prevent
+            // destruction of the object before the
+            // ole clipboard can acquire the interface
+            // now we release the interface so that
+            // our lostOwnership mechanism works
+            // remember: pIDataObject may be NULL
+            if ( pIDataObject )
+                pIDataObject->Release( );
         }
-    }
-    __except( EXCEPTION_EXECUTE_HANDLER )
-    {
-        OSL_ENSURE( sal_False, "Kernel exception in window-proc caught!" );
+        break;
+
+    case MSG_GETCLIPBOARD:
+        {
+            MsgCtx* aMsgCtx = reinterpret_cast< MsgCtx* >( lParam );
+            OSL_ASSERT( aMsgCtx );
+
+            aMsgCtx->hr = pImpl->onGetClipboard( reinterpret_cast< LPSTREAM* >(wParam) );
+            aMsgCtx->aCondition.set( );
+        }
+        break;
+
+    case MSG_FLUSHCLIPBOARD:
+        {
+            MsgCtx* aMsgCtx = reinterpret_cast< MsgCtx* >( lParam );
+            OSL_ASSERT( aMsgCtx );
+
+            aMsgCtx->hr = pImpl->onFlushClipboard( );
+            aMsgCtx->aCondition.set( );
+        }
+        break;
+
+    case MSG_REGCLIPVIEWER:
+        {
+            MsgCtx* aMsgCtx = reinterpret_cast< MsgCtx* >( lParam );
+            OSL_ASSERT( aMsgCtx );
+
+            pImpl->onRegisterClipViewer( reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam) );
+            aMsgCtx->aCondition.set( );
+        }
+        break;
+
+    case WM_CHANGECBCHAIN:
+        lResult = pImpl->onChangeCBChain(
+            reinterpret_cast< HWND >( wParam ), reinterpret_cast< HWND >( lParam ) );
+        break;
+
+    case WM_DRAWCLIPBOARD:
+        lResult = pImpl->onDrawClipboard( );
+        break;
+
+    case MSG_SHUTDOWN:
+        DestroyWindow( pImpl->m_hwndMtaOleReqWnd );
+        break;
+
+    // force the sta thread to end
+    case WM_DESTROY:
+        PostQuitMessage( 0 );
+        break;
+
+    default:
+        lResult = DefWindowProcA( hWnd, uMsg, wParam, lParam );
+        break;
     }
 
     return lResult;
