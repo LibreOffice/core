@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mt $ $Date: 2001-01-24 14:33:50 $
+#   last change: $Author: mm $ $Date: 2001-02-22 18:05:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,16 +81,19 @@ CXXFILES=	unodialog.cxx
 OBJFILES=	$(OBJ)$/unodialog.obj
 
 
+APP2NOSAL=		TRUE
 APP2TARGET= unodialog
 APP2OBJS=	$(OBJ)$/unodialog.obj
 APP2STDLIBS=$(TOOLSLIB)			\
             $(SOTLIB)			\
-            $(SVTOOLLIB)		\
             $(COMPHELPERLIB)	\
             $(CPPULIB)			\
             $(CPPUHELPERLIB)	\
             $(VCLLIB)			\
             $(SALLIB)
+
+#			$(SVTOOLLIB)		\
+
 APP2DEF=	$(MISC)$/unodialog.def
 
 # --- Targets ------------------------------------------------------

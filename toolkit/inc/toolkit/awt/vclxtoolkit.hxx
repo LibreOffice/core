@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-21 15:23:16 $
+ *  last change: $Author: mm $ $Date: 2001-02-22 18:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,14 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
 
+/*
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
+#endif
+*/
+
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
 #endif
 
 #ifndef _OSL_MUTEX_HXX_
@@ -89,40 +95,35 @@ namespace sun {
 namespace star {
 namespace awt {
     struct WindowDescriptor;
+    class XDataTransfer;
 } } } }
 
 //  ----------------------------------------------------
 //  class VCLXTOOLKIT
 //  ----------------------------------------------------
 
-class VCLXToolkit : public ::com::sun::star::awt::XToolkit,
-                    public ::com::sun::star::awt::XDataTransfer,
-                    public ::com::sun::star::lang::XTypeProvider,
-                    public ::cppu::OWeakObject
+class VCLXToolkit_Impl
 {
-private:
+protected:
     ::osl::Mutex    maMutex;
+};
 
+class VCLXToolkit : public VCLXToolkit_Impl,
+                    public cppu::WeakComponentImplHelper2< ::com::sun::star::awt::XToolkit, ::com::sun::star::awt::XDataTransfer >
+{
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxClipboard;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;
-
 protected:
     ::osl::Mutex&   GetMutex() { return maMutex; }
 
+    virtual void SAL_CALL disposing();
 public:
+
+    VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
+    ~VCLXToolkit();
 
     virtual Window* CreateComponent( VCLXWindow** ppNewComp,
         const ::com::sun::star::awt::WindowDescriptor& rDescriptor, Window* pParent, sal_uInt32 nWinBits );
-
-
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)   { OWeakObject::acquire(); }
-    void                        SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)   { OWeakObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XToolkit
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) throw(::com::sun::star::uno::RuntimeException);

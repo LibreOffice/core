@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-16 11:19:42 $
+ *  last change: $Author: mm $ $Date: 2001-02-22 18:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #define NOOLDSV
 
+#ifndef _SVWIN_H
+#include <tools/svwin.h>
+#endif
+#include <sal/main.h>
 
 #ifndef _COM_SUN_STAR_AWT_XTOOLKIT_HPP_
 #include <com/sun/star/awt/XToolkit.hpp>
@@ -182,14 +186,30 @@ using namespace ::com::sun::star::lang;
 
 
 // -----------------------------------------------------------------------
+void Main( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
 
+SAL_IMPLEMENT_MAIN()
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMSF = createApplicationServiceManager();
+    //SVInit( xMSF );
+    ::Main( xMSF );
+    //SVDeinit();
+    return NULL;
+}
+
+/*
 class MyApp : public Application
 {
 public:
-    void        Main();
+    void        Main()
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMSF = createApplicationServiceManager();
+        ::Main( xMSF );
+    }
 };
 
 MyApp aMyApp;
+*/
 
 
 class MyWin : public WorkWindow
@@ -206,14 +226,14 @@ public:
 
 // -----------------------------------------------------------------------
 
-void MyApp::Main()
+void Main( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMSF )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMSF = createApplicationServiceManager();
     ::comphelper::setProcessServiceFactory( xMSF );
-    InitExtVclToolkit();
-    Application::RegisterUnoServices();
+    //InitExtVclToolkit();
+    //Application::RegisterUnoServices();
 
-    uno::Reference< awt::XToolkit> xToolkit( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), uno::UNO_QUERY );
+    //uno::Reference< awt::XToolkit> xToolkit( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), uno::UNO_QUERY );
+    uno::Reference< awt::XToolkit> xToolkit( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" ) ) ), uno::UNO_QUERY );
 
     // Create a DialogModel
     uno::Reference< container::XNameContainer > xC( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), uno::UNO_QUERY );
@@ -270,31 +290,39 @@ void MyApp::Main()
     aValue <<= (sal_Int32) 20;
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
 
-    MyWin aWindow;
-    aWindow.Show();
+    MyWin * pWindow;
+    ::osl::Guard< vos::IMutex > aVclGuard( Application::GetSolarMutex() );
+    pWindow = new MyWin();
+    pWindow->Show();
 
     xDlg->setDesignMode( sal_True );
 
     uno::Reference< awt::XWindow > xWindow( xDlg, uno::UNO_QUERY );
     xWindow->setVisible( sal_False );
 
-    xDlg->createPeer( xToolkit, aWindow.GetComponentInterface() );
+    xDlg->createPeer( xToolkit, pWindow->GetComponentInterface() );
 
     uno::Reference< awt::XView > xView( xDlg, uno::UNO_QUERY );
-    aWindow.SetXView( xView );
+    pWindow->SetXView( xView );
 
     uno::Reference< awt::XDialog > xD( xDlg, uno::UNO_QUERY );
-    static BOOL bExecute = FALSE;
-    if ( bExecute )
-        xD->execute();
-    Execute();
 
+    //static BOOL bExecute = FALSE;
+    //if ( bExecute )
+        xD->execute();
+    //Execute();
+    Reference< XComponent > xDT( xD, uno::UNO_QUERY );
+    xDT->dispose();
+    delete pWindow;
+
+    Reference< XComponent > xT( xToolkit, uno::UNO_QUERY );
+    xT->dispose();
 }
 
 void MyWin::Paint( const Rectangle& r )
 {
     static BOOL bDraw = TRUE;
-    if ( bDraw )
+    if ( bDraw && mxView.is() )
         mxView->draw( 50, 50 );
 }
 
