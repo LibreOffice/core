@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:24:18 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
