@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:46:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
 #include "AccessibleShapeInfo.hxx"
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBLE_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBLE_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -88,7 +88,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 
 
@@ -438,7 +438,7 @@ void ChildrenManagerImpl::CreateAccessibilityObjects (
         {
             I->mbCreateEventPending = false;
             mrContext.CommitChange (
-                AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                AccessibleEventId::CHILD,
                 uno::makeAny(I->mxAccessibleShape),
                 uno::Any());
         }
@@ -486,7 +486,7 @@ void ChildrenManagerImpl::AddShape (const Reference<drawing::XShape>& rxShape)
                     aNewShape <<= rDescriptor.mxAccessibleShape;
                     aGuard.clear();
                     mrContext.CommitChange (
-                        AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                        AccessibleEventId::CHILD,
                         aNewShape,
                         uno::Any());
                     RegisterAsDisposeListener (rDescriptor.mxShape);
@@ -565,7 +565,7 @@ void ChildrenManagerImpl::ClearAccessibleShapeList (void)
         if (J->is())
         {
             mrContext.CommitChange (
-                AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                AccessibleEventId::CHILD,
                 uno::Any(),
                 uno::makeAny (*J));
 
@@ -733,7 +733,7 @@ void SAL_CALL ChildrenManagerImpl::disposing (void)
 
 // This method is experimental.  Use with care.
 long int ChildrenManagerImpl::GetChildIndex (const ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::accessibility::XAccessible>& xChild) const
+    ::com::sun::star::accessibility::XAccessible>& xChild) const
     throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -807,7 +807,7 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
             // Dispose the current child and send an event about its deletion.
             pCurrentChild->dispose();
             mrContext.CommitChange (
-                AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                AccessibleEventId::CHILD,
                 uno::Any(),
                 uno::makeAny (I->mxAccessibleShape));
 
@@ -815,7 +815,7 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
             // of the new child.
             I->mxAccessibleShape = pNewChild;
             mrContext.CommitChange (
-                AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                AccessibleEventId::CHILD,
                 uno::makeAny (I->mxAccessibleShape),
                 uno::Any());
             bResult = sal_True;
@@ -1030,7 +1030,7 @@ void ChildDescriptor::disposeAccessibleObject (AccessibleContextBase& rParent)
         uno::Any aOldValue;
         aOldValue <<= mxAccessibleShape;
         rParent.CommitChange (
-            AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+            AccessibleEventId::CHILD,
             uno::Any(),
             aOldValue);
 
