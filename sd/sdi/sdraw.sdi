@@ -78,33 +78,6 @@ SfxVoidItem AnimationEffects SID_ANIMATION_EFFECTS
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem AnimationMode SID_ANIMATIONMODE
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem AnimationObjects SID_ANIMATION_OBJECTS
 
 [
@@ -2097,88 +2070,6 @@ SfxVoidItem DeSelect SID_UNSELECT
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Dia SID_DIA
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem DiaAuto SID_DIA_AUTO
-( DiaAutoItem DiaAuto ATTR_DIA_AUTO )
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* status: */
-    SlotType = DiaAutoItem
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem DiaEffect SID_DIA_EFFECT
-( DiaEffectItem DiaEffect ATTR_DIA_EFFECT )
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* status: */
-    SlotType = DiaEffectItem
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem DiaMode SID_DIAMODE
 
 [
@@ -2203,64 +2094,6 @@ SfxBoolItem DiaMode SID_DIAMODE
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem DiaSpeed SID_DIA_SPEED
-( DiaSpeedItem DiaSpeed ATTR_DIA_SPEED )
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* status: */
-    SlotType = DiaSpeedItem
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem DiaTime SID_DIA_TIME
-( DiaTimeItem DiaTime ATTR_DIA_TIME )
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* status: */
-    SlotType = DiaTimeItem
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
 ]
 
 //--------------------------------------------------------------------------
@@ -2418,15 +2251,15 @@ SfxVoidItem EditOutline SID_EDIT_OUTLINER
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem EffectAssign SID_EFFECT_ASSIGN
+SfxBoolItem CustomAnimation SID_CUSTOM_ANIMATION_PANEL
 
 [
     /* flags: */
-    AutoUpdate = FALSE,
+    AutoUpdate = TRUE,
     Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
-    HasDialog = FALSE,
+    HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -2437,70 +2270,15 @@ SfxBoolItem EffectAssign SID_EFFECT_ASSIGN
     Readonly = FALSE,
 
     /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem EffectInit SID_EFFECT_INIT
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_OPTIONS;
-]
-
-//--------------------------------------------------------------------------
-SfxUInt32Item EffectState SID_EFFECT_STATE
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_OPTIONS;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem EffectWindow SID_EFFECT_WIN
-
+SfxBoolItem CustomAnimationSchemes SID_CUSTOM_ANIMATION_SCHEMES_PANEL
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -4387,33 +4165,6 @@ TbxImageItem LineToolbox SID_DRAWTBX_LINES
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem LivePresentation SID_LIVE_PRESENTATION
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem ManageLinks SID_MANAGE_LINKS
 ()
 [
@@ -4754,33 +4505,6 @@ SfxBoolItem NavigatorInit SID_NAVIGATOR_INIT
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem NavigatorLive SID_NAVIGATOR_LIVE
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -6270,61 +5994,7 @@ SfxBoolItem Shell3D SID_3D_SHELL
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem SlideChangeAssign SID_SLIDE_CHANGE_ASSIGN
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_MODIFY;
-]
-
-//--------------------------------------------------------------------------
-SfxUInt32Item SlideChangeState SID_SLIDE_CHANGE_STATE
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_MODIFY;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem SlideChangeWindow SID_SLIDE_CHANGE_WIN
+SfxBoolItem SlideChangeWindow SID_SLIDE_TRANSITIONS_PANEL
 
 [
     /* flags: */
