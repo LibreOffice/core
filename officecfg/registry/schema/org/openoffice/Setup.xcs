@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pb $ $Date: 2002-12-04 10:51:11 $
+ *  last change: $Author: mba $ $Date: 2002-12-06 14:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@
 		<group oor:name="Product">
 			<info>
 				<author>MBA</author>
+				<desc xml:lang="en-US">Common product and version information</desc>
 			</info>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooName" oor:type="xs:string">

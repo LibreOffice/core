@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: tpf $ $Date: 2002-12-06 13:17:10 $
+ *  last change: $Author: mba $ $Date: 2002-12-06 14:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1736,6 +1736,7 @@
 				<info>
 					<deprecated/>
 					<author>MBA</author>
+					<desc xml:lang="en-US">Send mails with stack trace after crash</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1743,6 +1744,7 @@
 				<info>
 					<deprecated/>
 					<author>MBA</author>
+					<desc xml:lang="en-US">Enables UI for sending document as e-mail</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1752,6 +1754,7 @@
 				<info>
 					<deprecated/>
 					<author>MBA</author>
+					<desc xml:lang="en-US">Enables mechanism for centralized disabling of functionality</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1871,8 +1874,16 @@
 						<label xml:lang="en-US">Minutes</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="1"/>
-						<maxInclusive oor:value="60"/>
+						<minInclusive oor:value="1">
+							<info>
+								<desc xml:lang="en-US">Minimum is 1 minute</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="60">
+							<info>
+								<desc xml:lang="en-US">Maximum is 60 minute</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>15</value>
 				</prop>
@@ -2378,6 +2389,7 @@
 					<info>
 						<deprecated/>
 						<author>MBA</author>
+						<desc xml:lang="en-US"></desc>
 					</info>
 				</prop>
 				<prop oor:name="Version" oor:type="xs:string">
@@ -2386,6 +2398,7 @@
 					<!-- Notice: LM: Description is missing -->
 					<info>
 						<deprecated/>
+						<desc xml:lang="en-US"></desc>
 					</info>
 					<value/>
 					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -2396,6 +2409,7 @@
 					<!-- Notice: LM: Description is missing -->
 					<info>
 						<deprecated/>
+						<desc xml:lang="en-US"></desc>
 					</info>
 					<value>false</value>
 				</prop>
@@ -2405,6 +2419,7 @@
 					<!-- Notice: LM: Description is missing -->
 					<info>
 						<deprecated/>
+						<desc xml:lang="en-US"></desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="01">
@@ -2445,6 +2460,7 @@
 					<!-- Notice: LM: Description is missing -->
 					<info>
 						<deprecated/>
+						<desc xml:lang="en-US"></desc>
 					</info>
 					<value/>
 					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -2454,6 +2470,7 @@
 				<info>
 					<deprecated/>
 					<author>MBA</author>
+					<desc xml:lang="en-US">Properties of window containers for docked windows</desc>
 				</info>
 				<prop oor:name="Key" oor:type="xs:string">
 					<!-- OldPath: soffice_View/SplitWindow -->
@@ -2462,6 +2479,8 @@
 					<info>
 						<deprecated/>
 						<author>MBA</author>
+						<desc xml:lang="en-US"></desc>
+
 					</info>
 					<value/>
 					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -2473,6 +2492,7 @@
 					<info>
 						<deprecated/>
 						<author>MBA</author>
+						<desc xml:lang="en-US"></desc>
 					</info>
 				</prop>
 				<prop oor:name="State" oor:type="xs:int">
@@ -2481,6 +2501,7 @@
 					<info>
 						<deprecated/>
 						<author>MBA</author>
+						<desc xml:lang="en-US"></desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -2508,6 +2529,7 @@
 				<prop oor:name="Count" oor:type="xs:int">
 					<info>
 						<deprecated/>
+						<desc xml:lang="en-US"></desc>
 					</info>
 					<!-- OldPath: soffice_View/SplitWindow -->
 					<!-- OldLocation: soffice.ini -->
@@ -2516,6 +2538,7 @@
 				<prop oor:name="Sequence" oor:type="xs:int">
 					<info>
 						<deprecated/>
+						<desc xml:lang="en-US"></desc>
 					</info>
 					<!-- OldPath: soffice_View/SplitWindow -->
 					<!-- OldLocation: soffice.ini -->
@@ -2523,6 +2546,9 @@
 				</prop>
 			</group>
 			<group oor:name="FontAntiAliasing">
+				<info>
+					<desc xml:lang="en-US">Font antialiasing properties</desc>
+				</info>
 				<prop oor:name="Enabled" oor:type="xs:boolean">
 					<info>
 						<desc xml:lang="en-US">Specifies whether fonts should be antialiased. This setting is used on UNIX systems only.</desc>
@@ -2858,6 +2884,7 @@
 			<info>
 				<deprecated/>
 				<author>MBA</author>
+				<desc xml:lang="en-US">List of open documents/windows</desc>
 			</info>
 			<prop oor:name="WindowList" oor:type="oor:string-list">
 				<!-- OldPath: SavedWorkingSet -->
@@ -2866,6 +2893,7 @@
 				<info>
 					<deprecated/>
 					<author>MBA</author>
+					<desc xml:lang="en-US">List of open documents/windows</desc>
 				</info>
 			</prop>
 		</group>
@@ -2962,6 +2990,7 @@
 			<group oor:name="HelpAgent">
 				<info>
 					<author>MBA</author>
+					<desc xml:lang="en-US">HelpAgent properties</desc>
 				</info>
 				<prop oor:name="Enabled" oor:type="xs:boolean">
 					<info>
@@ -3063,7 +3092,7 @@
 				<constraints>
 					<minInclusive oor:value="8">
 						<info>
-							<desc xml:lang="en-US">Minimal number that can be used to create 
+							<desc xml:lang="en-US">Minimal number that can be used to create
 							a vector graphic is 8.</desc>
 						</info>
 					</minInclusive>
