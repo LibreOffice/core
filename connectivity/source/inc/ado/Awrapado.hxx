@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:51:14 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ namespace connectivity
                                                   const ::rtl::OUString& schemaPattern,
                                                   const ::rtl::OUString& table,
                                                   const ::rtl::OUString& columnNamePattern );
-             ADORecordset* getTypeInfo( );
+             ADORecordset* getTypeInfo(DataTypeEnum _eType = adEmpty );
         };
 
         //------------------------------------------------------------------------
