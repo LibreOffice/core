@@ -3,18 +3,15 @@ mkdir: %_DEST%\xml%_EXT%
 
 mkdir: %_DEST%\inc%_EXT%\i18npool
 
-hedabu: ..\inc\unicode.hxx %_DEST%\inc%_EXT%\i18npool\unicode.hxx
-hedabu: ..\inc\casefolding.hxx %_DEST%\inc%_EXT%\i18npool\casefolding.hxx
-
-..\%__SRC%\bin\i18npool?????.dll %_DEST%\bin%_EXT%\i18npool?????.dll
-..\%__SRC%\lib\libi18npool?????.so %_DEST%\lib%_EXT%\libi18npool?????.so
-..\%__SRC%\lib\libi18npool??????.dylib %_DEST%\lib%_EXT%\libi18npool??????.dylib
+..\%__SRC%\bin\i18npool*.dll %_DEST%\bin%_EXT%\i18npool*.dll
+..\%__SRC%\lib\libi18npool*.so %_DEST%\lib%_EXT%\libi18npool*.so
+..\%__SRC%\lib\libi18npool*.dylib %_DEST%\lib%_EXT%\libi18npool*.dylib
 ..\%__SRC%\lib\ii18npool.lib %_DEST%\lib%_EXT%\ii18npool.lib
 
-..\%__SRC%\bin\i18nutil*.dll %_DEST%\bin%_EXT%\i18nutil*.dll
-..\%__SRC%\lib\libi18nutil*.so %_DEST%\lib%_EXT%\libi18nutil*.so
-..\%__SRC%\lib\libi18nutil*.dylib %_DEST%\lib%_EXT%\libi18nutil*.dylib
-..\%__SRC%\lib\ii18nutil.lib %_DEST%\lib%_EXT%\ii18nutil.lib
+..\%__SRC%\bin\i18nsearch*.dll %_DEST%\bin%_EXT%\i18nsearch*.dll
+..\%__SRC%\lib\libi18nsearch*.so %_DEST%\lib%_EXT%\libi18nsearch*.so
+..\%__SRC%\lib\libi18nsearch*.dylib %_DEST%\lib%_EXT%\libi18nsearch*.dylib
+..\%__SRC%\lib\ii18nsearch.lib %_DEST%\lib%_EXT%\ii18nsearch.lib
 
 ..\%__SRC%\bin\localedata_*.dll %_DEST%\bin%_EXT%\localedata_*.dll
 ..\%__SRC%\lib\liblocaledata_*.so %_DEST%\lib%_EXT%\liblocaledata_*.so
