@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: fs $ $Date: 2001-08-13 15:06:16 $
+#   last change: $Author: vg $ $Date: 2001-09-18 15:30:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,6 +129,10 @@ SLOFILES = \
     $(SLO)$/fmsrcimp.obj	\
     $(SLO)$/fmview.obj		\
     $(SLO)$/siimport.obj
+
+.IF "$(OS)$(CPU)"=="SOLARISI" 
+NOOPTFILES=$(SLO)$/fmprop.obj
+.ENDIF
 
 SVXLIGHTOBJFILES= \
     $(OBJ)$/fmpage.obj      \
