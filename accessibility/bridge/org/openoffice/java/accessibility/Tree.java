@@ -189,12 +189,11 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
                 if (unoAS != null) {
                     if (unoAS.contains(AccessibleStateType.EXPANDABLE)) {
                         states.add(javax.accessibility.AccessibleState.EXPANDABLE);
-                    }
-                    if (unoAS.contains(AccessibleStateType.EXPANDED)) {
-                        states.add(javax.accessibility.AccessibleState.EXPANDED);
-                    }
-                    if (unoAS.contains(AccessibleStateType.COLLAPSED)) {
-                        states.add(javax.accessibility.AccessibleState.COLLAPSED);
+                        if (unoAS.contains(AccessibleStateType.EXPANDED)) {
+                            states.add(javax.accessibility.AccessibleState.EXPANDED);
+                        } else {
+                            states.add(javax.accessibility.AccessibleState.COLLAPSED);
+                        }
                     }
                 }
             } catch (com.sun.star.uno.RuntimeException e) {
@@ -435,12 +434,12 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
                     }
                     if (unoAccessibleStateSet.contains(AccessibleStateType.EXPANDABLE)) {
                         stateSet.add(javax.accessibility.AccessibleState.EXPANDABLE);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.EXPANDED)) {
-                        stateSet.add(javax.accessibility.AccessibleState.EXPANDED);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.COLLAPSED)) {
-                        stateSet.add(javax.accessibility.AccessibleState.COLLAPSED);
+
+                        if (unoAccessibleStateSet.contains(AccessibleStateType.EXPANDED)) {
+                            stateSet.add(javax.accessibility.AccessibleState.EXPANDED);
+                        } else {
+                            stateSet.add(javax.accessibility.AccessibleState.COLLAPSED);
+                        }
                     }
                     return stateSet;
                 } catch (com.sun.star.uno.RuntimeException e) {
@@ -582,7 +581,7 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
             /** Causes every child of the object to be selected if the object supports multiple selection */
             public void selectAllAccessibleSelection() {
                 try {
-                    unoAccessibleSelection.selectAllAccessible();
+                    unoAccessibleSelection.selectAllAccessibleChildren();
                 } catch (com.sun.star.uno.RuntimeException e) {
                 }
             }
