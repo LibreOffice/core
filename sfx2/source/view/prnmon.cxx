@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-22 06:05:54 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,22 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEBROADCASTER_HPP_
+#include <com/sun/star/util/XCloseBroadcaster.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCLOSELISTENER_HPP_
+#include <com/sun/star/util/XCloseListener.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_CLOSEVETOEXCEPTION_HPP_
+#include <com/sun/star/util/CloseVetoException.hpp>
+#endif
 
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
@@ -249,7 +265,7 @@ SfxPrintProgress::SfxPrintProgress( SfxViewShell* pViewSh, FASTBOOL bShow )
                 LINK( this, SfxPrintProgress, PrintErrorNotify ));
     pImp->bCallbacks = TRUE;
 
-    pImp->pViewShell->GetViewFrame()->GetFrame()->Lock_Impl(TRUE);
+    //pImp->pViewShell->GetViewFrame()->GetFrame()->Lock_Impl(TRUE);
     pImp->bShow = bShow;
     Lock();
     if ( !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
@@ -285,7 +301,21 @@ SfxPrintProgress::~SfxPrintProgress()
                 pImp->bOldEnablePrintFile );
 
     // EndPrint-Notification an Frame
-    pImp->pViewShell->GetViewFrame()->GetFrame()->Lock_Impl(FALSE);
+    //pImp->pViewShell->GetViewFrame()->GetFrame()->Lock_Impl(FALSE);
+    if ( pImp->pViewShell->GotOwnerShip_Impl() )
+    {
+        com::sun::star::uno::Reference < com::sun::star::util::XCloseable > xModel( pImp->pViewShell->GetObjectShell()->GetModel(), com::sun::star::uno::UNO_QUERY );
+        if ( xModel.is() )
+        {
+            try
+            {
+                xModel->close( sal_True );
+            }
+            catch ( com::sun::star::util::CloseVetoException& )
+            {
+            }
+        }
+    }
 
     delete pImp;
 }
