@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideTransitionPane.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:33:15 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         HelpId = HID_SD_SLIDETRANSITIONPANE_LB_SLIDE_TRANSITIONS;
         Border = TRUE ;
         TabStop = TRUE ;
+        AutoHScroll = TRUE ;
 
         Size = MAP_APPFONT( 1, 1 );
     };
