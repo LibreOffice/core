@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-04 14:06:48 $
+ *  last change: $Author: sab $ $Date: 2002-10-01 16:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -975,6 +975,15 @@ ScSharedCellEditSource* ScCellTextData::GetOriginalSource()
     return pOriginalSource;
 }
 
+void ScCellTextData::GetCellText(const ScAddress& rCellPos, String& rText)
+{
+    if (pDocShell)
+    {
+        ScDocument* pDoc = pDocShell->GetDocument();
+        pDoc->GetInputString( rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), rText );
+    }
+}
+
 SvxTextForwarder* ScCellTextData::GetTextForwarder()
 {
     if (!pEditEngine)
@@ -1023,7 +1032,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
             pEditEngine->SetTextNewDefaults( *((const ScEditCell*)pCell)->GetData(), aDefaults );
         else
         {
-            pDoc->GetInputString( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aText );
+            GetCellText( aCellPos, aText );
             if (aText.Len())
                 pEditEngine->SetTextNewDefaults( aText, aDefaults );
             else

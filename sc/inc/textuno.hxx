@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:33:18 $
+ *  last change: $Author: sab $ $Date: 2002-10-01 16:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,6 +404,9 @@ protected:
     BOOL                    bInUpdate;
     BOOL                    bDirty;
     BOOL                    bDoUpdate;
+
+protected:
+    virtual void            GetCellText(const ScAddress& rCellPos, String& rText);
 
 public:
                             ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP);
