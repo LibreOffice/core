@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 08:59:27 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 06:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,9 @@ java_sql_Driver::~java_sql_Driver()
 //------------------------------------------------------------------------------
 rtl::OUString java_sql_Driver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbc.JDriver");
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.JDBCDriver");
+        // this name is referenced in the configuration and in the jdbc.xml
+        // Please take care when changing it.
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > java_sql_Driver::getSupportedServiceNames_Static(  ) throw (RuntimeException)

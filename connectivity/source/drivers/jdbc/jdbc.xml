@@ -4,7 +4,7 @@
     <module-name>   jdbc    </module-name>
     <component-description>
         <Author>Ocke Janssen</Author>
-        <Name>  com.sun.star.sdbc.JDBCDriver    </Name>
+        <Name>com.sun.star.comp.sdbc.JDBCDriver</Name>
         <Description>
             This is the implementation of the sdbc-jdbc bridge.
         </Description>
