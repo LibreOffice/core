@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:36:42 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,10 @@ class SwPageDesc;
 class SwCrsrShell;
 // OD 21.05.2003 #108789#
 class SwTxtFrm;
-
+// --> OD 2004-06-09 #i28701#
+class SwLayAction;
+class SwAnchoredObject;
+// <--
 #if defined(MSC)
 #define MA_FASTCALL __fastcall
 #else
@@ -531,4 +534,26 @@ inline BOOL SwBorderAttrs::IsLine() const
         ((SwBorderAttrs*)this)->_IsLine();
     return bIsLine;
 }
+
+/** method to determine the spacing values of a frame
+
+    OD 2004-03-10 #i28701#
+    Values only provided for flow frames (table, section or text frames)
+    Note: line spacing value is only determined for text frames
+
+    @param _rFrm
+    input parameter - frame, for which the spacing values are determined.
+
+    @param _roPrevLowerSpacing
+    output parameter - lower spacing of the frame in SwTwips
+
+    @param _roPrevLineSpacing
+    output parameter - line spacing of the frame in SwTwips
+
+    @author OD
+*/
+void GetSpacingValuesOfFrm( const SwFrm& _rFrm,
+                            SwTwips& _roLowerSpacing,
+                            SwTwips& _roLineSpacing );
+
 #endif  //_FRMTOOL_HXX
