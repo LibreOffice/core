@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsubt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nn $ $Date: 2001-02-08 10:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, USHORT nResId,
             pViewData       ( NULL ),
             pDoc            ( NULL )
 {
-    aLbColumns.SetFont( System::GetStandardFont( STDFONT_APP ) );
+    // Font is correctly initialized by SvTreeListBox ctor
     aLbColumns.SetSelectionMode( SINGLE_SELECTION );
     aLbColumns.SetDragDropMode( SV_DRAGDROP_NONE );
     aLbColumns.SetSpaceBetweenEntries( 0 );
@@ -774,6 +774,9 @@ __EXPORT ScTpSubTotalGroup3::~ScTpSubTotalGroup3()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:44:54  hr
+    initial import
+
     Revision 1.41  2000/09/17 14:08:59  willem.vandorp
     OpenOffice header added.
 
