@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:50:17 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,9 +515,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     if( pOutlNds != &GetNodes().GetOutLineNds() )
         delete pOutlNds;
 
-    SfxFilter* pDelFilter = 0;
-    SfxFactoryFilterContainer* pFCntnr;
-
 #ifdef DBG_UTIL
     USHORT nFltCnt;
 #endif
@@ -531,20 +528,8 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
             while( GetSections().Count() )
                 DelSectionFmt( GetSections()[ 0 ] );
 
-            // normally the GlobalDocShell has no HTML filter, but we can
-            // write the format. So for the SFX we must make sure that a
-            // HTML filter for this Factory exist. So add here a copy of the
-            // DocShell filter and remove it after the saving. Bug 93556
-            pDelFilter = new SfxFilter( *pFilter );
-            pFCntnr = pDocShell->GetFactory().GetFilterContainer();
-#ifdef DBG_UTIL
-            nFltCnt = pFCntnr->GetFilterCount();
-#endif
-            pFCntnr->AddFilter( pDelFilter, 0 );
-
-#ifdef DBG_UTIL
-            ASSERT( nFltCnt != pFCntnr->GetFilterCount(), "can't add the filter" );
-#endif
+            SfxFilterContainer* pFCntnr = pDocShell->GetFactory().GetFilterContainer();
+            pFilter = pFCntnr->GetFilter4EA( pFilter->GetTypeName(), SFX_FILTER_EXPORT );
         }
         break;
 
@@ -562,14 +547,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     aReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
     aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
     const SfxBoolItem *pRet = (const SfxBoolItem*)pDocShell->ExecuteSlot( aReq );
-
-    if( pDelFilter )
-    {
-        pFCntnr->DeleteFilter( pDelFilter );
-#ifdef DBG_UTIL
-        ASSERT( nFltCnt == pFCntnr->GetFilterCount(), "can't remove the filter" );
-#endif
-    }
 
     return pRet && pRet->GetValue();
 }
