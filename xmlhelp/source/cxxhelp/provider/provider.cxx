@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2001-09-28 15:01:59 $
+ *  last change: $Author: abi $ $Date: 2001-10-01 14:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,10 +325,10 @@ void ContentProvider::init()
     else
         instPath = xCfgMgr->substituteVariables( instPath );
 
-    err_msg( "installpath as given by substituteVariables ",
-             instPath );
+//      err_msg( "installpath as given by substituteVariables ",
+//               instPath );
 
-    instPath = rtl::OUString::createFromAscii( "/export/home/abi/src638_p2_01_49/help/" );
+//    instPath = rtl::OUString::createFromAscii( "/export/home/abi/src38b11/help" );
 
     m_pDatabases = new Databases( instPath,
                                   m_xSMgr );

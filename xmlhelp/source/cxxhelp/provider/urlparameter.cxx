@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: abi $ $Date: 2001-09-28 15:01:59 $
+ *  last change: $Author: abi $ $Date: 2001-10-01 14:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,8 +790,8 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         // Uses the implementation detail, that rtl::OString::getStr returns a zero terminated character-array
 
-        const char* parameter[29];
-        rtl::OString parString[28];
+        const char* parameter[31];
+        rtl::OString parString[30];
         int last;
 
         parString[ 0] = "Program";
@@ -826,7 +826,9 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             parString[25] = "%2F";
             parString[26] = "hm";
             parString[27] = "%23";
-            last = 28;
+            parString[28] = "cs";
+            parString[29] = "css";
+            last = 30;
         }
 
         for( int i = 0; i < last; ++i )
