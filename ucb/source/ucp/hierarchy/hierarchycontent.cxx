@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-16 10:29:41 $
+ *  last change: $Author: kso $ $Date: 2001-01-22 11:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
@@ -1462,7 +1465,7 @@ void HierarchyContent::transfer( const TransferInfo& rInfo )
     // Is source a hierarchy content?
     if ( rInfo.SourceURL.compareToAscii(
             HIERARCHY_ROOT_FOLDER_URL, HIERARCHY_ROOT_FOLDER_URL_LENGTH ) != 0 )
-        throw CommandAbortedException();
+        throw InteractiveBadTransferURLException();
 
     // Is source not a parent of me / not me?
     OUString aId = m_xIdentifier->getContentIdentifier();
