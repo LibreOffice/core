@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-19 14:22:25 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 14:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,8 @@ Remote2RemoteStub::Remote2RemoteStub( rtl_uString *pOid,
     m_pEnvRemote( pEnvRemote ),
     m_sOid( pOid ),
     m_nRef( 1 ),
-    m_dispatch( dispatch )
+    m_dispatch( dispatch ),
+    m_nReleaseRemote( 1 )
 {
     typelib_typedescription_acquire( ( typelib_TypeDescription * ) m_pType );
     m_pEnvRemote->acquire( m_pEnvRemote );
@@ -94,22 +95,6 @@ Remote2RemoteStub::~Remote2RemoteStub()
 {
 
     // send a release via the connection !
-    releaseRemote();
-
-    typelib_typedescription_release( (typelib_TypeDescription * ) m_pType );
-    m_pEnvRemote->release( m_pEnvRemote );
-#ifdef DEBUG
-    thisCounter.release();
-#endif
-}
-
-
-void Remote2RemoteStub::thisFree( uno_ExtEnvironment *pEnvUno , void *pThis )
-{
-    delete (Remote2RemoteStub *) pThis;
-}
-void Remote2RemoteStub::releaseRemote()
-{
     sal_Bool bNeedsRelease = sal_False;
     if( ! m_pType->aBase.bComplete )
     {
@@ -127,17 +112,35 @@ void Remote2RemoteStub::releaseRemote()
     typelib_typedescriptionreference_getDescription(
         &pReleaseMethod ,
         m_pType->ppAllMembers[REMOTE_RELEASE_METHOD_INDEX] );
-    thisDispatch( this,
-                  pReleaseMethod,
-                  0,
-                  0,
-                  &pAny );
-
+    for( int i = 0 ; i < m_nReleaseRemote ; i ++ )
+    {
+        thisDispatch( this,
+                      pReleaseMethod,
+                      0,
+                      0,
+                      &pAny );
+    }
     typelib_typedescription_release( pReleaseMethod );
     if( bNeedsRelease )
     {
         typelib_typedescription_release( (typelib_TypeDescription * ) m_pType );
     }
+
+    typelib_typedescription_release( (typelib_TypeDescription * ) m_pType );
+    m_pEnvRemote->release( m_pEnvRemote );
+#ifdef DEBUG
+    thisCounter.release();
+#endif
+}
+
+
+void Remote2RemoteStub::thisFree( uno_ExtEnvironment *pEnvUno , void *pThis )
+{
+    delete (Remote2RemoteStub *) pThis;
+}
+void Remote2RemoteStub::releaseRemote()
+{
+    osl_incrementInterlockedCount( &m_nReleaseRemote );
 }
 
 void Remote2RemoteStub::thisAcquire( remote_Interface *pThis )

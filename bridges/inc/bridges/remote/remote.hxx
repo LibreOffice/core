@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:48 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 14:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ public:
     oslInterlockedCount               m_nRef;
     uno_Environment                   *m_pEnvRemote;
     requestClientSideDispatcher       m_dispatch;
+    oslInterlockedCount m_nReleaseRemote;
 };
 
 }
