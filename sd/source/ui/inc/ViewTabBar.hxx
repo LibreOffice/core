@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewTabBar.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:05:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,15 @@ public:
     ViewTabBar (ViewShellBase& rViewShellBase, ::Window* pParent);
     virtual ~ViewTabBar (void);
 
+    /** The returned value is the calculated as the difference between the
+        total height of the control and the heigh of its first tab page.
+        This can be considered a hack.
+        This procedure works only when the control is visible.  Calling this
+        method when the control is not visible results in returning a
+        default value.
+        To be on the safe side wait for this control to become visible and
+        the call this method again.
+    */
     int GetHeight (void);
 
 protected:
