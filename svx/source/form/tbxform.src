@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:27:37 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,6 +378,20 @@ FloatingWindow RID_SVXTBX_FORM
                 HelpID = SID_OBJECT_SELECT ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_SCROLLBAR;
+                HelpID = SID_FM_SCROLLBAR;
+                RadioCheck = TRUE;
+                AutoCheck = TRUE;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_SPINBUTTON;
+                HelpID = SID_FM_SPINBUTTON;
+                RadioCheck = TRUE;
+                AutoCheck = TRUE;
             };
             ToolBoxItem
             {
