@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-06 16:07:42 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,12 +102,14 @@ class XF_Buffer;
 class FilterProgressBar;
 class XclImpPivotCacheList;
 
-class XtiBuffer;
-class SupbookBuffer;
-class SupbookE;
+class XclImpXtiBuffer;
+class XclImpSupbookBuffer;
+class XclImpSupbook;
 class XclImpTabIdBuffer;
 
 class ExcETabNumBuffer;
+class XclExpChTrTabId;
+class XclExpUserBViewList;
 class ExcNameList;
 class ExcPalette2;
 class UsedFontList;
@@ -160,9 +162,9 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     BOOL                bChartTab;              // Tabelle mit einem einzigen Chart
 
     // Biff8
-    XtiBuffer*          pXtiBuffer;             // Elemente der Externsheet-Records
-    SupbookBuffer*      pSupbookBuffer;         // Liste Suporting External Workbooks
-    SupbookE*           pCurrSupbook;           // current supbook in pSupbookBuffer
+    XclImpXtiBuffer*    pXtiBuffer;             // Elemente der Externsheet-Records
+    XclImpSupbookBuffer* pSupbookBuffer;        // Liste Suporting External Workbooks
+    XclImpSupbook*      pCurrSupbook;           // current supbook in pSupbookBuffer
     XclImpTabIdBuffer*  pImpTabIdBuffer;        // table id's for change tracking
 
     SvStorage*          pPivotCacheStorage;
@@ -180,6 +182,8 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 
     // Erweiterungen fuer Export
     ExcETabNumBuffer*   pTabBuffer;
+    XclExpChTrTabId*    pTabId;             // pointer to rec list, do not destroy
+    XclExpUserBViewList* pUserBViewList;    // pointer to rec list, do not destroy
     ExcNameList*        pNameList;
     ExcPalette2*        pPalette2;
     UsedFontList*       pFontRecs;
