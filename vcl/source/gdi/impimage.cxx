@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:18:57 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_IMPIMAGE_CXX
-
 #include <string.h>
 
 #ifndef _SV_OUTDEV_HXX
@@ -83,17 +81,6 @@
 #endif
 #ifndef _SV_IMAGE_HXX
 #include <image.hxx>
-#endif
-
-// -------------
-// - FASTIMAGE -
-// -------------
-
-#if defined WIN || defined WNT || defined OS2
-#undef FASTTRANSPARENT
-extern BOOL bFastTransparent;
-#else
-#undef FASTTRANSPARENT
 #endif
 
 // -----------
@@ -170,10 +157,6 @@ void ImplImageBmp::Create( const Bitmap& rBmp, const Bitmap& rMaskBmp,
     else if( bColor )
         aMask = aBmp.CreateMask( rColor );
 
-#ifdef FASTTRANSPARENT
-    if( nStyle & IMPSYSIMAGEITEM_MASK )
-        ImplUpdatePaintBmp( DISA_ALL );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -275,10 +258,6 @@ void ImplImageBmp::Replace( USHORT nPos, const Bitmap& rBmp, const Bitmap& rMask
         ImplUpdateDisaBmp( nPos );
 
     pInfoAry[ nPos ] |= IMPSYSIMAGEITEM_MASK;
-
-#ifdef FASTTRANSPARENT
-    ImplUpdatePaintBmp( nPos );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -324,8 +303,6 @@ void ImplImageBmp::Merge( USHORT nPos, USHORT nSrcPos )
             long                nDstRight = aDstRect.Right();
             long                nDstBottom = aDstRect.Bottom();
             long                nSrcLeft = aSrcRect.Left();
-            long                nSrcRight = aSrcRect.Right();
-            long                nSrcTop = aSrcRect.Bottom();
 
             for( long nDstY = aDstRect.Top(), nSrcY = aSrcRect.Top(); nDstY <= nDstBottom; nDstY++, nSrcY++ )
             {
@@ -355,10 +332,6 @@ void ImplImageBmp::Merge( USHORT nPos, USHORT nSrcPos )
             ImplUpdateDisaBmp( nPos );
 
         pInfoAry[ nPos ] |= IMPSYSIMAGEITEM_MASK;
-
-#ifdef FASTTRANSPARENT
-        ImplUpdatePaintBmp( nPos );
-#endif
     }
 }
 
@@ -441,11 +414,6 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
 
         if( pInfoAry[ nPos ] & IMPSYSIMAGEITEM_MASK )
         {
-#ifdef FASTTRANSPARENT
-            BOOL bTmp = bFastTransparent;
-            bFastTransparent = TRUE;
-#endif
-
             Point   aOutPos = pOutDev->LogicToPixel( rPos );
             Size    aOutSize;
             BOOL    bOldMap = pOutDev->IsMapModeEnabled();
@@ -600,10 +568,6 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
             }
 
             pOutDev->EnableMapMode( bOldMap );
-
-#ifdef FASTTRANSPARENT
-            bFastTransparent = bTmp;
-#endif
         }
         else
         {
