@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2000-11-10 14:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,30 +359,28 @@ FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         }
     }
 
-    if(!IsTextFrame())
+    // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
+    rXOut.SetLineAttr(aEmptySet);
+
+    if(bIsFillDraft)
     {
-        // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
-        rXOut.SetLineAttr(aEmptySet);
+        // perepare ItemSet to avoid XOut filling
+        rXOut.SetFillAttr(aEmptySet);
+    }
+    else
+    {
+        rXOut.SetFillAttr(rSet);
+    }
 
-        if(bIsFillDraft)
-        {
-            // perepare ItemSet to avoid XOut filling
-            rXOut.SetFillAttr(aEmptySet);
-        }
-        else
-        {
-            rXOut.SetFillAttr(rSet);
-        }
-
-        if (!bHideContour) {
-            if (PaintNeedsXPoly(nEckRad)) {
-                rXOut.DrawXPolygon(GetXPoly());
-            } else {
-                DBG_ASSERT(nEckRad==0,"SdrRectObj::Paint(): XOut.DrawRect() unterstuetz kein Eckenradius!");
-                rXOut.DrawRect(aRect/*,USHORT(2*nEckRad),USHORT(2*nEckRad)*/);
-            }
+    if (!bHideContour) {
+        if (PaintNeedsXPoly(nEckRad)) {
+            rXOut.DrawXPolygon(GetXPoly());
+        } else {
+            DBG_ASSERT(nEckRad==0,"SdrRectObj::Paint(): XOut.DrawRect() unterstuetz kein Eckenradius!");
+            rXOut.DrawRect(aRect/*,USHORT(2*nEckRad),USHORT(2*nEckRad)*/);
         }
     }
+
     DBG_ASSERT(aRect.GetWidth()>1 && aRect.GetHeight()>1,"SdrRectObj::Paint(): Rect hat Nullgroesse (oder negativ)!");
 
     // Own line drawing
