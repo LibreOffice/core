@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-05 08:33:06 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,22 +214,19 @@ class SvtMiscOptions_Impl : public ConfigItem
 
             @onerror    No error should occurre!
         *//*-*****************************************************************************************************/
-        void SetPluginsEnabled( sal_Bool bEnable )
-        { m_bPluginsEnabled = bEnable; SetModified(); }
+        void SetPluginsEnabled( sal_Bool bEnable );
 
         sal_Int16 GetSymbolSet()
         { return m_nSymbolSet; }
 
-        void SetSymbolSet( sal_Int16 nSet )
-        { m_nSymbolSet = nSet; SetModified(); }
+        void SetSymbolSet( sal_Int16 nSet );
 
         // translate to VCL settings ( "0" = 3D, "1" = FLAT )
         sal_Int16 GetToolboxStyle()
         { return m_nToolboxStyle ? 4 : 0; }
 
         // translate from VCL settings
-        void SetToolboxStyle( sal_Int16 nStyle )
-        { m_nToolboxStyle = nStyle ? 1 : 0; SetModified(); }
+        void SetToolboxStyle( sal_Int16 nStyle );
 
         void AddListener( const Link& rLink );
         void RemoveListener( const Link& rLink );
@@ -342,6 +339,30 @@ void SvtMiscOptions_Impl::RemoveListener( const Link& rLink )
     }
 }
 
+void SvtMiscOptions_Impl::SetToolboxStyle( sal_Int16 nStyle )
+{
+    m_nToolboxStyle = nStyle ? 1 : 0;
+    SetModified();
+    for ( USHORT n=0; n<aList.Count(); n++ )
+        aList.GetObject(n)->Call( this );
+}
+
+void SvtMiscOptions_Impl::SetSymbolSet( sal_Int16 nSet )
+{
+    m_nSymbolSet = nSet;
+    SetModified();
+    for ( USHORT n=0; n<aList.Count(); n++ )
+        aList.GetObject(n)->Call( this );
+}
+
+void SvtMiscOptions_Impl::SetPluginsEnabled( sal_Bool bEnable )
+{
+    m_bPluginsEnabled = bEnable;
+    SetModified();
+    for ( USHORT n=0; n<aList.Count(); n++ )
+        aList.GetObject(n)->Call( this );
+}
+
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
@@ -352,6 +373,7 @@ void SvtMiscOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     // Safe impossible cases.
     // We need values from ALL notified configuration keys.
     DBG_ASSERT( !(seqPropertyNames.getLength()!=seqValues.getLength()), "SvtMiscOptions_Impl::Notify()\nI miss some values of configuration keys!\n" );
+
     // Step over list of property names and get right value from coreesponding value list to set it on internal members!
     sal_Int32 nCount = seqPropertyNames.getLength();
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
@@ -378,6 +400,9 @@ void SvtMiscOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
                 break;
         }
     }
+
+    for ( USHORT n=0; n<aList.Count(); n++ )
+        aList.GetObject(n)->Call( this );
 }
 
 //*****************************************************************************************************************
