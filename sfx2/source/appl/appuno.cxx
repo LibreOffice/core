@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:24:30 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,7 @@ static const String sOpenNewView    = String::CreateFromAscii( "OpenNewView"    
 static const String sViewId         = String::CreateFromAscii( "ViewId"         );
 static const String sPluginMode     = String::CreateFromAscii( "PluginMode"     );
 static const String sReadOnly       = String::CreateFromAscii( "ReadOnly"       );
+static const String sStartPresentation = String::CreateFromAscii( "StartPresentation"       );
 static const String sFrameName      = String::CreateFromAscii( "FrameName"      );
 static const String sMediaType      = String::CreateFromAscii( "MediaType"    );
 static const String sPostData       = String::CreateFromAscii( "PostData"       );
@@ -635,6 +636,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         if (bOK)
                             rSet.Put( SfxBoolItem( SID_DOC_READONLY, bVal ) );
                      }
+                else if ( aName == sStartPresentation )
+                     {
+                        sal_Bool bVal = sal_False;
+                        sal_Bool bOK = (rProp.Value >>= bVal);
+                        DBG_ASSERT( bOK, "invalid type for StartPresentation" )
+                        if (bOK)
+                            rSet.Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, bVal ) );
+                     }
                 else if ( aName == sSelectionOnly )
                      {
                         sal_Bool bVal = sal_False;
@@ -935,6 +944,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOC_READONLY ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_DOC_STARTPRESENTATION ) == SFX_ITEM_SET )
+                nAdditional++;
             if ( rSet.GetItemState( SID_SELECTION ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_CONTENTTYPE ) == SFX_ITEM_SET )
@@ -1048,6 +1059,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_PLUGIN_MODE )
                         continue;
                     if ( nId == SID_DOC_READONLY )
+                        continue;
+                    if ( nId == SID_DOC_STARTPRESENTATION )
                         continue;
                     if ( nId == SID_SELECTION )
                         continue;
@@ -1283,6 +1296,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_DOC_READONLY, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nProps].Name = sReadOnly;
+                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_DOC_STARTPRESENTATION, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sStartPresentation;
                 pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_SELECTION, sal_False, &pItem ) == SFX_ITEM_SET )
