@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gconfbackend.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:05:16 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif // _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif // _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+//#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+//#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+//#endif // _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_INVALIDBOOTSTRAPFILEEXCEPTION_HPP_
 #include <com/sun/star/configuration/InvalidBootstrapFileException.hpp>
@@ -92,25 +92,17 @@
 #include <com/sun/star/configuration/backend/XBackendChangesNotifier.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#endif
-
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
 #endif // _CPPUHELPER_COMPBASE3_HXX_
-
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
 
 #ifndef INCLUDED_MAP
 #include <map>
 #define INCLUDED_MAP
 #endif
-#ifndef _VOS_THREAD_HXX_
-#include <vos/thread.hxx>
-#endif
+//#ifndef _VOS_THREAD_HXX_
+//#include <vos/thread.hxx>
+//#endif
 
 #include <gconf/gconf-client.h>
 
@@ -118,36 +110,12 @@
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
 namespace lang = css::lang ;
-namespace ucb = css::ucb;
 namespace backend = css::configuration::backend ;
 
 
-#define SYSTEMBE_INIFILE                   SAL_CONFIGFILE("systembe")
-
-/** Structure containing the mapping between OOffice and Gconf keys.
-    AlOO specifies whether the key is protected, if key is protected it
-    can not be over riden in subsequent higher layers
- */
-struct keyMapping
-{
-
-    keyMapping(){};
-
-    rtl::OUString mOOName;
-    rtl::OUString mOOType;
-    rtl::OUString mGconfName;
-    sal_Bool mbProtected;
-
-};
-
-typedef keyMapping KeyMappingInfo;
-typedef std::multimap<rtl::OUString, KeyMappingInfo> KeyMappingTable;
-
-/*Time Stamp mapping table used to store timestamps of updated components
-  when a notification is recieved. It is needed as you cannot access gconf key
-  timestamps via the Gconf api */
-typedef std::multimap<rtl::OUString, rtl::OUString>  TSMappingTable;
 //------------------------------------------------------------------------------
+
+/*
 class ONotificationThread: public vos::OThread
 {
 
@@ -171,12 +139,12 @@ private:
     GMainLoop* mLoop;
 };
 
-
+*/
 
 //------------------------------------------------------------------------------
 typedef cppu::WeakComponentImplHelper3<backend::XSingleLayerStratum,
                                        backend::XBackendChangesNotifier,
-                                       lang::XServiceInfo> BackendBase ;
+                       lang::XServiceInfo> BackendBase ;
 
 /**
   Implements the SingleLayerStratum service for gconf access.
@@ -184,73 +152,67 @@ typedef cppu::WeakComponentImplHelper3<backend::XSingleLayerStratum,
 class GconfBackend : public BackendBase {
     public :
 
-        static GconfBackend* createGconfInstance(
-             const uno::Reference<uno::XComponentContext>& xContext);
-
-        /** Destructor */
-        ~GconfBackend(void) ;
+    static GconfBackend* createInstance(const uno::Reference<uno::XComponentContext>& xContext);
 
         // XServiceInfo
-        virtual rtl::OUString SAL_CALL
-            getImplementationName(  )
-                throw (uno::RuntimeException) ;
+        virtual rtl::OUString SAL_CALL getImplementationName(  )
+            throw (uno::RuntimeException) ;
 
-        virtual sal_Bool SAL_CALL
-            supportsService( const rtl::OUString& aServiceName )
-                throw (uno::RuntimeException) ;
+        virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& aServiceName )
+            throw (uno::RuntimeException) ;
 
-        virtual uno::Sequence<rtl::OUString> SAL_CALL
-            getSupportedServiceNames(  )
-                throw (uno::RuntimeException) ;
+        virtual uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames(  )
+            throw (uno::RuntimeException) ;
 
         /**
           Provides the implementation name.
 
           @return   implementation name
           */
-        static rtl::OUString SAL_CALL getGconfBackendName(void) ;
+        static rtl::OUString SAL_CALL getBackendName(void) ;
+
         /**
           Provides the supported services names
 
           @return   service names
           */
-        static uno::Sequence<rtl::OUString> SAL_CALL getGconfBackendServiceNames(void) ;
-        /**
-          Provide the current module directory
+        static uno::Sequence<rtl::OUString> SAL_CALL getBackendServiceNames(void) ;
 
-          @return current module directory
+        /**
+          Provides the supported component nodes
+
+          @return supported component nodes
         */
-        static rtl::OUString getCurrentModuleDirectory();
+        static uno::Sequence<rtl::OUString> SAL_CALL getSupportedComponents(void) ;
 
         /* returns a GconfClient */
         static GConfClient* getGconfClient();
 
         //XSingleLayerStratum
         virtual uno::Reference<backend::XLayer> SAL_CALL
-        getLayer( const rtl::OUString& aLayerId, const rtl::OUString& aTimestamp )
-            throw (backend::BackendAccessException,
-                   lang::IllegalArgumentException) ;
+            getLayer( const rtl::OUString& aLayerId, const rtl::OUString& aTimestamp )
+                throw (backend::BackendAccessException, lang::IllegalArgumentException) ;
 
         virtual uno::Reference<backend::XUpdatableLayer> SAL_CALL
-        getUpdatableLayer( const rtl::OUString& aLayerId )
-            throw (backend::BackendAccessException,
-                   lang::NoSupportException,
-                   lang::IllegalArgumentException) ;
+            getUpdatableLayer( const rtl::OUString& aLayerId )
+                throw (backend::BackendAccessException, lang::NoSupportException,
+                       lang::IllegalArgumentException) ;
 
         // XBackendChangesNotifier
         virtual void SAL_CALL addChangesListener(
             const uno::Reference<backend::XBackendChangesListener>& xListener,
             const rtl::OUString& aComponent)
-            throw (::com::sun::star::uno::RuntimeException);
+                throw (::com::sun::star::uno::RuntimeException);
 
 
         virtual void SAL_CALL removeChangesListener(
             const uno::Reference<backend::XBackendChangesListener>& xListener,
             const rtl::OUString& aComponent)
-            throw (::com::sun::star::uno::RuntimeException);
+                throw (::com::sun::star::uno::RuntimeException);
 
         //Notify all listener of component change
         void notifyListeners(const rtl::OUString& aGconfKey);
+
     protected:
         /**
           Service constructor from a service factory.
@@ -259,6 +221,10 @@ class GconfBackend : public BackendBase {
           */
          GconfBackend(const uno::Reference<uno::XComponentContext>& xContext)
             throw (backend::BackendAccessException);
+
+        /** Destructor */
+        ~GconfBackend(void) ;
+
     private:
 
         typedef uno::Reference<backend::XBackendChangesListener> ListenerRef;
@@ -267,15 +233,12 @@ class GconfBackend : public BackendBase {
         /** Build Gconf/OO mapping table */
         void initializeMappingTable ();
 
-        uno::Reference<lang::XMultiServiceFactory> mFactory;
+
+        /** The component context */
+        uno::Reference<uno::XComponentContext> m_xContext;
 
         /** Mutex for reOOurces protection */
         osl::Mutex mMutex ;
-
-        KeyMappingTable mKeyMap;
-
-        /** List of component TimeStamps */
-        TSMappingTable mTSMap;
 
         static GconfBackend* mInstance;
 
@@ -285,9 +248,7 @@ class GconfBackend : public BackendBase {
         /**Connection to Gconf */
         static GConfClient* mClient;
 
-       ONotificationThread* mNotificationThread;
-
-
+//       ONotificationThread* mNotificationThread;
 } ;
 
 

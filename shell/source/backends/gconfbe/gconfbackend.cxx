@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gconfbackend.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:05:04 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,6 @@
 #define INCLUDED_VECTOR
 #endif
 
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-#ifndef _OSL_MODULE_HXX_
-#include <osl/module.hxx>
-#endif
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
 #endif
@@ -95,12 +89,13 @@
 #include <rtl/byteseq.h>
 #endif
 
+// #include<glib.h>
 
-
-
-#include<glib.h>
+#include <stdio.h>
 
 //==============================================================================
+
+/*
 void ONotificationThread::run()
 {
     mLoop= NULL;
@@ -109,180 +104,45 @@ void ONotificationThread::run()
     g_main_loop_run(mLoop);
 } ;
 
-// -------------------------------------------------------------------------------
-
-rtl::OUString GconfBackend::getCurrentModuleDirectory() // URL including terminating slash
-{
-    rtl::OUString aFileURL;
-    if ( !osl::Module::getUrlFromAddress((void*)&getCurrentModuleDirectory,aFileURL) )
-    {
-        OSL_TRACE(false, "Cannot locate current module - using executable instead");
-
-        OSL_VERIFY(osl_Process_E_None == osl_getExecutableFile(&aFileURL.pData));
-    }
-
-    OSL_ENSURE(0 < aFileURL.lastIndexOf('/'), "Cannot find directory for module URL");
-
-    return aFileURL.copy(0, aFileURL.lastIndexOf('/') + 1);
-}
-// ---------------------------------------------------------------------------------------
-void parseGconfString(const rtl::OUString& sKeyString,
-                      rtl::OUString& sComponentName,
-                      KeyMappingInfo& aKeyInfo)
-{
-    sal_Int32 nNextToken =0;
-    sal_Int32 nLength = sKeyString.getLength();
-
-    do
-    {
-        sComponentName = sKeyString.getToken(0, '/',nNextToken);
-        if((nNextToken ==-1)||(sComponentName.getLength()==0))
-        {
-            throw backend::BackendSetupException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "Malformed Gconf String specified")),
-                        NULL, uno::Any()) ;
-        }
-        rtl::OUString sOOName = sKeyString.getToken(0, ':',nNextToken);
-        if((nNextToken ==-1)||(sOOName.getLength()==0))
-        {
-             throw backend::BackendSetupException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "Malformed Gconf String specified")),
-                        NULL, uno::Any()) ;
-
-        }
-
-        rtl::OUString sOOType = sKeyString.getToken(0, ':',nNextToken);
-        if((nNextToken ==-1)||(sOOName.getLength()==0))
-        {
-             throw backend::BackendSetupException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "Malformed Gconf String specified")),
-                        NULL, uno::Any()) ;
-
-        }
-        rtl::OUString sGconfName = sKeyString.getToken(0, ':',nNextToken);
-        if((nNextToken ==-1)||(sGconfName.getLength()==0))
-        {
-             throw backend::BackendSetupException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "Malformed Gconf String specified")),
-                        NULL, uno::Any()) ;
-        }
-        sal_Bool bProtected = sal_False;
-        rtl::OUString sProtected = sKeyString.getToken(0, ' ',nNextToken);
-        if (    sProtected.equalsIgnoreAsciiCaseAscii("true") ||
-                sProtected.equalsAscii("1") ||
-                sProtected.equalsIgnoreAsciiCaseAscii("yes"))
-        {
-            bProtected = sal_True ;
-        }
-        else if (   sProtected.equalsIgnoreAsciiCaseAscii("false") ||
-                    sProtected.equalsAscii("0") ||
-                    sProtected.equalsIgnoreAsciiCaseAscii("no"))
-        {
-            bProtected = sal_False ;
-        }
-        rtl::OUString sSep =rtl::OUString::createFromAscii("/");
-        aKeyInfo.mOOName = sComponentName+sSep+sOOName;
-        aKeyInfo.mOOType = sOOType;
-        aKeyInfo.mGconfName = sGconfName;
-        aKeyInfo.mbProtected = bProtected;
-
-    }
-    while (nNextToken >= 0 && nNextToken < nLength ) ;
-}
+*/
 
 //------------------------------------------------------------------------------
+
 GconfBackend* GconfBackend::mInstance= 0;
 
-GconfBackend* GconfBackend::createGconfInstance
-    (const uno::Reference<uno::XComponentContext>& xContext)
+GconfBackend* GconfBackend::createInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
     if(mInstance == 0)
     {
         mInstance = new GconfBackend (xContext);
     }
+
     return mInstance;
 }
+
 //------------------------------------------------------------------------------
-GconfBackend::GconfBackend(
-        const uno::Reference<uno::XComponentContext>& xContext)
+
+GconfBackend::GconfBackend(const uno::Reference<uno::XComponentContext>& xContext)
         throw (backend::BackendAccessException)
-        : BackendBase(mMutex),
-          mFactory(xContext->getServiceManager(),uno::UNO_QUERY_THROW),
-          mNotificationThread(NULL)
+    : BackendBase(mMutex), m_xContext(xContext)
+//    , mNotificationThread(NULL)
 
 
 {
-    initializeMappingTable();
 }
+
 //------------------------------------------------------------------------------
 
 GconfBackend::~GconfBackend(void) {
 
 
-    delete (mNotificationThread);
+//    delete (mNotificationThread);
     GconfBackend::mClient = NULL;
 
 }
 
 //------------------------------------------------------------------------------
-void checkIOErrorCode(
-     osl::File::RC aErrorCode,
-     rtl::OUString& aFileUrl)
-{
-    switch (aErrorCode)
-    {
-        case osl::File::E_None: // got it
-        {
 
-        }
-        break;
-        default:
-        {
-            rtl::OUStringBuffer sMsg;
-            sMsg.appendAscii("GconfBackend: Cannot Read Key Mapping Table from INI/RC file:");
-            sMsg.append(aFileUrl);
-            throw backend::BackendSetupException(sMsg.makeStringAndClear(),
-                NULL, uno::Any());
-        }
-    }
-}
-//------------------------------------------------------------------------------
-
-void GconfBackend::initializeMappingTable()
-{
-    rtl::OUString aFileUrl = getCurrentModuleDirectory() +
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SYSTEMBE_INIFILE));
-
-    osl::File aMappingFile(aFileUrl) ;
-    osl::File::RC errorCode = aMappingFile.open(OpenFlag_Read) ;
-
-    checkIOErrorCode(errorCode,aFileUrl);
-    while(1)
-    {
-        rtl::ByteSequence aByteSequence;
-        sal_Bool bEof = false;
-        aMappingFile.isEndOfFile(&bEof);
-        if(bEof)
-            break;
-
-        errorCode = aMappingFile.readLine(aByteSequence);
-        checkIOErrorCode(errorCode,aFileUrl);
-
-        rtl::OUString  sKeyString ( reinterpret_cast<char*>
-                                   (aByteSequence.getArray()),
-                                   aByteSequence.getLength(),
-                                   RTL_TEXTENCODING_ASCII_US);
-        rtl::OUString sComponentName;
-        KeyMappingInfo aKeyInfo;
-        parseGconfString(sKeyString,sComponentName,aKeyInfo);
-        mKeyMap.insert(KeyMappingTable::value_type(sComponentName, aKeyInfo));
-    }
-}
-//------------------------------------------------------------------------------
 GConfClient* GconfBackend::mClient= 0;
 
 
@@ -322,13 +182,12 @@ GConfClient* GconfBackend::getGconfClient()
 //------------------------------------------------------------------------------
 
 uno::Reference<backend::XLayer> SAL_CALL GconfBackend::getLayer(
-        const rtl::OUString& aComponent, const rtl::OUString& aTimestamp)
+    const rtl::OUString& aComponent, const rtl::OUString& aTimestamp)
     throw (backend::BackendAccessException, lang::IllegalArgumentException)
 {
-
-    //All newly created layers have timestamp 0, timestamps are updated
-    //when notifications are recieved from gconf and stored in mTSMap
+    // timestamps need to be updated when notifications are recieved from gconf
     TimeValue aTimeValue = {0,0};
+    osl_getSystemTime(&aTimeValue);
 
     oslDateTime aLayerTS;
     rtl::OUString aTimeStamp;
@@ -336,33 +195,29 @@ uno::Reference<backend::XLayer> SAL_CALL GconfBackend::getLayer(
     if (osl_getDateTimeFromTimeValue(&aTimeValue, &aLayerTS)) {
         sal_Char asciiStamp [20] ;
 
-        sprintf(asciiStamp, "%04d%02d%02d%02d%02d%02dZ",
+        snprintf(asciiStamp, sizeof(asciiStamp), "%04d%02d%02d%02d%02d%02dZ",
                 aLayerTS.Year, aLayerTS.Month, aLayerTS.Day,
                 aLayerTS.Hours, aLayerTS.Minutes, aLayerTS.Seconds) ;
         aTimeStamp = rtl::OUString::createFromAscii(asciiStamp) ;
     }
-    //Need to pass mTSMap so GConfLayer can support XTimeStamp needed to
-    //work with binary cache feature
-    return new GconfLayer(aComponent, mKeyMap, aTimeStamp, mTSMap,mFactory);
+
+    return new GconfLayer(aComponent, aTimeStamp,  m_xContext);
 }
 
 //------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
 uno::Reference<backend::XUpdatableLayer> SAL_CALL
 GconfBackend::getUpdatableLayer(const rtl::OUString& aComponent)
     throw (backend::BackendAccessException,lang::NoSupportException,
            lang::IllegalArgumentException)
 {
-   throw lang::NoSupportException(
-        rtl::OUString::createFromAscii(
-        "GconfBackend: No Update Operation allowed, Read Only access"),
+    throw lang::NoSupportException( rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("GconfBackend: No Update Operation allowed, Read Only access") ),
         *this) ;
-
-    return NULL;
-
 }
+
 //------------------------------------------------------------------------------
+
 static void
 keyChangedCallback(GConfClient* aClient,
                    guint aID,
@@ -377,9 +232,12 @@ keyChangedCallback(GConfClient* aClient,
     aGconfBe->notifyListeners(aGconfKey);
 
 }
+
 //------------------------------------------------------------------------------
+
 void GconfBackend::notifyListeners(const rtl::OUString& aGconfKey)
 {
+/*
     //look up associated component from Map using GconfKey
     KeyMappingTable::iterator aIter;
     rtl::OUString aComponent;
@@ -435,6 +293,7 @@ void GconfBackend::notifyListeners(const rtl::OUString& aGconfKey)
         cur->second->componentDataChanged(aEvent);
 
     }
+*/
 }
 
 
@@ -444,6 +303,7 @@ void SAL_CALL GconfBackend::addChangesListener(
     const rtl::OUString& aComponent)
     throw (::com::sun::star::uno::RuntimeException)
 {
+/*
     osl::MutexGuard aGuard(mMutex);
 
     GConfClient* aClient = getGconfClient();
@@ -498,7 +358,9 @@ void SAL_CALL GconfBackend::addChangesListener(
         }
 
     }
+*/
 
+/*
     if (mNotificationThread == NULL)
     {
 
@@ -513,7 +375,7 @@ void SAL_CALL GconfBackend::addChangesListener(
             mNotificationThread->create();
         }
     }
-
+*/
     //Store listener in list
     mListenerList.insert(ListenerList::value_type(aComponent, xListener));
 
@@ -525,6 +387,7 @@ void SAL_CALL GconfBackend::removeChangesListener(
     const rtl::OUString& aComponent)
     throw (::com::sun::star::uno::RuntimeException)
 {
+/*
     osl::MutexGuard aGuard(mMutex);
     GConfClient* aClient = GconfBackend::getGconfClient();
     ListenerList::iterator aIter;
@@ -541,7 +404,7 @@ void SAL_CALL GconfBackend::removeChangesListener(
         BFRange aRange = mKeyMap.equal_range(aComponent);
 
         while (aRange.first != aRange.second)
-        {
+    {
             KMTIter cur = aRange.first++;
 
             sal_Int32 nIndex = cur->second.mGconfName.lastIndexOf('/');
@@ -559,40 +422,61 @@ void SAL_CALL GconfBackend::removeChangesListener(
             }
        }
     }
+*/
 }
+
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL GconfBackend::getGconfBackendName(void) {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.configuration.backend.GconfBackend") ;
+rtl::OUString SAL_CALL GconfBackend::getBackendName(void) {
+    return rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.configuration.backend.GconfBackend") );
 }
+
 //------------------------------------------------------------------------------
 
 rtl::OUString SAL_CALL GconfBackend::getImplementationName(void)
     throw (uno::RuntimeException)
 {
-    return getGconfBackendName() ;
+    return getBackendName() ;
 }
+
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL GconfBackend::getGconfBackendServiceNames(void)
+uno::Sequence<rtl::OUString> SAL_CALL GconfBackend::getBackendServiceNames(void)
 {
     uno::Sequence<rtl::OUString> aServices(2) ;
-    aServices[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.GconfBackend")) ;
-    aServices[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.PlatformBackend")) ;
+    aServices[0] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.GconfBackend")) ;
+    aServices[1] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.PlatformBackend")) ;
 
     return aServices ;
 }
+
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL GconfBackend::supportsService(
-                                        const rtl::OUString& aServiceName)
+uno::Sequence<rtl::OUString> SAL_CALL GconfBackend::getSupportedComponents(void)
+{
+    uno::Sequence<rtl::OUString> aSupportedComponentsList(2) ;
+    aSupportedComponentsList[0] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet")) ;
+    aSupportedComponentsList[1] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common")) ;
+
+    return aSupportedComponentsList ;
+}
+
+//------------------------------------------------------------------------------
+
+sal_Bool SAL_CALL GconfBackend::supportsService(const rtl::OUString& aServiceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< rtl::OUString > const svc = getGconfBackendServiceNames();
+    uno::Sequence< rtl::OUString > const svc = getBackendServiceNames();
 
     for(sal_Int32 i = 0; i < svc.getLength(); ++i )
         if(svc[i] == aServiceName)
             return true;
+
     return false;
 }
 
@@ -602,7 +486,7 @@ uno::Sequence<rtl::OUString>
 SAL_CALL GconfBackend::getSupportedServiceNames(void)
     throw (uno::RuntimeException)
 {
-    return getGconfBackendServiceNames() ;
+    return getBackendServiceNames() ;
 }
 
 // ---------------------------------------------------------------------------------------
