@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:22:56 $
+ *  last change: $Author: ama $ $Date: 2001-11-09 13:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,7 @@ SwPageFrm::~SwPageFrm()
 
 void SwPageFrm::CheckDirection( BOOL bVert )
 {
+#ifndef TEST
     if( bVert )
     {
         if( ( pDesc && pDesc->GetLandscape() ) ||
@@ -329,8 +330,20 @@ void SwPageFrm::CheckDirection( BOOL bVert )
             bRightToLeft = 0;
         bInvalidR2L = 0;
     }
+#else
+    if( bVert )
+    {
+        bVertical = 0;
+        bReverse = 0;
+        bInvalidVert = 0;
+    }
+    else
+    {
+        bRightToLeft = 0;
+        bInvalidR2L = 0;
+    }
+#endif
 }
-
 #endif
 
 /*************************************************************************
