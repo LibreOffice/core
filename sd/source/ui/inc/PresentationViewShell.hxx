@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PresentationViewShell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:39:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,31 +80,43 @@ public:
     SFX_DECL_VIEWFACTORY(PresViewShell);
     SFX_DECL_INTERFACE( SD_IF_SDPRESVIEWSHELL );
 
-    /** Create a new view shell for the full screen presentation.
-        @param rViewShellBase
-            The new object will be stacked on this view shell base.
-        @param pFrameView
-            The frame view that makes it possible to pass information from
-            one view shell to the next.
-    */
     PresentationViewShell (
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
-        FrameView* pFrameView);
+        ::Window* pParentWindow,
+        FrameView* pFrameView = NULL);
+    static void     CreateFullScreenShow(ViewShell* pOriginShell, SfxRequest& rReq );
 
-    static void CreateFullScreenShow(ViewShell* pOriginShell, SfxRequest& rReq );
+    /** This method is used by a simple class that passes some
+        arguments from the creator of the new view shell to the new view
+        shell object by waiting for its asynchronous creation.
+        @param pFrameView
+            The frame view that is typically used by the creating object and
+            that shall be shared by the created view shell.
+        @param rRequest
+            A request from which some arguments are extracted by the
+            FuSlideShow object.  It usually comes from an Execute() method
+            that initiated the creation of the new presentation view shell.
+        @param nPageNumber
+            The number of the page at which to start the show.
+    */
+    void FinishInitialization (
+        FrameView* pFrameView,
+        SfxRequest& rRequest,
+        USHORT nPageNumber);
 
 private:
-
     Rectangle       maOldVisArea;
     sal_Bool        mbShowStarted;
 
-
-    PresentationViewShell (SfxViewFrame* pFrame, const DrawViewShell& rShell);
+    PresentationViewShell (
+        SfxViewFrame* pFrame,
+        ::Window* pParentWindow,
+        const DrawViewShell& rShell);
     virtual ~PresentationViewShell (void);
 
-    virtual void    Activate( BOOL bIsMDIActivate );
-    virtual void    Paint( const Rectangle& rRect, ::sd::Window* pWin );
+    virtual void Activate (BOOL bIsMDIActivate);
+    virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
 };
 
 } // end of namespace sd
