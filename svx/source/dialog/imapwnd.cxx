@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-12 11:54:45 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
