@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:00:10 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 12:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1225,6 +1225,10 @@ ModulWindow* BasicIDEShell::ShowActiveModuleWindow( StarBASIC* pBasic )
     SetCurLib( 0, String(), false );
 
     SbModule* pActiveModule = StarBASIC::GetActiveModule();
+    SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pActiveModule);
+    if( pClassModuleObject != NULL )
+        pActiveModule = pClassModuleObject->getClassModule();
+
     DBG_ASSERT( pActiveModule, "Kein aktives Modul im ErrorHdl?!" );
     if ( pActiveModule )
     {
