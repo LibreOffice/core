@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleToolBox.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2003-05-28 10:03:37 $
+ *  last change:$Date: 2003-09-08 13:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,17 +63,6 @@ package mod._toolkit;
 
 import java.io.PrintWriter;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XModel;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleComponent;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -81,6 +70,17 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.DesktopTools;
 import util.SOfficeFactory;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.awt.XWindow;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object that implements the following interfaces :
@@ -115,7 +115,7 @@ public class AccessibleToolBox extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
+                    XDesktop.class, DesktopTools.createDesktop( (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
@@ -158,7 +158,7 @@ public class AccessibleToolBox extends TestCase {
         if (xTextDoc != null) xTextDoc.dispose();
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)  tParam.getMSF());
 
         try {
             log.println( "creating a text document" );
@@ -172,13 +172,12 @@ public class AccessibleToolBox extends TestCase {
         XModel aModel = (XModel)
                     UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
-        XController xController = aModel.getCurrentController();
 
         XInterface oObj = null;
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)tParam.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) tParam.getMSF(), aModel);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
@@ -187,19 +186,31 @@ public class AccessibleToolBox extends TestCase {
         oObj = at.getAccessibleObjectForRole(xRoot,
             AccessibleRole.TOOL_BAR);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent)
-                    UnoRuntime.queryInterface(XAccessibleComponent.class,oObj);
-
         log.println("ImplementationName: "+ util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
+        XAccessible acc = at.getAccessibleObject(oObj);
+        XAccessible child = null;
+        try {
+            child = acc.getAccessibleContext().getAccessibleChild(0);
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+        }
+
+        util.dbg.printInterfaces(child);
+
+        final XAccessibleAction action = (XAccessibleAction) UnoRuntime.queryInterface(XAccessibleAction.class,  child);
+
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {
-                    acomp.grabFocus();
+                    try {
+                        action.doAccessibleAction(0);
+                    } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                        System.out.println("Couldn't fire event");
+                    }
                 }
             });
 
