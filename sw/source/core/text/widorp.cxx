@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-14 11:03:17 $
+ *  last change: $Author: fme $ $Date: 2001-11-26 17:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,10 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pFrm, const SwTwips nRst )
     : pFrm(pFrm), nRstHeight(nRst),
       nOrigin( pFrm->Frm().Top() + pFrm->Prt().Top() )
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+            "SwTxtFrmBreak::SwTxtFrmBreak with unswapped frame" );
+#endif
     SwSectionFrm* pSct;
     bKeep = !pFrm->IsMoveable() || IsNastyFollow( pFrm ) ||
             ( pFrm->IsInSct() && (pSct=pFrm->FindSctFrm())->Lower()->IsColumnFrm()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-22 15:35:14 $
+ *  last change: $Author: fme $ $Date: 2001-11-26 17:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,11 +232,12 @@ sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
 
 SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn, sal_Bool bLocked ) const
 {
-    SwTxtFrm *pThis = (SwTxtFrm*)this;
-
 #ifdef VERTICAL_LAYOUT
-    SWAP_IF_NOT_SWAPPED( this )
+    ASSERT( ! IsVertical() || ! IsSwapped(),
+            "SwTxtFrm::GetFtnLine with swapped frame" )
 #endif
+
+    SwTxtFrm *pThis = (SwTxtFrm*)this;
 
     if( !HasPara() )
     {
@@ -250,10 +251,15 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn, sal_Bool bLocked ) const
         if( !bLocked )
             pThis->Prepare( PREP_ADJUST_FRM );
 #ifdef VERTICAL_LAYOUT
-        UNDO_SWAP( this )
-#endif
+        return IsVertical() ? Frm().Left() : Frm().Bottom();
+#else
         return Frm().Bottom();
+#endif
     }
+
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_NOT_SWAPPED( this )
+#endif
 
     SwTxtInfo aInf( pThis );
     SwTxtIter aLine( pThis, &aInf );
@@ -295,6 +301,10 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
                                         GetFtn().IsEndNote() ) )
         return 0;
 
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED( this )
+#endif
+
     SwTwips nHeight = pRef->IsInFtnConnect() ?
                             1 : pRef->GetFtnLine( pFtnFrm->GetAttr(), sal_False );
     if( nHeight )
@@ -304,8 +314,15 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
         // eingeben.
         const SwFrm *pCont = pFtnFrm->GetUpper();
         //Hoehe innerhalb des Cont, die ich mir 'eh noch genehmigen darf.
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( pCont )
+        SwTwips nTmp = (*fnRect->fnYDiff)( (pCont->*fnRect->fnGetLimit)(),
+                                           (Frm().*fnRect->fnGetTop)() );
+#else
         SwTwips nTmp = pCont->Frm().Top() + pCont->Prt().Top() +
                        pCont->Prt().Height() - Frm().Top();
+#endif
+
 #ifndef PRODUCT
         if( nTmp < 0 )
         {
@@ -322,7 +339,12 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
             ASSERT( bInvalidPos, "Hanging below FtnCont" );
         }
 #endif
+
+#ifdef VERTICAL_LAYOUT
+        if ( (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(), nHeight) > 0 )
+#else
         if( pCont->Frm().Top() > nHeight )
+#endif
         {
             //Wachstumspotential den Containers.
             if ( !pRef->IsInFtnConnect() )
@@ -347,13 +369,22 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
         }
         else
         {   // The container has to shrink
+#ifdef VERTICAL_LAYOUT
+            nTmp += (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(), nHeight);
+#else
             nTmp += pCont->Frm().Top() - nHeight;
+#endif
             if( nTmp > 0 )
                 nHeight = nTmp;
             else
                 nHeight = 0;
         }
     }
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP( this )
+#endif
+
     return nHeight;
 }
 
@@ -883,7 +914,6 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
 
     SwTwips nLower = Y() + nReal;
 
-
 #ifdef VERTICAL_LAYOUT
     SWRECTFN( pFrm )
 
@@ -1194,6 +1224,11 @@ SwErgoSumPortion *SwTxtFormatter::NewErgoSumPortion( SwTxtFormatInfo &rInf ) con
 
 xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! pFrm->IsVertical() || ! pFrm->IsSwapped(),
+            "SwTxtFormatter::FormatQuoVadis with swapped frame" );
+#endif
+
     if( !pFrm->IsInFtn() || pFrm->ImplFindFtnFrm()->GetAttr()->GetFtn().IsEndNote() )
         return nOffset;
 
@@ -1271,7 +1306,17 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
 
     // Jetzt wird formatiert
     Right( Right() - pQuo->Width() );
+
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_NOT_SWAPPED( pFrm )
+#endif
+
     const xub_StrLen nRet = FormatLine( nStart );
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP( pFrm )
+#endif
+
     Right( rInf.Left() + nOldRealWidth - 1 );
 
     nLastLeft = nOldRealWidth - pCurr->Width();
