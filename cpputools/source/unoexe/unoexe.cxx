@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-26 12:41:11 $
+ *  last change: $Author: dbo $ $Date: 2000-11-02 13:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,6 +567,7 @@ public:
         , _aImplName( rImplName )
         , _aLocation( rLocation )
         , _aServiceName( rServiceName )
+        , _aInitParams( rInitParams )
         , _aInstanceName( rInstanceName )
         {}
 
