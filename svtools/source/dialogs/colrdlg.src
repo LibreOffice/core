@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 14:44:13 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 21:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,7 +523,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Brilho" ;
         Text[ chinese_simplified ] = "ÁÁ¶È(~N)";
         Text[ russian ] = "ßðêîñòü";
-        Text[ polish ] = "Jasno?æ";
+        Text[ polish ] = "Jasnoœæ";
         Text[ japanese ] = "–¾“x(~N)";
         Text[ chinese_traditional ] = "«G«×(~N)";
         Text[ arabic ] = "ÇáÅÖÇÁÉ";
@@ -596,3 +596,4 @@ ModalDialog DLG_COLOR
     Text[ catalan ] = "Color";
     Text[ finnish ] = "Väri";
 };
+
