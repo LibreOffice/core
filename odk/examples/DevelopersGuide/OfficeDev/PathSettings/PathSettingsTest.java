@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PathSettingsTest.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:01:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,19 +38,12 @@
  *
  *************************************************************************/
 
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
-
 import com.sun.star.beans.UnknownPropertyException;
-/*
- * PathSettingsTest.java
- *
- * Created on 26. March 2003, 08:22
- */
 
 /*
  *
@@ -101,21 +94,10 @@ public class PathSettingsTest extends java.lang.Object {
         XPropertySet xPathSettingsService = null;
 
         try {
-            // connect
-            XComponentContext xLocalContext =
-                com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(null);
-            XMultiComponentFactory xLocalServiceManager = xLocalContext.getServiceManager();
-            Object urlResolver  = xLocalServiceManager.createInstanceWithContext(
-                "com.sun.star.bridge.UnoUrlResolver", xLocalContext );
-            XUnoUrlResolver xUnoUrlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-                XUnoUrlResolver.class, urlResolver );
-            Object initialObject = xUnoUrlResolver.resolve(
-                "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" );
-            XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
-                XPropertySet.class, initialObject);
-            Object context = xPropertySet.getPropertyValue("DefaultContext");
-            xRemoteContext = (XComponentContext)UnoRuntime.queryInterface(
-                XComponentContext.class, context);
+            // get the remote office context. If necessary a new office
+            // process is started
+            xRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
             xRemoteServiceManager = xRemoteContext.getServiceManager();
 
             Object pathSubst = xRemoteServiceManager.createInstanceWithContext(
@@ -143,43 +125,49 @@ public class PathSettingsTest extends java.lang.Object {
         if ( xPathSettingsService != null ) {
             for ( int i=0; i<predefinedPathProperties.length; i++ ) {
                 try {
-                        /* Retrieve values for path properties from path settings service*/
+                        /* Retrieve values for path properties from path settings
+                         * service*/
                         Object aValue = xPathSettingsService.getPropertyValue(
                                             predefinedPathProperties[i] );
 
-                        // getPropertyValue returns an Object, you have to cast it to type that you need
+                        // getPropertyValue returns an Object, you have to cast
+                        // it to type that you need
                         String aPath = (String)aValue;
-                        System.out.println( "Property="+ predefinedPathProperties[i] +
-                                            " Path=" + aPath );
+                        System.out.println( "Property="+ predefinedPathProperties[i]
+                                            + " Path=" + aPath );
                 }
                 catch ( com.sun.star.beans.UnknownPropertyException e) {
-                    System.out.println( "UnknownPropertyException has been thrown accessing "+predefinedPathProperties[i]);
+                    System.err.println( "UnknownPropertyException has been thrown accessing "+predefinedPathProperties[i]);
                 }
                 catch ( com.sun.star.lang.WrappedTargetException e ) {
-                    System.out.println( "WrappedTargetException has been thrown accessing "+predefinedPathProperties[i]);
+                    System.err.println( "WrappedTargetException has been thrown accessing "+predefinedPathProperties[i]);
                 }
             }
 
             // Try to modfiy the work path property. After running this example
             // you should see the new value of "My Documents" in the path options
-            // tab page, accessible via "Tools - Options - [Star|Open]Office - Paths".
-            // If you want to revert the changes, you can also do it with the path tab page.
+            // tab page, accessible via "Tools - Options - [Star|Open]Office -
+            // Paths".
+            // If you want to revert the changes, you can also do it with the
+            // path tab page.
             try {
                 xPathSettingsService.setPropertyValue( "Work", "$(temp)" );
                 String aValue = (String)xPathSettingsService.getPropertyValue( "Work" );
-                System.out.println( "The work path should now be " + aValue );
+                System.out.println( "\nNote: The example changes your current "
+                                    +"setting of the work path!\nThe work path "
+                                    +"should be now=" + aValue );
             }
             catch ( com.sun.star.beans.UnknownPropertyException e) {
-                System.out.println( "UnknownPropertyException has been thrown accessing PathSettings service");
+                System.err.println( "UnknownPropertyException has been thrown accessing PathSettings service");
             }
             catch ( com.sun.star.lang.WrappedTargetException e ) {
-                System.out.println( "WrappedTargetException has been thrown accessing PathSettings service");
+                System.err.println( "WrappedTargetException has been thrown accessing PathSettings service");
             }
             catch ( com.sun.star.beans.PropertyVetoException e ) {
-                System.out.println( "PropertyVetoException has been thrown accessing PathSettings service");
+                System.err.println( "PropertyVetoException has been thrown accessing PathSettings service");
             }
             catch ( com.sun.star.lang.IllegalArgumentException e ) {
-                System.out.println( "IllegalArgumentException has been thrown accessing PathSettings service");
+                System.err.println( "IllegalArgumentException has been thrown accessing PathSettings service");
             }
         }
     }
