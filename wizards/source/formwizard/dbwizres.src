@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-17 13:02:01 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,6 +530,7 @@ String RID_DB_COMMON_START + 21
     Text[ french ] = "Stop";
     Text[ spanish ] = "~Stop";
     Text[ italian ] = "Stop";
+    Text[ portuguese_brazilian ] = "~Parar";
 };
 
 
@@ -2748,7 +2749,7 @@ String RID_DB_FORM_WIZARD_START + 56
     Text[ greek ] = "Óå ğáñÜèåóç";
     Text[ dutch ] = "~Getegeld";
     Text[ french ] = "Carrelage";
-    Text[ spanish ] = "A~zulejado";
+    Text[ spanish ] = "~Embaldosado";
     Text[ italian ] = "Affianca";
     Text[ danish ] = "~Side om side";
     Text[ swedish ] = "Sida vid sida";
@@ -3568,7 +3569,7 @@ String RID_DB_QUERY_WIZARD_START + 22
     Text[ russian ] = "Ïîëÿ â ~çàïğîñå";
     Text[ dutch ] = "Velden in ~query";
     Text[ french ] = "Champs de la ~requête";
-    Text[ spanish ] = "Campos en ~consulta";
+    Text[ spanish ] = "Campos de la ~consulta";
     Text[ italian ] = "Campi nella ~ricerca";
     Text[ danish ] = "Felter i ~forespørgsel";
     Text[ swedish ] = "Fält i sök~ning";
@@ -4339,7 +4340,7 @@ String RID_DB_REPORT_WIZARD_START + 19
     Text[ danish ] = "Felter ~Inddel";
     Text[ swedish ] = "Fält";
     Text[ polish ] = "Organizuj pola";
-    Text[ portuguese_brazilian ] = "Felder";
+    Text[ portuguese_brazilian ] = "Campos";
     Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
     Text[ chinese_simplified ] = "å­—æ®µ";
     Text[ chinese_traditional ] = "æ¬„ä½";
@@ -4367,7 +4368,7 @@ String RID_DB_REPORT_WIZARD_START + 20
     Text[ danish ] = "~Sortering";
     Text[ swedish ] = "~Sortera efter";
     Text[ polish ] = "~Sortowanie";
-    Text[ portuguese_brazilian ] = "~Sortieren nach";
+    Text[ portuguese_brazilian ] = "Ordenar ~por";
     Text[ japanese ] = "æœ€å„ªå…ˆã‚­ãƒ¼";
     Text[ chinese_simplified ] = "æ’åºæŒ‰ç…§(~S)";
     Text[ chinese_traditional ] = "æ’åºæŒ‰ç…§";
@@ -4425,7 +4426,7 @@ String RID_DB_REPORT_WIZARD_START + 22
     Text[ danish ] = "~Stående";
     Text[ swedish ] = "~Justering";
     Text[ polish ] = "Orientacja pionowa";
-    Text[ portuguese_brazilian ] = "~Ausrichtung";
+    Text[ portuguese_brazilian ] = "~Alinhamento";
     Text[ japanese ] = "é…ç½®";
     Text[ chinese_simplified ] = "çºµå‘";
     Text[ chinese_traditional ] = "å°é½Š";
@@ -4481,7 +4482,7 @@ String RID_DB_REPORT_WIZARD_START + 24
     Text[ danish ] = "Typ~e";
     Text[ swedish ] = "Liggande";
     Text[ polish ] = "~Styl";
-    Text[ portuguese_brazilian ] = "~Querformat";
+    Text[ portuguese_brazilian ] = "~Paisagem";
     Text[ japanese ] = "æ¨ª";
     Text[ chinese_simplified ] = "æ¨ªå‘";
     Text[ chinese_traditional ] = "æ©«å‘";
@@ -4650,7 +4651,7 @@ String RID_DB_REPORT_WIZARD_START + 33
     Text[ danish ] = "Efter færdiggørelsen...";
     Text[ swedish ] = "~Namn på rapport";
     Text[ polish ] = "Po zakoñczeniu...";
-    Text[ portuguese_brazilian ] = "~Name des Berichts";
+    Text[ portuguese_brazilian ] = "~Nome do relatório";
     Text[ japanese ] = "ãƒ¬ãƒãƒ¼ãƒˆå";
     Text[ chinese_simplified ] = "æŠ¥å‘Šåç§°";
     Text[ chinese_traditional ] = "å ±è¡¨åç¨±(~N)";
@@ -4896,7 +4897,7 @@ String RID_DB_REPORT_WIZARD_START + 44
     Text[ danish ] = "Save as";
     Text[ swedish ] = "Spara som";
     Text[ polish ] = "Save as";
-    Text[ portuguese_brazilian ] = "Save as";
+    Text[ portuguese_brazilian ] = "Salvar como";
     Text[ japanese ] = "åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜";
     Text[ korean ] = "ë‹¤ë¥¸ ì´ë¦„ìœ¼ë¡œ ì €ì¥";
     Text[ chinese_simplified ] = "å¦å­˜ä¸º";
