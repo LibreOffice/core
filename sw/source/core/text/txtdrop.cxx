@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:38:54 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,12 +974,8 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 Size aNewSize( 0, ( nFactor * nCurrHeight ) / 1000 );
                 rFnt.SetSize( aNewSize, rFnt.GetActual() );
                 rFnt.ChgPhysFnt( rInf.GetVsh(), *pOut );
-                // the guessed leading
-                const bool bUseExtLeading = true;
-                nAscent = rFnt.GetAscent( rInf.GetVsh(), *pOut ) -
-                          ( bUseExtLeading ?
-                            0 :
-                            rFnt.GetGuessedLeading( rInf.GetVsh(), *pOut ) );
+
+                nAscent = rFnt.GetAscent( rInf.GetVsh(), *pOut );
 
                 // Wir besorgen uns das alle Buchstaben umfassende Rechteck:
                 bHaveGlyphRect = pOut->GetTextBoundRect( aRect, rInf.GetTxt(), 0,
