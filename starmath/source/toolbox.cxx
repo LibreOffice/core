@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:26:21 $
+ *  last change: $Author: vg $ $Date: 2003-06-11 09:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,21 +197,6 @@ void SmToolBoxWindow::AdjustPosSize( BOOL bSetPos )
     Size        CatSize (31 * 5, 31 * 2);
     Size        CmdSize (31 * 5, 31 * 5);
     Size        WndSize (31 * 5, CatSize.Height() + 10 + CmdSize.Height());
-<<<<<<< toolbox.cxx
-
-    // basic window settings
-    SetOutputSizePixel(WndSize);
-    SetPosPixel(rPoint);
-    // catalog settings
-    aToolBoxCat.SetPosSizePixel(Point(0, 3), CatSize);
-    // settings for catalog / category delimiter
-    Point aP( aToolBoxCat_Delim.GetPosPixel() );
-    aP.X() += 5;
-    aToolBoxCat_Delim.SetPosPixel( aP );
-    Size  aS( CatSize.Width() - 10, 10 );
-    aToolBoxCat_Delim.SetSizePixel( aS );
-    // category settings
-=======
 
     // basic window settings
     SetOutputSizePixel(WndSize);
@@ -225,7 +210,6 @@ void SmToolBoxWindow::AdjustPosSize( BOOL bSetPos )
     Size  aS( CatSize.Width() - 10, 10 );
     aToolBoxCat_Delim.SetSizePixel( aS );
     // category settings
->>>>>>> 1.9.10.1
     for (int i = 0;  i < NUM_TBX_CATEGORIES;  i++)
         vToolBoxCategories[i]->SetSizePixel(CmdSize);
 
