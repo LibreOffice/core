@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-11 15:20:17 $
+ *  last change: $Author: dv $ $Date: 2001-07-13 13:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ using namespace ::com::sun::star::uno;
 //!using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::view;
 
-extern String CreateExactSizeText_Impl( ULONG nSize ); // fileview.cxx
+extern ::rtl::OUString CreateExactSizeText_Impl( sal_Int64 nSize ); // fileview.cxx
 
 #define SPLITSET_ID         0
 #define COLSET_ID           1
@@ -442,6 +442,8 @@ void GetMenuEntry_Impl
         {
             // title
             String aRow = String( aTitle ).EraseAllChars( '~' );
+            aRow += '\t';
+            // no type
             aRow += '\t';
             // no size
             aRow += '\t';
