@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockhelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:12:01 $
+ *  last change: $Author: as $ $Date: 2001-06-19 08:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,17 @@ LockHelper::LockHelper( ::vos::IMutex* pSolarMutex )
 *//*-*************************************************************************************************************/
 LockHelper::~LockHelper()
 {
+    if( m_pShareableOslMutex != NULL )
+    {
+        // Sometimes we hold two pointer to same object!
+        // (e.g. if m_eLockType==E_OWNMUTEX!)
+        // So we should forget it ... but don't delete it twice!
+        if( m_pShareableOslMutex != m_pOwnMutex )
+        {
+            delete m_pShareableOslMutex;
+        }
+        m_pShareableOslMutex = NULL;
+    }
     if( m_pOwnMutex != NULL )
     {
         delete m_pOwnMutex;
@@ -179,11 +190,6 @@ LockHelper::~LockHelper()
     {
         delete m_pFairRWLock;
         m_pFairRWLock = NULL;
-    }
-    if( m_pShareableOslMutex != NULL )
-    {
-        delete m_pShareableOslMutex;
-        m_pShareableOslMutex = NULL;
     }
 }
 
@@ -501,30 +507,25 @@ LockHelper& LockHelper::getGlobalLock( ::vos::IMutex* pSolarMutex )
 *//*-*************************************************************************************************************/
 ::osl::Mutex& LockHelper::getShareableOslMutex()
 {
-    static ::osl::Mutex* pMutex = NULL;
-    if( pMutex == NULL )
+    if( m_pShareableOslMutex == NULL )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( pMutex == NULL )
+        if( m_pShareableOslMutex == NULL )
         {
             switch( m_eLockType )
             {
                 case E_OWNMUTEX     :   {
-                                            pMutex = m_pOwnMutex;
+                                            m_pShareableOslMutex = m_pOwnMutex;
                                         }
                                         break;
                 default             :   {
-                                            if( m_pShareableOslMutex == NULL )
-                                            {
-                                                m_pShareableOslMutex = new ::osl::Mutex;
-                                            }
-                                            pMutex = m_pShareableOslMutex;
+                                            m_pShareableOslMutex = new ::osl::Mutex;
                                         }
                                         break;
             }
         }
     }
-    return *pMutex;
+    return *m_pShareableOslMutex;
 }
 
 /*-************************************************************************************************************//**
