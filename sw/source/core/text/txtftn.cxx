@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-10 14:45:09 $
+ *  last change: $Author: fme $ $Date: 2001-04-18 12:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,7 +1271,18 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn* pTxtFtn )
             pInfo = &pDoc->GetFtnInfo();
         const SwAttrSet& rSet = pInfo->GetAnchorCharFmt((SwDoc&)*pDoc)->GetAttrSet();
         pFnt->SetDiffFnt( &rSet, rInf.GetDoc() );
+
+        // we reduce footnote size, if we are inside a double line portion
+        if ( ! pOld->GetEscapement() && 50 == pOld->GetPropr() )
+        {
+            Size aSize = pFnt->GetSize( pFnt->GetActual() );
+            pFnt->SetSize( Size( (long)aSize.Width() / 2,
+                                 (long)aSize.Height() / 2 ),
+                           pFnt->GetActual() );
+        }
+
         pFnt->ChgPhysFnt( pInf->GetVsh(), pInf->GetOut() );
+
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BACKGROUND,
             sal_True, &pItem ))
