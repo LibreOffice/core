@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basdoc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-07 12:18:10 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,24 +79,30 @@
 #include <basslots.hxx>
 
 #include "basicmod.hxx"
+#include "unomodel.hxx"
 
 TYPEINIT1(BasicDocShell, SfxObjectShell);
 DBG_NAME(BasicDocShell);
 
-SFX_IMPL_SIMPLE_OBJECTFACTORY_LOD( BasicDocShell, BasicIDE, BASIC_MOD() )
+SFX_IMPL_SIMPLE_OBJECTFACTORY( BasicDocShell, SFXOBJECTSHELL_STD_NORMAL, sbasic )
+{
+    Factory().SetExplorerImageId( IMG_MACROLIB );
+    Factory().RegisterHelpFile( String( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) ) );
+    Factory().SetDocumentServiceName( String::CreateFromAscii("com.sun.star.comp.basic.BasidIDE") );
+    Factory().RegisterMenuBar( IDEResId(RID_BASICMENU) );
+}
+
 SFX_IMPL_INTERFACE( BasicDocShell, SfxObjectShell, IDEResId( 0 ) )
 {
     SFX_STATUSBAR_REGISTRATION( SID_BASICIDE_STATUSBAR );
-//  SFX_CHILDWINDOW_REGISTRATION( SID_SHOW_BROWSER );
 }
-
-
 
 BasicDocShell::BasicDocShell( SfxObjectCreateMode eMode ) : SfxObjectShell( eMode )
 {
     pPrinter = 0;
     SetPool( &SFX_APP()->GetPool() );
     SetTitle( String( RTL_CONSTASCII_USTRINGPARAM("BASIC") ) );
+    SetModel( new SIDEModel(this) );
 }
 
 
