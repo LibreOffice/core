@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-08-02 14:41:56 $
+ *  last change: $Author: gt $ $Date: 2002-08-13 12:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,6 @@
 
 #define CB_REGISTER                     84
 #define FL_REGISTER                     85
-#define ST_TOPSPACE_ASIAN               88
-#define ST_BOTTOMSPACE_ASIAN            89
 #define FL_PROPERTIES                   90
 #define FT_TEXTDIRECTION                91
 #define LB_TEXTDIRECTION                92

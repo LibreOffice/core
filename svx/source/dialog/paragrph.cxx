@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-06 14:15:33 $
+ *  last change: $Author: gt $ $Date: 2002-08-13 12:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,12 +727,6 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,
     SetExchangeSupport();
 
     aLineDistAtMetricBox.Hide();
-    SvtLanguageOptions aCJKOptions;
-    if(aCJKOptions.IsAsianTypographyEnabled())
-    {
-        aTopLabel.SetText(String(ResId(    ST_TOPSPACE_ASIAN   )));
-        aBottomLabel.SetText(String(ResId( ST_BOTTOMSPACE_ASIAN)));
-    }
     FreeResource();
     Init_Impl();
     aFLineIndent.SetMin(-9999); // wird default auf 0 gesetzt

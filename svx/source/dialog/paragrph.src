@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-09 14:49:33 $
+ *  last change: $Author: gt $ $Date: 2002-08-13 12:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,56 +778,6 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ catalan ] = "Conforme al registre";
         Text[ finnish ] = "Rekisteri-tosi";
         Text[ thai ] = "ลงทะเบียน-จริง";
-    };
-    String ST_TOPSPACE_ASIAN
-    {
-        Text = "~Oben/Links" ;
-        Text [ english_us ] = "~Top/Left" ;
-        Text[ portuguese ] = "~Top/Left";
-        Text[ russian ] = "~Top/Left";
-        Text[ greek ] = "~Top/Left";
-        Text[ dutch ] = "~Top/Left";
-        Text[ french ] = "En haut/� gauche";
-        Text[ spanish ] = "~Arriba/a la izquierda";
-        Text[ finnish ] = "~Top/Left";
-        Text[ italian ] = "In alto/a sinistra";
-        Text[ danish ] = "~Top/Left";
-        Text[ swedish ] = "~Uppe/till v�nster";
-        Text[ polish ] = "~Top/Left";
-        Text[ portuguese_brazilian ] = "~Top/Left";
-        Text[ japanese ] = "上/左";
-        Text[ korean ] = "위/왼쪽";
-        Text[ chinese_simplified ] = "上/左";
-        Text[ chinese_traditional ] = "上/左";
-        Text[ turkish ] = "~Top/Left";
-        Text[ arabic ] = "~Top/Left";
-        Text[ catalan ] = "~Top/Left";
-        Text[ thai ] = "~Top/Left";
-    };
-    String ST_BOTTOMSPACE_ASIAN
-    {
-        Text = "~Unten/Rechts" ;
-        Text [ english_us ] = "~Bottom/Right" ;
-        Text[ portuguese ] = "~Bottom/Right";
-        Text[ russian ] = "~Bottom/Right";
-        Text[ greek ] = "~Bottom/Right";
-        Text[ dutch ] = "~Bottom/Right";
-        Text[ french ] = "En bas/� droite";
-        Text[ spanish ] = "~Abajo/a la derecha";
-        Text[ finnish ] = "~Bottom/Right";
-        Text[ italian ] = "In basso/a destra";
-        Text[ danish ] = "~Bottom/Right";
-        Text[ swedish ] = "Nere/h�ger";
-        Text[ polish ] = "~Bottom/Right";
-        Text[ portuguese_brazilian ] = "~Bottom/Right";
-        Text[ japanese ] = "下/右";
-        Text[ korean ] = "아래/오른쪽";
-        Text[ chinese_simplified ] = "下/右";
-        Text[ chinese_traditional ] = "下/右";
-        Text[ turkish ] = "~Bottom/Right";
-        Text[ arabic ] = "~Bottom/Right";
-        Text[ catalan ] = "~Bottom/Right";
-        Text[ thai ] = "~Bottom/Right";
     };
 
     Text[ chinese_simplified ] = "缩进和间隔";
