@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: pluby $ $Date: 2000-10-30 17:37:48 $
+#   last change: $Author: pluby $ $Date: 2000-10-31 03:12:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,8 +104,7 @@ CFLAGSOUTOBJ=-o
 
 SOLARVERSHLLIBS=$(shell -$(FIND) $(SOLARVERSION)$/$(INPATH)$/lib -name $(DLLPRE)\*$(DLLPOST))
 LINK=cc
-LINKFLAGS=-dynamic -framework System -framework Cocoa -framework QD \
-  -lcc_dynamic -lstdc++ \
+LINKFLAGS=-dynamic -framework System -framework Cocoa -lcc_dynamic -lstdc++ \
   $(foreach,i,$(SOLARVERSHLLIBS) '-dylib_file @executable_path$/$(i:f):$i')
 LINKFLAGSAPPGUI=-Wl,-u,__objcInit
 LINKFLAGSSHLGUI=-dynamiclib -install_name '@executable_path$/$(@:f)' \
