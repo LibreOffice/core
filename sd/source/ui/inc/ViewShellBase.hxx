@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:55:19 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,10 +219,10 @@ public:
         const ::com::sun::star::uno::Sequence <
         ::com::sun::star::beans::PropertyValue >&,
         sal_Bool bBrowse = sal_False);
+    virtual void UIActivating( SfxInPlaceClient* );
+    virtual void UIDeactivated( SfxInPlaceClient* );
     virtual void Activate (BOOL IsMDIActivate);
     virtual void Deactivate (BOOL IsMDIActivate);
-    virtual void UIActivate (SvInPlaceObject *pIPObj);
-    virtual void UIDeactivate (SvInPlaceObject *pIPObj);
     virtual void SetZoomFactor (
         const Fraction &rZoomX,
         const Fraction &rZoomY);
