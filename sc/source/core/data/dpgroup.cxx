@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpgroup.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 14:46:21 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #include "global.hxx"
 #include "document.hxx"
 
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDGROUPBY_HPP_
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#endif
+
 #define D_TIMEFACTOR              86400.0
 
 const USHORT SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations
@@ -122,19 +126,19 @@ String lcl_GetDateGroupName( sal_Int32 nDatePart, sal_Int32 nValue, SvNumberForm
     String aRet;
     switch ( nDatePart )
     {
-        case SC_DP_DATE_YEARS:
+        case com::sun::star::sheet::DataPilotFieldGroupBy::YEARS:
             aRet = String::CreateFromInt32( nValue );
             break;
-        case SC_DP_DATE_QUARTERS:
+        case com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS:
             aRet = ScGlobal::pLocaleData->getQuarterAbbreviation( (sal_Int16)(nValue - 1) );    // nValue is 1-based
             break;
-        case SC_DP_DATE_MONTHS:
+        case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
             //! cache getMonths() result?
             aRet = ScGlobal::pCalendar->getDisplayName(
                         ::com::sun::star::i18n::CalendarDisplayIndex::MONTH,
                         sal_Int16(nValue-1), 0 );    // 0-based, get short name
             break;
-        case SC_DP_DATE_DAYS:
+        case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:
             {
                 Date aDate( 1, 1, SC_DP_LEAPYEAR );
                 aDate += ( nValue - 1 );            // nValue is 1-based
@@ -146,12 +150,12 @@ String lcl_GetDateGroupName( sal_Int32 nDatePart, sal_Int32 nValue, SvNumberForm
                 pFormatter->GetOutputString( nDays, nFormat, aRet, &pColor );
             }
             break;
-        case SC_DP_DATE_HOURS:
+        case com::sun::star::sheet::DataPilotFieldGroupBy::HOURS:
             //! allow am/pm format?
             aRet = lcl_GetTwoDigitString( nValue );
             break;
-        case SC_DP_DATE_MINUTES:
-        case SC_DP_DATE_SECONDS:
+        case com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES:
+        case com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS:
             aRet = ScGlobal::pLocaleData->getTimeSep();
             aRet.Append( lcl_GetTwoDigitString( nValue ) );
             break;
@@ -177,7 +181,7 @@ sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberForm
 
     sal_Int32 nResult = 0;
 
-    if ( nDatePart == SC_DP_DATE_HOURS || nDatePart == SC_DP_DATE_MINUTES || nDatePart == SC_DP_DATE_SECONDS )
+    if ( nDatePart == com::sun::star::sheet::DataPilotFieldGroupBy::HOURS || nDatePart == com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES || nDatePart == com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS )
     {
         // handle time
         // (as in the cell functions, ScInterpreter::ScGetHour etc.: seconds are rounded)
@@ -187,13 +191,13 @@ sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberForm
 
         switch ( nDatePart )
         {
-            case SC_DP_DATE_HOURS:
+            case com::sun::star::sheet::DataPilotFieldGroupBy::HOURS:
                 nResult = nSeconds / 3600;
                 break;
-            case SC_DP_DATE_MINUTES:
+            case com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES:
                 nResult = ( nSeconds % 3600 ) / 60;
                 break;
-            case SC_DP_DATE_SECONDS:
+            case com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS:
                 nResult = nSeconds % 60;
                 break;
         }
@@ -205,16 +209,16 @@ sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberForm
 
         switch ( nDatePart )
         {
-            case SC_DP_DATE_YEARS:
+            case com::sun::star::sheet::DataPilotFieldGroupBy::YEARS:
                 nResult = aDate.GetYear();
                 break;
-            case SC_DP_DATE_QUARTERS:
+            case com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS:
                 nResult = 1 + ( aDate.GetMonth() - 1 ) / 3;     // 1..4
                 break;
-            case SC_DP_DATE_MONTHS:
+            case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
                 nResult = aDate.GetMonth();     // 1..12
                 break;
-            case SC_DP_DATE_DAYS:
+            case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:
                 {
                     Date aYearStart( 1, 1, aDate.GetYear() );
                     nResult = ( aDate - aYearStart ) + 1;       // Jan 01 has value 1
@@ -263,22 +267,22 @@ BOOL lcl_DateContained( sal_Int32 nGroupPart, const ScDPItemData& rGroupData,
     BOOL bContained = TRUE;
     switch ( nBasePart )        // inner part
     {
-        case SC_DP_DATE_MONTHS:
+        case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
             // a month is only contained in its quarter
-            if ( nGroupPart == SC_DP_DATE_QUARTERS )
+            if ( nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS )
             {
                 // months and quarters are both 1-based
                 bContained = ( nGroupValue - 1 == ( nBaseValue - 1 ) / 3 );
             }
             break;
-        case SC_DP_DATE_DAYS:
+        case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:
             // a day is only contained in its quarter or month
-            if ( nGroupPart == SC_DP_DATE_MONTHS || nGroupPart == SC_DP_DATE_QUARTERS )
+            if ( nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS || nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS )
             {
                 Date aDate( 1, 1, SC_DP_LEAPYEAR );
                 aDate += ( nBaseValue - 1 );            // days are 1-based
                 sal_Int32 nCompare = aDate.GetMonth();
-                if ( nGroupPart == SC_DP_DATE_QUARTERS )
+                if ( nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS )
                     nCompare = ( ( nCompare - 1 ) / 3 ) + 1;    // get quarter from date
 
                 bContained = ( nGroupValue == nCompare );
@@ -350,16 +354,16 @@ void ScDPDateGroupHelper::FillColumnEntries( TypedStrCollection& rEntries, const
 
     switch ( nDatePart )
     {
-        case SC_DP_DATE_YEARS:
-            nStart = lcl_GetDatePartValue( fSourceMin, SC_DP_DATE_YEARS, pFormatter, NULL );
-            nEnd = lcl_GetDatePartValue( fSourceMax, SC_DP_DATE_YEARS, pFormatter, NULL );
+        case com::sun::star::sheet::DataPilotFieldGroupBy::YEARS:
+            nStart = lcl_GetDatePartValue( fSourceMin, com::sun::star::sheet::DataPilotFieldGroupBy::YEARS, pFormatter, NULL );
+            nEnd = lcl_GetDatePartValue( fSourceMax, com::sun::star::sheet::DataPilotFieldGroupBy::YEARS, pFormatter, NULL );
             break;
-        case SC_DP_DATE_QUARTERS: nStart = 1; nEnd = 4;   break;
-        case SC_DP_DATE_MONTHS:   nStart = 1; nEnd = 12;  break;
-        case SC_DP_DATE_DAYS:     nStart = 1; nEnd = 366; break;
-        case SC_DP_DATE_HOURS:    nStart = 0; nEnd = 23;  break;
-        case SC_DP_DATE_MINUTES:  nStart = 0; nEnd = 59;  break;
-        case SC_DP_DATE_SECONDS:  nStart = 0; nEnd = 59;  break;
+        case com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS: nStart = 1; nEnd = 4;   break;
+        case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:   nStart = 1; nEnd = 12;  break;
+        case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:     nStart = 1; nEnd = 366; break;
+        case com::sun::star::sheet::DataPilotFieldGroupBy::HOURS:    nStart = 0; nEnd = 23;  break;
+        case com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES:  nStart = 0; nEnd = 59;  break;
+        case com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS:  nStart = 0; nEnd = 59;  break;
         default:
             DBG_ERROR("invalid date part");
     }
