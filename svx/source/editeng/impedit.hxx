@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:59:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,10 +744,11 @@ private:
 
     /** Decorate metafile output with verbose text comments
 
-        This method is used to call SvxFont::QuickDrawText
-        character-by-character wise, adding informational metafile
-        comments after logical text units like characters, words and
-        sentences. This is necessary for slideshow text effects.
+        This method is used to wrap SvxFont::QuickDrawText, to
+        determine character-by-character wise, which logical text
+        units like characters, words and sentences are contained in
+        the output string at hand. This is necessary for slideshow
+        text effects.
      */
     void                ImplDrawWithComments( SvxFont&                              rFont,
                                               const ::com::sun::star::lang::Locale& rLocale,
