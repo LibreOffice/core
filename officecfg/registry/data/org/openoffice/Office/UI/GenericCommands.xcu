@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-03 14:20:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5638,8 +5638,8 @@
             </node>
             <node oor:name=".uno:ExtrusionDepthDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Extrusion Depth</value>
-                    <value xml:lang="en-US">Extrusionstiefe</value>
+                    <value xml:lang="de">Extrusionstiefe</value>
+                    <value xml:lang="en-US">Extrusion Depth</value>
                 </prop>
             </node>
             <node oor:name=".uno:ExtrusionDepthFloater" oor:op="replace">
