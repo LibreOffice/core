@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-17 08:14:43 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 12:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3964,56 +3964,6 @@ DockingWindow RID_CMDBOXWINDOW
     };
 
 
-
-#define _ID_LIST \
-    IdList =\
-    {\
-        SID_NEXTERR ;\
-        SID_PREVERR ;\
-        SID_VIEW050 ;\
-        SID_VIEW100 ;\
-        SID_VIEW200 ;\
-        SID_ZOOMIN ;\
-        SID_ZOOMOUT ;\
-        SID_ADJUST ;\
-        SID_DRAW ;\
-        SID_TOOLBOX ;\
-        SID_FONT ;\
-        SID_FONTSIZE ;\
-        SID_DISTANCE ;\
-        SID_ALIGN ;\
-        SID_FORMULACURSOR ;\
-        SID_SYMBOLS_CATALOGUE ;\
-    };\
-    IdCount =    {        16;    };
-
-ImageList RID_DEFAULTIMAGELIST_LC
-{
-    Prefix = "lc";
-    MaskColor = IMAGE_STDBTN_COLOR ;
-    _ID_LIST
-};
-
-ImageList RID_DEFAULTIMAGELIST_SC
-{
-    Prefix = "sc";
-    MaskColor = IMAGE_STDBTN_COLOR ;
-    _ID_LIST
-};
-
-ImageList RID_DEFAULTIMAGELIST_LCH
-{
-    Prefix = "lch";
-    MaskColor = IMAGE_STDBTN_COLOR_HC ;
-    _ID_LIST
-};
-
-ImageList RID_DEFAULTIMAGELIST_SCH
-{
-    Prefix = "sch";
-    MaskColor = IMAGE_STDBTN_COLOR_HC ;
-    _ID_LIST
-};
 
 String STR_CMDBOXWINDOW
 {
