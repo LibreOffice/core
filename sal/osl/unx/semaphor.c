@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2001-03-01 13:26:57 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 13:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,33 +79,12 @@
 /* osl_createSemaphore  */
 /*****************************************************************************/
 
-#ifdef LINUX
-/* sem_t from glibc-2.1 (/usr/include/semaphore.h) */
-
-typedef struct {
-    struct { long status; int spinlock; } sem_lock;
-    int sem_value;
-    _pthread_descr sem_waiting;
-} glibc_21_sem_t;
-#endif
-
 oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount)
 {
     int ret = 0;
     oslSemaphore Semaphore;
 
-    /*
-     *  XXX this a hack of course. since sizeof(sem_t) changed
-     * from glibc-2.0.7 to glibc-2.1.x, we have to allocate the
-     * larger of both
-     * XXX
-     */
-#ifdef LINUX
-    if ( sizeof(glibc_21_sem_t) > sizeof(sem_t) )
-        Semaphore= malloc(sizeof(glibc_21_sem_t));
-    else
-#endif
-        Semaphore= malloc(sizeof(sem_t));
+    Semaphore= malloc(sizeof(sem_t));
 
     OSL_ASSERT(Semaphore);      /* ptr valid? */
 
