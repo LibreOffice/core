@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-11 15:52:05 $
+ *  last change: $Author: sab $ $Date: 2002-06-12 10:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,6 +689,8 @@ __EXPORT ScTextWnd::~ScTextWnd()
 {
     delete pEditView;
     delete pEditEngine;
+    if (pAccTextData)
+        pAccTextData->Dispose();
 }
 
 void __EXPORT ScTextWnd::Paint( const Rectangle& rRec )
@@ -846,10 +848,14 @@ void __EXPORT ScTextWnd::KeyInput(const KeyEvent& rKEvt)
 
 void __EXPORT ScTextWnd::GetFocus()
 {
+    if (pAccTextData)
+        pAccTextData->StartEdit();
 }
 
 void __EXPORT ScTextWnd::LoseFocus()
 {
+    if (pAccTextData)
+        pAccTextData->EndEdit();
 }
 
 String __EXPORT ScTextWnd::GetText() const
