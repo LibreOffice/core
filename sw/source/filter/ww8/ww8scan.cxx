@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:12:57 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,11 @@ template<class C> bool wwString<C>::TestBeltAndBraces(const SvStream& rStrm)
     return bRet;
 }
 
+bool operator==(const SprmInfo &rFirst, const SprmInfo &rSecond)
+{
+    return (rFirst.nId == rSecond.nId);
+}
+
 template<class C> class wwSortedArray
 {
 private:
@@ -219,11 +224,6 @@ template<class C> const C *wwSortedArray<C>::search(C aSrch) const
         return aPair.first;
     else
         return 0;
-}
-
-bool operator==(const SprmInfo &rFirst, const SprmInfo &rSecond)
-{
-    return (rFirst.nId == rSecond.nId);
 }
 
 bool operator<(const SprmInfo &rFirst, const SprmInfo &rSecond)
