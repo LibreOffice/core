@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:41 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 14:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,10 +133,11 @@ namespace connectivity
                                         public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
 
         {
+        protected:
             ::com::sun::star::sdbc::SQLWarning                                           m_aLastWarning;
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
                                                                         //  for this Statement
-        protected:
+
 
             connectivity::OSQLParser                    m_aParser;
             connectivity::OSQLParseTreeIterator         m_aSQLIterator;
