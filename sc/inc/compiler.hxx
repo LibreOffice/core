@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:32:54 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,9 @@
 #ifndef SC_COMPILER_HXX
 #define SC_COMPILER_HXX
 
-#include <string.h>     // wg. memcpy() und bitte nicht memory.h (WKC)
+#include <string.h>     // memcpy(), please don't use memory.h (WKC, was it some MAC weirdness?)
 
-#ifndef _SVMEMPOOL_HXX //autogen
+#ifndef _SVMEMPOOL_HXX
 #include <tools/mempool.hxx>
 #endif
 
@@ -72,8 +72,14 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_TOKENARRAY_HXX
+#include "tokenarray.hxx"
+#endif
 #ifndef SC_TOKEN_HXX
 #include "token.hxx"
+#endif
+#ifndef SC_INTRUREF_HXX
+#include "intruref.hxx"
 #endif
 
 #ifndef _UNOTOOLS_CHARCLASS_HXX
@@ -87,55 +93,11 @@
 
 //-----------------------------------------------
 
-// Konstanten und Datentypen auch fuer externe Module (Interpreter etc.):
+// constants and data types also for external modules (ScInterpreter et al)
 
-#define MAXCODE                 512         // Maximale Anzahl Tokens
-#define MAXSTRLEN               256         // Maximale Laenge fuer Eingabestring
-                                            // (auch Formeln), "Verlaengerung" durch
-                                            // Namensvergabe moeglich
-#define MAXJUMPCOUNT            32
-#define MAXMATSIZE              100
-#define SC_DOUBLE_MAXVALUE  1.7e307
-
-#define errIllegalChar          501
-#define errIllegalArgument      502
-#define errIllegalFPOperation   503
-#define errIllegalParameter     504
-#define errIllegalJump          505
-#define errSeparator            506
-#define errPair                 507
-#define errPairExpected         508
-#define errOperatorExpected     509
-#define errVariableExpected     510
-#define errParameterExpected    511
-#define errCodeOverflow         512
-#define errStringOverflow       513
-#define errStackOverflow        514
-#define errUnknownState         515
-#define errUnknownVariable      516
-#define errUnknownOpCode        517
-#define errUnknownStackVariable 518
-#define errNoValue              519
-#define errUnknownToken         520
-#define errNoCode               521
-#define errCircularReference    522
-#define errNoConvergence        523
-#define errNoRef                524
-#define errNoName               525
-#define errDoubleRef            526
-#define errInterpOverflow       527
-// wird nicht angezeigt, temporaer fuer TrackFormulas
-// Zelle haengt von einer ab, die errCircularReference ist
-#define errTrackFromCircRef     528
-// Interpreter internal: existing cell has no value but value queried
-#define errCellNoValue          529
-// Interpreter: needed AddIn not found
-#define errNoAddin              530
-// Interpreter: needed Macro not found
-#define errNoMacro              531
-
-#define NOVALUE                 0x7fff
-
+#define MAXCODE      512    /* maximum number of tokens in formula */
+#define MAXSTRLEN    256    /* maximum length of input string of one symbol */
+#define MAXJUMPCOUNT 32     /* maximum number of jumps (ocChose) */
 
 // flag values of CharTable
 #define SC_COMPILER_C_ILLEGAL       0x00000000
@@ -146,34 +108,33 @@
 #define SC_COMPILER_C_CHAR_STRING   0x00000010
 #define SC_COMPILER_C_CHAR_DONTCARE 0x00000020
 #define SC_COMPILER_C_BOOL          0x00000040
-#define SC_COMPILER_C_WORD          0x00000080  // auch in spstring.cxx dekl.
-#define SC_COMPILER_C_WORD_SEP      0x00000100  // und rangenam.cxx (WORD und CHAR_WORD)
+#define SC_COMPILER_C_WORD          0x00000080
+#define SC_COMPILER_C_WORD_SEP      0x00000100
 #define SC_COMPILER_C_VALUE         0x00000200
 #define SC_COMPILER_C_VALUE_SEP     0x00000400
 #define SC_COMPILER_C_VALUE_EXP     0x00000800
 #define SC_COMPILER_C_VALUE_SIGN    0x00001000
 #define SC_COMPILER_C_VALUE_VALUE   0x00002000
 #define SC_COMPILER_C_STRING_SEP    0x00004000
-#define SC_COMPILER_C_NAME_SEP      0x00008000  // es kann nur einen geben! '\''
+#define SC_COMPILER_C_NAME_SEP      0x00008000  // there can be only one! '\''
 #define SC_COMPILER_C_CHAR_IDENT    0x00010000  // identifier (built-in function) start
 #define SC_COMPILER_C_IDENT         0x00020000  // identifier continuation
 
-#define SC_COMPILER_FILE_TAB_SEP    '#'         // 'Doc'#Tab  auch in global2.cxx
+#define SC_COMPILER_FILE_TAB_SEP    '#'         // 'Doc'#Tab
 
 
 class ScDocument;
 class ScMatrix;
 class ScRangeData;
 
-// Konstanten und Datentypen compilerintern:
-
+// constants and data types internal to compiler
 
 #if 0
 /*
     OpCode   eOp;           // OpCode
     StackVar eType;         // type of data
     USHORT   nRefCnt;       // reference count
-    BOOL     bRaw;          // nicht per Clone auf passende Groesse getrimmt
+    BOOL     bRaw;          // not cloned yet and trimmed to real size
  */
 #endif
 
@@ -189,9 +150,12 @@ private:
     SC_TOKEN_FIX_MEMBERS
 public:
     union
-    {   // union nur um gleiches Alignment wie ScRawToken sicherzustellen
+    {   // union only to assure alignment identical to ScRawToken
         double      nValue;
-        BYTE        cByte;
+        struct {
+            BYTE        cByte;
+            bool        bHasForceArray;
+        } sbyte;
     };
                 DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleRawToken );
 };
@@ -199,26 +163,29 @@ public:
 struct ScRawToken
 {
     friend class ScCompiler;
-    // Friends, die temporaere Raw-Tokens auf dem Stack benutzen (und deswegen
-    // den private dtor brauchen) und wissen, was sie tun..
+    // Friends that use a temporary ScRawToken on the stack (and therefor need
+    // the private dtor) and know what they're doing..
     friend class ScTokenArray;
-    friend class ScInterpreter;
 private:
     SC_TOKEN_FIX_MEMBERS
 public:
     union {
         double       nValue;
+        struct {
+            BYTE        cByte;
+            bool        bHasForceArray;
+        } sbyte;
         ComplRefData aRef;
-        BYTE         cByte;
         ScMatrix*    pMat;
-        USHORT       nIndex;                // Index fuer Name-Tabelle
-        sal_Unicode  cStr[ MAXSTRLEN+1 ];   // String (bis 255 Zeichen + 0)
-        short        nJump[MAXJUMPCOUNT+1]; // If/Chose-Token
+        USHORT       nIndex;                // index into name collection
+        sal_Unicode  cStr[ MAXSTRLEN+1 ];   // string (up to 255 characters + 0)
+        short        nJump[MAXJUMPCOUNT+1]; // If/Chose token
     };
 
+                //! other members not initialized
                 ScRawToken() : bRaw( TRUE ) {}
 private:
-                ~ScRawToken() {}                //! nur via Delete() loeschen
+                ~ScRawToken() {}                //! only delete via Delete()
 public:
                 DECL_FIXEDMEMPOOL_NEWDEL( ScRawToken );
     StackVar    GetType()   const       { return (StackVar) eType; }
@@ -229,19 +196,18 @@ public:
     USHORT      GetRef() const          { return nRefCnt; }
     void        Delete();
 
-    // Diese Methoden nur auf Tokens, die nicht im TokenArray stehen,
-    // anwenden, da der RefCount auf 0 gesetzt wird!
+    // Use these methods only on tokens that are not part of a token array,
+    // since the reference count is cleared!
     void SetOpCode( OpCode eCode );
     void SetString( const sal_Unicode* pStr );
     void SetSingleReference( const SingleRefData& rRef );
     void SetDoubleReference( const ComplRefData& rRef );
-    void SetByte( BYTE c );
     void SetDouble( double fVal );
     void SetInt( int nVal );
     void SetName( USHORT n );
     void SetMatrix( ScMatrix* p );
     void SetExternal(const sal_Unicode* pStr);
-    // Diese Methoden sind hingegen OK.
+    // These methods are ok to use, reference count not cleared.
     ComplRefData& GetReference();
     void SetReference( ComplRefData& rRef );
 
@@ -258,228 +224,8 @@ public:
 };
 
 
-class ScRawTokenRef
-{
-    ScRawToken* p;
-public:
-    inline ScRawTokenRef() { p = NULL; }
-    inline ScRawTokenRef( const ScRawTokenRef& r )  { if( ( p = r.p ) != NULL ) p->IncRef(); }
-    inline ScRawTokenRef( ScRawToken *t )       { if( ( p = t ) != NULL ) t->IncRef(); }
-    inline void Clear()                         { if( p ) p->DecRef(); }
-    inline ~ScRawTokenRef()                     { if( p ) p->DecRef(); }
-    inline ScRawTokenRef& operator=( const ScRawTokenRef& r ) { return *this = r.p; }
-    inline ScRawTokenRef& operator=( ScRawToken* t )
-        { if( t ) t->IncRef(); if( p ) p->DecRef(); p = t; return *this; }
-    inline BOOL Is() const                      { return p != NULL; }
-    inline BOOL operator ! () const             { return p == NULL; }
-    inline ScRawToken* operator&() const        { return p; }
-    inline ScRawToken* operator->() const       { return p; }
-    inline ScRawToken& operator*() const        { return *p; }
-    inline operator ScRawToken*() const         { return p; }
-};
+typedef ScSimpleIntrusiveReference< struct ScRawToken > ScRawTokenRef;
 
-
-enum ScRecalcMode40
-{                           // alter RecalcMode bis einschliesslich 4.0
-    RC_NORMAL,
-    RC_ALWAYS,
-    RC_ONLOAD,              // immer nach dem Laden
-    RC_ONLOAD_ONCE,         // einmal nach dem Laden
-    RC_FORCED,              // auch wenn Zelle nicht sichtbar
-    RC_ONREFMOVE            // wenn Referenz bewegt wurde (ab SP3, 05.11.97)
-};
-
-// neuer (ab 5.0, 14.01.98) RecalcMode Zugriff nur noch noch via TokenArray
-// SetRecalcMode / IsRecalcMode...
-
-typedef BYTE ScRecalcMode;
-// von den exklusiven Bits kann nur eins gesetzt sein
-// wird von TokenArray SetRecalcMode... Methoden gehandelt
-#define RECALCMODE_NORMAL       0x01    // exklusiv
-#define RECALCMODE_ALWAYS       0x02    // exklusiv, immer
-#define RECALCMODE_ONLOAD       0x04    // exklusiv, immer nach dem Laden
-#define RECALCMODE_ONLOAD_ONCE  0x08    // exklusiv, einmal nach dem Laden
-#define RECALCMODE_FORCED       0x10    // kombiniert, auch wenn Zelle nicht sichtbar
-#define RECALCMODE_ONREFMOVE    0x20    // kombiniert, wenn Referenz bewegt wurde
-#define RECALCMODE_EMASK        0x0F    // Maske der exklusiven Bits
-// werden neue Bits definiert, muessen ExportRecalcMode40 und AddRecalcMode
-// angepasst werden!
-
-class ScTokenArray
-{
-    friend class ScCompiler;
-    friend class ScTokenIterator;
-
-    ScToken**       pCode;                  // Token code array
-    ScToken**       pRPN;                   // RPN array
-    USHORT          nLen;                   // Length of token array
-    USHORT          nRPN;                   // Length of RPN array
-    USHORT          nIndex;                 // Current step index
-    USHORT          nError;                 // Error code
-    short           nRefs;                  // Count of cell references
-    ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
-    BOOL            bReplacedSharedFormula; // If code was created by replacing
-                            // a shared formula, a temporary flag during
-                            // UpdateReference() until StartListeningTo()
-
-    void                    Assign( const ScTokenArray& );
-
-    ScToken*                Add( ScToken* );
-    void                    ImportRecalcMode40( ScRecalcMode40 );
-    ScRecalcMode40          ExportRecalcMode40() const;
-    inline  void            SetCombinedBitsRecalcMode( ScRecalcMode nBits )
-                            { nMode |= (nBits & ~RECALCMODE_EMASK); }
-    inline  ScRecalcMode    GetCombinedBitsRecalcMode() const
-                            { return nMode & ~RECALCMODE_EMASK; }
-    inline  void            SetMaskedRecalcMode( ScRecalcMode nBits )
-                            { nMode = GetCombinedBitsRecalcMode() | nBits; }
-                            // in nMode gesetzte exklusive Bits werden genullt,
-                            // nVal kann auch kombinierte Bits enthalten,
-                            // aber nur ein exklusives Bit darf gesetzt sein!
-
-    BOOL                    ImplGetReference( ScRange& rRange, BOOL bValidOnly ) const;
-
-public:
-    ScTokenArray();
-    ScTokenArray( const ScTokenArray& );    // Zuweisung mit Referenzen auf Tokens
-   ~ScTokenArray();
-    ScTokenArray* Clone() const;    // echte Kopie!
-    void Clear();
-    void DelRPN();
-    ScToken* First() { nIndex = 0; return Next(); }
-    ScToken* Next();
-    ScToken* FirstNoSpaces() { nIndex = 0; return NextNoSpaces(); }
-    ScToken* NextNoSpaces();
-    ScToken* GetNextName();
-    ScToken* GetNextDBArea();
-    ScToken* GetNextReference();
-    ScToken* GetNextReferenceRPN();
-    ScToken* GetNextReferenceOrName();
-    ScToken* GetNextColRowName();
-    ScToken* GetNextOpCodeRPN( OpCode );
-    ScToken* PeekNext();
-    ScToken* PeekPrevNoSpaces();    // nur nach First/Next/Last/Prev !
-    ScToken* PeekNextNoSpaces();    // nur nach First/Next/Last/Prev !
-    ScToken* FirstRPN() { nIndex = 0; return NextRPN(); }
-    ScToken* NextRPN();
-    ScToken* LastRPN() { nIndex = nRPN; return PrevRPN(); }
-    ScToken* PrevRPN();
-
-    BOOL    HasOpCodeRPN( OpCode ) const;
-    BOOL    HasName() const;        // token of type svIndex
-    BOOL    HasNameOrColRowName() const;    // token of type svIndex or opcode ocColRowName
-    BOOL    IsReference( ScRange& rRange ) const;       // exactly and only one range (valid or deleted)
-    BOOL    IsValidReference( ScRange& rRange ) const;  // exactly and only one valid range (no #REF!s)
-
-    ScToken** GetArray() const  { return pCode; }
-    ScToken** GetCode()  const  { return pRPN; }
-    USHORT    GetLen() const     { return nLen; }
-    USHORT    GetCodeLen() const { return nRPN; }
-    void      Reset()            { nIndex = 0; }
-    USHORT    GetError() const { return nError; }
-    void      SetError( USHORT n ) { nError = n; }
-    short     GetRefs()  const { return nRefs;  }
-    void      SetReplacedSharedFormula( BOOL bVal ) { bReplacedSharedFormula = bVal; }
-    BOOL      IsReplacedSharedFormula() const       { return bReplacedSharedFormula; }
-
-    inline  ScRecalcMode    GetRecalcMode() const { return nMode; }
-            void            AddRecalcMode( ScRecalcMode nBits );
-                                // Bits werden nicht direkt gesetzt sondern
-                                // geprueft und evtl. nach Prio behandelt,
-                                // wenn mehrere exklusive gesetzt sind!
-
-    inline  void            ClearRecalcMode() { nMode = RECALCMODE_NORMAL; }
-    inline  void            SetRecalcModeNormal()
-                                { SetMaskedRecalcMode( RECALCMODE_NORMAL ); }
-    inline  void            SetRecalcModeAlways()
-                                { SetMaskedRecalcMode( RECALCMODE_ALWAYS ); }
-    inline  void            SetRecalcModeOnLoad()
-                                { SetMaskedRecalcMode( RECALCMODE_ONLOAD ); }
-    inline  void            SetRecalcModeOnLoadOnce()
-                                { SetMaskedRecalcMode( RECALCMODE_ONLOAD_ONCE ); }
-    inline  void            SetRecalcModeForced()
-                                { nMode |= RECALCMODE_FORCED; }
-    inline  void            ClearRecalcModeForced()
-                                { nMode &= ~RECALCMODE_FORCED; }
-    inline  void            SetRecalcModeOnRefMove()
-                                { nMode |= RECALCMODE_ONREFMOVE; }
-    inline  void            ClearRecalcModeOnRefMove()
-                                { nMode &= ~RECALCMODE_ONREFMOVE; }
-    inline  BOOL            IsRecalcModeNormal() const
-                                { return (nMode & RECALCMODE_NORMAL) != 0; }
-    inline  BOOL            IsRecalcModeAlways() const
-                                { return (nMode & RECALCMODE_ALWAYS) != 0; }
-    inline  BOOL            IsRecalcModeOnLoad() const
-                                { return (nMode & RECALCMODE_ONLOAD) != 0; }
-    inline  BOOL            IsRecalcModeOnLoadOnce() const
-                                { return (nMode & RECALCMODE_ONLOAD_ONCE) != 0; }
-    inline  BOOL            IsRecalcModeForced() const
-                                { return (nMode & RECALCMODE_FORCED) != 0; }
-    inline  BOOL            IsRecalcModeOnRefMove() const
-                                { return (nMode & RECALCMODE_ONREFMOVE) != 0; }
-
-    inline OpCode   GetOuterFuncOpCode();       // OpCode der aeusseren Funktion
-                // ermittelt Ausdehnung direkt angrenzender Refs
-                // nur auf echte Funcs wie z.B. GetOuterFuncOpCode() == ocSum anwenden!
-    BOOL        GetAdjacentExtendOfOuterFuncRefs( USHORT& nExtend,
-                    const ScAddress& rPos, ScDirection );
-
-                            // Operatoren +,-,*,/,^,&,=,<>,<,>,<=,>=
-                            // mit DoubleRef in Formel?
-    BOOL                    HasMatrixDoubleRefOps();
-
-    void Load30( SvStream&, const ScAddress& );
-    void Load( SvStream&, USHORT, const ScAddress& );
-    void Store( SvStream&, const ScAddress& ) const;
-
-    ScToken* AddToken( const ScRawToken& );
-    ScToken* AddToken( const ScToken& );
-    ScToken* AddOpCode( OpCode eCode );
-    ScToken* AddString( const sal_Unicode* pStr );
-    ScToken* AddString( const String& rStr );
-    ScToken* AddDouble( double fVal );
-    ScToken* AddSingleReference( const SingleRefData& rRef );
-    ScToken* AddDoubleReference( const ComplRefData& rRef );
-    ScToken* AddName( USHORT n );
-    ScToken* AddMatrix( ScMatrix* p );
-    ScToken* AddExternal( const sal_Unicode* pStr );
-    ScToken* AddExternal( const String& rStr );
-    ScToken* AddColRowName( const SingleRefData& rRef );
-    ScToken* AddBad( const sal_Unicode* pStr );     // ocBad with String
-    ScToken* AddBad( const String& rStr );          // ocBad with String
-
-    // Zuweisung mit Referenzen auf Tokens
-    ScTokenArray& operator=( const ScTokenArray& );
-
-    // make 3D references point to old referenced position even if relative
-            void            ReadjustRelative3DReferences(
-                                const ScAddress& rOldPos,
-                                const ScAddress& rNewPos );
-};
-
-inline OpCode ScTokenArray::GetOuterFuncOpCode()
-{
-    if ( pRPN && nRPN )
-        return pRPN[nRPN-1]->GetOpCode();
-    return ocNone;
-}
-
-struct ImpTokenIterator;
-
-class ScTokenIterator
-{
-    friend class ScInterpreter;     // fuer Jump()
-    ImpTokenIterator* pCur;
-    void Jump( short nStart, short nNext );
-    void Push( ScTokenArray* );
-    void Pop();
-public:
-    ScTokenIterator( const ScTokenArray& );
-   ~ScTokenIterator();
-    void  Reset();
-    const ScToken* First();
-    const ScToken* Next();
-};
 
 struct ScArrayStack;
 
@@ -512,31 +258,31 @@ private:
     xub_StrLen  nSrcPos;                            // tokenizer position (source code)
     ScTokenArray* pArr;
     ScRawTokenRef   pRawToken;
-    ScTokenRef  pToken;
+    ScTokenRef  pToken;                     // current token
+    ScTokenRef  pCurrentFactorToken;        // current factor token (of Factor() method)
     OpCode      eLastOp;
     ScToken**   pCode;
     ScArrayStack* pStack;
     String*     pSymbolTable;               // which symbol table is used
     ScOpCodeHashMap*    pSymbolHashMap;     // which symbol hash map is used
     USHORT      pc;
-    short       nNumFmt;                    // bei CompileTokenArray() gesetzt
-    short       nMaxTab;                    // letzte Tabelle im Doc
-    short       nRecursion;                 // GetToken Rekursionen
-    BOOL        glSubTotal;                 // Merkvariablen fuer Zelle
-    BOOL        bAutoCorrect;               // AutoCorrection ausfuehren
-    BOOL        bCorrected;                 // AutoCorrection ausgefuehrt
-    BOOL        bCompileForFAP;             //! kein echtes RPN sondern Namen
-                                            // werden nicht aufgeloest
-    BOOL        bIgnoreErrors;              // bei AutoCorrect und CompileForFAP
-                                            // trotz Fehler RPN erzeugen
+    short       nNumFmt;                    // set during CompileTokenArray()
+    short       nMaxTab;                    // last sheet in document
+    short       nRecursion;                 // GetToken() recursions
+    BOOL        glSubTotal;                 // if code contains one or more subtotal functions
+    BOOL        bAutoCorrect;               // whether to apply AutoCorrection
+    BOOL        bCorrected;                 // AutoCorrection was applied
+    BOOL        bCompileForFAP;             //! not real RPN but names, for FunctionAutoPilot,
+                                            // will not be resolved
+    BOOL        bIgnoreErrors;              // on AutoCorrect and CompileForFAP
+                                            // ignore errors and create RPN nevertheless
     BOOL        bCompileXML;
     BOOL        bImportXML;
 
     BOOL   GetToken();
     BOOL   NextNewToken();
     OpCode NextToken();
-    void PutCode( ScRawToken* );
-    void PutCode( ScToken* );
+    void PutCode( ScTokenRef& );
     void Factor();
     void UnionCutLine();
     void Unary();
@@ -572,6 +318,7 @@ private:
     void PushTokenArray( ScTokenArray*, BOOL = FALSE );
     void PopTokenArray();
     void SetRelNameReference();
+
 public:
     ScCompiler(ScDocument* pDocument, const ScAddress& );
 
@@ -580,15 +327,15 @@ public:
 
     static void Init();
     static void DeInit();
-    static void CheckTabQuotes( String& );  // fuer ScAddress::Format()
+    static void CheckTabQuotes( String& );  // for ScAddress::Format()
 
-    // schliesst String in Quotes ein, wenn nicht-alphanumerische Zeichen
-    // enthalten sind, bestehende Quotes werden escaped
+    // Put quotes around string if non-alphanumeric characters are contained,
+    // quote characters contained within are escaped by '\\'.
     static BOOL EnQuote( String& );
-    // entfernt Quotes, escaped Quotes werden unescaped
+    // Remove quotes, escaped quotes are unescaped.
     static BOOL DeQuote( String& );
 
-    //! _entweder_ CompileForFAP _oder_ AutoCorrection, _nicht_ beides
+    //! _either_ CompileForFAP _or_ AutoCorrection, _not_ both
     void            SetCompileForFAP( BOOL bVal )
                         { bCompileForFAP = bVal; bIgnoreErrors = bVal; }
     void            SetAutoCorrection( BOOL bVal )
@@ -659,6 +406,52 @@ public:
                 ((pCharTable[ UINT8(c) ] & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD) :
                 ScGlobal::pCharClass->isLetterNumeric( c );
         }
+
+private:
+    static inline void ForceArrayOperator( ScTokenRef& rCurr, const ScTokenRef& rPrev )
+        {
+            if ( rPrev.Is() && rPrev->HasForceArray() &&
+                    rCurr->GetType() == svByte && rCurr->GetOpCode() != ocPush
+                    && !rCurr->HasForceArray() )
+                rCurr->SetForceArray( true);
+        }
+    // SUNWS7 needs a forward declared friend, otherwise members of the outer
+    // class are not accessible.
+    class CurrentFactor;
+    friend class ScCompiler::CurrentFactor;
+    class CurrentFactor
+    {
+        ScTokenRef  pPrevFac;
+        ScCompiler* pCompiler;
+        // not implemented
+        CurrentFactor( const CurrentFactor& );
+        CurrentFactor& operator=( const CurrentFactor& );
+    public:
+        explicit CurrentFactor( ScCompiler* pComp )
+            : pPrevFac( pComp->pCurrentFactorToken )
+            , pCompiler( pComp )
+            {}
+        ~CurrentFactor()
+            { pCompiler->pCurrentFactorToken = pPrevFac; }
+        // yes, this operator= may modify the RValue
+        void operator=( ScTokenRef& r )
+            {
+                ForceArrayOperator( r, pPrevFac);
+                pCompiler->pCurrentFactorToken = r;
+            }
+        void operator=( ScToken* p )
+            {
+                ScTokenRef xTemp( p );
+                *this = xTemp;
+            }
+        operator ScTokenRef&()
+            { return pCompiler->pCurrentFactorToken; }
+        ScToken* operator->()
+            { return pCompiler->pCurrentFactorToken.operator->(); }
+        operator ScToken*()
+            { return operator->(); }
+    };
 };
+
 
 #endif
