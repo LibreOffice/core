@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxecode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:24:32 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@
 #define ERRCODE_SFX_CONSULTUSER             (ERRCODE_WARNING_MASK|ERRCODE_AREA_SFX|ERRCODE_CLASS_NONE|48)
 #define ERRCODE_SFX_NEVERCHECKCONTENT       (ERRCODE_AREA_SFX|ERRCODE_CLASS_NONE|49)
 
-#define ERRCODE_SFX_NODOCRELOAD             (ERRCODE_AREA_SFX|ERRCODE_CLASS_ACCESS|18)
 #define ERRCODE_SFX_CANTFINDORIGINAL        (ERRCODE_AREA_SFX|ERRCODE_CLASS_GENERAL|19)
 #define ERRCODE_SFX_RESTART                 (ERRCODE_AREA_SFX|ERRCODE_CLASS_GENERAL|20)
 #define ERRCODE_SFX_CANTCREATECONTENT       (ERRCODE_AREA_SFX|ERRCODE_CLASS_CREATE|21)
