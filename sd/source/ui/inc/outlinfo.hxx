@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlinfo.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:40 $
+ *  last change: $Author: aw $ $Date: 2001-03-20 16:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ private:
     ULONG               nCurPara;
     long                nExtraData;
     BOOL                bInit;
+    BOOL                mbVertical;
 
                         OutlinerInfo( const OutlinerInfo& rInfo ) {}
     OutlinerInfo&       operator=( const OutlinerInfo& rInfo ) { return *this; }
@@ -148,6 +149,8 @@ public:
 
     void                SetExtraData( const long _nExtraData = 0L ) { nExtraData = _nExtraData; }
     const long          GetExtraData() const { return nExtraData; }
+
+    BOOL IsVertical() const { return mbVertical; }
 };
 
 #endif

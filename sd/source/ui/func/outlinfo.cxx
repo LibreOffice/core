@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlinfo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: aw $ $Date: 2001-03-20 16:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,14 @@ void OutlinerInfo::SetTextObj( SdDrawDocument* pDoc, SdrRectObj* pObj, OutputDev
 
     if( nParaCount )
     {
+        mbVertical = rOutliner.IsVertical();
         pObj->TakeTextRect( rOutliner, aParaBound, TRUE );
-        aTextOffset = aParaBound.TopLeft();
+
+        if(IsVertical())
+            aTextOffset = aParaBound.TopRight();
+        else
+            aTextOffset = aParaBound.TopLeft();
+
         nCurPara = 0;
         bInit = TRUE;
 
@@ -166,50 +172,103 @@ IMPL_LINK( OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pDInfo )
     Point           aStart;
 
     pOut->SetFont( (const Font&) pDInfo->rFont );
-    aStart.X() = pDInfo->rStartPos.X() + aTextOffset.X();
-    aStart.Y() = pDInfo->rStartPos.Y() + aTextOffset.Y() - pOut->GetFontMetric().GetAscent() ;
 
-    if( bInit )
+    if(IsVertical())
     {
-        pParagraphs[ 0 ].aRect = aParaBound;
-        bInit = FALSE;
-    }
-    else if( pDInfo->nPara != nCurPara )
-    {
-        pParagraphs[ nCurPara = pDInfo->nPara ].aRect = Rectangle( aStart.X(), aStart.Y(), aParaBound.Right(), aParaBound.Bottom() );
+        aStart.X() = pDInfo->rStartPos.X() + aTextOffset.X();
+        aStart.Y() = pDInfo->rStartPos.Y() + aTextOffset.Y();
 
-        Point aPt1Pix( pOut->LogicToPixel( pParagraphs[ nCurPara - 1 ].aRect.TopLeft() ) );
-        Point aPt2Pix( pOut->LogicToPixel( pParagraphs[ nCurPara ].aRect.TopLeft() ) );
-        Size aSizePix( pOut->PixelToLogic( Size( 0, aPt2Pix.Y() - aPt1Pix.Y() + 1 ) ) );
-        pParagraphs[ nCurPara - 1 ].aRect.SetSize( Size( pParagraphs[ nCurPara - 1 ].aRect.GetWidth(), aSizePix.Height() ) );
-    }
-    else if( aStart.Y() < pParagraphs[ nCurPara ].aRect.Top() )
-    {
-        pParagraphs[ nCurPara ].aRect.Top() = aStart.Y();
-
-        if( nCurPara )
+        if( bInit )
         {
+            pParagraphs[ 0 ].aRect = aParaBound;
+            bInit = FALSE;
+        }
+        else if( pDInfo->nPara != nCurPara )
+        {
+            pParagraphs[ nCurPara = pDInfo->nPara ].aRect = Rectangle( aStart.X(), aStart.Y(), aParaBound.Right(), aParaBound.Bottom() );
+
+            Point aPt1Pix( pOut->LogicToPixel( pParagraphs[ nCurPara - 1 ].aRect.TopRight() ) );
+            Point aPt2Pix( pOut->LogicToPixel( pParagraphs[ nCurPara ].aRect.TopRight() ) );
+            Size aSizePix( pOut->PixelToLogic( Size( aPt2Pix.X() - aPt1Pix.X() + 1 , 0 ) ) );
+            pParagraphs[ nCurPara - 1 ].aRect.SetSize( Size( aSizePix.Width() , pParagraphs[ nCurPara - 1 ].aRect.GetWidth() ) );
+        }
+        else if( pDInfo->nPara != nCurPara )
+        {
+            pParagraphs[ nCurPara ].aRect.Top() = aStart.Y();
+
+            if( nCurPara )
+            {
+                Point aPt1Pix( pOut->LogicToPixel( pParagraphs[ nCurPara - 1 ].aRect.TopRight() ) );
+                Point aPt2Pix( pOut->LogicToPixel( pParagraphs[ nCurPara ].aRect.TopRight() ) );
+                Size aSizePix( pOut->PixelToLogic( Size( 0, aPt2Pix.Y() - aPt1Pix.Y() + 1 ) ) );
+                pParagraphs[ nCurPara - 1 ].aRect.SetSize( Size( pParagraphs[ nCurPara - 1 ].aRect.GetWidth(), aSizePix.Height() ) );
+            }
+        }
+
+        if( nCharCount && ( pDInfo->nIndex != 0xFFFF ) )
+        {
+            pParagraphs[ nCurPara ].nCharCount += nCharCount;
+
+            for( USHORT nCharIndex = 0; nCharIndex < nCharCount; nCharIndex++ )
+            {
+                const Rectangle aRect( aStart, pDInfo->rFont.GetPhysTxtSize( pOut, pDInfo->rText, nCharIndex, 1 ) );
+
+                aCharacterList.Insert( new OutlinerCharacter( aRect, pDInfo->nPara,
+                                                              pDInfo->rFont.GetColor(),
+                                                              pDInfo->rText.GetChar( nCharIndex ) ), LIST_APPEND );
+
+                if( nCharIndex < nCharCount - 1 )
+                    aStart.Y() = pDInfo->rStartPos.Y() + aTextOffset.Y() + ( pDInfo->pDXArray )[ nCharIndex ];
+            }
+        }
+    }
+    else
+    {
+        aStart.X() = pDInfo->rStartPos.X() + aTextOffset.X();
+        aStart.Y() = pDInfo->rStartPos.Y() + aTextOffset.Y() - pOut->GetFontMetric().GetAscent() ;
+
+        if( bInit )
+        {
+            pParagraphs[ 0 ].aRect = aParaBound;
+            bInit = FALSE;
+        }
+        else if( pDInfo->nPara != nCurPara )
+        {
+            pParagraphs[ nCurPara = pDInfo->nPara ].aRect = Rectangle( aStart.X(), aStart.Y(), aParaBound.Right(), aParaBound.Bottom() );
+
             Point aPt1Pix( pOut->LogicToPixel( pParagraphs[ nCurPara - 1 ].aRect.TopLeft() ) );
             Point aPt2Pix( pOut->LogicToPixel( pParagraphs[ nCurPara ].aRect.TopLeft() ) );
             Size aSizePix( pOut->PixelToLogic( Size( 0, aPt2Pix.Y() - aPt1Pix.Y() + 1 ) ) );
             pParagraphs[ nCurPara - 1 ].aRect.SetSize( Size( pParagraphs[ nCurPara - 1 ].aRect.GetWidth(), aSizePix.Height() ) );
         }
-    }
-
-    if( nCharCount && ( pDInfo->nIndex != 0xFFFF ) )
-    {
-        pParagraphs[ nCurPara ].nCharCount += nCharCount;
-
-        for( USHORT nCharIndex = 0; nCharIndex < nCharCount; nCharIndex++ )
+        else if( aStart.Y() < pParagraphs[ nCurPara ].aRect.Top() )
         {
-            const Rectangle aRect( aStart, pDInfo->rFont.GetPhysTxtSize( pOut, pDInfo->rText, nCharIndex, 1 ) );
+            pParagraphs[ nCurPara ].aRect.Top() = aStart.Y();
 
-            aCharacterList.Insert( new OutlinerCharacter( aRect, pDInfo->nPara,
-                                                          pDInfo->rFont.GetColor(),
-                                                          pDInfo->rText.GetChar( nCharIndex ) ), LIST_APPEND );
+            if( nCurPara )
+            {
+                Point aPt1Pix( pOut->LogicToPixel( pParagraphs[ nCurPara - 1 ].aRect.TopLeft() ) );
+                Point aPt2Pix( pOut->LogicToPixel( pParagraphs[ nCurPara ].aRect.TopLeft() ) );
+                Size aSizePix( pOut->PixelToLogic( Size( 0, aPt2Pix.Y() - aPt1Pix.Y() + 1 ) ) );
+                pParagraphs[ nCurPara - 1 ].aRect.SetSize( Size( pParagraphs[ nCurPara - 1 ].aRect.GetWidth(), aSizePix.Height() ) );
+            }
+        }
 
-            if( nCharIndex < nCharCount - 1 )
-                aStart.X() = pDInfo->rStartPos.X() + aTextOffset.X() + ( pDInfo->pDXArray )[ nCharIndex ];
+        if( nCharCount && ( pDInfo->nIndex != 0xFFFF ) )
+        {
+            pParagraphs[ nCurPara ].nCharCount += nCharCount;
+
+            for( USHORT nCharIndex = 0; nCharIndex < nCharCount; nCharIndex++ )
+            {
+                const Rectangle aRect( aStart, pDInfo->rFont.GetPhysTxtSize( pOut, pDInfo->rText, nCharIndex, 1 ) );
+
+                aCharacterList.Insert( new OutlinerCharacter( aRect, pDInfo->nPara,
+                                                              pDInfo->rFont.GetColor(),
+                                                              pDInfo->rText.GetChar( nCharIndex ) ), LIST_APPEND );
+
+                if( nCharIndex < nCharCount - 1 )
+                    aStart.X() = pDInfo->rStartPos.X() + aTextOffset.X() + ( pDInfo->pDXArray )[ nCharIndex ];
+            }
         }
     }
 
