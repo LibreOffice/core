@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-11 11:05:23 $
+ *  last change: $Author: sab $ $Date: 2001-04-18 13:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,6 +473,12 @@ sal_Bool ScMyRowFormatRange::operator< (const ScMyRowFormatRange& rRange)
 ScRowFormatRanges::ScRowFormatRanges()
     : aRowFormatRanges(),
     nSize(0)
+{
+}
+
+ScRowFormatRanges::ScRowFormatRanges(const ScRowFormatRanges* pRanges)
+    : aRowFormatRanges(pRanges->aRowFormatRanges),
+    nSize(pRanges->nSize)
 {
 }
 

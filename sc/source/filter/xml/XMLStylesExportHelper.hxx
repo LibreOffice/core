@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-11 11:05:23 $
+ *  last change: $Author: sab $ $Date: 2001-04-18 13:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ class ScRowFormatRanges
 
 public:
     ScRowFormatRanges();
+    ScRowFormatRanges(const ScRowFormatRanges* pRanges);
     ~ScRowFormatRanges();
 
     void Clear();

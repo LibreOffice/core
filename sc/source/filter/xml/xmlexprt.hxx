@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-11 11:05:23 $
+ *  last change: $Author: sab $ $Date: 2001-04-18 13:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,8 @@ class ScXMLExport : public SvXMLExport
     void OpenHeaderRows();
     void CloseHeaderRows();
     void OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
-    void OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
+    void OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag,
+        const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
     void OpenRow(const sal_Int16 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow);
     void CloseRow(const sal_Int32 nRow);
     sal_Bool GetColumnHeader(com::sun::star::table::CellRangeAddress& aColumnHeaderRange) const;

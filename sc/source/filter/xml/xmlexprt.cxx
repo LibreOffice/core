@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-11 11:05:23 $
+ *  last change: $Author: sab $ $Date: 2001-04-18 13:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -911,9 +911,9 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
 void ScXMLExport::WriteRowContent()
 {
     ScMyRowFormatRange aRange;
-    sal_Int32 nIndex = -1;
-    sal_Int32 nCols = 0;
-    sal_Int32 nPrevValidationIndex = -1;
+    sal_Int32 nIndex(-1);
+    sal_Int32 nCols(0);
+    sal_Int32 nPrevValidationIndex(-1);
     sal_Bool bIsAutoStyle(sal_True);
     sal_Bool bIsFirst(sal_True);
     while (pRowFormatRanges->GetNext(aRange))
@@ -1035,7 +1035,8 @@ void ScXMLExport::OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const
         WriteRowStartTag(nIndex, nFlag, nEqualRows);
 }
 
-void ScXMLExport::OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEqualRows)
+void ScXMLExport::OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag,
+    const sal_Int32 nStartRow, const sal_Int32 nEqualRows)
 {
     OpenNewRow(nIndex, nFlag, nStartRow, nEqualRows);
     WriteRowContent();
@@ -1049,8 +1050,9 @@ void ScXMLExport::OpenRow(const sal_Int16 nTable, const sal_Int32 nStartRow, con
     {
         sal_Int32 nPrevIndex, nIndex;
         sal_Int8 nPrevFlag, nFlag;
-        sal_Int32 nEqualRows = 1;
-        for (sal_Int32 nRow = nStartRow; nRow < nStartRow + nRepeatRow; nRow++)
+        sal_Int32 nEqualRows(1);
+        sal_Int32 nEndRow(nStartRow + nRepeatRow);
+        for (sal_Int32 nRow = nStartRow; nRow < nEndRow; nRow++)
         {
             if (nRow == nStartRow)
             {
@@ -1068,7 +1070,15 @@ void ScXMLExport::OpenRow(const sal_Int16 nTable, const sal_Int32 nStartRow, con
                     nEqualRows++;
                 else
                 {
-                    OpenAndCloseRow(nPrevIndex, nPrevFlag, nRow - nEqualRows, nEqualRows);
+                    if (nRow < nEndRow)
+                    {
+                        ScRowFormatRanges* pTempRowFormatRanges = new ScRowFormatRanges(pRowFormatRanges);
+                        OpenAndCloseRow(nPrevIndex, nPrevFlag, nRow - nEqualRows, nEqualRows);
+                        delete pRowFormatRanges;
+                        pRowFormatRanges = pTempRowFormatRanges;
+                    }
+                    else
+                        OpenAndCloseRow(nPrevIndex, nPrevFlag, nRow - nEqualRows, nEqualRows);
                     nEqualRows = 1;
                     nPrevIndex = nIndex;
                     nPrevFlag = nFlag;
