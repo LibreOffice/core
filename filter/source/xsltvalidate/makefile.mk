@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.6 $ 
+#   $Revision: 1.7 $ 
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 15:13:03 $ 
+#   last change: $Author: obo $ $Date: 2005-01-25 15:13:41 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -86,9 +86,14 @@ JAVACLASSFILES=$(CLASSDIR)$/XSLTValidate.class
 #$(OUT)$/class$/$(TARGET)$/META-INF: META-INF
 #        + $(COPY) $(COPYRECURSE) META-INF $(OUT)$/class$/META-INF
 # --- Targets ------------------------------------------------------  
-.INCLUDE :  target.mk 
 .IF "$(SOLAR_JAVA)"!=""
+.IF "$(JDK)"=="gcj"
+all:
+    @echo This dir cannot be build with gcj because of javax.xml.parsers.DocumentBuilderFactory
+.ELSE
+.INCLUDE :  target.mk 
 $(JAVACLASSFILES) : $(CLASSDIR)
+.ENDIF
 .ENDIF
   
 $(CLASSDIR) :
