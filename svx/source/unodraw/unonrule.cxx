@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-06 15:48:32 $
+ *  last change: $Author: cl $ $Date: 2002-07-16 10:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,6 +552,43 @@ const SvxNumRule& SvxGetNumRule( uno::Reference< container::XIndexReplace > xRul
         throw lang::IllegalArgumentException();
 
     return pRule->getNumRule();
+}
+
+bool SvxGetNumRule( uno::Reference< container::XIndexReplace > xRule, SvxNumRule& rNumRule )
+{
+    SvxUnoNumberingRules* pRule = SvxUnoNumberingRules::getImplementation( xRule );
+    if( pRule )
+    {
+        rNumRule = pRule->getNumRule();
+    }
+    else if( xRule.is() )
+    {
+        try
+        {
+            pRule = new SvxUnoNumberingRules( rNumRule );
+
+            uno::Reference< container::XIndexReplace > xDestRule( pRule );
+
+            const sal_Int32 nCount = min( xRule->getCount(), xDestRule->getCount() );
+            sal_Int32 nLevel;
+            for( nLevel = 0; nLevel < nCount; nLevel++ )
+            {
+                xDestRule->replaceByIndex( nLevel, xRule->getByIndex( nLevel ) );
+            }
+
+            rNumRule = pRule->getNumRule();
+        }
+        catch( uno::Exception& )
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////
