@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:54:22 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,13 +639,7 @@ void ScFunctionDockWin::SetDescription()
             aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":   " ));
         }
 
-        String  a2String=pDesc->GetSignature();
-        xub_StrLen aStrtPos=a2String.Search('(');
-        xub_StrLen aEndPos=a2String.Search(')');
-        a2String.Erase(aEndPos-1);
-        a2String.Erase(0,aStrtPos+1);
-        a2String.EraseLeadingChars();
-        aString+=a2String;
+        aString+=pDesc->GetParamList();
 
         if(nDockMode==0)
         {
