@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:49:28 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,8 @@ enum RTF_FLD_TYPES {
     RTFFLD_HYPERLINK,
     RTFFLD_REF,
     RTFFLD_PAGEREF,
-    RTFFLD_EQ
+    RTFFLD_EQ,
+    RTFFLD_INCLUDETEXT
 };
 
 static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
@@ -192,14 +193,14 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
     sal_Char __READONLY_DATA sREF[]=        "\x03""ref";
     sal_Char __READONLY_DATA sPAGEREF[]=    "\x07""pageref";
     sal_Char __READONLY_DATA sEQ[]=         "\x02""eq";
-
+    sal_Char __READONLY_DATA sINCLUDETEXT[]="\x0B""includetext";
 
     struct _Dummy_RTF_FLD_TYPES
     {
         RTF_FLD_TYPES eFldType;
         const sal_Char* pFldNm;
     };
-    __READONLY_DATA _Dummy_RTF_FLD_TYPES aFldNmArr[ RTFFLD_EQ+1 ] = {
+    __READONLY_DATA _Dummy_RTF_FLD_TYPES aFldNmArr[RTFFLD_INCLUDETEXT + 1] = {
             {RTFFLD_TOC,         sTOC},
             {RTFFLD_IMPORT,      sIMPORT},
             {RTFFLD_INDEX,       sINDEX},
@@ -214,8 +215,8 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
             {RTFFLD_HYPERLINK,   sHYPERLINK},
             {RTFFLD_REF,         sREF},
             {RTFFLD_PAGEREF,     sPAGEREF},
-            {RTFFLD_EQ,          sEQ}
-
+            {RTFFLD_EQ,          sEQ},
+            {RTFFLD_INCLUDETEXT, sINCLUDETEXT}
     };
 
 
@@ -493,6 +494,8 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
     nPos = 0;
     switch (nRet)
     {
+    case RTFFLD_INCLUDETEXT:
+        break;
     case RTFFLD_IMPORT:
         {
 //JP 11.03.96: vertraegt sich nicht so ganz mit Internet!
@@ -1041,6 +1044,7 @@ void SwRTFParser::ReadField()
                     nRet = MakeFieldInst( sFieldStr );
                     switch ( nRet )
                     {
+                    case RTFFLD_INCLUDETEXT:
                     case RTFFLD_TOC:
                     case RTFFLD_INDEX:
                         // erstmal Index/Inhaltsverzeichniss ueberspringen
@@ -1065,8 +1069,14 @@ void SwRTFParser::ReadField()
 
                         if (pFldAttr)
                         {
-                            ((SwUserFieldType*)pFldAttr->GetFld().GetFld()->GetTyp())->
-                                        SetContent( sFieldStr );
+                            const SwField *pFld = pFldAttr->GetFld().GetFld();
+                            SwFieldType *pTyp = pFld ? pFld->GetTyp() : 0;
+                            ASSERT(pTyp->Which() == RES_USERFLD, "expected a user field");
+                            if (pTyp->Which() == RES_USERFLD)
+                            {
+                                SwUserFieldType *pUsrTyp = (SwUserFieldType*)pTyp;
+                                pUsrTyp->SetContent(sFieldStr);
+                            }
                         }
                     }
                 }
