@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-22 15:32:37 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 14:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,8 +632,8 @@ void DbGridControl::NavigationBar::InvalidateAll(sal_uInt32 nCurrentPos, sal_Boo
         // Wann muﬂ alles invalidiert werden
         if (bAll || m_nCurrentPos <= 0 ||
             nCurrentPos <= 0 ||
-            m_nCurrentPos >= (pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControl::OPT_INSERT) ? 2 : 1)) ||
-            nCurrentPos >= (pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControl::OPT_INSERT) ? 2 : 1)))
+            m_nCurrentPos >= sal_uInt32(pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControl::OPT_INSERT) ? 2 : 1)) ||
+            nCurrentPos >= sal_uInt32(pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControl::OPT_INSERT) ? 2 : 1)))
         {
             m_nCurrentPos = nCurrentPos;
             int i = 0;
@@ -678,9 +678,9 @@ sal_Bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
             case NavigationBar::RECORD_NEXT:
                 if(pParent->m_bRecordCountFinal)
                 {
-                    bAvailable = m_nCurrentPos < (pParent->GetRowCount() - 1);
+                    bAvailable = m_nCurrentPos < sal_uInt32(pParent->GetRowCount() - 1);
                     if (!bAvailable && pParent->GetOptions() & DbGridControl::OPT_INSERT)
-                        bAvailable = (m_nCurrentPos == (pParent->GetRowCount() - 2)) && pParent->IsModified();
+                        bAvailable = (m_nCurrentPos == sal_uInt32(pParent->GetRowCount() - 2)) && pParent->IsModified();
                 }
                 break;
             case NavigationBar::RECORD_LAST:
@@ -688,13 +688,13 @@ sal_Bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
                 {
                     if (pParent->GetOptions() & DbGridControl::OPT_INSERT)
                         bAvailable = pParent->IsCurrentAppending() ? pParent->GetRowCount() > 1 :
-                                     m_nCurrentPos != (pParent->GetRowCount() - 2);
+                                     m_nCurrentPos != sal_uInt32(pParent->GetRowCount() - 2);
                     else
-                        bAvailable = m_nCurrentPos != (pParent->GetRowCount() - 1);
+                        bAvailable = m_nCurrentPos != sal_uInt32(pParent->GetRowCount() - 1);
                 }
                 break;
             case NavigationBar::RECORD_NEW:
-                bAvailable = (pParent->GetOptions() & DbGridControl::OPT_INSERT) && pParent->GetRowCount() && m_nCurrentPos < (pParent->GetRowCount() - 1);
+                bAvailable = (pParent->GetOptions() & DbGridControl::OPT_INSERT) && pParent->GetRowCount() && m_nCurrentPos < sal_uInt32(pParent->GetRowCount() - 1);
                 break;
             case NavigationBar::RECORD_ABSOLUTE:
                 bAvailable = pParent->GetRowCount() > 0;
@@ -2792,9 +2792,9 @@ void DbGridControl::Command(const CommandEvent& rEvt)
             {
                 PopupMenu aContextMenu(SVX_RES(RID_SVXMNU_ROWS));
 
-                PreExecuteRowContextMenu(nRow, aContextMenu);
+                PreExecuteRowContextMenu((sal_uInt16)nRow, aContextMenu);
                 aContextMenu.RemoveDisabledEntries(sal_True, sal_True);
-                PostExecuteRowContextMenu(nRow, aContextMenu, aContextMenu.Execute(this, rEvt.GetMousePosPixel()));
+                PostExecuteRowContextMenu((sal_uInt16)nRow, aContextMenu, aContextMenu.Execute(this, rEvt.GetMousePosPixel()));
             }
             else if (canCopyCellText(nRow, nColId))
             {
@@ -3163,6 +3163,13 @@ sal_Bool DbGridControl::SaveModified()
         {
             TRACE_RANGE_MESSAGE1("no SetState, new state : %s", ROWSTATUS(m_xCurrentRow));
         }
+    }
+    else
+    {
+        // reset the modified flag ....
+        DBG_ASSERT( Controller().Is(), "DbGridControl::SaveModified: was modified, by have no controller?!" );
+        if ( Controller().Is() )
+            Controller()->SetModified();
     }
 
     return bOK;
@@ -3541,7 +3548,7 @@ void DbGridControl::ConnectToFields()
         m_pFieldListeners = pListeners;
     }
 
-    for (sal_Int32 i=0; i<m_aColumns.Count(); ++i)
+    for (sal_Int32 i=0; i<(sal_Int32)m_aColumns.Count(); ++i)
     {
         DbGridColumn* pCurrent = m_aColumns.GetObject(i);
         sal_uInt16 nViewPos = pCurrent ? GetViewColumnPos(pCurrent->GetId()) : (sal_uInt16)-1;
@@ -3572,7 +3579,7 @@ void DbGridControl::DisconnectFromFields()
         sal_Int32 nOldSize = pListeners->size();
 #endif
         pListeners->begin()->second->dispose();
-        DBG_ASSERT(nOldSize > pListeners->size(), "DbGridControl::DisconnectFromFields : dispose on a listener should result in a removal from my list !");
+        DBG_ASSERT(nOldSize > (sal_Int32)pListeners->size(), "DbGridControl::DisconnectFromFields : dispose on a listener should result in a removal from my list !");
     }
 
     delete pListeners;
