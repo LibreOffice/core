@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2003-09-05 08:51:44 $
+#   last change: $Author: vg $ $Date: 2003-10-06 13:41:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,8 @@ LIBTARGET=NO
 DLLPRE =
 .INCLUDE :  sv.mk
 
+.IF "$(COM)$(COMEX)" == "MSC8"
+
 # ------------------------------------------------------------------
 .IF "$(GUI)"=="WNT"
 MY_DLLPOSTFIX=.dll
@@ -103,8 +105,6 @@ UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 UNOUCROUT=$(OUT)$/inc
 INCPRE+=$(OUT)$/inc
-
-
 
 #-----------------------
 
@@ -225,3 +225,7 @@ $(DESTDIR)$/cli_vb_testobj.uno.dll : \
         -reference:System.Drawing.dll \
         -reference:System.Windows.Forms.dll \
         cli_vb_testobj.vb
+
+
+.ENDIF
+
