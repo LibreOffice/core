@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-19 16:08:12 $
+ *  last change: $Author: pl $ $Date: 2001-07-27 07:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,22 +248,14 @@ void PrinterInfoManager::initialize()
 
         // check directory validity
         OUString aUniPath;
-#ifdef TF_FILEURL
         FileBase::getFileURLFromSystemPath( aDir.PathToFileName(), aUniPath );
-#else
-        FileBase::normalizePath( aDir.PathToFileName(), aUniPath );
-#endif
         Directory aDirectory( aUniPath );
         if( aDirectory.open() )
             continue;
         aDirectory.close();
 
 
-#ifdef TF_FILEURL
         FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aUniPath );
-#else
-        FileBase::normalizePath( aFile.PathToFileName(), aUniPath );
-#endif
         FileStatus aStatus( FileStatusMask_All );
         DirectoryItem aItem;
 
@@ -440,11 +432,7 @@ void PrinterInfoManager::initialize()
                 fillFontSubstitutions( aPrinter.m_aInfo );
 
                 // finally insert printer
-#ifdef TF_FILEURL
                 FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aPrinter.m_aFile );
-#else
-                FileBase::normalizePath( aFile.PathToFileName(), aPrinter.m_aFile );
-#endif
                 aPrinter.m_bModified    = false;
                 aPrinter.m_aGroup       = aConfig.GetGroupName( nGroup );
                 m_aPrinters[ aPrinterName ] = aPrinter;
@@ -557,11 +545,7 @@ static bool checkWriteability( const OUString& rUniPath )
 {
     bool bRet = false;
     OUString aSysPath;
-#ifdef TF_FILEURL
     FileBase::getSystemPathFromFileURL( rUniPath, aSysPath );
-#else
-    FileBase::getSystemPathFromNormalizedPath( rUniPath, aSysPath );
-#endif
     SvFileStream aStream( aSysPath, STREAM_READ | STREAM_WRITE );
     if( aStream.IsOpen() && aStream.IsWritable() )
         bRet = true;

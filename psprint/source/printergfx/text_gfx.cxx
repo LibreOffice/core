@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.9 $
+  *  $Revision: 1.10 $
   *
-  *  last change: $Author: cp $ $Date: 2001-07-06 16:11:14 $
+  *  last change: $Author: pl $ $Date: 2001-07-27 07:58:33 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -160,11 +160,7 @@ PrinterGfx::PSUploadPS1Font (sal_Int32 nFontID)
     {
         const rtl::OString& rSysPath (mrFontMgr.getFontFileSysPath(nFontID) );
         rtl::OUString aUNCPath;
-#ifdef TF_FILEURL
         osl::File::getFileURLFromSystemPath (OStringToOUString (rSysPath, osl_getThreadTextEncoding()), aUNCPath);
-#else
-        osl::File::normalizePath (OStringToOUString (rSysPath, osl_getThreadTextEncoding()), aUNCPath);
-#endif
         osl::File aFontFile (aUNCPath);
 
         // provide the pfb or pfa font as a (pfa-)font resource

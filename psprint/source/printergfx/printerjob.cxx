@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-26 16:07:49 $
+ *  last change: $Author: pl $ $Date: 2001-07-27 07:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,11 +140,7 @@ PrinterJob::CreateSpoolFile (const rtl::OUString& rName, const rtl::OUString& rE
     rtl::OUString aFileName = maSpoolDirName + rtl::OUString::createFromAscii ("/")
         + rName + rExtension;
     rtl::OUString aNormFileName;
-#ifdef TF_FILEURL
-    OSL_VERIFY( osl_File_E_None == osl::File::getFileURLFromSystemPath( aFileName, aNormFileName ) );
-#else
-    osl::File::normalizePath (aFileName, aNormFileName);
-#endif
+    osl::File::getFileURLFromSystemPath( aFileName, aNormFileName );
 
     osl::File* pFile = new osl::File (aNormFileName);
     pFile->open (OpenFlag_Read | OpenFlag_Write | OpenFlag_Create);
@@ -302,7 +298,6 @@ void
 removeSpoolDir (const rtl::OUString& rSpoolDir)
 {
     rtl::OUString aSysPath;
-#ifdef TF_FILEURL
     if( osl_File_E_None != osl::File::getSystemPathFromFileURL( rSpoolDir, aSysPath ) )
     {
         // Conversion did not work, as this is quite a dangerous action,
@@ -310,9 +305,6 @@ removeSpoolDir (const rtl::OUString& rSpoolDir)
         OSL_ENSURE( 0, "psprint: couldn't remove spool directory" );
         return;
     }
-#else
-    osl::File::getSystemPathFromNormalizedPath (rSpoolDir, aSysPath);
-#endif
     rtl::OString aSysPathByte =
         rtl::OUStringToOString (aSysPath, osl_getThreadTextEncoding());
     sal_Char  pSystem [128];
@@ -343,11 +335,7 @@ createSpoolDir ()
     char* pName = tempnam (pTmpDir, "psp");
     rtl::OUString aSubDir = rtl::OUString::createFromAscii (pName);
     rtl::OUString aUNCSubDir;
-#ifdef TF_FILEURL
     osl::File::getFileURLFromSystemPath (aSubDir, aUNCSubDir);
-#else
-    osl::File::normalizePath (aSubDir, aUNCSubDir);
-#endif
     free (pName);
 
     /* create directory with attributes */
