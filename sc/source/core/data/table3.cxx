@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:28:40 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,10 +480,12 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
     }
     if (bGlobalKeepQuery && pRowFlags)
     {
-        BYTE nFlags1 = pRowFlags[nRow1] & ( CR_HIDDEN | CR_FILTERED );
-        BYTE nFlags2 = pRowFlags[nRow2] & ( CR_HIDDEN | CR_FILTERED );
-        pRowFlags[nRow1] = (pRowFlags[nRow1] & ~( CR_HIDDEN | CR_FILTERED )) | nFlags2;
-        pRowFlags[nRow2] = (pRowFlags[nRow2] & ~( CR_HIDDEN | CR_FILTERED )) | nFlags1;
+        BYTE nRow1Flags = pRowFlags->GetValue(nRow1);
+        BYTE nRow2Flags = pRowFlags->GetValue(nRow2);
+        BYTE nFlags1 = nRow1Flags & ( CR_HIDDEN | CR_FILTERED );
+        BYTE nFlags2 = nRow2Flags & ( CR_HIDDEN | CR_FILTERED );
+        pRowFlags->SetValue( nRow1, (nRow1Flags & ~( CR_HIDDEN | CR_FILTERED )) | nFlags2);
+        pRowFlags->SetValue( nRow2, (nRow2Flags & ~( CR_HIDDEN | CR_FILTERED )) | nFlags1);
     }
 }
 
@@ -881,7 +883,7 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 if (!pRowFlags)
                     bBlockVis = TRUE;
                 else
-                    if ( (pRowFlags[nRow] & CR_FILTERED) == 0 )
+                    if ( (pRowFlags->GetValue(nRow) & CR_FILTERED) == 0 )
                         bBlockVis = TRUE;
             }
         }
