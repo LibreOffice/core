@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTableSheetObj.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-03-19 14:37:09 $
+ *  last change:$Date: 2004-03-19 16:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,11 @@ package mod._sc;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.XScenariosSupplier;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.table.CellRangeAddress;
 import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
 import com.sun.star.uno.AnyConverter;
@@ -266,6 +268,30 @@ public class ScTableSheetObj extends TestCase {
         log.println("creating a new environment for object");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        //adding Scenario and with that a ScenarioSheet-Relation for Scenario and XScenarioEnhanced
+        XScenariosSupplier scene = (XScenariosSupplier) UnoRuntime.queryInterface(
+                                           XScenariosSupplier.class,
+                                           tEnv.getTestObject());
+        scene.getScenarios()
+             .addNewByName("Scenario",
+                           new CellRangeAddress[] {
+            new CellRangeAddress((short) 0, 0, 0, 10, 10)
+        }, "Comment");
+
+        XSpreadsheet sSheet = null;
+
+        try {
+            sSheet = (XSpreadsheet) UnoRuntime.queryInterface(
+                             XSpreadsheet.class,
+                             xSpreadsheets.getByName("Scenario"));
+        } catch (com.sun.star.container.NoSuchElementException e) {
+            log.println("Couldn't get Scenario");
+        } catch (com.sun.star.lang.WrappedTargetException e) {
+            log.println("Couldn't get Scenario");
+        }
+
+        tEnv.addObjRelation("ScenarioSheet", sSheet);
 
         log.println("adding ObjRelation 'noArray' to avoid the test" +
                     " 'XArrayFormulaRange'");
