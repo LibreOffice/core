@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-23 09:38:06 $
+ *  last change: $Author: ka $ $Date: 2002-08-26 08:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,17 +137,13 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
         if( xRenderable.is() )
         {
             Sequence< PropertyValue >   aRenderOptions( 1 );
-            PDFWriter*                  pPDFWriter = new PDFWriter( aURL.GetMainURL(), PDFWriter::PDF_1_4 );
-            OutputDevice*               pOut = pPDFWriter->GetReferenceDevice();
             VCLXDevice*                 pXDevice = new VCLXDevice;
             OUString                    aPageRange;
             Any                         aSelection;
             sal_Int32                   nCompressMode = 0;
             sal_Int32                   nPageCount = 0;
+            PDFWriter::Compression      eCompressMode;
 
-            DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
-
-            pXDevice->SetOutputDevice( pOut );
             aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
             aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
 
@@ -160,6 +156,22 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 else if( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) ) )
                     rFilterData[ nData ].Value >>= aSelection;
             }
+
+            switch( nCompressMode )
+            {
+                case( 1 ): eCompressMode = PDFWriter::Print; break;
+                case( 2 ): eCompressMode = PDFWriter::Press; break;
+
+                default:
+                    eCompressMode = PDFWriter::Screen;
+                break;
+            }
+
+            PDFWriter*      pPDFWriter = new PDFWriter( aURL.GetMainURL(), PDFWriter::PDF_1_4, eCompressMode );
+            OutputDevice*   pOut = pPDFWriter->GetReferenceDevice();
+
+            DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
+            pXDevice->SetOutputDevice( pOut );
 
             if( aPageRange.getLength() || !aSelection.hasValue() )
             {
