@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:59:48 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,43 +128,20 @@ rtl::OString getElementUpdated()
     rtl::OString sValue = (sal_Char*) pathObj->nodesetval->nodeTab[0]->content;
     return sValue;
 }
-bool createUserDirectory()
-{
-    bool ret = false;
-
-    rtl::OUString sUserDir;
-    getBootstrap().getFrom(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserInstallation")),
-        sUserDir);
-    FileBase::RC rc = Directory::create(sUserDir);
-    if (rc == FileBase::E_None || rc == FileBase::E_EXIST)
-    {
-        // .StarOfficeXXX file created in home directory
-        sUserDir += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/user"));
-        FileBase::RC rc = Directory::create(sUserDir);
-        if (rc == FileBase::E_None || rc == FileBase::E_EXIST)
-        {
-            sUserDir += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/config"));
-            FileBase::RC rc = Directory::create(sUserDir);
-            if (rc == FileBase::E_None || rc == FileBase::E_EXIST)
-                ret = true;
-        }
-    }
-    return ret;
-}
 
 void createUserSettingsDocument()
 {
     //make sure there is a user directory
     rtl::OString sExcMsg("[Java framework] Error in function createUserSettingsDocument "
                          "(elements.cxx).");
-    if( ! createUserDirectory())
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-
     // check if javasettings.xml already exist
     rtl::OUString sURL = BootParams::getUserData();
     if (checkFileURL(sURL) == FILE_OK)
         return;
+    //make sure that the directories are created in case they do not exist
+    FileBase::RC rcFile = Directory::createPath(getDirFromFile(sURL));
+    if (rcFile != FileBase::E_EXIST && rcFile != FileBase::E_None)
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     //javasettings.xml does not exist yet
     CXmlDocPtr doc(xmlNewDoc((xmlChar *)"1.0"));
