@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:53:42 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6931,22 +6931,13 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         pEntry = new PPTFieldEntry;
                                         rIn >> pEntry->nPos;
                                         pEntry->pField1 = new SvxFieldItem( SvxDateTimeField() );
-
-                                        if ( !nVal && ( rPersistEntry.pHeaderFooterEntry->nAtom & 0x20000 ) )   // auto date time
-                                            pEntry->SetDateTime( rPersistEntry.pHeaderFooterEntry->nAtom & 0xff );
-                                        else
-                                            pEntry->pString = new String( rPersistEntry.pHeaderFooterEntry->pPlaceholder[ nVal ] );
-/*
-                                        if ( rPersistEntry.pHeaderFooterEntry )
-                                        {
-                                            pEntry = new PPTFieldEntry;
-                                            rIn >> pEntry->nPos;
-                                            if ( !nVal && ( rPersistEntry.pHeaderFooterEntry->nAtom & 0x20000 ) )   // auto date time
+                                        if ( rPersistEntry.pHeaderFooterEntry ) // sj: #i34111# on master pages it is possible
+                                        {                                       // that there is no HeaderFooterEntry available
+                                            if ( rPersistEntry.pHeaderFooterEntry->nAtom & 0x20000 )    // auto date time
                                                 pEntry->SetDateTime( rPersistEntry.pHeaderFooterEntry->nAtom & 0xff );
                                             else
                                                 pEntry->pString = new String( rPersistEntry.pHeaderFooterEntry->pPlaceholder[ nVal ] );
                                         }
-*/
                                     }
                                     break;
 
