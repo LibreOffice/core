@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tra $ $Date: 2001-03-14 14:54:51 $
+#   last change: $Author: tra $ $Date: 2001-07-26 11:20:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ stoponerror=tr
 
 .INCLUDE : ..$/..$/cppumaker.mk
 
-CFLAGS+=/D_WIN32_DCOM /EHsc
+CFLAGS+=/D_WIN32_DCOM /EHsc /Ob0
 
 # --- Files --------------------------------------------------------
 
@@ -109,15 +109,17 @@ APP1NOSAL=  TRUE
 
 .IF "$(TESTCB)"==""
 
+CFLAGS+=/D_WIN32_DCOM /EHsc /Ob0
+
 OBJFILES=   	$(OBJ)$/testmarshal.obj
 APP1TARGET=		$(TARGET1)
-APP1OBJS=		$(OBJ)$/testmarshal.obj\
-                $(OBJ)$/XTDo.obj\
-                $(OBJ)$/DTransHelper.obj
+APP1OBJS=		$(OBJ)$/testmarshal.obj
                 
 APP1STDLIBS=	$(SALLIB)\
                 user32.lib\
-                ole32.lib
+                ole32.lib\
+                comsupp.lib\
+                oleaut32.lib
 
 APP1LIBS= 
 
