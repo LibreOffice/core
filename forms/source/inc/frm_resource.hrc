@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frm_resource.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:06 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 14:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #define RID_STR_ERR_UPDATERECORD                ( RID_FRM_STRINGS_START +  9 )
 #define RID_STR_ERR_DELETERECORD                ( RID_FRM_STRINGS_START + 10 )
 #define RID_STR_ERR_DELETERECORDS               ( RID_FRM_STRINGS_START + 11 )
-
+#define RID_STR_NEED_NON_NULL_OBJECT            ( RID_FRM_STRINGS_START + 12 )
 
 
 #endif // _FRM_RESOURCE_HRC_

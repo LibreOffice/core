@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 01:18:18 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 14:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,6 +378,9 @@ String RID_STR_ERR_DELETERECORDS
     Text[ finnish ] = "Virhe poistettaessa m‰‰ritettyj‰ tietueita";
 };
 
-
-
-
+String RID_STR_NEED_NON_NULL_OBJECT
+{
+    Text = "Das Objekt darf nicht NULL sein.";
+    Text [ english ] = "The object must not be NULL.";
+    Text [ english_us ] = "The object must not be NULL.";
+};
