@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:10:05 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,7 +623,7 @@ struct SwFillData
 };
 
 sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
-                    const sal_Bool bChgFrm, const SwCrsrMoveState* pCMS ) const
+                    const sal_Bool bChgFrm, SwCrsrMoveState* pCMS ) const
 {
     // 8804: _GetCrsrOfst wird vom GetCrsrOfst und GetKeyCrsrOfst gerufen.
     // In keinem Fall nur ein return sal_False.
@@ -761,7 +761,7 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
  *************************************************************************/
 
 sal_Bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
-                            const SwCrsrMoveState* pCMS ) const
+                               SwCrsrMoveState* pCMS ) const
 {
     MSHORT nChgFrm = 2;
     if( pCMS )
