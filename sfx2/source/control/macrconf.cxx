@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mav $ $Date: 2002-06-21 08:55:31 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,9 +244,11 @@ SfxMacroInfo::SfxMacroInfo( const String& rURL ) :
                 aMethodName = aTmp.GetToken( 2, '.' );
             }
         }
-    }
 
-    DBG_ASSERT( aLibName.Len() && aModuleName.Len() && aMethodName.Len(), "Wrong macro URL!" );
+        DBG_ASSERT( aLibName.Len() && aModuleName.Len() && aMethodName.Len(), "Wrong macro URL!" );
+    }
+    else
+        aMethodName = rURL;
 }
 
 SfxMacroInfo::SfxMacroInfo( SfxObjectShell *pDoc ) :
@@ -366,6 +368,9 @@ String SfxMacroInfo::GetFullQualifiedName() const
 
 String SfxMacroInfo::GetURL() const
 {
+    if ( !aLibName.Len() )
+        return aMethodName;
+
     // 'macro:///lib.mod.proc(args)' => Macro via App-BASIC-Mgr
     // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
     // 'macro://obj.method(args)' => Object via App-BASIC-Mgr
