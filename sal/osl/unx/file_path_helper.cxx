@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_path_helper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:02 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,12 @@
   const sal_Unicode FPH_CHAR_DOT            = (sal_Unicode)'.';
   const sal_Unicode FPH_CHAR_COLON          = (sal_Unicode)':';
 
-  const rtl::OUString FPH_PATH_SEPARATOR   = rtl::OUString::createFromAscii("/");
-  const rtl::OUString FPH_LOCAL_DIR_ENTRY  = rtl::OUString::createFromAscii(".");
-  const rtl::OUString FPH_PARENT_DIR_ENTRY = rtl::OUString::createFromAscii("..");
+  inline const rtl::OUString FPH_PATH_SEPARATOR()
+      { return rtl::OUString::createFromAscii("/"); }
+  inline const rtl::OUString FPH_LOCAL_DIR_ENTRY()
+      { return rtl::OUString::createFromAscii("."); }
+  inline const rtl::OUString FPH_PARENT_DIR_ENTRY()
+      { return rtl::OUString::createFromAscii(".."); }
 
  /*******************************************
   *  osl_systemPathRemoveSeparator
@@ -127,15 +130,15 @@
 
      rtl::OUString path(*ppustrPath);
     sal_Int32     lp = path.getLength();
-    sal_Int32     i  = path.lastIndexOf(FPH_PATH_SEPARATOR);
+    sal_Int32     i  = path.lastIndexOf(FPH_CHAR_PATH_SEPARATOR);
 
     if ((lp > 1 && i != (lp - 1)) || ((lp < 2) && i < 0))
     {
-        path += FPH_PATH_SEPARATOR;
+        path += FPH_PATH_SEPARATOR();
         rtl_uString_assign(ppustrPath, path.pData);
     }
 
-    OSL_POSTCOND(path.lastIndexOf(FPH_PATH_SEPARATOR) == (path.getLength() - 1), \
+    OSL_POSTCOND(path.lastIndexOf(FPH_CHAR_PATH_SEPARATOR) == (path.getLength() - 1), \
                  "osl_systemPathEnsureSeparator: Post condition failed");
  }
 
@@ -209,7 +212,7 @@
 
     if (path.getLength() > 1 || (1 == path.getLength() && *path.getStr() != FPH_CHAR_PATH_SEPARATOR))
     {
-        sal_Int32 idx_ps = path.lastIndexOf(FPH_PATH_SEPARATOR);
+        sal_Int32 idx_ps = path.lastIndexOf(FPH_CHAR_PATH_SEPARATOR);
         idx_ps++; // always right to increment by one even if idx_ps == -1!
         last_part = rtl::OUString(path.getStr() + idx_ps);
     }
@@ -255,7 +258,10 @@ sal_Bool SAL_CALL osl_systemPathIsLocalOrParentDirectoryEntry(
 
     osl_systemPathGetFileNameOrLastDirectoryPart(pustrPath, &dirent.pData);
 
-    return ((dirent == FPH_LOCAL_DIR_ENTRY) || (dirent == FPH_PARENT_DIR_ENTRY));
+    return (
+            (dirent == FPH_LOCAL_DIR_ENTRY()) ||
+            (dirent == FPH_PARENT_DIR_ENTRY())
+           );
 }
 
 /***********************************************
