@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-25 11:49:56 $
+ *  last change: $Author: dl $ $Date: 2001-06-25 12:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     Font aBulletFont( pStyleSheetPool->GetBulletFont() );
     aBulletFont.SetSize(Size(0,846));       // 24 pt
     aBulletItem.SetFont(aBulletFont);
-    aBulletItem.SetSymbol(34);                  // Punkt
+    aBulletItem.SetSymbol( 0x25CF );                    // Punkt
     rISet.Put(aBulletItem);
 
     SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 0); // Bullets nicht sichtbar
@@ -1374,7 +1374,7 @@ void SdDrawDocument::SetTextDefaults() const
     aBulletItem.SetStyle(BS_BULLET);
     aBulletItem.SetStart(1);
     aBulletItem.SetScale(45);               // in Prozent
-    aBulletItem.SetSymbol(34);              // Punkt
+    aBulletItem.SetSymbol( 0x25CF );                // Punkt
     pItemPool->SetPoolDefaultItem( aBulletItem );
 
     // Bullets nicht sichtbar
@@ -1384,7 +1384,7 @@ void SdDrawDocument::SetTextDefaults() const
     // Neues BulletItem
     SvxNumberFormat aNumberFormat(SVX_NUM_CHAR_SPECIAL);
     aNumberFormat.SetBulletFont(&aBulletFont);
-    aNumberFormat.SetBulletChar( 0xF000 + 34 );
+    aNumberFormat.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
     aNumberFormat.SetBulletRelSize(45);
     aNumberFormat.SetBulletColor(RGB_Color(COL_BLACK));
     aNumberFormat.SetStart(1);

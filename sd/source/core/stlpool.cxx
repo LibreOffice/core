@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-25 11:50:53 $
+ *  last change: $Author: dl $ $Date: 2001-06-25 12:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1307,7 +1307,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             // Standard-Vorlage
             SvxNumberFormat aNumberFormat(SVX_NUM_CHAR_SPECIAL);
             aNumberFormat.SetBulletFont(&rBulletFont);
-            aNumberFormat.SetBulletChar( 0xF000 + 34 );
+            aNumberFormat.SetBulletChar( 0x25CF ); // StarBats: 0xF000 + 34
             aNumberFormat.SetBulletRelSize(45);
             aNumberFormat.SetBulletColor(Color(COL_BLACK));
             aNumberFormat.SetStart(1);
@@ -1375,7 +1375,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                     aFrmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                     aFrmt.SetStart(1);
                     aFrmt.SetBulletRelSize(45);
-                    aFrmt.SetBulletChar( 0xF000 + 34 );
+                    aFrmt.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
                     aFrmt.SetBulletFont(&rBulletFont);
                     aNumRule.SetLevel(i, aFrmt);
                 }
@@ -1398,7 +1398,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                                  10, FALSE, SVX_RULETYPE_PRESENTATION_NUMBERING );
             for( UINT16 i = 0; i < 10; i++ )
             {
-                aNumberFormat.SetBulletChar( 0xF000 + 34 );
+                aNumberFormat.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
                 aNumberFormat.SetBulletRelSize(45);
                 const short nLSpace = i ? i * 1200 : 1200;
                 aNumberFormat.SetLSpace(nLSpace);
@@ -1420,7 +1420,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                     {
                         nFontSize = 28;
                         nFirstLineOffset = -800;
-                        aNumberFormat.SetBulletChar( 0xF000 + 150 );
+                        aNumberFormat.SetBulletChar( 0x2013 );  // StarBats: 0xF000 + 150
                         aNumberFormat.SetBulletRelSize(75);
                     }
                     break;
@@ -1433,7 +1433,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 
                     case 4:
                     {
-                        aNumberFormat.SetBulletChar( 0xF000 + 150 );
+                        aNumberFormat.SetBulletChar( 0x2013 ); // StarBats: 0xF000 + 150
                         aNumberFormat.SetBulletRelSize(75);
                     }
                     break;
@@ -1461,7 +1461,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 
 Font SdStyleSheetPool::GetBulletFont() const
 {
-    Font aBulletFont( String( RTL_CONSTASCII_USTRINGPARAM( "StarBats" )), Size(0, 1000) );
+    Font aBulletFont( String( RTL_CONSTASCII_USTRINGPARAM( "StarSymbol" )), Size(0, 1000) );
     aBulletFont.SetCharSet(RTL_TEXTENCODING_SYMBOL);
     aBulletFont.SetWeight(WEIGHT_NORMAL);
     aBulletFont.SetUnderline(UNDERLINE_NONE);
