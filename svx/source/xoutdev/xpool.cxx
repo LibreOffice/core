@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:27 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@ static USHORT nVersion2Map[66];
 static USHORT nVersion3Map[124];
 static USHORT nVersion4Map[141];
 
+static XOutdevItemPool* pPool=0;
+
 /*************************************************************************
 |*
 |* Konstruktor
@@ -94,6 +96,12 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* pMaster, USHORT nAttrStart, USHORT
     Ctor(pMaster,nAttrStart,nAttrEnd);
 }
 
+XOutdevItemPool* XOutdevItemPool::Get()
+{
+    if ( !pPool )
+        pPool = new XOutdevItemPool;
+    return pPool;
+}
 
 void XOutdevItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
 {
