@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-25 17:11:55 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,7 +692,18 @@ void XMLTextFrameContext::Create( sal_Bool bHRefOrBase64 )
     }
 
     Reference < XShape > xShape( xPropSet, UNO_QUERY );
-    GetImport().GetShapeImport()->shapeWithZIndexAdded( xShape, nZIndex );
+
+    // #107848#
+    // Make adding the shepe to Z-Ordering dependent from if we are
+    // inside a inside_deleted_section (redlining). That is necessary
+    // since the shape will be removed again later. It would lead to
+    // errors if it would stay inside the Z-Ordering. Thus, the
+    // easiest way to solve that conflict is to not add it here.
+    if(!GetImport().HasTextImport()
+        || !GetImport().GetTextImport()->IsInsideDeleteContext())
+    {
+        GetImport().GetShapeImport()->shapeWithZIndexAdded( xShape, nZIndex );
+    }
 
     if( XML_TEXT_FRAME_TEXTBOX == nType )
     {
