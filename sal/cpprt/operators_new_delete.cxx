@@ -2,9 +2,9 @@
  *
  *  $RCSfile: operators_new_delete.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,30 +108,30 @@ struct AllocatorTraits
     std::size_t size (std::size_t n) const SAL_THROW(())
     {
         n = std::max(n, std::size_t(1));
-#if defined(DEBUG) || defined(_DEBUG)
+#if OSL_DEBUG_LEVEL > 0
         n += sizeof(signature_type);
-#endif  /* DEBUG  */
+#endif  /* OSL_DEBUG_LEVEL  */
         return n;
     }
 
     void* init (void * p) const SAL_THROW(())
     {
-#if defined(DEBUG) || defined(_DEBUG)
+#if OSL_DEBUG_LEVEL > 0
         memcpy (p, m_signature, sizeof(signature_type));
         p = static_cast<char*>(p) + sizeof(signature_type);
-#endif  /* DEBUG */
+#endif  /* OSL_DEBUG_LEVEL */
         return p;
     }
 
     void* fini (void * p) const SAL_THROW(())
     {
-#if defined(DEBUG) || defined(_DEBUG)
+#if OSL_DEBUG_LEVEL > 0
         p = static_cast<char*>(p) - sizeof(signature_type);
         if (memcmp (p, m_signature, sizeof(signature_type)) != 0)
         {
             OSL_ENSURE(0, "operator delete mismatch");
         }
-#endif  /* DEBUG */
+#endif  /* OSL_DEBUG_LEVEL */
         return p;
     }
 };
