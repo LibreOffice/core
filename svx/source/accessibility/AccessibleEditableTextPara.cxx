@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-06 14:06:17 $
+ *  last change: $Author: thb $ $Date: 2002-06-13 09:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,8 @@ namespace accessibility
         // these are always on
         pStateSet->AddState( AccessibleStateType::MULTILINE );
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
+        pStateSet->AddState( AccessibleStateType::VISIBLE );
+        pStateSet->AddState( AccessibleStateType::SHOWING );
     }
 
     AccessibleEditableTextPara::~AccessibleEditableTextPara()
@@ -251,6 +253,7 @@ namespace accessibility
             SetState( AccessibleStateType::INVALID );
             SetState( AccessibleStateType::DEFUNC );
 
+            // notify listeners
             try
             {
                 uno::Reference < XAccessibleContext > xThis = getAccessibleContext();
@@ -259,14 +262,9 @@ namespace accessibility
                 maStateListeners.disposeAndClear( aEvent );
             }
             catch( const uno::Exception& ) {}
-        }
-        else if( !pOldEditSource )
-        {
-            // going alive
-            UnSetState( AccessibleStateType::DEFUNC );
-            UnSetState( AccessibleStateType::INVALID );
-            SetState( AccessibleStateType::VISIBLE );
-            SetState( AccessibleStateType::SHOWING );
+
+            // drop all references
+            mxParent = NULL;
         }
     }
 

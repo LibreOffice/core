@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-12 17:20:45 $
+ *  last change: $Author: thb $ $Date: 2002-06-13 09:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,6 +616,12 @@ namespace accessibility
     {
         // This should only be called with solar mutex locked, i.e. from the main office thread
 
+        // This here is somewhat clumsy: As soon as our children have
+        // a NULL EditSource (maParaManager.SetEditSource()), they
+        // enter the disposed state and cannot be reanimated. Thus, it
+        // is unavoidable and a hard requirement to let go and create
+        // from scratch each and every child.
+
         // invalidate children
         maParaManager.SetEditSource( NULL );
 
@@ -1028,7 +1034,6 @@ namespace accessibility
 
                     case EDITSOURCE_HINT_SELECTIONCHANGED:
                         // notify listeners
-                        ESelection aSelection;
                         try
                         {
                             UpdateSelection();
@@ -1046,13 +1051,11 @@ namespace accessibility
                     {
                         // notify listeners
                         sal_Int32 nPara( pTextHint->GetValue() );
-                        if( nPara < nParas )
-                        {
-                            if( pTextHint->GetValue() == EE_PARA_ALL )
-                                maParaManager.FireEvent( 0, GetTextForwarder().GetParagraphCount(), AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
-                            else
+                        if( nPara == static_cast<sal_Int32>(EE_PARA_ALL) )
+                            maParaManager.FireEvent( 0, GetTextForwarder().GetParagraphCount(), AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
+                        else
+                            if( nPara < nParas )
                                 maParaManager.FireEvent( nPara, AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
-                        }
                         break;
                     }
 
