@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:46:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1556,6 +1556,7 @@ public:
     void            ApplyAutoMark();
 
     sal_Bool IsInReading() const                    { return bInReading; }
+    void     SetInReading( bool bNew )              { bInReading = bNew; }
 
     // - Verzeichnis-Typen verwalten
     sal_uInt16 GetTOXTypeCount( TOXTypes eTyp ) const;
@@ -2369,6 +2370,11 @@ public:
     /// initialize XForms models; turn this into an XForms document
     void initXForms( bool bCreateDefaultModel );
     // <-- #i31958# access methods for XForms model(s)
+
+    // --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
+    // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
+    void UpdateLinks();
+    // <--
 };
 
 
