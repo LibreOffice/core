@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: fs $ $Date: 2001-08-16 14:11:48 $
+#   last change: $Author: kz $ $Date: 2002-01-04 17:55:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -188,12 +188,12 @@ RESLIB2SRSFILES=$(RES2FILELIST)
 
 .INCLUDE : target.mk
 
-
+$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
 
 $(SRS)$/hidother.hid: hidother.src
 .IF "$(GUI)$(CPU)"=="WNTI"
 .IF "$(BUILD_SOSL)"==""
-    +-mhids hidother.src ..\$(INPATH)$/srs dbu hidother $(INCLUDE)
+    @+-mhids hidother.src $(SRS) $(PRJNAME)
 .ENDIF
 .ELSE
     @+echo nix
