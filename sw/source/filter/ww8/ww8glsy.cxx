@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:42:10 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,17 +109,25 @@
 #include "ww8par.hxx"
 #endif
 
-WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm,BYTE nVersion,
-    SvStorage *pStg) : rStrm(refStrm), xStg(pStg), nStrings( 0 )
+WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, BYTE nVersion,
+    SvStorage *pStg)
+    : pGlossary(0), rStrm(refStrm), xStg(pStg), nStrings(0)
 {
-    refStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-    WW8Fib aWwFib( *refStrm, nVersion );
+    refStrm->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    WW8Fib aWwFib(*refStrm, nVersion);
 
-    xTableStream = pStg->OpenStream( String::CreateFromAscii(
-        aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ );
+    if (aWwFib.nFibBack >= 0x6A)   //Word97
+    {
+        xTableStream = pStg->OpenStream(String::CreateFromAscii(
+            aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
 
-    xTableStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-    pGlossary = new WW8GlossaryFib( *refStrm, nVersion,*xTableStream, aWwFib );
+        if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
+        {
+            xTableStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+            pGlossary =
+                new WW8GlossaryFib(*refStrm, nVersion, *xTableStream, aWwFib);
+        }
+    }
 }
 
 bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
@@ -261,7 +269,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
 bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 {
     bool bRet=false;
-    if( pGlossary->IsGlossaryFib() && rBlocks.StartPutMuchBlockEntries() )
+    if (pGlossary && pGlossary->IsGlossaryFib() && rBlocks.StartPutMuchBlockEntries())
     {
         //read the names of the autotext entries
         std::vector<String> aStrings;
