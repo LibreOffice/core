@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-23 11:58:01 $
+ *  last change: $Author: tra $ $Date: 2001-05-15 12:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ sal_Bool SAL_CALL CDataFormatTranslator::isTextHtmlFormat( CLIPFORMAT cf ) const
 {
     OUString clipFormatName = getClipboardFormatName( cf );
 
-    return ( clipFormatName.equalsIgnoreCase(
+    return ( clipFormatName.equalsIgnoreAsciiCase(
         OUString::createFromAscii( "HTML (HyperText Markup Language)" ) ) );
 }
 

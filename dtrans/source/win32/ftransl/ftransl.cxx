@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftransl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-10 15:23:19 $
+ *  last change: $Author: tra $ $Date: 2001-05-15 12:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ void SAL_CALL CDataFormatTranslator::findDataFlavorForNativeFormatName( const OU
           citer != citer_end;
           ++citer )
     {
-        if ( aNativeFormatName.equalsIgnoreCase( citer->aNativeFormatName ) )
+        if ( aNativeFormatName.equalsIgnoreAsciiCase( citer->aNativeFormatName ) )
         {
             aDataFlavor = citer->aDataFlavor;
             break;
@@ -447,7 +447,7 @@ void SAL_CALL CDataFormatTranslator::findDataFlavorForNativeFormatName( const OU
 
 void SAL_CALL CDataFormatTranslator::findStandardFormatIdForCharset( const OUString& aCharset, Any& aAny ) const
 {
-    if ( aCharset.equalsIgnoreCase( OUSTR( utf-16 ) ) )
+    if ( aCharset.equalsIgnoreAsciiCase( OUSTR( utf-16 ) ) )
         aAny <<= static_cast< sal_Int32 >( CF_UNICODETEXT );
     else
     {
@@ -466,7 +466,7 @@ void SAL_CALL CDataFormatTranslator::setStandardFormatIdForNativeFormatName( con
     vector< FormatEntry >::const_iterator citer_end = m_TranslTable.end( );
     for ( vector< FormatEntry >::const_iterator citer = m_TranslTable.begin( ); citer != citer_end; ++citer )
     {
-        if ( aNativeFormatName.equalsIgnoreCase( citer->aNativeFormatName ) &&
+        if ( aNativeFormatName.equalsIgnoreAsciiCase( citer->aNativeFormatName ) &&
              (CF_INVALID != citer->aStandardFormatId) )
         {
             aAny <<= citer->aStandardFormatId;
@@ -489,7 +489,7 @@ void SAL_CALL CDataFormatTranslator::findStdFormatIdOrNativeFormatNameForFullMed
     {
         Reference< XMimeContentType >
         refXMime( aRefXMimeFactory->createMimeContentType( citer->aDataFlavor.MimeType ) );
-        if ( aFullMediaType.equalsIgnoreCase( refXMime->getFullMediaType( ) ) )
+        if ( aFullMediaType.equalsIgnoreAsciiCase( refXMime->getFullMediaType( ) ) )
         {
             sal_Int32 cf = citer->aStandardFormatId;
             if ( CF_INVALID != cf )
@@ -512,7 +512,7 @@ void SAL_CALL CDataFormatTranslator::findStdFormatIdOrNativeFormatNameForFullMed
 inline
 sal_Bool CDataFormatTranslator::isTextPlainMediaType( const OUString& fullMediaType ) const
 {
-    return ( fullMediaType.equalsIgnoreCase( OUSTR( text/plain ) ) );
+    return ( fullMediaType.equalsIgnoreAsciiCase( OUSTR( text/plain ) ) );
 }
 
 // -------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-04 14:10:12 $
+ *  last change: $Author: tra $ $Date: 2001-05-15 12:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,7 +572,7 @@ sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
 sal_Bool SAL_CALL CDOTransferable::cmpFullMediaType(
     const Reference< XMimeContentType >& xLhs, const Reference< XMimeContentType >& xRhs ) const
 {
-    return xLhs->getFullMediaType().equalsIgnoreCase( xRhs->getFullMediaType( ) );
+    return xLhs->getFullMediaType().equalsIgnoreAsciiCase( xRhs->getFullMediaType( ) );
 }
 
 //------------------------------------------------------------------------
@@ -598,7 +598,7 @@ sal_Bool SAL_CALL CDOTransferable::cmpAllContentTypeParameter(
                 pLhs = xLhs->getParameterValue( xLhsFlavors[i] );
                 pRhs = xRhs->getParameterValue( xLhsFlavors[i] );
 
-                if ( !pLhs.equalsIgnoreCase( pRhs ) )
+                if ( !pLhs.equalsIgnoreAsciiCase( pRhs ) )
                 {
                     bRet = sal_False;
                     break;
