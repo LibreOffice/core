@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: os $ $Date: 2000-09-27 15:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,8 @@ SwSection::~SwSection()
 
         // ist die Section der letzte Client im Format, kann dieses
         // geloescht werden
+        SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFmt );
+        pFmt->Modify( &aMsgHint, &aMsgHint );
         if( !pFmt->GetDepends() )
         {
             // Bug: 28191 - nicht ins Undo aufnehmen, sollte schon vorher
