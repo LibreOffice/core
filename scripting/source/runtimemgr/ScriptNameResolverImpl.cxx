@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-03-06 15:31:02 $
+ *  last change: $Author: dfoster $ $Date: 2003-03-12 15:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,10 +474,12 @@ const ::rtl::OUString & docURI ) SAL_THROW ( ( RuntimeException, css::security::
         // if we dealing with a document storage (ie. not user or share
         // we need to check the permission
         if( ( sid != scriptingConstantsPool.USER_STORAGE_ID ) &&
-            ( sid != scriptingConstantsPool.SHARED_STORAGE_ID ) &&
-            ( xScriptSecurity->checkPermission( docURI,
-                OUString::createFromAscii( "execute" ) ) == true ) )
+            ( sid != scriptingConstantsPool.SHARED_STORAGE_ID ) )
         {
+            xScriptSecurity->checkPermission( docURI,
+                OUString::createFromAscii( "execute" ) );
+            // if we get here, the checkPermission hasn't thrown an
+            // AccessControlException, ie. permission has been granted
             OSL_TRACE( "ScriptNameResolverImpl::getStorageInstance: got execute permission for ID=%d", sid );
         }
         Reference< storage::XScriptStorageManager > xScriptStorageManager( xInterface, UNO_QUERY_THROW );

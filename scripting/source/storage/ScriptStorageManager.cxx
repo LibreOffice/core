@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.24 $
+*  $Revision: 1.25 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-03-04 18:34:54 $
+*  last change: $Author: dfoster $ $Date: 2003-03-12 15:54:17 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -416,15 +416,14 @@ throw( RuntimeException )
 }
 
 //*************************************************************************
-sal_Bool SAL_CALL
+void SAL_CALL
 ScriptStorageManager::checkPermission( const OUString &
 scriptStorageURI, const OUString & permissionRequest )
 throw ( RuntimeException, lang::IllegalArgumentException, css::security::AccessControlException )
 {
-    sal_Bool result;
     try
     {
-        result = m_securityMgr.checkPermission( scriptStorageURI, permissionRequest );
+        m_securityMgr.checkPermission( scriptStorageURI, permissionRequest );
     }
     catch ( css::security::AccessControlException & e )
     {
@@ -444,7 +443,6 @@ throw ( RuntimeException, lang::IllegalArgumentException, css::security::AccessC
             OUSTR( "ScriptStorageManager::checkPermission: RuntimeException: " ).concat(
                 e.Message ), Reference< XInterface >() );
     }
-    return result;
 }
 
 //*************************************************************************

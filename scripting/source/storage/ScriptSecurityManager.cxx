@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jmrice $ $Date: 2003-03-07 11:02:42 $
+ *  last change: $Author: dfoster $ $Date: 2003-03-12 15:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,7 @@ throw ( RuntimeException )
  * we can't see a good reason not to return a bool, rather than throw
  * an exception if the request is not granted (as is the case in Java).
  */
-sal_Bool ScriptSecurityManager::checkPermission( const OUString & scriptStorageURL,
+void ScriptSecurityManager::checkPermission( const OUString & scriptStorageURL,
     const OUString & permissionRequest )
     throw ( RuntimeException, lang::IllegalArgumentException, security::AccessControlException )
 {
@@ -396,7 +396,7 @@ sal_Bool ScriptSecurityManager::checkPermission( const OUString & scriptStorageU
         {
             if ( ph_it->second.execPermission )
             {
-                return true;
+                return;
             }
             else
             {

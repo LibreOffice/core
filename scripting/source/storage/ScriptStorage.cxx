@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.18 $
-*  last change: $Author: npower $ $Date: 2003-03-04 13:26:27 $
+*  $Revision: 1.19 $
+*  last change: $Author: dfoster $ $Date: 2003-03-12 15:54:16 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -556,8 +556,7 @@ ScriptStorage::writeMetadataHeader(
 //*************************************************************************
 Sequence< ::rtl::OUString >
 ScriptStorage::getScriptLogicalNames()
-throw ( lang::IllegalArgumentException,
-        RuntimeException )
+throw ( RuntimeException )
 {
     Sequence< ::rtl::OUString  > results;
     ScriptInfo_hash::iterator h_it = mh_implementations.begin();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-03-04 12:33:32 $
+ *  last change: $Author: dfoster $ $Date: 2003-03-12 15:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ public:
             if there is no matching script name
 
     */
-    virtual sal_Bool SAL_CALL ScriptStorageManager::checkPermission(
+    virtual void SAL_CALL ScriptStorageManager::checkPermission(
         const rtl::OUString & scriptStorageURI,
         const rtl::OUString & permissionRequest )
         throw ( css::uno::RuntimeException, css::lang::IllegalArgumentException,

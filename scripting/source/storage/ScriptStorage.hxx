@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorage.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: npower $ $Date: 2003-02-12 16:21:43 $
+ *  last change: $Author: dfoster $ $Date: 2003-03-12 15:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ public:
      */
     virtual css::uno::Sequence< ::rtl::OUString >
         SAL_CALL getScriptLogicalNames()
-        throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException );
 
     //=========================================================================
     /**

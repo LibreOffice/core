@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSecurityManager.hxx,v $
 *
-*  $Revision: 1.10 $
+*  $Revision: 1.11 $
 *
-*  last change: $Author: jmrice $ $Date: 2003-03-07 11:02:42 $
+*  last change: $Author: dfoster $ $Date: 2003-03-12 15:54:16 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -101,7 +101,7 @@ public:
  * checks to see if the requested permission can be granted
  * checks to see whether the requested ScriptPeremission is allowed.
  */
-    sal_Bool checkPermission( const rtl::OUString & scriptStorageURL,
+    void checkPermission( const rtl::OUString & scriptStorageURL,
         const rtl::OUString & permissionRequest )
         throw ( css::uno::RuntimeException, css::lang::IllegalArgumentException,
             css::security::AccessControlException );
