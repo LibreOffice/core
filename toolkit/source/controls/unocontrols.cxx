@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-14 09:54:03 $
+ *  last change: $Author: fs $ $Date: 2002-01-08 13:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,51 @@ uno::Any UnoControlDialogModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
+}
+
+void SAL_CALL UnoControlDialogModel::dispose(  ) throw(uno::RuntimeException)
+{
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+    // tell our listeners
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+        lang::EventObject aDisposeEvent;
+        aDisposeEvent.Source = static_cast< uno::XAggregation* >( static_cast< ::cppu::OWeakAggObject* >( this ) );
+        maContainerListeners.disposeAndClear( aDisposeEvent );
+    }
+
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+    // call the base class
+    UnoControlModel::dispose();
+
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+    // dispose our child models
+    // for this, collect the models (we collect them from mpModels, and this is modified when disposing children)
+    ::std::vector< uno::Reference< lang::XComponent > > aChildModels;
+    aChildModels.reserve( mpModels->Count() );
+    for ( sal_uInt32 n = mpModels->Count(); n; )
+    {
+        uno::Reference< lang::XComponent > xChildComp( mpModels->GetObject( --n )->xModel, uno::UNO_QUERY );
+        if ( xChildComp.is() )
+            aChildModels.push_back( xChildComp );
+    }
+    // now dispose
+    for (   const uno::Reference< lang::XComponent >* pChildModel = aChildModels.begin();
+            pChildModel != aChildModels.end();
+            ++pChildModel
+        )
+    {
+        try
+        {
+            if ( pChildModel->is() )
+                (*pChildModel)->dispose();
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_ERROR( "UnoControlDialogModel::dispose: caught an exception while disposing a child model!" );
+        }
+    }
 }
 
 // beans::XMultiPropertySet
@@ -505,19 +550,6 @@ IMPL_XTYPEPROVIDER_END
 
 void UnoDialogControl::ImplInsertControl( uno::Reference< awt::XControlModel >& rxModel, const ::rtl::OUString& rName )
 {
-    uno::Reference< beans::XMultiPropertySet > xMP( rxModel, uno::UNO_QUERY );
-    if ( xMP.is() )
-    {
-        uno::Sequence< ::rtl::OUString > aNames( 4 );
-        ::rtl::OUString* pNames = aNames.getArray();
-        pNames[0] = ::rtl::OUString::createFromAscii( "PositionX" );
-        pNames[1] = ::rtl::OUString::createFromAscii( "PositionY" );
-        pNames[2] = ::rtl::OUString::createFromAscii( "Width" );
-        pNames[3] = ::rtl::OUString::createFromAscii( "Height" );
-
-        xMP->addPropertiesChangeListener( aNames, (beans::XPropertiesChangeListener*)this );
-    }
-
     uno::Reference< beans::XPropertySet > xP( rxModel, uno::UNO_QUERY );
 
     ::rtl::OUString aDefCtrl;
@@ -525,18 +557,21 @@ void UnoDialogControl::ImplInsertControl( uno::Reference< awt::XControlModel >& 
     uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     uno::Reference < awt::XControl > xCtrl( xMSF->createInstance( aDefCtrl ), uno::UNO_QUERY );
 
-    xCtrl->setModel( rxModel );
-    addControl( rName, xCtrl );
+    DBG_ASSERT( xCtrl.is(), "UnoDialogControl::ImplInsertControl: could not create the control!" );
+    if ( xCtrl.is() )
+    {
+        xCtrl->setModel( rxModel );
+        addControl( rName, xCtrl );
+            // will implicitly call addingControl, where we can add the PropertiesChangeListener to the model
+            // (which we formerly did herein)
+            // 08.01.2001 - 96008 - fs@openoffice.org
 
-    ImplSetPosSize( xCtrl );
+        ImplSetPosSize( xCtrl );
+    }
 }
 
 void UnoDialogControl::ImplRemoveControl( uno::Reference< awt::XControlModel >& rxModel )
 {
-    uno::Reference< beans::XMultiPropertySet > xMP( rxModel, uno::UNO_QUERY );
-    if ( xMP.is() )
-        xMP->removePropertiesChangeListener( (beans::XPropertiesChangeListener*)this );
-
     uno::Sequence< uno::Reference< awt::XControl > > aControls = getControls();
     uno::Reference< awt::XControl > xCtrl = StdTabController::FindControl( aControls, rxModel );
     if ( xCtrl.is() )
@@ -606,8 +641,9 @@ void UnoDialogControl::ImplSetPosSize( uno::Reference< awt::XControl >& rxCtrl )
 void UnoDialogControl::dispose() throw(uno::RuntimeException)
 {
     lang::EventObject aEvt;
-    aEvt.Source = (::cppu::OWeakObject*)this;
+    aEvt.Source = static_cast< ::cppu::OWeakObject* >( this );
     maTopWindowListeners.disposeAndClear( aEvt );
+
     UnoControlContainer::dispose();
 }
 
@@ -616,14 +652,18 @@ sal_Bool UnoDialogControl::setModel( const ::com::sun::star::uno::Reference< ::c
     if ( getModel().is() )
     {
         uno::Sequence< uno::Reference< awt::XControl > > aControls = getControls();
-        const uno::Reference< awt::XControl > * pCtrls = aControls.getConstArray();
-        sal_Int32 nCtrls = aControls.getLength();
-        for ( sal_Int32 n = 0; n < nCtrls; n++ )
-            removeControl( pCtrls[n] );
+        const uno::Reference< awt::XControl >* pCtrls = aControls.getConstArray();
+        const uno::Reference< awt::XControl >* pCtrlsEnd = pCtrls + aControls.getLength();
+
+        for ( ; pCtrls < pCtrlsEnd; ++pCtrls )
+            removeControl( *pCtrls );
+                // will implicitly call removingControl, which will remove the PropertyChangeListener
+                // (which we formerly did herein)
+                // 08.01.2001 - 96008 - fs@openoffice.org
 
         uno::Reference< container::XContainer > xC( getModel(), uno::UNO_QUERY );
         if ( xC.is() )
-            xC->removeContainerListener( (container::XContainerListener*)this );
+            xC->removeContainerListener( this );
     }
 
     sal_Bool bRet = UnoControl::setModel( rxModel );
@@ -637,18 +677,17 @@ sal_Bool UnoDialogControl::setModel( const ::com::sun::star::uno::Reference< ::c
             const ::rtl::OUString* pNames = aNames.getConstArray();
             sal_uInt32 nCtrls = aNames.getLength();
 
-            for( sal_uInt32 n = 0; n < nCtrls; n++ )
+            uno::Reference< awt::XControlModel > xCtrlModel;
+            for( sal_uInt32 n = 0; n < nCtrls; ++n, ++pNames )
             {
-                uno::Any aA = xNA->getByName( pNames[n] );
-                uno::Reference< awt::XControlModel > xCtrlModel;
-                aA >>= xCtrlModel;
-                ImplInsertControl( xCtrlModel, pNames[n] );
+                xNA->getByName( *pNames ) >>= xCtrlModel;
+                ImplInsertControl( xCtrlModel, *pNames );
             }
         }
 
         uno::Reference< container::XContainer > xC( getModel(), uno::UNO_QUERY );
         if ( xC.is() )
-            xC->addContainerListener( (container::XContainerListener*)this );
+            xC->addContainerListener( this );
     }
     return bRet;
 }
@@ -837,6 +876,39 @@ void UnoDialogControl::endExecute() throw(uno::RuntimeException)
     }
 }
 
+void UnoDialogControl::addingControl( const uno::Reference< awt::XControl >& _rxControl )
+{
+    UnoControlContainer::addingControl( _rxControl );
+
+    if ( _rxControl.is() )
+    {
+        uno::Reference< beans::XMultiPropertySet > xProps( _rxControl->getModel(), uno::UNO_QUERY );
+        if ( xProps.is() )
+        {
+            uno::Sequence< ::rtl::OUString > aNames( 4 );
+            ::rtl::OUString* pNames = aNames.getArray();
+            *pNames++ = ::rtl::OUString::createFromAscii( "PositionX" );
+            *pNames++ = ::rtl::OUString::createFromAscii( "PositionY" );
+            *pNames++ = ::rtl::OUString::createFromAscii( "Width" );
+            *pNames++ = ::rtl::OUString::createFromAscii( "Height" );
+
+            xProps->addPropertiesChangeListener( aNames, this );
+        }
+    }
+}
+
+void UnoDialogControl::removingControl( const uno::Reference< awt::XControl >& _rxControl )
+{
+    UnoControlContainer::removingControl( _rxControl );
+
+    if ( _rxControl.is() )
+    {
+        uno::Reference< beans::XMultiPropertySet > xProps( _rxControl->getModel(), uno::UNO_QUERY );
+        if ( xProps.is() )
+            xProps->removePropertiesChangeListener( this );
+    }
+
+}
 
 //  ----------------------------------------------------
 //  class UnoControlEditModel
