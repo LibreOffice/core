@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:55:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
 #endif
+
+// defined in salframe.cxx
+extern void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );
 
 // =======================================================================
 
@@ -177,26 +180,26 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
                             long nSrcWidth, long nSrcHeight,
                             USHORT nFlags )
 {
-    BitBlt( mhDC,
-            (int)nDestX, (int)nDestY,
-            (int)nSrcWidth, (int)nSrcHeight,
-            mhDC,
-            (int)nSrcX, (int)nSrcY,
-            SRCCOPY );
+    bool    bRestoreClipRgn = false;
+    HRGN    hOldClipRgn = 0;
+    int     nOldClipRgnType = ERROR;
+    HRGN    hInvalidateRgn = 0;
 
     // Muessen die ueberlappenden Bereiche auch invalidiert werden?
     if ( (nFlags & SAL_COPYAREA_WINDOWINVALIDATE) && mbWindow )
     {
-        // Overlap-Bereich berechnen und invalidieren
+        // compute and invalidate those parts that were either off-screen or covered by other windows
+        //  while performing the above BitBlt
+        // those regions then have to be invalidated as they contain useless/wrong data
         RECT    aSrcRect;
         RECT    aClipRect;
         RECT    aTempRect;
         RECT    aTempRect2;
-        HRGN    hInvalidateRgn;
         HRGN    hTempRgn;
         HWND    hWnd;
         int     nRgnType;
 
+        // restrict srcRect to this window (calc intersection)
         aSrcRect.left   = (int)nSrcX;
         aSrcRect.top    = (int)nSrcY;
         aSrcRect.right  = aSrcRect.left+(int)nSrcWidth;
@@ -204,10 +207,8 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
         GetClientRect( mhWnd, &aClipRect );
         if ( IntersectRect( &aSrcRect, &aSrcRect, &aClipRect ) )
         {
-            // Rechteck in Screen-Koordinaaten umrechnen
+            // transform srcRect to screen coordinates
             POINT aPt;
-            int nScreenDX = GetSystemMetrics( SM_CXSCREEN );
-            int nScreenDY = GetSystemMetrics( SM_CYSCREEN );
             aPt.x = 0;
             aPt.y = 0;
             ClientToScreen( mhWnd, &aPt );
@@ -216,8 +217,11 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
             aSrcRect.right  += aPt.x;
             aSrcRect.bottom += aPt.y;
             hInvalidateRgn = 0;
-            // Bereiche ausserhalb des sichtbaren Bereiches berechnen
-            ImplCalcOutSideRgn( aSrcRect, 0, 0, nScreenDX, nScreenDY, hInvalidateRgn );
+
+            // compute the parts that are off screen (ie invisible)
+            RECT theScreen;
+            ImplSalGetWorkArea( NULL, &theScreen, NULL );  // find the screen area taking multiple monitors into account
+            ImplCalcOutSideRgn( aSrcRect, theScreen.left, theScreen.top, theScreen.right, theScreen.bottom, hInvalidateRgn );
 
             // Bereiche die von anderen Fenstern ueberlagert werden berechnen
             HRGN hTempRgn2 = 0;
@@ -231,7 +235,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
                 {
                     hWndTopWindow = ::GetParent( hWndTopWindow );
 
-                    // Test, if the Parent clip our window
+                    // Test, if the Parent clips our window
                     GetClientRect( hWndTopWindow, &aTempRect );
                     POINT aPt2;
                     aPt2.x = 0;
@@ -255,6 +259,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
                                         hInvalidateRgn );
                 }
             }
+            // retrieve the top-most (z-order) child window
             hWnd = GetWindow( GetDesktopWindow(), GW_CHILD );
             while ( hWnd )
             {
@@ -265,55 +270,105 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
                     GetWindowRect( hWnd, &aTempRect );
                     if ( IntersectRect( &aTempRect2, &aSrcRect, &aTempRect ) )
                     {
+                        // hWnd covers part or all of aSrcRect
                         if ( !hInvalidateRgn )
                             hInvalidateRgn = CreateRectRgnIndirect( &aSrcRect );
+
+                        // get full bounding box of hWnd
                         hTempRgn = CreateRectRgnIndirect( &aTempRect );
+
+                        // get region of hWnd (the window may be shaped)
                         if ( !hTempRgn2 )
                             hTempRgn2 = CreateRectRgn( 0, 0, 0, 0 );
                         nRgnType = GetWindowRgn( hWnd, hTempRgn2 );
                         if ( (nRgnType != ERROR) && (nRgnType != NULLREGION) )
                         {
+                            // convert window region to screen coordinates
                             OffsetRgn( hTempRgn2, aTempRect.left, aTempRect.top );
+                            // and intersect with the window's bounding box
                             CombineRgn( hTempRgn, hTempRgn, hTempRgn2, RGN_AND );
                         }
+                        // finally compute that part of aSrcRect which is not covered by any parts of hWnd
                         CombineRgn( hInvalidateRgn, hInvalidateRgn, hTempRgn, RGN_DIFF );
                         DeleteRegion( hTempRgn );
                     }
                 }
+                // retrieve the next window in the z-order, i.e. the window below hwnd
                 hWnd = GetWindow( hWnd, GW_HWNDNEXT );
             }
             if ( hTempRgn2 )
                 DeleteRegion( hTempRgn2 );
             if ( hInvalidateRgn )
             {
+                // hInvalidateRgn contains the fully visible parts of the original srcRect
                 hTempRgn = CreateRectRgnIndirect( &aSrcRect );
+                // substract it from the original rect to get the occluded parts
                 nRgnType = CombineRgn( hInvalidateRgn, hTempRgn, hInvalidateRgn, RGN_DIFF );
+                DeleteRegion( hTempRgn );
+
                 if ( (nRgnType != ERROR) && (nRgnType != NULLREGION) )
                 {
+                    // move the occluded parts to the destination pos
                     int nOffX = (int)(nDestX-nSrcX);
                     int nOffY = (int)(nDestY-nSrcY);
                     OffsetRgn( hInvalidateRgn, nOffX-aPt.x, nOffY-aPt.y );
-                    // Combine Invalidate Region with existing ClipRegion
-                    if ( GetClipRgn( mhDC, hTempRgn ) == 1 )
-                        nRgnType = CombineRgn( hInvalidateRgn, hTempRgn, hInvalidateRgn, RGN_AND );
-                    if ( (nRgnType != ERROR) && (nRgnType != NULLREGION) )
-                    {
-                        InvalidateRgn( mhWnd, hInvalidateRgn, TRUE );
-                        // Hier loesen wir nur ein Update aus, wenn es der
-                        // MainThread ist, damit es beim Bearbeiten der
-                        // Paint-Message keinen Deadlock gibt, da der
-                        // SolarMutex durch diesen Thread schon gelockt ist
-                        SalData*    pSalData = GetSalData();
-                        DWORD       nCurThreadId = GetCurrentThreadId();
-                        if ( pSalData->mnAppThreadId == nCurThreadId )
-                            UpdateWindow( mhWnd );
-                    }
+
+                    // by excluding hInvalidateRgn from the system's clip region
+                    // we will prevent bitblt from copying useless data
+                    // epsecially now shadows from overlapping windows will appear (#i36344)
+                    hOldClipRgn = CreateRectRgn( 0, 0, 0, 0 );
+                    nOldClipRgnType = GetClipRgn( mhDC, hOldClipRgn );
+
+                    bRestoreClipRgn = TRUE; // indicate changed clipregion and force invalidate
+                    ExtSelectClipRgn( mhDC, hInvalidateRgn, RGN_DIFF );
                 }
-                DeleteRegion( hTempRgn );
-                DeleteRegion( hInvalidateRgn );
             }
         }
     }
+
+    BitBlt( mhDC,
+            (int)nDestX, (int)nDestY,
+            (int)nSrcWidth, (int)nSrcHeight,
+            mhDC,
+            (int)nSrcX, (int)nSrcY,
+            SRCCOPY );
+
+    if( bRestoreClipRgn )
+    {
+        // restore old clip region
+        if( nOldClipRgnType != ERROR )
+            SelectClipRgn( mhDC, hOldClipRgn);
+        DeleteRegion( hOldClipRgn );
+
+        // invalidate regions that were not copied
+        bool    bInvalidate = true;
+
+        // Combine Invalidate Region with existing ClipRegion
+        HRGN    hTempRgn = CreateRectRgn( 0, 0, 0, 0 );
+        if ( GetClipRgn( mhDC, hTempRgn ) == 1 )
+        {
+            int nRgnType = CombineRgn( hInvalidateRgn, hTempRgn, hInvalidateRgn, RGN_AND );
+            if ( (nRgnType == ERROR) || (nRgnType == NULLREGION) )
+                bInvalidate = false;
+        }
+        DeleteRegion( hTempRgn );
+
+        if ( bInvalidate )
+        {
+            InvalidateRgn( mhWnd, hInvalidateRgn, TRUE );
+            // Hier loesen wir nur ein Update aus, wenn es der
+            // MainThread ist, damit es beim Bearbeiten der
+            // Paint-Message keinen Deadlock gibt, da der
+            // SolarMutex durch diesen Thread schon gelockt ist
+            SalData*    pSalData = GetSalData();
+            DWORD       nCurThreadId = GetCurrentThreadId();
+            if ( pSalData->mnAppThreadId == nCurThreadId )
+                UpdateWindow( mhWnd );
+        }
+
+        DeleteRegion( hInvalidateRgn );
+    }
+
 }
 
 // -----------------------------------------------------------------------
