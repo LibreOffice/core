@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-06-11 08:38:12 $
+ *  last change: $Author: os $ $Date: 2002-10-07 11:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
@@ -92,7 +95,15 @@ using namespace com::sun::star::uno;
 
 #define C2S(cChar) String::CreateFromAscii(cChar)
 #define C2U(cChar) OUString::createFromAscii(cChar)
-
+/* -----------------07.10.2002 12:15-----------------
+ *
+ * --------------------------------------------------*/
+inline LanguageType lcl_LanguageOfType(sal_Int16 nType, sal_Int16 eWestern, sal_Int16 eCJK, sal_Int16 eCTL)
+{
+    return LanguageType(
+                nType < FONT_STANDARD_CJK ? eWestern :
+                    nType >= FONT_STANDARD_CTL ? eCTL : eWestern);
+}
 /* -----------------------------08.09.00 15:52--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -131,9 +142,14 @@ Sequence<OUString> SwStdFontConfig::GetPropertyNames()
 SwStdFontConfig::SwStdFontConfig() :
     utl::ConfigItem(C2U("Office.Writer"))
 {
-    LanguageType eLang = GetAppLanguage();
+    SvtLinguOptions aLinguOpt;
+    SvtLinguConfig().GetOptions( aLinguOpt );
+    sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
+                eCJK = aLinguOpt.nDefaultLanguage_CJK,
+                eCTL = aLinguOpt.nDefaultLanguage_CTL;
     for(sal_Int16 i = 0; i < DEF_FONT_COUNT; i++)
-        sDefaultFonts[i] = GetDefaultFor(i, eLang);
+        sDefaultFonts[i] = GetDefaultFor(i,
+            lcl_LanguageOfType(i, eWestern, eCJK, eCTL));
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -161,10 +177,14 @@ void    SwStdFontConfig::Commit()
     OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
-    LanguageType eLang = GetAppLanguage();
+    SvtLinguOptions aLinguOpt;
+    SvtLinguConfig().GetOptions( aLinguOpt );
+    sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
+                eCJK = aLinguOpt.nDefaultLanguage_CJK,
+                eCTL = aLinguOpt.nDefaultLanguage_CTL;
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        if(GetDefaultFor(nProp, eLang) != sDefaultFonts[nProp])
+        if(GetDefaultFor(nProp, lcl_LanguageOfType(nProp, eWestern, eCJK, eCTL)) != sDefaultFonts[nProp])
                 pValues[nProp] <<= OUString(sDefaultFonts[nProp]);
     }
     PutProperties(aNames, aValues);
@@ -180,10 +200,15 @@ SwStdFontConfig::~SwStdFontConfig()
 BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
 {
     BOOL bSame;
-    LanguageType eLang = GetAppLanguage();
-    String sDefFont(GetDefaultFor(FONT_STANDARD, eLang));
-    String sDefFontCJK(GetDefaultFor(FONT_STANDARD_CJK, eLang));
-    String sDefFontCTL(GetDefaultFor(FONT_STANDARD_CTL, eLang));
+    SvtLinguOptions aLinguOpt;
+    SvtLinguConfig().GetOptions( aLinguOpt );
+    sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
+                eCJK = aLinguOpt.nDefaultLanguage_CJK,
+                eCTL = aLinguOpt.nDefaultLanguage_CTL;
+    String sDefFont(GetDefaultFor(FONT_STANDARD, eWestern));
+    String sDefFontCJK(GetDefaultFor(FONT_STANDARD_CJK, eCJK));
+    String sDefFontCTL(GetDefaultFor(FONT_STANDARD_CTL, eCTL));
+    LanguageType eLang = lcl_LanguageOfType(nFontType, eWestern, eCJK, eCTL);
     switch( nFontType )
     {
         case FONT_STANDARD:
@@ -264,5 +289,6 @@ String  SwStdFontConfig::GetDefaultFor(USHORT nFontType, LanguageType eLang)
         default:
             nFontId = DEFAULTFONT_LATIN_TEXT;
     }
-    return  OutputDevice::GetDefaultFont(nFontId, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
+    Font aFont = OutputDevice::GetDefaultFont(nFontId, eLang, DEFAULTFONT_FLAGS_ONLYONE);
+    return  aFont.GetName();
 }
