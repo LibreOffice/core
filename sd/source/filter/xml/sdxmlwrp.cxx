@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-08 12:41:52 $
+ *  last change: $Author: cl $ $Date: 2000-11-13 09:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,10 +314,14 @@ BOOL SdXMLWrapper::Export()
 
     uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
     OUString sFileName = mrMedium.GetName();
+
+#ifdef XMLTESTBIN
     uno::Reference<xml::sax::XDocumentHandler> xPacker =
       new URLPacker(sFileName, xHandler, sal_False, sal_True);
     SdXMLExport aExp(mxLocalModel, sFileName, xPacker, mbShowProgress, IsDraw());
-//  SdXMLExport aExp(mxLocalModel, sFileName, xHandler, mbShowProgress, IsDraw());
+#else
+    SdXMLExport aExp(mxLocalModel, sFileName, xHandler, mbShowProgress, IsDraw());
+#endif
 
     // give string descriptor as parameter for doc type
     BOOL bRet = (0 == aExp.exportDoc( IsDraw() ? sXML_drawing : sXML_impress ));
