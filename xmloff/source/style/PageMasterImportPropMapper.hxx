@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportPropMapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 15:30:39 $
+ *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,65 +97,4 @@ public:
             ::std::vector< XMLPropertyState >& rProperties ) const;
 };
 
-class PageMasterHeaderImportPropertyMapper : public SvXMLImportPropertyMapper
-{
-protected:
-
-public:
-
-    PageMasterHeaderImportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper );
-    virtual ~PageMasterHeaderImportPropertyMapper();
-
-    /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
-/*  virtual sal_Bool handleSpecialItem(
-            XMLPropertyState& rProperty,
-            ::std::vector< XMLPropertyState >& rProperties,
-            const ::rtl::OUString& rValue,
-            const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap ) const;*/
-
-    /** this method is called for every item that has the MID_FLAG_NO_ITEM_IMPORT flag set */
-/*  virtual sal_Bool handleNoItem(
-            sal_Int32 nIndex,
-            ::std::vector< XMLPropertyState >& rProperties,
-               const ::rtl::OUString& rValue,
-               const SvXMLUnitConverter& rUnitConverter,
-               const SvXMLNamespaceMap& rNamespaceMap ) const;*/
-
-    /** This method is called when all attributes have been processed. It may be used to remove items that are incomplete */
-    virtual void finished(
-            ::std::vector< XMLPropertyState >& rProperties ) const;
-};
-
-class PageMasterFooterImportPropertyMapper : public SvXMLImportPropertyMapper
-{
-protected:
-
-public:
-
-    PageMasterFooterImportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper );
-    virtual ~PageMasterFooterImportPropertyMapper();
-
-    /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
-/*  virtual sal_Bool handleSpecialItem(
-            XMLPropertyState& rProperty,
-            ::std::vector< XMLPropertyState >& rProperties,
-            const ::rtl::OUString& rValue,
-            const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap ) const;*/
-
-    /** this method is called for every item that has the MID_FLAG_NO_ITEM_IMPORT flag set */
-/*  virtual sal_Bool handleNoItem(
-            sal_Int32 nIndex,
-            ::std::vector< XMLPropertyState >& rProperties,
-               const ::rtl::OUString& rValue,
-               const SvXMLUnitConverter& rUnitConverter,
-               const SvXMLNamespaceMap& rNamespaceMap ) const;*/
-
-    /** This method is called when all attributes have been processed. It may be used to remove items that are incomplete */
-    virtual void finished(
-            ::std::vector< XMLPropertyState >& rProperties ) const;
-};
 #endif

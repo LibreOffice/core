@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 15:30:38 $
+ *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _XMLOFF_PAGEMASTERIMPORTPROPMAPPER_HXX
 #include "PageMasterImportPropMapper.hxx"
 #endif
+#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
+#include "PageMasterStyleMap.hxx"
+#endif
 
 using namespace ::com::sun::star;
 
@@ -131,18 +134,43 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
         ((rLocalName.compareToAscii( sXML_header_style ) == 0) ||
         (rLocalName.compareToAscii( sXML_footer_style ) == 0) ) )
     {
-        sal_Bool bHeader = (rLocalName.compareToAscii( sXML_header_style ) == 0);
-        XMLPropertySetMapper *pPropMapper = new XMLPageMasterPropSetMapper( bHeader );
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap = NULL;
-        if (bHeader)
-            xImpPrMap = new PageMasterHeaderImportPropertyMapper( pPropMapper );
-        else
-            xImpPrMap = new PageMasterFooterImportPropertyMapper( pPropMapper );
-
+        sal_Bool bHeader = (rLocalName.compareToAscii(sXML_header_style) == 0);
+        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+            GetStyles()->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
         {
+            const UniReference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
+            sal_Int32 nFlag;
+            if (bHeader)
+                nFlag = CTF_PM_HEADERFLAG;
+            else
+                nFlag = CTF_PM_FOOTERFLAG;
+            sal_Int32 nStartIndex (-1);
+            sal_Int32 nEndIndex (-1);
+            sal_Bool bFirst(sal_False);
+            sal_Bool bEnd(sal_False);
+            sal_Int32 nIndex = 0;
+            while ( nIndex < rMapper->GetEntryCount() && !bEnd)
+            {
+                if ((rMapper->GetEntryContextId( nIndex ) & CTF_PM_FLAGMASK) == nFlag)
+                {
+                    if (!bFirst)
+                    {
+                        bFirst = sal_True;
+                        nStartIndex = nIndex;
+                    }
+                }
+                else if (bFirst)
+                {
+                    bEnd = sal_True;
+                    nEndIndex = nIndex;
+                }
+                nIndex++;
+            }
+            if (!bEnd)
+                nEndIndex = nIndex;
             pContext = new PageHeaderFooterContext(GetImport(), nPrefix, rLocalName,
-                            xAttrList, GetProperties(), xImpPrMap, bHeader);
+                            xAttrList, GetProperties(), xImpPrMap, nStartIndex, nEndIndex, bHeader);
         }
     }
     if( XML_NAMESPACE_STYLE == nPrefix &&
@@ -152,11 +180,26 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
             GetStyles()->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
         {
+            const UniReference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
+            sal_Int32 nEndIndex (-1);
+            sal_Bool bEnd(sal_False);
+            sal_Int32 nIndex = 0;
+            while ( nIndex < rMapper->GetEntryCount() && !bEnd)
+            {
+                if ((rMapper->GetEntryContextId( nIndex ) & CTF_PM_FLAGMASK) != 0)
+                {
+                    nEndIndex = nIndex;
+                    bEnd = sal_True;
+                }
+                nIndex++;
+            }
+            if (!bEnd)
+                nEndIndex = nIndex;
             PageContextType aType = Page;
             pContext = new PagePropertySetContext( GetImport(), nPrefix,
                                                     rLocalName, xAttrList,
                                                     GetProperties(),
-                                                    xImpPrMap,  aType);
+                                                    xImpPrMap, 0, nEndIndex, aType);
         }
     }
 

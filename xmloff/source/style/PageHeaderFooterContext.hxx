@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageHeaderFooterContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 12:14:05 $
+ *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 class PageHeaderFooterContext : public SvXMLImportContext
 {
     ::std::vector< XMLPropertyState > &     rProperties;
+    sal_Int32                               nStartIndex;
+    sal_Int32                               nEndIndex;
     sal_Bool                                bHeader;
     const UniReference < SvXMLImportPropertyMapper > rMap;
 
@@ -79,6 +81,7 @@ public:
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ::std::vector< XMLPropertyState > & rProperties,
                         const UniReference < SvXMLImportPropertyMapper > &rMap,
+                        sal_Int32 nStartIndex, sal_Int32 nEndIndex,
                         const sal_Bool bHeader);
 
     virtual ~PageHeaderFooterContext();

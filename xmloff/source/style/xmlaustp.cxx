@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
+ *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,129 +148,78 @@ void SvXMLAutoStylePoolP::exportStyleContent(
 {
     if( nFamily == XML_STYLE_FAMILY_PAGE_MASTER )
     {
-        SvXMLAttributeList* pHeaderAttr = new SvXMLAttributeList;
-        uno::Reference< xml::sax::XAttributeList > xHeaderAttrList( pHeaderAttr );
-        SvXMLAttributeList* pFooterAttr = new SvXMLAttributeList;
-        uno::Reference< xml::sax::XAttributeList > xFooterAttrList( pFooterAttr );
-
         OUString sType( RTL_CONSTASCII_USTRINGPARAM( sXML_CDATA ) );
         OUString sWS( RTL_CONSTASCII_USTRINGPARAM( sXML_WS ) );
 
-        sal_Int32       nHeaderIndex;
-        const uno::Any* pHeaderURL      = NULL;
-        const uno::Any* pHeaderPos      = NULL;
-        const uno::Any* pHeaderFilter   = NULL;
-        sal_Int32       nFooterIndex;
-        const uno::Any* pFooterURL      = NULL;
-        const uno::Any* pFooterPos      = NULL;
-        const uno::Any* pFooterFilter   = NULL;
+        sal_Int32       nHeaderStartIndex(-1);
+        sal_Int32       nHeaderEndIndex(-1);
+        sal_Int32       nFooterStartIndex(-1);
+        sal_Int32       nFooterEndIndex(-1);
+        sal_Bool        bHeaderStartIndex(sal_False);
+        sal_Bool        bHeaderEndIndex(sal_False);
+        sal_Bool        bFooterStartIndex(sal_False);
+        sal_Bool        bFooterEndIndex(sal_False);
 
         UniReference< XMLPropertySetMapper > aPropMapper = rPropExp.getPropertySetMapper();
 
-        XMLBackgroundImageExport& rBGExport =
-            ((XMLPageMasterExportPropMapper&) rPropExp).GetBackgroundImageExport();
-
-        for( ::std::vector< XMLPropertyState >::const_iterator pProp = rProperties.begin(); pProp != rProperties.end(); pProp++ )
+        sal_Int32 nIndex(0);
+        while(nIndex < aPropMapper->GetEntryCount())
         {
-            sal_Int32 nIndex        = pProp->mnIndex;
-            sal_Int16 nContextId    = aPropMapper->GetEntryContextId( nIndex );
-            sal_Int16 nFlag         = nContextId & CTF_PM_FLAGMASK;
-            sal_Int16 nSimpleId     = nContextId & ~CTF_PM_FLAGMASK;
-
-            switch( nContextId )
+            switch( aPropMapper->GetEntryContextId( nIndex ) & CTF_PM_FLAGMASK )
             {
-                case CTF_PM_HEADERGRAPHICURL:
+                case CTF_PM_HEADERFLAG:
                 {
-                    pHeaderURL = &pProp->maValue;
-                    nHeaderIndex = nIndex;
-                }
-                break;
-                case CTF_PM_HEADERGRAPHICPOSITION:
-                    pHeaderPos = &pProp->maValue;
-                break;
-                case CTF_PM_HEADERGRAPHICFILTER:
-                    pHeaderFilter = &pProp->maValue;
-                break;
-
-                case CTF_PM_FOOTERGRAPHICURL:
-                {
-                    pFooterURL = &pProp->maValue;
-                    nFooterIndex = nIndex;
-                }
-                break;
-                case CTF_PM_FOOTERGRAPHICPOSITION:
-                    pFooterPos = &pProp->maValue;
-                break;
-                case CTF_PM_FOOTERGRAPHICFILTER:
-                    pFooterFilter = &pProp->maValue;
-                break;
-
-                default:
-                    if( nFlag )
+                    if (!bHeaderStartIndex)
                     {
-                        OUString sName( rNamespaceMap.GetQNameByKey(
-                            aPropMapper->GetEntryNameSpace( nIndex ), aPropMapper->GetEntryXMLName( nIndex ) ) );
-                        OUString sValue;
-                        const XMLPropertyHandler* pPropHdl = aPropMapper->GetPropertyHandler( nIndex );
-                        if( pPropHdl && pPropHdl->exportXML( sValue, pProp->maValue, rUnitConverter ) && (pProp->mnIndex >= 0) )
-                        {
-                            switch( nFlag )
-                            {
-                                case CTF_PM_HEADERFLAG:
-                                    pHeaderAttr->AddAttribute( sName, sType, sValue );
-                                break;
-                                case CTF_PM_FOOTERFLAG:
-                                    pFooterAttr->AddAttribute( sName, sType, sValue );
-                                break;
-                            }
-                        }
+                        nHeaderStartIndex = nIndex;
+                        bHeaderStartIndex = sal_True;
                     }
+                    if (bFooterStartIndex && !bFooterEndIndex)
+                    {
+                        nFooterEndIndex = nIndex;
+                        bFooterEndIndex = sal_True;
+                    }
+                }
+                break;
+                case CTF_PM_FOOTERFLAG:
+                {
+                    if (!bFooterStartIndex)
+                    {
+                        nFooterStartIndex = nIndex;
+                        bFooterStartIndex = sal_True;
+                    }
+                    if (bHeaderStartIndex && !bHeaderEndIndex)
+                    {
+                        nHeaderEndIndex = nIndex;
+                        bHeaderEndIndex = sal_True;
+                    }
+                }
+                break;
             }
+            nIndex++;
         }
+        if (!bHeaderEndIndex)
+            nHeaderEndIndex = nIndex;
+        if (!bFooterEndIndex)
+            nFooterEndIndex = nIndex;
 
         uno::Reference< xml::sax::XAttributeList > xEmptyList;
-        if( pHeaderAttr->getLength() )
-        {
-            OUString sNameHeader( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii( sXML_header_style ) ) );
-            OUString sNameProp( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii( sXML_properties ) ) );
 
-            rHandler->ignorableWhitespace( sWS );
-            rHandler->startElement( sNameHeader, xEmptyList );
-            rHandler->ignorableWhitespace( sWS );
-            rHandler->startElement( sNameProp, xHeaderAttrList );
-            if( pHeaderURL )
-            {
-                DBG_ASSERT( pHeaderPos && pHeaderFilter, "footer graphic pos or filter missing" );
-                rBGExport.exportXML( *pHeaderURL, pHeaderPos, pHeaderFilter,
-                    aPropMapper->GetEntryNameSpace( nHeaderIndex ),
-                    aPropMapper->GetEntryXMLName( nHeaderIndex ) );
-            }
-            rHandler->ignorableWhitespace( sWS );
-            rHandler->endElement( sNameProp );
-            rHandler->ignorableWhitespace( sWS );
-            rHandler->endElement( sNameHeader );
-        }
-        if( pFooterAttr->getLength() )
-        {
-            OUString sNameFooter( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii( sXML_footer_style ) ) );
-            OUString sNameProp( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii( sXML_properties ) ) );
+        OUString sNameHeader( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii( sXML_header_style ) ) );
 
-            rHandler->ignorableWhitespace( sWS );
-            rHandler->startElement( sNameFooter, xEmptyList );
-            rHandler->ignorableWhitespace( sWS );
-            rHandler->startElement( sNameProp, xFooterAttrList );
-            if( pHeaderURL )
-            {
-                DBG_ASSERT( pFooterPos && pFooterFilter, "footer graphic pos or filter missing" );
-                rBGExport.exportXML( *pFooterURL, pFooterPos, pFooterFilter,
-                    aPropMapper->GetEntryNameSpace( nFooterIndex ),
-                    aPropMapper->GetEntryXMLName( nFooterIndex ) );
-            }
-            rHandler->ignorableWhitespace( sWS );
-            rHandler->endElement( sNameProp );
-            rHandler->ignorableWhitespace( sWS );
-            rHandler->endElement( sNameFooter );
-        }
+        rHandler->ignorableWhitespace( sWS );
+        rHandler->startElement( sNameHeader, xEmptyList );
+        rPropExp.exportXML(rHandler, rProperties, rUnitConverter, rNamespaceMap, nHeaderStartIndex, nHeaderEndIndex, XML_EXPORT_FLAG_IGN_WS);
+        rHandler->ignorableWhitespace( sWS );
+        rHandler->endElement( sNameHeader );
+
+        OUString sNameFooter( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii( sXML_footer_style ) ) );
+
+        rHandler->ignorableWhitespace( sWS );
+        rHandler->startElement( sNameFooter, xEmptyList );
+        rPropExp.exportXML(rHandler, rProperties, rUnitConverter, rNamespaceMap, nFooterStartIndex, nFooterEndIndex, XML_EXPORT_FLAG_IGN_WS);
+        rHandler->ignorableWhitespace( sWS );
+        rHandler->endElement( sNameFooter );
     }
 }
 

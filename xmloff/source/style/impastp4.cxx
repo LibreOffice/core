@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 11:37:23 $
+ *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,12 @@
 #endif
 #ifndef _XMLOFF_XMLEXPPR_HXX
 #include "xmlexppr.hxx"
+#endif
+#ifndef _XMLOFF_FAMILIES_HXX_
+#include "families.hxx"
+#endif
+#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
+#include "PageMasterStyleMap.hxx"
 #endif
 
 using namespace ::std;
@@ -348,9 +354,25 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                 rHandler->ignorableWhitespace( msWS );
                 rHandler->startElement( sName, mxAttrList );
                 mpAttrList->Clear();
+                sal_Int32 nStart(-1);
+                sal_Int32 nEnd(-1);
+                if (nFamily == XML_STYLE_FAMILY_PAGE_MASTER)
+                {
+                    nStart = 0;
+                    sal_Int32 nIndex = 0;
+                    UniReference< XMLPropertySetMapper > aPropMapper = rPropExp.getPropertySetMapper();
+                    while(nIndex < aPropMapper->GetEntryCount() && nEnd == -1)
+                    {
+                        if (aPropMapper->GetEntryContextId( nIndex ) & CTF_PM_FLAGMASK)
+                            nEnd = nIndex;
+                        nIndex++;
+                    }
+                    if (nEnd == -1)
+                        nEnd = nIndex;
+                }
 
                 rPropExp.exportXML( rHandler, aExpStyles[i].mpProperties->GetProperties(), rUnitConverter,
-                                    rNamespaceMap, XML_EXPORT_FLAG_IGN_WS );
+                                    rNamespaceMap, nStart, nEnd, XML_EXPORT_FLAG_IGN_WS );
 
                 pAntiImpl->exportStyleContent( rHandler, nFamily,
                         aExpStyles[i].mpProperties->GetProperties(),

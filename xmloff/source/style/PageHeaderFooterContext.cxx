@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 10:17:47 $
+ *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,10 +91,13 @@ PageHeaderFooterContext::PageHeaderFooterContext( SvXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ::std::vector< XMLPropertyState > & rTempProperties,
                                       const UniReference < SvXMLImportPropertyMapper > &rTempMap,
+                                      sal_Int32 nStart, sal_Int32 nEnd,
                                       const sal_Bool bTempHeader ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     rProperties(rTempProperties),
-    rMap(rTempMap)
+    rMap(rTempMap),
+    nStartIndex(nStart),
+    nEndIndex(nEnd)
 {
     bHeader = bTempHeader;
 }
@@ -119,7 +122,7 @@ SvXMLImportContext *PageHeaderFooterContext::CreateChildContext( USHORT nPrefix,
         pContext = new PagePropertySetContext( GetImport(), nPrefix,
                                                 rLName, xAttrList,
                                                 rProperties,
-                                                rMap,  aType);
+                                                rMap,  nStartIndex, nEndIndex, aType);
     }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropMapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-24 08:32:04 $
+ *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,12 +246,6 @@ void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& r
 
 XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper():
     XMLPropertySetMapper( aXMLPageMasterStyleMap, new XMLPageMasterPropHdlFactory())
-{
-}
-
-XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper(const sal_Bool bHeader):
-    XMLPropertySetMapper( bHeader ? aXMLPageMasterHeaderImportStyleMap : aXMLPageMasterFooterImportStyleMap,
-                            new XMLPageMasterPropHdlFactory())
 {
 }
 

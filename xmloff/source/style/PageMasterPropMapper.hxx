@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropMapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 15:30:39 $
+ *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@ protected:
                             ) const;
 public:
                         XMLPageMasterPropSetMapper();
-                        XMLPageMasterPropSetMapper(const sal_Bool bHeader);
                         XMLPageMasterPropSetMapper(
                             const XMLPropertyMapEntry* pEntries,
                             const UniReference< XMLPropertyHandlerFactory >& rFactory );
