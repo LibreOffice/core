@@ -20511,3 +20511,6 @@ _real@8@400cfa00000000000000
 ?__uninitialized_copy_aux@_STL@@YAPAVINetURLObject@@PAV2@00U__false_type@@@Z
 ?__uninitialized_fill_n_aux@_STL@@YAPAVINetURLObject@@PAV2@IABV2@U__false_type@@@Z
 ?deallocate@?$_STL_alloc_proxy@PAVINetURLObject@@V1@V?$allocator@VINetURLObject@@@_STL@@@_STL@@QAEXPAVINetURLObject@@I@Z
+?GetGraphicObject@SvxBulletItem@@QBEABVGraphicObject@@XZ
+?SetBitmap@SvxBulletItem@@QAEXABVBitmap@@@Z
+?SetGraphicObject@SvxBulletItem@@QAEXABVGraphicObject@@@Z
