@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exceptiontree.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:08:45 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef INCLUDED_codemaker_exceptiontree_hxx
 #define INCLUDED_codemaker_exceptiontree_hxx
 
+#include "codemaker/global.hxx"
 #include "rtl/string.hxx"
 
 #include <vector>
@@ -133,7 +134,8 @@ public:
        if different calls to this member function use different, incompatible
        type managers
      */
-    void add(rtl::OString const & name, TypeManager const & manager);
+    void add(rtl::OString const & name, TypeManager const & manager)
+        throw( CannotDumpException );
 
     /**
        Gives access to the resultant exception hierarchy.
