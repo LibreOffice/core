@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 11:20:03 $
+#   last change: $Author: obo $ $Date: 2004-09-09 15:49:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,6 +110,7 @@ IDLFILES=\
     AdjustmentEvent.idl\
     AdjustmentType.idl\
     CharSet.idl\
+    Command.idl\
     DeviceCapability.idl\
     DeviceInfo.idl\
     DialogProvider.idl\
@@ -312,6 +313,7 @@ IDLFILES=\
     XVclWindowPeer.idl\
     XView.idl\
     XWindow.idl\
+    XWindow2.idl\
     XWindowListener.idl\
     XWindowPeer.idl\
     XMenuExtended.idl
