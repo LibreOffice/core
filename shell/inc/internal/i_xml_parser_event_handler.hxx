@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_xml_parser_event_handler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:53:24 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 10:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _I_XML_PARSER_EVENT_HANDLER_HXX_
-#define _I_XML_PARSER_EVENT_HANDLER_HXX_
+#ifndef I_XML_PARSER_EVENT_HANDLER_HXX_INCLUDED
+#define I_XML_PARSER_EVENT_HANDLER_HXX_INCLUDED
 
 #include <string>
 #include <map>
