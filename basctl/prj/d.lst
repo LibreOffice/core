@@ -10,6 +10,7 @@ touch: ..\inc\hid.lst %_DEST%\bin%_EXT%\hid.lst
 ..\%__SRC%\misc\basctl.csv %_DEST%\inc%_EXT%\basctl.csv
 ..\%__SRC%\misc\*.hid %_DEST%\bin%_EXT%\*.hid
 ..\%__SRC%\lib\basctl.lib %_DEST%\lib%_EXT%\basctl.lib
+..\%__SRC%\slb\ybctl.lib %_DEST%\lib%_EXT%\ybctl.lib
 
 del %_DEST%\inc%_EXT%\baside.hxx
 
