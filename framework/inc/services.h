@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:36:32 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ namespace framework{
 #define SERVICENAME_STATUSBARFACTORY                            DECLARE_ASCII("drafts.com.sun.star.ui.StatusBarFactory"             )
 #define SERVICENAME_UICATEGORYDESCRIPTION                       DECLARE_ASCII("com.sun.star.ui.UICategoryDescription"               )
 #define SERVICENAME_STATUSBARCONTROLLERFACTORY                  DECLARE_ASCII("com.sun.star.frame.StatusbarControllerFactory"       )
-
+#define SERVICENAME_SESSIONLISTENER                             DECLARE_ASCII("com.sun.star.frame.SessionListener"                  )
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
 //_________________________________________________________________________________________________________________
@@ -215,6 +215,8 @@ namespace framework{
 #define IMPLEMENTATIONNAME_STATUSBARCONTROLLERFACTORY           DECLARE_ASCII("com.sun.star.comp.framework.StatusBarControllerFactory" )
 #define IMPLEMENTATIONNAME_UICATEGORYDESCRIPTION                DECLARE_ASCII("com.sun.star.comp.framework.UICategoryDescription"   )
 #define IMPLEMENTATIONNAME_APPDISPATCHPROVIDER                  DECLARE_ASCII("com.sun.star.comp.sfx2.AppDispatchProvider"          )
+#define IMPLEMENTATIONNAME_SESSIONLISTENER                      DECLARE_ASCII("com.sun.star.comp.frame.SessionListener"             )
+
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_SERVICES_H_
