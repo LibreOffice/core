@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvspln.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 15:51:55 $
+ *  last change: $Author: sj $ $Date: 2001-11-30 12:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,13 @@ USHORT PeriodicSpline(USHORT n, double* x, double* y,
         ricol[0]=hr;
         a[nm1]=3.0*((y[1]-y[0])/hr-(y[n]-y[nm1])/hl);
         Error=ZyklTriDiagGS(FALSE,n,b,d,c,lowrow,ricol,a);
-        if (Error!=0) { delete a,lowrow,ricol; return(Error+4); }
+        if ( Error != 0 )
+        {
+            delete a;
+            delete lowrow;
+            delete ricol;
+            return(Error+4);
+        }
         for (i=0;i<=nm1;i++) c[i+1]=a[i];
     }
     c[0]=c[n];
@@ -673,7 +679,9 @@ USHORT PeriodicSpline(USHORT n, double* x, double* y,
         b[i]=b[i]-hl*(c[i+1]+2.0*c[i])/3.0;
         d[i]=(c[i+1]-c[i])/hl/3.0;
     }
-    delete a,lowrow,ricol;
+    delete a;
+    delete lowrow;
+    delete ricol;
     return 0;
 }
 
@@ -826,20 +834,25 @@ BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
     MargN1=0.0; MargN2=0.0;
     if (n>0) n--; // n Korregieren (Anzahl der Teilpolynome)
 
-    if ((Marg==3 && n>=3) || (Marg==2 && n>=2)) {
-        i=ParaSpline(n,ax,ay,Marg,Marg01,Marg01,MargN1,MargN2,FALSE,T,bx,cx,dx,by,cy,dy);
-        if (i==0) {
-            return TRUE;
-        } else {
-            delete ax,ay,bx,by,cx,cy,dx,dy,T;
-            n=0;
-            return FALSE;
-        }
-    } else {
-        delete ax,ay,bx,by,cx,cy,dx,dy,T;
-        n=0;
-        return FALSE;
+    BOOL bRet = FALSE;
+    if ( ( Marg == 3 && n >= 3 ) || ( Marg == 2 && n >= 2 ) )
+    {
+        bRet = ParaSpline(n,ax,ay,Marg,Marg01,Marg01,MargN1,MargN2,FALSE,T,bx,cx,dx,by,cy,dy) == 0;
     }
+    if ( bRet == FALSE )
+    {
+        delete ax;
+        delete ay;
+        delete bx;
+        delete by;
+        delete cx;
+        delete cy;
+        delete dx;
+        delete dy;
+        delete T;
+        n=0;
+    }
+    return bRet;
 }
 
 
@@ -913,201 +926,17 @@ BOOL Spline2Poly(Polygon& rSpln, BOOL Periodic, Polygon& rPoly)
             } // Ende von Teilpolynom
             i++; // nÑchstes Teilpolynom
         }
-        delete ax,ay,bx,by,cx,cy,dx,dy,tv;
+        delete ax;
+        delete ay;
+        delete bx;
+        delete by;
+        delete cx;
+        delete cy;
+        delete dx;
+        delete dy;
+        delete tv;
         return bOk;
     } // Ende von if (bOk)
     rPoly.SetSize(0);
     return FALSE;
 }
-
-
-
-
-
-
-
-
-
-/*************************************************************************
-|*
-|*    CalcLine()
-|*
-|*    Beschreibung      Routine fÅr DrawSpline (s.u.).
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
-*************************************************************************/
-/*void CalcLine(short x1, short y1,
-              short x2, short y2,
-              short hb, Polygon& rPoly)
-{
-    short  dx,dy,dxp,dyp;
-    double l;
-
-    rPoly.SetSize(4);
-    dx=x2-x1;
-    dy=y2-y1;
-    l=sqrt(dx*dx+dy*dy);
-    if (l>0) {
-        dxp=short((long(dy)*long(hb))/l);
-        dyp=short((long(dx)*long(hb))/l);
-        rPoly.SetPoint(Point(x1-dxp,y1+dyp),0);
-        rPoly.SetPoint(Point(x1+dxp,y1-dyp),1);
-        rPoly.SetPoint(Point(x2+dxp,y2-dyp),2);
-        rPoly.SetPoint(Point(x2-dxp,y2+dyp),3);
-    } else {
-        rPoly.SetPoint(Point(x1,y1+hb),0);
-        rPoly.SetPoint(Point(x1,y1-hb),1);
-        rPoly.SetPoint(Point(x2,y2-hb),2);
-        rPoly.SetPoint(Point(x2,y2+hb),3);
-    }
-} */
-
-
-/*************************************************************************
-|*
-|*    DrawSpline()
-|*
-|*    Beschreibung      Alte Routine. Dicke Linien werden mit Polys gemalt.
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
-*************************************************************************/
-/*
-BOOL DrawSpline(OutputDevice& rOut, Polygon& rPoly, BOOL Periodic)
-{
-    short  MinKoord=-12000; // StarDraw-Definitionen
-    short  MaxKoord=32000;  // zur Vermeidung von öberlÑufen
-
-    double* ax;          // ø
-    double* ay;          // ≥ Koeffizienten
-    double* bx;          // ≥ der Polynome
-    double* by;          // ≥
-    double* cx;          // ≥
-    double* cy;          // ≥
-    double* dx;          // ≥
-    double* dy;          // ≥
-    double* tv;          // Ÿ
-
-    double  Step;        // Schrittweite fÅr t
-    double  dt1,dt2,dt3; // Delta t, ˝, ^3
-    double  t;
-    BOOL    bEnde;       // Teilpolynom zu Ende?
-    USHORT  FHB;         // Halbe Linienbreite in SGV
-    Point   P10,P20;     // letzter Punkt (Screen) fÅr Anschlu·
-    Point   P100,P200;   // erster Punkt (Screen) zum Schlie·en des pSpline
-    BOOL    bFirst;      // erster Schrit des ersten Teilpolynoms?
-    BOOL    bThin;       // StrichstÑrke 1 Pixel?
-    Polygon aFP(0);      // fÅr gefÅllten Spline
-    Polygon aLP(4);      // fÅr dicke Umrandung
-    BOOL    bFill;       // gefÅllter Spline?
-    BOOL    bOutl;       // umrandeter Spline?
-    USHORT  n;           // Anzahl der zu zeichnenden Teilpolynome
-    USHORT  i;           // aktuelles Teilpolynom
-    BOOL    bOk;         // noch alles ok?
-    USHORT  StatA,StatB;
-    USHORT  PolyMax=16384;// Maximale Anzahl von Polygonpunkten
-    Pen     aPenMerk;
-    Brush   aBrushMerk;
-    short   x0,y0;
-    long    x,y;
-
-    bOk=CalcSpline(rPoly,Periodic,n,ax,ay,bx,by,cx,cy,dx,dy,tv);
-    if (bOk) {
-        aPenMerk=rOut.GetPen();
-        aBrushMerk=rOut.GetFillInBrush();
-        bFill=rOut.GetFillInBrush().GetStyle()!=BRUSH_NULL && Periodic;
-        bOutl=rOut.GetPen().GetStyle()!=PEN_NULL;
-        FHB  =rOut.GetPen().GetWidth() /2;
-        bThin=rOut.GetPen().GetWidth()<=1;
-        Step =10;
-
-        StatA=1; if (!bFill) StatA++;
-        StatB=2; if (!bOutl) StatB--;
-
-        while (StatA<=StatB) {
-            if (StatA==1) {
-                rOut.SetFillInBrush(aBrushMerk);
-                rOut.SetPen(Pen(PEN_NULL));
-            } else {
-                if (!bThin) {
-                    rOut.SetFillInBrush(Brush(rOut.GetPen().GetColor()));
-                    rOut.SetPen(Pen(PEN_NULL));
-                } else {
-                    rOut.SetPen(aPenMerk);
-                }
-            }
-            bFirst=TRUE;
-
-            x0=short(ax[0]); y0=short(ay[0]); // erster Punkt
-            i=0;
-            while (i<n) {       // n Teilpolynome malen
-                t=tv[i]+Step;
-                bEnde=FALSE;
-                while (!bEnde) {  // ein Teilpolynom interpolieren
-                    bEnde=t>=tv[i+1];
-                    if (bEnde) t=tv[i+1];
-                    dt1=t-tv[i]; dt2=dt1*dt1; dt3=dt2*dt1;
-                    x=long(ax[i]+bx[i]*dt1+cx[i]*dt2+dx[i]*dt3);
-                    y=long(ay[i]+by[i]*dt1+cy[i]*dt2+dy[i]*dt3);
-                    if (x-FHB<MinKoord) x=MinKoord+FHB; if (x+FHB>MaxKoord) x=MaxKoord-FHB;
-                    if (y-FHB<MinKoord) y=MinKoord+FHB; if (y+FHB>MaxKoord) y=MaxKoord-FHB;
-                    if (StatA==1) {  // FlÑche
-                        if (aFP.GetSize()<PolyMax) {
-                            aFP.SetSize(aFP.GetSize()+1);
-                            aFP.SetPoint(Point(short(x),short(y)),aFP.GetSize()-1);
-                        } else {
-                            bOk=FALSE; // Fehler: Polygon wird zu gro·
-                        }
-                    } else {        // Umrandung
-                        if (bThin) {
-                            rOut.DrawLine(Point(x0,y0),Point(short(x),short(y)));
-                        } else {
-                            CalcLine(x0,y0,short(x),short(y),FHB,aLP);
-                            rOut.DrawPolygon(aLP);
-                            if (bFirst) {
-                                P100=aLP.GetPoint(0); // fÅr pSpline merken
-                                P200=aLP.GetPoint(1);
-                            } else {
-                                Polygon aMP(4);
-                                aMP.SetPoint(P10,0);
-                                aMP.SetPoint(P20,1);
-                                aMP.SetPoint(aLP.GetPoint(1),2);
-                                aMP.SetPoint(aLP.GetPoint(0),3);
-                                rOut.DrawPolygon(aMP);
-                            }
-                            P10=aLP.GetPoint(3); // zum FÅllen der MÑuseecken merken
-                            P20=aLP.GetPoint(2);
-                        } // Ende von Umrandung
-                    } // Ende von if (StatA==1)
-                    x0=short(x); y0=short(y);  // die letzten Koordinaten merken
-                    bFirst=FALSE;
-                    t=t+Step;
-                } // Ende von Teilpolynom
-                i++; // nÑchstes Teilpolynom
-            }
-            if (StatA==1) {
-                rOut.DrawPolygon(aFP);
-            } else {
-                if (!bThin && Periodic) {      // nun die letzte MÑuseecke fÅllen
-                    Polygon aMP(4);
-                    aMP.SetPoint(aLP[3],1);
-                    aMP.SetPoint(aLP[4],2);
-                    aMP.SetPoint(P100,3);
-                    aMP.SetPoint(P200,4);
-                    rOut.DrawPolygon(aMP);
-                }
-            }
-            StatA++;
-        } // Ende von while (StatA<=StatB)
-        rOut.SetPen(aPenMerk);
-        rOut.SetFillInBrush(aBrushMerk);
-        delete ax,ay,bx,by,cx,cy,dx,dy,tv;
-        return TRUE;
-    } // Ende von if (bOk)
-    return FALSE;
-} */
-
-
-
-
