@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:05:04 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_SECURITYOPTIONS_HXX
+#include <svtools/securityoptions.hxx>
+#endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -212,6 +215,8 @@
 #include "fltoptint.hxx"
 #include "graphhelp.hxx"
 
+// xmlsec05, check with SFX team
+#include "../appl/app.hrc"
 
 extern sal_uInt32 CheckPasswd_Impl( SfxObjectShell*, SfxItemPool&, SfxMedium* );
 
@@ -641,8 +646,14 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 INetURLObject::SetBaseURL( aOldURL );
                 if ( bOk )
                 {
-                    GetDocInfo().Load(xStor);
+                    SfxDocumentInfo& rDocInfo = GetDocInfo();
+                    rDocInfo.Load( xStor );
                     bHasName = sal_True;
+
+                    // --> PB 2004-08-20 #i33095#
+                    if ( !IsReadOnly() && rDocInfo.IsLoadReadonly() )
+                        SetReadOnlyUI();
+                    // <--
                 }
                 else
                     SetError( ERRCODE_ABORT );
@@ -793,6 +804,17 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 SystemShell::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : String() );
             }
         }
+    }
+
+    // MAV: the code below is moved here since this is the only central place where the object shell is visible
+    //      in case of pick list for example OpenDocExec_Impl() is not used.
+
+    // xmlsec05, check with SFX team
+    // Check if there is a broken signature...
+    // After EA change to interaction handler...
+    if ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
+    {
+        WarningBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) ).Execute();
     }
 
     return bOk;
@@ -2275,6 +2297,118 @@ sal_Bool SfxObjectShell::IsInformationLost()
     if ( pFilt == GetFactory().GetFilterContainer()->GetDefaultFilter_Impl(GetFactory().GetFactoryName()) )
         return sal_False;
     return pFilt && pFilt->IsAlienFormat() && pImp->bDidDangerousSave && !(pFilt->GetFilterFlags() & SFX_FILTER_SILENTEXPORT);
+}
+
+sal_uInt16 SfxObjectShell::GetHiddenInformationState( sal_uInt16 nStates )
+{
+    sal_uInt16 nState = 0;
+    if ( nStates & HIDDENINFORMATION_DOCUMENTVERSIONS )
+    {
+        const SfxVersionTableDtor* pTable = GetMedium()->GetVersionList();
+        if ( pTable )
+            nState |= HIDDENINFORMATION_DOCUMENTVERSIONS;
+    }
+
+    return nState;
+}
+
+sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, Window* pParent )
+{
+    sal_Int16 nRet = RET_YES;
+    USHORT nResId = 0;
+    SvtSecurityOptions::EOption eOption = static_cast< SvtSecurityOptions::EOption >( -1 );
+
+    switch ( eFact )
+    {
+        case WhenSaving :
+        {
+            nResId = STR_HIDDENINFO_CONTINUE_SAVING;
+            eOption = SvtSecurityOptions::E_DOCWARN_SAVEORSEND;
+            break;
+        }
+        case WhenPrinting :
+        {
+            nResId = STR_HIDDENINFO_CONTINUE_PRINTING;
+            eOption = SvtSecurityOptions::E_DOCWARN_PRINT;
+            break;
+        }
+        case WhenSigning :
+        {
+            nResId = STR_HIDDENINFO_CONTINUE_SIGNING;
+            eOption = SvtSecurityOptions::E_DOCWARN_SIGNING;
+            break;
+        }
+        case WhenCreatingPDF :
+        {
+            nResId = STR_HIDDENINFO_CONTINUE_CREATEPDF;
+            eOption = SvtSecurityOptions::E_DOCWARN_CREATEPDF;
+            break;
+        }
+        default:
+        {
+            DBG_ERRORFILE( "SfxObjectShell::DetectHiddenInformation(): what fact?" );
+        }
+    }
+
+    if ( eOption != -1 && SvtSecurityOptions().IsOptionSet( eOption ) )
+    {
+        String sMessage( SfxResId( STR_HIDDENINFO_CONTAINS ) );
+        sal_uInt16 nWantedStates = HIDDENINFORMATION_RECORDEDCHANGES | HIDDENINFORMATION_NOTES;
+        if ( eFact != WhenPrinting )
+            nWantedStates |= HIDDENINFORMATION_DOCUMENTVERSIONS;
+        sal_uInt16 nStates = GetHiddenInformationState( nWantedStates );
+        bool bWarning = false;
+
+        if ( ( nStates & HIDDENINFORMATION_RECORDEDCHANGES ) == HIDDENINFORMATION_RECORDEDCHANGES )
+        {
+            sMessage += String( SfxResId( STR_HIDDENINFO_RECORDCHANGES ) );
+            sMessage += '\n';
+            bWarning = true;
+        }
+        if ( ( nStates & HIDDENINFORMATION_NOTES ) == HIDDENINFORMATION_NOTES )
+        {
+            sMessage += String( SfxResId( STR_HIDDENINFO_NOTES ) );
+            sMessage += '\n';
+            bWarning = true;
+        }
+        if ( ( nStates & HIDDENINFORMATION_DOCUMENTVERSIONS ) == HIDDENINFORMATION_DOCUMENTVERSIONS )
+        {
+            sMessage += String( SfxResId( STR_HIDDENINFO_DOCVERSIONS ) );
+            sMessage += '\n';
+            bWarning = true;
+        }
+
+        if ( bWarning )
+        {
+            sMessage += '\n';
+            sMessage += String( SfxResId( nResId ) );
+            WarningBox aWBox( pParent, WB_YES_NO | WB_DEF_NO, sMessage );
+            nRet = aWBox.Execute();
+        }
+    }
+
+    return nRet;
+}
+
+sal_Bool SfxObjectShell::HasSecurityOptOpenReadOnly() const
+{
+    return sal_True;
+}
+
+sal_Bool SfxObjectShell::IsSecurityOptOpenReadOnly() const
+{
+    const SfxDocumentInfo& rDocInfo = const_cast< SfxObjectShell* >( this )->GetDocInfo();
+    return rDocInfo.IsLoadReadonly();
+}
+
+void SfxObjectShell::SetSecurityOptOpenReadOnly( sal_Bool _b )
+{
+    SfxDocumentInfo& rDocInfo = GetDocInfo();
+    if ( rDocInfo.IsLoadReadonly() != _b )
+    {
+        GetDocInfo().SetLoadReadonly( _b );
+        SetModified( sal_True );
+    }
 }
 
 sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
