@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:33:02 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,6 @@ RootData::RootData( void )
     pCharset = NULL;
 
     bCellCut = FALSE;
-    bBreakSharedFormula = TRUE;
     bChartTab = FALSE;
 
     pAutoFilterBuffer = NULL;
