@@ -336,6 +336,9 @@ if ( $installer::globals::globallogging ) { installer::files::save_array_of_hash
 $filesinproductarrayref = installer::scriptitems::remove_delete_only_files_from_productlists($filesinproductarrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2.log", $filesinproductarrayref); }
 
+if ($installer::globals::product =~ /suite/i ) { $filesinproductarrayref = installer::scriptitems::remove_notinsuite_files_from_productlists($filesinproductarrayref); }
+if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2aa.log", $filesinproductarrayref); }
+
 if (! $installer::globals::languagepack)
 {
     $filesinproductarrayref = installer::scriptitems::remove_Languagepacklibraries_from_Installset($filesinproductarrayref);
