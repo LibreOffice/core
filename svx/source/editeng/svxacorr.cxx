@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 16:45:10 $
+ *  last change: $Author: hr $ $Date: 2001-07-11 12:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,8 +425,6 @@ long SvxAutoCorrect::GetDefaultFlags()
                     | SaveWordCplSttLst
                     | SaveWordWrdSttLst;
     LanguageType eLang = GetAppLang();
-    if( LANGUAGE_SYSTEM == eLang )
-        eLang = System::GetLanguage();
     switch( eLang )
     {
     case LANGUAGE_ENGLISH:
@@ -1269,7 +1267,7 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
 
         LanguageType eLang = rDoc.GetLanguage( nCapLttrPos, FALSE );
         if( LANGUAGE_SYSTEM == eLang )
-            eLang = System::GetLanguage();
+            eLang = GetSystemLanguage();
         CharClass& rCC = GetCharClass( eLang );
 
         // Bug 19285: Symbolzeichen nicht anfassen
@@ -1544,7 +1542,7 @@ BOOL SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
 
     LanguageType eLang = rDoc.GetLanguage( nCapLttrPos, FALSE );
     if( LANGUAGE_SYSTEM == eLang )
-        eLang = System::GetLanguage();
+        eLang = GetSystemLanguage();
 
     SvxAutoCorrect* pThis = (SvxAutoCorrect*)this;
     CharClass& rCC = pThis->GetCharClass( eLang );
@@ -1725,7 +1723,7 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
     LanguageType eLang = rLang;
     const SvxAutocorrWord* pRet = 0;
     if( LANGUAGE_SYSTEM == eLang )
-        eLang = System::GetLanguage();
+        eLang = GetSystemLanguage();
 
     // zuerst nach eLang suchen, dann nach der Obersprache
     // US-Englisch -> Englisch und zuletzt in LANGUAGE_DONTKNOW

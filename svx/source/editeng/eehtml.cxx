@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
+ *  last change: $Author: hr $ $Date: 2001-07-11 12:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,7 +653,7 @@ void EditHTMLParser::ImpSetStyleSheet( USHORT nHLevel )
             // Bei Pre einen proportionalen Font waehlen
             if ( nHLevel == STYLE_PRE )
             {
-                Font aFont = System::GetStandardFont( STDFONT_FIXED );
+                Font aFont = System::_GetStandardFont( _STDFONT_FIXED );
                 SvxFontItem aFontItem( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO );
                 aItems.Put( aFontItem );
             }
