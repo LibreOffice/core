@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-19 12:54:47 $
+ *  last change: $Author: sj $ $Date: 2001-10-23 11:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6827,15 +6827,21 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     }
                                                     else
                                                     {
-                                                        UINT32 nStartPos, nEndPos;
+                                                        sal_uInt32 nStartPos, nEndPos;
                                                         rIn >> nStartPos
                                                             >> nEndPos;
                                                         if ( nEndPos )
                                                         {
                                                             pEntry = new PPTFieldEntry;
-                                                            pEntry->nPos = (UINT16)nStartPos;
-                                                            pEntry->nTextRangeEnd = (UINT16)nEndPos;
-                                                            pEntry->pField1 = new SvxFieldItem( SvxURLField( pHyperlink->aTarget, String(), SVXURLFORMAT_REPR ) );
+                                                            pEntry->nPos = (sal_uInt16)nStartPos;
+                                                            pEntry->nTextRangeEnd = (sal_uInt16)nEndPos;
+                                                            String aTarget( pHyperlink->aTarget );
+                                                            if ( pHyperlink->aConvSubString.Len() )
+                                                            {
+                                                                aTarget.Append( (sal_Unicode)'#' );
+                                                                aTarget.Append( pHyperlink->aConvSubString );
+                                                            }
+                                                            pEntry->pField1 = new SvxFieldItem( SvxURLField( aTarget, String(), SVXURLFORMAT_REPR ) );
                                                         }
                                                     }
                                                     break;
