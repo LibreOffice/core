@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:25 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,30 +66,37 @@
 ///////////////////////////////
 String S_INVALID_KEYCODE
 {
-    Text = "Is an invalid KeyCode!";
+    Text [ de ] = "Ist kein gültiger KeyCode!";
+    Text[ en-US ] = "Is an invalid KeyCode!";
 };
 String S_MANDATORY_FILE
 {
-    Text = "\ncould not be found.\nThis file is indispensable.";
+    Text [ de ] = "\nwurde nicht gefunden.\nDiese Datei ist unentbehrlich.";
+    Text[ en-US ] = "\ncould not be found.\nThis file is indispensable.";
 };
 String S_READING_LONGNAMES
 {
-    Text = "Reading long-names";
+    Text [ de ] = "Einlesen der Langnamen";
+    Text[ en-US ] = "Reading long-names";
 };
 String S_READING_SLOT_IDS
 {
-    Text = "Reading Slot IDs";
+    Text [ de ] = "Einlesen der Slot IDs";
+    Text[ en-US ] = "Reading Slot IDs";
 };
 String S_READING_CONTROLS
 {
-    Text = "Reading Controls";
+    Text [ de ] = "Einlesen der Controls";
+    Text[ en-US ] = "Reading Controls";
 };
 String S_READING_BASIC_MODULE
 {
-    Text = "Reading BASIC module";
+    Text [ de ] = "Einlesen BASIC Modul";
+    Text[ en-US ] = "Reading BASIC module";
 };
 String S_STARTING_APPLICATION
 {
-    Text = "Starting application";
+    Text [ de ] = "Starten der Applikation";
+    Text[ en-US ] = "Starting application";
 };
 
