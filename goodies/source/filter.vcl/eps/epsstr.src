@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:04:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ String KEY_VERSION_CHECK
     Text[ russian ] = "Οπεδσοπεζδενθε! Ρξυπΰνθςό βρε θμοξπςθπξβΰννϋε γπΰτθχερκθε ξαϊεκςϋ EPS νΰ σπξβνε 1 νεβξημξζνξ,\nςΰκ κΰκ νεκξςξπϋε θη νθυ νΰυξδÿςρÿ νΰ αξλεε βϋρξκξμ σπξβνε!";
     Text[ polish ] = "OstrzeΏenie: Nie wszystkie importowane grafiki EPS mog³y zostaζ zapisane na poziomie 1,\nponiewaΏ niektσre znajdujΉ siκ na wyΏszym poziomie!";
     Text[ japanese ] = "ζ³¨ζ„: γ‚¤γƒ³γƒγƒΌγƒγ•γ‚γ EPS η”»εƒγ®γ„γγ¤γ‹γ―γ€δΈ€γ¤δΈγ®γƒ¬γƒ™γƒ«γ«γ‚γ‚\nγ«γ™γΉγ¦γ‚’γƒ¬γƒ™γƒ«οΌ‘ζ Όη΄γ§γγΎγ›γ‚“γ§γ—γγ€‚";
-    Text[ greek ] = "Προσοχή: Δεν ήταν δυνατόν να γίνει αποθήκευση όλων των εισηγμένων γραφικών EPS,\nεπειδή μερικά από αυτά υπάρχουν σε μορφή υψηλότερου επιπέδο? ";
+    Text[ greek ] = "Προειδοποίηση: Δεν ήταν δυνατή η αποθήκευση όλων των εισαχθέντων\nγραφικών EPS σε επίπεδο 1 καθώς μερικά ανήκουν σε ανώτερο επίπεδο!";
     Text[ korean ] = "μ£Όμ: μΌλ¶€ κ·Έλ¦Όμ΄ μƒμ„ μμ¤€μ— μμ–΄ \nκ°€μ Έμ¨ EPS κ·Έλ¦Ό λª¨λ‘λ¥Ό μμ¤€ 1μ— μ €μ¥ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ chinese_traditional ] = "θ¨»ζ„οΌη„΅ζ³•ε°‡ζ‰€ζ‰η„ε―ε…¥ε–ε½Άδ»¥ level 1 ε„²ε­οΉ\nε› η‚ΊδΈ€δΊ›ε–ε½Άι«ζ–Ό level 1 οΌ";
     Text[ arabic ] = "ΚΝΠνΡ: ΚΪΠΡ ΝέΩ ία ΥζΡ EPS ΗαγΣΚζΡΟΙ έν ΗαγΣΚζμ 1΅\nαΚζΗΜΟ ΘΪΦ γδεΗ έν γΣΚζμ ΓΪαμ!";
@@ -95,6 +95,7 @@ String KEY_VERSION_CHECK
     Text[ hindi ] = "ΰ¤ΰ¥‡ΰ¤¤ΰ¤Ύΰ¤µΰ¤¨ΰ¥€: ΰ¤†ΰ¤―ΰ¤Ύΰ¤¤ ΰ¤•ΰ¥€ ΰ¤Ήΰ¥ΰ¤―ΰ¥€ ΰ¤Έΰ¤­ΰ¥€ EPS ΰ¤Έΰ¥ΰ¤ΰ¤Ώΰ¤¤ΰ¥ΰ¤° ΰ¤•ΰ¥‹ ΰ¤Έΰ¤¤ΰ¤Ή1 ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤Έΰ¤‚ΰ¤ΰ¤Ώΰ¤¤ ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤•ΰ¤° ΰ¤Έΰ¤•ΰ¤¤ΰ¥‡ ΰ¤Ήΰ¥\nΰ¤•ΰ¥ΰ¤―ΰ¥‹ΰ¤‚ΰ¤•ΰ¤Ώ ΰ¤‰ΰ¤¨ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤Έΰ¥‡ ΰ¤•ΰ¥ΰ¤› ΰ¤‰ΰ¤ΰ¥ΰ¤ ΰ¤Έΰ¤¤ΰ¤Ή ΰ¤•ΰ¤Ύ ΰ¤Ήΰ¥!";
     Text[ slovak ] = "Upozornenie: Nie vΕ΅etky importovanΓ© EPS obrΓ΅zky mohli byΕ¥ uloΕΎenΓ© na ΓΊrovni1\npreto sΓΊ niektorΓ© na vyΕ΅Ε΅Γ­ch ΓΊrovniach!";
 };
+
 
 
 
