@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-14 12:51:55 $
+ *  last change: $Author: pb $ $Date: 2001-05-15 06:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     nMaxTextLength( 0 )
 
 {
-    aHeaderBar.InsertItem( HBI_CATEGORY, String( SvtResId( STR_SVT_CATEGORY ) ), 100, HIB_CENTER );
+    aHeaderBar.InsertItem( HBI_CATEGORY, String( SvtResId( STR_SVT_CATEGORY ) ), 100, HIB_CENTER | HIB_FIXED );
     Size aNewSize = aHeaderBar.CalcWindowSizePixel();
     aHeaderBar.SetSizePixel( aNewSize );
     aHeaderBar.Show();
@@ -163,9 +163,8 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     aIconCtrl.SetStyle( WB_3DLOOK | WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
                         WB_NOSELECTION | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    Wallpaper aWallpaper ( rStyles.GetWorkspaceColor() );
-    aIconCtrl.SetBackground( aWallpaper );
-    aIconCtrl.SetFontColorToBackground ();
+    aIconCtrl.SetBackground( Wallpaper( rStyles.GetDialogColor() ) );
+    aIconCtrl.SetTextColor( rStyles.GetDialogTextColor() );
     aIconCtrl.SetHelpId( HID_TEMPLATEDLG_ICONCTRL );
     aIconCtrl.Show();
 
@@ -759,7 +758,7 @@ SvtDocumentTemplateDialog::~SvtDocumentTemplateDialog()
 IMPL_LINK ( SvtDocumentTemplateDialog , SelectHdl_Impl, SvtTemplateWindow *, EMPTYARG )
 {
     sal_Bool bEnable = pImpl->pWin->IsFileSelected();
-    aEditBtn.Enable( bEnable );
+    aEditBtn.Enable( bEnable && pImpl->pWin->IsTemplateFolderOpen() );
     aOKBtn.Enable( bEnable );
     return 0;
 }
