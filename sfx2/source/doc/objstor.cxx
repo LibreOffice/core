@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:08:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1477,13 +1477,53 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             }
         }
 
-        // look for a "version" parameter
-        const SfxStringItem *pVersionItem = pSet ? (const SfxStringItem*)
-            SfxRequest::GetItem( pSet, SID_DOCINFO_COMMENTS, sal_False, TYPE(SfxStringItem) ) : NULL;
-
         if ( bOk )
         {
-            if ( pVersionItem )
+               if ( pImp->bIsSaving )
+            {
+                try {
+                    const SfxVersionTableDtor *pList = rMedium.GetVersionList();
+                    if ( pList && pList->Count() )
+                    {
+                        // copy the version streams
+                        ::rtl::OUString aVersionsName( RTL_CONSTASCII_USTRINGPARAM( "Versions" ) );
+                        uno::Reference< embed::XStorage > xNewVerStor = xMedStorage->openStorageElement(
+                                                        aVersionsName,
+                                                        embed::ElementModes::READWRITE );
+                        uno::Reference< embed::XStorage > xOldVerStor = GetStorage()->openStorageElement(
+                                                        aVersionsName,
+                                                        embed::ElementModes::READ );
+                        if ( !xNewVerStor.is() || !xOldVerStor.is() )
+                            throw uno::RuntimeException();
+
+                        sal_uInt32 n = 0;
+                        SfxVersionInfo* pInfo = pList->GetObject(n++);
+                        while( pInfo )
+                        {
+                            const String& rName = pInfo->aName;
+                            if ( xOldVerStor->hasByName( rName ) )
+                                xOldVerStor->copyElementTo( rName, xNewVerStor, rName );
+                            pInfo = pList->GetObject(n++);
+                        }
+
+                        uno::Reference< embed::XTransactedObject > xTransact( xNewVerStor, uno::UNO_QUERY );
+                        if ( xTransact.is() )
+                            xTransact->commit();
+                    }
+                }
+                catch( uno::Exception& )
+                {
+                    DBG_ERROR( "Couldn't copy versions!\n" );
+                    bOk = sal_False;
+                    // TODO/LATER: a specific error could be set
+                }
+            }
+
+            // look for a "version" parameter
+            const SfxStringItem *pVersionItem = pSet ? (const SfxStringItem*)
+                SfxRequest::GetItem( pSet, SID_DOCINFO_COMMENTS, sal_False, TYPE(SfxStringItem) ) : NULL;
+
+            if ( bOk && pVersionItem )
             {
                 // store a version also
                 const SfxStringItem *pAuthorItem = pSet ? (const SfxStringItem*)
@@ -1504,26 +1544,6 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 // time stamp for version
                 aInfo.aCreateStamp.SetName( aAuthor );
 
-                if ( pImp->bIsSaving )
-                {
-                    try {
-                        ::rtl::OUString aVersionsName = ::rtl::OUString::createFromAscii( "Versions" );
-                        if ( GetStorage()->hasByName( aVersionsName ) )
-                        {
-                            OSL_ENSURE( !xMedStorage->hasByName( aVersionsName ),
-                                        "The target medium should still contain no Versions inside" );
-
-                            GetStorage()->copyElementTo( aVersionsName, xMedStorage, aVersionsName );
-                        }
-                    }
-                    catch( uno::Exception& )
-                    {
-                        DBG_ERROR( "Couldn't copy versions!\n" );
-                        bOk = sal_False;
-                        // TODO/LATER: a specific error could be set
-                    }
-                }
-
                 if ( bOk )
                 {
                     // add new version information into the versionlist and save the versionlist
@@ -1533,6 +1553,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
                     bOk = CreateVersionByName_Impl( rMedium, aInfo.aName, aPasswd );
                 }
+            }
+               else if ( bOk && pImp->bIsSaving )
+            {
+                rMedium.SaveVersionList_Impl( sal_True );
             }
         }
     }
@@ -1672,7 +1696,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl( const uno::Reference< embed::XS
             // TODO/LATER: find faster way to copy storage; perhaps sharing with backup?!
             xStorage->copyToStorage( xTmpStorage );
             //CopyStoragesOfUnknownMediaType( xStorage, xTmpStorage );
-            SaveCompleted( xTmpStorage );
+            bResult = SaveCompleted( xTmpStorage );
 
             SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
             if( pDialogCont )
@@ -3319,7 +3343,7 @@ sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::
 
                         default:
                         {
-                            if ( !xTarget->hasByName( aSubElements[nInd] ) );
+                            if ( !xTarget->hasByName( aSubElements[nInd] ) )
                                 return sal_False;
                         }
                     }
