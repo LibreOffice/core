@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-10 07:31:43 $
+ *  last change: $Author: obr $ $Date: 2001-05-11 19:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,6 +368,7 @@ public:
         _aInfo.uStructSize = sizeof( oslVolumeInfo );
         rtl_fillMemory( &_aInfo.uValidFields, sizeof( oslVolumeInfo ) - sizeof( sal_uInt32 ), 0 );
         _strFileSystemName=NULL;
+        rtl_uString_new( &_strFileSystemName );
         _aInfo.pstrFileSystemName = &_strFileSystemName;
         _aInfo.pDeviceHandle = &_aDevice._aHandle;
     }
@@ -1060,7 +1061,8 @@ public:
 
     DirectoryItem( DirectoryItem& rItem ): _pData( rItem._pData)
     {
-        osl_acquireDirectoryItem( _pData );
+        if( _pData )
+            osl_acquireDirectoryItem( _pData );
     }
 
 
@@ -1082,7 +1084,9 @@ public:
             osl_releaseDirectoryItem( _pData );
 
         _pData = rItem._pData;
-        osl_acquireDirectoryItem( _pData );
+
+        if( _pData )
+            osl_acquireDirectoryItem( _pData );
         return *this;
     };
 
