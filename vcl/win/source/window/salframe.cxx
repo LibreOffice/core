@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: th $ $Date: 2001-08-28 11:06:58 $
+ *  last change: $Author: ssa $ $Date: 2001-09-10 08:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1149,7 +1149,13 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
     else
         nHeight = aWinRect.bottom-aWinRect.top;
 
-    // Adjust Window in the screen
+    // Adjust Window in the screen:
+    // if it does not fit into the screen do nothing, ie default pos/size will be used
+    // if there is an overlap with the screen border move the window while keeping its size
+
+    if( nWidth > nScreenWidth || nHeight > nScreenHeight )
+        nPosSize |= (SWP_NOMOVE | SWP_NOSIZE);
+
     if ( nX+nWidth > nScreenX+nScreenWidth )
         nX = (nScreenX+nScreenWidth) - nWidth;
     if ( nY+nHeight > nScreenY+nScreenHeight )
@@ -1212,10 +1218,13 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
     }
     else
     {
-        aPlacement.rcNormalPosition.left    = nX-nScreenX;
-        aPlacement.rcNormalPosition.top     = nY-nScreenY;
-        aPlacement.rcNormalPosition.right   = nX+nWidth-nScreenX;
-        aPlacement.rcNormalPosition.bottom  = nY+nHeight-nScreenY;
+        if( !(nPosSize & (SWP_NOMOVE|SWP_NOSIZE)) )
+        {
+            aPlacement.rcNormalPosition.left    = nX-nScreenX;
+            aPlacement.rcNormalPosition.top     = nY-nScreenY;
+            aPlacement.rcNormalPosition.right   = nX+nWidth-nScreenX;
+            aPlacement.rcNormalPosition.bottom  = nY+nHeight-nScreenY;
+        }
         SetWindowPlacement( maFrameData.mhWnd, &aPlacement );
     }
 }
