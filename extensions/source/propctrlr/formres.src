@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:04:27 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1778,36 +1778,9 @@ String RID_STR_IMAGE_ALIGN
 };
 String RID_STR_FONT
 {
-    Text = "Zeichensatz" ;
-    Text [ English ] = "Font" ;
-    Text [ portuguese ] = "Conjunto de caracteres" ;
-    Text [ english_us ] = "Character set" ;
-    Text [ portuguese_brazilian ] = "Conjunto de caracteres" ;
-    Text [ swedish ] = "Teckenupps‰ttning" ;
-    Text [ danish ] = "TegnsÊt" ;
-    Text [ italian ] = "Set di caratteri" ;
-    Text [ spanish ] = "Juego de caracteres" ;
-    Text [ french ] = "Jeu de caractËres" ;
-    Text [ dutch ] = "Tekenset" ;
-    Text[ chinese_simplified ] = "Â≠óÁ¨¶ÈõÜ";
-    Text[ russian ] = "ÿËÙÚ";
-    Text[ polish ] = "Zestaw znakÛw";
-    Text[ japanese ] = "ÊñáÂ≠óÂàó";
-    Text[ chinese_traditional ] = "Â≠óÂÖÉ";
-    Text[ greek ] = "”ÂÙ ˜·Ò·ÍÙﬁÒ˘Ì";
-    Text[ korean ] = "Î¨∏ÏûêÏßëÌï©";
-    Text[ arabic ] = "„Ã„Ê⁄… √Õ—›";
-    Text[ turkish ] = "Karakter k¸mesi";
-    Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Merkistˆ";
-    Text[ catalan ] = "Joc de car‡cters";
-    Text[ thai ] = "‡∏ä‡∏∏‡∏î‡∏ï‡∏±‡∏ß‡∏≠‡∏±‡∏Å‡∏Ç‡∏£‡∏∞";
-    Text[ czech ] = "P√≠smo";
-    Text[ hebrew ] = "Zeichensatz";
-    Text[ hindi ] = "‡§Ö‡§ï‡•ç‡§∑‡§∞ ‡§∏‡§Æ‡•Ç‡§π";
-    Text[ slovak ] = "Znakov√° sada";
-    Text[ hungarian ] = "Karakterk√©szlet";
-    Text[ slovenian ] = "Nabor znakov";
+    Text = "Schrift" ;
+    Text [ english ] = "Font" ;
+    Text [ english_us ] = "Font" ;
 };
 String RID_STR_BACKGROUNDCOLOR
 {
@@ -6118,6 +6091,29 @@ String RID_STR_SYMBOLCOLOR
     Text [ english ] = "Symbol color" ;
     Text [ english_us ] = "Symbol color" ;
     Text[ chinese_simplified ] = "Á¨¶Âè∑È¢úËâ≤";
+};
+
+String RID_STR_LINEEND_FORMAT
+{
+    Text = "Textzeilen enden mit";
+    Text [ english ] = "Text lines end with";
+    Text [ english_us ] = "Text lines end with";
+};
+
+Resource RID_RSC_ENUM_LINEEND_FORMAT
+{
+    String 1
+    {
+        Text = "LF (Unix)";
+        Text [ english ] = "LF (Unix)";
+        Text [ english_us ] = "LF (Unix)";
+    };
+    String 2
+    {
+        Text = "CR+LF (Windows)";
+        Text [ english ] = "CR+LF (Windows)";
+        Text [ english_us ] = "CR+LF (Windows)";
+    };
 };
 
 Resource RID_RSC_ENUM_SCROLLBARS
