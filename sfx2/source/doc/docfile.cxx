@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.166 $
+ *  $Revision: 1.167 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:24:03 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1079,7 +1079,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
                     // create a copy
                     CreateTempFile();
                     aArgs[0] <<= ::rtl::OUString( aName );
-                    aArgs[1] <<= embed::ElementModes::READ;
+                    aArgs[1] <<= embed::ElementModes::READWRITE;
 
                     pImp->bStorageBasedOnInStream = sal_False;
                 }
