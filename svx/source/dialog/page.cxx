@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-02-21 07:50:23 $
+ *  last change: $Author: ssa $ $Date: 2002-04-10 12:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,8 @@
 // static ----------------------------------------------------------------
 
 static const long MINBODY       = 284;  // 0,5cm in twips aufgerundet
-static const long PRINT_OFFSET  = 17;   // 0,03cm in twips abgerundet
+//static const long PRINT_OFFSET    = 17;   // 0,03cm in twips abgerundet
+static const long PRINT_OFFSET  = 0;    // why was this ever set to 17 ? it led to wrong right and bottom margins.
 
 static USHORT pRanges[] =
 {
@@ -338,7 +339,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
     if ( bPrinterDel )
         delete pDefPrinter;
-    long nOffset = !aPrintOffset.X() && !aPrintOffset.X() ? 0 : PRINT_OFFSET;
+    long nOffset = !aPrintOffset.X() && !aPrintOffset.Y() ? 0 : PRINT_OFFSET;
     aLeftMarginEdit.SetFirst( aLeftMarginEdit.Normalize( aPrintOffset.X() ), FUNIT_TWIP );
     nFirstLeftMargin = aLeftMarginEdit.GetFirst();
     aRightMarginEdit.SetFirst( aRightMarginEdit.Normalize(
@@ -1166,7 +1167,7 @@ void SvxPageDescPage::SwapFirstValues_Impl( FASTBOOL bSet )
     long nSetB = aBottomMarginEdit.Denormalize(
                     aBottomMarginEdit.GetValue( FUNIT_TWIP ) );
 
-    long nOffset = !aPrintOffset.X() && !aPrintOffset.X() ? 0 : PRINT_OFFSET;
+    long nOffset = !aPrintOffset.X() && !aPrintOffset.Y() ? 0 : PRINT_OFFSET;
     long nNewL = aPrintOffset.X();
     long nNewR =
         aPaperSize.Width() - aPrintSize.Width() - aPrintOffset.X() + nOffset;
