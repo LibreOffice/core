@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 08:32:48 $
+ *  last change: $Author: oj $ $Date: 2001-08-03 14:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,6 @@ using namespace ::com::sun::star::lang;
 java_sql_Driver::java_sql_Driver(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
     : java_lang_Object(_rxFactory)
 {
-//  SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
-//  // this object is not the right one
-//  if(t.pEnv)
-//      t.pEnv->DeleteGlobalRef( object );
-//  object = 0;
 }
 // --------------------------------------------------------------------------------
 jclass java_sql_Driver::theClass = 0;
@@ -213,6 +208,11 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
     }
     catch(Exception&)
     {
+        if( object )
+        {
+            t.pEnv->DeleteGlobalRef( object );
+            object = NULL;
+        }
         throw SQLException(::rtl::OUString::createFromAscii("The specified driver could not be loaded!"),*this,::rtl::OUString(),1000,Any());
     }
 
@@ -235,12 +235,22 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
             args[1].l = pProps->getJavaObject();
 
             out = t.pEnv->CallObjectMethod( object, mID, args[0].l,args[1].l );
-            ThrowSQLException(t.pEnv,*this);
             // und aufraeumen
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
-            ThrowSQLException(t.pEnv,*this);
             delete pProps;
+            if( object )
+            {
+                t.pEnv->DeleteGlobalRef( object );
+                object = NULL;
+            }
+            ThrowSQLException(t.pEnv,*this);
+
         } //mID
+        if( object )
+        {
+            t.pEnv->DeleteGlobalRef( object );
+            object = NULL;
+        }
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     Reference< XConnection > xOut;
