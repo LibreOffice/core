@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:54:56 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
+
 #include "freetype/freetype.h"
 #include "freetype/ftglyph.h"
 #include "freetype/ftoutln.h"
@@ -139,7 +143,7 @@ static bool bEnableSizeFT = false;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
 typedef ::std::hash_map<const char*,FtFontFile*,::std::hash<const char*>, EqStr> FontFileList;
-static FontFileList aFontFileList;
+namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
 
 // -----------------------------------------------------------------------
 
@@ -171,14 +175,15 @@ FtFontFile* FtFontFile::FindFontFile( const ::rtl::OString& rNativeFileName )
 {
     // font file already known? (e.g. for ttc, synthetic, aliased fonts)
     const char* pFileName = rNativeFileName.getStr();
-    FontFileList::const_iterator it = aFontFileList.find( pFileName );
-    if( it != aFontFileList.end() )
+    FontFileList &rFontFileList = vclFontFileList::get();
+    FontFileList::const_iterator it = rFontFileList.find( pFileName );
+    if( it != rFontFileList.end() )
         return (*it).second;
 
     // no => create new one
     FtFontFile* pFontFile = new FtFontFile( rNativeFileName );
     pFileName = pFontFile->maNativeFileName.getStr();
-    aFontFileList[ pFileName ] = pFontFile;
+    rFontFileList[ pFileName ] = pFontFile;
     return pFontFile;
 }
 
