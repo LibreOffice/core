@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-20 16:19:41 $
+ *  last change: $Author: sab $ $Date: 2001-04-05 15:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,6 @@ void XMLTableShapeImportHelper::finishShape(
     Rectangle* pRect = NULL;
     sal_Int32 nEndX(-1);
     sal_Int32 nEndY(-1);
-    sal_Int32 nStartX(-1);
-    sal_Int32 nStartY(-1);
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     table::CellAddress aEndCell;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -139,10 +137,6 @@ void XMLTableShapeImportHelper::finishShape(
                                                             &aLocalName );
         if(nPrefix = XML_NAMESPACE_TABLE)
         {
-            if (aLocalName.compareToAscii(sXML_x) ==0)
-                static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nStartX, rValue);
-            if (aLocalName.compareToAscii(sXML_y) ==0)
-                static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nStartY, rValue);
             if (aLocalName.compareToAscii(sXML_end_cell_address) == 0)
             {
                 sal_Int32 nOffset(0);
@@ -171,10 +165,9 @@ void XMLTableShapeImportHelper::finishShape(
 
     if (!bOnTable)
     {
-        if (nEndX >= 0 && nEndY >= 0 &&
-            nStartX >= 0 && nStartY >= 0)
+        if (nEndX >= 0 && nEndY >= 0)
             static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape, aStartCell, aEndCell,
-                nStartX, nStartY, nEndX, nEndY);
+                nEndX, nEndY);
         else
             DBG_ERROR("no or wrong position given");
         SvxShape* pShapeImp = SvxShape::getImplementation(rShape);

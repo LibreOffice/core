@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-20 16:19:41 $
+ *  last change: $Author: sab $ $Date: 2001-04-05 15:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include "document.hxx"
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
+#endif
+#ifndef SC_DOCUNO_HXX
+#include "docuno.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
@@ -213,7 +216,8 @@ ScMyTables::ScMyTables(ScXMLImport& rTempImport)
     nCurrentSheet( -1 ),
     nCurrentDrawPage( -1 ),
     nCurrentXShapes( -1 ),
-    aResizeShapes(rTempImport)
+    aResizeShapes(rTempImport),
+    aVDev()
 {
     aTableVec.resize(nDefaultTabCount, NULL);
 }
@@ -636,6 +640,17 @@ void ScMyTables::NewTable(sal_Int32 nTempSpannedCols)
     }
 }
 
+void ScMyTables::UpdateRowHeights()
+{
+    // update automatic row heights
+    Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
+    double nPPTX = aLogic.X() / 1000.0;
+    double nPPTY = aLogic.Y() / 1000.0;
+    nPPTX /= ScModelObj::getImplementation(rImport.GetModel())->GetOutputFactor();          // needed for screen or VDev
+    Fraction aZoom(1,1);
+    rImport.GetDocument()->SetOptimalHeight( 0,MAXROW, nCurrentSheet,0, &aVDev, nPPTX,nPPTY, aZoom,aZoom, FALSE );
+}
+
 void ScMyTables::DeleteTable()
 {
     if (nTableCount > 0)
@@ -657,6 +672,7 @@ void ScMyTables::DeleteTable()
             xProtectable->protect(sKey);
         }*/
     }
+    UpdateRowHeights();
     aResizeShapes.ResizeShapes(xCurrentSheet);
 }
 
@@ -719,7 +735,7 @@ sal_Bool ScMyTables::HasXShapes()
 
 void ScMyTables::AddShape(uno::Reference <drawing::XShape>& rShape,
     table::CellAddress& rStartAddress, table::CellAddress& rEndAddress,
-    sal_Int32 nStartX, sal_Int32 nStartY, sal_Int32 nEndX, sal_Int32 nEndY)
+    sal_Int32 nEndX, sal_Int32 nEndY)
 {
-    aResizeShapes.AddShape(rShape, rStartAddress, rEndAddress, nStartX, nStartY, nEndX, nEndY);
+    aResizeShapes.AddShape(rShape, rStartAddress, rEndAddress, nEndX, nEndY);
 }

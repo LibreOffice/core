@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-20 16:19:41 $
+ *  last change: $Author: sab $ $Date: 2001-04-05 15:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,14 +93,12 @@ ScMyShapeResizer::~ScMyShapeResizer()
 
 void ScMyShapeResizer::AddShape(uno::Reference <drawing::XShape>& rShape,
     table::CellAddress& rStartAddress, table::CellAddress& rEndAddress,
-    sal_Int32 nStartX, sal_Int32 nStartY, sal_Int32 nEndX, sal_Int32 nEndY)
+    sal_Int32 nEndX, sal_Int32 nEndY)
 {
     ScMyToResizeShape aShape;
     aShape.xShape = rShape;
     aShape.aEndCell = rEndAddress;
     aShape.aStartCell = rStartAddress;
-    aShape.nStartY = nStartY;
-    aShape.nStartX = nStartX;
     aShape.nEndY = nEndY;
     aShape.nEndX = nEndX;
     aShapes.push_back(aShape);
@@ -149,7 +147,7 @@ void ScMyShapeResizer::ResizeShapes(uno::Reference< sheet::XSpreadsheet > xSheet
                                 sal_Int32 Y (nHeight - aItr->nEndY);
                                 aItr->nEndX += pRect->Left();
                                 Y = pRect->Bottom() - Y;
-                                awt::Point aPoint(aItr->nStartX, aItr->nStartY);// = aItr->xShape->getPosition();
+                                awt::Point aPoint = aItr->xShape->getPosition();
                                 awt::Size aSize = aItr->xShape->getSize();
                                 aPoint.X += aRefPoint.X;
                                 aPoint.Y += aRefPoint.Y;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-20 16:19:41 $
+ *  last change: $Author: sab $ $Date: 2001-04-05 15:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
 #endif
+#ifndef _XMLOFF_XMLIMP_HXX
+#include <xmloff/xmlimp.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -80,12 +83,14 @@
 #ifndef _COM_SUN_STAR_TABLE_CELLRANGEADDRESS_HPP_
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #endif
-#ifndef _XMLOFF_XMLIMP_HXX
-#include <xmloff/xmlimp.hxx>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
+
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
@@ -152,6 +157,7 @@ private:
     ScXMLImport&                        rImport;
 
     ScMyShapeResizer                    aResizeShapes;
+    VirtualDevice                       aVDev;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > xCurrentSheet;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage;
@@ -184,6 +190,7 @@ public:
     void                                CloseRow();
     void                                AddColumn(sal_Bool bIsCovered);
     void                                NewTable(sal_Int32 nTempSpannedCols);
+    void                                UpdateRowHeights();
     void                                DeleteTable();
     com::sun::star::table::CellAddress  GetRealCellPos();
     void                                AddColCount(sal_Int32 nTempColCount);
@@ -202,7 +209,7 @@ public:
     void                                AddShape(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
                                                 com::sun::star::table::CellAddress& rStartAddress,
                                                 com::sun::star::table::CellAddress& rEndAddress,
-                                                sal_Int32 nStartX, sal_Int32 nStartY, sal_Int32 nEndX, sal_Int32 nEndY);
+                                                sal_Int32 nEndX, sal_Int32 nEndY);
 };
 
 #endif

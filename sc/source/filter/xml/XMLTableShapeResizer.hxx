@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-20 16:19:41 $
+ *  last change: $Author: sab $ $Date: 2001-04-05 15:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,6 @@ struct ScMyToResizeShape
     com::sun::star::uno::Reference <com::sun::star::drawing::XShape> xShape;
     com::sun::star::table::CellAddress  aEndCell;
     com::sun::star::table::CellAddress  aStartCell;
-    sal_Int32 nStartX;
-    sal_Int32 nStartY;
     sal_Int32 nEndX;
     sal_Int32 nEndY;
 };
@@ -101,7 +99,7 @@ public:
     void    AddShape(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
                     com::sun::star::table::CellAddress& rStartAddress,
                     com::sun::star::table::CellAddress& rEndAddress,
-                    sal_Int32 nStartX, sal_Int32 nStartY, sal_Int32 nEndX, sal_Int32 nEndY);
+                    sal_Int32 nEndX, sal_Int32 nEndY);
     void    ResizeShapes(::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > xSheet);
 };
 
