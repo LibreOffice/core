@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlxthdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:09:36 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,12 +94,7 @@
 //---------------------------
 // Module global
 //---------------------------
-
 long g_DllRefCnt = 0;
-
-//---------------------------
-//
-//---------------------------
 
 namespace /* private */
 {
@@ -123,7 +118,6 @@ namespace /* private */
     // "String Placeholder" ->
     // "String Replacement"
     //---------------------------
-
     void SubstitutePlaceholder(std::string& String, const std::string& Placeholder, const std::string& Replacement)
     {
         std::string::size_type idx = String.find(Placeholder);
@@ -136,13 +130,11 @@ namespace /* private */
         }
     }
 
-    //----------------------------------------------
-    // Make the registry entry
-    // HKCR\CLSID\{GUID}
-    //      InProcServer32     = Path\shlxthdl.dll
-    //          ThreadingModel = Apartment
-    //----------------------------------------------
-
+    /* Make the registry entry
+       HKCR\CLSID\{GUID}
+            InProcServer32 = Path\shlxthdl.dll
+                ThreadingModel = Apartment
+    */
     HRESULT RegisterComComponent(const char* FilePath, const CLSID& Guid)
     {
         std::string ClsidEntry = CLSID_ENTRY;
@@ -157,20 +149,12 @@ namespace /* private */
         return S_OK;
     }
 
-    //---------------------------
-    //
-    //---------------------------
-
     HRESULT UnregisterComComponent(const CLSID& Guid)
     {
         std::string tmp = "CLSID\\";
         tmp += ClsidToString(Guid);
         return DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str()) ? S_OK : E_FAIL;
     }
-
-    //---------------------------
-    //
-    //---------------------------
 
     HRESULT RegisterColumnHandler(const char* ModuleFileName)
     {
@@ -187,10 +171,6 @@ namespace /* private */
             WStringToString(COLUMN_HANDLER_DESCRIPTIVE_NAME).c_str()) ? S_OK : E_FAIL;
     }
 
-    //---------------------------
-    //
-    //---------------------------
-
     HRESULT UnregisterColumnHandler()
     {
         std::string tmp = "Folder\\shellex\\ColumnHandlers\\";
@@ -201,10 +181,6 @@ namespace /* private */
 
         return UnregisterComComponent(CLSID_COLUMN_HANDLER);
     }
-
-    //---------------------------
-    //
-    //---------------------------
 
     HRESULT RegisterInfotipHandler(const char* ModuleFileName)
     {
@@ -217,20 +193,14 @@ namespace /* private */
         for(size_t i = 0; i < OOFileExtensionTableSize; i++)
         {
             tmp = SHELLEX_IID_ENTRY;
-
             SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionAnsi);
             SubstitutePlaceholder(tmp, GUID_PLACEHOLDER, iid);
 
             if (!SetRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str(), "", ClsidToString(CLSID_INFOTIP_HANDLER).c_str()))
                 return E_FAIL;
         }
-
         return S_OK;
     }
-
-    //---------------------------
-    //
-    //---------------------------
 
     HRESULT UnregisterInfotipHandler()
     {
@@ -248,22 +218,15 @@ namespace /* private */
 
             // if there are no further subkey below .ext\\shellex
             // delete the whole subkey
-
             tmp = SHELLEX_ENTRY;
-
             SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionAnsi);
 
             bool HasSubKeys = true;
             if (HasSubkeysRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str(), HasSubKeys) && !HasSubKeys)
                 DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str());
         }
-
         return UnregisterComComponent(CLSID_INFOTIP_HANDLER);
     }
-
-    //---------------------------
-    //
-    //---------------------------
 
     HRESULT RegisterPropSheetHandler(const char* ModuleFileName)
     {
@@ -281,13 +244,8 @@ namespace /* private */
             if (!SetRegistryKey(HKEY_CLASSES_ROOT, FwdKeyEntry.c_str(), "", ClsidToString(CLSID_PROPERTYSHEET_HANDLER).c_str()))
                 return E_FAIL;
         }
-
         return S_OK;
     }
-
-    //---------------------------
-    //
-    //---------------------------
 
     HRESULT UnregisterPropSheetHandler()
     {
@@ -319,12 +277,55 @@ namespace /* private */
         return UnregisterComComponent(CLSID_PROPERTYSHEET_HANDLER);
     }
 
-    //-----------------------------------
-    /** Approve the Shell Extension, it's
-        important for Windows NT/2000/XP
-        See MSDN: Creating Shell Extension
-        Handlers
-    */
+    HRESULT RegisterThumbviewerHandler(const char* ModuleFileName)
+    {
+        if (FAILED(RegisterComComponent(ModuleFileName, CLSID_THUMBVIEWER_HANDLER)))
+            return E_FAIL;
+
+        std::string iid = ClsidToString(IID_IExtractImage);
+        std::string tmp;
+
+        for(size_t i = 0; i < OOFileExtensionTableSize; i++)
+        {
+            tmp = SHELLEX_IID_ENTRY;
+
+            SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionAnsi);
+            SubstitutePlaceholder(tmp, GUID_PLACEHOLDER, iid);
+
+            if (!SetRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str(), "", ClsidToString(CLSID_THUMBVIEWER_HANDLER).c_str()))
+                return E_FAIL;
+        }
+        return S_OK;
+    }
+
+    HRESULT UnregisterThumbviewerHandler()
+    {
+        std::string iid = ClsidToString(IID_IExtractImage);
+        std::string tmp;
+
+        for (size_t i = 0; i < OOFileExtensionTableSize; i++)
+        {
+            tmp = SHELLEX_IID_ENTRY;
+
+            SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionAnsi);
+            SubstitutePlaceholder(tmp, GUID_PLACEHOLDER, iid);
+
+            DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str());
+
+            // if there are no further subkey below .ext\\shellex
+            // delete the whole subkey
+            tmp = SHELLEX_ENTRY;
+            SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionAnsi);
+
+            bool HasSubKeys = true;
+            if (HasSubkeysRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str(), HasSubKeys) && !HasSubKeys)
+                DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str());
+        }
+        return UnregisterComComponent(CLSID_THUMBVIEWER_HANDLER);
+    }
+
+    /** Approving/Unapproving the Shell Extension, it's important under Windows
+        NT/2000/XP, see MSDN: Creating Shell Extension Handlers */
     HRESULT ApproveShellExtension(CLSID clsid, const std::wstring& Description)
     {
         bool bRet = SetRegistryKey(
@@ -336,12 +337,6 @@ namespace /* private */
         return bRet ? S_OK : E_FAIL;
     }
 
-    //------------------------------------
-    /** Unapprove the Shell Extension, it's
-        important under Windows NT/2000/XP
-        See MSDN: Creating Shell Extension
-        Handlers
-    */
     HRESULT UnapproveShellExtension(CLSID Clsid)
     {
         HKEY hkey;
@@ -366,10 +361,9 @@ namespace /* private */
 } // namespace /* private */
 
 
-//---------------------------
+//---------------------
 // COM exports
-//---------------------------
-
+//---------------------
 
 extern "C" STDAPI DllRegisterServer()
 {
@@ -380,63 +374,38 @@ extern "C" STDAPI DllRegisterServer()
         ModuleFileName,
         sizeof(ModuleFileName));
 
+    std::string module_path = WStringToString(ModuleFileName);
     HRESULT hr = S_OK;
 
-
-// register column handler
-#ifdef UNICODE
-    if (FAILED(RegisterColumnHandler(WStringToString(ModuleFileName).c_str())))
+    if (SUCCEEDED(RegisterColumnHandler(module_path.c_str())))
+        ApproveShellExtension(CLSID_COLUMN_HANDLER, COLUMN_HANDLER_DESCRIPTIVE_NAME);
+    else
         hr = E_FAIL;
-#else
-    if (FAILED(RegisterColumnHandler(ModuleFileName)))
+
+    if (SUCCEEDED(RegisterInfotipHandler(module_path.c_str())))
+        ApproveShellExtension(CLSID_INFOTIP_HANDLER, INFOTIP_HANDLER_DESCRIPTIVE_NAME);
+    else
         hr = E_FAIL;
-#endif
 
-    ApproveShellExtension(
-        CLSID_COLUMN_HANDLER,
-        COLUMN_HANDLER_DESCRIPTIVE_NAME);
-
-// register info tip control
-#ifdef UNICODE
-    if (FAILED(RegisterInfotipHandler(WStringToString(ModuleFileName).c_str())))
+    if (SUCCEEDED(RegisterPropSheetHandler(module_path.c_str())))
+        ApproveShellExtension(CLSID_PROPERTYSHEET_HANDLER, PROPSHEET_HANDLER_DESCRIPTIVE_NAME);
+    else
         hr = E_FAIL;
-#else
-    if (FAILED(RegisterInfotipHandler(ModuleFileName)))
+
+    if (SUCCEEDED(RegisterThumbviewerHandler(module_path.c_str())))
+        ApproveShellExtension(CLSID_THUMBVIEWER_HANDLER, THUMBVIEWER_HANDLER_DESCRIPTIVAE_NAME);
+    else
         hr = E_FAIL;
-#endif
 
-    ApproveShellExtension(
-        CLSID_INFOTIP_HANDLER,
-        INFOTIP_HANDLER_DESCRIPTIVE_NAME);
-
-// register property sheet handler
-#ifdef UNICODE
-    if (FAILED(RegisterPropSheetHandler(WStringToString(ModuleFileName).c_str())))
-        hr = E_FAIL;
-#else
-    if (FAILED(RegisterPropSheetHandler(ModuleFileName)))
-        hr = E_FAIL;
-#endif
-
-    ApproveShellExtension(
-        CLSID_PROPERTYSHEET_HANDLER,
-        PROPSHEET_HANDLER_DESCRIPTIVE_NAME);
-
-    // notify the Shell that something has
-    // changed
+    // notify the Shell that something has changed
     SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);
 
     return hr;
 }
 
-//---------------------------
-//
-//---------------------------
-
 extern "C" STDAPI DllUnregisterServer()
 {
     HRESULT hr = S_OK;
-
 
     if (FAILED(UnregisterColumnHandler()))
         hr = E_FAIL;
@@ -448,28 +417,30 @@ extern "C" STDAPI DllUnregisterServer()
 
     UnapproveShellExtension(CLSID_INFOTIP_HANDLER);
 
-
     if (FAILED(UnregisterPropSheetHandler()))
         hr = E_FAIL;
 
     UnapproveShellExtension(CLSID_PROPERTYSHEET_HANDLER);
 
-    // notify the Shell that something has
-    // changed
+    if (FAILED(UnregisterThumbviewerHandler()))
+        hr = E_FAIL;
+
+    UnapproveShellExtension(CLSID_THUMBVIEWER_HANDLER);
+
+    // notify the Shell that something has changed
     SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);
 
     return hr;
 }
 
-//---------------------------
-//
-//---------------------------
-
 extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 {
     *ppv = 0;
 
-    if ((rclsid != CLSID_INFOTIP_HANDLER) && (rclsid != CLSID_COLUMN_HANDLER) && (rclsid != CLSID_PROPERTYSHEET_HANDLER))
+    if ((rclsid != CLSID_INFOTIP_HANDLER) &&
+        (rclsid != CLSID_COLUMN_HANDLER) &&
+        (rclsid != CLSID_PROPERTYSHEET_HANDLER) &&
+        (rclsid != CLSID_THUMBVIEWER_HANDLER))
         return CLASS_E_CLASSNOTAVAILABLE;
 
     if ((riid != IID_IUnknown) && (riid != IID_IClassFactory))
@@ -480,13 +451,8 @@ extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
         return E_OUTOFMEMORY;
 
     *ppv = pUnk;
-
     return S_OK;
 }
-
-//---------------------------
-//
-//---------------------------
 
 extern "C" STDAPI DllCanUnloadNow(void)
 {
