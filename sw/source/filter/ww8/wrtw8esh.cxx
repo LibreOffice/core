@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-20 10:55:22 $
+ *  last change: $Author: cmc $ $Date: 2002-10-14 10:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 
 #define _SVSTDARR_ULONGSSORT
 #include <svtools/svstdarr.hxx>
+
+#ifndef _SV_CVTGRF_HXX
+#include <vcl/cvtgrf.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
@@ -2335,50 +2339,72 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
     }
 }
 
-INT32 SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
+INT32 SwEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
 {
     INT32 nBorderThick=0;
-    SwNodeIndex aIdx( *rFmt.GetCntnt().GetCntntIdx(), 1 );
+    SwNodeIndex aIdx(*rFmt.GetCntnt().GetCntntIdx(), 1);
     SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
-    const SvInPlaceObjectRef xObj( rOLENd.GetOLEObj().GetOleRef() );
+    const SvInPlaceObjectRef xObj(rOLENd.GetOLEObj().GetOleRef());
 
-    const SdrObject* pSdrObj = rFmt.FindRealSdrObject();
-    if( pSdrObj )
+    if (const SdrObject* pSdrObj = rFmt.FindRealSdrObject())
     {
         GDIMetaFile aMtf;
-        xObj->GetGDIMetaFile( aMtf );
-        OpenContainer( ESCHER_SpContainer );
+        xObj->GetGDIMetaFile(aMtf);
+        Graphic aGraphic(aMtf);
 
-        AddShape( ESCHER_ShpInst_PictureFrame, 0xa10, nShapeId );
+        /*
+        #i5970#
+        Export floating ole2 .doc ver 8+ wmf ole2 previews as emf previews
+        instead ==> allows unicode text to be preserved
+        */
+#define OLE_PREVIEW_AS_EMF
+#ifdef OLE_PREVIEW_AS_EMF
+        SvMemoryStream aStream;
+        sal_uInt32 nRet = GraphicConverter::Export(aStream, aGraphic, CVT_EMF);
+        if (nRet == ERRCODE_NONE)
+        {
+            const ULONG nBufSize = aStream.Tell();
+            if (nBufSize)
+            {
+                BYTE* pBuf = new BYTE[nBufSize];
+                aStream.Seek(0);
+                aStream.Read(pBuf, nBufSize);
+                aGraphic.SetLink(
+                    GfxLink(pBuf, nBufSize, GFX_LINK_TYPE_NATIVE_WMF, TRUE));
+            }
+        }
+#endif
+
+        OpenContainer(ESCHER_SpContainer);
+
+        AddShape(ESCHER_ShpInst_PictureFrame, 0xa10, nShapeId);
         EscherPropertyContainer aPropOpt;
 
-        Graphic         aGraphic( aMtf );
-        GraphicObject   aGraphicObject( aGraphic );
-        ByteString      aUniqueId = aGraphicObject.GetUniqueID();
-        if ( aUniqueId.Len() )
+        GraphicObject aGraphicObject(aGraphic);
+        ByteString aId = aGraphicObject.GetUniqueID();
+        if (aId.Len())
         {
-            Size aSz( rOLENd.GetTwipSize() );
-            aSz.Width() = DrawModelToEmu( aSz.Width() );
-            aSz.Height() = DrawModelToEmu( aSz.Height() );
-            Rectangle aRect( Point(0,0), aSz );
+            Size aSz(rOLENd.GetTwipSize());
+            aSz.Width() = DrawModelToEmu(aSz.Width());
+            aSz.Height() = DrawModelToEmu(aSz.Height());
+            Rectangle aRect(Point(0,0), aSz);
 
-            sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(), aUniqueId,
-                aRect, 0 );
-            if ( nBlibId )
+            sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aId, aRect, 0);
+            if (nBlibId)
             {
-                aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
-                aPropOpt.AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
+                aPropOpt.AddOpt(ESCHER_Prop_fillType, ESCHER_FillPicture);
+                aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
             }
         }
 
-        pTxtBxs->Append( *pSdrObj, nShapeId );
+        pTxtBxs->Append(*pSdrObj, nShapeId);
         UINT32 nPicId = pTxtBxs->Count();
         nPicId *= 0x10000;
-        aPropOpt.AddOpt( ESCHER_Prop_pictureId, nPicId );
-        aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
-        nBorderThick = WriteFlyFrameAttr( rFmt, mso_sptPictureFrame, aPropOpt );
-        WriteGrfAttr( rOLENd, aPropOpt );
-        aPropOpt.Commit( GetStream() );
+        aPropOpt.AddOpt(ESCHER_Prop_pictureId, nPicId);
+        aPropOpt.AddOpt(ESCHER_Prop_pictureActive, 0x10000);
+        nBorderThick = WriteFlyFrameAttr(rFmt, mso_sptPictureFrame, aPropOpt);
+        WriteGrfAttr(rOLENd, aPropOpt);
+        aPropOpt.Commit(GetStream());
 
         // store anchor attribute
         WriteFrmExtraData( rFmt );
