@@ -10,7 +10,9 @@ TARGET=copying
 IDLDIRLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type d -print))}
 
 DIRLIST = \
-    $(DESTDIREXAMPLES)$/officeclient 	\
+    $(DESTDIREXAMPLES)		 	\
+    $(DESTDIRCPPEXAMPLES)		 	\
+    $(DESTDIRCPPEXAMPLES)$/officeclient 	\
     $(DESTDIRJAVAEXAMPLES)		 	\
     $(DESTDIRJAVAEXAMPLES)$/draw		\
     $(DESTDIRJAVAEXAMPLES)$/calc		\
@@ -31,12 +33,12 @@ DIRLIST = \
     {$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLDIRLIST))}
 
 EXAMPLESLIST= \
-    $(DESTDIREXAMPLES)$/officeclient$/officeclient.cxx 		\
-    $(DESTDIREXAMPLES)$/officeclient$/officeclientsample.xml	\
-    $(DESTDIREXAMPLES)$/officeclient$/README           		\
-    $(DESTDIREXAMPLES)$/officeclient$/makefile.mk      		\
-    $(DESTDIREXAMPLES)$/officeclient$/Makefile         		\
-    $(DESTDIREXAMPLES)$/officeclient$/exports.dxp      		\
+    $(DESTDIRCPPEXAMPLES)$/officeclient$/officeclient.cxx 		\
+    $(DESTDIRCPPEXAMPLES)$/officeclient$/officeclientsample.xml	\
+    $(DESTDIRCPPEXAMPLES)$/officeclient$/README           		\
+    $(DESTDIRCPPEXAMPLES)$/officeclient$/makefile.mk      		\
+    $(DESTDIRCPPEXAMPLES)$/officeclient$/Makefile         		\
+    $(DESTDIRCPPEXAMPLES)$/officeclient$/exports.dxp      		\
     $(DESTDIRJAVAEXAMPLES)$/draw$/SDraw.java	   		\
     $(DESTDIRJAVAEXAMPLES)$/draw$/makefile.mk	   		\
     $(DESTDIRJAVAEXAMPLES)$/draw$/Makefile	  	 		\
@@ -111,12 +113,21 @@ all : 	\
     $(DESTDIRBIN)$/applicat.rdb  \
     $(DESTDIR)$/settings$/dk.mk \
     $(DESTDIR)$/classes$/unoil.jar \
-    $(DESTDIR)$/odk_overview.html
+    $(DESTDIR)$/odk_overview.html \
+    convert_links
+
+.IF "$(BUILD_SOSL)"==""
+convert_links : 
+    +$(PERL) $(CONVERTSCRIPT) $(DESTDIREXAMPLES) odk_ examples
+.ELSE
+convert_links : 
+    +echo no converison necessary
+.ENDIF
 
 $(DIRLIST) :
      -$(MKDIRHIER) 	$@
 
-$(DESTDIREXAMPLES)$/% : $(PRJ)$/examples$/cpp$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
+$(DESTDIRCPPEXAMPLES)$/% : $(PRJ)$/examples$/cpp$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
@@ -138,9 +149,15 @@ $(DESTDIR)$/settings$/dk.mk : $(PRJ)$/util$/dk.mk
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/util$/dk.mk $(MY_TEXTCOPY_TARGETPRE) $@
 
+.IF "$(BUILD_SOSL)"==""
 $(DESTDIR)$/odk_overview.html : $(PRJ)$/util$/odk_overview.html
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+.ELSE
+$(DESTDIR)$/odk_overview.html : $(PRJ)$/util$/odk_overview2.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+.ENDIF
 
 $(DESTDIRIDL)$/% : $(IDLOUT)$/%
     +-rm -f $@
