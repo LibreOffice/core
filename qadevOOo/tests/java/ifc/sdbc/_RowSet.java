@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _RowSet.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:56 $
+ *  last change:$Date: 2003-02-27 12:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@ package ifc.sdbc;
 
 import lib.MultiPropertyTest;
 
+import com.sun.star.container.XNameAccess;
+import com.sun.star.uno.Any;
+
+
 /**
 * Testing <code>com.sun.star.sdbc.RowSet</code>
 * service properties :
@@ -85,6 +89,28 @@ import lib.MultiPropertyTest;
 */
 public class _RowSet extends MultiPropertyTest {
 
+    /**
+    * Redefined method returns object, that contains changed property value.
+    */
+    public void _TypeMap() {
+        boolean result = false;
+        try {
+            Any TypeMap = (Any) oObj.getPropertyValue("TypeMap");
+            String TypeName = TypeMap.getType().getTypeName();
+            String expected = "com.sun.star.container.XNameAccess";
+            result = TypeName.equals(expected);
+            if (! result ) {
+                log.println("Expected Type is "+expected);
+                log.println("but the returned is "+TypeName);
+            }
+        } catch(com.sun.star.lang.WrappedTargetException e) {
+            log.println("Exception " + e.getMessage());
+        } catch(com.sun.star.beans.UnknownPropertyException e) {
+            log.println("Exception " + e.getMessage());
+        }
+
+        tRes.tested("TypeMap",result);
+    }
 
 }  // finish class _RowSet
 
