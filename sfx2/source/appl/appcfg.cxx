@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:30:57 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,9 @@
 #include <sot/exchange.hxx>
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 //#include <svtools/agprop.hxx>
 #include <sj2/sjapplet.hxx>
@@ -249,6 +251,7 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pTimer)
     return 0L;
 }
 
+
 /*
 const USHORT* SfxApplication::GetOptionsRanges() const
 {
@@ -265,7 +268,7 @@ const USHORT* SfxApplication::GetOptionsRanges() const
 
     if (0 == pRange[0])
     {
-        SfxItemPool &rPool = GetPool();
+        GetPool();  // -Wall required ??
         pRange[ 0] = SID_OPTIONS_START;
         pRange[ 1] = SID_OPTIONS_FIRSTFREE-1;
         pRange[ 2] = SID_HELPBALLOONS;
