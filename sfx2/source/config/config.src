@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-10 22:16:48 $
+ *  last change: $Author: kz $ $Date: 2001-12-13 21:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,13 +123,13 @@ QueryBox DLG_MACROQUERY
     Buttons = WB_OK_CANCEL;
     Title = "Makro ausführen" ;
     Title [ english ] = "Execute Macro" ;
-    Title [ english_us ] = "Execute Macro" ;
+    Title [ english_us ] = "Run Macro" ;
     Title [ french ] = "Exécuter une macro" ;
     Title[ italian ] = "Esegui macro";
     Title[ portuguese_brazilian ] = "Makro ausf?ren";
     Title[ portuguese ] = "Executar macro";
     Title[ danish ] = "Udfør makro";
-    Title[ swedish ] = "Utför makro";
+    Title[ swedish ] = "Kör makro";
     Title[ dutch ] = "Macro uitvoeren";
     Title[ spanish ] = "Ejecutar macro";
     Title[ chinese_simplified ] = "æ‰§è¡Œå®";
@@ -149,7 +149,7 @@ QueryBox DLG_MACROQUERY
 
     Message = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message [English] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
-    Message [English_us] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
+    Message [English_us] = "An event was triggered to which the macro $(MACRO) belongs. $(TEXT)";
 
     String BTN_OK
     {
@@ -266,7 +266,7 @@ QueryBox DLG_MACROQUERY
     Message[ finnish ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ italian ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ danish ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
-    Message[ swedish ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
+    Message[ swedish ] = "En händelse utlöstes för vilken makrot $(MACRO) har konfigurerats. $(TEXT)";
     Message[ polish ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ portuguese_brazilian ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ japanese ] = "ï¾ï½¸ï¾› $(MACRO) ã§è¨­å®šã•ã‚Œã¦ã„ã‚‹ï½²ï¾ï¾ï¾ï¾„ãŒä½œå‹•ã—ã¾ã—ãŸã€‚$(TEXT)";
@@ -277,5 +277,6 @@ QueryBox DLG_MACROQUERY
     Message[ arabic ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ catalan ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
 };
+
 
 
