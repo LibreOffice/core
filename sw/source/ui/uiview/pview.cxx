@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:31:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2534,7 +2534,7 @@ USHORT  SwPagePreView::Print( SfxProgress &rProgress, PrintDialog *pDlg )
         if( bPrtPros )
             pSh->PrintProspect( aOpts, rProgress );
         else
-            pSh->Prt( aOpts, rProgress );
+            pSh->Prt( aOpts, &rProgress );
     }
     else
     {
