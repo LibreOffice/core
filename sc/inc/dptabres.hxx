@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabres.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:55:24 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,32 @@ class ScDPAggData;
 class ScDPResultMember;
 
 struct ScDPValueData;
+struct ScDPItemData;
+
+//
+//  Member names that are being processed for InitFrom/LateInitFrom
+//  (needed for initialization of grouped items)
+//
+
+class ScDPInitState
+{
+    long*           pIndex;     // array
+    ScDPItemData*   pData;      // array
+    long            nCount;
+
+public:
+            ScDPInitState();
+            ~ScDPInitState();
+
+    void    AddMember( long nSourceIndex, const ScDPItemData& rName );
+    void    RemoveMember();
+
+    long                GetCount() const    { return nCount; }
+    const long*         GetSource() const   { return pIndex; }
+    const ScDPItemData* GetNames() const    { return pData; }
+
+    const ScDPItemData* GetNameForIndex( long nIndexValue ) const;
+};
 
 typedef ::std::vector<sal_Int32> ScMemberSortOrder;
 
@@ -245,7 +271,6 @@ public:
 class ScDPResultDimension;
 class ScDPDataDimension;
 class ScDPDataMember;
-struct ScDPItemData;
 
 #define SC_DPMEASURE_ALL    -1
 #define SC_DPMEASURE_ANY    -2
@@ -293,6 +318,14 @@ public:
 
     long                GetCountForMeasure( long nMeas ) const
                                 { return ( nMeas == SC_DPMEASURE_ALL ) ? nMeasCount : 1; }
+
+    BOOL                IsBaseForGroup( long nDim ) const;              // any group
+    long                GetGroupBase( long nGroupDim ) const;
+    BOOL                IsNumOrDateGroup( long nDim ) const;
+    BOOL                IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
+                                    const ScDPItemData& rBaseData, long nBaseIndex ) const;
+    BOOL                HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
+                                          const ScDPItemData& rSecondData, long nSecondIndex ) const;
 };
 
 
@@ -318,10 +351,12 @@ public:
                                             BOOL bForceSub );   //! Ref
                         ~ScDPResultMember();
 
-    void                InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev );
-    void                LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData );
+    void                InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPInitState& rInitState );
+    void                LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData,
+                                        ScDPInitState& rInitState );
 
     String              GetName() const;
+    void                FillItemData( ScDPItemData& rData ) const;
     BOOL                IsValid() const;
     BOOL                IsVisible() const;
     long                GetSize(long nMeasure) const;
@@ -447,6 +482,7 @@ class ScDPResultDimension
 private:
     ScDPResultData*         pResultData;
     ScDPResultMembers       aMembers;
+    BOOL                    bInitialized;
     String                  aDimensionName;     //! or ptr to IntDimension?
     BOOL                    bIsDataLayout;      //! or ptr to IntDimension?
     BOOL                    bSortByData;
@@ -463,8 +499,9 @@ public:
                         ~ScDPResultDimension();
 
                         //  allocates new members
-    void                InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev );
-    void                LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData );
+    void                InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPInitState& rInitState );
+    void                LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData,
+                                        ScDPInitState& rInitState );
 
     long                GetSize(long nMeasure) const;
 
