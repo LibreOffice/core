@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NodeAttribute.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:57:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,8 @@ published constants NodeAttribute
 
     /** can be used to mask the node attributes from merged attributes
      */
-    const short MASK = 65280; // 0xFF00
+    const short MASK = 32512; // 0xFF00, changed to 0x7F00 because only 3 bits
+                              // are masked and fixing a bug in idlc
 
     //-------------------------------------------------------------------------
 };
