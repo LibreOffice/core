@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:09 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,14 @@ namespace configmgr
         */
         virtual void disposeData(const RequestOptions& _aOptions) CFG_NOTHROW() = 0;
 
+        //Refresh all components in the cache
+        virtual void refreshAll()CFG_UNO_THROW_ALL() = 0;
 
+        //Flush all components in the cache
+        virtual void flushAll()CFG_NOTHROW() = 0;
+
+        //Enable/Disable Asynchronous write-back to cache
+        virtual void enableAsync(const sal_Bool& bEnableAsync) CFG_NOTHROW() = 0;
     };
 
 
