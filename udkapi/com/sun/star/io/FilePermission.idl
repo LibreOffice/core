@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePermission.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-10 13:35:01 $
+ *  last change: $Author: dbo $ $Date: 2002-03-20 14:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ module com {  module sun {  module star {  module io {
     <li>write -- write permission</li>
     <li>execute -- execute permission</li>
     <li>delete -- delete permission</li>
-    <ul>
+    </ul>
     The actions string is converted to lowercase before processing.
     </p>
 
