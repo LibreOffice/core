@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatritr.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 09:34:25 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 12:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,8 +179,9 @@ sal_Bool SwTxtAttrIterator::Next()
                     nAttrPos = nSavePos;
 
                     if( RES_TXTATR_CHARFMT == pHt->Which() )
-                        pCurItem = &pHt->GetCharFmt().GetCharFmt()->
-                                                GetAttr( GetWhichId() );
+                        pCurItem = &pHt->GetCharFmt().GetCharFmt()->GetAttr(
+                                        GetWhichOfScript( nWhichId,
+                                                aSIter.GetCurrScript() ) );
                     else
                         pCurItem = &pHt->GetAttr();
 
@@ -192,50 +193,6 @@ sal_Bool SwTxtAttrIterator::Next()
             SearchNextChg();
     }
     return bRet;
-}
-
-USHORT SwTxtAttrIterator::GetWhichId() const
-{
-    USHORT nRet = nWhichId;
-    switch( nRet )
-    {
-    case RES_CHRATR_LANGUAGE:
-        switch( aSIter.GetCurrScript() )
-        {
-        case ScriptType::ASIAN:     nRet = RES_CHRATR_CJK_LANGUAGE; break;
-        case ScriptType::COMPLEX:   nRet = RES_CHRATR_CTL_LANGUAGE; break;
-        }
-        break;
-    case RES_CHRATR_FONT:
-        switch( aSIter.GetCurrScript() )
-        {
-        case ScriptType::ASIAN:     nRet = RES_CHRATR_CJK_FONT; break;
-        case ScriptType::COMPLEX:   nRet = RES_CHRATR_CTL_FONT; break;
-        }
-        break;
-    case RES_CHRATR_FONTSIZE:
-        switch( aSIter.GetCurrScript() )
-        {
-        case ScriptType::ASIAN:     nRet = RES_CHRATR_CJK_FONTSIZE; break;
-        case ScriptType::COMPLEX:   nRet = RES_CHRATR_CTL_FONTSIZE; break;
-        }
-        break;
-    case RES_CHRATR_WEIGHT:
-        switch( aSIter.GetCurrScript() )
-        {
-        case ScriptType::ASIAN:     nRet = RES_CHRATR_CJK_WEIGHT;   break;
-        case ScriptType::COMPLEX:   nRet = RES_CHRATR_CTL_WEIGHT;   break;
-        }
-        break;
-    case RES_CHRATR_POSTURE:
-        switch( aSIter.GetCurrScript() )
-        {
-        case ScriptType::ASIAN:     nRet = RES_CHRATR_CJK_POSTURE;  break;
-        case ScriptType::COMPLEX:   nRet = RES_CHRATR_CTL_POSTURE;  break;
-        }
-        break;
-    }
-    return nRet;
 }
 
 void SwTxtAttrIterator::AddToStack( const SwTxtAttr& rAttr )
@@ -262,7 +219,8 @@ void SwTxtAttrIterator::SearchNextChg()
         aStack.Remove( 0, aStack.Count() );
     }
     if( !pParaItem )
-        pParaItem = &rTxtNd.GetSwAttrSet().Get( nWh = GetWhichId() );
+        pParaItem = &rTxtNd.GetSwAttrSet().Get( nWh =
+                    GetWhichOfScript( nWhichId, aSIter.GetCurrScript() ) );
 
     xub_StrLen nStt = nChgPos;
     nChgPos = aSIter.GetScriptChgPos();
@@ -272,7 +230,7 @@ void SwTxtAttrIterator::SearchNextChg()
     if( pHts )
     {
         if( !nWh )
-            nWh = GetWhichId();
+            nWh = GetWhichOfScript( nWhichId, aSIter.GetCurrScript() );
 
         const SfxPoolItem* pItem;
         SwFmt* pFmt;

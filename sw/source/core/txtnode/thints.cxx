@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-15 20:09:26 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 12:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2118,11 +2118,8 @@ USHORT SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen) const
     if( pSwpHints )
     {
         if( pBreakIt->xBreak.is() )
-            switch( pBreakIt->xBreak->getScriptType( aText, nBegin ) )
-            {
-            case ScriptType::ASIAN:     nWhichId = RES_CHRATR_CJK_LANGUAGE; break;
-            case ScriptType::COMPLEX:   nWhichId = RES_CHRATR_CTL_LANGUAGE; break;
-            }
+            nWhichId = GetWhichOfScript( nWhichId,
+                        pBreakIt->xBreak->getScriptType( aText, nBegin ) );
 
         xub_StrLen nEnd = nBegin + nLen;
         for( USHORT i = 0, nSize = pSwpHints->Count(); i < nSize; ++i )
@@ -2174,11 +2171,8 @@ USHORT SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen) const
         {
             nWhichId = RES_CHRATR_LANGUAGE;
             if( pBreakIt->xBreak.is() )
-                switch( pBreakIt->xBreak->getScriptType( aText, 0 ) )
-                {
-                case ScriptType::ASIAN:     nWhichId = RES_CHRATR_CJK_LANGUAGE; break;
-                case ScriptType::COMPLEX:   nWhichId = RES_CHRATR_CTL_LANGUAGE; break;
-                }
+                nWhichId = GetWhichOfScript( nWhichId,
+                            pBreakIt->xBreak->getScriptType( aText, 0 ) );
         }
 
         nRet = ((SvxLanguageItem&)GetSwAttrSet().Get( nWhichId )).GetLanguage();

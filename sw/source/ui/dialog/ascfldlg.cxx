@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-19 13:48:26 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 12:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _SVX_LANGITEM_HXX //autogen wg. SvxLanguageItem
 #include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
 #endif
 
 #ifndef _SWTYPES_HXX
@@ -257,8 +260,12 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         // initialisiere Sprache
         {
             if( !aOpt.GetLanguage() )
+            {
+                USHORT nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE,
+                                GetScriptTypeOfLanguage( LANGUAGE_SYSTEM ));
                 aOpt.SetLanguage( ((SvxLanguageItem&)rDocSh.GetDoc()->
-                            GetDefault( RES_CHRATR_LANGUAGE )).GetLanguage());
+                            GetDefault( nWhich )).GetLanguage());
+            }
 
             const USHORT nLanguageCount = (USHORT) SvxGetSelectableLanguages().getLength();
             const util::Language *pLang = SvxGetSelectableLanguages().getConstArray();
@@ -532,6 +539,9 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/01/19 13:48:26  jp
+      replace own code with new svx classes
+
       Revision 1.1.1.1  2000/09/18 17:14:34  hr
       initial import
 
