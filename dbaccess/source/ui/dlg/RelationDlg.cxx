@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:26:29 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 14:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,37 +313,31 @@ String ORelationControl::GetCellText( long nRow, USHORT nColId )
 void ORelationControl::InitController( CellControllerRef& rController, long nRow, USHORT nColumnId )
 {
     DBG_CHKTHIS(ORelationControl,NULL);
-    String aText;
 
+    ULONG nHelpId;
+
+    Reference< XPropertySet> xDef;
     switch (nColumnId)
     {
         case SOURCE_COLUMN:
-            //////////////////////////////////////////////////////////////
-            // Auffuellen der ComboBox
-            fillListBox(m_xSourceDef);
-            //////////////////////////////////////////////////////////////
-            // Setzen des Edits
-            aText = GetCellText( nRow, nColumnId );
-
-            m_pListCell->SelectEntry(aText);
-
-            m_pListCell->SetHelpId(HID_RELATIONDIALOG_LEFTFIELDCELL);
-            m_pListCell->SetHelpText(String());
+            xDef    = m_xSourceDef;
+            nHelpId = HID_RELATIONDIALOG_LEFTFIELDCELL;
             break;
         case DEST_COLUMN:
-            //////////////////////////////////////////////////////////////
-            // Auffuellen der ComboBox
-            fillListBox(m_xDestDef);
-
-            //////////////////////////////////////////////////////////////
-            // Setzen des Edits
-            aText = GetCellText( nRow, nColumnId );
-            m_pListCell->SelectEntry(aText);
-            m_pListCell->SetText( aText );
-
-            m_pListCell->SetHelpId(HID_RELATIONDIALOG_RIGHTFIELDCELL);
-            m_pListCell->SetHelpText(String());
+            xDef    = m_xDestDef;
+            nHelpId = HID_RELATIONDIALOG_RIGHTFIELDCELL;
             break;
+    }
+
+    if(xDef.is())
+    {
+        fillListBox(xDef,nRow,nColumnId);
+        String aText = GetCellText( nRow, nColumnId );
+
+        m_pListCell->SelectEntry(aText);
+
+        m_pListCell->SetHelpId(nHelpId);
+        m_pListCell->SetHelpText(String());
     }
 }
 
@@ -382,20 +376,29 @@ void ORelationControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, US
         rDev.SetClipRegion();
 }
 // -----------------------------------------------------------------------------
-void ORelationControl::fillListBox(const Reference< XPropertySet>& _xDest)
+void ORelationControl::fillListBox(const Reference< XPropertySet>& _xDest,long _nRow,USHORT nColumnId)
 {
     m_pListCell->Clear();
     try
     {
         if( _xDest.is() )
         {
+            sal_Int32 nRows = GetRowCount();
             Reference<XColumnsSupplier> xSup(_xDest,UNO_QUERY);
             Reference<XNameAccess> xColumns = xSup->getColumns();
             Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
             const ::rtl::OUString* pBegin = aNames.getConstArray();
             const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
             for(;pBegin != pEnd;++pBegin)
-                m_pListCell->InsertEntry( *pBegin );
+            {
+                String sName = *pBegin;
+                sal_Int32 i = 0;
+                for (; i< nRows; ++i)
+                    if(i != _nRow && GetCellText(i,nColumnId) == sName)
+                        break;
+                if(i == nRows)
+                    m_pListCell->InsertEntry( *pBegin );
+            }
             m_pListCell->InsertEntry(String(), 0);
         }
     }
