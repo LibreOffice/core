@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:50 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,11 @@
 // #97016#
 #ifndef _SVDOMEAS_HXX
 #include <svx/svdomeas.hxx>
+#endif
+
+// #109583#
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
 #endif
 
 #include "viewshel.hxx"
@@ -327,37 +332,42 @@ BOOL FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn(sal_False);
 
-    if ( pView->IsCreateObj() && rMEvt.IsLeft() )
+    if(pView->IsCreateObj() && rMEvt.IsLeft())
     {
         SdrObject* pObj = pView->GetCreateObj();
 
-        if (pView->EndCreateObj(SDRCREATE_FORCEEND) &&
-            pObj && nSlotId == SID_DRAW_MEASURELINE)
+        if(pObj && pView->EndCreateObj(SDRCREATE_FORCEEND))
         {
-            SdrLayerAdmin& rAdmin = pDoc->GetLayerAdmin();
-            String aStr(SdResId(STR_LAYER_MEASURELINES));
-            pObj->SetLayer(rAdmin.GetLayerID(aStr, FALSE));
+            if(SID_DRAW_MEASURELINE == nSlotId)
+            {
+                SdrLayerAdmin& rAdmin = pDoc->GetLayerAdmin();
+                String aStr(SdResId(STR_LAYER_MEASURELINES));
+                pObj->SetLayer(rAdmin.GetLayerID(aStr, FALSE));
+            }
+
+            // #88751# init text position when vertica caption object is created
+            if(pObj->ISA(SdrCaptionObj) && SID_DRAW_CAPTION_VERTICAL == nSlotId)
+            {
+                // draw text object, needs to be initialized when vertical text is used
+                SfxItemSet aSet(pObj->GetItemSet());
+
+                aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+                aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+
+                // #109583#
+                // Correct the value of SDRATTR_TEXTDIRECTION to avoid SetItemSet
+                // calling SetVerticalWriting() again since this item may not yet
+                // be set at the object and thus may differ from verical state of
+                // the object.
+                aSet.Put(SvxWritingModeItem(com::sun::star::text::WritingMode_TB_RL));
+
+                pObj->SetItemSet(aSet);
+            }
+
+            bReturn = sal_True;
         }
-
-        // #92557# re-get the object pointer, the object may be deleted
-        // in the meantime
-        pObj = pView->GetCreateObj();
-
-        // #88751# init text position when vertica caption object is created
-        if(pObj && pObj->ISA(SdrCaptionObj) && nSlotId == SID_DRAW_CAPTION_VERTICAL)
-        {
-            // draw text object, needs to be initialized when vertical text is used
-            SfxItemSet aSet(pObj->GetItemSet());
-
-            aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
-            aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
-
-            pObj->SetItemSet(aSet);
-        }
-
-        bReturn = TRUE;
     }
 
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
