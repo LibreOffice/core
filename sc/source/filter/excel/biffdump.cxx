@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:16:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,13 +765,13 @@ UINT16 Biff8RecDumper::DumpXF( XclImpStream& rStrm, const sal_Char* pPre )
         { __AddDec( t, nTmp ); ADDTEXT( "°" ); }
     else if( nTmp < 181 )
         { __AddDec( t, static_cast< sal_Int32 >( 90 - nTmp ) ); ADDTEXT( "°" ); }
-    else if( nTmp == EXC_XF8_STACKED )
+    else if( nTmp == EXC_ROT_STACKED )
         { ADDTEXT( "stacked" ); }
     else
         { ADDTEXT( "!unknown!" ); }
     ::extract_value( nTmp, nMiscAttrib, 0, 4 );
     ADDTEXT( ")   indent=" );       __AddDec( t, nTmp );
-    ADDTEXT( "   shrink=" );        lcl_AddOnOff( t, ::get_flag( nMiscAttrib, EXC_XF_SHRINK ) );
+    ADDTEXT( "   shrink=" );        lcl_AddOnOff( t, ::get_flag( nMiscAttrib, EXC_XF8_SHRINK ) );
     ::extract_value( nTmp, nMiscAttrib, 6, 2 );
     ADDTEXT( "   text-dir=" );      __AddDec( t, nTmp );
     ADDTEXT( " (" );
