@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleIconChoiceControl.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 12:05:30 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ service AccessibleIconChoiceControl
        <li>Name: The name of an icon choice control is IconChoiceControl.</li>
        <li>Description: The description of an icon choice control is its localized
            help text.</li>
-       <li>Children: There exists children of type <type scope"com::sun::star::accessibility">AccessibleIconChoiceControlEntry</type>.
+       <li>Children: There exists children of type <type scope="com::sun::star::awt">AccessibleIconChoiceControlEntry</type>.
         </li>
        <li>Parent: The parent is the window that contains the icon choice control.</li>
        <li>Relations: There are no relations.</li>
