@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-06 08:29:45 $
+ *  last change: $Author: kz $ $Date: 2001-08-08 09:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,10 @@ String STR_SVT_NEWDOC
     Text[ swedish ] = "Nytt dokument";
     Text[ polish ] = "Nowy dokument";
     Text[ portuguese_brazilian ] = "New Document";
-    Text[ japanese ] = "V‚µ‚¢ÄŞ·­ÒİÄ";
-    Text[ korean ] = "»õ ¹®¼­";
-    Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµ";
-    Text[ chinese_traditional ] = "·s¼W¤å¥ó";
+    Text[ japanese ] = "æ–°ã—ã„ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„";
+    Text[ korean ] = "ìƒˆ ë¬¸ì„œ";
+    Text[ chinese_simplified ] = "æ–°å»ºæ–‡æ¡£";
+    Text[ chinese_traditional ] = "æ–°å¢æ–‡ä»¶";
     Text[ turkish ] = "New Document";
     Text[ arabic ] = "New Document";
     Text[ catalan ] = "New Document";
@@ -120,10 +120,10 @@ String STR_SVT_MYDOCS
     Text[ swedish ] = "Mina dokument";
     Text[ polish ] = "Moje dokumenty";
     Text[ portuguese_brazilian ] = "My Documents";
-    Text[ japanese ] = "Ï²ÄŞ·­ÒİÄ";
-    Text[ korean ] = "°íÀ¯ ¹®¼­";
-    Text[ chinese_simplified ] = "ÎÒµÄÎÄµµ";
-    Text[ chinese_traditional ] = "§Úªº¤å¥ó§¨";
+    Text[ japanese ] = "ï¾ï½²ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„";
+    Text[ korean ] = "ê³ ìœ  ë¬¸ì„œ";
+    Text[ chinese_simplified ] = "æˆ‘çš„æ–‡æ¡£";
+    Text[ chinese_traditional ] = "æˆ‘çš„æ–‡ä»¶å¤¾";
     Text[ turkish ] = "My Documents";
     Text[ arabic ] = "My Documents";
     Text[ catalan ] = "My Documents";
@@ -151,10 +151,10 @@ String STR_SVT_TEMPLATES
     Text[ swedish ] = "Mallar";
     Text[ polish ] = "Szablony";
     Text[ portuguese_brazilian ] = "Templates";
-    Text[ japanese ] = "ÃİÌßÚ°Ä";
-    Text[ korean ] = "¼­½Ä ÆÄÀÏ";
-    Text[ chinese_simplified ] = "ÑùÊ½";
-    Text[ chinese_traditional ] = "¼Ë¦¡";
+    Text[ japanese ] = "ï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„";
+    Text[ korean ] = "ì„œì‹ íŒŒì¼";
+    Text[ chinese_simplified ] = "æ ·å¼";
+    Text[ chinese_traditional ] = "æ¨£å¼";
     Text[ turkish ] = "Templates";
     Text[ arabic ] = "Templates";
     Text[ catalan ] = "Templates";
@@ -181,10 +181,10 @@ String STR_SVT_SAMPLES
     Text[ swedish ] = "Exempel";
     Text[ polish ] = "Przyk³ady";
     Text[ portuguese_brazilian ] = "Samples";
-    Text[ japanese ] = "»İÌßÙ•¶‘";
-    Text[ korean ] = "¿¹";
-    Text[ chinese_simplified ] = "Ê¾ÀıÎÄµµ";
-    Text[ chinese_traditional ] = "¥Ü¨Ò";
+    Text[ japanese ] = "ï½»ï¾ï¾Œï¾Ÿï¾™æ–‡æ›¸";
+    Text[ korean ] = "ì˜ˆ";
+    Text[ chinese_simplified ] = "ç¤ºä¾‹æ–‡æ¡£";
+    Text[ chinese_traditional ] = "ç¤ºä¾‹";
     Text[ turkish ] = "Samples";
     Text[ arabic ] = "Samples";
     Text[ catalan ] = "Samples";
@@ -213,10 +213,10 @@ String STR_SVT_CATEGORY
     Text[ swedish ] = "Kategori";
     Text[ polish ] = "Kategoria";
     Text[ portuguese_brazilian ] = "Category";
-    Text[ japanese ] = "•ª—Ş";
-    Text[ korean ] = "¹üÁÖ";
-    Text[ chinese_simplified ] = "·ÖÀà";
-    Text[ chinese_traditional ] = "¤ÀÃş";
+    Text[ japanese ] = "åˆ†é¡";
+    Text[ korean ] = "ë²”ì£¼";
+    Text[ chinese_simplified ] = "åˆ†ç±»";
+    Text[ chinese_traditional ] = "åˆ†é¡";
     Text[ turkish ] = "Category";
     Text[ arabic ] = "Category";
     Text[ catalan ] = "Category";
@@ -247,10 +247,10 @@ ToolBox TB_SVT_FILEVIEW
             Text[ swedish ] = "Tillbaka";
             Text[ polish ] = "Wstecz";
             Text[ portuguese_brazilian ] = "Back";
-            Text[ japanese ] = "–ß‚é";
-            Text[ korean ] = "µÚ·Î";
-            Text[ chinese_simplified ] = "·µ»Ø";
-            Text[ chinese_traditional ] = "ªğ¦^";
+            Text[ japanese ] = "æˆ»ã‚‹";
+            Text[ korean ] = "ë’¤ë¡œ";
+            Text[ chinese_simplified ] = "è¿”å›";
+            Text[ chinese_traditional ] = "è¿”å›";
             Text[ turkish ] = "Back";
             Text[ arabic ] = "Back";
             Text[ catalan ] = "Back";
@@ -275,10 +275,10 @@ ToolBox TB_SVT_FILEVIEW
             Text[ swedish ] = "En nivå högre";
             Text[ polish ] = "Katalog wy¿ej";
             Text[ portuguese_brazilian ] = "Higher";
-            Text[ japanese ] = "‚P‚Âã‚ÌÌ«ÙÀŞ‚Ö";
-            Text[ korean ] = "´õ ³ô°Ô";
-            Text[ chinese_simplified ] = "Ä¿Â¼ÏòÉÏÒ»²ã";
-            Text[ chinese_traditional ] = "¥Ø¿ı¦V¤W¤@¼h";
+            Text[ japanese ] = "ï¼‘ã¤ä¸Šã®ï¾Œï½«ï¾™ï¾€ï¾ã¸";
+            Text[ korean ] = "ë” ë†’ê²Œ";
+            Text[ chinese_simplified ] = "ç›®å½•å‘ä¸Šä¸€å±‚";
+            Text[ chinese_traditional ] = "ç›®éŒ„å‘ä¸Šä¸€å±¤";
             Text[ turkish ] = "Higher";
             Text[ arabic ] = "Higher";
             Text[ catalan ] = "Higher";
@@ -307,10 +307,10 @@ ToolBox TB_SVT_FILEVIEW
             Text[ swedish ] = "Skriv ut";
             Text[ polish ] = "Drukuj";
             Text[ portuguese_brazilian ] = "Print";
-            Text[ japanese ] = "ˆóü";
-            Text[ korean ] = "ÀÎ¼â";
-            Text[ chinese_simplified ] = "´òÓ¡";
-            Text[ chinese_traditional ] = "¦C¦L";
+            Text[ japanese ] = "å°åˆ·";
+            Text[ korean ] = "ì¸ì‡„";
+            Text[ chinese_simplified ] = "æ‰“å°";
+            Text[ chinese_traditional ] = "åˆ—å°";
             Text[ turkish ] = "Print";
             Text[ arabic ] = "Print";
             Text[ catalan ] = "Print";
@@ -346,10 +346,10 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ swedish ] = "Dokumentegenskaper";
             Text[ polish ] = "W³aœciwoœci dokumentu";
             Text[ portuguese_brazilian ] = "Docinfo";
-            Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ì‘®«";
+            Text[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã®å±æ€§";
             Text[ korean ] = "Docinfo";
-            Text[ chinese_simplified ] = "ÎÄµµÊôĞÔ";
-            Text[ chinese_traditional ] = "¤å¥óÄİ©Ê";
+            Text[ chinese_simplified ] = "æ–‡æ¡£å±æ€§";
+            Text[ chinese_traditional ] = "æ–‡ä»¶å±¬æ€§";
             Text[ turkish ] = "Docinfo";
             Text[ arabic ] = "Docinfo";
             Text[ catalan ] = "Docinfo";
@@ -375,10 +375,10 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ swedish ] = "Förhandsvisning";
             Text[ polish ] = "Podgl¹d";
             Text[ portuguese_brazilian ] = "Preview";
-            Text[ japanese ] = "ÌßÚËŞ­°";
-            Text[ korean ] = "¹Ì¸®º¸±â";
-            Text[ chinese_simplified ] = "Ô¤ÀÀ";
-            Text[ chinese_traditional ] = "¹wÄı";
+            Text[ japanese ] = "ï¾Œï¾Ÿï¾šï¾‹ï¾ï½­ï½°";
+            Text[ korean ] = "ë¯¸ë¦¬ë³´ê¸°";
+            Text[ chinese_simplified ] = "é¢„è§ˆ";
+            Text[ chinese_traditional ] = "é è¦½";
             Text[ turkish ] = "Preview";
             Text[ arabic ] = "Preview";
             Text[ catalan ] = "Preview";
@@ -405,10 +405,10 @@ ModalDialog DLG_DOCTEMPLATE
     Text[ swedish ] = "Mallar och dokument";
     Text[ polish ] = "Szablony i dokumenty";
     Text[ portuguese_brazilian ] = "Templates and Documents";
-    Text[ japanese ] = "ÃİÌßÚ°Ä‚ÆÄŞ·­ÒİÄ";
-    Text[ korean ] = "¼­½ÄÆÄÀÏ°ú ¹®¼­";
-    Text[ chinese_simplified ] = "ÑùÊ½ºÍÎÄµµ";
-    Text[ chinese_traditional ] = "¼Ë¦¡©M¤å¥ó";
+    Text[ japanese ] = "ï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„ã¨ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„";
+    Text[ korean ] = "ì„œì‹íŒŒì¼ê³¼ ë¬¸ì„œ";
+    Text[ chinese_simplified ] = "æ ·å¼å’Œæ–‡æ¡£";
+    Text[ chinese_traditional ] = "æ¨£å¼å’Œæ–‡ä»¶";
     Text[ turkish ] = "Templates and Documents";
     Text[ arabic ] = "Templates and Documents";
     Text[ catalan ] = "Templates and Documents";
@@ -436,10 +436,10 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ swedish ] = "~Administrera...";
         Text[ polish ] = "Zarz¹dzaj...";
         Text[ portuguese_brazilian ] = "Manage...";
-        Text[ japanese ] = "ŠÇ—(~Z)...";
-        Text[ korean ] = "°ü¸®(~Z)...";
-        Text[ chinese_simplified ] = "¹ÜÀí(~Z)...";
-        Text[ chinese_traditional ] = "ºŞ²z(~Z)...";
+        Text[ japanese ] = "ç®¡ç†(~Z)...";
+        Text[ korean ] = "ê´€ë¦¬(~Z)...";
+        Text[ chinese_simplified ] = "ç®¡ç†(~Z)...";
+        Text[ chinese_traditional ] = "ç®¡ç†(~Z)...";
         Text[ turkish ] = "Manage...";
         Text[ arabic ] = "Manage...";
         Text[ catalan ] = "Manage...";
@@ -462,10 +462,10 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ swedish ] = "~Redigera";
         Text[ polish ] = "~Edytuj";
         Text[ portuguese_brazilian ] = "Edit";
-        Text[ japanese ] = "•ÒW(~E)";
-        Text[ korean ] = "ÆíÁı(~E)";
-        Text[ chinese_simplified ] = "±à¼­(~E)";
-        Text[ chinese_traditional ] = "½s¿è(~E)";
+        Text[ japanese ] = "ç·¨é›†(~E)";
+        Text[ korean ] = "í¸ì§‘(~E)";
+        Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
+        Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
         Text[ turkish ] = "Edit";
         Text[ arabic ] = "Edit";
         Text[ catalan ] = "Edit";
@@ -489,10 +489,10 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ swedish ] = "Ö~ppna";
         Text[ polish ] = "Otwórz";
         Text[ portuguese_brazilian ] = "Open";
-        Text[ japanese ] = "ŠJ‚­(~O)";
-        Text[ korean ] = "¿­±â(~O)";
-        Text[ chinese_simplified ] = "´ò¿ª(~O)";
-        Text[ chinese_traditional ] = "¶}±ÒÂÂÀÉ(~O)";
+        Text[ japanese ] = "é–‹ã(~O)";
+        Text[ korean ] = "ì—´ê¸°(~O)";
+        Text[ chinese_simplified ] = "æ‰“å¼€(~O)";
+        Text[ chinese_traditional ] = "é–‹å•ŸèˆŠæª”(~O)";
         Text[ turkish ] = "Open";
         Text[ arabic ] = "Open";
         Text[ catalan ] = "Open";
@@ -553,7 +553,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
         < "Geändert von" ; DI_MODIFIEDBY ; > ;
         < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "ZL : \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" ; DI_PRINTBY ; > ;
+        < "ZL : \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" ; DI_PRINTBY ; > ;
         < "Thema" ; DI_THEME ; > ;
         < "Größe" ; DI_SIZE ; > ;
     };
@@ -739,63 +739,63 @@ StringArray STRARY_SVT_DOCINFO
     };
     ItemList [ japanese ] =
     {
-        < "À²ÄÙ" ; DI_TITLE ; > ;
-        < "ì¬Ò" ; DI_FROM ; > ;
-        < "“ú" ; DI_DATE ; > ;
-        < "·°Ü°ÄŞ" ; DI_KEYWORDS ; > ;
-        < "ŠT—v" ; DI_DESCRIPTION ; > ;
-        < "\\¬“à—e" ; DI_MIMETYPE ; > ;
-        < "XV“ú" ; DI_MODIFIEDDATE ; > ;
-        < "XVÒ" ; DI_MODIFIEDBY ; > ;
-        < "ˆóü“ú" ; DI_PRINTDATE ; > ;
-        < "ˆóü“ú" ; DI_PRINTBY ; > ;
-        < "Ã°Ï" ; DI_THEME ; > ;
-        < "»²½Ş" ; DI_SIZE ; > ;
+        < "ï¾€ï½²ï¾„ï¾™" ; DI_TITLE ; > ;
+        < "ä½œæˆè€…" ; DI_FROM ; > ;
+        < "æ—¥æ™‚" ; DI_DATE ; > ;
+        < "ï½·ï½°ï¾œï½°ï¾„ï¾" ; DI_KEYWORDS ; > ;
+        < "æ¦‚è¦" ; DI_DESCRIPTION ; > ;
+        < "æ§‹æˆå†…å®¹" ; DI_MIMETYPE ; > ;
+        < "æ›´æ–°æ—¥æ™‚" ; DI_MODIFIEDDATE ; > ;
+        < "æ›´æ–°è€…" ; DI_MODIFIEDBY ; > ;
+        < "å°åˆ·æ—¥æ™‚" ; DI_PRINTDATE ; > ;
+        < "å°åˆ·æ—¥æ™‚" ; DI_PRINTBY ; > ;
+        < "ï¾ƒï½°ï¾" ; DI_THEME ; > ;
+        < "ï½»ï½²ï½½ï¾" ; DI_SIZE ; > ;
     };
     ItemList [ korean ] =
     {
-        < "Á¦¸ñ" ; DI_TITLE ; > ;
-        < "(À¸)·Î ºÎÅÍ" ; DI_FROM ; > ;
-        < "ÀÏÀÚ" ; DI_DATE ; > ;
-        < "Å°¿öµåµé" ; DI_KEYWORDS ; > ;
-        < "¼³¸í" ; DI_DESCRIPTION ; > ;
-        < "³»¿ë À¯Çü" ; DI_MIMETYPE ; > ;
-        < "º¯°æ ÀÏÀÚ" ; DI_MODIFIEDDATE ; > ;
-        < "..¿¡ ÀÇÇØ º¯°æ" ; DI_MODIFIEDBY ; > ;
-        < "ÀÎ¼âÀÏÀÚ" ; DI_PRINTDATE ; > ;
-        < "..¿¡ ÀÇÇØ ÀÎ¼â" ; DI_PRINTBY ; > ;
-        < "ÁÖÁ¦" ; DI_THEME ; > ;
-        < "Å©±â" ; DI_SIZE ; > ;
+        < "ì œëª©" ; DI_TITLE ; > ;
+        < "(ìœ¼)ë¡œ ë¶€í„°" ; DI_FROM ; > ;
+        < "ì¼ì" ; DI_DATE ; > ;
+        < "í‚¤ì›Œë“œë“¤" ; DI_KEYWORDS ; > ;
+        < "ì„¤ëª…" ; DI_DESCRIPTION ; > ;
+        < "ë‚´ìš© ìœ í˜•" ; DI_MIMETYPE ; > ;
+        < "ë³€ê²½ ì¼ì" ; DI_MODIFIEDDATE ; > ;
+        < "..ì— ì˜í•´ ë³€ê²½" ; DI_MODIFIEDBY ; > ;
+        < "ì¸ì‡„ì¼ì" ; DI_PRINTDATE ; > ;
+        < "..ì— ì˜í•´ ì¸ì‡„" ; DI_PRINTBY ; > ;
+        < "ì£¼ì œ" ; DI_THEME ; > ;
+        < "í¬ê¸°" ; DI_SIZE ; > ;
     };
     ItemList [ chinese_simplified ] =
     {
-        < "´ó±êÌâ" ; DI_TITLE ; > ;
-        < "×÷Õß" ; DI_FROM ; > ;
-        < "ÈÕÆÚ" ; DI_DATE ; > ;
-        < "¹Ø¼ü×Ö" ; DI_KEYWORDS ; > ;
-        < "ËµÃ÷" ; DI_DESCRIPTION ; > ;
-        < "ÄÚÈİÀàĞÍ" ; DI_MIMETYPE ; > ;
-        < "ĞŞ¸ÄµÄÈÕÆÚ" ; DI_MODIFIEDDATE ; > ;
-        < "±à¼­ĞŞ¸ÄÕß" ; DI_MODIFIEDBY ; > ;
-        < "´òÓ¡µÄÈÕÆÚ" ; DI_PRINTDATE ; > ;
-        < "´òÓ¡µÄÈÕÆÚ" ; DI_PRINTBY ; > ;
-        < "Ö÷Ìâ" ; DI_THEME ; > ;
-        < "´óĞ¡" ; DI_SIZE ; > ;
+        < "å¤§æ ‡é¢˜" ; DI_TITLE ; > ;
+        < "ä½œè€…" ; DI_FROM ; > ;
+        < "æ—¥æœŸ" ; DI_DATE ; > ;
+        < "å…³é”®å­—" ; DI_KEYWORDS ; > ;
+        < "è¯´æ˜" ; DI_DESCRIPTION ; > ;
+        < "å†…å®¹ç±»å‹" ; DI_MIMETYPE ; > ;
+        < "ä¿®æ”¹çš„æ—¥æœŸ" ; DI_MODIFIEDDATE ; > ;
+        < "ç¼–è¾‘ä¿®æ”¹è€…" ; DI_MODIFIEDBY ; > ;
+        < "æ‰“å°çš„æ—¥æœŸ" ; DI_PRINTDATE ; > ;
+        < "æ‰“å°çš„æ—¥æœŸ" ; DI_PRINTBY ; > ;
+        < "ä¸»é¢˜" ; DI_THEME ; > ;
+        < "å¤§å°" ; DI_SIZE ; > ;
     };
     ItemList [ chinese_traditional ] =
     {
-        < "¤j¼ĞÃD" ; DI_TITLE ; > ;
-        < "§@ªÌ" ; DI_FROM ; > ;
-        < "¤é´Á" ; DI_DATE ; > ;
-        < "ÃöÁä¦r" ; DI_KEYWORDS ; > ;
-        < "´y­z" ; DI_DESCRIPTION ; > ;
-        < "?®eÃş«¬" ; DI_MIMETYPE ; > ;
-        < "­×§ïªº¤é´Á" ; DI_MODIFIEDDATE ; > ;
-        < "½s¿è­×§ïªÌ" ; DI_MODIFIEDBY ; > ;
-        < "¦C¦Lªº¤é´Á" ; DI_PRINTDATE ; > ;
-        < "¦C¦Lªº¤é´Á" ; DI_PRINTBY ; > ;
-        < "¥DÃD" ; DI_THEME ; > ;
-        < "¤j¤p" ; DI_SIZE ; > ;
+        < "å¤§æ¨™é¡Œ" ; DI_TITLE ; > ;
+        < "ä½œè€…" ; DI_FROM ; > ;
+        < "æ—¥æœŸ" ; DI_DATE ; > ;
+        < "é—œéµå­—" ; DI_KEYWORDS ; > ;
+        < "æè¿°" ; DI_DESCRIPTION ; > ;
+        < "å†…å®¹é¡å‹" ; DI_MIMETYPE ; > ;
+        < "ä¿®æ”¹çš„æ—¥æœŸ" ; DI_MODIFIEDDATE ; > ;
+        < "ç·¨è¼¯ä¿®æ”¹è€…" ; DI_MODIFIEDBY ; > ;
+        < "åˆ—å°çš„æ—¥æœŸ" ; DI_PRINTDATE ; > ;
+        < "åˆ—å°çš„æ—¥æœŸ" ; DI_PRINTBY ; > ;
+        < "ä¸»é¡Œ" ; DI_THEME ; > ;
+        < "å¤§å°" ; DI_SIZE ; > ;
     };
     ItemList [ turkish ] =
     {
@@ -843,6 +843,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Größe" ; DI_SIZE ; > ;
     };
 };
+
 
 
 
