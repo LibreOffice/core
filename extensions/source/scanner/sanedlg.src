@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:59:21 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ russian ] = "—оздать\n просмотр";
         Text[ polish ] = "Utwуrz\n podglєd";
         Text[ japanese ] = "ћяЏЋё≠∞\nНмРђ";
-        Text[ chinese_traditional ] = "≤£•Ќєwµш";
+        Text[ chinese_traditional ] = "ЂЎ•яєwƒэ";
         Text[ arabic ] = "≈д‘«Ѕ\nгЏ«нд…";
         Text[ dutch ] = "~Voorbeeld\nmaken";
         Text[ chinese_simplified ] = "љ®ЅҐ‘§јј";
@@ -158,7 +158,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ russian ] = "ѕросмотр";
         Text[ polish ] = "Podglєd";
         Text[ japanese ] = "ћяЏЋё≠∞";
-        Text[ chinese_traditional ] = "єwµш";
+        Text[ chinese_traditional ] = "єwƒэ";
         Text[ arabic ] = "гЏ«нд…";
         Text[ dutch ] = "Voorbeeld";
         Text[ chinese_simplified ] = "‘§јј";
@@ -182,7 +182,7 @@ ModalDialog RID_SANE_DIALOG
         Text [ spanish ] = "Ѕrea de escaneado" ;
         Text [ french ] = "Zone а scanner" ;
         Text [ dutch ] = "Scanbereik" ;
-        Text [ portuguese ] = "Ѕrea de digitalizaзгo" ;
+        Text [ portuguese ] = "Ѕrea a digitalizar" ;
         Text[ chinese_simplified ] = "…®√иµƒ«ш”т";
         Text[ russian ] = "ќбласть сканировани€";
         Text[ polish ] = "Skanowany obszar";
@@ -699,7 +699,7 @@ String RID_SANE_NORESOLUTIONOPTION_TXT
     Text[ russian ] = "”стройство не настроено на создание предварительного просмотра. ¬место этого в качестве предварительного просмотра используетс€ обычное сосканированное изображение, что займет значительно больше времени.";
     Text[ polish ] = "Urzєdzenie to nie dysponuje opcjє podglєdu. Zastosowany zostanie wzamian zwyk≥y tryb przeglєdu. Operacja ta moњe trochк d≥uњej potrwaж.";
     Text[ japanese ] = "В±Вћ√ё ё≤љВЌћяЏЋё≠∞ВћНмРђВ…ВЌУKВµВƒВҐВ№ВєВсБBВ©ВнВиВ…ћяЏЋё≠∞В∆ВµВƒХБТ ВћљЈђЁВ™ОgЧpВ≥ВкВ№ВЈВ™ОЮК‘В™П≠ВµВ©В©ВиВ№ВЈБB";
-    Text[ chinese_traditional ] = "≥o≠”≥]≥∆®S¶≥≥]©wєwµш•\\ѓа°C¶]¶є±ƒ•ќіґ≥q™Ї±љіy§и¶°єwµшЈ|їЁ≠nЄы™ш™ЇЃ…ґ°°C";
+    Text[ chinese_traditional ] = "≥o≠”≥]≥∆®S¶≥≥]©wєwµш•\\ѓа°C¶]¶є±ƒ•ќіґ≥q™Ї±љіy§и¶°єwƒэЈ|їЁ≠nЄы™ш™ЇЃ…ґ°°C";
     Text[ arabic ] = "«бће«“ џн— гхЏѕ б≈д‘«Ѕ гЏ«нд…. »ѕб«р гд е–«° ”жЁ н г «” ќѕ«г г”Ќ Џ«ѕн ягЏ«нд…. нгяд √д н” џ—ё –бя Ё —… √Ўжб »яЋн—.";
     Text[ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren.";
     Text[ chinese_simplified ] = "’вЄц…и±Є√ї”–‘§јјє¶ƒ№°£≤…”√∆’Ќ®…®√иЈљ љ‘§јјњ…ƒ№–и“™љѕ≥§µƒ ±Љд°£";
@@ -736,6 +736,7 @@ String RID_SANE_NOSANELIB_TXT
     Text[ catalan ] = "La interfaz SANE no se pudo inicializar. No se puede realizar ningъn proceso de digitalizaciуn.";
     Text[ finnish ] = "SANE-liittymдд ei voitu alustaa. Skannausta ei voida suorittaa.";
 };
+
 
 
 
