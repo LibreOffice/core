@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:08:14 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1387,7 +1387,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mnRightBorder     = 0;
     mnBottomBorder    = 0;
     mnLastResizeDY    = 0;
-    mnOutStyle        = 0;
+    mnOutStyle        = TOOLBOX_STYLE_FLAT; // force flat buttons since NWF
     mnHighItemId      = 0;
     mnCurItemId       = 0;
     mnDownItemId      = 0;
