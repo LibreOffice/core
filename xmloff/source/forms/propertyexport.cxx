@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:15:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,6 +515,9 @@ namespace xmloff
         // style, too
         exportedProperty(PROPERTY_DATEFORMAT);
         exportedProperty(PROPERTY_TIMEFORMAT);
+
+        // the "VerticalAlign" property should have been exported at the shape, too
+        exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VerticalAlign" ) ) );
     }
 
     //---------------------------------------------------------------------
@@ -629,7 +632,7 @@ namespace xmloff
                 // convert it into an int32
                 sal_Int32 nValue;
                 ::cppu::enum2int(nValue, _rValue);
-                m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber(aBuffer, getINT32(_rValue));
+                m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber(aBuffer, nValue);
             }
             break;
             default:
