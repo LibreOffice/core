@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 17:22:24 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,14 @@
 #include <uiconfiguration/windowstateconfiguration.hxx>
 #endif
 
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
+#include <toolkit/helper/convert.hxx>
+#endif
+
+#ifndef _FRAMEWORK_UIELEMENT_PROGRESSBARWRAPPER_HXX_
+#include <uielement/progressbarwrapper.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -167,6 +175,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_WALL_HXX
+#include <vcl/wall.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -371,7 +382,12 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
                 xServiceManager->createInstance( SERVICENAME_WINDOWSTATECONFIGURATION ), UNO_QUERY ))
         ,   m_pAddonOptions( 0 )
         ,   m_aCustomTbxPrefix( RTL_CONSTASCII_USTRINGPARAM( "custom_" ))
+        ,   m_aStatusBarAlias( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ))
 {
+    // Initialize statusbar member
+    m_aStatusBarElement.m_aType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "statusbar" ));
+    m_aStatusBarElement.m_aName = m_aStatusBarAlias;
+
     m_pMiscOptions = new SvtMiscOptions();
 
     m_pMiscOptions->AddListener( LINK( this, LayoutManager, OptionsChanged ) );
@@ -644,6 +660,8 @@ void LayoutManager::implts_destroyElements()
             xComponent->dispose();
     }
 
+    implts_destroyStatusBar();
+
     aWriteLock.lock();
     impl_clearUpMenuBar();
     aWriteLock.unlock();
@@ -861,6 +879,21 @@ sal_Bool LayoutManager::implts_findElement( const rtl::OUString& aName, rtl::OUS
         {
             ReadGuard aReadLock( m_aLock );
             xUIElement = m_xMenuBar;
+            return sal_True;
+        }
+        else if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) &&
+                   aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) ||
+                 ( m_aStatusBarElement.m_aName == aName ))
+        {
+            ReadGuard aReadLock( m_aLock );
+            xUIElement = m_aStatusBarElement.m_xUIElement;
+            return sal_True;
+        }
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
+                  aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
+        {
+            ReadGuard aReadLock( m_aLock );
+            xUIElement = m_aProgressBarElement.m_xUIElement;
             return sal_True;
         }
         else
@@ -1141,7 +1174,7 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
 void LayoutManager::implts_setElementData( UIElement& rElement, const Reference< css::awt::XDockableWindow >& rDockWindow )
 {
     Reference< css::awt::XDockableWindow > xDockWindow( rDockWindow );
-    Reference< css::awt::XWindow >         xWindow( xDockWindow, UNO_QUERY );
+    Reference< css::awt::XWindow2 >        xWindow( xDockWindow, UNO_QUERY );
 
     Window*     pWindow( 0 );
     ToolBox*    pToolBox( 0 );
@@ -1193,11 +1226,10 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
                 bWriteData = sal_True;
             }
 
-            xWindow->setPosSize( aPos.X(),
-                                aPos.Y(),
-                                rElement.m_aFloatingData.m_aSize.Width(),
-                                rElement.m_aFloatingData.m_aSize.Height(),
-                                bSetSize ? css::awt::PosSize::POSSIZE : css::awt::PosSize::POS );
+            xWindow->setPosSize( aPos.X(), aPos.Y(), 0, 0,
+                                 css::awt::PosSize::POS );
+            if( bSetSize )
+                xWindow->setOutputSize( AWTSize( rElement.m_aFloatingData.m_aSize ) );
 
             if ( bWriteData )
                 implts_writeWindowStateData( rElement.m_aName, rElement );
@@ -1239,9 +1271,11 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
 
             xWindow->setPosSize( aPixelPos.X(),
                                  aPixelPos.Y(),
-                                 aSize.Width(),
-                                 aSize.Height(),
-                                 bSetSize ? css::awt::PosSize::POSSIZE : css::awt::PosSize::POS );
+                                 0, 0,
+                                 css::awt::PosSize::POS );
+            if( bSetSize )
+                xWindow->setOutputSize( AWTSize( aSize) );
+
             if ( rElement.m_bVisible && pWindow )
             {
                 vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -1699,7 +1733,11 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
     sal_Int32                      nBottomDockingAreaSize( implts_getTopBottomDockingAreaSizes().Height() );
     sal_Bool                       bHorizontalDockArea( ( rUIElement.m_aDockedData.m_nDockedArea == DockingArea_DOCKINGAREA_TOP ) ||
                                                         ( rUIElement.m_aDockedData.m_nDockedArea == DockingArea_DOCKINGAREA_BOTTOM ));
-    sal_Int32                      nMaxLeftRightDockAreaSize = aContainerWinSize.Height() - nTopDockingAreaSize - nBottomDockingAreaSize;
+    ::Size                         aStatusBarSize( implts_getStatusBarSize() );
+    sal_Int32                      nMaxLeftRightDockAreaSize = aContainerWinSize.Height() -
+                                                               nTopDockingAreaSize -
+                                                               nBottomDockingAreaSize -
+                                                               aStatusBarSize.Height();
 
     aReadLock.lock();
     xDockingAreaWindow = m_xDockAreaWindows[nDockedArea];
@@ -1734,7 +1772,7 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
 
     sal_Int32 nRowColPixelPos( 0 );
     if ( nDockedArea == DockingArea_DOCKINGAREA_BOTTOM )
-        nRowColPixelPos = aContainerWinSize.Height();
+        nRowColPixelPos = aContainerWinSize.Height() - aStatusBarSize.Height();
     else if ( nDockedArea == DockingArea_DOCKINGAREA_RIGHT )
         nRowColPixelPos = aContainerWinSize.Width();
 
@@ -1930,7 +1968,7 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
                             if ( rMousePos.X() <= nRowColBorder )
                             {
                                 sal_Int32 nMaxDockingAreaHeight = std::max( sal_Int32( 0 ),
-                                                                            sal_Int32( aContainerWinSize.Height() - nTopDockingAreaSize - nBottomDockingAreaSize ));
+                                                                            sal_Int32( nMaxLeftRightDockAreaSize ));
 
                                 sal_Int32 nPosY( std::max( sal_Int32( aWinPos.Y()), sal_Int32( nTopDockingAreaSize )));
                                 if (( nPosY + aWinSize.Height()) > ( nTopDockingAreaSize + nMaxDockingAreaHeight ))
@@ -1990,7 +2028,7 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
                             if ( rMousePos.X() >= nPixelPos )
                             {
                                 sal_Int32 nMaxDockingAreaHeight = std::max( sal_Int32( 0 ),
-                                                                            sal_Int32( aContainerWinSize.Height() - nTopDockingAreaSize - nBottomDockingAreaSize ));
+                                                                            sal_Int32( nMaxLeftRightDockAreaSize ));
 
                                 sal_Int32 nPosY( std::max( sal_Int32( aWinPos.Y()), sal_Int32( nTopDockingAreaSize )));
                                 if (( nPosY + aWinSize.Height()) > ( nTopDockingAreaSize + nMaxDockingAreaHeight ))
@@ -2074,7 +2112,7 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
             case DockingArea_DOCKINGAREA_LEFT:
             {
                 sal_Int32 nMaxDockingAreaHeight = std::max( sal_Int32( 0 ),
-                                                            sal_Int32( aContainerWinSize.Height() - nTopDockingAreaSize - nBottomDockingAreaSize ));
+                                                            sal_Int32( nMaxLeftRightDockAreaSize ));
 
                 sal_Int32 nPosY( std::max( sal_Int32( aWinPos.Y()), sal_Int32( nTopDockingAreaSize )));
                 if (( nPosY + aWinSize.Height()) > ( nTopDockingAreaSize + nMaxDockingAreaHeight ))
@@ -2097,7 +2135,7 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
             case DockingArea_DOCKINGAREA_RIGHT:
             {
                 sal_Int32 nMaxDockingAreaHeight = std::max( sal_Int32( 0 ),
-                                                            sal_Int32( aContainerWinSize.Height() - nTopDockingAreaSize - nBottomDockingAreaSize ));
+                                                            sal_Int32( nMaxLeftRightDockAreaSize ));
 
                 sal_Int32 nPosY( std::max( sal_Int32( aWinPos.Y()), sal_Int32( nTopDockingAreaSize )));
                 if (( nPosY + aWinSize.Height()) > ( nTopDockingAreaSize + nMaxDockingAreaHeight ))
@@ -2193,15 +2231,15 @@ Reference< css::awt::XWindowPeer > LayoutManager::implts_createToolkitWindow( co
         // create a new blank container window and get access to parent container to append new created task.
         xPeer = xToolkit->createWindow( aDescriptor );
 
-        vos::OGuard aGuard( Application::GetSolarMutex() );
-        ::Color aBackgroundColor = Application::GetSettings().GetStyleSettings().GetFaceColor();
-        xPeer->setBackground( aBackgroundColor.GetColor() );
-
         Window* pWindow = VCLUnoHelper::GetWindow( xPeer );
         if( pWindow )
-            // this will keep the correct face color after a settings change
-            pWindow->SetStyle( pWindow->GetStyle() | WB_3DLOOK );
-
+        {
+            // set an applicatiopn wide gradient
+            vos::OGuard aGuard( Application::GetSolarMutex() );
+            Wallpaper aWallpaper;
+            aWallpaper.SetStyle( WALLPAPER_APPLICATIONGRADIENT );
+            pWindow->SetBackground( aWallpaper );
+        }
     }
 
     return xPeer;
@@ -2242,6 +2280,202 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     }
 
     doLayout();
+}
+
+void LayoutManager::implts_destroyStatusBar()
+{
+     Reference< XComponent > xCompStatusBar;
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    m_aStatusBarElement.m_aName = rtl::OUString();
+    xCompStatusBar = Reference< XComponent >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
+    m_aStatusBarElement.m_xUIElement.clear();
+    aWriteLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    if ( xCompStatusBar.is() )
+        xCompStatusBar->dispose();
+
+    implts_destroyProgressBar();
+}
+
+void LayoutManager::implts_createStatusBar( const rtl::OUString& aStatusBarName )
+{
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    if ( !m_aStatusBarElement.m_xUIElement.is() )
+    {
+        m_aStatusBarElement.m_aName      = aStatusBarName;
+        m_aStatusBarElement.m_xUIElement = implts_createElement( aStatusBarName );
+
+        if ( m_aProgressBarElement.m_xUIElement.is() )
+        {
+            ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)m_aProgressBarElement.m_xUIElement.get();
+            if ( pWrapper )
+            {
+                Reference< css::awt::XWindow > xWindow(
+                    m_aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
+
+                // Set new status bar on our progress bar wrapper
+                pWrapper->setStatusBar( xWindow, sal_False );
+            }
+        }
+    }
+}
+
+void LayoutManager::implts_createProgressBar()
+{
+     Reference< XUIElement > xStatusBar;
+    Reference< XUIElement > xProgressBar;
+    Reference< css::awt::XWindow > xContainerWindow;
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    xStatusBar = Reference< XUIElement >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
+    xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xContainerWindow = m_xContainerWindow;
+    aReadLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    if ( xProgressBar.is() )
+        return;
+
+    ProgressBarWrapper* pWrapper = new ProgressBarWrapper();
+    if ( xStatusBar.is() )
+    {
+        Reference< css::awt::XWindow > xWindow( xStatusBar->getRealInterface(), UNO_QUERY );
+        pWrapper->setStatusBar( xWindow );
+    }
+    else
+    {
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+        Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+        if ( pWindow )
+        {
+            StatusBar* pStatusBar = new StatusBar( pWindow, WinBits( WB_LEFT | WB_3DLOOK ) );
+            Reference< css::awt::XWindow > xStatusBarWindow( VCLUnoHelper::GetInterface( pStatusBar ));
+            pWrapper->setStatusBar( xStatusBarWindow, sal_True );
+        }
+    }
+
+    WriteGuard aWriteLock( m_aLock );
+    m_aProgressBarElement.m_xUIElement = Reference< XUIElement >(
+        static_cast< cppu::OWeakObject* >( pWrapper ), UNO_QUERY );
+    aWriteLock.unlock();
+}
+
+void LayoutManager::implts_destroyProgressBar()
+{
+    Reference< XComponent > xCompProgressBar;
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    xCompProgressBar = Reference< XComponent >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    m_aProgressBarElement.m_xUIElement.clear();
+    aWriteLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    if ( xCompProgressBar.is() )
+        xCompProgressBar->dispose();
+}
+
+void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Size& rSize )
+{
+     Reference< XUIElement > xStatusBar;
+    Reference< XUIElement > xProgressBar;
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    xStatusBar = Reference< XUIElement >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
+    xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+
+    Reference< css::awt::XWindow > xWindow;
+    if ( xStatusBar.is() )
+        xWindow = Reference< css::awt::XWindow >( xStatusBar->getRealInterface(), UNO_QUERY );
+    else if ( xProgressBar.is() )
+    {
+        ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)xProgressBar.get();
+        if ( pWrapper )
+            xWindow = pWrapper->getStatusBar();
+    }
+    aReadLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    if ( xWindow.is() )
+    {
+        xWindow->setPosSize( rPos.X(), rPos.Y(),
+                             rSize.Width(), rSize.Height(),
+                             css::awt::PosSize::POSSIZE );
+    }
+}
+
+sal_Bool LayoutManager::implts_showProgressBar()
+{
+     Reference< XUIElement > xStatusBar;
+    Reference< XUIElement > xProgressBar;
+    Reference< css::awt::XWindow > xWindow;
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    xStatusBar = Reference< XUIElement >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
+    xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    sal_Bool bVisible( m_bVisible );
+
+    if ( bVisible )
+    {
+        if ( xStatusBar.is() && !m_aStatusBarElement.m_bMasterHide )
+        {
+            xWindow = Reference< css::awt::XWindow >( xStatusBar->getRealInterface(), UNO_QUERY );
+        }
+        else if ( xProgressBar.is() )
+        {
+            ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)xProgressBar.get();
+            if ( pWrapper )
+                xWindow = pWrapper->getStatusBar();
+        }
+        aReadLock.unlock();
+    }
+
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+    if ( pWindow && !pWindow->IsVisible() )
+    {
+        pWindow->Show();
+        doLayout();
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+sal_Bool LayoutManager::implts_hideProgressBar()
+{
+    Reference< XUIElement > xProgressBar;
+    Reference< css::awt::XWindow > xWindow;
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+
+    if ( xProgressBar.is() )
+    {
+        ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)xProgressBar.get();
+        if ( pWrapper )
+            xWindow = pWrapper->getStatusBar();
+    }
+    aReadLock.unlock();
+
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+    if ( pWindow && pWindow->IsVisible() )
+    {
+        pWindow->Hide();
+        doLayout();
+        return sal_True;
+    }
+
+    return sal_False;
 }
 
 void SAL_CALL LayoutManager::attachFrame( const Reference< XFrame >& xFrame )
@@ -2447,12 +2681,9 @@ throw (RuntimeException)
     implts_findElement( aName, aElementType, aElementName, xUIElement );
     bFound = xUIElement.is();
 
-    if ( xFrame.is() &&
-         m_xContainerWindow.is() )
+    if ( xFrame.is() && m_xContainerWindow.is() )
     {
-        if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolbar" )
-                //&& xFrame->isTop()
-                )
+        if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolbar" ))
         {
             if ( !bFound  )
             {
@@ -2556,6 +2787,16 @@ throw (RuntimeException)
             }
             aWriteLock.unlock();
         }
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && xFrame->isTop() )
+        {
+            implts_createStatusBar( aName );
+        }
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
+                  aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
+                  xFrame->isTop() )
+        {
+            implts_createProgressBar();
+        }
     }
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -2583,6 +2824,21 @@ throw (RuntimeException)
                 impl_clearUpMenuBar();
                 m_xMenuBar.clear();
             }
+        }
+        else if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) &&
+                   aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) ||
+                 ( m_aStatusBarElement.m_aName == aName ))
+        {
+            aWriteLock.unlock();
+            implts_destroyStatusBar();
+            bMustLayout = sal_True;
+        }
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
+                  aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ) )
+        {
+            aWriteLock.unlock();
+            implts_createProgressBar();
+            bMustLayout = sal_True;
         }
         else
         {
@@ -2643,36 +2899,70 @@ throw (RuntimeException)
 ::sal_Bool SAL_CALL LayoutManager::requestElement( const ::rtl::OUString& ResourceURL )
 throw (::com::sun::star::uno::RuntimeException)
 {
+    OUString                  aElementType;
+    OUString                  aElementName;
     UIElementVector::iterator pIter;
 
     WriteGuard aWriteLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    if ( impl_parseResourceURL( ResourceURL, aElementType, aElementName ))
     {
-        if (( pIter->m_aName == ResourceURL ) &&
-            ( pIter->m_xUIElement.is() ))
+        if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) &&
+              aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) ||
+            ( m_aStatusBarElement.m_aName == ResourceURL ))
         {
-            Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
-            Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-
-            if ( xWindow.is() &&
-                 xDockWindow.is() &&
-                 !pIter->m_bMasterHide &&
-                 pIter->m_bVisible )
+            if ( m_aStatusBarElement.m_xUIElement.is() &&
+                 m_aStatusBarElement.m_bVisible &&
+                 !m_aStatusBarElement.m_bMasterHide )
             {
-                pIter->m_bVisible = sal_True;
-                aWriteLock.unlock();
-
-                // we need VCL here to pass special flags to Show()
                 vos::OGuard aGuard( Application::GetSolarMutex() );
+                Reference< css::awt::XWindow > xWindow(
+                    m_aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-                if( pWindow )
+                if ( pWindow )
+                {
                     pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-                implts_writeNewStateData( ResourceURL, xWindow );
-
-                if ( xDockWindow.is() && !xDockWindow->isFloating() )
                     doLayout();
+                }
+            }
+        }
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
+                  aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ) )
+        {
+            aWriteLock.unlock();
+            implts_showProgressBar();
+            doLayout();
+        }
+        else
+        {
+            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+            {
+                if (( pIter->m_aName == ResourceURL ) &&
+                    ( pIter->m_xUIElement.is() ))
+                {
+                    Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
+                    Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
 
-                return sal_True;
+                    if ( xWindow.is() &&
+                        xDockWindow.is() &&
+                        !pIter->m_bMasterHide &&
+                        pIter->m_bVisible )
+                    {
+                        pIter->m_bVisible = sal_True;
+                        aWriteLock.unlock();
+
+                        // we need VCL here to pass special flags to Show()
+                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                        if( pWindow )
+                            pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                        implts_writeNewStateData( ResourceURL, xWindow );
+
+                        if ( xDockWindow.is() && !xDockWindow->isFloating() )
+                            doLayout();
+
+                        return sal_True;
+                    }
+                }
             }
         }
     }
@@ -2697,12 +2987,18 @@ throw (::com::sun::star::uno::RuntimeException)
     ReadGuard   aReadLock( m_aLock );
 
     sal_Bool  bMenuBar( sal_False );
+    sal_Bool  bStatusBar( sal_False );
     sal_Int32 nSize = m_aUIElements.size();
 
     if ( m_xMenuBar.is() )
     {
         ++nSize;
         bMenuBar = sal_True;
+    }
+    if ( m_aStatusBarElement.m_xUIElement.is() )
+    {
+        ++nSize;
+        bStatusBar = sal_True;
     }
 
     Sequence< Reference< ::drafts::com::sun::star::ui::XUIElement > > aSeq( nSize );
@@ -2716,6 +3012,8 @@ throw (::com::sun::star::uno::RuntimeException)
     }
     if ( bMenuBar )
         aSeq[nIndex++] = m_xMenuBar;
+    if ( bStatusBar )
+        aSeq[nIndex++] = m_aStatusBarElement.m_xUIElement;
 
     // Resize sequence as we now know our correct size
     aSeq.realloc( nIndex );
@@ -2767,6 +3065,37 @@ throw (RuntimeException)
                     }
                 }
             }
+        }
+        else if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) &&
+                   aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) ||
+                 ( m_aStatusBarElement.m_aName == aName ))
+        {
+            WriteGuard aWriteLock( m_aLock );
+            if ( m_aStatusBarElement.m_xUIElement.is() &&
+                 !m_aStatusBarElement.m_bMasterHide )
+            {
+                Reference< css::awt::XWindow > xWindow(
+                    m_aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
+                m_aStatusBarElement.m_bVisible = sal_True;
+                aWriteLock.unlock();
+
+                implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
+
+                vos::OGuard aGuard( Application::GetSolarMutex() );
+                Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                if ( pWindow && !pWindow->IsVisible() )
+                {
+                    pWindow->Show();
+                    doLayout();
+
+                    return sal_True;
+                }
+            }
+        }
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
+                  aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
+        {
+            return implts_showProgressBar();
         }
         else
         {
@@ -2837,6 +3166,37 @@ throw (RuntimeException)
                     }
                 }
             }
+        }
+        else if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) &&
+                   aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) ||
+                 ( m_aStatusBarElement.m_aName == aName ))
+        {
+            WriteGuard aWriteLock( m_aLock );
+            if ( m_aStatusBarElement.m_xUIElement.is() &&
+                 !m_aStatusBarElement.m_bMasterHide )
+            {
+                Reference< css::awt::XWindow > xWindow(
+                    m_aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
+                m_aStatusBarElement.m_bVisible = sal_False;
+                aWriteLock.unlock();
+
+                implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
+
+                vos::OGuard aGuard( Application::GetSolarMutex() );
+                Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                if ( pWindow && pWindow->IsVisible() )
+                {
+                    pWindow->Hide();
+                    doLayout();
+
+                    return sal_True;
+                }
+            }
+        }
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
+                  aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
+        {
+            return implts_hideProgressBar();
         }
         else
         {
@@ -3107,14 +3467,15 @@ throw (RuntimeException)
         {
             try
             {
-                Reference< css::awt::XWindow > xWindow( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
+                Reference< css::awt::XWindow >  xWindow( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
+                Reference< css::awt::XWindow2 > xWindow2( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
                 Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
 
-                if ( xWindow.is() && xDockWindow.is() )
+                if ( xWindow.is() && xWindow2.is() && xDockWindow.is() )
                 {
                     if ( aUIElement.m_bFloating )
                     {
-                        xWindow->setPosSize( 0, 0, aSize.Width, aSize.Height, css::awt::PosSize::SIZE );
+                        xWindow2->setOutputSize( aSize );
                         implts_writeNewStateData( aName, xWindow );
                     }
                 }
@@ -3183,13 +3544,15 @@ throw (RuntimeException)
             try
             {
                 Reference< css::awt::XWindow > xWindow( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
+                Reference< css::awt::XWindow2 > xWindow2( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
                 Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
 
-                if ( xWindow.is() && xDockWindow.is() )
+                if ( xWindow.is() && xWindow2.is() && xDockWindow.is() )
                 {
                     if ( aUIElement.m_bFloating )
                     {
-                        xWindow->setPosSize( aPos.X, aPos.Y, aSize.Width, aSize.Height, css::awt::PosSize::POSSIZE );
+                        xWindow2->setPosSize( aPos.X, aPos.Y, 0, 0, css::awt::PosSize::POS );
+                        xWindow2->setOutputSize( aSize );
                         implts_writeNewStateData( aName, xWindow );
                     }
                     else
@@ -3247,6 +3610,24 @@ throw (RuntimeException)
                 {
                     ReadGuard aReadLock( m_aLock );
                     return m_bMenuVisible;
+                }
+            }
+        }
+        else if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) &&
+                   aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) ||
+                 ( m_aStatusBarElement.m_aName == aName ))
+        {
+            if ( m_aStatusBarElement.m_xUIElement.is() )
+            {
+                Reference< css::awt::XWindow > xWindow(
+                    m_aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
+                if ( xWindow.is() )
+                {
+                    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                    if ( pWindow && pWindow->IsVisible() )
+                        return sal_True;
+                    else
+                        return sal_False;
                 }
             }
         }
@@ -3491,9 +3872,16 @@ void LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
         {
             std::vector< UIElement >    aWindowVector[DOCKINGAREAS_COUNT];
             ::Size                      aContainerSize;
+            ::Size                      aStatusBarSize;
 
+            aStatusBarSize = implts_getStatusBarSize();
+            aBorderSpace.Height -= aStatusBarSize.Height();
             implts_setDockingAreaWindowSizes( aBorderSpace );
+
+            // Subtract status bar size from our container output size. Docking area windows
+            // don't contain the status bar!
             aContainerSize = implts_getContainerWindowOutputSize();
+            aContainerSize.Height() -= aStatusBarSize.Height();
 
             // Retrieve row/column dependent data from all docked user-interface elements
             for ( sal_Int32 i = 0; i < DOCKINGAREAS_COUNT; i++ )
@@ -3508,6 +3896,13 @@ void LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
                     implts_calcWindowPosSizeOnSingleRowColumn( i, nOffset, aRowColumnsWindowData[j], aContainerSize );
                     nOffset += aRowColumnsWindowData[j].nStaticSize;
                 }
+            }
+
+            // Position the status bar
+            if ( aStatusBarSize.Height() > 0 )
+            {
+                implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerSize.Height() ), sal_Int32( 0 ))),
+                                            ::Size( aContainerSize.Width(),aStatusBarSize.Height() ));
             }
 
             /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -3689,36 +4084,6 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
 
             --i;
         }
-
-/*
-        double    fFactor( 1.0 );
-        sal_Int32 nPos = 0;
-
-        if (( nDockingArea == DockingArea_DOCKINGAREA_TOP ) ||
-            ( nDockingArea == DockingArea_DOCKINGAREA_BOTTOM ))
-            fFactor = double( nContainerClientSize ) / double( rRowColumnWindowData.nVarSize - nSpace );
-        else
-            fFactor = double( nContainerClientSize ) / double( rRowColumnWindowData.nVarSize - nSpace );
-
-        sal_Int32 nCurrPos( 0 );
-        for ( sal_Int32 i = 0; i < sal_Int32( rRowColumnWindowData.aRowColumnWindowSizes.size() ); i++ )
-        {
-            css::awt::Rectangle& rWinRect = rRowColumnWindowData.aRowColumnWindowSizes[i];
-            if (( nDockingArea == DockingArea_DOCKINGAREA_TOP ) ||
-                ( nDockingArea == DockingArea_DOCKINGAREA_BOTTOM ))
-            {
-                rWinRect.X = nCurrPos;
-                rWinRect.Width = sal_Int32( double( rWinRect.Width ) * fFactor );
-                nCurrPos = rWinRect.X + rWinRect.Width;
-            }
-            else
-            {
-                rWinRect.Y = nCurrPos;
-                rWinRect.Height = sal_Int32( double( rWinRect.Height ) * fFactor );
-                nCurrPos = rWinRect.Y + rWinRect.Height;
-            }
-        }
-*/
     }
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -3775,6 +4140,34 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
             nCurrPos += ( aWinRect.Y - nCurrPos ) + aWinRect.Height;
         }
     }
+}
+
+::Size LayoutManager::implts_getStatusBarSize()
+{
+    ReadGuard aReadLock( m_aLock );
+    sal_Bool bStatusBarVisible = isElementVisible( m_aStatusBarAlias );
+    sal_Bool bVisible = m_bVisible;
+    Reference< XUIElement > xStatusBar = m_aStatusBarElement.m_xUIElement;
+    Reference< XUIElement > xProgressBar = m_aProgressBarElement.m_xUIElement;
+
+    Reference< css::awt::XWindow > xWindow;
+    if ( bStatusBarVisible && bVisible && xStatusBar.is() )
+        xWindow = Reference< css::awt::XWindow >( xStatusBar->getRealInterface(), UNO_QUERY );
+    else if ( xProgressBar.is() && !xStatusBar.is() )
+    {
+        ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)xProgressBar.get();
+        if ( pWrapper )
+            xWindow = pWrapper->getStatusBar();
+    }
+    aReadLock.unlock();
+
+    if ( xWindow.is() )
+    {
+        css::awt::Rectangle aPosSize = xWindow->getPosSize();
+        return ::Size( aPosSize.Width, aPosSize.Height );
+    }
+    else
+        return ::Size();
 }
 
 css::awt::Rectangle LayoutManager::implts_calcDockingAreaSizes()
@@ -3876,6 +4269,9 @@ css::awt::Rectangle LayoutManager::implts_calcDockingAreaSizes()
                     aBorderSpace.Width = nSize;
             }
         }
+
+        // We have to add the height of a possible status bar
+        aBorderSpace.Height += implts_getStatusBarSize().Height();
     }
 
     return aBorderSpace;
@@ -3895,6 +4291,7 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const css::awt::Rectangle&
     css::awt::DeviceInfo aInfo                  = xDevice->getInfo();
     css::awt::Size       aContainerClientSize   = css::awt::Size( aRectangle.Width - aInfo.LeftInset - aInfo.RightInset  ,
                                                                   aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
+    ::Size               aStatusBarSize         = implts_getStatusBarSize();
 
     sal_Int32 nLeftRightDockingAreaHeight( aContainerClientSize.Height );
     if ( rBorderSpace.Y >= 0 )
@@ -3908,10 +4305,11 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const css::awt::Rectangle&
         xDockAreaWindow->setVisible( sal_True );
         nLeftRightDockingAreaHeight -= rBorderSpace.Y;
     }
+
     if ( rBorderSpace.Height >= 0 )
     {
         // Bottom docking area window
-        sal_Int32 nBottomPos = std::max( sal_Int32( aContainerClientSize.Height - rBorderSpace.Height), sal_Int32( 0 ));
+        sal_Int32 nBottomPos = std::max( sal_Int32( aContainerClientSize.Height - rBorderSpace.Height - aStatusBarSize.Height() ), sal_Int32( 0 ));
         sal_Int32 nHeight = ( nBottomPos == 0 ) ? 0 : rBorderSpace.Height;
 
         ReadGuard aReadLock( m_aLock );
@@ -3922,6 +4320,8 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const css::awt::Rectangle&
         xDockAreaWindow->setVisible( sal_True );
         nLeftRightDockingAreaHeight -= nHeight;
     }
+
+    nLeftRightDockingAreaHeight -= aStatusBarSize.Height();
     if ( rBorderSpace.X >= 0 || nLeftRightDockingAreaHeight > 0 )
     {
         // Left docking area window
@@ -3930,7 +4330,7 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const css::awt::Rectangle&
         aReadLock.unlock();
 
         // We also have to change our right docking area window if the top or bottom area has changed. They have a higher priority!
-        sal_Int32 nHeight = std::max( sal_Int32( 0 ), sal_Int32( aContainerClientSize.Height - rBorderSpace.Y - rBorderSpace.Height ));
+        sal_Int32 nHeight = std::max( sal_Int32( 0 ), sal_Int32( nLeftRightDockingAreaHeight ));
 
         xDockAreaWindow->setPosSize( 0, rBorderSpace.Y, rBorderSpace.X, nHeight, css::awt::PosSize::POSSIZE );
         xDockAreaWindow->setVisible( sal_True );
@@ -3944,11 +4344,18 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const css::awt::Rectangle&
 
         // We also have to change our right docking area window if the top or bottom area has changed. They have a higher priority!
         sal_Int32 nLeftPos  = std::max( sal_Int32( 0 ), sal_Int32( aContainerClientSize.Width - rBorderSpace.Width ));
-        sal_Int32 nHeight   = std::max( sal_Int32( 0 ), sal_Int32( aContainerClientSize.Height - rBorderSpace.Y - rBorderSpace.Height ));
+        sal_Int32 nHeight   = std::max( sal_Int32( 0 ), sal_Int32( nLeftRightDockingAreaHeight ));
         sal_Int32 nWidth    = ( nLeftPos == 0 ) ? 0 : rBorderSpace.Width;
 
         xDockAreaWindow->setPosSize( nLeftPos, rBorderSpace.Y, nWidth, nHeight, css::awt::PosSize::POSSIZE );
         xDockAreaWindow->setVisible( sal_True );
+    }
+
+    // Position the status bar
+    if ( aStatusBarSize.Height() > 0 )
+    {
+        implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerClientSize.Height - aStatusBarSize.Height() ), sal_Int32( 0 ))),
+                                    ::Size( aContainerClientSize.Width, aStatusBarSize.Height() ));
     }
 }
 
@@ -4229,6 +4636,7 @@ throw (::com::sun::star::uno::RuntimeException)
     Reference< css::awt::XWindow >         xBottomDockingWindow;
     Reference< css::awt::XWindow >         xContainerWindow;
     UIElement                              aUIDockingElement;
+    ::Size                                 aStatusBarSize;
 
     aDockingData.TrackingRectangle = e.TrackingRectangle;
     sal_Bool bDockingInProgress;
@@ -4244,6 +4652,7 @@ throw (::com::sun::star::uno::RuntimeException)
             xRightDockingWindow     = m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT];
             xBottomDockingWindow    = m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM];
             aUIDockingElement       = m_aDockUIElement;
+            aStatusBarSize          = implts_getStatusBarSize();
         }
     }
 
@@ -4484,7 +4893,7 @@ throw (::com::sun::star::uno::RuntimeException)
                 aSize = pToolBox->CalcWindowSizePixel( 1 );
 
                 // Lock layouting updates as our listener would be called due to SetSizePixel
-                pToolBox->SetSizePixel( aSize );
+                pToolBox->SetOutputSizePixel( aSize );
             }
         }
     }
@@ -4566,11 +4975,11 @@ throw (::com::sun::star::uno::RuntimeException)
 
     Window*  pWindow( 0 );
     ToolBox* pToolBox( 0 );
-    Reference< css::awt::XWindow > xWindow;
+    Reference< css::awt::XWindow2 > xWindow;
 
     {
         vos::OGuard aGuard( Application::GetSolarMutex() );
-        xWindow = Reference< css::awt::XWindow >( e.Source, UNO_QUERY );
+        xWindow = Reference< css::awt::XWindow2 >( e.Source, UNO_QUERY );
         pWindow = VCLUnoHelper::GetWindow( xWindow );
 
         if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
@@ -4619,9 +5028,8 @@ throw (::com::sun::star::uno::RuntimeException)
 
                 xWindow->setPosSize( aUIDockingElement.m_aFloatingData.m_aPos.X(),
                                      aUIDockingElement.m_aFloatingData.m_aPos.Y(),
-                                     aUIDockingElement.m_aFloatingData.m_aSize.Width(),
-                                     aUIDockingElement.m_aFloatingData.m_aSize.Height(),
-                                     css::awt::PosSize::POSSIZE );
+                                     0, 0, css::awt::PosSize::POS );
+                xWindow->setOutputSize( AWTSize( aUIDockingElement.m_aFloatingData.m_aSize ) );
             }
             else
             {
@@ -4810,58 +5218,16 @@ IMPL_LINK( LayoutManager, AsyncLayoutHdl, Timer *, pTimer )
     if( !m_xContainerWindow.is() )
         return 0;
 
-    css::awt::Rectangle               aDockingArea( m_aDockingArea );
-    Reference< XDockingAreaAcceptor > xDockingAreaAcceptor( m_xDockingAreaAcceptor );
-    Reference< css::awt::XWindow >    xContainerWindow( m_xContainerWindow );
+    css::awt::Rectangle aDockingArea( m_aDockingArea );
+    ::Size              aStatusBarSize( implts_getStatusBarSize() );
 
-    css::uno::Reference< css::awt::XDevice > xDevice( m_xContainerWindow, css::uno::UNO_QUERY );
-
-    // Convert relativ size to output size.
-    css::awt::Rectangle  aRectangle     = m_xContainerWindow->getPosSize();
-    css::awt::DeviceInfo aInfo          = xDevice->getInfo();
-    css::awt::Size aContainerClientSize = css::awt::Size( aRectangle.Width - aInfo.LeftInset - aInfo.RightInset  ,
-                                                          aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
-
-    // copy docking area windows
-    Reference< css::awt::XWindow > xTopDockAreaWindow( m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP] );
-    Reference< css::awt::XWindow > xBottomDockAreaWindow( m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM] );
-    Reference< css::awt::XWindow > xLeftDockAreaWindow( m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT] );
-    Reference< css::awt::XWindow > xRightDockAreaWindow( m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT] );
+    // Subtract status bar height
+    aDockingArea.Height -= aStatusBarSize.Height();
     aReadLock.unlock();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    sal_Int32 nTopBottomDockAreaHeight( 0 );
-    css::awt::Rectangle aTopRect = xTopDockAreaWindow->getPosSize();
-    xTopDockAreaWindow->setPosSize( 0,
-                                    0,
-                                    aContainerClientSize.Width,
-                                    aTopRect.Height,
-                                    css::awt::PosSize::POSSIZE );
-    nTopBottomDockAreaHeight += aTopRect.Height;
-
-    css::awt::Rectangle aBottomRect = xBottomDockAreaWindow->getPosSize();
-    xBottomDockAreaWindow->setPosSize( 0,
-                                        std::max( sal_Int32( aContainerClientSize.Height - aBottomRect.Height), sal_Int32( 0 )),
-                                        aContainerClientSize.Width,
-                                        aBottomRect.Height,
-                                        css::awt::PosSize::POSSIZE );
-    nTopBottomDockAreaHeight += aBottomRect.Height;
-
-    css::awt::Rectangle aRect = xLeftDockAreaWindow->getPosSize();
-    xLeftDockAreaWindow->setPosSize( 0,
-                                        aTopRect.Height,
-                                        aRect.Width,
-                                        std::max( sal_Int32( 0 ), sal_Int32( aContainerClientSize.Height - nTopBottomDockAreaHeight )),
-                                        css::awt::PosSize::POSSIZE );
-
-    aRect = xRightDockAreaWindow->getPosSize();
-    xRightDockAreaWindow->setPosSize( std::max( sal_Int32( 0 ), sal_Int32( aContainerClientSize.Width - aRect.Width )),
-                                        aTopRect.Height,
-                                        aRect.Width,
-                                        std::max( sal_Int32( 0 ), sal_Int32( aContainerClientSize.Height - nTopBottomDockAreaHeight )),
-                                        css::awt::PosSize::POSSIZE );
-
+    implts_setDockingAreaWindowSizes( aDockingArea );
     implts_doLayout( sal_True );
+
     return 0;
 }
 
