@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH USE_SHELL CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL SOLAR_JAVA JAVAC JAVA XSLTPROC JAVA_HOME JDK XMKMF PERL TCSH DMAKE BUILD_DMAKE EPM SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SYSTEM_DB3 SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_ODBC_HEADERS MOZILLA_CFLAGS MOZILLA_LIBS MOZILLABASE_CFLAGS MOZILLABASE_LIBS SYSTEM_MOZILLA SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_ICU X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_NAS NAS_INCLUDES NEON_CONFIG SYSTEM_NEON NEON_LIBS NEON_CFLAGS PSDK_HOME DIRECTXSDK_HOME EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN WITH_MOZILLA WITH_OPENLDAP WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB UPD SOURCEVERSION LOCAL_SOLENV LOCAL_SOLVER WITH_LANG WITH_DICT ENABLE_STATIC_GTK GCC_HOME WITH_MINGWIN LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH USE_SHELL CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL SOLAR_JAVA JAVAC JAVA XSLTPROC JAVA_HOME JDK XMKMF PERL TCSH DMAKE BUILD_DMAKE EPM SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SYSTEM_DB3 SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_ODBC_HEADERS MOZILLA_CFLAGS MOZILLA_LIBS MOZILLABASE_CFLAGS MOZILLABASE_LIBS SYSTEM_MOZILLA SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_ICU X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_NAS NAS_INCLUDES NEON_CONFIG SYSTEM_NEON NEON_LIBS NEON_CFLAGS PSDK_HOME DIRECTXSDK_HOME EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN WITH_MOZILLA WITH_OPENLDAP WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB UPD SOURCEVERSION LOCAL_SOLENV LOCAL_SOLVER WITH_LANG WITH_DICT ENABLE_STATIC_GTK GCC_HOME WITH_MINGWIN LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -870,6 +870,9 @@ Optional Features:
 
                           Usage: --disable-mozilla
 
+  --disable-fontooo       disable FontOOo
+                          (useful for distributions using fontconfig for OOo)
+
   --enable-cups           enable cups support in the psprint project
 
   --enable-fontconfig     enable support for the fontconfig library
@@ -956,6 +959,8 @@ Optional Packages:
                           openoffice.org installation set, for people building
                           for specific distributions where the fonts are known
                           to be already available
+
+  --with-system-mspack    use libmspack already installed on system
 
   --with-system-libs      Use libs already on system -- enables all
 			   --with-system-* flags except mozilla, python and
@@ -1630,7 +1635,19 @@ if test "${enable_mozilla+set}" = set; then
 else
   enable_mozilla="yes"
 fi;
+# Check whether --enable-fontooo or --disable-fontooo was given.
+if test "${enable_fontooo+set}" = set; then
+  enableval="$enable_fontooo"
 
+else
+  enable_fontooo="yes"
+fi;
+
+# Check whether --with-system-mspack or --without-system-mspack was given.
+if test "${with_system_mspack+set}" = set; then
+  withval="$with_system_mspack"
+
+fi;
 # Check whether --enable-cups or --disable-cups was given.
 if test "${enable_cups+set}" = set; then
   enableval="$enable_cups"
@@ -12608,6 +12625,267 @@ echo "${ECHO_T}Netscape/Mozilla" >&6
 fi
 
 
+echo "$as_me:$LINENO: checking whether to include FontOOo" >&5
+echo $ECHO_N "checking whether to include FontOOo... $ECHO_C" >&6
+if test -n "$enable_fontooo"; then
+  if test "$enable_fontooo" = "no"; then
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    WITH_FONTOOO=NO
+    SCPDEFS="$SCPDEFS -DWITHOUT_FONTOOO"
+  else
+    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    WITH_FONTOOO=YES
+  fi
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+  WITH_FONTOOO=NO
+  SCPDEFS="$SCPDEFS -DWITHOUT_FONTOOO"
+fi
+
+
+if test "$WITH_FONTOOO" = "YES"; then
+        echo "$as_me:$LINENO: checking whether to use system libmspack" >&5
+echo $ECHO_N "checking whether to use system libmspack... $ECHO_C" >&6
+  if test -n "$with_system_mspack" -o -n "$with_system_libs" && \
+	  test "$with_system_mspack" != "no"; then
+    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    SYSTEM_MSPACK=YES
+    if test "${ac_cv_header_mspack_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for mspack.h" >&5
+echo $ECHO_N "checking for mspack.h... $ECHO_C" >&6
+if test "${ac_cv_header_mspack_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_mspack_h" >&5
+echo "${ECHO_T}$ac_cv_header_mspack_h" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking mspack.h usability" >&5
+echo $ECHO_N "checking mspack.h usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <mspack.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking mspack.h presence" >&5
+echo $ECHO_N "checking mspack.h presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <mspack.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_cxx_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_cxx_werror_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: mspack.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: mspack.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mspack.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: mspack.h: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: mspack.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: mspack.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mspack.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: mspack.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mspack.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: mspack.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mspack.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: mspack.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mspack.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: mspack.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mspack.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: mspack.h: in the future, the compiler will take precedence" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------------ ##
+## Report this to the AC_PACKAGE_NAME lists.  ##
+## ------------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for mspack.h" >&5
+echo $ECHO_N "checking for mspack.h... $ECHO_C" >&6
+if test "${ac_cv_header_mspack_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_mspack_h=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_mspack_h" >&5
+echo "${ECHO_T}$ac_cv_header_mspack_h" >&6
+
+fi
+if test $ac_cv_header_mspack_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: mspack.h not found" >&5
+echo "$as_me: error: mspack.h not found" >&2;}
+   { (exit install libmspack); exit install libmspack; }; }
+fi
+
+
+
+echo "$as_me:$LINENO: checking for mspack_create_cab_decompressor in -lmspack" >&5
+echo $ECHO_N "checking for mspack_create_cab_decompressor in -lmspack... $ECHO_C" >&6
+if test "${ac_cv_lib_mspack_mspack_create_cab_decompressor+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lmspack  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char mspack_create_cab_decompressor ();
+int
+main ()
+{
+mspack_create_cab_decompressor ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_mspack_mspack_create_cab_decompressor=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_mspack_mspack_create_cab_decompressor=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_mspack_mspack_create_cab_decompressor" >&5
+echo "${ECHO_T}$ac_cv_lib_mspack_mspack_create_cab_decompressor" >&6
+if test $ac_cv_lib_mspack_mspack_create_cab_decompressor = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBMSPACK 1
+_ACEOF
+
+  LIBS="-lmspack $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error: libmspack not installed or functional" >&5
+echo "$as_me: error: libmspack not installed or functional" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+  else
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    SYSTEM_MSPACK=NO
+  fi
+fi
+
+
 echo "$as_me:$LINENO: checking whether to include Bitstream Vera fonts" >&5
 echo $ECHO_N "checking whether to include Bitstream Vera fonts... $ECHO_C" >&6
 if test "$with_fonts" != "no" ; then
@@ -13912,6 +14190,8 @@ s,@LIBSN_LIBS@,$LIBSN_LIBS,;t t
 s,@WITH_LIBSN@,$WITH_LIBSN,;t t
 s,@WITH_MOZILLA@,$WITH_MOZILLA,;t t
 s,@WITH_OPENLDAP@,$WITH_OPENLDAP,;t t
+s,@WITH_FONTOOO@,$WITH_FONTOOO,;t t
+s,@SYSTEM_MSPACK@,$SYSTEM_MSPACK,;t t
 s,@WITH_FONTS@,$WITH_FONTS,;t t
 s,@SCPDEFS@,$SCPDEFS,;t t
 s,@USE_XINERAMA@,$USE_XINERAMA,;t t
