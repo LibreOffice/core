@@ -1,0 +1,240 @@
+/*************************************************************************
+ *
+ *  $RCSfile: paramdialog.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2000-10-26 18:07:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBAUI_PARAMDIALOG_HRC_
+#include "paramdialog.hrc"
+#endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+ModalDialog DLG_PARAMETERS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 223 , 98 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text = "Parameter-Eingabe" ;
+
+    GroupBox GB_PARAMS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 95 , 62 ) ;
+        Text = "~Parameter";
+        Text [ ENGLISH ] = "~Parameters";
+        Text[ english_us ] = "~Parameters";
+        Text[ portuguese ] = "~Parâmetros";
+        Text[ russian ] = "~Ïàğàìåòğ";
+        Text[ greek ] = "ĞáñÜìåôñïé";
+        Text[ dutch ] = "~Parameters";
+        Text[ french ] = "~Paramètres";
+        Text[ spanish ] = "~Parámetros";
+        Text[ italian ] = "~Parametri";
+        Text[ danish ] = "Parametre";
+        Text[ swedish ] = "Parametrar";
+        Text[ polish ] = "Parametr";
+        Text[ portuguese_brazilian ] = "~Parameters";
+        Text[ japanese ] = "Êß×Ò°À(~P)";
+        Text[ korean ] = "ÆÄ¶ó¹ÌÅÍ(~P)";
+        Text[ chinese_simplified ] = "²ÎÊı(~P)";
+        Text[ chinese_traditional ] = "°Ñ¼Æ(~P)";
+        Text[ arabic ] = "ÇáãÚáãÇÊ";
+        Text[ turkish ] = "Parametre";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_ALLPARAMS
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 83 , 45 ) ;
+        Border = TRUE;
+        SVLook = TRUE;
+    };
+    GroupBox GB_DATA
+    {
+        Pos = MAP_APPFONT ( 107 , 3 ) ;
+        Size = MAP_APPFONT ( 110 , 30 ) ;
+        Text = "~Wert";
+        Text [ ENGLISH ] = "~Value";
+        Text[ english_us ] = "~Value";
+        Text[ portuguese ] = "~Valor";
+        Text[ russian ] = "~Çíà÷åíèå";
+        Text[ greek ] = "ÔéìŞ";
+        Text[ dutch ] = "~Waarde";
+        Text[ french ] = "~Valeur";
+        Text[ spanish ] = "~Valor";
+        Text[ italian ] = "~Valore";
+        Text[ danish ] = "Værdi";
+        Text[ swedish ] = "Värde";
+        Text[ polish ] = "Wartoœæ";
+        Text[ portuguese_brazilian ] = "~Value";
+        Text[ japanese ] = "’l(~V)";
+        Text[ korean ] = "°ª(~V)";
+        Text[ chinese_simplified ] = "ÊıÖµ(~V)";
+        Text[ chinese_traditional ] = "¼Æ­È(~V)";
+        Text[ arabic ] = "ÇáŞíãÉ";
+        Text[ turkish ] = "Değer";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ET_PARAM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 113 , 15 ) ;
+        Size = MAP_APPFONT ( 98 , 12 ) ;
+        Text = "" ;
+        TabStop = TRUE ;
+    };
+    PushButton BT_TRAVELNEXT
+    {
+        Pos = MAP_APPFONT ( 167 , 51 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~nächster";
+        Text [english] = "~next";
+        TabStop = TRUE ;
+        Text[ english_us ] = "~next";
+        Text[ portuguese ] = "~seguinte";
+        Text[ russian ] = "~ñëåäóşùèé";
+        Text[ greek ] = "åğüìå~íï";
+        Text[ dutch ] = "~volgende";
+        Text[ french ] = "~suivant";
+        Text[ spanish ] = "~siguiente";
+        Text[ italian ] = "Successivo";
+        Text[ danish ] = "næste";
+        Text[ swedish ] = "~nästa";
+        Text[ polish ] = "~nastêpny";
+        Text[ portuguese_brazilian ] = "~next";
+        Text[ japanese ] = "Ÿ‚Ö(~N)";
+        Text[ korean ] = "´ÙÀ½(~N)";
+        Text[ chinese_simplified ] = "ÏÂÒ»¸ö(~N)";
+        Text[ chinese_traditional ] = "¤U¤@­Ó(~N)";
+        Text[ arabic ] = "ÇáÊÇáí";
+        Text[ turkish ] = "Sonraki";
+    };
+    FixedLine FT_DELIM
+    {
+        Pos = MAP_APPFONT ( 3 , 71 ) ;
+        Size = MAP_APPFONT ( 217, 2 ) ;
+    };
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 114 , 76 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 167 , 76 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ ENGLISH ] = "Parameter input" ;
+    Text [ english_us ] = "Parameter input" ;
+    Text [ portuguese_brazilian ] = "Eingabe des Parameterwertes" ;
+    Text [ swedish ] = "Ange parametervärde" ;
+    Text [ danish ] = "Parameter-input" ;
+    Text [ italian ] = "Specifica parametro" ;
+    Text [ spanish ] = "Entrada de parámetro" ;
+    Text [ french ] = "Saisie de paramètre" ;
+    Text [ dutch ] = "Parameter aangeven" ;
+    Text [ portuguese ] = "Entrada de parâmetro" ;
+    Text[ chinese_simplified ] = "ÊäÈë²ÎÊıÖµ";
+    Text[ russian ] = "Ââîä ïàğàìåòğà";
+    Text[ polish ] = "Wpisanie wartoœci parametru";
+    Text[ japanese ] = "Êß×Ò°À°‚Ìw’è";
+    Text[ chinese_traditional ] = "¿é¤J°Ñ¼Æ­È";
+    Text[ arabic ] = "ÅÏÎÇá ÇáãÚáãÉ";
+    Text[ greek ] = "ÅéóáãùãŞ ğáñáìİôñùí";
+    Text[ korean ] = "ÆÄ¶ó¹ÌÅÍ ÀÔ·Â";
+    Text[ turkish ] = "Parametre girişi";
+
+    String STR_COULD_NOT_CONVERT_PARAM
+    {
+        Text = "Die Eingabe konnte nicht in einen gültigen Wert für die Spalte \"$name$\" umgewandelt werden";
+        Text [ english ] = "The given input could no be converted into a valid value for column \"$value$\".";
+        Text [ english_us ] = "The entry could not be converted to a valid value for the \"$name$\"column";
+        Text[ portuguese ] = "Foi impossível converter a entrada indicada num valor válido para a coluna \"$name$\".";
+        Text[ russian ] = "Ïğåîáğàçîâàòü ââîä â äîïóñòèìîå çíà÷åíèå äëÿ êîëîíêè \"$name$\" íåâîçìîæíî.";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé ìåôáôñïğŞ ôçò åéóáãùãŞò óå ìéá İãêõñç ôéìŞ ãéá ôçí óôŞëç \"$value$\".";
+        Text[ dutch ] = "De ingevoerde gegevens konden niet worden geconverteerd in een geldige waarde voor de kolom \"$name$\".";
+        Text[ french ] = "Impossible de convertir la saisie en une valeur correcte pour la colonne \"$name$\".";
+        Text[ spanish ] = "La entrada no se pudo convertir en un valor válido para la columna \"$name$\".";
+        Text[ italian ] = "Non è stato possibile convertire la voce in un valore valido per la colonna \"$name$\".";
+        Text[ danish ] = "Det var ikke muligt at konvertere inputtet til en gyldig værdi for kolonne \"$name$\".";
+        Text[ swedish ] = "Inmatningen kunde inte omvandlas till ett giltigt värde för kolumnen \"$name$\".";
+        Text[ polish ] = "Nie mo¿na by³o zamieniæ wpisu na wa¿n¹ wartoœæ kolumny \"$name$\"";
+        Text[ portuguese_brazilian ] = "The given input could no be converted into a valid value for column \"$value$\".";
+        Text[ japanese ] = "“ü—Í€–Ú‚Í—ñ<$name$>‚Ì—LŒø‚È’l‚É•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ korean ] = "ÀÔ·Â »çÇ×ÀÌ ¿­\"$name$\"¿¡ À¯È¿ÇÑ °ªÀ¸·Î º¯È¯µÇÁö ¸øÇß½À´Ï´Ù.";
+        Text[ chinese_simplified ] = "ÊäÈëµÄÄÚÈİÎŞ·¨×ª»»³ÉÒ»¸öÓÃÓÚÁĞ\"$value$\"µÄÓĞĞ§ÊıÖµ¡£";
+        Text[ chinese_traditional ] = "¿é¤J­ÈµLªkÂà´«¦¨Äæ\"$name$\" ªº¦³®Ä­È¡C";
+        Text[ arabic ] = "ÊÚĞÑ ÊÍæíá ÇáÅÏÎÇá Åáì ŞíãÉ ÕÇáÍÉ ááÚãæÏ \"$name$\".";
+        Text[ turkish ] = "Giriş, \"$name$\" sütunu için geçerli bir değere dönüştürülemedi.";
+    };
+};
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 26.10.00 15:14:44  fs
+ ************************************************************************/
+
