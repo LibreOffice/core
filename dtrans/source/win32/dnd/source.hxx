@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,17 +143,18 @@ public:
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException);
 
+
     // XDragSource
     virtual sal_Bool SAL_CALL isDragImageSupported(  ) throw(RuntimeException);
     virtual sal_Int32 SAL_CALL getDefaultCursor( sal_Int8 dragAction )
         throw( IllegalArgumentException, RuntimeException);
-    virtual void SAL_CALL executeDrag( const DragGestureEvent& trigger,
+    virtual void SAL_CALL startDrag( const DragGestureEvent& trigger,
                                      sal_Int8 sourceActions,
                                      sal_Int32 cursor,
                                      sal_Int32 image,
                                      const Reference<XTransferable >& trans,
                                      const Reference<XDragSourceListener >& listener )
-                throw( InvalidDNDOperationException, RuntimeException);
+                throw( RuntimeException);
 
 
 

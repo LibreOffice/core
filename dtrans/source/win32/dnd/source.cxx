@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 17:12:55 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,13 +135,13 @@ sal_Int32 SAL_CALL DragSource::getDefaultCursor( sal_Int8 dragAction )
 }
 
 // Notifies the XDragSourceListener by calling dragDropEnd
-void SAL_CALL DragSource::executeDrag( const DragGestureEvent& trigger,
+void SAL_CALL DragSource::startDrag( const DragGestureEvent& trigger,
                              sal_Int8 sourceActions,
                              sal_Int32 cursor,
                              sal_Int32 image,
                              const Reference<XTransferable >& trans,
                              const Reference<XDragSourceListener >& listener )
-        throw( InvalidDNDOperationException, RuntimeException)
+        throw( RuntimeException)
 {
     // The actions supported by the drag source
     m_sourceActions= sourceActions;

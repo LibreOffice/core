@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetdragcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,14 +94,16 @@ public:
     TargetDragContext( DropTarget* pTarget, sal_uInt32 id);
     ~TargetDragContext();
 
-    virtual void SAL_CALL accept( sal_Int8 dragOperation )
-        throw(InvalidDNDOperationException, RuntimeException);
-    virtual void SAL_CALL reject(  )
-        throw(InvalidDNDOperationException, RuntimeException);
-    virtual Sequence< DataFlavor > SAL_CALL getCurrentDataFlavors(  )
+
+    virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation )
+        throw( RuntimeException);
+    virtual void SAL_CALL rejectDrag(  )
+        throw( RuntimeException);
+/*    virtual Sequence< DataFlavor > SAL_CALL getCurrentDataFlavors(  )
         throw(RuntimeException);
     virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& df )
         throw(RuntimeException);
+*/
 };
 
 #endif

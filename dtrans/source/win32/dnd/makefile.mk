@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jl $ $Date: 2001-02-09 07:51:22 $
+#   last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,18 +90,18 @@ stoponerror=tr
 #DBG_CLIPBOARD_DATA: To provide DoDragDrop with an data object we call OleGetClipboard
 #CFLAGS+= -DDBG_CONSOLE_OUT 
 
-SLOFILES=	$(OBJ)$/dndentry.obj	\
-            $(OBJ)$/target.obj		\
-            $(OBJ)$/source.obj		\
-            $(OBJ)$/globals.obj		\
-            $(OBJ)$/targetdropcontext.obj	\
-            $(OBJ)$/targetdragcontext.obj	\
-            $(OBJ)$/sourcecontext.obj		\
+SLOFILES=	$(SLO)$/dndentry.obj	\
+            $(SLO)$/target.obj		\
+            $(SLO)$/source.obj		\
+            $(SLO)$/globals.obj		\
+            $(SLO)$/targetdropcontext.obj	\
+            $(SLO)$/targetdragcontext.obj	\
+            $(SLO)$/sourcecontext.obj		\
+            $(SLO)$/TransferableWrapper.obj  \
+            $(SLO)$/TxtConvertHelper.obj	\
             $(SLO)$/DataObjectWrapper.obj	\
-            $(OBJ)$/ImplHelper.obj	\
-            $(OBJ)$/DTransHelper.obj \
-            $(OBJ)$/TransferableWrapper.obj  \
-            $(OBJ)$/TxtConvertHelper.obj
+            $(SLO)$/ImplHelper.obj	\
+            $(SLO)$/DTransHelper.obj \
 
 
 #			DataObjectWrapper.obj, ImplHelper.obj, DTransHelper.obj, TransferableWrapper.obj  have to be removed when Transferables are available as service

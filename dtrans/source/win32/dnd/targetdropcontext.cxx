@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetdropcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,33 +77,34 @@ TargetDropContext::~TargetDropContext()
     m_pDropTarget->release();
 }
 
-void SAL_CALL TargetDropContext::accept( sal_Int8 dropOperation )
-        throw(InvalidDNDOperationException, RuntimeException)
+void SAL_CALL TargetDropContext::acceptDrop( sal_Int8 dropOperation )
+        throw( RuntimeException)
 {
     m_pDropTarget->_acceptDrop( dropOperation, m_id);
 }
 //
-void SAL_CALL TargetDropContext::reject( )
-        throw(InvalidDNDOperationException, RuntimeException)
+void SAL_CALL TargetDropContext::rejectDrop( )
+        throw( RuntimeException)
 {
     m_pDropTarget->_rejectDrop( m_id);
 }
 
+/*
 Sequence< DataFlavor > SAL_CALL TargetDropContext::getCurrentDataFlavors(  )
-    throw(RuntimeException)
+    throw( RuntimeException)
 {
     return m_pDropTarget->_getCurrentDataFlavors(  m_id);
 }
 
 sal_Bool SAL_CALL TargetDropContext::isDataFlavorSupported( const DataFlavor& df )
-    throw(RuntimeException)
+    throw( RuntimeException)
 {
     return m_pDropTarget->_isDataFlavorSupported( df, m_id);
 }
-
+*/
 
 void SAL_CALL TargetDropContext::dropComplete( sal_Bool success )
-        throw(InvalidDNDOperationException, RuntimeException)
+        throw( RuntimeException)
 {
     m_pDropTarget->_dropComplete( success, m_id);
 }

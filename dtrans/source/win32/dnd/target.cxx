@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #endif
+
 #include <stdio.h>
 #include "target.hxx"
 #include "globals.hxx"
@@ -234,7 +235,9 @@ STDMETHODIMP DropTarget::DragEnter( IDataObject __RPC_FAR *pDataObj,
     m_userAction= m_nListenerDropAction;
     if( m_nListenerDropAction != ACTION_NONE)
     {
-        DropTargetDragEvent e;
+        m_currentData= static_cast<XTransferable*>( new DNDTransferable( pDataObj) );
+        DropTargetDragEnterEvent e;
+        e.SupportedDataFlavors= m_currentData->getTransferDataFlavors();
         e.DropAction= m_nListenerDropAction;
         e.Source= Reference<XInterface>( static_cast<XDropTarget*>(this),UNO_QUERY);
         e.Context= static_cast<XDropTargetDragContext*>( new TargetDragContext( static_cast<DropTarget*>(this),
@@ -245,7 +248,6 @@ STDMETHODIMP DropTarget::DragEnter( IDataObject __RPC_FAR *pDataObj,
         e.Location.Y= point.y;
         e.SourceActions= dndOleDropEffectsToActions( *pdwEffect);
 
-        m_currentData= static_cast<XTransferable*>( new DNDTransferable( pDataObj) );
 
         // The Event contains a XDropTargetDragContext Implementation. A listener is only allowd to call
         // on it in the same thread and in event handler where it receives that event.
@@ -403,7 +405,7 @@ void DropTarget::fire_drop( const DropTargetDropEvent& dte)
     }
 }
 
-void DropTarget::fire_dragEnter( const DropTargetDragEvent& dtde )
+void DropTarget::fire_dragEnter( const DropTargetDragEnterEvent& e )
 {
     OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (Reference<XDropTargetListener>* )0 ) );
     if( pContainer)
@@ -412,7 +414,7 @@ void DropTarget::fire_dragEnter( const DropTargetDragEvent& dtde )
         while( iter.hasMoreElements())
         {
             Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
-            listener->dragEnter( dtde);
+            listener->dragEnter( e);
         }
     }
 }
@@ -472,36 +474,33 @@ void DropTarget::fire_dropActionChanged( const DropTargetDragEvent& dtde )
 // return sal_False results in throwing a InvalidDNDOperationException in the caller.
 
 void DropTarget::_acceptDrop(sal_Int8 dropOperation, sal_uInt32 id)
-         throw(InvalidDNDOperationException)
 {
     if( m_currentEventId == id)
     {
         m_nListenerDropAction= dropOperation;
     }
-    else
-        throw InvalidDNDOperationException();
+//  else
+//      throw InvalidDNDOperationException();
 }
 
 void DropTarget::_rejectDrop(sal_uInt32 id)
-          throw(InvalidDNDOperationException)
 {
     if( m_currentEventId == id)
     {
         m_nListenerDropAction= ACTION_NONE;
     }
-    else
-        throw InvalidDNDOperationException();
+//  else
+//      throw InvalidDNDOperationException();
 }
 
 void DropTarget::_dropComplete(sal_Bool success, sal_uInt32 id)
-         throw(InvalidDNDOperationException)
 {
     if( m_currentEventId == id)
     {
         m_bDropComplete= success;
     }
-    else
-        throw InvalidDNDOperationException();
+//  else
+//      throw InvalidDNDOperationException();
 }
 // --------------------------------------------------------------------------------------
 // DropTarget fires events to XDropTargetListeners. The event object can contains an
@@ -511,29 +510,26 @@ void DropTarget::_dropComplete(sal_Bool success, sal_uInt32 id)
 // Only one listener which visible area is affected is allowed to call on
 // XDropTargetDragContext
 void DropTarget::_acceptDrag( sal_Int8 dragOperation, sal_uInt32 id)
-         throw(InvalidDNDOperationException)
 {
     if( m_currentEventId == id)
     {
         m_nListenerDropAction= dragOperation;
     }
-    else
-        throw InvalidDNDOperationException();
+//  else
+//      throw InvalidDNDOperationException();
 }
 
 void DropTarget::_rejectDrag( sal_uInt32 id)
-    throw(InvalidDNDOperationException)
 {
     if( m_currentEventId == id)
     {
         m_nListenerDropAction= ACTION_NONE;
     }
-    else
-        throw InvalidDNDOperationException();
+//  else
+//      throw InvalidDNDOperationException();
 }
 
 Sequence<DataFlavor> DropTarget::_getCurrentDataFlavors( sal_uInt32 id)
-         throw( InvalidDNDOperationException)
 {
     Sequence<DataFlavor> retVal;
     if( m_currentEventId == id)
@@ -541,13 +537,12 @@ Sequence<DataFlavor> DropTarget::_getCurrentDataFlavors( sal_uInt32 id)
         if( m_currentData.is())
             retVal= m_currentData->getTransferDataFlavors();
     }
-    else
-        throw InvalidDNDOperationException();
+//  else
+//      throw InvalidDNDOperationException();
     return retVal;
 }
 
 sal_Bool DropTarget::_isDataFlavorSupported( const DataFlavor& df, sal_uInt32 id)
-         throw(InvalidDNDOperationException)
 {
     sal_Bool ret= sal_False;
     if( m_currentEventId == id)
@@ -555,8 +550,8 @@ sal_Bool DropTarget::_isDataFlavorSupported( const DataFlavor& df, sal_uInt32 id
         if( m_currentData.is())
             ret= m_currentData->isDataFlavorSupported( df);
     }
-    else
-        throw InvalidDNDOperationException();
+//  else
+//      throw InvalidDNDOperationException();
     return ret;
 }
 //--------------------------------------------------------------------------------------

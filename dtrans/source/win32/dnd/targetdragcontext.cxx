@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetdragcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,18 +74,19 @@ TargetDragContext::~TargetDragContext()
     m_pDropTarget->release();
 }
 
-void SAL_CALL TargetDragContext::accept( sal_Int8 dragOperation )
-    throw(InvalidDNDOperationException, RuntimeException)
+void SAL_CALL TargetDragContext::acceptDrag( sal_Int8 dragOperation )
+    throw( RuntimeException)
 {
     m_pDropTarget->_acceptDrag( dragOperation, m_id);
 
 }
-void SAL_CALL TargetDragContext::reject( )
-    throw(InvalidDNDOperationException, RuntimeException)
+void SAL_CALL TargetDragContext::rejectDrag( )
+    throw( RuntimeException)
 {
     m_pDropTarget->_rejectDrag( m_id);
 }
 
+/*
 Sequence< DataFlavor > SAL_CALL TargetDragContext::getCurrentDataFlavors(  )
     throw(RuntimeException)
 {
@@ -97,3 +98,4 @@ sal_Bool SAL_CALL TargetDragContext::isDataFlavorSupported( const DataFlavor& df
 {
     return m_pDropTarget->_isDataFlavorSupported( df, m_id);
 }
+*/

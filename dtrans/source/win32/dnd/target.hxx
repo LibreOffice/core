@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DROPTARGETDRAGENTEREVENT_HPP_
+#include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
+#endif
+
 #ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase2.hxx>
 #endif
@@ -181,25 +185,19 @@ public:
 // XDropTargetDropContext delegated from DropContext
 
     // return false signifies the caller to throw a InvalidDNDOperationException
-    void _acceptDrop( sal_Int8 dropOperation, sal_uInt32 id)
-             throw (InvalidDNDOperationException);
+    void _acceptDrop( sal_Int8 dropOperation, sal_uInt32 id);
     // return false signifies the caller to throw a InvalidDNDOperationException
-    void _rejectDrop( sal_uInt32 id)
-             throw (InvalidDNDOperationException);
+    void _rejectDrop( sal_uInt32 id);
     // return false signifies the caller to throw a InvalidDNDOperationException
-    void _dropComplete( sal_Bool success, sal_uInt32)
-             throw (InvalidDNDOperationException);
+    void _dropComplete( sal_Bool success, sal_uInt32);
 
 // XDropTargetDragContext delegated from DragContext
     // return false signifies the caller to throw a InvalidDNDOperationException
-    void _acceptDrag( sal_Int8 dragOperation, sal_uInt32)
-             throw (InvalidDNDOperationException);
+    void _acceptDrag( sal_Int8 dragOperation, sal_uInt32);
     // return false signifies the caller to throw a InvalidDNDOperationException
-    void _rejectDrag( sal_uInt32)throw (InvalidDNDOperationException);
-    Sequence<DataFlavor> _getCurrentDataFlavors( sal_uInt32 id)
-             throw (InvalidDNDOperationException);
-    sal_Bool _isDataFlavorSupported( const DataFlavor& df, sal_uInt32 id)
-             throw (InvalidDNDOperationException);
+    void _rejectDrag( sal_uInt32);
+    Sequence<DataFlavor> _getCurrentDataFlavors( sal_uInt32 id);
+    sal_Bool _isDataFlavorSupported( const DataFlavor& df, sal_uInt32 id);
 
 
 protected:
@@ -213,7 +211,7 @@ protected:
 
 
     void fire_drop( const DropTargetDropEvent& dte);
-    void fire_dragEnter( const DropTargetDragEvent& dtde );
+    void fire_dragEnter( const DropTargetDragEnterEvent& dtde );
     void fire_dragExit( const DropTargetEvent& dte );
     void fire_dragOver( const DropTargetDragEvent& dtde );
     void fire_dropActionChanged( const DropTargetDragEvent& dtde );

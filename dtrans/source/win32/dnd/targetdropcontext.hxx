@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetdropcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,19 +90,22 @@ public:
     TargetDropContext( DropTarget* pTarget, sal_uInt32 id);
     ~TargetDropContext();
 
-    // XDropTargetDragContext
-    virtual void SAL_CALL accept( sal_Int8 dropOperation )
-        throw(InvalidDNDOperationException, RuntimeException);
-    virtual void SAL_CALL reject(  )
-        throw(InvalidDNDOperationException, RuntimeException);
-    virtual Sequence< DataFlavor > SAL_CALL getCurrentDataFlavors(  )
-        throw(RuntimeException);
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& df )
-        throw(RuntimeException);
 
+    // XDropTargetDragContext
+    virtual void SAL_CALL acceptDrop( sal_Int8 dropOperation )
+        throw( RuntimeException);
+    virtual void SAL_CALL rejectDrop(  )
+        throw( RuntimeException);
+
+
+/*  virtual Sequence< DataFlavor > SAL_CALL getCurrentDataFlavors(  )
+        throw( RuntimeException);
+    virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& df )
+        throw( RuntimeException);
+*/
 
     // XDropTargetDropContext (inherits XDropTargetDragContext)
     virtual void SAL_CALL dropComplete( sal_Bool success )
-        throw(InvalidDNDOperationException, RuntimeException);
+        throw(  RuntimeException);
 };
 #endif
