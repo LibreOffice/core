@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-12 12:07:33 $
+#   last change: $Author: rt $ $Date: 2004-09-08 16:48:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,10 @@ TARGET = deployment_manager
 ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE : settings.mk
+
+.IF "$(SYSTEM_DB3)" == "YES"
+CFLAGS+=-DSYSTEM_DB3
+.ENDIF
 
 SRS1NAME = $(TARGET)
 SRC1FILES = \
