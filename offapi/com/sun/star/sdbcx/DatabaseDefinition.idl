@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseDefinition.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,10 @@
 
  module com {  module sun {  module star {  module sdbcx {
 
-interface XTablesSupplier;
-interface XViewsSupplier;
-interface XUsersSupplier;
-interface XGroupsSupplier;
+ published interface XTablesSupplier;
+ published interface XViewsSupplier;
+ published interface XUsersSupplier;
+ published interface XGroupsSupplier;
 
 
 // DocMerge from xml: service com::sun::star::sdbcx::DatabaseDefinition
@@ -88,7 +88,7 @@ interface XGroupsSupplier;
     implement objects like users and groups.
     </p>
  */
-service DatabaseDefinition
+published service DatabaseDefinition
 {
     // gives access to the tables.
     interface XTablesSupplier;
