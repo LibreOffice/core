@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:17:55 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,8 +885,9 @@ BOOL ScCompiler::IsOpCode( const String& rName )
 BOOL ScCompiler::IsOpCode2( const String& rName )
 {
     BOOL bFound = FALSE;
+    USHORT i;
 
-    for( USHORT i = ocInternalBegin; i <= ocInternalEnd && !bFound; i++ )
+    for( i = ocInternalBegin; i <= ocInternalEnd && !bFound; i++ )
         bFound = rName.EqualsAscii( pInternal[ i-ocInternalBegin ] );
 
     if (bFound)
