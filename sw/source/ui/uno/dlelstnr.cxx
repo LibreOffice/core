@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlelstnr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 12:30:35 $
+ *  last change: $Author: tl $ $Date: 2000-11-02 13:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,15 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_DICTIONARYLISTEVENTFLAGS_HPP_
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYLIST_HPP_
+#include <com/sun/star/linguistic2/XDictionaryList.hpp>
+#endif
+
+#include <com/sun/star/uno/Reference.h>
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -87,8 +96,10 @@
 #include <swmodule.hxx>
 #endif
 
+using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
@@ -103,18 +114,23 @@ SwDicListEvtListener::SwDicListEvtListener(
     {
         xDicList->addDictionaryListEventListener( this, sal_False );
     }
+
+    Reference< XMultiServiceFactory > xMgr( utl::getProcessServiceFactory() );
+    if (xMgr.is())
+    {
+        OUString aSvcName( OUString::createFromAscii(
+                "com.sun.star.frame.Desktop" ) );
+        xDesktop = Reference< frame::XDesktop >(
+                xMgr->createInstance( aSvcName ), UNO_QUERY );
+        if (xDesktop.is())
+            xDesktop->addTerminateListener( this );
+    }
 }
 /* -----------------------------17.03.00 09:07--------------------------------
 
  ---------------------------------------------------------------------------*/
 SwDicListEvtListener::~SwDicListEvtListener()
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-
-    if (xDicList.is())
-    {
-        xDicList->removeDictionaryListEventListener( this );
-    }
 }
 
 /* -----------------------------17.03.00 09:06--------------------------------
@@ -122,12 +138,12 @@ SwDicListEvtListener::~SwDicListEvtListener()
  ---------------------------------------------------------------------------*/
 
 void SwDicListEvtListener::processDictionaryListEvent(
-            const DictionaryListEvent& aDicListEvent)
+            const DictionaryListEvent& rDicListEvent)
         throw( RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    sal_Int16 nEvt = aDicListEvent.nCondensedEvent;
+    sal_Int16 nEvt = rDicListEvent.nCondensedEvent;
 
     sal_Bool bIsSpellWrong  =  ( nEvt & DictionaryListEventFlags::ADD_POS_ENTRY )
                             || ( nEvt & DictionaryListEventFlags::DEL_NEG_ENTRY )
@@ -142,14 +158,40 @@ void SwDicListEvtListener::processDictionaryListEvent(
 
 
 void SAL_CALL SwDicListEvtListener::disposing(
-            const EventObject& rSource )
+            const EventObject& rEventObj )
         throw(RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    if (xDicList.is()  &&  rSource.Source == xDicList)
+    if (xDicList.is()  &&  rEventObj.Source == xDicList)
     {
         xDicList = 0;
+    }
+}
+
+
+void SAL_CALL SwDicListEvtListener::queryTermination(
+            const EventObject& rEventObj )
+        throw(TerminationVetoException, RuntimeException)
+{
+    //vos::OGuard aGuard(Application::GetSolarMutex());
+}
+
+
+void SAL_CALL SwDicListEvtListener::notifyTermination(
+            const EventObject& rEventObj )
+        throw(RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if (xDesktop.is()  &&  rEventObj.Source == xDesktop)
+    {
+        if (xDicList.is())
+        {
+            xDicList->removeDictionaryListEventListener( this );
+            xDicList = NULL;
+        }
+        xDesktop = NULL;
     }
 }
 

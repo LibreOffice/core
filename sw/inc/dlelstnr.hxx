@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlelstnr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 11:43:40 $
+ *  last change: $Author: tl $ $Date: 2000-11-02 13:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,15 +64,29 @@
 
 #include <cppuhelper/weak.hxx>
 
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYLIST_HPP_
-#include <com/sun/star/linguistic2/XDictionaryList.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYLISTEVENTLISTENER_HPP_
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx> // helper for implementations
+#endif
+
+
+namespace com { namespace sun { namespace star {
+    namespace linguistic2 {
+        class XDictionaryList;
+    }
+    namespace frame {
+        class XTerminateListener;
+    }
+} } }
 
 ///////////////////////////////////////////////////////////////////////////
 // SwDicListEvtListener
@@ -81,12 +95,15 @@
 // dictionaries of the dictionary list were made.
 //
 
-class SwDicListEvtListener : public cppu::WeakImplHelper1
-<
-    ::com::sun::star::linguistic2::XDictionaryListEventListener
->
+class SwDicListEvtListener :
+    public cppu::WeakImplHelper2
+    <
+        ::com::sun::star::linguistic2::XDictionaryListEventListener,
+        ::com::sun::star::frame::XTerminateListener
+    >
 {
-private:
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::frame::XDesktop >                 xDesktop;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryList >    xDicList;
 
@@ -102,13 +119,21 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing(
-            const ::com::sun::star::lang::EventObject& rSource )
+            const ::com::sun::star::lang::EventObject& rEventObj )
         throw(::com::sun::star::uno::RuntimeException);
 
     // XDictionaryListEventListener
     virtual void    SAL_CALL processDictionaryListEvent(
-            const ::com::sun::star::linguistic2::DictionaryListEvent& aDicListEvent)
+            const ::com::sun::star::linguistic2::DictionaryListEvent& rDicListEvent)
         throw( ::com::sun::star::uno::RuntimeException );
+
+    // XTerminateListener
+    virtual void SAL_CALL queryTermination(
+            const ::com::sun::star::lang::EventObject& rEventObj )
+        throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyTermination(
+            const ::com::sun::star::lang::EventObject& rEventObj )
+        throw(::com::sun::star::uno::RuntimeException);
 };
 
 
