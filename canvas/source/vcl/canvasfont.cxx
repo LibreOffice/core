@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvasfont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:38:40 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,92 +59,119 @@
  *
  ************************************************************************/
 
-#include "canvasfont.hxx"
-#include "spritecanvas.hxx"
+#include <canvas/debug.hxx>
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XSPRITECANVAS_HPP_
-#include <drafts/com/sun/star/rendering/XSpriteCanvas.hpp>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
+#endif
+
+#ifndef _SV_METRIC_HXX
+#include <vcl/metric.hxx>
+#endif
+
+#include "outdevprovider.hxx"
+#include "canvasfont.hxx"
+#include "textlayout.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
 
+
 namespace vclcanvas
 {
-    CanvasFont::CanvasFont( const rendering::FontRequest&   rFontRequest,
-                            const OutDevProvider::ImplRef&  rCanvas ) :
-        maFont( Font( rFontRequest.FamilyName, rFontRequest.StyleName, ::Size( 0,
-                                                                               static_cast<long>(rFontRequest.CellSize + .5)) ) ),
+    CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
+                            const uno::Sequence< beans::PropertyValue >&    rExtraFontProperties,
+                            const geometry::Matrix2D&                       rFontMatrix,
+                            const OutDevProviderSharedPtr&                  rDevice ) :
+        CanvasFont_Base( m_aMutex ),
+        maFont( Font( rFontRequest.FontDescription.FamilyName,
+                      rFontRequest.FontDescription.StyleName,
+                      Size( 0, ::basegfx::fround(rFontRequest.CellSize) ) ) ),
         maFontRequest( rFontRequest ),
-        mpCanvas( rCanvas )
+        mpRefDevice( rDevice )
     {
+        CHECK_AND_THROW( mpRefDevice.get(),
+                         "CanvasFont::CanvasFont(): Invalid ref device" );
+
         maFont->SetAlign( ALIGN_BASELINE );
-        maFont->SetHeight( static_cast<long>(rFontRequest.CellSize + .5) );
+        maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==com::sun::star::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
+        maFont->SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? TRUE : FALSE );
+
+        // TODO(F2): improve panose->vclenum conversion
+        maFont->SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
+        maFont->SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
+
+        // adjust to stretched font
+        if( !::rtl::math::approxEqual( rFontMatrix.m00, rFontMatrix.m11) )
+        {
+            const OutputDevice& rOutDev( mpRefDevice->getOutDev() );
+            const Size aSize = rOutDev.GetFontMetric( *maFont ).GetSize();
+
+            const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
+            double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
+
+            if( !::basegfx::fTools::equalZero( fDividend) )
+                fStretch /= fDividend;
+
+            const long nNewWidth = ::basegfx::fround( aSize.Width() * fStretch );
+
+            maFont->SetWidth( nNewWidth );
+        }
     }
 
     CanvasFont::~CanvasFont()
     {
     }
 
-    uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > > SAL_CALL CanvasFont::queryTextShapes( const rendering::StringContext&  text,
-                                                                                                       const rendering::ViewState&      viewState,
-                                                                                                       const rendering::RenderState&    renderState,
-                                                                                                       sal_Int8                         direction ) throw (uno::RuntimeException)
+    void SAL_CALL CanvasFont::disposing()
     {
-        // TODO
-        return uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > >();
+        tools::LocalGuard aGuard;
+
+        mpRefDevice.reset();
     }
 
-    uno::Sequence< geometry::RealRectangle2D > SAL_CALL CanvasFont::queryTightMeasures( const rendering::StringContext& text,
-                                                                                     const rendering::ViewState&        viewState,
-                                                                                     const rendering::RenderState&      renderState,
-                                                                                     sal_Int8                           direction ) throw (uno::RuntimeException)
+    uno::Reference< rendering::XTextLayout > SAL_CALL  CanvasFont::createTextLayout( const rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) throw (uno::RuntimeException)
     {
-        // TODO
-        return uno::Sequence< geometry::RealRectangle2D >();
+        tools::LocalGuard aGuard;
+
+        if( !mpRefDevice.get() )
+            return uno::Reference< rendering::XTextLayout >(); // we're disposed
+
+        return new TextLayout( aText, nDirection, nRandomSeed, ImplRef( this ), mpRefDevice );
     }
 
-    uno::Sequence< geometry::RealRectangle2D > SAL_CALL CanvasFont::queryTextMeasures( const rendering::StringContext&  text,
-                                                                                    const rendering::ViewState&         viewState,
-                                                                                    const rendering::RenderState&       renderState,
-                                                                                    sal_Int8                            direction ) throw (uno::RuntimeException)
+    rendering::FontRequest SAL_CALL  CanvasFont::getFontRequest(  ) throw (uno::RuntimeException)
     {
-        // TODO
-        return uno::Sequence< geometry::RealRectangle2D >();
-    }
+        tools::LocalGuard aGuard;
 
-    uno::Sequence< double > SAL_CALL CanvasFont::queryTextOffsets( const rendering::StringContext&  text,
-                                                                   const rendering::ViewState&      viewState,
-                                                                   const rendering::RenderState&    renderState,
-                                                                   sal_Int8                         direction ) throw (uno::RuntimeException)
-    {
-        // TODO
-        return uno::Sequence< double >();
-    }
-
-    geometry::RealRectangle2D SAL_CALL CanvasFont::queryTextBounds( const rendering::StringContext& text,
-                                                                 const rendering::ViewState&        viewState,
-                                                                 const rendering::RenderState&      renderState,
-                                                                 sal_Int8                           direction ) throw (uno::RuntimeException)
-    {
-        // TODO
-        return geometry::RealRectangle2D();
-    }
-
-    rendering::FontRequest SAL_CALL CanvasFont::getFontRequest(  ) throw (uno::RuntimeException)
-    {
         return maFontRequest;
     }
 
-    rendering::FontMetrics SAL_CALL CanvasFont::getFontMetrics(  ) throw (uno::RuntimeException)
+    rendering::FontMetrics SAL_CALL  CanvasFont::getFontMetrics(  ) throw (uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
+        // TODO(F1)
         return rendering::FontMetrics();
     }
 
-    uno::Reference< rendering::XCanvas > SAL_CALL CanvasFont::getAssociatedCanvas(  ) throw (uno::RuntimeException)
+    uno::Sequence< double > SAL_CALL  CanvasFont::getAvailableSizes(  ) throw (uno::RuntimeException)
     {
-        return uno::Reference< rendering::XCanvas >( mpCanvas.getRef(),
-                                                     uno::UNO_QUERY );
+        tools::LocalGuard aGuard;
+
+        // TODO(F1)
+        return uno::Sequence< double >();
+    }
+
+    uno::Sequence< beans::PropertyValue > SAL_CALL  CanvasFont::getExtraFontProperties(  ) throw (uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+
+        // TODO(F1)
+        return uno::Sequence< beans::PropertyValue >();
     }
 
 #define SERVICE_NAME "drafts.com.sun.star.rendering.CanvasFont"
