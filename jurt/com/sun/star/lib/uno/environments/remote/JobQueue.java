@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-19 15:42:37 $
+ *  last change: $Author: kr $ $Date: 2001-03-06 17:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package com.sun.star.lib.uno.environments.remote;
 
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 
@@ -82,7 +83,7 @@ import com.sun.star.uno.UnoRuntime;
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.
  * <p>
- * @version     $Revision: 1.9 $ $ $Date: 2001-02-19 15:42:37 $
+ * @version     $Revision: 1.10 $ $ $Date: 2001-03-06 17:39:30 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -120,6 +121,8 @@ public class JobQueue {
 
     protected boolean _active = false;
 
+    protected JavaThreadPool _javaThreadPool;
+
     // statistics
     protected int _async_threads_created;
     protected int _sync_threads_created;
@@ -149,7 +152,7 @@ public class JobQueue {
 
         public Object invoke(Object params[]) {
             try {
-                enter(1000, null);
+                _javaThreadPool.enter(1000);
             }
             catch(java.lang.Exception exception) {
                 if(_head != null || _active) { // there was a job in progress, so give a stack
@@ -190,13 +193,13 @@ public class JobQueue {
      * @param sync_jobQueue    the sync queue this async queue belongs to
      * @see                    com.sun.star.lib.uno.environments.remote.ThreadID
      */
-    protected JobQueue(ThreadID threadId, JobQueue sync_jobQueue) {
+    JobQueue(JavaThreadPool javaThreadPool, ThreadID threadId, JobQueue sync_jobQueue) {
         ++ __instances;
 
-        // create a new async threadID
-        _threadId = new ThreadID(threadId);
-        _sync_jobQueue = sync_jobQueue;
-        _createThread = true;
+        _javaThreadPool   = javaThreadPool;
+        _threadId         = threadId;
+        _sync_jobQueue    = sync_jobQueue;
+        _createThread     = true;
         _createThread_now = true;
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + " - init:" +  _threadId);
@@ -209,11 +212,12 @@ public class JobQueue {
      * @param createThread    if true, the queue creates a worker thread if needed
      * @see             com.sun.star.lib.uno.environments.remote.ThreadID
      */
-    JobQueue(ThreadID threadId, boolean createThread){
+    JobQueue(JavaThreadPool javaThreadPool, ThreadID threadId, boolean createThread){
         ++ __instances;
 
-        _threadId     = threadId;
-        _createThread = createThread;
+        _javaThreadPool   = javaThreadPool;
+        _threadId         = threadId;
+        _createThread     = createThread;
         _createThread_now = createThread;
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + " - init:" +  _threadId + " " + createThread);
@@ -361,8 +365,14 @@ public class JobQueue {
         else {
             synchronized(this) {
                 // create the async JobQueue ?
-                if(_async_jobQueue == null)
-                    _async_jobQueue = new JobQueue(_threadId, this);
+                if(_async_jobQueue == null) {
+                    try {
+                        _async_jobQueue = _javaThreadPool.addThread(true, new ThreadID(_threadId), disposeId, this);
+                    }
+                    catch(InterruptedException interruptedException) {
+                        throw new RuntimeException(interruptedException.toString());
+                    }
+                }
 
                 // fill the async queue, async queue are intentionally not disposed
                 _async_jobQueue._putJob(job, null);
@@ -516,6 +526,27 @@ public class JobQueue {
         System.err.println("jobs pub - all: " + (_async_jobs_queued + _sync_jobs_queued)
                            + " asyncs: " + _async_jobs_queued
                            + " syncs: " + _sync_jobs_queued);
+    }
+
+    public String toString() {
+        String string =  "jobQueue: " + _threadId.toString();
+
+        Enumeration elements = _disposeIds.keys();
+        while(elements.hasMoreElements()) {
+            string += " " + elements.nextElement();
+        }
+
+        return string;
+    }
+
+
+    void dispose() {
+        if(_sync_jobQueue != null) {
+            _javaThreadPool.removeThread(_sync_jobQueue._threadId);
+
+            _sync_jobQueue._async_jobQueue = null;
+            _sync_jobQueue = null;
+        }
     }
 
     /**
