@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:23:10 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@ class ScDocument;
 class ScTokenArray;
 class XclImpStream;
 
-
 /* ============================================================================
 Classes for import of different kinds of internal/external references.
 - 3D cell and cell range links
@@ -107,17 +106,17 @@ public:
     // original Excel sheet names ---------------------------------------------
 
     /** Appends an original Excel sheet name with corresponding Calc sheet index. */
-    void                        AppendXclTabName( const String& rXclTabName, SCTAB nScTab );
+    void                AppendXclTabName( const String& rXclTabName, SCTAB nScTab );
     /** Inserts a Calc sheet index (increases all following sheet indexes). */
-    void                        InsertScTab( SCTAB nScTab );
+    void                InsertScTab( SCTAB nScTab );
 
     /** Returns the Calc sheet index from the passed original Excel sheet name. */
-    SCTAB                       GetScTabFromXclName( const String& rXclTabName ) const;
+    SCTAB               GetScTabFromXclName( const String& rXclTabName ) const;
 
     // record creation order - TABID record -----------------------------------
 
     /** Reads the TABID record. */
-    void                        ReadTabid( XclImpStream& rStrm );
+    void                ReadTabid( XclImpStream& rStrm );
 
     /** Returns the current sheet index calculated from creation index.
         @param nCreatedId  The creation index of the sheet (1-based).
@@ -125,15 +124,14 @@ public:
         @return  The 0-based index of the sheet nCreatedId if it is contained in the list.
         Example: The buffer is 3;5;2;4;1, nCreatedId is 1 and nMaxTabId is 3. The function will
         return 2 which is the 0-based index of sheet 1 in the list 3;2;1. */
-    sal_uInt16                  GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMaxTabId = 0xFFFF ) const;
+    sal_uInt16          GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMaxTabId = 0xFFFF ) const;
 
 private:
     typedef ::std::map< String, SCTAB > XclTabNameMap;
 
-    XclTabNameMap               maTabNames;     /// All Excel sheet names with Calc sheet index.
-    ScfUInt16Vec                maTabIdVec;     /// The vector with sheet indexes.
+    XclTabNameMap       maTabNames;     /// All Excel sheet names with Calc sheet index.
+    ScfUInt16Vec        maTabIdVec;     /// The vector with sheet indexes.
 };
-
 
 // Internal defined names =====================================================
 
@@ -143,22 +141,21 @@ class ScRangeData;
 class XclImpName : protected XclImpRoot
 {
 public:
-    explicit                    XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex );
+    explicit            XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex );
 
-    inline const String&        GetXclName() const { return maXclName; }
-    inline const String&        GetScName() const { return maScName; }
-    inline SCTAB                GetScTab() const { return mnScTab; }
-    inline const ScRangeData*   GetScRangeData() const { return mpScData; }
-    inline bool                 IsGlobal() const { return mnScTab == SCNOTAB; }
+    inline const String& GetXclName() const { return maXclName; }
+    inline const String& GetScName() const { return maScName; }
+    inline SCTAB        GetScTab() const { return mnScTab; }
+    inline const ScRangeData* GetScRangeData() const { return mpScData; }
+    inline bool         IsGlobal() const { return mnScTab == SCTAB_MAX; }
 
 private:
-    String                      maXclName;      /// Original name read from the file.
-    String                      maScName;       /// Name inserted into the Calc document.
-    const ScRangeData*          mpScData;       /// Pointer to Calc defined name (no ownership).
-    sal_Unicode                 mcBuiltIn;      /// Excel built-in name index.
-    SCTAB                       mnScTab;        /// Calc sheet index of local names.
+    String              maXclName;      /// Original name read from the file.
+    String              maScName;       /// Name inserted into the Calc document.
+    const ScRangeData*  mpScData;       /// Pointer to Calc defined name (no ownership).
+    sal_Unicode         mcBuiltIn;      /// Excel built-in name index.
+    SCTAB               mnScTab;        /// Calc sheet index of local names.
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -170,16 +167,16 @@ private:
 class XclImpNameBuffer : protected XclImpRoot
 {
 public:
-    explicit                    XclImpNameBuffer( const XclImpRoot& rRoot );
+    explicit            XclImpNameBuffer( const XclImpRoot& rRoot );
 
     /** Reads a NAME record and creates an entry in this buffer. */
-    void                        ReadName( XclImpStream& rStrm );
+    void                ReadName( XclImpStream& rStrm );
 
     /** Tries to find the name used in Calc, based on the original Excel defined name.
-        @param nScTab  The sheet index for local names or SCNOTAB for global names.
+        @param nScTab  The sheet index for local names or SCTAB_MAX for global names.
         If no local name is found, tries to find a matching global name.
         @return  Pointer to the defined name or 0 on error. */
-    const XclImpName*           FindName( const String& rXclName, SCTAB  nScTab = SCNOTAB ) const;
+    const XclImpName*   FindName( const String& rXclName, SCTAB nScTab = SCTAB_MAX ) const;
 
     /** Get the name used in Calc using the index of the internal defined names in document.
         @param nXtiIndex  The index of the internal defined names.
@@ -188,9 +185,8 @@ public:
 
 private:
     typedef ScfDelList< XclImpName > XclImpNameList;
-    XclImpNameList              maNameList;
+    XclImpNameList      maNameList;
 };
-
 
 // External names =============================================================
 
@@ -203,7 +199,6 @@ enum XclImpExtNameType
     xlExtOLE                    /// An OLE object link.
 };
 
-
 // ----------------------------------------------------------------------------
 
 /** Stores contents of an external name.
@@ -212,30 +207,28 @@ class XclImpExtName
 {
 public:
     /** Reads the external name from the stream. */
-    explicit                    XclImpExtName( XclImpStream& rStrm, bool bAddIn = false );
+    explicit            XclImpExtName( XclImpStream& rStrm, bool bAddIn = false );
 
     /** Create and apply the cached list of this DDE Link to the document. */
-    void                        CreateDdeData( ScDocument& rDoc,
-                                    const String& rApplc,
-                                    const String& rExtDoc) const;
+    void                CreateDdeData( ScDocument& rDoc,
+                            const String& rApplc, const String& rExtDoc ) const;
 
-    inline XclImpExtNameType    GetType() const         { return meType; }
-    inline const String&        GetName() const         { return maName; }
-    inline sal_uInt32           GetStorageId() const    { return mnStorageId; }
+    inline XclImpExtNameType GetType() const { return meType; }
+    inline const String& GetName() const { return maName; }
+    inline sal_uInt32   GetStorageId() const { return mnStorageId; }
 
 private:
     typedef ::std::auto_ptr< XclImpCachedMatrix > XclImpCachedMatrixPtr;
 
-    XclImpCachedMatrixPtr       mpDdeMatrix;        /// Cached results of the DDE link.
-    String                      maName;             /// The name of the external name.
-    sal_uInt32                  mnStorageId;        /// Storage ID for OLE object storages.
-    XclImpExtNameType           meType;             /// Type of the external name.
+    XclImpCachedMatrixPtr mxDdeMatrix;      /// Cached results of the DDE link.
+    String              maName;             /// The name of the external name.
+    sal_uInt32          mnStorageId;        /// Storage ID for OLE object storages.
+    XclImpExtNameType   meType;             /// Type of the external name.
 };
-
 
 // Import link manager ========================================================
 
-class XclImpLinkManager_Impl;
+class XclImpLinkManagerImpl;
 
 /** This is the central class for the import of all internal/external links.
     @descr  This manager stores all data about external documents with their sheets
@@ -255,44 +248,43 @@ class XclImpLinkManager_Impl;
 class XclImpLinkManager
 {
 public:
-    explicit                    XclImpLinkManager( const XclImpRoot& rRoot );
-                                ~XclImpLinkManager();
+    explicit            XclImpLinkManager( const XclImpRoot& rRoot );
+                        ~XclImpLinkManager();
 
     /** Reads the EXTERNSHEET record. */
-    void                        ReadExternsheet( XclImpStream& rStrm );
+    void                ReadExternsheet( XclImpStream& rStrm );
     /** Reads a SUPBOOK record. */
-    void                        ReadSupbook( XclImpStream& rStrm );
+    void                ReadSupbook( XclImpStream& rStrm );
     /** Reads an XCT record and appends it to the current SUPBOOK. */
-    void                        ReadXct( XclImpStream& rStrm );
+    void                ReadXct( XclImpStream& rStrm );
     /** Reads a CRN record and appends it to the current SUPBOOK. */
-    void                        ReadCrn( XclImpStream& rStrm );
+    void                ReadCrn( XclImpStream& rStrm );
     /** Reads an EXTERNNAME record and appends it to the current SUPBOOK. */
-    void                        ReadExternname( XclImpStream& rStrm );
+    void                ReadExternname( XclImpStream& rStrm );
 
     /** Returns true, if the specified XTI entry contains an internal reference. */
-    bool                        IsSelfRef( sal_uInt16 nXtiIndex ) const;
+    bool                IsSelfRef( sal_uInt16 nXtiIndex ) const;
     /** Returns the Calc sheet index range of the specified XTI entry.
         @return  true = XTI data found, returned sheet index range is valid. */
-    bool                        GetScTabRange(
-                                    SCTAB & rnScTabFirst, SCTAB & rnScTabLast,
-                                    sal_uInt16 nXtiIndex ) const;
+    bool                GetScTabRange(
+                            SCTAB& rnFirstScTab, SCTAB& rnLastScTab,
+                            sal_uInt16 nXtiIndex ) const;
     /** Returns the specified external name or 0 on error. */
-    const XclImpExtName*        GetExternName( sal_uInt16 nXtiIndex, sal_uInt16 nExtName ) const;
+    const XclImpExtName* GetExternName( sal_uInt16 nXtiIndex, sal_uInt16 nExtName ) const;
     /** Tries to decode the URL of the specified XTI entry to OLE or DDE link components.
         @descr  For DDE links: Decodes to application name and topic.
         For OLE object links: Decodes to class name and document URL.
         @return  true = decoding was successful, returned strings are valid (not empty). */
-    bool                        GetLinkData( String& rApplic, String& rTopic, sal_uInt16 nXtiIndex ) const;
+    bool                GetLinkData( String& rApplic, String& rTopic, sal_uInt16 nXtiIndex ) const;
 
     /** Returns the Calc sheet index of a table in an external document.
         @return  Calc sheet index or EXC_TAB_INVALID on error. */
-    SCTAB                       GetScTab( const String& rUrl, const String& rTabName ) const;
+    SCTAB               GetScTab( const String& rUrl, const String& rTabName ) const;
 
 private:
-    typedef ::std::auto_ptr< XclImpLinkManager_Impl > XclImpLinkManager_ImplPtr;
-    XclImpLinkManager_ImplPtr   mpImpl;
+    typedef ::std::auto_ptr< XclImpLinkManagerImpl > XclImpLinkMgrImplPtr;
+    XclImpLinkMgrImplPtr mxImpl;
 };
-
 
 // ============================================================================
 
