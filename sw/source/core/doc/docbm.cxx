@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:48:21 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,12 @@ void SwDoc::DelBookmark(USHORT nPos)
         ClearRedo();
         AppendUndo( new SwUndoDelBookmark( *pBM ));
     }
-    SetModified();
+
+    // #108964# UNO bookmark don't contribute to the document state,
+    // and hence changing them shouldn't set the document modified
+    if( !pBM->IsUNOMark() )
+        SetModified();
+
     pBookmarkTbl->Remove(nPos);
 
     SwServerObject* pServObj = pBM->GetObject();
