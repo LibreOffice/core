@@ -107,11 +107,55 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
     }
 
         tableModel.addTableModelListener(this);
-        JTable tableVersions = new JTable(tableModel);
+        JTable tableVersions = new JTable(tableModel) {
+            public String getToolTipText(MouseEvent event)
+            {
+                int col = columnAtPoint( event.getPoint() );
+                if (col != 2)
+                    return null;
+
+                int row = rowAtPoint( event.getPoint() );
+                Object o = getValueAt(row, col);
+
+                if (o == null)
+                    return null;
+
+                if (o.toString().equals(""))
+                    return null;
+
+                return o.toString();
+            }
+
+            public Point getToolTipLocation(MouseEvent event)
+            {
+                int col = columnAtPoint( event.getPoint() );
+                if (col != 2)
+                    return null;
+
+                int row = rowAtPoint( event.getPoint() );
+                Object o = getValueAt(row,col);
+
+                if (o == null)
+                    return null;
+
+                if (o.toString().equals(""))
+                    return null;
+
+                Point pt = getCellRect(row, col, true).getLocation();
+                pt.translate(-1,-2);
+                return pt;
+            }
+        };
+
         JScrollPane scroll = new JScrollPane(tableVersions);
 
         tableVersions.setPreferredSize(
             new Dimension(InstallWizard.DEFWIDTH,InstallWizard.DEFHEIGHT));
+
+        tableVersions.setRowSelectionAllowed(false);
+        tableVersions.setColumnSelectionAllowed(false);
+        tableVersions.setCellSelectionEnabled(false);
+
         initColumnSizes(tableVersions, tableModel);
         versionPanel.add(scroll);
 
@@ -273,6 +317,10 @@ class MyTableModelIDE extends AbstractTableModel {
     }
 
     public Object getValueAt(int row, int col) {
+        if (row < 0 || row > getRowCount() ||
+            col < 0 || col > getColumnCount())
+            return null;
+
         ArrayList aRow = (ArrayList)data.get(row);
         return aRow.get(col);
     }
