@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:14:47 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,8 @@ Window WIN_HELP_INDEX
                 Text[ hebrew ] = "‮תוכן עיניינים‬";
                 Text[ hindi ] = "विषयसूची";
                 Text[ slovak ] = "Obsah";
+                Text[ hungarian ] = "Tartalom";
+                Text[ slovenian ] = "Vsebina";
             };
             PageItem
             {
@@ -150,6 +152,8 @@ Window WIN_HELP_INDEX
                 Text[ hebrew ] = "‮אינדקס‬";
                 Text[ hindi ] = "अनुक्रमणिका";
                 Text[ slovak ] = "Index";
+                Text[ hungarian ] = "Tárgymutató";
+                Text[ slovenian ] = "Kazalo";
             };
             PageItem
             {
@@ -182,6 +186,8 @@ Window WIN_HELP_INDEX
                 Text[ hebrew ] = "‮חיפוש‬";
                 Text[ hindi ] = "अन्वेषण";
                 Text[ slovak ] = "Nájsť";
+                Text[ hungarian ] = "Keresés";
+                Text[ slovenian ] = "Najdi";
             };
             PageItem
             {
@@ -197,7 +203,7 @@ Window WIN_HELP_INDEX
                 Text[ spanish ] = "Marcadores";
                 Text[ finnish ] = "Kirjanmerkit";
                 Text[ italian ] = "Segnalibro";
-                Text[ danish ] = "Bogm�rke";
+                Text[ danish ] = "Bogm�rker";
                 Text[ swedish ] = "Bokm�rken";
                 Text[ polish ] = "Zak�adki";
                 Text[ portuguese_brazilian ] = "Marcadores";
@@ -213,6 +219,8 @@ Window WIN_HELP_INDEX
                 Text[ hebrew ] = "‮סימניות‬";
                 Text[ hindi ] = "पृष्ठसंकेतें";
                 Text[ slovak ] = "Záložky";
+                Text[ hungarian ] = "Könyvjelzők";
+                Text[ slovenian ] = "Zaznamki";
             };
         };
     };
@@ -254,6 +262,8 @@ TabPage TP_HELP_INDEX
         Text[ hebrew ] = "‮מילת חיפוש‬";
         Text[ hindi ] = "~अन्वेषण विषय";
         Text[ slovak ] = "Hľadaný výra~z";
+        Text[ hungarian ] = "~Keresett kifejezés";
+        Text[ slovenian ] = "~Iskalni pogoj";
     };
     ComboBox CB_INDEX
     {
@@ -291,6 +301,8 @@ TabPage TP_HELP_INDEX
         Text[ hebrew ] = "‮תצוגה‬";
         Text[ hindi ] = "~दिखाओ";
         Text[ slovak ] = "~Zobraziť";
+        Text[ hungarian ] = "~Megjelenítés";
+        Text[ slovenian ] = "~Prikaz";
     };
 };
 
@@ -330,6 +342,8 @@ TabPage TP_HELP_SEARCH
         Text[ hebrew ] = "‮מילת חיפוש‬";
         Text[ hindi ] = "अ~न्वेषण विषय";
         Text[ slovak ] = "~Hľadaný výraz";
+        Text[ hungarian ] = "~Keresési kifejezés";
+        Text[ slovenian ] = "I~skalni pogoj";
     };
     ComboBox ED_SEARCH
     {
@@ -368,6 +382,8 @@ TabPage TP_HELP_SEARCH
         Text[ hebrew ] = "‮חיפוש‬";
         Text[ hindi ] = "~अन्वेषण";
         Text[ slovak ] = "~Nájsť";
+        Text[ hungarian ] = "~Keresés";
+        Text[ slovenian ] = "~Najdi";
     };
     CheckBox CB_FULLWORDS
     {
@@ -399,6 +415,8 @@ TabPage TP_HELP_SEARCH
         Text[ hebrew ] = "‮מילים שלמות בלבד‬";
         Text[ hindi ] = "केवल ~सम्पूर्ण शब्द";
         Text[ slovak ] = "Iba ~celé slová";
+        Text[ hungarian ] = "~Csak egész szavak";
+        Text[ slovenian ] = "Samo ~celotne besede";
     };
     CheckBox CB_SCOPE
     {
@@ -430,6 +448,8 @@ TabPage TP_HELP_SEARCH
         Text[ hebrew ] = "‮חיפוש בכותרות בלבד‬";
         Text[ hindi ] = "केवल ~शीर्षकों में अन्वेषण करो";
         Text[ slovak ] = "~Hľadať iba v nadpisoch";
+        Text[ hungarian ] = "Keresés csak a ~címsorokban";
+        Text[ slovenian ] = "Najdi samo v ~naslovih";
     };
     ListBox LB_RESULT
     {
@@ -467,6 +487,8 @@ TabPage TP_HELP_SEARCH
         Text[ hebrew ] = "‮תצוגה‬";
         Text[ hindi ] = "~दिखाओ";
         Text[ slovak ] = "~Zobraziť";
+        Text[ hungarian ] = "~Megjelenítés";
+        Text[ slovenian ] = "~Prikaz";
     };
 };
 
@@ -490,7 +512,7 @@ TabPage TP_HELP_BOOKMARKS
         Text[ spanish ] = "Marcadores";
         Text[ finnish ] = "Kirjan~merkit";
         Text[ italian ] = "~Segnalibro";
-        Text[ danish ] = "~Bogm�rke";
+        Text[ danish ] = "~Bogm�rker";
         Text[ swedish ] = "~Bokm�rken";
         Text[ polish ] = "~Zak�adki";
         Text[ portuguese_brazilian ] = "~Marcadores";
@@ -506,6 +528,8 @@ TabPage TP_HELP_BOOKMARKS
         Text[ hebrew ] = "‮סימניות‬";
         Text[ hindi ] = "~पृष्ठसंकेत";
         Text[ slovak ] = "Zálož~ky";
+        Text[ hungarian ] = "~Könyvjelzők";
+        Text[ slovenian ] = "~Zaznamki";
     };
     ListBox LB_BOOKMARKS
     {
@@ -544,6 +568,8 @@ TabPage TP_HELP_BOOKMARKS
         Text[ hebrew ] = "‮תצוגה‬";
         Text[ hindi ] = "~दिखाओ";
         Text[ slovak ] = "~Zobraziť";
+        Text[ hungarian ] = "~Megjelenítés";
+        Text[ slovenian ] = "~Prikaz";
     };
 };
 
@@ -648,7 +674,7 @@ String STR_HELP_WINDOW_TITLE
     Text[ french ] = "Aide de %PRODUCTNAME";
     Text[ spanish ] = "%PRODUCTNAME - Ayuda";
     Text[ italian ] = "Guida %PRODUCTNAME";
-    Text[ danish ] = "Hj�lp til %PRODUCTNAME";
+    Text[ danish ] = "%PRODUCTNAME Hj�lp";
     Text[ swedish ] = "%PRODUCTNAME-hj�lp";
     Text[ polish ] = "%PRODUCTNAME - Pomoc";
     Text[ portuguese_brazilian ] = "Ajuda do %PRODUCTNAME";
@@ -665,6 +691,8 @@ String STR_HELP_WINDOW_TITLE
     Text[ hebrew ] = "‮עזרה ל%PRODUCTNAME ‬";
     Text[ hindi ] = "%PRODUCTNAME सहायता";
     Text[ slovak ] = "Pomocník %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME Súgó";
+    Text[ slovenian ] = "Pomoč za %PRODUCTNAME";
 };
 String STR_HELP_BUTTON_INDEX_ON
 {
@@ -694,6 +722,8 @@ String STR_HELP_BUTTON_INDEX_ON
     Text[ hebrew ] = "‮הצגת חלון הניווט‬";
     Text[ hindi ] = "Show Navigation Pane";
     Text[ slovak ] = "Zobraziť navigačnú lištu";
+    Text[ hungarian ] = "Navigációs tábla mutatása";
+    Text[ slovenian ] = "Pokaži podokno za krmarjenje";
 };
 String STR_HELP_BUTTON_INDEX_OFF
 {
@@ -723,6 +753,8 @@ String STR_HELP_BUTTON_INDEX_OFF
     Text[ hebrew ] = "‮הסתרת חלון הניווט‬";
     Text[ hindi ] = "नाविगेशन् पट्टी को छिपाओ ";
     Text[ slovak ] = "Skryť navigačnú lištu";
+    Text[ hungarian ] = "Navigációs tábla elrejtése";
+    Text[ slovenian ] = "Skrij podokno za krmarjenje";
 };
 String STR_HELP_BUTTON_START
 {
@@ -735,7 +767,7 @@ String STR_HELP_BUTTON_START
     Text[ french ] = "Page de d�part";
     Text[ spanish ] = "P�gina de inicio";
     Text[ italian ] = "Home";
-    Text[ danish ] = "Startside";
+    Text[ danish ] = "F�rste side";
     Text[ swedish ] = "Startsida";
     Text[ polish ] = "Pierwsza strona";
     Text[ portuguese_brazilian ] = "Primeira p�gina";
@@ -752,6 +784,8 @@ String STR_HELP_BUTTON_START
     Text[ hebrew ] = "‮הדף הראשון‬";
     Text[ hindi ] = "पहिला पृष्ठ";
     Text[ slovak ] = "Prvá stránka";
+    Text[ hungarian ] = "Első oldal";
+    Text[ slovenian ] = "Prva stran";
 };
 String STR_HELP_BUTTON_PREV
 {
@@ -781,6 +815,8 @@ String STR_HELP_BUTTON_PREV
     Text[ hebrew ] = "‮הדף הקודם‬";
     Text[ hindi ] = "पिछला पृष्ठ";
     Text[ slovak ] = "Predchádzajúca strana";
+    Text[ hungarian ] = "Előző oldal";
+    Text[ slovenian ] = "Prejšnja stran";
 };
 String STR_HELP_BUTTON_NEXT
 {
@@ -810,6 +846,8 @@ String STR_HELP_BUTTON_NEXT
     Text[ hebrew ] = "‮הדף הבא‬";
     Text[ hindi ] = "अगला पृष्ठ";
     Text[ slovak ] = "Ďalšia strana";
+    Text[ hungarian ] = "Következő oldal";
+    Text[ slovenian ] = "Naslednja stran";
 };
 String STR_HELP_BUTTON_PRINT
 {
@@ -839,6 +877,8 @@ String STR_HELP_BUTTON_PRINT
     Text[ hebrew ] = "‮הדפסה...‬";
     Text[ hindi ] = "छपाई...";
     Text[ slovak ] = "Tlač...";
+    Text[ hungarian ] = "Nyomtatás...";
+    Text[ slovenian ] = "Natisni...";
 };
 String STR_HELP_BUTTON_ADDBOOKMARK
 {
@@ -868,6 +908,8 @@ String STR_HELP_BUTTON_ADDBOOKMARK
     Text[ hebrew ] = "‮הוספה לסימניות...‬";
     Text[ hindi ] = "पृष्ठसंकेतों में जोड़ो...";
     Text[ slovak ] = "Pridať k záložkám...";
+    Text[ hungarian ] = "Hozzáadás a könyvjelzőkhöz...";
+    Text[ slovenian ] = "Dodaj k zaznamkom...";
 };
 String STR_HELP_BUTTON_SEARCHDIALOG
 {
@@ -897,6 +939,8 @@ String STR_HELP_BUTTON_SEARCHDIALOG
     Text[ hebrew ] = "‮חיפוס...‬";
     Text[ hindi ] = "अन्वेषण...";
     Text[ slovak ] = "Nájsť...";
+    Text[ hungarian ] = "Keresés...";
+    Text[ slovenian ] = "Najdi...";
 };
 String STR_HELP_BUTTON_SOURCEVIEW
 {
@@ -928,6 +972,8 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text[ hebrew ] = "‮קוד HTML‬";
     Text[ hindi ] = "HTML मूल";
     Text[ slovak ] = "Zdrojový HTML text";
+    Text[ hungarian ] = "HTML-forrás";
+    Text[ slovenian ] = "Izvorna HTML koda";
 };
 
 String STR_HELP_FIRST_MESSAGE
@@ -958,6 +1004,8 @@ String STR_HELP_FIRST_MESSAGE
     Text[ hebrew ] = "‮איתחול עזרה מתבצע...‬";
     Text[ hindi ] = "सहायता प्रारंभ हुआ है...";
     Text[ slovak ] = "Spúšťa sa pomocník...";
+    Text[ hungarian ] = "A súgó indítása...";
+    Text[ slovenian ] = "Pomoč se zaganja...";
 };
 String STR_HELP_FIRST_HTML
 {
@@ -969,13 +1017,13 @@ String STR_HELP_MENU_TEXT_SELECTION_MODE
     Text [english_us] = "Select Text";
     Text[ portuguese ] = "Select Text";
     Text[ russian ] = "Select Text";
-    Text[ greek ] = "Select Text";
-    Text[ dutch ] = "Select Text";
+    Text[ greek ] = "������� ��������";
+    Text[ dutch ] = "Tekst selecteren";
     Text[ french ] = "S�lectionner le texte";
     Text[ spanish ] = "Seleccionar texto";
     Text[ finnish ] = "Select Text";
     Text[ italian ] = "Seleziona testo";
-    Text[ danish ] = "Select Text";
+    Text[ danish ] = "Marker tekst";
     Text[ swedish ] = "Markera text";
     Text[ polish ] = "Select Text";
     Text[ portuguese_brazilian ] = "Selecionar texto";
@@ -991,6 +1039,8 @@ String STR_HELP_MENU_TEXT_SELECTION_MODE
     Text[ hebrew ] = "‮בחירת טקסט‬";
     Text[ hindi ] = "Select Text";
     Text[ slovak ] = "Vybrať text";
+    Text[ hungarian ] = "Szöveg kijelölése";
+    Text[ slovenian ] = "Izberi besedilo";
 };
 ModalDialog DLG_HELP_ADDBOOKMARK
 {
@@ -1036,6 +1086,8 @@ ModalDialog DLG_HELP_ADDBOOKMARK
         TEXT[ hebrew ] = ":‮סימניה‬";
         TEXT[ hindi ] = "पृष्ठसंकेत:";
         TEXT[ slovak ] = "Záložka:";
+        TEXT[ hungarian ] = "Könyvjelző:";
+        TEXT[ slovenian ] = "Zaznamek:";
     };
     Edit ED_BOOKMARK_TITLE
     {
@@ -1094,6 +1146,8 @@ ModalDialog DLG_HELP_ADDBOOKMARK
         TEXT[ hebrew ] = "‮שינוי שם סימניה‬";
         TEXT[ hindi ] = "पृष्ठसंकेत को पुनः नाम दो";
         TEXT[ slovak ] = "Premenovať záložku";
+        TEXT[ hungarian ] = "Könyvjelző átnevezése";
+        TEXT[ slovenian ] = "Preimenuj zaznamek";
     };
     TEXT[ english_us ] = "Add to Bookmarks";
     TEXT[ portuguese ] = "Adicionar marcador";
@@ -1120,6 +1174,8 @@ ModalDialog DLG_HELP_ADDBOOKMARK
     TEXT[ hebrew ] = "‮הוספה לסימניות‬";
     TEXT[ hindi ] = "पृष्ठसंकेतों में जोड़ो";
     TEXT[ slovak ] = "Pridať k záložkám";
+    TEXT[ hungarian ] = "Hozzáadás a könyvjelzőkhöz";
+    TEXT[ slovenian ] = "Dodaj k zaznamkom";
 };
 
 Menu MENU_HELP_BOOKMARKS
@@ -1157,6 +1213,8 @@ Menu MENU_HELP_BOOKMARKS
             Text[ hebrew ] = "‮תצוגה‬";
             Text[ hindi ] = "दिखाओ";
             Text[ slovak ] = "~Zobraziť";
+            Text[ hungarian ] = "Megjelenítés";
+            Text[ slovenian ] = "Prikaz";
         };
         MenuItem
         {
@@ -1193,6 +1251,8 @@ Menu MENU_HELP_BOOKMARKS
             Text[ hebrew ] = "‮שינוי שם...‬";
             Text[ hindi ] = "पुनः नाम दो...";
             Text[ slovak ] = "Premenovať...";
+            Text[ hungarian ] = "Átnevezés...";
+            Text[ slovenian ] = "Preimenuj...";
         };
         MenuItem
         {
@@ -1225,6 +1285,8 @@ Menu MENU_HELP_BOOKMARKS
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "मिटाओ";
             Text[ slovak ] = "Zmazať";
+            Text[ hungarian ] = "Törlés";
+            Text[ slovenian ] = "Izbriši";
         };
     };
 };
@@ -1244,7 +1306,7 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ spanish ] = "No se han encontrado temas";
     MESSAGE[ finnish ] = "Aiheita ei l�ytynyt.";
     MESSAGE[ italian ] = "Nessun tema trovato";
-    MESSAGE[ danish ] = "Der blev ikke fundet emner.";
+    MESSAGE[ danish ] = "Ingen emner blev fundet.";
     MESSAGE[ swedish ] = "S�kningen gav inget resultat.";
     MESSAGE[ polish ] = "Nie znaleziono �adnych temat�w.";
     MESSAGE[ portuguese_brazilian ] = "Nenhum t�pico encontrado";
@@ -1260,6 +1322,8 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ hebrew ] = "‮לא אותרו נושאים‬";
     MESSAGE[ hindi ] = "कोई विषय नहीं मिला ।";
     MESSAGE[ slovak ] = "Žiadne témy neboli nájdené.";
+    MESSAGE[ hungarian ] = "Nincs ilyen téma.";
+    MESSAGE[ slovenian ] = "Teme ni mogoče najti.";
 };
 
 Image IMG_HELP_TOOLBOX_HC_INDEX_ON
@@ -1399,6 +1463,8 @@ Image IMG_HELP_TOOLBOX_HCL_COPY
     ImageBitmap = Bitmap { File = "lch05711.bmp" ; };
     MASKCOLOR_MAGENTA
 };
+
+
 
 
 
