@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.15 2000-12-02 21:43:39 dvo Exp $
+	$Id: office.mod,v 1.16 2000-12-05 17:55:46 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -108,7 +108,7 @@
 		number:currency-style|number:percentage-style|number:date-style|
 		number:time-style|number:boolean-style|number:text-style|
 		draw:gradient|draw:hatch|draw:fill-image|draw:marker|draw:stroke-dash|
-		style:presentation-page-layout)">
+		style:presentation-page-layout|draw:transparency)">
 
 <!-- Validity constraint: The elements
 		text:outline-style,
