@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 17:57:17 $
+#   last change: $Author: vg $ $Date: 2003-04-24 10:53:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,14 +77,16 @@ IDLFILES=\
     Boundary.idl \
     BreakIterator.idl \
     BreakType.idl \
+    CTLScriptType.idl \
     Calendar.idl \
+    CalendarDisplayCode.idl \
     CalendarDisplayIndex.idl \
     CalendarFieldIndex.idl \
     CalendarItem.idl \
     ChapterCollator.idl \
+    CharType.idl \
     CharacterClassification.idl \
     CharacterIteratorMode.idl \
-    CharType.idl \
     Collator.idl \
     CollatorOptions.idl \
     Currency.idl \
@@ -93,6 +95,8 @@ IDLFILES=\
     FormatElement.idl \
     Implementation.idl \
     IndexEntrySupplier.idl \
+    InputSequenceChecker.idl \
+    InputSequenceCheckMode.idl \
     KCharacterType.idl \
     KNumberFormatType.idl \
     KNumberFormatUsage.idl \
@@ -107,11 +111,15 @@ IDLFILES=\
     LocaleDataItem.idl \
     LocaleItem.idl \
     Months.idl \
+    MultipleCharsOutputException.idl \
+    NativeNumberMode.idl \
+    NativeNumberSupplier.idl \
+    NativeNumberXmlAttributes.idl \
     NumberFormatCode.idl \
     NumberFormatIndex.idl \
     NumberFormatMapper.idl \
     ParseResult.idl \
-    reservedWords.idl \
+    ScriptDirection.idl \
     ScriptType.idl \
     TextConversion.idl \
     TextConversionOption.idl \
@@ -129,12 +137,19 @@ IDLFILES=\
     XCalendar.idl \
     XCharacterClassification.idl \
     XCollator.idl \
+    XExtendedCalendar.idl \
+    XExtendedIndexEntrySupplier.idl \
+    XExtendedTransliteration.idl \
     XForbiddenCharacters.idl \
     XIndexEntrySupplier.idl \
+    XInputSequenceChecker.idl \
     XLocaleData.idl \
+    XNativeNumberSupplier.idl \
     XNumberFormatCode.idl \
     XTextConversion.idl \
-    XTransliteration.idl
+    XScriptTypeDetector.idl \
+    XTransliteration.idl \
+    reservedWords.idl
 
 # ------------------------------------------------------------------
 
