@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:20:38 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ ModalDialog DLG_NEW_FILE
     Text [ portuguese_brazilian ] = "Novo" ;
     Text [ portuguese ] = "Novo" ;
     Text [ finnish ] = "Uusi" ;
-    Text [ danish ] = "Ny" ;
+    Text [ danish ] = "Ny(t)" ;
     Text [ french ] = "Nouveau" ;
     Text [ swedish ] = "Nytt" ;
     Text [ dutch ] = "Nieuw" ;
@@ -119,10 +119,10 @@ ModalDialog DLG_NEW_FILE
         Text [ portuguese_brazilian ] = "~Categorias" ;
         Text [ portuguese ] = "~Categorias" ;
         Text [ finnish ] = "~Luokat" ;
-        Text [ danish ] = "Omr�der" ;
+        Text [ danish ] = "~Kategorier" ;
         Text [ french ] = "~Cat�gories" ;
         Text [ swedish ] = "~Kategorier" ;
-        Text [ dutch ] = "~Bereiken" ;
+        Text [ dutch ] = "~Categorie�n" ;
         Text [ spanish ] = "~�reas" ;
         Text [ english_us ] = "~Categories" ;
         Left = TRUE ;
@@ -142,6 +142,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮סיווגים‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Kategórie";
+        Text[ hungarian ] = "~Kategóriák";
+        Text[ slovenian ] = "~Kategorije";
     };
     FixedText FT_TEMPLATE
     {
@@ -154,7 +156,7 @@ ModalDialog DLG_NEW_FILE
         Text [ portuguese_brazilian ] = "~Modelos" ;
         Text [ portuguese ] = "~Modelos" ;
         Text [ finnish ] = "~Mallit" ;
-        Text [ danish ] = "Skabeloner" ;
+        Text [ danish ] = "Skabel~oner" ;
         Text [ french ] = "~Mod�les" ;
         Text [ swedish ] = "~Mallar" ;
         Text [ dutch ] = "S~jablonen" ;
@@ -177,6 +179,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮תבניות‬";
         Text[ hindi ] = "न~मूनें";
         Text[ slovak ] = "Š~ablóny";
+        Text[ hungarian ] = "S~ablonok";
+        Text[ slovenian ] = "Pr~edloge";
     };
     ListBox LB_TEMPLATE
     {
@@ -196,7 +200,7 @@ ModalDialog DLG_NEW_FILE
         Text [ portuguese_brazilian ] = "~Mais" ;
         Text [ portuguese ] = "~Outros" ;
         Text [ finnish ] = "~Lis��" ;
-        Text [ danish ] = "Flere" ;
+        Text [ danish ] = "~Flere" ;
         Text [ french ] = "O~ptions" ;
         Text [ swedish ] = "~Fler" ;
         Text [ dutch ] = "~Overige" ;
@@ -220,6 +224,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮עוד‬";
         Text[ hindi ] = "~अधिक";
         Text[ slovak ] = "V~iac";
+        Text[ hungarian ] = "Egye~bek";
+        Text[ slovenian ] = "~Dodatno";
     };
     Window WIN_PREVIEW
     {
@@ -240,7 +246,7 @@ ModalDialog DLG_NEW_FILE
         Text [ portuguese_brazilian ] = "~Visualizar" ;
         Text [ portuguese ] = "~Previsualiza��o" ;
         Text [ finnish ] = "Esi~katselu" ;
-        Text [ danish ] = "Eksempel" ;
+        Text [ danish ] = "E~ksempel" ;
         Text [ french ] = "Aper�u" ;
         Text [ swedish ] = "F�rhandsvi~sning" ;
         Text [ dutch ] = "~Voorbeeld" ;
@@ -263,6 +269,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮תצוגה מקדימה‬";
         Text[ hindi ] = "पूर्व~दृश्य";
         Text[ slovak ] = "~Náhľad";
+        Text[ hungarian ] = "~Előnézet";
+        Text[ slovenian ] = "Predo~gled";
     };
     FixedLine GB_DOCINFO
     {
@@ -297,6 +305,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮תאור‬";
         Text[ hindi ] = "विवरण";
         Text[ slovak ] = "Popis";
+        Text[ hungarian ] = "Leírás";
+        Text[ slovenian ] = "Opis";
     };
     CheckBox CB_TEXT_STYLE
     {
@@ -330,6 +340,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टे~क्स्ट्";
         Text[ slovak ] = "Te~xt";
+        Text[ hungarian ] = "~Szöveg";
+        Text[ slovenian ] = "Be~sedilo";
     };
     CheckBox CB_FRAME_STYLE
     {
@@ -363,6 +375,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮מסגרת‬";
         Text[ hindi ] = "~फ्रेम्";
         Text[ slovak ] = "Rám~ec";
+        Text[ hungarian ] = "~Keret";
+        Text[ slovenian ] = "~Okvir";
     };
     CheckBox CB_PAGE_STYLE
     {
@@ -396,6 +410,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮עמודים‬";
         Text[ hindi ] = "~पृष्ठ";
         Text[ slovak ] = "~Stránky";
+        Text[ hungarian ] = "~Oldalak";
+        Text[ slovenian ] = "S~trani";
     };
     CheckBox CB_NUM_STYLE
     {
@@ -429,6 +445,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮מיספור‬";
         Text[ hindi ] = "सं~ख्या देना";
         Text[ slovak ] = "Čí~slovanie";
+        Text[ hungarian ] = "~Számozás";
+        Text[ slovenian ] = "Ošt~evilčevanje";
     };
     CheckBox CB_MERGE_STYLE
     {
@@ -443,7 +461,7 @@ ModalDialog DLG_NEW_FILE
         Text [ spanish ] = "So~brescribir" ;
         Text [ french ] = "�craser" ;
         Text [ swedish ] = "Skri~v �ver" ;
-        Text [ danish ] = "Ov~erskriv" ;
+        Text [ danish ] = "~Overskriv" ;
         Text [ portuguese ] = "~Substituir" ;
         Text [ portuguese_brazilian ] = "S~obrescrever" ;
         Text[ chinese_simplified ] = "改写(~O)";
@@ -462,6 +480,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮כתיבה על‬";
         Text[ hindi ] = "~ओवररइट्";
         Text[ slovak ] = "~Prepísať";
+        Text[ hungarian ] = "~Felülírás";
+        Text[ slovenian ] = "Pr~epiši";
     };
     PushButton PB_LOAD_FILE
     {
@@ -495,6 +515,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮מקובץ...‬";
         Text[ hindi ] = "फाइल से...";
         Text[ slovak ] = "Zo súboru...";
+        Text[ hungarian ] = "Fájlból...";
+        Text[ slovenian ] = "Iz datoteke...";
     };
     String STR_LOAD_TEMPLATE
     {
@@ -506,7 +528,7 @@ ModalDialog DLG_NEW_FILE
         Text [ french ] = "Charger les styles" ;
         Text [ dutch ] = "Opmaakprofielen laden" ;
         Text [ swedish ] = "Ladda mallar" ;
-        Text [ danish ] = "Indl�s skabeloner" ;
+        Text [ danish ] = "Indl�s typografier" ;
         Text [ portuguese ] = "Carregar estilos" ;
         Text [ portuguese_brazilian ] = "Carregar estilos" ;
         Text[ chinese_simplified ] = "装入样式";
@@ -525,6 +547,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮טעינת סגנונות‬";
         Text[ hindi ] = "शैलियों को लोड़ करो";
         Text[ slovak ] = "Načítať štýly";
+        Text[ hungarian ] = "Stílusok betöltése";
+        Text[ slovenian ] = "Naloži sloge";
     };
     FixedText FT_TITLE
     {
@@ -537,7 +561,7 @@ ModalDialog DLG_NEW_FILE
         Text [ portuguese_brazilian ] = "~T�tulo" ;
         Text [ portuguese ] = "~T�tulo" ;
         Text [ finnish ] = "~Otsikko" ;
-        Text [ danish ] = "Titel" ;
+        Text [ danish ] = "~Titel" ;
         Text [ french ] = "Titre" ;
         Text [ swedish ] = "~Rubrik" ;
         Text [ dutch ] = "~Titel" ;
@@ -560,6 +584,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮כותרת‬";
         Text[ hindi ] = "~उपाधि";
         Text[ slovak ] = "~Titulok";
+        Text[ hungarian ] = "~Címsor";
+        Text[ slovenian ] = "~Naslov";
     };
     Edit ED_TITLE
     {
@@ -603,6 +629,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮נושא‬";
         Text[ hindi ] = "विषय";
         Text[ slovak ] = "Predmet";
+        Text[ hungarian ] = "Tárgy";
+        Text[ slovenian ] = "Zadeva";
     };
     Edit ED_THEMA
     {
@@ -623,7 +651,7 @@ ModalDialog DLG_NEW_FILE
         Text [ portuguese_brazilian ] = "~Palavras-chave" ;
         Text [ portuguese ] = "~Palavras-chave" ;
         Text [ finnish ] = "Avain~sanat" ;
-        Text [ danish ] = "N�gleord" ;
+        Text [ danish ] = "~N�gleord" ;
         Text [ french ] = "Mots-cl~�s" ;
         Text [ swedish ] = "~Nyckelord" ;
         Text [ dutch ] = "S~leutelwoorden" ;
@@ -646,6 +674,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮מילות מפתח‬";
         Text[ hindi ] = "~प्रधान शब्द";
         Text[ slovak ] = "~Kľúčové slová";
+        Text[ hungarian ] = "K~ulcsszavak";
+        Text[ slovenian ] = "K~ljučne besede";
     };
     Edit ED_KEYWORDS
     {
@@ -666,7 +696,7 @@ ModalDialog DLG_NEW_FILE
         Text [ portuguese_brazilian ] = "~Descri��o" ;
         Text [ portuguese ] = "~Descri��o" ;
         Text [ finnish ] = "Ku~vaus" ;
-        Text [ danish ] = "Beskrivelse" ;
+        Text [ danish ] = "Be~skrivelse" ;
         Text [ french ] = "Description" ;
         Text [ swedish ] = "B~eskrivning" ;
         Text [ dutch ] = "Be~schrijving" ;
@@ -689,6 +719,8 @@ ModalDialog DLG_NEW_FILE
         Text[ hebrew ] = "‮תאור‬";
         Text[ hindi ] = "~विवरण";
         Text[ slovak ] = "~Popis";
+        Text[ hungarian ] = "~Leírás";
+        Text[ slovenian ] = "~Opis";
     };
     MultiLineEdit ED_DESC
     {
@@ -720,7 +752,16 @@ ModalDialog DLG_NEW_FILE
     Text[ hebrew ] = "‮חדש‬";
     Text[ hindi ] = "नया";
     Text[ slovak ] = "Nový";
+    Text[ hungarian ] = "Új";
+    Text[ slovenian ] = "Nov";
 };
+
+
+
+
+
+
+
 
 
 
