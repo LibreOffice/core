@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:48:51 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 14:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,7 +636,7 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
 
     ::rtl::OUString sName(_rQualifiedName);
     // do we have catalogs ?
-    if (_rxConnMetaData->supportsCatalogsInDataManipulation())
+    if ( _rxConnMetaData->supportsCatalogsInDataManipulation() )
     {
         if (_rxConnMetaData->isCatalogAtStart())
         {
@@ -660,11 +660,12 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
         }
     }
 
-    if (_rxConnMetaData->supportsSchemasInDataManipulation())
+    if ( _rxConnMetaData->supportsSchemasInDataManipulation() )
     {
         sal_Int32 nIndex = sName.indexOf((sal_Unicode)'.');
         //  OSL_ENSURE(-1 != nIndex, "QualifiedNameComponents : no schema separator!");
-        _rSchema = sName.copy(0, nIndex);
+        if ( nIndex != -1 )
+            _rSchema = sName.copy(0, nIndex);
         sName = sName.copy(nIndex + 1);
     }
 
@@ -1788,6 +1789,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.47  2002/11/14 07:48:51  oj
+ *  #105110# extend createUniqueName with bool param
+ *
  *  Revision 1.46  2002/10/07 12:48:11  oj
  *  #i3289# correct table name quoting so that in every situation the correct schema, catalog is used
  *
