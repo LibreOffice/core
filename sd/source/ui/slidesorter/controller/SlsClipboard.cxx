@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:35:43 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
     switch (rRequest.GetSlot())
     {
         case SID_CUT:
+        case SID_DELETE:
             if (pCurrentFunction != NULL)
                 pCurrentFunction->DoCut();
             else
