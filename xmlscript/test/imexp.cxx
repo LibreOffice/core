@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-16 11:48:02 $
+ *  last change: $Author: dbo $ $Date: 2001-03-19 10:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,19 +258,22 @@ void exportToFile(
     Reference< io::XInputStream > xStream( xProvider->createInputStream() );
 
     Sequence< sal_Int8 > bytes;
-    sal_Int32 nPos = xStream->readBytes( bytes, xStream->available() );
-    while (xStream->available() > 0)
+    sal_Int32 nRead = xStream->readBytes( bytes, xStream->available() );
+    for (;;)
     {
-        Sequence< sal_Int8 > addBytes;
-        sal_Int32 nRead = xStream->readBytes( addBytes, xStream->available() );
+        Sequence< sal_Int8 > readBytes;
+        nRead = xStream->readBytes( readBytes, 1024 );
+        if (! nRead)
+            break;
+
+        sal_Int32 nPos = bytes.getLength();
+        bytes.realloc( nPos + nRead );
         sal_Int8 * pBytes = bytes.getArray();
-        sal_Int8 const * pAddBytes = addBytes.getConstArray();
-        sal_Int32 nPos = nRead;
+        sal_Int8 const * pReadBytes = readBytes.getConstArray();
         while (nRead--)
         {
-            pBytes[ nPos + nPos ] = pAddBytes[ nPos ];
+            pBytes[ nPos + nRead ] = pReadBytes[ nRead ];
         }
-        nPos += nRead;
     }
 
     FILE * f = ::fopen( fname, "w" );
