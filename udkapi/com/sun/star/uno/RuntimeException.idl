@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RuntimeException.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:37:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
     some explicitly forbidden invalid parameters were passed ( e.g. null
     references ) or the called object has been disposed before.
  */
-exception RuntimeException: com::sun::star::uno::Exception
+published exception RuntimeException: com::sun::star::uno::Exception
 {
 };
 
