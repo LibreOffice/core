@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:01:18 $
+#   last change: $Author: obo $ $Date: 2003-10-21 09:01:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,8 @@ CXXFILES=	Grid.cxx	\
             Button.cxx \
             ImageButton.cxx \
             ImageControl.cxx \
-            cloneable.cxx
+            cloneable.cxx \
+            entrylisthelper.cxx \
 
 .IF "$(COM)"=="GCC"
 NOOPTFILES= $(SLO)$/EventThread.obj
@@ -142,6 +143,7 @@ SLOFILES=	$(SLO)$/Grid.obj \
             $(SLO)$/errorbroadcaster.obj \
             $(SLO)$/cloneable.obj \
             $(SLO)$/Filter.obj \
+            $(SLO)$/entrylisthelper.obj \
 
 # --- Targets ----------------------------------
 
