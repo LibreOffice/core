@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-27 10:13:26 $
+ *  last change: $Author: pl $ $Date: 2001-07-31 13:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1893,8 +1893,22 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
         aMouseEvt.mnX       = pEvent->xcrossing.x;
         aMouseEvt.mnY       = pEvent->xcrossing.y;
         aMouseEvt.mnTime    = pEvent->xcrossing.time;
-        aMouseEvt.mnCode    = sal_GetCode( pEvent->xcrossing.state );
-
+        /*
+         *  #89075# #89335# *sigh*
+         *  commented out:
+         *  aMouseEvt.mnCode    = sal_GetCode( pEvent->xcrossing.state );
+         *
+         *  some WMs (and/or) applications  have a passive grab on
+         *  mouse buttons (XGrabButton). This leads to enter/leave notifies
+         *  with mouse buttons pressed in the state mask before the actual
+         *  ButtonPress event gets dispatched. But EnterNotify
+         *  is reported in vcl as MouseMove event. Some office code
+         *  decides that a pressed button in a MouseMove belongs to
+         *  a drag operation which leads to doing things differently.
+         *
+         *  hopefully this workaround will not break anything.
+         */
+        aMouseEvt.mnCode    = 0;
         aMouseEvt.mnButton  = 0;
 
         nEvent              = LeaveNotify == pEvent->type
