@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-11 09:19:55 $
+ *  last change: $Author: tl $ $Date: 2001-11-20 10:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,19 +728,35 @@ void SmParser::NextToken()
                         xub_StrLen nTmpStart = rnEndPos +
                                 (xub_StrLen) aTmpRes.LeadingWhiteSpace;
 
-                        INT32 n = aTmpRes.EndPos - nTmpStart;
-                        CurToken.eType      = TSPECIAL;
+                        // default setting fo the case that no identifier
+                        // i.e. a valid symbol-name is following the '%'
+                        // character
+                        CurToken.eType      = TTEXT;
                         CurToken.cMathChar  = '\0';
                         CurToken.nGroup     = 0;
                         CurToken.nLevel     = 5;
-                        CurToken.aText      = BufferString.Copy( nTmpStart, n );
+                        CurToken.aText      = String();
                         CurToken.nRow       = Row;
                         CurToken.nCol       = nTmpStart - ColOff + 1;
 
-                        if (aTmpRes.EndPos > rnEndPos)
-                            rnEndPos = aTmpRes.EndPos;
-                        else
-                            ++rnEndPos;
+                        if (aTmpRes.TokenType & KParseType::IDENTNAME)
+                        {
+
+                            INT32 n = aTmpRes.EndPos - nTmpStart;
+                            CurToken.eType      = TSPECIAL;
+                            CurToken.aText      = BufferString.Copy( nTmpStart, n );
+
+                            DBG_ASSERT( aTmpRes.EndPos > rnEndPos,
+                                    "empty identifier" );
+                            if (aTmpRes.EndPos > rnEndPos)
+                                rnEndPos = aTmpRes.EndPos;
+                            else
+                                ++rnEndPos;
+                        }
+
+                        // if no symbol-name was found we start-over with
+                        // finding the next token right afer the '%' sign.
+                        // I.e. we leave rnEndPos unmodified.
                     }
                     break;
                 case '[':
