@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-07 11:40:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* arg )
         if ( xInteractionHandler.is() )
         {
             task::PasswordRequestMode eMode = bRetry ? task::PasswordRequestMode_PASSWORD_REENTER : task::PasswordRequestMode_PASSWORD_ENTER;
-            RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword( eMode, ::rtl::OUString() );
+            RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword( eMode, ::rtl::OUString::createFromAscii(PK11_GetTokenName(pSlot)) );
 
             uno::Reference< task::XInteractionRequest > xRequest( pPasswordRequest );
             xInteractionHandler->handle( xRequest );
@@ -144,21 +144,21 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* arg )
                 pPassword = (char*) PORT_Alloc( nLen+1 ) ;
                 pPassword[nLen] = 0;
                 memcpy( pPassword, aPassword.GetBuffer(), nLen );
+
+                return pPassword;
             }
         }
     }
+
 #ifdef DEBUG
-    else
-    {
-        // TEST Password is 'sceri'
-        pPassword = ( char* )PORT_Alloc( 20 ) ;
-        pPassword[0]='s';
-        pPassword[1]='c';
-        pPassword[2]='e';
-        pPassword[3]='r';
-        pPassword[4]='i';
-        pPassword[5]=0x0;
-   }
+    // When debug, we will set the password to 'sceri'
+    pPassword = ( char* )PORT_Alloc( 20 ) ;
+    pPassword[0]='s';
+    pPassword[1]='c';
+    pPassword[2]='e';
+    pPassword[3]='r';
+    pPassword[4]='i';
+    pPassword[5]=0x0;
 #endif
 
     return pPassword;
@@ -286,6 +286,20 @@ SecurityEnvironment_NssImpl* SecurityEnvironment_NssImpl :: getImplementation( c
 /* Native methods */
 PK11SlotInfo* SecurityEnvironment_NssImpl :: getCryptoSlot() throw( Exception , RuntimeException ) {
     return m_pSlot ;
+}
+
+::rtl::OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInfo() throw( ::com::sun::star::uno::RuntimeException )
+{
+    rtl::OUString result;
+
+    if( m_pSlot != NULL ) {
+        result = rtl::OUString::createFromAscii(PK11_GetTokenName(m_pSlot));
+    }
+    else{
+        result = rtl::OUString::createFromAscii( "Unknown Token" );
+    }
+
+    return result;
 }
 
 void SecurityEnvironment_NssImpl :: setCryptoSlot( PK11SlotInfo* aSlot) throw( Exception , RuntimeException ) {
@@ -469,7 +483,8 @@ SECKEYPrivateKey* SecurityEnvironment_NssImpl :: getPriKey( unsigned int positio
     return prikey ;
 }
 
-Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl :: getPersonalCertificates() throw( SecurityException , RuntimeException ) {
+Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl :: getPersonalCertificates() throw( SecurityException , RuntimeException )
+{
     sal_Int32 length ;
     X509Certificate_NssImpl* xcert ;
     std::list< X509Certificate_NssImpl* > certsList ;
@@ -558,7 +573,8 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl :: getPersona
     return NULL ;
 }
 
-Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException ) {
+Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException )
+{
     X509Certificate_NssImpl* xcert ;
 
     if( m_pHandler != NULL ) {
@@ -573,13 +589,55 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
         if( arena == NULL )
             throw RuntimeException() ;
 
-        rtl::OString ostr = rtl::OUStringToOString( issuerName , RTL_TEXTENCODING_ASCII_US ) ;
+                /*
+                 * mmi : because MS Crypto use the 'S' tag (equal to the 'ST' tag in NSS), but the NSS can't recognise
+                 *      it, so the 'S' tag should be changed to 'ST' tag
+                 *
+                 * PS  : it can work, but inside libxmlsec, the 'S' tag is till used to find cert in NSS engine, so it
+                 *       is not useful at all. (comment out now)
+                 */
+
+                /*
+                sal_Int32 nIndex = 0;
+                OUString newIssuerName;
+                do
+                {
+                    OUString aToken = issuerName.getToken( 0, ',', nIndex ).trim();
+                    if (aToken.compareToAscii("S=",2) == 0)
+                    {
+                        newIssuerName+=OUString::createFromAscii("ST=");
+                        newIssuerName+=aToken.copy(2);
+                    }
+                    else
+                    {
+                        newIssuerName+=aToken;
+                    }
+
+                    if (nIndex >= 0)
+                    {
+                        newIssuerName+=OUString::createFromAscii(",");
+                    }
+                } while ( nIndex >= 0 );
+                */
+
+                /* end */
+
+        //Create cert info from issue and serial
+        rtl::OString ostr = rtl::OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 ) ;
         chIssuer = PL_strndup( ( char* )ostr.getStr(), ( int )ostr.getLength() ) ;
         nmIssuer = CERT_AsciiToName( chIssuer ) ;
         if( nmIssuer == NULL ) {
             PL_strfree( chIssuer ) ;
             PORT_FreeArena( arena, PR_FALSE ) ;
-            throw RuntimeException() ;
+
+            /*
+             * i40394
+             *
+             * mmi : no need to throw exception
+             *       just return "no found"
+             */
+            //throw RuntimeException() ;
+            return NULL;
         }
 
         derIssuer = SEC_ASN1EncodeItem( arena, NULL, ( void* )nmIssuer, SEC_ASN1_GET( CERT_NameTemplate ) ) ;
@@ -824,11 +882,21 @@ sal_Int32 SecurityEnvironment_NssImpl :: getCertificateCharacters( const ::com::
     }
 
     //Secondly, make sentence whether or not the cert has a private key.
-    {
-        SECKEYPrivateKey* priKey ;
 
-        priKey = PK11_FindPrivateKeyFromCert( cert->slot, ( CERTCertificate* )cert, NULL ) ;
-        if( priKey == NULL && m_pSlot != NULL )
+    /*
+     * i40394
+     *
+     * mmi : need to check whether the cert's slot is valid first
+     */
+    {
+        SECKEYPrivateKey* priKey = NULL;
+
+        if (cert->slot != NULL)
+        {
+            priKey = PK11_FindPrivateKeyFromCert( cert->slot, ( CERTCertificate* )cert, NULL ) ;
+        }
+
+        if( priKey == NULL && m_pSlot != NULL && m_pSlot != cert->slot )
             priKey = PK11_FindPrivateKeyFromCert( m_pSlot, ( CERTCertificate* )cert, NULL ) ;
 
         if( priKey != NULL ) {
@@ -927,3 +995,59 @@ X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* priKey )
     return xcert ;
 }
 
+
+/* Native methods */
+xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() throw( Exception, RuntimeException ) {
+
+    unsigned int i ;
+    PK11SlotInfo* slot = NULL ;
+    CERTCertDBHandle* handler = NULL ;
+    PK11SymKey* symKey = NULL ;
+    SECKEYPublicKey* pubKey = NULL ;
+    SECKEYPrivateKey* priKey = NULL ;
+    xmlSecKeysMngrPtr pKeysMngr = NULL ;
+
+    slot = this->getCryptoSlot() ;
+    handler = this->getCertDb() ;
+
+    /*-
+     * The following lines is based on the private version of xmlSec-NSS
+     * crypto engine
+     */
+    pKeysMngr = xmlSecNssAppliedKeysMngrCreate( slot , handler ) ;
+    if( pKeysMngr == NULL )
+        throw RuntimeException() ;
+
+    /*-
+     * Adopt symmetric key into keys manager
+     */
+    for( i = 0 ; ( symKey = this->getSymKey( i ) ) != NULL ; i ++ ) {
+        if( xmlSecNssAppliedKeysMngrSymKeyLoad( pKeysMngr, symKey ) < 0 ) {
+            throw RuntimeException() ;
+        }
+    }
+
+    /*-
+     * Adopt asymmetric public key into keys manager
+     */
+    for( i = 0 ; ( pubKey = this->getPubKey( i ) ) != NULL ; i ++ ) {
+        if( xmlSecNssAppliedKeysMngrPubKeyLoad( pKeysMngr, pubKey ) < 0 ) {
+            throw RuntimeException() ;
+        }
+    }
+
+    /*-
+     * Adopt asymmetric private key into keys manager
+     */
+    for( i = 0 ; ( priKey = this->getPriKey( i ) ) != NULL ; i ++ ) {
+        if( xmlSecNssAppliedKeysMngrPriKeyLoad( pKeysMngr, priKey ) < 0 ) {
+            throw RuntimeException() ;
+        }
+    }
+    return pKeysMngr ;
+}
+void SecurityEnvironment_NssImpl::destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( Exception, RuntimeException ) {
+    if( pKeysMngr != NULL ) {
+        xmlSecKeysMngrDestroy( pKeysMngr ) ;
+    }
+}
