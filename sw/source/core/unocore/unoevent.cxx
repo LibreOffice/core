@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:42:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,8 @@ const struct SvEventDescription aDocumentEvents[] =
      { SFX_EVENT_PRINTDOC,      "OnPrint" },
      { SW_EVENT_MAIL_MERGE,     "OnMailMerge" },
      { SW_EVENT_PAGE_COUNT,     "PageCountChange" },
+    { SW_EVENT_FIELD_MERGE,     "OnFieldMerge" },
+    { SW_EVENT_FIELD_MERGE_FINISHED,     "OnFieldMergeFinished" },
 //  SFX_EVENT_LOADFINISHED,
 //  SFX_EVENT_MODIFYCHANGED,
 //  SFX_EVENT_PREPARECLOSEDOC,
