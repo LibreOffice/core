@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:29:25 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,24 +1104,9 @@ String STR_FORWARDMAIL
     Text[ thai ] = "ส่งต่อข้อความโดยกฎ\nTข้อความต้นฉบับเป็นสิ่งที่แนบมา";
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String STR_REPAIREDDOCUMENT
+{
+    Text = " (repariertes Dokument)" ;
+    Text [ english_us ] = " (repaired document)" ;
+};
 
