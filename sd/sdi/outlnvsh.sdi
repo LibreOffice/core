@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.sdi,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:43:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:45:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,6 +516,11 @@ interface OutlineView : Object
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
+    ]
+    SID_SPELL_DIALOG // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetMenuState ;
     ]
 }
 
