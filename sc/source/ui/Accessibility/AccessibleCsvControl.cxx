@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:00:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,26 +65,26 @@
 #include "AccessibleCsvControl.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTextType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTableModelChange.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGE_HPP_
+#include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -163,7 +163,7 @@ using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::lang::DisposedException;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::beans::PropertyValue;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 
 // ----------------------------------------------------------------------------
@@ -215,7 +215,7 @@ void SAL_CALL ScAccessibleCsvControl::disposing()
 
 // XAccessibleComponent -------------------------------------------------------
 
-Reference< XAccessible > SAL_CALL ScAccessibleCsvControl::getAccessibleAt( const AwtPoint& rPoint )
+Reference< XAccessible > SAL_CALL ScAccessibleCsvControl::getAccessibleAtPoint( const AwtPoint& rPoint )
         throw( RuntimeException )
 {
     ensureAlive();
@@ -255,7 +255,7 @@ void ScAccessibleCsvControl::SendCaretEvent()
 void ScAccessibleCsvControl::SendVisibleEvent()
 {
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+    aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
     aEvent.Source = Reference< XAccessible >( this );
     CommitChange( aEvent );
 }
@@ -263,7 +263,7 @@ void ScAccessibleCsvControl::SendVisibleEvent()
 void ScAccessibleCsvControl::SendSelectionEvent()
 {
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_SELECTION_EVENT;
+    aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
     aEvent.Source = Reference< XAccessible >( this );
     CommitChange( aEvent );
 }
@@ -573,7 +573,7 @@ sal_Unicode SAL_CALL ScAccessibleCsvRuler::getCharacter( sal_Int32 nIndex )
     return maBuffer.charAt( nIndex );
 }
 
-Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes( sal_Int32 nIndex )
+Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ScUnoGuard aGuard;
@@ -870,7 +870,7 @@ void ScAccessibleCsvRuler::SendCaretEvent()
     if( nPos != CSV_POS_INVALID )
     {
         AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ACCESSIBLE_CARET_EVENT;
+        aEvent.EventId = AccessibleEventId::CARET_CHANGED;
         aEvent.Source = Reference< XAccessible >( this );
         aEvent.NewValue <<= nPos;
         CommitChange( aEvent );
@@ -992,11 +992,11 @@ ScAccessibleCsvGrid::~ScAccessibleCsvGrid()
 
 // XAccessibleComponent -------------------------------------------------------
 
-Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAt( const AwtPoint& rPoint )
+Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAtPoint( const AwtPoint& rPoint )
         throw( RuntimeException )
 {
     Reference< XAccessible > xRet;
-    if( contains( rPoint ) )
+    if( containsPoint( rPoint ) )
     {
         ScUnoGuard aGuard;
         ensureAlive();
@@ -1070,8 +1070,8 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleStat
     if( implIsAlive() )
     {
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
-        pStateSet->AddState( AccessibleStateType::MULTISELECTABLE );
-        pStateSet->AddState( AccessibleStateType::MANAGES_DESCENDANT );
+        pStateSet->AddState( AccessibleStateType::MULTI_SELECTABLE );
+        pStateSet->AddState( AccessibleStateType::MANAGES_DESCENDANTS );
         if( implGetGrid().HasFocus() )
             pStateSet->AddState( AccessibleStateType::FOCUSED );
     }
@@ -1301,7 +1301,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleChil
     return getAccessibleCellAt( nRow, nColumn );
 }
 
-void SAL_CALL ScAccessibleCsvGrid::deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+void SAL_CALL ScAccessibleCsvGrid::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ScUnoGuard aGuard;
@@ -1370,7 +1370,7 @@ void ScAccessibleCsvGrid::SendFocusEvent( bool bFocused )
     ScAccessibleCsvControl::SendFocusEvent( bFocused );
 
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
+    aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
     aEvent.Source = Reference< XAccessible >( this );
     (bFocused ? aEvent.NewValue : aEvent.OldValue) <<=
         getAccessibleCellAt( 0, lcl_GetApiColumn( implGetGrid().GetFocusColumn() ) );
@@ -1385,7 +1385,7 @@ void ScAccessibleCsvGrid::SendTableUpdateEvent( sal_uInt32 nFirstColumn, sal_uIn
             AccessibleTableModelChangeType::UPDATE, 0, bAllRows ? implGetRowCount() - 1 : 0,
             lcl_GetApiColumn( nFirstColumn ), lcl_GetApiColumn( nLastColumn ) );
         AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ACCESSIBLE_TABLE_MODEL_EVENT;
+        aEvent.EventId = AccessibleEventId::TABLE_MODEL_CHANGED;
         aEvent.Source = Reference< XAccessible >( this );
         aEvent.NewValue <<= aModelChange;
         CommitChange( aEvent );
@@ -1400,7 +1400,7 @@ void ScAccessibleCsvGrid::SendInsertColumnEvent( sal_uInt32 nFirstColumn, sal_uI
             AccessibleTableModelChangeType::INSERT, 0, implGetRowCount() - 1,
             lcl_GetApiColumn( nFirstColumn ), lcl_GetApiColumn( nLastColumn ) );
         AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ACCESSIBLE_TABLE_MODEL_EVENT;
+        aEvent.EventId = AccessibleEventId::TABLE_MODEL_CHANGED;
         aEvent.Source = Reference< XAccessible >( this );
         aEvent.NewValue <<= aModelChange;
         CommitChange( aEvent );
@@ -1415,7 +1415,7 @@ void ScAccessibleCsvGrid::SendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uI
             AccessibleTableModelChangeType::DELETE, 0, implGetRowCount() - 1,
             lcl_GetApiColumn( nFirstColumn ), lcl_GetApiColumn( nLastColumn ) );
         AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ACCESSIBLE_TABLE_MODEL_EVENT;
+        aEvent.EventId = AccessibleEventId::TABLE_MODEL_CHANGED;
         aEvent.Source = Reference< XAccessible >( this );
         aEvent.NewValue <<= aModelChange;
         CommitChange( aEvent );
