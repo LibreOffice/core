@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:06:29 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -881,7 +881,7 @@ void Dialog::GrabFocusToFirstControl()
         pFocusControl->ImplControlFocus( GETFOCUS_INIT );
 }
 
-void Dialog::GetDrawWindowBorder( long& rLeftBorder, long& rTopBorder, long& rRightBorder, long& rBottomBorder ) const
+void Dialog::GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder, sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
     ImplBorderWindow aImplWin( (Window*)this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
 //  aImplWin.SetText( GetText() );
