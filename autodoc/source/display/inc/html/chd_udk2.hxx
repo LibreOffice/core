@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chd_udk2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ class CppHtmlDisplay_Udk2 : public autodoc::HtmlDisplay_UdkStd
                             const StringVector *
                                                 i_pProjectList );
 
-
+    void                Create_Css_File();
     void                Create_Overview_File();
     void                Create_Help_File();
     void                Create_AllDefs_File();

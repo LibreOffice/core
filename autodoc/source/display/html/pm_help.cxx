@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pm_help.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ using csi::xml::Element;
 
 const udmstri C_sHelpText(
 "<div style=\"font-size:10pt;\">\n"
-"<h3 style=\"background-color: rgb(238,238,255); \">The Main Navigationbar</h3>\n"
+"<h3 class=\"help\">The Main Navigationbar</h3>\n"
 "<p> On top of every page, there is a main navigationbar on a lightly coloured\n"
 "background with the following items:<br>\n"
 "</p>\n"
@@ -103,7 +103,7 @@ const udmstri C_sHelpText(
 "there would be no owning class),</li>\n"
 "  <li>Reversed (white text on dark background) - this is the current page.</li>\n"
 "</ul>\n"
-"<h3 style=\"background-color: rgb(238,238,255); margin-top:12pt;\">Lower Navigationbars</h3>\n"
+"<h3 class=\"help\">Lower Navigationbars</h3>\n"
 " Just below the main navigation bar, there may be zero to three lower navigationbars\n"
 "on white background.<br>\n"
 "<br>\n"
@@ -112,7 +112,7 @@ const udmstri C_sHelpText(
 "Available items appear as links. Unavailable items appear as simple text.<br>\n"
 "\n"
 "\n"
-"<h3 style=\"background-color: rgb(238,238,255); margin-top:12pt;\">Namespace Descriptions</h3>\n"
+"<h3 class=\"help\">Namespace Descriptions</h3>\n"
 "\n"
 "<dl>\n"
 "<dt class=\"simple\">Parent namespaces</dt>\n"
@@ -133,7 +133,7 @@ const udmstri C_sHelpText(
 "Each of this lists is accessible by the lower navigationbar on top of the\n"
 "page.<br>\n"
 "\n"
-"<h3 style=\"background-color: rgb(238,238,255); margin-top:12pt;\">Class Descriptions</h3>\n"
+"<h3 class=\"help\">Class Descriptions</h3>\n"
 "\n"
 "        <dl>\n"
 "        <dt class=\"simple\">Parent namespaces and classes</dt>\n"
@@ -143,8 +143,8 @@ const udmstri C_sHelpText(
 "parent namespaces or classes. The global namespace is linked with the first\n"
 "\"::\",</dd>\n"
 "            <dd>the namespaces between the global and the current one are\n"
-"linked by their names. Parent classes are linked as well, but appear in <font color=\"#33cc00\">\n"
-"green</font> color.&nbsp;</dd>\n"
+"linked by their names. Enclosing classes are linked as well, but appear in\n"
+"<span class=\"nqclass\">green</font> color.&nbsp;</dd>\n"
 "              <dd>So you see on the first glance, that this is a parent class,\n"
 "no namespace.<br>\n"
 "               </dd>\n"
@@ -155,11 +155,11 @@ const udmstri C_sHelpText(
 "Base classes are displayed as a graph. The text around base classes can appear\n"
 "in different styles and colours:<br>\n"
 "<ul>\n"
-"  <li><font color=\"#33ff33\">Green</font> - public inherited,</li>\n"
-"  <li><font color=\"#ffcc00\">Orange</font> - protected inherited,</li>\n"
-"  <li><font color=\"#ff0000\">Red </font>-&nbsp;private inherited,</li>\n"
-"  <li><font color=\"#33ff33\"><i>italic </i></font>- a (public inherited) virtual base class.</li>\n"
-"  <li><b>Bold and black</b> without a link - the placeholder\n"
+"  <li><span class=\"btpubl\">Green</span> - public inherited,</li>\n"
+"  <li><span class=\"btprot\">Orange</span> - protected inherited,</li>\n"
+"  <li><span class=\"btpriv\">Red</span> - private inherited,</li>\n"
+"  <li><span class=\"btvpubl\">italic</span> - a (public inherited) virtual base class.</li>\n"
+"  <li><span class=\"btself\">Bold and black</span> without a link - the placeholder\n"
 "for the currently described class.<br>\n"
 "  </li>\n"
 "</ul>\n"
@@ -183,25 +183,22 @@ const udmstri C_sHelpText(
 "All member lists are accessible by the lower navigationbars on top of the\n"
 "page.<br>\n"
 "\n"
-"<h3 style=\"background-color: rgb(238,238,255); margin-top:12pt;\">Macros\n"
-"and Defines</h3>\n"
+"<h3 class=\"help\">Macros and Defines</h3>\n"
 "In C++ and C, there are also program constructs, which do not fit into the\n"
 "name tree, because they are #define'd: macros and definitions.<br>\n"
 "These may be documented, too. Those comments you find <a href=\"def-all.html\">\n"
 "here</a>\n"
 " or from the \"Overview\" start page.\n"
-"<h3 style=\"background-color: rgb(238,238,255); margin-top:12pt;\">Links\n"
-"to IDL-Documentation</h3>\n"
+"<h3 class=\"help\">Links to IDL-Documentation</h3>\n"
 "Some types, which appear as links, may refer to classes, enums or other\n"
 "entities, which are direct mappings of UNO-IDL entities.<br>\n"
 "In those cases the link doesn't lead to the C++ class, enum or whatever,\n"
 "but to the description of the IDL entity.\n"
-"<h3 style=\"background-color: rgb(238,238,255); margin-top:12pt;\">How to\n"
-"Link From Extern Documents</h3>\n"
+"<h3 class=\"help\">How to Link From Extern Documents</h3>\n"
 "If you wish to write an extern html document, which links to types within\n"
 "this C++ reference, you can do so, if your links have the following format:<br>\n"
 "<br>\n"
-"&lt;RootDirectory-of-this-Document&gt;/names/&lt;Namespace-A&gt;/&lt;Namespace-XY&gt;/ParentClass-nn&gt;/&lt;TypePreFix&gt;-&lt;MyTypeName&gt;.html<br>\n"
+"&lt;RootDirectory-of-this-Document&gt;/names/&lt;Namespace-A&gt;/&lt;Namespace-XY&gt;/EnclosingClass-nn&gt;/&lt;TypePreFix&gt;-&lt;MyTypeName&gt;.html<br>\n"
 "<br>\n"
 "&lt;TypePreFix&gt; can have the following values:<br>\n"
 "<ul>\n"

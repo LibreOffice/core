@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strconst.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@ const char * const C_sDIR_Index = "index-files";   // Convention recognised by J
 
 const char * const C_sPath_Index = "index-files/index-1.html";   // Convention recognised by Javadoc
 
+const char * const C_sHFN_Css           = "cpp.css";
 const char * const C_sHFN_Overview      = "index.html";
 const char * const C_sHFN_Help          = "help.html";
 
