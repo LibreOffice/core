@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:28:39 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 16:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,13 +576,13 @@ Any OConnection::queryInterface( const Type & rType ) throw (RuntimeException)
 }
 
 //--------------------------------------------------------------------------
-void OConnection::acquire() throw (RuntimeException)
+void OConnection::acquire() throw ()
 {
     OSubComponent::acquire();
 }
 
 //--------------------------------------------------------------------------
-void OConnection::release() throw (RuntimeException)
+void OConnection::release() throw ()
 {
     OSubComponent::release();
 }

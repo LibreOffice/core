@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmarkcontainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 07:58:20 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 16:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,13 +191,13 @@ Any SAL_CALL OBookmarkContainer::queryInterface( const Type & _rType ) throw (Ru
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OBookmarkContainer::acquire(  ) throw(RuntimeException)
+void SAL_CALL OBookmarkContainer::acquire(  ) throw()
 {
     m_rParent.acquire();
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OBookmarkContainer::release(  ) throw(RuntimeException)
+void SAL_CALL OBookmarkContainer::release(  ) throw()
 {
     m_rParent.release();
 }

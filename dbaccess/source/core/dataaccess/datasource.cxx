@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-09 15:41:46 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 16:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,13 +423,13 @@ Any ODatabaseSource::queryInterface( const Type & rType ) throw (RuntimeExceptio
 }
 
 //--------------------------------------------------------------------------
-void ODatabaseSource::acquire() throw (RuntimeException)
+void ODatabaseSource::acquire() throw ()
 {
     OSubComponent::acquire();
 }
 
 //--------------------------------------------------------------------------
-void ODatabaseSource::release() throw (RuntimeException)
+void ODatabaseSource::release() throw ()
 {
     OSubComponent::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:50:01 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 16:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,8 @@ public:
 
 // ::com::sun::star::uno::XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw(::com::sun::star::uno::RuntimeException) { ODocumentDefinition_Base::acquire(); }
-    virtual void SAL_CALL release(  ) throw(::com::sun::star::uno::RuntimeException) { ODocumentDefinition_Base::release(); }
+    virtual void SAL_CALL acquire(  ) throw() { ODocumentDefinition_Base::acquire(); }
+    virtual void SAL_CALL release(  ) throw() { ODocumentDefinition_Base::release(); }
 
 // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 16:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,8 +154,8 @@ public:
 
 // ::com::sun::star::uno::XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw(::com::sun::star::uno::RuntimeException) { OCommandDefinition_Base::acquire(); }
-    virtual void SAL_CALL release(  ) throw(::com::sun::star::uno::RuntimeException) { OCommandDefinition_Base::release(); }
+    virtual void SAL_CALL acquire(  ) throw() { OCommandDefinition_Base::acquire(); }
+    virtual void SAL_CALL release(  ) throw() { OCommandDefinition_Base::release(); }
 
 // ::com::sun::star::lang::XServiceInfo
     DECLARE_SERVICE_INFO();
