@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:44:18 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1600,6 +1600,20 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             }
         }
     }
+
+    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_BASIC ) )
+        rSet.Put(SfxStringItem(SID_DRAWTBX_CS_BASIC, aCurrShapeEnumCommand[ 0 ] ));
+    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_SYMBOL ) )
+        rSet.Put(SfxStringItem(SID_DRAWTBX_CS_SYMBOL, aCurrShapeEnumCommand[ 1 ] ));
+    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_ARROW ) )
+        rSet.Put(SfxStringItem(SID_DRAWTBX_CS_ARROW, aCurrShapeEnumCommand[ 2 ] ));
+    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_FLOWCHART ) )
+        rSet.Put(SfxStringItem(SID_DRAWTBX_CS_FLOWCHART, aCurrShapeEnumCommand[ 3 ] ));
+    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_CALLOUT ) )
+        rSet.Put(SfxStringItem(SID_DRAWTBX_CS_CALLOUT, aCurrShapeEnumCommand[ 4 ] ));
+    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_STAR ) )
+        rSet.Put(SfxStringItem(SID_DRAWTBX_CS_STAR, aCurrShapeEnumCommand[ 5 ] ));
+
     if ( bDisableEditHyperlink || GetDocSh()->IsReadOnly() )
         rSet.DisableItem( SID_EDIT_HYPERLINK );
 
