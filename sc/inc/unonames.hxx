@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:19:36 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,11 @@
 
 //  data pilot field
 #define SC_UNONAME_FUNCTION         "Function"
+#define SC_UNONAME_SELPAGE          "SelectedPage"
+#define SC_UNONAME_USESELPAGE       "UseSelectedPage"
+
+//  data pilot item
+#define SC_UNONAME_SHOWDETAIL       "ShowDetail"
 
 //  database options
 #define SC_UNONAME_CASE             "CaseSensitive"
@@ -530,6 +535,7 @@
 #define SC_UNO_POSITION             "Position"
 #define SC_UNO_FUNCTION             "Function"
 #define SC_UNO_USEDHIER             "UsedHierarchy"
+#define SC_UNO_FILTER               "Filter"
 #define SC_UNO_SUBTOTAL             "SubTotals"
 #define SC_UNO_SHOWEMPT             "ShowEmpty"
 #define SC_UNO_ISVISIBL             "IsVisible"
@@ -538,6 +544,10 @@
 #define SC_UNO_REPEATIF             "RepeatIfEmpty"
 #define SC_UNO_DATADESC             "DataDescription"
 #define SC_UNO_NUMBERFO             "NumberFormat"
+
+// data pilot descriptor
+#define SC_UNO_IGNEMPROWS           "IgnoreEmptyRows"
+#define SC_UNO_RPTEMPTY             "RepeatIfEmpty"
 
 //  range selection
 #define SC_UNONAME_INITVAL          "InitialValue"
