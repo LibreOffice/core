@@ -1,0 +1,133 @@
+/*************************************************************************
+#*
+#*    $Workfile:   _docsh.sdi  $
+#*
+#*    Beschreibung      Basis fuer DocShell-IDL
+#*
+#*    Ersterstellung    SOH 04.04.97
+#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 16:48:29 $
+#*    $Revision: 1.1.1.1 $
+#*
+#*    $Logfile:   T:/sd/sdi/_docsh.sdv  $
+#*
+#*    Copyright (c) 1989 - 1999, STAR DIVISION
+#*
+#*************************************************************************
+
+      Source Code Control System - Header
+
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/_docsh.sdi,v 1.1.1.1 2000-09-18 16:48:29 hr Exp $
+
+*************************************************************************/
+
+
+interface DrawDocument : OfficeDocument
+{
+    SID_PACKNGO // ole : ?, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PUBLISH // ole : ?, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_CLOSEDOC // ole : ?, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_SPELLING // ole : ?, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+     // ?
+    SfxVoidItem DoSearchAndReplace FID_SEARCH_NOW // ole : ?, status : ?
+    (
+    )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+     // ?
+    SfxVoidItem SearchOn FID_SEARCH_ON // ole : ?, status : ?
+    (
+    )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+     // ?
+    SfxVoidItem SearchOff FID_SEARCH_OFF // ole : ?, status : ?
+    (
+    )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+     // ?
+    SfxVoidItem SearchOptions SID_SEARCH_OPTIONS // ole : ?, status : ?
+    (
+    )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+    SID_SEARCH_ITEM // ole : ?, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_GET_COLORTABLE
+    [
+        ExecMethod = Execute;
+    ]
+}
+
+/*************************************************************************
+
+      Source Code Control System - History
+
+      $Log: not supported by cvs2svn $
+      Revision 1.8  1999/09/01 15:41:55  pw
+      Pack & Go
+
+      Revision 1.7  1999/03/25 16:40:12  CL
+      #63859# ConfigName und HelpText entfernt
+
+
+      Rev 1.6   25 Mar 1999 17:40:12   CL
+   #63859# ConfigName und HelpText entfernt
+
+      Rev 1.5   11 Mar 1998 17:07:00   DL
+    #47845# Preview im Diamodus offen -> Dok. schliessen -> GPF
+
+      Rev 1.4   22 Oct 1997 16:07:32   SOH
+   #44618#: + SID_GET_COLORTABLE gemaess BugBeschr.
+
+      Rev 1.3   04 Sep 1997 13:36:18   MBA
+   Document von OfficeDocument abgeleitet
+
+      Rev 1.2   28 Aug 1997 12:33:30   MBA
+   Neue Interface-Namen
+
+      Rev 1.1   17 Jul 1997 16:46:34   SOH
+   #41635#: SID_MODIFIED entfernt
+
+      Rev 1.0   09 Apr 1997 13:18:52   SOH
+   Initial revision.
+
+*************************************************************************/
+
+

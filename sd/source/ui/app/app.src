@@ -1,0 +1,464 @@
+/*************************************************************************
+ *
+ *  $RCSfile: app.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#include "app.hrc"
+#include <offmgr/ofaids.hrc>
+#include <offmgr/offmenu.hrc>
+#include <offmgr/sba.hrc>
+#include "res_bmp.hrc"
+#include <svx/dialogs.hrc>
+#include "cfgids.hxx"
+#include "misc.hxx"
+#include <svx/svxids.hrc>
+#include <basctl/basicide.hrc>
+
+//
+// Acceleratorn
+//
+
+// Impress
+#include "accel.src"
+
+// PlugIn (Impress)
+#undef  SD_ACCELERATOR
+#define SD_ACCELERATOR RID_PLUGINACCEL
+#include "accel.src"
+
+// Draw (Graphic)
+#undef  SD_ACCELERATOR
+#define SD_ACCELERATOR RID_GRAPHIC_DEFAULTACCEL
+#include "accel.src"
+
+//
+// Menu
+//
+
+// Menu (Impress)
+#include "menu.src"
+#include "menuportal.src"
+
+// Menu (Draw (Graphic))
+#undef  SD_MENU
+#define SD_MENU RID_GRAPHIC_DEFAULTMENU
+#undef SD_MENU_PORTAL
+#define SD_MENU_PORTAL RID_GRAPHIC_PORTALMENU
+
+#include "menu.src"
+#include "menuportal.src"
+
+
+//
+// Image-Listen
+//
+
+#define IMAGE_ID_LIST\
+    IdList = {\
+            SID_EXTENDEDHELP;\
+            SID_NEWDOC;\
+            SID_OPENDOC;\
+            SID_PRINTDOC;\
+            SID_SAVEDOC;\
+            SID_STYLE_DESIGNER;\
+            SID_REDO;\
+            SID_UNDO;\
+            SID_CUT;\
+            SID_COPY;\
+            SID_PASTE;\
+            SID_ATTR_CHAR_POSTURE;\
+            SID_ATTR_CHAR_WEIGHT;\
+            SID_ATTR_CHAR_CONTOUR;\
+            SID_ATTR_CHAR_UNDERLINE;\
+            SID_ATTR_PARA_ADJUST_LEFT;\
+            SID_ATTR_PARA_ADJUST_RIGHT;\
+            SID_ATTR_PARA_ADJUST_CENTER;\
+            SID_ATTR_PARA_ADJUST_BLOCK;\
+            SID_ATTR_PARA_LINESPACE_10;\
+            SID_ATTR_PARA_LINESPACE_15;\
+            SID_ATTR_PARA_LINESPACE_20;\
+            SID_ATTR_TRANSFORM;\
+            SID_DRAW_LINE;\
+            SID_DRAW_RECT;\
+            SID_DRAW_ELLIPSE;\
+            SID_DRAW_PIE;\
+            SID_DRAW_ARC;\
+            SID_DRAW_CIRCLECUT;\
+            SID_DRAW_POLYGON;\
+            SID_DRAW_BEZIER_FILL;\
+            SID_BEZIER_INSERT;\
+            SID_BEZIER_DELETE;\
+            SID_BEZIER_MOVE;\
+            SID_BEZIER_CLOSE;\
+            SID_BEZIER_EDIT;\
+            SID_BEZIER_CUTLINE;\
+            SID_OBJECT_ROTATE;\
+            SID_OBJECT_ALIGN;\
+            SID_OBJECT_ALIGN_LEFT;\
+            SID_OBJECT_ALIGN_CENTER;\
+            SID_OBJECT_ALIGN_RIGHT;\
+            SID_OBJECT_ALIGN_UP;\
+            SID_OBJECT_ALIGN_MIDDLE;\
+            SID_OBJECT_ALIGN_DOWN;\
+            SID_INSERT_DIAGRAM;\
+            SID_ATTR_TABLE;\
+            SID_ATTRIBUTES_AREA;\
+            SID_ATTRIBUTES_LINE;\
+            SID_CHOOSE_CONTROLS;\
+            SID_DIALOG_TESTMODE;\
+            SID_INSERT_PUSHBUTTON;\
+            SID_INSERT_RADIOBUTTON;\
+            SID_INSERT_CHECKBOX;\
+            SID_OUTLINE_UP;\
+            SID_OUTLINE_DOWN;\
+            SID_OUTLINE_LEFT;\
+            SID_OUTLINE_RIGHT;\
+            SID_OUTLINE_FORMAT;\
+            SID_OUTLINE_COLLAPSE_ALL;\
+            SID_OUTLINE_BULLET;\
+            SID_PRESENTATION;\
+            SID_REHEARSE_TIMINGS;\
+            SID_DIA;\
+            SID_HIDE_SLIDE;\
+            SID_SHOW_BROWSER;\
+            SID_INSERT_FIXEDTEXT;\
+            SID_INSERT_GROUPBOX;\
+            SID_INSERT_LISTBOX;\
+            SID_INSERT_COMBOBOX;\
+            SID_OUTLINE_COLLAPSE;\
+            SID_OUTLINE_EXPAND_ALL;\
+            SID_OUTLINE_EXPAND;\
+            SID_INSERTFILE;\
+            SID_INSERT_GRAPHIC;\
+            SID_SPELLING;\
+            SID_OBJECT_SELECT;\
+            SID_ZOOM_TOOLBOX;\
+            SID_ZOOM_OUT;\
+            SID_ZOOM_IN;\
+            SID_SIZE_REAL;\
+            SID_SIZE_PAGE;\
+            SID_SIZE_ALL;\
+            SID_ATTR_CHAR;\
+            SID_ATTR_CHAR_COLOR;\
+            SID_TOOL_CONNECTOR;\
+            SID_DRAW_CAPTION;\
+            SID_STYLE_APPLY;\
+            SID_ATTR_LINE_STYLE;\
+            SID_ATTR_LINE_WIDTH;\
+            SID_ATTR_LINE_COLOR;\
+            SID_ATTR_FILL_STYLE;\
+            SID_DIA_EFFECT;\
+            SID_DIA_SPEED;\
+            SID_DIA_AUTO;\
+            SID_DIA_TIME;\
+            SID_ATTR_CHAR_FONT;\
+            SID_ATTR_CHAR_FONTHEIGHT;\
+            SID_BEZIER_EDGE;\
+            SID_BEZIER_SMOOTH;\
+            SID_BEZIER_SYMMTR;\
+            SID_BEZIER_CONVERT;\
+            SID_INSERTPAGE;\
+            SID_MODIFYPAGE;\
+            SID_PRESENTATION_LAYOUT;\
+            SID_RECORDMACRO;\
+            SID_OBJECT_MIRROR;\
+            SID_NEWDOCDIRECT;\
+            SID_PRINTDOCDIRECT;\
+            SID_OBJECT_CROOK_ROTATE;\
+            SID_OBJECT_CROOK_SLANT;\
+            SID_OBJECT_CHOOSE_MODE;\
+            SID_SIZE_PAGE_WIDTH;\
+            SID_SIZE_OPTIMAL;\
+            SID_OBJECT_SHEAR;\
+            SID_FRAME_TO_TOP;\
+            SID_FRAME_TO_BOTTOM;\
+            SID_SET_SUPER_SCRIPT;\
+            SID_SET_SUB_SCRIPT;\
+            SID_CHAR_DLG;\
+            SID_PARA_DLG;\
+            SID_ATTR_FILL_SHADOW;\
+            SID_WIN_FULLSCREEN;\
+            SID_COLORVIEW;\
+            SID_ATTR_LINEEND_STYLE;\
+            SID_PUBLISH;\
+            SID_DOCINFO;\
+            SID_MAIL_SENDDOC;\
+            SID_SAVEASDOC;\
+            SID_BEZIER_ELIMINATE_POINTS;\
+            SID_ZOOM_PANNING;\
+            SID_NAVIGATOR;\
+            SID_DRAW_RECT_NOFILL;\
+            SID_DRAW_RECT_ROUND_NOFILL;\
+            SID_DRAW_SQUARE;\
+            SID_DRAW_SQUARE_ROUND;\
+            SID_DRAW_SQUARE_NOFILL;\
+            SID_DRAW_SQUARE_ROUND_NOFILL;\
+            SID_DRAW_ELLIPSE_NOFILL;\
+            SID_DRAW_CIRCLE;\
+            SID_DRAW_CIRCLE_NOFILL;\
+            SID_DRAW_PIE_NOFILL;\
+            SID_DRAW_CIRCLEPIE;\
+            SID_DRAW_CIRCLEPIE_NOFILL;\
+            SID_DRAW_CIRCLEARC;\
+            SID_DRAW_CIRCLECUT_NOFILL;\
+            SID_DRAW_ELLIPSECUT;\
+            SID_DRAW_ELLIPSECUT_NOFILL;\
+            SID_DRAW_XPOLYGON;\
+            SID_DRAW_POLYGON_NOFILL;\
+            SID_DRAW_XPOLYGON_NOFILL;\
+            SID_DRAW_BEZIER_NOFILL;\
+            SID_DRAW_XLINE;\
+            SID_DRAW_RECT_ROUND;\
+            SID_DRAWTBX_TEXT;\
+            SID_DRAWTBX_RECTANGLES;\
+            SID_DRAWTBX_ELLIPSES;\
+            SID_DRAWTBX_LINES;\
+            SID_DRAWTBX_ARROWS;\
+            SID_DRAWTBX_INSERT;\
+            SID_ZOOM_NEXT;\
+            SID_ZOOM_PREV;\
+            SID_3D_CUBE;\
+            SID_3D_SPHERE;\
+            SID_3D_CYLINDER;\
+            SID_3D_CONE;\
+            SID_3D_PYRAMID;\
+            SID_3D_SHELL;\
+            SID_3D_TORUS;\
+            SID_3D_HALF_SPHERE;\
+            SID_DRAWTBX_3D_OBJECTS;\
+            SID_TEXT_FITTOSIZE;\
+            SID_GLUE_EDITMODE;\
+            SID_GLUE_INSERT_POINT;\
+            SID_GLUE_PERCENT;\
+            SID_GLUE_HORZALIGN_CENTER;\
+            SID_GLUE_HORZALIGN_LEFT;\
+            SID_GLUE_HORZALIGN_RIGHT;\
+            SID_GLUE_VERTALIGN_CENTER;\
+            SID_GLUE_VERTALIGN_TOP;\
+            SID_GLUE_VERTALIGN_BOTTOM;\
+            SID_GLUE_ESCDIR_LEFT;\
+            SID_GLUE_ESCDIR_RIGHT;\
+            SID_GLUE_ESCDIR_TOP;\
+            SID_GLUE_ESCDIR_BOTTOM;\
+            SID_CONVERT_TO_3D_LATHE;\
+            SID_DRAW_MEASURELINE;\
+            SID_INSERT_VSCROLLBAR;\
+            SID_INSERT_HSCROLLBAR;\
+            SID_INSERT_URLBUTTON;\
+            SID_INSERT_SPINBUTTON;\
+            SID_INSERT_EDIT;\
+            SID_INSERT_PREVIEW;\
+            SID_POSITION;\
+            SID_MOREFRONT;\
+            SID_MOREBACK;\
+            SID_BEFORE_OBJ;\
+            SID_BEHIND_OBJ;\
+            SID_REVERSE_ORDER;\
+            SID_INSERT_MATH ;\
+            SID_INSERT_FLOATINGFRAME ;\
+            SID_INSERT_OBJECT ;\
+            SID_ANIMATION_OBJECTS;\
+            SID_EFFECT_WIN;\
+            SID_ANIMATION_EFFECTS;\
+            SID_CONNECTOR_ARROW_START;\
+            SID_CONNECTOR_ARROW_END;\
+            SID_CONNECTOR_ARROWS;\
+            SID_CONNECTOR_CIRCLE_START;\
+            SID_CONNECTOR_CIRCLE_END;\
+            SID_CONNECTOR_CIRCLES;\
+            SID_CONNECTOR_LINE;\
+            SID_CONNECTOR_LINE_ARROW_START;\
+            SID_CONNECTOR_LINE_ARROW_END;\
+            SID_CONNECTOR_LINE_ARROWS;\
+            SID_CONNECTOR_LINE_CIRCLE_START;\
+            SID_CONNECTOR_LINE_CIRCLE_END;\
+            SID_CONNECTOR_LINE_CIRCLES;\
+            SID_CONNECTOR_LINES;\
+            SID_CONNECTOR_LINES_ARROW_START;\
+            SID_CONNECTOR_LINES_ARROW_END;\
+            SID_CONNECTOR_LINES_ARROWS;\
+            SID_CONNECTOR_LINES_CIRCLE_START;\
+            SID_CONNECTOR_LINES_CIRCLE_END;\
+            SID_CONNECTOR_LINES_CIRCLES;\
+            SID_CONNECTOR_CURVE;\
+            SID_CONNECTOR_CURVE_ARROW_START;\
+            SID_CONNECTOR_CURVE_ARROW_END;\
+            SID_CONNECTOR_CURVE_ARROWS;\
+            SID_CONNECTOR_CURVE_CIRCLE_START;\
+            SID_CONNECTOR_CURVE_CIRCLE_END;\
+            SID_CONNECTOR_CURVE_CIRCLES;\
+            SID_DRAWTBX_CONNECTORS;\
+            SID_ANIMATIONMODE;\
+            SID_ACTIONMODE;\
+            SID_DRAW_FREELINE;\
+            SID_DRAW_FREELINE_NOFILL;\
+            SID_GRAPHIC_DRAFT;\
+            SID_FILL_DRAFT;\
+            SID_TEXT_DRAFT;\
+            SID_LINE_DRAFT;\
+            SID_HANDLES_DRAFT;\
+            SID_SOLID_CREATE;\
+            SID_HELPLINES_VISIBLE;\
+            SID_HELPLINES_USE;\
+            SID_HELPLINES_MOVE;\
+            SID_GRID_VISIBLE;\
+            SID_GRID_USE;\
+            SID_SNAP_BORDER;\
+            SID_SNAP_FRAME;\
+            SID_SNAP_POINTS;\
+            SID_QUICKEDIT;\
+            SID_PICK_THROUGH;\
+            SID_INSERT_PLUGIN;\
+            SID_INSERT_APPLET;\
+            SID_BIG_HANDLES;\
+            SID_DOUBLECLICK_TEXTEDIT;\
+            SID_CLICK_CHANGE_ROTATION;\
+            SID_LINE_ARROW_START;\
+            SID_LINE_ARROW_END;\
+            SID_LINE_ARROWS;\
+            SID_LINE_ARROW_CIRCLE;\
+            SID_LINE_CIRCLE_ARROW;\
+            SID_LINE_ARROW_SQUARE;\
+            SID_LINE_SQUARE_ARROW;\
+            SID_LEAVE_ALL_GROUPS;\
+            SID_PARASPACE_INCREASE;\
+            SID_PARASPACE_DECREASE;\
+            SID_TOGGLECOMMONTASKBAR;\
+            SID_3D_WIN;\
+            SID_DUPLICATE_PAGE;\
+            SID_EXPAND_PAGE;\
+            SID_BULLET;\
+            SID_CHANGEBEZIER;\
+            SID_CHANGEPOLYGON;\
+            SID_CONVERT_TO_3D;\
+            SID_CONVERT_TO_3D_LATHE_FAST;\
+            SID_ATTR_GRAF_INVERT;\
+            SID_INSERT_SOUND;\
+            SID_INSERT_VIDEO;\
+            SID_GRAFTBX_FILTERS;\
+            SID_GRAFFILTER_INVERT;\
+            SID_GRAFFILTER_SMOOTH;\
+            SID_GRAFFILTER_SHARPEN;\
+            SID_GRAFFILTER_REMOVENOISE;\
+            SID_OBJECT_TRANSPARENCE;\
+            SID_OBJECT_GRADIENT;\
+            SID_GRAFFILTER_SOBEL;\
+            SID_GRAFFILTER_MOSAIC;\
+            SID_GRAFFILTER_EMBOSS;\
+            SID_GRAFFILTER_POSTER;\
+            SID_GRAFFILTER_POPART;\
+            SID_GRAFFILTER_SEPIA;\
+            SID_GRAFFILTER_SOLARIZE;\
+    };\
+    IdCount = {\
+        295;\
+    };
+
+ImageList RID_DEFAULTIMAGELIST_SC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc_out.bmp";
+        File[ ENGLISH ] = "sc_out01.bmp";
+        File[ DANISH ] = "sc_out45.bmp";
+        File[ ENGLISH_US ] = "sc_out01.bmp";
+        File[ SPANISH ] = "sc_out34.bmp";
+        File[ FRENCH ] = "sc_out33.bmp";
+        File[ ITALIAN ] = "sc_out39.bmp";
+        File[ DUTCH ] = "sc_out31.bmp";
+        File[ SWEDISH ] = "sc_out46.bmp";
+        File[ RUSSIAN ] = "sc_out07.bmp";
+        File[ POLISH ] = "sc_out48.bmp";
+        File[ GREEK ] = "sc_out30.bmp";
+        File[ JAPANESE ] = "sc_out81.bmp";
+        File[ PORTUGUESE ] = "sc_out03.bmp" ;
+        File[ portuguese_brazilian ] = "sc_out03.bmp" ;
+        File[ turkish ] = "sc_out90.bmp" ;
+    };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    IMAGE_ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_LC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lc_out.bmp";
+        File[ ENGLISH ] = "lc_out01.bmp";
+        File[ DANISH ] = "lc_out45.bmp";
+        File[ ENGLISH_US ] = "lc_out01.bmp";
+        File[ SPANISH ] = "lc_out34.bmp";
+        File[ FRENCH ] = "lc_out33.bmp";
+        File[ ITALIAN ] = "lc_out39.bmp";
+        File[ DUTCH ] = "lc_out31.bmp";
+        File[ SWEDISH ] = "lc_out46.bmp";
+        File[ RUSSIAN ] = "lc_out07.bmp";
+        File[ POLISH ] = "lc_out48.bmp";
+        File[ GREEK ] = "lc_out30.bmp";
+        File[ JAPANESE ] = "lc_out81.bmp";
+        File[ PORTUGUESE ] = "lc_out03.bmp" ;
+        File[ portuguese_brazilian ] = "lc_out03.bmp" ;
+        File[ turkish ] = "lc_out90.bmp" ;
+    };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    IMAGE_ID_LIST
+};
+
+

@@ -1,0 +1,52 @@
+/*************************************************************************
+#*
+#*    $Workfile:   GRVIEWSH.IDL  $
+#*
+#*    Beschreibung      Draw (Graphic) ViewShell-IDL
+#*
+#*    Ersterstellung    SOH 04.04.97
+#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 16:48:29 $
+#*    $Revision: 1.1.1.1 $
+#*
+#*    $Logfile:   T:/sd/idl/grviewsh.idv  $
+#*
+#*    Copyright (c) 1989 - 1999, STAR DIVISION
+#*
+#*************************************************************************
+
+      Source Code Control System - Header
+
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/grviewsh.sdi,v 1.1.1.1 2000-09-18 16:48:29 hr Exp $
+
+*************************************************************************/
+
+
+interface GraphicEditView : DrawView
+[
+    uuid ( "95F11180-ACE0-11D0-89CA-008029E4B0B1" ) ;
+]
+{
+}
+
+shell SdGraphicViewShell : SfxViewShell
+{
+    import GraphicEditView[Automation];
+}
+
+/*************************************************************************
+
+      Source Code Control System - History
+
+      $Log: not supported by cvs2svn $
+      Revision 1.2  1997/08/28 10:33:00  MBA
+      Neue Interface-Namen
+
+
+      Rev 1.1   28 Aug 1997 12:33:00   MBA
+   Neue Interface-Namen
+
+      Rev 1.0   09 Apr 1997 13:20:22   SOH
+   Initial revision.
+
+*************************************************************************/
+

@@ -1,0 +1,348 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlgsnap.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "app.hrc"
+#include "res_bmp.hrc"
+#include "dlgsnap.hrc"
+ModalDialog DLG_SNAPLINE
+{
+    HelpID = SID_CAPTUREPOINT ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 140 , 125 ) ;
+    Text = "Neues Fangobjekt" ;
+    Text [ ENGLISH ] = "New Snap Object" ;
+    Text [ norwegian ] = "+++New Snap Object" ;
+    Text [ italian ] = "Nuovo oggetto cattura" ;
+    Text [ portuguese_brazilian ] = "Novo Aderir Objeto" ;
+    Text [ portuguese ] = "Novo objecto de captura" ;
+    Text [ finnish ] = "Uusi kohdistusobjekti" ;
+    Text [ danish ] = "Nyt fangobjekt" ;
+    Text [ french ] = "Nouvel objet de capture" ;
+    Text [ swedish ] = "Nytt f‰stobjekt" ;
+    Text [ dutch ] = "Nieuw vangobject" ;
+    Text [ spanish ] = "Nuevo objeto de captura" ;
+    Text [ english_us ] = "New Snap Object" ;
+    Moveable = TRUE ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 86 , 6 ) ;
+        Size = MAP_APPFONT ( 46 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 86 , 22 ) ;
+        Size = MAP_APPFONT ( 46 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 86 , 40 ) ;
+        Size = MAP_APPFONT ( 46 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_DELETE
+    {
+        Pos = MAP_APPFONT ( 86 , 59 ) ;
+        Size = MAP_APPFONT ( 46 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Lˆschen : ~L˜schen */
+        Text = "~Lˆschen" ;
+        Text [ ENGLISH ] = "~Delete" ;
+        Text [ norwegian ] = "~Slett" ;
+        Text [ italian ] = "~Elimina" ;
+        Text [ portuguese_brazilian ] = "~Apagar" ;
+        Text [ portuguese ] = "E~liminar" ;
+        Text [ finnish ] = "~Poista" ;
+        Text [ danish ] = "Slet" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ swedish ] = "~Radera" ;
+        Text [ dutch ] = "~Wissen" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ english_us ] = "~Delete" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "…æ≥˝(~D)";
+        Text[ russian ] = "~”‰‡ÎËÚ¸";
+        Text[ polish ] = "UsuÒ";
+        Text[ japanese ] = "çÌèú(~D)";
+        Text[ chinese_traditional ] = "ßR∞£(~D)";
+        Text[ arabic ] = "Õ–›";
+        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
+        Text[ korean ] = "ªË¡¶(~D)";
+        Text[ turkish ] = "Sil";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GRP_POSITION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 70 , 46 ) ;
+        Text = "Position" ;
+        Text [ ENGLISH ] = "Position" ;
+        Text [ norwegian ] = "Posisjon" ;
+        Text [ italian ] = "Posizione" ;
+        Text [ portuguese_brazilian ] = "PosiÁ„o" ;
+        Text [ portuguese ] = "PosiÁ„o" ;
+        Text [ finnish ] = "Sijainti" ;
+        Text [ danish ] = "Placering" ;
+        Text [ french ] = "Position" ;
+        Text [ swedish ] = "Placering" ;
+        Text [ dutch ] = "Positie" ;
+        Text [ spanish ] = "PosiciÛn" ;
+        Text [ english_us ] = "Position" ;
+        Text[ chinese_simplified ] = "Œª÷√";
+        Text[ russian ] = "œÓÁËˆËˇ";
+        Text[ polish ] = "Pozycja";
+        Text[ japanese ] = "à íu";
+        Text[ chinese_traditional ] = "¶Ï∏m";
+        Text[ arabic ] = "«·„Ê÷⁄";
+        Text[ greek ] = "»›ÛÁ";
+        Text[ korean ] = "¿ßƒ°";
+        Text[ turkish ] = "Konum";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_X
+    {
+        Pos = MAP_APPFONT ( 12 , 17 ) ;
+        Size = MAP_APPFONT ( 7 , 10 ) ;
+        Text = "~X" ;
+    };
+    MetricField MTR_FLD_X
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 22 , 15 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -5000000 ;
+        Maximum = 5000000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = -5000000 ;
+        Last = 5000000 ;
+        SpinSize = 50 ;
+    };
+    FixedText FT_Y
+    {
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 7 , 10 ) ;
+        Text = "~Y" ;
+    };
+    MetricField MTR_FLD_Y
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 22 , 30 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -5000000 ;
+        Maximum = 5000000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = -5000000 ;
+        Last = 5000000 ;
+        SpinSize = 50 ;
+    };
+    GroupBox GRP_DIRECTION
+    {
+        Pos = MAP_APPFONT ( 6 , 52 ) ;
+        Size = MAP_APPFONT ( 70 , 67 ) ;
+        Text = "Art" ;
+        Text [ ENGLISH ] = "Kind" ;
+        Text [ norwegian ] = "+++Kind" ;
+        Text [ italian ] = "Tipo" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese ] = "Tipo" ;
+        Text [ finnish ] = "Laji" ;
+        Text [ danish ] = "Type" ;
+        Text [ french ] = "Type" ;
+        Text [ swedish ] = "Typ" ;
+        Text [ dutch ] = "Type" ;
+        Text [ spanish ] = "Tipo" ;
+        Text [ english_us ] = "Type" ;
+        Text[ chinese_simplified ] = "¿‡–Õ";
+        Text[ russian ] = "“ËÔ";
+        Text[ polish ] = "Typ";
+        Text[ japanese ] = "¿≤Ãﬂ";
+        Text[ chinese_traditional ] = "√˛´¨";
+        Text[ arabic ] = "«·‰Ê⁄";
+        Text[ greek ] = "‘˝ÔÚ";
+        Text[ korean ] = "«¸≈¬";
+        Text[ turkish ] = "T¸r";
+        Text[ language_user1 ] = " ";
+    };
+    ImageRadioButton RB_POINT
+    {
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Size = MAP_APPFONT ( 60 , 16 ) ;
+        Text = "~Punkt" ;
+        Text [ ENGLISH ] = "~Point" ;
+        Text [ norwegian ] = "~Punkt" ;
+        Text [ italian ] = "~Punto" ;
+        Text [ portuguese_brazilian ] = "~Ponto" ;
+        Text [ portuguese ] = "~Ponto" ;
+        Text [ finnish ] = "~Piste" ;
+        Text [ danish ] = "Punkt" ;
+        Text [ french ] = "~Point" ;
+        Text [ swedish ] = "~Punkt" ;
+        Text [ dutch ] = "~Punt" ;
+        Text [ spanish ] = "~Punto" ;
+        Text [ english_us ] = "~Point" ;
+        TabStop = TRUE ;
+        RadioButtonImage = Image
+        {
+            MaskColor = IMAGE_STDBTN_COLOR ;
+            ImageBitmap = Bitmap { File = "hlppoint.bmp" ; };
+        };
+        Text[ chinese_simplified ] = "µ„(~P)";
+        Text[ russian ] = "~“Ó˜Í‡";
+        Text[ polish ] = "Pu~nkt";
+        Text[ japanese ] = "ì_(~P)";
+        Text[ chinese_traditional ] = "¬I(~P)";
+        Text[ arabic ] = "‰ﬁÿ…";
+        Text[ greek ] = "”ÁÏÂﬂÔ";
+        Text[ korean ] = "¡°(~P)";
+        Text[ turkish ] = "Nokta";
+        Text[ language_user1 ] = " ";
+    };
+    ImageRadioButton RB_VERTICAL
+    {
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
+        Size = MAP_APPFONT ( 60 , 16 ) ;
+        Text = "~Vertikal" ;
+        Text [ ENGLISH ] = "~Vertical" ;
+        Text [ norwegian ] = "~Vertikal" ;
+        Text [ italian ] = "~Verticale" ;
+        Text [ portuguese_brazilian ] = "~Vertical" ;
+        Text [ portuguese ] = "~Vertical" ;
+        Text [ finnish ] = "~Rinnakkain" ;
+        Text [ danish ] = "Lodret" ;
+        Text [ french ] = "~Vertical" ;
+        Text [ swedish ] = "~Vertikal" ;
+        Text [ dutch ] = "~Verticaal" ;
+        Text [ spanish ] = "~Vertical" ;
+        Text [ english_us ] = "~Vertical" ;
+        TabStop = TRUE ;
+        RadioButtonImage = Image
+        {
+            MaskColor = IMAGE_STDBTN_COLOR ;
+            ImageBitmap = Bitmap { File = "hlplvert.bmp" ; };
+        };
+        Text[ chinese_simplified ] = "◊›œÚ(~V)";
+        Text[ russian ] = "~¬ÂÚËÍ‡Î¸ÌÓ";
+        Text[ polish ] = "W pionie";
+        Text[ japanese ] = "ècà íu(~V)";
+        Text[ chinese_traditional ] = "¡a¶V(~V)";
+        Text[ arabic ] = "—√”Ì";
+        Text[ greek ] = " ·Ù·Í¸Òıˆ·";
+        Text[ korean ] = "ºˆ¡˜(~V)";
+        Text[ turkish ] = "Dikey";
+        Text[ language_user1 ] = " ";
+    };
+    ImageRadioButton RB_HORIZONTAL
+    {
+        Pos = MAP_APPFONT ( 12 , 98 ) ;
+        Size = MAP_APPFONT ( 60 , 16 ) ;
+        Text = "~Horizontal" ;
+        Text [ ENGLISH ] = "~Horizontal" ;
+        Text [ norwegian ] = "~Horisontal" ;
+        Text [ italian ] = "~Orizzontale" ;
+        Text [ portuguese_brazilian ] = "~Horizontal" ;
+        Text [ portuguese ] = "~Horizontal" ;
+        Text [ finnish ] = "~Allekkain" ;
+        Text [ danish ] = "Vandret" ;
+        Text [ french ] = "~Horizontal" ;
+        Text [ swedish ] = "H~orisontell" ;
+        Text [ dutch ] = "~Horizontaal" ;
+        Text [ spanish ] = "~Horizontal" ;
+        Text [ english_us ] = "Hori~zontal" ;
+        TabStop = TRUE ;
+        RadioButtonImage = Image
+        {
+            MaskColor = IMAGE_STDBTN_COLOR ;
+            ImageBitmap = Bitmap { File = "hlplhorz.bmp" ; };
+        };
+        Text[ chinese_simplified ] = "∫·œÚ(~H)";
+        Text[ russian ] = "√ÓËÁÓÌÚ‡Î¸ÌÓ";
+        Text[ polish ] = "W poziomie";
+        Text[ japanese ] = "â°à íu(~H)";
+        Text[ chinese_traditional ] = "æÓ¶V(~H)";
+        Text[ arabic ] = "√›ﬁÌ";
+        Text[ greek ] = "œÒÈÊ¸ÌÙÈ·";
+        Text[ korean ] = "ºˆ∆Ú(~Z)";
+        Text[ turkish ] = "Yatay";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "–¬Ω®◊¯±Í";
+    Text[ russian ] = "ÕÓ‚˚È Ó·˙ÂÍÚ ÔË‚ˇÁÍË";
+    Text[ polish ] = "Nowy obiekt zaczepu";
+    Text[ japanese ] = "êVÇµÇ¢Ω≈ØÃﬂµÃﬁºﬁ™∏ƒ";
+    Text[ chinese_traditional ] = "∑s´ÿß§º–";
+    Text[ arabic ] = "ﬂ«∆‰ Õ»” ÃœÌœ";
+    Text[ greek ] = "Õ›Ô ·ÌÙÈÍÂﬂÏÂÌÔ ÒÔÛÍ¸ÎÎÁÛÁÚ";
+    Text[ korean ] = "ªı ∏¬√„ ∞≥√º";
+    Text[ turkish ] = "Yeni kavrama nesnesi";
+    Text[ language_user1 ] = " ";
+};

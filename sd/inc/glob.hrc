@@ -1,0 +1,154 @@
+/*************************************************************************
+ *
+ *  $RCSfile: glob.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SFX_HRC
+#include <sfx2/sfx.hrc>
+#endif
+
+#define STR_LAYER_BCKGRND                       RID_APP_START+700
+#define STR_LAYER_BCKGRNDOBJ                    RID_APP_START+701
+#define STR_LAYER_LAYOUT                        RID_APP_START+702
+#define STR_LAYER_CONTROLS                      RID_APP_START+703
+#define STR_PAGE                                RID_APP_START+704
+#define STR_PRESOBJ_TITLE                       RID_APP_START+705
+#define STR_PRESOBJ_OUTLINE                     RID_APP_START+706
+#define STR_PRESOBJ_TEXT                        RID_APP_START+707
+#define STR_PRESOBJ_GRAPHIC                     RID_APP_START+708
+#define STR_PRESOBJ_OBJECT                      RID_APP_START+709
+#define STR_PRESOBJ_CHART                       RID_APP_START+710
+#define STR_PRESOBJ_ORGCHART                    RID_APP_START+711
+#define STR_PRESOBJ_TABLE                       RID_APP_START+712
+#define STR_PRESOBJ_IMAGE                       RID_APP_START+713
+#define BMP_PRESOBJ_GRAPHIC                     RID_APP_START+714
+#define BMP_PRESOBJ_OBJECT                      RID_APP_START+715
+#define BMP_PRESOBJ_CHART                       RID_APP_START+716
+#define BMP_PRESOBJ_ORGCHART                    RID_APP_START+717
+#define BMP_PRESOBJ_TABLE                       RID_APP_START+718
+#define BMP_PRESOBJ_IMAGE                       RID_APP_START+719
+#define STR_SLIDEVIEWSHELL                      RID_APP_START+720
+#define STR_OUTLINEVIEWSHELL                    RID_APP_START+721
+#define STR_DRAWVIEWSHELL                       RID_APP_START+722
+#define STR_TEXTOBJECTBARSHELL                  RID_APP_START+723
+#define STR_STDOBJECTBARSHELL                   RID_APP_START+724
+#define STR_BEZIEROBJECTBARSHELL                RID_APP_START+725
+#define STR_APPLICATIONOBJECTBAR                RID_APP_START+726
+#define STR_LAYOUT_TITLE                        RID_APP_START+727
+#define STR_LAYOUT_OUTLINE                      RID_APP_START+728
+#define STR_LAYOUT_BACKGROUNDOBJECTS            RID_APP_START+729
+#define STR_LAYOUT_BACKGROUND                   RID_APP_START+730
+#define STR_LAYOUT_NOTES                        RID_APP_START+731
+#define STR_PRESOBJ_MPTITLE                     RID_APP_START+732
+#define STR_PRESOBJ_MPOUTLINE                   RID_APP_START+733
+#define STR_PRESOBJ_MPOUTLLAYER2                RID_APP_START+734
+#define STR_PRESOBJ_MPOUTLLAYER3                RID_APP_START+735
+#define STR_PRESOBJ_MPOUTLLAYER4                RID_APP_START+736
+#define STR_PRESOBJ_MPOUTLLAYER5                RID_APP_START+737
+#define STR_PRESOBJ_MPOUTLLAYER6                RID_APP_START+738
+#define STR_PRESOBJ_MPOUTLLAYER7                RID_APP_START+739
+#define STR_PRESOBJ_MPOUTLLAYER8                RID_APP_START+740
+#define STR_PRESOBJ_MPOUTLLAYER9                RID_APP_START+741
+#define STR_PRESOBJ_MPNOTESTITLE                RID_APP_START+742
+#define STR_PRESOBJ_MPNOTESTEXT                 RID_APP_START+743
+#define STR_PRESOBJ_NOTESTEXT                   RID_APP_START+744
+#define STR_LAYOUT_DEFAULT_NAME                 RID_APP_START+745
+#define STR_STANDARD_STYLESHEET_NAME            RID_APP_START+746
+#define STR_NOTES                               RID_APP_START+747
+#define STR_HANDOUT                             RID_APP_START+748
+#define STR_MASTERPAGE                          RID_APP_START+749
+#define STR_PRESOBJNOTESTEXT                    RID_APP_START+750
+#define STR_BAD_PASSWORD_OR_FILE_CORRUPTED      RID_APP_START+751
+#define STR_UNDO_MOVEPAGES                      RID_APP_START+752
+#define STR_NOT_ENOUGH_MEMORY                   RID_APP_START+753
+#define STR_LAYOUT_SUBTITLE                     RID_APP_START+754
+#define STR_POOLSHEET_OBJWITHARROW              RID_APP_START+755
+#define STR_POOLSHEET_OBJWITHSHADOW             RID_APP_START+756
+#define STR_POOLSHEET_OBJWITHOUTFILL            RID_APP_START+757
+#define STR_POOLSHEET_TEXT                      RID_APP_START+758
+#define STR_POOLSHEET_TEXTBODY                  RID_APP_START+759
+#define STR_POOLSHEET_TEXTBODY_JUSTIFY          RID_APP_START+760
+#define STR_POOLSHEET_TEXTBODY_INDENT           RID_APP_START+761
+#define STR_POOLSHEET_TITLE                     RID_APP_START+762
+#define STR_POOLSHEET_TITLE1                    RID_APP_START+763
+#define STR_POOLSHEET_TITLE2                    RID_APP_START+764
+#define STR_POOLSHEET_HEADLINE                  RID_APP_START+765
+#define STR_POOLSHEET_HEADLINE1                 RID_APP_START+766
+#define STR_POOLSHEET_HEADLINE2                 RID_APP_START+767
+#define STR_POOLSHEET_MEASURE                   RID_APP_START+768
+#define STR_PSEUDOSHEET_TITLE                   RID_APP_START+769
+#define STR_PSEUDOSHEET_OUTLINE                 RID_APP_START+770
+#define STR_PSEUDOSHEET_BACKGROUNDOBJECTS       RID_APP_START+771
+#define STR_PSEUDOSHEET_BACKGROUND              RID_APP_START+772
+#define STR_PSEUDOSHEET_NOTES                   RID_APP_START+773
+#define STR_GLUEPOINTSOBJECTBARSHELL            RID_APP_START+774
+#define STR_EMPTY_STYLESHEET_NAME               RID_APP_START+775
+#define STR_LAYER_MEASURELINES                  RID_APP_START+776
+#define STR_POOLSHEET_OBJWITHOUTFILL_NT         RID_APP_START+777
+#define STR_POOLSHEET_TEXTBODY_NT               RID_APP_START+778
+#define STR_POOLSHEET_TEXTBODY_JUSTIFY_NT       RID_APP_START+779
+#define STR_POOLSHEET_TEXTBODY_INDENT_NT        RID_APP_START+780
+#define STR_POOLSHEET_HEADLINE_NT               RID_APP_START+781
+#define STR_POOLSHEET_HEADLINE1_NT              RID_APP_START+782
+#define STR_POOLSHEET_HEADLINE2_NT              RID_APP_START+783
+#define STR_POOLSHEET_MEASURE_NT                RID_APP_START+784
+#define STR_PSEUDOSHEET_SUBTITLE                RID_APP_START+785
+#define STR_LAYOUT_DEFAULT_TITLE_NAME           RID_APP_START+786
+#define STR_GRAFOBJECTBARSHELL                  RID_APP_START+787
+
+

@@ -1,0 +1,238 @@
+/*************************************************************************
+ *
+ *  $RCSfile: morphdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "app.hrc"
+#include "morphdlg.hrc"
+/******************************************************************************
+|*
+|*
+|*
+\******************************************************************************/
+ModalDialog DLG_MORPH
+{
+    HelpID = SID_POLYGON_MORPHING ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 196 , 68 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? ‹berblenden : öberblenden */
+    Text = "‹berblenden" ;
+    Text [ ENGLISH ] = "Fading" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 141 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 141 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 140 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GRP_PRESET
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 129 , 59 ) ;
+        Text = "Einstellungen" ;
+        Text [ ENGLISH ] = "Settings" ;
+        Text [ english_us ] = "Settings" ;
+        Text [ italian ] = "Impostazioni" ;
+        Text [ spanish ] = "ConfiguraciÛn" ;
+        Text [ french ] = "ParamËtres" ;
+        Text [ dutch ] = "Instellingen" ;
+        Text [ swedish ] = "Inst‰llningar" ;
+        Text [ danish ] = "Indstillinger" ;
+        Text [ portuguese ] = "PredefiniÁıes" ;
+        Text [ portuguese_brazilian ] = "Einstellungen" ;
+        Text[ chinese_simplified ] = "…Ë∂®";
+        Text[ russian ] = "”ÒÚ‡ÌÓ‚ÍË";
+        Text[ polish ] = "Ustawienia";
+        Text[ japanese ] = "ê›íË";
+        Text[ chinese_traditional ] = "≥]©w";
+        Text[ arabic ] = "≈⁄œ«œ« ";
+        Text[ greek ] = "—ıËÏﬂÛÂÈÚ";
+        Text[ korean ] = "º≥¡§";
+        Text[ turkish ] = "Ayarlar";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_STEPS
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Schritte" ;
+        Text [ ENGLISH ] = "Steps" ;
+        Text [ english_us ] = "Increments" ;
+        Text [ italian ] = "Passaggi" ;
+        Text [ spanish ] = "Pasos" ;
+        Text [ french ] = "Pas" ;
+        Text [ dutch ] = "Stappen" ;
+        Text [ swedish ] = "Steg" ;
+        Text [ danish ] = "Trin" ;
+        Text [ portuguese ] = "Passos" ;
+        Text [ portuguese_brazilian ] = "Schritte" ;
+        Text[ chinese_simplified ] = "≤Ω÷Ë";
+        Text[ russian ] = "ÿ‡„Ë";
+        Text[ polish ] = "Kroki";
+        Text[ japanese ] = "Ω√ØÃﬂ";
+        Text[ chinese_traditional ] = "∫•ºW";
+        Text[ arabic ] = "«·ŒÿÊ« ";
+        Text[ greek ] = "¬ﬁÏ·Ù·";
+        Text[ korean ] = "¡ı∞°∫–";
+        Text[ turkish ] = "Ad˝mlar";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField MTF_STEPS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 56 , 14 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Minimum = 1 ;
+        Maximum = 256 ;
+        First = 1 ;
+        Last = 256 ;
+    };
+    CheckBox CBX_ATTRIBUTES
+    {
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
+        Size = MAP_APPFONT ( 121 , 12 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Attributierung ¸berblenden : Attributierung ≥berblenden */
+        Text = "Attributierung ¸berblenden" ;
+        Text [ ENGLISH ] = "Fade attributes" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Cross-fade attributes" ;
+        Text [ italian ] = "Nascondi gli attributi" ;
+        Text [ spanish ] = "Cubrir atributos" ;
+        Text [ french ] = "Fondu enchaÓnÈ d'attributs" ;
+        Text [ dutch ] = "Attributen niet weergeven" ;
+        Text [ swedish ] = "Tona ˆver attribut" ;
+        Text [ danish ] = "Ton attributter over" ;
+        Text [ portuguese ] = "SobreposiÁ„o de atributos" ;
+        Text [ portuguese_brazilian ] = "Attributierung ¸berblenden" ;
+        Text[ chinese_simplified ] = "ΩªÃÊœ‘ æª≠√ÊÃÿ–‘";
+        Text[ russian ] = "ÃÓÙËÌ„ ‡ÚË·ÛÚÓ‚";
+        Text[ polish ] = "Prze~nikanie atrybutÛw";
+        Text[ japanese ] = "ëÆê´ÇÃ™∞ƒﬁµ∞ ﬁ∞";
+        Text[ chinese_traditional ] = "•Ê¥¿≈„•‹µe≠±ØS© ";
+        Text[ arabic ] = " €ÿÌ… ”„«  «·ﬂ«∆‰";
+        Text[ greek ] = "¬·ËÏÈ·ﬂÔÚ ·Ô˜Ò˘Ï·ÙÈÛÏ¸Ú È‰ÈÔÙﬁÙ˘Ì";
+        Text[ korean ] = "º”º∫ ø¿πˆ ∑¶";
+        Text[ turkish ] = "÷znitelikler: Serme";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_ORIENTATION
+    {
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 121 , 12 ) ;
+        Text = "Gleiche Orientierung" ;
+        Text [ ENGLISH ] = "Same orientation" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Same orientation" ;
+        Text [ italian ] = "Stesso orientamento" ;
+        Text [ spanish ] = "Misma orientaciÛn" ;
+        Text [ french ] = "MÍme orientation" ;
+        Text [ dutch ] = "Gelijke oriÎntering" ;
+        Text [ swedish ] = "Samma orientering" ;
+        Text [ danish ] = "Samme retning" ;
+        Text [ portuguese ] = "Mesma orientaÁ„o" ;
+        Text [ portuguese_brazilian ] = "Gleiche Orientierung" ;
+        Text[ chinese_simplified ] = "œ‡Õ¨∑ΩœÚ";
+        Text[ russian ] = "“‡Í‡ˇ ÊÂ ÓËÂÌÚ‡ˆËˇ";
+        Text[ polish ] = "Ta sama orientacja";
+        Text[ japanese ] = "ìØÇ∂ï˚å¸";
+        Text[ chinese_traditional ] = "¨€¶P§Ë¶V";
+        Text[ arabic ] = "‰›” «·« Ã«Â";
+        Text[ greek ] = "∫‰ÈÔÚ ÒÔÛ·Ì·ÙÔÎÈÛÏ¸Ú";
+        Text[ korean ] = "∞∞¿∫ πÊ«‚";
+        Text[ turkish ] = "Ayn˝ yˆn";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ english_us ] = "Cross-fading" ;
+    Text [ italian ] = "Morphing" ;
+    Text [ spanish ] = "Disolvencia" ;
+    Text [ french ] = "Fondu enchaÓnÈ" ;
+    Text [ dutch ] = "Overlappen" ;
+    Text [ swedish ] = "Tona ˆver" ;
+    Text [ danish ] = "Ton over" ;
+    Text [ portuguese ] = "Dissolver" ;
+    Text [ portuguese_brazilian ] = "‹berblenden" ;
+    Text[ chinese_simplified ] = "ª≠√ÊΩªÃÊ";
+    Text[ russian ] = "ÃÓÙËÌ„";
+    Text[ polish ] = "Przenikaj";
+    Text[ japanese ] = "Ã™∞ƒﬁµ∞ ﬁ∞";
+    Text[ chinese_traditional ] = "µe≠±•Ê¥¿";
+    Text[ arabic ] = " €ÿÌ…";
+    Text[ greek ] = "¬·ËÏÈ·ﬂÔÚ ·Ô˜Ò˘Ï·ÙÈÛÏ¸Ú";
+    Text[ korean ] = "ø¿πˆ ∑¶";
+    Text[ turkish ] = "Ser";
+    Text[ language_user1 ] = " ";
+};

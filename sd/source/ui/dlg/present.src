@@ -1,0 +1,664 @@
+/*************************************************************************
+ *
+ *  $RCSfile: present.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <svx/svxids.hrc>
+#include "present.hrc"
+
+#define DISTANCE    23
+#define DISTANCE2   ((DISTANCE) + 81)
+
+ModalDialog DLG_START_PRESENTATION
+{
+    HelpID = SID_PRESENTATION ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 248 , 177 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Bildschirmpräsentation : Bildschirmprõsentation */
+    Text = "Bildschirmpräsentation" ;
+    Text [ ENGLISH ] = "Start Presentation" ;
+    Text [ norwegian ] = "Start Presentation" ;
+    Text [ italian ] = "Presentazione" ;
+    Text [ portuguese_brazilian ] = "Iniciar Apresentação" ;
+    Text [ portuguese ] = "Apresentação no ecrã" ;
+    Text [ finnish ] = "Aloita esitys" ;
+    Text [ danish ] = "Diasshow" ;
+    Text [ french ] = "Présentation à l'écran" ;
+    Text [ swedish ] = "Bildskärmspresentation" ;
+    Text [ dutch ] = "Schermpresentatie" ;
+    Text [ spanish ] = "Iniciar presentación" ;
+    Text [ english_us ] = "Slide Show" ;
+    Text[ chinese_simplified ] = "·ÅÓ³ÑİÊ¾ÎÄ¸å";
+    Text[ russian ] = "~Äåìîíñòğàöèÿ";
+    Text[ polish ] = "Pokaz slajdów";
+    Text[ japanese ] = "½×²ÄŞ¼®°";
+    Moveable = TRUE ;
+
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 192 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 192 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 192 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    GroupBox GRP_RANGE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 179 , 67 ) ;
+        Text = "Umfang" ;
+        Text [ ENGLISH ] = "Range" ;
+        Text [ norwegian ] = "Verdimengde" ;
+        Text [ italian ] = "Diapositive" ;
+        Text [ portuguese_brazilian ] = "Faixa" ;
+        Text [ portuguese ] = "Volume" ;
+        Text [ finnish ] = "Alue" ;
+        Text [ danish ] = "Omfang" ;
+        Text [ french ] = "Étendue" ;
+        Text [ swedish ] = "Omfång" ;
+        Text [ dutch ] = "Omvang" ;
+        Text [ spanish ] = "Volumen" ;
+        Text [ english_us ] = "Range" ;
+        Text[ chinese_simplified ] = "·¶Î§";
+        Text[ russian ] = "Îáúåì";
+        Text[ polish ] = "Zakres";
+        Text[ japanese ] = "½×²ÄŞ‚Ìw’è";
+        Text[ chinese_traditional ] = "½d³ò";
+        Text[ arabic ] = "ÇáÍÌã";
+        Text[ greek ] = "Åıñïò";
+        Text[ korean ] = "¹üÀ§";
+        Text[ turkish ] = "Kapsam";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_ALL
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 80 , 12 ) ;
+        Text = "~Alle Dias" ;
+        Text [ ENGLISH ] = "~All slides" ;
+        Text [ norwegian ] = "~Alle lysbilder slides" ;
+        Text [ italian ] = "~Tutte le diapositive" ;
+        Text [ portuguese_brazilian ] = "~Todos os slides" ;
+        Text [ portuguese ] = "~Todos os diapositivos" ;
+        Text [ finnish ] = "Ka~ikki kuvat" ;
+        Text [ danish ] = "Alle dias" ;
+        Text [ french ] = "~Toutes les diapos" ;
+        Text [ swedish ] = "~Alla diabilder" ;
+        Text [ dutch ] = "~Alle dia's" ;
+        Text [ spanish ] = "~Todas las diapositivas" ;
+        Text [ english_us ] = "All ~slides" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "È«²¿µÄ»ÃµÆÆ¬(~S)";
+        Text[ russian ] = "~Âñå ñëàéäû";
+        Text[ polish ] = "Wszystkie slajdy";
+        Text[ japanese ] = "‚·‚×‚Ä‚Ì½×²ÄŞ(~S)";
+        Text[ chinese_traditional ] = "¥ş³¡§ë¼v¤ù(~S)";
+        Text[ arabic ] = "ßá ÇáÔÑÇÆÍ";
+        Text[ greek ] = "¼ëåò ïé äé~áöÜíåéåò (slides)";
+        Text[ korean ] = "¸ğµç ½½¶óÀÌµå(~S)";
+        Text[ turkish ] = "Tüm slaytlar";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_AT_DIA
+    {
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
+        Text = "Ab ~Dia" ;
+        Text [ ENGLISH ] = "~From" ;
+        Text [ norwegian ] = "~Fra" ;
+        Text [ italian ] = "A partire ~da" ;
+        Text [ portuguese_brazilian ] = "~De" ;
+        Text [ portuguese ] = "A ~partir de:" ;
+        Text [ finnish ] = "~Alku" ;
+        Text [ danish ] = "Fra dias" ;
+        Text [ french ] = "À partir de " ;
+        Text [ swedish ] = "Från ~diabild" ;
+        Text [ dutch ] = "~Vanaf dia:" ;
+        Text [ spanish ] = "A pa~rtir de:" ;
+        Text [ english_us ] = "~From:" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "»ÃµÆÆ¬´Ó(~F)";
+        Text[ russian ] = "Ñî ñëàéäà";
+        Text[ polish ] = "Od slajdu";
+        Text[ japanese ] = "½×²ÄŞw’è(~F)";
+        Text[ chinese_traditional ] = "§ë¼v¤ù±q(~F)";
+        Text[ arabic ] = "ÈÏÇíÉ ãä ÇáÔÑíÍÉ:";
+        Text[ greek ] = "Áğü ôç ~äéáöÜíåéá:";
+        Text[ korean ] = "½½¶óÀÌµå ºÎÅÍ:(~F)";
+        Text[ turkish ] = "Başlangıç:";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DIAS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 24 ) ;
+        Size = MAP_APPFONT ( 117 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+         //DDExtraWidth = TRUE;
+    };
+    RadioButton RBT_CUSTOMSHOW
+    {
+        Pos = MAP_APPFONT ( 12 , 38 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Text = "~Individuelle Bildschirmpräsentation" ;
+        Text [ ENGLISH ] = "~CustomShow" ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "Apres~entação personalizada" ;
+        Text [ english_us ] = "~Custom Slide Show" ;
+        Text [ portuguese_brazilian ] = "~Individuelle Präsentation" ;
+        Text [ swedish ] = "~Individuell presentation" ;
+        Text [ danish ] = "Individuelt diasshow" ;
+        Text [ italian ] = "Presentazione su schermo personalizzata" ;
+        Text [ spanish ] = "~Presentación personalizada" ;
+        Text [ french ] = "~Présentation à l'écran personnalisée" ;
+        Text [ dutch ] = "~Individuele schermpresentatie" ;
+        Text[ chinese_simplified ] = "¸öÈËµÄÑİÊ¾ÎÄ¸å(~C)";
+        Text[ russian ] = "Ïğîèçâîëüíàÿ äåìîíñòğàöèÿ";
+        Text[ polish ] = "Indywidualny pokaz slajdów";
+        Text[ japanese ] = "–Ú“I•Ê½×²ÄŞ¼®°(~C)";
+        Text[ chinese_traditional ] = "¦Û­qªºÂ²³ø(~C)";
+        Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãÎÕÕ";
+        Text[ greek ] = "Ğñïóáñìïóìİí~ç ğáñïõóßáóç ïèüíçò";
+        Text[ korean ] = "°³ÀÎÀû ½½¶óÀÌµå ¼î(~C)";
+        Text[ turkish ] = "Özel ekran sunusu";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_CUSTOMSHOW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 32, 53 ) ;
+        Size = MAP_APPFONT ( 147 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    GroupBox GRP_KIND
+    {
+        Pos = MAP_APPFONT ( 6, 73 ) ;
+        Size = MAP_APPFONT ( 90, 98 );
+        Text = "Art" ;
+        Text [ ENGLISH ] = "Kind" ;
+        Text [ english_us ] = "Type" ;
+        Text[ portuguese ] = "Tipo";
+        Text[ russian ] = "Òèï";
+        Text[ dutch ] = "Type";
+        Text[ french ] = "Type";
+        Text[ spanish ] = "Tipo";
+        Text[ italian ] = "Tipo";
+        Text[ danish ] = "Type";
+        Text[ swedish ] = "Typ";
+        Text[ polish ] = "Typ";
+        Text[ portuguese_brazilian ] = "Kind";
+        Text[ japanese ] = "í—Ş";
+        Text[ chinese_simplified ] = "ÖÖÀà";
+        Text[ chinese_traditional ] = "ºØÃş";
+        Text[ arabic ] = "ÇáäæÚ";
+        Text[ greek ] = "Ôığïò";
+        Text[ korean ] = "ÇüÅÂ";
+        Text[ turkish ] = "Tür";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_STANDARD
+    {
+        Pos = MAP_APPFONT ( 12, 84 ) ;
+        Size = MAP_APPFONT ( 81, 12 ) ;
+        Text = "S~tandard" ;
+        Text [ ENGLISH ] = "Stan~dard" ;
+        Text [ english_us ] = "~Default" ;
+        TabStop = TRUE ;
+        Text[ portuguese ] = "~Padrão";
+        Text[ russian ] = "Ñòàíäàğòíûé";
+        Text[ dutch ] = "Stan~daard";
+        Text[ french ] = "Par ~défaut";
+        Text[ spanish ] = "~Predeterminado";
+        Text[ italian ] = "Standard";
+        Text[ danish ] = "Standard";
+        Text[ swedish ] = "S~tandard";
+        Text[ polish ] = "Domyœlnie";
+        Text[ portuguese_brazilian ] = "Stan~dard";
+        Text[ japanese ] = "•W€(~D)";
+        Text[ chinese_simplified ] = "±ê×¼(~D)";
+        Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
+        Text[ arabic ] = "ÇİÊÑÇÖí";
+        Text[ greek ] = "ĞñïåğéëïãŞ";
+        Text[ korean ] = "±âº»(~D)";
+        Text[ turkish ] = "Standart";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_WINDOW
+    {
+        Pos = MAP_APPFONT ( 12 , 96 ) ;
+        Size = MAP_APPFONT ( 81 , 12 ) ;
+        Text = "~Fenster" ;
+        Text [ ENGLISH ] = "~Window" ;
+        Text [ english_us ] = "~Window" ;
+        TabStop = TRUE ;
+        Text[ portuguese ] = "~Janela";
+        Text[ russian ] = "~Îêíî";
+        Text[ dutch ] = "~Venster";
+        Text[ french ] = "~Fenêtre";
+        Text[ spanish ] = "~Ventana";
+        Text[ italian ] = "Fi~nestra";
+        Text[ danish ] = "Vindue";
+        Text[ swedish ] = "~Fönster";
+        Text[ polish ] = "Okno";
+        Text[ portuguese_brazilian ] = "~Window";
+        Text[ japanese ] = "³¨İÄŞ³(~W)";
+        Text[ chinese_simplified ] = "ÊÓ´°(~W)";
+        Text[ chinese_traditional ] = "µøµ¡(~W)";
+        Text[ arabic ] = "ÇáäÇİĞÉ";
+        Text[ greek ] = "~ĞáñÜèõñï";
+        Text[ korean ] = "Ã¢(~W)";
+        Text[ turkish ] = "Pencere";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_AUTO
+    {
+        Pos = MAP_APPFONT ( 12 , 108 ) ;
+        Size = MAP_APPFONT ( 81 , 12 ) ;
+        Text = "A~uto" ;
+        Text [ ENGLISH ] = "A~uto" ;
+        Text [ english_us ] = "A~uto" ;
+        TabStop = TRUE ;
+        Text[ portuguese ] = "A~utomóvel";
+        Text[ russian ] = "Àâòîìàòè÷åñêè";
+        Text[ dutch ] = "A~uto";
+        Text[ french ] = "A~uto";
+        Text[ spanish ] = "~Auto";
+        Text[ italian ] = "Automatico";
+        Text[ danish ] = "Auto";
+        Text[ swedish ] = "A~uto";
+        Text[ polish ] = "Automatycznie";
+        Text[ portuguese_brazilian ] = "A~uto";
+        Text[ japanese ] = "µ°Ä(~U)";
+        Text[ chinese_simplified ] = "×Ô¶¯(~U)";
+        Text[ chinese_traditional ] = "¦Û°Ê(~U)";
+        Text[ arabic ] = "ÊáŞÇÆí";
+        Text[ greek ] = "Áõôüìáôá";
+        Text[ korean ] = "ÀÚµ¿Â÷(~U)";
+        Text[ turkish ] = "Otomatik";
+        Text[ language_user1 ] = " ";
+    };
+/*
+    FixedText FT_PAUSE
+    {
+        Pos = MAP_APPFONT ( 32, 124 ) ;
+        Size = MAP_APPFONT ( 25, 12 ) ;
+        Text = "Pause:" ;
+        Text [ ENGLISH ] = "Pause:" ;
+        Text [ english_us ] = "Pause:" ;
+    };
+*/
+    TimeField TMF_PAUSE
+    {
+        Pos = MAP_APPFONT ( 32, 120 ) ;
+        Size = MAP_APPFONT ( 50, 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Duration = TRUE ;
+        StrictFormat = TRUE ;
+        Maximum = Time
+        {
+            Hour = 23 ;
+            Minute = 59 ;
+            Second = 59 ;
+        };
+        Last = Time
+        {
+            Hour = 23 ;
+            Minute = 59 ;
+            Second = 59 ;
+        };
+        QuickHelpText = "Pausendauer" ;
+        QuickHelpText [ ENGLISH ] = "Duration of pause" ;
+        QuickHelpText [ english_us ] = "Duration of pause" ;
+        QuickHelpText[ portuguese ] = "Duration of pause";
+        QuickHelpText[ russian ] = "Äëèòåëüíîñòü ïàóçû";
+        QuickHelpText[ dutch ] = "Duur van de pauze";
+        QuickHelpText[ french ] = "Durée de la pause";
+        QuickHelpText[ spanish ] = "Duration of pause";
+        QuickHelpText[ italian ] = "Duration of pause";
+        QuickHelpText[ danish ] = "Pausetid";
+        QuickHelpText[ swedish ] = "Pausens längd";
+        QuickHelpText[ polish ] = "Czas trwania przerwy";
+        QuickHelpText[ portuguese_brazilian ] = "Duration of pause";
+        QuickHelpText[ japanese ] = "‹x~ŠÔ";
+        QuickHelpText[ chinese_simplified ] = "¼ä¸ôÊ±¼ä";
+        QuickHelpText[ chinese_traditional ] = "¶¡¹j®É¶¡";
+        QuickHelpText[ arabic ] = "ãÏÉ ÇáÅíŞÇİ ÇáãÄŞÊ";
+        QuickHelpText[ greek ] = "ÄéÜñêåéá ğñïóùñéíŞò äéáêïğŞò";
+        QuickHelpText[ korean ] = "Duration of pause";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    CheckBox CBX_AUTOLOGO
+    {
+        Pos = MAP_APPFONT ( 32 , 138 ) ;
+        Size = MAP_APPFONT ( 61 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "~Logo einblenden" ;
+        Text [ ENGLISH ] = "Show ~logo" ;
+        Text [ english_us ] = "Show ~logo" ;
+        Text[ portuguese ] = "Mos~trar logotipo";
+        Text[ russian ] = "Ïîêàçàòü ıìáëåìó";
+        Text[ dutch ] = "~Logo weergeven";
+        Text[ french ] = "Afficher le ~logo";
+        Text[ spanish ] = "Mostrar ~logotipo";
+        Text[ italian ] = "Mostra logo";
+        Text[ danish ] = "Vis logo";
+        Text[ swedish ] = "Visa ~logotyp";
+        Text[ polish ] = "Poka¿ logo";
+        Text[ portuguese_brazilian ] = "Show ~logo";
+        Text[ japanese ] = "ÛºŞ‚Ì•\\¦(~L)";
+        Text[ chinese_simplified ] = "ÏÔÊ¾»Õ±ê(~L)";
+        Text[ chinese_traditional ] = "Åã¥Ü¹Ï¼Ğ(~L)";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáÔÚÇÑ";
+        Text[ greek ] = "ÅìöÜíéóç ëïãüôõğïõ";
+        Text[ korean ] = "·Î°í ³ªÅ¸³»±â(~L)";
+        Text[ turkish ] = "Logo görüntüle";
+        Text[ language_user1 ] = " ";
+    };
+
+    GroupBox GRP_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 102 , 73 ) ;
+        Size = MAP_APPFONT ( 140, 98 );
+        Text = "Optionen" ;
+        Text [ ENGLISH ] = "Options" ;
+        Text [ norwegian ] = "Options" ;
+        Text [ italian ] = "Opzioni" ;
+        Text [ portuguese_brazilian ] = "Opções" ;
+        Text [ portuguese ] = "Opções" ;
+        Text [ finnish ] = "Määritykset" ;
+        Text [ danish ] = "Indstillinger" ;
+        Text [ french ] = "Options" ;
+        Text [ swedish ] = "Alternativ" ;
+        Text [ dutch ] = "Opties" ;
+        Text [ spanish ] = "Opciones" ;
+        Text [ english_us ] = "Options" ;
+        Text[ chinese_simplified ] = "Ñ¡Ïî";
+        Text[ russian ] = "Ïàğàìåòğû";
+        Text[ polish ] = "Opcje";
+        Text[ japanese ] = "µÌß¼®İ";
+        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ arabic ] = "ÎíÇÑÇÊ";
+        Text[ greek ] = "Åğéëïãİò";
+        Text[ korean ] = "¿É¼Ç";
+        Text[ turkish ] = "Seçenekler";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_MANUEL
+    {
+        Pos = MAP_APPFONT ( 108 , 84 ) ;
+        Size = MAP_APPFONT ( 121 , 12 ) ;
+        Text = "Diawechsel ~manuell" ;
+        Text [ ENGLISH ] = "~Manual advance" ;
+        Text [ norwegian ] = "~+++Manuell framgangsmåte" ;
+        Text [ italian ] = "~Avanzamento manuale" ;
+        Text [ portuguese_brazilian ] = "~Avançar Manual" ;
+        Text [ portuguese ] = "Transição ~manual de diapositivos" ;
+        Text [ finnish ] = "~Manuaalinen ohjaus" ;
+        Text [ danish ] = "Manuel diasovergang" ;
+        Text [ french ] = "~Transition manuelle" ;
+        Text [ swedish ] = "~Manuell diabildsväxling" ;
+        Text [ dutch ] = "~Dia´s handmatig wisselen" ;
+        Text [ spanish ] = "Avan~ce manual de diapositivas" ;
+        Text [ english_us ] = "~Change slides manually" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ÊÖ¹¤¸ü»»»ÃµÆÆ¬(~C)";
+        Text[ russian ] = "Ñìåíà ñëàéäà âğó÷íóş";
+        Text[ polish ] = "Zmieniaj slajdy rêcznie";
+        Text[ japanese ] = "è“®‚Å‰æ–ÊØ‚è‘Ö‚¦(~C)";
+        Text[ chinese_traditional ] = "¤â¤u§ó´«§ë¼v¤ù(~C)";
+        Text[ arabic ] = "ÊÛííÑ ÇáÔÑíÍÉ íÏæíÇğ";
+        Text[ greek ] = "ÁëëáãŞ äéá~öáíåéşí (slides) ÷åéñïêßíçôá";
+        Text[ korean ] = "¼öµ¿À¸·Î ½½¶óÀÌµå ±³È¯(~C)";
+        Text[ turkish ] = "Manüel slayt geçişi";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_MOUSEPOINTER
+    {
+        Pos = MAP_APPFONT ( 108, 96 ) ;
+        Size = MAP_APPFONT ( 121, 12 ) ;
+        Text = "Maus~zeiger sichtbar" ;
+        Text [ ENGLISH ] = "Mousepointer ~visible" ;
+        Text [ norwegian ] = "Musepeker ~synlig" ;
+        Text [ italian ] = "Puntatore mouse ~visibile" ;
+        Text [ portuguese_brazilian ] = "Ponteiro do mouse ~visível" ;
+        Text [ portuguese ] = "Ponteiro do rato ~visível" ;
+        Text [ finnish ] = "Hiiren osoitin ~näkyy" ;
+        Text [ danish ] = "Musemarkør synlig" ;
+        Text [ french ] = "Pointeur ~visible" ;
+        Text [ swedish ] = "Visa mus~pekare" ;
+        Text [ dutch ] = "Muisaanwijzer ~zichtbaar" ;
+        Text [ spanish ] = "Puntero del ratón vi~sible" ;
+        Text [ english_us ] = "Mouse pointer ~visible" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾Êó±ê(~V)";
+        Text[ russian ] = "Ïîêàçàòü óêàçàòåëü ìûøè";
+        Text[ polish ] = "WskaŸnik myszy widoczny";
+        Text[ japanese ] = "Ï³½Îß²İÀ‚ª–Ú‚ÉŒ©‚¦‚é(~V)";
+        Text[ chinese_traditional ] = "Åã¥Ü¹«¼Ğ(~V)";
+        Text[ arabic ] = "ãÄÔÑ ÇáãÇæÓ ãÑÆí";
+        Text[ greek ] = "Äåßêôçò ğïíôéêéïı ïñáôüò";
+        Text[ korean ] = "¸¶¿ì½º Æ÷ÀÎÅÍ º¸ÀÌ°Ô(~V)";
+        Text[ turkish ] = "Fare okunu görüntüle";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_PEN
+    {
+        Pos = MAP_APPFONT ( 108, 108 ) ;
+        Size = MAP_APPFONT ( 121, 12 ) ;
+        Text = "Mauszeiger als ~Stift" ;
+        Text [ ENGLISH ] = "Mousepointer ~Pen" ;
+        Text [ norwegian ] = "Musepeker ~Penn" ;
+        Text [ italian ] = "Puntatore mouse come ~penna" ;
+        Text [ portuguese_brazilian ] = "Caneta do ~ponteiro do mouse" ;
+        Text [ portuguese ] = "Ponteiro do rato como ~lápis" ;
+        Text [ finnish ] = "Hiien osoitn ~kynänä" ;
+        Text [ danish ] = "Musemarkør som pen" ;
+        Text [ french ] = "Pointeur ~crayon" ;
+        Text [ swedish ] = "Muspekare ~som penna" ;
+        Text [ dutch ] = "~Muisaanwijzer als pen" ;
+        Text [ spanish ] = "Puntero del ratón como p~luma" ;
+        Text [ english_us ] = "Mouse pointer as ~pen" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Êó±êÏÔÊ¾³É±ÊĞÍ(~P)";
+        Text[ russian ] = "Óêàçàòåëü ìûøè â âèäå êàğàíäàøà";
+        Text[ polish ] = "WskaŸnik myszy jako pióro";
+        Text[ japanese ] = "Ï³½Îß²İÀ‚ğÍßİ‚Æ‚µ‚Ä(~P)";
+        Text[ chinese_traditional ] = "¹«¼ĞÅã¥Ü¦¨µ§«¬(~P)";
+        Text[ arabic ] = "ãÄÔÑ ÇáãÇæÓ Úáì åíÆÉ Şáã";
+        Text[ greek ] = "Äåßêôçò ğïíôéêéïı ùò ğİíá";
+        Text[ korean ] = "¸¶¿ì½º Æ÷ÀÎÅÍ¸¦ ÆæÀ¸·Î(~P)";
+        Text[ turkish ] = "Kalem biçiminde fare oku";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_NAVIGATOR
+    {
+        Pos = MAP_APPFONT ( 108, 120 ) ;
+        Size = MAP_APPFONT ( 121, 12 ) ;
+        Text = "~Navigator sichtbar" ;
+        Text [ ENGLISH ] = "~Navigator visible" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "~Navigator zichtbaar" ;
+        Text [ english_us ] = "~Navigator visible" ;
+        Text [ italian ] = "~Pulsanti di navigazione visibili" ;
+        Text [ spanish ] = "Ver ~Navegador" ;
+        Text [ french ] = "~Navigateur visible" ;
+        Text [ swedish ] = "~Navigator synlig" ;
+        Text [ danish ] = "Navigator synlig" ;
+        Text [ portuguese ] = "~Navegador vísivel" ;
+        Text [ portuguese_brazilian ] = "~Navigator sichtbar" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾ÖúÊÖ(~N)";
+        Text[ russian ] = "Ïîêàçàòü íàâèãàòîğà";
+        Text[ polish ] = "Nawigator widoczny";
+        Text[ japanese ] = "ÅËŞ¹Ş°À‚ª–Ú‚ÉŒ©‚¦‚é(~N)";
+        Text[ chinese_traditional ] = "Åã¥Ü§U¤â(~N)";
+        Text[ arabic ] = "ÇáäÇİíÌíÊæÑ ãÑÆí";
+        Text[ greek ] = "Navigator ïñáôüò";
+        Text[ korean ] = "³×ºñ°ÔÀÌÅÍ º¸ÀÌ±â(~N)";
+        Text[ turkish ] = "Navigatörü görüntüle";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_ANIMATION_ALLOWED
+    {
+        Pos = MAP_APPFONT ( 108, 132 ) ;
+        Size = MAP_APPFONT ( 121, 12 ) ;
+        TabStop = TRUE ;
+        Text = "Animati~onen zulassen" ;
+        Text [ ENGLISH ] = "Animati~ons allowed" ;
+        Text [ english_us ] = "~Animations allowed" ;
+        Text [ portuguese_brazilian ] = "Animati~onen zulassen" ;
+        Text [ swedish ] = "Tillåt animati~oner" ;
+        Text [ danish ] = "Tillad animationer" ;
+        Text [ italian ] = "Permetti animazioni" ;
+        Text [ spanish ] = "Permitir animaci~ones" ;
+        Text [ french ] = "Permettre les animations" ;
+        Text [ dutch ] = "Animati~es toestaan" ;
+        Text [ portuguese ] = "Permitir a~nimações" ;
+        Text[ chinese_simplified ] = "ÔÊĞí¶¯»­(~A)";
+        Text[ russian ] = "Äîïóñòèòü àíèìàöèè";
+        Text[ polish ] = "Dopu~œæ animacje";
+        Text[ japanese ] = "±ÆÒ°¼®İ‚ğ‹–‰Â‚·‚é(~A)";
+        Text[ chinese_traditional ] = "¤¹³\\°Êµe(~A)";
+        Text[ arabic ] = "ÇáÓãÇÍ ÈÇáÍÑßÉ";
+        Text[ greek ] = "Åğéôñİğ~ïíôáé åöİ êßíçóçò";
+        Text[ korean ] = "¾Ö´Ï¸ŞÀÌ¼Ç Çã¿ë(~A)";
+        Text[ turkish ] = "Canlandırmaya izin ver";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_CHANGE_PAGE
+    {
+        Pos = MAP_APPFONT ( 108, 144 ) ;
+        Size = MAP_APPFONT ( 121, 12 ) ;
+        Text = "Diawechsel bei ~Klick auf Hintergrund" ;
+        Text [ ENGLISH ] = "Change slides on mouse ~click" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Change slides by clic~king on background" ;
+        Text [ italian ] = "Cambio dia dopo clic sullo sfondo" ;
+        Text [ spanish ] = "Transición de dia. pulsando en ~fondo" ;
+        Text [ french ] = "Transition : ~clic sur l'arrière-plan" ;
+        Text [ dutch ] = "Dia~wissel per klik op achtergrond" ;
+        Text [ swedish ] = "Diaväxling vid ~klick på bakgrunden" ;
+        Text [ danish ] = "Diasovergang ved klik på baggrunden" ;
+        Text [ portuguese ] = "Transição diapos.: clique plano de ~fundo" ;
+        Text [ portuguese_brazilian ] = "Diawechsel bei ~Klick auf Hintergrund" ;
+        Text[ chinese_simplified ] = "µ¥»÷±³¾°¸ü»»ÑİÊ¾ÎÄ¸å(~M)";
+        Text[ russian ] = "Ïåğåõîä ñëàéäà ïî ùåë÷êó íà ôîíå";
+        Text[ polish ] = "Zmiana ~slajdu przy klikniêciu t³a";
+        Text[ japanese ] = "”wŒi‚ğ¸Ø¯¸‚µ‚Ä‰æ–ÊØ‚è‘Ö‚¦(~M)";
+        Text[ chinese_traditional ] = "«ö¤@¤U¹«ÁäÅÜ§óÂ²³ø(~M)";
+        Text[ arabic ] = "ÊÛííÑ ÇáÔÑíÍÉ ÚäÏ ÇáäŞÑ İæŞ ÇáÎáİíÉ";
+        Text[ greek ] = "ÁëëáãŞ äéáöÜíåéáò (slides) ìå ~êëéê ôïõ öüíôïõ";
+        Text[ korean ] = "¹è°æ¿¡ Å¬¸¯ÇÒ ¶§ ½½¶óÀÌµå ±³È¯(~M)";
+        Text[ turkish ] = "Artalana tıklayınca slayt değiştir";
+        Text[ language_user1 ] = "RB: bitte auf die Länge des Textes achten. Der Text soll nicht die Länge des deutschen Textes überschreiten.";
+    };
+    CheckBox CBX_ALWAYS_ON_TOP
+    {
+        Pos = MAP_APPFONT ( 108, 156 ) ;
+        Size = MAP_APPFONT ( 131, 12 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Präsentation immer im ~Vordergrund : Prõsentation immer im ~Vordergrund */
+        Text = "Bildschirmpräsentation immer im ~Vordergrund" ;
+        Text [ ENGLISH ] = "Presentation always on ~top" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Presentation always ~on top" ;
+        Text [ italian ] = "Presentazione in primo piano" ;
+        Text [ spanish ] = "Prese~ntación siempre en primer plano" ;
+        Text [ french ] = "~Présentation toujours au premier plan" ;
+        Text [ dutch ] = "Schermpresentatie ~steeds op de voorgrond" ;
+        Text [ swedish ] = "Presentation alltid i förgrunden" ;
+        Text [ danish ] = "Diasshow altid i forgrunden" ;
+        Text [ portuguese ] = "Apresentação sempre em ~primeiro plano" ;
+        Text [ portuguese_brazilian ] = "Präsentation immer im ~Vordergrund" ;
+        Text[ chinese_simplified ] = "×ÜÊÇÇ°¶ËÏÔÊ¾ÑİÊ¾ÎÄ¸å(~O)";
+        Text[ russian ] = "Âñåãäà íà ïåğåäíåì ïëàíå";
+        Text[ polish ] = "Prezentacja zawsze na pierwszym planie";
+        Text[ japanese ] = "½×²ÄŞ¼®°‚ªí‚É‘OŒi(~O)";
+        Text[ chinese_traditional ] = "Á`¬O«eºİÅã¥ÜÂ²³ø(~O)";
+        Text[ arabic ] = "ÇáÚÑÖ ÏÇÆãÇğ İí ÇáÃãÇãíÉ";
+        Text[ greek ] = "Ğáñïõóßáóç ïèüíçò ğÜíôá óå ğñşôï ğëÜíï";
+        Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼ÇÀ» Ç×»ó Àü¸é¿¡(~O)";
+        Text[ turkish ] = "Ekran sunusunu hep önde göster";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_traditional ] = "©ñ¬MÂ²³ø§ë¼v¤ù";
+    Text[ arabic ] = "ÇáÚÑÖ Úáì ÇáÔÇÔÉ";
+    Text[ greek ] = "Ğáñïõóßáóç ïèüíçò";
+    Text[ korean ] = "½½¶óÀÌµå ¼î";
+    Text[ turkish ] = "Ekran sunusu";
+    Text[ language_user1 ] = " ";
+};

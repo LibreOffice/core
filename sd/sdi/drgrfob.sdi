@@ -1,0 +1,111 @@
+shell SdDrawGrafObjectBar
+{
+    SID_GRAFTBX_FILTERS // ole : no, status : ?
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState ;
+    ]
+    SID_GRAFFILTER_INVERT // ole : no, status : no
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState ;
+    ]
+    SID_GRAFFILTER_SMOOTH // ole : no, status : no
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState ;
+    ]
+    SID_GRAFFILTER_SHARPEN // ole : no, status : no
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState ;
+    ]
+    SID_GRAFFILTER_REMOVENOISE // ole : no, status : no
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState ;
+    ]
+    SID_GRAFFILTER_SOBEL // ole : no, status : no
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRAFFILTER_MOSAIC // ole : no, status : no
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRAFFILTER_EMBOSS // ole : no, status : no
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRAFFILTER_POSTER // ole : no, status : no
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRAFFILTER_POPART // ole : no, status : no
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRAFFILTER_SEPIA // ole : no, status : no
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRAFFILTER_SOLARIZE // ole : no, status : no
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+
+//------------------------------------------------------------------------------
+
+    SID_ATTR_GRAF_MODE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_RED
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_GREEN
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_BLUE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_LUMINANCE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_CONTRAST
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_GAMMA
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_TRANSPARENCE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_INVERT
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+}

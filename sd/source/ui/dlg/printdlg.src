@@ -1,0 +1,244 @@
+/*************************************************************************
+ *
+ *  $RCSfile: printdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "printdlg.hrc"
+ModalDialog DLG_PRINT_WARNINGS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 212 , 87 ) ;
+    Text = "Warnung Druckoptionen" ;
+    Text [ ENGLISH ] = "Warning Print options" ;
+    Moveable = TRUE ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 156 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 156 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 156 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GRP_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 144 , 78 ) ;
+        Text = "Druckoptionen" ;
+        Text [ ENGLISH ] = "Print options" ;
+        Text [ english_us ] = "Print options" ;
+        Text [ portuguese ] = "Opções de impressão" ;
+        Text [ swedish ] = "Utskriftsalternativ" ;
+        Text [ danish ] = "Udskriftsindstillinger" ;
+        Text [ italian ] = "Opzioni di stampa" ;
+        Text [ spanish ] = "Opciones de impresión" ;
+        Text [ french ] = "Options d'impression" ;
+        Text [ dutch ] = "Afdrukopties" ;
+        Text [ portuguese_brazilian ] = "Druckoptionen" ;
+        Text[ chinese_simplified ] = "´òÓ¡Ñ¡Ïî";
+        Text[ russian ] = "Ïàğàìåòğû ïå÷àòè";
+        Text[ polish ] = "Opcje wydruku";
+        Text[ japanese ] = "ˆóüµÌß¼®İ";
+        Text[ chinese_traditional ] = "¦C¦L¿ï¶µ";
+        Text[ arabic ] = "ÎíÇÑÇÊ ÇáØÈÇÚÉ";
+        Text[ greek ] = "Åğéëïãİò åêôığùóçò";
+        Text[ korean ] = "ÀÎ¼â ¿É¼Ç";
+        Text[ turkish ] = "Yazdırma seçenekleri";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_SCALE
+    {
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 129 , 12 ) ;
+        Text = "~Seite an Druckbereich anpassen" ;
+        Text [ ENGLISH ] = "~Scale page" ;
+        TabStop = TRUE ;
+        Text [ portuguese_brazilian ] = "~Seite an Druckbereich anpassen" ;
+        Text [ english_us ] = "~Fit page to print range" ;
+        Text [ portuguese ] = "~Adaptar à página" ;
+        Text [ swedish ] = "Anpassa ~sida till utskriftområde" ;
+        Text [ danish ] = "Tilpas side til udskriftsområde" ;
+        Text [ italian ] = "Adatta la pagina all'area di stampa" ;
+        Text [ spanish ] = "Ajustar ~página a área de impresión" ;
+        Text [ french ] = "~Adapter la page à la zone d'impression" ;
+        Text [ dutch ] = "~Pagina aanpassen aan afdrukbereik" ;
+        Text[ chinese_simplified ] = "Ò³ÃæºÍ´òÓ¡·¶Î§ÏàÊÊÓ¦(~F)";
+        Text[ russian ] = "~Ïîäáîğ ñòğàíèöû ïîä îáëàñòü ïå÷àòè";
+        Text[ polish ] = "Dopasuj stronê do obszaru wydruku";
+        Text[ japanese ] = "Íß°¼Ş‚ğˆóü”ÍˆÍ‚É‡‚í‚¹‚é(~F)";
+        Text[ chinese_traditional ] = "­¶­±©M¦C¦L½d³ò¬Û¾AÀ³(~F)";
+        Text[ arabic ] = "ãáÇÁãÉ ÇáÕİÍÉ áäØÇŞ ÇáØÈÇÚÉ";
+        Text[ greek ] = "ĞñïóáñìïãŞ óå óåëßäá";
+        Text[ korean ] = "ÆäÀÌÁö¸¦ ÀÎ¼â¿µ¿ª¿¡ ¸ÂÃã(~F)";
+        Text[ turkish ] = "Sayfaya sığdır";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_POSTER
+    {
+        Pos = MAP_APPFONT ( 12 , 54 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+        Text = "Auf ~mehrere Seiten drucken" ;
+        Text [ ENGLISH ] = "~Posterize" ;
+        TabStop = TRUE ;
+        Text [ portuguese_brazilian ] = "Auf ~mehrere Seiten drucken" ;
+        Text [ english_us ] = "~Posterize" ;
+        Text [ portuguese ] = "Imprimir em ~várias páginas" ;
+        Text [ swedish ] = "Skriv ut på ~flera sidor" ;
+        Text [ danish ] = "Udskriv på flere sider" ;
+        Text [ italian ] = "Stampa su più pagine" ;
+        Text [ spanish ] = "Imprimir en ~varias páginas" ;
+        Text [ french ] = "Imprimer sur plusieurs pages" ;
+        Text [ dutch ] = "Op ~meerdere pagina´s afdrukken" ;
+        Text[ chinese_simplified ] = "·Ö¿ª´òÓ¡ÔÚ¶à¸öÒ³ÃæÉÏ(~P)";
+        Text[ russian ] = "Ïå÷àòü íà íåñêîëüêèõ ñòğàíèöàõ";
+        Text[ polish ] = "Drukuj na kilku stronach";
+        Text[ japanese ] = "‰½Íß°¼Ş‚àˆóü(~P)";
+        Text[ chinese_traditional ] = "¤À¶}¦C¦L¦b¦h­Ó­¶­±¤W(~P)";
+        Text[ arabic ] = "ØÈÇÚÉ Úáì ÕİÍÇÊ ãÊÚÏÏÉ";
+        Text[ greek ] = "Åêôığùóç óå ğåñéóóüôåñåò óåëßäåò";
+        Text[ korean ] = "¿©·¯ ÆäÀÌÁö¿¡ ÀÎ¼â(~P)";
+        Text[ turkish ] = "Birden çok sayfaya yazdır";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_CUT
+    {
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Size = MAP_APPFONT ( 127 , 12 ) ;
+        Text = "~Abschneiden" ;
+        Text [ ENGLISH ] = "~Cut" ;
+        TabStop = TRUE ;
+        Text [ portuguese_brazilian ] = "~Abschneiden" ;
+        Text [ english_us ] = "~Trim" ;
+        Text [ portuguese ] = "~Cortar" ;
+        Text [ swedish ] = "~Klipp" ;
+        Text [ danish ] = "Beskær" ;
+        Text [ italian ] = "Ritaglia" ;
+        Text [ spanish ] = "~Cortar" ;
+        Text [ french ] = "~Couper" ;
+        Text [ dutch ] = "~Afknippen" ;
+        Text[ chinese_simplified ] = "²Ã¼ô(~T)";
+        Text[ russian ] = "~Îáğåçàòü";
+        Text[ polish ] = "Przytnij";
+        Text[ japanese ] = "Ø‚èæ‚è(~T)";
+        Text[ chinese_traditional ] = "°Å¤U(~T)";
+        Text[ arabic ] = "ÇŞÊÕÇÕ";
+        Text[ greek ] = "ÁğïêïğŞ";
+        Text[ korean ] = "Àß¶ó ³»±â(~T)";
+        Text[ turkish ] = "Kes";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FI_INFO
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 134 , 25 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Die Seiteneinstellungen stimmen nicht mit dem Druckbereich überein.\nSie können folgende Optionen wählen : Die Seiteneinstellungen stimmen nicht mit dem Druckbereich ³berein.\nSie k÷nnen folgende Optionen wõhlen */
+        Text = "Die Seiteneinstellungen stimmen nicht mit dem Druckbereich überein.\nSie können folgende Optionen wählen" ;
+        Text [ portuguese ] = "A configuração da página não é compatível com a área de impressão.\nPode escolher as seguintes opções" ;
+        Text [ swedish ] = "Sidinställningarna stämmer inte överens med utskriftsområdet.\nVälj ett av följande alternativ" ;
+        Text [ danish ] = "Sideindstillingerne svarer ikke til udskriftsområdet.\nDu kan vælge følgende muligheder" ;
+        Text [ italian ] = "Le impostazioni della pagina non corrispondono all'area di stampa.\nÈ possibile scegliere le seguenti opzioni" ;
+        Text [ spanish ] = "La configuración de página no coincide con el área de impresión.\nSeleccione una de las siguientes opciones." ;
+        Text [ french ] = "Les mises en page ne concordent pas avec la zone d'impression.\nVous pouvez choisir les options suivantes" ;
+        Text [ dutch ] = "De pagina-instellingen komen niet overeen met het afdrukbereik.\nU kunt de volgende opties kiezen" ;
+        Text [ ENGLISH ] = "The page layout does not match the print area.\nChoose one of the following options:" ;
+        Text [ english_us ] = "The page settings do not match the print range.\nChoose one of the following options" ;
+        WordBreak = TRUE ;
+        Text [ portuguese_brazilian ] = "Die Seiteneinstellungen stimmen nicht mit dem Druckbereich überein.\nSie können folgende Optionen wählen" ;
+        Text[ chinese_simplified ] = "Ò³ÃæÉè¶¨ºÍ´òÓ¡·¶Î§²»Ò»ÖÂ¡£\nÄúÄÜ¹»Ñ¡ÔñÒÔÏÂµÄÑ¡Ïî¡£";
+        Text[ russian ] = "Ïàğàìåòğû ñòğàíèöû íå ñîâïàäàşò ñ îáëàñòüş ïå÷àòè.\nÂû ìîæåòå âûáğàòü ñëåäóşùèå ïàğàìåòğû";
+        Text[ polish ] = "Ustawienia strony s¹ niezgodne z obszarem wydruku.\nMo¿esz wybraæ nastêpuj¹ce opcje";
+        Text[ japanese ] = "Íß°¼Şİ’è‚ªˆóü”ÍˆÍ‚Æˆê’v‚µ‚Ü‚¹‚ñB\nŸ‚ÌµÌß¼®İ‚ğ‘I‘ğ‚Å‚«‚Ü‚·";
+        Text[ chinese_traditional ] = "­¶­±³]©w©M¦C¦L½d³ò¤£¤@­P¡C\n±z¯à°÷¿ï¾Ü¥H¤Uªº¿ï¶µ¡C";
+        Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇáÕİÍÉ ÛíÑ ãáÇÆãÉ áäØÇŞ ÇáØÈÇÚÉ.\nÇÎÊÑ ÃÍÏ ÇáÎíÇÑÇÊ ÇáÊÇáíÉ";
+        Text[ greek ] = "Ç äéÜôáîç ôçò óåëßäáò äåí óõìğßğôåé ìå ôçí ğåñéï÷Ş åêôığùóçò.\nÅğéëİîôå ìßá áğü ôéò ğáñáêÜôù åğéëïãİò";
+        Text[ korean ] = "ÆäÀÌÁö ¼³Á¤ÀÌ ÀÎ¼â ¿µ¿ª°ú ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.\n´ÙÀ½°ú °°Àº ¿É¼ÇÀ» ¼±ÅÃÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+        Text[ turkish ] = "Sayfa ayarları ile yazdırma aralığı örtüşmüyor.\nAşağıdaki seçeneklerden birini seçin:";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ english_us ] = "Warning Print Options" ;
+    Text [ portuguese ] = "Aviso sobre opções de impressão" ;
+    Text [ swedish ] = "Varning utskriftsalternativ" ;
+    Text [ danish ] = "Advarsel udskriftsindstillinger" ;
+    Text [ italian ] = "Avvertimento opzioni di stampa" ;
+    Text [ spanish ] = "Advertencia opciones de impresión" ;
+    Text [ french ] = "Avertissement options d'impression" ;
+    Text [ dutch ] = "Waarschuwing afdrukopties" ;
+    Text [ portuguese_brazilian ] = "Warnung Druckoptionen" ;
+    Text[ chinese_simplified ] = "´òÓ¡Ñ¡ÏîµÄ¾¯¸æ";
+    Text[ russian ] = "Ïğåäóïğåæäåíèå Ïàğàìåòğû ïå÷àòè";
+    Text[ polish ] = "Ostrze¿enie Opcje wydruku";
+    Text[ japanese ] = "ˆóüµÌß¼®İ‚ÌŒx";
+    Text[ chinese_traditional ] = "¦C¦L¿ï¶µªºÄµ§i";
+    Text[ arabic ] = "ÊÍĞíÑ ÎíÇÑÇÊ ÇáØÈÇÚÉ";
+    Text[ greek ] = "Ğñïåéäïğïßçóç åğéëïãşí åêôığùóçò";
+    Text[ korean ] = "°æ°í ÀÎ¼â ¿É¼Ç";
+    Text[ turkish ] = "Uyarı: Yazdırma seçenekleri";
+    Text[ language_user1 ] = " ";
+};

@@ -1,0 +1,92 @@
+enum SvxAdjust
+{
+    SVX_ADJUST_LEFT,
+    SVX_ADJUST_RIGHT,
+    SVX_ADJUST_BLOCK,
+    SVX_ADJUST_CENTER,
+    SVX_ADJUST_BLOCKLINE,
+    SVX_ADJUST_END
+}
+
+item
+{
+    INT16 Red;
+    INT16 Green;
+    INT16 Blue;
+} SvxColorItem
+
+item SvxAdjust SvxAdjustItem;
+
+item String SvxBoxInfoItem;
+
+item String SvxBoxItem;
+item String SvxBrushItem;
+item String SvxCaseMapItem;
+item String SvxCharSetColorItem;
+item String SvxColumnItem;
+item String SvxContourItem;
+item String SvxCrossedOutItem;
+item String SvxDBDescMgr;
+item String SvxDbTypeItem;
+item String SvxEscapementItem;
+item String SvxFmtBreakItem;
+item String SvxFmtSplitItem;
+item String SvxFontHeightItem;
+item String SvxFontItem;
+item String SvxFontListItem;
+item String SvxHyphenZoneItem;
+item String SvxInFrameItem;
+item String SvxKerningItem;
+item String SvxLRSpaceItem;
+item String SvxLanguageItem;
+item String SvxLineSpacingItem;
+item String SvxMacroItem;
+item String SvxNoHyphenItem;
+item String SvxNoLinebreakItem;
+item String SvxNumberInfoItem;
+item String SvxOpaqueItem;
+item String SvxOrphansItem;
+item String SvxPageItem;
+item String SvxPageModelItem;
+item String SvxPagePosSizeItem;
+item String SvxPaperBinItem;
+item String SvxParaDlgLimitsItem;
+item String SvxPostItAuthorItem;
+item String SvxPostItDateItem;
+item String SvxPostItTextItem;
+item String SvxPostureItem;
+item String SvxPrintItem;
+item String SvxPropSizeItem;
+item String SvxProtectItem;
+item String SvxPtrItem;
+item String SvxRulerItem;
+item String SvxSearchItem;
+item String SvxSearchControllerItem;
+item String SvxSearchItem;
+item String SvxSetItem;
+item String SvxShadowedItem;
+item String SvxShadowItem;
+item String SvxSizeItem;
+item String SvxTabStopItem;
+item String SvxULSpaceItem;
+item String SvxUnderlineItem;
+item String SvxWeightItem;
+item String SvxWidowsItem;
+item String SvxWordLineModeItem;
+item String XFillAttrSetItem;
+item String XFillBitmapItem;
+item String XFillColorItem;
+item String XFillGradientItem;
+item String XFillHatchItem;
+item String XFillStyleItem;
+item String XLineAttrSetItem;
+item String XLineColorItem;
+item String XLineDashItem;
+item String XLineEndItem;
+item String XLineEndWidthItem;
+item String XLineEndCenterItem;
+item String XLineStartItem;
+item String XLineStartWidthItem;
+item String XLineStartCenterItem;
+item String XLineStyleItem;
+item String XLineWidthItem;

@@ -1,0 +1,206 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlgpage.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <svx/dialogs.hrc>
+#include "dlgpage.hrc"
+TabDialog TAB_PAGE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 289 , 176 ) ;
+    Text = "Seite einrichten" ;
+    Text [ ENGLISH ] = "Page Setup" ;
+    Text [ norwegian ] = "Side Oppsett" ;
+    Text [ italian ] = "Impostazione pagina" ;
+    Text [ portuguese_brazilian ] = "ConfiguraÁ„o da P·gina" ;
+    Text [ portuguese ] = "Configurar p·gina" ;
+    Text [ finnish ] = "Sivun asetukset" ;
+    Text [ danish ] = "SideopsÊtning" ;
+    Text [ french ] = "Mise en page" ;
+    Text [ swedish ] = "Inr‰tta sida" ;
+    Text [ dutch ] = "Pagina-instelling" ;
+    Text [ spanish ] = "Preparar p·gina" ;
+    Text [ english_us ] = "Page Setup" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PAGE ;
+                Text = "Seite" ;
+                Text [ ENGLISH ] = "Page" ;
+                Text [ norwegian ] = "Page" ;
+                Text [ italian ] = "Pagina" ;
+                Text [ portuguese_brazilian ] = "P·gina" ;
+                Text [ portuguese ] = "P·gina" ;
+                Text [ finnish ] = "Sivu" ;
+                Text [ danish ] = "Side" ;
+                Text [ french ] = "Page" ;
+                Text [ swedish ] = "Sida" ;
+                Text [ dutch ] = "Pagina" ;
+                Text [ spanish ] = "P·gina" ;
+                Text [ english_us ] = "Page" ;
+                PageResID = RID_SVXPAGE_PAGE ;
+                Text[ chinese_simplified ] = "“≥√Ê";
+                Text[ russian ] = "—Ú‡ÌËˆ‡";
+                Text[ polish ] = "Strona";
+                Text[ japanese ] = "Õﬂ∞ºﬁ";
+                Text[ chinese_traditional ] = "≠∂≠±";
+                Text[ arabic ] = "’›Õ…";
+                Text[ greek ] = "”ÂÎﬂ‰·";
+                Text[ korean ] = "∆‰¿Ã¡ˆ";
+                Text[ turkish ] = "Sayfa";
+                Text[ language_user1 ] = " ";
+            };
+
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_AREA;
+                Text = "Hintergrund";
+                Text [ ENGLISH ] = "Background";
+                PageResID = RID_SVXPAGE_AREA;
+                Text[ italian ] = "Sfondo";
+                Text[ portuguese_brazilian ] = "Background";
+                Text[ portuguese ] = "Plano de fundo";
+                Text[ danish ] = "Baggrund";
+                Text[ french ] = "ArriËre-plan";
+                Text[ swedish ] = "Bakgrund";
+                Text[ dutch ] = "Achtergrond";
+                Text[ spanish ] = "Fondo";
+                Text[ english_us ] = "Background";
+                Text[ chinese_simplified ] = "±≥æ∞";
+                Text[ russian ] = "‘ÓÌ";
+                Text[ polish ] = "T≥o";
+                Text[ japanese ] = "îwåi";
+                Text[ chinese_traditional ] = "≠I¥∫";
+                Text[ arabic ] = "«·Œ·›Ì…";
+                Text[ greek ] = "÷¸ÌÙÔ";
+                Text[ korean ] = "πË∞Ê";
+                Text[ turkish ] = "Artalan";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 6 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 60 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 114 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton 1
+    {
+        Pos = MAP_APPFONT ( 169 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Zur¸ck : Zur≥ck */
+        Text = "Zur¸ck" ;
+        Text [ ENGLISH ] = "Return" ;
+        Text [ norwegian ] = "Return" ;
+        Text [ italian ] = "Indietro" ;
+        Text [ portuguese_brazilian ] = "Devolver" ;
+        Text [ portuguese ] = "Anterior" ;
+        Text [ finnish ] = "Palaa" ;
+        Text [ danish ] = "Tilbage" ;
+        Text [ french ] = "PrÈcÈdent" ;
+        Text [ swedish ] = "Tillbaka" ;
+        Text [ dutch ] = "Vorige" ;
+        Text [ spanish ] = "Regresar" ;
+        Text [ english_us ] = "Return" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "∑µªÿ";
+        Text[ russian ] = "Õ‡Á‡‰";
+        Text[ polish ] = "Wstecz";
+        Text[ japanese ] = "ñﬂÇÈ";
+        Text[ chinese_traditional ] = "™¶^";
+        Text[ arabic ] = "«·”«»ﬁ";
+        Text[ greek ] = "≈ÈÛÙÒÔˆﬁ";
+        Text[ korean ] = "µ«µπæ∆ ∞°±‚";
+        Text[ turkish ] = "Geri";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "…Ë∂®“≥√Ê";
+    Text[ russian ] = "œ‡‡ÏÂÚ˚ ÒÚ‡ÌËˆ˚";
+    Text[ polish ] = "Uk≥ad strony";
+    Text[ japanese ] = "Õﬂ∞ºﬁê›íË";
+    Text[ chinese_traditional ] = "≥]©w≠∂≠±";
+    Text[ arabic ] = "≈⁄œ«œ «·’›Õ…";
+    Text[ greek ] = "ƒÈ·Ï¸Òˆ˘ÛÁ ÛÂÎﬂ‰·Ú";
+    Text[ korean ] = "∆‰¿Ã¡ˆ º≥¡§";
+    Text[ turkish ] = "Sayfa yap˝s˝";
+    Text[ language_user1 ] = " ";
+};

@@ -1,0 +1,171 @@
+/*************************************************************************
+ *
+ *  $RCSfile: inspagob.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "inspagob.hrc"
+ModalDialog DLG_INSERT_PAGES_OBJS
+{
+    HelpID = DLG_INSERT_PAGES_OBJS ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 200 , 128 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Seiten/Objekte einfügen : Seiten/Objekte einf³gen */
+    Moveable = TRUE ;
+    Text = "Seiten/Objekte einfügen" ;
+    Text [ ENGLISH ] = "Insert pages/objects" ;
+    Text [ english_us ] = "Insert Slides/Objects" ;
+    Text [ italian ] = "Inserisci pagine/oggetti" ;
+    Text [ spanish ] = "Insertar páginas/objetos" ;
+    Text [ french ] = "Insérer des pages/objets" ;
+    Text [ dutch ] = "Pagina/objecten invoegen" ;
+    Text [ swedish ] = "Infoga sidor/objekt" ;
+    Text [ danish ] = "Indsæt sider/objekter" ;
+    Text [ portuguese ] = "Inserir páginas/objectos" ;
+    Text [ portuguese_brazilian ] = "Seiten/Objekte einfügen" ;
+    Text[ chinese_simplified ] = "²åÈëÒ³Ãæ/¶ÔÏó";
+    Text[ russian ] = "Âñòàâèòü ñëàéäû/îáúåêòû";
+    Text[ polish ] = "Wstaw slajdy/obiekty";
+    Text[ japanese ] = "Íß°¼Ş/µÌŞ¼Şª¸Ä‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤J­¶­±/ª«¥ó";
+    Text[ arabic ] = "ÅÏÑÇÌ ÕİÍÇÊ/ßÇÆäÇÊ";
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 144 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 144 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 144 , 46 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Control LB_TREE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 132 , 88 ) ;
+        TabStop = TRUE ;
+    };
+    CheckBox CBX_LINK
+    {
+        Text = "~Verknüpfung" ;
+        Text [ ENGLISH ] = "~Link" ;
+        Pos = MAP_APPFONT ( 6 , 100 ) ;
+        Size = MAP_APPFONT ( 140 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Link" ;
+        Text [ italian ] = "Collegamento" ;
+        Text [ spanish ] = "~Vínculo" ;
+        Text [ french ] = "~Lien" ;
+        Text [ dutch ] = "~Koppeling" ;
+        Text [ swedish ] = "~Länk" ;
+        Text [ danish ] = "Kæde" ;
+        Text [ portuguese ] = "~Ligação" ;
+        Text [ portuguese_brazilian ] = "~Verknüpfung" ;
+        Text[ chinese_simplified ] = "Á´½Ó(~L)";
+        Text[ russian ] = "~Ññûëêà";
+        Text[ polish ] = "£¹cze";
+        Text[ japanese ] = "Øİ¸(~L)";
+        Text[ chinese_traditional ] = "±¶®|(~L)";
+        Text[ arabic ] = "ÇÑÊÈÇØ";
+        Text[ greek ] = "Óıíäåóç";
+        Text[ korean ] = "¿¬°á(~L)";
+        Text[ turkish ] = "Bağlantı";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_CHECK_MASTERS
+    {
+        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Size = MAP_APPFONT ( 140 , 12 ) ;
+        Text = "~Nicht verwendete Hintergrundseiten löschen" ;
+        Text [ ENGLISH ] = "~Remove not used master pages" ;
+        TabStop = TRUE ;
+        Text[ english_us ] = "~Remove unused background pages";
+        Text[ portuguese ] = "~Eliminar páginas de fundo não utilizadas";
+        Text[ russian ] = "Óäàëÿòü íåèñïîëüçîâàííûå ñòğàíèöû ôîíà";
+        Text[ dutch ] = "~Niet-gebruikte achtergrondpagina's wissen";
+        Text[ french ] = "Supprimer les pages d'arrière-plan ~inutilisées";
+        Text[ spanish ] = "~Eliminar páginas de fondo no usadas";
+        Text[ italian ] = "Elimi~na pagine di sfondo non utilizzate";
+        Text[ danish ] = "Slet ikke-brugte baggrundssider";
+        Text[ swedish ] = "Radera ej a~nvända bakgrundssidor";
+        Text[ polish ] = "Usuñ nieu¿ywane strony t³a";
+        Text[ portuguese_brazilian ] = "~Remove not used master pages";
+        Text[ japanese ] = "–¢g—p‚Ì”wŒiÍß°¼Ş‚Ííœ‚·‚é(~R)";
+        Text[ chinese_simplified ] = "É¾³ı²»ÓÃµÄ±³¾°Ò³Ãæ(~R)";
+        Text[ chinese_traditional ] = "§R°£¤£¥Îªº­I´º­¶­±(~R)";
+        Text[ arabic ] = "ÍĞİ ÕİÍÇÊ ÇáÎáİíÉ ÇáÊí áã ÊõÓÊÚãá";
+        Text[ greek ] = "ÄéáãñáöŞ ìç ÷ñçóéìïğïéïõìİ~íùí óåëéäşí öüíôïõ.";
+        Text[ korean ] = "»ç¿ëÇÏÁö ¾ÊÀº ¹è°æ ÆäÀÌÁö »èÁ¦(~R)";
+        Text[ turkish ] = "Artalandaki kullanılmayan sayfaları sil";
+    };
+    Text[ greek ] = "ÅéóáãùãŞ áíôéêåéìİíùí/óåëßäùí";
+    Text[ korean ] = "½½¶óÀÌµå/°³Ã¼ »ğÀÔ";
+    Text[ turkish ] = "Sayfa/nesne ekle";
+    Text[ language_user1 ] = " ";
+};

@@ -1,0 +1,767 @@
+/*************************************************************************
+ *
+ *  $RCSfile: toolbox.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "app.hrc"
+#include "cfgids.hxx"
+#include "helpids.h"
+#include <offmgr/offmenu.hrc>
+#include <svx/svxids.hrc>
+ToolBox RID_DRAW_DEFAULTTOOLBOX
+{
+    HelpId = HID_SD_DRAW_DEFAULTTOOLBOX ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_NEWDOCDIRECT
+        };
+        ToolBoxItem
+        {
+            ITEM_FILE_OPENDOC
+        };
+        ToolBoxItem
+        {
+            ITEM_FILE_SAVEDOC
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_PRINTDOCDIRECT
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_EDIT_CUT
+        };
+        ToolBoxItem
+        {
+            ITEM_EDIT_COPY
+        };
+        ToolBoxItem
+        {
+            ITEM_EDIT_PASTE
+        };
+        ToolBoxItem
+        {
+            ITEM_EDIT_UNDO
+        };
+        ToolBoxItem
+        {
+            ITEM_EDIT_REDO
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_EDIT_NAVIGATOR
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SPELLING ;
+            HelpID = SID_SPELLING ;
+        };
+    };
+};
+ToolBox RID_PLUGINTOOLBOX
+{
+    HelpId = HID_SD_PLUGINTOOLBOX ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    MenuStrings = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            ITEM_FILE_SAVEDOC
+        };
+        ToolBoxItem
+        {
+            ITEM_FILE_SAVEASDOC
+        };
+        ToolBoxItem
+        {
+            ITEM_FILE_MAIL_SENDDOC
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PUBLISH ;
+            HelpID = SID_PUBLISH ;
+        };
+        ToolBoxItem
+        {
+            ITEM_FILE_DOCINFO
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_PRINTDOCDIRECT
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_EDIT_CUT
+        };
+        ToolBoxItem
+        {
+            ITEM_EDIT_COPY
+        };
+        ToolBoxItem
+        {
+            ITEM_EDIT_PASTE
+        };
+        ToolBoxItem
+        {
+            ITEM_EDIT_UNDO
+        };
+        ToolBoxItem
+        {
+            ITEM_EDIT_REDO
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+    };
+};
+ // Werkzeugleiste (Impress)
+ // Objektleiste (Impress)
+ // Optionsleiste (Impress)
+#include "toolbox2.src"
+ // Werkzeugleiste (Draw (Graphic))
+ // Objektleiste (Draw (Graphic))
+ // Optionsleiste (Draw (Graphic))
+#undef SD_TOOLBOX
+#define SD_TOOLBOX RID_GRAPHIC_TOOLBOX
+#include "toolbox2.src"
+ToolBox RID_SLIDE_TOOLBOX
+{
+    HelpId = HID_SD_SLIDE_TOOLBOX ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_LEFT ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Checkable = TRUE ;
+            Identifier = SID_OBJECT_SELECT ;
+            HelpID = SID_OBJECT_SELECT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ZOOM_TOOLBOX ;
+            HelpID = SID_ZOOM_TOOLBOX ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PRESENTATION ;
+            HelpID = SID_PRESENTATION ;
+        };
+        TBI_ZOOM_IN
+        TBI_ZOOM_OUT
+    };
+};
+ToolBox RID_OUTLINE_TOOLBOX
+{
+    HelpId = HID_SD_OUTLINE_TOOLBOX ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_LEFT ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_ZOOM_TOOLBOX ;
+            HelpID = SID_ZOOM_TOOLBOX ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_COLLAPSE_ALL ;
+            HelpID = SID_OUTLINE_COLLAPSE_ALL ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_EXPAND_ALL ;
+            HelpID = SID_OUTLINE_EXPAND_ALL ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_COLLAPSE ;
+            HelpID = SID_OUTLINE_COLLAPSE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_EXPAND ;
+            HelpID = SID_OUTLINE_EXPAND ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_FORMAT ;
+            HelpID = SID_OUTLINE_FORMAT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_COLORVIEW ;
+            HelpID = SID_COLORVIEW ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PRESENTATION ;
+            HelpID = SID_PRESENTATION ;
+        };
+        TBI_ZOOM_IN
+        TBI_ZOOM_OUT
+    };
+};
+ToolBox RID_DRAW_COMMONTASK_TOOLBOX
+{
+    HelpId = HID_SD_DRAW_COMMONTASK_TOOLBOX ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_INSERTPAGE ;
+            HelpID = SID_INSERTPAGE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_MODIFYPAGE ;
+            HelpID = SID_MODIFYPAGE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PRESENTATION_LAYOUT ;
+            HelpID = SID_PRESENTATION_LAYOUT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DUPLICATE_PAGE ;
+            HelpID = SID_DUPLICATE_PAGE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_EXPAND_PAGE ;
+            HelpID = SID_EXPAND_PAGE ;
+        };
+    };
+};
+ToolBox RID_BEZIER_TOOLBOX
+{
+    HelpId = HID_SD_BEZIER_TOOLBOX ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            ITEM_FORMAT_BEZIER_EDIT
+            AutoCheck = TRUE ;
+            Checkable = TRUE ;
+            RadioCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_MOVE ;
+            HelpID = SID_BEZIER_MOVE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_INSERT ;
+            HelpID = SID_BEZIER_INSERT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_DELETE ;
+            HelpID = SID_BEZIER_DELETE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_CUTLINE ;
+            HelpID = SID_BEZIER_CUTLINE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_CONVERT ;
+            HelpID = SID_BEZIER_CONVERT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_EDGE ;
+            HelpID = SID_BEZIER_EDGE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_SMOOTH ;
+            HelpID = SID_BEZIER_SMOOTH ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_SYMMTR ;
+            HelpID = SID_BEZIER_SYMMTR ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_CLOSE ;
+            HelpID = SID_BEZIER_CLOSE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_ELIMINATE_POINTS ;
+            HelpID = SID_BEZIER_ELIMINATE_POINTS ;
+        };
+    };
+};
+ToolBox RID_GLUEPOINTS_TOOLBOX
+{
+    HelpId = HID_SD_GLUEPOINTS_TOOLBOX ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_GLUE_INSERT_POINT ;
+            HelpID = SID_GLUE_INSERT_POINT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GLUE_ESCDIR_LEFT ;
+            HelpID = SID_GLUE_ESCDIR_LEFT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GLUE_ESCDIR_TOP ;
+            HelpID = SID_GLUE_ESCDIR_TOP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GLUE_ESCDIR_RIGHT ;
+            HelpID = SID_GLUE_ESCDIR_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GLUE_ESCDIR_BOTTOM ;
+            HelpID = SID_GLUE_ESCDIR_BOTTOM ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GLUE_PERCENT ;
+            HelpID = SID_GLUE_PERCENT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GLUE_HORZALIGN_LEFT ;
+            HelpID = SID_GLUE_HORZALIGN_LEFT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GLUE_HORZALIGN_CENTER ;
+            HelpID = SID_GLUE_HORZALIGN_CENTER ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GLUE_HORZALIGN_RIGHT ;
+            HelpID = SID_GLUE_HORZALIGN_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GLUE_VERTALIGN_TOP ;
+            HelpID = SID_GLUE_VERTALIGN_TOP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GLUE_VERTALIGN_CENTER ;
+            HelpID = SID_GLUE_VERTALIGN_CENTER ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GLUE_VERTALIGN_BOTTOM ;
+            HelpID = SID_GLUE_VERTALIGN_BOTTOM ;
+        };
+    };
+};
+ToolBox RID_SLIDE_OBJ_TOOLBOX
+{
+    HelpId = HID_SD_SLIDE_OBJ_TOOLBOX ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_DIA_EFFECT ;
+            HelpID = SID_DIA_EFFECT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DIA_SPEED ;
+            HelpID = SID_DIA_SPEED ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DIA_AUTO ;
+            HelpID = SID_DIA_AUTO ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DIA_TIME ;
+            HelpID = SID_DIA_TIME ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_REHEARSE_TIMINGS ;
+            HelpID = SID_REHEARSE_TIMINGS ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HIDE_SLIDE ;
+            HelpID = SID_HIDE_SLIDE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PAGES_PER_ROW ;
+            HelpID = SID_PAGES_PER_ROW ;
+        };
+    };
+};
+ToolBox RID_DRAW_GRAF_TOOLBOX
+{
+    HelpId = HID_SD_DRAW_GRAF_TOOLBOX ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_GRAFTBX_FILTERS ;
+            HelpID = SID_GRAFTBX_FILTERS ;
+            DropDown = TRUE ;
+            Checkable = FALSE ;
+            RadioCheck = FALSE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_MODE;
+            HelpID = SID_ATTR_GRAF_MODE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_RED;
+            HelpID = SID_ATTR_GRAF_RED;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_GREEN;
+            HelpID = SID_ATTR_GRAF_GREEN;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_BLUE;
+            HelpID = SID_ATTR_GRAF_BLUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_LUMINANCE;
+            HelpID = SID_ATTR_GRAF_BLUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_CONTRAST;
+            HelpID = SID_ATTR_GRAF_BLUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_GAMMA;
+            HelpID = SID_ATTR_GRAF_BLUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_TRANSPARENCE;
+            HelpID = SID_ATTR_GRAF_BLUE;
+        };
+    };
+};
+
+
+

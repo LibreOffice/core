@@ -1,0 +1,688 @@
+/*************************************************************************
+ *
+ *  $RCSfile: strings.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "sfx2/sfx.hrc"
+#ifndef _SD_CFGID_HXX
+#include "cfgids.hxx"
+#endif
+
+#define STR_DEFAULTVIEW         (RID_APP_START)
+#define STR_SPECIALVIEW         (RID_APP_START+1)
+#define STR_DIAVIEW             (RID_APP_START+2)
+#define STR_NULL                (RID_APP_START+3)
+#define STR_SOLID               (RID_APP_START+4)
+#define STR_DOT                 (RID_APP_START+5)
+#define STR_DASH                (RID_APP_START+6)
+#define STR_DASHDOT             (RID_APP_START+7)
+#define STR_BLACK               (RID_APP_START+8)
+#define STR_BLUE                (RID_APP_START+9)
+#define STR_RED                 (RID_APP_START+10)
+#define STR_GREEN               (RID_APP_START+11)
+#define STR_CYAN                (RID_APP_START+12)
+#define STR_MAGENTA             (RID_APP_START+13)
+#define STR_YELLOW              (RID_APP_START+14)
+#define STR_WHITE               (RID_APP_START+15)
+#define STR_BROWN               (RID_APP_START+16)
+#define STR_GRAY                (RID_APP_START+17)
+#define STR_LIGHTGRAY           (RID_APP_START+18)
+#define STR_LIGHTBLUE           (RID_APP_START+19)
+#define STR_LIGHTGREEN          (RID_APP_START+20)
+#define STR_LIGHTRED            (RID_APP_START+21)
+#define STR_LIGHTMAGENTA        (RID_APP_START+22)
+#define STR_LIGHTCYAN           (RID_APP_START+23)
+#define STR_BRUSH_SOLID         (RID_APP_START+24)
+#define STR_HORZ                (RID_APP_START+25)
+#define STR_VERT                (RID_APP_START+26)
+#define STR_CROSS               (RID_APP_START+27)
+#define STR_DIAGCROSS           (RID_APP_START+28)
+#define STR_UPDIAG              (RID_APP_START+29)
+#define STR_DOWNDIAG            (RID_APP_START+30)
+#define STR_25                  (RID_APP_START+31)
+#define STR_50                  (RID_APP_START+32)
+#define STR_75                  (RID_APP_START+33)
+#define STR_NO_BRUSH            (RID_APP_START+34)
+#define STR_INSERTPAGE          (RID_APP_START+35)
+#define STR_MODIFYPAGE          (RID_APP_START+36)
+#define STR_INSERTLAYER         (RID_APP_START+37)
+#define STR_MODIFYLAYER         (RID_APP_START+38)
+#define STR_NO_EFFECT           (RID_APP_START+39)
+#define STR_UNDO_SLIDE_PARAMS   (RID_APP_START+40)
+#define STR_UNDO_SLIDE_MOVE     (RID_APP_START+41)
+#define STR_UNDO_REPLACE        (RID_APP_START+42)
+
+/*
+ *  Dummy-Strings, diese ResourceIDs duerfen nicht an andere Strings vergeben
+ *  werden, da sie fuer Popup-Menues benutzt werden (ein Popup-Menue und sein
+ *  Konfigurationsstring muessen dieselbe ResourceID haben!).
+ *  siehe auch: res_bmp.hrc, popup.src
+ */
+
+#define STR_DRAW_TEXTOBJ_POPUP          (RID_APP_START+43)
+#define STR_DRAW_GEOMOBJ_POPUP          (RID_APP_START+44)
+#define STR_DRAW_NOSEL_POPUP            (RID_APP_START+45)
+#define STR_SLIDETABLE_POPUP            (RID_APP_START+46)
+#define STR_BEZIER_POPUP                (RID_APP_START+47)
+#define STR_DRAW_LINEOBJ_POPUP          (RID_APP_START+48)
+#define STR_DRAW_MULTISELECTION_POPUP   (RID_APP_START+49)
+#define STR_PAGETAB_POPUP               (RID_APP_START+50)
+#define STR_LAYERTAB_POPUP              (RID_APP_START+51)
+#define STR_DRAW_GRAPHIC_POPUP          (RID_APP_START+52)
+#define STR_DRAW_OLE2_POPUP             (RID_APP_START+53)
+#define STR_DRAW_TEXTOBJ_INSIDE_POPUP   (RID_APP_START+54)
+#define STR_SLIDE_NOSEL_POPUP           (RID_APP_START+55)
+#define STR_OUTLINE_POPUP               (RID_APP_START+56)
+#define STR_MASTERPAGE_POPUP            (RID_APP_START+57)
+#define STR_DRAW_GROUPOBJ_POPUP         (RID_APP_START+58)
+
+#define STR_UNDO_CUT            (RID_APP_START+59)
+#define STR_ALIGN_LEFT          (RID_APP_START+60)
+#define STR_ALIGN_CENTER        (RID_APP_START+61)
+#define STR_ALIGN_RIGHT         (RID_APP_START+62)
+#define STR_ALIGN_UP            (RID_APP_START+63)
+#define STR_ALIGN_MIDDLE        (RID_APP_START+64)
+#define STR_ALIGN_DOWN          (RID_APP_START+65)
+#define STR_UNDO_DRAGDROP       (RID_APP_START+66)
+#define STR_INSERTGRAPHIC       (RID_APP_START+67)
+#define STR_FORMAT_STRING       (RID_APP_START+68)
+#define STR_FORMAT_RTF          (RID_APP_START+69)
+
+/*
+ * Ueberblendeffekte: sollten nach hinten offen bleiben,
+ * da FadeEffectLB mit variabler Anzahl arbeitet
+ * (Jetzt ueber STR_EFFECT_...)
+ */
+#define STR_DRAGTYPE_URL            (RID_APP_START+70)
+#define STR_DRAGTYPE_EMBEDDED       (RID_APP_START+71)
+#define STR_DRAGTYPE_LINK           (RID_APP_START+72)
+#define STR_GLUE_ESCDIR_SMART       (RID_APP_START+73)
+#define STR_GLUE_ESCDIR_LEFT        (RID_APP_START+74)
+#define STR_GLUE_ESCDIR_RIGHT       (RID_APP_START+75)
+#define STR_GLUE_ESCDIR_TOP         (RID_APP_START+76)
+#define STR_GLUE_ESCDIR_BOTTOM      (RID_APP_START+77)
+#define STR_GLUE_ESCDIR_LO          (RID_APP_START+78)
+#define STR_GLUE_ESCDIR_LU          (RID_APP_START+79)
+#define STR_GLUE_ESCDIR_RO          (RID_APP_START+80)
+#define STR_GLUE_ESCDIR_RU          (RID_APP_START+81)
+#define STR_GLUE_ESCDIR_HORZ        (RID_APP_START+82)
+#define STR_GLUE_ESCDIR_VERT        (RID_APP_START+83)
+#define STR_GLUE_ESCDIR_ALL         (RID_APP_START+84)
+
+#define STR_CANT_PERFORM_IN_LIVEMODE   (RID_APP_START+85)
+#define STR_PUBLISH_BACK            (RID_APP_START+86)
+#define STR_PUBLISH_NEXT            (RID_APP_START+87)
+#define STR_PUBLISH_OUTLINE         (RID_APP_START+88)
+#define STR_UNDO_COLORRESOLUTION    (RID_APP_START+89)
+
+/* Von 90 - 100 fuer Popups freihalten */
+#define STR_DRAW_3DOBJ_POPUP        (RID_APP_START+90)
+#define STR_DRAW_MEASUREOBJ_POPUP   (RID_APP_START+91)
+#define STR_ASK_DELETE_ALL_PICTURES (RID_APP_START+92)
+#define STR_WARN_PAGE_EXISTS        (RID_APP_START+93)
+#define STR_WARN_OBJECT_EXISTS      (RID_APP_START+94)
+
+/* tab_line.cxx */
+#define STR_LINESTYLE               (RID_APP_START+102)
+#define STR_DESC_LINESTYLE          (RID_APP_START+103)
+#define STR_DEL_LINESTYLE           (RID_APP_START+104)
+#define STR_ASK_DEL_LINESTYLE       (RID_APP_START+105)
+
+/* dlg_ctrl.cxx */
+#define STR_INVISIBLE               (RID_APP_START+106)
+#define STR_COLOR                   (RID_APP_START+107)
+#define STR_HATCH                   (RID_APP_START+108)
+
+#define STR_AREA                    (RID_APP_START+109)
+#define STR_LINE                    (RID_APP_START+110)
+#define STR_EFFECT                  (RID_APP_START+111)
+#define STR_SLOW                    (RID_APP_START+112)
+#define STR_MEDIUM                  (RID_APP_START+113)
+#define STR_FAST                    (RID_APP_START+114)
+#define STR_CHANGE                  (RID_APP_START+115)
+#define STR_AUTO                    (RID_APP_START+116)
+#define STR_MANUEL                  (RID_APP_START+117)
+// siehe auch 520 (STR_SEMIAUTO)
+
+#define STR_BASIC_IDE               (RID_APP_START+118)
+
+// Strings fuer Bezier-Popupeintrag Umwandlung Kurve/Linie (ESO)
+#define STR_BEZ_CONV_LINE           (RID_APP_START+119)
+#define STR_BEZ_CONV_CURVE          (RID_APP_START+120)
+
+#define STR_SLIDE_MODE              (RID_APP_START+121)
+#define STR_DRAW_MODE               (RID_APP_START+122)
+#define STR_OUTLINE_MODE            (RID_APP_START+123)
+#define STR_PRESENTATION_LAYOUT     (RID_APP_START+124)
+
+// String-Beschreibungen der Undoaktionen in fuedibez.cxx
+#define STR_UNDO_BEZCONV            (RID_APP_START+125)
+#define STR_UNDO_BEZSMOOTH          (RID_APP_START+126)
+#define STR_UNDO_BEZCLOSE           (RID_APP_START+127)
+
+#define STR_UNDO_3D_DIALOG          (RID_APP_START+128)
+#define STR_END_SPELLING_OBJ        (RID_APP_START+129)
+#define STR_MASTERPAGEMODE          (RID_APP_START+130)
+#define STR_PAGEMODE                (RID_APP_START+131)
+#define STR_LAYERMODE               (RID_APP_START+132)
+#define STR_OPEN_OBJECT             (RID_APP_START+133)
+#define STR_CLOSE_OBJECT            (RID_APP_START+134)
+#define STR_NOTES_MODE              (RID_APP_START+135)
+#define STR_HANDOUT_MODE            (RID_APP_START+136)
+
+#define STR_LINEEND                 (RID_APP_START+137)
+#define STR_DESC_LINEEND            (RID_APP_START+138)
+#define STR_WARN_NAME_DUPLICATE     (RID_APP_START+139)
+#define STR_UNDO_COPYOBJECTS        (RID_APP_START+140)
+#define STR_DESC_NAMEGROUP          (RID_APP_START+141)
+#define STR_UNDEFINED_NAME          (RID_APP_START+142)
+
+#define STR_SNAPDLG_SETLINE         (RID_APP_START+144)
+#define STR_SNAPDLG_SETPOINT        (RID_APP_START+145)
+#define STR_POPUP_EDIT_SNAPLINE     (RID_APP_START+146)
+#define STR_POPUP_EDIT_SNAPPOINT    (RID_APP_START+147)
+// weiter bei 160
+
+#define STR_UNDO_FORMTEXT           (RID_APP_START+148)
+
+#define STR_IMPRESS                 (RID_APP_START+149)
+#define STR_WINDOWS_BITMAP          (RID_APP_START+150)
+#define STR_WINDOWS_METAFILE        (RID_APP_START+151)
+#define STR_OS2_METAFILE            (RID_APP_START+152)
+#define STR_MAC_PICTURE             (RID_APP_START+153)
+#define STR_IMPRESS_DOCUMENT        (RID_APP_START+154)
+#define STR_OTHER_FORMAT            (RID_APP_START+155)
+#define STR_DELETED                 (RID_APP_START+156)
+#define STR_BREAK_ACTION            (RID_APP_START+157)
+#define STR_LAYER                   (RID_APP_START+158)
+// #define                          (RID_APP_START+159)
+
+#define STR_POPUP_DELETE_SNAPLINE   (RID_APP_START+160)
+#define STR_POPUP_DELETE_SNAPPOINT  (RID_APP_START+161)
+
+#define STR_SCALE_OBJS_TO_PAGE      (RID_APP_START+162)
+
+#define STR_EYEDROPPER              (RID_APP_START+163)
+
+#define STR_UNDO_MORPHING           (RID_APP_START+164)
+
+#define STR_SIMPRESS                (RID_APP_START+165)
+
+#define STR_FORMAT_HTML             (RID_APP_START+166)
+
+#define STR_IMPRESS_DOCUMENT_FULLTYPE_31  (RID_APP_START+167)
+#define STR_IMPRESS_DOCUMENT_FULLTYPE_40  (RID_APP_START+168)
+#define STR_IMPRESS_DOCUMENT_FULLTYPE_50  (RID_APP_START+169)
+
+#define STR_UNDO_VECTORIZE          (RID_APP_START+170)
+
+
+
+/*
+ *  ResourceIDs fuer Toolboxen nicht aendern, ohne die Strings in
+ *  strings.hrc auf die selben IDs zu setzen (eine Toolbox und sein
+ *  Konfigurationsstring muessen dieselbe ResourceID haben!).
+ */
+
+#define STR_PLUGIN_TOOLBOX          RID_PLUGINTOOLBOX
+#define STR_DRAW_DEFAULTTOOLBOX     RID_DRAW_DEFAULTTOOLBOX
+#define STR_DRAW_TOOLBOX            RID_DRAW_TOOLBOX
+#define STR_SLIDE_TOOLBOX           RID_SLIDE_TOOLBOX
+#define STR_DRAW_OBJ_TOOLBOX        RID_DRAW_OBJ_TOOLBOX
+#define STR_SLIDE_OBJ_TOOLBOX       RID_SLIDE_OBJ_TOOLBOX
+#define STR_BEZIER_TOOLBOX          RID_BEZIER_TOOLBOX
+#define STR_DRAW_TEXT_TOOLBOX       RID_DRAW_TEXT_TOOLBOX
+#define STR_OUTLINE_TOOLBOX         RID_OUTLINE_TOOLBOX
+#define STR_DRAW_POLYLINEOBJ_POPUP  RID_DRAW_POLYLINEOBJ_POPUP
+#define STR_GLUEPOINTS_TOOLBOX      RID_GLUEPOINTS_TOOLBOX
+#define STR_DRAW_OPTIONS_TOOLBOX    RID_DRAW_OPTIONS_TOOLBOX
+#define STR_DRAW_COMMONTASK_TOOLBOX RID_DRAW_COMMONTASK_TOOLBOX
+
+#define STR_GRAPHIC_TOOLBOX         RID_GRAPHIC_TOOLBOX
+#define STR_GRAPHIC_OPTIONS_TOOLBOX RID_GRAPHIC_OPTIONS_TOOLBOX
+#define STR_GRAPHIC_OBJ_TOOLBOX     RID_GRAPHIC_OBJ_TOOLBOX
+#define STR_GRAPHIC_TEXT_TOOLBOX    RID_GRAPHIC_TEXT_TOOLBOX
+
+#define STR_DRAW_GRAF_TOOLBOX       RID_DRAW_GRAF_TOOLBOX
+
+#define STR_UNDO_ANIMATION_ORDER    (RID_APP_START+200)
+
+// IDs fuer Praesentationsfolien
+#define STR_AUTOLAYOUT_NONE         (RID_APP_START+210)
+#define STR_AUTOLAYOUT_ONLY_TITLE   (RID_APP_START+211)
+#define STR_AUTOLAYOUT_TITLE        (RID_APP_START+212)
+#define STR_AUTOLAYOUT_OBJ          (RID_APP_START+213)
+#define STR_AUTOLAYOUT_ENUM         (RID_APP_START+214)
+#define STR_AUTOLAYOUT_CHART        (RID_APP_START+215)
+#define STR_AUTOLAYOUT_ORG          (RID_APP_START+216)
+#define STR_AUTOLAYOUT_TAB          (RID_APP_START+217)
+#define STR_AUTOLAYOUT_CLIPTEXT     (RID_APP_START+218)
+#define STR_AUTOLAYOUT_2TEXT        (RID_APP_START+219)
+#define STR_AUTOLAYOUT_TEXTCHART    (RID_APP_START+220)
+#define STR_AUTOLAYOUT_TEXTCLIP     (RID_APP_START+221)
+#define STR_AUTOLAYOUT_CHARTTEXT    (RID_APP_START+222)
+#define STR_AUTOLAYOUT_TEXTOBJ      (RID_APP_START+223)
+#define STR_AUTOLAYOUT_TEXT2OBJ     (RID_APP_START+224)
+#define STR_AUTOLAYOUT_OBJTEXT      (RID_APP_START+225)
+#define STR_AUTOLAYOUT_OBJOVERTEXT  (RID_APP_START+226)
+#define STR_AUTOLAYOUT_2OBJTEXT     (RID_APP_START+227)
+#define STR_AUTOLAYOUT_2OBJOVERTEXT (RID_APP_START+228)
+#define STR_AUTOLAYOUT_TEXTOVEROBJ  (RID_APP_START+229)
+#define STR_AUTOLAYOUT_4OBJ         (RID_APP_START+230)
+#define STR_AUTOLAYOUT_HANDOUT1     (RID_APP_START+231)
+#define STR_AUTOLAYOUT_HANDOUT2     (RID_APP_START+232)
+#define STR_AUTOLAYOUT_HANDOUT3     (RID_APP_START+233)
+#define STR_AUTOLAYOUT_HANDOUT4     (RID_APP_START+234)
+#define STR_AUTOLAYOUT_HANDOUT6     (RID_APP_START+235)
+#define STR_AUTOLAYOUT_NOTES        (RID_APP_START+236)
+
+// fuer weitere Layouts...
+
+#define STR_TRANSFORM               (RID_APP_START+240)
+
+#define STR_UNDO_ANIMATION          (RID_APP_START+241)
+
+
+#define STR_EXPORT_ALL                      (RID_APP_START+242)
+#define STR_EXPORT_UNKNOWN_FORMAT           (RID_APP_START+243)
+#define STR_EXPORT_HTML_NAME                (RID_APP_START+244)
+#define STR_EXPORT_HTML_FILTER              (RID_APP_START+245)
+#define STR_EXPORT_IMP_GROUP                (RID_APP_START+246)
+#define STR_EXPORT_EXP_GROUP                (RID_APP_START+247)
+#define STR_EXPORT_PATH_NOT_FOUND1          (RID_APP_START+248)
+#define STR_EXPORT_PATH_NOT_FOUND2          (RID_APP_START+249)
+#define STR_EXPORT_GRFILTER_OPENERROR       (RID_APP_START+250)
+#define STR_EXPORT_GRFILTER_IOERROR         (RID_APP_START+251)
+#define STR_EXPORT_GRFILTER_FORMATERROR     (RID_APP_START+252)
+#define STR_EXPORT_GRFILTER_VERSIONERROR    (RID_APP_START+253)
+#define STR_EXPORT_GRFILTER_FILTERERROR     (RID_APP_START+254)
+#define STR_EXPORT_GRFILTER_TOOBIG          (RID_APP_START+255)
+#define STR_EXPORT_PROPERTIES               (RID_APP_START+256)
+#define STR_EXPORT_STANDARD                 (RID_APP_START+257)
+#define STR_EXPORT_LINK                     (RID_APP_START+258)
+#define STR_EXPORT_PREVIEW                  (RID_APP_START+259)
+#define STR_EXPORT_IMPORTGRAPHIC_COUNT      (RID_APP_START+260)
+#define STR_EXPORT_DIALOG_TITLE             (RID_APP_START+261)
+#define STR_TWAIN_NO_SOURCE_UNX             (RID_APP_START+262)
+#define STR_EXPORT_MODULES_PATH             (RID_APP_START+263)
+#define STR_DEMO_EXPORT_LIMIT               (RID_APP_START+264)
+#define STR_UNDO_DELETEPAGES                (RID_APP_START+265)
+#define STR_UNDO_INSERTPAGES                (RID_APP_START+266)
+#define STR_ASK_DELETE_PAGE                 (RID_APP_START+267)
+#define STR_ASK_DELETE_LAYER                (RID_APP_START+268)
+#define STR_UNDO_CHANGE_TITLE_AND_LAYOUT    (RID_APP_START+269)
+#define STR_WAV_FILE                        (RID_APP_START+270)
+#define STR_MIDI_FILE                       (RID_APP_START+271)
+#define STR_SD_PAGE                         (RID_APP_START+272)
+#define STR_INSERT_AS_TEXTOBJECT            (RID_APP_START+273)
+#define STR_ALL_FILES                       (RID_APP_START+274)
+#define STR_UNDO_INSERT_TEXTFRAME           (RID_APP_START+275)
+#define STR_OPEN_DOCUMENT                   (RID_APP_START+276)
+#define STR_SAVE_DOCUMENT                   (RID_APP_START+277)
+#define STR_ACTION_NOTPOSSIBLE              (RID_APP_START+278)
+#define STR_DLG_INSERT_PAGES_FROM_FILE      (RID_APP_START+279)
+#define STR_DLG_INSERT_PAGES_FROM_OUTLINE   (RID_APP_START+280)
+#define STR_SCALE_OBJECTS                   (RID_APP_START+281)
+#define STR_CREATE_PAGES                    (RID_APP_START+282)
+
+#define STR_UNDO_CHANGE_PAGEFORMAT          (RID_APP_START+283)
+#define STR_UNDO_CHANGE_PAGEBORDER          (RID_APP_START+284)
+
+#define STR_EDIT_OBJ                        (RID_APP_START+288)
+
+#define STR_WRITE_DATA_ERROR                (RID_APP_START+289)
+#define STR_READ_DATA_ERROR                 (RID_APP_START+290)
+
+#define STR_SOUNDFILE1                      (RID_APP_START+291)
+#define STR_SOUNDFILE2                      (RID_APP_START+292)
+#define STR_SOUNDFILE3                      (RID_APP_START+293)
+#define STR_SOUNDFILE4                      (RID_APP_START+294)
+#define STR_SOUNDFILE5                      (RID_APP_START+295)
+
+#define STR_WARN_DEL_PAGE                   (RID_APP_START+296)
+#define STR_WARN_DEL_SEL_PAGES              (RID_APP_START+297)
+
+#define STR_DEL_SHAPE                       (RID_APP_START+298)
+#define STR_WARN_DEL_SHAPE                  (RID_APP_START+299)
+
+
+/******************************************************************************
+* Ab (RID_APP_START+300 beginnen die Ids in sdstring.hrc!
+******************************************************************************/
+
+#define STR_MODIFY_SHAPE                    (RID_APP_START+330)
+#define STR_WARN_MODIFY_SHAPE               (RID_APP_START+331)
+#define STR_DELETE_PAGES                    (RID_APP_START+332)
+#define STR_WARN_PRINTFORMAT_FAILURE        (RID_APP_START+333)
+#define STR_REMOVE_LINK                     (RID_APP_START+334)
+
+#define STR_IMPORT_GRFILTER_OPENERROR       (RID_APP_START+335)
+#define STR_IMPORT_GRFILTER_IOERROR         (RID_APP_START+336)
+#define STR_IMPORT_GRFILTER_FORMATERROR     (RID_APP_START+337)
+#define STR_IMPORT_GRFILTER_VERSIONERROR    (RID_APP_START+338)
+#define STR_IMPORT_GRFILTER_FILTERERROR     (RID_APP_START+339)
+#define STR_IMPORT_GRFILTER_TOOBIG          (RID_APP_START+340)
+
+#define STR_OBJECTS                         (RID_APP_START+341)
+#define STR_END_SEARCHING                   (RID_APP_START+342)
+#define STR_END_SPELLING                    (RID_APP_START+343)
+#define STR_NOLANGUAGE                      (RID_APP_START+344)
+#define STR_LAYER_LOCKED                    (RID_APP_START+345)
+#define STR_CLPBRD_CLEAR                    (RID_APP_START+346)
+#define STR_ASK_FOR_CONVERT_TO_BEZIER       (RID_APP_START+347)
+#define STR_TEMPLATE                        (RID_APP_START+348)
+#define STR_UNDO_CHANGE_PRES_OBJECT         (RID_APP_START+349)
+#define STR_UNDO_MODIFY_PAGE                (RID_APP_START+350)
+#define STR_STATSTR_PRINT                   (RID_APP_START+351)
+#define STR_UNDO_INSERT_FILE                (RID_APP_START+352)
+#define STR_UNDO_INSERT_SPECCHAR            (RID_APP_START+353)
+#define STR_UNDO_SET_PRESLAYOUT             (RID_APP_START+354)
+#define STR_STRING_NOTFOUND                 (RID_APP_START+355)
+#define STR_PLAY                            (RID_APP_START+356)
+#define STR_STOP                            (RID_APP_START+357)
+#define STR_CANT_READ_OLD_FORMAT_ERROR      (RID_APP_START+358)
+#define STR_UNDO_ORIGINALSIZE               (RID_APP_START+359)
+#define STR_EXPORT_EMPTYGRAPHIC             (RID_APP_START+360)
+#define STR_PRINT_DRAWING                   (RID_APP_START+361)
+#define STR_PRINT_NOTES                     (RID_APP_START+362)
+#define STR_PRINT_HANDOUT                   (RID_APP_START+363)
+#define STR_PRINT_OUTLINE                   (RID_APP_START+364)
+#define STR_WARN_SCALE_FAIL                 (RID_APP_START+365)
+
+// Strings fuer Klick-Effekte (Reihenfolge beibehalten)
+#define STR_CLICK_ACTION_NONE               (RID_APP_START+366)
+#define STR_CLICK_ACTION_PREVPAGE           (RID_APP_START+367)
+#define STR_CLICK_ACTION_NEXTPAGE           (RID_APP_START+368)
+#define STR_CLICK_ACTION_FIRSTPAGE          (RID_APP_START+369)
+#define STR_CLICK_ACTION_LASTPAGE           (RID_APP_START+370)
+#define STR_CLICK_ACTION_BOOKMARK           (RID_APP_START+371)
+#define STR_CLICK_ACTION_DOCUMENT           (RID_APP_START+372)
+#define STR_CLICK_ACTION_VANISH             (RID_APP_START+373)
+#define STR_CLICK_ACTION_INVISIBLE          (RID_APP_START+374)
+#define STR_CLICK_ACTION_SOUND              (RID_APP_START+375)
+#define STR_CLICK_ACTION_VERB               (RID_APP_START+376)
+#define STR_CLICK_ACTION_PROGRAM            (RID_APP_START+377)
+#define STR_CLICK_ACTION_MACRO              (RID_APP_START+378)
+// Mind. bis 380 freihalten
+
+#define STR_EFFECTDLG_SOUND                 (RID_APP_START+380)
+#define STR_EFFECTDLG_OBJECT                (RID_APP_START+381)
+#define STR_EFFECTDLG_PAGE_OBJECT           (RID_APP_START+382)
+#define STR_EFFECTDLG_DOCUMENT              (RID_APP_START+383)
+#define STR_EFFECTDLG_PROGRAM               (RID_APP_START+384)
+#define STR_EFFECTDLG_MACRO                 (RID_APP_START+385)
+
+/*  Fortsetzung von RID_APP_START+43 bis RID_APP_START+58:
+ *  Dummy-Strings, diese ResourceIDs duerfen nicht an andere Strings vergeben
+ *  werden, da sie fuer Popup-Menues benutzt werden (ein Popup-Menue und sein
+ *  Konfigurationsstring muessen dieselbe ResourceID haben!).
+ *  siehe auch: res_bmp.hrc, popup.src
+ */
+
+#define STR_DRAW_SNAPOBJECT_POPUP           (RID_APP_START+390)
+#define STR_DRAW_FILTERPROGRESS             (RID_APP_START+391)
+#define STR_DRAW_GLUEPOINT_POPUP            (RID_APP_START+392)
+#define STR_DRAW_CONTROL_POPUP              (RID_APP_START+393)
+
+
+#define STR_EFFECT_NONE                     (RID_APP_START+400)
+#define STR_EFFECT_FADE_FROM_LEFT           (RID_APP_START+401)
+#define STR_EFFECT_FADE_FROM_TOP            (RID_APP_START+402)
+#define STR_EFFECT_FADE_FROM_RIGHT          (RID_APP_START+403)
+#define STR_EFFECT_FADE_FROM_BOTTOM         (RID_APP_START+404)
+#define STR_EFFECT_FADE_TO_CENTER           (RID_APP_START+405)
+#define STR_EFFECT_FADE_FROM_CENTER         (RID_APP_START+406)
+#define STR_EFFECT_DISCARD_FROM_LEFT        (RID_APP_START+407)
+#define STR_EFFECT_DISCARD_FROM_TOP         (RID_APP_START+408)
+#define STR_EFFECT_DISCARD_FROM_RIGHT       (RID_APP_START+409)
+#define STR_EFFECT_DISCARD_FROM_BOTTOM      (RID_APP_START+410)
+#define STR_EFFECT_VERTICAL_STRIPES         (RID_APP_START+411)
+#define STR_EFFECT_HORIZONTAL_STRIPES       (RID_APP_START+412)
+#define STR_EFFECT_CLOCKWISE                (RID_APP_START+413)
+#define STR_EFFECT_COUNTERCLOCKWISE         (RID_APP_START+414)
+#define STR_EFFECT_FADE_FROM_UPPERLEFT      (RID_APP_START+415)
+#define STR_EFFECT_FADE_FROM_UPPERRIGHT     (RID_APP_START+416)
+#define STR_EFFECT_FADE_FROM_LOWERLEFT      (RID_APP_START+417)
+#define STR_EFFECT_FADE_FROM_LOWERRIGHT     (RID_APP_START+418)
+#define STR_EFFECT_CLOSE_VERTICAL           (RID_APP_START+419)
+#define STR_EFFECT_CLOSE_HORIZONTAL         (RID_APP_START+420)
+#define STR_EFFECT_OPEN_VERTICAL            (RID_APP_START+421)
+#define STR_EFFECT_OPEN_HORIZONTAL          (RID_APP_START+422)
+#define STR_EFFECT_PATH                     (RID_APP_START+423)
+#define STR_EFFECT_MOVE_TO_LEFT             (RID_APP_START+424)
+#define STR_EFFECT_MOVE_TO_TOP              (RID_APP_START+425)
+#define STR_EFFECT_MOVE_TO_RIGHT            (RID_APP_START+426)
+#define STR_EFFECT_MOVE_TO_BOTTOM           (RID_APP_START+427)
+#define STR_EFFECT_SPIRALIN_LEFT            (RID_APP_START+428)
+#define STR_EFFECT_SPIRALIN_RIGHT           (RID_APP_START+429)
+#define STR_EFFECT_SPIRALOUT_LEFT           (RID_APP_START+430)
+// Weiter bei 450
+
+
+#define STR_GENERAL_PUBLISHING_ERROR        (RID_APP_START+431)
+#define STR_INSERT_TEXT                     (RID_APP_START+432)
+#define STR_SLIDE_SINGULAR                  (RID_APP_START+433)
+#define STR_SLIDE_PLURAL                    (RID_APP_START+434)
+#define STR_AU_FILE                         (RID_APP_START+435)
+#define STR_VOC_FILE                        (RID_APP_START+436)
+#define STR_AIFF_FILE                       (RID_APP_START+437)
+#define STR_SVX_FILE                        (RID_APP_START+438)
+
+/*           Stringdefinitionen fuer die Chartbeschriftung
+*/
+#define STR_CHART_MAINTITLE                (RID_APP_START+440)
+#define STR_CHART_SUBTITLE                 (RID_APP_START+441)
+#define STR_CHART_TITLE_X                  (RID_APP_START+442)
+#define STR_CHART_TITLE_Y                  (RID_APP_START+443)
+#define STR_CHART_TITLE_Z                  (RID_APP_START+444)
+#define STR_CHART_NAME_COLUMN              (RID_APP_START+445)
+#define STR_CHART_NAME_ROW                 (RID_APP_START+446)
+
+#define STR_RESOLUTION                     (RID_APP_START+447)
+#define STR_LOAD_PRESENTATION_LAYOUT       (RID_APP_START+448)
+
+#define STR_EFFECT_SPIRALOUT_RIGHT          (RID_APP_START+450)
+#define STR_EFFECT_DISSOLVE                 (RID_APP_START+451)
+#define STR_EFFECT_ROLL_FROM_LEFT           (RID_APP_START+452)
+#define STR_EFFECT_ROLL_FROM_TOP            (RID_APP_START+453)
+#define STR_EFFECT_ROLL_FROM_RIGHT          (RID_APP_START+454)
+#define STR_EFFECT_ROLL_FROM_BOTTOM         (RID_APP_START+455)
+#define STR_EFFECT_WAVYLINE_FROM_LEFT       (RID_APP_START+456)
+#define STR_EFFECT_WAVYLINE_FROM_RIGHT      (RID_APP_START+457)
+#define STR_EFFECT_WAVYLINE_FROM_TOP        (RID_APP_START+458)
+#define STR_EFFECT_WAVYLINE_FROM_BOTTOM     (RID_APP_START+459)
+#define STR_EFFECT_VERTICAL_LINES           (RID_APP_START+460)
+#define STR_EFFECT_HORIZONTAL_LINES         (RID_APP_START+461)
+#define STR_EFFECT_RANDOM                   (RID_APP_START+462)
+#define STR_EFFECT_STRETCH_FROM_LEFT        (RID_APP_START+463)
+#define STR_EFFECT_STRETCH_FROM_TOP         (RID_APP_START+464)
+#define STR_EFFECT_STRETCH_FROM_RIGHT       (RID_APP_START+465)
+#define STR_EFFECT_STRETCH_FROM_BOTTOM      (RID_APP_START+466)
+#define STR_EFFECT_LASER_FROM_LEFT          (RID_APP_START+467)
+#define STR_EFFECT_LASER_FROM_TOP           (RID_APP_START+468)
+#define STR_EFFECT_LASER_FROM_RIGHT         (RID_APP_START+469)
+#define STR_EFFECT_LASER_FROM_BOTTOM        (RID_APP_START+470)
+#define STR_EFFECT_LASER_FROM_UPPERLEFT     (RID_APP_START+471)
+#define STR_EFFECT_LASER_FROM_UPPERRIGHT    (RID_APP_START+472)
+#define STR_EFFECT_LASER_FROM_LOWERLEFT     (RID_APP_START+473)
+#define STR_EFFECT_LASER_FROM_LOWERRIGHT    (RID_APP_START+474)
+#define STR_CLICK_ACTION_STOPPRESENTATION   (RID_APP_START+475)
+#define STR_EFFECT_HIDE                     (RID_APP_START+476)
+#define STR_EFFECT_APPEAR                   (RID_APP_START+477)
+
+#define STR_EFFECT_FAVOURITES               (RID_APP_START+479)
+#define STR_EFFECT_FADEFROM                 (RID_APP_START+480)
+#define STR_EFFECT_DISCARD                  (RID_APP_START+481)
+#define STR_EFFECT_FADE                     (RID_APP_START+482)
+#define STR_EFFECT_OPEN_CLOSE               (RID_APP_START+483)
+#define STR_EFFECT_WAVYLINE                 (RID_APP_START+484)
+#define STR_EFFECT_SPIRAL                   (RID_APP_START+485)
+#define STR_EFFECT_LASER                    (RID_APP_START+486)
+#define STR_EFFECT_EXTRA                    (RID_APP_START+487)
+
+#define STR_VIEWTYPE_EFFECT                 (RID_APP_START+488)
+#define STR_VIEWTYPE_EXTRAS                 (RID_APP_START+489)
+#define STR_VIEWTYPE_TEXT                   (RID_APP_START+490)
+#define STR_VIEWTYPE_ORDER                  (RID_APP_START+491)
+
+#define STR_UNDO_EXPAND_PAGE                (RID_APP_START+493)
+#define STR_UNDO_SUMMARY_PAGE               (RID_APP_START+494)
+
+#define STR_ASK_GALLERY_INSERT              (RID_APP_START+495)
+
+#define STR_EFFECT_ROLL                     (RID_APP_START+496)
+#define STR_EFFECT_STRETCH                  (RID_APP_START+497)
+
+#define STR_GRAPHIC                         (RID_APP_START+498)
+#define STR_GRAPHIC_DOCUMENT                (RID_APP_START+499)
+#define STR_GRAPHIC_DOCUMENT_FULLTYPE_50    (RID_APP_START+500)
+
+#define STR_TWAIN_NO_SOURCE                 (RID_APP_START+501)
+
+#define STR_FIX                             (RID_APP_START+502)
+#define STR_VAR                             (RID_APP_START+503)
+#define STR_STANDARD_NORMAL                 (RID_APP_START+504)
+#define STR_STANDARD_SMALL                  (RID_APP_START+505)
+#define STR_STANDARD_BIG                    (RID_APP_START+506)
+#define STR_FILEFORMAT_NAME_EXT             (RID_APP_START+507)
+#define STR_FILEFORMAT_FULLPATH             (RID_APP_START+508)
+#define STR_FILEFORMAT_PATH                 (RID_APP_START+509)
+#define STR_FILEFORMAT_NAME                 (RID_APP_START+510)
+
+#define STR_RELEASE_GRAPHICLINK             (RID_APP_START+511)
+
+#define STR_NEW_CUSTOMSHOW                  (RID_APP_START+512)
+#define STR_COPY_CUSTOMSHOW                 (RID_APP_START+513)
+
+#define STR_VIEWTYPE_VIEW                   (RID_APP_START+514)
+#define STR_VIEWTYPE_GEO                    (RID_APP_START+515)
+#define STR_VIEWTYPE_TEXTURE                (RID_APP_START+516)
+#define STR_VIEWTYPE_MATERIAL               (RID_APP_START+517)
+#define STR_VIEWTYPE_DUMMY                  (RID_APP_START+518)
+
+#define STR_START_PRESENTATION              (RID_APP_START+519)
+
+#define STR_SEMIAUTO                        (RID_APP_START+520)
+#define STR_BREAK_METAFILE                  (RID_APP_START+521)
+#define STR_BREAK_FAIL                      (RID_APP_START+522)
+
+#define STR_PUBDLG_SAMENAME                 (RID_APP_START+523)
+
+#define STR_HTMLATTR_TEXT                   (RID_APP_START+524)
+#define STR_HTMLATTR_LINK                   (RID_APP_START+525)
+#define STR_HTMLATTR_VLINK                  (RID_APP_START+526)
+#define STR_HTMLATTR_ALINK                  (RID_APP_START+527)
+
+#define STR_HTMLEXP_NOTES                   (RID_APP_START+528)
+#define STR_HTMLEXP_CONTENTS                (RID_APP_START+529)
+#define STR_HTMLEXP_CLICKSTART              (RID_APP_START+530)
+#define STR_HTMLEXP_AUTHOR                  (RID_APP_START+531)
+#define STR_HTMLEXP_EMAIL                   (RID_APP_START+532)
+#define STR_HTMLEXP_HOMEPAGE                (RID_APP_START+533)
+#define STR_HTMLEXP_INFO                    (RID_APP_START+534)
+#define STR_HTMLEXP_CREATED                 (RID_APP_START+535)
+#define STR_HTMLEXP_DOWNLOAD                (RID_APP_START+536)
+#define STR_HTMLEXP_NOFRAMES                (RID_APP_START+537)
+#define STR_HTMLEXP_FIRSTPAGE               (RID_APP_START+538)
+#define STR_HTMLEXP_LASTPAGE                (RID_APP_START+539)
+#define STR_HTMLEXP_SETTEXT                 (RID_APP_START+540)
+#define STR_HTMLEXP_SETGRAPHIC              (RID_APP_START+541)
+#define STR_HTMLEXP_OUTLINE                 (RID_APP_START+542)
+#define STR_HTMLEXP_NOOUTLINE               (RID_APP_START+543)
+
+#define STR_PRES_SOFTEND                    (RID_APP_START+550)
+#define STR_PRES_PAUSE                      (RID_APP_START+551)
+
+#define STR_WIZARD_ORIGINAL                 (RID_APP_START+552)
+#define STR_WIZARD_POSITION                 (RID_APP_START+553)
+
+#define STR_ISLOADING                       (RID_APP_START+554)
+
+#define STR_WEBVIEW_SAVE                    (RID_APP_START+555)
+
+#define STR_UNDO_APPLY_3D_FAVOURITE         (RID_APP_START+556)
+
+#define STR_WARN_DEL_SEL_PAGE               (RID_APP_START+557)
+
+#define STR_ERROR_OBJNOCREATE_PLUGIN        (RID_APP_START+563)
+
+#define STR_WARNING_NOSOUNDFILE             (RID_APP_START+565)
+
+#define STR_UNDO_GRAFFILTER                 (RID_APP_START+570)
+
+#define STR_UNDO_CONVERT_TO_METAFILE        (RID_APP_START+571)
+#define STR_UNDO_CONVERT_TO_BITMAP          (RID_APP_START+572)
+
+#define STR_PACKNGO_FILEDLG_TITLE           (RID_APP_START+576)
+#define STR_PACKNGO_FILTER                  (RID_APP_START+577)
+
+#define STR_HTMLEXP_ERROR_CREATE_FILE       (RID_APP_START+578)
+#define STR_HTMLEXP_ERROR_OPEN_FILE         (RID_APP_START+579)
+#define STR_HTMLEXP_ERROR_COPY_FILE         (RID_APP_START+580)
+#define STR_HTMLEXP_ERROR_GALLERY           (RID_APP_START+581)
+
+#define STR_UNDO_CONVERT_TO_CONTOUR         (RID_APP_START+582)
+
+#define STR_PAGE_BACKGROUND_TXT             (RID_APP_START+583)
+#define STR_PAGE_BACKGROUND_TITLE           (RID_APP_START+584)
+
+/******************************************************************************
+* Ab (RID_APP_START+700 beginnen die Ids in glob.hrc!
+******************************************************************************/
+
+

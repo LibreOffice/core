@@ -1,0 +1,188 @@
+SfxVoidItem GrafFilterCharcoal SID_GRAFFILTER_SOBEL
+()
+[
+    AutoUpdate = FALSE ,
+    Cachable = Cachable ,
+    FastCall = FALSE ,
+    HasCoreId = FALSE ,
+    HasDialog = FALSE ,
+    ReadOnlyDoc = FALSE ,
+    Toggle = FALSE ,
+    Synchron ;
+
+    Container = FALSE ,
+    PlugComm = FALSE ,
+
+    Export = TRUE ,
+    IsCollection = FALSE ,
+    RecordAbsolute = FALSE ,
+    RecordPerSet ;
+
+    AccelConfig = TRUE ,
+    MenuConfig = TRUE ,
+    StatusBarConfig = FALSE ,
+    ToolBoxConfig = TRUE ,
+    GroupId = GID_MODIFY ;
+]
+
+SfxVoidItem GrafFilterMosaic SID_GRAFFILTER_MOSAIC
+()
+[
+    AutoUpdate = FALSE ,
+    Cachable = Cachable ,
+    FastCall = FALSE ,
+    HasCoreId = FALSE ,
+    HasDialog = FALSE ,
+    ReadOnlyDoc = FALSE ,
+    Toggle = FALSE ,
+    Synchron ;
+
+    Container = FALSE ,
+    PlugComm = FALSE ,
+
+    Export = TRUE ,
+    IsCollection = FALSE ,
+    RecordAbsolute = FALSE ,
+    RecordPerSet ;
+
+    AccelConfig = TRUE ,
+    MenuConfig = TRUE ,
+    StatusBarConfig = FALSE ,
+    ToolBoxConfig = TRUE ,
+    GroupId = GID_MODIFY ;
+]
+
+SfxVoidItem GrafFilterRelief SID_GRAFFILTER_EMBOSS
+()
+[
+    AutoUpdate = FALSE ,
+    Cachable = Cachable ,
+    FastCall = FALSE ,
+    HasCoreId = FALSE ,
+    HasDialog = FALSE ,
+    ReadOnlyDoc = FALSE ,
+    Toggle = FALSE ,
+    Synchron ;
+
+    Container = FALSE ,
+    PlugComm = FALSE ,
+
+    Export = TRUE ,
+    IsCollection = FALSE ,
+    RecordAbsolute = FALSE ,
+    RecordPerSet ;
+
+    AccelConfig = TRUE ,
+    MenuConfig = TRUE ,
+    StatusBarConfig = FALSE ,
+    ToolBoxConfig = TRUE ,
+    GroupId = GID_MODIFY ;
+]
+
+SfxVoidItem GrafFilterPoster SID_GRAFFILTER_POSTER
+()
+[
+    AutoUpdate = FALSE ,
+    Cachable = Cachable ,
+    FastCall = FALSE ,
+    HasCoreId = FALSE ,
+    HasDialog = FALSE ,
+    ReadOnlyDoc = FALSE ,
+    Toggle = FALSE ,
+    Synchron ;
+
+    Container = FALSE ,
+    PlugComm = FALSE ,
+
+    Export = TRUE ,
+    IsCollection = FALSE ,
+    RecordAbsolute = FALSE ,
+    RecordPerSet ;
+
+    AccelConfig = TRUE ,
+    MenuConfig = TRUE ,
+    StatusBarConfig = FALSE ,
+    ToolBoxConfig = TRUE ,
+    GroupId = GID_MODIFY ;
+]
+
+SfxVoidItem GrafFilterPopart SID_GRAFFILTER_POPART
+()
+[
+    AutoUpdate = FALSE ,
+    Cachable = Cachable ,
+    FastCall = FALSE ,
+    HasCoreId = FALSE ,
+    HasDialog = FALSE ,
+    ReadOnlyDoc = FALSE ,
+    Toggle = FALSE ,
+    Synchron ;
+
+    Container = FALSE ,
+    PlugComm = FALSE ,
+
+    Export = TRUE ,
+    IsCollection = FALSE ,
+    RecordAbsolute = FALSE ,
+    RecordPerSet ;
+
+    AccelConfig = TRUE ,
+    MenuConfig = TRUE ,
+    StatusBarConfig = FALSE ,
+    ToolBoxConfig = TRUE ,
+    GroupId = GID_MODIFY ;
+]
+
+SfxVoidItem GrafFilterSepia SID_GRAFFILTER_SEPIA
+()
+[
+    AutoUpdate = FALSE ,
+    Cachable = Cachable ,
+    FastCall = FALSE ,
+    HasCoreId = FALSE ,
+    HasDialog = FALSE ,
+    ReadOnlyDoc = FALSE ,
+    Toggle = FALSE ,
+    Synchron ;
+
+    Container = FALSE ,
+    PlugComm = FALSE ,
+
+    Export = TRUE ,
+    IsCollection = FALSE ,
+    RecordAbsolute = FALSE ,
+    RecordPerSet ;
+
+    AccelConfig = TRUE ,
+    MenuConfig = TRUE ,
+    StatusBarConfig = FALSE ,
+    ToolBoxConfig = TRUE ,
+    GroupId = GID_MODIFY ;
+]
+
+SfxVoidItem GrafFilterSolarize SID_GRAFFILTER_SOLARIZE
+()
+[
+    AutoUpdate = FALSE ,
+    Cachable = Cachable ,
+    FastCall = FALSE ,
+    HasCoreId = FALSE ,
+    HasDialog = FALSE ,
+    ReadOnlyDoc = FALSE ,
+    Toggle = FALSE ,
+    Synchron ;
+
+    Container = FALSE ,
+    PlugComm = FALSE ,
+
+    Export = TRUE ,
+    IsCollection = FALSE ,
+    RecordAbsolute = FALSE ,
+    RecordPerSet ;
+
+    AccelConfig = TRUE ,
+    MenuConfig = TRUE ,
+    StatusBarConfig = FALSE ,
+    ToolBoxConfig = TRUE ,
+    GroupId = GID_MODIFY ;
+]

@@ -1,0 +1,245 @@
+/*************************************************************************
+#*
+#*    $Workfile:   drviewsh.sdi  $
+#*
+#*    Beschreibung      ImpressViewShell-IDL
+#*
+#*    Ersterstellung    SOH (04.04.97)
+#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 16:48:29 $
+#*    $Revision: 1.1.1.1 $
+#*
+#*    $Logfile:   T:/sd/sdi/drviewsh.sdv  $
+#*
+#*    Copyright (c) 1989 - 1999, STAR DIVISION
+#*
+#*************************************************************************
+
+      Source Code Control System - Header
+
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/drviewsh.sdi,v 1.1.1.1 2000-09-18 16:48:29 hr Exp $
+
+*************************************************************************/
+
+interface ImpressEditView : DrawView
+[
+    uuid ( "661B07E0-2FB4-11CF-89CA-008029E4B0B1" ) ;
+]
+{
+    SID_DIAMODE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_OUTLINEMODE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_NOTESMODE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_HANDOUTMODE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_DIA // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_MODIFYPAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ANIMATION_OBJECTS // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ANIMATION_EFFECTS // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_EFFECT_WIN // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_EFFECT_INIT // ole : no, status : ?
+    [
+        ExecMethod = ExecEffectWin ;
+        StateMethod = GetEffectWinState ;
+    ]
+    SID_EFFECT_STATE // ole : no, status : ?
+    [
+        ExecMethod = ExecEffectWin ;
+        StateMethod = GetEffectWinState ;
+    ]
+    SID_EFFECT_ASSIGN // ole : no, status : ?
+    [
+        ExecMethod = ExecEffectWin ;
+        StateMethod = GetEffectWinState ;
+    ]
+    SID_SLIDE_CHANGE_WIN // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SLIDE_CHANGE_STATE // ole : no, status : ?
+    [
+        ExecMethod = ExecEffectWin ;
+        StateMethod = GetEffectWinState ;
+    ]
+    SID_SLIDE_CHANGE_ASSIGN // ole : no, status : ?
+    [
+        ExecMethod = ExecEffectWin ;
+        StateMethod = GetEffectWinState ;
+    ]
+    SID_REHEARSE_TIMINGS // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PRESENTATION // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PRESENTATION_END // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SfxTemplateItem TemplateFamily5 SID_STYLE_FAMILY5 // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+        Export = FALSE ;
+    ]
+    SID_ANIMATOR_INIT // ole : no, status : ?
+    [
+        ExecMethod = ExecAnimationWin ;
+        StateMethod = GetAnimationWinState ;
+    ]
+    SID_ANIMATOR_ADD // ole : no, status : ?
+    [
+        ExecMethod = ExecAnimationWin ;
+        StateMethod = GetAnimationWinState ;
+    ]
+    SID_ANIMATOR_CREATE // ole : no, status : ?
+    [
+        ExecMethod = ExecAnimationWin ;
+        StateMethod = GetAnimationWinState ;
+    ]
+    SID_ANIMATOR_STATE // ole : no, status : ?
+    [
+        ExecMethod = ExecAnimationWin ;
+        StateMethod = GetAnimationWinState ;
+    ]
+    SID_NAVIGATOR_LIVE // ole : no, status : ?
+    [
+        ExecMethod = ExecNavigatorWin ;
+        StateMethod = GetNavigatorWinState ;
+    ]
+    SID_NAVIGATOR_PEN // ole : no, status : ?
+    [
+        ExecMethod = ExecNavigatorWin ;
+        StateMethod = GetNavigatorWinState ;
+    ]
+    SID_LIVE_PRESENTATION // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ANIMATIONMODE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ACTIONMODE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PRESENTATION_DLG
+    [
+        ExecMethod = FuTemporary ;
+    ]
+    SID_CUSTOMSHOW_DLG
+    [
+        ExecMethod = FuTemporary ;
+    ]
+    SID_EXPAND_PAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+        ReadOnlyDoc = FALSE;
+    ]
+    SID_SUMMARY_PAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SLIDE_MASTERPAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_NOTES_MASTERPAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_HANDOUT_MASTERPAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_TITLE_MASTERPAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_STYLE_FAMILY
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+}
+
+shell SdDrawViewShell : SfxViewShell
+{
+    import ImpressEditView[Automation];
+}
+
+/*************************************************************************
+
+      Source Code Control System - History
+
+      $Log: not supported by cvs2svn $
+      Revision 1.264  1999/12/15 12:15:40  pw
+      #70510# Removed SID_JUMPTOMARK
+
+      Revision 1.263  1998/11/04 14:08:16  CL
+      #58128# +SID_STYLE_FAMILY
+
+
+      Rev 1.262   04 Nov 1998 15:08:16   CL
+   #58128# +SID_STYLE_FAMILY
+
+      Rev 1.261   12 Nov 1997 12:11:00   SOH
+    + SID_CUSTOMSHOW_DLG
+
+      Rev 1.260   28 Aug 1997 12:33:46   MBA
+   Neue Interface-Namen
+
+      Rev 1.259   09 Apr 1997 13:20:02   SOH
+   Umstellung/Aufsplittung: Impress/Draw
+
+*************************************************************************/
+

@@ -1,0 +1,472 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tabtempl.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "tabtempl.hrc"
+#include <svx/dialogs.hrc>
+TabDialog TAB_TEMPLATE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 289 , 176 ) ;
+    Text = "Grafikobjektvorlage" ;
+    Text [ ENGLISH ] = "Stylesheets" ;
+    Text [ norwegian ] = "Stilark" ;
+    Text [ italian ] = "Modello di oggetto grafico" ;
+    Text [ portuguese_brazilian ] = "Folhas de Estilo" ;
+    Text [ portuguese ] = "Estilos de objecto gráfico" ;
+    Text [ finnish ] = "Tyylitiedostot" ;
+    Text [ danish ] = "Grafikobjekttypografi" ;
+    Text [ french ] = "Style d'objet graphique" ;
+    Text [ swedish ] = "Grafikobjektmall" ;
+    Text [ dutch ] = "Opmaakprofiel voor grafische objecten" ;
+    Text [ spanish ] = "Estilo de objeto gráfico" ;
+    Text [ english_us ] = "Graphics Styles" ;
+    Moveable = TRUE ;
+     // Closeable = TRUE; // Dieser Dialog hat OK und/oder Cancel Button ! (KH)
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_LINE ;
+                Text = "Linie" ;
+                Text [ ENGLISH ] = "Line" ;
+                Text [ norwegian ] = "Linje" ;
+                Text [ italian ] = "Linea" ;
+                Text [ portuguese_brazilian ] = "Linha" ;
+                Text [ portuguese ] = "Linha" ;
+                Text [ finnish ] = "Viiva" ;
+                Text [ danish ] = "Linje" ;
+                Text [ french ] = "Ligne" ;
+                Text [ swedish ] = "Linje" ;
+                Text [ dutch ] = "Lijn" ;
+                Text [ spanish ] = "Línea" ;
+                Text [ english_us ] = "Line" ;
+                PageResID = RID_SVXPAGE_LINE ;
+                Text[ chinese_simplified ] = "ÏßÌõ";
+                Text[ russian ] = "Ëèíèÿ";
+                Text[ polish ] = "Linia";
+                Text[ japanese ] = "ü";
+                Text[ chinese_traditional ] = "½u±ø";
+                Text[ greek ] = "ÃñáììŞ";
+                Text[ korean ] = "¼±";
+                Text[ arabic ] = "ÎØ ÇáÑÓã";
+                Text[ turkish ] = "Çizgi";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_AREA ;
+                /* ### ACHTUNG: Neuer Text in Resource? Fläche : Flõche */
+                Text = "Fläche" ;
+                Text [ ENGLISH ] = "Fill" ;
+                Text [ norwegian ] = "Fill" ;
+                Text [ italian ] = "Area" ;
+                Text [ portuguese_brazilian ] = "Preenchimento" ;
+                Text [ portuguese ] = "Preenchimento" ;
+                Text [ finnish ] = "~Täytä" ;
+                Text [ danish ] = "Flade" ;
+                Text [ french ] = "Remplissage" ;
+                Text [ swedish ] = "Yta" ;
+                Text [ dutch ] = "Vlak" ;
+                Text [ spanish ] = "Relleno" ;
+                Text [ english_us ] = "Area" ;
+                PageResID = RID_SVXPAGE_AREA ;
+                Text[ chinese_simplified ] = "³äÌî";
+                Text[ russian ] = "Çàëèâêà";
+                Text[ polish ] = "Obszar";
+                Text[ japanese ] = "•\\–Ê";
+                Text[ chinese_traditional ] = "¥R¶ñ";
+                Text[ greek ] = "ÅğéöÜíåéá";
+                Text[ korean ] = "¸é Ã¤¿ì±â";
+                Text[ arabic ] = "ÊÚÈÆÉ";
+                Text[ turkish ] = "Yüzey";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_SHADOW ;
+                Text = "Schatten" ;
+                Text [ ENGLISH ] = "Shadow" ;
+                PageResID = RID_SVXPAGE_SHADOW ;
+                Text [ english_us ] = "Shadowing" ;
+                Text [ italian ] = "Ombre" ;
+                Text [ spanish ] = "Sombra" ;
+                Text [ french ] = "Ombre" ;
+                Text [ dutch ] = "Schaduw" ;
+                Text [ swedish ] = "Skugga" ;
+                Text [ danish ] = "Skygge" ;
+                Text [ portuguese ] = "Sombras" ;
+                Text [ portuguese_brazilian ] = "Schatten" ;
+                Text[ chinese_simplified ] = "ÒõÓ°";
+                Text[ russian ] = "Òåíü";
+                Text[ polish ] = "Cieñ";
+                Text[ japanese ] = "‰e";
+                Text[ chinese_traditional ] = "³±¼v";
+                Text[ greek ] = "ÓêéÜ";
+                Text[ korean ] = "À½¿µ";
+                Text[ arabic ] = "Ùá";
+                Text[ turkish ] = "Gölge";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TRANSPARENCE ;
+                Text = "Transparenz" ;
+                Text [ ENGLISH ] = "Transparence" ;
+                Text[ english_us ] = "Transparency";
+                Text[ portuguese ] = "Transparência";
+                Text[ russian ] = "Ïğîçğà÷íûé";
+                Text[ greek ] = "ÄéáöÜíåéá";
+                Text[ dutch ] = "Transparantie";
+                Text[ french ] = "Transparence";
+                Text[ spanish ] = "Transparencia";
+                Text[ italian ] = "Trasparenza";
+                Text[ danish ] = "Transparens";
+                Text[ swedish ] = "Transparens";
+                Text[ polish ] = "Przezroczystoœæ";
+                Text[ portuguese_brazilian ] = "Transparence";
+                Text[ japanese ] = "“§‰ß«";
+                Text[ korean ] = "Åõ¸í";
+                Text[ chinese_simplified ] = "Í¸Ã÷";
+                Text[ chinese_traditional ] = "³z©ú";
+                Text[ arabic ] = "ÔİÇİíÉ";
+                Text[ turkish ] = "Saydamlık";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_CHAR_STD ;
+                Text = "Schrift" ;
+                Text [ ENGLISH ] = "Font" ;
+                Text [ norwegian ] = "Skrift" ;
+                Text [ italian ] = "Carattere" ;
+                Text [ portuguese_brazilian ] = "Fonte" ;
+                Text [ portuguese ] = "Tipo de letra" ;
+                Text [ finnish ] = "Fontti" ;
+                Text [ danish ] = "Skrifttype" ;
+                Text [ french ] = "Police" ;
+                Text [ swedish ] = "Teckensnitt" ;
+                Text [ dutch ] = "Lettertype" ;
+                Text [ spanish ] = "Fuente" ;
+                Text [ english_us ] = "Font" ;
+                PageResID = RID_SVXPAGE_CHAR_STD ;
+                Text[ chinese_simplified ] = "×ÖÌå";
+                Text[ russian ] = "Øğèôò";
+                Text[ polish ] = "Czcionka";
+                Text[ japanese ] = "Ì«İÄ";
+                Text[ chinese_traditional ] = "¦r«¬";
+                Text[ greek ] = "ÃñáììáôïóåéñÜ";
+                Text[ korean ] = "±Û²Ã";
+                Text[ arabic ] = "ÎØ";
+                Text[ turkish ] = "Yazıtipi";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
+                /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
+                Text = "Einzüge und Abstände" ;
+                Text [ ENGLISH ] = "Indent and Spacing" ;
+                Text [ norwegian ] = "Indent and Spacing" ;
+                Text [ italian ] = "Rientro e spaziatura" ;
+                Text [ portuguese_brazilian ] = "Indentar e Espaçar" ;
+                Text [ portuguese ] = "Avanços e espaçamento" ;
+                Text [ finnish ] = "Sisennys ja välit" ;
+                Text [ danish ] = "Indrykning og mellemrum" ;
+                Text [ french ] = "Retraits et écarts" ;
+                Text [ swedish ] = "Indrag och avstånd" ;
+                Text [ dutch ] = "Inspringingen en afstanden" ;
+                Text [ spanish ] = "Sangría y espacios" ;
+                Text [ english_us ] = "Indents & Spacing" ;
+                PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
+                Text[ chinese_simplified ] = "Ëõ½øºÍ¼ä¸ô";
+                Text[ russian ] = "Îòñòóïû è èíòåğâàëû";
+                Text[ polish ] = "Wciêcia i odstêpy";
+                Text[ japanese ] = "²İÃŞİÄ‚ÆsŠÔŠu";
+                Text[ chinese_traditional ] = "ÁY±Æ©M¶¡¹j";
+                Text[ greek ] = "Åóï÷İò êáé áğïóôÜóåéò";
+                Text[ korean ] = "µé¿© ¾²±â¿Í °£°İ";
+                Text[ arabic ] = "ÇáÅÒÇÍÉ æÇáÊÈÇÚÏ";
+                Text[ turkish ] = "Girintiler ve aralıklar";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TEXTATTR ;
+                Text = "Text" ;
+                Text [ ENGLISH ] = "Text" ;
+                PageResID = RID_SVXPAGE_TEXTATTR ;
+                Text [ english_us ] = "Text" ;
+                Text [ swedish ] = "Text" ;
+                Text [ danish ] = "Tekst" ;
+                Text [ italian ] = "Text" ;
+                Text [ spanish ] = "Texto" ;
+                Text [ french ] = "Texte" ;
+                Text [ dutch ] = "Tekst" ;
+                Text [ portuguese ] = "Texto" ;
+                Text [ portuguese_brazilian ] = "Text" ;
+                Text[ chinese_simplified ] = "ÎÄ×Ö";
+                Text[ russian ] = "Òåêñò";
+                Text[ polish ] = "Tekst";
+                Text[ japanese ] = "Ã·½Ä";
+                Text[ chinese_traditional ] = "¤å¦r";
+                Text[ greek ] = "Êåßìåíï";
+                Text[ korean ] = "ÅØ½ºÆ®";
+                Text[ arabic ] = "äÕ";
+                Text[ turkish ] = "Metin";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TEXTANIMATION ;
+                Text = "Lauftext" ;
+                Text [ ENGLISH ] = "Text animation" ;
+                PageResID = RID_SVXPAGE_TEXTANIMATION ;
+                Text [ english_us ] = "Text Animation" ;
+                Text [ swedish ] = "Löptext" ;
+                Text [ danish ] = "Animeret tekst" ;
+                Text [ italian ] = "Testo scorrevole" ;
+                Text [ spanish ] = "Animación de texto" ;
+                Text [ french ] = "Défilement de texte" ;
+                Text [ dutch ] = "Tekstanimatie" ;
+                Text [ portuguese ] = "Texto animado" ;
+                Text [ portuguese_brazilian ] = "Lauftext" ;
+                Text[ chinese_simplified ] = "»î¶¯ÎÄ×Ö";
+                Text[ russian ] = "Áåãóùàÿ ñòğîêà";
+                Text[ polish ] = "Animacje tekstu";
+                Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ";
+                Text[ chinese_traditional ] = "°ÊºA¤å¦r";
+                Text[ greek ] = "Êéíïıìåíï êåßìåíï";
+                Text[ korean ] = "ÅØ½ºÆ® ¾Ö´Ï¸ŞÀÌ¼Ç";
+                Text[ arabic ] = "äÕ ãÊÍÑß";
+                Text[ turkish ] = "Hareketli metin";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_MEASURE ;
+                /* ### ACHTUNG: Neuer Text in Resource? Bemaßung : Bema˜ung */
+                Text = "Bemaßung" ;
+                Text [ ENGLISH ] = "Measure" ;
+                Text [ english_us ] = "Dimensioning" ;
+                Text [ italian ] = "Quotatura" ;
+                Text [ spanish ] = "Dimensionar" ;
+                Text [ french ] = "Cotation" ;
+                Text [ dutch ] = "Maatindeling" ;
+                PageResID = RID_SVXPAGE_MEASURE ;
+                Text [ swedish ] = "Dimensionering" ;
+                Text [ danish ] = "Dimensionering" ;
+                Text [ portuguese ] = "Dimensões" ;
+                Text [ portuguese_brazilian ] = "Bemaßung" ;
+                Text[ chinese_simplified ] = "¶¨³ß¶È";
+                Text[ russian ] = "Çàäàíèå ğàçìåğîâ";
+                Text[ polish ] = "Wymiarowanie";
+                Text[ japanese ] = "kÚ‚Ì‹L“ü";
+                Text[ chinese_traditional ] = "©w¤Ø«×";
+                Text[ greek ] = "Äéáóôáóéïëüãçóç";
+                Text[ korean ] = "Ä¡¼ö";
+                Text[ arabic ] = "ÇáŞíÇÓ";
+                Text[ turkish ] = "Boyutlar";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_CONNECTION ;
+                Text = "Verbinder" ;
+                Text [ ENGLISH ] = "Connectors" ;
+                Text [ english_us ] = "Connector" ;
+                Text [ portuguese ] = "Conectores" ;
+                Text [ swedish ] = "Förbindelse" ;
+                Text [ danish ] = "Forbindelse" ;
+                Text [ italian ] = "Connettore" ;
+                Text [ spanish ] = "Conector" ;
+                Text [ french ] = "Connecteur" ;
+                Text [ dutch ] = "Verbinding" ;
+                Text [ portuguese_brazilian ] = "Verbinder" ;
+                Text[ chinese_simplified ] = "Á¬½Ó·û";
+                Text[ russian ] = "Ñîåäèíèòåëüíàÿ ëîìàíàÿ ëèíèÿ";
+                Text[ polish ] = "£¹cznik";
+                Text[ japanese ] = "ºÈ¸À";
+                Text[ chinese_traditional ] = "³s±µ²Å";
+                Text[ greek ] = "Óıíäåóç";
+                Text[ korean ] = "¿¬°á¼±";
+                Text[ arabic ] = "ÑÇÈØ";
+                Text[ turkish ] = "Bağlayıcı";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH ;
+                Text = "Ausrichtung" ;
+                Text [ ENGLISH ] = "Alignment" ;
+                PageResID = RID_SVXPAGE_ALIGN_PARAGRAPH ;
+                Text [ english_us ] = "Alignment" ;
+                Text [ portuguese ] = "Alinhamento" ;
+                Text [ swedish ] = "Justering" ;
+                Text [ danish ] = "Justering" ;
+                Text [ italian ] = "Allineamento" ;
+                Text [ spanish ] = "Alineación" ;
+                Text [ french ] = "Alignement" ;
+                Text [ dutch ] = "Uitlijning" ;
+                Text [ portuguese_brazilian ] = "Ausrichtung" ;
+                Text[ chinese_simplified ] = "¶ÔÆë";
+                Text[ russian ] = "Âûğàâíèâàíèå";
+                Text[ polish ] = "Wyrównanie";
+                Text[ japanese ] = "”z’u";
+                Text[ chinese_traditional ] = "¹ï»ô";
+                Text[ greek ] = "Óôïß÷éóç";
+                Text[ korean ] = "¸ÂÃã";
+                Text[ arabic ] = "ãÍÇĞÇÉ";
+                Text[ turkish ] = "Hizalama";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TABULATOR ;
+                Text = "Tabulator" ;
+                Text [ ENGLISH ] = "Paragraph (Tabs)" ;
+                Text [ norwegian ] = "Avsnitt (Tabulatorer)" ;
+                Text [ italian ] = "Tabulazione" ;
+                Text [ portuguese_brazilian ] = "Parágrafo (Tabs)" ;
+                Text [ portuguese ] = "Tabulação" ;
+                Text [ finnish ] = "Kappale (sarkaimet)" ;
+                Text [ danish ] = "Tabulator" ;
+                Text [ french ] = "Tabulation" ;
+                Text [ swedish ] = "Tabulator" ;
+                Text [ dutch ] = "Tab" ;
+                Text [ spanish ] = "Tabulación" ;
+                Text [ english_us ] = "Tabs" ;
+                PageResID = RID_SVXPAGE_TABULATOR ;
+                Text[ chinese_simplified ] = "ÖÆ±í·û";
+                Text[ russian ] = "Òàáóëÿòîğ";
+                Text[ polish ] = "Tabulator";
+                Text[ japanese ] = "ÀÌŞ";
+                Text[ chinese_traditional ] = "»sªí²Å";
+                Text[ greek ] = "Óôçëïèİôçò";
+                Text[ korean ] = "ÅÇ Á¤Áö";
+                Text[ arabic ] = "ÚáÇãÉ ÌÏæáÉ";
+                Text[ turkish ] = "Sekmeler";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 6 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 60 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 114 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton 1
+    {
+        Pos = MAP_APPFONT ( 169 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
+        Text = "Zurück" ;
+        Text [ ENGLISH ] = "Return" ;
+        Text [ norwegian ] = "Return" ;
+        Text [ italian ] = "Indietro" ;
+        Text [ portuguese_brazilian ] = "Devolver" ;
+        Text [ portuguese ] = "Anterior" ;
+        Text [ finnish ] = "Palaa" ;
+        Text [ danish ] = "Tilbage" ;
+        Text [ french ] = "Précédent" ;
+        Text [ swedish ] = "Tillbaka" ;
+        Text [ dutch ] = "Vorige" ;
+        Text [ spanish ] = "Regresar" ;
+        Text [ english_us ] = "Back" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "·µ»Ø";
+        Text[ russian ] = "Íàçàä";
+        Text[ polish ] = "Wstecz";
+        Text[ japanese ] = "–ß‚é";
+        Text[ chinese_traditional ] = "ªğ¦^";
+        Text[ greek ] = "Ğßóù";
+        Text[ korean ] = "µÚ·Î";
+        Text[ arabic ] = "ÇáÓÇÈŞ";
+        Text[ turkish ] = "Geri";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "Í¼ĞÎ¶ÔÏóÑùÊ½";
+    Text[ russian ] = "Ñòèëè ãğàôè÷åñêèõ îáúåêòîâ";
+    Text[ polish ] = "Style obiektów graficznych";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸ ½À²Ù";
+    Text[ chinese_traditional ] = "¹Ï§Îª«¥ó¼Ë¦¡";
+    Text[ greek ] = "Óôõë áíôéêåéìİíùí ãñáöéêşí";
+    Text[ korean ] = "±×·¡ÇÈ °³Ã¼ À¯Çü";
+    Text[ arabic ] = "ÃäãÇØ ßÇÆäÇÊ ÕæÑÉ";
+    Text[ turkish ] = "Grafik nesneleri şablonu";
+    Text[ language_user1 ] = " ";
+};

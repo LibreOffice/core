@@ -1,0 +1,11 @@
+SD_1_0 {
+    global:
+        CreateSdDrawDocShellDll;
+        CreateSdGraphicDocShellDll;
+        CreateObjSdDrawDocShellDll;
+        CreateObjSdGraphicDocShellDll;
+        InitSdDll;
+        DeInitSdDll;
+    local:
+        *;
+};

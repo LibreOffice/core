@@ -1,0 +1,1439 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tbx_ww.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <svx/svxids.hrc>
+#include "app.hrc"
+#include "res_bmp.hrc"
+#include "helpids.h"
+#include <offmgr/offmenu.hrc>
+FloatingWindow RID_ALIGNMENT
+{
+    HelpId = HID_SD_FW_ALIGNMENT ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "Ausrichtung" ;
+    Text [ ENGLISH ] = "Alignment" ;
+    Text [ norwegian ] = "Alignment" ;
+    Text [ italian ] = "Allineamento" ;
+    Text [ portuguese_brazilian ] = "Alinhamento" ;
+    Text [ portuguese ] = "Alinhar" ;
+    Text [ finnish ] = "Tasaus" ;
+    Text [ danish ] = "Justering" ;
+    Text [ french ] = "Alignement" ;
+    Text [ swedish ] = "Justering" ;
+    Text [ dutch ] = "Uitlijning" ;
+    Text [ spanish ] = "AlineaciÛn" ;
+    Text [ english_us ] = "Alignment" ;
+    ToolBox RID_ALIGNMENT_TBX
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                ITEM_FORMAT_OBJECT_ALIGN_LEFT
+            };
+            ToolBoxItem
+            {
+                ITEM_FORMAT_OBJECT_ALIGN_CENTER
+            };
+            ToolBoxItem
+            {
+                ITEM_FORMAT_OBJECT_ALIGN_RIGHT
+            };
+            ToolBoxItem
+            {
+                ITEM_FORMAT_OBJECT_ALIGN_UP
+            };
+            ToolBoxItem
+            {
+                ITEM_FORMAT_OBJECT_ALIGN_MIDDLE
+            };
+            ToolBoxItem
+            {
+                ITEM_FORMAT_OBJECT_ALIGN_DOWN
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "∂‘∆Î";
+    Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ";
+    Text[ polish ] = "WyrÛwnanie";
+    Text[ japanese ] = "îzíu";
+    Text[ chinese_traditional ] = "πÔªÙ";
+    Text[ greek ] = "”ÙÔﬂ˜ÈÛÁ";
+    Text[ korean ] = "∏¬√„";
+    Text[ arabic ] = "„Õ«–«…";
+    Text[ turkish ] = "Hizalama";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_ZOOM
+{
+    HelpId = HID_SD_FW_ZOOM ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "Zoomen" ;
+    Text [ ENGLISH ] = "Zoom" ;
+    Text [ norwegian ] = "Zoom" ;
+    Text [ italian ] = "Zoom" ;
+    Text [ portuguese_brazilian ] = "Zoom" ;
+    Text [ portuguese ] = "Zoom" ;
+    Text [ french ] = "Zoom" ;
+    Text [ dutch ] = "Zoomen" ;
+    Text [ spanish ] = "Escala" ;
+    Text [ danish ] = "Zoom" ;
+    Text [ swedish ] = "Zooma" ;
+    Text [ finnish ] = "Zoom" ;
+    Text [ english_us ] = "Zoom" ;
+    ToolBox RID_ZOOM_TBX
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        LineCount = 2 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = SID_ZOOM_OUT ;
+                HelpID = SID_ZOOM_OUT ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_ZOOM_IN ;
+                HelpID = SID_ZOOM_IN ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_SIZE_REAL ;
+                HelpID = SID_SIZE_REAL ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_ZOOM_PREV ;
+                HelpID = SID_ZOOM_PREV ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_ZOOM_NEXT ;
+                HelpID = SID_ZOOM_NEXT ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_SIZE_PAGE ;
+                HelpID = SID_SIZE_PAGE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_SIZE_PAGE_WIDTH ;
+                HelpID = SID_SIZE_PAGE_WIDTH ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_SIZE_ALL ;
+                HelpID = SID_SIZE_ALL ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_SIZE_OPTIMAL ;
+                HelpID = SID_SIZE_OPTIMAL ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_ZOOM_PANNING ;
+                HelpID = SID_ZOOM_PANNING ;
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "œ‘ æ±»¿˝";
+    Text[ russian ] = "Ã‡Ò¯Ú‡·";
+    Text[ polish ] = "PowiÍkszenie";
+    Text[ japanese ] = "Ωﬁ∞—";
+    Text[ chinese_traditional ] = "≈„•‹§Ò®“";
+    Text[ greek ] = "≈ÛÙﬂ·ÛÁ";
+    Text[ korean ] = "»Æ¥Î/√‡º“";
+    Text[ arabic ] = " ﬂ»Ì— Ê ’€Ì—";
+    Text[ turkish ] = "Yak˝nla˛t˝r";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_CHOOSE_MODE
+{
+    HelpId = HID_SD_FW_CHOOSE_MODE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "Effekte" ;
+    Text [ ENGLISH ] = "Effects" ;
+    Text [ norwegian ] = "Effects" ;
+    Text [ italian ] = "Effetti" ;
+    Text [ portuguese_brazilian ] = "Efeitos" ;
+    Text [ portuguese ] = "Efeitos" ;
+    Text [ french ] = "Effets" ;
+    Text [ dutch ] = "Effecten" ;
+    Text [ spanish ] = "Efectos" ;
+    Text [ danish ] = "Effekter" ;
+    Text [ swedish ] = "Effekter" ;
+    Text [ finnish ] = "Effects" ;
+    Text [ english_us ] = "Effects" ;
+    ToolBox RID_CHOOSE_MODE_TBX
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        LineCount = 2 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                ITEM_TOOLBAR_OBJECT_ROTATE
+                Checkable = TRUE ;
+                RadioCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_OBJECT_MIRROR ;
+                HelpID = SID_OBJECT_MIRROR ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONVERT_TO_3D_LATHE ;
+                HelpID = SID_CONVERT_TO_3D_LATHE ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_OBJECT_CROOK_ROTATE ;
+                HelpID = SID_OBJECT_CROOK_ROTATE ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_OBJECT_CROOK_SLANT ;
+                HelpID = SID_OBJECT_CROOK_SLANT ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_OBJECT_SHEAR ;
+                HelpID = SID_OBJECT_SHEAR ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_OBJECT_TRANSPARENCE ;
+                HelpID = SID_OBJECT_TRANSPARENCE ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_OBJECT_GRADIENT ;
+                HelpID = SID_OBJECT_GRADIENT ;
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "–ßπ˚";
+    Text[ russian ] = "›ÙÙÂÍÚ˚";
+    Text[ polish ] = "Efekty";
+    Text[ japanese ] = "å¯â ";
+    Text[ chinese_traditional ] = "Æƒ™G";
+    Text[ greek ] = "≈ˆ›";
+    Text[ korean ] = "»ø∞˙";
+    Text[ arabic ] = " √ÀÌ—« ";
+    Text[ turkish ] = "Efektler";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_TEXT
+{
+    HelpId = HID_SD_FW_TEXT ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "Text" ;
+    Text [ ENGLISH ] = "Text" ;
+    ToolBox RID_TEXT_TBX
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_ATTR_CHAR ;
+                HelpID = SID_ATTR_CHAR ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_TEXT_FITTOSIZE ;
+                HelpID = SID_TEXT_FITTOSIZE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_CAPTION ;
+                HelpId = SID_DRAW_CAPTION ;
+            };
+        };
+    };
+    Text [ dutch ] = "Tekst" ;
+    Text [ english_us ] = "Text" ;
+    Text [ italian ] = "Testo" ;
+    Text [ spanish ] = "Texto" ;
+    Text [ french ] = "Texte" ;
+    Text [ swedish ] = "Text" ;
+    Text [ danish ] = "Tekst" ;
+    Text [ portuguese_brazilian ] = "Text" ;
+    Text [ portuguese ] = "Texto" ;
+    Text[ chinese_simplified ] = "Œƒ◊÷";
+    Text[ russian ] = "“ÂÍÒÚ";
+    Text[ polish ] = "Tekst";
+    Text[ japanese ] = "√∑Ωƒ";
+    Text[ chinese_traditional ] = "§Â¶r";
+    Text[ greek ] = " ÂﬂÏÂÌÔ";
+    Text[ korean ] = "≈ÿΩ∫∆Æ";
+    Text[ arabic ] = "‰’";
+    Text[ turkish ] = "Metin";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_RECTANGLES
+{
+    HelpId = HID_SD_FW_RECTANGLES ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "Rechtecke" ;
+    Text [ ENGLISH ] = "Rectangles" ;
+    Text [ dutch ] = "Rechthoeken" ;
+    Text [ english_us ] = "Rectangles" ;
+    Text [ italian ] = "Rettangoli" ;
+    Text [ spanish ] = "Rect·ngulos" ;
+    Text [ french ] = "Rectangles" ;
+    Text [ swedish ] = "Rektanglar" ;
+    Text [ danish ] = "Rektangler" ;
+    Text [ portuguese_brazilian ] = "Rechtecke" ;
+    Text [ portuguese ] = "¬ngulos rectos" ;
+    ToolBox RID_RECTANGLES_TBX
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        LineCount = 2 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_DRAW_RECT ;
+                HelpID = SID_DRAW_RECT ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_DRAW_SQUARE ;
+                HelpID = SID_DRAW_SQUARE ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_DRAW_RECT_ROUND ;
+                HelpID = SID_DRAW_RECT_ROUND ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_DRAW_SQUARE_ROUND ;
+                HelpID = SID_DRAW_SQUARE_ROUND ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_DRAW_RECT_NOFILL ;
+                HelpID = SID_DRAW_RECT_NOFILL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_DRAW_SQUARE_NOFILL ;
+                HelpID = SID_DRAW_SQUARE_NOFILL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_DRAW_RECT_ROUND_NOFILL ;
+                HelpID = SID_DRAW_RECT_ROUND_NOFILL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_DRAW_SQUARE_ROUND_NOFILL ;
+                HelpID = SID_DRAW_SQUARE_ROUND_NOFILL ;
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "æÿ–Œ";
+    Text[ russian ] = "œˇÏÓÛ„ÓÎ¸ÌËÍË";
+    Text[ polish ] = "Prostokπty";
+    Text[ japanese ] = "éläpå`";
+    Text[ chinese_traditional ] = "ØxßŒ";
+    Text[ greek ] = "œÒËÔ„˛ÌÈ·";
+    Text[ korean ] = "¡˜ªÁ∞¢«¸";
+    Text[ arabic ] = "„” ÿÌ·« ";
+    Text[ turkish ] = "Dikdˆrtgenler";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_ELLIPSES
+{
+    HelpId = HID_SD_FW_ELLIPSES ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "Ellipsen" ;
+    Text [ ENGLISH ] = "Ellipses" ;
+    Text [ dutch ] = "Ellipsen" ;
+    Text [ english_us ] = "Ellipses" ;
+    Text [ italian ] = "Ellissi" ;
+    Text [ spanish ] = "Elipses" ;
+    Text [ french ] = "Ellipses" ;
+    Text [ swedish ] = "Ellipser" ;
+    Text [ danish ] = "Ellipser" ;
+    Text [ portuguese_brazilian ] = "Ellipsen" ;
+    Text [ portuguese ] = "Elipses" ;
+    ToolBox RID_ELLIPSES_TBX
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        LineCount = 2 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_ELLIPSE ;
+                HelpID = SID_DRAW_ELLIPSE ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_CIRCLE ;
+                HelpID = SID_DRAW_CIRCLE ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_PIE ;
+                HelpID = SID_DRAW_PIE ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_CIRCLEPIE ;
+                HelpID = SID_DRAW_CIRCLEPIE ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_ELLIPSECUT ;
+                HelpID = SID_DRAW_ELLIPSECUT ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_CIRCLECUT ;
+                HelpID = SID_DRAW_CIRCLECUT ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_ELLIPSE_NOFILL ;
+                HelpID = SID_DRAW_ELLIPSE_NOFILL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_CIRCLE_NOFILL ;
+                HelpID = SID_DRAW_CIRCLE_NOFILL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_PIE_NOFILL ;
+                HelpID = SID_DRAW_PIE_NOFILL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_CIRCLEPIE_NOFILL ;
+                HelpID = SID_DRAW_CIRCLEPIE_NOFILL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_ELLIPSECUT_NOFILL ;
+                HelpID = SID_DRAW_ELLIPSECUT_NOFILL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_CIRCLECUT_NOFILL ;
+                HelpID = SID_DRAW_CIRCLECUT_NOFILL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_ARC ;
+                HelpID = SID_DRAW_ARC ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_CIRCLEARC ;
+                HelpID = SID_DRAW_CIRCLEARC ;
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "Õ÷‘≤";
+    Text[ russian ] = "›ÎÎËÔÒ˚";
+    Text[ polish ] = "Elipsy";
+    Text[ japanese ] = "ë»â~å`";
+    Text[ chinese_traditional ] = "æÚ∂Í";
+    Text[ greek ] = "∏ÎÎÂÈ¯Á";
+    Text[ korean ] = "≈∏ø¯";
+    Text[ arabic ] = "√‘ﬂ«· »Ì÷ÊÌ…";
+    Text[ turkish ] = "Elipsler";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_LINES
+{
+    HelpId = HID_SD_FW_LINES ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "Kurven" ;
+    Text [ ENGLISH ] = "Curves" ;
+    Text [ dutch ] = "Bogen" ;
+    Text [ english_us ] = "Curves" ;
+    Text [ italian ] = "Curve" ;
+    Text [ spanish ] = "Curvas" ;
+    Text [ french ] = "Courbes" ;
+    Text [ swedish ] = "Kurvor" ;
+    Text [ danish ] = "Kurver" ;
+    Text [ portuguese_brazilian ] = "Kurven & Linien" ;
+    Text [ portuguese ] = "Curvas & Linhas" ;
+    ToolBox RID_LINES_TBX
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        HelpID = 1 ;
+        LineCount = 2 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_BEZIER_FILL ;
+                HelpID = SID_DRAW_BEZIER_FILL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_POLYGON ;
+                HelpID = SID_DRAW_POLYGON ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_XPOLYGON ;
+                HelpID = SID_DRAW_XPOLYGON ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_FREELINE ;
+                HelpID = SID_DRAW_FREELINE ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_BEZIER_NOFILL ;
+                HelpID = SID_DRAW_BEZIER_NOFILL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_POLYGON_NOFILL ;
+                HelpID = SID_DRAW_POLYGON_NOFILL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_XPOLYGON_NOFILL ;
+                HelpID = SID_DRAW_XPOLYGON_NOFILL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_DRAW_FREELINE_NOFILL ;
+                HelpID = SID_DRAW_FREELINE_NOFILL ;
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "«˙œﬂ";
+    Text[ russian ] = " Ë‚˚Â ÎËÌËË";
+    Text[ polish ] = "Krzywe";
+    Text[ japanese ] = "ã»ê¸";
+    Text[ chinese_traditional ] = "¶±Ωu";
+    Text[ greek ] = " ·Ï˝ÎÂÚ";
+    Text[ korean ] = "∞Óº±";
+    Text[ arabic ] = "„‰Õ‰Ì« ";
+    Text[ turkish ] = "Eri";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_ARROWS
+{
+    HelpId = HID_SD_FW_ARROWS ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "Linien" ;
+    Text [ ENGLISH ] = "Lines" ;
+    Text [ english_us ] = "Lines" ;
+    Text [ portuguese ] = "Linhas" ;
+    Text [ swedish ] = "Linjer" ;
+    Text [ danish ] = "Streger" ;
+    Text [ italian ] = "Linee" ;
+    Text [ spanish ] = "LÌneas" ;
+    Text [ french ] = "Lignes" ;
+    Text [ dutch ] = "Lijnen" ;
+    Text [ portuguese_brazilian ] = "Linien" ;
+    ToolBox RID_ARROWS_TBX
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        LineCount = 3 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_DRAW_LINE ;
+                HelpID = SID_DRAW_LINE ;
+            };
+            ToolBoxItem
+            {
+                Checkable = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = SID_LINE_ARROW_END ;
+                HelpID = SID_LINE_ARROW_END ;
+            };
+            ToolBoxItem
+            {
+                Checkable = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = SID_LINE_ARROW_CIRCLE ;
+                HelpID = SID_LINE_ARROW_CIRCLE ;
+            };
+            ToolBoxItem
+            {
+                Checkable = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = SID_LINE_ARROW_SQUARE ;
+                HelpID = SID_LINE_ARROW_SQUARE ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_DRAW_XLINE ;
+                HelpID = SID_DRAW_XLINE ;
+            };
+            ToolBoxItem
+            {
+                Checkable = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = SID_LINE_ARROW_START ;
+                HelpID = SID_LINE_ARROW_START ;
+            };
+            ToolBoxItem
+            {
+                Checkable = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = SID_LINE_CIRCLE_ARROW ;
+                HelpID = SID_LINE_CIRCLE_ARROW ;
+            };
+            ToolBoxItem
+            {
+                Checkable = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = SID_LINE_SQUARE_ARROW ;
+                HelpID = SID_LINE_SQUARE_ARROW ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_DRAW_MEASURELINE ;
+                HelpID = SID_DRAW_MEASURELINE ;
+            };
+            ToolBoxItem
+            {
+                Checkable = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = SID_LINE_ARROWS ;
+                HelpID = SID_LINE_ARROWS ;
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "œﬂÃı";
+    Text[ russian ] = "ÀËÌËË";
+    Text[ polish ] = "Linie";
+    Text[ japanese ] = "ê¸";
+    Text[ chinese_traditional ] = "Ωu±¯";
+    Text[ greek ] = "√Ò·ÏÏ›Ú";
+    Text[ korean ] = "º±";
+    Text[ arabic ] = "ŒÿÊÿ";
+    Text[ turkish ] = "«izgiler";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_3D_OBJECTS
+{
+    HelpId = HID_SD_FW_3D_OBJECTS ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "3D-Objekte" ;
+    Text [ ENGLISH ] = "3D objects" ;
+    Text [ english_us ] = "3D Objects" ;
+    Text [ italian ] = "Oggetti 3D" ;
+    Text [ spanish ] = "Objetos 3D" ;
+    Text [ french ] = "Objets 3D" ;
+    Text [ dutch ] = "3D-objecten" ;
+    Text [ swedish ] = "3D-objekt" ;
+    Text [ danish ] = "3D-objekter" ;
+    Text [ portuguese ] = "Objectos 3D" ;
+    Text [ portuguese_brazilian ] = "3D-Objekte" ;
+    ToolBox RID_3D_OBJECTS_TBX
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        HelpID = 1 ;
+        LineCount = 2 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_3D_CUBE ;
+                HelpID = SID_3D_CUBE ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_3D_SPHERE ;
+                HelpID = SID_3D_SPHERE ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_3D_CYLINDER ;
+                HelpID = SID_3D_CYLINDER ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_3D_CONE ;
+                HelpID = SID_3D_CONE ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_3D_PYRAMID ;
+                HelpID = SID_3D_PYRAMID ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_3D_TORUS ;
+                HelpID = SID_3D_TORUS ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_3D_SHELL ;
+                HelpID = SID_3D_SHELL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_3D_HALF_SPHERE ;
+                HelpID = SID_3D_HALF_SPHERE ;
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "3 Œ¨∂‘œÛ";
+    Text[ russian ] = "Œ·˙ÂÍÚ˚ 3-Ã";
+    Text[ polish ] = "Obiekty 3-W";
+    Text[ japanese ] = "3D ëÃµÃﬁºﬁ™∏ƒ";
+    Text[ chinese_traditional ] = "3 ∫˚™´•Û";
+    Text[ greek ] = "¡ÌÙÈÍÂﬂÏÂÌ· 3ƒ";
+    Text[ korean ] = "3D ∞≥√º";
+    Text[ arabic ] = "ﬂ«∆‰«  À·«ÀÌ… «·√»⁄«œ";
+    Text[ turkish ] = "3B nesneler";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_CONNECTORS
+{
+    HelpId = HID_SD_FW_CONNECTORS ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "Verbinder" ;
+    Text [ ENGLISH ] = "Connectors" ;
+    Text [ dutch ] = "Verbindingen" ;
+    Text [ english_us ] = "Connectors" ;
+    Text [ swedish ] = "Fˆrbindelse" ;
+    Text [ danish ] = "Forbindelse" ;
+    Text [ italian ] = "Connettori" ;
+    Text [ spanish ] = "Conector" ;
+    Text [ french ] = "Connecteurs" ;
+    Text [ portuguese_brazilian ] = "Verbinder" ;
+    Text [ portuguese ] = "Conectores" ;
+    ToolBox RID_CONNECTORS_TBX
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        LineCount = 4 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_TOOL_CONNECTOR ;
+                HelpID = SID_TOOL_CONNECTOR ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_ARROW_START ;
+                HelpID = SID_CONNECTOR_ARROW_START ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_ARROW_END ;
+                HelpID = SID_CONNECTOR_ARROW_END ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_ARROWS ;
+                HelpID = SID_CONNECTOR_ARROWS ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_CIRCLE_START ;
+                HelpID = SID_CONNECTOR_CIRCLE_START ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_CIRCLE_END ;
+                HelpID = SID_CONNECTOR_CIRCLE_END ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_CIRCLES ;
+                HelpID = SID_CONNECTOR_CIRCLES ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINES ;
+                HelpID = SID_CONNECTOR_LINES ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINES_ARROW_START ;
+                HelpID = SID_CONNECTOR_LINES_ARROW_START ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINES_ARROW_END ;
+                HelpID = SID_CONNECTOR_LINES_ARROW_END ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINES_ARROWS ;
+                HelpID = SID_CONNECTOR_LINES_ARROWS ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINES_CIRCLE_START ;
+                HelpID = SID_CONNECTOR_LINES_CIRCLE_START ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINES_CIRCLE_END ;
+                HelpID = SID_CONNECTOR_LINES_CIRCLE_END ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINES_CIRCLES ;
+                HelpID = SID_CONNECTOR_LINES_CIRCLES ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINE ;
+                HelpID = SID_CONNECTOR_LINE ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINE_ARROW_START ;
+                HelpID = SID_CONNECTOR_LINE_ARROW_START ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINE_ARROW_END ;
+                HelpID = SID_CONNECTOR_LINE_ARROW_END ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINE_ARROWS ;
+                HelpID = SID_CONNECTOR_LINE_ARROWS ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINE_CIRCLE_START ;
+                HelpID = SID_CONNECTOR_LINE_CIRCLE_START ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINE_CIRCLE_END ;
+                HelpID = SID_CONNECTOR_LINE_CIRCLE_END ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_LINE_CIRCLES ;
+                HelpID = SID_CONNECTOR_LINE_CIRCLES ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_CURVE ;
+                HelpID = SID_CONNECTOR_CURVE ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_CURVE_ARROW_START ;
+                HelpID = SID_CONNECTOR_CURVE_ARROW_START ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_CURVE_ARROW_END ;
+                HelpID = SID_CONNECTOR_CURVE_ARROW_END ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_CURVE_ARROWS ;
+                HelpID = SID_CONNECTOR_CURVE_ARROWS ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_CURVE_CIRCLE_START ;
+                HelpID = SID_CONNECTOR_CURVE_CIRCLE_START ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_CURVE_CIRCLE_END ;
+                HelpID = SID_CONNECTOR_CURVE_CIRCLE_END ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = SID_CONNECTOR_CURVE_CIRCLES ;
+                HelpID = SID_CONNECTOR_CURVE_CIRCLES ;
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "¡¨Ω”∑˚";
+    Text[ russian ] = "—ÓÂ‰ËÌËÚÂÎ¸Ì‡ˇ ÎÓÏ‡Ì‡ˇ ÎËÌËˇ";
+    Text[ polish ] = "£πcznik";
+    Text[ japanese ] = "∫»∏¿";
+    Text[ chinese_traditional ] = "≥s±µ≤≈";
+    Text[ greek ] = "”ıÌ‰›ÛÂÈÚ";
+    Text[ korean ] = "ø¨∞·º±";
+    Text[ arabic ] = "—Ê«»ÿ";
+    Text[ turkish ] = "Balay˝c˝lar";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_INSERT
+{
+    HelpId = HID_SD_FW_INSERT ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    /* ### ACHTUNG: Neuer Text in Resource? Einf¸gen : Einf≥gen */
+    Text = "Einf¸gen" ;
+    Text [ ENGLISH ] = "Insert" ;
+    Text [ dutch ] = "Invoegen" ;
+    Text [ english_us ] = "Insert" ;
+    Text [ italian ] = "Inserisci" ;
+    Text [ spanish ] = "Insertar" ;
+    Text [ french ] = "InsÈrer" ;
+    Text [ swedish ] = "Infoga" ;
+    Text [ danish ] = "IndsÊt" ;
+    Text [ portuguese_brazilian ] = "Einf¸gen" ;
+    Text [ portuguese ] = "Inserir" ;
+    ToolBox RID_INSERT_TBX
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        HelpID = 1 ;
+        LineCount = 2 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_DIAGRAM ;
+                HelpID = SID_INSERT_DIAGRAM;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_MATH ;
+                HelpID = SID_INSERT_MATH ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_FLOATINGFRAME ;
+                HelpID = SID_INSERT_FLOATINGFRAME ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_OBJECT ;
+                HelpID = SID_INSERT_OBJECT ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_PLUGIN ;
+                HelpID = SID_INSERT_PLUGIN ;
+            };
+#ifdef SOLAR_JAVA
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_APPLET ;
+                HelpID = SID_INSERT_APPLET ;
+            };
+#endif
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_ATTR_TABLE ;
+                HelpID = SID_ATTR_TABLE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_INSERTFILE ;
+                HelpID = SID_INSERTFILE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_INSERTPAGE ;
+                HelpID = SID_INSERTPAGE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_GRAPHIC ;
+                HelpID = SID_INSERT_GRAPHIC ;
+            };
+#ifdef STARIMAGE_AVAILABLE
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_IMAGE ;
+                HelpID = SID_INSERT_IMAGE ;
+            };
+#endif
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_SOUND ;
+                HelpID = SID_INSERT_SOUND ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_VIDEO ;
+                HelpID = SID_INSERT_VIDEO ;
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "≤Â»Î";
+    Text[ russian ] = "¬ÒÚ‡‚ËÚ¸";
+    Text[ polish ] = "Wstaw";
+    Text[ japanese ] = "ë}ì¸";
+    Text[ chinese_traditional ] = "¥°§J";
+    Text[ greek ] = "≈ÈÛ·„˘„ﬁ";
+    Text[ korean ] = "ª¿‘";
+    Text[ arabic ] = "≈œ—«Ã";
+    Text[ turkish ] = "Ekle";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_POSITION
+{
+    HelpId = HID_SD_FW_POSITION ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "Anordnung" ;
+    Text [ ENGLISH ] = "Position" ;
+    Text [ dutch ] = "Positie" ;
+    Text [ english_us ] = "Arrange" ;
+    Text [ swedish ] = "Placering" ;
+    Text [ danish ] = "Placering" ;
+    Text [ italian ] = "Disponi" ;
+    Text [ spanish ] = "PosiciÛn" ;
+    Text [ french ] = "Disposition" ;
+    Text [ portuguese_brazilian ] = "Anordnung" ;
+    Text [ portuguese ] = "DisposiÁ„o" ;
+    ToolBox RID_POSITION_TBX
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        LineCount = 2 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                ITEM_FORMAT_FRAME_TO_TOP
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_MOREFRONT ;
+                HelpID = SID_MOREFRONT ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_MOREBACK ;
+                HelpID = SID_MOREBACK ;
+            };
+            ToolBoxItem
+            {
+                ITEM_FORMAT_FRAME_TO_BOTTOM
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_BEFORE_OBJ ;
+                HelpID = SID_BEFORE_OBJ ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_BEHIND_OBJ ;
+                HelpID = SID_BEHIND_OBJ ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SPACE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_REVERSE_ORDER ;
+                HelpID = SID_REVERSE_ORDER ;
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "≈≈–Ú";
+    Text[ russian ] = "–‡ÒÔÓÎÓÊÂÌËÂ";
+    Text[ polish ] = "Rozmieszczenie";
+    Text[ japanese ] = "êÆóÒ";
+    Text[ chinese_traditional ] = "±∆ß«";
+    Text[ greek ] = "‘·ÍÙÔÔﬂÁÛÁ";
+    Text[ korean ] = "¡§∑ƒ";
+    Text[ arabic ] = " — Ì»";
+    Text[ turkish ] = "S˝ralama";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_GRAFFILTERS
+{
+    HelpId = HID_SD_FW_GRAFFILTERS ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "Filter" ;
+    Text [ ENGLISH ] = "Filter" ;
+    Text [ english_us ] = "Filter" ;
+    ToolBox RID_GRAFFILTERS_TBX
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        Align = BOXALIGN_TOP;
+        LineCount = 3;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = SID_GRAFFILTER_INVERT ;
+                HelpID = SID_GRAFFILTER_INVERT ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRAFFILTER_SMOOTH ;
+                HelpID = SID_GRAFFILTER_SMOOTH ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRAFFILTER_SHARPEN ;
+                HelpID = SID_GRAFFILTER_SHARPEN ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRAFFILTER_REMOVENOISE ;
+                HelpID = SID_GRAFFILTER_REMOVENOISE ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRAFFILTER_SOLARIZE ;
+                HelpId = SID_GRAFFILTER_SOLARIZE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRAFFILTER_SEPIA ;
+                HelpId = SID_GRAFFILTER_SEPIA ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRAFFILTER_POSTER ;
+                HelpId = SID_GRAFFILTER_POSTER ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRAFFILTER_POPART ;
+                HelpId = SID_GRAFFILTER_POPART ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRAFFILTER_SOBEL ;
+                HelpId = SID_GRAFFILTER_SOBEL ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRAFFILTER_EMBOSS ;
+                HelpId = SID_GRAFFILTER_EMBOSS ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRAFFILTER_MOSAIC ;
+                HelpId = SID_GRAFFILTER_MOSAIC ;
+            };
+        };
+    };
+    Text[ portuguese ] = "Filtros";
+    Text[ russian ] = "‘ËÎ¸Ú";
+    Text[ greek ] = "÷ﬂÎÙÒÔ";
+    Text[ dutch ] = "Filter";
+    Text[ french ] = "Filtre";
+    Text[ spanish ] = "Filtros";
+    Text[ italian ] = "Filtri";
+    Text[ danish ] = "Filter";
+    Text[ swedish ] = "Filter";
+    Text[ polish ] = "Filtr";
+    Text[ portuguese_brazilian ] = "Filter";
+    Text[ japanese ] = "Ã®Ÿ¿";
+    Text[ korean ] = "« ≈Õ";
+    Text[ chinese_simplified ] = "…∏—°";
+    Text[ chinese_traditional ] = "πL¬oæπ";
+    Text[ arabic ] = "›·« —";
+    Text[ turkish ] = "Filtre";
+    Text[ language_user1 ] = " ";
+};
+

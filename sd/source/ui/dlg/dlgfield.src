@@ -1,0 +1,223 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlgfield.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dlgfield.hrc"
+ModalDialog DLG_FIELD_MODIFY
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 138 , 136 ) ;
+    Text = "Feldbefehl bearbeiten" ;
+    Text [ ENGLISH ] = "Modify field" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    GroupBox GRP_TYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 70 , 37 ) ;
+        Text = "Feldtyp" ;
+        Text [ ENGLISH ] = "field type" ;
+        Text [ english_us ] = "Field type" ;
+        Text [ portuguese_brazilian ] = "Feldtyp" ;
+        Text [ swedish ] = "F‰lttyp" ;
+        Text [ danish ] = "Felttype" ;
+        Text [ italian ] = "Tipo di campo" ;
+        Text [ spanish ] = "Tipo de campo" ;
+        Text [ french ] = "Type de champ" ;
+        Text [ dutch ] = "Veldtype" ;
+        Text [ portuguese ] = "Tipo de campo" ;
+        Text[ chinese_simplified ] = "◊÷∂Œ¿‡–Õ";
+        Text[ russian ] = "“ËÔ ÔÓÎˇ";
+        Text[ polish ] = "Rodzaj pola";
+        Text[ japanese ] = "Ã®∞Ÿƒﬁ¿≤Ãﬂ";
+        Text[ chinese_traditional ] = "ƒÊ¶Ï√˛´¨";
+        Text[ arabic ] = "‰Ê⁄ «·Õﬁ·";
+        Text[ greek ] = "‘˝ÔÚ Â‰ﬂÔı";
+        Text[ korean ] = "« µÂ ¿Ø«¸";
+        Text[ turkish ] = "Alan tipi";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_FIX
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~fix" ;
+        Text [ ENGLISH ] = "~fix" ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "~fixo" ;
+        Text [ english_us ] = "~Fixed" ;
+        Text [ portuguese_brazilian ] = "~fix" ;
+        Text [ swedish ] = "~fast" ;
+        Text [ danish ] = "fast" ;
+        Text [ italian ] = "~Fisso" ;
+        Text [ spanish ] = "~fijo" ;
+        Text [ french ] = "~fixe" ;
+        Text [ dutch ] = "~vast" ;
+        Text[ chinese_simplified ] = "πÃ∂®(~F)";
+        Text[ russian ] = "~ÙËÍÒ.";
+        Text[ polish ] = "Sta≥y";
+        Text[ japanese ] = "ïœçXïsâ¬î\\(~F)";
+        Text[ chinese_traditional ] = "©T©w(~F)";
+        Text[ arabic ] = "À«» ";
+        Text[ greek ] = "”Ù·ËÂÒ‹";
+        Text[ korean ] = "∞Ì¡§¿˚(~F)";
+        Text[ turkish ] = "Sabit";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_VAR
+    {
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "~variabel" ;
+        Text [ ENGLISH ] = "~variable" ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "~vari·vel" ;
+        Text [ english_us ] = "~Variable" ;
+        Text [ portuguese_brazilian ] = "~variabel" ;
+        Text [ swedish ] = "~variabel" ;
+        Text [ danish ] = "variabel" ;
+        Text [ italian ] = "~Variabile" ;
+        Text [ spanish ] = "~variable" ;
+        Text [ french ] = "~variable" ;
+        Text [ dutch ] = "~variabel" ;
+        Text[ chinese_simplified ] = "ø…±‰(~V)";
+        Text[ russian ] = "~ËÁÏÂÌˇÂÏ.";
+        Text[ polish ] = "Zmienny";
+        Text[ japanese ] = "ïœçXâ¬î\\(~V)";
+        Text[ chinese_traditional ] = "•i≈‹(~V)";
+        Text[ arabic ] = "„ €Ì—";
+        Text[ greek ] = "ÏÂÙ·‚ÎÁÙﬁ";
+        Text[ korean ] = "¿Øµø¿˚(~V)";
+        Text[ turkish ] = "Dei˛ken";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_FORMAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 60 ) ;
+        Size = MAP_APPFONT ( 126 , 70 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_FORMAT
+    {
+        Pos = MAP_APPFONT ( 6 , 49 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "F~ormat" ;
+        Text [ ENGLISH ] = "F~ormat" ;
+        Text [ english_us ] = "F~ormat" ;
+        Text [ portuguese_brazilian ] = "F~ormat" ;
+        Text [ swedish ] = "F~ormat" ;
+        Text [ danish ] = "Format" ;
+        Text [ italian ] = "F~ormato" ;
+        Text [ spanish ] = "F~ormato" ;
+        Text [ french ] = "F~ormat" ;
+        Text [ dutch ] = "F~ormaat" ;
+        Text [ portuguese ] = "Forma~to" ;
+        Text[ chinese_simplified ] = "∏Ò Ω(~O)";
+        Text[ russian ] = "‘ÓÏ‡Ú";
+        Text[ polish ] = "Format";
+        Text[ japanese ] = "èëéÆ(~O)";
+        Text[ chinese_traditional ] = "ÆÊ¶°(~O)";
+        Text[ arabic ] = " ‰”Ìﬁ";
+        Text[ greek ] = "Ã~ÔÒˆﬁ";
+        Text[ korean ] = "º≠Ωƒ(~O)";
+        Text[ turkish ] = "Format";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 82 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 82 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 82 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ english_us ] = "Edit Field" ;
+    Text [ portuguese_brazilian ] = "Feldbefehl bearbeiten" ;
+    Text [ swedish ] = "Redigera f‰ltkommando" ;
+    Text [ danish ] = "Rediger felt" ;
+    Text [ italian ] = "Modifica comando di campo" ;
+    Text [ spanish ] = "Editar campo" ;
+    Text [ french ] = "…dition d'une instruction de champ" ;
+    Text [ dutch ] = "Veldopdracht bewerken" ;
+    Text [ portuguese ] = "Editar campos" ;
+    Text[ chinese_simplified ] = "±‡º≠◊÷∂Œ÷∏¡Ó";
+    Text[ russian ] = "»ÁÏÂÌÂÌËÂ ÔÓÎˇ";
+    Text[ polish ] = "Edytuj pole";
+    Text[ japanese ] = "Ã®∞Ÿƒﬁ∫œ›ƒﬁÇÃï“èW";
+    Text[ chinese_traditional ] = "ΩsøËƒÊ¶Ï´¸•O";
+    Text[ arabic ] = " Õ—Ì— «·Õﬁ·";
+    Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ· ÂÌÙÔÎﬁÚ Â‰ﬂÔı";
+    Text[ korean ] = "« µÂ∏Ì∑… ∆Ì¡˝";
+    Text[ turkish ] = "Alan ˆesini d¸zenle";
+    Text[ language_user1 ] = " ";
+};

@@ -1,0 +1,356 @@
+/*************************************************************************
+ *
+ *  $RCSfile: navigatr.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "navigatr.hrc"
+#include "helpids.h"
+#include "res_bmp.hrc"
+#define BUTTON_WIDTH 13
+#define BUTTON_COUNT 7
+#define BUTTON_SIZE MAP_APPFONT( BUTTON_WIDTH, BUTTON_WIDTH );
+Window FLT_NAVIGATOR
+{
+    HelpId = HID_SD_NAVIGATOR ;
+    Size = MAP_APPFONT ( 12 + BUTTON_WIDTH * BUTTON_COUNT , 105 ) ;
+    Text = "Navigator" ;
+    SVLook = TRUE ;
+    Control TLB_OBJECTS
+    {
+        HelpId = HID_SD_NAVIGATOR_TLB ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 20 ) ;
+        Size = MAP_APPFONT ( 6 + BUTTON_WIDTH * BUTTON_COUNT , 67 ) ;
+        TabStop = TRUE ;
+    };
+    ToolBox 1
+    {
+        HelpId = HID_SD_NAVIGATOR_TBX ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 6 + BUTTON_WIDTH , 15 ) ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                Identifier = TBI_LIVE ;
+                HelpId = HID_SD_NAVIGATOR_TBI_LIVE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "live.bmp" ; };
+                    MaskColor = IMAGE_STDBTN_COLOR ;
+                };
+                Text = "Livemodus" ;
+                Text [ ENGLISH ] = "Live mode" ;
+                Text [ english_us ] = "Live Mode" ;
+                Text [ italian ] = "Modo live" ;
+                Text [ spanish ] = "Modo en vivo" ;
+                Text [ french ] = "Mode Live" ;
+                Text [ dutch ] = "Livemodus" ;
+                Text [ danish ] = "Livemodus" ;
+                Text [ portuguese_brazilian ] = "Livemodus" ;
+                Text [ portuguese ] = "Ao vivo" ;
+                Text [ swedish ] = "Livel‰ge" ;
+                Text[ chinese_simplified ] = " µøˆƒ£ Ω";
+                Text[ russian ] = "–ÂÊËÏ Live";
+                Text[ polish ] = "Tryb Live";
+                Text[ japanese ] = "◊≤Ãﬁ ”∞ƒﬁ";
+                Text[ chinese_traditional ] = "πÍ™pº“¶°";
+                Text[ arabic ] = "«·Ê÷⁄ «·„»«‘—";
+                Text[ greek ] = " ·Ù‹ÛÙ·ÛÁ Ê˘ÌÙ·ÌﬁÚ Û˝Ì‰ÂÛÁÚ";
+                Text[ korean ] = "∂Û¿Ã∫Í ∏µÂ";
+                Text[ turkish ] = "\"Canl˝ sunu\" kipi";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                Identifier = TBI_PEN ;
+                HelpId = HID_SD_NAVIGATOR_TBI_PEN ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "pen.bmp" ; };
+                    MaskColor = IMAGE_STDBTN_COLOR ;
+                };
+                Text = "Stift" ;
+                Text [ ENGLISH ] = "Pen" ;
+                Text [ dutch ] = "Pen" ;
+                Text [ english_us ] = "Pointer" ;
+                Text [ italian ] = "Pennarello" ;
+                Text [ spanish ] = "Pluma" ;
+                Text [ french ] = "Crayon" ;
+                Text [ danish ] = "Pen" ;
+                Text [ portuguese_brazilian ] = "Stift" ;
+                Text [ portuguese ] = "Ponteiro" ;
+                Text [ swedish ] = "Penna" ;
+                Text[ chinese_simplified ] = "± ";
+                Text[ russian ] = " ‡‡Ì‰‡¯";
+                Text[ polish ] = "Kredka";
+                Text[ japanese ] = "Õﬂ›";
+                Text[ chinese_traditional ] = "µß";
+                Text[ arabic ] = "ﬁ·„";
+                Text[ greek ] = "–›Ì·";
+                Text[ korean ] = "∆˜¿Œ≈Õ";
+                Text[ turkish ] = "Kalem";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_FIRST ;
+                HelpId = HID_SD_NAVIGATOR_TBI_FIRST ;
+                 //Symbol = IMAGEBUTTON_FIRST ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "first.bmp" ; };
+                    MaskColor = IMAGE_STDBTN_COLOR ;
+                };
+                Text = "Erste Seite" ;
+                Text [ ENGLISH ] = "First page" ;
+                Text [ english_us ] = "First Slide" ;
+                Text [ italian ] = "Prima pagina" ;
+                Text [ spanish ] = "Primera p·gina" ;
+                Text [ french ] = "PremiËre page" ;
+                Text [ dutch ] = "Eerste pagina" ;
+                Text [ danish ] = "F¯rste side" ;
+                Text [ portuguese_brazilian ] = "Erste Seite" ;
+                Text [ portuguese ] = "Primeira p·gina" ;
+                Text [ swedish ] = "Fˆrsta sidan" ;
+                Text[ chinese_simplified ] = " ◊“≥";
+                Text[ russian ] = "œÂ‚˚È ÒÎ‡È‰";
+                Text[ polish ] = "Pierwszy slajd";
+                Text[ japanese ] = "ç≈èâÇÃÕﬂ∞ºﬁ";
+                Text[ chinese_traditional ] = "≠∫≠∂";
+                Text[ arabic ] = "«·’›Õ… «·√Ê·Ï";
+                Text[ greek ] = "–Ò˛ÙÁ ÛÂÎﬂ‰·";
+                Text[ korean ] = "√ππ¯¬∞ ΩΩ∂Û¿ÃµÂ";
+                Text[ turkish ] = "›lk sayfa";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_PREVIOUS ;
+                HelpId = HID_SD_NAVIGATOR_TBI_PREV ;
+                 //Symbol = IMAGEBUTTON_PREV ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "prev.bmp" ; };
+                    MaskColor = IMAGE_STDBTN_COLOR ;
+                };
+                Text = "vorherige Seite" ;
+                Text [ ENGLISH ] = "Previous page" ;
+                Text [ dutch ] = "Vorige pagina" ;
+                Text [ english_us ] = "Previous Slide" ;
+                Text [ italian ] = "pagina precedente" ;
+                Text [ spanish ] = "P·gina anterior" ;
+                Text [ french ] = "Page prÈcÈdente" ;
+                Text [ danish ] = "forrige side" ;
+                Text [ portuguese_brazilian ] = "vorherige Seite" ;
+                Text [ portuguese ] = "P·gina anterior" ;
+                Text [ swedish ] = "FˆregÂende sida" ;
+                Text[ chinese_simplified ] = "…œ“ª“≥";
+                Text[ russian ] = "œÂ‰˚‰Û˘ËÈ ÒÎ‡È‰";
+                Text[ polish ] = "Poprzedni slajd";
+                Text[ japanese ] = "ëOÇÃÕﬂ∞ºﬁ";
+                Text[ chinese_traditional ] = "§W§@≠∂";
+                Text[ arabic ] = "«·’›Õ… «·”«»ﬁ…";
+                Text[ greek ] = "–ÒÔÁ„Ô˝ÏÂÌÁ ÛÂÎﬂ‰·";
+                Text[ korean ] = "¿Ã¿¸ ΩΩ∂Û¿ÃµÂ";
+                Text[ turkish ] = "÷nceki sayfa";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_NEXT ;
+                HelpId = HID_SD_NAVIGATOR_TBI_NEXT ;
+                 //Symbol = IMAGEBUTTON_NEXT ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "next.bmp" ; };
+                    MaskColor = IMAGE_STDBTN_COLOR ;
+                };
+                /* ### ACHTUNG: Neuer Text in Resource? N‰chste Seite : Nıchste Seite */
+                Text = "N‰chste Seite" ;
+                Text [ ENGLISH ] = "Next page" ;
+                /* ### ACHTUNG: Neuer Text in Resource? Zur n‰chsten Seite springen : Zur nıchsten Seite springen */
+                Text [ dutch ] = "Volgende pagina" ;
+                Text [ english_us ] = "Next Slide" ;
+                Text [ italian ] = "Pagina successiva" ;
+                Text [ spanish ] = "P·gina siguiente" ;
+                Text [ french ] = "Page suivante" ;
+                Text [ danish ] = "NÊste side" ;
+                Text [ portuguese_brazilian ] = "N‰chste Seite" ;
+                Text [ portuguese ] = "P·gina seguinte" ;
+                Text [ swedish ] = "N‰sta sida" ;
+                Text[ chinese_simplified ] = "œ¬“ª“≥";
+                Text[ russian ] = "—ÎÂ‰Û˛˘ËÈ ÒÎ‡È‰";
+                Text[ polish ] = "NastÍpny slajd";
+                Text[ japanese ] = "éüÇÃÕﬂ∞ºﬁ";
+                Text[ chinese_traditional ] = "§U§@≠∂";
+                Text[ arabic ] = "«·’›Õ… «· «·Ì…";
+                Text[ greek ] = "≈¸ÏÂÌÁ ÛÂÎﬂ‰·";
+                Text[ korean ] = "¥Ÿ¿Ω ΩΩ∂Û¿ÃµÂ";
+                Text[ turkish ] = "Sonraki sayfa";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_LAST ;
+                HelpId = HID_SD_NAVIGATOR_TBI_LAST ;
+                 //Symbol = IMAGEBUTTON_LAST ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "last.bmp" ; };
+                    MaskColor = IMAGE_STDBTN_COLOR ;
+                };
+                Text = "Letzte Seite" ;
+                Text [ ENGLISH ] = "Last page" ;
+                Text [ dutch ] = "Laatste pagina" ;
+                Text [ english_us ] = "Last Slide" ;
+                Text [ italian ] = "Ultima pagina" ;
+                Text [ spanish ] = "⁄ltima p·gina" ;
+                Text [ french ] = "DerniËre page" ;
+                Text [ danish ] = "Sidste side" ;
+                Text [ portuguese_brazilian ] = "Letzte Seite" ;
+                Text [ portuguese ] = "⁄ltima p·gina" ;
+                Text [ swedish ] = "Sista sidan" ;
+                Text[ chinese_simplified ] = "Œ≤“≥";
+                Text[ russian ] = "œÓÒÎÂ‰ÌËÈ ÒÎ‡È‰";
+                Text[ polish ] = "Ostatni slajd";
+                Text[ japanese ] = "ç≈å„ÇÃÕﬂ∞ºﬁ";
+                Text[ chinese_traditional ] = "ß¿≠∂";
+                Text[ arabic ] = "«·’›Õ… «·√ŒÌ—…";
+                Text[ greek ] = "‘ÂÎÂıÙ·ﬂ· ÛÂÎﬂ‰·";
+                Text[ korean ] = "∏∂¡ˆ∏∑ ΩΩ∂Û¿ÃµÂ";
+                Text[ turkish ] = "Son sayfa";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_DRAGTYPE ;
+                HelpId = HID_SD_NAVIGATOR_TBI_DRAGTYPE ;
+                DropDown = TRUE ;
+                 //Left = FALSE;
+                Text = "Dragmodus" ;
+                Text [ English ] = "Drag Mode" ;
+                /* ### ACHTUNG: Neuer Text in Resource? Modus f¸r Drag & Drop ausw‰hlen : Modus f≥r Drag & Drop auswıhlen */
+                Text [ english_us ] = "Drag Mode" ;
+                Text [ italian ] = "Modo drag" ;
+                Text [ spanish ] = "Modo Arrastrar" ;
+                Text [ french ] = "Mode Glisser" ;
+                Text [ dutch ] = "Dragmodus" ;
+                Text [ danish ] = "TrÊkmodus" ;
+                Text [ portuguese_brazilian ] = "Dragmodus" ;
+                Text [ portuguese ] = "Modo Arrastar" ;
+                Text [ swedish ] = "Dral‰ge" ;
+                Text[ chinese_simplified ] = "Õœ¿≠ƒ£ Ω";
+                Text[ russian ] = "–ÂÊËÏ ÔÂÂÚ‡ÒÍË‚‡ÌËˇ";
+                Text[ polish ] = "Tryb przeciπgania";
+                Text[ japanese ] = "ƒﬁ◊Ø∏ﬁ ”∞ƒﬁ";
+                Text[ chinese_traditional ] = "©Ï¶≤º“¶°";
+                Text[ arabic ] = "ÿ—Ìﬁ… «·”Õ»";
+                Text[ greek ] = " ·Ù‹ÛÙ·ÛÁ ÏÂÙ·ÍﬂÌÁÛÁÚ";
+                Text[ korean ] = "µÂ∑°±◊ ∏µÂ";
+                Text[ turkish ] = "S¸r¸kleme kipi";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    ListBox LB_DOCS
+    {
+        HelpId = HID_SD_NAVIGATOR_LB ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 89 ) ;
+        Size = MAP_APPFONT ( 6 + BUTTON_WIDTH * BUTTON_COUNT , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        QuickHelpText = "Dokumente" ;
+        QuickHelpText [ ENGLISH ] = "Documents" ;
+        QuickHelpText [ dutch ] = "Documenten" ;
+        QuickHelpText [ english_us ] = "Documents" ;
+        QuickHelpText [ italian ] = "Documenti" ;
+        QuickHelpText [ spanish ] = "Documentos" ;
+        QuickHelpText [ french ] = "Documents" ;
+        QuickHelpText [ danish ] = "Dokumenter" ;
+        QuickHelpText [ portuguese ] = "Documentos" ;
+        QuickHelpText [ portuguese_brazilian ] = "Dokumente" ;
+        /* ### ACHTUNG: Neuer Text in Resource? Geˆffnete Dokumente : Ge˜ffnete Dokumente */
+        QuickHelpText [ swedish ] = "Dokument" ;
+    QuickHelpText[ russian ] = "ƒÓÍÛÏÂÌÚ˚";
+        QuickHelpText[ polish ] = "Dokumenty";
+        QuickHelpText[ japanese ] = "ƒﬁ∑≠“›ƒ";
+        QuickHelpText[ chinese_simplified ] = "Œƒµµ";
+        QuickHelpText[ chinese_traditional ] = "§Â•Û";
+        QuickHelpText[ arabic ] = "„” ‰œ« ";
+        QuickHelpText[ greek ] = "∏„„Ò·ˆ·";
+        QuickHelpText[ korean ] = "Documents";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+};

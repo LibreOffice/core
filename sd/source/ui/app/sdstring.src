@@ -1,0 +1,650 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sdstring.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "sdstring.hrc"
+String STR_SOLID
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Durchgängig : Durchgõngig */
+    Text = "Durchgängig" ;
+    Text [ ENGLISH ] = "Solid" ;
+    Text [ norwegian ] = "Solid" ;
+    Text [ italian ] = "Piena" ;
+    Text [ portuguese_brazilian ] = "Sólido" ;
+    Text [ portuguese ] = "Contínuo" ;
+    Text [ finnish ] = "Tasainen" ;
+    Text [ danish ] = "Gennemgående" ;
+    Text [ french ] = "Continu" ;
+    Text [ swedish ] = "Genomgående" ;
+    Text [ dutch ] = "Gesloten" ;
+    Text [ spanish ] = "Continuo" ;
+    Text [ english_us ] = "Continuous" ;
+    Text[ chinese_simplified ] = "³ÖĞøµÄ";
+    Text[ russian ] = "Ñïëîøíàÿ";
+    Text[ polish ] = "Ci¹g³y";
+    Text[ japanese ] = "Àü";
+    Text[ chinese_traditional ] = "«ùÄòªº";
+    Text[ arabic ] = "ãÊæÇÕá";
+    Text[ greek ] = "Óõíå÷üìåíá";
+    Text[ korean ] = "¿¬¼Ó";
+    Text[ turkish ] = "Düz";
+    Text[ language_user1 ] = " ";
+};
+String STR_GRADIENT
+{
+    Text = "Farbverlauf" ;
+    Text [ ENGLISH ] = "Gradient" ;
+    Text [ norwegian ] = "Gradient" ;
+    Text [ italian ] = "Sfumatura" ;
+    Text [ portuguese_brazilian ] = "Dégradé" ;
+    Text [ portuguese ] = "Gradação" ;
+    Text [ finnish ] = "Liukuväri" ;
+    Text [ danish ] = "Farvegraduering" ;
+    Text [ french ] = "Dégradé" ;
+    Text [ swedish ] = "Färggradient" ;
+    Text [ dutch ] = "Kleurverloop" ;
+    Text [ spanish ] = "Gradiente  de color" ;
+    Text [ english_us ] = "Gradient" ;
+    Text[ chinese_simplified ] = "²ÊÉ«Í¼°¸";
+    Text[ russian ] = "Ãğàäèåíòíàÿ";
+    Text[ polish ] = "Gradient";
+    Text[ japanese ] = "¸Ş×ÃŞ°¼®İ";
+    Text[ chinese_traditional ] = "±m¦â¹Ï®×";
+    Text[ arabic ] = "ÊÏÑÌ Çááæä";
+    Text[ greek ] = "ÄéáâÜèìéóç ÷ñşìáôïò";
+    Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç";
+    Text[ turkish ] = "Gradyan";
+    Text[ language_user1 ] = " ";
+};
+String STR_DESC_GRADIENT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den neuen Farbverlauf ein: : Geben Sie hier bitte den Namen f³r den neuen Farbverlauf ein: */
+    Text = "Geben Sie hier bitte den Namen für den neuen Farbverlauf ein:" ;
+    Text [ ENGLISH ] = "Please insert a name for the new gradient:" ;
+    Text [ norwegian ] = "Please insert a name for the new gradient:" ;
+    Text [ italian ] = "Digitate un nome per la nuova sfumatura:" ;
+    Text [ portuguese_brazilian ] = "Insira um nome para o novo dégradé:" ;
+    Text [ portuguese ] = "Introduza um nome para a nova gradação de cor:" ;
+    Text [ finnish ] = "Kirjoita uuden liukuvärin nimi:" ;
+    Text [ danish ] = "Indtast venligst et navn til den nye farvegraduering:" ;
+    Text [ french ] = "Veuillez saisir un nom pour le nouveau dégradé :" ;
+    Text [ swedish ] = "Mata in namnet för den nya färggradienten här:" ;
+    Text [ dutch ] = "Typ een naam voor het nieuwe kleurverloop:" ;
+    Text [ spanish ] = "Inserte aquí el nombre para el nuevo gradiente de color:" ;
+    Text [ english_us ] = "Please enter a name for the new gradient:" ;
+    Text[ chinese_simplified ] = "ÇëÄúÊäÈëĞÂ²ÊÉ«Í¼°¸µÄÃû³Æ£º";
+    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ íîâîé ãğàäèåíòíîé:";
+    Text[ polish ] = "Wstaw nazwê nowego gradientu:";
+    Text[ japanese ] = "‚±‚±‚ÉV‚µ‚¢¸Ş×ÃŞ°¼®İ‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢:";
+    Text[ chinese_traditional ] = "½Ğ±z¿é¤J·s±m¦â¹Ï®×ªº¦WºÙ¡G";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáÊÏÑÌ ÇáÌÏíÏ ááæä:";
+    Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ãéá ôç íİá äéáâÜèìéóç ÷ñşìáôïò:";
+    Text[ korean ] = "»õ ±×¶óµ¥ÀÌ¼ÇÀÇ ÀÌ¸§À» ¿©±â¿¡ ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ turkish ] = "Yeni gradyan için bir ad girin:";
+    Text[ language_user1 ] = " ";
+};
+String STR_DEL_GRADIENT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Farbverlauf löschen : Farbverlauf l÷schen */
+    Text = "Farbverlauf löschen" ;
+    Text [ ENGLISH ] = "Delete gradient" ;
+    Text [ norwegian ] = "Delete gradient" ;
+    Text [ italian ] = "Elimina sfumatura" ;
+    Text [ portuguese_brazilian ] = "Apagar dégradé" ;
+    Text [ portuguese ] = "Eliminar gradação" ;
+    Text [ finnish ] = "Poista liukuväri" ;
+    Text [ danish ] = "Slet farvegraduering" ;
+    Text [ french ] = "Supprimer le dégradé" ;
+    Text [ swedish ] = "Radera färggradient" ;
+    Text [ dutch ] = "Kleurverloop wissen" ;
+    Text [ spanish ] = "Eliminar gradiente" ;
+    Text [ english_us ] = "Delete gradient" ;
+    Text[ chinese_simplified ] = "É¾³ı²ÊÉ«Í¼°¸";
+    Text[ russian ] = "Óäàëèòü ãğàäèåíòíóş";
+    Text[ polish ] = "Usuñ gradient";
+    Text[ japanese ] = "¸Ş×ÃŞ°¼®İ‚Ìíœ";
+    Text[ chinese_traditional ] = "§R°£±m¦â¹Ï®×";
+    Text[ arabic ] = "ÍĞİ ÊÏÑÌ Çááæä";
+    Text[ greek ] = "ÄéáãñáöŞ äéáâÜèìéóç ÷ñşìáôïò";
+    Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç »èÁ¦";
+    Text[ turkish ] = "Gradyanı sil";
+    Text[ language_user1 ] = " ";
+};
+String STR_ASK_DEL_GRADIENT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Soll der Farbverlauf wirklich gelöscht werden? : Soll der Farbverlauf wirklich gel÷scht werden? */
+    Text = "Soll der Farbverlauf wirklich gelöscht werden?" ;
+    Text [ ENGLISH ] = "Do you want to delete the gradient?" ;
+    Text [ norwegian ] = "Do you want to delete the gradient?" ;
+    Text [ italian ] = "Eliminare la sfumatura?" ;
+    Text [ portuguese_brazilian ] = "Deseja apagar o dégradé?" ;
+    Text [ portuguese ] = "Deseja realmente eliminar a gradação?" ;
+    Text [ finnish ] = "Poistetaanko liukuväri?" ;
+    Text [ danish ] = "Er du sikker på, at du vil slette farvegradueringen?" ;
+    Text [ french ] = "Confirmez-vous la suppression du dégradé ?" ;
+    Text [ swedish ] = "Skall färggradienten verkligen raderas?" ;
+    Text [ dutch ] = "Wilt u het kleurverloop werkelijk wissen?" ;
+    Text [ spanish ] = "¿Desea realmente eliminar el gradiente de color?" ;
+    Text [ english_us ] = "Do you want to delete the gradient?" ;
+    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸ö²ÊÉ«Í¼°¸Âğ£¿";
+    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòó ãğàäèåíòíóş?";
+    Text[ polish ] = "Chcesz na pewno usun¹æ gradient?";
+    Text[ japanese ] = "¸Ş×ÃŞ°¼®İ‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "±z¯u­n§R°£³o­Ó±m¦â¹Ï®×¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÊÏÑÌ Çááæä¿";
+    Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá ãßíåé äéáãñáöŞ ôçò äéáâÜèìéóçò ÷ñşìáôïò;";
+    Text[ korean ] = "±×¶óµ¥ÀÌ¼ÇÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Gradyanı gerçekten silmek istiyor musunuz?";
+    Text[ language_user1 ] = " ";
+};
+String STR_ASK_CHANGE_GRADIENT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen. : Der Farbverlauf wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Farbverlauf õndern \noder einen neuen Farbverlauf hinzuf³gen. */
+    Text = "Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen." ;
+    Text [ ENGLISH ] = "The gradient was modified without save. You can modify the selected gradient or add a new gradient" ;
+    Text [ norwegian ] = "The gradient was modified without save. You can modify the selected gradient or add a new gradient" ;
+    Text [ italian ] = "La sfumatura è stata modificata senza essere salvata.\nPotete modificare la sfumatura o aggiungerne una nuova" ;
+    Text [ portuguese_brazilian ] = "O dégradé foi modificado sem gravar. Você poder  modificar o dégradé selecionado ou adicionar um novo dégradé" ;
+    Text [ portuguese ] = "A gradação da cor foi modificada sem ter sido guardada. Poderá modificar a gradação seleccionada ou adicionar uma nova." ;
+    Text [ finnish ] = "Muutettua liukuväriä ei ole tallennettu. Voit muokata valittua liukuväriä tai lisätä uuden" ;
+    Text [ danish ] = "Farvegradueringen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede farvegraduering \neller tilføje en ny." ;
+    Text [ french ] = "Les dernières modifications apportées au dégradé n'ont pas été sauvegardées. \nVous pouvez modifier le dégradé sélectionné ou en ajouter un nouveau." ;
+    Text [ swedish ] = "Färggradienten ändrades utan att sparas.\nDu kan ändra den markerade färggradienten eller lägga\ntill en ny färggradient." ;
+    Text [ dutch ] = "Het kleurverloop is zonder opslaan gewijzigd. \nU kunt het geselecteerde kleurverloop wijzigen \nof een nieuw kleurverloop toevoegen." ;
+    Text [ spanish ] = "El gradiente de color ha sido modificado sin guardar.\nUsted puede modificar el gradiente seleccionado\no añadir uno nuevo." ;
+    Text [ english_us ] = "The gradient was modified without saving. \nYou can change the selected gradient \nor add a new one." ;
+    Text[ chinese_simplified ] = "²ÊÉ«Í¼°¸ÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÉĞÎ´±»±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄ²ÊÉ«Í¼°¸\n»òÕßĞÂÔöÒ»¸ö²ÊÉ«Í¼°¸¡£";
+    Text[ russian ] = "Ãğàäèåíòíàÿ áûëà èçìåíåíà, íî íå ñîõğíåíà. \nÂû ìîæåòå èçìåíèòü âûáğàííóş ãğàäèåíòíóş \nèëè äîáàâèòü íîâóş ãğàäèåíòíóş.";
+    Text[ polish ] = "Gradient zosta³ zmieniony i nie zapisany. \nMo¿esz zmieniæ zaznaczony gradient \nlub dodaæ nowy gradient.";
+    Text[ japanese ] = "¸Ş×ÃŞ°¼®İ‚ª•ÏX‚³‚ê•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚µ‚½¸Ş×ÃŞ°¼®İ‚ğ•ÏX‚Å‚«‚Ü‚· \n‚Ü‚½‚ÍV‚µ‚¢¸Ş×ÃŞ°¼®İ‚ğ’Ç‰Á‚Å‚«‚Ü‚·B";
+    Text[ chinese_traditional ] = "±m¦â¹Ï®×¤w¸gÅÜ§ó¡A¦ı¬O©|¥¼³QÀx¦s¡C \n±z¯à°÷ÅÜ§ó¿ï¨úªº±m¦â¹Ï®×\n©ÎªÌ·s¼W¤@­Ó±m¦â¹Ï®×¡C";
+    Text[ arabic ] = "áã íÊã ÍİÙ ÊÏÑÌ Çááæä ÈÚÏ ÊÛííÑå. \níãßäß ÊÛííÑ ÊÏÑÌ Çááæä ÇáãÍÏÏ¡ \nÃæ ÅÖÇİÉ ÊÏÑÌ áæä ÌÏíÏ.";
+    Text[ greek ] = "Ç äéáâÜèìéóç ÷ñşìáôïò ôñïğïğïéŞèçêå ÷ùñßò íá áğïèçêåõôåß. \nÌğïñåßôå íá áëëÜîåôå ôçí åğéëåãìİíç äéáâÜèìéóç \\Ş íá ğñïóèİóåôå ìéá íİá.";
+    Text[ korean ] = "±×¶óµ¥ÀÌ¼ÇÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. \n¼±ÅÃµÈ ±×¶óµ¥ÀÌ¼ÇÀ» º¯°æÇÏ°Å³ª \n»õ ±×¶óµ¥ÀÌ¼ÇÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Gradyan değiştirildi, ancak kaydedilmedi. \nSeçilen gradyanı değiştirebilir \nya da yeni bir gradyan ekleyebilirsiniz.";
+    Text[ language_user1 ] = " ";
+};
+String STR_BITMAP
+{
+    Text = "Bitmap" ;
+    Text [ ENGLISH ] = "Bitmap" ;
+    Text [ norwegian ] = "Bitmap" ;
+    Text [ italian ] = "Stile bitmap" ;
+    Text [ portuguese_brazilian ] = "Bitmap" ;
+    Text [ portuguese ] = "Bitmap" ;
+    Text [ finnish ] = "Bittikartta" ;
+    Text [ danish ] = "Bitmap" ;
+    Text [ french ] = "Bitmap" ;
+    Text [ swedish ] = "Bitmap" ;
+    Text [ dutch ] = "Bitmap" ;
+    Text [ spanish ] = "Bitmap" ;
+    Text [ english_us ] = "Bitmap" ;
+    Text[ chinese_simplified ] = "Î»Í¼";
+    Text[ russian ] = "Bitmap";
+    Text[ polish ] = "Mapa bitowa";
+    Text[ japanese ] = "ËŞ¯ÄÏ¯Ìß";
+    Text[ chinese_traditional ] = "ÂI°}¹Ï";
+    Text[ arabic ] = "ÕæÑÉ äŞØíÉ";
+    Text[ greek ] = "Bitmap";
+    Text[ korean ] = "ºñÆ®¸Ê";
+    Text[ turkish ] = "Bit eşlem";
+    Text[ language_user1 ] = " ";
+};
+String STR_DESC_NEW_BITMAP
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die neue Bitmap ein: : Geben Sie hier bitte den Namen f³r die neue Bitmap ein: */
+    Text = "Geben Sie hier bitte den Namen für die neue Bitmap ein:" ;
+    Text [ ENGLISH ] = "Please insert a name for the new bitmap:" ;
+    Text [ norwegian ] = "Please insert a name for the new bitmap:" ;
+    Text [ italian ] = "Inserisci un nome per la nuova bitmap:" ;
+    Text [ portuguese_brazilian ] = "Insira um nome para o novo bitmap:" ;
+    Text [ portuguese ] = "Introduza um nome para o novomapa de bits:" ;
+    Text [ finnish ] = "Kirjoita uuden bittikartan nimi:" ;
+    Text [ danish ] = "Indtast venligst et navn til den nye bitmap:" ;
+    Text [ french ] = "Veuillez saisir un nom pour le nouveau bitmap :" ;
+    Text [ swedish ] = "Ange namn för den nya bitmappen:" ;
+    Text [ dutch ] = "Typ een naam voor de nieuwe bitmap in:" ;
+    Text [ spanish ] = "Inserte aquí el nombre para la nueva bitmap:" ;
+    Text [ english_us ] = "Please enter a name for the new bitmap:" ;
+    Text[ chinese_simplified ] = "ÇëÄúÊäÈëÒ»¸öĞÂÎ»Í¼µÄÃû³Æ£º";
+    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ äëÿ íîâîãî bitmap:";
+    Text[ polish ] = "Wstaw nazwê nowej mapy bitowej:";
+    Text[ japanese ] = "‚±‚±‚ÉV‚µ‚¢ËŞ¯ÄÏ¯Ìß‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢:";
+    Text[ chinese_traditional ] = "½Ğ±z¿é¤J¤@­Ó·sÂI°}¹Ïªº¦WºÙ¡G";
+    Text[ arabic ] = "ãä İÖáß ÇßÊÈ ÇÓã ÇáÕæÑÉ ÇáäŞØíÉ ÇáÌÏíÏÉ åäÇ:";
+    Text[ language_user1 ] = ":";
+    Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ãéá ôï íİï bitmap:";
+    Text[ korean ] = "»õ ºñÆ®¸ÊÀÇ ÀÌ¸§À» ¿©±â¿¡ ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ turkish ] = "Yeni bit eşlem için bir ad girin:";
+};
+String STR_DESC_EXT_BITMAP
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die externe Bitmap ein: : Geben Sie hier bitte den Namen f³r die externe Bitmap ein: */
+    Text = "Geben Sie hier bitte den Namen für die externe Bitmap ein:" ;
+    Text [ ENGLISH ] = "Please insert a name for the external bitmap:" ;
+    Text [ norwegian ] = "Please insert a name for the external bitmap:" ;
+    Text [ italian ] = "Inserisci un nome per la bitmap esterna:" ;
+    Text [ portuguese_brazilian ] = "Insira um nome para o bitmap externo:" ;
+    Text [ portuguese ] = "Introduza um nome para o mapa de bits externo:" ;
+    Text [ finnish ] = "Kirjoita ulkoisen bittikartan nimi:" ;
+    Text [ danish ] = "Indtast venligst et navn til den eksterne bitmap:" ;
+    Text [ french ] = "Veuillez saisir un nom pour le bitmap externe :" ;
+    Text [ swedish ] = "Ange namn för extern bitmap:" ;
+    Text [ dutch ] = "Geef een naam voor de externe bitmap op:" ;
+    Text [ spanish ] = "Inserte aquí el nombre para la bitmap externa:" ;
+    Text [ english_us ] = "Please enter the name of the external bitmap:" ;
+    Text[ chinese_simplified ] = "ÇëÄúÊäÈëÒ»¸öÍâÀ´Î»Í¼µÄÃû³Æ£º";
+    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ âíåøíåãî bitmap:";
+    Text[ polish ] = "Wstaw nazwê zewnêtrznej mapy bitowej:";
+    Text[ japanese ] = "‚±‚±‚ÉŠO•”ËŞ¯ÄÏ¯Ìß‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢:";
+    Text[ chinese_traditional ] = "½Ğ±z¿é¤J¤@­Ó¥~¨ÓÂI°}¹Ïªº¦WºÙ¡G";
+    Text[ arabic ] = "ãä İÖáß ÇßÊÈ ÇÓã ÇáÕæÑÉ ÇáäŞØíÉ ÇáÎÇÑÌíÉ åäÇ:";
+    Text[ language_user1 ] = ":";
+    Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ãéá ôï åîùôåñéêü bitmap:";
+    Text[ korean ] = "¿ÜºÎ ºñÆ®¸ÊÀÇ ÀÌ¸§À» ¿©±â¿¡ ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ turkish ] = "Harici bit eşlemin adını girin:";
+};
+String STR_DEL_BITMAP
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Bitmap löschen : Bitmap l÷schen */
+    Text = "Bitmap löschen" ;
+    Text [ ENGLISH ] = "Delete bitmap" ;
+    Text [ norwegian ] = "Delete bitmap" ;
+    Text [ italian ] = "Elimina bitmap" ;
+    Text [ portuguese_brazilian ] = "Apagar bitmap" ;
+    Text [ portuguese ] = "Eliminar mapa de bits" ;
+    Text [ finnish ] = "Poista bittikartta" ;
+    Text [ danish ] = "Slet bitmap" ;
+    Text [ french ] = "Supprimer le bitmap" ;
+    Text [ swedish ] = "Radera bitmap" ;
+    Text [ dutch ] = "Bitmap wissen" ;
+    Text [ spanish ] = "Eliminar bitmap" ;
+    Text [ english_us ] = "Delete bitmap" ;
+    Text[ chinese_simplified ] = "É¾³ıÎ»Í¼";
+    Text[ russian ] = "Óäàëèòü bitmap";
+    Text[ polish ] = "Usuñ mapê bitow¹";
+    Text[ japanese ] = "ËŞ¯ÄÏ¯Ìß‚Ìíœ";
+    Text[ chinese_traditional ] = "§R°£ÂI°}¹Ï";
+    Text[ arabic ] = "ÍĞİ ÕæÑÉ äŞØíÉ";
+    Text[ greek ] = "ÄéáãñáöŞ bitmap";
+    Text[ korean ] = "ºñÆ®¸Ê »èÁ¦";
+    Text[ turkish ] = "Bit eşlemi sil";
+    Text[ language_user1 ] = " ";
+};
+String STR_ASK_DEL_BITMAP
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Soll die Bitmap wirklich gelöscht werden? : Soll die Bitmap wirklich gel÷scht werden? */
+    Text = "Soll die Bitmap wirklich gelöscht werden?" ;
+    Text [ ENGLISH ] = "Do you want to delete the bitmap?" ;
+    Text [ norwegian ] = "Do you want to delete the bitmap?" ;
+    Text [ italian ] = "Eliminare la bitmap?" ;
+    Text [ portuguese_brazilian ] = "Deseja apagar o bitmap?" ;
+    Text [ portuguese ] = "Deseja realmente eliminar o bitmap?" ;
+    Text [ finnish ] = "Poistetaanko bittikartta?" ;
+    Text [ danish ] = "Er du sikker på, at du vil slette denne bitmap?" ;
+    Text [ french ] = "Confirmez-vous la suppression du bitmap ?" ;
+    Text [ swedish ] = "Vill Du verkligen radera bitmappen?" ;
+    Text [ dutch ] = "Wilt u de bitmap werkelijk wissen?" ;
+    Text [ spanish ] = "¿Desea realmente eliminar la bitmap?" ;
+    Text [ english_us ] = "Do you want to delete the bitmap?" ;
+    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÎ»Í¼Âğ£¿";
+    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü âûáğàííûé bitmap?";
+    Text[ polish ] = "Chcesz na pewno usun¹æ mapê bitow¹?";
+    Text[ japanese ] = "ËŞ¯ÄÏ¯Ìß‚ğ–{“–‚Éíœ‚µ‚Ä‚æ‚ë‚µ‚¢‚Å‚·‚©?";
+    Text[ chinese_traditional ] = "±z¯u­n§R°£³o­ÓÂI°}¹Ï¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáÕæÑÉ ÇáäŞØíÉ¿";
+    Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá äéáãñáöåß ôï bitmap;";
+    Text[ korean ] = "ºñÆ®¸ÊÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Bit eşlemi gerçekten silmek istiyor musunuz?";
+    Text[ language_user1 ] = " ";
+};
+String STR_ASK_CHANGE_BITMAP
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen. : Die Bitmap wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Bitmap õndern \noder eine neue Bitmap hinzuf³gen. */
+    Text = "Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen." ;
+    Text [ ENGLISH ] = "The bitmap was modified without save. You can modify the selected bitmap or add a new bitmap" ;
+    Text [ norwegian ] = "The bitmap was modified without save. You can modify the selected bitmap or add a new bitmap" ;
+    Text [ italian ] = "La bitmap è stata modificata senza esseere salvata.\nPotete modificare la bitmap selezionata o aggiungerne una nuova." ;
+    Text [ portuguese_brazilian ] = "O bitmap foi modificado sem gravar. Você poder  modificar o bitmap selecionado ou adicionar um novo bitmap" ;
+    Text [ portuguese ] = "As modificações feitas no bitmap não foram guardadas. Poderá alterar o \nbitmap seleccionado ou adicionar um novo bitmap." ;
+    Text [ finnish ] = "Muutettua bittikarttaa ei ole tallennettu. Voit muokata valittua bittikarttaa tai lisätä uuden" ;
+    Text [ danish ] = "Denne bitmap er blevet ændret, men ikke gemt. \nDu kan ændre den markerede bitmap\n eller tilføje en ny." ;
+    Text [ french ] = "Les dernières modifications apportées au bitmap n'ont pas\nété sauvegardées. Vous pouvez modifier le bitmap\nsélectionné ou en ajouter un nouveau." ;
+    Text [ swedish ] = "Bitmappen ändrades utan att sparas.\nDu kan ändra den valda bitmappen eller\nlägga till en ny bitmapp." ;
+    Text [ dutch ] = "De bitmap is zonder opslaan gewijzigd. U kunt de geselecteerde bitmap wijzigen \nof een nieuwe bitmap toevoegen." ;
+    Text [ spanish ] = "El bitmap ha sido modificado sin guardar.\nPuede modificar el bitmap seleccionado\no añadir uno nuevo." ;
+    Text [ english_us ] = "The bitmap was modified without saving. \nYou can change the selected bitmap \\or add a new one." ;
+    Text[ chinese_simplified ] = "Î»Í¼ÒÑ¾­¸ü¸Ä£¬µ«²¢Ã»ÓĞ±»±£´æ¡£\nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÎ»Í¼\n»òÕßĞÂÔöÒ»¸öĞÂÎ»Í¼¡£";
+    Text[ russian ] = "Bitmap áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé bitmap \nèëè äîáàâèòü íîâûé bitmap.";
+    Text[ polish ] = "Mapa bitowa zosta³a zmieniona i nie zapisana. \nMo¿esz zmieniæ zaznaczon¹ mapê bitow¹ \nlub dodaæ now¹ mapê bitow¹.";
+    Text[ japanese ] = "ËŞ¯ÄÏ¯Ìß‚ª•ÏX‚³‚ê‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚³‚ê‚½ËŞ¯ÄÏ¯Ìß‚ğ•ÏX‚Å‚«‚Ü‚·\n‚Ü‚½‚ÍV‚µ‚¢ËŞ¯ÄÏ¯Ìß‚ğ’Ç‰Á‚Å‚«‚Ü‚·B";
+    Text[ chinese_traditional ] = "ÂI°}¹Ï¤w¸gÅÜ§ó¡A¦ı¨Ã¨S¦³³Q«O¦s¡C\n±z¯à°÷§ó§ï¿ï¤¤ªºÂI°}¹Ï\n©ÎªÌ·s¼W¤@­Ó·sÂI°}¹Ï¡C";
+    Text[ arabic ] = "áã íÊã ÍİÙ ÇáÕæÑÉ ÇáäŞØíÉ ÈÚÏ ÊÛííÑåÇ.\níãßäß ÊÛííÑ ÇáÕæÑÉ ÇáäŞØíÉ ÇáãÍÏÏÉ¡ \nÃæ ÅÖÇİÉ ÕæÑÉ äŞØíÉ ÌÏíÏÉ.";
+    Text[ greek ] = "Ôï bitmap ôñïğïğïéŞèçêå ÷ùñßò íá áğïèçêåõôåß. \nÌğïñåßôå íá áëëÜîåôå ôï åğéëåãìİíï bitmap \\Ş íá ğñïóèİóåôå İíá íİï.";
+    Text[ korean ] = "ºñÆ®¸ÊÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. \n¼±ÅÃµÈ ºñÆ®¸ÊÀ» º¯°æÇÏ°Å³ª \n »õ ºñÆ®¸ÊÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Bit eşlem değiştirildi, ancak kaydedilmedi.\nSeçilen bit eşlemi değiştirebilir \nya da yeni bir bit eşlem ekleyebilirsiniz.";
+    Text[ language_user1 ] = " ";
+};
+String STR_LINESTYLE
+{
+    Text = "Linienstil" ;
+    Text [ ENGLISH ] = "Linestyle" ;
+    Text [ norwegian ] = "Linestyle" ;
+    Text [ italian ] = "Stile linea" ;
+    Text [ portuguese_brazilian ] = "Estilo da Linha" ;
+    Text [ portuguese ] = "Estilo da linha" ;
+    Text [ finnish ] = "Viivan tyyli" ;
+    Text [ danish ] = "Stregtype" ;
+    Text [ french ] = "Style de ligne" ;
+    Text [ swedish ] = "Linjestil" ;
+    Text [ dutch ] = "Lijntype" ;
+    Text [ spanish ] = "Estilo de línea" ;
+    Text [ english_us ] = "Line style" ;
+    Text[ chinese_simplified ] = "ÏßÌõÊ½Ñù";
+    Text[ russian ] = "Ñòèëü ëèíèè";
+    Text[ polish ] = "Styl linii";
+    Text[ japanese ] = "ü½À²Ù";
+    Text[ chinese_traditional ] = "½u±ø¼Ë¦¡";
+    Text[ arabic ] = "äãØ ÇáÎØ";
+    Text[ greek ] = "Óôõë ãñáììŞò";
+    Text[ korean ] = "¼± À¯Çü";
+    Text[ turkish ] = "Çizgi biçimi";
+    Text[ language_user1 ] = " ";
+};
+String STR_DESC_LINESTYLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den neuen Linienstil ein: : Geben Sie hier bitte den Namen f³r den neuen Linienstil ein: */
+    Text = "Geben Sie hier bitte den Namen für den neuen Linienstil ein:" ;
+    Text [ ENGLISH ] = "Please insert a name for the new linestyle:" ;
+    Text [ norwegian ] = "Please insert a name for the new linestyle:" ;
+    Text [ italian ] = "Inserisci un nome o un nuovo stile linea:" ;
+    Text [ portuguese_brazilian ] = "Insira um nome para o novo estilo de linha:" ;
+    Text [ portuguese ] = "Introduza um nome para o novo estilo de linha:" ;
+    Text [ finnish ] = "Kirjoita uuden viivatyylin nimi:" ;
+    Text [ danish ] = "Indtast venligst et navn til den nye stregtype:" ;
+    Text [ french ] = "Veuillez saisir un nom pour le nouveau style de ligne :" ;
+    Text [ swedish ] = "Mata in namnet för den nya linjestilen här:" ;
+    Text [ dutch ] = "Geef het nieuwe lijntype een naam:" ;
+    Text [ spanish ] = "Inserte aquí el nombre para el nuevo estilo de línea:" ;
+    Text [ english_us ] = "Please enter a name for the new line style:" ;
+    Text[ chinese_simplified ] = "ÇëÄúÊäÈëÒ»¸öĞÂµÄÏßÌõÊ½ÑùÃû³Æ£º";
+    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ äëÿ íîâîãî ñòèëÿ ëèíèè:";
+    Text[ polish ] = "Wstaw nazwê nowego stylu linii:";
+    Text[ japanese ] = "‚±‚±‚ÉV‚µ‚¢ü½À²Ù‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢:";
+    Text[ chinese_traditional ] = "½Ğ±z¿é¤J¤@­Ó·s½u±ø¼Ë¦¡ªº¦WºÙ¡G";
+    Text[ arabic ] = "ãä İÖáß ÇßÊÈ ÇÓã ÇáäãØ ÇáÌÏíÏ ááÎØ åäÇ:";
+    Text[ language_user1 ] = ":";
+    Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ãéá ôï íİï óôõë ãñáììŞò:";
+    Text[ korean ] = "»õ ¼± À¯ÇüÀÇ ÀÌ¸§À» ¿©±â¿¡ ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ turkish ] = "Yeni çizgi biçimi için bir ad girin:";
+};
+String STR_DEL_LINESTYLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Linienstil löschen : Linienstil l÷schen */
+    Text = "Linienstil löschen" ;
+    Text [ ENGLISH ] = "Delete linestyle" ;
+    Text [ norwegian ] = "Delete linestyle" ;
+    Text [ italian ] = "Elimina stile riga" ;
+    Text [ portuguese_brazilian ] = "Apagar estilo de linha" ;
+    Text [ portuguese ] = "Eliminar estilo de linha" ;
+    Text [ finnish ] = "Poista viivatyyli" ;
+    Text [ danish ] = "Slet stregtype" ;
+    Text [ french ] = "Supprimer le style de ligne" ;
+    Text [ swedish ] = "Radera linjestil" ;
+    Text [ dutch ] = "Lijntype wissen" ;
+    Text [ spanish ] = "Eliminar estilo de línea" ;
+    Text [ english_us ] = "Delete line style" ;
+    Text[ chinese_simplified ] = "É¾³ıÏßÌõÊ½Ñù";
+    Text[ russian ] = "Óäàëèòü ñòèëü ëèíèè";
+    Text[ polish ] = "Usuñ styl linii";
+    Text[ japanese ] = "ü½À²Ù‚Ìíœ";
+    Text[ chinese_traditional ] = "§R°£½u±ø¼Ë¦¡";
+    Text[ arabic ] = "ÍĞİ äãØ ÇáÎØ";
+    Text[ greek ] = "ÄéáãñáöŞ óôõë ãñáììŞò";
+    Text[ korean ] = "¼± À¯Çü »èÁ¦";
+    Text[ turkish ] = "Çizgi biçimini sil";
+    Text[ language_user1 ] = " ";
+};
+String STR_ASK_DEL_LINESTYLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Soll der Linienstil wirklich gelöscht werden? : Soll der Linienstil wirklich gel÷scht werden? */
+    Text = "Soll der Linienstil wirklich gelöscht werden?" ;
+    Text [ ENGLISH ] = "Do you want to delete the linestyle?" ;
+    Text [ norwegian ] = "Do you want to delete the linestyle?" ;
+    Text [ italian ] = "Eliminare lo stile riga?" ;
+    Text [ portuguese_brazilian ] = "Deseja Apagar o estilo de linha?" ;
+    Text [ portuguese ] = "Deseja realmente eliminar o estilo de linha?" ;
+    Text [ finnish ] = "Poistetaanko viivatyyli?" ;
+    Text [ danish ] = "Er du sikker på, at du vil slette stregtypen?" ;
+    Text [ french ] = "Confirmez-vous la suppression du style de ligne ?" ;
+    Text [ swedish ] = "Skall linjestilen verkligen raderas?" ;
+    Text [ dutch ] = "Wilt u het lijntype werkelijk wissen?" ;
+    Text [ spanish ] = "¿Desea realmente eliminar el estilo de línea?" ;
+    Text [ english_us ] = "Do you want to delete the line style?" ;
+    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÏßÌõÊ½ÑùÂğ£¿";
+    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòîò ñòèëü ëèíèè?";
+    Text[ polish ] = "Chcesz na pewno usun¹æ styl linii?";
+    Text[ japanese ] = "ü‚Ìí—Ş‚ğ–{“–‚Éíœ‚µ‚Ä‚æ‚ë‚µ‚¢‚Å‚·‚©?";
+    Text[ chinese_traditional ] = "±z¯u­n§R°£³o­Ó½u±ø¼Ë¦¡¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ äãØ ÇáÎØ¿";
+    Text[ greek ] = "Èİëåôå óßãïõñá íá äéáãñáöåß ôï óôõë ãñáììŞò;";
+    Text[ korean ] = "¼± À¯ÇüÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Çizgi biçimini gerçekten silmek istiyor musunuz?";
+    Text[ language_user1 ] = " ";
+};
+String STR_ASK_CHANGE_LINESTYLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen. : Der Linienstil wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Linienstil õndern \noder einen neuen Linienstil hinzuf³gen. */
+    Text = "Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen." ;
+    Text [ ENGLISH ] = "The linestyle was modified without save. You can modify the selected linestyle or add a new linestyle" ;
+    Text [ norwegian ] = "The linestyle was modified without save. You can modify the selected linestyle or add a new linestyle" ;
+    Text [ italian ] = "Lo stile riga è stato modificato senza essere salvato.\nPotete modificare lo stile riga selezionato o aggiungerne uno nuovo." ;
+    Text [ portuguese_brazilian ] = "O estilo de linha foi modificado sem gravar. Você poder  modificar o estilo de linha selecionado ou adicionar um novo estilo de linha" ;
+    Text [ portuguese ] = "O estilo de linha foi modificado sem ter sido guardado. Poderá modificar \no estilo de linha seleccionado ou\nadicionar um novo." ;
+    Text [ finnish ] = "Muutettua viivatyyliä ei ole tallennettu. Voit muokata valittua viivatyyliä tai lisätä uuden" ;
+    Text [ danish ] = "Stregtypen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede stregtype \neller tilføje en ny." ;
+    Text [ french ] = "Les dernières modifications apportées au style de ligne n'ont pas été sauvegardées. \nVous pouvez modifier le style de ligne sélectionné ou en ajouter un nouveau." ;
+    Text [ swedish ] = "Linjestilen ändrades utan att sparas.\n Du kan ändra den markerade linjestilen eller\nlägga till en ny linjestil." ;
+    Text [ dutch ] = "De wijzigingen in het lijntype werden niet opgeslagen. \nU kunt het geselecteerde lijntype wijzigen \nof een nieuw lijntype toevoegen." ;
+    Text [ spanish ] = "El estilo de línea ha sido modificado sin guardar.\nUsted puede modificar el estilo de línea seleccionado\no añadir uno nuevo." ;
+    Text [ english_us ] = "The line style was modified without saving. \nYou can change the selected line style \nor add a new one." ;
+    Text[ chinese_simplified ] = "ÏßÌõÊ½ÑùÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÉĞÎ´±»±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÏßÌõÊ½Ñù\n»òÕßĞÂÔöÒ»¸öÏßÌõÊ½Ñù¡£";
+    Text[ russian ] = "Ñòèëü ëèíèè áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé ñòèëü ëèíèè \nèëè äîáàâèòü íîâûé ñòèëü ëèíèè.";
+    Text[ polish ] = "Styl linii zosta³ zmieniony i nie zapisany. \nMo¿esz zmieniæ zaznaczony styl linii \nlub dodaæ nowy styl linii.";
+    Text[ japanese ] = "ü‚Ì½À²Ù‚ª•ÏX‚³‚ê•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚µ‚½ü‚Ì½À²Ù‚ğ•ÏX‚Å‚«‚Ü‚·\n‚Ü‚½‚ÍV‚µ‚¢ü‚Ì½À²Ù‚ğ’Ç‰Á‚Å‚«‚Ü‚·B";
+    Text[ chinese_traditional ] = "½u±ø¼Ë¦¡¤w¸gÅÜ§ó¡A¦ı¬O©|¥¼Àx¦s¡C \n±z¯à°÷ÅÜ§ó¿ï¨úªº½u±ø¼Ë¦¡\n©ÎªÌ·s¼W¤@­Ó½u±ø¼Ë¦¡¡C";
+    Text[ arabic ] = "áã íÊã ÍİÙ äãØ ÇáÎØ ÈÚÏ ÊÛííÑå. \níãßäß ÊÛííÑ äãØ ÇáÎØ ÇáãÍÏÏ¡ \nÃæ ÅÖÇİÉ äãØ ÎØ ÌÏíÏ.";
+    Text[ greek ] = "Ôï óôõë ãñáììŞò ôñïğïğïéŞèçêå ÷ùñßò íá áğïèçêåõôåß. \nÌğïñåßôå íá áëëÜîåôå ôï åğéëåãìİíï óôõë \\Ş íá ğñïóèİóåôå İíá íİï.";
+    Text[ korean ] = "¼± À¯ÇüÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. \n¼±ÅÃµÈ ¼± À¯ÇüÀ» º¯°æÇÏ°Å³ª \n»õ ¼± À¯ÇüÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Çizgi biçimi değiştirildi, ancak kaydedilmedi. \nSeçilen çizgi biçimini değiştirebilir \nya da yeni bir çizgi biçimi ekleyebilirsiniz.";
+    Text[ language_user1 ] = " ";
+};
+String STR_INVISIBLE
+{
+    Text = "Unsichtbar" ;
+    Text [ ENGLISH ] = "Invisible" ;
+    Text [ norwegian ] = "Usynlig" ;
+    Text [ italian ] = "Invisibile" ;
+    Text [ portuguese_brazilian ] = "Invisível" ;
+    Text [ portuguese ] = "Invisível" ;
+    Text [ finnish ] = "Näkymätön" ;
+    Text [ danish ] = "Usynlig" ;
+    Text [ french ] = "Invisible" ;
+    Text [ swedish ] = "Osynlig" ;
+    Text [ dutch ] = "Onzichtbaar" ;
+    Text [ spanish ] = "Invisible" ;
+    Text [ english_us ] = "Invisible" ;
+    Text[ chinese_simplified ] = "ÒşÈëµÄ";
+    Text[ russian ] = "Íåâèäèìàÿ";
+    Text[ polish ] = "Niewidoczny";
+    Text[ japanese ] = "–Ú‚ÉŒ©‚¦‚È‚¢";
+    Text[ chinese_traditional ] = "Áô¤Jªº";
+    Text[ arabic ] = "ÛíÑ ãÑÆí";
+    Text[ greek ] = "Ìç ïñáôÜ";
+    Text[ korean ] = "º¸ÀÌÁö ¾Ê°Ô";
+    Text[ turkish ] = "Görünmez";
+    Text[ language_user1 ] = " ";
+};
+String STR_COLOR
+{
+    Text = "Farbe" ;
+    Text [ ENGLISH ] = "Color" ;
+    Text [ norwegian ] = "Farge" ;
+    Text [ italian ] = "Colore" ;
+    Text [ portuguese_brazilian ] = "Cor" ;
+    Text [ portuguese ] = "Cor" ;
+    Text [ finnish ] = "Väri" ;
+    Text [ danish ] = "Farve" ;
+    Text [ french ] = "Couleur" ;
+    Text [ swedish ] = "Färg" ;
+    Text [ dutch ] = "Kleur" ;
+    Text [ spanish ] = "Color" ;
+    Text [ english_us ] = "Color" ;
+    Text[ chinese_simplified ] = "ÑÕÉ«";
+    Text[ russian ] = "Öâåò";
+    Text[ polish ] = "Kolor";
+    Text[ japanese ] = "F";
+    Text[ chinese_traditional ] = "ÃC¦â";
+    Text[ arabic ] = "áæä";
+    Text[ greek ] = "×ñşìá";
+    Text[ korean ] = "»ö";
+    Text[ turkish ] = "Renk";
+    Text[ language_user1 ] = " ";
+};
+String STR_HATCH
+{
+    Text = "Schraffur" ;
+    Text [ ENGLISH ] = "Hatch" ;
+    Text [ norwegian ] = "Hatch" ;
+    Text [ italian ] = "Tratteggio" ;
+    Text [ portuguese_brazilian ] = "Sombreado" ;
+    Text [ portuguese ] = "Tracejado" ;
+    Text [ finnish ] = "Viivoitus" ;
+    Text [ danish ] = "Skravering" ;
+    Text [ french ] = "Hachure" ;
+    Text [ swedish ] = "Skraffering" ;
+    Text [ dutch ] = "Arcering" ;
+    Text [ spanish ] = "Trama" ;
+    Text [ english_us ] = "Hatching" ;
+    Text[ chinese_simplified ] = "ÒõÓ°Ïß";
+    Text[ russian ] = "Øòğèõîâêà";
+    Text[ polish ] = "Kreskowanie";
+    Text[ japanese ] = "Ê¯Áİ¸Ş";
+    Text[ chinese_traditional ] = "³±¼v½u";
+    Text[ arabic ] = "äŞÔ";
+    Text[ greek ] = "ÃñáììïóêéÜ";
+    Text[ korean ] = "ÇØÄª";
+    Text[ turkish ] = "Desen";
+    Text[ language_user1 ] = " ";
+};
+String STR_CHANGE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Ändern : ndern */
+    Text = "Ändern" ;
+    Text [ ENGLISH ] = "Modify" ;
+    Text [ norwegian ] = "Modify" ;
+    Text [ italian ] = "Modifica" ;
+    Text [ portuguese_brazilian ] = "Modificar" ;
+    Text [ portuguese ] = "Alterar" ;
+    Text [ finnish ] = "Muokkaa" ;
+    Text [ danish ] = "Modificer" ;
+    Text [ french ] = "Modifier" ;
+    Text [ swedish ] = "Ändra" ;
+    Text [ dutch ] = "Wijzigen" ;
+    Text [ spanish ] = "Modificar" ;
+    Text [ english_us ] = "Modify" ;
+    Text[ chinese_simplified ] = "¸ü¸Ä";
+    Text[ russian ] = "Èçìåíèòü";
+    Text[ polish ] = "Modyfikuj";
+    Text[ japanese ] = "•ÏX";
+    Text[ chinese_traditional ] = "ÅÜ§ó";
+    Text[ arabic ] = "ÊÚÏíá";
+    Text[ greek ] = "Ôñïğïğïßçóç";
+    Text[ korean ] = "º¯°æ";
+    Text[ turkish ] = "Değiştir";
+    Text[ language_user1 ] = " ";
+};
+String STR_ADD
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Hinzufügen : Hinzuf³gen */
+    Text = "Hinzufügen" ;
+    Text [ ENGLISH ] = "Add" ;
+    Text [ norwegian ] = "Add" ;
+    Text [ italian ] = "Aggiungi" ;
+    Text [ portuguese_brazilian ] = "Acrescentar" ;
+    Text [ portuguese ] = "Adicionar" ;
+    Text [ finnish ] = "Lisää" ;
+    Text [ danish ] = "Tilføj" ;
+    Text [ french ] = "Ajouter" ;
+    Text [ swedish ] = "Lägg till" ;
+    Text [ dutch ] = "Toevoegen" ;
+    Text [ spanish ] = "Añadir" ;
+    Text [ english_us ] = "Add" ;
+    Text[ chinese_simplified ] = "ĞÂÔö";
+    Text[ russian ] = "Äîáàâèòü";
+    Text[ polish ] = "Dodaj";
+    Text[ japanese ] = "’Ç‰Á";
+    Text[ chinese_traditional ] = "¼W¥[";
+    Text[ arabic ] = "ÅÖÇİÉ";
+    Text[ greek ] = "ĞñïóèŞêç";
+    Text[ korean ] = "Ãß°¡";
+    Text[ turkish ] = "Ekle";
+    Text[ language_user1 ] = " ";
+};

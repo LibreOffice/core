@@ -1,0 +1,446 @@
+/*************************************************************************
+ *
+ *  $RCSfile: vectdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#include "app.hrc"
+#include "vectdlg.hrc"
+
+/******************************************************************************
+|*
+|*
+|*
+\******************************************************************************/
+
+ModalDialog DLG_VECTORIZE
+{
+    HelpID = SID_VECTORIZE;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 200, 237 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    Text = "In Polygon umwandeln" ;
+    Text [ ENGLISH ] = "Convert to polygon" ;
+    Text [ english_us ] = "Convert to Polygon" ;
+
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 144 , 6 );
+        Size = MAP_APPFONT ( 50 , 14 );
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 144 , 23 );
+        Size = MAP_APPFONT ( 50 , 14 );
+        TabStop = TRUE ;
+    };
+
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 144 , 43 );
+        Size = MAP_APPFONT ( 50 , 14 );
+        TabStop = TRUE ;
+    };
+
+    PushButton BTN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 144 , 63 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "~Vorschau" ;
+        Text [ ENGLISH ] = "~Preview" ;
+        Text [ english_us ] = "Preview" ;
+        Text[ italian ] = "Anteprima";
+        Text[ portuguese_brazilian ] = "~Preview";
+        Text[ portuguese ] = "~Previsualizar";
+        Text[ danish ] = "Eksempel";
+        Text[ french ] = "~Aperçu";
+        Text[ swedish ] = "~Förhandsvisning";
+        Text[ dutch ] = "~Voorbeeld";
+        Text[ spanish ] = "~Previsualización";
+        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ russian ] = "~Ïğîñìîòğ";
+        Text[ polish ] = "Podgl¹~d";
+        Text[ japanese ] = "ÌßÚËŞ­°";
+        Text[ chinese_traditional ] = "¹wÄı";
+        Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ greek ] = "Ğñïåğéóêüğçóç";
+        Text[ korean ] = "¹Ì¸® º¸±â";
+        Text[ turkish ] = "Önizleme";
+        Text[ language_user1 ] = " ";
+    };
+
+    GroupBox GRP_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 132 , 74 ) ;
+        Text = "Einstellungen" ;
+        Text [ ENGLISH ] = "Settings" ;
+        Text [ english_us ] = "Settings" ;
+        Text [ italian ] = "Impostazioni" ;
+        Text [ spanish ] = "Configuración" ;
+        Text [ french ] = "Paramètres" ;
+        Text [ dutch ] = "Instellingen" ;
+        Text [ swedish ] = "Inställningar" ;
+        Text [ danish ] = "Indstillinger" ;
+        Text [ portuguese ] = "Predefinições" ;
+        Text [ portuguese_brazilian ] = "Einstellungen" ;
+        Text[ chinese_simplified ] = "Éè¶¨";
+        Text[ russian ] = "Óñòàíîâêè";
+        Text[ polish ] = "Ustawienia";
+        Text[ japanese ] = "İ’è";
+        Text[ chinese_traditional ] = "³]©w";
+        Text[ arabic ] = "ÇáÅÚÏÇÏÇÊ";
+        Text[ greek ] = "Ñõèìßóåéò";
+        Text[ korean ] = "¼³Á¤";
+        Text[ turkish ] = "Ayarlar";
+        Text[ language_user1 ] = " ";
+    };
+
+    FixedText FT_LAYERS
+    {
+        Pos = MAP_APPFONT ( 12 , 14 );
+        Size = MAP_APPFONT ( 79 , 12 );
+        Text = "~Farbanzahl:";
+        Text [ ENGLISH ] = "~Number of colors:";
+        Text [ english_us ] = "Number of colors:";
+        Text[ italian ] = "~Numero colori:";
+        Text[ portuguese_brazilian ] = "~Number of colors:";
+        Text[ portuguese ] = "~Quantidade de cores:";
+        Text[ danish ] = "Antal farver:";
+        Text[ french ] = "~Nombre de couleurs :";
+        Text[ swedish ] = "~Antal färger:";
+        Text[ dutch ] = "~Aantal kleuren:";
+        Text[ spanish ] = "~Cantidad de colores:";
+        Text[ chinese_simplified ] = "ÑÕÉ«µÄÊıÄ¿£º";
+        Text[ russian ] = "Êîëè÷åñòâî öâåòîâ:";
+        Text[ polish ] = "Liczba kolorów:";
+        Text[ japanese ] = "F‚Ì”:";
+        Text[ chinese_traditional ] = "ÃC¦âªº¼Æ¥Ø¡G";
+        Text[ arabic ] = "ÚÏÏ ÇáÃáæÇä:";
+        Text[ greek ] = "Áñéèìüò ÷ñùìÜôùí:";
+        Text[ korean ] = "»öÀÇ ¼ö:";
+        Text[ turkish ] = "Renk sayısı:";
+        Text[ language_user1 ] = " ";
+    };
+
+    NumericField NM_LAYERS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 92 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 8;
+        Maximum = 32 ;
+        StrictFormat = TRUE ;
+        First = 8;
+        Last = 32 ;
+        SpinSize = 1 ;
+    };
+
+    FixedText FT_REDUCE
+    {
+        Pos = MAP_APPFONT ( 12 , 29 );
+        Size = MAP_APPFONT ( 79 , 12 );
+        Text = "~Punkt-Reduktion:";
+        Text [ ENGLISH ] = "~Point reduction:";
+        Text [ english_us ] = "Point reduction:";
+        Text[ italian ] = "Riduzione punti:";
+        Text[ portuguese_brazilian ] = "~Point reduction:";
+        Text[ portuguese ] = "~Redução de pontos:";
+        Text[ danish ] = "Punkt-reduktion:";
+        Text[ french ] = "~Réduction de points :";
+        Text[ swedish ] = "~Punktreduktion:";
+        Text[ dutch ] = "~Punten reduceren";
+        Text[ spanish ] = "~Reducción de puntos:";
+        Text[ chinese_simplified ] = "ËõĞ¡µãÊı£º";
+        Text[ russian ] = "~Ñîêğàùåíèå òî÷êè:";
+        Text[ polish ] = "Redukcja punktów:";
+        Text[ japanese ] = "“_‚ğŒ¸‚ç‚·:";
+        Text[ chinese_traditional ] = "ÁY¤pÂI¼Æ¡G";
+        Text[ arabic ] = "ÊŞáíá ÇáäŞÇØ:";
+        Text[ greek ] = "Ìåßùóç óçìåßùí:";
+        Text[ korean ] = "Á¡ ÁÙÀÓ:";
+        Text[ turkish ] = "Nokta azaltma:";
+        Text[ language_user1 ] = " ";
+    };
+
+    MetricField MT_REDUCE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 92 , 29 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0;
+        Maximum = 32 ;
+        StrictFormat = TRUE ;
+        First = 0;
+        Last = 32 ;
+        SpinSize = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " Pixel" ;
+    };
+
+    CheckBox CB_FILLHOLES
+    {
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 79 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "~Löcher füllen";
+        Text [ ENGLISH ] = "~Fill holes";
+        Text [ english_us ] = "~Fill holes:";
+        Text[ italian ] = "Riempi vuoti:";
+        Text[ portuguese_brazilian ] = "~Fill holes:";
+        Text[ portuguese ] = "~Preencher buracos:";
+        Text[ danish ] = "Fyld huller:";
+        Text[ french ] = "~Boucher les trous";
+        Text[ swedish ] = "F~yll hål";
+        Text[ dutch ] = "~Gaten opvullen";
+        Text[ spanish ] = "~Rellenar agujeros";
+        Text[ chinese_simplified ] = "Ìî³ä¿Õ¶´(~F)";
+        Text[ russian ] = "~Çàïîëíèòü äûğû";
+        Text[ polish ] = "Wype³nij dziurki";
+        Text[ japanese ] = "ŒŠ‚ğ“h‚è‚Â‚Ô‚·(~F)";
+        Text[ chinese_traditional ] = "¶ñ¥RªÅ¬}(~F)";
+        Text[ arabic ] = "ÊÚÈÆÉ ÇáËŞæÈ";
+        Text[ greek ] = "Ãİìéóç ïğşí";
+        Text[ korean ] = "±¸¸Û Ã¤¿ì±â:(~F)";
+        Text[ turkish ] = "Boşlukları doldur";
+        Text[ language_user1 ] = " ";
+    };
+
+    FixedText FT_FILLHOLES
+    {
+        Pos = MAP_APPFONT ( 12 , 59 );
+        Size = MAP_APPFONT ( 79 , 12 );
+        Text = "~Kachelgröße:";
+        Text [ ENGLISH ] = "~Tile size:";
+        Text [ english_us ] = "Tile size:";
+        Text[ italian ] = "Dimensione piastrella:";
+        Text[ portuguese_brazilian ] = "~Tile size:";
+        Text[ portuguese ] = "~Tamanho do azulejo:";
+        Text[ danish ] = "Flisestørrelse:";
+        Text[ french ] = "~Taille de carrelage :";
+        Text[ swedish ] = "~Kakelstorlek:";
+        Text[ dutch ] = "~Tegelformaat:";
+        Text[ spanish ] = "~Tamaño de azulejo:";
+        Text[ chinese_simplified ] = "Æ½ÆÌ´óĞ¡£º";
+        Text[ russian ] = "~Ğàçìåğ ïëèòêè:";
+        Text[ polish ] = "Wielkoœæ p³ytek:";
+        Text[ japanese ] = "À²Ù‚Ì»²½Ş:";
+        Text[ chinese_traditional ] = "¥­¾Q¤j¤p¡G";
+        Text[ arabic ] = "ÍÌã ÇáÈáÇØ:";
+        Text[ greek ] = "Ìİãåèïò åğé~êÜëõøçò:";
+        Text[ korean ] = "¹ÙµÏÆÇ Å©±â:";
+        Text[ turkish ] = "Döşeme taşı boyutu:";
+        Text[ language_user1 ] = " ";
+    };
+
+    MetricField MT_FILLHOLES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 92 , 59 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 8;
+        Maximum = 128;
+        StrictFormat = TRUE ;
+        First = 8;
+        Last = 128;
+        SpinSize = 1;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " Pixel" ;
+    };
+
+    FixedText FT_ORIGINAL
+    {
+        Pos = MAP_APPFONT ( 6 , 83 );
+        Size = MAP_APPFONT ( 92 , 12 );
+        Text = "Originalbild:";
+        Text [ ENGLISH ] = "Source image:";
+        Text [ english_us ] = "Source picture:";
+        Text[ italian ] = "Immagine originale:";
+        Text[ portuguese_brazilian ] = "Source image:";
+        Text[ portuguese ] = "Imagem original:";
+        Text[ danish ] = "Oprindeligt billede:";
+        Text[ french ] = "Image d'origine :";
+        Text[ swedish ] = "Originalbild:";
+        Text[ dutch ] = "Originele afbeelding:";
+        Text[ spanish ] = "Imagen original:";
+        Text[ chinese_simplified ] = "Ô´Í¼Ïñ£º";
+        Text[ russian ] = "Îğèãèíàë:";
+        Text[ polish ] = "Oryginalny obraz:";
+        Text[ japanese ] = "µØ¼ŞÅÙ‚Ì‰æ‘œ:";
+        Text[ chinese_traditional ] = "·½¼v¹³¡G";
+        Text[ arabic ] = "ÕæÑÉ ÃÕáíÉ:";
+        Text[ greek ] = "Áñ÷éêŞ åéêüíá:";
+        Text[ korean ] = "¼Ò½º ±×¸²:";
+        Text[ turkish ] = "Asıl resim:";
+        Text[ language_user1 ] = " ";
+    };
+
+    Control CTL_BMP
+    {
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6, 98 ) ;
+        Size = MAP_APPFONT ( 92, 100 ) ;
+    };
+
+    FixedText FT_VECTORIZED
+    {
+        Pos = MAP_APPFONT ( 101 , 83 );
+        Size = MAP_APPFONT ( 92 , 12 );
+        Text = "Vektorisiertes Bild:";
+        Text [ ENGLISH ] = "Vectorized image:";
+        Text [ english_us ] = "Vectorized image:";
+        Text[ italian ] = "Immagine vettoriale:";
+        Text[ portuguese_brazilian ] = "Vectorized image:";
+        Text[ portuguese ] = "Imagem vectorizada:";
+        Text[ danish ] = "Vektoriseret billede:";
+        Text[ french ] = "Image vectorielle :";
+        Text[ swedish ] = "Vektoriserad bild:";
+        Text[ dutch ] = "Vectorfiguur:";
+        Text[ spanish ] = "Imagen vectorizada:";
+        Text[ chinese_simplified ] = "Ê¸Á¿Í¼Ïñ£º";
+        Text[ russian ] = "Âåêòîğèçèğîâàííàÿ êàğòèíà:";
+        Text[ polish ] = "Obraz zwektorowany:";
+        Text[ japanese ] = "ÍŞ¸À•û®‚Ì‰æ‘œ:";
+        Text[ chinese_traditional ] = "¦V¶q¼v¹³¡G";
+        Text[ arabic ] = "ÕæÑÉ İßÊæÑíÉ:";
+        Text[ greek ] = "ÄéáíõóìáôéêŞ åéêüíá:";
+        Text[ korean ] = "º¤ÅÍ ÀÌ¹ÌÁö:";
+        Text[ turkish ] = "Vektör tabanlı resim:";
+        Text[ language_user1 ] = " ";
+    };
+
+    Control CTL_WMF
+    {
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 101, 98 ) ;
+        Size = MAP_APPFONT ( 93, 100 ) ;
+    };
+
+    GroupBox GRP_PRGS
+    {
+        Pos = MAP_APPFONT ( 6, 204 );
+        Size = MAP_APPFONT( 188, 27 );
+        Text = "Fortschritt";
+        Text [ ENGLISH ] = "Progress";
+        Text [ english_us ] = "Progress";
+        Text[ italian ] = "Progresso";
+        Text[ portuguese_brazilian ] = "Progress";
+        Text[ portuguese ] = "Progresso";
+        Text[ danish ] = "Fremgang";
+        Text[ french ] = "Progression";
+        Text[ swedish ] = "Framsteg";
+        Text[ dutch ] = "Vooruitgang";
+        Text[ spanish ] = "Progreso";
+        Text[ chinese_simplified ] = "½øÕ¹";
+        Text[ russian ] = "Ïğîãğåññ";
+        Text[ polish ] = "Postêp";
+        Text[ japanese ] = "is";
+        Text[ chinese_traditional ] = "¶i®i";
+        Text[ arabic ] = "ÊŞÏã";
+        Text[ greek ] = "Ğñüïäïò";
+        Text[ korean ] = "ÁøÇà";
+        Text[ turkish ] = "Artış";
+        Text[ language_user1 ] = " ";
+    };
+
+    Window WND_PRGS
+    {
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 12, 215 ) ;
+        Size = MAP_APPFONT ( 176, 10 ) ;
+    };
+    Text[ italian ] = "Converti in poligono";
+    Text[ portuguese_brazilian ] = "Convert to polygon";
+    Text[ portuguese ] = "Converter em polígono";
+    Text[ danish ] = "Konverter til polygon";
+    Text[ french ] = "Convertir en polygone";
+    Text[ swedish ] = "Omvandla till polygon";
+    Text[ dutch ] = "Converteren naar veelhoek";
+    Text[ spanish ] = "Convertir en polígono";
+    Text[ chinese_simplified ] = "×ª±ä³É¶à±ßĞÎ";
+    Text[ russian ] = "Ïğåîáğàçîâàòü â ìíîãîóãîëüíèê";
+    Text[ polish ] = "Konwertuj na wielok¹t";
+    Text[ japanese ] = "‘½ŠpŒ`‚É•ÏŠ·";
+    Text[ chinese_traditional ] = "ÂàÅÜ¦¨¦hÃä§Î";
+    Text[ arabic ] = "ÊÍæíá Åáì ãÖáÚ";
+    Text[ greek ] = "ÌåôáôñïğŞ óå ğïëıãùíï";
+    Text[ korean ] = "´Ù°¢ÇüÀ¸·Î º¯È¯";
+    Text[ turkish ] = "Çokgene dönüştür";
+    Text[ language_user1 ] = " ";
+};
+

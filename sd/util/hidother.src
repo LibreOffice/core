@@ -1,0 +1,147 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hidother.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:46 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "..\inc\helpids.h"
+#include "hidother.hrc"
+#include "..\inc\app.hrc"
+
+hidspecial SID_NOTESMODE      { HelpId = SID_NOTESMODE; };
+hidspecial SID_HANDOUTMODE      { HelpId = SID_HANDOUTMODE; };
+
+hidspecial SD_IF_SDAPP                     { HelpId = SD_IF_SDAPP; };
+hidspecial SD_IF_SDDRAWDOCSHELL            { HelpId = SD_IF_SDDRAWDOCSHELL; };
+hidspecial SD_IF_SDVIEWSHELL               { HelpId = SD_IF_SDVIEWSHELL; };
+hidspecial SD_IF_SDDRAWVIEWSHELL           { HelpId = SD_IF_SDDRAWVIEWSHELL; };
+hidspecial SD_IF_SDSLIDEVIEWSHELL          { HelpId = SD_IF_SDSLIDEVIEWSHELL; };
+hidspecial SD_IF_SDOUTLINEVIEWSHELL        { HelpId = SD_IF_SDOUTLINEVIEWSHELL; };
+hidspecial SD_IF_SDDRAWSTDOBJECTBAR        { HelpId = SD_IF_SDDRAWSTDOBJECTBAR; };
+hidspecial SD_IF_SDDRAWTEXTOBJECTBAR       { HelpId = SD_IF_SDDRAWTEXTOBJECTBAR; };
+hidspecial SD_IF_SDDRAWBEZIEROBJECTBAR     { HelpId = SD_IF_SDDRAWBEZIEROBJECTBAR; };
+hidspecial SD_IF_SDDRAWGLUEPOINTSOBJECTBAR { HelpId = SD_IF_SDDRAWGLUEPOINTSOBJECTBAR; };
+hidspecial SD_IF_SDGRAPHICDOCSHELL         { HelpId = SD_IF_SDGRAPHICDOCSHELL; };
+hidspecial SD_IF_SDGRAPHICVIEWSHELL        { HelpId = SD_IF_SDGRAPHICVIEWSHELL; };
+hidspecial SD_IF_SDGRAPHICSTDOBJECTBAR     { HelpId = SD_IF_SDGRAPHICSTDOBJECTBAR; };
+
+hidspecial HID_SD_PRINT_OPTIONS        { HelpId = HID_SD_PRINT_OPTIONS; };
+hidspecial HID_SD_OPTIONS_SNAP         { HelpId = HID_SD_OPTIONS_SNAP; };
+hidspecial HID_SD_OPTIONS_VIEW         { HelpId = HID_SD_OPTIONS_VIEW; };
+
+hidspecial HID_SD_AUTOPILOT_PAGE1      { HelpId = HID_SD_AUTOPILOT_PAGE1; };
+hidspecial HID_SD_AUTOPILOT_PAGE2  { HelpId = HID_SD_AUTOPILOT_PAGE2; };
+hidspecial HID_SD_AUTOPILOT_PAGE3  { HelpId = HID_SD_AUTOPILOT_PAGE3; };
+hidspecial HID_SD_AUTOPILOT_PAGE4  { HelpId = HID_SD_AUTOPILOT_PAGE4; };
+hidspecial HID_SD_AUTOPILOT_PAGE5  { HelpId = HID_SD_AUTOPILOT_PAGE5; };
+hidspecial HID_SD_AUTOPILOT_PAGE6  { HelpId = HID_SD_AUTOPILOT_PAGE6; };
+
+hidspecial HID_SD_CBX_ONLYSELECTED { HelpId = HID_SD_CBX_ONLYSELECTED; };
+hidspecial HID_SD_BTN_FILTERDIALOG { HelpId = HID_SD_BTN_FILTERDIALOG; };
+
+hidspecial HID_SD_BTN_PAGE         { HelpId = HID_SD_BTN_PAGE; };
+hidspecial HID_SD_BTN_MASTERPAGE       { HelpId = HID_SD_BTN_MASTERPAGE; };
+hidspecial HID_SD_BTN_LAYER            { HelpId = HID_SD_BTN_LAYER; };
+
+hidspecial HID_SD_BTN_DRAW                 { HelpId = HID_SD_BTN_DRAW; };
+hidspecial HID_SD_BTN_SLIDE                { HelpId = HID_SD_BTN_SLIDE; };
+hidspecial HID_SD_BTN_OUTLINE          { HelpId = HID_SD_BTN_OUTLINE; };
+hidspecial HID_SD_BTN_NOTES                { HelpId = HID_SD_BTN_NOTES; };
+hidspecial HID_SD_BTN_HANDOUT          { HelpId = HID_SD_BTN_HANDOUT; };
+hidspecial HID_SD_BTN_PRESENTATION     { HelpId = HID_SD_BTN_PRESENTATION; };
+
+hidspecial HID_SD_WIN_DOCUMENT         { HelpId = HID_SD_WIN_DOCUMENT; };
+
+hidspecial HID_SD_OPTIONS_LAYOUT      { HelpId = HID_SD_OPTIONS_LAYOUT; };
+hidspecial HID_SD_OPTIONS_CONTENTS    { HelpId = HID_SD_OPTIONS_CONTENTS; };
+hidspecial HID_SD_OPTIONS_MISC        { HelpId = HID_SD_OPTIONS_MISC; };
+
+hidspecial HID_SD_EFFECT_PREVIEW            { HelpId = HID_SD_OPTIONS_MISC; };
+hidspecial HID_SD_CTL_NEWFOIL                   { HelpId = HID_SD_CTL_NEWFOIL; };
+hidspecial HID_SD_NAVIGATOR_TLB             { HelpId = HID_SD_NAVIGATOR_TLB; };
+hidspecial HID_SD_NAVIGATOR                     { HelpId = HID_SD_NAVIGATOR; };
+
+hidspecial HID_SD_CTL_EFFECTS                   { HelpId = HID_SD_CTL_EFFECTS; };
+hidspecial HID_SD_CTL_TEXT_EFFECTS      { HelpId = HID_SD_CTL_TEXT_EFFECTS; };
+
+hidspecial HID_SD_CTL_SLIDE_CHANGE      { HelpId = HID_SD_CTL_SLIDE_CHANGE; };
+
+hidspecial HID_SD_NAVIGATOR_TBX             { HelpId = HID_SD_NAVIGATOR_TBX; };
+hidspecial HID_SD_NAVIGATOR_LB              { HelpId = HID_SD_NAVIGATOR_LB; };
+
+hidspecial HID_SD_NAVIGATOR_TBI_LIVE    { HelpId = HID_SD_NAVIGATOR_TBI_LIVE; };
+hidspecial HID_SD_NAVIGATOR_TBI_PEN         { HelpId = HID_SD_NAVIGATOR_TBI_PEN; };
+hidspecial HID_SD_NAVIGATOR_TBI_FIRST   { HelpId = HID_SD_NAVIGATOR_TBI_FIRST; };
+hidspecial HID_SD_NAVIGATOR_TBI_PREV    { HelpId = HID_SD_NAVIGATOR_TBI_PREV; };
+hidspecial HID_SD_NAVIGATOR_TBI_NEXT    { HelpId = HID_SD_NAVIGATOR_TBI_NEXT; };
+hidspecial HID_SD_NAVIGATOR_TBI_LAST    { HelpId = HID_SD_NAVIGATOR_TBI_LAST; };
+hidspecial HID_SD_NAVIGATOR_TBI_DRAGTYPE{ HelpId = HID_SD_NAVIGATOR_TBI_DRAGTYPE; };
+
+hidspecial HID_SD_HTMLEXPORT_PAGE1      { HelpId = HID_SD_HTMLEXPORT_PAGE1; };
+hidspecial HID_SD_HTMLEXPORT_PAGE2      { HelpId = HID_SD_HTMLEXPORT_PAGE2; };
+hidspecial HID_SD_HTMLEXPORT_PAGE3      { HelpId = HID_SD_HTMLEXPORT_PAGE3; };
+hidspecial HID_SD_HTMLEXPORT_PAGE4      { HelpId = HID_SD_HTMLEXPORT_PAGE4; };
+hidspecial HID_SD_HTMLEXPORT_PAGE5      { HelpId = HID_SD_HTMLEXPORT_PAGE5; };
+hidspecial HID_SD_HTMLEXPORT_PAGE6      { HelpId = HID_SD_HTMLEXPORT_PAGE6; };
+hidspecial HID_SD_HTMLEXPORT_DLG_DNAME  { HelpId = HID_SD_HTMLEXPORT_DLG_DNAME; };
+
+hidspecial HID_SD_CHGFOIL_LAYOUT        { HelpId = HID_SD_CHGFOIL_LAYOUT; };
+hidspecial HID_SD_CHGFOIL_BACKGROUND    { HelpId = HID_SD_CHGFOIL_BACKGROUND; };
+hidspecial HID_SD_CHGFOIL_OBJECTS       { HelpId = HID_SD_CHGFOIL_OBJECTS; };
+hidspecial HID_SD_CHGFOIL_NAME          { HelpId = HID_SD_CHGFOIL_NAME; };
+
+hidspecial HID_FM_CTL_SELECTION         { HelpId = HID_FM_CTL_SELECTION; };

@@ -1,0 +1,354 @@
+/*************************************************************************
+ *
+ *  $RCSfile: popup.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+ // TEXTOBJ
+ // Impress:
+#include "popup2.src"
+ // Draw (Graphic):
+#undef SD_POPUP
+#define SD_POPUP RID_GRAPHIC_TEXTOBJ_POPUP
+#include "popup2.src"
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+
+#define DEFINE_SLOTID_FOR_NUMBER_BULLETS    SID_OUTLINE_BULLET
+
+Menu RID_DRAW_TEXTOBJ_INSIDE_POPUP
+{
+    ItemList =
+    {
+        MN_SET_DEFAULT
+        SEPARATOR
+        MN_TEXTATTR
+        SEPARATOR
+        MN_TEXT_ATTR
+        MN_TEXT_ALIGN
+        MN_LINESPACING_ATTR
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MN_BULLET
+        ITEM_FORMAT_NUMBERING
+        SEPARATOR
+        MN_STYLEDT
+    };
+};
+Menu RID_DRAW_CONTROL_POPUP
+{
+    ItemList =
+    {
+        MN_TRANSFORM
+        MN_CONTROL_SHOW_BROWSER
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        SEPARATOR
+        MN_LEAVE_GROUP
+        MN_DISMANTLE
+    };
+};
+Menu RID_FORM_CONTROL_POPUP
+{
+    ItemList =
+    {
+        MN_TRANSFORM
+        MenuItem { ITEM_FORM_CONTROL_PROPERTIES };
+        MenuItem { ITEM_FORM_PROPERTIES };
+        MenuItem { ITEM_REPLACE_CONTROL };
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        SEPARATOR
+        MN_LEAVE_GROUP
+        MN_DISMANTLE
+    };
+};
+
+
+
+Menu RID_DRAW_SNAPOBJECT_POPUP
+{
+    ItemList =
+    {
+        MN_SET_SNAPITEM
+        SEPARATOR
+        MN_DELETE_SNAPITEM
+    };
+};
+
+
+Menu RID_DRAW_GLUEPOINT_POPUP
+{
+    ItemList =
+    {
+        MN_GLUE_INSERT_POINT
+        SEPARATOR
+        MN_GLUE_ESC_DIR_LEFT
+        MN_GLUE_ESC_DIR_TOP
+        MN_GLUE_ESC_DIR_RIGHT
+        MN_GLUE_ESC_DIR_BOTTOM
+        SEPARATOR
+        MN_GLUE_PERCENT
+        SEPARATOR
+        MN_GLUE_HORZALIGN_LEFT
+        MN_GLUE_HORZALIGN_CENTER
+        MN_GLUE_HORZALIGN_RIGHT
+        SEPARATOR
+        MN_GLUE_VERTALIGN_TOP
+        MN_GLUE_VERTALIGN_CENTER
+        MN_GLUE_VERTALIGN_BOTTOM
+    };
+};
+
+
+Menu RID_SLIDETABLE_POPUP
+{
+    ItemList =
+    {
+        MN_DIA
+        MN_HIDE_SLIDE
+        SEPARATOR
+        MN_INSERT_PAGE
+        MN_DELETE_PAGE
+        SEPARATOR
+        MN_REHEARSE_TIMINGS
+        SEPARATOR
+        MN_DRAWINGMODE
+        MN_OUTLINEMODE
+        MN_PRESENTATION
+    };
+};
+
+
+Menu RID_SLIDE_NOSEL_POPUP
+{
+    ItemList =
+    {
+        MN_REHEARSE_TIMINGS
+        SEPARATOR
+        MN_DRAWINGMODE
+        MN_OUTLINEMODE
+        MN_PRESENTATION
+    };
+};
+
+Menu RID_MASTERPAGE_POPUP
+{
+    ItemList =
+    {
+        MN_SET_DEFAULT
+        SEPARATOR
+        MN_LINE
+        MN_AREA
+        MN_TRANSFORM
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+         // MN_PRESENTATIONOBJECT
+        SEPARATOR
+        MN_POSITION
+    };
+};
+
+
+Menu RID_OUTLINE_POPUP
+{
+    ItemList =
+    {
+        MN_SET_DEFAULT
+        SEPARATOR
+        MN_TEXT_ATTR
+        SEPARATOR
+        MN_CHAR
+        ITEM_FORMAT_NUMBERING
+        MN_PRESENTATIONOBJECT
+        SEPARATOR
+        MN_DRAWINGMODE
+        MN_DIAMODE
+        MN_PRESENTATION
+    };
+};
+
+/*
+RID_MASTERPAGE_POPUP
+*/
+
+Menu RID_BEZIER_POPUP
+{
+    ItemList =
+    {
+        MN_BEZIER
+    };
+};
+
+
+Menu RID_DRAW_BMP_CONVERT_POPUP
+{
+    ItemList =
+    {
+        MN_CONVERT_TO_1BIT_THRESHOLD
+        MN_CONVERT_TO_1BIT_MATRIX
+        MN_CONVERT_TO_4BIT_GRAYS
+        MN_CONVERT_TO_4BIT_COLORS
+        MN_CONVERT_TO_8BIT_GRAYS
+        MN_CONVERT_TO_8BIT_COLORS
+        MN_CONVERT_TO_24BIT
+    };
+};
+
+
+Menu RID_LAYERTAB_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_INSERTLAYER ;
+            HelpID = SID_INSERTLAYER ;
+            /* ### ACHTUNG: Neuer Text in Resource? ~Ebene einf¸gen... : ~Ebene einf≥gen... */
+            Text = "~Ebene einf¸gen..." ;
+            Text [ ENGLISH ] = "~Insert layer..." ;
+            Text [ norwegian ] = "~Insert layer..." ;
+            Text [ italian ] = "Inserisci livello..." ;
+            Text [ portuguese_brazilian ] = "~Insert layer..." ;
+            Text [ portuguese ] = "~Inserir nÌvel..." ;
+            Text [ french ] = "InsÈrer une couche..." ;
+            Text [ dutch ] = "~Niveau invoegen..." ;
+            Text [ spanish ] = "~Insertar capa..." ;
+            Text [ danish ] = "IndsÊt niveau..." ;
+            Text [ swedish ] = "~Infoga nivÂ..." ;
+            Text [ finnish ] = "~Insert layer..." ;
+            Text [ english_us ] = "Insert La~yer..." ;
+            Text[ chinese_simplified ] = "≤Â»Î∑÷≤„(~Y)...";
+                    Text[ russian ] = "¬ÒÚ‡‚ËÚ¸ ÒÎÓÈ...";
+                    Text[ polish ] = "Wstaw warstwÍ...";
+                    Text[ japanese ] = "ëwÇÃë}ì¸(~Y)...";
+                    Text[ chinese_traditional ] = "¥°§J§¿ºh(~Y)...";
+            Text[ arabic ] = "...≈œ—«Ã ÿ»ﬁ…";
+            Text[ greek ] = "~≈ÈÛ·„˘„ﬁ ÂÈ›‰Ôı...";
+            Text[ korean ] = "∞Ë√˛ ª¿‘(~Y)...";
+            Text[ turkish ] = "D¸zey ekle...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_MODIFYLAYER ;
+            HelpID = SID_MODIFYLAYER ;
+            /* ### ACHTUNG: Neuer Text in Resource? E~bene ‰ndern... : E~bene ındern... */
+            Text = "E~bene ‰ndern..." ;
+            Text [ ENGLISH ] = "~Modify layer..." ;
+            Text [ norwegian ] = "~Modify layer..." ;
+            Text [ italian ] = "Modifica livello..." ;
+            Text [ portuguese_brazilian ] = "~Modify layer..." ;
+            Text [ portuguese ] = "~Modificar nÌvel..." ;
+            Text [ french ] = "Modifier la couche..." ;
+            Text [ dutch ] = "Niveau wij~zigen..." ;
+            Text [ spanish ] = "~Modificar capa..." ;
+            Text [ danish ] = "Rediger niveau..." ;
+            Text [ swedish ] = "~ƒndra nivÂ..." ;
+            Text [ finnish ] = "~Modify layer..." ;
+            Text [ english_us ] = "Modify La~yer..." ;
+            Text[ chinese_simplified ] = "–ﬁ∏ƒ∑÷≤„(~Y)...";
+                    Text[ russian ] = "»ÁÏÂÌËÚ¸ ÒÎÓÈ...";
+                    Text[ polish ] = "Modyfikuj warstwÍ...";
+                    Text[ japanese ] = "ëwÇÃïœçX(~Y)...";
+                    Text[ chinese_traditional ] = "≈‹ßÛ§¿ºh(~Y)...";
+            Text[ arabic ] = "... ⁄œÌ· ÿ»ﬁ…";
+            Text[ greek ] = "‘ÒÔÔÔﬂÁÛÁ Â~È›‰Ôı...";
+            Text[ korean ] = "∞Ë√˛ ∫Ø∞Ê(~Y)...";
+            Text[ turkish ] = "D¸zeyi dei˛tir...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE_LAYER ;
+            HelpID = SID_DELETE_LAYER ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ebe~ne lˆschen... : Ebe~ne l˜schen... */
+            Text = "Ebe~ne lˆschen..." ;
+            Text [ ENGLISH ] = "~Delete layer..." ;
+            Text [ norwegian ] = "~Delete layer..." ;
+            Text [ italian ] = "Elimina livello..." ;
+            Text [ portuguese_brazilian ] = "~Delete layer..." ;
+            Text [ portuguese ] = "Elimi~nar nÌvel..." ;
+            Text [ french ] = "Supprimer la couche..." ;
+            Text [ dutch ] = "Niveau ~wissen..." ;
+            Text [ spanish ] = "~Eliminar capa..." ;
+            Text [ danish ] = "Slet niveau..." ;
+            Text [ swedish ] = "Radera ~nivÂ..." ;
+            Text [ finnish ] = "~Delete layer..." ;
+            Text [ english_us ] = "Delete ~Layer..." ;
+            Text[ chinese_simplified ] = "…æ≥˝∑÷≤„(~L)...";
+                    Text[ russian ] = "”‰‡ÎËÚ¸ ÒÎÓÈ...";
+                    Text[ polish ] = "UsuÒ warstwÍ...";
+                    Text[ japanese ] = "⁄ÕﬁŸÇÃçÌèú(~L)...";
+                    Text[ chinese_traditional ] = "ßR∞£§¿ºh(~L)...";
+            Text[ arabic ] = "...Õ–› ÿ»ﬁ…";
+            Text[ greek ] = "ƒÈ·„Ò·ˆﬁ ÂÈ›~‰Ôı...";
+            Text[ korean ] = "∞Ë√˛ ªË¡¶(~L)...";
+            Text[ turkish ] = "D¸zeyi sil...";
+            Text[ language_user1 ] = " ";
+        };
+        MN_RENAME_LAYER
+    };
+};
+
+
+

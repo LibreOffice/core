@@ -1,0 +1,124 @@
+/*************************************************************************
+#*
+#*    $Workfile:   sdgslots.sdi  $
+#*
+#*    Beschreibung      IDL-Modul
+#*
+#*    Ersterstellung    SOH (04.04.97)
+#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 16:48:29 $
+#*    $Revision: 1.1.1.1 $
+#*
+#*    $Logfile:   T:/sd/sdi/sdgslots.sdv  $
+#*
+#*    Copyright (c) 1989 - 1999, STAR DIVISION
+#*
+#*************************************************************************
+
+      Source Code Control System - Header
+
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/sdgslots.sdi,v 1.1.1.1 2000-09-18 16:48:29 hr Exp $
+
+*************************************************************************/
+
+import "ofa.ilb"
+
+module
+"2DADF501-1F00-101C-A2E4-00001B4C5CE7"
+"33A1C840-1F00-101C-A2E4-00001B4C5CE7"
+StarDraw
+[
+HelpText( "StarDraw Application" )
+SlotIdFile( "sdslots.hrc" )
+TypeLibFile( "sdgslots.tlb" )
+ModulePrefix( "Sd" )
+]
+{
+        item UINT16 TbxImageItem;
+
+        enum FadeEffect
+        {
+            FADE_EFFECT_NONE ,
+            FADE_EFFECT_FADE_FROM_LEFT ,
+            FADE_EFFECT_FADE_FROM_TOP ,
+            FADE_EFFECT_FADE_FROM_RIGHT ,
+            FADE_EFFECT_FADE_FROM_BOTTOM ,
+            FADE_EFFECT_FADE_TO_CENTER ,
+            FADE_EFFECT_FADE_FROM_CENTER ,
+            FADE_EFFECT_MOVE_FROM_LEFT ,
+            FADE_EFFECT_MOVE_FROM_TOP ,
+            FADE_EFFECT_MOVE_FROM_RIGHT ,
+            FADE_EFFECT_MOVE_FROM_BOTTOM ,
+            FADE_EFFECT_ROLL_FROM_LEFT ,
+            FADE_EFFECT_ROLL_FROM_TOP ,
+            FADE_EFFECT_ROLL_FROM_RIGHT ,
+            FADE_EFFECT_ROLL_FROM_BOTTOM ,
+            FADE_EFFECT_VERTICAL_STRIPES ,
+            FADE_EFFECT_HORIZONTAL_STRIPES ,
+            FADE_EFFECT_OPEN_VERTICAL ,
+            FADE_EFFECT_CLOSE_VERTICAL ,
+            FADE_EFFECT_OPEN_HORIZONTAL ,
+            FADE_EFFECT_CLOSE_HORIZONTAL ,
+            FADE_EFFECT_CLEAR_AWAY ,
+            FADE_EFFECT_OVERLAY
+        }
+
+        enum FadeSpeed
+        {
+            FADE_SPEED_SLOW ,
+            FADE_SPEED_MEDIUM ,
+            FADE_SPEED_FAST
+        }
+
+        enum PresChange
+        {
+            PRESCHANGE_MANUAL,
+            PRESCHANGE_AUTO,
+            PRESCHANGE_SEMIAUTO
+        };
+
+            // Items
+        item UINT32 DiaTimeItem ;
+        item PresChange DiaAutoItem ;
+        item FadeEffect DiaEffectItem ;
+        item FadeSpeed DiaSpeedItem ;
+
+        include "sdnew.sdi"
+        include "sdraw.sdi"
+        include "app.sdi"
+        include "_drvwsh.sdi"
+        include "grviewsh.sdi"
+        include "slidvish.sdi"
+        include "outlnvsh.sdi"
+        include "drtxtob.sdi"
+        include "drbezob.sdi"
+        include "_docsh.sdi"
+        include "grdocsh.sdi"
+        include "drgrfob.sdi"
+}
+
+/*************************************************************************
+
+      Source Code Control System - History
+
+      $Log: not supported by cvs2svn $
+      Revision 1.5  1999/06/18 07:01:00  KA
+      new: Graphics objectbar
+
+
+      Rev 1.4   18 Jun 1999 09:01:00   KA
+   new: Graphics objectbar
+
+      Rev 1.3   21 Jun 1998 18:09:58   KA
+   neues Feature: Diawechsel halbautomatisch
+
+      Rev 1.2   09 Mar 1998 22:36:04   HJS
+   idl -> sdi
+
+      Rev 1.1   07 Jul 1997 15:19:38   SOH
+   #41363#: * Typelib: sdslots.tlb -> sdgslots.tlb
+
+      Rev 1.0   09 Apr 1997 13:20:46   SOH
+   Initial revision.
+
+*************************************************************************/
+

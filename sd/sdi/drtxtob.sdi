@@ -1,0 +1,165 @@
+
+
+shell SdDrawTextObjectBar
+{
+    SfxTemplateItem ApplyTemplate SID_STYLE_APPLY  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+        GroupId = GID_DOCUMENT;
+        Cachable, AutoUpdate;
+    ]
+
+    SID_ATTR_CHAR_FONT  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_ATTR_CHAR_FONTHEIGHT  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_ATTR_CHAR_COLOR  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_ATTR_CHAR_WEIGHT  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_ATTR_CHAR_POSTURE  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_ATTR_CHAR_UNDERLINE  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_ATTR_CHAR_CONTOUR  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_ATTR_CHAR_STRIKEOUT  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_ATTR_CHAR_SHADOWED  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SfxBoolItem AdjustLeft SID_ATTR_PARA_ADJUST_LEFT  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      Cachable, AutoUpdate;
+    ]
+
+    SfxBoolItem AdjustCenter SID_ATTR_PARA_ADJUST_CENTER  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      Cachable, AutoUpdate;
+    ]
+
+    SfxBoolItem AdjustRight SID_ATTR_PARA_ADJUST_RIGHT  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      Cachable, AutoUpdate;
+    ]
+
+    SfxBoolItem AdjustBlock SID_ATTR_PARA_ADJUST_BLOCK  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      Cachable, AutoUpdate;
+    ]
+
+    SfxBoolItem LineSpacing100 SID_ATTR_PARA_LINESPACE_10  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      Cachable, AutoUpdate;
+    ]
+
+    SfxBoolItem LineSpacing150 SID_ATTR_PARA_LINESPACE_15  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      Cachable, AutoUpdate;
+    ]
+
+    SfxBoolItem LineSpacing200 SID_ATTR_PARA_LINESPACE_20  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      Cachable, AutoUpdate;
+    ]
+
+    SID_SET_SUPER_SCRIPT  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_SET_SUB_SCRIPT  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_PARASPACE_INCREASE  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_PARASPACE_DECREASE  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_OUTLINE_LEFT // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+    ]
+    SID_OUTLINE_RIGHT // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+    ]
+    SID_OUTLINE_UP // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+    ]
+    SID_OUTLINE_DOWN // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+    ]
+    FN_NUM_BULLET_ON  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+}

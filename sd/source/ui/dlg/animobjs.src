@@ -1,0 +1,1464 @@
+/*************************************************************************
+ *
+ *  $RCSfile: animobjs.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "app.hrc"
+#include "animobjs.hrc"
+#define BUTTON_WIDTH 16
+#define BUTTON_HEIGHT 14
+#define BUTTON_SIZE MAP_APPFONT( BUTTON_WIDTH, BUTTON_HEIGHT );
+#define MIN_BUTTON_WIDTH 12
+#define MIN_BUTTON_HEIGHT 12
+#define MIN_BUTTON_SIZE MAP_APPFONT( MIN_BUTTON_WIDTH, MIN_BUTTON_HEIGHT );
+#define MASKCOLOR MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+DockingWindow FLT_WIN_ANIMATION
+{
+    HelpID = SID_ANIMATION_OBJECTS ;
+    Border = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Sizeable = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Dockable = TRUE ;
+    EnableResizing = TRUE ;
+    Size = MAP_APPFONT ( 159 , 226 ) ;
+    Text = "Animation" ;
+    Text [ ENGLISH ] = "Animation" ;
+    Text [ norwegian ] = "Animasjon" ;
+    Text [ italian ] = "Animazione" ;
+    Text [ portuguese_brazilian ] = "AnimaÁ„o" ;
+    Text [ portuguese ] = "AnimaÁ„o" ;
+    Text [ finnish ] = "Animaatio" ;
+    Text [ danish ] = "Animation" ;
+    Text [ french ] = "Animation" ;
+    Text [ swedish ] = "Animation" ;
+    Text [ dutch ] = "Animatie" ;
+    Text [ spanish ] = "AnimaciÛn" ;
+    Text [ english_us ] = "Animation" ;
+    Control CTL_DISPLAY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 147 , 87 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton BTN_FIRST
+    {
+        Pos = MAP_APPFONT ( 6 , 100 ) ;
+        Size = MIN_BUTTON_SIZE
+        Symbol = IMAGEBUTTON_WINDSTART ;
+        QuickHelpText = "Erstes Bild" ;
+        QuickHelpText [ ENGLISH ] = "First picture" ;
+        QuickHelpText [ norwegian ] = "F¯rste bilde" ;
+        QuickHelpText [ italian ] = "Prima immagine" ;
+        QuickHelpText [ portuguese_brazilian ] = "Primeira figura" ;
+        QuickHelpText [ portuguese ] = "Primeira imagem" ;
+        QuickHelpText [ finnish ] = "Ensimm‰inen kuva" ;
+        QuickHelpText [ danish ] = "F¯rste billede" ;
+        QuickHelpText [ french ] = "PremiËre image" ;
+        QuickHelpText [ swedish ] = "Fˆrsta bilden" ;
+        QuickHelpText [ dutch ] = "Eerste afbeelding" ;
+        QuickHelpText [ spanish ] = "Primera imagen" ;
+        QuickHelpText [ english_us ] = "First Image" ;
+        QuickHelpText[ russian ] = "œÂ‚‡ˇ Í‡ÚËÌ‡";
+        QuickHelpText[ polish ] = "Pierwszy obraz";
+        QuickHelpText[ japanese ] = "ç≈èâÇÃâÊëú";
+        QuickHelpText[ chinese_simplified ] = "µ⁄“ª∏ˆÕºœÒ";
+        QuickHelpText[ chinese_traditional ] = "≤ƒ§@≠”ºvπ≥";
+        QuickHelpText[ arabic ] = "«·’Ê—… «·√Ê·Ï";
+        QuickHelpText[ greek ] = "–Ò˛ÙÁ ÂÈÍ¸Ì·";
+        QuickHelpText[ korean ] = "First Image";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_REVERSE
+    {
+        Pos = MAP_APPFONT ( 6 + MIN_BUTTON_WIDTH , 100 ) ;
+        Size = MIN_BUTTON_SIZE
+        Symbol = IMAGEBUTTON_REVERSEPLAY ;
+        /* ### ACHTUNG: Neuer Text in Resource? R¸ckw‰rts : R≥ckwırts */
+        QuickHelpText = "R¸ckw‰rts" ;
+        QuickHelpText [ ENGLISH ] = "Reverse" ;
+        QuickHelpText [ norwegian ] = "Spole tilbake" ;
+        QuickHelpText [ italian ] = "Indietro" ;
+        QuickHelpText [ portuguese_brazilian ] = "Inverter" ;
+        QuickHelpText [ portuguese ] = "Para tr·s" ;
+        QuickHelpText [ finnish ] = "Taaksep‰in" ;
+        QuickHelpText [ danish ] = "BaglÊns" ;
+        QuickHelpText [ french ] = "Marche arriËre" ;
+        QuickHelpText [ swedish ] = "BakÂt" ;
+        QuickHelpText [ dutch ] = "Achterwaarts" ;
+        QuickHelpText [ spanish ] = "Atr·s" ;
+        QuickHelpText [ english_us ] = "Backwards" ;
+        QuickHelpText[ russian ] = "Õ‡Á‡‰";
+        QuickHelpText[ polish ] = "Wstecz";
+        QuickHelpText[ japanese ] = "å„ñﬂÇËÇµÇƒ";
+        QuickHelpText[ chinese_simplified ] = "∑µªÿ";
+        QuickHelpText[ chinese_traditional ] = "§œ¶V";
+        QuickHelpText[ arabic ] = "≈·Ï «·Œ·›";
+        QuickHelpText[ greek ] = "–ﬂÛ˘";
+        QuickHelpText[ korean ] = "Backwards";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_STOP
+    {
+        Pos = MAP_APPFONT ( 6 + MIN_BUTTON_WIDTH * 2 , 100 ) ;
+        Size = MIN_BUTTON_SIZE
+        Symbol = IMAGEBUTTON_STOP ;
+        Disable = TRUE ;
+        QuickHelpText = "Stopp" ;
+        QuickHelpText [ ENGLISH ] = "Stop" ;
+        QuickHelpText [ dutch ] = "Stop" ;
+        QuickHelpText [ english_us ] = "Stop" ;
+        QuickHelpText [ spanish ] = "Fianlizar" ;
+        QuickHelpText [ french ] = "Stop" ;
+        QuickHelpText [ italian ] = "Stop" ;
+        QuickHelpText [ danish ] = "Stop" ;
+        QuickHelpText [ swedish ] = "Stopp" ;
+        QuickHelpText [ portuguese ] = "Stop" ;
+        QuickHelpText [ portuguese_brazilian ] = "Stop" ;
+        QuickHelpText [ norwegian ] = "Stop" ;
+        QuickHelpText [ finnish ] = "Stop" ;
+        QuickHelpText[ russian ] = "—ÚÓÔ";
+        QuickHelpText[ polish ] = "Zatrzymanie";
+        QuickHelpText[ japanese ] = "íÜé~";
+        QuickHelpText[ chinese_simplified ] = "Õ£÷π";
+        QuickHelpText[ chinese_traditional ] = "º»∞±";
+        QuickHelpText[ arabic ] = "≈Ìﬁ«›";
+        QuickHelpText[ greek ] = "ƒÈ·ÍÔﬁ";
+        QuickHelpText[ korean ] = "Stop";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_PLAY
+    {
+        Pos = MAP_APPFONT ( 6 + MIN_BUTTON_WIDTH * 3 , 100 ) ;
+        Size = MIN_BUTTON_SIZE
+        Symbol = IMAGEBUTTON_PLAY ;
+        QuickHelpText = "Abspielen" ;
+        QuickHelpText [ ENGLISH ] = "Play" ;
+        QuickHelpText [ norwegian ] = "Spill" ;
+        QuickHelpText [ italian ] = "Riproduci" ;
+        QuickHelpText [ portuguese_brazilian ] = "Tocar" ;
+        QuickHelpText [ portuguese ] = "Tocar" ;
+        QuickHelpText [ finnish ] = "Eteenp‰in" ;
+        QuickHelpText [ danish ] = "Afspil" ;
+        QuickHelpText [ french ] = "Reproduire" ;
+        QuickHelpText [ swedish ] = "Spela upp" ;
+        QuickHelpText [ dutch ] = "Afspelen" ;
+        QuickHelpText [ spanish ] = "Mostrar" ;
+        QuickHelpText [ english_us ] = "Play" ;
+        QuickHelpText[ russian ] = "¬ÓÒÔÓËÁ‚ÂÒÚË";
+        QuickHelpText[ polish ] = "OdtwÛrz";
+        QuickHelpText[ japanese ] = "çƒê∂Ç∑ÇÈ";
+        QuickHelpText[ chinese_simplified ] = "∑≈”≥";
+        QuickHelpText[ chinese_traditional ] = "©Ò¨M";
+        QuickHelpText[ arabic ] = " ‘€Ì·";
+        QuickHelpText[ greek ] = "¡Ì··Ò·„˘„ﬁ";
+        QuickHelpText[ korean ] = "Play";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_LAST
+    {
+        Pos = MAP_APPFONT ( 6 + MIN_BUTTON_WIDTH * 4 , 100 ) ;
+        Size = MIN_BUTTON_SIZE
+        Symbol = IMAGEBUTTON_WINDEND ;
+        QuickHelpText = "Letztes Bild" ;
+        QuickHelpText [ ENGLISH ] = "Last picture" ;
+        QuickHelpText [ norwegian ] = "Siste bilde" ;
+        QuickHelpText [ italian ] = "Ultima immagine" ;
+        QuickHelpText [ portuguese_brazilian ] = "⁄ltima figura" ;
+        QuickHelpText [ portuguese ] = "⁄ltima imagem" ;
+        QuickHelpText [ finnish ] = "Viimeinen kuva" ;
+        QuickHelpText [ danish ] = "Sidste billede" ;
+        QuickHelpText [ french ] = "DerniËre image" ;
+        QuickHelpText [ swedish ] = "Sista bilden" ;
+        QuickHelpText [ dutch ] = "Laatste afbeelding" ;
+        QuickHelpText [ spanish ] = "⁄ltima imagen" ;
+        QuickHelpText [ english_us ] = "Last Image" ;
+        QuickHelpText[ russian ] = "œÓÒÎÂ‰Ìˇˇ Í‡ÚËÌ‡";
+        QuickHelpText[ polish ] = "Ostatni obraz";
+        QuickHelpText[ japanese ] = "ç≈å„ÇÃâÊëú";
+        QuickHelpText[ chinese_simplified ] = "◊Ó∫Û“ª∏ˆÕºœÒ";
+        QuickHelpText[ chinese_traditional ] = "≥Ã´·§@≠”ºvπ≥";
+        QuickHelpText[ arabic ] = "«·’Ê—… «·√ŒÌ—…";
+        QuickHelpText[ greek ] = "‘ÂÎÂıÙ·ﬂ· ÂÈÍ¸Ì·";
+        QuickHelpText[ korean ] = "Last Image";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    NumericField NUM_FLD_BITMAP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 + 3 + MIN_BUTTON_WIDTH * 5 , 100 ) ;
+        Size = MAP_APPFONT ( MIN_BUTTON_WIDTH * 2 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 999 ;
+        StrictFormat = TRUE ;
+        First = 1 ;
+        Last = 999 ;
+        SpinSize = 1 ;
+        QuickHelpText = "Bildnummer" ;
+        QuickHelpText [ ENGLISH ] = "Picture number" ;
+        QuickHelpText [ norwegian ] = "Bildenummer" ;
+        QuickHelpText [ italian ] = "Numero d'immagine" ;
+        QuickHelpText [ portuguese_brazilian ] = "N˙mero da figura" ;
+        QuickHelpText [ portuguese ] = "N˙mero da imagem" ;
+        QuickHelpText [ finnish ] = "Kuvan numero" ;
+        QuickHelpText [ danish ] = "Billednummer" ;
+        QuickHelpText [ french ] = "NumÈro de l'image" ;
+        QuickHelpText [ swedish ] = "Bildnummer" ;
+        QuickHelpText [ dutch ] = "Afbeeldingsnummer" ;
+        QuickHelpText [ spanish ] = "N˙mero de la imagen" ;
+        QuickHelpText [ english_us ] = "Image Number" ;
+        QuickHelpText [ french ] = "NumÈro de l'image" ;
+        QuickHelpText[ russian ] = "ÕÓÏÂ Í‡ÚËÌ˚";
+        QuickHelpText[ polish ] = "Numer obrazu";
+        QuickHelpText[ japanese ] = "âÊëúî‘çÜ";
+        QuickHelpText[ chinese_simplified ] = "ÕºœÒ∫≈¬Î";
+        QuickHelpText[ chinese_traditional ] = "ºvπ≥∏πΩX";
+        QuickHelpText[ arabic ] = "—ﬁ„ «·’Ê—…";
+        QuickHelpText[ greek ] = "¡ÒÈËÏ¸Ú ÂÈÍ¸Ì·Ú";
+        QuickHelpText[ korean ] = "Image Number";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    TimeField TIME_FIELD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 + 6 + MIN_BUTTON_WIDTH * 7 , 100 ) ;
+        Size = MAP_APPFONT ( MIN_BUTTON_WIDTH * 2 + 3 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = Time
+        {
+            Second = 59 ;
+            Sec100 = 99 ;
+        };
+        Duration = TRUE ;
+        StrictFormat = TRUE ;
+        Last = Time
+        {
+            Second = 59 ;
+            Sec100 = 99 ;
+        };
+        QuickHelpText = "Anzeigedauer" ;
+        QuickHelpText [ ENGLISH ] = "Duration" ;
+        QuickHelpText [ dutch ] = "Duur" ;
+        QuickHelpText [ english_us ] = "Duration" ;
+        QuickHelpText [ italian ] = "Durata visualizzazione" ;
+        QuickHelpText [ spanish ] = "DuraciÛn" ;
+        QuickHelpText [ french ] = "DurÈe d'affichage" ;
+        QuickHelpText [ portuguese_brazilian ] = "Anzeigedauer" ;
+        QuickHelpText [ portuguese ] = "DuraÁ„o" ;
+        QuickHelpText [ danish ] = "Visningstid" ;
+        QuickHelpText [ swedish ] = "Visningstid" ;
+        QuickHelpText[ russian ] = "ƒÎËÚÂÎ¸ÌÓÒÚ¸ ÔÓÍ‡Á‡";
+        QuickHelpText[ polish ] = "Czas wyúwietlania";
+        QuickHelpText[ japanese ] = "ï\\é¶éûä‘";
+        QuickHelpText[ chinese_simplified ] = "œ‘ æ≥÷–¯ ±º‰";
+        QuickHelpText[ chinese_traditional ] = "≈„•‹´˘ƒÚÆ…∂°";
+        QuickHelpText[ arabic ] = "«·„œ…";
+        QuickHelpText[ greek ] = "ƒÈ‹ÒÍÂÈ·";
+        QuickHelpText[ korean ] = "Duration";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ListBox LB_LOOP_COUNT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 + 12 + MIN_BUTTON_WIDTH * 9 , 100 ) ;
+        Size = MAP_APPFONT ( MIN_BUTTON_WIDTH * 2 + 3 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "1" ; > ;
+            < "2" ; > ;
+            < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "Max." ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "1" ; > ;
+            < "2" ; > ;
+            < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "Max." ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "1" ; > ;
+            < "2" ; > ;
+            < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "Max." ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "1" ; > ;
+            < "2" ; > ;
+            < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "Max." ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "1" ; > ;
+            < "2" ; > ;
+            < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "Maks." ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "1" ; > ;
+            < "2" ; > ;
+            < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "Max." ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "1" ; > ;
+            < "2" ; > ;
+            < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "M·x." ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "1" ; > ;
+            < "2" ; > ;
+            < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "Max." ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "1" ; > ;
+            < "2" ; > ;
+            < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "Max." ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "1" ; > ;
+            < "2" ; > ;
+            < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "Max." ; > ;
+        };
+        /* ### ACHTUNG: Neuer Text in Resource? Anzahl der Durchl‰ufe : Anzahl der Durchlıufe */
+        QuickHelpText = "Anzahl der Durchl‰ufe" ;
+        QuickHelpText [ ENGLISH ] = "Loop count" ;
+        QuickHelpText [ english_us ] = "Loop Count" ;
+        QuickHelpText [ portuguese_brazilian ] = "Anzahl der Durchl‰ufe" ;
+        QuickHelpText [ swedish ] = "Antal omgÂngar" ;
+        QuickHelpText [ danish ] = "Antal sl¯jfer" ;
+        QuickHelpText [ italian ] = "Numero dei passaggi" ;
+        QuickHelpText [ spanish ] = "Cantidad de secuencias" ;
+        QuickHelpText [ french ] = "Nombre de boucles" ;
+        QuickHelpText [ dutch ] = "Aantal keren doorlopen" ;
+        QuickHelpText [ portuguese ] = "Contagem de sequÍncias" ;
+    StringList [ chinese_simplified ] =
+    {
+            < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+        < "4" ; > ;
+        < "5" ; > ;
+        < "6" ; > ;
+        < "7" ; > ;
+        < "8" ; > ;
+        < "9" ; > ;
+        < "10" ; > ;
+        < "12" ; > ;
+        < "15" ; > ;
+        < "20" ; > ;
+        < "25" ; > ;
+        < "50" ; > ;
+        < "100" ; > ;
+        < "500" ; > ;
+        < "1000" ; > ;
+        < "◊Ó¥Û" ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+        < "4" ; > ;
+        < "5" ; > ;
+        < "6" ; > ;
+        < "7" ; > ;
+        < "8" ; > ;
+        < "9" ; > ;
+        < "10" ; > ;
+        < "12" ; > ;
+        < "15" ; > ;
+        < "20" ; > ;
+        < "25" ; > ;
+        < "50" ; > ;
+        < "100" ; > ;
+        < "500" ; > ;
+        < "1000" ; > ;
+        < "Ã‡ÍÒ." ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+        < "4" ; > ;
+        < "5" ; > ;
+        < "6" ; > ;
+        < "7" ; > ;
+        < "8" ; > ;
+        < "9" ; > ;
+        < "10" ; > ;
+        < "12" ; > ;
+        < "15" ; > ;
+        < "20" ; > ;
+        < "25" ; > ;
+        < "50" ; > ;
+        < "100" ; > ;
+        < "500" ; > ;
+        < "1000" ; > ;
+        < "Max." ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+        < "4" ; > ;
+        < "5" ; > ;
+        < "6" ; > ;
+        < "7" ; > ;
+        < "8" ; > ;
+        < "9" ; > ;
+        < "10" ; > ;
+        < "12" ; > ;
+        < "15" ; > ;
+        < "20" ; > ;
+        < "25" ; > ;
+        < "50" ; > ;
+        < "100" ; > ;
+        < "500" ; > ;
+        < "1000" ; > ;
+        < "ç≈ëÂå¿" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+        < "4" ; > ;
+        < "5" ; > ;
+        < "6" ; > ;
+        < "7" ; > ;
+        < "8" ; > ;
+        < "9" ; > ;
+        < "10" ; > ;
+        < "12" ; > ;
+        < "15" ; > ;
+        < "20" ; > ;
+        < "25" ; > ;
+        < "50" ; > ;
+        < "100" ; > ;
+        < "500" ; > ;
+        < "1000" ; > ;
+        < "≥Ã§j" ; > ;
+    };
+        QuickHelpText[ russian ] = " ÓÎË˜ÂÒÚ‚Ó ÔÓ„ÓÌÓ‚";
+        QuickHelpText[ polish ] = "Liczba przebiegÛw";
+        QuickHelpText[ japanese ] = "Ÿ∞Ãﬂêî";
+        QuickHelpText[ chinese_simplified ] = "¡¨–¯∑≈”≥µƒ ˝ƒø";
+        QuickHelpText[ chinese_traditional ] = "≥sƒÚ©Ò¨M™∫º∆•ÿ";
+        QuickHelpText[ arabic ] = "⁄œœ «·Õ·ﬁ« ";
+    StringList [ arabic ] =
+    {
+            < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+        < "4" ; > ;
+        < "5" ; > ;
+        < "6" ; > ;
+        < "7" ; > ;
+        < "8" ; > ;
+        < "9" ; > ;
+        < "10" ; > ;
+        < "12" ; > ;
+        < "15" ; > ;
+        < "20" ; > ;
+        < "25" ; > ;
+        < "50" ; > ;
+        < "100" ; > ;
+        < "500" ; > ;
+        < "1000" ; > ;
+        < "«·√ﬁ’Ï" ; > ;
+    };
+        QuickHelpText[ greek ] = "–ÎﬁËÔÚ Â·Ì·Îﬁ¯Â˘Ì";
+        QuickHelpText[ korean ] = "Loop Count";
+    StringList [ greek ] =
+    {
+            < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+        < "4" ; > ;
+        < "5" ; > ;
+        < "6" ; > ;
+        < "7" ; > ;
+        < "8" ; > ;
+        < "9" ; > ;
+        < "10" ; > ;
+        < "12" ; > ;
+        < "15" ; > ;
+        < "20" ; > ;
+        < "25" ; > ;
+        < "50" ; > ;
+        < "100" ; > ;
+        < "500" ; > ;
+        < "1000" ; > ;
+        < "ÃÂ„." ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+        < "4" ; > ;
+        < "5" ; > ;
+        < "6" ; > ;
+        < "7" ; > ;
+        < "8" ; > ;
+        < "9" ; > ;
+        < "10" ; > ;
+        < "12" ; > ;
+        < "15" ; > ;
+        < "20" ; > ;
+        < "25" ; > ;
+        < "50" ; > ;
+        < "100" ; > ;
+        < "500" ; > ;
+        < "1000" ; > ;
+        < "√÷¥Î" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+        < "4" ; > ;
+        < "5" ; > ;
+        < "6" ; > ;
+        < "7" ; > ;
+        < "8" ; > ;
+        < "9" ; > ;
+        < "10" ; > ;
+        < "12" ; > ;
+        < "15" ; > ;
+        < "20" ; > ;
+        < "25" ; > ;
+        < "50" ; > ;
+        < "100" ; > ;
+        < "500" ; > ;
+        < "1000" ; > ;
+        < "Azm." ; > ;
+    };
+        QuickHelpText[ language_user1 ] = " ";
+    StringList [ language_user1 ] =
+    {
+            < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+    };
+    };
+    ImageButton BTN_GET_ONE_OBJECT
+    {
+        Pos = MAP_APPFONT ( 12 , 132 ) ;
+        Size = MAP_APPFONT ( 16 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "get1obj.bmp" ;
+            };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        /* ### ACHTUNG: Neuer Text in Resource? Objekt ¸bernehmen : Objekt ≥bernehmen */
+        QuickHelpText = "Objekt ¸bernehmen" ;
+        QuickHelpText [ ENGLISH ] = "Get Object" ;
+        QuickHelpText [ dutch ] = "Object overnemen" ;
+        QuickHelpText [ english_us ] = "Apply Object" ;
+        QuickHelpText [ italian ] = "Accetta oggetto" ;
+        QuickHelpText [ spanish ] = "Aceptar objeto" ;
+        QuickHelpText [ french ] = "Appliquer l'objet" ;
+        QuickHelpText [ danish ] = "Overtag objekt" ;
+        QuickHelpText [ portuguese ] = "Aplicar objecto" ;
+        QuickHelpText [ portuguese_brazilian ] = "Objekt ¸bernehmen" ;
+        QuickHelpText [ swedish ] = "÷verta objekt" ;
+        QuickHelpText[ russian ] = "œËÌˇÚ¸ Ó·˙ÂÍÚ";
+        QuickHelpText[ polish ] = "Zastosuj obiekt";
+        QuickHelpText[ japanese ] = "µÃﬁºﬁ™∏ƒÇà¯Ç´åpÇÆ";
+        QuickHelpText[ chinese_simplified ] = " π”√∂‘œÛ";
+        QuickHelpText[ chinese_traditional ] = "®œ•Œ™´•Û";
+        QuickHelpText[ arabic ] = " ÿ»Ìﬁ «·ﬂ«∆‰";
+        QuickHelpText[ greek ] = "≈ˆ·ÒÏÔ„ﬁ ·ÌÙÈÍÂÈÏ›ÌÔı";
+        QuickHelpText[ korean ] = "Apply Object";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_GET_ALL_OBJECTS
+    {
+        Pos = MAP_APPFONT ( 31 , 132 ) ;
+        Size = MAP_APPFONT ( 16 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "getallob.bmp" ;
+            };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        /* ### ACHTUNG: Neuer Text in Resource? Objekte einzeln ¸bernehmen : Objekte einzeln ≥bernehmen */
+        QuickHelpText = "Objekte einzeln ¸bernehmen" ;
+        QuickHelpText [ ENGLISH ] = "Get pictures separatly" ;
+        QuickHelpText [ dutch ] = "Objecten afzonderlijk overnemen" ;
+        QuickHelpText [ english_us ] = "Apply Objects Individually" ;
+        QuickHelpText [ italian ] = "Accetta gli oggetti singolarmente" ;
+        QuickHelpText [ spanish ] = "Aceptar objetos de a uno" ;
+        QuickHelpText [ french ] = "Appliquer les objets un par un" ;
+        QuickHelpText [ danish ] = "Overtag objekter enkeltvis" ;
+        QuickHelpText [ portuguese ] = "Aplicar objectos um por um" ;
+        QuickHelpText [ portuguese_brazilian ] = "Objekte einzeln ¸bernehmen" ;
+        QuickHelpText [ swedish ] = "÷verta objekt en och en" ;
+        QuickHelpText[ russian ] = "œËÌˇÚ¸ Ó·˙ÂÍÚ˚ ÔÓ Ó‰ÌÓÏÛ";
+        QuickHelpText[ polish ] = "Zastosuj obiekty pojedynczo";
+        QuickHelpText[ japanese ] = "µÃﬁºﬁ™∏ƒÇå¬ÅXÇ…à¯Ç´åpÇÆ";
+        QuickHelpText[ chinese_simplified ] = "µ•∂¿ π”√∂‘œÛ";
+        QuickHelpText[ chinese_traditional ] = "≥ÊøW®œ•Œ™´•Û";
+        QuickHelpText[ arabic ] = " ÿ»Ìﬁ «·ﬂ«∆‰«  ﬂ· ⁄·Ï ÕœÂ";
+        QuickHelpText[ greek ] = "≈ˆ·ÒÏÔ„ﬁ ·ÌÙÈÍÂÈÏ›Ì˘Ì ÏÂÏÔÌ˘Ï›Ì·";
+        QuickHelpText[ korean ] = "Apply Objects Individually";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_REMOVE_BITMAP
+    {
+        Pos = MAP_APPFONT ( 60 , 132 ) ;
+        Size = MAP_APPFONT ( 16 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "del1bmp.bmp" ;
+            };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        /* ### ACHTUNG: Neuer Text in Resource? Aktuelles Bild lˆschen : Aktuelles Bild l˜schen */
+        QuickHelpText = "Aktuelles Bild lˆschen" ;
+        QuickHelpText [ ENGLISH ] = "Remove current picture" ;
+        QuickHelpText [ english_us ] = "Delete Current Image" ;
+        QuickHelpText [ italian ] = "Cancella immagine attuale" ;
+        QuickHelpText [ spanish ] = "Eliminar imagen actual" ;
+        QuickHelpText [ french ] = "Supprimer l'image active" ;
+        QuickHelpText [ dutch ] = "Actuele afbeelding wissen" ;
+        QuickHelpText [ danish ] = "Slet aktuelt billede" ;
+        QuickHelpText [ portuguese ] = "Elimina a imagem activa" ;
+        QuickHelpText [ portuguese_brazilian ] = "Aktuelles Bild lˆschen" ;
+        QuickHelpText [ swedish ] = "Radera aktuell bild" ;
+        QuickHelpText[ russian ] = "”‰‡ÎËÚ¸ ÚÂÍÛ˘Û˛ Í‡ÚËÌÛ";
+        QuickHelpText[ polish ] = "UsuÒ aktualny obraz";
+        QuickHelpText[ japanese ] = "åªâÊñ ÇçÌèú";
+        QuickHelpText[ chinese_simplified ] = "…æ≥˝µ±«∞µƒÕºœÒ";
+        QuickHelpText[ chinese_traditional ] = "ßR∞£∑Ì´e™∫ºvπ≥";
+        QuickHelpText[ arabic ] = "Õ–› «·’Ê—… «·Õ«·Ì…";
+        QuickHelpText[ greek ] = "ƒÈ·„Ò·ˆﬁ ÙÒ›˜˘Ì ÂÈÍ¸Ì·Ú";
+        QuickHelpText[ korean ] = "Delete Current Image";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_REMOVE_ALL
+    {
+        Pos = MAP_APPFONT ( 79 , 132 ) ;
+        Size = MAP_APPFONT ( 16 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "delall.bmp" ;
+            };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        /* ### ACHTUNG: Neuer Text in Resource? Alle Bilder lˆschen : Alle Bilder l˜schen */
+        QuickHelpText = "Alle Bilder lˆschen" ;
+        QuickHelpText [ ENGLISH ] = "Remove all pictures" ;
+        QuickHelpText [ english_us ] = "Delete All Images" ;
+        QuickHelpText [ dutch ] = "Alle afbeeldingen wissen" ;
+        QuickHelpText [ italian ] = "Cancella tutte le immagini" ;
+        QuickHelpText [ spanish ] = "Eliminar todas las im·genes" ;
+        QuickHelpText [ french ] = "Supprimer toutes les images" ;
+        QuickHelpText [ danish ] = "Slet alle billeder" ;
+        QuickHelpText [ portuguese ] = "Elimina as imagens todas" ;
+        QuickHelpText [ portuguese_brazilian ] = "Alle Bilder lˆschen" ;
+        QuickHelpText [ swedish ] = "Radera alla bilder" ;
+        QuickHelpText[ russian ] = "”‰‡ÎËÚ¸ ‚ÒÂ Í‡ÚËÌ˚";
+        QuickHelpText[ polish ] = "UsuÒ wszystkie obrazy";
+        QuickHelpText[ japanese ] = "Ç∑Ç◊ÇƒÇÃâÊëúÇçÌèú";
+        QuickHelpText[ chinese_simplified ] = "…æ≥˝»´≤øµƒÕºœÒ";
+        QuickHelpText[ chinese_traditional ] = "ßR∞£©“¶≥™∫ºvπ≥";
+        QuickHelpText[ arabic ] = "Õ–› ﬂ· «·’Ê—";
+        QuickHelpText[ greek ] = "ƒÈ·„Ò·ˆﬁ ¸Î˘Ì Ù˘Ì ÂÈÍ¸Ì˘Ì";
+        QuickHelpText[ korean ] = "Delete All Images";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    FixedText FT_COUNT
+    {
+        Pos = MAP_APPFONT ( 106 , 135 ) ;
+        Size = MAP_APPFONT ( 26 , 10 ) ;
+        Text = "Anzahl" ;
+        Text [ ENGLISH ] = "Number" ;
+        Text [ norwegian ] = "Number" ;
+        Text [ italian ] = "Numero" ;
+        Text [ portuguese_brazilian ] = "N˙mero" ;
+        Text [ portuguese ] = "N˙mero" ;
+        Text [ finnish ] = "Numero" ;
+        Text [ danish ] = "Antal" ;
+        Text [ french ] = "Nombre" ;
+        Text [ swedish ] = "Antal" ;
+        Text [ dutch ] = "Aantal" ;
+        Text [ spanish ] = "Cantidad" ;
+        Text [ english_us ] = "Number" ;
+        Text[ chinese_simplified ] = " ˝ƒø";
+        Text[ russian ] = " ÓÎË˜ÂÒÚ‚Ó";
+        Text[ polish ] = "IloúÊ";
+        Text[ japanese ] = "êî";
+        Text[ chinese_traditional ] = "º∆•ÿ";
+        Text[ arabic ] = "«·⁄œœ";
+        Text[ greek ] = "–ÎﬁËÔÚ";
+        Text[ korean ] = "æÁ";
+        Text[ turkish ] = "Say˝";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FI_COUNT
+    {
+        Pos = MAP_APPFONT ( 133 , 135 ) ;
+        Size = MAP_APPFONT ( 15 , 10 ) ;
+        DeltaLang = < Default ; Default ; Default ; Default ; > ;
+        DeltaLang [ ENGLISH ] = < 2 ; Default ; Default ; Default ; > ;
+        Text = "67" ;
+    };
+    GroupBox GRP_BITMAP
+    {
+        Pos = MAP_APPFONT ( 6 , 120 ) ;
+        Size = MAP_APPFONT ( 147 , 31 ) ;
+        Text = "Bild" ;
+        Text [ ENGLISH ] = "Picture" ;
+        Text [ dutch ] = "Afbeelding" ;
+        Text [ english_us ] = "Image" ;
+        Text [ italian ] = "Immagine" ;
+        Text [ spanish ] = "Imagen" ;
+        Text [ french ] = "Image" ;
+        Text [ swedish ] = "Bild" ;
+        Text [ danish ] = "Billede" ;
+        Text [ portuguese ] = "Imagem" ;
+        Text [ portuguese_brazilian ] = "Bild" ;
+        Text[ chinese_simplified ] = "ÕºœÒ";
+        Text[ russian ] = " ‡ÚËÌ‡";
+        Text[ polish ] = "Obraz";
+        Text[ japanese ] = "≤“∞ºﬁ";
+        Text[ chinese_traditional ] = "ºvπ≥";
+        Text[ arabic ] = "«·’Ê—…";
+        Text[ greek ] = "≈ÈÍ¸Ì·";
+        Text[ korean ] = "∫Ò∆Æ∏ ";
+        Text[ turkish ] = "Resim";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_GROUP
+    {
+        Pos = MAP_APPFONT ( 12 , 165 ) ;
+        Size = MAP_APPFONT ( 62 , 12 ) ;
+        Text = "Gruppenobjekt" ;
+        Text [ ENGLISH ] = "Group object" ;
+        Text [ english_us ] = "Group object" ;
+        Text [ italian ] = "Oggetto di gruppo" ;
+        Text [ spanish ] = "Objeto de grupo" ;
+        Text [ french ] = "Objet de groupe" ;
+        Text [ dutch ] = "Groepsobject" ;
+        Text [ swedish ] = "Gruppobjekt" ;
+        Text [ danish ] = "Gruppeobjekt" ;
+        Text [ portuguese_brazilian ] = "Gruppenobjekt" ;
+        Text [ portuguese ] = "Objecto de grupo" ;
+        Text[ chinese_simplified ] = "–°◊È∂‘œÛ";
+        Text[ russian ] = "Œ·˙ÂÍÚ „ÛÔÔ˚";
+        Text[ polish ] = "Obiekt grupowy";
+        Text[ japanese ] = "∏ﬁŸ∞ÃﬂâªÇ≥ÇÍÇΩµÃﬁºﬁ™∏ƒ";
+        Text[ chinese_traditional ] = "∏s≤’™´•Û";
+        Text[ arabic ] = "ﬂ«∆‰ „Ã„Ê⁄…";
+        Text[ greek ] = "¡ÌÙÈÍÂﬂÏÂÌÔ ÔÏ‹‰·Ú";
+        Text[ korean ] = "±◊∑Ï ∞≥√º(~G)";
+        Text[ turkish ] = "Grup nesnesi";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_BITMAP
+    {
+        Pos = MAP_APPFONT ( 83 , 165 ) ;
+        Size = MAP_APPFONT ( 57 , 12 ) ;
+        Text = "Bitmapobjekt" ;
+        Text [ ENGLISH ] = "Bitmap object" ;
+        Text [ dutch ] = "Bitmapobject" ;
+        Text [ english_us ] = "Bitmap object" ;
+        Text [ italian ] = "Oggetto bitmap" ;
+        Text [ spanish ] = "Objeto bitmap" ;
+        Text [ french ] = "Objet bitmap" ;
+        Text [ swedish ] = "Bitmapobjekt" ;
+        Text [ danish ] = "Bitmapobjekt" ;
+        Text [ portuguese_brazilian ] = "Bitmapobjekt" ;
+        Text [ portuguese ] = "Objecto de bitmap" ;
+        Text[ chinese_simplified ] = "ŒªÕº∂‘œÛ";
+        Text[ russian ] = "Œ·˙ÂÍÚ bitmap";
+        Text[ polish ] = "Obiekt mapy bit.";
+        Text[ japanese ] = "ÀﬁØƒœØÃﬂ µÃﬁºﬁ™∏ƒ";
+        Text[ chinese_traditional ] = "¬I∞}πœ™´•Û";
+        Text[ arabic ] = "ﬂ«∆‰ ’Ê—… ‰ﬁÿÌ…";
+        Text[ greek ] = "¡ÌÙÈÍÂﬂÏÂÌÔ Bitmap";
+        Text[ korean ] = "∫Ò∆Æ∏  ∞≥√º(~B)";
+        Text[ turkish ] = "Bit e˛lem nesnesi";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_COLOR
+    {
+        Pos = MAP_APPFONT ( 12 , 182 ) ;
+        Size = MAP_APPFONT ( 62 , 10 ) ;
+        Text = "Transparenzfarbe" ;
+        Text [ ENGLISH ] = "Tranparence color" ;
+        Text [ dutch ] = "Transparante kleur" ;
+        Text [ english_us ] = "Transparency color" ;
+        Text [ italian ] = "Colore di trasparenza" ;
+        Text [ spanish ] = "Color de transparencia" ;
+        Text [ french ] = "Transparence" ;
+        Text [ swedish ] = "Tranparensf‰rg" ;
+        Text [ danish ] = "Transparensfarve" ;
+        Text [ portuguese ] = "Cor de transparÍncia" ;
+        Text [ portuguese_brazilian ] = "Transparenzfarbe" ;
+        Text[ chinese_simplified ] = "Õ∏√˜µƒ—’…´";
+        Text[ russian ] = "œÓÁ‡˜Ì˚È";
+        Text[ polish ] = "Kolor przezroczysty";
+        Text[ japanese ] = "ìßñæêF";
+        Text[ chinese_traditional ] = "≥z©˙™∫√C¶‚";
+        Text[ arabic ] = "·Ê‰ ‘›«›";
+        Text[ greek ] = "ƒÈ·ˆ·Ì›Ú ˜Ò˛Ï·";
+        Text[ korean ] = "≈ı∏Ìªˆ";
+        Text[ turkish ] = "Saydaml˝k rengi";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_COLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 75 , 180 ) ;
+        Size = MAP_APPFONT ( 72 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    FixedText FT_ADJUSTMENT
+    {
+        Pos = MAP_APPFONT ( 11 , 202 ) ;
+        Size = MAP_APPFONT ( 39 , 10 ) ;
+        DeltaLang = < Default ; Default ; Default ; Default ; > ;
+        DeltaLang [ ENGLISH ] = < -1 ; Default ; -2 ; Default ; > ;
+        Text = "Anpassung" ;
+        Text [ ENGLISH ] = "Adjustment" ;
+        Text [ norwegian ] = "Justering" ;
+        Text [ italian ] = "Adattamento" ;
+        Text [ portuguese_brazilian ] = "Ajuste" ;
+        Text [ portuguese ] = "Alinhamento" ;
+        Text [ finnish ] = "S‰‰tˆ" ;
+        Text [ danish ] = "Justering" ;
+        Text [ french ] = "Adaptation" ;
+        Text [ swedish ] = "Anpassning" ;
+        Text [ dutch ] = "Uitlijning" ;
+        Text [ spanish ] = "Ajuste" ;
+        Text [ english_us ] = "Alignment" ;
+        Text[ chinese_simplified ] = "µ˜’˚";
+        Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ";
+        Text[ polish ] = "WyrÛwnanie";
+        Text[ japanese ] = "ìKçá";
+        Text[ chinese_traditional ] = "Ω’æ„";
+        Text[ arabic ] = "«·„·«¡„…";
+        Text[ greek ] = "”ÙÔﬂ˜ÈÛÁ";
+        Text[ korean ] = "∏¬√„";
+        Text[ turkish ] = "Hizalama";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_ADJUSTMENT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 51 , 200 ) ;
+        Size = MAP_APPFONT ( 51 , 100 ) ;
+        DeltaLang = < Default ; Default ; Default ; Default ; > ;
+        DeltaLang [ ENGLISH ] = < -1 ; Default ; Default ; Default ; > ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Links/Oben" ; Default ; > ;
+            < "Links" ; Default ; > ;
+            < "Links/Unten" ; Default ; > ;
+            < "Oben" ; Default ; > ;
+            < "Zentriert" ; Default ; > ;
+            < "Unten" ; Default ; > ;
+            < "Rechts/Oben" ; Default ; > ;
+            < "Rechts" ; Default ; > ;
+            < "Rechts/Unten" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Links/Oben" ; Default ; > ;
+            < "Links" ; Default ; > ;
+            < "Links/Unten" ; Default ; > ;
+            < "Oben" ; Default ; > ;
+            < "Zentriert" ; Default ; > ;
+            < "Unten" ; Default ; > ;
+            < "Rechts/Oben" ; Default ; > ;
+            < "Rechts" ; Default ; > ;
+            < "Rechts/Unten" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "Links/Oben" ; Default ; > ;
+            < "Links" ; Default ; > ;
+            < "Links/Unten" ; Default ; > ;
+            < "Oben" ; Default ; > ;
+            < "Zentriert" ; Default ; > ;
+            < "Unten" ; Default ; > ;
+            < "Rechts/Oben" ; Default ; > ;
+            < "Rechts" ; Default ; > ;
+            < "Rechts/Unten" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "Sinistra/alto" ; Default ; > ;
+            < "Sinistra" ; Default ; > ;
+            < "Sinistra/basso" ; Default ; > ;
+            < "Alto" ; Default ; > ;
+            < "Centro" ; Default ; > ;
+            < "Basso" ; Default ; > ;
+            < "Destra/alto" ; Default ; > ;
+            < "Destra" ; Default ; > ;
+            < "Destra/basso" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "Links/Oben" ; Default ; > ;
+            < "Links" ; Default ; > ;
+            < "Links/Unten" ; Default ; > ;
+            < "Oben" ; Default ; > ;
+            < "Zentriert" ; Default ; > ;
+            < "Unten" ; Default ; > ;
+            < "Rechts/Oben" ; Default ; > ;
+            < "Rechts" ; Default ; > ;
+            < "Direita/Para Baixo" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "Esquerda/Em cima" ; Default ; > ;
+            < "Esquerda" ; Default ; > ;
+            < "Esquerda/Em baixo" ; Default ; > ;
+            < "Em cima" ; Default ; > ;
+            < "Centrado" ; Default ; > ;
+            < "Em baixo" ; Default ; > ;
+            < "Direita/Em cima" ; Default ; > ;
+            < "Direita" ; Default ; > ;
+            < "Direita/Em baixo" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "Links/Oben" ; Default ; > ;
+            < "Links" ; Default ; > ;
+            < "Links/Unten" ; Default ; > ;
+            < "Oben" ; Default ; > ;
+            < "Zentriert" ; Default ; > ;
+            < "Unten" ; Default ; > ;
+            < "Rechts/Oben" ; Default ; > ;
+            < "Rechts" ; Default ; > ;
+            < "Rechts/Unten" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "Venstre/¯verst" ; Default ; > ;
+            < "Venstre" ; Default ; > ;
+            < "Venstre/nederst" ; Default ; > ;
+            < "ÿverst" ; Default ; > ;
+            < "Centreret" ; Default ; > ;
+            < "Nederst" ; Default ; > ;
+            < "H¯jre/¯verst" ; Default ; > ;
+            < "H¯jre" ; Default ; > ;
+            < "H¯jre/nederst" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "¿ gauche/En haut" ; Default ; > ;
+            < "¿ gauche" ; Default ; > ;
+            < "¿ gauche/En bas" ; Default ; > ;
+            < "En haut" ; Default ; > ;
+            < "CentrÈ" ; Default ; > ;
+            < "En bas" ; Default ; > ;
+            < "¿ droite/En haut" ; Default ; > ;
+            < "¿ droite" ; Default ; > ;
+            < "¿ droite/En bas" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "V‰nster/ˆverst" ; Default ; > ;
+            < "V‰nster" ; Default ; > ;
+            < "V‰nster/underst" ; Default ; > ;
+            < "÷verst" ; Default ; > ;
+            < "Centrerad" ; Default ; > ;
+            < "Underst" ; Default ; > ;
+            < "Hˆger/÷verst" ; Default ; > ;
+            < "Till hˆger" ; Default ; > ;
+            < "Hˆger/Ned" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "Links/boven" ; Default ; > ;
+            < "Links" ; Default ; > ;
+            < "Links/onder" ; Default ; > ;
+            < "Boven" ; Default ; > ;
+            < "Gecentreerd" ; Default ; > ;
+            < "Onder" ; Default ; > ;
+            < "Rechts/boven" ; Default ; > ;
+            < "Rechts" ; Default ; > ;
+            < "Rechts/onder" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "Izquierda/Arriba" ; Default ; > ;
+            < "A la izquierda" ; Default ; > ;
+            < "Izquierda/Abajo" ; Default ; > ;
+            < "Arriba" ; Default ; > ;
+            < "Centrado" ; Default ; > ;
+            < "Abajo" ; Default ; > ;
+            < "Derecha/Arriba" ; Default ; > ;
+            < "Derecha" ; Default ; > ;
+            < "Derecha/Abajo" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "Top Left" ; Default ; > ;
+            < "Left" ; Default ; > ;
+            < "Bottom Left" ; Default ; > ;
+            < "Top" ; Default ; > ;
+            < "Centered" ; Default ; > ;
+            < "Bottom" ; Default ; > ;
+            < "Top Right" ; Default ; > ;
+            < "Right" ; Default ; > ;
+            < "Bottom Right" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "œÚ◊Û/œÚ…œ" ; Default ; > ;
+        < "œÚ◊Û" ; Default ; > ;
+        < "œÚ◊Û/œÚ…œ" ; Default ; > ;
+        < "œÚ…œ" ; Default ; > ;
+        < "æ”÷–" ; Default ; > ;
+        < "œÚœ¬" ; Default ; > ;
+        < "œÚ”“/œÚ…œ" ; Default ; > ;
+        < "œÚ”“" ; Default ; > ;
+        < "œÚ”“/œÚœ¬" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "—ÎÂ‚‡/—‚ÂıÛ" ; Default ; > ;
+        < "—ÎÂ‚‡" ; Default ; > ;
+        < "—ÎÂ‚‡/—ÌËÁÛ" ; Default ; > ;
+        < "¬‚ÂıÛ" ; Default ; > ;
+        < "œÓ ˆÂÌÚÛ" ; Default ; > ;
+        < "¬ÌËÁÛ" ; Default ; > ;
+        < "—Ô‡‚‡/—‚ÂıÛ" ; Default ; > ;
+        < "—Ô‡‚‡" ; Default ; > ;
+        < "—Ô‡‚‡/¬ÌËÁÛ" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Z lewej/W gÛrze" ; Default ; > ;
+        < "Z lewej" ; Default ; > ;
+        < "Z lewej/Na dole" ; Default ; > ;
+        < "W gÛrze" ; Default ; > ;
+        < "Wyúrodkowany" ; Default ; > ;
+        < "W dole" ; Default ; > ;
+        < "Z prawej/W gÛrze" ; Default ; > ;
+        < "Z prawej" ; Default ; > ;
+        < "Z prawej/Na dole" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "ç∂/è„" ; Default ; > ;
+        < "ç∂" ; Default ; > ;
+        < "ç∂/â∫" ; Default ; > ;
+        < "è„" ; Default ; > ;
+        < "íÜâõ" ; Default ; > ;
+        < "â∫" ; Default ; > ;
+        < "âE/è„" ; Default ; > ;
+        < "âE" ; Default ; > ;
+        < "âE/â∫" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¶V•™/¶V§W" ; Default ; > ;
+        < "¶V•™" ; Default ; > ;
+        < "¶V•™/¶V§W" ; Default ; > ;
+        < "¶V§W" ; Default ; > ;
+        < "∏m§§" ; Default ; > ;
+        < "¶V§U" ; Default ; > ;
+        < "¶V•k/¶V§W" ; Default ; > ;
+        < "¶V•k" ; Default ; > ;
+        < "¶V•k/¶V§U" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "Ì”«—/√⁄·Ï" ; Default ; > ;
+        < "Ì”«—" ; Default ; > ;
+        < "Ì”«—/√”›·" ; Default ; > ;
+        < "√⁄·Ï" ; Default ; > ;
+        < " Ê”Ìÿ" ; Default ; > ;
+        < "√”›·" ; Default ; > ;
+        < "Ì„Ì‰/√⁄·Ï" ; Default ; > ;
+        < "Ì„Ì‰" ; Default ; > ;
+        < "Ì„Ì‰/√”›·" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "–‹Ì˘/ƒÂÓÈ‹" ; Default ; > ;
+        < "¡ÒÈÛÙÂÒ‹" ; Default ; > ;
+        < " ‹Ù˘/¡ÒÈÛÙÂÒ‹" ; Default ; > ;
+        < "–‹Ì˘" ; Default ; > ;
+        < " ÂÌÙÒ·ÒÈÛÏ›Ì·" ; Default ; > ;
+        < " ‹Ù˘" ; Default ; > ;
+        < "–‹Ì˘/ƒÂÓÈ‹" ; Default ; > ;
+        < "ƒÂÓÈ‹" ; Default ; > ;
+        < " ‹Ù˘/ƒÂÓÈ‹" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "øﬁ¬ /¿ß" ; Default ; > ;
+        < "øﬁ¬ " ; Default ; > ;
+        < "øﬁ¬ /æ∆∑°" ; Default ; > ;
+        < "¿ß" ; Default ; > ;
+        < "∞°øÓµ•" ; Default ; > ;
+        < "æ∆∑°" ; Default ; > ;
+        < "ø¿∏•¬ /¿ß" ; Default ; > ;
+        < "ø¿∏•¬ " ; Default ; > ;
+        < "ø¿∏•¬ /æ∆∑°" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Sol ¸st" ; Default ; > ;
+        < "Sol" ; Default ; > ;
+        < "Sol alt" ; Default ; > ;
+        < "‹st" ; Default ; > ;
+        < "Orta" ; Default ; > ;
+        < "Alt" ; Default ; > ;
+        < "Sa ¸st" ; Default ; > ;
+        < "Sa" ; Default ; > ;
+        < "Sa alt" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    PushButton BTN_CREATE_GROUP
+    {
+        Pos = MAP_APPFONT ( 107 , 200 ) ;
+        Size = MAP_APPFONT ( 41 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "Erstellen" ;
+        Text [ ENGLISH ] = "Create" ;
+        Text [ english_us ] = "Create" ;
+        Text [ italian ] = "Crea" ;
+        Text [ spanish ] = "Crear" ;
+        Text [ french ] = "CrÈer" ;
+        Text [ dutch ] = "Maken" ;
+        Text [ swedish ] = "Skapa" ;
+        Text [ danish ] = "Opret" ;
+        Text [ portuguese_brazilian ] = "Erstellen" ;
+        Text [ portuguese ] = "Criar" ;
+        Text[ chinese_simplified ] = "Ω®¡¢";
+        Text[ russian ] = "—ÓÁ‰‡Ú¸";
+        Text[ polish ] = "UtwÛrz";
+        Text[ japanese ] = "çÏê¨";
+        Text[ chinese_traditional ] = "´ÿ•ﬂ";
+        Text[ arabic ] = "≈‰‘«¡";
+        Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ·";
+        Text[ korean ] = "¿€º∫(~C)";
+        Text[ turkish ] = "Olu˛tur";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GRP_ANIMATION_GROUP
+    {
+        Pos = MAP_APPFONT ( 6 , 155 ) ;
+        Size = MAP_APPFONT ( 147 , 65 ) ;
+        Text = "Animationsgruppe" ;
+        Text [ ENGLISH ] = "Animation group" ;
+        Text [ norwegian ] = "Animasjonsgruppe" ;
+        Text [ italian ] = "Gruppo animazione" ;
+        Text [ portuguese_brazilian ] = "Grupo de animaÁ„o" ;
+        Text [ portuguese ] = "Grupo de animaÁ„o" ;
+        Text [ finnish ] = "Animaatioryhm‰" ;
+        Text [ danish ] = "Animationsgruppe" ;
+        Text [ french ] = "Groupe animÈ" ;
+        Text [ swedish ] = "Animeringsgrupp" ;
+        Text [ dutch ] = "Animatiegroep" ;
+        Text [ spanish ] = "Grupo de animaciÛn" ;
+        Text [ english_us ] = "Animation group" ;
+        Text[ chinese_simplified ] = "∂Øª≠–°◊È";
+        Text[ russian ] = "√ÛÔÔ‡ ‡ÌËÏ‡ˆËË";
+        Text[ polish ] = "Grupa animacyjna";
+        Text[ japanese ] = "±∆“∞ºÆ›∏ﬁŸ∞Ãﬂ";
+        Text[ chinese_traditional ] = "∞ µe∏s≤’";
+        Text[ arabic ] = "„Ã„Ê⁄… «·Õ—ﬂ…";
+        Text[ greek ] = "œÏ‹‰· Âˆ› ÍÈÌﬁÛÂ˘Ì";
+        Text[ korean ] = "æ÷¥œ∏ﬁ¿Ãº« ±◊∑Ï";
+        Text[ turkish ] = "Canland˝rma grubu";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "∂Øª≠";
+    Text[ russian ] = "¿ÌËÏ‡ˆËˇ";
+    Text[ polish ] = "Animacja";
+    Text[ japanese ] = "±∆“∞ºÆ›";
+    Text[ chinese_traditional ] = "∞ µe";
+    Text[ arabic ] = "Õ—ﬂ…";
+    Text[ greek ] = "≈ˆ› ÍﬂÌÁÛÁÚ";
+    Text[ korean ] = "æ÷¥œ∏ﬁ¿Ãº«";
+    Text[ turkish ] = "Canland˝rma";
+    Text[ language_user1 ] = " ";
+};

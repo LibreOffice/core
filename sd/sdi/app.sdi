@@ -1,0 +1,68 @@
+
+interface StarImpress : Module
+[
+    uuid ( "A1814AE0-07D4-11CF-89CA-008029E4B0B1" )
+]
+{
+    SfxVoidItem NewDoc SID_NEWDOC // ole : ?, status : ?
+    (
+    )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        GroupId = GID_APPLICATION ;
+        Cachable , Container ;
+    ]
+
+    SID_ATTR_METRIC
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    SID_AUTOPILOT // ole : ?, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_OPENDOC // ole() api()
+    [
+
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_AUTOSPELL_MARKOFF // ole() api()
+    [
+
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_AUTOSPELL_CHECK // ole() api()
+    [
+
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_LANGUAGE // ole() api()
+    [
+
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_OUTLINE_TO_IMPRESS // ole() api()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+}
+
+shell SdModule
+{
+    import StarImpress[Automation];
+}
+

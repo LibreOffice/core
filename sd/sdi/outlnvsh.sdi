@@ -1,0 +1,419 @@
+
+interface OutlineView : View
+[
+    uuid ( "92E2F580-2FB4-11CF-89CA-008029E4B0B1" ) ;
+]
+{
+    SID_CUT // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_COPY // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PASTE // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_DELETE // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+        Cachable , Asynchron ;
+    ]
+    SID_DRAWINGMODE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_DIAMODE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_OUTLINEMODE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_NOTESMODE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_HANDOUTMODE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ZOOM_NEXT // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ZOOM_PREV // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ZOOM_TOOLBOX // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetStatusBarState ;
+    ]
+    SID_ATTR_ZOOM // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetStatusBarState ;
+    ]
+    SID_ZOOM_OUT // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ZOOM_IN // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SIZE_REAL // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SIZE_VISAREA // ole : no, status : no
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_HYPERLINK_SETLINK // ole : no, status : no
+    [
+        ExecMethod = FuTemporary ;
+    ]
+    SID_HYPERLINK_GETLINK // ole : no, status : no
+    [
+        StateMethod = GetCtrlState ;
+    ]
+    SID_OUTLINE_FORMAT // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_OUTLINE_COLLAPSE_ALL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_OUTLINE_COLLAPSE // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_OUTLINE_EXPAND_ALL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_OUTLINE_EXPAND // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_BULLET // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_OUTLINE_BULLET // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+        Cachable , HasDialog , Export ;
+    ]
+    SID_CHAR_DLG // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+         //        Cachable , HasDialog , Export ;
+    ]
+    SID_SELECTALL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+    SID_INSERTFILE // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PRESENTATION // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_EDIT_OUTLINER // ole : no, status : ?
+    [
+        ExecMethod = FuPermanent ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SAVEDOC // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetMenuState ;
+        GroupId = GID_DOCUMENT ;
+    ]
+    SID_SAVEASDOC // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+        GroupId = GID_DOCUMENT ;
+    ]
+    SID_RULER // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_STATUS_PAGE // ole : no, status : ?
+    [
+        ExecMethod = ExecStatusBar ;
+        StateMethod = GetStatusBarState ;
+    ]
+    SID_STATUS_LAYOUT // ole : no, status : ?
+    [
+        ExecMethod = ExecStatusBar ;
+        StateMethod = GetStatusBarState ;
+    ]
+    SfxVoidItem RevertToSaved SID_RELOAD // ole : no, status : ?
+    (
+    )
+    [
+        GroupId = GID_DOCUMENT ;
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+        Asynchron , Volatile , AutoUpdate ,
+        MenuConfig , AccelConfig , ToolBoxConfig ;
+    ]
+    SID_THESAURUS // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_COLORVIEW // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SET_DEFAULT // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PRESENTATIONOBJECT
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_STYLE_CATALOG // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+     // Vorlagen
+     // kein Menueeintrag
+    SfxTemplateItem TemplateFamily2 SID_STYLE_FAMILY2 // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+     // Vorlagen
+     // kein Menueeintrag
+    SID_STYLE_FAMILY5 // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+    ]
+     // kein Menueeintrag
+    SfxVoidItem EditTemplate SID_STYLE_EDIT // ole : no, status : ?
+    (
+    )
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+     // kein Menueeintrag
+    SfxVoidItem TemplateUpdateByExample SID_STYLE_UPDATE_BY_EXAMPLE // ole : no, status : ?
+    (
+    )
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+     // kein Menueeintrag
+    SfxBoolItem TemplateWatercan SID_STYLE_WATERCAN // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+     // kein Menueeintrag
+    SfxVoidItem TemplateNewByExample SID_STYLE_NEW_BY_EXAMPLE // ole : no, status : ?
+    (
+    )
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+     // kein Menueeintrag
+    SfxVoidItem NewTemplate SID_STYLE_NEW // ole : no, status : ?
+    (
+    )
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+     // kein Menueeintrag
+    SfxVoidItem DeleteTemplate SID_STYLE_DELETE // ole : no, status : ?
+    (
+    )
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+    SID_AUTOSPELL_CHECK // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PREVIEW_WIN // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PREVIEW_STATE // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PRESENTATION_DLG
+    [
+        ExecMethod = FuTemporary ;
+    ]
+    SID_CUSTOMSHOW_DLG
+    [
+        ExecMethod = FuTemporary ;
+    ]
+    SID_EXPAND_PAGE // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SUMMARY_PAGE // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_FLD_DATE_FIX // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_FLD_DATE_VAR // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_FLD_TIME_FIX // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_FLD_TIME_VAR // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_FLD_PAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_FLD_FILE // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_FLD_AUTHOR // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_MODIFY_FIELD // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    /*
+    SID_PRINTDOC // ole : no, status : ?
+    [
+        StateMethod = GetMenuState ;
+    ]
+    SID_PRINTDOCDIRECT // ole : no, status : ?
+    [
+        StateMethod = GetMenuState ;
+    ]
+    SID_SETUPPRINTER // ole : no, status : ?
+    [
+        StateMethod = GetMenuState ;
+    ]
+*/
+
+    SID_PREVIEW_QUALITY_COLOR // ole : no, status : play rec
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_PREVIEW_QUALITY_GRAYSCALE // ole : no, status : play rec
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_PREVIEW_QUALITY_BLACKWHITE // ole : no, status : play rec
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_MAIL_SCROLLBODY_PAGEDOWN // ole : no, status : ?
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_STYLE_FAMILY
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+}
+
+shell SdOutlineViewShell : SfxViewShell
+{
+                                                                                                                                                            import OutlineView[Automation];
+}
+

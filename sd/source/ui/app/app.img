@@ -1,0 +1,120 @@
+File = "sc05410.bmp";Identifier = SID_HELPMENU;
+File = "sc05500.bmp";Identifier = SID_NEW_DOCUMENT;File = "sco043.bmp
+File = "sc05501.bmp";Identifier = SID_OPENDOC;File = "sco044.bmp
+File = "sc05504.bmp";Identifier = SID_PRINTDOC;File = "sco051.bmp
+File = "sc05505.bmp";Identifier = SID_SAVEDOC;File = "sco046.bmp
+File = "sc05539.bmp";Identifier = SID_TEMPLATE;
+File = "sc05561.bmp";Identifier = SID_INSERT_OBJECT;
+File = "sc05700.bmp";Identifier = SID_REDO;
+File = "sc05701.bmp";Identifier = SID_UNDO;
+File = "sc05710.bmp";Identifier = SID_CUT;File = "sco058.bmp
+File = "sc05711.bmp";Identifier = SID_COPY;File = "sco059.bmp
+File = "sc05712.bmp";Identifier = SID_PASTE;File = "sco060.bmp
+
+File = "sc10008.bmp";Identifier = SID_ATTR_CHAR_POSTURE;
+File = "sc10009.bmp";Identifier = SID_ATTR_CHAR_WEIGHT;
+File = "sc10012.bmp";Identifier = SID_ATTR_CHAR_CONTOUR;
+File = "sc10014.bmp";Identifier = SID_ATTR_CHAR_UNDERLINE;
+File = "sc10028.bmp";Identifier = SID_TEXT_ADJUST_LEFT;
+File = "sc10029.bmp";Identifier = SID_TEXT_ADJUST_RIGHT;
+File = "sc10030.bmp";Identifier = SID_TEXT_ADJUST_CENTER;
+File = "sc10031.bmp";Identifier = SID_TEXT_ADJUST_BLOCK;
+File = "sc10034.bmp";Identifier = SID_TEXT_LINESPACING_1;
+File = "sc10035.bmp";Identifier = SID_TEXT_LINESPACING_2;
+File = "sc10036.bmp";Identifier = SID_TEXT_LINESPACING_3;
+File = "sc10087.bmp";Identifier = SID_TRANSFORM;
+File = "sc10102.bmp";Identifier = SID_TOOL_LINE;File = "sco207.bmp
+File = "sc10104.bmp";Identifier = SID_TOOL_RECT;File = "sco209.bmp
+File = "sc10110.bmp";Identifier = SID_TOOL_ELLIPSE;File = "sco215.bmp
+File = "sc10113.bmp";Identifier = SID_TOOL_PIE;File = "sco220.bmp
+File = "sc10114.bmp";Identifier = SID_TOOL_ARC;File = "sco217.bmp
+File = "sc10116.bmp";Identifier = SID_TOOL_CIRCLECUT;File = "sco221.bmp
+File = "sc10117.bmp";Identifier = SID_TOOL_POLYGON;File = "sco222.bmp
+File = "sc10118.bmp";Identifier = SID_TOOL_BEZIER;File = "sco223.bmp
+File = "sc10119.bmp";Identifier = SID_BEZIER_INSERT;
+File = "sc10120.bmp";Identifier = SID_BEZIER_DELETE;
+File = "sc10121.bmp";Identifier = SID_BEZIER_MOVE;
+File = "sc10122.bmp";Identifier = SID_BEZIER_CLOSE;
+// wurde durch sc20014.bmp ersetzt:
+// File = "sc10123.bmp";Identifier = SID_BEZIER_SMOOTH;
+File = "sc10126.bmp";Identifier = SID_EDIT_POINTS;
+File = "sc10127.bmp";Identifier = SID_BEZIER_CUTLINE;
+File = "sc10129.bmp";Identifier = SID_TOOL_ROTATE;
+File = "sc10130.bmp";Identifier = SID_ALIGNMENT;
+File = "sc10131.bmp";Identifier = SID_LEFT;File = "sco231.bmp
+File = "sc10132.bmp";Identifier = SID_CENTER;File = "sco232.bmp
+File = "sc10133.bmp";Identifier = SID_RIGHT;File = "sco233.bmp
+File = "sc10134.bmp";Identifier = SID_UP;File = "sco234.bmp
+File = "sc10135.bmp";Identifier = SID_MIDDLE;File = "sco235.bmp
+File = "sc10136.bmp";Identifier = SID_DOWN;File = "sco236.bmp
+File = "sc10140.bmp";Identifier = SID_INSERTDIAGRAM;File = "sco246.bmp
+File = "sc10141.bmp";Identifier = SID_ATTR_TABLE;
+File = "sc10142.bmp";Identifier = SID_AREA;
+File = "sc10143.bmp";Identifier = SID_LINE;
+File = "sc10144.bmp";Identifier = SID_TOOL_CONTROLS;File = "sco270.bmp
+File = "sc10145.bmp";Identifier = SID_DIALOG_TESTMODE;File = "sco274.bmp
+File = "sc10146.bmp";Identifier = SID_INSERT_PUSHBUTTON;File = "sco271.bmp
+File = "sc10147.bmp";Identifier = SID_INSERT_RADIOBUTTON;File = "sco272.bmp
+File = "sc10148.bmp";Identifier = SID_INSERT_CHECKBOX;File = "sco273.bmp
+File = "sc10150.bmp";Identifier = SID_OUTLINE_UP;File = "sco290.bmp
+File = "sc10151.bmp";Identifier = SID_OUTLINE_DOWN;File = "sco291.bmp
+File = "sc10152.bmp";Identifier = SID_OUTLINE_LEFT;File = "sco292.bmp
+File = "sc10153.bmp";Identifier = SID_OUTLINE_RIGHT;File = "sco293.bmp
+File = "sc10154.bmp";Identifier = SID_OUTLINE_FORMAT;File = "sco204.bmp
+File = "sc10155.bmp";Identifier = SID_OUTLINE_TITLE;File = "sco295.bmp
+File = "sc10156.bmp";Identifier = SID_OUTLINE_BULLET;File = "sco296.bmp
+File = "sc10157.bmp";Identifier = SID_PRESENTATION;File = "sco238.bmp
+File = "sc10159.bmp";Identifier = SID_REHEARSE_TIMINGS;File = "sco239.bmp
+File = "sc10160.bmp";Identifier = SID_DIA;File = "sco240.bmp
+File = "sc10161.bmp";Identifier = SID_HIDE_SLIDE;File = "sco241.bmp
+File = "sc10162.bmp";Identifier = SID_CHOOSE_POLYGON;File = "sco242.bmp
+File = "sc10163.bmp";Identifier = SID_SHOW_BROWSER;File = "sco275.bmp
+File = "sc10188.bmp";Identifier = SID_INSERT_FIXEDTEXT;File = "sco276.bmp
+File = "sc10189.bmp";Identifier = SID_INSERT_GROUPBOX;File = "sco277.bmp
+File = "sc10191.bmp";Identifier = SID_INSERT_LISTBOX;File = "sco278.bmp
+File = "sc10192.bmp";Identifier = SID_INSERT_COMBOBOX;File = "sco279.bmp
+File = "sc10231.bmp";Identifier = SID_OUTLINE_COLLAPSE;
+File = "sc10232.bmp";Identifier = SID_OUTLINE_EXPAND_ALL;
+File = "sc10233.bmp";Identifier = SID_OUTLINE_EXPAND;
+File = "sc10240.bmp";Identifier = SID_INSERT_FRAME;
+File = "sc10241.bmp";Identifier = SID_INSERT_GRAPHIC;
+File = "sc10242.bmp";Identifier = SID_AUTOFORMAT;
+File = "sc10243.bmp";Identifier = SID_SPELLING;
+File = "sc10244.bmp";Identifier = SID_INSERT_DRAW;
+File = "sc10700.bmp";Identifier = SID_TOOL_SELECT;File = "sco200.bmp
+File = "sc10701.bmp";Identifier = SID_TOOL_ZOOM;File = "sco201.bmp
+File = "sc10702.bmp";Identifier = SID_ZOOM_PLUS;File = "sco202.bmp
+File = "sc10703.bmp";Identifier = SID_ZOOM_MINUS;File = "sco203.bmp
+File = "sc10704.bmp";Identifier = SID_ZOOM_100_PERCENT;File = "sco204.bmp
+File = "sc10705.bmp";Identifier = SID_ZOOM_PAGE;File = "sco205.bmp
+File = "sc10706.bmp";Identifier = SID_ZOOM_OBJECTS;File = "sco206.bmp
+File = "sc10724.bmp";Identifier = SID_TOOL_TEXT;File = "sco224.bmp
+
+File = "sc20000.bmp";Identifier = SID_ATTR_CHAR_COLOR;File = "charcol.bmp";
+File = "sc20001.bmp";Identifier = SID_TOOL_CONNECTOR;File = "sco298.bmp";
+
+// Controller
+File = "sc20002.bmp";Identifier = SID_TEMPLATE_APPLY;
+File = "sc20003.bmp";Identifier = SID_ATTR_LINE_STYLE;
+File = "sc20004.bmp";Identifier = SID_ATTR_LINE_WIDTH;
+File = "sc20005.bmp";Identifier = SID_ATTR_LINE_COLOR;
+File = "sc20006.bmp";Identifier = SID_ATTR_FILL_STYLE;
+File = "sc20007.bmp";Identifier = SID_DIA_EFFECT;
+File = "sc20008.bmp";Identifier = SID_DIA_SPEED;
+File = "sc20009.bmp";Identifier = SID_DIA_AUTO;
+File = "sc20010.bmp";Identifier = SID_DIA_TIME;
+File = "sc20011.bmp";Identifier = SID_ATTR_FONT;
+File = "sc20012.bmp";Identifier = SID_ATTR_FONTHEIGHT;
+
+// Bezier-Toolbar
+File = "sc20013.bmp";Identifier = SID_BEZIER_EDGE;
+File = "sc20014.bmp";Identifier = SID_BEZIER_SMOOTH;
+File = "sc20015.bmp";Identifier = SID_BEZIER_SYMMTR;
+File = "sc20016.bmp";Identifier = SID_BEZIER_CONVERT;
+
+// Standardleiste
+File = "sc20020.bmp";Identifier = SID_INSERTPAGE;
+File = "sc20094.bmp";Identifier = SID_MODIFYPAGE;
+File = "sc20170.bmp";Identifier = SID_PRESENTATION_LAYOUT;
+
+// Basic-IDE ...

@@ -1,0 +1,64 @@
+
+shell SdDrawBezierObjectBar
+{
+    SID_BEZIER_MOVE // ole : no, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_BEZIER_INSERT // ole : no, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_BEZIER_DELETE // ole : no, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_BEZIER_CUTLINE // ole : no, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_BEZIER_CONVERT // ole : no, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_BEZIER_EDGE // ole : no, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_BEZIER_SMOOTH // ole : no, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_BEZIER_SYMMTR // ole : no, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_BEZIER_ELIMINATE_POINTS // ole : no, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_BEZIER_CLOSE // ole : no, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+}
+

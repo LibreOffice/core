@@ -1,0 +1,464 @@
+/*************************************************************************
+ *
+ *  $RCSfile: custsdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "custsdlg.hrc"
+#include "app.hrc"
+#include "helpids.h"
+#define DIFF 20
+#define DIFF_Y 17
+ModalDialog DLG_CUSTOMSHOW
+{
+    HelpID = SID_CUSTOMSHOW_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 175 + DIFF , 114 + DIFF_Y ) ;
+    Text = "Individuelle Bildschirmpräsentationen" ;
+    Text [ ENGLISH ] = "Custom Shows" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    PushButton BTN_NEW
+    {
+        Pos = MAP_APPFONT ( 120 + DIFF , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Neu..." ;
+        Text [ ENGLISH ] = "~New..." ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "~Novo..." ;
+        Text [ english_us ] = "~New..." ;
+        Text [ portuguese_brazilian ] = "~Neu..." ;
+        Text [ swedish ] = "~Nytt..." ;
+        Text [ danish ] = "Ny..." ;
+        Text [ italian ] = "~Nuovo..." ;
+        Text [ spanish ] = "~Nuevo..." ;
+        Text [ french ] = "~Nouveau..." ;
+        Text [ dutch ] = "~Nieuw..." ;
+        Text[ chinese_simplified ] = "ÐÂ½¨(~N)...";
+        Text[ russian ] = "Ñîçäàòü...";
+        Text[ polish ] = "Nowy...";
+        Text[ japanese ] = "V‹Kì¬(~N)...";
+        Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)...";
+        Text[ arabic ] = "ÌÏíÏ...";
+        Text[ greek ] = "Äçìéïõñãßá...";
+        Text[ korean ] = "»õ·Î(~N)...";
+        Text[ turkish ] = "Yeni...";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_EDIT
+    {
+        Pos = MAP_APPFONT ( 120 + DIFF , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Bearbeiten..." ;
+        Text [ ENGLISH ] = "~Edit..." ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "~Editar..." ;
+        Text [ english_us ] = "~Edit..." ;
+        Text [ portuguese_brazilian ] = "~Bearbeiten..." ;
+        Text [ swedish ] = "~Bearbeta..." ;
+        Text [ danish ] = "Rediger..." ;
+        Text [ italian ] = "~Modifica..." ;
+        Text [ spanish ] = "E~ditar..." ;
+        Text [ french ] = "~Modifier..." ;
+        Text [ dutch ] = "~Bewerken..." ;
+        Text[ chinese_simplified ] = "±à¼­(~E)...";
+        Text[ russian ] = "Ïðàâêà...";
+        Text[ polish ] = "Edytuj...";
+        Text[ japanese ] = "•ÒW(~E)...";
+        Text[ chinese_traditional ] = "½s¿è(~E)...";
+        Text[ arabic ] = "ÊÍÑíÑ...";
+        Text[ greek ] = "~Åðåîåñãáóßá...";
+        Text[ korean ] = "ÆíÁý(~E)...";
+        Text[ turkish ] = "Düzenle...";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_REMOVE
+    {
+        Pos = MAP_APPFONT ( 120 + DIFF , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Löschen" ;
+        Text [ ENGLISH ] = "~Delete" ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "E~liminar" ;
+        Text [ english_us ] = "~Delete" ;
+        Text [ portuguese_brazilian ] = "~Löschen" ;
+        Text [ swedish ] = "~Radera" ;
+        Text [ danish ] = "Slet" ;
+        Text [ italian ] = "~Elimina" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ dutch ] = "~Wissen" ;
+        Text[ chinese_simplified ] = "É¾³ý(~D)";
+        Text[ russian ] = "~Óäàëèòü";
+        Text[ polish ] = "Usuñ";
+        Text[ japanese ] = "íœ(~D)";
+        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ arabic ] = "ÍÐÝ";
+        Text[ greek ] = "ÄéáãñáöÞ";
+        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ turkish ] = "Sil";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_COPY
+    {
+        Pos = MAP_APPFONT ( 120 + DIFF , 57 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Kopieren" ;
+        Text [ ENGLISH ] = "C~opy" ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "~Copiar" ;
+        Text [ english_us ] = "Cop~y" ;
+        Text [ portuguese_brazilian ] = "~Kopieren" ;
+        Text [ swedish ] = "~Kopiera" ;
+        Text [ danish ] = "Kopier" ;
+        Text [ italian ] = "~Copia" ;
+        Text [ spanish ] = "~Copiar" ;
+        Text [ french ] = "Co~pier" ;
+        Text [ dutch ] = "~Kopiëren" ;
+        Text[ chinese_simplified ] = "¸´ÖÆ(~C)";
+        Text[ russian ] = "~Êîïèðîâàòü";
+        Text[ polish ] = "Kopiuj";
+        Text[ japanese ] = "ºËß°(~C)";
+        Text[ chinese_traditional ] = "½Æ»s(~C)";
+        Text[ arabic ] = "äÓÎ";
+        Text[ greek ] = "Áíôé~ãñáöÞ";
+        Text[ korean ] = "º¹»ç(~Y)";
+        Text[ turkish ] = "Kopyala";
+        Text[ language_user1 ] = " ";
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 120 + DIFF , 74 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_STARTSHOW
+    {
+        Pos = MAP_APPFONT ( 120 + DIFF , 94 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "S~tarten" ;
+        Text [ ENGLISH ] = "S~tart" ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "~Iniciar" ;
+        Text [ english_us ] = "~Start" ;
+        Text [ portuguese_brazilian ] = "S~tarten" ;
+        Text [ swedish ] = "S~tarta" ;
+        Text [ danish ] = "Start" ;
+        Text [ italian ] = "~Avvia" ;
+        Text [ spanish ] = "~Inicio" ;
+        Text [ french ] = "~Lancer" ;
+        Text [ dutch ] = "S~tarten" ;
+        Text[ chinese_simplified ] = "¿ªÊ¼(~S)";
+        Text[ russian ] = "Çàïóñòèòü";
+        Text[ polish ] = "Rozpocznij";
+        Text[ japanese ] = "ŠJŽn(~S)";
+        Text[ chinese_traditional ] = "¶}©l(~S)";
+        Text[ arabic ] = "ÈÏÁ";
+        Text[ greek ] = "Åêêßíçóç";
+        Text[ korean ] = "½ÃÀÛ(~S)";
+        Text[ turkish ] = "Baþlat";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 120 + DIFF , 94 + DIFF_Y ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Schließen" ;
+        Text [ ENGLISH ] = "~Close" ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text [ portuguese ] = "~Fechar" ;
+        Text [ english_us ] = "~Close" ;
+        Text [ portuguese_brazilian ] = "~Schließen" ;
+        Text [ swedish ] = "~Stäng" ;
+        Text [ danish ] = "Luk" ;
+        Text [ italian ] = "~Chiudi" ;
+        Text [ spanish ] = "~Cerrar" ;
+        Text [ french ] = "~Fermer" ;
+        Text [ dutch ] = "~Sluiten" ;
+        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ russian ] = "Çàêðûòü";
+        Text[ polish ] = "Zamknij";
+        Text[ japanese ] = "•Â‚¶‚é(~C)";
+        Text[ chinese_traditional ] = "Ãö³¬(~C)";
+        Text[ arabic ] = "ÅÛáÇÞ";
+        Text[ greek ] = "Êëåßóéìï";
+        Text[ korean ] = "´Ý±â(~C)";
+        Text[ turkish ] = "Kapat";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_CUSTOMSHOWS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 102 + DIFF , 86 + DIFF_Y ) ;
+        TabStop = TRUE ;
+    };
+    CheckBox CBX_USE_CUSTOMSHOW
+    {
+        Pos = MAP_APPFONT ( 6 , 96 + DIFF_Y ) ;
+        Size = MAP_APPFONT ( 112 + DIFF , 12 ) ;
+        Text = "~Individuelle Bildschirmpräsentation benutzen" ;
+        Text [ ENGLISH ] = "~Use Custom Show" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Use Custom Slide Show" ;
+        Text [ portuguese_brazilian ] = "~Individuelle Präsentation benutzen" ;
+        Text [ swedish ] = "Använd ~individuell bildskärmspresentation" ;
+        Text [ danish ] = "Brug individuelt diasshow" ;
+        Text [ italian ] = "Usa presentaz~ione su schermo personalizzata" ;
+        Text [ spanish ] = "~Utilizar presentación personalizada" ;
+        Text [ french ] = "~Utiliser la présentation à l'écran personnalisée" ;
+        Text [ dutch ] = "~Individuele schermpresentatie gebruiken" ;
+        Text [ portuguese ] = "Utilizar apres~entação personalizada" ;
+        Text[ chinese_simplified ] = "Ê¹ÓÃ×Ô¶¨µÄÑÝÊ¾ÎÄ¸å(~U)";
+        Text[ russian ] = "Èñïîëüçîâàòü ïðîèçâîëüíóþ äåìîíñòðàöèþ";
+        Text[ polish ] = "Zastosuj indywidualny pokaz slajdów";
+        Text[ japanese ] = "–Ú“I•Ê½×²ÄÞ¼®°‚ÌŽg—p(~U)";
+        Text[ chinese_traditional ] = "¨Ï¥Î­Ó¤HªºÂ²³ø(~U)";
+        Text[ arabic ] = "ÇÓÊÎÏÇã ÚÑÖ ÊÞÏíãí ãÎÕÕ";
+        Text[ greek ] = "×ñÞóç ðñïóáñìïóìÝí~çò ðáñïõóßáóçò ïèüíçò";
+        Text[ korean ] = "°³ÀÎÀû ½½¶óÀÌµå ¼î ÀÌ¿ë(~U)";
+        Text[ turkish ] = "Özel ekran sunusunu kullan";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ english_us ] = "Custom Slide Shows" ;
+    Text [ portuguese_brazilian ] = "Individuelle Präsentationen" ;
+    Text [ swedish ] = "Individuella bildskärmspresentationer" ;
+    Text [ danish ] = "Individuelt diasshow" ;
+    Text [ italian ] = "Presentazioni su schermo personalizzate" ;
+    Text [ spanish ] = "Presentación personalizada" ;
+    Text [ french ] = "Présentations à l'écran personnalisées" ;
+    Text [ dutch ] = "Individuele schermpresentaties" ;
+    Text [ portuguese ] = "Apresentações personalizadas" ;
+    Text[ chinese_simplified ] = "×Ô¶¨µÄÑÝÊ¾ÎÄ¸å·ÅÓ³";
+    Text[ russian ] = "Ïðîèçâîëüíàÿ äåìîíñòðàöèÿ";
+    Text[ polish ] = "Indywidualne pokazy slajdów";
+    Text[ japanese ] = "–Ú“I•Ê½×²ÄÞ¼®°";
+    Text[ chinese_traditional ] = "­Ó¤HÂ²³ø";
+    Text[ arabic ] = "ÚÑæÖ ÊÞÏíãíÉ ãÎÕÕÉ";
+    Text[ greek ] = "ÐñïóáñìïóìÝíç ðáñïõóßáóç ïèüíçò";
+    Text[ korean ] = "°³ÀÎÀû ½½¶óÀÌµå ¼î";
+    Text[ turkish ] = "Özel ekran sunularý";
+    Text[ language_user1 ] = " ";
+};
+ModalDialog DLG_DEFINE_CUSTOMSHOW
+{
+    HelpID = HID_DLG_DEFINE_CUSTOMSHOW ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 248 , 117 ) ;
+    Text = "Individuelle Bildschirmpräsentation definieren" ;
+    Text [ ENGLISH ] = "Define Custom Show" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 187 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 187 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 187 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Text = "Name" ;
+        Text [ ENGLISH ] = "Name" ;
+        Text [ english_us ] = "Name" ;
+        Text [ portuguese_brazilian ] = "Name" ;
+        Text [ swedish ] = "Namn" ;
+        Text [ danish ] = "Navn" ;
+        Text [ italian ] = "Nome" ;
+        Text [ spanish ] = "Nombre" ;
+        Text [ french ] = "Nom" ;
+        Text [ dutch ] = "Naam" ;
+        Text [ portuguese ] = "Nome" ;
+        Text[ chinese_simplified ] = "Ãû³Æ";
+        Text[ russian ] = "Èìÿ";
+        Text[ polish ] = "Nazwa";
+        Text[ japanese ] = "–¼‘O";
+        Text[ chinese_traditional ] = "¦WºÙ";
+        Text[ arabic ] = "ÇáÇÓã";
+        Text[ greek ] = "¼íïìá";
+        Text[ korean ] = "ÀÌ¸§";
+        Text[ turkish ] = "Ad";
+        Text[ language_user1 ] = " ";
+    };
+    Edit EDT_NAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 38 , 6 ) ;
+        Size = MAP_APPFONT ( 141 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    MultiListBox LB_PAGES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Size = MAP_APPFONT ( 75 , 75 ) ;
+        TabStop = TRUE ;
+        SimpleMode = TRUE ;
+    };
+    PushButton BTN_ADD
+    {
+        Pos = MAP_APPFONT ( 84 , 67 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Text = "~>>" ;
+        TabStop = TRUE ;
+    };
+     //ListBox LB_CUSTOM_PAGES {
+    Control LB_CUSTOM_PAGES
+    {
+        HelpID = HID_DLG_DEFINE_CUSTOMSHOW_CTL ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 35 ) ;
+        Size = MAP_APPFONT ( 75 , 75 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_REMOVE
+    {
+        Pos = MAP_APPFONT ( 84 , 95 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Text = "~<<" ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_PAGES
+    {
+        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
+        Text = "Seiten der Präsentation" ;
+        Text [ ENGLISH ] = "Document Pages" ;
+        Text [ english_us ] = "Existing slides" ;
+        Text [ portuguese_brazilian ] = "Seiten der Präsentation" ;
+        Text [ swedish ] = "Presentationens sidor" ;
+        Text [ danish ] = "Præsentationens sider" ;
+        Text [ italian ] = "Pagine della presentazione" ;
+        Text [ spanish ] = "Páginas existentes" ;
+        Text [ french ] = "Pages de la présentation" ;
+        Text [ dutch ] = "Pagina's van de presentatie" ;
+        Text [ portuguese ] = "Diapositivos existentes" ;
+        Text[ chinese_simplified ] = "ÑÝÊ¾ÎÄ¸åÒ³Ãæ";
+        Text[ russian ] = "Ñóùåñòâóþùèå ñëàéäû";
+        Text[ polish ] = "Istniej¹ce slajdy";
+        Text[ japanese ] = "ÌßÚ¾ÞÝÃ°¼®Ý‚ÌÍß°¼Þ";
+        Text[ chinese_traditional ] = "Â²³ø­¶­±";
+        Text[ arabic ] = "ÕÝÍÇÊ ÇáÚÑÖ ÇáÊÞÏíãí";
+        Text[ greek ] = "Óåëßäåò ôçò ðáñïõóßáóçò";
+        Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç ½½¶óÀÌµå";
+        Text[ turkish ] = "Sunu sayfalarý";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_CUSTOM_PAGES
+    {
+        Pos = MAP_APPFONT ( 103 , 24 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "Individuelle Präsentation" ;
+        Text [ ENGLISH ] = "Custom Show" ;
+        Text [ portuguese ] = "Diapositivos seleccionados" ;
+        Text [ english_us ] = "Selected slides" ;
+        Text [ portuguese_brazilian ] = "Individuelle Präsentation" ;
+        Text [ swedish ] = "Individuell presentation" ;
+        Text [ danish ] = "Individuel præsentation" ;
+        Text [ italian ] = "Presentazione personalizzata" ;
+        Text [ spanish ] = "Presentación personalizada" ;
+        Text [ french ] = "Présentation personnalisée" ;
+        Text [ dutch ] = "Individuele presentatie" ;
+        Text[ chinese_simplified ] = "×Ô¶¨µÄÑÝÊ¾ÎÄ¸å";
+        Text[ russian ] = "Ïðîèçâîëüíàÿ äåìîíñòðàöèÿ";
+        Text[ polish ] = "Pokaz niestandardowy";
+        Text[ japanese ] = "–Ú“I•Ê½×²ÄÞ¼®°";
+        Text[ chinese_traditional ] = "­Ó¤HÂ²³ø";
+        Text[ arabic ] = "ÚÑÖ ÊÞÏíãí ãÎÕÕ";
+        Text[ greek ] = "ÅðéëåãìÝíåò ðáñïõóéÜóåéò";
+        Text[ korean ] = "°³ÀÎÀû ÇÁ¸®Á¨Å×ÀÌ¼Ç";
+        Text[ turkish ] = "Özel sunu";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ english_us ] = "Define Custom Slide Show" ;
+    Text [ portuguese_brazilian ] = "Individuelle Präsentation definieren" ;
+    Text [ swedish ] = "Definiera individuell bildskärmspresentation" ;
+    Text [ danish ] = "Definer individuelt diasshow" ;
+    Text [ italian ] = "Definisci presentazione su schermo personalizzata" ;
+    Text [ spanish ] = "Definir presentación personalizada" ;
+    Text [ french ] = "Définir une présentation à l'écran personnalisée" ;
+    Text [ dutch ] = "Individuele schermpresentatie definiëren" ;
+    Text [ portuguese ] = "Definir apresentação personalizada" ;
+    Text[ chinese_simplified ] = "¶¨Òå×Ô¶¨µÄÑÝÊ¾ÎÄ¸å";
+    Text[ russian ] = "Îïðåäåëèòü ïðîèçâîëüíóþ äåìîíñòðàöèþ";
+    Text[ polish ] = "Okreœl indywidualne pokazy slajdów";
+    Text[ japanese ] = "–Ú“I•Ê½×²ÄÞ¼®°‚Ì’è‹`•t‚¯";
+    Text[ chinese_traditional ] = "©w¸q­Ó¤HÂ²³ø";
+    Text[ arabic ] = "ÊÚÑíÝ ÇáÚÑÖ ÇáÊÞÏíãí ÇáãÎÕÕ";
+    Text[ greek ] = "Ïñéóìüò ðñïóáñìïóìÝíçò ðáñïõóßáóçò ïèüíçò";
+    Text[ korean ] = "°³ÀÎÀû ½½¶óÀÌµå ¼î Á¤ÀÇ";
+    Text[ turkish ] = "Özel ekran sunusu tanýmla";
+    Text[ language_user1 ] = " ";
+};

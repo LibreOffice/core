@@ -1,0 +1,223 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlgolbul.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <svx/dialogs.hrc>
+#include "dlgolbul.hrc"
+
+TabDialog TAB_OUTLINEBULLET
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Nummerierung/Aufzählung" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        SVLook = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PICK_BULLET ;
+                Text = "Bullets" ;
+                Text [ ENGLISH ] = "Bullets" ;
+                Text [ english_us ] = "Bullets" ;
+                Text [ portuguese_brazilian ] = "Bullets" ;
+                Text [ swedish ] = "Bullets" ;
+                Text [ danish ] = "Punkttegn" ;
+                Text [ italian ] = "Punti" ;
+                Text [ spanish ] = "Viñetas" ;
+                Text [ french ] = "Puces" ;
+                Text [ dutch ] = "Opsommingstekens" ;
+                Text [ portuguese ] = "Marcas" ;
+                Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ";
+                Text[ russian ] = "Ìàğêåğû";
+                Text[ polish ] = "Znaki wypunktowywania";
+                Text[ japanese ] = "‰Óğ‘‚«";
+                Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹";
+                Text[ arabic ] = "ÚáÇãÇÊ ÇáÊÚÏÇÏ";
+                Text[ greek ] = "Êïõêßäåò";
+                Text[ korean ] = "±Û¸Ó¸®Ç¥";
+                Text[ turkish ] = "Madde işaretleri";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PICK_SINGLE_NUM ;
+                Text = "Nummerierungsart" ;
+                Text [ ENGLISH ] = "Digits" ;
+                Text [ english_us ] = "Numbering type" ;
+                Text [ portuguese_brazilian ] = "Numerierungsart" ;
+                Text [ swedish ] = "Numreringstyp" ;
+                Text [ danish ] = "Nummereringstype" ;
+                Text [ italian ] = "Tipo di numerazione" ;
+                Text [ spanish ] = "Tipo de numeración" ;
+                Text [ french ] = "Type de numérotation" ;
+                Text [ dutch ] = "Nummeringstijl" ;
+                Text [ portuguese ] = "Tipo de numeração" ;
+                Text[ chinese_simplified ] = "±àºÅÀàĞÍ";
+                Text[ russian ] = "Âèä íóìåğàöèè";
+                Text[ polish ] = "Rodzaj numeracji";
+                Text[ japanese ] = "”Ô†•t‚¯‚Ìí—Ş";
+                Text[ chinese_traditional ] = "½s¸¹Ãş«¬";
+                Text[ language_user1 ] = "MS Word, KeyID23276";
+                Text[ arabic ] = "ØÑíŞÉ ÇáÊÑŞíã";
+                Text[ greek ] = "Óôõë áñßèìçóçò";
+                Text[ korean ] = "¹øÈ£ ¸Å±â±â À¯Çü";
+                Text[ turkish ] = "Numaralama türü";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PICK_BMP ;
+                Text = "Grafiken" ;
+                Text [ ENGLISH ] = "Images" ;
+                Text [ english_us ] = "Graphics" ;
+                Text [ portuguese_brazilian ] = "Grafiken" ;
+                Text [ swedish ] = "Grafiker" ;
+                Text [ danish ] = "Billeder" ;
+                Text [ italian ] = "Immagini" ;
+                Text [ spanish ] = "Imágenes" ;
+                Text [ french ] = "Images" ;
+                Text [ dutch ] = "Afbeeldingen" ;
+                Text [ portuguese ] = "Imagens" ;
+                Text[ chinese_simplified ] = "Í¼ĞÎ";
+                Text[ russian ] = "Ğèñóíêè";
+                Text[ polish ] = "Grafiki";
+                Text[ japanese ] = "}";
+                Text[ chinese_traditional ] = "¹Ï¤ù";
+                Text[ arabic ] = "ÕæÑ";
+                Text[ greek ] = "ÃñáöéêÜ";
+                Text[ korean ] = "±×·¡ÇÈ";
+                Text[ turkish ] = "Grafikler";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_NUM_POSITION ;
+                Text = "Position" ;
+                Text [ ENGLISH ] = "Position" ;
+                Text [ english_us ] = "Position" ;
+                Text [ portuguese_brazilian ] = "Position" ;
+                Text [ swedish ] = "Position" ;
+                Text [ danish ] = "Placering" ;
+                Text [ italian ] = "Posizione" ;
+                Text [ spanish ] = "Posición" ;
+                Text [ french ] = "Position" ;
+                Text [ dutch ] = "Positie" ;
+                Text [ portuguese ] = "Posição" ;
+                Text[ chinese_simplified ] = "Î»ÖÃ";
+                Text[ russian ] = "Ïîçèöèÿ";
+                Text[ polish ] = "Pozycja";
+                Text[ japanese ] = "ˆÊ’u";
+                Text[ chinese_traditional ] = "¦ì¸m";
+                Text[ arabic ] = "ÇáãæÖÚ";
+                Text[ greek ] = "Èİóç";
+                Text[ korean ] = "À§Ä¡";
+                Text[ turkish ] = "Konum";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_NUM_OPTIONS ;
+                Text = "Optionen" ;
+                Text [ ENGLISH ] = "Customize" ;
+                Text [ english_us ] = "Customize" ;
+                Text [ portuguese_brazilian ] = "~Optionen" ;
+                Text [ swedish ] = "Alternativ" ;
+                Text [ danish ] = "Indstillinger" ;
+                Text [ italian ] = "Opzioni" ;
+                Text [ spanish ] = "Opciones" ;
+                Text [ french ] = "Options" ;
+                Text [ dutch ] = "Opties" ;
+                Text [ portuguese ] = "Opções" ;
+                Text[ chinese_simplified ] = "Ñ¡Ïî";
+                Text[ russian ] = "Ïàğàìåòğû";
+                Text[ polish ] = "Opcje";
+                Text[ japanese ] = "µÌß¼®İ";
+                Text[ chinese_traditional ] = "¿ï¶µ";
+                Text[ arabic ] = "ÎíÇÑÇÊ";
+                Text[ greek ] = "Åğéëïãİò";
+                Text[ korean ] = "¿É¼Ç";
+                Text[ turkish ] = "Seçenekler";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text [ english ] = "Numbering/Bullets" ;
+    Text [ english_us ] = "Numbering/Bullets" ;
+    Text [ portuguese_brazilian ] = "Numerierung/Aufzählung" ;
+    Text [ swedish ] = "Numrering/punktmarkering" ;
+    Text [ danish ] = "Nummerering/punkttegn" ;
+    Text [ italian ] = "Elenchi puntati e numerati" ;
+    Text [ spanish ] = "Numeración/Viñetas" ;
+    Text [ french ] = "Numérotation/Puces" ;
+    Text [ dutch ] = "Nummering/opsomming" ;
+    Text [ portuguese ] = "Numeração & Marcas" ;
+    Text[ chinese_simplified ] = "±êºÅ/ÏîÄ¿·ûºÅ";
+    Text[ russian ] = "Íóìåğàöèÿ/Ñïèñîê";
+    Text[ polish ] = "Numeracja/Wypunktowanie";
+    Text[ japanese ] = "”Ô†•t‚¯/‰Óğ‘‚«";
+    Text[ chinese_traditional ] = "½s¸¹/¶µ¥Ø²Å¸¹";
+    Text[ arabic ] = "ÊÑŞíã/ÊÚÏÇÏ";
+    Text[ greek ] = "Áñßèìçóç/Êïõêßäåò";
+    Text[ korean ] = "¹øÈ£ ¸Å±â±â/±Û¸Ó¸®Ç¥";
+    Text[ turkish ] = "Numaralama/madde işaretleri";
+    Text[ language_user1 ] = " ";
+};

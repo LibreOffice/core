@@ -1,0 +1,182 @@
+/*************************************************************************
+ *
+ *  $RCSfile: pubdlg.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:40 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#define PAGE1_BMP           1
+#define PAGE1_TITEL         2
+#define PAGE1_NEW_DESIGN    3
+#define PAGE1_OLD_DESIGN    4
+#define PAGE1_DESIGNS       5
+#define PAGE1_DEL_DESIGN    6
+
+//////////////////////////////
+
+#define PAGE2_BMP           20
+#define PAGE2_TITEL         21
+#define PAGE2_STANDARD      22
+#define PAGE2_FRAMES        23
+#define PAGE2_KIOSK         24
+#define PAGE2_WEBCAST       25
+
+#define PAGE2_NOFRAMES_FB   26
+#define PAGE2_FRAMES_FB     27
+#define PAGE2_KIOSK_FB      28
+#define PAGE2_WEBCAST_FB    29
+
+#define PAGE2_TITEL_HTML    30
+#define PAGE2_CONTENT       31
+#define PAGE2_NOTES         32
+
+#define PAGE2_TITEL_KIOSK   33
+#define PAGE2_CHG_DEFAULT   34
+#define PAGE2_CHG_AUTO      35
+#define PAGE2_DURATION_TXT  36
+#define PAGE2_DURATION_TMF  37
+#define PAGE2_ENDLESS       38
+
+#define PAGE2_TITEL_WEBCAST 40
+#define PAGE2_ASP           41
+#define PAGE2_PERL          42
+#define PAGE2_INDEX_TXT     43
+#define PAGE2_INDEX         44
+#define PAGE2_URL_TXT       45
+#define PAGE2_URL           46
+#define PAGE2_CGI_TXT       47
+#define PAGE2_CGI           48
+
+//////////////////////////////
+
+#define PAGE3_BMP           50
+#define PAGE3_TITEL_1       51
+#define PAGE3_GIF           52
+#define PAGE3_JPG           53
+#define PAGE3_QUALITY_TXT   54
+#define PAGE3_QUALITY       55
+#define PAGE3_TITEL_2       56
+#define PAGE3_RESOLUTION_1  57
+#define PAGE3_RESOLUTION_2  58
+#define PAGE3_RESOLUTION_3  59
+#define PAGE3_TITEL_3       60
+#define PAGE3_SLD_SOUND     61
+
+//////////////////////////////
+
+#define PAGE4_BMP           65
+#define PAGE4_TITEL_1       66
+#define PAGE4_AUTHOR_TXT    67
+#define PAGE4_AUTHOR        68
+#define PAGE4_EMAIL_TXT     69
+#define PAGE4_EMAIL_EDIT    70
+#define PAGE4_WWW_TXT       71
+#define PAGE4_WWW_EDIT      72
+#define PAGE4_TITEL_2       73
+#define PAGE4_MISC          74
+#define PAGE4_DOWNLOAD      75
+#define PAGE4_CREATED       76
+
+//////////////////////////////
+
+#define PAGE5_BMP           80
+#define PAGE5_TITEL         81
+#define PAGE5_TEXTONLY      82
+#define PAGE5_BUTTONS       83
+#define PAGE5_TITEL_2       84
+#define PAGE5_NOBACK        85
+#define PAGE5_BACKS         86
+
+//////////////////////////////
+
+#define PAGE6_BMP           100
+#define PAGE6_TITEL         101
+#define PAGE6_DEFAULT       102
+#define PAGE6_USER          103
+#define PAGE6_BACK          104
+#define PAGE6_TEXT          105
+#define PAGE6_LINK          106
+#define PAGE6_VLINK         107
+#define PAGE6_ALINK         108
+#define PAGE6_DOCCOLORS     109
+#define PAGE6_USECOLOR      110
+#define PAGE6_PREVIEW       111
+
+//////////////////////////////
+
+//#define PAGE6_PAGE_SND        128
+
+//////////////////////////////
+
+#define BUT_LAST 200
+#define BUT_NEXT 201
+#define BUT_FINISH 202
+#define BUT_CANCEL 203
+#define BUT_HELP 204
+
+//////////////////////////////
+
+#define DLG_PUBLISHING 739
+
+//////////////////////////////
+
+#define BTN_SAVE    1
+#define BTN_NOSAVE  2
+#define EDT_NAME    3
+#define DLG_DESIGNNAME 740
+

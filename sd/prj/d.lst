@@ -1,0 +1,78 @@
+..\%__SRC%\inc\sdinter.h %_DEST%\ODK\inc%_EXT%\sdinter.h
+..\%__SRC%\lib\sdinter.lib %_DEST%\ODK\lib%_EXT%\sdinter.lib
+..\%__SRC%\misc\sdinter.c %_DEST%\ODK\src%_EXT%\sdinter.c
+..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
+touch: ..\%__SRC%\misc\sd.hid %_DEST%\bin%_EXT%\sd.hid
+..\inc\sd.lst %_DEST%\inc%_EXT%\sd.lst
+..\inc\sddll.hxx %_DEST%\inc%_EXT%\sddll.hxx
+..\%__SRC%\misc\sd.csv %_DEST%\inc%_EXT%\sd.csv
+..\%__SRC%\lib\sdi.lib %_DEST%\lib%_EXT%\sdi.lib
+..\%__SRC%\lib\sdlib.lib %_DEST%\lib%_EXT%\sdlib.lib
+..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
+..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
+..\%__SRC%\bin\sdraw3.exe %_DEST%\bin%_EXT%\sdraw3.exe
+..\%__SRC%\bin\sdraw3.sym %_DEST%\bin%_EXT%\sdraw3.sym
+..\%__SRC%\bin\sdslots.tlb %_DEST%\bin%_EXT%\sdslots.tlb
+..\%__SRC%\bin\sd%upd%*.dll %_DEST%\bin%_EXT%\sd%upd%*.dll
+..\%__SRC%\bin\sd%upd%*.res %_DEST%\bin%_EXT%\sd%upd%*.res
+..\%__SRC%\bin\emp%upd%*.* %_DEST%\bin%_EXT%\emp%upd%*.*
+..\%__SRC%\bin\sdslots.tlb %_DEST%\bin%_EXT%\sdslots.tlb
+..\%__SRC%\bin\sdgslots.tlb %_DEST%\bin%_EXT%\sdgslots.tlb
+..\%__SRC%\lib\sdl.lib %_DEST%\lib%_EXT%\sdl.lib
+..\%__SRC%\lib\libsdl.a %_DEST%\lib%_EXT%\libsdl.a
+..\%__SRC%\srs\core.srs %_DEST%\res%_EXT%\sdcore.srs
+
+dos: mkdir %_DEST%\pck%_EXT%
+..\res\webview\common.inc %_DEST%\pck%_EXT%\common.inc
+..\res\webview\common.pl %_DEST%\pck%_EXT%\common.pl
+..\res\webview\edit.asp %_DEST%\pck%_EXT%\edit.asp
+..\res\webview\edit.pl %_DEST%\pck%_EXT%\edit.pl
+..\res\webview\editpic.asp %_DEST%\pck%_EXT%\editpic.asp
+..\res\webview\editpic.pl %_DEST%\pck%_EXT%\editpic.pl
+..\res\webview\index.pl %_DEST%\pck%_EXT%\index.pl
+..\res\webview\poll.asp %_DEST%\pck%_EXT%\poll.asp
+..\res\webview\poll.pl %_DEST%\pck%_EXT%\poll.pl
+..\res\webview\savepic.asp %_DEST%\pck%_EXT%\savepic.asp
+..\res\webview\savepic.pl %_DEST%\pck%_EXT%\savepic.pl
+..\res\webview\show.asp %_DEST%\pck%_EXT%\show.asp
+..\res\webview\show.pl %_DEST%\pck%_EXT%\show.pl
+..\res\webview\webview.asp %_DEST%\pck%_EXT%\webcast.asp
+..\res\webview\webview.pl %_DEST%\pck%_EXT%\webcast.pl
+
+dos: mkdir %_DEST%\inc%_EXT%\sd
+hedabu: ..\inc\sddll.hxx %_DEST%\inc%_EXT%\sd\sddll.hxx
+hedabu: ..\inc\fadedef.h %_DEST%\inc%_EXT%\sd\fadedef.h
+hedabu: ..\inc\pres.hxx %_DEST%\inc%_EXT%\sd\pres.hxx
+hedabu: ..\inc\drawdoc.hxx %_DEST%\inc%_EXT%\sd\drawdoc.hxx
+hedabu: ..\inc\sdpage.hxx %_DEST%\inc%_EXT%\sd\sdpage.hxx
+hedabu: ..\inc\fadedef.hxx %_DEST%\inc%_EXT%\sd\fadedef.hxx
+hedabu: ..\inc\diadef.h %_DEST%\inc%_EXT%\sd\diadef.h
+hedabu: ..\inc\anmdef.hxx %_DEST%\inc%_EXT%\sd\anmdef.hxx
+hedabu: ..\inc\anminfo.hxx %_DEST%\inc%_EXT%\sd\anminfo.hxx
+hedabu: ..\inc\fadedef.h %_DEST%\inc%_EXT%\sd\fadedef.h
+hedabu: ..\inc\strmname.h %_DEST%\inc%_EXT%\sd\strmname.h
+hedabu: ..\inc\movedef.hxx %_DEST%\inc%_EXT%\sd\movedef.hxx
+hedabu: ..\inc\sdattr.hxx %_DEST%\inc%_EXT%\sd\sdattr.hxx
+hedabu: ..\inc\cusshow.hxx %_DEST%\inc%_EXT%\sd\cusshow.hxx
+hedabu: ..\inc\glob.hxx %_DEST%\inc%_EXT%\sd\glob.hxx
+hedabu: ..\inc\glob.hrc %_DEST%\inc%_EXT%\sd\glob.hrc
+hedabu: ..\inc\eetext.hxx %_DEST%\inc%_EXT%\sd\eetext.hxx
+hedabu: ..\inc\sdiocmpt.hxx %_DEST%\inc%_EXT%\sd\sdiocmpt.hxx
+hedabu: ..\inc\app.hrc %_DEST%\inc%_EXT%\sd\app.hrc
+hedabu: ..\inc\sdobjfac.hxx %_DEST%\inc%_EXT%\sd\sdobjfac.hxx
+
+..\xml\SdDocLinkTargets.xml %_DEST%\xml%_EXT%\SdDocLinkTargets.xml
+..\xml\SdDrawPage.xml %_DEST%\xml%_EXT%\SdDrawPage.xml
+..\xml\SdDrawPagesAccess.xml %_DEST%\xml%_EXT%\SdDrawPagesAccess.xml
+..\xml\SdGenericDrawPage.xml %_DEST%\xml%_EXT%\SdGenericDrawPage.xml
+..\xml\SdLayer.xml %_DEST%\xml%_EXT%\SdLayer.xml
+..\xml\SdLayerManager.xml %_DEST%\xml%_EXT%\SdLayerManager.xml
+..\xml\SdMasterPage.xml %_DEST%\xml%_EXT%\SdMasterPage.xml
+..\xml\SdMasterPagesAccess.xml %_DEST%\xml%_EXT%\SdMasterPagesAccess.xml
+..\xml\SdPageLinkTargets.xml %_DEST%\xml%_EXT%\SdPageLinkTargets.xml
+..\xml\SdXCustomPresentation.xml %_DEST%\xml%_EXT%\SdXCustomPresentation.xml
+..\xml\SdXCustomPresentationAccess.xml %_DEST%\xml%_EXT%\SdXCustomPresentationAccess.xml
+..\xml\SdXImpressDocument.xml %_DEST%\xml%_EXT%\SdXImpressDocument.xml
+..\xml\SdXImpressView.xml %_DEST%\xml%_EXT%\SdXImpressView.xml
+..\xml\SdXPresentation.xml %_DEST%\xml%_EXT%\SdXPresentation.xml
+..\xml\SdXShape.xml %_DEST%\xml%_EXT%\SdXShape.xml

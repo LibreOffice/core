@@ -1,0 +1,52 @@
+/*************************************************************************
+#*
+#*    $Workfile:   GRDOCSH.IDL  $
+#*
+#*    Beschreibung      Draw (Graphic) -DocShell-IDL
+#*
+#*    Ersterstellung    SOH 04.04.97
+#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 16:48:29 $
+#*    $Revision: 1.1.1.1 $
+#*
+#*    $Logfile:   T:/sd/idl/grdocsh.idv  $
+#*
+#*    Copyright (c) 1989 - 1999, STAR DIVISION
+#*
+#*************************************************************************
+
+      Source Code Control System - Header
+
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/grdocsh.sdi,v 1.1.1.1 2000-09-18 16:48:29 hr Exp $
+
+*************************************************************************/
+
+
+interface GraphicDocument : DrawDocument
+[
+    uuid ( "D7474100-ACDF-11D0-89CB-008029E4B0B1" ) ; // erzeug am 04.04.97
+]
+{
+}
+
+shell SdGraphicDocShell : SfxObjectShell
+{
+    import GraphicDocument[Automation];
+}
+
+/*************************************************************************
+
+      Source Code Control System - History
+
+      $Log: not supported by cvs2svn $
+      Revision 1.2  1997/08/28 10:33:08  MBA
+      Neue Interface-Namen
+
+
+      Rev 1.1   28 Aug 1997 12:33:08   MBA
+   Neue Interface-Namen
+
+      Rev 1.0   09 Apr 1997 13:19:06   SOH
+   Initial revision.
+
+*************************************************************************/
+

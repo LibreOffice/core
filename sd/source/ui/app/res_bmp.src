@@ -1,0 +1,686 @@
+/*************************************************************************
+ *
+ *  $RCSfile: res_bmp.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:48:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <sfx2/sfx.hrc>
+#include <svtools/style.hrc>
+#include "glob.hrc"
+#include "res_bmp.hrc"
+PushButton RID_TIME_BUTTON
+{
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 50 , 14 ) ;
+    Text = "00:00:00" ;
+    TabStop = TRUE ;
+    DefButton = TRUE ;
+};
+PushButton RID_PREVIEW_BUTTON
+{
+    Size = MAP_APPFONT ( 50 , 14 ) ;
+    Text = "Ab~spielen" ;
+    Text [ ENGLISH ] = "~Play" ;
+    TabStop = TRUE ;
+    Text [ english_us ] = "Play" ;
+    Text [ italian ] = "Esegui" ;
+    Text [ spanish ] = "~Reproducir" ;
+    Text [ french ] = "Reproduire" ;
+    Text [ dutch ] = "~Spelen" ;
+    Text [ swedish ] = "~Spela upp" ;
+    Text [ danish ] = "Afspil" ;
+    Text [ portuguese_brazilian ] = "Ab~spielen" ;
+    Text [ portuguese ] = "~Tocar" ;
+    Text[ chinese_simplified ] = "∑≈”≥";
+    Text[ russian ] = "¬ÓÒÔÓËÁ‚ÂÒÚË";
+    Text[ polish ] = "Odtwarzaj";
+    Text[ japanese ] = "çƒê∂Ç∑ÇÈ";
+    Text[ chinese_traditional ] = "©Ò¨M";
+    Text[ arabic ] = " ‘€Ì·";
+    Text[ greek ] = "≈ÍÙ›ÎÂ~ÛÁ";
+    Text[ korean ] = "¿Áª˝";
+    Text[ turkish ] = "«al˝˛t˝r";
+    Text[ language_user1 ] = " ";
+};
+Bitmap BMP_TAB_PAGEMODE
+{
+    File = "pagemode.bmp" ;
+};
+Bitmap BMP_TAB_MASTERPAGE
+{
+    File = "mspgmode.bmp" ;
+};
+Bitmap BMP_TAB_LAYERMODE
+{
+    File = "layrmode.bmp" ;
+};
+Bitmap BMP_SW_SLIDE
+{
+    File = "smo102.bmp" ;
+};
+Bitmap BMP_SW_DRAW
+{
+    File = "smo100.bmp" ;
+};
+Bitmap BMP_SW_OUTLINE
+{
+    File = "smo101.bmp" ;
+};
+Bitmap BMP_SW_NOTES
+{
+    File = "smo125.bmp" ;
+};
+Bitmap BMP_SW_HANDOUT
+{
+    File = "smo126.bmp" ;
+};
+Bitmap BMP_SW_PRESENTATION
+{
+    File = "smo103.bmp" ;
+};
+Bitmap BMP_FOIL_00
+{
+    File = "foil00.bmp" ;
+};
+Bitmap BMP_FOIL_01
+{
+    File = "foil01.bmp" ;
+};
+Bitmap BMP_FOIL_02
+{
+    File = "foil02.bmp" ;
+};
+Bitmap BMP_FOIL_03
+{
+    File = "foil03.bmp" ;
+};
+Bitmap BMP_FOIL_04
+{
+    File = "foil04.bmp" ;
+};
+Bitmap BMP_FOIL_05
+{
+    File = "foil05.bmp" ;
+};
+Bitmap BMP_FOIL_06
+{
+    File = "foil06.bmp" ;
+};
+Bitmap BMP_FOIL_07
+{
+    File = "foil07.bmp" ;
+};
+Bitmap BMP_FOIL_08
+{
+    File = "foil08.bmp" ;
+};
+Bitmap BMP_FOIL_09
+{
+    File = "foil09.bmp" ;
+};
+Bitmap BMP_FOIL_10
+{
+    File = "foil10.bmp" ;
+};
+Bitmap BMP_FOIL_11
+{
+    File = "foil11.bmp" ;
+};
+Bitmap BMP_FOIL_12
+{
+    File = "foil12.bmp" ;
+};
+Bitmap BMP_FOIL_13
+{
+    File = "foil13.bmp" ;
+};
+Bitmap BMP_FOIL_14
+{
+    File = "foil14.bmp" ;
+};
+Bitmap BMP_FOIL_15
+{
+    File = "foil15.bmp" ;
+};
+Bitmap BMP_FOIL_16
+{
+    File = "foil16.bmp" ;
+};
+Bitmap BMP_FOIL_17
+{
+    File = "foil17.bmp" ;
+};
+Bitmap BMP_FOIL_18
+{
+    File = "foil18.bmp" ;
+};
+Bitmap BMP_FOIL_19
+{
+    File = "foil19.bmp" ;
+};
+Bitmap BMP_FOIL_20
+{
+    File = "foil20.bmp" ;
+};
+Bitmap BMP_FOILH_01
+{
+    File = "foilh01.bmp" ;
+};
+Bitmap BMP_FOILH_02
+{
+    File = "foilh02.bmp" ;
+};
+Bitmap BMP_FOILH_03
+{
+    File = "foilh03.bmp" ;
+};
+Bitmap BMP_FOILH_04
+{
+    File = "foilh04.bmp" ;
+};
+Bitmap BMP_FOILH_06
+{
+    File = "foilh06.bmp" ;
+};
+Bitmap BMP_FOILN_01
+{
+    File = "foiln01.bmp" ;
+};
+Bitmap BMP_FOIL_NONE
+{
+    File = "foilnone.bmp" ;
+};
+Bitmap BMP_FONTWORK_TOPHCIRC
+{
+    File = "fwthcirc.bmp" ;
+};
+Bitmap BMP_PAGE
+{
+    File = "page.bmp" ;
+};
+Bitmap BMP_PAGE_EXCLUDED
+{
+    File = "pageexcl.bmp" ;
+};
+Bitmap BMP_PAGEOBJS_EXCLUDED
+{
+    File = "pagobjex.bmp" ;
+};
+Bitmap BMP_PAGEOBJS
+{
+    File = "pageobjs.bmp" ;
+};
+Bitmap BMP_OBJECTS
+{
+    File = "objects.bmp" ;
+};
+Bitmap BMP_OLE
+{
+    File = "ole.bmp" ;
+};
+Bitmap BMP_GROUP
+{
+    File = "group.bmp" ;
+};
+Bitmap BMP_DOC_OPEN
+{
+    File = "docopen.bmp" ;
+};
+Bitmap BMP_DOC_CLOSED
+{
+    File = "docclose.bmp" ;
+};
+Bitmap BMP_DOC_TEXT
+{
+    File = "doctext.bmp" ;
+};
+Bitmap BMP_EXPAND
+{
+    File = "plus.bmp" ;
+};
+Bitmap BMP_COLLAPSE
+{
+    File = "minus.bmp" ;
+};
+Bitmap BMP_GRAPHIC
+{
+    File = "graphic.bmp" ;
+};
+ // Effekte BMPs fuer ValueSet
+Bitmap BMP_EFFECT_FADE_FROM_UPPERLEFT
+{
+    File = "fadetl.bmp" ;
+};
+Bitmap BMP_EFFECT_FADE_FROM_TOP
+{
+    File = "fadetop.bmp" ;
+};
+Bitmap BMP_EFFECT_FADE_FROM_UPPERRIGHT
+{
+    File = "fadetr.bmp" ;
+};
+Bitmap BMP_EFFECT_FADE_FROM_LEFT
+{
+    File = "fadeleft.bmp" ;
+};
+Bitmap BMP_EFFECT_FADE_FROM_RIGHT
+{
+    File = "faderght.bmp" ;
+};
+Bitmap BMP_EFFECT_FADE_FROM_LOWERLEFT
+{
+    File = "fadebl.bmp" ;
+};
+Bitmap BMP_EFFECT_FADE_FROM_BOTTOM
+{
+    File = "fadebotm.bmp" ;
+};
+Bitmap BMP_EFFECT_FADE_FROM_LOWERRIGHT
+{
+    File = "fadebr.bmp" ;
+};
+Bitmap BMP_EFFECT_DISCARD_FROM_TOP
+{
+    File = "disctop.bmp" ;
+};
+Bitmap BMP_EFFECT_DISCARD_FROM_LEFT
+{
+    File = "discleft.bmp" ;
+};
+Bitmap BMP_EFFECT_DISCARD_FROM_RIGHT
+{
+    File = "discrght.bmp" ;
+};
+Bitmap BMP_EFFECT_DISCARD_FROM_BOTTOM
+{
+    File = "discbotm.bmp" ;
+};
+Bitmap BMP_EFFECT_FADE_TO_CENTER
+{
+    File = "fadtocen.bmp" ;
+};
+Bitmap BMP_EFFECT_FADE_FROM_CENTER
+{
+    File = "fadfrcen.bmp" ;
+};
+Bitmap BMP_EFFECT_VERTICAL_STRIPES
+{
+    File = "fadevert.bmp" ;
+};
+Bitmap BMP_EFFECT_HORIZONTAL_STRIPES
+{
+    File = "fadehorz.bmp" ;
+};
+Bitmap BMP_EFFECT_CLOCKWISE
+{
+    File = "fadclock.bmp" ;
+};
+Bitmap BMP_EFFECT_COUNTERCLOCKWISE
+{
+    File = "fadcount.bmp" ;
+};
+Bitmap BMP_EFFECT_OPEN_VERTICAL
+{
+    File = "openvert.bmp" ;
+};
+Bitmap BMP_EFFECT_OPEN_HORIZONTAL
+{
+    File = "openhorz.bmp" ;
+};
+Bitmap BMP_EFFECT_CLOSE_VERTICAL
+{
+    File = "closvert.bmp" ;
+};
+Bitmap BMP_EFFECT_CLOSE_HORIZONTAL
+{
+    File = "closhorz.bmp" ;
+};
+Bitmap BMP_EFFECT_WAVYLINE_FROM_TOP
+{
+    File = "wavytop.bmp" ;
+};
+Bitmap BMP_EFFECT_WAVYLINE_FROM_LEFT
+{
+    File = "wavyleft.bmp" ;
+};
+Bitmap BMP_EFFECT_WAVYLINE_FROM_RIGHT
+{
+    File = "wavyrght.bmp" ;
+};
+Bitmap BMP_EFFECT_WAVYLINE_FROM_BOTTOM
+{
+    File = "wavybotm.bmp" ;
+};
+Bitmap BMP_EFFECT_SPIRALIN_LEFT
+{
+    File = "spiralil.bmp" ;
+};
+Bitmap BMP_EFFECT_SPIRALIN_RIGHT
+{
+    File = "spiralir.bmp" ;
+};
+Bitmap BMP_EFFECT_SPIRALOUT_LEFT
+{
+    File = "spiralol.bmp" ;
+};
+Bitmap BMP_EFFECT_SPIRALOUT_RIGHT
+{
+    File = "spiralor.bmp" ;
+};
+Bitmap BMP_EFFECT_LASER_FROM_UPPERLEFT
+{
+    File = "lasrtlft.bmp" ;
+};
+Bitmap BMP_EFFECT_LASER_FROM_TOP
+{
+    File = "lasrtop.bmp" ;
+};
+Bitmap BMP_EFFECT_LASER_FROM_UPPERRIGHT
+{
+    File = "lasrtrgt.bmp" ;
+};
+Bitmap BMP_EFFECT_LASER_FROM_LEFT
+{
+    File = "lasrleft.bmp" ;
+};
+Bitmap BMP_EFFECT_LASER_FROM_RIGHT
+{
+    File = "lasrrght.bmp" ;
+};
+Bitmap BMP_EFFECT_LASER_FROM_LOWERLEFT
+{
+    File = "lasrblft.bmp" ;
+};
+Bitmap BMP_EFFECT_LASER_FROM_BOTTOM
+{
+    File = "lasrbotm.bmp" ;
+};
+Bitmap BMP_EFFECT_LASER_FROM_LOWERRIGHT
+{
+    File = "lasrbrgt.bmp" ;
+};
+Bitmap BMP_EFFECT_VERTICAL_LINES
+{
+    File = "linevert.bmp" ;
+};
+Bitmap BMP_EFFECT_HORIZONTAL_LINES
+{
+    File = "linehorz.bmp" ;
+};
+Bitmap BMP_EFFECT_DISSOLVE
+{
+    File = "dissolve.bmp" ;
+};
+Bitmap BMP_EFFECT_RANDOM
+{
+    File = "efrandom.bmp" ;
+};
+Bitmap BMP_EFFECT_PATH
+{
+    File = "effpath.bmp" ;
+};
+Bitmap BMP_EFFECT_ROLL_FROM_TOP
+{
+    File = "rolltop.bmp" ;
+};
+Bitmap BMP_EFFECT_ROLL_FROM_LEFT
+{
+    File = "rollleft.bmp" ;
+};
+Bitmap BMP_EFFECT_ROLL_FROM_RIGHT
+{
+    File = "rollrght.bmp" ;
+};
+Bitmap BMP_EFFECT_ROLL_FROM_BOTTOM
+{
+    File = "rollbotm.bmp" ;
+};
+Bitmap BMP_EFFECT_STRETCH_FROM_TOP
+{
+    File = "stretop.bmp" ;
+};
+Bitmap BMP_EFFECT_STRETCH_FROM_LEFT
+{
+    File = "streleft.bmp" ;
+};
+Bitmap BMP_EFFECT_STRETCH_FROM_RIGHT
+{
+    File = "strerght.bmp" ;
+};
+Bitmap BMP_EFFECT_STRETCH_FROM_BOTTOM
+{
+    File = "strebotm.bmp" ;
+};
+Bitmap BMP_EFFECT_NONE
+{
+    File = "effnone.bmp" ;
+};
+Bitmap BMP_TEXTEFFECT_DISCARD_FROM_TOP
+{
+    File = "disctxtt.bmp" ;
+};
+Bitmap BMP_TEXTEFFECT_FADE_FROM_CENTER
+{
+    File = "fadfrtxt.bmp" ;
+};
+Bitmap BMP_EFFECT_HIDE
+{
+    File = "effhide.bmp" ;
+};
+Bitmap BMP_EFFECT_APPEAR
+{
+    File = "effapear.bmp" ;
+};
+Image IMG_EMBEDDED
+{
+    ImageBitmap = Bitmap { File = "kopie.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+Image IMG_LINK
+{
+    ImageBitmap = Bitmap { File = "verknpf.bmp" ; };  // Bitmaps getauscht
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+Image IMG_HYPERLINK
+{
+    ImageBitmap = Bitmap { File = "link.bmp" ; };  // Bitmaps getauscht
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+Image IMG_EFFECT
+{
+    ImageBitmap = Bitmap { File = "objekt.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+Image IMG_EFFECT_ACTIVE
+{
+    ImageBitmap = Bitmap { File = "objekt2.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+Image IMG_EXTRAS
+{
+    ImageBitmap = Bitmap { File = "vtextras.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+Image IMG_TEXT
+{
+    ImageBitmap = Bitmap { File = "text.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+Image IMG_TEXT_ACTIVE
+{
+    ImageBitmap = Bitmap { File = "text2.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+Image IMG_ORDER
+{
+    ImageBitmap = Bitmap { File = "vtextras.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+SfxStyleFamilies DLG_STYLE_DESIGNER
+{
+    StyleFamilyList =
+    {
+        SfxStyleFamilyItem
+        {
+            StyleImage = Image
+            {
+                ImageBitmap = Bitmap { File = "sco206.bmp" ; };
+                MaskColor = IMAGE_STDBTN_COLOR ;
+            };
+            Text = "Grafikobjektvorlagen" ;
+            Text [ ENGLISH ] = "Graphic Objects Styles" ;
+            Text [ english_us ] = "Graphics Styles" ;
+            Text [ italian ] = "Modelli di oggetti grafici" ;
+            Text [ spanish ] = "Estilos de objetos gr·ficos" ;
+            Text [ french ] = "Styles d'objets graphiques" ;
+            Text [ dutch ] = "Opmaakprofielen voor grafische objecten" ;
+            Text [ swedish ] = "Grafikobjektmallar" ;
+            Text [ danish ] = "Grafikobjekttypografier" ;
+            Text [ portuguese_brazilian ] = "Estilos de Objetos Gr·ficos" ;
+            Text [ portuguese ] = "Estilos de objectos gr·ficos" ;
+            Text[ chinese_simplified ] = "Õº–Œ∂‘œÛ—˘ Ω";
+            Text[ russian ] = "—ÚËÎË „‡ÙË˜ÂÒÍÓ„Ó Ó·˙ÂÍÚ‡";
+            Text[ polish ] = "Style obiektÛw graficznych";
+            Text[ japanese ] = "∏ﬁ◊Ã®Ø∏ Ω¿≤Ÿ";
+            Text[ chinese_traditional ] = "πœßŒ™´•ÛºÀ¶°";
+            Text[ arabic ] = "√‰„«ÿ ﬂ«∆‰«  ’Ê—…";
+            Text[ greek ] = "”ÙıÎ ·ÌÙÈÍÂÈÏ›Ì˘Ì „Ò·ˆÈÍ˛Ì";
+            Text[ korean ] = "±◊∑°«»∞≥√º ¿Ø«¸";
+            StyleFamily = SFX_STYLE_FAMILY_PARA ;
+            FilterList =
+            {
+                < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
+                < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
+                < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+        };
+        SfxStyleFamilyItem
+        {
+            StyleImage = Image
+            {
+                ImageBitmap = Bitmap { File = "presobjs.bmp" ; };
+                MaskColor = IMAGE_STDBTN_COLOR ;
+            };
+            Text = "Pr‰sentationsobjektvorlagen" ;
+            Text [ ENGLISH ] = "Presentation objects styles" ;
+            Text [ english_us ] = "Presentation Styles" ;
+            Text [ italian ] = "Modelli di oggetto per presentazione" ;
+            Text [ spanish ] = "Estilos de objetos de presentaciÛn" ;
+            Text [ french ] = "Styles d'objet de prÈsentation" ;
+            Text [ dutch ] = "Opmaakprofielen voor presentatieobjecten" ;
+            Text [ swedish ] = "Presentationsobjektmallar" ;
+            Text [ danish ] = "PrÊsentationsobjekttypografier" ;
+            Text [ portuguese_brazilian ] = "Pr‰sentationsobjektvorlagen" ;
+            Text [ portuguese ] = "Estilos de objectos de apresentaÁ„o" ;
+            Text[ chinese_simplified ] = "—› æŒƒ∏Â∂‘œÛ—˘ Ω";
+            Text[ russian ] = "—ÚËÎË Ó·˙ÂÍÚ‡ ÔÂÁÂÌÚ‡ˆËË";
+            Text[ polish ] = "Szablony obiektÛw prezentacji";
+            Text[ japanese ] = "Ãﬂ⁄æﬁ›√∞ºÆ› µÃﬁºﬁ™∏ƒ Ω¿≤Ÿ";
+            Text[ chinese_traditional ] = "¬≤≥¯ºÀ¶°";
+            Text[ arabic ] = "√‰„«ÿ ﬂ«∆‰ ⁄—÷  ﬁœÌ„Ì";
+            Text[ greek ] = "–Ò¸Ùı· ·ÌÙÈÍÂÈÏ›Ì˘Ì ·ÒÔıÛﬂ·ÛÁÚ";
+            Text[ korean ] = "«¡∏Æ¡®≈◊¿Ãº« ∞≥√º ¿Ø«¸";
+            StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
+            FilterList =
+            {
+                < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
+            };
+        };
+    };
+};
+
+Bitmap BMP_PAGE_ON
+{
+    File = "chkpage1.bmp" ;
+};
+
+Bitmap BMP_PAGE_OFF
+{
+    File = "chkpage0.bmp" ;
+};
+Bitmap BMP_PRESOBJ_GRAPHIC
+{
+    File = "image.bmp" ;
+};
+Bitmap BMP_PRESOBJ_OBJECT
+{
+    File = "object.bmp" ;
+};
+Bitmap BMP_PRESOBJ_CHART
+{
+    File = "chart.bmp" ;
+};
+Bitmap BMP_PRESOBJ_ORGCHART
+{
+    File = "orgchart.bmp" ;
+};
+Bitmap BMP_PRESOBJ_TABLE
+{
+    File = "table.bmp" ;
+};
+Bitmap BMP_WAIT_ICON
+{
+    File = "waiticon.bmp";
+};
+
+#ifdef STARIMAGE_AVAILABLE
+Bitmap BMP_PRESOBJ_IMAGE
+{
+    File = "image.bmp" ;
+};
+#endif
