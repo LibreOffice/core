@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-09-11 10:28:44 $
+#   last change: $Author: rt $ $Date: 2004-01-06 08:56:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,10 +81,14 @@ IDLFILES=\
     EmbedVerbs.idl\
     EmbedMisc.idl\
     EmbedUpdateModes.idl\
+    EmbeddedObjectDescriptor.idl\
     EntryInitModes.idl\
     Storage.idl\
     StorageStream.idl\
     StorageFactory.idl\
+    VerbAttributes.idl\
+    VerbDescr.idl\
+    VerbFlags.idl\
     XPersistanceHolder.idl\
     XEmbeddedObject.idl\
     XVisualObject.idl\
@@ -93,7 +97,10 @@ IDLFILES=\
     XClassifiedObject.idl\
     XInplaceObject.idl\
     XEmbeddedClient.idl\
+    XEmbedObjectCreator.idl\
     XEmbedObjectFactory.idl\
+    XLinkCreator.idl\
+    XLinkFactory.idl\
     XEncryptionProtectedSource.idl\
     XInplaceClient.idl\
     XInplaceUIWindow.idl\
@@ -107,7 +114,10 @@ IDLFILES=\
     XStorage.idl\
     UnreachableStateException.idl\
     WrongStateException.idl\
+    ObjectSaveVetoException.idl\
     InvalidStorageException.idl\
+    LinkageMisuseException.idl\
+    NeedsRunningStateException.idl\
     StorageWTException.idl\
 
 # ------------------------------------------------------------------
