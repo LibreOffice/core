@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-15 06:58:11 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 #include <com/sun/star/datatransfer/XSystemTransferable.hpp>
 #endif
 
-#include <comdef.h>
+#include <systools/win32/comtools.hxx>
 
 //------------------------------------------------------------------------
 // deklarations
