@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:05:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #ifndef SC_CELL_HXX
 #include "cell.hxx"
 #endif
-#ifndef _SCEXTOPT_HXX
+#ifndef SC_SCEXTOPT_HXX
 #include "scextopt.hxx"
 #endif
 #ifndef SC_TABLINK_HXX
@@ -91,14 +91,13 @@ class XclImpCrn : public XclImpCachedValue
 {
 public:
     /** Reads a cached value and stores it with its cell address. */
-    explicit            XclImpCrn( XclImpStream& rStrm, sal_uInt16 nXclCol, sal_uInt16 nXclRow );
+    explicit            XclImpCrn( XclImpStream& rStrm, const XclAddress& rXclPos );
 
     /** Copies the cached value to sheet nTab in the document. */
-    void                SetCell( ScDocument& rDoc, SCTAB nScTab ) const;
+    void                SetCell( const XclImpRoot& rRoot, SCTAB nScTab ) const;
 
 private:
-    sal_uInt16          mnXclCol;       /// Column index of the cached cell.
-    sal_uInt16          mnXclRow;       /// Row index of the cached cell.
+    XclAddress          maXclPos;       /// Excel position of the cached cell.
 };
 
 // Sheet in an external document ==============================================
@@ -116,12 +115,12 @@ public:
     inline SCTAB        GetScTab() const { return mnScTab; }
 
     /** Reads a CRN record (external referenced cell) at the specified address. */
-    void                ReadCrn( XclImpStream& rStrm, sal_uInt16 nXclCol, sal_uInt16 nXclRow );
+    void                ReadCrn( XclImpStream& rStrm, const XclAddress& rXclPos );
 
     /** Creates a new linked table in the passed document and fills it with the cached cells.
         @descr  Stores the index of the new sheet, will be accessible with GetScTab(). */
     void                CreateAndFillTable(
-                            ScDocument& rDoc, const String& rAbsUrl,
+                            const XclImpRoot& rRoot, const String& rAbsUrl,
                             const String& rFilterName, const String& rFilterOpt );
 
 private:
@@ -296,15 +295,15 @@ void XclImpTabInfo::InsertScTab( SCTAB nScTab )
 SCTAB XclImpTabInfo::GetScTabFromXclName( const String& rXclTabName ) const
 {
     XclTabNameMap::const_iterator aIt = maTabNames.find( rXclTabName );
-    return (aIt != maTabNames.end()) ? aIt->second : SCTAB_MAX;
+    return (aIt != maTabNames.end()) ? aIt->second : SCTAB_INVALID;
 }
 
 // record creation order - TABID record ---------------------------------------
 
 void XclImpTabInfo::ReadTabid( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() == xlBiff8 );
-    if( rStrm.GetRoot().GetBiff() == xlBiff8 )
+    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() == EXC_BIFF8 );
+    if( rStrm.GetRoot().GetBiff() == EXC_BIFF8 )
     {
         sal_uInt32 nReadCount = rStrm.GetRecLeft() / 2;
         DBG_ASSERT( nReadCount <= 0xFFFF, "XclImpTabInfo::ReadTabid - record too long" );
@@ -372,32 +371,34 @@ void XclImpExtName::CreateDdeData( ScDocument& rDoc, const String& rApplic, cons
 
 // Cached external cells ======================================================
 
-XclImpCrn::XclImpCrn( XclImpStream& rStrm, sal_uInt16 nXclCol, sal_uInt16 nXclRow ) :
+XclImpCrn::XclImpCrn( XclImpStream& rStrm, const XclAddress& rXclPos ) :
     XclImpCachedValue( rStrm ),
-    mnXclCol( nXclCol ),
-    mnXclRow( nXclRow )
+    maXclPos( rXclPos )
 {
 }
 
-void XclImpCrn::SetCell( ScDocument& rDoc, SCTAB nScTab ) const
+void XclImpCrn::SetCell( const XclImpRoot& rRoot, SCTAB nScTab ) const
 {
-    ScAddress aPos( XclTools::MakeScAddress( mnXclCol, mnXclRow, nScTab ) );
-    switch( GetType() )
+    ScAddress aScPos( ScAddress::UNINITIALIZED );
+    if( rRoot.GetAddressConverter().ConvertAddress( aScPos, maXclPos, nScTab, false ) )
     {
-        case EXC_CACHEDVAL_DOUBLE:
-            rDoc.SetValue( aPos.Col(), aPos.Row(), aPos.Tab(), GetValue() );
-        break;
-        case EXC_CACHEDVAL_STRING:
-            rDoc.PutCell( aPos, new ScStringCell( GetString() ) );
-        break;
-        case EXC_CACHEDVAL_BOOL:
-        case EXC_CACHEDVAL_ERROR:
+        switch( GetType() )
         {
-            ScFormulaCell* pFmlaCell = new ScFormulaCell( &rDoc, aPos, GetBoolErrFmla() );
-            pFmlaCell->SetDouble( GetBool() ? 1.0 : 0.0 );  // GetBool() returns false for error codes
-            rDoc.PutCell( aPos, pFmlaCell );
+            case EXC_CACHEDVAL_DOUBLE:
+                rRoot.GetDoc().SetValue( aScPos.Col(), aScPos.Row(), aScPos.Tab(), GetValue() );
+            break;
+            case EXC_CACHEDVAL_STRING:
+                rRoot.GetDoc().PutCell( aScPos, new ScStringCell( GetString() ) );
+            break;
+            case EXC_CACHEDVAL_BOOL:
+            case EXC_CACHEDVAL_ERROR:
+            {
+                ScFormulaCell* pFmlaCell = new ScFormulaCell( rRoot.GetDocPtr(), aScPos, GetBoolErrFmla() );
+                pFmlaCell->SetDouble( GetBool() ? 1.0 : 0.0 );  // GetBool() returns false for error codes
+                rRoot.GetDoc().PutCell( aScPos, pFmlaCell );
+            }
+            break;
         }
-        break;
     }
 }
 
@@ -405,7 +406,7 @@ void XclImpCrn::SetCell( ScDocument& rDoc, SCTAB nScTab ) const
 
 XclImpSupbookTab::XclImpSupbookTab( const String& rTabName ) :
     maTabName( rTabName ),
-    mnScTab( SCTAB_MAX )
+    mnScTab( SCTAB_INVALID )
 {
 }
 
@@ -413,18 +414,18 @@ XclImpSupbookTab::~XclImpSupbookTab()
 {
 }
 
-void XclImpSupbookTab::ReadCrn( XclImpStream& rStrm, sal_uInt16 nXclCol, sal_uInt16 nXclRow )
+void XclImpSupbookTab::ReadCrn( XclImpStream& rStrm, const XclAddress& rXclPos )
 {
-    maCrnList.Append( new XclImpCrn( rStrm, nXclCol, nXclRow ) );
+    maCrnList.Append( new XclImpCrn( rStrm, rXclPos ) );
 }
 
-void XclImpSupbookTab::CreateAndFillTable(
-        ScDocument& rDoc, const String& rAbsUrl, const String& rFilterName, const String& rFilterOpt )
+void XclImpSupbookTab::CreateAndFillTable( const XclImpRoot& rRoot,
+        const String& rAbsUrl, const String& rFilterName, const String& rFilterOpt )
 {
-    if( mnScTab == SCTAB_MAX )
-        if( rDoc.InsertLinkedEmptyTab( mnScTab, rAbsUrl, rFilterName, rFilterOpt, maTabName ) )
+    if( mnScTab == SCTAB_INVALID )
+        if( rRoot.GetDoc().InsertLinkedEmptyTab( mnScTab, rAbsUrl, rFilterName, rFilterOpt, maTabName ) )
             for( const XclImpCrn* pCrn = maCrnList.First(); pCrn; pCrn = maCrnList.Next() )
-                pCrn->SetCell( rDoc, mnScTab );
+                pCrn->SetCell( rRoot, mnScTab );
 }
 
 // External document (SUPBOOK) ================================================
@@ -485,7 +486,7 @@ void XclImpSupbook::ReadCrn( XclImpStream& rStrm )
         rStrm >> nXclColLast >> nXclColFirst >> nXclRow;
 
         for( sal_uInt8 nXclCol = nXclColFirst; (nXclCol <= nXclColLast) && (rStrm.GetRecLeft() > 1); ++nXclCol )
-            pSBTab->ReadCrn( rStrm, nXclCol, nXclRow );
+            pSBTab->ReadCrn( rStrm, XclAddress( nXclCol, nXclRow ) );
     }
 }
 
@@ -499,7 +500,7 @@ SCTAB XclImpSupbook::GetScTabNum( sal_uInt16 nXclTab ) const
     if( meType == EXC_SBTYPE_SELF )
         return static_cast< SCTAB >( nXclTab );
     const XclImpSupbookTab* pSBTab = maSupbTabList.GetObject( nXclTab );
-    return pSBTab ? pSBTab->GetScTab() : SCTAB_MAX;
+    return pSBTab ? pSBTab->GetScTab() : SCTAB_INVALID;
 }
 
 SCTAB XclImpSupbook::GetScTabNum( const String& rTabName ) const
@@ -507,7 +508,7 @@ SCTAB XclImpSupbook::GetScTabNum( const String& rTabName ) const
     for( const XclImpSupbookTab* pSBTab = maSupbTabList.First(); pSBTab; pSBTab = maSupbTabList.Next() )
         if( pSBTab->GetTabName() == rTabName )
             return pSBTab->GetScTab();
-    return SCTAB_MAX;
+    return SCTAB_INVALID;
 }
 
 const XclImpExtName* XclImpSupbook::GetExternName( sal_uInt16 nXclIndex ) const
@@ -530,7 +531,7 @@ const String& XclImpSupbook::GetMacroName( sal_uInt16 nXclNameIdx ) const
 
 void XclImpSupbook::CreateTables( sal_uInt16 nSBTabFirst, sal_uInt16 nSBTabLast )
 {
-    if( (meType == EXC_SBTYPE_EXTERN) && (GetExtDocOptions().nLinkCnt < 1) && GetDocShell() )
+    if( (meType == EXC_SBTYPE_EXTERN) && (GetExtDocOptions().GetDocSettings().mnLinkCnt == 0) && GetDocShell() )
     {
         String aAbsUrl( ScGlobal::GetAbsDocName( maXclUrl, GetDocShell() ) );
 
@@ -541,7 +542,7 @@ void XclImpSupbook::CreateTables( sal_uInt16 nSBTabFirst, sal_uInt16 nSBTabLast 
         // create tables
         for( sal_uInt16 nSBTab = nSBTabFirst; nSBTab <= nSBTabLast; ++nSBTab )
             if( XclImpSupbookTab* pSBTab = maSupbTabList.GetObject( nSBTab ) )
-                pSBTab->CreateAndFillTable( GetDoc(), aAbsUrl, maFilterName, maFilterOpt );
+                pSBTab->CreateAndFillTable( GetRoot(), aAbsUrl, maFilterName, maFilterOpt );
     }
 }
 
@@ -635,7 +636,7 @@ const String& XclImpLinkManagerImpl::GetMacroName( sal_uInt16 nExtSheet, sal_uIn
 SCTAB XclImpLinkManagerImpl::GetScTab( const String& rUrl, const String& rTabName ) const
 {
     const XclImpSupbook* pSupbook = GetSupbook( rUrl );
-    return pSupbook ? pSupbook->GetScTabNum( rTabName ) : SCTAB_MAX;
+    return pSupbook ? pSupbook->GetScTabNum( rTabName ) : SCTAB_INVALID;
 }
 
 const XclImpSupbook* XclImpLinkManagerImpl::GetSupbook( sal_uInt32 nXtiIndex ) const
