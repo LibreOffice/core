@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinformation.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:47:51 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 08:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,12 +63,6 @@
 #include "userinformation.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -85,7 +79,6 @@
 using namespace ::utl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 
 //--------------------------------------------------------------------------
 UserInformation::UserInformation()
