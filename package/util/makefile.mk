@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
+#   last change: $Author: mtg $ $Date: 2001-10-02 22:32:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,7 @@ LIB1FILES=	\
 
 SHL1TARGET=$(TARGET)$(MAJOR_VERSION)
 SHL1IMPLIB=i$(TARGET)
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)$/src$/component.map
 
 SHL1STDLIBS=\
     $(CPPULIB)		\
@@ -99,12 +99,7 @@ SHL1STDLIBS=\
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=$(LIB1TARGET)
-
-# --- Def-File ---------------------------------------------------------
-
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
-DEF1DES=Package Lib
 
 # --- Targets ----------------------------------------------------------
 
