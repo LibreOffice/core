@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,14 @@ using namespace ::com::sun::star::lang;
 using namespace ::osl;
 
 // -------------------------------------------------------------------------
+OCacheSet::~OCacheSet()
+{
+    m_xDriverSet = NULL;
+    m_xDriverRow = NULL;
+    m_xSetMetaData = NULL;
+    m_xConnection = NULL;
+}
+// -----------------------------------------------------------------------------
 void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQLException, RuntimeException)
 {
     OSL_ENSHURE(_xTable.is(),"OCacheSet::fillTableName: PropertySet is empty!");
@@ -484,6 +492,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/10/25 07:30:24  oj
+    make strings unique for lib's
+
     Revision 1.4  2000/10/17 10:18:12  oj
     some changes for the rowset
 

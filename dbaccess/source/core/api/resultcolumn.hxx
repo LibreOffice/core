@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultcolumn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,41 +68,42 @@
 #ifndef _DBA_COREAPI_COLUMN_HXX_
 #include <column.hxx>
 #endif
-
-//************************************************************
-//  OResultColumn
-//************************************************************
-class OResultColumn : public OColumn,
-                      public ::comphelper::OPropertyArrayUsageHelper < OResultColumn >
+namespace dbaccess
 {
-protected:
-    ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData > m_xMetaData;
-    sal_Int32               m_nPos;
+    //************************************************************
+    //  OResultColumn
+    //************************************************************
+    class OResultColumn : public OColumn,
+                          public ::comphelper::OPropertyArrayUsageHelper < OResultColumn >
+    {
+    protected:
+        ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData > m_xMetaData;
+        sal_Int32               m_nPos;
 
-public:
-    OResultColumn(const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
-                  sal_Int32 _nPos);
+    public:
+        OResultColumn(const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
+                      sal_Int32 _nPos);
 
-// com::sun::star::lang::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
+    // com::sun::star::lang::XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
 
-// com::sun::star::lang::XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    // com::sun::star::lang::XServiceInfo
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-// cppu::OComponentHelper
-    virtual void SAL_CALL disposing(void);
+    // cppu::OComponentHelper
+        virtual void SAL_CALL disposing(void);
 
-// comphelper::OPropertyArrayUsageHelper
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+    // comphelper::OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
-// cppu::OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-    virtual void SAL_CALL getFastPropertyValue(
-                                ::com::sun::star::uno::Any& rValue,
-                                sal_Int32 nHandle
-                                     ) const;
-};
-
+    // cppu::OPropertySetHelper
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual void SAL_CALL getFastPropertyValue(
+                                    ::com::sun::star::uno::Any& rValue,
+                                    sal_Int32 nHandle
+                                         ) const;
+    };
+}
 #endif // _DBACORE_RESULTCOLUMN_HXX_
 

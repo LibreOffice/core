@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,12 @@ OQueryContainer::OQueryContainer(
     ,m_xCommandDefinitions(_rxCommandDefinitions)
     ,m_xORB(_rxORB)
 {
-    m_aConfigurationNode = _rRootConfigNode;
     DBG_CTOR(OQueryContainer, NULL);
+
+    m_aConfigurationNode = _rRootConfigNode;
+
+    m_pCommandsListener = new OCommandsListener(this);
+    m_pCommandsListener->acquire();
 
     DBG_ASSERT(m_aConfigurationNode.isValid() && m_xORB.is(), "OQueryContainer::OQueryContainer : invalid arguments !");
     m_aConfigurationNode.setEscape(m_aConfigurationNode.isSetNode());
@@ -146,7 +150,7 @@ OQueryContainer::OQueryContainer(
     {
         Reference< XContainer > xContainer(m_xCommandDefinitions, UNO_QUERY);
         DBG_ASSERT(xContainer.is(), "OQueryContainer::OQueryContainer : the CommandDefinitions container is invalid !");
-        xContainer->addContainerListener(this);
+        xContainer->addContainerListener(m_pCommandsListener);
 
         // fill my structures with dummies
         OQuery* pDummyObject = NULL;
@@ -166,8 +170,8 @@ OQueryContainer::OQueryContainer(
 OQueryContainer::~OQueryContainer()
 {
     DBG_DTOR(OQueryContainer, NULL);
-    dispose();
-        // maybe we're already disposed, but this should be uncritical
+    //  dispose();
+        //  maybe we're already disposed, but this should be uncritical
 }
 
 //------------------------------------------------------------------------------
@@ -207,7 +211,8 @@ void OQueryContainer::dispose()
 
     Reference< XContainer > xContainer(m_xCommandDefinitions, UNO_QUERY);
     if (xContainer.is())
-        xContainer->removeContainerListener(this);
+        xContainer->removeContainerListener(m_pCommandsListener);
+    m_pCommandsListener->release();
     m_xCommandDefinitions = NULL;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 09:44:26 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent, ::osl::Mutex& _r
 //------------------------------------------------------------------------------
 OTableContainer::~OTableContainer()
 {
+    dispose();
     DBG_DTOR(OTableContainer, NULL);
 }
 
@@ -355,8 +356,8 @@ void OTableContainer::dispose()
         //  !!! do this before clearing the map which the vector elements refer to !!!
     m_aTables.clear();
     m_xMasterTables = NULL;
-
-    m_bConstructed = sal_False;
+    m_xConnection   = NULL;
+    m_bConstructed  = sal_False;
 }
 
 // XServiceInfo
@@ -411,6 +412,7 @@ Any OTableContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsExcept
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_TYPE)),
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_DESCRIPTION)));
+        m_aTablesIndexed[_nIndex]->second = xReturn;
     }
     return makeAny(xReturn);
 }
@@ -419,7 +421,7 @@ Any OTableContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsExcept
 //------------------------------------------------------------------------------
 Any OTableContainer::getByName(const rtl::OUString& _rName) throw( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
-    ConstTablesIterator aPos = m_aTables.find(_rName);
+    TablesIterator aPos = m_aTables.find(_rName);
     if (aPos == m_aTables.end())
         throw NoSuchElementException();
 
@@ -438,6 +440,8 @@ Any OTableContainer::getByName(const rtl::OUString& _rName) throw( NoSuchElement
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_TYPE)),
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_DESCRIPTION)));
+
+        aPos->second = xReturn;
     }
     return makeAny(xReturn);
 }

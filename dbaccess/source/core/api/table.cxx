@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,11 +185,10 @@ Sequence< sal_Int8 > ODBTable::getImplementationId() throw (RuntimeException)
 
 // OComponentHelper
 //------------------------------------------------------------------------------
-void ODBTable::disposing()
+void SAL_CALL ODBTable::disposing()
 {
     OTable_Base::disposing();
     MutexGuard aGuard(m_aMutex);
-    //  m_aColumns.disposing();
     m_aConnection = Reference< XConnection > ();
     m_xTable = NULL;
 }

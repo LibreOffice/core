@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@
 #endif
 
 namespace com{ namespace sun { namespace star{namespace sdbc{ class XParameters; } } } }
-namespace connectivity{ class OSQLParseTreeIterator; }
 
 namespace dbaccess
 {
@@ -106,7 +105,6 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
 
         ORowSetRow                                  m_aInsertRow;
-        //  const connectivity::OSQLParseTreeIterator*  m_pIterator; // the parseiterator from RowSet
         ::rtl::OUString                             m_aComposedTableName;
         sal_Bool                                    m_bInserted;
         sal_Bool                                    m_bUpdated;
@@ -137,6 +135,7 @@ namespace dbaccess
         void setParameter(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > _xParameter,const ORowSetValue& _rValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         void fillTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     public:
+        virtual ~OCacheSet();
         virtual void fillValueRow(ORowSetRow& _rRow);
 
         // ::com::sun::star::sdbc::XRow
@@ -353,6 +352,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/17 10:18:12  oj
+    some changes for the rowset
+
     Revision 1.2  2000/10/11 11:18:10  fs
     replace unotools with comphelper
 

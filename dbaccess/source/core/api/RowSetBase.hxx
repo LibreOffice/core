@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 09:44:07 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,6 @@
 #endif
 
 
-namespace connectivity { class OSQLParseTreeIterator; }
 namespace com { namespace sun { namespace star { namespace sdb { struct RowChangeEvent; } } } }
 
 namespace dbaccess

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,9 @@ namespace dbaccess
     // -------------------------------------------------------------------------
     typedef connectivity::ORefVector< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> >
             ORowSetDataColumns_COLLECTION;
-    class ORowSetDataColumns : public connectivity::sdbcx::OCollection
+
+    typedef connectivity::sdbcx::OCollection ORowSetDataColumns_BASE;
+    class ORowSetDataColumns : public ORowSetDataColumns_BASE
     {
         ORowSetDataColumns_COLLECTION m_aColumns;
     protected:
@@ -143,6 +145,8 @@ namespace dbaccess
         {}
         ~ORowSetDataColumns()
         {}
+        // only the name is identical to ::cppu::OComponentHelper
+        virtual void SAL_CALL disposing(void);
     };
 }
 

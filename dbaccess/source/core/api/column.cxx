@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,7 +533,12 @@ void OColumns::clearColumns()
     m_aNameMap.clear();
     m_aElements.clear();
 }
-
+// -----------------------------------------------------------------------------
+void SAL_CALL OColumns::disposing(void)
+{
+    OColumns_BASE::disposing();
+    m_xDrvColumns = NULL;
+}
 //------------------------------------------------------------------------------
 void OColumns::loadSettings(const OConfigurationNode& _rLocation, const IColumnFactory* _pColFactory)
 {
