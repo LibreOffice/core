@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-14 05:29:33 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 11:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1500,13 +1500,13 @@ IMPL_LINK_INLINE_END( SfxPopupMenuManager, SelectHdl, void *, pvoid )
 
 //--------------------------------------------------------------------
 
-USHORT SfxPopupMenuManager::Execute( Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 )
+USHORT SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 )
 {
     DBG_MEMTEST();
 
     PopupMenu* pMenu = ( (PopupMenu*)GetMenu()->GetSVMenu() );
     pMenu->SetSelectHdl( LINK( this, SfxPopupMenuManager, SelectHdl ) );
-    USHORT nId = pMenu->Execute( pWindow, pWindow->GetPointerPosPixel() );
+    USHORT nId = pMenu->Execute( pWindow, rPoint );
     pMenu->SetSelectHdl( Link() );
 
     if ( nId )
@@ -1517,14 +1517,14 @@ USHORT SfxPopupMenuManager::Execute( Window* pWindow, va_list pArgs, const SfxPo
 
 //--------------------------------------------------------------------
 
-USHORT SfxPopupMenuManager::Execute( Window* pWindow, const SfxPoolItem *pArg1, ... )
+USHORT SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, const SfxPoolItem *pArg1, ... )
 {
     DBG_MEMTEST();
 
     va_list pArgs;
     va_start(pArgs, pArg1);
 
-    return (Execute( pWindow, pArgs, pArg1 ));
+    return (Execute( rPoint, pWindow, pArgs, pArg1 ));
 }
 
 //-------------------------------------------------------------------------
