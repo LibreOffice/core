@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScDrawPagesObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:30 $
+ *  last change:$Date: 2003-05-27 13:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.drawing.XDrawPages;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sheet.XSpreadsheetDocument;
@@ -106,7 +107,7 @@ public class ScDrawPagesObj extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
         try {
             log.println( "creating a sheetdocument" );
