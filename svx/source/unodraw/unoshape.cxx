@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-15 16:47:17 $
+ *  last change: $Author: cl $ $Date: 2002-02-04 14:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1801,6 +1801,9 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                         if( rVal >>= aUnoPoint )
                         {
                             Point aPoint( aUnoPoint.X, aUnoPoint.Y );
+                            if( pModel->IsWriter() )
+                                aPoint += pObj->GetAnchorPos();
+
                             pEdgeObj->SetTailPoint( pMap->nWID == OWN_ATTR_EDGE_START_POS, aPoint );
                             return;
                         }
@@ -1829,6 +1832,9 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             if(pMeasureObj && ( rVal >>= aUnoPoint ) )
             {
                 Point aPoint( aUnoPoint.X, aUnoPoint.Y );
+
+                if( pModel->IsWriter() )
+                    aPoint += pObj->GetAnchorPos();
 
                 pMeasureObj->NbcSetPoint( aPoint, pMap->nWID == OWN_ATTR_MEASURE_START_POS ? 0 : 1 );
                 pMeasureObj->SendRepaintBroadcast();
@@ -2434,7 +2440,11 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                     case OWN_ATTR_EDGE_END_POS:
                         {
                             Point aPoint( pEdgeObj->GetTailPoint( pMap->nWID == OWN_ATTR_EDGE_START_POS ) );
+                            if( pModel->IsWriter() )
+                                aPoint -= pObj->GetAnchorPos();
+
                             awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
+
                             aAny <<= aUnoPoint;
                             break;
                         }
@@ -2454,8 +2464,12 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 SdrMeasureObj* pMeasureObj = PTR_CAST(SdrMeasureObj,pObj);
                 if(pMeasureObj)
                 {
-                    const Point& rPoint = pMeasureObj->GetPoint( pMap->nWID == OWN_ATTR_MEASURE_START_POS ? 0 : 1 );
-                    awt::Point aUnoPoint( rPoint.X(), rPoint.Y() );
+                    Point aPoint( pMeasureObj->GetPoint( pMap->nWID == OWN_ATTR_MEASURE_START_POS ? 0 : 1 ) );
+                    if( pModel->IsWriter() )
+                        aPoint -= pObj->GetAnchorPos();
+
+                    awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
+
                     aAny <<= aUnoPoint;
                     break;
                 }
