@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 22:58:09 $
+ *  last change: $Author: os $ $Date: 2001-06-25 13:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,6 @@ String STR_PAGE_COUNT_MACRO
         SID_INSERT_SPINBUTTON ;\
         SID_INSERT_HSCROLLBAR ;\
         SID_INSERT_VSCROLLBAR ;\
-           FN_QRY                           ;\
            FN_INSERT_OBJECT_DLG         ;\
            FN_INSERT_SYMBOL             ;\
            FN_POSTIT                        ;\
@@ -328,7 +327,7 @@ String STR_PAGE_COUNT_MACRO
                                         \
         };                              \
     IdCount = {                         \
-        172;                            \
+        171;                            \
     };
 
 

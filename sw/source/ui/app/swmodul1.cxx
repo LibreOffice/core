@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 13:28:48 $
+ *  last change: $Author: os $ $Date: 2001-06-25 13:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,17 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx> // helper for implementations
+#endif
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
 #endif
 
 #ifndef _SBASLTID_HRC //autogen
@@ -186,10 +192,12 @@
 #endif
 
 using namespace ::rtl;
+using namespace ::svx;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::view;
 #define C2U(char) rtl::OUString::createFromAscii(char)
 
 /* -----------------------------05.01.00 15:14--------------------------------
@@ -619,34 +627,20 @@ void SwModule::ExecDB(SfxRequest &rReq)
     switch (nSlot)
     {
         case FN_QRY_MERGE:
-        case FN_QRY:
         {
             SwDBData aData;
-
             SwView* pView = GetView();
             if(pView)
             {
-                SfxViewFrame* pVFrame = pView->GetViewFrame();
-                Reference< XFrame >  xFrame = pVFrame->GetFrame()->GetFrameInterface();
-                Reference< XFrame >  xBeamerFrame = xFrame->findFrame(
-                                    C2U("_beamer"), FrameSearchFlag::CHILDREN);
-                if(xBeamerFrame.is())
-                {
-                    pVFrame->GetDispatcher()->Execute(SID_BROWSER);
-                    break;
-                }
-
                 SwWrtShell &rSh = GetView()->GetWrtShell();
                 aData = rSh.GetDBData();
                 rSh.EnterStdMode(); // Wechsel in Textshell erzwingen; ist fuer
                                     // das Mischen von DB-Feldern notwendig.
                 GetView()->AttrChangedNotify( &rSh );
                 pNewDBMgr->SetMergeType( DBMGR_MERGE );
-                if(nSlot != FN_QRY_MERGE)
-                    ShowDBObj(rSh, aData, sal_True);
             }
 
-            if (pNewDBMgr && nSlot == FN_QRY_MERGE)
+            if (pNewDBMgr)
             {
                 Sequence<PropertyValue> aProperties(3);
                 PropertyValue* pValues = aProperties.getArray();
@@ -661,7 +655,6 @@ void SwModule::ExecDB(SfxRequest &rReq)
             }
         }
         break;
-
         default:
             ASSERT(!this, falscher Dispatcher);
             return;
@@ -669,16 +662,12 @@ void SwModule::ExecDB(SfxRequest &rReq)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Schaut nach ob's min eine sdbcx::View gibt
+    Beschreibung: Schaut nach ob's min eine View gibt
  --------------------------------------------------------------------*/
 
 void SwModule::StateIsView(SfxItemSet& rSet)
 {
     SwView *pView = ::GetActiveView();
-
-    // Ist ein Writer-Dok ganz oben?
-    if( !pView || pView->GetDocShell()->GetProtocol().IsInPlaceActive() )
-        rSet.DisableItem(FN_QRY);
 
     TypeId aType( TYPE(SwView) );
     if( !SfxViewShell::GetFirst(&aType) )   // Ist irgendein Writer-Dok vorhanden?
@@ -689,11 +678,31 @@ void SwModule::StateIsView(SfxItemSet& rSet)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwModule::ShowDBObj(SwWrtShell& rSh, const SwDBData& rData, sal_Bool bShowError)
+void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, BOOL bOnlyIfAvailable)
 {
-    rSh.GetNewDBMgr()->ShowInBeamer( rData.sDataSource, rData.sCommand, rData.nCommandType, aEmptyStr );
-}
+    Reference<XFrame> xFrame = rView.GetViewFrame()->GetFrame()->GetFrameInterface();
+    Reference<XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
 
+    uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
+                                        rtl::OUString::createFromAscii("_beamer"),
+                                        FrameSearchFlag::CHILDREN);
+    if (xBeamerFrame.is())
+    {   // the beamer has been opened by the SfxViewFrame
+        Reference<XController> xController = xBeamerFrame->getController();
+        Reference<XSelectionSupplier> xControllerSelection(xController, UNO_QUERY);
+        if (xControllerSelection.is())
+        {
+
+            ODataAccessDescriptor aSelection;
+            aSelection[daDataSource]    <<= rData.sDataSource;
+            aSelection[daCommand]       <<= rData.sCommand;
+            aSelection[daCommandType]   <<= rData.nCommandType;
+            xControllerSelection->select(makeAny(aSelection.createPropertyValueSequence()));
+        }
+        else
+            DBG_ERROR("no selection supplier in the beamer!");
+    }
+}
 /*--------------------------------------------------------------------
     Beschreibung: Redlining
  --------------------------------------------------------------------*/

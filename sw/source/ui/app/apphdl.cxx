@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-08 16:29:35 $
+ *  last change: $Author: os $ $Date: 2001-06-25 13:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -981,7 +981,7 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     sal_uInt16 nCount = aDBNameList.Count();
                     if (nCount)
                     {   // Datenbankbeamer oeffnen
-                        ShowDBObj(*pWrtSh, pDoc->GetDBData());
+                        ShowDBObj(pWrtSh->GetView(), pDoc->GetDBData());
                     }
                 }
                 break;
