@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:47:42 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ TabPage TP_COLUMN
         Text[ arabic ] = "ÊæÒíÚ ÇáãÍÊæíÇÊ Úáì ßá ÇáÃÚãÏÉ ÈÇáÊÓÇæí";
         Text[ turkish ] = "S~ütunlarý dengele";
         Text[ catalan ] = "~Optimar columnas";
+        Text[ finnish ] = "~Balance columns";
     };
     FixedLine FL_COLUMNS
     {
@@ -174,7 +175,7 @@ TabPage TP_COLUMN
         Text [ italian ] = "Colonne" ;
         Text [ portuguese_brazilian ] = "Colunas" ;
         Text [ portuguese ] = "Colunas" ;
-        Text [ finnish ] = "Sarakkeet" ;
+        Text [ finnish ] = "Spalten" ;
         Text [ danish ] = "Kolonner" ;
         Text [ french ] = "Colonnes" ;
         Text [ swedish ] = "Kolumner" ;
@@ -268,6 +269,7 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Geniþlik";
         Text[ catalan ] = "Ancho";
+        Text[ finnish ] = "Leveys";
     };
     MetricField ED_1
     {
@@ -352,6 +354,7 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Aralýk";
         Text[ catalan ] = "Espacio";
+        Text[ finnish ] = "Välit";
     };
     MetricField ED_DIST1
     {
@@ -399,7 +402,7 @@ TabPage TP_COLUMN
         Text [ italian ] = "~Larghezza autom." ;
         Text [ portuguese_brazilian ] = "Autom tica ~largura" ;
         Text [ portuguese ] = "~Largura automática" ;
-        Text [ finnish ] = "Automaattinen ~leveys" ;
+        Text [ finnish ] = "~Automaattinen leveys" ;
         Text [ danish ] = "Automatisk bredde" ;
         Text [ french ] = "~Largeur automatique" ;
         Text [ swedish ] = "A~utomatisk bredd" ;
@@ -431,7 +434,7 @@ TabPage TP_COLUMN
         Text [ italian ] = "Larghezza colonna" ;
         Text [ portuguese_brazilian ] = "Largura da coluna" ;
         Text [ portuguese ] = "Largura da coluna" ;
-        Text [ finnish ] = "Sarakeleveys" ;
+        Text [ finnish ] = "Spaltenbreite" ;
         Text [ danish ] = "Kolonnebredde" ;
         Text [ french ] = "Largeur de colonne" ;
         Text [ swedish ] = "Kolumnbredd" ;
@@ -463,7 +466,7 @@ TabPage TP_COLUMN
         Text [ italian ] = "~Stile" ;
         Text [ portuguese_brazilian ] = "~Estilo" ;
         Text [ portuguese ] = "~Estilo" ;
-        Text [ finnish ] = "~Tyyli" ;
+        Text [ finnish ] = "~Viiva" ;
         Text [ danish ] = "Type" ;
         Text [ french ] = "~Type" ;
         Text [ swedish ] = "~Typ" ;
@@ -517,7 +520,7 @@ TabPage TP_COLUMN
         };
         StringList [ finnish ] =
         {
-            < "Keine" ; Default ; > ;
+            < "Ei mitään" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -674,6 +677,7 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Konum";
         Text[ catalan ] = "~Posición";
+        Text[ finnish ] = "~Sijainti";
     };
     ListBox LB_POSITION
     {
@@ -719,9 +723,9 @@ TabPage TP_COLUMN
         };
         StringList [ finnish ] =
         {
-            < "Oben" ; Default ; > ;
-            < "Zentriert" ; Default ; > ;
-            < "Unten" ; Default ; > ;
+            < "Yläosa" ; Default ; > ;
+            < "Keskitetty" ; Default ; > ;
+            < "Alaosa" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -848,7 +852,7 @@ TabPage TP_COLUMN
         Text [ italian ] = "Linea di separazione" ;
         Text [ portuguese_brazilian ] = "Linhas entre" ;
         Text [ portuguese ] = "Linha de separação" ;
-        Text [ finnish ] = "Rivejä välissä" ;
+        Text [ finnish ] = "Trennlinie" ;
         Text [ danish ] = "Separator" ;
         Text [ french ] = "Trait de séparation" ;
         Text [ swedish ] = "Skiljelinje" ;
@@ -938,6 +942,7 @@ ModalDialog DLG_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Uygulanacaðý yer:";
         Text[ catalan ] = "~Aplicar a:";
+        Text[ finnish ] = "~Käytä:";
     };
     ListBox LB_APPLY_TO
     {
@@ -1115,11 +1120,19 @@ ModalDialog DLG_COLUMN
     };
     StringList [ catalan ] =
     {
-            < "Selección" ;         LISTBOX_PAGE        ; > ;
-        < "Área actual" ;       LISTBOX_PAGE        ; > ;
-        < "Áreas seleccionadas" ;       LISTBOX_PAGE        ; > ;
-        < "Marco" ;         LISTBOX_PAGE        ; > ;
+            < "Selección" ;             LISTBOX_SELECTION; > ;
+        < "Área actual" ;   LISTBOX_SECTION     ; > ;
+        < "Áreas seleccionadas" ;  LISTBOX_SECTIONS ; > ;
+        < "Marco" ;                 LISTBOX_FRAME       ; > ;
         < "Estilo de página: " ;        LISTBOX_PAGE        ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Valinta" ;       LISTBOX_PAGE        ; > ;
+        < "Nykyinen osio" ;         LISTBOX_PAGE        ; > ;
+        < "Valittu osio" ;          LISTBOX_PAGE        ; > ;
+        < "Kehys" ;         LISTBOX_PAGE        ; > ;
+        < "Sivun tyyli:" ;          LISTBOX_PAGE        ; > ;
     };
     };
     Text[ english_us ] = "Columns";
@@ -1142,4 +1155,5 @@ ModalDialog DLG_COLUMN
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "Sütun";
     Text[ catalan ] = "Columnas";
+    Text[ finnish ] = "Sarakkeet";
 };
