@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-18 16:16:12 $
+ *  last change: $Author: dvo $ $Date: 2001-04-23 09:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,12 +295,13 @@ SvXMLImportContext *SvxXMLTabStopImportContext::CreateChildContext(
 
 void SvxXMLTabStopImportContext::EndElement( )
 {
+    sal_uInt16 nCount = mpTabStops ? mpTabStops->Count() : 0;
+    uno::Sequence< style::TabStop> aSeq( nCount );
+
     if( mpTabStops )
     {
-        sal_uInt16 nCount = mpTabStops->Count();
         sal_uInt16 nNewCount = 0;
 
-        uno::Sequence< style::TabStop> aSeq( nCount );
         style::TabStop* pTabStops = aSeq.getArray();
         for( sal_uInt16 i=0; i < nCount; i++ )
         {
@@ -318,16 +319,11 @@ void SvxXMLTabStopImportContext::EndElement( )
 
         if( nCount != nNewCount )
             aSeq.realloc( nNewCount );
-        aProp.maValue <<= aSeq;
     }
-    else
-    {
-        aProp.maValue.clear();
-    }
+    aProp.maValue <<= aSeq;
 
     SetInsert( sal_True );
     XMLElementPropertyContext::EndElement();
-
 
 }
 
