@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-04 14:37:13 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 10:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2705,7 +2705,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                 USHORT i;
 
                 USHORT nTabCount = pDoc->GetTableCount();
-                BOOL bProtected = pDocShell->IsReadOnly();
+                BOOL bProtected = !pDocShell->IsEditable();
                 for (i=0; i<nTabCount; i++)
                     if ( aMark.GetTableSelect(i) && pDoc->IsTabProtected(i) )
                         bProtected = TRUE;
