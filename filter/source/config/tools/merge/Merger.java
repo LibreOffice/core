@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Merger.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 18:57:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-05 10:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,11 @@ public class Merger
         }
         m_aLog.setGlobalInfo("package contains "+nItemCount+" items");
 
+        java.io.File aPackage = new File(sPackage);
+        m_aLog.setGlobalInfo("write temp package \""+aPackage.getPath()); // TODO encoding must be readed from the configuration
+        FileHelper.writeTextToFile(aPackage, false, "UTF-8", sBuffer.toString()); // check for success is done inside this method!
+
+/*
         java.lang.String sExtPkg      = m_aCfg.getString(PROP_EXTENSION_XCU);
         java.io.File     aTempPackage = FileHelper.createUniqueFile(m_aTempDir, sPackage, sExtPkg);
         java.io.File     aPackage     = new java.io.File(m_aOutDir, sPackage+"."+sExtPkg);
@@ -312,6 +317,7 @@ public class Merger
         if (bExists)
             throw new java.io.IOException("Old package \""+aPackage.getPath()+"\" couldn't be removed.");
         FileHelper.atomicFileCopy(aTempPackage, aPackage);
+*/
     }
 
     //-------------------------------------------
