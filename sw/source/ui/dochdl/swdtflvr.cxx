@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:54:32 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,7 +556,11 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
 
-    if( !HasFormat( nFormat ) || !pWrtShell)
+    // we can only fullfil the request if
+    // 1) we have data for this format
+    // 2) we have either a clipboard document (pClpDocFac), or
+    //    we have a SwWrtShell (so we can generate a new clipboard document)
+    if( !HasFormat( nFormat ) || ( pClpDocFac != NULL && pWrtShell != NULL ) )
         return sal_False;
 
     if( !pClpDocFac )
