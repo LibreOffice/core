@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-02-15 16:49:50 $
+ *  last change: $Author: jsc $ $Date: 2001-03-30 14:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1717,7 +1717,7 @@ static sal_uInt32 checkDifferences(StringSet& keys, RegistryKeyNames& subKeyName
             if ( options.forceOutput() )
             {
                 fprintf(stderr, "EXISTENCE: key \"%s\" exists only in registry \"%s\"\n",
-                        U2S(subKeyNames2.getElement(i)), options.getRegName1().getStr());
+                        U2S(subKeyNames2.getElement(i)), options.getRegName2().getStr());
             }
             nError++;
         } else
