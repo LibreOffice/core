@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-13 09:40:42 $
+ *  last change: $Author: ka $ $Date: 2001-09-26 08:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1058,8 +1058,7 @@ void SdrObjList::ForceSwapInObjects() const
 {
     ULONG nObjAnz=GetObjCount();
     for (ULONG nObjNum=nObjAnz; nObjNum>0;) {
-        nObjNum--;
-        SdrObject* pObj=GetObj(nObjNum);
+        SdrObject* pObj=GetObj(--nObjNum);
         SdrGrafObj* pGrafObj=PTR_CAST(SdrGrafObj,pObj);
         if (pGrafObj!=NULL) {
             pGrafObj->ForceSwapIn();
@@ -1067,6 +1066,22 @@ void SdrObjList::ForceSwapInObjects() const
         SdrObjList* pOL=pObj->GetSubList();
         if (pOL!=NULL) {
             pOL->ForceSwapInObjects();
+        }
+    }
+}
+
+void SdrObjList::ForceSwapOutObjects() const
+{
+    ULONG nObjAnz=GetObjCount();
+    for (ULONG nObjNum=nObjAnz; nObjNum>0;) {
+        SdrObject* pObj=GetObj(--nObjNum);
+        SdrGrafObj* pGrafObj=PTR_CAST(SdrGrafObj,pObj);
+        if (pGrafObj!=NULL) {
+            pGrafObj->ForceSwapOut();
+        }
+        SdrObjList* pOL=pObj->GetSubList();
+        if (pOL!=NULL) {
+            pOL->ForceSwapOutObjects();
         }
     }
 }
@@ -1896,7 +1911,7 @@ void SdrPage::SetInserted( FASTBOOL bIns )
         bInserted = bIns;
 
         SdrObjListIter aIter( *this, IM_FLAT );
-        while ( aIter.IsMore() )
+         while ( aIter.IsMore() )
         {
             SdrObject* pObj = aIter.Next();
             if ( pObj->ISA(SdrOle2Obj) )
@@ -1953,7 +1968,6 @@ FASTBOOL SdrPage::HasTransparentObjects( BOOL bCheckForAlphaChannel ) const
 
     return bRet;
 }
-
 
 #ifdef GCC
 // Dummy-Implementationen fuer Deklarationen in svdpage.hxx
