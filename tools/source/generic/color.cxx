@@ -2,9 +2,9 @@
  *
  *  $RCSfile: color.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-26 08:25:56 $
+ *  last change: $Author: ssa $ $Date: 2002-06-26 16:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ BOOL Color::IsDark() const
 
 BOOL Color::IsBright() const
 {
-    return GetLuminance() >= 225;
+    return GetLuminance() >= 245;
 }
 
 // -----------------------------------------------------------------------
