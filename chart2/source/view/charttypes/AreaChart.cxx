@@ -203,6 +203,43 @@ void AreaChart::addSeries( VDataSeries* pSeries, sal_Int32 xSlot, sal_Int32 ySlo
     VSeriesPlotter::addSeries( pSeries, xSlot, ySlot );
 }
 
+drawing::PolyPolygonShape3D createBorderPolygon(
+                      drawing::PolyPolygonShape3D& rPoly
+                    , double fDepth )
+{
+    drawing::PolyPolygonShape3D aRet;
+
+    sal_Int32 nPolyCount = rPoly.SequenceX.getLength();
+    sal_Int32 nBorder=0;
+    for(sal_Int32 nPoly=0;nPoly<nPolyCount;nPoly++)
+    {
+        sal_Int32 nPointCount = rPoly.SequenceX[nPoly].getLength();
+        for(sal_Int32 nPoint=0;nPoint<nPointCount-1;nPoint++)
+        {
+            aRet.SequenceX.realloc(nBorder+1);
+            aRet.SequenceY.realloc(nBorder+1);
+            aRet.SequenceZ.realloc(nBorder+1);
+
+            aRet.SequenceX[nBorder].realloc(5);
+            aRet.SequenceY[nBorder].realloc(5);
+            aRet.SequenceZ[nBorder].realloc(5);
+
+            aRet.SequenceX[nBorder][0] = aRet.SequenceX[nBorder][3] = aRet.SequenceX[nBorder][4] = rPoly.SequenceX[nPoly][nPoint];
+            aRet.SequenceY[nBorder][0] = aRet.SequenceY[nBorder][3] = aRet.SequenceY[nBorder][4] = rPoly.SequenceY[nPoly][nPoint];
+            aRet.SequenceZ[nBorder][0] = aRet.SequenceZ[nBorder][3] = aRet.SequenceZ[nBorder][4] = rPoly.SequenceZ[nPoly][nPoint];
+            aRet.SequenceZ[nBorder][3] += fDepth;
+
+            aRet.SequenceX[nBorder][1] = aRet.SequenceX[nBorder][2] = rPoly.SequenceX[nPoly][nPoint+1];
+            aRet.SequenceY[nBorder][1] = aRet.SequenceY[nBorder][2] = rPoly.SequenceY[nPoly][nPoint+1];
+            aRet.SequenceZ[nBorder][1] = aRet.SequenceZ[nBorder][2] = rPoly.SequenceZ[nPoly][nPoint+1];
+            aRet.SequenceZ[nBorder][2] += fDepth;
+
+            nBorder++;
+        }
+    }
+    return aRet;
+}
+
 uno::Reference< drawing::XShape >
         create3DLine( const uno::Reference< drawing::XShapes >& xTarget
                     , uno::Reference< lang::XMultiServiceFactory > m_xShapeFactory
@@ -230,24 +267,13 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
                 , uno::makeAny( rPoly ) );
 
-            /*
-            //Normals Polygon
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALSPOLYGON3D )
-                , uno::makeAny( aNewPoly ) );
-                */
-                /*
             //NormalsKind
             xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALS_KIND )
                 , uno::makeAny( drawing::NormalsKind_FLAT ) );
 
-            //LineOnly
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_LINEONLY )
-                , uno::makeAny( (sal_Bool)false) );
-
             //DoubleSided
             xProp->setPropertyValue( C2U( UNO_NAME_3D_DOUBLE_SIDED )
                 , uno::makeAny( (sal_Bool)true) );
-                */
         }
         catch( uno::Exception& e )
         {
@@ -283,6 +309,16 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
         this->setMappedProperties( xShape
                 , pSeries->getPropertiesOfSeries()
                 , m_aShapePropertyMapForArea );
+        //createBorder
+        {
+            drawing::PolyPolygonShape3D aBorderPoly = createBorderPolygon(
+                aPoly, m_pPosHelper->getTransformedDepth() );
+            LineProperties aLineProperties;
+            aLineProperties.initFromPropertySet( pSeries->getPropertiesOfSeries(), true );
+            uno::Reference< drawing::XShape > xBorder =
+                m_pShapeFactory->createLine3D( xSeriesGroupShape_Shapes
+                    , aBorderPoly, aLineProperties );
+        }
     }
     else //m_nDimension!=3
     {
