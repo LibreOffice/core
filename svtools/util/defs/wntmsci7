@@ -13474,3 +13474,8 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ??ATEWritingDirectionInfos@@QBEAAUTEWritingDirectionInfo@@G@Z
 ?Insert@TEWritingDirectionInfos@@QAEXPBV1@GGG@Z
 ?__query@BaseReference@uno@star@sun@com@@KAPAVXInterface@2345@PAV62345@ABVType@2345@@Z
+?SetToggledSelectedColumn@BrowseBox@@AAEXG@Z
+?ToggleSelectedColumn@BrowseBox@@AAEGXZ
+?GetEditCursor@TextEngine@@IAE?AVRectangle@@ABVTextPaM@@EE@Z
+?IsRightToLeft@MultiLineEdit@@QBEEXZ
+?SetRightToLeft@MultiLineEdit@@QAEXE@Z
