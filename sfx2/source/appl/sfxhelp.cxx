@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-23 11:53:27 $
+ *  last change: $Author: pb $ $Date: 2001-05-02 10:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ SfxHelpDB_Impl::SfxHelpDB_Impl( const String& rPath, sal_Bool bDebug ) :
 
 SfxHelpDB_Impl::~SfxHelpDB_Impl()
 {
+    m_pDB->close(0);
     delete m_pDB;
 }
 
