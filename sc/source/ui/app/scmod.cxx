@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 13:28:48 $
+ *  last change: $Author: nn $ $Date: 2001-04-12 08:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,7 @@ ScDocument* ScModule::GetClipDoc()
 {
     //  called from document
 
-    ScTransferObj* pObj = ScTransferObj::GetOwnClipboard();
+    ScTransferObj* pObj = ScTransferObj::GetOwnClipboard( FALSE );
     if (pObj)
         return pObj->GetDocument();
 

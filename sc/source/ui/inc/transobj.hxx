@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-03 17:39:58 $
+ *  last change: $Author: nn $ $Date: 2001-04-12 08:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ public:
     void                SetDragSourceFlags( USHORT nFlags );
     void                SetDragWasInternal();
 
-    static ScTransferObj* GetOwnClipboard();
+    static ScTransferObj* GetOwnClipboard( BOOL bForUI = TRUE );
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 19:14:48 $
+ *  last change: $Author: nn $ $Date: 2001-04-12 08:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vos/mutex.hxx>
+#include <sfx2/app.hxx>
 
 #include "transobj.hxx"
 #include "document.hxx"
@@ -226,12 +227,16 @@ ScTransferObj::~ScTransferObj()
 }
 
 // static
-ScTransferObj* ScTransferObj::GetOwnClipboard()
+ScTransferObj* ScTransferObj::GetOwnClipboard( BOOL bForUI )
 {
     ScTransferObj* pObj = SC_MOD()->GetClipData().pCellClipboard;
-    if ( pObj )
+    if ( pObj && bForUI )
     {
         //  check formats to see if pObj is really in the system clipboard
+
+        //  bForUI is FALSE when called from core (IsClipboardSource),
+        //  in that case don't access the system clipboard, because the call
+        //  may be from other clipboard operations (like flushing, #86059#)
 
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
         if ( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_DIF ) )
