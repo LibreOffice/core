@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dl $ $Date: 2001-11-16 14:46:59 $
+ *  last change: $Author: aw $ $Date: 2002-01-16 11:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1456,78 +1456,14 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
         // #UndoRedo#
         case SID_UNDO :
         {
-            // #87227#
-            SfxUndoManager* pUndoManager = ImpGetUndoManagerFromViewShell(*this);
-            sal_uInt16 nNumber(1);
-            const SfxItemSet* pReqArgs = rReq.GetArgs();
-
-            if(pReqArgs)
-            {
-                SfxUInt16Item* pUIntItem = (SfxUInt16Item*)&pReqArgs->Get(SID_UNDO);
-                nNumber = pUIntItem->GetValue();
-            }
-
-            if(nNumber && pUndoManager)
-            {
-                List* pList = pDoc->GetDeletedPresObjList();
-                if( pList )
-                    pList->Clear();
-
-                sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
-                if(nCount >= nNumber)
-                {
-                    // #94637# when UndoStack is cleared by ModifyPageUndoAction
-                    // the nCount may have changed, so test GetUndoActionCount()
-                    while(nNumber-- && pUndoManager->GetUndoActionCount())
-                    {
-                        pUndoManager->Undo();
-                    }
-                }
-
-                // #91081# refresh rulers, maybe UNDO was move of TAB marker in ruler
-                if(bHasRuler)
-                {
-                    Invalidate(SID_ATTR_TABSTOP);
-                }
-            }
-
-            rReq.Done();
+            // #96090# moved implementation to BaseClass
+            ImpSidUndo(TRUE, rReq);
         }
         break;
         case SID_REDO :
         {
-            // #87227#
-            SfxUndoManager* pUndoManager = ImpGetUndoManagerFromViewShell(*this);
-            sal_uInt16 nNumber(1);
-            const SfxItemSet* pReqArgs = rReq.GetArgs();
-
-            if(pReqArgs)
-            {
-                SfxUInt16Item* pUIntItem = (SfxUInt16Item*)&pReqArgs->Get(SID_REDO);
-                nNumber = pUIntItem->GetValue();
-            }
-
-            if(nNumber && pUndoManager)
-            {
-                sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
-                if(nCount >= nNumber)
-                {
-                    // #94637# when UndoStack is cleared by ModifyPageRedoAction
-                    // the nCount may have changed, so test GetRedoActionCount()
-                    while(nNumber-- && pUndoManager->GetRedoActionCount())
-                    {
-                        pUndoManager->Redo();
-                    }
-                }
-
-                // #91081# refresh rulers, maybe REDO was move of TAB marker in ruler
-                if(bHasRuler)
-                {
-                    Invalidate(SID_ATTR_TABSTOP);
-                }
-            }
-
-            rReq.Done();
+            // #96090# moved implementation to BaseClass
+            ImpSidRedo(TRUE, rReq);
         }
         break;
 
