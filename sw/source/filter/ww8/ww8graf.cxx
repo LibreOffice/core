@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-30 11:21:05 $
+ *  last change: $Author: cmc $ $Date: 2001-04-03 17:21:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,9 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
+#endif
+#ifndef _DOCARY_HXX
+#include <docary.hxx>
 #endif
 #ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
@@ -1969,11 +1972,9 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         // ggfs. Breite und Position des Rahmens anpassen:
         // Der beschreibbare Innenraum soll trotz breitem Rand
         // gleich gross bleiben.
-        long nWidth  = rSnapRect.GetWidth()  + 2*nLineWidth;
-        long nHeight = rSnapRect.GetHeight() + 2*nLineWidth;
         rFlySet.Put( SwFmtFrmSize(bFixSize ? ATT_FIX_SIZE : ATT_MIN_SIZE,
-                        rSnapRect.GetWidth()  + 2*nLineWidth,
-                        rSnapRect.GetHeight() + 2*nLineWidth) );
+            rSnapRect.GetWidth()  + 2*nLineWidth,
+            rSnapRect.GetHeight() + 2*nLineWidth) );
     }
 
     /*
@@ -2798,11 +2799,23 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                                 pPaM->GetPoint()->nContent.Assign(
                                     pPaM->GetCntntNode(), 0 );
 
+                                SwNodeIndex aStart(pPaM->GetPoint()->nNode);
+
                                 // lies den Text ein
                                 bTxbxFlySection = TRUE;
                                 ReadText( nStartCpFly, (nEndCpFly-nStartCpFly),
                                     MAN_MAINTEXT == pPlcxMan->GetManType()
                                     ? MAN_TXBX : MAN_TXBX_HDFT );
+
+                                /*
+                                ##505##
+                                Special test to see if we will be forced to
+                                disable allowing this box to grow. Only if
+                                contains only one flyframe which is bigger
+                                than the nominal size of this frame
+                                */
+                                if (pRecord->bLastBoxInChain)
+                                    EmbeddedFlyFrameSizeLock(aStart,pRetFrmFmt);
 
                                 aSave.Restore( this );
                             }
@@ -3074,15 +3087,62 @@ void SwWW8ImplReader::GrafikDtor()
     DELETEZ( pDrawHeight );     // dito
 }
 
+
+void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
+    SwFrmFmt *pFrmFmt)
+{
+    /*
+    ##505###
+    If we would ordinarily insert this textbox with a flexible size to expand
+    to fit its contents, but it consists solely of a textbox inside a textbox
+    where the internal textbox will force the size larger than itself then we
+    disable the grow to fit feature. We usually want the box to grow to fit if
+    it is the last in a chain so as to display all text, but some strange ww6
+    -> ww97 textbox conversions in word have placed textboxes without a size
+    setting inside textboxes that have them, and in this case the outer size
+    setting is the one that dominates
+    */
+    if ( (rStart == pPaM->GetPoint()->nNode) && rStart.GetNode().IsCntntNode() )
+    {
+        /*
+        Loop through the flyframes and see if any are anchored inside this
+        otherwise empty flyframe. If so and its size is bigger than the
+        current one then disable the current ones grow to fit feature
+        */
+        const SwSpzFrmFmts& rFmts = *rDoc.GetSpzFrmFmts();
+        for( USHORT iN = 0, nN = rFmts.Count(); iN < nN; ++iN )
+        {
+            const SwFmtAnchor& rA = rFmts[ iN ]->GetAnchor();
+            if (rA.GetCntntAnchor()->nNode == rStart.GetNode())
+            {
+                const SwFmtFrmSize& rSNew = rFmts[iN]->GetFrmSize();
+                SwFmtFrmSize aSOld = pFrmFmt->GetFrmSize();
+                if (
+                    (rSNew.GetWidth() > aSOld.GetWidth()) ||
+                    (rSNew.GetHeight() > aSOld.GetHeight())
+                   )
+                {
+                    aSOld.SetSizeType(ATT_FIX_SIZE);
+                    pFrmFmt->SetAttr(aSOld);
+                }
+            break;
+            }
+        }
+    }
+}
+
 /*************************************************************************
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.17 2001-03-30 11:21:05 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.18 2001-04-03 17:21:04 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.17  2001/03/30 11:21:05  cmc
+      ##575## Convert WW6/95 TextBox to FlyFrame when we are in a header/footer
+
       Revision 1.16  2001/03/27 12:01:49  cmc
       brightness, contrast, drawmode {im|ex}port, merge 0x01 and 0x08 graphics systems for escher to replace hack
 

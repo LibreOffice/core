@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-27 12:01:49 $
+ *  last change: $Author: cmc $ $Date: 2001-04-03 17:21:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,6 +927,7 @@ friend class WW8FormulaControl;
     void ProcessEscherAlign( SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
         SfxItemSet &rFlySet );
     SwFrmFmt* Read_GrafLayer( long nGrafAnchorCp );
+    void EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,SwFrmFmt *pFrmFmt);
     void GrafikCtor();
     void GrafikDtor();
 
@@ -1150,11 +1151,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.19 2001-03-27 12:01:49 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.20 2001-04-03 17:21:04 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.19  2001/03/27 12:01:49  cmc
+      brightness, contrast, drawmode {im|ex}port, merge 0x01 and 0x08 graphics systems for escher to replace hack
+
       Revision 1.18  2001/03/19 21:29:17  jp
       Bugfixes/Optimization for task #83168#
 
