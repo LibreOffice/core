@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contexts.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-11 17:00:59 $
+ *  last change: $Author: bm $ $Date: 2001-03-04 12:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,12 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = 0;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetDocElemTokenMap();
+    sal_uInt16 nFlags = GetImport().getImportFlags();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ))
     {
         case XML_TOK_DOC_AUTOSTYLES:
+            if( nFlags & IMPORT_AUTOSTYLES )
             {
                 SvXMLStylesContext* pStylesCtxt =
                     new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
@@ -135,18 +137,22 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
             break;
         case XML_TOK_DOC_STYLES:
             // for draw styles containing gradients/hatches/markers and dashes
-            pContext = new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
+            if( nFlags & IMPORT_STYLES )
+                pContext = new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_META:
-            pContext = new SfxXMLMetaContext( GetImport(), nPrefix, rLocalName, GetImport().GetModel());
+            if( nFlags & IMPORT_META )
+                pContext = new SfxXMLMetaContext( GetImport(), nPrefix, rLocalName, GetImport().GetModel());
             break;
         case XML_TOK_DOC_BODY:
-            pContext = new SchXMLBodyContext( mrImportHelper, GetImport(), nPrefix, rLocalName );
-            break;
-        default:
-            pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+            if( nFlags & IMPORT_CONTENT )
+                pContext = new SchXMLBodyContext( mrImportHelper, GetImport(), nPrefix, rLocalName );
             break;
     }
+
+    // call parent when no own context was created
+    if( ! pContext )
+        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
     return pContext;
 }

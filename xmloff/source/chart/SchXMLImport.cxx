@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:14:22 $
+ *  last change: $Author: bm $ $Date: 2001-03-04 12:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,7 +452,8 @@ void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoin
 
 // ========================================
 
-SchXMLImport::SchXMLImport()
+SchXMLImport::SchXMLImport( sal_uInt16 nImportFlags ) :
+        SvXMLImport( nImportFlags )
 {
 }
 
@@ -518,7 +519,10 @@ SvXMLImportContext *SchXMLImport::CreateContext( USHORT nPrefix, const rtl::OUSt
     return pContext;
 }
 
-// chart import
+// export components ========================================
+
+// first version: everything comes from one storage
+
 uno::Sequence< OUString > SAL_CALL SchXMLImport_getSupportedServiceNames() throw()
 {
     const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Chart" ) );
@@ -536,3 +540,61 @@ uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const uno
     return (cppu::OWeakObject*)new SchXMLImport();
 }
 
+// ============================================================
+
+// multiple storage version: one for content / styles / meta
+
+uno::Sequence< OUString > SAL_CALL SchXMLImport_Styles_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLStylesImporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SchXMLImport_Styles_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport.Styles" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SchXMLImport( IMPORT_STYLES );
+}
+
+// ------------------------------------------------------------
+
+uno::Sequence< OUString > SAL_CALL SchXMLImport_Content_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLStylesImporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SchXMLImport_Content_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport.Content" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SchXMLImport( IMPORT_CONTENT | IMPORT_AUTOSTYLES | IMPORT_FONTDECLS );
+}
+
+// ------------------------------------------------------------
+
+uno::Sequence< OUString > SAL_CALL SchXMLImport_Meta_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLStylesImporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport.Meta" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SchXMLImport( IMPORT_META );
+}

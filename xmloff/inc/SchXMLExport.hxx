@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-14 17:13:17 $
+ *  last change: $Author: bm $ $Date: 2001-03-04 12:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ protected:
     virtual void _ExportContent();
 
 public:
-    SchXMLExport();
+    SchXMLExport( sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SchXMLExport();
 
     void SetProgress( sal_Int32 nPercentage );

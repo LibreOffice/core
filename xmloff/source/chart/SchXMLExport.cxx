@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-01 08:59:35 $
+ *  last change: $Author: bm $ $Date: 2001-03-04 12:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1817,12 +1817,13 @@ void SchXMLExportHelper::addSize( uno::Reference< drawing::XShape > xShape )
 // class SchXMLExport
 // ========================================
 
-SchXMLExport::SchXMLExport()
-: SvXMLExport( MAP_CM ),
-  maAutoStylePool( *this ),
-  maExportHelper( *this, maAutoStylePool )
+SchXMLExport::SchXMLExport( sal_uInt16 nExportFlags ) :
+        SvXMLExport( MAP_CM, sXML_chart, nExportFlags ),
+        maAutoStylePool( *this ),
+        maExportHelper( *this, maAutoStylePool )
 {
 }
+
 
 SchXMLExport::~SchXMLExport()
 {
@@ -1847,15 +1848,19 @@ void SchXMLExport::_ExportMasterStyles()
 
 void SchXMLExport::_ExportAutoStyles()
 {
-    uno::Reference< chart::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
-    if( xChartDoc.is())
+    // there are no styles that require their own autostyles
+    if( getExportFlags() & EXPORT_CONTENT )
     {
-        maExportHelper.collectAutoStyles( xChartDoc );
-        maExportHelper.exportAutoStyles();
-    }
-    else
-    {
-        DBG_ERROR( "Couldn't export chart due to wrong XModel (must be XChartDocument)" );
+        uno::Reference< chart::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
+        if( xChartDoc.is())
+        {
+            maExportHelper.collectAutoStyles( xChartDoc );
+            maExportHelper.exportAutoStyles();
+        }
+        else
+        {
+            DBG_ERROR( "Couldn't export chart due to wrong XModel (must be XChartDocument)" );
+        }
     }
 }
 
@@ -1909,7 +1914,10 @@ void SchXMLExport::SetProgress( sal_Int32 nPercentage )
         mxStatusIndicator->setValue( nPercentage );
 }
 
-// chart export
+// export components ========================================
+
+// first version: everything goes in one storage
+
 uno::Sequence< OUString > SAL_CALL SchXMLExport_getSupportedServiceNames() throw()
 {
     const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Chart" ) );
@@ -1919,10 +1927,70 @@ uno::Sequence< OUString > SAL_CALL SchXMLExport_getSupportedServiceNames() throw
 
 OUString SAL_CALL SchXMLExport_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport" ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Compact" ) );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SchXMLExport();
+}
+
+// ============================================================
+
+// multiple storage version: one for content / styles / meta
+
+uno::Sequence< OUString > SAL_CALL SchXMLExport_Styles_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLStylesExporter" ));
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SchXMLExport_Styles_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Styles" ));
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Styles_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SchXMLExport( EXPORT_STYLES );
+}
+
+// ------------------------------------------------------------
+
+uno::Sequence< OUString > SAL_CALL SchXMLExport_Content_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLContentExporter" ));
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SchXMLExport_Content_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Content" ));
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SchXMLExport( EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS |
+                                                 EXPORT_SETTINGS | EXPORT_SCRIPTS );
+}
+
+// ------------------------------------------------------------
+
+uno::Sequence< OUString > SAL_CALL SchXMLExport_Meta_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLMetaExporter" ));
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SchXMLExport_Meta_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Meta" ));
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SchXMLExport( EXPORT_META );
 }
