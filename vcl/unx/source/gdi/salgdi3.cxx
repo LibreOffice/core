@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hdu $ $Date: 2001-04-02 13:45:10 $
+ *  last change: $Author: pl $ $Date: 2001-04-04 16:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1512,7 +1512,7 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
 
             pMetric->mnOrientation  = maGraphicsData.m_pPrinterGfx->GetFontAngle();
             pMetric->mnSlant        = 0;
-            pMetric->mbDevice       = sal_True;
+            pMetric->mbDevice       = aInfo.m_eType == psp::fonttype::Builtin ? sal_True : sal_False;
 
             pMetric->meCharSet      = aInfo.m_aEncoding;
 
