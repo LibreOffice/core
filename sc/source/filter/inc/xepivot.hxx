@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepivot.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:55:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef SC_XEPIVOT_HXX
 #define SC_XEPIVOT_HXX
 
+#include <map>
+
 #ifndef SC_XLPIVOT_HXX
 #include "xlpivot.hxx"
 #endif
@@ -76,6 +78,10 @@ class ScDPObject;
 class ScDPSaveData;
 class ScDPSaveDimension;
 class ScDPSaveMember;
+class ScDPDimensionSaveData;
+class ScDPSaveGroupDimension;
+class ScDPSaveNumGroupDimension;
+struct ScDPNumGroupInfo;
 
 // ============================================================================
 // Pivot cache
@@ -87,12 +93,13 @@ class XclExpPCItem : public XclExpRecord, public XclPCItem
 public:
     explicit            XclExpPCItem( const String& rText );
     explicit            XclExpPCItem( double fValue, bool bDate );
+    explicit            XclExpPCItem( sal_Int16 nValue );
     explicit            XclExpPCItem( bool bValue );
 
     inline sal_uInt16   GetTypeFlag() const { return mnTypeFlag; }
 
     bool                EqualsText( const String& rText ) const;
-    bool                EqualsValue( double fValue ) const;
+    bool                EqualsDouble( double fValue ) const;
     bool                EqualsDate( double fDate ) const;
     bool                EqualsBool( bool bValue ) const;
 
@@ -105,42 +112,103 @@ private:
 
 // ============================================================================
 
-class XclExpPCField : public XclExpRecord
+class XclExpPivotCache;
+
+class XclExpPCField : public XclExpRecord, public XclPCField, protected XclExpRoot
 {
 public:
-    explicit            XclExpPCField( const XclExpRoot& rRoot, const ScRange& rRange );
+    /** Creates a standard pivot cache field, filled from sheet source data. */
+    explicit            XclExpPCField( const XclExpRoot& rRoot,
+                            const XclExpPivotCache& rPCache, sal_uInt16 nFieldIdx,
+                            const ScDPObject& rDPObj, const ScRange& rRange );
+    /** Creates a child grouping pivot cache field, filled from the passed grouping info. */
+    explicit            XclExpPCField( const XclExpRoot& rRoot,
+                            const XclExpPivotCache& rPCache, sal_uInt16 nFieldIdx,
+                            const ScDPObject& rDPObj, const ScDPSaveGroupDimension& rGroupDim,
+                            const XclExpPCField& rBaseField );
+
+    /** Sets the passed field as direct grouping child field of this field. */
+    void                SetGroupChildField( const XclExpPCField& rChildField );
+    /** Converts this standard field into a numeric grouping field. */
+    void                ConvertToNumGroup( const ScDPObject& rDPObj, const ScDPSaveNumGroupDimension& rNumGroupDim );
 
     /** Returns the name of this cache field. */
-    inline const String& GetName() const { return maName; }
-    /** Returns the number of unique items of this field. */
+    inline const String& GetFieldName() const { return maFieldInfo.maName; }
+
+    /** Returns the number of visible items of this field. */
     sal_uInt16          GetItemCount() const;
+    /** Returns the specified pivot cache item (returns visible items in groupings). */
+    const XclExpPCItem* GetItem( sal_uInt16 nItemIdx ) const;
+    /** Returns the index of a pivot cache item, or EXC_PC_NOITEM on error. */
+    sal_uInt16          GetItemIndex( const String& rItemName ) const;
+
     /** Returns the size an item index needs to write out. */
     sal_uInt32          GetIndexSize() const;
-    /** Returns the specified cache item. */
-    const XclExpPCItem* GetItem( sal_uInt16 nItemIdx ) const;
+    /** Writes the item index at the passed source row position as part of the SXIDARRAY record. */
+    void                WriteIndex( XclExpStream& rStrm, sal_uInt32 nSrcRow ) const;
 
-    void                WriteIndex( XclExpStream& rStrm, sal_uInt16 nPos ) const;
-
+    /** Writes the pivot cache field and all items and other related records. */
     virtual void        Save( XclExpStream& rStrm );
-
-private:
-    void                InsertIndex( ULONG nListPos );
-    void                InsertNewItem( XclExpPCItem* pNewItem );
-
-    void                InsertTextItem( const String& rText );
-    void                InsertValueItem( double fValue );
-    void                InsertDateItem( double fDate );
-    void                InsertBoolItem( bool bValue );
-
-    virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
     typedef XclExpRecordList< XclExpPCItem > XclExpPCItemList;
 
-    String              maName;             /// Name of the pivot cache field.
-    XclExpPCItemList    maItemList;         /// List with unique items.
+    /** Returns the item list that contains the visible items.
+        @descr  Visible items are equal to source items in standard fields,
+            but are generated items in grouping and calculated fields. */
+    const XclExpPCItemList& GetVisItemList() const;
+
+    /** Initializes a standard field. Inserts all original source items. */
+    void                InitStandardField( const ScRange& rRange );
+    /** Initializes a standard grouping field. Inserts all visible grouping items. */
+    void                InitStdGroupField( const XclExpPCField& rBaseField, const ScDPSaveGroupDimension& rGroupDim );
+    /** Initializes a numeric grouping field. Inserts all visible grouping items and the limit settings. */
+    void                InitNumGroupField( const ScDPObject& rDPObj, const ScDPNumGroupInfo& rNumInfo );
+    /** Initializes a date grouping field. Inserts all visible grouping items and the limit settings. */
+    void                InitDateGroupField( const ScDPObject& rDPObj, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nDatePart );
+
+    /** Inserts the passed index into the item index array of original items. */
+    void                InsertItemArrayIndex( ULONG nListPos );
+    /** Inserts an original source item. Updates item index array. */
+    void                InsertOrigItem( XclExpPCItem* pNewItem );
+    /** Inserts an original text item, if it is not contained already. */
+    void                InsertOrigTextItem( const String& rText );
+    /** Inserts an original value item, if it is not contained already. */
+    void                InsertOrigDoubleItem( double fValue );
+    /** Inserts an original date/time item, if it is not contained already. */
+    void                InsertOrigDateItem( double fDate );
+    /** Inserts an original boolean item, if it is not contained already. */
+    void                InsertOrigBoolItem( bool bValue );
+
+    /** Inserts an item into the grouping item list. Does not change anything else.
+        @return  The list index of the new item. */
+    sal_uInt16          InsertGroupItem( XclExpPCItem* pNewItem );
+    /** Generates and inserts all visible items for numeric or date grouping. */
+    void                InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nDatePart = 0 );
+
+    /** Inserts the SXDOUBLE items that specify the limits for a numeric grouping. */
+    void                SetNumGroupLimit( const ScDPNumGroupInfo& rNumInfo );
+    /** Inserts the SXDATETIME/SXINTEGER items that specify the limits for a date grouping.
+        @param bUseStep  true = Insert the passed step value; false = always insert 1. */
+    void                SetDateGroupLimit( const ScDPNumGroupInfo& rDateInfo, bool bUseStep );
+
+    /** Initializes flags and item count fields. */
+    void                Finalize();
+
+    /** Writes an SXNUMGROUP record and the additional items for a numeric grouping field. */
+    void                WriteSxnumgroup( XclExpStream& rStrm );
+    /** Writes an SXGROUPINFO record describing the item order in grouping fields. */
+    void                WriteSxgroupinfo( XclExpStream& rStrm );
+
+    /** Writes the contents of the SXFIELD record for this field. */
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    const XclExpPivotCache& mrPCache;       /// Parent pivot cache containing this field.
+    XclExpPCItemList    maOrigItemList;     /// List with original items.
+    XclExpPCItemList    maGroupItemList;    /// List with grouping items.
     ScfUInt16Vec        maIndexVec;         /// Indexes into maItemList.
-    sal_uInt16          mnFlags;            /// Various flags.
+    XclExpPCItemList    maNumGroupLimits;   /// List with limit values for numeric grouping.
     sal_uInt16          mnTypeFlags;        /// Collected item data type flags.
 };
 
@@ -150,13 +218,15 @@ class XclExpPivotCache : protected XclExpRoot
 {
 public:
     explicit            XclExpPivotCache( const XclExpRoot& rRoot,
-                            const ScRange& rSrcRange, sal_uInt16 nListIdx );
+                            const ScDPObject& rDPObj, sal_uInt16 nListIdx );
 
     /** Returns true, if the cache has been constructed successfully. */
     inline bool         IsValid() const { return mbValid; }
+    /** Returns true, if the item index list will be written. */
+    bool                HasItemIndexList() const;
 
     /** Returns the stream identifier used to create the cache stream. */
-    inline sal_uInt16   GetStreamId() const { return mnStrmId; }
+    inline sal_uInt16   GetStreamId() const { return maPCInfo.mnStrmId; }
     /** Returns the list index of the cache used in pivot table records. */
     inline sal_uInt16   GetCacheIndex() const { return mnListIdx; }
 
@@ -164,6 +234,10 @@ public:
     sal_uInt16          GetFieldCount() const;
     /** Returns the specified pivot cache field. */
     const XclExpPCField* GetField( sal_uInt16 nFieldIdx ) const;
+    /** Returns a pivot cache field by its name. */
+    const XclExpPCField* GetField( const String& rFieldName ) const;
+    /** Returns true, if this pivot cache contains non-standard fields (i.e. grouping fields). */
+    bool                HasAddFields() const;
 
     /** Returns true, if the passed DP object has the same data source as this cache. */
     bool                HasEqualDataSource( const ScDPObject& rDPObj ) const;
@@ -172,6 +246,21 @@ public:
     virtual void        Save( XclExpStream& rStrm );
 
 private:
+    /** Returns read/write access to a pivot cache field. */
+    XclExpPCField*      GetFieldAcc( sal_uInt16 nFieldIdx );
+    /** Returns read/write access to a pivot cache field. */
+    XclExpPCField*      GetFieldAcc( const String& rFieldName );
+
+    /** Adds all pivot cache fields. */
+    void                AddFields( const ScDPObject& rDPObj );
+
+    /** Adds all standard pivot cache fields based on source data. */
+    void                AddStdFields( const ScDPObject& rDPObj );
+    /** Adds all grouping pivot cache fields. */
+    void                AddGroupFields( const ScDPObject& rDPObj );
+    /** Adds all calculated pivot cache fields. */
+    void                AddCalcFields( const ScDPObject& rDPObj );
+
     /** Writes the DCONREF record containing the source range. */
     void                WriteDconref( XclExpStream& rStrm ) const;
 
@@ -187,13 +276,13 @@ private:
 private:
     typedef XclExpRecordList< XclExpPCField > XclExpPCFieldList;
 
+    XclPCInfo           maPCInfo;           /// Pivot cache settings (SXDB record).
     XclExpPCFieldList   maFieldList;        /// List of all pivot cache fields.
     String              maTabName;          /// Name of source data sheet.
     ScRange             maOrigSrcRange;     /// The original sheet source range.
-    ScRange             maSrcRange;         /// The working sheet source range.
-    sal_uInt16          mnStrmId;           /// Pivot cache stream identifier.
+    ScRange             maExpSrcRange;      /// The exported sheet source range.
+    ScRange             maDocSrcRange;      /// The range used to build the cache fields and items.
     sal_uInt16          mnListIdx;          /// List index in pivot cache buffer.
-    sal_uInt16          mnSrcRecs;          /// Number of source records (data rows).
     bool                mbValid;            /// true = The cache is valid for export.
 };
 
@@ -304,10 +393,7 @@ class XclExpPivotTable : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     explicit            XclExpPivotTable( const XclExpRoot& rRoot,
-                            const XclExpPivotCache& rPCache, const ScDPObject& rDPObj );
-
-    /** Returns true, if the pivot table is valid for export. */
-    inline bool         IsValid() const { return mbValid; }
+                            const ScDPObject& rDPObj, const XclExpPivotCache& rPCache );
 
     /** Returns a pivot cache field. */
     const XclExpPCField* GetCacheField( sal_uInt16 nCacheIdx ) const;
@@ -336,17 +422,15 @@ private:
 
     // fill data --------------------------------------------------------------
 
-    /** Initializes any data before processing the entire source DataPilot. */
-    void                Initialize( const ScDPObject& rDPObj );
-    /** Initializes any data after processing the entire source DataPilot. */
-    void                Finalize();
-
     /** Fills internal members with all properties from the passed save data. */
     void                SetPropertiesFromDP( const ScDPSaveData& rSaveData );
     /** Fills a pivot table field with all properties from the passed save dimension. */
     void                SetFieldPropertiesFromDim( const ScDPSaveDimension& rSaveDim );
     /** Fills a pivot table data field with all properties from the passed save dimension. */
     void                SetDataFieldPropertiesFromDim( const ScDPSaveDimension& rSaveDim );
+
+    /** Initializes any data after processing the entire source DataPilot. */
+    void                Finalize();
 
     // records ----------------------------------------------------------------
 
@@ -368,8 +452,7 @@ private:
     typedef XclExpRecordList< XclExpPTField >   XclExpPTFieldList;
     typedef ::std::vector< XclPTDataFieldPos >  XclPTDataFieldPosVec;
 
-    const XclExpPivotCache& mrPCache;       /// The pivot cache for this pivot table.
-
+    const XclExpPivotCache& mrPCache;       /// The pivot cache this pivot table bases on.
     XclPTInfo           maPTInfo;           /// Info about the pivot table (SXVIEW record).
     XclPTExtInfo        maPTExtInfo;        /// Extended info about the pivot table (SXEX record).
     XclExpPTFieldList   maFieldList;        /// All fields in pivot cache order.
@@ -385,6 +468,13 @@ private:
 
 // ============================================================================
 
+/** The main class for pivot table export.
+
+    This class contains all pivot caches and pivot tables in a Calc document.
+    It creates the pivot cache streams and pivot table records in the main
+    workbook stream. It supports sharing of pivot caches between multiple pivot
+    tables to decrease file size.
+ */
 class XclExpPivotTableManager : protected XclExpRoot
 {
 public:
@@ -399,19 +489,17 @@ public:
     void                WritePivotTables( XclExpStream& rStrm, SCTAB nScTab );
 
 private:
-    /** Creates and returns a new pivot cache.
-        @param bUseExisting
-            true = Tries to find existing cache with same source range;
-            false = Always creates a new pivot cache.
-        @return  The pivot cache or 0, if the passed source range was invalid. */
-    const XclExpPivotCache* CreatePivotCache( const ScDPObject& rDPObj, bool bUseExisting = true );
+    /** Finds an existing (if enabled in mbShareCaches) or creates a new pivot cache.
+        @return  Pointer to the pivot cache or 0, if the passed source range was invalid. */
+    const XclExpPivotCache* CreatePivotCache( const ScDPObject& rDPObj );
 
 private:
-    typedef XclExpRecordList< XclExpPivotCache > XclExpPivotCacheList;
-    typedef XclExpRecordList< XclExpPivotTable > XclExpPivotTableList;
+    typedef XclExpRecordList< XclExpPivotCache >    XclExpPivotCacheList;
+    typedef XclExpRecordList< XclExpPivotTable >    XclExpPivotTableList;
 
     XclExpPivotCacheList maPCacheList;      /// List of all pivot caches.
     XclExpPivotTableList maPTableList;      /// List of all pivot tables.
+    bool                mbShareCaches;      /// true = Tries to share caches between tables.
 };
 
 // ============================================================================
