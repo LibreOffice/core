@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:52:28 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ namespace dbaui
         Reference< XRowLocate > xRowLocate( xSrcRs, UNO_QUERY );
         sal_Bool bUseSelection  = _aSelection.getLength() > 0;
 
-        if ( !xRow.is() || ( bUseSelection && _bBookmarkSelection && !xRowLocate.is() ) )
+        if ( !xRow.is() || ( bUseSelection && _bBookmarkSelection && !xRowLocate.is() ) || !_xMetaData.is() )
         {
             DBG_ERROR( "insertRows: bad arguments!" );
             return;
@@ -265,7 +265,9 @@ namespace dbaui
         static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
         static ::rtl::OUString aComma(RTL_CONSTASCII_USTRINGPARAM(","));
 
-        ::rtl::OUString aQuote = _xMetaData->getIdentifierQuoteString();
+        ::rtl::OUString aQuote;
+        if ( _xMetaData.is() )
+            aQuote = _xMetaData->getIdentifierQuoteString();
 
         Reference<XColumnsSupplier> xColsSup(_xDestTable,UNO_QUERY);
         OSL_ENSURE(xColsSup.is(),"SbaTableQueryBrowser::insertRows: No columnsSupplier!");
@@ -424,7 +426,10 @@ namespace dbaui
             sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
             // we need to create the sql stmt with column names
             // otherwise it is possible that names don't match
-            ::rtl::OUString sQuote = _xSrcConnection->getMetaData()->getIdentifierQuoteString();
+            ::rtl::OUString sQuote;
+            Reference<XDatabaseMetaData> xMeta = _xSrcConnection->getMetaData();
+            if ( xMeta.is() )
+                sQuote = xMeta->getIdentifierQuoteString();
             static ::rtl::OUString sComma = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
 
             Reference<XColumnsSupplier> xSrcColsSup(xSourceObject,UNO_QUERY);
@@ -1439,7 +1444,8 @@ namespace dbaui
         {
             try
             {
-                bIsConnectionWriteAble = !xCon->getMetaData()->isReadOnly();
+                Reference<XDatabaseMetaData> xMeta = xCon->getMetaData();
+                bIsConnectionWriteAble = xMeta.is() && !xMeta->isReadOnly();
             }
             catch(SQLException&)
             {
