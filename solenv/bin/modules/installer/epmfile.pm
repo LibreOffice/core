@@ -371,6 +371,12 @@ sub create_epm_header
         $requires = "requires";         # the name in the packagelist
     }
 
+    if ( $installer::globals::patch )
+    {
+        $onepackage->{$provides} = "";
+        $onepackage->{$requires} = "";
+    }
+
     if ( $onepackage->{$provides} )
     {
         my $providesstring = $onepackage->{$provides};
@@ -673,7 +679,7 @@ sub add_one_line_into_file
 
 sub set_revision_in_pkginfo
 {
-    my ($file, $filename, $newepmdir) = @_;
+    my ($file, $filename, $variables) = @_;
 
     my $revisionstring = "\,REV\=" . $installer::globals::packagerevision;
 
@@ -702,6 +708,66 @@ sub set_revision_in_pkginfo
             last;
         }
     }
+
+    # For Update and Patch reasons, this string can also be kept constant
+
+    if ( $variables->{'PKGVERSION'} )
+    {
+        if ( $variables->{'PKGVERSION'} ne "FINALVERSION" )
+        {
+            my $versionstring = $variables->{'PKGVERSION'};
+
+            for ( my $i = 0; $i <= $#{$file}; $i++ )
+            {
+                if ( ${$file}[$i] =~ /^\s*(VERSION\=).*?\s*$/ )
+                {
+                    my $start = $1;
+                    my $newstring = $start . $versionstring . "\n"; # setting the complete new string
+                    my $oldstring = ${$file}[$i];
+                    ${$file}[$i] = $newstring;
+                    $oldstring =~ s/\s*$//;
+                    $newstring =~ s/\s*$//;
+                    my $infoline = "Info: Changed in $filename file: \"$oldstring\" to \"$newstring\"!\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    last;
+                }
+            }
+        }
+    }
+}
+
+########################################################
+# Setting Patch information for Respin versions
+# into pkginfo file. This prevents Respin versions
+# from patching.
+########################################################
+
+sub set_patchlist_in_pkginfo_for_respin
+{
+    my ($changefile, $filename, $allvariables) = @_;
+
+    if ( $allvariables->{'PATCHLISTFORRESPIN'} )
+    {
+        my $newline = "PATCHLIST=" . $allvariables->{'PATCHLISTFORRESPIN'} . "\n";
+        add_one_line_into_file($changefile, $newline, $filename);
+
+        # Adding patch info for each  patch in the patchlist
+        # patchlist separator is a blank
+
+        my $allpatchesstring = $allvariables->{'PATCHLISTFORRESPIN'};
+        my $allpatches = installer::converter::convert_whitespace_stringlist_into_array(\$allpatchesstring);
+
+        for ( my $i = 0; $i <= $#{$allpatches}; $i++ )
+        {
+            my $patchid = ${$allpatches}[$i];
+            my $key = "PATCH_INFO_" . $patchid;
+            $key =~ s/\s*$//;
+
+            if ( ! $allvariables->{$key} ) { installer::exiter::exit_program("ERROR: No Patch info available in zip list file for $key", "set_patchlist_in_pkginfo"); }
+            $newline = $key . "=" . $allvariables->{$key} . "\n";
+            add_one_line_into_file($changefile, $newline, $filename);
+        }
+    }
 }
 
 ########################################################
@@ -712,7 +778,7 @@ sub set_maxinst_in_pkginfo
 {
     my ($changefile, $filename) = @_;
 
-    my $newline = "MAXINST\=1000";
+    my $newline = "MAXINST\=1000\n";
 
     add_one_line_into_file($changefile, $newline, $filename);
 }
@@ -844,7 +910,7 @@ sub set_autoprovreq_in_specfile
         {
             splice(@{$changefile},$i+1,0,$autoreqprovline);
             $autoreqprovline =~ s/\s*$//;
-            $infoline = "Success: Added line $autoreqprovline into file $changefile!\n";
+            $infoline = "Success: Added line $autoreqprovline into spec file!\n";
             push( @installer::globals::logfileinfo, $infoline);
 
             last;
@@ -1075,6 +1141,74 @@ sub include_classes_into_pkginfo
 }
 
 ############################################################
+# A Solaris patch contains 7 specific scripts
+############################################################
+
+sub add_scripts_into_prototypefile
+{
+    my ($prototypefile) = @_;
+
+    # The files are stored in the directory $installer::globals::patchincludepath
+    # The file names are available via @installer::globals::solarispatchscripts
+
+    my $path = $installer::globals::patchincludepath;
+    $path =~ s/\/\s*$//;
+    $path = $path . $installer::globals::separator;
+
+    my @newlines = ();
+
+    for ( my $i = 0; $i <= $#installer::globals::solarispatchscripts; $i++ )
+    {
+        my $line = "i $installer::globals::solarispatchscripts[$i]=" . $path . $installer::globals::solarispatchscripts[$i] . "\n";
+        push(@newlines, $line);
+    }
+
+    # Including the new lines after the last line starting with "i"
+
+    for ( my $i = 0; $i <= $#{$prototypefile}; $i++ )
+    {
+        if ( ${$prototypefile}[$i] =~ /^\s*i\s+copyright/ )
+        {
+            splice(@{$prototypefile}, $i, 1);   # ignoring old copyright text, using patch standard
+            next;
+        }
+        if ( ${$prototypefile}[$i] =~ /^\s*i\s+/ ) { next; }
+        splice(@{$prototypefile}, $i, 0, @newlines);
+        last;
+    }
+}
+
+############################################################
+# Adding patch infos in pkginfo file
+############################################################
+
+sub include_patchinfos_into_pkginfo
+{
+    my ( $changefile, $filename, $variableshashref ) = @_;
+
+    # SUNW_PATCHID=101998-10
+    # SUNW_OBSOLETES=114999-01 113999-01
+    # SUNW_PKGTYPE=usr
+    # SUNW_PKGVERS=1.0
+
+    if ( ! $variableshashref->{'PATCHID'} ) { installer::exiter::exit_program("ERROR: Variable PATCHID not defined in zip list file!", "include_patchinfos_into_pkginfo"); }
+
+    my $newline = "SUNW_PATCHID=" . $variableshashref->{'PATCHID'} . "\n";
+    add_one_line_into_file($changefile, $newline, $filename);
+
+    my $obsoletes = "";
+    if ( $variableshashref->{'PATCHOBSOLETES'} ) { $obsoletes = $variableshashref->{'PATCHOBSOLETES'}; }
+    $newline = "SUNW_OBSOLETES=" . $obsoletes . "\n";
+    add_one_line_into_file($changefile, $newline, $filename);
+
+    # $newline = "SUNW_PKGTYPE=usr\n";
+    # add_one_line_into_file($changefile, $newline, $filename);
+
+    # $newline = "SUNW_PKGVERS=1.0\n";
+    # add_one_line_into_file($changefile, $newline, $filename);
+}
+
+############################################################
 # Including the relocatable directory into
 # spec file and pkginfo file
 # Linux: set topdir in specfile
@@ -1134,8 +1268,10 @@ sub prepare_packages
 
     if ( $installer::globals::issolarispkgbuild )
     {
-        set_revision_in_pkginfo($changefile, $filename);
+        set_revision_in_pkginfo($changefile, $filename, $variableshashref);
         set_maxinst_in_pkginfo($changefile, $filename);
+        if ( ! $installer::globals::patch ) { set_patchlist_in_pkginfo_for_respin($changefile, $filename, $variableshashref); }
+        if ( $installer::globals::patch ) { include_patchinfos_into_pkginfo($changefile, $filename, $variableshashref); }
         installer::files::save_file($completefilename, $changefile);
 
         my $prototypefilename = $packagename . ".prototype";
@@ -1150,8 +1286,10 @@ sub prepare_packages
             include_classes_into_pkginfo($changefile, $classesstring);
             installer::files::save_file($completefilename, $changefile);
         }
-        installer::files::save_file($prototypefilename, $prototypefile);
 
+        if ( $installer::globals::patch ) { add_scripts_into_prototypefile($prototypefile); }
+
+        installer::files::save_file($prototypefilename, $prototypefile);
     }
 
     return $newepmdir;
@@ -1229,7 +1367,7 @@ sub determine_rpm_version
     my $infoline = "Systemcall: $systemcall\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    if ( $rpmout eq "" ) { $infoline = "ERROR: Could not find file $searchfile !\n"; }
+    if ( $rpmout eq "" ) { $infoline = "ERROR: Could not find file \"rpm\" !\n"; }
     else { $infoline = "Success: rpm version: $rpmout\n"; }
 
     push( @installer::globals::logfileinfo, $infoline);
@@ -1412,9 +1550,14 @@ sub create_packages_without_epm
 
         # saving globally for later usage
         $installer::globals::rpmcommand = $rpmcommand;
+        $installer::globals::rpmquerycommand = "rpm"; # For queries "rpm" is used, not "rpmbuild"
 
-        # my $systemcall = "$rpmcommand -bb $specfilename --target i586 \> /dev/null";
-        my $systemcall = "$rpmcommand -bb $specfilename --target i586 2\>\&1 |";
+        my $target = "";
+        if ( $installer::globals::compiler =~ /unxlngi/) { $target = "i586"; }
+        if ( $installer::globals::compiler =~ /unxlngx/) { $target = "x86_64"; }
+
+        my $systemcall = "$rpmcommand -bb $specfilename --target $target 2\>\&1 |";
+
         print "... $systemcall ...\n";
 
         my $maxrpmcalls = 3;
@@ -1589,7 +1732,9 @@ sub create_new_directory_structure
 
     if ( $installer::globals::islinuxrpmbuild )
     {
-        my $rpmdir = "$installer::globals::epmoutpath/RPMS/i586";
+        my $rpmdir;
+        if ( $installer::globals::compiler =~ /unxlngi/) { $rpmdir = "$installer::globals::epmoutpath/RPMS/i586"; }
+        if ( $installer::globals::compiler =~ /unxlngx/) { $rpmdir = "$installer::globals::epmoutpath/RPMS/x86_64"; }
 
         my $systemcall = "mv $rpmdir/* $newdir";    # moving the rpms into the directory "RPMS"
 
@@ -1611,6 +1756,7 @@ sub create_new_directory_structure
 
         # and removing the empty directory
 
+        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/x86_64");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i586");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i386");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS");
@@ -1847,6 +1993,100 @@ sub analyze_rootpath
 
     my $relocatablepath = $rootpath . "\/";
     $$relocatablepathref = $relocatablepath;    # will be "/opt/openofficeorg20/"
+}
+
+######################################################
+# Including license and readme into
+# Unix installation sets.
+######################################################
+
+sub put_installsetfiles_into_installset
+{
+    my ($destdir) = @_;
+
+    # All files for the installation set are saved in the global
+    # array @installer::globals::installsetfiles
+
+    for ( my $i = 0; $i <= $#installer::globals::installsetfiles; $i++ )
+    {
+        my $onefile = $installer::globals::installsetfiles[$i];
+        my $sourcefile = $onefile->{'sourcepath'};
+        my $destfile = "";
+        if ( $installer::globals::addjavainstaller ) { $destfile = $onefile->{'Name'}; }
+        else { $destfile = $destdir . $installer::globals::separator . $onefile->{'Name'}; }
+        installer::systemactions::copy_one_file($sourcefile, $destfile);
+
+        my $infoline = "Adding to installation set \"$destfile\" from source \"$sourcefile\".\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
+######################################################
+# Replacing one variable in patchinfo file
+######################################################
+
+sub replace_one_variable_in_file
+{
+    my ( $file, $placeholder, $value ) = @_;
+
+    for ( my $i = 0; $i <= $#{$file}; $i++ )
+    {
+        ${$file}[$i] =~ s/$placeholder/$value/g;
+    }
+}
+
+######################################################
+# Setting variables in the patchinfo file
+######################################################
+
+sub set_patchinfo
+{
+    my ( $patchinfofile, $patchid ) = @_;
+
+    # Setting: PATCHIDPLACEHOLDER and ARCHITECTUREPLACEHOLDER
+
+    replace_one_variable_in_file($patchinfofile, "PATCHIDPLACEHOLDER", $patchid);
+
+    my $architecture = "";
+    if ( $installer::globals::issolarissparcbuild ) { $architecture = "sparc"; }
+    if ( $installer::globals::issolarisx86build ) { $architecture = "x86"; }
+
+    replace_one_variable_in_file($patchinfofile, "ARCHITECTUREPLACEHOLDER", $architecture);
+}
+
+######################################################
+# Finalizing patch: Renaming directory and
+# including additional patch files.
+######################################################
+
+sub finalize_patch
+{
+    my ( $newepmdir, $allvariables ) = @_;
+
+    if ( ! $allvariables->{'PATCHID'} ) { installer::exiter::exit_program("ERROR: Variable PATCHID not defined in zip list file!", "finalize_patch"); }
+    my $patchid = $allvariables->{'PATCHID'};
+    installer::systemactions::rename_directory($newepmdir, $patchid);
+
+    # Copying all typical patch files into the patch directory
+    # All patch file names are stored in @installer::globals::solarispatchfiles
+    # Location of the file is $installer::globals::patchincludepath
+
+    my $sourcepath = $installer::globals::patchincludepath;
+    $sourcepath =~ s/\/\s*$//;
+
+    for ( my $i = 0; $i <= $#installer::globals::solarispatchfiles; $i++ )
+    {
+        my $sourcefile = $sourcepath . $installer::globals::separator . $installer::globals::solarispatchfiles[$i];
+        my $destfile = $patchid . $installer::globals::separator . $installer::globals::solarispatchfiles[$i];
+        installer::systemactions::copy_one_file($sourcefile, $destfile);
+    }
+
+    # And editing the patchinfo file
+
+    my $patchinfofilename = $patchid . $installer::globals::separator . "patchinfo";
+    my $patchinfofile = installer::files::read_file($patchinfofilename);
+    set_patchinfo($patchinfofile, $patchid);
+    installer::files::save_file($patchinfofilename, $patchinfofile);
 }
 
 1;
