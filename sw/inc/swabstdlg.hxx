@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swabstdlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:38:45 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,24 @@ public:
     virtual Window *    GetWindow() = 0; //this method is added for return a Window type pointer
 };
 
+#define RET_LOAD_DOC            100
+#define RET_EDIT_DOC            101
+#define RET_EDIT_RESULT_DOC     102
+#define RET_TARGET_CREATED      103
+#define RET_REMOVE_TARGET       104
+
+class SwView;
+class SwMailMergeConfigItem;
+
+class AbstractMailMergeWizard : public VclAbstractDialog
+{
+public:
+    virtual void                SetReloadDocument(const String& rURL) = 0;
+    virtual const String&       GetReloadDocument() const = 0;
+    virtual BOOL                ShowPage( USHORT nLevel ) = 0;
+    virtual sal_uInt16          GetRestartPage() const = 0;
+};
+
 
 //-------Swabstract fractory
 class SwAbstractDialogFactory
@@ -534,6 +552,8 @@ public:
                                                        sal_Bool bNew=sal_True) = 0; //add for SwAuthMarkFloatDlg
     virtual VclAbstractDialog *         CreateIndexMarkModalDlg( const ResId& rResId,
                                                 Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark ) = 0; //add for SwIndexMarkModalDlg
+
+    virtual AbstractMailMergeWizard*    CreateMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem) = 0;
 
     //add for static func in SwGlossaryDlg
     virtual GlossaryGetCurrGroup        GetGlossaryCurrGroupFunc( USHORT nId ) = 0;
