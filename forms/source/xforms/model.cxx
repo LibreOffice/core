@@ -1,0 +1,883 @@
+/*************************************************************************
+ *
+ *  $RCSfile: model.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:53:47 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "model.hxx"
+
+#include "model_helper.hxx"
+#include "unohelper.hxx"
+#include "binding.hxx"
+#include "submission.hxx"
+#include "mip.hxx"
+#include "evaluationcontext.hxx"
+#include "xmlhelper.hxx"
+#include "datatyperepository.hxx"
+
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <tools/debug.hxx>
+
+#include <comphelper/propertysetinfo.hxx>
+#include <cppuhelper/typeprovider.hxx>
+
+#include <algorithm>
+
+// UNO classes
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/dom/XCharacterData.hpp>
+#include <com/sun/star/xml/dom/NodeType.hpp>
+#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+
+
+using com::sun::star::lang::XMultiServiceFactory;
+using com::sun::star::lang::XUnoTunnel;
+using com::sun::star::beans::XPropertySet;
+using com::sun::star::beans::PropertyValue;
+using rtl::OUString;
+using rtl::OUStringBuffer;
+using com::sun::star::beans::PropertyVetoException;
+using com::sun::star::beans::UnknownPropertyException;
+using com::sun::star::util::VetoException;
+using com::sun::star::lang::WrappedTargetException;
+using com::sun::star::lang::IllegalArgumentException;
+using com::sun::star::ucb::XSimpleFileAccess;
+using com::sun::star::io::XInputStream;
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::xml::dom;
+using namespace xforms;
+
+
+#if OSL_DEBUG_LEVEL > 1
+#define DBG_INVARIANT_TYPE(TYPE) class DBG_##TYPE { const TYPE* mpT; void check() { mpT->dbg_assertInvariant(); } public: DBG_##TYPE(const TYPE* pT) : mpT(pT) { check(); } ~DBG_##TYPE() { check(); } } _DBG_##TYPE(this);
+
+#define DBG_INVARIANT() DBG_INVARIANT_TYPE(Model)
+#else
+#define DBG_INVARIANT_TYPE(TYPE)
+#define DBG_INVARIANT()
+#endif
+
+
+
+//
+// The Model
+//
+
+void Model::ensureAtLeastOneInstance()
+{
+    if( ! mpInstances->hasItems() )
+    {
+        // create a default instance
+        newInstance( OUString(), OUString(), true );
+    }
+}
+
+
+
+/** Model default constructor; create empty model */
+Model::Model() :
+    msID(),
+    mpBindings( NULL ),
+    mpSubmissions( NULL ),
+    mpInstances( new InstanceCollection ),
+    mxBindings( mpBindings ),
+    mxSubmissions( mpSubmissions ),
+    mxInstances( mpInstances ),
+    mbInitialized( false )
+{
+    setInfo( _getPropertySetInfo() );
+
+    // initialize bindings collections
+    // (not in initializer list to avoid use of incomplete 'this')
+    mpBindings = new BindingCollection( this );
+    mxBindings = mpBindings;
+
+    mpSubmissions = new SubmissionCollection( this );
+    mxSubmissions = mpSubmissions;
+
+    // invariant only holds after construction
+    DBG_INVARIANT();
+}
+
+Model::~Model() throw()
+{
+    // give up bindings & submissions; the mxBindings/mxSubmissions
+    // references will then delete them
+    mpBindings = NULL;
+    mpSubmissions = NULL;
+}
+
+Model* lcl_getModel( const Reference<XUnoTunnel>& xTunnel )
+{
+    Model* pModel = NULL;
+    if( xTunnel.is() )
+        pModel = reinterpret_cast<Model*>(
+            xTunnel->getSomething( Model::getUnoTunnelID() ) );
+    return pModel;
+}
+
+Model* Model::getModel( const Reference<XModel>& xModel )
+{
+    return lcl_getModel( Reference<XUnoTunnel>( xModel, UNO_QUERY ) );
+}
+
+EvaluationContext Model::getEvaluationContext()
+{
+    // the default context is the top-level element node. A default
+    // node (instanceData' is inserted when there is no default node
+    Reference<XDocument> xInstance = getDefaultInstance();
+    Reference<XNode> xElement( xInstance->getDocumentElement(), UNO_QUERY );
+
+    // no element found? Then insert default element 'instanceData'
+    if( ! xElement.is() )
+    {
+        xElement = Reference<XNode>(
+                       xInstance->createElement( OUSTRING("instanceData") ),
+                       UNO_QUERY_THROW );
+        Reference<XNode>( xInstance, UNO_QUERY_THROW)->appendChild( xElement );
+    }
+
+    OSL_ENSURE( xElement.is() &&
+                xElement->getNodeType() == NodeType_ELEMENT_NODE,
+                "no element in evaluation context" );
+    return EvaluationContext( xElement, this, 0, 1 );
+}
+
+
+Model::IntSequence_t Model::getUnoTunnelID()
+{
+    static cppu::OImplementationId aImplementationId;
+    return aImplementationId.getImplementationId();
+}
+
+Model::XDocument_t Model::getForeignSchema() const
+{
+    return mxForeignSchema;
+}
+
+void Model::setForeignSchema( const XDocument_t& rDocument )
+{
+    mxForeignSchema = rDocument;
+}
+
+rtl::OUString Model::getSchemaRef() const
+{
+    return msSchemaRef;
+}
+
+void Model::setSchemaRef( const rtl::OUString& rSchemaRef )
+{
+    msSchemaRef = rSchemaRef;
+}
+
+
+#if OSL_DEBUG_LEVEL > 1
+void Model::dbg_assertInvariant() const
+{
+    OSL_ENSURE( mpInstances != NULL, "no instances found" );
+    OSL_ENSURE( mxInstances.is(), "No instance container!" );
+    //    OSL_ENSURE( mxInstances->hasElements(), "no instance!" );
+
+    OSL_ENSURE( mpBindings != NULL, "no bindings element" );
+    OSL_ENSURE( mxBindings.is(), "No Bindings container" );
+
+    OSL_ENSURE( mpSubmissions != NULL, "no submissions element" );
+    OSL_ENSURE( mxSubmissions.is(), "No Submission container" );
+
+
+
+    /*
+    // check bindings, and things that have to do with our binding
+    std::vector<MIP*> aAllMIPs; // check MIP map
+    sal_Int32 nCount = mpBindings->countItems();
+    for( sal_Int32 i = 0; i < nCount; i++ )
+    {
+        Binding* pBind = Binding::getBinding(
+            mpBindings->Collection<XPropertySet_t>::getItem( i ) );
+
+        // examine and check binding
+        OSL_ENSURE( pBind != NULL, "invalid binding found" );
+
+        OSL_ENSURE( Model::getModel( pBind->getModel() ) == this,
+                    "our binding doesn't know us.");
+        // check this binding's MIP against MIP map
+        MIP* pMIP = const_cast<MIP*>( pBind->_getMIP() );
+        sal_Int32 nFound = 0;
+        if( pMIP != NULL )
+        {
+            aAllMIPs.push_back( pMIP );
+            for( MIPs_t::const_iterator aIter = maMIPs.begin();
+                 aIter != maMIPs.end();
+                 aIter++ )
+            {
+                if( pMIP == aIter->second )
+                    nFound++;
+            }
+        }
+        OSL_ENSURE( ( pMIP == NULL ) == ( nFound == 0 ), "MIP-map wrong" );
+    }
+
+    // check MIP map for left-over MIPs
+    for( MIPs_t::const_iterator aIter = maMIPs.begin();
+         aIter != maMIPs.end();
+         aIter++ )
+    {
+        MIP* pMIP = aIter->second;
+        std::vector<MIP*>::iterator aFound =
+            std::find( aAllMIPs.begin(), aAllMIPs.end(), pMIP );
+        if( aFound != aAllMIPs.end() )
+            aAllMIPs.erase( aFound );
+    }
+    OSL_ENSURE( aAllMIPs.empty(), "lonely MIPs found!" );
+    */
+}
+#endif
+
+
+//
+// MIP managment
+//
+
+void Model::addMIP( void* pTag, const XNode_t& xNode, const MIP& rMIP )
+{
+    OSL_ENSURE( pTag != NULL, "empty tag?" );
+    OSL_ENSURE( xNode.is(), "no node" );
+
+    MIPs_t::value_type aValue( xNode, pair<void*,MIP>( pTag, rMIP ) );
+    maMIPs.insert( aValue );
+}
+
+void Model::removeMIPs( void* pTag )
+{
+    OSL_ENSURE( pTag != NULL, "empty tag?" );
+
+    for( MIPs_t::iterator aIter = maMIPs.begin();
+         aIter != maMIPs.end();
+         aIter ++ )
+    {
+        if( aIter->second.first == pTag )
+            maMIPs.erase( aIter );
+    }
+}
+
+MIP Model::queryMIP( const XNode_t& xNode ) const
+{
+    //    OSL_ENSURE( xNode.is(), "no node" );
+
+    // travel up inheritance chain and inherit MIPs
+    MIP aRet;
+    for( XNode_t xCurrent = xNode;
+         xCurrent.is();
+         xCurrent = xCurrent->getParentNode() )
+    {
+        // iterate over all MIPs for this node, and join MIPs
+        MIP aMIP;
+        MIPs_t::const_iterator aEnd = maMIPs.upper_bound( xCurrent );
+        MIPs_t::const_iterator aIter = maMIPs.lower_bound( xCurrent );
+        for( ; aIter != aEnd; aIter++ )
+            aMIP.join( aIter->second.second );
+
+        // inherit from current node (or set if we are at the start node)
+        if( xCurrent == xNode )
+            aRet = aMIP;
+        else
+            aRet.inherit( aMIP );
+    }
+
+    return aRet;
+}
+
+
+
+void Model::rebind()
+{
+    OSL_ENSURE( mpBindings != NULL, "bindings?" );
+
+    // iterate over all bindings and call update
+    sal_Int32 nCount = mpBindings->countItems();
+    for( sal_Int32 i = 0; i < nCount; i++ )
+    {
+        Binding* pBind = Binding::getBinding( mpBindings->Collection<XPropertySet_t>::getItem( i ) );
+        OSL_ENSURE( pBind != NULL, "binding?" );
+        pBind->update();
+    }
+}
+
+
+
+void Model::deferNotifications( bool bDefer )
+{
+    // iterate over all bindings and defer notifications
+    sal_Int32 nCount = mpBindings->countItems();
+    for( sal_Int32 i = 0; i < nCount; i++ )
+    {
+        Binding* pBind = Binding::getBinding( mpBindings->Collection<XPropertySet_t>::getItem( i ) );
+        OSL_ENSURE( pBind != NULL, "binding?" );
+        pBind->deferNotifications( bDefer );
+    }
+}
+
+
+bool Model::setSimpleContent( const XNode_t& xConstNode,
+                              const rtl::OUString& sValue )
+{
+    OSL_ENSURE( xConstNode.is(), "need node to set data" );
+
+    bool bRet = false;
+    if( xConstNode.is() )
+    {
+        // non-const node reference so we can assign children (if necessary)
+        XNode_t xNode( xConstNode );
+
+        switch( xNode->getNodeType() )
+        {
+        case NodeType_ELEMENT_NODE:
+        {
+            // find first text node child
+            Reference<XNode> xChild;
+            for( xChild = xNode->getFirstChild();
+                 xChild.is() && xChild->getNodeType() != NodeType_TEXT_NODE;
+                 xChild = xChild->getNextSibling() )
+                ; // empty loop; only find first text node child
+
+            // create text node, if none is found
+            if( ! xChild.is() )
+            {
+                xChild = Reference<XNode>(
+                    xNode->getOwnerDocument()->createTextNode( OUString() ),
+                    UNO_QUERY_THROW );
+                xNode->appendChild( xChild );
+            }
+            xNode = xChild;
+
+            OSL_ENSURE( xNode.is() &&
+                        xNode->getNodeType() == NodeType_TEXT_NODE,
+                        "text node creation failed?" );
+        }
+        // no break; continue as with text node:
+
+        case NodeType_TEXT_NODE:
+        case NodeType_ATTRIBUTE_NODE:
+        {
+            // set the node value (defer notifications)
+            if( xNode->getNodeValue() != sValue )
+            {
+                deferNotifications( true );
+                xNode->setNodeValue( sValue );
+                deferNotifications( false );
+            }
+            bRet = true;
+        }
+        break;
+
+        default:
+        {
+            OSL_ENSURE( false, "bound to unknown node type?" );
+        }
+        break;
+
+        }
+    }
+    return bRet;
+}
+
+void Model::loadInstance( sal_Int32 nInstance )
+{
+    Sequence<PropertyValue> aSequence = mpInstances->getItem( nInstance );
+
+    // find URL from instance
+    OUString sURL;
+    bool bOnce = false;
+    getInstanceData( aSequence, NULL, NULL, &sURL, &bOnce );
+
+    // if we have a URL, load the document and set it into the instance
+    if( sURL.getLength() > 0 )
+    {
+        try
+        {
+            Reference<XInputStream> xInput =
+                Reference<XSimpleFileAccess>(
+                    createInstance(
+                        OUSTRING("com.sun.star.ucb.SimpleFileAccess") ),
+                    UNO_QUERY_THROW )->openFileRead( sURL );
+            if( xInput.is() )
+            {
+                Reference<XDocument> xInstance =
+                    getDocumentBuilder()->parse( xInput );
+                if( xInstance.is() )
+                {
+                    OUString sEmpty;
+                    setInstanceData( aSequence, NULL, &xInstance,
+                                     bOnce ? &sEmpty : &sURL, NULL);
+                    mpInstances->setItem( nInstance, aSequence );
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+            // couldn't load the instance -> ignore!
+        }
+    }
+}
+
+void Model::loadInstances()
+{
+    // iterate over instance array to get PropertyValue-Sequence
+    const sal_Int32 nInstances = mpInstances->countItems();
+    for( sal_Int32 nInstance = 0; nInstance < nInstances; nInstance++ )
+    {
+        loadInstance( nInstance );
+    }
+}
+
+bool Model::isInitialized() const
+{
+    return mbInitialized;
+}
+
+
+//
+// implement xforms::XModel
+//
+
+rtl::OUString Model::getID()
+    throw( RuntimeException )
+{
+    DBG_INVARIANT();
+    return msID;
+}
+
+void Model::setID( const rtl::OUString& sID )
+    throw( RuntimeException )
+{
+    DBG_INVARIANT();
+    msID = sID;
+}
+
+void Model::initialize()
+    throw( RuntimeException )
+{
+    DBG_ASSERT( ! mbInitialized, "model already initialized" );
+
+    // load instances
+    loadInstances();
+
+    // let's pretend we're initialized and rebind all bindings
+    mbInitialized = true;
+    rebind();
+}
+
+void Model::rebuild()
+    throw( RuntimeException )
+{
+    if( ! mbInitialized )
+        initialize();
+    else
+        rebind();
+}
+
+void Model::recalculate()
+    throw( RuntimeException )
+{
+    rebind();
+}
+
+void Model::revalidate()
+    throw( RuntimeException )
+{
+    // do nothing. We don't validate anyways!
+}
+
+void Model::refresh()
+    throw( RuntimeException )
+{
+    rebind();
+}
+
+
+void SAL_CALL Model::submitWithInteraction( const ::rtl::OUString& sID, const XInteraction_t& _rxHandler )
+    throw( VetoException, WrappedTargetException, RuntimeException )
+{
+    DBG_INVARIANT();
+
+    bool bResult = false;
+    try
+    {
+        // TODO: error handling!
+        if( mpSubmissions->hasItem( sID ) )
+        {
+            Submission* pSubmission =
+                Submission::getSubmission( mpSubmissions->getItem( sID ) );
+            OSL_ENSURE( pSubmission != NULL, "no submission?" );
+            OSL_ENSURE( pSubmission->getModel() == Reference<XModel>( this ),
+                        "wrong model" );
+            bResult = pSubmission->doSubmit( _rxHandler );
+        }
+    }
+    catch( const RuntimeException& )
+    {
+        // allowed to leave
+        throw;
+    }
+    catch( const VetoException& )
+    {
+        OSL_ENSURE( sal_False, "Model::submit: Hmm. How can a single submission have a veto right?" );
+        // allowed to leave
+        throw;
+    }
+    catch( const Exception& e )
+    {
+        throw WrappedTargetException( ::rtl::OUString::createFromAscii( "The submission failed. Sorry." ), *this, makeAny( e ) );
+    }
+
+    if( ! bResult )
+        throw WrappedTargetException( ::rtl::OUString::createFromAscii( "The submission failed. Sorry, no further info is available." ), *this, Any() );
+}
+
+void Model::submit( const rtl::OUString& sID )
+    throw( VetoException, WrappedTargetException, RuntimeException )
+{
+    submitWithInteraction( sID, NULL );
+}
+
+Model::XDataTypeRepository_t SAL_CALL Model::getDataTypeRepository(  )
+    throw( RuntimeException )
+{
+    if ( !mxDataTypes.is() )
+        mxDataTypes = new ODataTypeRepository;
+
+    return mxDataTypes;
+}
+
+//
+// instance management
+//
+
+Model::XSet_t Model::getInstances()
+    throw( RuntimeException )
+{
+    return mxInstances;
+}
+
+Model::XDocument_t Model::getInstanceDocument( const rtl::OUString& rName )
+    throw( RuntimeException )
+{
+    ensureAtLeastOneInstance();
+    Reference<XDocument> aInstance;
+    sal_Int32 nInstance = lcl_findInstance( mpInstances, rName );
+    if( nInstance != -1 )
+        getInstanceData( mpInstances->getItem( nInstance ),
+                         NULL, &aInstance, NULL, NULL );
+    return aInstance;
+}
+
+Model::XDocument_t SAL_CALL Model::getDefaultInstance()
+    throw( RuntimeException )
+{
+    ensureAtLeastOneInstance();
+    DBG_ASSERT( mpInstances->countItems() > 0, "no instance?" );
+    Reference<XDocument> aInstance;
+    getInstanceData( mpInstances->getItem( 0 ), NULL, &aInstance, NULL, NULL );
+    return aInstance;
+}
+
+
+
+//
+// bindings management
+//
+
+Model::XPropertySet_t SAL_CALL Model::createBinding()
+    throw( RuntimeException )
+{
+    DBG_INVARIANT();
+    return new Binding();
+}
+
+Model::XPropertySet_t Model::cloneBinding( const XPropertySet_t& xBinding )
+    throw( RuntimeException )
+{
+    DBG_INVARIANT();
+    XPropertySet_t xNewBinding = createBinding();
+    copy( xBinding, xNewBinding );
+    return xNewBinding;
+}
+
+Model::XPropertySet_t Model::getBinding( const rtl::OUString& sId )
+    throw( RuntimeException )
+{
+    DBG_INVARIANT();
+    return mpBindings->hasItem( sId ) ? mpBindings->getItem( sId ) : NULL;
+}
+
+Model::XSet_t Model::getBindings()
+    throw( RuntimeException )
+{
+    DBG_INVARIANT();
+    return mxBindings;
+}
+
+
+
+//
+// submission management
+//
+
+Model::XSubmission_t Model::createSubmission()
+    throw( RuntimeException )
+{
+    DBG_INVARIANT();
+    return new Submission();
+}
+
+Model::XSubmission_t Model::cloneSubmission(const XPropertySet_t& xSubmission)
+    throw( RuntimeException )
+{
+    DBG_INVARIANT();
+    XSubmission_t xNewSubmission = createSubmission();
+    XPropertySet_t xAsPropertySet( xNewSubmission.get() );
+    copy( xSubmission.get(), xAsPropertySet );
+    return xNewSubmission;
+}
+
+Model::XSubmission_t Model::getSubmission( const rtl::OUString& sId )
+    throw( RuntimeException )
+{
+    DBG_INVARIANT();
+    XSubmission_t xSubmission;
+    if ( mpSubmissions->hasItem( sId ) )
+        xSubmission = xSubmission.query( mpSubmissions->getItem( sId ) );
+    return xSubmission;
+}
+
+Model::XSet_t Model::getSubmissions()
+    throw( RuntimeException )
+{
+    DBG_INVARIANT();
+    return mxSubmissions;
+}
+
+
+
+//
+// implementation of XFormsUIHelper1 interface
+//   can be found in file model_ui.cxx
+//
+
+
+
+//
+// implement XPropertySet & friends
+//
+
+#define HANDLE_ID 0
+#define HANDLE_Instance 1
+#define HANDLE_InstanceURL 2
+#define HANDLE_ForeignSchema 3
+#define HANDLE_SchemaRef 4
+
+#define ENTRY_FLAGS(NAME,TYPE,FLAGS) { #NAME, sizeof(#NAME)-1, HANDLE_##NAME, &getCppuType(static_cast<TYPE*>(NULL)), FLAGS, 0 }
+#define ENTRY(NAME,TYPE) ENTRY_FLAGS(NAME,TYPE,0)
+#define ENTRY_RO(NAME,TYPE) ENTRY_FLAGS(NAME,TYPE,com::sun::star::beans::PropertyAttribute::READONLY)
+#define ENTRY_END { NULL, 0, NULL, 0, 0}
+
+comphelper::PropertySetInfo* Model::_getPropertySetInfo()
+{
+    static comphelper::PropertySetInfo* pInfo = NULL;
+
+    static comphelper::PropertyMapEntry pEntries[] =
+    {
+        ENTRY( ID, OUString ),
+        ENTRY( ForeignSchema, XDocument_t ),
+        ENTRY( SchemaRef, OUString ),
+        ENTRY_END
+    };
+
+    if( pInfo == NULL )
+    {
+        pInfo = new comphelper::PropertySetInfo( pEntries );
+        pInfo->acquire();
+    }
+
+    return pInfo;
+}
+
+
+
+void Model::_setPropertyValues(
+    const comphelper::PropertyMapEntry** ppEntries,
+    const Any_t* pValues )
+    throw( UnknownPropertyException,
+           PropertyVetoException,
+           IllegalArgumentException,
+           WrappedTargetException )
+{
+    DBG_INVARIANT();
+
+    // iterate over all PropertyMapEntry/Any pairs
+    for( ; *ppEntries != NULL; ppEntries++, pValues++ )
+    {
+        // delegate each property to the suitable handler method
+        switch( (*ppEntries)->mnHandle )
+        {
+            case HANDLE_ID:
+                setAny( this, &Model::setID, *pValues );
+                break;
+            case HANDLE_ForeignSchema:
+                setAny( this, &Model::setForeignSchema, *pValues );
+                break;
+            case HANDLE_SchemaRef:
+                setAny( this, &Model::setSchemaRef, *pValues );
+                break;
+            default:
+                OSL_ENSURE( false, "Unknown HANDLE" );
+                break;
+        }
+    }
+}
+
+
+void Model::_getPropertyValues(
+    const comphelper::PropertyMapEntry** ppEntries,
+    Any_t* pValues )
+    throw( UnknownPropertyException,
+           WrappedTargetException )
+{
+    DBG_INVARIANT();
+
+    // iterate over all PropertyMapEntry/Any pairs
+    for( ; *ppEntries != NULL; ppEntries++, pValues++ )
+    {
+        // delegate each property to the suitable handler method
+        switch( (*ppEntries)->mnHandle )
+        {
+        case HANDLE_ID:
+            getAny( this, &Model::getID, *pValues );
+            break;
+        case HANDLE_ForeignSchema:
+            getAny( this, &Model::getForeignSchema, *pValues );
+            break;
+        case HANDLE_SchemaRef:
+            getAny( this, &Model::getSchemaRef, *pValues );
+            break;
+        default:
+            OSL_ENSURE( false, "Unknown HANDLE" );
+            break;
+        }
+    }
+}
+
+
+void Model::update()
+    throw( RuntimeException )
+{
+    rebuild();
+}
+
+
+sal_Int64 Model::getSomething( const IntSequence_t& xId )
+    throw( RuntimeException )
+{
+    return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : NULL );
+}
+
+Sequence<sal_Int8> Model::getImplementationId()
+    throw( RuntimeException )
+{
+    return getUnoTunnelID();
+}
+
+
+//
+// 'shift' operators for getting data into and out of Anys
+//
+
+void operator <<= ( com::sun::star::uno::Any& rAny,
+                    xforms::Model* pModel)
+{
+    Reference<XPropertySet> xPropSet( static_cast<XPropertySet*>( pModel ) );
+    rAny <<= xPropSet;
+}
+
+bool operator >>= ( xforms::Model* pModel,
+                    com::sun::star::uno::Any& rAny )
+{
+    bool bRet = false;
+
+    // acquire model pointer through XUnoTunnel
+    Reference<XUnoTunnel> xTunnel( rAny, UNO_QUERY );
+    if( xTunnel.is() )
+    {
+        pModel = reinterpret_cast<xforms::Model*>(
+            xTunnel->getSomething( xforms::Model::getUnoTunnelID() ) );
+        bRet = true;
+    }
+
+    return bRet;
+}
