@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:29:10 $
+ *  last change: $Author: fs $ $Date: 2001-01-17 08:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_CANUPDATE,              "CanUpdate");
     PCR_CONSTASCII_STRING( PROPERTY_CANDELETE,              "CanDelete");
     PCR_CONSTASCII_STRING( PROPERTY_NAVIGATION,             "NavigationBarMode");
-    PCR_CONSTASCII_STRING( PROPERTY_HASNAVIGATION,          "HasNavigationBar");
     PCR_CONSTASCII_STRING( PROPERTY_CYCLE,                  "Cycle");
     PCR_CONSTASCII_STRING( PROPERTY_CONTROLSOURCE,          "DataField");
     PCR_CONSTASCII_STRING( PROPERTY_ENABLED,                "Enabled");
@@ -254,6 +253,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:29:10  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 14:17:16  fs
  ************************************************************************/
