@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-07-05 14:57:53 $
+ *  last change: $Author: er $ $Date: 2002-08-05 16:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,9 +558,13 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
         else
             return ParseResult();
     }
-    catch ( Exception& )
+    catch ( Exception& e )
     {
-        DBG_ERRORFILE( "parseAnyToken: Exception caught!" );
+#ifndef PRODUCT
+        ByteString aMsg( "parseAnyToken: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
         return ParseResult();
     }
 }
@@ -584,9 +588,13 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
         else
             return ParseResult();
     }
-    catch ( Exception& )
+    catch ( Exception& e )
     {
-        DBG_ERRORFILE( "parsePredefinedToken: Exception caught!" );
+#ifndef PRODUCT
+        ByteString aMsg( "parsePredefinedToken: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
         return ParseResult();
     }
 }
