@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:29:13 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,188 +72,204 @@
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
-#ifndef DBAUI_TOOLBOX_HXX
-#include "toolbox.hrc"
+#ifndef DBAUI_ADABASPAGE_HRC
+#include "AdabasPage.hrc"
 #endif
 
-#define PAGE_X 260
-#define PAGE_Y 185
 #define CHECKBOX_HEIGHT     8
 #define FIXEDTEXT_HEIGHT    8
 #define RELATED_CONTROLS    4
 #define UNRELATED_CONTROLS  7
-#define EDIT_HEIGHT        12
-#define BUTTON_HEIGHT       14
+#define EDIT_HEIGHT         12
+#define EDIT_X              101
 
-#define IL_TABLESUBCRIPTION \
-\
-    IdList = {\
-        ID_NEW_TABLE_DESIGN;\
-        ID_EDIT_TABLE;\
-        ID_DROP_TABLE;\
-        };\
-    IdCount = {\
-    3;\
+#define ADVANCED_PAGE_X     200
+#define ADVANCED_PAGE_Y     (105 + 4*CHECKBOX_HEIGHT + 4*RELATED_CONTROLS)
+//-------------------------------------------------------------------------
+#define AUTO_APPENDTABLEALIAS(AUTO_Y)                                               \
+    CheckBox CB_APPENDTABLEALIAS                                                    \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12  , CHECKBOX_HEIGHT ) ;                          \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_APPENDTABLEALIAS;                                      \
+        Text [ de ] = "Den Alias Namen von Tabellen im SELECT Ausdruck anhängen";           \
+        Text[ en-US ] = "Append the table alias name on SELECT statements"; \
     }
-
-ImageList IMG_TABLESUBCRIPTION_SC
-{
-    Prefix = "sc";
-    MaskColor   = Color {
-    Red   = 0xFFFF;
-    Green = 0x0000;
-    Blue  = 0xFFFF;
-    };
-    IL_TABLESUBCRIPTION ;
-};
-ImageList IMG_TABLESUBCRIPTION_SCH
-{
-    Prefix = "sch";
-    MaskColor   = Color {
-            Red   = 0xffff;
-            Green = 0x0000;
-            Blue  = 0xffff;
-    };
-    IL_TABLESUBCRIPTION ;
-};
-ImageList IMG_TABLESUBCRIPTION_LC
-{
-    Prefix = "lc";
-    MaskColor   = Color {
-    Red   = 0xFFFF;
-    Green = 0x0000;
-    Blue  = 0xFFFF;
-    };
-    IL_TABLESUBCRIPTION ;
-};
-ImageList IMG_TABLESUBCRIPTION_LCH
-{
-    Prefix = "lch";
-    MaskColor   = Color {
-                Red   = 0xffff;
-                Green = 0x0000;
-                Blue  = 0xffff;
-        };
-    IL_TABLESUBCRIPTION ;
-};
-
 
 //-------------------------------------------------------------------------
-#define IL_QUERYADMINISTRATION \
-\
-    IdList = {\
-        ID_NEW_QUERY_DESIGN;\
-        ID_NEW_QUERY_SQL;\
-        ID_EDIT_QUERY_DESIGN;\
-        ID_EDIT_QUERY_SQL;\
-        ID_DROP_QUERY;\
-        ID_RENAME_ENTRY;\
-        };\
-    IdCount = {\
-    6;\
+#define AUTO_IGNOREINDEXAPPENDIX(AUTO_Y)                                            \
+    CheckBox CB_IGNOREINDEXAPPENDIX                                                 \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12  , CHECKBOX_HEIGHT ) ;          \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_IGNOREINDEXAPPENDIX;                                   \
+        Text [ de ] = "Index mit ASC- oder DESC-Befehl erstellen";                  \
+        Text[ en-US ] = "Create index with ASC or DESC statement";          \
     }
 
-ImageList IMG_QUERYADMINISTRATION_SC
-{
-    Prefix = "sc";
-    MaskColor   = Color {
-    Red   = 0xFFFF;
-    Green = 0x0000;
-    Blue  = 0xFFFF;
-    };
-    IL_QUERYADMINISTRATION ;
-};
-ImageList IMG_QUERYADMINISTRATION_SCH
-{
-    Prefix = "sch";
-    MaskColor   = Color {
-                Red   = 0xffff;
-                Green = 0x0000;
-                Blue  = 0xffff;
-        };
-    IL_QUERYADMINISTRATION ;
-};
-ImageList IMG_QUERYADMINISTRATION_LC
-{
-    Prefix = "lc";
-    MaskColor   = Color {
-    Red   = 0xFFFF;
-    Green = 0x0000;
-    Blue  = 0xFFFF;
-    };
-    IL_QUERYADMINISTRATION ;
-};
-ImageList IMG_QUERYADMINISTRATION_LCH
-{
-    Prefix = "lch";
-    MaskColor   = Color {
-                Red   = 0xffff;
-                Green = 0x0000;
-                Blue  = 0xffff;
-        };
-    IL_QUERYADMINISTRATION ;
-};
 //-------------------------------------------------------------------------
-#define IL_DOCUMENTLINKS \
-\
-    IdList = {\
-        ID_NEW_LINK;\
-        ID_EDIT_LINK;\
-        ID_DROP_LINK;\
-        ID_OPEN_DOCUMENT;\
-        ID_EDIT_DOCUMENT;\
-        ID_CREATE_NEW_DOC;\
-        };\
-    IdCount = {\
-    6;\
+#define AUTO_SUPPRESVERSIONCOLUMN(AUTO_Y)                                           \
+    CheckBox CB_SUPPRESVERSIONCL                                                    \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        Group   = TRUE ;                                                            \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_SUPPRESS_VERSIONCL;                                    \
+        Text [ de ] = "Versionsspalten anzeigen (wenn verfuegbar)";                     \
+        Text [ en-US ] = "Display version columns (when available)";            \
     }
 
-ImageList IMG_DOCUMENTLINKS_SC
-{
-    Prefix = "sc";
-    MaskColor   = Color {
-    Red   = 0xFFFF;
-    Green = 0x0000;
-    Blue  = 0xFFFF;
-    };
-    IL_DOCUMENTLINKS ;
-};
-ImageList IMG_DOCUMENTLINKS_SCH
-{
-    Prefix = "sch";
-    MaskColor   = Color {
-            Red   = 0xffff;
-            Green = 0x0000;
-            Blue  = 0xffff;
-    };
-    IL_DOCUMENTLINKS ;
-};
-ImageList IMG_DOCUMENTLINKS_LC
-{
-    Prefix = "lc";
-    MaskColor   = Color {
-    Red   = 0xFFFF;
-    Green = 0x0000;
-    Blue  = 0xFFFF;
-    };
-    IL_DOCUMENTLINKS ;
-};
-ImageList IMG_DOCUMENTLINKS_LCH
-{
-    Prefix = "lch";
-    MaskColor   = Color {
-            Red   = 0xffff;
-            Green = 0x0000;
-            Blue  = 0xffff;
-    };
-    IL_DOCUMENTLINKS ;
-};
+//-------------------------------------------------------------------------
+#define AUTO_ENABLEOUTERJOIN(AUTO_Y)                                            \
+    CheckBox CB_ENABLEOUTERJOIN                                                     \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        Group   = TRUE ;                                                            \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_ENABLEOUTERJOIN;                                       \
+        Text [ de ] = "Für Outer Joins die Syntax '{OJ }' verwenden";                       \
+        Text [ en-US ] = "Use Outer Join syntax '{OJ }'";                       \
+    }
+
+//-------------------------------------------------------------------------
+#define AUTO_DOSLINEENDS(AUTO_Y)                                            \
+    CheckBox CB_DOSLINEENDS                                                         \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        Group   = TRUE ;                                                            \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_DOSLINEENDS;                                           \
+        Text [ de ] = "Textzeilen mit CR+LF beenden";                                       \
+        Text [ en-US ] = "End text lines with CR+LF";                           \
+    }
+
+//-------------------------------------------------------------------------
+#define AUTO_SCHEMA(AUTO_Y)                                         \
+    CheckBox CB_SCHEMA                                                      \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        Group   = TRUE ;                                                            \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_SCHEMA;                                                \
+        Text [ de ] = "Den Schemanamen im SELECT Ausdruck verwenden.";                  \
+        Text [ en-US ] = "Use schema name in SELECT statements";                \
+    }
+
+//-------------------------------------------------------------------------
+#define AUTO_CATALOG(AUTO_Y)                                            \
+    CheckBox CB_CATALOG                                                     \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        Group   = TRUE ;                                                            \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_CATALOG;                                               \
+        Text [ de ] = "Den Katalognamen im SELECT Ausdruck verwenden.";                 \
+        Text [ en-US ] = "Use catalog name in SELECT statements";               \
+    }
+
+//-------------------------------------------------------------------------
+#define AUTO_BOOLEANCOMPARISON(AUTO_Y)                                          \
+    FixedText FT_BOOLEANCOMPARISON                                                  \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( 100 , FIXEDTEXT_HEIGHT ) ;          \
+        Text [ de ] = "Vergleich von Wahrheitswerten";                      \
+        Text [ en-US ] = "Comparison of Boolean values";            \
+    };                                                                              \
+    ListBox LB_BOOLEANCOMPARISON                                                    \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 107 , AUTO_Y -1) ;                                  \
+        Size    = MAP_APPFONT ( 60 , CHECKBOX_HEIGHT ) ;            \
+        Group   = TRUE ;                                                            \
+        TabStop = TRUE ;                                                            \
+        SvLook = TRUE;                                                              \
+        DropDown = TRUE;                                                            \
+        Border = TRUE;                                                              \
+        HelpId = HID_DSADMIN_BOOLEANCOMPARISON;                                     \
+        StringList =                                                                \
+        {                                                                           \
+            < "Normal" ; Default ; > ;                                              \
+            < "SQL" ; Default ; > ;                                                 \
+            < "Gemischt" ; Default ; > ;                                            \
+            < "MS Access" ; Default ; > ;                                           \
+        };                                                                          \
+        StringList [ en-US ] =                                                  \
+        {                                                                           \
+            < "Default" ; Default ; > ;                                             \
+            < "SQL" ; Default ; > ;                                                 \
+            < "Mixed" ; Default ; > ;                                               \
+            < "MS Access" ; Default ; > ;                                           \
+        };                                                                          \
+    }
+
+//-------------------------------------------------------------------------
+#define AUTO_IGNOREDRIVER_PRIV(AUTO_Y)                                              \
+    CheckBox CB_IGNOREDRIVER_PRIV                                                   \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;                           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_IGNOREDRIVER_PRIV;                                     \
+        Text [ de ] = "Die Rechte vom Datenbank Treiber ignorieren";                        \
+        Text[ en-US ] = "Ignore the privileges from the database driver";       \
+    }
+
+//-------------------------------------------------------------------------
+#define AUTO_SQL92CHECK(AUTO_Y)                                                     \
+    CheckBox CB_SQL92CHECK                                                          \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y) ;                                       \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;                           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_SQL92CHECK;                                            \
+        Text [ de ] = "SQL92 Namensbeschränkung verwenden";                             \
+        Text[ en-US ] = "Use SQL92 naming constraints";                     \
+    }
+
+//-------------------------------------------------------------------------
+#define AUTO_USECATALOG(AUTO_Y)                                                     \
+    CheckBox CB_USECATALOG                                                                                                                                  \
+    {                                                                                                                                                       \
+        Pos     = MAP_APPFONT ( 6 ,AUTO_Y) ;                                                                                                                \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;                                                                                                   \
+        TabStop = TRUE ;                                                                                                                                    \
+        HelpId = HID_DSADMIN_USECATALOG;                                                                                                                    \
+        Text [ de ] = "Katalog verwenden bei dateibasierten Datenbanken";                                                                                           \
+        Text[ en-US ] = "Use catalog for file-based databases";                                                                                     \
+    }
+
+//-------------------------------------------------------------------------
+#define AUTO_PARAMETERNAMESUBST(AUTO_Y)                                             \
+    CheckBox CB_PARAMETERNAMESUBST                                                  \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y) ;                                       \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_PARAMETERNAMESUBST;                                    \
+        Text [ de ] = "Benannte Parameter durch '?' ersetzen";                              \
+        Text[ en-US ] = "Replace named parameters with '?'";                    \
+    }
+
 //-------------------------------------------------------------------------
 #define AUTO_INCREMENT_CONTROLS(AUTO_Y)                                     \
+    FixedLine FL_SEPARATORAUTO                                              \
+    {                                                                       \
+        Pos = MAP_APPFONT ( 4 , AUTO_Y ) ;                                  \
+        Size = MAP_APPFONT ( ADVANCED_PAGE_X - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;                        \
+        Text [ de ] = "Einstellungen";                                              \
+        Text [ en-US ] = "Settings";                                    \
+    };                                                                      \
     CheckBox CB_RETRIEVE_AUTO                                               \
     {                                                                       \
-        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                              \
-        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;                   \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y + FIXEDTEXT_HEIGHT + RELATED_CONTROLS) ; \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X - 2*UNRELATED_CONTROLS , CHECKBOX_HEIGHT ) ;                    \
         TabStop = TRUE ;                                                    \
         HelpId = HID_DSADMIN_AUTORETRIEVEENABLED;                           \
         Text [ de ] = "Generierte Werte ~berücksichtigen";                          \
@@ -262,25 +278,25 @@ ImageList IMG_DOCUMENTLINKS_LCH
                                                                             \
     FixedText FT_AUTOINCREMENTVALUE                                         \
     {                                                                       \
-        Pos     = MAP_APPFONT ( 15 , AUTO_Y + CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;        \
-        Size = MAP_APPFONT ( PAGE_X - 15 - 6 , FIXEDTEXT_HEIGHT ) ;         \
-        Text [ de ] = "~Auto-Increment-Ausdruck" ;                                  \
-        Text [ en-US ] = "~Auto-increment statement";\
+        Pos     = MAP_APPFONT ( 15 , AUTO_Y + FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS + CHECKBOX_HEIGHT ) ;       \
+        Size = MAP_APPFONT ( ADVANCED_PAGE_X - 15 - 6 , FIXEDTEXT_HEIGHT ) ;            \
+        Text [ de ] = "~Auto-Increment-Befehl" ;                                    \
+        Text[ en-US ] = "~Auto-increment statement";\
     };                                                                       \
                                                                              \
     Edit ET_AUTOINCREMENTVALUE                                               \
     {                                                                        \
         Border = TRUE ;                                                      \
-        Pos     = MAP_APPFONT ( 15 , AUTO_Y + CHECKBOX_HEIGHT + 2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT) ;         \
-        Size = MAP_APPFONT ( 180 , EDIT_HEIGHT ) ;                                   \
+        Pos     = MAP_APPFONT ( 15 , AUTO_Y + 2*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT + 3*RELATED_CONTROLS ) ;      \
+        Size = MAP_APPFONT ( ADVANCED_PAGE_X - 15 - 2*UNRELATED_CONTROLS , EDIT_HEIGHT ) ;                                   \
         TabStop = TRUE ;                                                     \
         HelpId = HID_DSADMIN_AUTOINCREMENTVALUE;                             \
     };                                                                       \
                                                                              \
     FixedText FT_RETRIEVE_AUTO                                               \
     {                                                                        \
-        Pos     = MAP_APPFONT ( 15 , AUTO_Y + CHECKBOX_HEIGHT + 3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + EDIT_HEIGHT) ;       \
-        Size = MAP_APPFONT ( PAGE_X - 15 - 6 , 10 ) ;                        \
+        Pos     = MAP_APPFONT ( 15 , AUTO_Y + 2*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + EDIT_HEIGHT) ;         \
+        Size = MAP_APPFONT ( ADVANCED_PAGE_X - 15 - 6 , 10 ) ;                       \
         Text [ de ] = "Abfrage der generierten ~Werte" ;                            \
         Text [ en-US ] = "~Query of generated values";\
     };                                                                      \
@@ -288,12 +304,90 @@ ImageList IMG_DOCUMENTLINKS_LCH
     Edit ET_RETRIEVE_AUTO                                                   \
     {                                                                       \
         Border = TRUE ;                                                     \
-        Pos     = MAP_APPFONT ( 15 , AUTO_Y + CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + EDIT_HEIGHT ) ;       \
-        Size = MAP_APPFONT ( 180, EDIT_HEIGHT ) ;                                   \
+        Pos     = MAP_APPFONT ( 15 , AUTO_Y + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT + 5*RELATED_CONTROLS + EDIT_HEIGHT ) ;       \
+        Size = MAP_APPFONT ( ADVANCED_PAGE_X - 15 - 2*UNRELATED_CONTROLS, EDIT_HEIGHT ) ;                                   \
         TabStop = TRUE ;                                                    \
         HelpId = HID_DSADMIN_RETRIEVE_AUTO;                                 \
-    };
+    }
 
+//-------------------------------------------------------------------------
+#define AUTO_CHARSET(AUTO_Y)                                                \
+    FixedLine FL_DATACONVERT                                                    \
+    {                                                                       \
+        Pos = MAP_APPFONT ( 4 , AUTO_Y ) ;                                  \
+        Size = MAP_APPFONT ( PAGE_X  - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;        \
+        Text [ de ] = "Datenkonvertierung";                                     \
+        Text [ en-US ] = "Data conversion";                         \
+    };                                                                      \
+    FixedText FT_CHARSET                                                    \
+    {                                                                       \
+        Pos = MAP_APPFONT ( 6 , AUTO_Y + RELATED_CONTROLS + FIXEDTEXT_HEIGHT ) ;    \
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;              \
+        Text [ de ] = "~Zeichensatz" ;                                              \
+        Text [ en-US ] = "~Character set" ;                         \
+    };                                                                      \
+    ListBox LB_CHARSET                                                      \
+    {                                                                       \
+        Border = TRUE ;                                                     \
+        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y + RELATED_CONTROLS + FIXEDTEXT_HEIGHT -1 ) ;\
+        Size = MAP_APPFONT ( 130 , 60 ) ;                                   \
+        TabStop = TRUE ;                                                    \
+        HelpId = HID_DSADMIN_CHARSET;                                       \
+        DropDown = TRUE ;                                                   \
+        CurPos = 0 ;                                                        \
+    }
+
+//-------------------------------------------------------------------------
+#define AUTO_DATAHANDLING(AUTO_Y)                                           \
+    FixedLine FL_DATAHANDLING                                               \
+    {                                                                       \
+        Pos = MAP_APPFONT ( RELATED_CONTROLS , AUTO_Y ) ;                   \
+        Size = MAP_APPFONT ( ADVANCED_PAGE_X - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;        \
+        Text [ de ] = "Optionen";                                           \
+        Text [ en-US ] = "Options";                             \
+    }
+
+//-------------------------------------------------------------------------
+#define AUTO_SPECIAL_JDBC(AUTO_Y)                                                                       \
+    FixedLine FL_SEPARATOR1                                                                             \
+    {                                                                                                   \
+        Pos = MAP_APPFONT ( 4 , AUTO_Y ) ;                                                              \
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;                                                  \
+        Text [ de ] = "Verbindungsangaben" ;                                                                    \
+        Text[ en-US ] = "Connection Settings";                                                      \
+    };                                                                                                  \
+                                                                                                        \
+    FixedText FT_HOSTNAME                                                                               \
+    {                                                                                                   \
+        Pos = MAP_APPFONT ( 6 , AUTO_Y + RELATED_CONTROLS + FIXEDTEXT_HEIGHT) ;                         \
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                          \
+        Text [ de ] = "~Rechnername" ;                                                                          \
+        Text[ en-US ] = "~Host name";                                                               \
+    };                                                                                                  \
+    Edit ET_HOSTNAME                                                                                    \
+    {                                                                                                   \
+        TabStop = TRUE ;                                                                                \
+        Border = TRUE ;                                                                                 \
+        HelpId = HID_DSADMIN_HOSTNAME;                                                                  \
+        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y + RELATED_CONTROLS + FIXEDTEXT_HEIGHT -1 ) ;                \
+        Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;                                                       \
+    };                                                                                                  \
+                                                                                                        \
+    FixedText FT_PORTNUMBER                                                                             \
+    {                                                                                                   \
+        Pos = MAP_APPFONT ( 6 , AUTO_Y + UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT) ;  \
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                          \
+        Text [ de ] = "~Portnummer" ;                                                                           \
+        Text[ en-US ] = "~Port number";                                                         \
+    };                                                                                                  \
+    NumericField NF_PORTNUMBER                                                                          \
+    {                                                                                                   \
+        TabStop = TRUE ;                                                                                \
+        Border = TRUE ;                                                                                 \
+        HelpId = HID_DSADMIN_PORTNUMBER;                                                                \
+        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y +UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT -1 ) ; \
+        Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;                                                       \
+    }
 //-------------------------------------------------------------------------
 TabDialog DLG_DATABASE_ADMINISTRATION
 {
@@ -304,37 +398,6 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     Hide = TRUE;
     HelpId = HID_DSADMIN_DIALOG;
 
-    Window WND_DATASOURCESELECTOR
-    {
-        Pos = MAP_APPFONT ( 0, 0 ) ;
-        Size = MAP_APPFONT ( 80, 200 ) ;
-        ClipChildren = TRUE;
-        HelpId = HID_DSADMIN_DATASOURCE_SELECTOR;
-
-        PushButton PB_NEW_DATASOURCE
-        {
-            Pos = MAP_APPFONT ( 0, 0 ) ;
-            Size = MAP_APPFONT ( 56, 14 ) ;
-            Border = TRUE;
-            SVLook = TRUE;
-            TabStop = TRUE ;
-            HelpId = HID_DSADMIN_DATASOURCE_NEWDS;
-
-            Text [ de ] = "Neue Datenquelle";
-            Text [ en-US ] = "New Data Source";
-        };
-        ListBox LB_DATASOURCES
-        {
-            Border = TRUE;
-            SVLook = TRUE;
-            AutoHScroll = TRUE;
-            TabStop = TRUE ;
-            Pos = MAP_APPFONT ( 2, 22 ) ;
-            Size = MAP_APPFONT ( 56, 196 ) ;
-            HelpId = HID_DSADMIN_DATASOURCE_DSLIST;
-        };
-    };
-
     TabControl 1
     {
         OutputSize = TRUE ;
@@ -342,127 +405,53 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         SingleLine=TRUE;
     };
 
-    Text [ de ] = "Datenquellen verwalten" ;
-    Text [ en-US ] = "Data Source Administration" ;
-
     //.........................................................................
     String STR_PAGETITLE_GENERAL
     {
-        Text [ de ] = "Allgemein" ;
-        Text [ en-US ] = "General" ;
-        Text [ x-comment ] = " ";
+        Text [ de ] = "Erweiterte Eigenschaften" ;
+        Text [ en-US ] = "Advanced Properties" ;
     };
-    String STR_PAGETITLE_DBASE
+    String STR_PAGETITLE_ADVANCED
     {
-        Text [ de ] = "dBase" ;
-        Text [ en-US ] = "dBase" ;
-        Text [ x-comment ] = " ";
+        Text [ de ] = "Zusätzliche Einstellungen" ;
+        Text [ en-US ] = "Additional Settings" ;
     };
-    String STR_PAGETITLE_JDBC
+    String STR_PAGETITLE_CONNECTION
     {
-        Text [ de ] = "JDBC" ;
-        Text [ en-US ] = "JDBC" ;
-        Text [ x-comment ] = " ";
-    };
-    String STR_PAGETITLE_ADO
-    {
-        Text [ de ] = "ADO" ;
-        Text [ en-US ] = "ADO" ;
-    };
-    String STR_PAGETITLE_ODBC
-    {
-        Text [ de ] = "ODBC" ;
-        Text [ en-US ] = "ODBC" ;
-        Text [ x-comment ] = " ";
-    };
-    String STR_PAGETITLE_LDAP
-    {
-        Text [ de ] = "LDAP" ;
-        Text [ en-US ] = "LDAP";
-    };
-    String STR_PAGETITLE_ADABAS
-    {
-        Text [ de ] = "Adabas D" ;
-        Text [ en-US ] = "Adabas D";
-    };
-    String STR_PAGETITLE_ADABAS_STATISTIC
-    {
-        Text [ de ] = "Adabas D Statistik" ;
-        Text [ en-US ] = "Adabas D Statistics";
+        Text [ de ] = "Verbingungseinstellungen" ;
+        Text [ en-US ] = "Connection settings" ;
     };
 
-    String STR_PAGETITLE_MYSQL
-    {
-        Text = "MySQL" ;
-    };
-
-    String STR_PAGETITLE_USERADMIN
-    {
-        Text [ de ] = "Benutzereinstellungen" ;
-        Text [ en-US ] = "User Settings";
-    };
-    String STR_PAGETITLE_TEXT
-    {
-        Text [ de ] = "Text" ;
-        Text [ en-US ] = "Text" ;
-        Text [ x-comment ] = " ";
-    };
-    String STR_PAGETITLE_TABLESUBSCRIPTION
-    {
-        Text [ de ] = "Tabellen" ;
-        Text [ en-US ] = "Tables" ;
-    };
-    String STR_PAGETITLE_QUERIES
-    {
-        Text [ de ] = "Abfragen" ;
-        Text [ en-US ] = "Queries" ;
-    };
-    String STR_PAGETITLE_DOCUMENTS
-    {
-        Text [ de ] = "Verknüpfungen" ;
-        Text [ en-US ] = "Links" ;
-    };
+    Text [ de ] = "Datenbankeigenschaften" ;
+    Text [ en-US ] = "Database properties" ;
 };
+// -----------------------------------------------------------------------------
+ModalDialog DLG_DATABASE_TYPE_CHANGE
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE;
+    Closeable = TRUE ;
+    Hide = TRUE;
+    HelpId = HID_DSADMIN_TYPE_DIALOG;
 
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        HelpId = HID_DSADMIN_TABCONTROL;
+        SingleLine=TRUE;
+    };
+    Text [ de ] = "Datenbankeigenschaften" ;
+    Text [ en-US ] = "Database properties" ;
+};
 //-------------------------------------------------------------------------
 Image IMG_DATABASE
 {
     ImageBitmap = Bitmap { File = "db.bmp"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
-Image IMG_DATABASE_MODIFIED
-{
-    ImageBitmap = Bitmap { File = "db_modified.bmp"; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-};
-Image IMG_DATABASE_NEW
-{
-    ImageBitmap = Bitmap { File = "db_new.bmp"; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-};
-Image IMG_DATABASE_DELETED
-{
-    ImageBitmap = Bitmap { File = "db_deleted.bmp"; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-};
 Image IMG_DATABASE_SCH
 {
     ImageBitmap = Bitmap { File = "db_sch.bmp"; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-};
-Image IMG_DATABASE_MODIFIED_SCH
-{
-    ImageBitmap = Bitmap { File = "db_modified_sch.bmp"; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-};
-Image IMG_DATABASE_NEW_SCH
-{
-    ImageBitmap = Bitmap { File = "db_new_sch.bmp"; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-};
-Image IMG_DATABASE_DELETED_SCH
-{
-    ImageBitmap = Bitmap { File = "db_deleted_sch.bmp"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
 
@@ -474,35 +463,18 @@ TabPage PAGE_GENERAL
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_GENERAL;
 
-    FixedText FT_DATASOURCENAME
+    FixedText FT_DATASOURCETYPE_PRE
     {
-        Pos = MAP_APPFONT ( 7 , 7 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "~Name";
-        Text [ en-US ] = "~Name";
-    };
-
-    Edit ET_DATASOURCENAME
-    {
-        HelpId = HID_DSADMIN_DSNAME;
-        Pos = MAP_APPFONT ( 90 , 6 ) ;
-        Size = MAP_APPFONT ( 164 , 12 ) ;
-        TabStop = TRUE ;
-        Border = TRUE ;
-    };
-
-    FixedLine FL_SEPARATOR1
-    {
-        Pos = MAP_APPFONT ( 4 , 23 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Verbindung" ;
-        Text [ en-US ] = "Connection" ;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , 3*FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Bitte wählen Sie den Type der Datenbank aus, zu der eine Verbindung aufgebaut werden soll.";
+        Text [ en-US ] = "Select the type of database to which you want to establish a connection.";
     };
 
     FixedText FT_DATATYPE
     {
-        Pos = MAP_APPFONT ( 7 , 35 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + RELATED_CONTROLS) ;
+        Size = MAP_APPFONT ( 80 , FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Datenbank~typ ";
         Text [ en-US ] = "Database ~type ";
         Text [ x-comment ] = " ";
@@ -510,107 +482,47 @@ TabPage PAGE_GENERAL
     ListBox LB_DATATYPE
     {
         HelpId = HID_DSADMIN_DSTYPE;
-        Pos = MAP_APPFONT ( 90, 33 ) ;
-        Size = MAP_APPFONT ( 60, 120 ) ;
+        Pos = MAP_APPFONT ( 90, 2*UNRELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + RELATED_CONTROLS -2 ) ;
+        Size = MAP_APPFONT ( 100, 120 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
+        Sort = TRUE;
     };
-    FixedText FT_CONNECTURL
+
+    FixedText FT_DATASOURCETYPE_POST
     {
-        HelpId = HID_DSADMIN_URL_GENERAL;
-        Pos = MAP_APPFONT ( 7 , 54 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "D~atenquellen-URL" ;
-        Text [ en-US ] = "~Data source URL" ;
+        Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , 4*FIXEDTEXT_HEIGHT ) ;
+        Text [ de ]= "Auf den nächsten Seiten können Sie dann detaillierte Verbindungs-Einstellungen vornehmen.\n\nBitte beachten Sie dabei,dass diese neuen Einstellungen Ihre existierenden überschreiben.";
+        Text [ en-US ] = "On the following pages, you can make detailed settings for the connection.\n\nThe new settings you make will overwrite your existing settings.";
     };
-    Edit ET_CONNECTURL
-    {
-        Pos = MAP_APPFONT ( 90 , 50 ) ;
-        Size = MAP_APPFONT ( 147 , 12 ) ;
-        TabStop = TRUE ;
-        Border = TRUE ;
-    };
-    PushButton PB_BROWSECONNECTION
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 241 , 49 ) ;
-        Size = MAP_APPFONT ( 12 , 14 ) ;
-        HelpId = HID_DSADMIN_BROWSECONN;
-        Text [ de ] = "~..." ;
-        Text [ en-US ] = "~..." ;
-    };
-    FixedText FT_LOGINTIMEOUT
-    {
-        Pos = MAP_APPFONT ( 10 , 69 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Abfallzeit:";
-        Text [ en-US ] = "Timeout:" ;
-    };
-    Edit ET_TIMEOUT_NUMBER
-    {
-        Pos = MAP_APPFONT ( 90 , 68 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
-        HelpId = HID_DSADMIN_LOGINTIMEOUT_NUMBER;
-        TabStop = TRUE ;
-        Border = TRUE ;
-    };
-    ListBox LB_TIMEOUT_UNIT
-    {
-        Pos = MAP_APPFONT ( 123 , 68 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        HelpId = HID_DSADMIN_LOGINTIMEOUT_UNIT;
-        Border = TRUE ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-    };
+
     FixedText FT_SPECIAL_MESSAGE
     {
-        Pos = MAP_APPFONT ( 6, 125 );
-        Size = MAP_APPFONT ( 248, 24 );
+        Pos = MAP_APPFONT ( 6, 4*UNRELATED_CONTROLS + 8*FIXEDTEXT_HEIGHT + RELATED_CONTROLS  );
+        Size = MAP_APPFONT ( PAGE_X - 12, 3*FIXEDTEXT_HEIGHT );
         WordBreak = TRUE;
         HelpId = HID_DSADMIN_SPECIAL_MESSAGE;
     };
-    PushButton PB_CREATEDATABASE
+
+    String STR_PARENTTITLE
     {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 154 , 165 ) ;
-        Size = MAP_APPFONT ( 100 , 14 ) ;
-        HelpId = HID_DSADMIN_CREATEDATABASE;
-        Text [ de ] = "N~eue Datenbank..." ;
-        Text [ en-US ] = "~New Database..." ;
-    };
-    String STR_NAMEINVALID
-    {
-        Text [ de ] =   "Es existiert schon eine andere Datenquelle mit diesem Namen. Da Datenquellennamen global eindeutig sein "
-            "müssen, sollten sie einen anderen wählen.";
-        Text [ en-US ] = "Another data source already has this name. As data sources have to have globally unique names, please choose another one.";
-    };
-    String STR_DATASOURCEDELETED
-    {
-        Text [ de ] =   "Diese Datenquelle haben Sie gelöscht.";
-        Text [ en-US ] = "You have deleted this data source.";
+        Text [ de ]= "Datenquellen Eigenschaften: #" ;
+        Text [ en-US ] = "Data Source Properties: #" ;
     };
     String STR_COULDNOTLOAD_ODBCLIB
     {
         Text [ de ] = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Auswahl ist nicht verfügbar.";
         Text [ en-US ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source selection is not available.";
     };
-    String STR_NO_ADABASE_DATASOURCES
-    {
-        Text [ de ] = "Auf Ihrem System wurden keine Adabas-D-Datenquellen gefunden.";
-        Text [ en-US ] = "There are no Adabas D data sources on your system.";
-    };
     String STR_UNSUPPORTED_DATASOURCE_TYPE
     {
         Text [ de ] = "Dieser Datenquellen-Typ wird auf dieser Plattform nicht unterstützt.\nSie können die Einstellungen verändern, werden aber vermutlich keine Verbindung zu der Datenbank herstellen können.";
         Text [ en-US ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably will not be able to connect to the database.";
     };
-    String STR_MYSQL_CONFIG_NEXT_PAGE
-    {
-        Text [ de ] = "Wechseln Sie zur MySQL-Registerseite um die Einstellungen vorzunehmen.";
-        Text [ en-US ] = "To adjust the settings, go to the MySQL tab page.";
-    };
+    Text [ de ]= "Allgemein" ;
+    Text [ en-US ] = "General" ;
 };
 
 //.........................................................................
@@ -622,59 +534,40 @@ TabPage PAGE_DBASE
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     HelpId = HID_DSADMIN_PAGE_DBASE;
 
+    AUTO_CHARSET(         UNRELATED_CONTROLS) ;
+
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 4 , 6 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Pos = MAP_APPFONT ( 4 , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ]= "Optionale Einstellungen" ;
+        Text[ en-US ] = "Optional settings";
     };
-    FixedText FT_CHARSET
-    {
-        Pos = MAP_APPFONT ( 7 , 18 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "~Zeichensatz" ;
-        Text [ en-US ] = "~Character set" ;
-        Text [ x-comment ] = " ";
-    };
-    ListBox LB_CHARSET
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 7 , 31 ) ;
-        Size = MAP_APPFONT ( 130 , 60 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        CurPos = 0 ;
-        HelpId = HID_DSADMIN_CHARSET_DBASE;
-    };
-    FixedLine FL_SEPARATOR2
-    {
-        Pos = MAP_APPFONT ( 4 , 51 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Allgemein";
-        Text [ en-US ] = "General";
-    };
+
     CheckBox CB_SHOWDELETEDROWS
     {
-        Pos = MAP_APPFONT ( 7 , 63 ) ;
+        Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT) ;
         Size = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_SHOWDELETED;
-        Text [ de ] = "I~naktive Datensätze anzeigen" ;
-        Text [ en-US ] = "Display i~nactive records" ;
-        Text [ x-comment ] = " ";
+        Text [ de ]= "Auch gelöschte Datensätze anzeigen" ;
+        Text [ en-US ] = "Display deleted records as well" ;
     };
-    CheckBox CB_SQL92CHECK
+
+    FixedText FT_SPECIAL_MESSAGE
     {
-        Pos     = MAP_APPFONT ( 7 , 63 + CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
-        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_SQL92CHECK;
-        Text [ de ] = "SQL92 Namensbeschränkung verwenden";
-        Text [ en-US ] = "Use SQL92 naming constraints";
+        Hide = TRUE;
+        WordBreak = TRUE;
+        Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , 2*FIXEDTEXT_HEIGHT ) ;
+        Text [ de ]= "Achtung: Wenn gelöschte und daher inaktive Datensätze angezeigt werden, können Sie keine Datensätze aus der Datenquelle löschen." ;
+        Text [ en-US ] = "Note: When deleted, and thus inactive, records are  displayed, you will not be able to delete records from the data source." ;
     };
+
     PushButton PB_INDICIES
     {
-        Pos = MAP_APPFONT ( 199 , 165 ) ;
-        Size = MAP_APPFONT ( 55 , 14 ) ;
+        Pos = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS, PAGE_Y - BUTTON_HEIGHT - UNRELATED_CONTROLS) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_DBASE_INDICIES;
         Text [ de ] = "~Indizes...";
@@ -691,160 +584,117 @@ TabPage PAGE_ADO
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_ADO;
-
-    FixedText FT_CONNECTURL
-    {
-        Pos = MAP_APPFONT ( 6 , 7 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text [ de ] = "U~RL" ;
-        Text [ en-US ] = "U~RL" ;
-        Text [ x-comment ] = " ";
-    };
-    Edit ET_CONNECTURL
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 6 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_CONNURL_ADOPAGE;
-            // special help id here: though this is the usual ConnectURL field, it's placed on the JDBC page
-            // (not as usual on the general page), so the documentation may want to write other help texts here.
-    };
-    FixedLine FL_SEPARATOR1
-    {
-        Pos = MAP_APPFONT ( 4 , 24 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
-    };
-    FixedText FT_USERNAME
-    {
-        Pos = MAP_APPFONT ( 6 , 36 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text [ de ] = "~Benutzername" ;
-        Text [ en-US ] = "~User name" ;
-        Text [ x-comment ] = " ";
-    };
-    Edit ET_USERNAME
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 35 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_USER_ADO;
-    };
-    CheckBox CB_PASSWORD_REQUIRED
-    {
-        Pos = MAP_APPFONT ( 90 , 51 ) ;
-        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
-        HelpId = HID_DSADMIN_PWDREC_ADO;
-        Text [ de ] = "Kennwort erforderlich";
-        Text [ en-US ] = "Password required";
-    };
-
-    FixedLine FL_SEPARATOR2
-    {
-        Pos = MAP_APPFONT ( 4 , 51 + CHECKBOX_HEIGHT + 3 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Allgemein";
-        Text [ en-US ] = "General";
-    };
-
-    CheckBox CB_SQL92CHECK
-    {
-        Pos     = MAP_APPFONT ( 6 , 51 + CHECKBOX_HEIGHT + 3 + 8 + 3 ) ;
-        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_SQL92CHECK;
-        Text [ de ] = "SQL92 Namensbeschränkung verwenden";
-        Text [ en-US ] = "Use SQL92 naming constraints";
-    };
+    AUTO_CHARSET(UNRELATED_CONTROLS);
 };
-
 //.........................................................................
-TabPage PAGE_JDBC
+TabPage PAGE_GENERATED_VALUES
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
+    Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
     Hide = TRUE;
-    HelpId = HID_DSADMIN_PAGE_JDBC;
-
-    FixedText FT_JDBCDRIVERCLASS
-    {
-        Pos = MAP_APPFONT ( 6 , 7 ) ;
-        Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text [ de ] = "~JDBC Treiberklasse" ;
-        Text [ en-US ] = "~JDBC driver class" ;
-        Text [ x-comment ] = " ";
-    };
-    Edit ET_JDBCDRIVERCLASS
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 6 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_DRIVERCLASS;
-    };
-    FixedText FT_CONNECTURL
-    {
-        Pos = MAP_APPFONT ( 6 , 22 ) ;
-        Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text [ de ] = "U~RL" ;
-        Text [ en-US ] = "U~RL" ;
-        Text [ x-comment ] = " ";
-    };
-    Edit ET_CONNECTURL
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 21 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_CONNURL_JDBCPAGE;
-            // special help id here: though this is the usual ConnectURL field, it's placed on the JDBC page
-            // (not as usual on the general page), so the documentation may want to write other help texts here.
-    };
-    FixedText FT_USERNAME
-    {
-        Pos = MAP_APPFONT ( 6 , 37 ) ;
-        Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text [ de ] = "~Benutzername" ;
-        Text [ en-US ] = "~User name" ;
-        Text [ x-comment ] = " ";
-    };
-    Edit ET_USERNAME
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 36 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_USER_JDBC;
-    };
-    CheckBox CB_PASSWORD_REQUIRED
-    {
-        Pos = MAP_APPFONT ( 90 , 51 ) ;
-        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
-        HelpId = HID_DSADMIN_PWDREC_JDBC;
-        Text [ de ] = "Kennwort erforderlich";
-        Text [ en-US ] = "Password required";
-    };
-    FixedLine FL_SEPARATOR1
-    {
-        Pos = MAP_APPFONT ( 4 , 62 ) ;
-        Size = MAP_APPFONT ( 252 , 8) ;
-        Text [ de ] = "Allgemein";
-        Text [ en-US ] = "General";
-    };
-
-    AUTO_INCREMENT_CONTROLS (73)
-
-    CheckBox CB_SQL92CHECK
-    {
-        Pos     = MAP_APPFONT ( 6 , 73 + CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + 2*EDIT_HEIGHT + UNRELATED_CONTROLS) ;
-        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_SQL92CHECK;
-        Text [ de ] = "SQL92 Namensbeschränkung verwenden";
-        Text [ en-US ] = "Use SQL92 naming constraints";
-    };
+    AUTO_INCREMENT_CONTROLS ( UNRELATED_CONTROLS);
+};
+//.........................................................................
+TabPage PAGE_DS_PROPERTIES_1
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
+    Hide = TRUE;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
+    AUTO_APPENDTABLEALIAS(        RELATED_CONTROLS + FIXEDTEXT_HEIGHT +                     RELATED_CONTROLS ) ;
+    AUTO_BOOLEANCOMPARISON(     2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +     CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+};
+//.........................................................................
+TabPage PAGE_DS_PROPERTIES_2
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
+    Hide = TRUE;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
+    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS ) ;
+    AUTO_APPENDTABLEALIAS(      2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_SUPPRESVERSIONCOLUMN(  3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_DOSLINEENDS(           4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+    AUTO_BOOLEANCOMPARISON(     5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+};
+//.........................................................................
+TabPage PAGE_DS_PROPERTIES_3
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
+    Hide = TRUE;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
+    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS ) ;
+    AUTO_APPENDTABLEALIAS(      2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_ENABLEOUTERJOIN(       3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_SUPPRESVERSIONCOLUMN(  4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_DOSLINEENDS(           5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+    AUTO_BOOLEANCOMPARISON(     6*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 5*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+};
+//.........................................................................
+TabPage PAGE_DS_PROPERTIES_FILE
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
+    Hide = TRUE;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
+    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS ) ;
+    AUTO_DOSLINEENDS(           2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+};
+//.........................................................................
+TabPage PAGE_DS_PROPERTIES_ACCESS
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
+    Hide = TRUE;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
+    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS ) ;
+    AUTO_APPENDTABLEALIAS(      2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_ENABLEOUTERJOIN(       3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_DOSLINEENDS(           4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+    AUTO_BOOLEANCOMPARISON(     5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+};
+//.........................................................................
+TabPage PAGE_DS_PROPERTIES_ENABLEOJ
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
+    Hide = TRUE;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
+    AUTO_ENABLEOUTERJOIN(         RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS ) ;
+    AUTO_IGNOREDRIVER_PRIV(     2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_APPENDTABLEALIAS(      3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_PARAMETERNAMESUBST(    4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_SUPPRESVERSIONCOLUMN(  5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_DOSLINEENDS(           6*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 5*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+    AUTO_BOOLEANCOMPARISON(     7*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 6*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+};
+//.........................................................................
+TabPage PAGE_DS_PROPERTIES_4
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
+    Hide = TRUE;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
+    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS ) ;
+    AUTO_APPENDTABLEALIAS(      2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_ENABLEOUTERJOIN(       3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_IGNOREDRIVER_PRIV(     4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_PARAMETERNAMESUBST(    5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_SUPPRESVERSIONCOLUMN(  6*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 5*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_CATALOG(               7*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 6*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_SCHEMA(                8*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 7*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_IGNOREINDEXAPPENDIX(   9*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 8*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
+    AUTO_DOSLINEENDS(          10*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 9*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+    AUTO_BOOLEANCOMPARISON(    11*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 10*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
 };
 
 //.........................................................................
@@ -856,233 +706,242 @@ TabPage PAGE_ODBC
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_ODBC;
 
-    FixedText FT_USERNAME
-    {
-        Pos = MAP_APPFONT ( 6 , 7 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "~Benutzername" ;
-        Text [ en-US ] = "~User name" ;
-        Text [ x-comment ] = " ";
-    };
-    Edit ET_USERNAME
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 6 ) ;
-        Size = MAP_APPFONT ( 130 , 12 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_USER_ODBC;
-    };
-    CheckBox CB_PASSWORD_REQUIRED
-    {
-        Pos = MAP_APPFONT ( 90 , 21 ) ;
-        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
-        Text [ de ] = "Kennwort erforderlich";
-        Text [ en-US ] = "Password required";
-        HelpId = HID_DSADMIN_PWDREC_ODBC;
-    };
+    AUTO_CHARSET( UNRELATED_CONTROLS) ;
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 4 , 32 ) ;
-        Size = MAP_APPFONT ( 252 , 1 ) ;
+        Pos = MAP_APPFONT ( 4 , 2*UNRELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ]= "Optionale Einstellungen" ;
+        Text[ en-US ] = "Optional Settings";
     };
+
     FixedText FT_OPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "~Treibereinstellungen" ;
-        Text [ en-US ] = "Driver settings" ;
-        Text [ x-comment ] = " ";
+        Text [ en-US ] = "ODBC ~options" ;
     };
     Edit ET_OPTIONS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 91 , 37 ) ;
-        Size = MAP_APPFONT ( 130 , 12 ) ;
+        Pos = MAP_APPFONT ( EDIT_X , 2*UNRELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS -1 ) ;
+        Size = MAP_APPFONT ( 130 , EDIT_HEIGHT ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_ODBC_OPTIONS;
     };
-    FixedText FT_CHARSET
-    {
-        Pos = MAP_APPFONT ( 6 , 53 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "~Zeichensatz" ;
-        Text [ en-US ] = "~Character set" ;
-        Text [ x-comment ] = " ";
-    };
-    ListBox LB_CHARSET
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 91 , 52 ) ;
-        Size = MAP_APPFONT ( 130 , 60 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        CurPos = 0 ;
-        HelpId = HID_DSADMIN_CHARSET_ODBC;
-    };
 
-    FixedLine FL_SEPARATOR2
-    {
-        Pos = MAP_APPFONT ( 4 , 68 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Allgemein";
-        Text [ en-US ] = "General";
-    };
-
-    AUTO_INCREMENT_CONTROLS (80 )
-
-    CheckBox CB_SQL92CHECK
-    {
-        Pos     = MAP_APPFONT ( 6 , 79 + CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + 2*EDIT_HEIGHT + UNRELATED_CONTROLS) ;
-        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_SQL92CHECK;
-        Text [ de ] = "SQL92 Namensbeschränkung verwenden";
-        Text [ en-US ] = "Use SQL92 naming constraints";
-    };
-
-    CheckBox CB_USECATALOG
-    {
-
-        Pos     = MAP_APPFONT ( 6 ,79 + 2*CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + 2*EDIT_HEIGHT + 2*UNRELATED_CONTROLS) ;
-        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_USECATALOG;
-        Text [ de ] = "Katalog verwenden bei dateibasierten Datenbanken";
-        Text [ en-US ] = "Use catalog for file-based databases";
-    };
+    AUTO_USECATALOG(        3*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS ) ;
 };
-//.........................................................................
-#define MYSQL_YDIST 53
-#define MYSQL_FL_Y  8
-#define MYSQL_DRIVERCLASS_Y 8
 
-TabPage PAGE_MYSQL
+TabPage PAGE_ADABAS
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     Hide = TRUE;
-    HelpId = HID_DSADMIN_PAGE_MYSQL;
+    HelpId = HID_DSADMIN_PAGE_ADABAS;
 
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 4 , 4 ) ;
-        Size = MAP_APPFONT ( 252 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Art der Verbindung";
-        Text [ en-US ] = "Type of connection";
+        Pos = MAP_APPFONT ( 4 , UNRELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Verbindungsangaben" ;
+        Text[ en-US ] = "Connection Settings";
     };
 
-    RadioButton RB_USEMYODBC
+    FixedText FT_HOSTNAME
     {
-        Pos                 = MAP_APPFONT ( 6 , 4 + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
-        Size                = MAP_APPFONT ( 150 , CHECKBOX_HEIGHT ) ;
-        Text [ de ] = "Existierende My~ODBC Datenquelle verwenden" ;
-        Text [ en-US ] = "Use existing My~ODBC data source";
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "~Rechnername" ;
+        Text[ en-US ] = "~Host name";
+    };
+    Edit ET_HOSTNAME
+    {
+        TabStop = TRUE ;
+        Border = TRUE ;
+
+        Pos = MAP_APPFONT ( EDIT_X , UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT-1 ) ;
+        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
     };
 
-    RadioButton RB_USECONNECTORJ3
+    FixedText FT_CACHE_SIZE
     {
-        Pos                 = MAP_APPFONT ( 6 , 4 + FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT + 2*RELATED_CONTROLS ) ;
-        Size                = MAP_APPFONT ( 150 , CHECKBOX_HEIGHT ) ;
-        Text [ de ] = "Connector/~J3 verwenden" ;
-        Text [ x-comment ] = "EM Dec 2002: Connector/J3 is the JDBC driver from MySQL. Do not translate or change “Connector/J3”-- it is a product name.";
-        Text [ en-US ] = "Use Connector/~J3";
+        Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Daten~puffergröße (MB)" ;
+        Text[ en-US ] = "Data ~buffer size (MB)";
     };
+    NumericField NF_CACHE_SIZE
+    {
+        Pos             = MAP_APPFONT ( EDIT_X , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT -1 ) ;
+        Size            = MAP_APPFONT ( 40 , EDIT_HEIGHT ) ;
+        Border          = TRUE ;
+        TabStop         = TRUE ;
+        Spin            = TRUE ;
+        SpinSize        = 1;
+        StrictFormat    = TRUE;
+    };
+
+    FixedText FT_DATA_INCREMENT
+    {
+        Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Zu~wachsgröße (MB)" ;
+        Text[ en-US ] = "~Data increment (MB)";
+    };
+    NumericField NF_DATA_INCREMENT
+    {
+        Pos             = MAP_APPFONT ( EDIT_X , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT -1 ) ;
+        Size            = MAP_APPFONT ( 40 , EDIT_HEIGHT ) ;
+        Border          = TRUE ;
+        TabStop         = TRUE ;
+        Spin            = TRUE ;
+        SpinSize        = 1;
+        StrictFormat    = TRUE;
+    };
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( 248 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Administration" ;
+        Text [ en-US ] = "Administration" ;
+    };
+    FixedText FT_CTRLUSERNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Control B~enutzername" ;
+        Text [ en-US ] = "Control ~user name" ;
+    };
+    Edit ET_CTRLUSERNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( EDIT_X , 4*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT-1 ) ;
+        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_CTRLPASSWORD
+    {
+        Pos = MAP_APPFONT ( 6 , 5*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "~Control Kennwort" ;
+        Text [ en-US ] = "Control ~password" ;
+    };
+    Edit ET_CTRLPASSWORD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( EDIT_X , 5*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT-1 ) ;
+        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT) ;
+        TabStop = TRUE ;
+        PassWord = TRUE ;
+    };
+
+    CheckBox CB_SHUTDB
+    {
+        Pos = MAP_APPFONT ( 6 , 6*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 7*FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( 248 , CHECKBOX_HEIGHT ) ;
+        Text [ de ] = "~Service beim Beenden von %PRODUCTNAME herunterfahren";
+        Text[ en-US ] = "~Shut down service when closing %PRODUCTNAME";
+    };
+
+    PushButton PB_STAT
+    {
+        Pos                 = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS, PAGE_Y - BUTTON_HEIGHT - UNRELATED_CONTROLS ) ;
+        Size                = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Text[ de ]          = "E~rweitert...";
+        Text[ en-US ] = "E~xtended...";
+    };
+
+    AUTO_CHARSET(           7*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 7*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT) ;
+};
+
+//.........................................................................
+#define MYSQL_YDIST 53
+#define MYSQL_FL_Y  8
+#define MYSQL_DRIVERCLASS_Y 8
+
+TabPage PAGE_MYSQL_ODBC
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
+    Hide = TRUE;
+
+    AUTO_CHARSET(             UNRELATED_CONTROLS ) ;
+};
+
+TabPage PAGE_MYSQL_JDBC
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
+    Hide = TRUE;
+
+    AUTO_SPECIAL_JDBC( UNRELATED_CONTROLS );
 
     FixedText FT_JDBCDRIVERCLASS
     {
-        Pos = MAP_APPFONT ( 15 , 4 + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + 3*RELATED_CONTROLS) ;
-        Size = MAP_APPFONT ( 80 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "MySQL JDBC ~Treiberklasse" ;
-        Text [ en-US ] = "MySQL JDBC d~river class";
+        Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "MySQL JDBC-~Treiberklasse" ;
+        Text[ en-US ] = "MySQL JDBC d~river class";
     };
     Edit ET_JDBCDRIVERCLASS
     {
-        Pos = MAP_APPFONT ( 101 , 4 + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + 3*RELATED_CONTROLS ) ;
-        Size = MAP_APPFONT ( 134 , EDIT_HEIGHT ) ;
+        Pos = MAP_APPFONT ( EDIT_X , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT -1 ) ;
+        Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    PushButton PB_TESTDRIVERCLASS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT -2) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Text [ de ] = "Klasse laden" ;
+        Text [ en-US ] = "Test class" ;
+    };
+
+    AUTO_CHARSET(           4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT ) ;
+};
+
+TabPage PAGE_ORACLE_JDBC
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
+    Hide = TRUE;
+
+    AUTO_SPECIAL_JDBC( UNRELATED_CONTROLS );
+
+    FixedText FT_JDBCDRIVERCLASS
+    {
+        Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Oracle JDBC-~Treiberklasse" ;
+        Text[ en-US ] = "Oracle JDBC d~river class";
+    };
+
+    Edit ET_JDBCDRIVERCLASS
+    {
+        Pos = MAP_APPFONT ( EDIT_X , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT -1 ) ;
+        Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;
         TabStop = TRUE ;
         Border = TRUE ;
     };
 
-    FixedLine FL_SEPARATOR2
-    {
-        Pos = MAP_APPFONT ( 4 , 4 + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + UNRELATED_CONTROLS + 3*RELATED_CONTROLS + EDIT_HEIGHT) ;
-        Size = MAP_APPFONT ( 252 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Allgemein";
-        Text [ en-US ] = "General";
-    };
-
-    FixedText FT_CONNECTURL
-    {
-        HelpId = HID_DSADMIN_URL_GENERAL;
-        Pos = MAP_APPFONT ( 6 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + UNRELATED_CONTROLS + 4*RELATED_CONTROLS + EDIT_HEIGHT ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "D~atenquellen-URL" ;
-        Text [ en-US ] = "~Data source URL";
-    };
-    Edit ET_CONNECTURL
-    {
-        Pos = MAP_APPFONT ( 101 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + UNRELATED_CONTROLS + 4*RELATED_CONTROLS + EDIT_HEIGHT -1) ;
-        Size = MAP_APPFONT ( 134 , 12 ) ;
-        TabStop = TRUE ;
-        Border = TRUE ;
-    };
-
-    PushButton PB_BROWSECONNECTION
+    PushButton PB_TESTDRIVERCLASS
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 241 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + UNRELATED_CONTROLS + 4*RELATED_CONTROLS + EDIT_HEIGHT -2 ) ;
-        Size = MAP_APPFONT ( 12 , 14 ) ;
-        HelpId = HID_DSADMIN_BROWSECONN;
-        Text = "~..." ;
+        Pos = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT - 2) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Text [ de ] = "Klasse laden" ;
+        Text [ en-US ] = "Test class" ;
     };
 
-    FixedText FT_USERNAME
-    {
-        Pos = MAP_APPFONT ( 6 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + 2*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + EDIT_HEIGHT + BUTTON_HEIGHT ) ;
-        Size = MAP_APPFONT ( 80 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "~Benutzername" ;
-        Text [ en-US ] = "~User name";
-    };
-    Edit ET_USERNAME
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 101 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + 2*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + EDIT_HEIGHT -1 + BUTTON_HEIGHT) ;
-        Size = MAP_APPFONT ( 134 , EDIT_HEIGHT ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_USER_ODBC;
-    };
-    CheckBox CB_PASSWORD_REQUIRED
-    {
-        Pos = MAP_APPFONT ( 101 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + 2*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 2*EDIT_HEIGHT + BUTTON_HEIGHT) ;
-        Size = MAP_APPFONT ( 134 , CHECKBOX_HEIGHT ) ;
-        Text [ de ] = "Kennwort ~erforderlich";
-        Text [ en-US ] = "Password r~equired";
-    };
-    FixedText FT_CHARSET
-    {
-        Pos = MAP_APPFONT ( 6 , 4 + 2*FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + 3*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 2*EDIT_HEIGHT + BUTTON_HEIGHT ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "~Zeichensatz" ;
-        Text [ en-US ] = "~Character set";
-    };
-    ListBox LB_CHARSET
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 101 , 4 + 2*FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + 3*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 2*EDIT_HEIGHT + BUTTON_HEIGHT ) ;
-        Size = MAP_APPFONT ( 134 , 60 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        CurPos = 0 ;
-        HelpId = HID_DSADMIN_CHARSET_ODBC;
-    };
-
-    String STR_JDBC_DEFAULT_URL
-    {
-        Text [ de ] = "<Rechnername>:<3306>/<DBNAME>" ;
-        Text [ en-US ] = "<host>:<3306>/<DBNAME>";
-    };
-
+    AUTO_CHARSET(           4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT ) ;
 };
 
 //.........................................................................
@@ -1094,58 +953,20 @@ TabPage PAGE_LDAP
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_LDAP;
 
-    FixedText FT_USERNAME
-    {
-        Pos = MAP_APPFONT ( 6 , 7 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "~Benutzername" ;
-        Text [ en-US ] = "~User name" ;
-        Text [ x-comment ] = " ";
-    };
-    Edit ET_USERNAME
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 6 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_USER_LDAP;
-    };
-    CheckBox CB_PASSWORD_REQUIRED
-    {
-        Pos = MAP_APPFONT ( 90 , 21 ) ;
-        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
-        Text [ de ] = "Kennwort erforderlich";
-        Text [ en-US ] = "Password required";
-        HelpId = HID_DSADMIN_PWDREC_LDAP;
-    };
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 4 , 32 ) ;
-        Size = MAP_APPFONT ( 252 , 1 ) ;
+        Pos = MAP_APPFONT ( 4 , UNRELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Verbindungsangaben" ;
+        Text[ en-US ] = "Connection Settings";
     };
 
-    FixedText FT_HOSTNAME
-    {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "~Rechnername" ;
-        Text [ en-US ] = "~Host name";
-    };
-    Edit ET_HOSTNAME
-    {
-        TabStop = TRUE ;
-        Border = TRUE ;
-        HelpId = HID_DSADMIN_LDAP_HOSTNAME;
-
-        Pos = MAP_APPFONT ( 91 , 37 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
-    };
     FixedText FT_BASEDN
     {
-        Pos = MAP_APPFONT ( 6 , 56 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "~Base DN" ;
-        Text [ en-US ] = "~Base DN";
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "~Basis DN" ;
+        Text[ en-US ] = "~Base DN";
         Text [ x-comment ] = "ZL: ; ZL: ; ZL: I got this information about Base DN-----------------------------------------Name of the LDAP Base Distinguished Name (DN) to use for LDAP lookupsFormat: Base DN  Example: o=exampleCompany.com,c=US  Specifying a Base DNThe base DN refers to the part";
     };
     Edit ET_BASEDN
@@ -1154,29 +975,24 @@ TabPage PAGE_LDAP
         Border = TRUE ;
         HelpId = HID_DSADMIN_LDAP_BASEDN;
 
-        Pos = MAP_APPFONT ( 91 , 55 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( EDIT_X , UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT -1 ) ;
+        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
     };
     CheckBox CB_USESSL
     {
-        Pos = MAP_APPFONT ( 91 , 75 ) ;
-        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
+        Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , CHECKBOX_HEIGHT ) ;
         Text [ de ] = "Use secure connection(SSL)";
         Text [ en-US ] = "Use secure connection(SSL)";
         HelpId = HID_DSADMIN_USESSL_LDAP;
     };
 
-    FixedLine FL_SEPARATOR2
-    {
-        Pos = MAP_APPFONT ( 4 , 90 ) ;
-        Size = MAP_APPFONT ( 252 , 1 ) ;
-    };
     FixedText FT_PORTNUMBER
     {
-        Pos = MAP_APPFONT ( 6 , 95 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "~Portnummer" ;
-        Text [ en-US ] = "~Port number";
+        Text[ en-US ] = "~Port number";
     };
     NumericField NF_PORTNUMBER
     {
@@ -1184,15 +1000,15 @@ TabPage PAGE_LDAP
         Border = TRUE ;
         HelpId = HID_DSADMIN_LDAP_PORTNUMBER;
 
-        Pos = MAP_APPFONT ( 91 , 96 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( EDIT_X , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT-1  + CHECKBOX_HEIGHT) ;
+        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
     };
     FixedText FT_LDAPROWCOUNT
     {
-        Pos = MAP_APPFONT ( 6 , 115 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "~Datensätze (max.)" ;
-        Text [ en-US ] = "~Records (max.)";
+        Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Maximale Anzahl der ~Datensätze" ;
+        Text[ en-US ] = "Maximum number of ~records";
     };
     NumericField NF_LDAPROWCOUNT
     {
@@ -1200,10 +1016,9 @@ TabPage PAGE_LDAP
         Border = TRUE ;
         HelpId = HID_DSADMIN_LDAP_ROWCOUNT;
 
-        Pos = MAP_APPFONT ( 91 , 114 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( EDIT_X , 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT -1  + CHECKBOX_HEIGHT) ;
+        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
     };
-
 };
 //.........................................................................
 TabPage PAGE_TEXT
@@ -1216,68 +1031,67 @@ TabPage PAGE_TEXT
 
     FixedLine FL_SEPARATOR2
     {
-        Pos = MAP_APPFONT ( 4 , 6 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Pos = MAP_APPFONT ( 4 , UNRELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Zeilenformat";
         Text [ en-US ] = "Row format";
     };
     CheckBox CB_HEADER
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 125 , 18 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Pos = MAP_APPFONT ( EDIT_X , UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( 150 , CHECKBOX_HEIGHT ) ;
         HelpId = HID_DSADMIN_TEXT_HEADER;
-        Text [ de ] = "~Text beinhaltet Kopfzeile" ;
+        Text [ de ] = "~Text enthält Kopfzeile" ;
         Text [ en-US ] = "~Text contains headers" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_FIELDSEPARATOR
     {
-        Pos = MAP_APPFONT ( 6 , 33 ) ;
-        Size = MAP_APPFONT ( 119 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "~Feldtrenner" ;
         Text [ en-US ] = "Field separator" ;
         Text [ x-comment ] = " ";
     };
     ComboBox CM_FIELDSEPARATOR
     {
-        Pos = MAP_APPFONT ( 125 , 31 ) ;
+        Pos = MAP_APPFONT ( EDIT_X , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;
         Size = MAP_APPFONT ( 48 , 60 ) ;
-        Text = ";" ;
+        Text [ de ] = ";" ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         HelpId = HID_DSADMIN_FIELD_SEPARATOR;
     };
     FixedText FT_TEXTSEPARATOR
     {
-        Pos = MAP_APPFONT ( 6 , 50 ) ;
-        Size = MAP_APPFONT ( 119 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "T~exttrenner" ;
         Text [ en-US ] = "Text separator" ;
         Text [ x-comment ] = " ";
     };
     ComboBox CM_TEXTSEPARATOR
     {
-        Pos = MAP_APPFONT ( 125 , 48 ) ;
+        Pos = MAP_APPFONT ( EDIT_X , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;
         Size = MAP_APPFONT ( 48 , 60 ) ;
-        Text = "\"" ;
+        Text [ de ] = "\"" ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         HelpId = HID_DSADMIN_TEXT_SEPARATOR;
     };
     FixedText FT_DECIMALSEPARATOR
     {
-        Pos = MAP_APPFONT ( 6 , 67 ) ;
-        Size = MAP_APPFONT ( 119 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "~Dezimaltrennzeichen" ;
         Text [ en-US ] = "Decimal separator" ;
         Text [ x-comment ] = "LS: ; LS: ; LS: Access sagt \"s?arateur d?imal*";
     };
     ComboBox CM_DECIMALSEPARATOR
     {
-        Pos = MAP_APPFONT ( 125 , 65 ) ;
+        Pos = MAP_APPFONT ( EDIT_X , 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;
         Size = MAP_APPFONT ( 32 , 60 ) ;
-        Text = ";" ;
+        Text [ de ] = ";" ;
         TabStop = TRUE ;
         MaxTextLength = 1 ;
         DropDown = TRUE ;
@@ -1292,17 +1106,17 @@ TabPage PAGE_TEXT
     };
     FixedText FT_THOUSANDSSEPARATOR
     {
-        Pos = MAP_APPFONT ( 6 , 84 ) ;
-        Size = MAP_APPFONT ( 119 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 5*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "T~ausendertrennzeichen" ;
         Text [ en-US ] = "Thousands separator" ;
         Text [ x-comment ] = "LS: ; LS: ; LS: auch laut Access";
     };
     ComboBox CM_THOUSANDSSEPARATOR
     {
-        Pos = MAP_APPFONT ( 125 , 84 ) ;
+        Pos = MAP_APPFONT ( EDIT_X , 5*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;
         Size = MAP_APPFONT ( 32 , 44 ) ;
-        Text = "." ;
+        Text [ de ] = "." ;
         TabStop = TRUE ;
         MaxTextLength = 1 ;
         DropDown = TRUE ;
@@ -1315,24 +1129,24 @@ TabPage PAGE_TEXT
     };
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 4 , 104 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Pos = MAP_APPFONT ( 4 , 6*UNRELATED_CONTROLS + RELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Dateiformat";
         Text [ en-US ] = "File format";
     };
     FixedText FT_EXTENSION
     {
-        Pos = MAP_APPFONT ( 6 , 116 ) ;
-        Size = MAP_APPFONT ( 119 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 6*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "E~rweiterung" ;
         Text [ en-US ] = "Extension" ;
         Text [ x-comment ] = " ";
     };
     ComboBox CM_EXTENSION
     {
-        Pos = MAP_APPFONT ( 125 , 114 ) ;
+        Pos = MAP_APPFONT ( EDIT_X , 6*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;
         Size = MAP_APPFONT ( 32 , 44 ) ;
-        Text = "txt" ;
+        Text [ de ] = "txt" ;
         TabStop = TRUE ;
         MaxTextLength = 3 ;
         DropDown = TRUE ;
@@ -1344,24 +1158,7 @@ TabPage PAGE_TEXT
         };
         HelpId = HID_DSADMIN_EXTENSION;
     };
-    FixedText FT_CHARSET
-    {
-        Pos = MAP_APPFONT ( 6 , 133 ) ;
-        Size = MAP_APPFONT ( 119 , 10 ) ;
-        Text [ de ] = "~Zeichensatz" ;
-        Text [ en-US ] = "~Character set" ;
-        Text [ x-comment ] = " ";
-    };
-    ListBox LB_CHARSET
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 125 , 131 ) ;
-        Size = MAP_APPFONT ( 130 , 60 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        CurPos = 0 ;
-        HelpId = HID_DSADMIN_CHARSET_TEXT;
-    };
+    AUTO_CHARSET(           7*UNRELATED_CONTROLS + 2*RELATED_CONTROLS +  7*FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT ) ;
 
     String STR_FIELDSEPARATORLIST
     {
@@ -1372,7 +1169,7 @@ TabPage PAGE_TEXT
 
     String STR_TEXTSEPARATORLIST
     {
-        Text = "\"\t34\t'\t39" ;
+        Text [ de ] = "\"\t34\t'\t39" ;
     };
 
     String STR_TEXT_FIELD_SEP_NONE
@@ -1399,511 +1196,6 @@ TabPage PAGE_TEXT
         Text [ en-US ] = "Wildcards such as ?,* are not allowed in #1." ;
         Text [ x-comment ] = " ";
     };
-
-    FixedLine FL_SEPARATOR3
-    {
-        Pos = MAP_APPFONT ( 4 , 149 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Allgemein";
-        Text [ en-US ] = "General";
-    };
-
-    CheckBox CB_SQL92CHECK
-    {
-        Pos     = MAP_APPFONT ( 6 , 160 ) ;
-        Size    = MAP_APPFONT ( 200 , 10 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_SQL92CHECK;
-        Text [ de ] = "SQL92 Namensbeschränkung verwenden";
-        Text [ en-US ] = "Use SQL92 naming constraints";
-    };
-};
-//.........................................................................
-TabPage PAGE_TABLESUBSCRIPTION
-{
-    SVLook = TRUE ;
-    Hide = TRUE;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
-    HelpId = HID_DSADMIN_TABLE_SUBSCRIPTION;
-
-    FixedLine FL_SEPARATOR1
-    {
-        Pos = MAP_APPFONT ( 4 , 6 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Tabellen und Tabellenfilter";
-        Text [ en-US ] = "Tables and table filters";
-    };
-    ToolBox TLB_ACTIONS
-    {
-        Pos = MAP_APPFONT ( 7 , 18 ) ;
-        Size = MAP_APPFONT ( 246 , 14 ) ;
-        ButtonType = BUTTON_SYMBOL;
-        Align = BOXALIGN_TOP;
-        Customize = FALSE;
-        HelpId = HID_DSADMIN_TABLE_TOOLBOX;
-        ItemImageList = IMG_TABLESUBCRIPTION_SC ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                MID_NEW_TABLE_DESIGN
-            };
-            ToolBoxItem
-            {
-                MID_EDIT_TABLE
-            };
-            ToolBoxItem
-            {
-                MID_DROP_TABLE
-            };
-        };
-    };
-    Control CTL_TABLESUBSCRIPTION
-    {
-        Pos     = MAP_APPFONT ( 7 , 35 ) ;
-        Size    = MAP_APPFONT ( 246 , 81 ) ;
-        Group   = TRUE;
-        Border  = TRUE ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_TABLE_SELECTOR;
-    };
-    FixedText FT_FILTER_EXPLANATION
-    {
-        Pos = MAP_APPFONT ( 7 , 122 ) ;
-        Size    = MAP_APPFONT ( 246 , 16 ) ;
-        HelpId = HID_DSADMIN_FILTER_EXPLANATION;
-        WordBreak = TRUE;
-        Text [ de ] = "Kreuzen Sie bitte in der obigen Liste diejenigen Tabellen an, die für die Applikationen sichtbar sein sollen.";
-        Text [ en-US ] = "In the list above, mark the tables that should be visible for the applications.";
-    };
-    FixedLine FL_SEPARATOR2
-    {
-        Pos = MAP_APPFONT ( 4 , 144 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Spalten";
-        Text [ en-US ] = "Columns";
-    };
-    CheckBox CB_SUPPRESVERSIONCL
-    {
-        Pos     = MAP_APPFONT ( 7 , 156 ) ;
-        Size    = MAP_APPFONT ( 246 , 10 ) ;
-        Group   = TRUE ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_SUPPRESS_VERSIONCL;
-        Text [ de ] = "Versionsspalten anzeigen (wenn verfuegbar)";
-        Text [ en-US ] = "Display version columns (when available)";
-    };
-};
-
-//.........................................................................
-TabPage PAGE_QUERYADMINISTRATION
-{
-    SVLook = TRUE ;
-    Hide = TRUE;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
-    HelpId = HID_DSADMIN_QUERYADMINISTRATION;
-
-    FixedLine FL_COLLECTION
-    {
-        Pos = MAP_APPFONT ( 4 , 6 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Abfragen";
-        Text [ en-US ] = "Queries";
-    };
-    ToolBox TLB_ACTIONS
-    {
-        Pos = MAP_APPFONT ( 7 , 18 ) ;
-        Size = MAP_APPFONT ( 246 , 14 ) ;
-        ButtonType = BUTTON_SYMBOL;
-        Align = BOXALIGN_TOP;
-        Customize = FALSE;
-        HelpId = HID_DSADMIN_QUERY_TOOLBOX;
-        ItemImageList = IMG_QUERYADMINISTRATION_SC ;
-        ItemList  =
-        {
-            ToolBoxItem
-            {
-                MID_QUERY_NEW_DESIGN
-            };
-            ToolBoxItem
-            {
-                MID_QUERY_NEW_SQL
-            };
-            ToolBoxItem
-            {
-                MID_QUERY_EDIT_DESIGN
-            };
-            ToolBoxItem
-            {
-                MID_QUERY_EDIT_SQL
-            };
-            ToolBoxItem
-            {
-                MID_QUERY_DROP
-            };
-            ToolBoxItem
-            {
-                MID_RENAME_ENTRY
-            };
-        };
-    };
-    Control CTL_COLLECTION
-    {
-        Pos = MAP_APPFONT ( 7 , 35 ) ;
-        Size = MAP_APPFONT ( 246, 138 ) ;
-        Border = TRUE;
-        SVLook = TRUE;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_QUERIES;
-    };
-};
-
-//.........................................................................
-TabPage PAGE_DOCUMENTLINKS
-{
-    SVLook = TRUE ;
-    Hide = TRUE;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
-    HelpId = HID_DSADMIN_DOCUMENTLINKS;
-
-    FixedLine FL_COLLECTION
-    {
-        Pos = MAP_APPFONT ( 4 , 6 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Verknüpfungen";
-        Text [ en-US ] = "Links";
-    };
-    ToolBox TLB_ACTIONS
-    {
-        Pos = MAP_APPFONT ( 7 , 18 ) ;
-        Size = MAP_APPFONT ( 246 , 14 ) ;
-        ButtonType = BUTTON_SYMBOL;
-        Align = BOXALIGN_TOP;
-        Customize = FALSE;
-        HelpId = HID_DSADMIN_BOOKMARK_TOOLBOX;
-        ItemImageList = IMG_DOCUMENTLINKS_SC ;
-        ItemList  =
-        {
-            ToolBoxItem
-            {
-                MID_LINK_NEW
-            };
-            ToolBoxItem
-            {
-                MID_LINK_EDIT
-            };
-            ToolBoxItem
-            {
-                MID_LINK_DROP
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR;
-            };
-            ToolBoxItem
-            {
-                MID_DOCUMENT_OPEN
-            };
-            ToolBoxItem
-            {
-                MID_DOCUMENT_EDIT
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR;
-            };
-            ToolBoxItem
-            {
-                MID_DOCUMENT_CREATE_NEW
-                DropDown = TRUE ;
-            };
-        };
-    };
-    Control CTL_COLLECTION
-    {
-        Pos = MAP_APPFONT ( 7 , 35 ) ;
-        Size = MAP_APPFONT ( 246 , 139 ) ;
-        Border = TRUE;
-        SVLook = TRUE;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_DOCUMENTS;
-    };
-};
-
-WarningBox ERR_NOREGISTEREDDATASOURCES
-{
-    Message [ de ] = "Es sind augenblicklich keine Datenquellen registriert.";
-    Message [ en-US ] = "There are no registered data sources, at present.";
-};
-ErrorBox ERR_COULDNOTRESTOREDS
-{
-    Message [ de ] = "Sie haben schon einer anderen Datenquellen den Namen der gelöschten gegeben! Sie müssen erstere umbenennen, um die aktuelle wiederherstellen zu können.";
-    Message [ en-US ] = "The name of the deleted data source has already been given to another data source. You have to rename the latter before you can restore the former.";
-};
-
-String STR_ENTER_CONNECTION_PASSWORD
-{
-    Text [ de ] = "Die Verbindung zur Datenquelle \"$name$\" erfordert die Eingabe eines Passwortes.";
-    Text [ en-US ] = "A password is needed to connect to the data source \"$name$\".";
-};
-String STR_DATASOURCE_DEFAULTNAME
-{
-    Text [ de ] = "Datenquelle";
-    Text [ en-US ] = "Data source";
-};
-String STR_ERR_EMPTY_DSN_NAME
-{
-    Text [ de ] = "Der Datenquellen-Name darf nicht leer sein!";
-    Text [ en-US ] = "The data source name must not be empty!";
-};
-Menu MENU_DATASOURCELIST_POPUP
-{
-    ItemList  =
-    {
-        MenuItem
-        {
-            Identifier = MID_NEW_DATASOURCE;
-            HelpId = HID_DSADMIN_DSACTIONS_NEWDS;
-
-            Text [ de ] = "neue Datenquelle" ;
-            Text [ en-US ] = "New Data Source" ;
-        };
-        MenuItem
-        {
-            Identifier = MID_DELETE_DATASOURCE;
-            HelpId = HID_DSADMIN_DSACTIONS_DELETEDS;
-            Text [ de ] = "Datenquelle löschen" ;
-            Text [ en-US ] = "Delete Data Source" ;
-        };
-        MenuItem
-        {
-            Identifier = MID_RESTORE_DATASOURCE;
-            HelpId = HID_DSADMIN_DSACTIONS_RESTOREDS;
-            Text [ de ] = "Datenquelle wiederherstellen" ;
-            Text [ en-US ] = "Restore Data Source" ;
-        };
-    };
-};
-
-Menu RID_NEW_FORM
-{
-    ItemList  =
-    {
-        MenuItem
-        {
-            Identifier = ID_FORM_NEW_TEXT;
-            Text [ de ] = "~Textdokument";
-            Text [ en-US ] = "~Text Document";
-        };
-        MenuItem
-        {
-            Identifier = ID_FORM_NEW_CALC;
-            Text [ de ] = "Ta~bellendokument";
-            Text [ en-US ] = "~Spreadsheet";
-        };
-        MenuItem
-        {
-            Identifier = ID_FORM_NEW_IMPRESS;
-            Text [ de ] = "~Präsentation";
-            Text [ en-US ] = "~Presentation";
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            MID_DOCUMENT_NEW_AUTOPILOT
-        };
-        MenuItem
-        {
-            MID_DOCUMENT_CREATE_REPWIZ
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = ID_FORM_NEW_TEMPLATE;
-            Text [ de ] = "Aus ~Vorlage...";
-            Text [ en-US ] = "From Templ~ate...";
-        };
-    };
-
-};
-
-WarningBox WARN_SAVEFORQUERIES
-{
-    Message [ de ] = "Um die $objects$ einer Datenquelle zu administrieren, muss diese gespeichert werden.\n"
-        "Sollen sämtliche bis jetzt in diesem Dialog vorgenommene Änderungen jetzt gespeichert werden?";
-    Message [ en-US ] = "To administrate the $objects$ of a data source, that data source must be saved.\nShould all changes made in this dialog be saved now?";
-
-    Buttons = WB_YES_NO;
-    DefButton = WB_DEF_YES;
-
-    Message [ x-comment ] = "For ; For ; For $objects$, there will be used one of the strings STR_QUERY_OBJECTS and STR_DOCUMENT_OBJECTS.";
-};
-
-ErrorBox ERR_CANTADMINQUERIES
-{
-    Message [ de ] = "Um die $objects$ einer Datenquelle zu administrieren, muss diese gespeichert werden.\n"
-        "Allerdings erlauben die aktuellen Eingaben es nicht, die Änderungen zu speichern (es gibt Namenskonflikte).\n\n"
-        "Sie können die $objects$ nicht administrieren, solange diese Konflikte nicht gelöst sind und die Änderungen gespeichert wurden.";
-    Message [ en-US ] = "To administrate the $objects$ of a data source, the data source must be saved.\nHowever, the current settings do not allow you to save the changes (due to conflicting names).\n\nYou will not be able to administrate the $objects$ until these conflicts are resolved and the changes are saved.";
-
-    Message [ x-comment ] = "For ; For ; For $objects$, there will be used one of the strings STR_QUERY_OBJECTS and STR_DOCUMENT_OBJECTS.";
-};
-
-ErrorBox ERR_CANTDOTABLEACTION
-{
-    Message [ de ] = "Für diese Aktion müssen die Änderungen an der Datenquelle gespeichert werden.\n"
-        "Allerdings erlauben die aktuellen Eingaben es nicht, dies zu tun, da es Namenskonflikte zwischen verschiedenen Datenquellen gibt.\n\n"
-        "Solange diese Konflikte nicht gelöst sind, können Sie die Aktion nicht ausführen.";
-    Message [ en-US ] = "For this operation, the changes to the data source must be saved.\nHowever, they cannot be saved due to conflicting names of different data sources.\n\nYou must resolve this conflict in order to perform the operation.";
-};
-
-String STR_QUERY_OBJECTS
-{
-    Text [ de ] = "Abfragen";
-    Text [ en-US ] = "queries";
-
-    Text [ x-comment ] = "This; This; This string will be used in the text of ERR_CANTADMINQUERIES and WARN_SAVEFORQUERIES, replacing the $objects$ variable.";
-};
-
-String STR_DOCUMENT_OBJECTS
-{
-    Text [ de ] = "Verknüpfungen";
-    Text [ en-US ] = "links";
-
-    Text [ x-comment ] = "This; This; This string will be used in the text of ERR_CANTADMINQUERIES and WARN_SAVEFORQUERIES, replacing the $objects$ variable.";
-};
-
-String STR_QUERY_DROP_ALL
-{
-    Text [ de ] = "Wollen Sie die alle Selektierten löschen?";
-    Text [ en-US ] = "Do you want to delete all selected items?";
-};
-
-String STR_QUERY_DROP_DOCUMENT_LINK
-{
-    Text [ de ] = "Wollen Sie die Dokument-Verknüpfung \"$name$\" löschen?\n\n"
-        "Hinweis: Es wird lediglich die Zuordnung dieses Dokumentes zu der Datenquelle gelöscht, nicht das Dokument selber.";
-    Text [ en-US ] = "Do you want to delete the document link \"$name$\"?\n\nNote: Only the assigment of the document to the data source will be deleted, not the document itself.";
-};
-
-String STR_ASK_FOR_DIRECTORY_CREATION
-{
-    Text [ de ] = "Das Verzeichnis\n\n$path$\n\nexistiert nicht. Soll es angelegt werden?";
-    Text [ en-US ] = "The directory\n\n$path$\n\ndoes not exist. Should it be created?";
-};
-
-String STR_COULD_NOT_CREATE_DIRECTORY
-{
-    Text [ de ] = "Das Verzeichnis $name$ konnte nicht angelegt werden.";
-    Text [ en-US ] = "The directory $name$ could not be created.";
-};
-
-QueryBox QUERY_NEED_TO_SAVE_FILTER
-{
-    Message [ de ] = "Um diese Aktion auszuführen, müssen die bis jetzt in diesem Dialog vorgenommene Änderungen gespeichert werden.\nWollen Sie fortfahren?";
-    Message [ en-US ] = "In order to perform this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
-
-    Buttons = WB_YES_NO;
-    DefButton = WB_DEF_YES;
-};
-String STR_ADDRESSBOOK_SYSTEM
-{
-    Text [ de ] = "Windows Adressbuch";
-    Text [ en-US ] = "Windows address book";
-};
-String STR_ADDRESSBOOK_OUTLOOK
-{
-    Text [ de ] = "MS Outlook";
-    Text [ en-US ] = "MS Outlook";
-};
-String STR_ADDRESSBOOK_MOZILLA
-{
-    Text [ de ] = "Mozilla Adressbuch";
-    Text [ en-US ] = "Mozilla address book";
-};
-String STR_ADDRESSBOOK_EVOLUTION
-{
-    Text [ de ] = "Evolution address book";
-    Text [ en-US ] = "Evolution address book";
-};
-String STR_ADDRESSBOOK_LDAP
-{
-    Text [ de ] = "LDAP Adressbuch";
-    Text [ en-US ] = "LDAP address book";
-};
-String STR_CALCDOC_DOESNOTEXIST
-{
-    Text [ de ] = "Die Datei \"$file$\" existiert nicht.";
-    Text [ en-US ] = "The file \"$file$\" does not exist.";
-};
-
-String STR_HINT_READONLY_CONNECTION
-{
-    Text [ de ] = "(Verbindung ist nur-lesend)";
-    Text [ en-US ] = "(Connection is read-only)";
-};
-
-String STR_HINT_CONNECTION_NOT_CAPABLE
-{
-    Text [ de ] = "(nicht unterstützt von dieser Verbindung)";
-    Text [ en-US ] = "(Not supported by this connection)";
-};
-
-#define EDIT_SIZE_X     50
-#define FT_SIZE_X       90
-#define WIN_X           220
-#define WIN_Y           72
-
-ModalDialog DLG_DOMAINPASSWORD
-{
-    Border = TRUE ;
-    Moveable = TRUE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
-    Text [ de ] = "Datenbank konvertieren";
-    Text [ en-US ] = "Convert Database";
-
-    FixedLine FT_PASSWORD
-    {
-        Pos = MAP_APPFONT ( 3 , 3 ) ;
-        Size = MAP_APPFONT ( WIN_X - 3 - 6 - 6 - 50 , 8 ) ;
-        Text [ de ] = "Bitte geben Sie das ~Kennwort für den Benutzer 'DOMAIN' ein" ;
-        Text [ en-US ] = "Please enter the ~password for the user 'DOMAIN'.";
-    };
-
-    Edit ET_PASSWORD
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 16 ) ;
-        Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
-        PassWord = TRUE ;
-    };
-    OKButton BTN_PASSWORD_OK
-    {
-        Pos = MAP_APPFONT ( WIN_X - 56 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_PASSWORD_CANCEL
-    {
-        Pos = MAP_APPFONT ( WIN_X - 56 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton BTN_PASSWORD_HELP
-    {
-        Pos = MAP_APPFONT ( WIN_X - 56 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
 };
 //.........................................................................
 TabPage PAGE_USERDRIVER
@@ -1914,99 +1206,51 @@ TabPage PAGE_USERDRIVER
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_USERDRIVER;
 
-    FixedText FT_USERNAME
+    FixedText FT_HOSTNAME
     {
-        Pos = MAP_APPFONT ( 6 , 7 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "~Benutzername" ;
-        Text [ en-US ] = "~User name" ;
-        Text [ x-comment ] = " ";
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "~Rechnername" ;
+        Text[ en-US ] = "~Hostname";
     };
-    Edit ET_USERNAME
+    Edit ET_HOSTNAME
     {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 6 ) ;
-        Size = MAP_APPFONT ( 130 , 12 ) ;
         TabStop = TRUE ;
-        HelpId = HID_DSADMIN_USER_ODBC;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( EDIT_X , UNRELATED_CONTROLS -1 ) ;
+        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
     };
-    CheckBox CB_PASSWORD_REQUIRED
+
+    FixedText FT_PORTNUMBER
     {
-        Pos = MAP_APPFONT ( 90 , 21 ) ;
-        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
-        Text [ de ] = "Kennwort erforderlich";
-        Text [ en-US ] = "Password required";
-        HelpId = HID_DSADMIN_PWDREC_ODBC;
+        Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "~Portnummer" ;
+        Text[ en-US ] = "~Port number";
     };
-    FixedLine FL_SEPARATOR1
+
+    NumericField NF_PORTNUMBER
     {
-        Pos = MAP_APPFONT ( 4 , 32 ) ;
-        Size = MAP_APPFONT ( 252 , 1 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+
+        Pos = MAP_APPFONT ( EDIT_X , 2*UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT -1 ) ;
+        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
     };
+
     FixedText FT_OPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "~Treibereinstellungen" ;
-        Text [ en-US ] = "Driver settings" ;
+        Text [ en-US ] = "~Driver settings" ;
         Text [ x-comment ] = " ";
     };
     Edit ET_OPTIONS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 91 , 37 ) ;
-        Size = MAP_APPFONT ( 130 , 12 ) ;
         TabStop = TRUE ;
-        HelpId = HID_DSADMIN_ODBC_OPTIONS;
     };
-    FixedText FT_CHARSET
-    {
-        Pos = MAP_APPFONT ( 6 , 53 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "~Zeichensatz" ;
-        Text [ en-US ] = "~Character set" ;
-        Text [ x-comment ] = " ";
-    };
-    ListBox LB_CHARSET
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 91 , 52 ) ;
-        Size = MAP_APPFONT ( 130 , 60 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        CurPos = 0 ;
-        HelpId = HID_DSADMIN_CHARSET_ODBC;
-    };
-
-    FixedLine FL_SEPARATOR2
-    {
-        Pos = MAP_APPFONT ( 4 , 68 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Allgemein";
-        Text [ en-US ] = "General";
-    };
-
-    AUTO_INCREMENT_CONTROLS (80 )
-
-    CheckBox CB_SQL92CHECK
-    {
-        Pos     = MAP_APPFONT ( 6 , 79 + CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + 2*EDIT_HEIGHT + UNRELATED_CONTROLS) ;
-        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_SQL92CHECK;
-        Text [ de ] = "SQL92 Namensbeschränkung verwenden";
-        Text [ en-US ] = "Use SQL92 naming constraints";
-    };
-
-    CheckBox CB_USECATALOG
-    {
-
-        Pos     = MAP_APPFONT ( 6 ,79 + 2*CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + 2*EDIT_HEIGHT + 2*UNRELATED_CONTROLS) ;
-        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_USECATALOG;
-        Text [ de ] = "Katalog verwenden bei dateibasierten Datenbanken";
-        Text [ en-US ] = "Use catalog for file-based databases";
-    };
+    AUTO_CHARSET(           4*UNRELATED_CONTROLS    + 3*FIXEDTEXT_HEIGHT +   RELATED_CONTROLS) ;
 };
 
