@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoutlinercache.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-05 14:02:01 $
+ *  last change: $Author: cl $ $Date: 2002-03-20 10:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,11 +122,13 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
         {
             mpModeOutline = pOutliner;
             pOutliner->Clear();
+            pOutliner->SetVertical( false );
         }
         else if( (OUTLINERMODE_TEXTOBJECT == nOutlMode) && (NULL == mpModeText) )
         {
             mpModeText = pOutliner;
             pOutliner->Clear();
+            pOutliner->SetVertical( false );
         }
         else
         {
