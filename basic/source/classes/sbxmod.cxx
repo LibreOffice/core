@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:34:15 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@
 TYPEINIT1(SbModule,SbxObject)
 TYPEINIT1(SbMethod,SbxMethod)
 TYPEINIT1(SbProperty,SbxProperty)
-TYPEINIT1(SbProcedureProperty,SbProperty)
+TYPEINIT1(SbProcedureProperty,SbxProperty)
 TYPEINIT1(SbJScriptModule,SbModule)
 TYPEINIT1(SbJScriptMethod,SbMethod)
 
@@ -139,8 +139,10 @@ static char* strListBasicKeyWords[] = {
     "call",
     "case",
     "cdecl",
+    "classmodule",
     "close",
     "compare",
+    "compatible",
     "const",
     "currency",
     "date",
@@ -178,11 +180,13 @@ static char* strListBasicKeyWords[] = {
     "explicit",
     "for",
     "function",
+    "get",
     "global",
     "gosub",
     "goto",
     "if",
     "imp",
+    "implements",
     "in",
     "input",
     "integer",
@@ -212,6 +216,7 @@ static char* strListBasicKeyWords[] = {
     "preserve",
     "print",
     "private",
+    "property",
     "public",
     "random",
     "read",
@@ -234,6 +239,7 @@ static char* strListBasicKeyWords[] = {
     "then",
     "to",
     "type",
+    "typeof",
     "until",
     "variant",
     "wend",
@@ -258,7 +264,7 @@ int CDECL compare_strings( const void *arg1, const void *arg2 )
 
 SbModule::SbModule( const String& rName )
          : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASICModule") ) ),
-           pImage( NULL ), pBreaks( NULL )
+           pImage( NULL ), pBreaks( NULL ), pClassData( NULL )
 {
     SetName( rName );
     SetFlag( SBX_EXTSEARCH | SBX_GBLSEARCH );
@@ -270,6 +276,8 @@ SbModule::~SbModule()
         delete pImage;
     if( pBreaks )
         delete pBreaks;
+    if( pClassData )
+        delete pClassData;
 }
 
 BOOL SbModule::IsCompiled() const
@@ -288,6 +296,9 @@ const SbxObject* SbModule::FindType( String aTypeName ) const
 void SbModule::StartDefinitions()
 {
     delete pImage; pImage = NULL;
+    if( pClassData )
+        pClassData->clear();
+
     // Methoden und Properties bleiben erhalten, sind jedoch ungueltig
     // schliesslich sind ja u.U. die Infos belegt
     USHORT i;
@@ -372,6 +383,30 @@ SbProcedureProperty* SbModule::GetProcedureProperty
     return pProp;
 }
 
+SbIfaceMapperMethod* SbModule::GetIfaceMapperMethod
+    ( const String& rName, SbMethod* pImplMeth )
+{
+    SbxVariable* p = pMethods->Find( rName, SbxCLASS_METHOD );
+    SbIfaceMapperMethod* pMapperMethod = p ? PTR_CAST(SbIfaceMapperMethod,p) : NULL;
+    if( p && !pMapperMethod )
+        pMethods->Remove( p );
+    if( !pMapperMethod )
+    {
+        pMapperMethod = new SbIfaceMapperMethod( rName, pImplMeth );
+        pMapperMethod->SetParent( this );
+        pMapperMethod->SetFlags( SBX_READ );
+        pMethods->Put( pMapperMethod, pMethods->Count() );
+    }
+    pMapperMethod->bInvalid = FALSE;
+    return pMapperMethod;
+}
+
+SbIfaceMapperMethod::~SbIfaceMapperMethod()
+{
+}
+
+TYPEINIT1(SbIfaceMapperMethod,SbMethod)
+
 
 // Aus dem Codegenerator: Ungueltige Eintraege entfernen
 
@@ -390,6 +425,8 @@ void SbModule::EndDefinitions( BOOL bNewState )
                 i++;
             }
         }
+        else
+            i++;
     }
     SetModified( TRUE );
 }
@@ -397,6 +434,8 @@ void SbModule::EndDefinitions( BOOL bNewState )
 void SbModule::Clear()
 {
     delete pImage; pImage = NULL;
+    if( pClassData )
+        pClassData->clear();
     SbxObject::Clear();
 }
 
@@ -524,6 +563,10 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
                 if( eCurTok == FUNCTION )
                 {
                     eEndTok = ENDFUNC; break;
+                }
+                if( eCurTok == PROPERTY )
+                {
+                    eEndTok = ENDPROPERTY; break;
                 }
                 if( eCurTok == OPTION )
                 {
