@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:12:46 $
+ *  last change: $Author: oj $ $Date: 2001-02-12 16:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,10 @@
 #define ID_BROWSER_FILTERED                 SID_FM_FORM_FILTERED
 #define ID_BROWSER_REFRESH                  SID_FM_REFRESH
 #define ID_BROWSER_EXPL_PREVLEVEL           SID_EXPLORER_PREVLEVEL
-#define ID_BROWSER_COLATTRSET               1   // Spaltenformatierung
-#define ID_BROWSER_COLWIDTH                 2   // Spaltenbreite
-#define ID_BROWSER_TABLEATTR                3   // table format attributes
-#define ID_BROWSER_ROWHEIGHT                4   // Zeilenhoehe
+#define ID_BROWSER_COLATTRSET               20  // Spaltenformatierung
+#define ID_BROWSER_COLWIDTH                 21  // Spaltenbreite
+#define ID_BROWSER_TABLEATTR                22  // table format attributes
+#define ID_BROWSER_ROWHEIGHT                23  // Zeilenhoehe
 #define ID_BROWSER_COUNTALL                 SID_FM_COUNTALL // count all
 #define ID_BROWSER_SQL                      SID_SOURCEVIEW
 #define ID_BROWSER_ADDTABLE                 SID_FM_ADDTABLE
@@ -107,6 +107,9 @@
 #define ID_TREE_QUERY_CREATE_TEXT           5
 #define ID_TREE_QUERY_EDIT                  6
 #define ID_TREE_QUERY_DELETE                7
+#define ID_TREE_TABLE_CREATE_DESIGN         8
+#define ID_TREE_TABLE_EDIT                  9
+#define ID_TREE_TABLE_DELETE               10
 
 #define ID_BROWSER_QUERY_EXECUTE            SID_FM_EXECUTE
 #define ID_BROWSER_CLEAR_QUERY              (SID_SBA_START+130)
