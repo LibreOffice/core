@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:47:35 $
+ *  last change: $Author: rt $ $Date: 2003-09-22 09:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,8 @@ IMPL_LINK( SwInsertChartDlg, FinishHdl, Button *, EMPTYARG )
     }
     else
     {
-        pShell->Insert( 0, &SvGlobalName( SO3_SCH_CLASSID ), FALSE );
+        SvGlobalName aGlobalName( SO3_SCH_CLASSID );
+        pShell->Insert( 0, &aGlobalName, FALSE );
     }
     delete pOutSet;
     delete pChData;

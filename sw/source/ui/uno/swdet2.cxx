@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdet2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 11:40:32 $
+ *  last change: $Author: rt $ $Date: 2003-09-22 09:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,11 +228,12 @@ ULONG SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilt
         else
         {
             //Bug 41417: JP 09.07.97: HTML auf die WebDocShell defaulten
+            SfxFilterContainer aFilterContainer( String::CreateFromAscii("swriter/web") );
             if( pTmp->GetUserData() != C2S(sHTML) ||
                 String::CreateFromAscii( "com.sun.star.text.WebDocument" ) ==
                 String( pTmp->GetServiceName() ) ||
                 0 == ( (*ppFilter) = SwIoSystem::GetFilterOfFormat( C2S(sHTML),
-                     &SfxFilterContainer(String::CreateFromAscii("swriter/web") ) ) ) )
+                     &aFilterContainer ) ) )
                 *ppFilter = pTmp;
         }
 

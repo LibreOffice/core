@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:47:24 $
+ *  last change: $Author: rt $ $Date: 2003-09-22 09:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 }
                 else
                 {
-                    rSh.Insert( 0, &SvGlobalName( SO3_SCH_CLASSID ), TRUE, 0, &rReq );
+                    SvGlobalName aGlobalName( SO3_SCH_CLASSID );
+                    rSh.Insert( 0, &aGlobalName, TRUE, 0, &rReq );
                 }
                 SvInPlaceObjectRef xOLE = rSh.GetOLEObj();
                 if(pItem && xOLE.Is())
@@ -575,7 +576,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     case FN_INSERT_SMA:
         {
-            rSh.Insert( 0, &SvGlobalName( SO3_SM_CLASSID ), TRUE, 0, &rReq );
+            SvGlobalName aGlobalName( SO3_SM_CLASSID );
+            rSh.Insert( 0, &aGlobalName, TRUE, 0, &rReq );
         }
         break;
 
