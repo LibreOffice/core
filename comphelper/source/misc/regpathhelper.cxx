@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regpathhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-06 12:37:11 $
+ *  last change: $Author: hro $ $Date: 2001-05-11 11:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,28 @@ static OUString getDefaultLocalRegistry()
                                OUString::createFromAscii(REGISTRY_LOCAL_NAME),
                                OUString::createFromAscii(LOCALREGISTRY_PORTALLOCATION));
 
+#ifdef TF_FILEURL
+        if (bFindProfile)
+        {
+            sal_Int32 tokenCount = uBuffer.getTokenCount('/');
+            OUString sSeperator(RTL_CONSTASCII_USTRINGPARAM("/"));
+            OUString sPath(RTL_CONSTASCII_USTRINGPARAM("file://"));
+            FileBase::RC retRC = FileBase::E_None;
+
+            sPath += uBuffer.getToken(2, '/');
+            for (sal_Int32 i = 3; i < tokenCount - 1; i++)
+            {
+                sPath += sSeperator;
+                sPath += uBuffer.getToken(i, '/');
+
+                retRC = Directory::create(sPath);
+                if ( retRC != FileBase::E_None && retRC != FileBase::E_EXIST)
+                {
+                    return OUString();
+                }
+            }
+        }
+#else
         if (bFindProfile)
         {
             sal_Int32 tokenCount = uBuffer.getTokenCount('/');
@@ -156,6 +178,7 @@ static OUString getDefaultLocalRegistry()
                 }
             }
         }
+#endif
     } else
        {
         bFindProfile = OProfile::getProfileName(uBuffer,
@@ -164,7 +187,11 @@ static OUString getDefaultLocalRegistry()
     }
     if ( bFindProfile )
     {
+#ifdef TF_FILEURL
+        FileBase::getSystemPathFromFileURL(uBuffer, userRegistryName);
+#else
         FileBase::getSystemPathFromNormalizedPath(uBuffer, userRegistryName);
+#endif
     }
 
     return userRegistryName;
@@ -279,7 +306,11 @@ OUString getPathToUserRegistry()
     {
         // search without dot
         OUString normalizedPath;
+#ifdef TF_FILEURL
+        if (!FileBase::getSystemPathFromFileURL(uBuffer, normalizedPath))
+#else
         if (!FileBase::getSystemPathFromNormalizedPath(uBuffer, normalizedPath))
+#endif
         {
             sBuffer = OUStringToOString(normalizedPath, RTL_TEXTENCODING_ASCII_US);
             if ( sBuffer.getLength() > 0 )
@@ -341,7 +372,11 @@ OUString getPathToSystemRegistry()
 
         uBuffer += registryBaseName;
 
+#ifdef TF_FILEURL
+        if (!FileBase::getSystemPathFromFileURL(uBuffer, systemRegistryName))
+#else
         if (!FileBase::getSystemPathFromNormalizedPath(uBuffer, systemRegistryName))
+#endif
         {
             OString tmpStr( OUStringToOString(systemRegistryName, RTL_TEXTENCODING_ASCII_US) );
             f = fopen( tmpStr.getStr(), "r" );
