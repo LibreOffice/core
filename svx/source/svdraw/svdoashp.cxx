@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:54:06 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,22 +431,6 @@ void SdrObjCustomShape::RecalcBoundRect()
     const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
     if ( pSdrObject )
         aOutRect = pSdrObject->GetCurrentBoundRect();
-
-    long nLineWdt = ImpGetLineWdt();
-    nLineWdt++; nLineWdt/=2;
-    if ( nLineWdt != 0 )
-    {
-        long a = nLineWdt;
-        if ( ( aGeo.nDrehWink != 0 || aGeo.nShearWink != 0) && GetEckenradius() == 0 )
-        {
-            a*=2; // doppelt, wegen evtl. spitzen Ecken
-        }
-        aOutRect.Left  ()-=a;
-        aOutRect.Top   ()-=a;
-        aOutRect.Right ()+=a;
-        aOutRect.Bottom()+=a;
-    }
-    SdrTextObj::ImpAddShadowToBoundRect();
 
     // add text to ImpAddTextToBoundrect:
     if ( pOutlinerParaObject )
