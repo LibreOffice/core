@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-18 16:28:35 $
+ *  last change: $Author: pl $ $Date: 2002-10-28 14:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ class XIMStatusWindow : public StatusWindow
 
     Point updatePosition();
     void layout();
+    bool checkLastParent() const;
 
     DECL_LINK( DelayedShowHdl, void* );
 public:
@@ -192,6 +193,21 @@ void XIMStatusWindow::layout()
     SetOutputSizePixel( m_aWindowSize );
 }
 
+bool XIMStatusWindow::checkLastParent() const
+{
+    if( m_pLastParent )
+    {
+        SalFrame* pFrame = GetSalData()->pFirstFrame_;
+        while( pFrame )
+        {
+            if( pFrame == m_pLastParent )
+                return true;
+            pFrame = pFrame->maFrameData.GetNextFrame();
+        }
+    }
+    return false;
+}
+
 void XIMStatusWindow::DataChanged( const DataChangedEvent& rEvt )
 {
     m_aStatusText.SetSettings( GetSettings() );
@@ -201,7 +217,7 @@ void XIMStatusWindow::DataChanged( const DataChangedEvent& rEvt )
 Point XIMStatusWindow::updatePosition()
 {
     Point aRet;
-    if( m_pLastParent )
+    if( checkLastParent() )
     {
         const SystemEnvData* pEnvData = GetSystemData();
         const SystemEnvData* pParentEnvData = m_pLastParent->GetSystemData();
@@ -236,7 +252,6 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
         if( IsVisible() )
         {
             const SystemEnvData* pEnvData = GetSystemData();
-            const SystemEnvData* pParentEnvData = m_pLastParent->GetSystemData();
             SalFrame* pStatusFrame = (SalFrame*)pEnvData->pSalFrame;
             pStatusFrame->maFrameData.setPosSize( Rectangle( updatePosition(), m_aWindowSize ) );
         }
