@@ -1,3 +1,30 @@
+SfxVoidItem GrabControlFocus SID_FM_GRABCONTROLFOCUS
+()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxVoidItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_CONTROLS;
+]
+
 SfxVoidItem CreateFieldControl SID_FM_CREATE_FIELDCONTROL
 ()
 [

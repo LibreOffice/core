@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-21 08:07:21 $
+ *  last change: $Author: fs $ $Date: 2002-05-22 18:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,6 +854,14 @@ void FmFormShell::Execute(SfxRequest &rReq)
     // Individuelle Aktionen
     switch( nSlot )
     {
+        case SID_FM_GRABCONTROLFOCUS:
+        {
+            FmFormView* pFormView = GetFormView();
+            if ( pFormView )
+                pFormView->GrabFirstControlFocus( );
+        }
+        break;
+
         case SID_FM_VIEW_AS_GRID:
             GetImpl()->CreateExternalView();
             break;
