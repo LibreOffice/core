@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-31 17:46:29 $
+ *  last change: $Author: vg $ $Date: 2002-11-04 16:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,8 @@ void SalData::Init (int *pIPointer, char *pCPointer[] )
 #endif /* UNX */
 
 #endif /* REMOTE_APPSERVER */
+
+#include <fontcfg.hxx>
 
 #pragma hdrstop
 
