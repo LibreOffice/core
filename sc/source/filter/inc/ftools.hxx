@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:22:18 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@
 #include <limits>
 #include <boost/shared_ptr.hpp>
 
-
 // Common macros ==============================================================
 
 /** Expands to the size of a STATIC data array. */
@@ -97,7 +96,6 @@
 #define CREATE_STRING( ascii )      String( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
 /** Expands to a temporary ::rtl::OUString, created from an ASCII character array. */
 #define CREATE_OUSTRING( ascii )    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
-
 
 // items and item sets --------------------------------------------------------
 
@@ -112,7 +110,6 @@
 /** Expands to the value of the SfxBoolItem with Which-ID 'which'. */
 #define GETITEMBOOL( itemset, which ) \
     GETITEMVALUE( itemset, SfxBoolItem, which, bool )
-
 
 // Global static helpers ======================================================
 
@@ -131,7 +128,7 @@ inline ReturnType llimit( Type nValue )
 /** Returns the value, if it is not greater than nMax, otherwise nMax. */
 template< typename ReturnType, typename Type >
 inline ReturnType ulimit( Type nValue, ReturnType nMax )
-{ return static_cast< ReturnType >( ::std::min< Type >( nValue, nMax ) ); }
+{ return static_cast< ReturnType >( ::std::min( nValue, static_cast< Type >( nMax ) ) ); }
 
 /** Returns the value, if it fits into ReturnType, otherwise the maximum value of ReturnType. */
 template< typename ReturnType, typename Type >
@@ -172,7 +169,6 @@ template< typename Type, typename ReturnType >
 inline void extract_value( ReturnType& rnRet, Type nBitField, sal_uInt8 nStartBit, sal_uInt8 nBitCount )
 { rnRet = static_cast< ReturnType >( ((1UL << nBitCount) - 1) & (nBitField >> nStartBit) ); }
 
-
 // Write to bitfields ---------------------------------------------------------
 
 /** Sets or clears (according to bSet) all set bits of nMask in rnBitField. */
@@ -191,46 +187,6 @@ void insert_value( Type& rnBitField, InsertType nValue, sal_uInt8 nStartBit, sal
     (rnBitField &= ~(nMask << nStartBit)) |= (nNewValue << nStartBit);
 }
 
-
-// Modify values on bit-level -------------------------------------------------
-
-/** Rotates rnValue left by nBits bits. */
-template< typename Type >
-inline void rotate_left( Type& rnValue, sal_uInt8 nBits )
-{
-    DBG_ASSERT( nBits < sizeof( Type ) * 8, "rotate_left - overflow" );
-    rnValue = static_cast< Type >( (rnValue << nBits) | (rnValue >> (sizeof( Type ) * 8 - nBits)) );
-}
-
-/** Rotates the lower nWidth bits of rnValue left by nBits bits. */
-template< typename Type >
-inline void rotate_left( Type& rnValue, sal_uInt8 nBits, sal_uInt8 nWidth )
-{
-    DBG_ASSERT( (nBits < nWidth) && (nWidth < sizeof( Type ) * 8), "rotate_left - overflow" );
-    Type nMask = static_cast< Type >( (1UL << nWidth) - 1 );
-    rnValue = static_cast< Type >(
-        ((rnValue << nBits) | ((rnValue & nMask) >> (nWidth - nBits))) & nMask );
-}
-
-/** Rotates rnValue right by nBits bits. */
-template< typename Type >
-inline void rotate_right( Type& rnValue, sal_uInt8 nBits )
-{
-    DBG_ASSERT( nBits < sizeof( Type ) * 8, "rotate_right - overflow" );
-    return static_cast< Type >( (rnValue >> nBits) | (rnValue << (sizeof( Type ) * 8 - nBits)) );
-}
-
-/** Rotates the lower nWidth bits of rnValue right by nBits bits. */
-template< typename Type >
-inline void rotate_right( Type& rnValue, sal_uInt8 nBits, sal_uInt8 nWidth )
-{
-    DBG_ASSERT( (nBits < nWidth) && (nWidth < sizeof( Type ) * 8), "rotate_right - overflow" );
-    Type nMask = static_cast< Type >( (1UL << nWidth) - 1 );
-    return static_cast< Type >(
-        (((rnValue & nMask) >> nBits) | (rnValue << (nWidth - nBits))) & nMask );
-}
-
-
 // ============================================================================
 
 /** Deriving from this class prevents copy construction. */
@@ -243,12 +199,10 @@ protected:
     inline                      ScfNoCopy() {}
 };
 
-
 // ----------------------------------------------------------------------------
 
 /** Deriving from this class prevents construction in general. */
 class ScfNoInstance : private ScfNoCopy {};
-
 
 // ============================================================================
 
@@ -256,16 +210,17 @@ class SfxPoolItem;
 class SfxItemSet;
 class ScStyleSheet;
 class ScStyleSheetPool;
-class SvStorage;
-class SvStorageStreamRef;
 class SvStream;
+class SvStorage;
+class SvStorageRef;
+class SvStorageStreamRef;
 
 /** Contains static methods used anywhere in the filters. */
 class ScfTools : ScfNoInstance
 {
 public:
 
-// *** common methods ***
+// *** common methods *** -----------------------------------------------------
 
     /** Reads a 10-byte-long-double and converts it to double. */
     static double               ReadLongDouble( SvStream& rStrm );
@@ -274,12 +229,14 @@ public:
     /** Returns a string representing the hexadecimal value of nValue. */
     static String               GetHexStr( sal_uInt16 nValue );
 
-    /** Mixes RGB components with given transparence (0x0000 == full nFore ... 0x8000 = full nBack). */
+    /** Mixes RGB components with given transparence.
+        @param nTrans  Foreground transparence (0x0000 == full nFore ... 0x8000 = full nBack). */
     static sal_uInt8            GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt16 nTrans );
-    /** Mixes colors with given transparence (0x0000 == full rFore ... 0x8000 = full rBack). */
+    /** Mixes colors with given transparence.
+        @param nTrans  Foreground transparence (0x0000 == full rFore ... 0x8000 = full rBack). */
     static Color                GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt16 nTrans );
 
-// *** conversion of names ***
+// *** conversion of names *** ------------------------------------------------
 
     /** Converts a string to a valid Calc sheet name.
         @descr  Sheet names in Calc may contain letters, digits, underscores, and spaces
@@ -291,14 +248,19 @@ public:
         (*) = not allowed at first position. */
     static void                 ConvertToScDefinedName( String& rName );
 
-// *** streams and storages ***
+// *** streams and storages *** -----------------------------------------------
 
-    /** Tries to open the stream with the specified name in the passed storage (read-only). */
-    static const SvStorageStreamRef OpenStorageStreamRead( SvStorage* pStorage, const String& rStrmName );
-    /** Tries to create or open a stream with the specified name in the passed storage (read/write). */
-    static const SvStorageStreamRef OpenStorageStreamWrite( SvStorage* pStorage, const String& rStrmName );
+    /** Tries to open an existing stream with the specified name in the passed storage (read-only). */
+    static SvStorageRef         OpenStorageRead( SvStorage* pStrg, const String& rStrgName );
+    /** Creates and opens a stream with the specified name in the passed storage (read/write). */
+    static SvStorageRef         OpenStorageWrite( SvStorage* pStrg, const String& rStrgName );
 
-// *** item handling ***
+    /** Tries to open an existing stream with the specified name in the passed storage (read-only). */
+    static SvStorageStreamRef   OpenStorageStreamRead( SvStorage* pStrg, const String& rStrmName );
+    /** Creates and opens a stream with the specified name in the passed storage (read/write). */
+    static SvStorageStreamRef   OpenStorageStreamWrite( SvStorage* pStrg, const String& rStrmName );
+
+// *** item handling *** ------------------------------------------------------
 
     /** Returns true, if the passed item set contains the item.
         @param bDeep  true = Searches in parent item sets too. */
@@ -323,7 +285,7 @@ public:
         @param bSkipPoolDef  true = Do not put item if it is equal to pool default; false = Always put the item. */
     static void                 PutItem( SfxItemSet& rItemSet, const SfxPoolItem& rItem, bool bSkipPoolDef );
 
-// *** style sheet handling ***
+// *** style sheet handling *** -----------------------------------------------
 
     /** Creates and returns a cell style sheet and inserts it into the pool.
         @descr  If the style sheet is already in the pool, another unused style name is used.
@@ -340,7 +302,7 @@ public:
                                     ScStyleSheetPool& rPool,
                                     const String& rStyleName, bool bForceName );
 
-// *** byte string import operations ***
+// *** byte string import operations *** --------------------------------------
 
     /** Reads and returns a zero terminted byte string. */
     static ByteString           ReadCString( SvStream& rStrm );
@@ -359,7 +321,7 @@ public:
     /** Appends a zero terminted byte string. */
     static void                 AppendCString( SvStream& rStrm, String& rString, CharSet eSrc );
 
-// *** HTML table names <-> named range names ***
+// *** HTML table names <-> named range names *** -----------------------------
 
     /** Returns the built-in range name for an HTML document. */
     static const String&        GetHTMLDocName();
@@ -387,7 +349,6 @@ private:
     static const String&        GetHTMLNamePrefix();
 };
 
-
 // Containers =================================================================
 
 typedef ::std::vector< sal_uInt8 >                  ScfUInt8Vec;
@@ -401,7 +362,6 @@ typedef ::std::stack< sal_Int16, ScfInt16Vec >      ScfInt16Stack;
 typedef ::std::stack< sal_uInt16, ScfUInt16Vec >    ScfUInt16Stack;
 typedef ::std::stack< sal_Int32, ScfInt32Vec >      ScfInt32Stack;
 typedef ::std::stack< sal_uInt32, ScfUInt32Vec >    ScfUInt32Stack;
-
 
 // ----------------------------------------------------------------------------
 
@@ -468,7 +428,6 @@ template< typename Type > void ScfDelList< Type >::Clear()
     maList.Clear();
 }
 
-
 // ----------------------------------------------------------------------------
 
 /** Template for a stack that owns the contained objects.
@@ -492,7 +451,6 @@ public:
                                 ScfDelList< Type >::Count;
                                 ScfDelList< Type >::Empty;
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -531,7 +489,6 @@ public:
                                         { return (sal_uInt16)(sal_uInt32) List::Remove( nIndex ); }
 };
 
-
 // ----------------------------------------------------------------------------
 
 /** List class for sal_uInt32 values.
@@ -568,7 +525,6 @@ public:
     inline sal_uInt32           Remove( sal_uInt32 nIndex )
                                         { return (sal_uInt32) List::Remove( nIndex ); }
 };
-
 
 // ============================================================================
 
