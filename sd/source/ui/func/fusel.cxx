@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:06:13 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1212,12 +1212,14 @@ void FuSelection::SelectionHasChanged()
     **************************************************************************/
     USHORT nObjBarId;
 
-    if (pView->GetContext() == SDRCONTEXT_POINTEDIT)
-        nObjBarId = RID_BEZIER_TOOLBOX;
-    else if (pView->GetContext() == SDRCONTEXT_GRAPHIC)
-        nObjBarId = RID_DRAW_GRAF_TOOLBOX;
-    else
-        nObjBarId = RID_DRAW_OBJ_TOOLBOX;
+    switch( pView->GetContext() )
+    {
+        case( SDRCONTEXT_POINTEDIT ): nObjBarId = RID_BEZIER_TOOLBOX; break;
+        case( SDRCONTEXT_GRAPHIC ): nObjBarId = RID_DRAW_GRAF_TOOLBOX; break;
+        case( SDRCONTEXT_MEDIA ): nObjBarId = RID_DRAW_MEDIA_TOOLBOX; break;
+
+        default: nObjBarId = RID_DRAW_OBJ_TOOLBOX; break;
+    }
 
     pViewShell->GetObjectBarManager().SwitchObjectBar (nObjBarId);
 }
