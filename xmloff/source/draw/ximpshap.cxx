@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-03 09:32:14 $
+ *  last change: $Author: cl $ $Date: 2001-05-07 14:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1658,8 +1658,48 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         // set pos, size, shear and rotate
         SetTransformation();
 
+        uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+        if( xProps.is() )
+            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CaptionPoint")), uno::makeAny( maCaptionPoint ) );
+
+        if(mnRadius)
+        {
+            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+            if(xPropSet.is())
+            {
+                uno::Any aAny;
+                aAny <<= mnRadius;
+                xPropSet->setPropertyValue(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius")), aAny);
+            }
+        }
+
         SdXMLShapeContext::StartElement(xAttrList);
     }
+}
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLCaptionShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    if( XML_NAMESPACE_DRAW == nPrefix )
+    {
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_caption_point_x)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maCaptionPoint.X, rValue);
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_caption_point_y)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maCaptionPoint.Y, rValue);
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_corner_radius)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(mnRadius, rValue);
+            return;
+        }
+    }
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

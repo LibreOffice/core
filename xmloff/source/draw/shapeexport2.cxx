@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-02 11:44:26 $
+ *  last change: $Author: cl $ $Date: 2001-05-07 14:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1387,11 +1387,36 @@ void XMLShapeExport::ImpExportCaptionShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
-    // write Caption shape. Add export later.
-    SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_caption, sal_True, sal_True);
+    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if(xPropSet.is())
+    {
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
-    ImpExportEvents( xShape );
-    ImpExportText( xShape );
+        // evtl. corner radius?
+        sal_Int32 nCornerRadius(0L);
+        xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius"))) >>= nCornerRadius;
+        if(nCornerRadius)
+        {
+            OUStringBuffer sStringBuffer;
+            rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nCornerRadius);
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_corner_radius, sStringBuffer.makeStringAndClear());
+        }
+
+        awt::Point aCaptionPoint;
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ) ) ) >>= aCaptionPoint;
+
+        rExport.GetMM100UnitConverter().convertMeasure(msBuffer, aCaptionPoint.X);
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_caption_point_x, msBuffer.makeStringAndClear() );
+        rExport.GetMM100UnitConverter().convertMeasure(msBuffer, aCaptionPoint.Y);
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_caption_point_y, msBuffer.makeStringAndClear() );
+
+        // write Caption shape. Add export later.
+        SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_caption, sal_True, sal_True);
+
+        ImpExportEvents( xShape );
+        ImpExportText( xShape );
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
