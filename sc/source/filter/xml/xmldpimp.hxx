@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:29:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,19 @@
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldReference.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDSORTINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDAUTOSHOWINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDLAYOUTINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #endif
 
 #include "global.hxx"
@@ -338,6 +351,28 @@ public:
     void SetShowEmpty(const sal_Bool bValue) { if (pDim) pDim->SetShowEmpty(bValue); }
     void SetSubTotals(const sal_uInt16* pFunctions, const sal_Int16 nCount) { if(pDim) pDim->SetSubTotals(nCount, pFunctions); }
     void AddMember(ScDPSaveMember* pMember) { if (pDim) pDim->AddMember(pMember); }
+    void SetFieldReference(const com::sun::star::sheet::DataPilotFieldReference& aRef) { if (pDim) pDim->SetReferenceValue(&aRef); }
+    void SetAutoShowInfo(const com::sun::star::sheet::DataPilotFieldAutoShowInfo& aInfo) { if (pDim) pDim->SetAutoShowInfo(&aInfo); }
+    void SetSortInfo(const com::sun::star::sheet::DataPilotFieldSortInfo& aInfo) { if (pDim) pDim->SetSortInfo(&aInfo); }
+    void SetLayoutInfo(const com::sun::star::sheet::DataPilotFieldLayoutInfo& aInfo) { if (pDim) pDim->SetLayoutInfo(&aInfo); }
+};
+
+class ScXMLDataPilotFieldReferenceContext : public SvXMLImportContext
+{
+    com::sun::star::sheet::DataPilotFieldReference aReference;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+public:
+
+    ScXMLDataPilotFieldReferenceContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDataPilotFieldContext* pDataPilotField);
+
+    virtual ~ScXMLDataPilotFieldReferenceContext();
 };
 
 class ScXMLDataPilotLevelContext : public SvXMLImportContext
@@ -363,6 +398,60 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void EndElement();
+};
+
+class ScXMLDataPilotDisplayInfoContext : public SvXMLImportContext
+{
+    com::sun::star::sheet::DataPilotFieldAutoShowInfo aInfo;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+public:
+
+    ScXMLDataPilotDisplayInfoContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDataPilotFieldContext* pDataPilotField);
+
+    virtual ~ScXMLDataPilotDisplayInfoContext();
+};
+
+class ScXMLDataPilotSortInfoContext : public SvXMLImportContext
+{
+    com::sun::star::sheet::DataPilotFieldSortInfo aInfo;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+public:
+
+    ScXMLDataPilotSortInfoContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDataPilotFieldContext* pDataPilotField);
+
+    virtual ~ScXMLDataPilotSortInfoContext();
+};
+
+class ScXMLDataPilotLayoutInfoContext : public SvXMLImportContext
+{
+    com::sun::star::sheet::DataPilotFieldLayoutInfo aInfo;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+public:
+
+    ScXMLDataPilotLayoutInfoContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDataPilotFieldContext* pDataPilotField);
+
+    virtual ~ScXMLDataPilotLayoutInfoContext();
 };
 
 class ScXMLDataPilotSubTotalsContext : public SvXMLImportContext
