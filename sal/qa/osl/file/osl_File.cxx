@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_File.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:30:40 $
+ *  last change: $Author: obo $ $Date: 2004-01-05 21:20:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2920,27 +2920,34 @@ namespace osl_FileStatus
 #endif
         }
 
-        void getFileType_005( )
-        {
-#if defined ( SOLARIS ) //Socket file may differ in Windows
-                nError1 = ::osl::DirectoryItem::get( aTypeURL1, m_aSocketItem );
-            CPPUNIT_ASSERT_MESSAGE("get Socket type file failed", ::osl::FileBase::E_None == nError1 );
+/*
+ * LLA: removed, m_aSocketItem is wrong initialised.
+ */
 
-            //check for File type
-             ::osl::FileStatus   rFileStatus( FileStatusMask_Type );
+// LLA:         void getFileType_005( )
+// LLA:         {
+// LLA: #if defined ( SOLARIS ) //Socket file may differ in Windows
+// LLA:             // nError1 = ::osl::DirectoryItem::get( aTypeURL1, m_aSocketItem );
+// LLA:             nError1 = ::osl::DirectoryItem::get( rtl::OUString::createFromAscii("/dev/null"), m_aSocketItem );
+// LLA:             printError(nError1);
+// LLA:             CPPUNIT_ASSERT_MESSAGE("get Socket type file failed", ::osl::FileBase::E_None == nError1 );
+// LLA:
+// LLA:             //check for File type
+// LLA:             ::osl::FileStatus   rFileStatus( FileStatusMask_Type );
+// LLA:
+// LLA:             nError1 = m_aSocketItem.getFileStatus( rFileStatus );
+// LLA:             CPPUNIT_ASSERT_MESSAGE("getFileStatus failed", ::osl::FileBase::E_None == nError1 );
+// LLA:
+// LLA:             if (rFileStatus.isValid( FileStatusMask_Type ))
+// LLA:             {
+// LLA:                 osl::FileStatus::Type eType = rFileStatus.getFileType( );
+// LLA:                 printFileType(eType);
+// LLA:                 CPPUNIT_ASSERT_MESSAGE( "test for getFileType function: Socket, Solaris version ",
+// LLA:                                         ( eType == ::osl::FileStatus::Socket ) );
+// LLA:             }
+// LLA: #endif
+// LLA:         }
 
-                nError1 = m_aSocketItem.getFileStatus( rFileStatus );
-            CPPUNIT_ASSERT_MESSAGE("getFileStatus failed", ::osl::FileBase::E_None == nError1 );
-
-                if (rFileStatus.isValid( FileStatusMask_Type ))
-                {
-                    osl::FileStatus::Type eType = rFileStatus.getFileType( );
-
-            CPPUNIT_ASSERT_MESSAGE( "test for getFileType function: Socket, Solaris version ",
-                                            ( eType == ::osl::FileStatus::Socket ) );
-        }
-#endif
-        }
 
 // deprecated since there is a same case Directory::getNextItem_004
 /*#if defined 0 //( UNX ) //( SOLARIS ) //Link file is not defined in Windows
@@ -2986,7 +2993,7 @@ namespace osl_FileStatus
         CPPUNIT_TEST( getFileType_002 );
         CPPUNIT_TEST( getFileType_003 );
         CPPUNIT_TEST( getFileType_004 );
-        CPPUNIT_TEST( getFileType_005 );
+        // LLA: CPPUNIT_TEST( getFileType_005 );
         //CPPUNIT_TEST( getFileType_006 );
         CPPUNIT_TEST( getFileType_007 );
         CPPUNIT_TEST_SUITE_END( );
