@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:34:20 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,9 @@ USHORT DoUpdateCharts( ScAddress aPos, ScDocument* pDoc,
                                 delete pMemChart;
                                 ++nFound;
 
-                                pObject->SendRepaintBroadcast();
+                                // redraw only
+                                pObject->ActionChanged();
+                                // pObject->SendRepaintBroadcast();
                             }
                         }
                     }
