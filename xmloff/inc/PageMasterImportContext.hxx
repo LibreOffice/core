@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 10:16:12 $
+ *  last change: $Author: mh $ $Date: 2000-10-24 09:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _XMLOFF_PAGEMASTERIMPORTCONTEXT_HXX
 
 #ifndef _XMLOFF_PRSTYLEI_HXX_
-#include <xmloff/prstylei.hxx>
+#include "prstylei.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
