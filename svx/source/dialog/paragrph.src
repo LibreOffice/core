@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 13:08:51 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1969,7 +1969,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ russian ] = "Ρμενΰ ρςπξκθ";
         Text[ greek ] = "Αλλαγή σ~ειράς";
         Text[ dutch ] = "Opties";
-        Text[ french ] = "Options";
+        Text[ french ] = "Chang~ement de ligne";
         Text[ spanish ] = "Cambio de fila";
         Text[ italian ] = "Opzioni";
         Text[ danish ] = "Options";
@@ -1994,7 +1994,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ russian ] = "Σχθςϋβΰςό ροθρξκ ηΰοπεωεννϋυ ηνΰκξβ β νΰχΰλε θ κξνφε ρςπξκθ";
         Text[ greek ] = "Να ληφθεί υπόψη η ~λίστα των μη επιτρεπόμενων χαρακτήρων στην αρχή και στο τέλος της σειράς";
         Text[ dutch ] = "Apply list of forbidden characters at line end and line start";
-        Text[ french ] = "Tenir compte de la liste des caractθres interdits en dιbut et en fin de ligne";
+        Text[ french ] = "Tenir compte de la ~liste des caractθres interdits en dιbut et en fin de ligne";
         Text[ spanish ] = "Considerar lista de caracteres no aceptables a comienzo y fin de lνnea.";
         Text[ italian ] = "Apply list of forbidden characters at line end and line start";
         Text[ danish ] = "Apply list of forbidden characters at line end and line start";
@@ -2019,7 +2019,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ russian ] = "Δξοσρςθςό πΰηπϋβ βνσςπθ ρλξβ λΰςθνρκξγξ ςεκρςΰ";
         Text[ greek ] = "Να επι~τραπεί η αλλαγή κειμένου εντός των λέξεων του λατινικού κειμένου";
         Text[ dutch ] = "Allow break inside of words in latin text";
-        Text[ french ] = "Allow break inside of words in latin text";
+        Text[ french ] = "Autoriser la ~coupure en milieu de mot pour le texte en caractθres latins";
         Text[ spanish ] = "Permitir salto dentro de palabras en texto con caracteres latinos.";
         Text[ italian ] = "Allow break inside of words in latin text";
         Text[ danish ] = "Allow break inside of words in latin text";
@@ -2044,7 +2044,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ russian ] = "Δξοσρςθςό βθρÿχσώ οσνκςσΰφθώ";
         Text[ greek ] = "Να επ~ιτραπούν προεξέχοντα σημεία στίξης";
         Text[ dutch ] = "Hanging punctuation";
-        Text[ french ] = "Permettre la ponctuation nιgative";
+        Text[ french ] = "Autoriser la ponctuation en retrait";
         Text[ spanish ] = "Permitir puntuaciσn libre";
         Text[ italian ] = "Hanging punctuation";
         Text[ danish ] = "Hanging punctuation";
@@ -2069,7 +2069,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ russian ] = "Πΰρρςξÿνθε μεζδσ ηνΰκΰμθ";
         Text[ greek ] = "Απόσταση χαρακτήρων";
         Text[ dutch ] = "Character distance";
-        Text[ french ] = "Character distance";
+        Text[ french ] = "Espacement des caractθres";
         Text[ spanish ] = "Espacio entre caracteres";
         Text[ italian ] = "Character distance";
         Text[ danish ] = "Character distance";
@@ -2094,7 +2094,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ russian ] = "Δξοσρςθςό οσνκςσΰφθώ β νΰχΰλε ρςπξκθ δλÿ σζΰςθÿ";
         Text[ greek ] = "~Να επιτραπεί η συμπίεση των σημείων στίξης στην αρχή της σειράς";
         Text[ dutch ] = "Allow punctuation at line start";
-        Text[ french ] = "Allow punctuation at line start";
+        Text[ french ] = "Autoriser la po~nctuation en dιbut de ligne pour compression";
         Text[ spanish ] = "Permitir puntuaciσn al comienzo de fila para comprimir";
         Text[ italian ] = "Allow punctuation at line start";
         Text[ danish ] = "Allow punctuation at line start";
@@ -2119,7 +2119,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ russian ] = "Οπθμενθςό θνςεπβΰλ μεζδσ ΰηθΰςρκθμ, λΰςθνρκθμ θ ρμεψΰννϋμ ςεκρςξμ";
         Text[ greek ] = "Εφαρμογή ~απόστασης μεταξύ ασιάτικου, λατινικού και πολύπλοκου κειμένου";
         Text[ dutch ] = "Apply distance between asian, latin and complex text";
-        Text[ french ] = "Appliquer l'espacement entre les textes asiatiques, latins et complexes.";
+        Text[ french ] = "Appliquer l'esp~acement entre les textes asiatiques, latins et complexes.";
         Text[ spanish ] = "Aplicar espacio entre texto asiαtico, latino y complejo.";
         Text[ italian ] = "Apply distance between asian, latin and complex text";
         Text[ danish ] = "Apply distance between asian, latin and complex text";
@@ -2144,7 +2144,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ russian ] = "ΐβςξοξδαξπ πΰρρςξÿνθÿ μεζδσ ΰηθΰςρκθμ ςεκρςξμ θ χθρλΰμθ";
         Text[ greek ] = "Αυτόματη προσαρμογή της απόστασης μεταξύ του ασιάτικου κειμένου και των αριθμών";
         Text[ dutch ] = "Automatically adjust distance between asian text and numbers";
-        Text[ french ] = "Automatically adjust distance between asian text and numbers";
+        Text[ french ] = "A~dapter automatiquement l'espacement entre le texte asiatique et les nombres.";
         Text[ spanish ] = "Ajustar automαticamente espacio entre texto asiαtico y nϊmeros";
         Text[ italian ] = "Automatically adjust distance between asian text and numbers";
         Text[ danish ] = "Automatically adjust distance between asian text and numbers";
@@ -2169,7 +2169,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ russian ] = "Βϋπΰβνθβΰνθε ςεκρςΰ";
         Text[ greek ] = "Στοί~χιση κειμένου";
         Text[ dutch ] = "Text alignment";
-        Text[ french ] = "Text alignment";
+        Text[ french ] = "Alignement du te~xte";
         Text[ spanish ] = "Alineaciσn de texto";
         Text[ italian ] = "Text alignment";
         Text[ danish ] = "Text alignment";
@@ -2230,8 +2230,8 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     };
     StringList [ french ] =
     {
-            < "Automatisch" ; Default ; > ;
-        < "??Manuell" ; Default ; > ;
+            < "Automatique" ; Default ; > ;
+        < "??Manuel" ; Default ; > ;
     };
     StringList [ spanish ] =
     {
