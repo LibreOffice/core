@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-13 08:42:13 $
+ *  last change: $Author: mib $ $Date: 2000-11-29 14:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,9 +347,10 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
 
         if( sImageURL.getLength() )
         {
-            String sURL( sImageURL );
-            INetURLObject::AbsToRel( sURL );
-            sImageURL = sURL;
+//          String sURL( sImageURL );
+//          INetURLObject::AbsToRel( sURL );
+//          sImageURL = sURL;
+            sImageURL = GetExport().AddEmbeddedGraphicObject( sImageURL );
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sImageURL );
 
             GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );

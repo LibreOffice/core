@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-27 13:37:09 $
+ *  last change: $Author: mib $ $Date: 2000-11-29 14:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1730,15 +1730,19 @@ void XMLTextParagraphExport::_exportTextGraphic(
     OUString sURL;
     aAny = rPropSet->getPropertyValue( sGraphicURL );
     aAny >>= sURL;
-    if( !sURL.getLength() )
-        sURL = exportTextEmbeddedGraphic( rPropSet );
-    GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
-    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
-                                   sXML_simple );
-    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show,
-                                   sXML_embed );
-    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
-                                   sXML_onRequest );
+    sURL = GetExport().AddEmbeddedGraphicObject( sURL );
+
+    // If there still is no url, then teh graphic is empty
+    if( sURL.getLength() )
+    {
+        GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
+        GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
+                                       sXML_simple );
+        GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show,
+                                       sXML_embed );
+        GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
+                                       sXML_onRequest );
+    }
 
     // draw:filter-name
     OUString sGrfFilter;
@@ -1798,12 +1802,12 @@ void XMLTextParagraphExport::exportTextGraphic(
     }
 }
 
-OUString XMLTextParagraphExport::exportTextEmbeddedGraphic(
-    const Reference < XPropertySet >& rPropSet )
-{
-    OUString sEmpty;
-    return sEmpty;
-}
+//OUString XMLTextParagraphExport::exportTextEmbeddedGraphic(
+//  const Reference < XPropertySet >& rPropSet )
+//{
+//  OUString sEmpty;
+//  return sEmpty;
+//}
 
 void XMLTextParagraphExport::exportShape(
         const Reference < XTextContent > & rTxtCntnt,

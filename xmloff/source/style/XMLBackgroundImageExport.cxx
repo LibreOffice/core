@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-08 15:53:11 $
+ *  last change: $Author: mib $ $Date: 2000-11-29 14:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
     rURL >>= sURL;
     if( sURL.getLength() && GraphicLocation_NONE != ePos )
     {
+        sURL = GetExport().AddEmbeddedGraphicObject( sURL );
         GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sURL );
         GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
                       sXML_simple );

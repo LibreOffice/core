@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-28 11:33:02 $
+ *  last change: $Author: mib $ $Date: 2000-11-29 14:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
+#endif
 
 #ifndef _XMLOFF_GRADIENTSTYLE_HXX
 #include <GradientStyle.hxx>
@@ -146,6 +149,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::container;
 
 sal_Char __READONLY_DATA sXML_0_9[] = "0.9";
 
@@ -188,6 +192,9 @@ void SvXMLExport::_InitCtor()
 
 
     xAttrList = (xml::sax::XAttributeList*)pAttrList;
+
+    sPicturesPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "./Pictures/" ) );
+    sGraphicObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.GraphicObject:" ) );
 }
 
 SvXMLExport::SvXMLExport(
@@ -213,6 +220,7 @@ SvXMLExport::SvXMLExport(
         const OUString &rFileName,
         const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
         const Reference< XModel >& rModel,
+        const Reference< XIndexContainer >& rEmbeddedGraphicObjects,
         sal_Int16 eDfltUnit ) :
     pImpl( 0 ),
     sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
@@ -224,6 +232,7 @@ SvXMLExport::SvXMLExport(
     bExtended( sal_False ),
     xHandler( rHandler ),
     xExtHandler( rHandler, uno::UNO_QUERY ),
+    xEmbeddedGraphicObjects( rEmbeddedGraphicObjects ),
     xModel( rModel ),
     pNumExport(0L),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
@@ -685,6 +694,25 @@ OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat) const
     return sTemp;
 }
 
+OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectURL )
+{
+    OUString sRet( rGraphicObjectURL );
+    if( 0 == rGraphicObjectURL .compareTo( sGraphicObjectProtocol,
+                             sGraphicObjectProtocol.getLength() ) &&
+        xEmbeddedGraphicObjects.is() )
+    {
+        Any aAny;
+        aAny <<= rGraphicObjectURL;
+        xEmbeddedGraphicObjects->insertByIndex(
+                xEmbeddedGraphicObjects->getCount(), aAny );
+
+        sRet = sPicturesPath;
+        sRet += rGraphicObjectURL.copy( sGraphicObjectProtocol.getLength() );
+    }
+
+    return sRet;
+}
+
 SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
                                         sal_uInt16 nPrefixKey,
                                         const sal_Char *pLName,
@@ -724,5 +752,4 @@ SvXMLElementExport::~SvXMLElementExport()
         rExport.GetDocHandler()->ignorableWhitespace( rExport.sWS );
     rExport.GetDocHandler()->endElement( aName );
 }
-
 

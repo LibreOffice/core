@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-27 09:09:12 $
+ *  last change: $Author: mib $ $Date: 2000-11-29 14:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1699,10 +1699,11 @@ void SchXMLExportHelper::addSize( uno::Reference< drawing::XShape > xShape )
 SchXMLExport::SchXMLExport( uno::Reference< frame::XModel > xModel,
                             const rtl::OUString& rFileName,
                             const uno::Reference< xml::sax::XDocumentHandler >& rHandler,
+                            const uno::Reference< ::com::sun::star::container::XIndexContainer > & rEGO,
                             sal_Bool bShowProgress,
                             sal_Bool bIncludeTable ) :
         // MAP_CM should become the application setting
-        SvXMLExport( rFileName, rHandler, xModel, MAP_CM ),
+        SvXMLExport( rFileName, rHandler, xModel, rEGO, MAP_CM ),
         maExportHelper( *this, maAutoStylePool )
 {
     // get status indicator (if requested)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-27 12:52:59 $
+ *  last change: $Author: mib $ $Date: 2000-11-29 14:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,9 +626,10 @@ SdXMLExport::SdXMLExport(
     const uno::Reference<frame::XModel>& rMod,
     const OUString& rFileName,
     const uno::Reference<xml::sax::XDocumentHandler>& rHandler,
+    const uno::Reference< ::com::sun::star::container::XIndexContainer > & rEGO,
     BOOL bShowProgr,
     BOOL bIsDraw)
-:   SvXMLExport( rFileName, rHandler, rMod, MAP_CM ),
+:   SvXMLExport( rFileName, rHandler, rMod, rEGO, MAP_CM ),
     mpPageMasterInfoList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpPageMaterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpDrawPageInfoList(new ImpXMLDrawPageInfoList(4, 8, 8)),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:01 $
+ *  last change: $Author: mib $ $Date: 2000-11-29 14:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@ public:
     SchXMLExport( com::sun::star::uno::Reference< com::sun::star::frame::XModel > xModel,
                   const rtl::OUString& rFileName,
                   const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& rHandler,
+                   const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::container::XIndexContainer > &,
                   sal_Bool bShowProgress,
                   sal_Bool bIncludeTable = sal_False );
     virtual ~SchXMLExport();
