@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2002-12-06 14:15:24 $
+ *  last change: $Author: iha $ $Date: 2002-12-06 15:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,11 +768,12 @@ void    PrtPrvWindow::Paint(const Rectangle&)
             aOffset.X() = (aWinSize.Width() - rSettings.aPrtSize.Width()) / 2;;
 
 
-        BOOL bAccessibleColors = SvtAccessibilityOptions().GetIsForPagePreviews();
+        BOOL bUseSystemColors = SvtAccessibilityOptions().GetIsForPagePreviews()
+                                && GetSettings().GetStyleSettings().GetHighContrastMode();
 
         //der weisse Seitenhintergrund
         Rectangle aRect(aOffset, rSettings.aPrtSize);
-        if(bAccessibleColors)
+        if(bUseSystemColors)
         {
             SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() );
             SetLineColor( GetSettings().GetStyleSettings().GetWindowTextColor() );
@@ -805,7 +806,7 @@ void    PrtPrvWindow::Paint(const Rectangle&)
             aPrvPageSize.Width() = aPrvPageSize.Height() * nSourceScale / 100;
         }
 
-        if(bAccessibleColors)
+        if(bUseSystemColors)
             SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() );
         else
             SetFillColor( Color( COL_GRAY ) );
