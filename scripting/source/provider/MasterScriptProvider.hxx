@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: npower $ $Date: 2003-08-19 09:46:43 $
+ *  last change: $Author: npower $ $Date: 2003-08-27 13:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _FRAMEWORK_SCRIPT_PROVIDER_XFUNCTIONPROVIDER_HXX_
 
 #include <rtl/ustring>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -71,6 +71,8 @@
 #include <drafts/com/sun/star/script/framework/provider/XScriptProvider.hpp>
 #include <drafts/com/sun/star/script/framework/runtime/XScriptInvocation.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
+#include <drafts/com/sun/star/script/framework/browse/XBrowseNode.hpp>
+
 #include "ScriptingContext.hxx"
 
 namespace func_provider
@@ -80,18 +82,29 @@ namespace func_provider
 #define dcsssf ::drafts::com::sun::star::script::framework
 
 class MasterScriptProvider :
-            public ::cppu::WeakImplHelper3 < dcsssf::provider::XScriptProvider,
-                css::lang::XServiceInfo, css::lang::XInitialization >
+            public ::cppu::WeakImplHelper4 < dcsssf::provider::XScriptProvider,
+                dcsssf::browse::XBrowseNode, css::lang::XServiceInfo, css::lang::XInitialization >
 {
 public:
     MasterScriptProvider(
         const css::uno::Reference< css::uno::XComponentContext >
-        & xContext );
+        & xContext ) throw( css::uno::RuntimeException );
     ~MasterScriptProvider();
 
     // XServiceInfo implementation
     virtual ::rtl::OUString SAL_CALL getImplementationName( )
         throw( css::uno::RuntimeException );
+
+    // XBrowseNode implementation
+    virtual ::rtl::OUString SAL_CALL getName()
+        throw ( css::uno::RuntimeException );
+    virtual css::uno::Sequence< css::uno::Reference< dcsssf::browse::XBrowseNode > > SAL_CALL getChildNodes()
+        throw ( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL hasChildNodes()
+        throw ( css::uno::RuntimeException );
+    virtual sal_Int16 SAL_CALL getType()
+        throw ( css::uno::RuntimeException );
+
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
         throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames( )
@@ -100,7 +113,7 @@ public:
     // XScriptInvocation implementation
     virtual css::uno::Reference < dcsssf::provider::XScript > SAL_CALL
         getScript( const ::rtl::OUString& scriptURI )
-        throw( css::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
     /**
      *  XInitialise implementation
@@ -111,13 +124,21 @@ public:
     virtual void SAL_CALL initialize( css::uno::Sequence < css::uno::Any > const & args )
         throw ( css::uno::Exception, css::uno::RuntimeException);
 private:
-    void addStorageAsListener();
+    void addStorageAsListener() throw( css::uno::RuntimeException );
+    bool  isValid();
+    const css::uno::Sequence< ::rtl::OUString >& getProviderNames();
+    ::rtl::OUString  getLanguageFromURI(const ::rtl::OUString& scriptURI );
+    css::uno::Reference< dcsssf::provider::XScriptProvider >
+        getScriptProvider( const ::rtl::OUString& language,
+                           const css::uno::Sequence< css::uno::Any >& args )
+                           throw ( css::uno::RuntimeException );
     /* to obtain other services if needed */
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Reference < dcsssf::storage::XScriptStorageManager > m_xScriptStorageMgr;
     bool m_bInitialised;
+    bool m_bIsValid;
     css::uno::Reference< css::beans::XPropertySet > m_XScriptingContext;
 
     osl::Mutex m_mutex;
