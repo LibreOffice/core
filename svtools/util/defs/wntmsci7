@@ -12215,3 +12215,15 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?lcl_MoveControl@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx3195813323@@YAXPAVControl@@JJAAJ@Z
 ?lcl_autoUpdateFileExtension@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx3195813323@@YAXPAVSvtFileDialog@@@Z
 ?lcl_getHomeDirectory@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx3195813323@@YAEABVString@@AAV2@@Z
+?_resize@SvBools@@IAEXI@Z
+?_resize@SvBytes@@IAEXI@Z
+?_resize@SvLongs@@IAEXI@Z
+?_resize@SvLongsSort_SAR@@IAEXI@Z
+?_resize@SvPtrarr@@IAEXI@Z
+?_resize@SvPtrarrPlain@@IAEXI@Z
+?_resize@SvShorts@@IAEXI@Z
+?_resize@SvULongs@@IAEXI@Z
+?_resize@SvULongsSort_SAR@@IAEXI@Z
+?_resize@SvUShorts@@IAEXI@Z
+?_resize@SvXub_StrLens@@IAEXI@Z
+?_resize@SvXub_StrLensSort_SAR@@IAEXI@Z
