@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-08 16:16:44 $
+ *  last change: $Author: cmc $ $Date: 2002-07-09 16:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,7 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                     if (!bDuplicate)
                     {
                         rWW8Wrt.GetOLEExp().ExportOLEObject( *pObj, *xOleStg );
-                        //We never need this preview image
+                        //We never need this stream: See #99809# and #i2179#
                         xOleStg->Remove(CREATE_CONST_ASC("\2OlePres000"));
                     }
 
@@ -336,7 +336,17 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                         WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
 
                     BOOL bEndCR = TRUE;
+                    /*
+                    In the word filter we only need a preview image for
+                    floating images, and then only (the usual case) if the
+                    object doesn't contain enough information to reconstruct
+                    what we need.
+
+                    We don't need a graphic for inline objects, so we don't
+                    even need the overhead of a graphic in that case.
+                    */
                     BOOL bGraphicNeeded = FALSE;
+
                     if (rWW8Wrt.pFlyFmt)
                     {
                         bGraphicNeeded = TRUE;
