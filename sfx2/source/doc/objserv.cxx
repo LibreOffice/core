@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 14:11:56 $
+ *  last change: $Author: mba $ $Date: 2001-06-20 14:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,7 +779,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 delete pInfo;
             }
 
-            if ( SaveTo_Impl(aMedium) )
+            if ( SaveTo_Impl(aMedium,NULL,FALSE) )
             {
                 bOK = TRUE;
                 aMedium.Commit();

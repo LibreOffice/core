@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-19 17:24:08 $
+ *  last change: $Author: mba $ $Date: 2001-06-20 14:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,14 +98,20 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
-#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#ifndef  _COM_SUN_STAR_UI_FILEDIALOGRESULTS_HPP_
+#include <com/sun/star/ui/FileDialogResults.hpp>
 #endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
-#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#ifndef  _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
+#include <com/sun/star/ui/FilePickerElementID.hpp>
 #endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#ifndef  _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/XFilterManager.hpp>
 #endif
 
 #pragma hdrstop
@@ -178,7 +184,7 @@ extern sal_uInt32 CheckPasswd_Impl( Window*, SfxItemPool&, SfxMedium* );
 
 
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 using namespace ::cppu;
@@ -668,7 +674,8 @@ void Lock_Impl( SfxObjectShell* pDoc, BOOL bLock )
 sal_Bool SfxObjectShell::SaveTo_Impl
 (
      SfxMedium &rMedium, // Medium, in das gespeichert werden soll
-     const SfxItemSet* pSet
+     const SfxItemSet* pSet,
+     BOOL bPrepareForDirectAccess
 )
 
 /*  [Beschreibung]
@@ -684,7 +691,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 {
     sal_Bool bOk = sal_False;
     SfxForceLinkTimer_Impl aFLT( this );
-    ModifyBlocker_Impl aBlock( this );
+    EnableSetModified( FALSE );
     const SfxFilter *pFilter = rMedium.GetFilter();
     if ( !pFilter )
     {
@@ -868,9 +875,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             bOk = ConvertTo( rMedium );
 
         if( bOk )
-            bOk = SaveChilds();
+            bOk = SaveChilds() && SaveCompletedChilds( NULL );
     }
-
 
 #ifdef DBG_UTILx
     if( bStorage )
@@ -880,39 +886,74 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     }
 #endif
 
+    EnableSetModified( TRUE );
+
     if(bOk)
     {
-        /*  When the new medium ( rMedium ) has the same name as the
-            current one, we need to call DoHandsOff() so Commit() can
-            overwrite the old version. This is a good time to check
-            wether we want a backup copy, too.
-            (dv) We have to call DoHandsOff wether or not the names
-            are the same
-        */
-
-        sal_Bool bCopyTo = sal_False;
-        SfxItemSet *pSet = rMedium.GetItemSet();
-
-        if( pSet )
+        sal_Bool bNeedsStorage = sal_False;
+        SvStorageRef xNewTempRef;
+        if ( bOk && bPrepareForDirectAccess )
         {
-            SFX_ITEMSET_ARG( pSet, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
-            bCopyTo =   GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
-                        pSaveToItem && pSaveToItem->GetValue();
+            /*  When the new medium ( rMedium ) has the same name as the
+                current one, we need to call DoHandsOff() so Commit() can
+                overwrite the old version. This is a good time to check
+                wether we want a backup copy, too.
+                (dv) We have to call DoHandsOff wether or not the names
+                are the same
+            */
+
+            sal_Bool bCopyTo = sal_False;
+            SfxItemSet *pSet = rMedium.GetItemSet();
+
+            if( pSet )
+            {
+                SFX_ITEMSET_ARG( pSet, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
+                bCopyTo =   GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
+                            pSaveToItem && pSaveToItem->GetValue();
+            }
+
+            // Falls jetzt in ein Fremdformat gespeichert wird, darf nicht der
+            // Objektstorage weiterverwendet werden, wenn das alte Format das
+            // eigene war. Daher wird hier eine temporaerer erzeugt.
+            // Damit DoHandsOff gerufen werden kann, merken wir uns den
+            // Storage und rufen anschliessend von Hand SaveCompleted
+
+            bNeedsStorage = !bCopyTo && IsOwnStorageFormat_Impl(*pMedium) &&
+                            !IsOwnStorageFormat_Impl(rMedium);
+
+            if ( bNeedsStorage && pMedium->GetName().Len() )
+            {
+                if( !ConnectTmpStorage_Impl( pMedium->GetStorage() ) )
+                    bOk = sal_False;
+            }
+
+            if( bNeedsStorage || !pMedium->GetName().Len() )
+                xNewTempRef = GetStorage();
+
+            if ( bOk && !bCopyTo )
+                DoHandsOff();
         }
 
-        if ( ! bCopyTo )
-            DoHandsOff();
-
-        if ( pMedium &&
-             ( rMedium.GetName() == pMedium->GetName() ) )
+        if ( bOk )
         {
-            const sal_Bool bDoBackup = SvtSaveOptions().IsBackup();
-            if ( bDoBackup )
-                pMedium->DoBackup_Impl();
-        }
+            EnableSetModified( FALSE );
+            if ( pMedium && ( rMedium.GetName() == pMedium->GetName() ) )
+            {
+                const sal_Bool bDoBackup = SvtSaveOptions().IsBackup();
+                if ( bDoBackup )
+                    pMedium->DoBackup_Impl();
+            }
 
-        RegisterTransfer( rMedium );
-        bOk=rMedium.Commit();
+            RegisterTransfer( rMedium );
+            bOk=rMedium.Commit();
+
+            EnableSetModified( TRUE );
+
+            if ( bNeedsStorage )
+                SaveCompleted( xNewTempRef );
+            else if ( bPrepareForDirectAccess && !bOk )
+                DoSaveCompleted( &rMedium );
+        }
     }
     else
     {
@@ -923,8 +964,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     Lock_Impl( this, FALSE );
     pImp->bForbidReload = bOldStat;
 
-    if(bOk && pFilter)
-        if(pFilter->IsAlienFormat())
+    if( bOk && pFilter )
+        if( pFilter->IsAlienFormat() )
             pImp->bDidDangerousSave=sal_True;
         else
             pImp->bDidDangerousSave=sal_False;
@@ -1003,7 +1044,7 @@ sal_Bool SfxObjectShell::DoSaveAs( SfxMedium &rMedium )
 
     rMedium.CreateTempFileNoCopy();
 
-    sal_Bool bRet = SaveTo_Impl(rMedium);
+    sal_Bool bRet = SaveTo_Impl( rMedium, NULL, FALSE );
     INetURLObject::SetBaseURL( aOldURL );
     if( bRet )
         DoHandsOff();
@@ -1358,8 +1399,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 // Ausser, wenn kein Backup gewuensch ist und wir ins eigene
 // Storageformat schreiben und wir nicht in SaveAs sind.
 
-    //  Backup will be created in SaveTo_Impl()
-    //  const sal_Bool bDoBackup=SvtSaveOptions().IsBackup();
+    //  Backup will be created in _Impl()
     const sal_Bool bIsOwn=IsOwnStorageFormat_Impl(*pMedium);
 
 // Zur Zeit wirder immer ueber temporaere Datei, um Storages schrumpfen
@@ -1395,7 +1435,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         if ( pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
             SetError( GetMedium()->Unpack_Impl( pMedium->GetPhysicalName() ) );
 
-        if( !GetError() && SaveTo_Impl(*pMediumTmp, pArgs) )
+        if( !GetError() && SaveTo_Impl( *pMediumTmp, pArgs, TRUE ) )
         {
             INetURLObject::SetBaseURL( aOldURL );
             ByteString aKey;
@@ -1601,8 +1641,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 #else
             // get the filename by dialog ...
             // create the file dialog
-            sfx2::FileDialogHelper aFileDlg( FILESAVE_AUTOEXTENSION_PASSWORD,
-                                             0L, GetFactory() );
+            sfx2::FileDialogHelper aFileDlg( WB_SAVEAS | SFXWB_PASSWORD, GetFactory() );
 
             if ( HasName() )
             {
@@ -1671,7 +1710,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             {
                 try
                 {
-                    Any aValue = xExtFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
+                    Any aValue = xExtFileDlg->getValue( FilePickerElementID::CBX_SELECT_FILTER );
                     sal_Bool bSelectFilter = sal_False;
 
                     aValue >>= bSelectFilter;
@@ -1738,8 +1777,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 #else
         // get the filename by dialog ...
         // create the file dialog
-        sfx2::FileDialogHelper aFileDlg( FILESAVE_AUTOEXTENSION_PASSWORD,
-                                         0L, GetFactory() );
+        sfx2::FileDialogHelper aFileDlg( WB_SAVEAS | SFXWB_PASSWORD, GetFactory() );
 
         if ( aFileDlg.Execute( pParams, aFilterName ) != ERRCODE_NONE )
         {
@@ -1913,46 +1951,16 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         pMediumTmp->SetError( GetMedium()->Unpack_Impl( pMed->GetPhysicalName() ) );
     }
 
-    sal_Bool bCouldNotConnect = sal_False;
-    sal_Bool bNeedsStorage;
-    SvStorageRef xNewTempRef;
-
-    if ( !pMediumTmp->GetErrorCode() )
-    {
-
-        // Falls jetzt in ein Fremdformat gespeichert wird, darf nicht der
-        // Objektstorage weiterverwendet werden, wenn das alte Format das
-        // eigene war. Daher wird hier eine temporaerer erzeugt.
-        // Damit DoHandsOff gerufen werden kann, merken wir uns den
-        // Storage und rufen anschliessend von Hand SaveCompleted
-
-        bNeedsStorage = !bCopyTo && IsOwnStorageFormat_Impl(*pMedium) &&
-                        !IsOwnStorageFormat_Impl(*pNewFile);
-
-        if ( bNeedsStorage && pMedium->GetName().Len() )
-        {
-            if(!ConnectTmpStorage_Impl( pMedium->GetStorage() ))
-                bCouldNotConnect = sal_True;
-        }
-
-        if( bNeedsStorage || !pMedium->GetName().Len() )
-            xNewTempRef = GetStorage();
-    }
-
-    if ( !pMediumTmp->GetErrorCode() && SaveTo_Impl( *pMediumTmp ) )
+    if ( !pMediumTmp->GetErrorCode() && SaveTo_Impl( *pMediumTmp, NULL, TRUE ) )
     {
         bOk = sal_True;
         INetURLObject::SetBaseURL( aOldURL );
 
-        if ( bCouldNotConnect )
-            bOk = sal_False;
-
         SetError( pMediumTmp->GetErrorCode() );
 
-        if( bNeedsStorage )
-            SaveCompleted( xNewTempRef );
-
-        if ( !bCopyTo )
+        if ( bCopyTo )
+            bOk = DoSaveCompleted( pMedium );
+        else
             bOk = DoSaveCompleted( pNewFile );
 
         //! Vorsich. Muss nicht immer klappen.
@@ -1968,9 +1976,11 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         else
         {
             SetError( pNewFile->GetErrorCode() );
+/*
             if ( !pMedium->GetName().Len() )
                 SaveCompleted( xNewTempRef );
             else
+ */
             DoSaveCompleted( pMedium );
             DELETEZ( pNewFile );
         }
@@ -1983,15 +1993,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     {
         INetURLObject::SetBaseURL( aOldURL );
         SetError(pMediumTmp->GetErrorCode());
-        if ( bCopyTo )
-            DoSaveCompleted( (SvStorage*)0 );
-        else
-        {
-            if( !pMedium->GetName().Len() )
-                SaveCompleted( xNewTempRef );
-            else
-                DoSaveCompleted( pMedium );
-        }
+        DoSaveCompleted( (SvStorage*)0 );
     }
 
     if(!bOk)
