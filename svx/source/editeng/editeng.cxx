@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-14 14:40:45 $
+ *  last change: $Author: aw $ $Date: 2001-08-15 12:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1536,10 +1536,11 @@ sal_Bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
     DBG_CHKTHIS( EditEngine, 0 );
 
     sal_Bool bTextPos = sal_False;
+    // #90780# take unrotated positions for calculation here
+    Point aDocPos = GetDocPos( rPaperPos );
 
-    if ( ( rPaperPos.Y() > 0  ) && ( rPaperPos.Y() < (long)GetTextHeight() ) )
+    if ( ( aDocPos.Y() > 0  ) && ( aDocPos.Y() < (long)pImpEditEngine->GetTextHeight() ) )
     {
-        Point aDocPos = GetDocPos( rPaperPos );
         EditPaM aPaM = pImpEditEngine->GetPaM( aDocPos, sal_False );
         if ( aPaM.GetNode() )
         {
