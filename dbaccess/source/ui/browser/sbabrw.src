@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:53:17 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 21:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
 #endif
@@ -76,6 +79,7 @@
     };\
 \
     IdList = {\
+        ID_BROWSER_EXPLORER;\
         ID_BROWSER_SEARCH;\
         ID_BROWSER_REFRESH;\
         ID_BROWSER_SORTUP;\
@@ -100,7 +104,7 @@
         ID_BROWSER_FILTERED;\
     };\
     IdCount = {\
-    22;\
+    23;\
     }
 
  // Default Image-Liste ----------------------------------------------------------------
@@ -472,6 +476,12 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ arabic ] = "„” ÊÏ Ê«Õœ ·√⁄·Ï";    \
     Text[ turkish ] = "‹st d¸zey";
 
+#define MID_BROWSER_EXPLORER \
+    Identifier = ID_BROWSER_EXPLORER; \
+    Text = "Explorer ein/aus" ; \
+    Text [ english ] = "Explorer on/off" ; \
+    Text [ english_us ] = "Explorer on/off" ; \
+
 #define MID_FM_SEARCH \
     Identifier = ID_BROWSER_SEARCH ; \
     Text = "Datensatz suchen" ; \
@@ -670,6 +680,12 @@ ToolBox RID_BRW_QRY_TOOLBOX
     {
     CUR_ITEM
     {
+        MID_BROWSER_EXPLORER
+        HelpId = ID_BROWSER_EXPLORER ;
+    };
+    CUR_SEPARATOR ;
+    CUR_ITEM
+    {
         MID_FM_SEARCH
         HelpId = ID_BROWSER_SEARCH ;
     };
@@ -748,6 +764,12 @@ ToolBox RID_BRW_TAB_TOOLBOX
     HelpId = HID_TLB_TABBROWSER ;
     ItemList =
     {
+    CUR_ITEM
+    {
+        MID_BROWSER_EXPLORER
+        HelpId = ID_BROWSER_EXPLORER ;
+    };
+    CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_FM_SEARCH
@@ -1007,3 +1029,33 @@ Image QUERY_TREE_ICON
 };
 
 
+Menu MENU_BROWSERTREE_CONTEXT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ID_TREE_ADMINISTRATE ;
+            HelpId = HID_BROWSER_DSADMINISTRATE ;
+            Text = "~Datenquellen administrieren ..." ;
+            Text [ english ] = "administrate ~data sources ..." ;
+            Text [ english_us ] = "administrate ~data sources ..." ;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_CLOSE_CONN ;
+            HelpId = HID_BROWSER_CLOSECONN ;
+            Text = "Verbindung s~chliessen" ;
+            Text [ english ] = "~close connection" ;
+            Text [ english_us ] = "~close connection" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_REBUILD_CONN ;
+            HelpId = HID_BROWSER_REFRESHCONN ;
+            Text = "Verbindung erneuern" ;
+            Text [ english ] = "~refresh connection" ;
+            Text [ english_us ] = "~refresh connection" ;
+        };
+    };
+};
