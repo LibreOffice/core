@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hro $ $Date: 2000-11-15 14:20:12 $
+ *  last change: $Author: hro $ $Date: 2000-11-17 10:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,14 @@
 #ifndef COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
+#include <com/sun/star/frame/XConfigManager.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_FILESYSTEMNOTATION_HPP_
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _FILID_HXX_
 #include "filid.hxx"
@@ -248,6 +248,12 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
         rtl::OUString aRootDirectory;
         if( xSubNode.is() )
         {
+            uno::Reference< frame::XConfigManager > xCfgMgr(
+                m_xMultiServiceFactory->createInstance(
+                    rtl::OUString::createFromAscii(
+                               "com.sun.star.config.SpecialConfigManager" ) ),
+                uno::UNO_QUERY );
+
             uno::Any aAny = xSubNode->getByName( rtl::OUString::createFromAscii("MountPoints" ) );
             uno::Reference< container::XNameAccess > xSubSubNode;
             aAny >>= xSubSubNode;
@@ -268,18 +274,22 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
                 rtl::OUString aAliasName;
                 letztesany >>= aAliasName;
 
+                VOS_ENSURE( xCfgMgr.is(),
+                        "FileProvider::FileProvider - No Config Manager!" );
+
                 rtl::OUString aUnqDir;
                 rtl::OUString aUnqAl;
 
+                if ( xCfgMgr.is() )
                 {
                     // Substitute path variables, like "$(user)".
 
                     rtl::OUString aDir
-                        = SvtPathOptions().SubstituteVariable( aDirectory );
+                        = xCfgMgr->substituteVariables( aDirectory );
                     osl::FileBase::getNormalizedPathFromFileURL( aDir, aUnqDir );
 
                     rtl::OUString aAlias
-                        = SvtPathOptions().SubstituteVariable( aAliasName );
+                        = xCfgMgr->substituteVariables( aAliasName );
                     osl::FileBase::getNormalizedPathFromFileURL( aAlias, aUnqAl );
                 }
 
