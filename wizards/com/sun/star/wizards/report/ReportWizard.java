@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bc $ $Date: 2002-06-11 15:05:24 $
+ *  last change: $Author: bc $ $Date: 2002-06-11 16:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,13 +610,13 @@ public class ReportWizard {
             ReportDocument.createDBForm(xMSF, CurReportDocument, CurDBMetaData);
             ReportDocument.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "macro:///Tools.Debug.FillDocument()");     //"service:com.sun.star.wizards.report.CallReportWizard?fill"
             boolean bUseTemplate = ((Short) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "optUseTemplate", "State")).shortValue() == (short) 1;
-            tools.storeDocument(xMSF, (XComponent) CurReportDocument.oComponent , sStorePath, "swriter: writer_StarOffice_XML_Writer_Template");
+            tools.storeDocument(xMSF, (XComponent) CurReportDocument.Component , sStorePath, "swriter: writer_StarOffice_XML_Writer_Template");
             DBMetaData.createDBLink(CurDBMetaData.DataSource, sStorePath);
             if (bUseTemplate == true){
             PropertyValue[] oEmptyArgs = new PropertyValue[0];
             XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
-            CurReportDocument.oComponent = (Object) xComponentLoader.loadComponentFromURL(sStorePath, "_blank", 0, oEmptyArgs);
-            CurReportDocument.ReportTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, CurReportDocument.oComponent);
+            CurReportDocument.Component = xComponentLoader.loadComponentFromURL(sStorePath, "_blank", 0, oEmptyArgs);
+            CurReportDocument.ReportTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, CurReportDocument.Component);
             ReportDocument.initializeReportDocument(xGlobalMSF, CurReportDocument);
             ReportDocument.insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument);
             }
@@ -624,7 +624,7 @@ public class ReportWizard {
         else{
             boolean bcreateLink = ((Short) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "chkcreateLink", "State")).shortValue() == (short) 1;
             ReportDocument.insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument);
-            tools.storeDocument(xMSF, (XComponent) CurReportDocument.oComponent , sStorePath, "swriter: StarOffice XML (Writer)");
+            tools.storeDocument(xMSF, CurReportDocument.Component , sStorePath, "swriter: StarOffice XML (Writer)");
             if (bcreateLink == true)
             DBMetaData.createDBLink(CurDBMetaData.DataSource, sStorePath);
         }
@@ -1117,7 +1117,7 @@ public class ReportWizard {
     getReportResources(xMSF);
     CurReportDocument =  new ReportDocument.RepWizardDocument();
     CurDBMetaData = new DBMetaData.CommandMetaData();
-    CurReportDocument.ReportTextDocument =  (XTextDocument) tools.createNewDocument(xDesktop, CurReportDocument.oComponent, "swriter");
+    CurReportDocument.ReportTextDocument =  (XTextDocument) tools.createNewDocument(xDesktop, CurReportDocument.Component, "swriter");
     ReportDocument.initializeReportDocument(xMSF, CurReportDocument);
     ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, CurReportDocument.ReportFolderName + "/stl-default.stw", "LoadPageStyles");
         initializeDialog(xMSF, CurReportDocument);
@@ -1132,7 +1132,7 @@ public class ReportWizard {
     CurReportDocument.ProgressBar.setValue(80);
     fillFifthStep();
     CurReportDocument.ProgressBar.setValue(100);
-    executeDialog(xMSF);
+    executeDialog(xMSF, CurReportDocument);
     }
     catch(java.lang.Exception jexception ){
     jexception.printStackTrace(System.out);
@@ -1167,7 +1167,7 @@ public class ReportWizard {
 
 
 
-    public static void executeDialog(XMultiServiceFactory xMSF){
+    public static void executeDialog(XMultiServiceFactory xMSF, ReportDocument.RepWizardDocument CurReportDocument){
     try{
     XWindow xWindow = ( XWindow ) UnoRuntime.queryInterface( XWindow.class, objectDialog );
         xWindow.setVisible( false );
@@ -1178,7 +1178,15 @@ public class ReportWizard {
     CurReportDocument.ProgressBar.end();
     short retvalue = xDialog.execute();
         switch (retvalue){
-        case 0:
+        case 0:     // Cancel
+        XNameContainer xNamedForms = ReportDocument.getDocumentForms(CurReportDocument.ReportTextDocument);
+        XNameAccess xName = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xNamedForms);
+        if (xName.hasByName("ReportSource") == false){
+            XComponent xComponent = ( XComponent ) UnoRuntime.queryInterface(XComponent.class, objectDialog);
+            xComponent.dispose();
+            CurReportDocument.Component.dispose();
+            System.exit(0);
+        }
         break;
             case 1:
                 break;
