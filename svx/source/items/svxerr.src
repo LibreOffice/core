@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-16 15:08:58 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 19:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ Resource RID_SVXERRCODE
         Text[ dutch ] = "Een thesaurus voor de ingestelde taal is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
         Text[ chinese_simplified ] = "ΔϊΛωΙθ¶¨µΔΣοΡΤΓ»ΣΠΟΰΣ¦µΔ΄Κµδ΅£\nΗλΔϊΌμ²ι°²Χ°£¬ΘηΣΠ±ΨÒª£¬ΗλΔϊ°²Χ°ΛωÒªΚΉΣΓµΔΣοΡΤ°ζ±Ύ΅£";
         Text[ greek ] = "Δεν υπάρχει διαθέσιμος θησαυρός λέξεων για την επιλεγμένη \nγλώσσα. Παρακαλώ ελέγξτε την εγκατάσταση και, αν χρειαστεί, εκτελέστε την εγκατ";
-        Text[ korean ] = "Ό³Α¤µΘ ΎπΎξΏ΅ ΄λΗΡ µΏΐΗΎξ »ηΐόΐ» ΐΜΏλΗÒ Όφ Ύψ½ΐ΄Ο΄Ω. \nΌ³Δ΅ΗΡ °Νΐ» °Λ»ηΗΡ ΄Ωΐ½ ΗΚΏδ½Γ Ώδ±ΈµΗ΄Β ΎπΎξΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ.";
+        Text[ korean ] = "Ό³Α¤µΘ ΎπΎξΏ΅ ΄λΗΡ µΏΐΗΎξ »ηΐόΐ» ΐΜΏλΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.\nΌ³Δ΅ΗΡ °Νΐ» °Λ»ηΗΡ ΄Ωΐ½ ΗΚΏδ½Γ Ώδ±ΈµΗ΄Β ΎπΎξΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ.";
         Text[ turkish ] = "Ayarlanan dile iliώkin eώanlamlύlar mevcut deπil.\nLόtfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No hay ningϊn diccionario de sinσnimos disponible para el idioma seleccionado.\nExamine por favor su instalaciσn e instale en caso dado el idioma deseado.";
@@ -494,7 +494,7 @@ Resource RID_SVXERRCODE
         TEXT[ russian ] = "ίηϋκ δλÿ βϋδελεννξγξ οξνÿςθÿ νε σρςΰνξβλεν.";
         TEXT[ italian ] = "Non θ stata impostata la lingua per il termine selezionato.";
         TEXT[ danish ] = "Der er ikke indstillet et sprog ved det valgte udtryk.";
-        TEXT[ polish ] = "Nie ustawiono jκzyka przy wybranym ha?le.";
+        TEXT[ polish ] = "Nie ustawiono jκzyka przy wybranym hale.";
         TEXT[ portuguese_brazilian ] = "There's no language at the selected object.";
         TEXT[ japanese ] = "‘I‘π‚µ‚½‚ΰ‚Μ‚ΙY“–‚·‚ιΎκ‚ª‚ ‚θ‚ά‚Ή‚ρB";
         TEXT[ korean ] = "Ό±ΕΓµΘ ΏλΎξΏ΅΄Β Ύξ¶² ΎπΎξµµ Ό³Α¤µΗΎξ ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
