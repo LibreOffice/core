@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:29:25 $
+#   last change: $Author: hjs $ $Date: 2000-09-26 09:39:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,6 @@ SHL2IMPLIB=		i$(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL2OBJS=		$(SLO)$/registerbaehservices.obj
 
 SHL2LIBS=		$(SLB)$/fwk_baehservices.lib		\
-                               $(SLB)$/fwk_services.lib                        \
                 $(SLB)$/fwk_services.lib			\
                 $(SLB)$/fwk_helper.lib				\
                 $(SLB)$/fwk_classes.lib
