@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: fs $ $Date: 2001-06-18 11:45:59 $
+#   last change: $Author: fs $ $Date: 2001-08-30 08:02:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,15 +73,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files -------------------------------------
 
-.IF "$(COM)"=="GCC"
-NOOPTFILES=$(SLO)$/registryhelper.obj
-.ENDIF
-
 SLOFILES=	\
+        $(SLO)$/sdbcoretools.obj				\
         $(SLO)$/commandbase.obj				\
         $(SLO)$/configurationflushable.obj	\
         $(SLO)$/propertyhelper.obj			\
-        $(SLO)$/registryhelper.obj			\
         $(SLO)$/services.obj				\
         $(SLO)$/userinformation.obj
 
