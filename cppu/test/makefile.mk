@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: dbo $ $Date: 2001-05-09 14:23:29 $
+#   last change: $Author: dbo $ $Date: 2001-07-05 10:23:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,10 @@ ALL: 	ALLDEP
 .IF "$(debug)" != ""
 CFLAGS += /Ob0
 .ENDIF
+.ENDIF
+
+.IF "$(extra_mapping)" != ""
+CFLAGS += -DEXTRA_MAPPING
 .ENDIF
 
 .INCLUDE :  target.mk

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-27 11:01:07 $
+ *  last change: $Author: dbo $ $Date: 2001-07-05 10:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,6 +628,8 @@ void test_CppBridge(void)
         Test_Impl * p = new Test_Impl();
         Reference< XLanguageBindingTest > xOriginal( p );
         {
+            const char * pExtraMapping = "";
+
             Reference< XLanguageBindingTest > xMapped;
             {
             uno_Interface * pUnoI = 0;
@@ -635,34 +637,43 @@ void test_CppBridge(void)
             OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
             OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
 
-            // C++ -> UNO
             uno_Environment * pCppEnv = 0;
             uno_Environment * pUnoEnv = 0;
             ::uno_getEnvironment( &pCppEnv, aCppEnvTypeName.pData, 0 );
             ::uno_getEnvironment( &pUnoEnv, aUnoEnvTypeName.pData, 0 );
-            Mapping aCpp2Uno( pCppEnv, pUnoEnv );
-            aCpp2Uno.mapInterface( (void **)&pUnoI, xOriginal.get(), ::getCppuType( &xOriginal ) );
-            (*pCppEnv->release)( pCppEnv );
 
-            // ano UNO -> ano C++
-            uno_Environment * pAnoUnoEnv = 0;
-            uno_Environment * pAnoCppEnv = 0;
-            ::uno_createEnvironment( &pAnoUnoEnv, aUnoEnvTypeName.pData, 0 );
-            ::uno_createEnvironment( &pAnoCppEnv, aCppEnvTypeName.pData, 0 );
-            Mapping aUno2Cpp( pAnoUnoEnv, pAnoCppEnv );
-            (*pAnoCppEnv->release)( pAnoCppEnv );
-            (*pAnoUnoEnv->release)( pAnoUnoEnv );
-            aUno2Cpp.mapInterface( (void **)&xMapped, pUnoI, ::getCppuType( &xOriginal ) );
+            // C++ -> UNO
+            Mapping mapping( pCppEnv, pUnoEnv );
+            mapping.mapInterface( (void **)&pUnoI, xOriginal.get(), ::getCppuType( &xOriginal ) );
+
+#ifdef EXTRA_MAPPING
+            // UNO -> ano C++a
+            ::uno_createEnvironment( &pCppEnv, aCppEnvTypeName.pData, 0 );
+            mapping = Mapping( pUnoEnv, pCppEnv );
+            mapping.mapInterface( (void **)&xMapped, pUnoI, ::getCppuType( &xMapped ) );
+            // ano C++a -> ano UNOa
+            ::uno_createEnvironment( &pUnoEnv, aUnoEnvTypeName.pData, 0 );
+            mapping = Mapping( pCppEnv, pUnoEnv );
+            mapping.mapInterface( (void **)&pUnoI, xMapped.get(), ::getCppuType( &xMapped ) );
+            pExtraMapping = " <-> c++ <-> uno";
+#endif
+
+            // ano UNOa -> ano C++b
+            ::uno_createEnvironment( &pCppEnv, aCppEnvTypeName.pData, 0 );
+            mapping = Mapping( pUnoEnv, pCppEnv );
+            mapping.mapInterface( (void **)&xMapped, pUnoI, ::getCppuType( &xMapped ) );
             (*pUnoI->release)( pUnoI );
+            (*pCppEnv->release)( pCppEnv );
+            (*pUnoEnv->release)( pUnoEnv );
             }
 
             if (perform_test( xMapped, xDummy ))
             {
-                ::fprintf( stderr, "> C++-UNO test (c++ <-> uno <-> c++ [component impl]) succeeded!\n" );
+                ::fprintf( stderr, "> C++-UNO test (c++ <-> uno%s <-> c++ [component impl]) succeeded!\n", pExtraMapping );
             }
             else
             {
-                ::fprintf( stderr, "> C++-UNO test (c++ <-> uno <-> c++ [component impl]) failed!\n" );
+                ::fprintf( stderr, "> C++-UNO test (c++ <-> uno%s <-> c++ [component impl]) failed!\n", pExtraMapping );
                 exit( 1 );
             }
         }
