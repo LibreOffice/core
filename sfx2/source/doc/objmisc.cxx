@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:15:16 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,6 @@
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
-#include <so3/inetbnd.hxx>
 #include <vos/mutex.hxx>
 
 #ifndef GCC
@@ -116,6 +112,12 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
 #endif
 
 #include <drafts/com/sun/star/script/provider/XScript.hpp>
@@ -171,6 +173,7 @@ using namespace ::drafts::com::sun::star::script;
 #include <svtools/pathoptions.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <tools/inetmime.hxx>
+#include <tools/urlobj.hxx>
 #include <svtools/inettype.hxx>
 #include <osl/file.hxx>
 
@@ -181,7 +184,6 @@ using namespace ::drafts::com::sun::star::script;
 #include "docfile.hxx"
 #include "docinf.hxx"
 #include "docfilt.hxx"
-#include "interno.hxx"
 #include "objsh.hxx"
 #include "objshimp.hxx"
 #include "event.hxx"
@@ -197,11 +199,14 @@ using namespace ::drafts::com::sun::star::script;
 #include "docfac.hxx"
 #include "helper.hxx"
 #include "doc.hrc"
+#include "workwin.hxx"
 #include "helpid.hrc"
 // xmlsec05 - think Gunnar shouldn't do that...
 #include "../appl/app.hrc"
 #include "secmacrowarnings.hxx"
 #include "sfxdlg.hxx"
+
+using namespace ::com::sun::star;
 
 // class SfxHeaderAttributes_Impl ----------------------------------------
 
@@ -331,8 +336,8 @@ sal_uInt32 SfxObjectShell::GetErrorCode() const
     sal_uInt32 lError=pImp->lErr;
     if(!lError && GetMedium())
         lError=GetMedium()->GetErrorCode();
-    if(!lError && HasStorage())
-        lError= GetStorage()->GetErrorCode();
+//REMOVE        if(!lError && HasStorage())
+//REMOVE            lError= GetStorage()->GetErrorCode();
     return lError;
 }
 
@@ -344,9 +349,9 @@ void SfxObjectShell::ResetError()
     SfxMedium * pMed = GetMedium();
     if( pMed )
         pMed->ResetError();
-    SvStorage *pStor= HasStorage() ? GetStorage() : 0;
-    if( pStor )
-        pStor->ResetError();
+//REMOVE        SvStorage *pStor= HasStorage() ? GetStorage() : 0;
+//REMOVE        if( pStor )
+//REMOVE            pStor->ResetError();
 }
 
 //-------------------------------------------------------------------------
@@ -365,6 +370,77 @@ void SfxObjectShell::SetTemplate(sal_Bool bIs)
     SfxFilterMatcherIter aIter( &aMatcher, SFX_FILTER_TEMPLATEPATH );
     SfxMedium* pMed = GetMedium();
     if( pMed ) pMed->SetFilter( aIter.First() );
+}
+
+//-------------------------------------------------------------------------
+
+void SfxObjectShell::EnableSetModified( sal_Bool bEnable )
+{
+    DBG_ASSERT( bEnable != pImp->m_bEnableSetModified,
+                "EnableSetModified 2x mit dem gleichen Wert gerufen" );
+    pImp->m_bEnableSetModified = bEnable;
+}
+
+//-------------------------------------------------------------------------
+
+sal_Bool SfxObjectShell::IsEnableSetModified() const
+{
+    return pImp->m_bEnableSetModified;
+}
+
+//-------------------------------------------------------------------------
+
+sal_Bool SfxObjectShell::IsModified()
+{
+    if ( pImp->m_bIsModified )
+        return sal_True;
+
+    uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+    for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
+    {
+        uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
+        OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+        if ( xObj.is() )
+        {
+            try
+            {
+                // TODO/LATER: an embedded object in running state can have modified component only in scripting case
+                //             may be this case should be handled in future too
+                sal_Int32 nState = xObj->getCurrentState();
+                if ( nState == embed::EmbedStates::ACTIVE
+                  || nState == embed::EmbedStates::INPLACE_ACTIVE
+                  || nState == embed::EmbedStates::UI_ACTIVE )
+                {
+                    uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
+                    if ( xModifiable.is() && xModifiable->isModified() )
+                        return sal_True;
+                }
+            }
+            catch( uno::Exception& )
+            {}
+        }
+    }
+
+    return sal_False;
+}
+
+//-------------------------------------------------------------------------
+
+void SfxObjectShell::SetModified( sal_Bool bModifiedP )
+{
+    DBG_ASSERT( bModifiedP || IsEnableSetModified(),
+                "SetModified( sal_False ), obwohl IsEnableSetModified() == sal_False" )
+
+    if( !IsEnableSetModified() )
+        return;
+
+    if( pImp->m_bIsModified != bModifiedP )
+    {
+        pImp->m_bIsModified = bModifiedP;
+        ModifyChanged();
+    }
+
+//REMOVE        pImp->m_aModifiedTime = Time();
 }
 
 //-------------------------------------------------------------------------
@@ -412,7 +488,7 @@ void SfxObjectShell::ModifyChanged()
     }
 
 //--------------------------------------------------------------------
-
+/*
 SfxInPlaceObject* SfxObjectShell::GetInPlaceObject() const
 {
     if( !pImp->pInPlaceObj && !pImp->bSetInPlaceObj )
@@ -425,7 +501,7 @@ SfxInPlaceObject* SfxObjectShell::GetInPlaceObject() const
     }
     return pImp->pInPlaceObj;
 }
-
+*/
 //-------------------------------------------------------------------------
 
 sal_Bool SfxObjectShell::IsReadOnlyUI() const
@@ -542,11 +618,7 @@ void SfxObjectShell::SetModalMode_Impl( sal_Bool bModal )
 
 Size SfxObjectShell::GetFirstPageSize()
 {
-    Size aRet;
-    SfxInPlaceObject *pIpObj = GetInPlaceObject();
-    if ( pIpObj )
-        aRet = pIpObj->GetVisArea(ASPECT_THUMBNAIL).GetSize();
-    return aRet;
+    return GetVisArea(ASPECT_THUMBNAIL).GetSize();
 }
 
 
@@ -1968,24 +2040,8 @@ BOOL SfxObjectShell::IsInPlaceActive()
     if ( eCreateMode != SFX_CREATE_MODE_EMBEDDED )
         return FALSE;
 
-    if ( GetInPlaceObject() && GetInPlaceObject()->GetProtocol().IsInPlaceActive() )
-        return TRUE;
-
-    if ( SfxViewFrame::GetFirst( this, 0, FALSE ) )
-    {
-        SfxFrame* pFrame = SfxViewFrame::GetFirst( this, 0, FALSE )->GetFrame();
-        Window* pWindow = &pFrame->GetWindow();
-        while ( pWindow )
-        {
-            if ( pWindow->IsSystemWindow() && ( pWindow->GetStyle() & WB_CLOSEABLE ) )
-                return FALSE;
-            pWindow = pWindow->GetParent();
-        }
-
-        return TRUE;
-    }
-
-    return FALSE;
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
+    return pFrame && pFrame->GetFrame()->IsInPlace();
 }
 
 BOOL SfxObjectShell::IsUIActive()
@@ -1993,22 +2049,83 @@ BOOL SfxObjectShell::IsUIActive()
     if ( eCreateMode != SFX_CREATE_MODE_EMBEDDED )
         return FALSE;
 
-    if ( GetInPlaceObject() && GetInPlaceObject()->GetProtocol().IsUIActive() )
-        return TRUE;
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
+    return pFrame && pFrame->GetFrame()->IsInPlace() && pFrame->GetFrame()->GetWorkWindow_Impl()->IsVisible_Impl();
+}
 
-    if ( SfxViewFrame::GetFirst( this, 0, FALSE ) )
+void SfxObjectShell::UIActivate( BOOL bActivate )
+{
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
+    SfxApplication *pApp = SFX_APP();
+    //SfxViewFrame *pParent = pFrame->GetParentViewFrame_Impl();
+    if ( bActivate )
     {
-        SfxFrame* pFrame = SfxViewFrame::GetFirst( this, 0, FALSE )->GetFrame();
-        Window* pWindow = &pFrame->GetWindow();
-        while ( pWindow )
+        //if ( pParent )
+        //    pParent->SetIPFrame_Impl( GetIPFrame_Impl() );
+
+        // DoActivate erfolgte schon im InPlaceActivate
+        pFrame->GetFrame()->GetWorkWindow_Impl()->MakeVisible_Impl( TRUE );
+        pApp->SetViewFrame( pFrame );
+        pFrame->GetDispatcher()->Update_Impl( TRUE );
+    }
+    else
+    {
+        //if ( pParent )
+            // Bei internem InPlace das Container-Dokument aktivieren
+        //    pParent->SetIPFrame_Impl( NULL );
+
+        //if ( pApp->GetViewFrame() == pFrame )
+            // Das muss nicht sein, es k"onnte auch die Task gewechselt worden sein
+        //    pApp->SetViewFrame( pParent );
+        pFrame->GetFrame()->GetWorkWindow_Impl()->MakeVisible_Impl( FALSE );
+        pFrame->GetDispatcher()->Update_Impl( TRUE );
+    }
+}
+
+void SfxObjectShell::InPlaceActivate( BOOL bActivate )
+{
+    /*
+    if( bActivate )
+    {
+        DBG_ASSERT( pObjShell,
+                    "SfxInPlaceObject::InPlaceActivate(): you must call SetShell() bevor" )
+        DBG_ASSERT (!pFrame, "Objekt ist noch aktiv!");
+
+        // IPFenster erzeugen
+        SfxInPlaceFrame *pIPFrame =
+                        new SfxInPlaceFrame( *pObjShell );
+        pFrame = pIPFrame;
+        SetIPEnv( pIPFrame->GetEnv_Impl() );
+
+        if ( GetIPClient()->Owner() )
         {
-            if ( pWindow->IsSystemWindow() && ( pWindow->GetStyle() & WB_CLOSEABLE ) )
-                return FALSE;
-            pWindow = pWindow->GetParent();
+            pFrame->SetParentViewFrame_Impl( SfxViewFrame::Current() );
         }
 
-        return TRUE;
+        pIPFrame->GetDispatcher()->Flush();
+        pIPFrame->DoActivate( FALSE );
     }
 
-    return FALSE;
+    SvInPlaceObject::InPlaceActivate( bActivate );
+
+    if ( !bActivate )
+    {
+        // Im UIActivate wurde SetViewFrame(0) gemacht, aber neuerdings
+        // gibt es dann kein Deactivate(TRUE), weil alter und neuer
+        // ViewFrame der Applikation verschiedene Bindings haben.
+        // Frame samt Fenstern jetzt im Deactivate wegwerfen
+        // DoDeactivate erfolgt im UIDeactivate
+
+        SfxObjectShell *pSh = pFrame->GetObjectShell();
+        SfxViewFrame *pParent = pFrame->GetParentViewFrame_Impl();
+        if ( pParent && pSh == SfxObjectShell::GetWorkingDocument() )
+            SfxObjectShell::SetWorkingDocument( pParent->GetObjectShell() );
+
+        pFrame->GetFrame()->DoClose();
+        pFrame = NULL;
+    } */
 }
+
+
+
+
