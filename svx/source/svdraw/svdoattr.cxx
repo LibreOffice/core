@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: cl $ $Date: 2001-01-28 16:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,26 @@
 
 #ifndef _SVX_XFLBCKIT_HXX
 #include "xflbckit.hxx"
+#endif
+
+#ifndef _SVX_XBTMPIT_HXX
+#include "xbtmpit.hxx"
+#endif
+
+#ifndef _XTABLE_HXX
+#include "xtable.hxx"
+#endif
+
+#ifndef _SVX_XLNDSIT_HXX
+#include "xlndsit.hxx"
+#endif
+
+#ifndef _SVX_XFLGRIT_HXX
+#include "xflgrit.hxx"
+#endif
+
+#ifndef _SVX_XFLFTRIT_HXX
+#include "xflftrit.hxx"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -772,13 +792,814 @@ const SfxItemSet& SdrAttrObj::GetUnmergedItemSet() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // private support routines for ItemSet access
 
+const SfxPoolItem* ImplCheckFillBitmapItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
+{
+    XFillBitmapItem* pBitmapItem = (XFillBitmapItem*)pNewItem;
+
+    const GraphicObject& xGraphic = pBitmapItem->GetValue().GetGraphicObject();
+    ByteString aUniqueID = xGraphic.GetUniqueID();
+
+    String aUniqueName( pBitmapItem->GetName() );
+
+    // 1. if we have no name check if we have the same bitmap
+    // inside the bitmap table if so, use that name
+    if( aUniqueName.Len() == 0 )
+    {
+        XBitmapList* pBitmapList = pModel->GetBitmapList();
+        if( pBitmapList )
+        {
+            const long nCount = pBitmapList->Count();
+            for( long nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                XBitmapEntry* pEntry = pBitmapList->Get(nIndex);
+                if( pEntry->GetXBitmap().GetGraphicObject().GetUniqueID() == aUniqueID )
+                    return new XFillBitmapItem( pEntry->GetName(), pEntry->GetXBitmap() );
+            }
+        }
+    }
+    // 2. if we have a name check if there is already an item with the
+    // same name in the documents pool with a different bitmap
+    else
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+        const USHORT nCount = rPool.GetItemCount( XATTR_FILLBITMAP );
+        const XFillBitmapItem *pItem;
+
+        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        {
+            pItem = (XFillBitmapItem*)rPool.GetItem( XATTR_FILLBITMAP, nSurrogate );
+
+            if( pItem && ( pItem->GetName() == pBitmapItem->GetName() ) )
+            {
+                // if there is already an item with the same name and the same bitmap
+                // its ok to set it
+                if( pItem->GetValue().GetGraphicObject().GetUniqueID() == aUniqueID )
+                    break;
+
+                // same name but different bitmap, we need a new name for this item
+                aUniqueName = String();
+                break;
+            }
+        }
+    }
+    // 3. if we have no name yet, find existing item with same conent or
+    // create a unique name
+    if( aUniqueName.Len() == 0 )
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+        const USHORT nCount = rPool.GetItemCount( XATTR_FILLBITMAP );
+        const XFillBitmapItem *pItem;
+
+        sal_Int32 nUserIndex = 1;
+
+        const String aUser( RTL_CONSTASCII_STRINGPARAM( "bitmap" ) );
+        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        {
+            pItem = (XFillBitmapItem*)rPool.GetItem( XATTR_FILLBITMAP, nSurrogate );
+
+            if( pItem && pItem->GetName().Len() )
+            {
+                if( pItem->GetValue().GetGraphicObject().GetUniqueID() == aUniqueID )
+                    return new XFillBitmapItem( *pItem );
+
+                if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                {
+                    sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                    if( nThisIndex >= nUserIndex )
+                        nUserIndex = nThisIndex + 1;
+                }
+            }
+        }
+
+        aUniqueName = aUser;
+        aUniqueName += String::CreateFromInt32( nUserIndex );
+
+        return new XFillBitmapItem( aUniqueName, pBitmapItem->GetValue() );
+    }
+
+    return pNewItem;
+}
+
+const SfxPoolItem* ImplCheckLineDashItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
+{
+    XLineDashItem* pLineDashItem = (XLineDashItem*)pNewItem;
+
+    String aUniqueName( pLineDashItem->GetName() );
+
+    // 1. if we have no name check if we have the same dash
+    // inside the dash table if so, use that name
+    if( aUniqueName.Len() == 0 )
+    {
+        XDashList* pDashList = pModel->GetDashList();
+        if( pDashList )
+        {
+            const long nCount = pDashList->Count();
+            for( long nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                XDashEntry* pEntry = pDashList->Get(nIndex);
+                if( pEntry->GetDash() == pLineDashItem->GetValue() )
+                    return new XLineDashItem( pEntry->GetName(), pEntry->GetDash() );
+            }
+        }
+    }
+    // 2. if we have a name check if there is already an item with the
+    // same name in the documents pool with a different dash
+    else
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+        const USHORT nCount = rPool.GetItemCount( XATTR_LINEDASH );
+        const XLineDashItem *pItem;
+
+        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        {
+            pItem = (XLineDashItem*)rPool.GetItem( XATTR_LINEDASH, nSurrogate );
+
+            if( pItem && ( pItem->GetName() == pLineDashItem->GetName() ) )
+            {
+                // if there is already an item with the same name and the same bitmap
+                // its ok to set it
+                if( pItem->GetValue() == pLineDashItem->GetValue() )
+                    break;
+
+                // same name but different bitmap, we need a new name for this item
+                aUniqueName = String();
+                break;
+            }
+        }
+    }
+    // 3. if we have no name yet, find existing item with same conent or
+    // create a unique name
+    if( aUniqueName.Len() == 0 )
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+        const USHORT nCount = rPool.GetItemCount( XATTR_LINEDASH );
+        const XLineDashItem *pItem;
+
+        sal_Int32 nUserIndex = 1;
+
+        const String aUser( RTL_CONSTASCII_STRINGPARAM( "dash" ) );
+        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        {
+            pItem = (XLineDashItem*)rPool.GetItem( XATTR_LINEDASH, nSurrogate );
+
+            if( pItem && pItem->GetName().Len() )
+            {
+                if( pItem->GetValue() == pLineDashItem->GetValue() )
+                    return new XLineDashItem( *pItem );
+
+                if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                {
+                    sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                    if( nThisIndex >= nUserIndex )
+                        nUserIndex = nThisIndex + 1;
+                }
+            }
+        }
+
+        aUniqueName = aUser;
+        aUniqueName += String::CreateFromInt32( nUserIndex );
+
+        return new XLineDashItem( aUniqueName, pLineDashItem->GetValue() );
+    }
+
+    return pNewItem;
+}
+
+const SfxPoolItem* ImplCheckLineStartItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
+{
+    XLineStartItem* pClosedItem = NULL;
+    XLineStartItem* pLineStartItem = (XLineStartItem*)pNewItem;
+
+    String aUniqueName( pLineStartItem->GetName() );
+
+    const XPolygon& rPoly = pLineStartItem->GetValue();
+    if( rPoly.GetPointCount() == 0 )
+    {
+        // if the polygon is empty, check if the name is empty
+        if( aUniqueName.Len() == 0 )
+            return pNewItem;
+
+        // force empty name for empty polygons
+        return new XLineEndItem( String(), rPoly );
+    }
+
+    if( rPoly.GetPointCount() > 1 )
+    {
+        // check if the polygon is closed
+        if( rPoly[0] != rPoly[rPoly.GetPointCount() - 1] )
+        {
+            // force a closed polygon
+            XPolygon aNewPolygon( rPoly );
+            aNewPolygon[ rPoly.GetPointCount() ] = rPoly[0];
+            pClosedItem = new XLineStartItem( aUniqueName, aNewPolygon );
+            pLineStartItem = pClosedItem;
+        }
+    }
+
+    // 1. if we have no name check if we have the same dash
+    // inside the dash table if so, use that name
+    if( aUniqueName.Len() == 0 )
+    {
+        XLineEndList* pLineEndList = pModel->GetLineEndList();
+        if( pLineEndList )
+        {
+            const long nCount = pLineEndList->Count();
+            for( long nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                XLineEndEntry* pEntry = pLineEndList->Get(nIndex);
+                if( pEntry->GetLineEnd() == pLineStartItem->GetValue() )
+                {
+                    if( pClosedItem )
+                        delete pClosedItem;
+
+                    return new XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() );
+                }
+            }
+        }
+    }
+    // 2. if we have a name check if there is already an item with the
+    // same name in the documents pool with a different line end or start
+    else
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+
+        {
+            const USHORT nCount = rPool.GetItemCount( XATTR_LINESTART );
+            const XLineStartItem *pItem;
+
+            for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                pItem = (XLineStartItem*)rPool.GetItem( XATTR_LINESTART, nSurrogate );
+
+                if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
+                {
+                    // if there is already an item with the same name and the same value
+                    // its ok to set it
+                    if( pItem->GetValue() == pLineStartItem->GetValue() )
+                        break;
+
+                    // same name but different end, we need a new name for this item
+                    aUniqueName = String();
+                    break;
+                }
+            }
+        }
+
+        if( aUniqueName.Len() != 0 )
+        {
+            const USHORT nCount = rPool.GetItemCount( XATTR_LINEEND );
+            const XLineEndItem *pItem;
+
+            for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                pItem = (XLineEndItem*)rPool.GetItem( XATTR_LINEEND, nSurrogate );
+
+                if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
+                {
+                    // if there is already an item with the same name and the same
+                    // value its ok to set it
+                    if( pItem->GetValue() == pLineStartItem->GetValue() )
+                        break;
+
+                    // same name but different bitmap, we need a new name for this item
+                    aUniqueName = String();
+                    break;
+                }
+            }
+        }
+    }
+
+    // 3. if we have no name yet, find existing item with same conent or
+    // create a unique name
+    if( aUniqueName.Len() == 0 )
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+        sal_Int32 nUserIndex = 1;
+        const String aUser( RTL_CONSTASCII_STRINGPARAM( "marker" ) );
+
+        {
+            const USHORT nCount = rPool.GetItemCount( XATTR_LINESTART );
+            const XLineStartItem *pItem;
+            for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                pItem = (XLineStartItem*)rPool.GetItem( XATTR_LINESTART, nSurrogate );
+
+                if( pItem && pItem->GetName().Len() )
+                {
+                    if( pItem->GetValue() == pLineStartItem->GetValue() )
+                    {
+                        if( pClosedItem )
+                            delete pClosedItem;
+                        return new XLineStartItem( *pItem );
+                    }
+                    if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                    {
+                        sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                        if( nThisIndex >= nUserIndex )
+                            nUserIndex = nThisIndex + 1;
+                    }
+                }
+            }
+        }
+
+        {
+            const USHORT nCount = rPool.GetItemCount( XATTR_LINEEND );
+            const XLineEndItem *pItem;
+            for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                pItem = (XLineEndItem*)rPool.GetItem( XATTR_LINEEND, nSurrogate );
+
+                if( pItem && pItem->GetName().Len() )
+                {
+                    if( pItem->GetValue() == pLineStartItem->GetValue() )
+                    {
+                        if( pClosedItem )
+                            delete pClosedItem;
+                        return new XLineStartItem( pItem->GetName(), pItem->GetValue() );
+                    }
+                    if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                    {
+                        sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                        if( nThisIndex >= nUserIndex )
+                            nUserIndex = nThisIndex + 1;
+                    }
+                }
+            }
+        }
+        aUniqueName = aUser;
+        aUniqueName += String::CreateFromInt32( nUserIndex );
+
+        pLineStartItem = new XLineStartItem( aUniqueName, pLineStartItem->GetValue() );
+        if( pClosedItem ) delete pClosedItem;
+    }
+
+    return pLineStartItem;
+}
+
+const SfxPoolItem* ImplCheckLineEndItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
+{
+    XLineEndItem* pClosedItem = NULL;
+    XLineEndItem* pLineEndItem = (XLineEndItem*)pNewItem;
+
+    String aUniqueName( pLineEndItem->GetName() );
+
+    // check if the polygon is closed, if not, close it!
+    const XPolygon& rPoly = pLineEndItem->GetValue();
+    if( rPoly.GetPointCount() == 0 )
+    {
+        // if the polygon is empty, check if the name is empty
+        if( aUniqueName.Len() == 0 )
+            return pNewItem;
+
+        // force empty name for empty polygons
+        return new XLineEndItem( String(), rPoly );
+
+    }
+
+    if( rPoly.GetPointCount() > 1 )
+    {
+        if( rPoly[0] != rPoly[rPoly.GetPointCount() - 1] )
+        {
+            // force a closed polygon
+            XPolygon aNewPolygon( rPoly );
+            aNewPolygon[ rPoly.GetPointCount() ] = rPoly[0];
+            pClosedItem = new XLineEndItem( aUniqueName, aNewPolygon );
+            pLineEndItem = pClosedItem;
+        }
+    }
+
+    // 1. if we have no name check if we have the same value
+    // inside the line end table if so, use that name
+    if( aUniqueName.Len() == 0 )
+    {
+        XLineEndList* pLineEndList = pModel->GetLineEndList();
+        if( pLineEndList )
+        {
+            const long nCount = pLineEndList->Count();
+            for( long nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                XLineEndEntry* pEntry = pLineEndList->Get(nIndex);
+                if( pEntry->GetLineEnd() == pLineEndItem->GetValue() )
+                {
+                    if( pClosedItem )
+                        delete pClosedItem;
+                    return new XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() );
+                }
+            }
+        }
+    }
+    // 2. if we have a name check if there is already an item with the
+    // same name in the documents pool with a different line end or start
+    else
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+
+        {
+            const USHORT nCount = rPool.GetItemCount( XATTR_LINEEND );
+            const XLineEndItem *pItem;
+
+            for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                pItem = (XLineEndItem*)rPool.GetItem( XATTR_LINEEND, nSurrogate );
+
+                if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
+                {
+                    // if there is already an item with the same name and the same
+                    // value its ok to set it
+                    if( pItem->GetValue() == pLineEndItem->GetValue() )
+                        break;
+
+                    // same name but different end, we need a new name for this item
+                    aUniqueName = String();
+                    break;
+                }
+            }
+        }
+
+        if( aUniqueName.Len() != 0 )
+        {
+            const USHORT nCount = rPool.GetItemCount( XATTR_LINESTART );
+            const XLineStartItem *pItem;
+
+            for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                pItem = (XLineStartItem*)rPool.GetItem( XATTR_LINESTART, nSurrogate );
+
+                if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
+                {
+                    // if there is already an item with the same name and the same
+                    // value its ok to set it
+                    if( pItem->GetValue() == pLineEndItem->GetValue() )
+                        break;
+
+                    // same name but different bitmap, we need a new name for this item
+                    aUniqueName = String();
+                    break;
+                }
+            }
+        }
+    }
+    // 3. if we have no name yet, find existing item with same conent or
+    // create a unique name
+    if( aUniqueName.Len() == 0 )
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+        sal_Int32 nUserIndex = 1;
+        const String aUser( RTL_CONSTASCII_STRINGPARAM( "marker" ) );
+
+        {
+            const USHORT nCount = rPool.GetItemCount( XATTR_LINEEND );
+            const XLineEndItem *pItem;
+            for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                pItem = (XLineEndItem*)rPool.GetItem( XATTR_LINEEND, nSurrogate );
+
+                if( pItem && pItem->GetName().Len() )
+                {
+                    if( pItem->GetValue() == pLineEndItem->GetValue() )
+                    {
+                        if( pClosedItem )
+                            delete pClosedItem;
+                        return new XLineEndItem( *pItem );
+                    }
+                    if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                    {
+                        sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                        if( nThisIndex >= nUserIndex )
+                            nUserIndex = nThisIndex + 1;
+                    }
+                }
+            }
+        }
+
+        {
+            const USHORT nCount = rPool.GetItemCount( XATTR_LINESTART );
+            const XLineStartItem *pItem;
+            for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                pItem = (XLineStartItem*)rPool.GetItem( XATTR_LINESTART, nSurrogate );
+
+                if( pItem && pItem->GetName().Len() )
+                {
+                    if( pItem->GetValue() == pLineEndItem->GetValue() )
+                    {
+                        if( pClosedItem )
+                            delete pClosedItem;
+                        return new XLineEndItem( pItem->GetName(), pItem->GetValue() );
+                    }
+                    if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                    {
+                        sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                        if( nThisIndex >= nUserIndex )
+                            nUserIndex = nThisIndex + 1;
+                    }
+                }
+            }
+        }
+
+        aUniqueName = aUser;
+        aUniqueName += String::CreateFromInt32( nUserIndex );
+
+        pLineEndItem = new XLineEndItem( aUniqueName, pLineEndItem->GetValue() );
+        if( pClosedItem )
+            delete pClosedItem;
+    }
+
+    return pLineEndItem;
+}
+
+const SfxPoolItem* ImplCheckFillGradientItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
+{
+    XFillGradientItem* pFillGradientItem = (XFillGradientItem*)pNewItem;
+
+    String aUniqueName( pFillGradientItem->GetName() );
+
+    // 1. if we have no name check if we have the same dash
+    // inside the dash table if so, use that name
+    if( aUniqueName.Len() == 0 )
+    {
+        XGradientList* pGradientList = pModel->GetGradientList();
+        if( pGradientList )
+        {
+            const long nCount = pGradientList->Count();
+            for( long nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                XGradientEntry* pEntry = pGradientList->Get(nIndex);
+                if( pEntry->GetGradient() == pFillGradientItem->GetValue() )
+                    return new XFillGradientItem( pEntry->GetName(), pEntry->GetGradient() );
+            }
+        }
+    }
+    // 2. if we have a name check if there is already an item with the
+    // same name in the documents pool with a different line end or start
+    else
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+
+        const USHORT nCount = rPool.GetItemCount( XATTR_FILLGRADIENT );
+        const XFillGradientItem *pItem;
+
+        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        {
+            pItem = (XFillGradientItem*)rPool.GetItem( XATTR_FILLGRADIENT, nSurrogate );
+
+            if( pItem && ( pItem->GetName() == pFillGradientItem->GetName() ) )
+            {
+                // if there is already an item with the same name and the same bitmap
+                // its ok to set it
+                if( pItem->GetValue() == pFillGradientItem->GetValue() )
+                    break;
+
+                // same name but different end, we need a new name for this item
+                aUniqueName = String();
+                break;
+            }
+        }
+    }
+    // 3. if we have no name yet, find existing item with same conent or
+    // create a unique name
+    if( aUniqueName.Len() == 0 )
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+        sal_Int32 nUserIndex = 1;
+        const String aUser( RTL_CONSTASCII_STRINGPARAM( "gradient" ) );
+
+        const USHORT nCount = rPool.GetItemCount( XATTR_FILLGRADIENT );
+        const XFillGradientItem *pItem;
+        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        {
+            pItem = (XFillGradientItem*)rPool.GetItem( XATTR_FILLGRADIENT, nSurrogate );
+
+            if( pItem && pItem->GetName().Len() )
+            {
+                if( pItem->GetValue() == pFillGradientItem->GetValue() )
+                    return new XFillGradientItem( *pItem );
+
+                if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                {
+                    sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                    if( nThisIndex >= nUserIndex )
+                        nUserIndex = nThisIndex + 1;
+                }
+            }
+        }
+
+        aUniqueName = aUser;
+        aUniqueName += String::CreateFromInt32( nUserIndex );
+
+        return new XFillGradientItem( aUniqueName, pFillGradientItem->GetValue() );
+    }
+
+    return pNewItem;
+}
+
+const SfxPoolItem* ImplCheckFillFloatTransparenceItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
+{
+    XFillFloatTransparenceItem* pFillFloatTransparenceItem = (XFillFloatTransparenceItem*)pNewItem;
+
+    String aUniqueName( pFillFloatTransparenceItem->GetName() );
+
+    // 1. if we have no name check if we have the same dash
+    // inside the dash table if so, use that name
+    if( aUniqueName.Len() == 0 )
+    {
+        XGradientList* pGradientList = pModel->GetGradientList();
+        if( pGradientList )
+        {
+            const long nCount = pGradientList->Count();
+            for( long nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                XGradientEntry* pEntry = pGradientList->Get(nIndex);
+                if( pEntry->GetGradient() == pFillFloatTransparenceItem->GetValue() )
+                    return new XFillFloatTransparenceItem( pEntry->GetName(), pEntry->GetGradient() );
+            }
+        }
+    }
+    // 2. if we have a name check if there is already an item with the
+    // same name in the documents pool with a different line end or start
+    else
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+
+        const USHORT nCount = rPool.GetItemCount( XATTR_FILLFLOATTRANSPARENCE );
+        const XFillFloatTransparenceItem *pItem;
+
+        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        {
+            pItem = (XFillFloatTransparenceItem*)rPool.GetItem( XATTR_FILLFLOATTRANSPARENCE, nSurrogate );
+
+            if( pItem && ( pItem->GetName() == pFillFloatTransparenceItem->GetName() ) )
+            {
+                // if there is already an item with the same name and the same bitmap
+                // its ok to set it
+                if( pItem->GetValue() == pFillFloatTransparenceItem->GetValue() )
+                    break;
+
+                // same name but different end, we need a new name for this item
+                aUniqueName = String();
+                break;
+            }
+        }
+    }
+    // 3. if we have no name yet, find existing item with same conent or
+    // create a unique name
+    if( aUniqueName.Len() == 0 )
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+        sal_Int32 nUserIndex = 1;
+        const String aUser( RTL_CONSTASCII_STRINGPARAM( "trans" ) );
+
+        const USHORT nCount = rPool.GetItemCount( XATTR_FILLFLOATTRANSPARENCE );
+        const XFillFloatTransparenceItem *pItem;
+        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        {
+            pItem = (XFillFloatTransparenceItem*)rPool.GetItem( XATTR_FILLFLOATTRANSPARENCE, nSurrogate );
+
+            if( pItem && pItem->GetName().Len() )
+            {
+                if( pItem->GetValue() == pFillFloatTransparenceItem->GetValue() )
+                {
+                    return pItem->Clone();
+                }
+                if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                {
+                    sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                    if( nThisIndex >= nUserIndex )
+                        nUserIndex = nThisIndex + 1;
+                }
+            }
+        }
+
+        aUniqueName = aUser;
+        aUniqueName += String::CreateFromInt32( nUserIndex );
+
+        return new XFillFloatTransparenceItem( aUniqueName, pFillFloatTransparenceItem->GetValue() );
+    }
+
+    return pNewItem;
+}
+
+const SfxPoolItem* ImplCheckFillHatchItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
+{
+    XFillHatchItem* pFillHatchItem = (XFillHatchItem*)pNewItem;
+
+    String aUniqueName( pFillHatchItem->GetName() );
+
+    // 1. if we have no name check if we have the same dash
+    // inside the dash table if so, use that name
+    if( aUniqueName.Len() == 0 )
+    {
+        XHatchList* pHatchList = pModel->GetHatchList();
+        if( pHatchList )
+        {
+            const long nCount = pHatchList->Count();
+            for( long nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                XHatchEntry* pEntry = pHatchList->Get(nIndex);
+                if( pEntry->GetHatch() == pFillHatchItem->GetValue() )
+                    return new XFillHatchItem( pEntry->GetName(), pEntry->GetHatch() );
+            }
+        }
+    }
+    // 2. if we have a name check if there is already an item with the
+    // same name in the documents pool with a different line end or start
+    else
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+
+        const USHORT nCount = rPool.GetItemCount( XATTR_FILLHATCH );
+        const XFillHatchItem *pItem;
+
+        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        {
+            pItem = (XFillHatchItem*)rPool.GetItem( XATTR_FILLHATCH, nSurrogate );
+
+            if( pItem && ( pItem->GetName() == pFillHatchItem->GetName() ) )
+            {
+                // if there is already an item with the same name and the same bitmap
+                // its ok to set it
+                if( pItem->GetValue() == pFillHatchItem->GetValue() )
+                    break;
+
+                // same name but different end, we need a new name for this item
+                aUniqueName = String();
+                break;
+            }
+        }
+    }
+    // 3. if we have no name yet, find existing item with same conent or
+    // create a unique name
+    if( aUniqueName.Len() == 0 )
+    {
+        const SfxItemPool& rPool = pModel->GetItemPool();
+        sal_Int32 nUserIndex = 1;
+        const String aUser( RTL_CONSTASCII_STRINGPARAM( "hatch" ) );
+
+        const USHORT nCount = rPool.GetItemCount( XATTR_FILLHATCH );
+        const XFillHatchItem *pItem;
+        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        {
+            pItem = (XFillHatchItem*)rPool.GetItem( XATTR_FILLHATCH, nSurrogate );
+
+            if( pItem && pItem->GetName().Len() )
+            {
+                if( pItem->GetValue() == pFillHatchItem->GetValue() )
+                    return pItem->Clone();
+
+                if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                {
+                    sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                    if( nThisIndex >= nUserIndex )
+                        nUserIndex = nThisIndex + 1;
+                }
+            }
+        }
+
+        aUniqueName = aUser;
+        aUniqueName += String::CreateFromInt32( nUserIndex );
+
+        return new XFillHatchItem( aUniqueName, pFillHatchItem->GetValue() );
+    }
+
+    return pNewItem;
+}
+
 void SdrAttrObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
 {
     if(pNewItem)
     {
+        const SfxPoolItem* pItem = pNewItem;
+
+        switch( pNewItem->Which() )
+        {
+        case XATTR_FILLBITMAP:
+            pItem = ImplCheckFillBitmapItem( pItem, pModel );
+            break;
+        case XATTR_LINEDASH:
+            pItem = ImplCheckLineDashItem( pItem, pModel );
+            break;
+        case XATTR_LINESTART:
+            pItem = ImplCheckLineStartItem( pItem, pModel );
+            break;
+        case XATTR_LINEEND:
+            pItem = ImplCheckLineEndItem( pItem, pModel );
+            break;
+        case XATTR_FILLGRADIENT:
+            pItem = ImplCheckFillGradientItem( pItem, pModel );
+            break;
+        case XATTR_FILLFLOATTRANSPARENCE:
+            pItem = ImplCheckFillFloatTransparenceItem( pItem, pModel );
+            break;
+        case XATTR_FILLHATCH:
+            pItem = ImplCheckFillHatchItem( pItem, pModel );
+            break;
+        }
+
         // set item
         ((SdrAttrObj*)this)->ImpForceItemSet();
-        mpObjectItemSet->Put(*pNewItem);
+        mpObjectItemSet->Put(*pItem);
+        if( pItem != pNewItem )
+            delete (SfxPoolItem*)pItem;
     }
     else
     {
