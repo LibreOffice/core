@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:51:47 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2515,38 +2515,36 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
     // #100592#
     SvXMLImportContext* pContext = NULL;
 
-    if(XML_NAMESPACE_OFFICE == nPrefix)
+    if((XML_NAMESPACE_OFFICE == nPrefix) && IsXMLToken(rLocalName, XML_BINARY_DATA))
     {
-        if(IsXMLToken(rLocalName, XML_BINARY_DATA))
+        maHref = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Obj12345678" ) );
+        mxBase64Stream =    GetImport().ResolveEmbeddedObjectURLFromBase64( maHref );
+        if( mxBase64Stream.is() )
+            pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
+                                                rLocalName, xAttrList,
+                                                mxBase64Stream );
+    }
+    else if( ((XML_NAMESPACE_OFFICE == nPrefix) && IsXMLToken(rLocalName, XML_DOCUMENT)) ||
+                ((XML_NAMESPACE_MATH == nPrefix) && IsXMLToken(rLocalName, XML_MATH)) )
+    {
+        XMLEmbeddedObjectImportContext *pEContext =
+            new XMLEmbeddedObjectImportContext( GetImport(), nPrefix,
+                                                rLocalName, xAttrList );
+        maCLSID = pEContext->GetFilterCLSID();
+        if( maCLSID.getLength() != 0 )
         {
-            maHref = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Obj12345678" ) );
-            mxBase64Stream =    GetImport().ResolveEmbeddedObjectURLFromBase64( maHref );
-            if( mxBase64Stream.is() )
-                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
-                                                    mxBase64Stream );
-        }
-        else if(IsXMLToken(rLocalName, XML_DOCUMENT))
-        {
-            XMLEmbeddedObjectImportContext *pEContext =
-                new XMLEmbeddedObjectImportContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList );
-            maCLSID = pEContext->GetFilterCLSID();
-            if( maCLSID.getLength() != 0 )
+            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+            if( xPropSet.is() )
             {
-                uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-                if( xPropSet.is() )
-                {
-                    xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID") ), uno::makeAny( maCLSID ) );
+                xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID") ), uno::makeAny( maCLSID ) );
 
-                    uno::Reference< lang::XComponent > xComp;
-                    xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) ) >>= xComp;
-                    DBG_ASSERT( xComp.is(), "no xModel for own OLE format" );
-                    pEContext->SetComponent( xComp );
-                }
+                uno::Reference< lang::XComponent > xComp;
+                xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) ) >>= xComp;
+                DBG_ASSERT( xComp.is(), "no xModel for own OLE format" );
+                pEContext->SetComponent( xComp );
             }
-            pContext = pEContext;
         }
+        pContext = pEContext;
     }
 
     // delegate to parent class if no context could be created
