@@ -4,10 +4,10 @@
         <prop oor:name="DocumentService"><value>com.sun.star.chart.ChartDocument</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="UserData"/>
-        <prop oor:name="FilterService"/>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
             <value xml:lang="en-US">StarChart 5.0</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT OWN ALIEN NOTINFILEDIALOG NOTINCHOOSER SILENTEXPORT</value></prop>
+        <prop oor:name="Flags"><value>IMPORT OWN ALIEN NOTINFILEDIALOG NOTINCHOOSER SILENTEXPORT 3RDPARTYFILTER</value></prop>
     </node>
