@@ -115,7 +115,7 @@ dnl ===================================================================
 dnl checking the os
 AC_MSG_CHECKING([the operating system])
 _os=`uname`
-if test "$_os" = "SunOS" -o "$_os" = "Linux" -o "$_os" = "WINNT" -o "$_os" = "Darwin"; then
+if test "$_os" = "SunOS" -o "$_os" = "Linux" -o "$_os" = "WINNT" -o "$_os" = "Darwin" -o "$_os" = "OSF1"; then
    AC_MSG_RESULT([checked ($_os)])
 else
    AC_MSG_ERROR([$_os operating system is not suitable to build OpenOffice!])
@@ -533,6 +533,9 @@ if test "$JAVA"; then
    if test "$_os" = "Linux" -a "$_machine_type" = "ppc"; then
       _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
    fi
+   if test "$_os" = "OSF1"; then
+      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
+   fi
    if test "$_os" = "WINNT"; then
       _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
    fi
@@ -553,6 +556,9 @@ if test "$JAVA"; then
          if test "$_machine_type" = "ppc"; then
             _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
          fi 
+      fi
+      if test "$_os" = "OSF1"; then
+         _jdk_minor=`echo $_jdk | $AWK -F- '{print $1}' | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
       fi
       if test "$_os" = "WINNT"; then
             _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
