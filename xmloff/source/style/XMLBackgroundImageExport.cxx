@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-24 13:48:19 $
+ *  last change: $Author: hjs $ $Date: 2000-11-08 15:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include <com/sun/star/style/GraphicLocation.hpp>
 #endif
 
-#include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmlkywd.hxx>
+#include <xmlnmspe.hxx>
+#include <xmlkywd.hxx>
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
