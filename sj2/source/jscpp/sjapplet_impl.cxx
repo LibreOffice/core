@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kr $ $Date: 2001-08-30 15:30:06 $
+ *  last change: $Author: pl $ $Date: 2001-10-24 16:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,20 +156,14 @@ static Atom getStateAtom(Display* pDisplay)
     return nWM_State;
 }
 
-static Widget getAppletWidget(Widget widget) {
-    /*  Find the shell widget to reparent.
-     *  Normally you would just have to go up in the hierarchy
-     *  to the widget that has no parent. But the java created
-     *  widget hierarchy ends sometimes with a widget with no window.
-     *  Why ? Just to anger us ?
-     */
+static XLIB_Window getAppletWindow(Display* pDisplay, XLIB_Window window) {
+    /*  Find the shell to reparent. */
     sal_Bool found = sal_False;
-    Display* pDisplay = XtDisplay(widget);
+    XLIB_Window aRoot;
     do
     {
-        XLIB_Window nWindow = XtWindow(widget);
         int nCount;
-        Atom *pAtom = XListProperties(pDisplay, nWindow, &nCount);
+        Atom *pAtom = XListProperties(pDisplay, window, &nCount);
         for (int i = 0; i < nCount && !found; ++i)
             found = (pAtom[i] == XA_WM_HINTS);
 
@@ -178,11 +172,15 @@ static Widget getAppletWidget(Widget widget) {
         if(found)
             break;
 
-        widget = XtParent(widget);
+        XLIB_Window* pChildren = NULL;
+        unsigned int nChildren = 0;
+        XQueryTree( pDisplay, window,
+                    &aRoot, &window, &pChildren, &nChildren );
+        XFree( pChildren );
     }
-    while (widget);
+    while (window != aRoot);
 
-    return widget;
+    return window != aRoot ? window : None;
 }
 
 #ifdef DEBUG
@@ -340,39 +338,36 @@ EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) th
 
         // get the platform-specific drawing info and reparent
         JAWT_X11DrawingSurfaceInfo * dsi_x11 = (JAWT_X11DrawingSurfaceInfo *)dsi->platformInfo;
-        Widget widget = XtWindowToWidget(dsi_x11->display, dsi_x11->drawable);
-        if (!widget)
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - couldn't get DrawingSurface widget")), Reference<XInterface>());
+        XLIB_Window window = dsi_x11->drawable;
 
-
-        Widget appletWidget = getAppletWidget(widget);
-        if(!appletWidget)
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - can't find AppletWidget")), Reference<XInterface>());
+        XLIB_Window appletWindow = getAppletWindow(dsi_x11->display, window);
+        if(appletWindow==None)
+            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - can't find AppletWindow")), Reference<XInterface>());
 
 #ifdef DEBUG
         fprintf(stderr, "+++++++++++++ the parent %x\n", pEnvData->aWindow);
         displayTree(dsi_x11->display, pEnvData->aWindow, 0);
 
-        fprintf(stderr, "+++++++++++++ the child %x\n", XtWindow(appletWidget));
-        displayTree(dsi_x11->display, XtWindow(appletWidget), 0);
+        fprintf(stderr, "+++++++++++++ the child %x\n", appletWindow);
+        displayTree(dsi_x11->display, appletWindow, 0);
 #endif
 
-        XWithdrawWindow( dsi_x11->display, XtWindow(appletWidget), DefaultScreen( dsi_x11->display ) );
+        XWithdrawWindow( dsi_x11->display, appletWindow, DefaultScreen( dsi_x11->display ) );
 #ifdef DEBUG
         fprintf( stderr, "enter wait (Withdraw)\n" );
 #endif
         XEvent aEvent;
-        XIfEvent( dsi_x11->display, &aEvent, withdrawPredicate, (XPointer)XtWindow(appletWidget) );
+        XIfEvent( dsi_x11->display, &aEvent, withdrawPredicate, (XPointer)appletWindow );
 
 #ifdef DEBUG
         fprintf( stderr, "leave wait (Withdraw)\n" );
 #endif
-        XReparentWindow(dsi_x11->display, XtWindow(appletWidget), pEnvData->aWindow, 0, 0);
-        XtMapWidget( appletWidget );
+        XReparentWindow(dsi_x11->display, appletWindow, pEnvData->aWindow, 0, 0);
+        XMapWindow( dsi_x11->display, appletWindow );
 
 #ifdef DEBUG
-        fprintf(stderr, "------------- the child %x\n", XtWindow(appletWidget));
-        displayTree(dsi_x11->display, XtWindow(appletWidget), 0);
+        fprintf(stderr, "------------- the child %x\n", appletWindow);
+        displayTree(dsi_x11->display, appletWindow, 0);
 #endif
 
         ds->FreeDrawingSurfaceInfo(dsi);

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2001-09-18 10:34:55 $
+#   last change: $Author: pl $ $Date: 2001-10-24 16:25:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,15 @@ SHL1STDLIBS= \
     $(SVTOOLLIB) \
     $(SVLLIB)	\
     $(TKLIB) \
-    $(VCLLIB) \
+    $(VCLLIB)
+
+.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="MACOSX"
+SHL1STDLIBS+=-lX11
+.ENDIF
+.ENDIF
+
+SHL1STDLIBS+=\
     $(TOOLSLIB) \
     $(VOSLIB) \
     $(SALLIB) \
