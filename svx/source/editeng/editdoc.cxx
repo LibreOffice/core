@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-21 15:05:22 $
+ *  last change: $Author: mt $ $Date: 2002-08-22 11:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1142,7 +1142,8 @@ void ContentAttribs::SetStyleSheet( SfxStyleSheet* pS )
         const SfxItemSet& rStyleAttribs = pStyle->GetItemSet();
         for ( USHORT nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
         {
-            if ( rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON )
+            // #99635# Don't change bullet on/off
+            if ( ( nWhich != EE_PARA_BULLETSTATE ) && ( rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON ) )
                 aAttribSet.ClearItem( nWhich );
         }
     }
