@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filectrl.src,v $
  *
- *  $Revision: 1.1.1.3 $
+ *  $Revision: 1.1.1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-10 05:14:09 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,3 +85,4 @@ String STR_FILECTRL_BUTTONTEXT
     Text[ catalan ] = "Examinar...";
     Text[ finnish ] = "Selaa";
 };
+
