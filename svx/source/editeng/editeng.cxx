@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:27:27 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 09:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2276,7 +2276,9 @@ Rectangle EditEngine::GetCharacterBounds( const EPosition& rPos ) const
 {
     Rectangle aBounds;
     ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( rPos.nPara );
-    if ( pNode && ( rPos.nPara < pNode->Len() ) )
+
+    // #109151# Check against index, not paragraph
+    if ( pNode && ( rPos.nIndex < pNode->Len() ) )
     {
         aBounds = pImpEditEngine->PaMtoEditCursor( EditPaM( pNode, rPos.nIndex ), GETCRSR_TXTONLY );
         Rectangle aR2 = pImpEditEngine->PaMtoEditCursor( EditPaM( pNode, rPos.nIndex+1 ), GETCRSR_TXTONLY|GETCRSR_ENDOFLINE );
