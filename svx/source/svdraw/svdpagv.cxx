@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-21 15:31:12 $
+ *  last change: $Author: cl $ $Date: 2002-04-29 14:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
+#endif
+
+#ifndef _SVX_COLORCFG_HXX
+#include "colorcfg.hxx"
 #endif
 
 #include "svdedxv.hxx"
@@ -1113,7 +1117,7 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
             // Paper, Border etc. painten
             if (rView.bPageVisible) ((SdrPageView*)this)->DrawPaper(pBmp->aVD);
             if (rView.bBordVisible) ((SdrPageView*)this)->DrawBorder(pBmp->aVD);
-            if (rView.bGridVisible && !rView.bGridFront) ((SdrPageView*)this)->DrawGrid(pBmp->aVD);
+            if (rView.bGridVisible && !rView.bGridFront) ((SdrPageView*)this)->DrawGrid(pBmp->aVD, rView.GetGridColor());
             if (rView.bHlplVisible && !rView.bHlplFront) ((SdrPageView*)this)->DrawHelplines(pBmp->aVD);
 
             // DrawMode vom Window uebernehmen
@@ -1277,7 +1281,7 @@ void SdrPageView::InitRedraw(OutputDevice* pOut_, const Region& rReg, USHORT nPa
                 DrawBorder(*pOut);
 
             if(rView.bGridVisible && !rView.bGridFront)
-                DrawGrid(*pOut,aCheckRect);
+                DrawGrid(*pOut,aCheckRect, rView.GetGridColor());
 
             if(rView.bHlplVisible && !rView.bHlplFront)
                 DrawHelplines(*pOut);
@@ -1387,7 +1391,7 @@ void SdrPageView::InitRedraw(OutputDevice* pOut_, const Region& rReg, USHORT nPa
         {
             // Raster und Hilfslinien malen
             if(rView.bGridVisible && rView.bGridFront)
-                DrawGrid(*pOut, aCheckRect);
+                DrawGrid(*pOut, aCheckRect, rView.GetGridColor());
 
             if(rView.bHlplVisible && rView.bHlplFront)
                 DrawHelplines(*pOut);
@@ -1425,8 +1429,15 @@ void SdrPageView::DrawPaper(OutputDevice& rOut)
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
-    rOut.SetLineColor( COL_GRAY );
-    rOut.SetFillColor( rSettings.GetWindowColor() );
+    svx::ColorConfig aColorConfig;
+    svx::ColorConfigValue aDocColor( aColorConfig.GetColorValue( svx::DOCCOLOR ) );
+    svx::ColorConfigValue aBorderColor( aColorConfig.GetColorValue( svx::DOCBOUNDARIES ) );
+
+    rOut.SetFillColor( aDocColor.nColor );
+    if( aBorderColor.bIsVisible )
+        rOut.SetLineColor( aBorderColor.nColor );
+    else
+        rOut.SetLineColor();
 
     Rectangle aRect(GetPageRect());
     rOut.DrawRect(aRect);
@@ -1438,7 +1449,13 @@ void SdrPageView::DrawBorder(OutputDevice& rOut)
     if (pPage==NULL)
         return;
 
-    rOut.SetLineColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
+    svx::ColorConfig aColorConfig;
+    svx::ColorConfigValue aBorderColor( aColorConfig.GetColorValue( svx::DOCBOUNDARIES ) );
+
+    if( !aBorderColor.bIsVisible )
+        return;
+
+    rOut.SetLineColor( aBorderColor.nColor );
     rOut.SetFillColor();
 
     Rectangle aRect(GetPageRect());
@@ -1454,7 +1471,7 @@ void SdrPageView::DrawBorder(OutputDevice& rOut)
 #endif
 
 
-void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect)
+void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor)
 {
     if (pPage==NULL)
         return;
@@ -1545,13 +1562,12 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect)
         FASTBOOL bHoriLines=bHoriSolid || bHoriFine || !bVertFine;
         FASTBOOL bVertLines=bVertSolid || bVertFine;
 
-        Color aCol( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
         Color aColorMerk( rOut.GetLineColor() );
-        rOut.SetLineColor( aCol );
+        rOut.SetLineColor( aColor );
 
         FASTBOOL bMap0=rOut.IsMapModeEnabled();
 #ifdef WIN // SetPixel-Profiling fuer Windows
-       COLORREF aWinColRef=PALETTERGB(aCol.GetRed()>>8,aCol.GetGreen()>>8,aCol.GetBlue()>>8);
+       COLORREF aWinColRef=PALETTERGB(aColor.GetRed()>>8,aColor.GetGreen()>>8,aColor.GetBlue()>>8);
        HDC aWinhDC=Sysdepen::GethDC(rOut);
 #endif
 #ifdef OS2 // SetPixel-Profiling fuer OS/2
@@ -1561,7 +1577,7 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect)
         GpiQueryAttrs(aOS2hPS,PRIM_LINE,LBB_COLOR,&aOS2BundleMerker);
         LINEBUNDLE aOS2Bundle;
         memset(&aOS2Bundle,0,sizeof(aOS2Bundle));
-        aOS2Bundle.lColor=RGBCOLOR(aCol.GetRed()>>8,aCol.GetGreen()>>8,aCol.GetBlue()>>8);
+        aOS2Bundle.lColor=RGBCOLOR(aColor.GetRed()>>8,aColor.GetGreen()>>8,aColor.GetBlue()>>8);
         GpiSetAttrs(aOS2hPS,PRIM_LINE,LBB_COLOR,0,&aOS2Bundle);
         long nOS2MaxYPix=rOut.GetOutputSizePixel().Height()-1;
 #endif
