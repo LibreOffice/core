@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:40:58 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,9 @@
 #endif
 #ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
+#endif
+#ifndef WW_FIELDS_HXX
+#include "fields.hxx"
 #endif
 
 
@@ -777,8 +780,24 @@ bool SwWW8ImplReader::ForceFieldLanguage(SwField &rFld, USHORT nLang)
     return bRet;
 }
 
+String GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, USHORT nLang)
+{
+    //Get the system date in the correct final language layout, convert to
+    //a known language and modify the 2 digit year part to be 4 digit, and
+    //convert back to the correct language layout.
+    ULONG nIndex = pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, nLang);
+
+    SvNumberformat aFormat = const_cast<SvNumberformat &>
+        (*(pFormatter->GetEntry(nIndex)));
+    aFormat.ConvertLanguage(*pFormatter, nLang, LANGUAGE_ENGLISH_US);
+
+    String sParams(aFormat.GetFormatstring());
+    sParams.SearchAndReplace(CREATE_CONST_ASC("YY"), CREATE_CONST_ASC("YYYY"));
+    return sParams;
+}
+
 short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat,
-    USHORT &rLang, bool bHijri)
+    USHORT &rLang, int nWhichDefault, bool bHijri)
 {
     bool bRTL = false;
     if (pPlcxMan && !bVer67)
@@ -796,18 +815,24 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat,
     String sParams( FindPara( rStr, '@', '@' ) );// Date/Time
     if (!sParams.Len())
     {
-        //Get the system date in the correct final language layout, convert to
-        //a known language and modify the 2 digit year part to be 4 digit, and
-        //convert back to the correct language layout.
-        ULONG nIndex = pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, rLang);
-
-        SvNumberformat aFormat = const_cast<SvNumberformat &>
-            (*(pFormatter->GetEntry(nIndex)));
-        aFormat.ConvertLanguage(*pFormatter, rLang, LANGUAGE_ENGLISH_US);
-
-        sParams = aFormat.GetFormatstring();
-        sParams.SearchAndReplace(CREATE_CONST_ASC("YY"),
-            CREATE_CONST_ASC("YYYY"));
+        bool bHasTime = false;
+        switch (nWhichDefault)
+        {
+            case ww::ePRINTDATE:
+            case ww::eSAVEDATE:
+                sParams = GetWordDefaultDateStringAsUS(pFormatter, rLang);
+                sParams.APPEND_CONST_ASC(" HH:MM:SS AM/PM");
+                bHasTime = true;
+                break;
+            case ww::eCREATEDATE:
+                sParams.ASSIGN_CONST_ASC("DD/MM/YYYY HH:MM:SS");
+                bHasTime = true;
+                break;
+            default:
+            case ww::eDATE:
+                sParams = GetWordDefaultDateStringAsUS(pFormatter, rLang);
+                break;
+        }
 
         if (bHijri)
             sParams.Insert(CREATE_CONST_ASC("[~hijri]"), 0);
@@ -819,7 +844,7 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat,
         pFormatter->PutandConvertEntry(sParams, nCheckPos, nType, rFormat,
             LANGUAGE_ENGLISH_US, rLang);
 
-        return NUMBERFORMAT_DATE;
+        return bHasTime ? NUMBERFORMAT_DATETIME : NUMBERFORMAT_DATE;
     }
 
     ULONG nFmtIdx =
@@ -1740,7 +1765,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
     USHORT nLang(0);
     if (bDateTime)
     {
-        short nDT = GetTimeDatePara(rStr, nFormat, nLang);
+        short nDT = GetTimeDatePara(rStr, nFormat, nLang, pF->nId);
         switch (nDT)
         {
             case NUMBERFORMAT_DATE:
@@ -1815,7 +1840,7 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
     ULONG nFormat = 0;
 
     USHORT nLang(0);
-    short nDT = GetTimeDatePara(rStr, nFormat, nLang, bHijri);
+    short nDT = GetTimeDatePara(rStr, nFormat, nLang, ww::eDATE, bHijri);
 
     if( NUMBERFORMAT_UNDEFINED == nDT )             // no D/T-Formatstring
     {
