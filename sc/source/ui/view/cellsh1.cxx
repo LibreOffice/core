@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-16 16:22:11 $
+ *  last change: $Author: nn $ $Date: 2002-09-23 08:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,9 +849,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 nStartCol, nStartRow, nMergeCol, nMergeRow,
                                 GetViewData()->GetTabNo() ) )
                         {
-                            if ( nFillCol <= nMergeCol && nFillRow == nStartRow )
+                            if ( nFillCol >= nStartCol && nFillCol <= nMergeCol && nFillRow == nStartRow )
                                 nFillCol = nStartCol;
-                            if ( nFillRow <= nMergeRow && nFillCol == nStartCol )
+                            if ( nFillRow >= nStartRow && nFillRow <= nMergeRow && nFillCol == nStartCol )
                                 nFillRow = nStartRow;
                         }
                     }
