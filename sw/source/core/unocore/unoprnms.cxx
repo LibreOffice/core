@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 10:04:52 $
+ *  last change: $Author: mtg $ $Date: 2001-03-28 11:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,3 +684,10 @@ const SwPropNameLen __FAR_DATA UNO_NAME_IS_WIDTH_RELATIVE                   (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_RELIEF                         (MAP_CHAR_LEN("CharRelief"));
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_HIDDEN                           (MAP_CHAR_LEN("IsHidden"));
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_CONDITION_TRUE                   (MAP_CHAR_LEN("IsConditionTrue"));
+
+const SwPropNameLen __FAR_DATA UNO_NAME_LINK_UPDATE_MODE                    (MAP_CHAR_LEN("LinkUpdateMode"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FIELD_AUTO_UPDATE                   (MAP_CHAR_LEN("FieldAutoUpdate"));
+const SwPropNameLen __FAR_DATA UNO_NAME_CHART_AUTO_UPDATE                   (MAP_CHAR_LEN("ChartAutoUpdate"));
+const SwPropNameLen __FAR_DATA UNO_NAME_ADD_PARA_TABLE_SPACING              (MAP_CHAR_LEN("AddParaTableSpacing"));
+const SwPropNameLen __FAR_DATA UNO_NAME_ADD_PARA_TABLE_SPACING_AT_START     (MAP_CHAR_LEN("AddParaTableSpacingAtStart"));
+const SwPropNameLen __FAR_DATA UNO_NAME_PRINTER_NAME                        (MAP_CHAR_LEN("PrinterName"));

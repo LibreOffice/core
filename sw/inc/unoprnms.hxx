@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 10:03:55 $
+ *  last change: $Author: mtg $ $Date: 2001-03-28 11:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,6 +686,11 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_WIDTH_RELATIVE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_RELIEF;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_HIDDEN;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_CONDITION_TRUE;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_LINK_UPDATE_MODE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FIELD_AUTO_UPDATE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHART_AUTO_UPDATE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ADD_PARA_TABLE_SPACING;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ADD_PARA_TABLE_SPACING_AT_START;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINTER_NAME;
 #endif
-
-
