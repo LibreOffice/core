@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2001-10-04 12:25:13 $
+ *  last change: $Author: tl $ $Date: 2001-10-05 11:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,8 +736,7 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         {   const SmRect &rNodeRect = pNode->GetRect();
             const SmNode *pCoNode   = pNode->GetLeftMost();
             SmTokenType   eType     = pCoNode->GetToken().eType;
-            RectHorAlign  eHorAlign = eType == TTEXT ?
-                                        RHA_LEFT : pCoNode->GetRectHorAlign();
+            RectHorAlign  eHorAlign = pCoNode->GetRectHorAlign();
 
             aPos = rNodeRect.AlignTo(*this, RP_BOTTOM,
                         eHorAlign, RVA_BASELINE);
@@ -1053,8 +1052,7 @@ void SmBinVerNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     // get horizontal alignment for numerator
     const SmNode *pLM       = pNum->GetLeftMost();
-    RectHorAlign  eHorAlign = pLM->GetToken().eType == TTEXT ?
-                                    RHA_LEFT : pLM->GetRectHorAlign();
+    RectHorAlign  eHorAlign = pLM->GetRectHorAlign();
 
     // move numerator to its position
     Point  aPos = pNum->AlignTo(*pLine, RP_TOP, eHorAlign, RVA_BASELINE);
@@ -1063,8 +1061,7 @@ void SmBinVerNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     // get horizontal alignment for denominator
     pLM       = pDenom->GetLeftMost();
-    eHorAlign = pLM->GetToken().eType == TTEXT ?
-                    RHA_LEFT : pLM->GetRectHorAlign();
+    eHorAlign = pLM->GetRectHorAlign();
 
     // move denominator to its position
     aPos = pDenom->AlignTo(*pLine, RP_BOTTOM, eHorAlign, RVA_BASELINE);
@@ -2385,6 +2382,12 @@ void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
     SmNode::Prepare(rFormat, rDocShell);
 
+    // default setting for horizontal alignment of nodes with TTEXT
+    // content is as alignl (cannot be done in Arrange since it would
+    // override the settings made by an SmAlignNode before)
+    if (TTEXT == GetToken().eType)
+        SetRectHorAlign( RHA_LEFT );
+
     aText = GetToken().aText;
     GetFont() = rFormat.GetFont(GetFontDesc());
 
@@ -2532,8 +2535,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
             // get horizontal alignment
             const SmNode *pCoNode   = pNode->GetLeftMost();
             SmTokenType   eType     = pCoNode->GetToken().eType;
-            RectHorAlign  eHorAlign = eType == TTEXT ?
-                                        RHA_LEFT : pCoNode->GetRectHorAlign();
+            RectHorAlign  eHorAlign = pCoNode->GetRectHorAlign();
 
             // caculate horizontal position of element depending on column
             // and horizontal alignment
