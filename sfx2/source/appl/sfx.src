@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 16:57:48 $
+ *  last change: $Author: kz $ $Date: 2000-11-24 16:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,7 +516,7 @@ QueryBox MSG_QUERY_LASTVERSION
     Message[ chinese_simplified ] = "ÒªΘ΅ΟϋΈόΈΔ?";
     Message[ russian ] = "Ξςμενθςό βρε θημενενθÿ?";
     Message[ polish ] = "UsunΉζ wszystkie zmiany?";
-    Message[ japanese ] = "‚·‚Χ‚Δ‚Μ•ΟX‚π‰π‚µ‚ά‚·‚©?";
+    Message[ japanese ] = "‚·‚Χ‚Δ‚Μ•ΟX‚π‰π‚µ‚ά‚·‚©B";
     Message[ chinese_traditional ] = "¨ϊ®ψ©Ò¦³ªΊΕά§σ΅H";
     Message[ greek ] = "Ακύρωση όλων των αλλαγών;";
     Message[ korean ] = "Έπµη Ί―°ζΐ» ΓλΌÒ ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
