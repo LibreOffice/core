@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 16:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ TabDialog TAB_TEMPLATE
                 Text [ ENGLISH ] = "Measure" ;
                 Text [ english_us ] = "Dimensioning" ;
                 Text [ italian ] = "Quotatura" ;
-                Text [ spanish ] = "Dimensionar" ;
+                Text [ spanish ] = "Dimensiones" ;
                 Text [ french ] = "Cotation" ;
                 Text [ dutch ] = "Maatindeling" ;
                 PageResID = RID_SVXPAGE_MEASURE ;
