@@ -56,6 +56,7 @@
 #
 #
 #*************************************************************************
+
 # Common tools
 TRANSEX*=transex3
 ULFEX*=ulfex
@@ -63,21 +64,57 @@ XMLEX*=xmlex
 XRMEX*=xrmex
 CFGEX*=cfgex
 
-# ulf conversion tool
 ULFCONV*=ulfconv
+
+MAKEDEPEND*=$(WRAPCMD) $(SOLARBINDIR)$/makedepend
+ADJUSTVISIBILITY*:=$(WRAPCMD) adjustvisibility
+CONVERT*:=$(PERL) $(SOLARENV)$/bin$/leconvert.pl
+
+EXECTEST:= $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
+
+SCP_CHECK_TOOL:=checkscp$E
 
 # Not 4nt means $(GUI)==UNX or $(GUI)==WNT with tcsh
 .IF "$(USE_SHELL)"!="4nt"
 # iz32110: Calling a cygwin application from a non-cygwin shell requires
 # backslashes to be escaped by another backslash: EES .. extra escape slash
-EES=
-NULLDEV=/dev/null
-.ELSE
-# adding explicit blank at end of line to avoid concatination
-EES=\ 
-NULLDEV=nul
-.ENDIF
+EES:=
 
+# iz29675: 4nt must not quote special characters, but tcsh has to.
+# *NIX shells needs to use " quotes, but 4nt must not.
+# EMQ .. extra meta quote (\\ at line end is \)
+# USQ .. unix shell  quote
+EMQ:=\\
+USQ:="
+
+NULLDEV:=/dev/null
+
+# iz29609 helpmacro to check if file exists tcsh style
+IFEXIST:=if ( -e
+THEN:= )
+
+# iz31658
+CHECKZIPRESULT:=|| if ("$$status" != "12") exit $$status && echo "Nothing to update for zip"
+
+.ELSE # "$(USE_SHELL)"!="4nt"
+# (\\ at line end is \)
+EES:=\\
+
+EMQ:=
+USQ:=
+
+NULLDEV:=nul
+
+# iz29609 helpmacro to check if file exists 4nt style
+IFEXIST:=if exist
+THEN:=
+
+# iz31658
+CHECKZIPRESULT:=^ iff errorlevel == 12 then ( echo Nothing to update for zip ^ set somedummyvar=%somedummyvar)
+
+.ENDIF # "$(USE_SHELL)"!="4nt"
+
+# Platform specific
 .IF "$(GUI)"=="WNT"
 AWK*=awk
 SORT*=sort
@@ -126,7 +163,6 @@ TOUCH*=$(BUILD_TOOLS)$/touch.exe
 TYPE*=type
 .ENDIF  "$(USE_SHELL)"!="4nt"
 MKDIRHIER=$(MKDIR) 
-SCP_CHECK_TOOL=checkscp.exe
 DUMPBIN*=$(WRAPCMD) dumpbin
 
 .ELIF "$(GUI)"=="UNX"	# "$(GUI)"=="WNT"
@@ -162,20 +198,4 @@ ECHON=echo -n
 ECHONL=echo
 .ENDIF			# "$(GUI)"=="UNX"
 
-MAKEDEPEND*=$(WRAPCMD) $(SOLARBINDIR)$/makedepend
-ADJUSTVISIBILITY*=$(WRAPCMD) adjustvisibility
-CONVERT*=$(PERL) $(SOLARENV)$/bin$/leconvert.pl
-
 RM+=$(RMFLAGS)
-
-.IF "$(GUI)"=="UNX"
-SCP_CHECK_TOOL=checkscp
-.ENDIF
-
-.IF "$(USE_SHELL)"!="4nt"
-CHECKZIPRESULT=|| if ("$$status" != "12") exit $$status && echo "Nothing to update for zip"
-.ELSE
-CHECKZIPRESULT=^ iff errorlevel == 12 then ( echo Nothing to update for zip ^ set somedummyvar=%somedummyvar)
-.ENDIF
-
-EXECTEST = $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
