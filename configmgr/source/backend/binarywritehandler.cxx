@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binarywritehandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:22:18 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,14 +306,16 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void BinaryWriteHandler::writeFileHeader(rtl::OUString const & _aOwnerEntity,
-                                                 rtl::OUString const & _aLocale)
+        void BinaryWriteHandler::writeFileHeader(   rtl::OUString const & _aOwnerEntity,
+                                                    const uno::Sequence<OUString> & aKnownLocales,
+                                                    const uno::Sequence<OUString> & aDataLocales  )
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
-            m_BinaryWriter.write(_aOwnerEntity);
-            m_BinaryWriter.write(_aLocale);
             m_BinaryWriter.write(CFG_BINARY_MAGIC);
             m_BinaryWriter.write(CFG_BINARY_VERSION);
+            m_BinaryWriter.write(_aOwnerEntity);
+            writeSequence(m_BinaryWriter,aKnownLocales);
+            writeSequence(m_BinaryWriter,aDataLocales);
             m_BinaryWriter.write(m_aComponentName);
         }
         // -----------------------------------------------------------------------------
@@ -516,14 +518,17 @@ namespace configmgr
         bool BinaryWriteHandler::generateHeader(const uno::Reference<backenduno::XLayer> * pLayers,
                                                  sal_Int32 nNumLayers,
                                                 const OUString& aEntity,
-                                                const OUString& aLocale )
+                                                const localehelper::LocaleSequence & aKnownLocales )
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
             //Open the writer
             if (!m_BinaryWriter.open())
                 return false;
 
-            this->writeFileHeader(aEntity, aLocale);
+            this->writeFileHeader(  aEntity,
+                                    localehelper::makeIsoSequence(aKnownLocales),
+                                    getAvailableLocales(pLayers,nNumLayers) );
+
             this->writeLayerInfoList(pLayers, nNumLayers);
             return true;
         }
