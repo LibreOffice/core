@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberchar.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-13 22:47:58 $
+ *  last change: $Author: khong $ $Date: 2002-09-15 22:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,12 +185,12 @@ const sal_Int16 Multiplier_Modern_ja    = 6;
 const sal_Int16 Multiplier_Traditional_ja = 7;
 const sal_Int16 Multiplier_Count    = 8;
 
-const sal_Int16 ExponentCount_CJK   = 6;
+const sal_Int16 ExponentCount_6_CJK     = 6;
 
-static sal_Int16 MultiplierExponent_CJK[ExponentCount_CJK] = {
+static sal_Int16 MultiplierExponent_6_CJK[ExponentCount_6_CJK] = {
         12,     8,  4,  3,  2,  1
 };
-static sal_Unicode MultiplierChar_CJK[][ExponentCount_CJK] = {
+static sal_Unicode MultiplierChar_6_CJK[][ExponentCount_6_CJK] = {
     0x5146, 0x4EBF, 0x4E07, 0x5343, 0x767E, 0x5341, // S. Chinese Lower
     0x5146, 0x4EBF, 0x4E07, 0x4EDF, 0x4F70, 0x62FE, // S. Chinese Upper
     0x5146, 0x5104, 0x842C, 0x5343, 0x767E, 0x5341, // T. Chinese Lower
@@ -201,13 +201,13 @@ static sal_Unicode MultiplierChar_CJK[][ExponentCount_CJK] = {
     0x5146, 0x5104, 0x842C, 0x9621, 0x767E, 0x62FE, // Japanese Traditional
 };
 
-const sal_Int16 ExponentCount_short_CJK     = 2;
+const sal_Int16 ExponentCount_2_CJK     = 2;
 
-static sal_Int16 MultiplierExponent_short_CJK[ExponentCount_short_CJK] = {
+static sal_Int16 MultiplierExponent_2_CJK[ExponentCount_2_CJK] = {
         8,  4,
 };
 
-static sal_Unicode MultiplierChar_short_CJK[][ExponentCount_short_CJK] = {
+static sal_Unicode MultiplierChar_2_CJK[][ExponentCount_2_CJK] = {
     0x4EBF, 0x4E07, // S. Chinese Lower
     0x4EBF, 0x4E07, // S. Chinese Upper
     0x5104, 0x842C, // T. Chinese Lower
@@ -216,6 +216,22 @@ static sal_Unicode MultiplierChar_short_CJK[][ExponentCount_short_CJK] = {
     0xC5B5, 0xB9CC, // Korean Hangul
     0x5104, 0x4E07, // Japanese Modern
     0x5104, 0x842C, // Japanese Traditional
+};
+
+const sal_Int16 ExponentCount_7_CJK     = 7;
+
+static sal_Int16 MultiplierExponent_7_CJK[ExponentCount_7_CJK] = {
+        16, 12,     8,  4,  3,  2,  1
+};
+static sal_Unicode MultiplierChar_7_CJK[][ExponentCount_7_CJK] = {
+    0x4EAC, 0x5146, 0x4EBF, 0x4E07, 0x5343, 0x767E, 0x5341, // S. Chinese Lower
+    0x4EAC, 0x5146, 0x4EBF, 0x4E07, 0x4EDF, 0x4F70, 0x62FE, // S. Chinese Upper
+    0x4EAC, 0x5146, 0x5104, 0x842C, 0x5343, 0x767E, 0x5341, // T. Chinese Lower
+    0x4EAC, 0x5146, 0x5104, 0x842C, 0x4EDF, 0x4F70, 0x62FE, // T. Chinese & Korean Upper
+    0x4EAC, 0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341, // Korean Lower
+    0x4EAC, 0xC870, 0xC5B5, 0xB9CC, 0xCC9C, 0xBC31, 0xC2ED, // Korean Hangul
+    0x4EAC, 0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341, // Japanese Modern
+    0x4EAC, 0x5146, 0x5104, 0x842C, 0x9621, 0x767E, 0x62FE, // Japanese Traditional
 };
 
 typedef struct {
