@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-13 16:21:22 $
+ *  last change: $Author: cmc $ $Date: 2001-03-16 14:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1342,8 +1342,10 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos)
                     break;
                 case 1:
                     if( bNew )
+                    {
                         rDoc.Insert(*pPaM, SvxFmtBreakItem(
-                        SVX_BREAK_COLUMN_BEFORE ));
+                            SVX_BREAK_COLUMN_BEFORE ));
+                    }
                     break;
                 //case 2:
                 //case 3:   // alle drei Faelle -> PgDesc-Format-Einfuegung
@@ -4840,7 +4842,16 @@ SprmReadInfo aSprmReadTab[] = {
 //0xD62A, ? ? ?  , "sprmTDiagLine", // ;;;
     0xD62B, (FNReadRecord)0, //"sprmTVertMerge" // tap.rgtc[].vertMerge;complex (see below);variable length always recorded as 2 bytes;
     0xD62C, (FNReadRecord)0, //"sprmTVertAlign" // tap.rgtc[].vertAlign;complex (see below);variable length always recorded as 3 byte;
-    0xCA78, &SwWW8ImplReader::Read_DoubleLine_Rotate
+    0xCA78, &SwWW8ImplReader::Read_DoubleLine_Rotate,
+    0x6649, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
+    0x6649, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
+    0xF614, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
+    0xD61A, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
+    0xD61B, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
+    0xD61C, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
+    0xD61D, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
+    0xD634, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
+    0xF661, (FNReadRecord)0  //undocumented 4 byte pap sprm (special though)
 };
 
 //-----------------------------------------
@@ -4942,12 +4953,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.15 2001-03-13 16:21:22 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.16 2001-03-16 14:19:41 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.15  2001/03/13 16:21:22  cmc
+      ##503##, #84126#. Incorrect endnote setting, and duplicate code
+
       Revision 1.14  2001/02/23 12:45:26  os
       Complete use of DefaultNumbering component
 
