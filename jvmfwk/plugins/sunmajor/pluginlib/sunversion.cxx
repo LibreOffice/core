@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunversion.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-12 09:43:19 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,108 @@ public:
 } test;
 #endif
 
+class FileHandleGuard
+{
+public:
+    inline FileHandleGuard(oslFileHandle & rHandle) SAL_THROW(()):
+        m_rHandle(rHandle) {}
+
+    inline ~FileHandleGuard() SAL_THROW(());
+
+    inline oslFileHandle & getHandle() SAL_THROW(()) { return m_rHandle; }
+
+private:
+    oslFileHandle & m_rHandle;
+
+    FileHandleGuard(FileHandleGuard &); // not implemented
+    void operator =(FileHandleGuard); // not implemented
+};
+inline FileHandleGuard::~FileHandleGuard() SAL_THROW(())
+{
+    if (m_rHandle != 0)
+    {
+        oslFileError eError = osl_closeFile(m_rHandle);
+        OSL_ENSURE(eError == osl_File_E_None, "unexpected situation");
+    }
+}
+
+class FileHandleReader
+{
+public:
+    enum Result
+    {
+        RESULT_OK,
+        RESULT_EOF,
+        RESULT_ERROR
+    };
+
+    inline FileHandleReader(oslFileHandle & rHandle) SAL_THROW(()):
+        m_aGuard(rHandle), m_nSize(0), m_nIndex(0), m_bLf(false) {}
+
+    Result readLine(rtl::OString * pLine) SAL_THROW(());
+
+private:
+    enum { BUFFER_SIZE = 1024 };
+
+    sal_Char m_aBuffer[BUFFER_SIZE];
+    FileHandleGuard m_aGuard;
+    int m_nSize;
+    int m_nIndex;
+    bool m_bLf;
+};
+
+FileHandleReader::Result
+FileHandleReader::readLine(rtl::OString * pLine)
+    SAL_THROW(())
+{
+    OSL_ENSURE(pLine, "specification violation");
+
+    for (bool bEof = true;; bEof = false)
+    {
+        if (m_nIndex == m_nSize)
+        {
+            sal_uInt64 nRead;
+            switch (osl_readFile(
+                        m_aGuard.getHandle(), m_aBuffer, BUFFER_SIZE, &nRead))
+            {
+            case osl_File_E_PIPE: //HACK! for windows
+                nRead = 0;
+            case osl_File_E_None:
+                if (nRead == 0)
+                {
+                    m_bLf = false;
+                    return bEof ? RESULT_EOF : RESULT_OK;
+                }
+                m_nIndex = 0;
+                m_nSize = static_cast< int >(nRead);
+                break;
+
+            default:
+                return RESULT_ERROR;
+            }
+        }
+
+        if (m_bLf && m_aBuffer[m_nIndex] == 0x0A)
+            ++m_nIndex;
+        m_bLf = false;
+
+        int nStart = m_nIndex;
+        while (m_nIndex != m_nSize)
+            switch (m_aBuffer[m_nIndex++])
+            {
+            case 0x0D:
+                m_bLf = true;
+            case 0x0A:
+                *pLine += rtl::OString(m_aBuffer + nStart,
+                                       m_nIndex - 1 - nStart);
+                    //TODO! check for overflow, and not very efficient
+                return RESULT_OK;
+            }
+
+        *pLine += rtl::OString(m_aBuffer + nStart, m_nIndex - nStart);
+            //TODO! check for overflow, and not very efficient
+    }
+}
 
 SunVersion::SunVersion():  m_nUpdateSpecial(0),
                            m_preRelease(Rel_NONE),
@@ -348,6 +450,10 @@ SunVersion initVersion(const OUString& usJavaHomeArg)
     oslFileHandle fileOut= 0;
     oslFileHandle fileErr= 0;
 
+
+    FileHandleReader stdoutReader(fileOut);
+    FileHandleReader stderrReader(fileErr);
+
     oslProcessError procErr =
         osl_executeProcess_WithRedirectedIO( usJava.pData,//usExe.pData,
                                              &argument.pData, //rtl_uString *strArguments[],
@@ -362,32 +468,23 @@ SunVersion initVersion(const OUString& usJavaHomeArg)
                                              &fileOut,//oslFileHandle *pChildOutputRead,
                                              &fileErr);//oslFileHandle *pChildErrorRead);
 
-    if( procErr == osl_Process_E_None)
+
+    if( procErr != osl_Process_E_None)
+        return ret;
+
+    OString aLine;
+    FileHandleReader::Result rs = stdoutReader.readLine( & aLine);
+    if (rs != FileHandleReader::RESULT_OK)
     {
-        const sal_Int32 BUF_SIZE= 512;
-        sal_Char buf[BUF_SIZE];
-        memset(buf, 0, BUF_SIZE);
-        sal_uInt64 read= 0;
-        TimeValue waitMax= {5 ,0};
-        if(osl_Process_E_None == osl_joinProcessWithTimeout(javaProcess, &waitMax))
-        {
-            //Read the output from stderr
-            if(osl_readFile(fileErr, &buf, BUF_SIZE, &read) == osl_File_E_None)
-            {
-                ret = getVersionFromBuf(buf, BUF_SIZE);
-            }
-            // If we have no version yet try stdout
-            if( ! ret)
-            {
-                if(osl_readFile(fileOut, &buf, BUF_SIZE - 1, &read) == osl_File_E_None)
-                {
-                    ret = getVersionFromBuf(buf, BUF_SIZE - 1);
-                }
-            }
-        }
+        rs = stderrReader.readLine( & aLine);
     }
-    osl_closeFile(fileErr);
-    osl_closeFile(fileOut);
+    if (rs == FileHandleReader::RESULT_OK)
+        ret = extractVersion(aLine);
+
+    TimeValue waitMax= {5 ,0};
+    procErr = osl_joinProcessWithTimeout(javaProcess, &waitMax);
+    OSL_ASSERT( procErr ==osl_Process_E_None );
+
     return ret;
 }
 
@@ -395,24 +492,24 @@ SunVersion initVersion(const OUString& usJavaHomeArg)
     @param arg
            max size of buffer pBuf
  */
-SunVersion getVersionFromBuf( const sal_Char *pBuf, sal_Int32 size)
+SunVersion extractVersion( const OString & sVersionLine)
 {
     // look for the string "version"
-    sal_Int32 i= rtl_str_indexOfStr_WithLength( (const sal_Char*) pBuf,
-                                               size,
-                                               RTL_CONSTASCII_STRINGPARAM(
-                                                   "version"));
-    if(i == -1)
-        return SunVersion(pBuf);
+    sal_Int32 i = sVersionLine.indexOf(
+        "version", 0);
 
-    sal_Char* pEnd= (sal_Char*)pBuf + size - 1;
+    if(i == -1)
+        return SunVersion();
+    sal_Char const * pBuf = sVersionLine.getStr();
+    sal_Char const * pEnd= pBuf + sVersionLine.getLength();
+
     pBuf += i + RTL_CONSTASCII_LENGTH("version");
     // skip tabs an spaces
     while (pBuf != pEnd && (*pBuf == '\t' || *pBuf == ' '))
         ++pBuf;
     // next char " ? then move one forward
     if (pBuf != pEnd && *pBuf == '"')
-            ++pBuf;
+        ++pBuf;
     // now we have the beginning of the version string.
     // search for the end of the string indicated by white space or a character
     // other than '.','_' or 0 ..9

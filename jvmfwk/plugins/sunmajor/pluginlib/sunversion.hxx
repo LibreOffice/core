@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunversion.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-12 09:43:20 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ protected:
 */
 SunVersion initVersion(const rtl::OUString& usJavaHome);
 
-SunVersion getVersionFromBuf(const sal_Char *pBuf, sal_Int32 sizeBuf);
+SunVersion extractVersion(const rtl::OString & sVersionLine);
 
 }
 
