@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:45:00 $
+ *  last change: $Author: hr $ $Date: 2000-11-15 11:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,9 @@
 #ifndef _SFX_PROGRESS_HXX
 #include <sfx2/progress.hxx>
 #endif
+
+#include <svtools/pathoptions.hxx>
+
 #define MAX_USER_MOVE       2
 
 //////////////////////////////////////////////////////////////////////////
