@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-20 09:51:03 $
+ *  last change: $Author: aw $ $Date: 2000-12-20 13:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,11 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const PolyPolygon& rPol
     aPolyPoly3D.RemoveDoublePoints();
 
 //-/    nVSegments = aPolyPoly3D[0].GetPointCount();
-    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(aPolyPoly3D[0].GetPointCount()));
+    const Polygon3D rPoly3D = aPolyPoly3D[0];
+    sal_uInt32 nSegCnt((sal_uInt32)rPoly3D.GetPointCount());
+    if(nSegCnt && !rPoly3D.IsClosed())
+        nSegCnt -= 1;
+    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nSegCnt));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -160,7 +164,11 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const XPolyPolygon& rXP
     // Start- und Endpunkte verhindern
     aPolyPoly3D.RemoveDoublePoints();
 //-/    nVSegments = aPolyPoly3D[0].GetPointCount();
-    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(aPolyPoly3D[0].GetPointCount()));
+    const Polygon3D rPoly = aPolyPoly3D[0];
+    sal_uInt32 nSegCnt((sal_uInt32)rPoly.GetPointCount());
+    if(nSegCnt && !rPoly.IsClosed())
+        nSegCnt -= 1;
+    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nSegCnt));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -181,7 +189,11 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const XPolygon& rXPoly)
     // Start- und Endpunkte verhindern
     aPolyPoly3D.RemoveDoublePoints();
 //-/    nVSegments = aPolyPoly3D[0].GetPointCount();
-    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(aPolyPoly3D[0].GetPointCount()));
+    const Polygon3D rPoly = aPolyPoly3D[0];
+    sal_uInt32 nSegCnt((sal_uInt32)rPoly.GetPointCount());
+    if(nSegCnt && !rPoly.IsClosed())
+        nSegCnt -= 1;
+    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nSegCnt));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -205,7 +217,11 @@ E3dLatheObj::E3dLatheObj (E3dDefaultAttributes& rDefault, const PolyPolygon3D rP
     // Start- und Endpunkte verhindern
     aPolyPoly3D.RemoveDoublePoints();
 //-/    nVSegments = aPolyPoly3D[0].GetPointCount();
-    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(aPolyPoly3D[0].GetPointCount()));
+    const Polygon3D rPoly = aPolyPoly3D[0];
+    sal_uInt32 nSegCnt((sal_uInt32)rPoly.GetPointCount());
+    if(nSegCnt && !rPoly.IsClosed())
+        nSegCnt -= 1;
+    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nSegCnt));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -409,27 +425,44 @@ void E3dLatheObj::CreateGeometry()
 PolyPolygon3D E3dLatheObj::CreateLathePolyPoly(PolyPolygon3D& rPolyPoly3D, long nVSegs)
 {
     PolyPolygon3D aLathePolyPolygon3D = rPolyPoly3D;
-    USHORT nCnt = aLathePolyPolygon3D.Count();
-    USHORT nOrigPntCnt = aPolyPoly3D[0].GetPointCount();
+    sal_uInt16 nCnt = aLathePolyPolygon3D.Count();
+    sal_uInt16 nOrigSegmentCnt = aPolyPoly3D[0].GetPointCount();
 
-    if(nVSegs && nVSegs != nOrigPntCnt)
+    if(nOrigSegmentCnt && !aPolyPoly3D[0].IsClosed())
+        nOrigSegmentCnt -= 1;
+
+    if(nVSegs && nVSegs != nOrigSegmentCnt)
     {
-        // Erstes Polygon anpassen
-        aLathePolyPolygon3D[0] = CreateLathePoly(aLathePolyPolygon3D[0], nVSegs);
-//-/        nVSegments = aLathePolyPolygon3D[0].GetPointCount();
-        mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(aLathePolyPolygon3D[0].GetPointCount()));
+        // make sure minimum is not too small, 3 edges for closed
+        // and 2 edges for open obects
+        sal_Int32 nMinVSegs = aPolyPoly3D[0].IsClosed() ? 3 : 2;
+        if(nVSegs <= nMinVSegs)
+            nVSegs = nMinVSegs;
 
-        // andere Polygone im richtigen Verhaeltnis anpassen,
-        // aber nur, wenn Wert fuer erstes angepasst werden musste
-        for(UINT16 i = 1; i < nCnt; i++ )
+        if(nVSegs != nOrigSegmentCnt)
         {
-            Polygon3D &rPoly3D = aLathePolyPolygon3D[i];
-            USHORT nPntCnt = rPoly3D.GetPointCount();
-            long nNewVSegs = (nPntCnt * nVSegs) / nOrigPntCnt;
+            // Erstes Polygon anpassen
+            aLathePolyPolygon3D[0] = CreateLathePoly(aLathePolyPolygon3D[0], nVSegs);
+            mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nVSegs));
 
-            if (nNewVSegs > 0 && nNewVSegs != nPntCnt)
+            // andere Polygone im richtigen Verhaeltnis anpassen,
+            // aber nur, wenn Wert fuer erstes angepasst werden musste
+            for(UINT16 i = 1; i < nCnt; i++ )
             {
-                aLathePolyPolygon3D[i] = CreateLathePoly(aLathePolyPolygon3D[i], nNewVSegs);
+                Polygon3D &rPoly3D = aLathePolyPolygon3D[i];
+                sal_uInt16 nSegCnt(rPoly3D.GetPointCount());
+                if(nSegCnt && !rPoly3D.IsClosed())
+                    nSegCnt -= 1;
+                long nNewVSegs = (nSegCnt * nVSegs) / nOrigSegmentCnt;
+
+                // make sure min is not too small for subpolys, too
+                if(nNewVSegs <= nMinVSegs)
+                    nNewVSegs = nMinVSegs;
+
+                if(nNewVSegs && nNewVSegs != nSegCnt)
+                {
+                    aLathePolyPolygon3D[i] = CreateLathePoly(aLathePolyPolygon3D[i], nNewVSegs);
+                }
             }
         }
     }
@@ -438,7 +471,12 @@ PolyPolygon3D E3dLatheObj::CreateLathePolyPoly(PolyPolygon3D& rPolyPoly3D, long 
 
 Polygon3D E3dLatheObj::CreateLathePoly(Polygon3D& rPoly3D, long nVSegs)
 {
-    return rPoly3D.GetExpandedPolygon(nVSegs);
+    // attention: Here number of SEGMENTS is given, while GetExpandedPolygon()
+    // takes number of points. Calc PntNum first
+    long nNumPts = rPoly3D.IsClosed() ? nVSegs : nVSegs + 1;
+    if(nNumPts != rPoly3D.GetPointCount())
+        return rPoly3D.GetExpandedPolygon(nNumPts);
+    return rPoly3D;
 }
 
 /*************************************************************************

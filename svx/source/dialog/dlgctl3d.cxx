@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
+ *  last change: $Author: aw $ $Date: 2000-12-20 13:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ void Svx3DPreviewControl::SetObjectType( UINT16 nType )
                 p3DObj = new E3dSphereObj(
                     p3DView->Get3DDefaultAttributes(),
                     Vector3D( 0, 0, 0 ),
-                    Vector3D( 1000, 1000, 1000 ));
+                    Vector3D( 5000, 5000, 5000 ));
             }
             break;
 
@@ -306,17 +306,11 @@ void Svx3DPreviewControl::SetObjectType( UINT16 nType )
                 // Wuerfel erzeugen
                 p3DObj = new E3dCubeObj(
                     p3DView->Get3DDefaultAttributes(),
-                    Vector3D( -500, -500, -500 ),
-                    Vector3D( 1000, 1000, 1000 ));
+                    Vector3D( -2500, -2500, -2500 ),
+                    Vector3D( 5000, 5000, 5000 ));
             }
             break;
         }
-
-        // Objekte groesser machen, da meisst nur 1x1x1 cm gross nach
-        // dem Erzeugen
-        Matrix4D aScaleMat;
-        aScaleMat.Scale(Vector3D(5.0, 5.0, 5.0));
-        p3DObj->ApplyTransform(aScaleMat);
 
         // Rein in die Szene
         pScene->Insert3DObj( p3DObj );
