@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: testshl.cxx,v $
+ *  $RCSfile: tlog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: sz $ $Date: 2001-04-12 10:55:57 $
+ *  last change: $Author: sz $ $Date: 2001-04-12 10:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,71 +59,81 @@
  *
  ************************************************************************/
 
-#include <stdio.h>
+#include    "tlog.hxx"
 
-#ifndef _SOLTOOLS_TESTSHL_TLOG_HXX_
-#include "inc/tlog.hxx"
-#endif
+using namespace std;
 
-#ifndef _SOLTOOLS_TESTSHL_TSTMGR_HXX_
-#include "inc/tstmgr.hxx"
-#endif
+// <namespace_tstutl>
+namespace tstutl {
 
-using namespace tstutl;
+// <method_initialize>
+void tLog::initialize( const ::rtl::OString& name ) {
+    m_logname = cnvrtPth( name );
+    m_logfile = new ::osl::File( m_logname );
+} // </method_initialize>
 
-void usage();
-void test_shl( vector< sal_Char* > cmdln, sal_Bool boom );
+// <method_open>
+::osl::FileBase::RC tLog::open( sal_Bool append ) {
 
-#if (defined UNX) || (defined OS2)
-int main( int argc, char* argv[] )
-#else
-int _cdecl main( int argc, char* argv[] )
-#endif
-{
-    if ( argc < 3 ) {
-        usage();
-    }
-    sal_Bool boom = sal_False;
-    vector< sal_Char* > cmdln;
+    if ( m_logfile ) {
+        ::osl::FileBase::RC ret;
 
-    sal_Int32 i;
-    for ( i = 1; i < argc; i++ ) {
-        sal_Char* ptr = argv[i];
-        if ( ptr[0] == '-' ) {
-            boom = sal_True;
+        if ( ! append ) {
+            ret = ::osl::File::remove( m_logname );
+        }
+
+    if( m_logfile->open( OpenFlag_Write ) == ::osl::FileBase::E_NOENT ) {
+            ret = m_logfile->open( OpenFlag_Write | OpenFlag_Create );
         }
         else  {
-            cmdln.push_back( ptr );
+            ret = m_logfile->setPos( Pos_End, 0 );
         }
+        return ret;
     }
-    if ( cmdln.size() < 3 ) {
-        cmdln.push_back( 0 );
+    return ( ::osl::FileBase::E_INVAL );
+} // </method_open>
+
+// <method_close>
+::osl::FileBase::RC tLog::close() {
+    if ( m_logfile ) {
+        return m_logfile->close();
     }
-    if ( ! cmdln[0] || ! cmdln[1] ) {
-        usage();
+    return ( ::osl::FileBase::E_INVAL );
+} // </method_close>
+
+// <method_writeRes>
+::osl::FileBase::RC tLog::writeRes( ::rtl::tRes& oRes, sal_Bool v, sal_Bool xml ) {
+    ::osl::FileBase::RC ret;
+
+    sal_Char* ptr = oRes.getName();
+    ptr = cat( ptr, ";" );
+    ptr = cat( ptr, oRes.getResult() );
+    ret = write( cat( ptr, "\n" ), v );
+    delete [] ptr;
+
+    return( ret );
+} // </method_writeRes>
+
+// <method_write>
+::osl::FileBase::RC tLog::write( const sal_Char* buf, sal_Bool v ) {
+
+    if ( ! m_logfile ) {
+        fprintf( stderr, "%s", buf );
+        return ( ::osl::FileBase::E_NOENT );
     }
+    sal_uInt64 uBytes=0;
+    sal_uInt32 len = ln( buf );
+    const sal_Char* ptr = buf;
 
-    test_shl( cmdln, boom );
-
-    return(0);
-}
-
-void test_shl( vector< sal_Char*> cmdln, sal_Bool boom ) {
-
-    tstMgr tst;
-
-    if ( tst.initialize( cmdln[0], boom )) {
-        tst.test_EntriesFromFile( cmdln[1], cmdln[2] );
+    if ( v ) {
+        fprintf( stderr, "%s", buf );
     }
-    else {
-        sal_Char* msg = "could not find module\n";
-        fprintf( stdout, "%s\n", msg );
-    }
-}
+    return m_logfile->write( buf, len , uBytes );
+} // </method_write>
 
-void usage(){
-    fprintf( stdout,
-            "USAGE: testSHL shlname scename [logname] [-boom]\n" );
-    exit(0);
-}
+} // </namespace_tstutl>
+
+
+
+
 

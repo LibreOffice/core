@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: testshl.cxx,v $
+ *  $RCSfile: tlog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: sz $ $Date: 2001-04-12 10:55:57 $
+ *  last change: $Author: sz $ $Date: 2001-04-12 10:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,72 +58,82 @@
  *
  *
  ************************************************************************/
+#ifndef _SOLTOOLS_TESTSHL_TLOG_HXX__
+#define _SOLTOOLS_TESTSHL_TLOG_HXX__
 
-#include <stdio.h>
-
-#ifndef _SOLTOOLS_TESTSHL_TLOG_HXX_
-#include "inc/tlog.hxx"
+#ifndef _OSL_FILE_HXX_
+#include    <osl/file.hxx>
 #endif
 
-#ifndef _SOLTOOLS_TESTSHL_TSTMGR_HXX_
-#include "inc/tstmgr.hxx"
+#ifndef _RTL_TRES_HXX_
+#include <rtl/tres.hxx>
 #endif
 
-using namespace tstutl;
-
-void usage();
-void test_shl( vector< sal_Char* > cmdln, sal_Bool boom );
-
-#if (defined UNX) || (defined OS2)
-int main( int argc, char* argv[] )
-#else
-int _cdecl main( int argc, char* argv[] )
+#ifndef _SOLTOOLS_TESTSHL_TUTIL_HXX_
+#include "tutil.hxx"
 #endif
-{
-    if ( argc < 3 ) {
-        usage();
+
+#include <iostream>
+
+using namespace std;
+
+// <namespace_tstutl>
+namespace tstutl {
+
+// <class_tLog>
+class tLog {
+
+    // <private_members>
+    ::osl::File*    m_logfile;              // fileobject
+    ::rtl::OUString m_logname;              // name of log
+    // </private_members>
+
+    // <private_methods>
+    void initialize( const ::rtl::OString& name );
+    // </private_methods>
+
+public:
+
+    // <public_ctors>
+    tLog() : m_logfile( 0 ) {
     }
-    sal_Bool boom = sal_False;
-    vector< sal_Char* > cmdln;
 
-    sal_Int32 i;
-    for ( i = 1; i < argc; i++ ) {
-        sal_Char* ptr = argv[i];
-        if ( ptr[0] == '-' ) {
-            boom = sal_True;
+    tLog( const sal_Char* name ) {
+        if( name ) {
+            initialize( name );
         }
         else  {
-            cmdln.push_back( ptr );
+            m_logfile = 0;
         }
+
     }
-    if ( cmdln.size() < 3 ) {
-        cmdln.push_back( 0 );
-    }
-    if ( ! cmdln[0] || ! cmdln[1] ) {
-        usage();
-    }
+    // </public_ctors>
 
-    test_shl( cmdln, boom );
+    // <dtor>
+    virtual ~tLog() {
+        if ( m_logfile ) {
+            m_logfile->close();
+            delete( m_logfile );
+        }
+    } // </dtor>
 
-    return(0);
-}
+    // <public_methods>
+    inline ::rtl::OUString& getName() { return m_logname; }
+    inline ::osl::File* getFile() { return m_logfile; }
 
-void test_shl( vector< sal_Char*> cmdln, sal_Bool boom ) {
+    // open logfile for overwrite (default) or append
+    ::osl::FileBase::RC open( sal_Bool append = sal_False );
+    ::osl::FileBase::RC close();
 
-    tstMgr tst;
+    ::osl::FileBase::RC writeRes( ::rtl::tRes& oRes, sal_Bool v = sal_False ,
+                                                  sal_Bool xml = sal_False );
 
-    if ( tst.initialize( cmdln[0], boom )) {
-        tst.test_EntriesFromFile( cmdln[1], cmdln[2] );
-    }
-    else {
-        sal_Char* msg = "could not find module\n";
-        fprintf( stdout, "%s\n", msg );
-    }
-}
+    // write methods without (default) or with echo on display
+    ::osl::FileBase::RC write( const sal_Char* buf, sal_Bool v = sal_False );
+    // </public_methods>
 
-void usage(){
-    fprintf( stdout,
-            "USAGE: testSHL shlname scename [logname] [-boom]\n" );
-    exit(0);
-}
+}; // </class_tLog>
 
+} // </namespace_tstutl>
+
+#endif

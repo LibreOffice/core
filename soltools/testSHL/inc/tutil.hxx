@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: testshl.cxx,v $
+ *  $RCSfile: tutil.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: sz $ $Date: 2001-04-12 10:55:57 $
+ *  last change: $Author: sz $ $Date: 2001-04-12 10:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,72 +58,28 @@
  *
  *
  ************************************************************************/
+#ifndef _SOLTOOLS_TESTSHL_TUTIL_HXX_
+#define _SOLTOOLS_TESTSHL_TUTIL_HXX__
 
-#include <stdio.h>
-
-#ifndef _SOLTOOLS_TESTSHL_TLOG_HXX_
-#include "inc/tlog.hxx"
+#ifndef _OSL_FILE_HXX_
+#include    <osl/file.hxx>
 #endif
 
-#ifndef _SOLTOOLS_TESTSHL_TSTMGR_HXX_
-#include "inc/tstmgr.hxx"
+using namespace std;
+
+#include <vector>
+
+// <namespace_tstutl>
+namespace tstutl {
+
+sal_uInt32 getEntriesFromFile( sal_Char* fName, vector< sal_Char* >& entries );
+::rtl::OUString cnvrtPth( ::rtl::OString sysPth );
+
+// string copy, cat, len methods
+sal_Char* cpy( sal_Char** dest, const sal_Char* src );
+sal_Char* cat( const sal_Char* str1, const sal_Char* str2 );
+sal_uInt32 ln( const sal_Char* str );
+
+} // </namespace_tstutl>
+
 #endif
-
-using namespace tstutl;
-
-void usage();
-void test_shl( vector< sal_Char* > cmdln, sal_Bool boom );
-
-#if (defined UNX) || (defined OS2)
-int main( int argc, char* argv[] )
-#else
-int _cdecl main( int argc, char* argv[] )
-#endif
-{
-    if ( argc < 3 ) {
-        usage();
-    }
-    sal_Bool boom = sal_False;
-    vector< sal_Char* > cmdln;
-
-    sal_Int32 i;
-    for ( i = 1; i < argc; i++ ) {
-        sal_Char* ptr = argv[i];
-        if ( ptr[0] == '-' ) {
-            boom = sal_True;
-        }
-        else  {
-            cmdln.push_back( ptr );
-        }
-    }
-    if ( cmdln.size() < 3 ) {
-        cmdln.push_back( 0 );
-    }
-    if ( ! cmdln[0] || ! cmdln[1] ) {
-        usage();
-    }
-
-    test_shl( cmdln, boom );
-
-    return(0);
-}
-
-void test_shl( vector< sal_Char*> cmdln, sal_Bool boom ) {
-
-    tstMgr tst;
-
-    if ( tst.initialize( cmdln[0], boom )) {
-        tst.test_EntriesFromFile( cmdln[1], cmdln[2] );
-    }
-    else {
-        sal_Char* msg = "could not find module\n";
-        fprintf( stdout, "%s\n", msg );
-    }
-}
-
-void usage(){
-    fprintf( stdout,
-            "USAGE: testSHL shlname scename [logname] [-boom]\n" );
-    exit(0);
-}
-
