@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:56 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ void OTable::refreshColumns()
     if(!isNew())
     {
         Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
-                                                        m_SchemaName,m_Name,::rtl::OUString::createFromAscii("%"));
+                                                        m_SchemaName,m_Name,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%")));
 
         if(xResult.is())
         {
