@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 15:52:14 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1381,7 +1381,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ finnish ] = "~Kirjainkoko vaikuttaa" ;
         Text [ danish ] = "Store og små bogstaver" ;
         Text [ french ] = "~Respecter la casse" ;
-        Text [ swedish ] = "~Skiftlägeskänslig" ;
+        Text [ swedish ] = "Versalkänsli~g" ;
         Text [ dutch ] = "~Hoofd-/kleine letters belangrijk" ;
         Text [ spanish ] = "M~ayúsculas/minúsculas" ;
         Text [ english_us ] = "Case ~sensitive" ;
@@ -1825,7 +1825,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ finnish ] = "~Kirjainkoko vaikuttaa" ;
         Text [ danish ] = "Store og små bogstaver" ;
         Text [ french ] = "~Respecter la casse" ;
-        Text [ swedish ] = "~Skiftlägeskänslig" ;
+        Text [ swedish ] = "Versalkänsli~g" ;
         Text [ dutch ] = "~Hoofd-/kleine letters belangrijk" ;
         Text [ spanish ] = "M~ayúsculas/minúsculas" ;
         Text [ english_us ] = "~Case sensitive" ;
@@ -3279,7 +3279,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ finnish ] = "~Kirjainkoko vaikuttaa" ;
         Text [ danish ] = "Store og små bogstaver" ;
         Text [ french ] = "~Respecter la casse" ;
-        Text [ swedish ] = "~Versaler/gemener" ;
+        Text [ swedish ] = "Versalkänsli~g" ;
         Text [ dutch ] = "~Hoofd-/kleine letters belangrijk" ;
         Text [ spanish ] = "M~ayúsculas/minúsculas" ;
         Text [ english_us ] = "~Case sensitive" ;
