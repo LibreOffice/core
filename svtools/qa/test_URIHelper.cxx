@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_URIHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-16 13:20:52 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 11:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "cppuhelper/bootstrap.hxx"
 #include "rtl/string.h"
-#include "rtl/tres.h"
+// #include "rtl/tres.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -76,12 +76,34 @@
 
 #include "urihelper.hxx"
 
-extern "C" sal_Bool SAL_CALL test_URIHelper_FindFirstURLInText(
-    rtl_TestResult * pTestResult)
+#include <cppunit/simpleheader.hxx>
+
+namespace test_URIHelper
+{
+
+    class test : public CppUnit::TestFixture
+    {
+
+    public:
+        // initialise your test code values here.
+        void setUp()
+            {
+            }
+
+        void tearDown()
+            {
+            }
+
+
+//extern "C" sal_Bool SAL_CALL test_URIHelper_FindFirstURLInText(
+//    rtl_TestResult * pTestResult)
+
+void FindFirstURLInText()
 {
     // This test needs an XMultiServiceFactory, so it needs an adequate
     // environment to be able to create one...
 
+    printf("XMultiServiceFactory\n");
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > xFactory;
     try
@@ -94,11 +116,14 @@ extern "C" sal_Bool SAL_CALL test_URIHelper_FindFirstURLInText(
     }
     catch (com::sun::star::uno::Exception &)
     {
-        pTestResult->pFuncs->state_(pTestResult, false,
-                                    "test_URIHelper_FindFirstURLInText",
-                                    "create XMultiServiceFactory", false);
-        return false;
+        CPPUNIT_ASSERT_MESSAGE("Can't get XMultiServiceFactory", false);
+        // pTestResult->pFuncs->state_(pTestResult, false,
+        //                             "test_URIHelper_FindFirstURLInText",
+        //                             "create XMultiServiceFactory", false);
+        return;
     }
+
+    printf("CharClass\n");
     CharClass aClass(xFactory,
                      com::sun::star::lang::Locale(
                          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
@@ -189,8 +214,10 @@ extern "C" sal_Bool SAL_CALL test_URIHelper_FindFirstURLInText(
            { "vnd.sun.star.script:", 0, 0, 0 },
            { "vnd.sun.star.webdav:", 0, 0, 0 },
            { "vnd.sun.star.wfs:", 0, 0, 0 },
+           { "generic:path", 0, 0, 0 },
            { "wfs:", 0, 0, 0 } };
 
+    printf("start tests.\n");
     bool bReturn = true;
     for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
     {
@@ -225,10 +252,36 @@ extern "C" sal_Bool SAL_CALL test_URIHelper_FindFirstURLInText(
             aBuffer.append(static_cast< sal_Int32 >(nEnd));
             aBuffer.append(')');
         }
-        pTestResult->pFuncs->state_(
-            pTestResult, bSuccess, "test_URIHelper_FindFirstURLInText",
-            aBuffer.getStr(), false);
-        bReturn = bReturn && bSuccess;
+        // pTestResult->pFuncs->state_(
+        //     pTestResult, bSuccess, "test_URIHelper_FindFirstURLInText",
+        //     aBuffer.getStr(), false);
+
+        printf("str: %s\n", aBuffer.getStr());
+
+        rtl::OString sError = aBuffer.getStr();
+        CPPUNIT_ASSERT_MESSAGE(sError.getStr(), bSuccess);
+        // bReturn = bReturn && bSuccess;
     }
-    return bReturn;
+    // return bReturn;
 }
+
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
+    // because these macros are need by auto register mechanism.
+
+    CPPUNIT_TEST_SUITE(test);
+    CPPUNIT_TEST(FindFirstURLInText);
+    CPPUNIT_TEST_SUITE_END();
+}; // class
+
+} // namespace test_URIHelper
+
+// -----------------------------------------------------------------------------
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test_URIHelper::test, "test_URIHelper");
+
+// -----------------------------------------------------------------------------
+
+// this macro creates an empty function, which will called by the RegisterAllFunctions()
+// to let the user the possibility to also register some functions by hand.
+NOADDITIONAL;
+
