@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-21 18:33:57 $
+ *  last change: $Author: dvo $ $Date: 2002-03-22 17:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,10 +245,11 @@ void SwAccessiblePortionData::Special(
             {
                 // We have a real Post-It portion, so we can now
                 // construct the replacement text
+                OUString sPostItText = OUString(
+                    static_cast<const SwPostItField*>(pField)->GetTxt() );
                 sDisplay = SwAccessibleContext::GetResource(
-                    STR_ACCESS_REPLACEMENT_POSTIT,
-                    & OUString(
-                        static_cast<const SwPostItField*>(pField)->GetTxt()) );
+                    STR_ACCESS_REPLACEMENT_POSTIT, &sPostItText );
+
             }
             else
                 sDisplay = rText;   // for non-Post-It
@@ -271,9 +272,9 @@ void SwAccessiblePortionData::Special(
             SwNoTxtNode* pNoTxtNode = aIndex.GetNode().GetNoTxtNode();
             DBG_ASSERT( pNoTxtNode != NULL, "FlyCnt without graphics?" );
 
+            OUString sDescription = OUString( pNoTxtNode->GetAlternateText() );
             sDisplay = SwAccessibleContext::GetResource(
-                STR_ACCESS_REPLACEMENT_FRAME,
-                & OUString( pNoTxtNode->GetAlternateText() ) );
+                STR_ACCESS_REPLACEMENT_FRAME, &sDescription );
         }
         break;
         default:
