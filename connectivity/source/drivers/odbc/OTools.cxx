@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 12:35:03 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,7 +596,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                 return ::rtl::OUString();
             // Bei Fehler bricht der GETDATA-Makro mit return ab,
             // bei NULL mit break!
-            SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : nMaxLen;
+            SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : (nMaxLen-1);
             waCharArray[nLen] = 0;
             aData = ::rtl::OUString(waCharArray);
 
@@ -623,6 +623,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                                                 (SQLINTEGER)nLen+1,
                                                 &pcbValue),
                                     _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
+                nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : (nMaxLen-1);
                 waCharArray[nLen] = 0;
 
                 aData += ::rtl::OUString(waCharArray);
@@ -648,7 +649,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             if(_bWasNull)
                 return ::rtl::OUString();
 
-            SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : nMaxLen;
+            SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : (nMaxLen-1);
             aCharArray[nLen] = 0;
             aData = ::rtl::OUString((const sal_Char*)aCharArray,nLen, _nTextEncoding);
 
@@ -675,6 +676,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                                                 (SQLINTEGER)nLen +1,
                                                 &pcbValue),
                                     _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
+                nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : (nMaxLen-1);
                 aCharArray[nLen] = 0;
 
                 aData += ::rtl::OUString((const sal_Char*)aCharArray,nLen,_nTextEncoding);
