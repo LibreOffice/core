@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:04:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
