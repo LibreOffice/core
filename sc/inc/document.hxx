@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-26 16:42:31 $
+ *  last change: $Author: nn $ $Date: 2001-11-14 15:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,6 +1023,7 @@ public:
     const SfxItemSet*   GetCondResult( USHORT nCol, USHORT nRow, USHORT nTab ) const;
     const SfxPoolItem*  GetEffItem( USHORT nCol, USHORT nRow, USHORT nTab, USHORT nWhich ) const;
 
+    BOOL            HasStringWeakCharacters( const String& rString );
     BYTE            GetStringScriptType( const String& rString );
     BYTE            GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat );
     BYTE            GetScriptType( USHORT nCol, USHORT nRow, USHORT nTab, ScBaseCell* pCell = NULL );

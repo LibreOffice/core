@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen6.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-26 18:56:21 $
+ *  last change: $Author: nn $ $Date: 2001-11-14 15:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,43 @@ using namespace com::sun::star;
 //
 
 // -----------------------------------------------------------------------
+
+BOOL ScDocument::HasStringWeakCharacters( const String& rString )
+{
+    if ( !pScriptTypeData )
+    {
+        pScriptTypeData = new ScScriptTypeData;
+        uno::Reference<uno::XInterface> xInterface = xServiceManager->createInstance(
+                            rtl::OUString::createFromAscii( SC_BREAKITER_SERVICE ) );
+        pScriptTypeData->xBreakIter = uno::Reference<i18n::XBreakIterator>( xInterface, uno::UNO_QUERY );
+        DBG_ASSERT( pScriptTypeData->xBreakIter.is(), "can't get BreakIterator" );
+    }
+
+    BYTE nRet = 0;
+    if (rString.Len())
+    {
+        uno::Reference<i18n::XBreakIterator> xBreakIter = pScriptTypeData->xBreakIter;
+        if ( xBreakIter.is() )
+        {
+            rtl::OUString aText = rString;
+            sal_Int32 nLen = aText.getLength();
+
+            sal_Int32 nPos = 0;
+            do
+            {
+                sal_Int16 nType = xBreakIter->getScriptType( aText, nPos );
+                if ( nType == i18n::ScriptType::WEAK )
+                    return TRUE;                            // found
+
+                nPos = xBreakIter->endOfScript( aText, nPos, nType );
+            }
+            while ( nPos >= 0 && nPos < nLen );
+        }
+    }
+
+    return FALSE;       // none found
+}
+
 
 BYTE ScDocument::GetStringScriptType( const String& rString )
 {
