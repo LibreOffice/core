@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-28 16:33:35 $
+ *  last change: $Author: pl $ $Date: 2001-05-30 18:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,15 +155,14 @@
 #define _GetXDisplay()      maFrameData.GetXDisplay()
 #define _GetColormap()      maFrameData.GetColormap()
 #define _GetPaintRegion()   maFrameData.GetPaintRegion()
-#define _GetStyle()         maFrameData.nStyle_
 #define _IsMapped()         maFrameData.bMapped_
+
+static XLIB_Window hPresentationWindow = None;
 
 // -=-= C++ statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static long sal_CallbackDummy( void*, SalFrame*, USHORT, const void* )
 { return 0; }
-
-XLIB_Window SalFrameData::s_aFullScreenWindow = None;
 
 // -=-= SalInstance =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -210,6 +209,12 @@ void SalGraphicsData::Init( SalFrame *pFrame )
 
 // -=-= SalFrame / SalFrameData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+bool SalFrameData::IsOverrideRedirect() const
+{ return  ! ( nStyle_ & ~SAL_FRAME_STYLE_DEFAULT ); }
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
 {
     nStyle_     = nSalFrameStyle;
@@ -386,8 +391,10 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
 #ifdef DEBUG
         fprintf( stderr, "nStyle = 0x%x\n", nStyle_ );
 #endif
-           if( ! (nStyle_ & ~SAL_FRAME_STYLE_DEFAULT )
-            || s_aFullScreenWindow != None )
+        // look if any frame is in full screen mode
+        // in this case make the frame override redirect so it can show
+        // above the full screen frame
+           if( IsOverrideRedirect() || hPresentationWindow != None )
            {
                XtSetArg( aArgs[nArgs], XtNoverrideRedirect, True ); nArgs++;
            }
@@ -462,9 +469,7 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
         // find the last document window (if any)
         SalFrame* pFrame = pNextFrame_;
         while( pFrame &&
-               ( pFrame->maFrameData.mpParent ||
-                 ! ( pFrame->maFrameData.nStyle_ & ~SAL_FRAME_STYLE_DEFAULT )
-                 )
+               ( pFrame->maFrameData.mpParent || pFrame->maFrameData.IsOverrideRedirect() )
                )
             pFrame = pFrame->maFrameData.pNextFrame_;
         if( mpParent || ! pFrame || ! ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
@@ -538,8 +543,6 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
     hComposite_                 = NULL;
     hForeignParent_             = None;
     hForeignTopLevelWindow_     = None;
-    hNoFullscreenShell_         = NULL;
-    hNoFullscreenComposite_     = NULL;
 
     pGraphics_                  = NULL;
     pFreeGraphics_              = NULL;
@@ -795,7 +798,7 @@ void SalFrame::Show( BOOL bVisible )
             maFrameData.Call( SALEVENT_RESIZE, NULL );
         }
 
-         if( !_GetStyle() || maFrameData.hNoFullscreenShell_ )
+         if( ! maFrameData.nStyle_  )
          {
              XSync( _GetXDisplay(), False );
              XSetInputFocus( _GetXDisplay(), maFrameData.GetShellWindow(), RevertToNone, CurrentTime );
@@ -813,7 +816,7 @@ void SalFrame::Show( BOOL bVisible )
 
         #ifdef __notdef__
 
-        if( !_GetStyle() || maFrameData.hNoFullscreenShell_ )
+        if( !maFrameData.nStyle_  )
         {
             SalFrameData *pTemp = &GetSalData()->pFirstFrame_->maFrameData;
             while( pTemp )
@@ -859,19 +862,6 @@ void SalFrame::Show( BOOL bVisible )
 void SalFrame::ToTop( USHORT nFlags )
 {
     int i;
-    // if one of our children is in fullscreen mode, ignore the to top
-    // and raise it instead. This will not work for grandchildren
-    // #58714#
-    for( i = 0; i < maFrameData.maChildren.Count(); i++ )
-    {
-        Widget pChild = maFrameData.maChildren.GetObject( i )->
-            maFrameData.hNoFullscreenShell_;
-        if( pChild )
-        {
-            XRaiseWindow( _GetXDisplay(), XtWindow( pChild ) );
-            return;
-        }
-    }
 
     if( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
         XtMapWidget( maFrameData.hShell_ );
@@ -885,7 +875,7 @@ void SalFrame::ToTop( USHORT nFlags )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::GetClientSize( long &rWidth, long &rHeight )
 {
-    if( ! maFrameData.bViewable_ && ! maFrameData.hNoFullscreenShell_ )
+    if( ! maFrameData.bViewable_  )
     {
         rWidth = rHeight = 0;
         return;
@@ -1199,8 +1189,6 @@ void SalFrameData::Minimize()
         return;
     }
 
-    if( hNoFullscreenShell_ )
-        XtUnmapWidget( hNoFullscreenShell_ );
     if( XIconifyWindow( GetXDisplay(),
                         XtWindow( hShell_ ),
                         pDisplay_->GetScreenNumber() ) )
@@ -1218,8 +1206,6 @@ void SalFrameData::Maximize()
 
     if( SHOWSTATE_MINIMIZED == nShowState_ )
     {
-        if( hNoFullscreenShell_ )
-            XtMapWidget( hNoFullscreenShell_ );
         XtMapWidget( hShell_ );
         nShowState_ = SHOWSTATE_NORMAL;
     }
@@ -1328,8 +1314,6 @@ void SalFrameData::Restore()
 
     if( SHOWSTATE_MINIMIZED == nShowState_ )
     {
-        if( hNoFullscreenShell_ )
-            XtMapWidget( hNoFullscreenShell_ );
         XtMapWidget( hShell_ );
         nShowState_ = SHOWSTATE_NORMAL;
     }
@@ -1371,9 +1355,6 @@ void SalFrameData::ShowFullScreen( BOOL bFullScreen )
         nWidth_   = aPosSize_.GetWidth();
         nHeight_  = aPosSize_.GetHeight();
 
-        DBG_ASSERT( ! s_aFullScreenWindow, "two fullscreen shells" );
-        s_aFullScreenWindow = XtWindow( hComposite_ );
-
         XRaiseWindow( GetXDisplay(), GetShellWindow() );
         if( GetStackingWindow() )
              XRaiseWindow( GetXDisplay(), GetStackingWindow() );
@@ -1382,12 +1363,11 @@ void SalFrameData::ShowFullScreen( BOOL bFullScreen )
     }
     else
     {
-        s_aFullScreenWindow = None;
         delete pFreeGraphics_;
         pFreeGraphics_ = NULL;
 
         SetPosSize( aRestoreFullScreen_ );
-        // SetPosSize macht Call( SALEVENT_RESIZE );
+        // SetPosSize does Call( SALEVENT_RESIZE );
         aRestoreFullScreen_ = Rectangle();
         nWidth_             = aPosSize_.GetWidth();
         nHeight_            = aPosSize_.GetHeight();
@@ -1474,6 +1454,7 @@ void SalFrame::StartPresentation( BOOL bStart )
     else
         MessageToXAutoLock( _GetXDisplay(), XAUTOLOCK_ENABLE );
 
+    hPresentationWindow = bStart ? maFrameData.GetWindow() : None;
     if( bStart || maFrameData.nScreenSaversTimeout_ )
     {
         int timeout, interval, prefer_blanking, allow_exposures;
@@ -2213,40 +2194,6 @@ long SalFrameData::HandleFocusEvent( XFocusChangeEvent *pEvent )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class SalPeekExpose
-{
-            XEvent          aEvent_;
-            XEvent         *pEvent_;
-            USHORT          nEvent_;
-
-public:
-    inline  Bool            Callback()
-                            {
-                                if( aEvent_.type != pEvent_->type
-                                    || aEvent_.xany.window != pEvent_->xany.window )
-                                    return !--nEvent_;
-                                pEvent_->xexpose.count++;
-                                return True;
-                            }
-    inline                  SalPeekExpose( XEvent *p );
-};
-
-extern "C" Bool
-sal_PeekExpose( Display*, XEvent*, char *p )
-{
-    return ((SalPeekExpose*)p)->Callback();
-}
-
-inline SalPeekExpose::SalPeekExpose( XEvent *p ) : pEvent_( p )
-{
-#ifdef DBG_UTIL
-    memset( &aEvent_, 0, sizeof( aEvent_ ) );
-#endif
-    nEvent_ = QLength( p->xany.display );
-    XPeekIfEvent( p->xany.display, &aEvent_, sal_PeekExpose, (char*)this );
-}
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long SalFrameData::HandleExposeEvent( XEvent *pEvent )
 {
     XRectangle  aRect;
@@ -2269,10 +2216,10 @@ long SalFrameData::HandleExposeEvent( XEvent *pEvent )
         nCount          = pEvent->xgraphicsexpose.count;
     }
 
-    if( hNoFullscreenShell_ != None )
+    if( ! aRestoreFullScreen_.IsEmpty() )
         // we are in fullscreen mode -> override redirect
-        // focus is probably lost, so reget it
-        XSetInputFocus( GetXDisplay(), XtWindow( hShell_ ), RevertToNone, CurrentTime );
+         // focus is probably lost, so reget it
+         XSetInputFocus( GetXDisplay(), XtWindow( hShell_ ), RevertToNone, CurrentTime );
 
     maPaintRegion.Union( Rectangle( Point(aRect.x, aRect.y), Size(aRect.width, aRect.height) ) );
 
@@ -2734,11 +2681,11 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 // #74406# if we loose the focus in presentation mode
                 // there are good chances that we never get it back
                 // since the WM ignores us
-                if( hNoFullscreenShell_ != None )
-                {
-                    XSetInputFocus( GetXDisplay(), GetShellWindow(),
-                            RevertToNone, CurrentTime );
-                }
+                 if( !aRestoreFullScreen_.IsEmpty() )
+                 {
+                     XSetInputFocus( GetXDisplay(), GetShellWindow(),
+                             RevertToNone, CurrentTime );
+                 }
 
             case ButtonRelease:
             case MotionNotify:
