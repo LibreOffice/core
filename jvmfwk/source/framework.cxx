@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-10 14:34:20 $
+ *  last change: $Author: jl $ $Date: 2004-05-12 10:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,10 +651,10 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
 sal_Bool SAL_CALL jfw_areEqualJavaInfo(
     JavaInfo const * pInfoA,JavaInfo const * pInfoB)
 {
-    OSL_ASSERT(pInfoA != NULL && pInfoB != NULL);
     if (pInfoA == pInfoB)
         return sal_True;
-
+    if (pInfoA == NULL || pInfoB == NULL)
+        return sal_False;
     rtl::OUString sVendor(pInfoA->sVendor);
     rtl::OUString sLocation(pInfoA->sLocation);
     rtl::OUString sVersion(pInfoA->sVersion);
@@ -814,13 +814,22 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
 {
     osl::MutexGuard guard(jfw::getFwkMutex());
     javaFrameworkError errcode = JFW_E_NONE;
-    jfw::CNodeJava node;
-    node.setJavaInfo(pInfo);
-    errcode = node.writeSettings();
+    //check if pInfo is the selected JRE
+    JavaInfo *currentInfo = NULL;
+    errcode = jfw_getSelectedJRE( & currentInfo);
     if (errcode != JFW_E_NONE)
         return errcode;
-    //remember that the JRE was selected in this process
-    jfw::setJavaSelected();
+
+    if (jfw_areEqualJavaInfo(currentInfo, pInfo) == sal_False)
+    {
+        jfw::CNodeJava node;
+        node.setJavaInfo(pInfo);
+        errcode = node.writeSettings();
+        if (errcode != JFW_E_NONE)
+            return errcode;
+        //remember that the JRE was selected in this process
+        jfw::setJavaSelected();
+    }
     return errcode;
 }
 javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
