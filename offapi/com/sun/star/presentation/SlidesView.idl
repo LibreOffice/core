@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlidesView.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:50 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@
     In a slides view, the pages of a presentation document are displayed
     to the user as thumbnails and can be arranged and cut/copied to/from
     the clipboard.
+
+    @since #107627#
  */
 service SlidesView
 {
