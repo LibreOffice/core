@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:08:21 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,11 +322,19 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 rSet.Put(SfxBoolItem(nWhich, GetViewData()->IsHeaderMode()));
                 break;
 
+            case FID_NORMALVIEWMODE:
             case FID_PAGEBREAKMODE:
+                // always handle both slots - they exclude each other
                 if ( bOle )
-                    rSet.DisableItem( nWhich );
+                {
+                    rSet.DisableItem( FID_NORMALVIEWMODE );
+                    rSet.DisableItem( FID_PAGEBREAKMODE );
+                }
                 else
-                    rSet.Put(SfxBoolItem(nWhich, GetViewData()->IsPagebreakMode()));
+                {
+                    rSet.Put(SfxBoolItem(FID_NORMALVIEWMODE, !GetViewData()->IsPagebreakMode()));
+                    rSet.Put(SfxBoolItem(FID_PAGEBREAKMODE, GetViewData()->IsPagebreakMode()));
+                }
                 break;
 
             case FID_FUNCTION_BOX:
