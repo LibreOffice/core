@@ -4,7 +4,7 @@ sh    shell\source\win32\simplemail                nmake   -   w   sh_win32_simp
 sh    shell\source\unix\exec                       nmake   -   u   sh_unix NULL
 sh    shell\source\unix\misc                       nmake   -   u   sh_unix_misc NULL
 sh    shell\source\proxysettings                   nmake   -   all sh_proxysettings NULL
-sh    shell\source\cmdmail                         nmake   -   all sh_cmdmail NULL
+sh    shell\source\cmdmail                         nmake   -   u   sh_cmdmail NULL
 sh    shell\source\all                             nmake   -   all sh_all NULL
 sh    shell\source\unix\sysshell                   nmake   -   u   sh_unix_sysshell sh_all NULL
 sh    shell\source\win32\sysshell                  nmake   -   w   sh_win32_sysshell NULL
