@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-18 14:02:33 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,13 @@ public:
     void SetPoolHelpId( USHORT nId )    { nPoolHelpId = nId; }
     BYTE GetPoolHlpFileId() const       { return nPoolHlpFileId; }
     void SetPoolHlpFileId( BYTE nId )   { nPoolHlpFileId = nId; }
+
+    /**
+        #109308# Sets adjustment in all formats of the numbering rule.
+
+        @param eNum adjustment to be set
+    */
+    void SetNumAdjust(SvxAdjust eNum);
 
     void        SetSvxRule(const SvxNumRule&, SwDoc* pDoc);
     SvxNumRule  MakeSvxNumRule() const;
