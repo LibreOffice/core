@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-12 14:15:51 $
+ *  last change: $Author: oj $ $Date: 2002-09-23 09:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,8 @@ namespace svxform
         // (the revocation may unload the DBT lib)
         m_xDataAccessFactory = NULL;
         // revoke the client
-        revokeClient();
+        if ( m_bCreateAlready )
+            revokeClient();
     }
 
     //--------------------------------------------------------------------
@@ -180,6 +181,8 @@ namespace svxform
                 osl_unloadModule(s_hDbtoolsModule);
             s_hDbtoolsModule = NULL;
         }
+
+        OSL_ENSURE(s_nClients >= 0,"Illegall call of revokeClient()");
     }
 
     //====================================================================
@@ -286,6 +289,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2002/09/12 14:15:51  fs
+ *  #97420# (on behalf of BerryJia@openoffice.org) lazy construction, to load the dbtools lib only if needed
+ *
  *  Revision 1.3  2001/08/01 12:46:41  oj
  *  #90462# use of MODULE_NAME corrected
  *
