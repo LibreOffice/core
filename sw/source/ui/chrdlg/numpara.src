@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:28:02 $
+ *  last change: $Author: rt $ $Date: 2000-12-04 11:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ TabPage TP_NUMPARA
         Text[ chinese_traditional ] = "¶}©l±q(~S)¡G";
         Text[ arabic ] = "ÇáÈÏÁ ÈÜ:";
         Text[ greek ] = "¸íáñîç ì~å:";
-        Text[ korean ] = "¿Í ÇÔ²² ½ÃÀÛ:(~S)";
+        Text[ korean ] = "¿Í ÇÔ²² ½ÃÀÛ:";
         Text[ turkish ] = "~Baþlangýç deðeri:";
         Text[ language_user1 ] = " ";
     };
