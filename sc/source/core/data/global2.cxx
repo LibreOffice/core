@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-26 18:58:10 $
+ *  last change: $Author: nn $ $Date: 2000-11-20 10:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/useroptions.hxx>
 #include <tools/intn.hxx>
@@ -498,13 +498,13 @@ void ScQueryEntry::Store( SvStream& rStream ) const
     rStream.WriteByteString( *pStr, rStream.GetStreamCharSet() );
 }
 
-SearchText* ScQueryEntry::GetSearchTextPtr( BOOL bCaseSens )
+utl::TextSearch* ScQueryEntry::GetSearchTextPtr( BOOL bCaseSens )
 {
     if ( !pSearchParam )
     {
-        pSearchParam = new SearchParam( *pStr, SearchParam::SRCH_REGEXP,
+        pSearchParam = new utl::SearchParam( *pStr, utl::SearchParam::SRCH_REGEXP,
             bCaseSens, FALSE, FALSE );
-        pSearchText = new SearchText( *pSearchParam, *ScGlobal::pScInternational );
+        pSearchText = new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass );
     }
     return pSearchText;
 }

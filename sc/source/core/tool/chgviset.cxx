@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgviset.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2000-11-20 10:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 
 #pragma hdrstop
 
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 
 #include "chgviset.hxx"
 #include "rechead.hxx"
@@ -143,10 +143,10 @@ void ScChangeViewSettings::SetTheComment(const String& rString)
 
     if(rString.Len()>0)
     {
-        SearchParam aSearchParam( rString,
-            SearchParam::SRCH_REGEXP,FALSE,FALSE,FALSE );
+        utl::SearchParam aSearchParam( rString,
+            utl::SearchParam::SRCH_REGEXP,FALSE,FALSE,FALSE );
 
-        pCommentSearcher=new SearchText( aSearchParam, *ScGlobal::pScInternational );
+        pCommentSearcher = new utl::TextSearch( aSearchParam, *ScGlobal::pCharClass );
     }
 }
 

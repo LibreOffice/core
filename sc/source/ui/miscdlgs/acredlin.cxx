@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 16:35:36 $
+ *  last change: $Author: nn $ $Date: 2000-11-20 10:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #pragma hdrstop
 
 #include <svtools/undo.hxx>
+#include <unotools/textsearch.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
 
@@ -2126,8 +2127,8 @@ void ScAcceptChgDlg::InitFilter()
 
         pTheView->SetFilterComment(pTPFilter->IsComment());
 
-        SearchParam aSearchParam( pTPFilter->GetComment(),
-                SearchParam::SRCH_REGEXP,FALSE,FALSE,FALSE );
+        utl::SearchParam aSearchParam( pTPFilter->GetComment(),
+                utl::SearchParam::SRCH_REGEXP,FALSE,FALSE,FALSE );
 
         pTheView->SetCommentParams(&aSearchParam);
 

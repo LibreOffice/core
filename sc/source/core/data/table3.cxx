@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 15:48:30 $
+ *  last change: $Author: nn $ $Date: 2000-11-20 10:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <tools/solmath.hxx>
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 #include <svtools/zforlist.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
@@ -933,8 +933,9 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam, BOOL* pSpecial
                 xub_StrLen nEnd   = aCellStr.Len();
                 bOk = (BOOL) rEntry.GetSearchTextPtr( rParam.bCaseSens )
                     ->SearchFrwrd( aCellStr, &nStart, &nEnd );
+                // from 614 on, nEnd is behind the found text
                 if ( bOk && bMatchWholeCell
-                        && (nStart != 0 || nEnd != aCellStr.Len()-1) )
+                        && (nStart != 0 || nEnd != aCellStr.Len()) )
                     bOk = FALSE;    // RegExp muss ganze Zelle matchen
                 if ( rEntry.eOp == SC_NOT_EQUAL )
                     bOk = !bOk;

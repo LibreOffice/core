@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-26 18:55:06 $
+ *  last change: $Author: nn $ $Date: 2000-11-20 10:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1376,8 +1376,11 @@ struct ScSortParam
 #define SC_EMPTYFIELDS      ((double)0x0042)
 #define SC_NONEMPTYFIELDS   ((double)0x0043)
 
-class SearchParam;
-class SearchText;
+namespace utl
+{
+    class SearchParam;
+    class TextSearch;
+}
 
 struct ScQueryEntry
 {
@@ -1388,15 +1391,15 @@ struct ScQueryEntry
     ScQueryConnect  eConnect;
     String*         pStr;
     double          nVal;
-    SearchParam*    pSearchParam;       // falls RegExp, nicht gespeichert
-    SearchText*     pSearchText;        // falls RegExp, nicht gespeichert
+    utl::SearchParam*   pSearchParam;       // falls RegExp, nicht gespeichert
+    utl::TextSearch*    pSearchText;        // falls RegExp, nicht gespeichert
 
     ScQueryEntry();
     ScQueryEntry(const ScQueryEntry& r);
     ~ScQueryEntry();
 
     // legt ggbf. pSearchParam und pSearchText an, immer RegExp!
-    SearchText*     GetSearchTextPtr( BOOL bCaseSens );
+    utl::TextSearch*    GetSearchTextPtr( BOOL bCaseSens );
 
     void            Clear();
     ScQueryEntry&   operator=( const ScQueryEntry& r );

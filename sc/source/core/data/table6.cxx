@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table6.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-10 10:05:10 $
+ *  last change: $Author: nn $ $Date: 2000-11-20 10:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 
 #include "table.hxx"
 #include "collect.hxx"
@@ -173,9 +173,16 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, USHORT nCol, USHORT n
             {
                 xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
                 bFound = (BOOL)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd));
+                // change results to definition before 614:
+                nTemp=nStart; nStart=nEnd; nEnd=nTemp;
+                ++nStart;
             }
             else
+            {
                 bFound = (BOOL)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd));
+                // change results to definition before 614:
+                --nEnd;
+            }
 
             if (bFound && rSearchItem.GetWordOnly())
                 bFound = (nStart == 0 && nEnd == aString.Len() - 1);
@@ -251,9 +258,16 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, USHORT nCol, USHORT n
                     {
                         xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
                         bRepeat = ((BOOL)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd)));
+                        // change results to definition before 614:
+                        nTemp=nStart; nStart=nEnd; nEnd=nTemp;
+                        ++nStart;
                     }
                     else
+                    {
                         bRepeat = ((BOOL)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd)));
+                        // change results to definition before 614:
+                        --nEnd;
+                    }
                 }
             }
             while (bRepeat);
@@ -697,18 +711,18 @@ BOOL ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
         else
         {
             if ( rSearchItem.GetRegExp() )
-                pSearchParam = new SearchParam(rSearchItem.GetSearchString(), SearchParam::SRCH_REGEXP, rSearchItem.GetExact(), FALSE, FALSE);
+                pSearchParam = new utl::SearchParam(rSearchItem.GetSearchString(), utl::SearchParam::SRCH_REGEXP, rSearchItem.GetExact(), FALSE, FALSE);
             else if ( rSearchItem.IsLevenshtein() )
             {
-                pSearchParam = new SearchParam(rSearchItem.GetSearchString(), SearchParam::SRCH_LEVDIST, rSearchItem.GetExact(), FALSE, FALSE);
+                pSearchParam = new utl::SearchParam(rSearchItem.GetSearchString(), utl::SearchParam::SRCH_LEVDIST, rSearchItem.GetExact(), FALSE, FALSE);
                 pSearchParam->SetSrchRelaxed(   rSearchItem.IsLEVRelaxed() );
                 pSearchParam->SetLEVOther(      rSearchItem.GetLEVOther() );
                 pSearchParam->SetLEVShorter(    rSearchItem.GetLEVShorter() );
                 pSearchParam->SetLEVLonger(     rSearchItem.GetLEVLonger() );
             }
             else
-                pSearchParam = new SearchParam(rSearchItem.GetSearchString(), SearchParam::SRCH_NORMAL, rSearchItem.GetExact(), FALSE, FALSE);
-            pSearchText = new SearchText( *pSearchParam, *ScGlobal::pScInternational );
+                pSearchParam = new utl::SearchParam(rSearchItem.GetSearchString(), utl::SearchParam::SRCH_NORMAL, rSearchItem.GetExact(), FALSE, FALSE);
+            pSearchText = new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass );
             if (nCommand == SVX_SEARCHCMD_FIND)
                 bFound = Search(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
             else if (nCommand == SVX_SEARCHCMD_FIND_ALL)

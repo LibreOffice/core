@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgviset.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: nn $ $Date: 2000-11-20 10:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,13 +77,15 @@ enum ScChgsDateMode{    SCDM_DATE_BEFORE=0,SCDM_DATE_SINCE=1,SCDM_DATE_EQUAL=2,
                         SCDM_DATE_NOTEQUAL=3,SCDM_DATE_BETWEEN=4, SCDM_DATE_SAVE=5,
                         SCDM_NO_DATEMODE=6};
 
-class SearchText;
+namespace utl {
+    class TextSearch;
+}
 
 class ScChangeViewSettings
 {
 private:
 
-    SearchText*         pCommentSearcher;
+    utl::TextSearch*    pCommentSearcher;
     DateTime            aFirstDateTime;
     DateTime            aLastDateTime;
     String              aAuthorToShow;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2000-11-20 10:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 
 #include "scitems.hxx"
 #include <svx/langitem.hxx>
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 #include <svtools/zforlist.hxx>
 #include <tools/intn.hxx>
 #include <tools/solar.h>
@@ -4997,8 +4997,8 @@ void ScInterpreter::ScSearch()
             SetNoValue();
         else
         {
-            SearchParam sPar(SearchStr, SearchParam::SRCH_REGEXP, FALSE, FALSE, FALSE);
-            SearchText sT( sPar, *ScGlobal::pScInternational );
+            utl::SearchParam sPar(SearchStr, utl::SearchParam::SRCH_REGEXP, FALSE, FALSE, FALSE);
+            utl::TextSearch sT( sPar, *ScGlobal::pCharClass );
             int nBool = sT.SearchFrwrd(sStr, &nPos, &nEndPos);
             if (!nBool)
                 SetNoValue();
