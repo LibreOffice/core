@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:08:36 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,23 +110,25 @@
 #define STR_FRMDLG_BEGIN        (MN_FOOTNOTE + 1)
 
 #define STR_TOPPRT              (STR_FRMDLG_BEGIN + 1)
-#define STR_FROMBOTTOM          (STR_FRMDLG_BEGIN + 2)
-#define STR_FROMTOP             (STR_FRMDLG_BEGIN + 3)
-#define STR_BELOW               (STR_FRMDLG_BEGIN + 4)
-
+//#define STR_FROMBOTTOM          (STR_FRMDLG_BEGIN + 2)
+//#define STR_FROMTOP             (STR_FRMDLG_BEGIN + 3)
+//#define STR_BELOW                 (STR_FRMDLG_BEGIN + 4)
+/*
 #define STR_LEFT                (STR_FRMDLG_BEGIN + 5)
 #define STR_RIGHT               (STR_FRMDLG_BEGIN + 6)
 #define STR_FROMLEFT            (STR_FRMDLG_BEGIN + 7)
 #define STR_MIR_LEFT            (STR_FRMDLG_BEGIN + 8)
 #define STR_MIR_RIGHT           (STR_FRMDLG_BEGIN + 9)
 #define STR_MIR_FROMLEFT        (STR_FRMDLG_BEGIN + 10)
+*/
 
 #define STR_BORDER              (STR_FRMDLG_BEGIN + 16)
 #define STR_COLUMN              (STR_FRMDLG_BEGIN + 17)
 #define STR_PARA                (STR_FRMDLG_BEGIN + 18)
 #define STR_CHAR                (STR_FRMDLG_BEGIN + 19)
 
-#define STR_FRAME               (STR_FRMDLG_BEGIN + 20)
+/*
+#define STR_FRAME              (STR_FRMDLG_BEGIN + 20)
 #define STR_PRTAREA             (STR_FRMDLG_BEGIN + 21)
 #define STR_REL_PG_LEFT         (STR_FRMDLG_BEGIN + 22)
 #define STR_REL_PG_RIGHT        (STR_FRMDLG_BEGIN + 23)
@@ -150,7 +152,7 @@
 #define STR_FLY_MIR_REL_PG_LEFT     (STR_FRMDLG_BEGIN + 41)
 #define STR_FLY_MIR_REL_PG_RIGHT    (STR_FRMDLG_BEGIN + 42)
 #define STR_FLY_MIR_REL_PG_FRAME    (STR_FRMDLG_BEGIN + 43)
-#define STR_FLY_MIR_REL_PG_PRTAREA  (STR_FRMDLG_BEGIN + 44)
+#define STR_FLY_MIR_REL_PG_PRTAREA  (STR_FRMDLG_BEGIN + 44)*/
 
 #define STR_OLE_INSERT          (STR_FRMDLG_BEGIN + 45)
 #define STR_OLE_EDIT            (STR_FRMDLG_BEGIN + 46)
@@ -165,14 +167,6 @@
 #define STR_CHAR_TOP            (STR_FRMDLG_BEGIN + 53)
 #define STR_CHAR_BOTTOM         (STR_FRMDLG_BEGIN + 54)
 #define STR_CHAR_CENTER         (STR_FRMDLG_BEGIN + 55)
-
-#define STR_REL_PG_TOP         (STR_FRMDLG_BEGIN + 56)
-#define STR_REL_PG_BOTTOM      (STR_FRMDLG_BEGIN + 57)
-#define STR_REL_FRM_TOP        (STR_FRMDLG_BEGIN + 58)
-#define STR_REL_FRM_BOTTOM     (STR_FRMDLG_BEGIN + 59)
-#define STR_FROMRIGHT          (STR_FRMDLG_BEGIN + 60)
-// OD 11.11.2003 #i22341#
-#define STR_REL_LINE           (STR_FRMDLG_BEGIN + 61)
 
 #define FRMDLG_ACT_END          STR_REL_LINE
 
