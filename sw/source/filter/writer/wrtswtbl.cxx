@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtswtbl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:00:44 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,8 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
                                         USHORT nParentLineWidth,
                                         const SwTableLines& rLines,
                                         const SvxBrushItem* pParentBrush,
-                                        USHORT nDepth )
+                                        USHORT nDepth,
+                                        sal_uInt16 nNumOfHeaderRows )
 {
     USHORT nLines = rLines.Count();
     BOOL bSubExpanded = FALSE;
@@ -622,7 +623,8 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
 
         SwWriteTableRow *pRow = aRows[nOldRow];
         SwWriteTableRow *pEndRow = aRows[nRow];
-        if( nLine==0 && nParentLineHeight==0 )
+//      if( nLine==0 && nParentLineHeight==0 )
+        if( nLine+1==nNumOfHeaderRows && nParentLineHeight==0 )
             nHeadEndRow = nRow;
 
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
@@ -754,7 +756,8 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
                 FillTableRowsCols( nOldRPos, nOldRow, nOldCPos, nOldCol,
                                     nRPos-nOldRPos, nCPos-nOldCPos,
                                     pBox->GetTabLines(),
-                                    pLineBrush, nDepth-1 );
+                                    pLineBrush, nDepth-1,
+                                    nNumOfHeaderRows );
                 bSubExpanded = TRUE;
             }
 
@@ -766,7 +769,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
 }
 
 SwWriteTable::SwWriteTable(const SwTableLines& rLines, long nWidth,
-    USHORT nBWidth, BOOL bRel, USHORT nMaxDepth, USHORT nLSub, USHORT nRSub)
+    USHORT nBWidth, BOOL bRel, USHORT nMaxDepth, USHORT nLSub, USHORT nRSub, sal_uInt32 nNumOfRowsToRepeat)
     : nBorderColor((UINT32)-1), nCellSpacing(0), nCellPadding(0), nBorder(0),
     nInnerBorder(0), nBaseWidth(nBWidth), nHeadEndRow(USHRT_MAX),
      nLeftSub(nLSub), nRightSub(nRSub), nTabWidth(nWidth), bRelWidths(bRel),
@@ -786,7 +789,7 @@ SwWriteTable::SwWriteTable(const SwTableLines& rLines, long nWidth,
     CollectTableRowsCols( 0, 0, 0, nParentWidth, rLines, nMaxDepth - 1 );
 
     // Und jetzt mit leben fuellen
-    FillTableRowsCols( 0, 0, 0, 0, 0, nParentWidth, rLines, 0, nMaxDepth - 1 );
+    FillTableRowsCols( 0, 0, 0, 0, 0, nParentWidth, rLines, 0, nMaxDepth - 1, nNumOfRowsToRepeat );
 
     // Einige Twip-Werte an Pixel-Grenzen anpassen
     if( !nBorder )
