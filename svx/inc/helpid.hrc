@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:42:44 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,7 @@
 #define HID_SVX_CONFIG_EVENT                        (HID_SVX_EXT0_START + 133)
 #define HID_CONFIG_EVENT_OFFICE_BASED               (HID_SVX_EXT0_START + 134)
 #define HID_CONFIG_EVENT_DOCUMENT_BASED             (HID_SVX_EXT0_START + 135)
+
 #define HID_SELECTOR_CATEGORIES                     (HID_SVX_EXT0_START + 136)
 #define HID_SELECTOR_COMMANDS                       (HID_SVX_EXT0_START + 137)
 #define HID_SELECTOR_DIALOG                         (HID_SVX_EXT0_START + 138)
@@ -760,6 +761,9 @@
 #define HID_SVX_CHINESE_DICTIONARY_LB_TO_SIMPLIFIED                 (HID_SVX_EXT0_START + 156)
 #define HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL                (HID_SVX_EXT0_START + 157)
 
+#define HID_POPUP_FONTWORK_ALIGN                    (HID_SVX_EXT0_START + 158)
+#define HID_POPUP_FONTWORK_CHARSPACE                (HID_SVX_EXT0_START + 159)
+
 
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
@@ -774,7 +778,7 @@
 #endif
 
 // overrun check 2
-#define ACT_SVX_HID_END2        HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL
+#define ACT_SVX_HID_END2        HID_POPUP_FONTWORK_CHARSPACE
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
