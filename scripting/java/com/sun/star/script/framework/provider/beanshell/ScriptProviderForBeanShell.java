@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForBeanShell.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: svesik $ $Date: 2004-04-19 23:11:14 $
+*  last change: $Author: hr $ $Date: 2004-07-23 14:03:24 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -70,6 +70,7 @@ import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XInitialization;
+import com.sun.star.frame.XModel;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.Any;
@@ -79,6 +80,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.reflection.InvocationTargetException;
+
 import com.sun.star.script.CannotConvertException;
 
 import java.util.Properties;
@@ -97,6 +99,11 @@ import bsh.Interpreter;
 import drafts.com.sun.star.script.provider.XScriptContext;
 import drafts.com.sun.star.script.provider.XScriptProvider;
 import drafts.com.sun.star.script.provider.XScript;
+import drafts.com.sun.star.script.provider.ScriptErrorRaisedException;
+import drafts.com.sun.star.script.provider.ScriptExceptionRaisedException;
+import drafts.com.sun.star.script.provider.ScriptFrameworkErrorException;
+import drafts.com.sun.star.script.provider.ScriptFrameworkErrorType;
+
 
 import com.sun.star.script.framework.provider.*;
 import com.sun.star.script.framework.log.*;
@@ -115,18 +122,19 @@ public class ScriptProviderForBeanShell
 
         public XScript getScript( /*IN*/String scriptURI )
             throws com.sun.star.uno.RuntimeException,
-                   com.sun.star.lang.IllegalArgumentException
+                   ScriptFrameworkErrorException
         {
-            ScriptMetaData scriptData = getScriptData( scriptURI );
-            if ( scriptData == null )
+            ScriptMetaData scriptData = null;
+            try
             {
-                throw new com.sun.star.uno.RuntimeException(
-                    "Cannot find script for URI: " + scriptURI );
-            }
-            else
-            {
-                ScriptImpl script = new ScriptImpl( m_xContext, scriptData, m_xInvocationContext );
+                scriptData = getScriptData( scriptURI );
+                ScriptImpl script = new ScriptImpl( m_xContext, scriptData, m_xModel );
                 return script;
+            }
+            catch ( com.sun.star.uno.RuntimeException re )
+            {
+                throw new ScriptFrameworkErrorException( "Failed to create script object: " + re.getMessage(),
+                    null, scriptData.getLanguageName(), language, ScriptFrameworkErrorType.UNKNOWN );
             }
         }
 
@@ -206,6 +214,7 @@ public class ScriptProviderForBeanShell
         }
         return false;
     }
+
 }
 
 class ScriptImpl implements XScript
@@ -213,13 +222,13 @@ class ScriptImpl implements XScript
     private ScriptMetaData metaData;
     private XComponentContext m_xContext;
     private XMultiComponentFactory m_xMultiComponentFactory;
-    private Object m_oInvokeContext;
+    private XModel m_xModel;
 
-    ScriptImpl( XComponentContext ctx, ScriptMetaData metaData, Object oInvokeContext ) throws com.sun.star.uno.RuntimeException
+    ScriptImpl( XComponentContext ctx, ScriptMetaData metaData, XModel xModel ) throws com.sun.star.uno.RuntimeException
     {
         this.metaData = metaData;
         this.m_xContext = ctx;
-        this.m_oInvokeContext = oInvokeContext;
+        this.m_xModel = xModel;
 
         try
         {
@@ -265,7 +274,7 @@ class ScriptImpl implements XScript
         public Object invoke( /*IN*/Object[] aParams,
                             /*OUT*/short[][] aOutParamIndex,
                             /*OUT*/Object[][] aOutParam )
-            throws IllegalArgumentException, CannotConvertException,
+            throws ScriptFrameworkErrorException,
                 InvocationTargetException
         {
             // Initialise the out paramters - not used at the moment
@@ -274,27 +283,51 @@ class ScriptImpl implements XScript
 
 
             ClassLoader cl = null;
+            URL sourceUrl = null;
             try {
                 cl = ClassLoaderFactory.getURLClassLoader( metaData );
+                sourceUrl = metaData.getSourceURL();
             }
-            catch (Exception e)
+            catch ( java.net.MalformedURLException mfu )
             {
-                throw new InvocationTargetException(e.getMessage());
+                // Framework error
+                throw new ScriptFrameworkErrorException(
+                    mfu.getMessage(), null,
+                    metaData.getLanguageName(), metaData.getLanguage(),
+                    ScriptFrameworkErrorType.UNKNOWN );
             }
+            catch ( NoSuitableClassLoaderException nsc )
+            {
+                // Framework error
+                throw new ScriptFrameworkErrorException(
+                    nsc.getMessage(), null,
+                    metaData.getLanguageName(), metaData.getLanguage(),
+                    ScriptFrameworkErrorType.UNKNOWN );
+            }
+            // Set class loader to be used for class files
+            // and jar files
+            Thread.currentThread().setContextClassLoader(cl);
             Interpreter interpreter = new Interpreter();
 
             interpreter.getNameSpace().clear();
+            // Set class loader to be used by interpreter
+            // to look for classes by source e.g. interpreter
+            // will use this classloader to search classpath
+            // for source file ( bla.java ) on import or reference
             interpreter.setClassLoader(cl);
-
             try {
                 interpreter.set("context",
-                    ScriptContext.createContext(m_oInvokeContext,
+                    ScriptContext.createContext(m_xModel,
                         m_xContext, m_xMultiComponentFactory));
 
                 interpreter.set("ARGUMENTS", aParams);
             }
             catch (bsh.EvalError e) {
-                throw new InvocationTargetException(e.getMessage());
+                // Framework error setting up context
+                throw new ScriptFrameworkErrorException(
+                    e.getMessage(), null,
+                    metaData.getLanguageName(), metaData.getLanguage(),
+                    ScriptFrameworkErrorType.UNKNOWN );
             }
 
             try {
@@ -303,7 +336,11 @@ class ScriptImpl implements XScript
 
                 ScriptEditorForBeanShell editor =
                     ScriptEditorForBeanShell.getEditor(
-                        metaData.getSourceURL() );
+                       sourceUrl );
+                if ( editor != null )
+                {
+                    editor.execute();
+                }
 
                 if (editor != null && editor.isModified())
                 {
@@ -311,23 +348,125 @@ class ScriptImpl implements XScript
                 }
                 else
                 {
+                    metaData.loadSource();
                     source = metaData.getSource();
-
                 }
 
                 if ( source == null || source.length() == 0 )
-                    throw new InvocationTargetException(
-                        "Couldn't read script: " + metaData.getSourceURL()  );
-
+                {
+                    throw new ScriptFrameworkErrorException(
+                        "Failed to read script", null,
+                        metaData.getLanguageName(), metaData.getLanguage(),
+                        ScriptFrameworkErrorType.UNKNOWN );
+                }
                 result = interpreter.eval( source );
 
                 if (result == null)
+                {
                     return new Any(new Type(), null);
+                }
                 return result;
             }
-            catch (Exception ex) {
-                throw new InvocationTargetException(ex.getMessage());
+            catch ( bsh.ParseException pe )
+            {
+                throw new InvocationTargetException( "Beanshell failed to parse " + metaData.getLanguageName(), null, processBshException( pe, metaData.getLanguageName() ) );
+            }
+            catch ( bsh.TargetError te )
+            {
+                throw new InvocationTargetException( "Beanshell uncaught exception for " + metaData.getLanguageName(), null, processBshException( te, metaData.getLanguageName() ) );
+            }
+            catch ( bsh.EvalError ex )
+            {
+                throw new InvocationTargetException( "Beanshell error for " + metaData.getLanguageName(), null, processBshException( ex, metaData.getLanguageName() ) );
+            }
+            catch ( Exception e )
+            {
+                throw new ScriptFrameworkErrorException(
+                    "Failed to read script", null,
+                    metaData.getLanguageName(), metaData.getLanguage(),
+                    ScriptFrameworkErrorType.UNKNOWN );
+            }
+        }
+        private void raiseEditor( int lineNum )
+        {
+            ScriptEditorForBeanShell editor = null;
+            try
+            {
+                URL sourceUrl = metaData.getSourceURL();
+                editor = ScriptEditorForBeanShell.getEditor( sourceUrl );
+                if ( editor == null )
+                {
+                    editor = ScriptEditorForBeanShell.getEditor();
+                    editor.edit(
+                        ScriptContext.createContext(m_xModel,
+                            m_xContext, m_xMultiComponentFactory), metaData );
+                    editor = ScriptEditorForBeanShell.getEditor( sourceUrl );
+                }
+                if ( editor != null )
+                {
+                    editor.indicateErrorLine( lineNum );
+                }
+            }
+            catch( Exception ignore )
+            {
             }
         }
 
+        private ScriptErrorRaisedException processBshException( bsh.EvalError e, String script  )
+        {
+            LogUtils.DEBUG("Beanshell error RAW message " + e.getMessage());
+            String message = e.getMessage();
+            int usefullInfoIndex = message.lastIndexOf("\' :" );
+            int lineNum = e.getErrorLineNumber();
+
+            raiseEditor( lineNum );
+
+            //String stackTrace = te.getScriptStackTrace();  // never seems to have any info??
+            if ( usefullInfoIndex > -1 )
+            {
+                message = message.substring( usefullInfoIndex + 2 );
+            }
+            if ( e instanceof bsh.TargetError )
+            {
+                LogUtils.DEBUG("got instance of  TargetError");
+                if ( usefullInfoIndex == -1 )
+                {
+                    message =  ( ( bsh.TargetError)e ).getTarget().getMessage();
+                }
+                String wrappedException = "";
+                String full = e.toString();
+                int index = full.indexOf( "Target exception:" );
+                if ( index > -1 )
+                {
+                    String toParse = full.substring( index );
+                    LogUtils.DEBUG("About to parse " + toParse );
+                    StringTokenizer tokenizer = new StringTokenizer( full.substring( index ),":" );
+                    if ( tokenizer.countTokens() > 2 )
+                    {
+                        LogUtils.DEBUG("First token = " + (String)tokenizer.nextElement());
+                        wrappedException = (String)tokenizer.nextElement();
+                        LogUtils.DEBUG("wrapped exception = = " + wrappedException );
+                    }
+                }
+                ScriptExceptionRaisedException se = new ScriptExceptionRaisedException( message);
+                se.lineNum = lineNum;
+                se.scriptName = script;
+                se.exceptionType = wrappedException;
+                se.language = "BeanShell";
+                LogUtils.DEBUG("UnCaught Exception error: " );
+                LogUtils.DEBUG("\tscript: " + script );
+                LogUtils.DEBUG("\tline: " + lineNum );
+                LogUtils.DEBUG("\twrapped exception: " + wrappedException );
+                LogUtils.DEBUG("\tmessage: " + message );
+                return se;
+            }
+            else
+            {
+                LogUtils.DEBUG("Error or ParseError Exception error: " );
+                LogUtils.DEBUG("\tscript: " + script );
+                LogUtils.DEBUG("\tline: " + lineNum );
+                LogUtils.DEBUG("\tmessage: " + message );
+                return new ScriptErrorRaisedException( message, null, script, "BeanShell", lineNum );
+            }
+        }
 }
