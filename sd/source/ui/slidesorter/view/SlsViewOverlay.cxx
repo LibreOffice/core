@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsViewOverlay.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:45:04 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,8 @@
 #include "view/SlsLayouter.hxx"
 #include "view/SlsPageObject.hxx"
 #include "view/SlsPageObjectViewObjectContact.hxx"
-#include "TextLogger.hxx"
+#include "ViewShellBase.hxx"
+#include "UpdateLockManager.hxx"
 
 #include "Window.hxx"
 #include "sdpage.hxx"
@@ -595,15 +596,6 @@ void InsertionIndicatorOverlay::SetPosition (const Point& rPoint)
             nInsertionIndex += 1;
     }
 
-#ifdef DEBUG
-    if (mnInsertionIndex != nInsertionIndex)
-    {
-        notes::TextLogger::Instance().AppendText ("new insertion index is ");
-        notes::TextLogger::Instance().AppendNumber (nInsertionIndex);
-        notes::TextLogger::Instance().AppendText ("\n");
-    }
-#endif
-
     mnInsertionIndex = nInsertionIndex;
 
     Rectangle aBox;
@@ -641,12 +633,14 @@ MouseOverIndicatorOverlay::MouseOverIndicatorOverlay (
 void MouseOverIndicatorOverlay::SetSlideUnderMouse (
     const model::PageDescriptor* pDescriptor)
 {
-    if (mpPageUnderMouse != pDescriptor)
-    {
-        ShowingModeGuard aGuard (*this, true);
+    SlideSorterViewShell& rViewShell (mrViewOverlay.GetViewShell());
+    if ( ! rViewShell.GetViewShellBase().GetUpdateLockManager().IsLocked())
+         if (mpPageUnderMouse != pDescriptor)
+        {
+            ShowingModeGuard aGuard (*this, true);
 
-        mpPageUnderMouse = pDescriptor;
-    }
+            mpPageUnderMouse = pDescriptor;
+        }
 }
 
 
@@ -656,14 +650,17 @@ void MouseOverIndicatorOverlay::Paint (void)
 {
     if (mpPageUnderMouse != NULL)
     {
-        OutputDevice* pDevice = mrViewOverlay.GetViewShell()
-            .GetSlideSorterController().GetView().GetWindow();
-        PageObjectViewObjectContact* pContact
-            = mpPageUnderMouse->GetViewObjectContact();
-        if (pDevice != NULL
-            && pContact != NULL)
+        SlideSorterViewShell& rViewShell (mrViewOverlay.GetViewShell());
+        if ( ! rViewShell.GetViewShellBase().GetUpdateLockManager().IsLocked())
         {
-            pContact->PaintFrame (*pDevice, mbIsShowing);
+            SlideSorterView& rView (rViewShell.GetSlideSorterController().GetView());
+            OutputDevice* pDevice = rView.GetWindow();
+            PageObjectViewObjectContact* pContact = mpPageUnderMouse->GetViewObjectContact();
+            if (pDevice != NULL
+                && pContact != NULL)
+            {
+                pContact->PaintFrame(*pDevice, mbIsShowing);
+            }
         }
     }
 }
