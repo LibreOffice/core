@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charhiddenitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:52:13 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,17 @@
 #include <svtools/eitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // class SvxCharHiddenItem -------------------------------------------------
 /*
     [Description]
     This item marks text as hidden
 */
 
-class SvxCharHiddenItem : public SfxBoolItem
+class SVX_DLLPUBLIC SvxCharHiddenItem : public SfxBoolItem
 {
 public:
     TYPEINFO();
