@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-07 09:59:35 $
+ *  last change: $Author: ka $ $Date: 2001-03-15 13:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1503,11 +1503,9 @@ static BOOL CheckTransferableContext_Impl( const Reference< XTransferable >& rxT
     }
     catch( const UnsupportedFlavorException& )
     {
-        DBG_ERROR( "UnsupportedFlavorException" );
     }
     catch( const RuntimeException& )
     {
-        DBG_ERROR( "Runtime Exception" );
     }
 
 
@@ -1591,11 +1589,9 @@ static USHORT GetTransferableAction_Impl(
     }
     catch( const UnsupportedFlavorException& )
     {
-        DBG_ERROR( "UnsupportedFlavorException" );
     }
     catch( const RuntimeException& )
     {
-        DBG_ERROR( "Runtime Exception" );
     }
 
     return EXCHG_INOUT_ACTION_NONE;
