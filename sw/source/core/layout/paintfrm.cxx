@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-24 08:03:50 $
+ *  last change: $Author: od $ $Date: 2002-10-28 08:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1576,9 +1576,12 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
         pOut->Pop();
 } // end of method <lcl_DrawGraphic>
 
-void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
-    const SwRect &rOrg, const SwRect &rOut, const BYTE nGrfNum,
-    const sal_Bool bConsiderBackgroundTransparency )
+void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
+                              OutputDevice *pOutDev,
+                              const SwRect &rOrg,
+                              const SwRect &rOut,
+                              const BYTE nGrfNum,
+                              const sal_Bool bConsiderBackgroundTransparency )
     /// OD 05.08.2002 #99657# - add 6th parameter to indicate that method should
     ///   consider background transparency, saved in the color of the brush item
 {
@@ -1672,36 +1675,36 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
 
     case GPOS_TILED:
         {
-            /// OD 17.10.2002 #103876# - draw background of tiled graphic
-            /// before drawing tiled graphic in loop
-            {
-                /// calculate aligned paint rectangle
-                SwRect aAlignedPaintRect = rOut;
-                ::SwAlignRect( aAlignedPaintRect, &rSh );
-                /// determine graphic object
-                const GraphicObject* pGraphicObj = pBrush->GetGraphicObject( GETOBJSHELL() );
-                lcl_DrawGraphicBackgrd( *pBrush, pOut, rOut, *pGraphicObj, bGrfNum );
-            }
+            // OD 17.10.2002 #103876# - draw background of tiled graphic
+            // before drawing tiled graphic in loop
+            // determine graphic object
+            GraphicObject* pGraphicObj = const_cast< GraphicObject* >(pBrush->GetGraphicObject( GETOBJSHELL() ));
+            // calculate aligned paint rectangle
+            SwRect aAlignedPaintRect = rOut;
+            ::SwAlignRect( aAlignedPaintRect, &rSh );
+            // OD 25.10.2002 #103876# - draw background color for aligned paint rectangle
+            lcl_DrawGraphicBackgrd( *pBrush, pOutDev, aAlignedPaintRect, *pGraphicObj, bGrfNum );
+
+            // set left-top-corner of background graphic to left-top-corner of the
+            // area, from which the background brush is determined.
             aGrf.Pos() = rOrg.Pos();
-            pOut->Push( PUSH_CLIPREGION );
-            pOut->IntersectClipRegion( rOut.SVRect() );
-            do {
-                do{
-                    if( aGrf.IsOver( rOut ) )
-                        /// OD 17.10.2002 #103876# - set 8th parameter to true,
-                        /// indicating that background is already drawn
-                        lcl_DrawGraphic( *pBrush, pOut, rSh, aGrf,
-                                         rOut, false, bGrfNum, true );
-                    aGrf.Pos().X() += aGrf.Width();
-
-                } while( aGrf.Left() < rOut.Right() );
-
-                aGrf.Pos().X() = rOrg.Left();
-                aGrf.Pos().Y() += aGrf.Height();
-
-            }  while( aGrf.Top() < rOut.Bottom() ) ;
-            pOut->Pop();
-
+            // setup clipping at output device
+            pOutDev->Push( PUSH_CLIPREGION );
+            pOutDev->IntersectClipRegion( rOut.SVRect() );
+            // OD 28.10.2002 #103876# - use new method <GraphicObject::DrawTiled(::)>
+            {
+                // calculate paint offset
+                Point aPaintOffset( aAlignedPaintRect.Pos() - aGrf.Pos() );
+                // draw background graphic tiled for aligned paint rectangle
+                pGraphicObj->DrawTiled( pOutDev,
+                                        aAlignedPaintRect.SVRect(),
+                                        aGrf.SSize(),
+                                        Size( aPaintOffset.X(), aPaintOffset.Y() ) );
+            }
+            // reset clipping at output device
+            pOutDev->Pop();
+            // set <bDraw> and <bRetouche> to false, indicating that background
+            // graphic and background are already drawn.
             bDraw = bRetouche = FALSE;
         }
         break;
@@ -1710,7 +1713,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
         bDraw = FALSE;
         break;
 
-    default: ASSERT( !pOut, "new Graphic position?" );
+    default: ASSERT( !pOutDev, "new Graphic position?" );
     }
 
     /// OD 02.09.2002 #99657#
@@ -1726,7 +1729,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
         SwRegionRects aRegion( rOut, 4 );
         aRegion -= aGrf;
         */
-        pOut->Push( PUSH_FILLCOLOR );
+        pOutDev->Push( PUSH_FILLCOLOR );
 
         /// OD 07.08.2002 #99657# #GetTransChg#
         ///     check, if a existing background graphic (not filling the complete
@@ -1787,13 +1790,13 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
         ///     the fill color for the output device.
         if ( bDrawTransparent )
         {
-            if( pOut->GetFillColor() != aColor.GetRGBColor() )
-                pOut->SetFillColor( aColor.GetRGBColor() );
+            if( pOutDev->GetFillColor() != aColor.GetRGBColor() )
+                pOutDev->SetFillColor( aColor.GetRGBColor() );
         }
         else
         {
-            if( pOut->GetFillColor() != aColor )
-                pOut->SetFillColor( aColor );
+            if( pOutDev->GetFillColor() != aColor )
+                pOutDev->SetFillColor( aColor );
         }
 
         /// OD 02.09.2002 #99657#
@@ -1830,7 +1833,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
               (( bTransparentGrfWithNoFillBackgrd ? nGrfTransparency : aColor.GetTransparency()
                )*100 + 0x7F)/0xFF;
             /// draw poly-polygon transparent
-            pOut->DrawTransparent( aDrawPoly, nTransparencyPercent );
+            pOutDev->DrawTransparent( aDrawPoly, nTransparencyPercent );
         }
         else
         {
@@ -1842,23 +1845,23 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
             /// loop rectangles of background region, which has to be drawn
             for( USHORT i = 0; i < aRegion.Count(); ++i )
             {
-                pOut->DrawRect( aRegion[i].SVRect() );
+                pOutDev->DrawRect( aRegion[i].SVRect() );
             }
         }
-        pOut->Pop();
+       pOutDev ->Pop();
     }
 
     if( bDraw && aGrf.IsOver( rOut ) )
         /// OD 02.09.2002 #99657#
         /// add parameter <bGrfBackgrdAlreadyDrawn>
-        lcl_DrawGraphic( *pBrush, pOut, rSh, aGrf, rOut, true, bGrfNum,
+        lcl_DrawGraphic( *pBrush, pOutDev, rSh, aGrf, rOut, true, bGrfNum,
                          bGrfBackgrdAlreadyDrawn );
 
     if( bReplaceGrfNum )
     {
         const Bitmap& rBmp = SwNoTxtFrm::GetBitmap( FALSE );
-        Font aTmp( pOut->GetFont() );
-        ((Graphic*)0)->Draw( pOut, aEmptyStr, aTmp, rBmp,
+        Font aTmp( pOutDev->GetFont() );
+        ((Graphic*)0)->Draw( pOutDev, aEmptyStr, aTmp, rBmp,
                              rOrg.Pos(), rOrg.SSize() );
     }
 }
