@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:52:40 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,12 +293,7 @@ Reference<XInterface> SAL_CALL AccInstanceProvider::getInstance (const OUString&
 
     Reference<XInterface> rInstance;
 
-    if ( aName.compareToAscii( "StarOffice.Startup" ) == 0)
-    {
-        // rvp client wants to connect
-        rInstance = Application::GetUnoInstance( m_rConnection, aName );
-    }
-    else if ( aName.compareToAscii( "StarOffice.ServiceManager" ) == 0)
+    if ( aName.compareToAscii( "StarOffice.ServiceManager" ) == 0)
     {
         rInstance = Reference< XInterface >( m_rSMgr );
     }
