@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:46:53 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,32 +99,13 @@ using namespace ucb;
 |*
 |************************************************************************/
 
-SvxFramesComboBox::SvxFramesComboBox ( Window* pParent, WinBits nStyle )
-:   ComboBox (pParent, nStyle)
-{
-    GetCurrentFrameNames ();
-}
-
-SvxFramesComboBox::SvxFramesComboBox ( Window* pParent, const ResId& rResId )
+SvxFramesComboBox::SvxFramesComboBox ( Window* pParent, const ResId& rResId,
+                                        SfxDispatcher* pDispatch )
 :   ComboBox (pParent, rResId)
 {
-    GetCurrentFrameNames ();
-}
-
-SvxFramesComboBox::~SvxFramesComboBox ()
-{
-}
-
-/*************************************************************************
-|*
-|* Fill list with curretn known framenames
-|*
-|************************************************************************/
-
-BOOL SvxFramesComboBox::GetCurrentFrameNames ()
-{
     TargetList* pList = new TargetList;
-    const SfxFrame* pFrame = SFX_APP()->GetViewFrame()->GetTopFrame();
+    SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
+    SfxFrame* pFrame = pViewFrame ? pViewFrame->GetTopFrame() : 0;
     if ( pFrame )
     {
         pFrame->GetTargetList(*pList);
@@ -143,10 +124,11 @@ BOOL SvxFramesComboBox::GetCurrentFrameNames ()
         }
         delete pList;
     }
-
-    return pFrame!=NULL;
 }
 
+SvxFramesComboBox::~SvxFramesComboBox ()
+{
+}
 //########################################################################
 //#                                                                      #
 //# ComboBox-Control for URL's with History and Autocompletion           #
@@ -387,7 +369,7 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
     {
         mpGrpMore     = new FixedLine           ( this, ResId (GRP_MORE) );
         mpFtFrame     = new FixedText           ( this, ResId (FT_FRAME) );
-        mpCbbFrame    = new SvxFramesComboBox   ( this, ResId (CB_FRAME) );
+        mpCbbFrame    = new SvxFramesComboBox   ( this, ResId (CB_FRAME), GetDispatcher() );
         mpFtForm      = new FixedText           ( this, ResId (FT_FORM) );
         mpLbForm      = new ListBox             ( this, ResId (LB_FORM) );
         mpFtIndication= new FixedText           ( this, ResId (FT_INDICATION) );
