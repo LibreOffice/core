@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pluby $ $Date: 2001-02-23 19:49:15 $
+ *  last change: $Author: pluby $ $Date: 2001-02-28 03:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,14 @@
 #ifndef _SV_VCLAPPLICATION_H
 #include <VCLApplication.h>
 #endif
+#ifndef _SV_VCLAUTORELEASEPOOL_H
+#include <VCLAutoreleasePool.h>
+#endif
+#ifndef _FSYS_HXX
+#include <tools/fsys.hxx>
+#endif
+
+static VCLAUTORELEASEPOOL hMainAutoreleasePool = NULL;
 
 // =======================================================================
 
@@ -116,6 +124,63 @@ void DeInitSalData()
     SalData *pSalData = GetSalData();
     delete pSalData;
     SetSalData( NULL );
+}
+
+// -----------------------------------------------------------------------
+
+void InitSalMain()
+{
+    // Need to include the absolute path for this executable in the PATH
+    // and STAR_RESOURCEPATH environment variables so that the resource manager
+    // can find resource files and in the DYLD_LIBRARY_PATH environment
+    // variable so that the dynamic library loader can find shared libraries
+    extern const char *__progname;
+    ByteString aPath( getenv( "PATH" ) );
+    ByteString aCmdPath( __progname );
+    // Get absolute path of command's directory
+    if ( aCmdPath.Len() ) {
+        DirEntry aCmdDirEntry( aCmdPath );
+        aCmdDirEntry.ToAbs();
+        aCmdPath = ByteString( aCmdDirEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US );
+    }
+    if ( aPath.Len() ) {
+        if ( aCmdPath.Len() )
+            aCmdPath += ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
+        aCmdPath += aPath;
+    }
+    // Assign to PATH environment variable
+    if ( aCmdPath.Len() ) {
+        aPath = ByteString( "PATH=" );
+        aPath += aCmdPath;
+        putenv( aPath.GetBuffer() );
+    }
+    // Assign to STAR_RESOURCEPATH environment variable
+    if ( aCmdPath.Len() ) {
+        aPath = ByteString( "STAR_RESOURCEPATH=" );
+        aPath += aCmdPath;
+        putenv( aPath.GetBuffer() );
+    }
+    // Assign to DYLD_LIBRARY_PATH environment variable
+    if ( aCmdPath.Len() ) {
+        aPath = ByteString( "DYLD_LIBRARY_PATH=" );
+        aPath += aCmdPath;
+        putenv( aPath.GetBuffer() );
+    }
+
+    // Setup up autorelease pool for Objective-C objects
+    hMainAutoreleasePool = VCLAutoreleasePool_Init();
+
+    // Initialize application's connection to the window server
+    VCLApplication_SharedApplication();
+}
+
+// -----------------------------------------------------------------------
+
+void DeInitSalMain()
+{
+    // Release autorelease pool
+    VCLAutoreleasePool_Release( hMainAutoreleasePool );
+
 }
 
 // -----------------------------------------------------------------------
