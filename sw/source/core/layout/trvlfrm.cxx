@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:13:41 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #endif
 #ifndef _VIEWSH_HXX //autogen
 #include <viewsh.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
 #endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
@@ -2022,7 +2025,12 @@ inline void Sub( SwRegionRects& rRegion, const SwRect& rRect )
 void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
 {
     ViewShell *pSh = GetShell();
-    SwRegionRects aRegion( pSh ? pSh->VisArea() : Frm() );
+
+// --> FME 2004-06-08 #i12836# enhanced pdf
+    SwRegionRects aRegion( pSh && !pSh->GetViewOptions()->IsPDFExport() ?
+                           pSh->VisArea() :
+                           Frm() );
+// <--
     const SwNodes &rNds = GetFmt()->GetDoc()->GetNodes();
 
     //Erstmal die CntntFrms zum Start und End besorgen, die brauch ich auf
