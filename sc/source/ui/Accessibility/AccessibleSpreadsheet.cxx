@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 08:02:48 $
+ *  last change: $Author: sab $ $Date: 2002-06-06 13:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,11 +255,6 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             else
                 mbDelIns = sal_False;
         }
-        else if ((rRef.GetId() == SC_HINT_ACC_EDITMODE))
-        {
-            if (mpAccCell)
-                mpAccCell->ChangeEditMode();
-        }
         // commented out, because to use a ModelChangeEvent is not the right way
         // at the moment there is no way, but the Java/Gnome Api should be extended sometime
 /*      else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
@@ -491,6 +486,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else
     {
+        pStateSet->AddState(AccessibleStateType::CHILDREN_TRANSIENT);
         if (IsEditable(xParentStates))
             pStateSet->AddState(AccessibleStateType::EDITABLE);
         pStateSet->AddState(AccessibleStateType::ENABLED);
