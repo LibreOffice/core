@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:45 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage RID_TP_GENERAL
         Text[ swedish ] = "~Kort beteckning";
         Text[ polish ] = "Skrót";
         Text[ portuguese_brazilian ] = "Identifier";
-        Text[ japanese ] = "’˜ÒID(~N)";
+        Text[ japanese ] = "’˜‘ID(~N)";
         Text[ korean ] = "¾àÄª(~N)";
         Text[ chinese_simplified ] = "¼ò³Æ(~N)";
         Text[ chinese_traditional ] = "ÃÑ§O¤å(~N)";
@@ -485,7 +485,7 @@ TabPage RID_TP_GENERAL
         Text[ swedish ] = "Organisation";
         Text[ polish ] = "Organizacja";
         Text[ portuguese_brazilian ] = "Organization";
-        Text[ japanese ] = "‘gD’c‘Ì(~Z)";
+        Text[ japanese ] = "‘gD’c‘Ì–¼(~Z)";
         Text[ korean ] = "Á¶Á÷(~Z)";
         Text[ chinese_simplified ] = "×éÖ¯(~Z)";
         Text[ chinese_traditional ] = "²ÕÂ´(~Z)";
@@ -511,7 +511,7 @@ TabPage RID_TP_GENERAL
         Text[ swedish ] = "Institution";
         Text[ polish ] = "Instytucja";
         Text[ portuguese_brazilian ] = "Institution";
-        Text[ japanese ] = "‹@ŠÖ(~U)";
+        Text[ japanese ] = "Œ¤‹†Š–¼(~U)";
         Text[ korean ] = "°ø°ø±â°ü(~U)";
         Text[ chinese_simplified ] = "»ú¹¹(~U)";
         Text[ chinese_traditional ] = "ÉóÌÛ(~U)";
@@ -537,7 +537,7 @@ TabPage RID_TP_GENERAL
         Text[ swedish ] = "Universitet/högskola";
         Text[ polish ] = "Uniwersytet/Szko³a wy¿sza";
         Text[ portuguese_brazilian ] = "University";
-        Text[ japanese ] = "‘åŠw(~R)";
+        Text[ japanese ] = "‹³ˆç‹@ŠÖ–¼(~R)";
         Text[ korean ] = "´ëÇĞ±³(~R)";
         Text[ chinese_simplified ] = "´óÑ§(~R)";
         Text[ chinese_traditional ] = "°ªµ¥°|®Õ(~R)";
@@ -615,7 +615,7 @@ TabPage RID_TP_GENERAL
         Text[ swedish ] = "Tidskrift";
         Text[ polish ] = "Czasopismo";
         Text[ portuguese_brazilian ] = "Journal";
-        Text[ japanese ] = "G(~J)";
+        Text[ japanese ] = "G–¼(~J)";
         Text[ korean ] = "ÀâÁö(~J)";
         Text[ chinese_simplified ] = "ÔÓÖ¾(~J)";
         Text[ chinese_traditional ] = "Âø»x(~J)";
@@ -694,7 +694,7 @@ TabPage RID_TP_GENERAL
         Text[ swedish ] = "Anmärkning";
         Text[ polish ] = "Adnotacja";
         Text[ portuguese_brazilian ] = "Annotation";
-        Text[ japanese ] = "”õl(~O)";
+        Text[ japanese ] = "’ß(~O)";
         Text[ korean ] = "ÁÖ¼®(~O)";
         Text[ chinese_simplified ] = "ËµÃ÷(~O)";
         Text[ chinese_traditional ] = "³Æª`(~O)";
@@ -900,7 +900,7 @@ TabPage RID_TP_GENERAL
         Text[ swedish ] = "Följande kolumnnamn kunde inte tilldelas:\n";
         Text[ polish ] = "Nie mo¿na by³o przypisaæ nastêpuj¹cej nazwy kolumny:\n";
         Text[ portuguese_brazilian ] = "The following column names could not be assigned:\n";
-        Text[ japanese ] = "ˆÈ‰º‚Ì—ñ–¼‚Í•ª—Ş‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½:\n";
+        Text[ japanese ] = "ˆÈ‰º‚Ì—ñ–¼‚Í•ª—Ş‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B\n";
         Text[ korean ] = "´ÙÀ½°ú °°Àº ´Ü¸íÄªÀº ÁöÁ¤µÉ ¼ö ¾ø½À´Ï´Ù :\n";
         Text[ chinese_simplified ] = "ÎŞ·¨±àÅÅÒÔÏÂÁĞÃû³Æ£º\n";
         Text[ chinese_traditional ] = "µLªk«ü©w¤U¦CÄæ¦W¡G\n";
