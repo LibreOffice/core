@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:28:56 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,7 @@ String RID_SVXITEMS_SEARCHIN_NOTE
     Text[ russian ] = "Çàìåòêà";
     Text[ polish ] = "Notatka";
     Text[ japanese ] = "ÒÓ";
-    Text[ chinese_traditional ] = "³Æª`";
+    Text[ chinese_traditional ] = "³Æµù";
     Text[ arabic ] = "ãáÇÍÙÉ";
     Text[ greek ] = "Óçìåßùóç";
     Text[ korean ] = "¸Ş¸ğ";
@@ -1883,7 +1883,7 @@ String RID_SVXITEMS_UL_NONE
     Text[ russian ] = "Áåç ïîä÷åğêèâàíèÿ";
     Text[ polish ] = "Nie podkreœlony";
     Text[ japanese ] = "‰ºü‚È‚µ";
-    Text[ chinese_traditional ] = "¨S¦³¤U¹º½u";
+    Text[ chinese_traditional ] = "µL©³½u";
     Text[ arabic ] = "ÈÏæä ÎØ ÊÍÊí";
     Text[ greek ] = "×ùñßò õğïãñÜììéóç";
     Text[ korean ] = "¹ØÁÙ ¾øÀ½";
@@ -1909,7 +1909,7 @@ String RID_SVXITEMS_UL_SINGLE
     Text[ russian ] = "Îäèíàğíîå ïîä÷åğêèâàíèå";
     Text[ polish ] = "Pojedyncze podkreœlenie";
     Text[ japanese ] = "‰ºü";
-    Text[ chinese_traditional ] = "³æ¤U¹º½u";
+    Text[ chinese_traditional ] = "³æ©³½u";
     Text[ arabic ] = "ÎØ ÊÍÊí ãİÑÏ";
     Text[ greek ] = "ÁğëŞ õğïãñÜììéóç";
     Text[ korean ] = "´ÜÀÏ ¹ØÁÙ";
@@ -1935,7 +1935,7 @@ String RID_SVXITEMS_UL_DOUBLE
     Text[ russian ] = "Äâîéíîå ïîä÷åğêèâàíèå";
     Text[ polish ] = "Podwójne podkreœlenie";
     Text[ japanese ] = "“ñd‰ºü";
-    Text[ chinese_traditional ] = "Âù¤U¹º½u";
+    Text[ chinese_traditional ] = "Âù©³½u";
     Text[ arabic ] = "ÎØ ÊÍÊí ãÒÏæÌ";
     Text[ greek ] = "ÄéğëŞ õğïãñÜììéóç";
     Text[ korean ] = "ÀÌÁß ¹ØÁÙ";
@@ -1985,7 +1985,7 @@ String RID_SVXITEMS_UL_DONTKNOW
     Text[ portuguese_brazilian ] = "Underline";
     Text[ japanese ] = "‰ºü";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß";
-    Text[ chinese_traditional ] = "¤U¹º½u";
+    Text[ chinese_traditional ] = "©³½u";
     Text[ arabic ] = "ÊÍÊå ÎØ";
     Text[ greek ] = "YğïãñÜììéóç";
     Text[ korean ] = "¹ØÁÙ";
@@ -2009,7 +2009,7 @@ String RID_SVXITEMS_UL_DASH
     Text[ portuguese_brazilian ] = "Underline (Dash)";
     Text[ japanese ] = "‰ºü(”jü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(»®Ïß)";
-    Text[ chinese_traditional ] = "¤U¹º½u(¹º½u)";
+    Text[ chinese_traditional ] = "©³½u(¹º½u)";
     Text[ arabic ] = "ÎØ ÊÍÊí (ÔõÑóØ)";
     Text[ greek ] = "YğïãñÜììéóç (Ğáıëá)";
     Text[ korean ] = "¹ØÁÙ(´ë½Ã)";
@@ -2033,7 +2033,7 @@ String RID_SVXITEMS_UL_LONGDASH
     Text[ portuguese_brazilian ] = "Underline (Long dash)";
     Text[ japanese ] = "‰ºü(’·‚¢”jü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(³¤»®Ïß)";
-    Text[ chinese_traditional ] = "¤U¹º½u(ªø¹º½u)";
+    Text[ chinese_traditional ] = "©³½u(ªø¹º½u)";
     Text[ arabic ] = "ÎØ ÊÍÊí (ÔõÑóØ ØæíáÉ)";
     Text[ greek ] = "YğïãñÜììéóç (ÌåãÜëç ğáıëá)";
     Text[ korean ] = "¹ØÁÙ (±ä ´ë½Ã)";
@@ -2057,7 +2057,7 @@ String RID_SVXITEMS_UL_DASHDOT
     Text[ portuguese_brazilian ] = "Underline (Dot dash)";
     Text[ japanese ] = "‰ºü(ˆê“_½ü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(µã»®Ïß)";
-    Text[ chinese_traditional ] = "¤U¹º½u(ÂI¹º½u)";
+    Text[ chinese_traditional ] = "©³½u(ÂI¹º½u)";
     Text[ arabic ] = "ÎØ ÊÍÊí (äŞØÉ ÔÑØÉ)";
     Text[ greek ] = "YğïãñÜììéóç (Ôåëåßá Ğáıëá)";
     Text[ korean ] = "¹ØÁÙ (ÀÏÁ¡ ¼â¼±)";
@@ -2081,7 +2081,7 @@ String RID_SVXITEMS_UL_DASHDOTDOT
     Text[ portuguese_brazilian ] = "Underline (Dot dot dash)";
     Text[ japanese ] = "‰ºü(“ñ“_½ü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(µãµã»®Ïß)";
-    Text[ chinese_traditional ] = "¤U¹º½u(ÂIÂI¹º½u)";
+    Text[ chinese_traditional ] = "©³½u(ÂIÂI¹º½u)";
     Text[ arabic ] = "ÎØ ÊÍÊí (äŞØÉ äŞØÉ ÔÑØÉ)";
     Text[ greek ] = "YğïãñÜììéóç (Ôåëåßá Ôåëåßá Ğáıëá)";
     Text[ korean ] = "¹ØÁÙ (ÀÌÁ¡ ¼â¼±)";
@@ -2105,7 +2105,7 @@ String RID_SVXITEMS_UL_SMALLWAVE
     Text[ portuguese_brazilian ] = "Underline (Small wave)";
     Text[ japanese ] = "‰ºü(×‚©‚¢”gü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(Ğ¡²¨ÀËÏß)";
-    Text[ chinese_traditional ] = "¤U¹º½u(¤pªi®ö½u)";
+    Text[ chinese_traditional ] = "©³½u(¤pªi®ö½u)";
     Text[ arabic ] = "ÎØ ÊÍÊí (ãæÌÉ ÕÛíÑÉ)";
     Text[ greek ] = "YğïãñÜììéóç (Êıìá ìéêñü)";
     Text[ korean ] = "¹ØÁÙ (ÀÛÀº ÆÄ¼±)";
@@ -2129,7 +2129,7 @@ String RID_SVXITEMS_UL_WAVE
     Text[ portuguese_brazilian ] = "Underline (Wave)";
     Text[ japanese ] = "‰ºü(”gü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(²¨ÀËÏß)";
-    Text[ chinese_traditional ] = "¤U¹º½u(ªi®ö½u)";
+    Text[ chinese_traditional ] = "©³½u(ªi®ö½u)";
     Text[ arabic ] = "ÎØ ÊÍÊí (ãæÌÉ)";
     Text[ greek ] = "YğïãñÜììéóç (Êıìá)";
     Text[ korean ] = "¹ØÁÙ (ÆÄ¼±)";
@@ -2153,7 +2153,7 @@ String RID_SVXITEMS_UL_DOUBLEWAVE
     Text[ portuguese_brazilian ] = "Underline (Double wave)";
     Text[ japanese ] = "‰ºü(“ñd”gü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(Ë«²¨ÀËÏß)";
-    Text[ chinese_traditional ] = "¤U¹º½u(Âùªi®ö½u)";
+    Text[ chinese_traditional ] = "©³½u(Âùªi®ö½u)";
     Text[ arabic ] = "ÎØ ÊÍÊí (ãæÌÉ ãÒÏæÌÉ)";
     Text[ greek ] = "YğïãñÜììéóç (Êıìá äéğëü)";
     Text[ korean ] = "¹ØÁÙ (ÀÌÁß ÆÄ¼±)";
@@ -2177,7 +2177,7 @@ String RID_SVXITEMS_UL_BOLD
     Text[ portuguese_brazilian ] = "Bold underline";
     Text[ japanese ] = "‘¾‚¢‰ºü";
     Text[ chinese_simplified ] = "´ÖĞÍÏÂ»®Ïß";
-    Text[ chinese_traditional ] = "²Ê«¬¤U¹º½u";
+    Text[ chinese_traditional ] = "²Ê«¬©³½u";
     Text[ arabic ] = "ÎØ ÊÍÊí ÚÑíÖ";
     Text[ greek ] = "ÕğïãñÜììéóç (¸íôïíá)";
     Text[ korean ] = "±½°Ô ¹ØÁÙ";
@@ -2225,7 +2225,7 @@ String RID_SVXITEMS_UL_BOLDDASH
     Text[ portuguese_brazilian ] = "Underline (Bold dash)";
     Text[ japanese ] = "‰ºü(‘¾‚¢”jü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(´ÖĞÍ»®Ïß)";
-    Text[ chinese_traditional ] = "¤U¹º½u(²Ê«¬¹º½u)";
+    Text[ chinese_traditional ] = "©³½u(²Ê«¬¹º½u)";
     Text[ arabic ] = "ÎØ ÊÍÊí ÚÑíÖ (ÔÑØÉ)";
     Text[ greek ] = "ÕğïãñÜììéóç (¸íôïíç ğáıëá)";
     Text[ korean ] = "¹ØÁÙ(ÁøÇÑ ´ë½Ã)";
@@ -2249,7 +2249,7 @@ String RID_SVXITEMS_UL_BOLDLONGDASH
     Text[ portuguese_brazilian ] = "Underline (Bold long dash)";
     Text[ japanese ] = "‰ºü(‘¾’·‚¢”jü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(´ÖĞÍ³¤»®Ïß)";
-    Text[ chinese_traditional ] = "¤U¹º½u(²Ê«¬ªø¹º½u)";
+    Text[ chinese_traditional ] = "©³½u(²Ê«¬ªø¹º½u)";
     Text[ arabic ] = "ÎØ ÊÍÊí ÚÑíÖ (ÔÑØÉ ØæíáÉ)";
     Text[ greek ] = "ÕğïãñÜììéóç (ÌåãÜëç ğáıëá, İíôïíá)";
     Text[ korean ] = "¹ØÁÙ (ÀÏÁ¡ ¼â¼±, ±½°Ô)";
@@ -2273,7 +2273,7 @@ String RID_SVXITEMS_UL_BOLDDASHDOT
     Text[ portuguese_brazilian ] = "Underline (Bold dot dash)";
     Text[ japanese ] = "‰ºü(‘¾‚¢ˆê“_½üj";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(´ÖĞÍµã»®Ïß)";
-    Text[ chinese_traditional ] = "¤U¹º½u(²Ê«¬ÂI¹º½u)";
+    Text[ chinese_traditional ] = "©³½u(²Ê«¬ÂI¹º½u)";
     Text[ arabic ] = "ÎØ ÊÍÊí ÚÑíÖ (äŞØÉ ÔÑØÉ)";
     Text[ greek ] = "ÕğïãñÜììéóç (Ôåëåßá-Ğáıëá, İíôïíá)";
     Text[ korean ] = "¹ØÁÙ (ÀÏÁ¡ ¼â¼±, ±½°Ô)";
@@ -2297,7 +2297,7 @@ String RID_SVXITEMS_UL_BOLDDASHDOTDOT
     Text[ portuguese_brazilian ] = "Underline (Bold dot dot dash)";
     Text[ japanese ] = "‰ºü(‘¾‚¢“ñ“_½ü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(´ÖĞÍµãµã»®Ïß)";
-    Text[ chinese_traditional ] = "¤U¹º½u(²Ê«¬ÂIÂI¹º½u)";
+    Text[ chinese_traditional ] = "©³½u(²Ê«¬ÂIÂI¹º½u)";
     Text[ arabic ] = "ÎØ ÊÍÊí ÚÑíÖ (äŞØÉ äŞØÉ ÔÑØÉ)";
     Text[ greek ] = "ÕğïãñÜììéóç (Ôåëåßá-Ôåëåßá-Ğáıëá, İíôïíá)";
     Text[ korean ] = "¹ØÁÙ (ÀÌÁ¡ ¼â¼±, ±½°Ô)";
@@ -2321,7 +2321,7 @@ String RID_SVXITEMS_UL_BOLDWAVE
     Text[ portuguese_brazilian ] = "Underline (Bold wave)";
     Text[ japanese ] = "‰ºü(‘¾‚¢”gü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(´ÖĞÍ²¨ÀËÏß)";
-    Text[ chinese_traditional ] = "¤U¹º½u(²Ê«¬ªi®ö½u)";
+    Text[ chinese_traditional ] = "©³½u(²Ê«¬ªi®ö½u)";
     Text[ arabic ] = "ÎØ ÊÍÊí ÚÑíÖ (ãæÌÉ)";
     Text[ greek ] = "ÕğïãñÜììéóç (¸íôïíç êõìáôéóôŞ ğáıëá)";
     Text[ korean ] = "¹ØÁÙ (ÁøÇÑ ÆÄ¼±)";
@@ -3394,7 +3394,7 @@ String RID_ATTR_CHAR_UNDERLINE
     Text[ russian ] = "Ïîä÷åğêíóòûé";
     Text[ polish ] = "Podkreœlenie";
     Text[ japanese ] = "‰ºü";
-    Text[ chinese_traditional ] = "¤U¹º½u";
+    Text[ chinese_traditional ] = "©³½u";
     Text[ arabic ] = "ÊÍÊå ÎØ";
     Text[ greek ] = "YğïãñÜììéóç";
     Text[ korean ] = "¹ØÁÙ";
@@ -6840,7 +6840,7 @@ String RID_SVXITEMS_HYPHEN_MINTRAIL
     Text[ russian ] = "çíàêà â íà÷àëå ñòğîêè";
     Text[ polish ] = "Znak pocz¹tku wiersza";
     Text[ japanese ] = "s“ª‚Ì‹L†";
-    Text[ chinese_traditional ] = "¦r¤¸¦b¦æ­º";
+    Text[ chinese_traditional ] = "¦r¤¸¦b¦æªº°_©l¦ì¸m";
     Text[ arabic ] = "ÃÍÑİ ÚäÏ ÈÏÇíÉ ÇáÓØÑ";
     Text[ greek ] = "×áñáêôŞñåò óôçí áñ÷Ş ôçò ãñáììŞò";
     Text[ korean ] = "ÁÙ Ã³À½ ¹®ÀÚ";
@@ -7093,7 +7093,7 @@ String RID_SVXITEMS_PATTERN_COLOR
     Text [ portuguese ] = "Cor padrão:  " ;
     Text [ portuguese_brazilian ] = "Musterfarbe: " ;
     Text[ chinese_simplified ] = "Í¼°¸ÑùÊ½£º ";
-    Text[ russian ] = "Öâåò îáğàçöà: ";
+    Text[ russian ] = "Öâåò óçîğà: ";
     Text[ polish ] = "Kolor wzorca: ";
     Text[ japanese ] = "ÊßÀ°İ‚ÌF: ";
     Text[ chinese_traditional ] = "¹Ï®×¼Ë¦¡¡G ";
@@ -7328,7 +7328,7 @@ String RID_SVXITEMS_TWOLINES_OFF
     Text[ greek ] = "Äßãñáììá - ¼÷é";
     Text[ dutch ] = "Tweeregelig uit";
     Text[ french ] = "Two lines off";
-    Text[ spanish ] = "Two lines off";
+    Text[ spanish ] = "Desactivar doble espacio";
     Text[ italian ] = "Two lines off";
     Text[ danish ] = "Two lines off";
     Text[ swedish ] = "Tvåradigt av";
@@ -7426,7 +7426,7 @@ String RID_SVXITEMS_HNGPNCT_OFF
     Text[ italian ] = "Nessuna interpunzione a fine riga";
     Text[ danish ] = "No hanging punctuation at line end";
     Text[ swedish ] = "Ingen hängande interpunktion vid radslutet";
-    Text[ polish ] = "No hanging punctuation at line end";
+    Text[ polish ] = "Koniec wiersza bez sierot i wdów";
     Text[ portuguese_brazilian ] = "No hanging punctuation at line end";
     Text[ japanese ] = "s––‚É‹å“Ç“_‚ğ‚Â‚¯‚È‚¢";
     Text[ korean ] = "Çà ³¡¿¡ ±¸µÎÁ¡ ¾øÀ½";
@@ -7449,7 +7449,7 @@ String RID_SVXITEMS_HNGPNCT_ON
     Text[ italian ] = "Interpunzione a fine riga";
     Text[ danish ] = "Hanging punctuation at line end";
     Text[ swedish ] = "Hängande interpunktion vid radslutet";
-    Text[ polish ] = "Hanging punctuation at line end";
+    Text[ polish ] = "Sieroty i wdowy na koñcu wiersza";
     Text[ portuguese_brazilian ] = "Hanging punctuation at line end";
     Text[ japanese ] = "s––‚É‹å“Ç“_‚ğ‚Â‚¯‚é";
     Text[ korean ] = "Çà ³¡¿¡ ±¸µÎÁ¡";
@@ -7477,7 +7477,7 @@ String RID_SVXITEMS_FORBIDDEN_RULE_OFF
     Text[ japanese ] = "s“ª‚¨‚æ‚Ñs––‚Ég—p‚µ‚Ä‚Í‚¢‚¯‚È‚¢‹L†‚É’ˆÓ";
     Text[ korean ] = "Apply list of forbidden characters at line end and line start";
     Text[ chinese_simplified ] = "¹Ë¼°ÔÚĞĞÊ×ĞĞÄ©½ûÖ¹Ê¹ÓÃµÄ×Ö·û";
-    Text[ chinese_traditional ] = "ÅU¤Î¦æ­º¦æ¥½¸T¤î¨Ï¥Îªº¦r¤¸";
+    Text[ chinese_traditional ] = "ÅU¤Î¦æ­º¦æ§À¸T¤î¨Ï¥Îªº¦r¤¸";
     Text[ turkish ] = "Apply list of forbidden characters at line end and line start";
     Text[ arabic ] = "ÊØÈíŞ ÇáÃÍÑİ ÇáããäæÚÉ Úáì ÈÏÇíÉ ÇáÃÓØÑ æäåÇíÊåÇ";
 };
@@ -7501,7 +7501,7 @@ String RID_SVXITEMS_FORBIDDEN_RULE_ON
     Text[ japanese ] = "s“ª‚¨‚æ‚Ñs––‚Ég—p‚µ‚Ä‚Í‚¢‚¯‚È‚¢‹L†‚ğ–³‹";
     Text[ korean ] = "Don't Apply list of forbidden characters at line end and line start";
     Text[ chinese_simplified ] = "²»¹Ë¼°ÔÚĞĞÊ×ĞĞÄ©½ûÖ¹Ê¹ÓÃµÄ×Ö·û";
-    Text[ chinese_traditional ] = "¤£ÅU¤Î¦æ­º¦æ¥½¸T¤î¨Ï¥Îªº¦r¤¸";
+    Text[ chinese_traditional ] = "¤£ÅU¤Î¦æ­º¦æ§À¸T¤î¨Ï¥Îªº¦r¤¸";
     Text[ turkish ] = "Don't Apply list of forbidden characters at line end and line start";
     Text[ arabic ] = "ÚÏã ÊØÈíŞ ÇáÃÍÑİ ÇáããäæÚÉ Úáì ÈÏÇíÉ ÇáÃÓØÑ æäåÇíÊåÇ";
 };
