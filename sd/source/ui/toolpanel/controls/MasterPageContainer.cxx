@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2004-07-22 12:30:23 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,9 +169,16 @@ public:
           maPreview(rPreview),
           maToken(aToken)
     {}
+    MasterPageDescriptor (const MasterPageDescriptor& rDescriptor)
+        : msURL(rDescriptor.msURL),
+          msPageName(rDescriptor.msPageName),
+          mpMasterPage(rDescriptor.mpMasterPage),
+          mpSlide(rDescriptor.mpSlide),
+          maPreview(rDescriptor.maPreview),
+          maToken(rDescriptor.maToken)
+    {}
     ~MasterPageDescriptor (void)
-    {
-    }
+    {}
 
     String msURL;
     String msPageName;
@@ -242,6 +249,8 @@ namespace sd { namespace toolpanel { namespace controls {
 class MasterPageContainer::Implementation
 {
 public:
+    static MasterPageContainer* mpInstance;
+
     MasterPageContainerType maContainer;
 
     Implementation (void);
@@ -334,50 +343,31 @@ private:
 
 //===== MasterPageContainer ===================================================
 
-MasterPageContainer* MasterPageContainer::mpInstance = NULL;
-::osl::Mutex MasterPageContainer::maMutex;
-int MasterPageContainer::mnReferenceCount = 0;
+MasterPageContainer* MasterPageContainer::Implementation::mpInstance = NULL;
 static const MasterPageContainer::Token NIL_TOKEN (-1);
 
 MasterPageContainer& MasterPageContainer::Instance (void)
 {
-    if (mpInstance == NULL)
+    if (Implementation::mpInstance == NULL)
     {
-        ::osl::MutexGuard aGuard (maMutex);
-        if (mpInstance == NULL)
+        ::osl::GetGlobalMutex aMutexFunctor;
+        ::osl::MutexGuard aGuard (aMutexFunctor());
+        if (Implementation::mpInstance == NULL)
         {
-            mpInstance = new MasterPageContainer ();
-            mpInstance->LateInit();
+            MasterPageContainer* pInstance = new MasterPageContainer ();
+            pInstance->LateInit();
+            SdGlobalResourceContainer::Instance().AddResource (
+                ::std::auto_ptr<SdGlobalResource>(pInstance));
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            Implementation::mpInstance = pInstance;
         }
     }
+    else
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
 
-    return *mpInstance;
-}
-
-
-
-
-void MasterPageContainer::Register (void)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-    mnReferenceCount ++;
-}
-
-
-
-
-void MasterPageContainer::Unregister (void)
-{
-#if 0
-    ::osl::MutexGuard aGuard (maMutex);
-    if (mnReferenceCount > 0)
-        mnReferenceCount--;
-    if (mnReferenceCount == 0)
-    {
-        delete mpInstance;
-        mpInstance = NULL;
-    }
-#endif
+    DBG_ASSERT (Implementation::mpInstance!=NULL,
+        "MasterPageContainer::Instance(): instance is NULL");
+    return *Implementation::mpInstance;
 }
 
 
