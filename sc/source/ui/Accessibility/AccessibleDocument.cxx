@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-20 13:18:03 $
+ *  last change: $Author: sab $ $Date: 2002-07-04 11:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1210,12 +1210,16 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if ((rRef.GetId() == SC_HINT_ACC_ENTEREDITMODE))
         {
-            uno::Reference<XAccessible> xAcc = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos), mpViewShell->GetWindowByPos(meSplitPos), sal_True);
-            AddChild(xAcc, sal_True);
+            if (mpViewShell && mpViewShell->GetViewData()->GetEditView(meSplitPos))
+            {
+                uno::Reference<XAccessible> xAcc = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos), mpViewShell->GetWindowByPos(meSplitPos), sal_True);
+                AddChild(xAcc, sal_True);
+            }
         }
         else if ((rRef.GetId() == SC_HINT_ACC_LEAVEEDITMODE))
         {
-            RemoveChild(mxTempAcc, sal_True);
+            if (mxTempAcc.is())
+                RemoveChild(mxTempAcc, sal_True);
         }
     }
 
