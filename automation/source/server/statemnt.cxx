@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:21:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2322,7 +2322,8 @@ Window* StatementCommand::GetNextRecoverWin()
             {
                 Window* pTB = pControl->GetChild( 0 );
                 if ( pControl->GetChildCount() == 1 && pTB->GetType() == WINDOW_TOOLBOX )
-                    return pTB;
+//                  return pTB;
+                    ;   // do not act on floating toolboxes #i38796
                 else
                     return pControl;
             }
@@ -4049,6 +4050,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                 }
 
 
+                // maybe this can get removed since we are using GetPreferredKeyInputWindow()
                 if ( pControl->GetType() == WINDOW_COMBOBOX )
                 {   // Bei COMBOBOX an das Edit direkt liefern
                     Window *pTemp = NULL;
@@ -4071,6 +4073,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                             else    // sonst fallback auf das Basisfenster
                                 pDeliverHere = pControl;
                         }
+                        pDeliverHere = pDeliverHere->GetPreferredKeyInputWindow();
                         KeyEvent aEvent;
                         if ( ((USHORT)aString1.GetChar(i)) <= 7 )
                         {
