@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: obr $ $Date: 2001-01-26 11:27:47 $
+#   last change: $Author: jl $ $Date: 2001-02-06 10:30:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,8 @@ IDLFILES=\
     DropTargetDropEvent.idl \
     DropTargetEvent.idl \
     InvalidDNDOperationException.idl \
-    OleDragAndDrop.idl \
+    OleDragAndDropTarget.idl \
+    OleDragAndDropSource.idl	\
     X11DragAndDrop.idl \
     XDragGestureListener.idl \
     XDragGestureRecognizer.idl \
