@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doublecheckedlocking.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-06-24 08:29:42 $
+ *  last change: $Author: sb $ $Date: 2002-10-28 09:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@ extern "C" {
       static T * pInstance = 0;
 
       T * p = pInstance;
-      OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
       if (!p)
       {
           Guard aGuard(aMutex);
@@ -100,6 +99,8 @@ extern "C" {
               pInstance = p;
           }
       }
+      else
+          OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
       return p;
 
     One extra advantage of this macro is that it makes it easier to find all

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instance.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-06-24 08:34:49 $
+ *  last change: $Author: sb $ $Date: 2002-10-28 09:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,6 @@ public:
         static Inst * m_pInstance = 0;
 #endif // _MSC_VER
         Inst * p = m_pInstance;
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
         if (!p)
         {
             Guard aGuard(aGuardCtor());
@@ -314,6 +313,8 @@ public:
                 m_pInstance = p;
             }
         }
+        else
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
         return p;
     }
 
@@ -324,7 +325,6 @@ public:
         static Inst * m_pInstance = 0;
 #endif // _MSC_VER
         Inst * p = m_pInstance;
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
         if (!p)
         {
             Data aData(aDataCtor());
@@ -337,6 +337,8 @@ public:
                 m_pInstance = p;
             }
         }
+        else
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
         return p;
     }
 
