@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-19 16:18:48 $
+#   last change: $Author: vg $ $Date: 2003-05-26 08:05:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,11 @@ SLOFILES=\
     $(SLO)$/importmergehandler.obj \
     $(SLO)$/layerdefaultremover.obj \
     $(SLO)$/emptylayer.obj \
+    $(SLO)$/binarywriter.obj \
+    $(SLO)$/binaryreader.obj \
+    $(SLO)$/binarywritehandler.obj \
+    $(SLO)$/binaryreadhandler.obj	\
+    $(SLO)$/binarycache.obj
 
 # --- Targets ---
 
