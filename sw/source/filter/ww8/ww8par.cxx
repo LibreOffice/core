@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:11:04 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,6 +351,29 @@ void SwMSDffManager::EnableFallbackStream()
     pOldEscherBlipCache = 0;
     pFallbackStream = 0;
 }
+
+USHORT SwWW8ImplReader::GetToggleAttrFlags() const
+{
+    return pCtrlStck ? pCtrlStck->GetToggleAttrFlags() : 0;
+}
+
+USHORT SwWW8ImplReader::GetToggleBiDiAttrFlags() const
+{
+    return pCtrlStck ? pCtrlStck->GetToggleBiDiAttrFlags() : 0;
+}
+
+void SwWW8ImplReader::SetToggleAttrFlags(USHORT nFlags)
+{
+    if (pCtrlStck)
+        pCtrlStck->SetToggleAttrFlags(nFlags);
+}
+
+void SwWW8ImplReader::SetToggleBiDiAttrFlags(USHORT nFlags)
+{
+    if (pCtrlStck)
+        pCtrlStck->SetToggleBiDiAttrFlags(nFlags);
+}
+
 
 /***************************************************************************
 #  Spezial FastSave - Attribute
@@ -857,8 +880,14 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
             if (nTabBase < nColls)
                 nTabBase = pCollA[nTabBase].nBase;
 
-            if (nTabBase < nColls && nOldTabBase != nTabBase)
+            if (
+                    nTabBase < nColls &&
+                    nOldTabBase != nTabBase &&
+                    nTabBase != ww::stiNil
+               )
+            {
                 pSty = (const SwTxtFmtColl*)pCollA[nTabBase].pFmt;
+            }
             else
                 pSty = 0;                           // gib die Suche auf
         }
@@ -2645,7 +2674,8 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     SvStream* pSt, SwDoc& rD, bool bNewDoc)
     : mpDocShell(rD.GetDocShell()), maTracer(*(mpDocShell->GetMedium())),
     pStg(pStorage), pStrm(pSt), pTableStream(0), pDataStream(0), rDoc(rD),
-    maSectionManager(*this), maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
+    maSectionManager(*this), maInsertedTables(rD),
+    maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
     maGrfNameGenerator(bNewDoc,String('G')), maParaStyleMapper(rD),
     maCharStyleMapper(rD), pMSDffManager(0), mpAtnNames(0), pAuthorInfos(0),
     mbNewDoc(bNewDoc), nDropCap(0)
@@ -2983,8 +3013,21 @@ void wwSectionManager::InsertSegments()
 
             SwSectionFmt *pRet = InsertSection(aSectPaM, *aIter);
             //The last section if continous is always unbalanced
-            if (aNext == aEnd && pRet)
-                pRet->SetAttr(SwFmtNoBalancedColumns(true));
+            if (pRet)
+            {
+                //Set the columns to be UnBalanced if that compatability option
+                //is set
+                if (mrReader.pWDop->fNoColumnBalance)
+                    pRet->SetAttr(SwFmtNoBalancedColumns(true));
+                else
+                {
+                    //Otherwise set to unbalanced if the following section is
+                    //not continuous, (which also means that the last section
+                    //is unbalanced)
+                    if (aNext == aEnd || !aNext->IsContinous())
+                        pRet->SetAttr(SwFmtNoBalancedColumns(true));
+                }
+            }
 
             bool bHasOwnHdFt = false;
             /*
@@ -3482,6 +3525,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 }
             }
 
+            maInsertedTables.DelAndMakeTblFrms();
             maSectionManager.InsertSegments();
 
             if (pCollA)
