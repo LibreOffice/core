@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:09:44 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 12:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1707,6 +1707,9 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                 aNotify.xselection.property = rRequest.property;
             }
         }
+        aGuard.clear();
+        xTrans.clear();
+        aGuard.reset();
     }
     XSendEvent( m_pDisplay, rRequest.requestor, False, 0, &aNotify );
 
