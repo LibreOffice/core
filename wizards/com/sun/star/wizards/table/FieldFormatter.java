@@ -2,9 +2,9 @@
 *
 *  $RCSfile: FieldFormatter.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:38:00 $
+*  last change: $Author: vg $ $Date: 2005-02-21 14:01:03 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,15 +57,17 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.table;
 
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.ItemEvent;
+import com.sun.star.awt.TextEvent;
+import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XButton;
 import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XTextComponent;
+import com.sun.star.awt.XTextListener;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
@@ -74,14 +76,16 @@ import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.DataType;
+import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.db.TableDescriptor;
-import com.sun.star.wizards.ui.PeerConfigHelper;
+import com.sun.star.wizards.ui.PeerConfig;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 
@@ -160,10 +164,10 @@ public class FieldFormatter  implements XItemListener{
         txtfieldname = CurUnoDialog.insertTextField("txtfieldname", MODIFYFIELDNAME, this,
                 new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"},
                 new Object[] { UIConsts.INTEGER_12, "HID:41225", new Integer(254), new Integer(37), IFieldFormatStep, new Short(curtabindex++),"", new Integer(50)});
-
-        PeerConfigHelper obtnpeerconfig = new PeerConfigHelper(CurUnoDialog.xUnoDialog);
-        obtnpeerconfig.setPeerProperties(btnplus, new String[] { "AccessibilityName" },new String[] { sbtnplushelptext });
-        obtnpeerconfig.setPeerProperties(btnminus, new String[] { "AccessibilityName" }, new String[] { sbtnminushelptext });
+        txtfieldname.addTextListener(CurUnoDialog);
+        PeerConfig oselfieldspeerconfig = new PeerConfig(CurUnoDialog.xWindow);
+        oselfieldspeerconfig.setAccessiblityName(btnplus, sbtnplushelptext);
+        oselfieldspeerconfig.setAccessiblityName(btnminus, sbtnminushelptext);
     }
 
 
@@ -172,18 +176,21 @@ public class FieldFormatter  implements XItemListener{
         // TODO How can I assign a HelpUrl without Wrapped Target exception
             oColumnDescriptorModel = CurUnoDialog.insertControlModel("com.sun.star.sdb.ColumnDescriptorControlModel", "oColumnDescriptor",
                     new String[] {"Height", "PositionX", "PositionY", "Step", "TabIndex", "Width","EditWidth"}, // "HelpURL"
-                    new Object[] {new Integer(77), new Integer(158), new Integer(49), IFieldFormatStep, new Short(curtabindex++), new Integer(146), new Integer(50)});  //, "HID:41226"
+                    new Object[] {new Integer(81), new Integer(158), new Integer(49), IFieldFormatStep, new Short(curtabindex++), new Integer(146), new Integer(50)});  //, "HID:41226"
             curTableDescriptor = _curTableDescriptor;
             Helper.setUnoPropertyValue(oColumnDescriptorModel, "ActiveConnection", _curTableDescriptor.DBConnection);
+            txtfieldname.setMaxTextLen((short) this.curTableDescriptor.getMaxColumnNameLength());
+        }
+        else {
+            int nStep = ((Integer) Helper.getUnoPropertyValue(oColumnDescriptorModel, "Step")).intValue();
+            if (nStep > IFieldFormatStep.intValue()){
+                Helper.setUnoPropertyValue(oColumnDescriptorModel, "Step", IFieldFormatStep);
+                CurUnoDialog.repaintDialogStep();
+            }
         }
         Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "StringItemList", _fieldnames);
         Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "SelectedItems", new short[] {0});
-//      try {
-//          int i = curTableDescriptor.tempcolumncontainer.size();
-//          updateColumnDescriptor("Comments", curTableDescriptor.tempcolumncontainer.elementAt(0)); //add(curTableDescriptor.getColumnbyName(fieldnames[0])));
-//      } catch (RuntimeException e) {
-//          e.printStackTrace(System.out);
-//      }
+
         updateColumnDescriptor(_fieldnames[0], curTableDescriptor.getColumnbyName(_fieldnames[0]));
         toggleButtons();
         CurUnoDialog.setFocus("lstfieldnames");
@@ -204,20 +211,24 @@ public class FieldFormatter  implements XItemListener{
         Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftUp), "Enabled", new Boolean(benableShiftUpButton));
         Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftDown), "Enabled", new Boolean(benableShiftDownButton));
         Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), "Enabled", new Boolean(blistispopulated));
-        CurUnoDialog.enablefromStep(TableWizard.SOPRIMARYKEYPAGE, blistispopulated);
+        CurUnoDialog.setcompleted(TableWizard.SOFIELDSFORMATPAGE, blistispopulated);
     }
 
 
     public void addFieldName(){
-        String snewfieldname = Desktop.getUniqueName(xlstFieldNames.getItems(), suntitled);
+        String snewfieldname = Desktop.getUniqueName(xlstFieldNames.getItems(), suntitled, "");
         short icount = xlstFieldNames.getItemCount();
-        xlstFieldNames.addItem(snewfieldname, icount);
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "SelectedItems", new short[] {icount});
-        toggleButtons();
-        FieldDescription curfielddescription = new FieldDescription(snewfieldname);
-        CurUnoDialog.fielditems.put(snewfieldname, curfielddescription);
-        curTableDescriptor.addColumn(curfielddescription.getPropertyValues());
-        updateColumnDescriptor(snewfieldname, curTableDescriptor.getColumnbyName(snewfieldname));
+        if (CurUnoDialog.verifyfieldcount(icount)){
+            xlstFieldNames.addItem(snewfieldname, icount);
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "SelectedItems", new short[] {icount});
+            toggleButtons();
+            FieldDescription curfielddescription = new FieldDescription(snewfieldname);
+            CurUnoDialog.fielditems.put(snewfieldname, curfielddescription);
+            curTableDescriptor.addColumn(curfielddescription.getPropertyValues());
+            updateColumnDescriptor(snewfieldname, curTableDescriptor.getColumnbyName(snewfieldname));
+            CurUnoDialog.setControlVisible("oColumnDescriptor", true);
+            CurUnoDialog.repaintDialogStep();
+        }
     }
 
 
@@ -245,10 +256,13 @@ public class FieldFormatter  implements XItemListener{
             toggleButtons();
         }
         else{
-//          Helper.setUnoPropertyValue(oColumnDescriptorModel, "Column", Any.VOID);
+            Helper.setUnoPropertyValue(UnoDialog.getModel(txtfieldname), "Text", "");
             Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), "Enabled", new Boolean(benable));
-            CurUnoDialog.enablefromStep(TableWizard.SOPRIMARYKEYPAGE, benable);
+            CurUnoDialog.setcompleted(TableWizard.SOFIELDSFORMATPAGE, benable);
         }
+        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), "Enabled", new Boolean(benable));
+        CurUnoDialog.setControlVisible("oColumnDescriptor", benable);
+        CurUnoDialog.repaintDialogStep();
     }
 
 
@@ -266,10 +280,7 @@ public class FieldFormatter  implements XItemListener{
                 fieldnames[ipos] = newfieldname;
                 Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "StringItemList", fieldnames);
                 Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "SelectedItems", new short[] {ipos});
-                CurUnoDialog.enablefromStep(TableWizard.SOPRIMARYKEYPAGE, true);
-            }
-            else
-                CurUnoDialog.enablefromStep(TableWizard.SOPRIMARYKEYPAGE, false);
+        }
         }
     }
 
@@ -317,7 +328,7 @@ public class FieldFormatter  implements XItemListener{
 
     private void updateColumnDescriptor(String _ColumnName, XPropertySet _xColumn){
         updateColumnofColumnDescriptor();
-        XPropertySet xNewPropertySet = curTableDescriptor.assignPropertyValues(_xColumn, "");
+        XPropertySet xNewPropertySet = curTableDescriptor.clonePropertySet(_ColumnName, _xColumn);
         if (xNewPropertySet != null)
             Helper.setUnoPropertyValue(oColumnDescriptorModel, "Column", xNewPropertySet);
         txtfieldname.setText(_ColumnName);
@@ -336,6 +347,13 @@ public class FieldFormatter  implements XItemListener{
         toggleButtons();
     }
 
+
+    public boolean iscompleted(){
+        String[] sfieldnames = (String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "StringItemList");
+        return sfieldnames.length > 0;
+    }
+
+
     public String[] getFieldNames(){
         return (String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "StringItemList");
     }
@@ -346,5 +364,4 @@ public class FieldFormatter  implements XItemListener{
     public void disposing(EventObject arg0) {
         // TODO Auto-generated method stub
     }
-
 }
