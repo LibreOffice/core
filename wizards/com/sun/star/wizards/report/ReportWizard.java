@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bc $ $Date: 2002-06-07 07:41:39 $
+ *  last change: $Author: bc $ $Date: 2002-06-11 15:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbc.*;
 import com.sun.star.sdb.*;
 import com.sun.star.sdbcx.XTablesSupplier;
+import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.XInterface;
@@ -222,6 +223,9 @@ public class ReportWizard {
     static String[] QueryNames;
     static String[][] LayoutFiles = new String[2][];
     static String[][] ContentFiles = new String[2][];
+    static String[] sSortHeader = new String[4];
+    static String[]sSortAscend = new String[4];
+    static String[]sSortDescend = new String[4];
     static XTextComponent xTitleTextBox;
     static XTextComponent[] xSaveTextBox = new XTextComponent[2];
 
@@ -269,16 +273,12 @@ public class ReportWizard {
     static String slblDataStructure;
     static String slblPageLayout;
     static String sOrganizeFields;
-    static String sSortHeader1;
-    static String sSortHeader2;
     static String sNoSorting;
     static String sOrientationHeader;
     static String sOrientVertical;
     static String sOrientHorizontal;
     static String sSaveAsTemplate;
     static String sReportTitle;
-    static String sSortAscend;
-    static String sSortDescend;
     static String sSaveAsDocument;
     static String sSaveAs;
     static String sUseTemplate;
@@ -339,20 +339,21 @@ public class ReportWizard {
         try{
     if (xTableListBox.getSelectedItems().length > 0) {
            int CurCommandType;
-           String TableName;
            int SelIndex = xTableListBox.getSelectedItemPos();
-           if (bgetCommandType){
+           if (bgetCommandType == true){
                CurCommandType = iCommandTypes[SelIndex];
                if (CurCommandType == com.sun.star.sdb.CommandType.QUERY){
-                    int QueryIndex = SelIndex - TableNames.length - 1;
+                    int QueryIndex = SelIndex - TableNames.length;
                     TableName = QueryNames[QueryIndex];
                     oDBTable = xQueryNames.getByName(TableName);
-                }
+            CurDBMetaData.Command = (String) tools.getUNOPropertyValue(oDBTable, "Command");
+           }
         else{
                     TableName = TableNames[SelIndex];
                     oDBTable = xTableNames.getByName(TableName);
                 }
-           }
+        CurDBMetaData.CommandType = CurCommandType;
+       }
            XColumnsSupplier xTableCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, oDBTable);
            xColumns = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xTableCols.getColumns());
            if (DBMetaData.getSpecificFieldNames(CurDBMetaData) > 0)
@@ -399,73 +400,71 @@ public class ReportWizard {
 
    static class ItemListenerImpl implements com.sun.star.awt.XItemListener{
 
-        // XEventListener
        public void itemStateChanged(ItemEvent EventObject ){
        int iPos;
     try{
             int iKey  =  getControlKey(EventObject.Source);
             switch (iKey) {
-              case SODBLST:
-                 getSelectedDBMetaData(xGlobalMSF);
-                 break;
+        case SODBLST:
+            getSelectedDBMetaData(xGlobalMSF);
+            break;
 
-              case SOTBLLST:
-                 FillUpFieldsListbox(CurDBMetaData, true);
-                 TableName = xTableListBox.getSelectedItem();
-                 break;
+        case SOTBLLST:
+            FillUpFieldsListbox(CurDBMetaData, true);
+            break;
 
-             case SOFLDSLST:
-                UNODialogs.FormSetMoveRights(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, (short)-1, (short)-1);
-                break;
+        case SOFLDSLST:
+            UNODialogs.FormSetMoveRights(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, (short)-1, (short)-1);
+            break;
 
-             case SOSELFLDSLST:
-                UNODialogs.FormSetMoveRights(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, (short)-1, (short)-1);
-                break;
+        case SOSELFLDSLST:
+            UNODialogs.FormSetMoveRights(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, (short)-1, (short)-1);
+            break;
 
-             case SOFIRSTSORTLST:
-                enableNextSortListBox(0);
-                break;
+        case SOFIRSTSORTLST:
+            enableNextSortListBox(0);
+            break;
 
-             case SOSECSORTLST:
-                enableNextSortListBox(1);
+        case SOSECSORTLST:
+            enableNextSortListBox(1);
 
-             case SOTHIRDSORTLST:
-                enableNextSortListBox(2);
-                break;
+        case SOTHIRDSORTLST:
+            enableNextSortListBox(2);
+            break;
 
-             case SOFOURTHSORTLST:
-                MaxSortIndex = 3;
-                break;
+        case SOFOURTHSORTLST:
+            MaxSortIndex = 3;
+            break;
 
-             case SOGROUPLST:
-         boolean bDoEnable = ((xGroupListBox.getSelectedItems().length > 0) && (GroupFieldVector.size() < 4));
-         UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGroupOut", "Enabled", new Boolean(bDoEnable));
-               break;
+        case SOGROUPLST:
+            boolean bDoEnable = ((xGroupListBox.getSelectedItems().length > 0) && (GroupFieldVector.size() < 4));
+            UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGroupOut", "Enabled", new Boolean(bDoEnable));
+            break;
 
-             case SOSELGROUPLST:
-         toggleRemoveGroupButton();
-               break;
+        case SOSELGROUPLST:
+            toggleRemoveGroupButton();
+            break;
 
         case SOCONTENTLST:
-        CurReportDocument.ReportTextDocument.lockControllers();
-        iPos = xContentListBox.getSelectedItemPos();
-        ReportDocument.loadSectionsfromTemplate(CurReportDocument, CurDBMetaData, ContentFiles[0][iPos]);
-        ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, ContentFiles[0][iPos], "LoadTextStyles");
-        CurReportDocument.ReportTextDocument.unlockControllers();
-        ReportDocument.selectFirstPage(CurReportDocument.ReportTextDocument);
-           break;
+            CurReportDocument.ReportTextDocument.lockControllers();
+            iPos = xContentListBox.getSelectedItemPos();
+            ReportDocument.loadSectionsfromTemplate(CurReportDocument, CurDBMetaData, ContentFiles[0][iPos]);
+            ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, ContentFiles[0][iPos], "LoadTextStyles");
+            CurReportDocument.ReportTextDocument.unlockControllers();
+            ReportDocument.selectFirstPage(CurReportDocument.ReportTextDocument);
+            break;
 
-         case SOLAYOUTLST:
-        CurReportDocument.ReportTextDocument.lockControllers();
-        iPos = xLayoutListBox.getSelectedItemPos();
+        case SOLAYOUTLST:
+            CurReportDocument.ReportTextDocument.lockControllers();
+            iPos = xLayoutListBox.getSelectedItemPos();
             boolean bOldIsCurLandscape = ((Boolean) tools.getUNOPropertyValue(CurReportDocument.ReportPageStyle, "IsLandscape")).booleanValue();
-        ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, LayoutFiles[0][iPos], "LoadPageStyles");
-        ReportDocument.changePageOrientation(xGlobalMSF, xDlgNameAccess, CurReportDocument, bOldIsCurLandscape);
-        CurReportDocument.ReportTextDocument.unlockControllers();
-        ReportDocument.selectFirstPage(CurReportDocument.ReportTextDocument);
-        break;
-            default:
-               break;
+            ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, LayoutFiles[0][iPos], "LoadPageStyles");
+            ReportDocument.changePageOrientation(xGlobalMSF, xDlgNameAccess, CurReportDocument, bOldIsCurLandscape);
+            CurReportDocument.ReportTextDocument.unlockControllers();
+            ReportDocument.selectFirstPage(CurReportDocument.ReportTextDocument);
+            break;
+        default:
+            break;
            }
         }
         catch( Exception exception ){
@@ -611,8 +610,6 @@ public class ReportWizard {
             ReportDocument.createDBForm(xMSF, CurReportDocument, CurDBMetaData);
             ReportDocument.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "macro:///Tools.Debug.FillDocument()");     //"service:com.sun.star.wizards.report.CallReportWizard?fill"
             boolean bUseTemplate = ((Short) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "optUseTemplate", "State")).shortValue() == (short) 1;
-            if (bUseTemplate == false)
-            ReportDocument.createReport(xGlobalMSF);
             tools.storeDocument(xMSF, (XComponent) CurReportDocument.oComponent , sStorePath, "swriter: writer_StarOffice_XML_Writer_Template");
             DBMetaData.createDBLink(CurDBMetaData.DataSource, sStorePath);
             if (bUseTemplate == true){
@@ -1022,17 +1019,12 @@ public class ReportWizard {
     public static void fillThirdStep(){
     try{
     boolean bDoEnable;
-    String LocHeader;
     int YPos = 40;
     for (int i = 0; i<4; i++){
         bDoEnable = (i == 0);
-        if (i == 0)
-            LocHeader = sSortHeader1;
-        else
-            LocHeader = sSortHeader2;
         InsertControlModel("com.sun.star.awt.UnoControlFixedLineModel", xMSFDialogModel, xDlgNames, "lblSort" + new Integer(i+1),
                 new String[] {"Enabled", "Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "Width"},
-                new Object[] {new Boolean(bDoEnable), new Integer(8), LocHeader, new Integer(0), new Integer(12), new Integer(YPos), new Integer(3), new Integer(252)});
+                new Object[] {new Boolean(bDoEnable), new Integer(8), sSortHeader[i], new Integer(0), new Integer(12), new Integer(YPos), new Integer(3), new Integer(252)});
 
         xSortListBox[i] = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstSort" + new Integer(i+1).toString(), SOSORTLST[i],
                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Dropdown", "LineCount", "Name"},
@@ -1040,11 +1032,11 @@ public class ReportWizard {
 
         InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optAscend" + Integer.toString(i+1), SOSORTASCENDOPT[i],
                            new String[] {"Enabled", "Height", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Tag", "Width"},
-                           new Object[] {new Boolean(bDoEnable), new Integer(10), sSortAscend, new Integer(186), new Integer(YPos+10), new Short((short) 1), new Integer(3), new Short((short) (18+i*4)), new String("ASC"), new Integer(65)});
+                           new Object[] {new Boolean(bDoEnable), new Integer(10), sSortAscend[i], new Integer(186), new Integer(YPos+10), new Short((short) 1), new Integer(3), new Short((short) (18+i*4)), new String("ASC"), new Integer(65)});
 
         InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optDescend" + Integer.toString(i+1), SOSORTDESCENDOPT[i],
                            new String[] {"Enabled", "Height", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Tag", "Width"},
-                           new Object[] {new Boolean(bDoEnable), new Integer(10), sSortDescend, new Integer(186), new Integer(YPos+24), new Short((short) 0), new Integer(3), new Short((short) (19+i*4)), new String("DESC"), new Integer(65)});
+                           new Object[] {new Boolean(bDoEnable), new Integer(10), sSortDescend[i], new Integer(186), new Integer(YPos+24), new Short((short) 0), new Integer(3), new Short((short) (19+i*4)), new String("DESC"), new Integer(65)});
         YPos = YPos + 36;
     }
     }
@@ -1100,11 +1092,13 @@ public class ReportWizard {
     }}
 
 
+
     public static void main (String args[]) {
         String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
     try {
             xGlobalMSF = connect(ConnectStr);
         if(xGlobalMSF != null)  System.out.println("Connected to "+ ConnectStr);
+        Object objectToolkit = xGlobalMSF.createInstance("com.sun.star.awt.ExtToolkit");
         startReportWizard(xGlobalMSF);
     }
         catch(Exception exception) {
@@ -1389,22 +1383,34 @@ public class ReportWizard {
         scmdBack = tools.getResText(xResInvoke, RID_COMMON + 2);
     scmdGoOn = tools.getResText(xResInvoke, RID_COMMON + 3);
         scmdHelp = tools.getResText(xResInvoke, RID_COMMON + 20);
-    slblDatabases = tools.getResText(xResInvoke, RID_FORM + 11);
+
         slblTables = tools.getResText(xResInvoke, RID_FORM + 6);
+    slblDatabases = tools.getResText(xResInvoke, RID_FORM + 11);
         slblFields = tools.getResText(xResInvoke, RID_FORM + 12);
         slblSelFields = tools.getResText(xResInvoke, RID_FORM + 13);
         slblDataStructure = tools.getResText(xResInvoke, RID_REPORT + 15);
         slblPageLayout = tools.getResText(xResInvoke, RID_REPORT + 16);
         sOrganizeFields = tools.getResText(xResInvoke, RID_REPORT + 19);
-        sSortHeader1 = tools.getResText(xResInvoke, RID_REPORT + 20);
-        sSortHeader2 = tools.getResText(xResInvoke, RID_REPORT + 21);
-        sNoSorting = tools.getResText(xResInvoke, RID_REPORT + 8);
+    sSortHeader[0] = tools.getResText(xResInvoke, RID_REPORT + 20);
+        sSortHeader[1] = tools.getResText(xResInvoke, RID_REPORT + 21);
+        sSortHeader[2] = tools.getResText(xResInvoke, RID_REPORT + 51);
+        sSortHeader[3] = tools.getResText(xResInvoke, RID_REPORT + 52);
+
+    sNoSorting = tools.getResText(xResInvoke, RID_REPORT + 8);
         sOrientationHeader =  tools.getResText(xResInvoke, RID_REPORT + 22);
         sOrientVertical = tools.getResText(xResInvoke, RID_REPORT + 23);
         sOrientHorizontal = tools.getResText(xResInvoke, RID_REPORT + 24);
         sReportTitle = tools.getResText(xResInvoke, RID_REPORT + 33);
-        sSortAscend = tools.getResText(xResInvoke, RID_REPORT + 36);
-        sSortDescend = tools.getResText(xResInvoke, RID_REPORT + 37);
+        sSortAscend[0] = tools.getResText(xResInvoke, RID_REPORT + 36);
+        sSortAscend[1] = tools.getResText(xResInvoke, RID_REPORT + 53);
+        sSortAscend[2] = tools.getResText(xResInvoke, RID_REPORT + 54);
+        sSortAscend[3] = tools.getResText(xResInvoke, RID_REPORT + 55);
+
+    sSortDescend[0] = tools.getResText(xResInvoke, RID_REPORT + 37);
+    sSortDescend[1] = tools.getResText(xResInvoke, RID_REPORT + 56);
+    sSortDescend[2] = tools.getResText(xResInvoke, RID_REPORT + 57);
+    sSortDescend[3] = tools.getResText(xResInvoke, RID_REPORT + 58);
+
     WizardHeaderText[0] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 28);
     WizardHeaderText[1] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 29);
     WizardHeaderText[2] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 30);
@@ -1423,6 +1429,7 @@ public class ReportWizard {
     sSaveAs = tools.getResText(xResInvoke, RID_REPORT + 44);
         sCreateLink = tools.getResText(xResInvoke, RID_REPORT + 45);
     sGroupings = tools.getResText(xResInvoke, RID_REPORT + 50);
+
     sWriterFilterName = tools.getResText(xResInvoke, RID_FORM + 70);
     }
 }   
