@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-07 15:07:50 $
+ *  last change: $Author: kz $ $Date: 2002-01-14 21:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ QueryBox DLG_MACROQUERY
         Text[ polish ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgef�hrt werden. M�chten Sie es trotzdem ausf�hren?";
         Text[ portuguese_brazilian ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgef�hrt werden. M�chten Sie es trotzdem ausf�hren?";
         Text[ japanese ] = "セキュリティ設定ではこのマクロは実行できないはずです。それでも実行しますか。";
-        Text[ korean ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgef�rt werden. M�hten Sie es trotzdem ausf�ren?";
+        Text[ korean ] = "보안 설정에 따라 이 매크로는 실행할 수 없습니다. 계속하시겠습니까?";
         Text[ chinese_simplified ] = "按照安全的设定不应该执行这个宏。您还是要执行这个宏吗？";
         Text[ chinese_traditional ] = "依照安全的設定不應該執行這個巨集。還是要執行這個巨集嗎？";
         Text[ turkish ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgef�hrt werden. M�chten Sie es trotzdem ausf�hren?";
@@ -250,7 +250,7 @@ QueryBox DLG_MACROQUERY
         Text[ polish ] = "M�chten Sie dieses Makro ausf�hren?";
         Text[ portuguese_brazilian ] = "M�chten Sie dieses Makro ausf�hren?";
         Text[ japanese ] = "このマクロを実行しますか。";
-        Text[ korean ] = "M�hten Sie dieses Makro ausf�ren?";
+        Text[ korean ] = "이 매크로를 실행하시겠습니까?";
         Text[ chinese_simplified ] = "您要执行这个宏吗？";
         Text[ chinese_traditional ] = "要執行這個巨集嗎？";
         Text[ turkish ] = "M�chten Sie dieses Makro ausf�hren?";
@@ -270,13 +270,14 @@ QueryBox DLG_MACROQUERY
     Message[ polish ] = "Es wurde ein Ereignis ausgel�st, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ portuguese_brazilian ] = "Es wurde ein Ereignis ausgel�st, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ japanese ] = "マクロ $(MACRO) で設定されているイベントが作動しました。$(TEXT)";
-    Message[ korean ] = "Es wurde ein Ereignis ausgel�t, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
+    Message[ korean ] = "매크로 $(MACRO)가 구성되어 있는 이벤트가 작동되었습니다. $(TEXT)";
     Message[ chinese_simplified ] = "已经引发这个宏 $(MACRO) 设定好的事件。$(TEXT)";
     Message[ chinese_traditional ] = "已經引發這個巨集 $(MACRO) 設置好的動作。$(TEXT)";
     Message[ turkish ] = "Es wurde ein Ereignis ausgel�st, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ arabic ] = "Es wurde ein Ereignis ausgel�st, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ catalan ] = "Es wurde ein Ereignis ausgel�st, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
 };
+
 
 
 
