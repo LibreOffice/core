@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-30 15:34:05 $
+ *  last change: $Author: thb $ $Date: 2002-04-30 16:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1627,12 +1627,12 @@ void SdrObjGroup::AfterRead()
 }
 
 // ItemPool fuer dieses Objekt wechseln
-void SdrObjGroup::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel*)
+void SdrObjGroup::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel )
 {
     if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
     {
         // call parent
-        SdrObject::MigrateItemPool(pSrcPool, pDestPool);
+        SdrObject::MigrateItemPool(pSrcPool, pDestPool, pNewModel );
 
         // own reaction
         SdrObjList* pOL = pSub;
@@ -1640,7 +1640,7 @@ void SdrObjGroup::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool,
 
         for(sal_uInt32 a(0); a < nObjAnz; a++)
         {
-            pOL->GetObj(a)->MigrateItemPool(pSrcPool, pDestPool);
+            pOL->GetObj(a)->MigrateItemPool(pSrcPool, pDestPool, pNewModel );
         }
     }
 }
