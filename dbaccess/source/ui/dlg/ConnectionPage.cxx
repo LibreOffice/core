@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:26:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@
 #ifdef _ADO_DATALINK_BROWSE_
 typedef void*               HWND;
 typedef void*               HMENU;
+typedef void*               HDC;
 #ifndef _SV_SYSDATA_HXX
 #include <vcl/sysdata.hxx>
 #endif
