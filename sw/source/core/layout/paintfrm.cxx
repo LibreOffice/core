@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2002-07-31 08:24:23 $
+ *  last change: $Author: os $ $Date: 2002-07-31 12:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -975,8 +975,6 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
         {
             pOut->Push( PUSH_FILLCOLOR );
 
-            const Color aBreak(COL_BLUE );
-
             for ( USHORT i = 0; i < Count(); ++i )
             {
                 SwLineRect &rLRect = operator[](i);
@@ -989,7 +987,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                         case SUBCOL_FLY: pCol = &SwViewOption::GetObjectBoundariesColor(); break;
                         case SUBCOL_TAB: pCol = &SwViewOption::GetTableBoundariesColor(); break;
                         case SUBCOL_SECT: pCol = &SwViewOption::GetSectionBoundColor(); break;
-                        case SUBCOL_BREAK:    pCol = &aBreak;    break;
+                        case SUBCOL_BREAK:    pCol = &SwViewOption::GetPageBreakColor(); break;
                     }
                     if ( pOut->GetFillColor() != *pCol )
                         pOut->SetFillColor( *pCol );

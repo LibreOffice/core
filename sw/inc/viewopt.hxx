@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-05-30 10:13:06 $
+ *  last change: $Author: os $ $Date: 2002-07-31 12:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,7 @@ class SwViewOption
     static Color    aSpellColor;     // mark color of online spell checking
     static Color    aFieldShadingsColor;
     static Color    aSectionBoundColor;
+    static Color    aPageBreakColor;
     static Color    aNotesIndicatorColor;
     static Color    aScriptIndicatorColor;
 
@@ -570,6 +571,7 @@ public:
     static Color&   GetSpellColor();
     static Color&   GetFieldShadingsColor();
     static Color&   GetSectionBoundColor();
+    static Color&   GetPageBreakColor();
     static Color&   GetNotesIndicatorColor();
     static Color&   GetScriptIndicatorColor();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-07-04 07:55:41 $
+ *  last change: $Author: os $ $Date: 2002-07-31 12:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ Color SwViewOption::aTextGridColor(COL_LIGHTGRAY);
 Color SwViewOption::aSpellColor(COL_LIGHTRED);
 Color SwViewOption::aFieldShadingsColor(COL_LIGHTGRAY);
 Color SwViewOption::aSectionBoundColor(COL_LIGHTGRAY);
+Color SwViewOption::aPageBreakColor(COL_BLUE);
 Color SwViewOption::aNotesIndicatorColor(COL_YELLOW);
 Color SwViewOption::aScriptIndicatorColor(COL_GREEN);
 
@@ -737,6 +738,13 @@ Color&   SwViewOption::GetSectionBoundColor()
 {
     return aSectionBoundColor;
 }
+/* -----------------------------2002/07/31 14:00------------------------------
+
+ ---------------------------------------------------------------------------*/
+Color& SwViewOption::GetPageBreakColor()
+{
+    return aPageBreakColor;
+}
 /*-- 24.04.2002 10:50:15---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -806,6 +814,9 @@ void SwViewOption::ApplyColorConfigValues(const svx::ColorConfig& rConfig )
     aSectionBoundColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
         nAppearanceFlags |= VIEWOPT_SECTION_BOUNDARIES;
+
+    aValue = rConfig.GetColorValue(svx::WRITERPAGEBREAKS);
+    aPageBreakColor.SetColor(aValue.nColor);
 
     aNotesIndicatorColor.SetColor(rConfig.GetColorValue(svx::WRITERNOTESINDICATOR).nColor);
     aScriptIndicatorColor.SetColor(rConfig.GetColorValue(svx::WRITERSCRIPTINDICATOR).nColor);
