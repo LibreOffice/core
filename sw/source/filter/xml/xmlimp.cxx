@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-04 15:10:17 $
+ *  last change: $Author: hr $ $Date: 2001-07-12 13:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,7 +739,7 @@ SvTextShapeImportHelper::~SvTextShapeImportHelper()
 {
     rFormImport->endPage();
 
-    if (xPage.is)
+    if (xPage.is())
     {
         Reference<XShapes> xShapes( xPage, UNO_QUERY );
         XMLShapeImportHelper::endPage(xShapes);
