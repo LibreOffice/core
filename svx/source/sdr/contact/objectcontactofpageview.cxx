@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofpageview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:06:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ namespace sdr
         {
             // get and remember OutputDevices
             OutputDevice* pOriginalOutDev = rDisplayInfo.GetOutputDevice();
-            ExtOutputDevice* pOriginalExtOutDev = rDisplayInfo.GetExtendedOutputDevice();
+            XOutputDevice* pOriginalExtOutDev = rDisplayInfo.GetExtendedOutputDevice();
 
             // compare size of maPreRenderDevice with size of visible area
             if(maPreRenderDevice.GetOutputSizePixel() != pOriginalOutDev->GetOutputSizePixel())
