@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltbl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:32:43 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #include "hintids.hxx"
 
@@ -291,39 +288,6 @@ SwHTMLTableLayout::~SwHTMLTableLayout()
     delete[] aCells;
 }
 
-#ifdef USED
-USHORT SwHTMLTableLayout::GetLeftBorderWidth( USHORT nCol ) const
-{
-    SwHTMLTableLayoutColumn *pColumn = GetColumn( nCol );
-
-    USHORT nBWidth = 0;
-    if( pColumn->HasLeftBorder() )
-    {
-        nBWidth = nCol==0 ? nLeftBorderWidth : nBorderWidth;
-    }
-    if( nCol==0 && nInhLeftBorderWidth > nBWidth )
-    {
-        nBWidth = nInhLeftBorderWidth;
-    }
-
-    return nBWidth;
-}
-
-USHORT SwHTMLTableLayout::GetRightBorderWidth( USHORT nCol, USHORT nColSpan ) const
-{
-    USHORT nBWidth = 0;
-
-    if( nCol+nColSpan==nCols )
-    {
-        nBWidth = nInhRightBorderWidth > nRightBorderWidth
-            ? nInhRightBorderWidth
-            : nRightBorderWidth;
-    }
-
-    return nBWidth;
-}
-#endif
-
 // Die Breiten der Umrandung werden zunaechst wie in Netscape berechnet:
 // Aussere Umrandung: BORDER + CELLSPACING + CELLPADDING
 // Innere Umrandung: CELLSPACING + CELLPADDING
@@ -402,38 +366,6 @@ void SwHTMLTableLayout::AddBorderWidth( ULONG &rMin, ULONG &rMax,
     rMin += nAdd;
     rMax += nAdd;
     rAbsMin += nAdd;
-
-#if 0
-    // Diese Breiten-Berchnung orientiert sich an den SW-Umrandungen!!!
-    USHORT nBDist = nCellPadding;
-
-    // linke Umrandung beruecksichtigen
-    USHORT nBorderWidth = GetLeftBorderWidth( nCol );
-    if( nBorderWidth )
-    {
-        rMin += nBorderWidth;
-        rMax += nBorderWidth;
-        rAbsMin += nBorderWidth;
-        if( !nBDist )
-            nBDist = MIN_BORDER_DIST;
-    }
-
-    // rechte Umrandung beruecksichtigen
-    nBorderWidth = GetRightBorderWidth( nCol, nColSpan );
-    if( nBorderWidth )
-    {
-        rMin += nBorderWidth;
-        rMax += nBorderWidth;
-        rAbsMin += nBorderWidth;
-        if( !nBDist )
-            nBDist = MIN_BORDER_DIST;
-    }
-
-    // Abstand zum Inhalt beruecksichtigen
-    rMin += 2*nBDist;
-    rMax += 2*nBDist;
-    rAbsMin += 2*nBDist;
-#endif
 }
 
 void SwHTMLTableLayout::SetBoxWidth( SwTableBox *pBox, USHORT nCol,
@@ -595,7 +527,7 @@ SwFrmFmt *SwHTMLTableLayout::FindFlyFrmFmt() const
     return pTblNd->GetFlyFmt();
 }
 
-void lcl_GetMinMaxSize( ULONG& rMinNoAlignCnts, ULONG& rMaxNoAlignCnts,
+static void lcl_GetMinMaxSize( ULONG& rMinNoAlignCnts, ULONG& rMaxNoAlignCnts,
                         ULONG& rAbsMinNoAlignCnts,
 #ifdef FIX41370
                         BOOL& rHR,
@@ -1713,9 +1645,9 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
     }
 }
 
-BOOL lcl_ResizeLine( const SwTableLine*& rpLine, void* pPara );
+static BOOL lcl_ResizeLine( const SwTableLine*& rpLine, void* pPara );
 
-BOOL lcl_ResizeBox( const SwTableBox*& rpBox, void* pPara )
+static BOOL lcl_ResizeBox( const SwTableBox*& rpBox, void* pPara )
 {
     USHORT *pWidth = (USHORT *)pPara;
 
@@ -1734,19 +1666,19 @@ BOOL lcl_ResizeBox( const SwTableBox*& rpBox, void* pPara )
     return TRUE;
 }
 
-BOOL lcl_ResizeLine( const SwTableLine*& rpLine, void* pPara )
+static BOOL lcl_ResizeLine( const SwTableLine*& rpLine, void* pPara )
 {
     USHORT *pWidth = (USHORT *)pPara;
 #ifndef PRODUCT
     USHORT nOldWidth = *pWidth;
-#endif;
+#endif
     *pWidth = 0;
     ((SwTableLine *)rpLine)->GetTabBoxes().ForEach( &lcl_ResizeBox, pWidth );
 
 #ifndef PRODUCT
     ASSERT( !nOldWidth || Abs(*pWidth-nOldWidth) < COLFUZZY,
             "Zeilen einer Box sind unterschiedlich lang" );
-#endif;
+#endif
 
     return TRUE;
 }
