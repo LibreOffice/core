@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-26 07:56:31 $
+ *  last change: $Author: mba $ $Date: 2001-03-05 12:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1471,8 +1471,7 @@ void SwDocShell::RemoveOLEObjects()
                     xOLEChildList->DoInitNew( 0 );
                 }
 
-                xOLEChildList->Move( &aRef, aRef->GetStorageName() );
-
+                xOLEChildList->Move( &aRef, aRef->GetStorageName(), TRUE );
                 pPersist->Remove( &aRef );
             }
         }
