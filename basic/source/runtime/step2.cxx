@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-18 12:42:15 $
+ *  last change: $Author: ab $ $Date: 2001-09-04 11:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,6 +919,9 @@ void SbiRuntime::StepPUBLIC( USHORT nOp1, USHORT nOp2 )
     SbxDataType t = (SbxDataType) nOp2;
     BOOL bFlag = pMod->IsSet( SBX_NO_MODIFY );
     pMod->SetFlag( SBX_NO_MODIFY );
+    SbxVariableRef p = pMod->Find( aName, SbxCLASS_PROPERTY );
+    if( p.Is() )
+        pMod->Remove (p);
     SbProperty* pProp = pMod->GetProperty( aName, t );
     if( !bFlag )
         pMod->ResetFlag( SBX_NO_MODIFY );
@@ -953,6 +956,42 @@ void SbiRuntime::StepGLOBAL( USHORT nOp1, USHORT nOp2 )
     }
 
 }
+
+
+// Creates global variable that isn't reinitialised when
+// basic is restarted, P=PERSIST (+StringID+Typ)
+
+void SbiRuntime::StepGLOBAL_P( USHORT nOp1, USHORT nOp2 )
+{
+    if( pMod->pImage->bFirstInit )
+    {
+        StepGLOBAL( nOp1, nOp2 );
+    }
+}
+
+
+// Searches for global variable, behavior depends on the fact
+// if the variable is initialised for the first time
+
+void SbiRuntime::StepFIND_G( USHORT nOp1, USHORT nOp2 )
+{
+    if( pMod->pImage->bFirstInit )
+    {
+        // Behave like always during first init
+        StepFIND( nOp1, nOp2 );
+    }
+    else
+    {
+        // Return dummy variable
+        SbxDataType t = (SbxDataType) nOp2;
+        String aName( pImg->GetString( nOp1 & 0x7FFF ) );
+
+        SbxVariable* pDummyVar = new SbxVariable( t );
+        pDummyVar->SetName( aName );
+        PushVar( pDummyVar );
+    }
+}
+
 
 // Einrichten einer statischen Variablen (+StringID+Typ)
 

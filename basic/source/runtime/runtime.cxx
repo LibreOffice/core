@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-01 11:02:48 $
+ *  last change: $Author: ab $ $Date: 2001-09-04 11:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,11 @@ SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// Alle Opcodes mit zwei Operanden
     MEMBER(SbiRuntime::StepSTATIC),     // Statische Variable (+StringId+StringId)
     MEMBER(SbiRuntime::StepTCREATE),    // User Defined Objekte (+StringId+StringId)
     MEMBER(SbiRuntime::StepDCREATE),    // Objekt-Array kreieren (+StringID+StringID)
+    MEMBER(SbiRuntime::StepGLOBAL_P),   // Globale Variable definieren, die beim Neustart
+                                        // von Basic nicht ueberschrieben wird (+StringID+Typ)
+    MEMBER(SbiRuntime::StepFIND_G),     // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
 };
+
 
 //////////////////////////////////////////////////////////////////////////
 //                              SbiRTLData                              //
