@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:05:59 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,21 @@ Window DLG_NAVIGATION_PI
     Text [ dutch ] = "Navigator" ;
     Text [ spanish ] = "Navegador" ;
     Text [ english_us ] = "Navigator" ;
+    Text [ chinese_simplified ] = "åŠ©æ‰‹";
+    Text [ russian ] = "Íàâèãàòîğ";
+    Text [ polish ] = "Nawigator";
+    Text [ japanese ] = "ãƒŠãƒ“ã‚²ãƒ¼ã‚¿";
+    Text [ chinese_traditional ] = "åŠ©æ‰‹";
+    Text [ arabic ] = "ÇáäÇİíÌíÊæÑ";
+    Text [ greek ] = "ĞåñéŞãçóç";
+    Text [ korean ] = "ë„¤ë¹„ê²Œì´í„°";
+    Text [ turkish ] = "Dolaşma";
+    Text [ catalan ] = "Navegador";
+    Text [ thai ] = "à¸•à¸±à¸§à¸™à¸³";
+    Text [ czech ] = "NavigÃ¡tor";
+    Text [ hebrew ] = "â€®× ×•×•×˜â€¬";
+    Text [ hindi ] = "à¤¨à¤¾à¤µà¤¿à¤—à¥‡à¤Ÿà¤°";
+    Text [ slovak ] = "NavigÃ¡tor";
     ExtraData =
     {
         198;
@@ -1976,21 +1991,6 @@ Window DLG_NAVIGATION_PI
         Text[ hindi ] = "à¤•à¥‡à¤µà¤² ~à¤ªà¤¢à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤";
         Text[ slovak ] = "Len na ÄÃ­~tanie";
     };
-    Text[ chinese_simplified ] = "åŠ©æ‰‹";
-    Text[ russian ] = "Íàâèãàòîğ";
-    Text[ polish ] = "Nawigator";
-    Text[ japanese ] = "ãƒŠãƒ“ã‚²ãƒ¼ã‚¿";
-    Text[ chinese_traditional ] = "åŠ©æ‰‹";
-    Text[ arabic ] = "ÇáäÇİíÌíÊæÑ";
-    Text[ greek ] = "ĞåñéŞãçóç";
-    Text[ korean ] = "ë„¤ë¹„ê²Œì´í„°";
-    Text[ turkish ] = "Dolaşma";
-    Text[ catalan ] = "Navegador";
-    Text[ thai ] = "à¸•à¸±à¸§à¸™à¸³";
-    Text[ czech ] = "NavigÃ¡tor";
-    Text[ hebrew ] = "â€®× ×•×•×˜â€¬";
-    Text[ hindi ] = "à¤¨à¤¾à¤µà¤¿à¤—à¥‡à¤Ÿà¤°";
-    Text[ slovak ] = "NavigÃ¡tor";
 };
 #define NAVI_ENTRY_IDS \
     IdList =           \
