@@ -20,6 +20,7 @@ GREP=$(ENV_TOOLS)$/grep32.exe
 FIND=$(BUILD_TOOLS)$/find.exe
 LS=$(BUILD_TOOLS)$/ls.exe
 GNUCOPY=$(BUILD_TOOLS)$/cp.exe
+#wraper for solenv\bin\mkdir.pl to fix mkdir /p problem
 MKDIR=+$(BUILD_TOOLS)$/mkdir.btm
 TOUCH=$(BUILD_TOOLS)$/touch.exe
 PERL=$(BUILD_TOOLS)$/perl.exe
