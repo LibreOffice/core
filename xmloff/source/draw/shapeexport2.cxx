@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-29 16:48:42 $
+ *  last change: $Author: aw $ $Date: 2001-04-24 11:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,10 +660,26 @@ void XMLShapeExport::ImpExportLineShape(
         awt::Point aStart(0,0);
         awt::Point aEnd(1,1);
 
-        drawing::PointSequenceSequence* pSourcePolyPolygon = 0L;
-        uno::Any aAny = xPropSet->getPropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon")));
-        pSourcePolyPolygon = (drawing::PointSequenceSequence*)aAny.getValue();
+        // #85920# use 'Geometry' to get the points of the line
+        // since this slot take anchor pos into account.
+
+        // get matrix
+        Matrix3D aMat;
+        ImpExportNewTrans_GetMatrix3D(aMat, xPropSet);
+
+        // decompose and correct about pRefPoint
+        Vector2D aTRScale;
+        double fTRShear(0.0);
+        double fTRRotate(0.0);
+        Vector2D aTRTranslate;
+        ImpExportNewTrans_DecomposeAndRefPoint(aMat, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
+
+        // create base position
+        awt::Point aBasePosition(FRound(aTRTranslate.X()), FRound(aTRTranslate.Y()));
+
+        // get the two points
+        uno::Any aAny(xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry"))));
+        drawing::PointSequenceSequence* pSourcePolyPolygon = (drawing::PointSequenceSequence*)aAny.getValue();
 
         if(pSourcePolyPolygon)
         {
@@ -678,25 +694,21 @@ void XMLShapeExport::ImpExportLineShape(
                     {
                         if(pInnerSequence->getLength() > 0)
                         {
-                            aStart = awt::Point(pArray->X, pArray->Y);
+                            aStart = awt::Point(
+                                pArray->X + aBasePosition.X,
+                                pArray->Y + aBasePosition.Y);
                             pArray++;
                         }
 
                         if(pInnerSequence->getLength() > 1)
                         {
-                            aEnd = awt::Point(pArray->X, pArray->Y);
+                            aEnd = awt::Point(
+                                pArray->X + aBasePosition.X,
+                                pArray->Y + aBasePosition.Y);
                         }
                     }
                 }
             }
-        }
-
-        if( pRefPoint )
-        {
-            aStart.X -= pRefPoint->X;
-            aStart.Y -= pRefPoint->Y;
-            aEnd.X -= pRefPoint->X;
-            aEnd.Y -= pRefPoint->Y;
         }
 
         if( nFeatures & SEF_EXPORT_X )
