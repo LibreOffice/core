@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-05 13:31:52 $
+ *  last change: $Author: cmc $ $Date: 2002-07-09 15:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,9 +426,17 @@ public:
 
 enum eF_ResT{ FLD_OK, FLD_TEXT, FLD_TAGIGN, FLD_TAGTXT, FLD_READ_FSPA };
 
-struct SwWW8Shade{
+class SwWW8Shade
+{
+public:
     Color aColor;
-    SwWW8Shade( BOOL bVer67, const WW8_SHD& rSHD );
+    SwWW8Shade(BOOL bVer67, const WW8_SHD& rSHD);
+    SwWW8Shade(BOOL bVer67, ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
+    {
+        SetShade(bVer67, nFore, nBack, nIndex);
+    }
+private:
+    SetShade(BOOL bVer67, ColorData nFore, ColorData nBack, sal_uInt16 nIndex);
 };
 
 
@@ -1215,7 +1223,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_TxtForeColor(USHORT, const BYTE* pData, short nLen);
     void Read_TxtBackColor(USHORT, const BYTE* pData, short nLen);
     void Read_ParaBackColor(USHORT, const BYTE* pData, short nLen);
-    static sal_uInt32 ExtractColour(const BYTE* &rpData);
+    static sal_uInt32 ExtractColour(const BYTE* &rpData, BYTE bVer67);
 
     long MapBookmarkVariables(const WW8FieldDesc* pF,String &rOrigName,
         const String &rData);

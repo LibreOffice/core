@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-05 13:31:54 $
+ *  last change: $Author: cmc $ $Date: 2002-07-09 15:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ struct WW8TabBandDesc
     BYTE nOverrideSpacing[MAX_COL + 1];
     short nOverrideValues[MAX_COL + 1][4];
     WW8_SHD* pSHDs;
-    sal_uInt32 *pNewSHDs;
+    sal_uInt32* pNewSHDs;
     WW8_BRC aDefBrcs[6];
 
 
@@ -241,7 +241,7 @@ struct WW8TabBandDesc
     void ProcessSpacing(const BYTE* pParamsTInsert);
     void ProcessSpecificSpacing(const BYTE* pParamsTInsert);
     void ReadShd(const BYTE* pS );
-    void ReadNewShd(const BYTE* pS );
+    void ReadNewShd(const BYTE* pS, BYTE bVer67 );
 
     enum wwDIR {wwTOP = 0, wwLEFT = 1, wwBOTTOM = 2, wwRIGHT = 3};
 };
@@ -1117,7 +1117,7 @@ WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc& rBand )
     if( rBand.pNewSHDs )
     {
         pNewSHDs = new sal_uInt32[nWwCols];
-        memcpy( pNewSHDs, rBand.pNewSHDs, nWwCols * sizeof( sal_uInt32 ) );
+        memcpy(pNewSHDs, rBand.pNewSHDs, nWwCols * sizeof(sal_uInt32));
     }
     memcpy(aDefBrcs, rBand.aDefBrcs, sizeof(aDefBrcs));
 }
@@ -1498,7 +1498,7 @@ void WW8TabBandDesc::ReadShd(const BYTE* pS )
         pSHDs[i].SetWWValue( *pShd );
 }
 
-void WW8TabBandDesc::ReadNewShd(const BYTE* pS )
+void WW8TabBandDesc::ReadNewShd(const BYTE* pS, BYTE bVer67 )
 {
     BYTE nLen = pS ? *(pS - 1) : 0;
     if( !nLen )
@@ -1515,7 +1515,7 @@ void WW8TabBandDesc::ReadNewShd(const BYTE* pS )
         nAnz = nWwCols;
 
     for(int i=0; i<nAnz; i++)
-        pNewSHDs[i] = SwWW8ImplReader::ExtractColour(pS);
+        pNewSHDs[i] = SwWW8ImplReader::ExtractColour(pS, bVer67);
 }
 
 void WW8TabBandDesc::setcelldefaults(WW8_TCell *pCells, short nCols)
@@ -1733,7 +1733,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
             if (pShadeSprm && !pNewShadeSprm)
                 pNewBand->ReadShd(pShadeSprm);
             else if (pNewShadeSprm)
-                pNewBand->ReadNewShd(pNewShadeSprm);
+                pNewBand->ReadNewShd(pNewShadeSprm, bVer67);
         }
 
         if( nTabeDxaNew < SHRT_MAX )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-05 13:31:58 $
+ *  last change: $Author: cmc $ $Date: 2002-07-09 15:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3586,8 +3586,9 @@ sal_uInt32 wwUtility::BGRToRGB(sal_uInt32 nColor)
     sal_uInt8
         r(static_cast<sal_uInt8>(nColor&0xFF)),
         g(static_cast<sal_uInt8>(((nColor)>>8)&0xFF)),
-        b(static_cast<sal_uInt8>((nColor>>16)&0xFF));
-    nColor = (r<<16) + (g<<8) + b;
+        b(static_cast<sal_uInt8>((nColor>>16)&0xFF)),
+        t(static_cast<sal_uInt8>((nColor>>24)&0xFF));
+    nColor = (t<<24) + (r<<16) + (g<<8) + b;
     return nColor;
 }
 
@@ -3972,7 +3973,7 @@ void SwWW8ImplReader::Read_TxtBackColor(USHORT, const BYTE* pData, short nLen )
         ASSERT(nLen == 10, "Len of para back colour not 10!");
         if (nLen != 10)
             return;
-        Color aColour(ExtractColour(pData));
+        Color aColour(ExtractColour(pData, bVer67));
         NewAttr(SvxBrushItem(aColour, RES_CHRATR_BACKGROUND));
     }
 }
@@ -4527,6 +4528,28 @@ void SwWW8ImplReader::Read_Relief( USHORT nId, const BYTE* pData, short nLen )
 
 SwWW8Shade::SwWW8Shade( BOOL bVer67, const WW8_SHD& rSHD )
 {
+    short b = rSHD.GetFore();
+    ASSERT(b < 17, "ww8: colour out of range");
+    if (b >= 17)
+        b = 0;
+
+    ColorData nFore = eSwWW8ColA[b];
+
+    b = rSHD.GetBack();
+    ASSERT(b < 17, "ww8: colour out of range");
+    if( b >=  17 )
+        b = 0;
+
+    ColorData nBack = eSwWW8ColA[b];
+
+    b = rSHD.GetStyle( bVer67 );
+
+    SetShade(bVer67, nFore, nBack, b);
+}
+
+SwWW8Shade::SetShade( BOOL bVer67, ColorData nFore, ColorData nBack,
+    sal_uInt16 nIndex)
+{
 static ULONG __READONLY_DATA eMSGrayScale[] = {
         // Nul-Brush
            0,   // 0
@@ -4597,54 +4620,44 @@ static ULONG __READONLY_DATA eMSGrayScale[] = {
          975,   // 61
          // und zu guter Letzt:
          970};// 62
-    ColorData nFore;
-    ColorData nBack;
-    ULONG     nWW8BrushStyle;
-    short     b;
 
-    b = rSHD.GetFore();
-    if ( b >= 17 )
-        b = 0;
 
     //NO auto for shading so Foreground: Auto = Black
-    if (b == 0)
-        b = 1;
-    nFore = eSwWW8ColA[b];
-
-    b = rSHD.GetBack();
-    if( b >=  17 )
-        b = 0;
+    if (nFore == COL_AUTO)
+        nFore = COL_BLACK;
 
     //NO auto for shading so background: Auto = Weiss
-    if( b == 0 )
-        b = 8;
-    nBack = eSwWW8ColA[b];
+    if (nBack == COL_AUTO)
+        nBack = COL_WHITE;
 
-    b = rSHD.GetStyle( bVer67 );
 
-    if( b >= sizeof( eMSGrayScale ) / sizeof ( eMSGrayScale[ 0 ] ) )
-        b = 0;
+    if( nIndex >= sizeof( eMSGrayScale ) / sizeof ( eMSGrayScale[ 0 ] ) )
+        nIndex = 0;
 
-    nWW8BrushStyle = eMSGrayScale[b];
+    ULONG nWW8BrushStyle = eMSGrayScale[nIndex];
 
-    switch( nWW8BrushStyle )
+    switch (nWW8BrushStyle)
     {
         case 0: // Null-Brush
             aColor.SetColor( nBack );
             break;
-        case 1000:
-            aColor.SetColor( nFore );
-            break;
         default:
             {
-                Color aForeColor = Color( nFore );
-                Color aBackColor = Color( nBack );
-                ULONG nRed = aForeColor.GetRed() * nWW8BrushStyle;
-                ULONG nGreen = aForeColor.GetGreen() * nWW8BrushStyle;
-                ULONG nBlue = aForeColor.GetBlue() * nWW8BrushStyle;
-                nRed += (ULONG)(aBackColor.GetRed()  *(1000-nWW8BrushStyle));
-                nGreen += (ULONG)(aBackColor.GetGreen()*(1000-nWW8BrushStyle));
-                nBlue += (ULONG)(aBackColor.GetBlue() *(1000-nWW8BrushStyle));
+                Color aForeColor(nFore);
+                Color aBackColor(nBack);
+#if 0
+                //Transparancy (if thats what it is) doesn't seem to matter
+                //in word
+                nWW8BrushStyle -=
+                    nWW8BrushStyle * aForeColor.GetTransparency() / 0xFF;
+#endif
+
+                sal_uInt32 nRed = aForeColor.GetRed() * nWW8BrushStyle;
+                sal_uInt32 nGreen = aForeColor.GetGreen() * nWW8BrushStyle;
+                sal_uInt32 nBlue = aForeColor.GetBlue() * nWW8BrushStyle;
+                nRed += aBackColor.GetRed()  * (1000L - nWW8BrushStyle);
+                nGreen += aBackColor.GetGreen()* (1000L - nWW8BrushStyle);
+                nBlue += aBackColor.GetBlue() * (1000L - nWW8BrushStyle);
 
                 aColor.SetColor( RGB_COLORDATA( nRed/1000, nGreen/1000,
                     nBlue/1000 ) );
@@ -4697,19 +4710,28 @@ void SwWW8ImplReader::Read_ParaBackColor(USHORT, const BYTE* pData, short nLen)
         ASSERT(nLen == 10, "Len of para back colour not 10!");
         if (nLen != 10)
             return;
-        NewAttr(SvxBrushItem(Color(ExtractColour(pData))));
+        NewAttr(SvxBrushItem(Color(ExtractColour(pData, bVer67))));
     }
 }
 
-sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData)
+sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData, BYTE bVer67)
 {
-    ASSERT(SVBT32ToLong(rpData) == 0xFF000000, "Unknown 1 not 0xff000000");
+    ASSERT(bVer67 == FALSE, "Impossible");
+    //ASSERT(SVBT32ToLong(rpData) == 0xFF000000, "Unknown 1 not 0xff000000");
+    sal_uInt32 nFore = wwUtility::BGRToRGB(SVBT32ToLong(rpData));
     rpData+=4;
-    sal_uInt32 nRet = wwUtility::BGRToRGB(SVBT32ToLong(rpData));
+    sal_uInt32 nBack = wwUtility::BGRToRGB(SVBT32ToLong(rpData));
     rpData+=4;
-    ASSERT(SVBT16ToShort(rpData) == 0x0000, "Unknown 2 not 0xff000000");
+    sal_uInt16 nIndex = SVBT16ToShort(rpData);
     rpData+=2;
-    return nRet;
+    //Being a transparent background colour doesn't actually show the page
+    //background through, it merely acts like white
+    if (nBack == 0xFF000000)
+        nBack = COL_WHITE;
+    ASSERT(!(nBack & 0xFF000000),
+        "ww8: don't know what to do with such a transparent bg colour, report");
+    SwWW8Shade aShade(bVer67, nFore, nBack, nIndex);
+    return aShade.aColor.GetColor();
 }
 
 void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)

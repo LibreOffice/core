@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-05 13:31:56 $
+ *  last change: $Author: cmc $ $Date: 2002-07-09 15:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2967,21 +2967,19 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
 
     // das Resultat uebernehmen
     String sDef(GetFieldResult(pF));
-    if( ( sURL.Len() || sMark.Len() ) && sDef.Len() )
-    {
-        if( sMark.Len() )
-            ( sURL += INET_MARK_TOKEN ) += sMark;
+    ASSERT( (sURL.Len() || sMark.Len()) && sDef.Len(), "WW8: Empty URL" )
 
-        SwFmtINetFmt aURL( sURL, sTarget );
+    if( sMark.Len() )
+        ( sURL += INET_MARK_TOKEN ) += sMark;
 
-        //As an attribute this needs to be closed, and that'll happen
-        //from EndExtSprm in conjunction with the maFieldStack
-        //If there are are flyfrms between the start and begin, their
-        //hyperlinks will be set at that time as well.
-        pCtrlStck->NewAttr( *pPaM->GetPoint(), aURL );
-        eRet = FLD_TEXT;
-    }
-    return eRet;
+    SwFmtINetFmt aURL( sURL, sTarget );
+
+    //As an attribute this needs to be closed, and that'll happen from
+    //EndExtSprm in conjunction with the maFieldStack If there are are flyfrms
+    //between the start and begin, their hyperlinks will be set at that time
+    //as well.
+    pCtrlStck->NewAttr( *pPaM->GetPoint(), aURL );
+    return FLD_TEXT;
 }
 
 
