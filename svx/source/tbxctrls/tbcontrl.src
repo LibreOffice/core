@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:45:54 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ String RID_SVXSTR_TRANSPARENT
     Text[ czech ] = "Bez výplně";
     Text[ hebrew ] = "‮ללא מילוי‬";
     Text[ hindi ] = "नहीं भरना";
+    Text[ slovak ] = "Bez výplne";
 };
 String RID_SVXSTR_FILLPATTERN
 {
@@ -153,6 +154,7 @@ String RID_SVXSTR_FILLPATTERN
     Text[ czech ] = "Vzorek";
     Text[ hebrew ] = "‮דוגמה‬";
     Text[ hindi ] = "नमूना";
+    Text[ slovak ] = "Vzorka";
 };
 String RID_SVXSTR_FRAME
 {
@@ -184,6 +186,7 @@ String RID_SVXSTR_FRAME
     Text[ czech ] = "Okraje";
     Text[ hebrew ] = "‮מסגרות‬";
     Text[ hindi ] = "किनारें";
+    Text[ slovak ] = "Okraje";
 };
 String RID_SVXSTR_FRAME_STYLE
 {
@@ -215,6 +218,7 @@ String RID_SVXSTR_FRAME_STYLE
     Text[ czech ] = "Styl okrajů";
     Text[ hebrew ] = "‮סגנון מסגרת‬";
     Text[ hindi ] = "किनारे की शैली";
+    Text[ slovak ] = "Štýl okrajov";
 };
 String RID_SVXSTR_FRAME_COLOR
 {
@@ -246,6 +250,7 @@ String RID_SVXSTR_FRAME_COLOR
     Text[ czech ] = "Barva okrajů";
     Text[ hebrew ] = "‮צבע מסגרת‬";
     Text[ hindi ] = "किनारे की रंग";
+    Text[ slovak ] = "Farba okrajov";
 };
 ListBox RID_SVXTBX_STYLE
 {
@@ -287,6 +292,7 @@ String RID_SVXSTR_EXTRAS_CHARBACKGROUND
     Text[ czech ] = "Zvýraznění";
     Text[ hebrew ] = "‮הבלטה‬";
     Text[ hindi ] = "विशेष प्रकार से दिखाना";
+    Text[ slovak ] = "Zvýraznenie";
 };
 String RID_SVXSTR_BACKGROUND
 {
@@ -316,6 +322,7 @@ String RID_SVXSTR_BACKGROUND
     Text[ czech ] = "Pozadí";
     Text[ hebrew ] = "‮רקע‬";
     Text[ hindi ] = "पृष्ठभाग";
+    Text[ slovak ] = "Pozadie";
 };
 String RID_SVXSTR_AUTOMATIC
 {
@@ -345,6 +352,7 @@ String RID_SVXSTR_AUTOMATIC
     Text[ czech ] = "Automaticky";
     Text[ hebrew ] = "‮אוטומטי‬";
     Text[ hindi ] = "स्वचालित";
+    Text[ slovak ] = "Automaticky";
 };
 String RID_SVXSTR_PAGES
 {
@@ -373,6 +381,7 @@ String RID_SVXSTR_PAGES
     Text[ hebrew ] = "‮עמודים‬";
     Text[ portuguese_brazilian ] = "~P�ginas";
     Text[ hindi ] = "पृष्ठ";
+    Text[ slovak ] = "Stránky";
 };
 Image RID_SVXIMG_GRAF_RED
 {
@@ -446,6 +455,8 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE_H
 };
 
 // ********************************************************************** EOF
+
+
 
 
 
