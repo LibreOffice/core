@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-30 17:23:37 $
+ *  last change: $Author: hr $ $Date: 2001-07-11 13:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1086,7 +1086,7 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                         Size aFontSz( 0, rFH.GetHeight() );
                         aFontSz.Height() /= 5;
 
-                        Font aNewFont( System::GetStandardFont( STDFONT_SWISS ) );
+                        Font aNewFont( System::_GetStandardFont( _STDFONT_SWISS ) );
                         aNewFont.SetSize( aFontSz );
                         aNewFont.SetAlign( ALIGN_BOTTOM );
                         aNewFont.SetVertical( bVertical );
