@@ -1,4 +1,4 @@
-go	goodies	:	so3 NULL
+go      goodies :       svtools NULL
 go	goodies									usr1	-	all	g_mkout NULL
 go	goodies\inc								get		-	all	g_inc NULL
 go	goodies\prj								get		-	all	g_prj NULL
