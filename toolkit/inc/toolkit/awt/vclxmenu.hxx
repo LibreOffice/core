@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxmenu.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-29 16:57:48 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _COM_SUN_STAR_AWT_XPOPUPMENU_HPP_
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XMENUEXTENDED_HPP_
+#include <com/sun/star/awt/XMenuExtended.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
@@ -90,6 +93,7 @@
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 class Menu;
+class MenuBar;
 class VclSimpleEvent;
 
 DECLARE_LIST( PopupMenuRefList, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >* );
@@ -100,6 +104,7 @@ DECLARE_LIST( PopupMenuRefList, ::com::sun::star::uno::Reference< ::com::sun::st
 
 class VCLXMenu :    public ::com::sun::star::awt::XMenuBar,
                     public ::com::sun::star::awt::XPopupMenu,
+                    public ::com::sun::star::awt::XMenuExtended,
                     public ::com::sun::star::lang::XTypeProvider,
                     public ::com::sun::star::lang::XUnoTunnel,
                     public ::cppu::OWeakObject
@@ -120,6 +125,7 @@ protected:
 
 public:
                     VCLXMenu();
+                    VCLXMenu( Menu* pMenu );
                     ~VCLXMenu();
 
 
@@ -165,6 +171,11 @@ public:
 
     // ::com::sun::star::awt::XMenuBar
 
+    // ::com::sun::star::awt::XMenuExtended
+    virtual void SAL_CALL setCommand( sal_Int16 nItemId, const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getCommand( sal_Int16 nItemId ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHelpCommand( sal_Int16 nItemId, const ::rtl::OUString& aHelp ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getHelpCommand( sal_Int16 nItemId ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 //  ----------------------------------------------------
@@ -173,7 +184,8 @@ public:
 class VCLXMenuBar : public VCLXMenu
 {
 public:
-        VCLXMenuBar() { ImplCreateMenu( FALSE ); }
+        VCLXMenuBar();
+        VCLXMenuBar( MenuBar* pMenuBar );
 };
 
 //  ----------------------------------------------------
@@ -182,11 +194,7 @@ public:
 class VCLXPopupMenu : public VCLXMenu
 {
 public:
-        VCLXPopupMenu() { ImplCreateMenu( TRUE ); }
+        VCLXPopupMenu();
 };
 
-
-
-
 #endif // _TOOLKIT_AWT_VCLXMENU_HXX_
-
