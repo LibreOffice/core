@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:43:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ inline void SwDBField::ChgBodyTxtFlag( BOOL bIsInBody )
 class SwDBNameInfField : public SwField
 {
     SwDBData    aDBData;
+    USHORT      nSubType;
 
 protected:
     const SwDBData& GetDBData() const {return aDBData;}
@@ -196,6 +197,8 @@ public:
     virtual String          GetCntnt(BOOL bName = FALSE) const;
     virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
     virtual BOOL            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual USHORT          GetSubType() const;
+    virtual void            SetSubType(USHORT nType);
 };
 
 
