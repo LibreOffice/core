@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:42:38 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ TabPage RID_SFXPAGE_SPELL
     Text [ ENGLISH ] = "Spell checking" ;
     Text [ norwegian ] = "Stavekontroll" ;
     Text [ italian ] = "Controllo ortografico" ;
-    Text [ portuguese_brazilian ] = "Verificação de ortográfica" ;
+    Text [ portuguese_brazilian ] = "Verifica??o de ortogr?fica" ;
     Text [ portuguese ] = "Correcção ortográfica" ;
     Text [ finnish ] = "Oikeinkirjoituksen tarkistus" ;
     Text [ danish ] = "Stavekontrol" ;
@@ -131,7 +131,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ ENGLISH ] = "Dictionaries" ;
         Text [ norwegian ] = "Ordlister" ;
         Text [ italian ] = "Dizionari" ;
-        Text [ portuguese_brazilian ] = "Dicionários" ;
+        Text [ portuguese_brazilian ] = "Dicion?rios" ;
         Text [ portuguese ] = "Dicionários" ;
         Text [ finnish ] = "Sanakirjat" ;
         Text [ danish ] = "Ordbøger" ;
@@ -162,7 +162,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ ENGLISH ] = "~Capital words" ;
         Text [ norwegian ] = "~Ord med store bokstaver" ;
         Text [ italian ] = "~Parole maiuscole" ;
-        Text [ portuguese_brazilian ] = "~Palavras em maiúsculas" ;
+        Text [ portuguese_brazilian ] = "~Palavras em mai?culas" ;
         Text [ portuguese ] = "~Palavras maiúsculas" ;
         Text [ finnish ] = "~Isolla kirjoitettavat sanat" ;
         Text [ danish ] = "Ord med store bogstaver" ;
@@ -194,7 +194,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ ENGLISH ] = "~Words with numbers " ;
         Text [ norwegian ] = "~Ord med tall " ;
         Text [ italian ] = "Parole con ~numeri " ;
-        Text [ portuguese_brazilian ] = "~Palavras com números " ;
+        Text [ portuguese_brazilian ] = "~Palavras com n?eros " ;
         Text [ portuguese ] = "~Palavras com números " ;
         Text [ finnish ] = "~Numeroita sisältävät sanat" ;
         Text [ danish ] = "Ord med tal " ;
@@ -269,7 +269,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ english_us ] = "Check" ;
         Text[ chinese_simplified ] = "¼ì²é";
         Text[ russian ] = "Ïðîâåðÿòü";
-        Text[ polish ] = "SprawdŸ";
+        Text[ polish ] = "Sprawd?";
         Text[ japanese ] = "½ÍßÙÁª¯¸";
         Text[ chinese_traditional ] = "ÀË¬d";
         Text[ arabic ] = "ÇáÊÏÞíÞ";
