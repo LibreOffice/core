@@ -80,9 +80,41 @@ public class PrettyPrinter extends HandlerBase
     private static int START_ELEMENT = 1;
     private static int CONTENT = 2;
     private static int END_ELEMENT = 3;
-
     private int nStatus = NONE;
 
+    //===========================================================
+    // replacing XML conform
+    //===========================================================
+    private String transform(String aSource)
+    {
+        int nLen = aSource.length();
+        StringBuffer aBuffer = new StringBuffer(nLen);
+        for (int i = 0; i < nLen; i++)
+        {
+            char c = aSource.charAt(i);
+            switch (c)
+            {
+                case '<':
+                    aBuffer.append("&lt;");
+                    break;
+                case '>':
+                    aBuffer.append("&gt;");
+                    break;
+                case '&':
+                    aBuffer.append("&amp;");
+                    break;
+                case '"':
+                    aBuffer.append("&quot;");
+                    break;
+                case '\'':
+                    aBuffer.append("&apos;");
+                    break;
+                default:
+                    aBuffer.append(c);
+            }
+        }
+        return aBuffer.toString();
+    }
 
     //===========================================================
     // SAX DocumentHandler methods
@@ -158,7 +190,7 @@ public class PrettyPrinter extends HandlerBase
         {
             if (nStatus == START_ELEMENT)
                 emit (">");
-            emit(s);
+            emit(transform(s));
             nStatus = CONTENT;
         }
 
@@ -171,7 +203,7 @@ public class PrettyPrinter extends HandlerBase
         String s = new String(buf, offset, len);
         if (nStatus == START_ELEMENT)
             emit (">");
-        emit(s);
+        emit(transform(s));
         nStatus = CONTENT;
     }
 
