@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _CharacterProperties.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:07:54 $
+ *  last change:$Date: 2003-11-18 16:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 
 package ifc.style;
 
+import com.sun.star.beans.XPropertySet;
 import lib.MultiPropertyTest;
+
 import util.ValueChanger;
 import util.utils;
-
-import com.sun.star.beans.XPropertySet;
 
 
 /**
@@ -186,14 +186,37 @@ public class _CharacterProperties extends MultiPropertyTest {
     }
 
     /**
-     * Custom tester for style name properties. Switches between
-     * 'Citation' and 'Emphasis' names.
+     * Custom tester for style name properties. If object relations "STYLENAME1"
+     * and "STYLENAME2" exists, then testing with these strings, else switches
+     * between 'Citation' and 'Emphasis' names.
      */
     protected PropertyTester StyleTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
+            String oStyleName1 = (String) tEnv.getObjRelation("STYLENAME1");
+            String oStyleName2 = (String) tEnv.getObjRelation("STYLENAME2");
+            if ((oStyleName1 != null) && (oStyleName2 != null)){
+                log.println("use strings given by object relation: '"
+                            + oStyleName1 + "' '" + oStyleName2 +"'");
+                if (oldValue.equals( oStyleName1))
+                    return oStyleName2;
+                else
+                    return oStyleName1;
+            }
             if (utils.isVoid(oldValue) || (oldValue.equals("Standard")))
-                return "Citation"; else
+                return "Example"; else
                 return "Emphasis";
+        }
+    } ;
+
+    /**
+     * Custom tester for style names properties. Switches between
+     * 'Citation' and 'Emphasis' names.
+     */
+    protected PropertyTester StylesTester = new PropertyTester() {
+        protected Object getNewValue(String propName, Object oldValue) {
+            if (utils.isVoid(oldValue) || (oldValue.equals("Standard")))
+                return new String[] {"Citation"}; else
+                return new String[] {"Emphasis"};
         }
     } ;
 
@@ -211,6 +234,24 @@ public class _CharacterProperties extends MultiPropertyTest {
         } else {
             changeProp((XPropertySet) oPara,
                 (XPropertySet) oPort,"CharStyleName","Standard");
+        }
+    }
+
+    /**
+     * If relations for paragraph and portion exist, then testing
+     * of this property performed using these objects, else
+     * testing is performed in common way.
+     */
+    public void _CharStyleNames() {
+        log.println("Testing with custom Property tester") ;
+        Object oPara = tEnv.getObjRelation("PARA");
+        Object oPort = tEnv.getObjRelation("PORTION");
+        if (oPara == null) {
+            testProperty("CharStyleNames", StylesTester) ;
+        } else {
+            String[] newNames = {"Standard"};
+            changeProp((XPropertySet) oPara,
+               (XPropertySet) oPort,"CharStyleNames",new String[] {"Standard"});
         }
     }
 
@@ -247,6 +288,7 @@ public class _CharacterProperties extends MultiPropertyTest {
             changeProp((XPropertySet) oPara,
                 (XPropertySet) oPort,"RubyAdjust", aShort);
         }
+        Short aShort = new Short((short) 1);
     }
 
     /**
