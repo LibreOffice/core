@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pw $ $Date: 2000-11-22 13:46:00 $
+ *  last change: $Author: pw $ $Date: 2000-11-22 13:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,8 +225,8 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
 SvxHpLinkDlg::~SvxHpLinkDlg ()
 {
     // delete config item, so the base class (IconChoiceDialog) can not load it on the next start
-//  SvtViewOptions aViewOpt( E_TABDIALOG, String::CreateFromInt32( SID_HYPERLINK_DIALOG ) );
-//  aViewOpt.Delete();
+    SvtViewOptions aViewOpt( E_TABDIALOG, String::CreateFromInt32( SID_HYPERLINK_DIALOG ) );
+    aViewOpt.Delete();
 
     delete mpItemSet;
 }
