@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:59:01 $
+#   last change: $Author: mhu $ $Date: 2000-09-28 17:43:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,9 +90,6 @@ UNOTYPES=\
     com.sun.star.beans.PropertyAttribute \
     com.sun.star.beans.PropertyState \
     com.sun.star.beans.XPropertySetInfo \
-    com.sun.star.chaos.ContentType \
-    com.sun.star.chaos.MenuDescriptor \
-    com.sun.star.chaos.MenuItemDescriptor \
     com.sun.star.chaos.WallPaper \
     com.sun.star.container.XNameAccess \
     com.sun.star.container.XNameContainer \
@@ -121,7 +118,6 @@ LIB2OBJFILES=\
     $(SLO)$/bintitem.obj	\
     $(SLO)$/cenumitm.obj	\
     $(SLO)$/cintitem.obj	\
-    $(SLO)$/cntcmpmn.obj	\
     $(SLO)$/cntwall.obj	\
     $(SLO)$/cstitem.obj	\
     $(SLO)$/ctypeitm.obj	\

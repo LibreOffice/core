@@ -62,7 +62,6 @@ hedabu: ..\inc\dtritem.hxx %_DEST%\inc%_EXT%\svtools\dtritem.hxx
 hedabu: ..\inc\frqitem.hxx %_DEST%\inc%_EXT%\svtools\frqitem.hxx
 hedabu: ..\inc\cstitem.hxx %_DEST%\inc%_EXT%\svtools\cstitem.hxx
 hedabu: ..\inc\tfrmitem.hxx %_DEST%\inc%_EXT%\svtools\tfrmitem.hxx
-hedabu: ..\inc\cntcmpmn.hxx %_DEST%\inc%_EXT%\svtools\cntcmpmn.hxx
 hedabu: ..\inc\cntwall.hxx %_DEST%\inc%_EXT%\svtools\cntwall.hxx
 hedabu: ..\inc\itemdel.hxx %_DEST%\inc%_EXT%\svtools\itemdel.hxx
 hedabu: ..\inc\wallitem.hxx %_DEST%\inc%_EXT%\svtools\wallitem.hxx
