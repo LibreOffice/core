@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringtransfer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-27 14:35:35 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 08:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,14 @@ namespace svt
         return sal_False;
     }
 
+    //--------------------------------------------------------------------
+    void OStringTransfer::StartStringDrag( const ::rtl::OUString& _rContent, Window* _pWindow, sal_Int8 _nDragSourceActions )
+    {
+        OStringTransferable* pTransferable = new OStringTransferable( _rContent );
+        Reference< XTransferable > xTransfer = pTransferable;
+        pTransferable->StartDrag(_pWindow, _nDragSourceActions);
+    }
+
 //........................................................................
 }   // namespace svt
 //........................................................................
@@ -139,6 +147,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/27 14:35:35  fs
+ *  initial checkin - helper classes for clipboard handling of strings
+ *
  *
  *  Revision 1.0 27.03.01 14:43:33  fs
  ************************************************************************/
