@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-08 10:21:28 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,8 @@
 #include "global.hxx"
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
-
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 // STATIC DATA -----------------------------------------------------------
 
 //==================================================================
@@ -265,21 +266,27 @@ BOOL ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
     aFont.SetCharSet  ( rOldFont.GetCharSet() );
     aFont.SetPitch   ( rOldFont.GetPitch() );
 
-    SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
-    pDlg->SetCharFont( aFont );
-
-    if ( pDlg->Execute() == RET_OK )
+    //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    if(pFact)
     {
-        rString  = pDlg->GetCharacters();
-        aFont    = pDlg->GetCharFont();
-        rNewFont = SvxFontItem( aFont.GetFamily(), aFont.GetName(),
-                                aFont.GetStyleName(), aFont.GetPitch(),
-                                aFont.GetCharSet() );                   //  nId egal
+        AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( NULL,  ResId(RID_SVXDLG_CHARMAP), FALSE );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
-        bRet = TRUE;
+        pDlg->SetCharFont( aFont );
+
+        if ( pDlg->Execute() == RET_OK )
+        {
+            rString  = pDlg->GetCharacters();
+            aFont    = pDlg->GetCharFont();
+            rNewFont = SvxFontItem( aFont.GetFamily(), aFont.GetName(),
+                                    aFont.GetStyleName(), aFont.GetPitch(),
+                                    aFont.GetCharSet() );                   //  nId egal
+
+            bRet = TRUE;
+        }
+        delete pDlg;
     }
-    delete pDlg;
-
     return bRet;
 }
 
