@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:26:30 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
         Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";\
         Text[ arabic ] = "~ŞíÇÓí";\
         Text[ greek ] = "~ĞñïåğéëïãŞ";\
-        Text[ korean ] = "±âº»°ª";\
+        Text[ korean ] = "±âº»°ª(~D)";\
         Text[ turkish ] = "Standar~t";\
         Text[ language_user1 ] = " ";\
     };
@@ -169,7 +169,7 @@
                     Text[ chinese_traditional ] = "¤W¼Ğ(~S)";\
                     Text[ arabic ] = "ãÑÊİÚ";\
                     Text[ greek ] = "Åêèİô~çò";\
-                    Text[ korean ] = "À§ Ã·ÀÚ";\
+                    Text[ korean ] = "À§ Ã·ÀÚ(~S)";\
                     Text[ turkish ] = "~Üst simge";\
                     Text[ language_user1 ] = " ";\
                 };\
@@ -197,7 +197,7 @@
                     Text[ chinese_traditional ] = "¤U¼Ğ(~U)";\
                     Text[ arabic ] = "ãäÎİÖ";\
                     Text[ greek ] = "Äåßê~ôçò";\
-                    Text[ korean ] = "¾Æ·¡Ã·ÀÚ";\
+                    Text[ korean ] = "¾Æ·¡Ã·ÀÚ(~U)";\
                     Text[ turkish ] = "~Alt simge";\
                     Text[ language_user1 ] = " ";\
                 };\
@@ -210,7 +210,7 @@
         Text[ chinese_traditional ] = "¼Ë¦¡(~S)";\
         Text[ arabic ] = "äãØ";\
         Text[ greek ] = "Óôõ~ë";\
-        Text[ korean ] = "½ºÅ¸ÀÏ";\
+        Text[ korean ] = "½ºÅ¸ÀÏ(~S)";\
         Text[ turkish ] = "Bi~çim";\
         Text[ language_user1 ] = " ";\
     };\
@@ -276,7 +276,7 @@
                     Text[ chinese_traditional ] = "¥ª¥k¹ï»ô(~J)";\
                     Text[ arabic ] = "ÖÈØ";\
                     Text[ greek ] = "~ĞëŞñçò óôïß÷éóç";\
-                    Text[ korean ] = "¾çÂÊ ¸ÂÃã";\
+                    Text[ korean ] = "¾çÂÊ ¸ÂÃã(~J)";\
                     Text[ turkish ] = "~İki yana yasla";\
                     Text[ language_user1 ] = " ";\
                 };\
@@ -289,7 +289,7 @@
         Text[ chinese_traditional ] = "¹ï»ô(~A)";\
         Text[ arabic ] = "ãÍÇĞÇÉ";\
         Text[ greek ] = "~Óôïß÷éóç";\
-        Text[ korean ] = "¸ÂÃã";\
+        Text[ korean ] = "¸ÂÃã(~A)";\
         Text[ turkish ] = "~Hizalama";\
         Text[ language_user1 ] = " ";\
     };\
@@ -339,7 +339,7 @@
         Text[ chinese_traditional ] = "¦C¶¡¹j(~L)";\
         Text[ arabic ] = "ÊÈÇÚÏ ÇáÃÓØÑ";\
         Text[ greek ] = "ÄéÜóôé~÷ï";\
-        Text[ korean ] = "Çà°£";\
+        Text[ korean ] = "Çà°£(~L)";\
         Text[ turkish ] = "~Satır aralığı";\
         Text[ language_user1 ] = " ";\
     };
@@ -378,7 +378,7 @@
         Text[ chinese_traditional ] = "¤å¦r(~X)...";\
         Text[ arabic ] = "~äÕ...";\
         Text[ greek ] = "~Êåßìåíï...";\
-        Text[ korean ] = "ÅØ½ºÆ®£®.";\
+        Text[ korean ] = "ÅØ½ºÆ®£®(~X).";\
         Text[ turkish ] = "~Metin...";\
         Text[ language_user1 ] = " ";\
     };
@@ -409,7 +409,7 @@
         Text[ chinese_traditional ] = "­ì¥ó¤j¤p(~O)";\
         Text[ arabic ] = "ÇáÍÌã ÇáÃÕáí";\
         Text[ greek ] = "Áñ÷éêü ìİ~ãåèïò";\
-        Text[ korean ] = "¿ø·¡ Å©±â";\
+        Text[ korean ] = "¿ø·¡ Å©±â(~O)";\
         Text[ turkish ] = "Gerçek ~boyut";\
         Text[ language_user1 ] = " ";\
     };
@@ -460,7 +460,7 @@
                     Text[ chinese_traditional ] = "««ª½¤è¦V(~V)";\
                     Text[ arabic ] = "ÑÃÓí~";\
                     Text[ greek ] = "Êáôáêüñõ~öá";\
-                    Text[ korean ] = "¼öÁ÷";\
+                    Text[ korean ] = "¼öÁ÷(~V)";\
                     Text[ turkish ] = "~Dikey";\
                     Text[ language_user1 ] = " ";\
                 };\
@@ -488,7 +488,7 @@
                     Text[ chinese_traditional ] = "¤ô¥­¤è¦V(~H)";\
                     Text[ arabic ] = "ÃİŞí";\
                     Text[ greek ] = "Ïñé~æüíôéá";\
-                    Text[ korean ] = "¼öÆò";\
+                    Text[ korean ] = "¼öÆò(~H)";\
                     Text[ turkish ] = "~Yatay";\
                     Text[ language_user1 ] = " ";\
                 };\
@@ -501,7 +501,7 @@
         Text[ chinese_traditional ] = "Â½Âà(~F)";\
         Text[ arabic ] = "ÇäÚßÇ~Ó";\
         Text[ greek ] = "Êáôüğôñ~éóç";\
-        Text[ korean ] = "´ëÄª";\
+        Text[ korean ] = "´ëÄª(~F)";\
         Text[ turkish ] = "~Yansıt";\
         Text[ language_user1 ] = " ";\
     };
@@ -557,7 +557,7 @@
                     Text[ chinese_traditional ] = "¤W²¾¤@¼h(~F)";\
                     Text[ arabic ] = "ÅÍÖÇÑ ÃãÇãÇğ";\
                     Text[ greek ] = "Ì~åôáöïñÜ İíá åğßğåäï åìğñüò";\
-                    Text[ korean ] = "¾ÕÀ¸·Î °¡Á®¿À±â";\
+                    Text[ korean ] = "¾ÕÀ¸·Î °¡Á®¿À±â(~F)";\
                     Text[ turkish ] = "B~ir öne getir";\
                     Text[ language_user1 ] = " ";\
                 };\
@@ -586,7 +586,7 @@
                     Text[ chinese_traditional ] = "¤U²¾¤@¼h(~W)";\
                     Text[ arabic ] = "ÅÑÓÇá ÎáİÇğ";\
                     Text[ greek ] = "~ÌåôáöïñÜ ğßóù";\
-                    Text[ korean ] = "µÚ·Î º¸³»±â";\
+                    Text[ korean ] = "µÚ·Î º¸³»±â(~W)";\
                     Text[ turkish ] = "Bir  ~geri gönder";\
                     Text[ language_user1 ] = " ";\
                 };\
@@ -612,7 +612,7 @@
         Text[ chinese_traditional ] = "±Æ§Ç(~A)";\
         Text[ arabic ] = "ÊÑÊíÈ~";\
         Text[ greek ] = "ÄéÜô~áîç";\
-        Text[ korean ] = "Á¤·Ä";\
+        Text[ korean ] = "Á¤·Ä(~A)";\
         Text[ turkish ] = "~Sıralama";\
         Text[ language_user1 ] = " ";\
     };
@@ -655,7 +655,7 @@
                     Text[ chinese_traditional ] = "¦b­¶­±¤W(~A)";\
                     Text[ arabic ] = "Úáì Çá~ÕİÍÉ";\
                     Text[ greek ] = "~Óôç óåëßäá";\
-                    Text[ korean ] = "£®£®ÂÊ¿¡";\
+                    Text[ korean ] = "£®£®ÂÊ¿¡(~A)";\
                     Text[ turkish ] = "Sayfa~da";\
                     Text[ language_user1 ] = " ";\
                 };\
@@ -681,7 +681,7 @@
                     Text[ chinese_traditional ] = "¦bÀx¦s®æ¤W(~C)";\
                     Text[ arabic ] = "ÎáíÉ";\
                     Text[ greek ] = "Óôï ~êåëß";\
-                    Text[ korean ] = "¼¿¿¡";\
+                    Text[ korean ] = "¼¿¿¡(~C)";\
                     Text[ turkish ] = "Hücre~de";\
                     Text[ language_user1 ] = " ";\
                 };\
@@ -698,7 +698,7 @@
         Text[ chinese_traditional ] = "Âê©w(~C)";\
         Text[ arabic ] = "~ÅÑÓÇÁ";\
         Text[ greek ] = "Áãêıñ~ùóç";\
-        Text[ korean ] = "°íÁ¤";\
+        Text[ korean ] = "°íÁ¤(~C)";\
         Text[ turkish ] = "Sa~bitleyici";\
         Text[ language_user1 ] = " ";\
     };
@@ -762,7 +762,7 @@
         Text[ chinese_traditional ] = "¹ï»ô(~L)";\
         Text[ arabic ] = "~ãÍÇĞÇÉ";\
         Text[ greek ] = "Ó~ôïß÷éóç";\
-        Text[ korean ] = "¸ÂÃã";\
+        Text[ korean ] = "¸ÂÃã(~L)";\
         Text[ turkish ] = "Hiz~alama";\
         Text[ language_user1 ] = " ";\
     };
