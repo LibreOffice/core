@@ -2,9 +2,9 @@
  *
  *  $RCSfile: URL.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ module com {  module sun {  module star {  module util {
 
     </p>
  */
-struct URL
+published struct URL
 {
     /** contains the string representation of the complete URL, for example,
         http://www.sun.de:8080/pub/test/foo.txt?a=b#xyz
