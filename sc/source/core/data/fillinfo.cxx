@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillinfo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:19:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,10 @@ inline const SvxBorderLine* GetNullOrLine( const SvxBoxItem* pBox, FillInfoLineP
 
 //  aehnlich wie in output.cxx
 
-void lcl_GetMergeRange( short nX, short nY, USHORT nArrY,
+void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
                             ScDocument* pDoc, RowInfo* pRowInfo,
-                            USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, USHORT nTab,
-                            short& rStartX, short& rStartY, short& rEndX, short& rEndY )
+                            SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, SCTAB nTab,
+                            SCsCOL& rStartX, SCsROW& rStartY, SCsCOL& rEndX, SCsROW& rEndY )
 {
     CellInfo* pInfo = &pRowInfo[nArrY].pCellInfo[nX+1];
 
@@ -131,7 +131,7 @@ void lcl_GetMergeRange( short nX, short nY, USHORT nArrY,
     while (bHOver)              // nY konstant
     {
         --rStartX;
-        if (rStartX >= (short) nX1 && (pDoc->GetColFlags(rStartX,nTab) & CR_HIDDEN) == 0)
+        if (rStartX >= (SCsCOL) nX1 && (pDoc->GetColFlags(rStartX,nTab) & CR_HIDDEN) == 0)
         {
             bHOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bHOverlapped;
             bVOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bVOverlapped;
@@ -152,10 +152,10 @@ void lcl_GetMergeRange( short nX, short nY, USHORT nArrY,
         if (nArrY>0)
             --nArrY;                        // lokale Kopie !
 
-        if (rStartX >= (short) nX1 && rStartY >= (short) nY1 &&
+        if (rStartX >= (SCsCOL) nX1 && rStartY >= (SCsROW) nY1 &&
             (pDoc->GetColFlags(rStartX,nTab) & CR_HIDDEN) == 0 &&
             (pDoc->GetRowFlags(rStartY,nTab) & CR_HIDDEN) == 0 &&
-            (short) pRowInfo[nArrY].nRowNo == rStartY)
+            (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
         {
             bHOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bHOverlapped;
             bVOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bVOverlapped;
@@ -170,10 +170,10 @@ void lcl_GetMergeRange( short nX, short nY, USHORT nArrY,
     }
 
     const ScMergeAttr* pMerge;
-    if (rStartX >= (short) nX1 && rStartY >= (short) nY1 &&
+    if (rStartX >= (SCsCOL) nX1 && rStartY >= (SCsROW) nY1 &&
         (pDoc->GetColFlags(rStartX,nTab) & CR_HIDDEN) == 0 &&
         (pDoc->GetRowFlags(rStartY,nTab) & CR_HIDDEN) == 0 &&
-        (short) pRowInfo[nArrY].nRowNo == rStartY)
+        (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
     {
         pMerge = (const ScMergeAttr*) &pRowInfo[nArrY].pCellInfo[rStartX+1].pPatternAttr->
                                         GetItem(ATTR_MERGE);
@@ -185,7 +185,7 @@ void lcl_GetMergeRange( short nX, short nY, USHORT nArrY,
     rEndY = rStartY + pMerge->GetRowMerge() - 1;
 }
 
-inline BOOL ScDocument::RowHidden( USHORT nRow, USHORT nTab )
+inline BOOL ScDocument::RowHidden( SCROW nRow, SCTAB nTab )
 {
     return ( pTab[nTab]->pRowFlags[nRow] & CR_HIDDEN ) != 0;
 }
@@ -193,8 +193,8 @@ inline BOOL ScDocument::RowHidden( USHORT nRow, USHORT nTab )
 
 #define CELLINFO(x,y) pRowInfo[nArrY+y].pCellInfo[nArrX+x]
 
-USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
-                            USHORT nTab, double nScaleX, double nScaleY,
+SCSIZE ScDocument::FillInfo( RowInfo* pRowInfo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
+                            SCTAB nTab, double nScaleX, double nScaleY,
                             BOOL bPageMode, BOOL bFormulaMode, const ScMarkData* pMarkData )
 {
     DBG_ASSERT( pTab[nTab], "Tabelle existiert nicht" );
@@ -213,13 +213,13 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
     const SvxShadowItem* pDefShadow =
             (const SvxShadowItem*) &pPool->GetDefaultItem( ATTR_SHADOW );
 
-    USHORT nThisRow;
-    USHORT nX;
-    USHORT nY;
-    short nSignedY;
-    USHORT nArrX;
-    USHORT nArrY;
-    USHORT nArrCount;
+    SCROW nThisRow;
+    SCCOL nX;
+    SCROW nY;
+    SCsROW nSignedY;
+    SCCOL nArrX;
+    SCSIZE nArrY;
+    SCSIZE nArrCount;
     BOOL bAnyLines = FALSE;
     BOOL bAnyMerged = FALSE;
     BOOL bAnyShadow = FALSE;
@@ -231,7 +231,8 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
                                                 // versteckter erster Zeile / Spalte
     BOOL bPaintMarks = FALSE;
     BOOL bSkipMarks = FALSE;
-    USHORT nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY;
+    SCCOL nBlockStartX, nBlockEndX;
+    SCROW nBlockEndY, nBlockStartY;
     if (pMarkData && pMarkData->IsMarked())
     {
         ScRange aTmpRange;
@@ -253,16 +254,16 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
     //  zuerst nur die Eintraege fuer die ganze Spalte
 
     nArrY=0;
-    USHORT nYExtra = nY2+1;
-    for (nSignedY=((short)nY1)-1; nSignedY<=(short)nYExtra; nSignedY++)
+    SCROW nYExtra = nY2+1;
+    for (nSignedY=((SCsROW)nY1)-1; nSignedY<=(SCsROW)nYExtra; nSignedY++)
     {
         if (nSignedY >= 0)
-            nY = (USHORT) nSignedY;
+            nY = (SCROW) nSignedY;
         else
             nY = MAXROW+1;          // ungueltig
 
         USHORT nDocHeight;
-        if (nY <= MAXROW)
+        if (ValidRow(nY))
             nDocHeight = GetRowHeight( nY, nTab );
         else
             nDocHeight = ScGlobal::nStdRowHeight;
@@ -294,7 +295,7 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
             }
         }
         else
-            if (nSignedY==(short) nYExtra)                          // zusaetzliche Zeile verdeckt ?
+            if (nSignedY==(SCsROW) nYExtra)                         // zusaetzliche Zeile verdeckt ?
                 ++nYExtra;
     }
     nArrCount = nArrY;                                      // incl. Dummys
@@ -311,7 +312,7 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
             break;
         }
 
-    USHORT nRotMax = nX2;
+    SCCOL nRotMax = nX2;
     if ( bAnyItem && HasAttrib( 0,nY1,nTab, MAXCOL,nY2+1,nTab,
                                 HASATTR_ROTATE | HASATTR_CONDITIONAL ) )
     {
@@ -382,7 +383,7 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
     for (nArrX=nX2+3; nArrX<=nRotMax+2; nArrX++)            // restliche Breiten eintragen
     {
         nX = nArrX-1;
-        if ( nX <= MAXCOL )
+        if ( ValidCol(nX) )
         {
             if ( (GetColFlags(nX,nTab) & CR_HIDDEN) == 0 )          // Spalte nicht versteckt
             {
@@ -399,7 +400,7 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
     {
         nX = (nArrX>0) ? nArrX-1 : MAXCOL+1;                    // negativ -> ungueltig
 
-        if ( nX <= MAXCOL )
+        if ( ValidCol(nX) )
         {
             if ( (GetColFlags(nX,nTab) & CR_HIDDEN) == 0 )          // Spalte nicht versteckt
             {
@@ -412,7 +413,7 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
                 ScColumn* pThisCol = &pTab[nTab]->aCol[nX];                 // Spalten-Daten
 
                 nArrY = 1;
-                USHORT nUIndex;
+                SCSIZE nUIndex;
                 (void) pThisCol->Search( nY1, nUIndex );
                 while ( nUIndex < pThisCol->nCount &&
                         (nThisRow=pThisCol->pItems[nUIndex].nRow) <= nY2 )
@@ -442,13 +443,13 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
 
                     nArrY = 0;
                     const ScPatternAttr* pPattern;
-                    USHORT nCurRow=nY1;                 // einzelne Zeile
+                    SCROW nCurRow=nY1;                  // einzelne Zeile
                     if (nCurRow>0)
                         --nCurRow;                      // oben 1 mehr
                     else
                         nArrY = 1;
                     nThisRow=nCurRow;                   // Ende des Bereichs
-                    short  nIndex;
+                    SCSIZE  nIndex;
                     (void) pThisAttrArr->Search( nCurRow, nIndex );
 
 
@@ -572,7 +573,7 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
                         while (nCurRow <= nThisRow && nCurRow <= nYExtra);
                         ++nIndex;
                     }
-                    while ( nIndex < (short) pThisAttrArr->nCount && nThisRow < nYExtra );
+                    while ( nIndex < pThisAttrArr->nCount && nThisRow < nYExtra );
 
 
                     if (pMarkData && pMarkData->IsMultiMarked())
@@ -615,7 +616,7 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
                             while (nCurRow <= nThisRow && nCurRow <= nY2);
                             ++nIndex;
                         }
-                        while ( nIndex < (short) pThisMarkArr->nCount && nThisRow < nY2 );
+                        while ( nIndex < pThisMarkArr->nCount && nThisRow < nY2 );
                     }
                 }
                 else                                    // vordere Spalten
@@ -686,11 +687,11 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
     {
         for (nArrY=0; nArrY<nArrCount; nArrY++)
         {
-//          short nY = nArrY ? pRowInfo[nArrY].nRowNo : ((short)nY1)-1;
+//          SCsROW nY = nArrY ? pRowInfo[nArrY].nRowNo : ((SCsROW)nY1)-1;
 
             for (nArrX=nX1; nArrX<=nX2+2; nArrX++)                  // links und rechts einer mehr
             {
-                short nX = ((short) nArrX) - 1;
+                SCsCOL nX = ((SCsCOL) nArrX) - 1;
                 CellInfo* pInfo = &pRowInfo[nArrY].pCellInfo[nArrX];
 
                 pInfo->pThisBottom = GetNullOrLine( pInfo->pLinesAttr, FILP_BOTTOM );
@@ -701,7 +702,7 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
                     pInfo->pNextTop = NULL;
 
                 pInfo->pThisRight = GetNullOrLine( pInfo->pLinesAttr, FILP_RIGHT );
-                if ( nX <= (short) nX2 )
+                if ( nX <= (SCsCOL) nX2 )
                     pInfo->pNextLeft =
                         GetNullOrLine( CELLINFO(1,0).pLinesAttr, FILP_LEFT );
                 else
@@ -719,53 +720,53 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
         for (nArrY=0; nArrY<nArrCount; nArrY++)
         {
             RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-            short nY = nArrY ? pThisRowInfo->nRowNo : ((short)nY1)-1;
+            SCsROW nY = nArrY ? pThisRowInfo->nRowNo : ((SCsROW)nY1)-1;
 
             for (nArrX=nX1; nArrX<=nX2+2; nArrX++)                  // links und rechts einer mehr
             {
-                short nX = ((short) nArrX) - 1;
+                SCsCOL nX = ((SCsCOL) nArrX) - 1;
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
 
                 if (pInfo->bMerged || pInfo->bHOverlapped || pInfo->bVOverlapped)
                 {
-                    short nStartX;
-                    short nStartY;
-                    short nEndX;
-                    short nEndY;
+                    SCsCOL nStartX;
+                    SCsROW nStartY;
+                    SCsCOL nEndX;
+                    SCsROW nEndY;
                     lcl_GetMergeRange( nX,nY, nArrY, this,pRowInfo, nX1,nY1,nX2,nY2,nTab,
                                         nStartX,nStartY, nEndX,nEndY );
                     const ScPatternAttr* pStartPattern = GetPattern( nStartX,nStartY,nTab );
                     const SfxItemSet* pStartCond = GetCondResult( nStartX,nStartY,nTab );
                     const SfxPoolItem* pItem;
 
-                    USHORT nVisStartX = (USHORT) nStartX;           // sichtbarer Bereich
-                    USHORT nVisStartY = (USHORT) nStartY;
-                    USHORT nVisEndX = (USHORT) nEndX;
-                    USHORT nVisEndY = (USHORT) nEndY;
+                    SCCOL nVisStartX = (SCCOL) nStartX;         // sichtbarer Bereich
+                    SCROW nVisStartY = (SCROW) nStartY;
+                    SCCOL nVisEndX = (SCCOL) nEndX;
+                    SCROW nVisEndY = (SCROW) nEndY;
                     StripHidden( nVisStartX, nVisStartY, nVisEndX, nVisEndY, nTab );
 
-                    if ( nX != (short) nVisStartX && nArrX > 0)
+                    if ( nX != (SCsCOL) nVisStartX && nArrX > 0)
                         pThisRowInfo->pCellInfo[nArrX-1].pNextLeft = NULL;
-                    if ( nY != (short) nVisStartY && nArrY > 0)
+                    if ( nY != (SCsROW) nVisStartY && nArrY > 0)
                         pRowInfo[nArrY-1].pCellInfo[nArrX].pNextTop = NULL;
 
-                    if ( nX != (short) nVisEndX ) pInfo->pThisRight = NULL;
-                    if ( nY != (short) nVisEndY ) pInfo->pThisBottom = NULL;
+                    if ( nX != (SCsCOL) nVisEndX ) pInfo->pThisRight = NULL;
+                    if ( nY != (SCsROW) nVisEndY ) pInfo->pThisBottom = NULL;
 
-                    if ( nX == (short) nVisStartX || nY == (short) nVisStartY ||
-                         nX == (short) nVisEndX   || nY == (short) nVisEndY )
+                    if ( nX == (SCsCOL) nVisStartX || nY == (SCsROW) nVisStartY ||
+                         nX == (SCsCOL) nVisEndX   || nY == (SCsROW) nVisEndY )
                     {
                         if ( !pStartCond || pStartCond->
                                     GetItemState(ATTR_BORDER,TRUE,&pItem) != SFX_ITEM_SET )
                             pItem = &pStartPattern->GetItem(ATTR_BORDER);
                         const SvxBoxItem* pBox = (const SvxBoxItem*) pItem;
-                        if ( nX == (short) nVisStartX && nArrX > 0 )
+                        if ( nX == (SCsCOL) nVisStartX && nArrX > 0 )
                             pThisRowInfo->pCellInfo[nArrX-1].pNextLeft = pBox->GetLeft();
-                        if ( nY == (short) nVisStartY && nArrY > 0)
+                        if ( nY == (SCsROW) nVisStartY && nArrY > 0)
                             pRowInfo[nArrY-1].pCellInfo[nArrX].pNextTop = pBox->GetTop();
-                        if ( nX == (short) nVisEndX )
+                        if ( nX == (SCsCOL) nVisEndX )
                             pInfo->pThisRight = pBox->GetRight();
-                        if ( nY == (short) nVisEndY )
+                        if ( nY == (SCsROW) nVisEndY )
                             pInfo->pThisBottom = pBox->GetBottom();
                     }
 
@@ -790,14 +791,14 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
 
                     BOOL bCellMarked = FALSE;
                     if (bPaintMarks)
-                        bCellMarked = ( nStartX >= (short) nBlockStartX
-                                    && nStartX <= (short) nBlockEndX
-                                    && nStartY >= (short) nBlockStartY
-                                    && nStartY <= (short) nBlockEndY );
+                        bCellMarked = ( nStartX >= (SCsCOL) nBlockStartX
+                                    && nStartX <= (SCsCOL) nBlockEndX
+                                    && nStartY >= (SCsROW) nBlockStartY
+                                    && nStartY <= (SCsROW) nBlockEndY );
                     if (pMarkData && pMarkData->IsMultiMarked() && !bCellMarked)
                     {
                         const ScMarkArray* pThisMarkArr = pMarkData->GetArray()+nStartX;
-                        short nIndex;
+                        SCSIZE nIndex;
                         (void) pThisMarkArr->Search( nStartY, nIndex );
                         bCellMarked=pThisMarkArr->pData[nIndex].bMarked;
                     }
@@ -813,11 +814,11 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
         for (nArrY=0; nArrY<nArrCount; nArrY++)
         {
             RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-//          short nY = nArrY ? pRowInfo[nArrY].nRowNo : ((short)nY1)-1;
+//          SCsROW nY = nArrY ? pRowInfo[nArrY].nRowNo : ((SCsROW)nY1)-1;
 
             for (nArrX=nX1; nArrX<=nX2+2; nArrX++)                  // links und rechts einer mehr
             {
-//              short nX = ((short) nArrX) - 1;
+//              SCsCOL nX = ((SCsCOL) nArrX) - 1;
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
 
                 if ( pInfo->pThisBottom || pInfo->pNextTop )
@@ -870,8 +871,8 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
                 {
                     //  oder Test auf != eLoc
 
-                    short nDxPos = 1;
-                    short nDxNeg = -1;
+                    SCsCOL nDxPos = 1;
+                    SCsCOL nDxNeg = -1;
 
                     while ( nArrX+nDxPos < nX2+2 && pRowInfo[0].pCellInfo[nArrX+nDxPos].nWidth == 0 )
                         ++nDxPos;
