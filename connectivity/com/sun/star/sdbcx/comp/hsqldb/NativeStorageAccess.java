@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NativeStorageAccess.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:36:44 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,33 +95,33 @@ public class NativeStorageAccess {
         NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "hsqldb2");
     }
     /** Creates a new instance of StorageAccess */
-    public NativeStorageAccess(String name,String _mode,Object key) throws java.lang.Exception{
+    public NativeStorageAccess(String name,String _mode,Object key) throws java.io.IOException{
         try {
             int mode = ElementModes.SEEKABLEREAD;
             if ( _mode.equals("rw") )
-                mode |= ElementModes.WRITE;
+                mode = ElementModes.READWRITE | ElementModes.SEEKABLE;
 
             openStream(name, (String)key, mode);
         } catch(Exception e){
-            throw new java.lang.Exception();
+            throw new java.io.IOException();
         }
     }
     public native void openStream(String name,String key, int mode);
-    public native void close(String name,String key) throws java.lang.Exception;
+    public native void close(String name,String key) throws java.io.IOException;
 
-    public native long getFilePointer(String name,String key) throws java.lang.Exception;
+    public native long getFilePointer(String name,String key) throws java.io.IOException;
 
-    public native long length(String name,String key) throws java.lang.Exception;
+    public native long length(String name,String key) throws java.io.IOException;
 
-    public native int read(String name,String key) throws java.lang.Exception;
+    public native int read(String name,String key) throws java.io.IOException;
 
-    public native void read(String name,String key,byte[] b, int off, int len) throws java.lang.Exception;
+    public native int read(String name,String key,byte[] b, int off, int len) throws java.io.IOException;
 
-    public native int readInt(String name,String key) throws java.lang.Exception;
+    public native int readInt(String name,String key) throws java.io.IOException;
 
-    public native void seek(String name,String key,long position) throws java.lang.Exception;
+    public native void seek(String name,String key,long position) throws java.io.IOException;
 
-    public native void write(String name,String key,byte[] b, int offset, int length) throws java.lang.Exception;
+    public native void write(String name,String key,byte[] b, int offset, int length) throws java.io.IOException;
 
-    public native void writeInt(String name,String key,int v) throws java.lang.Exception;
+    public native void writeInt(String name,String key,int v) throws java.io.IOException;
 }
