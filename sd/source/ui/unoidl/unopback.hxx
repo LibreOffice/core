@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopback.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: cl $ $Date: 2000-09-29 12:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,13 @@ class SdUnoPageBackground : public ::cppu::WeakImplHelper4<
                                     ::com::sun::star::beans::XPropertySet,
                                     ::com::sun::star::lang::XServiceInfo,
                                     ::com::sun::star::beans::XPropertyState,
-                                    ::com::sun::star::lang::XUnoTunnel>
+                                    ::com::sun::star::lang::XUnoTunnel>,
+                            public SfxListener
 {
 protected:
     SvxItemPropertySet  maPropSet;
     SfxItemSet*         mpSet;
+    SdrModel*           mpDoc;
 
     const SfxItemPropertyMap* getPropertyMapEntry( const ::rtl::OUString& rPropertyName ) const throw();
 public:
@@ -103,7 +105,8 @@ public:
     ~SdUnoPageBackground() throw();
 
     // internal
-    void fillItemSet( SfxItemSet& rSet ) throw();
+    void fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) throw();
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     // uno helper
     UNO3_GETIMPLEMENTATION_DECL( SdUnoPageBackground )

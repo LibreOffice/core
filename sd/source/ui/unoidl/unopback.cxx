@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopback.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: cl $ $Date: 2000-09-29 12:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,10 +102,11 @@ const SfxItemPropertyMap* ImplGetPageBackgroundPropertyMap()
 UNO3_GETIMPLEMENTATION_IMPL( SdUnoPageBackground );
 
 SdUnoPageBackground::SdUnoPageBackground( SdDrawDocument* pDoc /* = NULL */, SdrObject* pObj /* = NULL */ ) throw()
-: maPropSet( ImplGetPageBackgroundPropertyMap() ), mpSet( NULL )
+: maPropSet( ImplGetPageBackgroundPropertyMap() ), mpSet( NULL ), mpDoc( pDoc )
 {
-    if( pObj )
+    if( pObj && pDoc )
     {
+        StartListening( *pDoc );
         mpSet = new SfxItemSet( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILLRESERVED_LAST );
         pObj->TakeAttributes( *mpSet, sal_False, sal_False );
     }
@@ -113,16 +114,40 @@ SdUnoPageBackground::SdUnoPageBackground( SdDrawDocument* pDoc /* = NULL */, Sdr
 
 SdUnoPageBackground::~SdUnoPageBackground() throw()
 {
+    if( mpDoc )
+        EndListening( *mpDoc );
+
     if( mpSet )
         delete mpSet;
 }
 
-void SdUnoPageBackground::fillItemSet( SfxItemSet& rSet ) throw()
+void SdUnoPageBackground::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+
+    if( pSdrHint )
+    {
+        // delete item set if document is dying because then the pool
+        // will also die
+        if( pSdrHint->GetKind() == HINT_MODELCLEARED )
+        {
+            delete mpSet;
+            mpSet = NULL;
+            mpDoc = NULL;
+        }
+    }
+
+}
+
+void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) throw()
 {
     rSet.ClearItem();
 
     if( mpSet == NULL )
     {
+        StartListening( *pDoc );
+        mpDoc = pDoc;
+
         mpSet = new SfxItemSet( *rSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
 
         if( maPropSet.AreThereOwnUsrAnys() )

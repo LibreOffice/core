@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: cl $ $Date: 2000-09-29 12:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,11 +565,11 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
         break;
     case WID_PAGE_PREVIEW :
         {
-            SdDrawDocShell* pDocShell = ((SdDrawDocument*)mpPage->GetModel())->GetDocSh();
-            if ( pDocShell )
+            SdDrawDocument* pDoc = (SdDrawDocument*)mpPage->GetModel();
+            if ( pDoc )
             {
-                SdDrawDocument* pDoc = pDocShell->GetDoc();
-                if ( pDoc )
+                SdDrawDocShell* pDocShell = pDoc->GetDocSh();
+                if ( pDocShell )
                 {
                     sal_uInt16 nPgNum = 0;
                     sal_uInt16 nPageCount = pDoc->GetSdPageCount( PK_STANDARD );
@@ -1297,7 +1297,7 @@ void SdDrawPage::setBackground( const uno::Any& rValue )
 
     if( pBack )
     {
-        pBack->fillItemSet( aSet );
+        pBack->fillItemSet( (SdDrawDocument*)mpPage->GetModel(), aSet );
     }
     else
     {
@@ -1321,7 +1321,7 @@ void SdDrawPage::setBackground( const uno::Any& rValue )
             pProp++;
         }
 
-        pBackground->fillItemSet( aSet );
+        pBackground->fillItemSet( (SdDrawDocument*)mpPage->GetModel(), aSet );
     }
 
     pObj->NbcSetAttributes( aSet, sal_False );
@@ -1599,7 +1599,7 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
 
         if( pBack )
         {
-            pBack->fillItemSet( aSet );
+            pBack->fillItemSet( (SdDrawDocument*)mpPage->GetModel(), aSet );
         }
         else
         {
@@ -1623,7 +1623,7 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
                 pProp++;
             }
 
-            pBackground->fillItemSet( aSet );
+            pBackground->fillItemSet( (SdDrawDocument*)mpPage->GetModel(), aSet );
         }
 
         pObj->NbcSetAttributes( aSet, sal_False );
