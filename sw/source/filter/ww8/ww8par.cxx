@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,6 +802,8 @@ void SwWW8ImplReader::ImportDop()
     // set default language (from FIB)
     rDoc.GetAttrPool().SetPoolDefaultItem(
         SvxLanguageItem( (const LanguageType)pWwFib->lid )  );
+
+    rDoc._SetUseVirtualDevice(!pWDop->fUsePrinterMetrics);
 
     //import magic doptypography information, if its there
     if (pWwFib->nFib > 105)
