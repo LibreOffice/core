@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-23 13:05:45 $
+ *  last change: $Author: mt $ $Date: 2001-03-05 16:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2546,45 +2546,6 @@ USHORT ImpEditEngine::GetLineHeight( USHORT nParagraph, USHORT nLine )
     }
 
     return 0xFFFF;
-}
-
-// MT 06/00: Kann wahrscheinlich weg!
-USHORT ImpEditEngine::GetMaxFontHeight( USHORT nParagraph, USHORT nLine )
-{
-    DBG_ASSERTWARNING( nLine == 0, "GetMaxFontHeight nur fuer Zeile 0 richtig implementiert" );
-
-    USHORT nHeight = 0xFFFF;
-    ParaPortion* pPPortion = GetParaPortions().SaveGetObject( nParagraph );
-    DBG_ASSERT( pPPortion, "Absatz nicht gefunden: GetLineHeight" );
-    if ( pPPortion && ( nLine < pPPortion->GetLines().Count() ) )
-    {
-        EditLine* pLine = pPPortion->GetLines().GetObject( nLine );
-        DBG_ASSERT( pLine, "Zeile nicht gefunden: GetLineHeight" );
-        ContentNode* pNode = pPPortion->GetNode();
-        DBG_ASSERT( pNode, "Node?" );
-        nHeight = (USHORT)pNode->GetCharAttribs().GetDefFont().GetSize().Height();
-
-        USHORT nAttr = 0;
-        EditCharAttribPtr pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
-        // In einem leeren Absatz sind auch die leeren Attribute wirksam.
-        while ( pAttr && ( !pNode->Len() || ( pAttr->GetStart() < pLine->GetEnd() ) ) )
-        {
-            if ( !pNode->Len() ||
-                ( !pAttr->IsEmpty() && ( pAttr->GetEnd() > pLine->GetStart() ) ) )
-            {
-                if ( pAttr->GetItem()->Which() == EE_CHAR_FONTHEIGHT )
-                {
-                    ULONG nH = ((const SvxFontHeightItem*)pAttr->GetItem())->GetHeight();
-                    if ( nH > nHeight )
-                        nHeight = (USHORT)nH;
-                }
-            }
-            nAttr++;
-            pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
-        }
-    }
-
-    return nHeight;
 }
 
 ULONG ImpEditEngine::GetParaHeight( USHORT nParagraph )

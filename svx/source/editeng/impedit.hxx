@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-01 09:13:46 $
+ *  last change: $Author: mt $ $Date: 2001-03-05 16:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,7 +665,6 @@ public:
     sal_uInt16      GetLineCount( sal_uInt16 nParagraph ) const;
     sal_uInt16      GetLineLen( sal_uInt16 nParagraph, sal_uInt16 nLine ) const;
     sal_uInt16      GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine );
-    sal_uInt16      GetMaxFontHeight( sal_uInt16 nParagraph, sal_uInt16 nLine );
     sal_uInt32      GetParaHeight( sal_uInt16 nParagraph );
 
     SfxItemSet      GetAttribs( EditSelection aSel );
