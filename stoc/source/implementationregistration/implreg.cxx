@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-11 09:27:11 $
+ *  last change: $Author: jbu $ $Date: 2001-12-03 17:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <list>
 
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
@@ -86,6 +85,7 @@
 
 
 #include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
 
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
@@ -155,11 +155,6 @@ static OUString impreg_getImplementationName()
     return *pImplName;
 }
 
-//*************************************************************************
-//  static getTempName()
-//
-// Shouldn't this whole routine be rewritten ???? (jbu)
-
 static OUString getTempName()
 {
     static OUString TMP(RTL_CONSTASCII_USTRINGPARAM("TMP"));
@@ -167,7 +162,6 @@ static OUString getTempName()
 
     OUString    uTmpPath;
     OString     tmpPath;
-    sal_Char    tmpPattern[512];
     sal_Char    *pTmpName = NULL;
 
     if ( osl_getEnvironment(TMP.pData, &uTmpPath.pData) != osl_Process_E_None )
@@ -182,29 +176,24 @@ static OUString getTempName()
         }
     }
 
-    if (uTmpPath.getLength())
+    if ( ! tmpPath.getLength())
     {
         tmpPath = OUStringToOString(uTmpPath, osl_getThreadTextEncoding());
     }
 
-#if defined(WIN32) || defined(WNT)
-    strcpy(tmpPattern, tmpPath.getStr());
-    strcat(tmpPattern, "\\reg_XXXXXX");
-    pTmpName = mktemp(tmpPattern);
-#endif
-
-#ifdef __OS2__
-    strcpy(tmpPattern, tempnam(NULL, "reg_"));
-    pTmpName = tmpPattern;
-#endif
-
-#ifdef UNX
-    strcpy(tmpPattern, tmpPath.getStr());
-    strcat(tmpPattern, "/reg_XXXXXX");
-    pTmpName = mktemp(tmpPattern);
-#endif
-
-    return OStringToOUString(pTmpName, osl_getThreadTextEncoding());
+    {
+        OStringBuffer buf;
+        buf.append( tmpPath );
+        if( tmpPath.getLength() && tmpPath.getStr()[ tmpPath.getLength() -1 ] != '\\' )
+        {
+            buf.append( (sal_Char) SAL_PATHDELIMITER );
+        }
+        buf.append( RTL_CONSTASCII_STRINGPARAM( "reg_XXXXXX" ) );
+        tmpPath = buf.makeStringAndClear();
+    }
+    // I am the only one to own tmpPath here, so the cast is tolerateable.
+    OSL_VERIFY( tmpPath.getStr() == mktemp( (sal_Char * ) tmpPath.getStr() ) );
+    return OStringToOUString( tmpPath, osl_getThreadTextEncoding());
 }
 
 //*************************************************************************
