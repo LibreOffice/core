@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-19 12:45:38 $
+ *  last change: $Author: mib $ $Date: 2001-11-20 16:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::InitNew" );
 
     sal_Bool bRet = SfxInPlaceObject::InitNew( pStor );
-    SetMapUnit( MAP_TWIP );
+    ASSERT( GetMapUnit() == MAP_TWIP, "map unit is not twip!" );
     sal_Bool bHTMLTemplSet = sal_False;
     if( bRet )
     {
@@ -480,6 +480,9 @@ void  SwDocShell::Init_Impl()
     StartListening( *this );
     //position of the "Automatic" style filter for the stylist (app.src)
     SetAutoStyleFilterIndex(3);
+
+    // set map unit to twip
+    SetMapUnit( MAP_TWIP );
 }
 /*--------------------------------------------------------------------
     Beschreibung: AddLink
