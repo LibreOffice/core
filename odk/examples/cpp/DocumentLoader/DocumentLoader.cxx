@@ -31,7 +31,7 @@ using namespace com::sun::star::registry;
 int SAL_CALL main( int argc, char **argv )
 {
     OUString sConnectionString(RTL_CONSTASCII_USTRINGPARAM("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager"));
-     if (argc != 2)
+     if (argc < 2)
     {
         printf("using: DocumentLoader <file_url> [<uno_connection_url>]\n\n"
                "example: DocumentLoader  \"file://e:/temp/test.sxw\" \"uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager\"\n");

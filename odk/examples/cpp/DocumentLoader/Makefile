@@ -51,7 +51,7 @@ $(OUT_COMP_GEN) : $(OUT)
 	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_OBJ))
 
 # This example type library will be extended by the office types
-$(OUT_BIN)/%.rdb :
+$(OUT_BIN)/%.rdb : $(OUT_COMP_GEN)
 	-$(DEL) $(subst /,$(PS),$@)
 	regmerge $@ / $(DKREGISTRYNAME) 
 

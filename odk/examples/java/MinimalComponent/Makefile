@@ -37,7 +37,7 @@ CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 #CLASSFILES += $(subst $(OUT_COMP_GEN),$(OUT_COMP_CLASS),$(GENJAVAFILES:.java=.class))
 
 $(COMPONENT1_NAME)_CLASSFILES = $(COMPONENT1_NAME).class \
-		$(COMPONENT1_NAME)$$_$(COMPONENT1_NAME)Implementation.class						  
+		$(COMPONENT1_NAME)$$$(COMPONENT1_NAME)Implementation.class						  
 
 #$(COMPONENT1_NAME)_CLASSFILES += $(subst $(OUT_COMP_GEN)/,,$(GENJAVAFILES:.java=.class))
 
