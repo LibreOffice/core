@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:17 $
+ *  last change:$Date: 2003-09-08 10:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.frame;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
 import com.sun.star.view.XSelectionSupplier;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.frame.XModel</code>
