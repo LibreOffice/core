@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-27 14:14:38 $
+ *  last change: $Author: mib $ $Date: 2001-03-09 07:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,13 +576,7 @@ void SwXMLTableCellContext_Impl::EndElement()
 {
     if( bHasTextContent )
     {
-        if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
-        {
-            OUString sEmpty;
-            GetImport().GetTextImport()->GetText()->insertString(
-                GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
-                sal_True );
-        }
+        GetImport().GetTextImport()->DeleteParagraph();
     }
     else if( !bHasTableContent )
     {
