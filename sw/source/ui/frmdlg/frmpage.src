@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-04 11:54:21 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1192,7 +1192,7 @@ TabPage TP_FRM_STD
     {
             < "ÇáÕÝÍÉ" ; > ;
         < "ÇáÝÞÑÉ" ; > ;
-        < "ÎØ" ; > ;
+        < "ÇáÍÑÝ" ; > ;
         < "ßÇÏÑ" ; > ;
     };
     StringList [ greek ] =
