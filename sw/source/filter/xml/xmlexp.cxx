@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-13 17:54:54 $
+ *  last change: $Author: dvo $ $Date: 2001-02-14 16:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
     }
     else if (pDoc->IsHTMLMode())
     {
-        pClass = sXML_html;
+        pClass = sXML_online;
     }
     // else: keep default pClass that we received
 

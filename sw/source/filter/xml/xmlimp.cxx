@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-23 16:13:54 $
+ *  last change: $Author: dvo $ $Date: 2001-02-14 16:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #endif
 #ifndef _XMLOFF_TXTIMP_HXX
 #include <xmloff/txtimp.hxx>
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLTEXTSHAPEIMPORTHELPER_HXX_
 #include <xmloff/XMLTextShapeImportHelper.hxx>
@@ -187,6 +190,41 @@ SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
                 const Reference< xml::sax::XAttributeList > & xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
+    // process document class
+    // global-text, online are handled via document shell;
+    // we only handle label documents
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    {
+        OUString sLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+                              &sLocalName );
+
+        if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
+             sLocalName.equalsAsciiL(sXML_class, sizeof(sXML_class)-1) )
+        {
+            if (xAttrList->getValueByIndex(nAttr).equalsAsciiL(
+                sXML_label, sizeof(sXML_label)-1))
+            {
+                // OK, we need to set label mode. To do this, tunnel
+                // to get the SwDoc, then set label mode.
+
+                Reference<XText> xText(GetImport().GetModel(), UNO_QUERY);
+                Reference<XUnoTunnel> xTunnel(
+                    GetImport().GetTextImport()->GetText(), UNO_QUERY);
+                DBG_ASSERT(xTunnel.is(), "I can't get the Tunnel");
+                SwXText* pText = (SwXText*)xTunnel->getSomething(
+                    SwXText::getUnoTunnelId());
+                if (NULL != pText)
+                {
+                    SwDoc* pDoc = pText->GetDoc();
+                    if (NULL != pDoc)
+                        pDoc->SetLabelDoc();
+                }
+            }
+        }
+    }
 }
 
 SwXMLDocContext_Impl::~SwXMLDocContext_Impl()
