@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-03 11:42:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ sal_Bool ChkChain( SwLinePortion *pStart )
 }
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 const sal_Char *GetPortionName( const MSHORT nType );
 #endif
 
