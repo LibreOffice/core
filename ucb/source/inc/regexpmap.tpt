@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regexpmap.tpt,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 18:45:09 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,13 +112,9 @@ class RegexpMapIterImpl
 {
 public:
 	typedef RegexpMapImpl< Val > MapImpl;
-
-#if defined(_MSC_VER) && (_MSC_VER > 1300 )
 	typedef typename List< Val >::iterator ListIterator;
-#else
-	typedef List< Val >::iterator ListIterator;
-#endif
-		// Solaris needs these for the ctor...
+
+	// Solaris needs these for the ctor...
 
 	inline RegexpMapIterImpl();
 
@@ -133,22 +129,15 @@ public:
 
 	int getList() const { return m_nList; }
 
-#if defined(_MSC_VER) && (_MSC_VER > 1300 )
 	typename List< Val >::iterator const & getIndex() const { return m_aIndex; }
-#else
-	List< Val >::iterator const & getIndex() const { return m_aIndex; }
-#endif
+
 	void next();
 
 	RegexpMapEntry< Val > & get();
 
 private:
 	mutable RegexpMapEntry< Val > m_aEntry;
-#if defined(_MSC_VER) && (_MSC_VER > 1300 )
 	typename List< Val >::iterator m_aIndex;
-#else
-	List< Val >::iterator m_aIndex;
-#endif
 	RegexpMapImpl< Val > * m_pMap;
 	int m_nList;
 	mutable bool m_bEntrySet;
@@ -464,8 +453,8 @@ bool RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue,
 	{
 		List< Val > & rTheList = m_pImpl->m_aList[aRegexp.getKind()];
 
-		List< Val >::iterator aEnd(rTheList.end());
-		for (List< Val >::iterator aIt(rTheList.begin()); aIt != aEnd; ++aIt)
+		typename List< Val >::iterator aEnd(rTheList.end());
+		for (typename List< Val >::iterator aIt(rTheList.begin()); aIt != aEnd; ++aIt)
 			if (aIt->m_aRegexp == aRegexp)
 				if (bOverwrite)
 				{
@@ -486,13 +475,8 @@ bool RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue,
 
 //============================================================================
 template< typename Val >
-#if defined(_MSC_VER) && (_MSC_VER > 1300 )
 typename RegexpMap< Val >::iterator RegexpMap< Val >::find(rtl::OUString const & rKey,
 												  rtl::OUString * pReverse)
-#else
-RegexpMap< Val >::iterator RegexpMap< Val >::find(rtl::OUString const & rKey,
-												  rtl::OUString * pReverse)
-#endif
 {
 	Regexp aRegexp(Regexp::parse(rKey));
 
@@ -509,8 +493,8 @@ RegexpMap< Val >::iterator RegexpMap< Val >::find(rtl::OUString const & rKey,
 	{
 		List< Val > & rTheList = m_pImpl->m_aList[aRegexp.getKind()];
 
-		List< Val > ::iterator aEnd(rTheList.end());
-		for (List< Val >::iterator aIt(rTheList.begin()); aIt != aEnd; ++aIt)
+		typename List< Val > ::iterator aEnd(rTheList.end());
+		for (typename List< Val >::iterator aIt(rTheList.begin()); aIt != aEnd; ++aIt)
 			if (aIt->m_aRegexp == aRegexp)
 				return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(
 					                                m_pImpl,
@@ -540,22 +524,14 @@ void RegexpMap< Val >::erase(iterator const & rPos)
 
 //============================================================================
 template< typename Val >
-#if defined(_MSC_VER) && (_MSC_VER > 1300 )
 typename RegexpMap< Val >::iterator RegexpMap< Val >::begin()
-#else
-RegexpMap< Val >::iterator RegexpMap< Val >::begin()
-#endif
 {
 	return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(m_pImpl, true));
 }
 
 //============================================================================
 template< typename Val >
-#if defined(_MSC_VER) && (_MSC_VER > 1300 )
 typename RegexpMap< Val >::const_iterator RegexpMap< Val >::begin() const
-#else
-RegexpMap< Val >::const_iterator RegexpMap< Val >::begin() const
-#endif
 {
 	return RegexpMapConstIter< Val >(new RegexpMapIterImpl< Val >(m_pImpl,
 																  true));
@@ -563,22 +539,14 @@ RegexpMap< Val >::const_iterator RegexpMap< Val >::begin() const
 
 //============================================================================
 template< typename Val >
-#if defined(_MSC_VER) && (_MSC_VER > 1300 )
 typename RegexpMap< Val >::iterator RegexpMap< Val >::end()
-#else
-RegexpMap< Val >::iterator RegexpMap< Val >::end()
-#endif
 {
 	return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(m_pImpl, false));
 }
 
 //============================================================================
 template< typename Val >
-#if defined(_MSC_VER) && (_MSC_VER > 1300 )
 typename RegexpMap< Val >::const_iterator RegexpMap< Val >::end() const
-#else
-RegexpMap< Val >::const_iterator RegexpMap< Val >::end() const
-#endif
 {
 	return RegexpMapConstIter< Val >(new RegexpMapIterImpl< Val >(m_pImpl,
 																  false));
@@ -596,11 +564,7 @@ bool RegexpMap< Val >::empty() const
 
 //============================================================================
 template< typename Val >
-#if defined(_MSC_VER) && (_MSC_VER > 1300 )
 typename RegexpMap< Val >::size_type RegexpMap< Val >::size() const
-#else
-RegexpMap< Val >::size_type RegexpMap< Val >::size() const
-#endif
 {
 	return (m_pImpl->m_pDefault ? 1 : 0)
 		       + m_pImpl->m_aList[Regexp::KIND_PREFIX].size()
@@ -618,8 +582,8 @@ Val const * RegexpMap< Val >::map(rtl::OUString const & rString,
 	{
 		List< Val > const & rTheList = m_pImpl->m_aList[n];
 
-		List< Val >::const_iterator aEnd(rTheList.end());
-		for (List< Val >::const_iterator aIt(rTheList.begin()); aIt != aEnd;
+		typename List< Val >::const_iterator aEnd(rTheList.end());
+		for (typename List< Val >::const_iterator aIt(rTheList.begin()); aIt != aEnd;
 			 ++aIt)
 			if (aIt->m_aRegexp.matches(rString, pTranslation, pTranslated))
 				return &aIt->m_aValue;
