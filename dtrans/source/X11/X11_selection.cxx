@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 15:18:41 $
+ *  last change: $Author: pl $ $Date: 2002-03-12 12:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,8 @@ SelectionManager::SelectionManager() :
         m_aCopyCursor( None ),
         m_aLinkCursor( None ),
         m_aNoneCursor( None ),
-        m_aCurrentCursor( None )
+        m_aCurrentCursor( None ),
+        m_bLastDropAccepted( false )
 {
     m_aDropEnterEvent.data.l[0] = None;
     m_bDropEnterSent            = true;
@@ -1613,11 +1614,12 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 #endif
             DropTargetEvent aEvent;
             aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
-            it->second->dragExit( aEvent );
             m_aDropEnterEvent.data.l[0] = None;
             if( m_aCurrentDropWindow == aTarget )
                 m_aCurrentDropWindow = None;
             m_nCurrentProtocolVersion = nXdndProtocolRevision;
+            aGuard.clear();
+            it->second->dragExit( aEvent );
         }
         else if(
                 rMessage.message_type == m_nXdndDrop &&
@@ -1629,19 +1631,32 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 #ifdef DEBUG
             fprintf( stderr, "received XdndDrop on 0x%x (%d, %d)\n", aTarget, m_nLastX, m_nLastY );
 #endif
-            DropTargetDropEvent aEvent;
-            aEvent.Source       = static_cast< XDropTarget* >(it->second.m_pTarget);
-            aEvent.Context      = new DropTargetDropContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
-            aEvent.LocationX    = m_nLastX;
-            aEvent.LocationY    = m_nLastY;
-            aEvent.DropAction   = m_nLastDropAction;
-            // there is nothing corresponding to source supported actions
-            // every source can do link, copy and move
-            aEvent.SourceActions= m_nLastDropAction;
-            aEvent.Transferable = m_xDropTransferable;
+            if( m_bLastDropAccepted )
+            {
+                DropTargetDropEvent aEvent;
+                aEvent.Source       = static_cast< XDropTarget* >(it->second.m_pTarget);
+                aEvent.Context      = new DropTargetDropContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
+                aEvent.LocationX    = m_nLastX;
+                aEvent.LocationY    = m_nLastY;
+                aEvent.DropAction   = m_nLastDropAction;
+                // there is nothing corresponding to source supported actions
+                // every source can do link, copy and move
+                aEvent.SourceActions= m_nLastDropAction;
+                aEvent.Transferable = m_xDropTransferable;
 
-            aGuard.clear();
-            it->second->drop( aEvent );
+                aGuard.clear();
+                it->second->drop( aEvent );
+            }
+            else
+            {
+#ifdef DEBUG
+                fprintf( stderr, "XdndDrop canceled due to m_bLastDropAccepted = fale\n" );
+#endif
+                DropTargetEvent aEvent;
+                aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
+                aGuard.clear();
+                it->second->dragExit( aEvent );
+            }
         }
     }
 }
@@ -2074,7 +2089,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
         {
             if( it != m_aDropTargets.end() )
             {
-                if( it->second.m_pTarget->m_bActive && m_nUserDragAction != DNDConstants::ACTION_NONE )
+                if( it->second.m_pTarget->m_bActive && m_nUserDragAction != DNDConstants::ACTION_NONE && m_bLastDropAccepted )
                 {
                     int x, y;
                     Window aChild;
@@ -2132,7 +2147,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
                     aEvent.xbutton.time         = rMessage.xbutton.time+1;
                     aEvent.xbutton.x_root       = rMessage.xbutton.x_root;
                     aEvent.xbutton.y_root       = rMessage.xbutton.y_root;
-                    aEvent.xbutton.state        = rMessage.xbutton.state | Button2Mask;
+                    aEvent.xbutton.state        = rMessage.xbutton.state;
                     aEvent.xbutton.button       = Button2;
                     aEvent.xbutton.same_screen  = True;
                     XTranslateCoordinates( m_pDisplay,
@@ -2143,7 +2158,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
                     XSendEvent( m_pDisplay, m_aDropWindow, False, ButtonPressMask, &aEvent );
                     aEvent.xbutton.type   = ButtonRelease;
                     aEvent.xbutton.time++;
-                    aEvent.xbutton.state &= ~Button2Mask;
+                    aEvent.xbutton.state |= Button2Mask;
                     XSendEvent( m_pDisplay, m_aDropWindow, False, ButtonReleaseMask, &aEvent );
 
                     m_bDropSent                 = true;
@@ -2189,6 +2204,7 @@ void SelectionManager::accept( sal_Int8 dragOperation, Window aDropWindow, Time 
             nAction = m_nXdndActionCopy;
         else if( dragOperation & DNDConstants::ACTION_LINK )
             nAction = m_nXdndActionLink;
+        m_bLastDropAccepted = true;
         sendDragStatus( nAction );
     }
 }
@@ -2199,6 +2215,7 @@ void SelectionManager::reject( Window aDropWindow, Time aTimestamp )
 {
     if( aDropWindow == m_aCurrentDropWindow )
     {
+        m_bLastDropAccepted = false;
         sendDragStatus( None );
         if( m_bDropSent && m_xDragSourceListener.is() )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-20 12:35:35 $
+ *  last change: $Author: pl $ $Date: 2002-03-12 12:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,7 @@ namespace x11 {
         int                         m_nDragButton;
         sal_Int8                    m_nUserDragAction;
         sal_Int8                    m_nSourceActions;
+        bool                        m_bLastDropAccepted;
         bool                        m_bDropSuccess;
         bool                        m_bDropSent;
         time_t                      m_nDropTimeout;
