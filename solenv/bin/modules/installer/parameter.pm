@@ -397,10 +397,9 @@ sub setglobalvariables
 
 sub set_childproductnames
 {
-
     if ( $installer::globals::islinuxrpmbuild )
     {
-        $installer::globals::adafilename = "adabas-12.0.1-1.i586.rpm";
+        $installer::globals::adafilename = "adabas-13.01.00-1.i586.rpm";
         $installer::globals::javafilename = "jre-1_5_0_01-linux-i586.rpm";
     }
 
