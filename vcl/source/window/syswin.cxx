@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:52:30 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,54 +647,66 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         aState.mnState  = nState & SAL_FRAMESTATE_SYSTEMMASK;
 
         // #96568# avoid having multiple frames at the same screen location
-        if( rData.GetMask() & (WINDOWSTATE_MASK_POS|WINDOWSTATE_MASK_WIDTH|WINDOWSTATE_MASK_HEIGHT) )
-        {
-            Rectangle aDesktop = GetDesktopRectPixel();
-            ImplSVData *pSVData = ImplGetSVData();
-            Window *pWin = pSVData->maWinData.mpFirstFrame;
-            BOOL bWrapped = FALSE;
-            while( pWin )
+        //  do the check only if not maximized
+        if( !((rData.GetMask() & WINDOWSTATE_MASK_STATE) && (nState & WINDOWSTATE_STATE_MAXIMIZED)) )
+            if( rData.GetMask() & (WINDOWSTATE_MASK_POS|WINDOWSTATE_MASK_WIDTH|WINDOWSTATE_MASK_HEIGHT) )
             {
-                if( !pWin->ImplIsRealParentPath( this ) &&
-                    pWin->ImplGetWindow()->IsTopWindow() && pWin->mpWindowImpl->mbReallyVisible )
+                Rectangle aDesktop = GetDesktopRectPixel();
+                ImplSVData *pSVData = ImplGetSVData();
+                Window *pWin = pSVData->maWinData.mpFirstFrame;
+                BOOL bWrapped = FALSE;
+                while( pWin )
                 {
-                    SalFrameGeometry g = pWin->mpWindowImpl->mpFrame->GetGeometry();
-                    if( abs(g.nX-aState.mnX) < 2 && abs(g.nY-aState.mnY) < 5 )
+                    if( !pWin->ImplIsRealParentPath( this ) &&
+                        pWin->ImplGetWindow()->IsTopWindow() && pWin->mpWindowImpl->mbReallyVisible )
                     {
-                        long displacement = g.nTopDecoration ? g.nTopDecoration : 20;
-                        if( aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > (unsigned long) aDesktop.nRight ||
-                            aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > (unsigned long) aDesktop.nBottom )
+                        SalFrameGeometry g = pWin->mpWindowImpl->mpFrame->GetGeometry();
+                        if( abs(g.nX-aState.mnX) < 2 && abs(g.nY-aState.mnY) < 5 )
                         {
-                            // displacing would leave screen
-                            aState.mnX = g.nLeftDecoration ? g.nLeftDecoration : 10; // should result in (0,0)
-                            aState.mnY = displacement;
-                            if( bWrapped ||
-                                aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > (unsigned long) aDesktop.nRight ||
+                            long displacement = g.nTopDecoration ? g.nTopDecoration : 20;
+                            if( aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > (unsigned long) aDesktop.nRight ||
                                 aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > (unsigned long) aDesktop.nBottom )
-                                break;  // further displacement not possible -> break
-                            // avoid endless testing
-                            bWrapped = TRUE;
+                            {
+                                // displacing would leave screen
+                                aState.mnX = g.nLeftDecoration ? g.nLeftDecoration : 10; // should result in (0,0)
+                                aState.mnY = displacement;
+                                if( bWrapped ||
+                                    aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > (unsigned long) aDesktop.nRight ||
+                                    aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > (unsigned long) aDesktop.nBottom )
+                                    break;  // further displacement not possible -> break
+                                // avoid endless testing
+                                bWrapped = TRUE;
+                            }
+                            else
+                            {
+                                // displace
+                                aState.mnX += displacement;
+                                aState.mnY += displacement;
+                            }
+                        pWin = pSVData->maWinData.mpFirstFrame; // check new pos again
                         }
-                        else
-                        {
-                            // displace
-                            aState.mnX += displacement;
-                            aState.mnY += displacement;
-                        }
-                    pWin = pSVData->maWinData.mpFirstFrame; // check new pos again
                     }
+                    pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
                 }
-                pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
             }
-
-        }
 
         mpWindowImpl->mpFrame->SetWindowState( &aState );
 
         // do a synchronous resize for layout reasons
         //  but use rData only when the window is not to be maximized (#i38089#)
         //  otherwise we have no useful size information
-        if( !( (rData.GetMask() & WINDOWSTATE_MASK_STATE) && (nState & WINDOWSTATE_STATE_MAXIMIZED) ) )
+        if( (rData.GetMask() & WINDOWSTATE_MASK_STATE) && (nState & WINDOWSTATE_STATE_MAXIMIZED) )
+        {
+            // query maximized size from frame
+            SalFrameGeometry aGeometry = mpWindowImpl->mpFrame->GetGeometry();
+
+            // but use it only if it is different from the restore size (rData)
+            // as currently only on windows the exact size of a maximized window
+            //  can be computed without actually showing the window
+            if( aGeometry.nWidth != rData.GetWidth() || aGeometry.nHeight != rData.GetHeight() )
+                ImplHandleResize( pWindow, aGeometry.nWidth, aGeometry.nHeight );
+        }
+        else
             if( rData.GetMask() & (WINDOWSTATE_MASK_WIDTH|WINDOWSTATE_MASK_HEIGHT) )
                 ImplHandleResize( pWindow, rData.GetWidth(), rData.GetHeight() );
     }
