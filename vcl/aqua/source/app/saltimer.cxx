@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-16 02:43:16 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_SALTIMER_CXX
 
 #ifndef _SV_SALTIMER_HXX
 #include <saltimer.hxx>
