@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+#   last change: $Author: bm $ $Date: 2000-12-20 15:37:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,6 +108,7 @@ IDLFILES=\
     ChartSolidType.idl\
     ChartStatistics.idl\
     ChartSymbolType.idl\
+    ChartTableAddressSupplier.idl\
     ChartTitle.idl\
     ChartTwoAxisXSupplier.idl\
     ChartTwoAxisYSupplier.idl\
