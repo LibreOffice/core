@@ -2,9 +2,9 @@
  *
  *  $RCSfile: session.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:53:41 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,14 +390,14 @@ static Reference< XInterface > SAL_CALL vcl_session_createInstance( const Refere
 
 extern "C" {
 
-    void SAL_CALL component_getImplementationEnvironment(
+    VCL_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
         const sal_Char** ppEnvTypeName,
         uno_Environment** ppEnv )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pXUnoKey )
+    VCL_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pXUnoKey )
     {
         if( pXUnoKey )
         {
@@ -420,7 +420,7 @@ extern "C" {
         return sal_False;
     }
 
-    void* SAL_CALL component_getFactory(
+    VCL_DLLPUBLIC void* SAL_CALL component_getFactory(
         const sal_Char* pImplementationName,
         void* pXUnoSMgr,
         void* pXUnoKey
