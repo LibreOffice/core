@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2000-10-12 13:43:55 $
+ *  last change: $Author: pluby $ $Date: 2001-01-11 23:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,8 +280,6 @@ void BmpApp::Main( )
     // Param3: output directory
     // Param4: Langugage dependent directory
 
-// We need to stub out code Mac OS X until the vcl code is working
-#ifndef MACOSX
     if( nCmdCount >= 3 )
     {
         const String aSrsName( GetCommandLineParam( nCurCmd++ ) );
@@ -336,7 +334,6 @@ void BmpApp::Main( )
         Execute();
         delete pBmpWin;
     }
-#endif /* MACOSX */
 
     Resource::SetResManager( NULL );
     delete pAppResMgr;
