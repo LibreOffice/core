@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 06:47:59 $
+ *  last change: $Author: oj $ $Date: 2001-12-10 11:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ struct SvSortData;
 #define CONTAINER_TABLES        sal_Int32(etTable - etBookmark)
 #define CONTAINER_BOOKMARKS     sal_Int32(etBookmark - etBookmark)
 
+namespace com { namespace sun{ namespace star { namespace container { class XNameContainer; } } } }
 // .........................................................................
 namespace dbaui
 {
@@ -462,6 +463,8 @@ namespace dbaui
         sal_Bool isConnectionWriteAble(SvLBoxEntry* _pEntry) const;
         void ensureObjectExists(SvLBoxEntry* _pApplyTo);
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnectionFromEntry(SvLBoxEntry* _pEntry) const;
+        // remove all grid columns and dispose them
+        void clearGridColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _xColContainer);
     };
 
 // .........................................................................

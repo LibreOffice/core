@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-03 13:36:06 $
+ *  last change: $Author: oj $ $Date: 2001-12-10 11:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,14 +637,6 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
 
         Reference< ::com::sun::star::form::XGridColumnFactory >  xColFactory(xGrid, UNO_QUERY);
         Reference< XNameContainer >  xColContainer(xGrid, UNO_QUERY);
-        // first we have to clear the grid
-        {
-            Sequence< ::rtl::OUString > aNames = xColContainer->getElementNames();
-            const ::rtl::OUString* pBegin   = aNames.getConstArray();
-            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-            for (; pBegin != pEnd;++pBegin)
-                xColContainer->removeByName(*pBegin);
-        }
 
         Reference< XChild > xGridAsChild(xGrid, UNO_QUERY);
         Reference< XLoadable > xFormAsLoadable;
@@ -2196,6 +2188,11 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
             sal_Bool bSuccess = sal_True;
 
             {
+                {
+                    Reference< XNameContainer >  xColContainer(getFormComponent(), UNO_QUERY);
+                    // first we have to clear the grid
+                    clearGridColumns(xColContainer);
+                }
                 FormErrorHelper aHelper(this);
                 // load the form
                 bSuccess = reloadForm(xLoadable);
@@ -2891,15 +2888,8 @@ void SbaTableQueryBrowser::unloadAndCleanup(sal_Bool _bDisposeConnection, sal_Bo
             xLoadable->unload();
 
         // clear the grid control
-        Reference< XNameContainer >  xColContainer(getControlModel(), UNO_QUERY);
-        // first we have to clear the grid
-        {
-            Sequence< ::rtl::OUString > aNames = xColContainer->getElementNames();
-            const ::rtl::OUString* pBegin   = aNames.getConstArray();
-            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-            for (; pBegin != pEnd;++pBegin)
-                xColContainer->removeByName(*pBegin);
-        }
+        Reference< XNameContainer > xConta(getControlModel(),UNO_QUERY);
+        clearGridColumns(xConta);
 
         // dispose the connection
         if(_bDisposeConnection)
@@ -4002,7 +3992,20 @@ void SbaTableQueryBrowser::frameAction(const ::com::sun::star::frame::FrameActio
 
 }
 // -----------------------------------------------------------------------------
-
+void SbaTableQueryBrowser::clearGridColumns(const Reference< XNameContainer >& _xColContainer)
+{
+    // first we have to clear the grid
+    Sequence< ::rtl::OUString > aNames = _xColContainer->getElementNames();
+    const ::rtl::OUString* pBegin   = aNames.getConstArray();
+    const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+    Reference< XInterface > xColumn;
+    for (; pBegin != pEnd;++pBegin)
+    {
+        _xColContainer->getByName(*pBegin) >>= xColumn;
+        _xColContainer->removeByName(*pBegin);
+        ::comphelper::disposeComponent(xColumn);
+    }
+}
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................
