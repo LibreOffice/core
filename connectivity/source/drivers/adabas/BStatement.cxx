@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-18 11:22:32 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 13:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,11 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
+typedef ::connectivity::odbc::OStatement OAdabasStatement_BASE;
 // -----------------------------------------------------------------------------
 OResultSet* OAdabasStatement::createResulSet()
 {
-    return new OAdabasResultSet(m_aStatementHandle,this);
+    return new OAdabasResultSet(m_aStatementHandle,this,m_aSelectColumns);
 }
 // -----------------------------------------------------------------------------
 void OAdabasStatement::setUsingBookmarks(sal_Bool _bUseBookmark)
@@ -98,6 +99,12 @@ void OAdabasStatement::setResultSetConcurrency(sal_Int32 _par0)
 // -----------------------------------------------------------------------------
 void OAdabasStatement::setResultSetType(sal_Int32 _par0)
 {
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OAdabasStatement::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+{
+    m_aSelectColumns = m_pOwnConnection->createSelectColumns(sql);
+    return OAdabasStatement_BASE::execute(sql);
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BPreparedStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-18 11:22:32 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 13:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
-
+using namespace connectivity;
 using namespace connectivity::adabas;
 using namespace connectivity::odbc;
 //------------------------------------------------------------------------------
@@ -81,11 +81,15 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
-
+OAdabasPreparedStatement::OAdabasPreparedStatement( OAdabasConnection* _pConnection,const ::std::vector<OTypeInfo>& _TypeInfo,const ::rtl::OUString& sql)
+: ::connectivity::odbc::OPreparedStatement( _pConnection,_TypeInfo,sql)
+{
+    m_aSelectColumns = _pConnection->createSelectColumns(sql);
+}
 // -----------------------------------------------------------------------------
 OResultSet* OAdabasPreparedStatement::createResulSet()
 {
-    return new OAdabasResultSet(m_aStatementHandle,this);
+    return new OAdabasResultSet(m_aStatementHandle,this,m_aSelectColumns);
 }
 // -----------------------------------------------------------------------------
 void OAdabasPreparedStatement::setUsingBookmarks(sal_Bool _bUseBookmark)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 13:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
 
 namespace connectivity
 {
@@ -112,6 +115,8 @@ namespace connectivity
             //XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+
+            ::vos::ORef<OSQLColumns> createSelectColumns(const ::rtl::OUString& _rSql);
         };
     }
 }

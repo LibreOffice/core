@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 07:07:28 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 13:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -80,8 +77,9 @@ using namespace com::sun::star::uno;
 using namespace connectivity::adabas;
 using namespace connectivity;
 
-OAdabasResultSetMetaData::OAdabasResultSetMetaData(odbc::OConnection*   _pConnection, SQLHANDLE _pStmt )
+OAdabasResultSetMetaData::OAdabasResultSetMetaData(odbc::OConnection*   _pConnection, SQLHANDLE _pStmt,const ::vos::ORef<OSQLColumns>& _rSelectColumns )
 : OAdabasResultSetMetaData_BASE(_pConnection,_pStmt)
+,m_aSelectColumns(_rSelectColumns)
 {
 }
 // -----------------------------------------------------------------------------
@@ -106,27 +104,14 @@ sal_Int32 SAL_CALL OAdabasResultSetMetaData::getColumnType( sal_Int32 column ) t
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL OAdabasResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    // adabas return values, so we have to ask the table itself
-    sal_Int32 nNullable = ColumnValue::NULLABLE;
-    ::rtl::OUString sSchema = getSchemaName( column );
-    ::rtl::OUString sTable  = getTableName( column );
-    ::rtl::OUString sColumn = getColumnName( column );
-    Reference< XResultSet> xRes = m_pConnection->getMetaData()->getColumns(Any(),sSchema,sTable,sColumn);
-    Reference< XRow > xRow(xRes,UNO_QUERY);
-    if ( xRes.is() && xRow.is() )
-    {
-        sal_Int32 nType = getColumnType( column );
-        while ( xRes->next() )
-        {
-            if ( nType == xRow->getInt(5) )
-                nNullable = xRow->getInt( 11 );
-        }
-    }
-    else
-        nNullable = OAdabasResultSetMetaData_BASE::isNullable( column );
+    sal_Int32 nValue = 0;
+    sal_Bool bFound = sal_False;
+    if ( m_aSelectColumns.isValid() && column > 0 && column <= m_aSelectColumns->size() )
+        bFound = (*m_aSelectColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)) >>= nValue;
 
-    return nNullable;
+    if ( !bFound )
+        nValue = getNumColAttrib(column,SQL_DESC_NULLABLE);
+    return nValue;
 }
-// -----------------------------------------------------------------------------
-
+// -------------------------------------------------------------------------
 

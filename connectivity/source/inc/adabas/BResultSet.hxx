@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BResultSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:51 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 13:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,12 @@ namespace connectivity
     {
         class OAdabasResultSet :    public  ::connectivity::odbc::OResultSet
         {
+            ::vos::ORef<OSQLColumns>    m_aSelectColumns;
         public:
-            OAdabasResultSet(SQLHANDLE _pStatementHandle,::connectivity::odbc::OStatement_Base* pStmt)
-                : ::connectivity::odbc::OResultSet( _pStatementHandle,pStmt){}
+            OAdabasResultSet(SQLHANDLE _pStatementHandle,::connectivity::odbc::OStatement_Base* pStmt,const ::vos::ORef<OSQLColumns>& _rSelectColumns)
+             : ::connectivity::odbc::OResultSet( _pStatementHandle,pStmt)
+             ,m_aSelectColumns(_rSelectColumns)
+            {}
 
             // XResultSetMetaDataSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

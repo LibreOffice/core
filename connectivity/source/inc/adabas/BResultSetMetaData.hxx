@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 07:07:28 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 13:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _CONNECTIVITY_ODBC_ORESULTSETMETADATA_HXX_
 #include "odbc/OResultSetMetaData.hxx"
 #endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
 
 namespace connectivity
 {
@@ -76,9 +79,10 @@ namespace connectivity
         typedef odbc::OResultSetMetaData OAdabasResultSetMetaData_BASE;
         class OAdabasResultSetMetaData :    public  OAdabasResultSetMetaData_BASE
         {
+            ::vos::ORef<OSQLColumns>    m_aSelectColumns;
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OAdabasResultSetMetaData(odbc::OConnection* _pConnection, SQLHANDLE _pStmt );
+            OAdabasResultSetMetaData(odbc::OConnection* _pConnection, SQLHANDLE _pStmt ,const ::vos::ORef<OSQLColumns>& _rSelectColumns);
             OAdabasResultSetMetaData(odbc::OConnection* _pConnection, SQLHANDLE _pStmt ,const ::std::vector<sal_Int32> & _vMapping);
             virtual ~OAdabasResultSetMetaData();
 

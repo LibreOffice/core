@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BStatement.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-18 11:22:28 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 13:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,12 @@
 #ifndef _CONNECTIVITY_ADABAS_BCONNECTION_HXX_
 #include "adabas/BConnection.hxx"
 #endif
+#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+#include "connectivity/commontools.hxx"
+#endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
 
 namespace connectivity
 {
@@ -74,6 +80,8 @@ namespace connectivity
     {
         class OAdabasStatement :    public  ::connectivity::odbc::OStatement
         {
+            OAdabasConnection*          m_pOwnConnection;
+            ::vos::ORef<OSQLColumns>    m_aSelectColumns;
         protected:
             virtual odbc::OResultSet* createResulSet();
             virtual void setResultSetConcurrency(sal_Int32 _par0);
@@ -81,8 +89,11 @@ namespace connectivity
             virtual void setUsingBookmarks(sal_Bool _bUseBookmark);
         public:
             OAdabasStatement( OAdabasConnection* _pConnection)
-                : ::connectivity::odbc::OStatement( _pConnection){}
+                : ::connectivity::odbc::OStatement( _pConnection )
+                ,m_pOwnConnection(_pConnection)
+            {}
 
+            virtual sal_Bool SAL_CALL execute( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
     }
 }

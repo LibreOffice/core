@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BResultSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:49:44 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 13:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ Reference< XResultSetMetaData > SAL_CALL OAdabasResultSet::getMetaData(  ) throw
 
 
     if(!m_xMetaData.is())
-        m_xMetaData = new OAdabasResultSetMetaData(m_pStatement->getOwnConnection(),m_aStatementHandle);
+        m_xMetaData = new OAdabasResultSetMetaData(m_pStatement->getOwnConnection(),m_aStatementHandle,m_aSelectColumns);
     return m_xMetaData;
 }
 // -----------------------------------------------------------------------------

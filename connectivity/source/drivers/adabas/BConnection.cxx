@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 16:13:51 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 13:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,12 @@
 #ifndef _DBHELPER_DBCHARSET_HXX_
 #include <connectivity/dbcharset.hxx>
 #endif
-
+#ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
+#include "connectivity/sqliterator.hxx"
+#endif
+#ifndef _CONNECTIVITY_SQLPARSE_HXX
+#include <connectivity/sqlparse.hxx>
+#endif
 
 using namespace connectivity::adabas;
 using namespace connectivity;
@@ -311,6 +316,25 @@ Sequence< sal_Int8 > OAdabasConnection::getUnoTunnelImplementationId()
 ::connectivity::odbc::OConnection* OAdabasConnection::cloneConnection()
 {
     return new OAdabasConnection(m_pDriverHandleCopy,m_pDriver);
+}
+// -----------------------------------------------------------------------------
+::vos::ORef<OSQLColumns> OAdabasConnection::createSelectColumns(const ::rtl::OUString& _rSql)
+{
+    ::vos::ORef<OSQLColumns> aRet;
+    OSQLParser aParser(getDriver()->getORB());
+    ::rtl::OUString sErrorMessage;
+    OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_rSql);
+    if(pNode)
+    {
+        Reference< XTablesSupplier> xCata = createCatalog();
+        OSQLParseTreeIterator aParseIter(xCata->getTables(),
+                                        getMetaData(),
+                                        pNode,
+                                        &aParser);
+        aParseIter.traverseAll();
+        aRet = aParseIter.getSelectColumns();
+    }
+    return aRet;
 }
 // -----------------------------------------------------------------------------
 
