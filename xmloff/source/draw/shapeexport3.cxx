@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:22:16 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,10 @@ void XMLShapeExport::ImpExport3DShape(
                 aAny >>= xPolyPolygon3D;
 
                 // look for maximal values
-                double fXMin, fXMax, fYMin, fYMax;
+                double fXMin = 0;
+                double fXMax = 0;
+                double fYMin = 0;
+                double fYMax = 0;
                 BOOL bInit(FALSE);
                 sal_Int32 nOuterSequenceCount(xPolyPolygon3D.SequenceX.getLength());
                 drawing::DoubleSequence* pInnerSequenceX = xPolyPolygon3D.SequenceX.getArray();
