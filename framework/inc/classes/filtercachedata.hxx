@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2001-10-24 09:33:11 $
+ *  last change: $Author: as $ $Date: 2002-03-20 12:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@ namespace framework{
 #define PRODUCTNAME_VARIABLE                        DECLARE_ASCII("%productname%")
 #define PRODUCTNAME_VARLENGTH                       13
 #define PRODUCTNAME_FALLBACK                        DECLARE_ASCII("StarOffice"                                      )   /// fallback, if configuration can't give us current set product name ...
+#define PRODUCTPATCH_ORGVERSION                     DECLARE_ASCII("6.0"                                             )
+#define PRODUCTPATCH_NEWVERSION                     DECLARE_ASCII("1.0"                                             )
+#define PRODUCTPATCH_VARLENGTH                      3
 
 //*****************************************************************************************************************
 // We know some default values ...
@@ -964,6 +967,7 @@ class FilterCFGAccess : public ::utl::ConfigItem
         sal_Int32       m_nKeyCountContentHandlers     ;
         sal_Int32       m_nKeyCountProtocolHandlers    ;
         ::rtl::OUString m_sProductName                 ;
+        sal_Bool        m_bActivateOpenofficePatch     ;    // <TRUE/> (which is valid for m_sProductname="openoffice.org" only) force replace of 6.0 with 1.0 inside filter uinames!
 };
 
 }       //  namespace framework
