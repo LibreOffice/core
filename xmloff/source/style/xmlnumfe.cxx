@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: er $ $Date: 2001-07-16 17:26:03 $
+ *  last change: $Author: nn $ $Date: 2001-08-27 18:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,9 +960,16 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
     //  returns TRUE if currency element was written
 
     sal_Bool bRet = sal_False;
-    pLocaleData->setLocale( rLocale );
+
+//  pLocaleData->setLocale( rLocale );
+//  String sCurString = pLocaleData->getCurrSymbol();
+
+    LanguageType nLang = ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
+    pFormatter->ChangeIntl( nLang );
+    String sCurString, sDummy;
+    pFormatter->GetCompatibilityCurrency( sCurString, sDummy );
+
     pCharClass->setLocale( rLocale );
-    String sCurString = pLocaleData->getCurrSymbol();
     String sUpperStr = pCharClass->upper(rString);
     xub_StrLen nPos = lcl_FindSymbol( sUpperStr, sCurString );
     if ( nPos != STRING_NOTFOUND )
