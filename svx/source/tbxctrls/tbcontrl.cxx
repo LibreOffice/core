@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-14 12:48:51 $
+ *  last change: $Author: cd $ $Date: 2002-10-24 06:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1830,7 +1830,8 @@ void SvxTbxButtonColorUpdater_Impl::Update( const Color& rColor )
         bTransparentColorInitialized = sal_True;
     }
 
-    Image aNewImage( aBmp, aTransparentColor );
+    Bitmap  aMaskBitmap = aBmp.CreateMask( aTransparentColor );
+    Image aNewImage( aBmp, aMaskBitmap );
     pTbx->SetItemImage( nBtnId, aNewImage );
 }
 
