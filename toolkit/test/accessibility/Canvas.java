@@ -3,7 +3,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.tree.*;
+
+import com.sun.star.uno.UnoRuntime;
+import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.XAccessibleContext;
+import drafts.com.sun.star.accessibility.XAccessibleComponent;
 
 /** This canvas displays accessible objects graphically.  Each accessible
     object with graphical representation is represented by an
@@ -20,7 +24,7 @@ class Canvas
 
     public static boolean bPaintText = false;
 
-    public Canvas (MessageInterface aMessageDisplay, JTree aTree)
+    public Canvas (MessageInterface aMessageDisplay)
     {
         super (true);
         maObjects = new Vector ();
@@ -31,26 +35,38 @@ class Canvas
         setPreferredSize (maBoundingBox.getSize());
         setSize (nMaximumWidth,nMaximumHeight);
         maMessageDisplay = aMessageDisplay;
-        maTree = aTree;
+        maTree = null;
         mnXOffset = 0;
         mnYOffset = 0;
         mnScaleFactor = 1;
     }
 
+    public void setTree (JTree aTree)
+    {
+        maTree = aTree;
+    }
+
     public void addAccessible (AccessibleObject aObject)
     {
+        // Update bounding box that includes all objects.
+        if (maObjects.size() == 0)
+            maBoundingBox = aObject.getBBox();
+        else
+            maBoundingBox = maBoundingBox.union (aObject.getBBox());
+
         if( maObjects.indexOf( aObject ) == -1 )
         {
             maObjects.add (aObject);
             maContexts.add (aObject.getContext());
         }
-        maBoundingBox = maBoundingBox.union (aObject.getBBox());
+        repaint ();
     }
 
     public void removeAccessible (AccessibleObject aObject)
     {
         maObjects.remove (aObject);
         maContexts.remove (aObject.getContext());
+        repaint ();
     }
 
 
@@ -89,10 +105,14 @@ class Canvas
         // into the area specified by nMaximum(Width,Height)
         double nXScale = 1,
             nYScale = 1;
-        if (maBoundingBox.getWidth() > nMaximumWidth)
-            nXScale = 1.0 * nMaximumWidth / maBoundingBox.getWidth();
-        if (maBoundingBox.getHeight() > nMaximumHeight)
-            nYScale = 1.0 * nMaximumHeight / maBoundingBox.getHeight();
+        int nWidth = (int)maBoundingBox.getWidth() + 50,
+            nHeight = (int)maBoundingBox.getWidth() + 50;
+        mnXOffset = (int)-maBoundingBox.getX() + 25;
+        mnYOffset = (int)-maBoundingBox.getY() + 25;
+        if (nWidth > nMaximumWidth)
+            nXScale = 1.0 * nMaximumWidth / nWidth;
+        if (nHeight > nMaximumHeight)
+            nYScale = 1.0 * nMaximumHeight / nHeight;
         if (nXScale < nYScale)
             mnScaleFactor = nXScale;
         else
@@ -100,31 +120,55 @@ class Canvas
 
         int n = maObjects.size();
         for (int i=0; i<n; i++)
-            ((AccessibleObject)(maObjects.elementAt(i))).paint (
-                g,
-                (int)-maBoundingBox.getX(),
-                (int)-maBoundingBox.getY(),
-                mnScaleFactor);
+        {
+            AccessibleObject aAccessibleObject = (AccessibleObject)maObjects.elementAt(i);
+            if ( ! aAccessibleObject.isSelected())
+                aAccessibleObject.paint (
+                    g,
+                    mnXOffset, mnYOffset, mnScaleFactor);
+        }
+        if (maActiveObject != null)
+            maActiveObject.paint (
+                    g,
+                    mnXOffset, mnYOffset, mnScaleFactor);
     }
 
     public void mouseClicked (MouseEvent e)
     {
+        // Because we have no access (at the moment) to the root node of the
+        // accessibility tree we use the first accessible object inserted
+        // into the canvas instead.
+        com.sun.star.awt.Point aPosition = new com.sun.star.awt.Point (
+            (int)((e.getX() + mnXOffset) / mnScaleFactor),
+                    (int)((e.getY() + mnYOffset) / mnScaleFactor));
+        if (maObjects.size() > 0)
+        {
+            // Get component interface of object which is to be queried
+            // about accessible object at mouse position.
+            XAccessibleContext xContext = maActiveObject.getContext();
+            XAccessibleComponent xComponent =
+                (XAccessibleComponent) UnoRuntime.queryInterface (
+                    XAccessibleComponent.class, xContext);
+            if (xComponent != null)
+            {
+                XAccessible xAccessible = xComponent.getAccessibleAt (aPosition);
+                if (xAccessible != null)
+                {
+                    XAccessibleContext xContext2 = xAccessible.getAccessibleContext();
+                    maMessageDisplay.message ("accesssible at "
+                        + aPosition.X + "," + aPosition.Y
+                        + " is " + xContext2.getAccessibleName());
+                    return;
+                }
+            }
+
+        }
+        maMessageDisplay.message ("no object found at"
+            + aPosition.X + "," + aPosition.Y);
     }
 
     public void mousePressed (MouseEvent e)
     {
-        mnXAnchor = e.getX();
-        mnYAnchor = e.getY();
-        int n = maObjects.size();
-        for (int i=0; i<n; i++)
-        {
-            AccessibleObject aObject = (AccessibleObject)(maObjects.elementAt(i));
-            if (aObject != null && aObject.contains (e.getX(),e.getY()))
-            {
-                maActiveObject = aObject;
-                maResizeFlag = aObject.getResizeFlag (e.getX(),e.getY());
-            }
-        }
     }
 
     public void mouseReleased (MouseEvent e)
@@ -137,14 +181,13 @@ class Canvas
 
     public void mouseExited (MouseEvent e)
     {
-        int n = maObjects.size();
-        for (int i=0; i<n; i++)
+        // Deselect currently active object.
+        if (maActiveObject != null)
         {
-            AccessibleObject aObject = (AccessibleObject)(maObjects.elementAt(i));
-            if (aObject != null)
-                aObject.deselect ();
+            maActiveObject.deselect ();
+            maActiveObject = null;
+            repaint ();
         }
-        repaint ();
     }
 
     public void mouseDragged (MouseEvent e)
@@ -173,34 +216,36 @@ class Canvas
     public void mouseMoved (MouseEvent e)
     {
         int nObjects = maObjects.size();
+        AccessibleObject aNewActiveObject = null;
         for (int i=nObjects-1; i>=0; i--)
         {
             AccessibleObject aObject = (AccessibleObject)(maObjects.elementAt(i));
             if (aObject != null)
-            {
                 if (aObject.contains (e.getX(),e.getY()))
                 {
-                    if (aObject != maActiveObject)
-                    {
-                        if (maActiveObject != null)
-                            maActiveObject.deselect();
-
-                        maActiveObject = aObject;
-                        maMessageDisplay.message ("object under mouse is "
-                            +maActiveObject.toString());
-                        maActiveObject.select ();
-
-                        if (maTree != null)
-                        {
-                            maTree.scrollPathToVisible (maActiveObject.getPath());
-                            maTree.repaint ();
-                        }
-
-                        repaint ();
-                    }
+                    aNewActiveObject = aObject;
                     break;
                 }
+        }
+        if (aNewActiveObject != maActiveObject)
+        {
+            if (maActiveObject != null)
+                maActiveObject.deselect();
+
+            maActiveObject = aNewActiveObject;
+            if (maActiveObject != null)
+            {
+                maActiveObject.select ();
+
+                if (maTree != null)
+                {
+                    maTree.scrollPathToVisible (maActiveObject.getPath());
+                    maTree.setSelectionPath (maActiveObject.getPath());
+                    maTree.repaint ();
+                }
             }
+
+            repaint ();
         }
     }
 
