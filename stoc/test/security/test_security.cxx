@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_security.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-25 12:47:36 $
+ *  last change: $Author: dbo $ $Date: 2002-03-04 17:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <stdio.h>
 
 #include <osl/diagnose.h>
+#include <osl/socket.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <uno/current_context.hxx>
@@ -77,10 +78,29 @@
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
-using namespace ::cppu;
+using namespace ::osl;
 using namespace ::rtl;
+using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
+//--------------------------------------------------------------------------------------------------
+static OUString localhost( OUString const & addition ) SAL_THROW( () )
+{
+    static OUString ip;
+    if (! ip.getLength())
+    {
+        // dns lookup
+        SocketAddr addr;
+        SocketAddr::resolveHostname( OUSTR("localhost"), addr );
+        ::oslSocketResult rc = ::osl_getDottedInetAddrOfSocketAddr( addr.getHandle(), &ip.pData );
+        OSL_ENSURE( ::osl_Socket_E_None == rc, "### cannot resolve localhost!" );
+    }
+    OUStringBuffer buf( 48 );
+    buf.append( ip );
+    buf.append( addition );
+    return buf.makeStringAndClear();
+}
 
 //--------------------------------------------------------------------------------------------------
 static inline void dispose( Reference< XInterface > const & x )
@@ -161,14 +181,19 @@ Any user_CurrentContext::getValueByName( OUString const & name )
     { \
         if (negative_test) \
         { \
+            bool thrown = true; \
             try \
             { \
                 check; \
-                throw RuntimeException( \
-                    OUSTR("expected AccessControlException!"), Reference< XInterface >() ); \
+                thrown = false; \
             } \
-            catch (security::AccessControlException &) \
+            catch (RuntimeException &) \
             { \
+            } \
+            if (! thrown) \
+            { \
+                throw RuntimeException( \
+                    OUSTR("expected RuntimeException upon check!"), Reference< XInterface >() ); \
             } \
         } \
         else \
@@ -193,6 +218,12 @@ grant
 permission com.sun.star.io.FilePermission "file:///usr/bin/*", "read";
 permission com.sun.star.io.FilePermission "file:///tmp/-", "read,write";
 permission com.sun.star.io.FilePermission "file:///etc/profile", "read";
+
+permission com.sun.star.security.RuntimePermission "DEF";
+
+permission com.sun.star.connection.SocketPermission "127.0.0.1:-1023", "resolve, connect, listen";
+permission com.sun.star.connection.SocketPermission "localhost:1024-", "accept, connect, listen, resolve,";
+permission com.sun.star.connection.SocketPermission "*.sun.com:1024-", "resolve";
 };
 */
 static void check_defaults_pos( AccessControl & ac, bool invert = false )
@@ -202,6 +233,13 @@ static void check_defaults_pos( AccessControl & ac, bool invert = false )
     CHECK( ac.checkFilePermission( OUSTR("file:///tmp/bla"), OUSTR("read,write") ), invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///tmp/path/path/bla"), OUSTR("write") ), invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///etc/profile"), OUSTR("read") ), invert );
+    CHECK( ac.checkRuntimePermission( OUSTR("DEF") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("localhost:1024"), OUSTR("connect") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("localhost:65535"), OUSTR("resolve") ), invert );
+    CHECK( ac.checkSocketPermission( localhost(OUSTR(":2048")), OUSTR("accept,listen") ), invert );
+    CHECK( ac.checkSocketPermission( localhost(OUSTR(":1024-")), OUSTR("accept,connect,listen,resolve") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("localhost:-1023"), OUSTR("resolve,listen,connect") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("jl-1036.germany.sun.com:1024-"), OUSTR("resolve") ), invert );
 }
 static void check_defaults_neg( AccessControl & ac, bool invert = false )
 {
@@ -220,8 +258,14 @@ static void check_defaults_neg( AccessControl & ac, bool invert = false )
     CHECK( ac.checkFilePermission( OUSTR("file:///etc/blabla"), OUSTR("read,write,execute") ), !invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///home/root"), OUSTR("read,write,execute") ), !invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///root"), OUSTR("read,write,execute") ), !invert );
-    CHECK( ac.checkFilePermission( OUSTR("file:///root"), OUSTR("bla") ), !invert );
+    CHECK( ac.checkFilePermission( OUSTR("file:///root"), OUSTR("delete") ), !invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///root"), OUString() ), !invert );
+    CHECK( ac.checkRuntimePermission( OUSTR("ROOT") ), !invert );
+    CHECK( ac.checkSocketPermission( OUSTR("localhost:1023"), OUSTR("accept") ), !invert );
+    CHECK( ac.checkSocketPermission( OUSTR("localhost:123-"), OUSTR("accept") ), !invert );
+    CHECK( ac.checkSocketPermission( localhost(OUSTR(":-1023")), OUSTR("accept") ), !invert );
+    CHECK( ac.checkSocketPermission( OUSTR("localhost:-1023"), OUSTR("accept,resolve") ), !invert );
+    CHECK( ac.checkSocketPermission( OUSTR("sun.com:1024-"), OUSTR("resolve") ), !invert );
 }
 
 /*
@@ -230,6 +274,14 @@ grant user "dbo"
 permission com.sun.star.io.FilePermission "file:///home/dbo/-", "read,write";
 permission com.sun.star.io.FilePermission "-", "read,write";
 permission com.sun.star.io.FilePermission "file:///usr/local/dbo/*", "read";
+
+permission com.sun.star.security.RuntimePermission "DBO";
+
+permission com.sun.star.connection.SocketPermission "dbo-1224:1024-", "listen";
+permission com.sun.star.connection.SocketPermission "dbo-11081:-1023", "resolve";
+permission com.sun.star.connection.SocketPermission "dbo-11081:18", "listen";
+permission com.sun.star.connection.SocketPermission "dbo-11081:20-24", "listen";
+permission com.sun.star.connection.SocketPermission "dbo-11081", "connect";
 };
 */
 static void check_dbo_pos( AccessControl & ac, bool invert = false )
@@ -243,6 +295,17 @@ static void check_dbo_pos( AccessControl & ac, bool invert = false )
     CHECK( ac.checkFilePermission( OUSTR("file:///home/dbo/path/path/bla"), OUSTR("read,write") ), invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///usr/local/dbo/*"), OUSTR("read") ), invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///usr/local/dbo/bla"), OUSTR("read") ), invert );
+    CHECK( ac.checkRuntimePermission( OUSTR("DBO") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-1224:1024-"), OUSTR("listen") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-1224:2048-3122"), OUSTR("listen") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-1224:2048-"), OUSTR("listen") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-11081:-1023"), OUSTR("resolve") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-11081:20-1023"), OUSTR("resolve") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-11081:18"), OUSTR("listen") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-11081:20-24"), OUSTR("listen") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-11081:22"), OUSTR("listen") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-11081"), OUSTR("connect") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-11081:22"), OUSTR("connect") ), invert );
 }
 static void check_dbo_neg( AccessControl & ac, bool invert = false )
 {
@@ -257,6 +320,10 @@ static void check_dbo_neg( AccessControl & ac, bool invert = false )
     CHECK( ac.checkFilePermission( OUSTR("file:///usr/local/-"), OUSTR("read") ), !invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///usr/local/dbo/path/bla"), OUSTR("read") ), !invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///usr/local/dbo/path/path/bla"), OUSTR("read") ), !invert );
+    CHECK( ac.checkRuntimePermission( OUSTR("JBU") ), !invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-11081"), OUSTR("listen") ), !invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-11081:22"), OUSTR("accept") ), !invert );
+    CHECK( ac.checkSocketPermission( OUSTR("jbu-11096:22"), OUSTR("resolve") ), !invert );
 }
 
 /*
@@ -264,6 +331,10 @@ grant user "jbu"
 {
 permission com.sun.star.io.FilePermission  "file:///home/jbu/-", "read,write";
 permission com.sun.star.io.FilePermission "*", "read,write";
+
+permission com.sun.star.security.RuntimePermission "JBU";
+
+permission com.sun.star.connection.SocketPermission "jbu-11096","resolve";
 };
 */
 static void check_jbu_pos( AccessControl & ac, bool invert = false )
@@ -275,6 +346,10 @@ static void check_jbu_pos( AccessControl & ac, bool invert = false )
     CHECK( ac.checkFilePermission( OUSTR("file:///home/jbu/bla"), OUSTR("read,write") ), invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///home/jbu/path/bla"), OUSTR("read,write") ), invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///home/jbu/path/path/bla"), OUSTR("read,write") ), invert );
+    CHECK( ac.checkRuntimePermission( OUSTR("JBU") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("jbu-11096"), OUSTR("resolve") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("jbu-11096:20-24"), OUSTR("resolve") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-11081.germany.sun.com:2048"), OUSTR("resolve") ), invert );
 }
 static void check_jbu_neg( AccessControl & ac, bool invert = false )
 {
@@ -289,12 +364,16 @@ static void check_jbu_neg( AccessControl & ac, bool invert = false )
     CHECK( ac.checkFilePermission( OUSTR("file:///usr/local/-"), OUSTR("read") ), !invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///usr/local/dbo/bla"), OUSTR("read") ), !invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///usr/local/dbo/path/path/bla"), OUSTR("read") ), !invert );
+    CHECK( ac.checkRuntimePermission( OUSTR("DBO") ), !invert );
+    CHECK( ac.checkSocketPermission( OUSTR("jbu-11096:20-24"), OUSTR("accept") ), !invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-11081"), OUSTR("connect") ), !invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-11081.germany.sun.com"), OUSTR("connect") ), !invert );
 }
 
 /*
 grant principal "root"
 {
-      permission com.sun.star.security.AllPermission;
+permission com.sun.star.security.AllPermission;
 };
 */
 //==================================================================================================
@@ -310,6 +389,7 @@ static void check_root_pos( AccessControl & ac, bool invert = false )
     CHECK( ac.checkFilePermission( OUSTR("file:///etc/blabla"), OUSTR("read,write,execute") ), invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///home/root"), OUSTR("read,write,execute") ), invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///root"), OUSTR("read,write,execute") ), invert );
+    CHECK( ac.checkRuntimePermission( OUSTR("ROOT") ), invert );
 }
 
 //==================================================================================================
@@ -325,7 +405,7 @@ int SAL_CALL main( int argc, char * argv [] )
         AccessControl ac( xContext );
         check_dbo_pos( ac );
         check_dbo_neg( ac );
-        ::fprintf( stderr, "checked.\n" );
+        ::fprintf( stderr, "dbo checked.\n" );
         }
 
         // multi-user test
@@ -340,7 +420,7 @@ int SAL_CALL main( int argc, char * argv [] )
         ::fprintf( stderr, "[security test] multi-user checking dbo..." );
         check_dbo_pos( ac );
         check_dbo_neg( ac );
-        ::fprintf( stderr, "checked.\n" );
+        ::fprintf( stderr, "dbo checked.\n" );
         }
         {
         // set up jbu current context
@@ -348,21 +428,22 @@ int SAL_CALL main( int argc, char * argv [] )
         ::fprintf( stderr, "[security test] multi-user checking jbu..." );
         check_jbu_pos( ac );
         check_jbu_neg( ac );
-        ::fprintf( stderr, "checked.\n" );
+        ::fprintf( stderr, "jbu checked.\n" );
         }
         {
         // set up root current context
         ContextLayer layer( new user_CurrentContext( getCurrentContext(), OUSTR("root") ) );
         ::fprintf( stderr, "[security test] multi-user checking root..." );
         check_root_pos( ac );
-        ::fprintf( stderr, "checked.\n" );
+        ::fprintf( stderr, "root checked.\n" );
         }
         {
-        // set up unknown user current context
-        ContextLayer layer( new user_CurrentContext( getCurrentContext(), OUSTR("vicious") ) );
-        ::fprintf( stderr, "[security test] multi-user checking vicious..." );
-        check_root_pos( ac, true );
-        ::fprintf( stderr, "checked.\n" );
+        // set up unknown guest user current context => default permissions
+        ContextLayer layer( new user_CurrentContext( getCurrentContext(), OUSTR("guest") ) );
+        ::fprintf( stderr, "[security test] multi-user checking guest..." );
+        check_defaults_pos( ac );
+        check_defaults_neg( ac );
+        ::fprintf( stderr, "guest checked.\n" );
         }
 
         dispose( xContext );

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dbo $ $Date: 2002-01-25 09:29:35 $
+#   last change: $Author: dbo $ $Date: 2002-03-04 17:43:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,14 +78,16 @@ COMP1TYPELIST=$(TARGET)
 .INCLUDE :  ..$/cppumaker.mk
 
 SLOFILES= \
+        $(SLO)$/permissions.obj			\
         $(SLO)$/access_controller.obj		\
         $(SLO)$/file_policy.obj
 
 SHL1TARGET=$(TARGET)
 
 SHL1STDLIBS= \
-        $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
+        $(SALHELPERLIB)		\
+        $(CPPULIB)		\
         $(SALLIB)
 SHL1VERSIONMAP=$(TARGET).map
 
@@ -96,10 +98,21 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 .IF "$(debug)" != ""
+
 # msvc++: no inlining for debugging
 .IF "$(COM)" == "MSC"
 CFLAGS += /Ob0
 .ENDIF
+
+# some diagnose
+.IF "$(diag)" == "full"
+CFLAGS += -D__DIAGNOSE -D__CACHE_DIAGNOSE
+.ELIF "$(diag)" == "cache"
+CFLAGS += -D__CACHE_DIAGNOSE
+.ELIF "$(diag)" != ""
+CFLAGS += -D__DIAGNOSE
+.ENDIF
+
 .ENDIF
 
 # --- Targets ------------------------------------------------------

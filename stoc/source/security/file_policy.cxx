@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_policy.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-25 09:29:35 $
+ *  last change: $Author: dbo $ $Date: 2002-03-04 17:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace stoc_security
+namespace stoc_sec
 {
 
 // static stuff initialized when loading lib
@@ -98,7 +98,7 @@ static OUString s_implName = OUSTR(IMPL_NAME);
 static OUString s_serviceName = OUSTR(SERVICE_NAME);
 
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
-extern rtl_StandardModuleCount s_moduleCount;
+extern ::rtl_StandardModuleCount s_moduleCount;
 
 //##################################################################################################
 
@@ -166,13 +166,13 @@ FilePolicy::FilePolicy( Reference< XComponentContext > const & xComponentContext
     , m_xComponentContext( xComponentContext )
     , m_init( false )
 {
-     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 FilePolicy::~FilePolicy()
     SAL_THROW( () )
 {
-     s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 void FilePolicy::disposing()
@@ -416,30 +416,6 @@ PolicyReader::~PolicyReader()
     OSL_ASSERT( osl_File_E_None == rc );
 }
 
-//--------------------------------------------------------------------------------------------------
-static inline Sequence< Any > concat(
-    Sequence< Any > const & seq1,
-    Sequence< Any > const & seq2 )
-    SAL_THROW( () )
-{
-    if (! seq2.getLength())
-        return seq1;
-    if (! seq1.getLength())
-        return seq2;
-
-    Sequence< Any > seq( seq1 );
-    sal_Int32 len1 = seq1.getLength();
-    sal_Int32 len2 = seq2.getLength();
-    seq.realloc( len1 + len2 );
-    Any * p_seq = seq.getArray();
-    Any const * p_seq2 = seq2.getConstArray();
-    while (len2--)
-    {
-        p_seq[ len1 + len2 ] = p_seq2[ len2 ];
-    }
-    return seq;
-}
-
 static OUString s_grant = OUSTR("grant");
 static OUString s_user = OUSTR("user");
 static OUString s_permission = OUSTR("permission");
@@ -448,7 +424,7 @@ static OUString s_closingBrace = OUSTR("}");
 static OUString s_semi = OUSTR(";");
 
 static OUString s_filePermission = OUSTR("com.sun.star.io.FilePermission");
-static OUString s_socketPermission = OUSTR("com.sun.star.connection,SocketPermission");
+static OUString s_socketPermission = OUSTR("com.sun.star.connection.SocketPermission");
 static OUString s_runtimePermission = OUSTR("com.sun.star.security.RuntimePermission");
 static OUString s_allPermission = OUSTR("com.sun.star.security.AllPermission");
 
@@ -549,32 +525,10 @@ void FilePolicy::refresh()
         token = reader.getToken(); // next grant token
     }
 
-    // add default permissions to all user permissions
-    if (defaultPermissions.getLength())
-    {
-        t_permissions userPermissions2;
-        t_permissions::const_iterator iPos( userPermissions.begin() );
-        t_permissions::const_iterator iEnd( userPermissions.end() );
-        while (iPos != iEnd)
-        {
-            pair< t_permissions::iterator, bool > insertion(
-                userPermissions2.insert( t_permissions::value_type(
-                    iPos->first, concat( iPos->second, defaultPermissions ) ) ) );
-            OSL_ASSERT( insertion.second );
-            ++iPos;
-        }
-        // assign new ones
-        MutexGuard guard( m_mutex );
-        m_defaultPermissions = defaultPermissions;
-        m_userPermissions = userPermissions2;
-    }
-    else // no default permissions
-    {
-        // assign new ones
-        MutexGuard guard( m_mutex );
-        m_defaultPermissions = defaultPermissions;
-        m_userPermissions = userPermissions;
-    }
+    // assign new ones
+    MutexGuard guard( m_mutex );
+    m_defaultPermissions = defaultPermissions;
+    m_userPermissions = userPermissions;
 }
 
 //__________________________________________________________________________________________________

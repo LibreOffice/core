@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_controller.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-25 09:29:35 $
+ *  last change: $Author: dbo $ $Date: 2002-03-04 17:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,13 +60,15 @@
  ************************************************************************/
 
 #include <hash_set>
-#include <hash_map>
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
-#include <osl/process.h>
+#include <osl/mutex.hxx>
 #include <osl/thread.hxx>
+
 #include <rtl/ustrbuf.hxx>
+#include <rtl/string.hxx>
+
 #include <uno/current_context.h>
 
 #include <cppuhelper/implbase1.hxx>
@@ -80,26 +82,26 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/security/XAccessController.hpp>
 #include <com/sun/star/security/XPolicy.hpp>
-#include <com/sun/star/security/RuntimePermission.hpp>
-#include <com/sun/star/security/AllPermission.hpp>
-#include <com/sun/star/io/FilePermission.hpp>
-#include <com/sun/star/connection/SocketPermission.hpp>
+
+#include "lru_cache.h"
+#include "permissions.h"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SERVICE_NAME "com.sun.star.security.AccessController"
 #define IMPL_NAME "com.sun.star.security.comp.stoc.AccessController"
 #define USER_CREDS "access-control.user-credentials"
 
-// xxx todo deliver dll, ingo
 
 using namespace ::std;
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
 
-namespace stoc_security
+namespace stoc_sec
 {
 
 // static stuff initialized when loading lib
@@ -109,323 +111,10 @@ static OUString s_serviceName = OUSTR(SERVICE_NAME);
 static OUString s_acRestriction = OUSTR("access-control.restriction");
 
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
-rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
-
-static OUString s_filePermission = OUSTR("com.sun.star.io.FilePermission");
-static OUString s_socketPermission = OUSTR("com.sun.star.connection,SocketPermission");
-static OUString s_runtimePermission = OUSTR("com.sun.star.security.RuntimePermission");
-static OUString s_allPermission = OUSTR("com.sun.star.security.AllPermission");
-static OUString s_allFiles = OUSTR("<<ALL FILES>>");
+::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
 
 //##################################################################################################
 
-//--------------------------------------------------------------------------------------------------
-static inline bool implies_actions(
-    OUString const & granted_actions, OUString const & demanded_actions )
-    SAL_THROW( () )
-{
-    // on average it makes no sense to build up a hash_set, because I think commonly there
-    // only one demanded action, so tokenize every granted actions for every demanded action
-
-    sal_Int32 n = 0;
-    do
-    {
-        OUString demanded( demanded_actions.getToken( 0, ',', n ) );
-        bool found = false;
-        sal_Int32 n2 = 0;
-        do
-        {
-            OUString granted( granted_actions.getToken( 0, ',', n2 ) );
-            if (demanded.equals( granted ))
-            {
-                found = true;
-                break;
-            }
-        }
-        while (n2 >= 0); // all granted
-        if (! found)
-            return false;
-    }
-    while (n >= 0); // all demanded
-    // all actions in
-    return true;
-}
-//--------------------------------------------------------------------------------------------------
-static inline bool endsWith( OUString const & s, char const * p, sal_Int32 n )
-{
-    sal_Int32 nPos = s.getLength();
-    if (nPos < n)
-        return false;
-    sal_Unicode const * b = s.pData->buffer;
-    while (n)
-    {
-        if (b[ --nPos ] != p[ --n ])
-            return false;
-    }
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-static OUString const & getWorkingDir() SAL_THROW( () )
-{
-    static OUString * s_workingDir = 0;
-    if (! s_workingDir)
-    {
-        OUString workingDir;
-        ::osl_getProcessWorkingDir( &workingDir.pData );
-
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if (! s_workingDir)
-        {
-            static OUString s_dir( workingDir );
-            s_workingDir = &s_dir;
-        }
-    }
-    return *s_workingDir;
-}
-//--------------------------------------------------------------------------------------------------
-static inline OUString makeAbsolutePath( OUString const & url ) SAL_THROW( () )
-{
-    if (url.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("*") ))
-    {
-        OUStringBuffer buf( 64 );
-        buf.append( getWorkingDir() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/*") );
-        return buf.makeStringAndClear();
-    }
-    if (url.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("-") ))
-    {
-        OUStringBuffer buf( 64 );
-        buf.append( getWorkingDir() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/-") );
-        return buf.makeStringAndClear();
-    }
-    if (0 == url.compareToAscii( RTL_CONSTASCII_STRINGPARAM("file:///") )) // file url
-        return url;
-    // else relative path
-    OUString out;
-    oslFileError rc = ::osl_getAbsoluteFileURL(
-        getWorkingDir().pData, url.pData, &out.pData );
-    return (osl_File_E_None == rc ? out : url);
-}
-// FilePermission
-//--------------------------------------------------------------------------------------------------
-static inline bool implies(
-    Any const & granted, io::FilePermission const & demanded )
-    SAL_THROW( () )
-{
-    // avoid string ref-counting
-    OUString const & granted_typeName =
-        *reinterpret_cast< OUString const * >( &granted.pType->pTypeName );
-    if (granted_typeName.equals( s_allPermission ))
-        return true;
-    if (! granted_typeName.equals( s_filePermission ))
-        return false;
-
-    io::FilePermission const & granted_perm =
-        *reinterpret_cast< io::FilePermission const * >( granted.pData );
-
-    // check actions
-    if (! implies_actions( granted_perm.Actions, demanded.Actions ))
-        return false;
-
-    // check url
-    if (granted_perm.URL.equals( s_allFiles ))
-        return true;
-    if (demanded.URL.equals( s_allFiles ))
-        return false;
-    if (granted_perm.URL.equals( demanded.URL ))
-        return true;
-    // make absolute pathes
-    OUString granted_url( makeAbsolutePath( granted_perm.URL ) );
-    OUString demanded_url( makeAbsolutePath( demanded.URL ) );
-    if (granted_url.equals( demanded_url ))
-        return true;
-    if (granted_url.getLength() > demanded_url.getLength())
-        return false;
-    // check /- wildcard: all files and recursive in that path
-    if (endsWith( granted_url, RTL_CONSTASCII_STRINGPARAM("/-") ))
-    {
-        // demanded url must start with granted path (including path trailing path sep)
-        sal_Int32 len = granted_url.getLength() -1;
-        return (0 == demanded_url.compareTo( granted_url, len ));
-    }
-    // check /* wildcard: all files in that path (not recursive!)
-    if (endsWith( granted_url, RTL_CONSTASCII_STRINGPARAM("/*") ))
-    {
-        // demanded url must start with granted path (including path trailing path sep)
-        sal_Int32 len = granted_url.getLength() -1;
-        return ((0 == demanded_url.compareTo( granted_url, len )) &&
-                (0 > demanded_url.indexOf( '/', len ))); // in addition, no deeper pathes
-    }
-
-    return false;
-}
-// SocketPermission
-//--------------------------------------------------------------------------------------------------
-static inline bool implies(
-    Any const & granted, connection::SocketPermission const & demanded )
-    SAL_THROW( () )
-{
-    // avoid string ref-counting
-    OUString const & granted_typeName =
-        *reinterpret_cast< OUString const * >( &granted.pType->pTypeName );
-    if (granted_typeName.equals( s_allPermission ))
-        return true;
-    if (! granted_typeName.equals( s_socketPermission ))
-        return false;
-
-    connection::SocketPermission const & granted_perm =
-        *reinterpret_cast< connection::SocketPermission const * >( granted.pData );
-    // check actions
-    if (! implies_actions( granted_perm.Actions, demanded.Actions ))
-        return false;
-    // check host
-    // xxx todo
-    if (granted_perm.Host == demanded.Host)
-        return true;
-
-    return false;
-}
-// RuntimePermission
-//--------------------------------------------------------------------------------------------------
-static inline bool implies(
-    Any const & granted, security::RuntimePermission const & demanded )
-    SAL_THROW( () )
-{
-    // avoid string ref-counting
-    OUString const & granted_typeName =
-        *reinterpret_cast< OUString const * >( &granted.pType->pTypeName );
-    if (granted_typeName.equals( s_allPermission ))
-        return true;
-    if (! granted_typeName.equals( s_runtimePermission ))
-        return false;
-    security::RuntimePermission const & granted_perm =
-        *reinterpret_cast< security::RuntimePermission const * >( granted.pData );
-    return (sal_False != (granted_perm.Name == demanded.Name));
-}
-// AllPermission
-//--------------------------------------------------------------------------------------------------
-static inline bool implies(
-    Any const & granted, security::AllPermission const & demanded )
-    SAL_THROW( () )
-{
-    // avoid string ref-counting
-    OUString const & granted_typeName =
-        *reinterpret_cast< OUString const * >( &granted.pType->pTypeName );
-    return (sal_False != granted_typeName.equals( s_allPermission ));
-}
-
-//--------------------------------------------------------------------------------------------------
-template< typename permission_type >
-static inline bool implies(
-    Sequence< Any > const & granted_permissions, permission_type const & demanded )
-    SAL_THROW( () )
-{
-    Any const * granted = granted_permissions.getConstArray();
-    sal_Int32 nCount = granted_permissions.getLength();
-    for ( sal_Int32 nPos = 0; nPos < nCount; ++nPos )
-    {
-        if (implies( granted[ nPos ], demanded ))
-            return true;
-    }
-    return false;
-}
-//--------------------------------------------------------------------------------------------------
-static void checkStaticPermissions(
-    Sequence< Any > const & granted_permissions, Any const & demanded_permission )
-    SAL_THROW( (RuntimeException) )
-{
-    Type const & demanded_type = demanded_permission.getValueType();
-
-    // supported permission types
-    if (demanded_type.equals( ::getCppuType( (io::FilePermission const *)0 ) ))
-    {
-        io::FilePermission const & demanded =
-            *reinterpret_cast< io::FilePermission const * >( demanded_permission.pData );
-        if (implies( granted_permissions, demanded ))
-            return;
-        OUStringBuffer buf( 48 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("access denied: ") );
-        buf.append( demanded_type.getTypeName() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" (url=\"") );
-        buf.append( demanded.URL );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\", actions=\"") );
-        buf.append( demanded.Actions );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\")") );
-        throw security::AccessControlException(
-            buf.makeStringAndClear(), Reference< XInterface >(), demanded_permission );
-    }
-    else if (demanded_type.equals( ::getCppuType( (connection::SocketPermission const *)0 ) ))
-    {
-        connection::SocketPermission const & demanded =
-            *reinterpret_cast< connection::SocketPermission const * >( demanded_permission.pData );
-        if (implies( granted_permissions, demanded ))
-            return;
-        OUStringBuffer buf( 48 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("access denied: ") );
-        buf.append( demanded_type.getTypeName() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" (host=\"") );
-        buf.append( demanded.Host );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\", actions=\"") );
-        buf.append( demanded.Actions );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\")") );
-        throw security::AccessControlException(
-            buf.makeStringAndClear(), Reference< XInterface >(), demanded_permission );
-    }
-    else if (demanded_type.equals( ::getCppuType( (security::RuntimePermission const *)0 ) ))
-    {
-        security::RuntimePermission const & demanded =
-            *reinterpret_cast< security::RuntimePermission const * >( demanded_permission.pData );
-        if (implies( granted_permissions, demanded ))
-            return;
-        OUStringBuffer buf( 48 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("access denied: ") );
-        buf.append( demanded_type.getTypeName() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" (name=\"") );
-        buf.append( demanded.Name );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\")") );
-        throw security::AccessControlException(
-            buf.makeStringAndClear(), Reference< XInterface >(), demanded_permission );
-    }
-    else if (demanded_type.equals( ::getCppuType( (security::AllPermission const *)0 ) ))
-    {
-        security::AllPermission const & demanded =
-            *reinterpret_cast< security::AllPermission const * >( demanded_permission.pData );
-        if (implies( granted_permissions, demanded ))
-            return;
-        throw security::AccessControlException(
-            OUSTR("access denied: com.sun.star.security.AllPermission"),
-            Reference< XInterface >(), demanded_permission );
-    }
-    else
-    {
-        OUStringBuffer buf( 48 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("checking for unsupported permission type: ") );
-        buf.append( demanded_type.getTypeName() );
-        throw RuntimeException(
-            buf.makeStringAndClear(), Reference< XInterface >() );
-    }
-}
-
-/** ac context granting all permissions
-*/
-class acc_allPermissions
-    : public WeakImplHelper1< security::XAccessControlContext >
-{
-public:
-    // XAccessControlContext impl
-    virtual void SAL_CALL checkPermission(
-        Any const & perm )
-        throw (RuntimeException);
-};
-//__________________________________________________________________________________________________
-void acc_allPermissions::checkPermission(
-    Any const & perm )
-    throw (RuntimeException)
-{
-    // no restriction; allow all
-}
 /** ac context combiner combining two ac contexts
 */
 class acc_Combiner
@@ -460,13 +149,13 @@ inline acc_Combiner::acc_Combiner(
     : m_x1( x1 )
     , m_x2( x2 )
 {
-     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 acc_Combiner::~acc_Combiner()
     SAL_THROW( () )
 {
-     s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
 }
 //--------------------------------------------------------------------------------------------------
 inline Reference< security::XAccessControlContext > acc_Combiner::create(
@@ -489,19 +178,19 @@ void acc_Combiner::checkPermission(
     m_x2->checkPermission( perm );
 }
 
-/** ac context doing permission checks on static user permissions
+/** ac context doing permission checks on static permissions
 */
-class acc_UserPolicy
+class acc_Policy
     : public WeakImplHelper1< security::XAccessControlContext >
 {
-    Sequence< Any > m_permissions;
+    PermissionCollection m_permissions;
 
 public:
-    inline acc_UserPolicy(
-        Sequence< Any > permissions )
-        SAL_THROW( () )
-        : m_permissions( permissions )
-        {}
+    inline acc_Policy(
+        PermissionCollection const & permissions )
+        SAL_THROW( () );
+    virtual ~acc_Policy()
+        SAL_THROW( () );
 
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
@@ -509,11 +198,25 @@ public:
         throw (RuntimeException);
 };
 //__________________________________________________________________________________________________
-void acc_UserPolicy::checkPermission(
+inline acc_Policy::acc_Policy(
+    PermissionCollection const & permissions )
+    SAL_THROW( () )
+    : m_permissions( permissions )
+{
+    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+}
+//__________________________________________________________________________________________________
+acc_Policy::~acc_Policy()
+    SAL_THROW( () )
+{
+    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+}
+//__________________________________________________________________________________________________
+void acc_Policy::checkPermission(
     Any const & perm )
     throw (RuntimeException)
 {
-    checkStaticPermissions( m_permissions, perm );
+    m_permissions.checkPermission( perm );
 }
 
 /** current context overriding dynamic ac restriction
@@ -551,7 +254,7 @@ inline acc_CurrentContext::acc_CurrentContext(
     : m_refcount( 0 )
     , m_xDelegate( xDelegate )
 {
-     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 
     if (xRestriction.is())
     {
@@ -563,7 +266,7 @@ inline acc_CurrentContext::acc_CurrentContext(
 acc_CurrentContext::~acc_CurrentContext()
     SAL_THROW( () )
 {
-     s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 void acc_CurrentContext::acquire()
@@ -648,7 +351,7 @@ public:
 //==================================================================================================
 class RecursionCheck : public ThreadData
 {
-    typedef hash_set< OUString, OUStringHash > t_set;
+    typedef hash_set< OUString, ::rtl::OUStringHash > t_set;
     static void SAL_CALL destroyKeyData( void * );
 
     inline t_set * getData() SAL_THROW( () )
@@ -675,7 +378,20 @@ bool RecursionCheck::isRecurring( OUString const & userId ) SAL_THROW( () )
     if (s)
     {
         t_set::const_iterator const iFind( s->find( userId ) );
-        return (iFind != s->end());
+        bool ret= (iFind != s->end());
+#ifdef __DIAGNOSE
+        if (ret)
+        {
+            OUStringBuffer buf( 48 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> info: recurring call of user \"") );
+            buf.append( userId );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"") );
+            OString str( ::rtl::OUStringToOString(
+                buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
+            OSL_TRACE( str.getStr() );
+        }
+#endif
+        return ret;
     }
     return false;
 }
@@ -743,15 +459,17 @@ class AccessController
     // mode
     enum { OFF, ON, DYNAMIC_ONLY, SINGLE_USER, SINGLE_DEFAULT_USER } m_mode;
 
+    PermissionCollection m_defaultUserPermissions;
     // for single-user mode
-    Sequence< Any > m_singleUserPermissions;
+    PermissionCollection m_singleUserPermissions;
     OUString m_singleUserId;
+    bool m_defaultUser_init;
     bool m_singleUser_init;
+    // for multi-user mode
+    lru_cache< OUString, PermissionCollection, ::rtl::OUStringHash, equal_to< OUString > >
+        m_user2permissions;
 
-    typedef hash_map< OUString, Sequence< Any >, OUStringHash > t_user2permissions;
-    t_user2permissions m_user2permissions;
-
-    Sequence< Any > getUserPermissions(
+    PermissionCollection getEffectivePermissions(
         Reference< XCurrentContext > const & xContext )
         SAL_THROW( (RuntimeException) );
 
@@ -760,7 +478,7 @@ protected:
 
 public:
     AccessController( Reference< XComponentContext > const & xComponentContext )
-        SAL_THROW( () );
+        SAL_THROW( (RuntimeException) );
     virtual ~AccessController()
         SAL_THROW( () );
 
@@ -794,13 +512,14 @@ public:
 };
 //__________________________________________________________________________________________________
 AccessController::AccessController( Reference< XComponentContext > const & xComponentContext )
-    SAL_THROW( () )
+    SAL_THROW( (RuntimeException) )
     : t_helper( m_mutex )
     , m_xComponentContext( xComponentContext )
     , m_mode( ON ) // default
+    , m_defaultUser_init( false )
     , m_singleUser_init( false )
 {
-     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 
     OUString mode;
     if (m_xComponentContext->getValueByName( OUSTR("/services/" SERVICE_NAME "/mode") ) >>= mode)
@@ -835,12 +554,27 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
             m_mode = SINGLE_DEFAULT_USER;
         }
     }
+
+    // switch on caching for DYNAMIC_ONLY and ON (sharable multi-user process)
+    if (ON == m_mode || DYNAMIC_ONLY == m_mode)
+    {
+        sal_Int32 cacheSize; // multi-user cache size
+        if (! (m_xComponentContext->getValueByName(
+            OUSTR("/services/" SERVICE_NAME "/user-cache-size") ) >>= cacheSize))
+        {
+            cacheSize = 128; // reasonable default?
+        }
+#ifdef __CACHE_DIAGNOSE
+        cacheSize = 2;
+#endif
+        m_user2permissions.setSize( cacheSize );
+    }
 }
 //__________________________________________________________________________________________________
 AccessController::~AccessController()
     SAL_THROW( () )
 {
-     s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 void AccessController::disposing()
@@ -901,36 +635,80 @@ Reference< security::XPolicy > const & AccessController::getPolicy()
     }
     return m_xPolicy;
 }
+
+#ifdef __DIAGNOSE
+static void dumpPermissions(
+    OUString const & userId, PermissionCollection const & collection ) SAL_THROW( () )
+{
+    OUStringBuffer buf( 48 );
+    if (userId.getLength())
+    {
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> dumping effective permissions of user \"") );
+        buf.append( userId );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\":") );
+    }
+    else
+    {
+        buf.appendAscii(
+            RTL_CONSTASCII_STRINGPARAM("> dumping permission collection of default user:") );
+    }
+    OString str( ::rtl::OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
+    OSL_TRACE( str.getStr() );
+    Sequence< OUString > permissions( collection.toStrings() );
+    OUString const * p = permissions.getConstArray();
+    for ( sal_Int32 nPos = 0; nPos < permissions.getLength(); ++nPos )
+    {
+        OString str( ::rtl::OUStringToOString( p[ nPos ], RTL_TEXTENCODING_ASCII_US ) );
+        OSL_TRACE( str.getStr() );
+    }
+    OSL_TRACE( "> permission dump done" );
+}
+#endif
 //__________________________________________________________________________________________________
-Sequence< Any > AccessController::getUserPermissions(
+PermissionCollection AccessController::getEffectivePermissions(
     Reference< XCurrentContext > const & xContext )
     SAL_THROW( (RuntimeException) )
 {
     // this is the only place calling the policy singleton taking care of recurring calls
 
+    // init default permissions
+    if (! m_defaultUser_init)
+    {
+        // call on policy
+        // iff this is a recurring call for the default user, then grant all permissions
+        if (m_rec_check.isRecurring( OUString() ))
+            return PermissionCollection( new AllPermission() );
+        RecursionMarkGuard rec_guard( m_rec_check, OUString() ); // mark possible recursion
+        PermissionCollection defaultUserPermissions(
+            getPolicy()->getDefaultPermissions() );
+#ifdef __DIAGNOSE
+        dumpPermissions( OUSTR("default"), defaultUserPermissions );
+#endif
+        // assign
+        MutexGuard guard( m_mutex );
+        if (! m_defaultUser_init)
+        {
+            m_defaultUserPermissions = defaultUserPermissions;
+            m_defaultUser_init = true;
+        }
+    }
+
     switch (m_mode)
     {
     case SINGLE_USER:
-    case SINGLE_DEFAULT_USER:
     {
         if (! m_singleUser_init)
         {
             // call on policy
             // iff this is a recurring call for the same user, then grant all permissions
             if (m_rec_check.isRecurring( m_singleUserId ))
-            {
-                Any allPerm( makeAny( security::AllPermission() ) );
-                return Sequence< Any >( &allPerm, 1 );
-            }
-            Sequence< Any > singleUserPermissions;
-            {
+                return PermissionCollection( new AllPermission() );
             RecursionMarkGuard rec_guard( m_rec_check, m_singleUserId ); // mark possible recursion
-            if (SINGLE_USER == m_mode)
-                singleUserPermissions = getPolicy()->getPermissions( m_singleUserId );
-            else
-                singleUserPermissions = getPolicy()->getDefaultPermissions();
-            }
-
+            PermissionCollection singleUserPermissions(
+                getPolicy()->getPermissions( m_singleUserId ), m_defaultUserPermissions );
+#ifdef __DIAGNOSE
+            dumpPermissions( m_singleUserId, singleUserPermissions );
+#endif
             // assign
             MutexGuard guard( m_mutex );
             if (! m_singleUser_init)
@@ -940,6 +718,10 @@ Sequence< Any > AccessController::getUserPermissions(
             }
         }
         return m_singleUserPermissions;
+    }
+    case SINGLE_DEFAULT_USER:
+    {
+        return m_defaultUserPermissions;
     }
     case ON:
     {
@@ -955,50 +737,33 @@ Sequence< Any > AccessController::getUserPermissions(
         }
 
         // lookup policy for user
-        ClearableMutexGuard guard( m_mutex );
-        t_user2permissions::const_iterator iFind( m_user2permissions.find( userId ) );
-        if (m_user2permissions.end() == iFind)
         {
-            guard.clear();
-
-            // call on policy
-            // iff this is a recurring call for the same user, then grant all permissions
-            if (m_rec_check.isRecurring( userId ))
-            {
-                Any allPerm( makeAny( security::AllPermission() ) );
-                return Sequence< Any >( &allPerm, 1 );
-            }
-            Sequence< Any > permissions;
-            {
-            RecursionMarkGuard rec_guard( m_rec_check, userId ); // mark possible recursion
-            permissions = getPolicy()->getPermissions( userId );
-            }
-
-            {
-            // assign
-            MutexGuard guard( m_mutex );
-            t_user2permissions::const_iterator iFind( m_user2permissions.find( userId ) );
-            if (m_user2permissions.end() != iFind) // inserted in the meantime
-            {
-                return iFind->second;
-            }
-            else // insert new
-            {
-                pair< t_user2permissions::iterator, bool > insertion( m_user2permissions.insert(
-                    t_user2permissions::value_type( userId, permissions ) ) );
-                OSL_ASSERT( insertion.second );
-                return permissions;
-            }
-            }
+        MutexGuard guard( m_mutex );
+        PermissionCollection const * pPermissions = m_user2permissions.lookup( userId );
+        if (pPermissions)
+            return *pPermissions;
         }
-        else
+
+        // call on policy
+        // iff this is a recurring call for the same user, then grant all permissions
+        if (m_rec_check.isRecurring( userId ))
+            return PermissionCollection( new AllPermission() );
+        RecursionMarkGuard rec_guard( m_rec_check, userId ); // mark possible recursion
+        PermissionCollection permissions(
+            getPolicy()->getPermissions( userId ), m_defaultUserPermissions );
+#ifdef __DIAGNOSE
+        dumpPermissions( userId, permissions );
+#endif
         {
-            return iFind->second;
+        // cache
+        MutexGuard guard( m_mutex );
+        m_user2permissions.set( userId, permissions );
         }
+        return permissions;
     }
     default:
         OSL_ENSURE( 0, "### this should never be called in this mode!" );
-        return Sequence< Any >();
+        return PermissionCollection();
     }
 }
 
@@ -1027,7 +792,7 @@ void AccessController::checkPermission(
         return;
 
     // then static check
-    checkStaticPermissions( getUserPermissions( xContext ), perm );
+    getEffectivePermissions( xContext ).checkPermission( perm );
 }
 //__________________________________________________________________________________________________
 Any AccessController::doRestricted(
@@ -1087,7 +852,7 @@ Reference< security::XAccessControlContext > AccessController::getContext()
     throw (RuntimeException)
 {
     if (OFF == m_mode) // optimize this way, because no dynamic check will be performed
-        return new acc_allPermissions(); // dummy granting all permissions
+        return new acc_Policy( PermissionCollection( new AllPermission() ) );
 
     Reference< XCurrentContext > xContext;
     ::uno_getCurrentContext( (void **)&xContext, s_envType.pData, 0 );
@@ -1098,7 +863,7 @@ Reference< security::XAccessControlContext > AccessController::getContext()
         xDynamic = getDynamicRestriction( xContext );
     }
 
-    return acc_Combiner::create( xDynamic, new acc_UserPolicy( getUserPermissions( xContext ) ) );
+    return acc_Combiner::create( xDynamic, new acc_Policy( getEffectivePermissions( xContext ) ) );
 }
 
 // XServiceInfo impl
@@ -1174,14 +939,12 @@ static struct ImplementationEntry s_entries [] =
 
 }
 
-using namespace stoc_security;
-
 extern "C"
 {
 //==================================================================================================
-sal_Bool SAL_CALL component_canUnload( TimeValue * pTime )
+sal_Bool SAL_CALL component_canUnload( TimeValue * time )
 {
-    return s_moduleCount.canUnload( &s_moduleCount, pTime );
+    return ::stoc_sec::s_moduleCount.canUnload( &::stoc_sec::s_moduleCount, time );
 }
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
@@ -1191,14 +954,14 @@ void SAL_CALL component_getImplementationEnvironment(
 }
 //==================================================================================================
 sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
+    lang::XMultiServiceFactory * smgr, registry::XRegistryKey * key )
 {
-    return component_writeInfoHelper( pServiceManager, pRegistryKey, s_entries );
+    return component_writeInfoHelper( smgr, key, ::stoc_sec::s_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
-    sal_Char const * pImplName, void * pServiceManager, void * pRegistryKey )
+    sal_Char const * implName, lang::XMultiServiceFactory * smgr, registry::XRegistryKey * key )
 {
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, s_entries );
+    return component_getFactoryHelper( implName, smgr, key, ::stoc_sec::s_entries );
 }
 }
