@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-10 12:24:27 $
+ *  last change: $Author: tra $ $Date: 2001-08-16 06:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -851,6 +851,10 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
 
     // but now we have a valid parent handle
     m_HelpPopupWindow.setParent( m_hwndFileOpenDlg );
+
+    // call the parent function to center the
+    // dialog to it's parent
+    CFileOpenDialog::onInitDone();
 }
 
 //-----------------------------------------------------------------
