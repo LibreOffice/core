@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 10:51:11 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,6 +442,41 @@ static __FAR_DATA SvXMLEnumMapEntry aFormatSourceMap[] =
     { XML_FIXED,            sal_False },
     { XML_LANGUAGE,         sal_True  },
     { XML_TOKEN_INVALID,    0 }
+};
+
+//-------------------------------------------------------------------------
+
+struct SvXMLDefaultDateFormat
+{
+    NfIndexTableOffset          eFormat;
+    SvXMLDateElementAttributes  eDOW;
+    SvXMLDateElementAttributes  eDay;
+    SvXMLDateElementAttributes  eMonth;
+    SvXMLDateElementAttributes  eYear;
+    SvXMLDateElementAttributes  eHours;
+    SvXMLDateElementAttributes  eMins;
+    SvXMLDateElementAttributes  eSecs;
+    sal_Bool                    bSystem;
+};
+
+static __FAR_DATA SvXMLDefaultDateFormat aDefaultDateFormats[] =
+{
+    // format                           day-of-week     day             month               year            hours           minutes         seconds         format-source
+
+    { NF_DATE_SYSTEM_SHORT,             XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_True },
+    { NF_DATE_SYSTEM_LONG,              XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_True },
+    { NF_DATE_SYS_MMYY,                 XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_LONG,       XML_DEA_SHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
+    { NF_DATE_SYS_DDMMM,                XML_DEA_NONE,   XML_DEA_LONG,   XML_DEA_TEXTSHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
+    { NF_DATE_SYS_DDMMYYYY,             XML_DEA_NONE,   XML_DEA_LONG,   XML_DEA_LONG,       XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
+    { NF_DATE_SYS_DDMMYY,               XML_DEA_NONE,   XML_DEA_LONG,   XML_DEA_LONG,       XML_DEA_SHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
+    { NF_DATE_SYS_DMMMYY,               XML_DEA_NONE,   XML_DEA_SHORT,  XML_DEA_TEXTSHORT,  XML_DEA_SHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
+    { NF_DATE_SYS_DMMMYYYY,             XML_DEA_NONE,   XML_DEA_SHORT,  XML_DEA_TEXTSHORT,  XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
+    { NF_DATE_SYS_DMMMMYYYY,            XML_DEA_NONE,   XML_DEA_SHORT,  XML_DEA_TEXTLONG,   XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
+    { NF_DATE_SYS_NNDMMMYY,             XML_DEA_SHORT,  XML_DEA_SHORT,  XML_DEA_TEXTSHORT,  XML_DEA_SHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
+    { NF_DATE_SYS_NNDMMMMYYYY,          XML_DEA_SHORT,  XML_DEA_SHORT,  XML_DEA_TEXTLONG,   XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
+    { NF_DATE_SYS_NNNNDMMMMYYYY,        XML_DEA_LONG,   XML_DEA_SHORT,  XML_DEA_TEXTLONG,   XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
+    { NF_DATETIME_SYSTEM_SHORT_HHMM,    XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_NONE,   sal_True },
+    { NF_DATETIME_SYS_DDMMYYYY_HHMMSS,  XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    sal_False }
 };
 
 //-------------------------------------------------------------------------
@@ -1187,6 +1222,32 @@ sal_Bool SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( const International& rIntn,
     return ( bLong && rIntn.GetLongDateDayOfWeekFormat() == DAYOFWEEK_LONG );
 }
 
+sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes eDOW,
+                SvXMLDateElementAttributes eDay, SvXMLDateElementAttributes eMonth,
+                SvXMLDateElementAttributes eYear, SvXMLDateElementAttributes eHours,
+                SvXMLDateElementAttributes eMins, SvXMLDateElementAttributes eSecs,
+                sal_Bool bSystem )
+{
+    const sal_uInt16 nCount = sizeof(aDefaultDateFormats) / sizeof(SvXMLDefaultDateFormat);
+    for (sal_uInt16 nPos=0; nPos<nCount; nPos++)
+    {
+        const SvXMLDefaultDateFormat& rEntry = aDefaultDateFormats[nPos];
+        if ( bSystem == rEntry.bSystem &&
+            ( eDOW   == rEntry.eDOW   || ( rEntry.eDOW   == XML_DEA_ANY && eDOW   != XML_DEA_NONE ) ) &&
+            ( eDay   == rEntry.eDay   || ( rEntry.eDay   == XML_DEA_ANY && eDay   != XML_DEA_NONE ) ) &&
+            ( eMonth == rEntry.eMonth || ( rEntry.eMonth == XML_DEA_ANY && eMonth != XML_DEA_NONE ) ) &&
+            ( eYear  == rEntry.eYear  || ( rEntry.eYear  == XML_DEA_ANY && eYear  != XML_DEA_NONE ) ) &&
+            ( eHours == rEntry.eHours || ( rEntry.eHours == XML_DEA_ANY && eHours != XML_DEA_NONE ) ) &&
+            ( eMins  == rEntry.eMins  || ( rEntry.eMins  == XML_DEA_ANY && eMins  != XML_DEA_NONE ) ) &&
+            ( eSecs  == rEntry.eSecs  || ( rEntry.eSecs  == XML_DEA_ANY && eSecs  != XML_DEA_NONE ) ) )
+        {
+            return rEntry.eFormat;
+        }
+    }
+
+    return NF_INDEX_TABLE_ENTRIES;  // invalid
+}
+
 //-------------------------------------------------------------------------
 
 //
@@ -1213,6 +1274,14 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     bHasEra( FALSE ),
     bHasDateTime( FALSE ),
     bRemoveAfterUse( sal_False ),
+    eDateDOW( XML_DEA_NONE ),
+    eDateDay( XML_DEA_NONE ),
+    eDateMonth( XML_DEA_NONE ),
+    eDateYear( XML_DEA_NONE ),
+    eDateHours( XML_DEA_NONE ),
+    eDateMins( XML_DEA_NONE ),
+    eDateSecs( XML_DEA_NONE ),
+    bDateNoDefault( sal_False ),
     pStyles( &rStyles ),
     nKey(-1)
 {
@@ -1329,6 +1398,14 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     bHasEra( FALSE ),
     bHasDateTime( FALSE ),
     bRemoveAfterUse( sal_False ),
+    eDateDOW( XML_DEA_NONE ),
+    eDateDay( XML_DEA_NONE ),
+    eDateMonth( XML_DEA_NONE ),
+    eDateYear( XML_DEA_NONE ),
+    eDateHours( XML_DEA_NONE ),
+    eDateMins( XML_DEA_NONE ),
+    eDateSecs( XML_DEA_NONE ),
+    bDateNoDefault( sal_False ),
     pStyles( &rStyles ),
     nKey(nTempKey)
 {
@@ -1529,6 +1606,23 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
         if ( nType == XML_TOK_STYLES_BOOLEAN_STYLE )
             nIndex = pFormatter->GetFormatIndex( NF_BOOLEAN, nFormatLang );
 
+        //  check for default date formats
+        if ( nType == XML_TOK_STYLES_DATE_STYLE && bAutoOrder && !bDateNoDefault )
+        {
+            NfIndexTableOffset eFormat = (NfIndexTableOffset) SvXMLNumFmtDefaults::GetDefaultDateFormat(
+                eDateDOW, eDateDay, eDateMonth, eDateYear,
+                eDateHours, eDateMins, eDateSecs, bFromSystem );
+            if ( eFormat < NF_INDEX_TABLE_ENTRIES )
+            {
+                //  #109651# if a date format has the automatic-order attribute and
+                //  contains exactly the elements of one of the default date formats,
+                //  use that default format, with the element order and separators
+                //  from the current locale settings
+
+                nIndex = pFormatter->GetFormatIndex( eFormat, nFormatLang );
+            }
+        }
+
         if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND && sFormat.getLength() )
         {
             //  insert by format string
@@ -1608,12 +1702,25 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
         if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND && !bAutoOrder )
         {
             //  use fixed-order formats instead of SYS... if bAutoOrder is false
+            //  (only if the format strings are equal for the locale)
 
             NfIndexTableOffset eOffset = pFormatter->GetIndexTableOffset( nIndex );
             if ( eOffset == NF_DATE_SYS_DMMMYYYY )
-                nIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMYYYY, nFormatLang );
+            {
+                sal_uInt32 nNewIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMYYYY, nFormatLang );
+                const SvNumberformat* pOldEntry = pFormatter->GetEntry( nIndex );
+                const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewIndex );
+                if ( pOldEntry && pNewEntry && pOldEntry->GetFormatstring() == pNewEntry->GetFormatstring() )
+                    nIndex = nNewIndex;
+            }
             else if ( eOffset == NF_DATE_SYS_DMMMMYYYY )
-                nIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMMYYYY, nFormatLang );
+            {
+                sal_uInt32 nNewIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMMYYYY, nFormatLang );
+                const SvNumberformat* pOldEntry = pFormatter->GetEntry( nIndex );
+                const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewIndex );
+                if ( pOldEntry && pNewEntry && pOldEntry->GetFormatstring() == pNewEntry->GetFormatstring() )
+                    nIndex = nNewIndex;
+            }
         }
 
         if ((nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND) && sFormatTitle.getLength())
@@ -1905,6 +2012,32 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
     }
 
     aFormatCode.append( sKeyword );
+
+    //  collect the date elements that the format contains, to recognize default date formats
+    switch ( nIndex )
+    {
+        case NF_KEY_NN:     eDateDOW = XML_DEA_SHORT;       break;
+        case NF_KEY_NNN:
+        case NF_KEY_NNNN:   eDateDOW = XML_DEA_LONG;        break;
+        case NF_KEY_D:      eDateDay = XML_DEA_SHORT;       break;
+        case NF_KEY_DD:     eDateDay = XML_DEA_LONG;        break;
+        case NF_KEY_M:      eDateMonth = XML_DEA_SHORT;     break;
+        case NF_KEY_MM:     eDateMonth = XML_DEA_LONG;      break;
+        case NF_KEY_MMM:    eDateMonth = XML_DEA_TEXTSHORT; break;
+        case NF_KEY_MMMM:   eDateMonth = XML_DEA_TEXTLONG;  break;
+        case NF_KEY_YY:     eDateYear = XML_DEA_SHORT;      break;
+        case NF_KEY_YYYY:   eDateYear = XML_DEA_LONG;       break;
+        case NF_KEY_H:      eDateHours = XML_DEA_SHORT;     break;
+        case NF_KEY_HH:     eDateHours = XML_DEA_LONG;      break;
+        case NF_KEY_MI:     eDateMins = XML_DEA_SHORT;      break;
+        case NF_KEY_MMI:    eDateMins = XML_DEA_LONG;       break;
+        case NF_KEY_S:      eDateSecs = XML_DEA_SHORT;      break;
+        case NF_KEY_SS:     eDateSecs = XML_DEA_LONG;       break;
+        case NF_KEY_AP:
+        case NF_KEY_AMPM:   break;          // AM/PM may or may not be in date/time formats -> ignore by itself
+        default:
+            bDateNoDefault = sal_True;      // any other element -> no default format
+    }
 }
 
 sal_Bool lcl_IsAtEnd( rtl::OUStringBuffer& rBuffer, const String& rToken )
