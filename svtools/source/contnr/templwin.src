@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:40:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 21:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ String STR_SVT_CATEGORY
 {
     Text = "Kategorie";
     Text [ english_us ] = "Category";
-    Text[ portuguese ] = "Category";
+    Text[ portuguese ] = "Categoria";
     Text[ russian ] = "Êàòåãîðèÿ";
     Text[ greek ] = "Category";
     Text[ dutch ] = "Category";
@@ -236,7 +236,7 @@ ToolBox TB_SVT_FILEVIEW
             Text = "Zurück" ;
             Text [ english_us ] = "Back" ;
             Text[ language_user1 ] = " ";
-            Text[ portuguese ] = "Back";
+            Text[ portuguese ] = "Anterior";
             Text[ russian ] = "Íàçàä";
             Text[ greek ] = "Back";
             Text[ dutch ] = "Back";
@@ -264,7 +264,7 @@ ToolBox TB_SVT_FILEVIEW
             Text = "Ein Verzeichnis hoch" ;
             Text [ english_us ] = "Up One Level" ;
             Text[ language_user1 ] = " ";
-            Text[ portuguese ] = "Higher";
+            Text[ portuguese ] = "Subir um nível";
             Text[ russian ] = "Íà îäèí óðîâåíü ââåðõ";
             Text[ greek ] = "Higher";
             Text[ dutch ] = "Higher";
@@ -296,7 +296,7 @@ ToolBox TB_SVT_FILEVIEW
             Text = "Drucken" ;
             Text [ english_us ] = "Print" ;
             Text[ language_user1 ] = " ";
-            Text[ portuguese ] = "Print";
+            Text[ portuguese ] = "Imprimir";
             Text[ russian ] = "Ïå÷àòü";
             Text[ greek ] = "Print";
             Text[ dutch ] = "Print";
@@ -334,7 +334,7 @@ ToolBox TB_SVT_FRAMEWIN
             ItemBitmap = Bitmap { File = "info_small.bmp" ; };
             Text = "Dokumenteigenschaften" ;
             Text [ english_us ] = "Document Properties" ;
-            Text[ portuguese ] = "Docinfo";
+            Text[ portuguese ] = "Propriedades do documento";
             Text[ russian ] = "Ñâîéñòâà äîêóìåíòà";
             Text[ greek ] = "Docinfo";
             Text[ dutch ] = "Docinfo";
@@ -363,7 +363,7 @@ ToolBox TB_SVT_FRAMEWIN
             ItemBitmap = Bitmap { File = "preview_small.bmp" ; };
             Text = "Vorschau" ;
             Text [ english_us ] = "Preview" ;
-            Text[ portuguese ] = "Preview";
+            Text[ portuguese ] = "Previsualizar";
             Text[ russian ] = "Ïðîñìîòð";
             Text[ greek ] = "Preview";
             Text[ dutch ] = "Preview";
@@ -532,7 +532,7 @@ StringArray STRARY_SVT_DOCINFO
     ItemList [ english_us ] =
     {
         < "Title" ; DI_TITLE ; > ;
-        < "From" ; DI_FROM ; > ;
+        < "By" ; DI_FROM ; > ;
         < "Date" ; DI_DATE ; > ;
         < "Keywords" ; DI_KEYWORDS ; > ;
         < "Description" ; DI_DESCRIPTION ; > ;
@@ -555,22 +555,22 @@ ItemList [ language_user1 ] =
         < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
         < "Geändert von" ; DI_MODIFIEDBY ; > ;
         < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "ZL : \"Gedruckt von\" bedeutet hier am \"DATUM\"" ; DI_PRINTBY ; > ;
+        < "ZL : \\" ; DI_PRINTBY ; > ;
         < "Thema" ; DI_THEME ; > ;
         < "Größe" ; DI_SIZE ; > ;
     };
     ItemList [ portuguese ] =
     {
-             < "Capitulo" ; DI_TITLE ; > ;
+             < "Título" ; DI_TITLE ; > ;
         < "De" ; DI_FROM ; > ;
         < "Data " ; DI_DATE ; > ;
         < "Palavras-chave" ; DI_KEYWORDS ; > ;
         < "Descrição" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Geändert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "Tipo de conteúdo" ; DI_MIMETYPE ; > ;
+        < "Modificado em" ; DI_MODIFIEDDATE ; > ;
+        < "Modificado por" ; DI_MODIFIEDBY ; > ;
+        < "Impresso em" ; DI_PRINTDATE ; > ;
+        < "Impresso por" ; DI_PRINTBY ; > ;
         < "Assunto" ; DI_THEME ; > ;
         < "Tamanho" ; DI_SIZE ; > ;
     };
@@ -696,8 +696,8 @@ ItemList [ language_user1 ] =
     };
     ItemList [ swedish ] =
     {
-             < "Rubrik" ; DI_TITLE ; > ;
-        < "Från" ; DI_FROM ; > ;
+             < "Namn" ; DI_TITLE ; > ;
+        < "Av" ; DI_FROM ; > ;
         < "Datum" ; DI_DATE ; > ;
         < "Nyckelord" ; DI_KEYWORDS ; > ;
         < "Beskrivning" ; DI_DESCRIPTION ; > ;
@@ -845,6 +845,7 @@ ItemList [ language_user1 ] =
         < "Größe" ; DI_SIZE ; > ;
     };
     };
+
 
 
 
