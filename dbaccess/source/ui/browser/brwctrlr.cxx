@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 17:52:32 $
+ *  last change: $Author: rt $ $Date: 2001-06-22 10:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1012,7 +1012,7 @@ void SbaXDataBrowserController::disposing(const EventObject& Source) throw( Runt
 }
 
 // -----------------------------------------------------------------------
-void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt)
+void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) throw ( RuntimeException )
 {
     Reference< XPropertySet >  xSource(evt.Source, UNO_QUERY);
     if (!xSource.is())
