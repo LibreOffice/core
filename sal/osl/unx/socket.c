@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2000-10-31 15:32:08 $
+ *  last change: $Author: mhu $ $Date: 2000-11-20 13:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,6 +797,52 @@ static struct hostent* _osl_gethostbyname_r (
 #endif
 }
 
+static sal_Bool  _osl_getDomainName (sal_Char *buffer, sal_Int32 bufsiz)
+{
+    sal_Bool result;
+    int      p[2];
+
+    result = sal_False;
+    if (pipe (p) == 0)
+    {
+        pid_t pid;
+
+        pid = fork();
+        if (pid == 0)
+        {
+            char *argv[] =
+            {
+                "/bin/domainname",
+                NULL
+            };
+
+            close (p[0]);
+            dup2  (p[1], 1);
+
+            if (execvp ("/bin/domainname", argv) < 0)
+            {
+                exit(-1);
+            }
+        }
+        else if (pid > 0)
+        {
+            sal_Int32 k = 0, n = bufsiz;
+
+            close (p[1]);
+
+            if ((k = read (p[0], buffer, n - 1)) > 0)
+            {
+                buffer[k] = 0;
+                if (buffer[k - 1] == '\n')
+                    buffer[k - 1] = 0;
+                result = sal_True;
+            }
+        }
+        wait (NULL);
+    }
+    return (result);
+}
+
 static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
 {
 #   define DOMAINNAME_LENGTH 512
@@ -805,7 +851,9 @@ static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
     static sal_Char    *pDomainName = NULL;
 
     sal_Char  *pFullQualifiedName;
+#if 0  /* OBSOLETE */
     FILE      *pPipeToDomainnameExe;
+#endif /* OBSOLETE */
 
     /* get a '\0' terminated domainname */
 
@@ -822,6 +870,19 @@ static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
         }
     }
 
+#if 1  /* NEW */
+    if (nLengthOfDomainName == 0)
+    {
+        sal_Char pDomainNameBuffer[ DOMAINNAME_LENGTH ] = "";
+        if (_osl_getDomainName (pDomainNameBuffer, DOMAINNAME_LENGTH))
+        {
+            pDomainName = strdup (pDomainNameBuffer);
+            nLengthOfDomainName = strlen (pDomainName);
+        }
+    }
+
+#endif /* NEW */
+#if 0  /* OBSOLETE */
 #ifdef SCO
 
     /* call 'domainname > /usr/tmp/some-tmp-file', since
@@ -879,6 +940,7 @@ static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
     }
 
 #endif /* !SCO */
+#endif /* OBSOLETE */
 
     /* compose hostname and domainname */
     nLengthOfHostName = strlen( pHostName );
