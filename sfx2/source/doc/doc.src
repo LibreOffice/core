@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:11:25 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1281,7 +1281,7 @@ String RID_STR_FILTBASIC
     Text [ ENGLISH ] = "%PRODUCTNAME Basic Libraries" ;
     Text [ dutch ] = "%PRODUCTNAME Basic Bibliotheken" ;
     Text [ english_us ] = "%PRODUCTNAME Basic libraries" ;
-    Text [ italian ] = "Biblioteche di %PRODUCTNAME Basic" ;
+    Text [ italian ] = "Library di %PRODUCTNAME Basic" ;
     Text [ spanish ] = "Bibliotecas %PRODUCTNAME Basic" ;
     Text [ french ] = "Bibilothèques %PRODUCTNAME Basic" ;
     Text [ swedish ] = "%PRODUCTNAME Basic-bibliotek" ;
