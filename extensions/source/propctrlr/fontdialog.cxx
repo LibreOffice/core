@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontdialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-21 15:41:36 $
+ *  last change: $Author: fs $ $Date: 2001-06-06 08:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,6 @@ namespace pcr
                     static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(SID_ATTR_CHAR_FONTLIST))
                 );
                 break;
-            case TABPAGE_CHARACTERS_EXT:
-                static_cast<SvxCharEffectsPage&>(_rPage).DisableControls(DISABLE_UNDERLINE_COLOR);
-                break;
         }
     }
 
@@ -129,6 +126,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/21 15:41:36  fs
+ *  initial checkin - font dialog for form controls
+ *
  *
  *  Revision 1.0 21.03.01 10:17:26  fs
  ************************************************************************/
