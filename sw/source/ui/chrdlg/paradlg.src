@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:11:44 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ TabDialog DLG_PARA
                 Text[ korean ] = "µÈø©æ≤±‚øÕ ∞£∞›";
                 Text[ turkish ] = "Girinti ve aral˝klar";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "SangrÌas y espacios";
             };
             PageItem
             {
@@ -141,6 +142,7 @@ TabDialog DLG_PARA
                 Text[ korean ] = "∏¬√„";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "AlineaciÛn";
             };
             PageItem
             {
@@ -170,6 +172,7 @@ TabDialog DLG_PARA
                 Text[ greek ] = "—Ôﬁ ÍÂÈÏ›ÌÔı";
                 Text[ korean ] = "≈ÿΩ∫∆Æ »Â∏ß";
                 Text[ turkish ] = "Metin ak˝˛˝";
+                Text[ catalan ] = "Flujo del texto";
             };
             PageItem
             {
@@ -194,6 +197,7 @@ TabDialog DLG_PARA
                 Text[ chinese_traditional ] = "§§§È¡˙§Â¶r";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "√”·Ê» «·ÿ»«⁄… «·¬”ÌÊÌ…";
+                Text[ catalan ] = "TipografÌa asi·tica";
             };
             PageItem
             {
@@ -219,6 +223,7 @@ TabDialog DLG_PARA
                 Text[ korean ] = "π¯»£∏≈±‚±‚";
                 Text[ turkish ] = "Numaralama";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "NumeraciÛn";
             };
             PageItem
             {
@@ -247,6 +252,7 @@ TabDialog DLG_PARA
                 Text[ korean ] = "≈«";
                 Text[ turkish ] = "Sekmeler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Tabulaciones";
             };
             PageItem
             {
@@ -275,6 +281,7 @@ TabDialog DLG_PARA
                 Text[ korean ] = "¥‹∂Ù √ππÆ¿⁄ ¿ÂΩƒ";
                 Text[ turkish ] = "Ba˛harfler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Iniciales";
             };
             PageItem
             {
@@ -303,6 +310,7 @@ TabDialog DLG_PARA
                 Text[ korean ] = "≈◊µŒ∏Æ";
                 Text[ turkish ] = "Kenarl˝k";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Borde";
             };
             PageItem
             {
@@ -331,6 +339,7 @@ TabDialog DLG_PARA
                 Text[ korean ] = "πË∞Ê";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fondo";
             };
         };
     };
@@ -344,6 +353,7 @@ TabDialog DLG_PARA
     Text[ korean ] = "¥‹∂Ù";
     Text[ turkish ] = "Paragraf";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "P·rrafo";
 };
 TabDialog DLG_DRAWPARA
 {
@@ -396,6 +406,7 @@ TabDialog DLG_DRAWPARA
                 Text[ greek ] = "≈ÛÔ˜›Ú Í·È ·ÔÛÙ‹ÛÂÈÚ";
                 Text[ korean ] = "µÈø©æ≤±‚øÕ ∞£∞›";
                 Text[ turkish ] = "Girinti ve aral˝klar";
+                Text[ catalan ] = "SangrÌas y espacios";
             };
 #if SUPD>352
             PageItem
@@ -423,6 +434,7 @@ TabDialog DLG_DRAWPARA
                 Text[ korean ] = "∏¬√„";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "AlineaciÛn";
             };
 #endif
             PageItem
@@ -448,6 +460,7 @@ TabDialog DLG_DRAWPARA
                 Text[ chinese_traditional ] = "§§§È¡˙§Â¶r";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "√”·Ê» «·ÿ»«⁄… «·¬”ÌÊÌ…";
+                Text[ catalan ] = "TipografÌa asi·tica";
             };
             PageItem
             {
@@ -476,6 +489,7 @@ TabDialog DLG_DRAWPARA
                 Text[ korean ] = "≈«";
                 Text[ turkish ] = "Sekmeler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Tabulaciones";
             };
         };
     };
@@ -489,4 +503,5 @@ TabDialog DLG_DRAWPARA
     Text[ korean ] = "¥‹∂Ù";
     Text[ turkish ] = "Paragraf";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "P·rrafo";
 };
