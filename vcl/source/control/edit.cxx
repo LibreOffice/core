@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: tbe $ $Date: 2002-06-20 15:30:41 $
+ *  last change: $Author: mt $ $Date: 2002-07-02 10:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -951,12 +951,20 @@ void Edit::ImplCopy( uno::Reference< datatransfer::clipboard::XClipboard >& rxCl
     if ( rxClipboard.is() )
     {
         ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( GetSelected() );
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        rxClipboard->setContents( pDataObj, NULL );
 
-        Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
-        if( xFlushableClipboard.is() )
-            xFlushableClipboard->flushClipboard();
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+
+        try
+        {
+            rxClipboard->setContents( pDataObj, NULL );
+
+            Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
+            if( xFlushableClipboard.is() )
+                xFlushableClipboard->flushClipboard();
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+        }
 
         Application::AcquireSolarMutex( nRef );
     }
@@ -968,9 +976,20 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
 {
     if ( rxClipboard.is() )
     {
+        uno::Reference< datatransfer::XTransferable > xDataObj;
+
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        uno::Reference< datatransfer::XTransferable > xDataObj = rxClipboard->getContents();
+
+        try
+        {
+            xDataObj = rxClipboard->getContents();
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+        }
+
         Application::AcquireSolarMutex( nRef );
+
         if ( xDataObj.is() )
         {
             datatransfer::DataFlavor aFlavor;

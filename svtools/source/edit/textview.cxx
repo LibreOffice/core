@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-17 11:48:47 $
+ *  last change: $Author: mt $ $Date: 2002-07-02 10:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,11 +1105,18 @@ void TextView::Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxCl
             mpTextEngine->Write( pDataObj->GetHTMLStream(), &maSelection, TRUE );
 
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        rxClipboard->setContents( pDataObj, NULL );
 
-        uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
-        if( xFlushableClipboard.is() )
-            xFlushableClipboard->flushClipboard();
+        try
+        {
+            rxClipboard->setContents( pDataObj, NULL );
+
+            uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
+            if( xFlushableClipboard.is() )
+                xFlushableClipboard->flushClipboard();
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+        }
 
         Application::AcquireSolarMutex( nRef );
     }
@@ -1125,9 +1132,20 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
 {
     if ( rxClipboard.is() )
     {
+        uno::Reference< datatransfer::XTransferable > xDataObj;
+
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        uno::Reference< datatransfer::XTransferable > xDataObj = rxClipboard->getContents();
+
+        try
+        {
+            xDataObj = rxClipboard->getContents();
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+        }
+
         Application::AcquireSolarMutex( nRef );
+
         if ( xDataObj.is() )
         {
             datatransfer::DataFlavor aFlavor;
