@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 07:09:02 $
+ *  last change: $Author: oj $ $Date: 2002-05-06 09:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,23 @@ using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
+namespace
+{
+    void switchToolBox(ToolBox* _pToolBox,sal_Bool _bGraphicalDesign)
+    {
+        if ( _pToolBox )
+        {
+            _pToolBox->ShowItem(ID_BROWSER_QUERY_DISTINCT_VALUES,_bGraphicalDesign);
+            _pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_ALIASES,_bGraphicalDesign);
+            _pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_TABLES,_bGraphicalDesign);
+            _pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_FUNCTIONS,_bGraphicalDesign);
+            _pToolBox->ShowItem(ID_BROWSER_ADDTABLE,_bGraphicalDesign);
+            _pToolBox->ShowItem(ID_QUERY_ZOOM_IN,_bGraphicalDesign);
+            _pToolBox->ShowItem(ID_QUERY_ZOOM_OUT,_bGraphicalDesign);
+            _pToolBox->ShowItem(ID_BROWSER_ESACPEPROCESSING,!_bGraphicalDesign);
+        }
+    }
+}
 DBG_NAME(OQueryViewSwitch);
 OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
 {
@@ -106,9 +123,6 @@ OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryContro
 
     m_pTextView     = new OQueryTextView(_pParent);
     m_pDesignView   = new OQueryDesignView(_pParent,_pController,_rFactory);
-
-    // initially be in SQL mode
-    m_pTextView->Show();
 }
 // -----------------------------------------------------------------------------
 OQueryViewSwitch::~OQueryViewSwitch()
@@ -122,13 +136,16 @@ OQueryViewSwitch::~OQueryViewSwitch()
 void OQueryViewSwitch::Construct()
 {
     m_pDesignView->Construct( );
-
 }
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::initialize()
 {
+    // initially be in SQL mode
+    OQueryContainerWindow* pContainer = getContainer();
+    ToolBox* pToolBox = pContainer ? pContainer->getToolBox() : NULL;
+    switchToolBox(pToolBox,sal_False);
+    m_pTextView->Show();
     m_pDesignView->initialize();
-    switchView();
 }
 // -------------------------------------------------------------------------
 void OQueryViewSwitch::resizeDocumentView(Rectangle& _rPlayground)
@@ -176,7 +193,7 @@ void OQueryViewSwitch::GetFocus()
     if ( m_pTextView && m_pTextView->IsVisible() )
         m_pTextView->GetFocus();
     else if ( m_pDesignView && m_pDesignView->IsVisible() )
-        m_pDesignView->GetFocus();
+        m_pDesignView->GrabFocus();
 }
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::GrabFocus()
@@ -256,32 +273,19 @@ OQueryContainerWindow* OQueryViewSwitch::getContainer() const
 }
 
 // -----------------------------------------------------------------------------
-void OQueryViewSwitch::switchView()
+sal_Bool OQueryViewSwitch::switchView()
 {
+    sal_Bool bRet = sal_True;
     sal_Bool bGraphicalDesign = static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode();
 
     if ( !bGraphicalDesign ) // we have to hide the add table dialog
         m_pDesignView->getAddTableDialog()->Hide();
-    m_pTextView->Show   ( !bGraphicalDesign );
-    m_pDesignView->Show ( bGraphicalDesign );
 
     OQueryContainerWindow* pContainer = getContainer();
     ToolBox* pToolBox = pContainer ? pContainer->getToolBox() : NULL;
     DBG_ASSERT( pToolBox, "OQueryViewSwitch::switchView: no toolbox!" );
 
-    if ( pToolBox )
-    {
-        pToolBox->ShowItem(ID_BROWSER_QUERY_DISTINCT_VALUES,bGraphicalDesign);
-        pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_ALIASES,bGraphicalDesign);
-        pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_TABLES,bGraphicalDesign);
-        pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_FUNCTIONS,bGraphicalDesign);
-        pToolBox->ShowItem(ID_BROWSER_ADDTABLE,bGraphicalDesign);
-        pToolBox->ShowItem(ID_QUERY_ZOOM_IN,bGraphicalDesign);
-        pToolBox->ShowItem(ID_QUERY_ZOOM_OUT,bGraphicalDesign);
-        pToolBox->ShowItem(ID_BROWSER_ESACPEPROCESSING,!bGraphicalDesign);
-    }
-
-    if ( m_pTextView->IsVisible() )
+    if ( !bGraphicalDesign )
     {
         m_pDesignView->stopTimer();
         m_pTextView->getSqlEdit()->startTimer();
@@ -295,10 +299,18 @@ void OQueryViewSwitch::switchView()
         // we have to stop the sqledit from our textview
         m_pTextView->getSqlEdit()->stopTimer();
         getAddTableDialog()->Update();
-        m_pDesignView->InitFromParseNode();
+        bRet = m_pDesignView->InitFromParseNode();
 
         // only show the view when the data is inserted
         m_pDesignView->startTimer();
+    }
+
+    if ( bRet )
+    {
+        switchToolBox(pToolBox,bGraphicalDesign);
+
+        m_pTextView->Show   ( !bGraphicalDesign );
+        m_pDesignView->Show ( bGraphicalDesign );
     }
 
     if ( pContainer )
@@ -306,6 +318,8 @@ void OQueryViewSwitch::switchView()
 
     m_pDesignView->getController()->getUndoMgr()->Clear();
     m_pDesignView->getController()->InvalidateAll();
+
+    return bRet;
 }
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::clearDesignView()
@@ -359,7 +373,8 @@ Reference< XMultiServiceFactory > OQueryViewSwitch::getORB() const
 void OQueryViewSwitch::reset()
 {
     m_pDesignView->reset();
-    switchView();
+    if ( m_pDesignView->InitFromParseNode() )
+        switchView();
 }
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::setNoneVisbleRow(sal_Int32 _nRows)

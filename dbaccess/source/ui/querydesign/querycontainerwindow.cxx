@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-02 07:54:11 $
+ *  last change: $Author: oj $ $Date: 2002-05-06 09:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,9 +132,9 @@ namespace dbaui
         DBG_DTOR(OQueryContainerWindow,NULL);
     }
     // -----------------------------------------------------------------------------
-    void OQueryContainerWindow::switchView()
+    sal_Bool OQueryContainerWindow::switchView()
     {
-        m_pViewSwitch->switchView();
+        return m_pViewSwitch->switchView();
     }
 
     // -----------------------------------------------------------------------------
@@ -299,6 +299,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2002/05/02 07:54:11  oj
+ *  #98916# enable F6 key
+ *
  *  Revision 1.5  2002/03/01 14:42:07  oj
  *  #97850# correct F6 handling
  *
