@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TIndexes.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:01:34 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,7 @@ void OIndexesHelper::appendObject( const Reference< XPropertySet >& descriptor )
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
     ::rtl::OUString aName = comphelper::getString(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)));
-    ObjectMap::iterator aIter = m_aNameMap.find(aName);
-    if( aIter != m_aNameMap.end())
+    if ( m_pElements->exists(aName) )
         throw ElementExistException(aName,*this);
 
     if(!m_pTable->isNew())
@@ -198,12 +197,17 @@ void OIndexesHelper::appendObject( const Reference< XPropertySet >& descriptor )
             {
                 ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
                 aSql = aSql + ::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))));
-                aSql = aSql +   (any2bool(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISASCENDING)))
-                                            ?
-                                ::rtl::OUString::createFromAscii(" ASC")
-                                            :
-                                ::rtl::OUString::createFromAscii(" DESC"))
-                            +   ::rtl::OUString::createFromAscii(",");
+
+                if ( ::dbtools::isDataSourcePropertyEnabled(m_pTable->getConnection(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AddIndexAppendix")),sal_True) )
+                {
+
+                    aSql += (any2bool(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISASCENDING)))
+                                                ?
+                                    ::rtl::OUString::createFromAscii(" ASC")
+                                                :
+                                    ::rtl::OUString::createFromAscii(" DESC"));
+                }
+                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
             }
             aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
         }
@@ -234,8 +238,6 @@ void OIndexesHelper::appendObject( const Reference< XPropertySet >& descriptor )
 // XDrop
 void OIndexesHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ObjectMap::iterator aIter = m_aNameMap.find(_sElementName);
-
     if(!m_pTable->isNew())
     {
         ::rtl::OUString aName,aSchema;
@@ -245,14 +247,13 @@ void OIndexesHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
         aName   = _sElementName.copy(nLen+1);
 
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP INDEX ");
-        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
         ::rtl::OUString aComposedName = dbtools::composeTableName(m_pTable->getMetaData(),m_pTable,sal_True,::dbtools::eInIndexDefinitions);
+        ::rtl::OUString sIndexName,sTemp;
+        dbtools::composeTableName(m_pTable->getMetaData(),sTemp,aSchema,aName,sIndexName,sal_True,::dbtools::eInIndexDefinitions,sal_True,sal_True);
 
-        aSql = aSql + ::dbtools::quoteName( aQuote,aSchema)
-                    + aDot   + ::dbtools::quoteName( aQuote,aName)
-                    + ::rtl::OUString::createFromAscii(" ON ")
+        aSql += sIndexName
+                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON "))
                     + aComposedName;
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
