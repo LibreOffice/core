@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:39:02 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 10:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,11 +164,35 @@ DAVResourceAccess::DAVResourceAccess(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr,
                 rtl::Reference< DAVSessionFactory > const & rSessionFactory,
                 const rtl::OUString & rURL )
-    throw( DAVException )
 : m_aURL( rURL ),
-  m_xSMgr( rSMgr ),
-  m_xSessionFactory( rSessionFactory )
+  m_xSessionFactory( rSessionFactory ),
+  m_xSMgr( rSMgr )
 {
+}
+
+//=========================================================================
+DAVResourceAccess::DAVResourceAccess( const DAVResourceAccess & rOther )
+: m_aURL( rOther.m_aURL ),
+  m_aPath( rOther.m_aPath ),
+  m_xSession( rOther.m_xSession ),
+  m_xSessionFactory( rOther.m_xSessionFactory ),
+  m_xSMgr( rOther.m_xSMgr ),
+  m_aRedirectURIs( rOther.m_aRedirectURIs )
+{
+}
+
+//=========================================================================
+DAVResourceAccess & DAVResourceAccess::operator=(
+                                const DAVResourceAccess & rOther )
+{
+    m_aURL            = rOther.m_aURL;
+    m_aPath           = rOther.m_aPath;
+    m_xSession        = rOther.m_xSession;
+    m_xSessionFactory = rOther.m_xSessionFactory;
+    m_xSMgr           = rOther.m_xSMgr;
+    m_aRedirectURIs   = rOther.m_aRedirectURIs;
+
+    return *this;
 }
 
 //=========================================================================
