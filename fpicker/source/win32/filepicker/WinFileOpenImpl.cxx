@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-28 13:35:08 $
+ *  last change: $Author: tra $ $Date: 2001-12-18 13:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,7 +797,6 @@ void SAL_CALL CWinFileOpenImpl::onSelChanged( HWND hwndListBox )
     InitialSetDefaultName( );
 
     FilePickerEvent evt;
-    evt.Source = static_cast< XFilePicker* >( m_FilePicker );
     m_FilePicker->fileSelectionChanged( evt );
 }
 
@@ -932,7 +931,6 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
 void SAL_CALL CWinFileOpenImpl::onFolderChanged()
 {
     FilePickerEvent evt;
-    evt.Source = static_cast< XFilePicker* >( m_FilePicker );
     m_FilePicker->directoryChanged( evt );
 }
 
@@ -946,7 +944,6 @@ void SAL_CALL CWinFileOpenImpl::onTypeChanged( sal_uInt32 nFilterIndex )
 
     FilePickerEvent evt;
     evt.ElementId = LISTBOX_FILTER;
-    evt.Source = static_cast< XFilePicker* >( m_FilePicker );
     m_FilePicker->controlStateChanged( evt );
 }
 
@@ -962,9 +959,7 @@ sal_uInt32 SAL_CALL CWinFileOpenImpl::onCtrlCommand(
     if ( ctrlId < ctlFirst )
     {
         FilePickerEvent evt;
-
         evt.ElementId = ctrlId;
-        evt.Source = static_cast< XFilePicker* >( m_FilePicker );
         m_FilePicker->controlStateChanged( evt );
     }
 
