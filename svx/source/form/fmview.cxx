@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:22:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ FmFormView::FmFormView( FmFormModel* pModel, OutputDevice* pOut )
 }
 
 //------------------------------------------------------------------------
-FmFormView::FmFormView( FmFormModel* pModel, ExtOutputDevice* pXOut )
+FmFormView::FmFormView( FmFormModel* pModel, XOutputDevice* pXOut )
     :E3dView( pModel, pXOut )
 {
     Init();
