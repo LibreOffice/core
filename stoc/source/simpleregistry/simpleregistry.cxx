@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleregistry.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-29 10:00:12 $
+ *  last change: $Author: jbu $ $Date: 2001-09-27 15:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
+#endif
+#ifndef _RTL_USTRBUF_H_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
@@ -1104,7 +1107,28 @@ void SAL_CALL SimpleRegistryImpl::open( const OUString& rURL, sal_Bool bReadOnly
     }
 
     m_url = OUString();
-    throw InvalidRegistryException();
+
+    OUStringBuffer reason( 128 );
+    reason.appendAscii( RTL_CONSTASCII_STRINGPARAM("Couldn't ") );
+    if( bCreate )
+    {
+        reason.appendAscii( RTL_CONSTASCII_STRINGPARAM("create") );
+    }
+    else
+    {
+        reason.appendAscii( RTL_CONSTASCII_STRINGPARAM("open") );
+    }
+    reason.appendAscii( RTL_CONSTASCII_STRINGPARAM(" registry ") );
+    reason.append( rURL );
+    if( bReadOnly )
+    {
+        reason.appendAscii( RTL_CONSTASCII_STRINGPARAM("for reading") );
+    }
+    else
+    {
+        reason.appendAscii( RTL_CONSTASCII_STRINGPARAM("for writing" ) );
+    }
+    throw InvalidRegistryException( reason.makeStringAndClear() , Reference< XInterface >() );
 }
 
 //*************************************************************************
