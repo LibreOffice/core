@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-18 14:56:25 $
+ *  last change: $Author: dbo $ $Date: 2001-05-31 12:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ Any ComponentContext::getValueByName( OUString const & rName )
                     }
                     else
                     {
-                        pEntry->value = makeAny( xInstance );
+                        pEntry->value.setValue( &xInstance, ::getCppuType( &xInstance ) );
                         pEntry->bLateInitService = false;
                     }
 
