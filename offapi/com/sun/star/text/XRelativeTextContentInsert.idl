@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRelativeTextContentInsert.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 
  module com {  module sun {  module star {  module text {
 
-interface XTextContent;
+ published interface XTextContent;
 
 
 // DocMerge from xml: interface com::sun::star::text::XRelativeTextContentInsert
@@ -87,7 +87,7 @@ interface XTextContent;
 
     @deprecated
  */
-interface XRelativeTextContentInsert: com::sun::star::uno::XInterface
+published interface XRelativeTextContentInsert: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 

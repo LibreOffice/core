@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XParagraphCursor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:34:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 // DocMerge from xml: interface com::sun::star::text::XParagraphCursor
 /** makes it possible to move paragraph by paragraph.
  */
-interface XParagraphCursor: com::sun::star::text::XTextCursor
+published interface XParagraphCursor: com::sun::star::text::XTextCursor
 {
     //-------------------------------------------------------------------------
 
