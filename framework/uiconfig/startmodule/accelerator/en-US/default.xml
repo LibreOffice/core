@@ -9,7 +9,6 @@
     <accel:item accel:code="KEY_N" accel:mod1="true" xlink:href=".uno:AddDirect"/>
     <accel:item accel:code="KEY_W" accel:mod1="true" xlink:href=".uno:CloseWin"/>
     <accel:item accel:code="KEY_F4" accel:mod1="true" xlink:href=".uno:CloseWin"/>
-    <accel:item accel:code="KEY_J" accel:shift="true" accel:mod1="true" xlink:href=".uno:FullScreen"/>
     <accel:item accel:code="KEY_X" accel:mod1="true" xlink:href=".uno:Cut"/>
     <accel:item accel:code="KEY_DELETE" accel:shift="true" xlink:href=".uno:Cut"/>
     <accel:item accel:code="KEY_CUT" xlink:href=".uno:Cut"/>
