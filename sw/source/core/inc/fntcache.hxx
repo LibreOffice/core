@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:54:39 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #endif
 #ifndef _SVMEMPOOL_HXX //autogen
 #include <tools/mempool.hxx>
-#endif
-#ifndef _GDIOBJ_HXX //autogen
-#include <vcl/gdiobj.hxx>
 #endif
 
 #include "swtypes.hxx"
