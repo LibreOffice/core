@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedispatcher.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-07-20 08:08:06 $
+ *  last change: $Author: cd $ $Date: 2001-11-13 13:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,6 @@ class BaseDispatcher    :   // interfaces
         ::rtl::OUString implts_detectType           ( const css::util::URL&                                   aURL            ,
                                                             css::uno::Sequence< css::beans::PropertyValue >&  lDescriptor     ,
                                                             sal_Bool                                          bDeep           );
-        ::rtl::OUString implts_askType              (       css::uno::Sequence< css::beans::PropertyValue >&  lDescriptor     );
         sal_Bool        implts_handleIt             ( const css::util::URL&                                   aURL            ,
                                                             css::uno::Sequence< css::beans::PropertyValue >&  lDescriptor     ,
                                                       const ::rtl::OUString&                                  sTypeName       ,
