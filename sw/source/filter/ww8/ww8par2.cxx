@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:12 $
+ *  last change: $Author: cmc $ $Date: 2002-07-26 12:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3303,7 +3303,7 @@ void WW8RStyle::Set1StyleDefaults()
         pIo->SetNewFontAttr(ftcStandardChpCJKStsh, TRUE, RES_CHRATR_CJK_FONT);
 
     if (!bCTLFontChanged)   // Style no CTL Font? set the default
-        pIo->SetNewFontAttr(ftcStandardChpCTLStsh, TRUE, RES_CHRATR_CJK_FONT);
+        pIo->SetNewFontAttr(ftcStandardChpCTLStsh, TRUE, RES_CHRATR_CTL_FONT);
 
     //#88976# western 2nd to make western charset conversion the default
     if (!bFontChanged)      // Style has no Font? set the default,
