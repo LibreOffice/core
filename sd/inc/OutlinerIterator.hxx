@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlinerIterator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:14:17 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 11:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,19 +131,24 @@ class Iterator
 public:
     Iterator (void);
 
+    /** The copy constructor creates a new iterator by copying the
+        implementation object.
+    */
+    Iterator (const Iterator& rIterator);
+
     /** Create a new iterator with the implementation object being the
         provided one.
         @param pObject
             A copy of this object will become the implementation object.
     */
-    Iterator (IteratorImplBase* pObject);
+    explicit Iterator (IteratorImplBase* pObject);
 
     /** Create a new iterator with the implementation object being the copy
         of the provided one.
         @param rObject
             A copy of this object will become the implementation object.
     */
-    Iterator (const IteratorImplBase& rObject);
+    explicit Iterator (const IteratorImplBase& rObject);
 
     ~Iterator (void);
 
