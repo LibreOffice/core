@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: af $ $Date: 2002-02-05 10:39:09 $
+#   last change: $Author: af $ $Date: 2002-03-04 17:00:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -268,7 +268,8 @@ SRSFILELIST=\
                 $(SRS)$/fmcomp.srs \
                 $(SRS)$/engine3d.srs \
                 $(SRS)$/unodraw.srs \
-                $(SRS)$/svxlink.srs
+                $(SRS)$/svxlink.srs \
+                $(SRS)$/accessibility.srs
 
 .IF "$(GUI)" != "MAC"
 SRSFILELIST+=   $(SOLARVERSION)$/$(INPATH)$/res$(UPDMINOREXT)$/sfx.srs
