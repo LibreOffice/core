@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ValueChanger.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-12-10 17:01:46 $
+ *  last change:$Date: 2005-02-24 17:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@ package util;
 
 import com.sun.star.awt.Size;
 import com.sun.star.awt.Point;
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.drawing.PolygonFlags;
 //import util.BitmapLoader;
 import com.sun.star.uno.Enum ;
@@ -72,6 +73,7 @@ import java.lang.reflect.Modifier ;
 import java.lang.reflect.Array ;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.beans.PropertyValue;
 
 
 
@@ -744,6 +746,12 @@ public class ValueChanger {
         if (oldValue.equals(BT6)) newValue = BT7;
         if (oldValue.equals(BT7)) newValue = BT1;
    } else
+    if (oldValue instanceof PropertyValue){
+        PropertyValue newVal = new PropertyValue();
+        newVal.Name = ((PropertyValue)oldValue).Name;
+        newVal.Value = changePValue(((PropertyValue)oldValue).Value);
+        newValue = newVal;
+    } else
    if (oldValue instanceof com.sun.star.sheet.ValidationAlertStyle){
         com.sun.star.sheet.ValidationAlertStyle VAS1 = com.sun.star.sheet.ValidationAlertStyle.INFO;
         com.sun.star.sheet.ValidationAlertStyle VAS2 = com.sun.star.sheet.ValidationAlertStyle.MACRO;
@@ -838,7 +846,12 @@ public class ValueChanger {
         newArr[len] = "_dummy";
         newValue = newArr;
     } else
-
+    if (oldValue instanceof PropertyValue){
+        PropertyValue newVal = new PropertyValue();
+        newVal.Name = ((PropertyValue)oldValue).Name;
+        newVal.Value = changePValue(((PropertyValue)oldValue).Value);
+        newValue = newVal;
+    } else
     if (oldValue instanceof com.sun.star.util.DateTime) {
         com.sun.star.util.DateTime oldDT = (com.sun.star.util.DateTime) oldValue;
         com.sun.star.util.DateTime newDT = new com.sun.star.util.DateTime();
