@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authratr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:24 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <tools/solar.h>
 #endif
 
-#ifndef _SV_COLOR_HXX //autogen
-#include <vcl/color.hxx>
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
 #define COL_NONE        TRGB_COLORDATA( 0x80, 0xFF, 0xFF, 0xFF )
