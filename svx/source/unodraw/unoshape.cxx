@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-19 14:32:06 $
+ *  last change: $Author: cl $ $Date: 2001-12-19 14:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3641,7 +3641,7 @@ SvxShapeText::SvxShapeText() throw ()
 SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
 : SvxShape( pObject ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
 {
-    if( pObject )
+    if( pObject && pObject->GetModel() )
         SetEditSource( new SvxTextEditSource( pObject ) );
 }
 
