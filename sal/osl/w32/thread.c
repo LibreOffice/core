@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-14 09:47:09 $
+ *  last change: $Author: obr $ $Date: 2001-06-01 15:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,8 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
-#ifndef _OSL_TIME_H_
 #include <osl/time.h>
-#endif
+#include <osl/interlck.h>
 
 /*
     Thread-data structure hidden behind oslThread:
@@ -75,17 +74,13 @@ typedef struct _osl_TThreadImpl
 {
     HANDLE              m_hThread;      /* OS-handle used for all thread-functions */
     sal_uInt32          m_ThreadId;     /* identifier for this thread */
-    sal_uInt32          m_Flags;
-    HANDLE              m_hEvent;
-    DWORD               m_Timeout;
-    CRITICAL_SECTION    m_Mutex;
+    sal_Int32           m_nTerminationRequested;
     oslWorkerFunction   m_WorkerFunction;
     void*               m_pData;
 
 } osl_TThreadImpl;
 
 #define THREADIMPL_FLAGS_TERMINATE  0x0001
-#define THREADIMPL_FLAGS_SLEEP      0x0002
 
 static sal_uInt32 __stdcall oslWorkerWrapperFunction(void* pData);
 static oslThread oslCreateThread(oslWorkerFunction pWorker, void* pThreadData, sal_uInt32 nFlags);
@@ -95,7 +90,7 @@ typedef HRESULT (WINAPI *CoInitializeEx_PROC)(LPVOID pvReserved, DWORD dwCoInit)
 
 CoInitializeEx_PROC _CoInitializeEx = osl_CoInitializeEx;
 
-/* implemented in localenc.c */
+/* implemented in nlsupport.c */
 rtl_TextEncoding GetTextEncodingFromCodePage( UINT );
 
 /*****************************************************************************/
@@ -139,12 +134,7 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
 
     pThreadImpl->m_WorkerFunction= pWorker;
     pThreadImpl->m_pData= pThreadData;
-
-    pThreadImpl->m_Flags   = 0;
-    pThreadImpl->m_hEvent  = 0;
-    pThreadImpl->m_Timeout = 0;
-
-    InitializeCriticalSection(&pThreadImpl->m_Mutex);
+    pThreadImpl->m_nTerminationRequested= 0;
 
     pThreadImpl->m_hThread=
         (HANDLE)_beginthreadex(NULL,                        /* no security */
@@ -157,11 +147,6 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
     if(pThreadImpl->m_hThread == 0)
     {
         /* create failed */
-        if (pThreadImpl->m_hEvent != 0)
-            CloseHandle(pThreadImpl->m_hEvent);
-
-        DeleteCriticalSection(&pThreadImpl->m_Mutex);
-
         free(pThreadImpl);
         return 0;
     }
@@ -242,10 +227,8 @@ void SAL_CALL osl_freeThreadHandle(oslThread Thread)
         return;
     }
 
-    if (pThreadImpl->m_hEvent != 0)
-        CloseHandle(pThreadImpl->m_hEvent);
-
-    DeleteCriticalSection(&pThreadImpl->m_Mutex);
+    /* !!!! _exitthreadex does _not_ call CloseHandle !!! */
+    CloseHandle( pThreadImpl->m_hThread );
 
     /* free memory */
     free(Thread);
@@ -450,9 +433,7 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
         return;
     }
 
-    EnterCriticalSection(&pThreadImpl->m_Mutex);
-    pThreadImpl->m_Flags |= THREADIMPL_FLAGS_TERMINATE;
-    LeaveCriticalSection(&pThreadImpl->m_Mutex);
+    osl_incrementInterlockedCount(&pThreadImpl->m_nTerminationRequested);
 }
 
 
@@ -472,22 +453,7 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
         return sal_False;
     }
 
-    if (pThreadImpl->m_Flags & THREADIMPL_FLAGS_SLEEP)
-    {
-        OSL_ASSERT (pThreadImpl->m_hEvent != 0);
-
-        WaitForSingleObject(pThreadImpl->m_hEvent, pThreadImpl->m_Timeout);
-
-        EnterCriticalSection(&pThreadImpl->m_Mutex);
-
-        pThreadImpl->m_Timeout = 0;
-
-        pThreadImpl->m_Flags &= ~THREADIMPL_FLAGS_SLEEP;
-
-        LeaveCriticalSection(&pThreadImpl->m_Mutex);
-    }
-
-    return ((pThreadImpl->m_Flags & THREADIMPL_FLAGS_TERMINATE) == 0);
+    return (0 == pThreadImpl->m_nTerminationRequested);
 }
 
 /*****************************************************************************/
