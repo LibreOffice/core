@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:58:33 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3814,6 +3814,35 @@ Reference<XAccessible > DbGridControl::CreateAccessibleControl( sal_Int32 _nInde
     else
         xRet = DbGridControl_Base::CreateAccessibleControl( _nIndex );
     return xRet;
+}
+// -----------------------------------------------------------------------------
+Reference< XAccessible > DbGridControl::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
+{
+    USHORT nColumnId = GetColumnId( _nColumnPos );
+    DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColumnId));
+    if ( pColumn )
+    {
+        Reference< ::com::sun::star::awt::XControl> xInt(pColumn->GetCell());
+        Reference< ::com::sun::star::awt::XCheckBox> xBox(xInt,UNO_QUERY);
+        if ( xBox.is() )
+        {
+            TriState eValue = STATE_NOCHECK;
+            switch( xBox->getState() )
+            {
+                case 0:
+                    eValue = STATE_NOCHECK;
+                    break;
+                case 1:
+                    eValue = STATE_CHECK;
+                    break;
+                case 2:
+                    eValue = STATE_DONTKNOW;
+                    break;
+            }
+            return DbGridControl_Base::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,eValue,TRUE );
+        }
+    }
+    return DbGridControl_Base::CreateAccessibleCell( _nRow, _nColumnPos );
 }
 // -----------------------------------------------------------------------------
 
