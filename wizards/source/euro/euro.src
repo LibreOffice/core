@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:36:26 $
+ *  last change: $Author: bc $ $Date: 2001-05-03 13:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1369,6 +1369,12 @@ Text[ english_us ] = "'<1>' is not a directory!";
 };
 
 
+String MESSAGES + 21
+{
+Text = "Dokument ist schreibgeschützt!";
+Text[English] = "Document is Read Only!";
+Text[ english_us ] = "Document is Read Only!";
+};
 
 
  String CURRENCIES
