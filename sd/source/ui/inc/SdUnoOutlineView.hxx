@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:26:53 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,10 @@ private:
 
     /** This is a shortcut for accessing the view shell data member of
         the base class casted to the correct class.
+        @return
+            The returned pointer may be NULL.
     */
-    OutlineViewShell& GetDrawViewShell (void) const;
+    OutlineViewShell* GetDrawViewShell (void) const;
 };
 
 } // end of namespace sd
