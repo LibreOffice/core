@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-24 16:19:19 $
+ *  last change: $Author: thb $ $Date: 2002-07-25 08:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,12 +351,9 @@ namespace accessibility
 
         try
         {
-            // shutdown and release edit source
-            SetEditSource( ::std::auto_ptr< SvxEditSource >() );
+            Dispose();
         }
         catch( const uno::Exception& ) {}
-
-        // owner is responsible for dispose and clear on listeners
     }
 
     SvxTextForwarder& AccessibleTextHelper_Impl::GetTextForwarder() const SAL_THROW((uno::RuntimeException))

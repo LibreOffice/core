@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-24 16:19:15 $
+ *  last change: $Author: thb $ $Date: 2002-07-25 08:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,7 @@ namespace accessibility
 
         // drop all references
         mxParent = NULL;
+        mpEditSource = NULL;
     }
 
     void AccessibleEditableTextPara::SetEditSource( SvxEditSourceAdapter* pEditSource )
