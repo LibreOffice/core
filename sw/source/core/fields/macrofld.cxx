@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrofld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,9 +189,9 @@ String SwMacroField::GetPar2() const
 --------------------------------------------------*/
 BOOL SwMacroField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_MACRO))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_MACRO)))
         rAny <<= OUString(aMacro);
-    else if(rProperty.EqualsAscii(UNO_NAME_HINT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_HINT)))
         rAny <<= OUString(aText);
 
 #ifdef DBG_UTIL
@@ -205,13 +205,13 @@ BOOL SwMacroField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 --------------------------------------------------*/
 BOOL SwMacroField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_MACRO))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_MACRO)))
     {
         OUString uTmp;
         rAny >>= uTmp;
         aMacro = String(uTmp);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_HINT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_HINT)))
     {
         OUString uTmp;
         rAny >>= uTmp;

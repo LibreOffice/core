@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-03 11:52:23 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,7 +503,7 @@ String SwGetRefField::GetPar2() const
 --------------------------------------------------*/
 BOOL SwGetRefField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_REFERENCE_FIELD_PART))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_REFERENCE_FIELD_PART)))
     {
         sal_Int16 nPart = 0;
         switch(GetFormat())
@@ -519,7 +519,7 @@ BOOL SwGetRefField::QueryValue( uno::Any& rAny, const String& rProperty ) const
         }
         rAny <<= nPart;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_REFERENCE_FIELD_SOURCE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_REFERENCE_FIELD_SOURCE)))
     {
         sal_Int16 nSource = 0;
         switch(nSubType)
@@ -533,11 +533,11 @@ BOOL SwGetRefField::QueryValue( uno::Any& rAny, const String& rProperty ) const
         }
         rAny <<= nSource;
     }
-    else if( rProperty.EqualsAscii(UNO_NAME_SOURCE_NAME ))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SOURCE_NAME )))
         rAny <<= rtl::OUString(GetPar1());
-    else if(rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
         rAny <<= rtl::OUString(Expand());
-    else if(rProperty.EqualsAscii(UNO_NAME_SEQUENCE_NUMBER))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SEQUENCE_NUMBER)))
         rAny <<= (sal_Int16)nSeqNo;
 #ifdef DBG_UTIL
     else
@@ -550,7 +550,7 @@ BOOL SwGetRefField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 --------------------------------------------------*/
 BOOL SwGetRefField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_REFERENCE_FIELD_PART))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_REFERENCE_FIELD_PART)))
     {
         sal_Int16 nPart;
         rAny >>= nPart;
@@ -568,7 +568,7 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, const String& rProperty )
         }
         SetFormat(nPart);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_REFERENCE_FIELD_SOURCE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_REFERENCE_FIELD_SOURCE)))
     {
         sal_Int16 nSource;
         rAny >>= nSource;
@@ -581,19 +581,19 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, const String& rProperty )
             case ReferenceFieldSource::ENDNOTE        : nSubType = REF_ENDNOTE    ; break;
         }
     }
-    else if( rProperty.EqualsAscii(UNO_NAME_SOURCE_NAME ))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SOURCE_NAME )))
     {
         OUString uTmp;
         rAny >>= uTmp;
         SetPar1(uTmp);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
     {
         OUString sVal;
         rAny >>= sVal;
         SetExpand(sVal);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_SEQUENCE_NUMBER))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SEQUENCE_NUMBER)))
     {
         sal_Int16 nSetSeq;
         rAny >>= nSetSeq;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-17 14:32:37 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,21 +295,21 @@ ULONG SwDateTimeField::GetTime(BOOL bUseOffset) const
 --------------------------------------------------*/
 BOOL SwDateTimeField::QueryValue( uno::Any& rVal, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_IS_FIXED ))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED )))
     {
         BOOL bTmp = IsFixed();
         rVal.setValue(&bTmp, ::getCppuBooleanType());
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_NUMBER_FORMAT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
         rVal <<= (sal_Int32)GetFormat();
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_DATE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_DATE)))
     {
         BOOL bTmp = IsDate();
         rVal.setValue(&bTmp, ::getCppuBooleanType());
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_ADJUST))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_ADJUST)))
         rVal <<= (sal_Int32)nOffset;
-    else if(rProperty.EqualsAscii(UNO_NAME_DATE_TIME_VALUE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATE_TIME_VALUE)))
     {
         ULONG nDate = GetDate();
         ULONG nTime = GetTime();
@@ -339,7 +339,7 @@ BOOL SwDateTimeField::QueryValue( uno::Any& rVal, const String& rProperty ) cons
 --------------------------------------------------*/
 BOOL SwDateTimeField::PutValue( const uno::Any& rVal, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_IS_FIXED))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
     {
         BOOL bFix = *(sal_Bool*)rVal.getValue();
         if(bFix)
@@ -347,25 +347,25 @@ BOOL SwDateTimeField::PutValue( const uno::Any& rVal, const String& rProperty )
         else
             nSubType &= ~FIXEDFLD;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_NUMBER_FORMAT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
     {
         sal_Int32 nTmp;
         rVal >>= nTmp;
         ChangeFormat(nTmp);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_DATE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_DATE)))
     {
         BOOL bDate = *(sal_Bool*)rVal.getValue();
         nSubType &=  ~(DATEFLD|TIMEFLD);
         nSubType |= bDate ? DATEFLD : TIMEFLD;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_ADJUST))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_ADJUST)))
     {
         sal_Int32 nVal;
         rVal >>= nVal;
         nOffset = nVal;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_DATE_TIME_VALUE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATE_TIME_VALUE)))
     {
         util::DateTime aDateTimeValue;
         if(!(rVal >>= aDateTimeValue))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrptfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,11 +141,11 @@ String SwScriptField::GetPar2() const
 --------------------------------------------------*/
 BOOL SwScriptField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_URL_CONTENT))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_URL_CONTENT)))
         rAny.setValue(&bCodeURL, ::getBooleanCppuType());
-    else if(rProperty.EqualsAscii(UNO_NAME_SCRIPT_TYPE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SCRIPT_TYPE)))
         rAny <<= OUString(sType);
-    else if( rProperty.EqualsAscii(UNO_NAME_CONTENT))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)))
          rAny <<= OUString(sCode);
 #ifdef DBG_UTIL
     else
@@ -159,15 +159,15 @@ BOOL SwScriptField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 --------------------------------------------------*/
 BOOL SwScriptField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_URL_CONTENT))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_URL_CONTENT)))
         bCodeURL = *(sal_Bool*)rAny.getValue();
-    else if(rProperty.EqualsAscii(UNO_NAME_SCRIPT_TYPE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SCRIPT_TYPE)))
     {
         OUString uTmp;
         rAny >>= uTmp;
         sType = String(uTmp);
     }
-    else if( rProperty.EqualsAscii(UNO_NAME_CONTENT))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)))
     {
         OUString uTmp;
         rAny >>= uTmp;

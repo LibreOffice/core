@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblcalc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ void SwTblField::SetPar2(const String& rStr)
 BOOL SwTblField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
     BOOL bRet = TRUE;
-    if(rProperty.EqualsAscii(UNO_NAME_FORMULA))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FORMULA)))
     {
         rAny <<= rtl::OUString(SwTableFormula::GetFormula());
     }
@@ -261,7 +261,7 @@ BOOL SwTblField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 BOOL SwTblField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
     BOOL bRet = TRUE;
-    if(rProperty.EqualsAscii(UNO_NAME_FORMULA))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FORMULA)))
     {
         OUString uTmp;
         rAny >>= uTmp;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-12 15:39:50 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,27 +599,27 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
  ---------------------------------------------------------------------------*/
 BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_BRACKET_BEFORE.pName, 0, UNO_NAME_BRACKET_BEFORE.nNameLen))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_BRACKET_BEFORE)))
     {
         OUString sVal(m_cPrefix);
         rVal <<= sVal;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_BRACKET_AFTER         .pName, 0, UNO_NAME_BRACKET_AFTER  .nNameLen))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_BRACKET_AFTER)))
     {
         OUString sVal(m_cSuffix);
         rVal <<= sVal;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_NUMBER_ENTRIES     .pName, 0, UNO_NAME_IS_NUMBER_ENTRIES .nNameLen))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_NUMBER_ENTRIES)))
     {
         sal_Bool bVal = m_bIsSequence;
         rVal.setValue(&bVal, ::getBooleanCppuType());
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_SORT_BY_POSITION  .pName, 0,  UNO_NAME_IS_SORT_BY_POSITION.nNameLen))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SORT_BY_POSITION)))
     {
         sal_Bool bVal = m_bSortByDocument;
         rVal.setValue(&bVal, ::getBooleanCppuType());
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_SORT_KEYS            .pName, 0,  UNO_NAME_SORT_KEYS      .nNameLen))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SORT_KEYS)))
     {
         Sequence<PropertyValues> aRet(m_pSortKeyArr->Count());
         PropertyValues* pValues = aRet.getArray();
@@ -628,16 +628,16 @@ BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, const String& rProperty ) c
             const SwTOXSortKey* pKey = (*m_pSortKeyArr)[i];
             pValues[i].realloc(2);
             PropertyValue* pValue = pValues[i].getArray();
-            pValue[0].Name = C2U(UNO_NAME_SORT_KEY.pName);
+            pValue[0].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_SORT_KEY));
             pValue[0].Value <<= sal_Int16(pKey->eField);
-            pValue[1].Name = C2U(UNO_NAME_IS_SORT_ASCENDING.pName);
+            pValue[1].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_IS_SORT_ASCENDING));
             pValue[1].Value.setValue(&pKey->bSortAscending, ::getBooleanCppuType());
         }
         rVal <<= aRet;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_SORT_ALGORITHM     .pName, 0, UNO_NAME_SORT_ALGORITHM .nNameLen))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SORT_ALGORITHM)))
         rVal <<= OUString(GetSortAlgorithm());
-    else if(rProperty.EqualsAscii(UNO_NAME_LOCALE     .pName, 0, UNO_NAME_LOCALE .nNameLen))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_LOCALE)))
         rVal <<= SvxCreateLocale(GetLanguage());
     else
         return FALSE;
@@ -649,30 +649,30 @@ BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, const String& rProperty ) c
 BOOL    SwAuthorityFieldType::PutValue( const Any& rVal, const String& rProperty )
 {
     sal_Bool bRet = TRUE;
-    if(rProperty.EqualsAscii(UNO_NAME_BRACKET_BEFORE.pName, 0, UNO_NAME_BRACKET_BEFORE.nNameLen))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_BRACKET_BEFORE)))
     {
         OUString sVal; rVal >>= sVal;
         if(sVal.getLength())
             m_cPrefix = sVal[0];
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_BRACKET_AFTER         .pName, 0, UNO_NAME_BRACKET_AFTER  .nNameLen))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_BRACKET_AFTER)))
     {
         OUString sVal; rVal >>= sVal;
         if(sVal.getLength())
             m_cSuffix = sVal[0];
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_NUMBER_ENTRIES     .pName, 0, UNO_NAME_IS_NUMBER_ENTRIES .nNameLen))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_NUMBER_ENTRIES)))
     {
         sal_Bool bValue = *(sal_Bool*)rVal.getValue();
         m_bIsSequence = bValue;
 
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_SORT_BY_POSITION  .pName, 0,  UNO_NAME_IS_SORT_BY_POSITION.nNameLen))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SORT_BY_POSITION)))
     {
         sal_Bool bValue = *(sal_Bool*)rVal.getValue();
         m_bSortByDocument = bValue;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_SORT_KEYS            .pName, 0,  UNO_NAME_SORT_KEYS      .nNameLen))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SORT_KEYS)))
     {
         Sequence<PropertyValues> aSeq;
         bRet = rVal >>= aSeq;
@@ -686,7 +686,7 @@ BOOL    SwAuthorityFieldType::PutValue( const Any& rVal, const String& rProperty
                 SwTOXSortKey* pSortKey = new SwTOXSortKey;
                 for(sal_Int32 j = 0; j < pValues[i].getLength(); j++)
                 {
-                    if(pValue[j].Name.equalsAsciiL(UNO_NAME_SORT_KEY.pName, UNO_NAME_SORT_KEY.nNameLen))
+                    if(pValue[j].Name.equalsAsciiL(SW_PROP_NAME(UNO_NAME_SORT_KEY)))
                     {
                         sal_Int16 nVal = -1; pValue[j].Value >>= nVal;
                         if(nVal >= 0 && nVal < AUTH_FIELD_END)
@@ -694,7 +694,7 @@ BOOL    SwAuthorityFieldType::PutValue( const Any& rVal, const String& rProperty
                         else
                             bRet = FALSE;
                     }
-                    else if(pValue[j].Name.equalsAsciiL(UNO_NAME_IS_SORT_ASCENDING.pName, UNO_NAME_IS_SORT_ASCENDING.nNameLen))
+                    else if(pValue[j].Name.equalsAsciiL(SW_PROP_NAME(UNO_NAME_IS_SORT_ASCENDING)))
                     {
                         pSortKey->bSortAscending = *(sal_Bool*)pValue[j].Value.getValue();
                     }
@@ -703,14 +703,14 @@ BOOL    SwAuthorityFieldType::PutValue( const Any& rVal, const String& rProperty
             }
         }
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_SORT_ALGORITHM     .pName, 0, UNO_NAME_SORT_ALGORITHM .nNameLen))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SORT_ALGORITHM)))
     {
         OUString sAlgorithm;
         bRet = rVal >>= sAlgorithm;
         if(bRet)
             SetSortAlgorithm(sAlgorithm);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_LOCALE     .pName, 0, UNO_NAME_LOCALE .nNameLen))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_LOCALE)))
     {
         Locale aLocale;
         bRet = rVal >>= aLocale;

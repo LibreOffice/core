@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 16:57:17 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,13 +202,13 @@ void SwDBFieldType::ReleaseRef()
 BOOL    SwDBFieldType::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
 {
     USHORT nToken = USHRT_MAX;
-    if(rProperty.EqualsAscii(UNO_NAME_DATA_BASE_NAME     ))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_BASE_NAME    )))
         rAny <<= aDBData.sDataSource;
-    else if(rProperty.EqualsAscii(UNO_NAME_DATA_TABLE_NAME))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_TABLE_NAME)))
         rAny <<= aDBData.sCommand;
-    else if(rProperty.EqualsAscii(UNO_NAME_DATA_COMMAND_TYPE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_COMMAND_TYPE)))
         rAny <<= aDBData.nCommandType;
-    else if(rProperty.EqualsAscii(UNO_NAME_DATA_COLUMN_NAME))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_COLUMN_NAME)))
         rAny <<= (OUString)sColumn;
     return nToken != USHRT_MAX;
 }
@@ -219,13 +219,13 @@ BOOL    SwDBFieldType::PutValue( const com::sun::star::uno::Any& rAny, const Str
 {
     OUString sTmp;
     sal_Bool bRet = rAny >>= sTmp;
-    if(rProperty.EqualsAscii(UNO_NAME_DATA_BASE_NAME     ))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_BASE_NAME    )))
         rAny >>= aDBData.sDataSource;
-    else if(rProperty.EqualsAscii(UNO_NAME_DATA_TABLE_NAME))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_TABLE_NAME)))
         rAny >>= aDBData.sCommand;
-    else if(rProperty.EqualsAscii(UNO_NAME_DATA_COMMAND_TYPE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_COMMAND_TYPE)))
         rAny >>= aDBData.nCommandType;
-    else if(rProperty.EqualsAscii(UNO_NAME_DATA_COLUMN_NAME))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_COLUMN_NAME)))
     {
         sal_Bool bUpdate = sTmp != (OUString)sColumn;
         sColumn = sTmp;
@@ -493,15 +493,15 @@ void SwDBField::SetSubType(USHORT nType)
 --------------------------------------------------*/
 BOOL SwDBField::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_IS_DATA_BASE_FORMAT))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_DATA_BASE_FORMAT)))
     {
         BOOL bTemp = 0 == (GetSubType()&SUB_OWN_FMT);
         rAny.setValue(&bTemp, ::getBooleanCppuType());
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_NUMBER_FORMAT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
         rAny <<= (sal_Int32)GetFormat();
-    else if(rProperty.EqualsAscii(UNO_NAME_CONTENT)||
-        rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT))||
+        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
         rAny <<= OUString(aContent);
 #ifdef   DBG_UTIL
     else
@@ -515,7 +515,7 @@ BOOL SwDBField::QueryValue( com::sun::star::uno::Any& rAny, const String& rPrope
 --------------------------------------------------*/
 BOOL SwDBField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_IS_DATA_BASE_FORMAT))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_DATA_BASE_FORMAT)))
     {
         sal_Bool bTemp = *(sal_Bool*)rAny.getValue();
         if(bTemp)
@@ -523,14 +523,14 @@ BOOL SwDBField::PutValue( const com::sun::star::uno::Any& rAny, const String& rP
         else
             SetSubType(GetSubType()|SUB_OWN_FMT);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_NUMBER_FORMAT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
     {
         sal_Int32 nTemp;
         rAny >>= nTemp;
         SetFormat(nTemp);
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_CONTENT )||
-        rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT ))||
+        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
     {
         OUString uTmp;
         rAny >>= uTmp;
@@ -590,11 +590,11 @@ String SwDBNameInfField::GetCntnt(BOOL bName) const
 --------------------------------------------------*/
 BOOL SwDBNameInfField::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_DATA_BASE_NAME))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_BASE_NAME)))
         rAny <<= aDBData.sDataSource;
-    else if(rProperty.EqualsAscii(UNO_NAME_DATA_TABLE_NAME))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_TABLE_NAME)))
         rAny <<= aDBData.sCommand;
-    else if(rProperty.EqualsAscii(UNO_NAME_DATA_COMMAND_TYPE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_COMMAND_TYPE)))
         rAny <<= aDBData.nCommandType;
     else
     {
@@ -609,11 +609,11 @@ BOOL SwDBNameInfField::QueryValue( com::sun::star::uno::Any& rAny, const String&
 BOOL    SwDBNameInfField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
 {
     sal_Bool bRet;
-    if(rProperty.EqualsAscii(UNO_NAME_DATA_BASE_NAME))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_BASE_NAME)))
         bRet = rAny >>= aDBData.sDataSource;
-    else if(rProperty.EqualsAscii(UNO_NAME_DATA_TABLE_NAME))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_TABLE_NAME)))
         bRet = rAny >>= aDBData.sCommand;
-    else if(rProperty.EqualsAscii(UNO_NAME_DATA_COMMAND_TYPE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_COMMAND_TYPE)))
         rAny >>= aDBData.nCommandType;
     else
         bRet = FALSE;
@@ -694,7 +694,7 @@ void SwDBNextSetField::SetPar1(const String& rStr)
 --------------------------------------------------*/
 BOOL SwDBNextSetField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_CONDITION))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
         rAny <<= OUString(aCond);
     else
         return SwDBNameInfField::QueryValue(rAny, rProperty);
@@ -705,7 +705,7 @@ BOOL SwDBNextSetField::QueryValue( uno::Any& rAny, const String& rProperty ) con
 --------------------------------------------------*/
 BOOL    SwDBNextSetField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_CONDITION))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
     {
         OUString uTemp;
         rAny >>= uTemp;
@@ -823,9 +823,9 @@ void SwDBNumSetField::SetPar2(const String& rStr)
 --------------------------------------------------*/
 BOOL SwDBNumSetField::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_SET_NUMBER))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SET_NUMBER)))
         rAny <<= (sal_Int32)aPar2.ToInt32();
-    else if(rProperty.EqualsAscii(UNO_NAME_CONDITION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
         rAny <<= OUString(aCond);
     else
         return SwDBNameInfField::QueryValue(rAny, rProperty);
@@ -836,13 +836,13 @@ BOOL SwDBNumSetField::QueryValue( com::sun::star::uno::Any& rAny, const String& 
 --------------------------------------------------*/
 BOOL    SwDBNumSetField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_SET_NUMBER))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SET_NUMBER)))
     {
         sal_Int32 nVal;
         rAny >>= nVal;
         aPar2 = String::CreateFromInt32(nVal);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CONDITION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
     {
         OUString uTemp;
         rAny >>= uTemp;
@@ -996,11 +996,11 @@ SwField* SwDBSetNumberField::Copy() const
 --------------------------------------------------*/
 BOOL SwDBSetNumberField::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_NUMBERING_TYPE))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
     {
         rAny <<= (sal_Int16)GetFormat();
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_SET_NUMBER))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SET_NUMBER)))
         rAny <<= nNumber;
     else
         return SwDBNameInfField::QueryValue(rAny, rProperty);
@@ -1011,7 +1011,7 @@ BOOL SwDBSetNumberField::QueryValue( com::sun::star::uno::Any& rAny, const Strin
 --------------------------------------------------*/
 BOOL    SwDBSetNumberField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_NUMBERING_TYPE))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
     {
         sal_Int16 nSet;
         rAny >>= nSet;
@@ -1021,7 +1021,7 @@ BOOL    SwDBSetNumberField::PutValue( const com::sun::star::uno::Any& rAny, cons
             //exception(wrong_value)
             ;
     }
-    if(rProperty.EqualsAscii(UNO_NAME_SET_NUMBER))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SET_NUMBER)))
         rAny >>= nNumber;
     else
         return SwDBNameInfField::PutValue(rAny, rProperty);

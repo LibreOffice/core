@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddefld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-12 17:50:46 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,10 +398,10 @@ void SwDDEFieldType::_RefCntChgd()
  ---------------------------------------------------------------------------*/
 BOOL    SwDDEFieldType::QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const
 {
-    USHORT nPart = rProperty.EqualsAscii(UNO_NAME_DDE_COMMAND_TYPE)  ? 0 :
-        rProperty.EqualsAscii(UNO_NAME_DDE_COMMAND_FILE)  ? 1 :
-            rProperty.EqualsAscii(UNO_NAME_DDE_COMMAND_ELEMENT)  ? 2 :
-            rProperty.EqualsAscii(UNO_NAME_IS_AUTOMATIC_UPDATE) ? 3 : USHRT_MAX;
+    USHORT nPart = rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
+        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DDE_COMMAND_FILE))  ? 1 :
+            rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
+            rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
     if(nPart < 3 )
     {
         rVal <<= OUString(GetCmd().GetToken(nPart, cTokenSeperator));
@@ -420,10 +420,10 @@ BOOL    SwDDEFieldType::QueryValue( com::sun::star::uno::Any& rVal, const String
  ---------------------------------------------------------------------------*/
 BOOL    SwDDEFieldType::PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty )
 {
-    USHORT nPart = rProperty.EqualsAscii(UNO_NAME_DDE_COMMAND_TYPE)  ? 0 :
-        rProperty.EqualsAscii(UNO_NAME_DDE_COMMAND_FILE)  ? 1 :
-            rProperty.EqualsAscii(UNO_NAME_DDE_COMMAND_ELEMENT)  ? 2 :
-            rProperty.EqualsAscii(UNO_NAME_IS_AUTOMATIC_UPDATE) ? 3 : USHRT_MAX;
+    USHORT nPart = rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
+        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DDE_COMMAND_FILE))  ? 1 :
+            rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
+            rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
     if(nPart < 3 )
     {
         OUString sVal;

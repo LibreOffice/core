@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-04-23 13:13:11 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,15 +377,15 @@ sal_uInt16 SwPageNumberField::GetSubType() const
 --------------------------------------------------*/
 BOOL SwPageNumberField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_NUMBERING_TYPE))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
     {
         rAny <<= (sal_Int16)GetFormat();
     }
-    else if( rProperty.EqualsAscii(UNO_NAME_OFFSET ))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_OFFSET )))
     {
         rAny <<= nOffset;
     }
-    else if( rProperty.EqualsAscii(UNO_NAME_SUB_TYPE))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE)))
     {
          text::PageNumberType eType;
         eType = text::PageNumberType_CURRENT;
@@ -395,7 +395,7 @@ BOOL SwPageNumberField::QueryValue( uno::Any& rAny, const String& rProperty ) co
             eType = text::PageNumberType_NEXT;
         rAny.setValue(&eType, ::getCppuType((const text::PageNumberType*)0));
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_USERTEXT) )
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_USERTEXT) ))
     {
         rAny <<= OUString(sUserStr);
     }
@@ -411,7 +411,7 @@ BOOL SwPageNumberField::QueryValue( uno::Any& rAny, const String& rProperty ) co
 BOOL SwPageNumberField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
     BOOL bRet = TRUE;
-    if(rProperty.EqualsAscii(UNO_NAME_NUMBERING_TYPE))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
     {
         sal_Int16 nSet;
         rAny >>= nSet;
@@ -423,22 +423,17 @@ BOOL SwPageNumberField::PutValue( const uno::Any& rAny, const String& rProperty 
             //exception(wrong_value)
             ;
     }
-    else if( rProperty.EqualsAscii(UNO_NAME_OFFSET ))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_OFFSET )))
     {
         sal_Int16 nSet;
         rAny >>= nSet;
         nOffset = nSet;
     }
-    else if( rProperty.EqualsAscii(UNO_NAME_SUB_TYPE) )
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE) ))
     {
-        sal_Int32 eVal = - 1;
-        try
-        {
-            eVal = ::comphelper::getEnumAsINT32(rAny);
-        }
-        catch(Exception &) {}
-
-        switch( eVal )
+// implementation in unofields.cxx
+extern sal_Int32 GetEnumAsInt32( const ::com::sun::star::uno::Any& rAny );
+        switch( GetEnumAsInt32( rAny ) )
         {
             case text::PageNumberType_CURRENT:
                 nSubType = PG_RANDOM;
@@ -453,7 +448,7 @@ BOOL SwPageNumberField::PutValue( const uno::Any& rAny, const String& rProperty 
                 bRet = FALSE;
         }
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_USERTEXT) )
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_USERTEXT) ))
     {
         OUString uTmp;
         rAny >>= uTmp;
@@ -522,15 +517,15 @@ SwField* SwAuthorField::Copy() const
 --------------------------------------------------*/
 BOOL SwAuthorField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if( rProperty.EqualsAscii(UNO_NAME_FULL_NAME ))
+    if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FULL_NAME )))
     {
         sal_Bool bVal = GetFormat() == AF_NAME;
         rAny.setValue(&bVal, ::getBooleanCppuType());
     }
-    else if( rProperty.EqualsAscii(UNO_NAME_CONTENT )||
-        rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT ))||
+        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
         rAny <<= rtl::OUString(GetContent());
-    else if( rProperty.EqualsAscii(UNO_NAME_IS_FIXED ))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED )))
     {
         sal_Bool bVal = IsFixed();
         rAny.setValue(&bVal, ::getBooleanCppuType());
@@ -546,19 +541,19 @@ BOOL SwAuthorField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 --------------------------------------------------*/
 BOOL SwAuthorField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if( rProperty.EqualsAscii(UNO_NAME_FULL_NAME ))
+    if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FULL_NAME )))
     {
         sal_Bool bSet = *(sal_Bool*)rAny.getValue();
         SetFormat(bSet ? AF_NAME : AF_SHORTCUT);
     }
-    else if( rProperty.EqualsAscii(UNO_NAME_CONTENT) ||
-        rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)) ||
+        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
     {
         OUString uTmp;
         rAny >>= uTmp;
         aContent = String(uTmp);
     }
-    else if( rProperty.EqualsAscii(UNO_NAME_IS_FIXED ))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED )))
     {
         sal_Bool bSet = *(sal_Bool*)rAny.getValue();
         if(bSet)
@@ -666,7 +661,7 @@ SwField* SwFileNameField::Copy() const
 --------------------------------------------------*/
 BOOL SwFileNameField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_FILE_FORMAT))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FILE_FORMAT)))
     {
         sal_Int16 nRet;
         switch( GetFormat() &(~FF_FIXED) )
@@ -684,12 +679,12 @@ BOOL SwFileNameField::QueryValue( uno::Any& rAny, const String& rProperty ) cons
         }
         rAny <<= nRet;
     }
-    else if (rProperty.EqualsAscii(UNO_NAME_IS_FIXED))
+    else if (rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
     {
         sal_Bool bVal = IsFixed();
         rAny.setValue(&bVal, ::getBooleanCppuType());
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
         rAny <<= OUString(GetContent());
     return sal_True;
 }
@@ -698,7 +693,7 @@ BOOL SwFileNameField::QueryValue( uno::Any& rAny, const String& rProperty ) cons
 --------------------------------------------------*/
 BOOL SwFileNameField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_FILE_FORMAT))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FILE_FORMAT)))
     {
         sal_Int16 nType;
         rAny >>= nType;
@@ -720,7 +715,7 @@ BOOL SwFileNameField::PutValue( const uno::Any& rAny, const String& rProperty )
             nType |= FF_FIXED;
         SetFormat(nType);
     }
-    else if (rProperty.EqualsAscii(UNO_NAME_IS_FIXED))
+    else if (rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
 
     {
         sal_Bool bSet = *(sal_Bool*)rAny.getValue();
@@ -729,7 +724,7 @@ BOOL SwFileNameField::PutValue( const uno::Any& rAny, const String& rProperty )
         else
             SetFormat( GetFormat() & ~FF_FIXED);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
     {
         OUString sVal;
         rAny >>= sVal;
@@ -825,7 +820,7 @@ SwField* SwTemplNameField::Copy() const
 --------------------------------------------------*/
 BOOL SwTemplNameField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_FILE_FORMAT))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FILE_FORMAT)))
     {
         sal_Int16 nRet;
         switch( GetFormat() )
@@ -847,7 +842,7 @@ BOOL SwTemplNameField::QueryValue( uno::Any& rAny, const String& rProperty ) con
 --------------------------------------------------*/
 BOOL SwTemplNameField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_FILE_FORMAT))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FILE_FORMAT)))
     {
         sal_Int16 nType;
         rAny >>= nType;
@@ -969,7 +964,7 @@ void SwDocStatField::ChangeExpansion( const SwFrm* pFrm )
 --------------------------------------------------*/
 BOOL SwDocStatField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_NUMBERING_TYPE))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
     {
         rAny <<= (sal_Int16)GetFormat();
     }
@@ -984,7 +979,7 @@ BOOL SwDocStatField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 --------------------------------------------------*/
 BOOL SwDocStatField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_NUMBERING_TYPE))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
     {
         sal_Int16 nSet;
         rAny >>= nSet;
@@ -1235,32 +1230,32 @@ void SwDocInfoField::SetLanguage(sal_uInt16 nLng)
  ---------------------------------------------------------------------------*/
 BOOL SwDocInfoField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_AUTHOR) ||
-        rProperty.EqualsAscii(UNO_NAME_CONTENT) )
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_AUTHOR)) ||
+        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT) ))
     {
         rAny <<= OUString(aContent);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_REVISION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_REVISION)))
     {
         rAny  <<= (sal_Int16)aContent.ToInt32();
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_FIXED))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
     {
         sal_Bool bVal = 0 != (nSubType & DI_SUB_FIXED);
         rAny.setValue(&bVal, ::getBooleanCppuType());
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_NUMBER_FORMAT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
     {
         rAny  <<= (sal_Int32)GetFormat();
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_DATE_TIME_VALUE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATE_TIME_VALUE)))
     {
         double fVal = GetValue();
         rAny.setValue(&fVal, ::getCppuType(&fVal));
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
         rAny <<= rtl::OUString(Expand());
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_DATE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_DATE)))
     {
         sal_uInt16 nExtSub = nSubType & 0xff00;
         nExtSub &= ~DI_SUB_FIXED;
@@ -1279,7 +1274,7 @@ BOOL SwDocInfoField::QueryValue( uno::Any& rAny, const String& rProperty ) const
  ---------------------------------------------------------------------------*/
 BOOL SwDocInfoField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_IS_FIXED))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
     {
         sal_Bool bTemp = *(sal_Bool*)rAny.getValue();
         if(bTemp)
@@ -1287,35 +1282,35 @@ BOOL SwDocInfoField::PutValue( const uno::Any& rAny, const String& rProperty )
         else
             nSubType &= ~DI_SUB_FIXED;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_NUMBER_FORMAT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
     {
         sal_Int32 nNumberFormat;
         rAny >>= nNumberFormat;
         if(nNumberFormat >= 0)
             SetFormat(nNumberFormat);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_REVISION) &&
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_REVISION)) &&
         (nSubType & DI_SUB_FIXED))
     {
         sal_Int32 nRev;
         rAny >>= nRev;
         aContent = String::CreateFromInt32(nRev);
     }
-    else if((rProperty.EqualsAscii(UNO_NAME_AUTHOR) ||
-        rProperty.EqualsAscii(UNO_NAME_CONTENT)) &&
+    else if((rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_AUTHOR)) ||
+        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT))) &&
         (nSubType & DI_SUB_FIXED) )
     {
         OUString sVal;
         rAny >>= sVal;
         aContent = sVal;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
     {
         OUString sVal;
         rAny >>= sVal;
         SetExpansion(sVal);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_DATE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_DATE)))
     {
         nSubType &= 0xf0ff;
         if(*(sal_Bool*)rAny.getValue())
@@ -1587,20 +1582,21 @@ sal_uInt16 SwHiddenTxtField::GetSubType() const
  ---------------------------------------------------------------------------*/
 BOOL SwHiddenTxtField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_CONDITION))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
     {
         rAny <<= OUString(aCond);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_TRUE_CONTENT ) || rProperty.EqualsAscii(UNO_NAME_CONTENT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_TRUE_CONTENT )) ||
+            rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )) )
     {
         rAny <<= OUString(aTRUETxt);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_FALSE_CONTENT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FALSE_CONTENT)))
     {
         rAny <<= OUString(aFALSETxt);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_HIDDEN)||
-        rProperty.EqualsAscii(UNO_NAME_IS_CONDITION_TRUE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_HIDDEN))||
+        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_CONDITION_TRUE)))
     {
         sal_Bool bHidden = bIsHidden;
         rAny.setValue(&bHidden, ::getBooleanCppuType());
@@ -1620,14 +1616,15 @@ BOOL SwHiddenTxtField::PutValue( const uno::Any& rAny, const String& rProperty )
     rAny >>= uTmp;
     String sVal(uTmp);
 
-    if(rProperty.EqualsAscii(UNO_NAME_CONDITION))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
         SetPar1(sVal);
-    else if(rProperty.EqualsAscii(UNO_NAME_TRUE_CONTENT )|| rProperty.EqualsAscii(UNO_NAME_CONTENT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_TRUE_CONTENT ))||
+            rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
         aTRUETxt = sVal;
-    else if(rProperty.EqualsAscii(UNO_NAME_FALSE_CONTENT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FALSE_CONTENT)))
         aFALSETxt = sVal;
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_HIDDEN)||
-        rProperty.EqualsAscii(UNO_NAME_IS_CONDITION_TRUE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_HIDDEN))||
+        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_CONDITION_TRUE)))
     {
         bIsHidden = *(sal_Bool*)rAny.getValue();
     }
@@ -1718,9 +1715,9 @@ SwField* SwHiddenParaField::Copy() const
 --------------------------------------------------*/
 BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_CONDITION))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
         rAny <<= OUString(aCond);
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_HIDDEN))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_HIDDEN)))
     {
         sal_Bool bHidden = bIsHidden;
         rAny.setValue(&bHidden, ::getBooleanCppuType());
@@ -1736,13 +1733,13 @@ BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, const String& rProperty ) co
 --------------------------------------------------*/
 BOOL SwHiddenParaField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_CONDITION))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
     {
         OUString uTmp;
         rAny >>= uTmp;
         aCond = String(uTmp);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_HIDDEN))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_HIDDEN)))
         bIsHidden = *(sal_Bool*)rAny.getValue();
 #ifdef DBG_UTIL
     else
@@ -1841,11 +1838,11 @@ String SwPostItField::GetPar2() const
 --------------------------------------------------*/
 BOOL SwPostItField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_AUTHOR))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_AUTHOR)))
         rAny <<= OUString(sAuthor);
-    else if(rProperty.EqualsAscii(UNO_NAME_CONTENT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)))
         rAny <<= OUString(sTxt);
-    else if(rProperty.EqualsAscii(UNO_NAME_DATE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATE)))
     {
         util::Date aSetDate;
         aSetDate.Day = aDate.GetDay();
@@ -1864,19 +1861,19 @@ BOOL SwPostItField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 --------------------------------------------------*/
 BOOL SwPostItField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_AUTHOR))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_AUTHOR)))
     {
         OUString uTmp;
         rAny >>= uTmp;
         sAuthor = String(uTmp);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CONTENT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)))
     {
         OUString uTmp;
         rAny >>= uTmp;
         sTxt = String(uTmp);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_DATE) &&
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATE)) &&
         rAny.getValueType() == ::getCppuType((util::Date*)0))
     {
         util::Date aSetDate = *(util::Date*)rAny.getValue();
@@ -1987,15 +1984,15 @@ void SwExtUserField::SetSubType(sal_uInt16 nSub)
 --------------------------------------------------*/
 BOOL SwExtUserField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_USER_DATA_TYPE))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_USER_DATA_TYPE)))
     {
         sal_Int16 nTmp = nType;
         rAny <<= nTmp;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CONTENT)||
-        rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT))||
+        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
         rAny <<= OUString(aContent);
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_FIXED))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
     {
         sal_Bool bTmp = IsFixed();
         rAny.setValue(&bTmp, ::getBooleanCppuType());
@@ -2011,20 +2008,20 @@ BOOL SwExtUserField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 --------------------------------------------------*/
 BOOL SwExtUserField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_USER_DATA_TYPE))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_USER_DATA_TYPE)))
     {
         sal_Int16 nTmp;
         rAny >>= nTmp;
         nType = nTmp;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CONTENT)||
-        rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT))||
+        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
     {
         OUString uTmp;
         rAny >>= uTmp;
         aContent = String(uTmp);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_FIXED))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
     {
         sal_Bool bSet = *(sal_Bool*)rAny.getValue();
         if(bSet)
@@ -2106,9 +2103,9 @@ void SwRefPageSetField::SetPar2(const String& rStr)
 --------------------------------------------------*/
 BOOL SwRefPageSetField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_ON))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_ON)))
         rAny.setValue(&bOn, ::getBooleanCppuType());
-    else if( rProperty.EqualsAscii(UNO_NAME_OFFSET ))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_OFFSET )))
         rAny <<= (sal_Int16)nOffset;
 #ifdef DBG_UTIL
     else
@@ -2121,9 +2118,9 @@ BOOL SwRefPageSetField::QueryValue( uno::Any& rAny, const String& rProperty ) co
 --------------------------------------------------*/
 BOOL SwRefPageSetField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_ON))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_ON)))
         bOn = *(sal_Bool*)rAny.getValue();
-    else if( rProperty.EqualsAscii(UNO_NAME_OFFSET ))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_OFFSET )))
         rAny >>=nOffset;
 #ifdef DBG_UTIL
     else
@@ -2366,7 +2363,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
 --------------------------------------------------*/
 BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_NUMBERING_TYPE))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
     {
         rAny <<= (sal_Int16)GetFormat();
     }
@@ -2381,7 +2378,7 @@ BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, const String& rProperty ) co
 --------------------------------------------------*/
 BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_NUMBERING_TYPE ))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE )))
     {
         sal_Int16 nSet;
         rAny >>= nSet;
@@ -2489,7 +2486,7 @@ void SwJumpEditField::SetPar2(const String& rStr)
 --------------------------------------------------*/
 BOOL SwJumpEditField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_PLACEHOLDER_TYPE))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_PLACEHOLDER_TYPE)))
     {
         sal_Int16 nRet;
         switch( GetFormat() )
@@ -2503,9 +2500,9 @@ BOOL SwJumpEditField::QueryValue( uno::Any& rAny, const String& rProperty ) cons
         }
         rAny <<= nRet;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_HINT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_HINT)))
         rAny <<= OUString(sHelp);
-    else if( rProperty.EqualsAscii(UNO_NAME_PLACEHOLDER ))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_PLACEHOLDER    )))
          rAny <<= OUString(sTxt);
 #ifdef DBG_UTIL
     else
@@ -2518,7 +2515,7 @@ BOOL SwJumpEditField::QueryValue( uno::Any& rAny, const String& rProperty ) cons
 --------------------------------------------------*/
 BOOL SwJumpEditField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_PLACEHOLDER_TYPE))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_PLACEHOLDER_TYPE)))
     {
         sal_Int16 nSet;
         rAny >>= nSet;
@@ -2531,13 +2528,13 @@ BOOL SwJumpEditField::PutValue( const uno::Any& rAny, const String& rProperty )
             case text::PlaceholderType::OBJECT   : SetFormat(JE_FMT_OLE); break;
         }
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_HINT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_HINT)))
     {
         OUString uTmp;
         rAny >>= uTmp;
         sHelp = String(uTmp);
     }
-    else if( rProperty.EqualsAscii(UNO_NAME_PLACEHOLDER ))
+    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_PLACEHOLDER    )))
     {
         OUString uTmp;
         rAny >>= uTmp;
@@ -2598,8 +2595,8 @@ void SwCombinedCharField::SetPar1(const String& rStr)
 BOOL SwCombinedCharField::QueryValue( com::sun::star::uno::Any& rAny,
                                         const String& rProperty ) const
 {
-    if( rProperty.EqualsAscii( UNO_NAME_CONTENT ) ||
-        rProperty.EqualsAscii( UNO_NAME_CURRENT_PRESENTATION ))
+    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )) ||
+        rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION )))
         rAny <<= rtl::OUString( sCharacters );
 #ifdef DBG_UTIL
     else
@@ -2611,8 +2608,8 @@ BOOL SwCombinedCharField::QueryValue( com::sun::star::uno::Any& rAny,
 BOOL SwCombinedCharField::PutValue( const com::sun::star::uno::Any& rAny,
                                         const String& rProperty )
 {
-    if( rProperty.EqualsAscii(UNO_NAME_CONTENT) ||
-        rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)) ||
+        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
     {
         OUString uTmp;
         rAny >>= uTmp;

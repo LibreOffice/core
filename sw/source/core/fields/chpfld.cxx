@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chpfld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:19 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,9 +231,9 @@ void SwChapterField::ChangeExpansion( const SwFrm* pFrm,
 --------------------------------------------------*/
 BOOL   SwChapterField::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_LEVEL))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_LEVEL)))
         rAny <<= (sal_Int8)nLevel;
-    else if(rProperty.EqualsAscii(UNO_NAME_CHAPTER_FORMAT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CHAPTER_FORMAT)))
     {
         sal_Int16 nRet;
         switch( GetFormat() )
@@ -262,7 +262,7 @@ BOOL   SwChapterField::QueryValue( com::sun::star::uno::Any& rAny, const String&
 --------------------------------------------------*/
 BOOL    SwChapterField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_LEVEL))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_LEVEL)))
     {
         sal_Int8 nTmp;
         rAny >>= nTmp;
@@ -271,7 +271,7 @@ BOOL    SwChapterField::PutValue( const com::sun::star::uno::Any& rAny, const St
         else
             return FALSE;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CHAPTER_FORMAT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CHAPTER_FORMAT)))
     {
         sal_Int16 nVal;
         rAny >>= nVal;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrfld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 12:06:16 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,16 +176,16 @@ void SwUserField::SetSubType(sal_uInt16 nSub)
 --------------------------------------------------*/
 BOOL SwUserField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_NUMBER_FORMAT))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
     {
         rAny <<= (sal_Int32)GetFormat();
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_VISIBLE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_VISIBLE)))
     {
         BOOL bTmp = 0 == (nSubType & SUB_INVISIBLE);
         rAny.setValue(&bTmp, ::getBooleanCppuType());
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_SHOW_FORMULA))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
     {
         BOOL bTmp = 0 != (nSubType & SUB_CMD);
         rAny.setValue(&bTmp, ::getBooleanCppuType());
@@ -201,13 +201,13 @@ BOOL SwUserField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 --------------------------------------------------*/
 sal_Bool SwUserField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_NUMBER_FORMAT))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
     {
         sal_Int32 nTmp;
         rAny >>= nTmp;
         SetFormat(nTmp);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_VISIBLE))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_VISIBLE)))
     {
         sal_Bool bTmp = *(sal_Bool*) rAny.getValue();
         if(bTmp)
@@ -215,7 +215,7 @@ sal_Bool SwUserField::PutValue( const uno::Any& rAny, const String& rProperty )
         else
             nSubType |= SUB_INVISIBLE;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_SHOW_FORMULA))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
     {
         sal_Bool bTmp = *(sal_Bool*) rAny.getValue();
         if(bTmp)
@@ -390,15 +390,15 @@ void SwUserFieldType::CtrlSetContent( const String& rStr )
 --------------------------------------------------*/
 BOOL SwUserFieldType::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_VALUE))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_VALUE)))
     {
         rAny <<= (double) nValue;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CONTENT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)))
     {
         rAny <<= rtl::OUString(aContent);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_EXPRESSION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_EXPRESSION)))
     {
         BOOL bExpression = 0 != (GSE_EXPR&nType);
         rAny.setValue(&bExpression, ::getBooleanCppuType());
@@ -414,7 +414,7 @@ BOOL SwUserFieldType::QueryValue( uno::Any& rAny, const String& rProperty ) cons
 --------------------------------------------------*/
 BOOL SwUserFieldType::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_VALUE))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_VALUE)))
     {
         double fVal;
         rAny >>= fVal;
@@ -426,13 +426,13 @@ BOOL SwUserFieldType::PutValue( const uno::Any& rAny, const String& rProperty )
         // haben, nur die Formatierung ist unterschiedlich.
         DoubleToString(aContent, nValue, (sal_uInt16)LANGUAGE_SYSTEM);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CONTENT ))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
     {
         OUString uTmp;
         rAny >>= uTmp;
         aContent = String(uTmp);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_EXPRESSION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_EXPRESSION)))
     {
         BOOL bExpression = *(sal_Bool*)rAny.getValue();
         if(bExpression)

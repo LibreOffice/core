@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 16:57:17 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,25 +483,25 @@ void SwGetExpField::SetLanguage(USHORT nLng)
 --------------------------------------------------*/
 BOOL SwGetExpField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if( rProperty.EqualsAscii( UNO_NAME_VALUE ))
+    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VALUE )))
         rAny <<= GetValue();
-    else if( rProperty.EqualsAscii( UNO_NAME_NUMBER_FORMAT ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT )))
         rAny <<= (sal_Int32)GetFormat();
-    else if( rProperty.EqualsAscii( UNO_NAME_VARIABLE_SUBTYPE ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VARIABLE_SUBTYPE )))
          rAny <<= (sal_Int16)nSubType;
-    else if( rProperty.EqualsAscii( UNO_NAME_CONTENT ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
          rAny <<= OUString( GetFormula() );
-    else if( rProperty.EqualsAscii( UNO_NAME_SUB_TYPE ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE )))
     {
         sal_Int16 nRet = lcl_SubTypeToAPI(GetSubType() & 0xff);
         rAny <<= nRet;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_SHOW_FORMULA))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
     {
         BOOL bTmp = 0 != (nSubType & SUB_CMD);
         rAny.setValue(&bTmp, ::getBooleanCppuType());
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
         rAny <<= rtl::OUString(GetExpStr());
 #ifdef DBG_UTIL
     else
@@ -514,35 +514,35 @@ BOOL SwGetExpField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 --------------------------------------------------*/
 BOOL SwGetExpField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if( rProperty.EqualsAscii( UNO_NAME_VALUE ))
+    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VALUE )))
     {
         SwValueField::SetValue(*(double*) rAny.getValue());
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_NUMBER_FORMAT ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT )))
     {
         sal_Int32 nTmp;
         rAny >>= nTmp;
         SetFormat(nTmp);
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_VARIABLE_SUBTYPE ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VARIABLE_SUBTYPE )))
     {
          sal_Int32 nTmp;
          rAny >>= nTmp;
          nSubType = nTmp;
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_CONTENT ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
     {
         OUString uTmp;
         rAny >>= uTmp;
         SetFormula( uTmp );
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_SUB_TYPE ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE )))
     {
         sal_Int32 nSet = lcl_APIToSubType(rAny);
         if(nSet >=0 )
             SetSubType((GetSubType() & 0xff00) | nSet);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_SHOW_FORMULA))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
     {
         sal_Bool bTmp = *(sal_Bool*) rAny.getValue();
         if(bTmp)
@@ -550,7 +550,7 @@ BOOL SwGetExpField::PutValue( const uno::Any& rAny, const String& rProperty )
         else
             nSubType &= (~SUB_CMD);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
     {
         OUString sVal;
         rAny >>= sVal;
@@ -709,17 +709,17 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
  * --------------------------------------------------*/
 BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if( rProperty.EqualsAscii( UNO_NAME_SUB_TYPE ))
+    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE )))
     {
         sal_Int16 nRet = lcl_SubTypeToAPI(GetType());
         rAny <<= nRet;
     }
-    else if(rProperty.EqualsAscii( UNO_NAME_NUMBERING_SEPARATOR ))
+    else if(rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_SEPARATOR )))
     {
         OUString sRet(GetDelimiter());
         rAny <<= sRet;
     }
-    else if(rProperty.EqualsAscii( UNO_NAME_CHAPTER_NUMBERING_LEVEL ))
+    else if(rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CHAPTER_NUMBERING_LEVEL )))
     {
         sal_Int8 nRet = nLevel < MAXLEVEL? nLevel : -1;
         rAny <<= nRet;
@@ -730,13 +730,13 @@ BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, const String& rProperty ) co
 BOOL SwSetExpFieldType::PutValue( const uno::Any& rAny, const String& rProperty )
 {
     BOOL bRet = FALSE;
-    if( rProperty.EqualsAscii(UNO_NAME_SUB_TYPE ) )
+    if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE ) ))
     {
         sal_Int32 nSet = lcl_APIToSubType(rAny);
         if(nSet >=0)
             SetType(nSet);
     }
-    else if(rProperty.EqualsAscii( UNO_NAME_NUMBERING_SEPARATOR ))
+    else if(rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_SEPARATOR )))
     {
         OUString sDelim;
         rAny >>= sDelim;
@@ -745,7 +745,7 @@ BOOL SwSetExpFieldType::PutValue( const uno::Any& rAny, const String& rProperty 
         else
             SetDelimiter(' ');
     }
-    else if(rProperty.EqualsAscii( UNO_NAME_CHAPTER_NUMBERING_LEVEL ))
+    else if(rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CHAPTER_NUMBERING_LEVEL )))
     {
         sal_Int8 nLvl;
         rAny >>= nLvl;
@@ -1097,9 +1097,9 @@ String SwInputField::Expand() const
 --------------------------------------------------*/
 BOOL SwInputField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if( rProperty.EqualsAscii( UNO_NAME_HINT ))
+    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_HINT )))
         rAny <<= OUString( aPText );
-    else if( rProperty.EqualsAscii( UNO_NAME_CONTENT ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
          rAny <<= OUString( aContent );
 #ifdef DBG_UTIL
     else
@@ -1112,13 +1112,13 @@ BOOL SwInputField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 --------------------------------------------------*/
 BOOL SwInputField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if( rProperty.EqualsAscii( UNO_NAME_HINT ))
+    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_HINT )))
     {
         OUString uTmp;
         rAny >>= uTmp;
         aPText = String( uTmp );
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_CONTENT ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
     {
         OUString uTmp;
         rAny >>= uTmp;
@@ -1172,20 +1172,20 @@ void SwInputField::SetSubType(USHORT nSub)
 --------------------------------------------------*/
 BOOL SwSetExpField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if( rProperty.EqualsAscii( UNO_NAME_IS_VISIBLE ))
+    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_IS_VISIBLE )))
     {
         sal_Bool bVal = 0 == (nSubType & SUB_INVISIBLE);
         rAny.setValue(&bVal, ::getBooleanCppuType());
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_NUMBER_FORMAT ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT )))
         rAny <<= (sal_Int32)GetFormat();
-    else if( rProperty.EqualsAscii( UNO_NAME_NUMBERING_TYPE ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE )))
         rAny <<= (sal_Int16)GetFormat();
-    else if( rProperty.EqualsAscii( UNO_NAME_SEQUENCE_VALUE ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SEQUENCE_VALUE )))
         rAny <<= (sal_Int16)nSeqNo;
-    else if( rProperty.EqualsAscii( UNO_NAME_VARIABLE_NAME ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VARIABLE_NAME )))
         rAny <<= SwXFieldMaster::GetSetExpProgrammaticName(GetPar1());
-    else if( rProperty.EqualsAscii( UNO_NAME_CONTENT ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
     {
         //I18N - if the formula contains only "TypeName+1"
         //and it's one of the initially created sequence fields
@@ -1193,27 +1193,27 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, const String& rProperty ) const
         OUString sFormula = SwXFieldMaster::LocalizeFormula(*this, GetFormula(), TRUE);
         rAny <<= OUString( sFormula );
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_VALUE ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VALUE )))
         rAny <<= (double)GetValue();
-    else if( rProperty.EqualsAscii( UNO_NAME_SUB_TYPE ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE )))
     {
         sal_Int16 nRet = 0;
             nRet = lcl_SubTypeToAPI(GetSubType() & 0xff);
         rAny <<= nRet;
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_HINT ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_HINT )))
         rAny <<= OUString( aPText );
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_SHOW_FORMULA))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
     {
         BOOL bTmp = 0 != (nSubType & SUB_CMD);
         rAny.setValue(&bTmp, ::getBooleanCppuType());
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_INPUT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_INPUT)))
     {
         BOOL bTmp = GetInputFlag();
         rAny.setValue(&bTmp, ::getBooleanCppuType());
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
         rAny <<= rtl::OUString(GetExpStr());
 #ifdef DBG_UTIL
     else
@@ -1226,7 +1226,7 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 --------------------------------------------------*/
 BOOL SwSetExpField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii( UNO_NAME_IS_VISIBLE ))
+    if(rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_IS_VISIBLE )))
     {
         sal_Bool bVal = *(sal_Bool*)rAny.getValue();
         if(bVal)
@@ -1234,13 +1234,13 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, const String& rProperty )
         else
             nSubType |= SUB_INVISIBLE;
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_NUMBER_FORMAT ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT )))
     {
         sal_Int32 nTmp;
         rAny >>= nTmp;
         SetFormat(nTmp);
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_NUMBERING_TYPE ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE )))
     {
         sal_Int16 nSet;
         rAny >>=nSet;
@@ -1250,20 +1250,20 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, const String& rProperty )
             //exception(wrong_value)
             ;
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_SEQUENCE_VALUE ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SEQUENCE_VALUE )))
     {
         sal_Int16 nSet;
         rAny >>=nSet;
         nSeqNo = nSet;
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_VARIABLE_NAME ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VARIABLE_NAME )))
     {
         OUString uTmp;
         rAny >>= uTmp;
         uTmp = SwXFieldMaster::GetSetExpUIName(uTmp);
         SetPar1( uTmp );
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_CONTENT ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
     {
         OUString uTmp;
         rAny >>= uTmp;
@@ -1273,25 +1273,25 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, const String& rProperty )
         OUString sFormula = SwXFieldMaster::LocalizeFormula(*this, uTmp, FALSE);
         SetFormula( sFormula );
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_VALUE ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VALUE )))
     {
          double fVal;
          rAny >>= fVal;
          SetValue(fVal);
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_SUB_TYPE ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE )))
     {
         sal_Int32 nSet = lcl_APIToSubType(rAny);
         if(nSet >= 0)
             SetSubType((GetSubType() & 0xff00) | nSet);
     }
-    else if( rProperty.EqualsAscii( UNO_NAME_HINT ))
+    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_HINT )))
     {
         OUString uTmp;
         rAny >>= uTmp;
         aPText = String( uTmp );
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_SHOW_FORMULA))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
     {
         sal_Bool bTmp = *(sal_Bool*) rAny.getValue();
         if(bTmp)
@@ -1299,12 +1299,12 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, const String& rProperty )
         else
             nSubType &= (~SUB_CMD);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_INPUT))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_INPUT)))
     {
         sal_Bool bTmp = *(sal_Bool*) rAny.getValue();
         SetInputFlag(bTmp);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
     {
         OUString sVal;
         rAny >>= sVal;

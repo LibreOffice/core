@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: os $ $Date: 2001-04-24 11:20:29 $
+#   last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,9 +117,6 @@ SLOFILES =	\
         $(SLO)$/tblcalc.obj \
         $(SLO)$/usrfld.obj
 
-EXCEPTIONSFILES= \
-        $(SLO)$/docufld.obj \
-        $(SLO)$/usrfld.obj
 
 # --- Tagets -------------------------------------------------------
 
