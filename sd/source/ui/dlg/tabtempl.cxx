@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-08-23 14:27:17 $
+ *  last change: $Author: ka $ $Date: 2002-08-07 12:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,9 +279,17 @@ void SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 const SfxItemSet* SdTabTemplateDlg::GetRefreshedSet()
 {
-    delete GetInputSetImpl();
+    SfxItemSet* pRet = GetInputSetImpl();
 
-    return new SfxItemSet( GetStyleSheet().GetItemSet() );
+    if( pRet )
+    {
+        pRet->ClearItem();
+        pRet->SetParent( GetStyleSheet().GetItemSet().GetParent() );
+    }
+    else
+        pRet = new SfxItemSet( GetStyleSheet().GetItemSet() );
+
+    return pRet;
 }
 
 
