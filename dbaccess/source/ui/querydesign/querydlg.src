@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 22:02:15 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 20:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,7 @@ String STR_QUERY_FULL_JOIN
     Text[ catalan ] = "Contiene TODOS los registros de datos de '%1' y de '%2'";
     Text[ finnish ] = "Beinhaltet ALLE Datensätze aus '%1' und aus '%2'.";
 };
+
 
 
 
