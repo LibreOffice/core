@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:52:01 $
+#   last change: $Author: vg $ $Date: 2003-07-02 13:37:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,7 @@ $(DESTDIR)$/configure : $(PRJ)$/configure
     +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configure $(MY_TEXTCOPY_TARGETPRE) $@
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     +-chmod 755 $@
 .ENDIF
 
@@ -103,7 +103,7 @@ $(DESTDIR)$/configure.pl : $(PRJ)$/configure.pl
     +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configure.pl $(MY_TEXTCOPY_TARGETPRE) $@
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     +-chmod 755 $@
 .ENDIF
 
@@ -111,7 +111,7 @@ $(DESTDIR)$/setsdkenv_unix.in : $(PRJ)$/setsdkenv_unix.in
     +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/setsdkenv_unix.in $(MY_TEXTCOPY_TARGETPRE) $@
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     +-chmod 755 $@
 .ENDIF
 
@@ -328,7 +328,7 @@ $(DESTDIRSETTINGS)$/dk.mk :
     +-rm -f $@ >& $(NULLDEV)
     echo #$(PRODUCT_NAME) dependent settings > $@
     echo DKNAME=${PRODUCT_NAME} >> $@    
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     echo 'DKREGISTRYNAME=$$(subst \\,\,"$$(OFFICE_PROGRAM_PATH)$$(PS)types.rdb")' >> $@
 .ELSE
     echo DKREGISTRYNAME=$$(subst \\,\,"$$(OFFICE_PROGRAM_PATH)$$(PS)types.rdb") >> $@
