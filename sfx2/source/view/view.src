@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:19:03 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ String STR_READONLY
     Text [ dutch ] = "(alleen lezen)" ;
     Text [ spanish ] = "(solo lectura)" ;
     Text [ english_us ] = " (read-only)" ;
-    Text[ chinese_simplified ] = "(·ΐΈ²Π΄)";
+    Text[ chinese_simplified ] = " (·ΐΈΔΠ΄)";
     Text[ russian ] = "(ςξλόκξ δλÿ χςενθÿ)";
     Text[ polish ] = "(tylko do odczytu)";
     Text[ japanese ] = "(“Η‚έζ‚θκ—p)";
@@ -457,7 +457,7 @@ String STR_PRINT_NEWORI
     Text[ russian ] = "Βϋ θημενθλθ σρςΰνξβκσ ξπθενςΰφθθ ρςπΰνθφϋ.\nΡξυπΰνθςό ύςθ θημενθÿ\nβ ςεκσωεμ δξκσμενςε?";
     Text[ polish ] = "Zmieni³e ustawienia strony.\nCzy te zmienione ustawienia majΉ zostaζ \nzapisane w dokumencie?";
     Text[ japanese ] = "Νί°Όή•ϋό‚Μέ’θ‚ª•ΟX‚³‚κ‚Δ‚Ά‚ά‚·B\n•ΟX‚³‚κ‚½έ’θ‚π»έ‚ΜΔή·­ÒέΔ‚Ι\n“K—p‚µ‚ά‚·‚©?";
-    Text[ chinese_traditional ] = "±zΕά§σ¤F­¶­±³]©w΅C\n³o­Σ¤εΐΙ®M¥ΞΕά§σªΊ³]©w΅S";
+    Text[ chinese_traditional ] = "±zΕά§σ¤F­¶­±³]©w΅C\n³o­Σ¤εΐΙ±Δ¥ΞΕά§σªΊ³]©w΅S";
     Text[ greek ] = "Έχετε αλλάξει την ρύθμιση για τον προσανατολισμό της σελίδας.\nΘέλετε να εφαρμοστούν οι αλλαγές \nστο κείμενο;";
     Text[ korean ] = "ΖδΐΜΑφ ΉζΗβΌ³Α¤ΐΜ Ί―°ζµΗΎϊ½ΐ΄Ο΄Ω.\nΊ―°ζµΘ Ό³Α¤ΐ» Ή®Ό­Ώ΅ ΐϋΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ arabic ] = "αήΟ ήγΚ ΘΚΫννΡ ΕΪΟΗΟΗΚ ΗΚΜΗε ΗαΥέΝΙ.\nεα ΚΡνΟ ΚΨΘνή ΗαΕΪΟΗΟΗΚ ΗαΜΟνΟΙ\nΪαμ ΗαγΣΚδΟΏ";
@@ -1098,6 +1098,7 @@ String STR_FORWARDMAIL
     Text[ catalan ] = "Mensaje transmitido por regla.\nEl mensaje original como anexo.";
     Text[ finnish ] = "Viesti edelleenlδhetettiin sδδnnφn mukaan.\nAlkuperδinen viesti liitteenδ.";
 };
+
 
 
 
