@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: bm $ $Date: 2003-11-04 13:08:23 $
+#   last change: $Author: bm $ $Date: 2003-12-09 16:30:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ SLOFILES=   	$(SLO)$/SchItemPool.obj \
                 $(SLO)$/DataPointItemConverter.obj \
                 $(SLO)$/GraphicPropertyItemConverter.obj \
                 $(SLO)$/LegendItemConverter.obj \
+                $(SLO)$/StatisticsItemConverter.obj \
                 $(SLO)$/TitleItemConverter.obj
 
 # --- Targets -----------------------------------------------------------------

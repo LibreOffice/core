@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-04 16:32:45 $
+ *  last change: $Author: bm $ $Date: 2003-12-09 16:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,9 +270,11 @@ private:
                 FILL_PROPERTIES,
                 LINE_AND_FILL_PROPERTIES
                 */
+                bool bIncludeStatistics = ( eObjectType == OBJECTTYPE_DATA_SERIES );
                 pItemConverter =  new wrapper::DataPointItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
-                                        pNumberFormatterWrapper, eMapTo, pRefSize );
+                                        pNumberFormatterWrapper, eMapTo, pRefSize,
+                                        bIncludeStatistics );
                     break;
             }
             case OBJECTTYPE_DATA_ERRORS:

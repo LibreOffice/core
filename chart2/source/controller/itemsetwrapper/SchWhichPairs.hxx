@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchWhichPairs.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: bm $ $Date: 2003-12-09 16:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,23 +173,29 @@ const USHORT nDataLabelWhichPairs[] =
     0
 };
 
-#define CHART_ROW_WHICHPAIRS    \
+#define CHART_POINT_WHICHPAIRS  \
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              /*  1000 -  1016  svx/xdef.hxx   */ \
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              /*  1018 -  1046  svx/xdef.hxx   */ \
     EE_ITEMS_START, EE_ITEMS_END,                   /*  3994 -  4037  svx/eeitem.hxx */ \
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END, /*     1 -     2  sch/schattr.hxx*/ \
     SCHATTR_DUMMY0, SCHATTR_DUMMY0,                 /*    40          sch/schattr.hxx*/ \
     SCHATTR_DUMMY1, SCHATTR_DUMMY1,                 /*    41          sch/schattr.hxx*/ \
-    SCHATTR_STAT_START, SCHATTR_STAT_END,           /*    45 -    52  sch/schattr.hxx*/ \
     SCHATTR_STYLE_START,SCHATTR_STYLE_END,          /*    59 -    68  sch/schattr.hxx*/ \
-    SCHATTR_AXIS,SCHATTR_AXIS,                      /*    69          sch/schattr.hxx*/ \
     SCHATTR_SYMBOL_BRUSH,SCHATTR_SYMBOL_BRUSH,      /*    96          sch/schattr.hxx*/ \
     SCHATTR_SYMBOL_SIZE,SCHATTR_USER_DEFINED_ATTR,  /*    99 -   100  sch/schattr.hxx*/ \
     SDRATTR_3D_FIRST, SDRATTR_3D_LAST               /*  1244 -  1334  svx/svddef.hxx */
 
+const USHORT nDataPointWhichPairs[] =
+{
+    CHART_POINT_WHICHPAIRS,
+    0
+};
+
 const USHORT nRowWhichPairs[] =
 {
-    CHART_ROW_WHICHPAIRS,
+    CHART_POINT_WHICHPAIRS,
+    SCHATTR_STAT_START, SCHATTR_STAT_END,           /*    45 -    52  sch/schattr.hxx*/ \
+    SCHATTR_AXIS,SCHATTR_AXIS,                      /*    69          sch/schattr.hxx*/ \
     0
 };
 

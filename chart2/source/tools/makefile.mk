@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: bm $ $Date: 2003-12-08 15:46:18 $
+#   last change: $Author: bm $ $Date: 2003-12-09 16:31:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,7 @@ SLOFILES=	\
                 $(SLO)$/OPropertySet.obj \
                 $(SLO)$/OStyle.obj \
                 $(SLO)$/PotentialRegressionCurve.obj \
+                $(SLO)$/RegressionCurveHelper.obj \
                 $(SLO)$/Rotation.obj \
                 $(SLO)$/RelativeSizeHelper.obj \
                 $(SLO)$/Scaling.obj \

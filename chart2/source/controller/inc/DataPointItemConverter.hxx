@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointItemConverter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 13:07:22 $
+ *  last change: $Author: bm $ $Date: 2003-12-09 16:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,8 @@ public:
         GraphicPropertyItemConverter::eGraphicObjectType eMapTo =
             GraphicPropertyItemConverter::FILLED_DATA_POINT,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
-            ::std::auto_ptr< ::com::sun::star::awt::Size >() );
+            ::std::auto_ptr< ::com::sun::star::awt::Size >(),
+        bool bIncludeStatistics = false );
     virtual ~DataPointItemConverter();
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const;
@@ -110,6 +111,7 @@ protected:
 private:
     ::std::vector< ItemConverter * >    m_aConverters;
     NumberFormatterWrapper *            m_pNumberFormatterWrapper;
+    bool                                m_bIncludeStatistics;
 };
 
 } //  namespace wrapper

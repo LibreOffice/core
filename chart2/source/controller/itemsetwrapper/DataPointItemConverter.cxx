@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-08 15:45:35 $
+ *  last change: $Author: bm $ $Date: 2003-12-09 16:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 #include "GraphicPropertyItemConverter.hxx"
 #include "CharacterPropertyItemConverter.hxx"
+#include "StatisticsItemConverter.hxx"
 
 #ifndef _SVX_CHRTITEM_HXX
 #define ITEMID_CHARTDATADESCR SCHATTR_DATADESCR_DESCR
@@ -108,13 +109,17 @@ DataPointItemConverter::DataPointItemConverter(
     SdrModel& rDrawModel,
     NumberFormatterWrapper * pNumFormatter,
     GraphicPropertyItemConverter::eGraphicObjectType eMapTo /* = FILL_PROPERTIES */,
-    ::std::auto_ptr< awt::Size > pRefSize /* = NULL */ ) :
+    ::std::auto_ptr< awt::Size > pRefSize /* = NULL */,
+    bool bIncludeStatistics /* = false */ ) :
         ItemConverter( rPropertySet, rItemPool ),
-        m_pNumberFormatterWrapper( pNumFormatter )
+        m_pNumberFormatterWrapper( pNumFormatter ),
+        m_bIncludeStatistics( bIncludeStatistics )
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter( rPropertySet, rItemPool, rDrawModel, eMapTo ));
     m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool, pRefSize,
                                                                  C2U( "ReferenceDiagramSize" )));
+    if( m_bIncludeStatistics )
+        m_aConverters.push_back( new StatisticsItemConverter( rPropertySet, rItemPool ));
 }
 
 DataPointItemConverter::~DataPointItemConverter()
@@ -146,7 +151,9 @@ bool DataPointItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 const USHORT * DataPointItemConverter::GetWhichPairs() const
 {
     // must span all used items!
-    return nRowWhichPairs;
+    if( m_bIncludeStatistics )
+        return nRowWhichPairs;
+    return nDataPointWhichPairs;
 }
 
 bool DataPointItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
