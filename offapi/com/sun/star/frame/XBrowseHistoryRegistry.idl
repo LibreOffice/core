@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBrowseHistoryRegistry.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 //=============================================================================
 /** @deprecated
  */
-interface XBrowseHistoryRegistry: com::sun::star::uno::XInterface
+published interface XBrowseHistoryRegistry: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** @deprecated
