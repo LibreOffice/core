@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 13:59:24 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -883,8 +883,9 @@ sal_Bool ImplSdPPTImport::Import()
                                     {
                                         if ( nObjCount++ )      // skipping the first object
                                         {
+                                            Rectangle aEmpty;
                                             aHd.SeekToBegOfRecord( rStCtrl );
-                                            SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
+                                            SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
                                             if ( pObj )
                                             {
                                                 pObj->SetLayer( nBackgroundObjectsLayerID );
