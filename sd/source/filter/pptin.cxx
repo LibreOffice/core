@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-18 16:11:59 $
+ *  last change: $Author: sj $ $Date: 2000-12-20 13:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1443,7 +1443,7 @@ void SdPPTImport::ImportPageEffect( SdPage* pPage )
 
     // Animationsobjekte der Page in der Reihenfolge abstimmen
     SdrObjListIter aIter( *pPage, IM_FLAT );
-    sal_uInt32  i;
+    sal_Int32   i;
     List    aAnimInfo;
     while ( aIter.IsMore() )
     {
@@ -1459,7 +1459,7 @@ void SdPPTImport::ImportPageEffect( SdPage* pPage )
             aAnimInfo.Insert( (void*)pInfo, i + 1 );
         }
     }
-    for ( i = 0; i < aAnimInfo.Count(); i++ )
+    for ( i = 0; (sal_uInt32)i < aAnimInfo.Count(); i++ )
         ( (SdAnimationInfo*)aAnimInfo.GetObject( i ) )->nPresOrder = i + 1;
 
     rStCtrl.Seek( nFilePosMerk );
