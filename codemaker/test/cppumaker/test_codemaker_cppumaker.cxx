@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_codemaker_cppumaker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:14:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,8 @@
 #include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/TypeClass.hpp"
 #include "cppunit/simpleheader.hxx"
+#include "rtl/ustring.h"
+#include "rtl/ustring.hxx"
 
 #include <cstddef>
 
@@ -245,8 +247,11 @@ class Test: public CppUnit::TestFixture {
 public:
     void testBigStruct();
 
+    void testPolyCharStruct();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testBigStruct);
+    CPPUNIT_TEST(testPolyCharStruct);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -300,6 +305,16 @@ void Test::testBigStruct() {
         static_cast< std::size_t >(16),
         sizeof (test::codemaker::cppumaker::AlignmentDerivedStruct));
 #endif
+}
+
+void Test::testPolyCharStruct() {
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "test.codemaker.cppumaker.Struct<char,short>")),
+        (com::sun::star::uno::makeAny(
+            test::codemaker::cppumaker::Struct< sal_Unicode, sal_Int16 >()).
+         getValueType().getTypeName()));
 }
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
