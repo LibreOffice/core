@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+#   last change: $Author: hjs $ $Date: 2000-11-02 12:20:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Types -------------------------------------
 
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb makefile.mk
 UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
@@ -119,6 +119,7 @@ UNOTYPES=\
     com.sun.star.io.XActiveDataSink						\
     com.sun.star.io.XActiveDataControl					\
     com.sun.star.io.XDataOutputStream					\
+    com.sun.star.io.XOutputStream						\
     com.sun.star.io.XDataInputStream					\
     com.sun.star.io.XObjectInputStream					\
     com.sun.star.io.XMarkableStream						\
