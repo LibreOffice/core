@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 08:57:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,9 +135,9 @@ FltError ScImportStarCalc10( SvStream&, ScDocument* );
 FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                         const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, UINT32 nDifOption = SC_DIFOPT_EXCEL );
 
-FltError ScImportRTF( SvStream&, ScDocument*, ScRange& rRange );
+FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange );
 
-FltError ScImportHTML( SvStream&, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE );
+FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE );
 
 // ***********************************************************************
 // Diverse Exportfilter
@@ -155,7 +155,7 @@ FltError ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const Ch
 FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest,
                         UINT32 nDifOption = SC_DIFOPT_EXCEL );
 
-FltError ScExportHTML( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest, BOOL bAll,
+FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, BOOL bAll,
                         const String& rStreamPath, String& rNonConvertibleChars );
 
 FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest );
