@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:29:06 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,9 @@ ULONG SfxPSStringProperty_Impl::Load( SvStream& rStream )
         if ( bIsUniCode )
         {
             sal_Unicode* pString = new sal_Unicode[ nLen ];
-            for ( UINT32 i = 0; i < nLen; i++ )
+            UINT32 i;
+
+            for ( i = 0; i < nLen; i++ )
                 rStream >> pString[ i ];
             if ( pString[ i - 1 ] == 0 )
             {
