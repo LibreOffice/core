@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:03:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ static __FAR_DATA SvXMLTokenMapEntry aPlotAreaAttrTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aAxisAttrTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,  XML_CLASS,                  XML_TOK_AXIS_CLASS          },
+    { XML_NAMESPACE_CHART,  XML_DIMENSION,              XML_TOK_AXIS_DIMENSION      },
     { XML_NAMESPACE_CHART,  XML_NAME,                   XML_TOK_AXIS_NAME           },
     { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_AXIS_STYLE_NAME     },
     XML_TOKEN_MAP_END
