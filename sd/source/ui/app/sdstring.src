@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:07:41 $
+ *  last change: $Author: af $ $Date: 2002-08-07 17:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,12 +671,26 @@ String STR_ADD
     Text[ catalan ] = "Añadir";
 };
 
+String STR_SAR_TITLE
+{
+    Text = "Suchen & Ersetzen" ;
+    Text [ ENGLISH ] = "Find & Replace" ;
+};
 
+String STR_SAR_NOT_FOUND
+{
+    Text = "Suchbegriff nicht gefunden." ;
+    Text [ ENGLISH ] = "Search key not found." ;
+};
 
+String STR_SAR_WRAP_FORWARD
+{
+    Text = "%PRODUCTNAME Impress hat bis zum Ende der Präsentation gesucht. Möchten Sie die Suche am Anfang fortsetzen?" ;
+    Text [ ENGLISH ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?" ;
+};
 
-
-
-
-
-
-
+String STR_SAR_WRAP_BACKWARD
+{
+    Text = "%PRODUCTNAME Impress hat bis zum Anfang der Präsentation gesucht. Möchten Sie die Suche am Ende fortsetzen?" ;
+    Text [ ENGLISH ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?" ;
+};
