@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-09 12:54:14 $
+ *  last change: $Author: kso $ $Date: 2002-10-02 13:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,24 @@
 
 #include <stack>
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
-#ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
-#include <cppuhelper/servicefactory.hxx>
+
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
+#ifndef _CPPUHELPER_BOOTSTRAP_HXX_
+#include <cppuhelper/bootstrap.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_UCB_CONTENTACTION_HPP_
 #include <com/sun/star/ucb/ContentAction.hpp>
 #endif
@@ -167,12 +173,8 @@
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #endif
 
-#ifndef _COMPHELPER_REGPATHHELPER_HXX_
-#include <comphelper/regpathhelper.hxx>
-#endif
-
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _UCBHELPER_CONFIGURATIONKEYS_HXX_
@@ -183,10 +185,6 @@
 #endif
 #ifndef _UCBHELPER_CONTENTBROKER_HXX
 #include <ucbhelper/contentbroker.hxx>
-#endif
-
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -216,17 +214,12 @@
 #include <srcharg.hxx>
 #endif
 
-using namespace vos;
-using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::task;
-using namespace com::sun::star::io;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::container;
-using namespace com::sun::star::bridge;
+using ucb::getLocalFileURL;
+using ucb::getSystemPathFromFileURL;
+using ucb::getFileURLFromSystemPath;
+
+using namespace com::sun;
+using namespace com::sun::star;
 
 /*========================================================================
  *
@@ -317,9 +310,9 @@ void MessagePrinter::print( const UniString& rText )
 
 class TestOutputStream:
     public cppu::OWeakObject,
-    public XOutputStream
+    public io::XOutputStream
 {
-    OUString m_sStart;
+    rtl::OUString m_sStart;
     bool m_bMore;
 
 public:
@@ -327,38 +320,39 @@ public:
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const com::sun::star::uno::Type & rType)
-    throw(RuntimeException);
-    virtual void SAL_CALL acquire() throw (RuntimeException)
+    throw(uno::RuntimeException);
+    virtual void SAL_CALL acquire() throw (uno::RuntimeException)
     { OWeakObject::acquire(); }
 
-    virtual void SAL_CALL release() throw (RuntimeException)
+    virtual void SAL_CALL release() throw (uno::RuntimeException)
     { OWeakObject::release(); }
 
-    virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 > & rData)
-        throw(RuntimeException);
+    virtual void SAL_CALL writeBytes(const uno::Sequence< sal_Int8 > & rData)
+        throw(uno::RuntimeException);
 
     virtual void SAL_CALL flush() throw() {}
 
     virtual void SAL_CALL closeOutput() throw() {};
 
-    OUString getStart() const;
+    rtl::OUString getStart() const;
 };
 
 //============================================================================
 // virtual
-Any SAL_CALL
-TestOutputStream::queryInterface(const com::sun::star::uno::Type & rType)
-    throw(RuntimeException)
+uno::Any SAL_CALL
+TestOutputStream::queryInterface(const uno::Type & rType)
+    throw(uno::RuntimeException)
 {
-    Any aRet = cppu::queryInterface(rType,
-                           static_cast< XOutputStream * >(this));
+    uno::Any aRet = cppu::queryInterface(rType,
+                        static_cast< io::XOutputStream * >(this));
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface(rType);
 }
 
 //============================================================================
 // virtual
-void SAL_CALL TestOutputStream::writeBytes(const Sequence< sal_Int8 > & rData)
-    throw(RuntimeException)
+void SAL_CALL TestOutputStream::writeBytes(
+                                    const uno::Sequence< sal_Int8 > & rData)
+    throw(uno::RuntimeException)
 {
     sal_Int32 nLen = rData.getLength();
     if (m_sStart.getLength() + nLen > 500)
@@ -367,17 +361,17 @@ void SAL_CALL TestOutputStream::writeBytes(const Sequence< sal_Int8 > & rData)
         m_bMore = true;
     }
     m_sStart
-        += OUString(reinterpret_cast< const sal_Char * >(rData.
-                                                             getConstArray()),
-                    nLen, RTL_TEXTENCODING_ISO_8859_1);
+        += rtl::OUString(reinterpret_cast< const sal_Char * >(rData.
+                                                              getConstArray()),
+                         nLen, RTL_TEXTENCODING_ISO_8859_1);
 }
 
 //============================================================================
-OUString TestOutputStream::getStart() const
+rtl::OUString TestOutputStream::getStart() const
 {
-    OUString sResult = m_sStart;
+    rtl::OUString sResult = m_sStart;
     if (m_bMore)
-        sResult += OUString::createFromAscii("...");
+        sResult += rtl::OUString::createFromAscii("...");
     return sResult;
 }
 
@@ -389,103 +383,104 @@ OUString TestOutputStream::getStart() const
 
 class ProgressHandler:
     public cppu::OWeakObject,
-    public XProgressHandler
+    public star::ucb::XProgressHandler
 {
     MessagePrinter & m_rPrinter;
 
-    OUString toString(const Any & rStatus);
+    rtl::OUString toString(const uno::Any & rStatus);
 
 public:
     ProgressHandler(MessagePrinter & rThePrinter): m_rPrinter(rThePrinter) {}
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
-                                const com::sun::star::uno::Type & rType)
-        throw(RuntimeException);
+                                const uno::Type & rType)
+        throw(uno::RuntimeException);
 
-    virtual void SAL_CALL acquire() throw (RuntimeException)
+    virtual void SAL_CALL acquire() throw (uno::RuntimeException)
     { OWeakObject::acquire(); }
 
-    virtual void SAL_CALL release() throw (RuntimeException)
+    virtual void SAL_CALL release() throw (uno::RuntimeException)
     { OWeakObject::release(); }
 
-    virtual void SAL_CALL push(const Any & rStatus) throw (RuntimeException);
+    virtual void SAL_CALL push(const uno::Any & rStatus)
+        throw (uno::RuntimeException);
 
-    virtual void SAL_CALL update(const Any & rStatus)
-        throw (RuntimeException);
+    virtual void SAL_CALL update(const uno::Any & rStatus)
+        throw (uno::RuntimeException);
 
-    virtual void SAL_CALL pop() throw (RuntimeException);
+    virtual void SAL_CALL pop() throw (uno::RuntimeException);
 };
 
-OUString ProgressHandler::toString(const Any & rStatus)
+rtl::OUString ProgressHandler::toString(const uno::Any & rStatus)
 {
-    CHAOSProgressStart aStart;
+    star::ucb::CHAOSProgressStart aStart;
     if (rStatus >>= aStart)
     {
-        OUString sResult;
+        rtl::OUString sResult;
         if (aStart.Text.getLength() > 0)
         {
             sResult = aStart.Text;
-            sResult += OUString::createFromAscii(" ");
+            sResult += rtl::OUString::createFromAscii(" ");
         }
-        sResult += OUString::createFromAscii("[");
-        sResult += OUString::valueOf(aStart.Minimum);
-        sResult += OUString::createFromAscii("..");
-        sResult += OUString::valueOf(aStart.Maximum);
-        sResult += OUString::createFromAscii("]");
+        sResult += rtl::OUString::createFromAscii("[");
+        sResult += rtl::OUString::valueOf(aStart.Minimum);
+        sResult += rtl::OUString::createFromAscii("..");
+        sResult += rtl::OUString::valueOf(aStart.Maximum);
+        sResult += rtl::OUString::createFromAscii("]");
         return sResult;
     }
 
-    OUString sText;
+    rtl::OUString sText;
     if (rStatus >>= sText)
         return sText;
 
     sal_Int32 nValue;
     if (rStatus >>= nValue)
     {
-        OUString sResult = OUString::createFromAscii("..");
-        sResult += OUString::valueOf(nValue);
-        sResult += OUString::createFromAscii("..");
-        return OUString(sResult);
+        rtl::OUString sResult = rtl::OUString::createFromAscii("..");
+        sResult += rtl::OUString::valueOf(nValue);
+        sResult += rtl::OUString::createFromAscii("..");
+        return rtl::OUString(sResult);
     }
 
-    return OUString::createFromAscii("(Unknown object)");
+    return rtl::OUString::createFromAscii("(Unknown object)");
 }
 
 //============================================================================
 // virtual
-Any SAL_CALL
-ProgressHandler::queryInterface( const com::sun::star::uno::Type & rType )
-    throw(RuntimeException)
+uno::Any SAL_CALL
+ProgressHandler::queryInterface( const uno::Type & rType )
+    throw(uno::RuntimeException)
 {
-    Any aRet = cppu::queryInterface(
+    uno::Any aRet = cppu::queryInterface(
                         rType,
-                           static_cast< XProgressHandler* >(this));
+                        static_cast< star::ucb::XProgressHandler* >(this));
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
 //============================================================================
 // virtual
-void SAL_CALL ProgressHandler::push(const Any & rStatus)
-    throw (RuntimeException)
+void SAL_CALL ProgressHandler::push(const uno::Any & rStatus)
+    throw (uno::RuntimeException)
 {
-    OUString sMessage = OUString::createFromAscii("Status push: ");
+    rtl::OUString sMessage = rtl::OUString::createFromAscii("Status push: ");
     sMessage += toString(rStatus);
     m_rPrinter.print(sMessage);
 }
 
 //============================================================================
 // virtual
-void SAL_CALL ProgressHandler::update(const Any & rStatus)
-    throw (RuntimeException)
+void SAL_CALL ProgressHandler::update(const uno::Any & rStatus)
+    throw (uno::RuntimeException)
 {
-    OUString sMessage = OUString::createFromAscii("Status update: ");
+    rtl::OUString sMessage = rtl::OUString::createFromAscii("Status update: ");
     sMessage += toString(rStatus);
     m_rPrinter.print(sMessage);
 }
 
 //============================================================================
 // virtual
-void SAL_CALL ProgressHandler::pop() throw (RuntimeException)
+void SAL_CALL ProgressHandler::pop() throw (uno::RuntimeException)
 {
     m_rPrinter.print("Status pop");
 }
@@ -501,18 +496,18 @@ void SAL_CALL ProgressHandler::pop() throw (RuntimeException)
 class Ucb : public MessagePrinter
 {
 private:
-    Reference< XMultiServiceFactory >      m_xFac;
-    Reference< XContentProvider >          m_xProv;
-    Reference< XContentIdentifierFactory > m_xIdFac;
+    uno::Reference< lang::XMultiServiceFactory >      m_xFac;
+    uno::Reference< star::ucb::XContentProvider >          m_xProv;
+    uno::Reference< star::ucb::XContentIdentifierFactory > m_xIdFac;
     rtl::OUString m_aConfigurationKey1;
     rtl::OUString m_aConfigurationKey2;
     rtl::OUString m_aRapConnect;
     sal_Bool m_bInited : 1;
 
-    static OUString getUnoURL();
+    static rtl::OUString getUnoURL();
 
 public:
-    Ucb( Reference< XMultiServiceFactory >& rxFactory,
+    Ucb( uno::Reference< lang::XMultiServiceFactory >& rxFactory,
          rtl::OUString const & rConfigurationKey1,
          rtl::OUString const & rConfigurationKey2,
          rtl::OUString const & rRapConnect );
@@ -520,34 +515,36 @@ public:
 
     sal_Bool init();
 
-    Reference< XMultiServiceFactory > getServiceFactory() const
+    uno::Reference< lang::XMultiServiceFactory > getServiceFactory() const
     { return m_xFac; }
 
-    XContentIdentifierFactory* getContentIdentifierFactory();
-    XContentProvider*          getContentProvider();
+    uno::Reference< star::ucb::XContentIdentifierFactory >
+    getContentIdentifierFactory();
+    uno::Reference< star::ucb::XContentProvider >
+    getContentProvider();
 
-    static OUString m_aProtocol;
+    static rtl::OUString m_aProtocol;
 };
 
 // static
-OUString Ucb::m_aProtocol;
+rtl::OUString Ucb::m_aProtocol;
 
 //-------------------------------------------------------------------------
 // static
-OUString Ucb::getUnoURL()
+rtl::OUString Ucb::getUnoURL()
 {
-    OUString aUnoURL(OUString::createFromAscii(
+    rtl::OUString aUnoURL(rtl::OUString::createFromAscii(
                          "uno:socket,host=localhost,port=8121;"));
     if (m_aProtocol.getLength() == 0)
-        aUnoURL += OUString::createFromAscii("urp");
+        aUnoURL += rtl::OUString::createFromAscii("urp");
     else
         aUnoURL += m_aProtocol;
-    aUnoURL += OUString::createFromAscii(";UCB.Factory");
+    aUnoURL += rtl::OUString::createFromAscii(";UCB.Factory");
     return aUnoURL;
 }
 
 //-------------------------------------------------------------------------
-Ucb::Ucb( Reference< XMultiServiceFactory >& rxFactory,
+Ucb::Ucb( uno::Reference< lang::XMultiServiceFactory >& rxFactory,
           rtl::OUString const & rConfigurationKey1,
           rtl::OUString const & rConfigurationKey2,
           rtl::OUString const & rRapConnect )
@@ -578,36 +575,38 @@ sal_Bool Ucb::init()
             {
                 rtl::OUString aPipe;
                 vos::OSecurity().getUserIdent(aPipe);
-                Sequence< Any > aArgs(4);
+                uno::Sequence< uno::Any > aArgs(4);
                 aArgs[0] <<= m_aConfigurationKey1;
                 aArgs[1] <<= m_aConfigurationKey2;
                 aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
                 aArgs[3] <<= aPipe;
 #if 0
                 m_xProv
-                    = Reference< XContentProvider >(
+                    = uno::Reference< XContentProvider >(
                           m_xFac->
                               createInstanceWithArguments(
                                   rtl::OUString::createFromAscii(
                                       "com.sun.star.ucb."
                                           "UniversalContentBroker"),
                                   aArgs),
-                          UNO_QUERY);
+                          uno::UNO_QUERY);
 #else
                 ::ucb::ContentBroker::initialize( m_xFac, aArgs );
-                m_xProv = ::ucb::ContentBroker::get()->getContentProviderInterface();
+                m_xProv
+                    = ::ucb::ContentBroker::get()->getContentProviderInterface();
 #endif
             }
-            catch (Exception const &) {}
+            catch (uno::Exception const &) {}
 
         if (m_xProv.is())
         {
             print("UCB initialized");
-            Reference< XContentProviderManager > xProvMgr(m_xProv, UNO_QUERY);
+            uno::Reference< star::ucb::XContentProviderManager > xProvMgr(
+                m_xProv, uno::UNO_QUERY);
             if (xProvMgr.is())
             {
                 print("Registered schemes:");
-                Sequence< ContentProviderInfo >
+                uno::Sequence< star::ucb::ContentProviderInfo >
                     aInfos(xProvMgr->queryContentProviders());
                 for (sal_Int32 i = 0; i < aInfos.getLength(); ++i)
                 {
@@ -625,15 +624,15 @@ sal_Bool Ucb::init()
         if (m_xFac.is())
             try
             {
-                Reference< XUnoUrlResolver >
+                uno::Reference< bridge::XUnoUrlResolver >
                     xResolver(
                         m_xFac->
                             createInstance(
                                 rtl::OUString::createFromAscii(
                                     "com.sun.star.bridge.UnoUrlResolver")),
-                        UNO_QUERY);
+                        uno::UNO_QUERY);
 
-                Reference< XMultiServiceFactory > xRemoteFactory;
+                uno::Reference< lang::XMultiServiceFactory > xRemoteFactory;
                 if (xResolver.is())
                 {
                     rtl::OUStringBuffer aUrl;
@@ -642,32 +641,32 @@ sal_Bool Ucb::init()
                     aUrl.appendAscii(RTL_CONSTASCII_STRINGPARAM(
                                          ";urp;UCB.Factory"));
                     xRemoteFactory
-                        = Reference< XMultiServiceFactory >(
+                        = uno::Reference< lang::XMultiServiceFactory >(
                               xResolver->resolve(aUrl.makeStringAndClear()),
-                              UNO_QUERY);
+                              uno::UNO_QUERY);
                 }
 
                 if (xRemoteFactory.is())
                     xRemoteFactory
-                        = Reference< XMultiServiceFactory >(
+                        = uno::Reference< lang::XMultiServiceFactory >(
                               xRemoteFactory->
                                   createInstance(
                                       rtl::OUString::createFromAscii(
                                           "com.sun.star.lang."
                                               "ServiceManager")),
-                              UNO_QUERY);
+                              uno::UNO_QUERY);
 
                 if (xRemoteFactory.is())
                     m_xProv
-                        = Reference< XContentProvider >(
+                        = uno::Reference< star::ucb::XContentProvider >(
                               xRemoteFactory->
                                   createInstance(
                                       rtl::OUString::createFromAscii(
                                           "com.sun.star.ucb."
                                               "RemoteAccessContentProvider")),
-                              UNO_QUERY);
+                              uno::UNO_QUERY);
             }
-            catch (Exception const &) {}
+            catch (uno::Exception const &) {}
 
         print(m_xProv.is() ? "RAP initialized" : "Error initializing RAP");
     }
@@ -677,25 +676,26 @@ sal_Bool Ucb::init()
 }
 
 //-------------------------------------------------------------------------
-XContentIdentifierFactory* Ucb::getContentIdentifierFactory()
+uno::Reference< star::ucb::XContentIdentifierFactory >
+Ucb::getContentIdentifierFactory()
 {
     if ( !m_xIdFac.is() )
     {
         if ( init() )
-            m_xIdFac =
-                Reference< XContentIdentifierFactory >( m_xProv, UNO_QUERY );
+            m_xIdFac = uno::Reference< star::ucb::XContentIdentifierFactory >(
+                            m_xProv, uno::UNO_QUERY );
     }
 
-    return m_xIdFac.get();
+    return m_xIdFac;
 }
 
 //-------------------------------------------------------------------------
-XContentProvider* Ucb::getContentProvider()
+uno::Reference< star::ucb::XContentProvider > Ucb::getContentProvider()
 {
     if ( !m_xProv.is() )
         init();
 
-    return m_xProv.get();
+    return m_xProv;
 }
 
 /*========================================================================
@@ -705,15 +705,15 @@ XContentProvider* Ucb::getContentProvider()
  *=======================================================================*/
 
 class UcbTaskEnvironment : public cppu::OWeakObject,
-                           public XCommandEnvironment
+                           public star::ucb::XCommandEnvironment
 {
-    Reference< XInteractionHandler > m_xInteractionHandler;
-    Reference< XProgressHandler > m_xProgressHandler;
+    uno::Reference< task::XInteractionHandler > m_xInteractionHandler;
+    uno::Reference< star::ucb::XProgressHandler > m_xProgressHandler;
 
 public:
-    UcbTaskEnvironment( const Reference< XInteractionHandler>&
+    UcbTaskEnvironment( const uno::Reference< task::XInteractionHandler>&
                          rxInteractionHandler,
-                        const Reference< XProgressHandler>&
+                        const uno::Reference< star::ucb::XProgressHandler>&
                          rxProgressHandler );
     virtual ~UcbTaskEnvironment();
 
@@ -721,34 +721,31 @@ public:
 
     // XInterface
 
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface(
-                                const com::sun::star::uno::Type & rType )
-        throw( RuntimeException );
+    virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType )
+        throw( uno::RuntimeException );
     virtual void SAL_CALL acquire()
-        throw( RuntimeException );
+        throw( uno::RuntimeException );
     virtual void SAL_CALL release()
-        throw( RuntimeException );
+        throw( uno::RuntimeException );
 
      // XCommandEnvironemnt
 
-    virtual Reference<XInteractionHandler> SAL_CALL getInteractionHandler()
-        throw (RuntimeException)
+    virtual uno::Reference<task::XInteractionHandler> SAL_CALL
+    getInteractionHandler()
+        throw (uno::RuntimeException)
     { return m_xInteractionHandler; }
 
-    virtual Reference<XProgressHandler> SAL_CALL getProgressHandler()
-        throw (RuntimeException)
+    virtual uno::Reference<star::ucb::XProgressHandler> SAL_CALL
+    getProgressHandler()
+        throw (uno::RuntimeException)
     { return m_xProgressHandler; }
-
- // !!! Das Interface ist noch nicht vollstaendig !!!
- //  -- application settings -> client language, etc.
- //  -- ???
-};
+ };
 
 //-------------------------------------------------------------------------
 UcbTaskEnvironment::UcbTaskEnvironment(
-                    const Reference< XInteractionHandler >&
+                    const uno::Reference< task::XInteractionHandler >&
                      rxInteractionHandler,
-                    const Reference< XProgressHandler >&
+                    const uno::Reference< star::ucb::XProgressHandler >&
                      rxProgressHandler )
 : m_xInteractionHandler( rxInteractionHandler ),
   m_xProgressHandler( rxProgressHandler )
@@ -768,20 +765,19 @@ UcbTaskEnvironment::~UcbTaskEnvironment()
 //----------------------------------------------------------------------------
 
 // virtual
-Any SAL_CALL
-UcbTaskEnvironment::queryInterface( const com::sun::star::uno::Type & rType )
-    throw( RuntimeException )
+uno::Any SAL_CALL
+UcbTaskEnvironment::queryInterface( const uno::Type & rType )
+    throw( uno::RuntimeException )
 {
-    Any aRet = cppu::queryInterface(
-                            rType,
-                               static_cast< XCommandEnvironment* >( this ) );
+    uno::Any aRet = cppu::queryInterface(
+            rType, static_cast< star::ucb::XCommandEnvironment* >( this ) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
 //----------------------------------------------------------------------------
 // virtual
 void SAL_CALL UcbTaskEnvironment::acquire()
-    throw( RuntimeException )
+    throw( uno::RuntimeException )
 {
     OWeakObject::acquire();
 }
@@ -789,7 +785,7 @@ void SAL_CALL UcbTaskEnvironment::acquire()
 //----------------------------------------------------------------------------
 // virtual
 void SAL_CALL UcbTaskEnvironment::release()
-    throw( RuntimeException )
+    throw( uno::RuntimeException )
 {
     OWeakObject::release();
 }
@@ -803,26 +799,29 @@ void SAL_CALL UcbTaskEnvironment::release()
 class UcbCommandProcessor : public MessagePrinter
 {
 private:
-    Reference< XCommandProcessor > m_xProcessor;
-    sal_Int32                      m_aCommandId;
+    uno::Reference< star::ucb::XCommandProcessor > m_xProcessor;
+    sal_Int32 m_aCommandId;
 
 protected:
-    Ucb&                           m_rUCB;
+    Ucb& m_rUCB;
 
 public:
     UcbCommandProcessor( Ucb& rUCB,
-                         Reference< XCommandProcessor >& rxProcessor,
+                         const uno::Reference<
+                            star::ucb::XCommandProcessor >& rxProcessor,
                          MyOutWindow* pOutEdit );
 
     virtual ~UcbCommandProcessor();
 
-    Any executeCommand( const OUString& rName, const Any& rArgument,
-                        bool bPrint = true );
+    uno::Any executeCommand( const rtl::OUString& rName,
+                             const uno::Any& rArgument,
+                             bool bPrint = true );
 };
 
 //-------------------------------------------------------------------------
 UcbCommandProcessor::UcbCommandProcessor( Ucb& rUCB,
-                                          Reference< XCommandProcessor >&
+                                          const uno::Reference<
+                                            star::ucb::XCommandProcessor >&
                                               rxProcessor,
                                           MyOutWindow* pOutEdit)
 : MessagePrinter( pOutEdit ),
@@ -846,29 +845,29 @@ UcbCommandProcessor::~UcbCommandProcessor()
 }
 
 //----------------------------------------------------------------------------
-Any UcbCommandProcessor::executeCommand( const OUString& rName,
-                                         const Any& rArgument,
-                                         bool bPrint )
+uno::Any UcbCommandProcessor::executeCommand( const rtl::OUString& rName,
+                                              const uno::Any& rArgument,
+                                              bool bPrint )
 {
     if ( m_xProcessor.is() )
     {
-        Command aCommand;
+        star::ucb::Command aCommand;
         aCommand.Name     = rName;
         aCommand.Handle   = -1; /* unknown */
         aCommand.Argument = rArgument;
 
-        Reference< XInteractionHandler > xInteractionHandler;
+        uno::Reference< task::XInteractionHandler > xInteractionHandler;
         if (m_rUCB.getServiceFactory().is())
             xInteractionHandler
-                = Reference< XInteractionHandler >(
+                = uno::Reference< task::XInteractionHandler >(
                       m_rUCB.getServiceFactory()->
                           createInstance(
-                              OUString::createFromAscii(
+                              rtl::OUString::createFromAscii(
                                   "com.sun.star.task.InteractionHandler")),
-                      UNO_QUERY);
-        Reference< XProgressHandler >
+                      uno::UNO_QUERY);
+        uno::Reference< star::ucb::XProgressHandler >
             xProgressHandler(new ProgressHandler(m_rUCB));
-        Reference< XCommandEnvironment > xEnv(
+        uno::Reference< star::ucb::XCommandEnvironment > xEnv(
             new UcbTaskEnvironment( xInteractionHandler, xProgressHandler ) );
 
         if ( bPrint )
@@ -881,18 +880,18 @@ Any UcbCommandProcessor::executeCommand( const OUString& rName,
         }
 
         // Execute command
-        Any aResult;
+        uno::Any aResult;
         bool bException = false;
         bool bAborted = false;
         try
         {
             aResult = m_xProcessor->execute( aCommand, m_aCommandId, xEnv );
         }
-        catch ( CommandAbortedException )
+        catch ( star::ucb::CommandAbortedException const & )
         {
             bAborted = true;
         }
-        catch ( Exception )
+        catch ( uno::Exception const & )
         {
             bException = true;
         }
@@ -913,7 +912,7 @@ Any UcbCommandProcessor::executeCommand( const OUString& rName,
     }
 
     print( "executeCommand failed!" );
-    return Any();
+    return uno::Any();
 }
 
 /*========================================================================
@@ -924,24 +923,25 @@ Any UcbCommandProcessor::executeCommand( const OUString& rName,
 
 class UcbContent : public UcbCommandProcessor,
                    public cppu::OWeakObject,
-                   public XContentEventListener,
-                   public XPropertiesChangeListener
+                   public star::ucb::XContentEventListener,
+                   public beans::XPropertiesChangeListener
 {
-    Reference< XContent > m_xContent;
+    uno::Reference< star::ucb::XContent > m_xContent;
 
     struct OpenStackEntry
     {
-        Reference< XContentIdentifier > m_xIdentifier;
-        Reference< XContent > m_xContent;
+        uno::Reference< star::ucb::XContentIdentifier > m_xIdentifier;
+        uno::Reference< star::ucb::XContent > m_xContent;
         sal_uInt32 m_nLevel;
         bool m_bUseIdentifier;
 
-        OpenStackEntry(Reference< XContentIdentifier > const & rTheIdentifier,
+        OpenStackEntry(uno::Reference< star::ucb::XContentIdentifier > const &
+                        rTheIdentifier,
                        sal_uInt32 nTheLevel):
             m_xIdentifier(rTheIdentifier), m_nLevel(nTheLevel),
             m_bUseIdentifier(true) {}
 
-        OpenStackEntry(Reference< XContent > const & rTheContent,
+        OpenStackEntry(uno::Reference< star::ucb::XContent > const & rTheContent,
                        sal_uInt32 nTheLevel):
             m_xContent(rTheContent), m_nLevel(nTheLevel),
             m_bUseIdentifier(false) {}
@@ -949,7 +949,9 @@ class UcbContent : public UcbCommandProcessor,
     typedef std::stack< OpenStackEntry > OpenStack;
 
 private:
-    UcbContent( Ucb& rUCB, Reference< XContent >& rxContent, MyOutWindow* pOutEdit );
+    UcbContent( Ucb& rUCB,
+                uno::Reference< star::ucb::XContent >& rxContent,
+                MyOutWindow* pOutEdit );
 
 protected:
     virtual ~UcbContent();
@@ -962,58 +964,62 @@ public:
     const UniString getURL() const;
     const UniString getType() const;
 
-    Sequence< CommandInfo > getCommands();
-    Sequence< Property >    getProperties();
+    uno::Sequence< star::ucb::CommandInfo > getCommands();
+    uno::Sequence< beans::Property >    getProperties();
 
-    Any  getPropertyValue( const OUString& rName );
-    void setPropertyValue( const OUString& rName, const Any& rValue );
-    void addProperty     ( const OUString& rName, const Any& rValue );
-    void removeProperty  ( const OUString& rName );
+    uno::Any  getPropertyValue( const rtl::OUString& rName );
+    void setPropertyValue( const rtl::OUString& rName, const uno::Any& rValue );
+    void addProperty     ( const rtl::OUString& rName, const uno::Any& rValue );
+    void removeProperty  ( const rtl::OUString& rName );
 
-    OUString getStringPropertyValue( const OUString& rName );
-    void setStringPropertyValue( const OUString& rName, const OUString& rValue );
-    void addStringProperty( const OUString& rName, const OUString& rValue );
-    void open( const OUString & rName, const UniString& rInput,
+    rtl::OUString getStringPropertyValue( const rtl::OUString& rName );
+    void setStringPropertyValue( const rtl::OUString& rName,
+                                 const rtl::OUString& rValue );
+    void addStringProperty( const rtl::OUString& rName,
+                            const rtl::OUString& rValue );
+    void open( const rtl::OUString & rName, const UniString& rInput,
                bool bPrint, bool bTiming, bool bSort,
                OpenStack * pStack = 0, sal_uInt32 nLevel = 0,
                sal_Int32 nFetchSize = 0 );
     void openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
                   sal_Int32 nFetchSize );
-    void transfer( const OUString& rSourceURL, sal_Bool bMove );
+    void transfer( const rtl::OUString& rSourceURL, sal_Bool bMove );
     void destroy();
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type & rType )
-        throw( RuntimeException );
+    virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType )
+        throw( uno::RuntimeException );
     virtual void SAL_CALL
     acquire()
-        throw( RuntimeException );
+        throw( uno::RuntimeException );
     virtual void SAL_CALL
     release()
-        throw( RuntimeException );
+        throw( uno::RuntimeException );
 
     // XEventListener
     // ( base interface of XContentEventListener, XPropertiesChangeListener )
     virtual void SAL_CALL
-    disposing( const EventObject& Source )
-        throw( RuntimeException );
+    disposing( const lang::EventObject& Source )
+        throw( uno::RuntimeException );
 
     // XContentEventListener
     virtual void SAL_CALL
-    contentEvent( const ContentEvent& evt )
-        throw( RuntimeException );
+    contentEvent( const star::ucb::ContentEvent& evt )
+        throw( uno::RuntimeException );
 
     // XPropertiesChangeListener
     virtual void SAL_CALL
-    propertiesChange( const Sequence< PropertyChangeEvent >& evt )
-        throw( RuntimeException );
+    propertiesChange( const uno::Sequence< beans::PropertyChangeEvent >& evt )
+        throw( uno::RuntimeException );
 };
 
 //-------------------------------------------------------------------------
-UcbContent::UcbContent( Ucb& rUCB, Reference< XContent >& rxContent, MyOutWindow* pOutEdit)
+UcbContent::UcbContent( Ucb& rUCB,
+                        uno::Reference< star::ucb::XContent >& rxContent,
+                        MyOutWindow* pOutEdit)
 : UcbCommandProcessor( rUCB,
-                       Reference< XCommandProcessor >( rxContent, UNO_QUERY ),
+                       uno::Reference< star::ucb::XCommandProcessor >(
+                                                rxContent, uno::UNO_QUERY ),
                        pOutEdit ),
   m_xContent( rxContent )
 {
@@ -1038,12 +1044,12 @@ UcbContent* UcbContent::create(
     // identifer for the given URL.
     //////////////////////////////////////////////////////////////////////
 
-    Reference< XContentIdentifierFactory > xIdFac =
+    uno::Reference< star::ucb::XContentIdentifierFactory > xIdFac =
                                         rUCB.getContentIdentifierFactory();
     if ( !xIdFac.is() )
         return NULL;
 
-    Reference< XContentIdentifier > xId =
+    uno::Reference< star::ucb::XContentIdentifier > xId =
                             xIdFac->createContentIdentifier( rURL );
     if ( !xId.is() )
         return NULL;
@@ -1053,16 +1059,17 @@ UcbContent* UcbContent::create(
     // content for the given identifier.
     //////////////////////////////////////////////////////////////////////
 
-    Reference< XContentProvider > xProv = rUCB.getContentProvider();
+    uno::Reference< star::ucb::XContentProvider > xProv
+        = rUCB.getContentProvider();
     if ( !xProv.is() )
         return NULL;
 
-    Reference< XContent > xContent;
+    uno::Reference< star::ucb::XContent > xContent;
     try
     {
         xContent = xProv->queryContent( xId );
     }
-    catch (IllegalIdentifierException const &) {}
+    catch (star::ucb::IllegalIdentifierException const &) {}
     if ( !xContent.is() )
         return NULL;
 
@@ -1072,11 +1079,13 @@ UcbContent* UcbContent::create(
     // Register listener(s).
     xContent->addContentEventListener( pNew );
 
-    Reference< XPropertiesChangeNotifier > xNotifier( xContent, UNO_QUERY );
+    uno::Reference< beans::XPropertiesChangeNotifier > xNotifier(
+        xContent, uno::UNO_QUERY );
     if ( xNotifier.is() )
     {
         // Empty sequence -> interested in any property changes.
-        xNotifier->addPropertiesChangeListener( Sequence< OUString >(), pNew );
+        xNotifier->addPropertiesChangeListener(
+            uno::Sequence< rtl::OUString >(), pNew );
     }
 
     return pNew;
@@ -1085,7 +1094,8 @@ UcbContent* UcbContent::create(
 //-------------------------------------------------------------------------
 const UniString UcbContent::getURL() const
 {
-    Reference< XContentIdentifier > xId( m_xContent->getIdentifier() );
+    uno::Reference< star::ucb::XContentIdentifier > xId(
+        m_xContent->getIdentifier() );
     if ( xId.is() )
         return UniString( xId->getContentIdentifier() );
 
@@ -1102,67 +1112,68 @@ const UniString UcbContent::getType() const
 //-------------------------------------------------------------------------
 void UcbContent::dispose()
 {
-    Reference< XComponent > xComponent( m_xContent, UNO_QUERY );
+    uno::Reference< lang::XComponent > xComponent( m_xContent, uno::UNO_QUERY );
     if ( xComponent.is() )
         xComponent->dispose();
 }
 
 //----------------------------------------------------------------------------
-void UcbContent::open( const OUString & rName, const UniString& rInput,
+void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
                        bool bPrint, bool bTiming, bool bSort,
                        OpenStack * pStack, sal_uInt32 nLevel,
                        sal_Int32 nFetchSize )
 {
-    Any aArg;
+    uno::Any aArg;
 
     bool bDoSort = false;
 
-    OpenCommandArgument2 aOpenArg;
+    star::ucb::OpenCommandArgument2 aOpenArg;
     if (rName.compareToAscii("search") == 0)
     {
-        SearchCommandArgument aArgument;
+        star::ucb::SearchCommandArgument aArgument;
         if (!parseSearchArgument(rInput, aArgument.Info))
         {
             print("Can't parse search argument");
             return;
         }
         aArgument.Properties.realloc(5);
-        aArgument.Properties[0].Name = OUString::createFromAscii("Title");
+        aArgument.Properties[0].Name = rtl::OUString::createFromAscii("Title");
         aArgument.Properties[0].Handle = -1;
         aArgument.Properties[1].Name
-            = OUString::createFromAscii("DateCreated");
+            = rtl::OUString::createFromAscii("DateCreated");
         aArgument.Properties[1].Handle = -1;
-        aArgument.Properties[2].Name = OUString::createFromAscii("Size");
+        aArgument.Properties[2].Name = rtl::OUString::createFromAscii("Size");
         aArgument.Properties[2].Handle = -1;
-        aArgument.Properties[3].Name = OUString::createFromAscii("IsFolder");
+        aArgument.Properties[3].Name
+            = rtl::OUString::createFromAscii("IsFolder");
         aArgument.Properties[3].Handle = -1;
         aArgument.Properties[4].Name
-            = OUString::createFromAscii("IsDocument");
+            = rtl::OUString::createFromAscii("IsDocument");
         aArgument.Properties[4].Handle = -1;
         aArg <<= aArgument;
     }
     else
     {
-        aOpenArg.Mode = OpenMode::ALL;
+        aOpenArg.Mode = star::ucb::OpenMode::ALL;
         aOpenArg.Priority = 32768;
 //      if ( bFolder )
         {
             // Property values which shall be in the result set...
-            Sequence< Property > aProps( 5 );
-            Property* pProps = aProps.getArray();
-            pProps[ 0 ].Name   = OUString::createFromAscii( "Title" );
+            uno::Sequence< beans::Property > aProps( 5 );
+            beans::Property* pProps = aProps.getArray();
+            pProps[ 0 ].Name   = rtl::OUString::createFromAscii( "Title" );
             pProps[ 0 ].Handle = -1; // Important!
 /**/        pProps[ 0 ].Type = getCppuType(static_cast< rtl::OUString * >(0));
                 // HACK for sorting...
-            pProps[ 1 ].Name   = OUString::createFromAscii( "DateCreated" );
+            pProps[ 1 ].Name   = rtl::OUString::createFromAscii( "DateCreated" );
             pProps[ 1 ].Handle = -1; // Important!
-            pProps[ 2 ].Name   = OUString::createFromAscii( "Size" );
+            pProps[ 2 ].Name   = rtl::OUString::createFromAscii( "Size" );
             pProps[ 2 ].Handle = -1; // Important!
-            pProps[ 3 ].Name   = OUString::createFromAscii( "IsFolder" );
+            pProps[ 3 ].Name   = rtl::OUString::createFromAscii( "IsFolder" );
             pProps[ 3 ].Handle = -1; // Important!
 /**/        pProps[ 3 ].Type = getCppuType(static_cast< sal_Bool * >(0));
                 // HACK for sorting...
-            pProps[ 4 ].Name   = OUString::createFromAscii( "IsDocument" );
+            pProps[ 4 ].Name   = rtl::OUString::createFromAscii( "IsDocument" );
             pProps[ 4 ].Handle = -1; // Important!
             aOpenArg.Properties = aProps;
 
@@ -1191,32 +1202,34 @@ void UcbContent::open( const OUString & rName, const UniString& rInput,
     if ( bTiming )
         nTime = Time::GetSystemTicks();
 
-    Any aResult = executeCommand( rName, aArg, bPrint );
+    uno::Any aResult = executeCommand( rName, aArg, bPrint );
 
-    Reference< XDynamicResultSet > xDynamicResultSet;
+    uno::Reference< star::ucb::XDynamicResultSet > xDynamicResultSet;
     if ( ( aResult >>= xDynamicResultSet ) && xDynamicResultSet.is() )
     {
         if (bDoSort)
         {
             sal_Int16 nCaps = xDynamicResultSet->getCapabilities();
-            if (!(nCaps & ContentResultSetCapability::SORTED))
+            if (!(nCaps & star::ucb::ContentResultSetCapability::SORTED))
             {
                 if (bPrint)
                     print("Result set rows are not sorted"
                               "---using sorting cursor");
 
-                Reference< XSortedDynamicResultSetFactory > xSortedFactory;
+                uno::Reference< star::ucb::XSortedDynamicResultSetFactory >
+                    xSortedFactory;
                 if (m_rUCB.getServiceFactory().is())
                     xSortedFactory
-                        = Reference< XSortedDynamicResultSetFactory >(
+                        = uno::Reference<
+                            star::ucb::XSortedDynamicResultSetFactory >(
                               m_rUCB.
                                   getServiceFactory()->
                                       createInstance(
-                                          OUString::createFromAscii(
+                                          rtl::OUString::createFromAscii(
                                               "com.sun.star.ucb.SortedDynamic"
                                                   "ResultSetFactory")),
-                              UNO_QUERY);
-                Reference< XDynamicResultSet > xSorted;
+                              uno::UNO_QUERY);
+                uno::Reference< star::ucb::XDynamicResultSet > xSorted;
                 if (xSortedFactory.is())
                     xSorted
                         = xSortedFactory->
@@ -1231,7 +1244,7 @@ void UcbContent::open( const OUString & rName, const UniString& rInput,
             }
         }
 
-        Reference< XResultSet > xResultSet(
+        uno::Reference< sdbc::XResultSet > xResultSet(
                                     xDynamicResultSet->getStaticResultSet() );
         if ( xResultSet.is() )
         {
@@ -1246,20 +1259,21 @@ void UcbContent::open( const OUString & rName, const UniString& rInput,
             if (nFetchSize > 0)
             {
                 bool bSet = false;
-                Reference< XPropertySet > xProperties(xResultSet, UNO_QUERY);
+                uno::Reference< beans::XPropertySet > xProperties(
+                    xResultSet, uno::UNO_QUERY);
                 if (xProperties.is())
                     try
                     {
                         xProperties->
-                            setPropertyValue(OUString::createFromAscii(
+                            setPropertyValue(rtl::OUString::createFromAscii(
                                                  "FetchSize"),
-                                             makeAny(nFetchSize));
+                                             uno::makeAny(nFetchSize));
                         bSet = true;
                     }
-                    catch (UnknownPropertyException const &) {}
-                    catch (PropertyVetoException const &) {}
-                    catch (IllegalArgumentException const &) {}
-                    catch (WrappedTargetException const &) {}
+                    catch (beans::UnknownPropertyException const &) {}
+                    catch (beans::PropertyVetoException const &) {}
+                    catch (lang::IllegalArgumentException const &) {}
+                    catch (lang::WrappedTargetException const &) {}
                 if (!bSet)
                     print("Fetch size not set!");
             }
@@ -1267,9 +1281,9 @@ void UcbContent::open( const OUString & rName, const UniString& rInput,
             try
             {
                 ULONG n = 0;
-                Reference< XContentAccess > xContentAccess(
-                                                    xResultSet, UNO_QUERY );
-                Reference< XRow > xRow( xResultSet, UNO_QUERY );
+                uno::Reference< star::ucb::XContentAccess > xContentAccess(
+                                                xResultSet, uno::UNO_QUERY );
+                uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
 
                 while ( xResultSet->next() )
                 {
@@ -1277,7 +1291,7 @@ void UcbContent::open( const OUString & rName, const UniString& rInput,
 
                     if ( bPrint )
                     {
-                        OUString aId( xContentAccess->
+                        rtl::OUString aId( xContentAccess->
                                           queryContentIdentifierString() );
                         aText += UniString::CreateFromInt32( ++n );
                         aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
@@ -1365,7 +1379,7 @@ void UcbContent::open( const OUString & rName, const UniString& rInput,
                                           nLevel + 1 ) );
                 }
             }
-            catch ( ResultSetException )
+            catch ( star::ucb::ResultSetException )
             {
                 print( "ResultSetException caught!" );
             }
@@ -1374,9 +1388,11 @@ void UcbContent::open( const OUString & rName, const UniString& rInput,
                 print( "Iteration done." );
         }
     }
-Reference< XComponent > xComponent(xDynamicResultSet, UNO_QUERY);
-if (xComponent.is())
-    xComponent->dispose();
+
+    uno::Reference< lang::XComponent > xComponent(
+        xDynamicResultSet, uno::UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
 
 //  putenv("PROT_REMOTE_ACTIVATE="); // to log remote uno traffic
 
@@ -1416,7 +1432,7 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
             aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "LEVEL " ) );
             aText += UniString::CreateFromInt64( aEntry.m_nLevel );
 
-            Reference< XContentIdentifier > xID;
+            uno::Reference< star::ucb::XContentIdentifier > xID;
             if ( aEntry.m_bUseIdentifier )
                 xID = aEntry.m_xIdentifier;
             else if ( aEntry.m_xContent.is() )
@@ -1430,10 +1446,11 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
             print( aText );
         }
 
-        Reference< XContent > xChild;
+        uno::Reference< star::ucb::XContent > xChild;
         if ( aEntry.m_bUseIdentifier )
         {
-            Reference< XContentProvider > xProv = rUCB.getContentProvider();
+            uno::Reference< star::ucb::XContentProvider > xProv
+                = rUCB.getContentProvider();
             if ( !xProv.is() )
             {
                 print( "No content provider" );
@@ -1444,7 +1461,7 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
             {
                 xChild = xProv->queryContent( aEntry.m_xIdentifier );
             }
-            catch (IllegalIdentifierException const &) {}
+            catch (star::ucb::IllegalIdentifierException const &) {}
         }
         else
             xChild = aEntry.m_xContent;
@@ -1474,7 +1491,7 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
 }
 
 //----------------------------------------------------------------------------
-void UcbContent::transfer( const OUString& rSourceURL, sal_Bool bMove  )
+void UcbContent::transfer( const rtl::OUString& rSourceURL, sal_Bool bMove  )
 {
     if ( bMove )
         print( "Moving content..." );
@@ -1483,25 +1500,27 @@ void UcbContent::transfer( const OUString& rSourceURL, sal_Bool bMove  )
 
 #if 1 /* globalTransfer */
 
-    Reference< XCommandProcessor > xCommandProcessor(
-                                    m_rUCB.getContentProvider(), UNO_QUERY );
+    uno::Reference< star::ucb::XCommandProcessor > xCommandProcessor(
+                                m_rUCB.getContentProvider(), uno::UNO_QUERY );
     if ( xCommandProcessor.is() )
     {
 
 #if 0
-        Command aCommand(
-            OUString::createFromAscii( "getCommandInfo" ), -1, Any() );
-        Reference< XCommandInfo > xInfo;
+        star::ucb::Command aCommand(
+            rtl::OUString::createFromAscii( "getCommandInfo" ), -1, Any() );
+        uno::Reference< star::ucb::XCommandInfo > xInfo;
         xCommandProcessor->execute(
-            aCommand, 0, Reference< XCommandEnvironment >() ) >>= xInfo;
+            aCommand, 0, uno::Reference< star::ucb::XCommandEnvironment >() )
+                >>= xInfo;
         if ( xInfo.is() )
         {
-            CommandInfo aInfo
+            star::ucb::CommandInfo aInfo
                 = xInfo->getCommandInfoByName(
-                    OUString::createFromAscii( "globalTransfer" ) );
+                    rtl::OUString::createFromAscii( "globalTransfer" ) );
 
-            Sequence< CommandInfo > aCommands = xInfo->getCommands();
-            const CommandInfo* pCommands = aCommands.getConstArray();
+            uno::Sequence< star::ucb::CommandInfo > aCommands
+                = xInfo->getCommands();
+            const star::ucb::CommandInfo* pCommands = aCommands.getConstArray();
 
             String aText( UniString::CreateFromAscii(
                             RTL_CONSTASCII_STRINGPARAM( "Commands:\n" ) ) );
@@ -1515,38 +1534,39 @@ void UcbContent::transfer( const OUString& rSourceURL, sal_Bool bMove  )
             print( aText );
         }
 #endif
-        GlobalTransferCommandArgument aArg(
-                            bMove ? TransferCommandOperation_MOVE
-                                  : TransferCommandOperation_COPY,
+        star::ucb::GlobalTransferCommandArgument aArg(
+                            bMove ? star::ucb::TransferCommandOperation_MOVE
+                                  : star::ucb::TransferCommandOperation_COPY,
                             rSourceURL,
                             getURL(),
-                            OUString(),
-                            //OUString::createFromAscii( "NewTitle" ),
-                            NameClash::ERROR );
+                            rtl::OUString(),
+                            //rtl::OUString::createFromAscii( "NewTitle" ),
+                            star::ucb::NameClash::ERROR );
 
-        Command aTransferCommand( OUString::createFromAscii( "globalTransfer" ),
-                                  -1,
-                                  makeAny( aArg ) );
+        star::ucb::Command aTransferCommand( rtl::OUString::createFromAscii(
+                                                "globalTransfer" ),
+                                             -1,
+                                             uno::makeAny( aArg ) );
 
-        Reference< XInteractionHandler > xInteractionHandler;
+        uno::Reference< task::XInteractionHandler > xInteractionHandler;
         if (m_rUCB.getServiceFactory().is())
             xInteractionHandler
-                = Reference< XInteractionHandler >(
+                = uno::Reference< task::XInteractionHandler >(
                           m_rUCB.getServiceFactory()->
                               createInstance(
-                                  OUString::createFromAscii(
+                                rtl::OUString::createFromAscii(
                                       "com.sun.star.task.InteractionHandler")),
-                          UNO_QUERY);
-        Reference< XProgressHandler > xProgressHandler(
+                        uno::UNO_QUERY);
+        uno::Reference< star::ucb::XProgressHandler > xProgressHandler(
             new ProgressHandler(m_rUCB));
-        Reference< XCommandEnvironment > xEnv(
+        uno::Reference< star::ucb::XCommandEnvironment > xEnv(
             new UcbTaskEnvironment( xInteractionHandler, xProgressHandler ) );
 
         try
         {
             xCommandProcessor->execute( aTransferCommand, 0, xEnv );
         }
-        catch ( Exception const & )
+        catch ( uno::Exception const & )
         {
             print( "globalTransfer threw exception!" );
             return;
@@ -1557,11 +1577,12 @@ void UcbContent::transfer( const OUString& rSourceURL, sal_Bool bMove  )
 
 #else /* transfer */
 
-    Any aArg;
-    aArg <<= TransferInfo( bMove, rSourceURL, OUString(), NameClash::ERROR );
-    executeCommand( OUString::createFromAscii( "transfer" ), aArg );
+    uno::Any aArg;
+    aArg <<= star::ucb::TransferInfo(
+            bMove, rSourceURL, rtl::OUString(), star::ucb::NameClash::ERROR );
+    executeCommand( rtl::OUString::createFromAscii( "transfer" ), aArg );
 
-//  executeCommand( OUString::createFromAscii( "flush" ), Any() );
+//  executeCommand( rtl::OUString::createFromAscii( "flush" ), Any() );
 
 #endif
 }
@@ -1571,24 +1592,25 @@ void UcbContent::destroy()
 {
     print( "Deleting content..." );
 
-    Any aArg;
+    uno::Any aArg;
     aArg <<= sal_Bool( sal_True ); // delete physically, not only to trash.
-    executeCommand( OUString::createFromAscii( "delete" ), aArg );
+    executeCommand( rtl::OUString::createFromAscii( "delete" ), aArg );
 
-//  executeCommand( OUString::createFromAscii( "flush" ), Any() );
+//  executeCommand( rtl::OUString::createFromAscii( "flush" ), Any() );
 }
 
 //-------------------------------------------------------------------------
-Sequence< CommandInfo > UcbContent::getCommands()
+uno::Sequence< star::ucb::CommandInfo > UcbContent::getCommands()
 {
-    Any aResult = executeCommand(
-                    OUString::createFromAscii( "getCommandInfo" ), Any() );
+    uno::Any aResult = executeCommand(
+            rtl::OUString::createFromAscii( "getCommandInfo" ), uno::Any() );
 
-    Reference< XCommandInfo > xInfo;
+    uno::Reference< star::ucb::XCommandInfo > xInfo;
     if ( aResult >>= xInfo )
     {
-        Sequence< CommandInfo > aCommands( xInfo->getCommands() );
-        const CommandInfo* pCommands = aCommands.getConstArray();
+        uno::Sequence< star::ucb::CommandInfo > aCommands(
+            xInfo->getCommands() );
+        const star::ucb::CommandInfo* pCommands = aCommands.getConstArray();
 
         String aText( UniString::CreateFromAscii(
                         RTL_CONSTASCII_STRINGPARAM( "Commands:\n" ) ) );
@@ -1605,20 +1627,20 @@ Sequence< CommandInfo > UcbContent::getCommands()
     }
 
     print( "getCommands failed!" );
-    return Sequence< CommandInfo >();
+    return uno::Sequence< star::ucb::CommandInfo >();
 }
 
 //-------------------------------------------------------------------------
-Sequence< Property > UcbContent::getProperties()
+uno::Sequence< beans::Property > UcbContent::getProperties()
 {
-    Any aResult = executeCommand(
-                    OUString::createFromAscii( "getPropertySetInfo" ), Any() );
+    uno::Any aResult = executeCommand(
+        rtl::OUString::createFromAscii( "getPropertySetInfo" ), uno::Any() );
 
-    Reference< XPropertySetInfo > xInfo;
+    uno::Reference< beans::XPropertySetInfo > xInfo;
     if ( aResult >>= xInfo )
     {
-        Sequence< Property > aProps( xInfo->getProperties() );
-        const Property* pProps = aProps.getConstArray();
+        uno::Sequence< beans::Property > aProps( xInfo->getProperties() );
+        const beans::Property* pProps = aProps.getConstArray();
 
         String aText( UniString::CreateFromAscii(
                         RTL_CONSTASCII_STRINGPARAM( "Properties:\n" ) ) );
@@ -1635,42 +1657,43 @@ Sequence< Property > UcbContent::getProperties()
     }
 
     print( "getProperties failed!" );
-    return Sequence< Property >();
+    return uno::Sequence< beans::Property >();
 }
 
 //----------------------------------------------------------------------------
-Any UcbContent::getPropertyValue( const OUString& rName )
+uno::Any UcbContent::getPropertyValue( const rtl::OUString& rName )
 {
-    Sequence< Property > aProps( 1 );
-    Property& rProp = aProps.getArray()[ 0 ];
+    uno::Sequence< beans::Property > aProps( 1 );
+    beans::Property& rProp = aProps.getArray()[ 0 ];
 
     rProp.Name       = rName;
     rProp.Handle     = -1; /* unknown */
 //  rProp.Type       = ;
 //  rProp.Attributes = ;
 
-    Any aArg;
+    uno::Any aArg;
     aArg <<= aProps;
 
-    Any aResult = executeCommand(
-                    OUString::createFromAscii( "getPropertyValues" ), aArg );
+    uno::Any aResult = executeCommand(
+        rtl::OUString::createFromAscii( "getPropertyValues" ), aArg );
 
-    Reference< XRow > xValues;
+    uno::Reference< sdbc::XRow > xValues;
     if ( aResult >>= xValues )
-        return xValues->getObject( 1, Reference< XNameAccess>() );
+        return xValues->getObject(
+            1, uno::Reference< container::XNameAccess>() );
 
     print( "getPropertyValue failed!" );
-    return Any();
+    return uno::Any();
 }
 
 //----------------------------------------------------------------------------
-OUString UcbContent::getStringPropertyValue( const OUString& rName )
+rtl::OUString UcbContent::getStringPropertyValue( const rtl::OUString& rName )
 {
-    Any aAny = getPropertyValue( rName );
-    if ( aAny.getValueType() == getCppuType( (const ::rtl::OUString *)NULL ) )
+    uno::Any aAny = getPropertyValue( rName );
+    if ( aAny.getValueType() == getCppuType( (const ::rtl::OUString *)0 ) )
     {
-        const OUString aValue(
-                    *SAL_STATIC_CAST( const OUString*, aAny.getValue() ) );
+        const rtl::OUString aValue(
+            * static_cast< const rtl::OUString * >( aAny.getValue() ) );
 
         UniString aText( rName );
         aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " value: '" ) );
@@ -1682,50 +1705,51 @@ OUString UcbContent::getStringPropertyValue( const OUString& rName )
     }
 
     print( "getStringPropertyValue failed!" );
-    return OUString();
+    return rtl::OUString();
 }
 
 //----------------------------------------------------------------------------
-void UcbContent::setPropertyValue( const OUString& rName, const Any& rValue )
+void UcbContent::setPropertyValue( const rtl::OUString& rName,
+                                   const uno::Any& rValue )
 {
-    Sequence< PropertyValue > aProps( 1 );
-    PropertyValue& rProp = aProps.getArray()[ 0 ];
+    uno::Sequence< beans::PropertyValue > aProps( 1 );
+    beans::PropertyValue& rProp = aProps.getArray()[ 0 ];
 
     rProp.Name       = rName;
     rProp.Handle     = -1; /* unknown */
     rProp.Value      = rValue;
 //  rProp.State      = ;
 
-    Any aArg;
+    uno::Any aArg;
     aArg <<= aProps;
 
-    executeCommand( OUString::createFromAscii( "setPropertyValues" ), aArg );
+    executeCommand( rtl::OUString::createFromAscii( "setPropertyValues" ),
+                    aArg );
 
-//  executeCommand( OUString::createFromAscii( "flush" ), Any() );
+//  executeCommand( rtl::OUString::createFromAscii( "flush" ), Any() );
 }
 
 //----------------------------------------------------------------------------
-void UcbContent::setStringPropertyValue( const OUString& rName,
-                                         const OUString& rValue )
+void UcbContent::setStringPropertyValue( const rtl::OUString& rName,
+                                         const rtl::OUString& rValue )
 {
-    Any aAny;
-    aAny.setValue( &rValue, getCppuType( (const OUString *)NULL ) );
+    uno::Any aAny;
+    aAny <<= rValue;
     setPropertyValue( rName, aAny );
-
-    const OUString aValue(
-                    *SAL_STATIC_CAST( const OUString*, aAny.getValue() ) );
 
     UniString aText( rName );
     aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " value set to: '" ) );
-    aText += UniString( aValue );
+    aText += UniString( rValue );
     aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "'" ) );
     print( aText );
 }
 
 //----------------------------------------------------------------------------
-void UcbContent::addProperty( const OUString& rName, const Any& rValue )
+void UcbContent::addProperty( const rtl::OUString& rName,
+                              const uno::Any& rValue )
 {
-    Reference< XPropertyContainer > xContainer( m_xContent, UNO_QUERY );
+    uno::Reference< beans::XPropertyContainer > xContainer( m_xContent,
+                                                            uno::UNO_QUERY );
     if ( xContainer.is() )
     {
         UniString aText( UniString::CreateFromAscii(
@@ -1738,17 +1762,17 @@ void UcbContent::addProperty( const OUString& rName, const Any& rValue )
         {
             xContainer->addProperty( rName, 0, rValue );
         }
-        catch ( PropertyExistException& )
+        catch ( beans::PropertyExistException const & )
         {
             print( "Adding property failed. Already exists!" );
             return;
         }
-        catch ( IllegalTypeException& )
+        catch ( beans::IllegalTypeException const & )
         {
             print( "Adding property failed. Illegal Type!" );
             return;
         }
-        catch ( IllegalArgumentException& )
+        catch ( lang::IllegalArgumentException const & )
         {
             print( "Adding property failed. Illegal Argument!" );
             return;
@@ -1763,17 +1787,18 @@ void UcbContent::addProperty( const OUString& rName, const Any& rValue )
 
 //----------------------------------------------------------------------------
 void UcbContent::addStringProperty(
-                        const OUString& rName, const OUString& rValue )
+                    const rtl::OUString& rName, const rtl::OUString& rValue )
 {
-    Any aValue;
+    uno::Any aValue;
     aValue <<= rValue;
     addProperty( rName, aValue );
 }
 
 //----------------------------------------------------------------------------
-void UcbContent::removeProperty( const OUString& rName )
+void UcbContent::removeProperty( const rtl::OUString& rName )
 {
-    Reference< XPropertyContainer > xContainer( m_xContent, UNO_QUERY );
+    uno::Reference< beans::XPropertyContainer > xContainer( m_xContent,
+                                                            uno::UNO_QUERY );
     if ( xContainer.is() )
     {
         UniString aText( UniString::CreateFromAscii(
@@ -1786,7 +1811,7 @@ void UcbContent::removeProperty( const OUString& rName )
         {
             xContainer->removeProperty( rName );
         }
-        catch ( UnknownPropertyException& )
+        catch ( beans::UnknownPropertyException const & )
         {
             print( "Adding property failed. Unknown!" );
             return;
@@ -1806,23 +1831,22 @@ void UcbContent::removeProperty( const OUString& rName )
 //----------------------------------------------------------------------------
 
 // virtual
-Any SAL_CALL
-UcbContent::queryInterface( const com::sun::star::uno::Type & rType )
-    throw(RuntimeException)
+uno::Any SAL_CALL UcbContent::queryInterface( const uno::Type & rType )
+    throw(uno::RuntimeException)
 {
-    Any aRet = cppu::queryInterface(
+    uno::Any aRet = cppu::queryInterface(
                 rType,
-                static_cast< XEventListener* >(
-                    static_cast< XContentEventListener* >( this ) ),
-                static_cast< XContentEventListener* >( this ),
-                static_cast< XPropertiesChangeListener* >( this ) );
+                static_cast< lang::XEventListener* >(
+                    static_cast< star::ucb::XContentEventListener* >( this ) ),
+                static_cast< star::ucb::XContentEventListener* >( this ),
+                static_cast< beans::XPropertiesChangeListener* >( this ) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
 //----------------------------------------------------------------------------
 // virtual
 void SAL_CALL UcbContent::acquire()
-    throw( RuntimeException )
+    throw( uno::RuntimeException )
 {
     OWeakObject::acquire();
 }
@@ -1830,7 +1854,7 @@ void SAL_CALL UcbContent::acquire()
 //----------------------------------------------------------------------------
 // virtual
 void SAL_CALL UcbContent::release()
-    throw( RuntimeException )
+    throw( uno::RuntimeException )
 {
     OWeakObject::release();
 }
@@ -1842,8 +1866,8 @@ void SAL_CALL UcbContent::release()
 //----------------------------------------------------------------------------
 
 // virtual
-void SAL_CALL UcbContent::disposing( const EventObject& Source )
-    throw( RuntimeException )
+void SAL_CALL UcbContent::disposing( const lang::EventObject& Source )
+    throw( uno::RuntimeException )
 {
     print ( "Content: disposing..." );
 }
@@ -1855,19 +1879,19 @@ void SAL_CALL UcbContent::disposing( const EventObject& Source )
 //----------------------------------------------------------------------------
 
 // virtual
-void SAL_CALL UcbContent::contentEvent( const ContentEvent& evt )
-    throw( RuntimeException )
+void SAL_CALL UcbContent::contentEvent( const star::ucb::ContentEvent& evt )
+    throw( uno::RuntimeException )
 {
     switch ( evt.Action )
     {
-        case  ContentAction::INSERTED:
+        case  star::ucb::ContentAction::INSERTED:
         {
             UniString aText( UniString::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM(
                                     "contentEvent: INSERTED: " ) ) );
             if ( evt.Content.is() )
             {
-                Reference< XContentIdentifier > xId(
+                uno::Reference< star::ucb::XContentIdentifier > xId(
                                            evt.Content->getIdentifier() );
                 aText += UniString( xId->getContentIdentifier() );
                 aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " - " ) );
@@ -1877,19 +1901,19 @@ void SAL_CALL UcbContent::contentEvent( const ContentEvent& evt )
             print( aText );
             break;
         }
-        case  ContentAction::REMOVED:
+        case  star::ucb::ContentAction::REMOVED:
             print( "contentEvent: REMOVED" );
             break;
 
-        case  ContentAction::DELETED:
+        case  star::ucb::ContentAction::DELETED:
             print( "contentEvent: DELETED" );
             break;
 
-        case  ContentAction::EXCHANGED:
+        case  star::ucb::ContentAction::EXCHANGED:
             print( "contentEvent: EXCHANGED" );
             break;
 
-        case  ContentAction::SEARCH_MATCHED:
+        case  star::ucb::ContentAction::SEARCH_MATCHED:
         {
             String aMatch(RTL_CONSTASCII_USTRINGPARAM(
                               "contentEvent: SEARCH MATCHED "));
@@ -1922,15 +1946,15 @@ void SAL_CALL UcbContent::contentEvent( const ContentEvent& evt )
 
 // virtual
 void SAL_CALL UcbContent::propertiesChange(
-                    const Sequence< PropertyChangeEvent >& evt )
-    throw( RuntimeException )
+                    const uno::Sequence< beans::PropertyChangeEvent >& evt )
+    throw( uno::RuntimeException )
 {
     print( "propertiesChange..." );
 
     sal_uInt32 nCount = evt.getLength();
     if ( nCount )
     {
-        const PropertyChangeEvent* pEvents = evt.getConstArray();
+        const beans::PropertyChangeEvent* pEvents = evt.getConstArray();
         for ( sal_uInt32 n = 0; n < nCount; ++n )
         {
             UniString aText( UniString::CreateFromAscii(
@@ -1990,7 +2014,7 @@ private:
 
 public:
     MyWin( Window *pParent, WinBits nWinStyle,
-           Reference< XMultiServiceFactory >& rxFactory,
+           uno::Reference< lang::XMultiServiceFactory >& rxFactory,
            rtl::OUString const & rConfigurationKey1,
            rtl::OUString const & rConfigurationKey2,
            rtl::OUString const & rRapConnect );
@@ -2005,7 +2029,7 @@ public:
 
 //-------------------------------------------------------------------------
 MyWin::MyWin( Window *pParent, WinBits nWinStyle,
-                 Reference< XMultiServiceFactory >& rxFactory,
+              uno::Reference< lang::XMultiServiceFactory >& rxFactory,
               rtl::OUString const & rConfigurationKey1,
               rtl::OUString const & rConfigurationKey2,
               rtl::OUString const & rRapConnect )
@@ -2414,7 +2438,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
             if ( m_pContent )
                 m_pContent->addStringProperty(
                         aCmdLine,
-                        OUString::createFromAscii( "DefaultValue" ) );
+                        rtl::OUString::createFromAscii( "DefaultValue" ) );
             else
                 print( "No content!" );
 
@@ -2440,7 +2464,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
             if ( m_pContent )
                 m_pContent->setStringPropertyValue(
                                 aCmdLine,
-                                OUString::createFromAscii( "NewValue" ) );
+                                rtl::OUString::createFromAscii( "NewValue" ) );
             else
                 print( "No content!" );
 
@@ -2448,7 +2472,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 
         case MYWIN_ITEMID_OPEN:
             if ( m_pContent )
-                m_pContent->open(OUString::createFromAscii("open"),
+                m_pContent->open(rtl::OUString::createFromAscii("open"),
                                  aCmdLine, !m_bTiming, m_bTiming, m_bSort, 0,
                                  0, m_nFetchSize);
             else
@@ -2467,7 +2491,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 
         case MYWIN_ITEMID_UPDATE:
             if ( m_pContent )
-                m_pContent->open(OUString::createFromAscii("update"),
+                m_pContent->open(rtl::OUString::createFromAscii("update"),
                                  aCmdLine, !m_bTiming, m_bTiming, m_bSort, 0,
                                  0, m_nFetchSize);
             else
@@ -2477,7 +2501,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 
         case MYWIN_ITEMID_SYNCHRONIZE:
             if ( m_pContent )
-                m_pContent->open(OUString::createFromAscii("synchronize"),
+                m_pContent->open(rtl::OUString::createFromAscii("synchronize"),
                                  aCmdLine, !m_bTiming, m_bTiming, m_bSort, 0,
                                  0, m_nFetchSize);
             else
@@ -2487,7 +2511,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 
         case MYWIN_ITEMID_SEARCH:
             if ( m_pContent )
-                m_pContent->open(OUString::createFromAscii("search"),
+                m_pContent->open(rtl::OUString::createFromAscii("search"),
                                  aCmdLine, !m_bTiming, m_bTiming, m_bSort, 0,
                                  0, m_nFetchSize);
             else
@@ -2498,8 +2522,8 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
         case MYWIN_ITEMID_REORGANIZE:
             if ( m_pContent )
                 m_pContent->executeCommand (
-                    OUString::createFromAscii ("reorganizeData"),
-                    Any());
+                    rtl::OUString::createFromAscii ("reorganizeData"),
+                    uno::Any());
             else
                 print( "No content!" );
 
@@ -2554,19 +2578,19 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 
         case MYWIN_ITEMID_SYS2URI:
         {
-            Reference< XContentProviderManager >
-                xManager(m_aUCB.getContentProvider(), UNO_QUERY);
+            uno::Reference< star::ucb::XContentProviderManager >
+                xManager(m_aUCB.getContentProvider(), uno::UNO_QUERY);
             DBG_ASSERT(xManager.is(),
                        "MyWin::ToolBarHandler(): Service lacks interface");
 
-            rtl::OUString aURL(ucb::getLocalFileURL(xManager));
+            rtl::OUString aURL(getLocalFileURL(xManager));
 
             String aText(RTL_CONSTASCII_USTRINGPARAM("Local file URL: "));
             aText += String(aURL);
             aText.AppendAscii("\nConversion: ");
             aText += aCmdLine;
             aText.AppendAscii(" to ");
-            aText += String(ucb::getFileURLFromSystemPath(xManager,
+            aText += String(getFileURLFromSystemPath(xManager,
                                                           aURL,
                                                           aCmdLine));
             print(aText);
@@ -2575,15 +2599,15 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 
         case MYWIN_ITEMID_URI2SYS:
         {
-            Reference< XContentProviderManager >
-                xManager(m_aUCB.getContentProvider(), UNO_QUERY);
+            uno::Reference< star::ucb::XContentProviderManager >
+                xManager(m_aUCB.getContentProvider(), uno::UNO_QUERY);
             DBG_ASSERT(xManager.is(),
                        "MyWin::ToolBarHandler(): Service lacks interface");
 
             String aText(RTL_CONSTASCII_USTRINGPARAM("Conversion: "));
             aText += aCmdLine;
             aText.AppendAscii(" to ");
-            aText += String(ucb::getSystemPathFromFileURL(xManager,
+            aText += String(getSystemPathFromFileURL(xManager,
                                                           aCmdLine));
             print(aText);
             break;
@@ -2592,15 +2616,14 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
         case MYWIN_ITEMID_OFFLINE:
         case MYWIN_ITEMID_ONLINE:
         {
-            Reference< XContentProviderManager >
-                xManager(m_aUCB.getContentProvider(), UNO_QUERY);
-            Reference< XCommandProcessor > xProcessor;
+            uno::Reference< star::ucb::XContentProviderManager >
+                xManager(m_aUCB.getContentProvider(), uno::UNO_QUERY);
+            uno::Reference< star::ucb::XCommandProcessor > xProcessor;
             if (xManager.is())
                 xProcessor
-                    = Reference< XCommandProcessor >(xManager->
-                                                         queryContentProvider(
-                                                             aCmdLine),
-                                                     UNO_QUERY);
+                    = uno::Reference< star::ucb::XCommandProcessor >(
+                        xManager->queryContentProvider(aCmdLine),
+                        uno::UNO_QUERY);
             if (!xProcessor.is())
             {
                 String aText(RTL_CONSTASCII_USTRINGPARAM(
@@ -2610,20 +2633,22 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
                 break;
             }
 
-            OUString aName;
-            Any aArgument;
+            rtl::OUString aName;
+            uno::Any aArgument;
             if (nItemId == MYWIN_ITEMID_OFFLINE)
             {
-                aName = OUString::createFromAscii("goOffline");
+                aName = rtl::OUString::createFromAscii("goOffline");
 
-                Sequence< Reference< XContentIdentifier > > aIdentifiers(1);
+                uno::Sequence<
+                    uno::Reference< star::ucb::XContentIdentifier > >
+                        aIdentifiers(1);
                 aIdentifiers[0]
                     = m_aUCB.getContentIdentifierFactory()->
                                  createContentIdentifier(aCmdLine);
                 aArgument <<= aIdentifiers;
             }
             else
-                aName = OUString::createFromAscii("goOnline");
+                aName = rtl::OUString::createFromAscii("goOnline");
 
             UcbCommandProcessor(m_aUCB, xProcessor, m_pOutEdit).
                 executeCommand(aName, aArgument);
@@ -2718,23 +2743,35 @@ void MyApp::Main()
     // Initialize local Service Manager and basic services.
     //////////////////////////////////////////////////////////////////////
 
-    Reference< XMultiServiceFactory > xFac;
+    uno::Reference< lang::XMultiServiceFactory > xFac;
     try
     {
-        xFac = cppu::createRegistryServiceFactory(
-                            comphelper::getPathToSystemRegistry(),
-                            rtl::OUString(),
-                            true);
+        uno::Reference< uno::XComponentContext > xCtx(
+            cppu::defaultBootstrap_InitialComponentContext() );
+        if ( !xCtx.is() )
+        {
+            DBG_ERROR( "Error creating initial component context!" );
+            return;
+        }
+
+        xFac = uno::Reference< lang::XMultiServiceFactory >(
+            xCtx->getServiceManager(), uno::UNO_QUERY );
+
+        if ( !xFac.is() )
+        {
+            DBG_ERROR( "No service manager!" );
+            return;
+        }
     }
     catch ( com::sun::star::uno::Exception )
     {
-        DBG_ERROR( "Error creating RegistryServiceFactory!" );
+        DBG_ERROR( "Exception during creation of initial component context!" );
         return;
     }
 
     comphelper::setProcessServiceFactory( xFac );
 
-    Reference< XComponent > xComponent( xFac, UNO_QUERY );
+    uno::Reference< lang::XComponent > xComponent( xFac, uno::UNO_QUERY );
 
     //////////////////////////////////////////////////////////////////////
     // Create Application Window...
