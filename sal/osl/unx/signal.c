@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 11:06:35 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 15:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ static struct SignalAction
 {
     { SIGHUP,    ACT_IGNORE, NULL },    /* hangup */
     { SIGINT,    ACT_EXIT,   NULL },    /* interrupt (rubout) */
-    { SIGQUIT,   ACT_ABORT,  NULL },    /* quit (ASCII FS) */
+    { SIGQUIT,   ACT_EXIT,  NULL },    /* quit (ASCII FS) */
     { SIGILL,    ACT_SYSTEM,  NULL },    /* illegal instruction (not reset when caught) */
 /* changed from ACT_ABOUT to ACT_SYSTEM to try and get collector to run*/
     { SIGTRAP,   ACT_ABORT,  NULL },    /* trace trap (not reset when caught) */
