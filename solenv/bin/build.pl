@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.83 $
+#   $Revision: 1.84 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-14 14:36:09 $
+#   last change: $Author: vg $ $Date: 2003-06-16 13:53:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.83 $ ';
+$id_str = ' $Revision: 1.84 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -144,6 +144,8 @@ $child = 0;
 %module_annonced = ();
 $locked = 0; # lock for signal handler
 $prepare = ''; # prepare for following incompartible build
+$ignore = '';
+@ignored_errors = ();
 %incompartibles = ();
 %force_deliver = ();
 
@@ -164,7 +166,6 @@ if ($prepare) {
 };
 
 $StandDir = &get_stand_dir();
-#&check_dir;
 &provide_consistency if (defined $ENV{CWS_WORK_STAMP});
 
 $deliver_commando = $ENV{DELIVER};
@@ -216,7 +217,15 @@ if ($cmd_file) {
     close CMD_FILE;
     print STDOUT "Script $cmd_file generated\n";
 };
-exit(0);
+exit(0) if (!$ignore);
+exit(0) if (!scalar @ignored_errors);
+print STDERR "\nERROR: next directories could not be built:\n";
+foreach (@ignored_errors) {
+    print STDERR "\t$_\n";
+};
+print STDERR "\nERROR: please check these directories and build the correspondent module(s) anew!!\n\n";
+exit(1);
+
 
 #########################
 #                       #
@@ -359,6 +368,10 @@ sub dmake_dir {
         chdir $BuildDir;
         cwd();
         $error_code = system ("$dmake") if (!scalar keys %broken_build);
+        if ($error_code && $ignore) {
+            push(@ignored_errors, &CorrectPath($StandDir . $PathHash{$folder_nick}));
+            $error_code = 0;
+        };
         if ($error_code && ($error_code != -1)) {
             if (!$child) {
                 if ($incompartible) {
@@ -578,7 +591,6 @@ sub get_stand_dir {
         $ENV{mk_tmp} = '';
         die "No environment set\n";
     };
-    my ($StandDir);
     do {
         $StandDir = cwd();
         if (open(BUILD_LST, 'prj/build.lst')) {
@@ -586,7 +598,8 @@ sub get_stand_dir {
             $StandDir = $`;
             $CurrentPrj = $1;
             close(BUILD_LST);
-            return $StandDir;
+            return $StandDir if ($^O eq 'MSWin32');
+            return $ENV{SRC_ROOT} . '/';
         } elsif (&IsRootDir($StandDir)) {
             $ENV{mk_tmp} = '';
             &print_error ('Found no project to build');
@@ -748,7 +761,7 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:   build [--help|-all|-from|-from_opt|since prj_name|-incomp_from prj_name[:startprj_name] [-prepare]|-file file_name|-PP processes|-dlv[_switch] dlvswitch] \n";
+    print STDERR "Syntax:   build [--help|-all|-from|-from_opt|since prj_name|-incomp_from prj_name[:startprj_name] [-prepare]|-file file_name|-PP processes|-dlv[_switch] dlvswitch] [--ignore|-i] \n";
     print STDERR "Example:  build -from sfx2\n";
     print STDERR "              - build all projects including current one from sfx2\n";
     print STDERR "Example:  build -from_opt sfx2\n";
@@ -765,6 +778,7 @@ sub usage {
     print STDERR "      -PP         - start multiprocessing build, with number of processes passed (UNIXes only)\n";
     print STDERR "      -dlv[_switch]   - use deliver with the switch specified\n";
     print STDERR "      --help      - print help info\n";
+    print STDERR "      --ignore    - force tool to ignore errors\n";
     print STDERR "Default:          - build current project\n";
     print STDERR "Keys that are not listed above would be passed to dmake\n";
 };
@@ -796,6 +810,8 @@ sub get_options {
         $arg =~ /^-since$/      and $BuildAllParents = 1
                                 and $build_since = shift @ARGV      and next;
         $arg =~ /^--help$/      and &usage                          and exit(0);
+        $arg =~ /^--ignore$/        and $ignore = 1                         and next;
+        $arg =~ /^-i$/      and $ignore = 1                         and next;
         push (@dmake_args, $arg);
     };
     &print_error('Switches -from and -from_opt collision') if ($build_from && $build_from_opt);
@@ -809,6 +825,9 @@ sub get_options {
     $incompartible = scalar keys %incompartibles;
     if ($prepare && !$incompartible) {
         &print_error("-prepare is for use with -incomp_from switch only!\n");
+    };
+    if ($QuantityToBuild && $ignore) {
+        &print_error("Cannot ignore errors in multiprocessing build");
     };
 #    if ($incompartible && (!defined $ENV{CWS_WORK_STAMP})) {
 #       print "-incomp_from switch is implemented for cws only!\n";
@@ -1106,6 +1125,7 @@ sub module_classify {
 # and since switches)
 #
 sub provide_consistency {
+    &check_dir;
     foreach $var_ref (\$build_from, \$build_from_opt, \$build_since) {
         if ($$var_ref) {
             return if (-d $StandDir.$$var_ref);
@@ -1540,27 +1560,54 @@ sub get_solar_vars {
     unlink $file;
 }
 
-#sub check_dir {
-#   return if (!defined $ENV{CWS_WORK_STAMP});
-#   my $start_dir = cwd();
-#   chdir &CorrectPath($StandDir.$CurrentPrj);
-#   my $build_dir = cwd();
-#   $build_dir =~ s/\.lnk//o; #our current module directory
-#   chdir $ENV{SRC_ROOT};
-#   my $master_build_dir = &CorrectPath(cwd() . "/$module_name");
 #
-#   if ( $^O eq 'MSWin32' ) {
-#       $master_build_dir = uc $master_root_dir;
-#       $build_dir = uc $build_dir;
-#   };
+# Procedure checks out the module when we're
+# in link
 #
-#   if ($build_dir ne $master_build_dir) {
-#       &print_error("You are trying to build on master workspace");
-#       exit(1);
-#   };
-#   chdir $start_dir;
-#   cwd();
-#};
+sub checkout_current_module {
+    my $module_name = shift;
+    my $link_name = $module_name . '.lnk';
+    chdir $ENV{SRC_ROOT};
+    cwd();
+    print "\nBreaking link to module $module_name";
+    &checkout_module($module_name);
+    if (!-d $module_name) {
+        &print_error("Cannot checkout $module_name");
+    };
+    my $action;
+    if ( $^O eq 'MSWin32' ) {
+        $action = 'rename' if (!rename($link_name,
+                                $module_name.'.backup.lnk'));
+    } else {
+        $action = 'remove' if (!unlink $link_name);
+    };
+    &print_error("Cannot $action $link_name. Please $action it manually") if ($action);
+    chdir $module_name;
+    cwd();
+};
+
+sub check_dir {
+    my $start_dir = cwd();
+    $start_dir =~ /([\\\/])$/;
+    my @dir_entries = split(/[\\\/]/, $start_dir);
+    my $current_dir = $dir_entries[$#dir_entries];
+    if ( $^O eq 'MSWin32' ) {
+        if ($current_dir =~ /(\.lnk)$/) {
+            &checkout_current_module($`);
+        };
+    } else {
+        my $link_name = $ENV{SRC_ROOT}.'/'.$current_dir.'.lnk';
+        if ((-l $link_name) && (chdir $link_name)) {
+            if ($start_dir eq cwd()) {
+                &checkout_current_module($current_dir);
+                return;
+            } else {
+                chdir $start_dir;
+                cwd();
+            };
+        };
+    };
+};
 
 sub mark_force_deliver {
     my ($module_name, $module_path) = @_;
