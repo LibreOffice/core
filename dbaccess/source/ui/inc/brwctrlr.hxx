@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:16:27 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 08:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,16 +86,19 @@
 #ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
 #include <com/sun/star/form/XFormComponent.hpp>
 #endif
-#ifndef _SV_TIMER_HXX //autogen
+#ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
 #endif
-#ifndef _OSL_MUTEX_HXX_ //autogen
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
+#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef _VOS_THREAD_HXX_ //autogen
+#ifndef _VOS_THREAD_HXX_
 #include <vos/thread.hxx>
 #endif
-#ifndef _SFXCANCEL_HXX //autogen
+#ifndef _SFXCANCEL_HXX
 #include <svtools/cancel.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
@@ -168,7 +171,8 @@ namespace dbaui
         String                  m_sLoadStopperCaption;
             // If the data source is loaded asynchronously a stopper is created (which will result in activation of
             // the office's red button). This string is used as caption for the stopper.
-        AutoTimer   m_aInvalidateClipboard;             // for testing the state of the CUT/COPY/PASTE-slots
+        AutoTimer               m_aInvalidateClipboard;             // for testing the state of the CUT/COPY/PASTE-slots
+        TransferableDataHelper  m_aSystemClipboard;
 
 
         class FormErrorHelper
