@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-07 18:04:54 $
+ *  last change: $Author: pb $ $Date: 2000-12-08 10:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,9 +158,13 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
     String aHelpModuleName = GetHelpModuleName( nHelpId );
     String aHelpURL(String::CreateFromAscii("vnd.sun.star.help://") );
     aHelpURL += aHelpModuleName;
-    aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
-//! aHelpURL += '/';
-//! aHelpURL += String::CreateFromInt32( nHelpId );
+    if ( !nHelpId )
+        aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
+    else
+    {
+        aHelpURL += '/';
+        aHelpURL += String::CreateFromInt32( nHelpId );
+    }
 
     // try to find the help frame
     Reference < XDispatchProvider > xFrame(
