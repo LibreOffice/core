@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process_impl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 16:25:26 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #include <osl/file.h>
 #endif
 
+#ifndef _OSL_MODULE_H_
+#include "osl/module.h"
+#endif
+
 #ifndef _OSL_THREAD_H_
 #include "osl/thread.h"
 #endif
@@ -104,6 +108,98 @@
 #ifndef _OSL_UUNXAPI_H_
 #include "uunxapi.h"
 #endif
+
+/***************************************
+  osl_bootstrap_getExecutableFile_Impl().
+
+  @internal
+  @see rtl_bootstrap
+  @see #i37371#
+
+ **************************************/
+
+extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
+    rtl_uString ** ppFileURL
+) SAL_THROW_EXTERN_C();
+
+
+#if defined(MACOSX)
+#include <mach-o/dyld.h>
+
+oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
+    rtl_uString ** ppFileURL
+) SAL_THROW_EXTERN_C()
+{
+    oslProcessError result = osl_Process_E_NotFound;
+
+    char   buffer[PATH_MAX];
+    size_t buflen = sizeof(buffer);
+
+    if (_NSGetExecutablePath (buffer, &buflen) == 0)
+    {
+        /* Determine absolute path. */
+        char abspath[PATH_MAX];
+        if (realpath (buffer, abspath) != 0)
+        {
+            /* Convert from utf8 to unicode. */
+            rtl_uString * pAbsPath = 0;
+            rtl_string2UString (
+                &(pAbsPath),
+                abspath, rtl_str_getLength (abspath),
+                RTL_TEXTENCODING_UTF8,
+                OSTRING_TO_OUSTRING_CVTFLAGS);
+
+            if (pAbsPath)
+            {
+                /* Convert from path to url. */
+                if (osl_getFileURLFromSystemPath (pAbsPath, ppFileURL) == osl_File_E_None)
+                {
+                    /* Success. */
+                    result = osl_Process_E_None;
+                }
+                rtl_uString_release (pAbsPath);
+            }
+        }
+    }
+
+    return (result);
+}
+
+#elif !defined(NO_DL_FUNCTIONS)
+#include <dlfcn.h>
+
+oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
+    rtl_uString ** ppFileURL
+) SAL_THROW_EXTERN_C()
+{
+    oslProcessError result = osl_Process_E_NotFound;
+
+    /* Determine address of "main()" function. */
+    void * addr = dlsym (RTLD_DEFAULT, "main");
+    if (addr != 0)
+    {
+        /* Determine module URL. */
+        if (osl_getModuleURLFromAddress (addr, ppFileURL))
+        {
+            /* Success. */
+            result = osl_Process_E_None;
+        }
+    }
+
+    return (result);
+}
+
+#else  /* NO_DL_FUNCTIONS */
+
+oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
+    rtl_uString ** ppFileURL
+) SAL_THROW_EXTERN_C()
+{
+    /* Fallback to ordinary osl_getExecutableFile(). */
+    return osl_getExecutableFile (ppFileURL);
+}
+
+#endif /* NO_DL_FUNCTIONS */
 
 /***************************************
  CommandArgs_Impl.
@@ -130,7 +226,6 @@ oslProcessError SAL_CALL osl_getExecutableFile (rtl_uString ** ppustrFile)
     oslProcessError result = osl_Process_E_NotFound;
 
     pthread_mutex_lock (&(g_command_args.m_mutex));
-    OSL_ENSURE (g_command_args.m_nCount > 0, "osl_getExecutableFile(): CommandArgs not set.");
     if (g_command_args.m_nCount > 0)
     {
         /* CommandArgs set. Obtain argv[0]. */
@@ -150,7 +245,6 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount (void)
     sal_uInt32 result = 0;
 
     pthread_mutex_lock (&(g_command_args.m_mutex));
-    OSL_ENSURE (g_command_args.m_nCount > 0, "osl_getCommandArgCount(): CommandArgs not set.");
     if (g_command_args.m_nCount > 0)
         result = g_command_args.m_nCount - 1;
     pthread_mutex_unlock (&(g_command_args.m_mutex));
@@ -166,7 +260,6 @@ oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strC
     oslProcessError result = osl_Process_E_NotFound;
 
     pthread_mutex_lock (&(g_command_args.m_mutex));
-    OSL_ENSURE (g_command_args.m_nCount > 0, "osl_getCommandArg(): CommandArgs not set.");
     if (g_command_args.m_nCount > (nArg + 1))
     {
         rtl_uString_assign (strCommandArg, g_command_args.m_ppArgs[nArg + 1]);
@@ -202,7 +295,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
                 /* see @ osl_getExecutableFile(). */
                 if (rtl_ustr_indexOfChar (rtl_uString_getStr(ppArgs[0]), sal_Unicode('/')) == -1)
                 {
-                    const rtl::OUString PATH (rtl::OUString::createFromAscii ("PATH"));
+                    const rtl::OUString PATH (RTL_CONSTASCII_USTRINGPARAM("PATH"));
 
                     rtl_uString * pSearchPath = 0;
                     osl_getEnvironment (PATH.pData, &pSearchPath);
