@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:56 $
+ *  last change: $Author: cmc $ $Date: 2002-05-31 09:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5083,7 +5083,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
 const WW8_FFN* WW8Fonts::GetFont( USHORT nNum ) const
 {
-    if( !pFontA || nNum > nMax )
+    if( !pFontA || nNum >= nMax )
         return 0;
 
     return &pFontA[ nNum ];
