@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:27:33 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 09:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
 //......................................................................
 namespace dbaui
 {
@@ -161,10 +164,20 @@ namespace dbaui
     sal_Bool DbaIndexList::EditedEntry( SvLBoxEntry* _pEntry, const String& _rNewText )
     {
         // first check if this is valid SQL92 name
-        for(xub_StrLen i=0;i < _rNewText.Len();++i)
+        if ( isSQL92CheckEnabled(m_xConnection) )
         {
-            if(!isCharOk(_rNewText.GetBuffer()[i],i == 0,sal_False,::rtl::OUString()))
-                return sal_False;
+            Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
+            if ( xMeta.is() )
+            {
+                ::rtl::OUString sNewName(_rNewText);
+                ::rtl::OUString sAlias = ::dbtools::convertName2SQLName(sNewName,xMeta->getExtraNameCharacters());
+                if ( ( xMeta->storesMixedCaseQuotedIdentifiers() )
+                        ?
+                        sAlias != sNewName
+                        :
+                !sNewName.equalsIgnoreAsciiCase(sAlias))
+                    return sal_False;
+            }
         }
 
         if (!SvTreeListBox::EditedEntry(_pEntry, _rNewText))
@@ -222,9 +235,12 @@ namespace dbaui
     //= DbaIndexDialog
     //==================================================================
     //------------------------------------------------------------------
-    DbaIndexDialog::DbaIndexDialog(Window* _pParent, const Sequence< ::rtl::OUString >& _rFieldNames,
-        const Reference< XNameAccess >& _rxIndexes, const Reference< XMultiServiceFactory >& _rxORB,sal_Int32 _nMaxColumnsInIndex)
+    DbaIndexDialog::DbaIndexDialog( Window* _pParent, const Sequence< ::rtl::OUString >& _rFieldNames,
+                                    const Reference< XNameAccess >& _rxIndexes,
+                                    const Reference< XConnection >& _rxConnection,
+                                    const Reference< XMultiServiceFactory >& _rxORB,sal_Int32 _nMaxColumnsInIndex)
         :ModalDialog( _pParent, ModuleRes(DLG_INDEXDESIGN))
+        ,m_xConnection(_rxConnection)
         ,m_aGeometrySettings(E_DIALOG, ::rtl::OUString::createFromAscii("dbaccess.tabledesign.indexdialog"))
         ,m_aActions                         (this, ResId(TLB_ACTIONS))
         ,m_aIndexes                         (this, ResId(CTR_INDEXLIST))
@@ -249,6 +265,8 @@ namespace dbaui
         m_aIndexes.SetEndEditHdl(LINK(this, DbaIndexDialog, OnEntryEdited));
         m_aIndexes.SetSelectionMode(SINGLE_SELECTION);
         m_aIndexes.SetHighlightRange();
+        m_aIndexes.setConnection(m_xConnection);
+
         m_pFields->Init(_rFieldNames);
 
         setToolBox(&m_aActions);
@@ -965,6 +983,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2002/04/29 08:27:33  oj
+ *  #98772# impl toolbox hi contrast
+ *
  *  Revision 1.12  2001/11/05 10:12:52  oj
  *  #94031# set unique flag every time
  *

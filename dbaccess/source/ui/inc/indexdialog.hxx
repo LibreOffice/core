@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:08:41 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 09:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
@@ -110,6 +113,7 @@ namespace dbaui
     class DbaIndexList : public SvTreeListBox
     {
     protected:
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
         Link        m_aSelectHdl;
         Link        m_aEndEditHdl;
         sal_Bool    m_bSuspendSelectHdl;
@@ -130,6 +134,11 @@ namespace dbaui
 
         void SelectNoHandlerCall( SvLBoxEntry* pEntry );
 
+        inline void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection)
+        {
+             m_xConnection = _rxConnection;
+        }
+
     protected:
         virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
     };
@@ -143,6 +152,7 @@ namespace dbaui
                             public OToolBoxHelper
     {
     protected:
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
         SvtViewOptions          m_aGeometrySettings;
 
         ToolBox                 m_aActions;
@@ -167,10 +177,11 @@ namespace dbaui
             Window* _pParent,
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rFieldNames,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             sal_Int32 _nMaxColumnsInIndex
             );
-        ~DbaIndexDialog();
+        virtual ~DbaIndexDialog();
 
         virtual void StateChanged( StateChangedType nStateChange );
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
@@ -230,6 +241,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2002/04/29 08:08:41  oj
+ *  #98772# overload window method for hi contrast
+ *
  *  Revision 1.6  2001/05/11 16:24:08  fs
  *  #86788# +m_bEditAgain / #86863# allow a drop without confirmation (mapped from resetting a new index)
  *
