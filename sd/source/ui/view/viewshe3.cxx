@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-09 11:55:15 $
+ *  last change: $Author: os $ $Date: 2001-03-02 15:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@
 #include <svx/outliner.hxx>
 #endif
 
-#ifndef _OFA_MISCCFG_HXX //autogen
+#ifndef _SFX_MISCCFG_HXX
 #include <sfx2/misccfg.hxx>
 #endif
 
@@ -826,10 +826,10 @@ USHORT __EXPORT SdViewShell::Print(SfxProgress& rProgress, PrintDialog* pDlg)
             ePageKind = PK_NOTES;
         }
 
-        OfaMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
+        SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
         pPrintOpts->SetWarningPrinter( pMisc->IsNotFoundWarning() );
         pPrintOpts->SetWarningSize( pMisc->IsPaperSizeWarning() );
-        pPrintOpts->SetWarningOrientation( pMisc->IsPaperBinWarning() );
+        pPrintOpts->SetWarningOrientation( pMisc->IsPaperOrientationWarning() );
 
 /// Neu
         // Ausgabequalitaet setzen
