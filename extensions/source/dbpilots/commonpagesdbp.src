@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:21:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,12 +99,21 @@ TabPage RID_PAGE_TABLESELECTION
     ListBox LB_DATASOURCE
     {
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 26  ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , 14 ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 27 , 14 ) ;
         SVLook = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
         AutoHScroll = TRUE ;
     };
+
+    PushButton PB_FORMDATASOURCE
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 + WINDOW_HALF_SIZE_X - 24 , 25  ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Text [ de ] = "~..." ;
+        Text [ en-US ] = "~...";
+    };
+
     FixedText FT_TABLE
     {
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3, 46 ) ;
@@ -223,7 +232,8 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
     FixedText FT_FORMDATASOURCE
     {
         Pos = MAP_APPFONT ( 7 + 60 + 3 , 15 ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X / 2 - 80 - 3 , 8 ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X / 2 - 80 - 3 , 19 ) ;
+        WordBreak = TRUE;
     };
 
     FixedText FT_FORMCONTENTTYPELABEL
