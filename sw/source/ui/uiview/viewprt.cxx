@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 09:15:25 $
+ *  last change: $Author: vg $ $Date: 2003-07-28 12:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
             if( -1 != bPrintSelection )
                 aOpts.bPrintSelection = 0 != bPrintSelection;
 
-            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue> aViewProperties(14);
+            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue> aViewProperties(15);
             com::sun::star::beans::PropertyValue* pViewProperties =  aViewProperties.getArray();
             pViewProperties[1].Name = C2U("PrintGraphics");
             pViewProperties[1].Value <<= (sal_Bool)aOpts.IsPrintGraphic();
@@ -388,6 +388,8 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
             pViewProperties[13].Value <<= (sal_Bool)aOpts.IsPrintBlackFont();
             pViewProperties[0].Name = C2U("IsSinglePrintJob");
             pViewProperties[0].Value <<= (sal_Bool)aOpts.IsPrintSingleJobs();
+            pViewProperties[14].Name = C2U("Selection");
+            pViewProperties[14].Value <<= (sal_Bool)aOpts.bPrintSelection;
             SetAdditionalPrintOptions(aViewProperties);
 
             SfxViewShell::Print(*pProgress);
