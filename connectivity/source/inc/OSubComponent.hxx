@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSubComponent.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:24 $
+ *  last change: $Author: fs $ $Date: 2000-10-06 11:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,48 +75,51 @@ namespace connectivity
     {
     protected:
         // the parent must support the tunnel implementation
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
-        T*  m_pChildImpl;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
+        T*  m_pDerivedImplementation;
 
     public:
-        OSubComponent(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent) : m_xParent(_xParent)
+        OSubComponent(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent,
+                T* _pDerivedImplementation)
+            :m_xParent(_xParent)
+            ,m_pDerivedImplementation(_pDerivedImplementation)
         {
-            m_pChildImpl = (T*)this;
         }
 
 
     protected:
         void dispose_ChildImpl()
         {
-            ::osl::MutexGuard aGuard( m_pChildImpl->rBHelper.rMutex );
+            ::osl::MutexGuard aGuard( m_pDerivedImplementation->rBHelper.rMutex );
             m_xParent = NULL;
         }
         void relase_ChildImpl()
         {
-            if (osl_decrementInterlockedCount( &m_pChildImpl->m_refCount ) == 0)
+            if (osl_decrementInterlockedCount( &m_pDerivedImplementation->m_refCount ) == 0)
             {
-                if (! m_pChildImpl->rBHelper.bDisposed)
+                if (! m_pDerivedImplementation->rBHelper.bDisposed)
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xHoldAlive( *m_pChildImpl );
+                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xHoldAlive( *m_pDerivedImplementation );
 
                     // remember the parent
                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xParent;
                     {
-                        ::osl::MutexGuard aGuard( m_pChildImpl->rBHelper.rMutex );
+                        ::osl::MutexGuard aGuard( m_pDerivedImplementation->rBHelper.rMutex );
                         xParent = m_xParent;
                         m_xParent = NULL;
                     }
 
                     // First dispose
-                    m_pChildImpl->dispose();
+                    m_pDerivedImplementation->dispose();
 
                     // only the alive ref holds the object
-                    OSL_ASSERT( m_pChildImpl->m_refCount == 1 );
+                    OSL_ASSERT( m_pDerivedImplementation->m_refCount == 1 );
 
                     // release the parent in the ~
                     if (xParent.is())
                     {
-                        ::osl::MutexGuard aGuard( m_pChildImpl->rBHelper.rMutex );
+                        ::osl::MutexGuard aGuard( m_pDerivedImplementation->rBHelper.rMutex );
                         m_xParent = xParent;
                     }
 
@@ -124,10 +127,6 @@ namespace connectivity
                     return;
                 }
             }
-            // restore the reference count
-            osl_incrementInterlockedCount( &m_pChildImpl->m_refCount );
-            // as we cover the job of the componenthelper we use the ...
-            //  ((::cppu::OWeakObject*)m_pChildImpl)->release();
         }
     };
 }
