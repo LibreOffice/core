@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:19 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,6 +925,18 @@ ScToken* ScTokenArray::Next()
         return NULL;
 }
 
+ScToken* ScTokenArray::NextNoSpaces()
+{
+    if( pCode )
+    {
+        while( (nIndex < nLen) && (pCode[ nIndex ]->GetOpCode() == ocSpaces) )
+            ++nIndex;
+        if( nIndex < nLen )
+            return pCode[ nIndex++ ];
+    }
+    return NULL;
+}
+
 ScToken* ScTokenArray::NextRPN()
 {
     if( pRPN && nIndex < nRPN )
@@ -1062,111 +1074,6 @@ BOOL ScTokenArray::IsReference( ScRange& rRange ) const
 BOOL ScTokenArray::IsValidReference( ScRange& rRange ) const
 {
     return ImplGetReference( rRange, TRUE );
-}
-
-inline void lcl_GetAddress( ScAddress& rAddress, const ScToken& rToken )
-{
-    if ( rToken.GetType() == svSingleRef )
-    {
-        const SingleRefData& rRef = ((const ScSingleRefToken&)rToken).GetSingleRef();
-        rAddress.Set( rRef.nCol, rRef.nRow, rRef.nTab );
-    }
-}
-
-BOOL ScTokenArray::GetTableOpRefs(
-        ScAddress& rFormula,
-        ScAddress& rColFirstPos, ScAddress& rColRelPos,
-        ScAddress& rRowFirstPos, ScAddress& rRowRelPos,
-        BOOL& rbIsMode2 ) const
-{
-    ScToken* pToken;
-    BOOL bRet = FALSE;
-    rbIsMode2 = FALSE;
-    if( pCode && nLen )
-    {
-        enum
-        {
-            stBegin, stTableOp, stOpen, stFormula, stFormulaSep,
-            stColFirst, stColFirstSep, stColRel, stColRelSep,
-            stRowFirst, stRowFirstSep, stRowRel, stClose, stError
-        } eState = stBegin;     // last read token
-
-        USHORT nIndex = 0;
-        while( (eState != stError) && (nIndex < nLen) )
-        {
-            pToken = pCode[ nIndex ];
-            if( pToken )
-            {
-                OpCode eOpCode = pToken->GetOpCode();
-                BOOL bIsSingleRef = (eOpCode == ocPush) && (pToken->GetType() == svSingleRef);
-                BOOL bIsSep = (eOpCode == ocSep);
-
-                if( eOpCode != ocSpaces )
-                {
-                    switch( eState )
-                    {
-                        case stBegin:
-                            eState = (eOpCode == ocTableOp) ? stTableOp : stError;
-                        break;
-                        case stTableOp:
-                            eState = (eOpCode == ocOpen) ? stOpen : stError;
-                        break;
-                        case stOpen:
-                            eState = bIsSingleRef ? stFormula : stError;
-                            if( bIsSingleRef )
-                                lcl_GetAddress( rFormula, *pToken );
-                        break;
-                        case stFormula:
-                            eState = bIsSep ? stFormulaSep : stError;
-                        break;
-                        case stFormulaSep:
-                            eState = bIsSingleRef ? stColFirst : stError;
-                            if( bIsSingleRef )
-                                lcl_GetAddress( rColFirstPos, *pToken );
-                        break;
-                        case stColFirst:
-                            eState = bIsSep ? stColFirstSep : stError;
-                        break;
-                        case stColFirstSep:
-                            eState = bIsSingleRef ? stColRel : stError;
-                            if( bIsSingleRef )
-                                lcl_GetAddress( rColRelPos, *pToken );
-                        break;
-                        case stColRel:
-                            eState = bIsSep ? stColRelSep : ((eOpCode == ocClose) ? stClose : stError);
-                        break;
-                        case stColRelSep:
-                            eState = bIsSingleRef ? stRowFirst : stError;
-                            if( bIsSingleRef )
-                            {
-                                lcl_GetAddress( rRowFirstPos, *pToken );
-                                rbIsMode2 = TRUE;
-                            }
-                        break;
-                        case stRowFirst:
-                            eState = bIsSep ? stRowFirstSep : stError;
-                        break;
-                        case stRowFirstSep:
-                            eState = bIsSingleRef ? stRowRel : stError;
-                            if( bIsSingleRef )
-                                lcl_GetAddress( rRowRelPos, *pToken );
-                        break;
-                        case stRowRel:
-                            eState = (eOpCode == ocClose) ? stClose : stError;
-                        break;
-                        default:
-                            eState = stError;
-                    }
-                }
-            }
-            else
-                eState = stError;
-
-            nIndex++;
-        }
-        bRet = (eState == stClose);
-    }
-    return bRet;
 }
 
 void ScTokenArray::Load30( SvStream& rStream, const ScAddress& rPos )
@@ -2314,5 +2221,4 @@ void ScTokenIterator::Jump( short nStart, short nNext )
         pCur->nPC = nStart;
     }
 }
-
 
