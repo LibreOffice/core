@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 15:00:04 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 13:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,8 +638,9 @@ uno::Any SAL_CALL Content::execute(
 
         aRet = open( aOpenCommand, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
+    else if ( !m_aUri.isRootFolder()
+              && aCommand.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
     {
         //////////////////////////////////////////////////////////////////
         // insert
@@ -663,8 +664,9 @@ uno::Any SAL_CALL Content::execute(
                              : star::ucb::NameClash::ERROR;
         insert( aArg.Data, nNameClash, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(  "delete" ) ) )
+    else if ( !m_aUri.isRootFolder()
+              && aCommand.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
     {
         //////////////////////////////////////////////////////////////////
         // delete
@@ -1212,41 +1214,54 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
         {
-            rtl::OUString aNewValue;
-            if ( rValue.Value >>= aNewValue )
+            if ( m_aUri.isRootFolder() )
             {
-                // No empty titles!
-                if ( aNewValue.getLength() > 0 )
+                // Read-only property!
+                aRet[ n ] <<= lang::IllegalAccessException(
+                                rtl::OUString::createFromAscii(
+                                    "Property is read-only!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
+            }
+            else
+            {
+                rtl::OUString aNewValue;
+                if ( rValue.Value >>= aNewValue )
                 {
-                    if ( aNewValue != m_aProps.aTitle )
+                    // No empty titles!
+                    if ( aNewValue.getLength() > 0 )
                     {
-                        // modified title -> modified URL -> exchange !
-                        if ( m_eState == PERSISTENT )
-                            bExchange = sal_True;
+                        if ( aNewValue != m_aProps.aTitle )
+                        {
+                            // modified title -> modified URL -> exchange !
+                            if ( m_eState == PERSISTENT )
+                                bExchange = sal_True;
 
-                        // new value will be set later...
-                        aNewTitle = aNewValue;
+                            // new value will be set later...
+                            aNewTitle = aNewValue;
 
-                        // remember position within sequence of values
-                        // (for error handling).
-                        nTitlePos = n;
+                            // remember position within sequence of values
+                            // (for error handling).
+                            nTitlePos = n;
+                        }
+                    }
+                    else
+                    {
+                        aRet[ n ] <<=
+                            lang::IllegalArgumentException(
+                                rtl::OUString::createFromAscii(
+                                    "Empty title not allowed!" ),
+                                static_cast< cppu::OWeakObject * >( this ),
+                                -1 );
                     }
                 }
                 else
                 {
-                    aRet[ n ] <<= lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Empty title not allowed!" ),
-                                    static_cast< cppu::OWeakObject * >( this ),
-                                    -1 );
+                    aRet[ n ] <<=
+                        beans::IllegalTypeException(
+                            rtl::OUString::createFromAscii(
+                                "Property value has wrong type!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
                 }
-            }
-            else
-            {
-                aRet[ n ] <<= beans::IllegalTypeException(
-                                rtl::OUString::createFromAscii(
-                                    "Property value has wrong type!" ),
-                                static_cast< cppu::OWeakObject * >( this ) );
             }
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -1472,7 +1487,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         // Assemble new content identifier...
         rtl::OUString aNewURL = m_aUri.getParentUri();
         aNewURL += rtl::OUString::createFromAscii( "/" );
-        aNewURL += aNewTitle;
+        aNewURL += PackageUri::encodeSegment( aNewTitle );
         uno::Reference< star::ucb::XContentIdentifier > xNewId
             = new ::ucb::ContentIdentifier( m_xSMgr, aNewURL );
 
@@ -1738,7 +1753,7 @@ void Content::insert(
 
     rtl::OUString aNewURL = m_aUri.getParentUri();
     aNewURL += rtl::OUString::createFromAscii( "/" );
-    aNewURL += m_aProps.aTitle;
+    aNewURL += PackageUri::encodeSegment( m_aProps.aTitle );
     PackageUri aNewUri( aNewURL );
 
     // Handle possible name clash...
@@ -2152,7 +2167,7 @@ void Content::transfer(
                                                 != aChildId.getLength() )
                         aChildId += rtl::OUString::createFromAscii( "/" );
 
-                    aChildId += aName;
+                    aChildId += PackageUri::encodeSegment( aName );
 
                     star::ucb::TransferInfo aInfo;
                     aInfo.MoveData  = sal_False;
