@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-19 13:51:04 $
+#   last change: $Author: hjs $ $Date: 2001-10-22 12:18:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,12 @@ TARGET=openssl
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
+
+# workaround a strange behavior of ld.so (2.1.3)
+.IF "$(OS)$(CPU)"=="LINUXI"
+LD_LIBRARY_PATH!:=$(subst,../lib, $(LD_LIBRARY_PATH))
+.EXPORT : LD_LIBRARY_PATH
+.ENDIF
 
 TARFILE_NAME=openssl-0.9.5a
 
