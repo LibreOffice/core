@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-30 07:07:54 $
+ *  last change: $Author: gt $ $Date: 2001-09-06 14:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1310,10 +1310,10 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( Window* pParent ) :
 
 SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 {
-    delete pCPage;
-    delete pIPage;
-    delete pSPage;
-    delete pBPage;
+    DELETEZ( pCPage );
+    DELETEZ( pIPage );
+    DELETEZ( pSPage );
+    DELETEZ( pBPage );
 
     for ( USHORT i = 0; i < aActiveLB.GetEntryCount(); ++i )
         delete (String*)(ULONG)aActiveLB.GetEntryData(i);
@@ -1573,7 +1573,7 @@ sal_Bool SfxHelpIndexWindow_Impl::HasFocusOnEdit() const
 
 SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
-    Window( pParent, WB_CLIPCHILDREN ),
+    Window( pParent, WB_CLIPCHILDREN | WB_TABSTOP ),
 
     aToolBox        ( this, 0 ),
     pHelpWin        ( pParent ),
@@ -1723,6 +1723,23 @@ void SfxHelpTextWindow_Impl::ToggleIndex( sal_Bool bOn )
         aToolBox.SetQuickHelpText( TBI_INDEX, aIndexOnText );
     }
 }
+
+void SfxHelpTextWindow_Impl::GetFocus()
+{
+    try
+    {
+        if( xFrame.is() )
+        {
+            Reference< ::com::sun::star::awt::XWindow > xWindow = xFrame->getComponentWindow();
+            if( xWindow.is() )
+                xWindow->setFocus();
+        }
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+    }
+}
+
 
 // class SfxHelpWindow_Impl ----------------------------------------------
 
@@ -2000,6 +2017,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
 
 {
     SetHelpId( HID_HELP_WINDOW );
+    SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
     OpenStatusListener_Impl* pOpenListener = new OpenStatusListener_Impl;
     xOpenListener = Reference< XStatusListener >( static_cast< ::cppu::OWeakObject* >(pOpenListener), UNO_QUERY );
@@ -2026,7 +2044,10 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
 SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 {
     SaveConfig();
-    delete pIndexWin;
+    Window* pDel = pIndexWin;
+    pIndexWin = NULL;
+    delete pDel;
+
     delete pTextWin;
 }
 

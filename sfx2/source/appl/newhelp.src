@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-29 20:56:04 $
+ *  last change: $Author: gt $ $Date: 2001-09-06 14:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ Window WIN_HELP_INDEX
 {
     Hide = TRUE ;
     Size = MAP_APPFONT ( 120 , 200 ) ;
+    DialogControl = TRUE;
     ListBox LB_ACTIVE
     {
         HelpId = HID_HELP_LISTBOX;
@@ -85,6 +86,7 @@ Window WIN_HELP_INDEX
     {
         HelpId = HID_HELP_TABCONTROL;
         Pos = MAP_APPFONT ( 3, 19 ) ;
+        TabStop = TRUE;
         PageList =
         {
             PageItem

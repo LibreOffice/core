@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-30 07:07:54 $
+ *  last change: $Author: gt $ $Date: 2001-09-06 14:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,8 @@ public:
     virtual long        Notify( NotifyEvent& rNEvt );
 
     void                SelectExecutableEntry();
+
+//  virtual long        PreNotify( NotifyEvent& rNEvt );
 };
 
 class IndexTabPage_Impl : public TabPage
@@ -379,6 +381,8 @@ public:
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                             getFrame() const { return xFrame; }
     void                    ToggleIndex( sal_Bool bOn );
+
+    virtual void            GetFocus();
 };
 
 // class SfxHelpWindow_Impl ----------------------------------------------
@@ -434,6 +438,7 @@ public:
     void                SetFactory( const String& rFactory );
     void                SetHelpURL( const String& rURL );
     void                DoAction( USHORT nActionId );
+
 };
 
 class SfxAddHelpBookmarkDialog_Impl : public ModalDialog
