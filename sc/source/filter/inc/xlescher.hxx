@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:12:52 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XLESCHER_HXX
 #define SC_XLESCHER_HXX
 
@@ -138,6 +137,7 @@ const sal_uInt16 EXC_OBJ_CMO_PRINTABLE      = 0x0010;   /// Object printable
 // ftPioGrbit: flags
 const sal_uInt16 EXC_OBJ_PIO_LINKED         = 0x0002;
 const sal_uInt16 EXC_OBJ_PIO_SYMBOL         = 0x0008;
+const sal_uInt16 EXC_OBJ_PIO_AUTOLOAD       = 0x0200;
 
 // ftCbls: Check box/radio button data
 const sal_uInt16 EXC_OBJ_CBLS_STATEMASK     = 0x0003;
