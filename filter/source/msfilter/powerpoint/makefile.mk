@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 08:41:45 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:36:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJNAME=filter
 TARGET=PptImporter
 
 ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
 
 # --- Settings ----------------------------------
 
@@ -107,26 +106,20 @@ SLOFILES=	$(SLO)$/pptimporter.obj						\
 # --- Library -----------------------------------
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
-SHL1STDLIBS=$(CPPULIB)			\
-            $(CPPUHELPERLIB)	\
-            $(UNOTOOLSLIB)		\
-            $(COMPHELPERLIB)	\
-            $(VOSLIB)			\
-            $(SALLIB)			\
-            $(VCLLIB)			\
-            $(SVLLIB)			\
-            $(ONELIB)			\
-            $(TOOLSLIB)			\
+SHL1STDLIBS=\
             $(SOTLIB)			\
-            $(XMLOFFLIB)
+            $(TOOLSLIB)			\
+            $(CPPUHELPERLIB)	\
+            $(CPPULIB)			\
+            $(SALLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
+SHL1VERSIONMAP=exports.map
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
 
 # --- Targets ----------------------------------
 
