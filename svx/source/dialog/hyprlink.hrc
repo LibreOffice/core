@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:31:46 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _SVX_HYPERLINK_HRC
 
 #ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
+#include <svxids.hrc>
 #endif
 
 #ifndef _SFXSIDS_HRC
