@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:52:56 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #ifndef _COM_SUN_STAR_EMBED_XLINKAGESUPPORT_HPP_
 #include <com/sun/star/embed/XLinkageSupport.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
@@ -316,8 +319,13 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
         if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
         {
             // default size
-            awt::Size aSz = xObj->getVisualAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetAspect() );
-            aRect.SetSize( Size( aSz.Width, aSz.Height ) );
+            try
+            {
+                awt::Size aSz = xObj->getVisualAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetAspect() );
+                aRect.SetSize( Size( aSz.Width, aSz.Height ) );
+            }
+            catch( embed::NoVisualAreaSizeException& )
+            {}
             static_cast< SdrOle2Obj* >( pObj )->SetLogicRect( aRect );
         }
         else
@@ -375,8 +383,13 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
         if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
         {
             // default size
-            awt::Size aSz = xObj->getVisualAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetAspect() );
-            aRect.SetSize( Size( aSz.Width, aSz.Height ) );
+            try
+            {
+                awt::Size aSz = xObj->getVisualAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetAspect() );
+                aRect.SetSize( Size( aSz.Width, aSz.Height ) );
+            }
+            catch( embed::NoVisualAreaSizeException& )
+            {}
             static_cast< SdrOle2Obj* >( pObj )->SetLogicRect( aRect );
         }
         else
