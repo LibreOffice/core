@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atom.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-10 11:32:35 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 15:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,11 +152,11 @@ namespace utl {
         const ::rtl::OUString& getString( int atomClass, int atom ) const
             { return m_aProvider.getString( atomClass, atom ); }
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::AtomDescription > SAL_CALL getClass( sal_Int32 atomClass );
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::util::AtomDescription > > SAL_CALL getClasses( const ::com::sun::star::uno::Sequence< sal_Int32 >& atomClasses );
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAtomDescriptions( const ::com::sun::star::uno::Sequence< ::com::sun::star::util::AtomClassRequest >& atoms );
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::AtomDescription > SAL_CALL getRecentAtoms( sal_Int32 atomClass, sal_Int32 atom );
-        virtual sal_Int32 SAL_CALL getAtom( sal_Int32 atomClass, const ::rtl::OUString& description, sal_Bool create );
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::AtomDescription > SAL_CALL getClass( sal_Int32 atomClass ) throw();
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::util::AtomDescription > > SAL_CALL getClasses( const ::com::sun::star::uno::Sequence< sal_Int32 >& atomClasses ) throw();
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAtomDescriptions( const ::com::sun::star::uno::Sequence< ::com::sun::star::util::AtomClassRequest >& atoms ) throw();
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::AtomDescription > SAL_CALL getRecentAtoms( sal_Int32 atomClass, sal_Int32 atom ) throw();
+        virtual sal_Int32 SAL_CALL getAtom( sal_Int32 atomClass, const ::rtl::OUString& description, sal_Bool create ) throw();
     };
 
     class AtomClient

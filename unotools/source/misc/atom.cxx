@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atom.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-18 11:57:44 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 15:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,14 +245,14 @@ AtomServer::~AtomServer()
 {
 }
 
-sal_Int32 AtomServer::getAtom( sal_Int32 atomClass, const ::rtl::OUString& description, sal_Bool create )
+sal_Int32 AtomServer::getAtom( sal_Int32 atomClass, const ::rtl::OUString& description, sal_Bool create ) throw()
 {
     ::osl::Guard< ::osl::Mutex > guard( m_aMutex );
 
     return m_aProvider.getAtom( atomClass, description, create );
 }
 
-Sequence< Sequence< NMSP_UTIL::AtomDescription > > AtomServer::getClasses( const Sequence< sal_Int32 >& atomClasses )
+Sequence< Sequence< NMSP_UTIL::AtomDescription > > AtomServer::getClasses( const Sequence< sal_Int32 >& atomClasses ) throw()
 {
     ::osl::Guard< ::osl::Mutex > guard( m_aMutex );
 
@@ -264,7 +264,7 @@ Sequence< Sequence< NMSP_UTIL::AtomDescription > > AtomServer::getClasses( const
     return aRet;
 }
 
-Sequence< NMSP_UTIL::AtomDescription > AtomServer::getClass( sal_Int32 atomClass )
+Sequence< NMSP_UTIL::AtomDescription > AtomServer::getClass( sal_Int32 atomClass ) throw()
 {
     ::osl::Guard< ::osl::Mutex > guard( m_aMutex );
 
@@ -282,7 +282,7 @@ Sequence< NMSP_UTIL::AtomDescription > AtomServer::getClass( sal_Int32 atomClass
     return aRet;
 }
 
-Sequence< NMSP_UTIL::AtomDescription > AtomServer::getRecentAtoms( sal_Int32 atomClass, sal_Int32 atom )
+Sequence< NMSP_UTIL::AtomDescription > AtomServer::getRecentAtoms( sal_Int32 atomClass, sal_Int32 atom ) throw()
 {
     ::osl::Guard< ::osl::Mutex > guard( m_aMutex );
 
@@ -300,7 +300,7 @@ Sequence< NMSP_UTIL::AtomDescription > AtomServer::getRecentAtoms( sal_Int32 ato
     return aRet;
 }
 
-Sequence< ::rtl::OUString > AtomServer::getAtomDescriptions( const Sequence< AtomClassRequest >& atoms )
+Sequence< ::rtl::OUString > AtomServer::getAtomDescriptions( const Sequence< AtomClassRequest >& atoms ) throw()
 {
     ::osl::Guard< ::osl::Mutex > guard( m_aMutex );
 
