@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:07:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,6 @@
  *
  *
  ************************************************************************/
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
 #ifndef SC_BIFFDUMP_HXX
 #include "biffdump.hxx"
 #endif
@@ -103,9 +97,6 @@
 #include "xicontent.hxx"
 #endif
 
-#ifndef _FLTTOOLS_HXX
-#include "flttools.hxx"
-#endif
 #ifndef _IMP_OP_HXX
 #include "imp_op.hxx"
 #endif
@@ -1514,6 +1505,19 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 rIn.Ignore( 1 );
                 ADDTEXT( "   " );
                 AddUNICODEString( t, rIn, FALSE );
+                PRINT();
+            }
+            break;
+            case 0x0041:        // PANE
+            {
+                LINESTART();
+                ADDTEXT( "vert-split-pos=" );   ADDDEC( 2 );
+                ADDTEXT( "   hor-split-pos=" ); ADDDEC( 2 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "first-row=" );        ADDDEC( 2 );
+                ADDTEXT( "   first-col=" );     ADDDEC( 2 );
+                ADDTEXT( "   active-pane=" );   ADDDEC( 2 );
                 PRINT();
             }
             break;
@@ -3962,6 +3966,42 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 PRINT();
             }
             break;
+            case 0x023E:        // WINDOW2
+            {
+                LINESTART();
+                rIn >> __nFlags;
+                STARTFLAG();
+                ADDFLAG( 0x0001, "show-formulas" );
+                ADDFLAG( 0x0002, "show-grid" );
+                ADDFLAG( 0x0004, "show-headers" );
+                ADDFLAG( 0x0008, "frozen" );
+                ADDFLAG( 0x0010, "show-zero" );
+                ADDFLAG( 0x0020, "auto-grid-color" );
+                ADDFLAG( 0x0040, "right-to-left" );
+                ADDFLAG( 0x0080, "show-outline" );
+                ADDFLAG( 0x0100, "remove-splits" );
+                ADDFLAG( 0x0200, "sheet-selected" );
+                ADDFLAG( 0x0400, "sheet-visible" );
+                ADDFLAG( 0x0800, "show-pagebreak" );
+                ADDRESERVED( 0xF000 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "first-row=" );        ADDDEC( 2 );
+                ADDTEXT( "   first-col=" );     ADDDEC( 2 );
+                ADDTEXT( "   grid-color=" );    ADDDEC( 2 );
+                ADDTEXT( "   reserved=" );      ADDHEX( 2 );
+                PRINT();
+                // reallife: WINDOW2 in charts do not have teh following fields
+                if( rIn.GetRecLeft() >= 8 )
+                {
+                    LINESTART();
+                    ADDTEXT( "pagebreak-zoom=" );   ADDDEC( 2 );
+                    ADDTEXT( "%   view-zoom=" );    ADDDEC( 2 );
+                    ADDTEXT( "%   reserved=" );     ADDHEX( 4 );
+                    PRINT();
+                }
+            }
+            break;
             case 0x027E:
             {
                 ADDCELLHEAD();
@@ -4199,12 +4239,12 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 break;
             case 0x1006:        // ChartDataformat
             {
-                UINT16  n;
+                INT16   n;
                 LINESTART();
                 rIn >> n;
                 ADDTEXT( "Point number = " );
                 __AddDec( t, n );
-                if( n == 0xFFFF )
+                if( n == -1 )
                     ADDTEXT( " (entire series)" );
                 PRINT();
                 LINESTART();
@@ -5276,6 +5316,8 @@ void Biff8RecDumper::EscherDump( const ULONG nMaxLen )
             aT = "    Flag: ";
             *pIn >> n16;
             __AddHex( aT, n16 );
+            if( n16 & 0x0001 ) aT += " -fixedpos";
+            if( n16 & 0x0002 ) aT += " -fixedsize";
             Print( aT );
 
             aT = "    Col1: ";
@@ -5476,9 +5518,10 @@ void Biff8RecDumper::ObjDump( const ULONG nMaxLen )
                             {
                                 ADDTEXT( "   " );
                                 STARTFLAG();
-                                ADDFLAG( 0x0008, "fAsSymbol" );
                                 ADDFLAG( 0x0002, "fLinked" );
-                                ADDFLAG( 0x0001, "f1???" );
+                                ADDFLAG( 0x0008, "fAsSymbol" );
+                                ADDFLAG( 0x0200, "fAutoLoad" );
+                                ADDRESERVED( 0xFDF5 );
                             }
                         }
                         break;
@@ -6987,6 +7030,19 @@ if( var )                                                   \
     delete [] p;                                            \
     EXC_CTRLDUMP_PRINTC();                                  \
 }
+// ignore image data
+#define EXC_CTRLDUMP_IMAGE( var, text )                     \
+if( var )                                                   \
+{                                                           \
+    EXC_CTRLDUMP_PRINT();                                   \
+    rInStrm.SeekRel( 20 );                                  \
+    sal_uInt32 nLen; rInStrm >> nLen;                       \
+    rInStrm.SeekRel( nLen );                                \
+    nNextPos += 24 + nLen;                                  \
+    t.Append( text "-ignore=" );                            \
+    __AddDec( t, static_cast< sal_uInt32 >( 24 + nLen ) );  \
+    EXC_CTRLDUMP_PRINT();                                   \
+}
 // read flag fields
 #define EXC_CTRLDUMP_STARTFLAG( text ) { EXC_CTRLDUMP_ALIGN_INSTRM( 4 ); rInStrm >> __nFlags; t += "  " text "="; __AddHex( t, __nFlags ); }
 #define EXC_CTRLDUMP_ADDFLAG( flag, text ) { if( __nFlags & (flag) ) t += " -" text; EXC_CTRLDUMP_PRINTC(); }
@@ -7009,6 +7065,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
     static const XclGuid aComboBoxGuid(     0x8BD21D30, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
     static const XclGuid aSpinGuid(         0x79176FB0, 0xB7F2, 0x11CE, 0x97, 0xEF, 0x00, 0xAA, 0x00, 0x6D, 0x27, 0x76 );
     static const XclGuid aScrollBarGuid(    0xDFD181E0, 0x5E2F, 0x11CE, 0xA4, 0x49, 0x00, 0xAA, 0x00, 0x4A, 0x80, 0x3D );
+    static const XclGuid aImageGuid(        0x4C599241, 0x6926, 0x101B, 0x99, 0x92, 0x00, 0x00, 0x0B, 0x65, 0xC6, 0xF9 );
 
     if( !pDumpStream ) return;
     rInStrm.Seek( STREAM_SEEK_TO_END );
@@ -7037,6 +7094,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
         xlCtrlComboBox,
         xlCtrlSpin,
         xlCtrlScrollBar,
+        xlCtrlImage,
         xlCtrlUnknown
     } eCtrlType = xlCtrlUnknown;
 
@@ -7066,6 +7124,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
         else if( aGuid == aComboBoxGuid )           eCtrlType = xlCtrlComboBox;
         else if( aGuid == aSpinGuid )               eCtrlType = xlCtrlSpin;
         else if( aGuid == aScrollBarGuid )          eCtrlType = xlCtrlScrollBar;
+        else if( aGuid == aImageGuid )              eCtrlType = xlCtrlImage;
         else                                        eCtrlType = xlCtrlUnknown;
 
         // write control type
@@ -7082,6 +7141,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
             case xlCtrlComboBox:        rOutStrm << "ComboBox";         break;
             case xlCtrlSpin:            rOutStrm << "Spin";             break;
             case xlCtrlScrollBar:       rOutStrm << "ScrollBar";        break;
+            case xlCtrlImage:           rOutStrm << "Image";            break;
             default:                    rOutStrm << "*UNKNOWN*";
         }
         rOutStrm << ")\n";
@@ -7119,14 +7179,14 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                     EXC_CTRLDUMP_STARTFLAG( "option-flags" );
                     EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
                     EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
-                    EXC_CTRLDUMP_ADDFLAG( 0x00000008, "backstyle" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
                     EXC_CTRLDUMP_ADDFLAG( 0x00800000, "wordwrap" );
                     EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
                     EXC_CTRLDUMP_ENDFLAG( 0xEF7FFFF1 );
                 }
                 if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_DECVARMASK( nCaptionLen, 0x7FFFFFFF, "caption-len" );
                 if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_COORD( "picpos" );
-                if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_HEX2( "mouseptr" );
+                if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
                 if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_HEX2( "pic-len" );
                 if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_HEX2( "accel" );
                 if( nCtrlFlags & 0x0400 ) EXC_CTRLDUMP_HEX2( "icon-len" );
@@ -7188,7 +7248,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                     EXC_CTRLDUMP_STARTFLAG( "option-flags" );
                     EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
                     EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
-                    EXC_CTRLDUMP_ADDFLAG( 0x00000008, "backstyle" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
                     EXC_CTRLDUMP_ADDFLAG( 0x00000400, "colheads" );
                     EXC_CTRLDUMP_ADDFLAG( 0x00000800, "intheight" );
                     EXC_CTRLDUMP_ADDFLAG( 0x00001000, "matchreq" );
@@ -7268,14 +7328,14 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                     EXC_CTRLDUMP_STARTFLAG( "option-flags" );
                     EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
                     EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
-                    EXC_CTRLDUMP_ADDFLAG( 0x00000008, "backstyle" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
                     EXC_CTRLDUMP_ADDFLAG( 0x00800000, "wordwrap" );
                     EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
                     EXC_CTRLDUMP_ENDFLAG( 0xEF7FFFF1 );
                 }
                 if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_DECVARMASK( nCaptionLen, 0x7FFFFFFF, "caption-len" );
                 if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_COORD( "pos" );
-                if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_HEX2( "mouseptr" );
+                if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
                 if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_HEX4( "bordercolor" );
                 if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_HEX2( "borderstyle" );
                 if( nCtrlFlags & 0x0200 ) EXC_CTRLDUMP_HEX2( "specialleff" );
@@ -7289,7 +7349,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
             case xlCtrlSpin:
             case xlCtrlScrollBar:
             {
-                sal_uInt32 nIcon = 0;
+                sal_uInt16 nIcon = 0;
 
                 EXC_CTRLDUMP_STARTFLAG( "content-flags" );
                 EXC_CTRLDUMP_ADDFLAG( 0x00000001, "forecolor" );
@@ -7319,11 +7379,11 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                     EXC_CTRLDUMP_STARTFLAG( "option-flags" );
                     EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
                     EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
-                    EXC_CTRLDUMP_ADDFLAG( 0x00000008, "backstyle" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
                     EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
                     EXC_CTRLDUMP_ENDFLAG( 0xEFFFFFF1 );
                 }
-                if( nCtrlFlags & 0x00000010 ) EXC_CTRLDUMP_DEC4( "mouseptr" );
+                if( nCtrlFlags & 0x00000010 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
                 if( nCtrlFlags & 0x00000020 ) EXC_CTRLDUMP_DEC4( "min" );
                 if( nCtrlFlags & 0x00000040 ) EXC_CTRLDUMP_DEC4( "max" );
                 if( nCtrlFlags & 0x00000080 ) EXC_CTRLDUMP_DEC4( "value" );
@@ -7337,14 +7397,48 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                 if( nCtrlFlags & 0x00008000 ) EXC_CTRLDUMP_DEC4( "delay" );
                 if( nCtrlFlags & 0x00010000 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
                 if( nCtrlFlags & 0x00000008 ) EXC_CTRLDUMP_SIZE();
-                if( nIcon )
+                EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
+            }
+            break;
+            case xlCtrlImage:
+            {
+                sal_uInt16 nPic = 0;
+                sal_uInt16 nIcon = 0;
+
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0004, "autosize" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0010, "backcolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0020, "speceffect1" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0040, "mouseptr" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0080, "picsizemode" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0100, "speceffect2" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0200, "size" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0400, "pic" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0800, "picalign" );
+                EXC_CTRLDUMP_ADDFLAG( 0x1000, "pictiling" );
+                EXC_CTRLDUMP_ADDFLAG( 0x2000, "option" );
+                EXC_CTRLDUMP_ADDFLAG( 0x4000, "icon" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFF800B );
+                sal_uInt32 nCtrlFlags = __nFlags;
+
+                if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_HEX4( "backcolor" );
+                if( nCtrlFlags & 0x0020 ) EXC_CTRLDUMP_HEX1( "speceffect1" );
+                if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
+                if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_DEC1( "picsizemode" );
+                if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_HEX1( "speceffect2" );
+                if( nCtrlFlags & 0x0400 ) EXC_CTRLDUMP_HEXVAR( nPic, "pic" );
+                if( nCtrlFlags & 0x0800 ) EXC_CTRLDUMP_HEX2( "picalign" );
+                if( nCtrlFlags & 0x2000 )
                 {
-                    sal_uInt32 nIconLen;
-                    rInStrm.SeekRel( 20 );
-                    rInStrm >> nIconLen;
-                    rInStrm.SeekRel( nIconLen );
-                    nNextPos += 24 + nIconLen;
+                    EXC_CTRLDUMP_STARTFLAG( "option-flags" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
+                    EXC_CTRLDUMP_ENDFLAG( 0xFFFFFFF5 );
                 }
+                if( nCtrlFlags & 0x4000 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
+                if( nCtrlFlags & 0x0200 ) EXC_CTRLDUMP_SIZE();
+                EXC_CTRLDUMP_IMAGE( nPic, "pic" );
+                EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
             }
             break;
         }
@@ -7360,7 +7454,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
         rInStrm.Seek( nNextPos );
 
         // font data
-        if( (eCtrlType != xlCtrlSpin) && (eCtrlType != xlCtrlScrollBar) )
+        if( (eCtrlType != xlCtrlSpin) && (eCtrlType != xlCtrlScrollBar) && (eCtrlType != xlCtrlImage) )
         {
             rInStrm >> nId >> nSize;
             if( nId == 0x0200 )
