@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeyType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 // DocMerge from idl: constants com::sun::star::sdbcx::KeyType
 /** determines the type of a key.
  */
-constants KeyType
+published constants KeyType
 {
 
     // DocMerge from idl: value com::sun::star::sdbcx::KeyType::PRIMARY
