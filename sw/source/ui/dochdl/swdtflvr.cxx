@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:22:01 $
+ *  last change: $Author: mba $ $Date: 2001-03-21 14:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,7 +662,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
     case SWTRANSFER_OBJECTTYPE_SWOLE:
         {
             SvEmbeddedObject* pEmbObj = (SvEmbeddedObject*) pObject;
-            SvStorageRef xWorkStore( new SvStorage( *xStream ) );
+            SvStorageRef xWorkStore( new SvStorage( TRUE, *xStream ) );
 
             xStream->SetBufferSize( 0xff00 );
 
