@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-30 08:52:44 $
+ *  last change: $Author: sj $ $Date: 2002-09-30 12:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -860,10 +860,15 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
         if ( aSizePixel.Width() && aSizePixel.Height() )
         {
             sal_Bool bUseJPGCompression = sal_False;
-            if ( aBitmapEx.GetBitCount() > 8 )
-                bUseJPGCompression = sal_True;
-            if ( ( aBitmapEx.GetBitCount() == 8 ) && aBitmapEx.GetBitmap().HasGreyPalette() )
-                bUseJPGCompression = sal_True;
+
+            // use jpeg not for too small graphics
+            if ( ( aSizePixel.Width() > 32 ) && ( aSizePixel.Height() > 32 ) )
+            {
+                if ( aBitmapEx.GetBitCount() > 8 )
+                    bUseJPGCompression = sal_True;
+                if ( ( aBitmapEx.GetBitCount() == 8 ) && aBitmapEx.GetBitmap().HasGreyPalette() )
+                    bUseJPGCompression = sal_True;
+            }
             if ( bUseJPGCompression )
             {
                 Bitmap aMask;
