@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 10:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1098,7 +1098,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         pUndoDPObj = new ScDPObject( *pOldObj );    // copy old settings for undo
 
     ScDocument* pDoc = rDocShell.GetDocument();
-    if ( rDocShell.IsReadOnly() || pDoc->GetChangeTrack() )
+    if ( !rDocShell.IsEditable() || pDoc->GetChangeTrack() )
     {
         //  not recorded -> disallow
         //! different error messages?
