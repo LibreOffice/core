@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:52:34 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 06:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ turkish ] = "Madde iþaretleri";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Viñetas";
+                Text[ finnish ] = "Luettelomerkit";
             };
             PageItem
             {
@@ -124,6 +125,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ korean ] = "¹øÈ£¸Å±â±â À¯Çü";
                 Text[ turkish ] = "Numaralama türü";
                 Text[ catalan ] = "Tipo de numeración";
+                Text[ finnish ] = "Numerointityyppi";
             };
             PageItem
             {
@@ -150,6 +152,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ turkish ] = "Grafikler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Imágenes";
+                Text[ finnish ] = "Kuvat";
             };
             PageItem
             {
@@ -176,6 +179,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ turkish ] = "Konum";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Posición";
+                Text[ finnish ] = "Sijainti";
             };
             PageItem
             {
@@ -202,6 +206,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ turkish ] = "Seçenekler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Opciones";
+                Text[ finnish ] = "Mukauta";
             };
         };
     };
@@ -226,4 +231,5 @@ TabDialog TAB_OUTLINEBULLET
     Text[ turkish ] = "Numaralama/madde iþaretleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Numeración/Viñetas";
+    Text[ finnish ] = "Numerointi/luettelomerkit";
 };
