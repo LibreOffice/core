@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddlgfact.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 09:13:35 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,23 @@ class AbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual String      GetText() const; //add by CHINA001
 };
 //add for SdCharDlg end
+
+
+//add for OutlineBulletDlg begin
+class SfxTabDialog;
+class AbstractBulletDialog_Impl : public SfxAbstractTabDialog
+{
+    DECL_ABSTDLG_BASE( AbstractBulletDialog_Impl,SfxTabDialog );
+    virtual void                SetCurPageId( USHORT nId );
+    virtual const SfxItemSet*   GetOutputItemSet() const;
+    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem );
+    virtual void                SetInputSet( const SfxItemSet* pInSet );
+        //From class Window.
+    virtual void        SetText( const XubString& rStr );
+    virtual String      GetText() const;
+};
+//add for OutlineBulletDlg end
+
 class SdPresLayoutTemplateDlg;
 class SdPresLayoutTemplateDlg_Impl : public SfxAbstractTabDialog
 {
