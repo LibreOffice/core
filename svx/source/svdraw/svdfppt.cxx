@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:55:49 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,7 +1236,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     memset( rPersistEntry.pPresentationObjects, 0, PPT_STYLESHEETENTRYS * 4 );
                 }
                 if ( !rPersistEntry.pPresentationObjects[ nInstanceInSheet ] )
-                    rPersistEntry.pPresentationObjects[ nInstanceInSheet ] = rObjData.nOldFilePos;
+                    rPersistEntry.pPresentationObjects[ nInstanceInSheet ] = rObjData.rSpHd.GetRecBegFilePos();
             }
             switch ( nInstanceInSheet )
             {
@@ -2869,7 +2869,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             if ( nPosition )
                             {
                                 rStCtrl.Seek( nPosition );
-                                SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
+                                Rectangle aEmpty;
+                                SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty, 0 );
                                 if ( pObj )
                                 {   // cause of this object is already dirty, we can inserted it directly
                                     pHFE->nAtom &= ~pHFE->GetMaskForInstance( i );
@@ -2897,6 +2898,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             {
                                 case DFF_msofbtSpContainer :
                                 {
+                                    Rectangle aEmpty;
                                     if ( rSlidePersist.aSlideAtom.nFlags & 4 )          // follow master background ?
                                     {
                                         if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
@@ -2918,7 +2920,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 sal_Bool bTemporary = ( rSlidePersist.aSlideAtom.nFlags & 2 ) != 0;
                                                 sal_uInt32 nPos = rStCtrl.Tell();
                                                 rStCtrl.Seek( pE->nBackgroundOffset );
-                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
+                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
                                                 rSlidePersist.bBObjIsTemporary = bTemporary;
                                                 rStCtrl.Seek( nPos );
                                             }
@@ -2935,7 +2937,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                             if ( nSpFlags & SP_FBACKGROUND )
                                             {
                                                 aEscherObjListHd.SeekToBegOfRecord( rStCtrl );
-                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
+                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
                                                 rSlidePersist.bBObjIsTemporary = sal_False;
                                             }
                                         }
@@ -2967,9 +2969,10 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                             rStCtrl >> aShapeHd;
                                             if ( ( aShapeHd.nRecType == DFF_msofbtSpContainer ) || ( aShapeHd.nRecType == DFF_msofbtSpgrContainer ) )
                                             {
+                                                Rectangle aEmpty;
                                                 aShapeHd.SeekToBegOfRecord( rStCtrl );
                                                 aProcessData.nGroupingFlags = 0;
-                                                SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
+                                                SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
                                                 if ( pObj )
                                                 {
                                                     // maybe this is an animated textobj
