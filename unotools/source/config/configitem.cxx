@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2000-11-24 12:05:38 $
+ *  last change: $Author: tl $ $Date: 2000-11-29 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,7 +648,8 @@ sal_Bool ConfigItem::SetSetProperties(
             for(sal_Int32 i = 0; i < rValues.getLength(); i++)
             {
                 OUString sSubNode = pProperties[i].Name.copy(nNodeLength);
-                sSubNode = sSubNode.copy(0, sSubNode.indexOf('/'));
+                if(sSubNode.indexOf('/') >= 0)
+                    sSubNode = sSubNode.copy(0, sSubNode.indexOf('/'));
                 if(sLastSubNode != sSubNode)
                 {
                     pSubNodeNames[nSubIndex++] = sSubNode;
@@ -761,7 +762,8 @@ sal_Bool ConfigItem::ReplaceSetProperties(
             for(sal_Int32 i = 0; i < rValues.getLength(); i++)
             {
                 OUString sSubNode = pProperties[i].Name.copy(nNodeLength);
-                sSubNode = sSubNode.copy(0, sSubNode.indexOf('/'));
+                if(sSubNode.indexOf('/') >= 0)
+                    sSubNode = sSubNode.copy(0, sSubNode.indexOf('/'));
                 if(sLastSubNode != sSubNode)
                 {
                     pSubNodeNames[nSubIndex++] = sSubNode;
