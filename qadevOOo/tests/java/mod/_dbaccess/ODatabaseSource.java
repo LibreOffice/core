@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseSource.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:42:22 $
+ *  last change:$Date: 2004-08-02 17:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package mod._dbaccess;
 
+import com.sun.star.beans.PropertyValue;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -75,6 +76,7 @@ import com.sun.star.task.XInteractionHandler;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;
+import com.sun.star.frame.XStorable;
 
 /**
 * Test for object which is represented by service
@@ -175,12 +177,15 @@ public class ODatabaseSource extends TestCase {
             }
 
             // registering source in DatabaseContext
+            XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class, newSource);
+            String aFile = utils.getOfficeTemp ((XMultiServiceFactory) Param.getMSF ())+"DataSource.odb";
+            store.storeAsURL(aFile,new PropertyValue[]{});
             xDBContextNameServ.registerObject(databaseName, newSource) ;
-
             oInterface = newSource ;
         }
         catch( com.sun.star.uno.Exception e ) {
             log.println("Service not available" );
+            e.printStackTrace ();
             throw new StatusException("Service not available", e) ;
         }
 
