@@ -1,6 +1,6 @@
 /* $RCSfile: config.h,v $
--- $Revision: 1.5 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:10:31 $
+-- $Revision: 1.6 $
+-- last change: $Author: rt $ $Date: 2004-10-22 08:11:51 $
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -32,7 +32,13 @@
    must not be there to compile dmake with MSC and the
    "dmake\make.bat win95-vpp40" command. This file sets (among other
    things) the needed HAS_... and HAVE_... macros.
+
+   Don't forget to update the PACKAGE and VERSION macros!
 */
+
+/* Name and version number of this package */
+#define PACKAGE "dmake"
+#define VERSION "4.3"
 
 #if defined (_MSC_VER)
 # if _MSC_VER < 500
