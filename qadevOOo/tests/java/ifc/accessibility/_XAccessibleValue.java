@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleValue.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-04-28 12:22:44 $
+ *  last change:$Date: 2003-09-08 10:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,11 @@
 package ifc.accessibility;
 
 
-import com.sun.star.accessibility.XAccessibleValue;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.accessibility.XAccessibleValue;
 
 /**
  * Testing <code>com.sun.star.accessibility.XAccessibleValue</code>
@@ -94,17 +95,6 @@ public class _XAccessibleValue extends MultiMethodTest {
     private double curVal = 0;
     private Object val = null;
     XAccessibleValue anotherFromGroup = null;
-
-    private static final String className =
-        "com.sun.star.accessibility.XAccessibleValue" ;
-
-    /**
-     * Walkaround for current interface naming ('drafts' prefix)
-     * @return The class name to load
-     */
-    protected String getTestedClassName() {
-        return className;
-    }
 
     protected void before() {
         anotherFromGroup = (XAccessibleValue)tEnv.getObjRelation(
@@ -176,6 +166,12 @@ public class _XAccessibleValue extends MultiMethodTest {
 
         boolean result = true ;
 
+        if (tEnv.getObjRelation("ValueNotPersitent")!=null) {
+            log.println("Excluded since it works like AccessibleAction");
+            tRes.tested("setCurrentValue()",Status.skipped(true));
+            return;
+        }
+
         if (anotherFromGroup == null) {
             double newVal = curVal + 1;
             if (newVal > maxVal) newVal -= 2;
@@ -199,22 +195,26 @@ public class _XAccessibleValue extends MultiMethodTest {
 
             log.println("Checking min/max values");
             result &= oObj.setCurrentValue(getObjectValue(minVal, val.getClass()));
+            log.println("Setting to "+ getObjectValue(minVal, val.getClass()));
             resVal = getDoubleValue(oObj.getCurrentValue());
             log.println("Result min value is " + resVal);
             result &= Math.abs(minVal - resVal) < 0.00001;
 
             result &= oObj.setCurrentValue(getObjectValue(maxVal, val.getClass()));
+            log.println("Setting to "+ getObjectValue(maxVal, val.getClass()));
             resVal = getDoubleValue(oObj.getCurrentValue());
             log.println("Result max value is " + resVal);
             result &= Math.abs(maxVal - resVal) < 0.00001;
 
             log.println("Checking truncating of min/max values");
             oObj.setCurrentValue(getObjectValue(minVal - 1, val.getClass()));
+            log.println("Setting to "+ getObjectValue(minVal -1 , val.getClass()));
             resVal = getDoubleValue(oObj.getCurrentValue());
             log.println("Result min value is " + resVal);
             result &= Math.abs(minVal - resVal) < 0.00001;
 
             oObj.setCurrentValue(getObjectValue(maxVal + 1, val.getClass()));
+            log.println("Setting to "+ getObjectValue(maxVal +1 , val.getClass()));
             resVal = getDoubleValue(oObj.getCurrentValue());
             log.println("Result max value is " + resVal);
             result &= Math.abs(maxVal - resVal) < 0.00001;
