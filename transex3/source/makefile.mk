@@ -2,8 +2,8 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
-#   last change: $Author: kz $ $Date: 2004-08-30 17:31:25 $
+#   $Revision: 1.32 $
+#   last change: $Author: kz $ $Date: 2004-09-01 12:26:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,8 +150,8 @@ APP5STDLIBS+= \
             $(SALLIB)
 
 # extractor and merger for *.cfg
-#APP6TARGET= cfgex
-#APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP6TARGET= cfgex
+APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 
 #.IF "$(OS)"!="MACOSX"
 #APP6STDLIBS+= $(BTSTRPLIB)
@@ -164,18 +164,18 @@ APP6STDLIBS+= \
             $(SALLIB)
 
 # extractor and merger for *.xrm
-#APP7TARGET= xrmex
-#APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP7TARGET= xrmex
+APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 
 #.IF "$(OS)"!="MACOSX"
 #APP7STDLIBS+= $(BTSTRPLIB)
 #.ENDIF
 
-#APP7STDLIBS+= \
+APP7STDLIBS+= \
             $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
-#            $(SALLIB)
+            $(SALLIB)
 
 #APP8TARGET=  sdfupdate
 #APP8OBJS= $(OBJ)$/sdfupdate.obj
