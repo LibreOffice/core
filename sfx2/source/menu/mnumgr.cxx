@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:46 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <unotools/streamwrap.hxx>
 #include <objsh.hxx>
 #include <framework/menuconfiguration.hxx>
+#include <framework/addonmenu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/urlobj.hxx>
@@ -254,13 +255,27 @@ SfxMenuIter_Impl* SfxMenuIter_Impl::NextItem()
     if ( _nId >= START_ITEMID_WINDOWLIST && _nId <= END_ITEMID_WINDOWLIST )
         return NextItem();
 
-    if ( _nId == SID_ADDONS )
+    if (( _nId == SID_ADDONS ) || ( _nId == SID_ADDONHELP ))
+    {
+        _pPopup = 0;
         return NextItem();
+    }
 
     // nicht alle Popups werden durchlaufen
     if ( _nId == SID_OBJECT ||
          ( _nId >= SID_OBJECTMENU0 && _nId <= SID_OBJECTMENU_LAST ) )
         _pPopup = 0;
+
+    // Jump over the merged addon popup menus. They shouldn't be stored
+    // nor be configurable by the user.
+    if ( framework::AddonPopupMenu::IsCommandURLPrefix( _aCommand ))
+    {
+        _pPopup = 0;
+        return NextItem();
+    }
+
+    if ( framework::AddonMenuManager::IsAddonMenuId( _nId ))
+        return NextItem();
 
     // diesen Eintrag nehmen
     return this;
@@ -1261,6 +1276,7 @@ BOOL SfxMenuBarManager::Load( SvStream& rStream, BOOL bOLEServer )
 }
 */
 
+//------------------------------------------------------------------------
 // To be compatible to 6.0/src641 we have to erase .uno commands we got
 // from resource file. Otherwise these commands get saved to our XML configurations
 // files and 6.0/src641 is not able to map these to slot ids again!!!
@@ -1283,9 +1299,10 @@ void SfxMenuManager::EraseItemCmds( Menu* pMenu )
     }
 }
 
+//------------------------------------------------------------------------
 // Restore the correct macro ID so that menu items with an associated accelerator
-// are correctly identified. This ensures that the accelerator info is displayed on
-// the popup.
+// are correctly identified. This ensures that the accelerator info is displayed in
+// the menu.
 void SfxMenuManager::RestoreMacroIDs( Menu* pMenu )
 {
     USHORT nCount = pMenu->GetItemCount();
@@ -1319,6 +1336,8 @@ void SfxMenuManager::RestoreMacroIDs( Menu* pMenu )
     }
 }
 
+//------------------------------------------------------------------------
+
 MenuBar* SfxMenuBarManager::LoadMenuBar( SvStream& rStream )
 {
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xInputStream =
@@ -1338,6 +1357,8 @@ MenuBar* SfxMenuBarManager::LoadMenuBar( SvStream& rStream )
 
     return pSVMenu;
 }
+
+//------------------------------------------------------------------------
 
 BOOL SfxMenuBarManager::StoreMenuBar( SvStream& rStream, MenuBar* pMenuBar )
 {
