@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 11:10:06 $
+ *  last change: $Author: fme $ $Date: 2002-04-12 11:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,10 +505,22 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         else
             CheckSpecialUnderline( pPor );
 
+        // in extended input mode we do not want a common underline font.
+        SwFont* pOldUnderLineFnt = 0;
+        if ( GetRedln() && GetRedln()->ExtOn() )
+        {
+            pOldUnderLineFnt = GetInfo().GetUnderFnt();
+            GetInfo().SetUnderFnt( 0 );
+        }
+
         if( pPor->IsMultiPortion() )
             PaintMultiPortion( rPaint, (SwMultiPortion&)*pPor );
         else
             pPor->Paint( GetInfo() );
+
+        // reset underline font
+        if ( pOldUnderLineFnt )
+            GetInfo().SetUnderFnt( pOldUnderLineFnt );
 
         // reset (for special vertical alignment)
         GetInfo().Y( nOldY );
@@ -604,7 +616,11 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
 
     Range aRange( 0, GetInfo().GetTxt().Len() );
     MultiSelection aUnderMulti( aRange );
-    if( bUnderPara )
+
+    ASSERT( GetFnt() && UNDERLINE_NONE != GetFnt()->GetUnderline(),
+            "CheckSpecialUnderline without underlined font" )
+    const SwFont* pParaFnt = GetAttrHandler().GetFont();
+    if( pParaFnt && pParaFnt->GetUnderline() == GetFnt()->GetUnderline() )
         aUnderMulti.SelectAll();
 
     SwTxtAttr* pTxtAttr;
@@ -781,6 +797,8 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
         pUnderlineFnt->SetProportion( 100 );
         pUnderlineFnt->SetEscapement( 0 );
         pUnderlineFnt->SetStrikeout( STRIKEOUT_NONE );
+        const Color aFillColor( COL_TRANSPARENT );
+        pUnderlineFnt->SetFillColor( aFillColor );
 
         GetInfo().SetUnderFnt( pUnderlineFnt );
     }
