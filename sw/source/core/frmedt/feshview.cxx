@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-29 10:41:09 $
+ *  last change: $Author: ama $ $Date: 2002-01-31 09:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,8 +884,10 @@ void SwFEShell::EndTextEdit()
     SdrObjUserCall* pUserCall;
     if( 0 != ( pUserCall = GetUserCall(pObj) ) )
     {
-        pUserCall->Changed( *pObj, SDRUSERCALL_RESIZE,
-            pObj->GetBoundRect() );
+        SdrObject *pTmp = ((SwContact*)pUserCall)->GetMaster();
+        if( !pTmp )
+            pTmp = pObj;
+        pUserCall->Changed( *pTmp, SDRUSERCALL_RESIZE, pTmp->GetBoundRect() );
     }
     if ( !pObj->GetUpGroup() )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-14 10:46:06 $
+ *  last change: $Author: ama $ $Date: 2002-01-31 09:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,15 +484,21 @@ void SwDrawContact::_Changed(const SdrObject& rObj, SdrUserCallType eType,
                     ConnectToLayout();
                     pAnch = GetAnchor();
                 }
-                if( pAnch && !((SwTxtFrm*)pAnch)->IsLocked() )
+                if( pAnch && !((SwTxtFrm*)pAnch)->IsLocked() &&
+                    &rObj == GetMaster() )
                 {
                     SwFrmFmt *pFmt = GetFmt();
                     const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
 #ifdef VERTICAL_LAYOUT
-                    SwTwips nRel = pAnch->IsVertical() ?
-                        rObj.GetRelativePos().X() : rObj.GetRelativePos().Y();
-                    if( !pAnch->IsReverse() )
-                        nRel = - nRel - rObj.GetSnapRect().GetWidth();
+                    SwTwips nRel;
+                    if( pAnch->IsVertical() )
+                    {
+                        nRel = rObj.GetRelativePos().X();
+                        if( !pAnch->IsReverse() )
+                            nRel = - nRel - rObj.GetSnapRect().GetWidth();
+                    }
+                    else
+                        nRel = rObj.GetRelativePos().Y();
 #else
                     SwTwips nRel = rObj.GetRelativePos().Y();
 #endif
