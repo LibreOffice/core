@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 13:38:45 $
+ *  last change: $Author: os $ $Date: 2002-04-25 14:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 //#endif
 #ifndef _SFX_OBJITEM_HXX //autogen
 #include <sfx2/objitem.hxx>
+#endif
+#ifndef _SVT_IMAGEITM_HXX
+#include <svtools/imageitm.hxx>
 #endif
 #ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
@@ -398,6 +401,18 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_READONLY_MODE:
                 rSet.Put(SfxBoolItem(nWhich,
                     pWrtShell->HasReadonlySel()||GetDocShell()->IsReadOnly()));
+            break;
+            case SID_IMAGE_ORIENTATION:
+            {
+                SfxImageItem aImageItem(nWhich);
+                if(pWrtShell->IsInVerticalText())
+                    aImageItem.SetRotation( 900 );
+#ifdef BIDI
+                if(pWrtShell->IsInRightToLeftText())
+                    aImageItem.SetMirrored( TRUE );
+#endif
+                rSet.Put(aImageItem);
+            }
             break;
         }
         nWhich = aIter.NextWhich();

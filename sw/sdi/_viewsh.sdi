@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _viewsh.sdi,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-02-27 09:12:35 $
+ *  last change: $Author: os $ $Date: 2002-04-25 14:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,7 +534,10 @@ interface BaseTextEditView : View
     [
         StateMethod = GetState ;
     ]
-
+    SID_IMAGE_ORIENTATION
+    [
+        StateMethod = GetState ;
+    ]
 }
 
 interface GlobalContents : Collection
