@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:49:48 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ String STR_POOLCHR_FOOTNOTE
     Text = "Fußnotenzeichen" ;
     Text [ English ] = "Footnote" ;
     Text [ english_us ] = "Footnote Characters" ;
-    Text [ italian ] = "Carattere note a piè pagina" ;
+    Text [ italian ] = "Carattere della nota" ;
     Text [ spanish ] = "Símbolo de nota al pie" ;
     Text [ french ] = "Symbole de note de bas de page" ;
     Text [ dutch ] = "Voetnootteken" ;
@@ -181,14 +181,14 @@ String STR_POOLCHR_NUM_LEVEL
     Text [ danish ] = "Nummereringstegn" ;
     Text [ portuguese ] = "Caracteres de numeração" ;
     Text [ portuguese_brazilian ] = "Numerierungszeichen" ;
-    Text[ chinese_simplified ] = "±àºÅ·ûºÅ";
+    Text[ chinese_simplified ] = "±àºÅ×Ö·û";
     Text[ russian ] = "Çíàê íóìåğàöèè";
     Text[ polish ] = "Znaki numeracji";
     Text[ japanese ] = "”Ô†•t‚¯‹L†";
-    Text[ chinese_traditional ] = "½s¸¹²Å¸¹";
+    Text[ chinese_traditional ] = "½s¸¹¦r¤¸";
     Text[ arabic ] = "ÚáÇãÇÊ ÊÑŞíã";
     Text[ greek ] = "×áñáêôŞñåò áñßèìçóçò";
-    Text[ korean ] = "¹øÈ£¸Å±â±â¡¡±âÈ£";
+    Text[ korean ] = "¹øÈ£¸Å±â±â ±âÈ£";
     Text[ turkish ] = "Numaralama karakterleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Carácter de numeración";
@@ -291,7 +291,7 @@ String STR_POOLCHR_JUMPEDIT
     Text[ chinese_simplified ] = "Í¨Åä·û";
     Text[ russian ] = "Ìåñòîçàïîëíèòåëü";
     Text[ polish ] = "Znak-wype³niacz";
-    Text[ japanese ] = "Ü²ÙÄŞ¶°ÄŞ";
+    Text[ japanese ] = "ÌßÚ°½ÎÙÀŞ";
     Text[ chinese_traditional ] = "³q°t²Å";
     Text[ arabic ] = "ÚäÕÑ äÇÆÈ";
     Text[ greek ] = "Óıìâïëï êñÜôçóçò èİóçò";
@@ -373,7 +373,7 @@ String STR_POOLCHR_LINENUM
     Text[ chinese_traditional ] = "¦æ½s¸¹";
     Text[ arabic ] = "ÊÑŞíã ÇáÃÓØÑ";
     Text[ greek ] = "Áñßèìçóç ãñáììşí";
-    Text[ korean ] = "¼± ¹øÈ£¸Å±â±â";
+    Text[ korean ] = "Çà ¹øÈ£¸Å±â±â";
     Text[ turkish ] = "Satır numaralaması";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Numeración de líneas";
@@ -396,7 +396,7 @@ String STR_POOLCHR_IDX_MAIN_ENTRY
     Text[ polish ] = "Skorowidz: wpis g³ówny";
     Text[ portuguese_brazilian ] = "Main index entry";
     Text[ japanese ] = "õˆø‚Ìå€–Ú";
-    Text[ korean ] = "Å°¿öµå »öÀÎ¡¡ÁÖÇ×¸ñ";
+    Text[ korean ] = "Å°¿öµå »öÀÎ ÁÖÇ×¸ñ";
     Text[ chinese_simplified ] = "Ë÷ÒıÖ÷ÌõÄ¿";
     Text[ chinese_traditional ] = "¯Á¤Ş¥Ø¿ı¥D±ø¥Ø";
     Text[ arabic ] = "ÅÏÎÇá ÑÆíÓí İí ÇáİåÑÓ ÇáÃÈÌÏí";
@@ -416,13 +416,13 @@ String STR_POOLCHR_FOOTNOTE_ANCHOR
     Text[ dutch ] = "Voetnootanker";
     Text[ french ] = "Appel de note de bas de page";
     Text[ spanish ] = "Ancla de nota al pie";
-    Text[ italian ] = "Ancoraggio note a piè pagina";
+    Text[ italian ] = "Richiamo di nota";
     Text[ danish ] = "Fodnoteanker";
     Text[ swedish ] = "Fotnotsankare";
     Text[ polish ] = "Zakotwiczenie przypisów doln.";
     Text[ portuguese_brazilian ] = "Footnote anchor";
     Text[ japanese ] = "‹r’QÆ”Ô†";
-    Text[ korean ] = "°¢ÁÖ °íÁ¤¡¡±âÁØ";
+    Text[ korean ] = "°¢ÁÖ °íÁ¤ ±âÁØ";
     Text[ chinese_simplified ] = "×¢½Å±ê¼Ç";
     Text[ chinese_traditional ] = "µù¸}¼Ğ¸¹";
     Text[ arabic ] = "ãÑÓÇÉ ÇáÍÇÔíÉ ÇáÓİáíÉ";
@@ -441,7 +441,7 @@ String STR_POOLCHR_ENDNOTE_ANCHOR
     Text[ dutch ] = "Eindnootanker";
     Text[ french ] = "Appel de note de fin";
     Text[ spanish ] = "Ancla de nota al final";
-    Text[ italian ] = "Ancoraggio note di chiusura";
+    Text[ italian ] = "Richiamo di nota di chiusura";
     Text[ danish ] = "Slutnoteanker";
     Text[ swedish ] = "Slutnotsankare";
     Text[ polish ] = "Zakotwiczenie przypisów koñc.";
@@ -525,7 +525,7 @@ String STR_POOLCHR_HTML_STRONG
     Text[ chinese_simplified ] = "Ç¿µ÷";
     Text[ russian ] = "Âûäåëåíèå æèğíûì";
     Text[ polish ] = "Mocno wyró¿niony";
-    Text[ japanese ] = "‹­‚¢‹­’²";
+    Text[ japanese ] = "‚³‚ç‚É‹­’²";
     Text[ chinese_traditional ] = "±j½Õ";
     Text[ arabic ] = "ÅÈÑÇÒ ÈæÖæÍ";
     Text[ greek ] = "¸íôïíïò ôïíéóìüò";
@@ -812,7 +812,7 @@ String STR_POOLFRM_FRAME
     Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
     Text[ arabic ] = "ßÇÏÑ";
     Text[ greek ] = "Ğåñßãñáììá";
-    Text[ korean ] = "Æ²";
+    Text[ korean ] = "Å×µÎ¸®";
     Text[ turkish ] = "Çerçeve";
     Text[ catalan ] = "Marco";
     Text[ finnish ] = "Kehys";
@@ -908,14 +908,14 @@ String STR_POOLFRM_MARGINAL
     Text [ danish ] = "Randbemærkning" ;
     Text [ portuguese ] = "Notas à margem" ;
     Text [ portuguese_brazilian ] = "Marginalie" ;
-    Text[ chinese_simplified ] = "±ßÔµ";
+    Text[ chinese_simplified ] = "ÅÔ×¢";
     Text[ russian ] = "Ìàğãèíàëèè";
     Text[ polish ] = "Marginesy";
     Text[ japanese ] = "–T’";
-    Text[ chinese_traditional ] = "Ãä½t";
+    Text[ chinese_traditional ] = "®Çµù";
     Text[ arabic ] = "ãáÇÍÙÇÊ åÇãÔíÉ";
     Text[ greek ] = "Óçìåéşóåéò óôï ğåñéèşñéï";
-    Text[ korean ] = "³­¿ÜÀÇ¡¡ÁÖ";
+    Text[ korean ] = "¿©¹é";
     Text[ turkish ] = "Derkenar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nota al margen";
@@ -941,7 +941,7 @@ String STR_POOLFRM_WATERSIGN
     Text[ chinese_traditional ] = "¤ô¦L";
     Text[ arabic ] = "ÚáÇãÉ ãÇÆíÉ";
     Text[ greek ] = "Õäáôüóçìï";
-    Text[ korean ] = "(ºÒºû¿¡ ºñÃß¾î¾ß ³ªÅ¸³ª´Â Á¾ÀÌµ· µîÀÇ) ¹«´Ì";
+    Text[ korean ] = "(ºÒºû¿¡ ºñÃß¾î¾ß º¸ÀÌ´Â Á¾ÀÌµ· µîÀÇ) ¹«´Ì";
     Text[ turkish ] = "Filigran";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marca de agua";
@@ -1107,7 +1107,7 @@ String STR_POOLCOLL_TEXT_NEGIDENT
     Text[ chinese_traditional ] = "¤º¤å¤Ï¦VÁY±Æ";
     Text[ arabic ] = "ÅÒÇÍÉ ÌÓã äÕ ÓáÈíÉ";
     Text[ greek ] = "ÁñíçôéêŞ åóï÷Ş óşìáôïò êåéìİíïõ";
-    Text[ korean ] = "Ã¹ÁÙÀ» ±âÁØÀ¸·Î ³ª¸ÓÁö º»¹® µé¿©¾²±â";
+    Text[ korean ] = "³»¾î¾²±â";
     Text[ turkish ] = "Asılı girinti";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sangría negativa de primera línea";
@@ -1135,7 +1135,7 @@ String STR_POOLCOLL_TEXT_MOVE
     Text[ chinese_traditional ] = "¤º¤åÁY±Æ";
     Text[ arabic ] = "ÅÒÇÍÉ ÌÓã ÇáäÕ (ÇáÓØÑ ÇáÃæá)";
     Text[ greek ] = "Åóï÷Ş óşìáôïò êåéìİíïõ";
-    Text[ korean ] = "º»¹® µé¿©¾²±â";
+    Text[ korean ] = "ÅØ½ºÆ® º»¹® µé¿©¾²±â";
     Text[ turkish ] = "Metin gövdesi girintisi";
     Text[ catalan ] = "Cuerpo de texto con sangría";
     Text[ finnish ] = "Sisennetty leipäteksti";
@@ -1320,7 +1320,7 @@ String STR_POOLCOLL_MARGINAL
     Text[ chinese_traditional ] = "®Çµù";
     Text[ arabic ] = "ãáÇÍÙÇÊ åÇãÔíÉ";
     Text[ greek ] = "Óçìåéşóåéò óôï ğåñéèşñéï";
-    Text[ korean ] = "³­¿ÜÀÇ¡¡ÁÖ";
+    Text[ korean ] = "¿©¹é";
     Text[ turkish ] = "Derkenar";
     Text[ catalan ] = "Nota al margen";
     Text[ finnish ] = "Reunahuomautukset";
@@ -1667,7 +1667,7 @@ String STR_POOLCOLL_NUM_LEVEL1E
     Text[ chinese_traditional ] = "½s¸¹ 1 µ²§À";
     Text[ arabic ] = "ÇáÊÑŞíã 1 äåÇíÉ";
     Text[ greek ] = "Áñßèìçóç 1 Ôİëïò";
-    Text[ korean ] = "¹øÈ£ 1 ³¡";
+    Text[ korean ] = "¹øÈ£ 1 Á¾·á";
     Text[ turkish ] = "Numaralama 1 Son";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Numeración 1 fin";
@@ -1771,7 +1771,7 @@ String STR_POOLCOLL_NUM_LEVEL2E
     Text[ chinese_traditional ] = "½s¸¹ 2 µ²§À";
     Text[ arabic ] = "ÇáÊÑŞíã 2 äåÇíÉ";
     Text[ greek ] = "Áñßèìçóç 2 Ôİëïò";
-    Text[ korean ] = "¹øÈ£ 2 ³¡";
+    Text[ korean ] = "¹øÈ£ 2 Á¾·á";
     Text[ turkish ] = "Numaralama 2 Son";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Numeración 2 fin";
@@ -1875,7 +1875,7 @@ String STR_POOLCOLL_NUM_LEVEL3E
     Text[ chinese_traditional ] = "½s¸¹ 3 µ²§À";
     Text[ arabic ] = "ÇáÊÑŞíã 3 äåÇíÉ";
     Text[ greek ] = "Áñßèìçóç 3 Ôİëïò";
-    Text[ korean ] = "¹øÈ£ 3 ³¡";
+    Text[ korean ] = "¹øÈ£ 3 Á¾·á";
     Text[ turkish ] = "Numaralama 3 Son";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Numeración 3 fin";
@@ -1979,7 +1979,7 @@ String STR_POOLCOLL_NUM_LEVEL4E
     Text[ chinese_traditional ] = "½s¸¹ 4 µ²§À";
     Text[ arabic ] = "ÇáÊÑŞíã 4 äåÇíÉ";
     Text[ greek ] = "Áñßèìçóç 4 Ôİëïò";
-    Text[ korean ] = "¹øÈ£ 4 ³¡";
+    Text[ korean ] = "¹øÈ£ 4 Á¾·á";
     Text[ turkish ] = "Numaralama 4 Son";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Numeración 4 fin";
@@ -2083,7 +2083,7 @@ String STR_POOLCOLL_NUM_LEVEL5E
     Text[ chinese_traditional ] = "½s¸¹ 5 µ²§À";
     Text[ arabic ] = "ÇáÊÑŞíã 5 äåÇíÉ";
     Text[ greek ] = "Áñßèìçóç 5 Ôİëïò";
-    Text[ korean ] = "¹øÈ£ 5 ³¡";
+    Text[ korean ] = "¹øÈ£ 5 Á¾·á";
     Text[ turkish ] = "Numaralama 5 Son";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Numeración 5 fin";
@@ -2961,7 +2961,7 @@ String STR_POOLCOLL_LABEL
     Text [ portuguese_brazilian ] = "Beschriftung" ;
     Text[ chinese_simplified ] = "±êÇ©";
     Text[ russian ] = "Íàäïèñü";
-    Text[ polish ] = "Opis";
+    Text[ polish ] = "Etykieta";
     Text[ japanese ] = "}•\\”Ô†";
     Text[ chinese_traditional ] = "¼ĞÅÒ";
     Text[ arabic ] = "ÊÓãíÉ ÊæÖíÍíÉ";
@@ -2988,7 +2988,7 @@ String STR_POOLCOLL_LABEL_ABB
     Text[ chinese_simplified ] = "²åÍ¼";
     Text[ russian ] = "Èëëşñòğàöèÿ";
     Text[ polish ] = "Ilustracja";
-    Text[ japanese ] = "}";
+    Text[ japanese ] = "²×½ÄÚ°¼®İ";
     Text[ chinese_traditional ] = "´¡¹Ï";
     Text[ arabic ] = "ÑÓã ÊæÖíÍí";
     Text[ greek ] = "Åéêüíá";
@@ -5302,21 +5302,21 @@ String STR_POOLCHR_RUBYTEXT
 {
     Text = "Rubys" ;
     Text [ English ] = "Rubies" ;
-    Text[ english_us ] = "Phonetic Symbols";
+    Text[ english_us ] = "Rubys";
     Text[ portuguese ] = "Símbolos fonéticos";
     Text[ russian ] = "Ôîíåòè÷åñêèå çíàêè";
     Text[ greek ] = "ÖùíçôéêÜ óıìâïëá";
     Text[ dutch ] = "Fonetische tekens";
-    Text[ french ] = "Symboles phonétiques";
+    Text[ french ] = "Rubys";
     Text[ spanish ] = "Rubys";
     Text[ finnish ] = "Foneettiset merkit";
     Text[ italian ] = "Testo Ruby";
     Text[ danish ] = "Phonetic Symbols";
-    Text[ swedish ] = "Fonetiska symboler";
+    Text[ swedish ] = "Rubytext";
     Text[ polish ] = "Znaki Ruby";
     Text[ portuguese_brazilian ] = "Phonetic Symbols";
     Text[ japanese ] = "‚Ó‚è‚ª‚È";
-    Text[ korean ] = "¹ßÀ½ ±âÈ£";
+    Text[ korean ] = "·çºñ";
     Text[ chinese_simplified ] = "Æ´ÒôºÍ×¢Òô·ûºÅ";
     Text[ chinese_traditional ] = "µù­µ²Å¸¹";
     Text[ turkish ] = "Phonetic Symbols";
@@ -5328,6 +5328,7 @@ String STR_POOLCHR_PRGM_RUBYTEXT
 {
     Text  = "Rubies" ;
 };
+
 
 
 
