@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerwrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,14 @@
 
 #include "providerwrapper.hxx"
 
+#ifndef CONFIGMGR_BOOTSTRAP_HXX_
+#include "bootstrap.hxx"
+#endif
+
 #ifndef CONFIGMGR_BOOTSTRAPCONTEXT_HXX_
 #include "bootstrapcontext.hxx"
 #endif
+
 
 #ifndef _COM_SUN_STAR_LANG_NULLPOINTEREXCEPTION_HPP_
 #include <com/sun/star/lang/NullPointerException.hpp>
@@ -73,6 +78,7 @@
 #endif
 
 #include <algorithm>
+
 
 namespace configmgr
 {
@@ -92,8 +98,18 @@ namespace configmgr
             OUString sMsg(RTL_CONSTASCII_USTRINGPARAM("ProviderWrapper: Cannot wrap a NULL provider"));
             throw lang::NullPointerException(sMsg,NULL);
         }
+        //Strip prefixes
+        NamedValues aStrippedPresets = aPresets;
 
-        Provider xResult( new ProviderWrapper(xProvDelegate,aPresets) );
+        for (sal_Int32 i = 0; i < aPresets.getLength(); ++i)
+        {
+            if(aPresets[i].Name.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(CONTEXT_ITEM_PREFIX_ )))
+            {
+                aStrippedPresets[i].Name = aPresets[i].Name.copy(RTL_CONSTASCII_LENGTH(CONTEXT_ITEM_PREFIX_ ));
+            }
+        }
+
+        Provider xResult( new ProviderWrapper(xProvDelegate,aStrippedPresets) );
 
         typedef uno::Reference< lang::XComponent > Comp;
         DisposingForwarder::forward( Comp::query(xProvDelegate),Comp::query(xResult) );
