@@ -1,0 +1,499 @@
+/*************************************************************************
+ *
+ *  $RCSfile: abspilot.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2001-08-01 11:06:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef EXTENSIONS_ABPRESID_HRC
+#include "abpresid.hrc"
+#endif
+
+//........................................................................
+ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
+{
+    Text                = "Autopilot Adress-Datenquelle" ;
+    Text [ english ]    = "Autopilot Address Book Data Source" ;
+    Text [ english_us ] = "Autopilot Address Book Data Source" ;
+
+    OutputSize      = TRUE ;
+    SVLook          = TRUE ;
+    Moveable        = TRUE ;
+    Closeable       = TRUE ;
+    Hide            = TRUE;
+};
+
+//........................................................................
+TabPage RID_PAGE_SELECTABTYPE
+{
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text = "Adressbuch-Typ";
+    Text [ english ] = "Address Book Type";
+    Text [ english_us ] = "Address Book Type";
+
+    FixedLine FL_SEPARATOR
+    {
+        Pos     = MAP_APPFONT ( 4, 3 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8 ) ;
+
+        Text = "Willkommen";
+        Text [ english ] = "Welcome";
+        Text [ english_us ] = "Welcome";
+    };
+
+    FixedText FT_TYPE_HINTS
+    {
+        Pos     = MAP_APPFONT ( 7, 12 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 40 ) ;
+        WordBreak = TRUE;
+
+        Text = "%PRODUCTNAME bietet Ihnen die Mˆglichkeit, auf bereits in Ihrem Systemvorhandene Adress-Daten zuzugreifen.\n"
+            "Dazu wird eine %PRODUCTNAME Datenquelle angelegt, unter der Ihre Adressb¸cher als Tabellen zug‰nglich sind.\n\n"
+            "Dieser Auto-Pilot unterst¸tzt sie bei der Einrichtung dieser Datenquelle.";
+        Text [ english ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\n"
+            "For this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\n"
+            "This auto pilot will assist you in the creation of this data source.";
+        Text [ english_us ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\n"
+            "For this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\n"
+            "This auto pilot will assist you in the creation of this data source.";
+    };
+
+    FixedLine FL_TYPE
+    {
+        Pos     = MAP_APPFONT ( 4, 59 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8 ) ;
+
+        Text = "Typ";
+        Text [ english ] = "Type";
+        Text [ english_us ] = "Type";
+    };
+    FixedText FT_CHOOSE_TYPE
+    {
+        Pos     = MAP_APPFONT ( 7, 68 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 8 ) ;
+
+        Text = "Bitte w‰hlen sie den Typ Ihres externen Adressbuches:";
+        Text [ english ] = "Please choose the type of your external address book:";
+        Text [ english_us ] = "Please choose the type of your external address book:";
+    };
+
+    RadioButton RB_MORK
+    {
+        Pos     = MAP_APPFONT ( 15, 79 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
+
+        Text = "Mozilla / Netscape 6.x";
+        Text [ english ] = "Mozilla / Netscape 6.x";
+        Text [ english_us ] = "Mozilla / Netscape 6.x";
+        Group = TRUE;
+    };
+    RadioButton RB_LDAP
+    {
+        Pos     = MAP_APPFONT ( 15, 90 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
+
+        Text = "LDAP Adress-Bestand";
+        Text [ english ] = "LDAP address data";
+        Text [ english_us ] = "LDAP address data";
+    };
+    RadioButton RB_OUTLOOK
+    {
+        Pos     = MAP_APPFONT ( 15, 101 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
+
+        Text = "Outlook Adressbuch";
+        Text [ english ] = "Outlook address book";
+        Text [ english_us ] = "Outlook address book";
+    };
+    RadioButton RB_OUTLOOKEXPRESS
+    {
+        Pos     = MAP_APPFONT ( 15, 112 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
+
+        Text = "Windows System-Adressbuch";
+        Text [ english ] = "Windows system address book";
+        Text [ english_us ] = "Windows system address book";
+    };
+    RadioButton RB_OTHER
+    {
+        Pos     = MAP_APPFONT ( 15, 123 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
+
+        Text = "andere externe Datenquelle";
+        Text [ english ] = "other external data source";
+        Text [ english_us ] = "other external data source";
+    };
+};
+
+//........................................................................
+TabPage RID_PAGE_ADMININVOKATION
+{
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text = "Adressbuch-Details";
+    Text [ english ] = "Address Book Details";
+    Text [ english_us ] = "Address Book Details";
+
+    FixedLine FL_SEPARATOR
+    {
+        Pos     = MAP_APPFONT ( 4, 3 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8 ) ;
+    };
+
+    FixedText FT_ADMINEXPLANATION
+    {
+        Pos     = MAP_APPFONT ( 7, 12 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 48 ) ;
+        WordBreak = TRUE;
+
+        Text = "Um die neue Datenquelle einzurichten, sind noch weitergehende Angaben notwendig.\n\n"
+            "Daf¸r wird, sobald die auf den unten befindlichen Button dr¸cken, ein weiterer Dialog geˆffnet. "
+            "Nehmen Sie dort bitte die fehlenden Einstellungen vor.";
+        Text [ english ] = "To set up the new data source, some additional information is needed.\n\n"
+            "For this, another dialog will be opened, as soon as you press the button below. "
+            "There, please specify all missing settings.";
+        Text [ english_us ] = "To set up the new data source, some additional information is needed.\n\n"
+            "For this, another dialog will be opened, as soon as you press the button below. "
+            "There, please specify all missing settings.";
+    };
+
+    PushButton PB_INVOKE_ADMIN_DIALOG
+    {
+        Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 63 ) ;
+        Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
+
+        Text = "Einstellungen";
+        Text [ english ] = "Settings";
+        Text [ english_us ] = "Settings";
+    };
+
+    FixedText FT_ERROR
+    {
+        Pos     = MAP_APPFONT ( 7, WINDOW_SIZE_Y - 7 - 48 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 48 ) ;
+        WordBreak = TRUE;
+        Hide = TRUE;
+
+        Text = "Die Verbindung zur Datenquelle konnte nicht hergestellt werden.\n"
+            "Bitte ¸berpr¸fen Sie, bevor Sie fortfahren, die gemachten Einstellungen, oder w‰hlen Sie (auf der vorhergehenden "
+            "Seite) einen anderen Typ f¸r Ihre  Adress-Datenquelle.";
+        Text [ english ] = "The connection to the data source could not be established.\n"
+            "Before you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text [ english_us ] = "The connection to the data source could not be established.\n"
+            "Before you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+    };
+};
+
+//........................................................................
+TabPage RID_PAGE_TABLESELECTION
+{
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text = "Tabellen-Auswahl";
+    Text [ english ] = "Table selection";
+    Text [ english_us ] = "Table selection";
+
+    FixedLine FL_SEPARATOR
+    {
+        Pos     = MAP_APPFONT ( 4, 3 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8 ) ;
+    };
+
+    FixedText FL_TOOMUCHTABLES
+    {
+        Pos     = MAP_APPFONT ( 7, 12 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 24 ) ;
+        WordBreak = TRUE;
+
+        Text = "Die von Ihnen gew‰hlte externe Datenquelle enth‰lt mehrere Adress-Best‰nde (respektive Tabellen).\n"
+            "Bitte w‰hlen Sie denjenigen aus, mit dem Sie haupts‰chlich arbeiten wollen:";
+        Text [ english ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\n"
+            "Please choose the one you primarily want to work with:";
+        Text [ english_us ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\n"
+            "Please choose the one you primarily want to work with:";
+    };
+
+    ListBox LB_TABLELIST
+    {
+        Pos     = MAP_APPFONT ( 7, 39 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 50 ) ;
+        SVLook = TRUE;
+        Sort = TRUE;
+        DropDown = FALSE;
+        AutoHScroll = TRUE;
+        Border = TRUE;
+    };
+};
+
+//........................................................................
+TabPage RID_PAGE_FIELDMAPPING
+{
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text = "Feld-Zuordnung";
+    Text [ english ] = "Field assigment";
+    Text [ english_us ] = "Field assigment";
+
+    FixedLine FL_SEPARATOR
+    {
+        Pos     = MAP_APPFONT ( 4, 3 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8 ) ;
+    };
+
+    FixedText FT_FIELDASSIGMENTEXPL
+    {
+        Pos     = MAP_APPFONT ( 7, 12 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 72 ) ;
+        WordBreak = TRUE;
+
+        Text = "Um die Adress-Daten in Ihren Vorlagen-Dokumenten benutzen zu kˆnnen, muﬂ %PRODUCTNAME wissen, welche Felder welche "
+            "konkreten Daten enthalten.\n\n"
+            "Zum Beispiel kˆnnten Sie die E-Mail-Adressen in einem Feld namens \"EMail\" oder \"E-Mail\" oder \"EM\" - oder unter vˆllig anderem Namen - gespeichert haben.\n\n"
+            "Sobald sie den unten stehenden Button dr¸cken, wird ein weiterer Dialog geˆffnet, in dem sie diese Einstellungen "
+            "f¸r Ihre Datenquelle vornehmen kˆnnen.";
+        Text [ english ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields "
+            "do contain which concrete data.\n\n"
+            "For instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\n"
+            "When you press the button below, another dialog will be opened, where you can do this field assignment for your "
+            "data source.";
+        Text [ english_us ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields "
+            "do contain which concrete data.\n\n"
+            "For instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\n"
+            "When you press the button below, another dialog will be opened, where you can do this field assignment for your "
+            "data source.";
+    };
+
+    PushButton PB_INVOKE_FIELDS_DIALOG
+    {
+        Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 87 ) ;
+        Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
+
+        Text = "Feld-Zuordnung";
+        Text [ english ] = "Field assignment";
+        Text [ english_us ] = "Field assignment";
+    };
+
+    FixedText FT_ASSIGNEDFIELDS
+    {
+        Pos     = MAP_APPFONT ( 7, WINDOW_SIZE_Y - 7 - 32 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 32 ) ;
+    };
+};
+
+//........................................................................
+TabPage RID_PAGE_FINAL
+{
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text = "Zusammenfassung";
+    Text [ english ] = "Summary";
+    Text [ english_us ] = "Summary";
+
+    FixedLine FL_SEPARATOR
+    {
+        Pos     = MAP_APPFONT ( 4, 3 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8 ) ;
+    };
+
+    FixedText FT_FINISH_EXPL
+    {
+        Pos     = MAP_APPFONT ( 7, 12 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 32 ) ;
+        WordBreak = TRUE;
+
+        Text = "Das waren alle Angaben, die zu Integration Ihrer Adress-Daten in %PRODUCTNAME benˆtigt werden.\n\n"
+            "Geben Sie jetzt noch den Namen an, unter dem die Datenquelle in %PRODUCTNAME registriert werden soll.";
+        Text [ english ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\n"
+            "Now, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text [ english_us ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\n"
+            "Now, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+    };
+
+    FixedText FT_NAME_EXPL
+    {
+        Pos     = MAP_APPFONT ( 7, 48 ) ;
+        Size    = MAP_APPFONT ( 50, 8 ) ;
+
+        Text = "Name";
+        Text [ english ] = "Name";
+        Text [ english_us ] = "Name";
+        Group = TRUE;
+    };
+
+    Edit ET_DATASOURCENAME
+    {
+        Pos     = MAP_APPFONT ( 60, 48 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 60 - 7, 12) ;
+        SVLook = TRUE;
+        Border = TRUE;
+        Group = FALSE;
+    };
+
+    FixedText FT_DUPLICATENAME
+    {
+        Pos     = MAP_APPFONT ( 7, WINDOW_SIZE_Y - 7 - 24 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 24) ;
+        WordBreak = TRUE;
+
+        Text =  "Es existiert schon eine andere Datenquelle mit diesem Namen. Da Datenquellennamen global eindeutig sind, "
+            "m¸ssen sie einen anderen w‰hlen.";
+        Text [ english ] = "Another data source already has this name. As data sources have globally unique names, you have to choose another one.";
+        Text [ english_us ] = "Another data source already has this name. As data sources have globally unique names, you have to choose another one.";
+        Text [ portuguese ] = "J· existe uma fonte de dados com este nome. Os nomes das fontes de dados devem ser ˙nicos, por esta raz„o È recomend·vel seleccionar outro nome.";
+        Text [ russian ] = "œÓ‰ Ú‡ÍËÏ ËÏÂÌÂÏ ÛÊÂ ÒÛ˘ÂÒÚ‚ÛÂÚ Ó‰ËÌ ËÒÚÓ˜ÌËÍ ‰‡ÌÌ˚ı. œÓÒÍÓÎ¸ÍÛ ËÏÂÌ‡ ËÒÚÓ˜ÌËÍÓ‚ ‰‡ÌÌ˚ı ‰ÓÎÊÌ˚ ·˚Ú¸ ÛÌËÍ‡Î¸Ì˚ÏË, ÌÂÓ·ıÓ‰ËÏÓ ÔËÒ‚ÓËÚ¸ ‰Û„ÓÂ ËÏˇ.";
+        Text [ greek ] = "’‹Ò˜ÂÈ ﬁ‰Á ÏÈ· ÒÔ›ÎÂıÛÁ ‰Â‰ÔÏ›Ì˘Ì ÏÂ ·ıÙ¸ ÙÔ ¸ÌÔÏ·.  ‹ËÂ ¸ÌÔÏ· Ù˘Ì ÒÔÂÎÂ˝ÛÂ˘Ì Ù˘Ì ‰Â‰ÔÏ›Ì˘Ì ÂÈÙÒ›ÂÙ·È Ì· ı‹Ò˜ÂÈ Ï¸ÌÔ ÏÈ· ˆÔÒ‹. –·Ò·Í· ";
+        Text [ dutch ] = "Er bestaat reeds een andere gegevensbron met deze naam. Kies een andere naam.";
+        Text [ french ] = "Ce nom a dÈj‡ ÈtÈ attribuÈ ‡ une autre source de donnÈes. …tant donnÈ que les sources de donnÈes doivent avoir des noms globalement uniques, vous devez en choisir un autre.";
+        Text [ spanish ] = "Ya existe otra fuente de datos con este nombre. Debe elegir otro ya que el nombre de la fuente de datos debe ser globalmente ˙nico.";
+        Text [ italian ] = "Esiste gi‡ una sorgente dati con questo nome. PoichÈ il nome delle sorgenti di dati dev'essere univoco, Ë necesario scegliere un altro nome.";
+        Text [ danish ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
+        Text [ swedish ] = "Det finns redan en datak‰lla med det h‰r namnet. Eftersom namn pÂ datak‰llor mÂste vara globalt unika bˆr Du v‰lja ett annat namn.";
+        Text [ polish ] = "Istnieje inne ürÛd≥o danych o tej samej nazwie. Poniewaø nazwy ürode≥ danych muszπ byÊ globalnie jednoznaczne, naleøy wybraÊ innπ nazwÍ.";
+        Text [ portuguese_brazilian ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
+        Text [ japanese ] = "Ç±ÇÃñºëOÇÃïtÇ¢ÇΩï ÇÃ√ﬁ∞¿ø∞ΩÇ™Ç∑Ç≈Ç…Ç†ÇËÇ‹Ç∑ÅB√ﬁ∞¿ø∞ΩñºÇÇÕÇ¡Ç´ÇËÇ∆ãÊï Ç∑ÇÈÇΩÇﬂÇ…ÇÕÅAÇŸÇ©ÇÃñºëOÇëIëÇ∑ÇÈïKóvÇ™Ç†ÇËÇ‹Ç∑ÅB";
+        Text [ korean ] = "¿ÃπÃ ¿Ã ¿Ã∏ß¿ª ∞°¡¯ ¥Ÿ∏• µ•¿Ã≈Õ º“Ω∫∞° ¿÷Ω¿¥œ¥Ÿ. µ•¿Ã≈Õº“Ω∫ ¿Ã∏ß¿∫ ¿¸ø™ø°º≠ ¿Ø¿œ«ÿæﬂ «œπ«∑Œ, ¥Ÿ∏• ¿Ã∏ß¿ª º±≈√«ÿæﬂ «’¥œ¥Ÿ.";
+        Text [ chinese_simplified ] = "“—æ≠¥Ê‘⁄“ª∏ˆÕ¨√˚µƒ ˝æ›‘¥°£“ÚŒ™ ˝æ›‘¥√˚≥∆±ÿ–Î «“ª∏ˆÕ®”√µƒ”––ß√˚≥∆£¨Ω®“Èƒ˙≤…”√¡Ì“ª∏ˆ√˚≥∆°£";
+        Text [ chinese_traditional ] = "§w∏g¶s¶b§@≠”¶P¶W™∫∏ÍÆ∆∑Ω°C¶]¨∞§@≠”∏ÍÆ∆∑Ω™∫¶W∫Ÿ•≤∂∑≥q•Œ©˙ΩT°AΩ–±z±ƒ•Œ•t•~§@≠”¶≥Æƒ™∫¶W∫Ÿ°C";
+        Text [ turkish ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
+        Text [ arabic ] = "ÌÊÃœ »«·›⁄· „’œ— »Ì«‰«  ¬Œ— ·Â Â–« «·«”„. ‰Ÿ—« ·√‰ √”„«¡ „’«œ— «·»Ì«‰«  ÌÃ» ⁄„Ê„« √‰  ﬂÊ‰ ›—Ìœ…° «·—Ã«¡ «Œ Ì«— «”„ ¬Œ—.";
+        Text[ finnish ] = "Toisella tietol‰hteell‰ on jo sama nimi. Tietol‰hteill‰ on oltava yksilˆlliset nimet, valitse toinen nimi.";
+        Text[ catalan ] = "Ya existe otra fuente de datos con este nombre. Debe elegir otro ya que el nombre de la fuente de datos debe ser globalmente ˙nico.";
+    };
+};
+
+//........................................................................
+ErrorBox RID_ERR_NEEDTYPESELECTION
+{
+    Buttons = WB_OK;
+
+    Message = "Bitte w‰hlen sie einen Adressbuch-Typ aus!";
+    Message [ english ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus!";
+    Message [ english_us ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus!";
+};
+
+QueryBox RID_QRY_NOTABLES
+{
+    Buttons = WB_YES_NO;
+    DefButton = WB_DEF_NO;
+
+    Message = "Die Datenquelle enth‰lt keinerlei Tabellen.\n"
+        "Wollen Sie sie trotzdem als Adress-Datenquelle einrichten?";
+    Message [ english ] = "The data source does not contain any tables.\n"
+        "Do you want to install it as address data source, anyway?";
+    Message [ english_us ] = "The data source does not contain any tables.\n"
+        "Do you want to install it as address data source, anyway?";
+};
+
+//........................................................................
+String RID_STR_DEFAULT_NAME
+{
+    Text = "Adressen";
+    Text [ english ] = "Addresses";
+    Text [ english_us ] = "Addresses";
+};
+
+String RID_STR_ADMINDIALOGTITLE
+{
+    Text = "Adress Datenquelle anlegen";
+    Text [ english ] = "Create Address Data Source";
+    Text [ english_us ] = "Create Address Data Source";
+};
+
+String RID_STR_NOCONNECTION
+{
+    Text = "Die Verbindung konnte nicht hergestellt werden.";
+    Text [ english ] = "The connection could not be established.";
+    Text [ english_us ] = "The connection could not be established.";
+};
+
+String RID_STR_PLEASECHECKSETTINGS
+{
+    Text = "Bitte ¸berpr¸fen Sie die Einstellungen f¸r die Datenquelle.";
+    Text [ english ] = "Please check the settings made for the data source.";
+    Text [ english_us ] = "Please check the settings made for the data source.";
+};
+
+String RID_STR_FIELDDIALOGTITLE
+{
+    Text = "Adress Daten - Feldzuordnung";
+    Text [ english ] = "Address data - field assignment";
+    Text [ english_us ] = "Address data - field assignment";
+};
+
+String RID_STR_NOFIELDSASSIGNED
+{
+    Text = "Im Augenblick sind keine Felder zugeordnet.\n"
+        "Wenn Sie im Augenblick keine Zuordnung treffen wollen, kˆnnen Sie dies sp‰ter jederzeit nachholen:\n"
+        "Men¸ \"Datei - Dokumentvorlage - Adressbuch Quelle ...\"";
+    Text [ english ] = "Currently, there are no fields assigned.\n"
+        "If you don't want to do this assignment at the moment, you can make this up at any time later on:\n"
+        "Menu \"File - Template - Address Book Source ...\"";
+    Text [ english_us ] = "Currently, there are no fields assigned.\n"
+        "If you don't want to do this assignment at the moment, you can make this up at any time later on:\n"
+        "Menu \"File - Template - Address Book Source ...\"";
+    Text [ language_user1 ] = "The last line of this text refers to a menu entry. Please use the same "
+        "translation as for this menu. Does it help if I tell you that it's in svx/inc/globalmn.hrc:ITEM_FILE_DOCTEMPLATE?";
+};
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 26.07.01 09:03:45  fs
+ ************************************************************************/
+
