@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CConnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 07:26:58 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 09:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
         //  don't pass invalid URL to loadComponentFromURL
         throw SQLException();
     }
-    aFileName = aURL.GetMainURL();
+    aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
     Reference< XComponentLoader > xDesktop( getDriver()->getFactory()->createInstance(
                     ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );

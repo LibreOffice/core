@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 06:11:57 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 09:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ OFlatTable::OFlatTable(OFlatConnection* _pConnection,
 
     //  Content aContent(aURL.GetMainURL());
 
-    String aFileName = aURL.GetURLNoPass();
+    String aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
     m_pFileStream = ::utl::UcbStreamHelper::CreateStream( aFileName,STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
 

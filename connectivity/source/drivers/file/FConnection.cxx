@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-04 10:54:30 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 09:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,9 +177,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     }
     aURL.SetSmartURL(aFileName);
 
-
-    //  String aFileName = aURL.PathToFileName();
-    aFileName = aURL.GetMainURL();
+    aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
     m_aURL = aFileName;
 
     if(!aFileName.Len())
@@ -220,11 +218,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     ::ucb::Content aFile;
     try
     {
-        aFile = ::ucb::Content(aFileName,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+        aFile = ::ucb::Content(m_aURL,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
     }
     catch(ContentCreationException&e)
     {
-        throwUrlNotValid(aFileName,e.Message);
+        throwUrlNotValid(m_aURL,e.Message);
     }
 
     // set fields to fetch
@@ -256,10 +254,10 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     }
     catch(Exception& e) // a execption is thrown when no file exists
     {
-        throwUrlNotValid(aFileName,e.Message);
+        throwUrlNotValid(m_aURL,e.Message);
     }
     if(!m_xDir.is() || !m_xContent.is())
-        throwUrlNotValid(aFileName,::rtl::OUString());
+        throwUrlNotValid(m_aURL,::rtl::OUString());
 
     if (m_aFilenameExtension.Search('*') != STRING_NOTFOUND || m_aFilenameExtension.Search('?') != STRING_NOTFOUND)
         throw SQLException();

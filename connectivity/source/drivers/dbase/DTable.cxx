@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-29 08:28:41 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 09:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,9 +371,9 @@ void ODbaseTable::construct()
             // Wenn die Memodatei nicht gefunden wird, werden die Daten trotzdem angezeigt
             // allerdings koennen keine Updates durchgefuehrt werden
             // jedoch die Operation wird ausgefuehrt
-            m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+            m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
             if (!(m_bWriteableMemo = (NULL != m_pMemoStream)))
-                m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+                m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
             if (m_pMemoStream)
                 ReadMemoHeader();
         }
@@ -507,7 +507,7 @@ void ODbaseTable::refreshColumns()
 void ODbaseTable::refreshIndexes()
 {
     TStringVector aVector;
-    if(m_pFileStream)
+    if(m_pFileStream && (!m_pIndexes || m_pIndexes->getCount() == 0))
     {
         INetURLObject aURL;
         aURL.SetURL(getEntry());
@@ -530,7 +530,7 @@ void ODbaseTable::refreshIndexes()
                 aURL.setName(String(aIndexName,getConnection()->getTextEncoding()));
                 try
                 {
-                    Content aCnt(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+                    Content aCnt(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
                     if (aCnt.isDocument())
                     {
                         aVector.push_back(aURL.getBase());
@@ -815,13 +815,13 @@ BOOL ODbaseTable::CreateImpl()
     if(aURL.getExtension() != m_pConnection->getExtension())
         aURL.setExtension(m_pConnection->getExtension());
 
-    Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+    Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
     try
     {
         if (aContent.isDocument())
         {
             // Hack fuer Bug #30609 , nur wenn das File existiert und die Laenge > 0 gibt es einen Fehler
-            SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(),STREAM_READ);
+            SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(INetURLObject::NO_DECODE),STREAM_READ);
 
             if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
             {
@@ -851,7 +851,7 @@ BOOL ODbaseTable::CreateImpl()
     {
         String aExt = aURL.getExtension();
         aURL.setExtension(String::CreateFromAscii("dbt"));                      // extension for memo file
-        Content aMemo1Content(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+        Content aMemo1Content(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
 
         sal_Bool bMemoAlreadyExists = sal_False;
         try
@@ -867,7 +867,7 @@ BOOL ODbaseTable::CreateImpl()
             aURL.setExtension(aExt);      // kill dbf file
             try
             {
-                Content aMemoContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+                Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
                 aMemoContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
             }
             catch(const Exception&)
@@ -881,7 +881,7 @@ BOOL ODbaseTable::CreateImpl()
         if (!CreateMemoFile(aURL))
         {
             aURL.setExtension(aExt);      // kill dbf file
-            Content aMemoContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+            Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
             aMemoContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
             return sal_False;
         }
@@ -907,7 +907,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
     bCreateMemo = sal_False;
     Date aDate;                                     // aktuelles Datum
 
-    m_pFileStream = ::utl::UcbStreamHelper::CreateStream( aFile.GetURLNoPass(),STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
+    m_pFileStream = ::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
 
     if (!m_pFileStream)
         return sal_False;
@@ -1084,7 +1084,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 BOOL ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 {
     // Makro zum Filehandling fürs Erzeugen von Tabellen
-    m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aFile.GetURLNoPass(),STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
+    m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
 
     if (!m_pMemoStream)
         return sal_False;
@@ -1121,12 +1121,12 @@ BOOL ODbaseTable::DropImpl()
 
     BOOL bDropped = FALSE;
 
-    if(bDropped = ::utl::UCBContentHelper::Kill(aURL.GetURLNoPass()))
+    if(bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE)))
     {
         if (HasMemoFields())
         {  // delete the memo fields
             aURL.setExtension(String::CreateFromAscii("dbt"));
-            bDropped = ::utl::UCBContentHelper::Kill(aURL.GetURLNoPass());
+            bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
         }
 
         if(bDropped)
@@ -1144,7 +1144,7 @@ BOOL ODbaseTable::DropImpl()
             }
             //  aFile.SetBase(m_Name);
             aURL.setExtension(String::CreateFromAscii("inf"));
-            bDropped = ::utl::UCBContentHelper::Kill(aURL.GetURLNoPass());
+            bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
         }
     }
     if(!bDropped)
@@ -1717,9 +1717,9 @@ void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com:
 
     try
     {
-        String sOldName = aURL.GetURLNoPass();
+        String sOldName = aURL.GetMainURL(INetURLObject::NO_DECODE);
         //  ::utl::UCBContentHelper::MoveTo(sOldName,sNewName);
-        Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+        Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
         aContent.setPropertyValue( rtl::OUString::createFromAscii( "Title" ),makeAny( ::rtl::OUString(sNewName) ) );
     }
     catch(Exception&)

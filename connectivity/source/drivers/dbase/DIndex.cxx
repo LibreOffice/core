@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 08:24:34 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 09:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,7 +526,7 @@ BOOL ODbaseIndex::DropImpl()
     // InfDatei abgleichen
 
     ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
-    sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);;
+    sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sCfgFile += m_pTable->getName();
     sCfgFile += ::rtl::OUString::createFromAscii(".inf");
 
