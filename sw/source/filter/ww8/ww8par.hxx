@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:44:38 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,7 @@ struct WW8OleMap
 
 class SwWW8ImplReader;
 struct WW8LSTInfo;
+class SwNodeNum;
 class WW8ListManager
 {
 public:
@@ -250,7 +251,7 @@ public:
     //the rParaSprms returns back the original word paragraph indent
     //sprms which were attached to the original numbering format
     SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition, BYTE nLevel,
-        std::vector<sal_uInt8> &rParaSprms) const;
+        std::vector<sal_uInt8> &rParaSprms, SwNodeNum *pNodeNum=0) const;
     SwNumRule* CreateNextRule(bool bSimple);
     ~WW8ListManager();
 private:
@@ -662,26 +663,27 @@ public:
     SwPageDesc *mpPage;
     SvxFrameDirection meDir;
 
-    short nPgWidth;
-    short nPgLeft;
-    short nPgRight;
+    sal_uInt32 nPgWidth;
+    sal_uInt32 nPgLeft;
+    sal_uInt32 nPgRight;
 
     BYTE mnBorders;
     bool mbHasFootnote;
     void SetDirection();
     bool DoesContainFootnote() const { return mbHasFootnote; }
     bool IsContinous() const { return maSep.bkc == 0; }
+    bool IsNotProtected() const { return maSep.fUnlocked != 0; }
     bool IsVertical() const;
-    long NoCols() const { return maSep.ccolM1 + 1; }
-    long StandardColSeperation() const { return maSep.dxaColumns; }
+    sal_Int16 NoCols() const { return maSep.ccolM1 + 1; }
+    sal_Int32 StandardColSeperation() const { return maSep.dxaColumns; }
     bool HasTitlePage() const { return maSep.fTitlePage ? true : false; }
-    long PageStartAt() const { return maSep.pgnStart; }
+    sal_uInt16 PageStartAt() const { return maSep.pgnStart; }
     bool PageRestartNo() const { return maSep.fPgnRestart ? true : false; }
     bool IsBiDi() const { return maSep.fBiDi ? true : false; }
-    sal_uInt16 GetPageWidth() const { return nPgWidth; }
+    sal_uInt32 GetPageWidth() const { return nPgWidth; }
     sal_uInt32 GetPageHeight() const { return maSep.yaPage; }
-    sal_uInt16 GetPageLeft() const { return nPgLeft; }
-    sal_uInt16 GetPageRight() const { return nPgRight; }
+    sal_uInt32 GetPageLeft() const { return nPgLeft; }
+    sal_uInt32 GetPageRight() const { return nPgRight; }
     bool IsLandScape() const { return maSep.dmOrientPage ? true : false; }
 };
 
@@ -702,7 +704,7 @@ private:
     struct wwULSpaceData
     {
         bool bHasHeader, bHasFooter;
-        short nSwHLo, nSwFUp, nSwUp,  nSwLo;
+        sal_uInt32 nSwHLo, nSwFUp, nSwUp,  nSwLo;
         wwULSpaceData() : bHasHeader(false), bHasFooter(false) {}
     };
 
@@ -722,7 +724,9 @@ private:
     void SetHdFt(wwSection &rSection, int nSect, const wwSection *pPrevious);
 
     SwSectionFmt *InsertSection(SwPaM& rMyPaM, wwSection &rSection);
-    bool SetCols(SwFrmFmt &rFmt, const wwSection &rSection, USHORT nNettoWidth);
+    bool SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
+        sal_uInt32 nNettoWidth);
+    bool SectionIsProtected(const wwSection &rSection) const;
     void SetLeftRight(wwSection &rSection);
     bool IsNewDoc() const;
     /*
@@ -730,8 +734,8 @@ private:
      nodeindex of where we want the page break to (normally the segments start
      position
     */
-    bool SetSwFmtPageDesc(mySegIter &rIter, mySegIter &rStart,
-        SwNodeIndex &rWhere, bool bIgnoreCols);
+    SwFmtPageDesc SetSwFmtPageDesc(mySegIter &rIter, mySegIter &rStart,
+        bool bIgnoreCols);
 
     //No copying
     wwSectionManager(const wwSectionManager&);
@@ -741,15 +745,16 @@ public:
         {};
     void SetCurrentSectionHasFootnote();
     bool CurrentSectionIsVertical() const;
+    bool CurrentSectionIsProtected() const;
     void PrependedInlineNode(const SwPosition &rPos, const SwNode &rNode);
     USHORT CurrentSectionColCount() const;
     bool WillHavePageDescHere(SwNodeIndex aIdx) const;
     void CreateSep(const long nTxtPos, bool bMustHaveBreak);
     void InsertSegments();
     void JoinNode(const SwPosition &rPos, const SwNode &rNode);
-    short GetPageLeft() const;
-    short GetPageRight() const;
-    short GetPageWidth() const;
+    sal_uInt32 GetPageLeft() const;
+    sal_uInt32 GetPageRight() const;
+    sal_uInt32 GetPageWidth() const;
 };
 
 class wwFrameNamer
@@ -1119,36 +1124,40 @@ private:
     const SfxPoolItem* GetFmtAttr( USHORT nWhich );
     bool JoinNode(SwPaM &rPam, bool bStealAttr = false);
 
-    bool IsBorder(const WW8_BRC* pbrc, bool bChkBtwn = false);
+    bool IsBorder(const WW8_BRC* pbrc, bool bChkBtwn = false) const;
 
     //Set closest writer border equivalent into rBox from pbrc, optionally
     //recording true winword dimensions in pSizeArray. nSetBorders to mark a
     //border which has been previously set to a value and for which becoming
     //empty is valid. Set bCheBtwn to work with paragraphs that have a special
     //between paragraphs border
+#if 0
+    // #i20672# we can't properly support between lines so best to ignore
+    // them for now
     bool SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
-        BYTE nSetBorders=0xFF, bool bChkBtwn = false);
-
-    void GetBorderDistance(const WW8_BRC* pbrc, Rectangle& rInnerDist);
+        BYTE nSetBorders=0xFF, bool bChkBtwn = false) const;
+#endif
+    bool SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
+        BYTE nSetBorders=0xFF) const;
+    void GetBorderDistance(const WW8_BRC* pbrc, Rectangle& rInnerDist) const;
     sal_uInt16 GetParagraphAutoSpace(bool fDontUseHTMLAutoSpacing);
-    bool SetShadow(SvxShadowItem& rShadow, const SvxBoxItem& rBox,
-        const WW8_BRC pbrc[4]);
-
+    bool SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
+        const WW8_BRC pbrc[4]) const;
     //returns true is a shadow was set
     bool SetFlyBordersShadow(SfxItemSet& rFlySet, const WW8_BRC pbrc[4],
-        short *SizeArray=0);
+        short *SizeArray=0) const;
+    void SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) const;
 
     INT32 MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
         MSO_LineStyle eLineStyle, MSO_SPT eShapeType, INT32 &rLineWidth,
         SvxBoxItem& rBox );
     void MatchSdrItemsIntoFlySet( SdrObject*    pSdrObj, SfxItemSet &aFlySet,
         MSO_LineStyle eLineStyle, MSO_SPT eShapeType, Rectangle &rInnerDist );
-    void AdjustLRWrapForWordMargins(SvxMSDffImportRec* pRecord,
-        SvxLRSpaceItem *pLR);
-    void AdjustULWrapForWordMargins(SvxMSDffImportRec* pRecord,
-        SvxULSpaceItem *pUL);
-    void MatchWrapDistancesIntoFlyFmt( SvxMSDffImportRec* pRecord,
-                                       SwFrmFmt*          pFlyFmt );
+    void AdjustLRWrapForWordMargins(const SvxMSDffImportRec &rRecord,
+        SvxLRSpaceItem &rLR);
+    void AdjustULWrapForWordMargins(const SvxMSDffImportRec &rRecord,
+        SvxULSpaceItem &rUL);
+    void MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord, SwFrmFmt* pFlyFmt);
 
     void SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord, SwFrmFmt *pFlyFmt,
         WW8_FSPA *pF );
@@ -1333,7 +1342,7 @@ private:
 
     void PopTableDesc();
     void MoveInsideFly(const SwFrmFmt *pFlyFmt);
-    sal_uInt16 MoveOutsideFly(SwFrmFmt *pFlyFmt, const SwPosition &rPos,
+    SwTwips MoveOutsideFly(SwFrmFmt *pFlyFmt, const SwPosition &rPos,
         bool bTableJoin = true);
 
     void SetOutLineStyles();
@@ -1385,7 +1394,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_NoLineNumb(       USHORT nId, const BYTE* pData, short nLen );
 
     void Read_LR(               USHORT nId, const BYTE*, short nLen );
-    void AdjustStyleTabStops(short nLeft, SwWW8StyInf *pSty);
+    void AdjustStyleTabStops(long nLeft, SwWW8StyInf *pSty);
     void Read_UL(               USHORT nId, const BYTE*, short nLen );
     void Read_ParaAutoBefore(USHORT , const BYTE *pData, short nLen);
     void Read_ParaAutoAfter(USHORT , const BYTE *pData, short nLen);
@@ -1523,8 +1532,6 @@ public:     // eigentlich private, geht aber leider nur public
     SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage, SvStream* pSt,
         SwDoc& rD, bool bNewDoc );
 
-    const ULONG GetIniFlags()   const{ return nIniFlags; }
-
     // Laden eines kompletten DocFiles
     ULONG LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
     CharSet GetCurrentCharSet();
@@ -1535,26 +1542,6 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt);
 void SetStyleIndent(SwWW8StyInf &rStyleInfo, const SwNumFmt &rFmt);
 void SyncIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt);
 long GetListFirstLineIndent(const SwNumFmt &rFmt);
-const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode,
-    const SwDoc &rDocb);
-
-namespace sw
-{
-    namespace util
-    {
-        /*
-         For no good reason except to complicate my life writer tabs are
-         relative to the left of the paragraph text body indent. More
-         reasonably word's are absolute Adjust tabs converts tabs originally
-         relative from nSourceLeft to be relative to nDestLeft. nSourceLeft is
-         0 when converting from word to writer, and vice versa when converting
-         to word, and both values are set when moving writer tabs after an
-         indent change
-        */
-        bool AdjustTabs(long nDestLeft, long nSrcLeft, SvxTabStopItem &rTabs);
-    }
-}
-
 String BookmarkToWriter(const String &rBookmark);
 bool RTLGraphicsHack(long &rLeft, long nWidth,
     SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
