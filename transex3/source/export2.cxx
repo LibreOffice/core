@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nf $ $Date: 2002-01-14 14:11:04 $
+ *  last change: $Author: nf $ $Date: 2002-04-04 13:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ USHORT Export::LangId[ LANGUAGES ] =
     ARABIC,
     HEBREW,
     CATALAN,
+    THAI,
     EXTERN
 };
 
@@ -191,6 +192,7 @@ CharSet Export::GetCharSet( USHORT nLangId )
         case ARABIC: return RTL_TEXTENCODING_MS_1256;
         case HEBREW: return RTL_TEXTENCODING_MS_1255;
         case CATALAN: return RTL_TEXTENCODING_MS_1252;
+        case THAI: return RTL_TEXTENCODING_UTF8;
         case EXTERN: return RTL_TEXTENCODING_UTF8;
     }
     return 0xFFFF;
@@ -260,6 +262,8 @@ USHORT Export::GetLangByIsoLang( const ByteString &rIsoLang )
         return HEBREW;
     else if ( sLang == ByteString( CATALAN_ISO ).ToUpperAscii())
         return CATALAN;
+    else if ( sLang == ByteString( THAI_ISO ).ToUpperAscii())
+        return THAI;
     else if ( sLang == ByteString( sIsoCode99 ).ToUpperAscii())
         return EXTERN;
 
@@ -299,6 +303,7 @@ ByteString Export::GetIsoLangByIndex( USHORT nIndex )
         case ARABIC_INDEX: return ARABIC_ISO;
         case HEBREW_INDEX: return HEBREW_ISO;
         case CATALAN_INDEX: return CATALAN_ISO;
+        case THAI_INDEX: return THAI_ISO;
         case EXTERN_INDEX: return sIsoCode99;
     }
     return "";
@@ -424,6 +429,7 @@ const ByteString Export::LangName[ LANGUAGES ] =
     "arabic",
     "hebrew",
     "catalan",
+    "thai",
     "extern"
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2001-07-31 13:12:25 $
+ *  last change: $Author: nf $ $Date: 2002-04-04 13:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,11 +187,15 @@
 #define CATALAN_ISO             "ca"
 #define CATALAN_INDEX               28
 
+#define THAI                    66
+#define THAI_ISO                "th"
+#define THAI_INDEX                  29
+
 // special language for l10n framework
 #define EXTERN                  99
-#define EXTERN_INDEX                29
+#define EXTERN_INDEX                30
 
-#define LANGUAGES                   30
+#define LANGUAGES                   31
 
 #define LANGUAGE_ALLOWED( n )  (( n != 0xFFFF ) && ( Export::LanguageAllowed( Export::LangId[ n ] )) &&                                                     \
                                (( Export::LangId[ n ] == 01 ) || ( Export::LangId[ n ] == 03 ) || ( Export::LangId[ n ] == 07 ) ||  \
@@ -201,7 +205,7 @@
                                 ( Export::LangId[ n ] == 48 ) || ( Export::LangId[ n ] == 49 ) || ( Export::LangId[ n ] == 55 ) ||  \
                                 ( Export::LangId[ n ] == 81 ) || ( Export::LangId[ n ] == 82 ) || ( Export::LangId[ n ] == 86 ) ||  \
                                 ( Export::LangId[ n ] == 88 ) || ( Export::LangId[ n ] == 90 ) || ( Export::LangId[ n ] == 96 ) ||  \
-                                ( Export::LangId[ n ] == 00 ) || ( Export::LangId[ n ] == 99 )))
+                                ( Export::LangId[ n ] == 66 ) || ( Export::LangId[ n ] == 00 ) || ( Export::LangId[ n ] == 99 )))
 
 #define GERMAN_LIST_LINE_INDEX  LANGUAGES
 #define LIST_REFID              (GERMAN_LIST_LINE_INDEX+1)
