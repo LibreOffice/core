@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-17 07:48:42 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ ModelessDialog RID_SCDLG_CHANGES
         QuickHelpText [ dutch ] = "Verkleinen/vergroten" ;
         QuickHelpText [ portuguese ] = "Afastar/Aproximar" ;
     QuickHelpText[ russian ] = "Óìåíüøèòü/Óâåëè÷èòü";
-        QuickHelpText[ polish ] = "Pomniejsz/Powiêksz";
+        QuickHelpText[ polish ] = "Pomniejsz/Powiêksz!";
         QuickHelpText[ japanese ] = "k¬/Šg‘å!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡/·Å´ó";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p/©ñ¤j";
@@ -384,7 +384,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ dutch ] = "Inhoudsverandering" ;
         Text[ chinese_simplified ] = "ÄÚÈİ¸ü¸Ä";
         Text[ russian ] = "Èçìåíåíèå ñîäåğæèìîãî";
-        Text[ polish ] = "Zmiana zawarto?ci";
+        Text[ polish ] = "Zmiana zawartoœci";
         Text[ japanese ] = "“à—e‚Ì•ÏX";
         Text[ chinese_traditional ] = "¤º®eÅÜ§ó";
         Text[ arabic ] = "ÊÛííÑ ÇáãÍÊæíÇÊ";
@@ -412,7 +412,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ dutch ] = "Inhoudsverandering" ;
         Text[ chinese_simplified ] = "ÄÚÈİ¸ü¸Ä";
         Text[ russian ] = "Èçìåíåíèå ñîäåğæèìîãî";
-        Text[ polish ] = "Zmiana zawarto?ci";
+        Text[ polish ] = "Zmiana zawartoœci";
         Text[ japanese ] = "“à—e‚Ì•ÏX";
         Text[ chinese_traditional ] = "¤º®eÅÜ§ó";
         Text[ arabic ] = "ÊÛííÑ ÇáãÍÊæíÇÊ";
@@ -889,3 +889,4 @@ Menu RID_POPUP_CHANGES
         };
     };
 };
+
