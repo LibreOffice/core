@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 10:37:40 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,13 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
 
         for (nOb=0; nOb<nObAnz; nOb++) {
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
-            SdrObject* pNeuObj=pSrcOb->Clone(pDstLst->GetPage(),pDstLst->GetModel());
+
+            // #116235#
+            //SdrObject* pNeuObj=pSrcOb->Clone(pDstLst->GetPage(),pDstLst->GetModel());
+            SdrObject* pNeuObj = pSrcOb->Clone();
+            pNeuObj->SetModel(pDstLst->GetModel());
+            pNeuObj->SetPage(pDstLst->GetPage());
+
             if (pNeuObj!=NULL) {
                 if (bResize) {
                     pNeuObj->GetModel()->SetPasteResize(TRUE); // #51139#
@@ -795,7 +801,13 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
                 pNeuObj->SetModel( pNeuMod );
             }
             else
-                pNeuObj = pObj->Clone( pNeuPag, pNeuMod );
+            {
+                // #116235#
+                // pNeuObj = pObj->Clone( pNeuPag, pNeuMod );
+                pNeuObj = pObj->Clone();
+                pNeuObj->SetPage( pNeuPag );
+                pNeuObj->SetModel( pNeuMod );
+            }
 
             if( pNeuObj )
             {
