@@ -47,8 +47,9 @@ sub createFilename
 }
 # ------------------------------------------------------------------------------
 
-sub generateNewPackage
+sub generateNewPackage(*$)
 {
+    local *CPPFILE = shift;
     my $sPackageName = shift;
 
     my $sFilename = createFilename($sPackageName);
@@ -297,7 +298,7 @@ sub walkThroughJobFile
                         closePackage();
 
                         $sCurrentPackage = $sPackageName;
-                        generateNewPackage($sPackageName);
+                        generateNewPackage(CPPFILE, $sPackageName);
                     }
                     if ($sCurrentClass ne $sClassName)
                     {
@@ -378,11 +379,12 @@ sub checkMakefileNumber
     return $nFirstFree, $nReplacePos;
 }
 # ------------------------------------------------------------------------------
-sub createNewMakefile
+sub createNewMakefile($$$)
 {
-    $sNewMakefileName = shift;
+    my $sNewMakefileName = shift;
     my $sTargetName = shift;
     my $nNumber = shift;
+    local *MAKEFILE;
 
     # this function split a makefile into two parts,
     open(MAKEFILE, "makefile.mk") || return;
@@ -418,7 +420,7 @@ sub createNewMakefile
             print MAKEFILE $lines[$i];
         }
 
-        generateMakefileEntry($sTargetName, $nNumber);
+        generateMakefileEntry(MAKEFILE, $sTargetName, $nNumber);
 
         for ($i = ($nTargetMK - 2);$i <= $#lines; $i++)
         {
@@ -429,55 +431,58 @@ sub createNewMakefile
 }
 # ------------------------------------------------------------------------------
 
-sub generateMakefileEntry
+sub generateMakefileEntry(*$$)
 {
     # my MAKEFILE = shift;
+    local *_MAKEFILE = shift;
     my $sTargetName = shift;
     my $nNumber = shift;
 
-    # open(MAKEFILE, ">makefile.add") || die "can't open makefile.add";
+    # open(_MAKEFILE, ">makefile.add") || die "can't open makefile.add";
 
-    print MAKEFILE "# BEGIN ----------------------------------------------------------------\n";
-    print MAKEFILE "# auto generated Target:$sTargetName by codegen.pl \n";
-    print MAKEFILE "SHL${nNumber}OBJS= ";
+    print _MAKEFILE "# BEGIN ----------------------------------------------------------------\n";
+    print _MAKEFILE "# auto generated Target:$sTargetName by codegen.pl \n";
+    print _MAKEFILE "SHL${nNumber}OBJS= ";
     foreach $sFilename (@sFilenameStack)
     {
-        print MAKEFILE " \\\n";
-        print MAKEFILE "    \$(SLO)\$/$sFilename.obj";
+        print _MAKEFILE " \\\n";
+        print _MAKEFILE "   \$(SLO)\$/$sFilename.obj";
     }
-    print MAKEFILE "\n\n";
+    print _MAKEFILE "\n\n";
 
     # targetname
-    print MAKEFILE "SHL${nNumber}TARGET= $sTargetName\n";
+    print _MAKEFILE "SHL${nNumber}TARGET= $sTargetName\n";
     # additional libraries
-    print MAKEFILE "SHL${nNumber}STDLIBS=\\\n";
-    print MAKEFILE "   \$(SALLIB) \n";
+    print _MAKEFILE "SHL${nNumber}STDLIBS=\\\n";
+    print _MAKEFILE "   \$(SALLIB) \\\n";
+    # LLA: added by sb 18th jun 2003 (announced)
+    print _MAKEFILE "   \$(CPPUNITLIB) \n";
     # link static cppunit library
-    print MAKEFILE ".IF \"\$(GUI)\" == \"WNT\"\n";
-    print MAKEFILE "SHL${nNumber}STDLIBS+=  \$(SOLARLIBDIR)\$/cppunit.lib\n";
-    print MAKEFILE ".ENDIF\n";
-    print MAKEFILE ".IF \"\$(GUI)\" == \"UNX\"\n";
-    print MAKEFILE "SHL${nNumber}STDLIBS+=\$(SOLARLIBDIR)\$/libcppunit\$(DLLPOSTFIX).a\n";
-    print MAKEFILE ".ENDIF\n";
-    print MAKEFILE "\n";
-    print MAKEFILE "SHL${nNumber}IMPLIB= i\$(SHL${nNumber}TARGET)\n";
-    print MAKEFILE "# SHL${nNumber}DEF=    \$(MISC)\$/\$(SHL${nNumber}TARGET).def\n";
-    print MAKEFILE "\n";
+    # print _MAKEFILE ".IF \"\$(GUI)\" == \"WNT\"\n";
+    # print _MAKEFILE "SHL${nNumber}STDLIBS+=   \$(SOLARLIBDIR)\$/cppunit.lib\n";
+    # print _MAKEFILE ".ENDIF\n";
+    # print _MAKEFILE ".IF \"\$(GUI)\" == \"UNX\"\n";
+    # print _MAKEFILE "SHL${nNumber}STDLIBS+=\$(SOLARLIBDIR)\$/libcppunit\$(DLLPOSTFIX).a\n";
+    # print _MAKEFILE ".ENDIF\n";
+    print _MAKEFILE "\n";
+    print _MAKEFILE "SHL${nNumber}IMPLIB= i\$(SHL${nNumber}TARGET)\n";
+    print _MAKEFILE "# SHL${nNumber}DEF=    \$(MISC)\$/\$(SHL${nNumber}TARGET).def\n";
+    print _MAKEFILE "\n";
     # DEF name
-    print MAKEFILE "DEF${nNumber}NAME    =\$(SHL${nNumber}TARGET)\n";
-    print MAKEFILE "# DEF${nNumber}EXPORTFILE= export.exp\n";
-    print MAKEFILE "SHL${nNumber}VERSIONMAP= export.map\n";
-    print MAKEFILE "# auto generated Target:$sTargetName\n";
-    print MAKEFILE "# END ------------------------------------------------------------------\n\n";
+    print _MAKEFILE "DEF${nNumber}NAME    =\$(SHL${nNumber}TARGET)\n";
+    print _MAKEFILE "# DEF${nNumber}EXPORTFILE= export.exp\n";
+    print _MAKEFILE "SHL${nNumber}VERSIONMAP= export.map\n";
+    print _MAKEFILE "# auto generated Target:$sTargetName\n";
+    print _MAKEFILE "# END ------------------------------------------------------------------\n\n";
 
-    # close(MAKEFILE);
+    # close(_MAKEFILE);
 }
 
 # ------------------------------------------------------------------------------
 sub usage
 {
     print "usage:\ncodegen.pl joblist [targetname]\n";
-    print "\n(c) Sun Microsystems Inc. 2002\n";
+    print "\n(c) Sun Microsystems Inc. 2003\n";
     print "
 This is a testshl2 codegenerator which creates compilable C++ source files
 with stub functions for all given test routines from the jobfile.
@@ -537,8 +542,9 @@ sub main
     else
     {
         print "warning: No makefile.mk found, please add the content of makefile.add to a makefile.mk file\n";
+        local *MAKEFILE;
         open(MAKEFILE, ">makefile.add");
-        generateMakefileEntry($sTargetName, 1);
+        generateMakefileEntry(MAKEFILE, $sTargetName, 1);
         close(MAKEFILE);
     }
     print "\n";
@@ -556,6 +562,7 @@ sub main
     # }
     if (! -e "export.map")
     {
+        local *EXPORTMAP;
         print "info: create export.map file\n";
         open(EXPORTMAP, ">export.map") || die "can't create export.map";
         print EXPORTMAP "UDK_3.1 {\n";
