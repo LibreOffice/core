@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-01 09:39:36 $
+ *  last change: $Author: fme $ $Date: 2002-11-05 09:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,8 +592,10 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             rOldTxt.Insert( cFldChr, nOldIdx - 1 );
             rInf.SetIdx( nOldIdx );
 
+#ifdef DEBUG
             ASSERT( aDebugString == rInf.GetTxt(),
                     "Somebody, somebody, somebody put something in my string" );
+#endif
         }
     }
 
