@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 13:05:15 $
+#   last change: $Author: rt $ $Date: 2004-09-20 14:37:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,9 +100,13 @@ UNOTYPES = \
     com.sun.star.reflection.XEnumTypeDescription			\
     com.sun.star.reflection.XInterfaceTypeDescription2		\
     com.sun.star.reflection.XInterfaceMethodTypeDescription		\
-    com.sun.star.reflection.XInterfaceAttributeTypeDescription	\
+    com.sun.star.reflection.XInterfaceAttributeTypeDescription2	\
     com.sun.star.reflection.XCompoundTypeDescription		\
-    com.sun.star.reflection.XEnumTypeDescription
+    com.sun.star.reflection.XEnumTypeDescription			\
+    com.sun.star.reflection.XServiceTypeDescription2		\
+    com.sun.star.reflection.XSingletonTypeDescription2
+
+CFLAGS +=-AI$(BIN)
 
 .IF "$(COMEX)"=="10"
 CFLAGS += -clr:noAssembly,initialAppDomain
