@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-25 10:24:39 $
+ *  last change: $Author: cl $ $Date: 2002-10-23 19:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #include <stdio.h>
 
 #include <osl/mutex.hxx>

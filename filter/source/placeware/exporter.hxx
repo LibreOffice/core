@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exporter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-25 12:22:26 $
+ *  last change: $Author: cl $ $Date: 2002-10-23 19:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #ifndef _PLACEWARE_EXPORTER_HXX
 #define _PLACEWARE_EXPORTER_HXX
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-08 09:31:33 $
+#   last change: $Author: cl $ $Date: 2002-10-23 19:30:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,66 +62,42 @@
 
 PRJ=..$/..
 PRJNAME=filter
-TARGET=epwp
-
+TARGET=placeware
+USE_DEFFILE=	TRUE
+NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
+BOOTSTRAP_SERVICE=TRUE
+COMP1TYPELIST=$(TARGET)
 
 # --- Settings ----------------------------------
 
 .INCLUDE :  	settings.mk
 
-# --- Types -------------------------------------
-
-UNOTYPES=\
-    com.sun.star.uno.RuntimeException							\
-    com.sun.star.uno.TypeClass									\
-    com.sun.star.uno.XInterface									\
-    com.sun.star.uno.XWeak										\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.io.XInputStream								\
-    com.sun.star.io.XOutputStream								\
-    com.sun.star.lang.XComponent								\
-    com.sun.star.lang.XInitialization							\
-    com.sun.star.lang.XMultiServiceFactory						\
-    com.sun.star.lang.XSingleServiceFactory						\
-    com.sun.star.lang.XServiceInfo								\
-    com.sun.star.loader.XImplementationLoader					\
-    com.sun.star.registry.XImplementationRegistration			\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.registry.XSimpleRegistry						\
-    com.sun.star.document.XFilter								\
-    com.sun.star.document.XExporter								\
-    com.sun.star.drawing.XDrawPagesSupplier						\
-    com.sun.star.container.XIndexAccess
 # --- Files -------------------------------------
 
 SLOFILES=	$(SLO)$/zip.obj									\
             $(SLO)$/filter.obj								\
             $(SLO)$/uno.obj									\
             $(SLO)$/exporter.obj							\
-            $(SLO)$/Base64Codec.obj
+            $(SLO)$/Base64Codec.obj							\
+            $(SLO)$/tempfile.obj
 
 # --- Library -----------------------------------
 
-SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=$(TARGET)
     
-SHL1STDLIBS=\
-    $(SVTOOLLIB) \
-    $(CPPULIB)			\
-    $(CPPUHELPERLIB)	\
-    $(VOSLIB)			\
-    $(SALLIB)			\
-    $(TOOLSLIB)			\
-    $(UNOTOOLSLIB)
+SHL1STDLIBS= \
+        $(CPPULIB)		\
+        $(CPPUHELPERLIB)	\
+        $(SALLIB)
+SHL1VERSIONMAP=$(TARGET).map
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(SHL1TARGET)
+SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
-DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
+DEF1NAME=	$(SHL1TARGET)
 
 # --- Targets ----------------------------------
 

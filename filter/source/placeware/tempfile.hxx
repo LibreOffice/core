@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: zip.hxx,v $
+ *  $RCSfile: tempfile.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-23 19:30:49 $
+ *  last change: $Author: cl $ $Date: 2002-10-23 19:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,44 +59,24 @@
  *
  ************************************************************************/
 
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
-#ifndef _RTL_STRING_HXX_
-#include <rtl/string.hxx>
-#endif
-#ifndef _OSL_FILE_HXX_
+#ifndef _PLACEWARE_TEMPFILE_HXX_
+#define _PLACEWARE_TEMPFILE_HXX_
+
 #include <osl/file.hxx>
-#endif
+#include <rtl/ustring.hxx>
 
-#include <vector>
-
-struct ZipEntry;
-
-class ZipFile
+class TempFile : public osl::File
 {
 public:
-    ZipFile( osl::File& rFile );
-    ~ZipFile();
+    TempFile( const rtl::OUString& aURL );
+    ~TempFile();
 
-    bool addFile( osl::File& rFile, const rtl::OString& rName );
-    bool close();
-
-private:
-    void writeShort( sal_Int16 s);
-    void writeLong( sal_Int32 l );
-
-    void copyAndCRC( ZipEntry *e, osl::File& rFile );
-    void writeDummyLocalHeader(ZipEntry *e);
-    void writeLocalHeader(ZipEntry *e);
-    void writeCentralDir(ZipEntry *e);
-    void writeEndCentralDir(sal_Int32 nCdOffset, sal_Int32 nCdSize);
+    static rtl::OUString createTempFileURL();
+    rtl::OUString   getFileURL();
 
 private:
-    bool isError() const { return osl::File::E_None != mnRC; }
-
-    osl::File::RC mnRC;
-    bool mbOpen;
-    osl::File& mrFile;              /* file we're writing to */
-    std::vector<ZipEntry*> maEntries;
+    rtl::OUString   maURL;
 };
+
+
+#endif
