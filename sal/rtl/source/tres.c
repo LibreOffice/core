@@ -19,7 +19,7 @@ typedef struct _rtl_CmpState
     struct _rtl_CmpState*   m_prev;
 
     sal_Bool                m_stat;
-    sal_Char*               m_msg;
+    rtl_String*             m_msg;
 
 } rtl_CmpState;
 
@@ -27,7 +27,7 @@ typedef struct _rtl_FuncState
 {
     struct _rtl_FuncState*  m_next;
     struct _rtl_FuncState*  m_prev;
-    sal_Char*               m_name;
+    rtl_String*             m_name;
     sal_uInt32              m_flags;
     sal_uInt32              m_start;
     sal_uInt32              m_stop;
@@ -50,11 +50,6 @@ typedef struct _rtl_TestResult_Data
  /**
   * internal helper functions
   */
-
- /* ...for string handling, ...*/
-static sal_Char* tres_cpy( sal_Char** dest, const sal_Char* src );
-static sal_Char* tres_cat( const sal_Char* str1, const sal_Char* str2 );
-static sal_uInt32 tres_ln( const sal_Char* str );
 
  /* ...to create, link, unlink and destroy allocated memory */
 rtl_FuncState* SAL_CALL rtl_tres_create_funcstate( const sal_Char* meth );
@@ -110,13 +105,13 @@ static sal_Bool SAL_CALL rtl_tres_isbit( rtl_TestResult* pThis_,
 static rtl_funcstate SAL_CALL rtl_tres_getnextfuncstate( rtl_funcstate );
 static rtl_funcstate SAL_CALL rtl_tres_getprevfuncstate( rtl_funcstate );
 static sal_uInt32 SAL_CALL rtl_tres_getflags( rtl_funcstate );
-static sal_Char* SAL_CALL rtl_tres_getname( rtl_funcstate );
 sal_uInt32 SAL_CALL rtl_tres_getstarttime( rtl_funcstate );
 sal_uInt32 SAL_CALL rtl_tres_getstoptime( rtl_funcstate );
 static rtl_cmpstate SAL_CALL rtl_tres_getcmpstate( rtl_funcstate );
 
 static sal_Bool SAL_CALL rtl_tres_getstat( rtl_cmpstate );
-static sal_Char* SAL_CALL rtl_tres_getmsg( rtl_cmpstate );
+rtl_String* SAL_CALL rtl_tres_getname( rtl_funcstate );
+rtl_String* SAL_CALL rtl_tres_getmsg( rtl_cmpstate );
 static rtl_cmpstate SAL_CALL rtl_tres_getnextcmpstate( rtl_cmpstate );
 
 
@@ -198,7 +193,7 @@ rtl_FuncState* SAL_CALL rtl_tres_create_funcstate( const sal_Char* meth )
         pStat->m_start = rtl_tres_timer();      /* init start milliseconds */
         pStat->m_stop  = 0;                     /* init stop milliseconds */
         pStat->m_cmp   = 0;                     /* init ptr to msg struct */
-        tres_cpy( &pStat->m_name, meth );       /* copy meth to name */
+        rtl_string_newFromStr( &pStat->m_name, meth );/* copy meth to name */
 
         /* set ok flag initially */
         rtl_tres_setbit(pStat, rtl_tres_Flag_OK);
@@ -303,7 +298,7 @@ rtl_CmpState* SAL_CALL rtl_tres_create_cmpstate(
         pStat->m_prev   = pStat;                /* init prev with this */
         pStat->m_msg    = 0;
         pStat->m_stat   = state;                /* boolean state */
-        tres_cpy( &pStat->m_msg, msg );         /* copy message to instance */
+        rtl_string_newFromStr( &pStat->m_msg, msg ); /* copy message */
     }
     return ( pStat );
 }
@@ -381,7 +376,7 @@ void SAL_CALL rtl_tres_destroy_funcstate( rtl_FuncState* pState_ )
 
     if ( plink->m_name )
     {
-        free( plink->m_name );
+        rtl_string_release( plink->m_name );
         plink->m_name = 0;
     }
     plink->m_flags = 0;
@@ -402,7 +397,7 @@ void SAL_CALL rtl_tres_destroy_cmpstate( rtl_CmpState* pState_ )
 
     if ( plink->m_msg )
     {
-        free( plink->m_msg );
+        rtl_string_release( plink->m_msg );
         plink->m_msg = 0;
     }
     free( plink );
@@ -597,7 +592,7 @@ sal_uInt32 SAL_CALL rtl_tres_getflags( rtl_funcstate fstate )
  /**
   * returns name of passed funcstate structure
   */
-sal_Char* SAL_CALL rtl_tres_getname( rtl_funcstate fstate )
+rtl_String* SAL_CALL rtl_tres_getname( rtl_funcstate fstate )
 {
     rtl_FuncState* fs = (rtl_FuncState*)fstate;
     return( fs->m_name );
@@ -640,7 +635,7 @@ sal_Bool SAL_CALL rtl_tres_getstat( rtl_cmpstate cstate)
  /**
   * returns message of passed cmpstate structure
   */
-sal_Char* SAL_CALL rtl_tres_getmsg( rtl_cmpstate cstate)
+rtl_String* SAL_CALL rtl_tres_getmsg( rtl_cmpstate cstate)
 {
     rtl_CmpState* cs = (rtl_CmpState*)cstate;
     return( cs->m_msg );
@@ -652,78 +647,6 @@ rtl_cmpstate SAL_CALL rtl_tres_getnextcmpstate( rtl_cmpstate cstate)
 {
     rtl_CmpState* cs = (rtl_CmpState*)cstate;
     return( (rtl_cmpstate)cs->m_next );
-}
-
- /**
-  * copies an array of sal_Char* to a internal allocated block of memory
-  * the memory has to be freed outside after use!
-  */
-static sal_Char* tres_cpy( sal_Char** dest, const sal_Char* src )
-{
-    sal_Char* pdest = 0;
-    const sal_Char* psrc = 0;
-
-    if ( *dest )
-        free( *dest );
-
-    *dest = (sal_Char*)malloc( (tres_ln(src)+1)  * sizeof(sal_Char) );
-
-    /* set pointer */
-    pdest = *dest;
-    psrc = src;
-
-    /* copy string by char */
-    while( *pdest++ = *psrc++ );
-
-    return ( *dest );
-}
-
- /**
-  * concatinates two arrays of sal_Char* to an internal allocated block of
-  * memory the memory has to be freed outside after use!
-  */
-static sal_Char* tres_cat( const sal_Char* str1, const sal_Char* str2 )
-{
-    sal_Char* pdest = 0;
-    const sal_Char* psrc = 0;
-    sal_Char* dest = 0;
-
-    if ( ! (str1 || str2))
-        return ( 0 );
-    if ( ! str2 )
-        return ( (sal_Char*)str1 );
-    if ( ! str1 )
-        return ( (sal_Char*)str2 );
-
-    /* allocate memory for destination string */
-    dest =  (sal_Char*)malloc( ( tres_ln( str1 ) + tres_ln( str2 ) +1 ) *
-                                                        sizeof( sal_Char ) );
-
-    /* set pointers */
-    pdest = dest;
-    psrc = str1;
-
-    /* copy src by char to dest and skip back the '\0'*/
-    while( *pdest++ = *psrc++ );
-    pdest--;
-    psrc = str2;
-    while( *pdest++ = *psrc++ );
-
-    return ( dest );
-}
-
- /**
-  * returns the length of a sal_Char* array
-  */
-static sal_uInt32 tres_ln( const sal_Char* str )
-{
-    sal_uInt32 len = 0;
-    const sal_Char* ptr = str;
-
-    if( ptr )
-        while( *ptr++ ) len++;
-
-    return( len );
 }
 
 /*
