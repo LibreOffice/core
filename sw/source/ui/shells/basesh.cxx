@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:40:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,9 @@
 #endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
+#endif
+#ifndef _FMTINFMT_HXX
+#include <fmtinfmt.hxx>
 #endif
 
 USHORT SwBaseShell::nFrameMode = FLY_DRAG_END;
@@ -587,7 +590,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     SfxWhichIter aIter(rSet);
 
-    const BOOL bCopy = rSh.SwCrsrShell::HasSelection();
+    const BOOL bCopy = rSh.HasSelection();
 
     USHORT nWhich = aIter.FirstWhich();
 
@@ -897,8 +900,20 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 }
                 else if(!rSh.IsSelFrmMode() && SGA_FORMAT_SOUND & ((SfxUInt32Item*)pItem)->GetValue())
                 {
-                    String aURL( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
-                    InsertURLButton( aURL, aEmptyStr, aURL );
+                    String sURL( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
+                    String sLabel( pGal->GetURL().getBase() );
+                    String sTarget; // empty string!
+
+                    bool bIsHTMLMode =
+                        0 == ( HTMLMODE_ON &
+                               ::GetHtmlMode( GetView().GetDocShell() ) );
+
+                    // in Writer, we insert a button which plays the
+                    // sound. In Writer/Web, we just insert a (text) link.
+                    if( bIsHTMLMode )
+                        InsertURLButton( sURL, sTarget, sLabel );
+                    else
+                        rSh.InsertURL( SwFmtINetFmt( sURL, sTarget ), sLabel );
                 }
             }
         }
@@ -1400,8 +1415,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     rSet.DisableItem( nWhich );
                 break;
             case SID_GALLERY_ENABLE_ADDCOPY:
-                rSet.Put( SfxBoolItem( SID_GALLERY_ENABLE_ADDCOPY,
-                    0 == (HTMLMODE_ON & ::GetHtmlMode(GetView().GetDocShell()))));
+                // #108230# allow copy from gallery in Writer AND Writer/Web!
+                rSet.Put( SfxBoolItem( SID_GALLERY_ENABLE_ADDCOPY, TRUE ) );
                 break;
             case FN_EDIT_REGION:
                 if( !rSh.IsAnySectionInDoc() )
