@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-13 10:30:29 $
+ *  last change: $Author: mt $ $Date: 2001-07-18 17:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
+
+#define EXTRAOFFSET_X   2
 
 
 // =======================================================================
@@ -600,7 +602,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd )
 
     if ( !bDrawSelection && !mpIMEInfos )
     {
-        aPos.X() = GetTextWidth( aText, 0, nStart ) + mnXOffset;
+        aPos.X() = GetTextWidth( aText, 0, nStart ) + mnXOffset + EXTRAOFFSET_X;
         DrawText( aPos, aText, nStart, nEnd - nStart );
     }
     else
@@ -641,7 +643,6 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd )
                     nTmpEnd = (xub_StrLen)aTmpSel.Max();
             }
 
-            aPos.X() = GetTextWidth( aText, 0, nIndex ) + mnXOffset;
             ImplInitSettings( mpIMEInfos ? TRUE : FALSE, TRUE, FALSE );
             BOOL bSelected = bDrawSelection && ((xub_StrLen)aTmpSel.Min() <= nIndex ) && ((xub_StrLen)aTmpSel.Max() > nIndex );
             if ( bSelected || ( nAttr & EXTTEXTINPUT_ATTR_HIGHLIGHT) )
@@ -677,6 +678,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd )
                 else if ( nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT )
                     SetTextColor( Color( COL_LIGHTGRAY ) );
             }
+            aPos.X() = GetTextWidth( aText, 0, nIndex ) + mnXOffset + EXTRAOFFSET_X;
             DrawText( aPos, aText, nIndex, nTmpEnd - nIndex );
             nIndex = nTmpEnd;
         }
@@ -856,7 +858,7 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
     long nCursorWidth = 0;
     if ( !mbInsertMode && !maSelection.Len() && (maSelection.Max() < aText.Len()) )
         nCursorWidth = GetTextWidth( aText, (xub_StrLen)maSelection.Max(), 1 );
-    long nCursorPosX = nTextWidth + mnXOffset;
+    long nCursorPosX = nTextWidth + mnXOffset + EXTRAOFFSET_X;
 
     // Cursor muss im sichtbaren Bereich landen:
     Size aOutSize = GetOutputSizePixel();
@@ -874,23 +876,27 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
         }
         else
         {
-            mnXOffset = aOutSize.Width() - nTextWidth;
+            mnXOffset = (aOutSize.Width()-EXTRAOFFSET_X) - nTextWidth;
             // Etwas mehr?
-            if ( aOutSize.Width() < nTextWidth )
+            if ( (aOutSize.Width()-EXTRAOFFSET_X) < nTextWidth )
             {
-                long nMaxNegX = aOutSize.Width() - GetTextWidth( aText );
+                long nMaxNegX = (aOutSize.Width()-EXTRAOFFSET_X) - GetTextWidth( aText );
                 mnXOffset -= aOutSize.Width() / 5;
                 if ( mnXOffset < nMaxNegX )  // beides negativ...
                     mnXOffset = nMaxNegX;
             }
         }
 
-        nCursorPosX = nTextWidth + mnXOffset;
+        nCursorPosX = nTextWidth + mnXOffset + EXTRAOFFSET_X;
         if ( nCursorPosX == aOutSize.Width() )  // dann nicht sichtbar...
             nCursorPosX--;
 
         if ( mnXOffset != nOldXOffset )
+        {
+            if ( mnXOffset > (-EXTRAOFFSET_X) )
+                ImplClearBackground( 0, mnXOffset+EXTRAOFFSET_X );
             ImplRepaint();
+        }
     }
 
     long nTextHeight = GetTextHeight();
@@ -904,13 +910,16 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
 
 void Edit::ImplAlign()
 {
-    if ( mnAlign == EDIT_ALIGN_LEFT )
-        return;
-
     long nTextWidth = GetTextWidth( ImplGetText() );
     long nOutWidth = GetOutputSizePixel().Width();
 
-    if ( mnAlign == EDIT_ALIGN_RIGHT )
+    if ( mnAlign == EDIT_ALIGN_LEFT )
+    {
+        if( mnXOffset && ( nTextWidth < nOutWidth ) )
+            mnXOffset = 0;
+
+    }
+    else if ( mnAlign == EDIT_ALIGN_RIGHT )
     {
         long nMinXOffset = nOutWidth - nTextWidth;
         if ( mnXOffset < nMinXOffset )
@@ -932,22 +941,31 @@ void Edit::ImplAlignAndPaint( xub_StrLen nChangedFrom, long nOldWidth )
     long        nNewWidth = GetTextWidth( ImplGetText() );
     xub_StrLen  nPaintStart = nChangedFrom;
 
+    long nOldXOffset = mnXOffset;
     ImplAlign();
     if ( mnAlign == EDIT_ALIGN_LEFT )
     {
         if ( nOldWidth > nNewWidth )
-            ImplClearBackground( nNewWidth+mnXOffset, nOldWidth+mnXOffset );
+        {
+            if ( mnXOffset != nOldXOffset )
+            {
+                nPaintStart = 0;
+                if ( mnXOffset > (-EXTRAOFFSET_X) )
+                    ImplClearBackground( 0, mnXOffset+EXTRAOFFSET_X );
+            }
+            ImplClearBackground( nNewWidth+mnXOffset+EXTRAOFFSET_X, nOldWidth+nOldXOffset+EXTRAOFFSET_X );
+        }
     }
     else if ( mnAlign == EDIT_ALIGN_RIGHT )
     {
         nPaintStart = 0;
-        ImplClearBackground( GetOutputSizePixel().Width()-Max( nOldWidth, nNewWidth )-1, mnXOffset+1 );
+        ImplClearBackground( GetOutputSizePixel().Width()-Max( nOldWidth, nNewWidth )-1+EXTRAOFFSET_X, mnXOffset+1+EXTRAOFFSET_X );
     }
     else // EDIT_ALIGN_CENTER
     {
         nPaintStart = 0;
-        ImplClearBackground( 0, mnXOffset + 1 );
-        ImplClearBackground( mnXOffset+nNewWidth-1, GetOutputSizePixel().Width() );
+        ImplClearBackground( 0, mnXOffset + 1 + EXTRAOFFSET_X );
+        ImplClearBackground( mnXOffset+nNewWidth-1, GetOutputSizePixel().Width() + EXTRAOFFSET_X );
     }
 
     ImplRepaint( nPaintStart, STRING_LEN );
@@ -958,7 +976,7 @@ void Edit::ImplAlignAndPaint( xub_StrLen nChangedFrom, long nOldWidth )
 
 xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos )
 {
-    return GetTextBreak( ImplGetText(), rWindowPos.X() - mnXOffset );
+    return GetTextBreak( ImplGetText(), rWindowPos.X() - mnXOffset - EXTRAOFFSET_X );
 }
 
 // -----------------------------------------------------------------------
