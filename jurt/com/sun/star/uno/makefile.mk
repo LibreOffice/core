@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:52 $
+#   last change: $Author: kr $ $Date: 2001-01-16 18:03:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ JAVACLASSFILES= 											\
     $(CLASSDIR)$/$(PACKAGE)$/IBridge.class					\
     $(CLASSDIR)$/$(PACKAGE)$/IEnvironment.class				\
     $(CLASSDIR)$/$(PACKAGE)$/IQueryInterface.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/Mapping.class					\
+    $(CLASSDIR)$/$(PACKAGE)$/IMapping.class					\
     $(CLASSDIR)$/$(PACKAGE)$/MappingException.class 		\
     $(CLASSDIR)$/$(PACKAGE)$/MappingWrapper.class			\
     $(CLASSDIR)$/$(PACKAGE)$/UnoRuntime.class
