@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-09 06:57:30 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 15:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ using namespace ::rtl;
 #include "docfile.hxx"
 #include "docfilt.hxx"
 
-SfxFrameLoader::SfxFrameLoader( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
+SfxFrameLoader_Impl::SfxFrameLoader_Impl( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
     : pMatcher( 0 )
     , pLoader( 0 )
     , bLoadDone( sal_False )
@@ -147,14 +147,14 @@ SfxFrameLoader::SfxFrameLoader( const REFERENCE < ::com::sun::star::lang::XMulti
 {
 }
 
-SfxFrameLoader::~SfxFrameLoader()
+SfxFrameLoader_Impl::~SfxFrameLoader_Impl()
 {
     if ( pLoader )
         pLoader->ReleaseRef();
     delete pMatcher;
 }
 
-sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, const Reference< XFrame >& rFrame ) throw( RuntimeException )
+sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs, const Reference< XFrame >& rFrame ) throw( RuntimeException )
 {
     // this methods assumes that the filter is detected before, usually by calling the detect() method below
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -353,7 +353,7 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
     // create LoadEnvironment and set link for callback when it is finished
     pLoader = LoadEnvironment_Impl::Create( aSet );
     pLoader->AddRef();
-    pLoader->SetDoneLink( LINK( this, SfxFrameLoader, LoadDone_Impl ) );
+    pLoader->SetDoneLink( LINK( this, SfxFrameLoader_Impl, LoadDone_Impl ) );
 
     if ( !pFactory )
     {
@@ -378,7 +378,7 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
     return bLoadState;
 }
 
-void SfxFrameLoader::cancel() throw( RUNTIME_EXCEPTION )
+void SfxFrameLoader_Impl::cancel() throw( RUNTIME_EXCEPTION )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( pLoader )
@@ -386,7 +386,7 @@ void SfxFrameLoader::cancel() throw( RUNTIME_EXCEPTION )
     bLoadDone = sal_True;
 }
 
-IMPL_LINK( SfxFrameLoader, LoadDone_Impl, void*, pVoid )
+IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
 {
     DBG_ASSERT( pLoader, "No Loader created, but LoadDone ?!" );
 
@@ -415,14 +415,7 @@ IMPL_LINK( SfxFrameLoader, LoadDone_Impl, void*, pVoid )
     return NULL;
 }
 
-SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
-{
-    DBG_ERROR("Useless method!");
-    SfxObjectFactory* pFactory = 0;
-    return *pFactory;
-}
-
-::rtl::OUString SAL_CALL SfxFrameLoader::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
+::rtl::OUString SAL_CALL SfxFrameLoader_Impl::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
 {
     // This method detects (or verifies) the file type of the content to load. It also detects the filter, because SFX
     // detects type through filters, so detecting the filter later in the load method would be double work.
@@ -796,7 +789,6 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     return aTypeName;
 }
 
-SFX_IMPL_XINTERFACE_0( SfxFrameLoader_Impl, SfxFrameLoader )
 SFX_IMPL_SINGLEFACTORY( SfxFrameLoader_Impl )
 
 /* XServiceInfo */
@@ -847,10 +839,4 @@ UNOREFERENCE< UNOXINTERFACE > SAL_CALL SfxFrameLoader_Impl::impl_createInstance(
 {
     return UNOREFERENCE< UNOXINTERFACE >( *new SfxFrameLoader_Impl( xServiceManager ) );
 }
-
-SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference < XMultiServiceFactory >& xFactory )
-    : SfxFrameLoader( xFactory )
-{
-}
-
 
