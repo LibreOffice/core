@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfatr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 11:51:12 $
+ *  last change: $Author: tl $ $Date: 2002-04-29 08:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,12 +269,26 @@ int SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
 
 BOOL SwRotationGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    return SfxUInt16Item::QueryValue(rVal, nMemberId);
+    // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
+    // where we still want this to be a sal_Int16
+    rVal <<= (sal_Int16)GetValue();
+    return TRUE;
 }
 
 BOOL SwRotationGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    return SfxUInt16Item::PutValue(rVal, nMemberId);
+    // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
+    // where we still want this to be a sal_Int16
+    sal_Int16 nValue;
+    if (rVal >>= nValue)
+    {
+        // UINT16 argument needed
+        SetValue( (UINT16) nValue );
+        return TRUE;
+    }
+
+    DBG_ERROR( "SwRotationGrf::PutValue - Wrong type!" );
+    return FALSE;
 }
 
 // ------------------------------------------------------------------
