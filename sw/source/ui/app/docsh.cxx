@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:48:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1411,9 +1411,24 @@ void SwDocShell::StartLoadFinishedTimer()
         aFinishedTimer.Start();
         GetDoc()->StopIdleTimer();
     }
+    // --> OD 2005-02-11 #i38810# - disable method <SetModified(..)>, if document
+    // has stay in modified state, due to the update of its links during load.
+    bool bResetEnableSetModified(false);
+    if ( IsEnableSetModified() &&
+         pDoc->IsModified() && pDoc->LinksUpdated() )
+    {
+        EnableSetModified( FALSE );
+        bResetEnableSetModified = true;
+    }
+    // <--
     FinishedLoading( SFX_LOADED_MAINDOCUMENT |
                     ( bSttTimer ? 0 : SFX_LOADED_IMAGES ));
-    // jetzt noch testen, ob die SourceView noch geladen werden muss
+    // --> OD 2005-02-11 #i38810#
+    if ( bResetEnableSetModified )
+    {
+        EnableSetModified( TRUE );
+    }
+    // <--
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst(this);
     if(pVFrame)
     {
