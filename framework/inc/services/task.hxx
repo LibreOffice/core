@@ -2,9 +2,9 @@
  *
  *  $RCSfile: task.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-23 13:56:42 $
+ *  last change: $Author: as $ $Date: 2001-03-09 14:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,10 +419,10 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
         }
 
         virtual REFERENCE< XFRAME > SAL_CALL findFrame( const   OUSTRING&   sTargetFrameName    ,
-                                                                sal_Int32   nSearchFlags        ) throw( RUNTIMEEXCEPTION )
-        {
-            return Frame::findFrame( sTargetFrameName, nSearchFlags );
-        }
+                                                                sal_Int32   nSearchFlags        ) throw( RUNTIMEEXCEPTION );
+//      {
+//          return Frame::findFrame( sTargetFrameName, nSearchFlags );
+//      }
 
         //---------------------------------------------------------------------------------------------------------
         //   XTopWindowListener

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-05 17:42:02 $
+ *  last change: $Author: as $ $Date: 2001-03-09 14:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,8 @@ Reference< XFrame > TaskCreator::createNewSystemTask( const OUString& sName )
     // Method is not designed for all incoming parameter!
     LOG_ASSERT( impldbg_checkParameter_createNewSystemTask( sName ), "TaskCreator::createNewSystemTask()\nInvalid parameter detected!\n" )
 
+    OUString sFrameName = impl_filterNames( sName );
+
     // We must append a new task at our desktop.
     // If no desktop exist we cant work correctly.
     // Desktop is an one instance service. We will get a reference to it only!
@@ -206,14 +208,11 @@ Reference< XFrame > TaskCreator::createNewSystemTask( const OUString& sName )
             // Don't forget to create tree-bindings! Set this desktop as parent of new task ...
             // ... and append it to his container.
             // (Parent will automaticly set by "append()"!)
-            xTask->setName( sName );
+            xTask->setName( sFrameName );
             xDesktop->getFrames()->append( xTask );
             // Set window on task.
             xTask->initialize( xWindow );
-            /* HACK for VCL */
-//            xWindow->setPosSize ( 0, 0, 500, 500, PosSize::POSSIZE  );
-            xWindow->setEnable  ( sal_True                          );
-            /* HACK for VCL */
+            xWindow->setEnable( sal_True );
         }
     }
 
@@ -232,10 +231,34 @@ Reference< XFrame > TaskCreator::createNewBrowserTask( const OUString& sName )
     // Set default return value if method failed.
     Reference< XFrame > xPlugInFrame;
 
+    OUString sFrameName = impl_filterNames( sName );
+
     LOG_ASSERT( sal_False, "TaskCreator::createNewBrowserTask()\nNot supported yet! Return empty reference.\n" )
 
     // Return result of operation.
     return xPlugInFrame;
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
+OUString TaskCreator::impl_filterNames( const OUString& sName )
+{
+    // Filter special names which can't be a valid frame name!
+    // Attention: "_beamer" is a valid name - because:
+    //  It exist one beamer for one task tree only.
+    //  If he exist we can find it - otherwhise he will be created by our task-frame!
+    OUString sReturn = sName;
+    if  (
+            ( sName == SPECIALTARGET_BLANK  )   ||
+            ( sName == SPECIALTARGET_SELF   )   ||
+            ( sName == SPECIALTARGET_PARENT )   ||
+            ( sName == SPECIALTARGET_TOP    )
+        )
+    {
+        sReturn = OUString();
+    }
+    return sReturn;
 }
 
 //_________________________________________________________________________________________________________________

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targeting.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:23 $
+ *  last change: $Author: as $ $Date: 2001-03-09 14:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,32 +83,37 @@
     _____________________________________________________________________________________________________________*/
 
     #ifndef LOGFILE_TARGETING
-        #define LOGFILE_TARGETING                                                                               \
-                    "targeting.log"
+        #define LOGFILE_TARGETSTEPS     "targetsteps.log"
+        #define LOGFILE_TARGETPARAM     "targetparam.log"
     #endif
 
     /*_____________________________________________________________________________________________________________
         LOG_PARAMETER_FINDFRAME( SSERVICE, SFRAMENAME, STARGETNAME, NSEARCHFLAGS )
 
+        Log format for parameter e.g.: Desktop::findFrame( "frame1", 23 ) my name is "desktop"
+        Log format for steps     e.g.: desktop--
+
         With this macro you can log informations about search parameter of method "findFrame()" of an service.
         Use it at beginning of search only!
     _____________________________________________________________________________________________________________*/
 
-    #define LOG_PARAMETER_FINDFRAME( SSERVICE, SFRAMENAME, STARGETNAME, NSEARCHFLAGS )                                  \
-                /* Use new scope to prevent code against multiple variable defines! */                                  \
-                {                                                                                                       \
-                    ::rtl::OStringBuffer sBuffer(1024);                                                                 \
-                    sBuffer.append( "\n************************************************\n"  );                          \
-                    sBuffer.append( "[ "                                                    );                          \
-                    sBuffer.append( U2B( SFRAMENAME )                                       );                          \
-                    sBuffer.append( "] "                                                    );                          \
-                    sBuffer.append( SSERVICE                                                );                          \
-                    sBuffer.append( "::findFrame( \""                                       );                          \
-                    sBuffer.append( U2B( STARGETNAME )                                      );                          \
-                    sBuffer.append( "\", "                                                  );                          \
-                    sBuffer.append( ::rtl::OString::valueOf( sal_Int32( NSEARCHFLAGS ) )    );                          \
-                    sBuffer.append( " )\n"                                                  );                          \
-                    WRITE_LOGFILE( LOGFILE_TARGETING, sBuffer.makeStringAndClear().getStr() )                           \
+    #define LOG_PARAMETER_FINDFRAME( SSERVICE, SFRAMENAME, STARGETNAME, NSEARCHFLAGS )                          \
+                /* Use new scope to prevent code against multiple variable defines! */                          \
+                {                                                                                               \
+                    ::rtl::OStringBuffer sBufferParam(256);                                                     \
+                    ::rtl::OStringBuffer sBufferSteps(256);                                                     \
+                    sBufferParam.append( SSERVICE                                               );              \
+                    sBufferParam.append( "::findFrame( \""                                      );              \
+                    sBufferParam.append( U2B( STARGETNAME )                                     );              \
+                    sBufferParam.append( "\", "                                                 );              \
+                    sBufferParam.append( ::rtl::OString::valueOf( sal_Int32( NSEARCHFLAGS ) )   );              \
+                    sBufferParam.append( " ) my name is \""                                     );              \
+                    sBufferParam.append( U2B( SFRAMENAME )                                      );              \
+                    sBufferParam.append( "\"\n"                                                 );              \
+                    sBufferSteps.append( U2B( SFRAMENAME )                                      );              \
+                    sBufferSteps.append( "--"                                                   );              \
+                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBufferParam.makeStringAndClear().getStr() )            \
+                    WRITE_LOGFILE( LOGFILE_TARGETSTEPS, sBufferSteps.makeStringAndClear().getStr() )            \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -133,7 +138,7 @@
                     sBuffer.append( "\", "                                                  );                          \
                     sBuffer.append( ::rtl::OString::valueOf( sal_Int32( NSEARCHFLAGS ) )    );                          \
                     sBuffer.append( " )\n"                                                  );                          \
-                    WRITE_LOGFILE( LOGFILE_TARGETING, sBuffer.makeStringAndClear().getStr() )                           \
+                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBuffer.makeStringAndClear().getStr() )                         \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -168,27 +173,7 @@
                         }                                                                                               \
                     }                                                                                                   \
                     sBuffer.append( " )\n"                                                  );                          \
-                    WRITE_LOGFILE( LOGFILE_TARGETING, sBuffer.makeStringAndClear().getStr() )                           \
-                }
-
-    /*_____________________________________________________________________________________________________________
-        LOG_TARGETINGSTEP( SSERVICE, SFRAMENAME, SINFOMESSAGE )
-
-        With this macro you can log informations about search steps.
-    _____________________________________________________________________________________________________________*/
-
-    #define LOG_TARGETINGSTEP( SSERVICE, SFRAMENAME, SINFOMESSAGE )                                                     \
-                /* Use new scope to prevent code against multiple variable defines! */                                  \
-                {                                                                                                       \
-                    ::rtl::OStringBuffer sBuffer(1024);                                                                 \
-                    sBuffer.append( "\t[ "              );                                                              \
-                    sBuffer.append( U2B( SFRAMENAME )   );                                                              \
-                    sBuffer.append( "] "                );                                                              \
-                    sBuffer.append( SSERVICE            );                                                              \
-                    sBuffer.append( ": \""              );                                                              \
-                    sBuffer.append( SINFOMESSAGE        );                                                              \
-                    sBuffer.append( "\"\n"              );                                                              \
-                    WRITE_LOGFILE( LOGFILE_TARGETING, sBuffer.makeStringAndClear().getStr() )                           \
+                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBuffer.makeStringAndClear().getStr() )                         \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -201,21 +186,26 @@
     #define LOG_RESULT_FINDFRAME( SSERVICE, SFRAMENAME, XFRAME )                                                        \
                 /* Use new scope to prevent code against multiple variable defines! */                                  \
                 {                                                                                                       \
-                    ::rtl::OStringBuffer sBuffer(1024);                                                                 \
-                    sBuffer.append( "[ "                );                                                              \
-                    sBuffer.append( U2B( SFRAMENAME )   );                                                              \
-                    sBuffer.append( "] "                );                                                              \
-                    sBuffer.append( SSERVICE            );                                                              \
+                    ::rtl::OStringBuffer sBufferParam(256);                                                             \
+                    ::rtl::OStringBuffer sBufferSteps(256);                                                             \
+                    sBufferParam.append( SSERVICE               );                                                      \
+                    sBufferParam.append( "::findFrame() at \""  );                                                      \
+                    sBufferParam.append( U2B( SFRAMENAME )      );                                                      \
+                    sBufferParam.append( "\" "                  );                                                      \
                     if( XFRAME.is() == sal_True )                                                                       \
                     {                                                                                                   \
-                        sBuffer.append( "::findframe() return with valid frame.");                                      \
+                        sBufferParam.append( "return with valid frame.\n"       );                                      \
+                        sBufferSteps.append( "OK ["                             );                                      \
+                        sBufferSteps.append( U2B( XFRAME->getName() ).getStr()  );                                      \
+                        sBufferSteps.append( "]\n"                              );                                      \
                     }                                                                                                   \
                     else                                                                                                \
                     {                                                                                                   \
-                        sBuffer.append( "::findframe() return with NULL frame!" );                                      \
+                        sBufferParam.append( "return with NULL frame!\n");                                              \
+                        sBufferSteps.append( "??\n"                     );                                              \
                     }                                                                                                   \
-                    sBuffer.append( "\n" );                                                                             \
-                    WRITE_LOGFILE( LOGFILE_TARGETING, sBuffer.makeStringAndClear().getStr() )                           \
+                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBufferParam.makeStringAndClear().getStr() )                    \
+                    WRITE_LOGFILE( LOGFILE_TARGETSTEPS, sBufferSteps.makeStringAndClear().getStr() )                    \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -242,7 +232,7 @@
                         sBuffer.append( "::queryDispatch() return with NULL dispatcher!"    );                          \
                     }                                                                                                   \
                     sBuffer.append( "\n" );                                                                             \
-                    WRITE_LOGFILE( LOGFILE_TARGETING, sBuffer.makeStringAndClear().getStr() )                           \
+                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBuffer.makeStringAndClear().getStr() )                         \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -269,7 +259,7 @@
                         sBuffer.append( "::loadComponentFromURL() return with NULL component!"  );                      \
                     }                                                                                                   \
                     sBuffer.append( "\n" );                                                                             \
-                    WRITE_LOGFILE( LOGFILE_TARGETING, sBuffer.makeStringAndClear().getStr() )                           \
+                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBuffer.makeStringAndClear().getStr() )                         \
                 }
 
 #else   // #ifdef ENABLE_TARGETINGDEBUG
@@ -278,11 +268,11 @@
         If right testmode is'nt set - implements these macro empty!
     _____________________________________________________________________________________________________________*/
 
-    #undef  LOGFILE_TARGETING
+    #undef  LOGFILE_TARGETPARAM
+    #undef  LOGFILE_TARGETSTEPS
     #define LOG_PARAMETER_FINDFRAME( SSERVICE, SFRAMENAME, STARGETNAME, NSEARCHFLAGS )
     #define LOG_PARAMETER_QUERYDISPATCH( SSERVICE, SFRAMENAME, AURL, STARGETNAME, NSEARCHFLAGS )
     #define LOG_PARAMETER_LOADCOMPONENTFROMURL( SSERVICE, SFRAMENAME, SURL, STARGETNAME, NSEARCHFLAGS, SEQPARAMETER )
-    #define LOG_TARGETINGSTEP( SSERVICE, SFRAMENAME, SINFOMESSAGE )
     #define LOG_RESULT_FINDFRAME( SSERVICE, SFRAMENAME, XFRAME )
     #define LOG_RESULT_QUERYDISPATCH( SSERVICE, SFRAMENAME, XDISPATCHER )
     #define LOG_RESULT_LOADCOMPONENTFROMURL( SSERVICE, SFRAMENAME, XCOMPONENT )

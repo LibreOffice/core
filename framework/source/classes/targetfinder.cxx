@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-10-23 13:55:34 $
+ *  last change: $Author: as $ $Date: 2001-03-09 14:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,22 +75,6 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
-#include <com/sun/star/frame/XDesktop.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
-#include <com/sun/star/frame/XTask.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
-#include <com/sun/star/mozilla/XPluginInstance.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XELEMENTACCESS_HPP_
-#include <com/sun/star/container/XElementAccess.hpp>
-#endif
-
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -108,8 +92,6 @@ namespace framework{
 using namespace ::rtl                       ;
 using namespace ::com::sun::star::uno       ;
 using namespace ::com::sun::star::frame     ;
-using namespace ::com::sun::star::mozilla   ;
-using namespace ::com::sun::star::container ;
 
 //_________________________________________________________________________________________________________________
 //  non exported const
@@ -140,369 +122,473 @@ TargetFinder::~TargetFinder()
 //*****************************************************************************************************************
 //  interface
 //*****************************************************************************************************************
-IMPL_ETargetClass TargetFinder::classify(   const   Reference< XFrame >&    xOwner          ,
-                                            const   OUString&               sTargetName     ,
-                                                       sal_Int32                nSearchFlags    )
+ETargetClass TargetFinder::classify(            EFrameType      eFrameType          ,
+                                        const   OUString&       sTargetName         ,
+                                                   sal_Int32        nSearchFlags        ,
+                                                sal_Bool&       bCreationAllowed    ,
+                                                sal_Bool        bChildrenExist      ,
+                                        const   OUString&       sFrameName          ,
+                                                sal_Bool        bParentExist        ,
+                                        const   OUString&       sParentName         )
 {
-    /*Attention
+    // Check incoming parameter
+    LOG_ASSERT2( implcp_classify( eFrameType, sTargetName, nSearchFlags, bCreationAllowed, bChildrenExist, sFrameName, bParentExist, sParentName ), "TargetFinder::classify()", "Invalid parameter detected!" )
 
-         The desktop is a special object - the root of our frame tree ...
-        but he can't handle components!
-        I think he could'nt be a realy supported target any time!!!
-        Never return it as SELF or PARENT or TOP ...
+    // Initialize start values.
+    ETargetClass    eResult             =   E_UNKNOWN                                                               ;   // default result of method
+                    bCreationAllowed    =   (( nSearchFlags & FrameSearchFlag::CREATE ) == FrameSearchFlag::CREATE );   // if search failed we must caller allow to create new task/frame
 
-    */
-
-    // Safe impossible cases.
-    // These method is not defined for all incoming parameter!
-    LOG_ASSERT( impldbg_checkParameter_classify( xOwner, sTargetName, nSearchFlags ), "TargetFinder::classify()\nInvalid parameter detected!\n" )
-
-    // Set return value if method failed.
-    IMPL_ETargetClass eResult = eUNKNOWN;
-
-    // Get some special informations about our caller.
-    // We need his name, his type ... and something else.
-    IMPL_EFrameType eFrameType      ;
-    sal_Bool        bParentExist    ;
-    sal_Bool        bChildrenExist  ;
-    OUString        sFrameName      ;
-
-    // Children can exist for every frame implementation.
-    Reference< XFramesSupplier > xSupplier( xOwner                  , UNO_QUERY );
-    Reference< XElementAccess >  xAccess  ( xSupplier->getFrames()  , UNO_QUERY );
-    bChildrenExist = xAccess->hasElements();
-
-    // But all other informations are optional or defaults!
-    if( Reference< XDesktop >( xOwner, UNO_QUERY ).is() ==  sal_True )
+    // Use some helper methods for different classes of tree nodes to get the result.
+    switch( eFrameType )
     {
-        // a)   Our desktop is a special implementation!
-        //      He has no parent and no name.
-        eFrameType      =   eDESKTOP    ;
-        bParentExist    =   sal_False   ;
-        sFrameName      =   OUString()  ;
+        case E_DESKTOP      :   eResult = impl_classifyForDesktop( bChildrenExist, sTargetName, nSearchFlags );
+                                break;
+        case E_PLUGINFRAME  :   eResult = impl_classifyForPlugInFrame( bParentExist, bChildrenExist, sFrameName, sTargetName, nSearchFlags );
+                                break;
+        case E_TASK         :   eResult = impl_classifyForTask( bParentExist, bChildrenExist, sFrameName, sTargetName, nSearchFlags );
+                                break;
+        case E_FRAME        :   eResult = impl_classifyForFrame( bParentExist, bChildrenExist, sFrameName, sParentName, sTargetName, nSearchFlags );
+                                break;
     }
-    else
+
+    // It doesnt matter if CREATE flag is set or not ...
+    // If follow results are returned by our helper methods - the result will be clear!
+    // In these cases we dont can allow (or must!) creation of new frames/tasks...
+    if  (
+            (   eResult ==  E_UNKNOWN       )   ||
+            (   eResult ==  E_CREATETASK    )   ||
+            (   eResult ==  E_SELF          )   ||
+            (   eResult ==  E_PARENT        )   ||
+            (   eResult ==  E_BEAMER        )
+        )
     {
-        // b)   All other implementations has a parent and it's own name.
-        //      We set frame type to default eFRAME ...
-        eFrameType      =   eFRAME                      ;
-        bParentExist    =   xOwner->getCreator().is()   ;
-        sFrameName      =   xOwner->getName()           ;
-        if( Reference< XTask >( xOwner, UNO_QUERY ).is() ==  sal_True )
-        {
-            // c)   ... but it can be that our caller is a task ...
-            eFrameType = eTASK;
-        }
-        else
-        if( Reference< XPluginInstance >( xOwner, UNO_QUERY ).is() ==  sal_True )
-        {
-            // d)   ... or a plug-in frame!
-            eFrameType = ePLUGINFRAME;
-        }
+        bCreationAllowed = sal_False;
     }
+
+    return eResult;
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
+ETargetClass TargetFinder::impl_classifyForDesktop(         sal_Bool    bChildrenExist  ,
+                                                    const   OUSTRING&   sTargetName     ,
+                                                            sal_Int32   nSearchFlags    )
+{
+    ETargetClass eResult = E_UNKNOWN;
 
     //*************************************************************************************************************
-    //  1)  Look for "_blank"
-    //      These is the most used case and must be fast!
-    //      FrameSearchFlag::CREATE can be used at least if no other parameter match the given one!!!
-    //      Return "eUP" for all normaly frames/tasks/plugins ... These implementations don't must known something about
-    //      creation(!) ... The desktop only can do it - and we return right recommendation for it.
+    //  I)      Handle special target names.
+    //          Make an exclusiv search: if() else if() ...
+    //
+    //  I.I)    Look for "_blank"
+    //          Only the desktop can create new tasks.
     //*************************************************************************************************************
     if( sTargetName == SPECIALTARGET_BLANK )
     {
-        if( eFrameType == eDESKTOP )
+        eResult = E_CREATETASK;
+    }
+    else
+    {
+        //*********************************************************************************************************
+        //  II)     Special target names was handled ...
+        //          Now look for right flags.
+        //          Combine search results: if(); if() ...
+        //
+        //  II.I)   Special and exclusiv mode for search at our desktop!
+        //          Normaly TASKS flag is used to restrict upper searches inside current task tree!
+        //          All searches stop at a top frame if these flag isnt set.
+        //          For down search it doesnt matter ...
+        //          but I think we can use it to search at all direct(!) childrens of our desktop.
+        //          These can be useful to create new tasks by name if it not already exist.
+        //          =>  These flag cant combinde with CHILDREN or SIBLINGS or somethings else.
+        //              We ignore such constructs. If you combine it with the CREATE flag - a new task will created
+        //              if no existing one can be found.
+        //*********************************************************************************************************
+        if  (
+                ( nSearchFlags & FrameSearchFlag::TASKS )   &&
+                (
+                    !( nSearchFlags & FrameSearchFlag::CHILDREN )   &&
+                    !( nSearchFlags & FrameSearchFlag::SIBLINGS )   &&
+                    !( nSearchFlags & FrameSearchFlag::PARENT   )   &&
+                    !( nSearchFlags & FrameSearchFlag::SELF     )
+                )
+            )
         {
-            eResult = eCREATE;
+            eResult = E_TASKS;
         }
         else
         {
-            eResult = eUP;
+            //*****************************************************************************************************
+            //  II.I)   Look for CHILDREN.
+            //          Ignore flag if no childrens exist!
+            //*****************************************************************************************************
+            if  (
+                    ( nSearchFlags      &   FrameSearchFlag::CHILDREN   )   &&
+                    ( bChildrenExist    ==  sal_True                    )
+                )
+            {
+                eResult = E_DEEP_DOWN;
+            }
+
+            //*****************************************************************************************************
+            //  II.II)  Look for SIBLINGS.
+            //          These change a deep to a flat search!
+            //          Otherwise ... flag can be ignored - because the desktop has no siblings!
+            //*****************************************************************************************************
+            if( nSearchFlags & FrameSearchFlag::SIBLINGS )
+            {
+                switch( eResult )
+                {
+                    case E_DEEP_DOWN    :   eResult = E_FLAT_DOWN;
+                                            break;
+                }
+            }
+        }
+    }
+
+    //*************************************************************************************************************
+    //  possible results:
+    //      E_UNKNOWN
+    //      E_CREATETASK
+    //      E_TASKS
+    //      E_DEEP_DOWN
+    //      E_FLAT_DOWN
+    //*************************************************************************************************************
+    return eResult;
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
+ETargetClass TargetFinder::impl_classifyForPlugInFrame  (           sal_Bool    bParentExist    ,
+                                                                    sal_Bool    bChildrenExist  ,
+                                                            const   OUString&   sFrameName      ,
+                                                            const   OUString&   sTargetName     ,
+                                                                       sal_Int32    nSearchFlags    )
+{
+    // At the moment a PlugInFrame is a special task ... but we can use the same search algorithm!
+    return impl_classifyForTask( bParentExist, bChildrenExist, sFrameName, sTargetName, nSearchFlags );
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
+ETargetClass TargetFinder::impl_classifyForTask(            sal_Bool    bParentExist    ,
+                                                            sal_Bool    bChildrenExist  ,
+                                                    const   OUString&   sFrameName      ,
+                                                    const   OUString&   sTargetName     ,
+                                                               sal_Int32    nSearchFlags    )
+{
+    ETargetClass    eResult     =   E_UNKNOWN                                                               ;
+    sal_Bool        bLeaveTask  =   (( nSearchFlags & FrameSearchFlag::TASKS  ) == FrameSearchFlag::TASKS  );   // we must know if we can search outside current task
+
+    //*************************************************************************************************************
+    //  I)      Handle special target names.
+    //          Make an exclusiv search: if() else if() ...
+    //
+    //  I.I)    Look for "_blank"
+    //          Only the desktop can create new tasks. Forward search to parent!
+    //*************************************************************************************************************
+    if( sTargetName == SPECIALTARGET_BLANK )
+    {
+        if( bParentExist == sal_True )
+        {
+            eResult = E_FORWARD_UP;
         }
     }
     else
 
     //*************************************************************************************************************
-    //  2)  Look for "_self", "". Its the same like "_self"!
+    //  I.II)   Look for "_self"
+    //          Handle "" in the same way!
     //*************************************************************************************************************
     if  (
-            ( sTargetName               ==  SPECIALTARGET_SELF  )   ||  //  "_self"
-            ( sTargetName.getLength()   <   1                   )       //  ""
+            (   sTargetName             ==  SPECIALTARGET_SELF  )   ||
+            (   sTargetName.getLength() <   1                   )
         )
     {
-        eResult = eSELF;
+        eResult = E_SELF;
     }
     else
 
     //*************************************************************************************************************
-    //  3)  Look for "_top".
-    //      We must do it before "_parent" because it can a be combination of existing parent - frame type and ...
+    //  I.III)  Look for "_top"
+    //          A task is top everytime!
     //*************************************************************************************************************
     if( sTargetName == SPECIALTARGET_TOP )
     {
-        switch( eFrameType )
-        {
-            // a) A normal frame without a parent is TOP and must handle it by himself.
-            case eFRAME         :   {
-                                        if( bParentExist == sal_False )
-                                        {
-                                            eResult = eSELF;
-                                        }
-                                    }
-                                    break;
-
-            // b) A task is TOP every time and must handle it by himself.
-            // c) A plugin frame ... too.
-            case eTASK          :
-            case ePLUGINFRAME   :   {
-                                        eResult = eSELF;
-                                    }
-                                    break;
-        }
+        eResult = E_SELF;
     }
     else
 
     //*************************************************************************************************************
-    //  4)  Look for "_parent". We must handle these as DIRECT parent only. It's not a flag to search at parents ...
-    //
-    //      Attention: If a parent exist we return ePARENT as recommendation ...
-    //      but don't do it if frame type different from eFRAME(!) ...
-    //      because; otherwise the parent is the desktop automaticly!!!
-    //      (see ATTENTION a beginning of these function for further informations)
+    //  I.IV)   Look for "_beamer"
     //*************************************************************************************************************
-    if  (
-            ( sTargetName   ==  SPECIALTARGET_PARENT    )   &&
-            ( bParentExist  ==  sal_True                )   &&
-            ( eFrameType    ==  eFRAME                  )
-        )
+    if( sTargetName == SPECIALTARGET_BEAMER )
     {
-        eResult = ePARENT;
+        eResult = E_BEAMER;
     }
     else
 
-    //*************************************************************************************************************
-    //  ATTENTION!
-    //  We have searched for special targets only before ... and it was an exclusive search.
-    //  [ if() else if() else ... ]
-    //  But now we must search for any named frames and use search flags to do that in different combinations!
-    //  Look for any untested flag before if no result exist at that time!
-    //  [ if_no_result(); if_no_result(); return result ]
-    //*************************************************************************************************************
     {
-        //*****************************************************************************************************
-        //  5)  Look for SELF. Check right name.
-        //      We don't must look for an empty target name "" (!)
-        //      because we have already done it in 2).
-        //      Dont handle SELF for desktop!
-        //*****************************************************************************************************
+        //*********************************************************************************************************
+        //  II)     Special target names was handled ...
+        //          Now look for right flags.
+        //          Combine search results: if(); if() ...
+        //
+        //  II.I)   Look for SELF.
+        //          Use given frame name to do that. It couldn't be empty(!) - because this was handled in step I.II).
+        //*********************************************************************************************************
         if  (
-                ( eFrameType    !=  eDESKTOP                )   &&
                 ( nSearchFlags  &   FrameSearchFlag::SELF   )   &&
                 ( sTargetName   ==  sFrameName              )
             )
         {
-            eResult = eSELF;
+            eResult = E_SELF;
         }
 
-        //*****************************************************************************************************
-        //  6)  Look for PARENT.
-        //      You can do it for our desktop ... because he mst support search on his children!
-        //      Our implementation will protect us against SELF/_self/"" on the desktop ...
-        //*****************************************************************************************************
+        //*********************************************************************************************************
+        //  II.II)  Look for PARENT.
+        //          Is allowed on tasks if outside search of it is allowed!
+        //          Don't check name of parent here - otherwise we return the desktop as result ...
+        //*********************************************************************************************************
         if  (
-                ( eResult       ==  eUNKNOWN                )   &&
+                ( eResult       !=  E_SELF                  )   &&
                 ( nSearchFlags  &   FrameSearchFlag::PARENT )   &&
                 ( bParentExist  ==  sal_True                )   &&
-                ( eFrameType    !=  eDESKTOP                )
+                ( bLeaveTask    ==  sal_True                )
             )
         {
-            eResult = eUP;
+            eResult = E_FORWARD_UP;
         }
 
-        //*************************************************************************************************************
-        //  7)  Look for CHILDREN.
-        //  Attention:  In 6) we set return value to eUP ... but other flags can combined with these one!
-        //              zB CHILDREN
-        //              In these case we must correct our result to eALL, I think!
-        //*************************************************************************************************************
+        //*********************************************************************************************************
+        //  II.II)  Look for CHILDREN.
+        //          Ignore flag if no childrens exist!
+        //*********************************************************************************************************
         if  (
+                ( eResult           !=  E_SELF                      )   &&
                 ( nSearchFlags      &   FrameSearchFlag::CHILDREN   )   &&
                 ( bChildrenExist    ==  sal_True                    )
             )
         {
             switch( eResult )
             {
-                case eUNKNOWN   :   {
-                                        eResult = eDOWN;
-                                    }
-                                    break;
-                case eUP        :   {
-                                        eResult = eALL;
-                                    }
-                                    break;
+                case E_UNKNOWN      :   eResult = E_DEEP_DOWN;
+                                        break;
+                case E_FORWARD_UP   :   eResult = E_DEEP_BOTH;
+                                        break;
             }
         }
 
-        //*************************************************************************************************************
-        //  8)  Search for SIBLINGS.
-        //      We must check for existing parents because we can search our siblings as children of our parent only!
-        //*************************************************************************************************************
+        //*********************************************************************************************************
+        //  II.III) Look for SIBLINGS.
+        //          These change a deep to a flat search!
+        //*********************************************************************************************************
         if  (
-                ( eResult       ==  eUNKNOWN                    )   &&
-                ( nSearchFlags  &   FrameSearchFlag::SIBLINGS   )   &&
-                ( bParentExist  ==  sal_True                    )   &&
-                ( eFrameType    !=  eDESKTOP                    )
+                ( eResult       !=  E_SELF                      )   &&
+                   ( nSearchFlags   &   FrameSearchFlag::SIBLINGS   )
             )
         {
-            eResult = eSIBLINGS;
-        }
-
-        //*************************************************************************************************************
-        //  9)  Search for TASKS.
-        //      If CREATE is set we must forward call to desktop. He is the only one, who can do that!
-        //*************************************************************************************************************
-        if  (
-                ( eResult       ==  eUNKNOWN                )   &&
-                ( nSearchFlags  &   FrameSearchFlag::TASKS  )
-            )
-        {
-            if( nSearchFlags & FrameSearchFlag::CREATE )
+            switch( eResult )
             {
-                switch( eFrameType )
-                {
-                    case eTASK          :
-                    case ePLUGINFRAME   :
-                    case eFRAME         :   {
-                                                eResult = eUP;
-                                            }
-                                            break;
-
-                    case eDESKTOP       :   {
-                                                eResult = eCREATE;
-                                            }
-                                            break;
-                }
-            }
-            else
-            {
-                switch( eFrameType )
-                {
-                    case eTASK          :
-                    case ePLUGINFRAME   :   {
-                                                eResult = eSELF;
-                                            }
-                                            break;
-
-                    case eFRAME         :   {
-                                                eResult = eUP;
-                                            }
-                                            break;
-
-                    case eDESKTOP       :   {
-                                                eResult = eDOWN;
-                                            }
-                                            break;
-                }
+                case E_DEEP_DOWN    :   eResult = E_FLAT_DOWN;
+                                        break;
+                case E_DEEP_BOTH    :   eResult = E_FLAT_BOTH;
+                                        break;
             }
         }
     }
 
-    // Return result of operation.
+    //*************************************************************************************************************
+    //  possible results:
+    //      E_UNKNOWN
+    //      E_SELF
+    //      E_BEAMER
+    //      E_FORWARD_UP
+    //      E_DEEP_DOWN
+    //      E_DEEP_BOTH
+    //      E_FLAT_DOWN
+    //      E_FLAT_BOTH
+    //*************************************************************************************************************
     return eResult;
 }
 
 //*****************************************************************************************************************
-//  interface
+//  private method
 //*****************************************************************************************************************
-Reference< XFrame > TargetFinder::helpDownSearch(   const   Reference< XFrames >&   xChildFrameAccess   ,
-                                                    const   OUString&               sTargetName         )
+ETargetClass TargetFinder::impl_classifyForFrame(           sal_Bool    bParentExist    ,
+                                                            sal_Bool    bChildrenExist  ,
+                                                    const   OUString&   sFrameName      ,
+                                                    const   OUString&   sParentName     ,
+                                                    const   OUString&   sTargetName     ,
+                                                            sal_Int32   nSearchFlags    )
 {
-    // Safe impossible cases.
-    // We don't accept all incoming parameter!
-    LOG_ASSERT( impldbg_checkParameter_helpDownSearch( xChildFrameAccess, sTargetName ), "TargetFinder::helpDownSearch()\nInvalid parameter detected!\n" )
+    ETargetClass eResult = E_UNKNOWN;
 
-    // Set default return value if method failed.
-    Reference< XFrame > xResult;
-
-    // Get a collection of all childs of our owner frame,
-    // and search given target name in these list.
-    Sequence< Reference< XFrame > > seqChilds   = xChildFrameAccess->queryFrames( FrameSearchFlag::CHILDREN );
-    sal_uInt32                      nCount      = seqChilds.getLength();
-    sal_uInt32                      nPosition   = 0;
-    for( nPosition=0; nPosition<nCount; ++nPosition )
+    //*************************************************************************************************************
+    //  I)      Handle special target names.
+    //          Make an exclusiv search: if() else if() ...
+    //
+    //  I.I)    Look for "_blank"
+    //          Only the desktop can create new tasks. Forward search to parent!
+    //*************************************************************************************************************
+    if( sTargetName == SPECIALTARGET_BLANK )
     {
-        if( seqChilds[nPosition]->getName() == sTargetName )
+        if( bParentExist == sal_True )
         {
-            xResult = seqChilds[nPosition];
-            break;
+            eResult = E_FORWARD_UP;
+        }
+    }
+    else
+
+    //*************************************************************************************************************
+    //  I.II)   Look for "_self"
+    //          Handle "" in the same way!
+    //*************************************************************************************************************
+    if  (
+            (   sTargetName             ==  SPECIALTARGET_SELF  )   ||
+            (   sTargetName.getLength() <   1                   )
+        )
+    {
+        eResult = E_SELF;
+    }
+    else
+
+    //*************************************************************************************************************
+    //  I.III)  Look for "_top"
+    //          A frame without a parent is top - otherwhise it's one of his parents!
+    //*************************************************************************************************************
+    if( sTargetName == SPECIALTARGET_TOP )
+    {
+        if( bParentExist == sal_False )
+        {
+            eResult = E_SELF;
+        }
+        else
+        {
+            eResult = E_FORWARD_UP;
+        }
+    }
+    else
+
+    //*************************************************************************************************************
+    //  I.IV)   Look for "_parent"
+    //          Ignore it if no parent exist!
+    //*************************************************************************************************************
+    if( sTargetName == SPECIALTARGET_PARENT )
+    {
+        if( bParentExist == sal_True )
+        {
+            eResult = E_PARENT;
+        }
+    }
+    else
+
+    //*************************************************************************************************************
+    //  I.V)    Look for "_beamer"
+    //          Only a task can handle or create the beamer!
+    //*************************************************************************************************************
+    if  (
+            ( sTargetName   ==  SPECIALTARGET_BEAMER    )   &&
+            ( bParentExist  ==  sal_True                )
+        )
+    {
+        eResult = E_FORWARD_UP;
+    }
+    else
+
+    {
+        //*********************************************************************************************************
+        //  II)     Special target names was handled ...
+        //          Now look for right flags.
+        //          Combine search results: if(); if() ...
+        //
+        //  II.I)   Look for SELF.
+        //          Use given frame name to do that. It couldn't be empty(!) - because this was handled in step I.II).
+        //*********************************************************************************************************
+        if  (
+                ( nSearchFlags  &   FrameSearchFlag::SELF   )   &&
+                ( sTargetName   ==  sFrameName              )
+            )
+        {
+            eResult = E_SELF;
+        }
+
+        //*********************************************************************************************************
+        //  II.II)  Look for PARENT.
+        //          Ignore flag if no parent exist! Check his name here to break search erlier!
+        //          Ignore flag if we are a top frame and search outside current task isnt allowed.
+        //*********************************************************************************************************
+        if  (
+                ( eResult       !=  E_SELF                  )   &&
+                ( nSearchFlags  &   FrameSearchFlag::PARENT )   &&
+                ( bParentExist  ==  sal_True                )
+            )
+        {
+            if( sParentName == sTargetName )
+            {
+                eResult = E_PARENT;
+            }
+            else
+            {
+                eResult = E_FORWARD_UP;
+            }
+        }
+
+        //*********************************************************************************************************
+        //  II.III) Look for CHILDREN.
+        //          Ignore flag if no childrens exist! Combine it with already set decisions!
+        //*********************************************************************************************************
+        if  (
+                ( eResult           !=  E_SELF                      )   &&
+                ( eResult           !=  E_PARENT                    )   &&
+                ( nSearchFlags      &   FrameSearchFlag::CHILDREN   )   &&
+                ( bChildrenExist    ==  sal_True                    )
+            )
+        {
+            switch( eResult )
+            {
+                case E_UNKNOWN      :   eResult = E_DEEP_DOWN;
+                                           break;
+                case E_FORWARD_UP   :   eResult = E_DEEP_BOTH;
+                                         break;
+            }
+        }
+
+        //*********************************************************************************************************
+        //  II.IV)  Look for SIBLINGS.
+        //          These change a deep to a flat search!
+        //*********************************************************************************************************
+        if  (
+                ( eResult       !=  E_SELF                      )   &&
+                ( eResult       !=  E_PARENT                    )   &&
+                   ( nSearchFlags   &   FrameSearchFlag::SIBLINGS   )
+            )
+        {
+            switch( eResult )
+            {
+                case E_DEEP_DOWN    :   eResult = E_FLAT_DOWN;
+                                        break;
+                case E_DEEP_BOTH    :   eResult = E_FLAT_BOTH;
+                                        break;
+            }
         }
     }
 
-    return xResult;
+    //*************************************************************************************************************
+    //  possible results:
+    //      E_UNKNOWN
+    //      E_SELF
+    //      E_PARENT
+    //      E_FORWARD_UP
+    //      E_DEEP_DOWN
+    //      E_DEEP_BOTH
+    //      E_FLAT_DOWN
+    //      E_FLAT_BOTH
+    //*************************************************************************************************************
+    return eResult;
 }
-
-//_________________________________________________________________________________________________________________
-//  debug methods
-//_________________________________________________________________________________________________________________
-
-/*-----------------------------------------------------------------------------------------------------------------
-    The follow methods check parameter for other functions. If a parameter or his value is non valid,
-    we return "sal_False". (else sal_True) This mechanism is used to throw an ASSERT!
-
-    ATTENTION
-
-        If you miss a test for one of this parameters, contact the autor or add it himself !(?)
-        But ... look for right testing! See using of this methods!
------------------------------------------------------------------------------------------------------------------*/
-
-#ifdef ENABLE_ASSERTIONS
-
-//*****************************************************************************************************************
-// Check for valid pointer only in the moment - I think to control all combinations of flags is'nt a good idea ...
-// The target name can be empty but we must look for valid enum values.
-sal_Bool TargetFinder::impldbg_checkParameter_classify( const   Reference< XFrame >&    xOwner          ,
-                                                        const   OUString&               sTargetName     ,
-                                                                sal_Int32               nSearchFlags    )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xOwner       ==  NULL        )   ||
-            ( xOwner.is()   ==  sal_False   )   ||
-            ( &sTargetName  ==  NULL        )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-// We can't work with invalid references and don't accept special target names!
-// We search for realy named frames only.
-sal_Bool TargetFinder::impldbg_checkParameter_helpDownSearch(   const   Reference< XFrames >&   xChildFrameAccess   ,
-                                                                 const  OUSTRING&               sTargetName         )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xChildFrameAccess    ==  NULL                    )   ||
-            ( xChildFrameAccess.is()==  sal_False               )   ||
-            ( &sTargetName          ==  NULL                    )   ||
-            ( sTargetName           ==  SPECIALTARGET_BLANK     )   ||
-            ( sTargetName           ==  SPECIALTARGET_SELF      )   ||
-            ( sTargetName           ==  SPECIALTARGET_PARENT    )   ||
-            ( sTargetName           ==  SPECIALTARGET_TOP       )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-#endif  // #ifdef ENABLE_ASSERTIONS
 
 }       //  namespace framework

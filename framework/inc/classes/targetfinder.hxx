@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-10-23 13:55:34 $
+ *  last change: $Author: as $ $Date: 2001-03-09 14:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XFRAMES_HPP_
-#include <com/sun/star/frame/XFrames.hpp>
-#endif
-
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -107,7 +103,6 @@ namespace framework{
 #define OUSTRING            ::rtl::OUString
 #define REFERENCE           ::com::sun::star::uno::Reference
 #define XFRAME              ::com::sun::star::frame::XFrame
-#define XFRAMES             ::com::sun::star::frame::XFrames
 
 //_________________________________________________________________________________________________________________
 //  declarations
@@ -118,12 +113,12 @@ namespace framework{
                     (Frame/Task/PlugInFrame/Desktop ...)
 *//*-*************************************************************************************************************/
 
-enum IMPL_EFrameType
+enum EFrameType
 {
-    eFRAME          ,
-    eTASK           ,
-    ePLUGINFRAME    ,
-    eDESKTOP
+    E_DESKTOP       ,
+    E_PLUGINFRAME   ,
+    E_TASK          ,
+    E_FRAME
 };
 
 /*-************************************************************************************************************//**
@@ -134,9 +129,9 @@ enum IMPL_EFrameType
 #define SPECIALTARGET_SELF                                      DECLARE_ASCII("_self"       )
 #define SPECIALTARGET_PARENT                                    DECLARE_ASCII("_parent"     )
 #define SPECIALTARGET_TOP                                       DECLARE_ASCII("_top"        )
-/* not supported in moment!
-#define SPECIALTARGET_DOCUMENT                                  DECLARE_ASCII("_document"   )
 #define SPECIALTARGET_BEAMER                                    DECLARE_ASCII("_beamer"     )
+/* not supported yet!
+#define SPECIALTARGET_DOCUMENT                                  DECLARE_ASCII("_document"   )
 #define SPECIALTARGET_EXPLORER                                  DECLARE_ASCII("_explorer"   )
 #define SPECIALTARGET_PARTWINDOW                                DECLARE_ASCII("_partwindow" )
 */
@@ -145,16 +140,19 @@ enum IMPL_EFrameType
     @short          valid result values to classify targeting
 *//*-*************************************************************************************************************/
 
-enum IMPL_ETargetClass
+enum ETargetClass
 {
-    eUNKNOWN    ,   /// given parameter are invalid - there is no chance to find these target!
-    eCREATE     ,   /// a new target must create
-    eSELF       ,   /// you are the target himself
-    ePARENT     ,   /// your direct parent is the target!
-    eUP         ,   /// search target at parents only
-    eDOWN       ,   /// search target at childrens only
-    eSIBLINGS   ,   /// search target at parents and his childrens ... but not at your children!
-    eALL            /// react first for eCHILDRENS and then for eSIBLINGS! (protect your code against recursive calls from bottom or top!)
+    E_UNKNOWN       ,   /// occure if you call us without valid flag combinations!
+    E_CREATETASK    ,   /// create new task (supported by desktop only!)
+    E_SELF          ,   /// you are the target himself
+    E_PARENT        ,   /// your parent is the target
+    E_BEAMER        ,   /// an existing beamer is the target (create new one if it not already exist!)
+    E_TASKS         ,   /// special (but exclusiv) search for tasks only (supported at desktop only - but can combined with CREATE!)
+    E_FORWARD_UP    ,   /// forward call to your parent
+    E_DEEP_DOWN     ,   /// search at your children (search children of direct children before another direcht children!)
+    E_FLAT_DOWN     ,   /// search at your children (search at all direct children first;  children of direcht children then!)
+    E_DEEP_BOTH     ,   /// combination of E_DEEP_DOWN and E_FORWARD_UP ( search down first!)
+    E_FLAT_BOTH         /// combination of E_FLAT_DOWN and E_FORWARD_UP ( search down first!)
 };
 
 /*-************************************************************************************************************//**
@@ -207,41 +205,79 @@ class TargetFinder
             @short      get a recommendation for searching right target
             @descr      Our caller search for a target which match with given parameter.
                         Give him a direction to find the right one.
+                        These method never create or return a tree node! Thats your job!
+                        We say: go up, go down or give you the permission to create new frame if search will fail!
 
             @seealso    -
 
-            @param      "xOwner";           We need a reference to our caller to get some special informations about his environment
-            @param      "sTargetName";      This is the search parameter to find right frame by name or special value!
-            @param      "nSearchFlags";     These are optional parameter to regulate search direction.
+            @param      "eFrameType"        Give us your node type (desktop, task ,frame) Its neccessary to select right search algorithm.
+            @param      "sTargetName"       This is the search parameter to find right frame by name or special value!
+            @param      "nSearchFlags"      This value is an optional parameter to regulate search direction if no special target name was given.
+            @param      "bCreationAllowed"  We set it TRUE if flag TASKS is set. You must search for given target, but could create a new tree node if search will fail!
+            @param      "bChildrenExist"    Say us - if some children exist. Otherwise down search is ignored!
+            @param      "bParentExist"      Say us - if a parent exist. Otherwise upper search is ignored!
+            @param      "sFrameName"        If SELF flag is set we can break search earlier if this name is the target!
+            @param      "sParentName"       If PARENT flag is set we can break search earlier if this name is the target!
             @return     An enum value to classify the direction for searching.
 
-            @onerror    eUNKNOWN is returned.
+            @onerror    E_UNKNOWN is returned.
         *//*-*****************************************************************************************************/
 
-        static IMPL_ETargetClass classify(  const   REFERENCE< XFRAME >&    xOwner          ,
-                                            const   OUSTRING&               sTargetName     ,
-                                                       sal_Int32                nSearchFlags    );
+        static ETargetClass classify(           EFrameType      eFrameType                          ,
+                                        const   OUSTRING&       sTargetName                         ,
+                                                   sal_Int32        nSearchFlags                        ,
+                                                sal_Bool&       bCreationAllowed                    ,
+                                                sal_Bool        bChildrenExist                      ,
+                                        const   OUSTRING&       sFrameName          =   OUSTRING()  ,
+                                                sal_Bool        bParentExist        =   sal_False   ,
+                                        const   OUSTRING&       sParentName         =   OUSTRING()  );
+
+        //---------------------------------------------------------------------------------------------------------
+        //  private methods
+        //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      implement default search at children ...
-            @descr      You CAN use these implementation or write your own code!
-                        With these method we support a search for a target at your children.
-                        We search direct children first and subframes of these direct one then.
+            @short      helper methods for classify()
+            @descr      Every tree node (desktop, frame, task ...) has another preference shares to search a target.
+                        With these helper methods we differ between these search algorithm!
 
-            @ATTENTION  We don't accept inpossible calling parameter - like special target names!
-                        We search for realy named targets only.
+            @seealso    method classify()
 
-            @seealso    -
+            @param      "bParentExist"      set if a parent exist for caller tree node
+            @param      "bChildrenExist"    set if some children exist for caller tree node
+            @param      "sFrameName"        name of current tree node (used for SELF flag to break search earlier!)
+            @param      "sParentName"       name of current tree node (used for PARENT flag to break search earlier!)
+            @param      "sTargetName"       name of searched target tree node
+            @param      "nSearchFlags"      flags to regulate search in tree
+            @param      "bTopFrame"         used to break upper searches at a top frame if search outside current task isnt allowed!
 
-            @param      "xChildFrameAccess";    Access to container with child frames of our caller
-            @param      "sTargetName";          This is the search parameter to find right frame by name or special value!
             @return     A reference to an existing frame or null if search failed.
 
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        static REFERENCE< XFRAME > helpDownSearch(  const   REFERENCE< XFRAMES >&   xChildFrameAccess   ,
-                                                    const   OUSTRING&               sTargetName         );
+        static ETargetClass impl_classifyForDesktop     (           sal_Bool    bChildrenExist      ,
+                                                            const   OUSTRING&   sTargetName         ,
+                                                                       sal_Int32    nSearchFlags        );
+
+        static ETargetClass impl_classifyForPlugInFrame (           sal_Bool    bParentExist        ,
+                                                                    sal_Bool    bChildrenExist      ,
+                                                            const   OUSTRING&   sFrameName          ,
+                                                            const   OUSTRING&   sTargetName         ,
+                                                                       sal_Int32    nSearchFlags        );
+
+        static ETargetClass impl_classifyForTask        (           sal_Bool    bParentExist        ,
+                                                                    sal_Bool    bChildrenExist      ,
+                                                            const   OUSTRING&   sFrameName          ,
+                                                            const   OUSTRING&   sTargetName         ,
+                                                                       sal_Int32    nSearchFlags        );
+
+        static ETargetClass impl_classifyForFrame       (           sal_Bool    bParentExist        ,
+                                                                    sal_Bool    bChildrenExist      ,
+                                                            const   OUSTRING&   sFrameName          ,
+                                                            const   OUSTRING&   sParentName         ,
+                                                            const   OUSTRING&   sTargetName         ,
+                                                                       sal_Int32    nSearchFlags        );
 
         //---------------------------------------------------------------------------------------------------------
         //  debug and test methods
@@ -266,11 +302,41 @@ class TargetFinder
 
         private:
 
-            static sal_Bool impldbg_checkParameter_classify         (   const   REFERENCE< XFRAME >&    xOwner              ,
-                                                                        const   OUSTRING&               sTargetName         ,
-                                                                                   sal_Int32                nSearchFlags        );
-            static sal_Bool impldbg_checkParameter_helpDownSearch   (   const   REFERENCE< XFRAMES >&   xChildFrameAccess   ,
-                                                                        const   OUSTRING&               sTargetName         );
+        //*********************************************************************************************************
+        // - check invalid references, misused booleans, wrong flags or for an unknown frame type
+        // - value of bCreationAllowed will set by classify() - existing value isn't important
+        // - empty strings are allowed
+        static inline sal_Bool implcp_classify(         EFrameType  eFrameType          ,
+                                                const   OUSTRING&   sTargetName         ,
+                                                        sal_Int32   nSearchFlags        ,
+                                                        sal_Bool&   bCreationAllowed    ,
+                                                        sal_Bool    bChildrenExist      ,
+                                                const   OUSTRING&   sFrameName          ,
+                                                        sal_Bool    bParentExist        ,
+                                                const   OUSTRING&   sParentName         )
+        {
+            return  (
+                        ( &sTargetName      ==  NULL            )   ||
+                        ( &sFrameName       ==  NULL            )   ||
+                        ( &sParentName      ==  NULL            )   ||
+                        ( &bCreationAllowed ==  NULL            )   ||
+                        ( nSearchFlags      <   0               )   ||
+                        (
+                            ( bChildrenExist!=  sal_False       )   &&
+                            ( bChildrenExist!=  sal_True        )
+                        )                                           ||
+                        (
+                            ( bParentExist  !=  sal_False       )   &&
+                            ( bParentExist  !=  sal_True        )
+                        )                                           ||
+                        (
+                            ( eFrameType    !=  E_DESKTOP       )   &&
+                            ( eFrameType    !=  E_PLUGINFRAME   )   &&
+                            ( eFrameType    !=  E_TASK          )   &&
+                            ( eFrameType    !=  E_FRAME         )
+                        )
+                    );
+        }
 
         #endif  // #ifdef ENABLE_ASSERTIONS
 

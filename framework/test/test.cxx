@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-02-26 08:45:23 $
+ *  last change: $Author: as $ $Date: 2001-03-09 14:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,7 @@ class TestApplication : public Application
         void impl_testDesktop   ( const Reference< XDesktop >& xDesktop );
         void impl_buildTree     ( const Reference< XDesktop >& xDesktop );
         void impl_logTree       ( const Reference< XDesktop >& xDesktop );
+
         #endif
 
         #ifdef TEST_PLUGIN
@@ -297,6 +298,13 @@ class TestApplication : public Application
         void impl_testFilterRegistration();
         #endif
 #endif
+
+        #ifdef TEST_TREESEARCH
+        sal_Bool impl_testTreeSearch();
+        #endif
+
+    //*************************************************************************************************************
+    private:
 
     //*************************************************************************************************************
     private:
@@ -325,7 +333,7 @@ void TestApplication::Main()
 
     // Init global servicemanager and set it.
     ServiceManager aManager;
-    m_xFactory = aManager.getPrivateUNOServiceManager( DECLARE_ASCII("test.rdb") );
+    m_xFactory = aManager.getGlobalUNOServiceManager();
     setProcessServiceFactory( m_xFactory );
 
     // Control sucess of operation.
@@ -338,6 +346,8 @@ void TestApplication::Main()
     /**-***********************************************************************************************************
         test area
     **************************************************************************************************************/
+
+    sal_Bool bState = sal_True;
 
     //-------------------------------------------------------------------------------------------------------------
     #ifdef TEST_FILTERCACHE
@@ -374,91 +384,22 @@ void TestApplication::Main()
     impl_testFilterRegistration();
     #endif
 
-/*
-    Reference< XDispatchProvider > xProvider( xDesktop, UNO_QUERY );
-    URL aURL;
-    aURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM("file://d|/bla.htm"));
-    Reference< XDispatch > xDispatcher = xProvider->queryDispatch( aURL, OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0 );
-    if( xDispatcher.is()==sal_True )
-    {
-        xDispatcher->dispatch(aURL, Sequence< PropertyValue >() );
-    aURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM("file://d|/bla.htm"));
-        xDispatcher->dispatch(aURL, Sequence< PropertyValue >() );
-    aURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM("file://d|/bla.html"));
-        xDispatcher->dispatch(aURL, Sequence< PropertyValue >() );
-    aURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM("file://d|/test.txt"));
-        xDispatcher->dispatch(aURL, Sequence< PropertyValue >() );
-    }
-*/
-/*
-    Reference< XMultiServiceFactory > xFrameLoaderFactory( xGlobalServiceManager->createInstance( SERVICENAME_FRAMELOADERFACTORY ), UNO_QUERY );
-    LOG_ASSERT( !(xFrameLoaderFactory.is()==sal_False), "TestApplication::Main()\nServicename of FrameLoaderFactory is unknown.\n\n" );
-    Sequence< OUString > seqFilterNames = xFrameLoaderFactory->getAvailableServiceNames();
-    if (seqFilterNames.getLength()>0)
-    {
-        Sequence< Any > seqArguments(1);
-        seqArguments[0] <<= seqFilterNames[0];
+    //-------------------------------------------------------------------------------------------------------------
+    #ifdef TEST_TREESEARCH
+    bState = impl_testTreeSearch();
+    #endif
 
-        Reference< XPropertySet > xPropertySet( xFrameLoaderFactory->createInstanceWithArguments( OUString(), seqArguments ), UNO_QUERY );
-        if ( xPropertySet.is()==sal_True )
-        {
-            Sequence< OUString >    seqPattern      ;
-            Sequence< OUString >    seqExtension    ;
-            sal_Int32               nFlags          ;
-            sal_Int32               nFormat         ;
-            OUString                sMimeType       ;
-            OUString                sFilterName     ;
-            OUString                sDetectService  ;
-            Reference< XInterface > xLoader         ;
-            OUString                sURL            ;
-            PropertyValue           aPropertyValue  ;
-            Any                     aValue          ;
-
-            aValue = xPropertySet->getPropertyValue( PROPERTYNAME_PATTERN );
-            aValue >>= seqPattern;
-            aValue = xPropertySet->getPropertyValue( PROPERTYNAME_EXTENSION );
-            aValue >>= seqExtension;
-            aValue = xPropertySet->getPropertyValue( PROPERTYNAME_FLAGS );
-            aValue >>= nFlags;
-            aValue = xPropertySet->getPropertyValue( PROPERTYNAME_FORMAT );
-            aValue >>= nFormat;
-            aValue = xPropertySet->getPropertyValue( PROPERTYNAME_MIMETYPE );
-            aValue >>= sMimeType;
-            aValue = xPropertySet->getPropertyValue( PROPERTYNAME_FILTERNAME );
-            aValue >>= sFilterName;
-            aValue = xPropertySet->getPropertyValue( PROPERTYNAME_DETECTSERVICE );
-            aValue >>= sDetectService;
-
-            sURL                    =   OUString(RTL_CONSTASCII_USTRINGPARAM("file://d|bla.htm"))   ;
-            aPropertyValue.Name     =   PROPERTYNAME_FILTERNAME                                     ;
-            aPropertyValue.Value    <<= sFilterName                                                 ;
-            seqArguments.realloc(1);
-            seqArguments[0]         <<= aPropertyValue                                              ;
-            xLoader = xFrameLoaderFactory->createInstanceWithArguments( sURL, seqArguments );
-            LOG_ASSERT( !(xLoader.is()==sal_False), "TestApplication::Main()\nCreation of loader 1 failed.\n\n" );
-
-            sURL                    =   OUString(RTL_CONSTASCII_USTRINGPARAM("file://d|bla.htm"))   ;
-            aPropertyValue.Name     =   PROPERTYNAME_MIMETYPE                                       ;
-            aPropertyValue.Value    <<= sMimeType                                                   ;
-            seqArguments.realloc(1);
-            seqArguments[0]         <<= aPropertyValue                                              ;
-            xLoader = xFrameLoaderFactory->createInstanceWithArguments( sURL, seqArguments );
-            LOG_ASSERT( !(xLoader.is()==sal_False), "TestApplication::Main()\nCreation of loader 2 failed.\n\n" );
-
-            sURL                    =   OUString(RTL_CONSTASCII_USTRINGPARAM("file://d|bla.htm"))   ;
-            aPropertyValue.Name     =   PROPERTYNAME_FORMAT                                         ;
-            aPropertyValue.Value    <<= nFormat                                                     ;
-            seqArguments.realloc(1);
-            seqArguments[0]         <<= aPropertyValue                                              ;
-            xLoader = xFrameLoaderFactory->createInstanceWithArguments( sURL, seqArguments );
-            LOG_ASSERT( !(xLoader.is()==sal_False), "TestApplication::Main()\nCreation of loader 3 failed.\n\n" );
-        }
-    }
-*/
 //  Execute();
 //    xFrame->dispose();
 //    delete pMainWindow;
-    LOG_ASSERT( sal_False, "TestApplication: test successful ..." )
+    if( bState = sal_True )
+    {
+        LOG_ERROR( "TestApplication::Main()", "Test successful ..." )
+    }
+    else
+    {
+        LOG_ERROR( "TestApplication::Main()", "Test failed ..." )
+    }
 }
 
 //_________________________________________________________________________________________________________________
@@ -1290,5 +1231,271 @@ void TestApplication::impl_testFilterRegistration()
 
         xContainer->removeByName( DECLARE_ASCII("mein_eigener_neuer_Filter") );
     }
+}
+#endif
+
+//_________________________________________________________________________________________________________________
+//  test method for search mechanism in our frame tree
+//_________________________________________________________________________________________________________________
+#ifdef TEST_TREESEARCH
+sal_Bool TestApplication::impl_testTreeSearch()
+{
+    // Build an example tree.
+    Reference< XFrame > xD      ( m_xFactory->createInstance( SERVICENAME_DESKTOP   ), UNO_QUERY );
+    Reference< XFrame > xT1     ( m_xFactory->createInstance( SERVICENAME_TASK      ), UNO_QUERY );
+    Reference< XFrame > xT2     ( m_xFactory->createInstance( SERVICENAME_TASK      ), UNO_QUERY );
+    Reference< XFrame > xT3     ( m_xFactory->createInstance( SERVICENAME_TASK      ), UNO_QUERY );
+    Reference< XFrame > xF11    ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF12    ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF21    ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF22    ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF211   ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF212   ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF221   ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF2111  ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF2112  ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF2121  ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF2122  ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF2211  ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF21111 ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF21112 ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF21121 ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF21122 ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF21211 ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF21212 ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF21221 ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF21222 ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+    Reference< XFrame > xF22111 ( m_xFactory->createInstance( SERVICENAME_FRAME     ), UNO_QUERY );
+
+    xD->setName     ( DECLARE_ASCII("D"     ) );
+    xT1->setName    ( DECLARE_ASCII("T1"    ) );
+    xT2->setName    ( DECLARE_ASCII("T2"    ) );
+    xT3->setName    ( DECLARE_ASCII("T3"    ) );
+    xF11->setName   ( DECLARE_ASCII("F11"   ) );
+    xF12->setName   ( DECLARE_ASCII("F12"   ) );
+    xF21->setName   ( DECLARE_ASCII("F21"   ) );
+    xF22->setName   ( DECLARE_ASCII("F22"   ) );
+    xF211->setName  ( DECLARE_ASCII("F211"  ) );
+    xF212->setName  ( DECLARE_ASCII("F212"  ) );
+    xF221->setName  ( DECLARE_ASCII("F221"  ) );
+    xF2111->setName ( DECLARE_ASCII("F2111" ) );
+    xF2112->setName ( DECLARE_ASCII("F2112" ) );
+    xF2121->setName ( DECLARE_ASCII("F2121" ) );
+    xF2122->setName ( DECLARE_ASCII("F2122" ) );
+    xF2211->setName ( DECLARE_ASCII("F2211" ) );
+    xF21111->setName( DECLARE_ASCII("F21111") );
+    xF21112->setName( DECLARE_ASCII("F21112") );
+    xF21121->setName( DECLARE_ASCII("F21121") );
+    xF21122->setName( DECLARE_ASCII("F21122") );
+    xF21211->setName( DECLARE_ASCII("F21211") );
+    xF21212->setName( DECLARE_ASCII("F21212") );
+    xF21221->setName( DECLARE_ASCII("F21221") );
+    xF21222->setName( DECLARE_ASCII("F21222") );
+    xF22111->setName( DECLARE_ASCII("F22111") );
+
+    Reference< XFramesSupplier > xSD        ( xD        , UNO_QUERY );
+    Reference< XFramesSupplier > xST1       ( xT1       , UNO_QUERY );
+    Reference< XFramesSupplier > xST2       ( xT2       , UNO_QUERY );
+    Reference< XFramesSupplier > xST3       ( xT3       , UNO_QUERY );
+    Reference< XFramesSupplier > xSF11      ( xF11      , UNO_QUERY );
+    Reference< XFramesSupplier > xSF12      ( xF12      , UNO_QUERY );
+    Reference< XFramesSupplier > xSF21      ( xF21      , UNO_QUERY );
+    Reference< XFramesSupplier > xSF22      ( xF22      , UNO_QUERY );
+    Reference< XFramesSupplier > xSF211     ( xF211     , UNO_QUERY );
+    Reference< XFramesSupplier > xSF212     ( xF212     , UNO_QUERY );
+    Reference< XFramesSupplier > xSF221     ( xF221     , UNO_QUERY );
+    Reference< XFramesSupplier > xSF2111    ( xF2111    , UNO_QUERY );
+    Reference< XFramesSupplier > xSF2112    ( xF2112    , UNO_QUERY );
+    Reference< XFramesSupplier > xSF2121    ( xF2121    , UNO_QUERY );
+    Reference< XFramesSupplier > xSF2122    ( xF2122    , UNO_QUERY );
+    Reference< XFramesSupplier > xSF2211    ( xF2211    , UNO_QUERY );
+    Reference< XFramesSupplier > xSF21111   ( xF21111   , UNO_QUERY );
+    Reference< XFramesSupplier > xSF21112   ( xF21112   , UNO_QUERY );
+    Reference< XFramesSupplier > xSF21121   ( xF21121   , UNO_QUERY );
+    Reference< XFramesSupplier > xSF21122   ( xF21122   , UNO_QUERY );
+    Reference< XFramesSupplier > xSF21211   ( xF21211   , UNO_QUERY );
+    Reference< XFramesSupplier > xSF21212   ( xF21212   , UNO_QUERY );
+    Reference< XFramesSupplier > xSF21221   ( xF21221   , UNO_QUERY );
+    Reference< XFramesSupplier > xSF21222   ( xF21222   , UNO_QUERY );
+    Reference< XFramesSupplier > xSF22111   ( xF22111   , UNO_QUERY );
+
+    xSD->getFrames()->append        ( xT1       );
+    xSD->getFrames()->append        ( xT2       );
+    xSD->getFrames()->append        ( xT3       );
+    xST1->getFrames()->append       ( xF11      );
+    xST1->getFrames()->append       ( xF12      );
+    xST2->getFrames()->append       ( xF21      );
+    xST2->getFrames()->append       ( xF22      );
+    xSF21->getFrames()->append      ( xF211     );
+    xSF21->getFrames()->append      ( xF212     );
+    xSF211->getFrames()->append     ( xF2111    );
+    xSF211->getFrames()->append     ( xF2112    );
+    xSF212->getFrames()->append     ( xF2121    );
+    xSF212->getFrames()->append     ( xF2122    );
+    xSF2111->getFrames()->append    ( xF21111   );
+    xSF2111->getFrames()->append    ( xF21112   );
+    xSF2112->getFrames()->append    ( xF21121   );
+    xSF2112->getFrames()->append    ( xF21122   );
+    xSF2121->getFrames()->append    ( xF21211   );
+    xSF2121->getFrames()->append    ( xF21212   );
+    xSF2122->getFrames()->append    ( xF21221   );
+    xSF2122->getFrames()->append    ( xF21222   );
+    xSF22->getFrames()->append      ( xF221     );
+    xSF221->getFrames()->append     ( xF2211    );
+    xSF2211->getFrames()->append    ( xF22111   );
+
+    sal_Int32 nFlags = 0;
+
+    // Test deep down search
+    nFlags = FrameSearchFlag::CHILDREN;
+    if  (
+            ( xD->findFrame( DECLARE_ASCII("T1"     ), nFlags ) !=  xT1     )   ||
+            ( xD->findFrame( DECLARE_ASCII("T2"     ), nFlags ) !=  xT2     )   ||
+            ( xD->findFrame( DECLARE_ASCII("T3"     ), nFlags ) !=  xT3     )   ||
+            ( xD->findFrame( DECLARE_ASCII("F11"    ), nFlags ) !=  xF11    )   ||
+            ( xD->findFrame( DECLARE_ASCII("F12"    ), nFlags ) !=  xF12    )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21"    ), nFlags ) !=  xF21    )   ||
+            ( xD->findFrame( DECLARE_ASCII("F22"    ), nFlags ) !=  xF22    )   ||
+            ( xD->findFrame( DECLARE_ASCII("F211"   ), nFlags ) !=  xF211   )   ||
+            ( xD->findFrame( DECLARE_ASCII("F212"   ), nFlags ) !=  xF212   )   ||
+            ( xD->findFrame( DECLARE_ASCII("F2111"  ), nFlags ) !=  xF2111  )   ||
+            ( xD->findFrame( DECLARE_ASCII("F2112"  ), nFlags ) !=  xF2112  )   ||
+            ( xD->findFrame( DECLARE_ASCII("F2121"  ), nFlags ) !=  xF2121  )   ||
+            ( xD->findFrame( DECLARE_ASCII("F2122"  ), nFlags ) !=  xF2122  )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21111" ), nFlags ) !=  xF21111 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21112" ), nFlags ) !=  xF21112 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21121" ), nFlags ) !=  xF21121 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21122" ), nFlags ) !=  xF21122 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21211" ), nFlags ) !=  xF21211 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21212" ), nFlags ) !=  xF21212 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21221" ), nFlags ) !=  xF21221 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21222" ), nFlags ) !=  xF21222 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F221"   ), nFlags ) !=  xF221   )   ||
+            ( xD->findFrame( DECLARE_ASCII("F2211"  ), nFlags ) !=  xF2211  )   ||
+            ( xD->findFrame( DECLARE_ASCII("F22111" ), nFlags ) !=  xF22111 )
+        )
+    {
+        LOG_ERROR( "TestApplikation::impl_testTreeSearch()", "deep down search failed" )
+        return sal_False;
+    }
+
+    // Test flat down search
+    nFlags = FrameSearchFlag::CHILDREN | FrameSearchFlag::SIBLINGS;
+    if  (
+            ( xD->findFrame( DECLARE_ASCII("T1"     ), nFlags ) !=  xT1     )   ||
+            ( xD->findFrame( DECLARE_ASCII("T2"     ), nFlags ) !=  xT2     )   ||
+            ( xD->findFrame( DECLARE_ASCII("T3"     ), nFlags ) !=  xT3     )   ||
+            ( xD->findFrame( DECLARE_ASCII("F11"    ), nFlags ) !=  xF11    )   ||
+            ( xD->findFrame( DECLARE_ASCII("F12"    ), nFlags ) !=  xF12    )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21"    ), nFlags ) !=  xF21    )   ||
+            ( xD->findFrame( DECLARE_ASCII("F22"    ), nFlags ) !=  xF22    )   ||
+            ( xD->findFrame( DECLARE_ASCII("F211"   ), nFlags ) !=  xF211   )   ||
+            ( xD->findFrame( DECLARE_ASCII("F212"   ), nFlags ) !=  xF212   )   ||
+            ( xD->findFrame( DECLARE_ASCII("F2111"  ), nFlags ) !=  xF2111  )   ||
+            ( xD->findFrame( DECLARE_ASCII("F2112"  ), nFlags ) !=  xF2112  )   ||
+            ( xD->findFrame( DECLARE_ASCII("F2121"  ), nFlags ) !=  xF2121  )   ||
+            ( xD->findFrame( DECLARE_ASCII("F2122"  ), nFlags ) !=  xF2122  )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21111" ), nFlags ) !=  xF21111 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21112" ), nFlags ) !=  xF21112 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21121" ), nFlags ) !=  xF21121 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21122" ), nFlags ) !=  xF21122 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21211" ), nFlags ) !=  xF21211 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21212" ), nFlags ) !=  xF21212 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21221" ), nFlags ) !=  xF21221 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F21222" ), nFlags ) !=  xF21222 )   ||
+            ( xD->findFrame( DECLARE_ASCII("F221"   ), nFlags ) !=  xF221   )   ||
+            ( xD->findFrame( DECLARE_ASCII("F2211"  ), nFlags ) !=  xF2211  )   ||
+            ( xD->findFrame( DECLARE_ASCII("F22111" ), nFlags ) !=  xF22111 )
+        )
+    {
+        LOG_ERROR( "TestApplikation::impl_testTreeSearch()", "flat down search failed" )
+        return sal_False;
+    }
+
+    // Test deep up search
+    // All targets must be found. Control search steps in log files!
+    nFlags = FrameSearchFlag::PARENT;
+    if  (
+            ( xF11->findFrame   ( DECLARE_ASCII("T1"), nFlags ) !=  xT1 )   ||  // search for valid targets
+            ( xF12->findFrame   ( DECLARE_ASCII("T1"), nFlags ) !=  xT1 )   ||
+            ( xF21->findFrame   ( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF22->findFrame   ( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF211->findFrame  ( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF212->findFrame  ( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF221->findFrame  ( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF2111->findFrame ( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF2121->findFrame ( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF2122->findFrame ( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF2211->findFrame ( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF21111->findFrame( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF21112->findFrame( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF21121->findFrame( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF21122->findFrame( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF21211->findFrame( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF21212->findFrame( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF21221->findFrame( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF21222->findFrame( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF22111->findFrame( DECLARE_ASCII("T2"), nFlags ) !=  xT2 )   ||
+            ( xF11->findFrame   ( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||  // search for existing but non valid targets
+            ( xF12->findFrame   ( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF21->findFrame   ( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF22->findFrame   ( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF211->findFrame  ( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF212->findFrame  ( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF221->findFrame  ( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF2111->findFrame ( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF2121->findFrame ( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF2122->findFrame ( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF2211->findFrame ( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF21111->findFrame( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF21112->findFrame( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF21121->findFrame( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF21122->findFrame( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF21211->findFrame( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF21212->findFrame( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF21221->findFrame( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF21222->findFrame( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )   ||
+            ( xF22111->findFrame( DECLARE_ASCII("T3"), nFlags ).is()    ==  sal_True    )
+        )
+    {
+        LOG_ERROR( "TestApplikation::impl_testTreeSearch()", "deep up search failed" )
+        return sal_False;
+    }
+
+    // Test inside/outside tasks search
+    // No frames outside current task should be found if TASKS flag isnt set.
+    // Otherwise he must be found!
+    if  (
+            ( xF21211->findFrame( DECLARE_ASCII("F12"   ),  FrameSearchFlag::ALL                                )       == xF12     )   ||
+            ( xF21211->findFrame( DECLARE_ASCII("F22111"),  FrameSearchFlag::GLOBAL                             )       != xF22111  )   ||
+            ( xF21211->findFrame( DECLARE_ASCII("T4"    ),  FrameSearchFlag::GLOBAL | FrameSearchFlag::CREATE   ).is()  == sal_False)
+        )
+    {
+        LOG_ERROR( "TestApplikation::impl_testTreeSearch()", "inside/outside task search failed" )
+        return sal_False;
+    }
+
+    // Test SELF
+    // Use the desktop, one task and one frame node to do that.
+    // The desktop must ignore these question ... all other must return himself.
+    LOG_ASSERT2( (xD->findFrame     (   DECLARE_ASCII(""),  FrameSearchFlag::SELF   )   == xD   ), "TestApplication::impl_testTreeSearch()", "SELF search for D failed\n"   )
+    LOG_ASSERT2( (xT1->findFrame    (   DECLARE_ASCII(""),  FrameSearchFlag::SELF   )   != xT1  ), "TestApplication::impl_testTreeSearch()", "SELF search for T1 failed\n"  )
+    LOG_ASSERT2( (xF12->findFrame   (   DECLARE_ASCII(""),  FrameSearchFlag::SELF   )   != xF12 ), "TestApplication::impl_testTreeSearch()", "SELF search for F12 failed\n" )
+
+    // Test special task search at desktop
+    // These search allow TASKS and CREATE flags only!
+    // We make no deep search - we work on direct children of desktop only.
+    // Supported for desktop only.
+    LOG_ASSERT2( (xD->findFrame     (   DECLARE_ASCII("T1"),    FrameSearchFlag::TASKS                              )       != xT1          ), "TestApplication::impl_testTreeSearch()", "special TASKS search for T1 failed\n"             )
+    LOG_ASSERT2( (xD->findFrame     (   DECLARE_ASCII("T2"),    FrameSearchFlag::TASKS                              )       != xT2          ), "TestApplication::impl_testTreeSearch()", "special TASKS search for T2 failed\n"             )
+    LOG_ASSERT2( (xD->findFrame     (   DECLARE_ASCII("T3"),    FrameSearchFlag::TASKS                              )       != xT3          ), "TestApplication::impl_testTreeSearch()", "special TASKS search for T3 failed\n"             )
+    // Attention: T4 was created before!
+    LOG_ASSERT2( (xD->findFrame     (   DECLARE_ASCII("T5"),    FrameSearchFlag::TASKS                              ).is()  == sal_True     ), "TestApplication::impl_testTreeSearch()", "special TASKS search for T5 failed\n"             )
+    LOG_ASSERT2( (xD->findFrame     (   DECLARE_ASCII("T5"),    FrameSearchFlag::TASKS | FrameSearchFlag::CREATE    ).is()  == sal_False    ), "TestApplication::impl_testTreeSearch()", "special TASKS+CREATE search for T5 failed\n"      )
+    LOG_ASSERT2( (xD->findFrame     (   DECLARE_ASCII("F12"),   FrameSearchFlag::TASKS                              ).is()  == sal_True     ), "TestApplication::impl_testTreeSearch()", "special TASKS search for F12 failed\n"            )
+    LOG_ASSERT2( (xF12->findFrame   (   DECLARE_ASCII("T1"),    FrameSearchFlag::TASKS                              ).is()  == sal_True     ), "TestApplication::impl_testTreeSearch()", "special TASKS search for T1 from F12 failed\n"    )
+    LOG_ASSERT2( (xF22111->findFrame(   DECLARE_ASCII("T1"),    FrameSearchFlag::TASKS                              ).is()  == sal_True     ), "TestApplication::impl_testTreeSearch()", "special TASKS search for T1 from F22111 failed\n" )
+
+    return sal_True;
 }
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2001-03-05 12:55:44 $
+ *  last change: $Author: as $ $Date: 2001-03-09 14:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,13 @@
 #include <classes/framecontainer.hxx>
 #endif
 
-#include <vector>
-#include <stdexcept>
-#include <algorithm>
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCH_FLAG_HPP_
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -86,6 +87,7 @@
 namespace framework{
 
 using namespace ::std                       ;
+using namespace ::rtl                       ;
 using namespace ::com::sun::star::uno       ;
 using namespace ::com::sun::star::frame     ;
 
@@ -129,11 +131,12 @@ void FrameContainer::append( const Reference< XFrame >& xFrame )
 {
     // Safe impossible cases
     // This method is not defined for ALL incoming parameters!
-    LOG_ASSERT( impldbg_checkParameter_append( xFrame ), "FrameContainer::append()\nInvalid parameter detected!\n" )
+    LOG_ASSERT2( implcp_append( xFrame ), "FrameContainer::append()", "Invalid parameter detected!" )
     // Warn programmer at already existing elements in container.
-    LOG_ASSERT( !(exist(xFrame)==sal_True), "FrameContainer::append()\nNew frame already exist in container!\n" )
-    // We search for hidden tasks which have no component!
-    LOG_ASSERT( impldbg_lookForZombieFrames( xFrame ), "FrameContainer::append()\nZombie frame detected!\n" )
+    LOG_ASSERT2( exist(xFrame)==sal_True, "FrameContainer::append()", "New frame already exist in container!" )
+    // Warn programmer if an already existing frame has no component inside!
+    // These frames are created (e.g. by dispatch()) but not used ...
+    LOG_ASSERT2( impldbg_existZombie(), "FrameContainer::append()", "Zombie frame detected!" )
 
     // Work only, if container not locked!
     if ( m_bLock == LOCK_OFF )
@@ -152,17 +155,15 @@ void FrameContainer::remove( const Reference< XFrame >& xFrame )
 {
     // Safe impossible cases
     // This method is not defined for ALL incoming parameters!
-    LOG_ASSERT( impldbg_checkParameter_remove( xFrame ), "FrameContainer::remove()\nInvalid parameter detected!\n" )
+    LOG_ASSERT2( implcp_remove( xFrame ), "FrameContainer::remove()", "Invalid parameter detected!" )
     // Warn programmer at non existing elements in container.
-    LOG_ASSERT( !(exist(xFrame)==sal_False), "FrameContainer::remove()\nFrame to remove not exist in container!\n" )
-    // Safe impossible cases.
-//  LOG_ASSERT( impldbg_lookForZombieFrames( xFrame ), "FrameContainer::remove()\nZombie frame detected!\n" )
+    LOG_ASSERT2( exist(xFrame)==sal_False, "FrameContainer::remove()", "Frame to remove not exist in container!" )
 
     // Work only, if container not locked!
     if ( m_bLock == LOCK_OFF )
     {
         // Search frame and remove it from container ...
-        vector< Reference< XFrame > >::iterator aSearchedItem = find( m_aContainer.begin(), m_aContainer.end(), xFrame );
+        TFrameIterator aSearchedItem = find( m_aContainer.begin(), m_aContainer.end(), xFrame );
         // ... if it exist.
         if ( aSearchedItem != m_aContainer.end() )
         {
@@ -184,24 +185,24 @@ void FrameContainer::remove( const Reference< XFrame >& xFrame )
         }
     }
     // Else; Warn programmer.
-    LOG_ASSERT( !(m_bLock==LOCK_ON), "FrameContainer::remove()\nContainer is locked! You can't remove frame.\n" )
+    LOG_ASSERT2( m_bLock==LOCK_ON, "FrameContainer::remove()", "Container is locked! You can't remove frame." )
 }
 
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool FrameContainer::exist( const REFERENCE< XFRAME >& xFrame )
+sal_Bool FrameContainer::exist( const REFERENCE< XFRAME >& xFrame ) const
 {
     // Safe impossible cases
     // This method is not defined for ALL incoming parameters!
-    LOG_ASSERT( impldbg_checkParameter_exist( xFrame ), "FrameContainer::exist()\nInvalid parameter detected!\n" )
+    LOG_ASSERT2( implcp_exist( xFrame ), "FrameContainer::exist()", "Invalid parameter detected!" )
 
     // Set default return value.
     sal_Bool bExist = sal_False;
 
     // We ignore the lock, because we do not change the content of container!
     // Search frame.
-    vector< Reference< XFrame > >::iterator aSearchedItem = find( m_aContainer.begin(), m_aContainer.end(), xFrame );
+    TConstFrameIterator aSearchedItem = find( m_aContainer.begin(), m_aContainer.end(), xFrame );
     // If it exist ...
     if ( aSearchedItem != m_aContainer.end() )
     {
@@ -217,16 +218,13 @@ sal_Bool FrameContainer::exist( const REFERENCE< XFRAME >& xFrame )
 //*****************************************************************************************************************
 void FrameContainer::clear()
 {
-    // Safe impossible cases.
-    // We search for hidden tasks which have no component!
-    LOG_ASSERT( impldbg_lookForZombieFrames( Reference< XFrame >() ), "FrameContainer::clear()\nZombie frame detected!\n" )
-
     // This method is only allowed, if no lock is set!
     // Warn programmer, if its not true.
-    LOG_ASSERT( !(m_bLock==LOCK_ON), "FrameContainer::clear()\nContainer is locked! You can't clear it.\n" )
+    LOG_ASSERT2( m_bLock==LOCK_ON, "FrameContainer::clear()", "Container is locked! You can't clear it." )
     if ( m_bLock == LOCK_OFF )
     {
         // Clear the container ...
+        m_aContainer.erase( m_aContainer.begin(), m_aContainer.end() );
         m_aContainer.clear();
         // ... and don't forget to reset the active frame.
         // Its an reference to a valid container-item.
@@ -277,14 +275,14 @@ Reference< XFrame > FrameContainer::operator[]( sal_uInt32 nIndex ) const
 {
     // Safe impossible cases
     // This method is not defined for ALL incoming parameters!
-    LOG_ASSERT( impldbg_checkParameter_IndexOperator( nIndex ), "FrameContainer::operator[]()\nInvalid parameter detected!\n" )
+    LOG_ASSERT2( implcp_IndexOperator( nIndex, getCount() ), "FrameContainer::operator[]()", "Invalid parameter detected!" )
 
     // Set default return value.
     Reference< XFrame > xFrame;
 
     // This operation is allowed only, if lock is set.
     // Warn programmer, if this not true.
-    LOG_ASSERT( !(m_bLock==LOCK_OFF), "FrameContainer::operator[]()\nContainer is not locked! You can't do this.\n" )
+    LOG_ASSERT2( m_bLock==LOCK_OFF, "FrameContainer::operator[]()", "Container is not locked! You can't do this." )
 
     if ( m_bLock == LOCK_ON )
     {
@@ -352,10 +350,10 @@ void FrameContainer::setActive( const Reference< XFrame >& xFrame )
     // Safe impossible cases
     // This method is not defined for ALL incoming parameters!
     // BUT we accept null refrences for reset active state. => No frame is active then.
-    LOG_ASSERT( impldbg_checkParameter_setActive( xFrame ), "FrameContainer::setActive()\nInvalid parameter detected!\n" )
+    LOG_ASSERT2( implcp_setActive( xFrame ), "FrameContainer::setActive()", "Invalid parameter detected!" )
     // The new active frame MUST exist in container.
     // Control this.
-    LOG_ASSERT( !(xFrame.is()==sal_True && exist(xFrame)==sal_False), "FrameContainer::setActive()\nThe new active frame is not a member of current container!You cant activate it.\n" )
+    LOG_ASSERT2( xFrame.is()==sal_True && exist(xFrame)==sal_False, "FrameContainer::setActive()", "The new active frame is not a member of current container!You cant activate it." )
 
     // All incoming parameters are controlled.
     // We have a new active frame or a null reference to reset this state.
@@ -399,136 +397,124 @@ void FrameContainer::disableQuitTimer()
     }
 }
 
-//_________________________________________________________________________________________________________________
-//  debug methods
-//_________________________________________________________________________________________________________________
-
-/*-----------------------------------------------------------------------------------------------------------------
-    The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
-    we return "sal_False". (else sal_True) This mechanism is used to throw an ASSERT!
-
-    ATTENTION
-
-        If you miss a test for one of this parameters, contact the autor or add it himself !(?)
-        But ... look for right testing! See using of this methods!
------------------------------------------------------------------------------------------------------------------*/
-
-#ifdef ENABLE_ASSERTIONS
-
 //*****************************************************************************************************************
-// We accept valid references for working with container only.
-sal_Bool FrameContainer::impldbg_checkParameter_append( const Reference< XFrame >& xFrame ) const
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xFrame       ==  NULL        )   ||
-            ( xFrame.is()   ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
+//  public method
 //*****************************************************************************************************************
-// We accept valid references for working with container only.
-sal_Bool FrameContainer::impldbg_checkParameter_remove( const Reference< XFrame >& xFrame ) const
+Reference< XFrame > FrameContainer::searchDeepDown( const OUString& sName )
 {
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xFrame       ==  NULL        )   ||
-            ( xFrame.is()   ==  sal_False   )
-        )
+    // Check incoming parameter.
+    LOG_ASSERT2( implcp_searchDeepDown( sName ), "FrameContainer::searchDeepDown()", "Invalid parameter detected!" )
+
+    // Set default return value if search failed.
+    Reference< XFrame > xSearchedFrame;
+
+    // Use snapshot for search ...
+    // because these search could be a longer process.
+    // We must protect us against deleting references.
+    // In our multithreaded environment it could be that some new frames are appended or other are removed
+    // during this operation - but we hold valid references to it!
+
+    // Step over all child frames. But if direct child isnt the right one search on his children first - before
+    // you go to next direct child of this container!
+    Sequence< Reference< XFrame > > lFrames = getAllElements();
+    sal_Int32 nCount = lFrames.getLength();
+    for( sal_Int32 nFrame=0; nFrame<nCount; ++nFrame )
     {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-// We accept valid references for working with container only.
-sal_Bool FrameContainer::impldbg_checkParameter_exist( const Reference< XFrame >& xFrame ) const
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xFrame       ==  NULL        )   ||
-            ( xFrame.is()   ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-// The index in to the container must be in range of 0 and count-1!
-sal_Bool FrameContainer::impldbg_checkParameter_IndexOperator( sal_uInt32 nIndex ) const
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( nIndex >= (sal_uInt32)m_aContainer.size() )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-// setActive accept valid- or null-reference but no null-pointer!
-sal_Bool FrameContainer::impldbg_checkParameter_setActive( const Reference< XFrame >& xFrame ) const
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xFrame == NULL )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-sal_Bool FrameContainer::impldbg_lookForZombieFrames( const Reference< XFrame >& xFrame ) const
-{
-    // Step over all container items and search for a frame which contains no component.
-    // (He has no component window!)
-
-    // Use return value directly for an assert ...
-    sal_Bool bSuppressAssert = sal_True;
-
-    sal_Int32 nCount = m_aContainer.size();
-    for( sal_Int32 nPosition=0; nPosition<nCount; ++nPosition )
-    {
-        Reference< XFrame > xZombieFrame = m_aContainer.at(nPosition);
-        if  (
-                (   xZombieFrame.is()                       ==  sal_True    )   &&
-                (   xZombieFrame                            !=  xFrame      )   &&
-                (   xZombieFrame->getComponentWindow().is() ==  sal_False   )
-            )
+        if( lFrames[nFrame]->getName() == sName )
         {
-            bSuppressAssert = sal_False;
+            xSearchedFrame = lFrames[nFrame];
+            break;
+        }
+        else
+        {
+            xSearchedFrame = lFrames[nFrame]->findFrame( sName, FrameSearchFlag::CHILDREN );
+            if( xSearchedFrame.is() == sal_True )
+            {
+                break;
+            }
         }
     }
 
-    return bSuppressAssert;
+    return xSearchedFrame;
 }
 
-#endif  //  #ifdef ENABLE_ASSERTIONS
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+Reference< XFrame > FrameContainer::searchFlatDown( const OUString& sName )
+{
+    // Check incoming parameter.
+    LOG_ASSERT2( implcp_searchFlatDown( sName ), "FrameContainer::searchFlatDown()", "Invalid parameter detected!" )
+
+    // Set default return value if search failed.
+    Reference< XFrame > xSearchedFrame;
+
+    // Use snapshot for search ...
+    // because these search could be a longer process.
+    // We must protect us against deleting references.
+    // In our multithreaded environment it could be that some new frames are appended or other are removed
+    // during this operation - but we hold valid references to it!
+
+    // Step over all direct child frames first.
+    // Even right frame wasn't found start search at children of direct children.
+    Sequence< Reference< XFrame > > lFrames = getAllElements();
+    sal_Int32 nCount = lFrames.getLength();
+    sal_Int32 nFrame = 0;
+    for( nFrame=0; nFrame<nCount; ++nFrame )
+    {
+        if( lFrames[nFrame]->getName() == sName )
+        {
+            xSearchedFrame = lFrames[nFrame];
+            break;
+        }
+    }
+
+    if( xSearchedFrame.is() == sal_False )
+    {
+        nCount = lFrames.getLength();
+        for( sal_Int32 nFrame=0; nFrame<nCount; ++nFrame )
+        {
+            xSearchedFrame = lFrames[nFrame]->findFrame( sName, FrameSearchFlag::CHILDREN | FrameSearchFlag::SIBLINGS );
+            if( xSearchedFrame.is() == sal_True )
+            {
+                break;
+            }
+        }
+    }
+
+    return xSearchedFrame;
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+Reference< XFrame > FrameContainer::searchDirectChildren( const OUString& sName )
+{
+    // Check incoming parameter.
+    LOG_ASSERT2( implcp_searchDirectChildren( sName ), "FrameContainer::searchDirectChildren()", "Invalid parameter detected!" )
+
+    // Set default return value if search failed.
+    Reference< XFrame > xSearchedFrame;
+
+    // Use snapshot for search ...
+    // because these search could be a longer process.
+    // We must protect us against deleting references.
+    // In our multithreaded environment it could be that some new frames are appended or other are removed
+    // during this operation - but we hold valid references to it!
+
+    // Step over all current container items and search for right target.
+    Sequence< Reference< XFrame > > lFrames = getAllElements();
+    sal_Int32 nCount = lFrames.getLength();
+    for( sal_Int32 nFrame=0; nFrame<nCount; ++nFrame )
+    {
+        if( lFrames[nFrame]->getName() == sName )
+        {
+            xSearchedFrame = lFrames[nFrame];
+            break;
+        }
+    }
+
+    return xSearchedFrame;
+}
 
 }       //  namespace framework

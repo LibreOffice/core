@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:22 $
+ *  last change: $Author: as $ $Date: 2001-03-09 14:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
+
+#ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
+#include <classes/targetfinder.hxx>
+#endif
 
 #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
 #include <macros/generic.hxx>
@@ -195,6 +199,8 @@ class TaskCreator
     //-------------------------------------------------------------------------------------------------------------
 
     private:
+
+        OUSTRING impl_filterNames( const OUSTRING& sName );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods

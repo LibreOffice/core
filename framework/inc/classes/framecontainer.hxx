@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: svesik $ $Date: 2001-02-12 13:12:34 $
+ *  last change: $Author: as $ $Date: 2001-03-09 14:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
+#ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
+#include <classes/targetfinder.hxx>
+#endif
+
 #ifndef __FRAMEWORK_CLASSES_ASYNCQUIT_HXX_
 #include <classes/asyncquit.hxx>
 #endif
@@ -98,6 +102,14 @@
 #include <vos/ref.hxx>
 #endif
 
+#ifndef _RTL_USTRING_
+#include <rtl/ustring>
+#endif
+
+#include <vector>
+#include <stdexcept>
+#include <algorithm>
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -107,8 +119,8 @@ namespace framework{
 #define OREF                    ::vos::ORef
 #define REFERENCE               ::com::sun::star::uno::Reference
 #define SEQUENCE                ::com::sun::star::uno::Sequence
-#define STLVECTOR               ::std::vector
 #define XFRAME                  ::com::sun::star::frame::XFrame
+#define OUSTRING                ::rtl::OUString
 
 //_________________________________________________________________________________________________________________
 //  exported const
@@ -117,6 +129,10 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 //  exported definitions
 //_________________________________________________________________________________________________________________
+
+typedef ::std::vector< REFERENCE< XFRAME > >    TFrameContainer     ;
+typedef TFrameContainer::iterator               TFrameIterator      ;
+typedef TFrameContainer::const_iterator         TConstFrameIterator ;
 
 /*-************************************************************************************************************//**
     @short          implement a container to hold childs of frame, task or desktop
@@ -222,7 +238,7 @@ class FrameContainer
             @onerror    We return sal_False.
         *//*-*****************************************************************************************************/
 
-        sal_Bool exist( const REFERENCE< XFRAME >& xFrame );
+        sal_Bool exist( const REFERENCE< XFRAME >& xFrame ) const;
 
         /*-****************************************************************************************************//**
             @short      clear the container and free memory
@@ -381,6 +397,26 @@ class FrameContainer
         void enableQuitTimer( const REFERENCE< XDESKTOP >& xDesktop );
         void disableQuitTimer();
 
+        /*-****************************************************************************************************//**
+            @short      implements default searches at children ...
+            @descr      You CAN use these implementation or write your own code!
+                        With these method we support a search for a target at your children.
+
+            @ATTENTION  These methods never create a new tree node!
+                        If searched target not exist we return NULL.
+
+            @seealso    -
+
+            @param      "sTargetName"   This must be a non special target name. (_blank _self ... are not allowed! _beamer is a valid name!)
+            @return     A reference to an existing frame or null if search failed.
+
+            @onerror    A null reference is returned.
+        *//*-*****************************************************************************************************/
+
+        REFERENCE< XFRAME > searchDeepDown          ( const OUSTRING& sName );
+        REFERENCE< XFRAME > searchFlatDown          ( const OUSTRING& sName );
+        REFERENCE< XFRAME > searchDirectChildren    ( const OUSTRING& sName );
+
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
     //-------------------------------------------------------------------------------------------------------------
@@ -416,17 +452,120 @@ class FrameContainer
 
     private:
 
-        sal_Bool impldbg_checkParameter_append          (   const   REFERENCE< XFRAME >&    xFrame  ) const;
-        sal_Bool impldbg_checkParameter_remove          (   const   REFERENCE< XFRAME >&    xFrame  ) const;
-        sal_Bool impldbg_checkParameter_exist           (   const   REFERENCE< XFRAME >&    xFrame  ) const;
-        sal_Bool impldbg_checkParameter_IndexOperator   (           sal_uInt32              nIndex  ) const;
-        sal_Bool impldbg_checkParameter_setActive       (   const   REFERENCE< XFRAME >&    xFrame  ) const;
+        //*********************************************************************************************************
+        // - check for NULL pointer or invalid references
+        inline sal_Bool implcp_append( const REFERENCE< XFRAME >& xFrame ) const
+        {
+            return  (
+                        ( &xFrame       ==  NULL        )   ||
+                        ( xFrame.is()   ==  sal_False   )
+                    );
+        }
 
-        // These method search for empty frames in our container.
-        // It's a programming error if someone found.
-        // But no error if given frame is the empty one(!) ...
-        // because it's allowed to "remove()" or "append()" (FOR A SHORT TIME!) a zombie but not to HAVE it already in container.
-        sal_Bool impldbg_lookForZombieFrames            (   const   REFERENCE< XFRAME >&    xFrame  ) const;
+        //*********************************************************************************************************
+        // - check for NULL pointer or invalid references only
+        //   Don't look for Zombies here!
+        inline sal_Bool implcp_remove( const REFERENCE< XFRAME >& xFrame ) const
+        {
+            return  (
+                        ( &xFrame       ==  NULL        )   ||
+                        ( xFrame.is()   ==  sal_False   )
+                    );
+        }
+
+        //*********************************************************************************************************
+        // - check for NULL pointer or invalid references
+        inline sal_Bool implcp_exist( const REFERENCE< XFRAME >& xFrame ) const
+        {
+            return  (
+                        ( &xFrame       ==  NULL        )   ||
+                        ( xFrame.is()   ==  sal_False   )
+                    );
+        }
+
+        //*********************************************************************************************************
+        // - check if index out of range
+        inline sal_Bool implcp_IndexOperator( sal_uInt32 nIndex, sal_uInt32 nMax ) const
+        {
+            return  (
+                        ( nIndex    <   0       )   ||
+                        ( nIndex    >=  nMax    )
+                    );
+        }
+
+        //*********************************************************************************************************
+        // - check for NULL pointer or invalid references
+        inline sal_Bool implcp_setActive( const REFERENCE< XFRAME >& xFrame ) const
+        {
+            return  (
+                        ( &xFrame       ==  NULL        )   ||
+                        ( xFrame.is()   ==  sal_False   )
+                    );
+        }
+
+        //*********************************************************************************************************
+        // - check for null pointer
+        // - look for special target names ... some of them are not allowed as valid frame name
+        // Attention: "_beamer" is a valid name.
+        inline sal_Bool implcp_searchDeepDown( const OUSTRING& sName ) const
+        {
+            return  (
+                        ( &sName    ==  NULL                    )   ||
+                        ( sName     ==  SPECIALTARGET_BLANK     )   ||
+                        ( sName     ==  SPECIALTARGET_SELF      )   ||
+                        ( sName     ==  SPECIALTARGET_TOP       )   ||
+                        ( sName     ==  SPECIALTARGET_PARENT    )
+                    );
+        }
+
+        //*********************************************************************************************************
+        // - check for null pointer
+        // - look for special target names ... some of them are not allowed as valid frame name
+        // Attention: "_beamer" is a valid name.
+        inline sal_Bool implcp_searchFlatDown( const OUSTRING& sName ) const
+        {
+            return  (
+                        ( &sName    ==  NULL                    )   ||
+                        ( sName     ==  SPECIALTARGET_BLANK     )   ||
+                        ( sName     ==  SPECIALTARGET_SELF      )   ||
+                        ( sName     ==  SPECIALTARGET_TOP       )   ||
+                        ( sName     ==  SPECIALTARGET_PARENT    )
+                    );
+        }
+
+        //*********************************************************************************************************
+        // - check for null pointer
+        // - look for special target names ... some of them are not allowed as valid frame name
+        // Attention: "_beamer" is a valid name.
+        inline sal_Bool implcp_searchDirectChildren( const OUSTRING& sName ) const
+        {
+            return  (
+                        ( &sName    ==  NULL                    )   ||
+                        ( sName     ==  SPECIALTARGET_BLANK     )   ||
+                        ( sName     ==  SPECIALTARGET_SELF      )   ||
+                        ( sName     ==  SPECIALTARGET_TOP       )   ||
+                        ( sName     ==  SPECIALTARGET_PARENT    )
+                    );
+        }
+
+        //*********************************************************************************************************
+        // Special debug mode.
+        // If these container closed - we should search for created zombie frames before.
+        // Sometimes a frame was inserted which hold no component inside!
+        // They are created by failed dispatch calls ...
+        inline sal_Bool impldbg_existZombie() const
+        {
+            sal_Bool bZombieExist = sal_False;
+            for( TConstFrameIterator pItem=m_aContainer.begin(); pItem!=m_aContainer.end(); ++pItem )
+            {
+                if( (*pItem)->getComponentWindow().is() == sal_False )
+                {
+                    bZombieExist = sal_True;
+                    break;
+                }
+            }
+            return bZombieExist;
+        }
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
@@ -437,10 +576,10 @@ class FrameContainer
 
     private:
 
-        sal_Bool                                m_bLock             ;   /// lock to block append()-, remove()- or clear()-calls
-        STLVECTOR< REFERENCE< XFRAME > >        m_aContainer        ;   /// list to hold all frames
-        REFERENCE< XFRAME >                     m_xActiveFrame      ;   /// one container item can be the current active frame. Its neccessary for Desktop or Frame implementation.
-        OREF< AsyncQuit >                       m_rQuitTimer        ;   /// if an instance of these class used by desktop and last frame will be removed we must terminate the desktop
+        sal_Bool                m_bLock             ;   /// lock to block append()-, remove()- or clear()-calls
+        TFrameContainer         m_aContainer        ;   /// list to hold all frames
+        REFERENCE< XFRAME >     m_xActiveFrame      ;   /// one container item can be the current active frame. Its neccessary for Desktop or Frame implementation.
+        OREF< AsyncQuit >       m_rQuitTimer        ;   /// if an instance of these class used by desktop and last frame will be removed we must terminate the desktop
 
 };      //  class FrameContainer
 

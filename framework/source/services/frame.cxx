@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-15 08:49:10 $
+ *  last change: $Author: as $ $Date: 2001-03-09 14:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,331 +680,76 @@ Reference< XFrame > SAL_CALL Frame::findFrame(  const   OUString&   sTargetFrame
 
     // Protection against recursion while searching in parent frames!
     // See switch-statement eSIBLINGS, eALL for further informations.
-    if ( m_bRecursiveSearchProtection == sal_False )
+    if( m_bRecursiveSearchProtection == sal_False )
     {
+        LOG_PARAMETER_FINDFRAME( "Frame", m_sName, sTargetFrameName, nSearchFlags )
         // Use helper to classify search direction.
-        IMPL_ETargetClass eDirection = TargetFinder::classify(  this                ,
-                                                                sTargetFrameName    ,
-                                                                nSearchFlags        );
-        // Use returned recommendation to search right frame!
-        switch( eDirection )
+        // Attention: If he return ...BOTH -> please search down first; upper then!
+        Reference< XFrame > xParent          ( m_xParent, UNO_QUERY )   ;
+        sal_Bool            bCreationAllowed = sal_False                ;
+        ETargetClass eResult = TargetFinder::classify(  E_FRAME                                         ,
+                                                           sTargetFrameName                             ,
+                                                        nSearchFlags                                    ,
+                                                        bCreationAllowed                                ,
+                                                        m_aChildFrameContainer.hasElements()            ,
+                                                        m_sName                                         ,
+                                                        xParent.is()                                    ,
+                                                        xParent.is() ? xParent->getName() : OUString()  );
+        switch( eResult )
         {
-            case eSELF      :   {
-                                    xSearchedFrame = this;
-                                }
-                                break;
-
-            case ePARENT    :   {
-                                    xSearchedFrame = Reference< XFrame >( m_xParent, UNO_QUERY );
-                                }
-                                break;
-
-            case eUP        :   {
-                                    xSearchedFrame = m_xParent->findFrame( sTargetFrameName, nSearchFlags );
-                                }
-                                break;
-
-            case eDOWN      :   {
-                                    xSearchedFrame = TargetFinder::helpDownSearch( m_xFramesHelper, sTargetFrameName );
-                                }
-                                break;
-
-            case eSIBLINGS  :   {
-                                    m_bRecursiveSearchProtection = sal_True;
-                                    xSearchedFrame = m_xParent->findFrame( sTargetFrameName, FrameSearchFlag::CHILDREN );
-                                    m_bRecursiveSearchProtection = sal_False;
-                                }
-                                break;
-
-            case eALL       :   {
-                                    m_bRecursiveSearchProtection = sal_True;
-                                    xSearchedFrame = TargetFinder::helpDownSearch( m_xFramesHelper, sTargetFrameName );
-                                    if( xSearchedFrame.is() == sal_False )
-                                    {
-                                        xSearchedFrame = m_xParent->findFrame( sTargetFrameName, nSearchFlags );
+            case E_SELF         :   {
+                                        xSearchedFrame = this;
                                     }
-                                    m_bRecursiveSearchProtection = sal_False;
-                                }
-                                break;
+                                    break;
+            case E_PARENT       :   {
+                                        xSearchedFrame = xParent;
+                                    }
+                                    break;
+            case E_FORWARD_UP   :   {
+                                        m_bRecursiveSearchProtection = sal_True;
+                                        xSearchedFrame = m_xParent->findFrame( sTargetFrameName, nSearchFlags );
+                                        m_bRecursiveSearchProtection = sal_False;
+                                    }
+                                    break;
+            case E_DEEP_DOWN    :   {
+                                        xSearchedFrame = m_aChildFrameContainer.searchDeepDown( sTargetFrameName );
+                                    }
+                                    break;
+            case E_DEEP_BOTH    :   {
+                                        xSearchedFrame = m_aChildFrameContainer.searchDeepDown( sTargetFrameName );
+                                        if( xSearchedFrame.is() == sal_False )
+                                        {
+                                            m_bRecursiveSearchProtection = sal_True;
+                                            xSearchedFrame = m_xParent->findFrame( sTargetFrameName, nSearchFlags );
+                                            m_bRecursiveSearchProtection = sal_False;
+                                        }
+                                    }
+                                    break;
+            case E_FLAT_DOWN    :   {
+                                        xSearchedFrame = m_aChildFrameContainer.searchFlatDown( sTargetFrameName );
+                                    }
+                                    break;
+            case E_FLAT_BOTH    :   {
+                                        xSearchedFrame = m_aChildFrameContainer.searchFlatDown( sTargetFrameName );
+                                        if( xSearchedFrame.is() == sal_False )
+                                        {
+                                            m_bRecursiveSearchProtection = sal_True;
+                                            xSearchedFrame = m_xParent->findFrame( sTargetFrameName, nSearchFlags );
+                                            m_bRecursiveSearchProtection = sal_False;
+                                        }
+                                    }
+                                    break;
+            #ifdef ENABLE_ASSERTIONS
+            default:    LOG_ERROR( "Frame::findFrame()", "Unexpected result of TargetFinder::classify() detected!" )
+                        break;
+            #endif
         }
+        LOG_RESULT_FINDFRAME( "Frame", m_sName, xSearchedFrame )
     }
     // Return result of operation.
     return xSearchedFrame;
 }
 
-/*TODO
-     If new implementation of findFrame/queryDispatch works correctly we can delete these old code!
-
-//*****************************************************************************************************************
-//   XFrame
-//*****************************************************************************************************************
-Reference< XFrame > SAL_CALL Frame::findFrame(  const   OUString&   sTargetFrameName    ,
-                                                            sal_Int32   nSearchFlags        ) throw( RuntimeException )
-{
-    // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Frame::findFrame()" )
-    // Safe impossible cases
-    LOG_ASSERT( impldbg_checkParameter_findFrame( sTargetFrameName, nSearchFlags ), "Frame::findFrame()\nInvalid parameter detected.\n" )
-    // Log some special informations about search. (Active in debug version only, if special mode is set!)
-    LOG_PARAMETER_FINDFRAME( "Frame", m_sName, sTargetFrameName, nSearchFlags )
-
-    // Set default return Value, if method failed
-    Reference< XFrame > xReturn = Reference< XFrame >();
-
-    // Protection against recursion while searching in parent frames!
-    // See search for PARENT for further informations.
-    if ( m_bRecursiveSearchProtection == sal_False )
-    {
-        //*************************************************************************************************************
-        //  1)  Search for "_self" or ""!. We handle this as self too!
-        //*************************************************************************************************************
-        if  (
-                ( sTargetFrameName              ==  FRAMETYPE_SELF  )   ||
-                ( sTargetFrameName.getLength()  <   1               )
-            )
-        {
-            LOG_TARGETINGSTEP( "Frame", m_sName, "react to \"_self\" or \"\"" )
-            xReturn = Reference< XFrame >( static_cast< OWeakObject* >( this ), UNO_QUERY );
-        }
-        else
-        //*************************************************************************************************************
-        //  2)  If "_top" searched and we have no parent set us for return himself.
-        //*************************************************************************************************************
-        if( sTargetFrameName == FRAMETYPE_TOP )
-        {
-            LOG_TARGETINGSTEP( "Frame", m_sName, "react to \"_top\"" )
-            if( m_xParent.is() ==  sal_False )
-            {
-                // If no parent well known we are the top frame!
-                LOG_TARGETINGSTEP( "Frame", m_sName, "no parent exist!" )
-                xReturn = Reference< XFrame >( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            }
-            else
-            {
-                // If parent well kwnown we must forward searching to it.
-                LOG_TARGETINGSTEP( "Frame", m_sName, "parent exist!" )
-                xReturn = m_xParent->findFrame( FRAMETYPE_TOP, 0 );
-            }
-        }
-        else
-        //*************************************************************************************************************
-        //  3)  If "_parent" searched and we have any one, set it for return.
-        //*************************************************************************************************************
-        if( sTargetFrameName == FRAMETYPE_PARENT )
-        {
-            LOG_TARGETINGSTEP( "Frame", m_sName, "react to \"_parent\"" )
-            if( m_xParent.is() ==  sal_True )
-            {
-                // If parent well kwnown we must return it as result.
-                LOG_TARGETINGSTEP( "Frame", m_sName, "parent exist!" )
-                xReturn = Reference< XFrame >( m_xParent, UNO_QUERY );
-            }
-            else
-            {
-                // Else we can't return anything and our default is used!
-                LOG_TARGETINGSTEP( "Frame", m_sName, "no parent exist!" )
-            }
-        }
-        else
-        //*************************************************************************************************************
-        //  4)  Forward "_blank" to desktop. He can create new task only!
-        //      (Look for existing parent!)
-        //*************************************************************************************************************
-        if( sTargetFrameName == FRAMETYPE_BLANK )
-        {
-            LOG_TARGETINGSTEP( "Frame", m_sName, "react to \"_blank\"" )
-            if( m_xParent.is() ==  sal_True )
-            {
-                LOG_TARGETINGSTEP( "Frame", m_sName, "forward \"_blank\" to parent" )
-                xReturn = m_xParent->findFrame( FRAMETYPE_BLANK, 0 );
-            }
-            else
-            {
-                // Else we cant create this new frame!
-                LOG_TARGETINGSTEP( "Frame", m_sName, "can create new frame for \"_blank\"" )
-            }
-        }
-        else
-        //*************************************************************************************************************
-        //  ATTENTION!
-        //  We have searched for special targets only ... but now we must search for any named frames and use search
-        //  flags to do that!
-        //*************************************************************************************************************
-        {
-            //*********************************************************************************************************
-            //  At first we must filter all other special target names!
-            //  You can disable this statement if all these cases are handled before ...
-            //*********************************************************************************************************
-//          if  (
-//                  ( sTargetFrameName              !=  FRAMETYPE_SELF  )   &&
-//                  ( sTargetFrameName              !=  FRAMETYPE_PARENT)   &&
-//                  ( sTargetFrameName              !=  FRAMETYPE_TOP   )   &&
-//                  ( sTargetFrameName              !=  FRAMETYPE_BLANK )   &&
-//                  ( sTargetFrameName.getLength()  >   0               )
-//              )
-            {
-                //*****************************************************************************************************
-                //  5)  If SELF searched and given name is the right one, we can return us as result.
-                //*****************************************************************************************************
-                if  (
-                        ( nSearchFlags      &   FrameSearchFlag::SELF   )   &&
-                        ( sTargetFrameName  ==  m_sName                 )
-                    )
-                {
-                    LOG_TARGETINGSTEP( "Frame", m_sName, "react to SELF" )
-                    xReturn = Reference< XFrame >( static_cast< OWeakObject* >( this ), UNO_QUERY );
-                }
-                //*****************************************************************************************************
-                //  6)  If SELF searched and given name is the right one, we can return us as result.
-                //*****************************************************************************************************
-                if  (
-                        ( xReturn.is()      ==  sal_False               )   &&
-                        ( nSearchFlags      &   FrameSearchFlag::PARENT )   &&
-                        ( m_xParent.is()    ==  sal_True                )
-                    )
-                {
-                    // We must protect us against searching from top to bottom!
-                    m_bRecursiveSearchProtection = sal_True  ;
-                    LOG_TARGETINGSTEP( "Frame", m_sName, "forward PARENT to parent" )
-                    xReturn = m_xParent->findFrame( sTargetFrameName, nSearchFlags );
-                    m_bRecursiveSearchProtection = sal_False ;
-                }
-                //*************************************************************************************************************
-                //  7)  Search for CHILDREN.
-                //*************************************************************************************************************
-                if  (
-                        ( xReturn.is()                          ==  sal_False                   )   &&
-                        ( nSearchFlags                          &   FrameSearchFlag::CHILDREN   )   &&
-                        ( m_aChildFrameContainer.hasElements()  ==  sal_True                    )
-                    )
-                {
-                    LOG_TARGETINGSTEP( "Frame", m_sName, "react to CHILDREN" )
-                    // Search at own container of childframes if allowed.
-                    // Lock the container. Nobody should append or remove elements during next time.
-                    // But don't forget to unlock it again!
-                    m_aChildFrameContainer.lock();
-
-                    // First search only for direct subframes.
-                    // Break loop, if something was found or all container items was compared.
-                    sal_uInt32 nCount       = m_aChildFrameContainer.getCount();
-                    sal_uInt32 nPosition    = 0;
-                    while   (
-                                ( xReturn.is()  ==  sal_False   )   &&
-                                ( nPosition     <   nCount      )
-                            )
-                    {
-                        xReturn = m_aChildFrameContainer[nPosition]->findFrame( sTargetFrameName, FrameSearchFlag::SELF );
-                        ++nPosition;
-                    }
-
-                    // If no direct subframe was found, search now subframes of subframes.
-                    nPosition = 0;
-                    while   (
-                                ( xReturn.is()  ==  sal_False   )   &&
-                                ( nPosition     <   nCount      )
-                            )
-                    {
-                        xReturn = m_aChildFrameContainer[nPosition]->findFrame( sTargetFrameName, FrameSearchFlag::CHILDREN );
-                        ++nPosition;
-                    }
-
-                    // Don't forget to unlock the container!
-                    m_aChildFrameContainer.unlock();
-                }
-                //*************************************************************************************************************
-                //  8)  Search for SIBLINGS.
-                //      Attention:
-                //      Continue search on brothers ( subframes of parent ) but don't let them search their brothers too ...
-                //      If FrameSearchFlag_CHILDREN is set, the children of the brothers will be searched also, otherwise not.
-                //*************************************************************************************************************
-                if  (
-                        ( xReturn.is()      ==  sal_False                   )   &&
-                        ( nSearchFlags      &   FrameSearchFlag::SIBLINGS   )   &&
-                        ( m_xParent.is()    ==  sal_True                    )
-                    )
-                {
-                    LOG_TARGETINGSTEP( "Frame", m_sName, "react to SIBLINGS" )
-                    // Get all siblings from ouer parent and collect some informations about result set.
-                    // Count of siblings, access to list ...
-                    Reference< XFrames >            xFrames     = m_xParent->getFrames();
-                    Sequence< Reference< XFrame > > seqFrames   = xFrames->queryFrames( FrameSearchFlag::CHILDREN );
-                    Reference< XFrame >*            pArray      = seqFrames.getArray();
-                    sal_uInt16                      nCount      = (sal_uInt16)seqFrames.getLength();
-
-                    Reference< XFrame >             xThis       ( (OWeakObject*)this, UNO_QUERY );
-                    Reference< XFrame >             xSearchFrame;
-
-                    // Search siblings "pure" - no search on brothers of brothers - no search at children of siblings!
-                    // Break loop, if something was found or all items was threated.
-                    sal_uInt16 nPosition = 0;
-                    while   (
-                                ( xReturn.is()  ==  sal_False   )   &&
-                                ( nPosition     <   nCount      )
-                            )
-                    {
-                        // Exclude THIS frame! We are a child of ouer parent and exist in result list of "queryFrames()" too.
-                        if ( pArray[nPosition] != xThis )
-                        {
-                            xReturn = pArray[nPosition]->findFrame( sTargetFrameName, FrameSearchFlag::SELF );
-                        }
-                        ++nPosition;
-                    }
-
-                    // If no sibling match ouer search, try it again with children of ouer siblings.
-                    nPosition = 0;
-                    while   (
-                                ( xReturn.is()  ==  sal_False   )   &&
-                                ( nPosition     <   nCount      )
-                            )
-                    {
-                        // Exclude THIS frame again.
-                        if ( pArray[nPosition] != xThis )
-                        {
-                            xReturn = pArray[nPosition]->findFrame( sTargetFrameName, FrameSearchFlag::CHILDREN );
-                        }
-                        ++nPosition;
-                    }
-                }
-                //*************************************************************************************************************
-                //  9)  Search for TASKS.
-                //      Attention:
-                //      The Task-implementation control these flag too! But if search started from the bottom of the tree, we must
-                //      forward it to ouer parents. They can be tasks only!
-                //*************************************************************************************************************
-                if  (
-                        ( xReturn.is()      ==  sal_False               )   &&
-                        ( nSearchFlags      &   FrameSearchFlag::TASKS  )   &&
-                        ( m_xParent.is()    ==  sal_True                )
-                    )
-                {
-                    // We must protect us against recursive calls from top to bottom.
-                    m_bRecursiveSearchProtection = sal_True ;
-                    LOG_TARGETINGSTEP( "Frame", m_sName, "forward TASKS to parent" )
-                    xReturn = m_xParent->findFrame( sTargetFrameName, nSearchFlags );
-                    m_bRecursiveSearchProtection = sal_False;
-                }
-                //*************************************************************************************************************
-                //  10) If CREATE is set we must forward call to desktop. He is the only one, who can do that.
-                //*************************************************************************************************************
-//                  Praeprozessor Bug!
-//                  Wenn nach CREATE ein Space steht wird versucht es durch das Define CREATE aus tools/rtti.hxx zu ersetzen
-//                  was fehlschlaegt und die naechsten 3 Klammern ")){" unterschlaegt!
-//                  Dann meckert der Compiler das natuerlich an ...
-                if((xReturn.is()==sal_False)&&(nSearchFlags&FrameSearchFlag::CREATE)&&(m_xParent.is()==sal_True))
-                {
-                    LOG_TARGETINGSTEP( "Frame", m_sName, "forward CREATE to parent" )
-                    xReturn = m_xParent->findFrame( sTargetFrameName, FrameSearchFlag::CREATE );
-                }
-            }
-        }
-    }
-
-    // Log some special informations about search. (Active in debug version only, if special mode is set!)
-    LOG_RESULT_FINDFRAME( "Frame", m_sName, xReturn )
-    // Return with result of operation.
-    return xReturn;
-}
-*/
 //*****************************************************************************************************************
 //   XFrame
 //*****************************************************************************************************************
@@ -1466,11 +1211,11 @@ void SAL_CALL Frame::focusGained( const awt::FocusEvent& aEvent ) throw( Runtime
 //*****************************************************************************************************************
 void SAL_CALL Frame::focusLost( const awt::FocusEvent& aEvent ) throw( RuntimeException )
 {
-    // Ready for multithreading
+/*  // Ready for multithreading
     LOCK_MUTEX( aGuard, m_aMutex, "Frame::focusLost()" )
     // Safe impossible cases
     LOG_ASSERT( impldbg_checkParameter_focusLost( aEvent ), "Frame::focusLost()\nInvalid parameter detected.\n" )
-/*
+
     // We must send UI_DEACTIVATING to our listener and forget our current FOCUS state!
     m_eActiveState = ACTIVE;
     impl_sendFrameActionEvent( FrameAction_FRAME_UI_DEACTIVATING );

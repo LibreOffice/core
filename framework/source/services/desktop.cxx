@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-03-05 09:02:19 $
+ *  last change: $Author: as $ $Date: 2001-03-09 14:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,79 +780,27 @@ Reference< XDispatch > SAL_CALL Desktop::queryDispatch( const   URL&        aURL
     // Safe impossible cases
     // Method not defined for all incoming parameter.
     LOG_ASSERT( impldbg_checkParameter_queryDispatch( aURL, sTargetFrameName, nSearchFlags ), "Desktop::queryDispatch()\nInvalid parameter detected!\n" )
+    LOG_PARAMETER_QUERYDISPATCH( "Desktop", m_sName, aURL, sTargetFrameName, nSearchFlags )
 
     // Set default return value.
-    Reference< XDispatch > xReturn;
+    Reference< XDispatch > xDispatcher;
 
-    // Use helper to classify search direction.
-    IMPL_ETargetClass eDirection = TargetFinder::classify(  this                ,
-                                                            sTargetFrameName    ,
-                                                            nSearchFlags        );
-    // Use returned recommendation to search right frame!
-    switch( eDirection )
+    if( sTargetFrameName == SPECIALTARGET_BLANK )
     {
-        case eCREATE    :   {
-                                xReturn = m_xDispatchHelper;
-                            }
-                            break;
-
-        case eDOWN      :   {
-                                Reference< XDispatchProvider > xTarget( TargetFinder::helpDownSearch( m_xFramesHelper, sTargetFrameName ), UNO_QUERY );
-                                if( xTarget.is() == sal_True )
-                                {
-                                    xReturn = xTarget->queryDispatch( aURL, SPECIALTARGET_SELF, 0 );
-                                }
-                            }
-                            break;
-    }
-
-/* TODO
-    If new implementation of findFrame/queryDispatch works correctly we can delete these code!
-
-    //*************************************************************************************************************
-    //  1)  Handle special mode "_blank"/CREATE TASK!
-    //      We create a special dispatcher which create new tasks on demand if a new dispatch() is called.
-    //*************************************************************************************************************
-
-//      Praeprozessor Bug!
-//      Wenn nach CREATE ein Space steht wird versucht es durch das Define CREATE aus tools/rtti.hxx zu ersetzen
-//      was fehlschlaegt und die naechsten 3 Klammern ")){" unterschlaegt!
-//      Dann meckert der Compiler das natuerlich an ...
-
-    if((sTargetFrameName==FRAMETYPE_BLANK)||(nSearchFlags&FrameSearchFlag::CREATE))
-    {
-        xReturn = m_xDispatchHelper;
+        xDispatcher = m_xDispatchHelper;
     }
     else
-    //*************************************************************************************************************
-    //  2)  We search for an existing frame to dispatch this URL.
-    //*************************************************************************************************************
     {
-         // Forbid creation of new tasks at follow calls! We have handled this before.
-//      OUString sNewTargetFrameName;
-//      if( sTargetFrameName != FRAMETYPE_BLANK )
-//      {
-//          sNewTargetFrameName = sTargetFrameName;
-//      }
-//      nSearchFlags |= UNMASK_CREATE   ;
-
-        // Try to find right frame in current hierarchy to dispatch given URL to it.
-        Reference< XFrame > xDispatchFrame = findFrame( sTargetFrameName, nSearchFlags );
-        // Do the follow only, if we have any valid frame for dispatch!
-        // Otherwise ouer return value will be empty ...
-        if ( xDispatchFrame.is() == sal_True )
+        Reference< XFrame > xTarget = findFrame( sTargetFrameName, nSearchFlags );
+        if( xTarget.is() == sal_True )
         {
-            // Dispatch given URL on found frame.
-            Reference< XDispatchProvider > xDispatchProvider( xDispatchFrame, UNO_QUERY );
-            // Safe impossible cases.
-            // A frame of ouer hierarchy must support XDispatchProvider interface.
-            LOG_ASSERT( !(xDispatchProvider.is()==sal_False), "Desktop::queryDispatch()\nEvery frame of ouer hieararchy must support XDispatchProvider interface. But I have found a negative example ...!\n" )
-            xReturn = xDispatchProvider->queryDispatch( aURL, OUString(), FrameSearchFlag::SELF );
+            xDispatcher = Reference< XDispatchProvider >( xTarget, UNO_QUERY )->queryDispatch( aURL, SPECIALTARGET_SELF, FrameSearchFlag::SELF );
         }
     }
-*/
+
+    LOG_RESULT_QUERYDISPATCH( "Desktop", m_sName, xDispatcher )
     // Return dispatcher for given URL.
-    return xReturn;
+    return xDispatcher;
 }
 
 //*****************************************************************************************************************
@@ -1030,171 +978,55 @@ Reference< XFrame > SAL_CALL Desktop::findFrame(    const   OUString&   sTargetF
     LOCK_MUTEX( aGuard, m_aMutex, "Desktop::findFrame()" )
     // Safe impossible cases
     LOG_ASSERT( impldbg_checkParameter_findFrame( sTargetFrameName, nSearchFlags ), "Desktop::findFrame()\nInvalid parameter detected.\n" )
+    LOG_PARAMETER_FINDFRAME( "Desktop", m_sName, sTargetFrameName, nSearchFlags )
 
     // Set default return value if method failed.
     Reference< XFrame > xSearchedFrame;
 
-    // Use helper to classify search direction.
-    IMPL_ETargetClass eDirection = TargetFinder::classify(  this            ,
-                                                            sTargetFrameName,
-                                                            nSearchFlags    );
-    // Use returned recommendation to search right frame or create a new one!
-    switch( eDirection )
+    // Ask helper for right decision for given parameter.
+    sal_Bool bCreationAllowed = sal_False;
+    ETargetClass eResult = TargetFinder::classify(  E_DESKTOP                           ,
+                                                    sTargetFrameName                    ,
+                                                    nSearchFlags                        ,
+                                                    bCreationAllowed                    ,
+                                                    m_aChildTaskContainer.hasElements() );
+    switch( eResult )
     {
-        case eDOWN      :   {
-                                xSearchedFrame = TargetFinder::helpDownSearch( m_xFramesHelper, sTargetFrameName );
-                            }
-                            break;
-
-        case eCREATE    :   {
-                                OUString sFrameName = sTargetFrameName;
-                                if( sFrameName == SPECIALTARGET_BLANK )
-                                {
-                                    sFrameName = OUString();
+        case E_CREATETASK   :   {
+                                    xSearchedFrame = m_aTaskCreator.createNewSystemTask( sTargetFrameName );
                                 }
-                                xSearchedFrame = m_aTaskCreator.createNewSystemTask( sFrameName );
-                            }
-                            break;
+                                break;
+        case E_TASKS        :   {
+                                    xSearchedFrame = m_aChildTaskContainer.searchDirectChildren( sTargetFrameName );
+                                }
+                                break;
+        case E_DEEP_DOWN    :   {
+                                    xSearchedFrame = m_aChildTaskContainer.searchDeepDown( sTargetFrameName );
+                                }
+                                break;
+        case E_FLAT_DOWN    :   {
+                                    xSearchedFrame = m_aChildTaskContainer.searchFlatDown( sTargetFrameName );
+                                }
+                                break;
+        #ifdef ENABLE_ASSERTIONS
+        default: LOG_ERROR( "Desktop::findFrame()", "Unexpected result of TargetFinder::classify() detected!" )
+        #endif
     }
+
+    // If no right target could be found - but CREATE flag was set ... do it; create a new task.
+    if  (
+            ( xSearchedFrame.is()   ==  sal_False   )   &&
+            ( bCreationAllowed      ==  sal_True    )
+        )
+    {
+        xSearchedFrame = m_aTaskCreator.createNewSystemTask( sTargetFrameName );
+    }
+
+    LOG_RESULT_FINDFRAME( "Desktop", m_sName, xSearchedFrame )
     // return result of operation.
     return xSearchedFrame;
 }
-/* TODO
-    If new implementation of findFrame/queryDispatch works correctly we can delete these code!
 
-//*****************************************************************************************************************
-//   XFrame
-//*****************************************************************************************************************
-Reference< XFrame > SAL_CALL Desktop::findFrame(    const   OUString&   sTargetFrameName    ,
-                                                                sal_Int32   nSearchFlags        ) throw( RuntimeException )
-{
-    // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::findFrame()" )
-    // Safe impossible cases
-    LOG_ASSERT( impldbg_checkParameter_findFrame( sTargetFrameName, nSearchFlags ), "Desktop::findFrame()\nInvalid parameter detected.\n" )
-    // Log some special informations about search. (Active in debug version only, if special mode is set!)
-    LOG_PARAMETER_FINDFRAME( "Desktop", m_sName, sTargetFrameName, nSearchFlags )
-
-    // Set default return Value, if method failed
-    Reference< XFrame > xReturn = Reference< XFrame >();
-
-    //*************************************************************************************************************
-    //  1)  If "_blank" searched we must create a new task!
-    //  Attention:
-    //      Don't set a name at new created frame! sTargetFrameName is not a normal name yet.
-    //      "_blank" is not allowed as frame name.
-    //      The helper method will create the new task, initialize it with an empty window and append it on
-    //      ouer frame-hierarchy.
-    //*************************************************************************************************************
-    if( sTargetFrameName == FRAMETYPE_BLANK )
-    {
-        LOG_TARGETINGSTEP( "Desktop", m_sName, "react to \"_blank\"" )
-        //xReturn = impl_createNewTask( OUString() );
-        xReturn = m_aTaskCreator.createNewSystemTask( OUString() );
-    }
-    else
-    //*************************************************************************************************************
-    //  ATTENTION!
-    //  We have searched for special targets only ... but now we must search for any named frames and use search
-    //  flags to do that!
-    //*************************************************************************************************************
-    {
-        //*********************************************************************************************************
-        //  At first we must filter all other special target names!
-        //  You can disable this statement if all these cases are handled before ...
-        //*********************************************************************************************************
-        if  (
-                ( sTargetFrameName              !=  FRAMETYPE_SELF  )   &&
-                ( sTargetFrameName              !=  FRAMETYPE_PARENT)   &&
-                ( sTargetFrameName              !=  FRAMETYPE_TOP   )   &&
-                ( sTargetFrameName.getLength()  >   0               )
-            )
-        {
-            //*****************************************************************************************************
-            //  2)  Search for TASKS.
-            //*****************************************************************************************************
-            if  (
-                    ( nSearchFlags                          &   FrameSearchFlag::TASKS  )   &&
-                    ( m_aChildTaskContainer.hasElements()   ==  sal_True                )
-                )
-            {
-                LOG_TARGETINGSTEP( "Desktop", m_sName, "react to TASKS" )
-                // Step over all direct childtasks and search in it.
-                // Lock container for exclusiv access.
-                // The container is not threadsafe and shared with some helper classes.
-                // It must be! But don't forget to unlock it.
-                m_aChildTaskContainer.lock();
-
-                sal_uInt32  nCount      = m_aChildTaskContainer.getCount();
-                sal_uInt32  nPosition   = 0;
-                while   (
-                            ( nPosition     <   nCount      )   &&
-                            ( xReturn.is()  ==  sal_False   )
-                        )
-                {
-                    // Get next child and compare with searched name.
-                    // But allow task to search at himself only!
-                    xReturn = m_aChildTaskContainer[nPosition]->findFrame( sTargetFrameName, FrameSearchFlag::SELF );
-                    ++nPosition;
-                }
-                // Unlock the container.
-                m_aChildTaskContainer.unlock();
-            }
-            //*************************************************************************************************************
-            //  3)  Search for CHILDREN
-            //  Attention:
-            //      We search for ouer childs and his subtrees. That is the reason for using of SELF and CHILDREN as searchflags.
-            //      Never use SIBLINGS for searching. We step over ouer own container. Search for brothers at ouer direct
-            //      childs will do the same and it can be a problem ... RECURSIVE SEARCH ...!
-            //*************************************************************************************************************
-            if  (
-                    ( xReturn.is()                          ==  sal_False                   )   &&
-                    ( nSearchFlags                          &   FrameSearchFlag::CHILDREN   )   &&
-                    ( m_aChildTaskContainer.hasElements()   ==  sal_True                    )
-                )
-            {
-                LOG_TARGETINGSTEP( "Desktop", m_sName, "react to CHILDREN" )
-                // Lock container for exclusiv access.
-                // The container is not threadsafe and shared with some helper classes.
-                // It must be! But don't forget to unlock it.
-                m_aChildTaskContainer.lock();
-
-                sal_uInt32  nCount      = m_aChildTaskContainer.getCount();
-                sal_uInt32  nPosition   = 0;
-                while   (
-                            ( nPosition     <   nCount      )   &&
-                            ( xReturn.is()  ==  sal_False   )
-                        )
-                {
-                    // Get next child and search on it for subframes with searched name.
-                       xReturn = m_aChildTaskContainer[nPosition]->findFrame( sTargetFrameName, FrameSearchFlag::SELF | FrameSearchFlag::CHILDREN );
-                    ++nPosition;
-                }
-                m_aChildTaskContainer.unlock();
-            }
-            //*************************************************************************************************************
-            //  4)  If we have the license to create a new task then we do it.
-            //      Create a new task, initialize it with an empty window, set default parameters and append it on desktop!
-            //*************************************************************************************************************
-//              Praeprozessor Bug!
-//              Wenn nach CREATE ein Space steht wird versucht es durch das Define CREATE aus tools/rtti.hxx zu ersetzen
-//              was fehlschlaegt und die naechsten 3 Klammern ")){" unterschlaegt!
-//              Dann meckert der Compiler das natuerlich an ...
-            if((xReturn.is()==sal_False)&&(nSearchFlags&FrameSearchFlag::CREATE))
-            {
-                LOG_TARGETINGSTEP( "Desktop", m_sName, "react to CREATE" )
-                //xReturn = impl_createNewTask( sTargetFrameName );
-                xReturn = m_aTaskCreator.createNewSystemTask( sTargetFrameName );
-            }
-        }
-    }
-
-    // Log some special informations about search. (Active in debug version only, if special mode is set!)
-    LOG_RESULT_FINDFRAME( "Desktop", m_sName, xReturn )
-    // Return with result of operation.
-    return xReturn;
-}
-*/
 //*****************************************************************************************************************
 //   XFrame
 //*****************************************************************************************************************
