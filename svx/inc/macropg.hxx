@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 10:07:35 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #include <hash_map>
 
 typedef ::std::hash_map< ::rtl::OUString, ::std::pair< ::rtl::OUString, ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > EventsHash;
-typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString*, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > UIEventsStringHash;
+typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > UIEventsStringHash;
 
 class _SvxMacroTabPage;
 class SvStringsDtor;
