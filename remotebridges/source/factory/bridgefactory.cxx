@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgefactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-27 09:08:43 $
+ *  last change: $Author: jbu $ $Date: 2000-10-30 09:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,13 @@ namespace remotebridges_factory
                             if( seq.getConstArray()[i] != sMetaService )
                             {
                                 sal_Int32 nIndex = seq.getConstArray()[i].lastIndexOf( '.' );
-                                OUString sProtocol = seq.getConstArray()[i].copy( nIndex+1).toLowerCase();
-                                m_mapProtocolToService[ sProtocol ] = seq.getConstArray()[i];
+                                OUString sSuffix = seq.getConstArray()[i].copy(nIndex+1);
+                                if( sSuffix.getLength() > 6  &&
+                                    0 == sSuffix.copy( sSuffix.getLength() - 6 ).compareToAscii( "Bridge" ) )
+                                {
+                                    OUString sProtocol = sSuffix.copy(0 , sSuffix.getLength()-6 ).toLowerCase();
+                                    m_mapProtocolToService[ sProtocol ] = seq.getConstArray()[i];
+                                }
                             }
                         }
                     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote_bridge.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-27 09:00:57 $
+ *  last change: $Author: jbu $ $Date: 2000-10-30 09:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,8 +394,8 @@ namespace remotebridges_bridge
             {
                 static Sequence< OUString > seqNames(3);
                 seqNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.bridge.Bridge" );
-                seqNames.getArray()[1] = OUString::createFromAscii( "com.sun.star.bridge.Iiop" );
-                seqNames.getArray()[2] = OUString::createFromAscii( "com.sun.star.bridge.Urp" );
+                seqNames.getArray()[1] = OUString::createFromAscii( "com.sun.star.bridge.IiopBridge" );
+                seqNames.getArray()[2] = OUString::createFromAscii( "com.sun.star.bridge.UrpBridge" );
 
                 pNames = &seqNames;
             }
