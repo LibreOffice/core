@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:18:12 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,7 @@ uno::Reference< drawing::XDrawPage >  SdXImpressDocument::CreateXDrawPage( SdPag
 }
 */
 
-UNO3_GETIMPLEMENTATION_IMPL( SdXImpressDocument );
+UNO3_GETIMPLEMENTATION2_IMPL( SdXImpressDocument, SfxBaseModel );
 
 // XInterface
 uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
@@ -383,7 +383,6 @@ uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType ) 
     else QUERYINT(presentation::XHandoutMasterSupplier);
     else QUERYINT(document::XLinkTargetSupplier);
     else QUERYINT(style::XStyleFamiliesSupplier);
-    else QUERYINT(lang::XUnoTunnel);
     else QUERYINT(com::sun::star::ucb::XAnyCompareFactory);
     else QUERYINT(view::XRenderable);
     else if( mbImpressDoc && rType == ITYPE(presentation::XPresentationSupplier) )
@@ -415,7 +414,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
 
-        const sal_Int32 nOwnTypes = mbImpressDoc ? 15 : 12;     // !DANGER! Keep this updated!
+        const sal_Int32 nOwnTypes = mbImpressDoc ? 14 : 11;     // !DANGER! Keep this updated!
 
         maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
         uno::Type* pTypes = maTypeSequence.getArray();
@@ -429,7 +428,6 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         *pTypes++ = ITYPE(drawing::XDrawPagesSupplier);
         *pTypes++ = ITYPE(document::XLinkTargetSupplier);
         *pTypes++ = ITYPE(style::XStyleFamiliesSupplier);
-        *pTypes++ = ITYPE(lang::XUnoTunnel);
         *pTypes++ = ITYPE(com::sun::star::ucb::XAnyCompareFactory);
         *pTypes++ = ITYPE(view::XRenderable);
         if( mbImpressDoc )
