@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-01-16 15:04:43 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ __EXPORT ScDdeLink::~ScDdeLink()
 {
     // Verbindung aufheben
 
-    delete pResult;
+    // pResult is refcounted
 }
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
@@ -209,12 +209,11 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
 
     if (!nRows || !nCols)               // keine Daten
     {
-        DELETEZ(pResult);
+        pResult.Clear();
     }
     else                                // Daten aufteilen
     {
         //  Matrix immer neu anlegen, damit bIsString nicht durcheinanderkommt
-        delete pResult;
         pResult = new ScMatrix( nCols, nRows );
 
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
@@ -274,13 +273,12 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
 
 void ScDdeLink::NewData(USHORT nCols, USHORT nRows)
 {
-    delete pResult;
     pResult = new ScMatrix( nCols, nRows );
 }
 
 void ScDdeLink::ResetValue()
 {
-    DELETEZ(pResult);
+    pResult.Clear();
 
     //  Es hat sich was getan...
     //  Tracking, FID_DATACHANGED etc. passiert von aussen
