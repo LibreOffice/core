@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-03 13:48:07 $
+ *  last change: $Author: mba $ $Date: 2001-07-06 15:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,7 +554,16 @@ sal_Bool UCBContentHelper::MakeFolder( const String& rFolder )
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     String aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     aURL.removeSegment();
+    Content aCnt;
+    Content aNew;
+    if ( Content::create( aURL.GetMainURL(), Reference< XCommandEnvironment >(), aCnt ) )
+        return MakeFolder( aCnt, aTitle, aNew );
+    else
+        return sal_False;
+}
 
+sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Content& rNew )
+{
     try
     {
         Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment > () );
@@ -589,8 +598,7 @@ sal_Bool UCBContentHelper::MakeFolder( const String& rFolder )
                 Any* pValues = aValues.getArray();
                 pValues[0] = makeAny( OUString( aTitle ) );
 
-                Content aNewFolder;
-                if ( !aCnt.insertNewContent( rCurr.Type, aNames, aValues, aNewFolder ) )
+                if ( !aCnt.insertNewContent( rCurr.Type, aNames, aValues, rNew ) )
                     continue;
 
                 return sal_True;

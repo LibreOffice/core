@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-07 07:38:29 $
+ *  last change: $Author: mba $ $Date: 2001-07-06 15:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,11 @@
 
 #include <tools/string.hxx>
 
+namespace ucb
+{
+    class Content;
+};
+
 namespace utl
 {
     class UCBContentHelper
@@ -95,6 +100,7 @@ namespace utl
 
         static sal_Bool             CanMakeFolder( const String& rFolder );
         static sal_Bool             MakeFolder( const String& rFolder );
+        static sal_Bool             MakeFolder( ::ucb::Content& rParent, const String& rTitle, ::ucb::Content& rNewFolder );
         static sal_Bool             HasParentFolder( const String& rFolder );
 
         static ULONG                GetSize( const String& rContent );
