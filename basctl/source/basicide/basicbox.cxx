@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:00:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,19 +189,25 @@ void __EXPORT BasicLibBox::SFX_NOTIFY(  SfxBroadcaster& rBC, const TypeId&,
 {
     if ( rHint.IsA( TYPE( SfxEventHint ) ) )
     {
-        if ( ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_CREATEDOC ) ||
-             ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_OPENDOC ) )
+        switch ( ((SfxEventHint&)rHint).GetEventId() )
         {
-            FillBox();  // IDE reagiert selbst, wenn == aktuelle Lib
-        }
-        else if ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_SAVEASDOC )
-        {
-            FillBox( TRUE );
-        }
-        else if ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_CLOSEDOC )
-        {
-            if ( SFX_APP()->IsInBasicCall() )   // Nicht wenn Office beendet
-                FillBox();
+            case SFX_EVENT_CREATEDOC:
+            case SFX_EVENT_OPENDOC:
+            {
+                FillBox();  // IDE reagiert selbst, wenn == aktuelle Lib
+            }
+            break;
+            case SFX_EVENT_SAVEASDOC:
+            {
+                FillBox( TRUE );
+            }
+            break;
+            case SFX_EVENT_CLOSEDOC:
+            {
+                if ( SFX_APP()->IsInBasicCall() )   // Nicht wenn Office beendet
+                    FillBox();
+            }
+            break;
         }
     }
 }
