@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.8 2000-10-19 10:13:55 dr Exp $
+	$Id: style.mod,v 1.9 2000-11-01 11:15:55 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -305,7 +305,7 @@
 <!ATTLIST style:master-page style:page-master-name %styleName; #REQUIRED>
 <!ATTLIST style:master-page style:next-style-name %styleName; #IMPLIED>
 
-<!ENTITY % hd-ft-content "( text:p | (style:region-left?|style:region-center?| style:region-right?) )">
+<!ENTITY % hd-ft-content "( text:p | (style:region-left?, style:region-center?, style:region-right?) )">
 <!ELEMENT style:header %hd-ft-content;>
 <!ELEMENT style:footer %hd-ft-content;>
 <!ELEMENT style:header-left %hd-ft-content;>
