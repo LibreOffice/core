@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 12:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef DBACCESS_CORE_API_ROWSET_HXX
 #include "RowSet.hxx"
 #endif
@@ -143,8 +144,12 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
 #ifndef _COMPHELPER_SEQSTREAM_HXX
 #include <comphelper/seqstream.hxx>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 using namespace dbaccess;
@@ -1413,14 +1418,9 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
             xProp->setPropertyValue(PROPERTY_RESULTSETCONCURRENCY,makeAny(m_nResultSetConcurrency));
             xProp->setPropertyValue(PROPERTY_FETCHDIRECTION,makeAny((sal_Int32)m_nFetchDirection));
 
-            String aErr;
-            //  m_pParseTree = m_aParser.parseTree(aErr,aSql);
-            //  if(m_pParseTree)
             {
                 Reference<XNameAccess> xTables;
 
-                //  Reference< XDriverAccess> xManager(m_xServiceManager->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-                //  Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xActiveConnection->getMetaData()->getURL()),UNO_QUERY);
                 Reference< XTablesSupplier > xMasterTables(m_xActiveConnection,UNO_QUERY);
                 if(xMasterTables.is())
                     xTables = xMasterTables->getTables();
@@ -1433,10 +1433,6 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
                 }
 
                 {
-                    //  m_pIterator = new OSQLParseTreeIterator(xTables,m_xActiveConnection->getMetaData(),m_pParseTree);
-                    //  m_pIterator->traverseAll();
-                    //  m_aColumns = m_pIterator->getSelectColumns();
-
                     Reference<XParameters> xParam(m_xStatement,UNO_QUERY);
                     sal_Int32 i = 1;
                     for(ORowVector< ORowSetValue >::const_iterator aIter = m_aParameterRow.begin(); aIter != m_aParameterRow.end();++aIter,++i)
@@ -2193,9 +2189,9 @@ void ORowSet::checkInsert()
         fireProperty(PROPERTY_ID_ISNEW,sal_False,sal_True);
     }
 }
-//************************************************************
+// ***********************************************************
 //  ORowSetClone
-//************************************************************
+// ***********************************************************
 DBG_NAME(ORowSetClone);
 //--------------------------------------------------------------------------
 ORowSetClone::ORowSetClone(ORowSet& rParent)
@@ -2387,33 +2383,4 @@ sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId )
     return 0;
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2000/10/11 11:18:10  fs
-    replace unotools with comphelper
-
-    Revision 1.5  2000/10/05 14:52:16  oj
-    last changed
-
-    Revision 1.4  2000/10/05 09:33:39  fs
-    using comphelper::OPropertyContainer instead of connectivity::OSimplePropertyContainer
-
-    Revision 1.3  2000/10/04 13:34:40  oj
-    some changes for deleteRow and updateRow
-
-    Revision 1.2  2000/09/29 15:20:51  oj
-    rowset impl
-
-    Revision 1.1.1.1  2000/09/19 00:15:38  hr
-    initial import
-
-    Revision 1.2  2000/09/18 14:52:46  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.1  2000/09/01 15:19:23  oj
-    rowset addons
-
-    Revision 1.0 25.07.2000 14:10:09  oj
-------------------------------------------------------------------------*/
 
