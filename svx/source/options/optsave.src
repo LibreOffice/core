@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-27 23:13:35 $
+ *  last change: $Author: os $ $Date: 2001-12-06 13:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ TabPage RID_SFXPAGE_SAVE
     CheckBox CB_LOAD_SETTINGS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 162 , 10 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "~Benutzerspezifische Einstellungen mit dem Dokument laden" ;
         Text [ English ] = "Load user-defined settings with the document" ;
         Text[ english_us ] = "Load user-specific settings with the document";
@@ -183,7 +183,7 @@ TabPage RID_SFXPAGE_SAVE
     CheckBox BTN_DOCINFO
     {
         Pos = MAP_APPFONT ( 12 , 38 ) ;
-        Size = MAP_APPFONT ( 162 , 8 ) ;
+        Size = MAP_APPFONT ( 236 , 8 ) ;
         Text = "E~igenschaften vorher bearbeiten" ;
         Text [ English ] = "~Edit document info before" ;
         Text [ norwegian ] = "~Lagre dem dokumentinformasjon" ;
@@ -212,7 +212,7 @@ TabPage RID_SFXPAGE_SAVE
     CheckBox BTN_BACKUP
     {
         Pos = MAP_APPFONT ( 12 , 49 ) ;
-        Size = MAP_APPFONT ( 162 , 8 ) ;
+        Size = MAP_APPFONT ( 236 , 8 ) ;
         Text = "~Sicherungskopie immer erstellen" ;
         Text [ English ] = "~Backup copy always" ;
         Text [ norwegian ] = "~Alltid sikkerhetskopi" ;
@@ -313,7 +313,7 @@ TabPage RID_SFXPAGE_SAVE
     CheckBox BTN_AUTOSAVEPROMPT
     {
         Pos = MAP_APPFONT ( 22 , 74 ) ;
-        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Size = MAP_APPFONT ( 226 , 8 ) ;
         Text = "Mit ~Rückfrage" ;
         Text [ English ] = "~Prompt to save" ;
         Text [ norwegian ] = "~Anmodning om å lagre" ;
@@ -342,7 +342,7 @@ TabPage RID_SFXPAGE_SAVE
     CheckBox BTN_NOPRETTYPRINTING
     {
         Pos = MAP_APPFONT ( 12 , 85 ) ;
-        Size = MAP_APPFONT ( 260 - 12 - 12 , 8 ) ;
+        Size = MAP_APPFONT ( 236 , 8 ) ;
         Text = "XML-Format auf Größe optimieren (ohne Pretty Printing)" ;
         Text [ english ] = "Size optimization for XML format (no pretty printing)" ;
         Text [ english_us ] = "Size optimization for XML format (no pretty printing)" ;
@@ -397,7 +397,7 @@ TabPage RID_SFXPAGE_SAVE
     CheckBox BTN_RELATIVE_FSYS
     {
         Pos = MAP_APPFONT ( 12 , 110 ) ;
-        Size = MAP_APPFONT ( 94 , 10 ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "im Da~teisystem" ;
         Text [ English ] = "on ~filesystem" ;
         Text [ english_us ] = "~File system" ;
@@ -426,7 +426,7 @@ TabPage RID_SFXPAGE_SAVE
     CheckBox BTN_RELATIVE_INET
     {
         Pos = MAP_APPFONT ( 136 , 110 ) ;
-        Size = MAP_APPFONT ( 94 , 10 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "im Int~ernet" ;
         Text [ English ] = "~Internet" ;
         Text [ english_us ] = "~Internet" ;
