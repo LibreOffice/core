@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-08-30 13:56:10 $
+ *  last change: $Author: os $ $Date: 2001-09-04 12:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,6 @@
 #include <SwStyleNameMapper.hxx>
 #endif
 
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -285,7 +284,7 @@ using namespace com::sun::star::util;
 
 const char cDBFldStart  = '<';
 const char cDBFldEnd    = '>';
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 #define C2S(cChar) String::CreateFromAscii(cChar)
 
 // Hilfsstruktur fuers einfuegen von Datenbankspalten als Felder oder Text
@@ -352,7 +351,7 @@ SV_IMPL_OP_PTRARR_SORT( SwInsDBColumns, SwInsDBColumnPtr )
 struct _DB_ColumnConfigData
 {
     SwInsDBColumns aDBColumns;
-    OUString sSource, sTable, sEdit, sTblList, sTmplNm, sTAutoFmtNm;
+    rtl::OUString sSource, sTable, sEdit, sTblList, sTmplNm, sTAutoFmtNm;
     BOOL bIsTable : 1,
          bIsField : 1,
          bIsHeadlineOn : 1,
@@ -466,8 +465,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             }
         }
         Reference <XNameAccess> xCols = xColSupp->getColumns();
-        Sequence<OUString> aColNames = xCols->getElementNames();
-        const OUString* pColNames = aColNames.getConstArray();
+        Sequence<rtl::OUString> aColNames = xCols->getElementNames();
+        const rtl::OUString* pColNames = aColNames.getConstArray();
         long nCount = aColNames.getLength();
         for (long n = 0; n < nCount; n++)
         {
@@ -506,7 +505,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                                 Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFmt );
                                 Any aFormat = xNumProps->getPropertyValue(C2U("FormatString"));
                                 Any aLocale = xNumProps->getPropertyValue(C2U("Locale"));
-                                OUString sFormat;
+                                rtl::OUString sFormat;
                                 aFormat >>= sFormat;
                                 com::sun::star::lang::Locale aLoc;
                                 aLocale >>= aLoc;
@@ -1193,8 +1192,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 xResultSet = xStatement->executeQuery(aDBData.sCommand);
             else
             {
-                OUString aQuoteChar = xConnection->getMetaData()->getIdentifierQuoteString();
-                OUString sStatement(C2U("SELECT * FROM "));
+                rtl::OUString aQuoteChar = xConnection->getMetaData()->getIdentifierQuoteString();
+                rtl::OUString sStatement(C2U("SELECT * FROM "));
                 sStatement = C2U("SELECT * FROM ");
                 sStatement += aQuoteChar;
                 sStatement += aDBData.sCommand;
@@ -1376,7 +1375,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     }
                     else
                     {
-                        OUString sVal =  xColumn->getString();
+                        rtl::OUString sVal =  xColumn->getString();
                         if(!xColumn->wasNull())
                             rSh.SwEditShell::Insert( sVal );
                     }
@@ -1741,10 +1740,10 @@ BOOL _DB_ColumnConfigData::IsEqualDB( const _DB_ColumnConfigData& rCmp ) const
 /* -----------------------------05.12.00 16:15--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence<OUString> lcl_createSourceNames(const String& rNodeName)
+Sequence<rtl::OUString> lcl_createSourceNames(const String& rNodeName)
 {
-    Sequence<OUString> aSourceNames(11);
-    OUString* pNames = aSourceNames.getArray();
+    Sequence<rtl::OUString> aSourceNames(11);
+    rtl::OUString* pNames = aSourceNames.getArray();
 
     String sTmp( rNodeName );
     const xub_StrLen nPos = sTmp.Len();
@@ -1775,10 +1774,10 @@ Sequence<OUString> lcl_createSourceNames(const String& rNodeName)
 /* -----------------------------05.12.00 16:25--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence<OUString> lcl_CreateSubNames( const String& rSubNodeName )
+Sequence<rtl::OUString> lcl_CreateSubNames( const String& rSubNodeName )
 {
-    Sequence<OUString> aSubSourceNames(6);
-    OUString* pNames = aSubSourceNames.getArray();
+    Sequence<rtl::OUString> aSubSourceNames(6);
+    rtl::OUString* pNames = aSubSourceNames.getArray();
     String sTmp( rSubNodeName );
     const xub_StrLen nPos = sTmp.Len();
     pNames[0] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
@@ -1798,15 +1797,15 @@ Sequence<OUString> lcl_CreateSubNames( const String& rSubNodeName )
 /* -----------------------------06.12.00 13:03--------------------------------
 
  ---------------------------------------------------------------------------*/
-OUString lcl_CreateUniqueName(const Sequence<OUString>& aNames)
+rtl::OUString lcl_CreateUniqueName(const Sequence<rtl::OUString>& aNames)
 {
     sal_Int32 nIdx = aNames.getLength();
-    const OUString* pNames = aNames.getConstArray();
-    OUString sTest(C2U("_"));
-    OUString sRet;
+    const rtl::OUString* pNames = aNames.getConstArray();
+    rtl::OUString sTest(C2U("_"));
+    rtl::OUString sRet;
     while(sal_True)
     {
-        sRet = sTest; sRet += OUString::valueOf(nIdx++);
+        sRet = sTest; sRet += rtl::OUString::valueOf(nIdx++);
         sal_Bool bFound = sal_False;
         for(sal_Int32 i = 0; i < aNames.getLength(); i++)
         {
@@ -1826,60 +1825,60 @@ OUString lcl_CreateUniqueName(const Sequence<OUString>& aNames)
  ---------------------------------------------------------------------------*/
 void SwInsertDBColAutoPilot::Commit()
 {
-    Sequence <OUString> aNames = GetNodeNames(OUString());
-    const OUString* pNames = aNames.getArray();
+    Sequence <rtl::OUString> aNames = GetNodeNames(rtl::OUString());
+    const rtl::OUString* pNames = aNames.getArray();
     //remove entries that contain this data source + table at first
     for(sal_Int32 nNode = 0; nNode < aNames.getLength(); nNode++)
     {
-        Sequence<OUString> aSourceNames(2);
-        OUString* pSourceNames = aSourceNames.getArray();
+        Sequence<rtl::OUString> aSourceNames(2);
+        rtl::OUString* pSourceNames = aSourceNames.getArray();
         pSourceNames[0] = pNames[nNode];
         pSourceNames[0] += C2U("/DataSource");
         pSourceNames[1] = pNames[nNode];
         pSourceNames[1] += C2U("/Command");
         Sequence<Any> aSourceProperties = GetProperties(aSourceNames);
         const Any* pSourceProps = aSourceProperties.getArray();
-        OUString sSource, sCommand;
+        rtl::OUString sSource, sCommand;
         pSourceProps[0] >>= sSource;
         pSourceProps[1] >>= sCommand;
         if(sSource.equals(aDBData.sDataSource) && sCommand.equals(aDBData.sCommand))
         {
-            Sequence<OUString> aElements(1);
+            Sequence<rtl::OUString> aElements(1);
             aElements.getArray()[0] = pNames[nNode];
-            ClearNodeElements(OUString(), aElements);
+            ClearNodeElements(rtl::OUString(), aElements);
         }
     }
 
-    aNames = GetNodeNames(OUString());
-    OUString sNewNode = lcl_CreateUniqueName(aNames);
-    Sequence<OUString> aNodeNames = lcl_createSourceNames(sNewNode);
+    aNames = GetNodeNames(rtl::OUString());
+    rtl::OUString sNewNode = lcl_CreateUniqueName(aNames);
+    Sequence<rtl::OUString> aNodeNames = lcl_createSourceNames(sNewNode);
     Sequence<PropertyValue> aValues(aNodeNames.getLength());
     PropertyValue* pValues = aValues.getArray();
-    const OUString* pNodeNames = aNodeNames.getConstArray();
-    OUString sSlash(C2U("/"));
+    const rtl::OUString* pNodeNames = aNodeNames.getConstArray();
+    rtl::OUString sSlash(C2U("/"));
     for(sal_Int32 i = 0; i < aNodeNames.getLength(); i++)
     {
         pValues[i].Name = sSlash;
         pValues[i].Name += pNodeNames[i];
     }
 
-    pValues[0].Value <<= OUString(aDBData.sDataSource);
-    pValues[1].Value <<= OUString(aDBData.sCommand);
+    pValues[0].Value <<= rtl::OUString(aDBData.sDataSource);
+    pValues[1].Value <<= rtl::OUString(aDBData.sCommand);
     pValues[2].Value <<= aDBData.nCommandType;
-    pValues[3].Value <<= OUString(aEdDbText.GetText());
+    pValues[3].Value <<= rtl::OUString(aEdDbText.GetText());
 
     String sTmp;
     for( USHORT n = 0, nCnt = aLbTableCol.GetEntryCount(); n < nCnt; ++n )
         ( sTmp += aLbTableCol.GetEntry( n ) ) += '\x0a';
 
     if( sTmp.Len() )
-        pValues[4].Value <<= OUString(sTmp);
+        pValues[4].Value <<= rtl::OUString(sTmp);
 
     if( sNoTmpl != (sTmp = aLbDbParaColl.GetSelectEntry()) )
-        pValues[5].Value <<= OUString(sTmp);
+        pValues[5].Value <<= rtl::OUString(sTmp);
 
     if( pTAutoFmt )
-        pValues[6].Value <<= OUString(pTAutoFmt->GetName());
+        pValues[6].Value <<= rtl::OUString(pTAutoFmt->GetName());
 
     const Type& rBoolType = ::getBooleanCppuType();
     sal_Bool bTmp = aRbAsTable.IsChecked();
@@ -1894,18 +1893,18 @@ void SwInsertDBColAutoPilot::Commit()
     bTmp = aRbHeadlEmpty.IsChecked();
     pValues[10].Value.setValue(&bTmp, rBoolType);
 
-    SetSetProperties(OUString(), aValues);
+    SetSetProperties(rtl::OUString(), aValues);
 
     sNewNode += C2U("/ColumnSet");
     String sDelim( String::CreateFromAscii( "/__" ));
 
     LanguageType ePrevLang = (LanguageType)-1;
-    OUString sPrevLang;
+    rtl::OUString sPrevLang;
 
     SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
     for(USHORT nCol = 0; nCol < aDBColumns.Count(); nCol++)
     {
-        OUString sColumnNode = sNewNode;
+        rtl::OUString sColumnNode = sNewNode;
          SwInsDBColumn* pColumn = aDBColumns[nCol];
         String sColumnInsertNode(sColumnNode);
         sColumnInsertNode += sDelim;
@@ -1915,10 +1914,10 @@ void SwInsertDBColAutoPilot::Commit()
             sColumnInsertNode += '0';
         sColumnInsertNode += String::CreateFromInt32(  nCol );
 
-        Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sColumnInsertNode);
+        Sequence <rtl::OUString> aSubNodeNames = lcl_CreateSubNames(sColumnInsertNode);
         Sequence<PropertyValue> aSubValues(aSubNodeNames.getLength());
         PropertyValue* pSubValues = aSubValues.getArray();
-        const OUString* pSubNodeNames = aSubNodeNames.getConstArray();
+        const rtl::OUString* pSubNodeNames = aSubNodeNames.getConstArray();
         for(sal_Int32 i = 0; i < aSubNodeNames.getLength(); i++)
             pSubValues[i].Name = pSubNodeNames[i];
         pSubValues[0].Value <<= pColumn->sColumn;
@@ -1934,12 +1933,12 @@ void SwInsertDBColAutoPilot::Commit()
         LanguageType eLang;
         if( pNF )
         {
-            pSubValues[4].Value <<= OUString(pNF->GetFormatstring());
+            pSubValues[4].Value <<= rtl::OUString(pNF->GetFormatstring());
             eLang = pNF->GetLanguage();
         }
         else
         {
-            pSubValues[4].Value <<= OUString(sTmp);
+            pSubValues[4].Value <<= rtl::OUString(sTmp);
             eLang = ::GetSystemLanguage();
         }
 
@@ -1947,7 +1946,7 @@ void SwInsertDBColAutoPilot::Commit()
         {
             Locale aLocale;
             aLocale = SvxLanguageToLocale( aLocale, eLang );
-            (( sPrevLang = aLocale.Country ) += OUString( '-' )) += aLocale.Language;
+            (( sPrevLang = aLocale.Country ) += rtl::OUString( '-' )) += aLocale.Language;
             ePrevLang = eLang;
         }
 
@@ -1960,17 +1959,17 @@ void SwInsertDBColAutoPilot::Commit()
  ---------------------------------------------------------------------------*/
 void SwInsertDBColAutoPilot::Load()
 {
-    Sequence <OUString> aNames = GetNodeNames(OUString());
-    const OUString* pNames = aNames.getArray();
+    Sequence <rtl::OUString> aNames = GetNodeNames(rtl::OUString());
+    const rtl::OUString* pNames = aNames.getArray();
     SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
     for(sal_Int32 nNode = 0; nNode < aNames.getLength(); nNode++)
     {
         //search for entries with the appropriate data source and table
-        Sequence<OUString> aSourceNames = lcl_createSourceNames(pNames[nNode]);
+        Sequence<rtl::OUString> aSourceNames = lcl_createSourceNames(pNames[nNode]);
 
         Sequence< Any> aDataSourceProps = GetProperties(aSourceNames);
         const Any* pDataSourceProps = aDataSourceProps.getConstArray();
-        OUString sSource, sCommand;
+        rtl::OUString sSource, sCommand;
         sal_Int16 nCommandType;
         pDataSourceProps[0] >>= sSource;
         pDataSourceProps[1] >>= sCommand;
@@ -1994,19 +1993,19 @@ void SwInsertDBColAutoPilot::Load()
             if(pDataSourceProps[10].hasValue())
                  pNewData->bIsEmptyHeadln = *(sal_Bool*)pDataSourceProps[10].getValue();
 
-            OUString sSubNodeName(pNames[nNode]);
+            rtl::OUString sSubNodeName(pNames[nNode]);
             sSubNodeName += C2U("/ColumnSet/");
-            Sequence <OUString> aSubNames = GetNodeNames(sSubNodeName);
-            const OUString* pSubNames = aSubNames.getConstArray();
+            Sequence <rtl::OUString> aSubNames = GetNodeNames(sSubNodeName);
+            const rtl::OUString* pSubNames = aSubNames.getConstArray();
             for(sal_Int32 nSub = 0; nSub < aSubNames.getLength(); nSub++)
             {
-                OUString sSubSubNodeName(sSubNodeName);
+                rtl::OUString sSubSubNodeName(sSubNodeName);
                 sSubSubNodeName += pSubNames[nSub];
-                Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sSubSubNodeName);
+                Sequence <rtl::OUString> aSubNodeNames = lcl_CreateSubNames(sSubSubNodeName);
                 Sequence< Any> aSubProps = GetProperties(aSubNodeNames);
                 const Any* pSubProps = aSubProps.getConstArray();
 
-                OUString sColumn;
+                rtl::OUString sColumn;
                 pSubProps[0] >>= sColumn;
                 sal_Int16 nIndex;
                 pSubProps[1] >>= nIndex;
@@ -2017,7 +2016,7 @@ void SwInsertDBColAutoPilot::Load()
                     pInsDBColumn->bIsDBFmt = *(sal_Bool*)pSubProps[3].getValue();
 
                 pSubProps[4] >>= pInsDBColumn->sUsrNumFmt;
-                OUString sNumberFormatLocale;
+                rtl::OUString sNumberFormatLocale;
                 pSubProps[5] >>= sNumberFormatLocale;
 
                 Locale aLocale;
