@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentIndex.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module text {
 
 /** specifies service of content indexes within a document.@see com::sun::star::text::BaseIndex
  */
-service DocumentIndex
+published service DocumentIndex
 {
     service  com::sun::star::text::BaseIndex;
 
