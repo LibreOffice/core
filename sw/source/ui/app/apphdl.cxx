@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:40:56 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,45 +845,6 @@ void SwModule::ExecOther(SfxRequest& rReq)
         case FN_BUSINESS_CARD:
         case FN_LABEL:
             InsertLab(rReq, nWhich == FN_LABEL);
-            break;
-
-        case SID_SW_DOCMAN_PATH:
-            {
-                ASSERT(pArgs && pArgs->Count(), "fehlende Parameter GetDocManPath");
-                if(!pArgs)
-                    return;
-
-                String aParam(((const SfxStringItem &)pArgs->Get(rReq.GetSlot())).GetValue());
-                String aPath;
-
-                if(aParam == C2S("~~~GetMacroPath"))
-                {
-                    SvtPathOptions aPathOpt;
-                    aPath = URIHelper::SmartRelToAbs( aPathOpt.GetConfigPath() );
-                    if(aPath.Len())
-                        aPath += INET_PATH_TOKEN;
-                }
-                else if(aParam == C2S("~~~GetDefDocExt"))
-                    aPath =
-#if defined(PM2) || defined(MAC_WITHOUT_EXT)
-                    aEmptyStr;
-#else
-                    C2S(".sdw");
-#endif
-                else if(aParam == C2S("~~~SetNoFrameBeep"))
-                {
-                    SwView* pActView = ::GetActiveView();
-                    if( pActView && pActView->GetDocShell() )
-                        pActView->GetDocShell()->GetDoc()->SetFrmBeepEnabled( sal_False );
-                }
-                else if(aParam == C2S("~~~SetFrameBeep"))
-                {
-                    SwView* pActView = ::GetActiveView();
-                    if( pActView && pActView->GetDocShell() )
-                        pActView->GetDocShell()->GetDoc()->SetFrmBeepEnabled( sal_True );
-                }
-                rReq.SetReturnValue(SfxStringItem( SID_SW_DOCMAN_PATH, aPath ));
-            }
             break;
 
         case SID_ATTR_ADDRESS:
