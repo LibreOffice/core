@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 16:36:00 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 
 #include <algorithm>
 
-#include "segmentc.hxx"
 #pragma SW_SEGMENT_CLASS( SBRUNTIME, SBRUNTIME_CODE )
 
 void SbiRuntime::StepNOP()

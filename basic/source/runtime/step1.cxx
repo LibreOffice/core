@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #include "sbintern.hxx"
 #include "iosys.hxx"
 #include "image.hxx"
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBRUNTIME, SBRUNTIME_CODE )
 
 // Laden einer numerischen Konstanten (+ID)
 

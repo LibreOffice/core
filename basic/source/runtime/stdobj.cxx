@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-18 12:35:41 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #include "stdobj.hxx"
 #include "stdobj1.hxx"
 #include "rtlproto.hxx"
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBRUNTIME, SBRUNTIME_CODE )
 
 // Das nArgs-Feld eines Tabelleneintrags ist wie folgt verschluesselt:
 // Zur Zeit wird davon ausgegangen, dass Properties keine Parameter

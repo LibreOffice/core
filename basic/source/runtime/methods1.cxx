@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 17:25:57 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,9 +123,6 @@
 #include "sbunoobj.hxx"
 #endif
 #include "propacc.hxx"
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBRUNTIME, SBRUNTIME_CODE )
 
 
 #if defined (OS2) && defined (__BORLANDC__)

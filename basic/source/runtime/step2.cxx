@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-04 11:16:07 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,6 @@
 
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
-
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBRUNTIME, SBRUNTIME_CODE )
 
 
 /*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-07 14:51:02 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,6 @@
 
 // Makro MEMBER()
 #include <macfix.hxx>
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBRUNTIME, SBRUNTIME_CODE )
 
 
 // #91147 Global reschedule flag

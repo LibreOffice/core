@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-30 14:20:36 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,6 @@ using namespace com::sun::star::bridge;
 #pragma hdrstop
 #include "iosys.hxx"
 #include "sbintern.hxx"
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBRUNTIME, SBRUNTIME_CODE )
 
 // Der Input-Dialog:
 
