@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:59:43 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ static const char* pOp3[] = {
                         // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
     "FIND_G",           // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
     "DCREATE_REDIMP",   // User defined Objekt-Array redimensionieren (+StringId+StringId)
+    "FIND_CM",          // Search inside a class module (CM) to enable global search in time
 };
 
 static const char** pOps[3] = { pOp1, pOp2, pOp3 };
