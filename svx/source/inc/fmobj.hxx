@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:49:25 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ public:
     virtual void ReformatText();
 
     virtual SdrObject*  Clone() const;
-    virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
+    // #116235# virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
     virtual void        operator= (const SdrObject& rObj);
 
     virtual void clonedFrom(const FmFormObj* _pSource);
