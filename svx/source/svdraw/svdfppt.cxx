@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-06 15:33:31 $
+ *  last change: $Author: sj $ $Date: 2002-05-08 14:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,8 +1248,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     case 1 :
                     case 3 :        // - we have to get a single textobj
                     {
-                        bAutoGrowHeight = sal_False;
-                        bAutoGrowWidth = sal_True;
+                        bAutoGrowHeight = sal_True;
+                        bAutoGrowWidth = sal_False;
                     }
                     break;
                 }
