@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-28 15:04:44 $
+ *  last change: $Author: bm $ $Date: 2001-05-29 10:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,13 +820,16 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataSourceLabelsInFirstRow" )));
                         aAny >>= bFirstRow;
 
-                        mrExport.AddAttribute( XML_NAMESPACE_CHART,
-                                               ::xmloff::token::GetXMLToken( ::xmloff::token::XML_DATA_SOURCE_HAS_LABELS ),
-                                               ( bFirstCol
-                                                 ? ( bFirstRow
-                                                     ?  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_BOTH )
-                                                     :  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_COLUMN ))
-                                                 :  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_ROW )));
+                        if( bFirstCol || bFirstRow )
+                        {
+                            mrExport.AddAttribute( XML_NAMESPACE_CHART,
+                                                   ::xmloff::token::GetXMLToken( ::xmloff::token::XML_DATA_SOURCE_HAS_LABELS ),
+                                                   ( bFirstCol
+                                                     ? ( bFirstRow
+                                                         ?  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_BOTH )
+                                                         :  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_COLUMN ))
+                                                     : ::xmloff::token::GetXMLToken( ::xmloff::token::XML_ROW )));
+                        }
                     }
                     catch( beans::UnknownPropertyException )
                     {
