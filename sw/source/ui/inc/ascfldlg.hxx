@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-19 13:51:31 $
+ *  last change: $Author: tl $ $Date: 2001-03-22 10:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _SVX_TXENCBOX_HXX
 #include <svx/txencbox.hxx>
 #endif
+#ifndef _SVX_LANGBOX_HXX
+#include <svx/langbox.hxx>
+#endif
 
 class SwAsciiOptions;
 class SvStream;
@@ -92,7 +95,7 @@ class SwAsciiFilterDlg : public SfxModalDialog
     FixedText           aFontFT;
     ListBox             aFontLB;
     FixedText           aLanguageFT;
-    ListBox             aLanguageLB;
+    SvxLanguageBox      aLanguageLB;
     FixedText           aCRLF_FT;
     RadioButton         aCRLF_RB, aCR_RB, aLF_RB;
     OKButton            aOkPB;

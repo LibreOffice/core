@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 12:55:55 $
+ *  last change: $Author: tl $ $Date: 2001-03-22 10:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,17 +267,8 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                             GetDefault( nWhich )).GetLanguage());
             }
 
-            const USHORT nLanguageCount = (USHORT) SvxGetSelectableLanguages().getLength();
-            const util::Language *pLang = SvxGetSelectableLanguages().getConstArray();
-            for( USHORT i = 0; i < nLanguageCount; ++i )
-            {
-                LanguageType eType = pLang[ i ];
-                USHORT nPos = aLanguageLB.InsertEntry( ::GetLanguageString( eType ) );
-
-                aLanguageLB.SetEntryData( nPos, (void*)(ULONG)eType );
-                if( eType == aOpt.GetLanguage() )
-                    aLanguageLB.SelectEntryPos( nPos );
-            }
+            aLanguageLB.SetLanguageList( LANG_LIST_ALL, TRUE, FALSE );
+            aLanguageLB.SelectLanguage( aOpt.GetLanguage() );
         }
     }
     else
@@ -336,8 +327,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     if( aFontLB.IsVisible() )
     {
         sFont = aFontLB.GetSelectEntry();
-        nLng = (ULONG)aLanguageLB.GetEntryData(
-                        aLanguageLB.GetSelectEntryPos() );
+        nLng = (ULONG)aLanguageLB.GetSelectLanguage();
     }
 
     rOptions.SetFontName( sFont );
@@ -396,8 +386,7 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
 {
     LineEnd eOldEnd = GetCRLF(), eEnd = (LineEnd)-1;
     ULONG nLng = aFontLB.IsVisible()
-                    ? (ULONG)aLanguageLB.GetEntryData(
-                        aLanguageLB.GetSelectEntryPos() )
+                    ? (ULONG)aLanguageLB.GetSelectLanguage()
                     : 0,
             nOldLng = nLng;
 
@@ -518,14 +507,8 @@ which charset and language?
     bSaveLineStatus = TRUE;
 
     if( nOldLng != nLng && aFontLB.IsVisible() )
-    {
-        for( USHORT n = 0, nCnt = aLanguageLB.GetEntryCount(); n < nCnt; ++n )
-            if( nLng == (ULONG)aLanguageLB.GetEntryData( n ))
-            {
-                aLanguageLB.SelectEntryPos( n );
-                break;
-            }
-    }
+        aLanguageLB.SelectLanguage( nLng );
+
     return 0;
 }
 
@@ -539,6 +522,9 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/02/21 12:55:55  jp
+      use new function GetWhichOfScript() to get right WhichId
+
       Revision 1.2  2001/01/19 13:48:26  jp
       replace own code with new svx classes
 
