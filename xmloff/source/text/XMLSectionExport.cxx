@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-29 12:32:58 $
+ *  last change: $Author: dvo $ $Date: 2001-05-29 15:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,12 +118,12 @@
 #include <com/sun/star/container/XNamed.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_XDOCUMENTINDEX_HPP_
-#include <com/sun/star/text/XDocumentIndex.hpp>
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#ifndef _COM_SUN_STAR_TEXT_XDOCUMENTINDEX_HPP_
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
@@ -132,6 +132,10 @@
 
 #ifndef _COM_SUN_STAR_TEXT_BIBLIOGRAPHYDATAFIELD_HPP_
 #include <com/sun/star/text/BibliographyDataField.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELDSSUPPLIER_HPP_
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -182,9 +186,9 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::PropertyValues;
 using ::com::sun::star::beans::PropertyState;
 using ::com::sun::star::container::XIndexReplace;
+using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNamed;
 using ::com::sun::star::lang::XServiceInfo;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::uno::XInterface;
 
 
@@ -1610,32 +1614,37 @@ const sal_Char sAPI_IsSortAscending[] = "IsSortAscending";
 
 void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
 {
-    // first: get field master
-    // (we'll create one, and get the only master for this type)
-    Reference<XMultiServiceFactory> xFactory(rExport.GetModel(),UNO_QUERY);
-    if( xFactory.is() )
+    // first: get field master (via text field supplier)
+    Reference<XTextFieldsSupplier> xTextFieldsSupp( rExport.GetModel(),
+                                                    UNO_QUERY );
+    if ( xTextFieldsSupp.is() )
     {
         const OUString sFieldMaster_Bibliography(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_FieldMaster_Bibliography));
 
-        const OUString sBracketBefore(
-            RTL_CONSTASCII_USTRINGPARAM("BracketBefore"));
-        const OUString sBracketAfter(
-            RTL_CONSTASCII_USTRINGPARAM("BracketAfter"));
-        const OUString sIsNumberEntries(
-            RTL_CONSTASCII_USTRINGPARAM("IsNumberEntries"));
-        const OUString sIsSortByPosition(
-            RTL_CONSTASCII_USTRINGPARAM("IsSortByPosition"));
-        const OUString sSortKeys(
-            RTL_CONSTASCII_USTRINGPARAM("SortKeys"));
-
-        Reference<XInterface> xIfc =
-            xFactory->createInstance(sFieldMaster_Bibliography);
-        if( xIfc.is() )
+        // get bibliography field master
+        Reference<XNameAccess> xMasters =
+            xTextFieldsSupp->getTextFieldMasters();
+        if ( xMasters->hasByName(sFieldMaster_Bibliography) )
         {
-            Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
+            Any aAny =
+                xMasters->getByName(sFieldMaster_Bibliography);
+            Reference<XPropertySet> xPropSet;
+            aAny >>= xPropSet;
 
-            Any aAny;
+            DBG_ASSERT( xPropSet.is(), "field master must have XPropSet" );
+
+            const OUString sBracketBefore(
+                RTL_CONSTASCII_USTRINGPARAM("BracketBefore"));
+            const OUString sBracketAfter(
+                RTL_CONSTASCII_USTRINGPARAM("BracketAfter"));
+            const OUString sIsNumberEntries(
+                RTL_CONSTASCII_USTRINGPARAM("IsNumberEntries"));
+            const OUString sIsSortByPosition(
+                RTL_CONSTASCII_USTRINGPARAM("IsSortByPosition"));
+            const OUString sSortKeys(
+                RTL_CONSTASCII_USTRINGPARAM("SortKeys"));
+
             OUString sTmp;
 
             aAny = xPropSet->getPropertyValue(sBracketBefore);
