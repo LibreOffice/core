@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:29:42 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 13:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,7 @@ namespace connectivity
         static jclass getMyClass();
         // nur zum Zerstoeren des C++ Pointers in vom JSbxObject
         // abgeleiteten Java Objekten
-        //static jclass getJSbxObjectClass();
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
     protected:
         // der JAVA Handle zu dieser Klasse
@@ -159,6 +158,7 @@ namespace connectivity
         java_lang_Class *   getClass();
 
         ::rtl::OUString     toString();
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xFactory; }
     };
 }
 #endif //_CONNECTIVITY_JAVA_LANG_OBJJECT_HXX_

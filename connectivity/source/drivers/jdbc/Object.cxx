@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 13:43:08 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 13:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@ JavaVM_ *   pJRE_javaVM = NULL;
 
 int SDB_JRE_InitJava(const Reference<XMultiServiceFactory >& _rxFactory)
 {
+    OSL_ENSURE(_rxFactory.is(),"No XMultiServiceFactory a.v.!");
+    if(!_rxFactory.is())
+        return 0;
+
     int result = 0;
     JNIEnv * pEnv = NULL;
 
