@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-22 12:57:00 $
+ *  last change: $Author: nf $ $Date: 2000-11-27 07:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ USHORT Export::GetLangByIsoLang( const ByteString &rIsoLang )
     else if ( sLang == ByteString( HEBREW_ISO ).ToUpperAscii())
         return HEBREW;
 
-    return 0;
+    return 0xFFFF;
 }
 
 /*****************************************************************************/
