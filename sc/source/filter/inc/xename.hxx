@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xename.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:09:52 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 
 // ============================================================================
 
+class ScRangeList;
 class XclExpNameManagerImpl;
 
 /** Manager that stores all internal defined names (NAME records) of the document. */
