@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-04-19 12:51:01 $
+ *  last change: $Author: os $ $Date: 2002-08-07 13:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,8 +360,8 @@ void SvxRubyDialog::ClearCharStyleList()
     {
         void* pData = aCharStyleLB.GetEntryData(i);
         delete (OUString*)pData;
-        aCharStyleLB.RemoveEntry(i);
     }
+    aCharStyleLB.Clear();
 }
 /* -----------------------------09.01.01 17:17--------------------------------
 
