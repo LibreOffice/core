@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:14:36 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,8 @@ _ReadFieldParams::_ReadFieldParams( const String& _rData )
             && (c = aData.GetChar( nNext )) != ' '
             && c != '"'
             && c != '\\'
-            && c != 132  )
+            && c != 132
+            && c != 0x201c )
         ++nNext;
 
     nFnd      = nNext;
@@ -296,33 +297,35 @@ xub_StrLen _ReadFieldParams::GoToTokenParam()
     return STRING_NOTFOUND;
 }
 
-long _ReadFieldParams::SkipToNextToken() // ret: -2: NOT a '\' parameter but normal Text
+// ret: -2: NOT a '\' parameter but normal Text
+long _ReadFieldParams::SkipToNextToken()
 {
     long nRet = -1;     // Ende
-//  aData.SetChar( nSavPtr, cLastChar );
-    if(    (STRING_NOTFOUND != nNext)
-        && (nLen > nNext)
-        && STRING_NOTFOUND != ( nFnd = FindNextStringPiece( nNext ) ))
+    if (
+         (STRING_NOTFOUND != nNext) && (nLen > nNext) &&
+         STRING_NOTFOUND != (nFnd = FindNextStringPiece(nNext))
+       )
     {
         nSavPtr = nNext;
-//      cLastChar = aData.GetChar( nSavPtr );
 
-        if(    '\\' == aData.GetChar( nFnd )
-            && '\\' != aData.GetChar( nFnd + 1 ) ) // Options-Parameter gefunden
+        if ('\\' == aData.GetChar(nFnd) && '\\' != aData.GetChar(nFnd + 1))
         {
-            nRet = aData.GetChar( ++nFnd );
+            nRet = aData.GetChar(++nFnd);
             nNext = ++nFnd;             // und dahinter setzen
         }
         else
         {
             nRet = -2;
-            if(    (STRING_NOTFOUND != nSavPtr )
-                && ('"' == aData.GetChar( nSavPtr - 1 )) )
+            if (
+                 (STRING_NOTFOUND != nSavPtr ) &&
+                 (
+                   ('"' == aData.GetChar(nSavPtr - 1)) ||
+                   (0x201d == aData.GetChar(nSavPtr - 1))
+                 )
+               )
             {
-                nSavPtr--;
-//              cLastChar = aData.GetChar( nSavPtr );
+                --nSavPtr;
             }
-//          aData.SetChar( nSavPtr, 0 );
         }
     }
     return nRet;
@@ -351,12 +354,14 @@ xub_StrLen _ReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
         return STRING_NOTFOUND;     // String End reached!
 
     if(     (aData.GetChar( n ) == '"')     // Anfuehrungszeichen vor Para?
+        ||  (aData.GetChar( n ) == 0x201c)
         ||  (aData.GetChar( n ) == 132) )
     {
         n++;                        // Anfuehrungszeichen ueberlesen
         n2 = n;                     // ab hier nach Ende suchen
         while(     (nLen > n2)
                 && (aData.GetChar( n2 ) != '"')
+                && (aData.GetChar( n2 ) != 0x201d)
                 && (aData.GetChar( n2 ) != 147) )
             n2++;                   // Ende d. Paras suchen
     }
@@ -2854,7 +2859,6 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
         {
             USHORT eOptions = TOI_SAME_ENTRY | TOI_CASE_SENSITIVE;
 
-
             // TOX_OUTLINELEVEL setzen wir genau dann, wenn
             // die Parameter \o in 1 bis 9 liegen
             // oder der Parameter \f existiert
@@ -3173,14 +3177,18 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
             switch( eType )
             {
                 case TOX_CONTENT:
-                    if (eCreateFrom)
                     {
-                        if (eCreateFrom == TOX_OUTLINELEVEL)
+                        //If we would be created from outlines, either explictly or by default
+                        //then see if we need extra styles added to the outlines
+                        USHORT eEffectivelyFrom = eCreateFrom ? eCreateFrom : TOX_OUTLINELEVEL;
+                        if (eEffectivelyFrom & TOX_OUTLINELEVEL)
                         {
                             if (AddExtraOutlinesAsExtraStyles(*pBase))
-                                eCreateFrom |= TOX_TEMPLATE;
+                                eCreateFrom |= (TOX_TEMPLATE | TOX_OUTLINELEVEL);
                         }
-                        pBase->SetCreate(eCreateFrom);
+
+                        if (eCreateFrom)
+                            pBase->SetCreate(eCreateFrom);
                     }
                     break;
                 case TOX_ILLUSTRATIONS:
@@ -3278,8 +3286,15 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     SwPaM aRegion(*pPaM);
     aRegion.Move(fnMoveBackward);
     ASSERT(rDoc.GetCurTOX(*aRegion.GetPoint()), "Misunderstood how toc works");
-    if(rDoc.GetCurTOX(*aRegion.GetPoint()))
+    if (SwTOXBase* pBase = (SwTOXBase*)rDoc.GetCurTOX(*aRegion.GetPoint()))
     {
+        // Set the column number for index
+        SfxItemSet aSet( rDoc.GetAttrPool(), RES_COL, RES_COL );
+        SwFmtCol aCol;
+        aCol.Init( nIndexCols, 708, USHRT_MAX );
+        aSet.Put( aCol );
+        pBase->SetAttrSet( aSet );
+
         maSectionManager.PrependedInlineNode(*pPaM->GetPoint(),
             *aRegion.GetNode());
     }
