@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: mtg $ $Date: 2000-11-28 09:32:32 $
+#   last change: $Author: mtg $ $Date: 2000-12-20 11:24:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -54,7 +54,7 @@
 #
 #   All Rights Reserved.
 #
-#   Contributor(s): _______________________________________
+#   Contributor(s): Martin Gallwey (gallwey@sun.com)
 #
 #
 #
