@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:54:18 $
+ *  last change: $Author: kso $ $Date: 2000-12-05 16:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kai Sommerfeld ( kso@sun.com )
  *
  *
  ************************************************************************/
@@ -111,17 +111,6 @@ private:
                       ::com::sun::star::uno::Any& rTargetURL,
                       sal_Bool bChildren,
                       ::com::sun::star::uno::Any& rChildren );
-    sal_Bool setData( const ::rtl::OUString& rOldPath,
-                      const ::rtl::OUString& rPath,
-                      const ::com::sun::star::uno::Any& rTitle,
-                      const ::com::sun::star::uno::Any& rTargetURL,
-                      sal_Bool bCreate,
-                      sal_Bool bFailIfExists,
-                      sal_Bool bChildren,
-                      const ::com::sun::star::uno::Any& rChildren,
-                      const ::com::sun::star::uno::Reference<
-                          ::com::sun::star::util::XChangesBatch >& rxBatch,
-                      const ::rtl::OUString& rBatchPath );
     ::rtl::OUString createPathFromHierarchyURL( const ::rtl::OUString& rURL );
 
 public:

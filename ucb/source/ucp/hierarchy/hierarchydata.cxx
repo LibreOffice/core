@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-04 11:37:16 $
+ *  last change: $Author: kso $ $Date: 2000-12-05 16:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kai Sommerfeld ( kso@sun.com )
  *
  *
  ************************************************************************/
@@ -294,16 +294,8 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
 }
 
 //=========================================================================
-sal_Bool HierarchyEntry::setData( const OUString& rOldPath,
-                                  const OUString& rPath,
-                                  const Any& rTitle,
-                                  const Any& rTargetURL,
-                                  sal_Bool bCreate,
-                                   sal_Bool bFailIfExists,
-                                   sal_Bool bChildren,
-                                  const Any& rChildren,
-                                  const Reference< XChangesBatch >& rxBatch,
-                                  const OUString& rBatchPath )
+sal_Bool HierarchyEntry::setData(
+                    const HierarchyEntryData& rData, sal_Bool bCreate )
 {
     try
     {
@@ -322,77 +314,39 @@ sal_Bool HierarchyEntry::setData( const OUString& rOldPath,
 
             OUString aParentPath
                         = OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
-            OUString aKey  = rPath;
+            OUString aKey  = m_aPath;
             sal_Bool bRoot = sal_True;
 
-            sal_Int32 nPos = rPath.lastIndexOf( '/' );
+            sal_Int32 nPos = m_aPath.lastIndexOf( '/' );
             if ( nPos != -1 )
             {
-                aKey = rPath.copy( nPos + 1 );
+                aKey = m_aPath.copy( nPos + 1 );
 
                 // Skip "/Children" segment of the path, too.
-                nPos = rPath.lastIndexOf( '/', nPos - 1 );
+                nPos = m_aPath.lastIndexOf( '/', nPos - 1 );
 
                 VOS_ENSURE( nPos != -1,
                             "HierarchyEntry::setData - Wrong path!" );
 
                 aParentPath += OUString::createFromAscii( "/" );
-                aParentPath += rPath.copy( 0, nPos );
+                aParentPath += m_aPath.copy( 0, nPos );
                 bRoot = sal_False;
             }
 
-            OUString aBatchPath
-                = ( rBatchPath.getLength() > 0 ) ? rBatchPath : aParentPath;
+            Sequence< Any > aArguments( 1 );
+            aArguments[ 0 ] <<= aParentPath;
 
-            Reference< XChangesBatch > xBatch = rxBatch;
-            if ( !xBatch.is() )
-            {
-                Sequence< Any > aArguments( 1 );
-                aArguments[ 0 ] <<= aParentPath;
-
-                xBatch = Reference< XChangesBatch >(
+            Reference< XChangesBatch > xBatch(
                     m_xConfigProvider->createInstanceWithArguments(
                         OUString::createFromAscii(
                             "com.sun.star.configuration.ConfigurationUpdateAccess" ),
                         aArguments ),
                     UNO_QUERY );
-            }
 
             VOS_ENSURE( xBatch.is(),
                         "HierarchyEntry::setData - No batch!" );
 
             Reference< XNameAccess > xParentNameAccess( xBatch, UNO_QUERY );
-
-            if ( rxBatch.is() )
-            {
-                Reference< XHierarchicalNameAccess > xTmp(
-                                            xParentNameAccess, UNO_QUERY );
-
-                VOS_ENSURE( xTmp.is(),
-                            "HierarchyEntry::setData - No hier name access!" );
-
-                if ( xTmp.is() )
-                {
-                    OUString aName = rPath.copy(
-                                        aBatchPath.getLength()
-                                              - HIERARCHY_ROOT_DB_KEY_LENGTH );
-                    sal_Int32 nPos1 = aName.lastIndexOf( '/' );
-                    if ( nPos1 != -1 )
-                    {
-                        // Skip "/Children" segment of the path, too.
-                        nPos1 = aName.lastIndexOf( '/', nPos1 - 1 );
-
-                        VOS_ENSURE( nPos1 != -1,
-                                    "HierarchyEntry::setData - Wrong path!" );
-
-                        aName = aName.replaceAt( nPos1,
-                                                 aName.getLength() - nPos1,
-                                                 OUString() );
-                    }
-
-                    xTmp->getByHierarchicalName( aName ) >>= xParentNameAccess;
-                }
-            }
 
             VOS_ENSURE( xParentNameAccess.is(),
                         "HierarchyEntry::setData - No name access!" );
@@ -434,9 +388,6 @@ sal_Bool HierarchyEntry::setData( const OUString& rOldPath,
 
                 if ( bExists )
                 {
-                    if ( bFailIfExists )
-                        return sal_False;
-
                     // Key exists. Replace values.
 
                     aMyKey >>= xNameReplace;
@@ -497,150 +448,19 @@ sal_Bool HierarchyEntry::setData( const OUString& rOldPath,
                     // Set Title value.
                     xNameReplace->replaceByName(
                                 OUString::createFromAscii( "Title" ),
-                                rTitle );
+                                makeAny( rData.aTitle ) );
 
                     // Set TargetURL value.
                     xNameReplace->replaceByName(
                                 OUString::createFromAscii( "TargetURL" ),
-                                rTargetURL );
+                                makeAny( rData.aTargetURL ) );
 
                     if ( xContainer.is() )
                         xContainer->insertByName(
                                             aKey, makeAny( xNameReplace ) );
 
-#ifndef MULTI_COMMIT
                     // Commit changes.
                     xBatch->commitChanges();
-#endif
-
-#if 0
-    // Doesn't work. According to FS possibly never will ...
-
-                    // Set Children, if given.
-                    if ( bChildren )
-                        xNameReplace->replaceByName(
-                                OUString::createFromAscii( "Children" ),
-                                rChildren );
-#else
-    // Copy children manually :-(
-
-                    if ( bChildren && ( rOldPath.getLength() > 0  ) )
-                    {
-                        Reference< XNameAccess > xChildrenNameAccess;
-                        rChildren >>= xChildrenNameAccess;
-
-                        if ( xChildrenNameAccess.is() )
-                        {
-                            Sequence< Any > aArguments( 1 );
-                            aArguments[ 0 ]
-                                <<= OUString::createFromAscii(
-                                                HIERARCHY_ROOT_DB_KEY );
-
-                            Reference< XHierarchicalNameAccess >
-                                xRootHierAccess(
-                                    m_xConfigProvider->createInstanceWithArguments(
-                                        OUString::createFromAscii(
-                                            "com.sun.star.configuration.ConfigurationAccess" ),
-                                        aArguments ),
-                                    UNO_QUERY );
-
-                            VOS_ENSURE( xRootHierAccess.is(),
-                                        "HierarchyEntry::setData - No root!" );
-
-                            if ( xRootHierAccess.is() )
-                            {
-                                Sequence< OUString >aElems
-                                    = xChildrenNameAccess->getElementNames();
-                                const OUString* pElems = aElems.getConstArray();
-                                sal_Int32 nCount = aElems.getLength();
-
-                                if ( nCount > 0 )
-                                {
-                                    OUString aTitleKey =
-                                        OUString::createFromAscii(
-                                                            "/Title" );
-                                    OUString aTargetURLKey =
-                                        OUString::createFromAscii(
-                                                            "/TargetURL" );
-                                    OUString aChildrenKey =
-                                        OUString::createFromAscii(
-                                                            "/Children" );
-
-                                    OUString aFullChildPath = rPath;
-                                    aFullChildPath += aChildrenKey;
-                                    aFullChildPath
-                                        += OUString::createFromAscii( "/" );
-
-                                    OUString aOldFullChildPath = rOldPath;
-                                    aOldFullChildPath += aChildrenKey;
-                                    aOldFullChildPath
-                                        += OUString::createFromAscii( "/" );
-
-                                    // Iterate over children.
-                                    for ( sal_Int32 n = 0; n < nCount; ++n )
-                                    {
-                                        const OUString& rElem = pElems[ n ];
-
-                                        // Get data from old child...
-
-                                        OUString aOldChildPath
-                                                    = aOldFullChildPath;
-                                        aOldChildPath += rElem;
-
-                                        OUString aTitle     = aOldChildPath;
-                                        OUString aTargetURL = aOldChildPath;
-                                        OUString aChildren  = aOldChildPath;
-
-                                        aTitle     += aTitleKey;
-                                        aTargetURL += aTargetURLKey;
-                                        aChildren  += aChildrenKey;
-
-                                        Any aTitleValue
-                                            = xRootHierAccess
-                                                ->getByHierarchicalName(
-                                                                aTitle );
-
-                                        Any aTargetURLValue
-                                            = xRootHierAccess
-                                                ->getByHierarchicalName(
-                                                                aTargetURL );
-                                        Any aChildrenValue
-                                            = xRootHierAccess
-                                                ->getByHierarchicalName(
-                                                                aChildren );
-
-                                        OUString aChildPath = aFullChildPath;
-                                        aChildPath += rElem;
-
-                                        aOldChildPath = aOldFullChildPath;
-                                        aOldChildPath += rElem;
-
-                                        // Recurse...
-                                        if ( !setData( aOldChildPath,
-                                                       aChildPath,
-                                                       aTitleValue,
-                                                       aTargetURLValue,
-                                                       sal_True, // create
-                                                       sal_True, // fail, if exists
-                                                       sal_True, // copy children
-                                                       aChildrenValue,
-                                                       xBatch,   // no commit
-                                                       aBatchPath ) )
-                                            return sal_False;
-                                    }
-                                }
-                            }
-                        }
-                    }
-#endif
-
-#ifdef MULTI_COMMIT
-                    if ( !rxBatch.is() )
-                    {
-                        // Commit changes.
-                        xBatch->commitChanges();
-                    }
-#endif
                     return sal_True;
                 }
             }
@@ -690,22 +510,6 @@ sal_Bool HierarchyEntry::setData( const OUString& rOldPath,
 }
 
 //=========================================================================
-sal_Bool HierarchyEntry::setData(
-                    const HierarchyEntryData& rData, sal_Bool bCreate )
-{
-    return setData( OUString(), // no old path
-                    m_aPath,
-                    makeAny( rData.aTitle ),
-                    makeAny( rData.aTargetURL ),
-                    bCreate,
-                    sal_False,  // don't fail if exists
-                    sal_False,  // no children data given
-                    Any(),
-                    Reference< XChangesBatch >(), // commit data
-                    OUString() );
-}
-
-//=========================================================================
 sal_Bool HierarchyEntry::move( const OUString& rNewURL )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -715,6 +519,13 @@ sal_Bool HierarchyEntry::move( const OUString& rNewURL )
     if ( aNewPath == m_aPath )
         return sal_True;
 
+    if ( aNewPath.compareTo( m_aPath, aNewPath.lastIndexOf( '/' ) + 1 ) != 0 )
+    {
+        VOS_ENSURE( sal_False,
+                    "HierarchyEntry::move - Only rename implemented!" );
+        return sal_False;
+    }
+
 #if 0
        // In the "near future"... ( not yet implemented in config db )
 
@@ -723,45 +534,291 @@ sal_Bool HierarchyEntry::move( const OUString& rNewURL )
        - xNamed::setName( newName )
        - updateaccess commit
 #else
-    if ( aNewPath.compareTo( m_aPath, aNewPath.lastIndexOf( '/' ) + 1 ) != 0 )
+
+    OUString aOldKey  = m_aPath;
+    sal_Bool bOldRoot = sal_True;
+    Reference< XChangesBatch > xOldParentBatch;
+
+    OUString aNewKey  = aNewPath;
+    sal_Bool bNewRoot = sal_True;
+    Reference< XChangesBatch > xNewParentBatch;
+
+    sal_Bool bDifferentParents = sal_True;
+
+    try
     {
-        VOS_ENSURE( sal_False,
-                    "HierarchyEntry::move - Only rename implemented!" );
+        if ( !m_xConfigProvider.is() )
+            m_xConfigProvider = Reference< XMultiServiceFactory >(
+                m_xSMgr->createInstance(
+                    OUString::createFromAscii(
+                        "com.sun.star.configuration.ConfigurationProvider" ) ),
+                UNO_QUERY );
+
+        if ( !m_xConfigProvider.is() )
+            return sal_False;
+
+        OUString aOldParentPath
+                    = OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
+        sal_Int32 nPos = m_aPath.lastIndexOf( '/' );
+        if ( nPos != -1 )
+        {
+            aOldKey = m_aPath.copy( nPos + 1 );
+
+            // Skip "/Children" segment of the path, too.
+            nPos = m_aPath.lastIndexOf( '/', nPos - 1 );
+
+            VOS_ENSURE( nPos != -1, "HierarchyEntry::move - Wrong path!" );
+
+            aOldParentPath += OUString::createFromAscii( "/" );
+            aOldParentPath += m_aPath.copy( 0, nPos );
+            bOldRoot = sal_False;
+        }
+
+        OUString aNewParentPath
+                    = OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
+        nPos = aNewPath.lastIndexOf( '/' );
+        if ( nPos != -1 )
+        {
+            aNewKey = aNewPath.copy( nPos + 1 );
+
+            // Skip "/Children" segment of the path, too.
+            nPos = aNewPath.lastIndexOf( '/', nPos - 1 );
+
+            VOS_ENSURE( nPos != -1, "HierarchyEntry::move - Wrong path!" );
+
+            aNewParentPath += OUString::createFromAscii( "/" );
+            aNewParentPath += aNewPath.copy( 0, nPos );
+            bNewRoot = sal_False;
+        }
+
+        Sequence< Any > aArguments( 1 );
+        aArguments[ 0 ] <<= aOldParentPath;
+
+        xOldParentBatch = Reference< XChangesBatch >(
+            m_xConfigProvider->createInstanceWithArguments(
+                OUString::createFromAscii(
+                    "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+                aArguments ),
+            UNO_QUERY );
+
+        VOS_ENSURE( xOldParentBatch.is(), "HierarchyEntry::move - No batch!" );
+
+        if ( !xOldParentBatch.is() )
+            return sal_False;
+
+        if ( aOldParentPath == aNewParentPath )
+        {
+            bDifferentParents = sal_False;
+            xNewParentBatch = xOldParentBatch;
+        }
+        else
+        {
+            bDifferentParents = sal_True;
+
+            aArguments[ 0 ] <<= aNewParentPath;
+
+            xNewParentBatch = Reference< XChangesBatch >(
+                m_xConfigProvider->createInstanceWithArguments(
+                    OUString::createFromAscii(
+                        "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+                    aArguments ),
+                UNO_QUERY );
+
+            VOS_ENSURE( xNewParentBatch.is(), "HierarchyEntry::move - No batch!" );
+
+            if ( !xNewParentBatch.is() )
+                return sal_False;
+        }
+    }
+    catch ( RuntimeException& )
+    {
+        throw;
+    }
+    catch ( Exception& )
+    {
+        // createInstance, createInstanceWithArguments
+
+        VOS_ENSURE( sal_False, "HierarchyEntry::move - caught Exception!" );
         return sal_False;
     }
 
     //////////////////////////////////////////////////////////////////////
-    // (1) Get old entry...
+    // (1) Get entry...
     //////////////////////////////////////////////////////////////////////
-    Any aTitle;
-    Any aTargetURL;
-    Any aChildren;
-    if ( getData( aTitle, aTargetURL, sal_True, aChildren ) )
+
+    Any aEntry;
+    Reference< XNameAccess >    xOldParentNameAccess;
+    Reference< XNameContainer > xOldNameContainer;
+
+    try
     {
-        //////////////////////////////////////////////////////////////////
-        // (2) Insert entry at new location. Fail, if another entry with
-        //     same key already exists...
-        //////////////////////////////////////////////////////////////////
-        aTitle <<= aNewPath.copy( aNewPath.lastIndexOf( '/' ) + 1 );
-        if ( setData( m_aPath,     // old path
-                      aNewPath,    // new path
-                      aTitle,      // new title
-                      aTargetURL,
-                      sal_True,    // create, if not exists
-                      sal_True,    // fail, if exists
-                      sal_True,    // process aChildren
-                      aChildren,
-                      Reference< XChangesBatch >(),  // commit data
-                      OUString() ) )
+        xOldParentNameAccess
+            = Reference< XNameAccess >( xOldParentBatch, UNO_QUERY );
+
+        VOS_ENSURE( xOldParentNameAccess.is(),
+                    "HierarchyEntry::move - No name access!" );
+
+        if ( !xOldParentNameAccess.is() )
+            return sal_False;
+
+        if ( bOldRoot )
         {
-            //////////////////////////////////////////////////////////////
-            // (3) Remove old entry.
-            //////////////////////////////////////////////////////////////
-            return remove();
+            xOldNameContainer = Reference< XNameContainer >(
+                                        xOldParentNameAccess, UNO_QUERY );
         }
+        else
+        {
+            xOldParentNameAccess->getByName(
+                 OUString::createFromAscii( "Children" ) ) >>= xOldNameContainer;
+        }
+
+        aEntry = xOldNameContainer->getByName( aOldKey );
+    }
+    catch ( NoSuchElementException& )
+    {
+        // getByName
+
+        VOS_ENSURE( sal_False,
+                    "HierarchyEntry::move - caught NoSuchElementException!" );
+        return sal_False;
+    }
+    catch ( WrappedTargetException& )
+    {
+        // getByName
+
+        VOS_ENSURE( sal_False,
+                    "HierarchyEntry::move - caught WrappedTargetException!" );
+        return sal_False;
     }
 
-    return sal_False;
+    //////////////////////////////////////////////////////////////////////
+    // (2) Remove entry... Note: Insert BEFORE remove does not work!
+    //////////////////////////////////////////////////////////////////////
+
+    try
+    {
+        xOldNameContainer->removeByName( aOldKey );
+        xOldParentBatch->commitChanges();
+    }
+    catch ( NoSuchElementException& )
+    {
+        // getByName, removeByName
+
+        VOS_ENSURE( sal_False,
+                    "HierarchyEntry::move - caught NoSuchElementException!" );
+        return sal_False;
+    }
+
+    //////////////////////////////////////////////////////////////////////
+    // (3) Insert entry at new parent...
+    //////////////////////////////////////////////////////////////////////
+
+    try
+    {
+        Reference< XNameReplace > xNewNameReplace;
+        aEntry >>= xNewNameReplace;
+
+        VOS_ENSURE( xNewNameReplace.is(),
+                    "HierarchyEntry::move - No name replace!" );
+
+        if ( !xNewNameReplace.is() )
+            return sal_False;
+
+        Reference< XNameAccess > xNewParentNameAccess;
+        if ( bDifferentParents )
+            xNewParentNameAccess
+                = Reference< XNameAccess >( xNewParentBatch, UNO_QUERY );
+        else
+            xNewParentNameAccess = xOldParentNameAccess;
+
+        VOS_ENSURE( xNewParentNameAccess.is(),
+                    "HierarchyEntry::move - No name access!" );
+
+        if ( !xNewParentNameAccess.is() )
+            return sal_False;
+
+        Reference< XNameContainer > xNewNameContainer;
+        if ( bDifferentParents )
+        {
+            if ( bNewRoot )
+            {
+                xNewNameContainer = Reference< XNameContainer >(
+                                            xNewParentNameAccess, UNO_QUERY );
+            }
+            else
+            {
+                xNewParentNameAccess->getByName(
+                     OUString::createFromAscii( "Children" ) )
+                        >>= xNewNameContainer;
+            }
+        }
+        else
+            xNewNameContainer = xOldNameContainer;
+
+        if ( !xNewNameContainer.is() )
+            return sal_False;
+
+        xNewNameReplace->replaceByName(
+                OUString::createFromAscii( "Title" ), makeAny( aNewKey ) );
+        xNewNameContainer->insertByName( aNewKey, aEntry );
+        xNewParentBatch->commitChanges();
+    }
+    catch ( NoSuchElementException& )
+    {
+        // replaceByName, insertByName, getByName
+
+        VOS_ENSURE( sal_False,
+                    "HierarchyEntry::move - caught NoSuchElementException!" );
+        return sal_False;
+    }
+    catch ( IllegalArgumentException& )
+    {
+        // replaceByName, insertByName
+
+        VOS_ENSURE( sal_False,
+                    "HierarchyEntry::move - caught IllegalArgumentException!" );
+        return sal_False;
+    }
+    catch ( ElementExistException& )
+    {
+        // insertByName
+
+        VOS_ENSURE( sal_False,
+                    "HierarchyEntry::move - caught ElementExistException!" );
+        return sal_False;
+    }
+    catch ( WrappedTargetException& )
+    {
+        // replaceByName, insertByName, getByName
+
+        VOS_ENSURE( sal_False,
+                    "HierarchyEntry::move - caught WrappedTargetException!" );
+        return sal_False;
+    }
+
+#if 0
+    //////////////////////////////////////////////////////////////////////
+    // (4) Commit changes...
+    //////////////////////////////////////////////////////////////////////
+
+    try
+    {
+        xNewParentBatch->commitChanges();
+
+        if ( bDifferentParents )
+            xOldParentBatch->commitChanges();
+    }
+    catch ( WrappedTargetException& )
+    {
+        // commitChanges
+
+        VOS_ENSURE( sal_False,
+                    "HierarchyEntry::move - caught WrappedTargetException!" );
+        return sal_False;
+    }
+#endif
+
+    return sal_True;
 #endif
 }
 
