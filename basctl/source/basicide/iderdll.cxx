@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:44:55 $
+ *  last change: $Author: hr $ $Date: 2004-06-28 14:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,6 @@ void BasicIDEData::InitAccelerator()
         pAccelerator = new Accelerator;
         pAccelerator->InsertItem( 1, KeyCode( KEY_F5 ) );
         pAccelerator->InsertItem( 2, KeyCode( KEY_F5, KEY_SHIFT ) );
-        pAccelerator->InsertItem( 3, KeyCode( KEY_F5, KEY_MOD2 ) );
         pAccelerator->InsertItem( 4, KeyCode( KEY_F7 ) );
         pAccelerator->InsertItem( 5, KeyCode( KEY_F8 ) );
         pAccelerator->InsertItem( 6, KeyCode( KEY_F8, KEY_SHIFT ) );
