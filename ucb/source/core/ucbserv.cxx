@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbserv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-04 17:36:40 $
+ *  last change: $Author: kso $ $Date: 2001-02-06 10:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 
 #ifndef _UCB_HXX
 #include "ucb.hxx"
-#endif
-#ifndef _UCBCFG_HXX
-#include "ucbcfg.hxx"
 #endif
 #ifndef _UCBSTORE_HXX
 #include "ucbstore.hxx"
@@ -151,14 +148,6 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
                UniversalContentBroker::getSupportedServiceNames_Static() ) &&
 
     //////////////////////////////////////////////////////////////////////
-    // UCB Configuration.
-    //////////////////////////////////////////////////////////////////////
-
-    writeInfo( pRegistryKey,
-               UcbConfigurationManager::getImplementationName_Static(),
-               UcbConfigurationManager::getSupportedServiceNames_Static() ) &&
-
-    //////////////////////////////////////////////////////////////////////
     // UCB Store.
     //////////////////////////////////////////////////////////////////////
 
@@ -201,16 +190,6 @@ extern "C" void * SAL_CALL component_getFactory(
                 compareToAscii( pImplName ) == 0 )
     {
         xFactory = UniversalContentBroker::createServiceFactory( xSMgr );
-    }
-
-    //////////////////////////////////////////////////////////////////////
-    // UCB Configuration.
-    //////////////////////////////////////////////////////////////////////
-
-    else if ( UcbConfigurationManager::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
-    {
-        xFactory = UcbConfigurationManager::createServiceFactory( xSMgr );
     }
 
     //////////////////////////////////////////////////////////////////////
