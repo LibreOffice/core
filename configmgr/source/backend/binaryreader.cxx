@@ -2,9 +2,9 @@
 *
 *  $RCSfile: binaryreader.cxx,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: obo $ $Date: 2004-09-08 16:13:01 $
+*  last change: $Author: kz $ $Date: 2005-01-18 13:28:50 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -701,6 +701,14 @@ namespace configmgr
         // --------------------------------------------------------------------------
 
         void BinaryReader::read (Binary &_aValue)
+            SAL_THROW( (io::IOException, uno::RuntimeException) )
+        {
+            readSequence(*this, _aValue);
+        }
+
+        // --------------------------------------------------------------------------
+
+        void BinaryReader::read (StringList &_aValue)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
             readSequence(*this, _aValue);
