@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: mba $ $Date: 2000-10-20 17:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #include "sfxtypes.hxx"
 #include "sfxuno.hxx"
 #include "unoctitm.hxx"
+#include "msgpool.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -285,9 +286,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
         if ( xProv.is() )
         {
             DBG_ASSERT( !pDispatch, "Altes Dispatch nicht entfernt!" );
-
-//(mba)/compview
-            const SfxSlot* pSlot = 0;//SfxComponentViewShell::GetUnoSlot( nId );
+            const SfxSlot* pSlot = SFX_APP()->GetSlotPool( rDispat.GetFrame() ).GetUnoSlot( nId );
             ::com::sun::star::util::URL aURL;
             String aName( pSlot ? String::CreateFromAscii(pSlot->GetUnoName()) : String() );
             String aCmd;
@@ -509,56 +508,6 @@ void SfxStateCache::DeleteFloatingWindows()
         pNextCtrl = pCtrl->GetItemLink();
         pCtrl->DeleteFloatingWindow();
     }
-}
-
-sal_Bool SfxStateCache::UpdateDispatch( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & xProv )
-{
-    if ( bSlotDirty && xProv.is() )
-    {
-        DBG_ASSERT( !pDispatch, "Altes Dispatch nicht entfernt!" );
-
-//(mba)/compview
-        const SfxSlot* pSlot = 0;//SfxComponentViewShell::GetUnoSlot( nId );
-        ::com::sun::star::util::URL aURL;
-        String aName( pSlot ? String::CreateFromAscii(pSlot->GetUnoName()) : String() );
-        String aCmd;
-        if ( aName.Len() )
-        {
-            aCmd = DEFINE_CONST_UNICODE(".uno:");
-            aCmd += aName;
-        }
-        else
-        {
-            aCmd = DEFINE_CONST_UNICODE("slot:");
-            aCmd += String::CreateFromInt32( nId );
-        }
-
-        aURL.Complete = aCmd;
-        Reference < XURLTransformer > xTrans( ::utl::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-        xTrans->parseStrict( aURL );
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
-        if ( xDisp.is() )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel( xDisp, ::com::sun::star::uno::UNO_QUERY );
-            SfxOfficeDispatch* pDisp = NULL;
-            if ( xTunnel.is() )
-            {
-                sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
-                pDisp = (SfxOfficeDispatch*)(nImplementation);
-            }
-
-            if ( pDisp && !pDisp->IsInterceptDispatch() )
-                return sal_False;
-            pDispatch = new BindDispatch_Impl( xDisp, aURL, this );
-            pDispatch->acquire();
-            bSlotDirty = sal_False;
-            bCtrlDirty = sal_True;
-            xDisp->addStatusListener( pDispatch, aURL );
-            aSlotServ.SetSlot(0);
-        }
-    }
-
-    return ( pDispatch != NULL );
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SfxStateCache::GetDispatch() const
