@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-11 14:01:00 $
+ *  last change: $Author: aw $ $Date: 2001-06-25 10:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1214,7 +1214,11 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             awt::Point aPnt;
             if( rVal >>= aPnt )
             {
-                const Point aVclPoint( aPnt.X, aPnt.Y );
+                Point aVclPoint( aPnt.X, aPnt.Y );
+
+                // #88491# position relative to anchor
+                aVclPoint += pObj->GetAnchorPos();
+
                 ((SdrCaptionObj*)pObj)->SetTailPos(aVclPoint);
 
                 return;
@@ -1747,7 +1751,11 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
         {
             case OWN_ATTR_CAPTION_POINT:
             {
-                const Point& aVclPnt = ((SdrCaptionObj*)pObj)->GetTailPos();
+                Point aVclPnt = ((SdrCaptionObj*)pObj)->GetTailPos();
+
+                // #88491# make pos relative to anchor
+                aVclPnt -= pObj->GetAnchorPos();
+
                 awt::Point aPnt( aVclPnt.X(), aVclPnt.Y() );
                 aAny <<= aPnt;
                 break;
