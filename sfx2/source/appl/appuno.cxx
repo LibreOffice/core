@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ab $ $Date: 2001-12-05 10:13:58 $
+ *  last change: $Author: as $ $Date: 2001-12-12 13:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,12 @@
 #ifndef _COM_SUN_STAR_AWT_XBUTTON_HPP_
 #include <com/sun/star/awt/XButton.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTEVENT_HPP_
+#include <com/sun/star/frame/DispatchResultEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
+#include <com/sun/star/frame/DispatchResultState.hpp>
+#endif
 #include <tools/cachestr.hxx>
 #include <osl/mutex.hxx>
 
@@ -209,7 +214,8 @@ using namespace ::rtl;
 #include "scriptcont.hxx"
 #include "dlgcont.hxx"
 
-#define FRAMELOADER_SERVICENAME     "com.sun.star.frame.FrameLoader"
+#define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
+#define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
 
 static const String sTemplateRegionName   = String::CreateFromAscii( "TemplateRegionName"   );
 static const String sTemplateName   = String::CreateFromAscii( "TemplateName"   );
@@ -712,26 +718,61 @@ void SfxJavaLoader::LoadFinished( sal_Bool bOK )
 #endif
 #endif // (mba)
 
-SFX_IMPL_XINTERFACE_1( SfxMacroLoader, OWeakObject, ::com::sun::star::frame::XFrameLoader )
-SFX_IMPL_XTYPEPROVIDER_1( SfxMacroLoader, ::com::sun::star::frame::XFrameLoader )
-SFX_IMPL_XSERVICEINFO( SfxMacroLoader, FRAMELOADER_SERVICENAME, "com.sun.star.comp.sfx2.SfxMacroLoader" )
+SFX_IMPL_XINTERFACE_2( SfxMacroLoader, OWeakObject, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch )
+SFX_IMPL_XTYPEPROVIDER_2( SfxMacroLoader, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch )
+SFX_IMPL_XSERVICEINFO( SfxMacroLoader, PROTOCOLHANDLER_SERVICENAME, "com.sun.star.comp.sfx2.SfxMacroLoader" )
 SFX_IMPL_SINGLEFACTORY( SfxMacroLoader )
 
 // -----------------------------------------------------------------------
-void SAL_CALL SfxMacroLoader::load (const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > &rFrame,
-                                    const ::rtl::OUString& rURL,
-                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > &rArgs,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLoadEventListener > &rListener )
-    throw ( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::util::URL&                                                          aURL      ,
+                                                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&            lArgs     ,
+                                                        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& xListener )
+              throw (::com::sun::star::uno::RuntimeException)
 {
-    ErrCode nErr = loadMacro( rURL );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    if ( rListener.is() )
+    ErrCode nErr = loadMacro( aURL.Complete );
+    if( xListener.is() )
     {
-        // always call loadCancelled, because we didn't load a document but
+        // always call dispatchFinished(), because we didn't load a document but
         // executed a macro instead!
-        rListener->loadCancelled( this ) ;
+        ::com::sun::star::frame::DispatchResultEvent aEvent;
+
+        aEvent.Source = static_cast< ::cppu::OWeakObject* >(this);
+        if( nErr==ERRCODE_NONE)
+            aEvent.State = ::com::sun::star::frame::DispatchResultState::SUCCESS;
+        else
+            aEvent.State = ::com::sun::star::frame::DispatchResultState::FAILURE;
+
+        xListener->dispatchFinished( aEvent ) ;
     }
+}
+
+// -----------------------------------------------------------------------
+void SAL_CALL SfxMacroLoader::dispatch( const ::com::sun::star::util::URL&                                               aURL  ,
+                                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs )
+              throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    ErrCode nErr = loadMacro( aURL.Complete );
+}
+
+// -----------------------------------------------------------------------
+void SAL_CALL SfxMacroLoader::addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl ,
+                                                 const ::com::sun::star::util::URL&                                                  aURL     )
+              throw (::com::sun::star::uno::RuntimeException)
+{
+    /* TODO
+            How we can handle different listener for further coming or currently running dispatch() jobs
+            without any inconsistency!
+     */
+}
+
+// -----------------------------------------------------------------------
+void SAL_CALL SfxMacroLoader::removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl ,
+                                                    const ::com::sun::star::util::URL&                                                  aURL     )
+        throw (::com::sun::star::uno::RuntimeException)
+{
 }
 
 // -----------------------------------------------------------------------
@@ -741,12 +782,6 @@ SfxMacroLoader::SfxMacroLoader( com::sun::star::uno::Reference < class com::sun:
 
 // -----------------------------------------------------------------------
 SfxMacroLoader::~SfxMacroLoader()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void SAL_CALL SfxMacroLoader::cancel(void) throw ( ::com::sun::star::uno::RuntimeException )
 {
 }
 
