@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:43:05 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,24 @@ TabPage TP_CONDCOLL
         Size = MAP_APPFONT ( 248 , 179 ) ;
         Text = "Optionen" ;
         Text [ English ] = "Settings" ;
+        Text[ english_us ] = "Settings";
+        Text[ portuguese ] = "Settings";
+        Text[ russian ] = "Ïàðàìåòðû";
+        Text[ greek ] = "ÅðéëïãÝò";
+        Text[ dutch ] = "Settings";
+        Text[ french ] = "Settings";
+        Text[ spanish ] = "Settings";
+        Text[ italian ] = "Opzioni";
+        Text[ danish ] = "Settings";
+        Text[ swedish ] = "Alternativ";
+        Text[ polish ] = "Opcje";
+        Text[ portuguese_brazilian ] = "Settings";
+        Text[ japanese ] = "Settings";
+        Text[ korean ] = "Settings";
+        Text[ chinese_simplified ] = "Settings";
+        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ turkish ] = "Settings";
+        Text[ arabic ] = "ÎíÇÑÇÊ";
     };
     CheckBox CB_CONDITION
     {
@@ -341,7 +359,7 @@ TabPage TP_CONDCOLL
         itemlist [ portuguese ] =
         {
             < "Cabeçalho de folha" ; > ;
-            < "Folha" ; > ;
+            < "Tabela" ; > ;
             < "Moldura" ; > ;
             < "Secção" ; > ;
             < "Nota de rodapé" ; > ;
@@ -838,32 +856,32 @@ TabPage TP_CONDCOLL
     {
             < "½ÃÆ® ¸Ó¸®¸»" ; > ;
         < "Ç¥" ; > ;
-        < "ÅØ½ºÆ® ¹Ú½º" ; > ;
+        < "ÇÁ·¹ÀÓ" ; > ;
         < "±¸¿ª" ; > ;
         < "°¢ÁÖ" ; > ;
         < "¹ÌÁÖ" ; > ;
         < "¸Ó¸®±Û" ; > ;
         < "¹Ù´Ú±Û" ; > ;
-        < "1¹øÂ°°³¿ä¼öÁØ" ; > ;
-        < "2¹øÂ°°³¿ä¼öÁØ" ; > ;
-        < "3¹øÂ°°³¿ä¼öÁØ" ; > ;
-        < "4¹øÂ°°³¿ä¼öÁØ" ; > ;
-        < "5¹øÂ°°³¿ä¼öÁØ" ; > ;
-        < "6¹øÂ°°³¿ä¼öÁØ" ; > ;
-        < "7¹øÂ°°³¿ä¼öÁØ" ; > ;
-        < "8¹øÂ°°³¿ä¼öÁØ" ; > ;
-        < "9¹øÂ°°³¿ä¼öÁØ" ; > ;
-        < "10¹øÂ°°³¿ä¼öÁØ" ; > ;
-        < "1¹øÂ° ¹øÈ£ ¸Å±â±â ¼öÁØ" ; > ;
-        < "2¹øÂ° ¹øÈ£ ¸Å±â±â ¼öÁØ" ; > ;
-        < " 3¹øÂ° ¹øÈ£ ¸Å±â±â ¼öÁØ" ; > ;
-        < " 4¹øÂ° ¹øÈ£ ¸Å±â±â ¼öÁØ" ; > ;
-        < "5¹øÂ° ¹øÈ£ ¸Å±â±â ¼öÁØ" ; > ;
-        < "6¹øÂ° ¹øÈ£ ¸Å±â±â ¼öÁØ" ; > ;
-        < "7¹øÂ° ¹øÈ£ ¸Å±â±â ¼öÁØ" ; > ;
-        < "8¹øÂ° ¹øÈ£ ¸Å±â±â ¼öÁØ" ; > ;
-        < "9¹øÂ° ¹øÈ£ ¸Å±â±â ¼öÁØ" ; > ;
-        < "10¹øÂ° ¹øÈ£ ¸Å±â±â ¼öÁØ" ; > ;
+        < "1¹øÂ°´Ù´Ü°è¡¡´Ü°è£¡" ; > ;
+        < "2¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
+        < "3¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
+        < "4¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
+        < "5¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
+        < "6¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
+        < "7¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
+        < "8¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
+        < "9¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
+        < "10¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
+        < "1¹øÂ° ´Ü°è¡¡¹øÈ£¸Å±â±â" ; > ;
+        < "2¹øÂ° ´Ü°è¡¡¹øÈ£¸Å±â±â" ; > ;
+        < " 3¹øÂ° ´Ü°è¡¡¹øÈ£¸Å±â±â" ; > ;
+        < " 4¹øÂ° ´Ü°è¡¡¹øÈ£¸Å±â±â" ; > ;
+        < "5¹øÂ° ´Ü°è¡¡¹øÈ£¸Å±â±â" ; > ;
+        < "6¹øÂ° ´Ü°è¡¡¹øÈ£¸Å±â±â" ; > ;
+        < "7¹øÂ° ´Ü°è¡¡¹øÈ£¸Å±â±â" ; > ;
+        < "8¹øÂ° ´Ü°è¡¡¹øÈ£¸Å±â±â" ; > ;
+        < "9¹øÂ° ´Ü°è¡¡¹øÈ£¸Å±â±â" ; > ;
+        < "10¹øÂ° ´Ü°è¡¡¹øÈ£¸Å±â±â" ; > ;
     };
     ItemList [ turkish ] =
     {
