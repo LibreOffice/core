@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 12:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,7 @@
 #include <svheader.hxx>
 #endif
 
-#ifdef VCL
 #include <svtools/svmedit.hxx>
-#endif
 
 #include <iderid.hxx>
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 12:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,7 @@
 
 #include <ide_pch.hxx>
 
-#ifdef VCL
 #include <svtools/filedlg.hxx>
-#endif
 
 #pragma hdrstop
 

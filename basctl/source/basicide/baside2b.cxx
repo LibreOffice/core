@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 12:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1324,13 +1324,6 @@ WatchWindow::WatchWindow( Window* pParent ) :
     aRemoveWatchButton.Show();
 
     SetText( String( IDEResId( RID_STR_WATCHNAME ) ) );
-#ifndef VCL
-#ifdef UNX
-    aFont=GetFont();
-    aFont.SetTransparent(TRUE);
-    SetFont(aFont);
-#endif
-#endif
 }
 
 
@@ -1484,13 +1477,6 @@ StackWindow::StackWindow( Window* pParent ) :
     aGotoCallButton.SetSizePixel( aSz );
 //  aGotoCallButton.Show(); // wird vom Basic noch nicht unterstuetzt!
     aGotoCallButton.Hide();
-#ifndef VCL
-#ifdef UNX
-    aFont=GetFont();
-    aFont.SetTransparent(TRUE);
-    SetFont(aFont);
-#endif
-#endif
 }
 
 
@@ -1635,18 +1621,8 @@ void __EXPORT ComplexEditorWindow::Resize()
     Size aBrkSz( Size( nBrkWidth, aSz.Height() ) );
     aBrkWindow.SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
 
-#ifndef VCL
-#ifdef UNX
-    Size aEWSz( Size( aSz.Width() - nBrkWidth - nSBWidth, aSz.Height() ) );
-    aEdtWindow.SetPosSizePixel( Point( DWBORDER+aBrkSz.Width(), DWBORDER ), aEWSz );
-#else
     Size aEWSz( Size( aSz.Width() - nBrkWidth - nSBWidth + 2, aSz.Height() ) );
     aEdtWindow.SetPosSizePixel( Point( DWBORDER+aBrkSz.Width()-1, DWBORDER ), aEWSz );
-#endif
-#else
-    Size aEWSz( Size( aSz.Width() - nBrkWidth - nSBWidth + 2, aSz.Height() ) );
-    aEdtWindow.SetPosSizePixel( Point( DWBORDER+aBrkSz.Width()-1, DWBORDER ), aEWSz );
-#endif
 
     aEWVScrollBar.SetPosSizePixel( Point( aOutSz.Width()-DWBORDER-nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
 

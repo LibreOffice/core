@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 12:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1188,11 +1188,7 @@ void __EXPORT BasicIDEShell::AdjustPosSizePixel( const Point &rPos, const Size &
 //  long nScrollbarWidthPixel = aVScrollBar.GetSizePixel().Width();
     Size aScrollBarBoxSz( aScrollBarBox.GetSizePixel() );
     aSz.Height() -= aScrollBarBoxSz.Height();
-#ifndef VCL
-#ifdef MAC
-    aSz.Height()++;
-#endif
-#endif
+
     Size aOutSz( aSz );
     aSz.Width() -= aScrollBarBoxSz.Width();
     aScrollBarBox.SetPosPixel( Point( rSize.Width() - aScrollBarBoxSz.Width(), rSize.Height() - aScrollBarBoxSz.Height() ) );

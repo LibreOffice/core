@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-03 11:45:36 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 12:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1413,31 +1413,10 @@ void ModulWindowLayout::ArrangeWindows()
     if ( !aStackWindow.IsFloatingMode() )
         aStackWindow.SetPosSizePixel( aSWPos, aSWSz );
 
-#ifndef VCL
-#ifndef UNX
     if ( aStackWindow.IsFloatingMode() && aWatchWindow.IsFloatingMode() )
         aHSplitter.Hide();
     else
         aHSplitter.Show();
-#else
-    // Irgendwas liegt im argen. Das Stacking der windows kommt manchmal
-    // durcheinander.
-    if ( aStackWindow.IsFloatingMode() && aWatchWindow.IsFloatingMode() )
-        aHSplitter.Hide();
-    else
-      {
-        aHSplitter.Show();
-        aHSplitter.ToTop();
-      }
-    aVSplitter.ToTop();
-    Invalidate();
-#endif
-#else
-    if ( aStackWindow.IsFloatingMode() && aWatchWindow.IsFloatingMode() )
-        aHSplitter.Hide();
-    else
-        aHSplitter.Show();
-#endif
 
     long nHDoubleClickSplitPosX = aSz.Width()-aHSplitter.GetSizePixel().Width();
     if ( aHSplitter.GetSplitPosPixel() < nHDoubleClickSplitPosX )
