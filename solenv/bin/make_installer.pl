@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 14:19:22 $
+#   last change: $Author: rt $ $Date: 2004-08-12 08:55:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ use installer::epmfile;
 use installer::exiter;
 use installer::files;
 use installer::globals;
+use installer::javainstaller;
 use installer::languagepack;
 use installer::languages;
 use installer::logger;
@@ -151,6 +152,7 @@ if ( $installer::globals::debug ) { installer::logger::debuginfo("\nPart 1a: The
 installer::parameter::control_fundamental_parameter();
 installer::parameter::setglobalvariables();
 installer::parameter::control_required_parameter();
+installer::parameter::set_childproductnames();
 
 if (!($installer::globals::languages_defined_in_productlist)) { installer::languages::analyze_languagelist(); }
 installer::parameter::outputparameter();
@@ -438,7 +440,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     @installer::globals::logfileinfo = ();  # new logfile array and new logfile name
     installer::logger::copy_globalinfo_into_logfile();
-    $installer::globals::logfilename = "logfile" . "_" . $installer::globals::product . "_" . $installer::globals::compiler . "_" . $installer::globals::build . "_" . $installer::globals::minor . "_" . $$languagestringref . ".log";
+    my $logminor = "";
+    if ( $installer::globals::updatepack ) { $logminor = $installer::globals::lastminor; }
+    else { $logminor = $installer::globals::minor; }
+    $installer::globals::logfilename = "log_" . $installer::globals::build . "_" . $logminor . "_" . $$languagestringref . ".log";
 
     $loggingdir = $loggingdir . $$languagestringref . $installer::globals::separator;
     installer::systemactions::create_directory($loggingdir);
@@ -1067,7 +1072,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                         if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($newdir); }
 
                         # Copying the java installer into the installation set
-                        if ( ! $installer::globals::javafilespath eq "" ) { installer::epmfile::put_java_installer_into_installset($newdir); }
+                        # if ( ! $installer::globals::javafilespath eq "" ) { installer::epmfile::put_java_installer_into_installset($newdir); }
+                        chdir($currentdir); # changing back into start directory
+                        if ( ! $installer::globals::javafilespath eq "" ) { installer::javainstaller::create_java_installer($installdir, $languagestringref, $languagesarrayref, $filesinproductlanguageresolvedarrayref, $allvariableshashref, $includepatharrayref, $modulesinproductlanguageresolvedarrayref); }
                     }
                 }
             }
@@ -1402,6 +1409,14 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # adding the custom action for the existence check of dot net framework into the product (CustomAc.idt and InstallU.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Netframeworkdll", "1", "netframework.dll", "IsFrameworkInstalled", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
             if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "netframework.dll",  "Netframeworkdll", "Not REMOVE=\"ALL\"", "InstallWelcome", $filesinproductlanguageresolvedarrayref, $installuitablename); }
+
+            # adding the custom action for shutting down the quickstarter in executesequence table into the product (CustomAc.idt and InstallE.idt)
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "sdqsmsidll", "1", "sdqsmsi.dll", "ShutDownQuickstarter", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "sdqsmsi.dll", "sdqsmsidll", "REMOVE=\"ALL\"", "InstallInitialize", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+
+            # adding the custom action for the removal of the startup folder link in executesequence table into the product (CustomAc.idt and InstallE.idt)
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "qslnkmsidll", "1", "qslnkmsi.dll", "RemoveQuickstarterLink", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "qslnkmsi.dll",  "qslnkmsidll", "REMOVE=\"ALL\"", "sdqsmsidll", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             installer::files::save_file($customactionidttablename, $customactionidttable);
             installer::files::save_file($installexecutetablename, $installexecutetable);
