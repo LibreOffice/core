@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-29 08:56:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 14:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include <core_pch.hxx>
-#endif
 
 #pragma hdrstop
 
