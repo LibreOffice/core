@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-10 16:41:12 $
+ *  last change: $Author: tbe $ $Date: 2000-10-23 10:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,9 @@
 #ifndef _SVX_SRCHDLG_HXX //autogen
 #include <svx/srchdlg.hxx>
 #endif
-#ifndef _IDETEMP_HXX
-#include <basctl/idetemp.hxx>
-#endif
+//#ifndef _IDETEMP_HXX
+//#include <basctl/idetemp.hxx>
+//#endif
 #ifndef _SFX_TEMPLDLG_HXX //autogen
 #include <sfx2/templdlg.hxx>
 #endif
@@ -181,6 +181,9 @@ view::XSelectionSupplier* SwView::GetUNOObject()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/10 16:41:12  rt
+    include vcl/graph.hxx (galbrws.hxx needs it for class Graphic)
+
     Revision 1.2  2000/09/28 15:34:12  os
     gallery child window registered
 

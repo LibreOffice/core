@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:51 $
+ *  last change: $Author: tbe $ $Date: 2000-10-23 10:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,9 @@
 #ifndef _SVX_SRCHDLG_HXX //autogen
 #include <svx/srchdlg.hxx>
 #endif
-#ifndef _IDETEMP_HXX //autogen
-#include <basctl/idetemp.hxx>
-#endif
+//#ifndef _IDETEMP_HXX //autogen
+//#include <basctl/idetemp.hxx>
+//#endif
 #ifndef _SBX_SBXOBJECT_HXX //autogen
 #include <svtools/sbxobj.hxx>
 #endif
@@ -381,6 +381,9 @@ void SwWebView::SelectShell()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:51  hr
+    initial import
+
     Revision 1.45  2000/09/18 16:06:20  willem.vandorp
     OpenOffice header added.
 
