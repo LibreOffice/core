@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-01 20:28:40 $
+ *  last change: $Author: obo $ $Date: 2001-03-09 20:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,7 +756,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     Text[ portuguese_brazilian ] = "Data record search";
     Text[ japanese ] = "ÃŞ°À Úº°ÄŞ‚ÌŒŸõ";
     Text[ chinese_simplified ] = "ËÑÑ°Êı¾İ×é";
-    Text[ chinese_traditional ] = "·j´M¼Æ¾Ú¶µ¥Ø";
+    Text[ chinese_traditional ] = "·j´M¸ê®Æ¶µ¥Ø";
     Text[ arabic ] = "ÇáÈÍË Úä ÓÌá";
     Text[ greek ] = "ÁíáæŞôçóç åããñáöŞò";
     Text[ korean ] = "µ¥ÀÌÅÍ ·¹ÄÚµå Ã£±â";
