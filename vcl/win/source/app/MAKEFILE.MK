@@ -3,8 +3,8 @@
 #*    $Workfile:   makefile.  $
 #*
 #*    Ersterstellung    TH 01.04.97
-#*    Letzte Aenderung  $Author: th $ $Date: 2001-07-25 11:10:43 $
-#*    $Revision: 1.2 $
+#*    Letzte Aenderung  $Author: ssa $ $Date: 2002-11-20 12:36:25 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:   T:/sv2/win/source/app/makefile.__v  $
 #*
@@ -22,6 +22,9 @@ TARGET=salapp
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+
+# --- #105371#
+CFLAGS += -DWINVER=0x0400
 
 # --- Files --------------------------------------------------------
 

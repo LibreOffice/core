@@ -3,8 +3,8 @@
 #*	  $Workfile:   makefile.  $
 #*
 #*	  Ersterstellung	TH 01.04.97
-#*	  Letzte Aenderung	$Author: ssa $ $Date: 2002-10-08 13:24:18 $
-#*	  $Revision: 1.3 $
+#*	  Letzte Aenderung	$Author: ssa $ $Date: 2002-11-20 12:36:27 $
+#*	  $Revision: 1.4 $
 #*
 #*	  $Logfile:   T:/vcl/win/source/src/makefile.__v  $
 #*
@@ -22,6 +22,9 @@ TARGET=salsrc
 .INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
 .INCLUDE :	sv.mk
+
+# --- #105371#
+CFLAGS += -DWINVER=0x0400
 
 # --- Files --------------------------------------------------------
 
