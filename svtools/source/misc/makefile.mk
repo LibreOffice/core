@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 14:39:16 $
+#   last change: $Author: vg $ $Date: 2004-01-06 19:31:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,7 +100,6 @@ SLOFILES=\
     $(SLO)$/svtdata.obj
 
 OBJFILES=\
-    $(OBJ)$/filearch.obj	\
     $(OBJ)$/svtdata.obj
 
 LIB2TARGET=$(SLB)$/misc1.lib
@@ -120,9 +119,7 @@ LIB3OBJFILES=\
     $(SLO)$/templatefoldercache.obj	\
     $(SLO)$/helpagentwindow.obj		\
     $(SLO)$/imagemgr.obj			\
-    $(SLO)$/agprop.obj		\
     $(SLO)$/ehdl.obj		\
-    $(SLO)$/filearch.obj	\
     $(SLO)$/flbytes.obj		\
     $(SLO)$/fstathelper.obj \
     $(SLO)$/imap.obj		\
