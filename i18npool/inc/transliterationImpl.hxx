@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _I18N_TRANSLITERATIONIMPL_HXX_
 
 #include <com/sun/star/i18n/XLocaleData.hpp>
-#include <com/sun/star/i18n/XTransliteration.hpp>
+#include <drafts/com/sun/star/i18n/XExtendedTransliteration.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -80,7 +80,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class TransliterationImpl : public cppu::WeakImplHelper2
 <
-    XTransliteration,
+    drafts::com::sun::star::i18n::XExtendedTransliteration,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -112,6 +112,16 @@ public:
 
     virtual rtl::OUString SAL_CALL folding( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         com::sun::star::uno::Sequence< sal_Int32 >& offset ) throw(com::sun::star::uno::RuntimeException);
+
+    // Methods in XExtendedTransliteration
+    virtual rtl::OUString SAL_CALL transliterateString2String( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount )
+        throw(com::sun::star::uno::RuntimeException) ;
+    virtual rtl::OUString SAL_CALL transliterateChar2String( sal_Unicode inChar )
+        throw(com::sun::star::uno::RuntimeException) ;
+    virtual sal_Unicode SAL_CALL transliterateChar2Char( sal_Unicode inChar )
+        throw(drafts::com::sun::star::i18n::MultipleCharsOutputException,
+                com::sun::star::uno::RuntimeException) ;
+
 /*
     virtual void SAL_CALL createCascadeInstance( const com::sun::star::uno::Sequence< rtl::OUString >& modNamelist,
         const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException) ;
@@ -142,15 +152,15 @@ public:
 
 private:
 #define maxCascade 27
-    com::sun::star::uno::Reference< XTransliteration > bodyCascade[maxCascade];
+    com::sun::star::uno::Reference< drafts::com::sun::star::i18n::XExtendedTransliteration > bodyCascade[maxCascade];
     sal_Int16 numCascade;
     sal_Bool caseignoreOnly;
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xSMgr;
     com::sun::star::uno::Reference< XLocaleData > localedata;
-    com::sun::star::uno::Reference< XTransliteration > caseignore;
+    com::sun::star::uno::Reference< drafts::com::sun::star::i18n::XExtendedTransliteration > caseignore;
 
     virtual sal_Bool SAL_CALL loadModuleByName( const rtl::OUString& implName,
-        com::sun::star::uno::Reference<XTransliteration> & body, const com::sun::star::lang::Locale& rLocale)
+        com::sun::star::uno::Reference<drafts::com::sun::star::i18n::XExtendedTransliteration> & body, const com::sun::star::lang::Locale& rLocale)
         throw(com::sun::star::uno::RuntimeException);
 
     void clear();
