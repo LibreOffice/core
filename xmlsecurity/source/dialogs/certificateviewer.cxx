@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:04:34 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,8 +209,8 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
 
     DateTime aDateTimeStart;
     DateTime aDateTimeEnd;
-    utl::typeConvert( xCert->getNotBefore(), aDateTimeStart );
-    utl::typeConvert( xCert->getNotAfter(), aDateTimeEnd );
+    utl::typeConvert( xCert->getNotValidBefore(), aDateTimeStart );
+    utl::typeConvert( xCert->getNotValidAfter(), aDateTimeEnd );
     String sText = maValidDateFI.GetText();
     sText.SearchAndReplace( String::CreateFromAscii( "%SDATE%" ),
                             GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeStart.GetDate() ) );
@@ -230,7 +230,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     if ( _pDlg->mbCheckForPrivateKey )
     {
         long nCertificateCharacters = _pDlg->mxSecurityEnvironment->getCertificateCharacters( xCert );
-        bHasPrivateKey = ( nCertificateCharacters & security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ) ? TRUE : FALSE;
+        bHasPrivateKey = ( nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY ) ? TRUE : FALSE;
     }
     if ( !bHasPrivateKey )
     {
@@ -326,12 +326,12 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     */
 
     DateTime aDateTime;
-    utl::typeConvert( xCert->getNotBefore(), aDateTime );
+    utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
     aLBEntry += String::CreateFromAscii( " " );
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
     InsertElement( String( ResId( STR_VALIDFROM ) ), aLBEntry, aLBEntry  );
-    utl::typeConvert( xCert->getNotAfter(), aDateTime );
+    utl::typeConvert( xCert->getNotValidAfter(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
     aLBEntry += String::CreateFromAscii( " " );
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
