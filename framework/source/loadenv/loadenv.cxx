@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:15:20 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1144,7 +1144,9 @@ sal_Bool LoadEnv::impl_loadContent()
     else
         m_xTargetFrame = m_xBaseFrame->findFrame(m_sTarget, m_nSearchFlags);
 
-    if (!m_xTargetFrame.is())
+    // If we couldn't find a valid frame or the frame has no container window
+    // we have to throw an exception.
+    if (!m_xTargetFrame.is() || !m_xTargetFrame->getContainerWindow().is() )
         throw LoadEnvException(LoadEnvException::ID_NO_TARGET_FOUND);
     css::uno::Reference< css::frame::XFrame > xTargetFrame = m_xTargetFrame;
 
