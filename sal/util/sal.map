@@ -455,6 +455,7 @@ UDK_3_0_0 {
         osl_getTextEncodingFromLocale;
 
         rtl_getUriCharClass;
+        rtl_uriConvertRelToAbs;
         rtl_uriEncode;
         rtl_uriDecode;
 
