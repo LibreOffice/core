@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:27:18 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,39 +569,53 @@ void SdrHdl::CreateB2dIAObject()
             }
         }
 
-        for(UINT16 a=0;a<pHdlList->GetView()->GetWinCount();a++)
+        SdrMarkView* pView = pHdlList->GetView();
+        for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
         {
-            SdrViewWinRec& rRec = pHdlList->GetView()->GetWinRec(a);
-            Point aMoveOutsideOffset(0, 0);
+            SdrPageView* pPageView = pView->GetPageViewPvNum(a);
+            // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
+            // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
 
-            // add offset if necessary
-            if(rRec.pWin && pHdlList->IsMoveOutside())
+            for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
             {
-                Size aOffset = rRec.pWin->PixelToLogic(Size(4, 4));
+                // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
+                const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
+                OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
 
-                if(eKind == HDL_UPLFT || eKind == HDL_UPPER || eKind == HDL_UPRGT)
-                    aMoveOutsideOffset.Y() -= aOffset.Width();
-                if(eKind == HDL_LWLFT || eKind == HDL_LOWER || eKind == HDL_LWRGT)
-                    aMoveOutsideOffset.Y() += aOffset.Height();
-                if(eKind == HDL_UPLFT || eKind == HDL_LEFT  || eKind == HDL_LWLFT)
-                    aMoveOutsideOffset.X() -= aOffset.Width();
-                if(eKind == HDL_UPRGT || eKind == HDL_RIGHT || eKind == HDL_LWRGT)
-                    aMoveOutsideOffset.X() += aOffset.Height();
-            }
-
-            // Manager may be zero when printing or drawing to VDevs
-            if(rRec.pIAOManager)
-            {
-                B2dIAObject* pNew = CreateMarkerObject(
-                    rRec.pIAOManager,
-                    aPos + aMoveOutsideOffset,
-                    eColIndex,
-                    eKindOfMarker);
-
-                if(pNew)
+                if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
                 {
-                    // set as B2DIAObject
-                    aIAOGroup.InsertIAO(pNew);
+                    Point aMoveOutsideOffset(0, 0);
+
+                    // add offset if necessary
+                    if(pHdlList->IsMoveOutside())
+                    {
+                        Size aOffset = rOutDev.PixelToLogic(Size(4, 4));
+
+                        if(eKind == HDL_UPLFT || eKind == HDL_UPPER || eKind == HDL_UPRGT)
+                            aMoveOutsideOffset.Y() -= aOffset.Width();
+                        if(eKind == HDL_LWLFT || eKind == HDL_LOWER || eKind == HDL_LWRGT)
+                            aMoveOutsideOffset.Y() += aOffset.Height();
+                        if(eKind == HDL_UPLFT || eKind == HDL_LEFT  || eKind == HDL_LWLFT)
+                            aMoveOutsideOffset.X() -= aOffset.Width();
+                        if(eKind == HDL_UPRGT || eKind == HDL_RIGHT || eKind == HDL_LWRGT)
+                            aMoveOutsideOffset.X() += aOffset.Height();
+                    }
+
+                    // Manager may be zero when printing or drawing to VDevs
+                    if(rPageViewWindow.GetIAOManager())
+                    {
+                        B2dIAObject* pNew = CreateMarkerObject(
+                            rPageViewWindow.GetIAOManager(),
+                            aPos + aMoveOutsideOffset,
+                            eColIndex,
+                            eKindOfMarker);
+
+                        if(pNew)
+                        {
+                            // set as B2DIAObject
+                            aIAOGroup.InsertIAO(pNew);
+                        }
+                    }
                 }
             }
         }
@@ -931,21 +945,38 @@ void SdrHdlColor::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->IsMarkHdlHidden())
+    if(pHdlList)
     {
-        for(UINT16 a=0;a<pHdlList->GetView()->GetWinCount();a++)
-        {
-            SdrViewWinRec& rRec = pHdlList->GetView()->GetWinRec(a);
+        SdrMarkView* pView = pHdlList->GetView();
 
-            // Manager may be zero when printing or drawing to VDevs
-            if(rRec.pIAOManager)
+        if(pView && !pView->IsMarkHdlHidden())
+        {
+            for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
             {
-                Bitmap aBmpCol(CreateColorDropper(aMarkerColor));
-                B2dIAObject* pNew = new B2dIAOBitmapObj(rRec.pIAOManager, aPos, aBmpCol,
-                    (UINT16)(aBmpCol.GetSizePixel().Width() - 1) >> 1,
-                    (UINT16)(aBmpCol.GetSizePixel().Height() - 1) >> 1);
-                DBG_ASSERT(pNew, "Got NO new IAO!");
-                aIAOGroup.InsertIAO(pNew);
+                SdrPageView* pPageView = pView->GetPageViewPvNum(a);
+                // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
+                // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
+
+                for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
+                {
+                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
+                    const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
+                    OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
+
+                    if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                    {
+                        // Manager may be zero when printing or drawing to VDevs
+                        if(rPageViewWindow.GetIAOManager())
+                        {
+                            Bitmap aBmpCol(CreateColorDropper(aMarkerColor));
+                            B2dIAObject* pNew = new B2dIAOBitmapObj(rPageViewWindow.GetIAOManager(), aPos, aBmpCol,
+                                (UINT16)(aBmpCol.GetSizePixel().Width() - 1) >> 1,
+                                (UINT16)(aBmpCol.GetSizePixel().Height() - 1) >> 1);
+                            DBG_ASSERT(pNew, "Got NO new IAO!");
+                            aIAOGroup.InsertIAO(pNew);
+                        }
+                    }
+                }
             }
         }
     }
@@ -1072,38 +1103,55 @@ void SdrHdlGradient::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->IsMarkHdlHidden())
+    if(pHdlList)
     {
-        for(UINT16 a=0;a<pHdlList->GetView()->GetWinCount();a++)
+        SdrMarkView* pView = pHdlList->GetView();
+
+        if(pView && !pView->IsMarkHdlHidden())
         {
-            SdrViewWinRec& rRec = pHdlList->GetView()->GetWinRec(a);
-
-            // Manager may be zero when printing or drawing to VDevs
-            if(rRec.pIAOManager)
+            for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
             {
-                // striped line in between
-                Vector2D aVec(a2ndPos.X() - aPos.X(), a2ndPos.Y() - aPos.Y());
-                double fVecLen = aVec.GetLength();
-                double fLongPercentArrow = (1.0 - 0.05) * fVecLen;
-                double fHalfArrowWidth = (0.05 * 0.5) * fVecLen;
-                aVec.Normalize();
-                Vector2D aPerpend(-aVec.Y(), aVec.X());
-                INT32 nMidX = (INT32)(aPos.X() + aVec.X() * fLongPercentArrow);
-                INT32 nMidY = (INT32)(aPos.Y() + aVec.Y() * fLongPercentArrow);
-                Point aMidPoint(nMidX, nMidY);
-                B2dIAObject* pNew = new B2dIAOLineStriped(rRec.pIAOManager, aPos, aMidPoint, 4);
-                DBG_ASSERT(pNew, "Got NO new IAO!");
-                pNew->SetBaseColor(IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE));
-                aIAOGroup.InsertIAO(pNew);
+                SdrPageView* pPageView = pView->GetPageViewPvNum(a);
+                // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
+                // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
 
-                // arrowhead
-                Point aLeft(aMidPoint.X() + (INT32)(aPerpend.X() * fHalfArrowWidth),
-                            aMidPoint.Y() + (INT32)(aPerpend.Y() * fHalfArrowWidth));
-                Point aRight(aMidPoint.X() - (INT32)(aPerpend.X() * fHalfArrowWidth),
-                            aMidPoint.Y() - (INT32)(aPerpend.Y() * fHalfArrowWidth));
-                pNew = new B2dIAOBitmapTriangle(rRec.pIAOManager, aLeft, a2ndPos, aRight, IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE));
-                DBG_ASSERT(pNew, "Got NO new IAO!");
-                aIAOGroup.InsertIAO(pNew);
+                for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
+                {
+                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
+                    const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
+                    OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
+
+                    if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                    {
+                        // Manager may be zero when printing or drawing to VDevs
+                        if(rPageViewWindow.GetIAOManager())
+                        {
+                            // striped line in between
+                            Vector2D aVec(a2ndPos.X() - aPos.X(), a2ndPos.Y() - aPos.Y());
+                            double fVecLen = aVec.GetLength();
+                            double fLongPercentArrow = (1.0 - 0.05) * fVecLen;
+                            double fHalfArrowWidth = (0.05 * 0.5) * fVecLen;
+                            aVec.Normalize();
+                            Vector2D aPerpend(-aVec.Y(), aVec.X());
+                            INT32 nMidX = (INT32)(aPos.X() + aVec.X() * fLongPercentArrow);
+                            INT32 nMidY = (INT32)(aPos.Y() + aVec.Y() * fLongPercentArrow);
+                            Point aMidPoint(nMidX, nMidY);
+                            B2dIAObject* pNew = new B2dIAOLineStriped(rPageViewWindow.GetIAOManager(), aPos, aMidPoint, 4);
+                            DBG_ASSERT(pNew, "Got NO new IAO!");
+                            pNew->SetBaseColor(IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE));
+                            aIAOGroup.InsertIAO(pNew);
+
+                            // arrowhead
+                            Point aLeft(aMidPoint.X() + (INT32)(aPerpend.X() * fHalfArrowWidth),
+                                        aMidPoint.Y() + (INT32)(aPerpend.Y() * fHalfArrowWidth));
+                            Point aRight(aMidPoint.X() - (INT32)(aPerpend.X() * fHalfArrowWidth),
+                                        aMidPoint.Y() - (INT32)(aPerpend.Y() * fHalfArrowWidth));
+                            pNew = new B2dIAOBitmapTriangle(rPageViewWindow.GetIAOManager(), aLeft, a2ndPos, aRight, IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE));
+                            DBG_ASSERT(pNew, "Got NO new IAO!");
+                            aIAOGroup.InsertIAO(pNew);
+                        }
+                    }
+                }
             }
         }
     }
@@ -1119,7 +1167,7 @@ IMPL_LINK(SdrHdlGradient, ColorChangeHdl, SdrHdl*, pHdl)
 void SdrHdlGradient::FromIAOToItem(SdrObject* pObj, BOOL bSetItemOnObject, BOOL bUndo)
 {
     // from IAO positions and colors to gradient
-    const SfxItemSet& rSet = pObj->GetItemSet();
+    const SfxItemSet& rSet = pObj->GetMergedItemSet();
 
     GradTransformer aGradTransformer;
     GradTransGradient aOldGradTransGradient;
@@ -1168,7 +1216,8 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* pObj, BOOL bSetItemOnObject, BOOL 
             pModel->EndUndo();
         }
 
-        pObj->SetItemSetAndBroadcast(aNewSet);
+        //pObj->SetItemSetAndBroadcast(aNewSet);
+        pObj->SetMergedItemSetAndBroadcast(aNewSet);
     }
 
     // back transformation, set values on pIAOHandle
@@ -1197,27 +1246,44 @@ void SdrHdlLine::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->IsMarkHdlHidden() && pHdl1 && pHdl2)
+    if(pHdlList)
     {
-        for(UINT16 a=0;a<pHdlList->GetView()->GetWinCount();a++)
+        SdrMarkView* pView = pHdlList->GetView();
+
+        if(pView && !pView->IsMarkHdlHidden() && pHdl1 && pHdl2)
         {
-            SdrViewWinRec& rRec = pHdlList->GetView()->GetWinRec(a);
-
-            // Manager may be zero when printing or drawing to VDevs
-            if(rRec.pIAOManager)
+            for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
             {
-                B2dIAObject* pNew = new B2dIAOLine(
-                    rRec.pIAOManager,
-                    pHdl1->GetPos(),
-                    pHdl2->GetPos());
+                SdrPageView* pPageView = pView->GetPageViewPvNum(a);
+                // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
+                // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
 
-                if(pNew)
+                for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
                 {
-                    // color(?)
-                    pNew->SetBaseColor(Color(COL_LIGHTRED));
+                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
+                    const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
+                    OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
 
-                    // set as B2DIAObject
-                    aIAOGroup.InsertIAO(pNew);
+                    if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                    {
+                        // Manager may be zero when printing or drawing to VDevs
+                        if(rPageViewWindow.GetIAOManager())
+                        {
+                            B2dIAObject* pNew = new B2dIAOLine(
+                                rPageViewWindow.GetIAOManager(),
+                                pHdl1->GetPos(),
+                                pHdl2->GetPos());
+
+                            if(pNew)
+                            {
+                                // color(?)
+                                pNew->SetBaseColor(Color(COL_LIGHTRED));
+
+                                // set as B2DIAObject
+                                aIAOGroup.InsertIAO(pNew);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1250,30 +1316,47 @@ void SdrHdlBezWgt::CreateB2dIAObject()
     SdrHdl::CreateB2dIAObject();
 
     // create lines
-    if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->IsMarkHdlHidden())
+    if(pHdlList)
     {
-        for(UINT16 a=0;a<pHdlList->GetView()->GetWinCount();a++)
+        SdrMarkView* pView = pHdlList->GetView();
+
+        if(pView && !pView->IsMarkHdlHidden())
         {
-            SdrViewWinRec& rRec = pHdlList->GetView()->GetWinRec(a);
-
-            // Manager may be zero when printing or drawing to VDevs
-            if(rRec.pIAOManager)
+            for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
             {
-                B2dIAObject* pNew = new B2dIAOLine(
-                    rRec.pIAOManager,
-                    pHdl1->GetPos(),
-                    aPos);
+                SdrPageView* pPageView = pView->GetPageViewPvNum(a);
+                // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
+                // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
 
-                if(pNew)
+                for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
                 {
-                    // line part is not hittable
-                    pNew->SetHittable(FALSE);
+                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
+                    const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
+                    OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
 
-                    // color(?)
-                    pNew->SetBaseColor(Color(COL_LIGHTBLUE));
+                    if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                    {
+                        // Manager may be zero when printing or drawing to VDevs
+                        if(rPageViewWindow.GetIAOManager())
+                        {
+                            B2dIAObject* pNew = new B2dIAOLine(
+                                rPageViewWindow.GetIAOManager(),
+                                pHdl1->GetPos(),
+                                aPos);
 
-                    // set as B2DIAObject
-                    aIAOGroup.InsertIAO(pNew);
+                            if(pNew)
+                            {
+                                // line part is not hittable
+                                pNew->SetHittable(FALSE);
+
+                                // color(?)
+                                pNew->SetBaseColor(Color(COL_LIGHTBLUE));
+
+                                // set as B2DIAObject
+                                aIAOGroup.InsertIAO(pNew);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1290,30 +1373,47 @@ E3dVolumeMarker::E3dVolumeMarker(const XPolyPolygon& rXPP)
 void E3dVolumeMarker::CreateB2dIAObject()
 {
     // create lines
-    if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->IsMarkHdlHidden())
+    if(pHdlList)
     {
-        for(UINT16 a=0;a<pHdlList->GetView()->GetWinCount();a++)
+        SdrMarkView* pView = pHdlList->GetView();
+
+        if(pView && !pView->IsMarkHdlHidden())
         {
-            SdrViewWinRec& rRec = pHdlList->GetView()->GetWinRec(a);
-
-            // Manager may be zero when printing or drawing to VDevs
-            if(rRec.pIAOManager)
+            for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
             {
-                UINT16 nCnt = aWireframePoly.Count();
-                for(UINT16 i = 0; i < nCnt; i++)
+                SdrPageView* pPageView = pView->GetPageViewPvNum(a);
+                // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
+                // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
+
+                for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
                 {
-                    B2dIAObject* pNew = new B2dIAOLine(
-                        rRec.pIAOManager,
-                        aWireframePoly[i][0],
-                        aWireframePoly[i][1]);
+                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
+                    const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
+                    OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
 
-                    if(pNew)
+                    if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
                     {
-                        // color(?)
-                        pNew->SetBaseColor(Color(COL_BLACK));
+                        // Manager may be zero when printing or drawing to VDevs
+                        if(rPageViewWindow.GetIAOManager())
+                        {
+                            UINT16 nCnt = aWireframePoly.Count();
+                            for(UINT16 i = 0; i < nCnt; i++)
+                            {
+                                B2dIAObject* pNew = new B2dIAOLine(
+                                    rPageViewWindow.GetIAOManager(),
+                                    aWireframePoly[i][0],
+                                    aWireframePoly[i][1]);
 
-                        // set as B2DIAObject
-                        aIAOGroup.InsertIAO(pNew);
+                                if(pNew)
+                                {
+                                    // color(?)
+                                    pNew->SetBaseColor(Color(COL_BLACK));
+
+                                    // set as B2DIAObject
+                                    aIAOGroup.InsertIAO(pNew);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1337,36 +1437,53 @@ void ImpEdgeHdl::CreateB2dIAObject()
         BitmapColorIndex eColIndex = LightCyan;
         BitmapMarkerKind eKindOfMarker = Rect_7x7;
 
-        if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->IsMarkHdlHidden())
+        if(pHdlList)
         {
-            const SdrEdgeObj* pEdge = (SdrEdgeObj*)pObj;
+            SdrMarkView* pView = pHdlList->GetView();
 
-            if(pEdge->GetConnectedNode(nObjHdlNum == 0) != NULL)
-                eColIndex = LightRed;
-
-            if(nPPntNum < 2)
+            if(pView && !pView->IsMarkHdlHidden())
             {
-                // Handle with plus sign inside
-                eKindOfMarker = Circ_7x7;
-            }
+                const SdrEdgeObj* pEdge = (SdrEdgeObj*)pObj;
 
-            for(UINT16 a=0;a<pHdlList->GetView()->GetWinCount();a++)
-            {
-                SdrViewWinRec& rRec = pHdlList->GetView()->GetWinRec(a);
+                if(pEdge->GetConnectedNode(nObjHdlNum == 0) != NULL)
+                    eColIndex = LightRed;
 
-                // Manager may be zero when printing or drawing to VDevs
-                if(rRec.pIAOManager)
+                if(nPPntNum < 2)
                 {
-                    B2dIAObject* pNew = CreateMarkerObject(
-                        rRec.pIAOManager,
-                        aPos,
-                        eColIndex,
-                        eKindOfMarker);
+                    // Handle with plus sign inside
+                    eKindOfMarker = Circ_7x7;
+                }
 
-                    if(pNew)
+                for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
+                {
+                    SdrPageView* pPageView = pView->GetPageViewPvNum(a);
+                    // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
+                    // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
+
+                    for(sal_uInt32 b(0); b < pPageView->WindowCount(); b++)
                     {
-                        // set as B2DIAObject
-                        aIAOGroup.InsertIAO(pNew);
+                        // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
+                        const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
+                        OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
+
+                        if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                        {
+                            // Manager may be zero when printing or drawing to VDevs
+                            if(rPageViewWindow.GetIAOManager())
+                            {
+                                B2dIAObject* pNew = CreateMarkerObject(
+                                    rPageViewWindow.GetIAOManager(),
+                                    aPos,
+                                    eColIndex,
+                                    eKindOfMarker);
+
+                                if(pNew)
+                                {
+                                    // set as B2DIAObject
+                                    aIAOGroup.InsertIAO(pNew);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1406,7 +1523,7 @@ BOOL ImpEdgeHdl::IsHorzDrag() const
     if (pEdge==NULL) return FALSE;
     if (nObjHdlNum<=1) return FALSE;
 
-    SdrEdgeKind eKind = ((SdrEdgeKindItem&)(pEdge->GetItem(SDRATTR_EDGEKIND))).GetValue();
+    SdrEdgeKind eKind = ((SdrEdgeKindItem&)(pEdge->GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
 
     const SdrEdgeInfoRec& rInfo=pEdge->aEdgeInfo;
     if (eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) {
@@ -1430,38 +1547,55 @@ void ImpMeasureHdl::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->IsMarkHdlHidden())
+    if(pHdlList)
     {
-        BitmapColorIndex eColIndex = LightCyan;
-        BitmapMarkerKind eKindOfMarker = Rect_9x9;
+        SdrMarkView* pView = pHdlList->GetView();
 
-        if(nObjHdlNum > 1)
+        if(pView && !pView->IsMarkHdlHidden())
         {
-            eKindOfMarker = Rect_7x7;
-        }
+            BitmapColorIndex eColIndex = LightCyan;
+            BitmapMarkerKind eKindOfMarker = Rect_9x9;
 
-        if(bSelect)
-        {
-            eColIndex = Cyan;
-        }
-
-        for(UINT16 a=0;a<pHdlList->GetView()->GetWinCount();a++)
-        {
-            SdrViewWinRec& rRec = pHdlList->GetView()->GetWinRec(a);
-
-            // Manager may be zero when printing or drawing to VDevs
-            if(rRec.pIAOManager)
+            if(nObjHdlNum > 1)
             {
-                B2dIAObject* pNew = CreateMarkerObject(
-                    rRec.pIAOManager,
-                    aPos,
-                    eColIndex,
-                    eKindOfMarker);
+                eKindOfMarker = Rect_7x7;
+            }
 
-                if(pNew)
+            if(bSelect)
+            {
+                eColIndex = Cyan;
+            }
+
+            for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
+            {
+                SdrPageView* pPageView = pView->GetPageViewPvNum(a);
+                // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
+                // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
+
+                for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
                 {
-                    // set as B2DIAObject
-                    aIAOGroup.InsertIAO(pNew);
+                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
+                    const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
+                    OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
+
+                    if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                    {
+                        // Manager may be zero when printing or drawing to VDevs
+                        if(rPageViewWindow.GetIAOManager())
+                        {
+                            B2dIAObject* pNew = CreateMarkerObject(
+                                rPageViewWindow.GetIAOManager(),
+                                aPos,
+                                eColIndex,
+                                eKindOfMarker);
+
+                            if(pNew)
+                            {
+                                // set as B2DIAObject
+                                aIAOGroup.InsertIAO(pNew);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1529,21 +1663,9 @@ int ImpSdrHdlListSorter::Compare(const void* pElem1, const void* pElem2) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// #97016# II
-
-class ImplHdlListData
-{
-public:
-    sal_uInt32                  mnFocusIndex;
-    SdrMarkView*                pView;
-
-    ImplHdlListData(SdrMarkView* pV): mnFocusIndex(CONTAINER_ENTRY_NOTFOUND), pView(pV) {}
-};
-
 SdrMarkView* SdrHdlList::GetView() const
 {
-    return pImpl->pView;
+    return pView;
 }
 
 // #105678# Help struct for re-sorting handles
@@ -1627,20 +1749,20 @@ extern "C" int __LOADONCALLAPI ImplSortHdlFunc( const void* pVoid1, const void* 
 void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
 {
     // security correction
-    if(pImpl->mnFocusIndex != CONTAINER_ENTRY_NOTFOUND && pImpl->mnFocusIndex >= GetHdlCount())
-        pImpl->mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
+    if(mnFocusIndex != CONTAINER_ENTRY_NOTFOUND && mnFocusIndex >= GetHdlCount())
+        mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
 
     if(aList.Count())
     {
         // take care of old handle
-        const sal_uInt32 nOldHdlNum(pImpl->mnFocusIndex);
+        const sal_uInt32 nOldHdlNum(mnFocusIndex);
         SdrHdl* pOld = GetHdl(nOldHdlNum);
         sal_Bool bRefresh(sal_False);
 
         if(pOld)
         {
             // switch off old handle
-            pImpl->mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
+            mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
             pOld->Touch();
             bRefresh = sal_True;
         }
@@ -1744,8 +1866,8 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         // take care of next handle
         if(nOldHdlNum != nNewHdlNum)
         {
-            pImpl->mnFocusIndex = nNewHdlNum;
-            SdrHdl* pNew = GetHdl(pImpl->mnFocusIndex);
+            mnFocusIndex = nNewHdlNum;
+            SdrHdl* pNew = GetHdl(mnFocusIndex);
 
             if(pNew)
             {
@@ -1757,8 +1879,8 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         // if something has changed do a handle refresh
         if(bRefresh)
         {
-            if(pImpl->pView)
-                pImpl->pView->RefreshAllIAOManagers();
+            if(pView)
+                pView->RefreshAllIAOManagers();
         }
 
         // #105678# free mem again
@@ -1768,8 +1890,8 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
 
 SdrHdl* SdrHdlList::GetFocusHdl() const
 {
-    if(pImpl->mnFocusIndex != CONTAINER_ENTRY_NOTFOUND && pImpl->mnFocusIndex < GetHdlCount())
-        return GetHdl(pImpl->mnFocusIndex);
+    if(mnFocusIndex != CONTAINER_ENTRY_NOTFOUND && mnFocusIndex < GetHdlCount())
+        return GetHdl(mnFocusIndex);
     else
         return 0L;
 }
@@ -1787,7 +1909,7 @@ void SdrHdlList::SetFocusHdl(SdrHdl* pNew)
             if(nNewHdlNum != CONTAINER_ENTRY_NOTFOUND)
             {
                 sal_Bool bRefresh(sal_False);
-                pImpl->mnFocusIndex = nNewHdlNum;
+                mnFocusIndex = nNewHdlNum;
 
                 if(pActual)
                 {
@@ -1803,8 +1925,8 @@ void SdrHdlList::SetFocusHdl(SdrHdl* pNew)
 
                 if(bRefresh)
                 {
-                    if(pImpl->pView)
-                        pImpl->pView->RefreshAllIAOManagers();
+                    if(pView)
+                        pView->RefreshAllIAOManagers();
                 }
             }
         }
@@ -1815,24 +1937,23 @@ void SdrHdlList::ResetFocusHdl()
 {
     SdrHdl* pHdl = GetFocusHdl();
 
-    pImpl->mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
+    mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
 
     if(pHdl)
     {
         pHdl->Touch();
 
-        if(pImpl->pView)
-            pImpl->pView->RefreshAllIAOManagers();
+        if(pView)
+            pView->RefreshAllIAOManagers();
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrHdlList::SdrHdlList(SdrMarkView* pV)
-:   aList(1024,32,32),
-    pImpl(new ImplHdlListData(pV))
-    //#97016# II
-    //pView(pV)
+:   mnFocusIndex(CONTAINER_ENTRY_NOTFOUND),
+    pView(pV),
+    aList(1024,32,32)
 {
     nHdlSize = 3;
     bRotateShear = FALSE;
@@ -1844,8 +1965,6 @@ SdrHdlList::SdrHdlList(SdrMarkView* pV)
 SdrHdlList::~SdrHdlList()
 {
     Clear();
-    //#97016# II
-    delete pImpl;
 }
 
 void SdrHdlList::SetHdlSize(USHORT nSiz)
@@ -1923,8 +2042,8 @@ void SdrHdlList::Clear()
     aList.Clear();
 
     // immediately remove from display
-    if(pImpl->pView)
-        pImpl->pView->RefreshAllIAOManagers();
+    if(pView)
+        pView->RefreshAllIAOManagers();
 
     bRotateShear=FALSE;
     bDistortShear=FALSE;
@@ -1959,8 +2078,8 @@ void SdrHdlList::Sort()
 
         if(bRefresh)
         {
-            if(pImpl->pView)
-                pImpl->pView->RefreshAllIAOManagers();
+            if(pView)
+                pView->RefreshAllIAOManagers();
         }
     }
 }
