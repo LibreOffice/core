@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-18 10:43:14 $
+ *  last change: $Author: mba $ $Date: 2001-02-06 12:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,7 +822,7 @@ SvStorage* SfxStandaloneDocumentInfoObject::GetStorage_Impl( const String& rName
     // Storage "offnen
     SvStorageRef xStor = _pMedium->GetStorage();
     DBG_ASSERT( xStor.Is(), "no storage" );
-    xStor->SetVersion( _pFilter ? _pFilter->GetVersion() : SOFFICE_FILEFORMAT_NOW );
+    xStor->SetVersion( _pFilter ? _pFilter->GetVersion() : SOFFICE_FILEFORMAT_CURRENT );
     return xStor;
 }
 

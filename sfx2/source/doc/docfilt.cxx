@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfilt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:21 $
+ *  last change: $Author: mba $ $Date: 2001-02-06 12:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ void SfxFilter::InitMembers_Impl()
     }
     aWildCard = aShort;
 
-    nVersion = SOFFICE_FILEFORMAT_NOW;
+    nVersion = SOFFICE_FILEFORMAT_CURRENT;
     bPlugDataSearched = 0;
     pPlugData = 0;
 

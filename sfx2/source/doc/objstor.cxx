@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-01 15:39:57 $
+ *  last change: $Author: mba $ $Date: 2001-02-06 12:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1465,7 +1465,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 const SfxFilter* pMedFilter = GetMedium()->GetFilter();
                 if( pImp->bSetStandardName && !IsTemplate() || !pMedFilter ||
                     !pMedFilter->CanExport() ||
-                    pMedFilter->GetVersion() != SOFFICE_FILEFORMAT_NOW )
+                    pMedFilter->GetVersion() != SOFFICE_FILEFORMAT_CURRENT )
                 {
                     if( aLastName.Len() )
                     {

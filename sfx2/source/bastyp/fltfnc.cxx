@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-01 10:03:23 $
+ *  last change: $Author: mba $ $Date: 2001-02-06 12:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1151,7 +1151,7 @@ void SfxFilterContainer::RealLoad_Impl()
         aWild = aLine.GetToken( i++, ',' );
         sal_uInt16 nDocIconId = aLine.GetToken( i++, ',' ).ToInt32();
         aUserData = aLine.GetToken( i++, ',' );
-        sal_uInt32 nVersion = SOFFICE_FILEFORMAT_NOW;
+        sal_uInt32 nVersion = SOFFICE_FILEFORMAT_CURRENT;
         if( nTokCount >= 8 )
             nVersion = aLine.GetToken( i++, ',' ).ToInt32();
         aFlags = aLine.GetToken( i++, ',' );

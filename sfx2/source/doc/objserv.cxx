@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
+ *  last change: $Author: mba $ $Date: 2001-02-06 12:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         {
             // fremdes Format mit m"oglichem Verlust (aber nicht per API) wenn noch nicht gewarnt und anschließend im
             // alien format gespeichert wurde
-            if ( !( pCurFilter->IsOwnFormat() && pCurFilter->GetVersion() == SOFFICE_FILEFORMAT_NOW || ( pCurFilter->GetFilterFlags() & SFX_FILTER_SILENTEXPORT ) )
+            if ( !( pCurFilter->IsOwnFormat() && pCurFilter->GetVersion() == SOFFICE_FILEFORMAT_CURRENT || ( pCurFilter->GetFilterFlags() & SFX_FILTER_SILENTEXPORT ) )
                  && ( !pImp->bDidWarnFormat || !pImp->bDidDangerousSave ) )
             {
                 // Default-Format verf"ugbar?
