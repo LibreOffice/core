@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltbl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: mib $ $Date: 2001-07-11 10:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1381,34 +1381,88 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
         nAbsTabWidth = IsTopTable() ? MAX_TABWIDTH : nAbsAvail;
         nRelTabWidth = (nRelAvail ? nRelAvail : nAbsTabWidth );
 
-        USHORT nAbs = 0, nRel = 0;
-        SwHTMLTableLayoutColumn *pColumn;
-        for( USHORT i=0; i<nCols-1; i++ )
-        {
-            pColumn = GetColumn( i );
-            ULONG nColMin = pColumn->GetMin();
-            if( nColMin <= USHRT_MAX )
-            {
-                pColumn->SetAbsColWidth(
-                    (USHORT)((nColMin * nAbsTabWidth) / nMin) );
-                pColumn->SetRelColWidth(
-                    (USHORT)((nColMin * nRelTabWidth) / nMin) );
-            }
-            else
-            {
-                double nColMinD = nColMin;
-                pColumn->SetAbsColWidth(
-                    (USHORT)((nColMinD * nAbsTabWidth) / nMin) );
-                pColumn->SetRelColWidth(
-                    (USHORT)((nColMinD * nRelTabWidth) / nMin) );
-            }
+        // First of all, we check wether we can fit the layout constrains,
+        // that are: Every cell's width excluding the borders must be at least
+        // MINLAY:
 
-            nAbs += (USHORT)pColumn->GetAbsColWidth();
-            nRel += (USHORT)pColumn->GetRelColWidth();
+        ULONG nRealMin = 0;
+        for( USHORT i=0; i<nCols; i++ )
+        {
+            ULONG nRealColMin = MINLAY, nDummy1, nDummy2;
+            AddBorderWidth( nRealColMin, nDummy1, nDummy2, i, 1 );
+            nRealMin += nRealColMin;
         }
-        pColumn = GetColumn( nCols-1 );
-        pColumn->SetAbsColWidth( nAbsTabWidth - nAbs );
-        pColumn->SetRelColWidth( nRelTabWidth - nRel );
+        if( (nRealMin >= nAbsTabWidth) || (nRealMin >= nMin) )
+        {
+            // "Nichts geht mehr". We cannot get the minimum column widths
+            // the layout wants to have.
+
+            USHORT nAbs = 0, nRel = 0;
+            SwHTMLTableLayoutColumn *pColumn;
+            for( USHORT i=0; i<nCols-1; i++ )
+            {
+                pColumn = GetColumn( i );
+                ULONG nColMin = pColumn->GetMin();
+                if( nColMin <= USHRT_MAX )
+                {
+                    pColumn->SetAbsColWidth(
+                        (USHORT)((nColMin * nAbsTabWidth) / nMin) );
+                    pColumn->SetRelColWidth(
+                        (USHORT)((nColMin * nRelTabWidth) / nMin) );
+                }
+                else
+                {
+                    double nColMinD = nColMin;
+                    pColumn->SetAbsColWidth(
+                        (USHORT)((nColMinD * nAbsTabWidth) / nMin) );
+                    pColumn->SetRelColWidth(
+                        (USHORT)((nColMinD * nRelTabWidth) / nMin) );
+                }
+
+                nAbs += (USHORT)pColumn->GetAbsColWidth();
+                nRel += (USHORT)pColumn->GetRelColWidth();
+            }
+            pColumn = GetColumn( nCols-1 );
+            pColumn->SetAbsColWidth( nAbsTabWidth - nAbs );
+            pColumn->SetRelColWidth( nRelTabWidth - nRel );
+        }
+        else
+        {
+            ULONG nDistAbs = nAbsTabWidth - nRealMin;
+            ULONG nDistRel = nRelTabWidth - nRealMin;
+            ULONG nDistMin = nMin - nRealMin;
+            USHORT nAbs = 0, nRel = 0;
+            SwHTMLTableLayoutColumn *pColumn;
+            for( USHORT i=0; i<nCols-1; i++ )
+            {
+                pColumn = GetColumn( i );
+                ULONG nColMin = pColumn->GetMin();
+                ULONG nRealColMin = MINLAY, nDummy1, nDummy2;
+                AddBorderWidth( nRealColMin, nDummy1, nDummy2, i, 1 );
+
+                if( nColMin <= USHRT_MAX )
+                {
+                    pColumn->SetAbsColWidth(
+                        (USHORT)((((nColMin-nRealColMin) * nDistAbs) / nDistMin) + nRealColMin) );
+                    pColumn->SetRelColWidth(
+                        (USHORT)((((nColMin-nRealColMin) * nDistRel) / nDistMin) + nRealColMin) );
+                }
+                else
+                {
+                    double nColMinD = nColMin;
+                    pColumn->SetAbsColWidth(
+                        (USHORT)((((nColMinD-nRealColMin) * nDistAbs) / nDistMin) + nRealColMin) );
+                    pColumn->SetRelColWidth(
+                        (USHORT)((((nColMinD-nRealColMin) * nDistRel) / nDistMin) + nRealColMin) );
+                }
+
+                nAbs += (USHORT)pColumn->GetAbsColWidth();
+                nRel += (USHORT)pColumn->GetRelColWidth();
+            }
+            pColumn = GetColumn( nCols-1 );
+            pColumn->SetAbsColWidth( nAbsTabWidth - nAbs );
+            pColumn->SetRelColWidth( nRelTabWidth - nRel );
+        }
     }
     else if( nMax <= (ULONG)(nAbsTabWidth ? nAbsTabWidth : nAbsAvail) )
     {
