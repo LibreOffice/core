@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: gt $ $Date: 2001-10-10 08:55:40 $
+ *  last change: $Author: pb $ $Date: 2001-10-11 05:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3249,7 +3249,7 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 
     if ( !bChanged &&
          ( m_aKerningLB.GetSavedValue() == LISTBOX_ENTRY_NOTFOUND ||
-           !m_aKerningEdit.GetSavedValue().Len() ) )
+           ( !m_aKerningEdit.GetSavedValue().Len() && m_aKerningEdit.IsEnabled() ) ) )
         bChanged = TRUE;
 
     if ( bChanged && nPos != LISTBOX_ENTRY_NOTFOUND )
