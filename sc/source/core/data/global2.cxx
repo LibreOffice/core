@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 10:12:06 $
+ *  last change: $Author: nn $ $Date: 2000-10-05 17:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svtools/pathoptions.hxx>
 #include <svtools/useroptions.hxx>
 #include <tools/intn.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
 #include <ctype.h>
