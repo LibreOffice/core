@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_NamedRangesEnumeration.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:08:31 $
+ *  last change:$Date: 2003-09-08 12:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,28 +61,24 @@
 
 package mod._sc;
 
-import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.lang.XComponent;
-import com.sun.star.sheet.XNamedRanges;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.sheet.XSpreadsheets;
-import com.sun.star.table.CellAddress;
-import com.sun.star.table.CellRangeAddress;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.XNamedRanges;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.table.CellAddress;
+import com.sun.star.table.CellRangeAddress;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 public class ScIndexEnumeration_NamedRangesEnumeration extends TestCase {
     XSpreadsheetDocument xSheetDoc = null;
@@ -115,31 +111,13 @@ public class ScIndexEnumeration_NamedRangesEnumeration extends TestCase {
 
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        XInterface oInterface = null;
         XInterface oObj = null;
 
         // creation of testobject here
         // first we write what we are intend to do to log file
         log.println( "Creating a test environment" );
-        XSpreadsheet oSheet = null;
 
         log.println("Getting test object ");
-        XSpreadsheets oSheets = xSheetDoc.getSheets();
-        XIndexAccess oIndexSheets = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        }
 
         // Getting named ranges.
         XPropertySet docProps = (XPropertySet)
