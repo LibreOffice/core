@@ -121,6 +121,24 @@ Dim oDocSettings as Object
 			InsertPlaceholder(sFoundContent)
 		End If
 	Next i
+	If bDBFields Then
+		&apos;Open the DB beamer with the right DB
+		Dim oDisp as Object
+		Dim oTransformer
+		Dim aURL as new com.sun.star.util.URL
+		aURL.complete = &quot;.component:DB/DataSourceBrowser&quot;
+		oTransformer = createUnoService(&quot;com.sun.star.util.URLTransformer&quot;)
+		oTransformer.parseStrict(aURL)		
+		oDisp = oDocument.getCurrentController.getFrame.queryDispatch(aURL, &quot;_beamer&quot;, com.sun.star.frame.FrameSearchFlag.CHILDREN + com.sun.star.frame.FrameSearchFlag.CREATE)
+		Dim aArgs(3) as new com.sun.star.beans.PropertyValue
+		aArgs(1).Name = &quot;DataSourceName&quot;
+		aArgs(1).Value = sAddressbook
+		aArgs(2).Name = &quot;CommandType&quot;
+		aArgs(2).Value = com.sun.star.sdb.CommandType.TABLE
+		aArgs(3).Name = &quot;Command&quot;
+		aArgs(3).Value = Table
+		oDisp.dispatch(aURL, aArgs())
+	End If
 		
 End Sub
 
