@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttributeTypeInfo.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-08 15:38:23 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,13 @@ public class AttributeTypeInfo extends TypeInfo
     {
         return (m_flags & TypeInfo.READONLY) != 0;
     }
+
+    /**
+       Returns the status of the 'bound' flag.
+
+       @since UDK 3.2
+     */
+    public final boolean isBound() {
+        return (m_flags & TypeInfo.BOUND) != 0;
+    }
 }
-
-
