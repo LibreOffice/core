@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:00:22 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,25 +59,20 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XLTOOLS_HXX
 #define SC_XLTOOLS_HXX
 
-#ifndef _RTL_TEXTENC_H
-#include <rtl/textenc.h>
-#endif
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 #ifndef SC_FTOOLS_HXX
 #include "ftools.hxx"
 #endif
-#ifndef SC_XLCONST_HXX
-#include "xlconst.hxx"
-#endif
-
 
 // BIFF versions ==============================================================
 
@@ -101,7 +96,6 @@ enum XclBoolError
     xlErrUnknown                /// For unknown codes and values.
 };
 
-
 // GUID import/export =========================================================
 
 class XclImpStream;
@@ -110,16 +104,16 @@ class XclExpStream;
 /** This struct stores a GUID (class ID) and supports reading, writing and comparison. */
 struct XclGuid
 {
-    sal_uInt8                   mpData[ 16 ];   /// Stores GUID always in little endian.
+    sal_uInt8           mpnData[ 16 ];  /// Stores GUID always in little endian.
 
-    explicit                    XclGuid();
-    explicit                    XclGuid(
-                                    sal_uInt32 nData1,
-                                    sal_uInt16 nData2, sal_uInt16 nData3,
-                                    sal_uInt8 nData41, sal_uInt8 nData42,
-                                    sal_uInt8 nData43, sal_uInt8 nData44,
-                                    sal_uInt8 nData45, sal_uInt8 nData46,
-                                    sal_uInt8 nData47, sal_uInt8 nData48 );
+    explicit            XclGuid();
+    explicit            XclGuid(
+                            sal_uInt32 nData1,
+                            sal_uInt16 nData2, sal_uInt16 nData3,
+                            sal_uInt8 nData41, sal_uInt8 nData42,
+                            sal_uInt8 nData43, sal_uInt8 nData44,
+                            sal_uInt8 nData45, sal_uInt8 nData46,
+                            sal_uInt8 nData47, sal_uInt8 nData48 );
 };
 
 bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 );
@@ -127,7 +121,6 @@ inline bool operator!=( const XclGuid& rCmp1, const XclGuid& rCmp2 ) { return !(
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclGuid& rGuid );
 XclExpStream& operator<<( XclExpStream& rStrm, const XclGuid& rGuid );
-
 
 // Excel Tools ================================================================
 
@@ -143,92 +136,105 @@ class XclTools : ScfNoInstance
 public:
 // GUID's ---------------------------------------------------------------------
 
-    static const XclGuid        maGuidStdLink;      /// GUID of StdLink (HLINK record).
-    static const XclGuid        maGuidUrlMoniker;   /// GUID of URL moniker (HLINK record).
-    static const XclGuid        maGuidFileMoniker;  /// GUID of file moniker (HLINK record).
+    static const XclGuid maGuidStdLink;     /// GUID of StdLink (HLINK record).
+    static const XclGuid maGuidUrlMoniker;  /// GUID of URL moniker (HLINK record).
+    static const XclGuid maGuidFileMoniker; /// GUID of file moniker (HLINK record).
 
 // numeric conversion ---------------------------------------------------------
 
     /** Calculates the double value from an RK value (encoded integer or double). */
-    static double               GetDoubleFromRK( sal_Int32 nRKValue );
+    static double       GetDoubleFromRK( sal_Int32 nRKValue );
     /** Calculates an RK value (encoded integer or double) from a double value.
         @param rnRKValue  Returns the calculated RK value.
         @param fValue  The double value.
         @return  true = An RK value could be created. */
-    static bool                 GetRKFromDouble( sal_Int32& rnRKValue, double fValue );
+    static bool         GetRKFromDouble( sal_Int32& rnRKValue, double fValue );
 
     /** Calculates an angle (in 1/100 of degrees) from an Excel angle value.
         @param nRotForStacked  This value will be returned, if nXclRot contains 'stacked'. */
-    static sal_Int32            GetScRotation( sal_uInt16 nXclRot, sal_Int32 nRotForStacked );
+    static sal_Int32    GetScRotation( sal_uInt16 nXclRot, sal_Int32 nRotForStacked );
     /** Calculates the Excel angle value from an angle in 1/100 of degrees. */
-    static sal_uInt8            GetXclRotation( sal_Int32 nScRot );
+    static sal_uInt8    GetXclRotation( sal_Int32 nScRot );
 
     /** Converts a Calc error code to an Excel error code. */
-    static sal_uInt8            GetXclErrorCode( USHORT nScError );
+    static sal_uInt8    GetXclErrorCode( USHORT nScError );
     /** Converts an Excel error code to a Calc error code. */
-    static USHORT               GetScErrorCode( sal_uInt8 nXclError );
+    static USHORT       GetScErrorCode( sal_uInt8 nXclError );
 
     /** Gets a translated error code or Boolean value from Excel error codes.
         @param rfDblValue  Returns 0.0 for error codes or the value of a Boolean (0.0 or 1.0).
         @param bErrorOrBool  false = nError is a Boolean value; true = is an error value.
         @param nValue  The error code or Boolean value. */
-    static XclBoolError         ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sal_uInt8 nValue );
+    static XclBoolError ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sal_uInt8 nValue );
 
     /** Returns the length in twips calculated from a length in inches. */
-    static sal_uInt16           GetTwipsFromInch( double fInches );
+    static sal_uInt16   GetTwipsFromInch( double fInches );
     /** Returns the length in twips calculated from a length in 1/100 mm. */
-    static sal_uInt16           GetTwipsFromHmm( sal_Int32 nHmm );
+    static sal_uInt16   GetTwipsFromHmm( sal_Int32 nHmm );
 
     /** Returns the length in inches calculated from a length in twips. */
-    static double               GetInchFromTwips( sal_Int32 nTwips );
+    static double       GetInchFromTwips( sal_Int32 nTwips );
     /** Returns the length in inches calculated from a length in 1/100 mm. */
-    static double               GetInchFromHmm( sal_Int32 nHmm );
+    static double       GetInchFromHmm( sal_Int32 nHmm );
 
     /** Returns the length in 1/100 mm calculated from a length in inches. */
-    static sal_Int32            GetHmmFromInch( double fInches );
+    static sal_Int32    GetHmmFromInch( double fInches );
     /** Returns the length in 1/100 mm calculated from a length in twips. */
-    static sal_Int32            GetHmmFromTwips( sal_Int32 nTwips );
+    static sal_Int32    GetHmmFromTwips( sal_Int32 nTwips );
 
     /** Returns the Calc column width (twips) for the passed Excel width.
         @param nScCharWidth  Width of the '0' character in Calc (twips). */
-    static sal_uInt16           GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth );
+    static USHORT       GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth );
     /** Returns the Excel column width for the passed Calc width (twips).
         @param nScCharWidth  Width of the '0' character in Calc (twips). */
-    static sal_uInt16           GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth );
+    static sal_uInt16   GetXclColumnWidth( USHORT nScWidth, long nScCharWidth );
+
+    /** Returns a correction value to convert column widths from/to default column widths.
+        @param nXclDefFontHeight  Excel height of application default font. */
+    static double       GetXclDefColWidthCorrection( long nXclDefFontHeight );
+
+// cell/range addresses -------------------------------------------------------
+
+    /** Creates an ScAddress object from the passed Excel cell address. */
+    static ScAddress    MakeScAddress( sal_uInt16 nXclCol, sal_uInt16 nXclRow, SCTAB nScTab );
+    /** Creates an ScRange object from the passed Excel cell range address. */
+    static ScRange      MakeScRange(
+                            sal_uInt16 nStartXclCol, sal_uInt16 nStartXclRow, SCTAB nStartScTab,
+                            sal_uInt16 nEndXclCol, sal_uInt16 nEndXclRow, SCTAB nEndScTab );
 
 // text encoding --------------------------------------------------------------
 
     /** Returns a text encoding from an Excel code page.
         @return  The corresponding text encoding or RTL_TEXTENCODING_DONTKNOW. */
-    static rtl_TextEncoding     GetTextEncoding( sal_uInt16 nCodePage );
+    static rtl_TextEncoding GetTextEncoding( sal_uInt16 nCodePage );
     /** Returns an Excel code page from a text encoding. */
-    static sal_uInt16           GetXclCodePage( rtl_TextEncoding eTextEnc );
+    static sal_uInt16   GetXclCodePage( rtl_TextEncoding eTextEnc );
 
 // font names -----------------------------------------------------------------
 
     /** Returns the matching Excel font name for a passed Calc font name. */
-    static String               GetXclFontName( const String& rFontName );
+    static String       GetXclFontName( const String& rFontName );
 
 // built-in defined names -----------------------------------------------------
 
     /** Returns the raw English UI representation of a built-in defined name used in NAME records.
         @param nBuiltInIndex  Excel index of the built-in name. */
-    static String               GetXclBuiltInDefName( sal_Unicode nBuiltInIndex );
+    static String       GetXclBuiltInDefName( sal_Unicode nBuiltInIndex );
     /** Returns the Calc UI representation of a built-in defined name used in NAME records.
         @descr  Adds a prefix to the representation returned by GetXclBuiltInDefName().
         @param nBuiltInIndex  Excel index of the built-in name. */
-    static String               GetBuiltInDefName( sal_Unicode nBuiltInIndex );
+    static String       GetBuiltInDefName( sal_Unicode nBuiltInIndex );
     /** Tests on valid built-in name with sheet index.
-        @param rnSheet  Here the parsed sheet index is returned.
+        @param rnXclTab  Here the parsed sheet index is returned.
         @param rString  The string to be determined.
         @param nIndex  Index to built-in name to be compared with the string.
         @return  true = The string is valid. */
-    static bool                 IsBuiltInDefName( sal_uInt16& rnSheet, const String& rName, sal_Unicode nIndex );
+    static bool         IsBuiltInDefName( sal_uInt16& rnXclTab, const String& rName, sal_Unicode nIndex );
     /** Returns the Excel built-in name index of the passed defined name from Calc.
         @descr  Ignores any characters following a valid representation of a built-in name.
         @param pnBuiltInIndex  0, the index of the built-in name will be returned here.
         @return  true = passed string is a built-in name, false = user-defined name. */
-    static bool                 IsBuiltInDefName( const String& rDefName, sal_Unicode* pnBuiltInIndex = NULL );
+    static bool         IsBuiltInDefName( const String& rDefName, sal_Unicode* pnBuiltInIndex = 0 );
 
 // built-in style names -------------------------------------------------------
 
@@ -236,21 +242,19 @@ public:
         @param nStyleId  The identifier of the built-in style.
         @param nLevel  The zero-based outline level for RowLevel and ColLevel styles.
         @return  The style name or an empty string, if the parameters are not valid. */
-    static String               GetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel );
+    static String       GetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel );
     /** Returns true, if the passed string is a name of an Excel built-in style.
         @param pnStyleId  If not 0, the found style identifier will be returned here.
         @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
-    static bool                 IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleId = NULL, xub_StrLen* pnNextChar = NULL );
+    static bool         IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleId = 0, xub_StrLen* pnNextChar = 0 );
     /** Returns the Excel built-in style identifier of a passed style name.
         @param rnStyleId  The style identifier is returned here.
         @param rnLevel  The zero-based outline level for RowLevel and ColLevel styles is returned here.
         @param rStyleName  The style name to examine.
         @return  true = passed string is a built-in style name, false = user style. */
-    static bool                 GetBuiltInStyleId(
-                                    sal_uInt8& rnStyleId, sal_uInt8& rnLevel,
-                                    const String& rStyleName );
-    /** Returns the XF index of a built-in style. */
-    static sal_uInt16           GetBuiltInXFIndex( sal_uInt8 nStyleId, sal_uInt8 nLevel );
+    static bool         GetBuiltInStyleId(
+                            sal_uInt8& rnStyleId, sal_uInt8& rnLevel,
+                            const String& rStyleName );
 
 // conditional formatting style names -----------------------------------------
 
@@ -259,19 +263,18 @@ public:
         @param nFormat  The zero-based index of the conditional formatting.
         @param nCondition  The zero-based index of the condition.
         @return  A style sheet name in the form "Excel_CondFormat_<sheet>_<format>_<condition>". */
-    static String               GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition );
+    static String       GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition );
     /** Returns true, if the passed string is a name of a conditional format style created by Excel import.
         @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
-    static bool                 IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNextChar = NULL );
+    static bool         IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNextChar = 0 );
 
 // ----------------------------------------------------------------------------
 
 private:
-    static const String         maDefNamePrefix;        /// Prefix for built-in defined names.
-    static const String         maStyleNamePrefix;      /// Prefix for built-in cell style names.
-    static const String         maCFStyleNamePrefix;    /// Prefix for cond. formatting style names.
+    static const String maDefNamePrefix;        /// Prefix for built-in defined names.
+    static const String maStyleNamePrefix;      /// Prefix for built-in cell style names.
+    static const String maCFStyleNamePrefix;    /// Prefix for cond. formatting style names.
 };
-
 
 // read/write range lists -----------------------------------------------------
 
@@ -286,7 +289,6 @@ XclImpStream& operator>>( XclImpStream& rStrm, ScRangeList& rRanges );
     (range count); n * (first row; last row; first column; last column). */
 XclExpStream& operator<<( XclExpStream& rStrm, const ScRangeList& rRanges );
 
-
 // Rich-string formatting runs ================================================
 
 /** Represents a formatting run for rich-strings.
@@ -295,30 +297,28 @@ XclExpStream& operator<<( XclExpStream& rStrm, const ScRangeList& rRanges );
     characters. */
 struct XclFormatRun
 {
-    sal_uInt16                  mnChar;
-    sal_uInt16                  mnFontIx;
+    sal_uInt16          mnChar;         /// First character this format applies to.
+    sal_uInt16          mnXclFont;      /// Excel font index for the next characters.
 
-    explicit inline             XclFormatRun() : mnChar( 0 ), mnFontIx( 0 ) {}
-    explicit inline             XclFormatRun( sal_uInt16 nChar, sal_uInt16 nFontIx ) :
-                                    mnChar( nChar ), mnFontIx( nFontIx ) {}
+    explicit inline     XclFormatRun() : mnChar( 0 ), mnXclFont( 0 ) {}
+    explicit inline     XclFormatRun( sal_uInt16 nChar, sal_uInt16 nXclFont ) :
+                            mnChar( nChar ), mnXclFont( nXclFont ) {}
 };
 
 inline bool operator==( const XclFormatRun& rLeft, const XclFormatRun& rRight )
 {
-    return (rLeft.mnChar == rRight.mnChar) && (rLeft.mnFontIx == rRight.mnFontIx);
+    return (rLeft.mnChar == rRight.mnChar) && (rLeft.mnXclFont == rRight.mnXclFont);
 }
 
 inline bool operator<( const XclFormatRun& rLeft, const XclFormatRun& rRight )
 {
-    return (rLeft.mnChar < rRight.mnChar) || ((rLeft.mnChar == rRight.mnChar) && (rLeft.mnFontIx < rRight.mnFontIx));
+    return (rLeft.mnChar < rRight.mnChar) || ((rLeft.mnChar == rRight.mnChar) && (rLeft.mnXclFont < rRight.mnXclFont));
 }
-
 
 // ----------------------------------------------------------------------------
 
 /** A vector with all formatting runs for a rich-string. */
 typedef ::std::vector< XclFormatRun > XclFormatRunVec;
-
 
 // ============================================================================
 
