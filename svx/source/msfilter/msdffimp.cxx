@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:01:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7176,6 +7176,10 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
                 0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
             { OLE_EXCEL_2_STARCALC, "scalc",                // Excel chart
                 0x00020820L, 0x0000, 0x0000,
+                0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
+            // 114465: additional Excel OLE chart classId to above.
+            { OLE_EXCEL_2_STARCALC, "scalc",
+                0x00020821L, 0x0000, 0x0000,
                 0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
             { OLE_POWERPOINT_2_STARIMPRESS, "simpress",     // PowerPoint presentation
                 0x64818d10L, 0x4f9b, 0x11cf,
