@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mhu $ $Date: 2001-03-13 21:15:30 $
+#   last change: $Author: mhu $ $Date: 2001-07-18 11:26:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,16 +76,16 @@ TARGETTYPE=CUI
 
 .IF "$(STORELIB)" == ""
 .IF "$(GUI)" == "UNX"
-STOLIB=	-lsto$(UPD)$(DLLPOSTFIX)
+STORELIB=	-lstore
 .ELSE  # unx
-STOLIB=	$(LB)$/istore.lib
+STORELIB=	$(LB)$/istore.lib
 .ENDIF # unx
 .ENDIF # storelib
 
 .IF "$(GUI)" == "UNX"
-STODBGLIB=	$(LB)$/libstodbg.a
+STOREDBGLIB=	$(LB)$/libstoredbg.a
 .ELSE  # unx
-STODBGLIB=	$(LB)$/stodbg.lib
+STOREDBGLIB=	$(LB)$/storedbg.lib
 .ENDIF # unx
 
 CFLAGS+= -I..$/source
@@ -104,18 +104,18 @@ OBJFILES=	\
 
 APP1TARGET=		t_file
 APP1OBJS=		$(OBJ)$/t_file.obj
-APP1STDLIBS=	$(STODBGLIB)
+APP1STDLIBS=	$(STOREDBGLIB)
 APP1STDLIBS+=	$(SALLIB)
 APP1DEPN=	\
-    $(STODBGLIB)	\
+    $(STOREDBGLIB)	\
     $(L)$/isal.lib
 
 APP2TARGET=		t_base
 APP2OBJS=		$(OBJ)$/t_base.obj
-APP2STDLIBS=	$(STODBGLIB)
+APP2STDLIBS=	$(STOREDBGLIB)
 APP2STDLIBS+=	$(SALLIB)
 APP2DEPN=	\
-    $(STODBGLIB)	\
+    $(STOREDBGLIB)	\
     $(L)$/isal.lib
 
 APP3TARGET=		t_store
