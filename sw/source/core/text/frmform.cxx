@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:08:43 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,8 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
                              const xub_StrLen nOffset, const xub_StrLen nEnd,
                              const sal_uInt8 nMode )
 {
-    SWAP_IF_SWAPPED( this )
+    SwFrmSwapper aSwapper( this, sal_False );
+
     // Wir haben den Rest der Textmasse: alle Follows loeschen
     // Sonderfall sind DummyPortions()
     // - special cases are controlled by parameter <nMode>.
@@ -674,12 +675,11 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
             if( ((SwTxtFrm*)GetFollow())->IsLocked() )
             {
                 ASSERT( sal_False, "+SwTxtFrm::JoinFrm: Follow ist locked." );
-                UNDO_SWAP( this )
                 return;
             }
             JoinFrm();
         }
-        UNDO_SWAP( this )
+
         return;
     }
 
@@ -714,7 +714,6 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
         if ( CalcFollow( nNewOfst ) )   // CalcFollow erst zum Schluss, dort erfolgt ein SetOfst
             rLine.SetOnceMore( sal_True );
     }
-    UNDO_SWAP( this )
 }
 
 /*************************************************************************
@@ -984,7 +983,7 @@ sal_Bool SwTxtFrm::CalcPreps()
                 }
             }
 
-    SWAP_IF_NOT_SWAPPED( this )
+            SWAP_IF_NOT_SWAPPED( this )
 
             SwTxtFormatInfo aInf( this );
             SwTxtFormatter aLine( this, &aInf );
@@ -1221,7 +1220,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     // the other flags => loop
 
     // OD 04.04.2003 #108446# - handle special case:
-    // If text frame contains no content and just has splitted, because of a
+    // If text frame contains no content and just has split, because of a
     // line stop, it has to move forward. To force this forward move without
     // unnecessary formatting of its footnotes and its follow, especially in
     // columned sections, adjust frame height to zero (0) and do not perform
