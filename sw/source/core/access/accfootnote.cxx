@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfootnote.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:35:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,11 @@
 #include <vos/mutex.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
@@ -119,11 +119,11 @@
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
-const sal_Char sServiceNameFootnote[] = "drafts.com.sun.star.text.AccessibleFootnoteView";
-const sal_Char sServiceNameEndnote[] = "drafts.com.sun.star.text.AccessibleEndnoteView";
+const sal_Char sServiceNameFootnote[] = "com.sun.star.text.AccessibleFootnoteView";
+const sal_Char sServiceNameEndnote[] = "com.sun.star.text.AccessibleEndnoteView";
 const sal_Char sImplementationNameFootnote[] = "com.sun.star.comp.Writer.SwAccessibleFootnoteView";
 const sal_Char sImplementationNameEndnote[] = "com.sun.star.comp.Writer.SwAccessibleEndnoteView";
 
@@ -133,7 +133,7 @@ SwAccessibleFootnote::SwAccessibleFootnote(
         sal_Int32 nFootEndNote,
         const SwFtnFrm *pFtnFrm ) :
     SwAccessibleContext( pMap,
-        bIsEndnote ? AccessibleRole::ENDNOTE : AccessibleRole::FOOTNOTE,
+        bIsEndnote ? AccessibleRole::END_NOTE : AccessibleRole::FOOTNOTE,
         pFtnFrm )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -155,7 +155,7 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription (void)
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    sal_uInt16 nResId = AccessibleRole::ENDNOTE == GetRole()
+    sal_uInt16 nResId = AccessibleRole::END_NOTE == GetRole()
         ? STR_ACCESS_ENDNOTE_DESC
         : STR_ACCESS_FOOTNOTE_DESC ;
 
@@ -174,7 +174,7 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription (void)
 OUString SAL_CALL SwAccessibleFootnote::getImplementationName()
         throw( RuntimeException )
 {
-    if( AccessibleRole::ENDNOTE == GetRole() )
+    if( AccessibleRole::END_NOTE == GetRole() )
         return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationNameEndnote));
     else
         return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationNameFootnote));
@@ -187,7 +187,7 @@ sal_Bool SAL_CALL SwAccessibleFootnote::supportsService(
     if( sTestServiceName.equalsAsciiL( sAccessibleServiceName,
                                        sizeof(sAccessibleServiceName)-1 ) )
         return sal_True;
-    else if( AccessibleRole::ENDNOTE == GetRole() )
+    else if( AccessibleRole::END_NOTE == GetRole() )
         return sTestServiceName.equalsAsciiL( sServiceNameEndnote, sizeof(sServiceNameEndnote)-1 );
     else
         return sTestServiceName.equalsAsciiL( sServiceNameFootnote, sizeof(sServiceNameFootnote)-1 );
@@ -199,7 +199,7 @@ Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    if( AccessibleRole::ENDNOTE == GetRole() )
+    if( AccessibleRole::END_NOTE == GetRole() )
         pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceNameEndnote) );
     else
         pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceNameFootnote) );
