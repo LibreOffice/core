@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 08:23:35 $
+ *  last change: $Author: os $ $Date: 2002-08-15 07:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,12 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     aControls[15] =0;
 
     Link aLink = LINK(this, SwTextGridPage, CharSizeChangedHdl);
-    aCharsPerLineNF.SetModifyHdl(aLink);
-    aTextSizeMF.SetModifyHdl(aLink);
+    aCharsPerLineNF.SetUpHdl(aLink);
+    aTextSizeMF.SetUpHdl(aLink);
+    aCharsPerLineNF.SetDownHdl(aLink);
+    aTextSizeMF.SetDownHdl(aLink);
+    aCharsPerLineNF.SetLoseFocusHdl(aLink);
+    aTextSizeMF.SetLoseFocusHdl(aLink);
 
     Link aGridTypeHdl = LINK(this, SwTextGridPage, GridTypeHdl);
     aNoGridRB   .SetClickHdl(aGridTypeHdl);
@@ -171,9 +175,14 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     Link aModifyLk = LINK(this, SwTextGridPage, GridModifyHdl);
     aColorLB.SetSelectHdl(aModifyLk);
     aPrintCB.SetClickHdl(aModifyLk);
-    aLinesPerPageNF.SetModifyHdl(aModifyLk);
-    aRubySizeMF.SetModifyHdl(aModifyLk);
     aRubyBelowCB.SetClickHdl(aModifyLk);
+
+    aLinesPerPageNF.SetUpHdl(aModifyLk);
+    aRubySizeMF.SetUpHdl(aModifyLk);
+    aLinesPerPageNF.SetDownHdl(aModifyLk);
+    aRubySizeMF.SetDownHdl(aModifyLk);
+    aLinesPerPageNF.SetLoseFocusHdl(aModifyLk);
+    aRubySizeMF.SetLoseFocusHdl(aModifyLk);
 
     aDisplayCB.SetClickHdl(LINK(this, SwTextGridPage, DisplayGridHdl));
 
