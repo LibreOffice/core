@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: os $ $Date: 2000-10-25 15:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,7 +804,7 @@ void SwColumnPage::Init()
         }
         else
         {
-            aLineTypeDLB.SelectEntryPos( lcl_LineWidthToPos(( pColMgr->GetLineWidth() ) + 1 ));
+            aLineTypeDLB.SelectEntryPos( lcl_LineWidthToPos(( pColMgr->GetLineWidth() )) + 1);
             aLineHeightEdit.SetValue( pColMgr->GetLineHeightPercent() );
         }
         aLinePosDLB.SelectEntryPos( eAdj - 1 );
@@ -1394,168 +1394,5 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 ColumnValueSet::~ColumnValueSet()
 {
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.156  2000/09/18 16:05:32  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.155  2000/09/05 10:38:24  kz
-    chg. SetWinStyle/GetWinStyle to SetStyle/GetStyle
-
-    Revision 1.154  2000/08/15 15:46:54  os
-    #77635# set accelerator at last character
-
-    Revision 1.153  2000/07/26 16:26:29  jp
-    Bug #77158#: call InsertRegionDialog with the complete Itemset
-
-    Revision 1.152  2000/05/23 18:48:10  jp
-    Bugfixes for Unicode
-
-    Revision 1.151  2000/03/03 15:17:01  os
-    StarView remainders removed
-
-    Revision 1.150  2000/01/07 15:32:20  ama
-    Fix #71411#: NoBalanced columns
-
-    Revision 1.149  2000/01/04 15:36:29  os
-    #71411# balanced columns
-
-    Revision 1.148  1999/10/22 11:41:23  os
-    #69058# ListBox entries: selected sections only if more than one section is selected
-
-    Revision 1.147  1999/09/06 18:16:32  jp
-    Insert into the LineTypeBox twip values and set the Source- & Unit
-
-    Revision 1.146  1999/06/10 16:39:56  JP
-    new: Change columns for selected Pages or Sections
-
-
-      Rev 1.145   10 Jun 1999 18:39:56   JP
-   new: Change columns for selected Pages or Sections
-
-      Rev 1.144   27 May 1999 13:02:26   OS
-   Einf?gen/Bearbeiten von Spalten ueberarbeitet
-
-      Rev 1.143   05 Mar 1999 10:30:08   OS
-   #62854# ModifyHdl nur im Up/Down/LoseFocus, kein Timer
-
-      Rev 1.142   12 Oct 1998 17:21:32   OM
-   #57749# UI fuer spaltige Bereiche
-
-      Rev 1.141   08 Sep 1998 16:56:54   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.140   12 May 1998 12:29:34   OS
-   GapModify return wenn Spaltenzahl < 2 #50218#
-
-      Rev 1.139   24 Apr 1998 11:05:50   OS
-   Spalten in Rahmenvorlagen nur relativ
-
-      Rev 1.138   08 Apr 1998 13:55:24   OS
-   ein cast an der falschen Stelle
-
-      Rev 1.137   06 Apr 1998 09:49:20   OS
-   Warnungen beseitigt
-
-      Rev 1.136   28 Nov 1997 19:30:32   MA
-   includes
-
-      Rev 1.135   24 Nov 1997 17:40:10   MA
-   include
-
-      Rev 1.134   03 Nov 1997 13:19:48   MA
-   precomp entfernt
-
-      Rev 1.133   02 Sep 1997 14:41:42   OS
-   LineListBox fuer VCL
-
-      Rev 1.132   01 Sep 1997 13:26:24   OS
-   DLL-Umstellung
-
-      Rev 1.131   12 Aug 1997 15:58:08   OS
-   frmitems/textitem/paraitem aufgeteilt
-
-      Rev 1.130   08 Aug 1997 17:26:38   OM
-   Headerfile-Umstellung
-
-      Rev 1.129   07 Aug 1997 14:59:06   OM
-   Headerfile-Umstellung
-
-      Rev 1.128   07 Mar 1997 09:35:28   OS
-   Spaltenbeispiel mit UserDraw
-
-      Rev 1.127   20 Feb 1997 19:20:24   HJS
-   header umgestellt
-
-      Rev 1.126   28 Jan 1997 16:31:52   OS
-   HtmlMode mit GetHtmlMode ermitteln
-
-      Rev 1.125   08 Jan 1997 11:00:26   OS
-   SID_HTML_MODE jetzt UInt16Item
-
-      Rev 1.124   11 Dec 1996 10:24:06   MA
-   Warnings
-
-      Rev 1.123   02 Dec 1996 11:42:22   OS
-   GapModify mit PercentField
-
-      Rev 1.122   22 Nov 1996 09:52:16   OS
-   ValueSet deselektieren, wenn sich die Spaltenzahl aendert
-
-      Rev 1.121   21 Nov 1996 11:53:56   OS
-   Umrandungsabstand beruecksichtigen
-
-      Rev 1.120   11 Nov 1996 10:44:16   MA
-   ResMgr
-
-      Rev 1.119   08 Nov 1996 14:07:24   OS
-   div. Bugs behoben
-
-      Rev 1.118   25 Oct 1996 14:55:36   OS
-   neues Spaltenbeispiel ohne Seite
-
-      Rev 1.117   24 Oct 1996 17:57:40   OS
-   Rahmendialog mit unterschiedlichen Spaltenabstaenden
-
-      Rev 1.116   18 Oct 1996 16:14:40   HJS
-   includes
-
-      Rev 1.115   11 Oct 1996 12:06:28   OS
-   Aenderungen fuer HTML-Mode
-
-      Rev 1.114   02 Oct 1996 17:36:18   MA
-   Umstellung Enable/Disable
-
-      Rev 1.113   11 Sep 1996 15:09:32   OM
-   Rahmenspalten
-
-      Rev 1.112   10 Sep 1996 17:00:44   OM
-   Prozentuale Rahmen
-
-      Rev 1.111   09 Sep 1996 16:57:04   OM
-   Prozentuale Spalten
-
-      Rev 1.110   06 Sep 1996 14:15:18   OM
-   #31010# GPF bei fehlenden Groessenangaben behoben
-
-      Rev 1.109   28 Aug 1996 11:52:52   OS
-   includes
-
-      Rev 1.108   12 Aug 1996 14:04:08   OS
-   Registerhaltigkeit abschaltbar ...
-
-      Rev 1.107   10 Aug 1996 14:59:24   OS
-   FixedTexts immer mit enablen/disablen
-
-      Rev 1.106   31 Jul 1996 14:45:58   OS
-   im Html-Mode nur autom. Spaltenbreite
-
-      Rev 1.105   27 Jul 1996 10:52:58   OS
-   RegisterItem benutzen
-
-------------------------------------------------------------------------*/
-
 
 
