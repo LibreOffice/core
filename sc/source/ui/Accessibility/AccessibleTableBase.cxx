@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-13 17:42:44 $
+ *  last change: $Author: sab $ $Date: 2002-08-15 10:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,13 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sa
 {
     ScUnoGuard aGuard;
     IsObjectValid();
+
+    if (nRow > (maRange.aEnd.Row() - maRange.aStart.Row()) ||
+        nRow < 0 ||
+        nColumn > (maRange.aEnd.Col() - maRange.aStart.Col()) ||
+        nColumn < 0)
+        throw lang::IndexOutOfBoundsException();
+
     nRow -= maRange.aStart.Row();
     nColumn -= maRange.aStart.Col();
     return (nRow * (maRange.aEnd.Col() + 1)) + nColumn;
@@ -334,6 +341,10 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildInde
 {
     ScUnoGuard aGuard;
     IsObjectValid();
+
+    if (nChildIndex >= getAccessibleChildCount() || nChildIndex < 0)
+        throw lang::IndexOutOfBoundsException();
+
     return nChildIndex / (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
 }
 
@@ -342,6 +353,10 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildI
 {
     ScUnoGuard aGuard;
     IsObjectValid();
+
+    if (nChildIndex >= getAccessibleChildCount() || nChildIndex < 0)
+        throw lang::IndexOutOfBoundsException();
+
     return nChildIndex % (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
 }
 
@@ -365,6 +380,10 @@ uno::Reference< XAccessible > SAL_CALL
 {
     ScUnoGuard aGuard;
     IsObjectValid();
+
+    if (nIndex >= getAccessibleChildCount() || nIndex < 0)
+        throw lang::IndexOutOfBoundsException();
+
     sal_Int32 nRow(0);
     sal_Int32 nColumn(0);
     sal_Int32 nTemp(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
