@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-05-21 14:53:54 $
+ *  last change: $Author: kz $ $Date: 2002-05-27 20:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,13 +265,13 @@ TabPage TP_TEXTGRID_PAGE
         Text[ finnish ] = "Base text size";
         Text[ italian ] = "Dimensioni testo base";
         Text[ danish ] = "Base text size";
-        Text[ swedish ] = "Storlek bastext";
+        Text[ swedish ] = "Max. storlek bastext";
         Text[ polish ] = "Base text size";
         Text[ portuguese_brazilian ] = "Base text size";
         Text[ japanese ] = "対象文字列のサイズ";
         Text[ korean ] = "기본 텍스트 크기";
         Text[ chinese_simplified ] = "主文字的大小";
-        Text[ chinese_traditional ] = "主文字的大小";
+        Text[ chinese_traditional ] = "最大的主文字大小";
         Text[ turkish ] = "Base text size";
         Text[ arabic ] = "Base text size";
         Text[ catalan ] = "Base text size";
@@ -352,13 +352,13 @@ TabPage TP_TEXTGRID_PAGE
         Text[ finnish ] = "Ruby text size";
         Text[ italian ] = "Dimens. testo Ruby";
         Text[ danish ] = "Ruby text size";
-        Text[ swedish ] = "Storlek ruby-text";
+        Text[ swedish ] = "Max. storlek ruby-text";
         Text[ polish ] = "Ruby text size";
         Text[ portuguese_brazilian ] = "Ruby text size";
         Text[ japanese ] = "ルビ文字のサイズ";
         Text[ korean ] = "루비 텍스트 크기";
         Text[ chinese_simplified ] = "拼音文字的大小";
-        Text[ chinese_traditional ] = "注音符號的大小";
+        Text[ chinese_traditional ] = "最大的注音符號大小";
         Text[ turkish ] = "Ruby text size";
         Text[ arabic ] = "Ruby text size";
         Text[ catalan ] = "Ruby text size";
