@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: rt $ $Date: 2003-12-01 16:17:17 $
+#   last change: $Author: hr $ $Date: 2004-02-02 19:03:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.52 $ ';
+$id_str = ' $Revision: 1.53 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -607,8 +607,6 @@ sub walk_action_data
     for (my $i=0; $i <= $#action_data; $i++) {
             &{"do_".$action_data[$i][0]}($action_data[$i][1]);
     }
-    # special actions for Mac OS X
-    system("create-libstatic-link", expand_macros("%_DEST%/lib%_EXT%")) if ( $^O eq 'darwin' );
 }
 
 sub glob_line
@@ -705,7 +703,12 @@ sub copy_if_newer
     if ( $rc) {
         $rc = utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);
         if ( !$rc ) {
-            print_error("can't update temporary file modification time '$temp_file': $!",0);
+            # try again
+            sleep 3;
+            $rc = utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);
+            if ( !$rc ) {
+                print_error("can't update temporary file modification time '$temp_file': $!",0);
+            }
         }
         fix_file_permissions($$from_stat_ref[2], $temp_file);
         $rc = rename($temp_file, $to);
