@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectorProperties.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 
 /** This is a set of properties to describe the style for rendering connector.
  */
-service ConnectorProperties
+published service ConnectorProperties
 {
     //-------------------------------------------------------------------------
 
