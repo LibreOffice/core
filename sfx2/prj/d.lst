@@ -22,7 +22,6 @@ mkdir: %_DEST%\inc%_EXT%\sfx2
 ..\%COMMON_OUTDIR%\srs\sfx_srs.hid %COMMON_DEST%\res%_EXT%\sfx_srs.hid
 ..\%__SRC%\srs\sfxslots.srs %_DEST%\res%_EXT%\sfxslots.srs
 ..\%COMMON_OUTDIR%\srs\sfxslots_srs.hid %COMMON_DEST%\res%_EXT%\sfxslots_srs.hid
-..\util\svdbt.dll %_DEST%\bin%_EXT%\svdbt.dll
 ..\util\sfx.xml %_DEST%\xml%_EXT%\sfx.xml
 ..\%__SRC%\misc\sfx2.csv %_DEST%\inc%_EXT%\sfx2.csv
 ..\%__SRC%\inc\macropg.hxx %_DEST%\inc%_EXT%\macropg.hxx
@@ -51,8 +50,6 @@ hedabu: ..\inc\evntconf.hxx %_DEST%\inc%_EXT%\sfx2\evntconf.hxx
 hedabu: ..\inc\exchobj.hxx %_DEST%\inc%_EXT%\sfx2\exchobj.hxx
 hedabu: ..\inc\exptypes.hxx %_DEST%\inc%_EXT%\sfx2\exptypes.hxx
 hedabu: ..\inc\filedlghelper.hxx %_DEST%\inc%_EXT%\sfx2\filedlghelper.hxx
-hedabu: ..\inc\fsetvwsh.hxx %_DEST%\inc%_EXT%\sfx2\fsetvwsh.hxx
-hedabu: ..\inc\fsetobsh.hxx %_DEST%\inc%_EXT%\sfx2\fsetobsh.hxx
 hedabu: ..\inc\fcontnr.hxx %_DEST%\inc%_EXT%\sfx2\fcontnr.hxx
 hedabu: ..\inc\frame.hxx %_DEST%\inc%_EXT%\sfx2\frame.hxx
 hedabu: ..\inc\frameobj.hxx %_DEST%\inc%_EXT%\sfx2\frameobj.hxx
