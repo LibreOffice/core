@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:24:51 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,9 +113,6 @@
 #endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _LINKDLG_HXX //autogen
-#include <so3/linkdlg.hxx>
 #endif
 #ifndef _TXTCMP_HXX //autogen
 #include <svtools/txtcmp.hxx>
@@ -590,12 +587,9 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             {
                 GetEditWin().SetApplyTemplate(SwApplyTemplate());
             }
-            else if( ((SfxObjectShell*)GetDocShell())->GetInPlaceObject() &&
-                        ((SfxObjectShell*)GetDocShell())->GetInPlaceObject()->GetIPClient() )
+            else if( ((SfxObjectShell*)GetDocShell())->IsInPlaceActive() )
             {
-                ErrCode nErr = GetDocShell()->DoInPlaceActivate( FALSE );
-                if ( nErr )
-                    ErrorHandler::HandleError( nErr );
+                Escape();
             }
             else if ( GetEditWin().IsChainMode() )
             {
@@ -1434,9 +1428,13 @@ void SwView::InsFrmMode(USHORT nCols)
 void SwView::EditLinkDlg()
 {
     BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
-    ::so3::SvBaseLinksDialog aSvBaseLinksDialog( &GetViewFrame()->GetWindow(),
-                                    &GetWrtShell().GetLinkManager(), bWeb );
-    aSvBaseLinksDialog.Execute();
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( &GetViewFrame()->GetWindow(), &GetWrtShell().GetLinkManager(), bWeb );
+    if ( pDlg )
+    {
+        pDlg->Execute();
+        delete pDlg;
+    }
 /*
     SwLinkDlg* pDlg = new SwLinkDlg(GetFrameWindow());
     pDlg->SetShell(&GetWrtShell());
