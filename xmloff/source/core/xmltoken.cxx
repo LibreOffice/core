@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.86 $
+*  $Revision: 1.87 $
 *
-*  last change: $Author: rt $ $Date: 2005-01-27 11:08:47 $
+*  last change: $Author: rt $ $Date: 2005-01-28 15:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2755,6 +2755,7 @@ namespace xmloff { namespace token {
         TOKEN( "parallelDiagonalBottomLeft",    XML_PARALLELDIAGONALBOTTOMLEFT ),
         TOKEN( "topLeftHorizontal",         XML_TOPLEFTHORIZONTAL ),
         TOKEN( "topLeftDiagonal",               XML_TOPLEFTDIAGONAL ),
+        TOKEN( "topLeftVertical",               XML_TOPLEFTVERTICAL ),
         TOKEN( "topRightDiagonal",          XML_TOPRIGHTDIAGONAL ),
         TOKEN( "bottomRightDiagonal",           XML_BOTTOMRIGHTDIAGONAL ),
         TOKEN( "bottomLeftDiagonal",            XML_BOTTOMLEFTDIAGONAL ),
