@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:59:30 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,10 +668,24 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
         // apply pair kerning to prev glyph if requested
         if( SAL_LAYOUT_KERNING_PAIRS & rArgs.mnFlags )
         {
-            // TODO: get kerning value from printer
-            int nKern = 0; //GetGlyphKernValue( nOldGlyphId, nGlyphIndex );
-            nGlyphWidth += nKern;
-            aPrevItem.mnNewWidth = nGlyphWidth;
+            if( nOldGlyphId > 0 )
+            {
+                const std::list< KernPair >& rKernPairs = mrPrinterGfx.getKernPairs(mbVertical);
+                for( std::list< KernPair >::const_iterator it = rKernPairs.begin();
+                     it != rKernPairs.end(); ++it )
+                {
+                    if( it->first == nOldGlyphId && it->second == nGlyphIndex )
+                    {
+                        int nTextScale = mrPrinterGfx.GetFontWidth();
+                        if( ! nTextScale )
+                            nTextScale = mrPrinterGfx.GetFontHeight();
+                        int nKern = (mbVertical ? it->kern_y : it->kern_x) * nTextScale;
+                        nGlyphWidth += nKern;
+                        aPrevItem.mnNewWidth = nGlyphWidth;
+                        break;
+                    }
+                }
+            }
         }
 
         // finish previous glyph
