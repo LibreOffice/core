@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-14 16:29:19 $
+ *  last change: $Author: ssa $ $Date: 2002-10-16 11:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2809,6 +2809,18 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
     if ( !pFrame )
         return 0;
 
+    if( nMsg == WM_LBUTTONDOWN || nMsg == WM_MBUTTONDOWN || nMsg == WM_RBUTTONDOWN )
+    {
+        // #103168# post again if async focus has not arrived yet
+        // hopefully we will not receive the corresponding button up before this
+        // button down arrives again
+        Window *pWin = (Window*) pFrame->maFrameData.mpInst;
+        if( pWin && pWin->mpFrameData->mnFocusId )
+        {
+            ImplPostMessage( hWnd, nMsg, wParam, lParam );
+            return 1;
+        }
+    }
     SalMouseEvent   aMouseEvt;
     long            nRet;
     USHORT          nEvent;
