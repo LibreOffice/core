@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:17:35 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@
 #endif
 #ifndef _UNOFRAME_HXX
 #include <unoframe.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
 #endif
 #ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
@@ -863,6 +869,48 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
         }
     }
     delete pMed;
+}
+
+/* -----------------14.07.04 ------------------------
+ *
+ * --------------------------------------------------*/
+
+// insert text and scan for CR characters in order to insert
+// paragraph breaks at those positions by calling SplitNode
+sal_Bool DocInsertStringSplitCR(
+        SwDoc &rDoc,
+        const SwPaM &rNewCursor, const String &rText )
+{
+    sal_Bool bOK = sal_True;
+
+    OUString aTxt;
+    xub_StrLen nStartIdx = 0;
+    xub_StrLen nIdx = rText.Search( '\r', nStartIdx );
+    while (nIdx != STRING_NOTFOUND)
+    {
+        DBG_ASSERT( nIdx - nStartIdx >= 0, "index negative!" );
+        aTxt = rText.Copy( nStartIdx, nIdx - nStartIdx );
+        if (aTxt.getLength() && !rDoc.Insert( rNewCursor, aTxt ))
+        {
+            DBG_ERROR( "Doc->Insert(Str) failed." );
+            bOK = sal_False;
+        }
+        if (!rDoc.SplitNode( *rNewCursor.GetPoint() ) )
+        {
+            DBG_ERROR( "SplitNode failed" );
+            bOK = sal_False;
+        }
+        nStartIdx = nIdx + 1;
+        nIdx = rText.Search( '\r', nStartIdx );
+    }
+    aTxt = rText.Copy( nStartIdx );
+    if (aTxt.getLength() && !rDoc.Insert( rNewCursor, aTxt ))
+    {
+        DBG_ERROR( "Doc->Insert(Str) failed." );
+        bOK = sal_False;
+    }
+
+    return bOK;
 }
 
 }//namespace SwUnoCursorHelper
