@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 17:56:47 $
+ *  last change: $Author: pb $ $Date: 2002-01-10 13:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ TabPage TP_HELP_SEARCH
     CheckBox CB_FULLWORDS
     {
         Pos = MAP_APPFONT ( 6, 34 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Nur ganze Wörter" ;
         Text [ english_us ] = "~Complete words only";
         Text[ portuguese ] = "~Só palavras inteiras";
@@ -357,8 +357,8 @@ TabPage TP_HELP_SEARCH
     };
     CheckBox CB_SCOPE
     {
-        Pos = MAP_APPFONT ( 69, 34 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 6, 47 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Nur in ~Titeln suchen" ;
         Text [ english_us ] = "Find in ~headings only";
         Text[ portuguese ] = "~Procurar só em títulos";
@@ -384,12 +384,12 @@ TabPage TP_HELP_SEARCH
     ListBox LB_RESULT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 47 ) ;
+        Pos = MAP_APPFONT ( 6 , 60 ) ;
         Size = MAP_APPFONT ( 108 , 30 ) ;
     };
     PushButton PB_OPEN_SEARCH
     {
-        Pos = MAP_APPFONT ( 64 , 82 ) ;
+        Pos = MAP_APPFONT ( 64 , 182 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Anzeigen" ;
         Text [ english_us ] = "~Display" ;

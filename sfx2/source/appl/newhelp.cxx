@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-17 11:45:11 $
+ *  last change: $Author: pb $ $Date: 2002-01-10 13:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1113,20 +1113,11 @@ void SearchTabPage_Impl::Resize()
     aSearchFT.SetSizePixel( aNewSize );
     aNewSize.Height() = aResultsLB.GetSizePixel().Height();
     aResultsLB.SetSizePixel( aNewSize );
-    aNewSize.Height() = aFullWordsCB.GetSizePixel().Height();
-    long nW = ( aNewSize.Width() - ( a6Size.Width() / 2 ) ) / 2;
-    aNewSize.Width() = nW;
-    aFullWordsCB.SetSizePixel( aNewSize );
-    Point aNewPnt = aFullWordsCB.GetPosPixel();
-    aNewPnt.X() += ( nW + ( a6Size.Width() / 2 ) );
-    aScopeCB.SetPosPixel( aNewPnt );
-    aScopeCB.SetSizePixel( aNewSize );
-
     aNewSize = aSearchED.GetSizePixel();
     aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 ) -
-                        ( aSearchBtn.GetSizePixel().Width() + ( aPnt.X() / 2 ) );
+                       ( aSearchBtn.GetSizePixel().Width() + ( aPnt.X() / 2 ) );
     aSearchED.SetSizePixel( aNewSize );
-    aNewPnt = aSearchBtn.GetPosPixel();
+    Point aNewPnt = aSearchBtn.GetPosPixel();
     aNewPnt.X() = aPnt.X() + aNewSize.Width() + ( aPnt.X() / 2 );
     aSearchBtn.SetPosPixel( aNewPnt );
 
