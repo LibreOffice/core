@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstyles.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:38:34 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,16 +95,16 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ dutch ] = "Celopmaakprofielen" ;
             Text [ spanish ] = "Estilos de celda" ;
             Text [ english_us ] = "Cell Styles" ;
-            Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½";
+            Text[ chinese_simplified ] = "å•å…ƒæ ¼æ ·å¼";
             Text[ russian ] = "Ñòèëè ÿ÷åéêè";
                 Text[ polish ] = "Style komórki";
-                Text[ japanese ] = "¾Ù½À²Ù";
-                Text[ chinese_traditional ] = "Àx¦s®æ¼Ë¦¡";
+                Text[ japanese ] = "ï½¾ï¾™ï½½ï¾€ï½²ï¾™";
+                Text[ chinese_traditional ] = "å„²å­˜æ ¼æ¨£å¼";
                 Text[ arabic ] = "ÃäãÇØ ÇáÎáÇíÇ";
                 Text[ dutch ] = "Celopmaakprofielen";
-                Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½";
+                Text[ chinese_simplified ] = "å•å…ƒæ ¼æ ·å¼";
                 Text[ greek ] = "Óôõë êåëéïı";
-                Text[ korean ] = "¼¿ À¯Çü";
+                Text[ korean ] = "ì…€ ìœ í˜•";
                 Text[ turkish ] = "Hücre biçimi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Estilos de celda";
@@ -128,22 +128,23 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ dutch ] = "Pagina-opmaakprofielen" ;
             Text [ spanish ] = "Estilos de página" ;
             Text [ english_us ] = "Page Styles" ;
-            Text[ chinese_simplified ] = "Ò³ÃæÑùÊ½";
+            Text[ chinese_simplified ] = "é¡µé¢æ ·å¼";
             Text[ russian ] = "Ñòèëè ñòğàíèöû";
                 Text[ polish ] = "Style strony";
-                Text[ japanese ] = "Íß°¼Ş½À²Ù";
-                Text[ chinese_traditional ] = "­¶­±¼Ë¦¡";
+                Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ï½½ï¾€ï½²ï¾™";
+                Text[ chinese_traditional ] = "é é¢æ¨£å¼";
                 Text[ arabic ] = "ÃäãÇØ ÕİÍÉ";
                 Text[ dutch ] = "Pagina-opmaakprofielen";
-                Text[ chinese_simplified ] = "Ò³ÃæÑùÊ½";
+                Text[ chinese_simplified ] = "é¡µé¢æ ·å¼";
                 Text[ greek ] = "Ğñüôõğá óåëßäáò";
-                Text[ korean ] = "ÂÊ À¯Çü";
+                Text[ korean ] = "ìª½ ìœ í˜•";
                 Text[ turkish ] = "Sayfa biçimi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Estilos de página";
             };
     };
 };
+
 
 
 
