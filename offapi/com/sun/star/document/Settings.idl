@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Settings.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,16 @@ service Settings
     /**
      */
     [optional, property] boolean AutoCalculate;
+
+    // Writer, later others
+    //-------------------------------------------------------------------------
+    /** forbid use of printer metrics for layout
+
+        <p>For supported values see the constants group
+        <type>PrinterIndependentLayout</type>.</p>
+     */
+    [optional, property] short PrinterIndependentLayout;
+
 };
 
 //=============================================================================
