@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfmtf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-14 15:56:59 $
+ *  last change: $Author: sj $ $Date: 2002-10-10 17:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@
 ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(SdrModel& rModel):
     nMapScalingOfs(0),
     pLineAttr(NULL),pFillAttr(NULL),pTextAttr(NULL),pPage(NULL),pModel(NULL),nLayer(0),bFntDirty(TRUE),
-    bLastObjWasPolyWithoutLine(FALSE),bNoLine(FALSE),bNoFill(FALSE),bLastObjWasLine(FALSE)
+    bLastObjWasPolyWithoutLine(FALSE),bNoLine(FALSE),bNoFill(FALSE),bLastObjWasLine(FALSE),nLineWidth(0)
 {
     aVD.EnableOutput(FALSE);
     aOldLineColor.SetRed( aVD.GetLineColor().GetRed() + 1 ); // invalidate old line color
@@ -257,6 +257,7 @@ ULONG ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
             case META_TEXTCOLOR_ACTION      : DoAction((MetaTextColorAction      &)*pAct); break;
             case META_TEXTFILLCOLOR_ACTION  : DoAction((MetaTextFillColorAction  &)*pAct); break;
             case META_FONT_ACTION           : DoAction((MetaFontAction           &)*pAct); break;
+            case META_TEXTALIGN_ACTION      : DoAction((MetaTextAlignAction      &)*pAct); break;
             case META_MAPMODE_ACTION        : DoAction((MetaMapModeAction        &)*pAct); break;
             case META_CLIPREGION_ACTION     : DoAction((MetaClipRegionAction     &)*pAct); break;
             case META_MOVECLIPREGION_ACTION : DoAction((MetaMoveClipRegionAction &)*pAct); break;
@@ -349,6 +350,8 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
 
     if ( bLine )
     {
+        if ( nLineWidth )
+            pLineAttr->Put( XLineWidthItem( nLineWidth ) );
         aOldLineColor = aVD.GetLineColor();
         if( aVD.IsLineColor() )
         {
@@ -455,7 +458,16 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
     aXP.Scale( fScaleX, fScaleY );
     aXP.Translate( aOfs );
 
-    if ( !bLastObjWasLine || !CheckLastLineMerge( aXP ) )
+    const LineInfo& rLineInfo = rAct.GetLineInfo();
+    sal_Int32 nNewLineWidth = rLineInfo.GetWidth();
+    sal_Bool bCreateLineObject = sal_True;
+
+    if ( bLastObjWasLine && ( nNewLineWidth == nLineWidth ) && CheckLastLineMerge( aXP ) )
+        bCreateLineObject = sal_False;
+
+    nLineWidth = nNewLineWidth;
+
+    if ( bCreateLineObject )
     {
         SdrPathObj* pPath = new SdrPathObj( OBJ_LINE, XPolyPolygon( aXP ) );
         SetAttributes( pPath );
@@ -603,19 +615,29 @@ sal_Bool ImpSdrGDIMetaFileImport::CheckLastPolyLineAndFillMerge( const XPolyPoly
     return sal_False;
 }
 
+
 void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
 {
     XPolygon aXP( rAct.GetPolygon() );
     aXP.Scale( fScaleX, fScaleY );
     aXP.Translate( aOfs );
-    if ( !bLastObjWasLine || !CheckLastLineMerge( aXP ) )
+
+    const LineInfo& rLineInfo = rAct.GetLineInfo();
+    sal_Int32 nNewLineWidth = rLineInfo.GetWidth();
+    sal_Bool bCreateLineObject = sal_True;
+
+    if ( bLastObjWasLine && ( nNewLineWidth == nLineWidth ) && CheckLastLineMerge( aXP ) )
+        bCreateLineObject = sal_False;
+    else if ( bLastObjWasPolyWithoutLine && CheckLastPolyLineAndFillMerge( XPolyPolygon( aXP ) ) )
+        bCreateLineObject = sal_False;
+
+    nLineWidth = nNewLineWidth;
+
+    if ( bCreateLineObject )
     {
-        if ( !bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge( XPolyPolygon( aXP ) ) )
-        {
-            SdrPathObj* pPath = new SdrPathObj( OBJ_PLIN, XPolyPolygon( aXP ) );
-            SetAttributes(pPath);
-            InsertObj( pPath, sal_False );
-        }
+        SdrPathObj* pPath = new SdrPathObj( OBJ_PLIN, XPolyPolygon( aXP ) );
+        SetAttributes( pPath );
+        InsertObj( pPath, sal_False );
     }
 }
 
@@ -665,6 +687,11 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction& rAct)
 void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rStr, const MetaAction& rAct )
 {
     // calc text box size, add 5% to make it fit safely
+
+    FontMetric aFontMetric( aVD.GetFontMetric() );
+    Font aFnt( aVD.GetFont() );
+    FontAlign eAlg( aFnt.GetAlign() );
+
     sal_Int32 nTextWidth = (sal_Int32)( aVD.GetTextWidth( rStr ) * fScaleX );
     sal_Int32 nTextHeight = (sal_Int32)( aVD.GetTextHeight() * fScaleY );
     sal_Int32 nDxWidth = 0;
@@ -673,12 +700,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
     Point aPos( rPos.X() * fScaleX + aOfs.X(), rPos.Y() * fScaleY + aOfs.Y() );
     Size aSize( nTextWidth, nTextHeight );
 
-    FontMetric aFontMetric( aVD.GetFontMetric() );
-    Font aFnt( aVD.GetFont() );
-    FontAlign eAlg( aFnt.GetAlign() );
-
-    // calc rectangle for new object
-    if ( ( rAct.GetType() == META_STRETCHTEXT_ACTION ) || ( eAlg == ALIGN_BASELINE ) )
+    if ( eAlg == ALIGN_BASELINE )
         aPos.Y() -= aFontMetric.GetAscent() * fScaleY;
     else if ( eAlg == ALIGN_BOTTOM )
         aPos.Y() -= nTextHeight;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfmtf.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-14 15:56:59 $
+ *  last change: $Author: sj $ $Date: 2002-10-10 17:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ protected:
     SdrModel*                   pModel;
     SdrLayerID                  nLayer;
     Color                       aOldLineColor;
+    sal_Int32                   nLineWidth;
 
     sal_Bool                    bMov;
     sal_Bool                    bSize;
@@ -170,6 +171,7 @@ protected:
     void DoAction(MetaTextColorAction       & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaTextFillColorAction   & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaFontAction            & rAct) { rAct.Execute(&aVD); bFntDirty=TRUE; }
+    void DoAction(MetaTextAlignAction       & rAct) { rAct.Execute(&aVD); bFntDirty=TRUE; }
     void DoAction(MetaClipRegionAction      & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaRasterOpAction        & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaPushAction            & rAct) { rAct.Execute(&aVD); }
