@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsave.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:22:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,13 @@
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #endif
 
+namespace com { namespace sun { namespace star { namespace sheet {
+    struct DataPilotFieldReference;
+    struct DataPilotFieldSortInfo;
+    struct DataPilotFieldAutoShowInfo;
+    struct DataPilotFieldLayoutInfo;
+} } } }
+
 class SvStream;
 
 // --------------------------------------------------------------------
@@ -97,13 +104,13 @@ public:
 
     BOOL                    operator== ( const ScDPSaveMember& r ) const;
 
-    const String&           GetName()   { return aName; }
-    BOOL                    HasIsVisible();
+    const String&           GetName() const { return aName; }
+    BOOL                    HasIsVisible() const;
     void                    SetIsVisible(BOOL bSet);
-    BOOL                    GetIsVisible() { return BOOL(nVisibleMode); }
-    BOOL                    HasShowDetails();
+    BOOL                    GetIsVisible() const { return BOOL(nVisibleMode); }
+    BOOL                    HasShowDetails() const;
     void                    SetShowDetails(BOOL bSet);
-    BOOL                    GetShowDetails() { return BOOL(nShowDetailsMode); }
+    BOOL                    GetShowDetails() const { return BOOL(nShowDetailsMode); }
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
                                             com::sun::star::uno::XInterface>& xMember );
@@ -127,6 +134,10 @@ private:
     BOOL        bSubTotalDefault;   //! at level
     long        nSubTotalCount;
     USHORT*     pSubTotalFuncs;     // enum GeneralFunction
+    ::com::sun::star::sheet::DataPilotFieldReference* pReferenceValue;
+    ::com::sun::star::sheet::DataPilotFieldSortInfo*  pSortInfo;            // (level)
+    ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* pAutoShowInfo;     // (level)
+    ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pLayoutInfo;         // (level)
     List        aMemberList;
 
 public:
@@ -137,7 +148,7 @@ public:
 
     BOOL                    operator== ( const ScDPSaveDimension& r ) const;
 
-    const List&             GetMembers() { return aMemberList; }
+    const List&             GetMembers() const { return aMemberList; }
     void                    AddMember(ScDPSaveMember* pMember) { aMemberList.Insert(pMember, LIST_APPEND); };
 
     void                    SetDupFlag(BOOL bSet)   { bDupFlag = bSet; }
@@ -149,18 +160,28 @@ public:
     void                    SetOrientation(USHORT nNew);
     void                    SetSubTotals(BOOL bSet);        // to be removed!
     void                    SetSubTotals(long nCount, const USHORT* pFuncs);
-    long                    GetSubTotalsCount() { return nSubTotalCount; }
-    USHORT                  GetSubTotalFunc(long nIndex) { return pSubTotalFuncs[nIndex]; }
+    long                    GetSubTotalsCount() const { return nSubTotalCount; }
+    USHORT                  GetSubTotalFunc(long nIndex) const { return pSubTotalFuncs[nIndex]; }
     void                    SetShowEmpty(BOOL bSet);
-    BOOL                    GetShowEmpty() { return BOOL(nShowEmptyMode); }
+    BOOL                    GetShowEmpty() const { return BOOL(nShowEmptyMode); }
     void                    SetFunction(USHORT nNew);       // enum GeneralFunction
-    USHORT                  GetFunction() { return nFunction; }
+    USHORT                  GetFunction() const { return nFunction; }
     void                    SetUsedHierarchy(long nNew);
-    long                    GetUsedHierarchy() { return nUsedHierarchy; }
+    long                    GetUsedHierarchy() const { return nUsedHierarchy; }
     void                    SetLayoutName(const String* pName);
     const String&           GetLayoutName() const;
     BOOL                    HasLayoutName() const;
     void                    ResetLayoutName();
+
+    const ::com::sun::star::sheet::DataPilotFieldReference* GetReferenceValue() const   { return pReferenceValue; }
+    void                    SetReferenceValue(const ::com::sun::star::sheet::DataPilotFieldReference* pNew);
+
+    const ::com::sun::star::sheet::DataPilotFieldSortInfo* GetSortInfo() const          { return pSortInfo; }
+    void                    SetSortInfo(const ::com::sun::star::sheet::DataPilotFieldSortInfo* pNew);
+    const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* GetAutoShowInfo() const  { return pAutoShowInfo; }
+    void                    SetAutoShowInfo(const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* pNew);
+    const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* GetLayoutInfo() const      { return pLayoutInfo; }
+    void                    SetLayoutInfo(const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pNew);
 
     void                    SetCurrentPage( const String* pPage );      // NULL = no selection (all)
     BOOL                    HasCurrentPage() const;
@@ -203,6 +224,7 @@ public:
     ScDPSaveDimension*      GetDataLayoutDimension();
 
     ScDPSaveDimension*      DuplicateDimension(const String& rName);
+    ScDPSaveDimension&      DuplicateDimension(const ScDPSaveDimension& rDim);
 
     ScDPSaveDimension*      GetExistingDimensionByName(const String& rName);
     ScDPSaveDimension*      GetNewDimensionByName(const String& rName);
