@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 13:01:47 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
 #endif
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
@@ -156,7 +156,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
-using namespace ::drafts::com::sun::star::frame;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
 #define ERROR_TAG   String( DEFINE_CONST_UNICODE("Error: ") )
@@ -492,7 +492,7 @@ String SfxHelp::GetHelpModuleName_Impl()
         DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
     Reference < XFrame > xActiveTask = xDesktop->getActiveFrame();
     Reference < XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE("drafts.com.sun.star.frame.ModuleManager") ), UNO_QUERY );
+        DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY );
 
     rtl::OUString aModuleIdentifier;
     rtl::OUString aFactoryShortName;
@@ -503,7 +503,7 @@ String SfxHelp::GetHelpModuleName_Impl()
         {
             aModuleIdentifier = xModuleManager->identify( xActiveTask );
         }
-        catch ( ::drafts::com::sun::star::frame::UnknownModuleException& )
+        catch ( ::com::sun::star::frame::UnknownModuleException& )
         {
             DBG_WARNING( "SfxHelp::GetHelpModuleName_Impl(): unknown module (help in help?)" );
         }
