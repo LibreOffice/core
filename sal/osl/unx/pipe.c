@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jbu $ $Date: 2001-04-27 11:02:15 $
+ *  last change: $Author: jbu $ $Date: 2001-05-28 17:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,6 @@ void SAL_CALL osl_releasePipe( oslPipe pPipe )
 #ifdef LINUX
         }
 #endif
-        __osl_destroyPipeImpl( pPipe );
     }
 }
 
