@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:55 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 15:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,45 @@ ODbaseConnection::~ODbaseConnection()
 {
 }
 
+// --------------------------------------------------------------------------------
+void ODbaseConnection::construct(const ::rtl::OUString& _rUrl,const Sequence< PropertyValue >& _rInfo ) throw(SQLException)
+{
+    // check the arguments for settings which are not allowed here
+    // Normally, the base class would just ignore such settings. But there are settings which are recognized
+    // by the base class, but not allowed for ourself anymore.
+
+    const PropertyValue* pSetting = _rInfo.getConstArray();
+    const PropertyValue* pSettingEnd = pSetting + _rInfo.getLength();
+
+    Sequence< PropertyValue > aPatchedInfo(_rInfo);
+        // (cheap (till now) as the sequences are ref-counted)
+    PropertyValue* pNextPatchedInfo = NULL;
+
+    for (;pSetting < pSettingEnd; ++pSetting)
+    {
+        if (0 == pSetting->Name.compareToAscii("Extension"))
+        {
+            if (!pNextPatchedInfo)
+                // never found such an invalid setting before
+                pNextPatchedInfo = aPatchedInfo.getArray() + (pSetting - _rInfo.getConstArray());
+        }
+        else
+        {
+            if (pNextPatchedInfo)
+            {
+                *pNextPatchedInfo = *pSetting;
+                ++pNextPatchedInfo;
+            }
+        }
+    }
+
+    if (pNextPatchedInfo)
+        // we omitted at least one setting
+        aPatchedInfo.realloc(pNextPatchedInfo - aPatchedInfo.getArray());
+
+    ODbaseConnection_Base::construct(_rUrl, aPatchedInfo);
+}
+
 // XServiceInfo
 // --------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(ODbaseConnection, "com.sun.star.sdbc.drivers.dbase.Connection", "com.sun.star.sdbc.Connection")
@@ -176,7 +215,3 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareCall( const ::
 
     return NULL;
 }
-// -----------------------------------------------------------------------------
-
-
-
