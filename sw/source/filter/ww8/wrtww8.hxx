@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:54:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,9 +351,7 @@ public:
         : mnCp(nCp), mnShapeId(0), maCntnt(rCntnt), maParentPos(aParentPos),
         mnThick(0), mnDirection(nDir), mnHdFtIndex(nHdFtIndex) {}
     void SetShapeDetails(UINT32 nId, INT32 nThick);
-private:
-    //No assignment
-    DrawObj& operator=(const DrawObj&);
+    DrawObj& operator=(const DrawObj &rOther);
 };
 
 typedef std::vector<DrawObj> DrawObjVector;
@@ -895,13 +893,15 @@ public:
 class GraphicDetails
 {
 public:
-    const sw::Frame maFly;      // Umgebende FlyFrms dazu
+    sw::Frame maFly;            // Umgebende FlyFrms dazu
     ULONG mnPos;                // FilePos der Grafiken
     UINT16 mnWid;               // Breite der Grafiken
     UINT16 mnHei;               // Hoehe der Grafiken
+
     GraphicDetails(const sw::Frame &rFly, UINT16 nWid, UINT16 nHei)
         : maFly(rFly), mnPos(0), mnWid(nWid), mnHei(nHei)
     {}
+    GraphicDetails& operator=(const GraphicDetails& rOther);
 
     bool operator==(const GraphicDetails& rIn) const
     {
