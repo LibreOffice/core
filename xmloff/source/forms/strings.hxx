@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:03:33 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,6 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( PROPERTY_VALUE_MAX,          "ValueMax");
     XMLFORM_CONSTASCII_STRING( PROPERTY_EFFECTIVE_MIN,      "EffectiveMin");
     XMLFORM_CONSTASCII_STRING( PROPERTY_EFFECTIVE_MAX,      "EffectiveMax");
-
     XMLFORM_CONSTASCII_STRING( PROPERTY_DEFAULT_DATE,       "DefaultDate");
     XMLFORM_CONSTASCII_STRING( PROPERTY_DATE,               "Date");
     XMLFORM_CONSTASCII_STRING( PROPERTY_DEFAULT_TIME,       "DefaultTime");
@@ -169,6 +168,12 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( PROPERTY_EFFECTIVE_DEFAULT,  "EffectiveDefault");
     XMLFORM_CONSTASCII_STRING( PROPERTY_REFVALUE,           "RefValue");
     XMLFORM_CONSTASCII_STRING( PROPERTY_URL,                "URL");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_FONT,               "FontDescriptor");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_BACKGROUNDCOLOR,    "BackgroundColor");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_MASTERFIELDS,       "MasterFields");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_DETAILFIELDS,       "DetailFields");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_COLUMNSERVICENAME,  "ColumnServiceName");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_FORMATKEY,          "FormatKey");
 
     // services
     XMLFORM_CONSTASCII_STRING( SERVICE_FORMSCOLLECTION, "com.sun.star.form.Forms" );
@@ -226,6 +231,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/17 19:03:33  fs
+ *  initial checkin - export and/or import the applications form layer
+ *
  *
  *  Revision 1.0 13.11.00 17:00:01  fs
  ************************************************************************/

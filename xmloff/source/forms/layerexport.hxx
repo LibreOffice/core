@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:02:39 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,11 @@ namespace xmloff
         OFormLayerXMLExport_Impl(SvXMLExport& _rContext);
 
     protected:
+        /** exports one single grid column
+        */
+        void exportGridColumn(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn);
+
         /** exports one single control
         */
         void exportControl(
@@ -170,6 +175,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/17 19:02:39  fs
+ *  initial checkin - export and/or import the applications form layer
+ *
  *
  *  Revision 1.0 17.11.00 17:21:00  fs
  ************************************************************************/

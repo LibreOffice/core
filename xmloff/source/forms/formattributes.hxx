@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:01:46 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ namespace xmloff
         faCommandType,
         faEscapeProcessing,
         faDatasource,
-        faDetaildFiels,
+        faDetailFiels,
         faFilter,
         faIgnoreResult,
         faMasterFields,
@@ -230,6 +230,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/17 19:01:46  fs
+ *  initial checkin - export and/or import the applications form layer
+ *
  *
  *  Revision 1.0 13.11.00 17:49:43  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:02:29 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,14 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OFormLayerXMLExport_Impl::exportGridColumn(const Reference< XPropertySet >& _rxColumn)
+    {
+        // do the exporting
+        OColumnExport aExportImpl(m_rContext, _rxColumn);
+        aExportImpl.doExport();
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::exportControl(const Reference< XPropertySet >& _rxControl)
     {
         // the list of the referring controls
@@ -116,13 +124,13 @@ namespace xmloff
         // the control id (should already have been created in collectReferences)
         ::rtl::OUString sControlId;
         ConstMapPropertySet2StringIterator aControlId = m_aControlIds.find(_rxControl);
-        OSL_ENSHURE(aControlId != m_aControlIds.end(), "OFormLayerXMLExport_Impl::exportControl: could not find the control!");
+        OSL_ENSHURE(aControlId != m_aControlIds.end(), "OFormLayerXMLExport_Impl::exportControl: could not find the control id!");
         if (aControlId != m_aControlIds.end())
             sControlId = aControlId->second;
 
         // do the exporting
-        OControlExport aExportImpl(m_rContext, _rxControl, sControlId, sReferringControls);
-            // (done by the ctor and the dtor of the OControlExport object)
+        OControlExport aExportImpl(m_rContext, this, _rxControl, sControlId, sReferringControls);
+        aExportImpl.doExport();
     }
 
     //---------------------------------------------------------------------
@@ -154,7 +162,16 @@ namespace xmloff
 
                 // check if there is a ClassId property on the current element. If so, we assume it to be a control
                 xPropsInfo = xCurrentProps->getPropertySetInfo();
-                if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(PROPERTY_CLASSID))
+                OSL_ENSHURE(xPropsInfo.is(), "OFormLayerXMLExport_Impl::exportCollectionElements: no property set info!");
+                if (!xPropsInfo.is())
+                    // without this, a lot of stuff in the export routines may fail
+                    continue;
+
+                if (xPropsInfo->hasPropertyByName(PROPERTY_COLUMNSERVICENAME))
+                {
+                    exportGridColumn(xCurrentProps);
+                }
+                else if (xPropsInfo->hasPropertyByName(PROPERTY_CLASSID))
                 {
                     exportControl(xCurrentProps);
                 }
@@ -272,6 +289,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/17 19:02:29  fs
+ *  initial checkin - export and/or import the applications form layer
+ *
  *
  *  Revision 1.0 17.11.00 17:22:45  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:01:21 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 #ifndef _XMLOFF_FORMENUMS_HXX_
 #include "formenums.hxx"
 #endif
@@ -165,7 +162,8 @@ namespace xmloff
     //= OControlExport
     //=====================================================================
     //---------------------------------------------------------------------
-    OControlExport::OControlExport(SvXMLExport& _rContext, const Reference< XPropertySet >& _rxControl,
+    OControlExport::OControlExport(SvXMLExport& _rContext, IExportImplementation* _pCallback,
+        const Reference< XPropertySet >& _rxControl,
         const ::rtl::OUString& _rControlId, const ::rtl::OUString& _rReferringControls)
         :OPropertyExport(_rContext, _rxControl)
         ,m_sControlId(_rControlId)
@@ -176,15 +174,22 @@ namespace xmloff
         ,m_nIncludeEvents(0)
         ,m_nClassId(FormComponentType::CONTROL)
         ,m_pXMLElement(NULL)
+        ,m_pCallback(_pCallback)
+    {
+        OSL_ENSURE(m_xProps.is(), "OControlExport::OControlExport: invalid arguments!");
+    }
+
+    //---------------------------------------------------------------------
+    void OControlExport::doExport()
     {
         // collect some general information about the control
         examine();
 
-        // add the attributes to the context
-        implExportAllAttributes();
-
         // start the element
-        m_pXMLElement = new SvXMLElementExport(m_rContext, XML_NAMESPACE_FORM, getElementName(m_eType), sal_True, sal_True);
+        startExportElement();
+
+        // the sub elements (mostly control type dependent)
+        exportSubTags();
     }
 
     //---------------------------------------------------------------------
@@ -195,40 +200,44 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OControlExport::implExportAllAttributes() throw (Exception)
+    void OControlExport::startExportElement()
     {
-        // clear the attribute list on the context
+        // first add the attributes necessary for the element
         m_rContext.ClearAttrList();
 
-        // add the common control attributes
+        // common control attributes
         exportCommonControlAttributes();
 
-        // the control id
-        OSL_ENSURE(m_sControlId.getLength(), "OControlExport::export: have no control id for the control!");
-        AddAttribute(
-            getCommonControlAttributeNamespace(CCA_CONTROL_ID),
-            getCommonControlAttributeName(CCA_CONTROL_ID),
-            m_sControlId);
-
-        // add the common database attributes
+        // common database attributes
         exportDatabaseAttributes();
 
-        // add attributes special to the respective control type
+        // attributes special to the respective control type
         exportSpecialAttributes();
 
+        // add the style references to the attributes
+        implExportStyleReference();
+
         // TODO: add the event attributes
+
+        m_pXMLElement = new SvXMLElementExport(m_rContext, XML_NAMESPACE_FORM, getElementName(m_eType), sal_True, sal_True);
     }
 
     //---------------------------------------------------------------------
-    void OControlExport::implExportSubTags() throw (Exception)
+    void OControlExport::exportSubTags() throw (Exception)
     {
         // the ListSource related properties do not need to be exported in a generic way, exportListSourceAsElements
         // will handle this (if necessary)
-        m_aRemainingProps.erase(PROPERTY_STRING_ITEM_LIST);
-        m_aRemainingProps.erase(PROPERTY_VALUE_SEQ);
-        m_aRemainingProps.erase(PROPERTY_SELECT_SEQ);
-        m_aRemainingProps.erase(PROPERTY_DEFAULT_SELECT_SEQ);
-        m_aRemainingProps.erase(PROPERTY_LISTSOURCE);
+        exportedProperty(PROPERTY_STRING_ITEM_LIST);
+        exportedProperty(PROPERTY_VALUE_SEQ);
+        exportedProperty(PROPERTY_SELECT_SEQ);
+        exportedProperty(PROPERTY_DEFAULT_SELECT_SEQ);
+        exportedProperty(PROPERTY_LISTSOURCE);
+
+        // for the upcoming exportRemainingProperties:
+        // if a control has the LabelControl property, this is not stored with the control itself, but instead with
+        // the control which is referenced by this property. As the base class' exportRemainingProperties doesn't
+        // know anything about this, we need to prevent that it tries to export this property
+        exportedProperty(PROPERTY_CONTROLLABEL);
 
         // the properties which where not exported 'til now
         exportRemainingProperties();
@@ -244,7 +253,11 @@ namespace xmloff
                 break;
             case GRID:
             {   // a grid control requires us to store all columns as sub elements
-                // TODO
+                OSL_ENSURE(m_pCallback, "OControlExport::exportSubTags: need a callback for the export of GridControls!");
+                Reference< XIndexAccess > xColumnContainer(m_xProps, UNO_QUERY);
+                OSL_ENSURE(xColumnContainer.is(), "OControlExport::exportSubTags: a grid control which is no IndexAccess?!!");
+                if (xColumnContainer.is())
+                    m_pCallback->exportCollectionElements(xColumnContainer);
             }
             break;
             case COMBOBOX:
@@ -283,8 +296,22 @@ namespace xmloff
         // the extra indents for the respective blocks are to ensure that there is no copy'n'paste error, using
         // map identifiers from the wrong block
 
+        // the control id
+        if (CCA_CONTROL_ID & m_nIncludeCommon)
+        {
+            OSL_ENSURE(m_sControlId.getLength(), "OControlExport::exportCommonControlAttributes: have no control id for the control!");
+            AddAttribute(
+                getCommonControlAttributeNamespace(CCA_CONTROL_ID),
+                getCommonControlAttributeName(CCA_CONTROL_ID),
+                m_sControlId);
+        #ifdef DBG_UTIL
+            //  reset the bit for later checking
+            m_nIncludeCommon = m_nIncludeCommon & ~CCA_CONTROL_ID;
+        #endif
+        }
+
         // --------------------------------------------------------------------
-        // all string properties
+        // some string properties
         {
             // the attribute ids of all properties which are expected to be of type string
             static sal_Int32 nStringPropertyAttributeIds[] =
@@ -303,7 +330,7 @@ namespace xmloff
             for (i=0; i<sizeof(nStringPropertyAttributeIds)/sizeof(nStringPropertyAttributeIds[0]); ++i)
                 if (nStringPropertyAttributeIds[i] & m_nIncludeCommon)
                 {
-                    implAddStringPropAttribute(
+                    exportStringPropertyAttribute(
                         getCommonControlAttributeNamespace(nStringPropertyAttributeIds[i]),
                         getCommonControlAttributeName(nStringPropertyAttributeIds[i]),
                         pStringPropertyNames[i]
@@ -345,7 +372,7 @@ namespace xmloff
             for (i=0; i<sizeof(nBooleanPropertyAttributeIds)/sizeof(nBooleanPropertyAttributeIds[0]); ++i)
                 if (nBooleanPropertyAttributeIds[i] & m_nIncludeCommon)
                 {
-                    implAddBooleanPropAttribute(
+                    exportBooleanPropertyAttribute(
                         getCommonControlAttributeNamespace(nBooleanPropertyAttributeIds[i]),
                         getCommonControlAttributeName(nBooleanPropertyAttributeIds[i]),
                         pBooleanPropertyNames[i],
@@ -384,7 +411,7 @@ namespace xmloff
             for (i=0; i<sizeof(nIntegerPropertyAttributeIds)/sizeof(nIntegerPropertyAttributeIds[0]); ++i)
                 if (nIntegerPropertyAttributeIds[i] & m_nIncludeCommon)
                 {
-                    implAddInt16PropAttribute(
+                    exportInt16PropertyAttribute(
                         getCommonControlAttributeNamespace(nIntegerPropertyAttributeIds[i]),
                         getCommonControlAttributeName(nIntegerPropertyAttributeIds[i]),
                         pIntegerPropertyNames[i],
@@ -402,7 +429,7 @@ namespace xmloff
             // (only one a at the moment)
             if (m_nIncludeCommon & CCA_BUTTON_TYPE)
             {
-                implAddEnumPropAttribute(
+                exportEnumPropertyAttribute(
                     getCommonControlAttributeNamespace(CCA_BUTTON_TYPE),
                     getCommonControlAttributeName(CCA_BUTTON_TYPE),
                     PROPERTY_BUTTONTYPE,
@@ -421,7 +448,7 @@ namespace xmloff
         // the service name
         if (m_nIncludeCommon & CCA_SERVICE_NAME)
         {
-            implExportServiceName();
+            exportServiceNameAttribute();
         #ifdef DBG_UTIL
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_SERVICE_NAME;
@@ -431,7 +458,7 @@ namespace xmloff
         // the target frame
         if (m_nIncludeCommon & CCA_TARGET_FRAME)
         {
-            implExportTargetFrame();
+            exportTargetFrameAttribute();
         #ifdef DBG_UTIL
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_TARGET_FRAME;
@@ -470,13 +497,13 @@ namespace xmloff
 
             // add the atrtributes if necessary and possible
             if (pCurrentValuePropertyName && (CCA_CURRENT_VALUE & m_nIncludeCommon))
-                implExportGenericPropertyAttribute(
+                exportGenericPropertyAttribute(
                     nCurrentValueAttributeNamespaceKey,
                     pCurrentValueAttributeName,
                     pCurrentValuePropertyName);
 
             if (pValuePropertyName && (CCA_VALUE & m_nIncludeCommon))
-                implExportGenericPropertyAttribute(
+                exportGenericPropertyAttribute(
                     nValueAttributeNamespaceKey,
                     pValueAttributeName,
                     pValuePropertyName);
@@ -485,6 +512,7 @@ namespace xmloff
                 "OControlExport::exportCommonControlAttributes: no property found for the value attribute!");
             OSL_ENSURE((NULL == pCurrentValuePropertyName ) == (0 == (CCA_CURRENT_VALUE & m_nIncludeCommon)),
                 "OControlExport::exportCommonControlAttributes: no property found for the current-value attribute!");
+
         #ifdef DBG_UTIL
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~(CCA_CURRENT_VALUE | CCA_VALUE);
@@ -503,7 +531,7 @@ namespace xmloff
         // the only string property: DataField
         if (DA_DATA_FIELD & m_nIncludeDatabase)
         {
-            implAddStringPropAttribute(
+            exportStringPropertyAttribute(
                 getDatabaseAttributeNamespace(DA_DATA_FIELD),
                 getDatabaseAttributeName(DA_DATA_FIELD),
                 PROPERTY_DATAFIELD);
@@ -516,7 +544,7 @@ namespace xmloff
         // the only int16 property: BoundColumn
         if (DA_BOUND_COLUMN & m_nIncludeDatabase)
         {
-            implAddInt16PropAttribute(
+            exportInt16PropertyAttribute(
                 getDatabaseAttributeNamespace(DA_BOUND_COLUMN),
                 getDatabaseAttributeName(DA_BOUND_COLUMN),
                 PROPERTY_BOUNDCOLUMN,
@@ -530,7 +558,7 @@ namespace xmloff
         // the only boolean property: ConvertEmptyToNull
         if (DA_CONVERT_EMPTY & m_nIncludeDatabase)
         {
-            implAddBooleanPropAttribute(
+            exportBooleanPropertyAttribute(
                 getDatabaseAttributeNamespace(DA_CONVERT_EMPTY),
                 getDatabaseAttributeName(DA_CONVERT_EMPTY),
                 PROPERTY_EMPTY_IS_NULL,
@@ -546,7 +574,7 @@ namespace xmloff
         // the only enum property: ListSourceType
         if (DA_LIST_SOURCE_TYPE & m_nIncludeDatabase)
         {
-            implAddEnumPropAttribute(
+            exportEnumPropertyAttribute(
                 getDatabaseAttributeNamespace(DA_LIST_SOURCE_TYPE),
                 getDatabaseAttributeName(DA_LIST_SOURCE_TYPE),
                 PROPERTY_LISTSOURCETYPE,
@@ -604,7 +632,7 @@ namespace xmloff
             for (i=0; i<nIdCount; ++i)
                 if (nBooleanPropertyAttributeIds[i] & m_nIncludeSpecial)
                 {
-                    implAddBooleanPropAttribute(
+                    exportBooleanPropertyAttribute(
                         getSpecialAttributeNamespace(nBooleanPropertyAttributeIds[i]),
                         getSpecialAttributeName(nBooleanPropertyAttributeIds[i]),
                         pBooleanPropertyNames[i],
@@ -622,7 +650,7 @@ namespace xmloff
         {
             if (SCA_STATE & m_nIncludeSpecial)
             {
-                implAddEnumPropAttribute(
+                exportEnumPropertyAttribute(
                     getSpecialAttributeNamespace(SCA_STATE),
                     getSpecialAttributeName(SCA_STATE),
                     PROPERTY_DEFAULT_STATE,
@@ -636,7 +664,7 @@ namespace xmloff
 
             if (SCA_CURRENT_STATE & m_nIncludeSpecial)
             {
-                implAddEnumPropAttribute(
+                exportEnumPropertyAttribute(
                     getSpecialAttributeNamespace(SCA_CURRENT_STATE),
                     getSpecialAttributeName(SCA_CURRENT_STATE),
                     PROPERTY_STATE,
@@ -665,6 +693,7 @@ namespace xmloff
                         getSpecialAttributeName(SCA_ECHO_CHAR),
                         sCharacter);
                 }
+                exportedProperty(PROPERTY_ECHO_CHAR);
             #ifdef DBG_UTIL
                 //  reset the bit for later checking
                 m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_ECHO_CHAR;
@@ -712,13 +741,13 @@ namespace xmloff
             static const sal_uInt16 nMaxValueNamespaceKey = getSpecialAttributeNamespace(SCA_MAX_VALUE);
 
             if (pMinValuePropertyName && (SCA_MIN_VALUE & m_nIncludeSpecial))
-                implExportGenericPropertyAttribute(
+                exportGenericPropertyAttribute(
                     nMinValueNamespaceKey,
                     pMinValueAttributeName,
                     pMinValuePropertyName);
 
             if (pMaxValuePropertyName && (SCA_MAX_VALUE & m_nIncludeSpecial))
-                implExportGenericPropertyAttribute(
+                exportGenericPropertyAttribute(
                     nMaxValueNamespaceKey,
                     pMaxValueAttributeName,
                     pMaxValuePropertyName);
@@ -851,14 +880,13 @@ namespace xmloff
                 m_eType = FORMATTED_TEXT;
                 // NO BREAK
             case FormComponentType::TEXTFIELD:
-            {   // it's some kind of edit. To know which type we need further investogation
+            {   // it's some kind of edit. To know which type we need further investigation
 
                 if (FORMATTED_TEXT != m_eType)
                 {   // not coming from the presious cases which had a class id .ne. TEXTFIELD
 
                     // check if it's a formatted field
-                    Reference< XServiceInfo > xSI(m_xProps, UNO_QUERY);
-                    if (xSI.is() && xSI->supportsService(SERVICE_FORMATTEDFIELD))
+                    if (m_xPropertyInfo->hasPropertyByName(PROPERTY_FORMATKEY))
                     {
                         m_eType = FORMATTED_TEXT;
                     }
@@ -869,7 +897,9 @@ namespace xmloff
 
                         // if the EchoChar string is not empty, it is a password field
                         sal_Int16 nEchoChar = 0;
-                        m_xProps->getPropertyValue(PROPERTY_ECHOCHAR) >>= nEchoChar;
+                        if (m_xPropertyInfo->hasPropertyByName(PROPERTY_ECHOCHAR))
+                            // grid columns do not have this property ....
+                            m_xProps->getPropertyValue(PROPERTY_ECHOCHAR) >>= nEchoChar;
                         if (nEchoChar)
                         {
                             m_eType = PASSWORD;
@@ -878,7 +908,10 @@ namespace xmloff
                         else
                         {
                             // if the MultiLine property is sal_True, it is a TextArea
-                            sal_Bool bMultiLine = ::cppu::any2bool(m_xProps->getPropertyValue(PROPERTY_MULTILINE));
+                            sal_Bool bMultiLine = sal_False;
+                            if (m_xPropertyInfo->hasPropertyByName(PROPERTY_MULTILINE))
+                                // grid columns do not have this property ....
+                                bMultiLine = ::cppu::any2bool(m_xProps->getPropertyValue(PROPERTY_MULTILINE));
                             if (bMultiLine)
                                 m_eType = TEXT_AREA;
                             else
@@ -901,7 +934,7 @@ namespace xmloff
 
                 // only text and pattern fields have a ConvertEmptyToNull property
                 if ((m_nClassId == FormComponentType::TEXTFIELD) || (m_nClassId == FormComponentType::PATTERNFIELD))
-                    m_nIncludeDatabase = DA_CONVERT_EMPTY;
+                    m_nIncludeDatabase |= DA_CONVERT_EMPTY;
 
                 // all controls but the file control fields have a readonly property
                 if (m_nClassId != FormComponentType::FILECONTROL)
@@ -944,7 +977,7 @@ namespace xmloff
                 m_nIncludeCommon =
                     CCA_NAME | CCA_SERVICE_NAME | CCA_CURRENT_VALUE |
                     CCA_DISABLED | CCA_DROPDOWN | CCA_MAX_LENGTH | CCA_PRINTABLE | CCA_READONLY | CCA_SIZE |
-                    CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE;
+                    CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE | CCA_VALUE;
                 m_nIncludeSpecial = SCA_AUTOMATIC_COMPLETION;
                 m_nIncludeDatabase = DA_CONVERT_EMPTY | DA_DATA_FIELD | DA_LIST_SOURCE | DA_LIST_SOURCE_TYPE;
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_SELECT;
@@ -978,8 +1011,8 @@ namespace xmloff
 
             case FormComponentType::COMMANDBUTTON:
                 m_eType = BUTTON;
+                m_nIncludeCommon |= CCA_TAB_STOP | CCA_LABEL;
                 m_nIncludeSpecial = SCA_DEFAULT_BUTTON;
-                m_nIncludeCommon |= CCA_TAB_STOP;
                 // NO BREAK !
             case FormComponentType::IMAGEBUTTON:
                 if (BUTTON != m_eType)
@@ -1040,10 +1073,23 @@ namespace xmloff
                 m_nIncludeEvents = EA_CONTROL_EVENTS;
                 break;
 
+            case FormComponentType::CONTROL:
+                m_eType = CONTROL;
+                // unknown control type
+                m_nIncludeCommon = CCA_NAME | CCA_SERVICE_NAME;
+                    // at least a name should be there, 'cause without a name the control could never have been
+                    // inserted into it's parent container
+                    // In addition, the service name is absolutely necessary to create the control upon reading.
+                m_nIncludeEvents = EA_CONTROL_EVENTS;
+                    // we always should be able to export events - this is not control type dependent
+                break;
             default:
                 OSL_ENSHURE(sal_False, "OControlExport::examineControl: unknown control type (class id)!");
                 break;
         }
+
+        // in general, all control types need to export the control id
+        m_nIncludeCommon |= CCA_CONTROL_ID;
     }
 
     //---------------------------------------------------------------------
@@ -1081,10 +1127,10 @@ namespace xmloff
                 break;
             case FormComponentType::PATTERNFIELD:
             case FormComponentType::FILECONTROL:
+            case FormComponentType::COMBOBOX:
                 _rpValue = PROPERTY_DEFAULT_TEXT;
                 // NO BREAK!!
             case FormComponentType::COMMANDBUTTON:
-            case FormComponentType::COMBOBOX:
                 _rpCurrentValue = PROPERTY_TEXT;
                 break;
             case FormComponentType::CHECKBOX:
@@ -1095,6 +1141,79 @@ namespace xmloff
                 _rpValue = PROPERTY_VALUE;
                 break;
         }
+    }
+
+    //=====================================================================
+    //= OColumnExport
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OColumnExport::OColumnExport(SvXMLExport& _rContext, const Reference< XPropertySet >& _rxControl)
+        :OControlExport(_rContext, NULL, _rxControl, ::rtl::OUString(), ::rtl::OUString())
+        ,m_pColumnXMLElement(NULL)
+    {
+    }
+
+    //---------------------------------------------------------------------
+    OColumnExport::~OColumnExport()
+    {
+        // delete m_pXMLElement before m_pColumnXMLElement !!
+            // TODO: this makes me seriously thinking about why OColumnExport is derived from OControlExport, and
+            // not the other way round
+        delete m_pXMLElement;
+        m_pXMLElement = NULL;
+
+        delete m_pColumnXMLElement;
+    }
+
+    //---------------------------------------------------------------------
+    void OColumnExport::examine()
+    {
+        OControlExport::examine();
+
+        // grid columns miss some properties of the controls they're representing
+        m_nIncludeCommon &= ~(CCA_SERVICE_NAME | CCA_CONTROL_ID | CCA_FOR | CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_LABEL | CCA_NAME);
+        m_nIncludeSpecial &= ~(SCA_ECHO_CHAR | SCA_AUTOMATIC_COMPLETION | SCA_MULTIPLE | SCA_MULTI_LINE | SCA_IS_TRISTATE);
+
+        if (FormComponentType::DATEFIELD != m_nClassId)
+            // except date fields, no column has the DropDown property
+            m_nIncludeCommon &= ~CCA_DROPDOWN;
+    }
+
+    //---------------------------------------------------------------------
+    void OColumnExport::startExportElement()
+    {
+        // before the base class can start it's element, start an additional one stating that the following is
+        // a grid column
+
+        // the attributes:
+        m_rContext.ClearAttrList();
+
+        // the attribute "name"
+        exportStringPropertyAttribute(
+            getCommonControlAttributeNamespace(CCA_NAME),
+            getCommonControlAttributeName(CCA_NAME),
+            PROPERTY_NAME
+            );
+
+        // the attribute "service name" (which has a slightly different meaning for columns
+        DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_COLUMNSERVICENAME, ::rtl::OUString);
+        exportStringPropertyAttribute(
+            getCommonControlAttributeNamespace(CCA_SERVICE_NAME),
+            getCommonControlAttributeName(CCA_SERVICE_NAME),
+            PROPERTY_COLUMNSERVICENAME
+            );
+
+        // the attribute "label"
+        exportStringPropertyAttribute(
+            getCommonControlAttributeNamespace(CCA_LABEL),
+            getCommonControlAttributeName(CCA_LABEL),
+            PROPERTY_LABEL);
+
+        // start the extra element indicating that we're a column
+        m_pColumnXMLElement = new SvXMLElementExport(m_rContext, XML_NAMESPACE_FORM, "column", sal_True, sal_True);
+
+        // let the base class do it's handling
+        OControlExport::startExportElement();
     }
 
     //=====================================================================
@@ -1158,7 +1277,7 @@ namespace xmloff
                 "OFormExport::exportAttributes: somebody tampered with the maps (1)!");
         #endif
             for (i=0; i<nIdCount; ++i)
-                implAddStringPropAttribute(
+                exportStringPropertyAttribute(
                     getFormAttributeNamespace(eStringPropertyIds[i]),
                     getFormAttributeName(eStringPropertyIds[i]),
                     pStringPropertyNames[i]);
@@ -1187,7 +1306,7 @@ namespace xmloff
                 "OFormExport::exportAttributes: somebody tampered with the maps (2)!");
         #endif
             for (i=0; i<nIdCount; ++i)
-                implAddBooleanPropAttribute(
+                exportBooleanPropertyAttribute(
                     getFormAttributeNamespace(eBooleanPropertyIds[i]),
                     getFormAttributeName(eBooleanPropertyIds[i]),
                     pBooleanPropertyNames[i],
@@ -1223,7 +1342,7 @@ namespace xmloff
                 "OFormExport::exportAttributes: somebody tampered with the maps (3)!");
         #endif
             for (i=0; i<nIdCount; ++i)
-                implAddEnumPropAttribute(
+                exportEnumPropertyAttribute(
                     getFormAttributeNamespace(eEnumPropertyIds[i]),
                     getFormAttributeName(eEnumPropertyIds[i]),
                     pEnumPropertyNames[i],
@@ -1232,11 +1351,21 @@ namespace xmloff
         }
 
         // the service name
-        implExportServiceName();
+        exportServiceNameAttribute();
         // the target frame
-        implExportTargetFrame();
+        exportTargetFrameAttribute();
 
-        // TODO: master fields, detail fields
+        // master fields
+        exportStringSequenceAttribute(
+            getFormAttributeNamespace(faMasterFields),
+            getFormAttributeName(faMasterFields),
+            PROPERTY_MASTERFIELDS);
+        // detail fields
+        exportStringSequenceAttribute(
+            getFormAttributeNamespace(faDetailFiels),
+            getFormAttributeName(faDetailFiels),
+            PROPERTY_DETAILFIELDS);
+
 
         // TODO: the events EA_RESET, EA_SUBMIT
     }
@@ -1248,6 +1377,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/17 19:01:21  fs
+ *  initial checkin - export and/or import the applications form layer
+ *
  *
  *  Revision 1.0 13.11.00 18:56:13  fs
  ************************************************************************/

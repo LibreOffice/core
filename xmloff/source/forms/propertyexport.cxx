@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:03:06 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
@@ -131,6 +134,91 @@ namespace xmloff
     using namespace ::comphelper;
 
     //=====================================================================
+    //= iterating through sequences
+    //=====================================================================
+    class IIterator
+    {
+    public:
+        virtual sal_Bool hasMoreElements() const = 0;
+        virtual Any nextElement() = 0;
+
+        virtual ~IIterator() { }
+    };
+
+    /** a helper class for iterating through a sequence
+    */
+    template <class TYPE>
+    class OSequenceIterator : public IIterator
+    {
+        const TYPE* m_pElements;
+        sal_Int32   m_nLen;
+        const TYPE* m_pCurrent;
+
+    public:
+        /** contrcuct a sequence iterator from a sequence
+        */
+        OSequenceIterator(const Sequence< TYPE >& _rSeq);
+        /** contrcuct a sequence iterator from a Any containing a sequence
+        */
+        OSequenceIterator(const Any& _rSequenceAny);
+
+        virtual sal_Bool hasMoreElements() const;
+        virtual Any nextElement();
+
+    protected:
+        void construct(const Sequence< TYPE >& _rSeq);
+    };
+
+    //---------------------------------------------------------------------
+    template <class TYPE>
+    OSequenceIterator<TYPE>::OSequenceIterator(const Sequence< TYPE >& _rSeq)
+        :m_pElements(NULL)
+        ,m_nLen(0)
+        ,m_pCurrent(NULL)
+    {
+        construct(_rSeq);
+    }
+
+    //---------------------------------------------------------------------
+    template <class TYPE>
+    OSequenceIterator<TYPE>::OSequenceIterator(const ::com::sun::star::uno::Any& _rSequenceAny)
+        :m_pElements(NULL)
+        ,m_nLen(0)
+        ,m_pCurrent(NULL)
+    {
+        ::com::sun::star::uno::Sequence< TYPE > aContainer;
+    #ifdef DBG_UTIL
+        sal_Bool bSuccess =
+    #endif
+        _rSequenceAny >>= aContainer;
+        OSL_ENSURE(bSuccess, "OSequenceIterator::OSequenceIterator: invalid Any!");
+        construct(aContainer);
+    }
+
+    //---------------------------------------------------------------------
+    template <class TYPE>
+    void OSequenceIterator<TYPE>::construct(const ::com::sun::star::uno::Sequence< TYPE >& _rSeq)
+    {
+        m_pElements = _rSeq.getConstArray();
+        m_nLen = _rSeq.getLength();
+        m_pCurrent = m_pElements;
+    }
+
+    //---------------------------------------------------------------------
+    template <class TYPE>
+    sal_Bool OSequenceIterator<TYPE>::hasMoreElements() const
+    {
+        return m_pCurrent - m_pElements < m_nLen;
+    }
+
+    //---------------------------------------------------------------------
+    template <class TYPE>
+    ::com::sun::star::uno::Any OSequenceIterator<TYPE>::nextElement()
+    {
+        return ::com::sun::star::uno::makeAny(*m_pCurrent++);
+    }
+
+    //=====================================================================
     //= OPropertyExport
     //=====================================================================
     //---------------------------------------------------------------------
@@ -138,6 +226,16 @@ namespace xmloff
         :m_rContext(_rContext)
         ,m_xProps(_rxProps)
     {
+        // caching
+        ::rtl::OUStringBuffer aBuffer;
+        m_rContext.GetMM100UnitConverter().convertBool(aBuffer, sal_True);
+        m_sValueTrue = aBuffer.makeStringAndClear();
+        m_rContext.GetMM100UnitConverter().convertBool(aBuffer, sal_False);
+        m_sValueFalse = aBuffer.makeStringAndClear();
+
+        m_xPropertyInfo = m_xProps->getPropertySetInfo();
+        OSL_ENSURE(m_xPropertyInfo.is(), "OPropertyExport::OPropertyExport: need an XPropertySetInfo!");
+
         // collect the properties which need to be exported
         examinePersistence();
     }
@@ -145,31 +243,135 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyExport::exportRemainingProperties()
     {
-        // TODO
+        // the properties tag
+        SvXMLElementExport aPropertiesTag(m_rContext, XML_NAMESPACE_FORM, "properties", sal_True, sal_True);
+
+        Reference< XPropertyState > xPropertyState(m_xProps, UNO_QUERY);
+
+        Any aValue;
+        ::rtl::OUString sValue;
+        ::rtl::OUString sTypeDescription;
+
+        // loop through all the properties which are yet to be exported
+        for (   ConstStringSetIterator  aProperty = m_aRemainingProps.begin();
+                aProperty != m_aRemainingProps.end();
+                ++aProperty
+            )
+        {
+            DBG_CHECK_PROPERTY_NO_TYPE(*aProperty);
+
+#ifdef DBG_UTIL
+            const ::rtl::OUString sPropertyName = *aProperty;
+#endif
+            // if the property state is DEFAULT, it does not need to be written
+            if (xPropertyState.is() && (PropertyState_DEFAULT_VALUE == xPropertyState->getPropertyState(*aProperty)))
+                continue;
+
+            // add the name attribute
+            AddAttribute(XML_NAMESPACE_FORM, "property-name", *aProperty);
+
+            // get the value
+            aValue = m_xProps->getPropertyValue(*aProperty);
+
+            if (sal_False)
+            {
+                ::rtl::OUString sTemp;
+                aValue >>= sTemp;
+                aValue <<= makeAny(Sequence< ::rtl::OUString >(&sTemp, 1));
+            }
+
+            // is it a sequence
+            sal_Bool bIsSequence = TypeClass_SEQUENCE == aValue.getValueTypeClass();
+            // the type of the property, maybe reduced to the element type of a sequence
+            Type aSimpleType;
+            if (bIsSequence)
+                aSimpleType = getSequenceElementType(aValue.getValueType());
+            else
+                aSimpleType = aValue.getValueType();
+
+            // the type attribute
+            AddAttribute(XML_NAMESPACE_FORM, "property-type", implGetPropertyXMLType(aValue.getValueType()));
+
+            if (bIsSequence)
+                // we have a special attribute indicating that the property is a list
+                AddAttribute(XML_NAMESPACE_FORM, "property-is-list", m_sValueTrue);
+
+            // start the property tag
+            SvXMLElementExport aValueTag(m_rContext, XML_NAMESPACE_FORM, "property", sal_True, sal_True);
+
+            if (!bIsSequence)
+            {   // the simple case
+                sValue = implConvertAny(aValue);
+
+                SvXMLElementExport aValueTag(m_rContext, XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
+                    // (no whitespace inside the tag)
+                m_rContext.GetDocHandler()->characters(sValue);
+                // done with this property
+                continue;
+            }
+
+            // the not-that-simple case, we need to iterate through the sequence elements
+            IIterator* pSequenceIterator = NULL;
+            switch (aSimpleType.getTypeClass())
+            {
+                case TypeClass_STRING:
+                    pSequenceIterator = new OSequenceIterator< ::rtl::OUString >(aValue);
+                    break;
+                case TypeClass_DOUBLE:
+                    pSequenceIterator = new OSequenceIterator< double >(aValue);
+                    break;
+                case TypeClass_BOOLEAN:
+                    pSequenceIterator = new OSequenceIterator< sal_Bool >(aValue);
+                    break;
+                case TypeClass_BYTE:
+                    pSequenceIterator = new OSequenceIterator< sal_Int8 >(aValue);
+                    break;
+                case TypeClass_SHORT:
+                    pSequenceIterator = new OSequenceIterator< sal_Int16 >(aValue);
+                    break;
+                case TypeClass_LONG:
+                    pSequenceIterator = new OSequenceIterator< sal_Int32 >(aValue);
+                    break;
+                case TypeClass_HYPER:
+                    pSequenceIterator = new OSequenceIterator< sal_Int64 >(aValue);
+                    break;
+                default:
+                    OSL_ENSURE(sal_False, "OPropertyExport::exportRemainingProperties: unsupported sequence tyoe !");
+                    break;
+            }
+            if (pSequenceIterator)
+            {
+                ::rtl::OUString sCurrent;
+                while (pSequenceIterator->hasMoreElements())
+                {
+                    SvXMLElementExport aValueTag(m_rContext, XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
+                        // (no whitespace inside the tag)
+                    m_rContext.GetDocHandler()->characters(implConvertAny(pSequenceIterator->nextElement()));
+                }
+            }
+            delete pSequenceIterator;
+
+        }
     }
 
     //---------------------------------------------------------------------
     void OPropertyExport::examinePersistence()
     {
         m_aRemainingProps.clear();
-        Reference< XPropertySetInfo > xInfo = m_xProps->getPropertySetInfo();
-        if (xInfo.is())
+        Sequence< Property > aProperties = m_xPropertyInfo->getProperties();
+        const Property* pProperties = aProperties.getConstArray();
+        for (sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties)
         {
-            Sequence< Property > aProperties = xInfo->getProperties();
-            const Property* pProperties = aProperties.getConstArray();
-            for (sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties)
-            {
-                static sal_Int32 nExcludeIndicator = PropertyAttribute::READONLY | PropertyAttribute::TRANSIENT;
-                if (pProperties->Attributes & nExcludeIndicator)
-                    // no readonly props, no transient props
-                    continue;
-                m_aRemainingProps.insert(pProperties->Name);
-            }
+            static sal_Int32 nExcludeIndicator = PropertyAttribute::READONLY | PropertyAttribute::TRANSIENT;
+            if (pProperties->Attributes & nExcludeIndicator)
+                // no readonly props, no transient props
+                continue;
+            m_aRemainingProps.insert(pProperties->Name);
         }
     }
 
     //---------------------------------------------------------------------
-    void OPropertyExport::implAddStringPropAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
+    void OPropertyExport::exportStringPropertyAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
             const sal_Char* _pPropertyName)
     {
         DBG_CHECK_PROPERTY(_pPropertyName, ::rtl::OUString);
@@ -179,17 +381,21 @@ namespace xmloff
 
         // this is way simple, as we don't need to convert anything (the property already is a string)
 
+        ::rtl::OUString sPropertyName(::rtl::OUString::createFromAscii(_pPropertyName));
         // get the string
         ::rtl::OUString sPropValue;
-        m_xProps->getPropertyValue(::rtl::OUString::createFromAscii(_pPropertyName)) >>= sPropValue;
+        m_xProps->getPropertyValue(sPropertyName) >>= sPropValue;
 
         // add the attribute
         if (sPropValue.getLength())
             AddAttribute(_nNamespaceKey, _pAttributeName, sPropValue);
+
+        // the property does not need to be handled anymore
+        exportedProperty(sPropertyName);
     }
 
     //---------------------------------------------------------------------
-    void OPropertyExport::implAddBooleanPropAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
+    void OPropertyExport::exportBooleanPropertyAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
             const sal_Char* _pPropertyName, const sal_Bool _bDefault, const sal_Bool _bInverseSemantics)
     {
         DBG_CHECK_PROPERTY_NO_TYPE(_pPropertyName);
@@ -198,7 +404,8 @@ namespace xmloff
 
         // get the value
         sal_Bool bCurrentValue = _bDefault;
-        Any aCurrentValue = m_xProps->getPropertyValue(::rtl::OUString::createFromAscii(_pPropertyName));
+        ::rtl::OUString sPropertyName(::rtl::OUString::createFromAscii(_pPropertyName));
+        Any aCurrentValue = m_xProps->getPropertyValue(sPropertyName);
         if (aCurrentValue.hasValue())
             bCurrentValue = ::cppu::any2bool(aCurrentValue);
             // this will extract a boolean value even if the Any contains a int or short or something like that ...
@@ -208,24 +415,22 @@ namespace xmloff
 
         // add the attribute
         if (_bDefault != bCurrentValue)
-        {
-            // let the formatter of the export context build a string
-            ::rtl::OUStringBuffer sBuffer;
-            m_rContext.GetMM100UnitConverter().convertBool(sBuffer, bCurrentValue);
+            AddAttribute(_nNamespaceKey, _pAttributeName, bCurrentValue ? m_sValueTrue : m_sValueFalse);
 
-            AddAttribute(_nNamespaceKey, _pAttributeName, sBuffer.makeStringAndClear());
-        }
+        // the property does not need to be handled anymore
+        exportedProperty(sPropertyName);
     }
 
     //---------------------------------------------------------------------
-    void OPropertyExport::implAddInt16PropAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
+    void OPropertyExport::exportInt16PropertyAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
             const sal_Char* _pPropertyName, const sal_Int16 _nDefault)
     {
         DBG_CHECK_PROPERTY(_pPropertyName, sal_Int16);
 
         // get the value
         sal_Int16 nCurrentValue(_nDefault);
-        m_xProps->getPropertyValue(::rtl::OUString::createFromAscii(_pPropertyName)) >>= nCurrentValue;
+        ::rtl::OUString sPropertyName(::rtl::OUString::createFromAscii(_pPropertyName));
+        m_xProps->getPropertyValue(sPropertyName) >>= nCurrentValue;
 
         // add the attribute
         if (_nDefault != nCurrentValue)
@@ -236,16 +441,20 @@ namespace xmloff
 
             AddAttribute(_nNamespaceKey, _pAttributeName, sBuffer.makeStringAndClear());
         }
+
+        // the property does not need to be handled anymore
+        exportedProperty(sPropertyName);
     }
 
     //---------------------------------------------------------------------
-    void OPropertyExport::implAddEnumPropAttribute(
+    void OPropertyExport::exportEnumPropertyAttribute(
             const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
             const sal_Char* _pPropertyName, const SvXMLEnumMapEntry* _pValueMap, const sal_Int32 _nDefault)
     {
         // get the value
         sal_Int32 nCurrentValue(_nDefault);
-        ::cppu::enum2int(nCurrentValue, m_xProps->getPropertyValue(::rtl::OUString::createFromAscii(_pPropertyName)));
+        ::rtl::OUString sPropertyName(::rtl::OUString::createFromAscii(_pPropertyName));
+        ::cppu::enum2int(nCurrentValue, m_xProps->getPropertyValue(sPropertyName));
 
         // add the attribute
         if (_nDefault != nCurrentValue)
@@ -256,10 +465,13 @@ namespace xmloff
 
             AddAttribute(_nNamespaceKey, _pAttributeName, sBuffer.makeStringAndClear());
         }
+
+        // the property does not need to be handled anymore
+        exportedProperty(sPropertyName);
     }
 
     //---------------------------------------------------------------------
-    void OPropertyExport::implExportTargetFrame()
+    void OPropertyExport::exportTargetFrameAttribute()
     {
         DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_TARGETFRAME, ::rtl::OUString);
 
@@ -268,16 +480,24 @@ namespace xmloff
         {   // an empty string and "_blank" have the same meaning and don't have to be written
             AddAttribute(XML_NAMESPACE_XLINK, "href", sTargetFrame);
         }
-        m_aRemainingProps.erase(PROPERTY_TARGETFRAME);
+        exportedProperty(PROPERTY_TARGETFRAME);
     }
 
     //---------------------------------------------------------------------
-    void OPropertyExport::implExportServiceName()
+    void OPropertyExport::implExportStyleReference()
+    {
+        // TODO: style export/style references
+        exportedProperty(PROPERTY_FONT);
+        exportedProperty(PROPERTY_BACKGROUNDCOLOR);
+    }
+
+    //---------------------------------------------------------------------
+    void OPropertyExport::exportServiceNameAttribute()
     {
         Reference< XPersistObject > xPersistence(m_xProps, UNO_QUERY);
         if (!xPersistence.is())
         {
-            OSL_ENSURE(sal_False, "OPropertyExport::implExportServiceName: no XPersistObject!");
+            OSL_ENSURE(sal_False, "OPropertyExport::exportServiceNameAttribute: no XPersistObject!");
             return;
         }
 
@@ -324,7 +544,7 @@ namespace xmloff
 #ifdef DBG_UTIL
         Reference< XServiceInfo > xSI(m_xProps, UNO_QUERY);
         OSL_ENSURE(xSI.is() && xSI->supportsService(sToWriteServiceName),
-            "OPropertyExport::implExportServiceName: wrong service name translation!");
+            "OPropertyExport::exportServiceNameAttribute: wrong service name translation!");
 
 #endif
 
@@ -333,12 +553,14 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OPropertyExport::implExportGenericPropertyAttribute(
+    void OPropertyExport::exportGenericPropertyAttribute(
             const sal_uInt16 _nAttributeNamespaceKey, const sal_Char* _pAttributeName, const sal_Char* _pPropertyName)
     {
         DBG_CHECK_PROPERTY_NO_TYPE(_pPropertyName);
 
         ::rtl::OUString sPropertyName = ::rtl::OUString::createFromAscii(_pPropertyName);
+        exportedProperty(sPropertyName);
+
         Any aCurrentValue = m_xProps->getPropertyValue(sPropertyName);
         if (!aCurrentValue.hasValue())
             // nothing to do without a concrete value
@@ -348,21 +570,64 @@ namespace xmloff
         if (!sValue.getLength() && (TypeClass_STRING == aCurrentValue.getValueTypeClass()))
         {
             // check whether or not the property is allowed to be VOID
-            Reference< XPropertySetInfo > xPropInfo = m_xProps->getPropertySetInfo();
-            if (xPropInfo.is())
-            {
-                Property aProperty = xPropInfo->getPropertyByName(sPropertyName);
-                if ((aProperty.Attributes & PropertyAttribute::MAYBEVOID) == 0)
-                    // the string is empty, and the property is not allowed to be void
-                    // -> don't need to write the attibute, 'cause missing it is unambiguous
-                    return;
-            }
+            Property aProperty = m_xPropertyInfo->getPropertyByName(sPropertyName);
+            if ((aProperty.Attributes & PropertyAttribute::MAYBEVOID) == 0)
+                // the string is empty, and the property is not allowed to be void
+                // -> don't need to write the attibute, 'cause missing it is unambiguous
+                return;
         }
 
         // finally add the attribuite to the context
         AddAttribute(_nAttributeNamespaceKey, _pAttributeName, sValue);
+    }
 
-        m_aRemainingProps.erase(sPropertyName);
+    //---------------------------------------------------------------------
+    void OPropertyExport::exportStringSequenceAttribute(const sal_uInt16 _nAttributeNamespaceKey, const sal_Char* _pAttributeName,
+        const sal_Char* _pPropertyName,
+        const sal_Unicode _aQuoteCharacter, const sal_Unicode _aListSeparator)
+    {
+        DBG_CHECK_PROPERTY(_pPropertyName, Sequence< ::rtl::OUString >);
+        OSL_ENSURE(_aListSeparator != 0, "OPropertyExport::exportStringSequenceAttribute: invalid separator character!");
+
+        ::rtl::OUString sPropertyName(::rtl::OUString::createFromAscii(_pPropertyName));
+        Sequence< ::rtl::OUString > aItems;
+        m_xProps->getPropertyValue(sPropertyName) >>= aItems;
+
+        ::rtl::OUString sFinalList;
+
+        // unfortunately the OUString can't append single sal_Unicode characters ...
+        const ::rtl::OUString sQuote(&_aQuoteCharacter, 1);
+        const ::rtl::OUString sSeparator(&_aListSeparator, 1);
+        const sal_Bool bQuote = sQuote.getLength();
+
+        // concatenate the string items
+        const ::rtl::OUString* pItems = aItems.getConstArray();
+        const ::rtl::OUString* pEnd = pItems + aItems.getLength();
+        const ::rtl::OUString* pLastElement = pEnd - 1;
+        for (   ;
+                pItems != pEnd;
+                ++pItems
+            )
+        {
+            OSL_ENSURE(!_aQuoteCharacter || (-1 == pItems->indexOf(_aQuoteCharacter)),
+                "OPropertyExport::exportStringSequenceAttribute: there is an item which contains the quote character!");
+            OSL_ENSURE(_aQuoteCharacter || (-1 == pItems->indexOf(_aListSeparator)),
+                "OPropertyExport::exportStringSequenceAttribute: no quote character, but there is an item containing the separator character!");
+
+            if (bQuote)
+                sFinalList += sQuote;
+            sFinalList += *pItems;
+            if (bQuote)
+                sFinalList += sQuote;
+
+            if (pItems != pLastElement)
+                sFinalList += sSeparator;
+        }
+
+        if (sFinalList.getLength())
+            AddAttribute(_nAttributeNamespaceKey, _pAttributeName, sFinalList);
+
+        exportedProperty(sPropertyName);
     }
 
     //---------------------------------------------------------------------
@@ -383,8 +648,7 @@ namespace xmloff
                 m_rContext.GetMM100UnitConverter().convertNumber(aBuffer, getDouble(_rValue));
                 break;
             case TypeClass_BOOLEAN:
-                // let the unit converter format is as string
-                m_rContext.GetMM100UnitConverter().convertBool(aBuffer, getBOOL(_rValue));
+                aBuffer = getBOOL(_rValue) ? m_sValueTrue : m_sValueFalse;
                 break;
             case TypeClass_BYTE:
             case TypeClass_SHORT:
@@ -394,8 +658,16 @@ namespace xmloff
                 break;
             case TypeClass_HYPER:
                 // TODO
-                OSL_ENSURE(sal_False, "OPropertyExport::implExportGenericPropertyAttribute: missing implementation for sal_Int64!");
+                OSL_ENSURE(sal_False, "OPropertyExport::implConvertAny: missing implementation for sal_Int64!");
                 break;
+            case TypeClass_ENUM:
+            {
+                // convert it into an int32
+                sal_Int32 nValue;
+                ::cppu::enum2int(nValue, _rValue);
+                m_rContext.GetMM100UnitConverter().convertNumber(aBuffer, getINT32(_rValue));
+            }
+            break;
             default:
             {   // hmmm .... what else do we know?
                 double fValue = 0;
@@ -425,8 +697,10 @@ namespace xmloff
                 }
                 else
                 {
+                    // if any other types are added here, please remember to adjust implGetPropertyXMLType accordingly
+
                     // no more options ...
-                    OSL_ENSURE(sal_False, "OPropertyExport::implExportGenericPropertyAttribute: unsupported value type!");
+                    OSL_ENSURE(sal_False, "OPropertyExport::implConvertAny: unsupported value type!");
                     break;
                 }
                 // let the unit converter format is as string
@@ -436,6 +710,47 @@ namespace xmloff
         }
 
         return aBuffer.makeStringAndClear();
+    }
+
+
+    //---------------------------------------------------------------------
+    ::rtl::OUString OPropertyExport::implGetPropertyXMLType(const ::com::sun::star::uno::Type& _rType)
+    {
+        // possible types we can write (either because we recognize them directly or because we convert _rValue
+        // into one of these types)
+        static const ::rtl::OUString s_sTypeBoolean (RTL_CONSTASCII_USTRINGPARAM("boolean"));
+        static const ::rtl::OUString s_sTypeShort   (RTL_CONSTASCII_USTRINGPARAM("short"));
+        static const ::rtl::OUString s_sTypeInteger (RTL_CONSTASCII_USTRINGPARAM("integer"));
+        static const ::rtl::OUString s_sTypeLong    (RTL_CONSTASCII_USTRINGPARAM("long"));
+        static const ::rtl::OUString s_sTypeDouble  (RTL_CONSTASCII_USTRINGPARAM("double"));
+        static const ::rtl::OUString s_sTypeString  (RTL_CONSTASCII_USTRINGPARAM("string"));
+
+        // handle the type description
+        switch (_rType.getTypeClass())
+        {
+            case TypeClass_STRING:
+                return s_sTypeString;
+                break;
+            case TypeClass_DOUBLE:
+                return s_sTypeDouble;
+                break;
+            case TypeClass_BOOLEAN:
+                return s_sTypeBoolean;
+                break;
+            case TypeClass_BYTE:
+            case TypeClass_SHORT:
+            case TypeClass_LONG:
+                return s_sTypeInteger;
+                break;
+            case TypeClass_HYPER:
+                return s_sTypeLong;
+                break;
+            case TypeClass_ENUM:
+                return s_sTypeInteger;
+                break;
+            default:
+                return s_sTypeDouble;
+        }
     }
 
 #ifdef DBG_UTIL
@@ -453,16 +768,8 @@ namespace xmloff
     {
         try
         {
-            // we need a PropertySetInfo
-            Reference< XPropertySetInfo > xPropInfo = m_xProps->getPropertySetInfo();
-            if (!xPropInfo.is())
-            {
-                OSL_ENSURE(sal_False, "OPropertyExport::dbg_implCheckProperty: no PropertySetInfo!");
-                return;
-            }
-
             // the property must exist
-            if (!xPropInfo->hasPropertyByName(_rPropertyName))
+            if (!m_xPropertyInfo->hasPropertyByName(_rPropertyName))
             {
                 OSL_ENSURE(sal_False,
                     ::rtl::OString("OPropertyExport::dbg_implCheckProperty: no property with the name ") +=
@@ -474,7 +781,7 @@ namespace xmloff
             if (_pType)
             {
                 // and it must have the correct type
-                Property aPropertyDescription = xPropInfo->getPropertyByName(_rPropertyName);
+                Property aPropertyDescription = m_xPropertyInfo->getPropertyByName(_rPropertyName);
                 OSL_ENSURE(aPropertyDescription.Type.equals(*_pType), "OPropertyExport::dbg_implCheckProperty: invalid property type!");
             }
         }
@@ -492,6 +799,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/17 19:03:06  fs
+ *  initial checkin - export and/or import the applications form layer
+ *
  *
  *  Revision 1.0 15.11.00 17:50:20  fs
  ************************************************************************/

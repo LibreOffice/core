@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:03:18 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 
 //.........................................................................
 namespace xmloff
@@ -81,15 +84,23 @@ namespace xmloff
     */
     class OPropertyExport : public OAttributeMetaData
     {
-    protected:
-        SvXMLExport&    m_rContext;
-
+    private:
         DECLARE_STL_STDKEY_SET(::rtl::OUString, StringSet);
         StringSet       m_aRemainingProps;
             // see examinePersistence
 
+    protected:
+        SvXMLExport&    m_rContext;
+
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         m_xProps;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+                        m_xPropertyInfo;
+
+        // caching
+        ::rtl::OUString     m_sValueTrue;
+        ::rtl::OUString     m_sValueFalse;
+
     public:
         /** constructs an object capable of handling attributes for export
             @param  _rContext
@@ -103,7 +114,7 @@ namespace xmloff
     protected:
         /** examines a property set given for all properties which's value are to made persistent
 
-            <p>upon returnm the <method>m_aRemainingProps</method> will be filled with the names of all properties
+            <p>upon return the <method>m_aRemainingProps</method> will be filled with the names of all properties
             which need to be stored</p>
         */
         void examinePersistence();
@@ -111,6 +122,19 @@ namespace xmloff
         /**
         */
         void exportRemainingProperties();
+
+        /** indicates that a property has been by a derived class, without using the helper methods of this class.
+
+            <p>Calling this method is necessary in case you use the suggested mechanism for the generic export of
+            properties. This means that you want to use <method>exportRemainingProperties</method>, which exports
+            all properties which need to ('cause they haven't been exported with one of the other type-specific
+            methods).</p>
+
+            <p>In this case you should call exportedProperty for every property you export yourself, so the property
+            will be flagged as <em>already handled</em></p>
+        */
+        void exportedProperty(const ::rtl::OUString& _rPropertyName)
+            { m_aRemainingProps.erase(_rPropertyName); }
 
         /** add an attribute which is represented by a string property to the export context
 
@@ -122,7 +146,7 @@ namespace xmloff
             @param _pPropertyName
                 the name of the property to ask the control for
         */
-        void implAddStringPropAttribute(
+        void exportStringPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
             const sal_Char* _pPropertyName);
@@ -146,7 +170,7 @@ namespace xmloff
                 <p>Be careful with <arg>_bDefault</arg> and <arg>_bInverseSemantics</arg>: if <arg>_bInverseSemantics</arg>
                 is <TRUE/>, the current property value is inverted <em>before</em> comparing it to the default.</p>
         */
-        void implAddBooleanPropAttribute(
+        void exportBooleanPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
             const sal_Char* _pPropertyName,
@@ -166,7 +190,7 @@ namespace xmloff
                 the default of the attribute. If the current property value equals this default, no
                 attribute is added.
         */
-        void implAddInt16PropAttribute(
+        void exportInt16PropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
             const sal_Char* _pPropertyName,
@@ -187,18 +211,18 @@ namespace xmloff
                 the default of the attribute. If the current property value equals this default, no
                 attribute is added.
         */
-        void implAddEnumPropAttribute(
+        void exportEnumPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
             const sal_Char* _pPropertyName,
             const SvXMLEnumMapEntry* _pValueMap,
             const sal_Int32 _nDefault);
 
-        /// some very special methods for some very special attribute/property pairs
+        // some very special methods for some very special attribute/property pairs
 
         /** add the service-name attribute to the export context
         */
-        void implExportServiceName();
+        void exportServiceNameAttribute();
 
         /** add the hlink:xref attribute to the export context.
 
@@ -207,7 +231,14 @@ namespace xmloff
             <p>The property needs a special handling because conflicts between the default values for the attribute
             and the property.</p>
         */
-        void implExportTargetFrame();
+        void exportTargetFrameAttribute();
+
+        /** just a dummy at the moment.
+
+            <p>We don't have style support right now, so the only thing the method does is removing the style-relevant
+            properties from the list of yet-to-be-exported properties (<member>m_aRemainingProps</member>)</p>
+        */
+        void implExportStyleReference();
 
         /** add an arbitrary attribute extracted from an arbitrary property to the export context
 
@@ -232,17 +263,74 @@ namespace xmloff
             @param _pPropertyName
                 the name of the property to ask the object for
         */
-        void implExportGenericPropertyAttribute(
+        void exportGenericPropertyAttribute(
             const sal_uInt16 _nAttributeNamespaceKey,
             const sal_Char* _pAttributeName,
             const sal_Char* _pPropertyName);
+
+        /** exports a property value, which is a string sequence, as attribute
+
+            <p>The elements of the string sequence given are quoted and concatenated, with the characters used for
+            this to be choosen by the caller</p>
+
+            <p>If you use the quote character, no check (except assertions) is made if one of the list items
+            containes the quote character</p>
+
+            <p>If you don't use the quote character, no check (except assertions) is made if one of the list items
+            containes the separator character (which would be deadly when reimporting the string)</p>
+
+            @param _nNamespaceKey
+                the key of the namespace to use for the attribute name. Is used with the namespace map
+                provided by the export context.
+            @param _pAttributeName
+                the name of the attribute to add. Must not contain any namespace (it's added automatically)
+            @param _pPropertyName
+                the name of the property to ask the object for
+            @param _aQuoteCharacter
+                the character to use to quote the sequence elements with. May be 0, in this case no quoting happens
+            @param _aListSeparator
+                the character to use to separate the list entries
+        */
+        void exportStringSequenceAttribute(
+            const sal_uInt16 _nAttributeNamespaceKey,
+            const sal_Char* _pAttributeName,
+            const sal_Char* _pPropertyName,
+            const sal_Unicode _aQuoteCharacter = '"',
+            const sal_Unicode _aListSeparator = ',');
 
         /** tries to convert an arbitrary <type scope="com.sun:star.uno">Any</type> into an string
 
             <p>If the type contained in the Any is not supported, the returned string will be empty. In the
             debug version, an additional assertion occurs.</p>
+
+            @param  _rValue
+                the value to convert
         */
-        ::rtl::OUString implConvertAny(const ::com::sun::star::uno::Any& _rValue);
+        ::rtl::OUString implConvertAny(
+            const ::com::sun::star::uno::Any& _rValue);
+
+        /**
+            @return
+                string which can be used in the <code>form:property</code> element's <code>type</code> attribute
+                to describe the type of a value.<br/>
+                Possible types returned are
+                <ul>
+                    <li><b>boolean</b>: <arg>_rValue</arg> was interpreted as boolean value before converting
+                        it into a string</li>
+                    <li><b>short</b>: <arg>_rValue</arg> was interpreted as 16 bit integer value before
+                        converting it into a string</li>
+                    <li><b>int</b>: <arg>_rValue</arg> was interpreted as 32 bit integer value before
+                        converting it into a string</li>
+                    <li><b>long</b>: <arg>_rValue</arg> was interpreted as 64 bit integer value before
+                        converting it into a string</li>
+                    <li><b>double</b>: <arg>_rValue</arg> was interpreted as 64 bit floating point value before
+                        converting it into a string</li>
+                    <li><b>string</b>: <arg>_rValue</arg> did not need any conversion as it already was a string</li>
+                </ul>
+                If the type is not convertable, an empty string is returned
+        */
+        ::rtl::OUString implGetPropertyXMLType(const ::com::sun::star::uno::Type& _rType);
+
 #ifdef DBG_UTIL
                 void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue);
 #else
@@ -298,7 +386,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/17 19:03:18  fs
+ *  initial checkin - export and/or import the applications form layer
+ *
  *
  *  Revision 1.0 15.11.00 17:49:03  fs
  ************************************************************************/
-

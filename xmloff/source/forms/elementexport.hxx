@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:01:28 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,16 +143,17 @@ namespace xmloff
         DECLARE_STL_STDKEY_SET(sal_Int16, Int16Set);
             // used below
 
-        ::rtl::OUString     m_sControlId;           // the control id to use when exporting
-        ::rtl::OUString     m_sReferringControls;   // list of referring controls (i.e. their id's)
-        sal_Int16           m_nClassId;             // class id of the control we're representing
-        ElementType         m_eType;                // (XML) type of the control we're representing
-        sal_Int32           m_nIncludeCommon;       // common control attributes to include
-        sal_Int32           m_nIncludeDatabase;     // common database attributes to include
-        sal_Int32           m_nIncludeSpecial;      // special attributes to include
-        sal_Int32           m_nIncludeEvents;       // events to include
+        ::rtl::OUString         m_sControlId;           // the control id to use when exporting
+        ::rtl::OUString         m_sReferringControls;   // list of referring controls (i.e. their id's)
+        sal_Int16               m_nClassId;             // class id of the control we're representing
+        ElementType             m_eType;                // (XML) type of the control we're representing
+        sal_Int32               m_nIncludeCommon;       // common control attributes to include
+        sal_Int32               m_nIncludeDatabase;     // common database attributes to include
+        sal_Int32               m_nIncludeSpecial;      // special attributes to include
+        sal_Int32               m_nIncludeEvents;       // events to include
+        IExportImplementation*  m_pCallback;            // the callback to export collections - (GridControls are collections)
 
-        SvXMLElementExport* m_pXMLElement;          // XML element doing the concrete startElement etc.
+        SvXMLElementExport*     m_pXMLElement;          // XML element doing the concrete startElement etc.
 
     public:
         /** constructs an object capable of exporting controls
@@ -166,10 +167,17 @@ namespace xmloff
             @param _rReferringControls
                 the comma-separated list of control-ids of all the controls referring to this one as LabelControl
         */
-        OControlExport(SvXMLExport& _rContext,
+        OControlExport(SvXMLExport& _rContext, IExportImplementation* _pCallback,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
             const ::rtl::OUString& _rControlId,
             const ::rtl::OUString& _rReferringControls);
+
+        /** starts the export.
+
+            <p>This is an extra method because we need to call virtual methods here, else we would have placed
+            it in the ctor ...<p>
+        */
+        void doExport();
 
         /** dtor.
 
@@ -178,13 +186,20 @@ namespace xmloff
         ~OControlExport();
 
     protected:
-        /** adds all necessary attributes to the export context
+        /** examine the control. Some kind of CtorImpl.
         */
-        void implExportAllAttributes() throw (::com::sun::star::uno::Exception);
+        virtual void examine();
+
+        /** starts the XML element which represents the control.
+
+            <p>The default implementation only creates <member>m_pXMLElement</member> with the parameters
+            derived from the results of <method>examine</method>.
+        */
+        virtual void startExportElement();
 
         /** writes everything which needs to be represented as sub tag
         */
-        void implExportSubTags() throw (::com::sun::star::uno::Exception);
+        void exportSubTags() throw (::com::sun::star::uno::Exception);
 
         /** adds common control attributes to the XMLExport context given
 
@@ -226,7 +241,7 @@ namespace xmloff
         */
         void exportListSourceAsElements();
 
-        /** get's a Sequence< sal_Int16 > property value as set of sal_Int16's
+        /** get's a Sequence&lt; sal_Int16 &gt; property value as set of sal_Int16's
             @param _rPropertyName
                 the property name to use
             @param _rOut
@@ -240,10 +255,32 @@ namespace xmloff
             to NULL.</p>
         */
         void getPropertyNames_ca(sal_Char const * & _rpCurrentValue, sal_Char const * & _rpValue);
+    };
 
-        /** examine the control. Some kind of CtorImpl.
+    //=====================================================================
+    //= OColumnExport
+    //=====================================================================
+    /** Helper class for exporting a grid column
+    */
+    class OColumnExport : public OControlExport
+    {
+    protected:
+        SvXMLElementExport*     m_pColumnXMLElement;
+            // in addition to the element written by the base class, we need another one indicating that we're a
+            // column
+
+    public:
+        /** ctor
+            @see OColumnExport::OColumnExport
         */
-        void examine();
+        OColumnExport(SvXMLExport& _rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl);
+
+        ~OColumnExport();
+
+    protected:
+        virtual void examine();
+        virtual void startExportElement();
     };
 
     //=====================================================================
@@ -286,6 +323,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/17 19:01:28  fs
+ *  initial checkin - export and/or import the applications form layer
+ *
  *
  *  Revision 1.0 13.11.00 18:41:40  fs
  ************************************************************************/

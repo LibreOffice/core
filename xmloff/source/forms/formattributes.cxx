@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:01:36 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ namespace xmloff
             case faCommandType:     return "command-type";
             case faEscapeProcessing:return "escape-processing";
             case faDatasource:      return "datasource";
-            case faDetaildFiels:    return "detaild-fiels";
+            case faDetailFiels:     return "detaild-fiels";
             case faFilter:          return "filter";
             case faIgnoreResult:    return "ignore-result";
             case faMasterFields:    return "master-fields";
@@ -227,6 +227,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/17 19:01:36  fs
+ *  initial checkin - export and/or import the applications form layer
+ *
  *
  *  Revision 1.0 14.11.00 09:53:05  fs
  ************************************************************************/
