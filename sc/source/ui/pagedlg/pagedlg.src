@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:40:27 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,9 +265,9 @@ ModelessDialog RID_SCDLG_AREAS
     };
     StringList [ language_user1 ] =
     {
-            < "- keiner -" ; Default ; > ;
-        < "- benutzerdefiniert -" ; Default ; > ;
-        < "- Selektion -" ; Default ; > ;
+            < "; - keiner -" ; Default ; > ;
+        < "; - benutzerdefiniert -" ; Default ; > ;
+        < "; - Selektion -" ; Default ; > ;
     };
     StringList [ catalan ] =
     {
@@ -496,8 +496,8 @@ ModelessDialog RID_SCDLG_AREAS
     };
     StringList [ language_user1 ] =
     {
-            < "- keine -" ; Default ; > ;
-        < "- benutzerdefiniert -" ; Default ; > ;
+            < "; - keine -" ; Default ; > ;
+        < "; - benutzerdefiniert -" ; Default ; > ;
     };
     StringList [ catalan ] =
     {
@@ -720,8 +720,8 @@ ModelessDialog RID_SCDLG_AREAS
     };
     StringList [ language_user1 ] =
     {
-            < "- keine -" ; Default ; > ;
-        < "- benutzerdefiniert -" ; Default ; > ;
+            < "; - keine -" ; Default ; > ;
+        < "; - benutzerdefiniert -" ; Default ; > ;
     };
     StringList [ catalan ] =
     {
@@ -1150,7 +1150,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ japanese ] = "δΈγ‹γ‚‰δΈ‹γΈγ€γγ®εΎε³γΈ(~T)";
         Text[ chinese_traditional ] = "εΎδΈε‘δΈ‹οΌη„¶εΎε‘ε³(~T)";
         Text[ arabic ] = "γδ ΓΪαμ αΓΣέα";
-        Text[ greek ] = "Από πάνω προς τα κάτω, στη συνέχεια προς τα δεξιά";
+        Text[ greek ] = "~Από πάνω προς τα κάτω και προς τα δεξιά";
         Text[ korean ] = "ν–‰ μ°μ„ (~T)";
         Text[ turkish ] = "~Yukardan aώaπύ, sonra saπa";
         Text[ catalan ] = "De la part ~superior a la part inferior";
@@ -1184,9 +1184,9 @@ TabPage RID_SCPAGE_TABLE
         Text[ japanese ] = "ε·¦γ‹γ‚‰ε³γΈγ€γγ®εΎδΈ‹γΈ(~E)";
         Text[ chinese_traditional ] = "εΎε·¦ε‘ε³οΌη„¶εΎε‘δΈ‹(~E)";
         Text[ arabic ] = "γδ ΗανΣΗΡ Εαμ Ηανγνδ";
-        Text[ language_user1 ] = "Μήκος; - - - -";
-        Text[ greek ] = "Από αριστερά προς τα δεξιά, στη συνέχεια προς τα ~κάτω";
-        Text[ korean ] = "μ™Όμª½μ—μ„ μ¤λ¥Έμª½μΌλ΅, κ·Έ λ‹¤μ μ•„λλ΅";
+        Text[ language_user1 ] = "; Μήκος; - - - -";
+        Text[ greek ] = "Από αριστερά προς τα δεξιά και προς τα ~κάτω";
+        Text[ korean ] = "μ™Όμª½μ—μ„ μ¤λ¥Έμª½μΌλ΅, κ·Έ λ‹¤μ μ•„λλ΅(~E)";
         Text[ turkish ] = "~Soldan saπa, sonra aώaπύya";
         Text[ catalan ] = "D'~esquerra a dreta";
         Text[ thai ] = "ΰΈ‹ΰΉ‰ΰΈ²~ΰΈΆΰΉ„ΰΈ›ΰΈ‚ΰΈ§ΰΈ²";
@@ -1244,7 +1244,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ japanese ] = "ζ€εγ®γƒγƒΌγ‚Έη•ªε·(~P)";
         Text[ chinese_traditional ] = "η¬¬δΈ€ε€‹ι ηΆΌ(~P)";
         Text[ arabic ] = "Ρήγ ΗαΥέΝΙ ΗαΓζαμ";
-        Text[ greek ] = "Πρώτος αριθμός σελίδας";
+        Text[ greek ] = "~Πρώτος αρ. σελίδας";
         Text[ korean ] = "μ‹μ‘ νμ΄μ§€ λ²νΈ(~P)";
         Text[ turkish ] = "έlk ~sayfa numarasύ";
         Text[ catalan ] = "Nϊmero primera ~pΰgina";
@@ -1342,7 +1342,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ english_us ] = "Fit printout on nu~mber of pages";
         Text[ portuguese ] = "A~justar impressγo ao nϊmero de pαginas";
         Text[ russian ] = "Ρξγλΰρξβΰςό πΰροεχΰςκσ ρ χθρλξμ ρςπΰνθφ";
-        Text[ greek ] = "Προσαρμογή εκτύπωσης ως προς τον αριθμό σελίδω~ν";
+        Text[ greek ] = "Προ~σαρμογή της εκτύπωσης στον αριθμό σελίδων";
         Text[ dutch ] = "Afdruk~paginanummer aanpassen";
         Text[ french ] = "Ada~pter l'impression au nombre de pages";
         Text[ spanish ] = "Adaptar la impresiσn al nϊmero de pαginas";
@@ -1425,6 +1425,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ slovak ] = "PravΓ­tko";
     };
 };
+
 
 
 
