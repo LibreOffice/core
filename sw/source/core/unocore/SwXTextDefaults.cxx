@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDefaults.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-21 14:51:13 $
+ *  last change: $Author: mtg $ $Date: 2001-04-04 12:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,14 @@
  *
  *
  ************************************************************************/
+#ifdef PRECOMPILED
+#include "core_pch.hxx"
+#endif
+
+#pragma hdrstop
 #ifndef _SW_XTEXT_DEFAULTS_HXX
 #include <SwXTextDefaults.hxx>
 #endif
-
 
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
