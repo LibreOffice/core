@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:45:43 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,12 @@
 class HeaderBar;
 #endif
 
+#ifndef _SVX_READONLYIMAGE_HXX
+#include <readonlyimage.hxx>
+#endif
+
 class SfxFilter;
+class SvtInetOptions;
 
 #ifndef SV_NODIALOG
 #define PROXY_CONTROLS  23
@@ -146,28 +151,14 @@ private:
     FixedText       aFtpPortFT;
     SvxNoSpaceEdit  aFtpPortED;
 
-//#105461# obsolet entries
-//  FixedText       aSocksProxyFT;
-//  SvxNoSpaceEdit  aSocksProxyED;
-//  FixedText       aSocksPortFT;
-//  SvxNoSpaceEdit  aSocksPortED;
-
     FixedText       aNoProxyForFT;
     Edit            aNoProxyForED;
     FixedText       aNoProxyDescFT;
-    // DNS Server
-//#105461# obsolet entries
-//     FixedLine            aDNSGB;
-//  RadioButton         aDNSAutoRB;
-//  RadioButton         aDNSManualRB;
-//  PatternField        aDNSED;
 
-    String              sMsg255_0;
-    String              sMsg255_1;
-    String              sFromBrowser;
+    String          sFromBrowser;
 
+    SvtInetOptions* pInetOptions;
 #ifdef _SVX_OPTINET2_CXX
-    DECL_LINK( AutoDNSHdl_Impl, RadioButton* );
     void            EnableControls_Impl(BOOL bEnable);
 
     DECL_LINK( ProxyHdl_Impl, ListBox * );
@@ -262,26 +253,39 @@ protected:
 // class SvxScriptingTabPage ---------------------------------------------
 
 class SvtJavaOptions;
+class SvtSecurityOptions;
 
 class SvxScriptingTabPage : public SfxTabPage
 {
 private:
     // readonly ------------------------------------
-    BOOL bROConfirm;
-    BOOL bROWarning;
-    BOOL bROScriptExec;
-    BOOL bROExePlug;
-    BOOL bROExecMacro;
+    sal_Bool bROConfirm;
+    sal_Bool bROWarning;
+    sal_Bool bROScriptExec;
+    sal_Bool bROExePlug;
+    sal_Bool bROExecMacro;
+
+    sal_Bool bROJavaEnabled;
+    sal_Bool bROJavaSecurity;
+    sal_Bool bROJavaNetAccess;
+    sal_Bool bROJavaUserClassPath;
+    sal_Bool bROJavaExecuteApplets;
 
     // Execute
 
     FixedLine           aGrpScriptingStarBasic;
 
+    ReadOnlyImage       aExecMacroFI;
     FixedText           aExecMacroFT;
     ListBox             aExecMacroLB;
+
+    ReadOnlyImage       aConfirmFI;
     CheckBox            aConfirmCB;
+
+    ReadOnlyImage       aWarningFI;
     CheckBox            aWarningCB;
 
+    ReadOnlyImage       aScriptExecFI;
     FixedText           aPathListFT;
     // #98647# ------------------------------------
     SvxScriptExecListBox aLbScriptExec;
@@ -293,25 +297,36 @@ private:
     PushButton          aBtnScriptExecInsert;
 
     FixedLine           aHyperlinksFL;
+    ReadOnlyImage       aHyperlinksFI;
     FixedText           aHyperlinksFT;
     ListBox             aHyperlinksLB;
 
     FixedLine           aJavaFL;
+    ReadOnlyImage       aJavaEnableFI;
     CheckBox            aJavaEnableCB;
+    ReadOnlyImage       aJavaSecurityFI;
     CheckBox            aJavaSecurityCB;
+    ReadOnlyImage       aNetAccessFI;
     FixedText           aNetAccessFT;
     ListBox             aNetAccessLB;
     FixedText           aClassPathFT;
+    ReadOnlyImage       aClassPathFI;
     Edit                aClassPathED;
     PushButton          aClassPathPB;
 
     FixedLine           aSeparatorFL;
 
     FixedLine           aExecuteGB;
+    ReadOnlyImage       aExePlugFI;
     CheckBox            aExePlugCB;
+    ReadOnlyImage       aExecAppletsFI;
     CheckBox            aExecAppletsCB;
 
+    Image               aLockImg;
+    Image               aLockHCImg;
+
     SvtJavaOptions*     pJavaOptions;
+    SvtSecurityOptions* pSecurityOptions;
 #ifdef _SVX_OPTINET2_CXX
     DECL_LINK( EditHdl_Impl, Edit* );
     DECL_LINK( LBHdl_Impl, ListBox* );
