@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-16 14:41:55 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include "LegendHelper.hxx"
 #include "VLegend.hxx"
 #include "LayoutDefaults.hxx"
+#include "PropertyMapper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_AXISORIENTATION_HPP_
 #include <drafts/com/sun/star/chart2/AxisOrientation.hpp>
@@ -105,6 +106,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
 #include <drafts/com/sun/star/chart2/LegendPosition.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
+#include <com/sun/star/drawing/LineStyle.hpp>
 #endif
 
 //.............................................................................
@@ -681,15 +685,77 @@ void createLegend( const uno::Reference< XLegend > & xLegend
     }
 }
 
+void formatPage(
+      const uno::Reference< frame::XModel > & xModel
+    , const awt::Size rPageSize
+    , const uno::Reference< drawing::XShapes >& xTarget
+    , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
+    )
+{
+    try
+    {
+        uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
+        OSL_ASSERT( xChartDoc.is());
+        if( ! xChartDoc.is())
+            return;
+        uno::Reference< beans::XPropertySet > xModelPage( xChartDoc->getPageBackground());
+        if( ! xModelPage.is())
+            return;
+
+        uno::Reference< beans::XPropertySet > xPageProp( xTarget, uno::UNO_QUERY );
+        // the following is just a workaround as the draw page is no XPropertySet
+        // ------------ workaround
+        if( ! xPageProp.is() )
+        {
+            // if we get here, we need a shape to place on the page
+            if( xShapeFactory.is())
+            {
+                uno::Reference< drawing::XShape > xShape(
+                    xShapeFactory->createInstance(
+                        C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
+                if( xTarget.is() &&
+                    xShape.is())
+                {
+                    xTarget->add( xShape );
+                    xShape->setSize( rPageSize );
+                    xPageProp.set( xShape, uno::UNO_QUERY );
+                    if( xPageProp.is())
+                        xPageProp->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_NONE ));
+                }
+            }
+        }
+        // ------------ workaround
+
+        if( xPageProp.is())
+        {
+            tPropertyNameValueMap aFillValueMap;
+            tMakePropertyNameMap aCharNameMap = PropertyMapper::getPropertyNameMapForFillProperties();
+            PropertyMapper::getValueMap( aFillValueMap, aCharNameMap, xModelPage );
+
+            tNameSequence aNames;
+            tAnySequence aValues;
+            PropertyMapper::getMultiPropertyListsFromValueMap( aNames, aValues, aFillValueMap );
+            PropertyMapper::setMultiProperties( aNames, aValues, xPageProp );
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
 bool ChartViewImpl::create( const awt::Size& rPageSize )
 {
     uno::Reference<drawing::XShapes> xPageShapes =
         uno::Reference<drawing::XShapes>( m_xDrawPage, uno::UNO_QUERY );
 
-//     sal_Int32 nXOffsetFromRight = 0;
     sal_Int32 nYOffset = 0;
     sal_Int32 nXPosition = rPageSize.Width/2;
-//     sal_Int32 nYPosition = rPageSize.Height/2;
+
+    //------------ apply fill properties to page
+    // todo: it would be nicer to just pass the page m_xDrawPage and format it,
+    // but the page we have here does not support XPropertySet
+    formatPage( m_xChartModel, rPageSize, xPageShapes, m_xShapeFactory );
 
     //------------ create main title shape
     createTitle( TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_xChartModel )
@@ -707,14 +773,10 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
     awt::Rectangle aSpaceLeft( 0, nYOffset, rPageSize.Width, rPageSize.Height - nYOffset );
     createLegend( LegendHelper::getLegend( m_xChartModel )
                   , aSpaceLeft, xPageShapes, m_xShapeFactory );
-    // assume that the legend is on the right
-    // todo: adapt diagram size to correct legend position
-//     nXOffsetFromRight = rPageSize.Width - aSpaceLeft.Width;
 
     //------------ create complete diagram shape (inclusive axis and series)
     awt::Point aPosDia;
     awt::Size  aSizeDia;
-//     if( getPosAndSizeForDiagram( aPosDia, aSizeDia, rPageSize, nXOffsetFromRight, nYOffset ) )
     if( getPosAndSizeForDiagram( aPosDia, aSizeDia, aSpaceLeft ) )
         initializeDiagramAndGetCooSys( m_aVCooSysList
                     , m_xCC, xPageShapes, m_xShapeFactory, m_pNumberFormatterWrapper
