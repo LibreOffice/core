@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NotesAccess.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:57:22 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -112,18 +112,26 @@ public class NotesAccess implements Runnable {
     }
 
     // It is possible to use a different connection string, passed as argument
-    if ( args.length == 2 ) {
-        sOfficeConnection = args[1];
+    if ( args.length == 5 ) {
+        sOfficeConnection = args[4];
     }
 
+    if ( !args[ 0 ].trim().equals( "" ) ) {
+      stringHost = args[ 0 ].trim();
+    }
     if ( !args[ 1 ].trim().equals( "" ) ) {
-      stringHost = args[ 1 ].trim();
+      stringUser = args[ 1 ].trim();
     }
-    if ( !args[ 2 ].trim().equals( "" ) ) {
-      stringUser = args[ 2 ].trim();
+    stringPassword = args[ 2 ].trim();
+
+    try {
+        java.io.File sourceFile = new java.io.File(args[ 3 ].trim());
+        stringDatabase = sourceFile.getCanonicalPath();
+    } catch (java.io.IOException e) {
+        System.out.println("Error: Please check the name or path to your database file.");
+        e.printStackTrace();
+        System.exit( 1 );
     }
-    stringPassword = args[ 3 ].trim();
-    stringDatabase = args[ 4 ].trim();
 
     if ( stringHost.equals( "" ) ) {
       // Initializing.
