@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-12 08:51:24 $
+ *  last change: $Author: nn $ $Date: 2001-05-04 15:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,6 @@ SFX_IMPL_INTERFACE( ScModule, SfxShell, ScResId(RID_APPTITLE) )
 ScModule::ScModule( SfxObjectFactory* pFact ) :
     ScModuleDummy( SFX_APP()->CreateResManager( "sc" ), FALSE, pFact ),
     bIsWaterCan( FALSE ),
-    bDragWasIntern( FALSE ),
     bIsInEditCommand( FALSE ),
     pRefInputHandler( NULL ),
     pViewCfg( NULL ),
@@ -590,37 +589,6 @@ void ScModule::GetState( SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-void ScModule::SetDragObject( const ScMarkData& rMarkData,const ScRange& rRange,
-                        USHORT nHandleX, USHORT nHandleY, ScDocument* pDoc, USHORT nFlags )
-{
-    DBG_ERROR("SetDragObject is obsolete");
-
-#ifdef OLD_DND
-    aDragData.aMarkData = rMarkData;
-    USHORT nStartX = rRange.aStart.Col();
-    USHORT nStartY = rRange.aStart.Row();
-    aDragData.nStartX   = nStartX;
-    aDragData.nStartY   = nStartY;
-    aDragData.nTabNo    = rRange.aStart.Tab();
-    aDragData.nSizeX    = rRange.aEnd.Col() - nStartX + 1;
-    aDragData.nSizeY    = rRange.aEnd.Row() - nStartY + 1;
-    aDragData.nHandleX  = nHandleX;
-    aDragData.nHandleY  = nHandleY;
-    aDragData.pDoc      = pDoc;
-    aDragData.nFlags    = nFlags;
-
-    aDragData.pSdrModel = NULL;
-    aDragData.pSdrView  = NULL;
-    aDragData.aLinkDoc.Erase();
-    aDragData.aLinkTable.Erase();
-    aDragData.aLinkArea.Erase();
-
-    aDragData.pJumpLocalDoc = NULL;
-    aDragData.aJumpTarget.Erase();
-    aDragData.aJumpText.Erase();
-#endif
-}
-
 void ScModule::ResetDragObject()
 {
     aDragData.pCellTransfer = NULL;
@@ -632,8 +600,6 @@ void ScModule::ResetDragObject()
     aDragData.pJumpLocalDoc = NULL;
     aDragData.aJumpTarget.Erase();
     aDragData.aJumpText.Erase();
-
-    bDragWasIntern = FALSE;
 }
 
 void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )
@@ -641,19 +607,6 @@ void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawO
     ResetDragObject();
     aDragData.pCellTransfer = pCellObj;
     aDragData.pDrawTransfer = pDrawObj;
-}
-
-void ScModule::SetDragObject( SdrModel* pModel, SdrView* pView, USHORT nFlags )
-{
-    DBG_ERROR("SetDragObject is obsolete");
-
-#ifdef OLD_DND
-    SetDragObject(ScMarkData(),ScRange(),0,0,0,0 );
-
-    aDragData.pSdrModel = pModel;
-    aDragData.pSdrView  = pView;
-    aDragData.nFlags    = nFlags;
-#endif
 }
 
 void ScModule::SetDragLink( const String& rDoc, const String& rTab, const String& rArea )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 19:20:40 $
+ *  last change: $Author: nn $ $Date: 2001-05-04 15:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,14 +126,6 @@ class ScDrawTransferObj;
 
 struct ScDragData
 {
-//  ScDocument*     pDoc;
-//  ScMarkData      aMarkData;
-//  USHORT          nStartX, nStartY, nTabNo, nSizeX, nSizeY;
-//  USHORT          nHandleX, nHandleY;
-//  USHORT          nFlags;
-//  SdrModel*       pSdrModel;
-//  SdrView*        pSdrView;
-
     ScTransferObj*      pCellTransfer;
     ScDrawTransferObj*  pDrawTransfer;
 
@@ -173,7 +165,6 @@ class ScModule: public ScModuleDummy, public SfxListener
     SvxErrorHandler*    pSvxErrorHdl;
     ScFormEditData*     pFormEditData;
     USHORT              nCurRefDlgId;
-    BOOL                bDragWasIntern;
     BOOL                bIsWaterCan;
     BOOL                bIsInEditCommand;
 
@@ -206,16 +197,9 @@ public:
     const ScDragData&   GetDragData() const     { return aDragData; }
     void                SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj );
     void                ResetDragObject();
-    void                SetDragObject( const ScMarkData& rMarkData, const ScRange& rRange,
-                                        USHORT nHandleX, USHORT nHandleY,
-                                        ScDocument* pDoc, USHORT nFlags );
-    void                SetDragObject( SdrModel* pModel, SdrView* pView, USHORT nFlags );
     void                SetDragLink( const String& rDoc, const String& rTab, const String& rArea );
     void                SetDragJump( ScDocument* pLocalDoc,
                                     const String& rTarget, const String& rText );
-
-    void                SetDragIntern(BOOL bSet=TRUE)   { bDragWasIntern = bSet; }
-    BOOL                GetDragIntern() const           { return bDragWasIntern; }
 
     //  clipboard:
     const ScClipData&   GetClipData() const     { return aClipData; }
