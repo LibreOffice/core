@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-06 11:07:59 $
+ *  last change: $Author: obo $ $Date: 2001-11-13 22:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Kerning";
         Text[ arabic ] = " ﬁ‰Ì‰ √Õ—›";
         Text[ catalan ] = "Kerning";
-        Text[ finnish ] = "Unterschneidung";
+        Text[ finnish ] = "Fonttilimitys";
     };
     RadioButton RB_CHAR_KERNING
     {
@@ -125,7 +125,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Western characters only";
         Text[ arabic ] = "√Õ—› €—»Ì… ›ﬁÿ";
         Text[ catalan ] = "Solo caracteres del alfabeto occidental";
-        Text[ finnish ] = "~Nur westliche Zeichen";
+        Text[ finnish ] = "~Vain l‰nsimaiset merkit";
     };
     RadioButton RB_CHAR_PUNCT
     {
@@ -140,7 +140,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ dutch ] = "~Westerse tekst en Asiatische interpunctie";
         Text[ french ] = "CaractËres ~occidentaux et ponctuation asiatique";
         Text[ spanish ] = "Texto occidental y puntuaciÛn asi·tica";
-        Text[ finnish ] = "~Westlicher Text und Interpunktion";
+        Text[ finnish ] = "L‰nsimainen ~teksti ja v‰limerkit";
         Text[ italian ] = "~Testo occidentale e punteggiatura asiatica";
         Text[ danish ] = "Western text and punctuation";
         Text[ swedish ] = "~V‰stliga tecken och asiatisk interpunktion";
@@ -179,7 +179,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Character distance";
         Text[ arabic ] = " »«⁄œ «·√Õ—›";
         Text[ catalan ] = "Character distance";
-        Text[ finnish ] = "Zeichenabstand";
+        Text[ finnish ] = "Merkkien v‰lit";
     };
     RadioButton RB_NO_COMP
     {
@@ -206,7 +206,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "No compression";
         Text[ arabic ] = "»œÊ‰ ÷€ÿ";
         Text[ catalan ] = "Sin compresiÛn";
-        Text[ finnish ] = "~Keine Kompression";
+        Text[ finnish ] = "~Ei tiivistyst‰";
     };
     RadioButton RB_PUNCT_COMP
     {
@@ -233,7 +233,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Compress punctuation only";
         Text[ arabic ] = "÷€ÿ ⁄·«„«  «· ‰ﬁÌÿ ›ﬁÿ";
         Text[ catalan ] = "Comprimir solo puntuaciÛn";
-        Text[ finnish ] = "Nur ~Interpunktion komprimieren";
+        Text[ finnish ] = "~Vain v‰limerkkien tiivistys";
     };
     RadioButton RB_PUNCT_KANA_COMP
     {
@@ -260,7 +260,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Compress punctuation and japanese Kana";
         Text[ arabic ] = "Compress punctuation and japanese Kana";
         Text[ catalan ] = "Comprimir puntuaciÛn y Kana japonÈs";
-        Text[ finnish ] = "Interpunktion und ~japanische Kana komprimieren";
+        Text[ finnish ] = "~V‰limerkkien ja japanilaisten kana-merkkien tiivistys";
     };
     FixedLine GB_START_END
     {
@@ -287,7 +287,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Start and end characters";
         Text[ arabic ] = "√Õ—› «·»œ«Ì… Ê«·‰Â«Ì…";
         Text[ catalan ] = "Start and end characters";
-        Text[ finnish ] = "Anfangs- und Endzeichen";
+        Text[ finnish ] = "Aloitus- ja lopetusmerkit";
     };
     FixedText FT_LANGUAGE
     {
@@ -376,7 +376,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ arabic ] = "»œÊ‰ »œ«Ì… «·”ÿ—:";
         Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
         Text[ catalan ] = "Sin inicio de fila:";
-        Text[ finnish ] = "Kein Zeilen~beginn:";
+        Text[ finnish ] = "Ei rivin alussa:";
     };
     Edit ED_START
     {
@@ -410,7 +410,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ arabic ] = "»œÊ‰ ‰Â«Ì… ”ÿ—:";
         Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
         Text[ catalan ] = "Sin fin de lÌnea:";
-        Text[ finnish ] = "Kein Zeil~enende:";
+        Text[ finnish ] = "Ei rivin lopussa:";
     };
     Edit ED_END
     {
@@ -443,7 +443,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Without user-defined line break symbols";
         Text[ arabic ] = "»œÊ‰ ⁄·«„«  ›’· √”ÿ— „Œ’’…";
         Text[ catalan ] = "Sin car·cter de cambio de fila definido por el usuario";
-        Text[ finnish ] = "Ohne benutzerdefinierte Zeilenwechselzeichen";
+        Text[ finnish ] = "Ilman k‰ytt‰j‰n m‰‰ritt‰mi‰ rivinvaihtomerkkej‰";
     };
     Text[ english_us ] = "Proxy";
     Text[ portuguese ] = "Proxy";
@@ -466,6 +466,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ catalan ] = "Proxy";
     Text[ finnish ] = "V‰lityspalvelin";
 };
+
 
 
 
