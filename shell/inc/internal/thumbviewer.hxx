@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thumbviewer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:24:28 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 07:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,11 +130,11 @@ private:
 
 private:
     long         ref_count_;
-    //char       m_szFileName[MAX_PATH];
-    std::string  filename_;
+    std::wstring filename_;
     SIZE         thumbnail_size_;
     DWORD        color_depth_;
     ULONG_PTR    gdiplus_token_;
+    Gdiplus::Bitmap* signet_;
 };
 
 #endif
