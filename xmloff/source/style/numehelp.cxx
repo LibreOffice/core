@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-01-26 17:21:37 $
+ *  last change: $Author: sab $ $Date: 2001-03-19 15:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(SvXMLExpor
     sal_Bool bWasSetTypeAttribute = sal_False;
     switch(nTypeKey & ~util::NumberFormat::DEFINED)
     {
+    case 0:
     case util::NumberFormat::NUMBER:
     case util::NumberFormat::SCIENTIFIC:
     case util::NumberFormat::FRACTION:
