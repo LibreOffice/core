@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotSource.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ module com {  module sun {  module star {  module sheet {
     <p>A component that implements this service can be used as data source
     for a data pilot table in a spreadsheet document.</p>
  */
-service DataPilotSource
+published service DataPilotSource
 {
     //-------------------------------------------------------------------------
 
@@ -113,7 +113,7 @@ service DataPilotSource
 
     //-------------------------------------------------------------------------
 
-//! service PropertySet
+//!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
