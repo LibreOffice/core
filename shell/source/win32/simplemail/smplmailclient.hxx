@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smplmailclient.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-12-11 08:02:51 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,16 +62,8 @@
 #ifndef _SMPLMAILCLIENT_HXX_
 #define _SMPLMAILCLIENT_HXX_
 
-//_______________________________________________________________________________________________________________________
-//  includes of other projects
-//_______________________________________________________________________________________________________________________
-
 #ifndef _CPPUHELPER_COMPBASE1_HXX_
 #include <cppuhelper/compbase1.hxx>
-#endif
-
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
@@ -82,73 +74,20 @@
 #include <com/sun/star/system/XSimpleMailClient.hpp>
 #endif
 
-#ifndef _SIMPLEMAPI_HXX_
-#include "simplemapi.hxx"
-#endif
+namespace css = ::com::sun::star;
 
-#ifndef _GENERICBUFFER_HXX_
-#include "genericbuffer.hxx"
-#endif
-
-//----------------------------------------------------------
-// class declaration
-//----------------------------------------------------------
-
-class CSmplMailClient :
-    public  cppu::WeakImplHelper1< com::sun::star::system::XSimpleMailClient >
+class CSmplMailClient : public cppu::WeakImplHelper1<css::system::XSimpleMailClient>
 {
 public:
-    CSmplMailClient( LHANDLE hMapiSession );
-    ~CSmplMailClient( );
+    virtual css::uno::Reference<css::system::XSimpleMailMessage> SAL_CALL createSimpleMailMessage()
+        throw (css::uno::RuntimeException);
 
-    //------------------------------------------------
-    //
-    //------------------------------------------------
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage > SAL_CALL createSimpleMailMessage(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    //------------------------------------------------
-    //
-    //------------------------------------------------
-
-    virtual void SAL_CALL sendSimpleMailMessage( const ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 aFlag )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL sendSimpleMailMessage(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag)
+        throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException);
 
 private:
-    void validateParameter( const ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 aFlag );
-    void initMapiMessage( const ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage >& xSimpleMailMessage, MapiMessage& aMapiMessage );
-    void initMapiSendMailFlags( sal_Int32 aFlags, FLAGS& aMapiFlags );
-
-    inline
-    sal_uInt32 calcNumRecipients(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage >& xSimpleMailMessage );
-
-    inline
-    void initRecipientList( const ::com::sun::star::uno::Sequence< rtl::OUString >& aRecipList,
-                            ULONG ulRecipClass,
-                            size_t& nPos );
-
-    inline
-    void initAttachementList(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage >& xSimpleMailMessage );
-
-    rtl::OUString getMapiErrorMsg( ULONG ulMapiError );
-
-    // fix for #95743
-    ULONG SAL_CALL threadExecuteMAPISendMail( CSimpleMapi* pSimpleMapi, LHANDLE lhSession, ULONG ulUIParam, lpMapiMessage lpMessage, FLAGS flFlags );
-    static unsigned __stdcall threadProc( void* pParam );
-
-private:
-    LHANDLE                         m_hMapiSession;
-    CSimpleMapi*                    m_pSimpleMapi;
-    rtl::OString                    m_Subject;
-    rtl::OString                    m_SmtpAddressOriginator;
-    std::vector< rtl::OString >     m_RecipsSmtpAddressList;
-    std::vector< rtl::OString >     m_AttchmtsSysPathList;
-    MapiRecipDesc                   m_MsgOriginator;
-    TGenericBuffer< MapiRecipDesc > m_RecipientList;
-    TGenericBuffer< MapiFileDesc >  m_AttachementList;
+    void validateParameter(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag);
+    void assembleCommandLine(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag, std::vector<rtl::OUString>& rCommandArgs);
 };
 
 #endif
