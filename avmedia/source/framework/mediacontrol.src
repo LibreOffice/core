@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediacontrol.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2004-08-23 09:04:42 $
+ *  last change: $Author: hr $ $Date: 2005-02-14 11:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 String AVMEDIA_STR_OPEN
 {
     Text[de] = "÷ffnen";
-    Text[en-us] = "Open";
+    Text[en-US] = "Open";
 };
 
 // ------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ String AVMEDIA_STR_OPEN
 String AVMEDIA_STR_INSERT
 {
     Text [ de ] = "Zuweisen" ;
-    Text [ en-us ] = "Apply" ;
+    Text [ en-US ] = "Apply" ;
 };
 
 // ------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ String AVMEDIA_STR_INSERT
 String AVMEDIA_STR_PLAY
 {
     Text[de] = "Abspielen";
-    Text[en-us] = "Play";
+    Text[en-US] = "Play";
 };
 
 // ------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ String AVMEDIA_STR_PLAY
 String AVMEDIA_STR_PAUSE
 {
     Text[de] = "Pause";
-    Text[en-us] = "Pause";
+    Text[en-US] = "Pause";
 };
 
 // ------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ String AVMEDIA_STR_PAUSE
 String AVMEDIA_STR_STOP
 {
     Text[de] = "Stopp";
-    Text[en-us] = "Stop";
+    Text[en-US] = "Stop";
 };
 
 // ------------------------------------------------------------------------------
@@ -104,7 +104,7 @@ String AVMEDIA_STR_STOP
 String AVMEDIA_STR_ENDLESS
 {
     Text[de] = "Wiederholen";
-    Text[en-us] = "Repeat";
+    Text[en-US] = "Repeat";
 };
 
 // ------------------------------------------------------------------------------
@@ -112,7 +112,7 @@ String AVMEDIA_STR_ENDLESS
 String AVMEDIA_STR_MUTE
 {
     Text[de] = "Stumm";
-    Text[en-us] = "Mute";
+    Text[en-US] = "Mute";
 };
 
 // ------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ String AVMEDIA_STR_MUTE
 String AVMEDIA_STR_ZOOM
 {
     Text[de] = "Ansicht";
-    Text[en-us] = "View";
+    Text[en-US] = "View";
 };
 
 // ------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ String AVMEDIA_STR_ZOOM
 String AVMEDIA_STR_ZOOM_50
 {
     Text[de] = "50%";
-    Text[en-us] = "50%";
+    Text[en-US] = "50%";
 };
 
 // ------------------------------------------------------------------------------
@@ -136,7 +136,7 @@ String AVMEDIA_STR_ZOOM_50
 String AVMEDIA_STR_ZOOM_100
 {
     Text[de] = "100%";
-    Text[en-us] = "100%";
+    Text[en-US] = "100%";
 };
 
 // ------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ String AVMEDIA_STR_ZOOM_100
 String AVMEDIA_STR_ZOOM_200
 {
     Text[de] = "200%";
-    Text[en-us] = "200%";
+    Text[en-US] = "200%";
 };
 
 // ------------------------------------------------------------------------------
@@ -152,7 +152,7 @@ String AVMEDIA_STR_ZOOM_200
 String AVMEDIA_STR_ZOOM_FIT
 {
     Text[de] = "Angepaﬂt";
-    Text[en-us] = "Scaled";
+    Text[en-US] = "Scaled";
 };
 
 // ------------------------------------------------------------------------------
@@ -160,7 +160,7 @@ String AVMEDIA_STR_ZOOM_FIT
 String AVMEDIA_STR_MEDIAPLAYER
 {
     Text[de] = "Mediaplayer";
-    Text[en-us] = "Media Player";
+    Text[en-US] = "Media Player";
 };
 
 // ------------------------------------------------------------------------------
