@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-01 13:51:12 $
+ *  last change: $Author: kso $ $Date: 2001-03-21 08:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,14 +135,12 @@ struct HierarchyEntry::iterator_Impl
 //=========================================================================
 //=========================================================================
 
-#define HIERARCHY_ROOT_DB_KEY           "/org.openoffice.ucb.Hierarchy/Root"
-#define HIERARCHY_ROOT_DB_KEY_LENGTH    34
+#define HIERARCHY_ROOT_DB_KEY   "/org.openoffice.ucb.Hierarchy/Root"
 
-#define DECLARE_ASCII( SASCIIVALUE )                                                                            \
-    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ))
-
-#define CFGPROPERTY_NODEPATH            DECLARE_ASCII("nodepath"    )   // describe path of cfg entry
-#define CFGPROPERTY_LAZYWRITE           DECLARE_ASCII("lazywrite"   )   // true->async. update; false->sync. update
+// describe path of cfg entry
+#define CFGPROPERTY_NODEPATH    "nodepath"
+// true->async. update; false->sync. update
+#define CFGPROPERTY_LAZYWRITE   "lazywrite"
 
 //=========================================================================
 HierarchyEntry::HierarchyEntry(
@@ -268,8 +266,8 @@ sal_Bool HierarchyEntry::setData(
         {
             // Create parent's key. It must exist!
 
-            OUString aParentPath
-                        = OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
+            OUString aParentPath(
+                RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_ROOT_DB_KEY ) );
             OUString aKey  = m_aPath;
             sal_Bool bRoot = sal_True;
 
@@ -289,17 +287,18 @@ sal_Bool HierarchyEntry::setData(
                 bRoot = sal_False;
             }
 
-            Sequence< Any > aArguments( 2 ) ;
-            PropertyValue   aProperty       ;
-            OUString        sPath           ;
+            Sequence< Any > aArguments( 2 );
+            PropertyValue   aProperty;
 
-            aProperty.Name    = CFGPROPERTY_NODEPATH    ;
-            aProperty.Value <<= aParentPath             ;
-            aArguments[0]   <<= aProperty               ;
+            aProperty.Name    = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                    CFGPROPERTY_NODEPATH ) );
+            aProperty.Value <<= aParentPath;
+            aArguments[ 0 ] <<= aProperty;
 
-            aProperty.Name    = CFGPROPERTY_LAZYWRITE   ;
-            aProperty.Value <<= sal_True                ;
-            aArguments[1]   <<= aProperty               ;
+            aProperty.Name    = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                    CFGPROPERTY_LAZYWRITE ) );
+            aProperty.Value <<= sal_True;
+            aArguments[ 1 ] <<= aProperty;
 
             Reference< XChangesBatch > xBatch(
                     m_xConfigProvider->createInstanceWithArguments(
@@ -516,8 +515,8 @@ sal_Bool HierarchyEntry::move(
         if ( !m_xConfigProvider.is() )
             return sal_False;
 
-        OUString aOldParentPath
-                    = OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
+        OUString aOldParentPath(
+            RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_ROOT_DB_KEY ) );
         sal_Int32 nPos = m_aPath.lastIndexOf( '/' );
         if ( nPos != -1 )
         {
@@ -533,8 +532,8 @@ sal_Bool HierarchyEntry::move(
             bOldRoot = sal_False;
         }
 
-        OUString aNewParentPath
-                    = OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
+        OUString aNewParentPath(
+                    RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_ROOT_DB_KEY ) );
         nPos = aNewPath.lastIndexOf( '/' );
         if ( nPos != -1 )
         {
@@ -550,17 +549,18 @@ sal_Bool HierarchyEntry::move(
             bNewRoot = sal_False;
         }
 
-        Sequence< Any > aArguments( 2 ) ;
-        PropertyValue   aProperty       ;
-        OUString        sPath           ;
+        Sequence< Any > aArguments( 2 );
+        PropertyValue   aProperty;
 
-        aProperty.Name    = CFGPROPERTY_NODEPATH    ;
-        aProperty.Value <<= aOldParentPath          ;
-        aArguments[0]   <<= aProperty               ;
+        aProperty.Name    = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                    CFGPROPERTY_NODEPATH ) );
+        aProperty.Value <<= aOldParentPath;
+        aArguments[ 0 ] <<= aProperty;
 
-        aProperty.Name    = CFGPROPERTY_LAZYWRITE   ;
-        aProperty.Value <<= sal_True                ;
-        aArguments[1]   <<= aProperty               ;
+        aProperty.Name    = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                    CFGPROPERTY_LAZYWRITE ) );
+        aProperty.Value <<= sal_True;
+        aArguments[ 1 ] <<= aProperty;
 
         xOldParentBatch = Reference< XChangesBatch >(
             m_xConfigProvider->createInstanceWithArguments(
@@ -583,9 +583,10 @@ sal_Bool HierarchyEntry::move(
         {
             bDifferentParents = sal_True;
 
-            aProperty.Name    = CFGPROPERTY_NODEPATH    ;
-            aProperty.Value <<= aNewParentPath          ;
-            aArguments[0]   <<= aProperty               ;
+            aProperty.Name    = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                    CFGPROPERTY_NODEPATH ) );
+            aProperty.Value <<= aNewParentPath;
+            aArguments[ 0 ] <<= aProperty;
 
             xNewParentBatch = Reference< XChangesBatch >(
                 m_xConfigProvider->createInstanceWithArguments(
@@ -815,10 +816,9 @@ sal_Bool HierarchyEntry::remove()
         {
             // Create parent's key. It must exist!
 
-            OUString aParentPath
-                        = OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
-            OUString aKey
-                        = m_aPath;
+            OUString aParentPath(
+                RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_ROOT_DB_KEY ) );
+            OUString aKey  = m_aPath;
             sal_Bool bRoot = sal_True;
 
             sal_Int32 nPos = m_aPath.lastIndexOf( '/' );
@@ -837,18 +837,18 @@ sal_Bool HierarchyEntry::remove()
                 bRoot = sal_False;
             }
 
-            Sequence< Any > aArguments( 2 ) ;
-            PropertyValue   aProperty       ;
-            OUString        sPath           ;
+            Sequence< Any > aArguments( 2 );
+            PropertyValue   aProperty;
 
-            aProperty.Name    = CFGPROPERTY_NODEPATH    ;
-            aProperty.Value <<= aParentPath         ;
-            aArguments[0]   <<= aProperty               ;
+            aProperty.Name    = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                    CFGPROPERTY_NODEPATH ) );
+            aProperty.Value <<= aParentPath;
+            aArguments[ 0 ] <<= aProperty;
 
-            aProperty.Name    = CFGPROPERTY_LAZYWRITE   ;
-            aProperty.Value <<= sal_True                ;
-            aArguments[1]   <<= aProperty               ;
-
+            aProperty.Name    = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                    CFGPROPERTY_LAZYWRITE ) );
+            aProperty.Value <<= sal_True;
+            aArguments[ 1 ] <<= aProperty;
 
             Reference< XChangesBatch > xBatch(
                 m_xConfigProvider->createInstanceWithArguments(
@@ -1109,7 +1109,8 @@ Reference< XHierarchicalNameAccess > HierarchyEntry::getRootReadAccess()
 
                     Sequence< Any > aArguments( 1 );
                     aArguments[ 0 ]
-                        <<= OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
+                        <<= OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                HIERARCHY_ROOT_DB_KEY ) );
 
                     m_bTriedToGetRootReadAccess = sal_True;
 
