@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:45:29 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,9 @@
 #endif
 #ifndef SD_FU_CONSTRUCT_RECTANGLE_HXX
 #include "fuconrec.hxx"
+#endif
+#ifndef SD_FU_CONSTRUCT_CUSTOMSHAPE_HXX
+#include "fuconcs.hxx"
 #endif
 #ifndef SD_FU_CONSTRUCT_UNO_CONTROL_HXX
 #include "fuconuno.hxx"
@@ -632,6 +635,34 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             static_cast<FuConstruct3dObject*>(pFuActual)
                 ->SetPermanent(bPermanent);
             rReq.Done();
+        }
+        break;
+
+        case SID_DRAWTBX_CS_BASIC :
+        case SID_DRAWTBX_CS_SYMBOL :
+        case SID_DRAWTBX_CS_ARROW :
+        case SID_DRAWTBX_CS_FLOWCHART :
+        case SID_DRAWTBX_CS_CALLOUT :
+        case SID_DRAWTBX_CS_STAR :
+        case SID_DRAW_CS_ID :
+        {
+            pFuActual = new FuConstructCustomShape(
+                this, GetActiveWindow(), pDrView, GetDoc(), rReq);
+            static_cast<FuConstructCustomShape*>(pFuActual)
+                ->SetPermanent(bPermanent);
+            rReq.Done();
+
+            if ( nSId != SID_DRAW_CS_ID )
+            {
+                SFX_REQUEST_ARG( rReq, pEnumCommand, SfxStringItem, nSId, sal_False );
+                if ( pEnumCommand )
+                {
+                    aCurrShapeEnumCommand[ nSId-SID_DRAWTBX_CS_BASIC ] = pEnumCommand->GetValue();
+                    SfxBindings& rBind = GetViewFrame()->GetBindings();
+                    rBind.Invalidate( nSId );
+                    rBind.Update( nSId );
+                }
+            }
         }
         break;
 
