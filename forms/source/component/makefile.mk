@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 11:54:25 $
+#   last change: $Author: hr $ $Date: 2004-04-13 11:15:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,41 +77,6 @@ INCPRE+=$(SOLARINCDIR)$/offuh
 
 # --- Files -------------------------------------
 
-CXXFILES=	Grid.cxx	\
-            Columns.cxx\
-            DatabaseForm.cxx \
-            GroupManager.cxx \
-            FormsCollection.cxx \
-            EventThread.cxx \
-            File.cxx \
-            Edit.cxx \
-            EditBase.cxx \
-            Numeric.cxx \
-            Pattern.cxx \
-            Currency.cxx \
-            Date.cxx \
-            Time.cxx \
-            FormattedField.cxx \
-            FormattedFieldWrapper.cxx \
-            ListBox.cxx \
-            ComboBox.cxx \
-            GroupBox.cxx \
-            Hidden.cxx \
-            CheckBox.cxx \
-            RadioButton.cxx \
-            FixedText.cxx \
-            FormComponent.cxx \
-            Image.cxx \
-            Button.cxx \
-            ImageButton.cxx \
-            ImageControl.cxx \
-            cloneable.cxx \
-            entrylisthelper.cxx \
-            scrollbar.cxx \
-            spinbutton.cxx \
-            formparameters.cxx \
-            formfiltermanager.cxx \
-
 .IF "$(COM)"=="GCC"
 NOOPTFILES= $(SLO)$/EventThread.obj
 .ENDIF
@@ -152,6 +117,8 @@ SLOFILES=	$(SLO)$/Grid.obj \
             $(SLO)$/spinbutton.obj \
             $(SLO)$/formparameters.obj \
             $(SLO)$/formfiltermanager.obj \
+            $(SLO)$/navigationbar.obj \
+            $(SLO)$/formcontrolfont.obj \
 
 # --- Targets ----------------------------------
 
