@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:18:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ BOOL SvxBorderTabPage::bSync = TRUE;
 #define LINE_WIDTH2     (DEF_LINE_WIDTH_2 *100)
 #define LINE_WIDTH3     (DEF_LINE_WIDTH_3 *100)
 #define LINE_WIDTH4     (DEF_LINE_WIDTH_4 *100)
+#define LINE_WIDTH5     (DEF_LINE_WIDTH_5 *100)
 
 #define DLINE0_OUT      (DEF_DOUBLE_LINE0_OUT  *100)
 #define DLINE0_IN       (DEF_DOUBLE_LINE0_IN   *100)
@@ -262,6 +263,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         aLbShadowColor  ( this, ResId( LB_SHADOWCOLOR ) ),
         aPropertiesFL   ( this, ResId( FL_PROPERTIES ) ),
         aMergeWithNextCB( this, ResId( CB_MERGEWITHNEXT ) ),
+        aMergeAdjacentBordersCB( this, ResId( CB_MERGEADJACENTBORDERS ) ),
         aShadowImgLstH( ResId(ILH_SDW_BITMAPS)),
         aShadowImgLst( ResId(IL_SDW_BITMAPS)),
         aBorderImgLstH( ResId(ILH_PRE_BITMAPS)),
@@ -862,6 +864,13 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
         aMergeWithNextCB.Check(static_cast< const SfxBoolItem& >(rSet.Get(nConnectWhich)).GetValue());
         aMergeWithNextCB.SaveValue();
     }
+
+    if(aMergeAdjacentBordersCB.IsVisible())
+    {
+        nConnectWhich = GetWhich(SID_SW_COLLAPSING_BORDERS);
+        aMergeAdjacentBordersCB.Check(static_cast< const SfxBoolItem& >(rSet.Get(nConnectWhich)).GetValue());
+        aMergeAdjacentBordersCB.SaveValue();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -927,6 +936,17 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         SfxBoolItem* pBoolItem = static_cast< SfxBoolItem* >(
                 rOldSet.Get( GetWhich(SID_ATTR_BORDER_CONNECT)).Clone());
         pBoolItem->SetValue(aMergeWithNextCB.IsChecked());
+        rCoreAttrs.Put(*pBoolItem);
+        delete pBoolItem;
+    }
+
+    if(aMergeAdjacentBordersCB.IsVisible() &&
+            aMergeAdjacentBordersCB.GetSavedValue() != aMergeAdjacentBordersCB.IsChecked())
+    {
+        //Writer needs it's own derived SfxBoolItem
+        SfxBoolItem* pBoolItem = static_cast< SfxBoolItem* >(
+                rOldSet.Get( GetWhich(SID_SW_COLLAPSING_BORDERS)).Clone());
+        pBoolItem->SetValue(aMergeAdjacentBordersCB.IsChecked());
         rCoreAttrs.Put(*pBoolItem);
         delete pBoolItem;
     }
@@ -1447,6 +1467,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
     aLbLineStyle.InsertEntry( SVX_RESSTR( STR_NONE ) );
 
     aLbLineStyle.InsertEntry( LINE_WIDTH0 );
+    aLbLineStyle.InsertEntry( LINE_WIDTH5 );
     aLbLineStyle.InsertEntry( LINE_WIDTH1 );
     aLbLineStyle.InsertEntry( LINE_WIDTH2 );
     aLbLineStyle.InsertEntry( LINE_WIDTH3 );
@@ -1581,6 +1602,11 @@ void    SvxBorderTabPage::SetSWMode(BYTE nSet)
     {
         aPropertiesFL.Show();
         aMergeWithNextCB.Show();
+    }
+    else if(SW_BORDER_MODE_TABLE == nSet )
+    {
+        aPropertiesFL.Show();
+        aMergeAdjacentBordersCB.Show();
     }
 }
 /* -----------------------------03.06.2002 10:15------------------------------
