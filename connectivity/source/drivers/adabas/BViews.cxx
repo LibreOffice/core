@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:56:29 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ void OViews::appendObject( const Reference< XPropertySet >& descriptor )
 {
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
     if(!aName.getLength())
-        ::dbtools::throwFunctionSequenceException(*this);
+        ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(this));
 
     createView(descriptor);
 }
