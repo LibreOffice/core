@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:14:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,6 +431,13 @@ static XMLTransformerActionInit aActionTable[] =
         OOO_STYLE_REF_ACTIONS ), /* generated entry */
     ENTRY1( STYLE, PRESENTATION_PAGE_LAYOUT, XML_ETACTION_PROC_ATTRS,
                         OOO_MASTER_PAGE_ACTIONS ),
+    // --> OD 2005-01-10 #i40011#, #i40015#
+    // - consider also attribute table:style-name for <table:table>,
+    //   <table:table-row> and <table:table-column>.
+    ENTRY1( TABLE, TABLE, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
+    ENTRY1( TABLE, TABLE_ROW, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
+    ENTRY1( TABLE, TABLE_COLUMN, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
+    // <--
 
     // split frame elements
     ENTRY0( DRAW, TEXT_BOX, XML_ETACTION_FRAME ),
