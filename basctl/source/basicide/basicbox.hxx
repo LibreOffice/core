@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:18:53 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ private:
     com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 
     void            ReleaseFocus();
+    void            InsertEntries( SfxObjectShell* pShell, LibraryLocation eLocation );
 
 protected:
     virtual void    Select();
