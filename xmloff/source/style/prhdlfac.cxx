@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-06 14:19:09 $
+ *  last change: $Author: dvo $ $Date: 2002-03-13 11:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,13 +196,13 @@ SvXMLEnumMapEntry __READONLY_DATA aXML_WritingDirection_Enum[] =
 
     // &(aXML_WritingDirection_Enum[1])
     { XML_LR_TB,    text::WritingMode2::LR_TB },
-    { XML_RL_TB,    text::WritingMode2::LR_TB },
+    { XML_RL_TB,    text::WritingMode2::RL_TB },
     { XML_TB_RL,    text::WritingMode2::TB_RL },
     { XML_TB_LR,    text::WritingMode2::TB_LR },
 
     // alternative names of the above, as accepted by XSL
     { XML_LR,       text::WritingMode2::LR_TB },
-    { XML_RL,       text::WritingMode2::LR_TB },
+    { XML_RL,       text::WritingMode2::RL_TB },
     { XML_TB,       text::WritingMode2::TB_RL },
 
     { XML_TOKEN_INVALID, 0 }
@@ -462,7 +462,7 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
             case XML_TYPE_TEXT_WRITING_MODE:
                 pPropHdl = new XMLConstantsPropertyHandler(
                     &(aXML_WritingDirection_Enum[1]),
-                    XML_TB_LR);
+                    XML_LR_TB);
                 break;
             case XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT:
                 pPropHdl = new XMLConstantsPropertyHandler(
