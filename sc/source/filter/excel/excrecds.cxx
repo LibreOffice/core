@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-30 16:08:10 $
+ *  last change: $Author: dr $ $Date: 2002-01-29 08:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4790,7 +4790,7 @@ BOOL ExcArray::AppendBy( UINT8 nFCol, UINT16 nFRow, UINT8 nLCol, UINT16 nLRow )
     const UINT16    nNewRow = nLastRow + 1;
     const UINT16    nNewCol = nLastCol + 1;
 
-    if( nNewRow == nLRow && nFirstCol <= nFCol && nNewCol >= nLCol )
+    if( nNewRow <= nLRow && nFirstCol <= nFCol && nNewCol >= nLCol )
     {
         nLastRow = nNewRow;
 
@@ -4799,7 +4799,7 @@ BOOL ExcArray::AppendBy( UINT8 nFCol, UINT16 nFRow, UINT8 nLCol, UINT16 nLRow )
 
         bRet = TRUE;
     }
-    else if( nNewCol == nLCol && nFirstRow <= nFRow && nNewRow >= nLRow )
+    else if( nNewCol <= nLCol && nFirstRow <= nFRow && nNewRow >= nLRow )
     {
         nLastCol = ( UINT8 ) nNewCol;
 
