@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:51:31 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:33:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 #include <sot/factory.hxx>
-#include <vcl/system.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/imageitm.hxx>
