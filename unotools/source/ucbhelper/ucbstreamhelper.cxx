@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-16 09:28:18 $
+ *  last change: $Author: mba $ $Date: 2001-07-16 11:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
                 {
                 }
             }
-
+/*
             try
             {
                 // make sure that the desired file exists before trying to open
@@ -155,6 +155,7 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
             catch ( Exception& )
             {
             }
+ */
         }
 
         try
