@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XEnumeration.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 10:22:25 $
+ *  last change:$Date: 2005-03-23 13:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,16 @@ public class _XEnumeration extends MultiMethodTest {
         boolean result = true;
 
         log.println("get all elements");
+        int counter = 0;
+        int tmpCounter = 0;
         while ( oObj.hasMoreElements() ) {
             try {
                 Object oAny = oObj.nextElement();
+                counter ++;
+                if (counter - tmpCounter > 10000) {
+                    log.println(counter+ " Elements");
+                    tmpCounter = counter;
+                }
             } catch (WrappedTargetException e) {
                 log.println("hasMoreElements() : " + e);
                 result = false;
@@ -113,7 +120,17 @@ public class _XEnumeration extends MultiMethodTest {
                 break;
             }
         }
-
+        Object expCount = tEnv.getObjRelation("ExpectedCount");
+        if (expCount != null) {
+            int ec = ((Integer) expCount).intValue();
+            boolean locResult = counter == ec;
+            if (!locResult) {
+                log.println("Not all Elements are returned: ");
+                log.println("\tExpected: "+ ec);
+                log.println("\tFound: "+counter);
+            }
+            result &= locResult;
+        }
         tRes.tested("hasMoreElements()", result);
         return;
     } // end hasMoreElements
