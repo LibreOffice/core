@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: ucb_XSortedDynamicResultSetFactory.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:55:20 $ 
+'*  last change:$Date: 2003-03-19 14:36:48 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -92,7 +92,7 @@ On Error Goto ErrHndl
 
     Dim sURL, sCntURL As String
     sURL = utils.Path2URL(cTestDocsDir &amp; "solibrary.jar")
-    sURL = utils.gsub(sURL, "/", "%2F")
+    sURL = utils.StrReplace(sURL, "/", "%2F")
     sCntURL = "vnd.sun.star.pkg://" &amp; sURL &amp; "/"
 
     Dim oCI, oContent As Object
