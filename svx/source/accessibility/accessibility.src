@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:14:08 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 13:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,13 @@ String RID_SVXSTR_A11Y_3D_MATERIAL_COLOR
     Text[ ENGLISH_US ] = "3D material color" ;
     Text[ portuguese ] = "3D material color";
     Text[ russian ] = "3D material color";
-    Text[ greek ] = "3D material color";
-    Text[ dutch ] = "3D material color";
+    Text[ greek ] = "×ñşìá 3Ä õëéêïı";
+    Text[ dutch ] = "3D-materiaalkleur";
     Text[ french ] = "Couleur de matériau 3D";
     Text[ spanish ] = "Color del material-3D";
     Text[ finnish ] = "3D material color";
     Text[ italian ] = "Colore materiale 3D";
-    Text[ danish ] = "3D material color";
+    Text[ danish ] = "3D-materiale farve";
     Text[ swedish ] = "3D-materialfärg";
     Text[ polish ] = "3D material color";
     Text[ portuguese_brazilian ] = "Cor do material 3D";
@@ -90,6 +90,8 @@ String RID_SVXSTR_A11Y_3D_MATERIAL_COLOR
     Text[ hebrew ] = "â€®×¦×‘×¢ ×—×•××¨ ×ª×œ×ª ××™××“×™â€¬";
     Text[ hindi ] = "3D material color";
     Text[ slovak ] = "3D farba materiÃ¡lu";
+    Text[ hungarian ] = "TÃ©rbeli anyag szÃ­ne";
+    Text[ slovenian ] = "Barva 3D materiala";
 };
 String RID_SVXSTR_A11Y_TEXT_COLOR
 {
@@ -98,13 +100,13 @@ String RID_SVXSTR_A11Y_TEXT_COLOR
     Text[ ENGLISH_US ] = "Font color" ;
     Text[ portuguese ] = "text color";
     Text[ russian ] = "text color";
-    Text[ greek ] = "text color";
-    Text[ dutch ] = "text color";
+    Text[ greek ] = "×ñşìá ãñáììáôïóåéñÜò";
+    Text[ dutch ] = "Tekstkleur";
     Text[ french ] = "Couleur de police";
     Text[ spanish ] = "Color de fuente";
     Text[ finnish ] = "text color";
     Text[ italian ] = "Colore carattere";
-    Text[ danish ] = "text color";
+    Text[ danish ] = "Skriftfarve";
     Text[ swedish ] = "Teckenfärg";
     Text[ polish ] = "text color";
     Text[ portuguese_brazilian ] = "Cor da Fonte";
@@ -120,6 +122,8 @@ String RID_SVXSTR_A11Y_TEXT_COLOR
     Text[ hebrew ] = "â€®×¦×‘×¢ ×’×•×¤×Ÿâ€¬";
     Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤•à¤¾ à¤°à¤‚à¤—";
     Text[ slovak ] = "Farba pÃ­sma";
+    Text[ hungarian ] = "BetÅ±szÃ­n";
+    Text[ slovenian ] = "Barva pisave";
 };
 String RID_SVXSTR_A11Y_BACKGROUND_COLOR
 {
@@ -150,6 +154,8 @@ String RID_SVXSTR_A11Y_BACKGROUND_COLOR
     Text[ hebrew ] = "â€®×¦×‘×¢ ×¨×§×¢â€¬";
     Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤— à¤•à¤¾ à¤°à¤‚à¤—";
     Text[ slovak ] = "Farba pozadia";
+    Text[ hungarian ] = "HÃ¡ttÃ©rszÃ­n";
+    Text[ slovenian ] = "Barva ozadja";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_NONE
 {
@@ -180,6 +186,8 @@ String RID_SVXSTR_A11Y_FILLSTYLE_NONE
     Text[ hebrew ] = "â€®×œ×œ×â€¬";
     Text[ hindi ] = "à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚";
     Text[ slovak ] = "Å½iadne";
+    Text[ hungarian ] = "Nincs";
+    Text[ slovenian ] = "Brez";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_SOLID
 {
@@ -210,6 +218,8 @@ String RID_SVXSTR_A11Y_FILLSTYLE_SOLID
     Text[ hebrew ] = "â€®×—×œ×§â€¬";
     Text[ hindi ] = "à¤ à¥‹à¤¸";
     Text[ slovak ] = "PlnÃ©";
+    Text[ hungarian ] = "TÃ¶mÃ¶r";
+    Text[ slovenian ] = "Polno";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
 {
@@ -218,13 +228,13 @@ String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
     Text[ ENGLISH_US ] = "With hatching" ;
     Text[ portuguese ] = "hatch";
     Text[ russian ] = "hatch";
-    Text[ greek ] = "hatch";
-    Text[ dutch ] = "hatch";
+    Text[ greek ] = "Ìå äéáãñÜììéóç";
+    Text[ dutch ] = "Gearceerd";
     Text[ french ] = "Hachuré";
     Text[ spanish ] = "Con trama";
     Text[ finnish ] = "hatch";
     Text[ italian ] = "Tratteggiato";
-    Text[ danish ] = "hatch";
+    Text[ danish ] = "Med skravering";
     Text[ swedish ] = "Skrafferat";
     Text[ polish ] = "hatch";
     Text[ portuguese_brazilian ] = "Hachurado";
@@ -240,6 +250,8 @@ String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
     Text[ hebrew ] = "â€®××§×•×•×§×•â€¬";
     Text[ hindi ] = "With hatching";
     Text[ slovak ] = "So Å¡rafovanÃ­m";
+    Text[ hungarian ] = "VonalkÃ¡zott";
+    Text[ slovenian ] = "S Å¡rafiranjem";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
 {
@@ -254,7 +266,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
     Text[ spanish ] = "Gradiente";
     Text[ finnish ] = "Liukuvärjäys";
     Text[ italian ] = "Sfumatura";
-    Text[ danish ] = "~Graduering";
+    Text[ danish ] = "Farvegraduering";
     Text[ swedish ] = "Gradient";
     Text[ polish ] = "~Gradient";
     Text[ portuguese_brazilian ] = "Gradiente";
@@ -271,6 +283,8 @@ String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
     Text[ hebrew ] = "â€®×©×™×¤×•×¢â€¬";
     Text[ hindi ] = "à¤—à¥à¤°à¥‡à¤¡à¤¿à¤à¤¨à¥à¤Ÿà¥";
     Text[ slovak ] = "Prechod";
+    Text[ hungarian ] = "SzÃ­nÃ¡tmenet";
+    Text[ slovenian ] = "Preliv";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
 {
@@ -285,7 +299,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
     Text[ spanish ] = "Mapa de bits";
     Text[ finnish ] = "Bittikartta";
     Text[ italian ] = "Bitmap";
-    Text[ danish ] = "~Bitmap";
+    Text[ danish ] = "Bitmap";
     Text[ swedish ] = "Bitmap";
     Text[ polish ] = "Mapa bitowa";
     Text[ portuguese_brazilian ] = "Bitmap";
@@ -302,6 +316,8 @@ String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
     Text[ hebrew ] = "â€®××¤×ª ×¡×™×‘×™×•×ªâ€¬";
     Text[ hindi ] = "à¤¬à¤¿à¤Ÿà¤®à¥‰à¤ªà¥";
     Text[ slovak ] = "BitovÃ¡ mapa";
+    Text[ hungarian ] = "BitkÃ©p";
+    Text[ slovenian ] = "Bitna slika";
 };
 String RID_SVXSTR_A11Y_WITH
 {
@@ -310,13 +326,13 @@ String RID_SVXSTR_A11Y_WITH
     Text[ ENGLISH_US ] = "with" ;
     Text[ portuguese ] = "with";
     Text[ russian ] = "with";
-    Text[ greek ] = "with";
-    Text[ dutch ] = "with";
+    Text[ greek ] = "ìå";
+    Text[ dutch ] = "met";
     Text[ french ] = "avec";
     Text[ spanish ] = "con";
     Text[ finnish ] = "with";
     Text[ italian ] = "con";
-    Text[ danish ] = "with";
+    Text[ danish ] = "med";
     Text[ swedish ] = "med";
     Text[ polish ] = "with";
     Text[ portuguese_brazilian ] = "com";
@@ -332,6 +348,8 @@ String RID_SVXSTR_A11Y_WITH
     Text[ hebrew ] = "â€®×¢×â€¬";
     Text[ hindi ] = "with";
     Text[ slovak ] = "s";
+    Text[ hungarian ] = "Ã©s";
+    Text[ slovenian ] = "z";
 };
 String RID_SVXSTR_A11Y_STYLE
 {
@@ -341,12 +359,12 @@ String RID_SVXSTR_A11Y_STYLE
     Text[ portuguese ] = "Estilo";
     Text[ russian ] = "Ñòèëü";
     Text[ greek ] = "ÌïñöŞ";
-    Text[ dutch ] = "PROFIEL";
+    Text[ dutch ] = "Opmaakprofiel";
     Text[ french ] = "Style";
     Text[ spanish ] = "Estilo";
     Text[ finnish ] = "Tyyli";
     Text[ italian ] = "Stile";
-    Text[ danish ] = "Form";
+    Text[ danish ] = "Typografi";
     Text[ swedish ] = "Stil";
     Text[ polish ] = "Szablon";
     Text[ portuguese_brazilian ] = "ESTILO";
@@ -362,6 +380,8 @@ String RID_SVXSTR_A11Y_STYLE
     Text[ hebrew ] = "â€®×¡×’× ×•×Ÿâ€¬";
     Text[ hindi ] = "à¤¶à¥ˆà¤²à¥€";
     Text[ slovak ] = "Å tÃ½l";
+    Text[ hungarian ] = "StÃ­lus";
+    Text[ slovenian ] = "Slog";
 };
 String RID_SVXSTR_A11Y_AND
 {
@@ -370,13 +390,13 @@ String RID_SVXSTR_A11Y_AND
     Text[ ENGLISH_US ] = "and" ;
     Text[ portuguese ] = "e";
     Text[ russian ] = "è";
-    Text[ greek ] = "ÊÁÉ";
+    Text[ greek ] = "êáé";
     Text[ dutch ] = "en";
     Text[ french ] = "et";
     Text[ spanish ] = "y";
     Text[ finnish ] = "ja";
     Text[ italian ] = "e";
-    Text[ danish ] = "OG ";
+    Text[ danish ] = "og";
     Text[ swedish ] = "och";
     Text[ polish ] = "ORAZ";
     Text[ portuguese_brazilian ] = "e";
@@ -392,6 +412,8 @@ String RID_SVXSTR_A11Y_AND
     Text[ hebrew ] = "â€®×•â€¬";
     Text[ hindi ] = "and";
     Text[ slovak ] = "a";
+    Text[ hungarian ] = "Ã©s";
+    Text[ slovenian ] = "in";
 };
 
 
@@ -403,13 +425,13 @@ String RID_SVXSTR_RECTCTL_ACC_CORN_NAME
     Text [ english_us ] = "Corner control" ;
     Text[ portuguese ] = "Corner control";
     Text[ russian ] = "Corner control";
-    Text[ greek ] = "Corner control";
-    Text[ dutch ] = "Corner control";
+    Text[ greek ] = "¸ëåã÷ïò ãùíßáò";
+    Text[ dutch ] = "Hoekbesturing";
     Text[ french ] = "Élément de contrôle de coin";
     Text[ spanish ] = "Elemento de control - Esquinas";
     Text[ finnish ] = "Corner control";
     Text[ italian ] = "Controllo spigolo";
-    Text[ danish ] = "Corner control";
+    Text[ danish ] = "Hjørne-kontrol";
     Text[ swedish ] = "Hörnkontrollelement";
     Text[ polish ] = "Corner control";
     Text[ portuguese_brazilian ] = "Elemento de controle de canto";
@@ -425,6 +447,8 @@ String RID_SVXSTR_RECTCTL_ACC_CORN_NAME
     Text[ hebrew ] = "â€®×‘×§×¨×ª ×¤×™× ×•×ªâ€¬";
     Text[ hindi ] = "Corner control";
     Text[ slovak ] = "OvlÃ¡dacie pole rohu";
+    Text[ hungarian ] = "Sarok beÃ¡llÃ­tÃ¡sa";
+    Text[ slovenian ] = "Nadzor vogalov";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CORN_DESCR
@@ -433,13 +457,13 @@ String RID_SVXSTR_RECTCTL_ACC_CORN_DESCR
     Text [ english_us ] = "Selection of a corner point." ;
     Text[ portuguese ] = "Selection of a corner point.";
     Text[ russian ] = "Selection of a corner point.";
-    Text[ greek ] = "Selection of a corner point.";
-    Text[ dutch ] = "Selection of a corner point.";
+    Text[ greek ] = "ÅğéëïãŞ ãùíéáêïı óçìåßïõ.";
+    Text[ dutch ] = "Selectie van een hoekpunt.";
     Text[ french ] = "Sélection d'un point d'inflexion";
     Text[ spanish ] = "Selección de un punto de la esquina";
     Text[ finnish ] = "Selection of a corner point.";
     Text[ italian ] = "Selezione di un punto dello spigolo";
-    Text[ danish ] = "Selection of a corner point.";
+    Text[ danish ] = "Valg af hjørnepunkt.";
     Text[ swedish ] = "Urval av en hörnpunkt.";
     Text[ polish ] = "Selection of a corner point.";
     Text[ portuguese_brazilian ] = "Seleção de um ponto de canto.";
@@ -455,6 +479,8 @@ String RID_SVXSTR_RECTCTL_ACC_CORN_DESCR
     Text[ hebrew ] = "â€®×‘×—×™×¨×ª × ×§×•×“×ª ×¤×™× ×”â€¬";
     Text[ hindi ] = "Selection of a corner point.";
     Text[ slovak ] = "VÃ½ber rohovÃ©ho bodu.";
+    Text[ hungarian ] = "Sarokpont kivÃ¡lasztÃ¡sa.";
+    Text[ slovenian ] = "Izbor vogalne toÄke.";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_ANGL_NAME
@@ -464,12 +490,12 @@ String RID_SVXSTR_RECTCTL_ACC_ANGL_NAME
     Text[ portuguese ] = "Angle control";
     Text[ russian ] = "Angle control";
     Text[ greek ] = "Angle control";
-    Text[ dutch ] = "Angle control";
+    Text[ dutch ] = "Hoekbesturing";
     Text[ french ] = "Élément de contrôle d'angle";
     Text[ spanish ] = "Elemento de control - Ángulo";
     Text[ finnish ] = "Angle control";
     Text[ italian ] = "Controllo angolo";
-    Text[ danish ] = "Angle control";
+    Text[ danish ] = "Vinkel-kontrol";
     Text[ swedish ] = "Vinkelkontrollelement";
     Text[ polish ] = "Angle control";
     Text[ portuguese_brazilian ] = "Elemento de controle de ângulo";
@@ -485,6 +511,8 @@ String RID_SVXSTR_RECTCTL_ACC_ANGL_NAME
     Text[ hebrew ] = "â€®×‘×§×¨×ª ×–×•×•×™×ªâ€¬";
     Text[ hindi ] = "Angle control";
     Text[ slovak ] = "OvlÃ¡dacie pole uhla";
+    Text[ hungarian ] = "SzÃ¶g beÃ¡llÃ­tÃ¡sa";
+    Text[ slovenian ] = "Nadzor kotov";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR
@@ -494,12 +522,12 @@ String RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR
     Text[ portuguese ] = "Selection of a major angle";
     Text[ russian ] = "Selection of a major angle";
     Text[ greek ] = "Selection of a major angle";
-    Text[ dutch ] = "Selection of a major angle";
+    Text[ dutch ] = "Selectie van een grotere hoek";
     Text[ french ] = "Sélection d'un angle (principal)";
     Text[ spanish ] = "Selección de un ángulo principal";
     Text[ finnish ] = "Selection of a major angle";
     Text[ italian ] = "Selezione di un angolo (principale).";
-    Text[ danish ] = "Selection of a major angle";
+    Text[ danish ] = "Valg af en større vinkel.";
     Text[ swedish ] = "Markering av en (huvud)vinkel.";
     Text[ polish ] = "Selection of a major angle";
     Text[ portuguese_brazilian ] = "Seleção de um ângulo principal";
@@ -515,6 +543,8 @@ String RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR
     Text[ hebrew ] = "â€®×‘×—×™×¨×ª ×–×•×•×™×ª ×¢×™×§×¨×™×ªâ€¬.";
     Text[ hindi ] = "Selection of a major angle.";
     Text[ slovak ] = "VÃ½ber hlavnÃ©ho uhla.";
+    Text[ hungarian ] = "SzÃ¶g kivÃ¡lasztÃ¡sa";
+    Text[ slovenian ] = "Izbor veÄjega kota.";
 };
 
 
@@ -524,13 +554,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LT
     Text [ english_us ] = "Top left" ;
     Text[ portuguese ] = "Top left";
     Text[ russian ] = "Top left";
-    Text[ greek ] = "Top left";
-    Text[ dutch ] = "Top left";
+    Text[ greek ] = "ĞÜíù áñéóôåñÜ";
+    Text[ dutch ] = "Boven links";
     Text[ french ] = "En haut à gauche";
     Text[ spanish ] = "Arriba a la izquierda";
     Text[ finnish ] = "Top left";
     Text[ italian ] = "A sinistra/in alto";
-    Text[ danish ] = "Top left";
+    Text[ danish ] = "Øverst til venstre";
     Text[ swedish ] = "Uppe till vänster";
     Text[ polish ] = "Top left";
     Text[ portuguese_brazilian ] = "Em cima à esquerda";
@@ -546,6 +576,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LT
     Text[ hebrew ] = "â€®×¢×œ×™×•×Ÿ ×©×××œ×™â€¬";
     Text[ hindi ] = "Top left";
     Text[ slovak ] = "Nahor doÄ¾ava";
+    Text[ hungarian ] = "Bal felsÅ‘";
+    Text[ slovenian ] = "Zgoraj levo";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_MT
@@ -554,13 +586,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MT
     Text [ english_us ] = "Top middle" ;
     Text[ portuguese ] = "Top middle";
     Text[ russian ] = "Top middle";
-    Text[ greek ] = "Top middle";
-    Text[ dutch ] = "Top middle";
+    Text[ greek ] = "ĞÜíù ìİóç";
+    Text[ dutch ] = "Boven midden";
     Text[ french ] = "En haut au milieu";
     Text[ spanish ] = "Centrado arriba";
     Text[ finnish ] = "Top middle";
     Text[ italian ] = "Al centro/in alto";
-    Text[ danish ] = "Top middle";
+    Text[ danish ] = "Øverst i midten";
     Text[ swedish ] = "Uppe i mitten";
     Text[ polish ] = "Top middle";
     Text[ portuguese_brazilian ] = "Em cima no meio";
@@ -576,6 +608,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MT
     Text[ hebrew ] = "â€®×¢×œ×™×•×Ÿ ×××¦×¢×™â€¬";
     Text[ hindi ] = "Top middle";
     Text[ slovak ] = "Nahor do stredu";
+    Text[ hungarian ] = "Fent kÃ¶zÃ©pen";
+    Text[ slovenian ] = "Zgoraj na sredini";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_RT
@@ -584,13 +618,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_RT
     Text [ english_us ] = "Top right" ;
     Text[ portuguese ] = "Top right";
     Text[ russian ] = "Top right";
-    Text[ greek ] = "Top right";
-    Text[ dutch ] = "Top right";
+    Text[ greek ] = "ĞÜíù äåîéÜ";
+    Text[ dutch ] = "Boven rechts";
     Text[ french ] = "En haut à droite";
     Text[ spanish ] = "Arriba a la derecha";
     Text[ finnish ] = "Top right";
     Text[ italian ] = "A destra/in alto";
-    Text[ danish ] = "Top right";
+    Text[ danish ] = "Øverst til højre";
     Text[ swedish ] = "Uppe till höger";
     Text[ polish ] = "Top right";
     Text[ portuguese_brazilian ] = "Em cima à direita";
@@ -606,6 +640,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_RT
     Text[ hebrew ] = "â€®×¢×œ×™×•×Ÿ ×™×× ×™â€¬";
     Text[ hindi ] = "Top right";
     Text[ slovak ] = "Nahor doprava";
+    Text[ hungarian ] = "Jobb felsÅ‘";
+    Text[ slovenian ] = "Zgoraj desno";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_LM
@@ -614,13 +650,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LM
     Text [ english_us ] = "Left center" ;
     Text[ portuguese ] = "Left center";
     Text[ russian ] = "Left center";
-    Text[ greek ] = "Left center";
-    Text[ dutch ] = "Left center";
+    Text[ greek ] = "ÁñéóôåñÜ êİíôñï";
+    Text[ dutch ] = "Linksmidden";
     Text[ french ] = "Au centre à gauche";
     Text[ spanish ] = "Centrado a la izquierda";
     Text[ finnish ] = "Left center";
     Text[ italian ] = "In centro a sinistra";
-    Text[ danish ] = "Left center";
+    Text[ danish ] = "Venstre midte";
     Text[ swedish ] = "Till vänster i mitten";
     Text[ polish ] = "Left center";
     Text[ portuguese_brazilian ] = "No centro à esquerda";
@@ -636,6 +672,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LM
     Text[ hebrew ] = "â€®××¨×›×– ×©×××œ×™â€¬";
     Text[ hindi ] = "Left center";
     Text[ slovak ] = "ZarovnaÅ¥ vÄ¾avo";
+    Text[ hungarian ] = "Bal kÃ¶zÃ©p";
+    Text[ slovenian ] = "Levo na sredini";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_MM
@@ -666,6 +704,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MM
     Text[ hebrew ] = "â€®××¨×›×–â€¬";
     Text[ hindi ] = "Center";
     Text[ slovak ] = "ZarovnaÅ¥";
+    Text[ hungarian ] = "KÃ¶zÃ©pen";
+    Text[ slovenian ] = "Sredina";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_RM
@@ -674,13 +714,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_RM
     Text [ english_us ] = "Right center" ;
     Text[ portuguese ] = "Right center";
     Text[ russian ] = "Right center";
-    Text[ greek ] = "Right center";
-    Text[ dutch ] = "Right center";
+    Text[ greek ] = "ÄåîéÜ êİíôñï";
+    Text[ dutch ] = "Rechtsmidden";
     Text[ french ] = "Au centre à droite";
     Text[ spanish ] = "Centrado a la derecha";
     Text[ finnish ] = "Right center";
     Text[ italian ] = "In centro a destra";
-    Text[ danish ] = "Right center";
+    Text[ danish ] = "Højre midte";
     Text[ swedish ] = "Till höger i mitten";
     Text[ polish ] = "Right center";
     Text[ portuguese_brazilian ] = "No centro à direita";
@@ -696,6 +736,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_RM
     Text[ hebrew ] = "â€®××¨×›×– ×™×× ×™â€¬";
     Text[ hindi ] = "Right center";
     Text[ slovak ] = "ZarovnaÅ¥ vpravo";
+    Text[ hungarian ] = "Jobb kÃ¶zÃ©p";
+    Text[ slovenian ] = "Desno na sredini";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_LB
@@ -704,13 +746,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LB
     Text [ english_us ] = "Bottom left" ;
     Text[ portuguese ] = "Bottom left";
     Text[ russian ] = "Bottom left";
-    Text[ greek ] = "Bottom left";
-    Text[ dutch ] = "Bottom left";
+    Text[ greek ] = "ÊÜôù áñéóôåñÜ";
+    Text[ dutch ] = "Onder links";
     Text[ french ] = "En bas à gauche";
     Text[ spanish ] = "Abajo a la izquierda";
     Text[ finnish ] = "Bottom left";
     Text[ italian ] = "A sinistra/in basso";
-    Text[ danish ] = "Bottom left";
+    Text[ danish ] = "Nederst til venstre";
     Text[ swedish ] = "Nere till vänster";
     Text[ polish ] = "Bottom left";
     Text[ portuguese_brazilian ] = "Em baixo à esquerda";
@@ -726,6 +768,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LB
     Text[ hebrew ] = "â€®×ª×—×ª×•×Ÿ ×©×××œ×™â€¬";
     Text[ hindi ] = "Bottom left";
     Text[ slovak ] = "DoÄ¾ava dole";
+    Text[ hungarian ] = "Bal alsÃ³";
+    Text[ slovenian ] = "Spodaj levo";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_MB
@@ -734,13 +778,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MB
     Text [ english_us ] = "Bottom middle" ;
     Text[ portuguese ] = "Bottom middle";
     Text[ russian ] = "Bottom middle";
-    Text[ greek ] = "Bottom middle";
-    Text[ dutch ] = "Bottom middle";
+    Text[ greek ] = "ÊÜôù ìİóç";
+    Text[ dutch ] = "Onder midden";
     Text[ french ] = "En bas au milieu";
     Text[ spanish ] = "Centrado abajo";
     Text[ finnish ] = "Bottom middle";
     Text[ italian ] = "In centro in basso";
-    Text[ danish ] = "Bottom middle";
+    Text[ danish ] = "Nederst i midten";
     Text[ swedish ] = "Nere i mitten";
     Text[ polish ] = "Bottom middle";
     Text[ portuguese_brazilian ] = "Em baixo no meio";
@@ -756,6 +800,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MB
     Text[ hebrew ] = "â€®×ª×—×ª×•×Ÿ ×××¦×¢×™â€¬";
     Text[ hindi ] = "Bottom middle";
     Text[ slovak ] = "Dole do stredu";
+    Text[ hungarian ] = "Lent kÃ¶zÃ©pen";
+    Text[ slovenian ] = "Spodaj na sredini";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_RB
@@ -764,13 +810,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_RB
     Text [ english_us ] = "Bottom right" ;
     Text[ portuguese ] = "Bottom right";
     Text[ russian ] = "Bottom right";
-    Text[ greek ] = "Bottom right";
-    Text[ dutch ] = "Bottom right";
+    Text[ greek ] = "ÊÜôù äåîéÜ";
+    Text[ dutch ] = "Onder rechts";
     Text[ french ] = "En bas à droite";
     Text[ spanish ] = "Abajo a la derecha";
     Text[ finnish ] = "Bottom right";
     Text[ italian ] = "A destra/in basso";
-    Text[ danish ] = "Bottom right";
+    Text[ danish ] = "Nederst til højre";
     Text[ swedish ] = "Nere till höger";
     Text[ polish ] = "Bottom right";
     Text[ portuguese_brazilian ] = "Em baixo à direita";
@@ -786,6 +832,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_RB
     Text[ hebrew ] = "â€®×ª×—×ª×•×Ÿ ×™×× ×™â€¬";
     Text[ hindi ] = "Bottom right";
     Text[ slovak ] = "Vpravo dole";
+    Text[ hungarian ] = "Jobb alsÃ³";
+    Text[ slovenian ] = "Spodaj desno";
 };
 
 
@@ -795,13 +843,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A000
     Text [ english_us ] = "0 degrees" ;
     Text[ portuguese ] = "0 degrees";
     Text[ russian ] = "0 degrees";
-    Text[ greek ] = "0 degrees";
-    Text[ dutch ] = "0 degrees";
+    Text[ greek ] = "0 ìïßñåò";
+    Text[ dutch ] = "0 graden";
     Text[ french ] = "0 degré";
     Text[ spanish ] = "0 grados";
     Text[ finnish ] = "0 degrees";
     Text[ italian ] = "0 gradi";
-    Text[ danish ] = "0 degrees";
+    Text[ danish ] = "0 grader";
     Text[ swedish ] = "0 grader";
     Text[ polish ] = "0 degrees";
     Text[ portuguese_brazilian ] = "0 graus";
@@ -817,6 +865,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A000
     Text[ hebrew ] = "â€®0 ××¢×œ×•×ªâ€¬";
     Text[ hindi ] = "0 degrees";
     Text[ slovak ] = "0 stupÅˆov";
+    Text[ hungarian ] = "0 fok";
+    Text[ slovenian ] = "0 stopinj";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A045
@@ -847,6 +897,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A045
     Text[ hebrew ] = "â€®45 ××¢×œ×•×ªâ€¬";
     Text[ hindi ] = "45 degrees";
     Text[ slovak ] = "45 stupÅˆov";
+    Text[ hungarian ] = "45 fok";
+    Text[ slovenian ] = "45 stopinj";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A090
@@ -877,6 +929,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A090
     Text[ hebrew ] = "â€®90 ××¢×œ×•×ªâ€¬";
     Text[ hindi ] = "90 degrees";
     Text[ slovak ] = "90 stupÅˆov";
+    Text[ hungarian ] = "90 fok";
+    Text[ slovenian ] = "90 stopinj";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A135
@@ -885,13 +939,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A135
     Text [ english_us ] = "135 degrees" ;
     Text[ portuguese ] = "135 degrees";
     Text[ russian ] = "135 degrees";
-    Text[ greek ] = "135 degrees";
-    Text[ dutch ] = "135 degrees";
+    Text[ greek ] = "135 ìïßñåò";
+    Text[ dutch ] = "135 graden";
     Text[ french ] = "135 degrés";
     Text[ spanish ] = "135 grados";
     Text[ finnish ] = "135 degrees";
     Text[ italian ] = "135 gradi";
-    Text[ danish ] = "135 degrees";
+    Text[ danish ] = "135 grader";
     Text[ swedish ] = "135 grader";
     Text[ polish ] = "135 degrees";
     Text[ portuguese_brazilian ] = "135 graus";
@@ -907,6 +961,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A135
     Text[ hebrew ] = "â€®135 ××¢×œ×•×ªâ€¬";
     Text[ hindi ] = "135 degrees";
     Text[ slovak ] = "135 stupÅˆov";
+    Text[ hungarian ] = "135 fok";
+    Text[ slovenian ] = "135 stopinj";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A180
@@ -915,13 +971,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A180
     Text [ english_us ] = "180 degrees" ;
     Text[ portuguese ] = "180 degrees";
     Text[ russian ] = "180 degrees";
-    Text[ greek ] = "180 degrees";
-    Text[ dutch ] = "180 degrees";
+    Text[ greek ] = "180 ìïßñåò";
+    Text[ dutch ] = "180 graden";
     Text[ french ] = "180 degrés";
     Text[ spanish ] = "180 grados";
     Text[ finnish ] = "180 degrees";
     Text[ italian ] = "180 gradi";
-    Text[ danish ] = "180 degrees";
+    Text[ danish ] = "180 grader";
     Text[ swedish ] = "180 grader";
     Text[ polish ] = "180 degrees";
     Text[ portuguese_brazilian ] = "180 graus";
@@ -937,6 +993,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A180
     Text[ hebrew ] = "â€®180 ××¢×œ×•×ªâ€¬";
     Text[ hindi ] = "180 degrees";
     Text[ slovak ] = "180 stupÅˆov";
+    Text[ hungarian ] = "180 fok";
+    Text[ slovenian ] = "180 stopinj";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A225
@@ -945,13 +1003,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A225
     Text [ english_us ] = "225 degrees" ;
     Text[ portuguese ] = "225 degrees";
     Text[ russian ] = "225 degrees";
-    Text[ greek ] = "225 degrees";
-    Text[ dutch ] = "225 degrees";
+    Text[ greek ] = "225 ìïßñåò";
+    Text[ dutch ] = "225 graden";
     Text[ french ] = "225 degrés";
     Text[ spanish ] = "225 grados";
     Text[ finnish ] = "225 degrees";
     Text[ italian ] = "225 gradi";
-    Text[ danish ] = "225 degrees";
+    Text[ danish ] = "225 grader";
     Text[ swedish ] = "225 grader";
     Text[ polish ] = "225 degrees";
     Text[ portuguese_brazilian ] = "225 graus";
@@ -967,6 +1025,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A225
     Text[ hebrew ] = "â€®225 ××¢×œ×•×ªâ€¬";
     Text[ hindi ] = "225 degrees";
     Text[ slovak ] = "225 stupÅˆov";
+    Text[ hungarian ] = "225 fok";
+    Text[ slovenian ] = "225 stopinj";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A270
@@ -975,13 +1035,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A270
     Text [ english_us ] = "270 degrees" ;
     Text[ portuguese ] = "270 degrees";
     Text[ russian ] = "270 degrees";
-    Text[ greek ] = "270 degrees";
-    Text[ dutch ] = "270 degrees";
+    Text[ greek ] = "270 ìïßñåò";
+    Text[ dutch ] = "270 graden";
     Text[ french ] = "270 degrés";
     Text[ spanish ] = "270 grados";
     Text[ finnish ] = "270 degrees";
     Text[ italian ] = "270 gradi";
-    Text[ danish ] = "270 degrees";
+    Text[ danish ] = "270 grader";
     Text[ swedish ] = "270 grader";
     Text[ polish ] = "270 degrees";
     Text[ portuguese_brazilian ] = "270 graus";
@@ -997,6 +1057,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A270
     Text[ hebrew ] = "â€®270 ××¢×œ×•×ªâ€¬";
     Text[ hindi ] = "270 degrees";
     Text[ slovak ] = "270 stupÅˆov";
+    Text[ hungarian ] = "270 fok";
+    Text[ slovenian ] = "270 stopinj";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A315
@@ -1005,13 +1067,13 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A315
     Text [ english_us ] = "315 degrees" ;
     Text[ portuguese ] = "315 degrees";
     Text[ russian ] = "315 degrees";
-    Text[ greek ] = "315 degrees";
-    Text[ dutch ] = "315 degrees";
+    Text[ greek ] = "315 ìïßñåò";
+    Text[ dutch ] = "315 graden";
     Text[ french ] = "315 degrés";
     Text[ spanish ] = "315 grados";
     Text[ finnish ] = "315 degrees";
     Text[ italian ] = "315 gradi";
-    Text[ danish ] = "315 degrees";
+    Text[ danish ] = "315 grader";
     Text[ swedish ] = "315 grader";
     Text[ polish ] = "315 degrees";
     Text[ portuguese_brazilian ] = "315 graus";
@@ -1027,6 +1089,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A315
     Text[ hebrew ] = "â€®315 ××¢×œ×•×ªâ€¬";
     Text[ hindi ] = "315 degrees";
     Text[ slovak ] = "315 stupÅˆov";
+    Text[ hungarian ] = "315 fok";
+    Text[ slovenian ] = "315 stopinj";
 };
 
 // SvxGraphCtrlAccessibleContext
@@ -1036,13 +1100,13 @@ String RID_SVXSTR_GRAPHCTRL_ACC_NAME
     Text [ english_us ] = "Contour control" ;
     Text[ portuguese ] = "Graph control";
     Text[ russian ] = "Graph control";
-    Text[ greek ] = "Graph control";
-    Text[ dutch ] = "Graph control";
+    Text[ greek ] = "Contour control";
+    Text[ dutch ] = "Contourbesturing";
     Text[ french ] = "Élément de contrôle du contour";
     Text[ spanish ] = "Elemento de control del contorno";
     Text[ finnish ] = "Graph control";
     Text[ italian ] = "Controllo contorno";
-    Text[ danish ] = "Graph control";
+    Text[ danish ] = "Konturkontrol";
     Text[ swedish ] = "Kontrollelement för kontur";
     Text[ polish ] = "Graph control";
     Text[ portuguese_brazilian ] = "Elementos de controle de contornos";
@@ -1058,6 +1122,8 @@ String RID_SVXSTR_GRAPHCTRL_ACC_NAME
     Text[ hebrew ] = "â€®×‘×§×¨×ª ××ª××¨â€¬";
     Text[ hindi ] = "Contour control";
     Text[ slovak ] = "OvlÃ¡dacie pole obrysov";
+    Text[ hungarian ] = "KÃ¶rvonal beÃ¡llÃ­tÃ¡sai";
+    Text[ slovenian ] = "Nadzor obrisa";
 };
 
 String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
@@ -1067,12 +1133,12 @@ String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
     Text[ portuguese ] = "Editing of a graph";
     Text[ russian ] = "Editing of a graph";
     Text[ greek ] = "Editing of a graph";
-    Text[ dutch ] = "Editing of a graph";
+    Text[ dutch ] = "Hier kunt u een contour bewerken.";
     Text[ french ] = "Édition du contour";
     Text[ spanish ] = "Aquí puede editar el contorno.";
     Text[ finnish ] = "Editing of a graph";
     Text[ italian ] = "Modifica contorno";
-    Text[ danish ] = "Editing of a graph";
+    Text[ danish ] = "Her kan du redigere konturen.";
     Text[ swedish ] = "Här kan du redigera konturen.";
     Text[ polish ] = "Editing of a graph";
     Text[ portuguese_brazilian ] = "Edição do contorno";
@@ -1088,6 +1154,8 @@ String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
     Text[ hebrew ] = "â€®×›××Ÿ × ×™×ª×Ÿ ×œ×¢×¨×•×š ××ª ×”××ª××¨.â€¬";
     Text[ hindi ] = "This is where you can edit the contour.";
     Text[ slovak ] = "Tu mÃ´Å¾ete upravovaÅ¥ obrysy.";
+    Text[ hungarian ] = "Itt szerkeszthetÅ‘ a kÃ¶rvonal.";
+    Text[ slovenian ] = "Tukaj uredite obris.";
 };
 
 String RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION
@@ -1098,12 +1166,12 @@ String RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION
     Text[ portuguese ] = "Paragraph: $(ARG) ";
     Text[ russian ] = "Paragraph: $(ARG) ";
     Text[ greek ] = "Paragraph: $(ARG) ";
-    Text[ dutch ] = "Paragraph: $(ARG) ";
+    Text[ dutch ] = "Alinea: $(ARG) ";
     Text[ french ] = "Paragraphe : $(ARG) ";
     Text[ spanish ] = "Párrafo: $(ARG) ";
     Text[ finnish ] = "Paragraph: $(ARG) ";
     Text[ italian ] = "Paragrafo: $(ARG) ";
-    Text[ danish ] = "Paragraph: $(ARG) ";
+    Text[ danish ] = "Afsnit: $(ARG) ";
     Text[ swedish ] = "Stycke: $(ARG) ";
     Text[ polish ] = "Paragraph: $(ARG) ";
     Text[ portuguese_brazilian ] = "Parágrafo: $(ARG) ";
@@ -1119,6 +1187,8 @@ String RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION
     Text[ hebrew ] = "â€®×¤×™×¡×§×ª: $(ARG)â€¬";
     Text[ hindi ] = "Paragraph: $(ARG) ";
     Text[ slovak ] = "Odstavec: $(ARG) ";
+    Text[ hungarian ] = "BekezdÃ©s: $(ARG) ";
+    Text[ slovenian ] = "Odstavek: $(ARG) ";
 };
 
 String RID_SVXSTR_A11Y_PARAGRAPH_NAME
@@ -1129,12 +1199,12 @@ String RID_SVXSTR_A11Y_PARAGRAPH_NAME
     Text[ portuguese ] = "Paragraph $(ARG)";
     Text[ russian ] = "Paragraph $(ARG)";
     Text[ greek ] = "Paragraph $(ARG)";
-    Text[ dutch ] = "Paragraph $(ARG)";
+    Text[ dutch ] = "Alinea $(ARG)";
     Text[ french ] = "Paragraphe $(ARG)";
     Text[ spanish ] = "Párrafo $(ARG)";
     Text[ finnish ] = "Paragraph $(ARG)";
     Text[ italian ] = "Paragrafo $(ARG)";
-    Text[ danish ] = "Paragraph $(ARG)";
+    Text[ danish ] = "Afsnit $(ARG)";
     Text[ swedish ] = "Stycke $(ARG)";
     Text[ polish ] = "Paragraph $(ARG)";
     Text[ portuguese_brazilian ] = "Parágrafo: $(ARG) ";
@@ -1150,6 +1220,8 @@ String RID_SVXSTR_A11Y_PARAGRAPH_NAME
     Text[ hebrew ] = "â€®×¤×™×¡×§×ª: $(ARG)â€¬";
     Text[ hindi ] = "Paragraph $(ARG)";
     Text[ slovak ] = "Odstavec $(ARG)";
+    Text[ hungarian ] = "BekezdÃ©s $(ARG)";
+    Text[ slovenian ] = "Odstavek $(ARG)";
 };
 
 String RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION
@@ -1160,12 +1232,12 @@ String RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION
     Text[ portuguese ] = "Image bullet in paragraph: $(ARG)";
     Text[ russian ] = "Image bullet in paragraph: $(ARG)";
     Text[ greek ] = "Image bullet in paragraph: $(ARG)";
-    Text[ dutch ] = "Image bullet in paragraph: $(ARG)";
+    Text[ dutch ] = "Grafisch opsommingsteken in alinea: $(ARG)";
     Text[ french ] = "Puce picto dans le paragraphe : $(ARG)";
     Text[ spanish ] = "Imagen viñeta en párrafo: $(ARG)";
     Text[ finnish ] = "Image bullet in paragraph: $(ARG)";
     Text[ italian ] = "Carattere per elenchi puntati nel paragrafo: $(ARG)";
-    Text[ danish ] = "Image bullet in paragraph: $(ARG)";
+    Text[ danish ] = "Billedepunkt i afsnit: $(ARG)";
     Text[ swedish ] = "Grafiskt punktuppställningstecken i stycke: $(ARG)";
     Text[ polish ] = "Image bullet in paragraph: $(ARG)";
     Text[ portuguese_brazilian ] = "Marca imagem no parágrafo: $(ARG)";
@@ -1181,6 +1253,8 @@ String RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION
     Text[ hebrew ] = "â€®× ×§×•×“×ª ×¦×œ× ×‘×¤×™×¡×§×”: $(ARG)â€¬";
     Text[ hindi ] = "Image bullet in paragraph: $(ARG)";
     Text[ slovak ] = "ObrÃ¡zok guÄ¾ky v odstavci: $(ARG)";
+    Text[ hungarian ] = "KÃ©pes felsorolÃ¡sjel ebben a bekezdÃ©sben: $(ARG)";
+    Text[ slovenian ] = "GrafiÄna oznaka v odstavku: $(ARG)";
 };
 
 String RID_SVXSTR_A11Y_IMAGEBULLET_NAME
@@ -1191,12 +1265,12 @@ String RID_SVXSTR_A11Y_IMAGEBULLET_NAME
     Text[ portuguese ] = "Image bullet";
     Text[ russian ] = "Image bullet";
     Text[ greek ] = "Image bullet";
-    Text[ dutch ] = "Image bullet";
+    Text[ dutch ] = "Grafisch opsommingsteken";
     Text[ french ] = "Puce picto";
     Text[ spanish ] = "Imagen viñeta";
     Text[ finnish ] = "Image bullet";
     Text[ italian ] = "Carattere per elenchi puntati";
-    Text[ danish ] = "Image bullet";
+    Text[ danish ] = "Billedepunkt";
     Text[ swedish ] = "Grafiskt punktuppställningstecken";
     Text[ polish ] = "Image bullet";
     Text[ portuguese_brazilian ] = "Marca imagem";
@@ -1212,6 +1286,8 @@ String RID_SVXSTR_A11Y_IMAGEBULLET_NAME
     Text[ hebrew ] = "â€®× ×§×•×“×ª ×¦×œ×â€¬";
     Text[ hindi ] = "Image bullet";
     Text[ slovak ] = "ObrÃ¡zok guÄ¾ky";
+    Text[ hungarian ] = "KÃ©pes felsorolÃ¡sjel";
+    Text[ slovenian ] = "GrafiÄna oznaka";
 };
 
 String RID_SVXSTR_CHARACTER_SELECTION
@@ -1221,13 +1297,13 @@ String RID_SVXSTR_CHARACTER_SELECTION
     Text[ english_us ] = "Special character selection";
     Text[ portuguese ] = "Special character selection";
     Text[ russian ] = "Special character selection";
-    Text[ greek ] = "Special character selection";
-    Text[ dutch ] = "Special character selection";
+    Text[ greek ] = "ÅğéëïãŞ åéäéêïı ÷áñáêôŞñá";
+    Text[ dutch ] = "Selectie speciaal karakter";
     Text[ french ] = "Sélection de caractère spécial";
     Text[ spanish ] = "Selección de símbolos";
     Text[ finnish ] = "Special character selection";
     Text[ italian ] = "Selezione carattere speciale";
-    Text[ danish ] = "Special character selection";
+    Text[ danish ] = "Specialtegnsudvalg";
     Text[ swedish ] = "Urval av specialtecken";
     Text[ polish ] = "Special character selection";
     Text[ portuguese_brazilian ] = "Seleção de caracter especial";
@@ -1243,6 +1319,8 @@ String RID_SVXSTR_CHARACTER_SELECTION
     Text[ hebrew ] = "â€®×‘×—×™×¨×ª ×ª×•×•×™× ××™×•×—×“×™×â€¬";
     Text[ hindi ] = "Special character selection";
     Text[ slovak ] = "VÃ½ber Å¡peciÃ¡lneho znaku";
+    Text[ hungarian ] = "KÃ¼lÃ¶nleges karakter kivÃ¡lasztÃ¡sa";
+    Text[ slovenian ] = "Izbor posebnega znaka";
 };
 
 String RID_SVXSTR_CHAR_SEL_DESC
@@ -1252,13 +1330,13 @@ String RID_SVXSTR_CHAR_SEL_DESC
     Text[ english_us ] = "Select special characters in this area.";
     Text[ portuguese ] = "Select special characters in this area.";
     Text[ russian ] = "Select special characters in this area.";
-    Text[ greek ] = "Select special characters in this area.";
-    Text[ dutch ] = "Select special characters in this area.";
+    Text[ greek ] = "Åğéëİîôå åéäéêïıò ÷áñáêôŞñåò óå áõôŞ ôçí ğåñéï÷Ş.";
+    Text[ dutch ] = "Selecteer speciale karakters in dit gebied.";
     Text[ french ] = "Zone de sélection des caractères spéciaux";
     Text[ spanish ] = "Área de selección de símbolos.";
     Text[ finnish ] = "Select special characters in this area.";
     Text[ italian ] = "Selezionate il carattere speciale in questa sezione";
-    Text[ danish ] = "Select special characters in this area.";
+    Text[ danish ] = "Vælg specialtegn i dette område.";
     Text[ swedish ] = "Välj ut specialtecken i det här området.";
     Text[ polish ] = "Select special characters in this area.";
     Text[ portuguese_brazilian ] = "Área de seleção de caracteres";
@@ -1274,6 +1352,8 @@ String RID_SVXSTR_CHAR_SEL_DESC
     Text[ hebrew ] = "â€®×‘×—×™×¨×ª ×ª×•×™× ××™×•×—×“×™× ×œ×©×˜×— ×–×”.â€¬";
     Text[ hindi ] = "Select special characters in this area.";
     Text[ slovak ] = "Tu vyberte Å¡peciÃ¡lne znaky.";
+    Text[ hungarian ] = "VÃ¡lasszon kÃ¼lÃ¶nleges karaktert ezen a terÃ¼leten";
+    Text[ slovenian ] = "V tem obmoÄju izberete posebne znake.";
 };
 
 String RID_SVXSTR_CHARACTER_CODE
@@ -1285,12 +1365,12 @@ String RID_SVXSTR_CHARACTER_CODE
     Text[ portuguese ] = "Character code ";
     Text[ russian ] = "Character code ";
     Text[ greek ] = "Character code ";
-    Text[ dutch ] = "Character code ";
+    Text[ dutch ] = "Karaktercode ";
     Text[ french ] = "Code de caractère ";
     Text[ spanish ] = "Código de carácter";
     Text[ finnish ] = "Character code ";
     Text[ italian ] = "Codice carattere ";
-    Text[ danish ] = "Character code ";
+    Text[ danish ] = "Tegnkode ";
     Text[ swedish ] = "Teckenkod ";
     Text[ polish ] = "Character code ";
     Text[ portuguese_brazilian ] = "Código do caracter";
@@ -1306,7 +1386,11 @@ String RID_SVXSTR_CHARACTER_CODE
     Text[ hebrew ] = "â€®×§×•×“ ×ª×•â€¬";
     Text[ hindi ] = "Character code ";
     Text[ slovak ] = "KÃ³d znaku ";
+    Text[ hungarian ] = "KarakterkÃ³d";
+    Text[ slovenian ] = "Koda znaka ";
 };
+
+
 
 
 
