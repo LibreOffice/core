@@ -55,9 +55,11 @@ class CollatorRessourceData
 //
 // -------------------------------------------------------------------------
 
+#define COLLATOR_RESSOURCE_COUNT 7
+
 CollatorRessource::CollatorRessource()
 {
-    mp_Data = new CollatorRessourceData[7];
+    mp_Data = new CollatorRessourceData[COLLATOR_RESSOURCE_COUNT];
 
     #define ASCSTR(str) String(RTL_CONSTASCII_USTRINGPARAM(str))
     #define RESSTR(rid) String(SvtResId(rid))
@@ -80,7 +82,7 @@ CollatorRessource::CollatorRessource()
 
 CollatorRessource::~CollatorRessource()
 {
-    delete mp_Data;
+    delete[] mp_Data;
 }
 
 const String&
@@ -99,7 +101,7 @@ CollatorRessource::GetTranslation (const String &r_Algorithm)
         aLocaleFreeAlgorithm = String(r_Algorithm, nIndex, r_Algorithm.Len() - nIndex);
     }
 
-    for (sal_uInt32 i = 0; i < (sizeof(mp_Data) / sizeof(mp_Data[0])); i++)
+    for (sal_uInt32 i = 0; i < COLLATOR_RESSOURCE_COUNT; i++)
     {
         if (aLocaleFreeAlgorithm == mp_Data[i].GetAlgorithm())
             return mp_Data[i].GetTranslation();
