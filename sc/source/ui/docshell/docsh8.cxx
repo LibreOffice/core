@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-26 19:07:53 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 19:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,277 +712,288 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
     aURL.removeSegment();
     String aPath = aURL.GetMainURL();
 
-
-
-    uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
-    if (!xFactory.is()) return SCERR_EXPORT_CONNECT;
-
-    uno::Reference<sdbc::XDriverManager> xDrvMan( xFactory->createInstance(
-                        rtl::OUString::createFromAscii( SC_SERVICE_DRVMAN ) ),
-                        uno::UNO_QUERY);
-    DBG_ASSERT( xDrvMan.is(), "can't get DriverManager" );
-    if (!xDrvMan.is()) return SCERR_EXPORT_CONNECT;
-
-    // get connection
-
-    String aConnUrl = String::CreateFromAscii("sdbc:dbase:");
-    aConnUrl += aPath;
-
-    uno::Sequence<beans::PropertyValue> aProps(2);
-    aProps[0].Name = rtl::OUString::createFromAscii(SC_DBPROP_EXTENSION);
-    aProps[0].Value <<= rtl::OUString( aExtension );
-    aProps[1].Name = rtl::OUString::createFromAscii(SC_DBPROP_CHARSET);
-    aProps[1].Value <<= (rtl_TextEncoding) eCharSet;
-
-    uno::Reference<sdbc::XConnection> xConnection =
-                            xDrvMan->getConnectionWithInfo( aConnUrl, aProps );
-    DBG_ASSERT( xConnection.is(), "can't get Connection" );
-    if (!xConnection.is()) return SCERR_EXPORT_CONNECT;
-
-    // get dBase driver
-
-    uno::Reference<sdbc::XDriver> xDriver;
-    BOOL bDriverFound = FALSE;
-
-    uno::Reference<container::XEnumerationAccess> xEnAcc( xDrvMan, uno::UNO_QUERY );
-    DBG_ASSERT( xEnAcc.is(), "can't get DriverManager EnumerationAccess" );
-    if (!xEnAcc.is()) return SCERR_EXPORT_CONNECT;
-
-    uno::Reference<container::XEnumeration> xEnum = xEnAcc->createEnumeration();
-    DBG_ASSERT( xEnum.is(), "can't get DriverManager Enumeration" );
-    if (!xEnum.is()) return SCERR_EXPORT_CONNECT;
-
-    while ( xEnum->hasMoreElements() && !bDriverFound )
+    try
     {
-        uno::Any aElement = xEnum->nextElement();
-        if ( aElement >>= xDriver )
-            if ( xDriver.is() && xDriver->acceptsURL( aConnUrl ) )
-                bDriverFound = TRUE;
-    }
+        uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
+        if (!xFactory.is()) return SCERR_EXPORT_CONNECT;
 
-    DBG_ASSERT( bDriverFound, "can't get dBase driver" );
-    if (!bDriverFound) return SCERR_EXPORT_CONNECT;
+        uno::Reference<sdbc::XDriverManager> xDrvMan( xFactory->createInstance(
+                            rtl::OUString::createFromAscii( SC_SERVICE_DRVMAN ) ),
+                            uno::UNO_QUERY);
+        DBG_ASSERT( xDrvMan.is(), "can't get DriverManager" );
+        if (!xDrvMan.is()) return SCERR_EXPORT_CONNECT;
 
-    // create table
+        // get connection
 
-    uno::Reference<sdbcx::XDataDefinitionSupplier> xDDSup( xDriver, uno::UNO_QUERY );
-    DBG_ASSERT( xDDSup.is(), "can't get XDataDefinitionSupplier" );
-    if (!xDDSup.is()) return SCERR_EXPORT_CONNECT;
+        String aConnUrl = String::CreateFromAscii("sdbc:dbase:");
+        aConnUrl += aPath;
 
-    uno::Reference<sdbcx::XTablesSupplier> xTablesSupp =
-                        xDDSup->getDataDefinitionByConnection( xConnection );
-    DBG_ASSERT( xTablesSupp.is(), "can't get Data Definition" );
-    if (!xTablesSupp.is()) return SCERR_EXPORT_CONNECT;
+        uno::Sequence<beans::PropertyValue> aProps(2);
+        aProps[0].Name = rtl::OUString::createFromAscii(SC_DBPROP_EXTENSION);
+        aProps[0].Value <<= rtl::OUString( aExtension );
+        aProps[1].Name = rtl::OUString::createFromAscii(SC_DBPROP_CHARSET);
+        aProps[1].Value <<= (rtl_TextEncoding) eCharSet;
 
-    uno::Reference<container::XNameAccess> xTables = xTablesSupp->getTables();
-    DBG_ASSERT( xTables.is(), "can't get Tables" );
-    if (!xTables.is()) return SCERR_EXPORT_CONNECT;
+        uno::Reference<sdbc::XConnection> xConnection =
+                                xDrvMan->getConnectionWithInfo( aConnUrl, aProps );
+        DBG_ASSERT( xConnection.is(), "can't get Connection" );
+        if (!xConnection.is()) return SCERR_EXPORT_CONNECT;
 
-    uno::Reference<sdbcx::XDataDescriptorFactory> xTablesFact( xTables, uno::UNO_QUERY );
-    DBG_ASSERT( xTablesFact.is(), "can't get tables factory" );
-    if (!xTablesFact.is()) return SCERR_EXPORT_CONNECT;
+        // get dBase driver
 
-    uno::Reference<sdbcx::XAppend> xTablesAppend( xTables, uno::UNO_QUERY );
-    DBG_ASSERT( xTablesAppend.is(), "can't get tables XAppend" );
-    if (!xTablesAppend.is()) return SCERR_EXPORT_CONNECT;
+        uno::Reference<sdbc::XDriver> xDriver;
+        BOOL bDriverFound = FALSE;
 
-    uno::Reference<beans::XPropertySet> xTableDesc = xTablesFact->createDataDescriptor();
-    DBG_ASSERT( xTableDesc.is(), "can't get table descriptor" );
-    if (!xTableDesc.is()) return SCERR_EXPORT_CONNECT;
+        uno::Reference<container::XEnumerationAccess> xEnAcc( xDrvMan, uno::UNO_QUERY );
+        DBG_ASSERT( xEnAcc.is(), "can't get DriverManager EnumerationAccess" );
+        if (!xEnAcc.is()) return SCERR_EXPORT_CONNECT;
 
-    aAny <<= rtl::OUString( aTabName );
-    xTableDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_NAME), aAny );
+        uno::Reference<container::XEnumeration> xEnum = xEnAcc->createEnumeration();
+        DBG_ASSERT( xEnum.is(), "can't get DriverManager Enumeration" );
+        if (!xEnum.is()) return SCERR_EXPORT_CONNECT;
 
-    // create columns
+        while ( xEnum->hasMoreElements() && !bDriverFound )
+        {
+            uno::Any aElement = xEnum->nextElement();
+            if ( aElement >>= xDriver )
+                if ( xDriver.is() && xDriver->acceptsURL( aConnUrl ) )
+                    bDriverFound = TRUE;
+        }
 
-    uno::Reference<sdbcx::XColumnsSupplier> xColumnsSupp( xTableDesc, uno::UNO_QUERY );
-    DBG_ASSERT( xColumnsSupp.is(), "can't get columns supplier" );
-    if (!xColumnsSupp.is()) return SCERR_EXPORT_CONNECT;
+        DBG_ASSERT( bDriverFound, "can't get dBase driver" );
+        if (!bDriverFound) return SCERR_EXPORT_CONNECT;
 
-    uno::Reference<container::XNameAccess> xColumns = xColumnsSupp->getColumns();
-    DBG_ASSERT( xColumns.is(), "can't get columns" );
-    if (!xColumns.is()) return SCERR_EXPORT_CONNECT;
+        // create table
 
-    uno::Reference<sdbcx::XDataDescriptorFactory> xColumnsFact( xColumns, uno::UNO_QUERY );
-    DBG_ASSERT( xColumnsFact.is(), "can't get columns factory" );
-    if (!xColumnsFact.is()) return SCERR_EXPORT_CONNECT;
+        uno::Reference<sdbcx::XDataDefinitionSupplier> xDDSup( xDriver, uno::UNO_QUERY );
+        DBG_ASSERT( xDDSup.is(), "can't get XDataDefinitionSupplier" );
+        if (!xDDSup.is()) return SCERR_EXPORT_CONNECT;
 
-    uno::Reference<sdbcx::XAppend> xColumnsAppend( xColumns, uno::UNO_QUERY );
-    DBG_ASSERT( xColumnsAppend.is(), "can't get columns XAppend" );
-    if (!xColumnsAppend.is()) return SCERR_EXPORT_CONNECT;
+        uno::Reference<sdbcx::XTablesSupplier> xTablesSupp =
+                            xDDSup->getDataDefinitionByConnection( xConnection );
+        DBG_ASSERT( xTablesSupp.is(), "can't get Data Definition" );
+        if (!xTablesSupp.is()) return SCERR_EXPORT_CONNECT;
 
-    const rtl::OUString* pColNames = aColNames.getConstArray();
-    const sal_Int32* pColTypes     = aColTypes.getConstArray();
-    const sal_Int32* pColLengths   = aColLengths.getConstArray();
-    const sal_Int32* pColScales    = aColScales.getConstArray();
-    long nCol;
+        uno::Reference<container::XNameAccess> xTables = xTablesSupp->getTables();
+        DBG_ASSERT( xTables.is(), "can't get Tables" );
+        if (!xTables.is()) return SCERR_EXPORT_CONNECT;
 
-    for (nCol=0; nCol<nColCount; nCol++)
-    {
-        uno::Reference<beans::XPropertySet> xColumnDesc = xColumnsFact->createDataDescriptor();
-        DBG_ASSERT( xColumnDesc.is(), "can't get column descriptor" );
-        if (!xColumnDesc.is()) return SCERR_EXPORT_CONNECT;
+        uno::Reference<sdbcx::XDataDescriptorFactory> xTablesFact( xTables, uno::UNO_QUERY );
+        DBG_ASSERT( xTablesFact.is(), "can't get tables factory" );
+        if (!xTablesFact.is()) return SCERR_EXPORT_CONNECT;
 
-        aAny <<= pColNames[nCol];
-        xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_NAME), aAny );
+        uno::Reference<sdbcx::XAppend> xTablesAppend( xTables, uno::UNO_QUERY );
+        DBG_ASSERT( xTablesAppend.is(), "can't get tables XAppend" );
+        if (!xTablesAppend.is()) return SCERR_EXPORT_CONNECT;
 
-        aAny <<= pColTypes[nCol];
-        xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_TYPE), aAny );
+        uno::Reference<beans::XPropertySet> xTableDesc = xTablesFact->createDataDescriptor();
+        DBG_ASSERT( xTableDesc.is(), "can't get table descriptor" );
+        if (!xTableDesc.is()) return SCERR_EXPORT_CONNECT;
 
-        aAny <<= pColLengths[nCol];
-        xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_PRECISION), aAny );
+        aAny <<= rtl::OUString( aTabName );
+        xTableDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_NAME), aAny );
 
-        aAny <<= pColScales[nCol];
-        xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_SCALE), aAny );
+        // create columns
 
-        xColumnsAppend->appendByDescriptor( xColumnDesc );
-    }
+        uno::Reference<sdbcx::XColumnsSupplier> xColumnsSupp( xTableDesc, uno::UNO_QUERY );
+        DBG_ASSERT( xColumnsSupp.is(), "can't get columns supplier" );
+        if (!xColumnsSupp.is()) return SCERR_EXPORT_CONNECT;
 
-    xTablesAppend->appendByDescriptor( xTableDesc );
+        uno::Reference<container::XNameAccess> xColumns = xColumnsSupp->getColumns();
+        DBG_ASSERT( xColumns.is(), "can't get columns" );
+        if (!xColumns.is()) return SCERR_EXPORT_CONNECT;
 
+        uno::Reference<sdbcx::XDataDescriptorFactory> xColumnsFact( xColumns, uno::UNO_QUERY );
+        DBG_ASSERT( xColumnsFact.is(), "can't get columns factory" );
+        if (!xColumnsFact.is()) return SCERR_EXPORT_CONNECT;
 
-    // re-open connection
-//  xConnection = xDrvMan->getConnectionWithInfo( aConnUrl, aProps );
-//  DBG_ASSERT( xConnection.is(), "can't get Connection" );
-//  if (!xConnection.is()) return SCERR_EXPORT_CONNECT;
+        uno::Reference<sdbcx::XAppend> xColumnsAppend( xColumns, uno::UNO_QUERY );
+        DBG_ASSERT( xColumnsAppend.is(), "can't get columns XAppend" );
+        if (!xColumnsAppend.is()) return SCERR_EXPORT_CONNECT;
 
-    // get row set for writing
-
-    uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
-                        rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
-                        uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
-    DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
-    if (!xRowProp.is()) return SCERR_EXPORT_CONNECT;
-
-    aAny <<= xConnection;
-    xRowProp->setPropertyValue(
-                rtl::OUString::createFromAscii(SC_DBPROP_ACTIVECONNECTION), aAny );
-
-    aAny <<= (sal_Int32) sdb::CommandType::TABLE;
-    xRowProp->setPropertyValue(
-                rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
-
-    aAny <<= rtl::OUString( aTabName );
-    xRowProp->setPropertyValue(
-                rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
-
-    xRowSet->execute();
-
-    // write data rows
-
-    uno::Reference<sdbc::XResultSetUpdate> xResultUpdate( xRowSet, uno::UNO_QUERY );
-    DBG_ASSERT( xResultUpdate.is(), "can't get XResultSetUpdate" );
-    if (!xResultUpdate.is()) return SCERR_EXPORT_CONNECT;
-
-    uno::Reference<sdbc::XRowUpdate> xRowUpdate( xRowSet, uno::UNO_QUERY );
-    DBG_ASSERT( xRowUpdate.is(), "can't get XRowUpdate" );
-    if (!xRowUpdate.is()) return SCERR_EXPORT_CONNECT;
-
-    USHORT nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
-    ScFieldEditEngine aEditEngine( aDocument.GetEditPool() );
-    String aString;
-    double fVal;
-
-    for ( USHORT nDocRow = nFirstDataRow; nDocRow <= nLastRow; nDocRow++ )
-    {
-        xResultUpdate->moveToInsertRow();
+        const rtl::OUString* pColNames = aColNames.getConstArray();
+        const sal_Int32* pColTypes     = aColTypes.getConstArray();
+        const sal_Int32* pColLengths   = aColLengths.getConstArray();
+        const sal_Int32* pColScales    = aColScales.getConstArray();
+        long nCol;
 
         for (nCol=0; nCol<nColCount; nCol++)
         {
-            USHORT nDocCol = nFirstCol + nCol;
+            uno::Reference<beans::XPropertySet> xColumnDesc = xColumnsFact->createDataDescriptor();
+            DBG_ASSERT( xColumnDesc.is(), "can't get column descriptor" );
+            if (!xColumnDesc.is()) return SCERR_EXPORT_CONNECT;
 
-            switch (pColTypes[nCol])
+            aAny <<= pColNames[nCol];
+            xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_NAME), aAny );
+
+            aAny <<= pColTypes[nCol];
+            xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_TYPE), aAny );
+
+            aAny <<= pColLengths[nCol];
+            xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_PRECISION), aAny );
+
+            aAny <<= pColScales[nCol];
+            xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_SCALE), aAny );
+
+            xColumnsAppend->appendByDescriptor( xColumnDesc );
+        }
+
+        xTablesAppend->appendByDescriptor( xTableDesc );
+
+        // re-open connection
+//      xConnection = xDrvMan->getConnectionWithInfo( aConnUrl, aProps );
+//      DBG_ASSERT( xConnection.is(), "can't get Connection" );
+//      if (!xConnection.is()) return SCERR_EXPORT_CONNECT;
+
+        // get row set for writing
+
+        uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
+                            rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
+                            uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
+        DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
+        if (!xRowProp.is()) return SCERR_EXPORT_CONNECT;
+
+        aAny <<= xConnection;
+        xRowProp->setPropertyValue(
+                    rtl::OUString::createFromAscii(SC_DBPROP_ACTIVECONNECTION), aAny );
+
+        aAny <<= (sal_Int32) sdb::CommandType::TABLE;
+        xRowProp->setPropertyValue(
+                    rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
+
+        aAny <<= rtl::OUString( aTabName );
+        xRowProp->setPropertyValue(
+                    rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
+
+        xRowSet->execute();
+
+        // write data rows
+
+        uno::Reference<sdbc::XResultSetUpdate> xResultUpdate( xRowSet, uno::UNO_QUERY );
+        DBG_ASSERT( xResultUpdate.is(), "can't get XResultSetUpdate" );
+        if (!xResultUpdate.is()) return SCERR_EXPORT_CONNECT;
+
+        uno::Reference<sdbc::XRowUpdate> xRowUpdate( xRowSet, uno::UNO_QUERY );
+        DBG_ASSERT( xRowUpdate.is(), "can't get XRowUpdate" );
+        if (!xRowUpdate.is()) return SCERR_EXPORT_CONNECT;
+
+        USHORT nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
+        ScFieldEditEngine aEditEngine( aDocument.GetEditPool() );
+        String aString;
+        double fVal;
+
+        nLastRow = nFirstDataRow - 1;       //! Test !!!!!!!
+
+        for ( USHORT nDocRow = nFirstDataRow; nDocRow <= nLastRow; nDocRow++ )
+        {
+            xResultUpdate->moveToInsertRow();
+
+            for (nCol=0; nCol<nColCount; nCol++)
             {
-                case sdbc::DataType::LONGVARCHAR:
-                    {
-                        ScBaseCell* pCell;
-                        aDocument.GetCell( nDocCol, nDocRow, nTab, pCell );
-                        if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
+                USHORT nDocCol = nFirstCol + nCol;
+
+                switch (pColTypes[nCol])
+                {
+                    case sdbc::DataType::LONGVARCHAR:
                         {
-                            if ( pCell->GetCellType() == CELLTYPE_EDIT )
-                            {   // #60761# Paragraphs erhalten
-                                aEditEngine.SetText( *((ScEditCell*)pCell)->GetData() );
-                                aString = aEditEngine.GetText( LINEEND_CRLF );
+                            ScBaseCell* pCell;
+                            aDocument.GetCell( nDocCol, nDocRow, nTab, pCell );
+                            if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
+                            {
+                                if ( pCell->GetCellType() == CELLTYPE_EDIT )
+                                {   // #60761# Paragraphs erhalten
+                                    aEditEngine.SetText( *((ScEditCell*)pCell)->GetData() );
+                                    aString = aEditEngine.GetText( LINEEND_CRLF );
+                                }
+                                else
+                                {
+                                    ULONG nFormat;
+                                    Color* pColor;
+                                    aDocument.GetNumberFormat( nDocCol, nDocRow, nTab, nFormat );
+                                    ScCellFormat::GetString( pCell, nFormat, aString, &pColor, *pNumFmt );
+                                }
+                                xRowUpdate->updateString( nCol+1, aString );
+                            }
+                            else
+                                xRowUpdate->updateNull( nCol+1 );
+                        }
+                        break;
+
+                    case sdbc::DataType::VARCHAR:
+                        aDocument.GetString( nDocCol, nDocRow, nTab, aString );
+                        xRowUpdate->updateString( nCol+1, aString );
+                        if ( nErr == eERR_OK && pColLengths[nCol] < aString.Len() )
+                            nErr = SCWARN_EXPORT_DATALOST;
+                        break;
+
+                        break;
+
+                    case sdbc::DataType::DATE:
+                        {
+                            aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
+                            // #39274# zwischen 0 Wert und 0 kein Wert unterscheiden
+                            BOOL bIsNull = (fVal == 0.0);
+                            if ( bIsNull )
+                                bIsNull = !aDocument.HasValueData( nDocCol, nDocRow, nTab );
+                            if ( bIsNull )
+                            {
+                                xRowUpdate->updateNull( nCol+1 );
+                                if ( nErr == eERR_OK &&
+                                        aDocument.HasStringData( nDocCol, nDocRow, nTab ) )
+                                    nErr = SCWARN_EXPORT_DATALOST;
                             }
                             else
                             {
-                                ULONG nFormat;
-                                Color* pColor;
-                                aDocument.GetNumberFormat( nDocCol, nDocRow, nTab, nFormat );
-                                ScCellFormat::GetString( pCell, nFormat, aString, &pColor, *pNumFmt );
+                                Date aDate = *(pNumFmt->GetNullDate());     // tools date
+                                aDate += (long)fVal;                        //! approxfloor?
+                                util::Date aUnoDate( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
+                                xRowUpdate->updateDate( nCol+1, aUnoDate );
                             }
-                            xRowUpdate->updateString( nCol+1, aString );
                         }
-                        else
-                            xRowUpdate->updateNull( nCol+1 );
-                    }
-                    break;
+                        break;
 
-                case sdbc::DataType::VARCHAR:
-                    aDocument.GetString( nDocCol, nDocRow, nTab, aString );
-                    xRowUpdate->updateString( nCol+1, aString );
-                    if ( nErr == eERR_OK && pColLengths[nCol] < aString.Len() )
-                        nErr = SCWARN_EXPORT_DATALOST;
-                    break;
-
-                    break;
-
-                case sdbc::DataType::DATE:
-                    {
+                    case sdbc::DataType::DECIMAL:
+                    case sdbc::DataType::BIT:
                         aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
-                        // #39274# zwischen 0 Wert und 0 kein Wert unterscheiden
-                        BOOL bIsNull = (fVal == 0.0);
-                        if ( bIsNull )
-                            bIsNull = !aDocument.HasValueData( nDocCol, nDocRow, nTab );
-                        if ( bIsNull )
-                        {
-                            xRowUpdate->updateNull( nCol+1 );
-                            if ( nErr == eERR_OK &&
-                                    aDocument.HasStringData( nDocCol, nDocRow, nTab ) )
-                                nErr = SCWARN_EXPORT_DATALOST;
-                        }
+                        if ( fVal == 0.0 && nErr == eERR_OK &&
+                                            aDocument.HasStringData( nDocCol, nDocRow, nTab ) )
+                            nErr = SCWARN_EXPORT_DATALOST;
+                        if ( pColTypes[nCol] == sdbc::DataType::BIT )
+                            xRowUpdate->updateBoolean( nCol+1, ( fVal != 0.0 ) );
                         else
-                        {
-                            Date aDate = *(pNumFmt->GetNullDate());     // tools date
-                            aDate += (long)fVal;                        //! approxfloor?
-                            util::Date aUnoDate( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
-                            xRowUpdate->updateDate( nCol+1, aUnoDate );
-                        }
-                    }
-                    break;
+                            xRowUpdate->updateDouble( nCol+1, fVal );
+                        break;
 
-                case sdbc::DataType::DECIMAL:
-                case sdbc::DataType::BIT:
-                    aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
-                    if ( fVal == 0.0 && nErr == eERR_OK &&
-                                        aDocument.HasStringData( nDocCol, nDocRow, nTab ) )
-                        nErr = SCWARN_EXPORT_DATALOST;
-                    if ( pColTypes[nCol] == sdbc::DataType::BIT )
-                        xRowUpdate->updateBoolean( nCol+1, ( fVal != 0.0 ) );
-                    else
+                    default:
+                        DBG_ERROR( "ScDocShell::DBaseExport: unknown FieldType" );
+                        if ( nErr == eERR_OK )
+                            nErr = SCWARN_EXPORT_DATALOST;
+                        aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
                         xRowUpdate->updateDouble( nCol+1, fVal );
-                    break;
+                }
+            }
 
-                default:
-                    DBG_ERROR( "ScDocShell::DBaseExport: unknown FieldType" );
-                    if ( nErr == eERR_OK )
-                        nErr = SCWARN_EXPORT_DATALOST;
-                    aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
-                    xRowUpdate->updateDouble( nCol+1, fVal );
+            xResultUpdate->insertRow();
+
+            //! error handling and recovery of old
+            //! ScDocShell::SbaSdbExport is still missing!
+
+            if ( !aProgress.SetStateOnPercent( nDocRow - nFirstRow ) )
+            {   // UserBreak
+                nErr = SCERR_EXPORT_DATA;
+                break;
             }
         }
-
-        xResultUpdate->insertRow();
-
-        //! error handling and recovery of old
-        //! ScDocShell::SbaSdbExport is still missing!
-
-        if ( !aProgress.SetStateOnPercent( nDocRow - nFirstRow ) )
-        {   // UserBreak
-            nErr = SCERR_EXPORT_DATA;
-            break;
-        }
+    }
+    catch ( sdbc::SQLException& )
+    {
+        nErr = SCERR_EXPORT_CONNECT;
+    }
+    catch ( uno::Exception& )
+    {
+        DBG_ERROR("Unexpected exception in database");
+        nErr = ERRCODE_IO_GENERAL;
     }
 
     return nErr;
