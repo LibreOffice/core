@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zipfile.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 10:58:16 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
             IOException if the specified file doesn't exist
             AccessViolationException if read access to the file is denied
 */
-bool ZipFile::IsZipFile(const std::string& FileName)
+bool ZipFile::IsZipFile(const std::string& /*FileName*/)
 {
     return true;
 }
@@ -106,7 +106,7 @@ bool ZipFile::IsZipFile(const std::string& FileName)
             IOException if the specified file doesn't exist or is no zip file
             AccessViolationException if read access to the file is denied
 */
-bool ZipFile::IsValidZipFileVersionNumber(const std::string& FileName)
+bool ZipFile::IsValidZipFileVersionNumber(const std::string& /*FileName*/)
 {
     return true;
 }
@@ -179,7 +179,7 @@ ZipFile::DirectoryPtr_t ZipFile::GetDirectory() const
 {
     DirectoryPtr_t dir(new Directory_t());
 
-    long lmax = GetFileLongestFileNameLength();
+    long lmax = GetFileLongestFileNameLength() + 1;
     char* szFileName = reinterpret_cast<char*>(_alloca(lmax));
 
     if (!szFileName)
