@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-27 07:57:11 $
+ *  last change: $Author: mt $ $Date: 2004-07-27 11:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,18 +97,6 @@ using namespace ::com::sun::star::security;
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star;
-
-void DigitalSignaturesDialog::SetState( SigState _eState )
-{
-    bool    bShowValid = _eState == S_VALID;
-    bool    bShowInvalid = _eState == S_BROKEN;
-
-    maSigsValidImg.Show( bShowValid );
-    maSigsValidFI.Show( bShowValid );
-    maSigsInvalidImg.Show( bShowInvalid );
-    maSigsInvalidFI.Show( bShowInvalid );
-}
 
 DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Reference< lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode, sal_Bool bReadOnly )
     :ModalDialog        ( pParent, XMLSEC_RES( RID_XMLSECDLG_DIGSIG ) )
@@ -135,8 +123,6 @@ DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Referenc
     maSignaturesLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
 
     FreeResource();
-
-    SetState( S_NONE );     // first hide state image & info
 
     mbVerifySignatures = true;
     mbSignaturesChanged = false;
@@ -239,7 +225,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
         maSignatureHelper.GetSecurityEnvironment()->getPersonalCertificates();
 
         uno::Reference<com::sun::star::xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureHelper.GetSecurityEnvironment();
-        CertificateChooser aChooser( this, xSecEnv, aCurrentSignatureInformations );
+        CertificateChooser aChooser( this, xSecEnv, maCurrentSignatureInformations );
         if( aChooser.Execute() )
         {
             uno::Reference< ::com::sun::star::security::XCertificate > xCert = aChooser.GetSelectedCertificate();
@@ -294,9 +280,9 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
             uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
             // Export old signatures...
-            int nInfos = aCurrentSignatureInformations.size();
+            int nInfos = maCurrentSignatureInformations.size();
             for ( int n = 0; n < nInfos; n++ )
-                maSignatureHelper.ExportSignature( xDocumentHandler, aCurrentSignatureInformations[n]);
+                maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[n]);
 
             // Create a new one...
             bool bDone = maSignatureHelper.CreateAndWriteSignature( xDocumentHandler );
@@ -338,16 +324,16 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
     if( maSignaturesLB.FirstSelected() )
     {
         USHORT nSelected = (USHORT) (sal_Int32) maSignaturesLB.FirstSelected()->GetUserData();
-        aCurrentSignatureInformations.erase( aCurrentSignatureInformations.begin()+nSelected );
+        maCurrentSignatureInformations.erase( maCurrentSignatureInformations.begin()+nSelected );
 
         // Export all other signatures...
         SignatureStreamHelper aStreamHelper = DocumentSignatureHelper::OpenSignatureStream( mxStore, embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, meSignatureMode );
         uno::Reference< io::XOutputStream > xOutputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
         uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
-        int nInfos = aCurrentSignatureInformations.size();
+        int nInfos = maCurrentSignatureInformations.size();
         for( int n = 0 ; n < nInfos ; ++n )
-            maSignatureHelper.ExportSignature( xDocumentHandler, aCurrentSignatureInformations[ n ] );
+            maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[ n ] );
 
         maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
 
@@ -379,61 +365,78 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecEnv = maSignatureHelper.GetSecurityEnvironment();
     uno::Reference< ::com::sun::star::security::XCertificate > xCert;
 
-    String  aCN_Id( String::CreateFromAscii( "CN" ) );
-    String  aNullStr;
-    int     nInfos = aCurrentSignatureInformations.size();
-    int     nValidCnt = 0;
-    bool    bValid;
-    for( int n = 0; n < nInfos; ++n )
+    String aCN_Id( String::CreateFromAscii( "CN" ) );
+    String aNullStr;
+    int nInfos = maCurrentSignatureInformations.size();
+    int nValidSigs = 0;
+
+    if( nInfos )
     {
-        const SignatureInformation& rInfo = aCurrentSignatureInformations[n];
-        xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
-
-        // If we don't get it, create it from signature data:
-        if ( !xCert.is() )
-            xCert = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
-
-        DBG_ASSERT( xCert.is(), "Certificate not found and can't be created!" );
-
-        String  aSubject;
-        String  aIssuer;
-        String  aDateTimeStr;
-        if( xCert.is() )
+        std::vector< rtl::OUString > aElementsToBeVerified = DocumentSignatureHelper::CreateElementList( mxStore, ::rtl::OUString(), meSignatureMode );
+        for( int n = 0; n < nInfos; ++n )
         {
-            aSubject = XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id );
-            aIssuer = XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id );
-            aDateTimeStr = XmlSec::GetDateTimeString( rInfo.ouDate, rInfo.ouTime );
-        }
-        else
-        {
-#if OSL_DEBUG_LEVEL > 1
-            aSubject = String::CreateFromAscii( "ERROR getting certificate!" );
-#endif
-        }
+            const SignatureInformation& rInfo = maCurrentSignatureInformations[n];
+            xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
-        bValid = true;
-        if( bValid )
-            ++nValidCnt;
+            // If we don't get it, create it from signature data:
+            if ( !xCert.is() )
+                xCert = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
 
-        Image           aImg( bValid? maSigsValidImg.GetImage() : maSigsInvalidImg.GetImage() );
-        SvLBoxEntry*    pEntry = maSignaturesLB.InsertEntry( aNullStr, aImg, aImg );
-        maSignaturesLB.SetEntryText( aSubject, pEntry, 1 );
-        maSignaturesLB.SetEntryText( aIssuer, pEntry, 2 );
-        maSignaturesLB.SetEntryText( aDateTimeStr, pEntry, 3 );
-        pEntry->SetUserData( ( void* ) n );     // missuse user data as index
+            DBG_ASSERT( xCert.is(), "Certificate not found and can't be created!" );
+
+            String  aSubject;
+            String  aIssuer;
+            String  aDateTimeStr;
+            if( xCert.is() )
+            {
+                aSubject = XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id );
+                aIssuer = XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id );
+                aDateTimeStr = XmlSec::GetDateTimeString( rInfo.ouDate, rInfo.ouTime );
+            }
+
+            // New signatures are not verified, must be valid. Status is INIT.
+            bool bValid = ( rInfo.nStatus == STATUS_VERIFY_SUCCEED ) || ( rInfo.nStatus == STATUS_INIT );
+            if ( bValid )
+            {
+                // Can only be valid if ALL streams are signed, which means real stream count == signed stream count
+                int nRealCount = 0;
+                for ( int i = rInfo.vSignatureReferenceInfors.size(); i; )
+                {
+                    const SignatureReferenceInformation& rInf = rInfo.vSignatureReferenceInfors[--i];
+                    // There is also an extra entry of type TYPE_SAMEDOCUMENT_REFERENCE because of signature date.
+                    if ( ( rInf.nType == TYPE_BINARYSTREAM_REFERENCE ) || ( rInf.nType == TYPE_XMLSTREAM_REFERENCE ) )
+                        nRealCount++;
+                }
+                bValid = ( aElementsToBeVerified.size() == nRealCount );
+
+                if( bValid )
+                    nValidSigs++;
+            }
+
+            Image aImg( bValid? maSigsValidImg.GetImage() : maSigsInvalidImg.GetImage() );
+            SvLBoxEntry* pEntry = maSignaturesLB.InsertEntry( aNullStr, aImg, aImg );
+            maSignaturesLB.SetEntryText( aSubject, pEntry, 1 );
+            maSignaturesLB.SetEntryText( aIssuer, pEntry, 2 );
+            maSignaturesLB.SetEntryText( aDateTimeStr, pEntry, 3 );
+            pEntry->SetUserData( ( void* ) n );     // missuse user data as index
+        }
     }
 
-    bValid = ( nValidCnt == nInfos );
-    maSigsInvalidImg.SetImage( bValid? maSigsValidImg.GetImage() : maSigsInvalidImg.GetImage() );
+    bool bAllSigsValid = ( nValidSigs == nInfos );
+    bool bShowValidState = nInfos && bAllSigsValid;
+    bool bShowInvalidState = nInfos && !bAllSigsValid;
+    maSigsValidImg.Show( bShowValidState );
+    maSigsValidFI.Show( bShowValidState );
+    maSigsInvalidImg.Show( bShowInvalidState );
+    maSigsInvalidFI.Show( bShowInvalidState );
 
-    SetState( bValid? S_VALID : S_BROKEN );
 
     SignatureHighlightHdl( NULL );
 }
 
 void DigitalSignaturesDialog::ImplGetSignatureInformations()
 {
-    aCurrentSignatureInformations.clear();
+    maCurrentSignatureInformations.clear();
 
     maSignatureHelper.StartMission();
 
@@ -441,15 +444,13 @@ void DigitalSignaturesDialog::ImplGetSignatureInformations()
     if ( aStreamHelper.xSignatureStream.is() )
     {
         uno::Reference< io::XInputStream > xInputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
-        bool bVerifyOK = maSignatureHelper.ReadAndVerifySignature( xInputStream );
-
-        if ( bVerifyOK )
-            aCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
+        maSignatureHelper.ReadAndVerifySignature( xInputStream );
     }
+    maSignatureHelper.EndMission();
+
+    maCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
 
     aStreamHelper.Clear();
-
-    maSignatureHelper.EndMission();
 
     mbVerifySignatures = false;
 }
@@ -459,7 +460,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
     if( maSignaturesLB.FirstSelected() )
     {
         USHORT nSelected = (USHORT) (sal_Int32) maSignaturesLB.FirstSelected()->GetUserData();
-        const SignatureInformation& rInfo = aCurrentSignatureInformations[ nSelected ];
+        const SignatureInformation& rInfo = maCurrentSignatureInformations[ nSelected ];
         uno::Reference< dcss::security::XCertificate > xCert = maSignatureHelper.GetSecurityEnvironment()->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
         // If we don't get it, create it from signature data:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-27 07:56:35 $
+ *  last change: $Author: mt $ $Date: 2004-07-27 11:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,18 +94,13 @@ class HeaderBar;
 class DigitalSignaturesDialog : public ModalDialog
 {
 private:
-    enum SigState   { S_NONE, S_VALID, S_BROKEN };
-
     XMLSignatureHelper      maSignatureHelper;
 
     css::uno::Reference < css::embed::XStorage > mxStore;
-    SignatureInformations   aCurrentSignatureInformations;
+    SignatureInformations   maCurrentSignatureInformations;
     bool                    mbVerifySignatures;
     bool                    mbSignaturesChanged;
     DocumentSignatureMode   meSignatureMode;
-
-    // HACK, until sig in storage works
-    rtl::OUString       maSigFileName;
 
     FixedText           maHintDocFT;
     FixedText           maHintBasicFT;
@@ -136,7 +131,6 @@ private:
     void                ImplFillSignaturesBox();
     void                ImplShowSignaturesDetails();
 
-    void                SetState( SigState _eState );
 public:
     DigitalSignaturesDialog( Window* pParent, cssu::Reference< css::lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode, sal_Bool bReadOnly );
     ~DigitalSignaturesDialog();
@@ -146,9 +140,6 @@ public:
 
             // Set the storage which should be signed or verified
     void    SetStorage( const cssu::Reference < css::embed::XStorage >& rxStore );
-
-            // HACK: Set a signature file name, use this until sig in storage works!
-    void    SetSignatureFileName( const rtl::OUString& rName ) { maSigFileName = rName; }
 
                 // Execute the dialog...
     short       Execute();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-27 09:00:35 $
+ *  last change: $Author: mt $ $Date: 2004-07-27 11:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,8 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
     SvLBoxEntry*    pParent = NULL;
     for( int i = nCnt; i; )
     {
-           pParent = InsertCert( pParent, XmlSec::GetContentPart( pCertPath[ --i ]->getSubjectName(), aCN_Id ), pCertPath[ i ] );
+        const Reference< security::XCertificate > rCert = pCertPath[ --i ];
+           pParent = InsertCert( pParent, XmlSec::GetContentPart( rCert->getSubjectName(), aCN_Id ), rCert );
     }
 
     maCertPathLB.Select( pParent );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 12:13:28 $
+ *  last change: $Author: mt $ $Date: 2004-07-27 11:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,9 +165,9 @@ com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInf
         aSignatureHelper.ReadAndVerifySignature( xInputStream );
     }
 
-    aStreamHelper.Clear();
-
     aSignatureHelper.EndMission();
+
+    aStreamHelper.Clear();
 
     uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecEnv = aSignatureHelper.GetSecurityEnvironment();
 
@@ -187,6 +187,8 @@ com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInf
 
             aInfos[n].SignatureDate = String( rInfo.ouDate ).ToInt32();
             aInfos[n].SignatureTime = String( rInfo.ouTime ).ToInt32();
+
+            DBG_ASSERT( rInfo.nStatus != STATUS_INIT, "Signature not processed!" );
 
             aInfos[n].SignatureIsValid = ( rInfo.nStatus == STATUS_VERIFY_SUCCEED );
 
