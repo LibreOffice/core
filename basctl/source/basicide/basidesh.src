@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:13:17 $
+ *  last change: $Author: kz $ $Date: 2002-01-25 21:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1002,7 +1002,7 @@ String RID_STR_QUERYDELDIALOG
     Text [ italian ] = "Volete cancellare il dialogo XX ?" ;
     Text [ spanish ] = "¿Desea eliminar el diálogo XX?" ;
     Text [ french ] = "Voulez-vous supprimer la boîte de dialogue XX ?" ;
-    Text [ swedish ] = "Vill Du radera dialogen XX?" ;
+    Text [ swedish ] = "Vill du radera dialogrutan XX?" ;
     Text [ danish ] = "Vil du slette dialogen XX ?" ;
     Text [ portuguese_brazilian ] = "M?hten Sie den Dialog XX l?chen ?" ;
     Text [ portuguese ] = "Deseja eliminar o diálogo XX ?" ;
