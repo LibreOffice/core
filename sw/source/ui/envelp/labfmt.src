@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: rt $ $Date: 2000-12-08 18:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ String STR_HDIST
     Text[ chinese_simplified ] = "Ë®Æ½¼ä¸ô";
     Text[ russian ] = "Øàã ïî ãîğèçîíò.";
     Text[ polish ] = "Odstêp poziomy";
-    Text[ japanese ] = "‰¡ŠÔŠu";
+    Text[ japanese ] = "‰¡‚ÌŠÔŠu";
     Text[ chinese_traditional ] = "¤ô¥­¶¡¹j";
     Text[ arabic ] = "ÇáÎØæÉ ÇáÃİŞíÉ";
     Text[ greek ] = "Ïñéæüíôéá áğüóôáóç";
@@ -460,7 +460,7 @@ String STR_VDIST
     Text[ chinese_simplified ] = "´¹Ö±¼ä¸ô";
     Text[ russian ] = "Øàã ïî âåğòèê.";
     Text[ polish ] = "Odstêp pionowy";
-    Text[ japanese ] = "cŠÔŠu";
+    Text[ japanese ] = "c‚ÌŠÔŠu";
     Text[ chinese_traditional ] = "««ª½¶¡¹j";
     Text[ arabic ] = "ÇáÎØæÉ ÇáÑÃÓíÉ";
     Text[ greek ] = "Êáôáê. áğüóôáóç";
