@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:29:38 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 #include "scripttypeitem.hxx"
 #include "svditext.hxx"
 #include "svdoutl.hxx"
+#include "sdtfchim.hxx"
 #include "svdxout.hxx"
 #include "svdotext.hxx"
 #include "svdundo.hxx"
@@ -497,8 +498,10 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, BOOL bNoPaint, O
     }
     pOutlView->SetControlWord(nStat);
     pOutlView->SetBackgroundColor( aBackground );
-    if (pText!=NULL) {
+    if (pText!=NULL)
+    {
         pOutlView->SetAnchorMode((EVAnchorMode)(pText->GetOutlinerViewAnchorMode()));
+        pTextEditOutliner->SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)pText->GetItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
     }
     pOutlView->SetOutputArea(aTextEditArea);
     pTextEditOutliner->SetUpdateMode(TRUE);
