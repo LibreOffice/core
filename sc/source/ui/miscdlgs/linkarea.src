@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:53:18 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ french ] = "~URL de la source de donn�es externe";
         Text[ spanish ] = "~URL de la fuente de datos externa";
         Text[ italian ] = "URL della sorgente dati esterna";
-        Text[ danish ] = "~URL til den eksterne datakilde";
+        Text[ danish ] = "URL til den ~eksterne datakilde";
         Text[ swedish ] = "~URL f�r extern datak�lla";
         Text[ polish ] = "Adr~es URL zewn�trznego �r�d�a danych";
         Text[ portuguese_brazilian ] = "~URL da fonte de dados externa";
@@ -117,6 +117,8 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ hebrew ] = "~URL der externen Datenquelle";
         Text[ hindi ] = "~बाहरी ड़ॉटा मूल की URL";
         Text[ slovak ] = "URL ~externého zdroja dát";
+        Text[ hungarian ] = "~Külső adatforrás:";
+        Text[ slovenian ] = "URL zunanj~ega vira podatkov";
     };
     ComboBox CB_URL
     {
@@ -146,7 +148,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ french ] = "(URL du document source dans le syst�me de fichiers local ou dans l'Internet)";
         Text[ spanish ] = "(URL del documento fuente en el sistema de archivos local o en Internet)";
         Text[ italian ] = "(URL del documento sorgente nel sistema di dati locale oppure in Internet)";
-        Text[ danish ] = "(Kildedokumentets URL i det lokale filsystem eller p� Internettet)";
+        Text[ danish ] = "(Indtast her kildedokumentets URL til det lokale filsystem eller p� Internet.)";
         Text[ swedish ] = "(K�lldokumentets URL i det lokala filsystemet eller p� Internet)";
         Text[ polish ] = "(Adres URL dokumentu �r�d�owego w lokalnym systemie plik�w lub w Internecie)";
         Text[ portuguese_brazilian ] = "(Digite a URL do documento-origem no sistema de arquivos local ou na Internet)";
@@ -163,6 +165,8 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ hebrew ] = "(URL des Quelldokuments im lokalen Dateisystem oder im Internet)";
         Text[ hindi ] = "(मूल लेखपत्र का URL को स्थानिक फाइल सिस्टम में अथवा इन्टरनेट् में प्रविष्ट कीजिए ।)";
         Text[ slovak ] = "(Tu zadajte URL zdrojového dokumentu v lokálnom systéme alebo na internete.)";
+        Text[ hungarian ] = "(Írja be a forrásdokumentum fájlnevét vagy URL-jét.)";
+        Text[ slovenian ] = "(Tu vpišite URL izvornega dokumenta v lokalnem datotečnem sistemu ali na Internetu.)";
     };
     FixedText FT_RANGES
     {
@@ -195,6 +199,8 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ hebrew ] = "~Verfügbare Tabellen/Bereiche";
         Text[ hindi ] = "~प्राप्य सारणी/फैलाव";
         Text[ slovak ] = "Dostupné t~abuľky/oblasti";
+        Text[ hungarian ] = "~Rendelkezésre álló táblázatok/tartományok";
+        Text[ slovenian ] = "~Razpoložljive tabele / obsegi";
     };
     MultiListBox LB_RANGES
     {
@@ -219,7 +225,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ french ] = "~Actualisation toutes les";
         Text[ spanish ] = "Actuali~zar cada";
         Text[ italian ] = "Aggiorna ogni";
-        Text[ danish ] = "~Opdater alle";
+        Text[ danish ] = "~Opdater efter";
         Text[ swedish ] = "Uppd~atering var";
         Text[ polish ] = "~Aktualizuj co";
         Text[ portuguese_brazilian ] = "~Atualizar a cada";
@@ -236,6 +242,8 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ hebrew ] = "~Aktualisierung alle";
         Text[ hindi ] = "हरेक को ~अपडेट् करो";
         Text[ slovak ] = "Akt~ualizovať každých";
+        Text[ hungarian ] = "~Frissítés";
+        Text[ slovenian ] = "~Posodobi vsakih";
     };
     NumericField NF_DELAY
     {
@@ -279,6 +287,8 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ hebrew ] = "‮שניות‬";
         Text[ hindi ] = "सेकन्ड";
         Text[ slovak ] = "Sekúnd";
+        Text[ hungarian ] = "másodpercenként";
+        Text[ slovenian ] = "sekund";
     };
     Text[ english_us ] = "External Data";
     Text[ portuguese ] = "Dados externos";
@@ -305,7 +315,11 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ hebrew ] = "Externe Daten";
     Text[ hindi ] = "बाहरी ड़ॉटा";
     Text[ slovak ] = "Externé dáta";
+    Text[ hungarian ] = "Külső adatok";
+    Text[ slovenian ] = "Zunanji podatki";
 };
+
+
 
 
 
