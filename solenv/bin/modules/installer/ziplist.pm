@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: is $ $Date: 2004-07-29 11:09:48 $
+#   last change: $Author: rt $ $Date: 2004-07-30 16:37:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -514,6 +514,9 @@ sub replace_all_variables_in_pathes
         foreach $key (keys %{$variableshashref})
         {
             my $value = $variableshashref->{$key};
+
+            if (( $line =~ /\{$key\}/ ) && ( $value eq "" )) { $line = ".\n"; }
+
             $line =~ s/\{\Q$key\E\}/$value/g;
         }
 
@@ -562,6 +565,9 @@ sub remove_ending_separator
         my $line = ${$patharrayref}[$i];
 
         installer::remover::remove_ending_pathseparator(\$line);
+
+        $line =~ s/\s*$//;
+        $line = $line . "\n";
 
         ${$patharrayref}[$i] = $line;
     }
@@ -701,7 +707,7 @@ sub simplify_path
 
     my $change = 0;
 
-    while ( $oldpath =~ /(^.*)(\Q$installer::globals::separator\E.*?)(\Q$installer::globals::separator\E\.\.)(\Q$installer::globals::separator\E.*$)/ )
+    while ( $oldpath =~ /(^.*)(\Q$installer::globals::separator\E.*\w+?)(\Q$installer::globals::separator\E\.\.)(\Q$installer::globals::separator\E.*$)/ )
     {
         my $part1 = $1;
         my $part2 = $4;

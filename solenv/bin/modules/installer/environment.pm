@@ -2,9 +2,9 @@
 #
 #   $RCSfile: environment.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 14:56:35 $
+#   last change: $Author: rt $ $Date: 2004-07-30 16:37:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,14 +94,9 @@ sub create_pathvariables
 
     my $solarenvpath = "";
 
-    if (!($installer::globals::product =~ /OpenOffice/i ))
-    {
-        if ( $ENV{'SO_PACK'} ) { $solarenvpath  = $ENV{'SO_PACK'}; }
-        else { installer::exiter::exit_program("ERROR: Environment variable SO_PACK not set!", "create_pathvariables"); }
-
-        # overriding with STAR_INSTPATH, if set
-        if ( $ENV{'STAR_INSTPATH'} ) { $solarenvpath = $ENV{'STAR_INSTPATH'}; }
-    }
+    if ( $ENV{'SO_PACK'} ) { $solarenvpath  = $ENV{'SO_PACK'}; }
+    # overriding with STAR_INSTPATH, if set
+    if ( $ENV{'STAR_INSTPATH'} ) { $solarenvpath = $ENV{'STAR_INSTPATH'}; }
 
     $variables{'solarenvpath'} = $solarenvpath;
 
