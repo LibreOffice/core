@@ -117,7 +117,10 @@ LOCALPYFILES= \
 # native - "Native" software distribution for the platform
 # portable - Portable software distribution
 
-.IF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
+.IF "$(FORMAT)"!="" && "$(EPM)"==""
+ALLTAR : $(LOCALPYFILES)
+    @echo "No EPM: do no packaging at this stage"
+.ELIF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : openoffice
 .ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : updatepack
