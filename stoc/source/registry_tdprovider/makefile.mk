@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kso $ $Date: 2002-11-11 08:35:47 $
+#   last change: $Author: kso $ $Date: 2002-11-13 16:01:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,8 +83,12 @@ SLOFILES=	\
         $(SLO)$/tdef.obj	\
         $(SLO)$/tdenum.obj	\
         $(SLO)$/tdcomp.obj	\
+        $(SLO)$/tdconsts.obj	\
         $(SLO)$/tdiface.obj \
+        $(SLO)$/tdmodule.obj \
+        $(SLO)$/tdprop.obj \
         $(SLO)$/tdservice.obj \
+        $(SLO)$/tdsingleton.obj \
         $(SLO)$/rdbtdp_tdenumeration.obj
 
 

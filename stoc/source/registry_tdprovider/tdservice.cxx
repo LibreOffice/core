@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdservice.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-11 11:36:48 $
+ *  last change: $Author: kso $ $Date: 2002-11-13 16:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #include <osl/diagnose.h>
 #endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -75,6 +79,87 @@ using namespace com::sun::star;
 
 namespace stoc_rdbtdp
 {
+
+//==================================================================================================
+//
+// class PropertyTypeDescriptionImpl
+//
+//==================================================================================================
+class PropertyTypeDescriptionImpl : public WeakImplHelper1< XPropertyTypeDescription >
+{
+    OUString                      _aName;
+    Reference< XTypeDescription > _xTD;
+    sal_Int16                     _nFlags;
+
+public:
+    PropertyTypeDescriptionImpl( const OUString & rName,
+                                 const Reference< XTypeDescription > & xTD,
+                                 sal_Int16 nFlags )
+    : _aName( rName ), _xTD( xTD ), _nFlags( nFlags )
+    {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    }
+    virtual ~PropertyTypeDescriptionImpl();
+
+    // XTypeDescription
+    virtual TypeClass SAL_CALL getTypeClass()
+        throw( RuntimeException );
+    virtual OUString SAL_CALL getName()
+        throw( RuntimeException );
+
+    // XPropertyTypeDescription
+    virtual sal_Int16 SAL_CALL getPropertyFlags()
+        throw ( RuntimeException );
+    virtual Reference< XTypeDescription > SAL_CALL getPropertyTypeDescription()
+        throw ( RuntimeException );
+};
+
+//__________________________________________________________________________________________________
+// virtual
+PropertyTypeDescriptionImpl::~PropertyTypeDescriptionImpl()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
+
+// XTypeDescription
+//__________________________________________________________________________________________________
+// virtual
+TypeClass PropertyTypeDescriptionImpl::getTypeClass()
+    throw ( RuntimeException )
+{
+    return TypeClass_PROPERTY;
+}
+//__________________________________________________________________________________________________
+// virtual
+OUString PropertyTypeDescriptionImpl::getName()
+    throw ( RuntimeException )
+{
+    return _aName;
+}
+
+// XPropertyTypeDescription
+//__________________________________________________________________________________________________
+// virtual
+sal_Int16 SAL_CALL PropertyTypeDescriptionImpl::getPropertyFlags()
+    throw ( RuntimeException )
+{
+    return _nFlags;
+}
+
+//__________________________________________________________________________________________________
+// virtual
+Reference< XTypeDescription > SAL_CALL
+PropertyTypeDescriptionImpl::getPropertyTypeDescription()
+    throw ( RuntimeException )
+{
+    return _xTD;
+}
+
+//==================================================================================================
+//
+// ServiceTypeDescriptionImpl implementation
+//
+//==================================================================================================
 
 //__________________________________________________________________________________________________
 // virtual
@@ -148,7 +233,7 @@ ServiceTypeDescriptionImpl::getOptionalInterfaces()
 
 //__________________________________________________________________________________________________
 // virtual
-Sequence< PropertyDescription > SAL_CALL
+Sequence< Reference< XPropertyTypeDescription > > SAL_CALL
 ServiceTypeDescriptionImpl::getProperties()
     throw ( RuntimeException )
 {
@@ -160,29 +245,31 @@ ServiceTypeDescriptionImpl::getProperties()
             _aBytes.getLength(), sal_False );
 
         sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
-        Sequence< PropertyDescription > * pTempProps =
-            new Sequence< PropertyDescription >( nFields );
-        PropertyDescription * pProps = pTempProps->getArray();
+        Sequence< Reference< XPropertyTypeDescription > > * pTempProps =
+            new Sequence< Reference< XPropertyTypeDescription > >( nFields );
+        Reference< XPropertyTypeDescription > * pProps = pTempProps->getArray();
 
         while ( nFields-- )
         {
-            // PropertyDescription.Name
-            pProps[ nFields ].Name = aReader.getFieldName( nFields );
+            // name
+            OUStringBuffer aName( _aName );
+            aName.appendAscii( "." );
+            aName.append( aReader.getFieldName( nFields ) );
 
-            // PropertyDescription.TypeDescription
+            // type description
+            Reference< XTypeDescription > xTD;
             try
             {
                 _xTDMgr->getByHierarchicalName(
                     aReader.getFieldType( nFields ).replace( '/', '.' ) )
-                        >>= pProps[ nFields ].TypeDescription;
+                        >>= xTD;
             }
             catch ( NoSuchElementException const & )
             {
             }
-            OSL_ENSURE( pProps[ nFields ].TypeDescription.is(),
-                        "### no type description for property!" );
+            OSL_ENSURE( xTD.is(), "### no type description for property!" );
 
-            // PropertyDescription.Flags
+            // flags
             RTFieldAccess nFlags = aReader.getFieldAccess( nFields );
 
             sal_Int16 nAttribs = 0;
@@ -217,7 +304,10 @@ ServiceTypeDescriptionImpl::getProperties()
             OSL_ENSURE( !(nFlags & RT_ACCESS_DEFAULT),
                         "### RT_ACCESS_DEAFAULT is unexpected here" );
 
-            pProps[ nFields ].Flags = nAttribs;
+            pProps[ nFields ]
+                = new PropertyTypeDescriptionImpl( aName.makeStringAndClear(),
+                                                   xTD,
+                                                   nAttribs );
         }
 
         ClearableMutexGuard aGuard( _aMutex );

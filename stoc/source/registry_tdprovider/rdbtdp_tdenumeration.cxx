@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbtdp_tdenumeration.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:35:46 $
+ *  last change: $Author: kso $ $Date: 2002-11-13 16:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 #ifndef _REGISTRY_REFLREAD_HXX_
 #include <registry/reflread.hxx>
@@ -320,7 +323,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
 
     for (;;)
     {
-        if ( !m_aCurrentModuleSubKeys.empty() )
+        if ( !m_aCurrentModuleSubKeys.empty() || !m_aTypeDescs.empty() )
         {
             // Okay, there is at least one more element.
             return true;
@@ -450,6 +453,74 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                 }
             }
         }
+
+        /////////////////////////////////////////////////////////////////////
+        // Special handling for constants contained directly in module.
+        /////////////////////////////////////////////////////////////////////
+
+        // Constants requested?
+        bool bIncludeConstants = ( m_aTypes.getLength() == 0 );
+        if ( !bIncludeConstants )
+        {
+            for ( sal_Int32 m = 0; m < m_aTypes.getLength(); ++m )
+            {
+                if ( m_aTypes[ m ] == uno::TypeClass_CONSTANT )
+                {
+                    bIncludeConstants = true;
+                    break;
+                }
+            }
+
+        }
+
+        if ( bIncludeConstants )
+        {
+            if ( m_aModuleKeys.front()->getValueType()
+                    == registry::RegistryValueType_BINARY )
+            {
+                try
+                {
+                    uno::Sequence< sal_Int8 > aBytes(
+                        m_aModuleKeys.front()->getBinaryValue() );
+
+                    RegistryTypeReader aReader(
+                        m_aLoader, (const sal_uInt8 *)aBytes.getConstArray(),
+                        aBytes.getLength(), sal_False );
+
+                    if ( aReader.getTypeClass() == RT_TYPE_MODULE )
+                    {
+                        sal_uInt16 nFields
+                            = (sal_uInt16)aReader.getFieldCount();
+                        while ( nFields-- )
+                        {
+                            rtl::OUStringBuffer aName(
+                                aReader.getTypeName().replace( '/', '.' ) );
+                            aName.appendAscii( "." );
+                            aName.append( aReader.getFieldName( nFields ) );
+
+                            uno::Any aValue(
+                                getRTValue(
+                                    aReader.getFieldConstValue( nFields ) ) );
+
+                            m_aTypeDescs.push_back(
+                                new ConstantTypeDescriptionImpl(
+                                        aName.makeStringAndClear(), aValue ) );
+                        }
+                    }
+                }
+                catch ( registry::InvalidRegistryException const & )
+                {
+                    // getBinaryValue
+
+                    OSL_ENSURE( sal_False,
+                                "TypeDescriptionEnumerationImpl::queryMore "
+                                "- Caught InvalidRegistryException!" );
+                }
+            }
+        }
+
+        /////////////////////////////////////////////////////////////////////
+
 /*
    @@@ m_aModuleKeys.front() may have open sub keys (may be contained in
        both m_aModuleKeys and m_aCurrentModuleSubKeys)!
@@ -483,6 +554,15 @@ TypeDescriptionEnumerationImpl::queryNext()
         if ( !queryMore() )
             return uno::Reference< reflection::XTypeDescription >();
 
+        uno::Reference< reflection::XTypeDescription > xTD;
+
+        if ( !m_aTypeDescs.empty() )
+        {
+            xTD = m_aTypeDescs.front();
+            m_aTypeDescs.pop_front();
+            return xTD;
+        }
+
         // Note: xKey is already opened.
         uno::Reference< registry::XRegistryKey >
             xKey( m_aCurrentModuleSubKeys.front() );
@@ -493,7 +573,6 @@ TypeDescriptionEnumerationImpl::queryNext()
         // called even in case of exceptions).
         RegistryKeyCloser aCloser( xKey );
 */
-        uno::Reference< reflection::XTypeDescription > xTD;
         try
         {
             {

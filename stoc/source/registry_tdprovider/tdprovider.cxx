@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 11:18:50 $
+ *  last change: $Author: kso $ $Date: 2002-11-13 16:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,9 +465,16 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
         }
 
         case RT_TYPE_MODULE:
-            // @@@ not quite correct, XModuleTypeDescription missing.
+        {
+            Reference< XTypeDescriptionEnumerationAccess > xTDEA(
+                xNameAccess, UNO_QUERY );
+
+            OSL_ENSURE( xTDEA.is(),
+                        "No XTypeDescriptionEnumerationAccess!" );
+
             return com::sun::star::uno::Reference< XTypeDescription >(
-                new TypeDescriptionImpl( TypeClass_MODULE, aName ) );
+                new ModuleTypeDescriptionImpl( xTDEA, aName ) );
+        }
 
         case RT_TYPE_STRUCT:
             return com::sun::star::uno::Reference< XTypeDescription >(
@@ -503,14 +510,24 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
             return com::sun::star::uno::Reference< XTypeDescription >(
                 new ServiceTypeDescriptionImpl( xNameAccess, aName, rData ) );
 
-// @@@ X...Typedescription + TypeClass missing
-//        case RT_TYPE_CONSTANTS:
-//        case RT_TYPE_SINGLETON:
+        case RT_TYPE_CONSTANTS:
+            return com::sun::star::uno::Reference< XTypeDescription >(
+                new ConstantsTypeDescriptionImpl( aName, rData ) );
 
-//        case RT_TYPE_INVALID:
-//        case RT_TYPE_OBJECT:      // deprecated and not used
-//        case RT_TYPE_UNION:       // deprecated and not used
-        default: // existing registry node
+        case RT_TYPE_SINGLETON:
+            return com::sun::star::uno::Reference< XTypeDescription >(
+                new SingletonTypeDescriptionImpl( xNameAccess,
+                                                  aName,
+                                                  aReader.getSuperTypeName()
+                                                    .replace( '/', '.' ) ) );
+        case RT_TYPE_INVALID:
+        case RT_TYPE_OBJECT:      // deprecated and not used
+        case RT_TYPE_UNION:       // deprecated and not used
+            OSL_ENSURE( sal_False, "createTypeDescription - Unsupported Type!" );
+            break;
+
+        default:
+            OSL_ENSURE( sal_False, "createTypeDescription - Unknown Type!" );
             break;
     }
 

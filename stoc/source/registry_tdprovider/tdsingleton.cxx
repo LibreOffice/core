@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: XServiceTypeDescription.idl,v $
+ *  $RCSfile: tdsingleton.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-13 15:56:27 $
+ *  last change: $Author: kso $ $Date: 2002-11-13 16:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,69 +59,80 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_reflection_XServiceTypeDescription_idl__
-#define __com_sun_star_reflection_XServiceTypeDescription_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_reflection_XInterfaceTypeDescription_idl__
-#include <com/sun/star/reflection/XInterfaceTypeDescription.idl>
-#endif
-#ifndef __com_sun_star_reflection_XPropertyTypeDescription_idl__
-#include <com/sun/star/reflection/XPropertyTypeDescription.idl>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
-//=============================================================================
+#ifndef _STOC_RDBTDP_BASE_HXX
+#include "base.hxx"
+#endif
 
- module com {  module sun {  module star {  module reflection {
+using namespace com::sun::star;
 
-//=============================================================================
-
-/** Reflects a service.
-
-    <p>The type class of this type is
-    <member scope="com::sun::star::uno">TypeClass::SERVICE</type>.
-  */
-interface XServiceTypeDescription : com::sun::star::reflection::XTypeDescription
+namespace stoc_rdbtdp
 {
-    /** Returns the type descriptions of the mandatory services
-        defined for this service.
 
-        @return a sequence containing service type descriptions.
-      */
-    sequence< XServiceTypeDescription > getMandatoryServices();
+//__________________________________________________________________________________________________
+// virtual
+SingletonTypeDescriptionImpl::~SingletonTypeDescriptionImpl()
+{
+    delete _pServiceTD;
 
-    /** Returns the type descriptions of the optional services
-        defined for this service.
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
 
-        @return a sequence containing service type descriptions.
-      */
-    sequence< XServiceTypeDescription > getOptionalServices();
+// XTypeDescription
+//__________________________________________________________________________________________________
+// virtual
+TypeClass SingletonTypeDescriptionImpl::getTypeClass()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return TypeClass_SINGLETON;
+}
+//__________________________________________________________________________________________________
+// virtual
+OUString SingletonTypeDescriptionImpl::getName()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return _aName;
+}
 
-    /** Returns the type descriptions of the mandatory interfaces
-        defined for this service.
+// XSingletonTypeDescription
+//__________________________________________________________________________________________________
+// virtual
+Reference< XServiceTypeDescription > SAL_CALL
+SingletonTypeDescriptionImpl::getService()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    if ( !_pServiceTD )
+    {
+        Reference< XServiceTypeDescription > * pServiceTD
+            = new Reference< XServiceTypeDescription >();
+        try
+        {
+            _xTDMgr->getByHierarchicalName( _aServiceName ) >>= *pServiceTD;
+        }
+        catch ( NoSuchElementException const & )
+        {
+        }
+        OSL_ENSURE( (*pServiceTD).is(), "### no type description for service!" );
 
-        @return a sequence containing interface type descriptions.
-      */
-    sequence< XInterfaceTypeDescription > getMandatoryInterfaces();
+        ClearableMutexGuard aGuard( _aMutex );
+        if ( _pServiceTD )
+        {
+            aGuard.clear();
+            delete pServiceTD;
+        }
+        else
+        {
+            _pServiceTD = pServiceTD;
+        }
+    }
 
-    /** Returns the type descriptions of the optional interface
-        defined for this service.
+    return *_pServiceTD;
+}
 
-        @return a sequence containing interface type descriptions.
-      */
-    sequence< XInterfaceTypeDescription > getOptionalInterfaces();
+}
 
-    /** Returns the properties defined for this service.
 
-        @return a sequence containing property descriptions.
-      */
-    sequence< XPropertyTypeDescription > getProperties();
-};
 
-//=============================================================================
-
-}; }; }; };
-
-#endif

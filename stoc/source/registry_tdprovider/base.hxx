@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-11 11:36:48 $
+ *  last change: $Author: kso $ $Date: 2002-11-13 16:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,16 @@
 #include <vector>
 
 #include <com/sun/star/reflection/XTypeDescription.hpp>
+#include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/reflection/XInterfaceTypeDescription.hpp>
 #include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
+#include <com/sun/star/reflection/XConstantTypeDescription.hpp>
+#include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 #include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription.hpp>
+#include <com/sun/star/reflection/XSingletonTypeDescription.hpp>
+#include <com/sun/star/reflection/XModuleTypeDescription.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -391,12 +396,11 @@ class ServiceTypeDescriptionImpl : public WeakImplHelper1< XServiceTypeDescripti
     Sequence< sal_Int8 >                  _aBytes;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
 
-    Sequence< Reference< XServiceTypeDescription > > * _pMandatoryServices;
-    Sequence< Reference< XServiceTypeDescription > > * _pOptionalServices;
+    Sequence< Reference< XServiceTypeDescription > >   * _pMandatoryServices;
+    Sequence< Reference< XServiceTypeDescription > >   * _pOptionalServices;
     Sequence< Reference< XInterfaceTypeDescription > > * _pMandatoryInterfaces;
     Sequence< Reference< XInterfaceTypeDescription > > * _pOptionalInterfaces;
-
-    Sequence< PropertyDescription > *     _pProps;
+    Sequence< Reference< XPropertyTypeDescription > >  * _pProps;
 
 public:
     ServiceTypeDescriptionImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
@@ -440,13 +444,144 @@ public:
     getOptionalInterfaces()
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence<
-        ::com::sun::star::reflection::PropertyDescription > SAL_CALL
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::reflection::XPropertyTypeDescription > > SAL_CALL
     getProperties()
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
     void getReferences()
         throw (::com::sun::star::uno::RuntimeException);
+};
+
+//==================================================================================================
+class ModuleTypeDescriptionImpl : public WeakImplHelper1< XModuleTypeDescription >
+{
+    Mutex                                           _aMutex;
+    OUString                                        _aName;
+    Reference< XTypeDescriptionEnumerationAccess >  _xTDMgr;
+
+    Sequence< Reference< XTypeDescription > > *     _pMembers;
+
+public:
+    ModuleTypeDescriptionImpl(
+        const Reference< XTypeDescriptionEnumerationAccess > & xTDMgr,
+        const OUString & rName )
+    : _aName( rName ), _xTDMgr( xTDMgr ), _pMembers( 0 )
+    {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    }
+    virtual ~ModuleTypeDescriptionImpl();
+
+    // XTypeDescription
+    virtual TypeClass SAL_CALL
+    getTypeClass()
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL
+    getName()
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    // XModuleTypeDescription
+    virtual ::com::sun::star::uno::Sequence<
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::reflection::XTypeDescription > > SAL_CALL
+    getMembers()
+        throw ( ::com::sun::star::uno::RuntimeException );
+};
+
+//==================================================================================================
+class ConstantTypeDescriptionImpl : public WeakImplHelper1< XConstantTypeDescription >
+{
+    OUString _aName;
+    Any      _aValue;
+
+public:
+    ConstantTypeDescriptionImpl( const OUString & rName,
+                                 const Any & rValue )
+    : _aName( rName ), _aValue( rValue )
+    {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    }
+    virtual ~ConstantTypeDescriptionImpl();
+
+    // XTypeDescription
+    virtual TypeClass SAL_CALL
+    getTypeClass()
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL
+    getName()
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    // XConstantTypeDescription
+    virtual ::com::sun::star::uno::Any SAL_CALL
+    getConstantValue()
+        throw ( ::com::sun::star::uno::RuntimeException );
+};
+
+//==================================================================================================
+class ConstantsTypeDescriptionImpl : public WeakImplHelper1< XConstantsTypeDescription >
+{
+    Mutex                _aMutex;
+    OUString             _aName;
+    Sequence< sal_Int8 > _aBytes;
+    Sequence< Reference< XConstantTypeDescription > > * _pMembers;
+
+public:
+    ConstantsTypeDescriptionImpl( const OUString & rName,
+                                  const Sequence< sal_Int8 > & rBytes )
+    : _aName( rName ), _aBytes( rBytes), _pMembers( 0 )
+    {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    }
+    virtual ~ConstantsTypeDescriptionImpl();
+
+    // XTypeDescription
+    virtual TypeClass SAL_CALL
+    getTypeClass()
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL
+    getName()
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    // XConstantsTypeDescription
+    virtual Sequence< Reference< XConstantTypeDescription > > SAL_CALL
+    getConstants()
+        throw ( RuntimeException );
+};
+
+//==================================================================================================
+class SingletonTypeDescriptionImpl : public WeakImplHelper1< XSingletonTypeDescription >
+{
+    Mutex    _aMutex;
+    OUString _aName;
+    OUString _aServiceName;
+    Reference< XHierarchicalNameAccess >   _xTDMgr;
+    Reference< XServiceTypeDescription > * _pServiceTD;
+
+public:
+    SingletonTypeDescriptionImpl(
+            const Reference< XHierarchicalNameAccess > & xTDMgr,
+            const OUString & rName,
+            const OUString & rServiceName )
+    : _aName( rName ), _aServiceName( rServiceName), _xTDMgr( xTDMgr ),
+      _pServiceTD( 0 )
+    {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    }
+    virtual ~SingletonTypeDescriptionImpl();
+
+    // XTypeDescription
+    virtual TypeClass SAL_CALL
+    getTypeClass()
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL
+    getName()
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    // XSingletonTypeDescription
+    virtual Reference< XServiceTypeDescription > SAL_CALL
+    getService()
+        throw ( ::com::sun::star::uno::RuntimeException );
 };
 
 }

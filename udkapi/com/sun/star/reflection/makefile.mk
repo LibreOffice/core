@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kso $ $Date: 2002-11-11 08:30:12 $
+#   last change: $Author: kso $ $Date: 2002-11-13 15:56:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,13 +81,14 @@ IDLFILES=\
     NoSuchTypeNameException.idl\
     ParamInfo.idl\
     ParamMode.idl\
-    PropertyDescription.idl\
     ProxyFactory.idl\
     TypeDescriptionManager.idl\
     TypeDescriptionProvider.idl\
     TypeDescriptionSearchDepth.idl\
     XArrayTypeDescription.idl\
     XCompoundTypeDescription.idl\
+    XConstantTypeDescription.idl\
+    XConstantsTypeDescription.idl\
     XUnionTypeDescription.idl\
     XEnumTypeDescription.idl\
     XIdlArray.idl\
@@ -104,8 +105,11 @@ IDLFILES=\
     XInterfaceMethodTypeDescription.idl\
     XInterfaceTypeDescription.idl\
     XMethodParameter.idl\
+    XModuleTypeDescription.idl\
+    XPropertyTypeDescription.idl\
     XProxyFactory.idl\
     XServiceTypeDescription.idl\
+    XSingletonTypeDescription.idl\
     XTypeDescription.idl\
     XTypeDescriptionEnumeration.idl\
     XTypeDescriptionEnumerationAccess.idl

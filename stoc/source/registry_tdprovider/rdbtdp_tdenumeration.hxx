@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbtdp_tdenumeration.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:35:46 $
+ *  last change: $Author: kso $ $Date: 2002-11-13 16:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef _STOC_RDBTDP_TDENUMERATION_HXX
 #define _STOC_RDBTDP_TDENUMERATION_HXX
 
+#include <list>
+
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
@@ -101,6 +103,10 @@ class RegistryTypeReaderLoader;
 
 namespace stoc_rdbtdp
 {
+
+typedef ::std::list< ::com::sun::star::uno::Reference<
+    ::com::sun::star::reflection::XTypeDescription > > TypeDescriptionList;
+
 class TypeDescriptionEnumerationImpl
     : public cppu::WeakImplHelper1<
                 com::sun::star::reflection::XTypeDescriptionEnumeration >
@@ -155,8 +161,9 @@ private:
 
     // members
     osl::Mutex m_aMutex;
-    RegistryKeyList m_aModuleKeys;
-    RegistryKeyList m_aCurrentModuleSubKeys;
+    RegistryKeyList     m_aModuleKeys;
+    RegistryKeyList     m_aCurrentModuleSubKeys;
+    TypeDescriptionList m_aTypeDescs;
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::TypeClass > m_aTypes;
     ::com::sun::star::reflection::TypeDescriptionSearchDepth m_eDepth;
