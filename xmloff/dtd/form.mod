@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.16 2004-05-07 15:58:55 rt Exp $
+	$Id: form.mod,v 1.17 2004-07-05 16:05:04 obo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -92,6 +92,9 @@
 <!ENTITY % convert-empty "form:convert-empty-to-null  %boolean; 'false'">
 <!ENTITY % data-field "form:data-field CDATA #IMPLIED">
 <!ENTITY % linked-cell "form:linked-cell CDATA #IMPLIED">
+<!ENTITY % visual-effect "form:visual-effect (flat|3d) #IMPLIED">
+<!ENTITY % image-position "form:image-position (start|end|top|bottom|center) 'center'">
+<!ENTITY % image-align "form:image-align (start|center|end) 'center'">
 <!ENTITY % list-linkage-type "form:list-linkage-type (selection|selection-indexes) #IMPLIED">
 <!ENTITY % source-cell-range "form:source-cell-range CDATA #IMPLIED">
 <!ENTITY % list-source "form:list-source CDATA #IMPLIED">
@@ -267,8 +270,13 @@
                       %target-frame;
                       %target-location;
                       %title;
-                      %value;>
-<!ATTLIST form:button form:default-button %boolean; "false">
+                      %value;
+                      %image-position;
+                      %image-align;>
+
+<!ATTLIST form:button form:default-button %boolean; "false"
+                      form:toggle %boolean; "false"
+                      form:focus-on-click %boolean; "true">
 
 <!ELEMENT form:image (form:properties?, office:events?)>
 <!ATTLIST form:image %button-type;
@@ -291,7 +299,10 @@
                         %title;
                         %value;
                         %data-field;
-                        %linked-cell;>
+                        %linked-cell;
+                        %visual-effect;
+                        %image-position;
+                        %image-align;>
 
 <!ENTITY % states "(unchecked|checked|unknown)">
 <!ATTLIST form:checkbox form:current-state %states; #IMPLIED>
@@ -309,7 +320,10 @@
                      %title;
                      %value;
                      %data-field;
-                     %linked-cell;>
+                     %linked-cell;
+                     %visual-effect;
+                     %image-position;
+                     %image-align;>
 
 <!ELEMENT form:frame (form:properties?, office:events?)>
 <!ATTLIST form:frame %disabled;
