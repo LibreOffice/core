@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:57:54 $
+ *  last change: $Author: rt $ $Date: 2004-04-05 12:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,12 +737,9 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                 // like SDRUSERCALL_REMOVED with the effect that a
                 // deleted object was inserted into the
                 // DeletedPresObjList which lead to a crash.
-
-                if( aPresObjList.GetPos((void*) &rObj) != LIST_ENTRY_NOTFOUND )
-                {
-                    List* pList = ((SdDrawDocument*) pModel)->GetDeletedPresObjList();
+                List* pList = ((SdDrawDocument*) pModel)->GetDeletedPresObjList();
+                if( pList )
                     pList->Remove((void*) &rObj);
-                }
 
                 // this should be redundant, but for safety reasons
                 // check if someone deleted a SdrObject without
