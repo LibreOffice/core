@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonmenu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:32:53 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,9 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
+#endif
 #include <vcl/svapp.hxx>
 #include <svtools/menuoptions.hxx>
 
