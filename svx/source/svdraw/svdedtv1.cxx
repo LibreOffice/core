@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-08 10:43:05 $
+ *  last change: $Author: aw $ $Date: 2001-02-15 14:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,12 +712,12 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, BOOL bOnlyHardAttr) con
                 if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, FALSE))
                     rAttr.InvalidateItem(nWhich);
                 else
-                    rAttr.MergeValue(rSet.Get(nWhich), FALSE);
+                    rAttr.MergeValue(rSet.Get(nWhich), TRUE);
             }
             else if(SFX_ITEM_SET == rSet.GetItemState(nWhich, FALSE))
             {
                 const SfxPoolItem& rItem = rSet.Get(nWhich);
-                rAttr.MergeValue(rItem, FALSE);
+                rAttr.MergeValue(rItem, TRUE);
             }
 
             nWhich = aIter.NextWhich();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 17:54:43 $
+ *  last change: $Author: aw $ $Date: 2001-02-15 14:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1375,7 +1375,7 @@ const SfxItemSet& SdrObjGroup::GetItemSet() const
             if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, FALSE))
                 mpGroupItemSet->InvalidateItem(nWhich);
             else
-                mpGroupItemSet->MergeValue(rSet.Get(nWhich), FALSE);
+                mpGroupItemSet->MergeValue(rSet.Get(nWhich), TRUE);
 
             nWhich = aIter.NextWhich();
         }
