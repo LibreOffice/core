@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cusshow.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:27 $
+ *  last change: $Author: cl $ $Date: 2001-01-15 14:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <tools/string.hxx>
 #endif
 
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
+#endif
+
 class SdDrawDocument;
 
 
@@ -89,8 +93,13 @@ private:
     String          aName;
     SdDrawDocument* pDoc;
 
+    // this is a weak reference to a possible living api wrapper for this custom show
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > mxUnoCustomShow;
+
 public:
     SdCustomShow(SdDrawDocument* pDrawDoc);
+    SdCustomShow(SdDrawDocument* pDrawDoc, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xShow );
+
     SdCustomShow( const SdCustomShow& rShow );
     virtual ~SdCustomShow();
 
@@ -101,10 +110,9 @@ public:
 
     friend SvStream& operator << (SvStream& rOut, const SdCustomShow& rCustomShow);
     friend SvStream& operator >> (SvStream& rIn, SdCustomShow& rCustomShow);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoCustomShow();
 };
-
-
-
 
 #endif      // _SD_CUSSHOW_HXX
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cusshow.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:46 $
+ *  last change: $Author: cl $ $Date: 2001-01-15 14:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,16 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
+
 #include "sdiocmpt.hxx"
 #include "cusshow.hxx"
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 
-
+using namespace ::com::sun::star;
 
 /*************************************************************************
 |*
@@ -91,6 +95,13 @@ SdCustomShow::SdCustomShow( const SdCustomShow& rShow )
     pDoc = rShow.GetDoc();
 }
 
+SdCustomShow::SdCustomShow(SdDrawDocument* pDrawDoc, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xShow )
+  : List(),
+  pDoc(pDrawDoc),
+  mxUnoCustomShow( xShow )
+{
+}
+
 /*************************************************************************
 |*
 |* Dtor
@@ -98,6 +109,10 @@ SdCustomShow::SdCustomShow( const SdCustomShow& rShow )
 \************************************************************************/
 SdCustomShow::~SdCustomShow()
 {
+    uno::Reference< uno::XInterface > xShow( mxUnoCustomShow );
+    uno::Reference< lang::XComponent > xComponent( xShow, uno::UNO_QUERY );
+    if( xComponent.is() )
+        xComponent->dispose();
 }
 
 
@@ -166,6 +181,19 @@ SvStream& operator >> (SvStream& rIn, SdCustomShow& rCustomShow)
     return rIn;
 }
 
+extern uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow );
 
+uno::Reference< uno::XInterface > SdCustomShow::getUnoCustomShow()
+{
+    // try weak reference first
+    uno::Reference< uno::XInterface > xShow( mxUnoCustomShow );
 
+#ifndef SVX_LIGHT
+    if( !xShow.is() )
+    {
+        xShow = createUnoCustomShow( this );
+    }
+#endif
 
+    return xShow;
+}

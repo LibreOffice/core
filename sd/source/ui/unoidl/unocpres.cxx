@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocpres.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 16:38:42 $
+ *  last change: $Author: cl $ $Date: 2001-01-15 14:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,13 +84,23 @@ using namespace ::rtl;
 using namespace ::vos;
 using namespace ::com::sun::star;
 
+
+uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow )
+{
+    return (cppu::OWeakObject*)new SdXCustomPresentation( pShow, NULL );
+}
+
 SdXCustomPresentation::SdXCustomPresentation() throw()
-:   mpSdCustomShow(NULL), mpModel(NULL)
+:   mpSdCustomShow(NULL), mpModel(NULL),
+    aDisposeListeners( aDisposeContainerMutex ),
+    bDisposing( sal_False )
 {
 }
 
 SdXCustomPresentation::SdXCustomPresentation( SdCustomShow* pShow, SdXImpressDocument* pMyModel) throw()
-:   mpSdCustomShow(pShow), mpModel(pMyModel)
+:   mpSdCustomShow(pShow), mpModel(pMyModel),
+    aDisposeListeners( aDisposeContainerMutex ),
+    bDisposing( sal_False )
 {
 }
 
@@ -160,12 +170,15 @@ void SAL_CALL SdXCustomPresentation::removeByIndex( sal_Int32 Index )
 
     if(mpSdCustomShow)
     {
-        uno::Any aPage( getByIndex( Index ) );
+        uno::Reference< drawing::XDrawPage > xPage;
+        getByIndex( Index ) >>= xPage;
 
-        uno::Reference< drawing::XDrawPage > xPage( *(uno::Reference< drawing::XDrawPage > *)aPage.getValue() );
-        SvxDrawPage* pPage = SvxDrawPage::getImplementation(  xPage );
-        if(pPage)
-            mpSdCustomShow->Remove(pPage->GetSdrPage());
+        if( xPage.is() )
+        {
+            SvxDrawPage* pPage = SvxDrawPage::getImplementation(  xPage );
+            if(pPage)
+                mpSdCustomShow->Remove(pPage->GetSdrPage());
+        }
     }
 
     if( mpModel )
@@ -211,7 +224,7 @@ uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
         throw lang::IndexOutOfBoundsException();
 
     uno::Any aAny;
-    if(mpSdCustomShow && mpModel )
+    if(mpSdCustomShow )
     {
         SdrPage* pPage = (SdrPage*)mpSdCustomShow->GetObject(Index);
 
@@ -244,6 +257,38 @@ void SAL_CALL SdXCustomPresentation::setName( const OUString& aName )
 
     if(mpSdCustomShow)
         mpSdCustomShow->SetName( aName );
+}
+
+// XComponent
+void SAL_CALL SdXCustomPresentation::dispose() throw(uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( bDisposing )
+        return; // catched a recursion
+
+    bDisposing = sal_True;
+
+    uno::Reference< uno::XInterface > xSource( (cppu::OWeakObject*)this );
+
+    lang::EventObject aEvt;
+    aEvt.Source = xSource;
+    aDisposeListeners.disposeAndClear(aEvt);
+
+    mpSdCustomShow = NULL;
+}
+
+//----------------------------------------------------------------------
+void SAL_CALL SdXCustomPresentation::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+    throw(uno::RuntimeException)
+{
+    aDisposeListeners.addInterface(xListener);
+}
+
+//----------------------------------------------------------------------
+void SAL_CALL SdXCustomPresentation::removeEventListener( const uno::Reference< lang::XEventListener >& aListener ) throw(uno::RuntimeException)
+{
+   aDisposeListeners.removeInterface(aListener);
 }
 
 /*===========================================================================*
@@ -311,9 +356,11 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
         throw uno::RuntimeException();
 
     // do we have an container::XIndexContainer?
+    SdXCustomPresentation* pXShow = NULL;
+
     uno::Reference< container::XIndexContainer > xContainer;
-    ::cppu::extractInterface( xContainer, aElement);
-    SdXCustomPresentation* pXShow = SdXCustomPresentation::getImplementation(xContainer);
+    if( (aElement >>= xContainer) && xContainer.is() )
+        pXShow = SdXCustomPresentation::getImplementation(xContainer);
 
     if( NULL == pXShow )
         throw lang::IllegalArgumentException();
@@ -322,7 +369,7 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
     SdCustomShow* pShow = pXShow->GetSdCustomShow();
     if( NULL == pShow )
     {
-        pShow = new SdCustomShow( mrModel.GetDoc() );
+        pShow = new SdCustomShow( mrModel.GetDoc(), xContainer );
         pXShow->SetSdCustomShow( pShow );
     }
     else
@@ -340,18 +387,7 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
          pCompare = (SdCustomShow*)pList->Next() )
     {
         if( pCompare == pShow || pCompare->GetName() == pShow->GetName() )
-            break;
-    }
-
-    if( CONTAINER_ENTRY_NOTFOUND != pList->GetPos( pShow ) )
-    {
-        uno::Any aAny;
-        aAny <<= container::ElementExistException();
-
-        lang::WrappedTargetException aExp;
-        aExp.TargetException = aAny;
-
-        throw aExp;
+            throw container::ElementExistException();
     }
 
     pList->Insert(pShow);
@@ -394,7 +430,7 @@ uno::Any SAL_CALL SdXCustomPresentationAccess::getByName( const OUString& aName 
     SdCustomShow* pShow = getSdCustomShow(aName);
     if(pShow)
     {
-        uno::Reference< container::XIndexContainer >  xRef( (container::XIndexContainer*)new SdXCustomPresentation(pShow, &mrModel) );
+        uno::Reference< container::XIndexContainer >  xRef( pShow->getUnoCustomShow(), uno::UNO_QUERY );
         aAny <<= xRef;
     }
     else

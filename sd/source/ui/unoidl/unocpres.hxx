@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocpres.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: cl $ $Date: 2001-01-15 14:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _SD_UNOCPRES_HXX
 #define _SD_UNOCPRES_HXX
 
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
@@ -73,8 +76,14 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
+#include <cppuhelper/interfacecontainer.h>
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <unotools/servicehelper.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -84,14 +93,20 @@ class SdView;
 class SdDrawViewShell;
 class SdCustomShow;
 
-class SdXCustomPresentation :   public ::cppu::WeakImplHelper4< ::com::sun::star::container::XIndexContainer,
+class SdXCustomPresentation :   public ::cppu::WeakImplHelper5< ::com::sun::star::container::XIndexContainer,
                                                                 ::com::sun::star::container::XNamed,
                                                                 ::com::sun::star::lang::XUnoTunnel,
+                                                                ::com::sun::star::lang::XComponent,
                                                                 ::com::sun::star::lang::XServiceInfo >
 {
 private:
     SdCustomShow*       mpSdCustomShow;
     SdXImpressDocument* mpModel;
+
+    // for xComponent
+    ::osl::Mutex aDisposeContainerMutex;
+    ::cppu::OInterfaceContainerHelper aDisposeListeners;
+    BOOL bDisposing;
 
 public:
     SdXCustomPresentation() throw();
@@ -130,6 +145,11 @@ public:
     // XNamed
     virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XComponent
+    virtual void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 // --------------------------------------------------------------------------
