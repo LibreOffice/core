@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-19 14:51:17 $
+ *  last change: $Author: oisin $ $Date: 2001-01-23 17:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 
 #include <tools/debug.hxx>
 
-#if !defined(USE_PSPRINT) && !defined(_USE_PRINT_EXTENSION_)
+#if !defined(USE_PSPRINT)
 #ifndef PRINTER_DUMMY
 #define Font XLIB_Font
 #define Region XLIB_Region
@@ -302,13 +302,8 @@ final GC SalGraphicsData::SelectBrush()
         {
             XSetFillStyle ( pDisplay, pBrushGC_, FillSolid );
             XSetForeground( pDisplay, pBrushGC_, nBrushPixel_ );
-                        #if defined(_USE_PRINT_EXTENSION_)
-                        XSetBackground( pDisplay, pBrushGC_,
-                                        WhitePixel(pDisplay, DefaultScreen(pDisplay)) );
-                        #else
             if( bPrinter_ )
                 XSetTile( pDisplay, pBrushGC_, None );
-            #endif
         }
         else
         {
@@ -1184,7 +1179,7 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
     {
     #endif
 
-    #if !defined(PRINTER_DUMMY) && !defined(USE_PSPRINT) && !defined(_USE_PRINT_EXTENSION_)
+    #if !defined(PRINTER_DUMMY) && !defined(USE_PSPRINT)
     if( _IsPrinter() )
     {
         // convert \r to \n (#60367#, EPS-files with mac format)
