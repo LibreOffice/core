@@ -10,11 +10,11 @@ import com.sun.star.wizards.document.OfficeDocument;
 public class WebWizardDialogResources extends Resource {
 
     String resSessionName;
+    String resSizeTemplate;
     String resCreatedTemplate;
     String resUpdatedTemplate;
     String resSlides;
     String resDelSessionConfirm;
-    String resErrProxies;
     String resErrIsDirectory;
     String resErrDocValidate;
     String resStep1;
@@ -49,11 +49,9 @@ public class WebWizardDialogResources extends Resource {
 
     String resWebWizardDialog_title;
     String reslblIntroduction_value;
-    String resbtnLoadSession_value;
     String resbtnDelSession_value;
     String reslbIntroTitle_value;
     String reslblContentTitle_value;
-    String reslblDocuments_value;
     String reslnDocsInfo_value;
     String reslblDocTitle_value;
     String reslblDocInfo_value;
@@ -61,15 +59,11 @@ public class WebWizardDialogResources extends Resource {
     String reslblDocExportFormat_value;
     String reslblTitleGeneralPage_value;
     String reslblSiteTitle_value;
-    String reslblFavIcon_value;
     String reslblSiteDesc_value;
-    String reslblSiteKeywords_value;
     String reslblSiteCreated_value;
-    String reslblRevisit_value;
     String reslblEmail_value;
     String reslblCopyright_value;
     String reslblSiteUpdated_value;
-    String reslblRevisitDays_value;
     String resbtnPreview_value;
     String reslblTitlePublish_value;
     String reslblCreateSite_value;
@@ -88,8 +82,6 @@ public class WebWizardDialogResources extends Resource {
     String reslblLayoutTitle_value;
     String reslblStyleTitle_value;
     String reslblStyle_value;
-    String resbtnBackgrounds_value;
-    String resbtnIconSets_value;
     String reslblLayouts_value;
     String reschbDocDesc_value;
     String reschbDocAuthor_value;
@@ -104,13 +96,20 @@ public class WebWizardDialogResources extends Resource {
     String reslblLayout2Title_value;
     String reslblDisplay_value;
     String reslblOptimizeFor_value;
-    String resbtnFavIcon_value;
     String resoptOptimize640x480_value;
     String resoptOptimize800x600_value;
     String resoptOptimize1024x768_value;
 
     final String resbtnDocUp_value = String.valueOf((char) 8743);
     final String resbtnDocDown_value = String.valueOf((char) 8744);
+
+    String reslblBackground;
+    String reslblIconset;
+    String reslblIconSetInfo;
+    String reslblMetaData;
+    String resBtnChooseBackground;
+    String resBtnChooseIconset;
+
 
     //String resGenerate;
     //String resPublish;
@@ -146,12 +145,9 @@ public class WebWizardDialogResources extends Resource {
 
     String resPages;
 
-    String resSODocs;
-    String resMSDocs;
     String resImages;
     String resAllFiles;
     String resZipFiles;
-    String resIconFiles;
     String resGifFiles;
 
     String resOK;
@@ -169,7 +165,17 @@ public class WebWizardDialogResources extends Resource {
     String resFinishedSuccess;
     String resFinishedNoSuccess;
 
+    String resSessionNameNone;
+    String reslblFTPDisabled;
+    String resBackgroundNone;
+    String resIconsetNone;
     String prodName;
+
+    String resFTPTargetCouldNotCreate;
+    String resFTPTargetCreate;
+    String resZipTargetIsDir;
+    String resLocalTargetCouldNotCreate;
+    String resLocalTargetCreate;
 
     public WebWizardDialogResources(XMultiServiceFactory xmsf) {
         super(xmsf, UNIT_NAME, MODULE_NAME);
@@ -180,11 +186,9 @@ public class WebWizardDialogResources extends Resource {
          */
         resWebWizardDialog_title        = getResText(RID_WEBWIZARDDIALOG_START + 1);
         reslblIntroduction_value        = getResText(RID_WEBWIZARDDIALOG_START + 2);
-        resbtnLoadSession_value         = getResText(RID_WEBWIZARDDIALOG_START + 3);
         resbtnDelSession_value          = getResText(RID_WEBWIZARDDIALOG_START + 4);
         reslbIntroTitle_value           = getResText(RID_WEBWIZARDDIALOG_START + 5);
         reslblContentTitle_value        = getResText(RID_WEBWIZARDDIALOG_START + 6);
-        reslblDocuments_value           = getResText(RID_WEBWIZARDDIALOG_START + 7);
         reslnDocsInfo_value             = getResText(RID_WEBWIZARDDIALOG_START + 8);
         reslblDocTitle_value            = getResText(RID_WEBWIZARDDIALOG_START + 9);
         reslblDocInfo_value             = getResText(RID_WEBWIZARDDIALOG_START + 10);
@@ -192,15 +196,11 @@ public class WebWizardDialogResources extends Resource {
         reslblDocExportFormat_value     = getResText(RID_WEBWIZARDDIALOG_START + 12);
         reslblTitleGeneralPage_value    = getResText(RID_WEBWIZARDDIALOG_START + 13);
         reslblSiteTitle_value           = getResText(RID_WEBWIZARDDIALOG_START + 14);
-        reslblFavIcon_value             = getResText(RID_WEBWIZARDDIALOG_START + 15);
         reslblSiteDesc_value            = getResText(RID_WEBWIZARDDIALOG_START + 16);
-        reslblSiteKeywords_value        = getResText(RID_WEBWIZARDDIALOG_START + 17);
         reslblSiteCreated_value         = getResText(RID_WEBWIZARDDIALOG_START + 18);
-        reslblRevisit_value             = getResText(RID_WEBWIZARDDIALOG_START + 19);
         reslblEmail_value               = getResText(RID_WEBWIZARDDIALOG_START + 20);
         reslblCopyright_value           = getResText(RID_WEBWIZARDDIALOG_START + 21);
         reslblSiteUpdated_value         = getResText(RID_WEBWIZARDDIALOG_START + 22);
-        reslblRevisitDays_value         = getResText(RID_WEBWIZARDDIALOG_START + 23);
         resbtnPreview_value             = getResText(RID_WEBWIZARDDIALOG_START + 24);
         reslblTitlePublish_value        = getResText(RID_WEBWIZARDDIALOG_START + 25);
         reslblCreateSite_value          = getResText(RID_WEBWIZARDDIALOG_START + 26);
@@ -220,8 +220,6 @@ public class WebWizardDialogResources extends Resource {
         reslblLayoutTitle_value         = getResText(RID_WEBWIZARDDIALOG_START + 40);
         reslblStyleTitle_value          = getResText(RID_WEBWIZARDDIALOG_START + 41);
         reslblStyle_value               = getResText(RID_WEBWIZARDDIALOG_START + 42);
-        resbtnBackgrounds_value         = getResText(RID_WEBWIZARDDIALOG_START + 43);
-        resbtnIconSets_value            = getResText(RID_WEBWIZARDDIALOG_START + 44);
         //
         reslblLayouts_value             = getResText(RID_WEBWIZARDDIALOG_START + 48);
         //
@@ -238,7 +236,6 @@ public class WebWizardDialogResources extends Resource {
         reslblLayout2Title_value        = getResText(RID_WEBWIZARDDIALOG_START + 60);
         reslblDisplay_value             = getResText(RID_WEBWIZARDDIALOG_START + 61);
         reslblOptimizeFor_value         = getResText(RID_WEBWIZARDDIALOG_START + 62);
-        resbtnFavIcon_value             = getResText(RID_WEBWIZARDDIALOG_START + 63);
         resoptOptimize640x480_value     = getResText(RID_WEBWIZARDDIALOG_START + 64);
         resoptOptimize800x600_value     = getResText(RID_WEBWIZARDDIALOG_START + 65);
         resoptOptimize1024x768_value    = getResText(RID_WEBWIZARDDIALOG_START + 66);
@@ -266,12 +263,9 @@ public class WebWizardDialogResources extends Resource {
         resTaskPublishZip               = getResText(RID_WEBWIZARDDIALOG_START + 89);
         resTaskFinish                   = getResText(RID_WEBWIZARDDIALOG_START + 90);
         //resPages                      = getResText(RID_WEBWIZARDDIALOG_START + 91);
-        resSODocs                       = getResText(RID_WEBWIZARDDIALOG_START + 92);
-        resMSDocs                       = getResText(RID_WEBWIZARDDIALOG_START + 93);
         resImages                       = getResText(RID_WEBWIZARDDIALOG_START + 94);
         resAllFiles                     = getResText(RID_WEBWIZARDDIALOG_START + 95);
         resZipFiles                     = getResText(RID_WEBWIZARDDIALOG_START + 96);
-        resIconFiles                    = getResText(RID_WEBWIZARDDIALOG_START + 97);
         resBackgroundsDialog            = getResText(RID_WEBWIZARDDIALOG_START + 98);
         resBackgroundsDialogCaption     = getResText(RID_WEBWIZARDDIALOG_START + 99);
         resIconsDialog                  = getResText(RID_WEBWIZARDDIALOG_START + 100);
@@ -303,13 +297,30 @@ public class WebWizardDialogResources extends Resource {
         resStep5                        = getResText(RID_WEBWIZARDDIALOG_START + 126);
         resStep6                        = getResText(RID_WEBWIZARDDIALOG_START + 127);
         resStep7                        = getResText(RID_WEBWIZARDDIALOG_START + 128);
-        resErrProxies                   = getResText(RID_WEBWIZARDDIALOG_START + 129);
         resDelSessionConfirm            = getResText(RID_WEBWIZARDDIALOG_START + 130);
         resPages                        = getResText(RID_WEBWIZARDDIALOG_START + 131);
         resSlides                       = getResText(RID_WEBWIZARDDIALOG_START + 132);
         resCreatedTemplate              = getResText(RID_WEBWIZARDDIALOG_START + 133);
         resUpdatedTemplate              = getResText(RID_WEBWIZARDDIALOG_START + 134);
         resSessionName                  = getResText(RID_WEBWIZARDDIALOG_START + 135);
+
+        reslblBackground                = getResText(RID_WEBWIZARDDIALOG_START + 136);
+        reslblIconset                   = getResText(RID_WEBWIZARDDIALOG_START + 137);
+        reslblIconSetInfo               = getResText(RID_WEBWIZARDDIALOG_START + 138);
+        reslblMetaData                  = getResText(RID_WEBWIZARDDIALOG_START + 139);
+        resBtnChooseBackground          = getResText(RID_WEBWIZARDDIALOG_START + 140);
+        resBtnChooseIconset             = getResText(RID_WEBWIZARDDIALOG_START + 141);
+        resSessionNameNone              = getResText(RID_WEBWIZARDDIALOG_START + 142);
+        reslblFTPDisabled               = getResText(RID_WEBWIZARDDIALOG_START + 143);
+        resBackgroundNone               = getResText(RID_WEBWIZARDDIALOG_START + 144);
+        resIconsetNone                  = getResText(RID_WEBWIZARDDIALOG_START + 145);
+        resFTPTargetCouldNotCreate      = getResText(RID_WEBWIZARDDIALOG_START + 146);
+        resFTPTargetCreate              = getResText(RID_WEBWIZARDDIALOG_START + 147);
+        resZipTargetIsDir               = getResText(RID_WEBWIZARDDIALOG_START + 148);
+        resLocalTargetCouldNotCreate    = getResText(RID_WEBWIZARDDIALOG_START + 149);
+        resLocalTargetCreate            = getResText(RID_WEBWIZARDDIALOG_START + 150);
+        resSizeTemplate                 = getResText(RID_WEBWIZARDDIALOG_START + 151);
+
 
         resClose                        = getResText(RID_COMMON_START + 17);
         resCancel                       = getResText(RID_COMMON_START + 11);
@@ -318,7 +329,6 @@ public class WebWizardDialogResources extends Resource {
 
         try {
             prodName        = Configuration.getProductName(xmsf);
-            resSODocs       = JavaTools.replaceSubString(resSODocs, prodName, "%PRODNAME");
             resGifFiles     = (String) Properties.getPropertyValue(OfficeDocument.getTypeMediaDescriptor(xmsf, "gif_Graphics_Interchange"), "UIName");
         } catch (Exception ex) {
             ex.printStackTrace();
