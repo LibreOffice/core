@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: er $ $Date: 2001-11-27 15:16:27 $
+ *  last change: $Author: er $ $Date: 2002-09-12 16:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2754,10 +2754,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             {
                 ScRangeData* pName = pDoc->GetRangeName()->FindIndex( t->GetIndex() );
                 if (pName && pName->HasType(RT_SHAREDMOD))
-                {
-                    pRangeData = pName;     // => neu kompilieren etc.
-                    rChanged = TRUE;
-                }
+                    pRangeData = pName;     // maybe need a replacement of shared with own code
             }
             else if( t->GetType() != svIndex )  // es kann ein DB-Bereich sein !!!
             {
@@ -2781,12 +2778,22 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                 }
             }
         }
+        BOOL bEasyShared, bPosInRange;
+        if ( !pRangeData )
+            bEasyShared = bPosInRange = FALSE;
+        else
+        {
+            bEasyShared = TRUE;
+            bPosInRange = r.In( eUpdateRefMode == URM_MOVE ? aPos : rOldPos );
+        }
         pArr->Reset();
         for( t = pArr->GetNextReferenceRPN(); t;
              t = pArr->GetNextReferenceRPN() )
         {
-            if ( t->GetRef() == 1 )
-            {   // bei nRefCnt>1 bereits im Code angepasst
+            if ( t->GetRef() != 1 )
+                bEasyShared = FALSE;
+            else
+            {   // if nRefCnt>1 it's already updated in token code
                 if ( t->GetType() == svSingleRef )
                 {
                     SingleRefData& rRef = t->GetSingleRef();
@@ -2805,6 +2812,13 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                             )
                             rChanged = TRUE;
                     }
+                    if ( bEasyShared )
+                    {
+                        const SingleRefData& rSRD = aMod.Ref().Ref1;
+                        ScAddress aRef( rSRD.nCol, rSRD.nRow, rSRD.nTab );
+                        if ( r.In( aRef ) != bPosInRange )
+                            bEasyShared = FALSE;
+                    }
                 }
                 else
                 {
@@ -2822,8 +2836,23 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                             )
                             rChanged = TRUE;
                     }
+                    if ( bEasyShared )
+                    {
+                        ScRange aRef( rRef.Ref1.nCol, rRef.Ref1.nRow,
+                                rRef.Ref1.nTab, rRef.Ref2.nCol, rRef.Ref2.nRow,
+                                rRef.Ref2.nTab );
+                        if ( r.In( aRef ) != bPosInRange )
+                            bEasyShared = FALSE;
+                    }
                 }
             }
+        }
+        if ( pRangeData )
+        {
+            if ( bEasyShared )
+                pRangeData = 0;
+            else
+                rChanged = TRUE;
         }
         return pRangeData;
     }
