@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:52:37 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3141,6 +3141,68 @@
 						</info>
 						<value/>
 						<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					</prop>
+					<prop oor:name="PabDescription" oor:type="xs:string">
+						<info>
+							<desc xml:lang="de">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="en-US">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="el">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="nl">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="fr">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="fi">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="cs">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="da">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="zh-CN">描述Mozilla个人通讯录所映射到的表的名字</desc>
+							<desc xml:lang="zh-TW">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="ar">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="he">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="ca">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="pt">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="ru">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="es">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="it">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="sv">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="pl">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="pt-BR">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="ja">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="ko">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="tr">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="th">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="hi-IN">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+							<desc xml:lang="x-comment">Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+						</info>
+						<value/>
+					</prop>
+					<prop oor:name="HisDescription" oor:type="xs:string">
+						<info>
+							<desc xml:lang="de">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="en-US">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="el">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="nl">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="fr">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="fi">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="cs">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="da">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="zh-CN">描述Mozilla集合通讯录所映射到的表的名字</desc>
+							<desc xml:lang="zh-TW">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="ar">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="he">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="ca">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="pt">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="ru">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="es">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="it">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="sv">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="pl">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="pt-BR">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="ja">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="ko">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="tr">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="th">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="hi-IN">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+							<desc xml:lang="x-comment">Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+						</info>
+						<value/>
 					</prop>
 				</group>
 				<group oor:name="ColumnAliases">
