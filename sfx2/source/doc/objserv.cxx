@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:14:07 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,6 +827,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     if ( bCopyTo )
     {
         // restore DocumentInfo if only a copy was created
+        //! This seems to be a hack: the DocInfo should never be changed!
         SfxDocumentInfo &rDocInfo = GetDocInfo();
         rDocInfo = aSavedInfo;
     }
@@ -1101,8 +1102,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             ResetError();
 
             rReq.SetReturnValue( SfxBoolItem(0, bOk) );
-            if ( bOk )
-                SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEDOCDONE,this));
+            SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEDOCDONE,this));
             break;
         }
 
