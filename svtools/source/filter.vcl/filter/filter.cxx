@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-11 13:14:55 $
+ *  last change: $Author: sj $ $Date: 2002-04-17 12:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,6 +1178,13 @@ USHORT GraphicFilter::GetImportFormatNumberForShortName( const String& rShortNam
 
 // ------------------------------------------------------------------------
 
+sal_uInt16 GraphicFilter::GetImportFormatNumberForTypeName( const String& rType )
+{
+    return pConfig->GetImportFormatNumberForTypeName( rType );
+}
+
+// ------------------------------------------------------------------------
+
 String GraphicFilter::GetImportFormatName( USHORT nFormat )
 {
     return pConfig->GetImportFormatName( nFormat );
@@ -1258,6 +1265,13 @@ USHORT GraphicFilter::GetExportFormatNumberForMediaType( const String& rMediaTyp
 USHORT GraphicFilter::GetExportFormatNumberForShortName( const String& rShortName )
 {
     return pConfig->GetExportFormatNumberForShortName( rShortName );
+}
+
+// ------------------------------------------------------------------------
+
+sal_uInt16 GraphicFilter::GetExportFormatNumberForTypeName( const String& rType )
+{
+    return pConfig->GetExportFormatNumberForTypeName( rType );
 }
 
 // ------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-11 13:12:11 $
+ *  last change: $Author: sj $ $Date: 2002-04-17 12:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@ class FilterConfigCache
         sal_uInt16  GetImportFormatNumber( const String& rFormatName );
         sal_uInt16  GetImportFormatNumberForMediaType( const String& rMediaType );
         sal_uInt16  GetImportFormatNumberForShortName( const String& rShortName );
+        sal_uInt16  GetImportFormatNumberForTypeName( const String& rType );
         String      GetImportFilterName( sal_uInt16 nFormat );
         String      GetImportFormatName( sal_uInt16 nFormat );
         String      GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0);
@@ -168,6 +169,7 @@ class FilterConfigCache
         sal_uInt16  GetExportFormatNumber( const String& rFormatName );
         sal_uInt16  GetExportFormatNumberForMediaType( const String& rMediaType );
         sal_uInt16  GetExportFormatNumberForShortName( const String& rShortName );
+        sal_uInt16  GetExportFormatNumberForTypeName( const String& rType );
         String      GetExportFilterName( sal_uInt16 nFormat );
         String      GetExportFormatName( sal_uInt16 nFormat );
         String      GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );

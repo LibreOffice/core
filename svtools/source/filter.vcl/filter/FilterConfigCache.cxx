@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-11 13:13:26 $
+ *  last change: $Author: sj $ $Date: 2002-04-17 12:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,6 +503,18 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( const String& r
     return aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin();
 }
 
+sal_uInt16 FilterConfigCache::GetImportFormatNumberForTypeName( const String& rType )
+{
+    CacheVector::iterator aIter( aImport.begin() );
+    while ( aIter != aImport.end() )
+    {
+        if ( aIter->sType.equalsIgnoreAsciiCase( rType ) )
+            break;
+        aIter++;
+    }
+    return aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin();
+}
+
 String FilterConfigCache::GetImportFormatName( sal_uInt16 nFormat )
 {
     CacheVector::iterator aIter( aImport.begin() + nFormat );
@@ -625,6 +637,18 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const String& r
     while ( aIter != aExport.end() )
     {
         if ( aIter->GetShortName().EqualsIgnoreCaseAscii( rShortName ) )
+            break;
+        aIter++;
+    }
+    return aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin();
+}
+
+sal_uInt16 FilterConfigCache::GetExportFormatNumberForTypeName( const String& rType )
+{
+    CacheVector::iterator aIter( aExport.begin() );
+    while ( aIter != aExport.end() )
+    {
+        if ( aIter->sType.equalsIgnoreAsciiCase( rType ) )
             break;
         aIter++;
     }
