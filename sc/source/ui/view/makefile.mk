@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: nn $ $Date: 2002-02-22 09:57:40 $
+#   last change: $Author: vg $ $Date: 2002-07-29 12:26:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,8 +159,10 @@ SLOFILES =  \
         $(SLO)$/cellsh3.obj\
         $(SLO)$/cellsh4.obj\
         $(SLO)$/formatsh.obj\
-        $(SLO)$/pgbrksh.obj\
+        $(SLO)$/pgbrksh.obj
 
+EXCEPTIONSFILES=\
+        $(SLO)$/viewdata.obj
 
 NOOPTFILES=\
     $(SLO)$/drawview.obj	\
