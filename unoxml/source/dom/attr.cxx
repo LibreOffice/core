@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace DOM
     }
 
     /**
-    The Element node this attribute is attached to or null if this 
+    The Element node this attribute is attached to or null if this
     attribute is not in use.
     */
     Reference< XElement > SAL_CALL CAttr::getOwnerElement()
@@ -113,7 +113,7 @@ namespace DOM
     }
 
     /**
-    If this attribute was explicitly given a value in the original 
+    If this attribute was explicitly given a value in the original
     document, this is true; otherwise, it is false.
     */
     sal_Bool SAL_CALL CAttr::getSpecified()
@@ -143,7 +143,7 @@ namespace DOM
     */
     void SAL_CALL CAttr::setValue(const OUString& value)
         throw (DOMException)
-    {   
+    {
         OString o1 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
         xmlChar* xValue = (xmlChar*)o1.getStr();
         // xmlChar* xName = OUStringToOString(m_aAttrPtr->name, RTL_TEXTENCODING_UTF8).getStr();
@@ -160,7 +160,7 @@ namespace DOM
                 m_aNodePtr->last = tmp;
             tmp = tmp->next;
         }
-        xmlFree(buffer);            
+        xmlFree(buffer);
     }
 
 }
