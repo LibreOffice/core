@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.163 $
+ *  $Revision: 1.164 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 10:10:47 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1127,9 +1127,10 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
                     }
                 }
 
-                   SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False);
-                   if ( pItem && pItem->GetValue() )
+                   SFX_ITEMSET_ARG( GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False);
+                   if ( pRepairItem && pRepairItem->GetValue() )
                 {
+                    // the storage should be created for repairing mode
                     CreateTempFile();
                     Reference< ::com::sun::star::ucb::XProgressHandler > xProgressHandler;
                     Reference< ::com::sun::star::task::XStatusIndicator > xStatusIndicator;
@@ -1145,8 +1146,12 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
                     aAddProps[1].Name = ::rtl::OUString::createFromAscii( "StatusIndicator" );
                     aAddProps[1].Value <<= xProgressHandler;
 
-                    aArgs.realloc( ++nArgsLen );
-                    aArgs[nArgsLen-1] <<= aAddProps;
+                    aArgs.realloc( 3 );
+                    aArgs[0] <<= ::rtl::OUString( aName );
+                    aArgs[1] <<= embed::ElementModes::READWRITE;
+                    aArgs[2] <<= aAddProps;
+
+                    pImp->bStorageBasedOnInStream = sal_False;
                 }
 
                 pImp->xStorage = uno::Reference< embed::XStorage >(
@@ -1155,6 +1160,18 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
 
                 if ( !pImp->xStorage.is() )
                     throw uno::RuntimeException();
+
+                if ( pRepairItem && pRepairItem->GetValue() )
+                {
+                    // in repairing mode the mediatype required by filter should be used
+                    ::rtl::OUString aMediaType;
+                    ::rtl::OUString aMediaTypePropName( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+                       uno::Reference < beans::XPropertySet > xPropSet( pImp->xStorage, uno::UNO_QUERY_THROW );
+                    xPropSet->getPropertyValue( aMediaTypePropName ) >>= aMediaType;
+                    if ( !aMediaType.getLength() && pFilter )
+                        xPropSet->setPropertyValue( aMediaTypePropName,
+                                                    uno::makeAny( ::rtl::OUString( pFilter->GetMimeType() ) ) );
+                }
             }
             catch ( uno::Exception& )
             {
