@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-15 11:32:26 $
+ *  last change: $Author: pluby $ $Date: 2001-03-15 17:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,12 @@ static VCLRegServiceInfo aVCLComponentsArray[] =
 #else
     {"int", sal_True},
 #endif
-#ifdef UNIX
+#ifdef UNX
+#ifdef MACOSX
+    {"dtransaqua", sal_True},
+#else
     {"dtransX11", sal_True},
+#endif
 #endif
 #ifdef WNT
     {"sysdtrans", sal_False},
