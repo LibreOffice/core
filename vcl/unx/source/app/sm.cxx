@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-19 13:19:20 $
+ *  last change: $Author: pl $ $Date: 2001-10-22 10:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ void SessionManagerClient::open()
                                             SmcSaveCompleteProcMask         |
                                             SmcShutdownCancelledProcMask    ,
                                             &aCallbacks,
-                                            rPrevId.Len() ? rPrevId.GetBuffer() : NULL,
+                                            rPrevId.Len() ? const_cast<char*>(rPrevId.GetBuffer()) : NULL,
                                             &pClientID,
                                             sizeof( aErrBuf ),
                                             aErrBuf );
