@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:37:58 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,6 @@ class X11SalGraphics : public SalGraphics
     ExtendedFontStructRef   mXFont[ MAX_FALLBACK ];
     ServerFont*             mpServerFont[ MAX_FALLBACK ];
 
-    Fraction        aScale_;
     SalColor        nTextColor_;
     Pixel           nTextPixel_;
     short           nFontOrientation_;
@@ -303,6 +302,7 @@ public:
                                               );
     virtual const std::map< sal_Unicode, sal_Int32 >* GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** ppNonEncoded );
     virtual const void* GetEmbedFontData( ImplFontData* pFont,
+                                          const sal_Unicode* pUnicodes,
                                           sal_Int32* pWidths,
                                           FontSubsetInfo& rInfo,
                                           long* pDataLen );
