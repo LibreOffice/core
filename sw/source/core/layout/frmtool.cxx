@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:47:38 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ SwFrmNotify::~SwFrmNotify()
                 FASTBOOL bNotify = FALSE;
                 FASTBOOL bNotifySize = FALSE;
                 SdrObject *pObj = rObjs[i];
-                if ( pObj->IsWriterFlyFrame() )
+                if ( pObj->ISA(SwVirtFlyDrawObj) )
                 {
                     SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                     if ( !pFly->IsFlyInCntFrm() )
@@ -482,7 +482,7 @@ void MA_FASTCALL lcl_MoveDrawObjs( SwFrm *pLow, const Point &rDiff,
             ++i )
     {
         SdrObject *pObj = (*pLow->GetDrawObjs())[i];
-        if ( pObj->IsWriterFlyFrame() )
+        if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pF = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             if ( pF->Frm().Left() != WEIT_WECH )
@@ -1093,7 +1093,10 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
                     {
                         SwDrawVirtObj* pDrawVirtObj = pNew->AddVirtObj();
                         pFrm->AppendVirtDrawObj( pNew, pDrawVirtObj );
-                        pDrawVirtObj->SendRepaintBroadcast();
+
+                        // for repaint, use new ActionChanged()
+                        // pDrawVirtObj->SendRepaintBroadcast();
+                        pDrawVirtObj->ActionChanged();
                     }
 
                 }
@@ -2216,7 +2219,7 @@ const SdrObject *SwOrderIter::Top()
             for ( USHORT i = 0; i < pObjs->Count(); ++i )
             {
                 const SdrObject *pObj = (*pObjs)[i];
-                if ( bFlysOnly && !pObj->IsWriterFlyFrame() )
+                if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
                     continue;
                 UINT32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp >= nTopOrd )
@@ -2252,7 +2255,7 @@ const SdrObject *SwOrderIter::Bottom()
             for ( USHORT i = 0; i < pObjs->Count(); ++i )
             {
                 SdrObject *pObj = (*pObjs)[i];
-                if ( bFlysOnly && !pObj->IsWriterFlyFrame() )
+                if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
                     continue;
                 UINT32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp < nBotOrd )
@@ -2289,7 +2292,7 @@ const SdrObject *SwOrderIter::Next()
             for ( USHORT i = 0; i < pObjs->Count(); ++i )
             {
                 SdrObject *pObj = (*pObjs)[i];
-                if ( bFlysOnly && !pObj->IsWriterFlyFrame() )
+                if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
                     continue;
                 UINT32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp > nCurOrd && nTmp < nOrd )
@@ -2326,7 +2329,7 @@ const SdrObject *SwOrderIter::Prev()
             for ( USHORT i = 0; i < pObjs->Count(); ++i )
             {
                 SdrObject *pObj = (*pObjs)[i];
-                if ( bFlysOnly && !pObj->IsWriterFlyFrame() )
+                if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
                     continue;
                 UINT32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp < nCurOrd && nTmp >= nOrd )
@@ -2369,7 +2372,7 @@ void MA_FASTCALL lcl_RemoveFlysFromPage( SwCntntFrm *pCntnt )
     for ( USHORT i = 0; i < rObjs.Count(); ++i )
     {
         SdrObject *pO = rObjs[i];
-        SwVirtFlyDrawObj *pObj = pO->IsWriterFlyFrame() ?
+        SwVirtFlyDrawObj *pObj = pO->ISA(SwVirtFlyDrawObj) ?
                                                         (SwVirtFlyDrawObj*)pO : 0;
         if ( pObj && pObj->GetFlyFrm()->IsFlyFreeFrm() )
         {
@@ -2502,7 +2505,7 @@ void MA_FASTCALL lcl_AddFlysToPage( SwCntntFrm *pCntnt, SwPageFrm *pPage )
     for ( USHORT i = 0; i < rObjs.Count(); ++i )
     {
         SdrObject *pO = rObjs[i];
-        SwVirtFlyDrawObj *pObj = pO->IsWriterFlyFrame() ?
+        SwVirtFlyDrawObj *pObj = pO->ISA(SwVirtFlyDrawObj) ?
                                                         (SwVirtFlyDrawObj*)pO : 0;
         if ( pObj && pObj->GetFlyFrm()->IsFlyFreeFrm() )
         {
@@ -2693,7 +2696,7 @@ void MA_FASTCALL lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
     for ( USHORT i = 0; i < pObjs->Count(); ++i )
     {
         SdrObject *pObj = (*pObjs)[i];
-        SwVirtFlyDrawObj *pFObj = pObj->IsWriterFlyFrame() ?
+        SwVirtFlyDrawObj *pFObj = pObj->ISA(SwVirtFlyDrawObj) ?
                                                     (SwVirtFlyDrawObj*)pObj : 0;
         if ( pFObj )
         {
@@ -2866,7 +2869,7 @@ void MA_FASTCALL lcl_NotifyCntnt( SdrObject *pThis, SwCntntFrm *pCnt,
         aCntPrt.Pos() += pCnt->Frm().Pos();
         if ( eHint == PREP_FLY_ATTR_CHG )
         {
-            if ( aCntPrt.IsOver( pThis->GetBoundRect() ) )
+            if ( aCntPrt.IsOver( pThis->GetCurrentBoundRect() ) )
                 pCnt->Prepare( PREP_FLY_ATTR_CHG );
         }
         else if ( aCntPrt.IsOver( rRect ) || pCnt->IsFollow() || pCnt->HasFollow() )
@@ -2877,7 +2880,7 @@ void MA_FASTCALL lcl_NotifyCntnt( SdrObject *pThis, SwCntntFrm *pCnt,
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
                 SdrObject *pO = rObjs[i];
-                if ( pO->IsWriterFlyFrame() )
+                if ( pO->ISA(SwVirtFlyDrawObj) )
                 {
                     SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                     if ( pFly->IsFlyInCntFrm() )
@@ -2907,7 +2910,7 @@ void Notify_Background( SdrObject *pObj, SwPageFrm *pPage, const SwRect& rRect,
     SwLayoutFrm *pArea;
     SwFlyFrm *pFlyFrm = 0;
     SwFrm* pAnchor;
-    if( pObj->IsWriterFlyFrame() )
+    if( pObj->ISA(SwVirtFlyDrawObj) )
     {
         pFlyFrm = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
 
@@ -2952,7 +2955,7 @@ void Notify_Background( SdrObject *pObj, SwPageFrm *pPage, const SwRect& rRect,
         {
             SwLayoutFrm* pCell = pCnt->GetUpper();
             if( pCell->IsCellFrm() &&
-                ( (pCell->Frm().IsOver( pObj->GetBoundRect() ) ||
+                ( (pCell->Frm().IsOver( pObj->GetCurrentBoundRect() ) ||
                     pCell->Frm().IsOver( rRect )) ) )
             {
                 const SwFmtVertOrient &rOri = pCell->GetFmt()->GetVertOrient();
@@ -2963,7 +2966,7 @@ void Notify_Background( SdrObject *pObj, SwPageFrm *pPage, const SwRect& rRect,
             if ( pTab != pLastTab )
             {
                 pLastTab = pTab;
-                if ( pTab->Frm().IsOver( pObj->GetBoundRect() ) ||
+                if ( pTab->Frm().IsOver( pObj->GetCurrentBoundRect() ) ||
                         pTab->Frm().IsOver( rRect ) )
                 {
                     if ( !pFlyFrm || !pFlyFrm->IsLowerOf( pTab ) )
@@ -2992,7 +2995,7 @@ void Notify_Background( SdrObject *pObj, SwPageFrm *pPage, const SwRect& rRect,
         for ( USHORT i = 0; i < rObjs.Count(); ++i )
         {
             SdrObject *pO = rObjs[i];
-            if ( pO->IsWriterFlyFrame() )
+            if ( pO->ISA(SwVirtFlyDrawObj) )
             {
                 if( pO == pObj )
                     continue;
@@ -3104,7 +3107,7 @@ BOOL Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
 {
     Point aPos;
     const SwFrm* pFrm;
-    if( pObj->IsWriterFlyFrame() )
+    if( pObj->ISA(SwVirtFlyDrawObj) )
     {
         const SwFlyFrm* pFly = ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm();
         pFrm = pFly->GetAnchor();
@@ -3113,7 +3116,7 @@ BOOL Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
     else
     {
         pFrm = ( (SwDrawContact*)GetUserCall(pObj) )->GetAnchor();
-        aPos = pObj->GetBoundRect().TopLeft();
+        aPos = pObj->GetCurrentBoundRect().TopLeft();
     }
     ASSERT( pFrm, "8-( Fly is lost in Space." );
     pFrm = GetVirtualUpper( pFrm, aPos );
