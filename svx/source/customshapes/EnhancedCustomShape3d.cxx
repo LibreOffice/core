@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:03:10 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         aSet.Put( Svx3DPercentDiagonalItem( 0 ) );
         aSet.Put( Svx3DTextureModeItem( 1 ) );
         aSet.Put( Svx3DNormalsKindItem( 1 ) );
+
         if ( eRenderMode == mso_Wireframe )
         {
             aSet.Put( XLineStyleItem( XLINE_SOLID ) );
@@ -425,6 +426,15 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 aSet.Put( XFillStyleItem( XFILL_SOLID ) );
             else if ( ( eFillStyle == XFILL_BITMAP ) || ( eFillStyle == XFILL_GRADIENT ) || bUseExtrusionColor )
                 bUseTwoFillStyles = sal_True;
+
+            // #116336#
+            // If shapes are mirrored once (mirroring two times correct geometry again)
+            // double-sided at the object and two-sided-lighting at the scene need to be set.
+            if((bIsMirroredX && !bIsMirroredY) || (!bIsMirroredX && bIsMirroredY))
+            {
+                aSet.Put( Svx3DDoubleSidedItem( sal_True ) );
+                pScene->GetProperties().SetObjectItem( Svx3DTwoSidedLightingItem( sal_True ) );
+            }
         }
 
         Rectangle aBoundRect2d;
