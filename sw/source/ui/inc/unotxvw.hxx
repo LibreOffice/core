@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:51:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _UNOTXVW_HXX
 #define _UNOTXVW_HXX
-
 #ifndef _SFX_SFXBASECONTROLLER_HXX_
 #include <sfx2/sfxbasecontroller.hxx>
 #endif
@@ -225,7 +224,7 @@ public OTextCursorHelper
     SwView*             pView;
     SfxItemPropertySet  aPropSet;
 protected:
-    sal_Bool    IsTextSelection() const;
+    sal_Bool    IsTextSelection( sal_Bool bAllowTables = sal_True ) const;
     virtual     ~SwXTextViewCursor();
 public:
     SwXTextViewCursor(SwView* pVw);
