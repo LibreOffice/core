@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleListBox.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:43:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,9 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessibleSelection;
-interface XAccessibleExtendedComponent;
-interface XAccessibleComponent;
+ published interface XAccessibleSelection;
+ published interface XAccessibleExtendedComponent;
+ published interface XAccessibleComponent;
 
 }; }; }; };
 
@@ -84,7 +84,7 @@ module com { module sun { module star { module awt {
 
     @since #103639#
 */
-service AccessibleListBox
+published service AccessibleListBox
 {
     /** This interface gives access to the structural information of a list box:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleList.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:43:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,10 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessible;
-interface XAccessibleExtendedComponent;
-interface XAccessibleComponent;
-interface XAccessibleSelection;
+ published interface XAccessible;
+ published interface XAccessibleExtendedComponent;
+ published interface XAccessibleComponent;
+ published interface XAccessibleSelection;
 
 }; }; }; };
 
@@ -90,7 +90,7 @@ module com { module sun { module star { module awt {
 
     @since #103639#
 */
-service AccessibleList
+published service AccessibleList
 {
     /** This interface gives access to the structural information of a list:
 
