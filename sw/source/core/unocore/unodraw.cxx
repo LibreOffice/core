@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-12-11 16:02:50 $
+ *  last change: $Author: os $ $Date: 2000-12-15 08:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,9 @@
 #ifndef _SWUNDO_HXX //autogen
 #include <swundo.hxx>
 #endif
-
+#ifndef _NDTXT_HXX //autogen
+#include <ndtxt.hxx>
+#endif
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
 #endif
@@ -1312,9 +1314,22 @@ Reference< XTextRange >  SwXShape::getAnchor(void) throw( RuntimeException )
  * --------------------------------------------------*/
 void SwXShape::dispose(void) throw( RuntimeException )
 {
-    SvxShape* pSvxShape = GetSvxShape();
-    if(pSvxShape)
-            pSvxShape->dispose();
+    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SwFrmFmt* pFmt = GetFrmFmt();
+    if(pFmt)
+    {
+        if( pFmt->GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+            {
+                const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
+                SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
+                const xub_StrLen nIdx = rPos.nContent.GetIndex();
+                pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+            }
+            else
+                pFmt->GetDoc()->DelLayoutFmt( pFmt );
+    }
+    else
+        throw RuntimeException();
 }
 /* -----------------14.04.99 13:02-------------------
  *
