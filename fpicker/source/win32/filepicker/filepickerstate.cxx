@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filepickerstate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-14 16:42:20 $
+ *  last change: $Author: hro $ $Date: 2002-01-10 18:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,20 +187,30 @@ Any SAL_CALL CNonExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int
 {
     CValueControlCommandRequest value_request( aControlId, aControlAction );
 
-    // pass the request along the command-chain
-    std::auto_ptr< CControlCommandResult > result( m_FirstControlCommand->handleRequest( &value_request ) );
-
-    OSL_ENSURE( result->hasResult( ), "invalid getValue request" );
-
     Any aAny;
 
-    if ( result->hasResult( ) )
-    {
-        CValueCommandResult* value_result = dynamic_cast< CValueCommandResult* >( result.get( ) );
-        OSL_ENSURE( value_result, "should have be a CValueCommandResult" );
+    OSL_ENSURE( m_FirstControlCommand, "invalid getValue request" );
 
-        aAny = value_result->getValue( );
-        OSL_ENSURE( aAny.hasValue( ), "empty any" );
+    if ( m_FirstControlCommand )
+    {
+        // pass the request along the command-chain
+        std::auto_ptr< CControlCommandResult > result( m_FirstControlCommand->handleRequest( &value_request ) );
+
+        OSL_ENSURE( result.get(), "invalid getValue request" );
+
+        if ( result.get() )
+        {
+            OSL_ENSURE( result->hasResult( ), "invalid getValue request" );
+
+            if ( result->hasResult( ) )
+            {
+                CValueCommandResult* value_result = dynamic_cast< CValueCommandResult* >( result.get( ) );
+                OSL_ENSURE( value_result, "should have be a CValueCommandResult" );
+
+                aAny = value_result->getValue( );
+                OSL_ENSURE( aAny.hasValue( ), "empty any" );
+            }
+        }
     }
 
     return aAny;
