@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:06:31 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7057,8 +7057,9 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                 EXC_CTRLDUMP_ADDFLAG( 0x0040, "mouseptr" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0080, "pic" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0100, "accel" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0200, "notakefocus" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0400, "icon" );
-                EXC_CTRLDUMP_ENDFLAG( 0xFFFFFA00 );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFF800 );
                 sal_uInt32 nCtrlFlags = __nFlags;
 
                 if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_HEX4( "forecolor" );
