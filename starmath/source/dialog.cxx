@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2002-04-29 12:40:02 $
+ *  last change: $Author: vg $ $Date: 2002-05-03 14:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,8 @@ void SmFontDialog::InitColor_Impl()
         nTxtCol = rS.GetFieldTextColor().GetColor();
     }
 
-    Wallpaper aWall( (Color) Color( nBgCol ) );
+    Color aTmpColor( nBgCol );
+    Wallpaper aWall( aTmpColor );
     Color aTxtColor( nTxtCol );
     aShowFont.SetBackground( aWall );
     aShowFont.SetTextColor( aTxtColor );
@@ -1592,7 +1593,8 @@ void SmSymbolDialog::InitColor_Impl()
         nTxtCol = rS.GetFieldTextColor().GetColor();
     }
 
-    Wallpaper aWall( (Color) Color( nBgCol ) );
+    Color aTmpColor( nBgCol );
+    Wallpaper aWall( aTmpColor );
     Color aTxtColor( nTxtCol );
     aSymbolDisplay   .SetBackground( aWall );
     aSymbolDisplay   .SetTextColor( aTxtColor );
@@ -2175,7 +2177,8 @@ void SmSymDefineDialog::InitColor_Impl()
         nTxtCol = rS.GetFieldTextColor().GetColor();
     }
 
-    Wallpaper aWall( (Color) Color( nBgCol ) );
+    Color aTmpColor( nBgCol );
+    Wallpaper aWall( aTmpColor );
     Color aTxtColor( nTxtCol );
     aCharsetDisplay  .SetBackground( aWall );
     aCharsetDisplay  .SetTextColor( aTxtColor );
