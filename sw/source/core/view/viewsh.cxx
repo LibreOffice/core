@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 09:40:50 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,6 +774,28 @@ void ViewShell::LayoutIdle()
     }
 }
 
+/*************************************************************************
+|*
+|*    DOCUMENT COMPATIBILITY FLAGS
+|*
+*************************************************************************/
+
+void lcl_InvalidateAllCntnt( ViewShell& rSh, BYTE nInv )
+{
+    BOOL bCrsr = rSh.ISA(SwCrsrShell);
+    if ( bCrsr )
+        ((SwCrsrShell&)rSh).StartAction();
+    else
+        rSh.StartAction();
+    rSh.GetLayout()->InvalidateAllCntnt( nInv );
+    if ( bCrsr )
+        ((SwCrsrShell&)rSh).EndAction();
+    else
+        rSh.EndAction();
+
+    rSh.GetDoc()->SetModified();
+}
+
 // Absatzabstaende koennen wahlweise addiert oder maximiert werden
 
 BOOL ViewShell::IsParaSpaceMax() const
@@ -786,7 +808,6 @@ BOOL ViewShell::IsParaSpaceMaxAtPages() const
     return GetDoc()->IsParaSpaceMaxAtPages();
 }
 
-
 void ViewShell::SetParaSpaceMax( BOOL bNew, BOOL bAtPages )
 {
     if( GetDoc()->IsParaSpaceMax() != bNew  ||
@@ -794,16 +815,8 @@ void ViewShell::SetParaSpaceMax( BOOL bNew, BOOL bAtPages )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
         GetDoc()->SetParaSpaceMax( bNew, bAtPages );
-        BOOL bCrsr = ISA(SwCrsrShell);
-        if ( bCrsr )
-            ((SwCrsrShell*)this)->StartAction();
-        else
-            StartAction();
-        GetLayout()->InvalidateAllCntnt( INV_PRTAREA | INV_TABLE | INV_SECTION );
-        if ( bCrsr )
-            ((SwCrsrShell*)this)->EndAction();
-        else
-            EndAction();
+        const BYTE nInv = INV_PRTAREA | INV_TABLE | INV_SECTION;
+        lcl_InvalidateAllCntnt( *this,  nInv );
     }
 }
 
@@ -818,18 +831,56 @@ void ViewShell::SetTabCompat( BOOL bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
         GetDoc()->SetTabCompat( bNew );
-        BOOL bCrsr = ISA(SwCrsrShell);
-        if ( bCrsr )
-            ((SwCrsrShell*)this)->StartAction();
-        else
-            StartAction();
-        GetLayout()->InvalidateAllCntnt( INV_PRTAREA | INV_TABLE | INV_SECTION );
-        if ( bCrsr )
-            ((SwCrsrShell*)this)->EndAction();
-        else
-            EndAction();
+        const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
+        lcl_InvalidateAllCntnt( *this, nInv );
     }
 }
+
+BOOL ViewShell::IsAddFlyOffsets() const
+{
+    return GetDoc()->IsAddFlyOffsets();
+}
+
+void ViewShell::SetAddFlyOffsets( BOOL bNew )
+{
+    if( GetDoc()->IsAddFlyOffsets() != bNew  )
+    {
+        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
+        GetDoc()->SetAddFlyOffsets( bNew );
+        const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
+        lcl_InvalidateAllCntnt( *this, nInv );
+    }
+}
+
+sal_Bool ViewShell::IsAddExtLeading() const
+{
+    return GetDoc()->IsAddExtLeading();
+}
+
+void ViewShell::SetAddExtLeading( sal_Bool bNew )
+{
+    if ( GetDoc()->IsAddExtLeading() != bNew )
+    {
+        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
+        GetDoc()->SetAddExtLeading( bNew );
+        if ( GetDoc()->GetDrawModel() )
+            GetDoc()->GetDrawModel()->SetAddExtLeading( bNew );
+        const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
+        lcl_InvalidateAllCntnt( *this, nInv );
+    }
+}
+
+short ViewShell::IsUseVirtualDevice() const
+{
+    return GetDoc()->IsUseVirtualDevice();
+}
+
+void ViewShell::SetUseVirtualDevice( short nNew )
+{
+    // this sets the flag at the document and calls PrtDataChanged
+    GetDoc()->SetUseVirtualDevice( nNew );
+}
+
 
 /******************************************************************************
 |*
@@ -2305,19 +2356,3 @@ void ViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibility
             pOpt->SetSelectionInReadonly(rAccessibilityOptions.IsSelectionInReadonly());
     }
 }
-/*-----------------07.03.2003 12:38-----------------
- *
- * --------------------------------------------------*/
-sal_Bool ViewShell::IsUseVirtualDevice() const
-{
-    return GetDoc()->IsUseVirtualDevice();
-}
-/*-----------------07.03.2003 12:38-----------------
- *
- * --------------------------------------------------*/
-void ViewShell::SetUseVirtualDevice( sal_Bool bNew )
-{
-    // this sets the flag at the document and calls PrtDataChanged
-    GetDoc()->SetUseVirtualDevice( bNew );
-}
-
