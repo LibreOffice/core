@@ -319,9 +319,7 @@ Function GetFormWizardPaths() as Boolean
 			End If
 		End If
 	End  If
-	If Not IsNull(oDocument) Then
-		oDocument.dispose()
-	End If
+	DisposeDocument(oDocument)
 	GetFormWizardPaths() = False
 End Function
 

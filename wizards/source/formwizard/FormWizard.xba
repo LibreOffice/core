@@ -168,7 +168,7 @@ Dim SelList(0) as Integer
 		oDBConnection.Dispose()
 	End If
 	If bDisposeDoc Then
-		oDocument.Dispose()
+		DisposeDocument(oDocument)
 	ElseIf RetValue = 0 Then
 		RemoveNirwanaShapes()
 	End If
