@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlbas.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
+ *  last change: $Author: tbe $ $Date: 2001-08-22 07:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,11 @@
 #include "swhtml.hxx"
 
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+
+
 static HTMLOutEvent __FAR_DATA aBodyEventTable[] =
 {
     { sHTML_O_SDonload,     sHTML_O_onload,     SFX_EVENT_OPENDOC   },
@@ -156,7 +161,6 @@ void SwHTMLParser::EndScript()
         break;
     }
 
-
     bIgnoreRawData = FALSE;
     aScriptSource.ConvertLineEnd();
 
@@ -185,44 +189,67 @@ void SwHTMLParser::EndScript()
         // Das Basic entfernt natuerlich weiterhin keine SGML-Kommentare
         RemoveSGMLComment( aScriptSource, TRUE );
 
-        SFX_APP()->EnterBasicCall();
+        // get library name
+        ::rtl::OUString aLibName;
+        if( aBasicLib.Len() )
+            aLibName = aBasicLib;
+        else
+            aLibName = ::rtl::OUString::createFromAscii( "Standard" );
 
-        BasicManager *pBasicMan = pDocSh->GetBasicManager();
-        ASSERT( pBasicMan, "Wo ist der BasicManager?" );
-        if( pBasicMan )
+        // get module library container
+        Reference< script::XLibraryContainer > xModLibContainer( pDocSh->GetBasicContainer(), UNO_QUERY );
+
+        if ( xModLibContainer.is() )
         {
-            StarBASIC *pBasic;
-            if( aBasicLib.Len() )
+            Reference< container::XNameContainer > xModLib;
+            if ( xModLibContainer->hasByName( aLibName ) )
             {
-                pBasic = pBasicMan->GetLib( aBasicLib );
-                if( !pBasic )
-                    pBasic = pBasicMan->CreateLib( aBasicLib );
+                // get module library
+                Any aElement = xModLibContainer->getByName( aLibName );
+                aElement >>= xModLib;
             }
             else
-                pBasic = pBasicMan->GetStdLib();
+            {
+                // create module library
+                xModLib = xModLibContainer->createLibrary( aLibName );
+            }
 
-            if( pBasic )
+            if ( xModLib.is() )
             {
                 if( !aBasicModule.Len() )
                 {
+                    // create module name
                     BOOL bFound = TRUE;
                     while( bFound )
                     {
                         aBasicModule.AssignAscii( "Modul" );
-                        aBasicModule += String::CreateFromInt32(
-                                            (sal_Int32)(++nSBModuleCnt) );
-                        bFound = (pBasic->FindModule( aBasicModule ) != 0);
+                        aBasicModule += String::CreateFromInt32( (sal_Int32)(++nSBModuleCnt) );
+                        bFound = xModLib->hasByName( ::rtl::OUString( aBasicModule ) );
                     }
                 }
 
-                SbModule *pModule =
-                    pBasic->MakeModule( aBasicModule, aScriptSource );
-                if( pModule )
-                    pModule->Compile();
+                // create module
+                ::rtl::OUString aModName( aBasicModule );
+                if ( !xModLib->hasByName( aModName ) )
+                {
+                    Any aElement;
+                    aElement <<= ::rtl::OUString( aScriptSource );
+                    xModLib->insertByName( aModName , aElement );
+                }
             }
         }
 
-        SFX_APP()->LeaveBasicCall();
+        // get dialog library container
+        Reference< script::XLibraryContainer > xDlgLibContainer( pDocSh->GetDialogContainer(), UNO_QUERY );
+
+        if ( xDlgLibContainer.is() )
+        {
+            if ( !xDlgLibContainer->hasByName( aLibName ) )
+            {
+                // create dialog library
+                xDlgLibContainer->createLibrary( aLibName );
+            }
+        }
     }
 
     aScriptSource.Erase();
@@ -395,11 +422,14 @@ void SwHTMLWriter::OutBasicBodyEvents()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlbas.cxx,v 1.4 2001-07-03 07:49:47 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlbas.cxx,v 1.5 2001-08-22 07:57:19 tbe Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/07/03 07:49:47  mib
+      #88156#: warning for unconvertable chars
+
       Revision 1.3  2001/01/17 12:50:56  jp
       remove compiler warning
 
