@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:02:26 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,13 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     Check( MN_READONLY_OPENURLNEW,      SID_OPENDOC,        rDis );
 
     SfxPoolItem* pState;
-    SfxItemState eState = pVFrame->GetBindings().QueryState( SID_EDITDOC, pState );
+
+    SfxItemState eState = pVFrame->GetBindings().QueryState( SID_COPY, pState );
+    Check( MN_READONLY_COPY,            SID_COPY,           rDis );
+    if(eState < SFX_ITEM_AVAILABLE)
+        EnableItem( MN_READONLY_COPY, FALSE );
+
+    eState = pVFrame->GetBindings().QueryState( SID_EDITDOC, pState );
     if(eState < SFX_ITEM_DEFAULT ||
         rSh.IsGlobalDoc() && rView.GetDocShell()->IsReadOnlyUI())
         EnableItem( MN_READONLY_EDITDOC, FALSE );
@@ -411,6 +417,8 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
         case SID_WIN_FULLSCREEN :           nExecId = SID_WIN_FULLSCREEN; break;
         case MN_READONLY_OPENURL:           nFilter = URLLOAD_NOFILTER;   break;
         case MN_READONLY_OPENURLNEW:        nFilter = URLLOAD_NEWVIEW;    break;
+        case MN_READONLY_COPY:              nExecId = SID_COPY;           break;
+
         case MN_READONLY_EDITDOC:           nExecId = SID_EDITDOC;        break;
         case MN_READONLY_SELECTION_MODE:    nExecId = FN_READONLY_SELECTION_MODE; break;
         case MN_READONLY_RELOAD:
