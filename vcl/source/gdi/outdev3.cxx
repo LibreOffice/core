@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-26 16:12:39 $
+ *  last change: $Author: hdu $ $Date: 2002-08-28 11:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5498,8 +5498,9 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         const xub_Unicode* pStr = aStr.GetBuffer() + nFirstIndex;
         const xub_Unicode* pEnd = pStr + (nEndIndex - nFirstIndex);
         for( ; pStr < pEnd; ++pStr )
-            if( (*pStr >= 0x0580) && (*pStr < 0x0800)   // middle eastern scripts
-            ||  (*pStr >= 0xFB50) && (*pStr < 0xFEFF) ) // arabic presentation forms
+            if( ((*pStr >= 0x0580) && (*pStr < 0x0800))   // middle eastern scripts
+            ||  ((*pStr >= 0xFB18) && (*pStr < 0xFE00))   // hebrew + arabic A presentation forms
+            ||  ((*pStr >= 0xFE70) && (*pStr < 0xFF00)) ) // arabic presentation forms B
                 break;
         if( pStr >= pEnd )
             nLayoutFlags |= SAL_LAYOUT_BIDI_STRONG;
@@ -5599,7 +5600,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
             else if( pDXArray )
                 aRTLOffset = Point( -pDXArray[ nLength-1 ], 0 );
             else
-                aRTLOffset = pSalLayout->GetCharPosition( nEndIndex, !bRTLWindow );
+                aRTLOffset = Point( -pSalLayout->GetTextWidth(), 0 );
             if( bRTLWindow )
                 aRTLOffset = Point(0,0) - aRTLOffset;
             Point aRTLPosition = pSalLayout->GetDrawPosition( aRTLOffset );
