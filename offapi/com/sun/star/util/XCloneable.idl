@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCloneable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com {  module sun {  module star {  module util {
 
 /** makes it possible to create a copy of the object which supports this interface.
  */
-interface XCloneable: com::sun::star::uno::XInterface
+published interface XCloneable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** creates a copy of the object.
