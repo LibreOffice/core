@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: bustamam $ $Date: 2001-04-27 21:18:20 $
+#   last change: $Author: jp $ $Date: 2001-05-14 10:17:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ IDLFILES=\
         Collator.idl \
     Currency.idl \
     GNUCollator.idl \
+    IndexEntrySupplier.idl \
     JAJPBreakIterator.idl \
     LanguageCountryInfo.idl \
     LocaleData.idl \
@@ -101,6 +102,7 @@ IDLFILES=\
     XCharacterClassification.idl \
     XCollator.idl \
     XForbiddenCharacters.idl \
+    XIndexEntrySupplier.idl \
     XLocaleData.idl \
     XNumberFormatCode.idl \
     XTransliteration.idl \
