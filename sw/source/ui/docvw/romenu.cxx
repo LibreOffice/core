@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-10-25 09:17:52 $
+ *  last change: $Author: rt $ $Date: 2002-12-03 10:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,7 +531,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
     INetURLObject aURL;
     aURL.SetSmartURL( aName );
     aPath.Append( aURL.GetName() );
-    xFP->setDisplayDirectory( aPath.GetMainURL() );
+    xFP->setDisplayDirectory( aPath.GetMainURL(INetURLObject::DECODE_TO_IURI) );
     xFP->setTitle( SW_RESSTR(STR_EXPORT_GRAFIK_TITLE));
 
     GraphicFilter& rGF = *GetGrfFilter();
