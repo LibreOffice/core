@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_ucb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:10:17 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,11 @@ using ::rtl::OUString;
 
 namespace dp_misc
 {
+
+const OUString StrTitle::operator () ()
+{
+    return OUSTR("Title");
+}
 
 //==============================================================================
 bool create_ucb_content(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:11:20 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -866,8 +866,8 @@ Reference<XInterface> BackendImpl::insertObject(
 }
 
 void dummy() {}
-struct ProgramDir : public ::rtl::StaticData<OUString, ProgramDir>{
-    OUString operator () () {
+struct ProgramDir : public rtl::StaticWithInit<const OUString, ProgramDir> {
+    const OUString operator () () {
         OUString exeURL;
         ::osl::Module::getUrlFromAddress( (void *) dummy, exeURL );
         return exeURL.copy( 0, exeURL.lastIndexOf('/') );
