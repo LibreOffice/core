@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:32:15 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,55 +70,16 @@ TabPage RID_SFXPAGE_SPELL
     HelpId = HID_OPTIONS_SPELL ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 221 , 185 ) ;
-    Text = "Rechtschreibprüfung" ;
-    Text [ ENGLISH ] = "Spell checking" ;
-    Text [ norwegian ] = "Stavekontroll" ;
-    Text [ italian ] = "Controllo ortografico" ;
-    Text [ portuguese_brazilian ] = "Verificação Ortográfica" ;
-    Text [ portuguese ] = "Correcção ortográfica" ;
-    Text [ finnish ] = "Oikeinkirjoituksen tarkistus" ;
-    Text [ danish ] = "Stavekontrol" ;
-    Text [ french ] = "Vérification orthographique" ;
-    Text [ swedish ] = "Rättstavning" ;
-    Text [ dutch ] = "Spellingcontrole" ;
-    Text [ spanish ] = "Revisión ortográfica" ;
-    Text [ english_us ] = "Spellcheck" ;
+    Text [ de ] = "Rechtschreibprüfung" ;
+    Text [ en-US ] = "Spellcheck" ;
     PushButton BTN_BOOK
     {
         Pos = MAP_APPFONT ( 128 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Bearbeiten..." ;
-        Text [ ENGLISH ] = "~Edit..." ;
-        Text [ norwegian ] = "~Edit..." ;
-        Text [ italian ] = "Modifica..." ;
-        Text [ portuguese_brazilian ] = "~Editar..." ;
-        Text [ portuguese ] = "~Editar..." ;
-        Text [ finnish ] = "~Muokkaa..." ;
-        Text [ danish ] = "~Rediger..." ;
-        Text [ french ] = "Éditer..." ;
-        Text [ swedish ] = "~Redigera..." ;
-        Text [ dutch ] = "Be~werken..." ;
-        Text [ spanish ] = "~Editar..." ;
-        Text [ english_us ] = "~Edit..." ;
+        Text [ de ] = "~Bearbeiten..." ;
+        Text [ en-US ] = "~Edit..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ç¼–è¾‘(~E)...";
-        Text[ russian ] = "Ïğàâêà...";
-        Text[ polish ] = "~Edytuj...";
-        Text[ japanese ] = "ç·¨é›†(~E)...";
-        Text[ chinese_traditional ] = "ç·¨è¼¯(~E)...";
-        Text[ arabic ] = "ÊÍÑíÑ...";
-        Text[ greek ] = "~Åğåîåñãáóßá...";
-        Text[ korean ] = "í¸ì§‘(~E)...";
-        Text[ turkish ] = "Düzenle...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Edita...";
-        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚...";
-        Text[ czech ] = "Upravit...";
-        Text[ hebrew ] = "â€®×¢×¨×™×›×”...â€¬";
-        Text[ hindi ] = "~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨...";
-        Text[ slovak ] = "~UpraviÅ¥...";
-        Text[ hungarian ] = "~SzerkesztÃ©s...";
-        Text[ slovenian ] = "~Uredi...";
+        Text [ x-comment ] = " ";
     };
     MultiListBox LB_BOOK
     {
@@ -134,37 +95,9 @@ TabPage RID_SFXPAGE_SPELL
         Size = MAP_APPFONT ( 115 , 66 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Wörterbücher : W÷rterb³cher */
         /* ### ACHTUNG: Neuer Text in Resource? Wörterbücher : W÷rterb³cher */
-        Text = "Wörterbücher" ;
-        Text [ ENGLISH ] = "Dictionaries" ;
-        Text [ norwegian ] = "Ordlister" ;
-        Text [ italian ] = "Dizionari" ;
-        Text [ portuguese_brazilian ] = "Dicionários" ;
-        Text [ portuguese ] = "Dicionários" ;
-        Text [ finnish ] = "Sanakirjat" ;
-        Text [ danish ] = "Ordbøger" ;
-        Text [ french ] = "Dictionnaires" ;
-        Text [ swedish ] = "Ordlistor" ;
-        Text [ dutch ] = "Woordenboeken" ;
-        Text [ spanish ] = "Diccionarios" ;
-        Text [ english_us ] = "Dictionaries" ;
-        Text[ chinese_simplified ] = "å­—å…¸";
-        Text[ russian ] = "Ñëîâàğè";
-        Text[ polish ] = "S³owniki";
-        Text[ japanese ] = "è¾æ›¸";
-        Text[ chinese_traditional ] = "å­—å…¸";
-        Text[ arabic ] = "ÇáŞæÇãíÓ";
-        Text[ greek ] = "ËåîéêÜ";
-        Text[ korean ] = "ì‚¬ì „";
-        Text[ turkish ] = "Sözlükler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Diccionaris";
-        Text[ thai ] = "à¸à¸ˆà¸™à¸²à¸™à¸¸à¸à¸£à¸¡";
-        Text[ czech ] = "SlovnÃ­ky";
-        Text[ hebrew ] = "â€®××™×œ×•× ×™×â€¬";
-        Text[ hindi ] = "à¤¶à¤¬à¥à¤¦à¤•à¥‹à¤¶";
-        Text[ slovak ] = "SlovnÃ­ky";
-        Text[ hungarian ] = "SzÃ³tÃ¡rak";
-        Text[ slovenian ] = "Slovarji";
+        Text [ de ] = "Wörterbücher" ;
+        Text [ en-US ] = "Dictionaries" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox BTN_CAPS
     {
@@ -172,38 +105,10 @@ TabPage RID_SFXPAGE_SPELL
         Size = MAP_APPFONT ( 103 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Großgeschriebene Wörter : ~Gro˜geschriebene W÷rter */
         /* ### ACHTUNG: Neuer Text in Resource? ~Großgeschriebene Wörter : ~Gro˜geschriebene W÷rter */
-        Text = "~Großgeschriebene Wörter" ;
-        Text [ ENGLISH ] = "~Capital words" ;
-        Text [ norwegian ] = "~Ord med store bokstaver" ;
-        Text [ italian ] = "~Parole maiuscole" ;
-        Text [ portuguese_brazilian ] = "~Palavras em maiúsculas" ;
-        Text [ portuguese ] = "~Palavras maiúsculas" ;
-        Text [ finnish ] = "~Isolla kirjoitettavat sanat" ;
-        Text [ danish ] = "~Ord med store bogstaver" ;
-        Text [ french ] = "les mots écrits en ~majuscules" ;
-        Text [ swedish ] = "Or~d med stora bokstäver" ;
-        Text [ dutch ] = "~Woorden met hoofdletters" ;
-        Text [ spanish ] = "~Palabras en mayúscula" ;
-        Text [ english_us ] = "~Capital words" ;
+        Text [ de ] = "~Großgeschriebene Wörter" ;
+        Text [ en-US ] = "~Capital words" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å¤§å†™å•è¯(~C)";
-        Text[ russian ] = "Ñëîâà èç ïğîïèñíûõ áóêâ";
-        Text[ polish ] = "~S³owa napisane wielkimi literami";
-        Text[ japanese ] = "ã™ã¹ã¦å¤§æ–‡å­—ã®å˜èª(~C)";
-        Text[ chinese_traditional ] = "å¤§å¯«å­—(~C)";
-        Text[ arabic ] = "ÇáßáãÇÊ ÇáãßÊæÈÉ ÈÃÍÑİ ßÈíÑÉ";
-        Text[ greek ] = "Ëİîåéò ìå êåöáëáßá ãñÜììáôá";
-        Text[ korean ] = "ëŒ€ë¬¸ìë¡œ ì‚¬ìš©ëœ ë‹¨ì–´(~C)";
-        Text[ turkish ] = "Büyük harfli sözcükler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Paraules en majúscula";
-        Text[ thai ] = "à¸„à¸³à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰~à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ";
-        Text[ czech ] = "Slova velkÃ½mi pÃ­smeny";
-        Text[ hebrew ] = "â€®××™×œ×™× ×‘×¢×œ×•×ª ×¨××©×™×•×ª ×’×“×•×œ×•×ªâ€¬";
-        Text[ hindi ] = "~à¤•à¥‡à¤ªà¤¿à¤Ÿà¤² à¤¶à¤¬à¥à¤¦";
-        Text[ slovak ] = "SlovÃ¡ ~veÄ¾kÃ½mi pÃ­smenami";
-        Text[ hungarian ] = "~NagybetÅ±s szavak";
-        Text[ slovenian ] = "~Besede z veliko zaÄetnico";
+        Text [ x-comment ] = " ";
     };
     CheckBox BTN_NUMS
     {
@@ -211,38 +116,10 @@ TabPage RID_SFXPAGE_SPELL
         Size = MAP_APPFONT ( 103 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Wörter mit Ziffern  : ~W÷rter mit Ziffern  */
         /* ### ACHTUNG: Neuer Text in Resource? ~Wörter mit Ziffern  : ~W÷rter mit Ziffern  */
-        Text = "~Wörter mit Ziffern " ;
-        Text [ ENGLISH ] = "~Words with numbers " ;
-        Text [ norwegian ] = "~Ord med tall " ;
-        Text [ italian ] = "Parole con ~numeri " ;
-        Text [ portuguese_brazilian ] = "Palavras com ~números " ;
-        Text [ portuguese ] = "~Palavras com números " ;
-        Text [ finnish ] = "~Numeroita sisältävät sanat " ;
-        Text [ danish ] = "~Ord med tal " ;
-        Text [ french ] = "les mots comportant des ~chiffres  " ;
-        Text [ swedish ] = "Ord med s~iffror  " ;
-        Text [ dutch ] = "~Woorden met cijfers" ;
-        Text [ spanish ] = "P~alabras con números  " ;
-        Text [ english_us ] = "~Words with numbers " ;
+        Text [ de ] = "~Wörter mit Ziffern " ;
+        Text [ en-US ] = "~Words with numbers " ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å«æœ‰æ•°å­—çš„è¯(~W)";
-        Text[ russian ] = "Ñëîâà ñ öèôğàìè ";
-        Text[ polish ] = "~Wyrazy z cyframi";
-        Text[ japanese ] = "æ•°å­—ã‚’å«ã‚€å˜èª(~W)";
-        Text[ chinese_traditional ] = "å«æœ‰æ•¸å­—çš„è©(~W)";
-        Text[ arabic ] = "ÇáßáãÇÊ ÇáÊí ÊÍÊæí Úáì ÃÑŞÇã ";
-        Text[ greek ] = "Ëİîåéò ìå áñéèìïıò ";
-        Text[ korean ] = "ìˆ«ìê°€ í¬í•¨ëœ ë‹¨ì–´ (~W)";
-        Text[ turkish ] = "Rakamlı sözcükler ";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Paraules amb nombres ";
-        Text[ thai ] = "~à¸„à¸³à¸—à¸µà¹ˆà¸¡à¸µà¸•à¸±à¸§à¹€à¸¥à¸‚ ";
-        Text[ czech ] = "Slova s ÄÃ­slicemi ";
-        Text[ hebrew ] = "â€®××™×œ×™× ×¢× ××¡×¤×¨×™×â€¬";
-        Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¸à¤¹à¤¿à¤¤ ~à¤¶à¤¬à¥à¤¦ ";
-        Text[ slovak ] = "SlovÃ¡ s ÄÃ­slica~mi ";
-        Text[ hungarian ] = "~SzÃ¡mozott szavak";
-        Text[ slovenian ] = "~Besede s Å¡tevilkami";
+        Text [ x-comment ] = " ";
     };
     CheckBox BTN_UPLOW
     {
@@ -250,38 +127,10 @@ TabPage RID_SFXPAGE_SPELL
         Size = MAP_APPFONT ( 103 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Groß- u. ~Kleinschreibung  : Gro˜- u. ~Kleinschreibung  */
         /* ### ACHTUNG: Neuer Text in Resource? Groß- u. ~Kleinschreibung  : Gro˜- u. ~Kleinschreibung  */
-        Text = "Groß- u. ~Kleinschreibung " ;
-        Text [ ENGLISH ] = "~Upper and lower case " ;
-        Text [ norwegian ] = "~Stor og liten skrift " ;
-        Text [ italian ] = "Mai~uscole e minuscole " ;
-        Text [ portuguese_brazilian ] = "Diferenciar ~maiúsculas/minúsculas" ;
-        Text [ portuguese ] = "~Maiúsculas & Minúsculas " ;
-        Text [ finnish ] = "~Kirjainkoon erottelu " ;
-        Text [ danish ] = "~STORE og små bogstaver" ;
-        Text [ french ] = "la ~casse  " ;
-        Text [ swedish ] = "Versal~känslig " ;
-        Text [ dutch ] = "~Hoofdletters/kleine letters " ;
-        Text [ spanish ] = "~Mayúsculas y minúsculas  " ;
-        Text [ english_us ] = "~Case sensitive " ;
+        Text [ de ] = "Groß- u. ~Kleinschreibung " ;
+        Text [ en-US ] = "~Case sensitive " ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å­—æ¯å¤§å°å†™ (~C)";
-        Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ ";
-        Text[ polish ] = "~Uwzglêdnij wielkoœæ liter";
-        Text[ japanese ] = "å¤§æ–‡å­—ã¨å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹(~C)";
-        Text[ chinese_traditional ] = "å­—æ¯å¤§å°å¯«(~C)";
-        Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ ";
-        Text[ greek ] = "ĞåæÜ-Êåöáëáßá ";
-        Text[ korean ] = "ëŒ€ë¬¸ìì™€ ì†Œë¬¸ì (~C)";
-        Text[ turkish ] = "Büyük/küçük yazım ";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Majúscules i minúscules  ";
-        Text[ thai ] = "~à¸•à¸£à¸‡à¸•à¸²à¸¡à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ-à¹€à¸¥à¹‡à¸ ";
-        Text[ czech ] = "RozliÅ¡ovat velkÃ¡/malÃ¡ ";
-        Text[ hebrew ] = "â€®×¨×’×™×©×•×ª ×œ××•×ª×™×•×ª ×’×“×•×œ×•×ª\\×§×˜× ×•×ªâ€¬";
-        Text[ hindi ] = "~à¤•à¥‡à¤¸ à¤¸à¤šà¥‡à¤¤à¤¨ ";
-        Text[ slovak ] = "~RozliÅ¡ovaÅ¥ veÄ¾kÃ©/malÃ© ";
-        Text[ hungarian ] = "Kis/nagybetÅ± ~kÃ¼lÃ¶nbÃ¶zik";
-        Text[ slovenian ] = "Raz~likuj velike in male Ärke";
+        Text [ x-comment ] = " ";
     };
     FixedLine GB_AUDIT
     {
@@ -289,56 +138,11 @@ TabPage RID_SFXPAGE_SPELL
         Size = MAP_APPFONT ( 115 , 53 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Prüfen : Pr³fen */
         /* ### ACHTUNG: Neuer Text in Resource? Prüfen : Pr³fen */
-        Text = "Prüfen" ;
-        Text [ ENGLISH ] = "Check" ;
-        Text [ norwegian ] = "Kontroller" ;
-        Text [ italian ] = "Verifica" ;
-        Text [ portuguese_brazilian ] = "Verificar" ;
-        Text [ portuguese ] = "Verificar" ;
-        Text [ finnish ] = "Tarkista" ;
-        Text [ danish ] = "Kontroller" ;
-        Text [ french ] = "Vérifier" ;
-        Text [ swedish ] = "Kontrollera" ;
-        Text [ dutch ] = "Controleren" ;
-        Text [ spanish ] = "Revisar" ;
-        Text [ english_us ] = "Check" ;
-        Text[ chinese_simplified ] = "æ£€æŸ¥";
-        Text[ russian ] = "Ïğîâåğÿòü";
-        Text[ polish ] = "SprawdŸ";
-        Text[ japanese ] = "ã‚¹ãƒšãƒ«ãƒã‚§ãƒƒã‚¯";
-        Text[ chinese_traditional ] = "æª¢æŸ¥";
-        Text[ arabic ] = "ÇáÊÏŞíŞ";
-        Text[ greek ] = "¸ëåã÷ïò";
-        Text[ korean ] = "ê²€ì‚¬";
-        Text[ turkish ] = "Denetim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Comprova";
-        Text[ thai ] = "à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸š";
-        Text[ czech ] = "Kontrola";
-        Text[ hebrew ] = "â€®×‘×“×™×§×”â€¬";
-        Text[ hindi ] = "à¤œà¤¾à¤à¤š";
-        Text[ slovak ] = "Kontrola";
-        Text[ hungarian ] = "EllenÅ‘rzÃ©s";
-        Text[ slovenian ] = "Preveri";
+        Text [ de ] = "Prüfen" ;
+        Text [ en-US ] = "Check" ;
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥";
-    Text[ russian ] = "Ïğîâåğêà îğôîãğàôèè";
-    Text[ polish ] = "Sprawdzanie pisowni";
-    Text[ japanese ] = "æ–‡ç« æ ¡æ­£";
-    Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥";
-    Text[ arabic ] = "ÊÏŞíŞ ÅãáÇÆí";
-    Text[ greek ] = "Ïñèïãñáößá";
-    Text[ korean ] = "ë§ì¶¤ë²• ê²€ì‚¬";
-    Text[ turkish ] = "İmla kontrol";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ortografia";
-    Text[ thai ] = "à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸à¸²à¸£à¸ªà¸°à¸à¸”";
-    Text[ czech ] = "Kontrola pravopisu";
-    Text[ hebrew ] = "â€®×‘×“×™×§×ª ××™×•×ªâ€¬";
-    Text[ hindi ] = "à¤…à¤•à¥à¤·à¤° à¤•à¥€ à¤œà¤¾à¤à¤š";
-    Text[ slovak ] = "Kontrola pravopisu";
-    Text[ hungarian ] = "HelyesÃ­rÃ¡s-ellenÅ‘rzÃ©s";
-    Text[ slovenian ] = "Preverjanje Ärkovanja";
+    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
