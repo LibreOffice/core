@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:52:56 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,11 +874,31 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
 
     if ( m_xComponent.is() )
     {
+        uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xOwnLM;
+        try {
+            uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
+            xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xOwnLM;
+        } catch( uno::Exception& )
+        {}
+
+        if ( xOwnLM.is() )
+            xOwnLM->lock();
+
         // TODO/LATER: get it for the real aspect
         awt::Size aSize;
         GetExtent( embed::Aspects::MSOLE_CONTENT, &aSize );
         LoadDocToFrame(sal_False);
+
+        if ( xOwnLM.is() )
+        {
+            xOwnLM->unlock();
+            xOwnLM->lock();
+        }
+
         SetExtent( embed::Aspects::MSOLE_CONTENT, aSize );
+
+        if ( xOwnLM.is() )
+            xOwnLM->unlock();
     }
 
     return m_xFrame;
