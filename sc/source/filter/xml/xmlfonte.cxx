@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfonte.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-17 10:25:58 $
+ *  last change: $Author: sab $ $Date: 2001-02-27 16:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,19 +99,27 @@
 
 class ScXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 {
-    void AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pPool);
+    void AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pPool, const sal_Bool bExportDefaults);
     public:
 
     ScXMLFontAutoStylePool_Impl( ScXMLExport& rExport );
 
 };
 
-void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pPool)
+void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pPool, const sal_Bool bExportDefaults)
 {
     const SfxPoolItem* pItem;
     for( sal_uInt16 i=0; i < nIdCount; i++ )
     {
         sal_uInt16 nWhichId = pWhichIds[i];
+        if (bExportDefaults && (0 != (pItem = &pPool->GetDefaultItem(nWhichId))))
+        {
+            const SvxFontItem *pFont =
+                        (const SvxFontItem *)pItem;
+            Add( pFont->GetFamilyName(), pFont->GetStyleName(),
+                    pFont->GetFamily(), pFont->GetPitch(),
+                    pFont->GetCharSet() );
+        }
         sal_uInt16 nItems = pPool->GetItemCount( nWhichId );
         for( sal_uInt16 j = 0; j < nItems; ++j )
         {
@@ -139,9 +147,9 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(
                                     ATTR_PAGE_HEADERRIGHT, ATTR_PAGE_FOOTERRIGHT };
 
     const SfxItemPool* pPool = rExport.GetDocument()->GetPool();
-    AddFontItems(aWhichIds, 3, pPool);
+    AddFontItems(aWhichIds, 3, pPool, sal_True);
     const SfxItemPool* pEditPool = rExport.GetDocument()->GetEditPool();
-    AddFontItems(aEditWhichIds, 3, pEditPool);
+    AddFontItems(aEditWhichIds, 3, pEditPool, sal_False);
 
     SfxStyleSheetIterator* pItr = rExport.GetDocument()->GetStyleSheetPool()->CreateIterator(SFX_STYLE_FAMILY_PAGE, 0xFFFF);
     if(pItr)
@@ -165,19 +173,19 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(
                         if (pLeftArea)
                         {
                             aEditEngine.SetText(*pLeftArea);
-                            AddFontItems(aEditWhichIds, 3, pPageEditPool);
+                            AddFontItems(aEditWhichIds, 3, pPageEditPool, sal_False);
                         }
                         const EditTextObject* pCenterArea = pPageItem->GetCenterArea();
                         if (pCenterArea)
                         {
                             aEditEngine.SetText(*pCenterArea);
-                            AddFontItems(aEditWhichIds, 3, pPageEditPool);
+                            AddFontItems(aEditWhichIds, 3, pPageEditPool, sal_False);
                         }
                         const EditTextObject* pRightArea = pPageItem->GetRightArea();
                         if (pRightArea)
                         {
                             aEditEngine.SetText(*pRightArea);
-                            AddFontItems(aEditWhichIds, 3, pPageEditPool);
+                            AddFontItems(aEditWhichIds, 3, pPageEditPool, sal_False);
                         }
                     }
                 }
