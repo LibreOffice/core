@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XThesaurus.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ module com { module sun { module star { module linguistic2 {
 
     @see    <type scope="com::sun::star::linguistic2">XSupportedLocales</type>
 */
-interface XThesaurus : com::sun::star::linguistic2::XSupportedLocales
+published interface XThesaurus : com::sun::star::linguistic2::XSupportedLocales
 {
     //-------------------------------------------------------------------------
     /**
