@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fumorph.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:06:13 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,13 +96,14 @@
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
 #endif
-#ifndef SD_MORPH_DLG_HXX
-#include "morphdlg.hxx"
-#endif
+//CHINA001 #ifndef SD_MORPH_DLG_HXX
+//CHINA001 #include "morphdlg.hxx"
+//CHINA001 #endif
 #include "strings.hrc"
 #include "sdresid.hxx"
 
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "morphdlg.hrc" //CHINA001
 namespace sd {
 
 #define  ITEMVALUE( ItemSet, Id, Cast ) ( ( (const Cast&) (ItemSet).Get( (Id) ) ).GetValue() )
@@ -136,16 +137,19 @@ FuMorph::FuMorph (
         // Path-Objekte erzeugen
         SdrPathObj* pPolyObj1 = (SdrPathObj*)pCloneObj1->ConvertToPolyObj(FALSE, FALSE);
         SdrPathObj* pPolyObj2 = (SdrPathObj*)pCloneObj2->ConvertToPolyObj(FALSE, FALSE);
-        MorphDlg aDlg (static_cast< ::Window*>(pWindow), pObj1, pObj2);
-
-        if(pPolyObj1 && pPolyObj2 && (aDlg.Execute() == RET_OK))
+        //CHINA001 MorphDlg aDlg (static_cast< ::Window*>(pWindow), pObj1, pObj2);
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+        DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+        AbstractMorphDlg* pDlg = pFact->CreateMorphDlg(ResId( DLG_MORPH ), static_cast< ::Window*>(pWindow), pObj1, pObj2 );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        if(pPolyObj1 && pPolyObj2 && (pDlg->Execute() == RET_OK)) //CHINA001 if(pPolyObj1 && pPolyObj2 && (aDlg.Execute() == RET_OK))
         {
             List aPolyPolyList3D;
             PolyPolygon3D aPolyPoly1(pPolyObj1->GetPathPoly());
             PolyPolygon3D aPolyPoly2(pPolyObj2->GetPathPoly());
             PolyPolygon3D* pPolyPoly;
 
-            aDlg.SaveSettings();
+            pDlg->SaveSettings(); //CHINA001 aDlg.SaveSettings();
 
             // Morphing durchfuehren
             if(aPolyPoly1.Count() && aPolyPoly2.Count())
@@ -169,7 +173,7 @@ FuMorph::FuMorph (
                     ImpAddPolys(aPolyPoly2, aPolyPoly1);
 
                 // use orientation flag from dialog
-                if(!aDlg.IsOrientationFade())
+                if(!pDlg->IsOrientationFade()) //CHINA001 if(!aDlg.IsOrientationFade())
                     aPolyPoly2.FlipDirections();
 
                 // force same point counts
@@ -181,7 +185,7 @@ FuMorph::FuMorph (
                         ImpEqualizePolyPointCount(aPolyPoly2[a], aPolyPoly1[a]);
                 }
 
-                if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, aDlg.GetFadeSteps(), aPolyPolyList3D))
+                if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, pDlg->GetFadeSteps(), aPolyPolyList3D)) //CHINA001 if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, aDlg.GetFadeSteps(), aPolyPolyList3D))
                 {
                     String aString(pView->GetMarkDescription());
 
@@ -189,7 +193,7 @@ FuMorph::FuMorph (
                     aString.Append(String(SdResId(STR_UNDO_MORPHING)));
 
                     pView->BegUndo(aString);
-                    ImpInsertPolygons(aPolyPolyList3D, aDlg.IsAttributeFade(), pObj1, pObj2);
+                    ImpInsertPolygons(aPolyPolyList3D, pDlg->IsAttributeFade(), pObj1, pObj2); //CHINA001 ImpInsertPolygons(aPolyPolyList3D, aDlg.IsAttributeFade(), pObj1, pObj2);
                     pView->EndUndo();
                 }
 
@@ -198,7 +202,7 @@ FuMorph::FuMorph (
                     delete pPolyPoly;
             }
         }
-
+        delete pDlg; //add by CHINA001
         delete pCloneObj1;
         delete pCloneObj2;
 
