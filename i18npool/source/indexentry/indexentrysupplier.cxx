@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-12-14 16:26:09 $
+ *  last change: $Author: bustamam $ $Date: 2002-01-10 21:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,26 +95,34 @@ using namespace ::com::sun::star::i18n;
         rServiceName += underScore + rLocale.Variant;
         if ( rSortAlgorithm.getLength() )
         rServiceName += underScore + rSortAlgorithm;
-        rServiceName += underScore;
-    }
-    rServiceName += ::rtl::OUString::createFromAscii("IndexEntrySupplier");
+    } else // if not locale specified, use default Unicode service.
+        rServiceName += ::rtl::OUString::createFromAscii("Unicode");
+
+    rServiceName += ::rtl::OUString::createFromAscii("_IndexEntrySupplier");
 
     if ( (!rServiceName.equals(aServiceName) || (!xIES.is())) && xMSF.is() ) {
 
         aServiceName = rServiceName;
 
-        if ( aServiceName.compareToAscii( implementationName ) != 0 ) {
+        ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >
+            xI = xMSF->createInstance( aServiceName );
+        ::com::sun::star::uno::Any x;
+        if( xI.is() ) {
+        x = xI->queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::i18n::XIndexEntrySupplier>*)0) );
+            x >>= xIES;
+        } else {
+        // For the locale the service does not exist, call default Unicode service,
+        // if Unicode service does not exist also, throw an error.
+        xI = xMSF->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.i18n.Unicode_IndexEntrySupplier" ));
+        if ( xI.is() ) {
+            x = xI->queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::i18n::XIndexEntrySupplier>*)0) );
+            x >>= xIES;
+        } else
+            throw ::com::sun::star::uno::RuntimeException();
 
-            ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >
-                xI = xMSF->createInstance( aServiceName );
-            if( xI.is() ) {
-            ::com::sun::star::uno::Any x = xI->queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::i18n::XIndexEntrySupplier>*)0) );
-                x >>= xIES;
-            } else if ( xIES.is() )
-            xIES.clear();
-        } else if ( xIES.is() )
-            xIES.clear();
+        }
     }
 
     if( xIES.is() )
@@ -138,6 +146,8 @@ using namespace ::com::sun::star::i18n;
         { "it",     "seg.",     "segg." },
         { "fr",     "suivante", "suivantes" },
         { "zh",     "",         "" },
+        { "ja",     "",         "" },
+        { "ko",     "",         "" },
         { 0, 0, 0 }
     };
 

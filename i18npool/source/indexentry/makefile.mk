@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.2 $
+#*  $Revision: 1.3 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2001-12-14 17:46:29 $
+#*  last change: $Author: bustamam $ $Date: 2002-01-10 21:53:13 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -93,7 +93,8 @@ SLOFILES=   \
             $(SLO)$/indexentrysupplier_fi_FI_alphanumeric.obj \
             $(SLO)$/indexentrysupplier_is_IS_alphanumeric.obj \
             $(SLO)$/indexentrysupplier_nl_BE_alphanumeric.obj \
-            $(SLO)$/indexentrysupplier_no_NO_alphanumeric.obj
+            $(SLO)$/indexentrysupplier_no_NO_alphanumeric.obj \
+            $(SLO)$/indexentrysupplier_Unicode.obj
 
 
 # --- Targets ------------------------------------------------------
