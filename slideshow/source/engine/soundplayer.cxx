@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soundplayer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:00:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,49 @@ namespace presentation
     {
         // TODO(Q3): Move the whole SoundPlayer class to avmedia.
 
-        SoundPlayer::SoundPlayer( const ::rtl::OUString&                            rSoundURL,
-                                  const uno::Reference< uno::XComponentContext>&    rComponentContext ) :
-            mxPlayer()
+        boost::shared_ptr<SoundPlayer> SoundPlayer::create(
+            EventMultiplexer & rEventMultiplexer,
+            const ::rtl::OUString& rSoundURL,
+            const uno::Reference< uno::XComponentContext>&  rComponentContext )
+        {
+            boost::shared_ptr<SoundPlayer> pPlayer(
+                new SoundPlayer( rEventMultiplexer,
+                                 rSoundURL,
+                                 rComponentContext ) );
+            rEventMultiplexer.addPauseHandler( pPlayer );
+            pPlayer->mThis = pPlayer;
+            return pPlayer;
+        }
+
+        bool SoundPlayer::handlePause( bool bPauseShow )
+        {
+            return bPauseShow ? stopPlayback() : startPlayback();
+        }
+
+        void SoundPlayer::dispose()
+        {
+            if (mThis.get() != 0) {
+                mrEventMultiplexer.removePauseHandler( mThis );
+                mThis.reset();
+            }
+
+            if (mxPlayer.is()) {
+                mxPlayer->stop();
+                uno::Reference<lang::XComponent> xComponent(
+                    mxPlayer, uno::UNO_QUERY );
+                if (xComponent.is())
+                    xComponent->dispose();
+                mxPlayer.clear();
+            }
+        }
+
+        SoundPlayer::SoundPlayer(
+            EventMultiplexer & rEventMultiplexer,
+            const ::rtl::OUString& rSoundURL,
+            const uno::Reference< uno::XComponentContext>&  rComponentContext )
+            : mrEventMultiplexer(rEventMultiplexer),
+              mThis(),
+              mxPlayer()
         {
             ENSURE_AND_THROW( rComponentContext.is(),
                               "SoundPlayer::SoundPlayer(): Invalid component context" );
@@ -121,21 +161,16 @@ namespace presentation
             }
             catch( uno::Exception& )
             {
-                throw lang::NoSupportException();
+                throw lang::NoSupportException(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                       "No sound support for ") ) + rSoundURL,
+                    uno::Reference<uno::XInterface>() );
             }
         }
 
         SoundPlayer::~SoundPlayer()
         {
-            if( mxPlayer.is() )
-            {
-                mxPlayer->stop();
-
-                uno::Reference< lang::XComponent > xComponent( mxPlayer, uno::UNO_QUERY );
-
-                if( xComponent.is() )
-                    xComponent->dispose();
-            }
+            dispose();
         }
 
         double SoundPlayer::getDuration() const
