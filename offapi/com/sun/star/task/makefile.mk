@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 11:52:50 $
+#   last change: $Author: kz $ $Date: 2004-10-04 17:41:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ IDLFILES=\
     ClassifiedInteractionRequest.idl\
     DocumentPasswordRequest.idl\
     ErrorCodeRequest.idl\
+    ErrorCodeIOException.idl\
     InteractionClassification.idl\
     InteractionHandler.idl\
     JobExecutor.idl\
