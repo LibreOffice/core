@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dbo $ $Date: 2001-09-06 11:59:03 $
+#   last change: $Author: vg $ $Date: 2001-12-11 19:09:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,5 +107,5 @@ SHL1STDLIBS= \
 .INCLUDE :	target.mk
 
 $(SLO)$/%.obj: %.s
-    CC -c -o $(SLO)$/$(@:b).o $< ; touch $@
+    CC -KPIC -c -o $(SLO)$/$(@:b).o $< ; touch $@
 
