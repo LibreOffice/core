@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:12:46 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,20 @@
 #include <X11/keysym.h>
 
 #include <X11/Xatom.h>
+
+#ifdef USE_XINERAMA
 #ifndef SOLARIS
 #if defined(X86) || defined(MACOSX)
 #include <X11/extensions/Xinerama.h>
+#endif
+#else
+#if defined(INTEL) // missing extension header in standard installation
+#define MAXFRAMEBUFFERS       16
+Bool XineramaGetState(Display*, int);
+Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
+#else
+#include <X11/extensions/xinerama.h>
+#endif
 #endif
 #endif
 
@@ -649,6 +660,15 @@ void SalDisplay::doDestruct()
     X11SalBitmap::ImplDestroyCache();
     DestroyFontCache();
 
+#ifdef HAVE_LIBSN
+    if( m_pSnLauncheeContext )
+    {
+        sn_launchee_context_complete( m_pSnLauncheeContext );
+        sn_launchee_context_unref( m_pSnLauncheeContext );
+    }
+    sn_display_unref( m_pSnDisplay );
+#endif /* HAVE_LIBSN */
+
     if( IsDisplay() )
     {
         osl_destroyMutex( hEventGuard_ );
@@ -692,12 +712,6 @@ void SalDisplay::doDestruct()
         delete mpInputMethod;
         delete mpKbdExtension;
     }
-
-#ifdef HAVE_LIBSN
-    if( m_pSnLauncheeContext )
-        sn_launchee_context_unref( m_pSnLauncheeContext );
-    sn_display_unref( m_pSnDisplay );
-#endif /* HAVE_LIBSN */
 
     pVisual_        = (SalVisual*)ILLEGAL_POINTER;
     pRootVisual_    = (SalVisual*)ILLEGAL_POINTER;
@@ -756,14 +770,12 @@ SalX11Display::~SalX11Display()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalX11Display::~SalX11Display()\n" );
 #endif
-#ifdef __FIXME__
     if( pDisp_ )
     {
         doDestruct();
         XCloseDisplay( pDisp_ );
         pDisp_ = NULL;
     }
-#endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1898,10 +1910,8 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
     if( aCur != None )
         return aCur;
 
-    Pixmap          aCursBitmap = 0;
-    Pixmap          aMaskBitmap = 0;
-    unsigned int    nXHot = 0;
-    unsigned int    nYHot = 0;
+    Pixmap          aCursBitmap = None, aMaskBitmap = None;
+    unsigned int    nXHot = 0, nYHot = 0;
 
     switch( ePointerStyle )
     {
@@ -2438,7 +2448,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
         std::list< SalFrame* >::const_iterator it;
         for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
         {
-            X11SalFrame* pFrame = static_cast< X11SalFrame* >(*it);
+            const X11SalFrame* pFrame = static_cast< const X11SalFrame* >(*it);
             if( pFrame->GetWindow() == aWindow || pFrame->GetShellWindow() == aWindow )
             {
                 aWindow = pFrame->GetWindow();
@@ -2499,7 +2509,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
             break;
     }
 
-    std::list< SalFrame* >::const_iterator it;
+    std::list< SalFrame* >::iterator it;
     for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
     {
         X11SalFrame* pFrame = static_cast< X11SalFrame* >(*it);
@@ -2762,32 +2772,18 @@ void SalDisplay::GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) c
 
 void SalDisplay::InitXinerama()
 {
+#ifdef USE_XINERAMA
 #if defined( SOLARIS )
-    // do this load on call for benefit of Solaris < 8
-    rtl::OUString aLib( RTL_CONSTASCII_USTRINGPARAM( "libXext.so" ) );
-    rtl::OUString aSymb1( RTL_CONSTASCII_USTRINGPARAM( "XineramaGetState" ) );
-    rtl::OUString aSymb2( RTL_CONSTASCII_USTRINGPARAM( "XineramaGetInfo" ) );
-    oslModule hModule = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
-    if( hModule == NULL )
-        return;
-
-    Bool(*pXineramaGetState)(Display*, int) =
-        (Bool(*)(Display*,int))osl_getSymbol( hModule, aSymb1.pData );
-    Status(*pXineramaGetInfo)(Display*,int,XRectangle*,unsigned char*,int*) =
-        (Status(*)(Display*,int,XRectangle*,unsigned char*,int*))osl_getSymbol( hModule, aSymb2.pData );
-    if( ! (pXineramaGetState && pXineramaGetInfo ) )
-        return;
-
     int nFramebuffers = 1;
-    if( pXineramaGetState( pDisp_, nScreen_ ) )
+    if( XineramaGetState( pDisp_, nScreen_ ) )
     {
-        XRectangle pFramebuffers[16]; // MAXFRAMEBUFFERS in the original header
-        unsigned char hints[16];
-        int result = pXineramaGetInfo( pDisp_,
-                                       nScreen_,
-                                       pFramebuffers,
-                                       hints,
-                                       &nFramebuffers );
+        XRectangle pFramebuffers[MAXFRAMEBUFFERS];
+        unsigned char hints[MAXFRAMEBUFFERS];
+        int result = XineramaGetInfo( pDisp_,
+                                      nScreen_,
+                                      pFramebuffers,
+                                      hints,
+                                      &nFramebuffers );
         if( result > 0 && nFramebuffers > 1 )
         {
             m_bXinerama = true;
@@ -2798,7 +2794,6 @@ void SalDisplay::InitXinerama()
                                                                pFramebuffers[i].height ) ) );
         }
     }
-    osl_unloadModule( hModule );
 #else
 #if defined( X86 ) || defined( MACOSX )
     if( XineramaIsActive( pDisp_ ) )
@@ -2821,13 +2816,14 @@ void SalDisplay::InitXinerama()
     }
 #endif
 #endif
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if( m_bXinerama )
     {
         for( std::vector< Rectangle >::const_iterator it = m_aXineramaScreens.begin(); it != m_aXineramaScreens.end(); ++it )
             fprintf( stderr, "Xinerama screen: %dx%d+%d+%d\n", it->GetWidth(), it->GetHeight(), it->Left(), it->Top() );
     }
 #endif
+#endif // USE_XINERAMA
 }
 
 void SalDisplay::registerFrame( SalFrame* pFrame )
