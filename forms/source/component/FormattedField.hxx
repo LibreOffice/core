@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 17:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,12 +93,12 @@ class OFormattedModel
     // das Original, falls ich die Format-Properties meines aggregierten Models gefaket, d.h. von dem Feld, an das
     // ich gebunden bin, weitergereicht habe (nur gueltig wenn loaded)
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>   m_xOriginalFormatter;
-    ::com::sun::star::util::Date                m_aNullDate;
-    ::com::sun::star::uno::Any              m_aSaveValue;
-    sal_Int16                   m_nKeyType;
+    ::com::sun::star::util::Date        m_aNullDate;
+    ::com::sun::star::uno::Any          m_aSaveValue;
 
-    sal_Bool                    m_bOriginalNumeric : 1,
-                                m_bNumeric : 1;
+    sal_Int16                           m_nKeyType;
+    sal_Bool                            m_bOriginalNumeric : 1,
+                                        m_bNumeric : 1;
         // analog fuer TreatAsNumeric-Property
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>    s_xDefaultFormatter;

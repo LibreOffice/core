@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-07 15:09:52 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 17:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,7 +713,7 @@ sal_Int32 OFormattedModel::calcFormatKey() const
 {
     DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::calcFormatKey : have no aggregate !");
     // hat mein aggregiertes Model einen FormatSupplier ?
-        Any aFormatKey = m_xAggregateSet.is() ? m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY): Any();
+    Any aFormatKey = m_xAggregateSet.is() ? m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY): Any();
     if (aFormatKey.hasValue())
         return getINT32(aFormatKey);
 
@@ -775,71 +775,78 @@ void OFormattedModel::_loaded(const EventObject& rEvent)
             DBG_ASSERT(xSupplier.is(), "OFormattedModel::_loaded : bound to a field but no parent with a formatter ? how this ?");
             if (xSupplier.is())
             {
+                m_bOriginalNumeric = getBOOL(getPropertyValue(PROPERTY_TREATASNUMERIC));
+
                 if (!aFmtKey.hasValue())
                 {   // we aren't bound to a field (or this field's format is invalid)
-                    // -> determine the standard text format of the supplier
-                                        Reference<XNumberFormatTypes>  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
+                    // -> determine the standard text (or numeric) format of the supplier
+                    Reference<XNumberFormatTypes>  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
                     if (xTypes.is())
                     {
                         UniString sLanguage, sCountry;
                         ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
-                                                Locale aNewLanguage(
-                            sLanguage,
-                            sCountry,
-                            ::rtl::OUString());
+                        Locale aApplicationLocale(sLanguage, sCountry, ::rtl::OUString());
+
+                        sal_Int32 nNewKey = 0;
+                        if (m_bOriginalNumeric)
+                            aFmtKey <<= (sal_Int32)xTypes->getStandardFormat(NumberFormat::NUMBER, aApplicationLocale);
+                        else
+                            aFmtKey <<= (sal_Int32)xTypes->getStandardFormat(NumberFormat::TEXT, aApplicationLocale);
                     }
                 }
 
-                                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(xSupplier));
+                aSupplier >>= m_xOriginalFormatter;
+                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(xSupplier));
                 m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, aFmtKey);
-                                m_xOriginalFormatter = *(Reference<XNumberFormatsSupplier> *)aSupplier.getValue();
 
                 // das Numeric-Flag an mein gebundenes Feld anpassen
-                m_bNumeric = sal_False;
-                switch (nType)
+                if (m_xField.is())
                 {
-                    case DataType::BIT:
-                    case DataType::TINYINT:
-                    case DataType::SMALLINT:
-                    case DataType::INTEGER:
-                    case DataType::BIGINT:
-                    case DataType::FLOAT:
-                    case DataType::REAL:
-                    case DataType::DOUBLE:
-                    case DataType::NUMERIC:
-                    case DataType::DECIMAL:
-                    case DataType::DATE:
-                    case DataType::TIME:
-                    case DataType::TIMESTAMP:
-                        m_bNumeric = sal_True;
-                        break;
+                    m_bNumeric = sal_False;
+                    switch (nType)
+                    {
+                        case DataType::BIT:
+                        case DataType::TINYINT:
+                        case DataType::SMALLINT:
+                        case DataType::INTEGER:
+                        case DataType::BIGINT:
+                        case DataType::FLOAT:
+                        case DataType::REAL:
+                        case DataType::DOUBLE:
+                        case DataType::NUMERIC:
+                        case DataType::DECIMAL:
+                        case DataType::DATE:
+                        case DataType::TIME:
+                        case DataType::TIMESTAMP:
+                            m_bNumeric = sal_True;
+                            break;
+                    }
                 }
-                m_bOriginalNumeric = getBOOL(getPropertyValue(PROPERTY_TREATASNUMERIC));
+                else
+                    m_bNumeric = m_bOriginalNumeric;
+
                 setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny((sal_Bool)m_bNumeric));
 
                 m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32(aFmtKey));
-                xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp)
-                    >>= m_aNullDate;
+                xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp) >>= m_aNullDate;
             }
         }
         else
         {
-                        Reference<XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
+            Reference<XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
 
             m_bNumeric = getBOOL(getPropertyValue(PROPERTY_TREATASNUMERIC));
             m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32(aFmtKey));
-            xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp)
-                >>= m_aNullDate;
+            xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp) >>= m_aNullDate;
         }
     }
     else
     {   // try to get some defaults ...
-                Reference<XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
+        Reference<XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
 
         m_bNumeric = getBOOL(getPropertyValue(PROPERTY_TREATASNUMERIC));
         m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), 0);
-        xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp)
-            >>= m_aNullDate;
+        xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp) >>= m_aNullDate;
     }
 
     OEditBaseModel::_loaded(rEvent);
@@ -851,9 +858,9 @@ void OFormattedModel::_unloaded()
     OEditBaseModel::_unloaded();
     if (m_xOriginalFormatter.is())
     {   // unser aggregiertes Model hatte keinerlei Format-Informationen
-                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(m_xOriginalFormatter));
-                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, Any());
-                setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny((sal_Bool)m_bOriginalNumeric));
+        m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(m_xOriginalFormatter));
+        m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, Any());
+        setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny((sal_Bool)m_bOriginalNumeric));
         m_xOriginalFormatter = NULL;
     }
 
