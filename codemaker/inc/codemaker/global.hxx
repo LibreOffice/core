@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:50:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ enum FileAccessMode
     FAM_READ,                   // "r"
     FAM_WRITE,                  // "w"
     FAM_READWRITE_EXIST,        // "r+"
-    FAM_READWRITE,              // "w+"
+    FAM_READWRITE               // "w+"
 };
 
 class FileStream
@@ -130,6 +130,8 @@ public:
     void close();
 
     ::rtl::OString  getName() { return m_name; }
+
+    bool write(void const * buffer, sal_uInt64 size);
 
     // friend functions
     friend FileStream &operator<<(FileStream& o, sal_uInt32 i);
