@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2002-04-02 15:14:06 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 07:45:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,12 +74,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  sv.mk
 
 # ------------------------------------------------------------------
-
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRDEP=	$(UNOUCRRDB)
-
-UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc
 
 UNOTYPES= \
         com.sun.star.registry.XRegistryKey	\
