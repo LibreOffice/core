@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallReportWizard.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bc $ $Date: 2002-05-15 15:04:28 $
+ *  last change: $Author: tv $ $Date: 2002-05-16 13:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,6 @@ import java.util.*;
  * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
  * method, that writes the information into the given registry key
  * (<CODE>__writeRegistryServiceInfo</CODE>).
- * @version $Date: 2002-05-15 15:04:28 $
  * @author Bertram Nolte
  */
 public class CallReportWizard {
@@ -143,7 +142,6 @@ public class CallReportWizard {
      */
     public static XSingleServiceFactory __getServiceFactory(String stringImplementationName, XMultiServiceFactory xMSF, XRegistryKey xregistrykey)
     {
-                System.err.println("tomsfehler" + stringImplementationName);
                 XSingleServiceFactory xsingleservicefactory = null;
         if ( stringImplementationName.equals(
             ReportWizardImplementation.class.getName() ) )
@@ -152,7 +150,6 @@ public class CallReportWizard {
             ReportWizardImplementation.__serviceName,
             xMSF,
             xregistrykey );
-                        System.err.println("tomsfehler" + xsingleservicefactory);
             return xsingleservicefactory;
     }
 
@@ -177,6 +174,18 @@ public class CallReportWizard {
      */
     public static class ReportWizardImplementation implements XInitialization, XTypeProvider, XServiceInfo, XDialog
     {
+
+        /** The constructor of the inner class has a XMultiServiceFactory parameter.
+         * @param xmultiservicefactoryInitialization A special service factory
+         * could be introduced while initializing.
+         */
+        public ReportWizardImplementation(XMultiServiceFactory xmultiservicefactoryInitialization)
+        {
+            xmultiservicefactory = xmultiservicefactoryInitialization;
+                        this.execute();
+        }
+
+
                 public void setTitle( /*IN*/String Title ){}
             public String getTitle(  ) {
                     return "";
@@ -188,7 +197,7 @@ public class CallReportWizard {
             {
                XComponentLoader xcomponentloader = ( XComponentLoader ) UnoRuntime.queryInterface(XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop" ));
                //ConnectToOfficeDatabase(xcomponentloader);
-        ReportWizard.startReportWizard(xmultiservicefactory);
+                             ReportWizard.startReportWizard(xmultiservicefactory);
             }
             catch( Exception exception )
             {
@@ -206,15 +215,6 @@ public class CallReportWizard {
         /** The service manager, that gives access to all registered services.
          */
         private XMultiServiceFactory xmultiservicefactory;
-
-        /** The constructor of the inner class has a XMultiServiceFactory parameter.
-         * @param xmultiservicefactoryInitialization A special service factory
-         * could be introduced while initializing.
-         */
-        public ReportWizardImplementation(XMultiServiceFactory xmultiservicefactoryInitialization)
-        {
-            xmultiservicefactory = xmultiservicefactoryInitialization;
-        }
 
         /** This method is a member of the interface for initializing an object
          * directly after its creation.
