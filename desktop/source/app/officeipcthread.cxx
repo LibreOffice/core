@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-26 10:46:38 $
+ *  last change: $Author: cd $ $Date: 2001-11-29 15:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,12 +333,15 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         // Seems another office is running. Pipe arguments to it and self terminate
         pThread->maStreamPipe = pThread->maPipe;
 
+        sal_Bool bWaitBeforeClose = sal_False;
         ByteString aArguments;
         ULONG nCount = aInfo.getCommandArgCount();
+
         if ( nCount == 0 )
         {
             // Use default argument so the first office can distinguish between a real second
             // office and another program that check the existence of the the pipe!!
+
             aArguments += ByteString( "-show" );
         }
         else
@@ -352,6 +355,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
                 // Otherwhise relativ pathes are not right for his environment ...
                 if( aDummy.indexOf('-',0) != 0 )
                 {
+                    bWaitBeforeClose = sal_True;
                     aDummy = GetURL_Impl( aDummy );
                 }
                 aArguments += ByteString( String( aDummy ), osl_getThreadTextEncoding() );
@@ -361,6 +365,24 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
         pThread->maStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
         delete pThread;
+
+#ifdef UNX
+        if ( bWaitBeforeClose )
+        {
+            // Fix for bug #95361#
+            // We are waiting before office shutdown itself. Netscape
+            // deletes temporary files after the responsible application
+            // exited. The running office must have time to open the file
+            // before Netscape can delete it!!
+            // We have to find a better way to handle this kind of problem
+            // in the future.
+            TimeValue aTimeValue;
+            aTimeValue.Seconds = 5;
+            aTimeValue.Nanosec = 0; // 5sec
+            osl::Thread::wait( aTimeValue );
+        }
+#endif
+
         return IPC_STATUS_2ND_OFFICE;
     }
 
