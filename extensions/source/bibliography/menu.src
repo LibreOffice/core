@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:05:17 $
+ *  last change: $Author: os $ $Date: 2001-04-06 07:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,63 +107,9 @@ Menu RID_MAIN_MENU
             {
             ITEM_FILE_CLOSEDOC
             };
-                    /*
-            MenuItem
-            {
-            ITEM_FILE_SAVEDOC
-            };
-            MenuItem
-            {
-            ITEM_FILE_SAVEASDOC
-            };
-                    */
             MenuItem
             {
             ITEM_FILE_SAVEDOCS //!!muss fuer andere geoeffnete Tasks drinbleiben
-            };
-            MenuItem
-            {
-                Command = ".uno:ss/sendasemail" ;
-                Identifier = 369;
-                Text = "Als E-Mail ~versenden..." ;
-                Text[ English ] = "Send as EMail...";
-                Text [ english_us ] = "Send as ~E-mail..." ;
-                Text[ portuguese ] = "~Enviar como e-mail...";
-                Text[ russian ] = "ŒÚÔ‡‚ËÚ¸ Í‡Í ˝ÎÂÍÚÓÌÌÓÂ ÔËÒ¸ÏÓ...";
-                Text[ dutch ] = "Als ~e-mail verzenden...";
-                Text[ french ] = "En~voyer par e-mail...";
-                Text[ spanish ] = "Enviar como ~mensaje electrÛnico...";
-                Text[ italian ] = "~Invia come eMail...";
-                Text[ danish ] = "Send som e-mail...";
-                Text[ swedish ] = "~Skicka som e-post...";
-                Text[ polish ] = "Wyúlij jako e-mail...";
-                Text[ portuguese_brazilian ] = "Send Even~t as EMail...";
-                Text[ japanese ] = "~E-mailÇ∆ÇµÇƒëóêM...";
-                Text[ chinese_simplified ] = "µ±◊˜µÁ◊”” º˛ºƒ∑¢(~E)...";
-                Text[ chinese_traditional ] = "∑Ìß@πq§l∂l•Ûµo∞e(~E)...";
-                        Text[ arabic ] = "≈—”«· ﬂ»—Ìœ ≈·ﬂ —Ê‰Ì...";
-                        Text[ greek ] = "¡ÔÛÙÔÎﬁ ~˘Ú E-mail...";
-                        Text[ korean ] = "~E-Mail ∑Œ ∫∏≥ª±‚...";
-                        Text[ turkish ] = "E-posta olarak gˆnder...";
-                        Text[ language_user1 ] = " ";
-                    };
-                    /*
-            MenuItem
-            {
-            ITEM_FILE_MAIL_SENDDOC
-            };
-                    */
-            MenuItem
-            {
-            Separator = TRUE ;
-            };
-            MenuItem
-            {
-            ITEM_FILE_PRINTDOC
-            };
-            MenuItem
-            {
-            ITEM_FILE_SETUPPRINTER
             };
             MenuItem
             {
@@ -197,23 +143,6 @@ Menu RID_MAIN_MENU
         {
         ItemList =
         {
-/*          MenuItem
-            {
-            ITEM_EDIT_UNDO
-            Command = ".uno:Bib/undo" ;
-            };
-              MenuItem
-            {
-            ITEM_EDIT_REDO
-            };
-            MenuItem
-            {
-            ITEM_EDIT_REPEAT
-            };
-            MenuItem
-            {
-            Separator = TRUE ;
-            };*/
             MenuItem
             {
             ITEM_EDIT_CUT
@@ -225,10 +154,6 @@ Menu RID_MAIN_MENU
             MenuItem
             {
             ITEM_EDIT_PASTE
-            };
-            MenuItem
-            {
-            ITEM_EDIT_SELECTALL
             };
             MenuItem
             {
@@ -290,40 +215,6 @@ Menu RID_MAIN_MENU
                         Text[ turkish ] = "~Veri kayna˝...";
                         Text[ language_user1 ] = " ";
                     };
-/*          MenuItem
-            {
-            Separator = TRUE ;
-            };
-            MenuItem
-            {
-                Text = "~Layout" ;
-                Text[ English ] = "~Layout" ;
-                Command = ".uno:Bib/Layout" ;
-                Identifier = RID_MAIN_ME_LAYOUT;
-                Checkable=TRUE;
-            };
-
-            MenuItem
-            {
-            Separator = TRUE ;
-            };
-            MenuItem
-            {
-            ITEM_EDIT_SEARCH_DLG
-            };
-            MenuItem
-            {
-            ITEM_EDIT_SBA_ADDRPI
-            };
-            MenuItem
-            {
-            Separator = TRUE ;
-            };
-            MenuItem
-            {
-            ITEM_EDIT_EDIT_FRAMESET
-            };
-                    */
         };
         };
         Text[ russian ] = "~œ‡‚Í‡";
@@ -337,128 +228,30 @@ Menu RID_MAIN_MENU
             Text[ turkish ] = "~D¸zenle";
             Text[ language_user1 ] = " ";
         };
-    MenuItem
-    {
-        Identifier = MN_VIEW ;
-        HelpID = MN_VIEW ;
-        Text = "~Ansicht" ;
-        Text [ English ] = "~View" ;
-        Text [ norwegian ] = "~Vis" ;
-        Text [ italian ] = "~Visualizza" ;
-        Text [ portuguese_brazilian ] = "~Ver" ;
-        Text [ portuguese ] = "~Ver" ;
-        Text [ finnish ] = "~N‰yt‰" ;
-        Text [ danish ] = "~Vis" ;
-        Text [ french ] = "~Affichage" ;
-        Text [ swedish ] = "Vi~sa" ;
-        Text [ dutch ] = "Beel~d" ;
-        Text [ spanish ] = "~Ver" ;
-        Text [ english_us ] = "~View" ;
-        SubMenu = Menu
+        MenuItem
         {
-        ItemList =
-        {
-            MenuItem
-            {
-            ITEM_VIEW_EXPLORER
-            };
-            MenuItem
-            {
-            ITEM_VIEW_BROWSER
-            };
-            MenuItem
-            {
-            Separator = TRUE ;
-            };
-            MenuItem
-            {
-            Identifier = 22 ;
-            HelpID = 22 ;
-            Text = "S~ymbolleisten" ;
-            Text [ English ] = "Toolbars" ;
-            Text [ english_us ] = "~Toolbars" ;
-            Text [ swedish ] = "S~ymbollister" ;
-            Text [ danish ] = "Ikonlin~jer" ;
-            Text [ italian ] = "Barr~e dei simboli" ;
-            Text [ spanish ] = "Barras de ~sÌmbolos" ;
-            Text [ french ] = "Barres d'~outils" ;
-            Text [ dutch ] = "We~rkbalken" ;
-            Text [ portuguese ] = "Barras de ~ferramentas" ;
-            Text [ portuguese_brazilian ] = "Symbolleisten" ;
+            Identifier = MN_VIEW ;
+            HelpID = MN_VIEW ;
+            Text = "~Ansicht" ;
+            Text [ English ] = "~View" ;
+            Text [ norwegian ] = "~Vis" ;
+            Text [ italian ] = "~Visualizza" ;
+            Text [ portuguese_brazilian ] = "~Ver" ;
+            Text [ portuguese ] = "~Ver" ;
+            Text [ finnish ] = "~N‰yt‰" ;
+            Text [ danish ] = "~Vis" ;
+            Text [ french ] = "~Affichage" ;
+            Text [ swedish ] = "Vi~sa" ;
+            Text [ dutch ] = "Beel~d" ;
+            Text [ spanish ] = "~Ver" ;
+            Text [ english_us ] = "~View" ;
             SubMenu = Menu
             {
                 ItemList =
                 {
-                MenuItem
-                {
-                    ITEM_VIEW_TOGGLEFUNCTIONBAR
-                };
-                MenuItem
-                {
-                    ITEM_VIEW_TOGGLEOBJECTBAR
-                };
-                MenuItem
-                {
-                    ITEM_INSERT_HYPERLINK_INSERT
-                };
-                                /*
-                MenuItem
-                {
-                    Separator = TRUE ;
-                };
-                MenuItem
-                {
-                    Identifier = SID_CUSTOMIZETOOLBOX ;
-                    HelpID = SID_CUSTOMIZETOOLBOX ;
-                    Text = "~Bearbeiten..." ;
-                    Text [ English ] = "~Customize..." ;
-                    Text [ english_us ] = "~Customize..." ;
-                    Text [ swedish ] = "~Redigera..." ;
-                    Text [ danish ] = "~Rediger..." ;
-                    Text [ italian ] = "~Modifica..." ;
-                    Text [ spanish ] = "~Personalizar..." ;
-                    Text [ french ] = "~Personnaliser..." ;
-                    Text [ dutch ] = "~Bewerken..." ;
-                    Text [ portuguese ] = "~Personalizar..." ;
-                    Text [ portuguese_brazilian ] = "~Bearbeiten..." ;
-                };
-                                */
+                    ITEM_VIEW_SCREENMODE
                 };
             };
-                Text[ russian ] = "œ‡ÌÂÎË ÒËÏ‚ÓÎÓ‚";
-                        Text[ polish ] = "Paski symboli";
-                        Text[ japanese ] = "¬∞Ÿ ﬁ∞(~T)";
-                        Text[ chinese_simplified ] = "Õº±Í¿∏(~T)";
-                        Text[ chinese_traditional ] = "§u®„¶C(~T)";
-                        Text[ arabic ] = "√‘—ÿ… «·—„Ê“";
-                        Text[ greek ] = "√Ò·ÏÏ›Ú Û~ıÏ‚¸Î˘Ì";
-                        Text[ korean ] = "µµ±∏∏¿Ω(~T)";
-                        Text[ turkish ] = "AraÁ Áubuklar˝";
-                        Text[ language_user1 ] = " ";
-                    };
-            MenuItem
-            {
-            ITEM_VIEW_TOGGLESTATUSBAR
-            };
-/*          MenuItem
-            {
-            Separator = TRUE ;
-            };
-            MenuItem
-            {
-                Text = "Hierarchisch" ;
-                Text[ English ] = "Hierarchical" ;
-                Command = ".uno:Bib/hierarchical" ;
-                Identifier = RID_MAIN_ME_HIERARCHICAL;
-                Checkable=TRUE;
-            };
-*/          MenuItem
-            {
-            Separator = TRUE ;
-            };
-            ITEM_VIEW_SCREENMODE
-        };
-        };
             Text[ russian ] = "~¬Ë‰";
             Text[ greek ] = "–ÒÔ~‚ÔÎﬁ";
             Text[ polish ] = "~Widok";
@@ -491,34 +284,7 @@ Menu RID_MAIN_MENU
         {
         ItemList =
         {
-/*          MenuItem
-            {
-                Text = "Neue Adresse" ;
-                Text [ English ] = "New Address" ;
-                Command = ".uno:Bib/newEntry" ;
-                Identifier = RID_MAIN_ME_NEWENTRY;
-            };
             MenuItem
-            {
-                Text = "Adresse ‰ndern" ;
-                Text [ English ] = "Change Address" ;
-                Command = ".uno:Bib/changeEntry" ;
-                Identifier = RID_MAIN_ME_CHANGEENTRY;
-            };
-            MenuItem
-            {
-                Text = "Adresse lˆschen" ;
-                Text [ English ] = "Remove Address" ;
-                Command = ".uno:Bib/removeEntry" ;
-                Identifier = RID_MAIN_ME_REMOVEENTRY;
-            };
-
-            MenuItem
-            {
-            Separator = TRUE ;
-            };
-
-*/          MenuItem
             {
                 Command = ".uno:Bib/standardFilter" ;
                 Identifier = RID_MAIN_ME_SEARCH;
@@ -544,35 +310,14 @@ Menu RID_MAIN_MENU
                         Text[ turkish ] = "~Filtrele...";
                         Text[ language_user1 ] = " ";
                     };
-/*          MenuItem
+             MenuItem
             {
             Separator = TRUE ;
             };
-            MenuItem
-            {
-                Command = ".uno:Bib/InsertFieldDlg" ;
-                Identifier = RID_MAIN_ME_FIELDDLG;
-                Text = "Felder ~einf¸gen...";
-                Text[ English ] = "Insert Fields..." ;
-            };
-*/          MenuItem
-            {
-            Separator = TRUE ;
-            };
-
-
             MenuItem
             {
             ITEM_TOOLS_BASICCHOOSER
             };
-
-
-                    /*
-            MenuItem
-            {
-            ITEM_TOOLS_CONFIG
-            };
-                    */
             ITEM_MN_OPTIONS
         };
         };
