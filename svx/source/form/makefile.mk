@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: fs $ $Date: 2001-01-12 14:13:13 $
+#   last change: $Author: fs $ $Date: 2001-04-11 12:38:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,7 @@ SRC1FILES= \
 
 
 SLOFILES = \
+    $(SLO)$/dataaccessdescriptor.obj      \
     $(SLO)$/fmpage.obj      \
     $(SLO)$/fmPropBrw.obj			\
     $(SLO)$/dialogservices.obj		\
