@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_OStringBuffer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:37:03 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ using namespace rtl;
 //------------------------------------------------------------------------
 // test classes
 //------------------------------------------------------------------------
-const MAXBUFLENGTH = 255;
+// const MAXBUFLENGTH = 255;
 //------------------------------------------------------------------------
 // helper functions
 //------------------------------------------------------------------------
@@ -138,14 +138,14 @@ namespace rtl_OStringBuffer
         void ctor_003()
         {
             ::rtl::OStringBuffer aStrBuf1(kTestStr2Len);
-    #ifdef WITH_CORE
+#ifdef WITH_CORE
             ::rtl::OStringBuffer aStrBuf2(kSInt32Max);     //will core dump
             // LLA: will core, due to the fact, that ksint32max is too big, the max length can't
             //      use, because there are some internal bytes, which we can't calculate.
 
-    #else
+#else
             ::rtl::OStringBuffer aStrBuf2(0);
-    #endif
+#endif
 
             const sal_Char* pStr1 = aStrBuf1.getStr();
             const sal_Char* pStr2 = aStrBuf2.getStr();
@@ -160,7 +160,8 @@ namespace rtl_OStringBuffer
                 ! *(aStrBuf2.getStr()) && aStrBuf2.getCapacity() == kSInt32Max
 
             );
-#else            CPPUNIT_ASSERT_MESSAGE
+#else
+            CPPUNIT_ASSERT_MESSAGE
             (
                 "New OStringBuffer containing no characters and contain assigned capacity",
                 aStrBuf1.getLength() == 0 &&
@@ -168,7 +169,7 @@ namespace rtl_OStringBuffer
                 aStrBuf1.getCapacity() == kTestStr2Len &&
                 aStrBuf2.getLength() == 0 &&
                 *pStr2 == '\0' &&
-                aStrBuf2.getCapacity() == 16
+                aStrBuf2.getCapacity() == 0
             );
 #endif
 
@@ -9197,7 +9198,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
             OString                expVal( kTestStr69 );
-            sal_Int32              input = -2147483648;
+            sal_Int32              input = SAL_MIN_INT32 /*-2147483648*/;
 
             aStrBuf.append( input );
 
@@ -9277,7 +9278,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
             OString                expVal( kTestStr69 );
-            sal_Int32              input = -2147483648;
+            sal_Int32              input = SAL_MIN_INT32;
 
             aStrBuf.append( input );
 
@@ -9357,7 +9358,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
             OString                expVal( kTestStr69 );
-            sal_Int32              input = -2147483648;
+            sal_Int32              input = SAL_MIN_INT32;
 
             aStrBuf.append( input );
 
@@ -9437,7 +9438,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
             OString                expVal( kTestStr73 );
-            sal_Int32              input = -2147483648;
+            sal_Int32              input = SAL_MIN_INT32;
 
             aStrBuf.append( input );
 
@@ -9517,7 +9518,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
             OString                expVal( kTestStr69 );
-            sal_Int32              input = -2147483648;
+            sal_Int32              input = SAL_MIN_INT32;
 
             aStrBuf.append( input );
 
@@ -14836,7 +14837,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
             OString                expVal( kTestStr117 );
-            sal_Int64              input = -9223372036854775808; // LLA: this is not the same :-( kNonSInt64Max;
+            sal_Int64              input = SAL_MIN_INT64/*-9223372036854775808*/; // LLA: this is not the same :-( kNonSInt64Max;
 
             aStrBuf.append( input );
 
@@ -14917,7 +14918,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
             OString                expVal( kTestStr119 );
-            sal_Int64              input = -9223372036854775808; // LLA: this is not the same :-( kNonSInt64Max;
+            sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
 
             aStrBuf.append( input );
 
@@ -14997,7 +14998,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
             OString                expVal( kTestStr119 );
-            sal_Int64              input = -9223372036854775808; // LLA: this is not the same :-( kNonSInt64Max;
+            sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
 
             aStrBuf.append( input );
 
@@ -15077,7 +15078,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
             OString                expVal( kTestStr119 );
-            sal_Int64              input = -9223372036854775808; // LLA: this is not the same :-( kNonSInt64Max;
+            sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
 
             aStrBuf.append( input );
 
@@ -15157,7 +15158,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
             OString                expVal( kTestStr121 );
-            sal_Int64              input = -9223372036854775808; // LLA: this is not the same :-( kNonSInt64Max;
+            sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
 
             aStrBuf.append( input );
 
@@ -15237,7 +15238,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
             OString                expVal( kTestStr119 );
-            sal_Int64              input = -9223372036854775808; // LLA: this is not the same :-( kNonSInt64Max;
+            sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
 
             aStrBuf.append( input );
 
