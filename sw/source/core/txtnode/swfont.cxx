@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:14:07 $
+ *  last change: $Author: ama $ $Date: 2000-11-24 15:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,7 @@ void SwFont::SetFnt( const SwAttrSet *pAttrSet )
             aSub[SW_CTL].SetLanguage( pAttrSet->GetCTLLanguage().GetLanguage() );
         }
         SetUnderline( pAttrSet->GetUnderline().GetUnderline() );
+        SetUnderColor( pAttrSet->GetUnderline().GetColor() );
         SetEmphasisMark( pAttrSet->GetEmphasisMark().GetEmphasisMark() );
         SetStrikeout( pAttrSet->GetCrossedOut().GetStrikeout() );
         SetColor( pAttrSet->GetColor().GetValue() );
@@ -449,7 +450,10 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet )
 
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_UNDERLINE,
             TRUE, &pItem ))
+        {
             SetUnderline( ((SvxUnderlineItem*)pItem)->GetUnderline() );
+            SetUnderColor( ((SvxUnderlineItem*)pItem)->GetColor() );
+        }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CROSSEDOUT,
             TRUE, &pItem ))
             SetStrikeout( ((SvxCrossedOutItem*)pItem)->GetStrikeout() );
@@ -518,6 +522,7 @@ SwFont::SwFont( const SwFont &rFont )
     aSub[SW_CTL] = rFont.aSub[SW_CTL];
     nActual = rFont.nActual;
     pBackColor = rFont.pBackColor ? new Color( *rFont.pBackColor ) : NULL;
+    aUnderColor = rFont.GetUnderColor();
     nToxCnt = nRefCnt = 0;
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
@@ -590,6 +595,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet )
     }
 
     SetUnderline( pAttrSet->GetUnderline().GetUnderline() );
+    SetUnderColor( pAttrSet->GetUnderline().GetColor() );
     SetEmphasisMark( pAttrSet->GetEmphasisMark().GetEmphasisMark() );
     SetStrikeout( pAttrSet->GetCrossedOut().GetStrikeout() );
     SetColor( pAttrSet->GetColor().GetValue() );
@@ -632,6 +638,7 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     nActual = rFont.nActual;
     delete pBackColor;
     pBackColor = rFont.pBackColor ? new Color( *rFont.pBackColor ) : NULL;
+    aUnderColor = rFont.GetUnderColor();
     nToxCnt = nRefCnt = 0;
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
@@ -726,6 +733,8 @@ void SwFont::ChgPhysFnt( ViewShell *pSh, OutputDevice *pOut )
         ChgFnt( pSh, pOut );
         bFntChg = bOrgChg;
     }
+    if( pOut->GetTextLineColor() != aUnderColor )
+        pOut->SetTextLineColor( aUnderColor );
 }
 
 /*************************************************************************

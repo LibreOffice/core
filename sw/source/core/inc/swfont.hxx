@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 12:51:04 $
+ *  last change: $Author: ama $ $Date: 2000-11-24 15:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ class SwFont
                                 // CTL == Complex text layout ( Hebrew, Arabic )
     SwSubFont   aSub[SW_SCRIPTS]; // Latin-, CJK- and CTL-font
     Color*      pBackColor;     // background color (i.e. at character styles)
+    Color       aUnderColor;    // color of the underlining
     BYTE        nToxCnt;        // Zaehlt die Schachtelungstiefe der Tox
     BYTE        nRefCnt;        // Zaehlt die Schachtelungstiefe der Refs
     BYTE        nActual;        // actual font (Latin, CJK or CTL)
@@ -259,6 +260,7 @@ public:
     inline void SetFillColor( const Color& rColor );
     inline void SetAlign( const FontAlign eAlign );
     inline void SetUnderline( const FontUnderline eUnderline );
+    inline void SetUnderColor( const Color &rColor ) { aUnderColor = rColor; }
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetOutline( const BOOL bOutline );
     inline void SetShadow( const BOOL bShadow );
@@ -323,6 +325,7 @@ public:
     BOOL IsSymbol( ViewShell *pSh )
         { return aSub[nActual].IsSymbol( pSh ); }
     FontUnderline GetUnderline() const { return aSub[nActual].GetUnderline(); }
+    const Color& GetUnderColor() const { return aUnderColor; }
     short GetFixKerning() const { return aSub[nActual].GetFixKerning(); }
     FontStrikeout GetStrikeout() const { return aSub[nActual].GetStrikeout(); }
     const Color& GetColor() const { return aSub[nActual].GetColor(); }
