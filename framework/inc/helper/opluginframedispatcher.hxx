@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opluginframedispatcher.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-02 14:08:21 $
+ *  last change: $Author: as $ $Date: 2001-02-15 14:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,32 @@ struct tIMPLExtractedArguments
     REFERENCE< XINPUTSTREAM >       xPostDataStream ;   // Value of extracted data stream for posting
 
     sal_Int32                       nValidMask      ;   // state of extracted arguments
+
+    /*ATTENTION
+
+        Bug: #83884#
+                If no copy-ctor exist - we crash under linux !??
+                Why?? ... I HAVE ABSOLUT NO IDEA!
+                May be its a compiler bug ... or a problem of stack- or memory- handling ...
+     */
+
+    tIMPLExtractedArguments()
+    {
+        sReferrer       =   OUSTRING()                  ;
+        xPostDataStream =   REFERENCE< XINPUTSTREAM >() ;
+        nValidMask      =   0                           ;
+    }
+
+    tIMPLExtractedArguments( const tIMPLExtractedArguments& rCopy )
+        :   sReferrer       (   rCopy.sReferrer         )
+        ,   xPostDataStream (   rCopy.xPostDataStream   )
+        ,   nValidMask      (   rCopy.nValidMask        )
+    {
+    }
+
+    ~tIMPLExtractedArguments()
+    {
+    }
 };
 
 /*-************************************************************************************************************//**
