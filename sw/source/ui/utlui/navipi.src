@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-22 05:46:20 $
+ *  last change: $Author: kz $ $Date: 2001-10-24 20:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1249,7 +1249,7 @@ Window DLG_NAVIGATION_PI
         Text[ portuguese ] = "Edit link";
         Text[ russian ] = "Ïðàâêà ññûëêè";
         Text[ greek ] = "Edit link";
-        Text[ dutch ] = "Edit link";
+        Text[ dutch ] = "Koppeling bewerken";
         Text[ french ] = "Éditer le lien";
         Text[ spanish ] = "Editar vínculo";
         Text[ finnish ] = "Edit link";
@@ -1730,6 +1730,7 @@ ImageList IMG_NAVI_ENTRYBMP
     };
     IdCount = { 12 ; };
 };
+
 
 
 
