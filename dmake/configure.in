@@ -44,22 +44,31 @@ AC_CHECK_FUNCS(getcwd getwd putenv strcspn strerror strspn strstr)
 
 dnl Checks for OS
 OS_UNAME=`uname`
-if test ${OS_UNAME} = SunOS; then
-	echo "Solaris found"
-	OS_VERSION=solaris
-fi
-if test ${OS_UNAME} = Linux; then
-	echo "Linux found"
-	OS_VERSION=linux
-fi
-if test ${OS_UNAME} = Irix; then
-	echo "Irix found"
-	OS_VERSION=sysvr4
-fi
-if test ${OS_UNAME} = FreeBSD; then
-	echo "FreeBSD found"
-	OS_VERSION=386ix
-fi
+case $OS_UNAME in
+	SunOS)
+		OS_VERSION=solaris
+		echo "Solaris found"
+	;;
+	Linux)
+		OS_VERSION=linux
+		echo "Linux found"
+	;;
+	Irix)
+		OS_VERSION=sysvr4
+		echo "Irix found"
+	;;
+	FreeBsd)
+		OS_VERSION=386ix
+		echo "FreeBSD found"
+	;;
+	CYGWIN* | cygwin* | mingw*)
+		OS_VERSION=cygwin
+		echo "cygwin found"
+	;;
+	*)
+		echo "Unknown OS"
+	;;
+esac
 AC_SUBST(OS_VERSION)
 
 AC_OUTPUT(Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
