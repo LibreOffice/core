@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:40:46 $
+ *  last change: $Author: hr $ $Date: 2000-10-31 12:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBContentLoader()
     static OMultiInstanceAutoRegistration< DBContentLoader > aAutoRegistration;
 }
 // -------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMultiServiceFactory >  & rSMgr ) throw( Exception )
+Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMultiServiceFactory >  & rSMgr )
 {
     return *(new DBContentLoader(rSMgr));
 }
