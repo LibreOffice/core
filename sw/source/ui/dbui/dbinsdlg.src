@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-25 14:38:40 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 20:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "T~abel";
         Text[ chinese_simplified ] = "±í¸ñ(~A)";
         Text[ greek ] = "Ðßíáêáò";
-        Text[ korean ] = "Ç¥(~A)";
+        Text[ korean ] = "Å×ÀÌºí";
         Text[ turkish ] = "T~ablo";
         Text[ catalan ] = "T~abla";
         Text[ finnish ] = "~Taulukko";
@@ -514,7 +514,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "Tabe~l";
         Text[ chinese_simplified ] = "±í¸ñ(~L)";
         Text[ greek ] = "Ðßíáêáò";
-        Text[ korean ] = "Ç¥(~L)";
+        Text[ korean ] = "Å×ÀÌºí";
         Text[ turkish ] = "~Tablo";
         Text[ catalan ] = "Tab~la";
         Text[ finnish ] = "~Taulukko";
@@ -539,6 +539,26 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ ENGLISH ] = "On" ;
         TabStop = TRUE ;
         Check = TRUE ;
+        Text[ english_us ] = "~On";
+        Text[ portuguese ] = "~Activar";
+        Text[ russian ] = "Âêëþ÷èòü";
+        Text[ greek ] = "Åíåñãïðïßçóç";
+        Text[ dutch ] = "In~schakelen";
+        Text[ french ] = "~Activer";
+        Text[ spanish ] = "~Activar";
+        Text[ finnish ] = "~On";
+        Text[ italian ] = "Attiva";
+        Text[ danish ] = "Aktiver";
+        Text[ swedish ] = "Infoga tabellöverskrift";
+        Text[ polish ] = "W³¹cz";
+        Text[ portuguese_brazilian ] = "E~inschalten";
+        Text[ japanese ] = "µÝ(~O)";
+        Text[ korean ] = "È°¼º(~O)";
+        Text[ chinese_simplified ] = "¼¤»î(~O)";
+        Text[ chinese_traditional ] = "±Ò°Ê(~O)";
+        Text[ turkish ] = "Çalýþtýr";
+        Text[ arabic ] = "ÊÔÛíá";
+        Text[ catalan ] = "~Activar";
     };
     RadioButton RB_HEADL_COLNMS
     {
@@ -548,6 +568,26 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ English ] = "Column name" ;
         TabStop = TRUE ;
         Check = TRUE ;
+        Text[ english_us ] = "Column ~name";
+        Text[ portuguese ] = "~Nome da coluna";
+        Text[ russian ] = "Èìåíà êîëîíîê";
+        Text[ greek ] = "Ïíüìáôá óôÞëçò";
+        Text[ dutch ] = "K~olomnaam";
+        Text[ french ] = "Noms ~de colonne";
+        Text[ spanish ] = "~Nombres de columnas";
+        Text[ finnish ] = "~Sarakkeen nimi";
+        Text[ italian ] = "Nomi colonne";
+        Text[ danish ] = "Kolonnenavn";
+        Text[ swedish ] = "Använd kolumn~namn";
+        Text[ polish ] = "Nazwa kolumny";
+        Text[ portuguese_brazilian ] = "S~paltenamen";
+        Text[ japanese ] = "—ñ–¼(~N)";
+        Text[ korean ] = "¿­ ÀÌ¸§(~N)";
+        Text[ chinese_simplified ] = "À¸Ãû(~N)";
+        Text[ chinese_traditional ] = "Äæ¦W(~N)";
+        Text[ turkish ] = "~Sütun adý";
+        Text[ arabic ] = "ÃÓãÇÁ ÇáÃÚãÏÉ";
+        Text[ catalan ] = "~Nombres de columnas";
     };
     RadioButton RB_HEADL_EMPTY
     {
@@ -556,6 +596,26 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text = "Nur Zeile erstellen" ;
         Text [ English ] = "empty" ;
         TabStop = TRUE ;
+        Text[ english_us ] = "~empty";
+        Text[ portuguese ] = "~vazio";
+        Text[ russian ] = "ïóñòîé";
+        Text[ greek ] = "êåíü";
+        Text[ dutch ] = "lee~g";
+        Text[ french ] = "~Vide";
+        Text[ spanish ] = "~vacío";
+        Text[ finnish ] = "~tyhjä";
+        Text[ italian ] = "v~uoto";
+        Text[ danish ] = "tom";
+        Text[ swedish ] = "Skapa bara rad";
+        Text[ polish ] = "pusty";
+        Text[ portuguese_brazilian ] = "lee~r";
+        Text[ japanese ] = "‹ó”’(~E)";
+        Text[ korean ] = "ºñ¾îÀÖÀ½(~E)";
+        Text[ chinese_simplified ] = "¿ÕÈ±(~E)";
+        Text[ chinese_traditional ] = "ªÅ¯Ê(~E)";
+        Text[ turkish ] = "boþ";
+        Text[ arabic ] = "ÝÇÑÛ";
+        Text[ catalan ] = "~vacío";
     };
     PushButton PB_TBL_FORMAT
     {
@@ -575,7 +635,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÊôÐÔ(~O)...";
         Text[ russian ] = "Ñâîéñòâà...";
-        Text[ polish ] = "W³a?ciwo?ci";
+        Text[ polish ] = "W³aœciwoœci";
         Text[ japanese ] = "ÌßÛÊßÃ¨(~O)...";
         Text[ chinese_traditional ] = "ÄÝ©Ê(~O)...";
         Text[ arabic ] = "ÎÕÇÆÕ...";
