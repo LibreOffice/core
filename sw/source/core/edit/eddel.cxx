@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eddel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:02:46 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
+
+#include <comcore.hrc>
 
 /************************************************************
  * Loeschen
