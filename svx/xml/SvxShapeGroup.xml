@@ -11,6 +11,6 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>com.sun.star.drawing.ShapeGroup</supported-service>
+        <supported-service>com.sun.star.drawing.GroupShape</supported-service>
     </component-description>
 </module-description>
