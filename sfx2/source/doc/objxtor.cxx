@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-09 16:06:27 $
+ *  last change: $Author: ab $ $Date: 2001-08-02 08:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,6 +591,8 @@ sal_Bool SfxObjectShell::HasBasic() const
 
 Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 {
+    if( !pImp->pDialogLibContainer )
+        GetBasicManager();
     Reference< XLibraryContainer > xRet
         = static_cast< XLibraryContainer* >( pImp->pDialogLibContainer );
     return xRet;
@@ -600,6 +602,8 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 
 Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 {
+    if( !pImp->pBasicLibContainer )
+        GetBasicManager();
     Reference< XLibraryContainer > xRet
         = static_cast< XLibraryContainer* >( pImp->pBasicLibContainer );
     return xRet;
