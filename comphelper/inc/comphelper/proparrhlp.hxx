@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proparrhlp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 16:01:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 namespace cppu {
     class IPropertyArrayHelper;
@@ -92,20 +95,24 @@ namespace comphelper
 
 
 //==================================================================
+
+template <typename TYPE> struct OPropertyArrayUsageHelperMutex
+    : public rtl::Static< ::osl::Mutex, OPropertyArrayUsageHelperMutex<TYPE> > {};
+
+
 template <class TYPE>
 class OPropertyArrayUsageHelper
 {
 protected:
     static sal_Int32                        s_nRefCount;
     static ::cppu::IPropertyArrayHelper*    s_pProps;
-    static ::osl::Mutex                     s_aMutex;
 
 public:
     OPropertyArrayUsageHelper();
     virtual ~OPropertyArrayUsageHelper()
     {   // ARGHHHHHHH ..... would like to implement this in proparrhlp_impl.hxx (as we do with all other methods)
         // but SUNPRO 5 compiler (linker) doesn't like this
-        ::osl::MutexGuard aGuard(s_aMutex);
+        ::osl::MutexGuard aGuard(OPropertyArrayUsageHelperMutex<TYPE>::get());
         OSL_ENSURE(s_nRefCount > 0, "OPropertyArrayUsageHelper::~OPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
         if (!--s_nRefCount)
         {
@@ -123,7 +130,7 @@ protected:
     /** used to implement the creation of the array helper which is shared amongst all instances of the class.
         This method needs to be implemented in derived classes.
         <BR>
-        The method gets called with s_aMutex acquired.
+        The method gets called with Mutex acquired.
         <BR>
         as long as IPropertyArrayHelper has no virtual destructor, the implementation of ~OPropertyArrayUsageHelper
         assumes that you created an ::cppu::OPropertyArrayHelper when deleting s_pProps.
@@ -142,7 +149,7 @@ protected:
     /** overwrite this in your derived class. initialize the two sequences with your and your aggregate's
         properties.
         <BR>
-        The method gets called with s_aMutex acquired.
+        The method gets called with Mutex acquired.
         @param      _rProps             out parameter to be filled with the property descriptions of your own class
         @param      _rAggregateProps    out parameter to be filled with the properties of your aggregate.
     */
