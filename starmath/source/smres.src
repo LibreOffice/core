@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:26:37 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4347,7 +4347,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ ENGLISH ] = "sign +" ;
                 Text [ english_us ] = "+ sign" ;
                 Text [ portuguese_brazilian ] = "Vorzeichen +" ;
-                Text [ swedish ] = "förtecken +" ;
+                Text [ swedish ] = "tecken +" ;
                 Text [ danish ] = "fortegn +" ;
                 Text [ italian ] = "Segno +" ;
                 Text [ spanish ] = "Signo +" ;
@@ -4373,7 +4373,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ ENGLISH ] = "sign -" ;
                 Text [ english_us ] = "- sign" ;
                 Text [ portuguese_brazilian ] = "Vorzeichen -" ;
-                Text [ swedish ] = "förtecken -" ;
+                Text [ swedish ] = "tecken -" ;
                 Text [ danish ] = "fortegn -" ;
                 Text [ italian ] = "Segno -" ;
                 Text [ spanish ] = "Signo -" ;
@@ -4399,7 +4399,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ ENGLISH ] = "sign +-" ;
                 Text [ english_us ] = "+- Sign" ;
                 Text [ portuguese_brazilian ] = "Vorzeichen +-" ;
-                Text [ swedish ] = "förtecken +-" ;
+                Text [ swedish ] = "tecken +-" ;
                 Text [ danish ] = "fortegn +-" ;
                 Text [ italian ] = "Segno +-" ;
                 Text [ spanish ] = "Signo +-" ;
@@ -4425,7 +4425,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ ENGLISH ] = "sign-+" ;
                 Text [ english_us ] = "-+ Sign" ;
                 Text [ portuguese_brazilian ] = "Vorzeichen -+" ;
-                Text [ swedish ] = "förtecken -+" ;
+                Text [ swedish ] = "tecken -+" ;
                 Text [ danish ] = "fortegn -+" ;
                 Text [ italian ] = "Segno -+" ;
                 Text [ spanish ] = "Signo -+" ;
@@ -5107,7 +5107,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ japanese ] = "¬‚È‚è²º°Ù";
                 Text[ chinese_traditional ] = "¤p©ó©Îµ¥©ó";
                 Text[ arabic ] = "ÃÕÛÑ ãä Ãæ íÓÇæí";
-                Text[ greek ] = "åßíáé ìéêñüôåñï Ş ßóï ìå (ìå êëßóç)";
+                Text[ greek ] = "åßíáé ìéêñüôåñï Ş ßóï ìå (ëïîÜ)";
                 Text[ korean ] = "ÀÌÇÏ";
                 Text[ turkish ] = "Küçüktür ya da eşittir";
                 Text[ language_user1 ] = " ";
@@ -5133,7 +5133,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ japanese ] = "‘å‚È‚è²º°Ù";
                 Text[ chinese_traditional ] = "¤j©ó©Î¤j©ó";
                 Text[ arabic ] = "ÃßÈÑ ãä Ãæ íÓÇæí (ãÇÆá)";
-                Text[ greek ] = "åßíáé ìåãáëıôåñï Ş ßóï ìå (ğëÜãéá)";
+                Text[ greek ] = "åßíáé ìåãáëıôåñï Ş ßóï ìå (ëïîÜ)";
                 Text[ korean ] = "ÀÌ»ó";
                 Text[ turkish ] = "Büyüktür ya da eşittir";
                 Text[ language_user1 ] = " ";
@@ -9428,7 +9428,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ ENGLISH ] = "unary/binary operators" ;
                 Text [ english_us ] = "Unary/Binary Operators" ;
                 Text [ portuguese_brazilian ] = "Unäre/Binäre Operatoren" ;
-                Text [ swedish ] = "Unära/Binära operatorer" ;
+                Text [ swedish ] = "Unära/binära operatorer" ;
                 Text [ danish ] = "Monadiske/binære operatorer" ;
                 Text [ italian ] = "Operatori unari/binari" ;
                 Text [ spanish ] = "Operadores unarios/binarios" ;
@@ -10186,7 +10186,7 @@ String RID_ERR_UNOPEREXPECTED
     Text [ spanish ] = "Se espera un operador unario" ;
     Text [ french ] = "Opérateur unaire requis" ;
     Text [ dutch ] = "Monade verwacht" ;
-    Text [ swedish ] = "Monär operator förväntad" ;
+    Text [ swedish ] = "Unär operator förväntad" ;
     Text [ danish ] = "Monadisk operator forventes" ;
     Text [ portuguese_brazilian ] = "Unõrer Operator erwartet" ;
     Text [ portuguese ] = "Necessário operador unário" ;
