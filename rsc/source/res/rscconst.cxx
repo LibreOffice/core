@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscconst.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:26:21 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 |*    Letzte Aenderung  MM 03.05.91
 |*
 *************************************************************************/
-RscConst::RscConst( HASHID nId, USHORT nTypeId )
+RscConst::RscConst( Atom nId, sal_uInt32 nTypeId )
     : RscTop( nId, nTypeId )
 {
     pVarArray = NULL;
@@ -106,7 +106,7 @@ RscConst::RscConst( HASHID nId, USHORT nTypeId )
 RscConst::~RscConst()
 {
     if( pVarArray )
-        RscMem::Free( (void *)pVarArray );
+        rtl_freeMemory( (void *)pVarArray );
 }
 
 /*************************************************************************
@@ -132,14 +132,14 @@ RSCCLASS_TYPE RscConst::GetClassType() const
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-ERRTYPE RscConst::SetConstant( HASHID nVarName, INT32 lValue ){
+ERRTYPE RscConst::SetConstant( Atom nVarName, INT32 lValue ){
     if( pVarArray )
         pVarArray = (VarEle *)
-            RscMem::Realloc( (void *)pVarArray,
-                (USHORT)((nEntries +1) * sizeof( VarEle )) );
+            rtl_reallocateMemory( (void *)pVarArray,
+                ((nEntries +1) * sizeof( VarEle )) );
     else
         pVarArray = (VarEle *)
-            RscMem::Malloc( (USHORT)((nEntries +1) * sizeof( VarEle )) );
+            rtl_allocateMemory( ((nEntries +1) * sizeof( VarEle )) );
     pVarArray[ nEntries ].nId     = nVarName;
     pVarArray[ nEntries ].lValue  = lValue;
     nEntries++;
@@ -156,10 +156,10 @@ ERRTYPE RscConst::SetConstant( HASHID nVarName, INT32 lValue ){
 |*    Letzte Aenderung  MM 15.05.91
 |*
 *************************************************************************/
-HASHID RscConst::GetConstant( USHORT nPos ){
+Atom RscConst::GetConstant( sal_uInt32 nPos ){
      if( nPos < nEntries )
         return pVarArray[ nPos ].nId;
-    return( HASH_NONAME );
+    return( InvalidAtom );
 }
 
 /*************************************************************************
@@ -171,9 +171,9 @@ HASHID RscConst::GetConstant( USHORT nPos ){
 |*    Letzte Aenderung  MM 15.05.91
 |*
 *************************************************************************/
-BOOL RscConst::GetConstValue( HASHID nConst, INT32 * pValue ) const
+BOOL RscConst::GetConstValue( Atom nConst, INT32 * pValue ) const
 {
-    USHORT i;
+    sal_uInt32 i = 0;
 
     for( i = 0; i < nEntries; i++ )
         if( pVarArray[ i ].nId == nConst )
@@ -193,9 +193,9 @@ BOOL RscConst::GetConstValue( HASHID nConst, INT32 * pValue ) const
 |*    Letzte Aenderung  MM 15.05.91
 |*
 *************************************************************************/
-BOOL RscConst::GetValueConst( INT32 lValue, HASHID * pConst ) const
+BOOL RscConst::GetValueConst( INT32 lValue, Atom * pConst ) const
 {
-    USHORT i;
+    sal_uInt32 i = 0;
 
     for( i = 0; i < nEntries; i++ )
         if( pVarArray[ i ].lValue == lValue )
@@ -217,9 +217,9 @@ BOOL RscConst::GetValueConst( INT32 lValue, HASHID * pConst ) const
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-USHORT RscConst::GetConstPos( HASHID nConst )
+sal_uInt32 RscConst::GetConstPos( Atom nConst )
 {
-    USHORT i;
+    sal_uInt32 i = 0;
 
     for( i = 0; i < nEntries; i++ )
     {
@@ -243,13 +243,13 @@ void RscConst::WriteSyntax( FILE * fOutput, RscTypCont * pTC )
 {
     RscTop::WriteSyntax( fOutput, pTC );
 
-    USHORT i;
+    sal_uInt32 i = 0;
     // Wenn eine Variable Maskierung hat, dann Maskenfeld
     fprintf( fOutput, "\t" );
     for( i = 0; i < nEntries; i++ )
     {
-        fprintf( fOutput, "%s, ", pHS->Get( pVarArray[ i ].nId ) );
-        if( 3 == (i % 4) && i < (USHORT)(nEntries -1) )
+        fprintf( fOutput, "%s, ", pHS->getString( pVarArray[ i ].nId ).getStr() );
+        if( 3 == (i % 4) && i < sal_uInt32(nEntries -1) )
             fprintf( fOutput, "\n\t" );
     };
     fprintf( fOutput, "\n" );
@@ -263,7 +263,7 @@ void RscConst::WriteRcAccess
     const char * pName
 )
 {
-    fprintf( fOutput, "\t\tSet%s( %s( ", pName, pHS->Get( GetId() ) );
+    fprintf( fOutput, "\t\tSet%s( %s( ", pName, pHS->getString( GetId() ).getStr() );
     fprintf( fOutput, "*(short*)(pResData+nOffset) ) );\n" );
     fprintf( fOutput, "\t\tnOffset += sizeof( short );\n" );
 }
@@ -278,9 +278,8 @@ void RscConst::WriteRcAccess
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-RscEnum::RscEnum( HASHID nId, USHORT nTypeId, BOOL bUSHORT_ )
+RscEnum::RscEnum( Atom nId, sal_uInt32 nTypeId )
             : RscConst( nId, nTypeId )
-            , bUSHORT( bUSHORT_ )
 {
     nSize = ALIGNED_SIZE( sizeof( RscEnumInst ) );
 }
@@ -294,9 +293,9 @@ RscEnum::RscEnum( HASHID nId, USHORT nTypeId, BOOL bUSHORT_ )
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-ERRTYPE RscEnum::SetConst( const RSCINST & rInst, HASHID nConst, INT32 nVal )
+ERRTYPE RscEnum::SetConst( const RSCINST & rInst, Atom nConst, INT32 nVal )
 {
-    USHORT i;
+    sal_uInt32 i = 0;
 
     if( nEntries != (i = GetConstPos( nConst )) )
     {
@@ -317,8 +316,9 @@ ERRTYPE RscEnum::SetConst( const RSCINST & rInst, HASHID nConst, INT32 nVal )
 |*    Letzte Aenderung  MM 18.07.91
 |*
 *************************************************************************/
-ERRTYPE RscEnum::SetNumber( const RSCINST & rInst, INT32 lValue ){
-    USHORT i;
+ERRTYPE RscEnum::SetNumber( const RSCINST & rInst, INT32 lValue )
+{
+    sal_uInt32  i = 0;
 
     for( i = 0; i < nEntries; i++ ){
         if( (INT32)pVarArray[ i ].lValue == lValue )
@@ -337,7 +337,7 @@ ERRTYPE RscEnum::SetNumber( const RSCINST & rInst, INT32 lValue ){
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-ERRTYPE RscEnum::GetConst( const RSCINST & rInst, HASHID * pH ){
+ERRTYPE RscEnum::GetConst( const RSCINST & rInst, Atom * pH ){
     *pH = pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].nId;
     return( ERR_OK );
 }
@@ -371,7 +371,7 @@ RSCINST RscEnum::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass 
     if( !pInst ){
         aInst.pClass = this;
         aInst.pData = (CLASS_DATA)
-                      RscMem::Malloc( sizeof( RscEnumInst ) );
+                      rtl_allocateMemory( sizeof( RscEnumInst ) );
     }
     else
         aInst = *pInst;
@@ -419,10 +419,10 @@ BOOL RscEnum::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
 |*
 *************************************************************************/
 void RscEnum::WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                         RscTypCont *, USHORT, const char * )
+                         RscTypCont *, sal_uInt32, const char * )
 {
-    fprintf( fOutput, "%s", pHS->Get(
-             pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].nId ) );
+    fprintf( fOutput, "%s", pHS->getString(
+             pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].nId ).getStr() );
 }
 
 /*************************************************************************
@@ -435,16 +435,13 @@ void RscEnum::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 ERRTYPE RscEnum::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                          RscTypCont *, USHORT, BOOL )
+                          RscTypCont *, sal_uInt32, BOOL )
 {
-    if( bUSHORT )
-        aMem.Put( (USHORT)pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].lValue );
-    else
-        aMem.Put( (INT32)pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].lValue );
+    aMem.Put( (INT32)pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].lValue );
     return( ERR_OK );
 }
 
 RscLangEnum::RscLangEnum()
-        : RscEnum( pHS->Insert( "LangEnum" ), RSC_NOTYPE )
+        : RscEnum( pHS->getID( "LangEnum" ), RSC_NOTYPE )
 {
 }
