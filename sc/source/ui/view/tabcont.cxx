@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcont.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-04 12:55:07 $
+ *  last change: $Author: nn $ $Date: 2001-05-04 14:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <sfx2/dispatch.hxx>
+#include <sfx2/docfile.hxx>
 #include <vcl/sound.hxx>
+#include <tools/urlobj.hxx>
 
 #include "tabcont.hxx"
 #include "tabvwsh.hxx"
@@ -77,7 +79,6 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
-#include "dataobj.hxx"
 #include "transobj.hxx"
 
 
@@ -89,8 +90,8 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
             TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL |
                                     WB_RANGESELECT | WB_MULTISELECT | WB_DRAG | WB_SIZEABLE ) ),
             DropTargetHelper( this ),
+            DragSourceHelper( this ),
             pViewData( pData ),
-            bDragging( FALSE ),
             bErrorShown( FALSE ),
             bAddDown( FALSE )
 {
@@ -402,41 +403,52 @@ void __EXPORT ScTabControl::Command( const CommandEvent& rCEvt )
             pViewSh->GetDispatcher()->ExecutePopup( ScResId(RID_POPUP_TAB) );
         }
     }
-    else if ( nCmd == COMMAND_STARTDRAG )
-    {
-        if (!bDisable)
-        {
-            Region aRegion( Rectangle(0,0,0,0) );
-            if (StartDrag( rCEvt, aRegion ))
-                DoDrag( aRegion );
-        }
-    }
 }
 
+void ScTabControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+{
+    ScModule* pScMod = SC_MOD();
+    BOOL bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
+
+    if (!bDisable)
+    {
+        Region aRegion( Rectangle(0,0,0,0) );
+        CommandEvent aCEvt( rPosPixel, COMMAND_STARTDRAG, TRUE );   // needed for StartDrag
+        if (TabBar::StartDrag( aCEvt, aRegion ))
+            DoDrag( aRegion );
+    }
+}
 
 void ScTabControl::DoDrag( const Region& rRegion )
 {
     ScModule* pScMod = SC_MOD();
 
-    ScDocument* pDoc = pViewData->GetDocument();
-    ScMarkData& rMark= pViewData->GetMarkData();
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
 
     USHORT nTab = pViewData->GetTabNo();
-    pScMod->SetDragObject( rMark, ScRange(0,0,nTab,MAXCOL,MAXROW,nTab), 0,0, pDoc, SC_DROP_TABLE );
+    ScMarkData aTabMark = pViewData->GetMarkData();
+    aTabMark.ResetMark();   // doesn't change marked table information
+    aTabMark.SetMarkArea( ScRange(0,0,nTab,MAXCOL,MAXROW,nTab) );
 
-    bDragging = TRUE;           // um Tabellen innerhalb dieses TabBars zu verschieben
+    ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
+    pDoc->CopyToClip( 0,0, MAXCOL,MAXROW, FALSE, pClipDoc, FALSE, &aTabMark );
 
-    SvDataObjectRef pDragServer = new ScDataObject(pDoc,FALSE,pViewData->GetDocShell());
-    DropAction eAction = pDragServer->ExecuteDrag(pViewData->GetActiveWin(),
-                                            Pointer(POINTER_MOVEDATA),
-                                            Pointer(POINTER_COPYDATA),
-                                            Pointer(POINTER_LINKDATA) );
+    TransferableObjectDescriptor aObjDesc;
+    pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+    aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+    // maSize is set in ScTransferObj ctor
 
-    bDragging = FALSE;
+    ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
+    com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> xTransferable( pTransferObj );
 
-    pScMod->ResetDragObject();
+    pTransferObj->SetDragSourceFlags( SC_DROP_TABLE );
 
-    //! eAction auswerten
+    pTransferObj->SetDragSource( pDocSh, aTabMark );
+
+    Window* pWindow = pViewData->GetActiveWin();
+    SC_MOD()->SetDragObject( pTransferObj, NULL );      // for internal D&D
+    pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 }
 
 USHORT lcl_DocShellNr( ScDocument* pDoc )
@@ -463,17 +475,18 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     EndSwitchPage();
 
-    ScModule* pScMod = SC_MOD();
-    const ScDragData& rData = pScMod->GetDragData();
-    if ( rData.pCellTransfer && bDragging )
+    ScDocument* pDoc = pViewData->GetDocument();
+    const ScDragData& rData = SC_MOD()->GetDragData();
+    if ( rData.pCellTransfer && ( rData.pCellTransfer->GetDragSourceFlags() & SC_DROP_TABLE ) &&
+            rData.pCellTransfer->GetSourceDocument() == pDoc )
     {
+        // moving of tables within the document
         USHORT nPos = GetPrivatDropPos( rEvt.maPosPixel );
         HideDropPos();
-        ScDocument* pSourceDoc = rData.pCellTransfer->GetSourceDocument();
-        ScDocument* pDestDoc = pViewData->GetDocument();
-        if ( pSourceDoc == pDestDoc && pSourceDoc->IsDocEditable() )
+        if ( !pDoc->GetChangeTrack() && pDoc->IsDocEditable() )
         {
-            pViewData->GetView()->MoveTable( lcl_DocShellNr(pDestDoc), nPos, rEvt.mnAction != DND_ACTION_MOVE );
+            //! use table selection from the tab control where dragging was started?
+            pViewData->GetView()->MoveTable( lcl_DocShellNr(pDoc), nPos, rEvt.mnAction != DND_ACTION_MOVE );
 
             rData.pCellTransfer->SetDragWasInternal();          // don't delete
             return TRUE;
@@ -494,9 +507,12 @@ sal_Int8 ScTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
         return rEvt.mnAction;
     }
 
-    if (bDragging)          // within one TabControl
+    const ScDocument* pDoc = pViewData->GetDocument();
+    const ScDragData& rData = SC_MOD()->GetDragData();
+    if ( rData.pCellTransfer && ( rData.pCellTransfer->GetDragSourceFlags() & SC_DROP_TABLE ) &&
+            rData.pCellTransfer->GetSourceDocument() == pDoc )
     {
-        const ScDocument* pDoc = pViewData->GetDocument();
+        // moving of tables within the document
         if ( !pDoc->GetChangeTrack() && pDoc->IsDocEditable() )
         {
             ShowDropPos( rEvt.maPosPixel );

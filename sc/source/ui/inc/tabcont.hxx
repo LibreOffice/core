@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-04 12:54:17 $
+ *  last change: $Author: nn $ $Date: 2001-05-04 14:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,10 @@ class ScViewData;
 #define SC_TABBAR_DEFWIDTH      270
 
 
-class ScTabControl : public TabBar, public DropTargetHelper
+class ScTabControl : public TabBar, public DropTargetHelper, public DragSourceHelper
 {
 private:
     ScViewData*     pViewData;
-    BOOL            bDragging;
     BOOL            bErrorShown;
     BOOL            bAddDown;
     USHORT          nTabSwitchId;
@@ -102,6 +101,8 @@ protected:
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
+
+    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     virtual long    StartRenaming();
     virtual long    AllowRenaming();
