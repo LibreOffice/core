@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-29 16:19:57 $
+ *  last change: $Author: mib $ $Date: 2001-04-10 12:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,6 +655,8 @@ XMLPropertyMapEntry aXMLShapePropMap[] =
     // RES_UL_SPACE
     M_E( "TopMargin",               FO, margin_top,         XML_TYPE_MEASURE, 0 ),
     M_E( "BottomMargin",            FO, margin_bottom,      XML_TYPE_MEASURE, 0 ),
+    // RES_OPAQUE
+    M_ED( "Opaque",                 STYLE,  run_through,    XML_TYPE_TEXT_OPAQUE, 0 ),
     // RES_SURROUND
     M_E( "TextWrap",                STYLE,  wrap,   XML_TYPE_TEXT_WRAP, CTF_WRAP ),
     M_E( "SurroundAnchorOnly",      STYLE,  number_wrapped_paragraphs,  XML_TYPE_TEXT_PARAGRAPH_ONLY, CTF_WRAP_PARAGRAPH_ONLY ),
