@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 15:57:11 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:33:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,12 +59,11 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=misc
-
+LIBTARGET=no
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	$(PRJ)$/inc$/swpre.mk
@@ -106,12 +105,22 @@ SLOFILES =	\
         $(SLO)$/pgfnote.obj \
         $(SLO)$/pggrid.obj \
         $(SLO)$/redlndlg.obj \
+        $(SLO)$/swmodalredlineacceptdlg.obj	\
         $(SLO)$/srtdlg.obj
 
 EXCEPTIONSFILES = \
         $(SLO)$/glossary.obj \
         $(SLO)$/numberingtypelistbox.obj
+        
+LIB1TARGET = $(SLB)$/$(TARGET).lib
 
+LIB1OBJFILES =	\
+        $(SLO)$/glosdoc.obj	\
+        $(SLO)$/glshell.obj \
+        $(SLO)$/hdftctrl.obj \
+        $(SLO)$/numberingtypelistbox.obj \
+        $(SLO)$/redlndlg.obj
+       
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :	target.mk
