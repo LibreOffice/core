@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 13:37:15 $
+ *  last change: $Author: fs $ $Date: 2001-06-13 17:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1867,6 +1867,33 @@ IMPL_LINK(SbaTableQueryBrowser, OnEntryDoubleClicked, SvLBoxEntry*, _pEntry)
 };
 
 //------------------------------------------------------------------------------
+void SbaTableQueryBrowser::openHelpAgent(sal_Int32 _nHelpId)
+{
+    try
+    {
+        URL aURL;
+        aURL.Complete = ::rtl::OUString::createFromAscii("vnd.sun.star.help://database.hlp/");
+        aURL.Complete += ::rtl::OUString::valueOf(_nHelpId);
+        if (m_xUrlTransformer.is())
+            m_xUrlTransformer->parseStrict(aURL);
+
+        Reference< XDispatchProvider > xDispProv(m_xCurrentFrame, UNO_QUERY);
+        Reference< XDispatch > xHelpDispatch;
+        if (xDispProv.is())
+            xHelpDispatch = xDispProv->queryDispatch(aURL, ::rtl::OUString::createFromAscii("_helpagent"), FrameSearchFlag::PARENT | FrameSearchFlag::SELF);
+        OSL_ENSURE(xHelpDispatch.is(), "SbaTableQueryBrowser::openHelpAgent: could not get a dispatcher!");
+        if (xHelpDispatch.is())
+        {
+            xHelpDispatch->dispatch(aURL, Sequence< PropertyValue >());
+        }
+    }
+    catch(const Exception&)
+    {
+        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::openHelpAgent: caught an exception while executing the dispatch!");
+    }
+}
+
+//------------------------------------------------------------------------------
 IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
 {
     ::osl::MutexGuard aGuard(m_aEntryMutex);
@@ -1878,6 +1905,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
         case etQuery:
         case etView:
             break;
+        case etBookmark:
+            openHelpAgent(HID_DSBROWSER_BOOKMARKSELECTED);
+            return 0L;
         default:
             // nothing to do
             return 0L;
@@ -3170,6 +3200,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             bReopenConn = sal_True;
 
         case ID_TREE_CLOSE_CONN:
+            openHelpAgent(HID_DSBROWSER_DISCONNECTING);
             closeConnection(pDSEntry);
             break;
 
