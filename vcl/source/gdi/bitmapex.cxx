@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-22 16:12:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,12 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
         eTransparent    ( !rMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP ),
         bAlpha          ( FALSE )
 {
+    // #105489# Ensure a mask is exactly one bit deep
+    if( !!aMask && aMask.GetBitCount() != 1 )
+    {
+        OSL_TRACE("BitmapEx: forced mask to monochrome");
+        aMask.ImplMakeMono( 255 );
+    }
 }
 
 // ------------------------------------------------------------------
