@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2004-06-26 00:20:18 $
+#   last change: $Author: vg $ $Date: 2004-07-27 13:01:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -231,7 +231,7 @@ sub is_tag
     my $tag  = shift;
 
     my $tags_ref = $self->get_tags();
-    return exists($$tags_ref{$tag}) ? 1 : 0;
+    return (defined $$tags_ref{$tag}) ? 1 : 0;
 }
 
 # Check if $label is branch label and returns revision.
