@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-14 12:47:59 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 16:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <pwd.h>
+
+#include <algorithm>
 
 
 using namespace psp ;
