@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-18 12:25:58 $
+ *  last change: $Author: tl $ $Date: 2001-04-19 11:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,7 +481,7 @@ void SmParser::NextToken()
         bCont = FALSE;
         if ( aRes.TokenType == 0  &&
                 nRealStart < nBufLen &&
-                CharLineEnd == BufferString.GetChar( nRealStart ) )
+                '\n' == BufferString.GetChar( nRealStart ) )
         {
             // keep data needed for tokens row and col entry up to date
             ++Row;
@@ -496,7 +496,7 @@ void SmParser::NextToken()
                 //SkipComment
                 BufferIndex = nRealStart + 2;
                 while (BufferIndex < nBufLen  &&
-                    CharLineEnd != BufferString.GetChar( BufferIndex ))
+                    '\n' != BufferString.GetChar( BufferIndex ))
                     ++BufferIndex;
                 bCont = TRUE;
             }
@@ -2264,17 +2264,6 @@ void SmParser::Error(SmParseError eError)
 
 SmParser::SmParser()
 {
-    switch (GetSystemLineEnd())
-    {
-        case LINEEND_CRLF:
-        case LINEEND_LF:    CharLineEnd = '\n';     break;
-        case LINEEND_CR:    CharLineEnd = '\r';     break;
-
-        default:
-            CharLineEnd = '\n';
-            break;
-    }
-
     bConvert40To50 = FALSE;
 }
 
@@ -2284,6 +2273,7 @@ BOOL SmParser::CheckSyntax(const String &rBuffer)
     SmErrDescList OldErrorList;
 
     BufferString = rBuffer;
+    BufferString.ConvertLineEnd( LINEEND_LF );
     BufferIndex  =
     nTokenIndex  = 0;
     Row    = 1;
@@ -2317,6 +2307,7 @@ BOOL SmParser::CheckSyntax(const String &rBuffer)
 SmNode *SmParser::Parse(const String &rBuffer)
 {
     BufferString = rBuffer;
+    BufferString.ConvertLineEnd( LINEEND_LF );
     BufferIndex  =
     nTokenIndex  = 0;
     Row          = 1;
