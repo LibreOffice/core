@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-18 13:50:32 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #ifndef _SV_WINCOMP_HXX
 #include <wincomp.hxx>
 #endif
-#ifndef _SV_SALBMP_HXX
-#include <salbmp.hxx>
+#ifndef _SV_SALBMP_H
+#include <salbmp.h>
 #endif
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
@@ -84,8 +84,8 @@
 #ifndef _SV_SALIDS_HRC
 #include <salids.hrc>
 #endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
 #endif
 
 // =======================================================================
@@ -94,17 +94,17 @@ BOOL bFastTransparent = FALSE;
 
 // =======================================================================
 
-void SalGraphics::CopyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics, const OutputDevice* /*pOutDev*/, const OutputDevice* /*pSrcOutDev*/)
+void WinSalGraphics::copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics )
 {
     HDC     hSrcDC;
     DWORD   nRop;
 
     if ( pSrcGraphics )
-        hSrcDC = pSrcGraphics->maGraphicsData.mhDC;
+        hSrcDC = static_cast<WinSalGraphics*>(pSrcGraphics)->mhDC;
     else
-        hSrcDC = maGraphicsData.mhDC;
+        hSrcDC = mhDC;
 
-    if ( maGraphicsData.mbXORMode )
+    if ( mbXORMode )
         nRop = SRCINVERT;
     else
         nRop = SRCCOPY;
@@ -112,7 +112,7 @@ void SalGraphics::CopyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics
     if ( (pPosAry->mnSrcWidth  == pPosAry->mnDestWidth) &&
          (pPosAry->mnSrcHeight == pPosAry->mnDestHeight) )
     {
-        BitBlt( maGraphicsData.mhDC,
+        BitBlt( mhDC,
                 (int)pPosAry->mnDestX, (int)pPosAry->mnDestY,
                 (int)pPosAry->mnDestWidth, (int)pPosAry->mnDestHeight,
                 hSrcDC,
@@ -121,15 +121,15 @@ void SalGraphics::CopyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics
     }
     else
     {
-        int nOldStretchMode = SetStretchBltMode( maGraphicsData.mhDC, STRETCH_DELETESCANS );
-        StretchBlt( maGraphicsData.mhDC,
+        int nOldStretchMode = SetStretchBltMode( mhDC, STRETCH_DELETESCANS );
+        StretchBlt( mhDC,
                     (int)pPosAry->mnDestX, (int)pPosAry->mnDestY,
                     (int)pPosAry->mnDestWidth, (int)pPosAry->mnDestHeight,
                     hSrcDC,
                     (int)pPosAry->mnSrcX, (int)pPosAry->mnSrcY,
                     (int)pPosAry->mnSrcWidth, (int)pPosAry->mnSrcHeight,
                     nRop );
-        SetStretchBltMode( maGraphicsData.mhDC, nOldStretchMode );
+        SetStretchBltMode( mhDC, nOldStretchMode );
     }
 }
 
@@ -178,20 +178,20 @@ void ImplCalcOutSideRgn( const RECT& rSrcRect,
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::CopyArea( long nDestX, long nDestY,
+void WinSalGraphics::copyArea( long nDestX, long nDestY,
                             long nSrcX, long nSrcY,
                             long nSrcWidth, long nSrcHeight,
-                            USHORT nFlags, const OutputDevice* )
+                            USHORT nFlags )
 {
-    BitBlt( maGraphicsData.mhDC,
+    BitBlt( mhDC,
             (int)nDestX, (int)nDestY,
             (int)nSrcWidth, (int)nSrcHeight,
-            maGraphicsData.mhDC,
+            mhDC,
             (int)nSrcX, (int)nSrcY,
             SRCCOPY );
 
     // Muessen die ueberlappenden Bereiche auch invalidiert werden?
-    if ( (nFlags & SAL_COPYAREA_WINDOWINVALIDATE) && maGraphicsData.mbWindow )
+    if ( (nFlags & SAL_COPYAREA_WINDOWINVALIDATE) && mbWindow )
     {
         // Overlap-Bereich berechnen und invalidieren
         RECT    aSrcRect;
@@ -207,7 +207,7 @@ void SalGraphics::CopyArea( long nDestX, long nDestY,
         aSrcRect.top    = (int)nSrcY;
         aSrcRect.right  = aSrcRect.left+(int)nSrcWidth;
         aSrcRect.bottom = aSrcRect.top+(int)nSrcHeight;
-        GetClientRect( maGraphicsData.mhWnd, &aClipRect );
+        GetClientRect( mhWnd, &aClipRect );
         if ( IntersectRect( &aSrcRect, &aSrcRect, &aClipRect ) )
         {
             // Rechteck in Screen-Koordinaaten umrechnen
@@ -216,7 +216,7 @@ void SalGraphics::CopyArea( long nDestX, long nDestY,
             int nScreenDY = GetSystemMetrics( SM_CYSCREEN );
             aPt.x = 0;
             aPt.y = 0;
-            ClientToScreen( maGraphicsData.mhWnd, &aPt );
+            ClientToScreen( mhWnd, &aPt );
             aSrcRect.left   += aPt.x;
             aSrcRect.top    += aPt.y;
             aSrcRect.right  += aPt.x;
@@ -227,7 +227,7 @@ void SalGraphics::CopyArea( long nDestX, long nDestY,
 
             // Bereiche die von anderen Fenstern ueberlagert werden berechnen
             HRGN hTempRgn2 = 0;
-            HWND hWndTopWindow = maGraphicsData.mhWnd;
+            HWND hWndTopWindow = mhWnd;
             // Find the TopLevel Window, because only Windows which are in
             // in the foreground of our TopLevel window must be considered
             if ( GetWindowStyle( hWndTopWindow ) & WS_CHILD )
@@ -300,11 +300,11 @@ void SalGraphics::CopyArea( long nDestX, long nDestY,
                     int nOffY = (int)(nDestY-nSrcY);
                     OffsetRgn( hInvalidateRgn, nOffX-aPt.x, nOffY-aPt.y );
                     // Combine Invalidate Region with existing ClipRegion
-                    if ( GetClipRgn( maGraphicsData.mhDC, hTempRgn ) == 1 )
+                    if ( GetClipRgn( mhDC, hTempRgn ) == 1 )
                         nRgnType = CombineRgn( hInvalidateRgn, hTempRgn, hInvalidateRgn, RGN_AND );
                     if ( (nRgnType != ERROR) && (nRgnType != NULLREGION) )
                     {
-                        InvalidateRgn( maGraphicsData.mhWnd, hInvalidateRgn, TRUE );
+                        InvalidateRgn( mhWnd, hInvalidateRgn, TRUE );
                         // Hier loesen wir nur ein Update aus, wenn es der
                         // MainThread ist, damit es beim Bearbeiten der
                         // Paint-Message keinen Deadlock gibt, da der
@@ -312,7 +312,7 @@ void SalGraphics::CopyArea( long nDestX, long nDestY,
                         SalData*    pSalData = GetSalData();
                         DWORD       nCurThreadId = GetCurrentThreadId();
                         if ( pSalData->mnAppThreadId == nCurThreadId )
-                            UpdateWindow( maGraphicsData.mhWnd );
+                            UpdateWindow( mhWnd );
                     }
                 }
                 DeleteRegion( hTempRgn );
@@ -325,19 +325,19 @@ void SalGraphics::CopyArea( long nDestX, long nDestY,
 // -----------------------------------------------------------------------
 
 void ImplDrawBitmap( HDC hDC,
-                     const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,
+                     const SalTwoRect* pPosAry, const WinSalBitmap& rSalBitmap,
                      BOOL bPrinter, int nDrawMode )
 {
     if( hDC )
     {
         HGLOBAL     hDrawDIB;
         HBITMAP     hDrawDDB = rSalBitmap.ImplGethDDB();
-        SalBitmap*  pTmpSalBmp;
+        WinSalBitmap*   pTmpSalBmp;
         BOOL        bPrintDDB = ( bPrinter && hDrawDDB );
 
         if( bPrintDDB )
         {
-            pTmpSalBmp = new SalBitmap;
+            pTmpSalBmp = new WinSalBitmap;
             pTmpSalBmp->Create( rSalBitmap, rSalBitmap.GetBitCount() );
             hDrawDIB = pTmpSalBmp->ImplGethDIB();
         }
@@ -416,24 +416,26 @@ void ImplDrawBitmap( HDC hDC,
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
-                              const SalBitmap& rSalBitmap, const OutputDevice* )
+void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
+                              const SalBitmap& rSalBitmap )
 {
-    ImplDrawBitmap( maGraphicsData.mhDC, pPosAry, rSalBitmap,
-                    maGraphicsData.mbPrinter,
-                    maGraphicsData.mbXORMode ? SRCINVERT : SRCCOPY );
+    ImplDrawBitmap( mhDC, pPosAry, static_cast<const WinSalBitmap&>(rSalBitmap),
+                    mbPrinter,
+                    mbXORMode ? SRCINVERT : SRCCOPY );
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
-                              const SalBitmap& rSalBitmap,
-                              SalColor nTransparentColor, const OutputDevice* pOutDev )
+void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
+                              const SalBitmap& rSSalBitmap,
+                              SalColor nTransparentColor )
 {
-    DBG_ASSERT( !maGraphicsData.mbPrinter, "No transparency print possible!" );
+    DBG_ASSERT( !mbPrinter, "No transparency print possible!" );
 
-    SalBitmap*  pMask = new SalBitmap;
-    HDC         hDC = maGraphicsData.mhDC;
+    const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
+
+    WinSalBitmap*   pMask = new WinSalBitmap;
+    HDC         hDC = mhDC;
     const Point aPoint;
     const Size  aSize( rSalBitmap.GetSize() );
     HBITMAP     hMaskBitmap = CreateBitmap( (int) aSize.Width(), (int) aSize.Height(), 1, 1, NULL );
@@ -454,7 +456,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
     }
     else
     {
-        SalBitmap*  pTmpSalBmp = new SalBitmap;
+        WinSalBitmap*   pTmpSalBmp = new WinSalBitmap;
 
         if( pTmpSalBmp->Create( rSalBitmap, this ) )
         {
@@ -474,18 +476,21 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
 
     // hMaskBitmap is destroyed by new SalBitmap 'pMask' ( bDIB==FALSE, bCopy == FALSE )
     if( pMask->Create( hMaskBitmap, FALSE, FALSE ) )
-        DrawBitmap( pPosAry, rSalBitmap, *pMask, pOutDev );
+        drawBitmap( pPosAry, rSalBitmap, *pMask );
 
     delete pMask;
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
-                              const SalBitmap& rSalBitmap,
-                              const SalBitmap& rTransparentBitmap, const OutputDevice* )
+void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
+                              const SalBitmap& rSSalBitmap,
+                              const SalBitmap& rSTransparentBitmap )
 {
-    DBG_ASSERT( !maGraphicsData.mbPrinter, "No transparency print possible!" );
+    DBG_ASSERT( !mbPrinter, "No transparency print possible!" );
+
+    const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
+    const WinSalBitmap& rTransparentBitmap = static_cast<const WinSalBitmap&>(rSTransparentBitmap);
 
     if( bFastTransparent )
     {
@@ -494,24 +499,24 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
         // wenn wir die DIB direkt ausgeben => DDB-Ausgabe
         if( ( GetBitCount() <= 8 ) && rTransparentBitmap.ImplGethDIB() && rTransparentBitmap.GetBitCount() == 1 )
         {
-            SalBitmap aTmp;
+            WinSalBitmap aTmp;
             if( aTmp.Create( rTransparentBitmap, this ) )
-                ImplDrawBitmap( maGraphicsData.mhDC, pPosAry, aTmp, FALSE, SRCAND );
+                ImplDrawBitmap( mhDC, pPosAry, aTmp, FALSE, SRCAND );
         }
         else
-            ImplDrawBitmap( maGraphicsData.mhDC, pPosAry, rTransparentBitmap, FALSE, SRCAND );
+            ImplDrawBitmap( mhDC, pPosAry, rTransparentBitmap, FALSE, SRCAND );
 
         // bei Paletten-Displays hat WIN/WNT offenbar ein kleines Problem,
         // die Farben der Maske richtig auf die Palette abzubilden,
         // wenn wir die DIB direkt ausgeben => DDB-Ausgabe
         if( ( GetBitCount() <= 8 ) && rSalBitmap.ImplGethDIB() && rSalBitmap.GetBitCount() == 1 )
         {
-            SalBitmap aTmp;
+            WinSalBitmap aTmp;
             if( aTmp.Create( rSalBitmap, this ) )
-                ImplDrawBitmap( maGraphicsData.mhDC, pPosAry, aTmp, FALSE, SRCPAINT );
+                ImplDrawBitmap( mhDC, pPosAry, aTmp, FALSE, SRCPAINT );
         }
         else
-            ImplDrawBitmap( maGraphicsData.mhDC, pPosAry, rSalBitmap, FALSE, SRCPAINT );
+            ImplDrawBitmap( mhDC, pPosAry, rSalBitmap, FALSE, SRCPAINT );
     }
     else
     {
@@ -520,7 +525,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
         int         nDstY = (int)aPosAry.mnDestY;
         int         nDstWidth = (int)aPosAry.mnDestWidth;
         int         nDstHeight = (int)aPosAry.mnDestHeight;
-        HDC         hDC = maGraphicsData.mhDC;
+        HDC         hDC = mhDC;
         HBITMAP     hMemBitmap = 0;
         HBITMAP     hMaskBitmap = 0;
 
@@ -541,7 +546,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
         // wenn wir die DIB direkt ausgeben => DDB-Ausgabe
         if( ( GetBitCount() <= 8 ) && rTransparentBitmap.ImplGethDIB() && rTransparentBitmap.GetBitCount() == 1 )
         {
-            SalBitmap aTmp;
+            WinSalBitmap aTmp;
 
             if( aTmp.Create( rTransparentBitmap, this ) )
                 ImplDrawBitmap( hMaskDC, &aPosAry, aTmp, FALSE, SRCCOPY );
@@ -552,7 +557,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
         // now MemDC contains background, MaskDC the transparency mask
 
         // #105055# Respect XOR mode
-        if( maGraphicsData.mbXORMode )
+        if( mbXORMode )
         {
             ImplDrawBitmap( hMaskDC, &aPosAry, rSalBitmap, FALSE, SRCERASE );
             // now MaskDC contains the bitmap area with black background
@@ -585,17 +590,19 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawMask( const SalTwoRect* pPosAry,
-                            const SalBitmap& rSalBitmap,
-                            SalColor nMaskColor, const OutputDevice* )
+void WinSalGraphics::drawMask( const SalTwoRect* pPosAry,
+                            const SalBitmap& rSSalBitmap,
+                            SalColor nMaskColor )
 {
-    DBG_ASSERT( !maGraphicsData.mbPrinter, "No transparency print possible!" );
+    DBG_ASSERT( !mbPrinter, "No transparency print possible!" );
+
+    const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
     SalTwoRect  aPosAry = *pPosAry;
     const BYTE  cRed = SALCOLOR_RED( nMaskColor );
     const BYTE  cGreen = SALCOLOR_GREEN( nMaskColor );
     const BYTE  cBlue = SALCOLOR_BLUE( nMaskColor );
-    HDC         hDC = maGraphicsData.mhDC;
+    HDC         hDC = mhDC;
     HBRUSH      hMaskBrush = CreateSolidBrush( RGB( cRed, cGreen, cBlue ) );
     HBRUSH      hOldBrush = SelectBrush( hDC, hMaskBrush );
 
@@ -604,7 +611,7 @@ void SalGraphics::DrawMask( const SalTwoRect* pPosAry,
     // wenn wir die DIB direkt ausgeben => DDB-Ausgabe
     if( ( GetBitCount() <= 8 ) && rSalBitmap.ImplGethDIB() && rSalBitmap.GetBitCount() == 1 )
     {
-        SalBitmap aTmp;
+        WinSalBitmap aTmp;
 
         if( aTmp.Create( rSalBitmap, this ) )
             ImplDrawBitmap( hDC, &aPosAry, aTmp, FALSE, 0x00B8074AUL );
@@ -618,16 +625,16 @@ void SalGraphics::DrawMask( const SalTwoRect* pPosAry,
 
 // -----------------------------------------------------------------------
 
-SalBitmap* SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY, const OutputDevice* )
+SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
 {
-    DBG_ASSERT( !maGraphicsData.mbPrinter, "No ::GetBitmap() from printer possible!" );
+    DBG_ASSERT( !mbPrinter, "No ::GetBitmap() from printer possible!" );
 
-    SalBitmap* pSalBitmap = NULL;
+    WinSalBitmap* pSalBitmap = NULL;
 
     nDX = labs( nDX );
     nDY = labs( nDY );
 
-    HDC     hDC = maGraphicsData.mhDC;
+    HDC     hDC = mhDC;
     HBITMAP hBmpBitmap = CreateCompatibleBitmap( hDC, nDX, nDY );
     HDC     hBmpDC = ImplGetCachedDC( CACHED_HDC_1, hBmpBitmap );
     BOOL    bRet;
@@ -637,7 +644,7 @@ SalBitmap* SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY, const O
 
     if( bRet )
     {
-        pSalBitmap = new SalBitmap;
+        pSalBitmap = new WinSalBitmap;
 
         if( !pSalBitmap->Create( hBmpBitmap, FALSE, FALSE ) )
         {
@@ -651,9 +658,9 @@ SalBitmap* SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY, const O
 
 // -----------------------------------------------------------------------
 
-SalColor SalGraphics::GetPixel( long nX, long nY, const OutputDevice* )
+SalColor WinSalGraphics::getPixel( long nX, long nY )
 {
-    COLORREF aWinCol = ::GetPixel( maGraphicsData.mhDC, (int) nX, (int) nY );
+    COLORREF aWinCol = ::GetPixel( mhDC, (int) nX, (int) nY );
 
 #ifdef WIN
     if ( -1 == aWinCol )
@@ -669,20 +676,20 @@ SalColor SalGraphics::GetPixel( long nX, long nY, const OutputDevice* )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::Invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags, const OutputDevice * )
+void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
     if ( nFlags & SAL_INVERT_TRACKFRAME )
     {
         HPEN    hDotPen = CreatePen( PS_DOT, 0, 0 );
-        HPEN    hOldPen = SelectPen( maGraphicsData.mhDC, hDotPen );
-        HBRUSH  hOldBrush = SelectBrush( maGraphicsData.mhDC, GetStockBrush( NULL_BRUSH ) );
-        int     nOldROP = SetROP2( maGraphicsData.mhDC, R2_NOT );
+        HPEN    hOldPen = SelectPen( mhDC, hDotPen );
+        HBRUSH  hOldBrush = SelectBrush( mhDC, GetStockBrush( NULL_BRUSH ) );
+        int     nOldROP = SetROP2( mhDC, R2_NOT );
 
-        WIN_Rectangle( maGraphicsData.mhDC, (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
+        WIN_Rectangle( mhDC, (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
 
-        SetROP2( maGraphicsData.mhDC, nOldROP );
-        SelectPen( maGraphicsData.mhDC, hOldPen );
-        SelectBrush( maGraphicsData.mhDC, hOldBrush );
+        SetROP2( mhDC, nOldROP );
+        SelectPen( mhDC, hOldPen );
+        SelectBrush( mhDC, hOldBrush );
         DeletePen( hDotPen );
     }
     else if ( nFlags & SAL_INVERT_50 )
@@ -695,11 +702,11 @@ void SalGraphics::Invert( long nX, long nY, long nWidth, long nHeight, SalInvert
             pSalData->mh50Brush = CreatePatternBrush( pSalData->mh50Bmp );
         }
 
-        COLORREF nOldTextColor = ::SetTextColor( maGraphicsData.mhDC, 0 );
-        HBRUSH hOldBrush = SelectBrush( maGraphicsData.mhDC, pSalData->mh50Brush );
-        PatBlt( maGraphicsData.mhDC, nX, nY, nWidth, nHeight, PATINVERT );
-        ::SetTextColor( maGraphicsData.mhDC, nOldTextColor );
-        SelectBrush( maGraphicsData.mhDC, hOldBrush );
+        COLORREF nOldTextColor = ::SetTextColor( mhDC, 0 );
+        HBRUSH hOldBrush = SelectBrush( mhDC, pSalData->mh50Brush );
+        PatBlt( mhDC, nX, nY, nWidth, nHeight, PATINVERT );
+        ::SetTextColor( mhDC, nOldTextColor );
+        SelectBrush( mhDC, hOldBrush );
     }
     else
     {
@@ -708,20 +715,20 @@ void SalGraphics::Invert( long nX, long nY, long nWidth, long nHeight, SalInvert
          aRect.top       = (int)nY;
          aRect.right     = (int)nX+nWidth;
          aRect.bottom    = (int)nY+nHeight;
-         ::InvertRect( maGraphicsData.mhDC, &aRect );
+         ::InvertRect( mhDC, &aRect );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::Invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nSalFlags, const OutputDevice* )
+void WinSalGraphics::invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
 {
     HPEN        hPen;
     HPEN        hOldPen;
     HBRUSH      hBrush;
     HBRUSH      hOldBrush;
     COLORREF    nOldTextColor;
-    int         nOldROP = SetROP2( maGraphicsData.mhDC, R2_NOT );
+    int         nOldROP = SetROP2( mhDC, R2_NOT );
 
     if ( nSalFlags & SAL_INVERT_TRACKFRAME )
         hPen = CreatePen( PS_DOT, 0, 0 );
@@ -744,10 +751,10 @@ void SalGraphics::Invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nSalF
             hBrush = GetStockBrush( BLACK_BRUSH );
 
         hPen = GetStockPen( NULL_PEN );
-        nOldTextColor = ::SetTextColor( maGraphicsData.mhDC, 0 );
-        hOldBrush = SelectBrush( maGraphicsData.mhDC, hBrush );
+        nOldTextColor = ::SetTextColor( mhDC, 0 );
+        hOldBrush = SelectBrush( mhDC, hBrush );
     }
-    hOldPen = SelectPen( maGraphicsData.mhDC, hPen );
+    hOldPen = SelectPen( mhDC, hPen );
 
     POINT* pWinPtAry;
 #ifdef WIN
@@ -762,38 +769,38 @@ void SalGraphics::Invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nSalF
         pWinPtAry[i].y = (int)pHugePtAry[i].mnY;
     }
     if ( nSalFlags & SAL_INVERT_TRACKFRAME )
-        Polyline( maGraphicsData.mhDC, pWinPtAry, (int)nPoints );
+        Polyline( mhDC, pWinPtAry, (int)nPoints );
     else
-        WIN_Polygon( maGraphicsData.mhDC, pWinPtAry, (int)nPoints );
+        WIN_Polygon( mhDC, pWinPtAry, (int)nPoints );
     delete pWinPtAry;
 #else
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "SalGraphics::DrawPolyLine(): POINT != SalPoint" );
+                "WinSalGraphics::DrawPolyLine(): POINT != SalPoint" );
 
     pWinPtAry = (POINT*)pPtAry;
     // Wegen Windows 95 und der Beschraenkung auf eine maximale Anzahl
     // von Punkten
     if ( nSalFlags & SAL_INVERT_TRACKFRAME )
     {
-        if ( !Polyline( maGraphicsData.mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
-            Polyline( maGraphicsData.mhDC, pWinPtAry, MAX_64KSALPOINTS );
+        if ( !Polyline( mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+            Polyline( mhDC, pWinPtAry, MAX_64KSALPOINTS );
     }
     else
     {
-        if ( !WIN_Polygon( maGraphicsData.mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
-            WIN_Polygon( maGraphicsData.mhDC, pWinPtAry, MAX_64KSALPOINTS );
+        if ( !WIN_Polygon( mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+            WIN_Polygon( mhDC, pWinPtAry, MAX_64KSALPOINTS );
     }
 #endif
 
-    SetROP2( maGraphicsData.mhDC, nOldROP );
-    SelectPen( maGraphicsData.mhDC, hOldPen );
+    SetROP2( mhDC, nOldROP );
+    SelectPen( mhDC, hOldPen );
 
     if ( nSalFlags & SAL_INVERT_TRACKFRAME )
         DeletePen( hPen );
     else
     {
-        ::SetTextColor( maGraphicsData.mhDC, nOldTextColor );
-        SelectBrush( maGraphicsData.mhDC, hOldBrush );
+        ::SetTextColor( mhDC, nOldTextColor );
+        SelectBrush( mhDC, hOldBrush );
     }
 }
