@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-05 18:04:24 $
+ *  last change: $Author: khong $ $Date: 2002-09-12 00:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,8 +394,8 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_Unicode currentChar )
         //JP 21.9.2001: handle specific characters - always as weak
         //          definition of 1 - this breaks a word
         //          2 - this can be inside a word
-        //          0x20 - Bug 102975, declare western blank as WEAK char.
-        if( 1 == currentChar || 2 == currentChar || 0x20 == currentChar )
+        //          0x20 & 0xA0 - Bug 102975, declare western space and non-break space as WEAK char.
+        if( 1 == currentChar || 2 == currentChar || 0x20 == currentChar || 0xA0 == currentChar)
         nRet = ScriptType::WEAK;
         else
         nRet = unicode::getUnicodeScriptType( currentChar, typeList, ScriptType::WEAK );
