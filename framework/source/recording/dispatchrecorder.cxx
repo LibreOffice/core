@@ -3,6 +3,10 @@
 #include <recording/dispatchrecorder.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHSTATEMENT_HPP_
+#include <com/sun/star/frame/DispatchStatement.hpp>
+#endif
+
 #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
 #endif
@@ -26,18 +30,20 @@ namespace framework{
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_3(
+DEFINE_XINTERFACE_4(
     DispatchRecorder,
     OWeakObject,
     DIRECT_INTERFACE(css::lang::XTypeProvider),
     DIRECT_INTERFACE(css::lang::XServiceInfo),
-    DIRECT_INTERFACE(css::frame::XDispatchRecorder))
+    DIRECT_INTERFACE(css::frame::XDispatchRecorder),
+    DIRECT_INTERFACE(css::container::XIndexReplace))
 
-DEFINE_XTYPEPROVIDER_3(
+DEFINE_XTYPEPROVIDER_4(
     DispatchRecorder,
     css::lang::XTypeProvider,
     css::lang::XServiceInfo,
-    css::frame::XDispatchRecorder)
+    css::frame::XDispatchRecorder,
+    css::container::XIndexReplace)
 
 DEFINE_XSERVICEINFO_MULTISERVICE(
     DispatchRecorder,
@@ -101,24 +107,6 @@ Sequence< Any > make_seq_out_of_struct(
     return Sequence< Any >( &vec[ 0 ], vec.size() );
 }
 
-
-struct DispatchStatement
-{
-    ::rtl::OUString aCommand;
-    ::rtl::OUString aTarget;
-    css::uno::Sequence < css::beans::PropertyValue > aArgs;
-    sal_Int32 nFlags;
-    sal_Bool bIsComment;
-
-    DispatchStatement( const ::rtl::OUString& rCmd, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, sal_Bool bComment )
-        : aCommand( rCmd )
-        , nFlags(0)
-        , bIsComment( bComment )
-        {
-            aArgs = rArgs;
-        }
-};
-
 //***********************************************************************
 DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
@@ -145,24 +133,9 @@ void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::
 void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
                                                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
 {
-    //implts_recordMacro(aURL,lArguments,sal_False);
-    sal_Int32 nSize = m_aStatements.size();
-    if ( nSize && aURL.Complete.compareToAscii(".uno:InsertText") == COMPARE_EQUAL )
-    {
-        DispatchStatementList::reverse_iterator pLast = m_aStatements.rbegin();
-        if ( pLast->aCommand.compareToAscii(".uno:InsertText") == COMPARE_EQUAL )
-        {
-            ::rtl::OUString aStr;
-            ::rtl::OUString aNew;
-            pLast->aArgs[0].Value >>= aStr;
-            lArguments[0].Value >>= aNew;
-            aStr += aNew;
-            pLast->aArgs[0].Value <<= aStr;
-            return;
-        }
-    }
+    ::rtl::OUString aTarget;
 
-    DispatchStatement aStatement( aURL.Complete, lArguments, sal_False );
+    com::sun::star::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, sal_False );
     m_aStatements.push_back( aStatement );
 }
 
@@ -170,8 +143,9 @@ void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
 void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& aURL,
                                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
 {
-    //implts_recordMacro(aURL,lArguments,sal_True);
-    DispatchStatement aStatement( aURL.Complete, lArguments, sal_True );
+    ::rtl::OUString aTarget;
+
+        com::sun::star::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, sal_False );
     m_aStatements.push_back( aStatement );
 }
 
@@ -208,7 +182,7 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
     aScriptBuffer.appendAscii("document = ThisComponent.CurrentController.Frame\n");
     aScriptBuffer.appendAscii("parser   = createUnoService(\"com.sun.star.util.URLTransformer\")\n\n");
 
-    std::vector< DispatchStatement>::iterator p;
+    std::vector< com::sun::star::frame::DispatchStatement>::iterator p;
     for ( p = m_aStatements.begin(); p != m_aStatements.end(); p++ )
         implts_recordMacro( p->aCommand, p->aArgs, p->bIsComment, aScriptBuffer );
     ::rtl::OUString sScript = aScriptBuffer.makeStringAndClear();
@@ -436,6 +410,69 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
     /* SAFE { */
     m_nRecordingID++;
     /* } */
+}
+
+com::sun::star::uno::Type SAL_CALL DispatchRecorder::getElementType() throw (::com::sun::star::uno::RuntimeException)
+{
+    return ::getCppuType((const com::sun::star::frame::DispatchStatement *)NULL);
+}
+
+sal_Bool SAL_CALL DispatchRecorder::hasElements()  throw (::com::sun::star::uno::RuntimeException)
+{
+    return (! m_aStatements.empty());
+}
+
+sal_Int32 SAL_CALL DispatchRecorder::getCount() throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_aStatements.size();
+}
+
+com::sun::star::uno::Any SAL_CALL DispatchRecorder::getByIndex(long int idx)  throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    if (idx >= m_aStatements.size()) {
+        throw com::sun::star::lang::IndexOutOfBoundsException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "Dispatch recorder out of bounds") ),
+                    Reference< XInterface >() );
+
+    }
+
+    Any element(&m_aStatements[idx],
+        ::getCppuType((const com::sun::star::frame::DispatchStatement *)NULL));
+
+    return element;
+}
+
+void SAL_CALL DispatchRecorder::replaceByIndex(long int idx, const com::sun::star::uno::Any& element) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    if (element.getValueType() !=
+        ::getCppuType((const com::sun::star::frame::DispatchStatement *)NULL)) {
+                        throw com::sun::star::lang::IllegalArgumentException(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                "Illegal argument in dispatch recorder") ),
+                        Reference< XInterface >(), 2 );
+    }
+
+    if (idx >= m_aStatements.size()) {
+                throw com::sun::star::lang::IndexOutOfBoundsException(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                "Dispatch recorder out of bounds") ),
+                        Reference< XInterface >() );
+
+        }
+
+    com::sun::star::frame::DispatchStatement *pStatement;
+
+    pStatement = (com::sun::star::frame::DispatchStatement *)element.getValue();
+
+    com::sun::star::frame::DispatchStatement aStatement(
+        pStatement->aCommand,
+        pStatement->aTarget,
+        pStatement->aArgs,
+        pStatement->nFlags,
+        pStatement->bIsComment);
+
+    m_aStatements[idx] = aStatement;
 }
 
 } // namespace framework

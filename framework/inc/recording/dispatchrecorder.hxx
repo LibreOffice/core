@@ -47,6 +47,14 @@
 #include <com/sun/star/frame/XDispatchRecorder.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHSTATEMENT_HPP_
+#include <com/sun/star/frame/DispatchStatement.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
+#include <com/sun/star/container/XIndexReplace.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.HPP>
 #endif
@@ -75,14 +83,14 @@
 
 namespace framework{
 
-struct DispatchStatement;
-typedef ::std::vector < DispatchStatement > DispatchStatementList;
+typedef ::std::vector < com::sun::star::frame::DispatchStatement > DispatchStatementList;
 
 class DispatchRecorder
     : private ThreadHelpBase
     , public  css::lang::XTypeProvider
     , public  css::lang::XServiceInfo
     , public  css::frame::XDispatchRecorder
+    , public  css::container::XIndexReplace
     , public  ::cppu::OWeakObject
 {
     // private member
@@ -108,6 +116,16 @@ class DispatchRecorder
         virtual void SAL_CALL            recordDispatchAsComment( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException );
         virtual void SAL_CALL            endRecording           () throw( css::uno::RuntimeException );
         virtual ::rtl::OUString SAL_CALL getRecordedMacro       () throw( css::uno::RuntimeException );
+
+    virtual com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasElements()  throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getCount() throw (::com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::uno::Any SAL_CALL getByIndex(long int)  throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::WrappedTargetException, com::sun::star::lang::IndexOutOfBoundsException);
+
+    virtual void SAL_CALL replaceByIndex(long int, const com::sun::star::uno::Any&)  throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // private functions
     private:
