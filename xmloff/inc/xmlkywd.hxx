@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-23 14:38:19 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 15:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1280,6 +1280,7 @@ XML_CONSTASCII_ACTION( sXML_protect_content, "content" );
 XML_CONSTASCII_ACTION( sXML_protect_position, "position" );
 XML_CONSTASCII_ACTION( sXML_protect_size, "size" );
 XML_CONSTASCII_ACTION( sXML_protected, "protected" );
+XML_CONSTASCII_ACTION( sXML_protection_key, "protection-key" );
 XML_CONSTASCII_ACTION( sXML_prsubset, "prsubset" );
 XML_CONSTASCII_ACTION( sXML_publisher, "publisher" );
 XML_CONSTASCII_ACTION( sXML_punctuation_wrap, "punctuation-wrap" );
@@ -1516,6 +1517,7 @@ XML_CONSTASCII_ACTION( sXML_stroke_dash , "stroke-dash" );
 XML_CONSTASCII_ACTION( sXML_stroke_linejoin , "stroke-linejoin" );
 XML_CONSTASCII_ACTION( sXML_stroke_opacity, "stroke-opacity" );
 XML_CONSTASCII_ACTION( sXML_stroke_width, "stroke-width" );
+XML_CONSTASCII_ACTION( sXML_structure_protected, "structure-protected" );
 XML_CONSTASCII_ACTION( sXML_style, "style" );
 XML_CONSTASCII_ACTION( sXML_style_name, "style-name" );
 XML_CONSTASCII_ACTION( sXML_styles, "styles" );
