@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.22 $
-*  last change: $Author: toconnor $ $Date: 2003-05-27 13:40:49 $
+*  $Revision: 1.23 $
+*  last change: $Author: dfoster $ $Date: 2003-05-29 14:17:55 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -64,6 +64,9 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <util/util.hxx>
 #include <rtl/uri.hxx>
@@ -110,6 +113,7 @@ extern ::rtl_StandardModuleCount s_moduleCount;
 //*************************************************************************
 ScriptStorage::ScriptStorage( const Reference <
                               XComponentContext > & xContext )
+throw ( RuntimeException )
         : m_xContext( xContext ), m_bInitialised( false )
 {
     OSL_TRACE( "< ScriptStorage ctor called >\n" );
@@ -127,10 +131,65 @@ ScriptStorage::ScriptStorage( const Reference <
         if( !mh_scriptLangs )
         {
             mh_scriptLangs = new ScriptLanguages_hash();
-            (*mh_scriptLangs)[ OUString::createFromAscii( "bsh" ) ] =
-                OUString::createFromAscii( "BeanShell" );
-            (*mh_scriptLangs)[ OUString::createFromAscii( "js" ) ] =
-                OUString::createFromAscii( "Rhino" );
+            Reference< XInterface > xInterface =
+                m_xMgr->createInstanceWithContext(
+                        OUString::createFromAscii(
+                            "com.sun.star.configuration.ConfigurationProvider" )
+                        , m_xContext );
+            validateXRef( xInterface,
+                "ScriptStorage::ScriptStorage: cannot get ConfigurationProvider" );
+            // create an instance of the ConfigurationAccess for accessing the
+            // scripting runtime settings
+            Reference< lang::XMultiServiceFactory > xConfigProvFactory =
+                Reference < lang::XMultiServiceFactory >
+                    ( xInterface, UNO_QUERY_THROW );
+            validateXRef( xConfigProvFactory,
+                "ScriptStorage::ScriptStorage: cannot get XMultiServiceFactory interface from ConfigurationProvider" );
+            beans::PropertyValue configPath;
+            configPath.Name = ::rtl::OUString::createFromAscii( "nodepath" );
+            configPath.Value <<= ::rtl::OUString::createFromAscii( "org.openoffice.Office.Scripting/ScriptRuntimes" );
+            Sequence < Any > aargs( 1 );
+            aargs[ 0 ] <<= configPath;
+
+            xInterface = xConfigProvFactory->createInstanceWithArguments(
+                        OUString::createFromAscii(
+                            "com.sun.star.configuration.ConfigurationAccess"),
+                        aargs );
+            validateXRef( xInterface,
+                "ScriptStorage::ScriptStorage: cannot get ConfigurationAccess" );
+            Reference< container::XNameAccess > xNameAccess =
+                Reference < container::XNameAccess > ( xInterface,
+                                            UNO_QUERY_THROW );
+            validateXRef( xNameAccess,
+                "ScriptStorage::ScriptStorage: cannot get ConfigurationAccess" );
+            Sequence< OUString > names = xNameAccess->getElementNames();
+            for( int i = 0 ; i < names.getLength() ; i++ )
+            {
+                OSL_TRACE(  "Getting propertyset for Lang=%s",
+                    ::rtl::OUStringToOString( names[i], RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                Reference< beans::XPropertySet > xPropSet =
+                    Reference< beans::XPropertySet >( xNameAccess->getByName(names[i]),
+                                            UNO_QUERY_THROW );
+                validateXRef( xPropSet,
+                    "ScriptStorage::ScriptStorage: cannot get XPropertySet for name" );
+                Any aProp = xPropSet->getPropertyValue(
+                        OUString::createFromAscii( "SupportedFileExtensions") );
+                Sequence< OUString > extns;
+                if( sal_False == ( aProp >>= extns ) )
+                {
+                    throw RuntimeException(
+                        OUSTR( "ScriptStorage:ScriptStorage: can't get runtime extensions" ),
+                        Reference< XInterface > () );
+                }
+                for( int j = 0 ; j < extns.getLength() ; j++ )
+                {
+                    OSL_TRACE(  "Adding Lang=%s, Extn=%s\n",
+                        ::rtl::OUStringToOString( names[i], RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                        ::rtl::OUStringToOString( extns[j], RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                    (*mh_scriptLangs)[ extns[j] ] =
+                        names[i];
+                }
+            }
         }
     }
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );

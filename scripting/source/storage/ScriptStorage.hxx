@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorage.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-05-23 14:59:52 $
+ *  last change: $Author: dfoster $ $Date: 2003-05-29 14:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,8 @@ public:
     //Constructors and Destructors
     //=========================================================================
     explicit ScriptStorage(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext );
+        const css::uno::Reference< css::uno::XComponentContext > & xContext )
+        throw ( css::uno::RuntimeException );
     //-------------------------------------------------------------------------
     virtual ~ScriptStorage() SAL_THROW( () );
     //=========================================================================
