@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:21:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,6 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
     // bForceToTop = always align to top, for editing
     // (FALSE for querying URLs etc.)
 
-    USHORT i;
-
     if (!pPattern)
         pPattern = pDoc->GetPattern( nCol, nRow, nTab );
 
@@ -150,15 +148,15 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
     long nCellX = (long) ( pDoc->GetColWidth(nCol,nTab) * nPPTX );
     if ( pMerge->GetColMerge() > 1 )
     {
-        USHORT nCountX = pMerge->GetColMerge();
-        for (i=1; i<nCountX; i++)
+        SCCOL nCountX = pMerge->GetColMerge();
+        for (SCCOL i=1; i<nCountX; i++)
             nCellX += (long) ( pDoc->GetColWidth(nCol+i,nTab) * nPPTX );
     }
     long nCellY = (long) ( pDoc->GetRowHeight(nRow,nTab) * nPPTY );
     if ( pMerge->GetRowMerge() > 1 )
     {
-        USHORT nCountY = pMerge->GetRowMerge();
-        for (i=1; i<nCountY; i++)
+        SCROW nCountY = pMerge->GetRowMerge();
+        for (SCROW i=1; i<nCountY; i++)
             nCellY += (long) ( pDoc->GetRowHeight(nRow+i,nTab) * nPPTY );
     }
 
