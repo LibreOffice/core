@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:51:20 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,8 @@
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>       // SwTxtFrm
 #endif
-#ifndef _DRAWFONT_HXX
-#include <drawfont.hxx>
+#ifndef _SCRIPTINFO_HXX
+#include <scriptinfo.hxx>
 #endif
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <svtools/ctloptions.hxx>
