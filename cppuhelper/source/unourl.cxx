@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unourl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-02 15:31:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
     m_aDescriptor = rDescriptor;
     enum State { STATE_NAME0, STATE_NAME, STATE_KEY0, STATE_KEY, STATE_VALUE };
     State eState = STATE_NAME0;
-    sal_Int32 nStart;
+    sal_Int32 nStart = 0;
     rtl::OUString aKey;
     for (sal_Int32 i = 0;; ++i)
     {
