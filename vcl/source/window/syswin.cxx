@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: th $ $Date: 2001-08-07 11:55:59 $
+ *  last change: $Author: th $ $Date: 2001-08-23 13:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,9 @@ SystemWindow::SystemWindow( WindowType nType ) :
     mbRollFunc          = FALSE;
     mbDockBtn           = FALSE;
     mbHideBtn           = FALSE;
+    mbSysChild          = FALSE;
     mnMenuBarMode       = MENUBAR_MODE_NORMAL;
+    mnIcon              = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -244,6 +246,26 @@ void SystemWindow::SetZLevel( BYTE nLevel )
             pWindow->mpOverlapWindow->mpLastOverlap = pWindow;
             pWindow->mpPrev->mpNext = pWindow;
         }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SystemWindow::SetIcon( USHORT nIcon )
+{
+    if ( mnIcon == nIcon )
+        return;
+
+    mnIcon = nIcon;
+
+    if ( !mbSysChild )
+    {
+        const Window* pWindow = this;
+        while ( pWindow->mpBorderWindow )
+            pWindow = pWindow->mpBorderWindow;
+
+        if ( pWindow->mbFrame )
+            pWindow->mpFrame->SetIcon( nIcon );
     }
 }
 
@@ -393,6 +415,236 @@ Size SystemWindow::GetResizeOutputSizePixel() const
     if ( aSize.Height() < maMinOutSize.Height() )
         aSize.Height() = maMinOutSize.Height();
     return aSize;
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rStr )
+{
+    ULONG       nValidMask  = 0;
+    xub_StrLen  nIndex      = 0;
+    ByteString  aTokenStr;
+
+    aTokenStr = rStr.GetToken( 0, ',', nIndex );
+    if ( aTokenStr.Len() )
+    {
+        rData.SetX( aTokenStr.ToInt32() );
+        nValidMask |= WINDOWSTATE_MASK_X;
+    }
+    else
+        rData.SetX( 0 );
+    aTokenStr = rStr.GetToken( 0, ',', nIndex );
+    if ( aTokenStr.Len() )
+    {
+        rData.SetY( aTokenStr.ToInt32() );
+        nValidMask |= WINDOWSTATE_MASK_Y;
+    }
+    else
+        rData.SetY( 0 );
+    aTokenStr = rStr.GetToken( 0, ',', nIndex );
+    if ( aTokenStr.Len() )
+    {
+        rData.SetWidth( aTokenStr.ToInt32() );
+        nValidMask |= WINDOWSTATE_MASK_WIDTH;
+    }
+    else
+        rData.SetWidth( 0 );
+    aTokenStr = rStr.GetToken( 0, ';', nIndex );
+    if ( aTokenStr.Len() )
+    {
+        rData.SetHeight( aTokenStr.ToInt32() );
+        nValidMask |= WINDOWSTATE_MASK_HEIGHT;
+    }
+    else
+        rData.SetHeight( 0 );
+    aTokenStr = rStr.GetToken( 0, ';', nIndex );
+    if ( aTokenStr.Len() )
+    {
+        rData.SetState( (ULONG)aTokenStr.ToInt32() );
+        nValidMask |= WINDOWSTATE_MASK_STATE;
+    }
+    else
+        rData.SetState( 0 );
+    rData.SetMask( nValidMask );
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplWindowStateToStr( const WindowStateData& rData, ByteString& rStr )
+{
+    ULONG nValidMask = rData.GetMask();
+    if ( !nValidMask )
+        return;
+
+    if ( nValidMask & WINDOWSTATE_MASK_X )
+        rStr.Append( ByteString::CreateFromInt32( rData.GetX() ) );
+    rStr.Append( ',' );
+    if ( nValidMask & WINDOWSTATE_MASK_Y )
+        rStr.Append( ByteString::CreateFromInt32( rData.GetY() ) );
+    rStr.Append( ',' );
+    if ( nValidMask & WINDOWSTATE_MASK_WIDTH )
+        rStr.Append( ByteString::CreateFromInt32( rData.GetWidth() ) );
+    rStr.Append( ',' );
+    if ( nValidMask & WINDOWSTATE_MASK_HEIGHT )
+        rStr.Append( ByteString::CreateFromInt32( rData.GetHeight() ) );
+    rStr.Append( ';' );
+    if ( nValidMask & WINDOWSTATE_MASK_STATE )
+        rStr.Append( ByteString::CreateFromInt32( (long)rData.GetState() ) );
+    rStr.Append( ';' );
+}
+
+// -----------------------------------------------------------------------
+
+void SystemWindow::SetWindowStateData( const WindowStateData& rData )
+{
+    ULONG nValidMask = rData.GetMask();
+    if ( !nValidMask )
+        return;
+
+    if ( mbSysChild )
+        return;
+
+    Window* pWindow = this;
+    while ( pWindow->mpBorderWindow )
+        pWindow = pWindow->mpBorderWindow;
+
+    if ( pWindow->mbFrame )
+    {
+#ifndef REMOTE_APPSERVER
+        ULONG           nState = rData.GetState();
+        SalFrameState   aState;
+        aState.mnMask   = rData.GetMask();
+        aState.mnX      = rData.GetX();
+        aState.mnY      = rData.GetY();
+        aState.mnWidth  = rData.GetWidth();
+        aState.mnHeight = rData.GetHeight();
+        aState.mnState  = nState & SAL_FRAMESTATE_SYSTEMMASK;
+        mpFrame->SetWindowState( &aState );
+#else
+        ByteString aStr;
+        ImplWindowStateToStr( rData, aStr );
+        mpFrame->SetWindowState( ::rtl::OUString( aStr.GetBuffer(), aStr.Len(), RTL_TEXTENCODING_ASCII_US ) );
+#endif
+
+        // Syncrones Resize ausloesen, damit wir nach Moeglichkeit gleich
+        // mit der richtigen Groesse rechnen
+        long nNewWidth;
+        long nNewHeight;
+        pWindow->mpFrame->GetClientSize( nNewWidth, nNewHeight );
+        ImplHandleResize( pWindow, nNewWidth, nNewHeight );
+    }
+    else
+    {
+        USHORT nPosSize = 0;
+        if ( nValidMask & WINDOWSTATE_MASK_X )
+            nPosSize |= WINDOW_POSSIZE_X;
+        if ( nValidMask & WINDOWSTATE_MASK_Y )
+            nPosSize |= WINDOW_POSSIZE_Y;
+        if ( nValidMask & WINDOWSTATE_MASK_WIDTH )
+            nPosSize |= WINDOW_POSSIZE_WIDTH;
+        if ( nValidMask & WINDOWSTATE_MASK_HEIGHT )
+            nPosSize |= WINDOW_POSSIZE_HEIGHT;
+        SetPosSizePixel( rData.GetX(), rData.GetY(), rData.GetWidth(), rData.GetHeight(), nPosSize );
+
+        if ( nValidMask & WINDOWSTATE_MASK_STATE )
+        {
+            ULONG nState = rData.GetState();
+            if ( nState & WINDOWSTATE_STATE_ROLLUP )
+                RollUp();
+            else
+                RollDown();
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
+{
+    ULONG nValidMask = rData.GetMask();
+    if ( !nValidMask )
+        return;
+
+    if ( mbSysChild )
+        return;
+
+    const Window* pWindow = this;
+    while ( pWindow->mpBorderWindow )
+        pWindow = pWindow->mpBorderWindow;
+
+    if ( pWindow->mbFrame )
+    {
+#ifndef REMOTE_APPSERVER
+        SalFrameState aState;
+        aState.mnMask = 0xFFFFFFFF;
+        if ( mpFrame->GetWindowState( &aState ) )
+        {
+            if ( nValidMask & WINDOWSTATE_MASK_X )
+                rData.SetX( aState.mnX );
+            if ( nValidMask & WINDOWSTATE_MASK_Y )
+                rData.SetY( aState.mnY );
+            if ( nValidMask & WINDOWSTATE_MASK_WIDTH )
+                rData.SetWidth( aState.mnWidth );
+            if ( nValidMask & WINDOWSTATE_MASK_HEIGHT )
+                rData.SetHeight( aState.mnHeight );
+            if ( nValidMask & WINDOWSTATE_MASK_STATE )
+                rData.SetState( aState.mnState );
+        }
+        else
+            rData.SetMask( 0 );
+#else
+        ::rtl::OUString aStr( mpFrame->GetWindowState() );
+        ByteString aByteStr( aStr.getStr(), aStr.getLength(), RTL_TEXTENCODING_ASCII_US );
+        WindowStateData aData;
+        ImplWindowStateFromStr( aData, rStr );
+        rData = aData;
+#endif
+    }
+    else
+    {
+        Point   aPos = GetPosPixel();
+        Size    aSize = GetSizePixel();
+        ULONG   nState = 0;
+
+        if ( IsRollUp() )
+            nState |= WINDOWSTATE_STATE_ROLLUP;
+
+        if ( nValidMask & WINDOWSTATE_MASK_X )
+            rData.SetX( aPos.X() );
+        if ( nValidMask & WINDOWSTATE_MASK_Y )
+            rData.SetY( aPos.Y() );
+        if ( nValidMask & WINDOWSTATE_MASK_WIDTH )
+            rData.SetWidth( aSize.Width() );
+        if ( nValidMask & WINDOWSTATE_MASK_HEIGHT )
+            rData.SetHeight( aSize.Height() );
+        if ( nValidMask & WINDOWSTATE_MASK_STATE )
+            rData.SetState( nState );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SystemWindow::SetWindowState( const ByteString& rStr )
+{
+    if ( !rStr.Len() )
+        return;
+
+    WindowStateData aData;
+    ImplWindowStateFromStr( aData, rStr );
+    SetWindowStateData( aData );
+}
+
+// -----------------------------------------------------------------------
+
+ByteString SystemWindow::GetWindowState( ULONG nMask ) const
+{
+    WindowStateData aData;
+    aData.SetMask( nMask );
+    GetWindowStateData( aData );
+
+    ByteString aStr;
+    ImplWindowStateToStr( aData, aStr );
+    return aStr;
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: th $ $Date: 2001-08-23 13:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,13 +108,13 @@
 
 void WorkWindow::ImplInitData()
 {
-    mnIcon                  = 0;
+    mnIcon                  = 0; // Should be removed in the next top level update - now in SystemWindow
+
     mnPresentationFlags     = 0;
     mbPresentationMode      = FALSE;
     mbPresentationVisible   = FALSE;
     mbPresentationFull      = FALSE;
     mbFullScreenMode        = FALSE;
-    mbSysChild              = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -260,89 +260,25 @@ WorkWindow::~WorkWindow()
 
 void WorkWindow::SetIcon( USHORT nIcon )
 {
-    if ( mnIcon == nIcon )
-        return;
-
+    // Should be removed in the next top level update - now in SystemWindow
     mnIcon = nIcon;
-    if ( !mbSysChild )
-        mpFrame->SetIcon( nIcon );
+    SystemWindow::SetIcon( nIcon );
 }
 
 // -----------------------------------------------------------------------
 
 void WorkWindow::SetWindowState( const ByteString& rStr )
 {
-    if ( mbSysChild )
-        return;
-
-#ifndef REMOTE_APPSERVER
-    SalFrameState   aState;
-    USHORT          nIndex = 0;
-    aState.mnX      = rStr.GetToken( 0, ',', nIndex ).ToInt32();
-    aState.mnY      = rStr.GetToken( 0, ',', nIndex ).ToInt32();
-    aState.mnWidth  = rStr.GetToken( 0, ',', nIndex ).ToInt32();
-    aState.mnHeight = rStr.GetToken( 0, ';', nIndex ).ToInt32();
-    if ( nIndex != STRING_NOTFOUND )
-    {
-        if ( IsFullScreenMode() )
-            ShowFullScreenMode( FALSE );
-
-        ULONG nState = rStr.Copy( nIndex ).ToInt32();
-        aState.mnState = nState & ~WORKWIN_WINDOWSTATE_ALL;
-        mpFrame->SetWindowState( &aState );
-
-        if ( nState & WORKWIN_WINDOWSTATE_FULLSCREEN )
-            ShowFullScreenMode( TRUE );
-    }
-#else
-    mpFrame->SetWindowState( String::CreateFromAscii(rStr.GetBuffer()) );
-#endif
-
-    // Syncrones Resize ausloesen, damit wir nach Moeglichkeit gleich
-    // mit der richtigen Groesse rechnen
-    // Oberstes BorderWindow ist das Window, welches positioniert werden soll
-    Window* pWindow = this;
-    while ( pWindow->mpBorderWindow )
-        pWindow = pWindow->mpBorderWindow;
-
-    // Syncrones Resize ausloesen, damit wir nach Moeglichkeit gleich
-    // mit der richtigen Groesse rechnen
-    long nNewWidth;
-    long nNewHeight;
-    pWindow->mpFrame->GetClientSize( nNewWidth, nNewHeight );
-    ImplHandleResize( pWindow, nNewWidth, nNewHeight );
+    // Should be removed in the next top level update - now in SystemWindow
+    SystemWindow::SetWindowState( rStr );
 }
 
 // -----------------------------------------------------------------------
 
 ByteString WorkWindow::GetWindowState() const
 {
-    if ( mbSysChild )
-        return ImplGetSVEmptyByteStr();
-
-#ifndef REMOTE_APPSERVER
-    ByteString      aStr;
-    SalFrameState   aState;
-    if ( mpFrame->GetWindowState( &aState ) )
-    {
-        // FullScreen merken wir uns auch
-        if ( IsFullScreenMode() )
-            aState.mnState |= WORKWIN_WINDOWSTATE_FULLSCREEN;
-
-        aStr.Append( ByteString::CreateFromInt32( aState.mnX ) );
-        aStr.Append( ',' );
-        aStr.Append( ByteString::CreateFromInt32( aState.mnY ) );
-        aStr.Append( ',' );
-        aStr.Append( ByteString::CreateFromInt32( aState.mnWidth ) );
-        aStr.Append( ',' );
-        aStr.Append( ByteString::CreateFromInt32( aState.mnHeight ) );
-        aStr.Append( ';' );
-        aStr.Append( ByteString::CreateFromInt32( aState.mnState ) );
-    }
-    return aStr;
-#else
-    return (ByteString)::rtl::OUStringToOString( mpFrame->GetWindowState() , RTL_TEXTENCODING_ASCII_US );
-#endif
+    // Should be removed in the next top level update - now in SystemWindow
+    return SystemWindow::GetWindowState();
 }
 
 // -----------------------------------------------------------------------
