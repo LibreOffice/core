@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
+#   last change: $Author: hjs $ $Date: 2002-07-02 14:53:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,7 @@ AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -81,11 +79,6 @@ SLOFILES = \
         $(SLO)$/exptypes.obj	\
         $(SLO)$/infodlgs.obj	\
         $(SLO)$/sfxdir.obj
-
-.IF "$(GUI)"=="WNT"
-CXXFILES += goffline.cxx
-SLOFILES += $(SLO)$/goffline.obj
-.ENDIF
 
 SRCFILES = \
         explorer.src
