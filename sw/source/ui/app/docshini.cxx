@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:49:50 $
+ *  last change: $Author: os $ $Date: 2001-09-10 14:38:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,11 +419,7 @@ SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
     pWrtShell( 0 )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
-    SetShell(this);
-    SetBaseModel(new SwXTextDocument(this));
-    // wir als BroadCaster werden auch unser eigener Listener
-    // (fuer DocInfo/FileNamen/....)
-    StartListening( *this );
+    Init_Impl();
 }
 
 /*--------------------------------------------------------------------
@@ -441,11 +437,7 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     pWrtShell( 0 )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
-    SetShell(this);
-    SetBaseModel(new SwXTextDocument(this));
-    // wir als BroadCaster werden auch unser eigener Listener
-    // (fuer DocInfo/FileNamen/....)
-    StartListening( *this );
+    Init_Impl();
 }
 
 /*--------------------------------------------------------------------
@@ -472,7 +464,19 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
             delete pTable;
     }
 }
+/* -----------------------------10.09.2001 15:59------------------------------
 
+ ---------------------------------------------------------------------------*/
+void  SwDocShell::Init_Impl()
+{
+    SetShell(this);
+    SetBaseModel(new SwXTextDocument(this));
+    // wir als BroadCaster werden auch unser eigener Listener
+    // (fuer DocInfo/FileNamen/....)
+    StartListening( *this );
+    //position of the "Automatic" style filter for the stylist (app.src)
+    SetAutoStyleFilterIndex(3);
+}
 /*--------------------------------------------------------------------
     Beschreibung: AddLink
  --------------------------------------------------------------------*/
