@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:54:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,6 +544,13 @@ IMPL_LINK( ScGridWindow, PopupModeEndHdl, FloatingWindow*, pFloat )
     if (pFilterBox)
         pFilterBox->SetCancelled();     // nicht mehr auswaehlen
     GrabFocus();
+    return 0;
+}
+
+IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo*, pInfo )
+{
+    if( pInfo->nCommand == SPELLCMD_STARTSPELLDLG )
+        pViewData->GetDispatcher().Execute( SID_SPELL_DIALOG, SFX_CALLMODE_ASYNCHRON );
     return 0;
 }
 
@@ -1895,7 +1902,7 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         return;
 
     SfxBindings& rBindings = pViewData->GetBindings();
-    if (bEEMouse)
+    if (bEEMouse && pViewData->HasEditView( eWhich ))
     {
         EditView*   pEditView;
         SCCOL       nEditCol;
@@ -2294,7 +2301,7 @@ void __EXPORT ScGridWindow::MouseMove( const MouseEvent& rMEvt )
     BOOL bRefMode = pViewData->IsRefMode();                 // Referenz angefangen
     BOOL bFormulaMode = pScMod->IsFormulaMode();            // naechster Klick -> Referenz
 
-    if (bEEMouse)
+    if (bEEMouse && pViewData->HasEditView( eWhich ))
     {
         EditView*   pEditView;
         SCCOL       nEditCol;
@@ -2575,7 +2582,7 @@ void ScGridWindow::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
     CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, TRUE );
 
-    if (bEEMouse)
+    if (bEEMouse && pViewData->HasEditView( eWhich ))
     {
         EditView*   pEditView;
         SCCOL       nEditCol;
@@ -2791,7 +2798,8 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
                 if (pHdl)
                     pHdl->SetModified();
 
-                pEditView->ExecuteSpellPopup( aMenuPos );
+                Link aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
+                pEditView->ExecuteSpellPopup( aMenuPos, &aLink );
 
                 bDone = TRUE;
             }
