@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2001-04-11 11:25:58 $
+ *  last change: $Author: hro $ $Date: 2001-05-09 14:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,7 +751,13 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding()
 
     if ( !gotACP )
     {
-        _encoding = GetTextEncodingFromCodePage( GetACP() );
+        char    *pszEncoding;
+
+        if ( NULL != (pszEncoding = getenv( "SOLAR_USER_RTL_TEXTENCODING" )) )
+            _encoding = atoi(pszEncoding);
+        else
+            _encoding = GetTextEncodingFromCodePage( GetACP() );
+
         TlsSetValue( g_dwTLSTextEncodingIndex, (LPVOID)MAKELONG( _encoding, TRUE ) );
     }
 
