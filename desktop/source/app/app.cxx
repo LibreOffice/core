@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mh $ $Date: 2001-08-01 07:42:16 $
+ *  last change: $Author: fs $ $Date: 2001-08-01 12:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#endif
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
@@ -122,12 +125,23 @@
 #ifndef _VOS_SECURITY_HXX_
 #include <vos/security.hxx>
 #endif
+#ifndef _VOS_TIMER_HXX_
+#include <vos/timer.hxx>
+#endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
+#endif
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
 #endif
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
@@ -154,18 +168,43 @@
 #include <setup2/installer.hxx>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_INTERNALOPTIONS_HXX
 #include <svtools/internaloptions.hxx>
+#endif
+#ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
+#endif
 
+#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
+#endif
+#ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
+#endif
+#ifndef _VCL_STDTEXT_HXX
+#include <vcl/stdtext.hxx>
+#endif
+#ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
+#endif
+#ifndef _UCBHELPER_CONTENTBROKER_HXX
 #include <ucbhelper/contentbroker.hxx>
+#endif
+#ifndef _UTL_BOOTSTRAP_HXX
 #include <unotools/bootstrap.hxx>
+#endif
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII##))
 #define U2S(STRING)                             ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
@@ -181,6 +220,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::system;
+using namespace ::com::sun::star::ui::dialogs;
 
 static SalMainPipeExchangeSignalHandler* pSignalHandler = 0;
 
@@ -817,12 +857,56 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
 //  OFF_APP()->SystemSettingsChanging( rSettings, pFrame );
 }
 
+// ========================================================================
+typedef ::vos::OTimer OFirstOfficeRunInitTimer_Base;
+class OFirstOfficeRunInitTimer : public OFirstOfficeRunInitTimer_Base
+{
+private:
+    Link    m_aAsyncExpireHandler;
+
+public:
+    OFirstOfficeRunInitTimer( const Link& _rExpireHdl );
+
+private:
+    virtual void SAL_CALL onShot();
+};
+
+// ========================================================================
+OFirstOfficeRunInitTimer::OFirstOfficeRunInitTimer( const Link& _rExpireHdl )
+    :OFirstOfficeRunInitTimer_Base( TTimeValue( 3, 0 ) )
+    ,m_aAsyncExpireHandler( _rExpireHdl )
+{
+    acquire();
+}
+
+// ========================================================================
+void SAL_CALL OFirstOfficeRunInitTimer::onShot()
+{
+    {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        Application::PostUserEvent( m_aAsyncExpireHandler );
+    }
+
+    // delete ourself - we're not needed anymore
+    release();
+}
+
+// ========================================================================
+IMPL_LINK( Desktop, AsyncInitFirstRun, void*, NOTINTERESTEDIN )
+{
+    DoFirstRunInitializations();
+    return 0L;
+}
+
+// ========================================================================
 IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::Desktop::OpenClients_Impl" );
 
     OpenClients();
     CloseStartupScreen();
+
+    CheckFirstRun( );
 
     return 0;
 }
@@ -1239,3 +1323,79 @@ void Desktop::CloseStartupScreen()
     RTL_LOGFILE_TRACE( "desktop (cd) ::Desktop::CloseStartupScreen" );
 }
 
+
+// ========================================================================
+void Desktop::DoFirstRunInitializations()
+{
+    // TODO: as soon as there's more to do than starting this one special pilot,
+    // we most probably should have a better concept for services to be invoked upon
+    // running the first time ....
+
+    // --------------------------------------------------------------------
+    // execute the auto pilot which registers the users address book as data source
+    try
+    {
+        const ::rtl::OUString sAddressBookPilotServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AddressBookSourcePilot" );
+        // create the pilot's service
+        Reference< XInterface > xDialog = ::comphelper::getProcessServiceFactory()->createInstance( sAddressBookPilotServiceName );
+        if ( !xDialog.is() )
+        {
+            ShowServiceNotAvailableError( NULL, sAddressBookPilotServiceName, sal_True );
+        }
+        else
+        {
+            Reference< XExecutableDialog > xExecute( xDialog, UNO_QUERY );
+            OSL_ENSURE( xExecute.is(), "Desktop::DoFirstRunInitializations: missing an interface (XExecutableDialog)!" );
+            if ( xExecute.is() )
+                xExecute->execute();
+        }
+    }
+    catch(const ::com::sun::star::uno::Exception&)
+    {
+        OSL_ENSURE( sal_False, "Desktop::DoFirstRunInitializations: caught an exception while executing the Address Book AutoPilot!" );
+    }
+}
+
+// ========================================================================
+void Desktop::CheckFirstRun( )
+{
+    const ::rtl::OUString sCommonMiscNodeName = ::rtl::OUString::createFromAscii( "/org.openoffice.Office.Common/Misc" );
+    const ::rtl::OUString sFirstRunNodeName = ::rtl::OUString::createFromAscii( "FirstRun" );
+
+    // --------------------------------------------------------------------
+    // check if this is the first office start
+
+    // for this, open the Common/Misc node where this info is stored
+    ::utl::OConfigurationTreeRoot aCommonMisc = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+        ::comphelper::getProcessServiceFactory( ),
+        sCommonMiscNodeName,
+        2,
+        ::utl::OConfigurationTreeRoot::CM_UPDATABLE
+    );
+
+    // read the flag
+    OSL_ENSURE( aCommonMisc.isValid(), "Desktop::CheckFirstRun: could not open the config node needed!" );
+    sal_Bool bIsFirstRun = sal_False;
+    aCommonMisc.getNodeValue( sFirstRunNodeName ) >>= bIsFirstRun;
+
+    if ( !bIsFirstRun )
+        // nothing to do ....
+        return;
+
+    // --------------------------------------------------------------------
+    // it is the first run
+
+    // do the initialization asynchronously
+    ::vos::ORef< ::vos::OTimer > xInitTimer = new OFirstOfficeRunInitTimer( LINK( this, Desktop, AsyncInitFirstRun ) );
+    xInitTimer->start();
+    OSL_ENSURE( xInitTimer->isTicking() && !xInitTimer->isExpired(),
+        "Desktop::CheckFirstRun: strange timer behaviour!" );
+
+    // --------------------------------------------------------------------
+    // reset the config flag
+
+    // set the value
+    aCommonMisc.setNodeValue( sFirstRunNodeName, makeAny( (sal_Bool)sal_False ) );
+    // commit the changes
+    aCommonMisc.commit();
+}
