@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoifac2.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:10:28 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 13:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,7 @@ Menu RID_CONTEXTMENU
         };
     };
 };
+
 
 
 
