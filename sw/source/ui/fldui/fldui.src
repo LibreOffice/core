@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:24:22 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,7 +933,7 @@ String STR_DBSETNUMBERFLD
     TEXT[ russian ] = "Íîìåğ çàïèñè";
     TEXT[ polish ] = "Numer rekordu";
     TEXT[ japanese ] = "Úº°ÄŞ”Ô†";
-    TEXT[ chinese_traditional ] = "¸ê®Æ±ø¥Ø¸¹½X";
+    TEXT[ chinese_traditional ] = "¸ê®Æ±ø¥Ø½s¸¹";
     TEXT[ arabic ] = "ÑŞã ÇáÓÌá";
     TEXT[ greek ] = "Áñéèìüò åããñáöŞò";
     TEXT[ korean ] = "·¹ÄÚµå ¹øÈ£";
@@ -963,7 +963,7 @@ String STR_PREVPAGEFLD
     TEXT[ chinese_traditional ] = "¤W¤@­¶";
     TEXT[ arabic ] = "ÇáÕİÍÉ ÇáÓÇÈŞÉ";
     TEXT[ greek ] = "Ğñïçãïıìåíç óåëßäá";
-    TEXT[ korean ] = "ÀÌÀü ÂÊ";
+    TEXT[ korean ] = "ÀÌÀü ÆäÀÌÁö";
     TEXT[ turkish ] = "Önceki sayfa";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Página anterior";
@@ -990,7 +990,7 @@ String STR_NEXTPAGEFLD
     TEXT[ chinese_traditional ] = "¤U¤@­¶";
     TEXT[ arabic ] = "ÇáÕİÍÉ ÇáÊÇáíÉ";
     TEXT[ greek ] = "Åğüìåíç óåëßäá";
-    TEXT[ korean ] = "´ÙÀ½ ÂÊ";
+    TEXT[ korean ] = "´ÙÀ½ ÆäÀÌÁö";
     TEXT[ turkish ] = "Sonraki sayfa";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Página siguiente";
@@ -1044,7 +1044,7 @@ String STR_USERFLD
     TEXT[ russian ] = "Ïîëå ïîëüçîâàòåëÿ";
     TEXT[ polish ] = "Pole u¿ytkownika";
     TEXT[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ";
-    TEXT[ chinese_traditional ] = "¨Ï¥ÎªÌÄæ¦ì";
+    TEXT[ chinese_traditional ] = "¦Û­qÄæ¦ì";
     TEXT[ arabic ] = "ÍŞá ÇáãÓÊÎÏã";
     TEXT[ greek ] = "Ğåäßï ÷ñŞóôç";
     TEXT[ korean ] = "»ç¿ëÀÚ ÇÊµå";
@@ -1484,7 +1484,7 @@ String FLD_STAT_PAGE
     TEXT[ chinese_traditional ] = "­¶";
     TEXT[ arabic ] = "ÕİÍÇÊ";
     TEXT[ greek ] = "Óåëßäåò";
-    TEXT[ korean ] = "ÂÊ";
+    TEXT[ korean ] = "ÆäÀÌÁö";
     TEXT[ turkish ] = "Sayfa";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Páginas";
@@ -2376,7 +2376,7 @@ String FMT_NUM_PAGEDESC
     TEXT[ chinese_traditional ] = "©M­¶­±¼Ë¦¡¬Û¦P";
     TEXT[ arabic ] = "ãËá äãØ ÇáÕİÍÉ";
     TEXT[ greek ] = "¼ğùò ôï ğñüôõğï óåëßäáò";
-    TEXT[ korean ] = "ÂÊ À¯ÇüÃ³·³";
+    TEXT[ korean ] = "ÆäÀÌÁö À¯ÇüÃ³·³";
     TEXT[ turkish ] = "Sayfa biçimi gibi";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Como estilo de página";
@@ -2811,7 +2811,7 @@ String FMT_REF_PAGE
     TEXT[ chinese_traditional ] = "­¶";
     TEXT[ arabic ] = "ÕİÍÉ";
     TEXT[ greek ] = "Óåëßäá";
-    TEXT[ korean ] = "ÂÊ";
+    TEXT[ korean ] = "ÆäÀÌÁö";
     TEXT[ turkish ] = "Sayfa";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Página";
@@ -2891,7 +2891,7 @@ String FMT_REF_PAGE_PGDSC
     TEXT[ chinese_traditional ] = "©M­¶­±¼Ë¦¡¬Û¦P";
     TEXT[ arabic ] = "ãËá äãØ ÇáÕİÍÉ";
     TEXT[ greek ] = "¼ğùò ôï ğñüôõğï óåëßäáò";
-    TEXT[ korean ] = "ÂÊ À¯ÇüÃ³·³";
+    TEXT[ korean ] = "ÆäÀÌÁö À¯ÇüÃ³·³";
     TEXT[ turkish ] = "Sayfa biçimi gibi";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Como estilo de página";
@@ -3357,7 +3357,7 @@ String STR_COMBCHRS_FT
     TEXT[ polish ] = "Znaki";
     TEXT[ portuguese_brazilian ] = "Ch~aracters";
     TEXT[ japanese ] = "•¶š(~A)";
-    TEXT[ korean ] = "¹®ÀÚ";
+    TEXT[ korean ] = "¹®ÀÚ(~A)";
     TEXT[ chinese_simplified ] = "×Ö·û(~A)";
     TEXT[ chinese_traditional ] = "¦r¤¸(~A)";
     TEXT[ turkish ] = "Ch~aracters";
@@ -3598,6 +3598,7 @@ PushButton PB_FLDEDT_ADDRESS
     Text[ catalan ] = "Editar";
     Text[ finnish ] = "Muokkaa";
 };
+
 
 
 
