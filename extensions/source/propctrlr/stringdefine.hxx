@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringdefine.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:33:53 $
+ *  last change: $Author: fs $ $Date: 2001-06-06 08:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,21 +77,45 @@ namespace pcr
     //============================================================
     //= a helper for static ascii pseudo-unicode strings
     //============================================================
-    struct _ConstAsciiString_
+    struct ConstAsciiString
     {
-    protected:
-        sal_Int32 length;
-        sal_Char  const* str;
+        const sal_Char* ascii;
+        sal_Int32       length;
 
-    public:
-        _ConstAsciiString_(const sal_Char* _str, sal_Int32 _len) : str(_str), length(_len) { }
+        inline  operator const ::rtl::OUString& () const;
+        inline  operator const sal_Char* () const { return ascii; }
 
-        operator ::rtl::OUString    () const { return ::rtl::OUString(str, length, RTL_TEXTENCODING_ASCII_US); }
-        operator String             () const { return String(str, (xub_StrLen)length, RTL_TEXTENCODING_ASCII_US); }
-        operator const sal_Char*    () const { return str; }
+        inline ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength);
+        inline ~ConstAsciiString();
 
-        sal_Int32 len() const { return length; }
+    private:
+        mutable ::rtl::OUString*    ustring;
     };
+
+    //------------------------------------------------------------
+    inline ConstAsciiString::ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength)
+        :ascii(_pAsciiZeroTerminated)
+        ,length(_nLength)
+        ,ustring(NULL)
+    {
+    }
+
+    //------------------------------------------------------------
+    inline ConstAsciiString::~ConstAsciiString()
+    {
+        delete ustring;
+        ustring = NULL;
+    }
+
+    //------------------------------------------------------------
+    inline ConstAsciiString::operator const ::rtl::OUString& () const
+    {
+        if (!ustring)
+            ustring = new ::rtl::OUString(ascii, length, RTL_TEXTENCODING_ASCII_US);
+        return *ustring;
+    }
+
+    //============================================================
 
 #define CONST_ASCII_LENGTH(c)   \
     (const sal_Char*)c, c.length()
@@ -100,9 +124,9 @@ namespace pcr
     //= concrete strings
     //============================================================
     #ifndef PCR_IMPLEMENT_STRINGS
-    #define PCR_CONSTASCII_STRING(ident, string) extern const _ConstAsciiString_ ident
+    #define PCR_CONSTASCII_STRING(ident, string) extern const ConstAsciiString ident
     #else
-    #define PCR_CONSTASCII_STRING(ident, string) extern const _ConstAsciiString_ ident(string, sizeof(string)-1)
+    #define PCR_CONSTASCII_STRING(ident, string) extern const ConstAsciiString ident(string, sizeof(string)-1)
     #endif
 
 //............................................................................
@@ -114,6 +138,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:33:53  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 12.01.01 09:37:53  fs
  ************************************************************************/
