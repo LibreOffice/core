@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-15 18:52:50 $
+ *  last change: $Author: pl $ $Date: 2002-01-16 12:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2548,21 +2548,58 @@ long SalFrameData::HandleExposeEvent( XEvent *pEvent )
     return 1;
 }
 
-void SalFrameData::RepositionChildren()
+void SalFrameData::RestackChildren( XLIB_Window* pTopLevelWindows, int nTopLevelWindows )
 {
-    if( ! GetDisplay()->getWMAdaptor()->isTransientBehaviourAsExpected() )
+    if( maChildren.begin() != maChildren.end() )
     {
+        int nWindow = nTopLevelWindows;
+        while( nWindow-- )
+            if( pTopLevelWindows[nWindow] == GetStackingWindow() )
+                break;
+        if( nWindow < 0 )
+            return;
+
         ::std::list< SalFrame* >::const_iterator it;
         for( it = maChildren.begin(); it != maChildren.end(); ++it )
         {
             SalFrameData* pData = &(*it)->maFrameData;
             if( pData->bMapped_ )
-                XRaiseWindow( GetXDisplay(), pData->GetStackingWindow() ? pData->GetStackingWindow() : pData->GetShellWindow() );
+            {
+                int nChild = nWindow;
+                while( nChild-- )
+                {
+                    if( pTopLevelWindows[nChild] == pData->GetStackingWindow() )
+                    {
+                        XRaiseWindow( GetXDisplay(), pData->GetStackingWindow() ? pData->GetStackingWindow() : pData->GetShellWindow() );
+                        break;
+                    }
+                }
+            }
         }
         for( it = maChildren.begin(); it != maChildren.end(); ++it )
         {
             SalFrameData* pData = &(*it)->maFrameData;
-            pData->RepositionChildren();
+            pData->RestackChildren( pTopLevelWindows, nTopLevelWindows );
+        }
+    }
+}
+
+void SalFrameData::RestackChildren()
+{
+    if( ! GetDisplay()->getWMAdaptor()->isTransientBehaviourAsExpected()
+        && maChildren.begin() != maChildren.end() )
+    {
+        XLIB_Window aRoot, aParent, *pChildren = NULL;
+        unsigned int nChildren;
+        if( XQueryTree( GetXDisplay(),
+                        GetDisplay()->GetRootWindow(),
+                        &aRoot,
+                        &aParent,
+                        &pChildren,
+                        &nChildren ) )
+        {
+            RestackChildren( pChildren, nChildren );
+            XFree( pChildren );
         }
     }
 }
@@ -2587,7 +2624,7 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
     if( ( nStyle_ & SAL_FRAME_STYLE_CHILD ) && pEvent->window == GetShellWindow() )
     {
         // just update the children's positions
-        RepositionChildren();
+        RestackChildren();
         return 1;
     }
 
@@ -2686,7 +2723,7 @@ IMPL_LINK( SalFrameData, HandleResizeTimer, void*, pDummy )
     maResizeBuffer = Rectangle();
 
     // update children's position
-    RepositionChildren();
+    RestackChildren();
 
     if( bSized && ! bMoved )
         Call ( SALEVENT_RESIZE, NULL );
@@ -3238,7 +3275,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 if( pEvent->xconfigure.window == GetStackingWindow() )
                     nRet = HandleSizeEvent( &pEvent->xconfigure );
 
-                RepositionChildren();
+                RestackChildren();
                 break;
         }
     }

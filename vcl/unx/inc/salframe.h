@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-27 18:13:48 $
+ *  last change: $Author: pl $ $Date: 2002-01-16 12:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,8 @@ class SalFrameData
     void            Restore();
     void            SetWindowGravity (int nGravity, const Point& rPosition) const;
 
-    void            RepositionChildren();
+    void            RestackChildren( XLIB_Window* pTopLevelWindows, int nTopLevelWindows );
+    void            RestackChildren();
 
     long            HandleKeyEvent      ( XKeyEvent         *pEvent );
     long            HandleMouseEvent    ( XEvent            *pEvent );
