@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-03 17:44:48 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <tools/string.hxx>
 #endif
 #ifndef _LINKSRC_HXX //autogen
-#include <so3/linksrc.hxx>
+#include <sfx2/linksrc.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -75,7 +75,7 @@ class Graphic;
 struct Impl_DownLoadData;
 
 
-class SvFileObject : public so3::SvLinkSource
+class SvFileObject : public sfx2::SvLinkSource
 {
     String sFileNm;
     String sFilter;
@@ -115,8 +115,8 @@ public:
                             const String & rMimeType,
                             BOOL bSynchron = FALSE );
 
-    virtual BOOL Connect( so3::SvBaseLink* );
-    virtual String Edit( Window*, so3::SvBaseLink* );
+    virtual BOOL Connect( sfx2::SvBaseLink* );
+    virtual String Edit( Window*, sfx2::SvBaseLink* );
 
     // erfrage ob das man direkt auf die Daten zugreifen kann oder ob das
     // erst angestossen werden muss
