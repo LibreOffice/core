@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-21 14:09:23 $
+ *  last change: $Author: mib $ $Date: 2000-09-25 06:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ XMLTextFrameContext::XMLTextFrameContext(
     sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")),
     sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter")),
     sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
-    sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyle")),
+    sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName")),
     sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")),
     sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Graphic"))
 {
