@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2002-06-26 08:17:57 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 12:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,14 +813,6 @@ FeatureState OGenericUnoController::GetState(sal_uInt16 nId) const
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OGenericUnoController::SaveModified( sal_Bool bCommit )
-{
-    InvalidateFeature( ID_BROWSER_SAVEDOC );
-    InvalidateFeature( ID_BROWSER_UNDO );
-    return sal_True;
-}
-
-//------------------------------------------------------------------------------
 void OGenericUnoController::onToolBoxSelected( sal_uInt16 _nSelectedItem )
 {
     Execute( _nSelectedItem );
@@ -844,11 +836,6 @@ IMPL_LINK(OGenericUnoController, OnToolBoxSelected, ToolBox*, pToolBox)
     onToolBoxSelected( pToolBox->GetCurItemId() );
     return 0L;
 }
-//------------------------------------------------------------------
-//sal_uInt16 OGenericUnoController::SaveData(sal_Bool bUI, sal_Bool bForBrowsing)
-//{
-//  return (sal_uInt16)SaveModified();
-//}
 // -------------------------------------------------------------------------
 URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
 {
