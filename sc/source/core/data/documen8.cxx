@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: er $ $Date: 2002-09-26 16:04:48 $
+ *  last change: $Author: dr $ $Date: 2002-11-27 15:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,19 +918,22 @@ BOOL ScDocument::IdleCheckLinks()           // TRUE = demnaechst wieder versuche
 {
     BOOL bAnyLeft = FALSE;
 
-    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-    USHORT nCount = rLinks.Count();
-    for (USHORT i=0; i<nCount; i++)
+    if (pLinkManager)
     {
-        ::so3::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScDdeLink))
+        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
         {
-            ScDdeLink* pDdeLink = (ScDdeLink*)pBase;
-            if (pDdeLink->NeedsUpdate())
+            ::so3::SvBaseLink* pBase = *rLinks[i];
+            if (pBase->ISA(ScDdeLink))
             {
-                pDdeLink->TryUpdate();
-                if (pDdeLink->NeedsUpdate())        // war nix?
-                    bAnyLeft = TRUE;
+                ScDdeLink* pDdeLink = (ScDdeLink*)pBase;
+                if (pDdeLink->NeedsUpdate())
+                {
+                    pDdeLink->TryUpdate();
+                    if (pDdeLink->NeedsUpdate())        // war nix?
+                        bAnyLeft = TRUE;
+                }
             }
         }
     }
@@ -1020,39 +1023,42 @@ BOOL ScDocument::IsInLinkUpdate() const
 
 void ScDocument::UpdateDdeLinks()
 {
-    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-    USHORT nCount = rLinks.Count();
-    USHORT i;
-
-    //  #49226# falls das Updaten laenger dauert, erstmal alle Werte
-    //  zuruecksetzen, damit nichts altes (falsches) stehen bleibt
-    BOOL bAny = FALSE;
-    for (i=0; i<nCount; i++)
+    if (pLinkManager)
     {
-        ::so3::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScDdeLink))
+        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        USHORT nCount = rLinks.Count();
+        USHORT i;
+
+        //  #49226# falls das Updaten laenger dauert, erstmal alle Werte
+        //  zuruecksetzen, damit nichts altes (falsches) stehen bleibt
+        BOOL bAny = FALSE;
+        for (i=0; i<nCount; i++)
         {
-            ((ScDdeLink*)pBase)->ResetValue();
-            bAny = TRUE;
+            ::so3::SvBaseLink* pBase = *rLinks[i];
+            if (pBase->ISA(ScDdeLink))
+            {
+                ((ScDdeLink*)pBase)->ResetValue();
+                bAny = TRUE;
+            }
         }
-    }
-    if (bAny)
-    {
-        //  Formeln berechnen und painten wie im TrackTimeHdl
-        TrackFormulas();
-        pShell->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
-        ResetChanged( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB) );
+        if (bAny)
+        {
+            //  Formeln berechnen und painten wie im TrackTimeHdl
+            TrackFormulas();
+            pShell->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
+            ResetChanged( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB) );
 
-        //  wenn FID_DATACHANGED irgendwann mal asynchron werden sollte
-        //  (z.B. mit Invalidate am Window), muss hier ein Update erzwungen werden.
-    }
+            //  wenn FID_DATACHANGED irgendwann mal asynchron werden sollte
+            //  (z.B. mit Invalidate am Window), muss hier ein Update erzwungen werden.
+        }
 
-    //  nun wirklich updaten...
-    for (i=0; i<nCount; i++)
-    {
-        ::so3::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScDdeLink))
-            ((ScDdeLink*)pBase)->TryUpdate();       // bei DDE-Links TryUpdate statt Update
+        //  nun wirklich updaten...
+        for (i=0; i<nCount; i++)
+        {
+            ::so3::SvBaseLink* pBase = *rLinks[i];
+            if (pBase->ISA(ScDdeLink))
+                ((ScDdeLink*)pBase)->TryUpdate();       // bei DDE-Links TryUpdate statt Update
+        }
     }
 }
 
@@ -1063,20 +1069,23 @@ BOOL ScDocument::UpdateDdeLink( const String& rAppl, const String& rTopic, const
     //! wenn's mal alles asynchron wird, aber auch hier
 
     BOOL bFound = FALSE;
-    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-    USHORT nCount = rLinks.Count();
-    for (USHORT i=0; i<nCount; i++)
+    if (pLinkManager)
     {
-        ::so3::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScDdeLink))
+        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
         {
-            ScDdeLink* pDdeLink = (ScDdeLink*)pBase;
-            if ( pDdeLink->GetAppl() == rAppl &&
-                 pDdeLink->GetTopic() == rTopic &&
-                 pDdeLink->GetItem() == rItem )
+            ::so3::SvBaseLink* pBase = *rLinks[i];
+            if (pBase->ISA(ScDdeLink))
             {
-                pDdeLink->TryUpdate();
-                bFound = TRUE;          // koennen theoretisch mehrere sein (Mode), darum weitersuchen
+                ScDdeLink* pDdeLink = (ScDdeLink*)pBase;
+                if ( pDdeLink->GetAppl() == rAppl &&
+                     pDdeLink->GetTopic() == rTopic &&
+                     pDdeLink->GetItem() == rItem )
+                {
+                    pDdeLink->TryUpdate();
+                    bFound = TRUE;          // koennen theoretisch mehrere sein (Mode), darum weitersuchen
+                }
             }
         }
     }
@@ -1108,7 +1117,7 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
             pDestDoc->LoadDdeLinks(*pClipData);
         }
     }
-    else                // Links direkt kopieren
+    else if (pLinkManager)              // Links direkt kopieren
     {
         const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1250,47 +1259,53 @@ void ScDocument::CreateDdeLink(const String& rAppl, const String& rTopic, const 
     //  damit nicht ohne Nachfrage Verbindungen aufgebaut werden)
     //  zuerst suchen, ob schon vorhanden
     //! Dde-Links (zusaetzlich) effizienter am Dokument speichern?
-    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-    USHORT nCount = rLinks.Count();
-    for (USHORT i=0; i<nCount; i++)
+    if (pLinkManager)
     {
-        ::so3::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScDdeLink))
+        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
         {
-            ScDdeLink* pLink = (ScDdeLink*)pBase;
-            if ( pLink->GetAppl() == rAppl &&
-                 pLink->GetTopic() == rTopic &&
-                 pLink->GetItem() == rItem &&
-                 pLink->GetMode() == nMode )
-                return;                                     // dann nichts tun
+            ::so3::SvBaseLink* pBase = *rLinks[i];
+            if (pBase->ISA(ScDdeLink))
+            {
+                ScDdeLink* pLink = (ScDdeLink*)pBase;
+                if ( pLink->GetAppl() == rAppl &&
+                     pLink->GetTopic() == rTopic &&
+                     pLink->GetItem() == rItem &&
+                     pLink->GetMode() == nMode )
+                    return;                                     // dann nichts tun
+            }
         }
-    }
 
-    //  neu anlegen, aber kein TryUpdate
-    ScDdeLink* pNew = new ScDdeLink( this, rAppl, rTopic, rItem, nMode );
-    pLinkManager->InsertDDELink( pNew, rAppl, rTopic, rItem );
+        //  neu anlegen, aber kein TryUpdate
+        ScDdeLink* pNew = new ScDdeLink( this, rAppl, rTopic, rItem, nMode );
+        pLinkManager->InsertDDELink( pNew, rAppl, rTopic, rItem );
+    }
 }
 
 BOOL ScDocument::FindDdeLink(const String& rAppl, const String& rTopic, const String& rItem, const BYTE nMode, USHORT& nPos )
 {
-    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-    USHORT nCount = rLinks.Count();
-    USHORT nDdeCount = 0;
-    for (USHORT i=0; i<nCount; i++)
+    if (pLinkManager)
     {
-        ::so3::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScDdeLink))
+        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        USHORT nCount = rLinks.Count();
+        USHORT nDdeCount = 0;
+        for (USHORT i=0; i<nCount; i++)
         {
-            ScDdeLink* pLink = (ScDdeLink*)pBase;
-            if ( pLink->GetAppl() == rAppl &&
-                 pLink->GetTopic() == rTopic &&
-                 pLink->GetItem() == rItem &&
-                 (nMode == SC_DDE_IGNOREMODE || pLink->GetMode() == nMode) )
+            ::so3::SvBaseLink* pBase = *rLinks[i];
+            if (pBase->ISA(ScDdeLink))
             {
-                nPos = nDdeCount;
-                return TRUE;
+                ScDdeLink* pLink = (ScDdeLink*)pBase;
+                if ( pLink->GetAppl() == rAppl &&
+                     pLink->GetTopic() == rTopic &&
+                     pLink->GetItem() == rItem &&
+                     (nMode == SC_DDE_IGNOREMODE || pLink->GetMode() == nMode) )
+                {
+                    nPos = nDdeCount;
+                    return TRUE;
+                }
+                nDdeCount++;
             }
-            nDdeCount++;
         }
     }
     return FALSE;
@@ -1360,43 +1375,49 @@ BOOL ScDocument::HasAreaLinks() const
 
 void ScDocument::UpdateAreaLinks()
 {
-    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-    USHORT nCount = rLinks.Count();
-    for (USHORT i=0; i<nCount; i++)
+    if (pLinkManager)
     {
-        ::so3::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScAreaLink))
-            pBase->Update();
+        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
+        {
+            ::so3::SvBaseLink* pBase = *rLinks[i];
+            if (pBase->ISA(ScAreaLink))
+                pBase->Update();
+        }
     }
 }
 
 void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                              const ScRange& rRange, short nDx, short nDy, short nDz )
 {
-    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-    USHORT nCount = rLinks.Count();
-    for (USHORT i=0; i<nCount; i++)
+    if (pLinkManager)
     {
-        ::so3::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScAreaLink))
+        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
         {
-            ScAreaLink* pLink = (ScAreaLink*) pBase;
-            ScRange aOutRange = pLink->GetDestArea();
+            ::so3::SvBaseLink* pBase = *rLinks[i];
+            if (pBase->ISA(ScAreaLink))
+            {
+                ScAreaLink* pLink = (ScAreaLink*) pBase;
+                ScRange aOutRange = pLink->GetDestArea();
 
-            USHORT nCol1 = aOutRange.aStart.Col();
-            USHORT nRow1 = aOutRange.aStart.Row();
-            USHORT nTab1 = aOutRange.aStart.Tab();
-            USHORT nCol2 = aOutRange.aEnd.Col();
-            USHORT nRow2 = aOutRange.aEnd.Row();
-            USHORT nTab2 = aOutRange.aEnd.Tab();
+                USHORT nCol1 = aOutRange.aStart.Col();
+                USHORT nRow1 = aOutRange.aStart.Row();
+                USHORT nTab1 = aOutRange.aStart.Tab();
+                USHORT nCol2 = aOutRange.aEnd.Col();
+                USHORT nRow2 = aOutRange.aEnd.Row();
+                USHORT nTab2 = aOutRange.aEnd.Tab();
 
-            ScRefUpdateRes eRes =
-                ScRefUpdate::Update( this, eUpdateRefMode,
-                    rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
-                    rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
-                    nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-            if ( eRes != UR_NOTHING )
-                pLink->SetDestArea( ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 ) );
+                ScRefUpdateRes eRes =
+                    ScRefUpdate::Update( this, eUpdateRefMode,
+                        rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
+                        rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
+                        nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                if ( eRes != UR_NOTHING )
+                    pLink->SetDestArea( ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 ) );
+            }
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-10 16:56:12 $
+ *  last change: $Author: dr $ $Date: 2002-11-27 15:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,8 @@ BOOL ScDocument::InsertTab( USHORT nPos, const String& rName,
                 if ( pCondFormList )
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 // #81844# sheet names of references are not valid until sheet is inserted
-                pChartListenerCollection->UpdateScheduledSeriesRanges();
+                if ( pChartListenerCollection )
+                    pChartListenerCollection->UpdateScheduledSeriesRanges();
 
                 SetDirty();
                 bValid = TRUE;
