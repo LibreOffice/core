@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-24 11:30:28 $
+ *  last change: $Author: mt $ $Date: 2000-12-04 13:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,8 +283,17 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
     Rectangle aOutRect( pOutDev->LogicToPixel( rOutRect ) );
     aOutRect = pOutDev->PixelToLogic( aOutRect );
 
-    Point aStartPos = aOutRect.TopLeft();
-    aStartPos -= rStartDocPos;
+    Point aStartPos;
+    if ( !IsVertical() )
+    {
+        aStartPos.X() = aOutRect.Left() - rStartDocPos.X();
+        aStartPos.Y() = aOutRect.Top() - rStartDocPos.Y();
+    }
+    else
+    {
+        aStartPos.X() = aOutRect.Right() + rStartDocPos.Y();
+        aStartPos.Y() = aOutRect.Top() - rStartDocPos.X();
+    }
 
     sal_Bool bClipRegion = pOutDev->IsClipRegion();
     sal_Bool bMetafile = pOutDev->GetConnectMetaFile() ? sal_True : sal_False;
