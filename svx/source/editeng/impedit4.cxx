@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 08:06:32 $
+ *  last change: $Author: mt $ $Date: 2001-05-17 13:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1958,6 +1958,7 @@ sal_uInt16 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxS
 
         pEditView->pImpEditView->DrawSelection();
 
+        aCurSel.Adjust( aEditDoc );
         EditPaM aStartPaM = aTmpItem.GetSelection() ? aCurSel.Min() : aEditDoc.GetStartPaM();
         EditSelection aFoundSel( aCurSel.Max() );
         sal_Bool bFound = ImpSearch( aTmpItem, aCurSel, aStartPaM, aFoundSel );
@@ -1991,7 +1992,6 @@ sal_uInt16 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxS
 BOOL ImpEditEngine::Search( const SvxSearchItem& rSearchItem, EditView* pEditView )
 {
     EditSelection aSel( pEditView->pImpEditView->GetEditSelection() );
-
     aSel.Adjust( aEditDoc );
     EditPaM aStartPaM( aSel.Max() );
     if ( rSearchItem.GetSelection() && !rSearchItem.GetBackward() )
