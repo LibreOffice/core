@@ -8,10 +8,10 @@ TARGET=unzip_udk
 #----------------------------------------------------------------
 
 .IF "$(GUI)"=="WNT"
-UDKPATH=$(UDKZIPPATH)$/$(UDKNAME).zip
+UDKPATH=$(UDKZIPPATH)$/$(UDKZIPPREFIX).zip
 ODKDOCPATH=$(UDKZIPPATH)$/$(ODKDOCNAME).zip
 .ELSE
-UDKPATH=$(UDKZIPPATH)$/$(UDKNAME).tar.gz
+UDKPATH=$(UDKZIPPATH)$/$(UDKZIPPREFIX).tar.gz
 ODKDOCPATH=$(UDKZIPPATH)$/$(ODKDOCNAME).tar.gz
 .ENDIF
 
@@ -27,9 +27,9 @@ all: ..$/misc$/deltree.txt
     +-$(MY_DELETE_RECURSIVE) $(PRODUCT_NAME) >& $(NULLDEV)
 .ENDIF
     +-$(MY_DELETE_RECURSIVE) $(UDKNAME) >& $(NULLDEV)
-    +-$(MY_DELETE_RECURSIVE) $(UDKNAME).zip >& $(NULLDEV)
-    +-$(MY_DELETE_RECURSIVE) $(UDKNAME).tar.gz >& $(NULLDEV)
-    +-$(MY_DELETE_RECURSIVE) $(UDKNAME).tar >& $(NULLDEV)
+    +-$(MY_DELETE_RECURSIVE) $(UDKZIPPREFIX).zip >& $(NULLDEV)
+    +-$(MY_DELETE_RECURSIVE) $(UDKZIPPREFIX).tar.gz >& $(NULLDEV)
+    +-$(MY_DELETE_RECURSIVE) $(UDKZIPPREFIX).tar >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(ODKDOCNAME).zip >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(ODKDOCNAME).tar.gz >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(ODKDOCNAME).tar >& $(NULLDEV)
@@ -39,11 +39,11 @@ all: ..$/misc$/deltree.txt
     $(GNUCOPY) -p $(UDKPATH) .
     $(GNUCOPY) -p $(ODKDOCPATH) .
 .IF "$(GUI)"=="WNT"
-    unzip -q -d . $(UDKNAME)
+    unzip -q -d . $(UDKZIPPREFIX)
     +-$(RENAME) $(UDKNAME) $(ODKNAME)
     unzip -q -d . $(ODKDOCNAME).zip
 .ELSE
-    gzip -df < $(UDKNAME).tar.gz | tar -xvf -
+    gzip -df < $(UDKZIPPREFIX).tar.gz | tar -xvf -
     +-$(RENAME) $(UDKNAME) $(ODKNAME)
     gzip -df < $(ODKDOCNAME).tar.gz | tar -xvf -
 .ENDIF
@@ -51,9 +51,9 @@ all: ..$/misc$/deltree.txt
 # for OpenOffice build rename to PRODUCT_NAME
     +-$(RENAME) $(ODKNAME) $(PRODUCT_NAME)
 .ENDIF
-    +-$(MY_DELETE_RECURSIVE) $(UDKNAME).zip >& $(NULLDEV)
-    +-$(MY_DELETE_RECURSIVE) $(UDKNAME).tar.gz >& $(NULLDEV)
-    +-$(MY_DELETE_RECURSIVE) $(UDKNAME).tar >& $(NULLDEV)
+    +-$(MY_DELETE_RECURSIVE) $(UDKZIPPREFIX).zip >& $(NULLDEV)
+    +-$(MY_DELETE_RECURSIVE) $(UDKZIPPREFIX).tar.gz >& $(NULLDEV)
+    +-$(MY_DELETE_RECURSIVE) $(UDKZIPPREFIX).tar >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(ODKDOCNAME).zip >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(ODKDOCNAME).tar.gz >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(ODKDOCNAME).tar >& $(NULLDEV)
