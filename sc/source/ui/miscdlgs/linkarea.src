@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-17 07:55:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,10 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ dutch ] = "~URL van de externe gegevensbron";
         Text[ french ] = "~URL de la source de donnÈes externe";
         Text[ spanish ] = "~URL de la fuente de datos externa";
-        Text[ italian ] = "External Data Source Location";
+        Text[ italian ] = "URL della sorgente dati esterna";
         Text[ danish ] = "External Data Source Location";
         Text[ swedish ] = "~URL fˆr extern datak‰lla";
-        Text[ polish ] = "Adres URL zewnÍtrznego ?rÛd≥a danych";
+        Text[ polish ] = "Adres URL zewnÍtrznego ürÛd≥a danych";
         Text[ portuguese_brazilian ] = "External Data Source Location";
         Text[ japanese ] = "äOïî√ﬁ∞¿ø∞ΩÇÃ URL";
         Text[ korean ] = "External Data Source Location";
@@ -140,10 +140,10 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ dutch ] = "(URL van het brondocument in het lokale bestandssysteem of in Internet)";
         Text[ french ] = "(URL du document source dans le systËme de fichiers local ou dans l'Internet)";
         Text[ spanish ] = "(URL del documento fuente en el sistema de archivos local o en Internet)";
-        Text[ italian ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ italian ] = "(URL del documento sorgente nel sistema di dati locale oppure in Internet)";
         Text[ danish ] = "(Insert a local file location or an URL from a web site here)";
         Text[ swedish ] = "(K‰lldokumentets URL i det lokala filsystemet eller pÂ Internet)";
-        Text[ polish ] = "(Adres URL dokumentu ?rÛd≥owego w lokalnym systemie plikÛw lub w Internecie)";
+        Text[ polish ] = "(Adres URL dokumentu ürÛd≥owego w lokalnym systemie plikÛw lub w Internecie)";
         Text[ portuguese_brazilian ] = "(Insert a local file location or an URL from a web site here)";
         Text[ japanese ] = "(€∞∂ŸÇÃÃß≤ŸºΩ√—ÅAÇ†ÇÈÇ¢ÇÕ≤›¿∞»ØƒÇ…Ç†ÇÈø∞Ωƒﬁ∑≠“›ƒÇÃ URL)";
         Text[ korean ] = "(Insert a local file location or an URL from a web site here)";
@@ -167,7 +167,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ dutch ] = "~Beschikbare tabellen/Bereiken";
         Text[ french ] = "Tables/Plages dis~ponibles";
         Text[ spanish ] = "Tablas/¡reas dispo~nibles";
-        Text[ italian ] = "Available Tables/Ranges";
+        Text[ italian ] = "Sezioni/tabelle disponibili";
         Text[ danish ] = "Available Tables/Ranges";
         Text[ swedish ] = "T~illg‰ngliga tabeller/omrÂden";
         Text[ polish ] = "DostÍpne tabele/obszary";
@@ -202,7 +202,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ dutch ] = "~Actualisering alle";
         Text[ french ] = "Tout ~actualiser";
         Text[ spanish ] = "Actuali~zar cada";
-        Text[ italian ] = "Auto reload data every";
+        Text[ italian ] = "Aggiorna ogni";
         Text[ danish ] = "Auto reload data every";
         Text[ swedish ] = "Uppd~atering var";
         Text[ polish ] = "Aktualizuj co";
@@ -240,7 +240,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ dutch ] = "seconden";
         Text[ french ] = "secondes";
         Text[ spanish ] = "segundos";
-        Text[ italian ] = "seconds";
+        Text[ italian ] = "secondi";
         Text[ danish ] = "seconds";
         Text[ swedish ] = "sekund";
         Text[ polish ] = "sekundy";
@@ -261,10 +261,10 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ dutch ] = "Externe gegevensbron";
     Text[ french ] = "Source de donnÈes externe";
     Text[ spanish ] = "Fuente de datos externa";
-    Text[ italian ] = "External Data Source";
+    Text[ italian ] = "Sorgente dati esterna";
     Text[ danish ] = "External Data Source";
     Text[ swedish ] = "Extern datak‰lla";
-    Text[ polish ] = "ZewnÍtrzne ?rÛd≥o danych";
+    Text[ polish ] = "ZewnÍtrzne ürÛd≥o danych";
     Text[ portuguese_brazilian ] = "External Data Source";
     Text[ japanese ] = "äOïî√ﬁ∞¿ø∞Ω";
     Text[ korean ] = "External Data Source";
@@ -275,4 +275,5 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ catalan ] = "External Data Source";
     Text[ finnish ] = "Ulkoinen l‰hde";
 };
+
 
