@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
+ *  last change: $Author: oj $ $Date: 2002-03-26 07:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ void OTableWindowListBox::NotifyEndScroll()
 {
     if (m_bReallyScrolled)
         // die Verbindungen, die diese Tabelle eventuell hat, muessen neu gezeichnet werden
-        static_cast<OQueryTableView*>(m_pTabWin->getTableView())->Invalidate(INVALIDATE_NOCHILDREN);
+        m_pTabWin->getTableView()->Invalidate(INVALIDATE_NOCHILDREN);
         // ohne das INVALIDATE_NOCHILDREN wuerden auch alle Tabellen neu gezeichnet werden,
         // sprich : es flackert
     m_bReallyScrolled = FALSE;
@@ -265,7 +265,7 @@ IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, pBox )
 //------------------------------------------------------------------------------
 void OTableWindowListBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
-    OQueryTableView* pCont = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
+    OJoinTableView* pCont = m_pTabWin->getTableView();
     if (!pCont->getDesignView()->getController()->isReadOnly() && pCont->getDesignView()->getController()->isConnected())
     {
         sal_Bool bFirst = FirstSelected() != First();
@@ -356,7 +356,7 @@ IMPL_LINK( OTableWindowListBox, DropHdl, void *, EMPTY_ARG)
     OSL_ENSURE(m_pTabWin,"No TableWindow!");
     try
     {
-        OQueryTableView* pCont = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
+        OJoinTableView* pCont = m_pTabWin->getTableView();
         OSL_ENSURE(pCont,"No QueryTableView!");
         pCont->AddConnection(m_aDropInfo.aSource, m_aDropInfo.aDest);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
+ *  last change: $Author: oj $ $Date: 2002-03-26 07:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,8 +219,8 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
             {
                 m_pTabWin->SetSizePixel(aSize);
 
-                OQueryTableView* pView = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
-                OSL_ENSURE(pView,"No OQueryTableView!");
+                OJoinTableView* pView = static_cast<OJoinTableView*>(m_pTabWin->getTableView());
+                OSL_ENSURE(pView,"No OJoinTableView!");
                 const ::std::vector<OTableConnection*>* pConns = pView->getTableConnections();
                 ::std::for_each(pConns->begin(),
                                 pConns->end(),
@@ -235,8 +235,8 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
         {
             Point aPos = rEvt.GetPosPixel();
             aPos = OutputToScreenPixel( aPos );
-            OQueryTableView* pView = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
-            OSL_ENSURE(pView,"No OQueryTableView!");
+            OJoinTableView* pView = static_cast<OJoinTableView*>(m_pTabWin->getTableView());
+            OSL_ENSURE(pView,"No OJoinTableView!");
             pView->NotifyTitleClicked( static_cast<OTableWindow*>(GetParent()), aPos );
         }
         GrabFocus();
