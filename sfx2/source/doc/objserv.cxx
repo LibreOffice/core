@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:45:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,6 +517,14 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 {
                     if( QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_LOSINGSIGNATURE ) ).Execute() != RET_YES )
                         return;
+                }
+
+                if ( nId == SID_SAVEASDOC )
+                {
+                    // in case of plugin mode the SaveAs operation means SaveTo
+                    SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY, FALSE );
+                    if ( pViewOnlyItem && pViewOnlyItem->GetValue() )
+                        rReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
                 }
 
                 // TODO/LATER: do the following GUI related actions in standalown method
