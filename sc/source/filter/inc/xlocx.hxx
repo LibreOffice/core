@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:49:23 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ protected:
     virtual                     ~XclOcxConverter();
 
     /** Sets the sheet index of the currently processed object. GetDrawPage() needs this. */
-    void                        SetCurrTab( sal_uInt16 nTab );
+    void                        SetCurrScTab( USHORT nScTab );
 
 private:
     /** Returns the current draw page. */
@@ -104,8 +104,8 @@ private:
 
 private:
     ScDocument&                 mrDoc;          /// The Calc document.
-    sal_uInt16                  mnCurrTab;      /// Stores sheet index of an object for GetDrawPage().
-    sal_uInt16                  mnCachedTab;    /// Sheet index of cached draw page.
+    USHORT                      mnCurrScTab;    /// Stores sheet index of an object for GetDrawPage().
+    USHORT                      mnCachedScTab;  /// Sheet index of cached draw page.
 };
 
 
