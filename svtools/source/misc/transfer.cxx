@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:19 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -708,7 +708,7 @@ sal_Bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const Data
         maAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
     }
 
-    return( maAny.hasValue() != NULL );
+    return( maAny.hasValue() );
 }
 
 // -----------------------------------------------------------------------------
@@ -725,7 +725,7 @@ sal_Bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlav
         maAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
     }
 
-    return( maAny.hasValue() != NULL );
+    return( maAny.hasValue() );
 }
 
 // -----------------------------------------------------------------------------
@@ -738,7 +738,7 @@ sal_Bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::su
     aMemStm << rIMap;
     maAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
 
-    return( maAny.hasValue() != NULL );
+    return( maAny.hasValue() );
 }
 
 // -----------------------------------------------------------------------------
@@ -854,7 +854,7 @@ sal_Bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
 
     maAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
 
-    return( maAny.hasValue() != NULL );
+    return( maAny.hasValue() );
 }
 
 // -----------------------------------------------------------------------------
@@ -869,7 +869,7 @@ sal_Bool TransferableHelper::SetFileList( const FileList& rFileList,
 
     maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
 
-    return( maAny.hasValue() != NULL );
+    return( maAny.hasValue() );
 }
 
 // -----------------------------------------------------------------------------
@@ -900,7 +900,7 @@ sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjec
             maAny <<= aSeq;
     }
 
-    return( maAny.hasValue() != NULL );
+    return( maAny.hasValue() );
 }
 
 // -----------------------------------------------------------------------------
@@ -909,7 +909,7 @@ sal_Bool TransferableHelper::SetInterface( const ::com::sun::star::uno::Referenc
                                            const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
     maAny <<= rIf;
-    return( maAny.hasValue() != NULL );
+    return( maAny.hasValue() );
 }
 
 // -----------------------------------------------------------------------------
