@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:49:41 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 #include <svtools/svstdarr.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
-#include <sfx2/misccfg.hxx>
+#include <svtools/misccfg.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <svtools/securityoptions.hxx>
