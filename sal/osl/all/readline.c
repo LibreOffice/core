@@ -2,9 +2,9 @@
  *
  *  $RCSfile: readline.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-24 11:48:59 $
+ *  last change: $Author: tra $ $Date: 2001-10-30 08:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@
     Reads a line from given file. The new line delimiter(s) are NOT returned!
 
     @param  Handle [in] Handle to an open file.
-    @param  ppSequence [in/out] a pointer to a valid sequence. Will hold the line read on return.
-    including a terminating '\0'
+    @param  ppSequence [in/out] a pointer to a valid sequence.
+
     @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
 
     osl_File_E_INVAL        the format of the parameters was not valid<br>
@@ -108,7 +108,6 @@ oslFileError SAL_CALL osl_readLine( oslFileHandle Handle, sal_Sequence** ppSeq )
     sal_uInt64   nRead         = 0;
     sal_uInt32   sizeBuff      = INITIAL_BUFF_SIZE;
     sal_Char    *pchBuff       = 0;
-    sal_Char    *pchLastInBuff = 0;
 
     OSL_PRECOND( ppSeq, "invalid parameter detected" );
 
@@ -135,14 +134,9 @@ oslFileError SAL_CALL osl_readLine( oslFileHandle Handle, sal_Sequence** ppSeq )
         if ( 0 == nRead )
         {
             if ( nReadTotal > 0 )
-            {
-                *(pchBuff + nReadTotal) = '\0';
-                rtl_byte_sequence_constructFromArray( ppSeq, (sal_Int8*)pchBuff, (sal_Int32)(nReadTotal + 1) );
-            }
+                rtl_byte_sequence_constructFromArray( ppSeq, (sal_Int8*)pchBuff, (sal_Int32)nReadTotal );
             else
-            {
                 rtl_byte_sequence_construct( ppSeq, 0 );
-            }
 
             rtl_freeMemory( pchBuff );
             return osl_File_E_None;
@@ -150,17 +144,15 @@ oslFileError SAL_CALL osl_readLine( oslFileHandle Handle, sal_Sequence** ppSeq )
 
         OSL_ASSERT( 1 == nRead );
 
-        nReadTotal    += nRead;
-        pchLastInBuff  = pchBuff + nReadTotal - 1;
+        nReadTotal++;
 
-        if ( LF == *pchLastInBuff )
+        if ( LF == *(pchBuff + nReadTotal - 1) )
         {
-            *pchLastInBuff = '\0';
-            rtl_byte_sequence_constructFromArray( ppSeq, (sal_Int8*)pchBuff, (sal_Int32)nReadTotal );
+            rtl_byte_sequence_constructFromArray( ppSeq, (sal_Int8*)pchBuff, (sal_Int32)(nReadTotal - 1) );
             rtl_freeMemory( pchBuff );
             return osl_File_E_None;
         }
-        else if ( CR == *pchLastInBuff )
+        else if ( CR == *(pchBuff + nReadTotal - 1) )
         {
             /* read one more character to detect possible '\n' */
 
@@ -172,47 +164,34 @@ oslFileError SAL_CALL osl_readLine( oslFileHandle Handle, sal_Sequence** ppSeq )
                 return ferr;
             }
 
-            if ( 0 == nRead )
+            if ( nRead > 0 )
             {
-                *pchLastInBuff = '\0';
-                rtl_byte_sequence_constructFromArray( ppSeq, (sal_Int8*)pchBuff, (sal_Int32)nReadTotal );
-                rtl_freeMemory( pchBuff );
-                return osl_File_E_None;
-            }
+                OSL_ASSERT( 1 == nRead );
 
-            OSL_ASSERT( 1 == nRead );
+                /* we don't increment nReadTotal, so now last in buff is pchBuff + nReadTotal !!! */
 
-            nReadTotal    += nRead;
-            pchLastInBuff  = pchBuff + nReadTotal - 1;
-
-            if ( LF == *pchLastInBuff )
-            {
-                *(pchLastInBuff - 1) = '\0';
-                rtl_byte_sequence_constructFromArray( ppSeq, (sal_Int8*)pchBuff, (sal_Int32)(nReadTotal - 1) );
-                rtl_freeMemory( pchBuff );
-                return osl_File_E_None;
-            }
-            else /* any other character */
-            {
-                /* correct the file pointer */
-                ferr = osl_setFilePos( Handle, osl_Pos_Current, -1 );
-
-                if ( ferr != osl_File_E_None )
+                if ( LF != *(pchBuff + nReadTotal) )
                 {
-                    rtl_freeMemory( pchBuff );
-                    return ferr;
-                }
+                    /* correct the file pointer */
 
-                *(pchLastInBuff - 1) = '\0';
-                rtl_byte_sequence_constructFromArray( ppSeq, (sal_Int8*)pchBuff, (sal_Int32)(nReadTotal - 1) );
-                rtl_freeMemory( pchBuff );
-                return osl_File_E_None;
+                    ferr = osl_setFilePos( Handle, osl_Pos_Current, -1 );
+
+                    if ( ferr != osl_File_E_None )
+                    {
+                        rtl_freeMemory( pchBuff );
+                        return ferr;
+                    }
+                }
             }
+
+            rtl_byte_sequence_constructFromArray( ppSeq, (sal_Int8*)pchBuff, (sal_Int32)(nReadTotal - 1));
+            rtl_freeMemory( pchBuff );
+            return osl_File_E_None;
         }
 
         /* buffer handling */
 
-        if ( nReadTotal == (sizeBuff - 1) )
+        if ( nReadTotal == sizeBuff )
         {
             sal_Char *pchTmp = (sal_Char*)rtl_reallocateMemory(
                 pchBuff, sizeBuff * ENLARGEMENT_FACTOR );
