@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:18:28 $
+ *  last change: $Author: rt $ $Date: 2000-12-06 14:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ swedish ] = "Format~beskrivning" ;
         Text [ dutch ] = "F~ormaatcode" ;
         Text [ spanish ] = "CÛdigo del for~mato" ;
-        Text [ english_us ] = "Format c~ode" ;
+        Text [ english_us ] = "~Format code" ;
         Text[ chinese_simplified ] = "∏Ò Ω¬Î(~O)";
         Text[ russian ] = " Ó‰ ÙÓÏ‡Ú‡";
         Text[ polish ] = "Kod formatu";
