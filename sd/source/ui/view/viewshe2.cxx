@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:59:15 $
+ *  last change: $Author: af $ $Date: 2004-06-18 11:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1242,12 +1242,9 @@ void ViewShell::CancelSearching()
 
 void ViewShell::ReadUserData(const String& rString)
 {
-    SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=NULL);
-    pViewShell->ReadUserData(rString);
-
     // Auf an FrameView gemerkte VisArea zoomen
-    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_VISAREA,
+    GetDispatcher()->Execute(
+        SID_SIZE_VISAREA,
         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 }
 
@@ -1259,10 +1256,6 @@ void ViewShell::ReadUserData(const String& rString)
 
 void ViewShell::WriteUserData(String& rString)
 {
-    SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=NULL);
-    pViewShell->WriteUserData(rString);
-
     // Das Schreiben unserer Daten erfolgt stets in WriteFrameViewData()
     WriteFrameViewData();
 }
