@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-29 15:47:40 $
+ *  last change: $Author: fme $ $Date: 2001-07-04 12:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,10 +582,18 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         // calculate cursor values
                         if( ((SwMultiPortion*)pPor)->HasRotation() )
                         {
+                            GetInfo().SetMulti( sal_False );
                             long nTmp = pOrig->Width();
                             pOrig->Width( pOrig->Height() );
                             pOrig->Height( nTmp );
                             nTmp = pOrig->Left() - aOldPos.X();
+
+                            // if we travel into our rotated portion from
+                            // a line below, we have to take care, that the
+                            // y coord in pOrig is less than line height:
+                            if ( nTmp )
+                                nTmp--;
+
                             pOrig->Pos().X() = nX + aOldPos.X();
                             if( ((SwMultiPortion*)pPor)->IsRevers() )
                                 pOrig->Pos().Y() = aOldPos.Y() + nTmp;
@@ -1148,8 +1156,6 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             SwTwips nTmpY = rPoint.Y() - pCurr->GetAscent() + pPor->GetAscent();
             // if we are in the first line of a double line portion, we have
             // to add a value to nTmpY for not staying in this line
-            // note: these flags are only set, if this function is called during
-            // up/down cursor travelling
             // we also want to skip the first line, if we are inside ruby
             if ( ( ((SwTxtSizeInfo*)pInf)->IsMulti() &&
                    ((SwTxtSizeInfo*)pInf)->IsFirstMulti() ) ||
