@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-20 14:54:47 $
+ *  last change: $Author: cmc $ $Date: 2001-04-23 11:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,10 @@ enum eF_ResT{ F_OK, F_TEXT, F_TAGIGN, F_TAGTXT, F_READ_FSPA };
 
 struct SwWW8Shade{
     Color aColor;
+#if 0
+    //With auto colour, no longer need this.
     BOOL  bWhiteText;
+#endif
     SwWW8Shade( BOOL bVer67, const WW8_SHD& rSHD );
 };
 
@@ -1151,11 +1154,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.21 2001-04-20 14:54:47 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.22 2001-04-23 11:16:23 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.21  2001/04/20 14:54:47  cmc
+      base table handling on logical character positions and by using new property finding algorithm
+
       Revision 1.20  2001/04/03 17:21:04  cmc
       ##505## Test for special case of textbox that contains only another textbox whose size is greater than container so as to disable autogrow
 

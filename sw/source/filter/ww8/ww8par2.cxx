@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-20 14:54:47 $
+ *  last change: $Author: cmc $ $Date: 2001-04-23 11:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
+#endif
+#ifndef _SVX_COLRITEM_HXX
+#include <svx/colritem.hxx>
 #endif
 #ifndef _SVX_ORPHITEM_HXX //autogen
 #include <svx/orphitem.hxx>
@@ -2578,8 +2581,13 @@ void WW8RStyle::Set1StyleDefaults()
     if( !bCJKFontChanged )  // Style no CJK Font? set the default
         pIo->SetNewFontAttr( ftcStandardChpCJKStsh, TRUE, RES_CHRATR_CJK_FONT );
 
+
     if( !pIo->bNoAttrImport )
     {
+        // Style has no text color set, winword default is auto
+        if ( !bTxtColChanged )
+            pIo->pAktColl->SetAttr(SvxColorItem(Color(COL_AUTO)));
+
         // Style has no FontSize ? WinWord Default is 10pt for western and asian
         if( !bFSizeChanged )
         {
@@ -2882,7 +2890,8 @@ void WW8RStyle::Import1Style( USHORT nNr )
                                     // wird, gehts danach wieder richtig
 
     pStyRule = 0;                   // falls noetig, neu anlegen
-    bFontChanged = bCJKFontChanged = bFSizeChanged = bWidowsChanged = FALSE;
+    bTxtColChanged = bFontChanged = bCJKFontChanged = bFSizeChanged =
+        bWidowsChanged = FALSE;
     pIo->SetNAktColl( nNr );
     pIo->bStyNormal = nNr == 0;
 
@@ -3056,11 +3065,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.8 2001-04-20 14:54:47 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.9 2001-04-23 11:16:23 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/04/20 14:54:47  cmc
+      base table handling on logical character positions and by using new property finding algorithm
+
       Revision 1.7  2001/03/16 14:23:21  cmc
       ##561## Styles should inherit the toggleable attributes from eachother
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-16 17:15:59 $
+ *  last change: $Author: cmc $ $Date: 2001-04-23 11:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1050,6 +1050,7 @@ BYTE SwWW8Writer::TransCol( const Color& rCol )
     case COL_LIGHTMAGENTA:  nCol = 5;   break;
     case COL_YELLOW:        nCol = 7;   break;
     case COL_WHITE:         nCol = 8;   break;
+    case COL_AUTO:          nCol = 0;   break;
 
     default:
         if( !pBmpPal )
@@ -3703,6 +3704,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/03/16 17:15:59  jp
+      new: im-/export emboss / engrave attribute
+
       Revision 1.11  2001/02/23 09:57:21  cmc
       Test if CJK combined characters are western or asian
 

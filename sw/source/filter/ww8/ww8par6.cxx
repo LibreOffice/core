@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-20 14:49:03 $
+ *  last change: $Author: cmc $ $Date: 2001-04-23 11:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@
 
 
 static ColorData __FAR_DATA eSwWW8ColA[] = {
-        COL_BLACK, COL_BLACK, COL_LIGHTBLUE,
+        COL_AUTO, COL_BLACK, COL_LIGHTBLUE,
         COL_LIGHTCYAN, COL_LIGHTGREEN, COL_LIGHTMAGENTA, COL_LIGHTRED,
         COL_YELLOW, COL_WHITE, COL_BLUE, COL_CYAN, COL_GREEN,
         COL_MAGENTA, COL_RED, COL_BROWN, COL_GRAY, COL_LIGHTGRAY };
@@ -3268,20 +3268,24 @@ void SwWW8ImplReader::Read_TxtColor( USHORT, BYTE* pData, short nLen )
     {
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
         bTxtCol = FALSE;
-
+#if 0
+        //No longer need this with auto color
         if( bCharShdTxtCol || bShdTxtCol )
             // dann muss die wieder eingeschaltet werden!!
             NewAttr( SvxColorItem( Color( COL_WHITE ) ) );  // -> weisse Schrift
+#endif
     }
     else
     {
         BYTE b = *pData;            // Parameter: 0 = Auto, 1..16 Farben
 
         if( b > 16 )                // unbekannt -> Black
-            b = 0;                  // Auto -> Black
+            b = 0;
 
         NewAttr( SvxColorItem( Color( eSwWW8ColA[b] ) ) );
         bTxtCol = TRUE;                         // SHD darf nicht Farbe einschalten
+        if( pAktColl && pStyles )
+            pStyles->bTxtColChanged = TRUE;
     }
 }
 
@@ -3617,12 +3621,15 @@ void SwWW8ImplReader::Read_CharShadow(  USHORT, BYTE* pData, short nLen )
 
         NewAttr( SvxBrushItem( aSh.aColor, RES_CHRATR_BACKGROUND ));
 
+#if 0
+        //Now we have auto color, no longer need this
         // weisse Schrift und nicht ueberattributiert
         if( aSh.bWhiteText && !bTxtCol && !bShdTxtCol )
         {
             NewAttr( SvxColorItem( Color( COL_WHITE ) ) );  // -> weisse Schrift
             bCharShdTxtCol = TRUE;
         }
+#endif
     }
 }
 
@@ -3647,12 +3654,15 @@ void SwWW8ImplReader::Read_CharHighlight( USHORT, BYTE* pData, short nLen )
         Color aCol( eSwWW8ColA[b] );
         NewAttr( SvxBrushItem( aCol , RES_CHRATR_BACKGROUND ));
 
+#if 0
+        //No longer need this with auto color
         // weisse Schrift und nicht ueberattributiert
         if( COL_BLACK == aCol.GetColor() && !bTxtCol && !bShdTxtCol )
         {
             NewAttr( SvxColorItem( Color( COL_WHITE ) ) );  // -> weisse Schrift
             bCharShdTxtCol = TRUE;
         }
+#endif
     }
 }
 
@@ -4157,9 +4167,12 @@ static ULONG __READONLY_DATA eMSGrayScale[] = {
             }
             break;
     }
+#if 0
+    //Now we have Auto color, no longer need this
     // schwarzer Hintergrund -> weisse Schrift
     bWhiteText =    (nFore == COL_BLACK) && ( 800 <= nWW8BrushStyle )
                  || (nBack == COL_BLACK) && ( 200 >= nWW8BrushStyle );
+#endif
 }
 
 
@@ -4181,13 +4194,15 @@ void SwWW8ImplReader::Read_Shade( USHORT, BYTE* pData, short nLen )
         SwWW8Shade aSh( bVer67, aSHD );
 
         NewAttr( SvxBrushItem( aSh.aColor ) );
-
+#if 0
+        //Now we have Auto Color, no longer need this
         // weisse Schrift und nicht ueberattributiert
         if( aSh.bWhiteText && !bTxtCol )
         {
             NewAttr( SvxColorItem( Color( COL_WHITE ) ) );  // -> weisse Schrift
             bShdTxtCol = TRUE;
         }
+#endif
     }
 }
 
@@ -5024,12 +5039,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.20 2001-04-20 14:49:03 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.21 2001-04-23 11:16:23 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.20  2001/04/20 14:49:03  cmc
+      Missing sprms and bad WW6 fontselection sprm id
+
       Revision 1.19  2001/04/05 16:54:15  cmc
       ##573## Take first line indent into account before removing tabstops during readjustment
 

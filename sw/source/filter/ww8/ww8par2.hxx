@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-01 11:22:52 $
+ *  last change: $Author: cmc $ $Date: 2001-04-23 11:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@ friend class SwWW8ImplReader;
 
     BYTE nWwNumLevel;           // fuer Bullets und Aufzaehlungen in Styles
 
+    BOOL bTxtColChanged : 1;
     BOOL bFontChanged   : 1;    // Fuer Simulation Default-Font
     BOOL bCJKFontChanged: 1;    // Fuer Simulation Default-Font
     BOOL bFSizeChanged  : 1;    // Fuer Simulation Default-FontSize
@@ -291,11 +292,14 @@ inline WW8LvlType GetNumType( BYTE nWwLevelNo )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.hxx,v 1.2 2000-12-01 11:22:52 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.hxx,v 1.3 2001-04-23 11:16:23 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/12/01 11:22:52  jp
+      Task #81077#: im-/export of CJK documents
+
       Revision 1.1.1.1  2000/09/18 17:14:58  hr
       initial import
 

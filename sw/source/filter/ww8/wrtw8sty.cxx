@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:26 $
+ *  last change: $Author: cmc $ $Date: 2001-04-23 11:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,6 +458,8 @@ void WW8WrtStyle::Set1StyleDefaults( const SwFmt& rFmt, BOOL bPap )
     {
            aFlags[ RES_CHRATR_FONTSIZE - RES_CHRATR_BEGIN ] = 1;
         aFlags[ RES_CHRATR_LANGUAGE - RES_CHRATR_BEGIN ] = 1;
+        //Winword default is auto, OOo default is black
+        aFlags[ RES_CHRATR_COLOR - RES_CHRATR_BEGIN] = 1;
     }
 
     const SfxItemSet* pOldI = rWrt.GetCurItemSet();
@@ -1881,11 +1883,14 @@ const SvULongs* WW8_WrPlcSubDoc::GetShapeIdArr() const
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8sty.cxx,v 1.4 2001-02-23 12:45:26 os Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8sty.cxx,v 1.5 2001-04-23 11:16:22 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/02/23 12:45:26  os
+      Complete use of DefaultNumbering component
+
       Revision 1.3  2000/11/21 12:55:21  jp
       Bug #80385#: Set1StyleDefaults - write also all dynamic attributes
 
