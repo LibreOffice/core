@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentLoader.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:10:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,116 +38,61 @@
  *
  *************************************************************************/
 
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
 
 
 /** This class opens a new or an existing office document.
  */
 public class DocumentLoader {
-  public static void main(String args[]) {
-    try {
-      String sConnectionString = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
+    public static void main(String args[]) {
+        if ( args.length < 1 ) {
+            System.out.println(
+                "usage: java -jar DocumentLoader.jar \"<URL|path>\"" );
+            System.out.println( "\ne.g.:" );
+            System.out.println(
+                "java -jar DocumentLoader.jar \"private:factory/swriter\"" );
+            System.exit(1);
+        }
 
-      if ( args.length < 1 ) {
-        System.out.println(
-        "usage: java -classpath .;<Office path>/program/classes/jurt.jar;" +
-        "<Office path>/program/classes/ridl.jar;" +
-        "<Office path>/program/classes/sandbox.jar;" +
-        "<Office path>/program/classes/unoil.jar;" +
-        "<Office path>/program/classes/juh.jar " +
-        "DocumentLoader \"<URL|path>\" [\"<connection>\"]" );
-        System.out.println( "\ne.g.:" );
-        System.out.println(
-        "java -classpath .;d:/office60/program/classes/jurt.jar;" +
-        "d:/office60/program/classes/ridl.jar;" +
-        "d:/office60/program/classes/sandbox.jar;" +
-        "d:/office60/program/classes/unoil.jar; " +
-        "d:/office60/program/classes/juh.jar " +
-        "DocumentLoader \"private:factory/swriter\"" );
-        System.exit(1);
-      }
+        com.sun.star.uno.XComponentContext xContext = null;
 
-      // It is possible to use a different connection string, passed as argument
-      if ( args.length == 2 ) {
-            sConnectionString = args[1];
-      }
+        try {
+            // get the remote office component context
+            xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
 
-      /* Bootstraps a component context with the jurt base components
-         registered. Component context to be granted to a component for running.
-         Arbitrary values can be retrieved from the context. */
-      XComponentContext xcomponentcontext =
-      com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
+            // get the remote office service manager
+            com.sun.star.lang.XMultiComponentFactory xMCF =
+                xContext.getServiceManager();
 
-      /* Gets the service manager instance to be used (or null). This method has
-         been added for convenience, because the service manager is a often used
-         object. */
-      XMultiComponentFactory xmulticomponentfactory =
-      xcomponentcontext.getServiceManager();
+            Object oDesktop = xMCF.createInstanceWithContext(
+                "com.sun.star.frame.Desktop", xContext);
 
-      /* Creates an instance of the component UnoUrlResolver which
-         supports the services specified by the factory. */
-      Object objectUrlResolver =
-      xmulticomponentfactory.createInstanceWithContext(
-      "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
+            com.sun.star.frame.XComponentLoader xCompLoader =
+                (com.sun.star.frame.XComponentLoader)
+                     UnoRuntime.queryInterface(
+                         com.sun.star.frame.XComponentLoader.class, oDesktop);
 
-      // Create a new url resolver
-      XUnoUrlResolver xurlresolver = ( XUnoUrlResolver )
-      UnoRuntime.queryInterface( XUnoUrlResolver.class,
-      objectUrlResolver );
+            String sUrl = args[0];
+            if ( sUrl.indexOf("private:") != 0) {
+                java.io.File sourceFile = new java.io.File(args[0]);
+                StringBuffer sbTmp = new StringBuffer("file:///");
+                sbTmp.append(sourceFile.getCanonicalPath().replace('\\', '/'));
+                sUrl = sbTmp.toString();
+            }
 
-      // Resolves an object that is specified as follow:
-      // uno:<connection description>;<protocol description>;<initial object name>
-      Object objectInitial = xurlresolver.resolve( sConnectionString );
+            // Load a Writer document, which will be automaticly displayed
+            com.sun.star.lang.XComponent xComp = xCompLoader.loadComponentFromURL(
+                sUrl, "_blank", 0, new com.sun.star.beans.PropertyValue[0]);
 
-      // Create a service manager from the initial object
-      xmulticomponentfactory = ( XMultiComponentFactory )
-      UnoRuntime.queryInterface( XMultiComponentFactory.class, objectInitial );
-
-      // Query for the XPropertySet interface.
-      XPropertySet xpropertysetMultiComponentFactory = ( XPropertySet )
-      UnoRuntime.queryInterface( XPropertySet.class, xmulticomponentfactory );
-
-      // Get the default context from the office server.
-      Object objectDefaultContext =
-      xpropertysetMultiComponentFactory.getPropertyValue( "DefaultContext" );
-
-      // Query for the interface XComponentContext.
-      xcomponentcontext = ( XComponentContext ) UnoRuntime.queryInterface(
-      XComponentContext.class, objectDefaultContext );
-
-      /* A desktop environment contains tasks with one or more
-         frames in which components can be loaded. Desktop is the
-         environment for components which can instanciate within
-         frames. */
-      XComponentLoader xcomponentloader = ( XComponentLoader )
-      UnoRuntime.queryInterface( XComponentLoader.class,
-      xmulticomponentfactory.createInstanceWithContext(
-      "com.sun.star.frame.Desktop", xcomponentcontext ) );
-
-      String sUrl = args[0];
-      if ( sUrl.indexOf("private:") != 0) {
-          java.io.File sourceFile = new java.io.File(args[0]);
-          StringBuffer sTmp = new StringBuffer("file:///");
-          sTmp.append(sourceFile.getCanonicalPath().replace('\\', '/'));
-          sUrl = sTmp.toString();
-      }
-
-      // Load a Writer document, which will be automaticly displayed
-      XComponent xcomponent = xcomponentloader.loadComponentFromURL(
-      sUrl, "_blank", 0,
-      new PropertyValue[0] );
-
-      System.exit(0);
+            if ( xComp != null )
+                System.exit(0);
+            else
+                System.exit(1);
+        }
+        catch( Exception e ) {
+            e.printStackTrace(System.err);
+            System.exit(1);
+        }
     }
-    catch( Exception exception ) {
-      System.err.println( exception );
-    }
-  }
 }
