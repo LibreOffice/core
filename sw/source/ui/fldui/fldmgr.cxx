@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 13:34:44 $
+ *  last change: $Author: os $ $Date: 2001-07-11 12:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1278,7 +1278,8 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
             {
                 aDBData.sDataSource = rData.sPar1.GetToken(0, DB_DELIM);
                 aDBData.sCommand = rData.sPar1.GetToken(1, DB_DELIM);
-                sPar1 = rData.sPar1.GetToken(2, DB_DELIM);
+                aDBData.nCommandType = rData.sPar1.GetToken(2, DB_DELIM).ToInt32();
+                sPar1 = rData.sPar1.GetToken(3, DB_DELIM);
             }
 
             if(aDBData.sDataSource.getLength() && pCurShell->GetDBData() != aDBData)

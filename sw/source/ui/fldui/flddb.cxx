@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:09:31 $
+ *  last change: $Author: os $ $Date: 2001-07-11 12:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,8 @@ BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& rSet)
         String sDBName = aData.sDataSource;
         sDBName += DB_DELIM;
         sDBName += (String)aData.sCommand;
+        sDBName += DB_DELIM;
+        sDBName += String::CreateFromInt32(aData.nCommandType);
         sDBName += DB_DELIM;
         if(sColumnName.Len())
         {
