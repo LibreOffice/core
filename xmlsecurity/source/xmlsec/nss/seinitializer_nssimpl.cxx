@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+ *  last change: $Author: mmi $ $Date: 2004-07-15 08:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,13 @@
 /*
  * header files needed for getCurrentProfilePath
  */
+/*-
+ * Delete by AF in order to decouple from xpcom
 #include "nsIServiceManager.h"
 #include "nsIProfileInternal.h"
 #include "nsString.h"
 #include "nsEmbedAPI.h"
+ */
 #include <sal/types.h>
 
 
@@ -122,12 +125,17 @@ using namespace com::sun::star;
 //      This is a bug, because any other component who will initialize the XPCOM afterward
 //      will always fail.
 //      This bug will be fixed when there is solution.
+/*-
+ * Delete by AF in order to decouple from xpcom
 static nsIServiceManager           *sServiceManager = nsnull;
 static nsIDirectoryServiceProvider *appFileLocProvider = nsnull;
 static NS_DEFINE_CID(kProfileCID, NS_PROFILE_CID);
+*/
 
 char* getCurrentProfilePath( )
 {
+/*-
+ * Delete by AF in order to decouple from xpcom
         nsCOMPtr<nsILocalFile> binDir;
 
     if (sServiceManager == nsnull)
@@ -180,6 +188,7 @@ char* getCurrentProfilePath( )
     //      one program
     //NS_RELEASE(sServiceManager);
     //NS_ShutdownXPCOM(sServiceManager);
+*/
 
     return NULL;
 }
