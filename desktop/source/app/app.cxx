@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-12 14:20:07 $
+ *  last change: $Author: mba $ $Date: 2000-12-13 17:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,15 +88,21 @@ using namespace ::com::sun::star::lang;
 void ReplaceStringHookProc( UniString& rStr )
 {
     static String aBrandName;
+    static String aVersion;
     if ( !aBrandName.Len() )
     {
         Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
         rtl::OUString aTmp;
         aRet >>= aTmp;
         aBrandName = aTmp;
+
+        aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+        aRet >>= aTmp;
+        aVersion = aTmp;
     }
 
     rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", aBrandName );
+    rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", aVersion );
 }
 
 Desktop aDesktop;
