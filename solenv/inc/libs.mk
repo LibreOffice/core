@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: er $ $Date: 2002-03-27 18:06:38 $
+#   last change: $Author: er $ $Date: 2002-03-28 03:07:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.40 $$"
+LIBSMKREV!:="$$Revision: 1.41 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -72,7 +72,7 @@ LIBPRE=libr
 #externe libs in plattform.mk
 #
 
-ICUI18NLIB=-licui18n -licuuc -licule -licudata
+ICUI18NLIB=-licui18n -licuuc -licule -licudt20b
 GPC3RDLIB=-lgpc
 SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
 XMLSCRIPTLIB =-lxcr$(OFFICEUPD)$(DLLPOSTFIX)
