@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-06 11:04:07 $
+ *  last change: $Author: abi $ $Date: 2002-02-06 12:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,14 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
         delete[] bff1;
 
         // Now determine the order
-        rtl::OString LN[8];
+#define NAMECOUNT 16
+#define UNREACHABLEPLACE 100000;
+        /**
+         *  The available names cannot be determined from LINKNAMES at current,
+         *  because LINKNAMES is a serialized Java-object
+         *  Always update LINKNAMES if index.xsl or default.xsl are modified.
+         */
+        rtl::OString LN[NAMECOUNT];
         LN[0] = "text:span";
         LN[1] = "help:help-text";
         LN[2] = "help:to-be-embedded";
@@ -267,31 +274,40 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
         LN[5] = "text:p";
         LN[6] = "office:document";
         LN[7] = "help:link";
+        LN[8] = "help:key-word";
+        LN[9] = "table:table";
+        LN[10] = "table:table-header-row";
+        LN[11] = "table:table-row";
+        LN[12] = "table:table-cell";
+        LN[13] = "text:unordered-list";
+        LN[14] = "text:ordered-list";
+        LN[15] = "text:list-item";
 
-        int idx[8];
-        idx[0] = aStr.indexOf( LN[0] );
-        idx[1] = aStr.indexOf( LN[1] );
-        idx[2] = aStr.indexOf( LN[2] );
-        idx[3] = aStr.indexOf( LN[3] );
-        idx[4] = aStr.indexOf( LN[4] );
-        idx[5] = aStr.indexOf( LN[5] );
-        idx[6] = aStr.indexOf( LN[6] );
-        idx[7] = aStr.indexOf( LN[7] );
 
-        linkNames_ = new rtl::OUString[ linkNamesL_ = 8 ];
+        // Determine index in file
+        int idx[NAMECOUNT];
+        int linkNamesL_ = NAMECOUNT;
+        for( i = 0; i < NAMECOUNT; ++i )
+            if( ( idx[i] = aStr.indexOf( LN[i] ) ) == -1 ) {
+                idx[i] = UNREACHABLEPLACE;
+                --linkNamesL_;
+            }
 
-        for( i = 0; i < 8; ++i )
-        {
+        linkNames_ = new rtl::OUString[linkNamesL_];
+        for( i = 0; i < linkNamesL_; ++i ) {
             int first;
-            int Place = 100000;
-            for( int j = 0; j < 8; ++j )
+            int Place = UNREACHABLEPLACE; // This is the defintely last place
+            for( int j = 0; j < NAMECOUNT; ++j )
             {
                 if( idx[j] < Place )
-                    Place = idx[ first = j];
+                    Place = idx[first = j];
             }
-            idx[first] = 100000;
+            idx[first] = UNREACHABLEPLACE;
             linkNames_[i] = rtl::OUString( LN[first].getStr(),LN[first].getLength(),RTL_TEXTENCODING_UTF8 );
         }
+
+#undef NAMECOUNT
+#undef UNREACHABLEPLACE
     }  // end linknames
 
 
