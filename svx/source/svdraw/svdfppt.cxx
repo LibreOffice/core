@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:24:48 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,6 +723,7 @@ PptSlidePersistEntry::PptSlidePersistEntry() :
     nSlidePersistStartOffset( 0 ),
     nSlidePersistEndOffset  ( 0 )
 {
+    HeaderFooterOfs[ 0 ] =  HeaderFooterOfs[ 1 ] = HeaderFooterOfs[ 2 ] = HeaderFooterOfs[ 3 ] = 0;
 }
 
 
@@ -756,8 +757,6 @@ SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam ) :
 SdrEscherImport::~SdrEscherImport()
 {
     void* pPtr;
-    for ( pPtr = aHFMasterList.First(); pPtr; pPtr = aHFMasterList.Next() )
-        delete (HeaderFooterMaster*)pPtr;
     for ( pPtr = aOleObjectList.First(); pPtr; pPtr = aOleObjectList.Next() )
         delete (PPTOleEntry*)pPtr;
     delete pFonts;
@@ -960,12 +959,13 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
     if ( maShapeRecords.SeekToContent( rSt, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
     {
-        DffRecordHeader aPlaceHd;
+        DffRecordHeader aClientDataHd;
         while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < maShapeRecords.Current()->GetRecEndFilePos() ) )
         {
-            rSt >> aPlaceHd;
-            switch ( aPlaceHd.nRecType )
+            rSt >> aClientDataHd;
+            switch ( aClientDataHd.nRecType )
             {
+                // importing header/footer object from master page
                 case PPT_PST_OEPlaceholderAtom :
                 {
                     rSt >> aPlaceholderAtom;
@@ -980,48 +980,27 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         }
                         if ( ! ( nHeaderFooterInstance & 0xfffc ) )     // is this a valid instance ( 0->3 )
                         {
-                            if ( ( rPersistEntry.aSlideAtom.aLayout.eLayout != PPT_LAYOUT_TITLEMASTERSLIDE )
-                                    || ( aDocAtom.bTitlePlaceholdersOmitted == FALSE ) )
+                            if ( !rPersistEntry.pHeaderFooterEntry )    // generate masterheaderfooter first
                             {
-                                if ( !rPersistEntry.pHeaderFooterEntry )    // generate masterheaderfooter first
+                                rPersistEntry.pHeaderFooterEntry = new HeaderFooterEntry( NULL );
+                                DffRecordHeader* pHd;
+                                for ( pHd = ((SdrEscherImport*)this )->aDocRecManager.GetRecordHeader( PPT_PST_HeadersFooters, SEEK_FROM_BEGINNING );
+                                                    pHd; pHd = ((SdrEscherImport*)this )->aDocRecManager.GetRecordHeader( PPT_PST_HeadersFooters, SEEK_FROM_CURRENT ) )
                                 {
-                                    HeaderFooterMaster* pHFM = new HeaderFooterMaster;
-                                    if ( pHFM )
+                                    if ( rPersistEntry.bNotesMaster )
                                     {
-                                        ((SdrEscherImport*)this )->aHFMasterList.Insert( (void*)pHFM, LIST_APPEND );
-                                        HeaderFooterEntry* pHFE = new HeaderFooterEntry( *pHFM, rData.pPage );
-                                        rPersistEntry.pHeaderFooterEntry = pHFE;
-                                        pHFM->aHeaderFooterEntryList.Insert( pHFE, LIST_APPEND );
-                                        DffRecordHeader* pHd;
-                                        for ( pHd = ((SdrEscherImport*)this )->aDocRecManager.GetRecordHeader( PPT_PST_HeadersFooters, SEEK_FROM_BEGINNING );
-                                                            pHd; pHd = ((SdrEscherImport*)this )->aDocRecManager.GetRecordHeader( PPT_PST_HeadersFooters, SEEK_FROM_CURRENT ) )
-                                        {
-                                            if ( rPersistEntry.bNotesMaster )
-                                            {
-                                                if ( pHd->nRecInstance == 4 )
-                                                    break;
-                                            }
-                                            else if ( rPersistEntry.bHandoutMaster )
-                                                continue;
-                                            else if ( pHd->nRecInstance == 3 )      // normal master page
-                                                break;
-                                        }
-                                        if ( pHd )
-                                            ((SdrEscherImport*)this )->ImportHeaderFooterContainer( *pHd, *pHFE );
+                                        if ( pHd->nRecInstance == 4 )
+                                            break;
                                     }
+                                    else if ( rPersistEntry.bHandoutMaster )
+                                        continue;
+                                    else if ( pHd->nRecInstance == 3 )      // normal master page
+                                        break;
                                 }
-                                if ( rPersistEntry.pHeaderFooterEntry )
-                                {
-                                    HeaderFooterMaster& rHFM = rPersistEntry.pHeaderFooterEntry->rMaster;
-                                    if ( !rHFM.pOfs[ nHeaderFooterInstance ] )
-                                        rHFM.pOfs[ nHeaderFooterInstance ] = rObjData.rSpHd.GetRecBegFilePos();
-                                }
+                                if ( pHd )
+                                    ((SdrEscherImport*)this )->ImportHeaderFooterContainer( *pHd, *rPersistEntry.pHeaderFooterEntry );
                             }
-                            else
-                            {
-                                delete pRet;
-                                return NULL;
-                            }
+                            rPersistEntry.HeaderFooterOfs[ nHeaderFooterInstance ] = rObjData.rSpHd.GetRecBegFilePos();
                         }
                     }
                 }
@@ -1032,13 +1011,13 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     if ( pRet && ( pRet->ISA( SdrGrafObj ) && ((SdrGrafObj*)pRet)->HasGDIMetaFile() ) )
                     {
                         Graphic aGraphic( ((SdrGrafObj*)pRet)->GetGraphic() );
-                        RecolorGraphic( rSt, aPlaceHd.nRecLen, aGraphic );
+                        RecolorGraphic( rSt, aClientDataHd.nRecLen, aGraphic );
                         ((SdrGrafObj*)pRet)->SetGraphic( aGraphic );
                     }
                 }
                 break;
             }
-            aPlaceHd.SeekToEndOfRecord( rSt );
+            aClientDataHd.SeekToEndOfRecord( rSt );
         }
     }
     if ( ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_NOTESSLIDEIMAGE ) && ( rPersistEntry.bNotesMaster == FALSE ) )
@@ -1414,17 +1393,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         if ( rObjData.nSpFlags & SP_FBACKGROUND )
         {
             pRet->NbcSetSnapRect( Rectangle( Point(), ((SdrPage*)rData.pPage)->GetSize() ) );   // Groesse setzen
-        }
-        if ( ( nHeaderFooterInstance != -1 )  && rPersistEntry.pHeaderFooterEntry ) // headerfooter ?
-        {
-            HeaderFooterEntry& rHFE = *rPersistEntry.pHeaderFooterEntry;
-            if ( rHFE.bMaster && ( !rHFE.pSdrObject[ nHeaderFooterInstance ] ) )            // master ?
-            {
-                rHFE.pInstanceOrder[ rHFE.nInstanceCount++ ] = nHeaderFooterInstance;
-                rHFE.pSdrObject[ nHeaderFooterInstance ] = pRet;
-                rHFE.pPageIndex[ nHeaderFooterInstance ] = ((SdrPage*)rData.pPage)->GetObjCount();
-                pRet = NULL;
-            }
         }
         if ( rPersistEntry.pSolverContainer )
         {
@@ -2907,17 +2875,12 @@ SdrPage* SdrPowerPointImport::MakeBlancPage( sal_Bool bMaster ) const
 void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry* pMasterPersist )
 {
     UINT32 nMerk = rStCtrl.Tell();
-    HeaderFooterEntry* pHFEM = NULL;
-
     PptSlidePersistList* pList = GetPageList( eAktPageKind );
     if ( ( !pList ) || ( pList->Count() <= nAktPageNum ) )
         return;
     PptSlidePersistEntry& rSlidePersist = *(*pList)[ nAktPageNum ];
     if ( rSlidePersist.bStarDrawFiller )
         return;
-
-    if ( pMasterPersist )
-        pHFEM = pMasterPersist->pHeaderFooterEntry; // get the masterpage's HeaderFooterEntry
 
     DffRecordHeader aPageHd;
     if ( SeekToAktPage( &aPageHd ) )
@@ -2927,18 +2890,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                     ? rtl::OUString::createFromAscii( "Page" )
                                     : rtl::OUString::createFromAscii( "NotesPage" ),
                                     rtl::OUString::valueOf( (sal_Int32)nAktPageNum + 1 ) );
-        HeaderFooterEntry* pHFE = NULL;
-        if ( pHFEM )
-        {
-            pHFE = new HeaderFooterEntry( *pHFEM, (SdPage*)pRet );
-            rSlidePersist.pHeaderFooterEntry = pHFE;
-            if ( ( rSlidePersist.aSlideAtom.aLayout.eLayout == PPT_LAYOUT_TITLESLIDE )
-                    && ( aDocAtom.bTitlePlaceholdersOmitted == TRUE ) )
-            {
-                pHFE->rMaster.nDirtyInstance = 0xf;
-                pHFE->nAtom = 0;
-            }
-        }
+
+        rSlidePersist.pHeaderFooterEntry = new HeaderFooterEntry( pMasterPersist );
         ProcessData aProcessData( rSlidePersist, (SdPage*)pRet );
         while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
         {
@@ -2948,25 +2901,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
             {
                 case PPT_PST_HeadersFooters :
                 {
-                    if ( pHFE )
-                    {
-                        ImportHeaderFooterContainer( aHd, *pHFE );
-                        for ( UINT32 i = 0; i < 4; i++ )
-                        {
-                            UINT32 nPosition = pHFE->rMaster.NeedToImportInstance( i, *pHFE );
-                            if ( nPosition )
-                            {
-                                rStCtrl.Seek( nPosition );
-                                Rectangle aEmpty;
-                                SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty, 0 );
-                                if ( pObj )
-                                {   // cause of this object is already dirty, we can inserted it directly
-                                    pHFE->nAtom &= ~pHFE->GetMaskForInstance( i );
-                                    pRet->NbcInsertObject( pObj );
-                                }
-                            }
-                        }
-                    }
+                    ImportHeaderFooterContainer( aHd, *rSlidePersist.pHeaderFooterEntry );
                 }
                 break;
 
@@ -3266,39 +3201,26 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-HeaderFooterEntry::HeaderFooterEntry( HeaderFooterMaster& rM, SdPage* pPage ) :
-    rMaster         ( rM ),
-    pSdPage         ( pPage ),
-    nAtom           ( 0 ),
-    nInstanceCount  ( 0 ),
-    bMaster         ( TRUE )
+HeaderFooterEntry::HeaderFooterEntry( const PptSlidePersistEntry* pMPE ) :
+    pMasterPersist  ( pMPE ),
+    nAtom           ( 0 )
 {
-    for ( UINT32 i = 0; i < 4; i++ )
+    if ( pMPE )
     {
-        pSdrObject[ i ] = NULL;
+        HeaderFooterEntry* pMHFE = pMPE->pHeaderFooterEntry;
+        if ( pMHFE )
+        {
+            nAtom = pMPE->pHeaderFooterEntry->nAtom;
+            pPlaceholder[ 0 ] = pMHFE->pPlaceholder[ 0 ];
+            pPlaceholder[ 1 ] = pMHFE->pPlaceholder[ 1 ];
+            pPlaceholder[ 2 ] = pMHFE->pPlaceholder[ 2 ];
+            pPlaceholder[ 3 ] = pMHFE->pPlaceholder[ 3 ];
+        }
     }
-}
-
-HeaderFooterEntry::HeaderFooterEntry( HeaderFooterEntry& rE, SdPage* pPage ) :
-    rMaster         ( rE.rMaster ),
-    pSdPage         ( pPage ),
-    nAtom           ( rE.nAtom ),
-    nInstanceCount  ( rE.nInstanceCount ),
-    bMaster         ( FALSE )
-{
-    for ( UINT32 i = 0; i < 4; i++ )
-    {
-        if ( i < nInstanceCount )
-            pInstanceOrder[ i ] = rE.pInstanceOrder[ i ];
-        pPlaceholder[ i ] = rE.pPlaceholder[ i ];
-        pSdrObject[ i ] = NULL;
-    }
-    rMaster.aHeaderFooterEntryList.Insert( (void*)this, LIST_APPEND );
 }
 
 HeaderFooterEntry::~HeaderFooterEntry()
 {
-    for ( UINT32 i = 0; i < 4; delete pSdrObject[ i++ ] );
 }
 
 UINT32 HeaderFooterEntry::GetMaskForInstance( UINT32 nInstance )
@@ -3327,39 +3249,21 @@ UINT32 HeaderFooterEntry::IsToDisplay( UINT32 nInstance )
     return ( nAtom & nMask );
 }
 
-HeaderFooterMaster::HeaderFooterMaster() :
-    nDirtyInstance  ( 0 )
+// The following method checks if the slide is using a different colorscheme than
+// its master, if this is the fact, then the HeaderFooter must probably be
+// imported as real sdrobject. In this case, the return value is the offset to the
+// master header footer object, so it can be re-loaded with a different color set
+sal_uInt32 HeaderFooterEntry::NeedToImportInstance( const sal_uInt32 nInstance, const PptSlidePersistEntry& rSlidePersist )
 {
-    for ( UINT32 i = 0; i < 4; i++ )
+    sal_uInt32 nRet = 0;
+    if ( pMasterPersist )
     {
-        pOfs[ i ] = 0;
-     }
-}
-
-HeaderFooterMaster::~HeaderFooterMaster()
-{
-    for ( void* pPtr = aHeaderFooterEntryList.First(); pPtr; pPtr = aHeaderFooterEntryList.Next() )
-        delete (HeaderFooterEntry*)pPtr;
-}
-
-UINT32 HeaderFooterMaster::NeedToImportInstance( UINT32 nInstance, HeaderFooterEntry& rE )
-{
-    UINT32 nRet = 0;
-    UINT32 nCount = aHeaderFooterEntryList.Count();
-    if ( nCount > 1 )
-    {
-        HeaderFooterEntry& rEM = *( (HeaderFooterEntry*)aHeaderFooterEntryList.First() );
-        BOOL bPlaceholderChanged = rEM.pPlaceholder[ nInstance ] != rE.pPlaceholder[ nInstance ];
-        UINT32 nMask = rE.GetMaskForInstance( nInstance );
-        UINT32 nInstMask = 1 << nInstance;
-        if ( ( rEM.nAtom & nMask ) != ( rE.nAtom & nMask ) )
-            nDirtyInstance |= nInstMask;
-        if ( bPlaceholderChanged )
-            nDirtyInstance |= nInstMask;
-        if  ( nDirtyInstance & nInstMask )
-        {
-            if ( rE.IsToDisplay( nInstance ) )
-                nRet = pOfs[ nInstance ];
+        if ( !( rSlidePersist.aSlideAtom.nFlags & 2 ) )
+        {   // not following the master persist, so we have to check if the colors are changed
+            if ( memcmp( &rSlidePersist.aColorScheme, &pMasterPersist->aColorScheme, 32 ) )
+            {
+                nRet = pMasterPersist->HeaderFooterOfs[ nInstance ];
+            }
         }
     }
     return nRet;
@@ -6436,10 +6340,10 @@ PPTFieldEntry::~PPTFieldEntry()
     delete pString;
 };
 
-void PPTFieldEntry::SetDateTime( UINT32 nVal )
+void PPTFieldEntry::GetDateTime( const sal_uInt32 nVal, SvxDateFormat& eDateFormat, SvxTimeFormat& eTimeFormat )
 {
-    SvxDateFormat eDateFormat( SVXDATEFORMAT_APPDEFAULT );
-    SvxTimeFormat eTimeFormat( SVXTIMEFORMAT_APPDEFAULT );
+    eDateFormat = SVXDATEFORMAT_APPDEFAULT;
+    eTimeFormat = SVXTIMEFORMAT_APPDEFAULT;
     // ID auswerten
     switch( nVal )
     {
@@ -6475,6 +6379,13 @@ void PPTFieldEntry::SetDateTime( UINT32 nVal )
             eTimeFormat = SVXTIMEFORMAT_12_HMS;
         break;
     }
+}
+
+void PPTFieldEntry::SetDateTime( UINT32 nVal )
+{
+    SvxDateFormat eDateFormat;
+    SvxTimeFormat eTimeFormat;
+    GetDateTime( nVal, eDateFormat, eTimeFormat );
     if ( eDateFormat != SVXDATEFORMAT_APPDEFAULT )
         pField1 = new SvxFieldItem( SvxDateField( Date(), SVXDATETYPE_VAR, eDateFormat ) );
     if ( eTimeFormat != SVXTIMEFORMAT_APPDEFAULT )
@@ -6890,11 +6801,32 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     break;
 
                                     case PPT_PST_FooterMCAtom :
-                                        nVal++;
+                                    {
+                                        pEntry = new PPTFieldEntry;
+                                        rIn >> pEntry->nPos;
+                                        pEntry->pField1 = new SvxFieldItem( SvxFooterField() );
+                                    }
+                                    break;
+
                                     case PPT_PST_HeaderMCAtom :
-                                        nVal++;
+                                    {
+                                        pEntry = new PPTFieldEntry;
+                                        rIn >> pEntry->nPos;
+                                        pEntry->pField1 = new SvxFieldItem( SvxHeaderField() );
+                                    }
+                                    break;
+
                                     case PPT_PST_GenericDateMCAtom :
                                     {
+                                        pEntry = new PPTFieldEntry;
+                                        rIn >> pEntry->nPos;
+                                        pEntry->pField1 = new SvxFieldItem( SvxDateTimeField() );
+
+                                        if ( !nVal && ( rPersistEntry.pHeaderFooterEntry->nAtom & 0x20000 ) )   // auto date time
+                                            pEntry->SetDateTime( rPersistEntry.pHeaderFooterEntry->nAtom & 0xff );
+                                        else
+                                            pEntry->pString = new String( rPersistEntry.pHeaderFooterEntry->pPlaceholder[ nVal ] );
+/*
                                         if ( rPersistEntry.pHeaderFooterEntry )
                                         {
                                             pEntry = new PPTFieldEntry;
@@ -6904,6 +6836,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             else
                                                 pEntry->pString = new String( rPersistEntry.pHeaderFooterEntry->pPlaceholder[ nVal ] );
                                         }
+*/
                                     }
                                     break;
 
