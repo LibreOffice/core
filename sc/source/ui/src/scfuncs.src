@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 15:26:09 $
+ *  last change: $Author: kz $ $Date: 2002-02-06 21:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8242,7 +8242,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ZR" ;
             Text [ english ] = "per" ;
             Text [ norwegian ] = "ZR" ;
-            Text [ italian ] = "Periodo " ;
+            Text [ italian ] = "Periodo" ;
             Text [ portuguese_brazilian ] = "ZR" ;
             Text [ portuguese ] = "Período" ;
             Text [ finnish ] = "Kausi" ;
@@ -10528,7 +10528,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "termijn";
             Text[ french ] = "Périodes";
             Text[ spanish ] = "Período";
-            Text[ italian ] = "Periodo ";
+            Text[ italian ] = "Periodo";
             Text[ danish ] = "period";
             Text[ swedish ] = "Period";
             Text[ polish ] = "Okres";
