@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: fs $ $Date: 2000-10-30 13:46:58 $
+#   last change: $Author: mh $ $Date: 2000-11-10 09:20:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ PRJNAME=dbaccess
 TARGET=dba
 TARGET2=dbu
 USE_LDUMP2=TRUE
+GEN_HID=TRUE
 
 USE_DEFFILE=TRUE
 
@@ -118,13 +119,6 @@ SHL1LIBS=$(LIB1TARGET)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=$(TARGET).dxp 
-
-#SHL1DEPN=\
-        makefile.mk
-
-ALL: \
-    $(LIB1TARGET)	\
-    ALLTAR
 
 # --- .res file ----------------------------------------------------------
 RES1FILELIST=\
