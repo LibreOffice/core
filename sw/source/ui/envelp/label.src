@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-29 16:09:47 $
+ *  last change: $Author: kz $ $Date: 2001-09-06 20:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ TabDialog DLG_LAB
         Text[ swedish ] = "Medium";
         Text[ polish ] = "Noúnik danych";
         Text[ portuguese_brazilian ] = "Media";
-        Text[ japanese ] = "Â™í‰Ωì";
+        Text[ japanese ] = "Áî®Á¥ô";
         Text[ korean ] = "Îß§Ï≤¥";
         Text[ chinese_simplified ] = "Á∫∏Âº†";
         Text[ chinese_traditional ] = "Á¥ôÂºµ";
@@ -1523,7 +1523,7 @@ TabPage TP_BUSINESS_DATA
         Text[ portuguese_brazilian ] = "Position";
         Text[ japanese ] = "ÈÉ®ÁΩ≤";
         Text[ korean ] = "ÏßÅÏúÑ";
-        Text[ chinese_simplified ] = "ËÅå‰Ωç";
+        Text[ chinese_simplified ] = "‰ΩçÁΩÆ";
         Text[ chinese_traditional ] = "‰ΩçÁΩÆ";
         Text[ arabic ] = "«·„‰’» «·ÊŸÌ›Ì";
         Text[ turkish ] = "Pozisyon";
@@ -1650,6 +1650,7 @@ TabPage TP_BUSINESS_DATA
         Border = TRUE ;
     };
 };
+
 
 
 
