@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-02 11:22:23 $
+ *  last change: $Author: ka $ $Date: 2000-12-03 16:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2075,8 +2075,12 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
         {
             if( GRAFSTREAMPOS_INVALID != nGrafStreamPos )
             {
-                FASTBOOL    bDeleteStream = FALSE;
-                SvStream*   pStream = pModel->GetDocumentStream( bDeleteStream );
+                SdrDocumentStreamInfo aStreamInfo;
+
+                aStreamInfo.mbDeleteAfterUse = FALSE;
+                aStreamInfo.maUserData = String();
+
+                SvStream* pStream = pModel->GetDocumentStream( aStreamInfo );
 
                 if( pStream != NULL )
                 {
@@ -2087,7 +2091,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                     pGraphic->SetGraphic( aGraphic );
                     pStream->ResetError();
 
-                    if( bDeleteStream )
+                    if( aStreamInfo.mbDeleteAfterUse )
                         delete pStream;
 
                     pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
