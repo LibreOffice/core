@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:29:25 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ void SwWW8Writer::OutListTab()
                 sFontName = pBulletFont->GetName();
                 eFamily = pBulletFont->GetFamily();
 
-                if (wwFont::IsStarSymbol(sFontName))
+                if (sw::util::IsStarSymbol(sFontName))
                     SubstituteBullet(sNumStr,eChrSet,sFontName);
 
                 nFlags = 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
@@ -543,7 +543,7 @@ void SwWW8Writer::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
         String sFontName = rFont.GetName();
 
         USHORT nFontId;
-        if (wwFont::IsStarSymbol(sFontName))
+        if (sw::util::IsStarSymbol(sFontName))
         {
             /*
             If we are starsymbol then in ww7- mode we will always convert to a
