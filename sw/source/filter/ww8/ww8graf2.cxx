@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:12:27 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@
 
 using namespace sw::types;
 
-wwZOrderer::wwZOrderer(const sw::hack::SetLayer &rSetLayer, SdrPage* pDrawPg,
+wwZOrderer::wwZOrderer(const sw::util::SetLayer &rSetLayer, SdrPage* pDrawPg,
     const SvxMSDffShapeOrders *pShapeOrders)
     : maSetLayer(rSetLayer), mnInlines(0), mpDrawPg(pDrawPg),
     mpShapeOrders(pShapeOrders)
@@ -411,28 +411,23 @@ struct WW8PicDesc
 
 WW8PicDesc::WW8PicDesc( const WW8_PIC& rPic )
 {
-    long nOriWidth = (long)rPic.dxaGoal;        // Groesse in 1/100 mm ?
-    long nOriHeight = (long)rPic.dyaGoal;
+    //See #i21190# before fiddling with this method
+    long nOriWidth = rPic.dxaGoal;        //Size in 1/100 mm before crop
+    long nOriHeight = rPic.dyaGoal;
 
     nCL = rPic.dxaCropLeft;
     nCR = rPic.dxaCropRight;
     nCT = rPic.dyaCropTop;
     nCB = rPic.dyaCropBottom;
 
-    long nAddWidth  = nOriWidth + nCL + nCR;        // Groesse nach Crop
-    long nAddHeight = nOriHeight + nCT + nCB;
-    if(!nAddWidth  )
-        nAddWidth  = 1;
-    if(!nAddHeight )
-        nAddHeight = 1;
-
-    nCL = (short)((long)nCL * nOriWidth / nAddWidth );// Crop absolut
-    nCR = (short)((long)nCR * nOriWidth / nAddWidth );// -> skaliert
-    nCT = (short)((long)nCT * nOriWidth / nAddWidth );// auf Original-ImageSize
-    nCB = (short)((long)nCB * nOriWidth / nAddWidth );
-
-    nWidth = nAddWidth * rPic.mx / 1000;        // entgueltige Sw-Groesse
-    nHeight = nAddHeight * rPic.my / 1000;
+    long nAktWidth  = nOriWidth - (nCL + nCR);  // Size after crop
+    long nAktHeight = nOriHeight - (nCT + nCB);
+    if (!nAktWidth)
+        nAktWidth  = 1;
+    if (!nAktHeight)
+        nAktHeight = 1;
+    nWidth = nAktWidth * rPic.mx / 1000;        // Writer Size
+    nHeight = nAktHeight * rPic.my / 1000;
 }
 
 void SwWW8ImplReader::ReplaceObj(const SdrObject &rReplaceObj,
