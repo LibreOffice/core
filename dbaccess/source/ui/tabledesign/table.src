@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:33:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2197,40 +2197,6 @@ String STR_TABLEDESIGN_DATASOURCE_DELETED
     Text[ slovenian ] = "Ni mogoÄe prilagoditi filtra za tabele, ker je bil vir podatkov izbrisan.";
 };
 
-FixedText FIXED_NO_CONNECTION
-{
-    Pos                 = MAP_APPFONT ( 0,0 ) ;
-    Size                = MAP_APPFONT ( 120 , 10 ) ;
-    Text                = "Keine Verbindung" ;
-    Text [ English ]    = "no connection" ;
-    Text [ english_us ] = "No connection" ;
-    Text[ portuguese ] = "Sem ligação";
-    Text[ russian ] = "Íåò ñîåäèíåíèÿ";
-    Text[ greek ] = "Äåí õğÜñ÷åé óıíäåóç";
-    Text[ dutch ] = "geen verbinding";
-    Text[ french ] = "Aucune connexion";
-    Text[ spanish ] = "Sin conexión";
-    Text[ italian ] = "nessun collegamento";
-    Text[ danish ] = "Ingen forbindelse";
-    Text[ swedish ] = "Ingen förbindelse";
-    Text[ polish ] = "Brak po³¹czenia";
-    Text[ portuguese_brazilian ] = "Sem conexão";
-    Text[ japanese ] = "æ¥ç¶šãªã—";
-    Text[ korean ] = "ì—°ê²° ì—†ìŒ";
-    Text[ chinese_simplified ] = "æ— æ³•è¿æ¥";
-    Text[ chinese_traditional ] = "æ²’æœ‰é€£ç·š";
-    Text[ turkish ] = "Bağlantı yok.";
-    Text[ arabic ] = "áÇ íæÌÏ ÇÊÕÇá";
-    Text[ catalan ] = "sense connexió";
-    Text[ finnish ] = "Ei yhteyttä";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­";
-    Text[ czech ] = "Bez pÅ™ipojenÃ­";
-    Text[ hebrew ] = "Keine Verbindung";
-    Text[ hindi ] = "à¤•à¥‹à¤ˆ à¤•à¤¨à¥‡à¤•à¥à¤¶à¤¨ à¤¨à¤¹à¥€à¤‚";
-    Text[ slovak ] = "Bez spojenia";
-    Text[ hungarian ] = "Nincs kapcsolat.";
-    Text[ slovenian ] = "Brez povezave";
-};
 QueryBox QUERY_SAVE_TABLE_EDIT_INDEXES
 {
     Message = "Bevor Sie die Indizies einer Tabelle ändern können, muss diese gespeichert werden.\n"
