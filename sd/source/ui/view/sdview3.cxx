@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-05 08:54:48 $
+ *  last change: $Author: ka $ $Date: 2001-09-24 13:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,10 +248,43 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
     if( pOwnData && !nFormat )
     {
-        // own data
         const SdView* pSourceView = pOwnData->GetView();
 
-        if( pSourceView )
+        if( pOwnData->GetDocShell() && pOwnData->IsPageTransferable() && ISA( SdView ) )
+        {
+            USHORT  nInsertPgCnt, nInsertPos = pDoc->GetSdPageCount( PK_STANDARD ) * 2 + 1;
+            USHORT  nPgCnt = pDoc->GetSdPageCount( PK_STANDARD );
+            BOOL    bMergeMasterPages = !pOwnData->HasSourceDoc( pDoc );
+
+            for( USHORT nPage = 0; nPage < nPgCnt; nPage++ )
+            {
+                SdPage* pPage = pDoc->GetSdPage( nPage, PK_STANDARD );
+
+                if( pPage->IsSelected() )
+                    nInsertPos = nPage * 2 + 3;
+            }
+
+            if( pOwnData->HasPageBookmarks() )
+            {
+                const List& rBookmarkList = pOwnData->GetPageBookmarks();
+
+                nInsertPgCnt = (USHORT) rBookmarkList.Count();
+                pDoc->InsertBookmarkAsPage( const_cast< List* >( &rBookmarkList ), NULL, FALSE, FALSE, nInsertPos, TRUE, pOwnData->GetPageDocShell(), TRUE, bMergeMasterPages );
+            }
+            else
+            {
+                SvEmbeddedObject*   pObj = pOwnData->GetDocShell();
+                SdDrawDocShell*     pDataDocSh = (SdDrawDocShell*) pObj;
+                SdDrawDocument*     pDataDoc = pDataDocSh->GetDoc();
+
+                if( pDataDoc && pDataDoc->GetSdPageCount( PK_STANDARD ) )
+                {
+                    nInsertPgCnt = pDataDoc->GetSdPageCount( PK_STANDARD );
+                    pDoc->InsertBookmarkAsPage( NULL, NULL, FALSE, FALSE, nInsertPos, TRUE, pDataDocSh, TRUE, bMergeMasterPages );
+                }
+            }
+        }
+        else if( pSourceView )
         {
             if( pSourceView == this )
             {

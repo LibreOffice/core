@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2001-07-17 06:51:52 $
+ *  last change: $Author: ka $ $Date: 2001-09-24 13:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,55 +977,6 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
     }
     else
         pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-}
-
-
-/*************************************************************************
-|*
-|* Command-event
-|*
-\************************************************************************/
-
-BOOL FuDraw::Command(const CommandEvent& rCEvt)
-{
-    BOOL bReturn = FALSE;
-
-    if ( rCEvt.GetCommand() == COMMAND_STARTDRAG )
-    {
-        USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-
-        // MouseButtonDown will not called
-        aMDPos = pWindow->PixelToLogic( rCEvt.GetMousePosPixel() );
-
-        if ( pView->IsMarkedHit(aMDPos, nHitLog) && !bIsInDragMode )
-        {
-            // hit handle or marked object
-
-            if ( !pView->IsAction() )
-            {
-                SdrHdl* pHdl = pView->HitHandle(aMDPos, *pWindow);
-                USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
-
-                if ( !pHdl && !pView->IsPresObjSelected(FALSE, TRUE) )
-                {
-                    pWindow->ReleaseMouse();
-                    bIsInDragMode = TRUE;
-                    pView->BeginDrag(pWindow, aMDPos);
-                    bIsInDragMode = FALSE;
-                }
-            }
-
-            bReturn = TRUE;
-         }
-    }
-
-    if (!bReturn)
-    {
-        bReturn = FuPoor::Command(rCEvt);
-    }
-
-    return bReturn;
 }
 
 /*************************************************************************

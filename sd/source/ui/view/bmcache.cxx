@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmcache.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: ka $ $Date: 2001-09-24 13:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,24 +61,19 @@
 
 #pragma hdrstop
 
-#include <limits.h>                         // LONG_MAX
-#ifndef _SOLAR_H
+#include <limits.h>     // LONG_MAX
 #include <tools/solar.h>
-#endif
-#ifndef _SV_BITMAP_HXX
-#include <vcl/bitmap.hxx>
-#endif
-
+#include <goodies/grfmgr.hxx>
 #include "bmcache.hxx"
 
 // eine Struktur fuer die Cache-Eintraege
-typedef struct
+struct BitmapCacheEntry
 {
-    const SdPage* pPage;
-    Bitmap*       pBitmap;
-    long          nZoom;
-} BitmapCacheEntry;
-
+    const SdPage*   pPage;
+    GraphicObject*  pGraphicObject;
+    sal_uInt32      nSizeBytes;
+    long            nZoom;
+};
 
 /*************************************************************************
 |*
@@ -88,12 +83,10 @@ typedef struct
 
 BitmapCache::~BitmapCache()
 {
-    BitmapCacheEntry* pEntry = NULL;
-    while (aEntries.Count() > 0)
+    for( void* pEntry = aEntries.First();  pEntry; pEntry = aEntries.Next() )
     {
-        pEntry = (BitmapCacheEntry*)aEntries.Remove((ULONG)0);
-        delete pEntry->pBitmap;
-        delete pEntry;
+        delete static_cast< BitmapCacheEntry* >( pEntry )->pGraphicObject;
+        delete static_cast< BitmapCacheEntry* >( pEntry );
     }
 }
 
@@ -103,36 +96,38 @@ BitmapCache::~BitmapCache()
 |*
 \************************************************************************/
 
-void BitmapCache::Add(const SdPage* pPage, Bitmap* pBitmap, long nZoom)
+void BitmapCache::Add(const SdPage* pPage, const Bitmap& rBmp, long nZoom)
 {
-    BitmapCacheEntry* pEntry = NULL;
+    BitmapCacheEntry*   pEntry = NULL;
+    ULONG               nSizeOfBitmap = rBmp.GetSizeBytes();
 
-    ULONG nSizeOfBitmap = pBitmap->GetSizeBytes();
-
-    if (nSizeOfBitmap < nMaxSize)
+    if( nSizeOfBitmap < nMaxSize )
     {
-            while (nCurSize + nSizeOfBitmap > nMaxSize)
+        while (nCurSize + nSizeOfBitmap > nMaxSize)
+        {
+            if( aEntries.Count() )
             {
-                if( aEntries.Count() )
+                pEntry = (BitmapCacheEntry*) aEntries.Remove(aEntries.Count() - 1);
+
+                if( pEntry && pEntry->pGraphicObject )
                 {
-                    pEntry = (BitmapCacheEntry*)aEntries.Remove(aEntries.Count() - 1);
-                    if ( pEntry && pEntry->pBitmap != NULL)
-                    {
-                        nCurSize -= pEntry->pBitmap->GetSizeBytes();
-                        delete pEntry->pBitmap;
-                    }
-                    delete pEntry;
+                    nCurSize -= pEntry->nSizeBytes;
+                    delete pEntry->pGraphicObject;
                 }
-                else
-                    break;
+
+                delete pEntry;
             }
+            else
+                break;
+        }
 
-        pEntry          = new BitmapCacheEntry;
-        pEntry->pPage   = pPage;
-        pEntry->pBitmap = pBitmap;
-        pEntry->nZoom   = nZoom;
+        pEntry = new BitmapCacheEntry;
+        pEntry->pPage = pPage;
+        pEntry->pGraphicObject = new GraphicObject( rBmp );
+        pEntry->nSizeBytes = nSizeOfBitmap;
+        pEntry->nZoom = nZoom;
 
-        aEntries.Insert(pEntry, (ULONG)0);
+        aEntries.Insert( pEntry, (ULONG) 0 );
         nCurSize += nSizeOfBitmap;
     }
 }
@@ -150,74 +145,70 @@ void BitmapCache::Add(const SdPage* pPage, Bitmap* pBitmap, long nZoom)
 |*
 \************************************************************************/
 
-const Bitmap* BitmapCache::Get(const SdPage* pPage, long& rZoomPercent,
-                               long nZoomTolerancePercent)
+const GraphicObject* BitmapCache::Get( const SdPage* pPage, long& rZoomPercent, long nZoomTolerancePercent)
 {
     BitmapCacheEntry* pEntry  = NULL;
-    Bitmap*           pBitmap = NULL;
+    GraphicObject*    pGraphicObject = NULL;
 
-    // "best fit"-Suche
-    if (nZoomTolerancePercent < 0)
+    if( nZoomTolerancePercent < 0 )
     {
+        // "best fit"-Suche
         long nTolerance = -nZoomTolerancePercent;
         BitmapCacheEntry* pBest = NULL;
         long              nBest = LONG_MAX;
         long              nTest = 0L;
 
-        for (ULONG nPos = 0; nPos < aEntries.Count(); nPos++)
+        for( ULONG nPos = 0; nPos < aEntries.Count(); nPos++ )
         {
-            pEntry = (BitmapCacheEntry*)aEntries.GetObject(nPos);
-            if (pEntry->pPage == pPage)
+            pEntry = (BitmapCacheEntry*) aEntries.GetObject( nPos );
+
+            if( pEntry->pPage == pPage )
             {
                 nTest = rZoomPercent - pEntry->nZoom;
-                if (nTest >= 0 && nTest < nBest && nTest <= nTolerance)
-                {
+
+                if( nTest >= 0 && nTest < nBest && nTest <= nTolerance )
                     pBest = pEntry;
-                }
             }
         }
+
         pEntry = pBest;
     }
-
-    // "first fit"-suche
     else
     {
-        for (ULONG nPos = 0; nPos < aEntries.Count(); nPos++)
+        // "first fit"-suche
+        for( ULONG nPos = 0; nPos < aEntries.Count(); nPos++ )
         {
-            pEntry = (BitmapCacheEntry*)aEntries.GetObject(nPos);
-            if (pEntry->pPage == pPage &&
-                Abs(pEntry->nZoom - rZoomPercent) <= nZoomTolerancePercent)
-            {
+            pEntry = (BitmapCacheEntry*)aEntries.GetObject( nPos );
+
+            if (pEntry->pPage == pPage && Abs( pEntry->nZoom - rZoomPercent ) <= nZoomTolerancePercent )
                 break;
-            }
             else
-            {
                 pEntry = NULL;
-            }
         }
     }
 
     // was passendes gefunden?
-    if (pEntry)
+    if( pEntry )
     {
-        pBitmap = pEntry->pBitmap;
-        aEntries.Remove(pEntry);
-        aEntries.Insert(pEntry, (ULONG)0);
+        pGraphicObject = pEntry->pGraphicObject;
+        aEntries.Remove( pEntry );
+        aEntries.Insert( pEntry, (ULONG) 0 );
         rZoomPercent = pEntry->nZoom;
     }
-    return pBitmap;
+
+    return pGraphicObject;
 }
 
-void BitmapCache::Remove(const SdPage* pPage)
+void BitmapCache::Remove( const SdPage* pPage )
 {
-    for (ULONG nPos = 0; nPos < aEntries.Count(); )
+    for( ULONG nPos = 0; nPos < aEntries.Count();  )
     {
-        BitmapCacheEntry* pCand = (BitmapCacheEntry*)aEntries.GetObject(nPos);
+        BitmapCacheEntry* pCand = (BitmapCacheEntry*) aEntries.GetObject( nPos );
 
-        if(pCand->pPage == pPage)
+        if( pCand->pPage == pPage )
         {
-            pCand = (BitmapCacheEntry*)aEntries.Remove((ULONG)nPos);
-            delete pCand->pBitmap;
+            pCand = (BitmapCacheEntry*) aEntries.Remove((ULONG)nPos);
+            delete pCand->pGraphicObject;
             delete pCand;
         }
         else

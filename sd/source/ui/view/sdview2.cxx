@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-13 11:06:40 $
+ *  last change: $Author: ka $ $Date: 2001-09-24 13:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,11 +185,14 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     String                          aDisplayName;
     SdrOle2Obj*                     pSdrOleObj = NULL;
     SdrPageView*                    pPgView = GetPageViewPvNum( 0 );
-    SdPage*                         pPage = (SdPage*) pPgView->GetPage();
-    SdPage*                         pNewPage = (SdPage*) pTransferable->GetWorkDocument()->GetPage(0);
+    SdPage*                         pOldPage = pPgView ? ( (SdPage*) pPgView->GetPage() ) : NULL;
+    SdPage*                         pNewPage = (SdPage*) pTransferable->GetWorkDocument()->GetPage( 0 );
 
-    pNewPage->SetSize( pPage->GetSize() );
-    pNewPage->SetLayoutName( pPage->GetLayoutName() );
+    if( pOldPage )
+    {
+        pNewPage->SetSize( pOldPage->GetSize() );
+        pNewPage->SetLayoutName( pOldPage->GetLayoutName() );
+    }
 
     if( aMark.GetMarkCount() == 1 )
     {
@@ -383,85 +386,33 @@ void __EXPORT SdView::DoPaste( Window* pWindow )
     }
     else
     {
-        Point           aPos;
-        BOOL            bPagesInserted = FALSE;
-        SdTransferable* pTransferClip = SD_MOD()->pTransferClip;
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewSh->GetActiveWindow() ) );
 
-        if( pWindow )
-            aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
-
-        if( pTransferClip && pTransferClip->GetDocShell() )
+        if( aDataHelper.GetTransferable().is() )
         {
-            // Eigenes Format: Ganze Seiten einfuegen?
-            SvEmbeddedObject*   pObj = pTransferClip->GetDocShell();
-            SdDrawDocShell*     pDataDocSh = (SdDrawDocShell*) pObj;
-            SdDrawDocument*     pDataDoc = pDataDocSh->GetDoc();
+            Point       aPos;
+            sal_Int8    nDnDAction = DND_ACTION_COPY;
 
-            if( pDataDoc && pDataDoc->GetSdPageCount( PK_STANDARD ) > 1 )
+            if( pWindow )
+                aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
+
+            if( !InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
             {
-                // Dokument hat mehrere Seiten -> Seiten einfuegen
-                bPagesInserted = TRUE;
+                SdDrawViewShell* pDrViewSh = (SdDrawViewShell*) pDocSh->GetViewShell();
 
-                USHORT  nInsertPgCnt = pDataDoc->GetSdPageCount(PK_STANDARD);
-                USHORT  nInsertPos = pDoc->GetSdPageCount(PK_STANDARD) * 2 + 1;
-                USHORT  nPgCnt = pDoc->GetSdPageCount(PK_STANDARD);
-                BOOL    bMergeMasterPages = TRUE;
-
-                for( USHORT nPage = 0; nPage < nPgCnt; nPage++ )
+                if( pDrViewSh )
                 {
-                    SdPage* pPage = pDoc->GetSdPage( nPage, PK_STANDARD );
+                    String          aEmptyStr;
+                    INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
 
-                    if( pPage->IsSelected() )
-                        nInsertPos = nPage * 2 + 3;
-                }
-
-                if( pTransferClip->HasSourceDoc( pDoc ) )
-                    bMergeMasterPages = FALSE;
-
-                pDoc->InsertBookmarkAsPage( NULL, NULL, FALSE, FALSE, nInsertPos,
-                                            FALSE, pDataDocSh, TRUE, bMergeMasterPages );
-
-                if( this->ISA( SdSlideView ) )
-                {
-                    // Alle Seiten deselektieren
-                    for( USHORT nPage = 0, nPgCnt = pDoc->GetSdPageCount( PK_STANDARD ); nPage < nPgCnt; nPage++ )
-                        pDoc->GetSdPage( nPage, PK_STANDARD )->SetSelected( FALSE );
-
-                    // Die letzte eingefuegte Seite selektieren
-                    SdPage* pPage = pDoc->GetSdPage( nInsertPos / 2 + nInsertPgCnt - 1, PK_STANDARD );
-
-                    if( pPage )
-                        pPage->SetSelected( TRUE );
-                }
-            }
-        }
-
-        if( !bPagesInserted && this->ISA( SdDrawView ) )
-        {
-            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewSh->GetActiveWindow() ) );
-
-            if( aDataHelper.GetTransferable().is() )
-            {
-                sal_Int8 nDnDAction = DND_ACTION_COPY;
-
-                if( !InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
-                {
-                    SdDrawViewShell* pDrViewSh = (SdDrawViewShell*) pDocSh->GetViewShell();
-
-                    if( pDrViewSh )
+                    if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
+                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
+                        ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) &&
+                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
+                        ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
+                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                     {
-                        String          aEmptyStr;
-                        INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
-
-                        if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
-                              aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
-                            ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) &&
-                              aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
-                            ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
-                              aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
-                        {
-                            pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
-                        }
+                        pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
                     }
                 }
             }
@@ -471,11 +422,9 @@ void __EXPORT SdView::DoPaste( Window* pWindow )
 
 // -----------------------------------------------------------------------------
 
-BOOL SdView::BeginDrag(Window* pWindow, Point aStartPos)
+void SdView::StartDrag( const Point& rStartPos, Window* pWindow )
 {
-    BOOL bRet = HasMarkedObj() && IsAction() && pViewSh && pWindow;
-
-    if( bRet )
+    if( HasMarkedObj() && IsAction() && pViewSh && pWindow )
     {
         BrkAction();
 
@@ -499,10 +448,8 @@ BOOL SdView::BeginDrag(Window* pWindow, Point aStartPos)
         aStr += sal_Unicode(' ');
         aStr += pDragSrcMarkList->GetMarkDescription();
         BegUndo(aStr);
-        CreateDragDataObject( this, *pWindow, aStartPos );
+        CreateDragDataObject( this, *pWindow, rStartPos );
     }
-
-    return bRet;
 }
 
 // -----------------------------------------------------------------------------
@@ -600,9 +547,15 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTar
 
                 if( pSourceView )
                 {
-                    if( !( nDropAction & DND_ACTION_LINK ) || pSourceView->GetDocSh()->GetMedium()->GetName().Len() )
+                    if( !( nDropAction & DND_ACTION_LINK ) ||
+                        pSourceView->GetDocSh()->GetMedium()->GetName().Len() ||
+                        pDragTransferable->IsPageTransferable() )
+                    {
                         nRet = nDropAction;
+                    }
                 }
+                else if( pDragTransferable->IsPageTransferable() )
+                    nRet = nDropAction;
             }
             else
             {

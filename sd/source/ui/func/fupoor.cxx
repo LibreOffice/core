@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-11 16:19:17 $
+ *  last change: $Author: ka $ $Date: 2001-09-24 13:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,8 +585,7 @@ IMPL_LINK( FuPoor, DragHdl, Timer *, pTimer )
     {
         pWindow->ReleaseMouse();
         bIsInDragMode = TRUE;
-
-        pView->BeginDrag(pWindow, aMDPos);
+        pView->StartDrag( aMDPos, pWindow );
     }
     return 0;
 }
