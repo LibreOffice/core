@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reposy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:01:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,6 +314,8 @@ RepositoryCenter::inq_Gate_Cpp() const
     Constant            2012
     Singleton           2013
     Attribute           2014
+    SglIfcService       2015
+    SglIfcSingleton     2016
 
     BuiltInType         2200
     CeType              2201
