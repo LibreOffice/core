@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-12 13:54:58 $
+ *  last change: $Author: dl $ $Date: 2001-06-26 11:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #endif
 #ifndef _SFX_TOPFRM_HXX //autogen wg. SfxTopViewFrame
 #include <sfx2/topfrm.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 
 #include "frmview.hxx"
@@ -323,12 +326,22 @@ void __EXPORT SdDrawViewShell::GetCtrlState(SfxItemSet &rSet)
     if ( !pView->GetTextEditOutliner() )
     {
         rSet.DisableItem( SID_TRANSLITERATE_UPPER );
-        rSet.DisableItem( SID_TRANSLITERATE_UPPER );
         rSet.DisableItem( SID_TRANSLITERATE_LOWER );
         rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
         rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
         rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
         rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
+    }
+    else
+    {
+        SvtCJKOptions aCJKOptions;
+        if( !aCJKOptions.IsChangeCaseMapEnabled() )
+        {
+            rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
+            rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
+            rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
+            rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
+        }
     }
 }
 

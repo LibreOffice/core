@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-12 13:59:49 $
+ *  last change: $Author: dl $ $Date: 2001-06-26 11:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,8 @@
 #ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
 #endif
-#ifndef _SFXSTYLE_HXX
-#include <svtools/style.hxx>
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 
 #ifndef _SD_OPTSITEM_HXX
@@ -653,8 +653,21 @@ void __EXPORT SdOutlineViewShell::GetCtrlState(SfxItemSet &rSet)
     }
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
-    {
         rSet.Put( SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, TRUE ) );
+
+    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_TRANSLITERATE_HALFWIDTH) ||
+         SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_TRANSLITERATE_FULLWIDTH) ||
+         SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_TRANSLITERATE_HIRAGANA) ||
+         SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_TRANSLITERATE_KATAGANA) )
+    {
+        SvtCJKOptions aCJKOptions;
+        if( !aCJKOptions.IsChangeCaseMapEnabled() )
+        {
+            rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
+            rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
+            rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
+            rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
+        }
     }
 }
 
