@@ -97,7 +97,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(APP1LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP1LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP1ICON)" != ""
@@ -184,8 +183,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .ENDIF			# "$(APP1TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
-#next Target
+# Instruction for linking
 # unroll begin
 
 .IF "$(APP2LINKTYPE)" != ""
@@ -285,7 +283,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(APP2LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP2LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP2ICON)" != ""
@@ -372,8 +369,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ENDIF			# "$(APP2TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
-#next Target
+# Instruction for linking
 # unroll begin
 
 .IF "$(APP3LINKTYPE)" != ""
@@ -473,7 +469,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(APP3LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP3LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP3ICON)" != ""
@@ -560,8 +555,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .ENDIF			# "$(APP3TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
-#next Target
+# Instruction for linking
 # unroll begin
 
 .IF "$(APP4LINKTYPE)" != ""
@@ -661,7 +655,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(APP4LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP4LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP4ICON)" != ""
@@ -748,8 +741,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ENDIF			# "$(APP4TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
-#next Target
+# Instruction for linking
 # unroll begin
 
 .IF "$(APP5LINKTYPE)" != ""
@@ -849,7 +841,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(APP5LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP5LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP5ICON)" != ""
@@ -936,8 +927,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .ENDIF			# "$(APP5TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
-#next Target
+# Instruction for linking
 # unroll begin
 
 .IF "$(APP6LINKTYPE)" != ""
@@ -1037,7 +1027,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(APP6LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP6LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP6ICON)" != ""
@@ -1124,8 +1113,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ENDIF			# "$(APP6TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
-#next Target
+# Instruction for linking
 # unroll begin
 
 .IF "$(APP7LINKTYPE)" != ""
@@ -1225,7 +1213,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(APP7LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP7LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP7ICON)" != ""
@@ -1312,8 +1299,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .ENDIF			# "$(APP7TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
-#next Target
+# Instruction for linking
 # unroll begin
 
 .IF "$(APP8LINKTYPE)" != ""
@@ -1413,7 +1399,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(APP8LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP8LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP8ICON)" != ""
@@ -1500,8 +1485,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ENDIF			# "$(APP8TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
-#next Target
+# Instruction for linking
 # unroll begin
 
 .IF "$(APP9LINKTYPE)" != ""
@@ -1601,7 +1585,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(APP9LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP9LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP9ICON)" != ""
@@ -1688,8 +1671,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .ENDIF			# "$(APP9TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
-#next Target
+# Instruction for linking
 # unroll begin
 
 .IF "$(APP10LINKTYPE)" != ""
@@ -1789,7 +1771,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(APP10LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP10LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP10ICON)" != ""
@@ -1876,5 +1857,4 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF			# "$(APP10TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
-#next Target
+# Instruction for linking

@@ -213,7 +213,6 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(COM)"=="BLC"
 .ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -641,7 +640,6 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(COM)"=="BLC"
 .ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -1069,7 +1067,6 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(COM)"=="BLC"
 .ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -1497,7 +1494,6 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(COM)"=="BLC"
 .ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -1925,7 +1921,6 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(COM)"=="BLC"
 .ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -2353,7 +2348,6 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(COM)"=="BLC"
 .ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -2781,7 +2775,6 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(COM)"=="BLC"
 .ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -3209,7 +3202,6 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(COM)"=="BLC"
 .ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -3637,7 +3629,6 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(COM)"=="BLC"
 .ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -4065,7 +4056,6 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(COM)"=="BLC"
 .ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx

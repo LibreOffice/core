@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-30 12:02:05 $
+#   last change: $Author: hjs $ $Date: 2001-09-05 10:24:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -886,20 +886,6 @@ RES=$(LDRES)$/comp
 MISCX=$(LDMISC)$/comp
 SRSX=$(LDSRS)$/comp
 INCCOMX=$(LDINC)$/comp
-.ENDIF
-
-# fuer die Segmentierung kann das z.B. fuer dg*.dll uebergebuegelt werden
-.IF "$(SEGDEFS_HXX)" == ""
-SEGDEFS_HXX=$(INC)$/segdefs_.hxx
-.ENDIF
-
-# fuer die Segmentierung kann das z.B. fuer dg*.dll uebergebuegelt werden
-.IF "$(FUNCORD)" == ""
-.IF "$(USE_FUNCORD)"=="FALSE"
-FUNCORD=emptyorg.seg
-.ELSE
-FUNCORD=funcord.seg
-.ENDIF
 .ENDIF
 
 # damit gezielt Abhaengigkeiten auf s: angegeben werden koennen

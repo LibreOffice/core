@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-31 12:16:47 $
+#   last change: $Author: hjs $ $Date: 2001-09-05 10:24:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -313,7 +313,6 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(COM)"=="BLC"
 .ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx

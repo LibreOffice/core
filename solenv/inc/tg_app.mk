@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: mh $ $Date: 2001-06-20 08:56:56 $
+#   last change: $Author: hjs $ $Date: 2001-09-05 10:24:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -192,7 +192,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
-    @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(APP$(TNR)LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP$(TNR)LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP$(TNR)ICON)" != ""
