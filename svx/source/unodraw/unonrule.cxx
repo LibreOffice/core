@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 18:14:28 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 16:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,48 +66,21 @@
 #include <brshitem.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_RELORIENTATION_HPP_
-#include <com/sun/star/text/RelOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
-#include <com/sun/star/text/VertOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIZONTALADJUST_HPP_
-#include <com/sun/star/text/HorizontalAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_DOCUMENTSTATISTIC_HPP_
-#include <com/sun/star/text/DocumentStatistic.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
-#include <com/sun/star/text/HoriOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATIONFORMAT_HPP_
-#include <com/sun/star/text/HoriOrientationFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_NOTEPRINTMODE_HPP_
-#include <com/sun/star/text/NotePrintMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HPP_
-#include <com/sun/star/text/SizeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATIONFORMAT_HPP_
-#include <com/sun/star/text/VertOrientationFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
-#include <com/sun/star/text/WrapTextMode.hpp>
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XBITMAP_HPP_
 #include <com/sun/star/awt/XBitmap.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
-#include <com/sun/star/beans/PropertyState.hpp>
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#ifndef _SFXITEMPOOL_HXX
+#include <svtools/itempool.hxx>
 #endif
 #ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
-#endif
-
-#ifndef _SVX_NUMITEM_HXX
-#include <numitem.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX //autogen
@@ -120,56 +93,71 @@
 #include <vcl/graph.hxx>
 #endif
 
+#include <unotools/servicehelper.hxx>
 #include <toolkit/unohlp.hxx>
-
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
 #include "unoprnms.hxx"
+#include "numitem.hxx"
+#include "eeitem.hxx"
 #include "unofdesc.hxx"
 #include "unonrule.hxx"
 #include "unotext.hxx"
 #include "svdmodel.hxx"
+#include "numitem.hxx"
 #include "unoapi.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::vos;
+using namespace ::std;
 
 /******************************************************************
  * SvxUnoNumberingRules
  ******************************************************************/
 
+#include <cppuhelper/implbase2.hxx>
+
+
+class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper2< container::XIndexReplace, lang::XUnoTunnel >
+{
+private:
+    SvxNumRule maRule;
+public:
+    SvxUnoNumberingRules( const SvxNumRule& rRule ) throw();
+    virtual ~SvxUnoNumberingRules() throw();
+
+    UNO3_GETIMPLEMENTATION_DECL( SvxUnoNumberingRules )
+
+    //XIndexReplace
+    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const uno::Any& Element ) throw(lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
+
+    //XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(uno::RuntimeException) ;
+    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
+
+    //XElementAccess
+    virtual uno::Type SAL_CALL getElementType() throw(uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw(uno::RuntimeException);
+
+    // intern
+    uno::Sequence<beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const throw();
+    void setNumberingRuleByIndex( const uno::Sequence< beans::PropertyValue >& rProperties, sal_Int32 nIndex) throw( lang::IllegalArgumentException );
+
+    const SvxNumRule& getNumRule() const { return maRule; }
+};
+
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoNumberingRules );
 
-SvxUnoNumberingRules::SvxUnoNumberingRules( SdrModel* pModel ) throw() :
-    mpBulletItem(0)
-{
-    if( pModel )
-    {
-        SvxNumRule* pDefaultRule = ((SvxNumBulletItem*) pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET))->GetNumRule();
-        DBG_ASSERT( pDefaultRule, "No default SvxNumRule!" );
-        if( pDefaultRule )
-        {
-            mpBulletItem = new SvxNumBulletItem( *pDefaultRule );
-            mbOwnRule = sal_True;
-        }
-    }
-}
-
-SvxUnoNumberingRules::SvxUnoNumberingRules(SvxNumBulletItem* pBulletItem) throw() :
-    mpBulletItem(pBulletItem), mbOwnRule(sal_False)
+SvxUnoNumberingRules::SvxUnoNumberingRules( const SvxNumRule& rRule ) throw()
+: maRule( rRule )
 {
 }
 
 SvxUnoNumberingRules::~SvxUnoNumberingRules() throw()
 {
-    // if where not inserted yet, we have to clean up
-    // ourself
-    if( mbOwnRule )
-        delete mpBulletItem;
 }
-
 
 //XIndexReplace
 void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::Any& Element )
@@ -177,14 +165,10 @@ void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SvxNumRule* pNumRule = GetNumRule();
-    if(pNumRule == NULL)
-        throw uno::RuntimeException();
-
-    if(pNumRule->GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
+    if(maRule.GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
         Index++;
 
-    if( Index < 0 || Index >= pNumRule->GetLevelCount() )
+    if( Index < 0 || Index >= maRule.GetLevelCount() )
         throw lang::IndexOutOfBoundsException();
 
     uno::Sequence< beans::PropertyValue > aSeq;
@@ -199,12 +183,8 @@ sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( uno::RuntimeException
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SvxNumRule* pNumRule = GetNumRule();
-    if(pNumRule == NULL)
-        throw uno::RuntimeException();
-
-    sal_Int32 nCount = pNumRule->GetLevelCount();
-    if(pNumRule->GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
+    sal_Int32 nCount = maRule.GetLevelCount();
+    if(maRule.GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
         nCount -= 1;
 
     return nCount;
@@ -215,11 +195,10 @@ uno::Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SvxNumRule* pNumRule = GetNumRule();
-    if(pNumRule->GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
+    if(maRule.GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
         Index++;
 
-    if( Index < 0 || Index >= pNumRule->GetLevelCount() )
+    if( Index < 0 || Index >= maRule.GetLevelCount() )
         throw lang::IndexOutOfBoundsException();
 
     uno::Sequence<beans::PropertyValue> aRet = getNumberingRuleByIndex(Index);
@@ -235,20 +214,16 @@ uno::Type SAL_CALL SvxUnoNumberingRules::getElementType()
 
 sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements() throw( uno::RuntimeException )
 {
-    return mpBulletItem != NULL;
+    return sal_True;
 }
 
 uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sal_Int32 nIndex) const throw()
 {
-    SvxNumRule* pNumRule = GetNumRule();
-    if(pNumRule == NULL)
-        return uno::Sequence< beans::PropertyValue >(0);
-
     //  NumberingRule aRule;
-    const SvxNumberFormat& rFmt = pNumRule->GetLevel((sal_uInt16) nIndex);
+    const SvxNumberFormat& rFmt = maRule.GetLevel((sal_uInt16) nIndex);
     sal_uInt16 nIdx = 0;
 
-    const int nProps = 14;
+    const int nProps = 15;
     beans::PropertyValue* pArray = new beans::PropertyValue[nProps];
 
     uno::Any aVal;
@@ -276,14 +251,6 @@ uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByInde
         pArray[nIdx++] = aSuffixProp;
     }
 
-/*
-    {
-        aVal <<= (sal_Int16)rFmt.GetBulletChar();
-        beans::PropertyValue aBulletProp( OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_NRULE_BULLETID)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
-        pArray[nIdx++] = aBulletProp;
-    }
-*/
-
     {
         sal_Unicode nCode = rFmt.GetBulletChar();
         OUString aStr( &nCode, 1 );
@@ -296,13 +263,13 @@ uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByInde
     {
         awt::FontDescriptor aDesc;
         SvxUnoFontDescriptor::ConvertFromFont( *rFmt.GetBulletFont(), aDesc );
-        aVal.setValue(&aDesc, ::getCppuType((const ::com::sun::star::awt::FontDescriptor*)0));
+        aVal.setValue(&aDesc, ::getCppuType((const awt::FontDescriptor*)0));
         pArray[nIdx++] = beans::PropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_NRULE_BULLET_FONT)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
     }
 
     {
         const SvxBrushItem* pBrush = rFmt.GetBrush();
-        uno::Reference< ::com::sun::star::awt::XBitmap >  xBmp;
+        uno::Reference< awt::XBitmap >  xBmp;
 
         if(pBrush && pBrush->GetGraphic())
         {
@@ -344,6 +311,8 @@ uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByInde
     aVal <<= (sal_Int32)rFmt.GetFirstLineOffset();
     pArray[nIdx++] = beans::PropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_NRULE_FIRST_LINE_OFFSET)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
+    pArray[nIdx++] = beans::PropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("SymbolTextDistance")), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+
     aVal <<= (sal_Int32)rFmt.GetBulletColor().GetColor();
     pArray[nIdx++] = beans::PropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_NRULE_BULLET_COLOR)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
@@ -360,11 +329,7 @@ uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByInde
 void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::PropertyValue >& rProperties, sal_Int32 nIndex)
     throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    SvxNumRule* pNumRule = GetNumRule();
-    if(pNumRule == NULL)
-        throw uno::RuntimeException();
-
-    SvxNumberFormat aFmt(pNumRule->GetLevel( (sal_uInt16)nIndex ));
+    SvxNumberFormat aFmt(maRule.GetLevel( (sal_uInt16)nIndex ));
     const beans::PropertyValue* pPropArray = rProperties.getConstArray();
     for(int i = 0; i < rProperties.getLength(); i++)
     {
@@ -511,6 +476,15 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 continue;
             }
         }
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SymbolTextDistance")))
+        {
+            sal_Int32 nTextDistance;
+            if( aVal >>= nTextDistance )
+            {
+                aFmt.SetCharTextDistance((sal_uInt16)nTextDistance);
+                continue;
+            }
+        }
         else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLET_COLOR)))
         {
             sal_Int32 nColor;
@@ -536,19 +510,95 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
 
         throw lang::IllegalArgumentException();
     }
+
+    maRule.SetLevel( (sal_uInt16)nIndex, aFmt );
 }
 
-// XNamed
-OUString SAL_CALL SvxUnoNumberingRules::getName() throw(uno::RuntimeException)
+///////////////////////////////////////////////////////////////////////
+
+const SvxNumRule& SvxGetNumRule( uno::Reference< container::XIndexReplace > xRule ) throw( lang::IllegalArgumentException )
 {
-    OUString aName;
-    if( mpBulletItem )
-        aName = mpBulletItem->getName();
-    return aName;
+    SvxUnoNumberingRules* pRule = SvxUnoNumberingRules::getImplementation( xRule );
+    if( pRule == NULL )
+        throw lang::IllegalArgumentException();
+
+    return pRule->getNumRule();
 }
 
-void SAL_CALL SvxUnoNumberingRules::setName( const OUString& aName ) throw(uno::RuntimeException)
+///////////////////////////////////////////////////////////////////////
+
+uno::Reference< container::XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw()
 {
-    if( mpBulletItem )
-        mpBulletItem->setName( aName );
+    DBG_ASSERT( pRule, "No default SvxNumRule!" );
+    if( pRule )
+    {
+        return new SvxUnoNumberingRules( *pRule );
+    }
+    else
+    {
+        SvxNumRule aDefaultRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , FALSE);
+        return new SvxUnoNumberingRules( aDefaultRule );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////
+
+uno::Reference< container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw()
+{
+    SvxNumRule* pDefaultRule = NULL;
+    if( pModel )
+        pDefaultRule = ((SvxNumBulletItem*) pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET))->GetNumRule();
+
+    return SvxCreateNumRule( pDefaultRule );
+}
+
+///////////////////////////////////////////////////////////////////////
+
+#include <cppuhelper/implbase1.hxx>
+
+class SvxUnoNumberingRulesCompare : public ::cppu::WeakAggImplHelper1< ucb::XAnyCompare >
+{
+public:
+    virtual sal_Int16 SAL_CALL compare( const uno::Any& Any1, const uno::Any& Any2 ) throw(uno::RuntimeException);
+};
+
+sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const uno::Any& Any1, const uno::Any& Any2 ) throw(uno::RuntimeException)
+{
+    uno::Reference< container::XIndexReplace > x1, x2;
+    Any1 >>= x1;
+    Any2 >>= x2;
+    if( x1.is() && x2.is() )
+    {
+        if( x1.get() == x2.get() )
+            return 0;
+
+        SvxUnoNumberingRules* pRule1 = SvxUnoNumberingRules::getImplementation( x1 );
+        if( pRule1 )
+        {
+            SvxUnoNumberingRules* pRule2 = SvxUnoNumberingRules::getImplementation( x2 );
+            if( pRule2 )
+            {
+                const SvxNumRule& rRule1 = pRule1->getNumRule();
+                const SvxNumRule& rRule2 = pRule2->getNumRule();
+
+                const USHORT nLevelCount = rRule1.GetLevelCount();
+                if( nLevelCount != rRule2.GetLevelCount() )
+                    return -1;
+
+                for(USHORT i = 0; i < nLevelCount; i++)
+                {
+                    if( rRule1.GetLevel(i) != rRule2.GetLevel(i) )
+                        return -1;
+                }
+                return  0;
+            }
+        }
+    }
+
+    return -1;
+}
+
+uno::Reference< ucb::XAnyCompare > SvxCreateNumRuleCompare() throw()
+{
+    return new SvxUnoNumberingRulesCompare();
 }
