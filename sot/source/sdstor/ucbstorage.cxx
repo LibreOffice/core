@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:31:52 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1847,7 +1847,7 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     {
         // create the special package URL for the package content
         String aTemp = String::CreateFromAscii("vnd.sun.star.pkg://");
-        aTemp += INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL );
+        aTemp += String(INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL ));
         m_aURL = aTemp;
 
         if ( m_nMode & STREAM_WRITE )
@@ -1893,7 +1893,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
     // accessed readonly
     // the root storage opens the package; create the special package URL for the package content
     String aTemp = String::CreateFromAscii("vnd.sun.star.pkg://");
-    aTemp += INetURLObject::encode( m_pTempFile->GetURL(), INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL );
+    aTemp += String(INetURLObject::encode( m_pTempFile->GetURL(), INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL ));
     m_aURL = aTemp;
 
     // copy data into the temporary file
