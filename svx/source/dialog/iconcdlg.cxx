@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-30 11:33:50 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 15:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,6 +473,26 @@ void IconChoiceDialog::AddTabPage( USHORT nId, const String& rIconText,
 
     USHORT *pId = new USHORT ( nId );
     SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon );
+    pEntry->SetUserData ( (void*) pId );
+}
+
+void IconChoiceDialog::AddTabPage( USHORT nId, const String& rIconText,
+                                   const Image& rChoiceIcon,
+                                   const Image& rChoiceIconHC,
+                                   CreatePage pCreateFunc /* != 0 */,
+                                   GetPageRanges pRangesFunc /* darf 0 sein */,
+                                   BOOL bItemsOnDemand, ULONG nPos )
+{
+    IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc,
+                                                         pRangesFunc,
+                                                         bItemsOnDemand );
+    maPageList.Insert ( pData, LIST_APPEND );
+
+    pData->fnGetRanges = pRangesFunc;
+    pData->bOnDemand = bItemsOnDemand;
+
+    USHORT *pId = new USHORT ( nId );
+    SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon, rChoiceIconHC );
     pEntry->SetUserData ( (void*) pId );
 }
 

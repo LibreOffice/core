@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-29 11:40:11 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 15:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,20 +196,25 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     mbGrabFocus = sal_True;
     // insert pages
     Image aImage;
+    Image aImageHC;
     String aStrTitle;
 
     aStrTitle = SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
     aImage = Image( SVX_RES ( RID_SVXBMP_HLINETTP ) );
-    AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, SvxHyperlinkInternetTp::Create );
+    aImageHC = Image( SVX_RES ( RID_SVXBMP_HLINETTP_H ) );
+    AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, aImageHC, SvxHyperlinkInternetTp::Create );
     aStrTitle = SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP );
     aImage = Image( SVX_RES ( RID_SVXBMP_HLMAILTP ) );
-    AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, aImage, SvxHyperlinkMailTp::Create );
+    aImageHC = Image( SVX_RES ( RID_SVXBMP_HLMAILTP_H ) );
+    AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, aImage, aImageHC, SvxHyperlinkMailTp::Create );
     aStrTitle = SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP );
     aImage = Image( SVX_RES ( RID_SVXBMP_HLDOCTP ) );
-    AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, aImage, SvxHyperlinkDocTp::Create );
+    aImageHC = Image( SVX_RES ( RID_SVXBMP_HLDOCTP_H ) );
+    AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkDocTp::Create );
     aStrTitle = SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP );
     aImage = Image( SVX_RES ( RID_SVXBMP_HLDOCNTP ) );
-    AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, SvxHyperlinkNewDocTp::Create );
+    aImageHC = Image( SVX_RES ( RID_SVXBMP_HLDOCNTP_H ) );
+    AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkNewDocTp::Create );
 
     // all tab pages set -> create mnemonics
     CreateIconTextAutoMnemonics();

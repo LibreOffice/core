@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: gt $ $Date: 2002-06-05 10:23:01 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 15:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2843,6 +2843,29 @@ Image RID_SVXBMP_HLDOCNTP
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
 
+Image RID_SVXBMP_HLINETTP_H
+{
+    ImageBitmap = Bitmap { File = "hlinettp_h.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0x0000 ; Blue = 0xC000 ; };
+};
+
+Image RID_SVXBMP_HLMAILTP_H
+{
+    ImageBitmap = Bitmap { File = "hlmailtp_h.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0x0000 ; Blue = 0xC000 ; };
+};
+
+Image RID_SVXBMP_HLDOCTP_H
+{
+    ImageBitmap = Bitmap { File = "hldoctp_h.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0x0000 ; Blue = 0xC000 ; };
+};
+
+Image RID_SVXBMP_HLDOCNTP_H
+{
+    ImageBitmap = Bitmap { File = "hldocntp_h.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0x0000 ; Blue = 0xC000 ; };
+};
 
 
 
