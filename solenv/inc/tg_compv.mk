@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:06:26 $
+#   last change: $Author: rt $ $Date: 2004-06-16 10:35:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,6 +132,10 @@ SHORTSTDCPP3="4"
 
 .IF "$(CCNUMVER)">="000300020000"
 SHORTSTDCPP3="5"
+.ENDIF
+
+.IF "$(CCNUMVER)">="000300040000"
+SHORTSTDCPP3="6"
 .ENDIF
 
 .ENDIF
