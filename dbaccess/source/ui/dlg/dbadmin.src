@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 15:42:38 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
             Text [ italian ] = "Nuova sorgente dati";
             Text [ danish ] = "Ny datakilde";
             Text [ swedish ] = "Ny datakälla";
-            Text [ polish ] = "Nowe ?ród³o danych";
+            Text [ polish ] = "Nowe Ÿród³o danych";
             Text [ portuguese_brazilian ] = "New data source";
             Text [ japanese ] = "V‚µ‚¢ÃŞ°À¿°½";
             Text [ korean ] = "»õ·Î¿î µ¥ÀÌÅÍ ¼Ò½º";
@@ -318,7 +318,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text [ english_us ] = "Adabas D Statistics";
         Text [ portuguese ] = "Adabas D - Estatística";
         Text [ russian ] = "Ñòàòèñòèêè Adabas D";
-        Text [ greek ] = "Adabas D";
+        Text [ greek ] = "ÓôáôéóôéêŞ ôïõ Adabas D";
         Text [ dutch ] = "Adabas D Statistiek";
         Text [ french ] = "Adabas D - Statistique";
         Text [ spanish ] = "Estadística Adabas D";
@@ -420,12 +420,12 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text [ english_us ] = "Links" ;
         Text[ portuguese ] = "Ligações";
         Text[ russian ] = "Ññûëêè";
-        Text[ greek ] = "Bookmarks";
+        Text[ greek ] = "Óõíäİóåéò";
         Text[ dutch ] = "Koppelingen";
         Text[ french ] = "Liens";
         Text[ spanish ] = "Vínculos";
         Text[ finnish ] = "Linkit";
-        Text[ italian ] = "Bookmarks";
+        Text[ italian ] = "Collegamenti";
         Text[ danish ] = "Bookmarks";
         Text[ swedish ] = "Länkar";
         Text[ polish ] = "£¹cza";
@@ -447,7 +447,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     Text [ italian ] = "Gestire sorgente dati";
     Text [ danish ] = "Administrer datakilde";
     Text [ swedish ] = "Administrera datakällor";
-    Text [ polish ] = "Zarz¹dzaj ?ród³ami danych";
+    Text [ polish ] = "Zarz¹dzaj Ÿród³ami danych";
     Text [ portuguese_brazilian ] = "Datasource administration";
     Text [ japanese ] = "ÃŞ°À¿°½‚ÌŠÇ—";
     Text [ korean ] = "µ¥ÀÌÅÍ ¼Ò½º °ü¸®";
@@ -495,22 +495,22 @@ TabPage PAGE_GENERAL
         Size = MAP_APPFONT ( 74 , 10 ) ;
         Text = "~Name";
         Text [ english ] = "~Name";
-        Text [ english_us ] = "~Name:";
+        Text [ english_us ] = "~Name";
         Text [ portuguese ] = "~Nome:";
-        Text [ russian ] = "~Èìÿ:";
+        Text [ russian ] = "~Èìÿ";
         Text [ greek ] = "¼íï~ìá:";
         Text [ dutch ] = "~Naam:";
-        Text [ french ] = "~Nom :";
+        Text [ french ] = "~Nom";
         Text [ spanish ] = "~Nombre:";
         Text [ italian ] = "~Nome:";
         Text [ danish ] = "Navn:";
         Text [ swedish ] = "~Namn:";
-        Text [ polish ] = "~Nazwa:";
+        Text [ polish ] = "~Nazwa";
         Text [ portuguese_brazilian ] = "~Name:";
-        Text [ japanese ] = "–¼‘O(~N):";
+        Text [ japanese ] = "–¼‘O(~N)";
         Text [ korean ] = "ÀÌ¸§(~N):";
-        Text [ chinese_simplified ] = "Ãû³Æ(~N)£º";
-        Text [ chinese_traditional ] = "¦WºÙ(~N)¡G";
+        Text [ chinese_simplified ] = "Ãû³Æ";
+        Text [ chinese_traditional ] = "¦WºÙ";
         Text [ turkish ] = "Ad:";
         Text [ arabic ] = "ÇáÇÓã:";
         Text[ finnish ] = "~Nimi:";
@@ -560,20 +560,20 @@ TabPage PAGE_GENERAL
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Datenbank~typ ";
         Text [ english ] = "Database ~type ";
-        Text [ english_us ] = "Database ~type:";
-        Text [ dutch ] = "Database~type:";
-        Text [ italian ] = "Tipo di database:";
+        Text [ english_us ] = "Database ~type ";
+        Text [ dutch ] = "Database~type";
+        Text [ italian ] = "Tipo di database";
         Text [ spanish ] = "Tipo de base de datos:";
-        Text [ french ] = "~Type de BD :";
+        Text [ french ] = "~Type de BD ";
         Text [ swedish ] = "Databas~typ:";
         Text [ danish ] = "Databasetype:";
         Text [ portuguese ] = "~Tipo da base de dados:";
         Text [ portuguese_brazilian ] = "Datenbanktyp:";
-        Text [ chinese_simplified ] = "Êı¾İ¿âÀàĞÍ(~T)£º";
+        Text [ chinese_simplified ] = "Êı¾İ¿âÀàĞÍ ";
         Text [ russian ] = "Òèï áàçû äàííûõ";
         Text [ polish ] = "Typ bazy danych";
-        Text [ japanese ] = "ÃŞ°ÀÍŞ°½‚Ìí—Ş(~T):";
-        Text [ chinese_traditional ] = "¸ê®Æ®wÃş«¬(~T)¡G";
+        Text [ japanese ] = "ÃŞ°ÀÍŞ°½‚Ìí—Ş(~T)";
+        Text [ chinese_traditional ] = "¸ê®Æ®wÃş«¬(~T) ";
         Text [ arabic ] = "äæÚ ŞÇÚÏÉ ÇáÈíÇäÇÊ:";
         Text [ greek ] = "~Ôığïò âÜóçò äåäïìİíùí";
         Text [ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º Å¸ÀÔ(~T)";
@@ -598,22 +598,22 @@ TabPage PAGE_GENERAL
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "D~atenquelle URL" ;
         Text [ english ] = "~Data source URL" ;
-        Text [ english_us ] = "~Data source URL:" ;
+        Text [ english_us ] = "~Data source URL" ;
         Text [ portuguese ] = "~Fonte de dados URL:";
-        Text [ russian ] = "~Èñòî÷íèê äàííûõ URL:";
+        Text [ russian ] = "~Èñòî÷íèê äàííûõ URL";
         Text [ greek ] = "URL ôçò ğñïİëåõóçò äåäïìİíùí:";
-        Text [ dutch ] = "~Gegevensbron URL:";
-        Text [ french ] = "URL de la ~source de données :" ;
+        Text [ dutch ] = "~Gegevensbron URL";
+        Text [ french ] = "URL de la ~source de données" ;
         Text [ spanish ] = "~Fuente de datos URL:";
         Text [ italian ] = "Fonte di dati URL:";
         Text [ danish ] = "Datakilde URL:";
         Text [ swedish ] = "D~atakälla URL:";
-        Text [ polish ] = "?ród³o danych URL";
+        Text [ polish ] = "ród³o danych URL";
         Text [ portuguese_brazilian ] = "~Data source URL:";
-        Text [ japanese ] = "ÃŞ°À¿°½ URL(~D):";
+        Text [ japanese ] = "ÃŞ°À¿°½ URL(~D)";
         Text [ korean ] = "µ¥ÀÌÅÍ ¼Ò½º URL(~D):";
-        Text [ chinese_simplified ] = "Êı¾İÔ´ URL(~D)£º";
-        Text [ chinese_traditional ] = "¸ê®Æ¨Ó·½ URL(~D)¡G";
+        Text [ chinese_simplified ] = "Êı¾İÔ´ URL";
+        Text [ chinese_traditional ] = "¸ê®Æ¨Ó·½ URL";
         Text [ turkish ] = "~Data source URL:";
         Text [ arabic ] = " URL ãÕÏÑ ÇáÈíÇäÇÊ:";
         Text[ finnish ] = "~Tietolähteen URL-osoite:";
@@ -743,7 +743,7 @@ TabPage PAGE_GENERAL
                 "globally unique, you have to choose another one.";
         Text [ english_us ] = "Another data source already has this name. As data sources have to have globally unique names, please choose another one.";
         Text [ portuguese ] = "Já existe uma fonte de dados com este nome. Os nomes das fontes de dados devem ser únicos, por esta razão é recomendável seleccionar outro nome.";
-        Text [ russian ] = "Ïîä òàêèì èìåíåì óæå ñóùåñòâóåò îäèí èñòî÷íèê äàííûõ. Ïîñêîëüêó èìåíà èñòî÷íèêîâ äàííûõ äîëæíû áûòü óíèêàëüíûìè, íåîáõîäèìî ïğèñâîèòü äğó";
+        Text [ russian ] = "Ïîä òàêèì èìåíåì óæå ñóùåñòâóåò îäèí èñòî÷íèê äàííûõ. Ïîñêîëüêó èìåíà èñòî÷íèêîâ äàííûõ äîëæíû áûòü óíèêàëüíûìè, íåîáõîäèìî ïğèñâîèòü äğóãîå èìÿ.";
         Text [ greek ] = "ÕğÜñ÷åé Şäç ìéá ğñïİëåõóç äåäïìİíùí ìå áõôü ôï üíïìá. ÊÜèå üíïìá ôùí ğñïåëåıóåùí ôùí äåäïìİíùí åğéôñİğåôáé íá õğÜñ÷åé ìüíï ìéá öïñÜ. Ğáñáêá";
         Text [ dutch ] = "Er bestaat reeds een andere gegevensbron met deze naam. Kies een andere naam.";
         Text [ french ] = "Ce nom a déjà été attribué à une autre source de données. Étant donné que les sources de données doivent avoir des noms globalement uniques, vous devez en choisir un autre.";
@@ -751,7 +751,7 @@ TabPage PAGE_GENERAL
         Text [ italian ] = "Esiste già una sorgente dati con questo nome. Poiché il nome delle sorgenti di dati dev'essere univoco, è necesario scegliere un altro nome.";
         Text [ danish ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
         Text [ swedish ] = "Det finns redan en datakälla med det här namnet. Eftersom namn på datakällor måste vara globalt unika bör Du välja ett annat namn.";
-        Text [ polish ] = "Istnieje inne ?ród³o danych o tej samej nazwie. Poniewa¿ nazwy ?rode³ danych musz¹ byæ globalnie jednoznaczne, nale¿y wybraæ inn¹ nazwê.";
+        Text [ polish ] = "Istnieje inne Ÿród³o danych o tej samej nazwie. Poniewa¿ nazwy Ÿrode³ danych musz¹ byæ globalnie jednoznaczne, nale¿y wybraæ inn¹ nazwê.";
         Text [ portuguese_brazilian ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
         Text [ japanese ] = "‚±‚Ì–¼‘O‚Ì•t‚¢‚½•Ê‚ÌÃŞ°À¿°½‚ª‚·‚Å‚É‚ ‚è‚Ü‚·BÃŞ°À¿°½–¼‚ğ‚Í‚Á‚«‚è‚Æ‹æ•Ê‚·‚é‚½‚ß‚É‚ÍA‚Ù‚©‚Ì–¼‘O‚ğ‘I‘ğ‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B";
         Text [ korean ] = "ÀÌ ÀÌ¸§À» °¡Áø µ¥ÀÌÅÍ¼Ò½º°¡ ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù.  µ¥ÀÌÅÍ¼Ò½º ÀÌ¸§Àº  Àü¿ªÀûÀ¸·Î À¯ÀÏÇØ¾ß ÇÏ¹Ç·Î,  ´Ù¸¥ ÀÌ¸§À» ¼±ÅÃÇØ¾ß  ÇÕ´Ï´Ù.";
@@ -776,7 +776,7 @@ TabPage PAGE_GENERAL
         Text [ italian ] = "La sorgente dati è stata cancellata.";
         Text [ danish ] = "This data source is scheduled to be deleted.";
         Text [ swedish ] = "Du har raderat den här datakällan.";
-        Text [ polish ] = "To ?ród³o danych zosta³o usuniête.";
+        Text [ polish ] = "To Ÿród³o danych zosta³o usuniête.";
         Text [ portuguese_brazilian ] = "This data source is scheduled to be deleted.";
         Text [ japanese ] = "‚±‚ÌÃŞ°À¿°½‚ÍÕ°»Ş°‚É‚æ‚Á‚Äíœ‚³‚ê‚Ä‚¢‚Ü‚·B";
         Text [ korean ] = "»ç¿ëÀÚ´Â ÀÌ¡¡µ¥ÀÌÅÍ¼Ò½º¸¦ »èÁ¦ÇÏ¿´½À´Ï´Ù.";
@@ -801,7 +801,7 @@ TabPage PAGE_GENERAL
         Text [ italian ] = "Impossibile caricare la libreria programma #lib# oppure è difettosa. La selezione della sorgente dati ODBC non è disponibile.";
         Text [ danish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
         Text [ swedish ] = "Det gick inte att ladda programbiblioteket #lib# eller så är det defekt. Urvalet av ODBC-datakällor är inte tillgängligt.";
-        Text [ polish ] = "Za³adowanie biblioteki programu #lib# nie by³o mo¿liwe. Jest ona byæ mo¿e uszkodzona. Wybór ?ród³a danych ODBC nie jest mo¿liwy.";
+        Text [ polish ] = "Za³adowanie biblioteki programu #lib# nie by³o mo¿liwe. Jest ona byæ mo¿e uszkodzona. Wybór Ÿród³a danych ODBC nie jest mo¿liwy.";
         Text [ portuguese_brazilian ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
         Text [ japanese ] = "#lib# ÌßÛ¸Ş×Ñ×²ÌŞ×Ø‚ğ“Ç‚İ‚ß‚È‚©‚Á‚½‚©A‚Ü‚½‚Í‚»‚ê©‘Ì‚ÉÄ×ÌŞÙ‚ª‚ ‚è‚Ü‚·B ODBC ÃŞ°À¿°½‚Í‘I‘ğ‚Å‚«‚Ü‚¹‚ñB";
         Text [ korean ] = "ÇÁ·Î±×·¥ ¶óÀÌºê·¯¸® #lib#À»£¨¸¦£© ·ÎµåÇÒ ¼ö ¾ø¾ú°Å³ª ¶Ç´Â °íÀåÀÔ´Ï´Ù. ODBC µ¥ÀÌÅÍ ¼Ò½º ¼±ÅÃÀÌ °¡´ÉÇÏÁö ¾Ê½À´Ï´Ù.";
@@ -826,7 +826,7 @@ TabPage PAGE_GENERAL
         Text [ italian ] = "Impossibile trovare una sorgente dati Adabas nel sistema";
         Text [ danish ] = "No Adabas data sources have been found on your system.";
         Text [ swedish ] = "Inga Adabasdatakällor har hittats på Ditt system.";
-        Text [ polish ] = "W systemie komputera u¿ytkownika nie znaleziono ?róde³ danych Adabas.";
+        Text [ polish ] = "W systemie komputera u¿ytkownika nie znaleziono Ÿróde³ danych Adabas.";
         Text [ portuguese_brazilian ] = "No Adabas data sources have been found on your system.";
         Text [ japanese ] = "‚¨g‚¢‚Ì¼½ÃÑã‚É Adabas ÃŞ°À¿°½‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
         Text [ korean ] = "»ç¿ëÀÚÀÇ ½Ã½ºÅÛ¿¡¼­ Adabas µ¥ÀÌÅÍ ¼Ò½º¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.";
@@ -1456,7 +1456,7 @@ TabPage PAGE_ODBC
         Text[ portuguese_brazilian ] = "Use catalog on filebased databases";
         Text[ japanese ] = "Ì§²Ù‚ªÍŞ°½‚ÌÃŞ°ÀÍŞ°½‚Å‚Í Catalog ‚ğg—p";
         Text[ korean ] = "Use catalog on filebased databases";
-        Text[ chinese_simplified ] = "ÈçÊÇÎÄ¼şÊ½Êı¾İ¿â¾Í²ÉÓÃ·ÖÀà·½Ê½";
+        Text[ chinese_simplified ] = "Èç¹ûÊÇÎÄ¼şÊ½Êı¾İ¿â¾Í²ÉÓÃ·ÖÀà";
         Text[ chinese_traditional ] = "­Y¬OÀÉ®×¦¡¸ê®Æ®w´N±Ä¥Î¤ÀÃş¤è¦¡";
         Text[ turkish ] = "Use catalog on filebased databases";
         Text[ arabic ] = "Use catalog on filebased databases";
@@ -2070,11 +2070,11 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ portuguese ] = "Tabelas e filtros";
         Text[ russian ] = "Òàáëèöû è ôèëüòğû òàáëèö";
         Text[ greek ] = "Tables and Table filter";
-        Text[ dutch ] = "Tables and Table filter";
+        Text[ dutch ] = "Tabellen en tabellenfilter";
         Text[ french ] = "Tables et filtres";
         Text[ spanish ] = "Tablas y filtros de tablas";
         Text[ finnish ] = "Tables and Table filter";
-        Text[ italian ] = "Tables and Table filter";
+        Text[ italian ] = "Tabelle e filtri di tabelle";
         Text[ danish ] = "Tables and Table filter";
         Text[ swedish ] = "Tabeller och tabellfilter";
         Text[ polish ] = "Tabele i filtry tabel";
@@ -2135,14 +2135,14 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ portuguese ] = "Seleccione na lista acima as tabelas que deseja ver nas aplicações.";
         Text[ russian ] = "Îòìåòüòå â âåğõíåì ñïèñêå òå òàáëèöû, êîòîğûå íåîáõîäèìî ïîêàçàòü äëÿ ïğèëîæåíèé.";
         Text[ greek ] = "In the list above, please check the tables which should be visible for the applications.";
-        Text[ dutch ] = "In the list above, please check the tables which should be visible for the applications.";
+        Text[ dutch ] = "Kruis in de bovenstaande lijst de tabellen aan die weergegeven moeten worden.";
         Text[ french ] = "Dans la liste ci-dessus, marquez d'une croix les tables à rendre visibles pour les applications.";
         Text[ spanish ] = "Active en la lista superior las tablas que deben estar visibles para las aplicaciones.";
         Text[ finnish ] = "In the list above, please check the tables which should be visible for the applications.";
-        Text[ italian ] = "In the list above, please check the tables which should be visible for the applications.";
+        Text[ italian ] = "Nell'elenco precedente, selezionate le tabelle che dovranno essere visualizzate nell'applicazione.";
         Text[ danish ] = "In the list above, please check the tables which should be visible for the applications.";
         Text[ swedish ] = "Kryssa för de tabeller, som ska vara synliga för programmen, i listan ovan.";
-        Text[ polish ] = "Na powy¿szej li?cie nale¿y zaznaczyæ krzy¿ykiem tabele, które maj¹ byæ widoczne w aplikacjach.";
+        Text[ polish ] = "Na powy¿szej liœcie nale¿y zaznaczyæ krzy¿ykiem tabele, które maj¹ byæ widoczne w aplikacjach.";
         Text[ portuguese_brazilian ] = "In the list above, please check the tables which should be visible for the applications.";
         Text[ japanese ] = "ã‹L‚ÌØ½Ä‚Ì’†‚©‚çA±ÌßØ¹°¼®İ‚Å•\\¦‚³‚¹‚éÃ°ÌŞÙ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ korean ] = "In the list above, please check the tables which should be visible for the applications.";
@@ -2161,12 +2161,12 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text [ english_us ] = "Columns";
         Text[ portuguese ] = "Colunas";
         Text[ russian ] = "Êîëîíêè";
-        Text[ greek ] = "Columns";
-        Text[ dutch ] = "Columns";
+        Text[ greek ] = "ÓôŞëåò";
+        Text[ dutch ] = "Kolommen";
         Text[ french ] = "Colonnes";
         Text[ spanish ] = "Columnas";
         Text[ finnish ] = "Columns";
-        Text[ italian ] = "Columns";
+        Text[ italian ] = "Colonne";
         Text[ danish ] = "Columns";
         Text[ swedish ] = "Kolumner";
         Text[ polish ] = "Kolumny";
@@ -2198,7 +2198,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text [ italian ] = "Mostra colonne di versione (se disponibili)";
         Text [ danish ] = "Suppress version columns";
         Text [ swedish ] = "Visa versionskolumner (om tillgängliga)";
-        Text [ polish ] = "Poka¿ wersje kolumn (je?li s¹ dostêpne)";
+        Text [ polish ] = "Poka¿ wersje kolumn (jeœli s¹ dostêpne)";
         Text [ portuguese_brazilian ] = "Suppress version columns";
         Text [ japanese ] = "ÊŞ°¼Ş®İ—“‚Ì•\\¦(‚ ‚éê‡)";
         Text [ korean ] = "¹öÀü ¿­ ³ªÅ¸³»±â (°¡´ÉÇÒ °æ¿ì)";
@@ -2233,7 +2233,7 @@ TabPage PAGE_QUERYADMINISTRATION
         Text [ dutch ] = "Query's";
         Text [ french ] = "Requêtes";
         Text [ spanish ] = "Consultas";
-        Text [ italian ] = "Queries";
+        Text [ italian ] = "Ricerche";
         Text [ danish ] = "Queries";
         Text [ swedish ] = "Sökningar";
         Text [ polish ] = "Kwerendy";
@@ -2313,12 +2313,12 @@ TabPage PAGE_DOCUMENTLINKS
         Text [ english_us ] = "Links";
         Text[ portuguese ] = "Ligações";
         Text[ russian ] = "Ññûëêè";
-        Text[ greek ] = "Bookmarks";
-        Text[ dutch ] = "Bookmarks";
+        Text[ greek ] = "Óõíäİóåéò";
+        Text[ dutch ] = "Koppelingen";
         Text[ french ] = "Liens";
         Text[ spanish ] = "Vínculos";
         Text[ finnish ] = "Bookmarks";
-        Text[ italian ] = "Bookmarks";
+        Text[ italian ] = "Collegamenti";
         Text[ danish ] = "Bookmarks";
         Text[ swedish ] = "Länkar";
         Text[ polish ] = "£¹cza";
@@ -2407,7 +2407,7 @@ WarningBox ERR_NOREGISTEREDDATASOURCES
     Message[ italian ] = "Al momento non sono registrate alcune sorgenti di dati.";
     Message[ danish ] = "For tiden er ingen datakilder registreret.";
     Message[ swedish ] = "För närvarande är inga datakällor registrerade.";
-    Message[ polish ] = "Brak na razie zarejestrowanych ?róde³ danych.";
+    Message[ polish ] = "Brak na razie zarejestrowanych Ÿróde³ danych.";
     Message[ portuguese_brazilian ] = "Currently, there are no registered data sources.";
     Message[ japanese ] = "Œ»“_‚Å‚ÍÃŞ°À¿°½‚Í“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
     Message[ korean ] = "ÇöÀç µî·ÏµÈ µ¥ÀÌÅÍ ¼Ò½º°¡ ¾ø½À´Ï´Ù.";
@@ -2432,7 +2432,7 @@ ErrorBox ERR_COULDNOTRESTOREDS
     Message[ italian ] = "Il nome della sorgente dati eliiminata è già stato attribuito a un'altra. Prima di procedere, è necessario cambiare nome alla seconda sorgente dati prima di poter ripristinare quella eliminata.";
     Message[ danish ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
     Message[ swedish ] = "Du har redan gett namnet på den raderade datakällan till en annan datakälla! Du måste byta namn på den andra datakällan för att kunna återställa den aktuella datakällan.";
-    Message[ polish ] = "Nazwa usuniêtego ?ród³a danych przypisana zosta³a innemu plikowi! Nale¿y zmieniæ jego nazwê, aby móc odtworzyæ aktualne ?ród³o danych.";
+    Message[ polish ] = "Nazwa usuniêtego Ÿród³a danych przypisana zosta³a innemu plikowi! Nale¿y zmieniæ jego nazwê, aby móc odtworzyæ aktualne Ÿród³o danych.";
     Message[ portuguese_brazilian ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
     Message[ japanese ] = "‚·‚Å‚Éíœ‚µ‚½ÃŞ°À‚Ì–¼‘O‚ª•Ê‚ÌÃŞ°À¿°½‚É“ü—Í‚³‚ê‚Ü‚µ‚½BŒ»İ‚Ì‚à‚Ì‚ğ•œŒ³‚·‚é‚É‚ÍA‚Ü‚¸‹ŒÃŞ°À‚Ì–¼‘O‚ğ•ÏX‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B";
     Message[ korean ] = "»ç¿ëÀÚ´Â »èÁ¦µÈ µ¥ÀÌÅÍ¼Ò½ºÀÇ ÀÌ¸§À» ÀÌ¹Ì ´Ù¸¥ µ¥ÀÌÅÍ¼Ò½º¿¡ ºÎ¿©ÇÏ¿´½À´Ï´Ù. ÀüÀÚ¸¦ º¹±¸ÇÏ±â À§ÇØ¼­´Â ÈÄÀÚ ÀÌ¸§À» º¯°æÇØ¾ß ÇÕ´Ï´Ù.";
@@ -2458,7 +2458,7 @@ String STR_ENTER_CONNECTION_PASSWORD
     Text [ italian ] = "Per il collegamento alla sorgente dati \"$name$\" è necessaria una password.";
     Text [ danish ] = "Forbindelsen til datakilden \"$name$\" kræver at du indtaster en adgangskode.";
     Text [ swedish ] = "Förbindelsen till datakällan \"$name$\" kräver att Du anger ditt lösenord.";
-    Text [ polish ] = "Po³¹czenie ze ?ród³em danych \"$name$\" wymaga wprowadzenia has³a.";
+    Text [ polish ] = "Po³¹czenie ze Ÿród³em danych \"$name$\" wymaga wprowadzenia has³a.";
     Text [ portuguese_brazilian ] = "Connecting to data source \"$name$\" requires you to enter a password.";
     Text [ japanese ] = "\"$name$\" ÃŞ°À¿°½‚Ö‚ÌÚ‘±‚É‚ÍÊß½Ü°ÄŞ‚Ì“ü—Í‚ª•K—v‚Å‚·B";
     Text [ korean ] = "µ¥ÀÌÅÍ ¼Ò½º \"$name$\" ¿¡ ¿¬°áÇÏ±â À§ÇØ¼­´Â ÆĞ½º¿öµå¸¦ ÀÔ·ÂÇØ¾ß ÇÕ´Ï´Ù.";
@@ -2483,7 +2483,7 @@ String STR_DATASOURCE_DEFAULTNAME
     Text [ italian ] = "Sorgente dati";
     Text [ danish ] = "datas source";
     Text [ swedish ] = "Datakälla";
-    Text [ polish ] = "?ród³o danych";
+    Text [ polish ] = "ród³o danych";
     Text [ portuguese_brazilian ] = "datas source";
     Text [ japanese ] = "ÃŞ°À¿°½";
     Text [ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
@@ -2508,7 +2508,7 @@ String STR_ERR_EMPTY_DSN_NAME
     Text [ italian ] = "The data source name must not be empty!";
     Text [ danish ] = "The data source name must not be empty!";
     Text [ swedish ] = "Namnet på datakällan får inte vara tomt!";
-    Text [ polish ] = "Nazwa ?ród³a danych nie mo¿e byæ pusta!";
+    Text [ polish ] = "Nazwa Ÿród³a danych nie mo¿e byæ pusta!";
     Text [ portuguese_brazilian ] = "The data source name must not be empty!";
     Text [ japanese ] = "ÃŞ°À¿°½–¼‚ª‹ó”’‚Å‚Í‚¢‚¯‚Ü‚¹‚ñB";
     Text [ korean ] = "µ¥ÀÌÅÍ ¼Ò½º ÀÌ¸§ÀÌ ºñ¾î ÀÖ¾î¼­´Â ¾ÈµË´Ï´Ù!";
@@ -2540,7 +2540,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ italian ] = "Nuova sorgente dati";
             Text [ danish ] = "new data source";
             Text [ swedish ] = "Ny datakälla";
-            Text [ polish ] = "nowe ?ród³o danych";
+            Text [ polish ] = "nowe Ÿród³o danych";
             Text [ portuguese_brazilian ] = "new data source";
             Text [ japanese ] = "V‚µ‚¢ÃŞ°À¿°½";
             Text [ korean ] = "»õ·Î¿î µ¥ÀÌÅÍ ¼Ò½º";
@@ -2567,7 +2567,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ italian ] = "Elimina sorgente dati";
             Text [ danish ] = "delete data source";
             Text [ swedish ] = "Radera datakälla";
-            Text [ polish ] = "Usuñ ?ród³o danych";
+            Text [ polish ] = "Usuñ Ÿród³o danych";
             Text [ portuguese_brazilian ] = "delete data source";
             Text [ japanese ] = "ÃŞ°À¿°½‚Ìíœ";
             Text [ korean ] = "µ¥ÀÌÅÍ ¼Ò½º »èÁ¦";
@@ -2594,7 +2594,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ italian ] = "Ripristina sorgente dati";
             Text [ danish ] = "restore data source";
             Text [ swedish ] = "Återställ datakälla";
-            Text [ polish ] = "Odtwórz ?ród³o danych";
+            Text [ polish ] = "Odtwórz Ÿród³o danych";
             Text [ portuguese_brazilian ] = "restore data source";
             Text [ japanese ] = "ÃŞ°À¿°½‚Ì•œŒ³";
             Text [ korean ] = "µ¥ÀÌÅÍ ¼Ò½º º¹±¸";
@@ -2625,7 +2625,7 @@ Menu RID_NEW_FORM
             Text[ french ] = "Document ~texte";
             Text[ spanish ] = "~Documento de texto";
             Text[ finnish ] = "~Textdokument";
-            Text[ italian ] = "~Text document";
+            Text[ italian ] = "Documento di ~testo";
             Text[ danish ] = "~Text document";
             Text[ swedish ] = "~Textdokument";
             Text[ polish ] = "~Dokument tekstowy";
@@ -2651,7 +2651,7 @@ Menu RID_NEW_FORM
             Text[ french ] = "~Classeur";
             Text[ spanish ] = "~Hoja de cálculo";
             Text[ finnish ] = "Ta~bellendokument";
-            Text[ italian ] = "~Spreadsheet";
+            Text[ italian ] = "Foglio elettronico";
             Text[ danish ] = "~Spreadsheet";
             Text[ swedish ] = "Ta~belldokument";
             Text[ polish ] = "~Arkusz kalkulacyjny";
@@ -2677,7 +2677,7 @@ Menu RID_NEW_FORM
             Text[ french ] = "~Présentation";
             Text[ spanish ] = "~Presentation";
             Text[ finnish ] = "~Präsentation";
-            Text[ italian ] = "~Presentation";
+            Text[ italian ] = "~Presentazione";
             Text[ danish ] = "~Presentation";
             Text[ swedish ] = "~Presentation";
             Text[ polish ] = "~Prezentacja";
@@ -2699,7 +2699,26 @@ Menu RID_NEW_FORM
             Identifier = ID_FORM_NEW_PILOT;
             Text = "~AutoPilot...";
             Text [ english ] = "~AutoPilot...";
-            Text [ english_us ] = "A~utoPilot...";
+            Text [ english_us ] = "A~utoPilot";
+            Text[ portuguese ] = "A~utoPiloto";
+            Text[ russian ] = "~Àâòîïèëîò";
+            Text[ greek ] = "~ÁõôïĞéëüôïò";
+            Text[ dutch ] = "~AutoPiloot";
+            Text[ french ] = "~AutoPilote";
+            Text[ spanish ] = "A~utoPiloto";
+            Text[ finnish ] = "~Automaattinen ohjaus";
+            Text[ italian ] = "Pilota auto~matico";
+            Text[ danish ] = "A~utoPilot";
+            Text[ swedish ] = "A~utoPilot";
+            Text[ polish ] = "A~utoPilot";
+            Text[ portuguese_brazilian ] = "A~utoPilot";
+            Text[ japanese ] = "µ°ÄÊß²Û¯Ä(~U)";
+            Text[ korean ] = "A~utoPilot";
+            Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí";
+            Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z";
+            Text[ turkish ] = "A~utoPilot";
+            Text[ arabic ] = "A~utoPilot";
+            Text[ catalan ] = "A~utoPilot";
         };
         MenuItem
         {
@@ -2710,7 +2729,26 @@ Menu RID_NEW_FORM
             Identifier = ID_FORM_NEW_TEMPLATE;
             Text = "Aus ~Vorlage...";
             Text [ english ] = "From Templ~ate...";
-            Text [ english_us ] = "From Templ~ate...";
+            Text [ english_us ] = "From Templ~ate";
+            Text[ portuguese ] = "A partir de ~modelo";
+            Text[ russian ] = "Èç øàáëîíîâ";
+            Text[ greek ] = "From Templ~ate";
+            Text[ dutch ] = "Uit ~sjabloon";
+            Text[ french ] = "À partir d'un ~modèle";
+            Text[ spanish ] = "De pl~antilla";
+            Text[ finnish ] = "Aus ~Vorlage";
+            Text[ italian ] = "Da ~modello";
+            Text[ danish ] = "From Templ~ate";
+            Text[ swedish ] = "Från m~all";
+            Text[ polish ] = "Na podstawie ~szablonu";
+            Text[ portuguese_brazilian ] = "From Templ~ate";
+            Text[ japanese ] = "ÃİÌßÚ°Ä‚©‚ç(~A)";
+            Text[ korean ] = "From Templ~ate";
+            Text[ chinese_simplified ] = "²ÉÓÃÑùÊ½(A)";
+            Text[ chinese_traditional ] = "±Ä¥Î¼Ë¦¡";
+            Text[ turkish ] = "From Templ~ate";
+            Text[ arabic ] = "From Templ~ate";
+            Text[ catalan ] = "From Templ~ate";
         };
     };
 
@@ -2735,10 +2773,10 @@ WarningBox WARN_SAVEFORQUERIES
     Message[ french ] = "Vous devez enregistrer la source de données afin de pouvoir en gérer les $objects$.\nEnregistrer toutes les modifications effectuées dans cette boîte de dialogue ?";
     Message[ spanish ] = "Para poder administrar $objects$ de una fuente de datos, debe guardarse esta.\n¿Desea guardar todas las modificaciones realizadas hasta ahora en este diálogo?";
     Message[ finnish ] = "Um die $objects$ einer Datenquelle zu administrieren, muss diese gespeichert werden.\nSollen sämtliche bis jetzt in diesem Dialog vorgenommene Änderungen jetzt gespeichert werden?";
-    Message[ italian ] = "Per gestire la ricerca di una sorgente di dati è necessario prima salvarla.\nVolete salvare le modifiche raccolte fino adesso nel dialogo?";
+    Message[ italian ] = "Per gestire $objects$ di una sorgente di dati è necessario prima salvare la sorgente di dati.\nVolete salvare le modifiche raccolte fino adesso nel dialogo?";
     Message[ danish ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
     Message[ swedish ] = "För att $objects$ i en datakälla ska kunna administreras måste datakällan sparas.\nSka alla ändringar som hittills har gjorts i den här dialogrutan sparas nu?";
-    Message[ polish ] = "Administracja '$objects$' okre?lonego ?ród³a danych wymaga jego uprzedniego zapisania.\nZapisaæ wszystkie zmiany ³¹cznie ze zmianami dokonanymi w danym oknie dialogowym?";
+    Message[ polish ] = "Administracja '$objects$' okreœlonego Ÿród³a danych wymaga jego uprzedniego zapisania.\nZapisaæ wszystkie zmiany ³¹cznie ze zmianami dokonanymi w danym oknie dialogowym?";
     Message[ portuguese_brazilian ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
     Message[ japanese ] = "ÃŞ°À¿°½‚Ì $objects$ ‚ğŠÇ—‚·‚é‚½‚ß‚ÉA‚±‚ê‚ğ•Û‘¶‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B\n‚±‚ÌÀŞ²±Û¸Ş‚Ås‚Á‚½‚·‚×‚Ä‚Ì•ÏX‚ğ¡‚·‚®•Û‘¶‚µ‚Ü‚·‚©B";
     Message[ chinese_simplified ] = "ÔÚ¹ÜÀí×ÊÁÏÔ´µÄ $objects$ Ö®Ç°±ØĞëÏÈ´æÅÌËü¡£\nÏÖÔÚÒª´æÅÌÕâ¸ö¶Ô»°¿òÖ®ÖĞ¸ü¸ÄÄÚÈİ£¿";
@@ -2766,13 +2804,13 @@ ErrorBox ERR_CANTADMINQUERIES
     Message[ dutch ] = "Om de $objects$ van een gegevensbron te beheren moet deze opgeslagen zijn.\nMaar met de actuele instellingen is het opslaan van wijzigingen niet mogelijk (moeilijkheden met naamgeving).\n\nU kunt de $objects$  niet beheren zolang deze moeilijkheden niet zijn opgelost en de wijzigingen niet werden opgeslagen.";
     Message[ french ] = "Vous devez enregistrer la source de données afin de pouvoir en gérer les $objects$.\nLes paramètres actifs ne permettent cependant pas d'enregistrer les modifications car il y a des conflits de noms.\n\nTant que ces conflits persisteront et que les modifications n'auront pas été enregistrées, la gestion des $objects$ sera impossible.";
     Message[ spanish ] = "Para administrar $objects$ de una fuente de datos, esta debe guardarse.\nLas entradas actuales, sin embargo, no permiten guardar las modificaciones (existen conflictos con los nombres).\n\nNo podrá administrar $objects$ mientras no solucione estos conflictos y mientras no guarde las modificaciones.";
-    Message[ italian ] = "Per gestire la ricerca di un database è necessario prima salvarla.\nLe indicazioni attuali non permettono di salvare la ricerca in quanto genera un conflitto di nomi.\n\nFintanto non avete risolto il conflitto fra i nomi e salvato le modifiche sarà impossibile gestire la ricerca.";
+    Message[ italian ] = "Per gestire i contenuti ($objects$) di una sorgente di dati è necessario prima salvare la sorgente di dati.\nLe indicazioni attuali non permettono di salvare la ricerca in quanto genera un conflitto di nomi.\n\nFintanto non avete risolto il conflitto fra i nomi e salvato le modifiche sarà impossibile gestire $objects$.";
     Message[ danish ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
     Message[ swedish ] = "En datakälla måste sparas om det ska gå att administrera $objects$ i den.\nMen de aktuella inmatningarna tillåter inte att ändringarna sparas (det finns namnkonflikter).\n\nDu kan inte administrera $objects$ sålänge de här konflikterna inte är lösta och ändringarna har sparats.";
-    Message[ polish ] = "Administracja $objects$ okre?lonego ?ród³a danych wymaga jego uprzedniego zapisania.\nAktualne wpisy nie pozwalaj¹ jednak zapisaæ ?ród³a danych (wyst¹pi³ konflikt nazw).\n\nAdministracja $objects$ mo¿liwa bêdzie dopiero po rozwi¹zaniu konfliktu i zapisaniu zmian.";
+    Message[ polish ] = "Administracja $objects$ okreœlonego Ÿród³a danych wymaga jego uprzedniego zapisania.\nAktualne wpisy nie pozwalaj¹ jednak zapisaæ Ÿród³a danych (wyst¹pi³ konflikt nazw).\n\nAdministracja $objects$ mo¿liwa bêdzie dopiero po rozwi¹zaniu konfliktu i zapisaniu zmian.";
     Message[ portuguese_brazilian ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
     Message[ japanese ] = "ÃŞ°À¿°½‚Ì $objects$ ‚ğŠÇ—‚·‚é‚½‚ß‚ÉA‚±‚ê‚ğ•Û‘¶‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B\n‚Æ‚±‚ë‚ªA–¼‘O‚Ì‹¤—Lˆá”½‚ª‹N‚±‚Á‚½‚½‚ßAŒ»İ‚Ì“ü—Í‚Å‚Í•ÏX‚Ì•Û‘¶‚Í‚Å‚«‚Ü‚¹‚ñB\n\n‚±‚Ì‹¤—Lˆá”½‚ªíœ‚³‚ê‚Ä•ÏX‚ª•Û‘¶‚³‚ê‚È‚¢‚¤‚¿‚ÍA$objects$ ‚ÌŠÇ—‚Í‚Å‚«‚Ü‚¹‚ñB";
-    Message[ korean ] = "µ¥ÀÌÅÍ¼Ò½ºÀÇ ÁúÀÇ¸¦ °ü¸®ÇÏ±â À§ÇØ, ÀÌ¸¦ ¹İµå½Ã ÀúÀåÇØ¾ß ÇÕ´Ï´Ù, ÇöÀçÀÇ ¼¼ÆÃÀº º¯°æ»çÇ× ÀúÀåÀ» Çã¿ëÇÏÁö ¾Ê½À´Ï´Ù\n  (ÀÌ¸§ Ãæµ¹).\n\nÀÌ Ãæµ¹À» Á¦°ÅÇÏ°í, º¯°æ»çÇ×À»  ÀúÀåÇÏÁö ¾Ê´ÂÇÑ »ç?";
+    Message[ korean ] = "µ¥ÀÌÅÍ¼Ò½ºÀÇ ÁúÀÇ¸¦ °ü¸®ÇÏ±â À§ÇØ, ÀÌ¸¦ ¹İµå½Ã ÀúÀåÇØ¾ß ÇÕ´Ï´Ù, ÇöÀçÀÇ ¼¼ÆÃÀº º¯°æ»çÇ× ÀúÀåÀ» Çã¿ëÇÏÁö ¾Ê½À´Ï´Ù\n  (ÀÌ¸§ Ãæµ¹).\n\nÀÌ Ãæµ¹À» Á¦°ÅÇÏ°í, º¯°æ»çÇ×À»  ÀúÀåÇÏÁö ¾Ê´ÂÇÑ »ç¿ëÀÚ´Â ÁúÀÇ¸¦ °ü¸®ÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Message[ chinese_simplified ] = "Òª¹ÜÀíÒ»¸ö×ÊÁÏÔ´µÄ $objects$ £¬±ØĞëÏÈ´¢´æËü¡£\nµ«ÊÇÏÖÔÚÄú²»¿ÉÒÔ´æÅÌ¸ü¸ÄµÄÄÚÈİ£¬ÒòÎª´æÔÚÒ»¸öÃû³Æ³åÍ»µÄ´íÎó¡£\n\nÔÚÅÅ³ı´íÎóÖ®Ç°ÄúÎŞ·¨´æÅÌ¸ü¸Ä $objects$ ¡£";
     Message[ chinese_traditional ] = "­nºŞ²z¤@­Ó¸ê®Æ·½ªº $objects$ ¡A¥²¶·¥ıÀx¦s¥¦¡C\n¦ı¬O²{¦b±z¤£¥i¥HÀx¦sÅÜ§ó¤º®e¡A¦]¬°¦s¦b¦WºÙ¨R¬ğ¿ù»~¡C\n\n¦b±Æ°£¿ù»~¤§«e±zµLªk¦sÀxÅÜ§ó $objects$ ¡C";
     Message[ turkish ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
@@ -2793,14 +2831,14 @@ ErrorBox ERR_CANTDOTABLEACTION
     Message[ portuguese ] = "Para poder executar esta operação terá que guardar as modificações na fonte de dados.\nContudo, as actuais indicações não o permitem, uma vez que existe conflito de nomes entre várias fontes de dados.\n\nTerá que solucionar primeiro estes conflitos para poder executar a operação.";
     Message[ russian ] = "Äëÿ ıòîé îïåğàöèè íåîáõîäèìî ñîõğàíèòü èçìåíåíèÿ â èñòî÷íèêå äàííûõ.\nÎäíàêî òåêóùèå íàñòğîéêè íå ïîçâîëÿşò ıòîãî, ò.ê. ñóùåñòâóåò êîíôëèêò èìåí ìåæäó ğàçëè÷íûìè èñòî÷íèêàìè äàííûõ.\n\nÄî òåõ ïîğ, ïîêà ıòè êîíôëèêòû íå ğàçğåøåíû, ıòà îïåğàöèÿ íå âûïîëíèìà.";
     Message[ greek ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
-    Message[ dutch ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
+    Message[ dutch ] = "Om dit commando te kunnen uitvoeren moet de gegevensbron opgeslagen worden.\nMet de bestaande gegevens is dit niet mogelijk, daar er problemen zijn met de namen van de verschillende gegevensbronnen.\n\nU moet deze problemen eerst oplossen voordat u dit commando kunt uitvoeren.";
     Message[ french ] = "Vous devez enregistrer les modifications apportées à la source de données afin de pouvoir exécuter cette opération.\nLes paramètres actifs ne permettent cependant pas de le faire car il y a des conflits de noms entre plusieurs sources de données.\n\nTant que ces conflits persisteront, l'exécution de cette opération sera impossible.";
     Message[ spanish ] = "Para ejecutar esta acción se deben guardar las modificaciones en la fuente de datos.\nPero la información introducida no lo permite debido a conflicto con los nombres de las diversas fuentes de datos.\n\nPara realizar la acción debe solucionar primero este conflicto.";
     Message[ finnish ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
-    Message[ italian ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
+    Message[ italian ] = "Per questa operazione è necessario salvare le modifiche della sorgente di dati.\nTuttavia non è possibile salvare le modifiche a causa di un conflitto di nomi tra diverse sorgenti di dati.\n\nFintanto non verrà risolto il problema sarà impossibile salvare le modifiche.";
     Message[ danish ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
-    Message[ swedish ] = "För den här åtgärden måste ändringarna av datakällan sparas.\nMen de aktuella inmatningarna tillåter inte detta eftersom det finns namnkonflikter mellan olika datakällor.\n\nSålänge de här konflikterna inte är lösta kan du inte utföra den h";
-    Message[ polish ] = "Operacja ta wymaga zapisania zmian dokonanych w ?ródle danych.\nNiestety, bie¿¹ce dane uniemo¿liwiaj¹ zapisania zmian, poniewa¿ miêdzy ró¿nymi ?ród³ami danych powsta³y konflikty nazw.\n\nWykonanie operacji mo¿liwe bêdzie dopiero po rozwi¹zaniu wymienionych konfliktów.";
+    Message[ swedish ] = "För den här åtgärden måste ändringarna av datakällan sparas.\nMen de aktuella inmatningarna tillåter inte detta eftersom det finns namnkonflikter mellan olika datakällor.\n\nSålänge de här konflikterna inte är lösta kan du inte utföra den här åtgärden.";
+    Message[ polish ] = "Operacja ta wymaga zapisania zmian dokonanych w Ÿródle danych.\nNiestety, bie¿¹ce dane uniemo¿liwiaj¹ zapisania zmian, poniewa¿ miêdzy ró¿nymi Ÿród³ami danych powsta³y konflikty nazw.\n\nWykonanie operacji mo¿liwe bêdzie dopiero po rozwi¹zaniu wymienionych konfliktów.";
     Message[ portuguese_brazilian ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
     Message[ japanese ] = "‚±‚Ì±¸¼®İ‚É‚ÍÃŞ°À¿°½‚Ì•ÏX‚ğ•Û‘¶‚µ‚Ä‚¨‚­•K—v‚ª‚ ‚è‚Ü‚·B\n‚Æ‚±‚ë‚ªAˆÙ‚È‚Á‚½ÃŞ°À¿°½ŠÔ‚Å–¼‘O‚ÌºİÌØ¸Ä‚ª‹N‚±‚Á‚Ä‚¢‚é‚½‚ßAŒ»İ‚Ì“ü—Í‚Ì‚Ü‚Ü‚Å‚Í–³—‚Å‚·B\n\n‚±‚ÌºİÌØ¸Ä‚ªíœ‚³‚ê‚È‚¢‚Ü‚Å‚ÍA±¸¼®İ‚ÌÀs‚Í•s‰Â”\\‚Å‚·B";
     Message[ korean ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
@@ -2825,7 +2863,7 @@ String STR_QUERY_OBJECTS
     Text[ french ] = "requêtes";
     Text[ spanish ] = "Consultas";
     Text[ finnish ] = "Abfragen";
-    Text[ italian ] = "queries";
+    Text[ italian ] = "ricerche";
     Text[ danish ] = "queries";
     Text[ swedish ] = "sökningar";
     Text[ polish ] = "Kwerendy";
@@ -2848,12 +2886,12 @@ String STR_DOCUMENT_OBJECTS
     Text [ language_user1 ] = "This string will be used in the text of ERR_CANTADMINQUERIES and WARN_SAVEFORQUERIES, replacing the $objects$ variable.";
     Text[ portuguese ] = "ligações";
     Text[ russian ] = "Ññûëêè";
-    Text[ greek ] = "Bookmarks";
+    Text[ greek ] = "Óõíäİóåéò";
     Text[ dutch ] = "Koppelingen";
     Text[ french ] = "liens";
     Text[ spanish ] = "Vínculos";
     Text[ finnish ] = "Linkit";
-    Text[ italian ] = "Bookmarks";
+    Text[ italian ] = "collegamenti";
     Text[ danish ] = "Bookmarks";
     Text[ swedish ] = "länkar";
     Text[ polish ] = "£¹cza";
@@ -2881,7 +2919,7 @@ String STR_QUERY_DROP_DOCUMENT_LINK
     Text[ french ] = "Voulez-vous supprimer le lien \"$name$\" (document) ?\n\nRemarque : la suppression ne concernera que l'assignation de ce document à la base de données et pas le document en soi.";
     Text[ spanish ] = "¿Desea eliminar el vínculo de documento \"$name$\"?\n\nNota: Solo se eliminará la asignación de este documento a la fuente de datos, no el documento en sí.";
     Text[ finnish ] = "Wollen Sie die Dokument-Verknüpfung \"$name$\" löschen?\n\nHinweis: Es wird lediglich die Zuordnung dieses Dokumentes zu der Datenquelle gelöscht, nicht das Dokument selber.";
-    Text[ italian ] = "Do you want to delete the document link \"$name$\"?\n\nNote: Only the assigment of the document to the data source will be dropped, not the document itself.";
+    Text[ italian ] = "Volete eliminare il collegamento al documento \"$name$\"?\n\nNota: l'operazione annulla solo l'assegnazione del documento alla sorgente, non il documento stesso.";
     Text[ danish ] = "Do you want to delete the document link \"$name$\"?\n\nNote: Only the assigment of the document to the data source will be dropped, not the document itself.";
     Text[ swedish ] = "Vill du radera dokumentlänken \"$name$\"?\n\nOBS: det är bara tilldelningen av dokumentet till datakällan som raderas, inte själva dokumentet.";
     Text[ polish ] = "Usun¹æ ³¹cze do dokumentu \"$name$\"?\n\nUwaga: Usuniête zostanie tylko ³¹cze, a nie dokument.";
@@ -2903,11 +2941,11 @@ String STR_ASK_FOR_DIRECTORY_CREATION
     Text[ portuguese ] = "O directório\n\n$path$\n\nnão existe. Criar?";
     Text[ russian ] = "Êàòàëîã\n\n$path$\n\níå ñóùåñòâóåò. Ñîçäàòü åãî?";
     Text[ greek ] = "The directory\n\n$path$\n\ndoes not exist. Do you wish to create it?";
-    Text[ dutch ] = "The directory\n\n$path$\n\ndoes not exist. Do you wish to create it?";
+    Text[ dutch ] = "De directory\n\n$path$\n\nbestaat niet. Wilt u deze aanleggen?";
     Text[ french ] = "Le répertoire\n\n$path$\n\nn'existe pas. Voulez-vous le créer ?";
     Text[ spanish ] = "No existe el directorio\n\n$path$\n\n¿Desea crearlo?";
     Text[ finnish ] = "The directory\n\n$path$\n\ndoes not exist. Do you wish to create it?";
-    Text[ italian ] = "The directory\n\n$path$\n\ndoes not exist. Do you wish to create it?";
+    Text[ italian ] = "La cartella\n\n$path$\n\nnon esiste. Volete crearla?";
     Text[ danish ] = "The directory\n\n$path$\n\ndoes not exist. Do you wish to create it?";
     Text[ swedish ] = "Katalogen\n\n$path$\n\nexisterar inte. Ska den skapas?";
     Text[ polish ] = "Katalog\n\n$path$\n\nnie istnieje. Utworzyæ go?";
@@ -2929,11 +2967,11 @@ String STR_COULD_NOT_CREATE_DIRECTORY
     Text[ portuguese ] = "Foi impossível criar o directório $name$.";
     Text[ russian ] = "Ñîçäàòü êàòàëîã $name$ íåâîçìîæíî.";
     Text[ greek ] = "The directory $name$ could not be created.";
-    Text[ dutch ] = "The directory $name$ could not be created.";
+    Text[ dutch ] = "De directory $name$ kon niet worden aangelegd.";
     Text[ french ] = "Impossible de créer le répertoire $name$ !";
     Text[ spanish ] = "No se pudo crear el directorio $name$.";
     Text[ finnish ] = "The directory $name$ could not be created.";
-    Text[ italian ] = "The directory $name$ could not be created.";
+    Text[ italian ] = "Impossibile creare la cartella $name$.";
     Text[ danish ] = "The directory $name$ could not be created.";
     Text[ swedish ] = "Det gick inte att skapa katalogen $name$.";
     Text[ polish ] = "Utworzenie katalogu $name$ nie powiod³o siê.";
@@ -2958,11 +2996,11 @@ QueryBox QUERY_NEED_TO_SAVE_FILTER
     Message[ portuguese ] = "Para executar esta operação terá que guardar as modiicações efectuadas até agora na caixa de diálogo.\nContinuar?";
     Message[ russian ] = "Äëÿ âûïîëíåíèÿ ıòîé îïåğàöèè, âñå èçìåíåíèÿ, îñóùåñòâëåííûå â ıòîì äèàëîãå, íåîáõîäèìî ñîõğàíèòü.\nÂû õîòèòå ïğîäîëæèòü?";
     Message[ greek ] = "For this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
-    Message[ dutch ] = "For this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
+    Message[ dutch ] = "Om dit commando te kunnen uitvoeren moeten de tot nu toe in deze dialoog gemaakte verandering worden opgeslagen.\nWilt u doorgaan?";
     Message[ french ] = "Vous devez enregistrer les modifications effectuées jusqu'ici dans cette boîte de dialogue afin de pouvoir exécuter cette opération.\nContinuer ?";
     Message[ spanish ] = "Para realizar esta acción, debe guardar las modificaciones realizadas hasta ahora en este diálogo.\n¿Desea continuar?";
     Message[ finnish ] = "For this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
-    Message[ italian ] = "For this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
+    Message[ italian ] = "Per poter eseguire questa operazione è necessario salvare le modifiche effettuate in questo dialogo.\nVolete procedere?";
     Message[ danish ] = "For this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
     Message[ swedish ] = "För att den här åtgärden ska kunna utföras måste de ändringar som har gjorts hittills i den här dialogrutan sparas.\nVill du fortsätta?";
     Message[ polish ] = "W celu wykonania operacji nale¿y zapisaæ zmiany dokonane w danym oknie dialogowym.\nKontynuowaæ?";
@@ -2999,6 +3037,9 @@ String STR_ADDRESSBOOK_LDAP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.52  2001/05/29 15:42:38  fs
+ *  #87006# use ... for items invoking a dialog
+ *
  *  Revision 1.51  2001/05/29 14:34:28  oj
  *  #87149# addressbook ui impl
  *
