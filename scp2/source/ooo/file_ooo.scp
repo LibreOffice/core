@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.66 $
+*  $Revision: 1.67 $
 *
-*  last change: $Author: kz $ $Date: 2005-01-21 12:14:20 $
+*  last change: $Author: obo $ $Date: 2005-01-25 15:20:52 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -693,9 +693,9 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-
+#ifndef GCJ
 STD_JAR_FILE( gid_File_Jar_Js, js )
-
+#endif
 #endif
 
 #ifdef SOLAR_JAVA
@@ -748,40 +748,32 @@ End
 
 
 #ifdef SOLAR_JAVA
+#ifndef GCJ
+/*
+GCJ because com.sun.star.wizards.tutorial.creator.frame.Framework cannot be
+built with gcj
+*/
 UNO_JAR_FILE( gid_File_Jar_Report, report )
-#endif
-
-#ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Table, table )
-#endif
-
-#ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Letter, letter )
-#endif
-
-#ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Form, form )
-#endif
-
-#ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Fax, fax )
-#endif
-
-#ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Agenda, agenda )
+UNO_JAR_FILE( gid_File_Jar_Query, query )
+#endif
 #endif
 
 #ifdef SOLAR_JAVA
+#ifndef GCJ
 STD_JAR_FILE( gid_File_Jar_Hsqldb, hsqldb )
 STD_JAR_FILE( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
 #endif
-
-#ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Web, web )
 #endif
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Query, query )
+#ifndef GCJ
+UNO_JAR_FILE( gid_File_Jar_Web, web )
+#endif
 #endif
 
 #ifdef SOLAR_JAVA
@@ -816,27 +808,27 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-
+#ifndef GCJ
 UNO_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
-
+#endif
 #endif
 
 #ifdef SOLAR_JAVA
-
+#ifndef GCJ
 UNO_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
-
+#endif
 #endif
 
 #ifdef SOLAR_JAVA
-
+#ifndef GCJ
 UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
-
+#endif
 #endif
 
 #ifdef SOLAR_JAVA
-
+#ifndef GCJ
 UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
-
+#endif
 #endif
 
 #ifdef SOLAR_JAVA
@@ -1955,11 +1947,13 @@ File gid_File_Scripts_Beanshell
 End
 
 #ifdef SOLAR_JAVA
+#ifndef GCJ
 File gid_File_Scripts_Java
     Dir = gid_Dir_Share_Scripts;
     ARCHIVE_TXT_FILE_BODY;
     Name = "ScriptsJava.zip";
 End
+#endif
 #endif
 
 File gid_File_Scripts_Javascript
