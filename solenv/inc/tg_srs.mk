@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_srs.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-29 17:34:38 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 14:49:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,27 +62,13 @@
 
 
 
-
-# so sah es ueber Kommandozeile aus:
-#  krank aber wahr, sonst steht da hinterher
-#  Text = 1234	oder  Text = \1234	oder sonstiger Mist
-# .IF "$(OS)" == "DOS"
-# RSCUPDVERMAC=-DUPDVER="$(RSCUPDVER)"
-# .ENDIF
-# .IF "$(OS)" == "OS2"
-# RSCUPDVERMAC=-DUPDVER=\\"$(RSCUPDVER)\\"
-# .ENDIF
-# .IF "$(OS)" == "WNT"
-# RSCUPDVERMAC=-DUPDVER=\\\"$(RSCUPDVER)\\\"
-# .ENDIF
-
 # und so mit response file
 #.IF "$(OS)" == "DOS"
 # fuer DOSSTCIX nicht \" sondern "
 .IF "$(GUI)" == "MAC"
-RSCUPDVERMAC=-DUPDVER=¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"$(RSCUPDVER)¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"
+RSCUPDVERMAC+=-DUPDVER=¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"$(RSCUPDVER)¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"
 .ELSE
-RSCUPDVERMAC=-DUPDVER="$(RSCUPDVER)"
+RSCUPDVERMAC+=-DUPDVER="$(RSCUPDVER)"
 .ENDIF
 #.ELSE
 #RSCUPDVERMAC=-DUPDVER=\"$(RSCUPDVER)\"
@@ -90,9 +76,9 @@ RSCUPDVERMAC=-DUPDVER="$(RSCUPDVER)"
 
 # und so mit response file
 .IF "$(GUI)" == "MAC"
-RSCUPDVERMAC=-DUPDVER=¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"$(RSCUPDVER)¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"
+RSCUPDVERMAC+=-DUPDVER=¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"$(RSCUPDVER)¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"
 .ELSE
-RSCUPDVERMAC=-DUPDVER="$(RSCUPDVER)"
+RSCUPDVERMAC+=-DUPDVER="$(RSCUPDVER)"
 .ENDIF
 
 .IF "$(lintit)"==""
