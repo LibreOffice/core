@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 16:20:42 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@
 
 #include <rtl/ustring.hxx>
 
-#ifndef _VOS_PROCESS_HXX_
-#include <vos/process.hxx>
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
 #endif
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -108,7 +108,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace rtl;
-using namespace vos;
 
 namespace stoc_impreg
 {
@@ -123,18 +122,19 @@ namespace stoc_impreg
 
 static OUString getTempName()
 {
+    static OUString TMP(RTL_CONSTASCII_USTRINGPARAM("TMP"));
+    static OUString TEMP(RTL_CONSTASCII_USTRINGPARAM("TEMP"));
+
     OUString    uTmpPath;
     OString     tmpPath;
     sal_Char    tmpPattern[512];
     sal_Char    *pTmpName = NULL;
 
-    OStartupInfo StartupInfo;
-
-    if (StartupInfo.getEnvironment(OUString(RTL_CONSTASCII_USTRINGPARAM("TMP")), uTmpPath) != OStartupInfo::E_None)
+    if ( osl_getEnvironment(TMP.pData, &uTmpPath.pData) != osl_Process_E_None )
     {
-        if (StartupInfo.getEnvironment(OUString(RTL_CONSTASCII_USTRINGPARAM("TEMP")), uTmpPath) != OStartupInfo::E_None)
+        if ( osl_getEnvironment(TEMP.pData, &uTmpPath.pData) != osl_Process_E_None )
         {
-#if defined(WIN32) || defined(WNT) || defined(OS2)
+#if defined(SAL_W32) || defined(SAL_OS2)
             tmpPath = OString("c:\\temp");
 #else
             tmpPath = OString("/tmp");
