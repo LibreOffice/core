@@ -13,15 +13,12 @@ touch: ..\inc\hid.lst %_DEST%\bin%_EXT%\hid.lst
 del %_DEST%\inc%_EXT%\baside.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basctl
-hedabu: ..\%__SRC%\inc\basslots.hxx %_DEST%\inc%_EXT%\basctl\basslots.hxx
-hedabu: ..\inc\basidesh.hxx %_DEST%\inc%_EXT%\basctl\basidesh.hxx
 hedabu: ..\inc\sidll.hxx %_DEST%\inc%_EXT%\basctl\sidll.hxx
 hedabu: ..\inc\vcattr.hxx %_DEST%\inc%_EXT%\basctl\vcattr.hxx
 hedabu: ..\inc\vcbrwwrp.hxx %_DEST%\inc%_EXT%\basctl\vcbrwwrp.hxx
 hedabu: ..\inc\vcsbxdef.hxx %_DEST%\inc%_EXT%\basctl\vcsbxdef.hxx
 hedabu: ..\inc\basobj.hxx %_DEST%\inc%_EXT%\basctl\basobj.hxx
 hedabu: ..\inc\basidesh.hrc %_DEST%\inc%_EXT%\basctl\basicide.hrc
-hedabu: ..\source\basicide\bastype2.hxx %_DEST%\inc%_EXT%\basctl\bastype2.hxx
 hedabu: ..\source\basicide\idetemp.hxx %_DEST%\inc%_EXT%\basctl\idetemp.hxx
 hedabu: ..\source\basicide\tbxctl.hxx %_DEST%\inc%_EXT%\basctl\btbxctl.hxx
 hedabu: ..\source\basicide\iderdll.hxx %_DEST%\inc%_EXT%\basctl\iderdll.hxx
