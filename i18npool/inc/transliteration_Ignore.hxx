@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_Ignore.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:45:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _I18N_TRANSLITERATION_TRANSLITERATION_IGNORE_H_
 
 #include <transliteration_commonclass.hxx>
-#include <oneToOneMapping.hxx>
+#include <i18nutil/oneToOneMapping.hxx>
 
 typedef sal_Unicode (*TransFunc)(const sal_Unicode);
 
@@ -103,7 +103,7 @@ public:
         virtual sal_Unicode SAL_CALL
         transliterateChar2Char( sal_Unicode inChar)
         throw(com::sun::star::uno::RuntimeException,
-            drafts::com::sun::star::i18n::MultipleCharsOutputException);
+            com::sun::star::i18n::MultipleCharsOutputException);
 
         com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
         transliterateRange( const rtl::OUString& str1, const rtl::OUString& str2, XTransliteration& t1, XTransliteration& t2 )
@@ -201,7 +201,7 @@ public:\
         sal_Unicode SAL_CALL \
         transliterateChar2Char( sal_Unicode inChar) \
         throw(com::sun::star::uno::RuntimeException,\
-            drafts::com::sun::star::i18n::MultipleCharsOutputException);\
+            com::sun::star::i18n::MultipleCharsOutputException);\
 };
 
 #if defined( TRANSLITERATION_Kana ) || defined( TRANSLITERATION_ALL )
