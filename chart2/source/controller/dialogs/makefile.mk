@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-21 13:36:48 $
+#   last change: $Author: kz $ $Date: 2004-05-18 18:34:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,8 +67,6 @@ TARGET=				chcdialogs
 
 ENABLE_EXCEPTIONS=	TRUE
 #GEN_HID=           TRUE
-
-#BMP_IN=$(PRJ)$/res
 
 # --- Settings -----------------------------------------------------
 
