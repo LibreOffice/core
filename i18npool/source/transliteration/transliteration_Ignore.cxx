@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_Ignore.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:25:19 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,9 +219,6 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
                 *p = position;
             *dst ++ = previousChar;
         }
-        newStr->length = sal_Int32(dst - newStr->buffer);
-        if (useOffset)
-            offset.realloc(newStr->length);
     } else {
         // Translation
         while (nCount -- > 0) {
@@ -236,6 +233,9 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
             }
         }
     }
+    newStr->length = sal_Int32(dst - newStr->buffer);
+    if (useOffset)
+      offset.realloc(newStr->length);
     *dst = (sal_Unicode) 0;
 
     return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
