@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:36:51 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,6 @@
  ************************************************************************/
 
 #include <cstdarg>
-#ifdef SOLAR_JAVA
-#include <jnihelp.hxx>
-#endif // SOLAR_JAVA
-
 #include <sjapplet.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -81,15 +77,14 @@
 
 using namespace ::rtl;
 using namespace ::utl;
-#ifdef SOLAR_JAVA
-using namespace ::sj2;
-#endif // SOLAR_JAVA
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+
 #ifdef SOLAR_JAVA
 using namespace ::com::sun::star::java;
 #endif // SOLAR_JAVA
+
 
 SjApplet2::SjApplet2()
   : _pImpl(new SjApplet2_Impl())
