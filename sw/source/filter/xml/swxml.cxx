@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-14 16:28:24 $
+ *  last change: $Author: mtg $ $Date: 2002-01-29 15:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,6 @@ sal_Int32 ReadThroughComponent(
     SvStorageStreamRef xEventsStream;
     xEventsStream = pStorage->OpenStream( sStreamName,
                                           STREAM_READ | STREAM_NOCREATE );
-    xEventsStream->SetBufferSize( 16*1024 );
 
     Any aAny;
     sal_Bool bEncrypted =
@@ -390,12 +389,10 @@ sal_Int32 ReadThroughComponent(
         aAny.getValueType() == ::getBooleanCppuType() &&
         *(sal_Bool *)aAny.getValue();
 
-    Reference<io::XInputStream> xInputStream =
-        new utl::OInputStreamWrapper( *xEventsStream );
-
+    Reference < io::XInputStream > xStream = xEventsStream->GetXInputStream();
     // read from the stream
     return ReadThroughComponent(
-        xInputStream, xModelComponent, sStreamName, rFactory,
+        xStream, xModelComponent, sStreamName, rFactory,
         pFilterName, rFilterArguments,
         rName, bMustBeSuccessfull, bBlockMode, rInsertTextRange, bFormatsOnly,
         nStyleFamilyMask, bMergeStyles, bOrganizerMode, bEncrypted );
@@ -758,9 +755,7 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
         aParserInput.sSystemId = sDocName;
         SvStorageStreamRef xDocStream = pStg->OpenStream( sDocName,
             ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE ) );
-        xDocStream->Seek( 0L );
-        xDocStream->SetBufferSize( 16*1024 );
-        aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
+        aParserInput.aInputStream = xDocStream->GetXInputStream();
 
         // get parser
         Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
