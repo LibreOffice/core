@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: ka $ $Date: 2000-11-16 17:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,6 +497,100 @@ BOOL BitmapEx::Expand( ULONG nDX, ULONG nDY, const Color* pInitColor, BOOL bExpa
         }
 
         aBitmapSize = aBitmap.GetSizePixel();
+    }
+
+    return bRet;
+}
+
+// ------------------------------------------------------------------
+
+BOOL BitmapEx::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
+                          const BitmapEx* pBmpExSrc )
+{
+    BOOL bRet = FALSE;
+
+    if( !pBmpExSrc || pBmpExSrc->IsEmpty() )
+    {
+        if( !aBitmap.IsEmpty() )
+        {
+            bRet = aBitmap.CopyPixel( rRectDst, rRectSrc );
+
+            if( bRet && ( eTransparent == TRANSPARENT_BITMAP ) && !!aMask )
+                aMask.CopyPixel( rRectDst, rRectSrc );
+        }
+    }
+    else
+    {
+        if( !aBitmap.IsEmpty() )
+        {
+            bRet = aBitmap.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->aBitmap );
+
+            if( bRet )
+            {
+                if( pBmpExSrc->IsAlpha() )
+                {
+                    if( IsAlpha() )
+                        aMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->aMask );
+                    else if( IsTransparent() )
+                    {
+                        AlphaMask* pAlpha = new AlphaMask( aMask );
+
+                        aMask = pAlpha->ImplGetBitmap();
+                        delete pAlpha;
+                        bAlpha = TRUE;
+                        aMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->aMask );
+                    }
+                    else
+                    {
+                        Byte        cBlack = 0;
+                        AlphaMask*  pAlpha = new AlphaMask( GetSizePixel(), &cBlack );
+
+                        aMask = pAlpha->ImplGetBitmap();
+                        delete pAlpha;
+                        eTransparent = TRANSPARENT_BITMAP;
+                        bAlpha = TRUE;
+                        aMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->aMask );
+                    }
+                }
+                else if( pBmpExSrc->IsTransparent() )
+                {
+                    if( IsAlpha() )
+                    {
+                        AlphaMask aAlpha( pBmpExSrc->aMask );
+                        aMask.CopyPixel( rRectDst, rRectSrc, &aAlpha.ImplGetBitmap() );
+                    }
+                    else if( IsTransparent() )
+                        aMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->aMask );
+                    else
+                    {
+                        aMask = Bitmap( GetSizePixel(), 1 );
+                        aMask.Erase( Color( COL_BLACK ) );
+                        eTransparent = TRANSPARENT_BITMAP;
+                        aMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->aMask );
+                    }
+                }
+            }
+        }
+    }
+
+    return bRet;
+}
+
+// ------------------------------------------------------------------
+
+BOOL BitmapEx::Erase( const Color& rFillColor )
+{
+    BOOL bRet = FALSE;
+
+    if( !!aBitmap )
+    {
+        bRet = aBitmap.Erase( rFillColor );
+
+        if( bRet && ( eTransparent == TRANSPARENT_BITMAP ) && !!aMask )
+        {
+            const Color aBlack( COL_BLACK );
+            aMask.Erase( aBlack );
+        }
     }
 
     return bRet;
