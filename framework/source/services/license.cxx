@@ -2,9 +2,9 @@
  *
  *  $RCSfile: license.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:22:39 $
+ *  last change: $Author: hjs $ $Date: 2004-06-30 10:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,23 +321,37 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             return aRet;
         }
         // determine the filename of the license to show
-        LanguageType aLanguage = LANGUAGE_DONTKNOW;
+        OUString  aLangString;
+        ::com::sun::star::lang::Locale aLocale;
         OString aMgrName = OString("fwe") + OString::valueOf((sal_Int32)SUPD, 10);
         AllSettings aSettings(Application::GetSettings());
-        aLanguage = aSettings.GetUILanguage();
-        ResMgr* pResMgr = ResMgr::SearchCreateResMgr(aMgrName, aLanguage);
+        aLocale = aSettings.GetUILocale();
+        ResMgr* pResMgr = ResMgr::SearchCreateResMgr(aMgrName, aLocale);
 
+        aLangString = aLocale.Language;
+        if ( aLocale.Country.getLength() != 0 )
+        {
+            aLangString += OUString::createFromAscii("-");
+            aLangString += aLocale.Country;
+            if ( aLocale.Variant.getLength() != 0 )
+            {
+                aLangString += OUString::createFromAscii("-");
+                aLangString += aLocale.Variant;
+            }
+        }
 #ifdef WNT
         OUString aLicensePath =
             aBaseInstallPath + OUString::createFromAscii(szLicensePath)
             + OUString::createFromAscii(szWNTLicenseName)
-            + OUString::createFromAscii(ResMgr::GetLang(aLanguage, 0))
+            + OUString::createFromAscii("_")
+            + aLangString
             + OUString::createFromAscii(szWNTLicenseExt);
 #else
         OUString aLicensePath =
             aBaseInstallPath + OUString::createFromAscii(szLicensePath)
             + OUString::createFromAscii(szUNXLicenseName)
-            + OUString::createFromAscii(ResMgr::GetLang(aLanguage, 0))
+            + OUString::createFromAscii("_")
+            + aLangString
             + OUString::createFromAscii(szUNXLicenseExt);
 #endif
         // check if we need to show the license at all
