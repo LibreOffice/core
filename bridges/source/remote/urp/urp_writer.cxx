@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:29:18 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 #include <stdio.h>
-
 #ifndef _OSL_TIME_H_
 #include <osl/time.h>
 #endif
@@ -91,12 +90,12 @@ namespace bridges_urp {
 
 OWriterThread::OWriterThread( remote_Connection *pConnection, urp_BridgeImpl *pBridgeImpl,
                               uno_Environment *pEnvRemote) :
-    m_pConnection( pConnection ),
     m_bAbort( sal_False ),
-    m_pBridgeImpl( pBridgeImpl ),
-    m_pEnvRemote( pEnvRemote ),
     m_bInBlockingWait( sal_False ),
-    m_bEnterBlockingWait( sal_False )
+    m_bEnterBlockingWait( sal_False ),
+    m_pConnection( pConnection ),
+    m_pBridgeImpl( pBridgeImpl ),
+    m_pEnvRemote( pEnvRemote )
 
 {
     m_oslCondition = osl_createCondition();
@@ -219,7 +218,6 @@ void OWriterThread::insertReleaseRemoteCall(
  ***/
 void OWriterThread::executeReleaseRemoteCalls()
 {
-    sal_Bool bFound = sal_True;
     ::std::list< struct RemoteReleaseCall > lstReleaseCalls;
     {
         ::osl::MutexGuard guard( m_releaseCallMutex );
