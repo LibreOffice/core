@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-05 15:47:37 $
+ *  last change: $Author: dr $ $Date: 2002-07-08 08:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,12 +118,6 @@ inline set_bits( Type& rValue, const Type& rMask, bool bSet )
 {
     if( bSet ) rValue |= rMask; else rValue &= ~rMask;
 }
-
-
-// ----------------------------------------------------------------------------
-
-/** Transparency for header color of selected columns. */
-const sal_uInt16 CSV_HDR_TRANSPARENCY = 85;
 
 
 // ============================================================================
@@ -250,7 +244,11 @@ void ScCsvGrid::ApplyLayout( const ScCsvLayoutData& rOldData )
     if( GetPosCount() != rOldData.mnPosCount )
     {
         if( GetPosCount() < rOldData.mnPosCount )
+        {
+            ImplClearSelection();
+            CommitEvent( GRIDEVENT_SELECTION );
             maSplits.RemoveRange( GetPosCount(), rOldData.mnPosCount );
+        }
         else
             maSplits.Remove( rOldData.mnPosCount );
         maSplits.Insert( GetPosCount() );
@@ -536,10 +534,10 @@ void ScCsvGrid::ImplSetTextLineSep(
             ImplInsertSplit( nLastPos );
         }
 
-        if( aCellText.Len() <= 0x7FFF ) // not more than 0x7FFFF characters for edit engine
+        if( aCellText.Len() <= CSV_MAXSTRLEN )
             rStrVec.push_back( aCellText );
         else
-            rStrVec.push_back( aCellText.Copy( 0, 0x7FFF ) );
+            rStrVec.push_back( aCellText.Copy( 0, CSV_MAXSTRLEN ) );
         ++nColIx;
     }
     InvalidateGfx();
@@ -563,7 +561,7 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const String& rTextLine )
     for( sal_uInt32 nColIx = 0; (nColIx < nColCount) && (nStrIx < nStrLen); ++nColIx )
     {
         xub_StrLen nChars = static_cast< xub_StrLen >( GetColumnWidth( nColIx ) );
-        rStrVec.push_back( rTextLine.Copy( nStrIx, Max( nChars, static_cast< xub_StrLen >( 0x7FFFF ) ) ) );
+        rStrVec.push_back( rTextLine.Copy( nStrIx, Max( nChars, CSV_MAXSTRLEN ) ) );
         nStrIx += nChars;
     }
     InvalidateGfx();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-05 15:42:14 $
+ *  last change: $Author: dr $ $Date: 2002-07-08 08:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,46 @@
 #ifndef _SC_CSVSPLITS_HXX
 #include "csvsplits.hxx"
 #endif
+
+
+// ============================================================================
+
+typedef ::std::vector< String >             ScCsvStringVec;
+typedef ::std::vector< ScCsvStringVec >     ScCsvStringVecVec;
+typedef ::std::vector< sal_Int32 >          ScCsvColTypeVec;
+typedef ::std::vector< sal_uInt8 >          ScCsvColFlagsVec;
+
+typedef ::std::vector< xub_StrLen >         ScCsvExtColPosVec;
+typedef ::std::vector< sal_uInt8 >          ScCsvExtColTypeVec;
+
+
+// ----------------------------------------------------------------------------
+
+/** Minimum character count for a column in separators mode. */
+const sal_Int32 CSV_MINCOLWIDTH         = 5;
+/** Maximum length of a cell string. */
+const xub_StrLen CSV_MAXSTRLEN          = 0x7FFF;
+/** Transparency for header color of selected columns. */
+const sal_uInt16 CSV_HDR_TRANSPARENCY   = 85;
+
+//! TODO make string array dynamic
+const sal_Int32 CSV_PREVIEW_LINES       = 32; // maximum count of preview lines
+
+/** Default column data type. */
+const sal_Int32 CSV_TYPE_DEFAULT        = 0;
+/** Multi selection with different types. */
+const sal_Int32 CSV_TYPE_MULTI          = -1;
+/** No column selected. */
+const sal_Int32 CSV_TYPE_NOSELECTION    = -2;
+
+// External used column types.
+const sal_uInt8 SC_COL_STANDARD         = 1;
+const sal_uInt8 SC_COL_TEXT             = 2;
+const sal_uInt8 SC_COL_MDY              = 3;
+const sal_uInt8 SC_COL_DMY              = 4;
+const sal_uInt8 SC_COL_YMD              = 5;
+const sal_uInt8 SC_COL_SKIP             = 9;
+const sal_uInt8 SC_COL_ENGLISH          = 10;
 
 
 // ============================================================================
