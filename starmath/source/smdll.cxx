@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smdll.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-12 15:54:37 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,15 @@
 #ifndef _SVX_LBOXCTRL_HXX_
 #include <svx/lboxctrl.hxx>
 #endif
+#ifndef _SFXDOCFILE_HXX //autogen
+#include <sfx2/docfile.hxx>
+#endif
+#ifndef _SFX_DOCFILT_HACK_HXX //autogen
+#include <sfx2/docfilt.hxx>
+#endif
+#ifndef _SFXAPP_HXX //autogen
+#include <sfx2/app.hxx>
+#endif
 
 #ifndef _SMDLL_HXX
 #include <smdll.hxx>
@@ -96,6 +105,7 @@
 #ifndef _STARMATH_HRC
 #include <starmath.hrc>
 #endif
+
 
 BOOL SmDLL::bInitialized = FALSE;
 
@@ -115,23 +125,12 @@ void SmDLL::Init()
     // do whatever you want, you may use Sd-DLL too
 
     // the SdModule must be created
-#if 0
+
+    SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
+    *ppShlPtr = new SmModule( &SmDocShell::Factory() );
+
     SmDocShell::RegisterFactory(SDT_SMA_DOCFACTPRIO);
-#endif
-
-    SmModuleDummy** ppShlPtr = (SmModuleDummy**) GetAppData(SHL_SM);
-
-#if 1
-    SvFactory* pFact = PTR_CAST(SvFactory,(*ppShlPtr)->pSmDocShellFactory);
-    delete (*ppShlPtr);
-    (*ppShlPtr) = new SmModule(pFact);
-    (*ppShlPtr)->pSmDocShellFactory = pFact;
-#else
-    (*ppShlPtr) = new SmModule( &SmDocShell::Factory() );
-#endif
-
-    String aResDll(C2S("sm"));
-    aResDll += String::CreateFromInt32( SOLARUPD );
+    //SmDocShell::InitFactory();
 
     SfxModule *p = SM_MOD1();
     SmModule *pp = (SmModule *) p;
@@ -163,11 +162,119 @@ void SmDLL::Init()
 void SmDLL::Exit()
 {
     // the SdModule must be destroyed
-    SmModuleDummy** ppShlPtr = (SmModuleDummy**) GetAppData(SHL_SM);
+    SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
     delete (*ppShlPtr);
     (*ppShlPtr) = NULL;
 
     *GetAppData(SHL_SM) = 0;
 }
 
+ULONG SmDLL::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
+                            SfxFilterFlags nMust, SfxFilterFlags nDont )
+{
+    ULONG nReturn = ERRCODE_ABORT;
+    if( SVSTREAM_OK != rMedium.GetError() )
+        nReturn = rMedium.GetError();
+    else if ( rMedium.IsStorage() )
+    {
+        // Storage
+        SvStorage* pStorage = rMedium.GetStorage();
+
+        if( !pStorage )
+            nReturn = ULONG_MAX;
+        else
+        {
+            // Erkennung ueber contained streams (StarChart 3.0)
+            static const sal_Char sStrmNm_0[] = "StarMathDocument";
+            static const sal_Char sFltrNm_0[] = "StarMath 5.0";
+            static const sal_Char sStrmNm_1[] = "Equation Native";
+            static const sal_Char sFltrNm_1[] = "MathType 3.x";
+            static const sal_Char sStrmNm_2[] = "content.xml";
+            static const sal_Char sFltrNm_2[] = STAROFFICE_XML;
+            static const sal_Char sStrmNm_3[] = "Content.xml";
+            static const sal_Char sFltrNm_3[] = STAROFFICE_XML;
+
+            const sal_uInt16 nCount = 4;
+            const sal_Char *aStrmNms[nCount] =
+                { sStrmNm_0, sStrmNm_1, sStrmNm_2, sStrmNm_3 };
+            const sal_Char *aFltrNms[nCount] =
+                { sFltrNm_0, sFltrNm_1, sFltrNm_2, sFltrNm_3 };
+
+            String aStreamName;
+            String sFilterName;
+            if( *ppFilter )
+            {
+                for( sal_uInt16 i=0; i < nCount; i++ )
+                {
+                    if( (*ppFilter)->GetFilterName().EqualsAscii(aFltrNms[i]) )
+                    {
+                        aStreamName.AssignAscii( aStrmNms[i] );
+                        if( pStorage->IsStream( aStreamName ) &&
+                            ((*ppFilter)->GetFilterFlags() & nMust) == nMust &&
+                            ((*ppFilter)->GetFilterFlags() & nDont) == 0 )
+                            nReturn = ERRCODE_NONE;
+
+                        break;  // The old XML filter (Content.xml) will be
+                                // detected in the next loop.
+                    }
+                }
+            }
+
+            if( ERRCODE_NONE != nReturn )
+            {
+                for( sal_uInt16 i=0; i < nCount; i++ )
+                {
+                    aStreamName.AssignAscii( aStrmNms[i] );
+                    if( pStorage->IsStream( aStreamName ))
+                    {
+                        sFilterName.AssignAscii( aFltrNms[i] );
+                        const SfxFilter* pFilt = SFX_APP()->GetFilter(
+                                    SmDocShell::Factory(), sFilterName );
+
+                        if( pFilt &&
+                            (pFilt->GetFilterFlags() & nMust) == nMust &&
+                            (pFilt->GetFilterFlags() & nDont) == 0)
+                        {
+                            *ppFilter = pFilt;
+                            nReturn = ERRCODE_NONE;
+                        }
+
+                        break; // There are no two filters with the same strm name
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        //Test to see if this begins with xml and if so run it through
+        //the MathML filter. There are all sorts of things wrong with
+        //this approach, to be fixed at a better level than here
+        SvStream *pStrm = rMedium.GetInStream();
+        if (pStrm && !pStrm->GetError())
+        {
+            const int nSize = 5;
+            sal_Char aBuffer[nSize+1];
+            aBuffer[nSize] = 0;
+            ULONG nBytesRead = pStrm->Read( aBuffer, nSize );
+            pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+            if (nBytesRead == nSize)
+            {
+                if (0 == strncmp( "<?xml",aBuffer,nSize))
+                {
+                    static const sal_Char sFltrNm_2[] = MATHML_XML;
+
+                    String sFltrNm;
+                    sFltrNm.AssignAscii( sFltrNm_2 );
+                    const SfxFilter* pFilt = SFX_APP()->GetFilter(
+                                    SmDocShell::Factory(), sFltrNm );
+                    *ppFilter = pFilt;
+
+                    nReturn = ERRCODE_NONE;
+                }
+            }
+        }
+    }
+    return nReturn;
+}
 
