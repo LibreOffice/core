@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dfoster $ $Date: 2003-11-04 17:45:29 $
+#   last change: $Author: rt $ $Date: 2004-01-05 14:42:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ NO_BSYMBOLIC=   TRUE
 
 # --- Allgemein ----------------------------------------------------
 LIB1TARGET=	 $(SLB)$/$(TARGET).lib
-LIB1FILES=  $(SLB)/storage.lib $(SLB)/provider.lib
+LIB1FILES=   $(SLB)/provider.lib
 
 
 #SHL1TARGET= sfx$(UPD)$(DLLPOSTFIX)
