@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2001-10-26 11:00:37 $
+ *  last change: $Author: jb $ $Date: 2001-11-05 16:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,11 +415,10 @@ TemplateProvider SetElementFactory::findTemplateProvider(Tree const& aTree, Node
 // class TreeSetUpdater and ValueSetUpdater
 //-----------------------------------------------------------------------------
 
-static Attributes getNewElementAttributes()
+static Attributes getNewElementAttributes(bool bInserting)
 {
     Attributes aResult;
-    aResult.bDefaulted = false;
-    aResult.bReplaced  = true;
+    aResult.setState( bInserting ? node::isAdded : node::isReplaced );
 
     return aResult;
 }
@@ -429,7 +428,7 @@ static Attributes getNewElementAttributes()
 
 ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, UnoAny const& aValue)
 {
-    static const Attributes aNewValueAttributes = getNewElementAttributes();
+    static const Attributes aNewValueAttributes = getNewElementAttributes(false); // TODO: get real value
 
     UnoType aType = m_aTemplate->getInstanceType();
 

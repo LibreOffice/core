@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: jb $ $Date: 2001-11-05 16:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ namespace configmgr
         void        setNewValue(const uno::Any& _rNewVal, Mode aMode)
         { setNewValue(_rNewVal); m_eMode = aMode;}
 
-        bool isReplacedValue()   const {return m_aAttributes.bReplaced;}
+        bool isReplacedValue()   const {return m_aAttributes.isReplacedForUser();}
         bool isLocalizedValue()  const {return m_aAttributes.bLocalized;}
 
         Mode getMode() const { return m_eMode; }
@@ -376,7 +376,7 @@ namespace configmgr
         : Change(_rName,_bToDefault)
         , m_aAttributes(_rAttr)
         {
-            m_aAttributes.bDefaulted = _bToDefault;
+            m_aAttributes.markAsDefault(_bToDefault);
         }
 
         SubtreeChange(const rtl::OUString& _rName,
@@ -389,7 +389,7 @@ namespace configmgr
         , m_sTemplateModule(_rTemplateModule)
         , m_aAttributes(_rAttr)
         {
-            m_aAttributes.bDefaulted = _bToDefault;
+            m_aAttributes.markAsDefault(_bToDefault);
         }
 
         SubtreeChange(const ISubtree& _rTree, bool _bToDefault = false)
@@ -398,7 +398,7 @@ namespace configmgr
         , m_sTemplateName(_rTree.getElementTemplateName())
         , m_sTemplateModule(_rTree.getElementTemplateModule())
         {
-            m_aAttributes.bDefaulted = _bToDefault;
+            m_aAttributes.markAsDefault(_bToDefault);
         }
 
         SubtreeChange(const SubtreeChange& _rChange, NoChildCopy)
@@ -416,7 +416,7 @@ namespace configmgr
 
         void swap(SubtreeChange& aOther);
 
-        bool isReplacedNode()       const { return m_aAttributes.bReplaced;  }
+        bool isReplacedNode()       const { return m_aAttributes.isReplacedForUser();  }
         bool isLocalizedContainer() const { return m_aAttributes.bLocalized; }
 
         const node::Attributes& getAttributes() const {return m_aAttributes;}

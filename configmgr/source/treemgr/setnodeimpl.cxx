@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
+ *  last change: $Author: jb $ $Date: 2001-11-05 16:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,10 +180,9 @@ namespace
 
         node::Attributes aAttributes = pTree->node(pTree->root())->attributes();
 
-        OSL_ENSURE(!(aAttributes.bReplaced && aAttributes.bDefaulted),
-                    "Unexpected case: node is both defaulted and replaced" );
+        bool bReplaced = aAttributes.isReplacedForUser();
 
-        return !aAttributes.bReplaced;
+        return !bReplaced;
     }
     //-------------------------------------------------------------------------
     void CollectElementTrees::handle(ValueNode& rValue)
@@ -228,11 +227,8 @@ namespace
     {
         node::Attributes const aAttributes = rNode.getAttributes();
 
-        OSL_ENSURE(!(aAttributes.bReplaced && aAttributes.bDefaulted),
-                    "Unexpected case: node is both defaulted and replaced" );
-
         bool bWritable  = aAttributes.bWritable;
-        bool bInDefault = !aAttributes.bReplaced;
+        bool bInDefault = !aAttributes.isReplacedForUser();
 
         NodeFactory& rNodeFactory = bWritable ? m_rFactory : NodeType::getReadAccessFactory();
 

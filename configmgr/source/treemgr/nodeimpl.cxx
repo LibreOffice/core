@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
+ *  last change: $Author: jb $ $Date: 2001-11-05 16:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ bool GroupNodeImpl::hasValue(Name const& aName) const
 
 bool GroupNodeImpl::areValueDefaultsAvailable() const
 {
-    return m_rOriginal.getDefaultsLevel() != 0 || m_rOriginal.getAttributes().bDefaulted;
+    return m_rOriginal.getDefaultsLevel() != 0 || m_rOriginal.getAttributes().isDefault();
 }
 //-----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
+ *  last change: $Author: jb $ $Date: 2001-11-05 16:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ namespace
             Attributes aElementAttributes = aTree.getAttributes(aTree.getRootNode());
 
             // a set element is considered default iff it is not replaced/added
-            bool bDefault = !aElementAttributes.bReplaced;
+            bool bDefault = !aElementAttributes.isReplacedForUser();
 
             aResult = bDefault ? CONTINUE : DONE;
         }

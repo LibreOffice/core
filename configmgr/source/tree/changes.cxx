@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:30 $
+ *  last change: $Author: jb $ $Date: 2001-11-05 16:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,14 @@ ValueChange::ValueChange(OUString const& _rName,
     : Change(_rName,false)
      ,m_aValue(aNewValue)
      ,m_aOldValue(aOldValue)
+     ,m_eMode(changeValue)
      ,m_aAttributes(_rAttributes)
 {
-     m_eMode = _rAttributes.bDefaulted ? wasDefault : changeValue;
-     m_aAttributes.bDefaulted = false;
+    if (_rAttributes.isDefault())
+    {
+        m_eMode = wasDefault;
+        m_aAttributes.setState( node::isModification );
+    }
 }
 // -------------------------------------------------------------------------
 static inline bool isDefaultMode(ValueChange::Mode _eMode)
@@ -99,7 +103,7 @@ ValueChange::ValueChange(OUString const& _rName,
      ,m_eMode(_eMode)
      ,m_aAttributes(_rAttributes)
 {
-    m_aAttributes.bDefaulted = Change::isToDefault();
+    m_aAttributes.markAsDefault(Change::isToDefault());
 }
 // -------------------------------------------------------------------------
 ValueChange::ValueChange(Any aNewValue, ValueNode const& aOldValue)
@@ -109,7 +113,7 @@ ValueChange::ValueChange(Any aNewValue, ValueNode const& aOldValue)
      ,m_aAttributes(aOldValue.getAttributes())
 {
     m_eMode = aOldValue.isDefault() ? wasDefault : changeValue;
-    m_aAttributes.bDefaulted = false;
+    m_aAttributes.markAsDefault(false);
 }
 // -------------------------------------------------------------------------
 ValueChange::ValueChange(SetToDefault, ValueNode const& aOldValue)
@@ -119,7 +123,7 @@ ValueChange::ValueChange(SetToDefault, ValueNode const& aOldValue)
      ,m_eMode(setToDefault)
      ,m_aAttributes(aOldValue.getAttributes())
 {
-     m_aAttributes.bDefaulted = true;
+    m_aAttributes.markAsDefault(true);
 }
 
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-02 12:46:48 $
+ *  last change: $Author: jb $ $Date: 2001-11-05 16:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,10 @@ namespace configmgr
     protected:
         INode(){}
 
-        void markAsDefault(bool _bDefault = true) { m_aAttributes.bDefaulted = _bDefault;}
+        void markAsDefault(bool _bDefault = true)
+        {
+            m_aAttributes.markAsDefault(_bDefault);
+        }
     public:
         explicit
         INode(node::Attributes);
@@ -142,9 +145,8 @@ namespace configmgr
         const OUString& getName() const { return m_aName; }
         node::Attributes getAttributes() const { return m_aAttributes; }
 
-        bool isDefault()   const { return m_aAttributes.bDefaulted; }
+        bool isDefault()   const { return m_aAttributes.isDefault(); }
         bool isLocalized() const { return m_aAttributes.bLocalized; }
-        bool isReplaced()  const { return m_aAttributes.bReplaced; }
 
         void forceWritableToFinalized(); /// make non-writable nodes writable but finalized
 
@@ -317,7 +319,7 @@ namespace configmgr
         }
         ValueNode(OUString const& aName,uno::Any const& anAny, node::Attributes _aAttrs)
         : INode(aName, _aAttrs)
-        , m_aValuePair(anAny, selectMember(_aAttrs.bDefaulted))
+        , m_aValuePair(anAny, selectMember(_aAttrs.isDefault()))
         {
         }
         ValueNode(OUString const& aName,uno::Any const& anAny,uno::Any const& aDefault, node::Attributes _aAttrs)

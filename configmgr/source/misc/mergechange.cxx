@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-10-08 15:50:30 $
+ *  last change: $Author: jb $ $Date: 2001-11-05 16:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,10 @@ namespace configmgr
     private:
         virtual void handle(ValueChange& aValueChange)
             {
-                m_eAction = FlagDeleted;
+                if (aValueChange.getAttributes().existsInDefault())
+                    m_eAction = FlagDeleted;
+                else
+                    m_eAction = RemoveCompletely;
             }
 
         virtual void handle(RemoveNode& _rRemoveNode)
@@ -312,10 +315,10 @@ namespace configmgr
 
         virtual void handle(SubtreeChange& _rSubtree)
             {
-                m_eAction = FlagDeleted;
-                // TODO: need an extra state to distinguish between nodes which are overwritten in the user layer
-                // and nodes which are added to the user layer, but not existent in the share layer
-                // In the latter case m_eAction could be set to RemoveCompletely
+                if (_rSubtree.getAttributes().existsInDefault())
+                    m_eAction = FlagDeleted;
+                else
+                    m_eAction = RemoveCompletely;
             }
     };
     // -----------------------------------------------------------------------------
@@ -924,7 +927,7 @@ namespace configmgr
         {
             INode* pAdded = _rAddNode.getAddedNode();
             OSL_ENSURE(pAdded,"No Data in AddNode");
-            if (pAdded == NULL || pAdded->getAttributes().bDefaulted)
+            if (pAdded == NULL || pAdded->getAttributes().isDefault())
                 stripOne(_rAddNode);
 
             // else we should strip the defaults from the added node

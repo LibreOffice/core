@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configdefaultprovider.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
+ *  last change: $Author: jb $ $Date: 2001-11-05 16:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,10 +140,10 @@ bool DefaultProvider::fetchDefaultData(Tree const& _aTree) const SAL_THROW((uno:
 {
     node::Attributes aAttributes = _aTree.getAttributes(_aTree.getRootNode());
 
-    if (aAttributes.bDefaulted) return true;
+    if (aAttributes.isDefault()) return true;
 
     // in replaced/added parts, defaults are considered non-existing
-    if (aAttributes.bReplaced)  return false;
+    if (!aAttributes.isReplacedForUser())  return false;
 
     if (!m_aProxy.is()) return false;
 
@@ -161,7 +161,7 @@ std::auto_ptr<ISubtree> DefaultProvider::getDefaultTree(Tree const& _aTree, Node
 //    if (aAttributes.bDefaulted)
 //        clone the ISubtree (no interface for that) :-(
 
-    if (m_aProxy.is() && !aAttributes.bReplaced)
+    if (m_aProxy.is() && aAttributes.existsInDefault())
     {
         aRet = m_aProxy->getDefaultTree(_aTree.getAbsolutePath(_aNode));
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: jb $ $Date: 2001-11-05 16:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,23 @@ namespace configmgr
 {
     namespace node
     {
+        enum State          // Change State
+        {
+            isDefault,          isToDefault     = isDefault,
+            isMerged,           isModification  = isMerged,
+            isReplaced,         isReplacement   = isReplaced,
+            isAdded,            isAddition      = isAdded,
+        };
+        inline bool existsInDefault(State eState)   { return eState <= isReplaced;}
+        inline bool isReplacedForUser(State eState) { return eState >= isReplaced;}
+
         /// holds attributes a node in the schema
         struct Attributes
         {
+            State state_        : 2;    // merged/replaced/default state
+
             bool bWritable      : 1;    // write-protected, if false
             bool bFinalized     : 1;    // can not be overridden - write protected when merged upwards
-
-            bool bReplaced      : 1;    // node not merged: it does not exist in the default layer
-            bool bDefaulted     : 1;    // node not merged: it exists only in the default layer
 
             bool bNullable      : 1;    // values only: can be NULL
             bool bLocalized     : 1;    // values only: value may depend on locale
@@ -84,8 +93,7 @@ namespace configmgr
             Attributes()
             : bWritable(true)
             , bFinalized(false)
-            , bReplaced(false)
-            , bDefaulted(false)
+            , state_(node::isMerged)
             , bNullable(true)
             , bLocalized(false)
             , bNotified(true)
@@ -95,6 +103,21 @@ namespace configmgr
                 the handling in CmXMLFormater::handleAttributes()
                 and OValueHandler::startElement() should be reviewed
             */
+            State state() const         { return State(0x03 & state_); }
+            void setState(State _state) { this->state_ = _state; }
+
+            bool isDefault()            const { return this->state() == node::isDefault;}
+            bool existsInDefault()      const { return node::existsInDefault(this->state());}
+            bool isReplacedForUser()    const { return node::isReplacedForUser(this->state());}
+
+            void markAsDefault(bool _bDefault = true)
+            {
+                if (_bDefault)
+                    this->state_ = node::isDefault;
+                else if (this->isDefault())
+                    this->state_ = node::isMerged;
+            }
+
         };
 
     }
