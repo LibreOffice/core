@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-06 15:04:48 $
+ *  last change: $Author: fme $ $Date: 2002-06-07 14:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ class Point;
 class SwWrongList;
 class Size;
 class SwFont;
+class Font;
 class ViewShell;
 class SwTxtNode;
 class SwAttrHandler;
@@ -666,6 +667,12 @@ public:
 #endif
 
     void Shift( USHORT nDir );
+
+    // sets a new color at the output device if necessary
+    // if a font is passed as argument, the change if made to the font
+    // otherwise the font at the output device is changed
+    // returns if the font has been changed
+    sal_Bool ApplyAutoColor( Font* pFnt = 0 );
 };
 
 #endif

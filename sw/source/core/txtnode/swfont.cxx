@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-21 08:36:33 $
+ *  last change: $Author: fme $ $Date: 2002-06-07 14:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -973,26 +973,6 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
         nOldUnder = GetUnderline();
         SetUnderline( UNDERLINE_NONE );
         pUnderFnt = rInf.GetUnderFnt();
-
-        // !!! In case the font color and the underline color are both
-        // COL_AUTO, we set the color
-        if( COL_AUTO == GetColor().GetColor() )
-        {
-            ViewShell* pSh = rInf.GetShell();
-            ColorData nNewColor;
-            if( pSh && pSh->GetWin() )
-            {
-                const StyleSettings& rS = pSh->GetWin()->GetSettings().GetStyleSettings();
-                nNewColor = rInf.GetDarkBack()
-                    ? COL_WHITE : rS.GetWindowTextColor().GetColor();
-            }
-            else
-                nNewColor = rInf.GetDarkBack() ? COL_WHITE : COL_BLACK;
-
-            pUnderFnt->SetColor( Color( nNewColor ) );
-        }
-        else
-            pUnderFnt->SetColor( GetColor() );
     }
 
     if( !pLastFont || pLastFont->GetOwner()!=pMagic )
@@ -1101,6 +1081,8 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
 
     if ( !pLastFont || pLastFont->GetOwner() != pMagic )
         ChgFnt( rInf.GetShell(), rInf.GetpOut() );
+
+    rInf.ApplyAutoColor();
 
     Point aPos( rInf.GetPos() );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-13 09:02:02 $
+ *  last change: $Author: fme $ $Date: 2002-06-07 14:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,42 +782,13 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         }
         aPos.X() += nPixWidth;
     }
-    BOOL bChgColor = FALSE;
-    ColorData nNewColor;
-    if( bPrt && rInf.GetShell()->GetViewOptions()->IsBlackFont() )
-    {
-        if( COL_BLACK != pTmpFont->GetColor().GetColor() )
-        {
-            nNewColor = COL_BLACK;
-            bChgColor = TRUE;
-        }
-    }
-    else if( COL_AUTO == pTmpFont->GetColor().GetColor() ||
-             rInf.GetShell()->GetViewOptions()->IsAlwaysAutoColor() )
-    {
-        ViewShell* pSh = rInf.GetShell();
-        if( pSh && pSh->GetWin() )
-        {
-            const StyleSettings& rS = pSh->GetWin()->GetSettings().GetStyleSettings();
-            nNewColor = rInf.GetDarkBack()
-                ? COL_WHITE : rS.GetWindowTextColor().GetColor();
-        }
-        else
-            nNewColor = rInf.GetDarkBack() ? COL_WHITE : COL_BLACK;
 
-        bChgColor = TRUE;
-    }
-    if( bChgColor )
-    {
-        Color aOldColor( pTmpFont->GetColor() );
-        Color aBlack( nNewColor );
-        pTmpFont->SetColor( aBlack );
-        if( !pTmpFont->IsSameInstance( rInf.GetOut().GetFont() ) )
-            rInf.GetOut().SetFont( *pTmpFont );
-        pTmpFont->SetColor( aOldColor );
-    }
-    else if( !pTmpFont->IsSameInstance( rInf.GetOut().GetFont() ) )
+    Color aOldColor( pTmpFont->GetColor() );
+    sal_Bool bChgColor = rInf.ApplyAutoColor( pTmpFont );
+    if( !pTmpFont->IsSameInstance( rInf.GetOut().GetFont() ) )
         rInf.GetOut().SetFont( *pTmpFont );
+    if ( bChgColor )
+        pTmpFont->SetColor( aOldColor );
 
     if ( STRING_LEN == rInf.GetLen() )
         rInf.SetLen( rInf.GetText().Len() );
@@ -1116,15 +1087,17 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         else if( rInf.GetKern() )
         {
             long nTmpWidth = GetTextSize( rInf ).Width();
-            if( bChgColor && COL_AUTO == pTmpFont->GetColor().GetColor() )
+
+            Color aOldColor( pTmpFont->GetColor() );
+            sal_Bool bChgColor = rInf.ApplyAutoColor( pTmpFont );
+
+            if( bChgColor )
             {
-                Color aOldColor( pTmpFont->GetColor() );
-                Color aBlack( nNewColor );
-                pTmpFont->SetColor( aBlack );
                 if( !pTmpFont->IsSameInstance( rInf.GetOut().GetFont() ) )
                     rInf.GetOut().SetFont( *pTmpFont );
                 pTmpFont->SetColor( aOldColor );
             }
+
             rInf.GetOut().DrawStretchText( aPos, (USHORT)nTmpWidth,
                                rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
         }
@@ -2287,3 +2260,84 @@ void SwDrawTextInfo::Shift( USHORT nDir )
         break;
     }
 }
+
+sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
+{
+    const Font& rFnt = pFnt ? *pFnt : GetOut().GetFont();
+    sal_Bool bPrt = OUTDEV_PRINTER == GetOut().GetOutDevType();
+    ColorData nNewColor;
+    sal_Bool bChgFntColor = sal_False;
+    sal_Bool bChgUnderColor = sal_False;
+
+    if( bPrt && GetShell() && GetShell()->GetViewOptions()->IsBlackFont() )
+    {
+        if ( COL_BLACK != rFnt.GetColor().GetColor() )
+            bChgFntColor = sal_True;
+
+        if ( COL_BLACK != GetOut().GetTextLineColor().GetColor() )
+            bChgUnderColor = sal_True;
+
+        nNewColor = COL_BLACK;
+    }
+    else
+    {
+        // FontColor has to be changed if:
+        // 1. FontColor = AUTO or 2. IsAlwaysAutoColor is set
+        // UnderLineColor has to be changed if:
+        // 1. IsAlwaysAutoColor is set
+
+        bChgUnderColor = ! bPrt && GetShell() &&
+                         GetShell()->GetViewOptions()->IsAlwaysAutoColor();
+
+        bChgFntColor = COL_AUTO == rFnt.GetColor().GetColor() || bChgUnderColor;
+
+        if ( bChgFntColor )
+        {
+            if( GetShell() && GetShell()->GetWin() )
+            {
+                const StyleSettings& rS = GetShell()->GetWin()->
+                                          GetSettings().GetStyleSettings();
+                nNewColor = GetDarkBack() ?
+                            COL_WHITE :
+                            rS.GetWindowTextColor().GetColor();
+            }
+            else
+                nNewColor = GetDarkBack() ? COL_WHITE : COL_BLACK;
+        }
+    }
+
+    if ( bChgFntColor || bChgUnderColor )
+    {
+        Color aNewColor( nNewColor );
+
+        if ( bChgFntColor )
+        {
+            if ( pFnt && aNewColor != pFnt->GetColor() )
+            {
+                // only set the new color at the font passed as argument
+                pFnt->SetColor( aNewColor );
+            }
+            else if ( aNewColor != GetOut().GetFont().GetColor() )
+            {
+                // set new font with new color at output device
+                Font aFont( rFnt );
+                aFont.SetColor( aNewColor );
+                GetOut().SetFont( aFont );
+            }
+        }
+
+        // the underline color has to be set separately
+        if ( bChgUnderColor )
+        {
+            // get current font color or color set at output device
+            aNewColor = pFnt ? pFnt->GetColor() : GetOut().GetFont().GetColor();
+            if ( aNewColor != GetOut().GetTextLineColor() )
+                GetOut().SetTextLineColor( aNewColor );
+        }
+
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
