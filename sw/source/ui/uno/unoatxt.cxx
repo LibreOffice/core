@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:48:47 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
 
     Reference< text::XAutoTextGroup > xGroup;
     if ( pGlossaries )
-        xGroup = pGlossaries->GetAutoTextGroup( GroupName, true );
+        xGroup = pGlossaries->GetAutoTextGroup( GroupName, FALSE );
 
     if ( !xGroup.is() )
         throw container::NoSuchElementException();
