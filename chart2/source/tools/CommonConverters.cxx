@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonConverters.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-04 13:13:53 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 14:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,14 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_WRITINGMODE2_HPP_
 #include <com/sun/star/text/WritingMode2.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XNUMERICALDATASEQUENCE_HPP_
+#include <drafts/com/sun/star/chart2/XNumericalDataSequence.hpp>
+#endif
+
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 #include <cstdarg>
@@ -665,6 +673,37 @@ text::WritingMode WritingMode2ToWritingMode1( sal_Int16 nWritingMode2 )
         default: // TL
             return  text::WritingMode_TB_RL;//there can no correct conversion be done here
     }
+}
+
+using namespace ::drafts::com::sun::star::chart2;
+
+uno::Sequence< double > DataSequenceToDoubleSequence(
+    const uno::Reference< XDataSequence > & xDataSequence )
+{
+    uno::Sequence< double > aResult;
+    OSL_ASSERT( xDataSequence.is());
+    if(!xDataSequence.is())
+        return aResult;
+
+    uno::Reference< XNumericalDataSequence > xNumericalDataSequence( xDataSequence, uno::UNO_QUERY );
+    if( xNumericalDataSequence.is() )
+    {
+        aResult = xNumericalDataSequence->getNumericalData();
+    }
+    else
+    {
+        uno::Sequence< uno::Any > aValues = xDataSequence->getData();
+        aResult.realloc(aValues.getLength());
+        for(sal_Int32 nN=aValues.getLength();nN--;)
+        {
+            if( !(aValues[nN] >>= aResult[nN]) )
+            {
+                ::rtl::math::setNan( & aResult[nN] );
+            }
+        }
+    }
+
+    return aResult;
 }
 
 //.............................................................................
