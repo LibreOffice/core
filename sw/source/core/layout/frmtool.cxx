@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:12:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2710,16 +2710,18 @@ void Notify_Background( SdrObject *pObj, SwPageFrm *pPage, const SwRect& rRect,
         }
         pCnt = pCnt->GetNextCntntFrm();
     }
-    if( pPage->Lower() )
-    {
-        SwFrm* pFrm = pPage->Lower();
-        while( pFrm->GetNext() )
-            pFrm = pFrm->GetNext();
-        if( pFrm->IsFooterFrm() &&
-            ( ( pFrm->Frm().IsOver( pObj->GetBoundRect() ) ||
-                pFrm->Frm().IsOver( rRect ) ) ) )
-            pFrm->InvalidateSize();
-    }
+// #108745# Sorry, but this causes nothing but trouble. I remove these lines
+// taking the risk that the footer frame will have a wrong height
+//  if( pPage->Lower() )
+//  {
+//      SwFrm* pFrm = pPage->Lower();
+//      while( pFrm->GetNext() )
+//          pFrm = pFrm->GetNext();
+//      if( pFrm->IsFooterFrm() &&
+//          ( ( pFrm->Frm().IsOver( pObj->GetBoundRect() ) ||
+//              pFrm->Frm().IsOver( rRect ) ) ) )
+//           pFrm->InvalidateSize();
+//  }
     if( pPage->GetSortedObjs() )
     {
         pObj->GetOrdNum();
