@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:22:18 $
+ *  last change: $Author: hr $ $Date: 2000-11-22 14:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ BYTE SwPaM::Find( const utl::SearchParam& rParam, utl::TextSearch& rSTxt,
                 lcl_CleanStr( *(SwTxtNode*)pNode, nEnde, nStart,
                                 aFltArr, sCleanStr );
 
-            if( (rSTxt.*fnMove->fnSearch)( sCleanStr, &nStart, &nEnde ))
+            if( (rSTxt.*fnMove->fnSearch)( sCleanStr, &nStart, &nEnde, 0 ))
             {
                 // setze den Bereich richtig
                 *GetPoint() = *pPam->GetPoint();
