@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:16:21 $
+#   last change: $Author: jsc $ $Date: 2001-03-13 12:45:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,7 +110,7 @@ APP1OBJS=   $(OBJ)$/rdbmaker.obj	\
 
 APP1STDLIBS=\
             $(SALLIB) \
-            $(VOSLIB) \
+            $(SALHELPERLIB) \
             $(REGLIB) \
             $(CPPULIB) \
             $(CPPUHELPERLIB) \

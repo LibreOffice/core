@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbmaker.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:08 $
+ *  last change: $Author: jsc $ $Date: 2001-03-13 12:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,9 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
-#ifndef _VOS_PROCESS_HXX_
-#include <vos/process.hxx>
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
 #endif
-
 #ifndef _CODEMAKER_TYPEMANAGER_HXX_
 #include <codemaker/typemanager.hxx>
 #endif
@@ -75,8 +74,8 @@
 #include <codemaker/dependency.hxx>
 #endif
 
-#ifndef     _RTL_OSTRINGBUFFER_HXX_
-#include    <rtl/strbuf.hxx>
+#ifndef _RTL_OSTRINGBUFFER_HXX_
+#include <rtl/strbuf.hxx>
 #endif
 
 #if defined(SAL_W32) || defined(SAL_OS2)
@@ -100,7 +99,6 @@
 
 using namespace rtl;
 using namespace osl;
-using namespace vos;
 
 FileStream          listFile;
 RegistryKey         rootKey;
@@ -115,7 +113,7 @@ OString getFullNameOfApplicatRdb()
 {
     OUString bootReg;
     OUString uTmpStr;
-    if( OStartupInfo::E_None == OStartupInfo().getExecutableFile(uTmpStr) )
+    if( osl_getExecutableFile(&uTmpStr.pData) == osl_Process_E_None )
     {
         sal_uInt32  lastIndex = uTmpStr.lastIndexOf(PATH_DELEMITTER);
         OUString    tmpReg;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeblop.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:08 $
+ *  last change: $Author: jsc $ $Date: 2001-03-13 12:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,16 +245,16 @@ void writeMethodData( RegistryTypeWriter& rWriter, sal_uInt32 inheritedMmeberCou
 
     Sequence< Reference< XMethodParameter > > parameters( xMethod->getParameters() );
     Sequence< Reference< XTypeDescription > > exceptions( xMethod->getExceptions() );
-    sal_uInt32 methodIndex = xMember->getPosition() - inheritedMmeberCount;
-    sal_uInt32 paramCount = parameters.getLength();
-    sal_uInt32 exceptionCount = exceptions.getLength();
+    sal_uInt16 methodIndex = (sal_uInt16)(xMember->getPosition() - inheritedMmeberCount);
+    sal_uInt16 paramCount = (sal_uInt16)parameters.getLength();
+    sal_uInt16 exceptionCount = (sal_uInt16)exceptions.getLength();
 
     rWriter.setMethodData(methodIndex, xMember->getMemberName(),
                           xMethod->getReturnType()->getName().replace('.', '/'),
                           methodMode, paramCount, exceptionCount, OUString());
 
     RTParamMode paramMode = RT_PARAM_IN;
-    for (sal_Int32 i=0; i < paramCount; i++)
+    for (sal_uInt16 i=0; i < paramCount; i++)
     {
         Reference< XMethodParameter > xParam = parameters[i];
         if ( xParam->isIn() && xParam->isOut())
@@ -270,7 +270,7 @@ void writeMethodData( RegistryTypeWriter& rWriter, sal_uInt32 inheritedMmeberCou
             paramMode = RT_PARAM_OUT;
         }
 
-        rWriter.setParamData(methodIndex, xParam->getPosition(), xParam->getType()->getName().replace('.', '/'),
+        rWriter.setParamData(methodIndex, (sal_uInt16)xParam->getPosition(), xParam->getType()->getName().replace('.', '/'),
                              xParam->getName(), paramMode);
     }
 
@@ -358,9 +358,9 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                     Reference< XInterfaceAttributeTypeDescription > xAttr;
                     Reference< XInterfaceMethodTypeDescription > xMethod;
                     Sequence< Reference< XInterfaceMemberTypeDescription > > memberTypes( xIFace->getMembers());
-                    sal_uInt32 memberCount = memberTypes.getLength();
-                    sal_uInt32 attrCount = 0;
-                    sal_uInt32 inheritedMemberCount = 0;
+                    sal_uInt16 memberCount = (sal_uInt16)memberTypes.getLength();
+                    sal_uInt16 attrCount = 0;
+                    sal_uInt16 inheritedMemberCount = 0;
 
                     for (sal_Int32 i=0; i < memberCount; i++)
                     {
@@ -376,7 +376,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                     if ( xSuperType.is() )
                     {
                         uSuperType = xSuperType->getName().replace('.','/');
-                        inheritedMemberCount = getInheritedMemberCount( xSuperType );
+                        inheritedMemberCount = (sal_uInt16)getInheritedMemberCount( xSuperType );
                     }
 
                     RegistryTypeWriter writer(rtwLoader, RT_TYPE_INTERFACE, uTypeName.replace('.', '/'),
@@ -434,7 +434,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
 
                     Sequence< OUString > memberNames( xComp->getMemberNames());
                     Sequence< Reference< XTypeDescription > > memberTypes( xComp->getMemberTypes());
-                    sal_uInt32 memberCount = memberNames.getLength();
+                    sal_uInt16 memberCount = (sal_uInt16)memberNames.getLength();
 
                     OUString uSuperType;
                     Reference< XTypeDescription > xSuperType = xComp->getBaseType();
@@ -446,7 +446,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                     RegistryTypeWriter writer(rtwLoader, rtTypeClass, uTypeName.replace('.', '/'),
                                               uSuperType, memberCount, 0, 0);
 
-                    for (sal_Int32 i=0; i < memberCount; i++)
+                    for (sal_Int16 i=0; i < memberCount; i++)
                     {
                         writer.setFieldData(i , memberNames[i], memberTypes[i]->getName().replace('.', '/'),
                                             OUString(), OUString(), RT_ACCESS_READWRITE);
@@ -466,13 +466,13 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
 
                     Sequence< OUString > enumNames( xEnum->getEnumNames());
                     Sequence< sal_Int32 > enumValues( xEnum->getEnumValues());
-                    sal_uInt32 enumCount = enumNames.getLength();
+                    sal_uInt16 enumCount = (sal_uInt16)enumNames.getLength();
 
                     RegistryTypeWriter writer(rtwLoader, RT_TYPE_ENUM, uTypeName.replace('.', '/'),
                                               OUString(), enumCount, 0, 0);
 
                     RTConstValue constValue;
-                    for (sal_Int32 i=0; i < enumCount; i++)
+                    for (sal_Int16 i=0; i < enumCount; i++)
                     {
                         constValue.m_type = RT_TYPE_INT32;
                         constValue.m_value.aLong = enumValues[i];

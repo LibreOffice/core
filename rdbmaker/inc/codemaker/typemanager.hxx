@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:08 $
+ *  last change: $Author: jsc $ $Date: 2001-03-13 12:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,10 @@
 RegistryTypeReaderLoader & getRegistryTypeReaderLoader();
 
 
-typedef NAMESPACE_STD(list) <Registry*>     RegistryList;
+typedef ::std::list< Registry* >    RegistryList;
 
 #if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
-typedef NAMESPACE_STD(__hash_map__)
+typedef ::std::__hash_map__
 <
     ::rtl::OString, // Typename
     RTTypeClass,    // TypeClass
@@ -83,7 +83,7 @@ typedef NAMESPACE_STD(__hash_map__)
     NewAlloc
 > T2TypeClassMap;
 #else
-typedef NAMESPACE_STD(hash_map)
+typedef ::std::hash_map
 <
     ::rtl::OString, // Typename
     RTTypeClass,    // TypeClass

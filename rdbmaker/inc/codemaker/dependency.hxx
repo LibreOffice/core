@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dependency.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:08 $
+ *  last change: $Author: jsc $ $Date: 2001-03-13 12:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,11 +122,11 @@ struct LessTypeUsing
     }
 };
 
-typedef NAMESPACE_STD(set) <TypeUsing, LessTypeUsing> TypeUsingSet;
+typedef ::std::set< TypeUsing, LessTypeUsing > TypeUsingSet;
 
 
 #if (defined( _MSC_VER ) && ( _MSC_VER < 1200 ))
-typedef NAMESPACE_STD(__hash_map__)
+typedef ::std::__hash_map__
 <
     ::rtl::OString,
     TypeUsingSet,
@@ -135,7 +135,7 @@ typedef NAMESPACE_STD(__hash_map__)
     NewAlloc
 > DependencyMap;
 
-typedef NAMESPACE_STD(__hash_map__)
+typedef ::std::__hash_map__
 <
     ::rtl::OString,
     sal_uInt16,
@@ -144,7 +144,7 @@ typedef NAMESPACE_STD(__hash_map__)
     NewAlloc
 > GenerationMap;
 #else
-typedef NAMESPACE_STD(hash_map)
+typedef ::std::hash_map
 <
     ::rtl::OString,
     TypeUsingSet,
@@ -152,7 +152,7 @@ typedef NAMESPACE_STD(hash_map)
     EqualString
 > DependencyMap;
 
-typedef NAMESPACE_STD(hash_map)
+typedef ::std::hash_map
 <
     ::rtl::OString,
     sal_uInt16,
