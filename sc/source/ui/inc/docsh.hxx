@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-26 19:06:18 $
+ *  last change: $Author: nn $ $Date: 2000-11-03 19:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@ class FontList;
 class PrintDialog;
 class SfxStyleSheetBasePool;
 class SfxStyleSheetHint;
-class StarBASIC;
 struct ChartSelectionInfo;
+class INetURLObject;
 
 class ScPaintItem;
 class ScViewData;
@@ -165,6 +165,10 @@ class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxList
                                  BOOL bSimpleColWidth[MAXCOL+1] );
     ULONG           DBaseExport( const String& rFullFileName, CharSet eCharSet,
                                  BOOL& bHasMemo );
+
+    static BOOL     MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
+    static BOOL     KillFile( const INetURLObject& rURL );
+    static BOOL     IsDocument( const INetURLObject& rURL );
 
 protected:
 
