@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-11 09:27:29 $
+ *  last change: $Author: ab $ $Date: 2000-10-13 09:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #endif
 #include <osl/security.h>
 #include <osl/file.hxx>
+#include <tools/urlobj.hxx>
 
 #include "runtime.hxx"
 
@@ -236,263 +237,6 @@ void SbiStream::MapError()
 
 // TODO: Code is copied from daemons2/source/uno/asciiEncoder.cxx
 
-namespace basicEncoder
-{
-    enum EncodeMechanism
-    {
-        ENCODE_ALL,
-        WAS_ENCODED,
-        NOT_CANONIC
-    };
-
-    enum DecodeMechanism
-    {
-        NO_DECODE,
-        DECODE_TO_IURI,
-        DECODE_WITH_CHARSET
-    };
-
-    enum EscapeType
-    {
-        ESCAPE_NO,
-        ESCAPE_OCTET,
-        ESCAPE_UTF32
-    };
-
-    inline bool isUSASCII(sal_uInt32 nChar)
-    {
-        return nChar <= 0x7F;
-    }
-
-    inline bool isDigit(sal_uInt32 nChar)
-    {
-        return nChar >= '0' && nChar <= '9';
-    }
-
-    inline int getHexWeight(sal_uInt32 nChar)
-    {
-        return isDigit(nChar) ? int(nChar - '0') :
-            nChar >= 'A' && nChar <= 'F' ? int(nChar - 'A' + 10) :
-            nChar >= 'a' && nChar <= 'f' ? int(nChar - 'a' + 10) : -1;
-    }
-
-    inline bool isHighSurrogate(sal_uInt32 nUTF16)
-    {
-        return nUTF16 >= 0xD800 && nUTF16 <= 0xDBFF;
-    }
-
-    inline bool isLowSurrogate(sal_uInt32 nUTF16)
-    {
-        return nUTF16 >= 0xDC00 && nUTF16 <= 0xDFFF;
-    }
-
-    sal_uInt32 getHexDigit(int nWeight)
-    {
-        OSL_ASSERT(nWeight >= 0 && nWeight < 16);
-        static sal_Char const aDigits[16]
-            = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
-                'D', 'E', 'F' };
-        return aDigits[nWeight];
-    }
-
-    inline void appendEscape(rtl::OUStringBuffer & rTheText,
-                             sal_Char cEscapePrefix, sal_uInt32 nOctet)
-    {
-        rTheText.append(sal_Unicode(cEscapePrefix));
-        rTheText.append(sal_Unicode(getHexDigit(int(nOctet >> 4))));
-        rTheText.append(sal_Unicode(getHexDigit(int(nOctet & 15))));
-    }
-
-    inline sal_uInt32 getUTF32Character(sal_Unicode const *& rBegin,
-                                        sal_Unicode const * pEnd)
-    {
-        OSL_ASSERT(rBegin && rBegin < pEnd);
-        if (rBegin + 1 < pEnd && rBegin[0] >= 0xD800 && rBegin[0] <= 0xDBFF
-            && rBegin[1] >= 0xDC00 && rBegin[1] <= 0xDFFF)
-        {
-            sal_uInt32 nUTF32 = sal_uInt32(*rBegin++ & 0x3FF) << 10;
-            return (nUTF32 | (*rBegin++ & 0x3FF)) + 0x10000;
-        }
-        else
-            return *rBegin++;
-    }
-
-    sal_uInt32 getUTF32(sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
-                        bool bOctets, sal_Char cEscapePrefix,
-                        EncodeMechanism eMechanism, rtl_TextEncoding eCharset,
-                        EscapeType & rEscapeType)
-    {
-        OSL_ASSERT(rBegin < pEnd);
-        sal_uInt32 nUTF32 = bOctets ? *rBegin++ : getUTF32Character(rBegin, pEnd);
-        switch (eMechanism)
-        {
-        case ENCODE_ALL:
-            rEscapeType = ESCAPE_NO;
-            break;
-
-        case WAS_ENCODED:
-        {
-            int nWeight1;
-            int nWeight2;
-            if (nUTF32 == cEscapePrefix && rBegin + 1 < pEnd
-                && (nWeight1 = getHexWeight(rBegin[0])) >= 0
-                && (nWeight2 = getHexWeight(rBegin[1])) >= 0)
-            {
-                rBegin += 2;
-                nUTF32 = nWeight1 << 4 | nWeight2;
-                switch (eCharset)
-                {
-                default:
-                    OSL_ASSERT(false);
-                case RTL_TEXTENCODING_ASCII_US:
-                    rEscapeType
-                        = isUSASCII(nUTF32) ? ESCAPE_UTF32 : ESCAPE_OCTET;
-                    break;
-
-                case RTL_TEXTENCODING_ISO_8859_1:
-                    rEscapeType = ESCAPE_UTF32;
-                    break;
-
-                case RTL_TEXTENCODING_UTF8:
-                    if (isUSASCII(nUTF32))
-                        rEscapeType = ESCAPE_UTF32;
-                    else
-                    {
-                        if (nUTF32 >= 0xC0 && nUTF32 <= 0xF4)
-                        {
-                            sal_uInt32 nEncoded;
-                            int nShift;
-                            sal_uInt32 nMin;
-                            if (nUTF32 <= 0xDF)
-                            {
-                                nEncoded = (nUTF32 & 0x1F) << 6;
-                                nShift = 0;
-                                nMin = 0x80;
-                            }
-                            else if (nUTF32 <= 0xEF)
-                            {
-                                nEncoded = (nUTF32 & 0x0F) << 12;
-                                nShift = 6;
-                                nMin = 0x800;
-                            }
-                            else
-                            {
-                                nEncoded = (nUTF32 & 0x07) << 18;
-                                nShift = 12;
-                                nMin = 0x10000;
-                            }
-                            sal_Unicode const * p = rBegin;
-                            bool bUTF8 = true;
-                            for (;;)
-                            {
-                                if (p + 2 >= pEnd || p[0] != cEscapePrefix
-                                    || (nWeight1 = getHexWeight(p[1])) < 0
-                                    || (nWeight2 = getHexWeight(p[2])) < 0
-                                    || nWeight1 < 8)
-                                {
-                                    bUTF8 = false;
-                                    break;
-                                }
-                                p += 3;
-                                nEncoded
-                                    |= ((nWeight1 & 3) << 4 | nWeight2)
-                                                       << nShift;
-                                if (nShift == 0)
-                                    break;
-                                nShift -= 6;
-                            }
-                            if (bUTF8 && nEncoded >= nMin
-                                && !isHighSurrogate(nEncoded)
-                                && !isLowSurrogate(nEncoded)
-                                && nEncoded <= 0x10FFFF)
-                            {
-                                rBegin = p;
-                                nUTF32 = nEncoded;
-                                rEscapeType = ESCAPE_UTF32;
-                                break;
-                            }
-                        }
-                        rEscapeType = ESCAPE_OCTET;
-                    }
-                    break;
-                }
-            }
-            else
-                rEscapeType = ESCAPE_NO;
-            break;
-        }
-
-        case NOT_CANONIC:
-        {
-            int nWeight1;
-            int nWeight2;
-            if (nUTF32 == cEscapePrefix && rBegin + 1 < pEnd
-                && ((nWeight1 = getHexWeight(rBegin[0])) >= 0)
-                && ((nWeight2 = getHexWeight(rBegin[1])) >= 0))
-            {
-                rBegin += 2;
-                nUTF32 = nWeight1 << 4 | nWeight2;
-                rEscapeType = ESCAPE_OCTET;
-            }
-            else
-                rEscapeType = ESCAPE_NO;
-            break;
-        }
-        }
-        return nUTF32;
-    }
-
-    static rtl::OUString decodeImpl(sal_Unicode const * pBegin,
-                         sal_Unicode const * pEnd, sal_Char cEscapePrefix,
-                         DecodeMechanism eMechanism,
-                         rtl_TextEncoding eCharset)
-    {
-        switch (eMechanism)
-        {
-        case NO_DECODE:
-            return rtl::OUString(pBegin, pEnd - pBegin);
-
-        case DECODE_TO_IURI:
-            eCharset = RTL_TEXTENCODING_UTF8;
-            break;
-        }
-        rtl::OUStringBuffer aResult;
-        while (pBegin < pEnd)
-        {
-            EscapeType eEscapeType;
-            sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, false, cEscapePrefix,
-                                         WAS_ENCODED, eCharset, eEscapeType);
-            switch (eEscapeType)
-            {
-            case ESCAPE_NO:
-                aResult.append(sal_Unicode(nUTF32));
-                break;
-
-            case ESCAPE_OCTET:
-                appendEscape(aResult, cEscapePrefix, nUTF32);
-                break;
-
-            case ESCAPE_UTF32:
-                if (eMechanism == DECODE_TO_IURI && isUSASCII(nUTF32))
-                    appendEscape(aResult, cEscapePrefix, nUTF32);
-                else
-                    aResult.append(sal_Unicode(nUTF32));
-                break;
-            }
-        }
-        return aResult.makeStringAndClear();
-    }
-
-
-    OUString AsciiEncoder::decodeUnoUrlParamValue(rtl::OUString const & rSource)
-    {
-        return decodeImpl(rSource.getStr(), rSource.getStr() + rSource.getLength(),
-                      '%', DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8);
-    }
-
-}
-
-
 OUString findUserInDescription( const OUString& aDescription )
 {
     OUString user;
@@ -500,34 +244,17 @@ OUString findUserInDescription( const OUString& aDescription )
     sal_Int32 index;
     sal_Int32 lastIndex = 0;
 
-//#ifdef DEBUG
-    //OString tmp = OUStringToOString(aDescription, RTL_TEXTENCODING_ASCII_US);
-    //OSL_TRACE("Portal_XConnector %s\n", tmp.getStr());
-//#endif
-
     do
     {
         index = aDescription.indexOf((sal_Unicode) ',', lastIndex);
-        //OSL_TRACE("Portal_XConnector %d last_index %d\n", index, lastIndex);
         OUString token = (index == -1) ? aDescription.copy(lastIndex) : aDescription.copy(lastIndex, index - lastIndex);
-
-//#ifdef DEBUG
-        //OString token_tmp = OUStringToOString(token, RTL_TEXTENCODING_ASCII_US);
-        //OSL_TRACE("Portal_XConnector - token %s\n", token_tmp.getStr());
-//#endif
 
         lastIndex = index + 1;
 
         sal_Int32 eindex = token.indexOf((sal_Unicode)'=');
         OUString left = token.copy(0, eindex).toLowerCase().trim();
-        OUString right = basicEncoder::AsciiEncoder::decodeUnoUrlParamValue(token.copy(eindex + 1).trim());
-
-//#ifdef DEBUG
-        //OString left_tmp = OUStringToOString(left, RTL_TEXTENCODING_ASCII_US);
-        //OSL_TRACE("Portal_XConnector - left %s\n", left_tmp.getStr());
-        //OString right_tmp = OUStringToOString(right, RTL_TEXTENCODING_ASCII_US);
-        //OSL_TRACE("Portal_XConnector - right %s\n", right_tmp.getStr());
-//#endif
+        OUString right = INetURLObject::decode( token.copy(eindex + 1).trim(), '%',
+                            INetURLObject::DECODE_WITH_CHARSET );
 
         if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("user"))))
         {
@@ -538,49 +265,6 @@ OUString findUserInDescription( const OUString& aDescription )
     while(index != -1);
 
     return user;
-
-    /*
-    ORef<IPortalConnector> connector;
-
-    Reference<XConnection> xConnection;
-
-    OUString protocol;
-    connector = getPortalConnector(protocol);
-    if(connector.isValid())
-    {
-        ORef<IConnection> connection;
-
-        OUString server;
-        if(host.getLength()) // let the server empty when there is no host
-        {
-            server += host;
-            server += OUString(RTL_CONSTASCII_USTRINGPARAM(":"));
-            server += port;
-        }
-
-        RC state;
-
-        if(user.getLength() && !ticket.getLength()) // if there is a user and no ticket
-        {
-            state = connector->connectToService(user, password, server, service, connection);
-        }
-        else
-        {
-            ByteSequence byteSequence_ticket = AsciiEncoder::decode(ticket);
-
-            state = connector->connectToService(user, byteSequence_ticket, server, service, connection);
-        }
-
-        if(state == E_None)
-            xConnection = new Portal_XConnection(connection);
-        else
-            throw ConnectionSetupException(OUString(RTL_CONSTASCII_USTRINGPARAM("Portal_XConnector::connect: could not connect")), Reference<XInterface>());
-    }
-    else
-        throw ConnectionSetupException(OUString(RTL_CONSTASCII_USTRINGPARAM("Portal_XConnector::connect: couldn't get connector")), Reference<XInterface>());
-
-    return xConnection;
-    */
 }
 
 #endif
@@ -986,7 +670,9 @@ SbError SbiStream::Open
     nExpandOnWriteTo = 0;
     if( ( nStrmMode & ( STREAM_READ|STREAM_WRITE ) ) == STREAM_READ )
         nStrmMode |= STREAM_NOCREATE;
-    String aNameStr( rName, gsl_getSystemTextEncoding() );
+    String aStr( rName, gsl_getSystemTextEncoding() );
+    String aNameStr = getFullPath( aStr );
+
 #ifdef _USE_UNO
     if( hasUno() )
     {
@@ -998,7 +684,13 @@ SbError SbiStream::Open
             if( xSFI.is() )
             {
                 try
-            {
+                {
+
+                // #??? For write access delete file if it already exists (not for appending)
+                if( (nStrmMode & STREAM_WRITE) != 0 && !IsAppend() && xSFI->exists( aNameStr ) )
+                {
+                    xSFI->kill( aNameStr );
+                }
 
                 if( (nStrmMode & (STREAM_READ | STREAM_WRITE)) == (STREAM_READ | STREAM_WRITE) )
                 {
@@ -1018,6 +710,7 @@ SbError SbiStream::Open
                     Reference< XInputStream > xIS = xSFI->openFileRead( aNameStr );
                     pStrm = new UCBStream( xIS );
                 }
+
                 }
                 catch( Exception & )
                 {
