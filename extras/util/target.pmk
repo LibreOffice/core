@@ -1,0 +1,226 @@
+#*************************************************************************
+#
+#   $RCSfile: target.pmk,v $
+#
+#   $Revision: 1.1.1.1 $
+#
+#   last change: $Author: hr $ $Date: 2000-09-19 09:03:39 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
+#*************************************************************************
+AUTOTEXT_SHARE_TARGET           = autotextshare
+AUTOTEXT_USER_TARGET            = autotextuser
+AUTOCORR_TARGET                 = autocorr
+
+DATABASE_USER_TARGET            = database
+DATABASE_USER_BIBLIO_TARGET     = databasebiblio
+DATABASE_USER_ADDRESS_TARGET    = databaseaddress
+DATABASE_SHARED_TARGET          = databaseshared
+
+URL_HELP_TARGET                 = urlhelp
+URL_NEWMENU_STANDARD_TARGET     = urlnew
+URL_NEWMENU_CALC_TARGET         = urlnewcalc
+URL_NEWMENU_IMPRESS_TARGET      = urlnewimpress
+URL_NEWMENU_DRAW_TARGET         = urlnewdraw
+URL_NEWMENU_CHART_TARGET        = urlnewchart
+URL_NEWMENU_IMAGE_TARGET        = urlnewimage
+URL_NEWMENU_MATH_TARGET         = urlnewmath
+URL_SAMPLES_TEXTS_TARGET        = urlsamplestexts
+URL_SAMPLES_SPREADSHEETS_TARGET = urlsamplesspreadsheets
+URL_SAMPLES_PRESENTATIONS_TARGET = urlsamplespresentations
+URL_SAMPLES_DRAWINGS_TARGET     = urlsamplesdrawings
+URL_SAMPLES_FORMULAS_TARGET     = urlsamplesformulas
+URL_SAMPLES_DATABASES_TARGET    = urlsamplesdatabases
+URL_WIZARD_TARGET               = urlwizard
+
+GALLERY_ROOT_TARGET             = gallroot
+GALLERY_SYSTEM_TARGET           = gallsystem
+GALLERY_OPTIONAL_TARGET         = galloptional
+GALLERY_SOUND_TARGET            = gallsound
+GALLERY_CLIPART_TARGET          = gallclipart
+GALLERY_BULLETS_TARGET          = gallbullets
+GALLERY_FLAGS_TARGET            = gallflags
+GALLERY_HTMLEXPO_TARGET         = gallhtmlexpo
+GALLERY_MAPS_TARGET             = gallmaps
+GALLERY_PHOTO_TARGET            = gallphoto
+GALLERY_RULERS_TARGET           = gallrulers
+GALLERY_SOUNDS_TARGET           = gallsounds
+GALLERY_CLIPARTS_TARGET         = gallcliparts
+GALLERY_SURFACE_TARGET          = gallsurface
+GALLERY_SYMBOLS_TARGET          = gallsymbols
+GALLERY_WWWANIM_TARGET          = gallwwwanim
+GALLERY_WWWBACK_TARGET          = gallwwwback
+GALLERY_WWWGRAF_TARGET          = gallwwwgraf
+
+INSO_DUTCH_TARGET               = inso31
+INSO_ENGLISH_UK_TARGET          = inso44
+INSO_ENGLISH_US_TARGET          = inso01
+INSO_FRENCH_TARGET              = inso33
+INSO_GERMAN_TARGET              = inso49
+INSO_ITALIAN_TARGET             = inso39
+INSO_PORTUGUESE_TARGET          = inso03
+INSO_SPANISH_TARGET             = inso34
+INSO_SWEDISH_TARGET             = inso46
+
+CONFIG_SERVER_TARGET            = cfgsrv
+CONFIG_SERVER_NOLANG_TARGET     = cfgsrvnolang
+CONFIG_SERVER_BITMAP_TARGET     = cfgsrvbitmap
+CONFIG_SERVER_BITMAP_UNX_TARGET = cfgsrvbitmapunx
+CONFIG_SERVER_DOCLANG_TARGET    = cfgsrvdoclang
+CONFIG_USER_TARGET              = cfgusr
+
+PALETTES_TARGET                 = palettes
+
+SAMPLES_DRAWINGS_TARGET         = samdraw
+SAMPLES_FORMULAS_TARGET         = samform
+SAMPLES_PRESENTATIONS_TARGET    = sampres
+SAMPLES_SPREADSHEETS_TARGET     = samspread
+SAMPLES_TEXTS_TARGET            = samtext
+SAMPLES_CHAPTERS_TARGET         = samchapters
+SAMPLES_HOMEPAGE_TARGET         = samhomepage
+
+
+SYMBOLS_ALL_TARGET              = symbols
+
+TEMPLATE_ROOT_TARGET            = tplroot
+TEMPLATE_EDUCATE_WRITER_TARGET  = tpleduwrit
+TEMPLATE_EDUCATE_IMPRESS_TARGET = tpleduimpr
+TEMPLATE_EDUCATE_CALC_TARGET    = tpleducalc
+TEMPLATE_FINANCE_CALC_TARGET    = tplfinancecalc
+TEMPLATE_FORMS_WRITER_TARGET    = tplformswrit
+TEMPLATE_LAYOUT_IMPRESS_TARGET  = tpllayoutimpr
+TEMPLATE_MISC_WRITER_TARGET     = tplmiscwrit
+TEMPLATE_MISC_CALC_TARGET       = tplmisccalc
+TEMPLATE_MISC_DRAW_TARGET       = tplmiscdraw
+TEMPLATE_OFFICORR_WRITER_TARGET = tplofficorrwrit
+TEMPLATE_OFFIMISC_WRITER_TARGET = tploffimiscwrit
+TEMPLATE_PERSONAL_WRITER_TARGET = tplpersonalwrit
+TEMPLATE_PRESNT_IMPRESS_TARGET  = tplpresntimpr
+
+TEMPLATE_WIZARD_AGENDA_TARGET   = tplwizagenda
+TEMPLATE_WIZARD_BITMAP_TARGET   = tplwizbitmap
+TEMPLATE_WIZARD_DESKTOP_TARGET  = tplwizdesktop
+TEMPLATE_WIZARD_FAX_TARGET      = tplwizfax
+TEMPLATE_WIZARD_FORM_TARGET     = tplwizform
+TEMPLATE_WIZARD_HOMEPAGE_TARGET = tplwizhomepage
+TEMPLATE_WIZARD_LETTER_TARGET   = tplwizletter
+TEMPLATE_WIZARD_MEMO_TARGET     = tplwizmemo
+TEMPLATE_WIZARD_REPORT_TARGET   = tplwizreport
+TEMPLATE_WIZARD_STYLES_TARGET   = tplwizstyles
+
+WORDBOOK_ALL_TARGET             = wordbook
+WORDBOOK_USER_TARGET            = wordbookuser
+
+FONTS_WIN_ARIOSO_BOLD           = fontwinariosobold
+FONTS_WIN_ARIOSO_NORMAL         = fontwinariosonormal
+FONTS_WIN_CHEVARA_NORMAL        = fontwinchevaranormal
+FONTS_WIN_CHEVARAOUTLINE_NORMAL = fontwinchevaraoutlinenormal
+FONTS_WIN_CONGA_BOLD            = fontwincongabold
+FONTS_WIN_CONGA_NORMAL          = fontwinconganormal
+FONTS_WIN_HELMET_BOLD           = fontwinhelmetbold
+FONTS_WIN_HELMET_NORMAL         = fontwinhelmetnormal
+FONTS_WIN_HELMET_ITALIC         = fontwinhelmetitalic
+FONTS_WIN_HELMET_BOLDITALIC     = fontwinhelmetbolditalic
+FONTS_WIN_HELMETCON_BOLD        = fontwinhelmetconbold
+FONTS_WIN_HELMETCON_NORMAL      = fontwinhelmetconnormal
+FONTS_WIN_HELMETCON_ITALIC      = fontwinhelmetconitalic
+FONTS_WIN_HELMETCON_BOLDITALIC  = fontwinhelmetconbolditalic
+FONTS_WIN_TIMMONS_BOLD          = fontwintimmonsbold
+FONTS_WIN_TIMMONS_NORMAL        = fontwintimmonsnormal
+FONTS_WIN_TIMMONS_ITALIC        = fontwintimmonsitalic
+FONTS_WIN_TIMMONS_BOLDITALIC    = fontwintimmonsbolditalic
+FONTS_WIN_STARBATS_NORMAL       = fontwinstarbatsnormal
+FONTS_WIN_STARMATH_NORMAL       = fontwinstarmathnormal
+
+FONTS_OS2_ARIOSO_BOLD           = fontos2ariosobold
+FONTS_OS2_ARIOSO_NORMAL         = fontos2ariosonormal
+FONTS_OS2_CHEVARA_NORMAL        = fontos2chevaranormal
+FONTS_OS2_CHEVARAOUTLINE_NORMAL = fontos2chevaraoutlinenormal
+FONTS_OS2_CONGA_BOLD            = fontos2congabold
+FONTS_OS2_CONGA_NORMAL          = fontos2conganormal
+FONTS_OS2_HELMET_BOLD           = fontos2helmetbold
+FONTS_OS2_HELMET_NORMAL         = fontos2helmetnormal
+FONTS_OS2_HELMET_ITALIC         = fontos2helmetitalic
+FONTS_OS2_HELMET_BOLDITALIC     = fontos2helmetbolditalic
+FONTS_OS2_HELMETCON_BOLD        = fontos2helmetconbold
+FONTS_OS2_HELMETCON_NORMAL      = fontos2helmetconnormal
+FONTS_OS2_HELMETCON_ITALIC      = fontos2helmetconitalic
+FONTS_OS2_HELMETCON_BOLDITALIC  = fontos2helmetconbolditalic
+FONTS_OS2_TIMMONS_BOLD          = fontos2timmonsbold
+FONTS_OS2_TIMMONS_NORMAL        = fontos2timmonsnormal
+FONTS_OS2_TIMMONS_ITALIC        = fontos2timmonsitalic
+FONTS_OS2_TIMMONS_BOLDITALIC    = fontos2timmonsbolditalic
+FONTS_OS2_STARBATS_NORMAL       = fontos2starbatsnormal
+FONTS_OS2_STARMATH_NORMAL       = fontos2starmathnormal
+
+FONTS_75DPI_TARGET              = fontunx75dpi
+FONTS_BDF_TARGET                = fontunxbdf
+FONTS_TYPE1_TARGET              = fontunxtype1
+FONTS_XP3_TARGET                = fontunxxp3
+FONTS_UNX_XP3_TARGET            = fontunxxp
+FONTS_LNX_XP3_TARGET            = fontlnxxp
+FONTS_AFM_TARGET                = fontunxafm
+FONTS_TFM_TARGET                = fontunxtfm
+FONTS_PPDS_TARGET               = fontunxppds
+FONTS_PSSOFTFONTS_TARGET        = fontunxpssoft
+
+CDE_ALL_TARGET                  = cde
+CDE_ROOT_TARGET                 = cderoot
+
+KDE_APPLNK_TARGET               = kdeapplnk
+KDE_ICONS_TARGET                = kdeicons
+KDE_ICONS_MINI_TARGET           = kdemini
+KDE_MIMELNK_APPL_TARGET         = kdemimeappl
+KDE_MIMELNK_TEXT_TARGET         = kdemimetext
+

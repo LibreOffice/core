@@ -1,0 +1,9 @@
+mkdir: %_DEST%\pck%_EXT%
+..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
+..\common.pro\bin\*.zip %_DEST%\pck%_EXT%\*.zip
+..\wnt\source\fonts\decorative\*.TTF %_DEST%\pck%_EXT%\*.TTF
+..\wnt\source\fonts\standard_sans\*.TTF %_DEST%\pck%_EXT%\*.TTF
+..\wnt\source\fonts\standard_serif\*.TTF %_DEST%\pck%_EXT%\*.TTF
+..\wnt\source\fonts\symbol\*.TTF %_DEST%\pck%_EXT%\*.TTF
+..\source\shellnew\soffice.* %_DEST%\pck%_EXT%\soffice.*
+..\unx\source\fonts\fonts\type1\fontunxtype1portal.zip %_DEST%\pck%_EXT%\fontunxtype1portal.zip
