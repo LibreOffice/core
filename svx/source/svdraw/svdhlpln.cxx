@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhlpln.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:41:03 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <tools/poly.hxx>
 #endif
 
+#ifndef _SV_LINEINFO_HXX
+#include <vcl/lineinfo.hxx>
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Pointer SdrHelpLine::GetPointer() const
@@ -89,74 +93,61 @@ Pointer SdrHelpLine::GetPointer() const
     } // switch
 }
 
+// #i27493#
+// Helper method to draw a hor or ver two-colored dashed line
+void SdrHelpLine::ImpDrawDashedTwoColorLine(OutputDevice& rOut, sal_Int32 nStart, sal_Int32 nEnd, sal_Int32 nFixPos,
+    sal_Int32 nStepWidth, Color aColA, Color aColB, sal_Bool bHorizontal) const
+{
+    for(sal_Int32 a(nStart), b(0L); a < nEnd; a += nStepWidth, b++)
+    {
+        rOut.SetLineColor((b % 2) ? aColA : aColB);
+        sal_Int32 nNextPos(a + nStepWidth - 1L);
+        if(nNextPos > nEnd)
+            nNextPos = nEnd;
+        if(bHorizontal)
+            rOut.DrawLine(Point(a, nFixPos), Point(nNextPos, nFixPos));
+        else
+            rOut.DrawLine(Point(nFixPos, a), Point(nFixPos, nNextPos));
+    }
+}
+
 void SdrHelpLine::Draw(OutputDevice& rOut, const Point& rOfs) const
 {
-    Point aPnt(rOut.LogicToPixel(aPos+rOfs));
-    long x=aPnt.X();
-    long y=aPnt.Y();
-    long nMin=0;
-    long nMax=2048;
-    FASTBOOL bMap0=rOut.IsMapModeEnabled();
-    rOut.EnableMapMode(FALSE);
-    switch (eKind) {
-        case SDRHELPLINE_VERTICAL  :
+    // #i27493# New implementation for 8. Will be replaced later when we have overlays.
+    Point aPnt(rOut.LogicToPixel(aPos + rOfs));
+    const sal_Int32 xPos(aPnt.X());
+    const sal_Int32 yPos(aPnt.Y());
+    const sal_Bool bOldMapModeWasEnabled(rOut.IsMapModeEnabled());
+    const Size aOutSizePixel(rOut.GetOutputSizePixel());
+    rOut.EnableMapMode(sal_False);
+
+    switch(eKind)
+    {
+        case SDRHELPLINE_VERTICAL :
         {
-            if (rOut.GetOutDevType() == OUTDEV_WINDOW)
-            {
-                Point aLine[2];
-                aLine[0].X() = x; aLine[0].Y() = nMin;
-                aLine[1].X() = x; aLine[1].Y() = nMax;
-                ((Window&) rOut).InvertTracking(Polygon(2, aLine), SHOWTRACK_WINDOW);
-            }
-            else
-            {
-                rOut.DrawLine(Point(x,nMin),Point(x,nMax));
-            }
+            ImpDrawDashedTwoColorLine(rOut, 0L, aOutSizePixel.Height(),
+                xPos, 4L , Color(COL_BLACK), Color(COL_WHITE), sal_False);
+            break;
         }
-        break;
 
-        case SDRHELPLINE_HORIZONTAL:
+        case SDRHELPLINE_HORIZONTAL :
         {
-            if (rOut.GetOutDevType() == OUTDEV_WINDOW)
-            {
-                Point aLine[2];
-                aLine[0].X() = nMin; aLine[0].Y() = y;
-                aLine[1].X() = nMax; aLine[1].Y() = y;
-                ((Window&) rOut).InvertTracking(Polygon(2, aLine), SHOWTRACK_WINDOW);
-            }
-            else
-            {
-                rOut.DrawLine(Point(nMin,y),Point(nMax,y));
-            }
+            ImpDrawDashedTwoColorLine(rOut, 0L, aOutSizePixel.Width(),
+                yPos, 4L , Color(COL_BLACK), Color(COL_WHITE), sal_True);
+            break;
         }
-        break;
 
-        case SDRHELPLINE_POINT     :
+        case SDRHELPLINE_POINT :
         {
-            int r=SDRHELPLINE_POINT_PIXELSIZE;
-
-            if (rOut.GetOutDevType() == OUTDEV_WINDOW)
-            {
-                Point aHLine[2];
-                aHLine[0].X() = x-r; aHLine[0].Y() = y;
-                aHLine[1].X() = x+r; aHLine[1].Y() = y;
-                ((Window&) rOut).InvertTracking(Polygon(2, aHLine), SHOWTRACK_WINDOW);
-
-                Point aVLine[2];
-                aVLine[0].X() = x; aVLine[0].Y() = y-r;
-                aVLine[1].X() = x; aVLine[1].Y() = y+r;
-                ((Window&) rOut).InvertTracking(Polygon(2, aVLine), SHOWTRACK_WINDOW);
-            }
-            else
-            {
-                rOut.DrawLine(Point(x-r,y),Point(x+r,y));
-                rOut.DrawLine(Point(x,y-r),Point(x,y+r));
-            }
+            ImpDrawDashedTwoColorLine(rOut, xPos - SDRHELPLINE_POINT_PIXELSIZE, xPos + SDRHELPLINE_POINT_PIXELSIZE,
+                yPos, 4L , Color(COL_BLACK), Color(COL_WHITE), sal_True);
+            ImpDrawDashedTwoColorLine(rOut, yPos - SDRHELPLINE_POINT_PIXELSIZE, yPos + SDRHELPLINE_POINT_PIXELSIZE,
+                xPos, 4L , Color(COL_BLACK), Color(COL_WHITE), sal_False);
+            break;
         }
-        break;
+    }
 
-    } // switch
-    rOut.EnableMapMode(bMap0);
+    rOut.EnableMapMode(bOldMapModeWasEnabled);
 }
 
 FASTBOOL SdrHelpLine::IsHit(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const
@@ -268,9 +259,6 @@ FASTBOOL SdrHelpLineList::operator==(const SdrHelpLineList& rSrcList) const
 
 void SdrHelpLineList::DrawAll(OutputDevice& rOut, const Point& rOfs) const
 {
-    Color aOldLineColor( rOut.GetLineColor() );
-
-    rOut.SetLineColor( Color( COL_GREEN ) );
 
     sal_uInt16 nAnz = GetCount();
     sal_uInt16 i,j;
@@ -297,8 +285,6 @@ void SdrHelpLineList::DrawAll(OutputDevice& rOut, const Point& rOfs) const
         if( pHL )
             pHL->Draw(rOut,rOfs);
     }
-
-    rOut.SetLineColor( aOldLineColor );
 }
 
 USHORT SdrHelpLineList::HitTest(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const
