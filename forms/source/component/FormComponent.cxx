@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 13:59:21 $
+ *  last change: $Author: tbe $ $Date: 2002-08-01 14:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROPERTY_HXX_
@@ -460,7 +463,7 @@ Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeE
         {
             aReturn = OControlModel_BASE::queryInterface(_rType);
             // our aggregate
-            if (!aReturn.hasValue() && m_xAggregate.is())
+            if (!aReturn.hasValue() && m_xAggregate.is() && !_rType.equals(::getCppuType(static_cast< Reference< XCloneable>* >(NULL))))
                 aReturn = m_xAggregate->queryAggregation(_rType);
         }
     }
