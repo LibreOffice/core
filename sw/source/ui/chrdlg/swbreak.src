@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbreak.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:49:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ ModalDialog DLG_BREAK
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo" ;
         Text [ finnish ] = "Tyyppi" ;
-        Text [ danish ] = "Type" ;
+        Text [ danish ] = "V�RDITYPE" ;
         Text [ french ] = "Type" ;
         Text [ swedish ] = "Typ" ;
         Text [ dutch ] = "Type" ;
@@ -476,6 +476,8 @@ ModalDialog DLG_BREAK
     Text[ hindi ] = "खण्डन जोड़ो";
     Text[ slovak ] = "Vložiť zalomenie";
 };
+
+
 
 
 
