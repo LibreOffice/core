@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2000-10-10 11:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,9 +618,9 @@ void SwXAutoTextGroup::setName(const OUString& rName) throw( uno::RuntimeExcepti
     //the name must be saved, the group may be invalidated while in RenameGroupDoc()
     SwGlossaries* pTempGlossaries = pGlossaries;
 
-    String sGroupName(sName);
-    String sTitle(pGlossaries->GetGroupTitle(sGroupName));
-    if(!pGlossaries->RenameGroupDoc(sGroupName, sNewGroup, sTitle))
+    String sGrpName(sName);
+    String sTitle(pGlossaries->GetGroupTitle(sGrpName));
+    if(!pGlossaries->RenameGroupDoc(sGrpName, sNewGroup, sTitle))
         throw uno::RuntimeException();
     else
     {
@@ -729,6 +729,8 @@ uno::Any SwXAutoTextGroup::getByName(const OUString& Name)
                 xRef = new SwXAutoTextEntry(pGlossaries, sName, Name);
             aRet.setValue(&xRef, ::getCppuType((Reference< text::XAutoTextEntry>*)0));
         }
+        else
+            throw container::NoSuchElementException();
         delete pGlosGroup;
     }
     else
@@ -1144,149 +1146,4 @@ Sequence< OUString > SwXAutoTextEntry::getSupportedServiceNames(void) throw( Run
     pArray[0] = C2U("com.sun.star.text.AutoTextEntry");
     return aRet;
 }
-
-
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.45  2000/09/18 16:06:15  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.44  2000/08/18 08:00:55  os
-    #77770# missing mutex
-
-    Revision 1.43  2000/08/09 12:58:48  os
-    #76891# short names are always upper case
-
-    Revision 1.42  2000/06/26 13:05:51  os
-    INetURLObject::SmartRelToAbs removed
-
-    Revision 1.41  2000/05/31 12:02:10  os
-    SAL_CALL
-
-    Revision 1.40  2000/05/16 09:15:14  os
-    project usr removed
-
-    Revision 1.39  2000/04/11 08:04:59  os
-    UNICODE
-
-    Revision 1.38  2000/03/27 10:36:31  os
-    UNO III
-
-    Revision 1.37  2000/03/21 15:39:44  os
-    UNOIII
-
-    Revision 1.36  2000/02/14 14:31:34  os
-    #70473# Unicode
-
-    Revision 1.35  2000/02/10 10:35:22  os
-    #70359# titles added to AutoText groups
-
-    Revision 1.34  2000/01/28 15:24:05  os
-    #72213# Chg: text::XSimpleText;
-
-    Revision 1.33  1999/11/19 16:38:02  os
-    modules renamed
-
-    Revision 1.32  1999/10/18 08:16:13  os
-    #67409# save glossaries ptr while renaming the group
-
-    Revision 1.31  1999/10/05 09:45:09  os
-    #67454# last forgotten path indicators added
-
-    Revision 1.30  1999/09/10 13:19:05  os
-    Chg: resource types removed
-
-    Revision 1.29  1999/07/28 14:21:14  OS
-    #67828# applyTo changed
-
-
-      Rev 1.28   28 Jul 1999 16:21:14   OS
-   #67828# applyTo changed
-
-      Rev 1.27   23 Jul 1999 13:21:18   OS
-   #67828# applyTo implemented ;unused methods removed
-
-      Rev 1.26   23 Jul 1999 10:19:06   OS
-   #67828# applyTo implemented ;unused methods removed
-
-      Rev 1.25   20 Jul 1999 08:58:24   OS
-   #67409# SwXAutoTextGroup::setName; #67115# SwXAutoTextGroup::renameByName
-
-      Rev 1.24   19 Jul 1999 09:01:06   OS
-   new method: aplyTo()
-
-      Rev 1.23   04 May 1999 13:41:46   OS
-   #65330# insertNewByName funktioniert
-
-      Rev 1.22   04 May 1999 10:18:16   OS
-   #65328# container::XElementAccess fuer text::XAutoTextGroup
-
-      Rev 1.21   22 Apr 1999 16:09:04   OS
-   #65194# throw -> throw
-
-      Rev 1.20   22 Apr 1999 15:28:52   OS
-   #65124# not implemented - nur noch DBG_WARNING
-
-      Rev 1.19   30 Mar 1999 15:28:12   OS
-   #63930# Services am ProcessServiceManager anmelden
-
-      Rev 1.18   15 Mar 1999 14:38:24   OS
-   #62845# Makro fuer ServiceInfo jetzt auch fuer OS/2
-
-      Rev 1.17   12 Mar 1999 09:57:04   OS
-   #62845# lang::XServiceInfo impl.
-
-      Rev 1.16   09 Mar 1999 12:38:38   OS
-   #62008# Solar-Mutex
-
-      Rev 1.15   08 Mar 1999 07:43:00   MH
-   update 515
-
-      Rev 1.14   23 Feb 1999 16:14:20   OS
-   #62281# Pfadangabe muss in die text::AutoTextGroup uebernommen werden
-
-      Rev 1.13   08 Feb 1999 15:02:06   OS
-   #56371# richtiger Gruppenzugriff
-
-      Rev 1.12   28 Jan 1999 16:27:48   OS
-   #56371# keine Objekte fuer DEBUG anlegen
-
-      Rev 1.11   27 Jan 1999 12:06:08   OS
-   #56371# TF_ONE51
-
-      Rev 1.10   21 Dec 1998 16:20:04   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.9   10 Dec 1998 15:54:04   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.8   01 Sep 1998 08:24:08   OS
-   #55849# Signaturen per UNO ermitteln - SwTextBlocks immer neu anlegen
-
-      Rev 1.7   23 Jul 1998 17:18:08   OS
-   text::AutoTextGroup liefert jetzt text::XAutoTextEntry #52654#
-
-      Rev 1.6   10 Jul 1998 18:09:38   OS
-   PropertySetInfo und IdlClass static
-
-      Rev 1.5   21 Jun 1998 16:24:30   MH
-   Syntax OS/2
-
-      Rev 1.4   18 Jun 1998 08:13:22   OS
-   SwXAutoTextEntry
-
-      Rev 1.3   17 Jun 1998 09:55:56   OS
-   removeXXXByName
-
-      Rev 1.2   16 Jun 1998 16:48:28   OS
-   interface verbessert
-
-      Rev 1.1   04 Jun 1998 09:40:44   OS
-   getIdlClasses
-
-
-      Rev 1.0   27 May 1998 17:07:36   OM
-   Initial revision.
-------------------------------------------------------------------------*/
 
