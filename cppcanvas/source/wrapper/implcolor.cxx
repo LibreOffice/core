@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implcolor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#include "implcolor.hxx"
-#include "tools.hxx"
+#include <implcolor.hxx>
+#include <tools.hxx>
 
 using namespace ::drafts::com::sun::star;
 using namespace ::com::sun::star;
@@ -84,7 +84,7 @@ namespace cppcanvas
         {
             OSL_ENSURE( mxDevice.is(), "ImplColor::getIntSRGBA(): Invalid graphic device" );
 
-            // TODO: Color space handling
+            // TODO(F1): Color space handling
             return tools::doubleSequenceToIntSRGBA( mxDevice, rDeviceColor );
         }
 
@@ -92,7 +92,7 @@ namespace cppcanvas
         {
             OSL_ENSURE( mxDevice.is(), "ImplColor::getDeviceColor(): Invalid graphic device" );
 
-            // TODO: Color space handling
+            // TODO(F1): Color space handling
             return tools::intSRGBAToDoubleSequence( mxDevice, aSRGBA );
         }
 
