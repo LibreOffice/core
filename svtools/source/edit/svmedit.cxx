@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:21:34 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ private:
     BOOL            mbFocusSelectionHide;
     BOOL            mbIgnoreTab;
     BOOL            mbActivePopup;
+    BOOL            mbSelectOnTab;
 
 public:
                     TextWindow( Window* pParent );
@@ -128,6 +129,8 @@ public:
 
     BOOL            IsIgnoreTab() const { return mbIgnoreTab; }
     void            SetIgnoreTab( BOOL bIgnore ) { mbIgnoreTab = bIgnore; }
+
+    void            DisableSelectionOnFocus() {mbSelectOnTab = sal_False;}
 
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
@@ -741,6 +744,7 @@ BOOL ImpSvMEdit::HandleCommand( const CommandEvent& rCEvt )
 TextWindow::TextWindow( Window* pParent ) : Window( pParent )
 {
     mbInMBDown = FALSE;
+    mbSelectOnTab = TRUE;
     mbFocusSelectionHide = FALSE;
     mbIgnoreTab = FALSE;
     mbActivePopup = FALSE;
@@ -934,7 +938,8 @@ void TextWindow::GetFocus()
     {
         BOOL bGotoCursor = !mpExtTextView->IsReadOnly();
         if ( mbFocusSelectionHide && IsReallyVisible() && !mpExtTextView->IsReadOnly()
-                && ( !mbInMBDown || ( GetSettings().GetStyleSettings().GetSelectionOptions() & SELECTION_OPTION_FOCUS ) ) )
+                && ( mbSelectOnTab &&
+                    (!mbInMBDown || ( GetSettings().GetStyleSettings().GetSelectionOptions() & SELECTION_OPTION_FOCUS ) )) )
         {
             // Alles selektieren, aber nicht scrollen
             BOOL bAutoScroll = mpExtTextView->IsAutoScroll();
@@ -1596,3 +1601,11 @@ MultiLineEdit::GetComponentInterface(BOOL bCreate)
     }
     return xPeer;
 }
+/*-- 11.08.2004 11:29:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void MultiLineEdit::DisableSelectionOnFocus()
+{
+    pImpSvMEdit->GetTextWindow()->DisableSelectionOnFocus();
+}
+
