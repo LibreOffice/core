@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-12 11:56:29 $
+ *  last change: $Author: os $ $Date: 2000-10-20 14:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,8 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #include "docsh.hxx"
 #include "swmodule.hxx"
@@ -360,7 +360,7 @@ SwModule::SwModule( SvFactory* pFact,
     xDicListEvtListener = uno::Reference< linguistic::XDictionaryListEventListener > (
             new SwDicListEvtListener( ::GetDictionaryList() ) );
 
-    Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( xMgr.is() )
     {
         m_xScannerManager = Reference< XScannerManager >(
@@ -435,7 +435,7 @@ void SwDLL::RegisterInterfaces()
     SwWebDrawFormShell::RegisterInterface(pMod);
     SwWebOleShell::RegisterInterface(pMod);
 
-    uno::Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
     uno::Reference< container::XSet >  xSet(xMgr, uno::UNO_QUERY);
     if (xSet.is())
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-26 13:06:56 $
+ *  last change: $Author: os $ $Date: 2000-10-20 14:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
@@ -489,6 +489,9 @@ void SwEnvPage::Reset(const SfxItemSet& rSet)
 
 /*
 $Log: not supported by cvs2svn $
+Revision 1.2  2000/09/26 13:06:56  os
+use of configuration service
+
 Revision 1.1.1.1  2000/09/18 17:14:35  hr
 initial import
 

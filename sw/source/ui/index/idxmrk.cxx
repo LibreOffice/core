@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: os $ $Date: 2000-10-20 14:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -162,7 +162,7 @@ static sal_uInt16 nKey1Pos = USHRT_MAX;
 static sal_uInt16 nKey2Pos = USHRT_MAX;
 
 using namespace ::rtl;
-using namespace ::utl;
+using namespace ::comphelper;
 using namespace ::com::sun::star;
 #define C2U(cChar) OUString::createFromAscii(cChar)
 /*--------------------------------------------------------------------
@@ -1754,6 +1754,9 @@ void    SwAuthMarkModalDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:44  hr
+    initial import
+
     Revision 1.105  2000/09/18 16:05:53  willem.vandorp
     OpenOffice header added.
 

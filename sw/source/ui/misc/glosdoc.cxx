@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:35:57 $
+ *  last change: $Author: os $ $Date: 2000-10-20 14:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,8 @@
 #ifndef _UCBHELPER_CONTENTBROKER_HXX
 #include <ucbhelper/contentbroker.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -335,7 +335,7 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
     }
     //man darf zweimal suchen, denn bei mehreren Verzeichnissen koennte der caseinsensitive Name mehrfach auftreten
     const International& rInt = Application::GetAppInternational();
-    Reference< lang::XMultiServiceFactory > xMSF = utl::getProcessServiceFactory();
+    Reference< lang::XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
 
     for(i = 0; i < nCount; i++)
     {
@@ -911,6 +911,9 @@ String  SwGlossaries::GetExtension()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/06 13:35:57  jp
+    should changes: don't use IniManager
+
     Revision 1.1.1.1  2000/09/18 17:14:44  hr
     initial import
 

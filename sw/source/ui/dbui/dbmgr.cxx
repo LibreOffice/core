@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:32:56 $
+ *  last change: $Author: os $ $Date: 2000-10-20 14:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,8 +260,8 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
@@ -1871,7 +1871,7 @@ Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rDataSourc
 {
     Reference< sdbc::XConnection> xConnection;
     Reference<XNameAccess> xDBContext;
-    Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( xMgr.is() )
     {
         Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
@@ -2081,7 +2081,7 @@ BOOL SwNewDBMgr::OpenMergeSource(const String& rDataSource,
                 pMergeData->bEndOfDB = !pMergeData->xResultSet->next();
                 ++pMergeData->nSelectionIndex;
             }
-            Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
             if( xMgr.is() )
             {
                 Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.util.NumberFormatter" ));
@@ -2516,7 +2516,7 @@ const String&   SwNewDBMgr::GetAddressDBName()
 Sequence<OUString> SwNewDBMgr::GetExistingDatabaseNames()
 {
     Reference<XNameAccess> xDBContext;
-    Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( xMgr.is() )
     {
         Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
@@ -2532,6 +2532,9 @@ Sequence<OUString> SwNewDBMgr::GetExistingDatabaseNames()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/06 13:32:56  jp
+    should changes: don't use IniManager
+
     Revision 1.1.1.1  2000/09/18 17:14:33  hr
     initial import
 

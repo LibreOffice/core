@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: os $ $Date: 2000-10-20 14:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
 #ifndef _LINGU_LNGPROPS_HHX_
 #include <lingu/lngprops.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
@@ -398,7 +398,7 @@ SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const uno::Reference< linguistic
     {
 
         uno::Reference< lang::XMultiServiceFactory >
-                                    xMgr = utl::getProcessServiceFactory();
+                                    xMgr = comphelper::getProcessServiceFactory();
         xOther = uno::Reference< linguistic::XOtherLingu >( xMgr->createInstance(
                             C2U("com.sun.star.linguistic.OtherLingu") ), uno::UNO_QUERY );
         if (xOther.is())
@@ -644,6 +644,9 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Point& rWordPos )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:44  hr
+      initial import
+
       Revision 1.64  2000/09/18 16:05:54  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:33:58 $
+ *  last change: $Author: os $ $Date: 2000-10-20 14:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,8 @@
 #ifndef _LABEL_HRC
 #include <label.hrc>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifdef REPLACE_OFADBMGR
@@ -165,9 +165,6 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
 #endif
 
 using namespace com::sun::star::lang;
@@ -180,7 +177,7 @@ using namespace com::sun::star::uno;
 #endif  //REPLACE_OFADBMGR
 
 using namespace ::com::sun::star;
-using namespace ::utl;
+using namespace ::comphelper;
 using namespace ::rtl;
 
 // dont use RTL_CONSTASCII_STRINGPARAM for UNO_NAME ...

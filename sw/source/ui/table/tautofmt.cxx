@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 09:51:34 $
+ *  last change: $Author: os $ $Date: 2000-10-20 14:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _UIPARAM_HXX
@@ -674,7 +674,7 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes ) :
         nDataColWidth2  ( (USHORT)(((aPrvSize.Width()-4)-(nLabelColWidth*2)) / 4) ),
         nRowHeight      ( (USHORT)((aPrvSize.Height()-4) / 5) )
 {
-    Reference< XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
+    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     pNumFmt = new SvNumberFormatter( xMSF, LANGUAGE_SYSTEM );
 
     Init();
@@ -1724,6 +1724,9 @@ void lcl_SwLinkLine(const SwLineStruct& dLine,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/20 09:51:34  os
+    change: use SvNumberFormatter ctor using XMultiServiceFactory
+
     Revision 1.1.1.1  2000/09/18 17:14:48  hr
     initial import
 

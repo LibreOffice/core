@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: os $ $Date: 2000-10-20 14:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 #ifndef _SFXINIMGR_HXX
 #include <svtools/iniman.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
 #include <com/sun/star/ucb/XContentProvider.hpp>
@@ -191,7 +191,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
             nCaseReadonly |= PATH_READONLY;
         else
         {
-            Reference< lang::XMultiServiceFactory > xMSF = utl::getProcessServiceFactory();
+            Reference< lang::XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
             try
             {
                 INetURLObject aTempObj(aTempFile.GetName());
@@ -679,6 +679,9 @@ void    SwGlossaryGroupTLB::Clear()
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:44  hr
+      initial import
+
       Revision 1.64  2000/09/18 16:05:56  willem.vandorp
       OpenOffice header added.
 
