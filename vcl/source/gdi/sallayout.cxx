@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-17 12:17:45 $
+ *  last change: $Author: hdu $ $Date: 2002-05-28 18:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,44 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
     }
 
     return aPos;
+}
+
+// -----------------------------------------------------------------------
+
+// returns asian kerning values in quarter of character width units
+// to enable automatic halfwidth substitution for fullwidth punctuation
+// return value is negative for l, positive for r, zero for neutral
+
+// If the range doesn't match in 0x3000 and 0x30FB, please change
+// also ImplCalcKerning.
+
+int SalLayout::CalcAsianKerning( sal_Unicode c, bool bLeft, bool bVertical )
+{
+    // http://www.asahi-net.or.jp/~sd5a-ucd/freetexts/jis/x4051/1995/appendix.html
+    static signed char nTable[0x30] =
+    {
+         0, -2, -2,  0,   0,  0,  0,  0,  +2, -2, +2, -2,  +2, -2, +2, -2,
+        +2, -2,  0,  0,  +2, -2, +2, -2,   0,  0,  0,  0,   0, +2, -2, -2,
+         0,  0,  0,  0,   0,  0,  0,  0,   0,  0, -2, -2,  +2, +2, -2, -2
+    };
+
+    int nResult = 0;
+    if( c>=0x3000 && c<0x3030 )
+        nResult = nTable[ c - 0x3000 ];
+    else switch( c )
+    {
+        case ':': case ';': case '!':
+            if( !bVertical )
+                nResult = bLeft ? -1 : +1;   // 25% left and right
+            break;
+        case 0x30FB:
+            nResult = bLeft ? -1 : +1;      // 25% left/right/top/bottom
+            break;
+        default:
+            break;
+    }
+    return nResult;
+
 }
 
 // =======================================================================

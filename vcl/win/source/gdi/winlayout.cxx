@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-28 11:54:14 $
+ *  last change: $Author: hdu $ $Date: 2002-05-28 18:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,30 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
 
     if( rArgs.mnLayoutWidth && (rArgs.mnLayoutWidth < mnWidth) )
         Justify( rArgs.mnLayoutWidth );
+
+    if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN)
+    &&  !rArgs.mpDXArray && !rArgs.mnLayoutWidth )
+    {
+        bool bVertical = false;
+        const xub_Unicode* pStr = rArgs.mpStr + rArgs.mnFirstCharIndex;
+        for( int i = 1; i < mnGlyphCount; ++i )
+        {
+            if( (0x3000 == (0xFF00 & pStr[i-1]))
+            &&  (0x3000 == (0xFF00 & pStr[i])) )
+            {
+                long nKernFirst = +CalcAsianKerning( pStr[i-1], true, bVertical );
+                long nKernNext  = -CalcAsianKerning( pStr[i], false, bVertical );
+
+                long nDelta = (nKernFirst < nKernNext) ? nKernFirst : nKernNext;
+                if( nDelta<0 && nKernFirst!=0 && nKernNext!=0 )
+                {
+                    nDelta = (nDelta * mpGlyphAdvances[i-1] + 2) / 4;
+                    mpGlyphAdvances[i-1] += nDelta;
+                    mnWidth += nDelta;
+                }
+            }
+        }
+    }
 
     return (nRC != 0);
 }
