@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelperfunctions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:56:52 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,8 @@
 #include <classes/sfxhelperfunctions.hxx>
 #endif
 
-static pfunc_setToolBoxControllerCreator pToolBoxControllerCreator = NULL;
+static pfunc_setToolBoxControllerCreator   pToolBoxControllerCreator   = NULL;
+static pfunc_setStatusBarControllerCreator pStatusBarControllerCreator = NULL;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -82,6 +83,21 @@ svt::ToolboxController* SAL_CALL CreateToolBoxController( const Reference< XFram
 {
     if ( pToolBoxControllerCreator )
         return (*pToolBoxControllerCreator)( rFrame, pToolbox, nID, aCommandURL );
+    else
+        return NULL;
+}
+
+pfunc_setStatusBarControllerCreator SAL_CALL SetStatusBarControllerCreator( pfunc_setStatusBarControllerCreator pSetStatusBarControllerCreator )
+{
+    pfunc_setStatusBarControllerCreator pOldSetStatusBarControllerCreator = pSetStatusBarControllerCreator;
+    pStatusBarControllerCreator = pSetStatusBarControllerCreator;
+    return pOldSetStatusBarControllerCreator;
+}
+
+svt::StatusbarController* SAL_CALL CreateStatusBarController( const Reference< XFrame >& rFrame, StatusBar* pStatusBar, unsigned short nID, const ::rtl::OUString& aCommandURL )
+{
+    if ( pStatusBarControllerCreator )
+        return (*pStatusBarControllerCreator)( rFrame, pStatusBar, nID, aCommandURL );
     else
         return NULL;
 }
