@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-14 13:53:28 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 13:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3214,7 +3214,7 @@ void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun:
     Reference< XInterface> xPreviousObject( getSelObject());
     EnableTrackProperties(sal_False);
 
-    m_pShell->GetFormView()->UnmarkAll();
+    sal_Bool bMarkChanged = m_pShell->GetFormView()->checkUnMarkAll(rEvent.Source);
     Reference< XForm> xNewForm( GetForm(rEvent.Source));
 
     setCurControl(xSelObj);
@@ -3231,7 +3231,8 @@ void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun:
         ShowProperties(m_xSelObject, sal_True);
 
     EnableTrackProperties(sal_True);
-    m_pShell->NotifyMarkListChanged(m_pShell->GetFormView());
+    if ( bMarkChanged )
+        m_pShell->NotifyMarkListChanged(m_pShell->GetFormView());
 }
 
 //------------------------------------------------------------------------------
