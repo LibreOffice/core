@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 09:40:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,18 +109,26 @@ namespace dbaccess
                                     ::com::sun::star::sdbcx::XColumnsSupplier,
                                     ::com::sun::star::lang::XServiceInfo    > OQueryComposer_BASE;
 
+    class OPrivateColumns;
+    class OPrivateTables;
+
     class OQueryComposer :  public ::comphelper::OBaseMutex,
                             public OSubComponent,
                             public OQueryComposer_BASE
     {
         ::connectivity::OSQLParser              m_aSqlParser;
         ::connectivity::OSQLParseTreeIterator   m_aSqlIterator;
-        ::connectivity::OSQLParseNode*          m_pSqlParseNode;
+
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>              m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xTableSupplier;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xColumns;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+
+        ::connectivity::OSQLParseNode*          m_pSqlParseNode;
+
+        OPrivateColumns*                        m_pColumns;
+        OPrivateTables*                         m_pTables;
 
         ::rtl::OUString                         m_aQuery;
         ::rtl::OUString                         m_aFilter;  // curently used where clause

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,8 +229,10 @@ ORowSetCache::~ORowSetCache()
         m_pInsertMatrix->clear();
         delete m_pInsertMatrix;
     }
-
-    m_aUpdateTable = NULL;
+    m_xStatement    = NULL;
+    m_xSet          = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>();
+    m_xMetaData     = NULL;
+    m_aUpdateTable  = NULL;
 }
 // -------------------------------------------------------------------------
 void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
@@ -1425,6 +1427,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2000/10/25 07:30:24  oj
+    make strings unique for lib's
+
     Revision 1.6  2000/10/17 10:18:12  oj
     some changes for the rowset
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 09:27:34 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,7 @@ DBG_NAME(ODatabaseContext)
 Reference< XInterface >
     ODatabaseContext_CreateInstance(const Reference< XMultiServiceFactory >  & xServiceManager)
 {
-    Reference< XInterface >  xService(*new ODatabaseContext(xServiceManager));
-    return xService;
+    return (*new ODatabaseContext(xServiceManager));
 }
 
 //--------------------------------------------------------------------------

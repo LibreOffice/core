@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:32:52 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,104 +98,107 @@
 #include "apitools.hxx"
 #endif
 
-typedef ::cppu::WeakImplHelper4< ::com::sun::star::container::XEnumerationAccess,
-                                 ::com::sun::star::container::XNameAccess,
-                                 ::com::sun::star::container::XIndexAccess,
-                                 ::com::sun::star::lang::XServiceInfo > OTableContainer_Base;
-
-
-//==========================================================================
-//= OTableContainer
-//==========================================================================
-class OTable;
 class WildCard;
-class OTableContainer :  public OTableContainer_Base
+namespace dbaccess
 {
-protected:
+    typedef ::cppu::WeakImplHelper4< ::com::sun::star::container::XEnumerationAccess,
+                                     ::com::sun::star::container::XNameAccess,
+                                     ::com::sun::star::container::XIndexAccess,
+                                     ::com::sun::star::lang::XServiceInfo > OTableContainer_Base;
 
-    ::cppu::OWeakObject&        m_rParent;
-    ::osl::Mutex&               m_rMutex;
 
-    DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>, Tables);
-    DECLARE_STL_VECTOR(TablesIterator, TablesIndexAccess);
-    Tables                  m_aTables;
-    TablesIndexAccess       m_aTablesIndexed;
+    //==========================================================================
+    //= OTableContainer
+    //==========================================================================
+    class OTable;
 
-    // holds the original tables which where set in construct but they can be null
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterTables;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
+    class OTableContainer :  public OTableContainer_Base
+    {
+    protected:
 
-    sal_Bool m_bConstructed : 1;        // late ctor called
+        ::cppu::OWeakObject&        m_rParent;
+        ::osl::Mutex&               m_rMutex;
 
-    sal_Bool isNameValid(const ::rtl::OUString& _rName,
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
-        const ::std::vector< WildCard >& _rWCSearch) const;
-public:
-    /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
-        interface.<BR>
-        @param          _rParent            the object which acts as parent for the container.
-                                            all refcounting is rerouted to this object
-        @param          _rMutex             the access safety object of the parent
-        @param          _rTableFilter       restricts the visible tables by name
-        @param          _rTableTypeFilter   restricts the visible tables by type
-        @see            construct
-    */
-    OTableContainer(
-        ::cppu::OWeakObject& _rParent,
-        ::osl::Mutex& _rMutex,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon
-        );
-    ~OTableContainer();
+        DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>, Tables);
+        DECLARE_STL_VECTOR(TablesIterator, TablesIndexAccess);
+        Tables                  m_aTables;
+        TablesIndexAccess       m_aTablesIndexed;
 
-    /** late ctor. The container will fill itself with the data got by the connection meta data, considering the
-        filters given (the connection is the parent object you passed in the ctor).
-    */
-    void construct(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter
-        );
+        // holds the original tables which where set in construct but they can be null
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterTables;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
 
-    /** late ctor. The container will fill itself with wrapper objects for the tables returned by the given
-        name container.
-    */
-    void construct(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxMasterContainer,
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter
-        );
+        sal_Bool m_bConstructed : 1;        // late ctor called
 
-    sal_Bool isInitialized() const { return m_bConstructed; }
+        sal_Bool isNameValid(const ::rtl::OUString& _rName,
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
+            const ::std::vector< WildCard >& _rWCSearch) const;
+    public:
+        /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
+            interface.<BR>
+            @param          _rParent            the object which acts as parent for the container.
+                                                all refcounting is rerouted to this object
+            @param          _rMutex             the access safety object of the parent
+            @param          _rTableFilter       restricts the visible tables by name
+            @param          _rTableTypeFilter   restricts the visible tables by type
+            @see            construct
+        */
+        OTableContainer(
+            ::cppu::OWeakObject& _rParent,
+            ::osl::Mutex& _rMutex,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon
+            );
+        ~OTableContainer();
 
-    /** tell the container to free all elements and all additional resources.<BR>
-        After using this method the object may be reconstructed by calling one of the <code>constrcuct</code> methods.
-    */
-    virtual void SAL_CALL dispose();
+        /** late ctor. The container will fill itself with the data got by the connection meta data, considering the
+            filters given (the connection is the parent object you passed in the ctor).
+        */
+        void construct(
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter
+            );
 
-// ::com::sun::star::uno::XInterface
-    virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException) { m_rParent.acquire(); }
-    virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) { m_rParent.release(); }
+        /** late ctor. The container will fill itself with wrapper objects for the tables returned by the given
+            name container.
+        */
+        void construct(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxMasterContainer,
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter
+            );
 
-// ::com::sun::star::lang::XServiceInfo
-    DECLARE_SERVICE_INFO();
+        sal_Bool isInitialized() const { return m_bConstructed; }
 
-// ::com::sun::star::container::XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
+        /** tell the container to free all elements and all additional resources.<BR>
+            After using this method the object may be reconstructed by calling one of the <code>constrcuct</code> methods.
+        */
+        virtual void SAL_CALL dispose();
 
-// ::com::sun::star::container::XEnumerationAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw(::com::sun::star::uno::RuntimeException);
+    // ::com::sun::star::uno::XInterface
+        virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException) { m_rParent.acquire(); }
+        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) { m_rParent.release(); }
 
-// ::com::sun::star::container::XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    // ::com::sun::star::lang::XServiceInfo
+        DECLARE_SERVICE_INFO();
 
-// ::com::sun::star::container::XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
-};
+    // ::com::sun::star::container::XElementAccess
+        virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
+    // ::com::sun::star::container::XEnumerationAccess
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::container::XIndexAccess
+        virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::container::XNameAccess
+        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
+    };
+}
 #endif // _DBA_CORE_TABLECONTAINER_HXX_
 
 

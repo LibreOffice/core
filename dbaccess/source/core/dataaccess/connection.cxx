@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:42:28 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ Sequence< ::rtl::OUString > OConnectionRerouter::getSupportedServiceNames(  ) th
 void OConnectionRerouter::close(void) throw( SQLException, RuntimeException )
 {
     checkDisposed();
+    disposing();
     Reference< XComponent > xDerivedComp;
     if (queryInterface(::getCppuType(&xDerivedComp)) >>= xDerivedComp)
         // we ourself do not have an XComponent interface, but our derived classes do
@@ -376,8 +377,6 @@ void OConnectionRerouter::disposing()
             xComp->dispose();
     }
     m_aStatements.clear();
-
-    // do not dispose the master connection ! this is the responsibility of the server component !
 }
 
 //==========================================================================
@@ -507,7 +506,7 @@ Reference< XSQLQueryComposer >  OConnection::createQueryComposer(void) throw( Ru
 
     // get the supplier of the database
     ODatabaseSource* pParent = NULL;
-        if (!comphelper::getImplementation(pParent, m_xParent))
+    if (!comphelper::getImplementation(pParent, m_xParent))
         throw RuntimeException();
 
     //  Reference< XNumberFormatsSupplier >  xSupplier = pParent->getNumberFormatsSupplier();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 15:21:51 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ namespace dbaccess
                                                 ,   ::com::sun::star::sdb::XCompletedExecution
                                                 >   ORowSet_BASE1;
 
+    class OTableContainer;
     class ORowSet : public ORowSet_BASE1
                     , public ORowSetBase
                     , public ::comphelper::OPropertyArrayUsageHelper<ORowSet>
@@ -138,11 +139,12 @@ namespace dbaccess
         ::com::sun::star::uno::Any                                                      m_aTypeMap;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >  m_xStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;  // tables of the connection
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns; // the columns from a table or query
 
         connectivity::OWeakRefArray                 m_aClones;
         connectivity::ORowVector< ORowSetValue >    m_aParameterRow; // hold all parameters
+
+        OTableContainer*                            m_pTables;
 
         rtl::OUString                               m_aCommand;
         rtl::OUString                               m_aDataSourceName;
@@ -186,8 +188,8 @@ namespace dbaccess
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >  calcConnection() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-        rtl::OUString getComposedQuery(const rtl::OUString& rQuery, sal_Bool bEscapeProcessing) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-        rtl::OUString getCommand(sal_Bool& bEscapeProcessing) throw( ::com::sun::star::sdbc::SQLException);
+        rtl::OUString getComposedQuery(const rtl::OUString& rQuery, sal_Bool bEscapeProcessing,::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxRetTables) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
+        rtl::OUString getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxRetTables) throw( ::com::sun::star::sdbc::SQLException);
         // free clones and ParseTree
         void freeResources();
 
@@ -434,6 +436,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2000/10/31 15:21:51  fs
+    added XCompletedExecution interface & implementation
+
     Revision 1.6  2000/10/30 09:24:02  oj
     use tablecontainer if no tablesupplier is supported
 

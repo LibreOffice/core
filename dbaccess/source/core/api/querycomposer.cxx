@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:00:20 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,10 @@
 #ifndef _COM_SUN_STAR_I18N_XLOCALEDATA_HPP_
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #endif
+#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
+#include "connectivity/sdbcx/VCollection.hxx"
+#endif
+
 
 using namespace dbaccess;
 using namespace connectivity;
@@ -143,6 +147,71 @@ using namespace ::utl;
 #define R_BRACKET       ::rtl::OUString::createFromAscii(")")
 #define COMMA           ::rtl::OUString::createFromAscii(",")
 
+namespace dbaccess
+{
+    // -----------------------------------------------------------------------------
+    class OPrivateColumns : public connectivity::sdbcx::OCollection
+    {
+        OSQLColumns m_aColumns;
+    protected:
+        virtual Reference< XNamed > createObject(const ::rtl::OUString& _rName);
+        virtual void impl_refresh() throw(RuntimeException) {}
+        virtual Reference< XPropertySet > createEmptyObject()
+        {
+            return NULL;
+        }
+    public:
+        OPrivateColumns(const OSQLColumns& _rColumns,
+                        ::cppu::OWeakObject& _rParent,
+                        ::osl::Mutex& _rMutex,
+                        const ::std::vector< ::rtl::OUString> &_rVector
+                        ) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
+                        ,m_aColumns(_rColumns)
+        {}
+        ~OPrivateColumns()
+        {
+            disposing();
+        }
+    };
+    // -------------------------------------------------------------------------
+    Reference< XNamed > OPrivateColumns::createObject(const ::rtl::OUString& _rName)
+    {
+        return Reference< XNamed >(*find(m_aColumns.begin(),m_aColumns.end(),_rName,isCaseSensitive()),UNO_QUERY);
+    }
+    typedef connectivity::sdbcx::OCollection OPrivateTables_BASE;
+    // -------------------------------------------------------------------------
+    class OPrivateTables : public OPrivateTables_BASE
+    {
+        OSQLTables  m_aTables;
+    protected:
+        virtual Reference< XNamed > createObject(const ::rtl::OUString& _rName);
+        virtual void impl_refresh() throw(RuntimeException) {}
+        virtual Reference< XPropertySet > createEmptyObject()
+        {
+            return NULL;
+        }
+    public:
+        OPrivateTables(const OSQLTables& _rColumns,
+                        ::cppu::OWeakObject& _rParent,
+                        ::osl::Mutex& _rMutex,
+                        const ::std::vector< ::rtl::OUString> &_rVector
+                        ) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
+                        ,m_aTables(_rColumns)
+        {}
+        virtual void SAL_CALL disposing(void)
+        {
+            OPrivateTables_BASE::disposing();
+            m_aTables.clear();
+        }
+    };
+    // -------------------------------------------------------------------------
+    Reference< XNamed > OPrivateTables::createObject(const ::rtl::OUString& _rName)
+    {
+        return Reference< XNamed >(m_aTables.find(_rName)->second,UNO_QUERY);
+    }
+    // -----------------------------------------------------------------------------
+}
+
 DBG_NAME(OQueryComposer)
 // -------------------------------------------------------------------------
 OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
@@ -155,6 +224,8 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
  , m_xTableSupplier(_xTableSupplier)
  , m_xServiceFactory(_xServiceFactory)
  , m_aSqlParser(_xServiceFactory)
+ ,m_pColumns(NULL)
+ ,m_pTables(NULL)
 {
     DBG_CTOR(OQueryComposer,NULL);
     OSL_ENSHURE(_xServiceFactory.is()," ServiceFactory cant be null!");
@@ -179,10 +250,22 @@ void SAL_CALL OQueryComposer::disposing(void)
 
     delete m_pSqlParseNode;
     m_pSqlParseNode     = NULL;
+    m_aSqlIterator.dispose();
     m_xTableSupplier    = NULL;
     m_xConnection       = NULL;
-    m_xColumns          = NULL;
     m_xServiceFactory   = NULL;
+    if(m_pColumns)
+    {
+        m_pColumns->disposing();
+        delete m_pColumns;
+        m_pColumns = NULL;
+    }
+    if(m_pTables)
+    {
+        m_pTables->disposing();
+        delete m_pTables;
+        m_pTables = NULL;
+    }
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::lang::XTypeProvider
@@ -286,7 +369,25 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
     if(pOrderNode) // parse without "ORDER BY"
         pOrderNode->getChild(2)->parseNodeToStr(m_aOrgOrder,m_xConnection->getMetaData());
 
-    m_xColumns = m_aSqlIterator.getSelectAsNameAccess(*this,m_aMutex);
+    // first clear the tables and columns
+    if(m_pTables)
+    {
+        m_pTables->disposing();
+        delete m_pTables;
+        m_pTables = NULL;
+    }
+    if(m_pColumns)
+    {
+        m_pColumns->disposing();
+        delete m_pColumns;
+        m_pColumns = NULL;
+    }
+    // now set the columns
+    const ::vos::ORef< OSQLColumns>& aCols = m_aSqlIterator.getSelectColumns();
+    ::std::vector< ::rtl::OUString> aNames;
+    for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
+        aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
+    m_pColumns = new OPrivateColumns(*aCols,*this,m_aMutex,aNames);
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OQueryComposer::getComposedQuery(  ) throw(RuntimeException)
@@ -499,7 +600,7 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
 
     ::rtl::OUString aName;
     column->getPropertyValue(PROPERTY_NAME) >>= aName;
-    if(!m_xConnection->getMetaData()->supportsOrderByUnrelated() && !m_xColumns->hasByName(aName))
+    if(!m_xConnection->getMetaData()->supportsOrderByUnrelated() && !m_pColumns->hasByName(aName))
         throw SQLException();
 
     // filter anhaengen
@@ -563,7 +664,20 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OQueryComposer::g
         throw DisposedException();
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    return m_aSqlIterator.getTablesAsNameAccess(*this,m_aMutex);
+    if(!m_pTables)
+    {
+        const OSQLTables& aTables = m_aSqlIterator.getTables();
+        ::std::vector< ::rtl::OUString> aNames;
+        for(OSQLTables::const_iterator aIter = aTables.begin(); aIter != aTables.end();++aIter)
+        {
+            Reference<XNamed> xName(aIter->second,UNO_QUERY);
+            aNames.push_back(xName->getName());
+        }
+
+        m_pTables = new OPrivateTables(aTables,*this,m_aMutex,aNames);
+    }
+
+    return m_pTables;
 }
 // -------------------------------------------------------------------------
 // XColumnsSupplier
@@ -573,7 +687,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OQueryComposer::g
         throw DisposedException();
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    return m_aSqlIterator.getSelectAsNameAccess(*this,m_aMutex);
+    return m_pColumns;
 }
 // -------------------------------------------------------------------------
 sal_Bool OQueryComposer::setORCriteria(OSQLParseNode* pCondition,
@@ -645,8 +759,6 @@ sal_Bool OQueryComposer::setANDCriteria(OSQLParseNode * pCondition,
             PropertyValue aItem;
             ::rtl::OUString aValue;
             ::rtl::OUString aColumnName;
-
-
 
             Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
             LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
@@ -809,6 +921,7 @@ void OQueryComposer::resetIterator(const ::rtl::OUString& aSql)
 {
     ::rtl::OUString aErrorMsg;
     delete m_pSqlParseNode;
+
     m_pSqlParseNode = m_aSqlParser.parseTree(aErrorMsg, aSql);
     m_aSqlIterator.setParseTree(m_pSqlParseNode);
 }
@@ -852,3 +965,4 @@ void OQueryComposer::resetIterator(const ::rtl::OUString& aSql)
         pHaving->parseNodeToStr(aResult,m_xConnection->getMetaData());
     return aResult;
 }
+// -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,6 @@ public:
     virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    /// does not dispose the master connection ! this is the responsibility of the server component !
     virtual void SAL_CALL disposing(void);
 
     inline  void checkDisposed() throw (::com::sun::star::lang::DisposedException);

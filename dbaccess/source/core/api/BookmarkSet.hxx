@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:19:03 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@ namespace dbaccess
             : OCacheSet(_xDriverSet)
             ,m_xRowLocate(_xDriverSet,::com::sun::star::uno::UNO_QUERY)
         {}
+        ~OBookmarkSet()
+        {
+            m_xRowLocate = NULL;
+        }
 
         virtual void fillValueRow(ORowSetRow& _rRow);
         // ::com::sun::star::sdbcx::XRowLocate
@@ -138,6 +142,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/17 10:19:03  oj
+    some changes for the rowset
+
     Revision 1.2  2000/10/11 11:18:10  fs
     replace unotools with comphelper
 
