@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-23 09:07:48 $
+ *  last change: $Author: dr $ $Date: 2002-03-01 11:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,11 @@
 
 //========================================================================
 
-ScPivotFunctionDlg::ScPivotFunctionDlg( Window*         pParent,
-                                        BOOL            bSubTotalFunc,
-                                        const String&   rName,
-                                        USHORT          nFunctions,
-                                        BOOL            bIsShowAll )
+ScDPFunctionDlg::ScDPFunctionDlg(   Window*         pParent,
+                                    BOOL            bSubTotalFunc,
+                                    const String&   rName,
+                                    USHORT          nFunctions,
+                                    BOOL            bIsShowAll )
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_PIVOTSUBT ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
@@ -105,7 +105,7 @@ ScPivotFunctionDlg::ScPivotFunctionDlg( Window*         pParent,
 
 //------------------------------------------------------------------------
 
-__EXPORT ScPivotFunctionDlg::~ScPivotFunctionDlg()
+__EXPORT ScDPFunctionDlg::~ScDPFunctionDlg()
 {
     USHORT  nEntryCount = aLbFunc.GetEntryCount();
 
@@ -118,7 +118,7 @@ __EXPORT ScPivotFunctionDlg::~ScPivotFunctionDlg()
 
 //------------------------------------------------------------------------
 
-BOOL ScPivotFunctionDlg::GetShowAll() const
+BOOL ScDPFunctionDlg::GetShowAll() const
 {
     return aCbShowAll.IsChecked();
 }
@@ -128,7 +128,7 @@ BOOL ScPivotFunctionDlg::GetShowAll() const
 #define FUNC_SET(f) ( (nFunctions & (f)) == (f) )
 
 
-void ScPivotFunctionDlg::InitFuncLb( USHORT nFunctions )
+void ScDPFunctionDlg::InitFuncLb( USHORT nFunctions )
 {
     aLbFunc.SetEntryData(  0, new USHORT(PIVOT_FUNC_SUM) );
     aLbFunc.SetEntryData(  1, new USHORT(PIVOT_FUNC_COUNT) );
@@ -161,24 +161,24 @@ void ScPivotFunctionDlg::InitFuncLb( USHORT nFunctions )
         aLbFunc.SelectEntryPos(  9, FUNC_SET( PIVOT_FUNC_STD_VAR    ) );
         aLbFunc.SelectEntryPos( 10, FUNC_SET( PIVOT_FUNC_STD_VARP   ) );
     }
-    aLbFunc.SetDoubleClickHdl( LINK( this, ScPivotFunctionDlg, DblClickHdl ) );
+    aLbFunc.SetDoubleClickHdl( LINK( this, ScDPFunctionDlg, DblClickHdl ) );
 }
 
 #undef FUNC_SET
 
 //------------------------------------------------------------------------
 
-void ScPivotFunctionDlg::SetUI( BOOL bSubTotals )
+void ScDPFunctionDlg::SetUI( BOOL bSubTotals )
 {
-    aBtnOk.SetClickHdl  ( LINK( this, ScPivotFunctionDlg, ClickHdl ) );
+    aBtnOk.SetClickHdl  ( LINK( this, ScDPFunctionDlg, ClickHdl ) );
 
     if ( bSubTotals )
     {
         aFlFunc.SetText( ScResId( STR_SUBTOTALS ) );
 
-        aBtnNone.SetClickHdl    ( LINK( this, ScPivotFunctionDlg, RadioClickHdl ) );
-        aBtnAuto.SetClickHdl    ( LINK( this, ScPivotFunctionDlg, RadioClickHdl ) );
-        aBtnUser.SetClickHdl    ( LINK( this, ScPivotFunctionDlg, RadioClickHdl ) );
+        aBtnNone.SetClickHdl    ( LINK( this, ScDPFunctionDlg, RadioClickHdl ) );
+        aBtnAuto.SetClickHdl    ( LINK( this, ScDPFunctionDlg, RadioClickHdl ) );
+        aBtnUser.SetClickHdl    ( LINK( this, ScDPFunctionDlg, RadioClickHdl ) );
 
         if ( nFuncMask == PIVOT_FUNC_NONE )
         {
@@ -233,7 +233,7 @@ void ScPivotFunctionDlg::SetUI( BOOL bSubTotals )
 //------------------------------------------------------------------------
 // Handler:
 
-IMPL_LINK( ScPivotFunctionDlg, RadioClickHdl, RadioButton *, pBtn )
+IMPL_LINK( ScDPFunctionDlg, RadioClickHdl, RadioButton *, pBtn )
 {
     if ( pBtn == &aBtnNone || pBtn == &aBtnAuto )
     {
@@ -249,16 +249,16 @@ IMPL_LINK( ScPivotFunctionDlg, RadioClickHdl, RadioButton *, pBtn )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( ScPivotFunctionDlg, DblClickHdl, MultiListBox *, EMPTYARG )
+IMPL_LINK_INLINE_START( ScDPFunctionDlg, DblClickHdl, MultiListBox *, EMPTYARG )
 {
     ClickHdl( &aBtnOk );
     return 0;
 }
-IMPL_LINK_INLINE_END( ScPivotFunctionDlg, DblClickHdl, MultiListBox *, EMPTYARG )
+IMPL_LINK_INLINE_END( ScDPFunctionDlg, DblClickHdl, MultiListBox *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScPivotFunctionDlg, ClickHdl, PushButton *, pBtn )
+IMPL_LINK( ScDPFunctionDlg, ClickHdl, PushButton *, pBtn )
 {
     if ( pBtn == &aBtnOk )
     {

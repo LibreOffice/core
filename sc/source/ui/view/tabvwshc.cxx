@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:17:56 $
+ *  last change: $Author: dr $ $Date: 2002-03-01 11:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             //  all settings must be in pDialogDPObject
 
             GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
-            pResult = new ScPivotLayoutDlg( pB, pCW, pParent, pDialogDPObject );
+            pResult = new ScDPLayoutDlg( pB, pCW, pParent, pDialogDPObject );
 
 #if 0
             ScDocument*     pDoc = GetViewData()->GetDocument();

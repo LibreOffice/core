@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-22 21:09:58 $
+ *  last change: $Author: dr $ $Date: 2002-03-01 11:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,11 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
 {
     OutputSize = TRUE ;
     HelpId = SID_OPENDLG_PIVOTTABLE ;
+    Size = MAP_APPFONT ( 336 , 164 ) ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 325 , 140 ) ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
     Text = "Datenpilot" ;
     Text [ ENGLISH ] = "Data Pilot" ;
     Text [ norwegian ] = "Data Pilot" ;
@@ -76,112 +78,89 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Text [ portuguese_brazilian ] = "Data Pilot" ;
     Text [ portuguese ] = "Piloto de dados" ;
     Text [ english_us ] = "DataPilot" ;
-    Moveable = TRUE ;
-    Closeable = FALSE ;
-    Window WND_ROW
+    Text[ danish ] = "DataPilot";
+    Text[ french ] = "Pilote de donnÈes";
+    Text[ swedish ] = "Datapilot";
+    Text[ dutch ] = "DataPiloot";
+    Text[ spanish ] = "Piloto de datos";
+    Text[ chinese_simplified ] = "Êï∞ÊçÆÂä©ÁêÜ";
+    Text[ russian ] = "—‚Ó‰Ì‡ˇ Ú‡·ÎËˆ‡";
+    Text[ polish ] = "Pilot danych";
+    Text[ japanese ] = "„Éá„Éº„Çø„Éë„Ç§„É≠„ÉÉ„Éà";
+    Text[ chinese_traditional ] = "Ë≥áÊñôÂä©ÁêÜ";
+    Text[ arabic ] = "„—‘œ «·»Ì«‰« ";
+    Text [ spanish ] = "Piloto de datos" ;
+    Text [ french ] = "Pilote de donnÈes" ;
+    Text [ dutch ] = "DataPiloot" ;
+    Text [ swedish ] = "Datapilot" ;
+    Text [ danish ] = "DataPilot" ;
+    Text[ greek ] = "–ÈÎ¸ÙÔÚ ‰Â‰ÔÏ›Ì˘Ì";
+    Text[ korean ] = "Îç∞Ïù¥ÌÑ∞ ÌååÏùºÎüø";
+    Text[ turkish ] = "Veri pilotu";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "DataPilot";
+    Text[ finnish ] = "Tietojen ohjaus";
+
+    FixedText FT_COL
     {
-        Pos = MAP_APPFONT ( 9 , 34 ) ;
-        Size = MAP_APPFONT ( 34 , 80 ) ;
-        Text = "ZEILE" ;
-        Text [ ENGLISH ] = "ROW" ;
-        Text [ norwegian ] = "RAD" ;
-        Text [ italian ] = "RIGA" ;
-        Text [ portuguese_brazilian ] = "FILEIRA" ;
-        Text [ portuguese ] = "LINHA" ;
-        Text [ finnish ] = "ROW" ;
-        Text [ danish ] = "R∆KKE" ;
-        Text [ french ] = "LIGNE" ;
-        Text [ swedish ] = "RAD" ;
-        Text [ dutch ] = "RIJ" ;
-        Text [ spanish ] = "FILA" ;
-        Text [ english_us ] = "ROW" ;
-        Text[ chinese_simplified ] = "Ë°å";
-        Text[ russian ] = "—“–Œ ¿";
-        Text[ polish ] = "LINIA";
-        Text[ japanese ] = "Ë°å";
-        Text[ chinese_traditional ] = "Âàó";
-        Text[ arabic ] = "ROW";
-        Text[ greek ] = "√—¡ÃÃ«";
-        Text[ korean ] = "Ìñâ";
-        Text[ turkish ] = "SATIR";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ROW";
+        Pos = MAP_APPFONT ( 231 , 142 ) ;
+        Size = MAP_APPFONT ( 37 , 8 ) ;
+        Text = "Spalte" ;
+        Text[ ENGLISH ] = "Column" ;
+        Text[ english_us ] = "Column" ;
     };
-    Window WND_COL
+    Control WND_COL
     {
-        Pos = MAP_APPFONT ( 43 , 14 ) ;
-        Size = MAP_APPFONT ( 136 , 20 ) ;
-        Text = "SPALTE" ;
-        Text [ ENGLISH ] = "COLUMN" ;
-        Text [ norwegian ] = "KOLONNE" ;
-        Text [ italian ] = "Colonna" ;
-        Text [ portuguese_brazilian ] = "COLUNA" ;
-        Text [ portuguese ] = "COLUNA" ;
-        Text [ finnish ] = "COLUMN" ;
-        Text [ danish ] = "KOLONNE" ;
-        Text [ french ] = "COLONNE" ;
-        Text [ swedish ] = "KOLUMN" ;
-        Text [ dutch ] = "KOLOM" ;
-        Text [ spanish ] = "COLUMNA" ;
-        Text [ english_us ] = "COLUMN" ;
-        Text[ chinese_simplified ] = "Âàó";
-        Text[ russian ] = "—“ŒÀ¡≈÷";
-        Text[ polish ] = "KOLUMNA";
-        Text[ japanese ] = "Âàó";
-        Text[ chinese_traditional ] = "Ê¨Ñ";
-        Text[ arabic ] = "COLUMN";
-        Text[ greek ] = "”‘«À«";
-        Text[ korean ] = "Îã®";
-        Text[ turkish ] = "S‹TUN";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "COLUMN";
+        Pos = MAP_APPFONT ( 44 , 14 ) ;
+        Size = MAP_APPFONT ( 144 , 24 ) ;
+        TabStop = TRUE ;
     };
-    Window WND_DATA
+    FixedText FT_ROW
     {
-        Pos = MAP_APPFONT ( 43 , 34 ) ;
-        Size = MAP_APPFONT ( 136 , 80 ) ;
-        Text = "DATEN" ;
-        Text [ ENGLISH ] = "DATA" ;
-        Text [ norwegian ] = "DATA" ;
-        Text [ italian ] = "DATI" ;
-        Text [ portuguese_brazilian ] = "DADOS" ;
-        Text [ portuguese ] = "DADOS" ;
-        Text [ finnish ] = "DATA" ;
-        Text [ danish ] = "DATA" ;
-        Text [ french ] = "DONNEES" ;
-        Text [ swedish ] = "DATA" ;
-        Text [ dutch ] = "DATA" ;
-        Text [ spanish ] = "DATOS" ;
-        Text [ english_us ] = "DATA" ;
-        Text[ chinese_simplified ] = "Êï∞ÊçÆ";
-        Text[ russian ] = "ƒ¿ÕÕ€≈";
-        Text[ polish ] = "DANE";
-        Text[ japanese ] = "„Éá„Éº„Çø";
-        Text[ chinese_traditional ] = "Ë≥áÊñô";
-        Text[ arabic ] = "DATA";
-        Text[ greek ] = "DATA";
-        Text[ korean ] = "Îç∞Ïù¥ÌÑ∞";
-        Text[ turkish ] = "VER›";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DATA";
+        Pos = MAP_APPFONT ( 194 , 150 ) ;
+        Size = MAP_APPFONT ( 37 , 8 ) ;
+        Text = "Zeile" ;
+        Text[ ENGLISH ] = "Row" ;
+        Text[ english_us ] = "Row" ;
     };
-    Window WND_SELECT
+    Control WND_ROW
     {
-        Pos = MAP_APPFONT ( 187 , 14 ) ;
+        Pos = MAP_APPFONT ( 6 , 40 ) ;
+        Size = MAP_APPFONT ( 36 , 96 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DATA
+    {
+        Pos = MAP_APPFONT ( 231, 150 ) ;
+        Size = MAP_APPFONT ( 37 , 8 ) ;
+        Text = "Daten" ;
+        Text[ ENGLISH ] = "Data" ;
+        Text[ english_us ] = "Data" ;
+    };
+    Control WND_DATA
+    {
+        Pos = MAP_APPFONT ( 44 , 40 ) ;
+        Size = MAP_APPFONT ( 144 , 96 ) ;
+        TabStop = TRUE ;
+    };
+    Control WND_SELECT
+    {
+        Pos = MAP_APPFONT ( 194 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 100 ) ;
+        TabStop = TRUE ;
     };
     ScrollBar WND_HSCROLL
     {
-        Pos = MAP_APPFONT ( 187 , 118 ) ;
+        Pos = MAP_APPFONT ( 194 , 118 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
         HScroll = TRUE ;
+        TabStop = FALSE ;
     };
     FixedText FT_INFO
     {
-        Pos = MAP_APPFONT ( 9 , 118 ) ;
-        Size = MAP_APPFONT ( 171 , 16 ) ;
+        Pos = MAP_APPFONT ( 6 , 142 ) ;
+        Size = MAP_APPFONT ( 182 , 16 ) ;
         WordBreak = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? Ziehen Sie die Felder auf der rechten Seite mit der Maus in die gew¸nschten Bereiche. : Ziehen Sie die Felder auf der rechten Seite mit der Maus in die gew≥nschten Bereiche. */
         Text = "Ziehen Sie die Felder auf der rechten Seite mit der Maus in die gew¸nschten Bereiche." ;
         Text [ ENGLISH ] = "Drag the fields from the right into the desired area using the mouse." ;
         Text [ norwegian ] = "Dra feltene fra h¯yre og inn I det ¯nskede omrÂdet ved Â bruke musen." ;
@@ -210,7 +189,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     FixedLine FL_LAYOUT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 257 , 8 ) ;
+        Size = MAP_APPFONT ( 268 , 8 ) ;
         Text = "Layout" ;
         Text [ ENGLISH ] = "Layout" ;
         Text[ english_us ] = "Layout";
@@ -236,26 +215,42 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 270 , 6 ) ;
+        Pos = MAP_APPFONT ( 280 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 270 , 23 ) ;
+        Pos = MAP_APPFONT ( 280 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 270 , 43 ) ;
+        Pos = MAP_APPFONT ( 280 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
+    PushButton BTN_REMOVE
+    {
+        Pos = MAP_APPFONT ( 280 , 63 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "Entfernen" ;
+        Text [ ENGLISH ] = "Remove" ;
+    };
+    PushButton BTN_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 280 , 80 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "Optionen..." ;
+        Text [ ENGLISH ] = "Options..." ;
+    };
     MoreButton BTN_MORE
     {
-        Pos = MAP_APPFONT ( 270 , 120 ) ;
+        Pos = MAP_APPFONT ( 280 , 144 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
@@ -264,14 +259,18 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Window WND_FIELD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 187 , 17 ) ;
-        Size = MAP_APPFONT ( 34 , 10 ) ;
-        Text = "Field" ;
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
+    };
+    Window WND_FIELD_SPACE
+    {
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
+        Size = MAP_APPFONT ( 2 , 2 ) ;
     };
     FixedLine FL_OUTPUT
     {
-        Pos = MAP_APPFONT ( 6 , 140 ) ;
-        Size = MAP_APPFONT ( 257 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 164 ) ;
+        Size = MAP_APPFONT ( 268 , 8 ) ;
         Text = "Ergebnis" ;
         Text [ ENGLISH ] = "Result" ;
         Text [ norwegian ] = "Resultat" ;
@@ -300,8 +299,9 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     FixedText FT_OUTAREA
     {
-        Pos = MAP_APPFONT ( 12 , 153 ) ;
+        Pos = MAP_APPFONT ( 12 , 177 ) ;
         Size = MAP_APPFONT ( 59 , 8 ) ;
+        Hide = TRUE ;
         Text = "~Ausgabe ab" ;
         Text [ ENGLISH ] = "~Output from" ;
         Text [ norwegian ] = "UtgÂende fra " ;
@@ -315,7 +315,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ dutch ] = "~Weergave vanaf" ;
         Text [ spanish ] = "Resultado en" ;
         Text [ english_us ] = "Results to" ;
-        Hide = TRUE ;
         Text[ chinese_simplified ] = "ËæìÂá∫Âå∫Âüü‰ªé";
         Text[ russian ] = "Õ‡˜‡Ú¸ Ò";
         Text[ polish ] = "Rozpocznij od";
@@ -331,7 +330,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     ListBox LB_OUTAREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 73 , 151 ) ;
+        Pos = MAP_APPFONT ( 73 , 175 ) ;
         Size = MAP_APPFONT ( 75 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -340,18 +339,19 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Edit ED_OUTAREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 152 , 151 ) ;
-        Size = MAP_APPFONT ( 94 , 12 ) ;
+        Pos = MAP_APPFONT ( 152 , 175 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
     };
     ImageButton RB_OUTAREA
     {
+        Pos = MAP_APPFONT ( 256 , 175 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 248 , 151 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
-        TabStop = FALSE ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText [ english_us ] = "Shrink" ;
         QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
@@ -376,8 +376,10 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_IGNEMPTYROWS
     {
-        Pos = MAP_APPFONT ( 12 , 169 ) ;
-        Size = MAP_APPFONT ( 121 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 193 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
         Text = "Leerzeilen ~ignorieren" ;
         Text [ ENGLISH ] = "~Ignore empty rows" ;
         Text [ norwegian ] = "~Ignorer tomme rader " ;
@@ -391,8 +393,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ dutch ] = "~Lege rijen negeren" ;
         Text [ spanish ] = "~Ignorar filas vacÌas" ;
         Text [ english_us ] = "Ignore ~empty rows" ;
-        TabStop = TRUE ;
-        Hide = TRUE ;
         Text[ chinese_simplified ] = "ÂøΩÁï•Á©∫Ë°å(~E)";
         Text[ russian ] = "œÓÔÛÒÍ ÔÛÒÚ˚ı ÒÚÓÍ";
         Text[ polish ] = "Zignoruj spacje";
@@ -407,8 +407,10 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_DETECTCAT
     {
-        Pos = MAP_APPFONT ( 139 , 169 ) ;
-        Size = MAP_APPFONT ( 121 , 10 ) ;
+        Pos = MAP_APPFONT ( 142 , 193 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
         Text = "~Kategorieerkennung" ;
         Text [ ENGLISH ] = "~Detect Categories" ;
         Text [ norwegian ] = "~Finn Kategorier " ;
@@ -422,8 +424,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ dutch ] = "~CategorieÎn opsporen" ;
         Text [ spanish ] = "I~dentificar categorÌas" ;
         Text [ english_us ] = "~Identify categories" ;
-        TabStop = TRUE ;
-        Hide = TRUE ;
         Text[ chinese_simplified ] = "ËØÜÂà´ÂàÜÁ±ª(~I)";
         Text[ russian ] = "–‡ÒÔÓÁÌ‡ÌËÂ Í‡ÚÂ„ÓËÈ";
         Text[ polish ] = "Identyfikacja kategorii";
@@ -438,13 +438,13 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_TOTALCOL
     {
-        Pos = MAP_APPFONT ( 12 , 183 ) ;
-        Size = MAP_APPFONT ( 121 , 10 ) ;
-        Text = "Gesamtergebnis-~Spalten" ;
-        Text [ ENGLISH ] = "Add total ~colunms" ;
+        Pos = MAP_APPFONT ( 12 , 207 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ english_us ] = "Total ~columns" ;
+        Text = "Gesamtergebnis-Spalten" ;
+        Text [ ENGLISH ] = "Add total colunms" ;
+        Text [ english_us ] = "Total columns" ;
         Text [ portuguese ] = "Soma total - ~colunas" ;
         Text [ swedish ] = "Totalresultat k~olumner" ;
         Text [ danish ] = "Total kolonner" ;
@@ -468,12 +468,12 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_TOTALROW
     {
-        Pos = MAP_APPFONT ( 139 , 183 ) ;
-        Size = MAP_APPFONT ( 121 , 10 ) ;
-        Text = "~Gesamtergebnis-Zeilen" ;
-        Text [ ENGLISH ] = "Add total ~rows" ;
+        Pos = MAP_APPFONT ( 142 , 207 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
+        Text = "~Gesamtergebnis-Zeilen" ;
+        Text [ ENGLISH ] = "Add total ~rows" ;
         Text [ english_us ] = "~Total rows" ;
         Text [ portuguese ] = "Soma ~total - linhas" ;
         Text [ swedish ] = "Totalresultat ~rader" ;
@@ -660,7 +660,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     String PIVOTSTR_COUNT2
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Anzahl -  : Anzahl2 -  */
         Text = "Anzahl - " ;
         Text [ ENGLISH ] = "Count - " ;
         Text [ norwegian ] = "Antall2 - " ;
@@ -794,45 +793,5 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "VarP - ";
     };
-    Text[ danish ] = "DataPilot";
-    Text[ french ] = "Pilote de donnÈes";
-    Text[ swedish ] = "Datapilot";
-    Text[ dutch ] = "DataPiloot";
-    Text[ spanish ] = "Piloto de datos";
-    Text[ chinese_simplified ] = "Êï∞ÊçÆÂä©ÁêÜ";
-    Text[ russian ] = "—‚Ó‰Ì‡ˇ Ú‡·ÎËˆ‡";
-    Text[ polish ] = "Pilot danych";
-    Text[ japanese ] = "„Éá„Éº„Çø„Éë„Ç§„É≠„ÉÉ„Éà";
-    Text[ chinese_traditional ] = "Ë≥áÊñôÂä©ÁêÜ";
-    Text[ arabic ] = "„—‘œ «·»Ì«‰« ";
-    Text [ spanish ] = "Piloto de datos" ;
-    Text [ french ] = "Pilote de donnÈes" ;
-    Text [ dutch ] = "DataPiloot" ;
-    Text [ swedish ] = "Datapilot" ;
-    Text [ danish ] = "DataPilot" ;
-    Text[ greek ] = "–ÈÎ¸ÙÔÚ ‰Â‰ÔÏ›Ì˘Ì";
-    Text[ korean ] = "Îç∞Ïù¥ÌÑ∞ ÌååÏùºÎüø";
-    Text[ turkish ] = "Veri pilotu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "DataPilot";
-    Text[ finnish ] = "Tietojen ohjaus";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

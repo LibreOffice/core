@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-25 15:24:33 $
+ *  last change: $Author: dr $ $Date: 2002-03-01 11:33:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,106 +121,126 @@ class ScDPObject;
 
 #define FUNC_COUNT 11
 
-class ScPivotLayoutDlg : public ScAnyRefDlg
+class ScDPLayoutDlg : public ScAnyRefDlg
 {
 public:
-                    ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                                        const ScDPObject* pDPObject );
-                    ~ScPivotLayoutDlg();
+                            ScDPLayoutDlg(
+                                SfxBindings* pB,
+                                SfxChildWindow* pCW,
+                                Window* pParent,
+                                const ScDPObject* pDPObject );
+    virtual                 ~ScDPLayoutDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual BOOL    IsRefInputMode() const { return bRefInputMode; }
-    virtual void    SetActive();
-    virtual BOOL    Close();
+    virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual BOOL            IsRefInputMode() const { return bRefInputMode; }
+    virtual void            SetActive();
+    virtual BOOL            Close();
 
-    void            NotifyDoubleClick    ( FieldType eType, USHORT nFieldIndex );
-    const Pointer*  NotifyMouseButtonDown( FieldType eType, USHORT nFieldIndex );
-    void            NotifyMouseButtonUp  ( const Point& rAt );
-    const Pointer*  NotifyMouseMove      ( const Point& rAt );
+    void                    NotifyDoubleClick    ( ScDPFieldType eType, long nFieldIndex );
+    const Pointer*          NotifyMouseButtonDown( ScDPFieldType eType, long nFieldIndex );
+    void                    NotifyMouseButtonUp  ( const Point& rAt );
+    const Pointer*          NotifyMouseMove      ( const Point& rAt );
+    void                    NotifyFieldFocus     ( ScDPFieldType eType, BOOL bActive );
+    void                    NotifyMoveField      ( ScDPFieldType eToType );
+    void                    NotifyRemoveField    ( ScDPFieldType eType, long nFieldIndex );
+    BOOL                    NotifyMoveSlider     ( USHORT nKeyCode );   // return TRUE, if position changed
 
 private:
-    FixedLine       aFlLayout;
-    FieldWindow     aWndRow;
-    FieldWindow     aWndCol;
-    FieldWindow     aWndData;
-    FieldWindow     aWndSelect;
-    ScrollBar       aSlider;
-    FixedInfo       aFtInfo;
+    FixedLine               aFlLayout;
+    FixedText               aFtCol;
+    ScDPFieldWindow         aWndCol;
+    FixedText               aFtRow;
+    ScDPFieldWindow         aWndRow;
+    FixedText               aFtData;
+    ScDPFieldWindow         aWndData;
+    ScDPFieldWindow         aWndSelect;
+    ScrollBar               aSlider;
+    FixedInfo               aFtInfo;
 
-    FixedLine       aFlAreas;
-    ListBox         aLbOutPos;
-    FixedText       aFtOutArea;
-    ScRefEdit       aEdOutPos;
-    ScRefButton     aRbOutPos;
-    CheckBox        aBtnIgnEmptyRows;
-    CheckBox        aBtnDetectCat;
-    CheckBox        aBtnTotalCol;
-    CheckBox        aBtnTotalRow;
+    FixedLine               aFlAreas;
+    ListBox                 aLbOutPos;
+    FixedText               aFtOutArea;
+    ScRefEdit               aEdOutPos;
+    ScRefButton             aRbOutPos;
+    CheckBox                aBtnIgnEmptyRows;
+    CheckBox                aBtnDetectCat;
+    CheckBox                aBtnTotalCol;
+    CheckBox                aBtnTotalRow;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    MoreButton      aBtnMore;
+    OKButton                aBtnOk;
+    CancelButton            aBtnCancel;
+    HelpButton              aBtnHelp;
+    PushButton              aBtnRemove;
+    PushButton              aBtnOptions;
+    MoreButton              aBtnMore;
 
-    Pointer         aPtrField;
-    Pointer         aPtrCol;
-    Pointer         aPtrRow;
+    Pointer                 aPtrField;
+    Pointer                 aPtrCol;
+    Pointer                 aPtrRow;
 
-    const String    aStrUndefined;
-    const String    aStrNewTable;
-    String*         aFuncNameArr[FUNC_COUNT];
+    const String            aStrUndefined;
+    const String            aStrNewTable;
+    String*                 aFuncNameArr[FUNC_COUNT];
 
-    Pointer         aPtrArrow;
-    FieldType       eDnDFromType;
-    USHORT          nDnDFromIndex;
-    BOOL            bIsDrag;
+    Pointer                 aPtrArrow;
+    ScDPFieldType           eDnDFromType;
+    long                    nDnDFromIndex;
+    BOOL                    bIsDrag;
 
-    Rectangle       aRectRow;
-    Rectangle       aRectCol;
-    Rectangle       aRectData;
-    Rectangle       aRectSelect;
+    Rectangle               aRectRow;
+    Rectangle               aRectCol;
+    Rectangle               aRectData;
+    Rectangle               aRectSelect;
 
-    LabelData**     aLabelDataArr; // (nCol, Feldname, Zahl/Text)
-    USHORT          nLabelCount;
+    LabelData**             aLabelDataArr; // (nCol, Feldname, Zahl/Text)
+    long                    nLabelCount;
 
-    short           nOffset;
-    FuncData*       aSelectArr [MAX_LABELS]; // (nCol, nFuncMask)
-    FuncData*       aColArr    [MAX_FIELDS]; // (nCol, nFuncMask)
-    FuncData*       aRowArr    [MAX_FIELDS]; // (nCol, nFuncMask)
-    FuncData*       aDataArr   [MAX_FIELDS]; // (nCol, nFuncMask)
+    ScDPFieldType           eLastActiveType;        /// Type of last active area.
+    long                    nOffset;                /// Offset of first field in TYPE_SELECT area.
 
-    BOOL            bShowAll[MAX_LABELS];
+    FuncData*               aSelectArr[MAX_LABELS]; // (nCol, nFuncMask)
+    FuncData*               aColArr   [MAX_FIELDS]; // (nCol, nFuncMask)
+    FuncData*               aRowArr   [MAX_FIELDS]; // (nCol, nFuncMask)
+    FuncData*               aDataArr  [MAX_FIELDS]; // (nCol, nFuncMask)
 
-    ScDPObject*     pDlgDPObject;
-    ScPivotParam    thePivotData;
-    ScViewData*     pViewData;
-    ScDocument*     pDoc;
-    BOOL            bRefInputMode;
+    BOOL                    bShowAll[MAX_LABELS];
+
+    ScDPObject*             pDlgDPObject;
+    ScPivotParam            thePivotData;
+    ScViewData*             pViewData;
+    ScDocument*             pDoc;
+    BOOL                    bRefInputMode;
 
 #ifdef _PVLAYDLG_CXX
 private:
-    void        Init            ();
-    void        InitWndSelect   ( LabelData** ppLabelArr, USHORT nLabels );
-    void        InitWnd         ( PivotField* pArr, USHORT nCount, FieldType eType );
-    void        CalcWndSizes    ();
-    Point       DlgPos2WndPos   ( const Point& rPt, Window& rWnd );
-    LabelData*  GetLabelData    ( short nCol, USHORT* pPos = NULL );
-    String      GetLabelString  ( short nCol );
-    String      GetFuncString   ( USHORT& rFuncMask, BOOL bIsValue = TRUE );
-    BOOL        Contains        ( FuncData** pArr, short nCol, USHORT& nAt );
-    void        Remove          ( FuncData** pArr, USHORT nAt );
-    void        Insert          ( FuncData** pArr, const FuncData& rFData, USHORT nAt );
-    void        AddField        ( FieldType eToType, const Point& rAtPos );
-    void        MoveField       ( FieldType     eFromType,
-                                  FieldType     eToType,
-                                  const Point&  rAtPos );
-    BOOL        GetPivotArrays  ( PivotField*   pColArr,
-                                  PivotField*   pRowArr,
-                                  PivotField*   pDataArr,
-                                  USHORT&       rColCount,
-                                  USHORT&       rRowCount,
-                                  USHORT&       rDataCount );
+    ScDPFieldWindow&        GetFieldWindow  ( ScDPFieldType eType );
+    void                    Init            ();
+    void                    InitWndSelect   ( LabelData** ppLabelArr, long nLabels );
+    void                    InitWnd         ( PivotField* pArr, long nCount, ScDPFieldType eType );
+    void                    InitFocus       ();
+    void                    CalcWndSizes    ();
+    Point                   DlgPos2WndPos   ( const Point& rPt, Window& rWnd );
+    LabelData*              GetLabelData    ( short nCol, long* pPos = NULL );
+    String                  GetLabelString  ( short nCol );
+    String                  GetFuncString   ( USHORT& rFuncMask, BOOL bIsValue = TRUE );
+    BOOL                    Contains        ( FuncData** pArr, short nCol, long& nAt );
+    void                    Remove          ( FuncData** pArr, long nAt );
+    void                    Insert          ( FuncData** pArr, const FuncData& rFData, long nAt );
+
+    void                    AddField        ( long nFromIndex,
+                                              ScDPFieldType eToType, const Point& rAtPos );
+    void                    MoveField       ( ScDPFieldType eFromType, long nFromIndex,
+                                              ScDPFieldType eToType, const Point&  rAtPos );
+    void                    RemoveField     ( ScDPFieldType eRemType, long nRemIndex );
+
+    BOOL                    GetPivotArrays  ( PivotField*   pColArr,
+                                              PivotField*   pRowArr,
+                                              PivotField*   pDataArr,
+                                              USHORT&       rColCount,
+                                              USHORT&       rRowCount,
+                                              USHORT&       rDataCount );
     // Handler
+    DECL_LINK( ClickHdl, PushButton * );
     DECL_LINK( ScrollHdl, ScrollBar * );
     DECL_LINK( SelAreaHdl, ListBox * );
     DECL_LINK( MoreClickHdl, MoreButton * );

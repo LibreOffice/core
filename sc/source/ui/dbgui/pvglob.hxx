@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvglob.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: dr $ $Date: 2002-03-01 11:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,9 @@
 class PivotGlobal
 {
 public:
-    static USHORT       nObjHeight;
-    static USHORT       nObjWidth;
-    static USHORT       nSelSpace;
+    static long nObjHeight;
+    static long nObjWidth;
+    static long nSelSpace;
 };
 
 

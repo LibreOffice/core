@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-28 14:06:44 $
+ *  last change: $Author: dr $ $Date: 2002-03-01 11:33:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,15 +87,15 @@
 
 //===================================================================
 
-class ScPivotFunctionDlg : public ModalDialog
+class ScDPFunctionDlg : public ModalDialog
 {
 public:
-        ScPivotFunctionDlg( Window*         pParent,
+        ScDPFunctionDlg(    Window*         pParent,
                             BOOL            bSubTotalFunc,
                             const String&   rName,
                             USHORT          nFunctions,
                             BOOL            bIsShowAll );
-        ~ScPivotFunctionDlg();
+        ~ScDPFunctionDlg();
 
     USHORT  GetFuncMask() const { return nFuncMask; }
     BOOL    GetShowAll() const;
