@@ -2,9 +2,9 @@
  *
  *  $RCSfile: folderitem_writer.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:10:30 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,23 +61,12 @@
 
 #include "macros.inc"
 
-FolderItem gid_Folderitem_Sweb
-    FOLDERITEM_NAME_LNG(HTMLDOKUMENT)
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    FolderID = gid_Folder_Staroffice51;
-    FileID = gid_File_Bin_Soffice;
-    IconFile = gid_File_Bin_Soffice;
-    IconID = 11;
-    Parameter = "-web";
-    Styles = (NOWEB);
-End
-
 FolderItem gid_Folderitem_Swriter
-    FOLDERITEM_NAME_LNG(TEXTDOKUMENT)
+    Name = "%PRODUCTNAME %PRODUCTVERSION Writer";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     FolderID = gid_Folder_Staroffice51;
-    FileID = gid_File_Bin_Soffice;
-    IconFile = gid_File_Bin_Soffice;
+    FileID = gid_File_Exe_Swriter;
+    IconFile = gid_File_Exe_Swriter;
     IconID = 1;
     Parameter = "-writer";
     Styles = (NOWEB);
