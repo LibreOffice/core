@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphicproperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:10:28 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,14 @@ namespace sdr
 
             // local changes
             rObj.SetXPolyDirty();
+
+            // #i29367# Update GraphicAttr, too. This was formerly
+            // triggered by SdrGrafObj::SFX_NOTIFY, which is no longer
+            // called nowadays. BTW: strictly speaking, the whole
+            // ImpSetAttrToGrafInfo/ImpSetGrafInfoToAttr stuff could
+            // be dumped, when SdrGrafObj::aGrafInfo is removed and
+            // always created on the fly for repaint.
+            rObj.ImpSetAttrToGrafInfo();
 
             // call parent
             RectangleProperties::ItemSetChanged(rSet);
