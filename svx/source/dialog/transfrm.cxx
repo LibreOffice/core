@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 07:24:38 $
+ *  last change: $Author: aw $ $Date: 2002-10-21 16:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -965,13 +965,16 @@ BOOL SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             maRect = mpView->GetAllMarkedRect();
             mpView->GetPageViewPvNum( 0 )->LogicToPagePos( maRect );
 
-            GetTopLeftPosition( lX, lY, maRect );
-
             Fraction aUIScale = mpView->GetModel()->GetUIScale();
             lX += maAnchorPos.X();
             lX = Fraction( lX ) * aUIScale;
             lY += maAnchorPos.Y();
             lY = Fraction( lY ) * aUIScale;
+
+            // #101581# GetTopLeftPosition(...) needs coordinates
+            // after UI scaling, in real PagePositions.
+            GetTopLeftPosition( lX, lY, maRect );
+
             rOutAttrs.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_POS_X ), (INT32) lX ) );
             rOutAttrs.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_POS_Y ), (INT32) lY ) );
 
@@ -1266,7 +1269,17 @@ int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* pSet )
         INT32 lX = maMtrPosX.GetValue();
         INT32 lY = maMtrPosY.GetValue();
 
+        // #101581# GetTopLeftPosition(...) needs coordinates
+        // after UI scaling, in real PagePositions. Thus I added
+        // that calculation here
+        Fraction aUIScale = mpView->GetModel()->GetUIScale();
+        lX += maAnchorPos.X();
+        lX = Fraction( lX ) * aUIScale;
+        lY += maAnchorPos.Y();
+        lY = Fraction( lY ) * aUIScale;
+
         GetTopLeftPosition( lX, lY, maRect );
+
         maRect.SetPos( Point( lX, lY ) );
 
         pSet->Put( SfxRectangleItem( SID_ATTR_TRANSFORM_INTERN, maRect ) );
