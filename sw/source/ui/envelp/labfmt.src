@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:16:58 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ TabPage TP_LAB_FMT
         Text[ korean ] = "°¡·Î °£°İ(~Z)";
         Text[ turkish ] = "~Yatay boşluk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Distancia ~horiz.";
     };
     MetricField FLD_HDIST
     {
@@ -156,6 +157,7 @@ TabPage TP_LAB_FMT
         Text[ korean ] = "¼¼·Î °£°İ(~V)";
         Text[ turkish ] = "Dikey boşluk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Distancia ~vert.";
     };
     MetricField FLD_VDIST
     {
@@ -198,6 +200,7 @@ TabPage TP_LAB_FMT
         Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "Ge~nişlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ncho";
     };
     MetricField FLD_WIDTH
     {
@@ -240,6 +243,7 @@ TabPage TP_LAB_FMT
         Text[ korean ] = "³ôÀÌ(~H)";
         Text[ turkish ] = "~Yükseklik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ltura";
     };
     MetricField FLD_HEIGHT
     {
@@ -282,6 +286,7 @@ TabPage TP_LAB_FMT
         Text[ korean ] = "¿ŞÂÊ ¿©¹é(~L)";
         Text[ turkish ] = "S~ol kenar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Margen i~zquierdo";
     };
     MetricField FLD_LEFT
     {
@@ -326,6 +331,7 @@ TabPage TP_LAB_FMT
         Text[ korean ] = "À§ ¿©¹é(~T)";
         Text[ turkish ] = "Üst kenar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "M~argen superior";
     };
     MetricField FLD_UPPER
     {
@@ -370,6 +376,7 @@ TabPage TP_LAB_FMT
         Text[ korean ] = "¿­(~C)";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Column~as";
     };
     NumericField FLD_COLUMNS
     {
@@ -411,6 +418,7 @@ TabPage TP_LAB_FMT
         Text[ korean ] = "Çà(~O)";
         Text[ turkish ] = "~Satır";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Filas";
     };
     NumericField FLD_ROWS
     {
@@ -431,7 +439,7 @@ TabPage TP_LAB_FMT
         Text = "~Speichern..." ;
         Text [ English ] = "Save..." ;
         Text[ english_us ] = "~Save...";
-        Text[ portuguese ] = "Save...";
+        Text[ portuguese ] = "~Guardar...";
         Text[ russian ] = "Ñîõğàíèòü...";
         Text[ greek ] = "ÁğïèŞêåõ~óç...";
         Text[ dutch ] = "~Opslaan...";
@@ -448,6 +456,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "Àx¦s(~S)...";
         Text[ turkish ] = "Save...";
         Text[ arabic ] = "ÍİÙ...";
+        Text[ catalan ] = "~Guardar...";
     };
 };
  // String *******************************************************************
@@ -476,6 +485,7 @@ String STR_HDIST
     Text[ korean ] = "°¡·Î °£°İ";
     Text[ turkish ] = "Y. boşluk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Distancia h.";
 };
 String STR_VDIST
 {
@@ -502,6 +512,7 @@ String STR_VDIST
     Text[ korean ] = "¼¼·Î °£°İ";
     Text[ turkish ] = "D. boşluk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Distancia v.";
 };
 String STR_WIDTH
 {
@@ -528,6 +539,7 @@ String STR_WIDTH
     Text[ korean ] = "³Êºñ";
     Text[ turkish ] = "Genişlik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ancho";
 };
 String STR_HEIGHT
 {
@@ -554,6 +566,7 @@ String STR_HEIGHT
     Text[ korean ] = "³ôÀÌ";
     Text[ turkish ] = "Yükseklik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Altura";
 };
 String STR_LEFT
 {
@@ -580,6 +593,7 @@ String STR_LEFT
     Text[ korean ] = "¿ŞÂÊ ¿©¹é";
     Text[ turkish ] = "Sol kenar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen izquierdo";
 };
 String STR_UPPER
 {
@@ -606,6 +620,7 @@ String STR_UPPER
     Text[ korean ] = "À§ ¿©¹é";
     Text[ turkish ] = "Üst kenar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen superior";
 };
 String STR_COLS
 {
@@ -632,6 +647,7 @@ String STR_COLS
     Text[ korean ] = "¿­";
     Text[ turkish ] = "Sütun";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Columnas";
 };
 String STR_ROWS
 {
@@ -658,6 +674,7 @@ String STR_ROWS
     Text[ korean ] = "Çà";
     Text[ turkish ] = "Satır";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Filas";
 };
 ModalDialog DLG_SAVE_LABEL
 {
@@ -675,7 +692,7 @@ ModalDialog DLG_SAVE_LABEL
         Text = "~Marke" ;
         Text [ italian ] = "Marca" ;
         Text [ portuguese_brazilian ] = "Fazer" ;
-        Text [ portuguese ] = "Marca" ;
+        Text [ portuguese ] = "~Marca" ;
         Text [ finnish ] = "Merkki" ;
         Text [ danish ] = "Mærke" ;
         Text [ french ] = "~Marque" ;
@@ -694,6 +711,7 @@ ModalDialog DLG_SAVE_LABEL
         Text[ greek ] = "~ÌÜñêá";
         Text[ korean ] = "»óÇ¥";
         Text[ turkish ] = "Markası";
+        Text[ catalan ] = "~Marca";
     };
     ComboBox CB_MAKE
     {
@@ -711,7 +729,7 @@ ModalDialog DLG_SAVE_LABEL
         Text [ norwegian ] = "Type" ;
         Text [ italian ] = "~Tipo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
-        Text [ portuguese ] = "Tipo" ;
+        Text [ portuguese ] = "~Tipo" ;
         Text [ finnish ] = "Laji" ;
         Text [ danish ] = "Type" ;
         Text [ french ] = "~Type" ;
@@ -730,6 +748,7 @@ ModalDialog DLG_SAVE_LABEL
         Text[ korean ] = "À¯Çü(~Y)";
         Text[ turkish ] = "Tipi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tipo";
     };
     Edit ED_TYPE
     {
@@ -744,7 +763,7 @@ ModalDialog DLG_SAVE_LABEL
         Text = "Optionen";
         Text [ ENGLISH ] = "Options" ;
         Text[ english_us ] = "Options";
-        Text[ portuguese ] = "Options";
+        Text[ portuguese ] = "Opções";
         Text[ russian ] = "Ïàğàìåòğû";
         Text[ greek ] = "Options";
         Text[ dutch ] = "Opties";
@@ -761,6 +780,7 @@ ModalDialog DLG_SAVE_LABEL
         Text[ chinese_traditional ] = "¿ï¶µ";
         Text[ turkish ] = "Options";
         Text[ arabic ] = "ÇáÎíÇÑÇÊ";
+        Text[ catalan ] = "Opciones";
     };
     OKButton PB_OK
     {
@@ -791,7 +811,7 @@ ModalDialog DLG_SAVE_LABEL
         Message = "Das Etikett \"%1 / %2\" ist bereits vorhanden.\nMöchten Sie die Daten überschreiben?" ;
         Message [ English ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?" ;
         Message[ english_us ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
-        Message[ portuguese ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ portuguese ] = "A etiqueta \"%1 / %2\" já existe.\nSubstitui-la?";
         Message[ russian ] = "Íàêëåéêà \"%1 / %2\" óæå ñóùåñòâóåò.\nÇàìåíèòü ıòè äàííûå?";
         Message[ greek ] = "Ç åôéêİôá \"%1 / %2\" õğÜñ÷åé Şäç.\nÈİëåôå íá áíôéêáôáóôáèåß;";
         Message[ dutch ] = "Etiket \"%1 / %2\" bestaat reeds.\nOverschrijven?";
@@ -808,9 +828,10 @@ ModalDialog DLG_SAVE_LABEL
         Message[ chinese_traditional ] = "³o­Ó¶K¼Ğ¡u%1 / %2¡v¤w¸g¦s¦b¡C\n­nÂĞ¼g¡H";
         Message[ turkish ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
         Message[ arabic ] = "ÈØÇŞÉ ÇáÚäæäÉ \"%1 / %2\" ãæÌæÏÉ ÈÇáİÚá.\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞ ÇáÈíÇäÇÊ¿";
+        Message[ catalan ] = "La etiqueta \"%1 / %2\" existe ya.\n¿Desea sobrescribila?";
     };
     Text[ english_us ] = "Save Label Format";
-    Text[ portuguese ] = "Save label format";
+    Text[ portuguese ] = "Guardar formato de etiqueta";
     Text[ russian ] = "Ñîõğàíèòü ôîğìàò íàêëåéêè";
     Text[ greek ] = "ÁğïèŞêåõóç ôïõ ìåãİèïõò ôçò åôéêİôáò";
     Text[ dutch ] = "Etiketformaat opslaan";
@@ -827,4 +848,5 @@ ModalDialog DLG_SAVE_LABEL
     Text[ chinese_traditional ] = "Àx¦s¶K¼Ğ®æ¦¡";
     Text[ turkish ] = "Save label format";
     Text[ arabic ] = "ÍİÙ ÊäÓíŞ ÈØÇŞÇÊ ÇáÚäæäÉ";
+    Text[ catalan ] = "Guardar formato de etiqueta";
 };
