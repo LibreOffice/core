@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: yl146652 $ $Date: 2004-01-30 09:06:50 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,15 +345,20 @@ namespace dbaui
         static sal_Int32* getDetailIds();
 
     private:
+        FixedLine           m_aSeparator1;
         FixedText           m_aHostname;
         Edit                m_aETHostname;
         FixedText           m_aBaseDN;
         Edit                m_aETBaseDN;
+        CheckBox            m_aCBUseSSL;
         FixedLine           m_aSeparator2;
         FixedText           m_aPortNumber;
         NumericField        m_aNFPortNumber;
         FixedText           m_aFTRowCount;
         NumericField        m_aNFRowCount;
+        sal_Int32           m_iSSLPort;
+        sal_Int32           m_iNormalPort;
+        DECL_LINK( OnCheckBoxClick, CheckBox * );
 
         OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
 
