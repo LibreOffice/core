@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-18 12:58:07 $
+ *  last change: $Author: nn $ $Date: 2002-11-18 18:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ private:
     BOOL                    bCreatingFuncView;
     BOOL                    bInEnterHandler;
     BOOL                    bCommandErrorShown;
+    BOOL                    bInOwnChange;
 
     BOOL                    bProtected;
     BOOL                    bCellHasPercentFormat;
@@ -187,6 +188,7 @@ private:
     BOOL            CursorAtClosingPar();
     void            SkipClosingPar();
     void            StopInputWinEngine( BOOL bAll );
+    DECL_LINK( ModifyHdl, void* );
 #endif
 
 public:

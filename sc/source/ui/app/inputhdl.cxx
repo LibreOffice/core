@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-06 10:45:25 $
+ *  last change: $Author: nn $ $Date: 2002-11-18 18:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,8 @@ void ScInputHandler::UpdateRange( USHORT nIndex, const ScRange& rNew )
         aJustified.Format( aNewStr, pData->nFlags, pDocView->GetViewData()->GetDocument() );
         ESelection aOldSel( 0, nOldStart, 0, nOldEnd );
 
+        DataChanging();
+
         lcl_Replace( pTopView, aNewStr, aOldSel );
         lcl_Replace( pTableView, aNewStr, aOldSel );
 
@@ -369,7 +371,8 @@ ScInputHandler::ScInputHandler()
         bParenthesisShown( FALSE ),
         bCreatingFuncView( FALSE ),
         bInEnterHandler( FALSE ),
-        bCommandErrorShown( FALSE )
+        bCommandErrorShown( FALSE ),
+        bInOwnChange( FALSE )
 {
     //  The InputHandler is constructed with the view, so SfxViewShell::Current
     //  doesn't have the right view yet. pActiveViewSh is updated in NotifyChange.
@@ -444,6 +447,7 @@ void ScInputHandler::ImplCreateEditEngine()
         pEditDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
 
         pEngine->SetControlWord( pEngine->GetControlWord() | EE_CNTRL_AUTOCORRECT );
+        pEngine->SetModifyHdl( LINK( this, ScInputHandler, ModifyHdl ) );
     }
 }
 
@@ -1060,6 +1064,8 @@ void ScInputHandler::NextAutoEntry( BOOL bBack )
                     String aNew;
                     if ( pColumnData->FindText( aAutoSearch, aNew, nAutoPos, bBack ) )
                     {
+                        bInOwnChange = TRUE;        // disable ModifyHdl (reset below)
+
                         lcl_RemoveLineEnd( aNew );
                         String aIns = aNew.Copy( aAutoSearch.Len() );
 
@@ -1080,6 +1086,8 @@ void ScInputHandler::NextAutoEntry( BOOL bBack )
                                                         aSel.nEndPara, aSel.nStartPos + aIns.Len(),
                                                         aSel.nEndPara, aSel.nStartPos ) );
                         }
+
+                        bInOwnChange = FALSE;
                     }
                     else
                     {
@@ -1668,8 +1676,25 @@ void ScInputHandler::SetAllUpdateMode( BOOL bUpdate )
     pEngine->SetUpdateMode( bUpdate );
 }
 
+IMPL_LINK( ScInputHandler, ModifyHdl, void *, EMPTYARG )
+{
+    if ( !bInOwnChange && ( eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE ) &&
+         pEngine && pEngine->GetUpdateMode() && pInputWin )
+    {
+        //  #102745# update input line from ModifyHdl for changes that are not
+        //  wrapped by DataChanging/DataChanged calls (like Drag&Drop)
+
+        String aText = GetEditText(pEngine);
+        lcl_RemoveTabs(aText);
+        pInputWin->SetTextString(aText);
+    }
+    return 0;
+}
+
 BOOL ScInputHandler::DataChanging( sal_Unicode cTyped, BOOL bFromCommand )      // return TRUE = new view created
 {
+    bInOwnChange = TRUE;                // disable ModifyHdl (reset in DataChanged)
+
     if ( eMode == SC_INPUT_NONE )
         return StartTable( cTyped, bFromCommand );
     else
@@ -1732,6 +1757,7 @@ void ScInputHandler::DataChanged()
 
     UpdateFormulaMode();
     bTextValid = FALSE;         // Aenderungen sind nur in der Edit-Engine
+    bInOwnChange = FALSE;
 }
 
 void ScInputHandler::UpdateFormulaMode()
@@ -1861,6 +1887,8 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
         return;
     }
 
+    bInOwnChange = TRUE;                // disable ModifyHdl (reset below)
+
     ScInputMode eOldMode = eMode;
     eMode = eNewMode;
     if (eOldMode == SC_INPUT_TOP && eNewMode != eOldMode)
@@ -1910,6 +1938,8 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
 
     if (eNewMode != eOldMode)
         UpdateFormulaMode();
+
+    bInOwnChange = FALSE;
 }
 
 //----------------------------------------------------------------------------------------
@@ -1935,6 +1965,7 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
 
     if (bInEnterHandler) return;
     bInEnterHandler = TRUE;
+    bInOwnChange = TRUE;                // disable ModifyHdl (reset below)
 
     ImplCreateEditEngine();
 
@@ -2217,11 +2248,14 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
     nFormSelStart = nFormSelEnd = 0;
     aFormText.Erase();
 
+    bInOwnChange = FALSE;
     bInEnterHandler = FALSE;
 }
 
 void ScInputHandler::CancelHandler()
 {
+    bInOwnChange = TRUE;                // disable ModifyHdl (reset below)
+
     ImplCreateEditEngine();
 
     bModified = FALSE;
@@ -2262,6 +2296,8 @@ void ScInputHandler::CancelHandler()
 
     nFormSelStart = nFormSelEnd = 0;
     aFormText.Erase();
+
+    bInOwnChange = FALSE;
 }
 
 BOOL ScInputHandler::IsModalMode( SfxObjectShell* pDocSh )
@@ -2801,6 +2837,8 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     if (bRepeat && !bForce)
         return;
 
+    bInOwnChange = TRUE;                // disable ModifyHdl (reset below)
+
     if ( pState && !pLastState )        // wieder enablen
         bForce = TRUE;
 
@@ -2970,7 +3008,9 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     }
 
     HideTip();
+    bInOwnChange = FALSE;
 }
+
 void ScInputHandler::ResetDelayTimer()
 {
     if(pDelayTimer!=NULL)
@@ -3005,6 +3045,8 @@ IMPL_LINK( ScInputHandler, DelayTimer, Timer*, pTimer )
             }
             else if ( !bFormulaMode )   // #39210# Formel auch z.B. bei Hilfe behalten
             {
+                bInOwnChange = TRUE;    // disable ModifyHdl (reset below)
+
                 pActiveViewSh = NULL;
                 pEngine->SetText( EMPTY_STRING );
                 if ( pInputWin )
@@ -3013,6 +3055,8 @@ IMPL_LINK( ScInputHandler, DelayTimer, Timer*, pTimer )
                     pInputWin->SetTextString( EMPTY_STRING );
                     pInputWin->Disable();
                 }
+
+                bInOwnChange = FALSE;
             }
         }
     }
