@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:34:42 $
+#   last change: $Author: obo $ $Date: 2004-03-17 09:38:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,8 @@ PACKAGE=com$/sun$/star$/beans
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    GetDirectPropertyTolerantResult.idl\
+    GetPropertyTolerantResult.idl\
     IllegalTypeException.idl\
     Introspection.idl\
     IntrospectionException.idl\
@@ -93,8 +95,10 @@ IDLFILES=\
     PropertyValue.idl\
     PropertyValues.idl\
     PropertyVetoException.idl\
-    UnknownPropertyException.idl\
+    SetPropertyTolerantFailed.idl\
     StringPair.idl\
+    TolerantPropertySetResultType.idl\
+    UnknownPropertyException.idl\
     XExactName.idl\
     XFastPropertySet.idl\
     XHierarchicalPropertySet.idl\
@@ -119,6 +123,7 @@ IDLFILES=\
     XPropertyState.idl\
     XPropertyStateChangeListener.idl\
     XPropertyWithState.idl\
+    XTolerantMultiPropertySet.idl\
     XVetoableChangeListener.idl\
 
 # ------------------------------------------------------------------
