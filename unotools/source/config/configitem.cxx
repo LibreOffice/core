@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 15:02:00 $
+ *  last change: $Author: fs $ $Date: 2001-08-10 09:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1041,8 +1041,8 @@ sal_Bool ConfigItem::SetSetProperties(
                         else
                             xCont->insertByName(sSubNode, pValues[nValue].Value);
 
-                        OSL_ENSURE( xHierarchyAccess->hasByHierarchicalName(dropPrefixFromConfigurationPath(pValues[nValue].Name, rNode)),
-                                    "Invalid config path" );
+                        OSL_ENSURE( xHierarchyAccess->hasByHierarchicalName(pValues[nValue].Name),
+                            "Invalid config path" );
                     }
                     CATCH_INFO("Exception form insert/replaceByName(): ")
                 }
