@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale version="1.0" >
+<LC_INFO>
+<Language>
+<LangID>sh</LangID>
+<DefaultName>Serbian Latin</DefaultName>
+</Language>
+<Country>
+<CountryID>YU</CountryID>
+<DefaultName>Serbia and Montenegro</DefaultName>
+</Country>
+</LC_INFO>
+<LC_CTYPE unoid="generic">
+<Separators>
+<DateSeparator>.</DateSeparator>
+<ThousandSeparator>.</ThousandSeparator>
+<DecimalSeparator>,</DecimalSeparator>
+<TimeSeparator>:</TimeSeparator>
+<Time100SecSeparator>,</Time100SecSeparator>
+<ListSeparator>;</ListSeparator>
+<LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
+<LongDateDaySeparator>, </LongDateDaySeparator>
+<LongDateMonthSeparator> </LongDateMonthSeparator>
+<LongDateYearSeparator> </LongDateYearSeparator>
+</Separators>
+<Markers>
+<QuotationStart>‘</QuotationStart>
+<QuotationEnd>’</QuotationEnd>
+<DoubleQuotationStart>“</DoubleQuotationStart>
+<DoubleQuotationEnd>”</DoubleQuotationEnd>
+</Markers>
+<TimeAM>pre.</TimeAM>
+<TimePM>pop.</TimePM>
+<MeasurementSystem>Metric</MeasurementSystem>
+</LC_CTYPE>
+<LC_FORMAT ref="sr_YU" replaceFrom="[CURRENCY]" replaceTo="[$Din-81A]"/>
+<LC_COLLATION>
+<Collator unoid="alphanumeric" default="true"/>
+<CollationOptions>
+<TransliterationModules>IGNORE_CASE</TransliterationModules>
+</CollationOptions>
+</LC_COLLATION>
+<LC_SEARCH>
+<SearchOptions>
+<TransliterationModules>IGNORE_CASE</TransliterationModules>
+</SearchOptions>
+</LC_SEARCH>
+<LC_CALENDAR>
+<Calendar unoid="gregorian" default="true">
+<DaysOfWeek>
+<Day>
+<DayID>sun</DayID>
+<DefaultAbbrvName>Ned</DefaultAbbrvName>
+<DefaultFullName>Nedelja</DefaultFullName>
+</Day>
+<Day>
+<DayID>mon</DayID>
+<DefaultAbbrvName>Pon</DefaultAbbrvName>
+<DefaultFullName>Ponedeljak</DefaultFullName>
+</Day>
+<Day>
+<DayID>tue</DayID>
+<DefaultAbbrvName>Uto</DefaultAbbrvName>
+<DefaultFullName>Utorak</DefaultFullName>
+</Day>
+<Day>
+<DayID>wed</DayID>
+<DefaultAbbrvName>Sre</DefaultAbbrvName>
+<DefaultFullName>Sreda</DefaultFullName>
+</Day>
+<Day>
+<DayID>thu</DayID>
+<DefaultAbbrvName>Čet</DefaultAbbrvName>
+<DefaultFullName>Četvrtak</DefaultFullName>
+</Day>
+<Day>
+<DayID>fri</DayID>
+<DefaultAbbrvName>Pet</DefaultAbbrvName>
+<DefaultFullName>Petak</DefaultFullName>
+</Day>
+<Day>
+<DayID>sat</DayID>
+<DefaultAbbrvName>Sub</DefaultAbbrvName>
+<DefaultFullName>Subota</DefaultFullName>
+</Day>
+</DaysOfWeek>
+<MonthsOfYear>
+<Month>
+<MonthID>jan</MonthID>
+<DefaultAbbrvName>Jan</DefaultAbbrvName>
+<DefaultFullName>Januar</DefaultFullName>
+</Month>
+<Month>
+<MonthID>feb</MonthID>
+<DefaultAbbrvName>Feb</DefaultAbbrvName>
+<DefaultFullName>Februar</DefaultFullName>
+</Month>
+<Month>
+<MonthID>mar</MonthID>
+<DefaultAbbrvName>Mar</DefaultAbbrvName>
+<DefaultFullName>Mart</DefaultFullName>
+</Month>
+<Month>
+<MonthID>apr</MonthID>
+<DefaultAbbrvName>Apr</DefaultAbbrvName>
+<DefaultFullName>April</DefaultFullName>
+</Month>
+<Month>
+<MonthID>may</MonthID>
+<DefaultAbbrvName>Maj</DefaultAbbrvName>
+<DefaultFullName>Maj</DefaultFullName>
+</Month>
+<Month>
+<MonthID>jun</MonthID>
+<DefaultAbbrvName>Jun</DefaultAbbrvName>
+<DefaultFullName>Juni</DefaultFullName>
+</Month>
+<Month>
+<MonthID>jul</MonthID>
+<DefaultAbbrvName>Jul</DefaultAbbrvName>
+<DefaultFullName>Juli</DefaultFullName>
+</Month>
+<Month>
+<MonthID>aug</MonthID>
+<DefaultAbbrvName>Avg</DefaultAbbrvName>
+<DefaultFullName>Avgust</DefaultFullName>
+</Month>
+<Month>
+<MonthID>sep</MonthID>
+<DefaultAbbrvName>Sept</DefaultAbbrvName>
+<DefaultFullName>Septembar</DefaultFullName>
+</Month>
+<Month>
+<MonthID>oct</MonthID>
+<DefaultAbbrvName>Okt</DefaultAbbrvName>
+<DefaultFullName>Oktobar</DefaultFullName>
+</Month>
+<Month>
+<MonthID>nov</MonthID>
+<DefaultAbbrvName>Nov</DefaultAbbrvName>
+<DefaultFullName>Novembar</DefaultFullName>
+</Month>
+<Month>
+<MonthID>dec</MonthID>
+<DefaultAbbrvName>Dec</DefaultAbbrvName>
+<DefaultFullName>Decembar</DefaultFullName>
+</Month>
+</MonthsOfYear>
+<Eras>
+<Era>
+<EraID>bc</EraID>
+<DefaultAbbrvName>pr.n.b.</DefaultAbbrvName>
+<DefaultFullName>pred našim brojevima</DefaultFullName>
+</Era>
+<Era>
+<EraID>ad</EraID>
+<DefaultAbbrvName>n.b.</DefaultAbbrvName>
+<DefaultFullName>naši brojevi</DefaultFullName>
+</Era>
+</Eras>
+<StartDayOfWeek><DayID>mon</DayID></StartDayOfWeek>
+<MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+</Calendar>
+</LC_CALENDAR>
+<LC_CURRENCY>
+<Currency default="true" usedInCompatibleFormatCodes="true">
+<CurrencyID>dinar</CurrencyID>
+<CurrencySymbol>Din</CurrencySymbol>
+<BankSymbol>CSD</BankSymbol>
+<CurrencyName>Crnogorsko Srpski Dinar</CurrencyName>
+<DecimalPlaces>2</DecimalPlaces>
+</Currency>
+</LC_CURRENCY>
+<LC_TRANSLITERATION>
+<Transliteration unoid="LOWERCASE_UPPERCASE"/>
+<Transliteration unoid="UPPERCASE_LOWERCASE"/>
+<Transliteration unoid="IGNORE_CASE"/>
+</LC_TRANSLITERATION>
+<LC_MISC>
+<ReservedWords>
+<trueWord>tačno</trueWord>
+<falseWord>netačno</falseWord>
+<quarter1Word>Prvi kvartal godine</quarter1Word>
+<quarter2Word>Drugi kvartal godine</quarter2Word>
+<quarter3Word>Treći kvartal godine</quarter3Word>
+<quarter4Word>Četvrti kvartal godine</quarter4Word>
+<aboveWord>nad</aboveWord>
+<belowWord>pod</belowWord>
+<quarter1Abbreviation>K1</quarter1Abbreviation>
+<quarter2Abbreviation>K2</quarter2Abbreviation>
+<quarter3Abbreviation>K3</quarter3Abbreviation>
+<quarter4Abbreviation>K4</quarter4Abbreviation>
+</ReservedWords>
+</LC_MISC>
+<LC_INDEX>
+<IndexKey unoid="alphanumeric" default="true" phonetic="false">A-P R-V Z Ć Č Š Ž Đ</IndexKey>
+<UnicodeScript>0</UnicodeScript>
+<UnicodeScript>1</UnicodeScript>
+<UnicodeScript>2</UnicodeScript>
+<FollowPageWord>p.</FollowPageWord>
+<FollowPageWord>pp.</FollowPageWord>
+</LC_INDEX>
+<LC_NumberingLevel>
+<NumberingLevel Prefix=" " NumType="4" Suffix=")" />
+<NumberingLevel Prefix=" " NumType="4" Suffix="." />
+<NumberingLevel Prefix="(" NumType="4" Suffix="." />
+<NumberingLevel Prefix=" " NumType="2" Suffix="." />
+<NumberingLevel Prefix=" " NumType="0" Suffix=")" />
+<NumberingLevel Prefix=" " NumType="1" Suffix=")" />
+<NumberingLevel Prefix="(" NumType="1" Suffix=")" />
+<NumberingLevel Prefix=" " NumType="3" Suffix="." />
+</LC_NumberingLevel>
+<LC_OutLineNumberingLevel>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="(" NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix="." BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="4" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="27A2"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E006"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=")" BulletChar="E004"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+</LC_OutLineNumberingLevel>
+</Locale>
