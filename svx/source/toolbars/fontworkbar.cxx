@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkbar.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:46:50 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 14:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,10 @@ TYPEINIT1( FontworkBar, SfxShell );
 FontworkBar::FontworkBar(SfxViewShell* pViewShell )
 : SfxShell(pViewShell)
 {
+    DBG_ASSERT( pViewShell, "svx::FontworkBar::FontworkBar(), I need a viewshell!" );
+    if( pViewShell )
+        SetPool(&pViewShell->GetPool());
+
     SetHelpId( SVX_INTERFACE_FONTWORK_BAR );
     SetName( String( SVX_RES( RID_SVX_FONTWORK_BAR) ));
 }
