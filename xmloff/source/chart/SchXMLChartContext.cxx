@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-25 12:01:07 $
+ *  last change: $Author: af $ $Date: 2001-06-08 14:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,23 +173,6 @@ SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
         mbHasOwnTable( sal_False ),
         mbHasLegend( sal_False )
 {
-    // hide title, subtitle and legend
-    uno::Reference< beans::XPropertySet > xProp( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
-    if( xProp.is())
-    {
-        uno::Any aFalseBool;
-        aFalseBool <<= (sal_Bool)(sal_False);
-        try
-        {
-            xProp->setPropertyValue( rtl::OUString::createFromAscii( "HasMainTitle" ), aFalseBool );
-            xProp->setPropertyValue( rtl::OUString::createFromAscii( "HasSubTitle" ), aFalseBool );
-            xProp->setPropertyValue( rtl::OUString::createFromAscii( "HasLegend" ), aFalseBool );
-        }
-        catch( beans::UnknownPropertyException )
-        {
-            DBG_ERROR( "XML-Chart Import: Property not found" );
-        }
-    }
 }
 
 SchXMLChartContext::~SchXMLChartContext()
@@ -288,82 +271,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
         }
     }
 
-    // resize chart to zero data, because data will only be enlarged later
-    uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
-    DBG_ASSERT( xDoc.is(), "No valid document!" );
-    uno::Reference< chart::XChartDataArray > xArray( xDoc->getData(), uno::UNO_QUERY );
-    if( xArray.is())
-    {
-        double fNan = 0.0;
-
-        uno::Reference< chart::XChartData > xData( xDoc->getData(), uno::UNO_QUERY );
-        if( xData.is())
-            fNan = xData->getNotANumber();
-
-        // attention: the data must at least be 1 x 1,
-        // otherwise BuildChart doesn't perform much.
-        uno::Sequence< uno::Sequence< double > > aAlmostEmptySeq( 1 );
-        if( bDomainForDefaultDataNeeded )
-        {
-            aAlmostEmptySeq[ 0 ].realloc( 2 );
-            aAlmostEmptySeq[ 0 ][ 0 ] = 0.0;
-            aAlmostEmptySeq[ 0 ][ 1 ] = fNan;
-        }
-        else
-        {
-            aAlmostEmptySeq[ 0 ].realloc( 1 );
-            aAlmostEmptySeq[ 0 ][ 0 ] = fNan;
-        }
-        xArray->setData( aAlmostEmptySeq );
-    }
-
-    if( aServiceName.getLength() &&
-        xDoc.is())
-    {
-        uno::Reference< lang::XMultiServiceFactory > xFact( xDoc, uno::UNO_QUERY );
-        if( xFact.is())
-        {
-            uno::Reference< chart::XDiagram > xDia( xFact->createInstance( aServiceName ), uno::UNO_QUERY );
-            if( xDia.is())
-            {
-                xDoc->setDiagram( xDia );
-
-                // set data row source for pie charts to ROWS
-                if( bSetSwitchData )
-                {
-                    uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
-                    if( xDiaProp.is())
-                    {
-                        uno::Any aAny;
-                        aAny <<= chart::ChartDataRowSource( chart::ChartDataRowSource_ROWS );
-                        xDiaProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), aAny );
-                    }
-                }
-            }
-        }
-    }
-
-    uno::Reference< drawing::XDrawPageSupplier > xPageSupp( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
-    if( xPageSupp.is())
-    {
-        uno::Reference< beans::XPropertySet > xPageProp( xPageSupp->getDrawPage(), uno::UNO_QUERY );
-        if( xPageProp.is())
-        {
-            try
-            {
-                uno::Any aAny;
-                aAny <<= (sal_Int32)( aChartSize.Width );
-                xPageProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" )), aAny );
-
-                aAny <<= (sal_Int32)( aChartSize.Height );
-                xPageProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" )), aAny );
-            }
-            catch( beans::UnknownPropertyException )
-            {
-                DBG_ERROR( "Cannot set page size" );
-            }
-        }
-    }
+    InitChart (aChartSize, bDomainForDefaultDataNeeded, aServiceName, bSetSwitchData);
 
     // set auto-styles for Area
     uno::Reference< beans::XPropertySet > xProp( mrImportHelper.GetChartDocument()->getArea(), uno::UNO_QUERY );
@@ -657,6 +565,136 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
     return pContext;
 }
 
+
+/*
+    With a locked controller the following is done here:
+        1.  Hide title, subtitle, and legend.
+        2.  Set the size of the draw page.
+        3.  Set a (logically) empty data set.
+        4.  Set the chart type.
+*/
+void    SchXMLChartContext::InitChart   (awt::Size aChartSize,
+                                        sal_Bool bDomainForDefaultDataNeeded,
+                                        rtl::OUString aServiceName,
+                                        sal_Bool bSetSwitchData)
+{
+    uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
+    DBG_ASSERT( xDoc.is(), "No valid document!" );
+    uno::Reference< frame::XModel > xModel (xDoc, uno::UNO_QUERY );
+    if( xModel.is())
+        xModel->lockControllers();
+
+    //  Hide title, subtitle, and legend
+    uno::Reference< beans::XPropertySet > xProp( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+    if( xProp.is())
+    {
+        uno::Any aFalseBool;
+        aFalseBool <<= (sal_Bool)(sal_False);
+        try
+        {
+            xProp->setPropertyValue( rtl::OUString::createFromAscii( "HasMainTitle" ), aFalseBool );
+            xProp->setPropertyValue( rtl::OUString::createFromAscii( "HasSubTitle" ), aFalseBool );
+            xProp->setPropertyValue( rtl::OUString::createFromAscii( "HasLegend" ), aFalseBool );
+        }
+        catch( beans::UnknownPropertyException )
+        {
+            DBG_ERROR( "XML-Chart Import: Property not found" );
+        }
+    }
+
+    //  Set the size of the draw page.
+    uno::Reference< drawing::XDrawPageSupplier > xPageSupp( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+    if( xPageSupp.is())
+    {
+        uno::Reference< beans::XPropertySet > xPageProp( xPageSupp->getDrawPage(), uno::UNO_QUERY );
+        if( xPageProp.is())
+        {
+            try
+            {
+                uno::Any aAny;
+                aAny <<= (sal_Int32)( aChartSize.Width );
+                xPageProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" )), aAny );
+
+                aAny <<= (sal_Int32)( aChartSize.Height );
+                xPageProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" )), aAny );
+            }
+            catch( beans::UnknownPropertyException )
+            {
+                DBG_ERROR( "Cannot set page size" );
+            }
+        }
+    }
+
+    //  We have to unlock the controllers and execute an implicit BuildChart because
+    //  the following call to setData needs data structures created in a BuildChartrelies.
+    if( xModel.is())
+        xModel->unlockControllers();
+
+    //  Set a (logically) empty data set.  It will later be filled with the
+    //  actual data.
+    //  Because the chart does not work with a really empty data set a dummy data point
+    //  and, if necessary, a dummy domain value (Not a number) are set.
+    uno::Reference< chart::XChartDataArray > xArray( xDoc->getData(), uno::UNO_QUERY );
+    if( xArray.is())
+    {
+        double fNan = 0.0;
+
+        uno::Reference< chart::XChartData > xData( xDoc->getData(), uno::UNO_QUERY );
+        if( xData.is())
+            fNan = xData->getNotANumber();
+
+        // attention: the data must at least be 1 x 1,
+        // otherwise BuildChart doesn't perform much.
+        uno::Sequence< uno::Sequence< double > > aAlmostEmptySeq( 1 );
+        if( bDomainForDefaultDataNeeded )
+        {
+            aAlmostEmptySeq[ 0 ].realloc( 2 );
+            aAlmostEmptySeq[ 0 ][ 0 ] = 0.0;
+            aAlmostEmptySeq[ 0 ][ 1 ] = fNan;
+        }
+        else
+        {
+            aAlmostEmptySeq[ 0 ].realloc( 1 );
+            aAlmostEmptySeq[ 0 ][ 0 ] = fNan;
+        }
+        xArray->setData( aAlmostEmptySeq );
+    }
+
+    if( xModel.is())
+        xModel->lockControllers();
+
+    //  Set the chart type via setting the diagram.
+    if( aServiceName.getLength() &&
+        xDoc.is())
+    {
+        uno::Reference< lang::XMultiServiceFactory > xFact( xDoc, uno::UNO_QUERY );
+        if( xFact.is())
+        {
+            uno::Reference< chart::XDiagram > xDia( xFact->createInstance( aServiceName ), uno::UNO_QUERY );
+            if( xDia.is())
+            {
+                xDoc->setDiagram( xDia );
+
+                // set data row source for pie charts to ROWS
+                if( bSetSwitchData )
+                {
+                    uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
+                    if( xDiaProp.is())
+                    {
+                        uno::Any aAny;
+                        aAny <<= chart::ChartDataRowSource( chart::ChartDataRowSource_ROWS );
+                        xDiaProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), aAny );
+                    }
+                }
+            }
+        }
+    }
+
+    if( xModel.is())
+        xModel->unlockControllers();
+}
+
+
 // ----------------------------------------
 
 SchXMLTitleContext::SchXMLTitleContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
@@ -854,4 +892,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
 SchXMLLegendContext::~SchXMLLegendContext()
 {
 }
+
+
+
 

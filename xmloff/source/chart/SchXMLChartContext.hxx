@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-17 15:48:47 $
+ *  last change: $Author: af $ $Date: 2001-06-08 14:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,22 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+private:
+    /** @descr  This method bundles some settings to the chart model and executes them with
+            a locked controller.  This includes setting the draw page size and setting
+            the chart type.
+        @param  aChartSize  The size the draw page will be set to.
+        @param  bDomainForDefaultDataNeeded This flag indicates wether the chart's data set
+            has to contain a domain value.
+        @param  aServiceName The name of the service the diagram is initialized with.
+        @param  bSetWitchData   Indicates wether the data set takes it's data series from
+            rows or from columns.
+    */
+    void    InitChart   (com::sun::star::awt::Size aChartSize,
+                        sal_Bool bDomainForDefaultDataNeeded,
+                        ::rtl::OUString aServiceName,
+                        sal_Bool bSetSwitchData);
 };
 
 // ----------------------------------------
