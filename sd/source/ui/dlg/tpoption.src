@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 09:12:10 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #define SCALE_TEXT \
         Text [ de ] = "Maﬂstab" ;                              \
         Text [ en-US ] = "Scale" ;                 \
-        Text [ x-comment ] = " ";
+        Text [ x-comment ] = " ";   \
 
  // Contents (Inhalte)
 TabPage TP_OPTIONS_CONTENTS
@@ -150,7 +150,7 @@ TabPage TP_OPTIONS_CONTENTS
         Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "~Alle Steuerpunkte im Bezier-Editor" ;
-        Text [ en-US ] = "~All control points in BÈzier editor" ;
+        Text [ en-US ] = "~All control points in B√©zier editor" ;
         Text [ x-comment ] = " ";
     };
     CheckBox CBX_MOVE_OUTLINE
