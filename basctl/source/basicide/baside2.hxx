@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:11:09 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ class ModulWindow: public IDEBaseWindow
     friend class BasicIDEShell;
 
 private:
-
+    StarBASICRef        xBasic;
     short               nValid;
     ComplexEditorWindow aXEditorWindow;
     BasicStatus         aStatus;
@@ -425,8 +425,8 @@ protected:
 public:
                     TYPEINFO();
 
-                    ModulWindow( ModulWindowLayout* pParent, StarBASIC* pBasic,
-                            SfxObjectShell* pShell, String aLibName, String aName, ::rtl::OUString& aModule );
+                    ModulWindow( ModulWindowLayout* pParent, SfxObjectShell* pShell, String aLibName,
+                        String aName, ::rtl::OUString& aModule );
 
                     ~ModulWindow();
 
@@ -437,10 +437,12 @@ public:
     virtual BOOL    CanClose();
     virtual void    PrintData( Printer* pPrinter );
     virtual String  GetTitle();
-    virtual String  CreateSbxDescription();
+    virtual BasicEntryDescriptor CreateEntryDescriptor();
     virtual BOOL    AllowUndo();
     virtual void    SetReadOnly( BOOL bReadOnly );
     virtual BOOL    IsReadOnly();
+
+    StarBASIC*      GetBasic() { return xBasic; }
 
     SbModule*       GetSbModule() { return xModule; }
     void            SetSbModule( SbModule* pModule ) { xModule = pModule; }
