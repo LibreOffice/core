@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:09:58 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 20:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,9 +687,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ portuguese ] = "<Tudo>";
         Text[ russian ] = "<All>";
         Text[ greek ] = "<All>";
-        Text[ dutch ] = "<All>";
+        Text[ dutch ] = "<Alle>";
         Text[ french ] = "<Tout>";
-        Text[ spanish ] = "<All>";
+        Text[ spanish ] = "<Todos>";
         Text[ finnish ] = "<All>";
         Text[ italian ] = "<All>";
         Text[ danish ] = "<All>";
@@ -717,6 +717,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text[ catalan ] = "Imprimir";
     Text[ finnish ] = "Tulosta";
 };
+
 
 
 
