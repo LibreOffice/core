@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-28 16:36:02 $
+ *  last change: $Author: dvo $ $Date: 2001-10-30 15:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1436,6 +1436,7 @@ SwXMLTableContext::~SwXMLTableContext()
 {
     delete pColumnDefaultCellStyleNames;
     delete pSharedBoxFormats;
+    delete pRows;
 }
 
 SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,

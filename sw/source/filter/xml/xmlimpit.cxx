@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimpit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-25 14:43:24 $
+ *  last change: $Author: dvo $ $Date: 2001-10-30 15:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,6 +666,11 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             pBox->SetLine( pBottom, BOX_LINE_BOTTOM );
             pBox->SetLine( pLeft,   BOX_LINE_LEFT   );
             pBox->SetLine( pRight,  BOX_LINE_RIGHT  );
+
+            delete pTop;
+            delete pBottom;
+            delete pLeft;
+            delete pRight;
 
             bOk = sal_True;
         }
