@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellexec.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-26 15:09:51 $
+ *  last change: $Author: obr $ $Date: 2001-06-27 06:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,12 +292,14 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
             }
         }
 
-        sal_Int32 nLength = aHandler.getLength();
-        if( nLength )
+        if( aHandler.getLength() )
         {
+            // handler may be stored as file URL
+            FileBase::getSystemPathFromFileURL( aHandler, aHandler );
+
             // due to a possible convertion to file url,
             // rebuild command line from scratch
-            OUStringBuffer aBuffer( nLength + aURL.getLength() + 1 );
+            OUStringBuffer aBuffer( aHandler.getLength() + aURL.getLength() + 1 );
 
             aBuffer.append( aHandler );
             aBuffer.append( (sal_Unicode) ' ' );
