@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:17:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,9 +113,7 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
 #include <com/sun/star/document/XFilter.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
-#include <com/sun/star/document/XImporter.hpp>
-#endif
+
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
@@ -386,38 +384,12 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         {
             // ich benutze nicht maURL, sondern rURL, denn zwischen dem Constructor und diesem Load hier kann sich die ::com::sun::star::util::URL des Objektes
             // schon geaendert haben (zum Beispiel durch Umbenennen)
-            const PropertyValue* pValue =::std::find_if(rArgs.getConstArray(),
-                                                        rArgs.getConstArray() + rArgs.getLength(),
-                                                        ::std::bind2nd(::comphelper::TPropertyValueEqualFunctor(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StatusIndicator"))));
-
-            Sequence<Any> aFilterArgs;
-            if ( pValue && pValue != (rArgs.getConstArray() + rArgs.getLength()) )
-            {
-                Reference<XStatusIndicator> xStatusIndicator(pValue->Value,UNO_QUERY);
-
-                // set progress range and start status indicator
-                sal_Int32 nProgressRange(1000000);
-                if (xStatusIndicator.is())
-                {
-                    xStatusIndicator->start(::rtl::OUString(), nProgressRange);
-                    aFilterArgs.realloc( 1 );
-                    Any *pArgs = aFilterArgs.getArray();
-                    *pArgs++ <<= xStatusIndicator;
-                }
-            }
-
-            Reference<XImporter> xImporter(m_xServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdb.DBFilter")),aFilterArgs),UNO_QUERY);
-
-            xImporter->setTargetDocument(xComponent);
-            Reference<XFilter> xFilter(xImporter,UNO_QUERY);
 
             m_aArgs.realloc(m_aArgs.getLength()+1);
             m_aArgs[m_aArgs.getLength()-1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
             m_aArgs[m_aArgs.getLength()-1].Value <<= rURL;
 
             xModel->attachResource(rURL,m_aArgs);
-
-            xFilter->filter(m_aArgs);
         }
         catch(Exception&)
         {
