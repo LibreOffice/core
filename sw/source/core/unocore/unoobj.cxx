@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2000-10-25 11:46:21 $
+ *  last change: $Author: os $ $Date: 2000-10-26 10:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2781,7 +2781,22 @@ Any SwXTextCursor::GetPropertyDefault(
   -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo >  SwXTextCursor::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef = aPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo >  xRef;
+    if(!xRef.is())
+    {
+        static SfxItemPropertyMap aCrsrExtMap_Impl[] =
+        {
+            { SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT), FN_SKIP_HIDDEN_TEXT, &::getBooleanCppuType(), PROPERTY_NONE,     0},
+            { SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT), FN_SKIP_PROTECTED_TEXT, &::getBooleanCppuType(), PROPERTY_NONE,     0},
+            {0,0,0,0}
+        };
+        uno::Reference< beans::XPropertySetInfo >  xInfo = aPropSet.getPropertySetInfo();
+        // PropertySetInfo verlaengern!
+        const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
+        xRef = new SfxExtItemPropertySetInfo(
+            aCrsrExtMap_Impl,
+            aPropSeq );
+    }
     return xRef;
 }
 /*-- 09.12.98 14:18:54---------------------------------------------------
@@ -2796,7 +2811,18 @@ void SwXTextCursor::setPropertyValue(const OUString& rPropertyName, const uno::A
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SetPropertyValue(*pUnoCrsr, aPropSet, rPropertyName, aValue);
+        if(!rPropertyName.compareToAscii(UNO_NAME_IS_SKIP_HIDDEN_TEXT.pName))
+        {
+            sal_Bool bSet = *(sal_Bool*)aValue.getValue();
+            pUnoCrsr->SetSkipOverHiddenSections(bSet);
+        }
+        else if(!rPropertyName.compareToAscii(UNO_NAME_IS_SKIP_PROTECTED_TEXT.pName))
+        {
+            sal_Bool bSet = *(sal_Bool*)aValue.getValue();
+            pUnoCrsr->SetSkipOverProtectSections(bSet);
+        }
+        else
+            SetPropertyValue(*pUnoCrsr, aPropSet, rPropertyName, aValue);
     }
     else
         throw uno::RuntimeException();
@@ -2813,7 +2839,18 @@ Any SwXTextCursor::getPropertyValue(const OUString& rPropertyName)
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        aAny = GetPropertyValue(*pUnoCrsr, aPropSet, rPropertyName);
+        if(!rPropertyName.compareToAscii(UNO_NAME_IS_SKIP_HIDDEN_TEXT.pName))
+        {
+            BOOL bSet = pUnoCrsr->IsSkipOverHiddenSections();
+            aAny.setValue(&bSet, ::getBooleanCppuType());
+        }
+        else if(!rPropertyName.compareToAscii(UNO_NAME_IS_SKIP_PROTECTED_TEXT.pName))
+        {
+            BOOL bSet = pUnoCrsr->IsSkipOverProtectSections();
+            aAny.setValue(&bSet, ::getBooleanCppuType());
+        }
+        else
+            aAny = GetPropertyValue(*pUnoCrsr, aPropSet, rPropertyName);
     }
     else
         throw uno::RuntimeException();

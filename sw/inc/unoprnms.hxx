@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-10-25 12:49:28 $
+ *  last change: $Author: os $ $Date: 2000-10-26 10:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,6 +553,8 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_COLOR;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_RELATIVE_HEIGHT;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_VERTIVAL_ALIGNMENT;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_IS_ON;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_SKIP_HIDDEN_TEXT;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_SKIP_PROTECTED_TEXT;
 
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 14:25:39 $
+ *  last change: $Author: os $ $Date: 2000-10-26 10:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,6 +865,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_IS_NUMBER                    (FN_EXTRA2 + 69)
 #define FN_UNO_TEXT_WRAP                    (FN_EXTRA2 + 70)
 #define FN_UNO_ANCHOR_TYPE                  (FN_EXTRA2 + 71)
+#define FN_SKIP_HIDDEN_TEXT                 (FN_EXTRA2 + 72)
+#define FN_SKIP_PROTECTED_TEXT              (FN_EXTRA2 + 73)
+
 /*--------------------------------------------------------------------
     Bereich: Fenster
  --------------------------------------------------------------------*/
