@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-09 12:07:41 $
+ *  last change: $Author: ama $ $Date: 2002-10-18 13:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1173,7 +1173,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
             {
                 lcl_GetPostIts( pDoc, aPostItFields );
                 pPostItDoc   = new SwDoc;
-                if (!pPrt)
+                if (pPrt)
                     pPostItDoc->SetPrt( pPrt );
                 pPostItShell = new ViewShell( *pPostItDoc, 0,
                                                pShell->GetViewOptions() );
@@ -1655,6 +1655,9 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2002/09/09 12:07:41  tl
+      #102510# XRenderable (PDF) export for selection implemented
+
       Revision 1.10  2002/09/06 05:53:24  tl
       #102510# XRenderable (PDF) export implementation
 
