@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 18:12:38 $
+ *  last change: $Author: bm $ $Date: 2000-11-24 09:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,8 @@ XML_CONSTASCII_ACTION( sXML_accent, "accent" );
 XML_CONSTASCII_ACTION( sXML_accentunder, "accentunder" );
 XML_CONSTASCII_ACTION( sXML_active, "active" );
 XML_CONSTASCII_ACTION( sXML_actuate, "actuate" );
+XML_CONSTASCII_ACTION( sXML_add_in, "add-in" );
+XML_CONSTASCII_ACTION( sXML_add_in_name, "add-in-name" );
 XML_CONSTASCII_ACTION( sXML_address, "address" );
 XML_CONSTASCII_ACTION( sXML_align, "align" );
 XML_CONSTASCII_ACTION( sXML_all, "all" );
