@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: gt $ $Date: 2002-06-28 14:26:00 $
+ *  last change: $Author: os $ $Date: 2002-08-26 12:52:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,30 @@ SvxRectCtl::SvxRectCtl( Window* pParent, const ResId& rResId, RECT_POINT eRpt,
     pBitmap     ( NULL )
 {
     SetMapMode( MAP_100TH_MM );
+    Resize_Impl();
+}
+
+// -----------------------------------------------------------------------
+
+SvxRectCtl::~SvxRectCtl()
+{
+    delete pBitmap;
+
+    if( pAccContext )
+        pAccContext->release();
+}
+
+// -----------------------------------------------------------------------
+void SvxRectCtl::Resize()
+{
+    Resize_Impl();
+    Control::Resize();
+}
+
+// -----------------------------------------------------------------------
+
+void SvxRectCtl::Resize_Impl()
+{
     aSize = GetOutputSize();
 
     switch( eCS )
@@ -171,17 +195,6 @@ SvxRectCtl::SvxRectCtl( Window* pParent, const ResId& rResId, RECT_POINT eRpt,
     Reset();
     InitSettings( TRUE, TRUE );
 }
-
-// -----------------------------------------------------------------------
-
-SvxRectCtl::~SvxRectCtl()
-{
-    delete pBitmap;
-
-    if( pAccContext )
-        pAccContext->release();
-}
-
 // -----------------------------------------------------------------------
 
 void SvxRectCtl::InitBitmap( void )
