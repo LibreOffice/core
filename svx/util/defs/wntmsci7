@@ -18329,3 +18329,12 @@ _real@8@3ff9a0a0a0a0a0a0a000
 ??0SvxLanguageBox@@QAE@PAVWindow@@KE@Z
 ?Init@SvxLanguageBox@@AAEXXZ
 ??0SvxJSearchOptionsDialog@@QAE@PAVWindow@@ABVSfxItemSet@@GJ@Z
+?GetEditOutlinerParaObject@SdrTextObj@@QBEPAVOutlinerParaObject@@XZ
+??0?$_Node_Alloc_Lock@$00$0A@@_STL@@QAE@XZ
+??4ODataAccessDescriptor@svx@@QAEABV01@ABV01@@Z
+?__stl_delete@_STL@@YAXPAX@Z
+?implMoveControls@FmSearchDialog@@AAEXPAPAVControl@@JJPAV2@@Z
+??0OColumnTransferable@svx@@QAE@ABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@0ABV?$Reference@VXConnection@sdbc@star@sun@com@@@3456@J@Z
+?LinkStubOnAsyncExecuteDrop@FmGridHeader@@CAJPAX0@Z
+?OnAsyncExecuteDrop@FmGridHeader@@AAEJPAX@Z
+?set@?$Reference@VXNumberFormats@util@star@sun@com@@@uno@star@sun@com@@QAAEPAVXNumberFormats@util@345@@Z
