@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:12:28 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,9 @@
 //CHINA001 #endif
 #include "swabstdlg.hxx" //CHINA001
 #include "fldui.hrc" //CHINA001
+
+#include <undobj.hxx>
+
 /*------------------------------------------------------------------------
         Beschreibung:
 ------------------------------------------------------------------------*/
@@ -203,7 +206,11 @@ void SwWrtShell::Insert(SwField &rFld)
     if(!_CanInsert())
         return;
     StartAllAction();
-    StartUndo(UNDO_INSERT);
+
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UNDO_ARG1, rFld.GetDescription());
+
+    StartUndo(UNDO_INSERT, &aRewriter);
 
 //JP 09.06.97: Wozu die Abpruefung des FeldTypen??
 //          Wobei das SETREFFLD kein Feld ist und hier garnicht durchkommt!
