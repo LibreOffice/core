@@ -226,4 +226,11 @@ Dim bDoProtect as Boolean
 		End If
 	End If
 End Sub
+
+
+Sub FillDocument()
+	oMyReport = createUNOService(&quot;com.sun.star.wizards.report.CallReportWizard&quot;)
+	oMyReport.trigger(&quot;fill&quot;)
+End Sub
+
 </script:module>
