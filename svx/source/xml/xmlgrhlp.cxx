@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $
+ *  last change: $Author: ka $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,7 +669,7 @@ void SvXMLGraphicHelper::Init( SotStorage* pXMLStorage,
 {
     mpRootStorage = pXMLStorage;
     meCreateMode = eCreateMode;
-    mbDirect = bDirect;
+    mbDirect = ( ( GRAPHICHELPER_MODE_READ == meCreateMode ) ? bDirect : sal_True );
 }
 
 // -----------------------------------------------------------------------------
