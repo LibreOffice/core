@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-09 14:56:19 $
+ *  last change: $Author: sj $ $Date: 2002-07-11 16:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2880,75 +2880,87 @@
             </prop>
         </group>
         <group oor:name="Filter">
+            <!-- Responsible: SJ / OS -->
+            <info>
+                <desc xml:lang="en-US">Settings for Microsoft-, Graphic- and HTML filter</desc>
+            </info>
             <group oor:name="Microsoft">
+                <!-- Responsible: SJ -->
+				<info>
+					<desc xml:lang="en-US">Specifies, what kind of OLE objects are to be converted when importing/exporting Microsoft documents</desc>
+				</info>
                 <group oor:name="Import">
+					<info>
+						<desc xml:lang="en-US">Specifies, what kind of OLE objects are to be converted when importing Microsoft documents</desc>
+					</info>
                     <prop oor:name="MathTypeToMath" oor:type="xs:boolean">
-                        <!-- Responsible: SJ -->
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies, if a convertable OLE Object should be converted into an Office object</desc>
+                            <desc xml:lang="en-US">Specifies, if convertable MathType OLE objects should be converted into Math objects </desc>
                         </info>
                     </prop>
                     <prop oor:name="WinWordToWriter" oor:type="xs:boolean">
-                        <!-- Responsible: SJ -->
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies, if a convertable OLE Object should be converted into an Office object</desc>
+                            <desc xml:lang="en-US">Specifies, if convertable WinWord OLE objects should be converted into Writer objects</desc>
                         </info>
                     </prop>
                     <prop oor:name="ExcelToCalc" oor:type="xs:boolean">
-                        <!-- Responsible: SJ -->
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies, if a convertable OLE Object should be converted into an Office object</desc>
+                            <desc xml:lang="en-US">Specifies, if convertable Excel OLE objects should be converted into Calc objects</desc>
                         </info>
                     </prop>
                     <prop oor:name="PowerPointToImpress" oor:type="xs:boolean">
-                        <!-- Responsible: SJ -->
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies, if a convertable OLE Object should be converted into an Office object</desc>
+                            <desc xml:lang="en-US">Specifies, if convertable PowerPoint OLE objects should be converted into Impress objects</desc>
                         </info>
                     </prop>
                 </group>
                 <group oor:name="Export">
+					<info>
+						<desc xml:lang="en-US">Specifies, what kind of OLE objects are to be converted when exporting Microsoft documents</desc>
+					</info>
                     <prop oor:name="MathToMathType" oor:type="xs:boolean">
-                        <!-- Responsible: SJ -->
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies, if a convertable OLE Object should be converted into an Office object</desc>
+                            <desc xml:lang="en-US">Specifies if embedded Math objects should be converted into MathType objects</desc>
                         </info>
                     </prop>
                     <prop oor:name="WriterToWinWord" oor:type="xs:boolean">
-                        <!-- Responsible: SJ -->
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies, if a convertable OLE Object should be converted into an Office object</desc>
+                            <desc xml:lang="en-US">Specifies if embedded Writer objects should be converted into WinWord objects</desc>
                         </info>
                     </prop>
                     <prop oor:name="CalcToExcel" oor:type="xs:boolean">
-                        <!-- Responsible: SJ -->
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies, if a convertable OLE Object should be converted into an Office object</desc>
+                            <desc xml:lang="en-US">Specifies if embedded Calc objects should be converted into Excel objects</desc>
                         </info>
                     </prop>
                     <prop oor:name="ImpressToPowerPoint" oor:type="xs:boolean">
-                        <!-- Responsible: SJ -->
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies, if a convertable OLE Object should be converted into an Office object</desc>
+                            <desc xml:lang="en-US">Specifies if embedded Impress objects should be converted into PowerPoint objects</desc>
                         </info>
                     </prop>
                 </group>
             </group>
             <group oor:name="Graphic">
+                <!-- Responsible: SJ -->
+				<info>
+					<desc xml:lang="en-US">Default settings for graphic filter</desc>
+				</info>
                 <group oor:name="Import">
+					<info>
+						<desc xml:lang="en-US">Default settings for import graphic filter</desc>
+					</info>
                     <group oor:name="PCD">
                         <prop oor:name="Resolution" oor:type="xs:int">
                             <!-- OldPath: PCD-IMPORT-RESOLUTION -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <value>2</value>
                             <info>
                                 <desc xml:lang="en-US">Specifies the import resolution for the PCD-format: 0 - Base16 ( 192 * 128 pixel ) 1 - Base4 ( 384 * 256 pixel ) 2 - Base ( 768 * 512 pixel )</desc>
@@ -2977,11 +2989,13 @@
                     </group>
                 </group>
                 <group oor:name="Export">
+					<info>
+						<desc xml:lang="en-US">Default settings for export graphic filter</desc>
+					</info>
                     <group oor:name="BMP">
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: BMP-EXPORT-MODE -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
                             <value>0</value>
                             <info>
@@ -3011,7 +3025,6 @@
                         <prop oor:name="Resolution" oor:type="xs:int">
                             <!-- OldPath: BMP-EXPORT-RES -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
                             <value>75</value>
                             <info>
@@ -3043,7 +3056,6 @@
                         </prop>
                         <prop oor:name="Color" oor:type="xs:int">
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
                             <value>0</value>
                             <info>
@@ -3098,7 +3110,6 @@
                         <prop oor:name="RLE_Coding" oor:type="xs:boolean">
                             <!-- OldPath: BMP-RLE_CODING -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
                             <value>true</value>
                             <info>
@@ -3108,13 +3119,11 @@
                         </prop>
                         <node-ref oor:name="Size" oor:node-type="GraphicSize">
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
                         </node-ref>
                     </group>
                     <group oor:name="EPS">
                         <!-- OldLocation: fltopt.ini -->
-                        <!-- Responsible: SJ -->
                         <!-- UIHints: File  Export  Filetype File  Export  Filetype  EPS-Encapsulated Postscript -->
                         <prop oor:name="Preview" oor:type="xs:int">
                             <value>0</value>
@@ -3234,7 +3243,6 @@
                         <prop oor:name="Interlaced" oor:type="xs:int">
                             <!-- OldPath: GIF-EXPORT-INTERLACED -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  GIF-Graphics Interchange -->
                             <value>1</value>
                             <info>
@@ -3256,7 +3264,6 @@
                         <prop oor:name="Translucent" oor:type="xs:int">
                             <!-- OldPath: GIF-EXPORT-TRANSLUCENT -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  GIF-Graphics Interchange -->
                             <value>1</value>
                             <info>
@@ -3280,7 +3287,6 @@
                         <prop oor:name="Quality" oor:type="xs:int">
                             <!-- OldPath: JPG-EXPORT-QUALITY -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  JPG-JPEG -->
                             <value>75</value>
                             <info>
@@ -3294,7 +3300,6 @@
                         <prop oor:name="ColorMode" oor:type="xs:int">
                             <!-- OldPath: JPG_EXPORT_COLORMODE -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  JPG-JPEG -->
                             <value>0</value>
                             <info>
@@ -3318,7 +3323,6 @@
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: MET-EXPORT-MODE -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  MET-OS/2 Metafile -->
                             <value>0</value>
                             <info>
@@ -3339,7 +3343,6 @@
                         </prop>
                         <node-ref oor:name="Size" oor:node-type="GraphicSize">
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  MET-MS Windows - [dialog] MET Options -->
                         </node-ref>
                     </group>
@@ -3347,7 +3350,6 @@
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: PCT-EXPORT-MODE -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  PCT-Mac Pict -->
                             <value>0</value>
                             <info>
@@ -3368,7 +3370,6 @@
                         </prop>
                         <node-ref oor:name="Size" oor:node-type="GraphicSize">
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  PCT-MS Windows - [dialog] PCT Options -->
                         </node-ref>
                     </group>
@@ -3376,7 +3377,6 @@
                         <prop oor:name="FileFormat" oor:type="xs:int">
                             <!-- OldPath: PBM-EXPORT-FORMAT -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  PBM-Portable Bitmap -->
                             <value>1</value>
                             <info>
@@ -3400,7 +3400,6 @@
                         <prop oor:name="FileFormat" oor:type="xs:int">
                             <!-- OldPath: PGM-EXPORT-FORMAT -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  PGM-Portable Graymap -->
                             <value>1</value>
                             <info>
@@ -3424,7 +3423,6 @@
                         <prop oor:name="FileFormat" oor:type="xs:int">
                             <!-- OldPath: PPM-EXPORT-FORMAT -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  PPM-Portable Pixelmap -->
                             <value>1</value>
                             <info>
@@ -3448,7 +3446,6 @@
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: SVM-EXPORT-MODE -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  SVM - StarView Metafile -->
                             <value>0</value>
                             <info>
@@ -3469,7 +3466,6 @@
                         </prop>
                         <node-ref oor:name="Size" oor:node-type="GraphicSize">
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  SVM  - StarView Metafile - [dialog] SVM Options -->
                         </node-ref>
                     </group>
@@ -3477,7 +3473,6 @@
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: WMF-EXPORT-MODE -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  WMF -MS Windows Metafile -->
                             <value>0</value>
                             <info>
@@ -3498,7 +3493,6 @@
                         </prop>
                         <node-ref oor:name="Size" oor:node-type="GraphicSize">
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  WMF - MS Windows Metafile - [dialog] WMF Options -->
                         </node-ref>
                     </group>
@@ -3506,7 +3500,6 @@
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: EMF-EXPORT-MODE -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File - Export -->
                             <value>0</value>
                             <info>
@@ -3527,7 +3520,6 @@
                         </prop>
                         <node-ref oor:name="Size" oor:node-type="GraphicSize">
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  EMF - Enhanced Metafile - [dialog] EMF Options -->
                         </node-ref>
                     </group>
@@ -3535,7 +3527,6 @@
                         <prop oor:name="Compression" oor:type="xs:int">
                             <!-- OldPath: PNG-EXPORT-COMPRESSION -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  PNG-Portable Network Graphic -->
                             <value>6</value>
                             <info>
@@ -3549,7 +3540,6 @@
                         <prop oor:name="Interlaced" oor:type="xs:int">
                             <!-- OldPath: PNG-EXPORT-INTERLACED -->
                             <!-- OldLocation: fltopt.ini -->
-                            <!-- Responsible: SJ -->
                             <!-- UIHints: File  Export  Filetype  PNG-Portable Network Graphic -->
                             <value>1</value>
                             <info>
