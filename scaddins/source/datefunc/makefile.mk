@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.9 2003-04-15 14:17:20 vg Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.10 2003-08-25 15:23:48 kz Exp $
 #
-#     $Date: 2003-04-15 14:17:20 $
-#     $Author: vg $
-#     $Revision: 1.9 $
+#     $Date: 2003-08-25 15:23:48 $
+#     $Author: kz $
+#     $Revision: 1.10 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -111,7 +111,8 @@ SLOFILES=\
 ALLIDLFILES=\
     dateadd.idl
 
-SRCFILES =\
+SRS1NAME=$(TARGET)
+SRC1FILES =\
     datefunc.src
 
 # --- Library -----------------------------------
