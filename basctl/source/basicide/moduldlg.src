@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:25:03 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 07:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ TabDialog RID_TD_ORGANIZE
                 Text[ korean ] = "¶óÀÌºê·¯¸®";
                 Text[ turkish ] = "Kitaplýklar";
                 Text[ catalan ] = "Bibliotecas";
+                Text[ finnish ] = "Kirjastot";
             };
         };
     };
@@ -161,6 +162,7 @@ TabDialog RID_TD_ORGANIZE
     Text[ korean ] = "¸ÅÅ©·Î °ü¸®";
     Text[ turkish ] = "Makrolarý yönet";
     Text[ catalan ] = "Administrar";
+    Text[ finnish ] = "Makrojen järjestelytyökalu";
 };
 TabPage RID_TP_MODULS
 {
@@ -178,7 +180,7 @@ TabPage RID_TP_MODULS
         Text [ italian ] = "M~odulo/Dialogo" ;
         Text [ portuguese_brazilian ] = "M~ódulo/Di logo" ;
         Text [ portuguese ] = "M~ódulo/Diálogo" ;
-        Text [ finnish ] = "M~oduuli-valintaikkuna" ;
+        Text [ finnish ] = "M~oduuli/valintaikkuna" ;
         Text [ danish ] = "Modul/Dialog" ;
         Text [ french ] = "M~odule/boîte de dialogue" ;
         Text [ swedish ] = "M~odul/dialog" ;
@@ -235,7 +237,7 @@ TabPage RID_TP_MODULS
         Text [ italian ] = "Modi~fica" ;
         Text [ portuguese_brazilian ] = "~Editar" ;
         Text [ portuguese ] = "~Editar" ;
-        Text [ finnish ] = "Muo~kkaa" ;
+        Text [ finnish ] = "~Muokkaa" ;
         Text [ danish ] = "~Rediger" ;
         Text [ french ] = "Édi~ter" ;
         Text [ swedish ] = "~Redigera" ;
@@ -303,7 +305,7 @@ TabPage RID_TP_MODULS
         Text [ italian ] = "Nuovo ~modulo..." ;
         Text [ portuguese_brazilian ] = "~Módulo novo" ;
         Text [ portuguese ] = "~Novo módulo..." ;
-        Text [ finnish ] = "~Uusi..." ;
+        Text [ finnish ] = "Uusi ~moduuli" ;
         Text [ danish ] = "Nyt modul..." ;
         Text [ french ] = "Nouveau ~module..." ;
         Text [ swedish ] = "Ny ~modul..." ;
@@ -332,7 +334,7 @@ TabPage RID_TP_MODULS
         Text [ italian ] = "Nuovo dialo~go" ;
         Text [ portuguese_brazilian ] = "Di lo~go novo" ;
         Text [ portuguese ] = "Novo diálo~go..." ;
-        Text [ finnish ] = "Uusi-~valintaikkuna..." ;
+        Text [ finnish ] = "~Uusi valintaikkuna" ;
         Text [ danish ] = "Ny dialog..." ;
         Text [ french ] = "Nouveau ~dialogue" ;
         Text [ swedish ] = "Ny dialo~g..." ;
@@ -413,6 +415,7 @@ TabPage RID_TP_LIBS
         Text[ korean ] = "¶óÀÌºê·¯¸®(~L)";
         Text[ turkish ] = "Kitaplýk";
         Text[ catalan ] = "~Biblioteca";
+        Text[ finnish ] = "~Kirjasto";
     };
     Control RID_TRLBOX
     {
@@ -444,7 +447,7 @@ TabPage RID_TP_LIBS
         Text [ italian ] = "Modi~fica" ;
         Text [ portuguese_brazilian ] = "~Editar" ;
         Text [ portuguese ] = "~Editar" ;
-        Text [ finnish ] = "Muo~kkaa" ;
+        Text [ finnish ] = "~Muokkaa" ;
         Text [ danish ] = "~Rediger" ;
         Text [ french ] = "Édi~ter" ;
         Text [ swedish ] = "~Redigera" ;
@@ -513,7 +516,7 @@ TabPage RID_TP_LIBS
         Text [ italian ] = "~Password..." ;
         Text [ portuguese_brazilian ] = "~Senha..." ;
         Text [ portuguese ] = "~Senha..." ;
-        Text [ finnish ] = "~Salasana..." ;
+        Text [ finnish ] = "~Salasana" ;
         Text [ danish ] = "Adgangskode..." ;
         Text [ french ] = "Mot de ~passe..." ;
         Text [ swedish ] = "~Lösenord..." ;
@@ -547,7 +550,7 @@ TabPage RID_TP_LIBS
         Text [ spanish ] = "~Nuevo..." ;
         Text [ danish ] = "Ny..." ;
         Text [ swedish ] = "~Nytt..." ;
-        Text [ finnish ] = "~New..." ;
+        Text [ finnish ] = "~Uusi..." ;
         Text [ english_us ] = "~New..." ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÐÂ½¨(~N)...";
@@ -587,6 +590,7 @@ TabPage RID_TP_LIBS
         Text[ korean ] = "Ãß°¡(~A)...";
         Text[ turkish ] = "Ekle...";
         Text[ catalan ] = "~Añadir...";
+        Text[ finnish ] = "~Liitä";
     };
     PushButton RID_PB_DELETE
     {
@@ -695,6 +699,7 @@ ModalDialog RID_DLG_LIBS
         Text[ korean ] = "¿É¼Ç";
         Text[ turkish ] = "Seçenekler";
         Text[ catalan ] = "Opciones";
+        Text[ finnish ] = "Asetukset";
     };
     CheckBox RID_CB_REF
     {
@@ -723,6 +728,7 @@ ModalDialog RID_DLG_LIBS
         Text[ korean ] = "ÂüÁ¶·Î¼­ »ðÀÔ (ÀÐ±â Àü¿ë)";
         Text[ turkish ] = "Referans olarak ekle (salt okunur)";
         Text[ catalan ] = "Insertar como referencia (solo leer)";
+        Text[ finnish ] = "Lisää viite (vain luku)";
     };
     CheckBox RID_CB_SEP
     {
@@ -749,6 +755,7 @@ ModalDialog RID_DLG_LIBS
         Text[ korean ] = "º°µµ ÆÄÀÏ·Î¼­  ÀúÀå";
         Text[ turkish ] = "Ayrý dosya olarak kaydet";
         Text[ catalan ] = "Guardar como archivo separado";
+        Text[ finnish ] = "Tallenna erillisenä tiedostona";
     };
     CheckBox RID_CB_REPL
     {
@@ -775,6 +782,7 @@ ModalDialog RID_DLG_LIBS
         Text[ korean ] = "±âÁ¸ ¶óÀÌºê·¯¸® ´ëÃ¼";
         Text[ turkish ] = "Mevcut kitaplýðý deðiþtir";
         Text[ catalan ] = "Reemplazar bibliotecas existentes";
+        Text[ finnish ] = "Korvaa nykyiset kirjastot";
     };
 };
 ModalDialog RID_DLG_NEWLIB
@@ -822,6 +830,7 @@ ModalDialog RID_DLG_NEWLIB
         Text[ korean ] = "ÀÌ¸§(~N):";
         Text[ turkish ] = "Ad:";
         Text[ catalan ] = "~Nombre:";
+        Text[ finnish ] = "~Nimi:";
     };
     Edit RID_ED_LIBNAME
     {
@@ -857,5 +866,6 @@ ModalDialog RID_DLG_NEWLIB
         Text[ korean ] = "º°µµ ÆÄÀÏ ÀÛ¼º(~C)";
         Text[ turkish ] = "Ayrý dosya oluþtur";
         Text[ catalan ] = "Crear archivo ~separado";
+        Text[ finnish ] = "~Luo erillinen tiedosto";
     };
 };
