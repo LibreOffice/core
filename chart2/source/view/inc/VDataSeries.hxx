@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-12 18:08:05 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 10:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,24 +61,17 @@
 #ifndef _CHART2_VIEW_DATASERIES_HXX
 #define _CHART2_VIEW_DATASERIES_HXX
 
-#include "ShapeAppearance.hxx"
 #include "PropertyMapper.hxx"
-/*
-#ifndef _B3D_HMATRIX_HXX
-#include <goodies/hmatrix.hxx>
-#endif
-*/
+
 #include <vector>
 //for auto_ptr
 #include <memory>
 
-/*
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
-#include <drafts/com/sun/star/chart2/ExplicitScaleData.hpp>
-#endif
-*/
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATACAPTIONSTYLE_HPP_
 #include <drafts/com/sun/star/chart2/DataCaptionStyle.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLPROPERTIES_HPP_
+#include <drafts/com/sun/star/chart2/SymbolProperties.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASEQUENCE_HPP_
 #include <drafts/com/sun/star/chart2/XDataSequence.hpp>
@@ -113,8 +106,7 @@ class VDataSeries
 {
 public:
     VDataSeries();
-    VDataSeries( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDataSeries >
-               , const ShapeAppearance& rDefaultAppearence );
+    VDataSeries( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDataSeries > );
     virtual ~VDataSeries();
 
     sal_Int32   getTotalPointCount() const;
@@ -129,8 +121,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         getPropertiesOfSeries() const;
 
-    ShapeAppearance     getAppearanceOfPoint( sal_Int32 index ) const;
-    SymbolType          getSymbolTypeOfPoint( sal_Int32 index ) const;
+    ::drafts::com::sun::star::chart2::SymbolProperties*
+                        getSymbolProperties( sal_Int32 index ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xShape;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xLabelsShape;
@@ -154,8 +146,6 @@ private: //methods
     bool    isAttributedDataPoint( sal_Int32 index ) const;
 
 private: //member
-
-    ShapeAppearance     m_aAppearanceOfSeries;
 
     ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::chart2::XDataSeries >       m_xDataSeries;
@@ -192,6 +182,11 @@ private: //member
     mutable ::std::auto_ptr< tNameSequence >        m_apLabelPropNames_AttributedPoint;
     mutable ::std::auto_ptr< tAnySequence >         m_apLabelPropValues_AttributedPoint;
     mutable sal_Int32   m_nCurrentAttributedPoint;
+
+    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::SymbolProperties >
+                                                    m_apSymbolProperties_Series;
+    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::SymbolProperties >
+                                                    m_apSymbolProperties_AttributedPoint;
     //
 };
 

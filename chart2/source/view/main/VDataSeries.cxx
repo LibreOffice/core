@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-12 18:08:23 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 10:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #include "chartview/ObjectIdentifier.hxx"
 #include "macros.hxx"
 
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLPROPERTIES_HPP_
+#include <drafts/com/sun/star/chart2/SymbolProperties.hpp>
+#endif
+
 //#include "CommonConverters.hxx"
 
 #ifndef INCLUDED_RTL_MATH_HXX
@@ -111,7 +115,6 @@ void PlottingPositionHelper::setScales( const uno::Sequence< ExplicitScaleData >
 VDataSeries::VDataSeries()
     : m_xShape(NULL)
     , m_xLabelsShape(NULL)
-    , m_aAppearanceOfSeries(12632256) //LIGHT_GRAY is default color for dataseries for testing
     , m_xDataSeries(NULL)
     , m_aDataSequences()
     , m_nPointCount(0)
@@ -125,6 +128,10 @@ VDataSeries::VDataSeries()
     , m_apCaption_AttributedPoint(NULL)
     , m_apLabelPropNames_AttributedPoint(NULL)
     , m_apLabelPropValues_AttributedPoint(NULL)
+
+    , m_nCurrentAttributedPoint(-1)
+    , m_apSymbolProperties_Series(NULL)
+    , m_apSymbolProperties_AttributedPoint(NULL)
 {
 
 }
@@ -156,10 +163,9 @@ void initDoubleValues( uno::Sequence< double >& rDoubleValues,
     }
 }
 
-VDataSeries::VDataSeries( uno::Reference< XDataSeries > xDataSeries, const ShapeAppearance& rDefaultAppearence )
+VDataSeries::VDataSeries( uno::Reference< XDataSeries > xDataSeries )
     : m_xShape(NULL)
     , m_xLabelsShape(NULL)
-    , m_aAppearanceOfSeries(rDefaultAppearence) //LIGHT_GRAY is default color for dataseries for testing
     , m_xDataSeries(xDataSeries)
     , m_aDataSequences()
     , m_nPointCount(0)
@@ -173,6 +179,10 @@ VDataSeries::VDataSeries( uno::Reference< XDataSeries > xDataSeries, const Shape
     , m_apCaption_AttributedPoint(NULL)
     , m_apLabelPropNames_AttributedPoint(NULL)
     , m_apLabelPropValues_AttributedPoint(NULL)
+
+    , m_nCurrentAttributedPoint(-1)
+    , m_apSymbolProperties_Series(NULL)
+    , m_apSymbolProperties_AttributedPoint(NULL)
 {
     uno::Reference<XDataSource> xDataSource =
             uno::Reference<XDataSource>( xDataSeries, uno::UNO_QUERY );
@@ -216,12 +226,6 @@ VDataSeries::VDataSeries( uno::Reference< XDataSeries > xDataSeries, const Shape
     {
         try
         {
-            //get style
-            uno::Any aAFirstColor = xProp->getPropertyValue( C2U( "Color" ) );
-            sal_Int32 nFirstColor;
-            if(aAFirstColor>>=nFirstColor)
-                m_aAppearanceOfSeries.m_nColorData = nFirstColor;
-
             //get CID
             uno::Any aAIdentifier = xProp->getPropertyValue( C2U( "Identifier" ) );
             aAIdentifier >>= m_aIdentifier;
@@ -306,14 +310,41 @@ rtl::OUString VDataSeries::getCategoryString( sal_Int32 index ) const
     return aRet;
 }
 
-ShapeAppearance VDataSeries::getAppearanceOfPoint( sal_Int32 index ) const
+::std::auto_ptr< SymbolProperties > getSymbolPropertiesFromPropertySet(
+        const uno::Reference< beans::XPropertySet >& xProp )
 {
-    return m_aAppearanceOfSeries;
+    ::std::auto_ptr< SymbolProperties > apSymbolProps( new SymbolProperties() );
+    try
+    {
+        if( !(xProp->getPropertyValue( C2U( "SymbolProperties" ) ) >>= *apSymbolProps) )
+            apSymbolProps.reset();
+    }
+    catch( uno::Exception &e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+    return apSymbolProps;
 }
 
-SymbolType VDataSeries::getSymbolTypeOfPoint( sal_Int32 index ) const
+SymbolProperties* VDataSeries::getSymbolProperties( sal_Int32 index ) const
 {
-    return m_aAppearanceOfSeries.m_eSymbolType;
+    SymbolProperties* pRet=NULL;
+    if( isAttributedDataPoint( index ) )
+    {
+        if(!m_apSymbolProperties_AttributedPoint.get() || m_nCurrentAttributedPoint!=index)
+        {
+            m_apSymbolProperties_AttributedPoint = getSymbolPropertiesFromPropertySet( this->getPropertiesOfPoint( index ) );
+            m_nCurrentAttributedPoint = index;
+        }
+        pRet = m_apSymbolProperties_AttributedPoint.get();
+    }
+    else
+    {
+        if(!m_apSymbolProperties_Series.get())
+            m_apSymbolProperties_Series = getSymbolPropertiesFromPropertySet( this->getPropertiesOfPoint( index ) );
+        pRet = m_apSymbolProperties_Series.get();
+    }
+    return pRet;
 }
 
 bool VDataSeries::isAttributedDataPoint( sal_Int32 index ) const
