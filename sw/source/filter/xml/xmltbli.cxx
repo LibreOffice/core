@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-20 10:39:13 $
+ *  last change: $Author: aw $ $Date: 2001-02-27 14:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,7 +476,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                                              sizeof(sXML_value)-1))
             {
                 double fTmp;
-                if (SvXMLUnitConverter::convertNumber(fTmp, rValue))
+                if (SvXMLUnitConverter::convertDouble(fTmp, rValue))
                 {
                     fValue = fTmp;
                     bHasValue = sal_True;
