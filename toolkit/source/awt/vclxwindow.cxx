@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-27 10:37:02 $
+ *  last change: $Author: mt $ $Date: 2002-06-12 10:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,10 @@ VCLXWindow::~VCLXWindow()
 void VCLXWindow::SetWindow( Window* pWindow )
 {
     if ( GetWindow() )
+    {
         GetWindow()->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
+//        GetWindow()->DbgAssertNoEventListeners();
+    }
 
     SetOutputDevice( pWindow );
 
@@ -1444,7 +1447,7 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     ::vos::OGuard aGuard( GetMutex() );
 
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xC( mxAccessibleContext.get(), ::com::sun::star::uno::UNO_QUERY );
-    if ( !xC.is() )
+    if ( !xC.is() && GetWindow() )
     {
         xC = CreateAccessibleContext();
         mxAccessibleContext = xC;
