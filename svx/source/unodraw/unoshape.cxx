@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 11:09:36 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,9 @@
 #include <outlobj.hxx>
 #endif
 
+#include <vector>
+
+
 using namespace ::osl;
 using namespace ::vos;
 using namespace ::rtl;
@@ -392,42 +395,8 @@ sal_Bool SvxShape::queryAggregation( const com::sun::star::uno::Type & rType, co
             return sal_True;
     }
 
-    if( rType == ::getCppuType((const uno::Reference< beans::XPropertyState >*)0) )
-        aAny <<= uno::Reference< beans::XPropertyState >(this);
-    else if( rType == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) )
-        aAny <<= uno::Reference< beans::XPropertySet >(this);
-    else if( rType == ::getCppuType((const uno::Reference< drawing::XShape >*)0) )
-        aAny <<= uno::Reference< drawing::XShape >(this);
-    else if( rType == ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0) )
-        aAny <<= uno::Reference< lang::XTypeProvider >(this);
-    else if( rType == ::getCppuType((const uno::Reference< uno::XAggregation >*)0) )
-        aAny <<= uno::Reference< uno::XAggregation >(this);
-    else if( rType == ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0) )
-        aAny <<= uno::Reference< beans::XMultiPropertySet >(this);
-    else if( rType == ::getCppuType((const uno::Reference< drawing::XShapeDescriptor >*)0) )
-        aAny <<= uno::Reference< drawing::XShapeDescriptor >(this);
-    else if( rType == ::getCppuType((const uno::Reference< document::XActionLockable >*)0) )
-        aAny <<= uno::Reference< document::XActionLockable >(this);
-    else if( rType == ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0) )
-        aAny <<= uno::Reference< lang::XUnoTunnel >(this);
-    else if( rType == ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0) )
-        aAny <<= uno::Reference< drawing::XGluePointsSupplier >(this);
-    else if( rType == ::getCppuType((const uno::Reference< container::XNamed >*)0) )
-        aAny <<= uno::Reference< container::XNamed >(this);
-    else if( rType == ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0) )
-        aAny <<= uno::Reference< lang::XServiceInfo >(this);
-    else if( rType == ::getCppuType((const uno::Reference< container::XChild >*)0) )
-        aAny <<= uno::Reference< container::XChild >(this);
-    else if( rType == ::getCppuType((const uno::Reference< lang::XComponent >*)0) )
-        aAny <<= uno::Reference< lang::XComponent >(this);
-    else if( rType == ::getCppuType((const uno::Reference< uno::XInterface >*)0) )
-        aAny <<= uno::Reference< uno::XInterface >(static_cast< XInterface * >(static_cast< OWeakObject * >(this)));
-    else if( rType == ::getCppuType((const uno::Reference< uno::XWeak >*)0) )
-        aAny <<= uno::Reference< uno::XWeak >(this);
-    else
-        return sal_False;
-
-    return sal_True;
+    aAny = SvxShape_UnoImplHelper::queryAggregation(rType);
+    return aAny.hasValue();
 }
 
 //----------------------------------------------------------------------
@@ -753,7 +722,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                 // Control these pointer again ... it can be, that another instance will be faster then these!
                 if( aTypeSequence.getLength() == 0 )
                 {
-                    aTypeSequence.realloc( 11 );
+                    aTypeSequence.realloc( 12 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
@@ -761,6 +730,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
@@ -784,7 +754,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                 // Control these pointer again ... it can be, that another instance will be faster then these!
                 if( aTypeSequence.getLength() == 0 )
                 {
-                    aTypeSequence.realloc( 13 );
+                    aTypeSequence.realloc( 14 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
@@ -792,6 +762,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
@@ -816,13 +787,14 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                 // Control these pointer again ... it can be, that another instance will be faster then these!
                 if( aTypeSequence.getLength() == 0 )
                 {
-                    aTypeSequence.realloc( 11 );
+                    aTypeSequence.realloc( 12 );
                     uno::Type* pTypes = aTypeSequence.getArray();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
@@ -846,7 +818,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                 // Control these pointer again ... it can be, that another instance will be faster then these!
                 if( aTypeSequence.getLength() == 0 )
                 {
-                    aTypeSequence.realloc( 15 );
+                    aTypeSequence.realloc( 16 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
@@ -854,6 +826,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
@@ -882,7 +855,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                 // Control these pointer again ... it can be, that another instance will be faster then these!
                 if( aTypeSequence.getLength() == 0 )
                 {
-                    aTypeSequence.realloc( 12 );
+                    aTypeSequence.realloc( 13 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
@@ -890,6 +863,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
@@ -914,7 +888,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                 // Control these pointer again ... it can be, that another instance will be faster then these!
                 if( aTypeSequence.getLength() == 0 )
                 {
-                    aTypeSequence.realloc( 12 );
+                    aTypeSequence.realloc( 13 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
@@ -922,6 +896,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
@@ -961,7 +936,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                 // Control these pointer again ... it can be, that another instance will be faster then these!
                 if( aTypeSequence.getLength() == 0 )
                 {
-                    aTypeSequence.realloc( 14 );
+                    aTypeSequence.realloc( 15 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
@@ -969,6 +944,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
@@ -3003,6 +2979,33 @@ uno::Any SAL_CALL SvxShape::_getPropertyDefault( const OUString& aPropertyName )
 
         return GetAnyForItem( aSet, pMap );
     }
+}
+
+// XMultiPropertyStates
+void SvxShape::setAllPropertiesToDefault() throw (uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+    pObj->ClearMergedItem(); // nWhich == 0 => all
+    pModel->SetChanged();
+}
+
+void SvxShape::setPropertiesToDefault(
+    const uno::Sequence<OUString>& aPropertyNames )
+    throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    for ( sal_Int32 pos = 0; pos < aPropertyNames.getLength(); ++pos )
+        setPropertyToDefault( aPropertyNames[pos] );
+}
+
+uno::Sequence<uno::Any> SvxShape::getPropertyDefaults(
+    const uno::Sequence<OUString>& aPropertyNames )
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+           uno::RuntimeException)
+{
+    ::std::vector<uno::Any> ret;
+    for ( sal_Int32 pos = 0; pos < aPropertyNames.getLength(); ++pos )
+        ret.push_back( getPropertyDefault( aPropertyNames[pos] ) );
+    return uno::Sequence<uno::Any>( &ret[0], ret.size() );
 }
 
 //----------------------------------------------------------------------
