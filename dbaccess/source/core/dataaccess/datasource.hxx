@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-08 16:05:02 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
-#include <cppuhelper/implbase7.hxx>
+#ifndef _CPPUHELPER_IMPLBASE8_HXX_
+#include <cppuhelper/implbase8.hxx>
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -164,13 +164,14 @@ typedef std::vector< OWeakConnection > OWeakConnectionArray;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::ImplHelper7 <   ::com::sun::star::lang::XServiceInfo
+typedef ::cppu::ImplHelper8 <   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::lang::XUnoTunnel
                             ,   ::com::sun::star::sdbc::XDataSource
                             ,   ::com::sun::star::sdb::XFormDocumentsSupplier
                             ,   ::com::sun::star::sdb::XReportDocumentsSupplier
                             ,   ::com::sun::star::sdb::XQueryDefinitionsSupplier
                             ,   ::com::sun::star::sdb::XCompletedConnection
+                            ,   ::com::sun::star::lang::XEventListener
                             >   ODatabaseSource_Base;
 
 class ODatabaseSource   :public ::comphelper::OBaseMutex
@@ -254,6 +255,8 @@ public:
 
 // com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+    // XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
 // comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;

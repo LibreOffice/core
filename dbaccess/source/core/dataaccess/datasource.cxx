@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 10:21:30 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,18 @@ void ODatabaseSource::release() throw (RuntimeException)
 {
     OSubComponent::release();
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
+{
+    for (OWeakConnectionArray::iterator i = m_aConnections.begin(); m_aConnections.end() != i; i++)
+    {
+        if(Source.Source == i->get())
+        {
+            *i = OWeakConnection();
+        }
+    }
 
+}
 // XServiceInfo
 //------------------------------------------------------------------------------
 rtl::OUString ODatabaseSource::getImplementationName(  ) throw(RuntimeException)
@@ -797,6 +808,11 @@ Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& use
 
     // build a connection server and return it (no stubs)
     xConn = new OConnection(*this, xSdbcConn, m_xServiceFactory);
+    Reference< XComponent> xComp(xConn,UNO_QUERY);
+    if(xComp.is())
+    {
+        xComp->addEventListener(this);
+    }
     m_aConnections.push_back(OWeakConnection(xConn));
 
     return xConn;

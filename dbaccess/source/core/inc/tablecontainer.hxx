@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:41:49 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ namespace dbaccess
         ::cppu::OWeakObject&        m_rParent;
         ::osl::Mutex&               m_rMutex;
 
-        DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>, Tables);
+        DECLARE_STL_MAP(::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>,::comphelper::UStringMixLess, Tables);
         DECLARE_STL_VECTOR(TablesIterator, TablesIndexAccess);
         Tables                  m_aTables;
         TablesIndexAccess       m_aTablesIndexed;
@@ -127,6 +127,7 @@ namespace dbaccess
         // holds the original tables which where set in construct but they can be null
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterTables;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
 
         sal_Bool m_bConstructed : 1;        // late ctor called
 

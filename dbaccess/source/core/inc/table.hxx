@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-08 14:23:10 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,9 @@ namespace dbaccess
                     ,public OTable_Base
     {
     protected:
-        OWeakConnection                                                                 m_aConnection;
+        //  OWeakConnection                                                                 m_aConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >   m_xTable;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
     // <properties>
         sal_Int32                                                                       m_nPrivileges;
     // </properties>
@@ -147,7 +148,7 @@ namespace dbaccess
             @param          _rDesc          the description of the table, as supplied by the driver
         */
         ODBTable(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable,
                 const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName,
                 const ::rtl::OUString& _rType, const ::rtl::OUString& _rDesc)
@@ -188,7 +189,8 @@ namespace dbaccess
         // XNamed
         virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() const { return m_aConnection; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const { return m_xMetaData; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() const { return m_xMetaData->getConnection(); }
 
         virtual void refreshColumns();
         virtual void refreshKeys();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:42:50 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,6 @@ OConnection::OConnection(ODatabaseSource& _rDB, const Reference< XConnection >& 
             ,m_aQueries(*this, m_aMutex, static_cast< XNameContainer* >(&_rDB.m_aCommandDefinitions), _rDB.m_aCommandDefinitions.getConfigLocation().cloneAsRoot(), _rxORB)
                 // as the queries reroute their refcounting to us, this m_aMutex is okey. If the queries
                 // container would do it's own refcounting, it would have to aquire m_pMutex
-            ,m_aTables(*this, m_aMutex,_rxMaster)
                 // same for tables
             ,m_aTableFilter(_rDB.m_aTableFilter)
             ,m_aTableTypeFilter(_rDB.m_aTableTypeFilter)
@@ -398,6 +397,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const Reference< XConnection >& 
 {
     DBG_CTOR(OConnection,NULL);
 
+    m_pTables = new OTableContainer(*this, m_aMutex,this);
     // initialize the queries
     DBG_ASSERT(_rDB.m_aConfigurationNode.isValid(), "OConnection::OConnection : invalid configuration location of my parent !");
 }
@@ -405,6 +405,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const Reference< XConnection >& 
 //--------------------------------------------------------------------------
 OConnection::~OConnection()
 {
+    delete m_pTables;
     DBG_DTOR(OConnection,NULL);
 }
 
@@ -465,7 +466,7 @@ void OConnection::disposing()
     OSubComponent::disposing();
     OConnectionRerouter::disposing();
 
-    m_aTables.dispose();
+    m_pTables->dispose();
     m_aQueries.dispose();
 
     for (OWeakRefArrayIterator j = m_aComposers.begin(); m_aComposers.end() != j; j++)
@@ -522,7 +523,7 @@ Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException )
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
-    if (!m_aTables.isInitialized())
+    if (!m_pTables->isInitialized())
     {
         // check if out "master connection" can supply tables
         Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
@@ -533,15 +534,15 @@ Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException )
 
         if (xMasterTables.is() && xMasterTables->getTables().is())
         {   // yes -> wrap them
-            m_aTables.construct(xMasterTables->getTables(),m_aTableFilter, m_aTableTypeFilter);
+            m_pTables->construct(xMasterTables->getTables(),m_aTableFilter, m_aTableTypeFilter);
         }
         else
         {   // no -> use an own container
-            m_aTables.construct(m_aTableFilter, m_aTableTypeFilter);
+            m_pTables->construct(m_aTableFilter, m_aTableTypeFilter);
         }
     }
 
-    return static_cast< XNameAccess* >(&m_aTables);
+    return m_pTables;
 }
 
 // XQueriesSupplier
