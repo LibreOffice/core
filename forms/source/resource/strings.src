@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-22 05:55:27 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 22:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ String RID_BASELISTBOX_ERROR_FILLLIST
     Text[ polish ] = "Nie mo�na by�o ustali� zawarto�ci pola kombi lub pola listy.";
     Text[ portuguese_brazilian ] = "ComboBox/ListBox : determine the list contents";
     Text[ japanese ] = "ｺﾝﾎﾞﾎﾞｯｸｽまたはﾘｽﾄﾎﾞｯｸｽの内容が確認できませんでした。";
-    Text[ korean ] = "콤보박스 또는 목록 필드의 내용을 조사할 수 없었습니다.";
+    Text[ korean ] = "콤보 상자 또는 목록 필드의 내용을 조사할 수 없었습니다.";
     Text[ chinese_simplified ] = "无法确定组合框或者列表框内的内容。";
     Text[ chinese_traditional ] = "無法從資料庫內測定組合方塊或清單方塊的內容";
     Text[ arabic ] = "���� ������ ��� ������� ���� ����� ���� �� ���� �����.";
@@ -158,7 +158,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ polish ] = "Wyst�pi� b��d podczas �adowania pola kontrolnego (control). Z tego powodu zamieniono je na symbol wieloznaczny.";
     Text[ portuguese_brazilian ] = "While loading this control an error occured. Thus it was replaced with a placeholder.";
     Text[ japanese ] = "このｺﾝﾄﾛｰﾙの読み込み中にｴﾗｰが発生しました。それが原因でﾜｲﾙﾄﾞｶｰﾄﾞに置換されました。";
-    Text[ korean ] = "이 컨트롤 로드시에 오류가 발생하였습니다. 그러므로 플레이스홀더로 대체되었습니다.";
+    Text[ korean ] = "이 컨트롤 로드시에 오류가 발생하였습니다. 그러므로 플레이스홀더로 변경되었습니다.";
     Text[ chinese_simplified ] = "装入这个字段时出现了一个错误，因此用通配符代替字段。";
     Text[ chinese_traditional ] = "載入這個控製項時發生一個錯誤。但已經用一個通配符替代它。";
     Text[ arabic ] = "��� ��� ����� ����� ���� ������ ���. ���� �� �������� ����� ����.";
@@ -238,7 +238,7 @@ String RID_ERR_LOADING_FORM
     Text[ polish ] = "Nie mo�na by�o za�adowa� zawarto�ci danych.";
     Text[ portuguese_brazilian ] = "The data content could not be loaded.";
     Text[ japanese ] = "ﾃﾞｰﾀ内容が読み込めませんでした。";
-    Text[ korean ] = "데이터 내용을 로드할 수 없었습니다.";
+    Text[ korean ] = "데이터 내용을 로드하지 못했습니다.";
     Text[ chinese_simplified ] = "无法装入数据内容。";
     Text[ chinese_traditional ] = "無法載入資料內容。";
     Text[ arabic ] = "���� ����� ��������� ��������.";
@@ -264,7 +264,7 @@ String RID_ERR_REFRESHING_FORM
     Text[ polish ] = "Nie mo�na by�o zaktualizowa� zawarto�ci danych.";
     Text[ portuguese_brazilian ] = "The data content could not be refreshed.";
     Text[ japanese ] = "ﾃﾞｰﾀ内容が更新できませんでした。";
-    Text[ korean ] = "데이터 내용을 갱신할 수 없었습니다.";
+    Text[ korean ] = "데이터 내용을 업데이트하지 못했습니다.";
     Text[ chinese_simplified ] = "无法更新数据内容。";
     Text[ chinese_traditional ] = "無法更新資料內容。";
     Text[ arabic ] = "���� ����� ��������� ��������.";
@@ -343,7 +343,7 @@ String RID_STR_ERR_DELETERECORD
     Text[ polish ] = "B��d przy usuwaniu aktualnego rekordu";
     Text[ portuguese_brazilian ] = "error deleting the current record";
     Text[ japanese ] = "現在のﾚｺｰﾄﾞを削除する時のｴﾗｰ";
-    Text[ korean ] = "현재 레코드 삭제시에  오류";
+    Text[ korean ] = "현재 레코드 삭제시에 오류";
     Text[ chinese_simplified ] = "在删除当前数据条目时发生错误";
     Text[ chinese_traditional ] = "在刪除資料條目時發生錯誤";
     Text[ arabic ] = "��� ��� ����� ��� ����� ������";
@@ -422,7 +422,7 @@ String RID_STR_OPEN_GRAPHICS
     Text[ polish ] = "Wstaw grafik� z...";
     Text[ portuguese_brazilian ] = "Insert graphics from...";
     Text[ japanese ] = "図の挿入に開く...";
-    Text[ korean ] = "Insert graphics from...";
+    Text[ korean ] = "...에서 그래픽 삭제";
     Text[ chinese_simplified ] = "插入图形从...";
     Text[ chinese_traditional ] = "插入圖形從...";
     Text[ turkish ] = "Insert graphics from...";
@@ -448,13 +448,14 @@ String RID_STR_CLEAR_GRAPHICS
     Text[ polish ] = "Usu� grafik�";
     Text[ portuguese_brazilian ] = "Remove graphics";
     Text[ japanese ] = "図の削除";
-    Text[ korean ] = "Remove graphics";
+    Text[ korean ] = "그래픽 삭제";
     Text[ chinese_simplified ] = "删除图形";
     Text[ chinese_traditional ] = "刪除圖形";
     Text[ turkish ] = "Remove graphics";
     Text[ arabic ] = "Remove graphics";
     Text[ catalan ] = "Remove graphics";
 };
+
 
 
 
