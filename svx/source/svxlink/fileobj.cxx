@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-22 17:26:32 $
+ *  last change: $Author: hr $ $Date: 2001-06-25 17:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,7 +540,7 @@ String SvFileObject::Edit( Window* pParent, so3::SvBaseLink* pLink )
         {
             nType = FILETYPE_GRF;       // falls noch nicht gesetzt
 
-            SvxOpenGraphicDialog aDlg(String(ResId(RID_SVXSTR_EDITGRFLINK, DIALOG_MGR())));
+            SvxOpenGraphicDialog aDlg(ResId(RID_SVXSTR_EDITGRFLINK, DIALOG_MGR()));
             aDlg.EnableLink(sal_False);
             aDlg.SetPath( sFile, sal_True );
             aDlg.SetCurrentFilter( sTmpFilter );
