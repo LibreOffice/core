@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODriver.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 11:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,8 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const ::rtl::OUString& ur
             throw SQLException(aPath,*this,::rtl::OUString(),1000,Any());
     }
     OConnection* pCon = new OConnection(m_pDriverHandle,this);
+    Reference< XConnection > xCon = pCon;
     pCon->Construct(url,info);
-    Reference< XConnection > xCon = NULL;
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
     return xCon;
