@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.38 $
- *  last change: $Author: bmahbod $ $Date: 2001-01-03 22:05:32 $
+ *  $Revision: 1.39 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-05 03:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,42 +704,6 @@ static OSStatus GetGDeviceResolution ( long  *rGDeviceHRes,
 
 // =======================================================================
 
-static OSStatus BeginClip ( SalGraphicsDataPtr rSalGraphicsData )
-{
-    if (    ( rSalGraphicsData->mbClipRegionChanged == TRUE )
-         && ( rSalGraphicsData->mhClipRgn != NULL )
-       )
-    {
-        // Set the clip region
-
-        SetClip( rSalGraphicsData->mhClipRgn );
-
-        // Was there an error after setting the clipping region?
-
-        rSalGraphicsData->mnMacOSStatus = QDErr();
-
-        // Set the new status flag for our port
-
-        rSalGraphicsData->mbClipRegionChanged = FALSE;
-    } // if
-    return rSalGraphicsData->mnMacOSStatus;
-} // BeginClip
-
-// -----------------------------------------------------------------------
-
-static OSStatus EndClip ( SalGraphicsDataPtr rSalGraphicsData )
-{
-    // Set the new status flag for our port
-
-    rSalGraphicsData->mbClipRegionChanged = FALSE;
-
-    return rSalGraphicsData->mnMacOSStatus;
-} // EndClip
-
-// =======================================================================
-
-// =======================================================================
-
 static OSStatus BeginGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 {
     // Previous to entering this function, was there a QD error?
@@ -769,6 +733,25 @@ static OSStatus BeginGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
             SetWhiteBackColor();
             SetBlackForeColor();
+
+            // Now begin to set the clip region
+
+            if (    ( rSalGraphicsData->mbClipRegionChanged == TRUE )
+                 && ( rSalGraphicsData->mhClipRgn != NULL )
+               )
+            {
+                // Set the clip region
+
+                SetClip( rSalGraphicsData->mhClipRgn );
+
+                // Was there an error after setting the clipping region?
+
+                rSalGraphicsData->mnMacOSStatus = QDErr();
+
+                // Set the new status flag for our port
+
+                rSalGraphicsData->mbClipRegionChanged = FALSE;
+            } // if
         } // if
     } // if
 
@@ -801,6 +784,10 @@ static OSStatus EndGraphics ( SalGraphicsDataPtr rSalGraphicsData )
         // Was there a QD error?
 
         rSalGraphicsData->mnMacOSStatus = QDErr();
+
+        // Set the new status flag for clip region
+
+        rSalGraphicsData->mbClipRegionChanged = FALSE;
     } // if
 
     return rSalGraphicsData->mnMacOSStatus;
@@ -1185,16 +1172,9 @@ void SalGraphics::DrawPixel( long nX,
 
     if ( aQDStatus == noErr )
     {
-        aQDStatus = BeginClip( &maGraphicsData );
+        RGBColor aPixelRGBColor =  maGraphicsData.maPenColor;
 
-        if ( aQDStatus == noErr )
-        {
-            RGBColor aPixelRGBColor =  maGraphicsData.maPenColor;
-
-            SetCPixel( nX, nY, &aPixelRGBColor );
-
-            EndClip( &maGraphicsData );
-        } // if
+        SetCPixel( nX, nY, &aPixelRGBColor );
 
         EndGraphics( &maGraphicsData );
     } // if
@@ -1213,18 +1193,11 @@ void SalGraphics::DrawPixel( long      nX,
 
     if ( aQDStatus == noErr )
     {
-        aQDStatus = BeginClip( &maGraphicsData );
+        RGBColor aPixelRGBColor;
 
-        if ( aQDStatus == noErr )
-        {
-            RGBColor aPixelRGBColor;
+        aPixelRGBColor = SALColor2RGBColor( nSalColor );
 
-            aPixelRGBColor = SALColor2RGBColor( nSalColor );
-
-            SetCPixel( nX, nY, &aPixelRGBColor );
-
-            EndClip( &maGraphicsData );
-        } // if
+        SetCPixel( nX, nY, &aPixelRGBColor );
 
         EndGraphics( &maGraphicsData );
     } // if
@@ -1244,41 +1217,34 @@ void SalGraphics::DrawLine( long nX1,
 
     if ( aQDStatus == noErr )
     {
-        aQDStatus = BeginClip( &maGraphicsData );
+        short       nPortPenMode = 0;
+        short       nPenMode     = maGraphicsData.mnPenMode;
+        CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
 
-        if ( aQDStatus == noErr )
+        // What is the current pen mode associated with this graph port?
+
+        nPortPenMode = GetPortPenMode( pCGraf );
+
+        SetPortPenMode( pCGraf, nPenMode );
+
+        MoveTo( nX1, nY1 );
+
+        if ( maGraphicsData.mbPenTransparent == TRUE )
         {
-            short       nPortPenMode = 0;
-            short       nPenMode     = maGraphicsData.mnPenMode;
-            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
-
-            // What is the current pen mode associated with this graph port?
-
-            nPortPenMode = GetPortPenMode( pCGraf );
-
-            SetPortPenMode( pCGraf, nPenMode );
-
-            MoveTo( nX1, nY1 );
-
-            if ( maGraphicsData.mbPenTransparent == TRUE )
-            {
-                SetBlackForeColor();
-            } // if
-            else
-            {
-                RGBColor  aPenColor = maGraphicsData.maPenColor;
-
-                RGBForeColor( &aPenColor );
-            } // else
-
-            MacLineTo( nX2, nY2 );
-
-            // Reset the port to its original pen mode
-
-            SetPortPenMode( pCGraf, nPortPenMode );
-
-            EndClip( &maGraphicsData );
+            SetBlackForeColor();
         } // if
+        else
+        {
+            RGBColor  aPenColor = maGraphicsData.maPenColor;
+
+            RGBForeColor( &aPenColor );
+        } // else
+
+        MacLineTo( nX2, nY2 );
+
+        // Reset the port to its original pen mode
+
+        SetPortPenMode( pCGraf, nPortPenMode );
 
         EndGraphics( &maGraphicsData );
     } // if
@@ -1298,51 +1264,44 @@ void SalGraphics::DrawRect( long  nX,
 
     if ( aQDStatus == noErr )
     {
-        aQDStatus = BeginClip( &maGraphicsData );
+        long      nEndX       = 0;
+        long      nEndY       = 0;
+        RGBColor  aBrushColor = maGraphicsData.maBrushColor;
+        Rect      aRect;
 
-        if ( aQDStatus == noErr )
+        // Compute the second set of (nX,nY) coordinates
+
+        nEndX = nX + nWidth;
+        nEndY = nY + nHeight;
+
+        RGBForeColor( &aBrushColor );
+
+        MoveTo( nX, nY );
+
+        MacSetRect( &aRect, nX, nY, nEndX, nEndY );
+
+        if ( maGraphicsData.mbBrushTransparent == TRUE )
         {
-            long      nEndX       = 0;
-            long      nEndY       = 0;
-            RGBColor  aBrushColor = maGraphicsData.maBrushColor;
-            Rect      aRect;
+            short       nPortPenMode = 0;
+            short       nPenMode     = maGraphicsData.mnPenMode;
+            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
 
-            // Compute the second set of (nX,nY) coordinates
+            // What is the current pen mode associated with this graph port?
 
-            nEndX = nX + nWidth;
-            nEndY = nY + nHeight;
+            nPortPenMode = GetPortPenMode( pCGraf );
 
-            RGBForeColor( &aBrushColor );
+            SetPortPenMode( pCGraf, nPenMode );
 
-            MoveTo( nX, nY );
+            MacFrameRect( &aRect );
 
-            MacSetRect( &aRect, nX, nY, nEndX, nEndY );
+            // Reset the port to its original pen mode
 
-            if ( maGraphicsData.mbBrushTransparent == TRUE )
-            {
-                short       nPortPenMode = 0;
-                short       nPenMode     = maGraphicsData.mnPenMode;
-                CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
-
-                // What is the current pen mode associated with this graph port?
-
-                nPortPenMode = GetPortPenMode( pCGraf );
-
-                SetPortPenMode( pCGraf, nPenMode );
-
-                MacFrameRect( &aRect );
-
-                // Reset the port to its original pen mode
-
-                SetPortPenMode( pCGraf, nPortPenMode );
-            } // if
-            else
-            {
-                PaintRect( &aRect );
-            } // else
-
-            EndClip( &maGraphicsData );
+            SetPortPenMode( pCGraf, nPortPenMode );
         } // if
+        else
+        {
+            PaintRect( &aRect );
+        } // else
 
         EndGraphics( &maGraphicsData );
     } // if
@@ -1362,66 +1321,61 @@ void SalGraphics::DrawPolyLine( ULONG           nPoints,
 
         if ( aQDStatus == noErr )
         {
-            aQDStatus = BeginClip( &maGraphicsData );
+            long        nPolyEdges   = 0;
+            short       nPortPenMode = 0;
+            short       nPenMode     = maGraphicsData.mnPenMode;
+            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
+            PolyHandle  hPolygon     = NULL;
 
-            if ( aQDStatus == noErr )
-            {
-                long        nPolyEdges   = 0;
-                short       nPortPenMode = 0;
-                short       nPenMode     = maGraphicsData.mnPenMode;
-                CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
-                PolyHandle  hPolygon     = NULL;
+            // What is the current pen mode associated with this graph port?
 
-                // What is the current pen mode associated with this graph port?
+            nPortPenMode = GetPortPenMode( pCGraf );
 
-                nPortPenMode = GetPortPenMode( pCGraf );
+            SetBlackForeColor();
 
-                SetBlackForeColor();
+            SetPortPenMode( pCGraf, nPenMode );
 
-                SetPortPenMode( pCGraf, nPenMode );
+            // Construct a polygon
 
-                // Construct a polygon
+            hPolygon = OpenPoly();
 
-                hPolygon = OpenPoly();
-
-                    if ( hPolygon != NULL )
-                    {
-                        MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
-
-                        for ( nPolyEdges = 1;
-                              nPolyEdges < nPoints;
-                              nPolyEdges++
-                            )
-                        {
-                            MacLineTo( pPtAry[nPolyEdges].mnX,
-                                       pPtAry[nPolyEdges].mnY
-                                     );
-                        } // for
-
-                        MacLineTo( pPtAry[0].mnX,  pPtAry[0].mnY );
-                    } // if
-
-                ClosePoly();
-
-                // Did a QD error occur whilst constructing a polygon?
-
-                maGraphicsData.mnMacOSStatus = QDErr();
-
-                if (    ( maGraphicsData.mnMacOSStatus == noErr )
-                     && ( hPolygon != NULL )
-                   )
+                if ( hPolygon != NULL )
                 {
-                    FramePoly( hPolygon );
+                    MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
 
-                    KillPoly( hPolygon );
+                    for ( nPolyEdges = 1;
+                          nPolyEdges < nPoints;
+                          nPolyEdges++
+                        )
+                    {
+                        MacLineTo( pPtAry[nPolyEdges].mnX,
+                                   pPtAry[nPolyEdges].mnY
+                                 );
+                    } // for
+
+                    MacLineTo( pPtAry[0].mnX,
+                               pPtAry[0].mnY
+                             );
                 } // if
 
-                // Reset the port to its original pen mode
+            ClosePoly();
 
-                SetPortPenMode( pCGraf, nPortPenMode );
+            // Did a QD error occur whilst constructing a polygon?
 
-                EndClip( &maGraphicsData );
+            maGraphicsData.mnMacOSStatus = QDErr();
+
+            if (    ( maGraphicsData.mnMacOSStatus == noErr )
+                 && ( hPolygon != NULL )
+               )
+            {
+                FramePoly( hPolygon );
+
+                KillPoly( hPolygon );
             } // if
+
+            // Reset the port to its original pen mode
+
+            SetPortPenMode( pCGraf, nPortPenMode );
 
             EndGraphics( &maGraphicsData );
         } // if
@@ -1442,62 +1396,62 @@ void SalGraphics::DrawPolygon( ULONG            nPoints,
 
         if ( aQDStatus == noErr )
         {
-            aQDStatus = BeginClip( &maGraphicsData );
+            long        nPolyEdges   = 0;
+            short       nPortPenMode = 0;
+            short       nPenMode     = maGraphicsData.mnPenMode;
+            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
+            PolyHandle  hPolygon     = NULL;
+            RGBColor    aPolyColor   = maGraphicsData.maBrushColor;
 
-            if ( aQDStatus == noErr )
-            {
-                long        nPolyEdges   = 0;
-                short       nPortPenMode = 0;
-                short       nPenMode     = maGraphicsData.mnPenMode;
-                CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
-                PolyHandle  hPolygon     = NULL;
-                RGBColor    aPolyColor   = maGraphicsData.maBrushColor;
+            // What is the current pen mode associated with this graph port?
 
-                // What is the current pen mode associated with this graph port?
+            nPortPenMode = GetPortPenMode( pCGraf );
 
-                nPortPenMode = GetPortPenMode( pCGraf );
+            RGBForeColor( &aPolyColor );
 
-                RGBForeColor( &aPolyColor );
+            SetPortPenMode( pCGraf, nPenMode );
 
-                SetPortPenMode( pCGraf, nPenMode );
+            // Construct a polygon
 
-                // Construct a polygon
+            hPolygon = OpenPoly();
 
-                hPolygon = OpenPoly();
-
-                    if ( hPolygon != NULL )
-                    {
-                        MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
-
-                        for ( nPolyEdges = 1; nPolyEdges < nPoints; nPolyEdges ++ )
-                        {
-                            MacLineTo( pPtAry[nPolyEdges].mnX, pPtAry[nPolyEdges].mnY );
-                        } // for
-
-                        MacLineTo( pPtAry[0].mnX,  pPtAry[0].mnY );
-                    } // if
-
-                ClosePoly();
-
-                // Did a QD error occur whilst constructing a polygon?
-
-                maGraphicsData.mnMacOSStatus = QDErr();
-
-                if (    ( maGraphicsData.mnMacOSStatus == noErr )
-                     && ( hPolygon != NULL )
-                   )
+                if ( hPolygon != NULL )
                 {
-                    PaintPoly( hPolygon );
+                    MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
 
-                    KillPoly( hPolygon );
+                    for ( nPolyEdges = 1;
+                          nPolyEdges < nPoints;
+                          nPolyEdges++
+                        )
+                    {
+                        MacLineTo( pPtAry[nPolyEdges].mnX,
+                                   pPtAry[nPolyEdges].mnY
+                                 );
+                    } // for
+
+                    MacLineTo( pPtAry[0].mnX,
+                               pPtAry[0].mnY
+                             );
                 } // if
 
-                // Reset the port to its original pen mode
+            ClosePoly();
 
-                SetPortPenMode( pCGraf, nPortPenMode );
+            // Did a QD error occur whilst constructing a polygon?
 
-                EndClip( &maGraphicsData );
+            maGraphicsData.mnMacOSStatus = QDErr();
+
+            if (    ( maGraphicsData.mnMacOSStatus == noErr )
+                 && ( hPolygon != NULL )
+               )
+            {
+                PaintPoly( hPolygon );
+
+                KillPoly( hPolygon );
             } // if
+
+            // Reset the port to its original pen mode
+
+            SetPortPenMode( pCGraf, nPortPenMode );
 
             EndGraphics( &maGraphicsData );
         } // if
@@ -1519,52 +1473,45 @@ void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
 
         if ( aQDStatus == noErr )
         {
-            aQDStatus = BeginClip( &maGraphicsData );
+            short       nPortPenMode = 0;
+            short       nPenMode     = maGraphicsData.mnPenMode;
+            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
+            RgnHandle   hPolyRgn     = NULL;
+            RGBColor    aPolyColor   = maGraphicsData.maBrushColor;
+            OSStatus    aQDStatus    = noErr;
 
-            if ( aQDStatus == noErr )
+            // What is the current pen mode associated with this graph port?
+
+            nPortPenMode = GetPortPenMode( pCGraf );
+
+            RGBForeColor( &aPolyColor );
+
+            SetPortPenMode( pCGraf, nPenMode );
+
+            // Construct a polygon region
+
+            hPolyRgn = GetPolygonRgn(  nPoly,
+                                       pPoints,
+                                       ppPtAry,
+                                      &aQDStatus
+                                    );
+
+            if ( ( hPolyRgn != NULL ) && ( aQDStatus == noErr ) )
             {
-                short       nPortPenMode = 0;
-                short       nPenMode     = maGraphicsData.mnPenMode;
-                CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
-                RgnHandle   hPolyRgn     = NULL;
-                RGBColor    aPolyColor   = maGraphicsData.maBrushColor;
-                OSStatus    aQDStatus    = noErr;
+                MacPaintRgn( hPolyRgn );
 
-                // What is the current pen mode associated with this graph port?
+                DisposeRgn( hPolyRgn );
 
-                nPortPenMode = GetPortPenMode( pCGraf );
+                aQDStatus = QDErr();
 
-                RGBForeColor( &aPolyColor );
-
-                SetPortPenMode( pCGraf, nPenMode );
-
-                // Construct a polygon region
-
-                hPolyRgn = GetPolygonRgn(  nPoly,
-                                           pPoints,
-                                           ppPtAry,
-                                          &aQDStatus
-                                        );
-
-                if ( ( hPolyRgn != NULL ) && ( aQDStatus == noErr ) )
-                {
-                    MacPaintRgn( hPolyRgn );
-
-                    DisposeRgn( hPolyRgn );
-
-                    aQDStatus = QDErr();
-
-                    hPolyRgn = NULL;
-                } // if
-
-                // Reset the port to its original pen mode
-
-                SetPortPenMode( pCGraf, nPortPenMode );
-
-                maGraphicsData.mnMacOSStatus = aQDStatus;
-
-                EndClip( &maGraphicsData );
+                hPolyRgn = NULL;
             } // if
+
+            // Reset the port to its original pen mode
+
+            SetPortPenMode( pCGraf, nPortPenMode );
+
+            maGraphicsData.mnMacOSStatus = aQDStatus;
 
             EndGraphics( &maGraphicsData );
         } // if
@@ -1588,78 +1535,71 @@ void SalGraphics::CopyBits( const SalTwoRect  *pPosAry,
 
         if ( aQDStatus == noErr )
         {
-            aQDStatus = BeginClip( &maGraphicsData );
+            const BitMap  *pDstBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
 
-            if ( aQDStatus == noErr )
+            if ( pDstBitMap != NULL )
             {
-                const BitMap  *pDstBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
+                maGraphicsData.mnMacOSStatus = LockPortBits( maGraphicsData.mpCGrafPort );
 
-                if ( pDstBitMap != NULL )
+                if ( maGraphicsData.mnMacOSStatus == noErr )
                 {
-                    maGraphicsData.mnMacOSStatus = LockPortBits( maGraphicsData.mpCGrafPort );
+                    Rect       aSrcRect;
+                    Rect       aDstRect;
+                    Rect       aPortBoundsRect;
+                    RgnHandle  hMaskRgn  = NULL;  // Mask Region for QD CopyBits
+                    short      nCopyMode = 0;
 
-                    if ( maGraphicsData.mnMacOSStatus == noErr )
+                    SalTwoRect2SQDSrcRect( pPosAry, &aSrcRect );
+
+                    SalTwoRect2SQDDstRect( pPosAry, &aDstRect );
+
+                    GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
+
+                    CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
+
+                    nCopyMode = SelectCopyMode( &maGraphicsData );
+
+                    // Now we can call QD CopyBits to copy the bits from source rectangle
+                    // to the destination rectangle
+
+                    if (    ( pSrcGraphics != NULL )
+                         && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL )
+                       )
                     {
-                        Rect       aSrcRect;
-                        Rect       aDstRect;
-                        Rect       aPortBoundsRect;
-                        RgnHandle  hMaskRgn  = NULL;  // Mask Region for QD CopyBits
-                        short      nCopyMode = 0;
+                        const BitMap  *pSrcBitMap = GetPortBitMapForCopyBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
 
-                        SalTwoRect2SQDSrcRect( pPosAry, &aSrcRect );
-
-                        SalTwoRect2SQDDstRect( pPosAry, &aDstRect );
-
-                        GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
-
-                        CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
-
-                        nCopyMode = SelectCopyMode( &maGraphicsData );
-
-                        // Now we can call QD CopyBits to copy the bits from source rectangle
-                        // to the destination rectangle
-
-                        if (    ( pSrcGraphics != NULL )
-                             && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL )
-                           )
+                        if ( pSrcBitMap != NULL )
                         {
-                            const BitMap  *pSrcBitMap = GetPortBitMapForCopyBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+                            maGraphicsData.mnMacOSStatus
+                                = LockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
 
-                            if ( pSrcBitMap != NULL )
+                            if ( maGraphicsData.mnMacOSStatus == noErr )
                             {
-                                maGraphicsData.mnMacOSStatus
-                                    = LockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+                                ::CopyBits (  pSrcBitMap,
+                                              pDstBitMap,
+                                             &aSrcRect,
+                                             &aDstRect,
+                                              nCopyMode,
+                                              hMaskRgn
+                                           );
 
-                                if ( maGraphicsData.mnMacOSStatus == noErr )
-                                {
-                                    ::CopyBits (  pSrcBitMap,
-                                                  pDstBitMap,
-                                                 &aSrcRect,
-                                                 &aDstRect,
-                                                  nCopyMode,
-                                                  hMaskRgn
-                                               );
-
-                                    UnlockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
-                                } // if
+                                UnlockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
                             } // if
                         } // if
-                        else
-                        {
-                            ::CopyBits (  pDstBitMap,
-                                          pDstBitMap,
-                                         &aSrcRect,
-                                         &aDstRect,
-                                          nCopyMode,
-                                          hMaskRgn
-                                       );
-                        } // else
-
-                        UnlockPortBits( maGraphicsData.mpCGrafPort );
                     } // if
-                } // if
+                    else
+                    {
+                        ::CopyBits (  pDstBitMap,
+                                      pDstBitMap,
+                                     &aSrcRect,
+                                     &aDstRect,
+                                      nCopyMode,
+                                      hMaskRgn
+                                   );
+                    } // else
 
-                EndClip( &maGraphicsData );
+                    UnlockPortBits( maGraphicsData.mpCGrafPort );
+                } // if
             } // if
 
             EndGraphics( &maGraphicsData );
@@ -1688,53 +1628,46 @@ void SalGraphics::CopyArea( long    nDstX,
 
         if ( aQDStatus == noErr )
         {
-            aQDStatus = BeginClip( &maGraphicsData );
+            const BitMap  *pSrcBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
+            const BitMap  *pDstBitMap = pSrcBitMap;
 
-            if ( aQDStatus == noErr )
+            if ( pSrcBitMap != NULL )
             {
-                const BitMap  *pSrcBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
-                const BitMap  *pDstBitMap = pSrcBitMap;
+                maGraphicsData.mnMacOSStatus = LockPortBits( maGraphicsData.mpCGrafPort );
 
-                if ( pSrcBitMap != NULL )
+                if ( maGraphicsData.mnMacOSStatus == noErr )
                 {
-                    maGraphicsData.mnMacOSStatus = LockPortBits( maGraphicsData.mpCGrafPort );
+                    short      nCopyMode  = 0;
+                    long       nDstWidth  = nSrcWidth;
+                    long       nDstHeight = nSrcHeight;
+                    RgnHandle  hMaskRgn   = NULL;  // Mask Region for QD CopyBits
+                    Rect       aSrcRect;
+                    Rect       aDstRect;
+                    Rect       aPortBoundsRect;
 
-                    if ( maGraphicsData.mnMacOSStatus == noErr )
-                    {
-                        short      nCopyMode  = 0;
-                        long       nDstWidth  = nSrcWidth;
-                        long       nDstHeight = nSrcHeight;
-                        RgnHandle  hMaskRgn   = NULL;  // Mask Region for QD CopyBits
-                        Rect       aSrcRect;
-                        Rect       aDstRect;
-                        Rect       aPortBoundsRect;
+                    GetQDRect ( nSrcX, nSrcY, nSrcWidth, nSrcHeight, &aSrcRect );
 
-                        GetQDRect ( nSrcX, nSrcY, nSrcWidth, nSrcHeight, &aSrcRect );
+                    GetQDRect ( nDstX, nDstY, nDstWidth, nDstHeight, &aDstRect );
 
-                        GetQDRect ( nDstX, nDstY, nDstWidth, nDstHeight, &aDstRect );
+                    GetPortBounds( maGraphicsData.mpCGrafPort, &aPortBoundsRect );
 
-                        GetPortBounds( maGraphicsData.mpCGrafPort, &aPortBoundsRect );
+                    CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
 
-                        CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
+                    nCopyMode = SelectCopyMode( &maGraphicsData );
 
-                        nCopyMode = SelectCopyMode( &maGraphicsData );
+                    // Now we can call QD CopyBits to copy the bits from source rectangle
+                    // to the destination rectangle
 
-                        // Now we can call QD CopyBits to copy the bits from source rectangle
-                        // to the destination rectangle
+                    ::CopyBits (  pSrcBitMap,
+                                  pDstBitMap,
+                                 &aSrcRect,
+                                 &aDstRect,
+                                  nCopyMode,
+                                  hMaskRgn
+                               );
 
-                        ::CopyBits (  pSrcBitMap,
-                                      pDstBitMap,
-                                     &aSrcRect,
-                                     &aDstRect,
-                                      nCopyMode,
-                                      hMaskRgn
-                                   );
-
-                        UnlockPortBits( maGraphicsData.mpCGrafPort );
-                    } // if
+                    UnlockPortBits( maGraphicsData.mpCGrafPort );
                 } // if
-
-                EndClip( &maGraphicsData );
             } // if
 
             EndGraphics( &maGraphicsData );
@@ -1744,41 +1677,65 @@ void SalGraphics::CopyArea( long    nDstX,
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
-                              const SalBitmap& rSalBitmap )
+void SalGraphics::DrawBitmap( const SalTwoRect*  pPosAry,
+                              const SalBitmap&   rSalBitmap
+                            )
 {
-}
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::DrawBitmap 1 not yet implemented!\n"
+           );
+} // SalGraphics::DrawBitmap
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
-                              const SalBitmap& rSalBitmap,
-                              SalColor nTransparentColor )
+                              const SalBitmap&  rSalBitmap,
+                              SalColor          nTransparentColor
+                            )
 {
-}
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::DrawBitmap 2 not yet implemented!\n"
+           );
+} // SalGraphics::DrawBitmap
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
-                              const SalBitmap& rSalBitmap,
-                              const SalBitmap& rTransparentBitmap )
+void SalGraphics::DrawBitmap( const SalTwoRect*  pPosAry,
+                              const SalBitmap&   rSalBitmap,
+                              const SalBitmap&   rTransparentBitmap
+                            )
 {
-}
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::DrawBitmap 3 not yet implemented!\n"
+           );
+} // SalGraphics::DrawBitmap
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawMask( const SalTwoRect* pPosAry,
-                            const SalBitmap& rSalBitmap,
-                            SalColor nMaskColor )
+void SalGraphics::DrawMask( const SalTwoRect*  pPosAry,
+                            const SalBitmap&   rSalBitmap,
+                            SalColor           nMaskColor
+                          )
 {
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::DrawMask not yet implemented!\n"
+           );
 } // SalGraphics::DrawMask
 
 // -----------------------------------------------------------------------
 
-SalBitmap* SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY )
+SalBitmap* SalGraphics::GetBitmap( long  nX,
+                                   long  nY,
+                                   long  nDX,
+                                   long  nDY
+                                 )
 {
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::GetBitmap not yet implemented!\n"
+           );
+
     return NULL;
-}
+} // SalGraphics::GetBitmap
 
 // -----------------------------------------------------------------------
 
@@ -1801,46 +1758,98 @@ SalColor SalGraphics::GetPixel( long nX,
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::Invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
+void SalGraphics::Invert( long       nX,
+                          long       nY,
+                          long       nWidth,
+                          long       nHeight,
+                          SalInvert  nFlags
+                        )
 {
-}
+    // Implementation not yet complete
+
+    if ( maGraphicsData.mpCGrafPort != NULL )
+    {
+        OSStatus aQDStatus = noErr;
+
+        aQDStatus = BeginGraphics( &maGraphicsData );
+
+        if ( aQDStatus == noErr )
+        {
+            Rect   aRect;
+            short  left   = (short)nX;
+            short  top    = (short)nY;
+            short  right  = (short)nX + (short)nWidth;
+            short  bottom = (short)nY + (short)nHeight;
+
+            MacSetRect( &aRect, left, top, right, bottom );
+
+            ::MacInvertRect ( &aRect );
+
+            EndGraphics( &maGraphicsData );
+        } // if
+    } // if
+} // SalGraphics::Invert
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::Invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
+void SalGraphics::Invert( ULONG            nPoints,
+                          const SalPoint*  pPtAry,
+                          SalInvert        nSalFlags
+                        )
 {
-}
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::Invert 2 not yet implemented!\n"
+           );
+} // SalGraphics::Invert
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight,
-              void* pPtr, ULONG nSize )
+BOOL SalGraphics::DrawEPS( long   nX,
+                           long   nY,
+                           long   nWidth,
+                           long   nHeight,
+                           void*  pPtr,
+                           ULONG  nSize
+                         )
 {
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::DrawEPS not yet implemented!\n"
+           );
+
     return FALSE;
-}
+} // SalGraphics::DrawEPS
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::SetTextColor( SalColor nSalColor )
 {
     maGraphicsData.maFontColor = SALColor2RGBColor( nSalColor );
-}
+} // SalGraphics::SetTextColor
 
 // -----------------------------------------------------------------------
 
 USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
 {
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::SetFont not yet implemented!\n"
+           );
+
     return 0;
-}
+} // SalGraphics::SetFont
 
 // -----------------------------------------------------------------------
 
-long SalGraphics::GetCharWidth( sal_Unicode nChar1, sal_Unicode nChar2, long* pWidthAry )
+long SalGraphics::GetCharWidth( sal_Unicode  nChar1,
+                                sal_Unicode  nChar2,
+                                long*        pWidthAry
+                              )
 {
-    // Stub code: we have not yet written any interfaces to native fonts.
-    // However, we need to get some font info in order to continue porting.
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::GetCharWidth not yet implemented!\n"
+           );
+
     return 10;
-}
+} // SalGraphics::GetCharWidth
 
 // -----------------------------------------------------------------------
 
@@ -1854,27 +1863,38 @@ void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
 
     pMetric->mnAscent = 10;
     pMetric->mnDescent = 10;
-}
+
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::GetFontMetric not yet implemented!\n"
+           );
+} // SalGraphics::GetFontMetric
 
 // -----------------------------------------------------------------------
 
-ULONG SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
+ULONG SalGraphics::GetKernPairs( ULONG              nPairs,
+                                 ImplKernPairData*  pKernPairs
+                               )
 {
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::GetKernPairs not yet implemented!\n"
+           );
+
     return 0;
-}
+} // SalGraphics::GetKernPairs
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::GetDevFontList( ImplDevFontList* pList )
 {
-    // Stub code: we have not yet written any interfaces to native fonts.
-    // However, we need to create at least one fake font to continue our
-    // porting.
     ImplFontData *pFontData = new ImplFontData;
     pFontData->mnWidth = 10;
     pFontData->mnHeight = 10;
     pList->Add( pFontData );
-}
+
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::GetDevFontList not yet implemented!\n"
+           );
+} // SalGraphics::GetDevFontList
 
 // -----------------------------------------------------------------------
 
@@ -1894,27 +1914,21 @@ void SalGraphics::DrawText( long                nX,
     {
         if ( ( pStr != NULL ) && ( nLen > 0 ) )
         {
-            ByteString  aByteString( pStr, nLen, gsl_getSystemTextEncoding() );
+            ByteString   aByteString( pStr, nLen, gsl_getSystemTextEncoding() );
 
-            aQDStatus = BeginClip( &maGraphicsData );
+            const char  *pTextBuffer = aByteString.GetBuffer();
 
-            if ( aQDStatus == noErr )
+            if ( pTextBuffer != NULL )
             {
                 short           nFirstByte     = 0;
                 short           nByteCount     = nLen;
-                const char     *pTextBuffer    = aByteString.GetBuffer();
                 const RGBColor  aFontForeColor = maGraphicsData.maFontColor;
 
-                if ( pTextBuffer != NULL )
-                {
-                    RGBForeColor( &aFontForeColor );
+                RGBForeColor( &aFontForeColor );
 
-                    MoveTo( nX, nY );
+                MoveTo( nX, nY );
 
-                    ::MacDrawText( pTextBuffer, nFirstByte, nByteCount );
-                } // if
-
-                EndClip( &maGraphicsData );
+                ::MacDrawText( pTextBuffer, nFirstByte, nByteCount );
             } // if
         } // if
 
@@ -1924,27 +1938,48 @@ void SalGraphics::DrawText( long                nX,
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawTextArray( long nX, long nY,
-                                 const xub_Unicode* pStr, xub_StrLen nLen,
-                                 const long* pDXAry )
+void SalGraphics::DrawTextArray( long                nX,
+                                 long                nY,
+                                 const xub_Unicode*  pStr,
+                                 xub_StrLen          nLen,
+                                 const long*         pDXAry
+                               )
 {
-}
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::DrawTextArray not yet implemented!\n"
+           );
+} // SalGraphics::DrawTextArray
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphBoundRect( xub_Unicode cChar, long* pX, long* pY,
-                                     long* pWidth, long* pHeight )
+BOOL SalGraphics::GetGlyphBoundRect( xub_Unicode  cChar,
+                                     long*        pX,
+                                     long*        pY,
+                                     long*        pWidth,
+                                     long*        pHeight
+                                   )
 {
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::GetGlyphBoundRect not yet implemented!\n"
+           );
+
     return FALSE;
-}
+} // SalGraphics::GetGlyphBoundRect
 
 // -----------------------------------------------------------------------
 
-ULONG SalGraphics::GetGlyphOutline( xub_Unicode cChar, USHORT** ppPolySizes,
-                                    SalPoint** ppPoints, BYTE** ppFlags )
+ULONG SalGraphics::GetGlyphOutline( xub_Unicode  cChar,
+                                    USHORT**     ppPolySizes,
+                                    SalPoint**   ppPoints,
+                                    BYTE**       ppFlags
+                                  )
 {
+    fprintf( stderr,
+             "<<WARNING>> SalGraphics::GetGlyphOutline not yet implemented!\n"
+           );
+
     return 0;
-}
+} // SalGraphics::GetGlyphOutline
 
 // =======================================================================
 
