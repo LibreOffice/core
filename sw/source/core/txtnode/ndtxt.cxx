@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:35:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 10:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_I18N_XINPUTSEQUENCECHECKER_HPP_
-#include <drafts/com/sun/star/i18n/InputSequenceCheckMode.hpp>
+#ifndef _COM_SUN_STAR_I18N_XINPUTSEQUENCECHECKER_HPP_
+#include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
@@ -1656,7 +1656,7 @@ SwTxtNode& SwTxtNode::Insert( const XubString   &rStr,
                 cChar = rStr.GetChar( nI++ );
                 if ( pCheckIt->xCheck->checkInputSequence(
                         aText, nTmpPos - 1, cChar,
-                        ::drafts::com::sun::star::i18n::InputSequenceCheckMode::BASIC ) )
+                        ::com::sun::star::i18n::InputSequenceCheckMode::BASIC ) )
                 {
                     // character can be inserted
                     aText.Insert( cChar, nTmpPos++ );
