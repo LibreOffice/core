@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:36:16 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,10 +172,24 @@
 #ifndef _EMBOBJ_HXX
 #include <so3/embobj.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGES_HPP_
+#include <com/sun/star/sheet/XNamedRanges.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGEFLAG_HPP_
+#include <com/sun/star/sheet/NamedRangeFlag.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGE_HPP_
+#include <com/sun/star/sheet/XNamedRange.hpp>
+#endif
 
 #define SC_LOCALE           "Locale"
 #define SC_STANDARDFORMAT   "StandardFormat"
 #define SC_CURRENCYSYMBOL   "CurrencySymbol"
+#define SC_NAMEDRANGES      "NamedRanges"
+#define SC_REPEAT_COLUMN "repeat-column"
+#define SC_REPEAT_ROW "repeat-row"
+#define SC_FILTER "filter"
+#define SC_PRINT_RANGE "print-range"
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
@@ -2275,6 +2289,110 @@ void SAL_CALL ScXMLImport::startDocument(void)
     UnlockSolarMutex();
 }
 
+sal_Int32 ScXMLImport::GetRangeType(const rtl::OUString sRangeType) const
+{
+    sal_Int32 nRangeType = 0;
+    rtl::OUStringBuffer sBuffer;
+    sal_Int16 i = 0;
+    while (i <= sRangeType.getLength())
+    {
+        if ((sRangeType[i] == ' ') || (i == sRangeType.getLength()))
+        {
+            rtl::OUString sTemp = sBuffer.makeStringAndClear();
+            if (sTemp.compareToAscii(SC_REPEAT_COLUMN) == 0)
+                nRangeType |= sheet::NamedRangeFlag::COLUMN_HEADER;
+            else if (sTemp.compareToAscii(SC_REPEAT_ROW) == 0)
+                nRangeType |= sheet::NamedRangeFlag::ROW_HEADER;
+            else if (sTemp.compareToAscii(SC_FILTER) == 0)
+                 nRangeType |= sheet::NamedRangeFlag::FILTER_CRITERIA;
+            else if (sTemp.compareToAscii(SC_PRINT_RANGE) == 0)
+                 nRangeType |= sheet::NamedRangeFlag::PRINT_AREA;
+        }
+        else if (i < sRangeType.getLength())
+            sBuffer.append(sRangeType[i]);
+        i++;
+    }
+    return nRangeType;
+}
+
+void ScXMLImport::SetNamedRanges()
+{
+    ScMyNamedExpressions* pNamedExpressions = GetNamedExpressions();
+    if (pNamedExpressions)
+    {
+        uno::Reference <beans::XPropertySet> xPropertySet (GetModel(), uno::UNO_QUERY);
+        if (xPropertySet.is())
+        {
+            uno::Any aNamedRanges = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NAMEDRANGES)));
+            uno::Reference <sheet::XNamedRanges> xNamedRanges;
+            if (aNamedRanges >>= xNamedRanges)
+            {
+                ScMyNamedExpressions::iterator aItr = pNamedExpressions->begin();
+                ScMyNamedExpressions::const_iterator aEndItr = pNamedExpressions->end();
+                table::CellAddress aCellAddress;
+                rtl::OUString sTempContent(RTL_CONSTASCII_USTRINGPARAM("0"));
+                while (aItr != aEndItr)
+                {
+                    sal_Int32 nOffset(0);
+                    if (ScXMLConverter::GetAddressFromString(
+                        aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), nOffset ))
+                    {
+                        try
+                        {
+                            xNamedRanges->addNewByName((*aItr)->sName, sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
+                        }
+                        catch( uno::RuntimeException& r )
+                        {
+                            DBG_ERROR("here are some Named Ranges with the same name");
+                            uno::Reference < container::XIndexAccess > xIndex(xNamedRanges, uno::UNO_QUERY);
+                            if (xIndex.is())
+                            {
+                                sal_Int32 nMax(xIndex->getCount());
+                                sal_Bool bInserted(sal_False);
+                                sal_Int32 nCount(1);
+                                rtl::OUStringBuffer sName((*aItr)->sName);
+                                sName.append(sal_Unicode('_'));
+                                while (!bInserted && nCount <= nMax)
+                                {
+                                    rtl::OUStringBuffer sTemp(sName);
+                                    sTemp.append(rtl::OUString::valueOf(nCount));
+                                    try
+                                    {
+                                        xNamedRanges->addNewByName(sTemp.makeStringAndClear(), sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
+                                        bInserted = sal_True;
+                                    }
+                                    catch( uno::RuntimeException& rE )
+                                    {
+                                        ++nCount;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    aItr++;
+                }
+                aItr = pNamedExpressions->begin();
+                while (aItr != aEndItr)
+                {
+                    sal_Int32 nOffset(0);
+                    if (ScXMLConverter::GetAddressFromString(
+                        aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), nOffset ))
+                    {
+                        sTempContent = (*aItr)->sContent;
+                        ScXMLConverter::ParseFormula(sTempContent, (*aItr)->bIsExpression);
+                        uno::Any aNamedRange = xNamedRanges->getByName((*aItr)->sName);
+                        uno::Reference <sheet::XNamedRange> xNamedRange;
+                        if (aNamedRange >>= xNamedRange)
+                            xNamedRange->setContent(sTempContent);
+                    }
+                    delete *aItr;
+                    aItr = pNamedExpressions->erase(aItr);
+                }
+            }
+        }
+    }
+}
+
 void SAL_CALL ScXMLImport::endDocument(void)
     throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
 {
@@ -2315,6 +2433,7 @@ void SAL_CALL ScXMLImport::endDocument(void)
                     }
                 }
             }
+            SetNamedRanges();
         }
         GetProgressBarHelper()->End();  // make room for subsequent SfxProgressBars
         if (pDoc)
