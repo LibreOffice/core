@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:19:50 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,17 @@
 #include "ddelink.hxx"
 #include "validat.hxx"
 #include "progress.hxx"
+#include "editutil.hxx"
+#ifndef _EDITOBJ_HXX
+#include <svx/editobj.hxx>
+#endif
+#define ITEMID_FIELD EE_FEATURE_FIELD
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
+#endif
+#ifndef _SVX_FLDITEM_HXX
+#include <svx/flditem.hxx>
+#endif
 
 #ifndef _SVT_BROADCAST_HXX
 #include <svtools/broadcast.hxx>
@@ -1344,7 +1355,11 @@ void ScFormulaCell::Interpret()
             bRunning = TRUE;
             p->Interpret();
             bRunning = FALSE;
-            if( pCode->GetError()
+                        // Do not create a HyperLink() cell if the formula results in an error.
+                if( pCode->GetError() && pCode->IsHyperLink())
+                pCode->SetHyperLink(FALSE);
+
+                if( pCode->GetError()
              && pCode->GetError() != errCircularReference )
             {
                 bDirty = FALSE;
@@ -1463,7 +1478,7 @@ void ScFormulaCell::Interpret()
                 bChanged = TRUE;
             else
 #else
-            if( cMatrixFlag != MM_FORMULA )
+            if( cMatrixFlag != MM_FORMULA && !pCode->IsHyperLink() )
 #endif
             {   // mit linker oberer Ecke weiterleben
                 pMatrix->Delete();
@@ -1633,6 +1648,66 @@ void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
         nBits = (nBits & ~RECALCMODE_EMASK) | RECALCMODE_NORMAL;
     }
     pCode->AddRecalcMode( nBits );
+}
+
+// Dynamically create the URLField on a mouse-over action on a hyperlink() cell.
+EditTextObject* ScFormulaCell::CreateURLObject()
+{
+    String aCellText;
+    String aURL;
+    String aCellString;
+
+    Color* pColor;
+
+    // Cell Text uses the Cell format while the URL uses
+    // the default format for the type.
+    ULONG nCellFormat = pDocument->GetNumberFormat( aPos );
+    SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
+
+    if ( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
+        nCellFormat = GetStandardFormat( *pFormatter,nCellFormat );
+
+   ULONG nURLFormat = ScGlobal::GetStandardFormat( *pFormatter,nCellFormat, NUMBERFORMAT_NUMBER);
+
+    if ( IsValue() )
+    {
+        double fValue = GetValue();
+        pFormatter->GetOutputString( GetValue(), nCellFormat, aCellText, &pColor );
+    }
+    else
+    {
+        GetString( aCellString );
+        pFormatter->GetOutputString( aCellString, nCellFormat, aCellText, &pColor );
+    }
+
+    if(pMatrix)
+    {
+        BOOL bIsString;
+        // determine if the matrix result is a string or value.
+        const MatValue* pMatVal = pMatrix->Get(0, 1, bIsString);
+        if (pMatVal)
+    {
+            if (bIsString)
+                aURL = pMatVal->GetString();
+            else
+                pFormatter->GetOutputString( pMatVal->fVal, nURLFormat, aURL, &pColor );
+    }
+    }
+
+    if(!aURL.Len())
+    {
+        if(IsValue())
+            pFormatter->GetOutputString( GetValue(), nURLFormat, aURL, &pColor );
+        else
+            pFormatter->GetOutputString( aCellString, nURLFormat, aURL, &pColor );
+    }
+
+    SvxURLField aUrlField( aURL, aCellText, SVXURLFORMAT_APPDEFAULT);
+    EditEngine& rEE = pDocument->GetEditEngine();
+    rEE.SetText( EMPTY_STRING );
+    rEE.QuickInsertField( SvxFieldItem( aUrlField ), ESelection( 0xFFFF, 0xFFFF ) );
+
+    return rEE.CreateTextObject();
 }
 
 //------------------------------------------------------------------------
