@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:39:14 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,7 @@ using namespace ::xmloff::token;
 #define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context }
 #define GMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context)
 #define DPMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_DRAWING_PAGE,context)
+#define TMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TEXT,context)
 
 //////////////////////////////////////////////////////////////////////////////
 // entry list for graphic properties
@@ -313,7 +314,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "IsMirrored",                     XML_NAMESPACE_DRAW, XML_MIRROR,                 XML_TYPE_BOOL, 0 ),
 
     // animation text attributes
-    GMAP( "TextAnimationKind",              XML_NAMESPACE_STYLE,XML_TEXT_BLINKING,          XML_TYPE_TEXT_ANIMATION_BLINKING, CTF_TEXTANIMATION_BLINKING ),
+    TMAP( "TextAnimationKind",              XML_NAMESPACE_STYLE,XML_TEXT_BLINKING,          XML_TYPE_TEXT_ANIMATION_BLINKING, CTF_TEXTANIMATION_BLINKING ),
     GMAP( "TextAnimationKind",              XML_NAMESPACE_TEXT, XML_ANIMATION,              XML_TYPE_TEXT_ANIMATION, CTF_TEXTANIMATION_KIND ),
     GMAP( "TextAnimationDirection",         XML_NAMESPACE_TEXT, XML_ANIMATION_DIRECTION,    XML_TYPE_TEXT_ANIMATION_DIRECTION, 0 ),
     GMAP( "TextAnimationStartInside",       XML_NAMESPACE_TEXT, XML_ANIMATION_START_INSIDE, XML_TYPE_BOOL, 0 ),
