@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tbe $ $Date: 2002-06-21 08:47:18 $
+ *  last change: $Author: tbe $ $Date: 2002-06-21 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,7 +591,7 @@ uno::Reference< accessibility::XAccessibleRelationSet > VCLXAccessibleComponent:
     if ( pWindow )
     {
         Window *pLabeledBy = pWindow->GetLabeledBy();
-        if( pLabeledBy )
+        if ( pLabeledBy )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
             aSequence[0] = pLabeledBy->GetAccessible();
