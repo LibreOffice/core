@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 14:34:28 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 15:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2697,28 +2697,9 @@ Menu RID_NEW_FORM
         MenuItem
         {
             Identifier = ID_FORM_NEW_PILOT;
-            Text = "~AutoPilot";
-            Text [ english ] = "~AutoPilot";
-            Text [ english_us ] = "A~utoPilot";
-            Text[ portuguese ] = "A~utoPiloto";
-            Text[ russian ] = "~Àâòîïèëîò";
-            Text[ greek ] = "A~utoPilot";
-            Text[ dutch ] = "~AutoPiloot";
-            Text[ french ] = "~AutoPilote";
-            Text[ spanish ] = "A~utoPiloto";
-            Text[ finnish ] = "~Automaattinen ohjaus";
-            Text[ italian ] = "A~utoPilot";
-            Text[ danish ] = "A~utoPilot";
-            Text[ swedish ] = "A~utoPilot";
-            Text[ polish ] = "A~utoPilot";
-            Text[ portuguese_brazilian ] = "A~utoPilot";
-            Text[ japanese ] = "µ°ÄÊß²Û¯Ä(~U)";
-            Text[ korean ] = "A~utoPilot";
-            Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼þÖúÀí";
-            Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z";
-            Text[ turkish ] = "A~utoPilot";
-            Text[ arabic ] = "A~utoPilot";
-            Text[ catalan ] = "A~utoPilot";
+            Text = "~AutoPilot...";
+            Text [ english ] = "~AutoPilot...";
+            Text [ english_us ] = "A~utoPilot...";
         };
         MenuItem
         {
@@ -2727,28 +2708,9 @@ Menu RID_NEW_FORM
         MenuItem
         {
             Identifier = ID_FORM_NEW_TEMPLATE;
-            Text = "Aus ~Vorlage";
-            Text [ english ] = "From Templ~ate";
-            Text [ english_us ] = "From Templ~ate";
-            Text[ portuguese ] = "A partir de ~modelo";
-            Text[ russian ] = "Èç øàáëîíîâ";
-            Text[ greek ] = "From Templ~ate";
-            Text[ dutch ] = "Uit ~sjabloon";
-            Text[ french ] = "À partir d'un ~modèle";
-            Text[ spanish ] = "De pl~antilla";
-            Text[ finnish ] = "Aus ~Vorlage";
-            Text[ italian ] = "From Templ~ate";
-            Text[ danish ] = "From Templ~ate";
-            Text[ swedish ] = "Från m~all";
-            Text[ polish ] = "Na podstawie ~szablonu";
-            Text[ portuguese_brazilian ] = "From Templ~ate";
-            Text[ japanese ] = "ÃÝÌßÚ°Ä‚©‚ç(~A)";
-            Text[ korean ] = "From Templ~ate";
-            Text[ chinese_simplified ] = "²ÉÓÃÑùÊ½(A)";
-            Text[ chinese_traditional ] = "±Ä¥Î¼Ë¦¡";
-            Text[ turkish ] = "From Templ~ate";
-            Text[ arabic ] = "From Templ~ate";
-            Text[ catalan ] = "From Templ~ate";
+            Text = "Aus ~Vorlage...";
+            Text [ english ] = "From Templ~ate...";
+            Text [ english_us ] = "From Templ~ate...";
         };
     };
 
@@ -3037,6 +2999,9 @@ String STR_ADDRESSBOOK_LDAP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.51  2001/05/29 14:34:28  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.50  2001/05/29 13:33:12  oj
  *  #87149# addressbook ui impl
  *

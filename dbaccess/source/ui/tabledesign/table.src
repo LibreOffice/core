@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:28:40 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 15:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,28 +88,9 @@
 
 #define MID_INDEXDESIGN \
     Identifier = SID_INDEXDESIGN ; \
-    Text = "I~ndexentwurf" ; \
-    Text [ english ] = "I~ndex Desgin" ; \
-    Text [ english_us ] = "Index Design";   \
-    Text[ portuguese ] = "E~sboçar índice";\
-    Text[ russian ] = "Ïğîåêò èíäåêñà";\
-    Text[ greek ] = "Ó÷åäéáóìüò åõñåôçñßïõ";\
-    Text[ dutch ] = "~Ontwerp-index";\
-    Text[ french ] = "Ébauche d'i~ndex";\
-    Text[ spanish ] = "D~iseño de índice";\
-    Text[ italian ] = "Struttura indice";\
-    Text[ danish ] = "Index Desgin";\
-    Text[ swedish ] = "I~ndexutkast";\
-    Text[ polish ] = "Projekt indeksu";\
-    Text[ portuguese_brazilian ] = "Index Desgin";\
-    Text[ japanese ] = "²İÃŞ¯¸½ÃŞ»Ş²İ";\
-    Text[ korean ] = "»öÀÎ µğÀÚÀÎ";\
-    Text[ chinese_simplified ] = "Ë÷ÒıÉè¼Æ";\
-    Text[ chinese_traditional ] = "¯Á¤Ş³]­p";\
-    Text[ turkish ] = "Index Desgin";\
-    Text[ arabic ] = "ÊÕãíã ÇáİåÑÓ";\
-    Text[ catalan ] = "Index Desgin";   \
-    Text[ finnish ] = "I~ndexentwurf";
+    Text = "I~ndexentwurf..." ; \
+    Text [ english ] = "I~ndex Desgin..." ; \
+    Text [ english_us ] = "Index Design...";    \
 
 
 String STR_TABLEDESIGN_DBFIELDTYPES

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-19 05:13:21 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 15:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1261,28 +1261,9 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         {
             Identifier = ID_BROWSER_ADDTABLE;
             HelpId = SID_FM_ADDTABLE ;
-            Text = "Tabellen hinzufügen" ;
-            Text [ ENGLISH ] = "Add tables" ;
-            Text[ english_us ] = "Add Tables";
-            Text[ portuguese ] = "Adicionar tabelas";
-            Text[ russian ] = "Äîáàâèòü òàáëèöû";
-            Text[ greek ] = "ÐñïóèÞêç ðßíáêá";
-            Text[ dutch ] = "Tabellen toevoegen";
-            Text[ french ] = "Ajouter des tables";
-            Text[ spanish ] = "Añadir tablas";
-            Text[ italian ] = "Aggiungi tabelle";
-            Text[ danish ] = "Add tables";
-            Text[ swedish ] = "Lägg till tabeller";
-            Text[ polish ] = "Dodaj tabelê";
-            Text[ portuguese_brazilian ] = "Add tables";
-            Text[ japanese ] = "Ã°ÌÞÙ‚Ì’Ç‰Á";
-            Text[ korean ] = "Ç¥ Ãß°¡";
-            Text[ chinese_simplified ] = "Add tables";
-            Text[ chinese_traditional ] = "¼W¥[ªí®æ";
-            Text[ turkish ] = "Add tables";
-            Text[ arabic ] = "ÅÖÇÝÉ ÌÏÇæá";
-            Text[ finnish ] = "Lisää taulukoita";
-            Text[ catalan ] = "Añadir tablas";
+            Text = "Tabellen hinzufügen..." ;
+            Text [ ENGLISH ] = "Add tables..." ;
+            Text[ english_us ] = "Add Tables...";
         };
         ToolBoxItem
         {

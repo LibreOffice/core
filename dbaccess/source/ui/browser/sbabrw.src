@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:22:33 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 15:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,28 +929,9 @@ Menu MENU_BROWSER_TABLECONTEXT
         {
             Identifier = ID_TREE_TABLE_PASTE ;
             HelpId = HID_BROWSER_TABLE_PASTE ;
-            Text = "Tabelle e~infügen" ;
-            Text [ english ] = "~insert table" ;
-            Text [ english_us ] = "~Insert Table" ;
-            Text[ portuguese ] = "~Inserir tabela";
-            Text[ russian ] = "~Âñòàâèòü òàáëèöó";
-            Text[ greek ] = "Å~éóáãùãŞ ğßíáêá";
-            Text[ dutch ] = "tabel ~invoegen";
-            Text[ french ] = "~Insérer une table";
-            Text[ spanish ] = "~Insertar tabla";
-            Text[ italian ] = "~Inserisci tabella";
-            Text[ danish ] = "~insert table";
-            Text[ swedish ] = "~Infoga tabell";
-            Text[ polish ] = "~Wstaw tabelê";
-            Text[ portuguese_brazilian ] = "~insert table";
-            Text[ japanese ] = "Ã°ÌŞÙ‚Ì‘}“ü(~I)";
-            Text[ korean ] = "~insert table";
-            Text[ chinese_simplified ] = "²åÈë±í¸ñ(~I)";
-            Text[ chinese_traditional ] = "¥[¤Jªí®æ(~I)";
-            Text[ turkish ] = "~insert table";
-            Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá";
-            Text[ finnish ] = "Tabelle e~infügen";
-            Text[ catalan ] = "~Insert Table";
+            Text = "Tabelle e~infügen..." ;
+            Text [ english ] = "~insert table..." ;
+            Text [ english_us ] = "~Insert Table..." ;
         };
         MenuItem
         {
