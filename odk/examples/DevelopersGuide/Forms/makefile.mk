@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:44:36 $
+#   last change: $Author: rt $ $Date: 2005-01-31 16:34:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,9 +75,15 @@ TARGET=copying
 #----------------------------------------------------
 
 FORMS_FILES=\
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/BooleanValidator.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/ButtonOperator.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/ComponentTreeTraversal.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/ControlLock.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/ControlValidation.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/ControlValidator.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/DataAwareness.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/DateValidator.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/DocumentBasedExample.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/DocumentHelper.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/DocumentType.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/DocumentViewHelper.java \
@@ -86,9 +92,21 @@ FORMS_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/GridFieldValidator.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/InteractionRequest.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/KeyGenerator.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/ListSelectionValidator.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/Makefile \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/NumericValidator.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/ProgrammaticScriptAssignment.odt \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/SalesFilter.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/UNO.java
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/SingleControlValidation.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/SpreadsheetDocument.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/SpreadsheetValueBinding.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/SpreadsheetView.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/TableCellTextBinding.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/TextValidator.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/TimeValidator.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/UNO.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/ValueBinding.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/WaitForInput.java
 
 DIR_FILE_LIST= \
     $(FORMS_FILES)
