@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stl_types.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-22 05:48:40 $
+ *  last change: $Author: oj $ $Date: 2002-07-18 09:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
 using namespace ::std;
@@ -155,6 +158,17 @@ public:
         return !!(m_bCaseSensitive ? lhs.equals( rhs ) : lhs.equalsIgnoreAsciiCase( rhs ));
     }
     sal_Bool isCaseSensitive() const {return m_bCaseSensitive;}
+};
+//------------------------------------------------------------------------
+class TPropertyValueEqualFunctor : public ::std::binary_function< ::com::sun::star::beans::PropertyValue,::rtl::OUString,bool>
+{
+public:
+    TPropertyValueEqualFunctor()
+    {}
+    bool operator() (const ::com::sun::star::beans::PropertyValue& lhs, const ::rtl::OUString& rhs) const
+    {
+        return !!(lhs.Name == rhs);
+    }
 };
 //------------------------------------------------------------------------
 class UStringMixHash
