@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pb $ $Date: 2002-07-30 08:34:00 $
+ *  last change: $Author: pb $ $Date: 2002-10-02 07:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,7 +431,13 @@ USHORT GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
         String aURLPath = sURL.Copy( URL_PREFIX_PRIV_SOFFICE_LEN );
         String aType = aURLPath.GetToken( 0, INET_PATH_TOKEN );
         if ( aType == String( RTL_CONSTASCII_STRINGPARAM("factory") ) )
+        {
+            // detect an image id for our "private:factory" urls
             aExt = GetImageExtensionByFactory_Impl( sURL );
+            if ( aExt.Len() > 0 )
+                nImage = GetImageId_Impl( aExt );
+            return nImage;
+        }
         else if ( aType == String( RTL_CONSTASCII_STRINGPARAM("image") ) )
             nImage = (USHORT)aURLPath.GetToken( 1, INET_PATH_TOKEN ).ToInt32();
     }
