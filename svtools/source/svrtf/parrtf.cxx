@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:44:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@ SvRTFParser::~SvRTFParser()
 {
 }
 
+
+
+
 int SvRTFParser::_GetNextToken()
 {
     int nRet = 0;
@@ -185,6 +188,7 @@ int SvRTFParser::_GetNextToken()
                             } while( RTF_ISDIGIT( nNextCh ) );
                             if( bNegValue )
                                 nTokenValue = -nTokenValue;
+                            bTokenHasValue=true;
                         }
                         else if( bNegValue )        // das Minus wieder zurueck
                         {
@@ -225,6 +229,7 @@ int SvRTFParser::_GetNextToken()
                             break;
 
                         case RTF_UPR:
+                            if (!_inSkipGroup) {
                             // UPR - overread the group with the ansi
                             //       informations
                             while( '{' != _GetNextToken() )
@@ -232,6 +237,7 @@ int SvRTFParser::_GetNextToken()
                             SkipGroup();
                             _GetNextToken();  // overread the last bracket
                             nRet = 0;
+                            }
                             break;
 
                         case RTF_U:
@@ -535,9 +541,15 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
         aToken += aStrBuffer;
 }
 
+
+short SvRTFParser::_inSkipGroup=0;
+
 void SvRTFParser::SkipGroup()
 {
-    short nBrackets = 1;
+short nBrackets=1;
+if (_inSkipGroup>0)
+    return;
+_inSkipGroup++;
 #if 1   //#i16185# fecking \bin keyword
     do
     {
@@ -547,8 +559,10 @@ void SvRTFParser::SkipGroup()
                 ++nBrackets;
                 break;
             case '}':
-                if (!--nBrackets)
+                if (!--nBrackets) {
+                    _inSkipGroup--;
                     return;
+                }
                 break;
         }
         int nToken = _GetNextToken();
@@ -556,6 +570,10 @@ void SvRTFParser::SkipGroup()
         {
             rInput.SeekRel(-1);
             rInput.SeekRel(nTokenValue);
+            nNextCh = GetNextChar();
+        }
+        while (nNextCh==0xa || nNextCh==0xd)
+        {
             nNextCh = GetNextChar();
         }
     } while (sal_Unicode(EOF) != nNextCh && IsParserWorking());
@@ -586,6 +604,7 @@ void SvRTFParser::SkipGroup()
 
     if( SVPAR_PENDING != eState && '}' != nNextCh )
         eState = SVPAR_ERROR;
+    _inSkipGroup--;
 }
 
 void SvRTFParser::ReadUnknownData() { SkipGroup(); }
