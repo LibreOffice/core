@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:22 $
+ *  last change: $Author: as $ $Date: 2000-10-16 11:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
+
+#ifndef __FRAMEWORK_CLASSES_ASYNCQUIT_HXX_
+#include <classes/asyncquit.hxx>
+#endif
 
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
@@ -356,6 +360,23 @@ class FrameContainer
 
         REFERENCE< XFRAME > getActive() const;
 
+        /*-****************************************************************************************************//**
+            @short      Enable or disable automatic termination of desktop if last frame was removed from container
+            @descr      Only the desktop should use this functions!
+
+            @seealso    class Desktop
+            @seealso    class AsyncQuit
+
+            @param      "aMode", with these mode you can set default time values for different shutdown scenes at timer
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        void enableQuitTimer(   const   REFERENCE< XDESKTOP >&  xDesktop    ,
+                                const   TAsyncQuitMode&         aMode       );
+        void disableQuitTimer();
+
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
     //-------------------------------------------------------------------------------------------------------------
@@ -409,6 +430,7 @@ class FrameContainer
         sal_Bool                                m_bLock             ;   /// lock to block append()-, remove()- or clear()-calls
         STLVECTOR< REFERENCE< XFRAME > >        m_aContainer        ;   /// list to hold all frames
         REFERENCE< XFRAME >                     m_xActiveFrame      ;   /// one container item can be the current active frame. Its neccessary for Desktop or Frame implementation.
+        AsyncQuit*                              m_pQuitTimer        ;   /// if an instance of these class used by desktop and last frame will be removed we must terminate the desktop
 
 };      //  class FrameContainer
 
