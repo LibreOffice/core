@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 13:38:50 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ namespace filter{
 //_______________________________________________
 // definitions
 
+::salhelper::SingletonRef< FilterCache >* BaseContainer::m_pPerformanceOptimizer = 0;
+
 /*-----------------------------------------------
     03.03.2004 11:37
 -----------------------------------------------*/
@@ -103,6 +105,14 @@ BaseContainer::BaseContainer()
     , m_lListener  (m_aLock)
 {
     m_rCache->load(FilterCache::E_CONTAINS_STANDARD);
+
+    // GLOBAL SAFE (!) -> -----------------------
+    // TODO use rtl pattern to create it realy threadsafe!
+    ::osl::ResettableMutexGuard aGlobalLock(::osl::Mutex::getGlobalMutex());
+    if (!m_pPerformanceOptimizer)
+        m_pPerformanceOptimizer = new ::salhelper::SingletonRef< FilterCache >();
+    aGlobalLock.clear();
+    // <- GLOBAL SAFE (!) -----------------------
 }
 
 /*-----------------------------------------------
