@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-03 15:33:16 $
+ *  last change: $Author: ab $ $Date: 2001-03-28 11:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,11 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bScanBasics ) :
 MacroChooser::~MacroChooser()
 {
     if ( bForceStoreBasic )
+    {
         SFX_APP()->SaveBasicManager();
+        SFX_APP()->SaveBasicContainer();
+        SFX_APP()->SaveDialogContainer();
+    }
 }
 
 void MacroChooser::StoreMacroDescription()
