@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-20 17:03:37 $
+ *  last change: $Author: jb $ $Date: 2002-11-25 14:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,22 @@
 					<desc xml:lang="en-US">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
 				</info>
 				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+			</prop>
+		</group>
+		<group oor:name="Configuration">
+			<info>
+				<author>JB</author>
+				<desc xml:lang="en-US">Settings that control configuration data access.</desc>
+			</info>
+			<prop oor:name="TransferUserSettingsOnce" oor:type="xs:boolean" oor:nillable="false">
+				<info>
+					<author>JB</author>
+					<desc xml:lang="en-US">Indicates that user settings should be imported, 
+						if the backend does not yet contain data for this user. 
+						This only takes effect, if the source of the import is configured locally.
+					</desc>
+					<label xml:lang="en-US">Transfer User Settings Once on First Start</label>
+				</info>
 			</prop>
 		</group>
 	</component>
