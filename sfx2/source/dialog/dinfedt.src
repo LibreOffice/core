@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfedt.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:16:54 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ ModalDialog DLG_DOCINFO_EDT
         Text [ portuguese_brazilian ] = "Nomes" ;
         Text [ portuguese ] = "Nomes" ;
         Text [ finnish ] = "Nimet" ;
-        Text [ danish ] = "Navn" ;
+        Text [ danish ] = "Navne" ;
         Text [ french ] = "Noms" ;
         Text [ swedish ] = "Namn" ;
         Text [ dutch ] = "Namen" ;
@@ -127,6 +127,8 @@ ModalDialog DLG_DOCINFO_EDT
         Text[ hebrew ] = "‮שמות‬";
         Text[ hindi ] = "नाम";
         Text[ slovak ] = "Názvy";
+        Text[ hungarian ] = "Nevek";
+        Text[ slovenian ] = "Imena";
     };
     Edit ED_INFO1
     {
@@ -176,7 +178,10 @@ ModalDialog DLG_DOCINFO_EDT
     Text[ hebrew ] = "‮עריכת שמות שדות‬";
     Text[ hindi ] = "क्षेत्र नामों का संपादन";
     Text[ slovak ] = "Upraviť názvy polí­";
+    Text[ hungarian ] = "Mezőnevek szerkesztése";
+    Text[ slovenian ] = "Uredi imena polj";
 };
+
 
 
 
