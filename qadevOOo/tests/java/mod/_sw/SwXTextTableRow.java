@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextTableRow.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:23 $
+ *  last change:$Date: 2003-02-10 12:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 
 public class SwXTextTableRow extends TestCase {
     XTextDocument xTextDoc;
@@ -99,9 +102,7 @@ public class SwXTextTableRow extends TestCase {
         xTextDoc.dispose();
     }
 
-    public synchronized TestEnvironment createTestEnvironment(
-                                    TestParameters Param, PrintWriter log )
-           throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oInterface = null;
         XInterface oObj = null;
@@ -139,7 +140,8 @@ public class SwXTextTableRow extends TestCase {
             XTableRows oTRn = oTable.getRows();
             XIndexAccess oIA = (XIndexAccess) UnoRuntime.queryInterface
                 (XIndexAccess.class,oTRn);
-            oObj = (XPropertySet) oIA.getByIndex(1);
+            oObj = (XPropertySet) AnyConverter.toObject(
+                    new Type(XPropertySet.class),oIA.getByIndex(1));
         } catch( Exception e ) {
             e.printStackTrace(log);
         }

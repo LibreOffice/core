@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextPortionEnumeration.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:25 $
+ *  last change:$Date: 2003-02-10 12:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
  *
  * initial description
@@ -115,8 +118,7 @@ public class SwXTextPortionEnumeration extends TestCase {
      *  @see TestParameters
      *    @see PrintWriter
      */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log ) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface param = null;
 
@@ -164,7 +166,8 @@ public class SwXTextPortionEnumeration extends TestCase {
         int n = 0;
         while ( (oEnum.hasMoreElements()) ) {
             try {
-                    param = (XInterface)oEnum.nextElement();
+                    param = (XInterface) AnyConverter.toObject(
+                        new Type(XInterface.class),oEnum.nextElement());
             } catch ( Exception e) {
                 log.println("Couldn't get Paragraph");
                 e.printStackTrace();
