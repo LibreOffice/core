@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:24:48 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,12 +186,30 @@ const SwNumFmt* SwNumRule::GetNumFmt( USHORT i ) const
     return aFmts[ i ];
 }
 
+void SwNumRule::SetName(const String & rName)
+{
+
+    if (pNumRuleMap)
+    {
+        pNumRuleMap->erase(sName);
+        (*pNumRuleMap)[rName] = this;
+    }
+
+    sName = rName;
+}
+
 void SwNumRule::SetList(SwTxtNodeTable * _pList)
 {
     if (pList)
         delete pList;
 
     pList = _pList;
+}
+
+void SwNumRule::SetNumRuleMap(std::hash_map<String, SwNumRule *, StringHash> *
+                              _pNumRuleMap)
+{
+    pNumRuleMap = _pNumRuleMap;
 }
 
 const Font& SwNumRule::GetDefBulletFont()
@@ -206,6 +224,7 @@ USHORT SwNumRule::GetNumIndent( BYTE nLvl )
     ASSERT( MAXLEVEL > nLvl, "NumLevel is out of range" );
     return aDefNumIndents[ nLvl ];
 }
+
 USHORT SwNumRule::GetBullIndent( BYTE nLvl )
 {
     ASSERT( MAXLEVEL > nLvl, "NumLevel is out of range" );
@@ -571,6 +590,7 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
     sName( rNm ),
       pList(0),
       aMarkedLevels( MAXLEVEL ), // #i27615#
+      pNumRuleMap(0),
     bAutoRuleFlag( bAutoFlg ),
     bInvalidRuleFlag( TRUE ),
     bContinusNum( FALSE ),
@@ -619,6 +639,7 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
     sName( rNumRule.sName ),
       pList(0),
     aMarkedLevels( MAXLEVEL ), // #i27615#
+      pNumRuleMap(0),
     bAutoRuleFlag( rNumRule.bAutoRuleFlag ),
     bInvalidRuleFlag( TRUE ),
     bContinusNum( rNumRule.bContinusNum ),
@@ -638,6 +659,11 @@ SwNumRule::~SwNumRule()
 {
     for( USHORT n = 0; n < MAXLEVEL; ++n )
         delete aFmts[ n ];
+
+    if (pNumRuleMap)
+    {
+        pNumRuleMap->erase(GetName());
+    }
 
     if( !--nRefCount )          // der letzte macht die Tuer zu
     {
