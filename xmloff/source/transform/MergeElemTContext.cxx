@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MergeElemTContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:52:31 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,43 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
+class XMLPersTextContentRNGTransformTContext : public XMLPersTextContentTContext
+{
+public:
+    TYPEINFO();
+
+    XMLPersTextContentRNGTransformTContext(
+        XMLTransformerBase& rTransformer,
+        const ::rtl::OUString& rQName,
+        sal_uInt16 nPrefix,
+        ::xmloff::token::XMLTokenEnum eToken );
+    virtual ~XMLPersTextContentRNGTransformTContext();
+
+    virtual void Characters( const ::rtl::OUString& rChars );
+};
+
+TYPEINIT1( XMLPersTextContentRNGTransformTContext, XMLPersAttrListTContext );
+
+XMLPersTextContentRNGTransformTContext::XMLPersTextContentRNGTransformTContext(
+    XMLTransformerBase& rTransformer,
+    const ::rtl::OUString& rQName,
+    sal_uInt16 nPrefix,
+    ::xmloff::token::XMLTokenEnum eToken ) :
+        XMLPersTextContentTContext(
+            rTransformer, rQName, nPrefix, eToken )
+{}
+
+XMLPersTextContentRNGTransformTContext::~XMLPersTextContentRNGTransformTContext()
+{}
+
+void XMLPersTextContentRNGTransformTContext::Characters( const ::rtl::OUString& rChars )
+{
+    OUString aConvChars( rChars );
+    GetTransformer().ConvertRNGDateTimeToISO( aConvChars );
+    XMLPersTextContentTContext::Characters( aConvChars );
+}
+
+
 TYPEINIT1( XMLMergeElemTransformerContext, XMLTransformerContext );
 
 void XMLMergeElemTransformerContext::ExportStartElement()
@@ -141,6 +178,18 @@ XMLTransformerContext *XMLMergeElemTransformerContext::CreateChildContext(
             {
                 switch( (*aIter).second.m_nActionType )
                 {
+                case XML_ATACTION_MOVE_FROM_ELEM_RNG2ISO_DATETIME:
+                    {
+                        XMLPersTextContentTContext *pTC =
+                            new XMLPersTextContentRNGTransformTContext(
+                                    GetTransformer(), rQName,
+                                    (*aIter).second.GetQNamePrefixFromParam1(),
+                                    (*aIter).second.GetQNameTokenFromParam1() );
+                        XMLPersTextContentTContextVector::value_type aVal(pTC);
+                        m_aChildContexts.push_back( aVal );
+                        pContext = pTC;
+                    }
+                    break;
                 case XML_ATACTION_MOVE_FROM_ELEM:
                     {
                         XMLPersTextContentTContext *pTC =
