@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dvo $ $Date: 2003-10-15 14:42:15 $
+#   last change: $Author: dvo $ $Date: 2003-10-16 13:00:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,7 @@ SLOFILES =	\
 
 # --- Shared-Library -----------------------------------------------
 
-SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
+SHL1TARGET= $(TARGET)
 #SHL1IMPLIB= ihwp
 
 SHL1STDLIBS= \
