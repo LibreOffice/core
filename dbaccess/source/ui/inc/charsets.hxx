@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charsets.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-29 22:26:20 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 08:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,11 @@ namespace dbaui
         const_iterator find(const ::rtl::OUString& _rDisplayName, const Display&) const;
 
         /// get access to the first element of the charset collection
-        ExtendedCharsetIterator begin() const;
+        const_iterator  begin() const;
         /// get access to the (last + 1st) element of the charset collection
-        ExtendedCharsetIterator end() const;
+        const_iterator  end() const;
+        // size of the map
+        sal_Int32   size() const { return OCharsetDisplay_Base::size(); }
     };
 
     //-------------------------------------------------------------------------
@@ -182,6 +184,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/11/29 22:26:20  fs
+ *  #80003# re-implemented, now base on dbtools::OCharsetMap
+ *
  *  Revision 1.2  2000/10/11 11:31:54  fs
  *  replace unotools with comphelper
  *
