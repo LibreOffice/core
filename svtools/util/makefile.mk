@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.23 $
+#*  $Revision: 1.24 $
 #*
-#*  last change: $Author: er $ $Date: 2001-07-02 09:42:09 $
+#*  last change: $Author: dv $ $Date: 2001-07-03 11:54:09 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -375,7 +375,6 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo SvInterfaceClient >> $@
     @echo SvImp >> $@
     @echo SvStringLockBytes >> $@
-    @echo svtools >> $@
     @echo SVTOOLS_FILTER >> $@
     @echo SVTOOLS_CODE >> $@
     @echo SVTOOLS_FILTER4 >> $@
