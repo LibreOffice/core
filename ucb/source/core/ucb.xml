@@ -67,6 +67,28 @@
             Kai Sommerfeld
         </author>
         <name>
+            com.sun.star.comp.ucb.UcbPropertiesManager
+        </name>
+        <description>
+        This component provides access to the meta data of the properties
+        known to the UCB.
+        </description>
+        <loader-name>
+            com.sun.star.loader.SharedLibrary
+        </loader-name>
+        <language>
+            c++
+        </language>
+        <status value="final"/>
+        <supported-service>
+            com.sun.star.ucb.PropertiesManager
+        </supported-service>
+    </component-description>
+    <component-description>
+        <author>
+            Kai Sommerfeld
+        </author>
+        <name>
             com.sun.star.comp.ucb.UcbContentProviderProxyFactory
         </name>
         <description>
