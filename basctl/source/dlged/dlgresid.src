@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 07:08:39 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ String RID_STR_BRWTITLE_PROPERTIES
     Text[ chinese_simplified ] = " Ù–‘£∫";
     Text[ chinese_traditional ] = "ƒ›© °G";
     Text[ turkish ] = "Properties: ";
-    Text[ arabic ] = "Properties: ";
+    Text[ arabic ] = "«·Œ’«∆’: ";
 };
 String RID_STR_BRWTITLE_NO_PROPERTIES
 {
@@ -150,7 +150,7 @@ String RID_STR_BRWTITLE_NO_PROPERTIES
     Text[ chinese_simplified ] = "√ª”–—°‘Òøÿ÷∆œÓ";
     Text[ chinese_traditional ] = "®S¶≥øÔ®˙±±®Ó∂µ";
     Text[ turkish ] = "No Control marked";
-    Text[ arabic ] = "No Control marked";
+    Text[ arabic ] = "·„ Ì „  ÕœÌœ ⁄‰’—  Õﬂ„";
 };
 String RID_STR_BRWTITLE_MULTISELECT
 {
@@ -173,7 +173,7 @@ String RID_STR_BRWTITLE_MULTISELECT
     Text[ chinese_simplified ] = "∂‡÷ÿ—°‘Ò";
     Text[ chinese_traditional ] = "¶h≠´øÔ®˙";
     Text[ turkish ] = "Multiselection";
-    Text[ arabic ] = "Multiselection";
+    Text[ arabic ] = " ÕœÌœ „ ⁄œœ";
 };
 
 // -----------------------------------------------------------------------
