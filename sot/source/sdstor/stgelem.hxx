@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgelem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-05 18:11:55 $
+ *  last change: $Author: obo $ $Date: 2001-02-13 13:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #ifndef _TOOLS_SOLAR_H
 #include <tools/solar.h>
 #endif
+
+#include <stg.hxx>
 
 class StgIo;
 class SvStream;
