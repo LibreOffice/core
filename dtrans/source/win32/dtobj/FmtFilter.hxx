@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-20 08:41:20 $
+ *  last change: $Author: ka $ $Date: 2002-07-20 10:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
     aMetaFilePict - a sequence of bytes containing a METAFILEPICT struct
 ------------------------------------------------------------------------*/
 com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( com::sun::star::uno::Sequence< sal_Int8 >& aMetaFilePict );
+com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( com::sun::star::uno::Sequence< sal_Int8 >& aEnhMetaFile );
 
 /*------------------------------------------------------------------------
     input:
