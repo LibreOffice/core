@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-28 23:05:55 $
+ *  last change: $Author: obo $ $Date: 2001-12-04 18:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2819,7 +2819,7 @@ SfxSlotInfo FN_GOTO_NEXT_MARK
     SlotName[ portuguese_brazilian ] = "GotoNextPlacemarker";
     SlotName[ japanese ] = "次のﾌﾟﾚｰｽﾎﾙﾀﾞへ";
     SlotName[ chinese_simplified ] = "转到下一个通配符";
-    SlotName[ chinese_traditional ] = "轉到下一個通配符";
+    SlotName[ chinese_traditional ] = "轉到下一個萬用字元";
     SlotName[ arabic ] = "��� ������ ������ ������";
     SlotName[ dutch ] = "Naar volgende plaatsvervanger";
     SlotName[ chinese_simplified ] = "转到下一个通配符";
@@ -2931,7 +2931,7 @@ SfxSlotInfo FN_GOTO_PREV_MARK
     SlotName[ portuguese_brazilian ] = "GoToPrevPlacemarker";
     SlotName[ japanese ] = "前のﾌﾟﾚｰｽﾎﾙﾀﾞへ";
     SlotName[ chinese_simplified ] = "转到上一个通配符";
-    SlotName[ chinese_traditional ] = "轉到上一個通配符";
+    SlotName[ chinese_traditional ] = "轉到上一個萬用字元";
     SlotName[ arabic ] = "��� ������ ������ ������";
     SlotName[ dutch ] = "Naar vorige plaatsvervanger";
     SlotName[ chinese_simplified ] = "转到上一个通配符";
@@ -9539,6 +9539,7 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName[ arabic ] = "Update Charts";
     SlotName[ catalan ] = "Update Charts";
 };
+
 
 
 
