@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvashelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:12:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <rtl/math.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP__
+#include <com/sun/star/rendering/TextDirection.hpp>
+#endif
+
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
@@ -83,6 +87,9 @@
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
+#include <basegfx/range/b2drectangle.hxx>
 #endif
 #ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
@@ -110,7 +117,6 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 
 namespace vclcanvas
@@ -302,7 +308,7 @@ namespace vclcanvas
 
             if( mp2ndOutDev.get() )
             {
-                if( nTransparency )
+                if( !nTransparency )
                     mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
                 else
                     mp2ndOutDev->getOutDev().DrawTransparent( aPolyPoly, nTransPercent );
@@ -327,7 +333,7 @@ namespace vclcanvas
         {
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
-            const int nTransparency( setupOutDevState( viewState, renderState, FILL_COLOR ) );
+            const int nTransparency( setupOutDevState( viewState, renderState, IGNORE_COLOR ) );
             const PolyPolygon aPolyPoly( tools::mapPolyPolygon( tools::polyPolygonFromXPolyPolygon2D(xPolyPolygon),
                                                                 viewState, renderState ) );
 
@@ -410,17 +416,42 @@ namespace vclcanvas
             if( !setupTextOutput( aOutpos, viewState, renderState, xFont ) )
                 return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
 
+            // change text direction and layout mode
+            ULONG nLayoutMode(0);
+            switch( textDirection )
+            {
+                case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
+                    nLayoutMode |= TEXT_LAYOUT_BIDI_LTR;
+                    // FALLTHROUGH intended
+                case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
+                    nLayoutMode |= TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_BIDI_STRONG;
+                    nLayoutMode |= TEXT_LAYOUT_TEXTORIGIN_LEFT;
+                    break;
+
+                case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
+                    nLayoutMode |= TEXT_LAYOUT_BIDI_RTL;
+                    // FALLTHROUGH intended
+                case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
+                    nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG;
+                    nLayoutMode |= TEXT_LAYOUT_TEXTORIGIN_RIGHT;
+                    break;
+            }
+
             // TODO(F2): alpha
+            mpOutDev->getOutDev().SetLayoutMode( nLayoutMode );
             mpOutDev->getOutDev().DrawText( aOutpos,
                                             text.Text,
                                             ::canvas::tools::numeric_cast<USHORT>(text.StartPosition),
                                             ::canvas::tools::numeric_cast<USHORT>(text.Length) );
 
             if( mp2ndOutDev.get() )
+            {
+                mp2ndOutDev->getOutDev().SetLayoutMode( nLayoutMode );
                 mp2ndOutDev->getOutDev().DrawText( aOutpos,
                                                    text.Text,
                                                    ::canvas::tools::numeric_cast<USHORT>(text.StartPosition),
                                                    ::canvas::tools::numeric_cast<USHORT>(text.Length) );
+            }
         }
 
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
@@ -494,9 +525,26 @@ namespace vclcanvas
                 (!::basegfx::fTools::equalZero( aMatrix.get(0,1) ) ||
                  !::basegfx::fTools::equalZero( aMatrix.get(1,0) )) )
             {
+                const BitmapEx& rBmpEx( tools::bitmapExFromXBitmap(xBitmap) );
+
+                // modify output position, to account for the fact
+                // that transformBitmap() always normalizes its output
+                // bitmap into the smallest enclosing box.
+                const Size              aBmpSize( rBmpEx.GetSizePixel() );
+                ::basegfx::B2DRectangle aDestRect;
+                ::canvas::tools::calcTransformedRectBounds( aDestRect,
+                                                            ::basegfx::B2DRectangle(0,
+                                                                                    0,
+                                                                                    aBmpSize.Width(),
+                                                                                    aBmpSize.Height()),
+                                                            aMatrix );
+
+                aOutputPos.setX( aDestRect.getMinX() );
+                aOutputPos.setY( aDestRect.getMinY() );
+
                 // complex transformation, use generic affine bitmap
                 // transformation
-                aBmpEx = tools::transformBitmap( tools::bitmapExFromXBitmap(xBitmap),
+                aBmpEx = tools::transformBitmap( rBmpEx,
                                                  viewState, renderState );
             }
             else if( !aMatrix.isIdentity() &&
@@ -918,7 +966,7 @@ namespace vclcanvas
                     ::basegfx::unotools::homMatrixFromAffineMatrix( aMatrix,
                                                                     viewState.AffineTransform ) );
 
-                aClipRegion = Region( ::PolyPolygon( aClipPoly ) );
+                aClipRegion = Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
             }
         }
 
@@ -937,12 +985,12 @@ namespace vclcanvas
             if( aClipPoly.count() )
             {
                 // setup non-empty clipping
-                Region aRegion = Region( ::PolyPolygon( aClipPoly ) );
+                Region aRegion = Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
 
                 if( aClipRegion.IsEmpty() )
                     aClipRegion = aRegion;
                 else
-                    aClipRegion.Intersect( Region( ::PolyPolygon( aClipPoly ) ) );
+                    aClipRegion.Intersect( aRegion );
             }
             else
             {
@@ -1001,13 +1049,15 @@ namespace vclcanvas
                     break;
 
                 case FILL_COLOR:
+                    // #i42440# Make VCL canvas comply to XCanvas polygon fill
+                    // semantics (no exclusion of rightmost/bottommost pixel).
                     rOutDev.SetFillColor( aColor );
-                    rOutDev.SetLineColor();
+                    rOutDev.SetLineColor( aColor );
 
                     if( p2ndOutDev )
                     {
                         p2ndOutDev->SetFillColor( aColor );
-                        p2ndOutDev->SetLineColor();
+                        p2ndOutDev->SetLineColor( aColor );
                     }
                     break;
 
