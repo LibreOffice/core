@@ -3,9 +3,9 @@
  *
  *  $RCSfile: CalcWindowState.xcu,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 10:08:47 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 15:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/previewbar">
@@ -135,7 +135,7 @@
                     <value xml:lang="de">Seitenvorschau</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/extrusionobjectbar" oor:op="replace">
@@ -189,7 +189,7 @@
                     <value>1</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -337,6 +337,9 @@
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
