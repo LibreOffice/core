@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poly2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:42:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 10:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,11 +799,13 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
     // polygons.
     if( aMergePolyPolygonA.areControlPointsUsed() )
         aMergePolyPolygonA = ::basegfx::tools::adaptiveSubdivideByAngle(aMergePolyPolygonA);
-    ::basegfx::tools::correctOrientations( aMergePolyPolygonA );
+    // #i37009#
+    aMergePolyPolygonA = ::basegfx::tools::correctOrientations( aMergePolyPolygonA );
 
     if( aMergePolyPolygonB.areControlPointsUsed() )
         aMergePolyPolygonB = ::basegfx::tools::adaptiveSubdivideByAngle(aMergePolyPolygonB);
-    ::basegfx::tools::correctOrientations( aMergePolyPolygonB );
+    // #i37009#
+    aMergePolyPolygonB = ::basegfx::tools::correctOrientations( aMergePolyPolygonB );
 
     switch( nOperation )
     {
