@@ -10437,3 +10437,11 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ?DrawingLayerXMLExport_getSupportedServiceNames@@YA?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@XZ
 ??0?$pair@$$CBVOUString@rtl@@V?$ORef@VNameSpaceEntry@@@vos@@@_STL@@QAE@ABVOUString@rtl@@ABV?$ORef@VNameSpaceEntry@@@vos@@@Z
 ?bind@?$ORef@VNameSpaceEntry@@@vos@@QAAXPAVNameSpaceEntry@@@Z
+?__query@?$Reference@VXEmbeddedObjectResolver@document@star@sun@com@@@uno@star@sun@com@@CAPAVXEmbeddedObjectResolver@document@345@PAVXInterface@2345@@Z
+?__query@?$Reference@VXGraphicObjectResolver@document@star@sun@com@@@uno@star@sun@com@@CAPAVXGraphicObjectResolver@document@345@PAVXInterface@2345@@Z
+?__query@?$Reference@VXStatusIndicator@task@star@sun@com@@@uno@star@sun@com@@CAPAVXStatusIndicator@task@345@PAVXInterface@2345@@Z
+?set@?$Reference@VXDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@QAAEPAVXDocumentHandler@sax@xml@345@@Z
+?set@?$Reference@VXEmbeddedObjectResolver@document@star@sun@com@@@uno@star@sun@com@@QAAEPAVXEmbeddedObjectResolver@document@345@@Z
+?set@?$Reference@VXGraphicObjectResolver@document@star@sun@com@@@uno@star@sun@com@@QAAEPAVXGraphicObjectResolver@document@345@@Z
+??0XMLShapePropertySetMapper@@QAE@ABV?$UniReference@VXMLPropertyHandlerFactory@@@@G@Z
+?CreateExternalShapePropMapper@XMLShapeImportHelper@@SAPAVSvXMLImportPropertyMapper@@ABV?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@AAVSvXMLImport@@@Z
