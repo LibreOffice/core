@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2001-03-27 22:03:08 $
+#   last change: $Author: cl $ $Date: 2001-03-29 15:13:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -128,6 +128,7 @@ SLOFILES =      \
         $(SLO)$/unovwcrs.obj
 
 SVXLIGHTOBJFILES = \
+        $(OBJ)$/UnoDocumentSettings.obj \
         $(OBJ)$/unomodel.obj    \
         $(OBJ)$/unopage.obj     \
         $(OBJ)$/unolayer.obj    \
