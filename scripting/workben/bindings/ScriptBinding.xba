@@ -975,6 +975,8 @@ sub UpdateTopLevelMenus( topLevelMenuPosition as integer, addLine as boolean )
 	for n = topLevelMenuPosition to 8
 		if addLine then
 			menuItemLinePosition( n ) = menuItemLinePosition( n ) + 1
+
+		end if
 	next n
 end sub
 
