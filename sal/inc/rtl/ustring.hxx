@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:15 $
+ *  last change: $Author: th $ $Date: 2001-03-16 15:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,8 @@
 #include <rtl/locale.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
 namespace rtl
 {
-#endif
 
 /**
  * Converts all of the characters in this <code>OUString</code> to lower
@@ -113,28 +111,20 @@ inline OUString OUString::toUpperCase( const OLocale & locale) const
 // Helper functions
 inline OUString OStringToOUString( const OString & rStr,
                                    rtl_TextEncoding encoding,
-                                   sal_uInt32 nCvtFlags=OSTRING_TO_OUSTRING_CVTFLAGS )
+                                   sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS )
 {
-    OUString newStr;
-    if (rStr.getLength())
-        rtl_string2UString( &newStr.pData, rStr.getStr(), rStr.getLength(), encoding, nCvtFlags );
+    OUString newStr( rStr.getStr(), rStr.getLength(), encoding, convertFlags );
     return newStr;
 }
 
 inline OString OUStringToOString( const OUString & rUnicode,
                                   rtl_TextEncoding encoding,
-                                  sal_uInt32 nCvtFlags=OUSTRING_TO_OSTRING_CVTFLAGS )
+                                  sal_uInt32 convertFlags = OUSTRING_TO_OSTRING_CVTFLAGS )
 {
-    OString newStr;
-    if (rUnicode.getLength())
-        rtl_uString2String( &newStr.pData, rUnicode.getStr(), rUnicode.getLength(), encoding, nCvtFlags );
+    OString newStr( rUnicode.getStr(), rUnicode.getLength(), encoding, convertFlags );
     return newStr;
 }
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif /* _RTL_USTRING_HXX_ */
-
-

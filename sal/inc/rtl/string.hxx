@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-15 11:36:22 $
+ *  last change: $Author: th $ $Date: 2001-03-16 15:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,195 +62,205 @@
 #ifndef _RTL_STRING_HXX_
 #define _RTL_STRING_HXX_
 
-#ifndef _RTL_STRING_H_
-#include <rtl/string.h>
+#ifdef __cplusplus
+
+#ifndef _RTL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
-#ifndef _RTL_USTRING_H_
-#include <rtl/ustring.h>
-#endif
+
 #ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
 #endif
 #ifndef _RTL_TEXTENC_H
 #include <rtl/textenc.h>
 #endif
-#ifndef _RTL_MACROS_HXX_
-#include <rtl/macros.hxx>
+#ifndef _RTL_STRING_H_
+#include <rtl/string.h>
 #endif
-
-#ifdef __cplusplus
 
 class ByteString;
 
-#ifdef _USE_NAMESPACE
 namespace rtl
 {
-#endif
+
+/* ======================================================================= */
 
 /**
- * The <code>OAsciiString</code> class represents character strings. All
- * string literals in Java programs, such as <code>"abc"</code>, are
- * implemented as instances of this class.
- * <p>
- * Strings are constant; their values cannot be changed after they
- * are created. OAsciiString buffers support mutable strings.
- * Because OAsciiString objects are immutable they can be shared. For example:
- * <p><blockquote><pre>
- *     OAsciiString str = "abc";
- * </pre></blockquote><p>
- * is equivalent to:
- * <p><blockquote><pre>
- *     char data[] = {'a', 'b', 'c'};
- *     OAsciiString str = new OAsciiString(data);
- * </pre></blockquote><p>
- * Here are some more examples of how strings can be used:
- * <p><blockquote><pre>
- *     System.out.println("abc");
- *     OAsciiString cde = "cde";
- *     System.out.println("abc" + cde);
- *     OAsciiString c = "abc".substring(2,3);
- *     OAsciiString d = cde.substring(1, 2);
- * </pre></blockquote>
- * <p>
- * The class <code>OAsciiString</code> includes methods for examining
- * individual characters of the sequence, for comparing strings, for
- * searching strings, for extracting substrings, and for creating a
- * copy of a string with all characters translated to uppercase or to
- * lowercase.
- */
+  This String class provide base functionality for C++ like 8-Bit
+  character array handling. The advantage of this class is, that it
+  handle all the memory managament for you - and it do it
+  more efficient. If you assign a string to another string, the
+  data of both strings are shared (without any copy operation or
+  memory allocation) as long as you change the string. This class
+  stores also the length of the string, so that many operations are
+  faster as the C-str-functions.
+
+  This class provide only readonly string handling. So you could create
+  a string and you could only query the content from this string.
+  It provide also functionality to change the string, but this results
+  in every case in a new string instance (in the most cases with an
+  memory allocation). You don't have functionality to change the
+  content of the string. If you want change the string content, than
+  you should us the OStringBuffer class, which provide these
+  functionality and avoid to much memory allocation.
+
+  The design of this class is similar to the string classes in Java
+  and so more people should have fewer understanding problems when they
+  use this class.
+*/
+
 class OString
 {
-    class DO_NOT_ACQUIRE;
-    OString( rtl_String * value, DO_NOT_ACQUIRE * )
-        : pData( value )
-    {
-    }
+    friend class ByteString;
+
 public:
-    /**
-     * A pointer to the data structur which contains the data.
-     */
     rtl_String * pData;
 
-    /**
-     * Allocates a new <code>OString</code> containing no characters.
-     */
-    OString()
-        : pData(NULL)
+private:
+    class DO_NOT_ACQUIRE;
+    OString( rtl_String * value, DO_NOT_ACQUIRE * )
     {
-        RTL_STRING_NEW(&pData);
+        pData = value;
+    }
+
+public:
+    /**
+      New string containing no characters.
+    */
+    OString() SAL_THROW(())
+    {
+        pData = 0;
+        rtl_string_new( &pData );
     }
 
     /**
-     * Notice and acquire the string data of value.
-     *
-     * @param   value   a <code>OString</code>.
-     */
-    OString( const OString & value )
-        : pData( value.pData )
+      New string from OString.
+
+      @param    str         a OString.
+    */
+    OString( const OString & str ) SAL_THROW(())
     {
+        pData = str.pData;
         rtl_string_acquire( pData );
     }
 
     /**
-     * Notice and acquire the string data of value.
-     *
-     * @param   value   a <code>rtl_String</code>.
-     */
-    OString( rtl_String * value )
-        : pData(value)
+      New string from OString data.
+
+      @param    str         a OString data.
+    */
+    OString( rtl_String * str ) SAL_THROW(())
     {
+        pData = str;
         rtl_string_acquire( pData );
     }
 
     /**
-     * Allocates a new <code>OString</code> so that it represents the
-     * sequence of characters currently contained in the character array
-     * argument.
-     *
-     * @param  value   the initial value of the string.
-     */
-    OString( const sal_Char * value)
-        : pData(NULL)
+      New string from a character buffer array.
+
+      @param    value       a NULL-terminated character array.
+    */
+    OString( const sal_Char * value ) SAL_THROW(())
     {
+        pData = 0;
         rtl_string_newFromStr( &pData, value );
     }
 
     /**
-     * Allocates a new <code>OString</code> that contains characters from
-     * a subarray of the character array argument. The <code>offset</code>
-     * argument is the index of the first character of the subarray and
-     * the <code>count</code> argument specifies the length of the
-     * subarray.
-     *
-     * @param      value    array that is the source of characters.
-     * @param      offset   the initial offset.
-     * @param      count    the length.
-     * @exception  StringIndexOutOfBoundsException  if the <code>offset</code>
-     *               and <code>count</code> arguments index characters outside
-     *               the bounds of the <code>value</code> array.
-     */
-    OString( const sal_Char * value, sal_Int32 length )
-        : pData(NULL)
+      New string from a character buffer array.
+
+      @param    value       a character array.
+      @param    length      the number of character which should be copied.
+                            The character array length must be greater or
+                            equal than this value.
+    */
+    OString( const sal_Char * value, sal_Int32 length ) SAL_THROW(())
     {
+        pData = 0;
         rtl_string_newFromStr_WithLength( &pData, value, length );
     }
 
     /**
-     * Allocates a new <code>OString</code> that contains the first
-     * <code>count</code> characters of the Unicode character array argument.
-     * The Unicode string is converted to a 8 bit string using the
-     * <code>encoding</code> argument.
-     *
-     * @param      value    Unicode character array
-     * @param      count    the length.
-     * @param      encoding TextEncoding used to convert the 8 bit string
-     * @exception  StringIndexOutOfBoundsException  <code>count</code> argument
-     *              is bigger than the length of the 8 bit character string.
-     */
-    OString( const sal_Unicode * value, sal_Int32 length, rtl_TextEncoding encoding )
-        : pData(NULL)
-    {
-        RTL_STRING_NEW(&pData);
-        if( value )
-        {
-            // for exception
-            //sal_Int32 len = rtl_ustr_getLength(value);
-            //if( len < length )
-            //  throw StringIndexOutOfBoundsException;
+      New string from a Unicode character buffer array.
 
-            if( length )
-                rtl_uString2String( &pData, value, length, encoding, OUSTRING_TO_OSTRING_CVTFLAGS );
-        }
+      @param    value           a Unicode character array.
+      @param    length          the number of character which should be converted.
+                                The Unicode character array length must be
+                                greater or equal than this value.
+      @param    encoding        the text encoding in which the Unicode character
+                                sequence should be converted.
+      @param    convertFlags    flags which controls the conversion.
+                                see RTL_UNICODETOTEXT_FLAGS_...
+    */
+    OString( const sal_Unicode * value, sal_Int32 length,
+             rtl_TextEncoding encoding,
+             sal_uInt32 convertFlags = OUSTRING_TO_OSTRING_CVTFLAGS ) SAL_THROW(())
+    {
+        pData = 0;
+        rtl_uString2String( &pData, value, length, encoding, convertFlags );
     }
 
-    OString( const ByteString & value );
+    OString( const ByteString & value ) SAL_THROW(());
 
     /**
-     * Release the string own string data and notice and acquire the string data of value.
-     */
-    OString& operator = ( const OString& value )
-    {
-        rtl_string_assign( &pData, value.pData );
-        return *this;
-    }
-
-    /**
-     * Release the string own string data and replace the string data with new string data
-     * containing the old string data concatenate with the sting data of value.
-     */
-    OString operator+=( const OString& rStr )
-    {
-        rtl_string_newConcat( &pData, pData, rStr.pData );
-        return *this;
-    }
-
-    /**
-     * Release the string data.
-     */
-    ~OString()
+      Release the string data.
+    */
+    ~OString() SAL_THROW(())
     {
         rtl_string_release( pData );
     }
+
+    /**
+      Assign a new string.
+
+      @param    str         a OString.
+    */
+    OString & operator=( const OString & str ) SAL_THROW(())
+    {
+        rtl_string_assign( &pData, str.pData );
+        return *this;
+    }
+
+    /**
+      Append a string to this string.
+
+      @param    str         a OString.
+    */
+    OString & operator+=( const OString & str ) SAL_THROW(())
+    {
+        rtl_string_newConcat( &pData, pData, str.pData );
+        return *this;
+    }
+
+    /**
+      Returns the length of this string.
+      The length is equal to the number of characters in this string.
+
+      @return   the length of the sequence of characters represented by this
+                object.
+    */
+    sal_Int32 getLength() const SAL_THROW(()) { return pData->length; }
+
+    /**
+      Returns a pointer to the character buffer from this string.
+      It isn't necessarily NULL terminated.
+
+      @return   a pointer to the characters buffer from this object.
+    */
+    operator const sal_Char *() const SAL_THROW(()) { return pData->buffer; }
+
+    /**
+      Returns a pointer to the character buffer from this string.
+      It isn't necessarily NULL terminated.
+
+      @return   a pointer to the characters buffer from this object.
+    */
+    const sal_Char * getStr() const SAL_THROW(()) { return pData->buffer; }
+
+
+
+
+
 
     /**
      * Allocates a new string that contains the sequence of characters
@@ -259,39 +269,6 @@ public:
      * @param   buffer   a <code>StringBuffer</code>.
      */
     //public OString (StringBuffer buffer) {
-
-    /**
-     * Returns the length of this string.
-     * The length is equal to the number of 16-bit
-     * Unicode characters in the string.
-     *
-     * @return  the length of the sequence of characters represented by this
-     *          object.
-     */
-    sal_Int32 getLength() const { return pData->length; }
-
-    /**
-     * Returns the character at the specified index. An index ranges
-     * from <code>0</code> to <code>length() - 1</code>.
-     *
-     * @param      index   the index of the character.
-     * @return     the character at the specified index of this string.
-     *             The first character is at index <code>0</code>.
-     * @exception  StringIndexOutOfBoundsException  if the index is out of
-     *               range.
-     */
-    //sal_Char  operator [] ( sal_Int32 nIndex ) const
-    //  { return pData->buffer[nIndex]; }
-
-    /**
-     * Return a null terminated character array.
-     */
-    operator        const sal_Char *() const { return pData->buffer; }
-
-    /**
-     * Return a null terminated unicode character array.
-     */
-    const sal_Char* getStr() const { return pData->buffer; }
 
     /**
      * Compares this string to the specified object.
@@ -691,109 +668,174 @@ public:
         return OString( pNew, (DO_NOT_ACQUIRE *)0 );
     }
 
+
+
+
     /**
-     * Returns the string representation of the <code>sal_Bool</code> argument.
-     *
-     * @param   b   a <code>sal_Bool</code>.
-     * @return  if the argument is <code>true</code>, a string equal to
-     *          <code>"true"</code> is returned; otherwise, a string equal to
-     *          <code>"false"</code> is returned.
-     */
-    static OString valueOf(sal_Bool b)
+      Returns the Boolean value from this string.
+      This function can't be used for language specific conversion.
+
+      @return   sal_True, if the string is 1 or "True" in any ASCII case.
+                sal_False in any other case.
+    */
+    sal_Bool toBoolean() const SAL_THROW(())
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
-        rtl_String * pNew = 0;
-        rtl_string_newFromStr_WithLength( &pNew, sz, rtl_str_valueOfBoolean( sz, b ) );
-        return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+        return rtl_str_toBoolean( pData->buffer );
     }
 
     /**
-     * Returns the string representation of the <code>char</code> * argument.
-     *
-     * @param   c   a <code>char</code>.
-     * @return  a newly allocated string of length <code>1</code> containing
-     *          as its single character the argument <code>c</code>.
-     */
-    static OString valueOf(sal_Char c)
+      Returns the first character from this string.
+
+      @return   the first character from this string or 0, if this string
+                is emptry.
+    */
+    sal_Char toChar() const SAL_THROW(())
+    {
+        return pData->buffer[0];
+    }
+
+    /**
+      Returns the int32 value from this string.
+      This function can't be used for language specific conversion.
+
+      @param    radix       the radix (between 2 and 36)
+      @return   the int32 represented from this string.
+                0 if this string represents no number.
+    */
+    sal_Int32 toInt32( sal_Int16 radix = 10 ) const SAL_THROW(())
+    {
+        return rtl_str_toInt32( pData->buffer, radix );
+    }
+
+    /**
+      Returns the int64 value from this string.
+      This function can't be used for language specific conversion.
+
+      @param    radix       the radix (between 2 and 36)
+      @return   the int64 represented from this string.
+                0 if this string represents no number.
+    */
+    sal_Int64 toInt64( sal_Int16 radix = 10 ) const SAL_THROW(())
+    {
+        return rtl_str_toInt64( pData->buffer, radix );
+    }
+
+    /**
+      Returns the float value from this string.
+      This function can't be used for language specific conversion.
+
+      @return   the float represented from this string.
+                0.0 if this string represents no number.
+    */
+    float toFloat() const SAL_THROW(())
+    {
+        return rtl_str_toFloat( pData->buffer );
+    }
+
+    /**
+      Returns the double value from this string.
+      This function can't be used for language specific conversion.
+
+      @return   the double represented from this string.
+                0.0 if this string represents no number.
+    */
+    double toDouble() const SAL_THROW(())
+    {
+        return rtl_str_toDouble( pData->buffer );
+    }
+
+    /**
+      Returns the string representation of the sal_Bool argument.
+      If the sal_Bool is true, the string "true" is returned.
+      If the sal_Bool is false, the string "false" is returned.
+      This function can't be used for language specific conversion.
+
+      @param    b   a sal_Bool.
+      @return   a string with the string representation of the argument.
+    */
+    static OString valueOf( sal_Bool b ) SAL_THROW(())
+    {
+        sal_Char aBuf[RTL_STR_MAX_VALUEOFBOOLEAN];
+        rtl_String* pNewData = 0;
+        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfBoolean( aBuf, b ) );
+        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns the string representation of the char argument.
+
+      @param    c   a character.
+      @return   a string with the string representation of the argument.
+    */
+    static OString valueOf( sal_Char c ) SAL_THROW(())
     {
         return OString( &c, 1 );
     }
 
     /**
-     * Returns the string representation of the <code>int</code> argument.
-     * <p>
-     * The representation is exactly the one returned by the
-     * <code>Integer.toString</code> method of one argument.
-     *
-     * @param   i   an <code>int</code>.
-     * @return  a newly allocated string containing a string representation of
-     *          the <code>int</code> argument.
-     * @see     java.lang.Integer#toString(int, int)
-     */
-    static OString valueOf(sal_Int32 i, sal_Int16 radix = 10 )
+      Returns the string representation of the int argument.
+      This function can't be used for language specific conversion.
+
+      @param    i           a int32.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+    */
+    static OString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFINT32];
-        rtl_String * pNew = 0;
-        rtl_string_newFromStr_WithLength( &pNew, sz, rtl_str_valueOfInt32( sz, i, radix ) );
-        return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+        sal_Char aBuf[RTL_STR_MAX_VALUEOFINT32];
+        rtl_String* pNewData = 0;
+        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfInt32( aBuf, i, radix ) );
+        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
     }
 
     /**
-     * Returns the string representation of the <code>long</code> argument.
-     * <p>
-     * The representation is exactly the one returned by the
-     * <code>Long.toString</code> method of one argument.
-     *
-     * @param   l   a <code>long</code>.
-     * @return  a newly allocated string containing a string representation of
-     *          the <code>long</code> argument.
-     * @see     java.lang.Long#toString(long)
-     */
-    static OString valueOf(sal_Int64 l, sal_Int16 radix = 10 )
+      Returns the string representation of the long argument.
+      This function can't be used for language specific conversion.
+
+      @param    l           a int64.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+    */
+    static OString valueOf( sal_Int64 l, sal_Int16 radix = 10 ) SAL_THROW(())
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFINT64];
-        rtl_String * pNew = 0;
-        rtl_string_newFromStr_WithLength( &pNew, sz, rtl_str_valueOfInt64( sz, l, radix ) );
-        return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+        sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
+        rtl_String* pNewData = 0;
+        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfInt64( aBuf, l, radix ) );
+        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
     }
 
     /**
-     * Returns the string representation of the <code>float</code> argument.
-     * <p>
-     * The representation is exactly the one returned by the
-     * <code>Float.toString</code> method of one argument.
-     *
-     * @param   f   a <code>float</code>.
-     * @return  a newly allocated string containing a string representation of
-     *          the <code>float</code> argument.
-     * @see     java.lang.Float#toString(float)
-     */
-    static OString valueOf(float f)
+      Returns the string representation of the float argument.
+      This function can't be used for language specific conversion.
+
+      @param    f           a float.
+      @return   a string with the string representation of the argument.
+    */
+    static OString valueOf( float f ) SAL_THROW(())
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFFLOAT];
-        rtl_String * pNew = 0;
-        rtl_string_newFromStr_WithLength( &pNew, sz, rtl_str_valueOfFloat( sz, f ) );
-        return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+        sal_Char aBuf[RTL_STR_MAX_VALUEOFFLOAT];
+        rtl_String* pNewData = 0;
+        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfFloat( aBuf, f ) );
+        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
     }
 
     /**
-     * Returns the string representation of the <code>double</code> argument.
-     * <p>
-     * The representation is exactly the one returned by the
-     * <code>Double.toString</code> method of one argument.
-     *
-     * @param   d   a <code>double</code>.
-     * @return  a newly allocated string containing a string representation of
-     *          the <code>double</code> argument.
-     * @see     java.lang.Double#toString(double)
-     */
-    static OString valueOf(double d)
+      Returns the string representation of the double argument.
+      This function can't be used for language specific conversion.
+
+      @param    d           a double.
+      @return   a string with the string representation of the argument.
+    */
+    static OString valueOf( double d ) SAL_THROW(())
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFDOUBLE];
-        rtl_String * pNew = 0;
-        rtl_string_newFromStr_WithLength( &pNew, sz, rtl_str_valueOfDouble( sz, d ) );
-        return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+        sal_Char aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
+        rtl_String* pNewData = 0;
+        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfDouble( aBuf, d ) );
+        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
     }
+
+
+
 
     // UString compatibility deprecated
     sal_Int32           len() const { return getLength(); }
@@ -816,18 +858,18 @@ public:
     sal_Int32           search( const sal_Char* pchar, sal_Int32 nIndex = 0) const { return indexOf( pchar, nIndex ); }
 };
 
+/* ======================================================================= */
+
 struct OStringHash
 {
-     size_t operator()(const rtl::OString& rString) const
-         { return (size_t)rString.hashCode(); }
+    size_t operator()( const rtl::OString& rString ) const
+        { return (size_t)rString.hashCode(); }
 };
 
-#ifdef _USE_NAMESPACE
-}
-#endif
+/* ======================================================================= */
+
+} /* Namespace */
 
 #endif /* __cplusplus */
+
 #endif /* _RTL_STRING_HXX_ */
-
-
-
