@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:37:02 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 }
 
                 ODataAccessDescriptor aDescriptor;
-                aDescriptor[daDataSource]   <<= sSourceArg;
+                aDescriptor.setDataSource(sSourceArg);
                 aDescriptor[daCommand]      <<= sCommandArg;
                 aDescriptor[daCursor]       <<= xCursor;
                 aDescriptor[daSelection]    <<= aSelection;
