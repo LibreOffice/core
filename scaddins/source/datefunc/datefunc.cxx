@@ -2,9 +2,9 @@
 *
 *  $RCSfile: datefunc.cxx,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: dr $ $Date: 2001-10-02 07:52:33 $
+*  last change: $Author: dr $ $Date: 2001-10-02 08:07:33 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -123,7 +123,7 @@ ScaList::ScaList() :
 
 ScaList::~ScaList()
 {
-    delete pData;
+    delete[] pData;
 }
 
 void ScaList::_Grow()
@@ -498,7 +498,7 @@ OUString SAL_CALL ScaDateAddIn::getImplementationName() throw( uno::RuntimeExcep
 sal_Bool SAL_CALL ScaDateAddIn::supportsService( const OUString& aServiceName ) throw( uno::RuntimeException )
 {
     return aServiceName.equalsAscii( ADDIN_SERVICE ) ||
-           aServiceName.equalsAscii( MY_SERVICE );
+        aServiceName.equalsAscii( MY_SERVICE );
 }
 
 uno::Sequence< OUString > SAL_CALL ScaDateAddIn::getSupportedServiceNames() throw( uno::RuntimeException )
