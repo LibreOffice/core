@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbreak.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:37:49 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,14 +126,14 @@ ModalDialog DLG_BREAK
         Text [ english_us ] = "~Line break" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "»»ĞĞ(~L)";
+        Text[ chinese_simplified ] = "æ¢è¡Œ(~L)";
         Text[ russian ] = "Ğàçğûâ ñòğîêè";
         Text[ polish ] = "Podzia³ ~wierszy";
-        Text[ japanese ] = "‰üs(~L)";
-        Text[ chinese_traditional ] = "´«¦æ(~L)";
+        Text[ japanese ] = "æ”¹è¡Œ(~L)";
+        Text[ chinese_traditional ] = "æ›è¡Œ(~L)";
         Text[ arabic ] = "İÇÕá ÃÓØÑ";
         Text[ greek ] = "ÁëëáãŞ ãñáììŞò";
-        Text[ korean ] = "°³Çà(~L)";
+        Text[ korean ] = "ê°œí–‰(~L)";
         Text[ turkish ] = "Satır sonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Salto de ~línea";
@@ -157,14 +157,14 @@ ModalDialog DLG_BREAK
         Text [ english_us ] = "~Page break" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "»»Ò³(~P)";
+        Text[ chinese_simplified ] = "æ¢é¡µ(~P)";
         Text[ russian ] = "Ğàçğûâ ñòğàíèöû";
         Text[ polish ] = "Podzia³ stron";
-        Text[ japanese ] = "‰üÍß°¼Ş(~P)";
-        Text[ chinese_traditional ] = "´«­¶(~P)";
+        Text[ japanese ] = "æ”¹ï¾ï¾Ÿï½°ï½¼ï¾(~P)";
+        Text[ chinese_traditional ] = "æ›é (~P)";
         Text[ arabic ] = "İÇÕá ÕİÍÇÊ";
         Text[ greek ] = "ÁëëáãŞ óåëßäáò";
-        Text[ korean ] = "ÂÊ ³ª´©±â(~P)";
+        Text[ korean ] = "ìª½ ë‚˜ëˆ„ê¸°(~P)";
         Text[ turkish ] = "~Sayfa sonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Salto de ~página";
@@ -187,14 +187,14 @@ ModalDialog DLG_BREAK
         Text [ spanish ] = "Salto de colu~mna" ;
         Text [ english_us ] = "~Column break" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "»»À¸(~C)";
+        Text[ chinese_simplified ] = "æ¢æ (~C)";
         Text[ russian ] = "Ğàçğûâ êîëîíêè";
         Text[ polish ] = "Podzia³ kolumny";
-        Text[ japanese ] = "‰ü’i(~C)";
-        Text[ chinese_traditional ] = "´«Äæ(~C)";
+        Text[ japanese ] = "æ”¹æ®µ(~C)";
+        Text[ chinese_traditional ] = "æ›æ¬„(~C)";
         Text[ arabic ] = "İÇÕá ÃÚãÏÉ";
         Text[ greek ] = "ÁëëáãŞ óôŞëçò";
-        Text[ korean ] = "¿­ ³ª´©±â(~C)";
+        Text[ korean ] = "ì—´ ë‚˜ëˆ„ê¸°(~C)";
         Text[ turkish ] = "Sütun sonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Salto de colu~mna";
@@ -216,14 +216,14 @@ ModalDialog DLG_BREAK
         Text [ dutch ] = "Type" ;
         Text [ spanish ] = "Tipo" ;
         Text [ english_us ] = "Type" ;
-        Text[ chinese_simplified ] = "ÀàĞÍ";
+        Text[ chinese_simplified ] = "ç±»å‹";
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ";
-        Text[ japanese ] = "í—Ş";
-        Text[ chinese_traditional ] = "Ãş«¬";
+        Text[ japanese ] = "ç¨®é¡";
+        Text[ chinese_traditional ] = "é¡å‹";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "ÇüÅÂ";
+        Text[ korean ] = "í˜•íƒœ";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo";
@@ -247,14 +247,14 @@ ModalDialog DLG_BREAK
         Text [ english_us ] = "~Style" ;
         Group = TRUE ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÑùÊ½(~S)";
+        Text[ chinese_simplified ] = "æ ·å¼(~S)";
         Text[ russian ] = "Øàáëîí";
         Text[ polish ] = "Szablon";
-        Text[ japanese ] = "½À²Ù(~S)";
-        Text[ chinese_traditional ] = "¼Ë¦¡(~S)";
+        Text[ japanese ] = "ï½½ï¾€ï½²ï¾™(~S)";
+        Text[ chinese_traditional ] = "æ¨£å¼(~S)";
         Text[ arabic ] = "äãØ";
         Text[ greek ] = "Ğñüôõğï";
-        Text[ korean ] = "À¯Çü(~S)";
+        Text[ korean ] = "ìœ í˜•(~S)";
         Text[ turkish ] = "~Biçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Estilo";
@@ -320,7 +320,7 @@ ModalDialog DLG_BREAK
         };
     StringList [ chinese_simplified ] =
     {
-             < "[ÎŞ]" ; > ;
+             < "[æ— ]" ; > ;
     };
     StringList [ russian ] =
     {
@@ -332,11 +332,11 @@ ModalDialog DLG_BREAK
     };
     StringList [ japanese ] =
     {
-             < "[‚È‚µ]" ; > ;
+             < "[ãªã—]" ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-             < "[µL]" ; > ;
+             < "[ç„¡]" ; > ;
     };
     StringList [ arabic ] =
     {
@@ -348,7 +348,7 @@ ModalDialog DLG_BREAK
     };
     StringList [ korean ] =
     {
-             < "[¾øÀ½]" ; > ;
+             < "[ì—†ìŒ]" ; > ;
     };
     StringList [ turkish ] =
     {
@@ -382,14 +382,14 @@ ModalDialog DLG_BREAK
         Text [ spanish ] = "Cam~biar número de página" ;
         Text [ english_us ] = "Change page ~number" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "¸ü¸ÄÒ³Âë(~N)";
+        Text[ chinese_simplified ] = "æ›´æ”¹é¡µç (~N)";
         Text[ russian ] = "Èçìåíèòü íîìåğ ñòğàíèöû";
         Text[ polish ] = "Zmieñ numer strony";
-        Text[ japanese ] = "Íß°¼Ş”Ô†‚Ì•ÏX(~N)";
-        Text[ chinese_traditional ] = "ÅÜ§ó­¶½X(~N)";
+        Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ç•ªå·ã®å¤‰æ›´(~N)";
+        Text[ chinese_traditional ] = "è®Šæ›´é ç¢¼(~N)";
         Text[ arabic ] = "ÊÛííÑ ÑŞã ÇáÕİÍÉ";
         Text[ greek ] = "ÁëëáãŞ áñéèìïı óåëßäáò";
-        Text[ korean ] = "ÂÊ ¡¡¹øÈ£ º¯°æ(~N)";
+        Text[ korean ] = "ìª½ ã€€ë²ˆí˜¸ ë³€ê²½(~N)";
         Text[ turkish ] = "Sayfa numarasını değiştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cam~biar número de página";
@@ -409,18 +409,19 @@ ModalDialog DLG_BREAK
         First = 1 ;
         Last = 9999 ;
     };
-    Text[ chinese_simplified ] = "²åÈë»»ĞĞ";
+    Text[ chinese_simplified ] = "æ’å…¥æ¢è¡Œ";
     Text[ russian ] = "Âñòàâèòü ğàçğûâ";
     Text[ polish ] = "Wstaw podzia³";
-    Text[ japanese ] = "‹æØ‚è‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J´«¦æ";
+    Text[ japanese ] = "åŒºåˆ‡ã‚Šã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥æ›è¡Œ";
     Text[ arabic ] = "ÅÏÑÇÌ İÇÕá";
     Text[ greek ] = "ÅéóáãùãŞ áëëáãŞò";
-    Text[ korean ] = "³ª´©±â »ğÀÔ";
+    Text[ korean ] = "ë‚˜ëˆ„ê¸° ì‚½ì…";
     Text[ turkish ] = "Kesme ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar salto";
 };
+
 
 
 
