@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EditBase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:30 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ protected:
     sal_Int16   getLastReadVersion() const { return m_nLastReadVersion; }
 
 public:
-    DECLARE_DEFAULT_XTOR( OEditBaseModel );
+    DECLARE_DEFAULT_BOUND_XTOR( OEditBaseModel );
 
     // XPersistObject
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
