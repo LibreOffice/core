@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 15:20:26 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 11:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef __FILTER_CONFIG_TYPEDETECTION_HXX_
 #define __FILTER_CONFIG_TYPEDETECTION_HXX_
 
@@ -75,6 +74,10 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
 
+#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
+#include <comphelper/mediadescriptor.hxx>
+#endif
+
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
@@ -89,13 +92,6 @@ namespace css = ::com::sun::star;
 
 //_______________________________________________
 // definitions
-
-/** @short  often used property names of a <type scope="com.sun.star.document">MediaDescriptor</type>. */
-#define DESCPROP_FILTERNAME         ::rtl::OUString::createFromAscii("FilterName"     )
-#define DESCPROP_TYPENAME           ::rtl::OUString::createFromAscii("TypeName"       )
-#define DESCPROP_URL                ::rtl::OUString::createFromAscii("URL"            )
-#define DESCPROP_INPUTSTREAM        ::rtl::OUString::createFromAscii("InputStream"    )
-#define DESCPROP_DOCUMENTSERVICE    ::rtl::OUString::createFromAscii("DocumentService")
 
 //_______________________________________________
 
@@ -131,12 +127,20 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
 
     private:
 
+        //---------------------------------------
+        /** TODO document me */
         sal_Bool impl_getPreselectionForType(const ::rtl::OUString& sPreSelType,
                                              const css::util::URL&  aParsedURL ,
                                                    FlatDetection&   rFlatTypes );
+
+        //---------------------------------------
+        /** TODO document me */
         sal_Bool impl_getPreselectionForFilter(const ::rtl::OUString& sPreSelFilter,
                                                const css::util::URL&  aParsedURL   ,
                                                      FlatDetection&   rFlatTypes   );
+
+        //---------------------------------------
+        /** TODO document me */
         sal_Bool impl_getPreselectionForDocumentService(const ::rtl::OUString& sPreSelDocumentService,
                                                          const css::util::URL& aParsedURL            ,
                                                                FlatDetection&  rFlatTypes            );
@@ -165,9 +169,9 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
                         information, if this type match to the given URL by its URLPattern
                         registration.
          */
-        void impl_getPreselection(const css::util::URL&                  aParsedURL ,
-                                        ::comphelper::SequenceAsHashMap& rDescriptor,
-                                        FlatDetection&                   rFlatTypes );
+        void impl_getPreselection(const css::util::URL&                aParsedURL ,
+                                        ::comphelper::MediaDescriptor& rDescriptor,
+                                        FlatDetection&                 rFlatTypes );
 
         //---------------------------------------
 
@@ -215,11 +219,11 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
                         An empty value if detection failed. .... but see rLastChance
                         for additional returns!
          */
-        ::rtl::OUString impl_detectTypeFlatAndDeep(      ::comphelper::SequenceAsHashMap& rDescriptor   ,
-                                                   const FlatDetection&                   lFlatTypes    ,
-                                                         sal_Bool                         bAllowDeep    ,
-                                                         OUStringList&                    rUsedDetectors,
-                                                         ::rtl::OUString&                 rLastChance   );
+        ::rtl::OUString impl_detectTypeFlatAndDeep(      ::comphelper::MediaDescriptor& rDescriptor   ,
+                                                   const FlatDetection&                 lFlatTypes    ,
+                                                         sal_Bool                       bAllowDeep    ,
+                                                         OUStringList&                  rUsedDetectors,
+                                                         ::rtl::OUString&               rLastChance   );
 
         //---------------------------------------
 
@@ -245,8 +249,8 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
             @return     The internal name of a detected type.
                         An empty value if detection failed.
          */
-        ::rtl::OUString impl_detectTypeDeepOnly(      ::comphelper::SequenceAsHashMap& rDescriptor   ,
-                                                const OUStringList&                    rUsedDetectors);
+        ::rtl::OUString impl_detectTypeDeepOnly(      ::comphelper::MediaDescriptor& rDescriptor   ,
+                                                const OUStringList&                  rUsedDetectors);
 
         //---------------------------------------
 
@@ -267,8 +271,8 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
             @param      rDescriptor
                         a stl representation of the MediaDescriptor as in/out parameter.
          */
-        ::rtl::OUString impl_askDetectService(const ::rtl::OUString&                 sDetectService,
-                                                    ::comphelper::SequenceAsHashMap& rDescriptor   );
+        ::rtl::OUString impl_askDetectService(const ::rtl::OUString&               sDetectService,
+                                                    ::comphelper::MediaDescriptor& rDescriptor   );
 
         //---------------------------------------
 
@@ -305,7 +309,7 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
                         Note: If an interactionHandler is part of the given descriptor too, it was already used.
                         Means: let the exception pass trough the top most interface method!
          */
-        void impl_openStream(::comphelper::SequenceAsHashMap& rDescriptor)
+        void impl_openStream(::comphelper::MediaDescriptor& rDescriptor)
             throw (css::uno::Exception);
 
         //---------------------------------------
@@ -328,8 +332,8 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
             @return     TRUE the specified type and its registrations was valid(!) and
                         could be set on the descriptor.
          */
-        sal_Bool impl_validateAndSetTypeOnDescriptor(      ::comphelper::SequenceAsHashMap& rDescriptor,
-                                                     const ::rtl::OUString&                 sType      );
+        sal_Bool impl_validateAndSetTypeOnDescriptor(      ::comphelper::MediaDescriptor& rDescriptor,
+                                                     const ::rtl::OUString&               sType      );
 
         //---------------------------------------
 
@@ -350,8 +354,8 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
             @return     TRUE the specified type and its registrations was valid(!) and
                         could be set on the descriptor.
          */
-        sal_Bool impl_validateAndSetFilterOnDescriptor(      ::comphelper::SequenceAsHashMap& rDescriptor,
-                                                       const ::rtl::OUString&                 sFilter    );
+        sal_Bool impl_validateAndSetFilterOnDescriptor(      ::comphelper::MediaDescriptor& rDescriptor,
+                                                       const ::rtl::OUString&               sFilter    );
 
         //---------------------------------------
 
@@ -366,7 +370,7 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
                         reference to the MediaDescriptor (represented by an easy-to-use
                         stl interface!), which should be pacthed.
          */
-        void impl_removeTypeFilterFromDescriptor(::comphelper::SequenceAsHashMap& rDescriptor);
+        void impl_removeTypeFilterFromDescriptor(::comphelper::MediaDescriptor& rDescriptor);
 
     //-------------------------------------------
     // uno interface
