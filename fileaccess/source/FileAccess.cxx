@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:55:13 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 15:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,10 @@ class OFileAccess : public FileAccessHelper
 
     void transferImpl( const rtl::OUString& rSource, const rtl::OUString& rDest, sal_Bool bMoveData )
         throw(CommandAbortedException, Exception, RuntimeException);
+    bool createNewFile( const rtl::OUString & rParentURL,
+                        const rtl::OUString & rTitle,
+                        const Reference< XInputStream >& data )
+        throw ( Exception );
 
 public:
     OFileAccess() : mpEnvironment( NULL ) {}
@@ -665,22 +669,117 @@ void OFileAccess::setInteractionHandler( const Reference< XInteractionHandler >&
     mpEnvironment->setHandler( Handler );
 }
 
+bool OFileAccess::createNewFile( const rtl::OUString & rParentURL,
+                                 const rtl::OUString & rTitle,
+                                 const Reference< XInputStream >& data )
+    throw ( Exception )
+{
+    ucb::Content aParentCnt( rParentURL, mxEnvironment );
+
+    Reference< XContentCreator > xCreator
+        = Reference< XContentCreator >( aParentCnt.get(), UNO_QUERY );
+    if ( xCreator.is() )
+    {
+        Sequence< ContentInfo > aInfo = xCreator->queryCreatableContentsInfo();
+        sal_Int32 nCount = aInfo.getLength();
+        if ( nCount == 0 )
+            return false;
+
+        for ( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            const ContentInfo & rCurr = aInfo[i];
+            if ( ( rCurr.Attributes
+                    & ContentInfoAttribute::KIND_DOCUMENT ) &&
+                 ( rCurr.Attributes
+                    & ContentInfoAttribute::INSERT_WITH_INPUTSTREAM ) )
+            {
+                // Make sure the only required bootstrap property is
+                // "Title",
+                const Sequence< Property > & rProps = rCurr.Properties;
+                if ( rProps.getLength() != 1 )
+                    continue;
+
+                if ( !rProps[ 0 ].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+                    continue;
+
+                Sequence<rtl::OUString> aNames(1);
+                rtl::OUString* pNames = aNames.getArray();
+                pNames[0] = rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+                Sequence< Any > aValues(1);
+                Any* pValues = aValues.getArray();
+                pValues[0] = makeAny( rtl::OUString( rTitle ) );
+
+                try
+                {
+                    ucb::Content aNew;
+                    if ( aParentCnt.insertNewContent(
+                            rCurr.Type, aNames, aValues, data, aNew ) )
+                        return true; // success.
+                    else
+                        continue;
+                }
+                catch ( CommandFailedException const & )
+                {
+                    // Interaction Handler already handled the
+                    // error that has occured...
+                    continue;
+                }
+            }
+        }
+    }
+
+    return false;
+}
 
 void SAL_CALL OFileAccess::writeFile( const rtl::OUString& FileURL,
                                       const Reference< XInputStream >& data )
     throw ( Exception, RuntimeException )
 {
-    INetURLObject aObj( FileURL, INET_PROT_FILE );
-    ucb::Content aCnt(
-        aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
-
+    INetURLObject aURL( FileURL, INET_PROT_FILE );
     try
     {
-        aCnt.writeStream( data, sal_True /* bReplaceExisting */ );
+        ucb::Content aCnt(
+            aURL.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+
+        try
+        {
+            aCnt.writeStream( data, sal_True /* bReplaceExisting */ );
+        }
+        catch ( CommandFailedException const & )
+        {
+            // Interaction Handler already handled the error that has occured...
+        }
     }
-    catch ( ::com::sun::star::ucb::CommandFailedException const & )
+    catch ( ContentCreationException const & e )
     {
-        // Interaction Handler already handled the error that has occured...
+        // Most probably file does not exist. Try to create.
+        if ( e.eError == ContentCreationError_CONTENT_CREATION_FAILED )
+        {
+            INetURLObject aParentURLObj( aURL );
+            if ( aParentURLObj.removeSegment() )
+            {
+                String aParentURL
+                    = aParentURLObj.GetMainURL( INetURLObject::NO_DECODE );
+
+                // ensure all parent folders exist.
+                createFolder( aParentURL );
+
+                // create the new file...
+                String aTitle
+                    = aURL.getName( INetURLObject::LAST_SEGMENT,
+                                    true,
+                                    INetURLObject::DECODE_WITH_CHARSET );
+                if ( createNewFile( aParentURL, aTitle, data ) )
+                {
+                    // success
+                    return;
+                }
+            }
+        }
+
+        throw;
     }
 }
 
@@ -704,6 +803,10 @@ void OFileAccess::setHidden( const ::rtl::OUString& FileURL, sal_Bool bHidden )
     aAny <<= bHidden;
     aCnt.setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ), aAny );
 }
+
+//==================================================================================================
+//==================================================================================================
+//==================================================================================================
 
 Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMultiServiceFactory > &)
 {
@@ -729,10 +832,6 @@ Sequence< rtl::OUString > FileAccess_getSupportedServiceNames()
 
 
 }
-
-
-
-
 
 //==================================================================================================
 // Component exports
