@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:41 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,11 @@
 #ifndef _DBAUI_MARKTREE_HXX_
 #define _DBAUI_MARKTREE_HXX_
 
-#ifndef _SVTREEBOX_HXX
-#include <svtools/svtreebx.hxx>
+#ifndef DBAUI_DBTREELISTBOX_HXX
+#include "dbtreelistbox.hxx"
 #endif
+
+
 
 //.........................................................................
 namespace dbaui
@@ -78,27 +80,26 @@ namespace dbaui
     unmarked. In addition, inner nodes know a third state which applies
     if some, but not all of their descendants are marked.
 */
-class OMarkableTreeListBox : public SvTreeListBox
+class OMarkableTreeListBox : public DBTreeListBox
 {
     SvLBoxButtonData*   m_pCheckButton;
     Link                m_aCheckButtonHandler;
 
 public:
-    OMarkableTreeListBox( Window* pParent, WinBits nWinStyle=0 );
-    OMarkableTreeListBox( Window* pParent, const ResId& rResId );
+    OMarkableTreeListBox( Window* pParent
+                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+                            , WinBits nWinStyle=0 );
+    OMarkableTreeListBox( Window* pParent
+                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+                            , const ResId& rResId );
     ~OMarkableTreeListBox();
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual void    CheckButtonHdl();
     void            CheckButtons();     // make the button states consistent (bottom-up)
-    SvLBoxEntry*    GetEntryPosByName(const String& aName,SvLBoxEntry* pStart=NULL) const;
 
     /// the handler given is called whenever the check state of one or more items changed
     void SetCheckHandler(const Link& _rHdl) { m_aCheckButtonHandler = _rHdl; }
-
-    /** call when HiContrast change.
-    */
-    virtual void notifyHiContrastChanged();
 
 protected:
     virtual void Paint(const Rectangle& _rRect);
