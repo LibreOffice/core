@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-01 16:07:57 $
+ *  last change: $Author: dvo $ $Date: 2002-03-04 12:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,11 +544,35 @@ sal_Int32 SwAccessibleParagraph::getCharacterCount()
     return GetString().getLength();
 }
 
-sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Point& aPoint )
+sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Point& rPoint )
     throw (RuntimeException)
 {
-    // HACK: dummy implementation
-    return 0;
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // construct SwPosition (where GetCrsrOfst() will put the result into)
+    SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
+    SwIndex aIndex( pNode, 0);
+    SwPosition aPos( *pNode, aIndex );
+
+    // construct Point (translate into layout coordinates)
+    Window *pWin = GetWindow();
+    CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
+    Point aPoint( rPoint.X, rPoint.Y );
+    MapMode aMapMode = pWin->GetMapMode();
+    aMapMode.SetOrigin( Point() );
+    Point aCorePoint = pWin->PixelToLogic( aPoint, aMapMode );
+    aCorePoint += GetBounds().TopLeft();
+
+    // ask core for position
+    DBG_ASSERT( GetFrm() != NULL, "The text frame has vanished!" );
+    DBG_ASSERT( GetFrm()->IsTxtFrm(), "The text frame has mutated!" );
+    const SwTxtFrm* pFrm = static_cast<const SwTxtFrm*>( GetFrm() );
+    sal_Bool bSuccess = pFrm->GetCrsrOfst( &aPos, aCorePoint );
+
+    return bSuccess ?
+        GetPortionData().GetAccessiblePosition( aPos.nContent.GetIndex() )
+        : 0;
 }
 
 OUString SwAccessibleParagraph::getSelectedText()
