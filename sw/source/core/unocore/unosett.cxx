@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:25:22 $
+ *  last change: $Author: mtg $ $Date: 2001-10-17 16:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2587,9 +2587,16 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
         case WID_TXTCOL_LINE_ALIGN:
         {
             style::VerticalAlignment eAlign;
-            if(!(aValue >>= eAlign))
-                throw IllegalArgumentException();
-            nSepLineVertAlign = eAlign;
+            if(!(aValue >>= eAlign) )
+            {
+                sal_Int8 nTmp;
+                if (! ( aValue >>= nTmp ) )
+                    throw IllegalArgumentException();
+                else
+                    nSepLineVertAlign = static_cast < style::VerticalAlignment > ( nTmp );
+            }
+            else
+                nSepLineVertAlign = eAlign;
         }
         break;
         case WID_TXTCOL_LINE_IS_ON:
