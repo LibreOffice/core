@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepivot.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:44:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,6 @@ public:
 
 private:
     typedef XclExpRecordList< XclExpPCItem >    XclExpPCItemList;
-    typedef XclExpPCItemList::RecordRefType     XclExpPCItemRef;
 
     /** Returns the item list that contains the visible items.
         @descr  Visible items are equal to source items in standard fields,
@@ -379,7 +378,6 @@ private:
 private:
     typedef ::std::vector< XclPTDataFieldInfo > XclPTDataFieldInfoVec;
     typedef XclExpRecordList< XclExpPTItem >    XclExpPTItemList;
-    typedef XclExpPTItemList::RecordRefType     XclExpPTItemRef;
 
     const XclExpPivotTable& mrPTable;       /// Parent pivot table containing this field.
     const XclExpPCField* mpCacheField;      /// The referred pivot cache field.
@@ -487,6 +485,11 @@ public:
     /** Creates all pivot tables and caches from the Calc DataPilot objects. */
     void                CreatePivotTables();
 
+    /** Creates a record wrapper for exporting all pivot caches. */
+    XclExpRecordRef     CreatePivotCachesRecord();
+    /** Creates a record wrapper for exporting all pivot tables of the specified sheet. */
+    XclExpRecordRef     CreatePivotTablesRecord( SCTAB nScTab );
+
     /** Writes all pivot caches (all Workbook records and cache streams). */
     void                WritePivotCaches( XclExpStream& rStrm );
     /** Writes all pivot tables of the specified Calc sheet. */
@@ -506,38 +509,6 @@ private:
     XclExpPivotCacheList maPCacheList;      /// List of all pivot caches.
     XclExpPivotTableList maPTableList;      /// List of all pivot tables.
     bool                mbShareCaches;      /// true = Tries to share caches between tables.
-};
-
-// ============================================================================
-// Reference record classes
-// ============================================================================
-
-/** Placeholder record to write the entire pivot cache list. */
-class XclExpPivotCacheRefRecord : public XclExpRecordBase
-{
-public:
-    explicit            XclExpPivotCacheRefRecord( const XclExpRoot& rRoot );
-
-    virtual void        Save( XclExpStream& rStrm );
-
-private:
-    XclExpPivotTableManager& mrPTManager;   /// The pivot table manager.
-};
-
-// ----------------------------------------------------------------------------
-
-/** Placeholder record to write all pivot tables of a specific sheet. */
-class XclExpPivotTablesRefRecord : public XclExpRecordBase
-{
-public:
-    /** Refers to the current Calc sheet contained in the root data. */
-    explicit            XclExpPivotTablesRefRecord( const XclExpRoot& rRoot );
-
-    virtual void        Save( XclExpStream& rStrm );
-
-private:
-    XclExpPivotTableManager& mrPTManager;   /// The pivot table manager.
-    SCTAB               mnScTab;            /// The Calc sheet index for the pivot tables.
 };
 
 // ============================================================================
