@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:20:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1004,6 +1004,8 @@ void BasicIDEShell::SetCurLib( SfxObjectShell* pShell, String aLibName, bool bUp
         m_aCurLibName = aLibName;
         if ( bUpdateWindows )
             UpdateWindows();
+
+        SetMDITitle();
 
         SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
         if ( pBindings )
