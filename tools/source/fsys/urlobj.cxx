@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-01-15 09:40:07 $
+ *  last change: $Author: sb $ $Date: 2002-07-19 15:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,7 +751,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
             //    domain "@" domain
             //
             // 3rd Production (ftp):
-            //    "ftp" 2*("." label) ["/" *UCS4]
+            //    "FTP" 2*("." label) ["/" *UCS4]
             //
             // 4th Production (http):
             //    label 2*("." label) ["/" *UCS4]
@@ -828,9 +828,9 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                          && (pDomainEnd == pEnd || *pDomainEnd == '/'))
                     m_eScheme
                         = pDomainEnd - p >= 4
-                          && p[0] == 'f'
-                          && p[1] == 't'
-                          && p[2] == 'p'
+                          && (p[0] == 'f' || p[0] == 'F')
+                          && (p[1] == 't' || p[1] == 'T')
+                          && (p[2] == 'p' || p[2] == 'P')
                           && p[3] == '.' ?
                               INET_PROT_FTP : INET_PROT_HTTP; // 3rd, 4th
             }
