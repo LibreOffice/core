@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelckb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-19 11:58:32 $
+ *  last change: $Author: mhu $ $Date: 2001-04-17 11:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_FILELCKB_CXX_ "$Revision: 1.5 $"
+#define _STORE_FILELCKB_CXX_ "$Revision: 1.6 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -506,17 +506,17 @@ inline storeError OFileLockBytes_Impl::create (
 inline storeError OFileLockBytes_Impl::create (
     rtl_uString *pFilename, storeAccessMode eAccessMode)
 {
-#if 0  /* NEW */
-
+    // Path conversion result.
     oslFileError result;
 
+    // Convert into normalized path.
     rtl::OUString aNormPath;
-    result = osl_normalizePath (pFilename, &(aNormPath.pData));
+    result = osl_getNormalizedPathFromFileURL (
+        pFilename, &(aNormPath.pData));
     if (!(result == osl_File_E_None))
     {
-        // Neither System, nor Normalized. May be FileUrl.
-        result = osl_getNormalizedPathFromFileURL (
-            pFilename, &(aNormPath.pData));
+        // Not FileUrl. Maybe System or already Normalized.
+        result = osl_normalizePath (pFilename, &(aNormPath.pData));
         if (!(result == osl_File_E_None))
         {
             // Invalid path.
@@ -524,6 +524,7 @@ inline storeError OFileLockBytes_Impl::create (
         }
     }
 
+    // Convert into system path.
     rtl::OUString aSystemPath;
     result = osl_getSystemPathFromNormalizedPath (
         aNormPath.pData, &(aSystemPath.pData));
@@ -533,21 +534,13 @@ inline storeError OFileLockBytes_Impl::create (
         return store_E_InvalidParameter;
     }
 
+    // Convert into system text encoding.
     rtl::OString aFilename (
         aSystemPath.pData->buffer,
         aSystemPath.pData->length,
         osl_getThreadTextEncoding());
 
-#endif /* NEW */
-#if 1  /* OLD */
-
-    rtl::OString aFilename (
-        pFilename->buffer,
-        pFilename->length,
-        osl_getThreadTextEncoding());
-
-#endif /* OLD */
-
+    // Open file.
     return create (aFilename.pData->buffer, eAccessMode);
 }
 
