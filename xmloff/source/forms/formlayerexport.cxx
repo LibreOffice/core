@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerexport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 16:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OFormLayerXMLExport::getControlId(const Reference< XPropertySet > _rxControl)
+    ::rtl::OUString OFormLayerXMLExport::getControlId(const Reference< XPropertySet >& _rxControl)
     {
         return m_pImpl->getControlId(_rxControl);
     }
@@ -175,6 +175,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.4  2000/12/06 17:28:05  fs
  *  changes for the formlayer import - still under construction
  *
