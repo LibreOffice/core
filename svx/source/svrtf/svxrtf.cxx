@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-03 11:49:05 $
+ *  last change: $Author: jp $ $Date: 2001-08-01 11:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,15 +528,31 @@ void SvxRTFParser::ReadFontTable()
     int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt !!
     Font* pFont = new Font();
     short nFontNo;
+    String sAltNm, sFntNm;
+    BOOL bIsAltFntNm = FALSE;
 
     while( nOpenBrakets && IsParserWorking() )
     {
         switch( ( nToken = GetNextToken() ))
         {
-        case '}':       if( --nOpenBrakets && IsParserWorking() )
+        case '}':
+                        bIsAltFntNm = FALSE;
+                        if( --nOpenBrakets <= 1 && IsParserWorking() )
                             // Style konnte vollstaendig gelesen werden,
                             // also ist das noch ein stabiler Status
                             SaveState( RTF_FONTTBL );
+                        if( 1 == nOpenBrakets && sFntNm.Len() )  // one font is ready
+                        {
+                            // alle Daten vom Font vorhanden, also ab in die Tabelle
+                            if( sAltNm.Len() && 6380 < GetVersionNo() )
+                                (sFntNm += ';' ) += sAltNm;
+
+                            pFont->SetName( sFntNm );
+                            aFontTbl.Insert( nFontNo, pFont );
+                            pFont = new Font();
+                            sAltNm.Erase();
+                            sFntNm.Erase();
+                        }
                         break;
 
         case '{':
@@ -546,8 +562,7 @@ void SvxRTFParser::ReadFontTable()
                 // Unknown und alle bekannten nicht ausgewerteten Gruppen
                 // sofort ueberspringen
                 else if( RTF_UNKNOWNCONTROL != ( nToken = GetNextToken() ) &&
-                        RTF_PANOSE != nToken && RTF_FALT != nToken &&
-                        RTF_FALT != nToken && RTF_FNAME != nToken &&
+                        RTF_PANOSE != nToken && RTF_FNAME != nToken &&
                         RTF_FONTEMB != nToken && RTF_FONTFILE != nToken )
                     nToken = SkipToken( -2 );
                 else
@@ -579,10 +594,6 @@ void SvxRTFParser::ReadFontTable()
                                         (BYTE)nTokenValue ) );
             break;
 
-// AlternativName
-//      case RTF_FALT:
-//          break;
-
         case RTF_FPRQ:
             switch( nTokenValue )
             {
@@ -592,15 +603,17 @@ void SvxRTFParser::ReadFontTable()
             break;
 
         case RTF_F:         nFontNo = (short)nTokenValue;   break;
+        case RTF_FALT:      bIsAltFntNm = TRUE;             break;
 
         case RTF_TEXTTOKEN:
             {
-                if( DelCharAtEnd( aToken, ';' ).Len() )
+                DelCharAtEnd( aToken, ';' );
+                if ( aToken.Len() )
                 {
-                    // alle Daten vom Font vorhanden, also ab in die Tabelle
-                    pFont->SetName( aToken );
-                    aFontTbl.Insert( nFontNo, pFont );
-                    pFont = new Font();
+                    if( bIsAltFntNm )
+                        sAltNm = aToken;
+                    else
+                        sFntNm = aToken;
                 }
             }
             break;
@@ -1344,7 +1357,6 @@ void SvxRTFItemStackType::SetRTFDefaults( const SfxItemSet& rDefaults )
     if( rDefaults.Count() )
     {
         SfxItemIter aIter( rDefaults );
-        const SfxPoolItem* pItem;
         do {
             USHORT nWhich = aIter.GetCurItem()->Which();
             if( SFX_ITEM_SET != aAttrSet.GetItemState( nWhich, FALSE ))
