@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obr $ $Date: 2001-04-10 13:38:59 $
+ *  last change: $Author: ka $ $Date: 2001-04-12 11:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,7 +850,7 @@ void TransferableHelper::CopyToClipboard() const
     if( !mxClipboard.is() )
         ( (TransferableHelper*) this )->mxClipboard = GetSystemClipboard();
 
-    if( mxClipboard.is() )
+    if( mxClipboard.is() && !mxTerminateListener.is() )
     {
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
 
