@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelist.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:51 $
+ *  last change: $Author: jp $ $Date: 2001-05-04 15:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,12 +263,12 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
 
             rIStm >> c;
         }
-        while( cLast );
+        while( cLast && !rIStm.IsEof() );
 
         // String in die Liste stopfen
         rFileList.AppendFile( String(aStr, RTL_TEXTENCODING_ASCII_US));
     }
-    while( c );     // c == 0 && cLast == 0 -> Ende
+    while( c  && !rIStm.IsEof() );      // c == 0 && cLast == 0 -> Ende
 
     return rIStm;
 }
