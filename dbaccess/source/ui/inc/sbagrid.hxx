@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-10 08:52:06 $
+ *  last change: $Author: fs $ $Date: 2001-05-03 09:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,8 +336,8 @@ namespace dbaui
 
         // drag events
         virtual void DoColumnDrag(sal_uInt16 nColumnPos);
-        virtual void DoRowDrag(sal_uInt16 nRowPos);
-        virtual void DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos);
+        virtual void DoRowDrag(sal_Int16 nRowPos);
+        virtual void DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos);
 
         void refresh();
 

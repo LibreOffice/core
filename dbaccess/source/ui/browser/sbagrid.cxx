@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 11:52:17 $
+ *  last change: $Author: fs $ $Date: 2001-05-03 09:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1761,7 +1761,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 }
 
 // -----------------------------------------------------------------------
-void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
+void SbaGridControl::DoRowDrag(sal_Int16 nRowPos)
 {
     Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
     DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoRowDrag : invalid data source !");
@@ -1788,7 +1788,7 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
 }
 
 // -----------------------------------------------------------------------
-void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
+void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
 {
     // the only thing to do here is dragging the pure cell text
     // the old implementation copied a SBA_FIELDDATAEXCHANGE_FORMAT, too, (which was rather expensive to obtain),
