@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-24 09:56:35 $
+ *  last change: $Author: cl $ $Date: 2002-07-12 10:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,6 +658,8 @@ sal_Bool SdUnoDrawView::convertFastPropertyValue
     const Any& rValue
 ) throw ( com::sun::star::lang::IllegalArgumentException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     switch( nHandle )
     {
         case PROPERTY_CURRENTPAGE:
@@ -722,6 +724,8 @@ void SdUnoDrawView::setFastPropertyValue_NoBroadcast
     const Any& rValue
 ) throw ( com::sun::star::uno::Exception)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     switch( nHandle )
     {
         case PROPERTY_CURRENTPAGE:
@@ -754,6 +758,8 @@ void SdUnoDrawView::setFastPropertyValue_NoBroadcast
 
 void SdUnoDrawView::getFastPropertyValue( Any & rRet, sal_Int32 nHandle ) const
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     switch( nHandle )
     {
         case PROPERTY_CURRENTPAGE:
