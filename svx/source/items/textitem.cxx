@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:29:12 $
+ *  last change: $Author: os $ $Date: 2001-02-14 15:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef NOOLDSV //autogen
 #include <vcl/system.hxx>
 #endif
+#ifndef _VCL_VCLENUM_HXX
+#include <vcl/vclenum.hxx>
+#endif
 
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
@@ -176,6 +179,9 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_FONTEMPHASIS_HPP_
+#include <com/sun/star/text/FontEmphasis.hpp>
+#endif
 
 #ifndef _SVX_UNOMID_HXX
 #include <unomid.hxx>
@@ -215,6 +221,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::text;
 
 // Konvertierung fuer UNO
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
@@ -3834,8 +3841,22 @@ sal_Bool SvxEmphasisMarkItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     switch( nMemberId )
     {
     case MID_EMPHASIS:
-        rVal <<= (sal_Int16)GetValue();
-        break;
+    {
+        sal_Int16 nValue = GetValue();
+        sal_Int16 nRet = 0;
+        switch(nValue & EMPHASISMARK_STYLE)
+        {
+            case EMPHASISMARK_NONE   : nRet = FontEmphasis::NONE;           break;
+            case EMPHASISMARK_DOT    : nRet = FontEmphasis::DOT_ABOVE;      break;
+            case EMPHASISMARK_CIRCLE : nRet = FontEmphasis::CIRCLE_ABOVE;   break;
+            case EMPHASISMARK_DISC   : nRet = FontEmphasis::DISK_ABOVE;     break;
+            case EMPHASISMARK_ACCENT : nRet = FontEmphasis::ACCENT_ABOVE;   break;
+        }
+        if(nRet && nValue & EMPHASISMARK_POS_BELOW)
+            nRet += 10;
+        rVal <<= nRet;
+    }
+    break;
     }
     return sal_True;
 }
@@ -3847,11 +3868,22 @@ sal_Bool SvxEmphasisMarkItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
     case MID_EMPHASIS:
     {
-        sal_Int32 nValue;
-        if(!(rVal >>= nValue))
-            bRet = sal_False;
-        else
-            SetValue( (sal_Int16)nValue );
+        sal_Int32 nValue = -1;
+        rVal >>= nValue;
+        switch(nValue)
+        {
+            case FontEmphasis::NONE        : nValue = EMPHASISMARK_NONE;   break;
+            case FontEmphasis::DOT_ABOVE   : nValue = EMPHASISMARK_DOT|EMPHASISMARK_POS_ABOVE;    break;
+            case FontEmphasis::CIRCLE_ABOVE: nValue = EMPHASISMARK_CIRCLE|EMPHASISMARK_POS_ABOVE; break;
+            case FontEmphasis::DISK_ABOVE  : nValue = EMPHASISMARK_DISC|EMPHASISMARK_POS_ABOVE;   break;
+            case FontEmphasis::ACCENT_ABOVE: nValue = EMPHASISMARK_ACCENT|EMPHASISMARK_POS_ABOVE; break;
+            case FontEmphasis::DOT_BELOW   : nValue = EMPHASISMARK_DOT|EMPHASISMARK_POS_BELOW;    break;
+            case FontEmphasis::CIRCLE_BELOW: nValue = EMPHASISMARK_CIRCLE|EMPHASISMARK_POS_BELOW; break;
+            case FontEmphasis::DISK_BELOW  : nValue = EMPHASISMARK_DISC|EMPHASISMARK_POS_BELOW;   break;
+            case FontEmphasis::ACCENT_BELOW: nValue = EMPHASISMARK_ACCENT|EMPHASISMARK_POS_BELOW; break;
+            default: return sal_False;
+        }
+        SetValue( (sal_Int16)nValue );
     }
     break;
     }
