@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 10:27:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ inline int IntFromFixed(FIXED f)
 static BOOL bImplSalCourierScalable = FALSE;
 static BOOL bImplSalCourierNew = FALSE;
 
-static BOOL FontHasCJKUnicodeRange( const SalGraphics* pGraphics );
+static BOOL FontHasCJKUnicodeRange( const SalGraphics* pGraphics, BOOL &bHasKoreanRange );
 
 // =======================================================================
 
@@ -881,7 +881,7 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
     }
 
     if (maGraphicsData.mxTextLayoutCache.get() != 0)
-        maGraphicsData.mxTextLayoutCache->flush();
+        maGraphicsData.mxTextLayoutCache->flush( nFallbackLevel );
 
     // some printers have higher internal resolution, so their
     // text output would be different from what we calculated
@@ -924,10 +924,14 @@ void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
             pMetric->mbDevice           = (aWinMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
             pMetric->mnLeading          = aWinMetric.tmInternalLeading;
             pMetric->mnAscent           = aWinMetric.tmAscent;
-            if ( FontHasCJKUnicodeRange( this ))    // #107888# worakround for Asian...
+            BOOL bHasKoreanRange;
+            if ( FontHasCJKUnicodeRange( this, bHasKoreanRange ))    // #107888# worakround for Asian...
             {
                 pMetric->mnLeading  += aWinMetric.tmExternalLeading;
                 pMetric->mnAscent   += aWinMetric.tmExternalLeading;
+                // #109280# korean only: increase descent for wavelines and improved line space
+                if( bHasKoreanRange )
+                    pMetric->mnDescent   += aWinMetric.tmExternalLeading;
             }
             pMetric->mnDescent          = aWinMetric.tmDescent;
             pMetric->mnSlant            = 0;
@@ -964,10 +968,14 @@ void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
             pMetric->mnAscent           = aWinMetric.tmAscent;
             pMetric->mnDescent          = aWinMetric.tmDescent;
             pMetric->mnLeading          = aWinMetric.tmInternalLeading;
-            if ( FontHasCJKUnicodeRange( this ))    // #107888# worakround for Asian...
+            BOOL bHasKoreanRange;
+            if ( FontHasCJKUnicodeRange( this, bHasKoreanRange ))    // #107888# worakround for Asian...
             {
                 pMetric->mnLeading  += aWinMetric.tmExternalLeading;
                 pMetric->mnAscent   += aWinMetric.tmExternalLeading;
+                // #109280# korean only: increase descent for wavelines and improved line space
+                if( bHasKoreanRange )
+                    pMetric->mnDescent   += aWinMetric.tmExternalLeading;
             }
             pMetric->mnSlant            = 0;
             pMetric->mnFirstChar        = aWinMetric.tmFirstChar;
@@ -1192,9 +1200,10 @@ static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
 static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
 static inline DWORD CalcTag( const char p[4]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
-static BOOL FontHasCJKUnicodeRange( const SalGraphics* pGraphics )
+static BOOL FontHasCJKUnicodeRange( const SalGraphics* pGraphics, BOOL &bHasKoreanRange )
 {
     BOOL bCJKCapable = FALSE;
+    bHasKoreanRange = FALSE;
 
     if ( pGraphics )
     {
@@ -1218,7 +1227,11 @@ static BOOL FontHasCJKUnicodeRange( const SalGraphics* pGraphics )
                 // Check for CJK capabilities of the current font
                 sal_uInt32 nResult = ( ulUnicodeRange2 & 0x2fff0000 ) |
                                      ( ulUnicodeRange3 & 0x00000001 );
+                sal_uInt32 nKorean = ( ulUnicodeRange1 & 0x10000000 ) |
+                                     ( ulUnicodeRange2 & 0x00100000 ) |
+                                     ( ulUnicodeRange2 & 0x01000000 );
                 bCJKCapable = ( nResult != 0 );
+                bHasKoreanRange = bCJKCapable && ( nKorean != 0 );
             }
         }
     }
