@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:11:03 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ polish ] = "Od ~lewej";
         Text[ portuguese_brazilian ] = "Da ~esquerda";
         Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®å‰";
-        Text[ chinese_simplified ] = "åœ¨æ–‡å­—ä¹‹å‰";
+        Text[ chinese_simplified ] = "æ–‡å­—ä¹‹å‰";
         Text[ turkish ] = "Metinden önce";
         Text[ arabic ] = "ãä ÇáíÓÇÑ";
         Text[ thai ] = "à¸ˆà¸²à¸~à¸‹à¹‰à¸²à¸¢";
@@ -154,7 +154,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ polish ] = "Od pra~wej";
         Text[ portuguese_brazilian ] = "Da dire~ita";
         Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®å¾Œ";
-        Text[ chinese_simplified ] = "åœ¨æ–‡å­—ä¹‹å";
+        Text[ chinese_simplified ] = "æ–‡å­—ä¹‹å";
         Text[ turkish ] = "Sonraki metin";
         Text[ arabic ] = "ãä Çáíãíä";
         Text[ thai ] = "à¸ˆà¸²à¸à¸‚~à¸§à¸²";
@@ -327,7 +327,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ portuguese_brazilian ] = "Em ~Cima";
         Text[ japanese ] = "æ®µè½ã®ä¸Š(~O)";
         Text[ korean ] = "ë‹¨ë½ ìœ„(~O)";
-        Text[ chinese_simplified ] = "åœ¨æ®µè½ä¹‹ä¸Š(~O)";
+        Text[ chinese_simplified ] = "æ®µè½ä¹‹ä¸Š";
         Text[ chinese_traditional ] = "åœ¨æ®µè½ä¹‹ä¸Š(~O)";
         Text[ turkish ] = "Paragrafdan önce";
         Text[ arabic ] = "ÃÚáì";
@@ -377,7 +377,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ portuguese_brazilian ] = "Em ~Baixo";
         Text[ japanese ] = "æ®µè½ã®ä¸‹";
         Text[ korean ] = "ë‹¨ë½ ì•„ë˜";
-        Text[ chinese_simplified ] = "åœ¨æ®µè½ä¹‹ä¸‹";
+        Text[ chinese_simplified ] = "æ®µè½ä¹‹ä¸‹";
         Text[ chinese_traditional ] = "åœ¨æ®µè½ä¹‹ä¸‹";
         Text[ turkish ] = "Sonraki metin";
         Text[ arabic ] = "ÃÓİá";
@@ -1040,7 +1040,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ spanish ] = "I~zquierda" ;
         Text [ english_us ] = "~Left" ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "å·¦(~L)";
+        Text[ chinese_simplified ] = "å·¦";
         Text[ russian ] = "Ëåâûé";
         Text[ polish ] = "Do lewej";
         Text[ japanese ] = "å·¦æƒãˆ(~L)";
@@ -1076,7 +1076,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ dutch ] = "Re~chts" ;
         Text [ spanish ] = "~Derecha" ;
         Text [ english_us ] = "Righ~t" ;
-        Text[ chinese_simplified ] = "å³(~T)";
+        Text[ chinese_simplified ] = "å³";
         Text[ russian ] = "Ïğàâûé";
         Text[ polish ] = "Do prawej";
         Text[ japanese ] = "å³æƒãˆ(~T)";
@@ -1350,7 +1350,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         };
         StringList [ chinese_simplified ] =
         {
-                < "æ ‡å‡†" ; Default ; > ;
+                < "é»˜è®¤å€¼" ; Default ; > ;
             < "å·¦" ; Default ; > ;
             < "å±…ä¸­" ; Default ; > ;
             < "å·¦å³å¯¹é½" ; Default ; > ;
@@ -2062,7 +2062,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ spanish ] = "~Caracteres al final de la línea" ;
         Text [ english_us ] = "C~haracters at line end" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "å­—ç¬¦ç•™ä½äºè¡Œæœ«(~H)";
+        Text[ chinese_simplified ] = "è¡Œæœ«å­—ç¬¦";
         Text[ russian ] = "Ñèìâîëîâ â êîíöå ñòğîêè";
         Text[ polish ] = "znakach na koñcu wiersza";
         Text[ japanese ] = "æ–‡å­—ä»¥ä¸Šæ®‹ã™(è¡Œæœ«)(~H)";
@@ -2116,7 +2116,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ spanish ] = "Caracteres al comienzo de la línea" ;
         Text [ english_us ] = "Cha~racters at line begin" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "å­—ç¬¦ç•™ä½äºè¡Œé¦–(~R)";
+        Text[ chinese_simplified ] = "è¡Œé¦–å­—ç¬¦";
         Text[ russian ] = "Ñèìâîëîâ â íà÷àëå ñòğîêè";
         Text[ polish ] = "znakach na pocz¹tku wiersza";
         Text[ japanese ] = "æ–‡å­—ä»¥ä¸Šæ®‹ã™(è¡Œé ­)(~R)";
@@ -2153,7 +2153,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ dutch ] = "~Max. aantal opeenvolgende scheidingstekens" ;
         Text [ spanish ] = "~Número máximo de guiones consecutivos" ;
         Text [ english_us ] = "~Maximum number of consecutive hyphens" ;
-        Text[ chinese_simplified ] = "æœ€å¤šè¿ç»­ä½¿ç”¨çš„è¿å­—ç¬¦æ•°ç›®(~M)";
+        Text[ chinese_simplified ] = "æœ€å¤šè¿ç»­ä½¿ç”¨çš„è¿å­—ç¬¦æ•°ç›®";
         Text[ russian ] = "Ìàêñèìàëüíîå êîëè÷åñòâî ïîñëåäîâàòåëüíûõ ğàçäåëèòåëåé";
         Text[ polish ] = "Maksyma~lna liczba kolejnych podzia³ów";
         Text[ japanese ] = "ãƒã‚¤ãƒ•ãƒãƒ¼ã‚·ãƒ§ãƒ³è¡Œã®æœ€é«˜é€£ç¶šæ•°(~M)";
@@ -2301,7 +2301,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "~Enable" ;
         Text [ english_us ] = "Enable" ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "å…è®¸";
+        Text[ chinese_simplified ] = "å¼€æ”¾";
         Text[ russian ] = "Ğà~çğûâ";
         Text[ polish ] = "~Podzia³";
         Text[ japanese ] = "ä½¿ç”¨ã™ã‚‹";
@@ -2826,7 +2826,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ spanish ] = "Mantener líneas juntas" ;
         Text [ english_us ] = "~Do not split paragraph" ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "æ®µä¸­ä¸åˆ†é¡µ(~D)";
+        Text[ chinese_simplified ] = "æ®µä¸­ä¸åˆ†é¡µ";
         Text[ russian ] = "Íå ğàçäåëÿòü ñòğîêè";
         Text[ polish ] = "N~ie dziel wierszy";
         Text[ japanese ] = "æ®µè½ã‚’åˆ†å‰²ã—ãªã„(~D)";
