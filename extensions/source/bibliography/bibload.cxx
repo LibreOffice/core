@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
+ *  last change: $Author: fs $ $Date: 2002-10-24 08:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,6 +493,8 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
         pParentComponent->setVisible(sal_True);
 
         m_xDatMan->load();
+        // #100312# ----------
+        m_pDatMan->RegisterInterceptor(pBeamer);
 
         if ( rListener.is() )
             rListener->loadFinished( this );

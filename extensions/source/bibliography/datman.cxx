@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 08:50:24 $
+ *  last change: $Author: fs $ $Date: 2002-10-24 08:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,10 @@
 #endif
 #ifndef _BIB_VIEW_HXX
 #include "bibview.hxx"
+#endif
+// #100312# ---------
+#ifndef ADRBEAM_HXX
+#include "bibbeam.hxx"
 #endif
 #ifndef _BIB_FMPROP_HRC
 #include "bibprop.hrc"
@@ -839,6 +843,82 @@ String  DBChangeDialog_Impl::GetCurrentURL()const
     return sRet;
 }
 
+// #100312# --------------------------------------------------------------------
+// XDispatchProvider
+BibInterceptorHelper::BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch)
+{
+    if( pBibBeamer )
+    {
+        xInterception = pBibBeamer->getDispatchProviderInterception();
+        if( xInterception.is() )
+            xInterception->registerDispatchProviderInterceptor( this );
+    }
+    if( xDispatch.is() )
+        xFormDispatch = xDispatch;
+}
+
+BibInterceptorHelper::~BibInterceptorHelper( )
+{
+}
+
+BibInterceptorHelper::ReleaseInterceptor()
+{
+    if ( xInterception.is() )
+        xInterception->releaseDispatchProviderInterceptor( this );
+    xInterception.clear();
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL
+    BibInterceptorHelper::queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< XDispatch > xReturn;
+
+    String aCommand( aURL.Path );
+    if ( aCommand.EqualsAscii("FormSlots/ConfirmDeletion") )
+        xReturn = xFormDispatch;
+    else
+        if ( xSlaveDispatchProvider.is() )
+            xReturn = xSlaveDispatchProvider->queryDispatch( aURL, aTargetFrameName, nSearchFlags);
+
+    return xReturn;
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL
+    BibInterceptorHelper::queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Sequence< Reference< XDispatch> > aReturn( aDescripts.getLength() );
+    Reference< XDispatch >* pReturn = aReturn.getArray();
+    const DispatchDescriptor* pDescripts = aDescripts.getConstArray();
+    for ( sal_Int16 i=0; i<aDescripts.getLength(); ++i, ++pReturn, ++pDescripts )
+    {
+        *pReturn = queryDispatch( pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags );
+    }
+    return aReturn;
+}
+
+// XDispatchProviderInterceptor
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL
+    BibInterceptorHelper::getSlaveDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return xSlaveDispatchProvider;
+}
+
+void SAL_CALL BibInterceptorHelper::setSlaveDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) throw (::com::sun::star::uno::RuntimeException)
+{
+    xSlaveDispatchProvider = xNewSlaveDispatchProvider;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL
+    BibInterceptorHelper::getMasterDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return xMasterDispatchProvider;
+}
+
+void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewMasterDispatchProvider ) throw (::com::sun::star::uno::RuntimeException)
+{
+    xMasterDispatchProvider = xNewMasterDispatchProvider;
+}
+
 //-----------------------------------------------------------------------------
 #define STR_UID "uid"
 rtl::OUString gGridName(C2U("theGrid"));
@@ -852,6 +932,8 @@ BibDataManager::BibDataManager()
     ,pToolbar(0)
     ,pBibView( NULL )
     ,m_aLoadListeners(m_aMutex)
+    // #100312# --------------
+    ,m_pInterceptorHelper( NULL )
 {
 }
 /* --------------------------------------------------
@@ -874,6 +956,13 @@ BibDataManager::~BibDataManager()
         if(xConnection.is())
             xConnection->dispose();
         m_xForm = NULL;
+    }
+    // #100312# ----------------
+    if( m_pInterceptorHelper )
+    {
+        m_pInterceptorHelper->ReleaseInterceptor();
+        m_pInterceptorHelper->release();
+        m_pInterceptorHelper = NULL;
     }
 }
 //------------------------------------------------------------------------
@@ -1858,7 +1947,19 @@ uno::Reference< form::XFormController > BibDataManager::GetFormController()
         m_xFormCtrl = uno::Reference< form::XFormController > (
             xMgr->createInstance(C2U("com.sun.star.form.controller.FormController")), UNO_QUERY);
         m_xFormCtrl->setModel(uno::Reference< awt::XTabControllerModel > (getForm(), UNO_QUERY));
+        // #100312# -------------
+        m_xFormDispatch = uno::Reference< frame::XDispatch > ( m_xFormCtrl, UNO_QUERY);
     }
     return m_xFormCtrl;
 }
 
+// #100312# ----------
+void BibDataManager::RegisterInterceptor( ::bib::BibBeamer* pBibBeamer)
+{
+    DBG_ASSERT( !m_pInterceptorHelper, "BibDataManager::RegisterInterceptor: called twice!" );
+
+    if( pBibBeamer )
+        m_pInterceptorHelper = new BibInterceptorHelper( pBibBeamer, m_xFormDispatch);
+    if( m_pInterceptorHelper )
+        m_pInterceptorHelper->acquire();
+}

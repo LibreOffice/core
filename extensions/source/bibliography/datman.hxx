@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 08:50:24 $
+ *  last change: $Author: fs $ $Date: 2002-10-24 08:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,16 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
+// #100312# --------------------
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HPP_
+#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
+#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 class Window;
 
@@ -96,10 +106,40 @@ class Window;
 namespace bib
 {
     class BibView;
+    // #100312# -----------
+    class BibBeamer;
 }
 
 class BibToolBar;
 struct BibDBDescriptor;
+
+// #100312# ---------------------
+class BibInterceptorHelper
+    :public cppu::WeakImplHelper1< ::com::sun::star::frame::XDispatchProviderInterceptor >
+{
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > xMasterDispatchProvider;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > xSlaveDispatchProvider;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xFormDispatch;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception > xInterception;
+
+protected:
+    ~BibInterceptorHelper( );
+
+public:
+    BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch);
+
+    ReleaseInterceptor();
+
+    // XDispatchProvider
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw (::com::sun::star::uno::RuntimeException);
+    // XDispatchProviderInterceptor
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setSlaveDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewMasterDispatchProvider ) throw (::com::sun::star::uno::RuntimeException);
+};
 
 typedef cppu::WeakComponentImplHelper2  <   ::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::form::XLoadable
@@ -114,6 +154,10 @@ private:
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xSourceProps;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        m_xParser;
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >         m_xFormCtrl;
+        // #100312# -------------------
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >      m_xFormDispatch;
+        BibInterceptorHelper* m_pInterceptorHelper;
+
         ::rtl::OUString                     aActiveDataTable;
         ::rtl::OUString                     aDataSourceURL;
         ::rtl::OUString                     aQuoteChar;
@@ -201,6 +245,8 @@ public:
         void                        ResetIdentifierMapping() {sIdentifierMapping = rtl::OUString();}
 
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > GetFormController();
+        // #100312# ----------
+        void RegisterInterceptor( ::bib::BibBeamer* pBibBeamer);
 };
 
 
