@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-27 07:10:08 $
+ *  last change: $Author: nf $ $Date: 2000-12-08 12:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,35 +291,45 @@ void Export::QuotHTML( ByteString &rString )
 /*****************************************************************************/
 {
     ByteString sReturn;
+    BOOL bBreak = FALSE;
     for ( ULONG i = 0; i < rString.Len(); i++ ) {
-        switch ( rString.GetChar( i )) {
-            case '<':
-                sReturn += "&lt;";
-            break;
+        ByteString sTemp = rString.Copy( i );
+        if ( sTemp.Search( "<Arg n=" ) == 0 ) {
+            while ( i == rString.Len() || rString.GetChar( i ) == '>' ) {
+                 sReturn += rString.GetChar( i );
+                i++;
+            }
+        }
+        if ( i < rString.Len()) {
+            switch ( rString.GetChar( i )) {
+                case '<':
+                    sReturn += "&lt;";
+                break;
 
-            case '>':
-                sReturn += "&gt;";
-            break;
+                case '>':
+                    sReturn += "&gt;";
+                break;
 
-            case '\"':
-                sReturn += "&quot;";
-            break;
+                case '\"':
+                    sReturn += "&quot;";
+                break;
 
-            case '\'':
-                sReturn += "&apos;";
-            break;
+                case '\'':
+                    sReturn += "&apos;";
+                break;
 
-            case '&':
-                if ((( i + 4 ) < rString.Len()) &&
-                    ( rString.Copy( i, 5 ) == "&amp;" ))
-                        sReturn += rString.GetChar( i );
-                else
-                    sReturn += "&amp;";
-            break;
+                case '&':
+                    if ((( i + 4 ) < rString.Len()) &&
+                        ( rString.Copy( i, 5 ) == "&amp;" ))
+                            sReturn += rString.GetChar( i );
+                    else
+                        sReturn += "&amp;";
+                break;
 
-            default:
-                sReturn += rString.GetChar( i );
-            break;
+                default:
+                    sReturn += rString.GetChar( i );
+                break;
+            }
         }
     }
     rString = sReturn;
