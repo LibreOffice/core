@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:11:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,6 +497,22 @@ private:
     BOOL                                                                            bPastePossible;
 
     virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint);
+
+    /** Stop a running slide show.  The frame the show is running in is
+        destroyed if
+        a) it is running in its own frame, i.e. is a full screen show and
+        b) the given flag bCloseFrame is true.
+        @param bCloseFrame
+            Be carefull with this flag when stopping a full screen show.
+            When called from the destructor the flag has to be <FALSE/> or
+            otherwise we run into a loop of calls to destructors of the view
+            and the frame.
+            When called from other places the flag should be <TRUE/> so that
+            not an empty frame remains. When called with <TRUE/> it is the
+            responsibility of the caller to avoid an illegal reentrant
+            call.
+    */
+    void StopSlideShow (bool bCloseFrame);
 };
 
 
