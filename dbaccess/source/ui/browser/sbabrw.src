@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-01 10:34:58 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 17:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,4 +743,18 @@ QueryBox QUERY_CONNECTION_LOST
     Message = "Die Verbindung zur Datenbank wurde gelöscht! Soll Sie wieder aufgebaut werden?" ;
     Message [ English ] = "The connection to the database was lost! Reconnect?" ;
     Message [ english_us ] = "The connection to the database was lost! Reconnect" ;
+};
+
+String STR_OPENTABLES_WARNINGS
+{
+    Text = "Warnungen aufgetreten.";
+    Text [ english ] = "Warnings encountered.";
+    Text [ english_us ] = "Warnings encountered.";
+};
+
+String STR_OPENTABLES_WARNINGS_DETAILS
+{
+    Text = "Beim Ermitteln der Tabellen wurden von der Datenbankverbindung Warnungen gemeldet.";
+    Text [ english ] = "While retrieving the tables, warnings were provided by the connection.";
+    Text [ english_us ] = "While retrieving the tables, warnings were provided by the connection.";
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:22:17 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 17:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,6 +344,8 @@
 #define STR_QUERY_REL_EDIT_RELATION         RID_STRING_START + 125
 #define STR_RELATIONDESIGN                  RID_STRING_START + 126
 #define STR_RELATIONDESIGN_NOT_AVAILABLE    RID_STRING_START + 127
+#define STR_OPENTABLES_WARNINGS             RID_STRING_START + 128
+#define STR_OPENTABLES_WARNINGS_DETAILS     RID_STRING_START + 129
 
 
 //========================================================================
@@ -358,6 +360,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28  2001/03/01 15:22:17  oj
+ *  #84511# change message
+ *
  *  Revision 1.27  2001/02/28 10:10:01  oj
  *  changes for the new relation design
  *
