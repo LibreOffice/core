@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:42:31 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1704,6 +1704,19 @@ XMLParaContext::~XMLParaContext()
         GetImport().GetTextImport());
     Reference < XTextRange > xEnd(xTxtImport->GetCursorAsRange()->getStart());
 
+    // if we have an id set for this paragraph, get a cursor for this
+    // paragraph and register it with the given identifier
+    if( sId.getLength() )
+    {
+        Reference < XTextCursor > xIdCursor( xTxtImport->GetText()->createTextCursorByRange( xStart ) );
+        if( xIdCursor.is() )
+        {
+            xIdCursor->gotoRange( xEnd, sal_True );
+            Reference< XInterface > xRef( xIdCursor, UNO_QUERY );
+            GetImport().getInterfaceToIdentifierMapper().registerReference( sId, xRef );
+        }
+    }
+
     // insert a paragraph break
     xTxtImport->InsertControlCharacter( ControlCharacter::APPEND_PARAGRAPH );
 
@@ -1897,27 +1910,6 @@ XMLParaContext::~XMLParaContext()
         }
     }
     delete pHints;
-
-    // if we have an id set for this paragraph, get the latest added
-    // paragraph and register it with this identifier
-    if( sId.getLength() )
-    {
-        Reference< XEnumerationAccess > xParaEnumAccess( xTxtImport->GetText(), UNO_QUERY );
-        if( xParaEnumAccess.is() )
-        {
-            Reference< XEnumeration > xEnumeration( xParaEnumAccess->createEnumeration(), UNO_QUERY );
-            if( xEnumeration.is() )
-            {
-                Reference< XInterface > xRef;
-
-                while( xEnumeration->hasMoreElements() )
-                    xEnumeration->nextElement() >>= xRef;
-
-                if( xRef.is() )
-                    GetImport().getInterfaceToIdentifierMapper().registerReference( sId, xRef );
-            }
-        }
-    }
 }
 
 SvXMLImportContext *XMLParaContext::CreateChildContext(
