@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptBrowseNode.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 12:52:25 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@ import drafts.com.sun.star.script.provider.XScriptContext;
 
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.lib.uno.helper.PropertySet;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
 
 import com.sun.star.beans.XIntrospectionAccess;
@@ -74,80 +76,46 @@ import com.sun.star.script.XInvocation;
 
 import java.io.File;
 import java.util.*;
+import javax.swing.JOptionPane;
+
 import com.sun.star.script.framework.log.LogUtils;
+import com.sun.star.script.framework.provider.ScriptProvider;
+import com.sun.star.script.framework.browse.DialogFactory;
+import com.sun.star.script.framework.container.*;
 
 public class ScriptBrowseNode extends PropertySet
     implements XBrowseNode, XInvocation
 {
+    private ScriptProvider provider;
+
+    private Parcel parent;
     private String name;
-    private ScriptMetaData entry;
-    private String location;
-    private File basedir;
-    private static Map editors = new HashMap();
-    private EditorDesc editor = null;
-    public boolean editable = false;
-    public boolean deletable = false;
     public String uri;
-    private class EditorDesc
+    public boolean editable  = false;
+    public boolean deletable = false;
+
+    public ScriptBrowseNode( ScriptProvider provider, Parcel parent,
+        String name )
     {
-        java.lang.reflect.Method m;
-        Class c;
-        EditorDesc( java.lang.reflect.Method m, Class c )
+        this.provider = provider;
+        this.name = name;
+        this.parent = parent;
+        ScriptMetaData data = null;
+        try
         {
-           this.m = m;
-           this.c = c;
-        }
-    }
-    public ScriptBrowseNode(ScriptMetaData entry ) {
-        this.entry  = entry;
-        this.location  = entry.getLocationPlaceHolder();
-        String tmp = entry.getParcelLocation();
-        // TODO, this processing should not be necessary,
-        // the code for reading file should deal with urls of
-        // all supported types
-        if ( tmp.startsWith("file://") )
-        {
-            tmp = tmp.substring("file://".length());
+            data = (ScriptMetaData)parent.getByName( name );
         }
 
-        this.basedir = new File( tmp );
-        this.name = this.entry.getLanguageName();
-        uri = entry.getShortFormScriptURL();
-        synchronized( this.getClass() )
+        // TODO fix exception types to be caught here, should we rethrow?
+        catch (  Exception e )
         {
-            if ( !editors.containsKey( this.name ) )
-            {
-                String name = "com.sun.star.script.framework.provider." +
-                    entry.getLanguage().toLowerCase() + ".ScriptEditorFor" +
-                    entry.getLanguage();
-                try
-                {
-                    Class c = Class.forName(name);
-                    Class[] types =
-                        new Class[] { XScriptContext.class, ScriptMetaData.class };
-
-                    java.lang.reflect.Method m = c.getMethod("edit", types);
-
-                    if ( m != null )
-                    {
-                        editor = new EditorDesc( m,c );
-                    }
-                    editors.put( this.name, editor );
-                }
-                catch (Exception e )
-                {
-                    LogUtils.DEBUG("Caught excpetion: " + e);
-                }
-            }
-            else
-            {
-                editor = (EditorDesc)editors.get( this.name );
-            }
+            LogUtils.DEBUG("** caught exception getting script data for " + name + " ->" + e.toString() );
         }
-        if ( editor != null )
+        uri = data.getShortFormScriptURL();
+        if (provider.hasScriptEditor() == true)
         {
-            editable = true;
-            deletable = true;
+            this.editable  = true;
+            this.deletable = true;
         }
 
         registerProperty("Deletable", new Type(boolean.class),
@@ -157,6 +125,7 @@ public class ScriptBrowseNode extends PropertySet
         registerProperty("URI", new Type(String.class),
             (short)0, "uri");
     }
+
 
     public String getName() {
         return name;
@@ -189,52 +158,102 @@ public class ScriptBrowseNode extends PropertySet
                com.sun.star.script.CannotConvertException,
                com.sun.star.reflection.InvocationTargetException
     {
-        if (aFunctionName.equals("Editable")) {
-            if (!editable) {
+        // Initialise the out paramters - not used but prevents error in
+        // UNO bridge
+        aOutParamIndex[0] = new short[0];
+        aOutParam[0] = new Object[0];
+
+        Any result = new Any(new Type(Boolean.class), Boolean.TRUE);
+
+        if (aFunctionName.equals("Editable"))
+        {
+            if (!editable)
+            {
+                throw new com.sun.star.reflection.InvocationTargetException(
+                    "Script not editable");
+            }
+
+            if (aParams == null || aParams.length < 1 ||
+                AnyConverter.isObject(aParams[0]) == false)
+            {
+                throw new com.sun.star.lang.IllegalArgumentException(
+                    "XScriptContext not provided");
+            }
+
+            XScriptContext ctxt = (XScriptContext) AnyConverter.toObject(
+                new com.sun.star.uno.Type(XScriptContext.class), aParams[0]);
+            ScriptMetaData data = null;
+            try
+            {
+                data = (ScriptMetaData)parent.getByName( name );
+            }
+            // TODO fix exception types to be caught here
+            catch (  Exception e )
+            {
+                LogUtils.DEBUG("** caught exception getting script data for " + name + " ->" + e.toString() );
+                throw new  com.sun.star.lang.IllegalArgumentException( "no script data for " + name );
+            }
+
+            provider.getScriptEditor().edit(ctxt, data);
+        }
+        else if (aFunctionName.equals("Deletable"))
+        {
+            if (!deletable)
+            {
                 throw new com.sun.star.reflection.InvocationTargetException(
                     "Script not editable");
             }
 
 
-            if (aParams == null || aParams.length < 1) {
-                throw new com.sun.star.lang.IllegalArgumentException(
-                    "XScriptContext not provided");
-            }
-
-            XScriptContext ctxt;
-            try {
-                ctxt = (XScriptContext) aParams[0];
-            }
-            catch (ClassCastException cce) {
-                throw new com.sun.star.lang.IllegalArgumentException(
-                    "Wrong type for editor parameter: " +
-                    aParams[0].getClass().getName());
-            }
-
             try
             {
-                Object[] args = new Object[] { ctxt, entry };
-                editor.m.invoke(editor.c.newInstance(), args);
+                boolean goAhead = false;
+
+                String prompt = "Do you really want to delete this Script?";
+                String title = "Delete Script";
+
+                // try to get a DialogFactory instance, if it fails
+                // just use a Swing JOptionPane to prompt for the name
+                try
+                {
+                    DialogFactory dialogFactory =
+                        DialogFactory.getDialogFactory();
+
+                    goAhead = dialogFactory.showConfirmDialog(title, prompt);
+                }
+                catch (Exception e)
+                {
+                    int reply = JOptionPane.showConfirmDialog(
+                        null, prompt, title, JOptionPane.YES_NO_OPTION);
+
+                    if (reply == JOptionPane.YES_OPTION)
+                    {
+                        goAhead = true;
+                    }
+                    else
+                    {
+                        goAhead = false;
+                    }
+                }
+
+                if (goAhead == true)
+                {
+
+                    parent.removeByName( name );
+                    result = new Any(new Type(Boolean.class), Boolean.TRUE);
+                }
+                else
+                {
+                    result = new Any(new Type(Boolean.class), Boolean.FALSE);
+                }
             }
-            catch ( InstantiationException ie )
+            // TODO Exception handling TBD
+            catch (Exception e)
             {
-                throw new com.sun.star.reflection.InvocationTargetException(
-                    "Exception getting Editor: " + ie.getMessage());
-            }
-            catch ( IllegalAccessException iae )
-            {
-                throw new com.sun.star.reflection.InvocationTargetException(
-                    "Exception getting Editor: " + iae.getMessage());
-            }
-            catch ( java.lang.IllegalArgumentException iarge )
-            {
-                throw new com.sun.star.reflection.InvocationTargetException(
-                    "Exception getting Editor: " + iarge.getMessage());
-            }
-            catch ( java.lang.reflect.InvocationTargetException ite )
-            {
-                throw new com.sun.star.reflection.InvocationTargetException(
-                    "Exception getting Editor: " + ite.getMessage());
+                result = new Any(new Type(Boolean.class), Boolean.FALSE);
+
+                // throw new com.sun.star.reflection.InvocationTargetException(
+                //     "Error deleting script: " + e.getMessage());
             }
         }
         else {
@@ -242,7 +261,7 @@ public class ScriptBrowseNode extends PropertySet
                 "Function " + aFunctionName + " not supported.");
         }
 
-        return null;
+        return result;
     }
 
     public void setValue(String aPropertyName, Object aValue)
