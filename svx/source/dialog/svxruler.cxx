@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: ama $ $Date: 2000-11-29 13:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1364,7 +1364,7 @@ long SvxRuler::GetRightFrameMargin() const
                    SVXRULER_SUPPORT_NEGATIVE_MARGINS )
 #define TAB_FLAG ( pColumnItem && pColumnItem->IsTable() )
 
-long SvxRuler::GetCorrectedDragPos()
+long SvxRuler::GetCorrectedDragPos( BOOL bLeft, BOOL bRight )
 
 /*
    [Beschreibung]
@@ -1377,9 +1377,9 @@ long SvxRuler::GetCorrectedDragPos()
 {
     const long lNullPix = Ruler::GetNullOffset();
     long lDragPos = GetDragPos() + lNullPix;
-     if(lDragPos < nMaxLeft)
+     if(bLeft && lDragPos < nMaxLeft)
         lDragPos = nMaxLeft;
-    else if(lDragPos > nMaxRight)
+    else if(bRight && lDragPos > nMaxRight)
         lDragPos = nMaxRight;
     return lDragPos - lNullPix;
 }
@@ -1415,9 +1415,8 @@ void SvxRuler::DragMargin1()
 
 */
 {
-    const long lDragPos = ( TAB_FLAG && NEG_FLAG ) ?
-            GetDragPos() : GetCorrectedDragPos();
-    DrawLine_Impl(lTabPos, ( TAB_FLAG && NEG_FLAG ) ? 1 : 3, bHorz);
+    const long lDragPos = GetCorrectedDragPos( !TAB_FLAG || !NEG_FLAG, TRUE );
+    DrawLine_Impl(lTabPos, ( TAB_FLAG && NEG_FLAG ) ? 3 : 7, bHorz);
     const long nOld = bAppSetNullOffset? GetMargin1(): GetNullOffset();
     if(pColumnItem&&
        (//nDragType & DRAG_OBJECT_SIZE_LINEAR ||
@@ -1544,9 +1543,8 @@ void SvxRuler::DragMargin2()
 
 */
 {
-    const long lDragPos = ( TAB_FLAG && NEG_FLAG ) ?
-            GetDragPos() : GetCorrectedDragPos();
-    DrawLine_Impl(lTabPos, ( TAB_FLAG && NEG_FLAG ) ? 1 : 3, bHorz);
+    const long lDragPos = GetCorrectedDragPos( TRUE, !TAB_FLAG || !NEG_FLAG);
+    DrawLine_Impl(lTabPos, ( TAB_FLAG && NEG_FLAG ) ? 5 : 7, bHorz);
     long lDiff = lDragPos - GetMargin2();
 
     BOOL bProtectColumns =
@@ -1616,8 +1614,8 @@ void SvxRuler::DrawLine_Impl(long &lTabPos, int nNew, BOOL Hori)
         if( nNew & 1 )
         {
 
-            lTabPos = ConvertHSizeLogic( ( (nNew & 2) ? GetCorrectedDragPos() :
-                GetDragPos() ) + GetNullOffset());
+            lTabPos = ConvertHSizeLogic( GetCorrectedDragPos( nNew&4, nNew&2 )
+                                         + GetNullOffset() );
             if(pPagePosItem)
                 lTabPos += pPagePosItem->GetPos().X();
             pEditWin->InvertTracking(
@@ -1670,7 +1668,7 @@ void SvxRuler::DragTabs()
 
 
     USHORT nIdx = GetDragAryPos()+TAB_GAP;
-    DrawLine_Impl(lTabPos, 3, bHorz);
+    DrawLine_Impl(lTabPos, 7, bHorz);
 
     long nDiff = lDragPos - pTabs[nIdx].nPos;
 
@@ -1813,7 +1811,7 @@ void SvxRuler::DragBorders()
 
     if(GetDragType()==RULER_TYPE_BORDER)
     {
-        DrawLine_Impl(lTabPos, 3, bHorz);
+        DrawLine_Impl(lTabPos, 7, bHorz);
         nIdx = GetDragAryPos();
     }
     else
@@ -1947,7 +1945,7 @@ void SvxRuler::DragObjectBorder()
         const USHORT nIdx = GetDragAryPos();
         pObjectBorders[GetObjectBordersOff(nIdx)].nPos = lPos;
         SetBorders(2, pObjectBorders + GetObjectBordersOff(0));
-        DrawLine_Impl(lTabPos, 3, bHorz);
+        DrawLine_Impl(lTabPos, 7, bHorz);
 
     }
 }
@@ -2974,7 +2972,7 @@ void __EXPORT SvxRuler::EndDrag()
 {
     const BOOL bUndo = IsDragCanceled();
     const long lPos = GetDragPos();
-    DrawLine_Impl(lTabPos, 2, bHorz);
+    DrawLine_Impl(lTabPos, 6, bHorz);
     lTabPos=-1;
     if(!bUndo)
         switch(GetDragType())
