@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:58:00 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,11 +130,11 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 
     // FileIO
     SW_DLLPRIVATE virtual sal_Bool InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    SW_DLLPRIVATE virtual sal_Bool Load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    SW_DLLPRIVATE virtual sal_Bool LoadFrom( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    SW_DLLPRIVATE virtual sal_Bool Load( SfxMedium& rMedium );
+    SW_DLLPRIVATE virtual sal_Bool LoadFrom( SfxMedium& rMedium );
     SW_DLLPRIVATE virtual sal_Bool            ConvertFrom( SfxMedium &rMedium );
     SW_DLLPRIVATE virtual sal_Bool            ConvertTo( SfxMedium &rMedium );
-    SW_DLLPRIVATE virtual sal_Bool SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewStg );
+    SW_DLLPRIVATE virtual sal_Bool SaveAs( SfxMedium& rMedium );
     SW_DLLPRIVATE virtual sal_Bool SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
     SW_DLLPRIVATE virtual USHORT            PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
