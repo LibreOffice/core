@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-14 01:45:22 $
+#   last change: $Author: pluby $ $Date: 2001-02-14 04:16:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY -DSTLPORT_VERSIO
 
 # Workaround for Mac OS X duplicate symbol plugin bug
 .IF "$(SYMBOLPREFIX)"==""
-SYMBOLPREFIX="$(TARGET)"
+SYMBOLPREFIX=$(TARGET)
 .ENDIF
 .IF "$(SYMBOLPREFIX)"!=""
 CDEFS+=-Dcomponent_getImplementationEnvironment=lib$(SYMBOLPREFIX)component_getImplementationEnvironment \
