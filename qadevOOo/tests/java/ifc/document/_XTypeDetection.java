@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTypeDetection.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:27:39 $
+ *  last change:$Date: 2004-12-10 17:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,12 +87,14 @@ public class _XTypeDetection extends MultiMethodTest {
     public XTypeDetection oObj = null;
 
     private String docURL = null;
+    private String bookmarkURL = null;
 
     /**
      * Get the document URL.
      */
     public void before() {
         docURL = utils.getFullTestURL("XTypeDetection.sxw");
+        bookmarkURL =  (String) tEnv.getObjRelation("XTypeDetection.bookmarkDoc");
     }
 
     /**
@@ -121,7 +123,7 @@ public class _XTypeDetection extends MultiMethodTest {
      */
     public void _queryTypeByDescriptor() {
         boolean result = true ;
-
+        log.println("test document with wrong extension");
         PropertyValue[][] mediaDescr = new PropertyValue[1][1];
         mediaDescr[0][0] = new PropertyValue();
         mediaDescr[0][0].Name = "URL";
@@ -133,6 +135,17 @@ public class _XTypeDetection extends MultiMethodTest {
         type = oObj.queryTypeByDescriptor(mediaDescr, true);
         result &= type.indexOf("calc") > -1;
 
+        log.println("test dokument with bookmark");
+
+        mediaDescr = new PropertyValue[1][1];
+        mediaDescr[0][0] = new PropertyValue();
+        mediaDescr[0][0].Name = "URL";
+        mediaDescr[0][0].Value = bookmarkURL;
+        System.out.println(bookmarkURL);
+        type = "FAILED";
+        type = oObj.queryTypeByDescriptor(mediaDescr, false);
+
+        System.out.println("TYPE: " + type);
         tRes.tested("queryTypeByDescriptor()", result) ;
     }
 }
