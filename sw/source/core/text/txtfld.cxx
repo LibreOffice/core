@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:30:17 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,5 +472,14 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
         }
     }
     return pRet;
+}
+/* -----------------26.06.2003 13:54-----------------
+
+ --------------------------------------------------*/
+void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
+{
+    //if not in undo section notify the change
+    if(pMyTxtNd && pMyTxtNd->GetNodes().IsDocNodes())
+        pMyTxtNd->Modify(0, &rFmtFld);
 }
 
