@@ -2246,3 +2246,7 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?acquire@OStatement@file@connectivity@@WBFA@AAXXZ
 ?queryInterface@OStatement@file@connectivity@@WBFA@AA?AVAny@uno@star@sun@com@@ABVType@5678@@Z
 ?release@OStatement@file@connectivity@@WBFA@AAXXZ
+??_C@_0CD@KIGD@o?3?2SRC637?2wntmsci7?2inc?2vos?1ref?4i@
+??_C@_0DF@JBMJ@o?3?2SRC637?2wntmsci7?2inc?2com?1sun?1s@
+??_C@_0DB@DMKF@o?3?2SRC637?2wntmsci7?2inc?2comphelpe@
+??_C@_0DG@GPCN@o?3?2SRC637?2wntmsci7?2inc?2comphelpe@
