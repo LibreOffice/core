@@ -3,9 +3,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Date: 2005-03-10 16:26:46 $
+#   last change: $Date: 2005-03-18 10:03:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,10 @@ PACKAGE = complex$/dbaccess
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = SingleSelectQueryComposer.java
+JAVAFILES       = \
+        SingleSelectQueryComposer.java \
+        RowSetEventListener.java \
+        RowSet.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
@@ -96,5 +99,5 @@ ALL: 	ALLDEP
 
 
 run:
-    java -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar org.openoffice.Runner -TestBase java_complex -o complex.dbaccess.$(TARGET)
+    java -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar org.openoffice.Runner -TestBase java_complex -sce dbaccess.sce
 
