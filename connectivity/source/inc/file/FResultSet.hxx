@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-10 14:31:14 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 06:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,6 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             sal_Int32                               m_nRowCountResult;
             sal_Int32                               m_nCurrentPosition;     // current position of the resultset is returned when ask for getRow()
             sal_Bool                                m_bWasNull;
-            sal_Bool                                m_bBOF;                 // before first record
             sal_Bool                                m_bEOF;                 // after last record
             sal_Bool                                m_bLastRecord;
             sal_Bool                                m_bFileSetFrozen;

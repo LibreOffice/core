@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:37:36 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 06:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbc.driver.file.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
-OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::std::vector<OTypeInfo>& _TypeInfo)
+OPreparedStatement::OPreparedStatement( OConnection* _pConnection)
     : OStatement_BASE2( _pConnection )
     ,m_pResultSet(NULL)
     ,m_pTable(NULL)
@@ -187,8 +187,8 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
 Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!m_xMetaData.is())
         m_xMetaData = new OResultSetMetaData(m_aSQLIterator.getSelectColumns(),m_aSQLIterator.getTables().begin()->first,m_pTable);
@@ -199,8 +199,8 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
 void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     clearMyResultSet();
 }
@@ -209,8 +209,8 @@ void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException
 sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     Reference< XResultSet > rs = initResultSet();
 
@@ -221,8 +221,8 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
 sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     Reference< XResultSet > rs = initResultSet();
     return m_pResultSet ? m_pResultSet->getRowCountResult() : sal_Int32(0);
@@ -232,8 +232,8 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if( parameterIndex < 1)
         throwInvalidIndexException(*this);
@@ -247,8 +247,8 @@ void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::r
 Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     return (Reference< XConnection >)m_pConnection;
 }
@@ -257,8 +257,8 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQ
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     Reference< XResultSet > rs = initResultSet();
     return rs;
@@ -268,8 +268,8 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
 void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if( parameterIndex < 1)
         throwInvalidIndexException(*this);
 
@@ -282,8 +282,8 @@ void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool
 void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if( parameterIndex < 1)
         throwInvalidIndexException(*this);
 
@@ -297,8 +297,8 @@ void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x 
 void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date& aData ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if( parameterIndex < 1)
         throwInvalidIndexException(*this);
 
@@ -313,8 +313,8 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date&
 void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time& aVal ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if( parameterIndex < 1)
         throwInvalidIndexException(*this);
 
@@ -328,8 +328,8 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time&
 void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const DateTime& aVal ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if( parameterIndex < 1)
         throwInvalidIndexException(*this);
 
@@ -343,8 +343,8 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
 void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if( parameterIndex < 1)
         throwInvalidIndexException(*this);
 
@@ -359,8 +359,8 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
 void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if( parameterIndex < 1)
         throwInvalidIndexException(*this);
 
@@ -374,8 +374,8 @@ void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) 
 void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if( parameterIndex < 1)
         throwInvalidIndexException(*this);
 
@@ -389,8 +389,8 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
 void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 aVal ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     throwInvalidIndexException(*this);
 }
 // -------------------------------------------------------------------------
@@ -398,8 +398,8 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 a
 void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     // Get the buffer needed for the length
     if( parameterIndex < 1)
         throwInvalidIndexException(*this);
@@ -414,8 +414,8 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
 void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Reference< XClob >& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     throwInvalidIndexException(*this);
 }
 // -------------------------------------------------------------------------
@@ -423,8 +423,8 @@ void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Refer
 void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Reference< XBlob >& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     throwInvalidIndexException(*this);
 }
 // -------------------------------------------------------------------------
@@ -432,8 +432,8 @@ void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Refer
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Reference< XArray >& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     throwInvalidIndexException(*this);
 }
 // -------------------------------------------------------------------------
@@ -441,8 +441,8 @@ void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Refe
 void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Reference< XRef >& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     throwInvalidIndexException(*this);
 }
 // -------------------------------------------------------------------------
@@ -450,8 +450,8 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Refere
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if( parameterIndex < 1)
         throwInvalidIndexException(*this);
     // For each known SQL Type, call the appropriate
@@ -514,8 +514,8 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if( parameterIndex < 1)
         throwInvalidIndexException(*this);
 
@@ -529,8 +529,8 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
 void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     throwInvalidIndexException(*this);
     //  setObject (parameterIndex, x, sqlType, 0);
 }
@@ -539,8 +539,8 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
 void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if( parameterIndex < 1)
         throwInvalidIndexException(*this);
     setInt(parameterIndex,x);
@@ -550,8 +550,8 @@ void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 
 void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     throwInvalidIndexException(*this);
 }
 // -------------------------------------------------------------------------
@@ -560,8 +560,8 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     throwInvalidIndexException(*this);
 }
 // -------------------------------------------------------------------------
@@ -569,8 +569,8 @@ void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, 
 void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     throwInvalidIndexException(*this);
 }
 // -------------------------------------------------------------------------
@@ -578,8 +578,8 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
 void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     m_aRow->clear();
 }
 // -------------------------------------------------------------------------

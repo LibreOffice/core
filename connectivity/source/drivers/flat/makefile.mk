@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-14 13:36:27 $
+#   last change: $Author: oj $ $Date: 2001-05-17 06:46:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,7 +123,6 @@ SHL1STDLIBS+= ifile$(UPD).lib
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
-SHL1LIBS=	$(SLB)$/file.lib
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 

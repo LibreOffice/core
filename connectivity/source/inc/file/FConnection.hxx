@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:13 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 06:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,6 @@ namespace connectivity
             //====================================================================
             // Data attributes
             //====================================================================
-            ::std::vector<connectivity::OTypeInfo>      m_aTypeInfo;    //  vector containing an entry
-                                                        //  for each row returned by
-                                                        //  DatabaseMetaData.getTypeInfo.
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>     m_xCatalog;
 

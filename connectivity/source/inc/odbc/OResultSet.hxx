@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 06:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,10 @@ namespace connectivity
                                                         ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
 
 
+        typedef sal_Int64 TVoidPtr;
+        typedef ::std::allocator< TVoidPtr > TVoidAlloc;
+        typedef ::std::vector<TVoidPtr> TVoidVector;
+        //  typedef ::com::sun::star::uno::Sequence<TVoidPtr> TVoidVector;
 
         class OResultSet :  public  comphelper::OBaseMutex,
                             public  OResultSet_BASE,
@@ -140,7 +144,7 @@ namespace connectivity
                             public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
-            ::std::vector<void*>                        m_aBindVector;
+            TVoidVector                                 m_aBindVector;
             ::std::vector<sal_Int32>                    m_aLengthVector;
             ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
             ::std::vector< ::com::sun::star::uno::Any>  m_aRow; // only used when SQLGetData can't be called in any order

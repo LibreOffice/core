@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 06:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,50 +232,50 @@ void OResultSet::allocBuffer(sal_Bool _bAllocRow)
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
-                m_aBindVector.push_back(new ::rtl::OString());
+                m_aBindVector.push_back((sal_Int64)new ::rtl::OString());
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::BIGINT:
-                m_aBindVector.push_back(new ::rtl::OString());
+                m_aBindVector.push_back((sal_Int64)new ::rtl::OString());
                 break;
             case DataType::FLOAT:
-                m_aBindVector.push_back(new float(0.0));
+                m_aBindVector.push_back((sal_Int64)new float(0.0));
                 break;
             case DataType::DOUBLE:
-                m_aBindVector.push_back(new double(0.0));
+                m_aBindVector.push_back((sal_Int64)new double(0.0));
                 break;
             case DataType::LONGVARCHAR:
-                m_aBindVector.push_back(new char[2]);  // dient nur zum auffinden
+                m_aBindVector.push_back((sal_Int64)new char[2]);  // dient nur zum auffinden
                 break;
             case DataType::LONGVARBINARY:
-                m_aBindVector.push_back(new char[2]);  // dient nur zum auffinden
+                m_aBindVector.push_back((sal_Int64)new char[2]);  // dient nur zum auffinden
                 break;
             case DataType::DATE:
-                m_aBindVector.push_back(new DATE_STRUCT);
+                m_aBindVector.push_back((sal_Int64)new DATE_STRUCT);
                 break;
             case DataType::TIME:
-                m_aBindVector.push_back(new TIME_STRUCT);
+                m_aBindVector.push_back((sal_Int64)new TIME_STRUCT);
                 break;
             case DataType::TIMESTAMP:
-                m_aBindVector.push_back(new TIMESTAMP_STRUCT);
+                m_aBindVector.push_back((sal_Int64)new TIMESTAMP_STRUCT);
                 break;
             case DataType::BIT:
-                m_aBindVector.push_back(new sal_Int8(0));
+                m_aBindVector.push_back((sal_Int64)new sal_Int8(0));
                 break;
             case DataType::TINYINT:
             case DataType::SMALLINT:
-                m_aBindVector.push_back(new sal_Int16(0));
+                m_aBindVector.push_back((sal_Int64)new sal_Int16(0));
                 break;
             case DataType::INTEGER:
-                m_aBindVector.push_back(new sal_Int32(0));
+                m_aBindVector.push_back((sal_Int64)new sal_Int32(0));
                 break;
             case DataType::REAL:
-                m_aBindVector.push_back(new float(0));
+                m_aBindVector.push_back((sal_Int64)new float(0));
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
-                m_aBindVector.push_back(new sal_Int8[xMeta->getPrecision(i)]);
+                m_aBindVector.push_back((sal_Int64)new sal_Int8[xMeta->getPrecision(i)]);
                 break;
             default:
                 OSL_ENSURE(0,"Unknown type");
@@ -291,7 +291,7 @@ void OResultSet::releaseBuffer()
 {
     Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
-    void** pValue = m_aBindVector.begin() + 1;
+    TVoidVector::iterator pValue = m_aBindVector.begin() + 1;
     for(sal_Int32 i = 1; i<=nLen; ++i, ++pValue)
     {
         OSL_ENSURE(pValue != m_aBindVector.end(),"Iterator is equal end!");
@@ -299,50 +299,50 @@ void OResultSet::releaseBuffer()
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
-                delete static_cast< ::rtl::OString* >(*pValue);
+                delete static_cast< ::rtl::OString* >((void*)*pValue);
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::BIGINT:
-                delete static_cast< ::rtl::OString* >(*pValue);
+                delete static_cast< ::rtl::OString* >((void*)*pValue);
                 break;
             case DataType::FLOAT:
-                delete static_cast< float* >(*pValue);
+                delete static_cast< float* >((void*)*pValue);
                 break;
             case DataType::DOUBLE:
-                delete static_cast< double* >(*pValue);
+                delete static_cast< double* >((void*)*pValue);
                 break;
             case DataType::LONGVARCHAR:
-                delete static_cast< char* >(*pValue);
+                delete static_cast< char* >((void*)*pValue);
                 break;
             case DataType::LONGVARBINARY:
-                delete static_cast< char* >(*pValue);
+                delete static_cast< char* >((void*)*pValue);
                 break;
             case DataType::DATE:
-                delete static_cast< DATE_STRUCT* >(*pValue);
+                delete static_cast< DATE_STRUCT* >((void*)*pValue);
                 break;
             case DataType::TIME:
-                delete static_cast< TIME_STRUCT* >(*pValue);
+                delete static_cast< TIME_STRUCT* >((void*)*pValue);
                 break;
             case DataType::TIMESTAMP:
-                delete static_cast< TIMESTAMP_STRUCT* >(*pValue);
+                delete static_cast< TIMESTAMP_STRUCT* >((void*)*pValue);
                 break;
             case DataType::BIT:
-                delete static_cast< sal_Int8* >(*pValue);
+                delete static_cast< sal_Int8* >((void*)*pValue);
                 break;
             case DataType::TINYINT:
             case DataType::SMALLINT:
-                delete static_cast< sal_Int16* >(*pValue);
+                delete static_cast< sal_Int16* >((void*)*pValue);
                 break;
             case DataType::INTEGER:
-                delete static_cast< sal_Int32* >(*pValue);
+                delete static_cast< sal_Int32* >((void*)*pValue);
                 break;
             case DataType::REAL:
-                delete static_cast< float* >(*pValue);
+                delete static_cast< float* >((void*)*pValue);
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
-                delete static_cast< sal_Int8* >(*pValue);
+                delete static_cast< sal_Int8* >((void*)*pValue);
                 break;
         }
     }
@@ -1028,7 +1028,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
             if (nRet != SQL_SUCCESS && nRet != SQL_SUCCESS_WITH_INFO && nRet != SQL_NEED_DATA)
                 break;
 
-            ::std::vector<void*>::const_iterator aFound = ::std::find(m_aBindVector.begin(),m_aBindVector.end(),pData);
+            TVoidVector::const_iterator aFound = ::std::find(m_aBindVector.begin(),m_aBindVector.end(),(sal_Int64)pData);
             sal_Int32 nPos = m_aBindVector.size() - (m_aBindVector.end() - aFound);
 
             // TODO transfer long data
@@ -1093,7 +1093,7 @@ void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) thr
 
 
     columnIndex = mapColumn(columnIndex);
-    void* pData = m_aBindVector[columnIndex];
+    void* pData = (void*)m_aBindVector[columnIndex];
     OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_BIT,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
@@ -1105,7 +1105,7 @@ void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(
     ::osl::MutexGuard aGuard( m_aMutex );
 
     columnIndex = mapColumn(columnIndex);
-    void* pData = m_aBindVector[columnIndex];
+    void* pData = (void*)m_aBindVector[columnIndex];
     OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_CHAR,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
@@ -1117,7 +1117,7 @@ void SAL_CALL OResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) thro
 
 
     columnIndex = mapColumn(columnIndex);
-    void* pData = m_aBindVector[columnIndex];
+    void* pData = (void*)m_aBindVector[columnIndex];
     OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TINYINT,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
@@ -1129,7 +1129,7 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
     ::osl::MutexGuard aGuard( m_aMutex );
 
     columnIndex = mapColumn(columnIndex);
-    void* pData = m_aBindVector[columnIndex];
+    void* pData = (void*)m_aBindVector[columnIndex];
     OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_INTEGER,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
@@ -1150,7 +1150,7 @@ void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQ
 
 
     columnIndex = mapColumn(columnIndex);
-    void* pData = m_aBindVector[columnIndex];
+    void* pData = (void*)m_aBindVector[columnIndex];
     OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_REAL,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
@@ -1162,7 +1162,7 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
 
 
     columnIndex = mapColumn(columnIndex);
-    void* pData = m_aBindVector[columnIndex];
+    void* pData = (void*)m_aBindVector[columnIndex];
     OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_DOUBLE,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
@@ -1173,7 +1173,7 @@ void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUSt
 
 
     columnIndex = mapColumn(columnIndex);
-    void* pData = m_aBindVector[columnIndex];
+    void* pData = (void*)m_aBindVector[columnIndex];
     OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_VARCHAR,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
@@ -1184,7 +1184,7 @@ void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sa
 
 
     columnIndex = mapColumn(columnIndex);
-    void* pData = m_aBindVector[columnIndex];
+    void* pData = (void*)m_aBindVector[columnIndex];
     OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_BINARY,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
@@ -1195,7 +1195,7 @@ void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const Date& x ) thr
 
 
     columnIndex = mapColumn(columnIndex);
-    void* pData = m_aBindVector[columnIndex];
+    void* pData = (void*)m_aBindVector[columnIndex];
     DATE_STRUCT aVal = OTools::DateToOdbcDate(x);
     OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_DATE,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
@@ -1208,7 +1208,7 @@ void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const Time& x ) thr
 
 
     columnIndex = mapColumn(columnIndex);
-    void* pData = m_aBindVector[columnIndex];
+    void* pData = (void*)m_aBindVector[columnIndex];
     TIME_STRUCT aVal = OTools::TimeToOdbcTime(x);
     OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TIME,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
@@ -1221,7 +1221,7 @@ void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const DateTime
 
 
     columnIndex = mapColumn(columnIndex);
-    void* pData = m_aBindVector[columnIndex];
+    void* pData = (void*)m_aBindVector[columnIndex];
     TIMESTAMP_STRUCT aVal = OTools::DateTimeToTimestamp(x);
     OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TIMESTAMP,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 06:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,7 @@ namespace connectivity
                                     ::com::sun::star::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const;
+            ~OStatement_Base(){}
         public:
             ::cppu::OBroadcastHelper& rBHelper;
             OStatement_Base(OConnection* _pConnection );
@@ -256,6 +257,8 @@ namespace connectivity
                             public ::com::sun::star::sdbc::XBatchExecution,
                             public ::com::sun::star::lang::XServiceInfo
         {
+        protected:
+            ~OStatement(){}
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:37:37 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 06:46:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1911,8 +1911,8 @@ BOOL ODbaseTable::WriteBuffer()
 void SAL_CALL ODbaseTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTableDescriptor_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+
 
     Reference<XDataDescriptorFactory> xOldColumn;
     m_pColumns->getByName(colName) >>= xOldColumn;
@@ -1923,8 +1923,8 @@ void SAL_CALL ODbaseTable::alterColumnByName( const ::rtl::OUString& colName, co
 void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTableDescriptor_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+
     if(index < 0 || index >= m_pColumns->getCount())
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
@@ -2025,8 +2025,8 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTableDescriptor_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+
 
     FileClose();
     String aName = getEntry();

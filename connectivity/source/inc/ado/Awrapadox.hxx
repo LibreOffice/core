@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapadox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 11:38:26 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 06:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,96 +132,21 @@ namespace connectivity
             inline WpADOColumn& operator=(const WpADOColumn& rhs)
                 {WpOLEBase<_ADOColumn>::operator=(rhs); return *this;}
 
-            ::rtl::OUString get_Name() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Name(&aBSTR);
-                return aBSTR;
-            }
-            ::rtl::OUString get_RelatedColumn() const
-            {
-                OLEString aBSTR;
-                pInterface->get_RelatedColumn(&aBSTR);
-                return aBSTR;
-            }
-
-            void put_Name(const ::rtl::OUString& _rName)
-            {
-                OLEString bstr(_rName);
-                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-            }
-            void put_RelatedColumn(const ::rtl::OUString& _rName)
-            {
-                OLEString bstr(_rName);
-                sal_Bool bErg = SUCCEEDED(pInterface->put_RelatedColumn(bstr));
-            }
-
-            DataTypeEnum get_Type() const
-            {
-                DataTypeEnum eNum = adVarChar;
-                pInterface->get_Type(&eNum);
-                return eNum;
-            }
-
-            void put_Type(const DataTypeEnum& _eNum)
-            {
-                pInterface->put_Type(_eNum);
-            }
-
-            sal_Int32 get_Precision() const
-            {
-                sal_Int32 nPrec=0;
-                pInterface->get_Precision(&nPrec);
-                return nPrec;
-            }
-
-            void put_Precision(sal_Int32 _nPre)
-            {
-                pInterface->put_Precision(_nPre);
-            }
-
-            sal_Int32 get_NumericScale() const
-            {
-                sal_uInt8 nPrec=0;
-                pInterface->get_NumericScale(&nPrec);
-                return nPrec;
-            }
-
-            void put_NumericScale(sal_Int8 _nScale)
-            {
-                pInterface->put_NumericScale(_nScale);
-            }
-
-            SortOrderEnum get_SortOrder() const
-            {
-                SortOrderEnum nPrec=adSortAscending;
-                pInterface->get_SortOrder(&nPrec);
-                return nPrec;
-            }
-
-            void put_SortOrder(SortOrderEnum _nScale)
-            {
-                pInterface->put_SortOrder(_nScale);
-            }
-
-            ColumnAttributesEnum get_Attributes() const
-            {
-                ColumnAttributesEnum eNum=adColNullable;
-                pInterface->get_Attributes(&eNum);
-                return eNum;
-            }
-
-            void put_Attributes(const ColumnAttributesEnum& _eNum)
-            {
-                pInterface->put_Attributes(_eNum);
-            }
-
-            ADOProperties* get_Properties() const
-            {
-                ADOProperties* pProps = NULL;
-                pInterface->get_Properties(&pProps);
-                return pProps;
-            }
+            ::rtl::OUString get_Name() const;
+            ::rtl::OUString get_RelatedColumn() const;
+            void put_Name(const ::rtl::OUString& _rName);
+            void put_RelatedColumn(const ::rtl::OUString& _rName);
+            DataTypeEnum get_Type() const;
+            void put_Type(const DataTypeEnum& _eNum) ;
+            sal_Int32 get_Precision() const;
+            void put_Precision(sal_Int32 _nPre) ;
+            sal_Int32 get_NumericScale() const;
+            void put_NumericScale(sal_Int8 _nScale);
+            SortOrderEnum get_SortOrder() const;
+            void put_SortOrder(SortOrderEnum _nScale);
+            ColumnAttributesEnum get_Attributes() const;
+            void put_Attributes(const ColumnAttributesEnum& _eNum);
+            ADOProperties* get_Properties() const;
         };
 
         class WpADOKey : public WpOLEBase<ADOKey>
@@ -235,76 +160,17 @@ namespace connectivity
 
             void Create();
 
-            ::rtl::OUString get_Name() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Name(&aBSTR);
-                return aBSTR;
-            }
-
-            void put_Name(const ::rtl::OUString& _rName)
-            {
-                OLEString bstr(_rName);
-                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-
-            }
-
-            KeyTypeEnum get_Type() const
-            {
-                KeyTypeEnum eNum=adKeyPrimary;
-                pInterface->get_Type(&eNum);
-                return eNum;
-            }
-
-            void put_Type(const KeyTypeEnum& _eNum)
-            {
-                pInterface->put_Type(_eNum);
-            }
-
-            ::rtl::OUString get_RelatedTable() const
-            {
-                OLEString aBSTR;
-                pInterface->get_RelatedTable(&aBSTR);
-                return aBSTR;
-            }
-
-            void put_RelatedTable(const ::rtl::OUString& _rName)
-            {
-                OLEString bstr(_rName);
-                sal_Bool bErg = SUCCEEDED(pInterface->put_RelatedTable(bstr));
-
-            }
-
-            RuleEnum get_DeleteRule() const
-            {
-                RuleEnum eNum = adRINone;
-                pInterface->get_DeleteRule(&eNum);
-                return eNum;
-            }
-
-            void put_DeleteRule(const RuleEnum& _eNum)
-            {
-                pInterface->put_DeleteRule(_eNum);
-            }
-
-            RuleEnum get_UpdateRule() const
-            {
-                RuleEnum eNum = adRINone;
-                pInterface->get_UpdateRule(&eNum);
-                return eNum;
-            }
-
-            void put_UpdateRule(const RuleEnum& _eNum)
-            {
-                pInterface->put_UpdateRule(_eNum);
-            }
-
-            ADOColumns* get_Columns() const
-            {
-                ADOColumns* pCols = NULL;
-                pInterface->get_Columns(&pCols);
-                return pCols;
-            }
+            ::rtl::OUString get_Name() const;
+            void put_Name(const ::rtl::OUString& _rName);
+            KeyTypeEnum get_Type() const;
+            void put_Type(const KeyTypeEnum& _eNum) ;
+            ::rtl::OUString get_RelatedTable() const;
+            void put_RelatedTable(const ::rtl::OUString& _rName);
+            RuleEnum get_DeleteRule() const;
+            void put_DeleteRule(const RuleEnum& _eNum) ;
+            RuleEnum get_UpdateRule() const;
+            void put_UpdateRule(const RuleEnum& _eNum) ;
+            ADOColumns* get_Columns() const;
         };
 
         class WpADOIndex : public WpOLEBase<_ADOIndex>
@@ -318,62 +184,15 @@ namespace connectivity
 
             void Create();
 
-            ::rtl::OUString get_Name() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Name(&aBSTR);
-                return aBSTR;
-            }
-
-            void put_Name(const ::rtl::OUString& _rName)
-            {
-                OLEString bstr(_rName);
-                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-
-            }
-
-            sal_Bool get_Clustered() const
-            {
-                VARIANT_BOOL eNum = VARIANT_FALSE;
-                pInterface->get_Clustered(&eNum);
-                return eNum == VARIANT_TRUE;
-            }
-
-            void put_Clustered(sal_Bool _b)
-            {
-                pInterface->put_Clustered(_b ? VARIANT_TRUE : VARIANT_FALSE);
-            }
-
-            sal_Bool get_Unique() const
-            {
-                VARIANT_BOOL eNum = VARIANT_FALSE;
-                pInterface->get_Unique(&eNum);
-                return eNum == VARIANT_TRUE;
-            }
-
-            void put_Unique(sal_Bool _b)
-            {
-                pInterface->put_Unique(_b ? VARIANT_TRUE : VARIANT_FALSE);
-            }
-
-            sal_Bool get_PrimaryKey() const
-            {
-                VARIANT_BOOL eNum = VARIANT_FALSE;
-                pInterface->get_PrimaryKey(&eNum);
-                return eNum == VARIANT_TRUE;
-            }
-
-            void put_PrimaryKey(sal_Bool _b)
-            {
-                pInterface->put_PrimaryKey(_b ? VARIANT_TRUE : VARIANT_FALSE);
-            }
-
-            ADOColumns* get_Columns() const
-            {
-                ADOColumns* pCols = NULL;
-                pInterface->get_Columns(&pCols);
-                return pCols;
-            }
+            ::rtl::OUString get_Name() const;
+            void put_Name(const ::rtl::OUString& _rName);
+            sal_Bool get_Clustered() const;
+            void put_Clustered(sal_Bool _b);
+            sal_Bool get_Unique() const;
+            void put_Unique(sal_Bool _b);
+            sal_Bool get_PrimaryKey() const;
+            void put_PrimaryKey(sal_Bool _b);
+            ADOColumns* get_Columns() const;
         };
 
         class WpADOCatalog : public WpOLEBase<_ADOCatalog>
@@ -387,46 +206,12 @@ namespace connectivity
 
             ::rtl::OUString GetObjectOwner(const ::rtl::OUString& _rName, ObjectTypeEnum _eNum);
 
-            void putref_ActiveConnection(IDispatch* pCon)
-            {
-                pInterface->putref_ActiveConnection(pCon);
-            }
-
-            ADOTables* get_Tables()
-            {
-                ADOTables* pRet = NULL;
-                pInterface->get_Tables(&pRet);
-                return pRet;
-            }
-
-            ADOViews* get_Views()
-            {
-                ADOViews* pRet = NULL;
-                pInterface->get_Views(&pRet);
-                return pRet;
-            }
-
-            ADOGroups* get_Groups()
-            {
-                ADOGroups* pRet = NULL;
-                pInterface->get_Groups(&pRet);
-                return pRet;
-            }
-
-            ADOUsers* get_Users()
-            {
-                ADOUsers* pRet = NULL;
-                pInterface->get_Users(&pRet);
-                return pRet;
-            }
-
-            ADOProcedures* get_Procedures()
-            {
-                ADOProcedures* pRet = NULL;
-                pInterface->get_Procedures(&pRet);
-                return pRet;
-            }
-
+            void putref_ActiveConnection(IDispatch* pCon);
+            ADOTables* get_Tables();
+            ADOViews* get_Views();
+            ADOGroups* get_Groups();
+            ADOUsers* get_Users();
+            ADOProcedures* get_Procedures();
             void Create();
         };
 
@@ -441,61 +226,14 @@ namespace connectivity
 
             void Create();
 
-            ::rtl::OUString get_Name() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Name(&aBSTR);
-                return aBSTR;
-            }
-
-            void put_Name(const ::rtl::OUString& _rName)
-            {
-                OLEString bstr(_rName);
-                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-
-            }
-
-            ::rtl::OUString get_Type() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Type(&aBSTR);
-                return aBSTR;
-            }
-
-            ADOColumns* get_Columns() const
-            {
-                ADOColumns* pCols = NULL;
-                pInterface->get_Columns(&pCols);
-                return pCols;
-            }
-
-            ADOIndexes* get_Indexes() const
-            {
-                ADOIndexes* pCols = NULL;
-                pInterface->get_Indexes(&pCols);
-                return pCols;
-            }
-
-            ADOKeys* get_Keys() const
-            {
-                ADOKeys* pCols = NULL;
-                pInterface->get_Keys(&pCols);
-                return pCols;
-            }
-
-            WpADOCatalog get_ParentCatalog() const
-            {
-                ADOCatalog* pCat = NULL;
-                pInterface->get_ParentCatalog(&pCat);
-                return WpADOCatalog(pCat);
-            }
-
-            ADOProperties* get_Properties() const
-            {
-                ADOProperties* pProps = NULL;
-                pInterface->get_Properties(&pProps);
-                return pProps;
-            }
+            ::rtl::OUString get_Name() const;
+            void put_Name(const ::rtl::OUString& _rName);
+            ::rtl::OUString get_Type() const;
+            ADOColumns* get_Columns() const;
+            ADOIndexes* get_Indexes() const;
+            ADOKeys* get_Keys() const;
+            WpADOCatalog get_ParentCatalog() const;
+            ADOProperties* get_Properties() const;
         };
 
         class WpADOView : public WpOLEBase<ADOView>
@@ -509,22 +247,9 @@ namespace connectivity
 
             void Create();
 
-            ::rtl::OUString get_Name() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Name(&aBSTR);
-                return aBSTR;
-            }
-
-            void get_Command(OLEVariant& _rVar) const
-            {
-                pInterface->get_Command(&_rVar);
-            }
-
-            void put_Command(OLEVariant& _rVar)
-            {
-                pInterface->put_Command(_rVar);
-            }
+            ::rtl::OUString get_Name() const;
+            void get_Command(OLEVariant& _rVar) const;
+            void put_Command(OLEVariant& _rVar);
         };
 
         class WpADOGroup : public WpOLEBase<_ADOGroup>
@@ -538,48 +263,17 @@ namespace connectivity
 
             void Create();
 
-            ::rtl::OUString get_Name() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Name(&aBSTR);
-                return aBSTR;
-            }
-
-            void put_Name(const ::rtl::OUString& _rName)
-            {
-                OLEString bstr(_rName);
-                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-
-            }
-
+            ::rtl::OUString get_Name() const;
+            void put_Name(const ::rtl::OUString& _rName);
             RightsEnum GetPermissions(
                 /* [in] */ const OLEVariant& Name,
-                /* [in] */ ObjectTypeEnum ObjectType)
-            {
-                RightsEnum Rights=adRightNone;
-                OLEVariant ObjectTypeId;
-                ObjectTypeId.setNoArg();
-                pInterface->GetPermissions(Name,ObjectType,ObjectTypeId,&Rights);
-                return Rights;
-            }
-
+                /* [in] */ ObjectTypeEnum ObjectType);
             sal_Bool SetPermissions(
                 /* [in] */ const OLEVariant& Name,
                 /* [in] */ ObjectTypeEnum ObjectType,
                 /* [in] */ ActionEnum Action,
-                /* [in] */ RightsEnum Rights)
-            {
-                OLEVariant ObjectTypeId;
-                ObjectTypeId.setNoArg();
-                return SUCCEEDED(pInterface->SetPermissions(Name,ObjectType,Action,Rights,adInheritNone,ObjectTypeId));
-            }
-
-            ADOUsers* get_Users( )
-            {
-                ADOUsers* pRet = NULL;
-                pInterface->get_Users( &pRet);
-                return pRet;
-            }
+                /* [in] */ RightsEnum Rights);
+            ADOUsers* get_Users( );
         };
 
         class WpADOUser : public WpOLEBase<_ADOUser>
@@ -593,56 +287,18 @@ namespace connectivity
 
             void Create();
 
-            ::rtl::OUString get_Name() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Name(&aBSTR);
-                return aBSTR;
-            }
-
-            void put_Name(const ::rtl::OUString& _rName)
-            {
-                OLEString bstr(_rName);
-                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-
-            }
-
-            sal_Bool ChangePassword(const ::rtl::OUString& _rPwd,const ::rtl::OUString& _rNewPwd)
-            {
-                OLEString sStr1(_rPwd);
-                OLEString sStr2(_rNewPwd);
-                sal_Bool bErg = SUCCEEDED(pInterface->ChangePassword(sStr1,sStr2));
-                return bErg;
-            }
-
-            ADOGroups* get_Groups()
-            {
-                ADOGroups* pRet = NULL;
-                pInterface->get_Groups(&pRet);
-                return pRet;
-            }
-
+            ::rtl::OUString get_Name() const;
+            void put_Name(const ::rtl::OUString& _rName);
+            sal_Bool ChangePassword(const ::rtl::OUString& _rPwd,const ::rtl::OUString& _rNewPwd);
+            ADOGroups* get_Groups();
             RightsEnum GetPermissions(
                 /* [in] */ const OLEVariant& Name,
-                /* [in] */ ObjectTypeEnum ObjectType)
-            {
-                RightsEnum Rights=adRightNone;
-                OLEVariant ObjectTypeId;
-                ObjectTypeId.setNoArg();
-                pInterface->GetPermissions(Name,ObjectType,ObjectTypeId,&Rights);
-                return Rights;
-            }
-
+                /* [in] */ ObjectTypeEnum ObjectType);
             sal_Bool SetPermissions(
                 /* [in] */ const OLEVariant& Name,
                 /* [in] */ ObjectTypeEnum ObjectType,
                 /* [in] */ ActionEnum Action,
-                /* [in] */ RightsEnum Rights)
-            {
-                OLEVariant ObjectTypeId;
-                ObjectTypeId.setNoArg();
-                return SUCCEEDED(pInterface->SetPermissions(Name,ObjectType,Action,Rights,adInheritNone,ObjectTypeId));
-            }
+                /* [in] */ RightsEnum Rights);
         };
     }
 }

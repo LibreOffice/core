@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 06:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,6 @@ namespace connectivity
                                     public  ::cppu::OPropertySetHelper,
                                     public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
         {
-            ::std::vector<void*>                            m_aBindVector;
             ::connectivity::TIntVector                      m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
 
             ::std::map<sal_Int32, ::connectivity::TInt2IntMap >                 m_aValueRange;
@@ -153,11 +152,9 @@ namespace connectivity
             sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
             SQLRETURN                                   m_nCurrentFetchState;
             sal_Bool                                    m_bWasNull;
-            sal_Bool                                    m_bBOF;                 // before first record
             sal_Bool                                    m_bEOF;                 // after last record
             sal_Bool                                    m_bLastRecord;
             sal_Bool                                    m_bFreeHandle;
-            sal_Bool                                    m_bInserting;
             sal_Bool                                    m_bFetchData;           // true when SQLGetaData can be called in any order or when fetching data for m_aRow
 
             sal_Int32 getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -194,10 +191,11 @@ namespace connectivity
                                                                         ::com::sun::star::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const;
+            ~ODatabaseMetaDataResultSet();
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             ODatabaseMetaDataResultSet(OConnection* _pConnection,SQLHANDLE _pStatementHandle,rtl_TextEncoding _nTextEncoding);
-            ~ODatabaseMetaDataResultSet();
+
 
             inline void* getOdbcFunction(sal_Int32 _nIndex)  const
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:51:37 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 06:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ TYPEINIT1(OOp_COMPARE, OBoolOperator);
 TYPEINIT1(ONumOperator, OOperator);
 
 //------------------------------------------------------------------
-#if 0
+#if SUPD < 632
 sal_Int32 compareIgnoreCase(const rtl::OUString& rStr1, const rtl::OUString& rStr2, const ::rtl::OLocale& rLocale)
 {
     rtl::OUString aString1 = rStr1.toUpperCase(rLocale);
@@ -377,22 +377,22 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
         case DataType::CHAR:
         case DataType::VARCHAR:
         {
-#if 0
+#if SUPD < 632
             static String sLanguage;
             static String sCountry;
             if (!sLanguage.Len())
                 ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
 
             static rtl::OLocale aLocale = rtl::OLocale::registerLocale(sLanguage, sCountry);
-
             INT32 nRes = compareIgnoreCase(aLH, aRH, aLocale);
-#endif
+#else
             INT32 nRes = rtl_ustr_compareIgnoreAsciiCase_WithLength
                 (
                  static_cast<rtl::OUString>(aLH).pData->buffer,
                  static_cast<rtl::OUString>(aLH).pData->length,
                  static_cast<rtl::OUString>(aRH).pData->buffer,
                  static_cast<rtl::OUString>(aRH).pData->length );
+#endif
             switch(aPredicateType)
             {
                 case SQL_PRED_EQUAL:            bResult = (nRes == 0); break;

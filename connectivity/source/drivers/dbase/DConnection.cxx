@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:09 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 06:46:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,8 @@ IMPLEMENT_SERVICE_INFO(ODbaseConnection, "com.sun.star.sdbc.drivers.dbase.Connec
 Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+
 
     Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
     if(!xMetaData.is())
@@ -148,8 +148,8 @@ Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  ) throw(
 Reference< XStatement > SAL_CALL ODbaseConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+
 
     Reference< XStatement > xReturn = new ODbaseStatement(this);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
@@ -159,10 +159,10 @@ Reference< XStatement > SAL_CALL ODbaseConnection::createStatement(  ) throw(SQL
 Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    ODbasePreparedStatement* pStmt = new ODbasePreparedStatement(this,m_aTypeInfo);
+
+    ODbasePreparedStatement* pStmt = new ODbasePreparedStatement(this);
     Reference< XPreparedStatement > xHoldAlive = pStmt;
     pStmt->construct(sql);
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
@@ -172,9 +172,11 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( con
 Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareCall( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+
     return NULL;
 }
+// -----------------------------------------------------------------------------
+
 
 

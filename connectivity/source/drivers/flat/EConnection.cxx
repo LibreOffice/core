@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EConnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:10 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 06:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,8 @@ void OFlatConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
 Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_B::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_B::rBHelper.bDisposed);
+
 
     Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
     if(!xMetaData.is())
@@ -196,8 +196,8 @@ Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  ) throw(S
 Reference< XStatement > SAL_CALL OFlatConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_B::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_B::rBHelper.bDisposed);
+
     OFlatStatement* pStmt = new OFlatStatement(this);
 
     Reference< XStatement > xStmt = pStmt;
@@ -208,10 +208,10 @@ Reference< XStatement > SAL_CALL OFlatConnection::createStatement(  ) throw(SQLE
 Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_B::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_B::rBHelper.bDisposed);
 
-    OFlatPreparedStatement* pStmt = new OFlatPreparedStatement(this,m_aTypeInfo);
+
+    OFlatPreparedStatement* pStmt = new OFlatPreparedStatement(this);
     Reference< XPreparedStatement > xStmt = pStmt;
     pStmt->construct(sql);
 
@@ -222,8 +222,8 @@ Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( cons
 Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareCall( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_B::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_B::rBHelper.bDisposed);
+
     return NULL;
 }
 

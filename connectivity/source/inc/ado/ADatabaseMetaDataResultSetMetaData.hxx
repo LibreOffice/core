@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 06:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@ namespace connectivity
             ADORecordset*   m_pRecordSet;
             sal_Int32       m_nColCount;
 
-            sal_Int32 MapADOType2Jdbc(DataTypeEnum eType);
         protected:
             void setColumnPrivilegesMap();
             void setColumnsMap();
