@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-29 06:11:46 $
+ *  last change: $Author: jbu $ $Date: 2002-09-04 14:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1275,13 +1275,12 @@ void Desktop::Main()
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
 
-    Reference< XCurrentContext > xCurrentContext;
+    com::sun::star::uno::ContextLayer layer( com::sun::star::uno::getCurrentContext() );
 
     if ( !Application::IsRemoteServer() )
     {
-        JavaContext* pJavaContext = new JavaContext;
-        xCurrentContext = Reference< XCurrentContext >( (cppu::OWeakObject *)pJavaContext, UNO_QUERY );
-        pJavaContext->Initialize();
+        com::sun::star::uno::setCurrentContext(
+            new JavaContext( com::sun::star::uno::getCurrentContext() ) );
     }
 
     // ----  Startup screen ----
