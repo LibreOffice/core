@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:17:33 $
+ *  last change: $Author: rt $ $Date: 2003-05-27 16:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ using namespace ::com::sun::star;
 TYPEINIT2_AUTOFACTORY( SwFmtDrop, SfxPoolItem, SwClient);
 TYPEINIT1_AUTOFACTORY( SwRegisterItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY( SwNumRuleItem, SfxStringItem);
+TYPEINIT1_AUTOFACTORY( SwParaConnectBorderItem, SfxBoolItem);
 
 /*************************************************************************
 |*    Beschreibung      Methoden von SwFmtDrop
@@ -370,7 +371,13 @@ BOOL    SwNumRuleItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMem
     SetValue(SwStyleNameMapper::GetUIName(uName, GET_POOLID_NUMRULE));
     return TRUE;
 }
+/* -----------------19.05.2003 10:44-----------------
 
+ --------------------------------------------------*/
+SfxPoolItem* SwParaConnectBorderItem::Clone( SfxItemPool * ) const
+{
+    return new SwParaConnectBorderItem( *this );
+}
 
 
 
