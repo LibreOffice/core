@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hdu $ $Date: 2001-08-02 17:16:20 $
+#   last change: $Author: hdu $ $Date: 2002-02-15 15:52:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,9 @@ SLOFILES=\
         $(SLO)$/gcach_rbmp.obj		\
         $(SLO)$/gcach_vdev.obj		\
         $(SLO)$/gcach_ftyp.obj
-
+.IF "$(ENABLE_CTL)" != ""
+SLOFILES+=$(SLO)$/gcach_layout.obj
+.ENDIF
 .ENDIF
 
 # --- Targets ------------------------------------------------------
