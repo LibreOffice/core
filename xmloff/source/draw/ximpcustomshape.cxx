@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpcustomshape.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:04:22 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,26 +143,26 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPAIR_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPAIR_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTPATHMODE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTPATHMODE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_PROJECTIONMODE_HPP_
 #include <com/sun/star/drawing/ProjectionMode.hpp>
@@ -324,7 +324,7 @@ sal_Bool GetEquationName( const rtl::OUString& rEquation, const sal_Int32 nStart
     return bValid;
 }
 
-sal_Bool GetNextParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter, sal_Int32& nIndex, const rtl::OUString& rParaString )
+sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter, sal_Int32& nIndex, const rtl::OUString& rParaString )
 {
     if ( nIndex >= rParaString.getLength() )
         return sal_False;
@@ -333,10 +333,10 @@ sal_Bool GetNextParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeP
     sal_Bool bNumberRequired = sal_True;
     sal_Bool bMustBePositiveWholeNumbered = sal_False;
 
-    rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL;
+    rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL;
     if ( rParaString[ nIndex ] == (sal_Unicode)'$' )
     {
-        rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT;
+        rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT;
         bMustBePositiveWholeNumbered = sal_True;
         nIndex++;
     }
@@ -348,7 +348,7 @@ sal_Bool GetNextParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeP
         bValid = GetEquationName( rParaString, nIndex, aEquationName );
         if ( bValid )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION;
+            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION;
             rParameter.Value <<= aEquationName;
             nIndex += aEquationName.getLength();
         }
@@ -358,62 +358,62 @@ sal_Bool GetNextParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeP
         bNumberRequired = sal_False;
         if ( rParaString.matchIgnoreAsciiCaseAsciiL( "left", 4, nIndex ) )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT;
+            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT;
             nIndex += 4;
         }
         else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "top", 3, nIndex ) )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP;
+            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP;
             nIndex += 3;
         }
         else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "right", 5, nIndex ) )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT;
+            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT;
             nIndex += 5;
         }
         else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "bottom", 6, nIndex ) )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM;
+            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM;
             nIndex += 6;
         }
         else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "xstretch", 8, nIndex ) )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::XSTRETCH;
+            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::XSTRETCH;
             nIndex += 8;
         }
         else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "ystretch", 8, nIndex ) )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::YSTRETCH;
+            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::YSTRETCH;
             nIndex += 8;
         }
         else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "hasstroke", 9, nIndex ) )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::HASSTROKE;
+            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::HASSTROKE;
             nIndex += 9;
         }
         else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "hasfill", 7, nIndex ) )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::HASFILL;
+            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::HASFILL;
             nIndex += 7;
         }
         else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "width", 5, nIndex ) )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::WIDTH;
+            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::WIDTH;
             nIndex += 5;
         }
         else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "height", 6, nIndex ) )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::HEIGHT;
+            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::HEIGHT;
             nIndex += 6;
         }
         else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "logwidth", 8, nIndex ) )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGWIDTH;
+            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGWIDTH;
             nIndex += 8;
         }
         else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "logheight", 9, nIndex ) )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGHEIGHT;
+            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGHEIGHT;
             nIndex += 9;
         }
         else
@@ -580,7 +580,7 @@ void GetEnhancedParameter( std::vector< com::sun::star::beans::PropertyValue >& 
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nIndex = 0;
-    drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aParameter;
+    com::sun::star::drawing::EnhancedCustomShapeParameter aParameter;
     if ( GetNextParameter( aParameter, nIndex, rValue ) )
     {
         beans::PropertyValue aProp;
@@ -594,7 +594,7 @@ void GetEnhancedParameterPair( std::vector< com::sun::star::beans::PropertyValue
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nIndex = 0;
-    drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameterPair;
+    com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameterPair;
     if ( GetNextParameter( aParameterPair.First, nIndex, rValue )
         && GetNextParameter( aParameterPair.Second, nIndex, rValue ) )
     {
@@ -608,8 +608,8 @@ void GetEnhancedParameterPair( std::vector< com::sun::star::beans::PropertyValue
 void GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,      // e.g. draw:glue-points
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
-    std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair > vParameter;
-    drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameter;
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair > vParameter;
+    com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameter;
 
     sal_Int32 nIndex = 0;
     while ( GetNextParameter( aParameter.First, nIndex, rValue )
@@ -619,10 +619,10 @@ void GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::Prope
     }
     if ( vParameter.size() )
     {
-        uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair > aParameterSeq( vParameter.size() );
-        std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair >::const_iterator aIter = vParameter.begin();
-        std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair >::const_iterator aEnd = vParameter.end();
-        drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair* pValues = aParameterSeq.getArray();
+        uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aParameterSeq( vParameter.size() );
+        std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >::const_iterator aIter = vParameter.begin();
+        std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >::const_iterator aEnd = vParameter.end();
+        com::sun::star::drawing::EnhancedCustomShapeParameterPair* pValues = aParameterSeq.getArray();
 
         while ( aIter != aEnd )
             *pValues++ = *aIter++;
@@ -637,8 +637,8 @@ void GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::Prope
 void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,      // e.g. draw:text-areas
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
-    std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame > vTextFrame;
-    drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame aParameter;
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeTextFrame > vTextFrame;
+    com::sun::star::drawing::EnhancedCustomShapeTextFrame aParameter;
 
     sal_Int32 nIndex = 0;
 
@@ -651,10 +651,10 @@ void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyV
     }
     if ( vTextFrame.size() )
     {
-        uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrameSeq( vTextFrame.size() );
-        std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame >::const_iterator aIter = vTextFrame.begin();
-        std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame >::const_iterator aEnd = vTextFrame.end();
-        drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame* pValues = aTextFrameSeq.getArray();
+        uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrameSeq( vTextFrame.size() );
+        std::vector< com::sun::star::drawing::EnhancedCustomShapeTextFrame >::const_iterator aIter = vTextFrame.begin();
+        std::vector< com::sun::star::drawing::EnhancedCustomShapeTextFrame >::const_iterator aEnd = vTextFrame.end();
+        com::sun::star::drawing::EnhancedCustomShapeTextFrame* pValues = aTextFrameSeq.getArray();
 
         while ( aIter != aEnd )
             *pValues++ = *aIter++;
@@ -669,14 +669,14 @@ void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyV
 void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest,                   // e.g. draw:enhanced-path
                         const rtl::OUString& rValue )
 {
-    std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair >    vCoordinates;
-    std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeSegment >      vSegments;
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >    vCoordinates;
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >      vSegments;
 
     sal_Int32 nIndex = 0;
     sal_Int32 nParameterCount = 0;
 
     sal_Int32 nParametersNeeded = 1;
-    sal_Int16 nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
+    sal_Int16 nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
 
     sal_Bool bValid = sal_True;
 
@@ -686,112 +686,112 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
         {
             case 'M' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
                 nParametersNeeded = 1;
                 nIndex++;
             }
             break;
             case 'L' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
                 nParametersNeeded = 1;
                 nIndex++;
             }
             break;
             case 'C' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
                 nParametersNeeded = 3;
                 nIndex++;
             }
             break;
             case 'Z' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
                 nParametersNeeded = 0;
                 nIndex++;
             }
             break;
             case 'N' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
                 nParametersNeeded = 0;
                 nIndex++;
             }
             break;
             case 'F' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOFILL;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOFILL;
                 nParametersNeeded = 0;
                 nIndex++;
             }
             break;
             case 'S' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE;
                 nParametersNeeded = 0;
                 nIndex++;
             }
             break;
             case 'T' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO;
                 nParametersNeeded = 3;
                 nIndex++;
             }
             break;
             case 'U' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE;
                 nParametersNeeded = 3;
                 nIndex++;
             }
             break;
             case 'A' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
                 nParametersNeeded = 4;
                 nIndex++;
             }
             break;
             case 'B' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARC;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARC;
                 nParametersNeeded = 4;
                 nIndex++;
             }
             break;
             case 'W' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO;
                 nParametersNeeded = 4;
                 nIndex++;
             }
             break;
             case 'V' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC;
                 nParametersNeeded = 4;
                 nIndex++;
             }
             break;
             case 'X' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX;
                 nParametersNeeded = 1;
                 nIndex++;
             }
             break;
             case 'Y' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY;
                 nParametersNeeded = 1;
                 nIndex++;
             }
             break;
             case 'Q' :
             {
-                nLatestSegmentCommand = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO;
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO;
                 nParametersNeeded = 2;
                 nIndex++;
             }
@@ -816,7 +816,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
             case '9' :
             case '.' :
             {
-                drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aPair;
+                com::sun::star::drawing::EnhancedCustomShapeParameterPair aPair;
                 if ( GetNextParameter( aPair.First, nIndex, rValue ) &&
                         GetNextParameter( aPair.Second, nIndex, rValue ) )
                 {
@@ -833,7 +833,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
         }
         if ( !nParameterCount && !nParametersNeeded )
         {
-            drafts::com::sun::star::drawing::EnhancedCustomShapeSegment aSegment;
+            com::sun::star::drawing::EnhancedCustomShapeSegment aSegment;
             aSegment.Command = nLatestSegmentCommand;
             aSegment.Count = 0;
             vSegments.push_back( aSegment );
@@ -847,7 +847,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
                 vSegments[ vSegments.size() -1 ].Count++;
             else
             {
-                drafts::com::sun::star::drawing::EnhancedCustomShapeSegment aSegment;
+                com::sun::star::drawing::EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = nLatestSegmentCommand;
                 aSegment.Count = 1;
                 vSegments.push_back( aSegment );
@@ -856,10 +856,10 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
         }
     }
     // adding the Coordinates property
-    uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair > seqCoordinates( vCoordinates.size() );
-    std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair >::const_iterator aCoordinatesIter = vCoordinates.begin();
-    std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair >::const_iterator aCoordinatesEnd = vCoordinates.end();
-    drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair* pCoordinateValues = seqCoordinates.getArray();
+    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > seqCoordinates( vCoordinates.size() );
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >::const_iterator aCoordinatesIter = vCoordinates.begin();
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >::const_iterator aCoordinatesEnd = vCoordinates.end();
+    com::sun::star::drawing::EnhancedCustomShapeParameterPair* pCoordinateValues = seqCoordinates.getArray();
 
     while ( aCoordinatesIter != aCoordinatesEnd )
         *pCoordinateValues++ = *aCoordinatesIter++;
@@ -871,10 +871,10 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
 
 
     // adding the Segments property
-    uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeSegment > seqSegments( vSegments.size() );
-    std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeSegment >::const_iterator aSegmentsIter = vSegments.begin();
-    std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeSegment >::const_iterator aSegmentsEnd = vSegments.end();
-    drafts::com::sun::star::drawing::EnhancedCustomShapeSegment* pSegmentValues = seqSegments.getArray();
+    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > seqSegments( vSegments.size() );
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >::const_iterator aSegmentsIter = vSegments.begin();
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >::const_iterator aSegmentsEnd = vSegments.end();
+    com::sun::star::drawing::EnhancedCustomShapeSegment* pSegmentValues = seqSegments.getArray();
 
     while ( aSegmentsIter != aSegmentsEnd )
         *pSegmentValues++ = *aSegmentsIter++;
@@ -887,13 +887,13 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
 void GetAdjustmentValues( std::vector< com::sun::star::beans::PropertyValue >& rDest,               // draw:adjustments
                         const rtl::OUString& rValue )
 {
-    std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > vAdjustmentValue;
-    drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aParameter;
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > vAdjustmentValue;
+    com::sun::star::drawing::EnhancedCustomShapeParameter aParameter;
     sal_Int32 nIndex = 0;
     while ( GetNextParameter( aParameter, nIndex, rValue ) )
     {
-        drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue aAdj;
-        if ( aParameter.Type == drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL )
+        com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue aAdj;
+        if ( aParameter.Type == com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL )
         {
             aAdj.Value <<= aParameter.Value;
             aAdj.State = beans::PropertyState_DIRECT_VALUE;
@@ -907,10 +907,10 @@ void GetAdjustmentValues( std::vector< com::sun::star::beans::PropertyValue >& r
     sal_Int32 nAdjustmentValues = vAdjustmentValue.size();
     if ( nAdjustmentValues )
     {
-        uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentValues( nAdjustmentValues );
-        std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >::const_iterator aIter = vAdjustmentValue.begin();
-        std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >::const_iterator aEnd = vAdjustmentValue.end();
-        drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue* pValues = aAdjustmentValues.getArray();
+        uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentValues( nAdjustmentValues );
+        std::vector< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >::const_iterator aIter = vAdjustmentValue.begin();
+        std::vector< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >::const_iterator aEnd = vAdjustmentValue.end();
+        com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue* pValues = aAdjustmentValues.getArray();
 
         while ( aIter != aEnd )
             *pValues++ = *aIter++;
@@ -976,9 +976,9 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 case EAS_extrusion_depth :
                 {
                     sal_Int32 nIndex = 0;
-                    drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameterPair;
-                    drafts::com::sun::star::drawing::EnhancedCustomShapeParameter& rDepth = aParameterPair.First;
-                    drafts::com::sun::star::drawing::EnhancedCustomShapeParameter& rFraction = aParameterPair.Second;
+                    com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameterPair;
+                    com::sun::star::drawing::EnhancedCustomShapeParameter& rDepth = aParameterPair.First;
+                    com::sun::star::drawing::EnhancedCustomShapeParameter& rFraction = aParameterPair.Second;
                     if ( GetNextParameter( rDepth, nIndex, rValue ) )
                     {
                         // try to catch the unit for the depth
@@ -1136,11 +1136,11 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 break;
                 case EAS_text_path_mode :
                 {
-                    drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode eTextPathMode( drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode_NORMAL );
+                    com::sun::star::drawing::EnhancedCustomShapeTextPathMode eTextPathMode( com::sun::star::drawing::EnhancedCustomShapeTextPathMode_NORMAL );
                     if( IsXMLToken( rValue, XML_PATH ) )
-                        eTextPathMode = drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode_PATH;
+                        eTextPathMode = com::sun::star::drawing::EnhancedCustomShapeTextPathMode_PATH;
                     else if ( IsXMLToken( rValue, XML_SHAPE ) )
-                        eTextPathMode = drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode_SHAPE;
+                        eTextPathMode = com::sun::star::drawing::EnhancedCustomShapeTextPathMode_SHAPE;
 
                     beans::PropertyValue aProp;
                     aProp.Name = EASGet( EAS_TextPathMode );
@@ -1235,9 +1235,9 @@ typedef std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash, OUStringEqFu
 
 /* if rPara.Type is from type EnhancedCustomShapeParameterType::EQUATION, the name of the equation
    will be converted from rtl::OUString to index */
-void CheckAndResolveEquationParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeParameter& rPara, EquationHashMap* pH )
+void CheckAndResolveEquationParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rPara, EquationHashMap* pH )
 {
-    if ( rPara.Type == drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION )
+    if ( rPara.Type == com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION )
     {
         rtl::OUString aEquationName;
         if ( rPara.Value >>= aEquationName )
@@ -1308,8 +1308,8 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 case EAS_Coordinates :
                 case EAS_GluePoints :
                 {
-                    uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair >& rSeq =
-                        *((uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair >*)
+                    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >& rSeq =
+                        *((uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >*)
                             aPathIter->Value.getValue());
                     for ( i = 0; i < rSeq.getLength(); i++ )
                     {
@@ -1320,8 +1320,8 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 break;
                 case EAS_TextFrames :
                 {
-                    uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame >& rSeq =
-                        *((uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame >*)
+                    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame >& rSeq =
+                        *((uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame >*)
                             aPathIter->Value.getValue());
                     for ( i = 0; i < rSeq.getLength(); i++ )
                     {
@@ -1352,15 +1352,15 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     case EAS_RadiusRangeMinimum :
                     case EAS_RadiusRangeMaximum :
                     {
-                        CheckAndResolveEquationParameter( *((drafts::com::sun::star::drawing::EnhancedCustomShapeParameter*)
+                        CheckAndResolveEquationParameter( *((com::sun::star::drawing::EnhancedCustomShapeParameter*)
                             pValues->Value.getValue()), pH );
                     }
                     break;
                     case EAS_Polar :
                     {
-                        CheckAndResolveEquationParameter( (*((drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair*)
+                        CheckAndResolveEquationParameter( (*((com::sun::star::drawing::EnhancedCustomShapeParameterPair*)
                             pValues->Value.getValue())).First, pH );
-                        CheckAndResolveEquationParameter( (*((drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair*)
+                        CheckAndResolveEquationParameter( (*((com::sun::star::drawing::EnhancedCustomShapeParameterPair*)
                             pValues->Value.getValue())).Second, pH );
                     }
                     break;
