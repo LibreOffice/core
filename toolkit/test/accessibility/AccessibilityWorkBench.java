@@ -501,7 +501,8 @@ public class AccessibilityWorkBench
                 {
                     println (xModel.getURL());
                     XWindow xWindow = office.getCurrentWindow (xModel);
-                    XAccessible xRoot = office.getAccessibleRoot (xWindow);
+                    XAccessible xRoot = office.getAccessibleRoot (
+                        office.getAccessibleObject(xWindow));
 
                     // create document node
                     aRoot.addChild (
@@ -513,6 +514,7 @@ public class AccessibilityWorkBench
         catch (Exception e)
         {
             System.out.println ("caught exception while getting document names: " + e);
+            e.printStackTrace();
         }
 
         return aRoot;
