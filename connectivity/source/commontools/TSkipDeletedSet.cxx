@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TSkipDeletedSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:32:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             bDone = sal_False;
     }
 
-    while (bDataFound && !bDone)            // solange iterieren bis man auf einem gültigen Satz ist
+    while (bDataFound && !bDone)            // solange iterieren bis man auf einem gueltigen Satz ist
     {
         bDataFound = m_pHelper->move(eDelPosition, 1, _bRetrieveData);
         if (_eCursorPosition != IResultSetHelper::RELATIVE)
