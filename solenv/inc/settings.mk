@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.158 $
+#   $Revision: 1.159 $
 #
-#   last change: $Author: kz $ $Date: 2004-12-16 11:40:19 $
+#   last change: $Author: rt $ $Date: 2004-12-16 12:57:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -531,6 +531,15 @@ NEWCHARSET=TRUE
 ######################################################
 
 .INCLUDE : lang.mk
+
+.INCLUDE : postset.mk
+
+# --- add L10N_framework codes -------------------------------------
+
+alllangiso+=$(L10N_framework:s/,/ /)
+completelangiso+=$(L10N_framework:s/,/ /)
+RSC_LANG_ISO+:=$(completelangiso)
+.EXPORT : RSC_LANG_ISO
 
 ######################################################
 
