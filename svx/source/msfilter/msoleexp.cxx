@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:01:01 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XEmbedPersist_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -316,7 +319,18 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                 if( rObj.GetObject().is() )
                 {
                     // MSOLE objects don't need to be in running state for VisualArea access
-                    awt::Size aSize = rObj->getVisualAreaSize( rObj.GetViewAspect() );
+                    awt::Size aSize;
+                    try
+                    {
+                        aSize = rObj->getVisualAreaSize( rObj.GetViewAspect() );
+                    }
+                    catch( embed::NoVisualAreaSizeException& )
+                    {
+                        OSL_ENSURE( sal_False, "Could not get visual area size!\n" );
+                        aSize.Width = 5000;
+                        aSize.Height = 5000;
+                    }
+
                     //Rectangle aVisArea = xSfxIPObj->GetVisArea( ASPECT_CONTENT );
                     sal_Int32 pRect[4];
                     //pRect[0] = aVisArea.Left();
