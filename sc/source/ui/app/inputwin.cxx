@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:13:06 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ SfxChildWinInfo __EXPORT ScInputWindowWrapper::GetInfo() const
 
 //==================================================================
 
-#define IMAGE(id) pImgMgr->SeekImage(id,bDark,pScMod)
+#define IMAGE(id) pImgMgr->SeekImage(id, bDark)
 
 //==================================================================
 //  class ScInputWindow
@@ -200,9 +200,9 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
         bIsOkCancelMode ( FALSE ),
         pInputHdl       ( NULL )
 {
-    SfxImageManager* pImgMgr = pBindings->GetImageManager();
-    ScTabViewShell*  pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
     ScModule*        pScMod  = SC_MOD();
+    SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
+    ScTabViewShell*  pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
 
     BOOL bDark = GetDisplayBackground().GetColor().IsDark();
 
@@ -261,7 +261,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     else if ( pViewSh )
         pViewSh->UpdateInputHandler( TRUE ); // unbedingtes Update
 
-    pImgMgr->RegisterToolBox( this, SC_MOD() );
+    pImgMgr->RegisterToolBox( this );
 }
 
 __EXPORT ScInputWindow::~ScInputWindow()
@@ -285,7 +285,7 @@ __EXPORT ScInputWindow::~ScInputWindow()
         }
     }
 
-    pBindings->GetImageManager()->ReleaseToolBox( this );
+    SfxImageManager::GetImageManager( SC_MOD() )->ReleaseToolBox( this );
 }
 
 void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
@@ -569,7 +569,7 @@ void ScInputWindow::SetOkCancelMode()
     EnableButtons( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) );
 
     ScModule* pScMod = SC_MOD();
-    SfxImageManager* pImgMgr = pBindings->GetImageManager();
+    SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
     if (!bIsOkCancelMode)
     {
         BOOL bDark = GetDisplayBackground().GetColor().IsDark();
@@ -593,7 +593,7 @@ void ScInputWindow::SetSumAssignMode()
     EnableButtons( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) );
 
     ScModule* pScMod = SC_MOD();
-    SfxImageManager* pImgMgr = pBindings->GetImageManager();
+    SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
     if (bIsOkCancelMode)
     {
         BOOL bDark = GetDisplayBackground().GetColor().IsDark();
@@ -723,7 +723,7 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
         //  update item images
 
         ScModule*        pScMod  = SC_MOD();
-        SfxImageManager* pImgMgr = pBindings->GetImageManager();
+        SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
         BOOL bDark = GetDisplayBackground().GetColor().IsDark();
         // IMAGE macro uses pScMod, pImgMgr, bDark
 
