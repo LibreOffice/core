@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:57:02 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ String STR_CENTER_HORI
     TEXT[ japanese ] = "δΈ­ε¤®(~C)";
     TEXT[ chinese_traditional ] = "η½®δΈ­(~C)";
     TEXT[ arabic ] = "ΚζΣνΨ";
-    TEXT[ greek ] = "Κεντραρισμένα";
+    TEXT[ greek ] = "Στο κέντρο";
     TEXT[ korean ] = "κ°€μ΄λ°(~C)";
     TEXT[ turkish ] = "~Merkez";
     TEXT[ language_user1 ] = " ";
@@ -1315,7 +1315,7 @@ String STR_CENTER_BASE
     Text[ japanese ] = "εΊη·γ®δΈ­ε¤®(~C)";
     Text[ chinese_traditional ] = "εΊη·η½®δΈ­(~C)";
     Text[ arabic ] = "ζΣΨ ΗαΞΨ ΗαΓΣΗΣν";
-    Text[ greek ] = "Βασική γραμμή - κεντραρισμένα";
+    Text[ greek ] = "Βασική γραμμή - στο κέντρο";
     Text[ korean ] = "κΈ°μ¤€μ„  κ°€μ΄λ°(~C)";
     Text[ turkish ] = "Taban ηizgisini ~ortala";
     Text[ language_user1 ] = " ";
@@ -1501,7 +1501,7 @@ String STR_CHAR_CENTER
     Text[ japanese ] = "ζ–‡ε­—γ®δΈ­ε¤®";
     Text[ chinese_traditional ] = "ε­—ε…ƒη½®δΈ­";
     Text[ arabic ] = "ζΣΨ ΗαΝΡέ";
-    Text[ greek ] = "Χαρακτήρας - κεντραρισμένα";
+    Text[ greek ] = "Χαρακτήρας - στο κέντρο";
     Text[ korean ] = "λ¬Έμ κ°€μ΄λ°";
     Text[ turkish ] = "Karakter ortasύ";
     Text[ language_user1 ] = " ";
@@ -1535,7 +1535,7 @@ String STR_OLE_INSERT
     TEXT[ japanese ] = "γ‚ªγƒ—γ‚Έγ‚§γ‚―γƒγ®ζΏε…¥";
     TEXT[ chinese_traditional ] = "ζ’ε…¥η‰©δ»¶";
     TEXT[ arabic ] = "ΕΟΡΗΜ ίΗΖδ";
-    TEXT[ greek ] = "Προσθήκη αντικειμένου";
+    TEXT[ greek ] = "Εισαγωγή αντικειμένου";
     TEXT[ korean ] = "κ°μ²΄ μ‚½μ…";
     TEXT[ turkish ] = "Nesne ekle";
     TEXT[ language_user1 ] = " ";
@@ -1756,7 +1756,7 @@ String STR_REL_PG_TOP
     Text[ danish ] = "Top page border";
     Text[ swedish ] = "Sidmarginal φverst";
     Text[ polish ] = "Top page border";
-    Text[ portuguese_brazilian ] = "Top page border";
+    Text[ portuguese_brazilian ] = "Borda superior da pαgina";
     Text[ japanese ] = "γƒγƒΌγ‚Έδ½™η™½γ€δΈ";
     Text[ korean ] = "νμ΄μ§€ μ—¬λ°± μ„μª½";
     Text[ chinese_simplified ] = "ι΅µιΆθΎΉθ· δΈζ–Ή";
@@ -1785,7 +1785,7 @@ String STR_REL_PG_BOTTOM
     Text[ danish ] = "Bottom page border";
     Text[ swedish ] = "Sidmarginal nederst";
     Text[ polish ] = "Bottom page border";
-    Text[ portuguese_brazilian ] = "Bottom page border";
+    Text[ portuguese_brazilian ] = "Borda inferior da pαgina";
     Text[ japanese ] = "γƒγƒΌγ‚Έδ½™η™½γ€δΈ‹";
     Text[ korean ] = "νμ΄μ§€ μ—¬λ°± μ•„λμª½";
     Text[ chinese_simplified ] = "ι΅µιΆθΎΉθ· δΈ‹ζ–Ή";
@@ -1814,7 +1814,7 @@ String STR_REL_FRM_TOP
     Text[ danish ] = "Top paragraph border";
     Text[ swedish ] = "Styckemarginal φverst";
     Text[ polish ] = "Top paragraph border";
-    Text[ portuguese_brazilian ] = "Top paragraph border";
+    Text[ portuguese_brazilian ] = "Borda superior do parαgrafo";
     Text[ japanese ] = "ζ®µθ½γ®δΈδ½™η™½";
     Text[ korean ] = "λ‹¨λ½ μ—¬λ°± μ„μª½";
     Text[ chinese_simplified ] = "ζ®µθ½θΎΉζ΅† δΈζ–Ή";
@@ -1843,7 +1843,7 @@ String STR_REL_FRM_BOTTOM
     Text[ danish ] = "Bottom paragraph border";
     Text[ swedish ] = "Styckemarginal nederst";
     Text[ polish ] = "Bottom paragraph border";
-    Text[ portuguese_brazilian ] = "Bottom paragraph border";
+    Text[ portuguese_brazilian ] = "Borda inferior do parαgrafo";
     Text[ japanese ] = "ζ®µθ½γ®δΈ‹δ½™η™½";
     Text[ korean ] = "λ‹¨λ½ μ—¬λ°± μ•„λμª½";
     Text[ chinese_simplified ] = "ζ®µθ½θΎΉζ΅† δΈ‹ζ–Ή";
@@ -1872,7 +1872,7 @@ String STR_FROMRIGHT
     TEXT[ danish ] = "From right";
     TEXT[ swedish ] = "Frεn hφger";
     TEXT[ polish ] = "From right";
-    TEXT[ portuguese_brazilian ] = "From right";
+    TEXT[ portuguese_brazilian ] = "Da direita";
     TEXT[ japanese ] = "ε³γ‹γ‚‰";
     TEXT[ korean ] = "μ¤λ¥Έμª½μΌλ΅λ¶€ν„°";
     TEXT[ chinese_simplified ] = "δ»ε³";
@@ -1886,6 +1886,7 @@ String STR_FROMRIGHT
     TEXT[ hindi ] = "From right";
     TEXT[ slovak ] = "Sprava";
 };
+
 
 
 
