@@ -2,9 +2,9 @@
  *
  *  $RCSfile: composedprops.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-23 16:08:37 $
+ *  last change: $Author: rt $ $Date: 2001-01-25 12:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ namespace comphelper
     }
 
     //------------------------------------------------------------------------------
-    Sequence< Property> SAL_CALL OComposedPropertySetInfo::getProperties()
+    Sequence< Property> SAL_CALL OComposedPropertySetInfo::getProperties() throw(RuntimeException)
     {
         return m_aProperties;
     }
@@ -397,6 +397,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/23 16:08:37  fs
+ *  initial checkin - migrated svx/source/inc/multipro.cxx
+ *
  *
  *  Revision 1.0 23.01.01 14:35:37  fs
  ************************************************************************/
