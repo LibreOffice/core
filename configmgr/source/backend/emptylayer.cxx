@@ -2,9 +2,9 @@
 *
 *  $RCSfile: emptylayer.cxx,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: jb $ $Date: 2002-11-28 09:05:11 $
+*  last change: $Author: jb $ $Date: 2002-11-28 12:58:17 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -198,7 +198,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL RequireEmptyLayer::addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-            throw (backenduno::MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
             failNotEmpty();
         }
