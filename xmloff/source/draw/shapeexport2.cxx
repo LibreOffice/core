@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:39:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,6 +477,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             case presentation::ClickAction_SOUND:           eStrAction = XML_SOUND; break;
             default:
                 DBG_ERROR( "unknown presentation::ClickAction found!" );
+                eStrAction = XML_UNKNOWN;
             }
 
             OUString aEventQName(
