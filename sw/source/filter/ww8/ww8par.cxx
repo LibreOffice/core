@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-29 16:21:47 $
+ *  last change: $Author: cmc $ $Date: 2002-08-08 15:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1723,7 +1723,7 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
 
     sal_Char cInsert = '\x0';
     BOOL bRet = FALSE;
-    switch( nWCharVal )
+    switch (nWCharVal)
     {
         case 0xe:
             /*
@@ -1821,16 +1821,32 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
             graphic preview of an associated ole2 object (or a simple
             graphic of course)
             */
-            if( bObj )
-                pFmtOfJustInsertedGraphicOrOLE = ImportOle();
-            else
-                pFmtOfJustInsertedGraphicOrOLE = ImportGraf();
-            // reset the flags.
-            bObj = bEmbeddObj = FALSE;
-            nObjLocFc = 0;
-            //##515## set nLastFlyNode so we can determine if a section
-            //has ended with this paragraph unclosed
-            nLastFlyNode = (*pPaM->GetPoint()).nNode.GetIndex();
+            {
+                SwFrmFmt *pResult = 0;
+                if (bObj)
+                    pResult = ImportOle();
+                else if (bSpec)
+                    pResult = ImportGraf();
+
+                //#102160# If we have a bad 0x1 insert a space instead.
+                if (!pResult)
+                {
+                    cInsert = ' ';
+                    ASSERT(!bObj && !bEmbeddObj && !nObjLocFc,
+                        "WW8: Please report this document, it may have a "
+                        "missing graphic");
+                }
+                else
+                {
+                    // reset the flags.
+                    bObj = bEmbeddObj = FALSE;
+                    nObjLocFc = 0;
+                    pFmtOfJustInsertedGraphicOrOLE = pResult;
+                    //##515## set nLastFlyNode so we can determine if a section
+                    //has ended with this paragraph unclosed
+                    nLastFlyNode = (*pPaM->GetPoint()).nNode.GetIndex();
+                }
+            }
             break;
         case 0x8:
             if( !bObj )
