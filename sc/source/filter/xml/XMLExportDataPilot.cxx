@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:09:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,33 @@
 
 #ifndef _COM_SUN_STAR_SHEET_DATAIMPORTMODE_HPP_
 #include <com/sun/star/sheet/DataImportMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldReference.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCETYPE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCEITEMTYPE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDSORTINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDAUTOSHOWINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDLAYOUTINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDSHOWITEMSMODE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDSORTMODE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDLAYOUTMODE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #endif
 
 using namespace com::sun::star;
@@ -496,12 +523,160 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                                 (sheet::GeneralFunction) pDim->GetFunction() );
                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sValueStr);
                             SvXMLElementExport aElemDPF(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_FIELD, sal_True, sal_True);
+                            const sheet::DataPilotFieldReference* pRef = pDim->GetReferenceValue();
+                            if (pRef)
+                            {
+                                sValueStr = rtl::OUString();
+                                switch (pRef->ReferenceType)
+                                {
+                                    case sheet::DataPilotFieldReferenceType::NONE :
+                                        sValueStr = GetXMLToken(XML_NONE);
+                                        break;
+                                    case sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE :
+                                        sValueStr = GetXMLToken(XML_MEMBER_DIFFERENCE);
+                                        break;
+                                    case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE :
+                                        sValueStr = GetXMLToken(XML_MEMBER_PERCENTAGE);
+                                        break;
+                                    case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE :
+                                        sValueStr = GetXMLToken(XML_MEMBER_PERCENTAGE_DIFFERENCE);
+                                        break;
+                                    case sheet::DataPilotFieldReferenceType::RUNNING_TOTAL :
+                                        sValueStr = GetXMLToken(XML_RUNNING_TOTAL);
+                                        break;
+                                    case sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE :
+                                        sValueStr = GetXMLToken(XML_ROW_PERCENTAGE);
+                                        break;
+                                    case sheet::DataPilotFieldReferenceType::COLUMN_PERCENTAGE :
+                                        sValueStr = GetXMLToken(XML_COLUMN_PERCENTAGE);
+                                        break;
+                                    case sheet::DataPilotFieldReferenceType::TOTAL_PERCENTAGE :
+                                        sValueStr = GetXMLToken(XML_TOTAL_PERCENTAGE);
+                                        break;
+                                    case sheet::DataPilotFieldReferenceType::INDEX :
+                                        sValueStr = GetXMLToken(XML_INDEX);
+                                        break;
+                                }
+                                if (sValueStr.getLength())
+                                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TYPE, sValueStr);
+
+                                if (pRef->ReferenceField.getLength())
+                                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NAME, pRef->ReferenceField);
+
+                                if (pRef->ReferenceItemType == sheet::DataPilotFieldReferenceItemType::NAMED)
+                                {
+                                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MEMBER_TYPE, XML_NAMED);
+                                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MEMBER_NAME, pRef->ReferenceItemName);
+                                }
+                                else
+                                {
+                                    sValueStr = rtl::OUString();
+                                    switch(pRef->ReferenceItemType)
+                                    {
+                                        case sheet::DataPilotFieldReferenceItemType::PREVIOUS :
+                                        sValueStr = GetXMLToken(XML_PREVIOUS);
+                                        break;
+                                        case sheet::DataPilotFieldReferenceItemType::NEXT :
+                                        sValueStr = GetXMLToken(XML_NEXT);
+                                        break;
+                                    }
+                                    if (sValueStr.getLength())
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MEMBER_TYPE, sValueStr);
+                                }
+                                SvXMLElementExport aElemDPFR(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_FIELD_REFERENCE, sal_True, sal_True);
+                            }
                             rExport.CheckAttrList();
                             {
                                 rtl::OUStringBuffer sBuffer;
                                 SvXMLUnitConverter::convertBool(sBuffer, pDim->GetShowEmpty());
                                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_EMPTY, sBuffer.makeStringAndClear());
                                 SvXMLElementExport aElemDPL(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_LEVEL, sal_True, sal_True);
+                                const sheet::DataPilotFieldSortInfo* pSortInfo = pDim->GetSortInfo();
+                                if (pSortInfo)
+                                {
+                                    if (pSortInfo->IsAscending)
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_ASCENDING);
+                                    else
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
+
+                                    sValueStr = rtl::OUString();
+                                    switch (pSortInfo->Mode)
+                                    {
+                                        case sheet::DataPilotFieldSortMode::NONE:
+                                        sValueStr = GetXMLToken(XML_NONE);
+                                        break;
+                                        case sheet::DataPilotFieldSortMode::MANUAL:
+                                        sValueStr = GetXMLToken(XML_MANUAL);
+                                        break;
+                                        case sheet::DataPilotFieldSortMode::NAME:
+                                        sValueStr = GetXMLToken(XML_NAME);
+                                        break;
+                                        case sheet::DataPilotFieldSortMode::DATA:
+                                        sValueStr = GetXMLToken(XML_DATA);
+                                        if (pSortInfo->Field.getLength())
+                                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_FIELD, pSortInfo->Field);
+                                        break;
+                                    }
+                                    if (sValueStr.getLength())
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SORT_MODE, sValueStr);
+                                    SvXMLElementExport aElemDPLSI(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_SORT_INFO, sal_True, sal_True);
+                                }
+                                const sheet::DataPilotFieldAutoShowInfo* pAutoInfo = pDim->GetAutoShowInfo();
+                                if (pAutoInfo)
+                                {
+                                    if (pAutoInfo->IsEnabled)
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ENABLED, XML_TRUE);
+                                    else
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ENABLED, XML_FALSE);
+
+                                    sValueStr = rtl::OUString();
+                                    switch (pAutoInfo->ShowItemsMode)
+                                    {
+                                        case sheet::DataPilotFieldShowItemsMode::FROM_TOP:
+                                        sValueStr = GetXMLToken(XML_FROM_TOP);
+                                        break;
+                                        case sheet::DataPilotFieldShowItemsMode::FROM_BOTTOM:
+                                        sValueStr = GetXMLToken(XML_FROM_BOTTOM);
+                                        break;
+                                    }
+                                    if (sValueStr.getLength())
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_MEMBER_MODE, sValueStr);
+
+                                    rtl::OUStringBuffer sBuffer;
+                                    SvXMLUnitConverter::convertNumber(sBuffer, pAutoInfo->ItemCount);
+                                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MEMBER_COUNT, sBuffer.makeStringAndClear());
+
+                                    if (pAutoInfo->DataField.getLength())
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_FIELD, pAutoInfo->DataField);
+
+                                    SvXMLElementExport aElemDPLAI(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_DISPLAY_INFO, sal_True, sal_True);
+                                }
+                                const sheet::DataPilotFieldLayoutInfo* pLayoutInfo = pDim->GetLayoutInfo();
+                                if (pLayoutInfo)
+                                {
+                                    if (pLayoutInfo->AddEmptyLines)
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ADD_EMPTY_LINE, XML_TRUE);
+                                    else
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ADD_EMPTY_LINE, XML_FALSE);
+
+                                    sValueStr = rtl::OUString();
+                                    switch (pLayoutInfo->LayoutMode)
+                                    {
+                                        case sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT:
+                                        sValueStr = GetXMLToken(XML_TABULAR_LAYOUT);
+                                        break;
+                                        case sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP:
+                                        sValueStr = GetXMLToken(XML_OUTLINE_SUBTOTALS_TOP);
+                                        break;
+                                        case sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM:
+                                        sValueStr = GetXMLToken(XML_OUTLINE_SUBTOTALS_BOTTOM);
+                                        break;
+                                    }
+                                    if (sValueStr.getLength())
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_LAYOUT_MODE, sValueStr);
+                                    SvXMLElementExport aElemDPLLI(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_LAYOUT_INFO, sal_True, sal_True);
+                                }
+
                                 rExport.CheckAttrList();
                                 sal_Int32 nSubTotalCount = pDim->GetSubTotalsCount();
                                 if (nSubTotalCount > 0)
