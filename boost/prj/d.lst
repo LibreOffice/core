@@ -1,5 +1,13 @@
 mkdir: %_DEST%\inc%_EXT%\boost
 
+..\%__SRC%\misc\build\boost-1.30.2\boost\function.hpp %_DEST%\inc%_EXT%\boost\function.hpp
+mkdir: %_DEST%\inc%_EXT%\boost\function
+..\%__SRC%\misc\build\boost-1.30.2\boost\function\*.*pp %_DEST%\inc%_EXT%\boost\function\*.*pp
+mkdir: %_DEST%\inc%_EXT%\boost\function\detail
+..\%__SRC%\misc\build\boost-1.30.2\boost\function\detail\*.*pp %_DEST%\inc%_EXT%\boost\function\detail\*.*pp
+mkdir: %_DEST%\inc%_EXT%\boost\pending
+..\%__SRC%\misc\build\boost-1.30.2\boost\pending\ct_if.hpp %_DEST%\inc%_EXT%\boost\pending\ct_if.hpp
+
 ..\%__SRC%\misc\build\boost-1.30.2\boost\mem_fn.hpp %_DEST%\inc%_EXT%\boost\mem_fn.hpp
 ..\%__SRC%\misc\build\boost-1.30.2\boost\get_pointer.hpp %_DEST%\inc%_EXT%\boost\get_pointer.hpp
 ..\%__SRC%\misc\build\boost-1.30.2\boost\bind.hpp %_DEST%\inc%_EXT%\boost\bind.hpp
