@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-17 09:11:33 $
+ *  last change: $Author: fme $ $Date: 2001-07-24 07:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,9 @@
 #endif
 #define _SVSTDARR_LONGS
 #include <svtools/svstdarr.hxx>
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
 
 #ifdef DEBUG
 #ifndef _NDTXT_HXX
@@ -479,40 +482,69 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 rInf.GetIdx() <= rInf.GetTxt().Len(),
                 "SwTxtFormatter::BuildPortions: bad length in info" );
         DBG_LOOP;
-        BYTE nNxtActual;
+
         if( pPor->InFldGrp() && !pPor->InNumberGrp() )
-        {
             ((SwFldPortion*)pPor)->CheckScript( rInf );
-            const SwFont* pTmpFnt = ((SwFldPortion*)pPor)->GetFont();
-            if( !pTmpFnt )
-                pTmpFnt = rInf.GetFont();
-            nNxtActual = pTmpFnt->GetActual();
-        }
-        else
-            nNxtActual = rInf.GetFont()->GetActual();
-        if(rInf.HasScriptSpace() && rInf.GetLast() && rInf.GetLast()->InTxtGrp()
+
+        if( rInf.HasScriptSpace() && rInf.GetLast() && rInf.GetLast()->InTxtGrp()
             && rInf.GetLast()->Width() && !rInf.GetLast()->InNumberGrp() )
         {
-            BYTE nLstActual;
-            USHORT nLstHeight;
-            if( rInf.GetLast()->InFldGrp() &&
-                ((SwFldPortion*)rInf.GetLast())->GetFont() )
+            BYTE nNxtActual = rInf.GetFont()->GetActual();
+            BYTE nLstActual = nNxtActual;
+            USHORT nLstHeight = (USHORT)rInf.GetFont()->GetHeight();
+            sal_Bool bAllowBefore = sal_False;
+            sal_Bool bAllowBehind = sal_False;
+            const CharClass& rCC = GetAppCharClass();
+
+            // are there any punctuation characters on both sides
+            // of the kerning portion?
+            if ( pPor->InFldGrp() )
             {
-                nLstActual = ((SwFldPortion*)rInf.GetLast())->GetFont()->
-                             GetActual();
-                nLstHeight = KSHORT( ((SwFldPortion*)rInf.GetLast())->GetFont()
-                                     ->GetHeight() );
+                XubString aAltTxt;
+                if ( ((SwFldPortion*)pPor)->GetExpTxt( rInf, aAltTxt ) &&
+                        aAltTxt.Len() )
+                {
+                    bAllowBehind = rCC.isLetterNumeric( aAltTxt, 0 );
+
+                    const SwFont* pTmpFnt = ((SwFldPortion*)pPor)->GetFont();
+                    if ( pTmpFnt )
+                        nNxtActual = pTmpFnt->GetActual();
+                }
             }
             else
+                bAllowBehind = rCC.isLetterNumeric( rInf.GetTxt(), rInf.GetIdx() );
+
+            const SwLinePortion* pLast = rInf.GetLast();
+            if ( bAllowBehind && pLast )
             {
-                nLstActual = rInf.GetFont()->GetActual();
-                nLstHeight = KSHORT( rInf.GetFont()->GetHeight() );
-            }
-            if( nNxtActual != nLstActual )
-            {
+                if ( pLast->InFldGrp() )
+                {
+                    XubString aAltTxt;
+                    if ( ((SwFldPortion*)pLast)->GetExpTxt( rInf, aAltTxt ) &&
+                         aAltTxt.Len() )
+                    {
+                        bAllowBefore = rCC.isLetterNumeric( aAltTxt, aAltTxt.Len() - 1 );
+
+                        const SwFont* pTmpFnt = ((SwFldPortion*)pLast)->GetFont();
+                        if ( pTmpFnt )
+                        {
+                            nLstActual = pTmpFnt->GetActual();
+                            nLstHeight = (USHORT)pTmpFnt->GetHeight();
+                        }
+                    }
+                }
+                else if ( rInf.GetIdx() )
+                {
+                    bAllowBefore = rCC.isLetterNumeric( rInf.GetTxt(), rInf.GetIdx() - 1 );
+                    // Note: ScriptType returns values in [1,4]
+                    if ( bAllowBefore )
+                        nLstActual = pScriptInfo->ScriptType( rInf.GetIdx() - 1 ) - 1;
+                }
+
                 nLstHeight /= 5;
                 // does the kerning portion still fit into the line?
-                if( nLstHeight && rInf.X() + nLstHeight <= rInf.Width() )
+                if( bAllowBefore && ( nLstActual != nNxtActual ) &&
+                    nLstHeight && rInf.X() + nLstHeight <= rInf.Width() )
                 {
                     SwKernPortion* pKrn =
                         new SwKernPortion( *rInf.GetLast(), nLstHeight );
@@ -562,9 +594,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             if( rInf.HasScriptSpace() && pPor->InTxtGrp() &&
                 pPor->GetLen() && !pPor->InFldGrp() )
             {
-                xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
                 // The distance between two different scripts is set
                 // to 20% of the fontheight.
+                xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
                 if( nTmp == pScriptInfo->NextScriptChg( nTmp - 1 ) &&
                     nTmp != rInf.GetTxt().Len() )
                 {
@@ -572,11 +604,18 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
                     if( nDist )
                     {
-                        // does the kerning portion still fit into the line?
-                        if ( rInf.X() + pPor->Width() + nDist <= rInf.Width() )
-                            new SwKernPortion( *pPor, nDist );
-                        else
-                            bFull = sal_True;
+                        // we do not want a kerning portion if any end
+                        // would be a punctuation character
+                        const CharClass& rCC = GetAppCharClass();
+                        if ( rCC.isLetterNumeric( rInf.GetTxt(), nTmp - 1 ) &&
+                             rCC.isLetterNumeric( rInf.GetTxt(), nTmp ) )
+                        {
+                            // does the kerning portion still fit into the line?
+                            if ( rInf.X() + pPor->Width() + nDist <= rInf.Width() )
+                                new SwKernPortion( *pPor, nDist );
+                            else
+                                bFull = sal_True;
+                        }
                     }
                 }
             }

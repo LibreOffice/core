@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-27 13:25:02 $
+ *  last change: $Author: fme $ $Date: 2001-07-24 07:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,6 @@
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
 #endif
-
-class SwScriptInfo;
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -252,6 +250,19 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         }
     }
 
+    sal_Bool bChgLocale = sal_False;
+
+    // if the current character does not fit to the current line,
+    // we check for possible hanging punctuation:
+    if ( nCutPos && nCutPos == rInf.GetIdx() )
+    {
+        ASSERT( rSI.ScriptType( nCutPos - 1 ), "Script is not between 1 and 4" );
+
+        // compare current script with last script
+        bChgLocale = ( rSI.ScriptType( nCutPos - 1 ) - 1 !=
+                       rInf.GetFont()->GetActual() );
+    }
+
     xub_StrLen nPorLen = 0;
     if( CH_BLANK == rInf.GetTxt().GetChar( nCutPos ) )
     {
@@ -282,7 +293,12 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                                 rInf.GetHyphValues(), nHyphPos );
         }
 
-        LanguageType aLang = rInf.GetFont()->GetLanguage();
+        // We have to switch the current language if we have a script
+        // change at nCutPos. Otherwise LATIN punctuation would never
+        // be allowed to be hanging punctuation.
+        LanguageType aLang = bChgLocale ?
+                             rInf.GetTxtFrm()->GetTxtNode()->GetLang( nCutPos - 1 ) :
+                             rInf.GetFont()->GetLanguage();
         const ForbiddenCharacters aForbidden(
                 *rInf.GetTxtFrm()->GetNode()->GetDoc()->
                             GetForbiddenCharacters( aLang, TRUE ));

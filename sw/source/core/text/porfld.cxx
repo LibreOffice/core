@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:28:16 $
+ *  last change: $Author: fme $ $Date: 2001-07-24 07:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,18 +504,6 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 nNextOffset += nNextOfst;
                 pFld->SetNextOffset( nNextOffset );
                 rInf.SetRest( pFld );
-                if( ! bFull && nScriptChg && rInf.HasScriptSpace() )
-                {
-                    USHORT nDist = pFld->GetFont()->GetHeight()/5;
-                    if( nDist )
-                    {
-                        // does the kerning portion still fit into the line?
-                        if ( rInf.X() + Width() + nDist <= rInf.Width() )
-                            new SwKernPortion( *this, nDist );
-                        else
-                            bFull = sal_True;
-                    }
-                }
             }
         }
     }
@@ -1195,7 +1183,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
             SwDrawTextInfo aDrawInf( pSh, *rInf.GetOut(), 0, aExpand, i, 1 );
             Size aSize = aTmpFont._GetTxtSize( aDrawInf );
             USHORT nAsc = aTmpFont.GetAscent( pSh, rInf.GetOut() );
-            aPos[ i ] = aSize.Width();
+            aPos[ i ] = (USHORT)aSize.Width();
             if( i == nTop ) // enter the second line
             {
                 nLowPos = nMaxDescent;
@@ -1269,7 +1257,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     {
         if( rInf.GetLineStart() == rInf.GetIdx() && (!rInf.GetLast()->InFldGrp()
             || !((SwFldPortion*)rInf.GetLast())->IsFollow() ) )
-            Width( rInf.Width() - rInf.X() );
+            Width( (USHORT)( rInf.Width() - rInf.X() ) );
         else
         {
             Truncate();
