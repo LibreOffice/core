@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowids.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-23 18:20:49 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,9 @@
 #define SC_WID_UNO_HEADERSET        ( SC_WID_UNO_START + 26 )
 #define SC_WID_UNO_FOOTERSET        ( SC_WID_UNO_START + 27 )
 #define SC_WID_UNO_NUMRULES         ( SC_WID_UNO_START + 28 )
+#define SC_WID_UNO_AUTOPRINT        ( SC_WID_UNO_START + 29 )
 
-#define SC_WID_UNO_END              ( SC_WID_UNO_START + 28 )
+#define SC_WID_UNO_END              ( SC_WID_UNO_START + 29 )
 
 
 inline BOOL IsScUnoWid( USHORT nWid )
