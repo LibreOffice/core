@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:06:48 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ DBG_NAME( file_OResultSet )
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIterator) :    OResultSet_BASE(m_aMutex)
                         ,::comphelper::OPropertyContainer(OResultSet_BASE::rBHelper)
-                        ,m_aStatement((OWeakObject*)pStmt)
+                        ,m_xStatement(*pStmt)
                         ,m_nRowPos(-1)
                         ,m_bLastRecord(sal_False)
                         ,m_bEOF(sal_False)
@@ -221,7 +221,7 @@ void OResultSet::disposing(void)
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_aStatement    = NULL;
+    m_xStatement    = NULL;
     m_xMetaData     = NULL;
     m_pParseTree    = NULL;
     m_xColNames     = NULL;
@@ -540,7 +540,7 @@ Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    return m_aStatement.get();
+    return m_xStatement;
 }
 // -------------------------------------------------------------------------
 
@@ -769,7 +769,6 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
 
     checkIndex(columnIndex );
     columnIndex = mapColumn(columnIndex);
-
 
     (*m_aInsertRow)[columnIndex]->setBound(sal_True);
     (*m_aInsertRow)[columnIndex]->setNull();
