@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-10-30 12:32:33 $
+ *  last change: $Author: obr $ $Date: 2000-11-06 11:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#include <vos/channel.hxx>
-
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
@@ -69,6 +67,12 @@
 
 #include <stl/hash_set>
 
+#ifndef _VOS_SOCKET_HXX_
+#       include <vos/socket.hxx>
+#endif
+#ifndef _VOS_PIPE_HXX_
+#       include <vos/pipe.hxx>
+#endif
 
 namespace stoc_connector
 {
@@ -194,7 +198,6 @@ namespace stoc_connector
             throw(::com::sun::star::uno::RuntimeException);
     private:
         ::vos::IStream *m_pStream;
-        ::vos::ORef < ::vos::OChannel > m_channel;
         oslInterlockedCount m_nStatus;
         ::rtl::OUString m_sDescription;
     };
