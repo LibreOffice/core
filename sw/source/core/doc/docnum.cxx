@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:13:16 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1229,9 +1229,11 @@ BOOL SwDoc::DelNumRule( const String& rName )
     return FALSE;
 }
 
-void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule )
+// #106897#
+void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule, const String * pName )
 {
-    SwNumRule* pRule = FindNumRulePtr( rRule.GetName() );
+    // #106897#
+    SwNumRule* pRule = FindNumRulePtr( pName ? *pName : rRule.GetName() );
     if( pRule )
     {
         SwUndoInsNum* pUndo = 0;
@@ -1292,52 +1294,54 @@ BOOL SwDoc::ReplaceNumRule( const SwPosition& rPos,
         SwNumRuleInfo aUpd( rOldRule );
         aUpd.MakeList( *this );
 
-        // Position suchen und bestimme ob ein Node davor oder dahinter
-        // einen Start erzwingt
-        SwTxtNode* pTxtNd;
-        ULONG nFndPos, nFirst, nLast;
-
-        if( TABLE_ENTRY_NOTFOUND != aUpd.GetList().SearchKey(
-            rPos.nNode.GetIndex(), &nFndPos ))
-            ++nFndPos;
-
-        for( nLast = nFndPos; nLast < aUpd.GetList().Count(); ++nLast )
-            if( ( pTxtNd = aUpd.GetList().GetObject( nLast ))->GetNum() &&
-                pTxtNd->GetNum()->IsStart() )
-                break;
-        for( nFirst = nFndPos; nFirst; )
-            if( ( pTxtNd = aUpd.GetList().GetObject( --nFirst ))->GetNum() &&
-                pTxtNd->GetNum()->IsStart() )
-                break;
-
-        // dann neue Numerierung ueber diesen Bereich
-        // definieren und den Start am Anfang/Ende zurueck setzen
-        pTxtNd = aUpd.GetList().GetObject( nFirst );
-        if( pTxtNd->GetNum()->IsStart() )
+        if (aUpd.GetList().Count() > 0)    // #106897#
         {
-            ((SwNodeNum*)pTxtNd->GetNum())->SetStart( FALSE );
-            if( pUndo )
-                pUndo->SetSttNum( pTxtNd->GetIndex() );
-        }
+            // Position suchen und bestimme ob ein Node davor oder dahinter
+            // einen Start erzwingt
+            SwTxtNode* pTxtNd;
+            ULONG nFndPos, nFirst, nLast;
 
-        SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : 0 );
-        USHORT nChgFmtLevel = 0;
-        for( BYTE n = 0; n < MAXLEVEL; ++n )
-        {
-            const SwNumFmt& rOldFmt = pOldRule->Get( n ),
-                            & rNewFmt = pNewRule->Get( n );
+            if( TABLE_ENTRY_NOTFOUND != aUpd.GetList().SearchKey(
+                                                                 rPos.nNode.GetIndex(), &nFndPos ))
+                ++nFndPos;
 
-            if( rOldFmt.GetAbsLSpace() != rNewFmt.GetAbsLSpace() ||
-                rOldFmt.GetFirstLineOffset() != rNewFmt.GetFirstLineOffset() )
-                nChgFmtLevel |= ( 1 << n );
-        }
+            for( nLast = nFndPos; nLast < aUpd.GetList().Count(); ++nLast )
+                if( ( pTxtNd = aUpd.GetList().GetObject( nLast ))->GetNum() &&
+                    pTxtNd->GetNum()->IsStart() )
+                    break;
+            for( nFirst = nFndPos; nFirst; )
+                if( ( pTxtNd = aUpd.GetList().GetObject( --nFirst ))->GetNum() &&
+                    pTxtNd->GetNum()->IsStart() )
+                    break;
 
-        SwNumRuleItem aRule( rNewRule );
-        for( ; nFirst < nLast; ++nFirst )
-        {
+            // dann neue Numerierung ueber diesen Bereich
+            // definieren und den Start am Anfang/Ende zurueck setzen
             pTxtNd = aUpd.GetList().GetObject( nFirst );
+            if( pTxtNd->GetNum()->IsStart() )
+            {
+                ((SwNodeNum*)pTxtNd->GetNum())->SetStart( FALSE );
+                if( pUndo )
+                    pUndo->SetSttNum( pTxtNd->GetIndex() );
+            }
 
-            aRegH.RegisterInModify( pTxtNd, *pTxtNd );
+            SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : 0 );
+            USHORT nChgFmtLevel = 0;
+            for( BYTE n = 0; n < MAXLEVEL; ++n )
+            {
+                const SwNumFmt& rOldFmt = pOldRule->Get( n ),
+                    & rNewFmt = pNewRule->Get( n );
+
+                if( rOldFmt.GetAbsLSpace() != rNewFmt.GetAbsLSpace() ||
+                    rOldFmt.GetFirstLineOffset() != rNewFmt.GetFirstLineOffset() )
+                    nChgFmtLevel |= ( 1 << n );
+            }
+
+            SwNumRuleItem aRule( rNewRule );
+            for( ; nFirst < nLast; ++nFirst )
+            {
+                pTxtNd = aUpd.GetList().GetObject( nFirst );
+
+                aRegH.RegisterInModify( pTxtNd, *pTxtNd );
 
 #ifndef NUM_RELSPACE
             BYTE nLvl = !pTxtNd->GetNum() ? NO_NUMBERING
@@ -1347,12 +1351,16 @@ BOOL SwDoc::ReplaceNumRule( const SwPosition& rPos,
                     pTxtNd->SetNumLSpace( TRUE );
 #endif
 
-            pTxtNd->SwCntntNode::SetAttr( aRule );
-            pTxtNd->NumRuleChgd();
+                pTxtNd->SwCntntNode::SetAttr( aRule );
+                pTxtNd->NumRuleChgd();
+            }
+            EndUndo( UNDO_END );
+            SetModified();
+
+            bRet = TRUE;     // #106897#
         }
-        EndUndo( UNDO_END );
-        SetModified();
     }
+
     return bRet;
 }
 
@@ -1651,39 +1659,6 @@ BOOL SwDoc::GotoNextNum( SwPosition& rPos, BOOL bOverUpper,
 }
 
 // -> #i23731#
-BOOL lcl_IsNumbering(sal_Int16 eNumberType)
-{
-    BOOL bResult;
-    switch(eNumberType)
-    {
-    case SVX_NUM_CHARS_UPPER_LETTER:
-    case SVX_NUM_CHARS_LOWER_LETTER:
-    case SVX_NUM_ROMAN_UPPER:
-    case SVX_NUM_ROMAN_LOWER:
-    case SVX_NUM_ARABIC:
-    case SVX_NUM_NUMBER_NONE:
-    case SVX_NUM_PAGEDESC:
-    case SVX_NUM_CHARS_UPPER_LETTER_N:
-    case SVX_NUM_CHARS_LOWER_LETTER_N:
-        bResult = TRUE;
-
-        break;
-
-    case SVX_NUM_CHAR_SPECIAL:
-    case SVX_NUM_BITMAP:
-        bResult = FALSE;
-
-        break;
-
-    default:
-        ASSERT(0, "What kind of number format is this?");
-
-        bResult = FALSE;
-    }
-
-    return bResult;
-}
-
 const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
                                         BOOL bForward,
                                         BOOL bNum,
@@ -1712,8 +1687,9 @@ const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
                 const SwNumRule * pNumRule = pTxtNd->GetNumRule();
                 if (pNumRule)
                 {
-                    if (lcl_IsNumbering(pNumRule->Get(0).GetNumberingType()) ==
-                        bNum)
+                    if (pNumRule->IsOutlineRule() == bOutline && // #115901#
+                        (bNum && pNumRule->Get(0).IsEnumeration() ||
+                         !bNum && pNumRule->Get(0).IsItemize())) // #i22362#, #i29560#
                         pResult = pTxtNd->GetNumRule();
 
                     break;
@@ -2180,9 +2156,9 @@ BOOL SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, BOOL bDel )
         if (pRule)
         {
             if (bDel)
-                bTmp = 0 != (pNum->GetLevel() & NO_NUMLEVEL);
+                bTmp = pNum->IsNum(); // #i29560#
             else
-                bTmp = 0 == (pNum->GetLevel() & NO_NUMLEVEL);
+                bTmp = !pNum->IsNum(); // #i29560#
 
             nOldLevel = pNum->GetLevel();
         }
@@ -2191,12 +2167,12 @@ BOOL SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, BOOL bDel )
             SVX_NUM_NUMBER_NONE != pRule->Get(GetRealLevel(pNum->GetLevel())).
             GetNumberingType())
         {
-            SwNodeNum aNum(*pNum);
+            SwNodeNum aNum( *pNum );
 
-            if (bDel)
-                aNum.SetNoNum(FALSE);
+            if( bDel )
+                aNum.SetNoNum(TRUE); // #i29560#
             else
-                aNum.SetNoNum(TRUE);
+                aNum.SetNoNum(FALSE); // #i29560#
 
             if( DoesUndo() )
             {
@@ -2217,7 +2193,7 @@ BOOL SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, BOOL bDel )
         }
 
         // -> #115901#
-        if (! bRet && ! bDel && pNum && (0 != (nOldLevel & NO_NUMLEVEL)))
+        if (! bRet && bDel && pNum && !IsNum(nOldLevel)) // #i29560#
         {
             SwPaM aPam(*pTNd);
 
@@ -2547,7 +2523,7 @@ void SwDoc::UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos)
 
             // #111955# fixed loop due to not increasing nUpdatePos when
             // pOldNum == 0
-            if (pOldNum)
+            if (pOldNum && pOldNum->IsNum()) // #i29560#
             {
                 BYTE nLevel = pOldNum->GetRealLevel();
 
@@ -2662,9 +2638,9 @@ void SwDoc::UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos)
                     pTxtNode->UpdateNum(aTmpNum);
                 }
             }
-            else
+            else if (! pOldNum) // #i29560#
             {
-                ASSERT(0, "No numrule!");
+                ASSERT(0, "No number!");
             }
         }
 
@@ -3020,3 +2996,24 @@ void SwDoc::IndentNumRule(SwPosition & rPos, short nAmount)
         }
     }
 }
+
+// #106897#
+sal_Bool SwDoc::RenameNumRule(const String & rOldName, const String & rNewName)
+{
+    sal_Bool bResult = sal_False;
+    SwNumRule * pOldRule = FindNumRulePtr(rOldName);
+
+    if (pOldRule)
+    {
+        MakeNumRule(rNewName, pOldRule);
+
+        SwPosition aPos = SwPosition(SwNodeIndex(*aNodes[0]));
+        bResult = ReplaceNumRule(aPos, rOldName, rNewName);
+
+        if (bResult)
+            bResult = DelNumRule(rOldName);
+    }
+
+    return bResult;
+}
+
