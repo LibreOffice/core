@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:15:06 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,6 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
-
-extern FASTBOOL IsInProgress( const SwFlyFrm *pFly );
 
 class FormatLevel
 {
@@ -847,9 +845,6 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
     MoveFlyInCnt( pNew, nTxtPos, STRING_LEN );
 
     // Kein SetOfst oder CalcFollow, weil gleich ohnehin ein AdjustFollow folgt.
-#ifdef USED
-    CalcFollow( nNewOfst );
-#endif
 
     pNew->ManipOfst( nTxtPos );
 
@@ -1422,22 +1417,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
         return sal_True;
 
     return 0 != *(pPara->GetDelta());
-
-// Dieser Bereich ist so sensibel, da behalten wir mal die alte Version:
-#ifdef USED
-    // nDelta abgearbeitet ?
-    if( 0 == *(pPara->GetDelta()) )
-        return sal_False;
-
-    // Wenn die Zeilen ausgeglichen sind, ist alles ok.
-    if( bUnChg )
-        return sal_False;
-
-    return sal_True;
-#endif
 }
-
-
 
 /*************************************************************************
  *                      SwTxtFrm::_Format()
