@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 17:41:39 $
+ *  last change: $Author: fs $ $Date: 2001-02-21 11:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1095,22 +1095,25 @@ sal_Bool OFormattedModel::_commit()
     if (!compare(aNewValue, m_aSaveValue))
     {
         // Leerstring + EmptyIsNull = void
-        if (!aNewValue.hasValue() ||
-                        (aNewValue.getValueType().getTypeClass() == TypeClass_STRING)
-             && (getString(aNewValue).getLength() == 0) && m_bEmptyIsNull)
+        if  (   !aNewValue.hasValue()
+            ||  (   (aNewValue.getValueType().getTypeClass() == TypeClass_STRING)
+                &&  (getString(aNewValue).getLength() == 0)
+                &&  m_bEmptyIsNull
+                )
+            )
             m_xColumnUpdate->updateNull();
         else
         {
             // als Value koennen nur double, string oder void auftreten
             try
             {
-                                if (aNewValue.getValueType().getTypeClass() == TypeClass_DOUBLE)
+                if (aNewValue.getValueType().getTypeClass() == TypeClass_DOUBLE)
                 {
                     DBTypeConversion::setValue(m_xColumnUpdate, m_aNullDate, getDouble(aNewValue), m_nKeyType);
                 }
                 else
                 {
-                                        DBG_ASSERT(aNewValue.getValueType().getTypeClass() == TypeClass_STRING, "OFormattedModel::_commit : invalud value type !");
+                    DBG_ASSERT(aNewValue.getValueType().getTypeClass() == TypeClass_STRING, "OFormattedModel::_commit : invalud value type !");
                     m_xColumnUpdate->updateString(getString(aNewValue));
                 }
             }
