@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-02-16 16:46:38 $
+dnl * Date: $Date: 2005-02-18 10:58:56 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.96 $ )
+AC_REVISION( $Revision: 1.97 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2337,7 +2337,7 @@ void main(int argc, char **argv) {
 	fi
 else
 	AC_MSG_RESULT([no])
-fi:
+fi
 AC_SUBST(ENABLE_PASF)
 AC_SUBST(SYSTEM_PORTAUDIO)
 AC_SUBST(SYSTEM_SNDFILE)
