@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellatr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 17:51:46 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,17 @@
 #include <svtools/zforlist.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+#ifndef _FORMAT_HXX
 #include "format.hxx"
+#endif
+#ifndef _CELLFML_HXX
 #include "cellfml.hxx"
+#endif
 
-
-class SwTblBoxNumFormat : public SfxUInt32Item
+class SW_DLLPUBLIC SwTblBoxNumFormat : public SfxUInt32Item
 {
     BOOL bAuto;     // automatisch vergebenes Flag
 public:
@@ -131,7 +137,7 @@ public:
     void Calc( SwTblCalcPara& rCalcPara, double& rValue );
 };
 
-class SwTblBoxValue : public SfxPoolItem
+class SW_DLLPUBLIC SwTblBoxValue : public SfxPoolItem
 {
     double nValue;
 public:
