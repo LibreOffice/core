@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:10:13 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,6 +853,9 @@ void SwTxtFly::CtorInit( const SwTxtFrm *pFrm )
 {
     mbIgnoreCurrentFrame = sal_False;
     mbIgnoreContour = sal_False;
+    // --> OD 2004-12-17 #118809#
+    mbIgnoreObjsInHeaderFooter = sal_False;
+    // <--
     pPage = pFrm->FindPageFrm();
     const SwFlyFrm* pTmp = pFrm->FindFlyFrm();
     pCurrFly = pTmp ? pTmp->GetVirtDrawObj() : NULL;
@@ -1438,6 +1441,13 @@ SwFlyList *SwTxtFly::InitFlyList()
                  (*fnRect->fnYDiff)( (aRect.*fnRect->fnGetTop)(),
                                      (aBound.*fnRect->fnGetBottom)() ) > 0 ||
                  nLeft > (aBound.*fnRect->fnGetRight)() ||
+                 // --> OD 2004-12-17 #118809# - If requested, do not consider
+                 // objects in page header|footer for text frames not in page
+                 // header|footer. This is requested for the calculation of
+                 // the base offset for objects <SwTxtFrm::CalcBaseOfstForFly()>
+                 ( mbIgnoreObjsInHeaderFooter && !bFooterHeader &&
+                   pAnchoredObj->GetAnchorFrm()->FindFooterOrHeader() ) ||
+                 // <--
                  // --> FME 2004-07-14 #i20505# Do not consider oversized objects
                  (aBound.*fnRect->fnGetHeight)() >
                  2 * (pPage->Frm().*fnRect->fnGetHeight)() )
@@ -1971,8 +1981,9 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly, MSHORT nFlyPos,
     ASSERT( ! pCurrFrm->IsVertical() || ! pCurrFrm->IsSwapped(),
             "SwTxtFly::CalcRightMargin with swapped frame" )
     SWRECTFN( pCurrFrm )
-    SwTwips nRight = (pCurrFrm->Frm().*fnRect->fnGetLeft)() +
-                     (pCurrFrm->Prt().*fnRect->fnGetRight)() + 1;
+    // --> OD 2004-12-14 #118796# - correct determination of right of printing area
+    SwTwips nRight = (pCurrFrm->*fnRect->fnGetPrtRight)();
+    // <--
     SwTwips nFlyRight = (rFly.*fnRect->fnGetRight)();
     SwRect aLine( rLine );
     (aLine.*fnRect->fnSetRight)( nRight );
@@ -2068,8 +2079,9 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly, MSHORT nFlyPos,
     ASSERT( ! pCurrFrm->IsVertical() || ! pCurrFrm->IsSwapped(),
             "SwTxtFly::CalcLeftMargin with swapped frame" )
     SWRECTFN( pCurrFrm )
-    SwTwips nLeft = (pCurrFrm->Frm().*fnRect->fnGetLeft)() +
-                    (pCurrFrm->Prt().*fnRect->fnGetLeft)();
+    // --> OD 2004-12-14 #118796# - correct determination of left of printing area
+    SwTwips nLeft = (pCurrFrm->*fnRect->fnGetPrtLeft)();
+    // <--
     const SwTwips nFlyLeft = (rFly.*fnRect->fnGetLeft)();
 
     if( nLeft > nFlyLeft )
@@ -2110,9 +2122,12 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly, MSHORT nFlyPos,
 
         if( (aTmp.*fnRect->fnGetLeft)() < nFlyLeft && aTmp.IsOver( aLine ) )
         {
+            // --> OD 2004-12-14 #118796# - no '+1', because <..fnGetRight>
+            // returns the correct value.
             SwTwips nTmpRight = (aTmp.*fnRect->fnGetRight)();
-            if( nLeft <= nTmpRight )
-                nLeft = nTmpRight + 1;
+            if ( nLeft <= nTmpRight )
+                nLeft = nTmpRight;
+            // <--
 
             break;
         }
