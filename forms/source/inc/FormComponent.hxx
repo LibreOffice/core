@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:44:39 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,6 +427,7 @@ protected:
     ::rtl::OUString                 m_aTag;                     // tag for additional data
     sal_Int16                       m_nTabIndex;                // index within the taborder
     sal_Int16                       m_nClassId;                 // type of the control
+    sal_Bool                        m_bNativeLook;              // should the control use the native platform look?
 // </properties>
 
 
