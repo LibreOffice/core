@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-12 09:05:15 $
+ *  last change: $Author: dr $ $Date: 2002-07-17 14:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,6 +828,7 @@ void ScCsvGrid::GetFocus()
 {
     ScCsvControl::GetFocus();
     CommitRequest( CSVREQ_MOVEGRIDCURSOR, GetNoScrollCol( GetGridCursorPos() ) );
+    Repaint();
 }
 
 void ScCsvGrid::LoseFocus()
@@ -933,15 +934,9 @@ void ScCsvGrid::KeyInput( const KeyEvent& rKEvt )
                     CommitRequest( CSVREQ_COLUMNTYPE, nType );
             }
         }
-        else if( (nCode == KEY_CONTEXTMENU) && !rKCode.GetModifier() )
-        {
-            if( !HasSelection() )
-                Select( GetFocusColumn() );
-            ExecutePopup( Point( GetColumnX( GetFocusColumn() ), GetHeight() / 2 ) );
-        }
     }
 
-    if( (rKCode.GetGroup() != KEYGROUP_CURSOR) && (nCode != KEY_CONTEXTMENU) )
+    if( rKCode.GetGroup() != KEYGROUP_CURSOR )
         ScCsvControl::KeyInput( rKEvt );
 }
 
@@ -951,12 +946,26 @@ void ScCsvGrid::Command( const CommandEvent& rCEvt )
     {
         case COMMAND_CONTEXTMENU:
         {
-            Point aPos( rCEvt.GetMousePosPixel() );
-            sal_uInt32 nColIx = GetColumnFromX( aPos.X() );
-            if( IsValidColumn( nColIx ) && !IsSelected( nColIx ) )
-                DoSelectAction( nColIx, 0 );    // focus & select
-            if( HasSelection() )
-                ExecutePopup( aPos );
+            if( rCEvt.IsMouseEvent() )
+            {
+                Point aPos( rCEvt.GetMousePosPixel() );
+                sal_uInt32 nColIx = GetColumnFromX( aPos.X() );
+                if( IsValidColumn( nColIx ) && (aPos.X() >= GetOffsetX()) )
+                {
+                    if( !IsSelected( nColIx ) )
+                        DoSelectAction( nColIx, 0 );    // focus & select
+                    ExecutePopup( aPos );
+                }
+            }
+            else
+            {
+                sal_uInt32 nColIx = GetFocusColumn();
+                if( !IsSelected( nColIx ) )
+                    Select( nColIx );
+                sal_Int32 nX1 = Max( GetColumnX( nColIx ), GetOffsetX() );
+                sal_Int32 nX2 = Min( GetColumnX( nColIx + 1 ), GetWidth() );
+                ExecutePopup( Point( (nX1 + nX2) / 2, GetHeight() / 2 ) );
+            }
         }
         break;
         case COMMAND_WHEEL:
