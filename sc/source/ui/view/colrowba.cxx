@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowba.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:58:57 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,8 @@ USHORT ScRowBar::GetEntrySize( SCCOLROW nEntryNo )
     if ( pDoc->GetRowFlags( nEntryNo, nTab ) & CR_HIDDEN )
         return 0;
     else
-        return (USHORT) ScViewData::ToPixel( pDoc->GetRowHeight( nEntryNo, nTab ), pViewData->GetPPTY() );
+        return (USHORT) ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,
+                    nTab ), pViewData->GetPPTY() );
 }
 
 String ScRowBar::GetEntryText( SCCOLROW nEntryNo )
