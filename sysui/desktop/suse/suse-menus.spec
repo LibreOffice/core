@@ -137,6 +137,11 @@ application/vnd.sun.xml.draw.template; %PREFIX -view %s
 application/vnd.stardivision.draw; %PREFIX -view %s
 application/x-stardraw; %PREFIX -view %s
 application/vnd.oasis.opendocument.database; %PREFIX -view %s
+application/vnd.wordperfect; %PREFIX -view %s
+application/wordperfect5.1; %PREFIX -view %s
+application/x-wordperfect; %PREFIX -view %s
+application/wordperfect; %PREFIX -view %s
+application/wpwin; %PREFIX -view %s
 END
 
   # and replace the original file
