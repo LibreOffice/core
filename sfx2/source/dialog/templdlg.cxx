@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-30 13:53:59 $
+ *  last change: $Author: os $ $Date: 2002-01-15 16:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1167,11 +1167,10 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
                 pTreeBox->Expand(pEntry);
         }
 
+        String aStyle;
         if(pState)  //Aktuellen Eintrag selektieren
-        {
-            const String aStyle(pState->GetStyleName());
-            SelectStyle(aStyle);
-        }
+            aStyle = pState->GetStyleName();
+        SelectStyle(aStyle);
         EnableDelete();
 
         pTreeBox->SetUpdateMode( TRUE );
@@ -1312,11 +1311,10 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
             }
                 // aktuelle Vorlage anzeigen
             SfxTemplateItem *pState = pFamilyState[nActFamily-1];
-            if(pState)
-            {
-                const String aStyle(pState->GetStyleName());
-                SelectStyle(aStyle);
-            }
+            String aStyle;
+            if(pState)  //Aktuellen Eintrag selektieren
+                aStyle = pState->GetStyleName();
+            SelectStyle(aStyle);
             EnableDelete();
         }
     }
