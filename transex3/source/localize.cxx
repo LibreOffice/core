@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2001-10-15 16:20:40 $
+ *  last change: $Author: nf $ $Date: 2001-10-18 14:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,13 @@ const ByteString SourceTreeLocalizer::GetProjectName( BOOL bAbs )
         DirEntry aTest = aCur + DirEntry(PRJ_DIR_NAME) + DirEntry(DLIST_NAME);
         if ( aTest.Exists() )
         {
+            // HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            if (( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ) == "webinstall" ) ||
+                ( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ) == "portal" ) ||
+                ( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ) == "xulclient" ))
+                    return "";
+            // end HACK !!!!!!!!!!!!!!!!!!!!!!!!!
+
             if ( bAbs )
                 return ByteString( aCur.GetFull(), RTL_TEXTENCODING_ASCII_US );
             else
