@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-02 18:09:28 $
+ *  last change: $Author: jp $ $Date: 2000-12-09 14:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,9 +260,6 @@ BYTE SwPaM::Find( const utl::SearchParam& rParam, utl::TextSearch& rSTxt,
                 // setze den Bereich richtig
                 *GetPoint() = *pPam->GetPoint();
                 SetMark();
-
-                if( !bSrchForward )     // move the "correct" positions, because
-                    ++nStart, ++nEnde;  // start is inclusiv, end is exclusiv
 
                 // Start und Ende wieder korrigieren !!
                 if( aFltArr.Count() )
