@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-25 11:46:38 $
+ *  last change: $Author: mib $ $Date: 2000-10-26 08:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,12 @@ void SvXMLImportPropertyMapper::importXML(
 
         const OUString& rValue = xAttrList->getValueByIndex( i );
 
-        sal_Int32 nIndex = nStartIdx;   // index of actual property map entry
+        // index of actual property map entry
+        // This looks very strange, but it works well:
+        // If the start index is 0, the new value will become -1, and
+        // GetEntryIndex will start searching with position 0.
+        // Otherwise GetEntryIndex will start with the next position specified.
+        sal_Int32 nIndex =  nStartIdx - 1;
         sal_uInt32 nFlags = 0;  // flags of actual property map entry
         do
         {

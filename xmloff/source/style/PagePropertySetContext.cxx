@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PagePropertySetContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
+ *  last change: $Author: mib $ $Date: 2000-10-26 08:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #endif
 #ifndef _XMLBACKGROUNDIMAGECONTEXT_HXX
 #include "XMLBackgroundImageContext.hxx"
+#endif
+#ifndef _XMLTEXTCOLUMNSCONTEXT_HXX
+#include "XMLTextColumnsContext.hxx"
 #endif
 #ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include "PageMasterStyleMap.hxx"
@@ -139,6 +142,11 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
                                            rProp.mnIndex-2,
                                            rProp.mnIndex-1,
                                            rProperties );
+        break;
+    case CTF_PM_TEXTCOLUMNS:
+        pContext = new XMLTextColumnsContext( GetImport(), nPrefix,
+                                              rLocalName, xAttrList, rProp,
+                                              rProperties );
         break;
     }
 

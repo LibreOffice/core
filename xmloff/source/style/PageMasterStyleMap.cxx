@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterStyleMap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 16:31:11 $
+ *  last change: $Author: mib $ $Date: 2000-10-26 08:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     { "FirstPageNumber",        XML_NAMESPACE_STYLE,    sXML_first_page_number,         XML_PM_TYPE_FIRSTPAGENUMBER,                            0 },
     { "PageScale",              XML_NAMESPACE_STYLE,    sXML_scale_to,                  XML_TYPE_NUMBER16,                                      CTF_PM_SCALETO },
     { "ScaleToPages",           XML_NAMESPACE_STYLE,    sXML_scale_to_pages,            XML_TYPE_NUMBER16,                                      CTF_PM_SCALETOPAGES },
+    { "TextColumns",            XML_NAMESPACE_STYLE,    sXML_columns,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_PM_TEXTCOLUMNS },
 //  { "CenterHorizontally",     XML_NAMESPACE_STYLE,    sXML_center_horizontally,       XML_TYPE_BOOL,                                          0 },
 //  { "CenterVertically",       XML_NAMESPACE_STYLE,    sXML_center_vertically,         XML_TYPE_BOOL,                                          0 },
 // header

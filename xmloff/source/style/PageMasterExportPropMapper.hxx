@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
+ *  last change: $Author: mib $ $Date: 2000-10-26 08:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _XMLBACKGROUNDIMAGEEXPORT_HXX
 #include "XMLBackgroundImageExport.hxx"
 #endif
+#ifndef _XMLOFF_XMLTEXTCOLUMNSEXPORT_HXX
+#include "XMLTextColumnsExport.hxx"
+#endif
 
 
 //______________________________________________________________________________
@@ -76,6 +79,7 @@ class XMLPageMasterExportPropMapper : public SvXMLExportPropertyMapper
 {
 protected:
     XMLBackgroundImageExport aBackgroundImageExport;
+    XMLTextColumnsExport aTextColumnsExport;
 
 public:
                         XMLPageMasterExportPropMapper(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
+ *  last change: $Author: mib $ $Date: 2000-10-26 08:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,8 @@ XMLPageMasterExportPropMapper::XMLPageMasterExportPropMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
         SvXMLExport& rExport ) :
     SvXMLExportPropertyMapper( rMapper ),
-    aBackgroundImageExport( rExport )
+    aBackgroundImageExport( rExport ),
+    aTextColumnsExport( rExport )
 {
 }
 
@@ -126,6 +127,9 @@ void XMLPageMasterExportPropMapper::handleElementItem(
                 getPropertySetMapper()->GetEntryNameSpace( nPropIndex ),
                 getPropertySetMapper()->GetEntryXMLName( nPropIndex ) );
         }
+        case CTF_PM_TEXTCOLUMNS:
+            pThis->aTextColumnsExport.exportXML( rProperty.maValue );
+            break;
     }
 }
 

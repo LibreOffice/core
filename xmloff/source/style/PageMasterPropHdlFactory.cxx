@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdlFactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-23 09:53:27 $
+ *  last change: $Author: mib $ $Date: 2000-10-26 08:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
 #include "NamedBoolPropertyHdl.hxx"
+#endif
+#ifndef _XMLOFF_XMLTEXTCOLUMNSPPROPERTYHANDLER_HXX
+#include "XMLTextColumnsPropertyHandler.hxx"
 #endif
 
 #ifndef _XMLOFF_PAGEMASTERPROPHDL_HXX_
@@ -154,6 +157,9 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
             break;
             case XML_PM_TYPE_FIRSTPAGENUMBER:
                 pHdl = new XMLNumberNonePropHdl( sXML_continue, 2 );
+            break;
+            case XML_TYPE_TEXT_COLUMNS:
+                pHdl = new XMLTextColumnsPropertyHandler;
             break;
         }
 
