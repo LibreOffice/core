@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-04 04:52:26 $
+ *  last change: $Author: sab $ $Date: 2001-05-04 10:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_RASTERSYNC),   0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_AUTOCALC),     0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_PRINTERNAME),  0,  &getCppuType((rtl::OUString*)0),    0},
-        {MAP_CHAR_LEN(SC_UNO_PRINTERSETUP), 0,  &getCppuType((rtl::OUString*)0),    0},
+        {MAP_CHAR_LEN(SC_UNO_PRINTERSETUP), 0,  &getCppuType((uno::Sequence<sal_Int8>*)0),  0},
         {MAP_CHAR_LEN(SC_UNO_APPLYDOCINF),  0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),    0,  &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY},
         {0,0,0,0}
@@ -230,24 +230,19 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_PRINTERSETUP ) == 0 )
             {
-                rtl::OUString sValue;
-                if ( aValue >>= sValue )
+                uno::Sequence<sal_Int8> aSequence;
+                if ( aValue >>= aSequence )
                 {
-                    if (sValue.getLength())
-                    {
-                        uno::Sequence < sal_Int8 > aSequence;
-                        SvXMLUnitConverter::decodeBase64(aSequence, sValue);
-                        sal_uInt32 nSize = aSequence.getLength();
-                        SvMemoryStream aStream;
-                        aStream.Write ( aSequence.getArray(), nSize );
-                        aStream.Flush();
-                        aStream.Seek(STREAM_SEEK_TO_BEGIN);
-                        SfxItemSet* pSet = new SfxItemSet( *pDoc->GetPool(),
-                                SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                                SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
-                                NULL );
-                        pDoc->SetPrinter( SfxPrinter::Create( aStream, pSet ) );
-                    }
+                    sal_uInt32 nSize = aSequence.getLength();
+                    SvMemoryStream aStream;
+                    aStream.Write ( aSequence.getArray(), nSize );
+                    aStream.Flush();
+                    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+                    SfxItemSet* pSet = new SfxItemSet( *pDoc->GetPool(),
+                            SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                            SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
+                            NULL );
+                    pDoc->SetPrinter( SfxPrinter::Create( aStream, pSet ) );
                 }
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_APPLYDOCINF ) == 0 )
@@ -341,9 +336,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                     sal_uInt32 nSize = aStream.GetSize();
                     uno::Sequence < sal_Int8 > aSequence ( nSize );
                     memcpy ( aSequence.getArray(), aStream.GetData(), nSize );
-                    rtl::OUStringBuffer sBuffer;
-                    SvXMLUnitConverter::encodeBase64(sBuffer, aSequence);
-                    aRet <<= sBuffer.makeStringAndClear();
+                    aRet <<= aSequence;
                 }
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_APPLYDOCINF ) == 0 )
