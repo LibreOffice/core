@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhlpln.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:32:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,23 +206,23 @@ bool SdrHelpLine::IsVisibleEqual( const SdrHelpLine& rHelpLine, const OutputDevi
     return false;
 }
 
-SvStream& operator<<(SvStream& rOut, const SdrHelpLine& rHL)
-{
-    SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOHlpLID);
-    rOut<<UINT16(rHL.eKind);
-    rOut<<rHL.aPos;
-    return rOut;
-}
+//BFS01SvStream& operator<<(SvStream& rOut, const SdrHelpLine& rHL)
+//BFS01{
+//BFS01 SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOHlpLID);
+//BFS01 rOut<<UINT16(rHL.eKind);
+//BFS01 rOut<<rHL.aPos;
+//BFS01 return rOut;
+//BFS01}
 
-SvStream& operator>>(SvStream& rIn, SdrHelpLine& rHL)
-{
-    SdrIOHeader aHead(rIn,STREAM_READ);
-    UINT16 nDum;
-    rIn>>nDum;
-    rHL.eKind=(SdrHelpLineKind)nDum;
-    rIn>>rHL.aPos;
-    return rIn;
-}
+//BFS01SvStream& operator>>(SvStream& rIn, SdrHelpLine& rHL)
+//BFS01{
+//BFS01 SdrIOHeader aHead(rIn,STREAM_READ);
+//BFS01 UINT16 nDum;
+//BFS01 rIn>>nDum;
+//BFS01 rHL.eKind=(SdrHelpLineKind)nDum;
+//BFS01 rIn>>rHL.aPos;
+//BFS01 return rIn;
+//BFS01}
 
 void SdrHelpLineList::Clear()
 {
@@ -297,28 +297,29 @@ USHORT SdrHelpLineList::HitTest(const Point& rPnt, USHORT nTolLog, const OutputD
     return SDRHELPLINE_NOTFOUND;
 }
 
-SvStream& operator<<(SvStream& rOut, const SdrHelpLineList& rHLL)
-{
-    SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOHLstID);
-    USHORT nAnz=rHLL.GetCount();
-    rOut<<nAnz;
-    for (USHORT i=0; i<nAnz; i++) {
-        rOut<<rHLL[i];
-    }
-    return rOut;
-}
+//BFS01SvStream& operator<<(SvStream& rOut, const SdrHelpLineList& rHLL)
+//BFS01{
+//BFS01 SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOHLstID);
+//BFS01 USHORT nAnz=rHLL.GetCount();
+//BFS01 rOut<<nAnz;
+//BFS01 for (USHORT i=0; i<nAnz; i++) {
+//BFS01     rOut<<rHLL[i];
+//BFS01 }
+//BFS01 return rOut;
+//BFS01}
 
-SvStream& operator>>(SvStream& rIn, SdrHelpLineList& rHLL)
-{
-    SdrIOHeader aHead(rIn,STREAM_READ);
-    rHLL.Clear();
-    USHORT nAnz;
-    rIn>>nAnz;
-    for (USHORT i=0; i<nAnz; i++) {
-        SdrHelpLine* pHL=new SdrHelpLine;
-        rIn>>*pHL;
-        rHLL.aList.Insert(pHL,CONTAINER_APPEND);
-    }
-    return rIn;
-}
+//BFS01SvStream& operator>>(SvStream& rIn, SdrHelpLineList& rHLL)
+//BFS01{
+//BFS01 SdrIOHeader aHead(rIn,STREAM_READ);
+//BFS01 rHLL.Clear();
+//BFS01 USHORT nAnz;
+//BFS01 rIn>>nAnz;
+//BFS01 for (USHORT i=0; i<nAnz; i++) {
+//BFS01     SdrHelpLine* pHL=new SdrHelpLine;
+//BFS01     rIn>>*pHL;
+//BFS01     rHLL.aList.Insert(pHL,CONTAINER_APPEND);
+//BFS01 }
+//BFS01 return rIn;
+//BFS01}
 
+// eof
