@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeclient.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-26 14:12:07 $
+ *  last change: $Author: jbu $ $Date: 2000-10-26 14:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ void OfficeClientMain::registerServices( )
     }
 }
 
-sal_Int32 OfficeClientMain::run( const Sequence< OUString > & aArguments )
+sal_Int32 OfficeClientMain::run( const Sequence< OUString > & aArguments ) throw ( RuntimeException )
 {
     printf( "Connecting ....\n" );
 
