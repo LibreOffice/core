@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-18 10:46:27 $
+ *  last change: $Author: sj $ $Date: 2001-10-19 16:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,12 +285,50 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 
 // ------------------------------------------------------------------------
 
+#ifdef WIN_MTF_ASSERT
+const void WinMtfAssertHandler( const sal_Char* pAction, sal_uInt32 nFlags )
+{
+    static sal_Bool     bOnlyOnce;
+    static sal_Int32    nAssertCount;
+
+    if ( nFlags & WIN_MTF_ASSERT_INIT )
+        nAssertCount = 0;
+    if ( nFlags & WIN_MTF_ASSERT_ONCE )
+       bOnlyOnce = sal_True;
+    if ( nFlags & WIN_MTF_ASSERT_MIFE )
+    {
+        if ( ( nAssertCount == 0 ) || ( bOnlyOnce == sal_False ) )
+        {
+            ByteString aText( "WMF/EMF Import: " );
+            if ( pAction )
+            {
+                ByteString aAction( pAction );
+                aText.Append( aAction );
+            }
+            aText.Append( " needs to be implemented (SJ)" );
+            DBG_ASSERT( 0, aText.GetBuffer() );
+        }
+        nAssertCount++;
+    }
+}
+#endif
+
+// ------------------------------------------------------------------------
+
 WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, PFilterCallback pcallback, void * pcallerdata ) :
     pOut                ( pWinMtfOutput ),
     pCallback           ( pcallback ),
     pCallerData         ( pcallerdata ),
     pWMF                ( &rStreamWMF )
 {
+#ifdef WIN_MTF_ASSERT
+    // we want to assert not implemented features, but we do this
+    // only once, so that nobody is handicaped by getting too much assertions
+    // I hope this will bring more testdocuments, without support of these
+    // testdocuments the implementation of missing features won't be possible. (SJ)
+    WinMtfAssertHandler( NULL, WIN_MTF_ASSERT_INIT | WIN_MTF_ASSERT_ONCE );
+#endif
+
     SvLockBytes *pLB = pWMF->GetLockBytes();
     if ( pLB )
         pLB->SetSynchronMode( TRUE );
@@ -660,12 +698,15 @@ void WinMtfOutput::CreateObject( INT32 nIndex, GDIObjectType eType, void* pStyle
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::DeleteObject( INT32 nIndex )
+void WinMtfOutput::DeleteObject( sal_Int32 nIndex )
 {
     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
     {
-        nIndex &= 0xffff;       // zur Sicherheit: mehr als 65535 nicht zulassen
-        delete mpGDIObj[ nIndex ], mpGDIObj[ nIndex ] = NULL;
+        if ( (sal_uInt32)nIndex < mnEntrys )
+        {
+            delete mpGDIObj[ nIndex ];
+            mpGDIObj[ nIndex ] = NULL;
+        }
     }
 }
 

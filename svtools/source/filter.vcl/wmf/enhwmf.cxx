@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-18 10:46:27 $
+ *  last change: $Author: sj $ $Date: 2001-10-19 16:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,9 +231,6 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
 
         switch( nRecType )
         {
-            case EMR_HEADER :                           // wir haben schon laengst einen header eingelesen
-            break;
-
             case EMR_POLYBEZIERTO :
                 bFlag = sal_True;
             case EMR_POLYBEZIER :
@@ -377,10 +374,6 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             }
             break;
 
-            case EMR_SETVIEWPORTEXTEX :
-            case EMR_SETVIEWPORTORGEX :
-            break;
-
             case EMR_SCALEVIEWPORTEXTEX :
             {
                 *pWMF >> nNom1 >> nDen1 >> nNom2 >> nDen2;
@@ -395,8 +388,6 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             }
             break;
 
-            case EMR_SETBRUSHORGEX :
-            break;
             case EMR_EOF :
                 nRecordCount = 0;           // #76846#
             break;
@@ -406,9 +397,6 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 *pWMF >> nX32 >> nY32;
                 pOut->DrawPixel( Point( nX32, nY32 ), ReadColor() );
             }
-            break;
-
-            case EMR_SETMAPPERFLAGS :
             break;
 
             case EMR_SETMAPMODE :
@@ -449,9 +437,6 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             }
             break;
 
-            case EMR_SETCOLORADJUSTMENT :
-            break;
-
             case EMR_SETTEXTCOLOR :
             {
                 pOut->SetTextColor( ReadColor() );
@@ -476,10 +461,6 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 *pWMF >> nX32 >> nY32;
                 pOut->MoveTo( Point( nX32, nY32 ) );
             }
-            break;
-
-            case EMR_SETMETARGN :
-            case EMR_EXCLUDECLIPRECT :
             break;
 
             case EMR_INTERSECTCLIPRECT :
@@ -574,6 +555,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 }
             }
             break;
+
             case EMR_CREATEBRUSHINDIRECT :
             {
                 UINT32  nStyle;
@@ -585,15 +567,13 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 }
             }
             break;
+
             case EMR_DELETEOBJECT :
             {
                 *pWMF >> nIndex;
                 if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                     pOut->DeleteObject( nIndex );
             }
-            break;
-
-            case EMR_ANGLEARC :
             break;
 
             case EMR_ELLIPSE :
@@ -642,14 +622,6 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             }
             break;
 
-            case EMR_SELECTPALETTE :
-            case EMR_CREATEPALETTE :
-            case EMR_SETPALETTEENTRIES :
-            case EMR_RESIZEPALETTE :
-            case EMR_REALIZEPALETTE :
-            case EMR_EXTFLOODFILL :
-            break;
-
             case EMR_LINETO :
             {
                 *pWMF >> nX32 >> nY32;
@@ -664,36 +636,36 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 pOut->DrawArc( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), TRUE );
             }
             break;
-            case EMR_POLYDRAW :
-            case EMR_SETARCDIRECTION :
-            case EMR_SETMITERLIMIT :
-            break;
+
             case EMR_BEGINPATH :
             {
                 pOut->ClearPath();
                 bRecordPath = sal_True;
             }
             break;
+
             case EMR_ABORTPATH :
                 pOut->ClearPath();
             case EMR_ENDPATH :
                 bRecordPath = sal_False;
             break;
+
             case EMR_CLOSEFIGURE :
                 pOut->ClosePath();
             break;
+
             case EMR_FILLPATH :
                 pOut->StrokeAndFillPath( sal_False, sal_True );
             break;
+
             case EMR_STROKEANDFILLPATH :
                 pOut->StrokeAndFillPath( sal_True, sal_True );
             break;
+
             case EMR_STROKEPATH :
                 pOut->StrokeAndFillPath( sal_True, sal_False );
             break;
-            case EMR_FLATTENPATH :
-            case EMR_WIDENPATH :
-            break;
+
             case EMR_SELECTCLIPPATH :
             {
                 sal_Int32 nClippingMode;
@@ -701,6 +673,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 pOut->SetClipPath( pOut->GetPathObj(), nClippingMode );
             }
             break;
+
             case EMR_EXTSELECTCLIPRGN :
             {
                 sal_Int32 nClippingMode;
@@ -713,13 +686,6 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                     pOut->SetClipPath( aEmptyPolyPoly, RGN_COPY );
                 }
             }
-            break;
-
-            case EMR_GDICOMMENT :
-            case EMR_FILLRGN :
-            case EMR_FRAMERGN :
-            case EMR_INVERTRGN :
-            case EMR_PAINTRGN :
             break;
 
             case EMR_BITBLT :
@@ -833,11 +799,6 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             }
             break;
 
-            case EMR_MASKBLT :
-            case EMR_PLGBLT :
-            case EMR_SETDIBITSTODEVICE :
-            break;
-
             case EMR_EXTCREATEFONTINDIRECTW :
             {
                 *pWMF >> nIndex;
@@ -858,6 +819,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 }
             }
             break;
+
             case EMR_EXTTEXTOUTA :
                 bFlag = sal_True;
             case EMR_EXTTEXTOUTW :
@@ -933,6 +895,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 pOut->DrawPolyBezier( aPoly, bFlag, bRecordPath );  // Line( aPoly, bFlag );
             }
             break;
+
             case EMR_POLYGON16 :
             {
                 pWMF->SeekRel( 16 );
@@ -946,6 +909,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 pOut->DrawPolygon( aPoly, bRecordPath );
             }
             break;
+
             case EMR_POLYLINETO16 :
                 bFlag = sal_True;
             case EMR_POLYLINE16 :
@@ -1030,24 +994,53 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 delete pnPoints;
             };
             break;
-            case EMR_POLYDRAW16 :
-            case EMR_CREATEMONOBRUSH :
-            case EMR_CREATEDIBPATTERNBRUSHPT :
-            case EMR_EXTCREATEPEN :
-            case EMR_POLYTEXTOUTA :
-            case EMR_POLYTEXTOUTW :
-            case EMR_SETICMMODE :
-            case EMR_CREATECOLORSPACE :
-            case EMR_SETCOLORSPACE :
-            case EMR_DELETECOLORSPACE :
-            case EMR_GLSRECORD :
-            case EMR_GLSBOUNDEDRECORD :
-            case EMR_PIXELFORMAT :
-            break;
 
-            default :
-//              bStatus = FALSE;
+#ifdef WIN_MTF_ASSERT
+            default :                           WinMtfAssertHandler( "Unknown Meta Action" );       break;
+            case EMR_MASKBLT :                  WinMtfAssertHandler( "MaskBlt" );                   break;
+            case EMR_PLGBLT :                   WinMtfAssertHandler( "PlgBlt" );                    break;
+            case EMR_SETDIBITSTODEVICE :        WinMtfAssertHandler( "SetDIBitsToDevice" );         break;
+            case EMR_FILLRGN :                  WinMtfAssertHandler( "FillRgn" );                   break;
+            case EMR_FRAMERGN :                 WinMtfAssertHandler( "FrameRgn" );                  break;
+            case EMR_INVERTRGN :                WinMtfAssertHandler( "InvertRgn" );                 break;
+            case EMR_PAINTRGN :                 WinMtfAssertHandler( "PaintRgn" );                  break;
+            case EMR_FLATTENPATH :              WinMtfAssertHandler( "FlattenPath" );               break;
+            case EMR_WIDENPATH :                WinMtfAssertHandler( "WidenPath" );                 break;
+            case EMR_POLYDRAW :                 WinMtfAssertHandler( "Polydraw" );                  break;
+            case EMR_SETARCDIRECTION :          WinMtfAssertHandler( "SetArcDirection" );           break;
+            case EMR_SETMITERLIMIT :            WinMtfAssertHandler( "SetMiterLimit" );             break;
+            case EMR_SETPALETTEENTRIES :        WinMtfAssertHandler( "SetPaletteEntries" );         break;
+            case EMR_RESIZEPALETTE :            WinMtfAssertHandler( "ResizePalette" );             break;
+            case EMR_EXTFLOODFILL :             WinMtfAssertHandler( "ExtFloodFill" );              break;
+            case EMR_ANGLEARC :                 WinMtfAssertHandler( "AngleArc" );                  break;
+            case EMR_SETMAPPERFLAGS :           WinMtfAssertHandler( "SetMapperFlags" );            break;
+            case EMR_SETCOLORADJUSTMENT :       WinMtfAssertHandler( "SetColorAdjustment" );        break;
+            case EMR_SETMETARGN :               WinMtfAssertHandler( "SetMetArgn" );                break;
+            case EMR_SETBRUSHORGEX :            WinMtfAssertHandler( "SetBrushOrgEx" );             break;
+            case EMR_POLYDRAW16 :               WinMtfAssertHandler( "PolyDraw16" );                break;
+            case EMR_CREATEMONOBRUSH :          WinMtfAssertHandler( "CreateMonoBrush" );           break;
+            case EMR_CREATEDIBPATTERNBRUSHPT :  WinMtfAssertHandler( "CreateDibPatternBrushPt" );   break;
+            case EMR_EXTCREATEPEN :             WinMtfAssertHandler( "ExtCreatePen" );              break;
+            case EMR_POLYTEXTOUTA :             WinMtfAssertHandler( "PolyTextOutA" );              break;
+            case EMR_POLYTEXTOUTW :             WinMtfAssertHandler( "PolyTextOutW" );              break;
+            case EMR_SETICMMODE :               WinMtfAssertHandler( "SetICMMode" );                break;
+            case EMR_CREATECOLORSPACE :         WinMtfAssertHandler( "CreateColorSpace" );          break;
+            case EMR_SETCOLORSPACE :            WinMtfAssertHandler( "SetColorSpace" );             break;
+            case EMR_DELETECOLORSPACE :         WinMtfAssertHandler( "DeleteColorSpace" );          break;
+            case EMR_GLSRECORD :                WinMtfAssertHandler( "GlsRecord" );                 break;
+            case EMR_GLSBOUNDEDRECORD :         WinMtfAssertHandler( "GlsBoundRecord" );            break;
+            case EMR_PIXELFORMAT :              WinMtfAssertHandler( "PixelFormat" );               break;
+
+            case EMR_EXCLUDECLIPRECT :          WinMtfAssertHandler( "ExcludeClipRect", 0 );        break;
+            case EMR_REALIZEPALETTE :           WinMtfAssertHandler( "RealizePalette", 0 );         break;
+            case EMR_SELECTPALETTE :            WinMtfAssertHandler( "SelectPalette", 0 );          break;
+            case EMR_CREATEPALETTE :            WinMtfAssertHandler( "CreatePalette", 0 );          break;
+            case EMR_GDICOMMENT :
+            case EMR_SETVIEWPORTEXTEX :
+            case EMR_SETVIEWPORTORGEX :
+            case EMR_HEADER :               // has already been read at ReadHeader()
             break;
+#endif
         }
         pWMF->Seek( nNextPos );
     }

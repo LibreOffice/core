@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-18 10:46:27 $
+ *  last change: $Author: sj $ $Date: 2001-10-19 16:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _WINMTF_HXX
 #define _WINMTF_HXX
+
+#ifdef DBG_UTIL
+#define WIN_MTF_ASSERT
+#endif
 
 #include <math.h>
 #include <stdlib.h>
@@ -295,6 +299,15 @@ struct LOGFONTW
 #define W_HS_DIAGCROSS          5
 
 //============================ WMFReader ==================================
+
+
+#ifdef WIN_MTF_ASSERT
+#define WIN_MTF_ASSERT_INIT     0x80000000
+#define WIN_MTF_ASSERT_ONCE     0x40000000
+#define WIN_MTF_ASSERT_MIFE     0x20000000
+
+const void WinMtfAssertHandler( const sal_Char*, sal_uInt32 nFlags = WIN_MTF_ASSERT_MIFE );
+#endif
 
 enum WinMtfClipPathType{ EMPTY, RECTANGLE, COMPLEX };
 
