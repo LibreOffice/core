@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:37 $
+ *  last change: $Author: af $ $Date: 2001-05-17 13:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #define CB_STARTWITH 8
 
 #define FB_PAGE1            9
-#define RB_PAGE1_ARTGROUP   10
+#define FL_PAGE1_ARTGROUP   10
 #define RB_PAGE1_EMPTY      11
 #define RB_PAGE1_TEMPLATE   12
 #define LB_PAGE1_REGION     13
@@ -77,10 +77,10 @@
 #define LB_PAGE1_OPEN       16
 
 #define FB_PAGE2                    30
-#define GRP_PAGE2_LAYOUT            31
+#define FL_PAGE2_LAYOUT         31
 #define LB_PAGE2_REGION             32
 #define LB_PAGE2_LAYOUT             33
-#define GRP_PAGE2_OUTPUTTYPES       34
+#define FL_PAGE2_OUTPUTTYPES        34
 #define RB_PAGE2_MEDIUM1            35
 #define RB_PAGE2_MEDIUM2            36
 #define RB_PAGE2_MEDIUM3            37
@@ -88,12 +88,12 @@
 #define RB_PAGE2_MEDIUM5            39
 
 #define FB_PAGE3                    40
-#define GRP_PAGE3_EFFECT            41
+#define FL_PAGE3_EFFECT         41
 #define FT_PAGE3_EFFECT             42
 #define LB_PAGE3_EFFECT             43
 #define FT_PAGE3_SPEED              44
 #define LB_PAGE3_SPEED              45
-#define GRP_PAGE3_PRESTYPE          46
+#define FL_PAGE3_PRESTYPE           46
 #define RB_PAGE3_LIVE               47
 #define RB_PAGE3_KIOSK              48
 #define FT_PAGE3_TIME               49
@@ -103,7 +103,7 @@
 #define CB_PAGE3_LOGO               53
 
 #define FB_PAGE4                    20
-#define GRP_PAGE4_PERSONAL          21
+#define FL_PAGE4_PERSONAL           21
 #define FT_PAGE4_ASKNAME            22
 #define EDT_PAGE4_ASKNAME           23
 #define FT_PAGE4_ASKTOPIC           24
