@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 16:46:40 $
+ *  last change: $Author: bm $ $Date: 2003-10-16 14:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,8 +141,11 @@ uno::Reference< beans::XPropertySet > getObjectPropertySet( const rtl::OUString&
                 }
                 break;
             case OBJECTTYPE_LEGEND:
-                if( LegendHelper::getIdentifierForLegend().equals( aParticleID ) )
-                    xObjectProperties.set( LegendHelper::getLegend( xModel ), uno::UNO_QUERY );
+                {
+                    uno::Reference< XDiagram > xDia( ChartModelHelper::findDiagram( xModel ) );
+                    if( xDia.is())
+                        xObjectProperties.set( xDia->getLegend(), uno::UNO_QUERY );
+                }
                 break;
             case OBJECTTYPE_LEGEND_ENTRY:
                     break;
