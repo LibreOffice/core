@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 11:43:53 $
+ *  last change: $Author: mba $ $Date: 2000-10-09 10:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,7 +503,7 @@ public:
     AsynchronLink       aAvailableLink;
     UCB_Link_HelperRef  aLinkList;
 
-    DECL_LINK(          Done_Impl, void* );
+    DECL_LINK(          Done_Impl, ErrCode );
     DECL_LINK(          DataAvailable_Impl, void* );
     DECL_LINK(          Cancel_Impl, void* );
 
@@ -519,14 +519,15 @@ public:
     ~SfxMedium_Impl();
 };
 
-IMPL_LINK( SfxMedium_Impl, Done_Impl, void*, pVoid )
+IMPL_LINK( SfxMedium_Impl, Done_Impl, ErrCode, nError )
 {
     DELETEZ( pCancellable );
     bDownloadDone = sal_True;
+    pAntiImpl->SetError( nError );
     if ( bStreamReady )
     {
         aDoneLink.ClearPendingCall();
-        aDoneLink.Call( pVoid );
+        aDoneLink.Call( (void*) nError );
     }
 
     return 0;
@@ -856,16 +857,19 @@ sal_Bool SfxMedium::Commit()
 }
 
 //------------------------------------------------------------------
+#if SUPD<608
 sal_Bool SfxMedium::IsStorage() const
 {
+/*
     if( !aStorage.Is() && !pInStream )
     {
         (const_cast< SfxMedium* > (this))->GetStorage();
         (const_cast< SfxMedium* > (this))->ResetError();
     }
-
+*/
     return aStorage.Is();
 }
+#endif
 
 //------------------------------------------------------------------
 Link SfxMedium::GetDataAvailableLink() const
@@ -2120,9 +2124,10 @@ ErrCode SfxMedium::CheckOpenMode_Impl( sal_Bool bSilent, sal_Bool bAllowModeChan
             {
                 // erst der Zugriff auf den Storage erzeugt den Fehlercode
                 SvStorageRef aStor;
-                if (  IsStorage() )
-                    aStor = GetStorage();
-                else
+#if SUPD<508
+                aStor = GetStorage();
+                if ( !aStor.Is() )
+#endif
                     GetInStream();
 
                 if( aStor.Is() && bReadOnly && !bTriesCopy && !pImp->bIsTemp )
@@ -2412,7 +2417,7 @@ void SfxMedium::ResetDataSink()
 
 const SfxVersionTableDtor* SfxMedium::GetVersionList()
 {
-    if ( !pImp->pVersions && IsStorage() )
+    if ( !pImp->pVersions && GetStorage() )
     {
         SvStorageStreamRef aStream =
             GetStorage()->OpenStream( DEFINE_CONST_UNICODE( "VersionList" ), SFX_STREAM_READONLY | STREAM_NOCREATE );
@@ -2428,7 +2433,7 @@ const SfxVersionTableDtor* SfxMedium::GetVersionList()
 
 sal_uInt16 SfxMedium::AddVersion_Impl( SfxVersionInfo& rInfo )
 {
-    if ( IsStorage() )
+    if ( GetStorage() )
     {
         if ( !pImp->pVersions )
             pImp->pVersions = new SfxVersionTableDtor;
@@ -2498,7 +2503,7 @@ sal_Bool SfxMedium::TransferVersionList_Impl( SfxMedium& rMedium )
 
 sal_Bool SfxMedium::SaveVersionList_Impl()
 {
-    if ( IsStorage() )
+    if ( GetStorage() )
     {
         if ( !pImp->pVersions )
             return sal_True;

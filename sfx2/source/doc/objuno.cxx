@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 11:18:10 $
+ *  last change: $Author: mba $ $Date: 2000-10-09 10:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,8 @@ using namespace ::com::sun::star::frame;
 //=============================================================================
 
 #define PROPERTY_UNBOUND 0
+#define PROPERTY_MAYBEVOID ::com::sun::star::beans::PropertyAttribute::MAYBEVOID
+
 SfxItemPropertyMap aDocInfoPropertyMap_Impl[] =
 {
     { "Author"          , 6 , WID_FROM,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
@@ -122,7 +124,7 @@ SfxItemPropertyMap aDocInfoPropertyMap_Impl[] =
     { "AutoloadURL"     , 11, MID_DOCINFO_AUTOLOADURL, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "BlindCopiesTo"   , 13, WID_BCC,            &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "CopyTo"          , 6 , WID_CC,             &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "CreationDate"    , 12, WID_DATE_CREATED,   &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_UNBOUND, 0 },
+    { "CreationDate"    , 12, WID_DATE_CREATED,   &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
     { "DefaultTarget"   , 13, MID_DOCINFO_DEFAULTTARGET, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "Description"     , 11, MID_DOCINFO_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "EditingCycles"   , 13, MID_DOCINFO_REVISION, &::getCppuType((const sal_Int16*)0),   PROPERTY_UNBOUND, 0 },
@@ -132,10 +134,10 @@ SfxItemPropertyMap aDocInfoPropertyMap_Impl[] =
     { "Keywords"        , 8 , WID_KEYWORDS,       &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "MIMEType"        , 8 , WID_CONTENT_TYPE,   &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND | ::com::sun::star::beans::PropertyAttribute::READONLY, 0 },
     { "ModifiedBy"      , 10, MID_DOCINFO_MODIFICATIONAUTHOR, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "ModifyDate"      , 10, WID_DATE_MODIFIED,  &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_UNBOUND, 0 },
+    { "ModifyDate"      , 10, WID_DATE_MODIFIED,  &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
     { "Newsgroups"      , 10, WID_NEWSGROUPS,     &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "Original"        , 8 , WID_MESSAGE_ID,     &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "PrintDate"       , 9 , MID_DOCINFO_PRINTDATE, &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_UNBOUND, 0 },
+    { "PrintDate"       , 9 , MID_DOCINFO_PRINTDATE, &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
     { "PrintedBy"       , 9 , MID_DOCINFO_PRINTEDBY, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "Priority"        , 8 , WID_PRIORITY,       &::getCppuType((const sal_Int16*)0),   PROPERTY_UNBOUND, 0 },
     { "Recipient"       , 9 , WID_TO,             &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
@@ -143,7 +145,7 @@ SfxItemPropertyMap aDocInfoPropertyMap_Impl[] =
     { "ReplyTo"         , 7 , WID_REPLY_TO,       &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "Template"        , 8 , MID_DOCINFO_TEMPLATE, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "TemplateFileName", 16, SID_TEMPLATE_NAME, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "TemplateDate"    , 12, MID_DOCINFO_TEMPLATEDATE, &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_UNBOUND, 0 },
+    { "TemplateDate"    , 12, MID_DOCINFO_TEMPLATEDATE, &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
     { "Theme"           , 5 , MID_DOCINFO_SUBJECT, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "Title"           , 5 , WID_TITLE,          &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     {0,0,0,0,0}
@@ -795,7 +797,7 @@ SvStorage* SfxStandaloneDocumentInfoObject::GetStorage_Impl( const String& rName
         delete _pMedium;
 
     _pMedium = new SfxMedium( rName, bWrite ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY, sal_True );
-    if ( !_pMedium->IsStorage() || SVSTREAM_OK != _pMedium->GetError() )
+    if ( !_pMedium->GetStorage() || SVSTREAM_OK != _pMedium->GetError() )
         // Datei existiert nicht oder ist kein Storage
         return NULL;
 

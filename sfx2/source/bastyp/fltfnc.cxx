@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2000-09-28 12:22:53 $
+ *  last change: $Author: mba $ $Date: 2000-10-09 10:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2316,13 +2316,9 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
         {
             // dann ueber Storage CLSID
             // Remote macht das keinen Sinn, wenn der Download noch la"uft
-            if( rMedium.IsStorage() )
-            {
-                SvStorageRef aStor = rMedium.GetStorage();
-                if ( !aStor.Is() )
-                    return ERRCODE_IO_GENERAL;
+            SvStorageRef aStor = rMedium.GetStorage();
+            if ( aStor.Is() )
                 pFilter = GetFilter4ClipBoardId( aStor->GetFormat(), nMust, nDont );
-            }
 
             // Als naechstes ueber Extended Attributes pruefen
             String aNewFileName;
@@ -2580,7 +2576,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilter(
         if ( !rMedium.IsDownloadDone_Impl() )
             return ERRCODE_IO_PENDING;
 
-        rMedium.IsStorage();
+        rMedium.GetStorage();
         nErr = rMedium.GetErrorCode();
         if( nErr )
             return nErr;
@@ -2603,7 +2599,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilter(
 //DV !!!! don't close InStream when using the new Medium
 //rMedium.CloseInStream();
 
-        rMedium.IsStorage();
+        rMedium.GetStorage();
         nErr = GetFilter4Content( rMedium, &pFilter, nMust, nDont );
         CHECKERROR();
         if( nErr && (nErr != ERRCODE_ABORT && nErr != ERRCODE_SFX_FORCEQUIET ) )

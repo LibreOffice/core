@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:45:25 $
+ *  last change: $Author: mba $ $Date: 2000-10-09 10:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1468,7 +1468,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     DBG_ASSERT( pFile, "cannot UpdateFromTemplate without medium" );
 
     // only for own storage formats
-    SvStorageRef xDocStor = pFile && pFile->IsStorage() ? pFile->GetStorage() : 0;
+    SvStorageRef xDocStor = pFile ? pFile->GetStorage() : 0;
     if ( !xDocStor.Is() || !pFile->GetFilter() || !pFile->GetFilter()->IsOwnFormat() )
         return;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 10:50:20 $
+ *  last change: $Author: mba $ $Date: 2000-10-09 10:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,7 +974,7 @@ sal_uInt32 SfxApplication::DetectFilter(
 
     if( !pFilter)
     {
-        if ( !rMedium.IsRemote() && rMedium.IsStorage() )
+        if ( !rMedium.IsRemote() )
         {
             SvStorageRef aStor = rMedium.GetStorage();
             if ( !aStor.Is() )

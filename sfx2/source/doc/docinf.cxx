@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 17:37:55 $
+ *  last change: $Author: mba $ $Date: 2000-10-09 10:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1478,7 +1478,7 @@ void SfxDocumentInfo::SetUseUserData( BOOL bNew )
 ErrCode SfxDocumentInfo::Load(const String& rName)
 {
     SfxMedium aMedium( rName, SFX_STREAM_READONLY_MAKECOPY, TRUE );
-    if ( !aMedium.IsStorage() || SVSTREAM_OK != aMedium.GetError() )
+    if ( !aMedium.GetStorage() || SVSTREAM_OK != aMedium.GetError() )
         // Datei existiert nicht oder ist kein Storage
         return ERRCODE_IO_CANTREAD;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 16:07:22 $
+ *  last change: $Author: mba $ $Date: 2000-10-09 10:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ ULONG CheckPasswd_Impl
 
 {
     ULONG nRet=0;
-    if( ( !pFile->GetFilter() || pFile->GetFilter()->UsesStorage() ) && pFile->IsStorage() )
+    if( ( !pFile->GetFilter() || pFile->GetFilter()->UsesStorage() ) )
     {
         SvStorageRef aRef = pFile->GetStorage();
         if(aRef.Is())
@@ -418,9 +418,7 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
     const SfxFilter* pFilter = NULL;
     SfxMedium aMedium( rFileName,  ( STREAM_READ | STREAM_SHARE_DENYNONE ), FALSE );
 
-    if ( aMedium.IsStorage() )
-        aMedium.GetStorage();
-    else
+    if ( !aMedium.GetStorage() )
         aMedium.GetInStream();
 
     if ( aMedium.GetError() )
@@ -510,7 +508,7 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
 
 void SfxApplication::LoadEa_Impl(SfxMedium &rMedium, SfxObjectShell& rObj)
 {
-    if ( !rMedium.IsStorage() )
+    if ( !rMedium.GetStorage() )
         return;
     const SfxFilter *pFilter = rMedium.GetFilter();
     if ( !pFilter || !pFilter->IsOwnFormat() )
