@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:49:12 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 16:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,8 @@
  *
  ************************************************************************/
 
-#define RID_STR_START       2000
+#define RID_STR_START        2000
+#define RID_FWK_DIALOG_START 0
 
 #define STR_MENU_ADDONS         (RID_STR_START+0)
 #define STR_MENU_ADDONHELP      (RID_STR_START+1)
@@ -68,3 +69,20 @@
 #define STR_CLOSEDOC_ANDRETURN  (RID_STR_START+4)
 #define STR_SAVECOPYDOC         (RID_STR_START+5)
 
+// License Dialog
+#define DLG_LICENSE                         (RID_FWK_DIALOG_START+256)
+#define ML_LICENSE                          (RID_FWK_DIALOG_START+11)
+#define FT_INFO1                            (RID_FWK_DIALOG_START+12)
+#define FT_INFO2                            (RID_FWK_DIALOG_START+13)
+#define FT_INFO3                            (RID_FWK_DIALOG_START+14)
+#define FT_INFO2_1                          (RID_FWK_DIALOG_START+15)
+#define FT_INFO3_1                          (RID_FWK_DIALOG_START+16)
+#define FL_DIVIDE                           (RID_FWK_DIALOG_START+17)
+#define PB_PAGEDOWN                         (RID_FWK_DIALOG_START+18)
+#define IMG_ARROW                           (RID_FWK_DIALOG_START+19)
+#define LICENSE_ACCEPT                      (RID_FWK_DIALOG_START+20)
+#define LICENSE_NOTACCEPT                   (RID_FWK_DIALOG_START+21)
+#define PB_DECLINE                          (RID_FWK_DIALOG_START+22)
+#define PB_ACCEPT                           (RID_FWK_DIALOG_START+23)
+
+>>>>>>> 1.3.28.1
