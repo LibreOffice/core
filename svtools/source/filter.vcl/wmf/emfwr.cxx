@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:42:10 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ BOOL EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm,
     const ULONG nHeaderPos = rOStm.Tell();
 
     mpHandlesUsed = new BOOL[ MAXHANDLES ];
-    HMEMSET( mpHandlesUsed, 0, MAXHANDLES * sizeof( BOOL ) );
+    memset( mpHandlesUsed, 0, MAXHANDLES * sizeof( BOOL ) );
     mnHandleCount = mnLastPercent = mnRecordPos = mnRecordCount = 0;
     mnLineHandle = mnFillHandle = mnTextHandle = HANDLE_INVALID;
     mbRecordOpen = FALSE;
