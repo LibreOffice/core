@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-24 21:23:23 $
+ *  last change: $Author: kz $ $Date: 2001-09-27 21:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,7 +1028,7 @@ String sConvertError2
     Text = "Autopilot abbrechen";
     Text[English] = "Cancel Autopilot";
     Text[ English_us ] = "Cancel AutoPilot";
-    Text[ french ] = "Quitter l'AutoPilote";
+    Text[ french ] = "Annuler l'AutoPilote";
     Text[ italian ] = "Interrompi Pilota automatico";
     Text[ spanish ] = "Cancelar el AutoPiloto";
     Text[ portuguese ] = "Cancelar AutoPiloto";
@@ -1039,9 +1039,9 @@ String sConvertError2
     Text[ swedish ] = "Avbryt Autopiloten";
     Text[ russian ] = "������ ����������";
     Text[ danish ] = "Annuller AutoPiloten";
-    Text[ polish ] = "Przerwij AutoPilota";
+    Text[ polish ] = "Anuluj AutoPilota";
     Text[ portuguese_brazilian ] = "Cancel Autopilot";
-    Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ ｷｬﾝｾﾙ";
+    Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄを中止";
     Text[ korean ] = "자동파일럿 중단";
     Text[ chinese_simplified ] = "取消自动文档助理";
     Text[ chinese_traditional ] = "取消自動檔案助理";
@@ -2165,6 +2165,7 @@ String sSumMSDrawTemplates
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
     Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
 };
+
 
 
 
