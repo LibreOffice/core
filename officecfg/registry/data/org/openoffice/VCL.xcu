@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-07 09:39:19 $
+ *  last change: $Author: ssa $ $Date: 2002-10-11 13:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,26 @@
      </prop>
      <prop oor:name="CTL_TEXT" oor:type="xs:string" oor:op="replace">
         <value>Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+     </prop>
+    </node>
+    <node oor:name="th" oor:op="replace">
+     <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>OONaksit;Tahoma;Lucidasans;Arial Unicode MS</value>
+     </prop>
+     <prop oor:name="CTL_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+     </prop>
+     <prop oor:name="CTL_HEADING" oor:type="xs:string" oor:op="replace">
+        <value>OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+     </prop>
+     <prop oor:name="CTL_PRESENTATION" oor:type="xs:string" oor:op="replace">
+        <value>OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+     </prop>
+     <prop oor:name="CTL_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+        <value>OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+     </prop>
+     <prop oor:name="CTL_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
     </node>
     <node oor:name="ja-jp" oor:op="replace">
