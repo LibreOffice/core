@@ -91,9 +91,9 @@ sub BuildAll {
             RemoveFromDependencies($DeadPrj, \%ParentDepsHash);
         };
         while ($Prj = PickPrjToBuild(\%ParentDepsHash)) {
-            print "\n-------------\n";
+            print "\n=============\n";
             print "Building project $Prj\n";
-            print "-------------\n";
+            print   "=============\n";
             $PrjDir = CorrectPath($StandDir.$Prj);
             BuildPrj($PrjDir);
             system ("deliver");
@@ -109,7 +109,7 @@ sub BuildAll {
 # Start build given project
 #
 sub MakeDir {
-    my ($DirToBuild, $BuildDir, $error, );
+    my ($DirToBuild, $BuildDir, $error);
     $DirToBuild = $_[0];
     $BuildDir = CorrectPath($StandDir.$PathHash{$DirToBuild});
     if ($ENV{GUI} eq "UNX") {
@@ -122,7 +122,7 @@ sub MakeDir {
     if (!$error) {
         RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
     } else {
-        print "Error $error occurred while making $BuildDir\n";
+        print "Error $error occurred while making $BuilidDir\n";
         exit();
     };
 };
@@ -182,7 +182,7 @@ sub BuildPrj {
             my ($Platform, $Dependencies, $Dir, $DirAlias, @Array);
             $Dependencies = $';
             $dummy = $`;
-            $dummy =~ /(\w+)([\t | \s]+)([\w | \\ | \.]+)/;
+            $dummy =~ /(\S+)(\s+)(\S+)/;
             $Dir = $3;
             $Dependencies =~ /(\w+)/; #/(\t\-\t)(\w+)/; #(\t)(\S+)(\s)/;
             $Platform = $1;
