@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>XPM</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">XPM - X PixMap</value>
+            <value>XPM - X PixMap</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
