@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-10-17 13:38:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,9 +270,11 @@ SwCollectionBaseClass;
 class SwXTextTables : public SwCollectionBaseClass,
     public SwUnoCollection
 {
+protected:
+    virtual ~SwXTextTables();
 public:
     SwXTextTables(SwDoc* pDoc);
-    virtual ~SwXTextTables();
+
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -309,9 +311,10 @@ protected:
 
     void                RemoveFrame(const rtl::OUString& rName, FlyCntType eType);
 
+    virtual ~SwXFrames();
 public:
         SwXFrames(SwDoc* pDoc, FlyCntType eSet);
-        virtual ~SwXFrames();
+
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -341,9 +344,11 @@ public:
 --------------------------------------------------*/
 class SwXTextFrames : public SwXFrames
 {
+protected:
+    virtual ~SwXTextFrames();
 public:
     SwXTextFrames(SwDoc* pDoc);
-    virtual ~SwXTextFrames();
+
 
 //  SMART_UNO_DECLARATION( SwXTextFrames, UsrObject );
 
@@ -359,9 +364,11 @@ public:
 --------------------------------------------------*/
 class SwXTextGraphicObjects : public SwXFrames
 {
+protected:
+    virtual ~SwXTextGraphicObjects();
 public:
         SwXTextGraphicObjects(SwDoc* pDoc);
-        virtual ~SwXTextGraphicObjects();
+
 
 //  SMART_UNO_DECLARATION( SwXTextGraphicObjects, UsrObject );
 
@@ -377,10 +384,11 @@ public:
 --------------------------------------------------*/
 class SwXTextEmbeddedObjects :  public SwXFrames
 {
-
+protected:
+    virtual ~SwXTextEmbeddedObjects();
 public:
     SwXTextEmbeddedObjects(SwDoc* pDoc);
-    virtual ~SwXTextEmbeddedObjects();
+
 
 //  SMART_UNO_DECLARATION( SwXTextEmbeddedObjects, UsrObject );
 
@@ -397,9 +405,11 @@ public:
 class SwXTextSections : public SwCollectionBaseClass,
                         public SwUnoCollection
 {
+protected:
+    virtual ~SwXTextSections();
 public:
     SwXTextSections(SwDoc* pDoc);
-    virtual ~SwXTextSections();
+
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -427,9 +437,11 @@ public:
 class SwXBookmarks : public SwCollectionBaseClass,
     public SwUnoCollection
 {
+protected:
+    virtual ~SwXBookmarks();
 public:
     SwXBookmarks(SwDoc* pDoc);
-    virtual ~SwXBookmarks();
+
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -466,10 +478,11 @@ class SwXFootnotes : public SwSimpleIndexAccessBaseClass,
     public SwUnoCollection
 {
     sal_Bool                bEndnote;
-
+protected:
+    virtual ~SwXFootnotes();
 public:
     SwXFootnotes(sal_Bool bEnd, SwDoc* pDoc);
-    virtual ~SwXFootnotes();
+
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -493,9 +506,11 @@ public:
 class SwXReferenceMarks : public SwCollectionBaseClass,
     public SwUnoCollection
 {
+protected:
+    virtual ~SwXReferenceMarks();
 public:
     SwXReferenceMarks(SwDoc* pDoc);
-    virtual ~SwXReferenceMarks();
+
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
