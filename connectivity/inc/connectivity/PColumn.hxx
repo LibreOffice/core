@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:17:23 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 10:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ namespace connectivity
 
             void setRealName(const ::rtl::OUString& _rName)  { m_aRealName  = _rName; }
             void setTableName(const ::rtl::OUString& _rName) { m_aTableName = _rName; }
-            void setFunction(sal_Bool _bFunction)            { m_bFunction = _bFunction; }
+            void setFunction(sal_Bool _bFunction)            { m_bFunction  = _bFunction; }
             void setDbasePrecisionChanged(sal_Bool _bDbasePrecisionChanged) { m_bDbasePrecisionChanged = _bDbasePrecisionChanged; }
 
             ::rtl::OUString getRealName() const { return  m_aRealName; }
