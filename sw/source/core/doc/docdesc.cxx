@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:49:08 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
 
 #ifndef _FMTFSIZE_HXX //autogen
@@ -773,7 +776,10 @@ void SwDoc::PrtDataChanged()
 
             bDraw = FALSE;
             if( pDrawModel )
+            {
+                pDrawModel->SetAddExtLeading( IsAddExtLeading() );
                 pDrawModel->SetRefDevice( _GetRefDev() );
+            }
 
             pFntCache->Flush();
             GetRootFrm()->InvalidateAllCntnt();
@@ -790,8 +796,13 @@ void SwDoc::PrtDataChanged()
 
         }
     }
-    if ( bDraw && pDrawModel && _GetRefDev() != pDrawModel->GetRefDevice() )
-        pDrawModel->SetRefDevice( _GetRefDev() );
+    if ( bDraw && pDrawModel )
+    {
+        if ( IsAddExtLeading() != pDrawModel->IsAddExtLeading() )
+            pDrawModel->SetAddExtLeading( IsAddExtLeading() );
+        if ( _GetRefDev() != pDrawModel->GetRefDevice() )
+            pDrawModel->SetRefDevice( _GetRefDev() );
+    }
 
     PrtOLENotify( TRUE );
 
@@ -967,21 +978,67 @@ void SwDoc::SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged )
             ::lcl_DefaultPageFmt( rDesc.GetPoolFmtId(), rDesc.GetMaster(),
                                   rDesc.GetLeft(), pPrt, TRUE );
         }
-    }
+        }
 
     if ( bCallPrtDataChanged )
         PrtDataChanged();
 }
 
-void SwDoc::SetUseVirtualDevice( sal_Bool bFlag )
+void SwDoc::SetUseVirtualDevice( short nNew )
 {
-    if ( !IsUseVirtualDevice() != !bFlag )
+    if ( IsUseVirtualDevice() != nNew )
     {
-        _SetUseVirtualDevice( bFlag );
+        if ( com::sun::star::document::PrinterIndependentLayout::DISABLED != nNew )
+        {
+            VirtualDevice* pVirDev = GetVirDev( sal_True );
+            if ( com::sun::star::document::PrinterIndependentLayout::LOW_RESOLUTION == nNew )
+                pVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE06 );
+            else
+            {
+                ASSERT( com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION == nNew,
+                        "Virtual device type: != DISABLED, LOW_RESOLUTION, HIGH_RESOLUTION" )
+                pVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE96 );
+            }
+        }
+
+        _SetUseVirtualDevice( nNew );
         PrtDataChanged();
         SetModified();
     }
+}
 
+short SwDoc::IsUseVirtualDevice() const
+{
+    if ( n8Dummy1 & DUMMY_USE_VIRTUAL_DEVICE )
+    {
+        if ( n8Dummy2 & DUMMY_USE_HIRES_VIR_DEV )
+            return com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION;
+        else
+            return com::sun::star::document::PrinterIndependentLayout::LOW_RESOLUTION;
+    }
+    else
+        return com::sun::star::document::PrinterIndependentLayout::DISABLED;
+}
+
+void SwDoc::_SetUseVirtualDevice( short nNew )
+{
+    if( com::sun::star::document::PrinterIndependentLayout::DISABLED != nNew )
+    {
+        n8Dummy1 |= DUMMY_USE_VIRTUAL_DEVICE;
+        if ( com::sun::star::document::PrinterIndependentLayout::LOW_RESOLUTION == nNew )
+            n8Dummy2 &= ~DUMMY_USE_HIRES_VIR_DEV;
+        else
+        {
+            ASSERT( com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION == nNew,
+                    "Virtual device type: != DISABLED, LOW_RESOLUTION, HIGH_RESOLUTION" )
+            n8Dummy2 |= DUMMY_USE_HIRES_VIR_DEV;
+        }
+    }
+    else
+    {
+        n8Dummy1 &= ~DUMMY_USE_VIRTUAL_DEVICE;
+        n8Dummy2 &= ~DUMMY_USE_HIRES_VIR_DEV;
+    }
 }
 
 /*
