@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-22 11:01:46 $
+ *  last change: $Author: ama $ $Date: 2001-11-07 13:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,9 @@
 #endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
+#endif
+#ifndef _BODYFRM_HXX
+#include <bodyfrm.hxx>
 #endif
 #ifndef _DBG_LAY_HXX
 #include <dbg_lay.hxx>
@@ -3394,7 +3397,10 @@ long MA_FASTCALL lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
     ASSERT( pCol, "Where's the columnframe?" );
     SwFrm *pFrm = pCol->Lower();
     do
-    {   if ( pFrm && pFrm->IsTxtFrm() )
+    {
+        if( pFrm && pFrm->IsBodyFrm() )
+            pFrm = ((SwBodyFrm*)pFrm)->Lower();
+        if ( pFrm && pFrm->IsTxtFrm() )
         {
             const long nTmp = ((SwTxtFrm*)pFrm)->FirstLineHeight();
             if ( nTmp != USHRT_MAX )
@@ -3428,9 +3434,13 @@ BOOL lcl_IsFlyHeightClipped( SwLayoutFrm *pLay )
             for ( USHORT i = 0; i < nCnt; ++i )
             {
                 SdrObject *pO = (*pFrm->GetDrawObjs())[i];
-                if ( pO->IsWriterFlyFrame() &&
-                     ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->IsHeightClipped() )
-                    return TRUE;
+                if ( pO->IsWriterFlyFrame() )
+                {
+                    SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                    if( pFly->IsHeightClipped() && (!pFly->IsFlyFreeFrm() ||
+                        ((SwFlyFreeFrm*)pFly)->GetPage() ) )
+                        return TRUE;
+                }
             }
         }
         pFrm = pFrm->FindNextCnt();

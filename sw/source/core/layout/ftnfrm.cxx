@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:21:32 $
+ *  last change: $Author: ama $ $Date: 2001-11-07 13:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3145,15 +3145,24 @@ SwSaveFtnHeight::~SwSaveFtnHeight()
 //JP 15.10.2001: in a non pro version test if the attribute has the same
 //              meaning which his reference is
 
+// Normally, the pRef member and the GetRefFromAttr() result has to be
+// identically. Sometimes footnote will be moved from a master to its follow,
+// but the GetRef() is called first, so we have to ignore a master/follow
+// mismatch.
+
 const SwCntntFrm* SwFtnFrm::GetRef() const
 {
-    ASSERT( pRef == GetRefFromAttr(), "access to deleted Frame? pRef != pAttr->GetRef()" );
+    const SwCntntFrm* pRefAttr = GetRefFromAttr();
+    ASSERT( pRef == pRefAttr || pRef->GetFollow() == pRefAttr,
+            "access to deleted Frame? pRef != pAttr->GetRef()" );
     return pRef;
 }
 
 SwCntntFrm* SwFtnFrm::GetRef()
 {
-    ASSERT( pRef == GetRefFromAttr(), "access to deleted Frame? pRef != pAttr->GetRef()" );
+    const SwCntntFrm* pRefAttr = GetRefFromAttr();
+    ASSERT( pRef == pRefAttr || pRef->GetFollow() == pRefAttr,
+            "access to deleted Frame? pRef != pAttr->GetRef()" );
     return pRef;
 }
 

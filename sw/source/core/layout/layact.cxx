@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-05 13:41:06 $
+ *  last change: $Author: ama $ $Date: 2001-11-07 13:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2185,6 +2185,8 @@ BOOL SwLayAction::FormatFlyCntnt( const SwPageFrm *pPage )
 |*************************************************************************/
 void SwLayAction::FormatFlyInCnt( SwFlyInCntFrm *pFly )
 {
+    if ( IsAgain() )
+        return;
     //Wg. Aenderung eine kleine Vorsichtsmassnahme. Es wird jetzt vor der
     //Cntntformatierung das Flag validiert und wenn die Formatierung mit
     //FALSE returnt wird halt wieder invalidiert.
