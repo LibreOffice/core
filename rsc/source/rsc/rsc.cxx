@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:56 $
+ *  last change: $Author: nf $ $Date: 2001-06-12 14:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 
     Source Code Control System - Header
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/rsc/rsc.cxx,v 1.1.1.1 2000-09-18 16:42:56 hr Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/rsc/rsc.cxx,v 1.2 2001-06-12 14:58:55 nf Exp $
 
 **************************************************************************/
 /****************************************************************/
@@ -320,6 +320,8 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
                      nSourceCharSet = RTL_TEXTENCODING_IBM_850;
                 else if( !rsc_stricmp( (*ppStr) + 9, "DONTKNOW" ) )
                      nSourceCharSet = RTL_TEXTENCODING_DONTKNOW;
+                else if( !rsc_stricmp( (*ppStr) + 9, "UTF8" ) )
+                     nSourceCharSet = RTL_TEXTENCODING_UTF8;
                 else
                 {
                     nSourceCharSet = rtl_getTextEncodingFromUnixCharset( (*ppStr) + 9 );
@@ -351,7 +353,7 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
                 LT( USER6               );
                 LT( USER7               );
                 LT( USER8               );
-                LT( USER9               );
+                LT( EXTERN              );
                 if( nLangTypeId == LANGUAGE_DONTKNOW )
                     pEH->FatalError( ERR_UNKNOWNSW, RscId(), *ppStr );
             }
