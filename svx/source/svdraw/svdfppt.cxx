@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-26 13:34:42 $
+ *  last change: $Author: sj $ $Date: 2001-10-12 16:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2413,7 +2413,10 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                         sal_uInt32 nCharacters = pPortion->Count();
                         const sal_Unicode* pSource = pPortion->maString.GetBuffer();
                         sal_Unicode* pDest = pParaText + nCurrentIndex;
-                        PptFontEntityAtom* pFontEnityAtom = GetFontEnityAtom( pPortion->pCharSet->mnFont );
+
+                        sal_uInt32 nFont;
+                        pPortion->GetAttrib( PPT_CharAttr_Font, nFont, pTextObj->GetInstance() );
+                        PptFontEntityAtom* pFontEnityAtom = GetFontEnityAtom( nFont );
                         if ( pFontEnityAtom && ( pFontEnityAtom->eCharSet == RTL_TEXTENCODING_SYMBOL ) )
                         {
                             sal_uInt32 i;
