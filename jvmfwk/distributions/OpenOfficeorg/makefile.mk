@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jl $ $Date: 2004-05-04 10:00:57 $
+#   last change: $Author: jl $ $Date: 2004-05-21 09:03:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,7 +61,7 @@
 
 PRJ = ..$/..
 PRJNAME = jvmfwk
-TARGET = 
+TARGET = vendors_ooo
 
 .INCLUDE: settings.mk
 
@@ -71,7 +71,7 @@ nojava:
 .ENDIF
 
 .IF "$(SOLAR_JAVA)"!=""
-$(BIN)$/javavendors_so.xml: javavendors_unx.xml javavendors_wnt.xml 
+$(BIN)$/javavendors_ooo.xml: javavendors_unx.xml javavendors_wnt.xml 
 .IF "$(GUI)"=="UNX"
     +-$(COPY) javavendors_unx.xml $(BIN)$/javavendors_ooo.xml
 .ELIF "$(GUI)"=="WNT"
