@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-25 11:36:55 $
+#   last change: $Author: hr $ $Date: 2003-08-07 14:54:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,6 @@ SLOFILES=\
         $(SLO)$/contentinfo.obj        \
         $(SLO)$/propertyvalueset.obj   \
         $(SLO)$/registerucb.obj        \
-        $(SLO)$/remotecontentproviderscontrol.obj \
         $(SLO)$/resultsetmetadata.obj  \
         $(SLO)$/resultset.obj          \
         $(SLO)$/resultsethelper.obj    \
