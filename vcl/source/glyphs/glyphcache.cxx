@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 13:49:43 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@ GlyphCache::GlyphCache( ULONG nMaxSize )
     mnBytesUsed(sizeof(GlyphCache)),
     mnLruIndex(0),
     mnGlyphCount(0),
-    mpFtManager(NULL),
-    mpCurrentGCFont(NULL)
+    mpCurrentGCFont(NULL),
+    mpFtManager(NULL)
 {
     mpFtManager = new FreetypeManager;
 }
@@ -409,8 +409,8 @@ ServerFont::ServerFont( const ImplFontSelectData& rFSD )
     mnExtInfo(0),
     mnRefCount(1),
     mnBytesUsed( sizeof(ServerFont) ),
-    mpNextGCFont( NULL ),
     mpPrevGCFont( NULL ),
+    mpNextGCFont( NULL ),
     nCos( 0x10000),
     nSin( 0)
 {
