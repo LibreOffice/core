@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-09-28 12:23:22 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
