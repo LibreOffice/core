@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 14:02:28 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ ModalDialog DLG_EXPORT_JPG
         Text [ french ] = "Qualit�" ;
         Text [ dutch ] = "Kwaliteit" ;
         Text [ swedish ] = "Kvalitet" ;
-        Text [ danish ] = "Kvalitet." ;
+        Text [ danish ] = "Kvalitet" ;
         Text [ portuguese_brazilian ] = "Qualidade" ;
         Text [ portuguese ] = "Qualidade" ;
         Text[ chinese_simplified ] = "质量";
@@ -129,6 +129,8 @@ ModalDialog DLG_EXPORT_JPG
         Text[ hebrew ] = "‮איכות‬";
         Text[ hindi ] = "गुण";
         Text[ slovak ] = "Kvalita";
+        Text[ hungarian ] = "Minőség";
+        Text[ slovenian ] = "Kakovost";
     };
     FixedText FI_DESCR
     {
@@ -142,7 +144,7 @@ ModalDialog DLG_EXPORT_JPG
         Text [ french ] = "1 : qualit� min.\n100 : qualit� max." ;
         Text [ dutch ] = "1: min. kwaliteit\n100: max. kwaliteit" ;
         Text [ swedish ] = "1: min. kvalitet\n100: max. kvalitet" ;
-        Text [ danish ] = "~1: min. kvalitet\n100: maks. kvalitet" ;
+        Text [ danish ] = "1: min. kvalitet\n100: maks. kvalitet" ;
         Text [ portuguese_brazilian ] = "1: min. qualidade\n100: max. qualidade" ;
         Text [ portuguese ] = "1: min. qualidade\n100: max. qualidade" ;
         Text[ chinese_simplified ] = "1: 最差质量 \n100: 最佳质量";
@@ -164,6 +166,8 @@ ModalDialog DLG_EXPORT_JPG
         Text[ hebrew ] = "‮1 - איכות מזערית\n100 - איכות מירבית‬";
         Text[ hindi ] = "1: min. quality\n100: max. quality";
         Text[ slovak ] = "1: min. kvalita\n100: max. kvalita";
+        Text[ hungarian ] = "1: legrosszabb minőség \n100: legjobb minőség";
+        Text[ slovenian ] = "1: min. kakovost\n100: maks. kakovost";
     };
     NumericField NUM_FLD_QUALITY
     {
@@ -212,6 +216,8 @@ ModalDialog DLG_EXPORT_JPG
         Text[ hebrew ] = "‮רזולוצית הצבע‬";
         Text[ hindi ] = "रंग का रेजॉल्यूशन्";
         Text[ slovak ] = "Počet farieb";
+        Text[ hungarian ] = "Színfelbontás";
+        Text[ slovenian ] = "Barvna ločljivost";
     };
     RadioButton RB_GRAY
     {
@@ -248,6 +254,8 @@ ModalDialog DLG_EXPORT_JPG
         Text[ hebrew ] = "‮סולם האפור‬";
         Text[ hindi ] = "ग्रेस्केल्";
         Text[ slovak ] = "Stupne šedej";
+        Text[ hungarian ] = "Szürkeárnyalatos";
+        Text[ slovenian ] = "Sivine";
     };
     RadioButton RB_RGB
     {
@@ -284,6 +292,8 @@ ModalDialog DLG_EXPORT_JPG
         Text[ hebrew ] = "‮צבע אמיתי‬";
         Text[ hindi ] = "True Colors";
         Text[ slovak ] = "Skutočné farby";
+        Text[ hungarian ] = "True Color";
+        Text[ slovenian ] = "True colors";
     };
     Text [ portuguese_brazilian ] = "Op��es JPEG" ;
     Text [ portuguese ] = "Op��es JPEG" ;
@@ -306,7 +316,10 @@ ModalDialog DLG_EXPORT_JPG
     Text[ hebrew ] = "‮אפשרויות ‬JPEG";
     Text[ hindi ] = "JPEG विकल्प";
     Text[ slovak ] = "Nastavenia JPEG";
+    Text[ hungarian ] = "JPEG-beállítások";
+    Text[ slovenian ] = "Možnosti za obliko zapisa JPEG";
 };
+
 
 
 
