@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-02 13:02:55 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,14 +87,14 @@ PushButton RID_PREVIEW_BUTTON
     Text [ danish ] = "Afspil" ;
     Text [ portuguese_brazilian ] = "Ab~spielen" ;
     Text [ portuguese ] = "~Tocar" ;
-    Text[ chinese_simplified ] = "·ÅÓ³";
+    Text[ chinese_simplified ] = "æ”¾æ˜ ";
     Text[ russian ] = "Âîñïğîèçâåñòè";
     Text[ polish ] = "Odtwórz";
-    Text[ japanese ] = "Ä¶";
-    Text[ chinese_traditional ] = "©ñ¬M";
+    Text[ japanese ] = "å†ç”Ÿ";
+    Text[ chinese_traditional ] = "æ”¾æ˜ ";
     Text[ arabic ] = "ÊÔÛíá";
     Text[ greek ] = "Åêôİëå~óç";
-    Text[ korean ] = "Àç»ı";
+    Text[ korean ] = "ì¬ìƒ";
     Text[ turkish ] = "Çalıştır";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Reproducir";
@@ -744,14 +744,14 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ danish ] = "Grafikobjekttypografier" ;
             Text [ portuguese_brazilian ] = "Estilos de Objetos Gr?ficos" ;
             Text [ portuguese ] = "Estilos de objectos gráficos" ;
-            Text[ chinese_simplified ] = "Í¼ĞÎ¶ÔÏóÑùÊ½";
+            Text[ chinese_simplified ] = "å›¾å½¢å¯¹è±¡æ ·å¼";
             Text[ russian ] = "Ãğàôè÷åñêèå ñòèëè";
             Text[ polish ] = "Style obiektów graficznych";
-            Text[ japanese ] = "}µÌŞ¼Şª¸Ä½À²Ù";
-            Text[ chinese_traditional ] = "¹Ï§Îª«¥ó¼Ë¦¡";
+            Text[ japanese ] = "å›³ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ï½½ï¾€ï½²ï¾™";
+            Text[ chinese_traditional ] = "åœ–å½¢ç‰©ä»¶æ¨£å¼";
             Text[ arabic ] = "ÃäãÇØ ßÇÆäÇÊ ÕæÑÉ";
             Text[ greek ] = "Óôõë áíôéêåéìİíùí ãñáöéêşí";
-            Text[ korean ] = "±×·¡ÇÈ°³Ã¼ À¯Çü";
+            Text[ korean ] = "ê·¸ë˜í”½ê°œì²´ ìœ í˜•";
             Text[ turkish ] = "Grafik nesne biçimi";
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
             StyleImage = Image
@@ -779,14 +779,14 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ danish ] = "Præsentationsobjekttypografier" ;
             Text [ portuguese_brazilian ] = "Pr?sentationsobjektvorlagen" ;
             Text [ portuguese ] = "Estilos de objectos de apresentação" ;
-            Text[ chinese_simplified ] = "ÑİÊ¾ÎÄ¸å¶ÔÏóÑùÊ½";
+            Text[ chinese_simplified ] = "æ¼”ç¤ºæ–‡ç¨¿å¯¹è±¡æ ·å¼";
             Text[ russian ] = "Ñòèëè ïğåçåíòàöèè";
             Text[ polish ] = "Style obiektów prezentacji";
-            Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İµÌŞ¼Şª¸Ä½À²Ù";
-            Text[ chinese_traditional ] = "Â²³ø¼Ë¦¡";
+            Text[ japanese ] = "ï¾Œï¾Ÿï¾šï½¾ï¾ï¾ï¾ƒï½°ï½¼ï½®ï¾ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ï½½ï¾€ï½²ï¾™";
+            Text[ chinese_traditional ] = "ç°¡å ±æ¨£å¼";
             Text[ arabic ] = "ÃäãÇØ ßÇÆä ÚÑÖ ÊŞÏíãí";
             Text[ greek ] = "Ğñüôõğá áíôéêåéìİíùí ğáñïõóßáóçò";
-            Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç °³Ã¼ À¯Çü";
+            Text[ korean ] = "í”„ë¦¬ì  í…Œì´ì…˜ ê°œì²´ ìœ í˜•";
             Text[ turkish ] = "Sunu nesne biçimi";
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
             StyleImage = Image
@@ -844,6 +844,7 @@ Bitmap BMP_PRESOBJ_IMAGE
     File = "image.bmp" ;
 };
 #endif
+
 
 
 
