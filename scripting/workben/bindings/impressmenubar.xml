@@ -281,7 +281,7 @@
    <menu:menuitem menu:id="slot:5904" menu:helpid="5904" menu:label="~Configure..."/>
    <menu:menu menu:id="slot:4" menu:label="Scripting Add-on's">
     <menu:menupopup>
-     <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteMenuBinding()" menu:label="Assign Scrpt to ~Menu..."/>
+     <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteMenuBinding()" menu:label="Assign Script to ~Menu..."/>
      <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteKeyBinding" menu:label="Assign Script to ~Key..."/>
      <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteEventBinding()" menu:label="Assign Script to ~Event..."/>
      <menu:menuitem menu:id="script://Interactive.BeanShell" menu:label="Interactive ~Beanshell Scripting..."/>
