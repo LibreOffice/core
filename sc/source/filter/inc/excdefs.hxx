@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-31 10:58:54 $
+ *  last change: $Author: dr $ $Date: 2001-02-07 15:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,12 @@
 // row height
 #define EXC_ROW_VALZEROHEIGHT       0x00FF
 #define EXC_ROW_FLAGDEFHEIGHT       0x8000
+
+//_________________________________________________________
+// (0x0236) TABLE
+
+#define EXC_TABOP_ROW               0x0004
+#define EXC_TABOP_BOTH              0x0008
 
 //_________________________________________________________
 // Specials for outlines

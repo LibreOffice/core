@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:16:27 $
+ *  last change: $Author: dr $ $Date: 2001-02-07 15:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1269,6 +1269,10 @@ FltError ImportExcel8::Read( void )
                         Boolerr34();
                         eAkt = Z_Biff8T;
                         break;
+                    case 0x0236:
+                        TableOp();
+                        eAkt = Z_Biff8T;
+                        break;
                     case 0x027E:                        // RK           [  34    ]
                         Rk();
                         eAkt = Z_Biff8T;
@@ -1357,6 +1361,7 @@ FltError ImportExcel8::Read( void )
                     case 0x0204: Label(); break;        // LABEL        [  34    ]
                     case 0x0205: Boolerr34(); break;    // BOOLERR      [  34    ]
                     case 0x0207: RecString(); break;    // STRING       [ 2345   ]
+                    case 0x0236: TableOp(); break;      // TABLE
                     case 0x027E: Rk(); break;           // RK           [  34    ]
                     case 0x0809:                        // BOF          [    5   ]
                         Bof5();

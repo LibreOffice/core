@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:19:02 $
+ *  last change: $Author: dr $ $Date: 2001-02-07 15:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,8 @@ class ImportExcel8 : public ImportExcel
         void                    Dv( void );                     // 0x01BE
         void                    Dimensions( void );             // 0x0200
         void                    Name( void );                   // 0x0218
-        void                    Style( void );
+        void                    TableOp( void );                // 0x0236
+        void                    Style( void );                  // 0x0293
 
         void                    ChartScl( void );               // 0x00A0
         void                    ChartChart( void );             // 0x1002
