@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:54:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,7 +534,10 @@ sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const ::rtl::OUString& aFilte
 
                             if( xFilterDialog->execute() )
                             {
-                                GetMediaDescr() << aPropsForDialog;
+                                uno::Sequence< beans::PropertyValue > aPropsFromDialog =
+                                                                            xFilterProperties->getPropertyValues();
+                                for ( sal_Int32 nInd = 0; nInd < aPropsFromDialog.getLength(); nInd++ )
+                                    GetMediaDescr()[aPropsFromDialog[nInd].Name] = aPropsFromDialog[nInd].Value;
                             }
                             else
                             {
