@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:02:33 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ SFX_IMPL_OBJECTFACTORY(
     simpress,
     SvGlobalName(SO3_SIMPRESS_CLASSID) )
 {
-    DrawDocShell::Factory().SetCreateNewSlotId( SID_SD_AUTOPILOT );
+    DrawDocShell::Factory().SetCreateNewSlotId( SID_NEWSD );
     DrawDocShell::Factory().SetDocumentServiceName( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) );
     DrawDocShell::Factory().RegisterMenuBar( SdResId( RID_DRAW_DEFAULTMENU ) );
     DrawDocShell::Factory().RegisterAccel( SdResId( RID_DRAW_DEFAULTACCEL ) );
