@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-09 14:58:24 $
+ *  last change: $Author: hro $ $Date: 2001-05-14 07:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2428,7 +2428,11 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
         osl::FileBase::RC next = err;
         if( err == osl::FileBase::E_None )
         {
+#ifdef TF_FILEURL
+            sal_Int32 n_Mask = FileStatusMask_FileURL | FileStatusMask_FileName | FileStatusMask_Type;
+#else
             sal_Int32 n_Mask = FileStatusMask_FilePath | FileStatusMask_FileName | FileStatusMask_Type;
+#endif
 
             osl::DirectoryItem aDirItem;
 
@@ -2444,8 +2448,13 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
                 sal_Int32 newTypeToCopy = IsDocument ? -1 : +1;
 
                 rtl::OUString newSrcUnqPath;
+#ifdef TF_FILEURL
+                if( aFileStatus.isValid( FileStatusMask_FileURL ) )
+                    newSrcUnqPath = aFileStatus.getFileURL();
+#else
                 if( aFileStatus.isValid( FileStatusMask_FilePath ) )
                     newSrcUnqPath = aFileStatus.getFilePath();
+#endif
 
                 rtl::OUString newDstUnqPath = dstUnqPath;
                 rtl::OUString tit;
@@ -2573,7 +2582,11 @@ shell::remove( sal_Int32 CommandId,
                const rtl::OUString& aUnqPath,
                sal_Int32 IsWhat )
 {
+#ifdef TF_FILEURL
+    sal_Int32 nMask = FileStatusMask_Type | FileStatusMask_FileURL;
+#else
     sal_Int32 nMask = FileStatusMask_Type | FileStatusMask_FilePath;
+#endif
     osl::DirectoryItem aItem;
     osl::FileStatus aStatus( nMask );
 
@@ -2627,16 +2640,29 @@ shell::remove( sal_Int32 CommandId,
             oslFileStatus aStat;
 
             memset(&aStat,0,sizeof(aStat));
+
+            aStat.uStructSize=sizeof(aStat);
+#ifdef TF_FILEURL
+            rtl::OUString sFileURL;
+            rtl::OUString sLinkTargetURL;
+
+            aStat.pstrFileURL=&sFileURL.pData;
+            aStat.pstrLinkTargetURL=&sLinkTargetURL.pData;
+#else
             rtl::OUString sFilePath;
             rtl::OUString sNativePath;
 
-            aStat.uStructSize=sizeof(aStat);
             aStat.pstrFilePath=&sFilePath.pData;
             aStat.pstrNativePath=&sNativePath.pData;
+#endif
 
 //              aItem.getFileStatus( aStatus );
 
+#ifdef TF_FILEURL
+            osl_getFileStatus(pItem,&aStat,FileStatusMask_Type | FileStatusMask_FileURL);
+#else
             osl_getFileStatus(pItem,&aStat,FileStatusMask_Type | FileStatusMask_FilePath);
+#endif
 
 
 //              if(  aStatus.isValid( nMask ) &&
@@ -2658,7 +2684,11 @@ shell::remove( sal_Int32 CommandId,
             }
 
 //              name = aStatus.getFilePath();
+#ifdef TF_FILEURL
+            name = rtl::OUString(*aStat.pstrFileURL);
+#else
             name = rtl::OUString(*aStat.pstrFilePath);
+#endif
 
             remove( CommandId,
                     name,
@@ -2930,7 +2960,13 @@ sal_Bool SAL_CALL shell::getUnqFromUrl( const rtl::OUString& Url,rtl::OUString& 
         return false;
     }
 
+#ifdef TF_FILEURL
+    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Url,Unq );
+
+    Unq = Url;
+#else
     sal_Bool err = osl::FileBase::E_None != osl::FileBase::getNormalizedPathFromFileURL( Url,Unq );
+#endif
 
     sal_Int32 l = Unq.getLength()-1;
     if( ! err && Unq.getStr()[ l ] == '/' &&
@@ -2942,6 +2978,13 @@ sal_Bool SAL_CALL shell::getUnqFromUrl( const rtl::OUString& Url,rtl::OUString& 
 
 sal_Bool SAL_CALL shell::getUrlFromUnq( const rtl::OUString& Unq,rtl::OUString& Url )
 {
+#ifdef TF_FILEURL
+    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Unq,Url );
+
+    Url = Unq;
+
+    return err;
+#else
     if( Unq.compareToAscii( "//./" ) == 0 )
     {
         Url = rtl::OUString::createFromAscii( "file:///" );
@@ -2955,6 +2998,7 @@ sal_Bool SAL_CALL shell::getUrlFromUnq( const rtl::OUString& Unq,rtl::OUString& 
     }
     sal_Bool err = osl::FileBase::E_None != osl::FileBase::getFileURLFromNormalizedPath( aUnq,Url );
     return err;
+#endif
 }
 
 
@@ -2964,7 +3008,11 @@ sal_Bool SAL_CALL shell::getUrlFromUnq( const rtl::OUString& Unq,rtl::OUString& 
 
 void SAL_CALL shell::getMaskFromProperties( sal_Int32& n_Mask, const uno::Sequence< beans::Property >& seq )
 {
+#ifdef TF_FILEURL
+    n_Mask = FileStatusMask_FileURL;
+#else
     n_Mask = FileStatusMask_FilePath;
+#endif
 
     rtl::OUString PropertyName;
     for( sal_Int32 i = 0; i < seq.getLength(); ++i )
@@ -3177,7 +3225,11 @@ shell::getv(
     osl::FileStatus aFileStatus( n_Mask );
     aDirItem.getFileStatus( aFileStatus );
 
+#ifdef TF_FILEURL
+    aUnqPath = aFileStatus.getFileURL();
+#else
     aUnqPath = aFileStatus.getFilePath();
+#endif
     aIsRegular = aFileStatus.getFileType() == osl::FileStatus::Regular;
 
     registerNotifier( aUnqPath,pNotifier );
