@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2001-07-24 20:35:20 $
+ *  last change: $Author: os $ $Date: 2001-07-30 13:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,15 +58,6 @@
  *
  *
  ************************************************************************/
-//==================================================================
-// BibDataManager
-//
-//
-//
-// $Author: obo $ $Date: 2001-07-24 20:35:20 $ $Revision: 1.20 $
-// $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
-//------------------------------------------------------------------
-
 #include "bib.hrc"
 #include "datman.hrc"
 ModalDialog RID_DLG_MAPPING
@@ -74,7 +65,7 @@ ModalDialog RID_DLG_MAPPING
     HelpID = HID_DLG_MAPPING;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 391 , 181 ) ;
+    Size = MAP_APPFONT ( 391 , 195 ) ;
     Moveable = TRUE ;
     Text = "Spaltenzuordung für Tabelle %1";
     Text [ENGLISH] = "Column assignment for table %1";
@@ -144,322 +135,322 @@ ModalDialog RID_DLG_MAPPING
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_AUTHOR
+    FixedText FT_YEAR
     {
         Pos = MAP_APPFONT ( 229 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_AUTHOR
+    ListBox LB_YEAR
     {
         Pos = MAP_APPFONT ( 282 , 13 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_TITLE
+    FixedText FT_AUTHOR
     {
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_TITLE
+    ListBox LB_AUTHOR
     {
         Pos = MAP_APPFONT ( 65 , 28 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_MONTH
+    FixedText FT_TITLE
     {
         Pos = MAP_APPFONT ( 118 , 29 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_MONTH
+    ListBox LB_TITLE
     {
         Pos = MAP_APPFONT ( 171 , 28 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_YEAR
-    {
-        Pos = MAP_APPFONT ( 229 , 29 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-    };
-    ListBox LB_YEAR
-    {
-        Pos = MAP_APPFONT ( 282 , 28 ) ;
-        Size = MAP_APPFONT ( 50 , 60 ) ;
-        DropDown = TRUE;
-    };
-    FixedText FT_ISBN
+    FixedText FT_PUBLISHER
     {
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_ISBN
+    ListBox LB_PUBLISHER
     {
         Pos = MAP_APPFONT ( 65 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_BOOKTITLE
+    FixedText FT_ADDRESS
     {
         Pos = MAP_APPFONT ( 118 , 44 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_BOOKTITLE
+    ListBox LB_ADDRESS
     {
         Pos = MAP_APPFONT ( 171, 43 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_CHAPTER
+    FixedText FT_ISBN
     {
         Pos = MAP_APPFONT ( 229 , 44 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_CHAPTER
+    ListBox LB_ISBN
     {
         Pos = MAP_APPFONT ( 282 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_EDITION
+    FixedText FT_CHAPTER
     {
         Pos = MAP_APPFONT ( 12 , 59 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_EDITION
+    ListBox LB_CHAPTER
     {
         Pos = MAP_APPFONT ( 65 , 58 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_EDITOR
+    FixedText FT_PAGES
     {
         Pos = MAP_APPFONT ( 118 , 59 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_EDITOR
+    ListBox LB_PAGES
     {
         Pos = MAP_APPFONT ( 171, 58) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_HOWPUBLISHED
-    {
-        Pos = MAP_APPFONT ( 229 , 59 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-    };
-    ListBox LB_HOWPUBLISHED
-    {
-        Pos = MAP_APPFONT ( 282 , 58 ) ;
-        Size = MAP_APPFONT ( 50 , 60 ) ;
-        DropDown = TRUE;
-    };
-    FixedText FT_INSTITUTION
+    FixedText FT_EDITOR
     {
         Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_INSTITUTION
+    ListBox LB_EDITOR
     {
         Pos = MAP_APPFONT ( 65 , 73 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_JOURNAL
+    FixedText FT_EDITION
     {
         Pos = MAP_APPFONT ( 118 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_JOURNAL
+    ListBox LB_EDITION
     {
         Pos = MAP_APPFONT ( 171 , 73 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_NOTE
-    {
-        Pos = MAP_APPFONT ( 229 , 74 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-    };
-    ListBox LB_NOTE
-    {
-        Pos = MAP_APPFONT ( 282 , 73 ) ;
-        Size = MAP_APPFONT ( 50 , 60 ) ;
-        DropDown = TRUE;
-    };
-    FixedText FT_ANNOTE
+    FixedText FT_BOOKTITLE
     {
         Pos = MAP_APPFONT ( 12, 89 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_ANNOTE
+    ListBox LB_BOOKTITLE
     {
         Pos = MAP_APPFONT ( 65, 88 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_NUMBER
+    FixedText FT_VOLUME
     {
         Pos = MAP_APPFONT ( 118 , 89 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_NUMBER
+    ListBox LB_VOLUME
     {
         Pos = MAP_APPFONT ( 171 , 88 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_ORGANIZATIONS
+    FixedText FT_HOWPUBLISHED
     {
         Pos = MAP_APPFONT ( 229 , 89 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_ORGANIZATIONS
+    ListBox LB_HOWPUBLISHED
     {
         Pos = MAP_APPFONT ( 282, 88 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_PAGES
+    FixedText FT_ORGANIZATIONS
     {
         Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_PAGES
+    ListBox LB_ORGANIZATIONS
     {
         Pos = MAP_APPFONT ( 65 , 103 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_PUBLISHER
+    FixedText FT_INSTITUTION
     {
         Pos = MAP_APPFONT ( 118 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_PUBLISHER
+    ListBox LB_INSTITUTION
     {
-        Pos = MAP_APPFONT ( 171, 103 ) ;
-        Size = MAP_APPFONT ( 50 , 60 ) ;
-        DropDown = TRUE;
-    };
-    FixedText FT_ADDRESS
-    {
-        Pos = MAP_APPFONT ( 229 , 104 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-    };
-    ListBox LB_ADDRESS
-    {
-        Pos = MAP_APPFONT ( 282 , 103 ) ;
+        Pos = MAP_APPFONT ( 171 , 103) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
     FixedText FT_SCHOOL
     {
-        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Pos = MAP_APPFONT ( 229 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
     ListBox LB_SCHOOL
     {
-        Pos = MAP_APPFONT ( 65 , 118 ) ;
-        Size = MAP_APPFONT ( 50 , 60 ) ;
-        DropDown = TRUE;
-    };
-    FixedText FT_SERIES
-    {
-        Pos = MAP_APPFONT ( 118 , 119 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-    };
-    ListBox LB_SERIES
-    {
-        Pos = MAP_APPFONT ( 171 , 118) ;
+        Pos = MAP_APPFONT ( 282 , 103 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
     FixedText FT_REPORTTYPE
     {
-        Pos = MAP_APPFONT ( 229 , 119 ) ;
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
     ListBox LB_REPORTTYPE
     {
-        Pos = MAP_APPFONT ( 282 , 118 ) ;
+        Pos = MAP_APPFONT ( 65 , 118 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_VOLUME
+    FixedText FT_MONTH
+    {
+        Pos = MAP_APPFONT ( 118 , 119 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_MONTH
+    {
+        Pos = MAP_APPFONT ( 171 , 118) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_JOURNAL
     {
         Pos = MAP_APPFONT ( 12 , 134 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_VOLUME
+    ListBox LB_JOURNAL
     {
         Pos = MAP_APPFONT ( 65 , 133) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_URL
+    FixedText FT_NUMBER
     {
         Pos = MAP_APPFONT ( 118 , 134 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_URL
+    ListBox LB_NUMBER
     {
         Pos = MAP_APPFONT ( 171 , 133 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_CUSTOM1
+    FixedText FT_SERIES
     {
         Pos = MAP_APPFONT ( 229 , 134 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_CUSTOM1
+    ListBox LB_SERIES
     {
         Pos = MAP_APPFONT ( 282 , 133 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_CUSTOM2
+    FixedText FT_ANNOTE
     {
         Pos = MAP_APPFONT ( 12 , 149 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_CUSTOM2
+    ListBox LB_ANNOTE
     {
         Pos = MAP_APPFONT ( 65 , 148 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_CUSTOM3
+    FixedText FT_NOTE
     {
         Pos = MAP_APPFONT ( 118 , 149 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_CUSTOM3
+    ListBox LB_NOTE
     {
         Pos = MAP_APPFONT ( 171 , 148 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_CUSTOM4
+    FixedText FT_URL
     {
         Pos = MAP_APPFONT ( 229 , 149 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_CUSTOM4
+    ListBox LB_URL
     {
         Pos = MAP_APPFONT ( 282, 148 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
-    FixedText FT_CUSTOM5
+    FixedText FT_CUSTOM1
     {
         Pos = MAP_APPFONT ( 12 , 164 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
     };
-    ListBox LB_CUSTOM5
+    ListBox LB_CUSTOM1
     {
         Pos = MAP_APPFONT ( 65 , 163 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM2
+    {
+        Pos = MAP_APPFONT ( 118 , 164 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_CUSTOM2
+    {
+        Pos = MAP_APPFONT ( 171 , 163 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM3
+    {
+        Pos = MAP_APPFONT ( 229, 164 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_CUSTOM3
+    {
+        Pos = MAP_APPFONT ( 282 , 163 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM4
+    {
+        Pos = MAP_APPFONT ( 12 , 178 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_CUSTOM4
+    {
+        Pos = MAP_APPFONT ( 65 , 177 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM5
+    {
+        Pos = MAP_APPFONT ( 118 , 178 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_CUSTOM5
+    {
+        Pos = MAP_APPFONT ( 171 , 177 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
     };
