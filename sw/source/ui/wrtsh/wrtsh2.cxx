@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:41:31 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,24 +387,17 @@ void SwWrtShell::ClickToField( const SwField& rFld, USHORT nFilter )
     case RES_MACROFLD:
         {
             const SwMacroField *pFld = (const SwMacroField*)&rFld;
-            String sLibName(pFld->GetLibName());
-            String sMacroName(pFld->GetMacroName());
+            String sText( rFld.GetPar2() );
+            String sRet( sText );
+            ExecMacro( pFld->GetSvxMacro(), &sRet );
 
-            if( sLibName.Len() && sMacroName.Len() )
+            // return Wert veraendert?
+            if( sRet != sText )
             {
-                String sText( rFld.GetPar2() );
-                String sRet( sText );
-                SvxMacro aMacro( sMacroName, sLibName, STARBASIC );
-                ExecMacro( aMacro, &sRet );
-
-                // return Wert veraendert?
-                if( sRet != sText )
-                {
-                    StartAllAction();
-                    ((SwField&)rFld).SetPar2( sRet );
-                    ((SwField&)rFld).GetTyp()->UpdateFlds();
-                    EndAllAction();
-                }
+                StartAllAction();
+                ((SwField&)rFld).SetPar2( sRet );
+                ((SwField&)rFld).GetTyp()->UpdateFlds();
+                EndAllAction();
             }
         }
         break;
