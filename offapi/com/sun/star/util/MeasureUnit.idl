@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MeasureUnit.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 12:53:39 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 14:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,26 +82,26 @@ constants MeasureUnit
     /** all measures for this component are in millimeter */
     const short MM = 2;
 
+    /** all measures for this component are in centimeters */
+    const short CM = 3;
+
     /** all measures for this component are in 1000th inch */
-    const short INCH_1000TH = 3;
+    const short INCH_1000TH = 4;
 
     /** all measures for this component are in 100th inch */
-    const short INCH_100TH = 4;
+    const short INCH_100TH = 5;
 
     /** all measures for this component are in 10th inch */
-    const short INCH_10TH = 5;
+    const short INCH_10TH = 6;
 
     /** all measures for this component are in inch */
-    const short INCH = 6;
+    const short INCH = 7;
 
     /** all measures for this component are in points */
-    const short POINT = 7;
+    const short POINT = 8;
 
     /** all measures for this component are in twips */
-    const short TWIP = 8;
-
-    /** all measures for this component are in centimeters */
-    const short CM = 9;
+    const short TWIP = 9;
 
     /** all measures for this component are in meters */
     const short M = 10;
