@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: sb $ $Date: 2001-02-09 10:28:17 $
+#   last change: $Author: sb $ $Date: 2001-02-09 12:41:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,6 +159,7 @@ IDLFILES=\
     PropertySetRegistry.idl\
     RememberAuthentication.idl\
     RemoteAccessContentProvider.idl\
+    RemoteContentProviderAcceptor.idl\
     RecipientInfo.idl\
     ResultSetException.idl\
     Rule.idl\
