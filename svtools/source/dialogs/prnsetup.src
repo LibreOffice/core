@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:16:23 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 10:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ String STR_SVT_PRNDLG_PRINTING
     Text [ italian ] = "Stampa" ;
     Text [ spanish ] = "Imprimir" ;
     Text [ french ] = "Imprimer" ;
-    Text [ dutch ] = "Printwn" ;
+    Text [ dutch ] = "Afdrukken" ;
     Text[ chinese_simplified ] = "´òÓ¡";
     Text[ russian ] = "Ïå÷àòü";
     Text[ polish ] = "Drukuj";
