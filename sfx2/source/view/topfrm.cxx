@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:20:24 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,9 +689,8 @@ IMPL_LINK( SfxTopWindow_Impl, CloserHdl, void*, pVoid )
 
 void SfxTopFrame::SetMenuBarOn_Impl( BOOL bOn )
 {
-/*
     pImp->bMenuBarOn = bOn;
-    if ( !bOn )
+/*    if ( !bOn )
         SetMenuBar_Impl( 0 );
 */
     Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
@@ -716,9 +715,11 @@ void SfxTopFrame::SetMenuBarOn_Impl( BOOL bOn )
 
 BOOL SfxTopFrame::IsMenuBarOn_Impl() const
 {
-/*
     return pImp->bMenuBarOn;
-*/
+}
+
+BOOL SfxTopFrame::IsMenuBarVisible_Impl() const
+{
     Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
     Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
 
@@ -822,6 +823,10 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     SFX_ITEMSET_ARG(
         pSet, pEditItem, SfxBoolItem, SID_VIEWONLY, sal_False);
 
+    // Plugin (external InPlace)
+    SFX_ITEMSET_ARG(
+        pSet, pPluginMode, SfxUInt16Item, SID_PLUGIN_MODE, sal_False);
+
     if ( pEditItem  && pEditItem->GetValue() )
         SetMenuBarOn_Impl( FALSE );
 
@@ -834,7 +839,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     // Wenn z.B. eine Fenstergr"o\se gesetzt wurde, soll keine Fensterinformation
     // aus den Dokument geladen werden, z.B. weil InsertDocument seinerseits
     // aus LoadWindows_Impl aufgerufen wurde!
-    if ( pDoc && !pAreaItem && !pViewIdItem && !pModeItem &&
+    if ( !pPluginMode && pDoc && !pAreaItem && !pViewIdItem && !pModeItem &&
             !pImp->bHidden && pDoc->LoadWindows_Impl( this ) )
     {
         pDoc->OwnerLock( sal_False );
@@ -930,12 +935,18 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         }
     }
 
+    if ( pPluginMode && !pFrame->GetViewShell()->UseObjectSize() )
+        pFrame->LockAdjustPosSizePixel();
+
     if ( !pImp->bHidden )
     {
         if ( pDoc->IsHelpDocument() )
             pFrame->GetDispatcher()->HideUI( TRUE );
         else
             pFrame->GetDispatcher()->HideUI( FALSE );
+
+        if ( pPluginMode && pPluginMode->GetValue() == 3)
+            GetWorkWindow_Impl()->SetInternalDockingAllowed(FALSE);
 
         pFrame->Show();
         GetWindow().Show();
@@ -954,6 +965,12 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     // Jetzt UpdateTitle, hidden TopFrames haben sonst keinen Namen!
     pFrame->UpdateTitle();
 
+    if ( pPluginMode && pPluginMode->GetValue() == 3)
+    {
+        pFrame->UnlockAdjustPosSizePixel();
+        GetCurrentViewFrame()->ForceInnerResize_Impl( FALSE );
+    }
+    else
     if ( pFrame->GetViewShell()->UseObjectSize() )
     {
         GetCurrentViewFrame()->UnlockAdjustPosSizePixel();
