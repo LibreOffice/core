@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-15 11:25:48 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 06:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,12 +262,11 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUStrin
 
                 if (xMetaData.is())
                 {
-                    // we want all table types, the standard types are VIEW and TABLE
-                    Sequence< ::rtl::OUString > sTableTypes(2);
-                    sTableTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-                    sTableTypes[1] = s_sTableTypeView;
                     // we want all catalogues, all schemas, all tables
+                    Sequence< ::rtl::OUString > sTableTypes(1);
                     const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
+                    sTableTypes[0] = sAll;
+
                     xTables = xMetaData->getTables(Any(), sAll, sAll, sTableTypes);
                 }
                 Reference< XRow > xCurrentRow(xTables, UNO_QUERY);
@@ -528,6 +527,9 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/05/15 11:25:48  fs
+ *  #86996# use the connection pool instead of the driver manager
+ *
  *  Revision 1.11  2001/03/29 08:06:35  oj
  *  only assign array when length != 0
  *
