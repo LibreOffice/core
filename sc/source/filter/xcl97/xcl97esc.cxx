@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:25:33 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef _SVDOOLE2_HXX //autogen wg. SdrOle2Obj
 #include <svx/svdoole2.hxx>
+#endif
+#ifndef _SVX_UNOAPI_HXX_
+#include <svx/unoapi.hxx>
 #endif
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
@@ -271,9 +274,13 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
                 if ( pObj )
                 {
                     if ( !bInGroup )
-                        pCurrAppData->SetClientAnchor(
-                            new XclEscherClientAnchor( rRootData,
-                            XclEscherClientAnchor::GetMoveSizeFlag( *pObj ) ) );
+                    {
+                        /*  Create a dummy anchor carrying the flags. Real coordinates are
+                            calculated later in WriteData(EscherEx&,const Rectangle&). */
+                        XclExpEscherAnchor* pAnchor = new XclExpEscherAnchor( rRoot );
+                        pAnchor->SetFlags( *pObj );
+                        pCurrAppData->SetClientAnchor( pAnchor );
+                    }
                     const SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
                     if ( pTextObj )
                     {
@@ -287,8 +294,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
                 else
                 {
                     if ( !bInGroup )
-                        pCurrAppData->SetClientAnchor(
-                            new XclEscherClientAnchor( rRootData, 0 ) );
+                        pCurrAppData->SetClientAnchor( new XclExpEscherAnchor( rRoot ) );
                 }
             }
             else if ( nAdditionalText == 3 )
@@ -408,248 +414,184 @@ void XclEscher::AddSdrPage( RootData& rRootData )
 }
 
 
-// --- class XclEscherClientAnchor -----------------------------------
+// Escher client anchor =======================================================
 
-XclEscherClientAnchor::XclEscherClientAnchor( RootData& rRoot, UINT16 nFlagP )
-        :
-        pRootData( &rRoot ),
-        nFlag( nFlagP ),
-        nCol1(0),
-        nX1(0),
-        nRow1(0),
-        nY1(0),
-        nCol2(0),
-        nX2(0),
-        nRow2(0),
-        nY2(0)
+XclExpEscherAnchor::XclExpEscherAnchor( const XclExpRoot& rRoot, sal_uInt16 nFlags ) :
+    XclExpRoot( rRoot ),
+    maAnchor( rRoot.GetScTab() ),
+    mnFlags( nFlags )
 {
 }
 
-
-XclEscherClientAnchor::XclEscherClientAnchor( RootData& rRoot, const SdrObject& rObj )
-        :
-        pRootData( &rRoot )
+XclExpEscherAnchor::XclExpEscherAnchor( const XclExpRoot& rRoot, const SdrObject& rSdrObj ) :
+    XclExpRoot( rRoot ),
+    maAnchor( rRoot.GetScTab() )
 {
-    nFlag = GetMoveSizeFlag( rObj );
-    const MapMode aSrc( MAP_100TH_MM );
-    const MapMode aDst( MAP_TWIP );
-    Rectangle aRect( OutputDevice::LogicToLogic( rObj.GetCurrentBoundRect(), aSrc, aDst ) );
-    Init( aRect );
+    SetFlags( rSdrObj );
+    maAnchor.SetRect( GetDoc(), rSdrObj.GetCurrentBoundRect(), MAP_100TH_MM );
+}
+
+void XclExpEscherAnchor::SetFlags( const SdrObject& rSdrObj )
+{
+    // Special case "page anchor" (X==0,Y==1) -> lock pos and size.
+    const Point& rPos = rSdrObj.GetAnchorPos();
+    mnFlags = ((rPos.X() == 0) && (rPos.Y() == 1)) ? EXC_ESC_ANCHOR_LOCKED : 0;
 }
 
 
-UINT16 XclEscherClientAnchor::GetMoveSizeFlag( const SdrObject& rObj )
+BOOL XclExpEscherAnchor::FindNextCol( USHORT& nCol, short nDir )
 {
-    // X==0,Y==1 := anchored at page => don't move, don't size
-    const Point& rAnchor = rObj.GetAnchorPos();
-    return (rAnchor.X() == 0 && rAnchor.Y() == 1) ? 3 : 0;
-}
-
-
-void XclEscherClientAnchor::Init( const Rectangle& rRect )
-{
-    const ScDocument* pDoc = pRootData->pDoc;
-    const USHORT nTab = pRootData->pER->GetScTab();
-
-    long nWidth = 0;
-    ColX( nCol1, nX1, 0, nWidth, rRect.TopLeft().X(), pDoc, nTab );
-    ColX( nCol2, nX2, nCol1, nWidth, rRect.BottomRight().X(), pDoc, nTab );
-
-    long nHeight = 0;
-    RowY( nRow1, nY1, 0, nHeight, rRect.TopLeft().Y(), pDoc, nTab );
-    RowY( nRow2, nY2, nRow1, nHeight, rRect.BottomRight().Y(), pDoc, nTab );
-}
-
-
-void XclEscherClientAnchor::ColX( UINT16& nCol, UINT16& nX, UINT16 nStart,
-            long& nWidth, long nPosX, const ScDocument* pDoc, USHORT nTab )
-{
-    long nW = 0;
-    for ( nCol = nStart; nCol <= MAXCOL; nCol++ )
+    while ( nDir < 0 ? 0 < nCol : nCol < MAXCOL )
     {
-        nW = pDoc->GetColWidth( nCol, nTab );
-        if ( nWidth + nW > nPosX )
-            break;
-        nWidth += nW;
+        nCol += nDir;
+        if ( !(GetDoc().GetColFlags( nCol, maAnchor.mnScTab ) & CR_HIDDEN) )
+            return TRUE;
     }
-    long n = nPosX - nWidth;
-    DBG_ASSERT( n < nW, "XclEscherClientAnchor::ColX: width?" );
-    nX = ( nW ? (UINT16) ((n * 1024) / nW) : 0 );
+    return FALSE;
 }
 
 
-void XclEscherClientAnchor::RowY( UINT16& nRow, UINT16& nY, UINT16 nStart,
-            long& nHeight, long nPosY, const ScDocument* pDoc, USHORT nTab )
+BOOL XclExpEscherAnchor::FindNextRow( USHORT& nRow, short nDir )
 {
-    long nH = 0;
-    for ( nRow = nStart; nRow <= MAXROW; nRow++ )
+    while ( nDir < 0 ? 0 < nRow : nRow < MAXROW )
     {
-        nH = pDoc->GetRowHeight( nRow, nTab );
-        if ( nHeight + nH > nPosY )
-            break;
-        nHeight += nH;
+        nRow += nDir;
+        if ( !(GetDoc().GetRowFlags( nRow, maAnchor.mnScTab ) & CR_HIDDEN) )
+            return TRUE;
     }
-    long n = nPosY - nHeight;
-    DBG_ASSERT( n < nH, "XclEscherClientAnchor::RowY: width?" );
-    nY = ( nH ? (UINT16) ((n * 256) / nH) : 0 );
+    return FALSE;
 }
 
 
-// create comment note textbox, try 2 cols by 5 rows
-XclEscherClientAnchor::XclEscherClientAnchor( const ScDocument* pDoc,
-            const ScAddress& rPos )
-        :
-        pRootData( NULL ),
-        nFlag(2)    // move but don't size
+void XclExpEscherAnchor::WriteData( EscherEx& rEx, const Rectangle& rRect )
 {
-    USHORT nTab = rPos.Tab();
+    // the rectangle is already in twips
+    maAnchor.SetRect( GetDoc(), rRect, MAP_TWIP );
+    WriteData( rEx );
+}
+
+
+void XclExpEscherAnchor::WriteData( EscherEx& rEx ) const
+{
+    rEx.AddAtom( 18, ESCHER_ClientAnchor );
+    rEx.GetStream() << mnFlags << maAnchor;
+}
+
+
+// ----------------------------------------------------------------------------
+
+XclExpEscherNoteAnchor::XclExpEscherNoteAnchor( const XclExpRoot& rRoot, const ScAddress& rPos ) :
+    XclExpEscherAnchor( rRoot, EXC_ESC_ANCHOR_SIZELOCKED )
+{
     BOOL bBad = FALSE;
-    nCol1 = rPos.Col();
+    maAnchor.mnLCol = rPos.Col();
     // go right
-    if ( !FindNextCol( nCol1, pDoc, nTab, 1 ) )
+    if ( !FindNextCol( maAnchor.mnLCol, 1 ) )
         bBad = TRUE;
     else
     {
-        nCol2 = nCol1;
-        bBad = !FindNextCol( nCol2, pDoc, nTab, 1 );
+        maAnchor.mnRCol = maAnchor.mnLCol;
+        bBad = !FindNextCol( maAnchor.mnRCol, 1 );
     }
     if ( bBad )
     {   // go left
         bBad = FALSE;
-        nCol2 = rPos.Col();
-        if ( !FindNextCol( nCol2, pDoc, nTab, -1 ) )
-            nCol1 = nCol2 = rPos.Col(); // hopeless
+        maAnchor.mnRCol = rPos.Col();
+        if ( !FindNextCol( maAnchor.mnRCol, -1 ) )
+            maAnchor.mnLCol = maAnchor.mnRCol = rPos.Col(); // hopeless
         else
         {
-            nCol1 = nCol2;
-            if ( !FindNextCol( nCol1, pDoc, nTab, -1 ) )
-                nCol1 = nCol2;
+            maAnchor.mnLCol = maAnchor.mnRCol;
+            if ( !FindNextCol( maAnchor.mnLCol, -1 ) )
+                maAnchor.mnLCol = maAnchor.mnRCol;
         }
     }
-    if ( nCol1 == nCol2 )
+    if ( maAnchor.mnLCol == maAnchor.mnRCol )
     {
-        nX1 = 0;
-        nX2 = 1023;
+        maAnchor.mnLX = 0;
+        maAnchor.mnRX = 1023;
     }
     else
     {
-        nX1 = 0x00c0;
-        nX2 = 0x0326;
+        maAnchor.mnLX = 0x00c0;
+        maAnchor.mnRX = 0x0326;
     }
 
     BOOL bTop = FALSE;
-    nRow1 = rPos.Row();
-    switch ( nRow1 )
+    maAnchor.mnTRow = rPos.Row();
+    switch ( maAnchor.mnTRow )
     {
         case 0 :
         case 1 :
-            nRow1 = 0;
-            bTop = (pDoc->GetRowFlags( nRow1, nTab ) & CR_HIDDEN) == 0;
+            maAnchor.mnTRow = 0;
+            bTop = (GetDoc().GetRowFlags( maAnchor.mnTRow, maAnchor.mnScTab ) & CR_HIDDEN) == 0;
         break;
         default:
-            nRow1 -= 2;
+            maAnchor.mnTRow -= 2;
     }
     // go down
-    if ( !bTop && !FindNextRow( nRow1, pDoc, nTab, 1 ) )
+    if ( !bTop && !FindNextRow( maAnchor.mnTRow, 1 ) )
         bBad = TRUE;
     else
     {
-        nRow2 = nRow1;
+        maAnchor.mnBRow = maAnchor.mnTRow;
         for ( int j=0; j<4 && !bBad; j++ )
         {
-            bBad = !FindNextRow( nRow2, pDoc, nTab, 1 );
+            bBad = !FindNextRow( maAnchor.mnBRow, 1 );
         }
     }
     if ( bBad )
     {   // go up
         bBad = FALSE;
-        nRow2 = rPos.Row();
-        if ( !FindNextRow( nRow2, pDoc, nTab, -1 ) )
-            nRow1 = nRow2 = rPos.Row(); // hopeless
+        maAnchor.mnBRow = rPos.Row();
+        if ( !FindNextRow( maAnchor.mnBRow, -1 ) )
+            maAnchor.mnTRow = maAnchor.mnBRow = rPos.Row(); // hopeless
         else
         {
-            nRow1 = nRow2;
+            maAnchor.mnTRow = maAnchor.mnBRow;
             for ( int j=0; j<4 && !bBad; j++ )
             {
-                USHORT nBkp = nRow1;
-                if ( !FindNextRow( nRow1, pDoc, nTab, -1 ) )
+                USHORT nBkp = maAnchor.mnTRow;
+                if ( !FindNextRow( maAnchor.mnTRow, -1 ) )
                 {
                     bBad = TRUE;
-                    nRow1 = nBkp;
+                    maAnchor.mnTRow = nBkp;
                 }
             }
         }
     }
-    if ( nRow1 == nRow2 )
+    if ( maAnchor.mnTRow == maAnchor.mnBRow )
     {
-        nY1 = 0;
-        nY2 = 255;
+        maAnchor.mnTY = 0;
+        maAnchor.mnBY = 255;
     }
-    else if ( nRow1 == 0 && nRow1 == rPos.Row() )
+    else if ( maAnchor.mnTRow == 0 && maAnchor.mnTRow == rPos.Row() )
     {
-        nY1 = 0x001e;
-        nY2 = 0x0078;
+        maAnchor.mnTY = 0x001e;
+        maAnchor.mnBY = 0x0078;
     }
     else
     {
-        nY1 = 0x0069;
-        nY2 = 0x00c4;
+        maAnchor.mnTY = 0x0069;
+        maAnchor.mnBY = 0x00c4;
     }
 }
 
 
-void XclEscherClientAnchor::SetDropDownPosition( const ScAddress& rAddr )
+// ----------------------------------------------------------------------------
+
+XclExpEscherDropDownAnchor::XclExpEscherDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rPos ) :
+    XclExpEscherAnchor( rRoot, EXC_ESC_ANCHOR_POSLOCKED )
 {
-    nCol1 = rAddr.Col();
-    nRow1 = rAddr.Row();
-    nCol2 = nCol1 + 1;
-    nRow2 = nRow1 + 1;
-    nX1 = nY1 = nX2 = nY2 = 0;
+    maAnchor.mnLCol = rPos.Col();
+    maAnchor.mnTRow = rPos.Row();
+    maAnchor.mnRCol = maAnchor.mnLCol + 1;
+    maAnchor.mnBRow = maAnchor.mnTRow + 1;
+    maAnchor.mnLX = maAnchor.mnTY = maAnchor.mnRX = maAnchor.mnBY = 0;
 }
 
 
-BOOL XclEscherClientAnchor::FindNextCol( USHORT& nCol, const ScDocument* pDoc,
-            USHORT nTab, short nDir )
-{
-    while ( nDir < 0 ? 0 < nCol : nCol < MAXCOL )
-    {
-        nCol += nDir;
-        if ( (pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN) == 0 )
-            return TRUE;
-    }
-    return FALSE;
-}
-
-
-BOOL XclEscherClientAnchor::FindNextRow( USHORT& nRow, const ScDocument* pDoc,
-            USHORT nTab, short nDir )
-{
-    while ( nDir < 0 ? 0 < nRow : nRow < MAXROW )
-    {
-        nRow += nDir;
-        if ( (pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN) == 0 )
-            return TRUE;
-    }
-    return FALSE;
-}
-
-
-void XclEscherClientAnchor::WriteData( EscherEx& rEx, const Rectangle& rRect )
-{
-    //! the rectangle is already in twips
-    Init( rRect );
-    WriteData( rEx );
-}
-
-
-void XclEscherClientAnchor::WriteData( EscherEx& rEx ) const
-{
-    rEx.AddAtom( 18, ESCHER_ClientAnchor );
-    rEx.GetStream() << nFlag
-        << nCol1 << nX1 << nRow1 << nY1
-        << nCol2 << nX2 << nRow2 << nY2;
-}
-
+// ============================================================================
 
 // --- class XclEscherClientData -------------------------------------
 
