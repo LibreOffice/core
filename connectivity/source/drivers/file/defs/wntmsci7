@@ -2232,3 +2232,4 @@ __CTA2?AVIllegalArgumentException@lang@star@sun@com@@
 ??_C@_0DG@MMJG@o?3?2CFG636?2wntmsci7?2inc?2comphelpe@
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBUNumberedSortingInfo@ucb@345@@Z
 ??1?$Reference@VXParameters@sdbc@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?getWarning@OSQLParseTreeIterator@connectivity@@QBE?AVSQLWarning@sdbc@star@sun@com@@XZ
