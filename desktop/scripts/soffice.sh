@@ -162,13 +162,12 @@ THREADS_TYPE=native_threads
 
 # misc. environment variables
 OPENOFFICE_MOZILLA_FIVE_HOME="$sd_inst/program"
+export OPENOFFICE_MOZILLA_FIVE_HOME
 
 unset XENVIRONMENT
 
-export OPENOFFICE_MOZILLA_FIVE_HOME
-
 # uncomment line below to disable anti aliasing of fonts
-#SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
+# SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
 
 # error message function
 err () {
@@ -179,7 +178,6 @@ err () {
 #
 # parse command line arguments
 #
-
 plugin_mode=false
 for DUMMY in ${1+"$@"}
 do
@@ -222,6 +220,33 @@ if [ "X${SO_REMOTE_START}" = "Xrsh" ]; then
         err "invalid rsh arguments host=\"$remote_server\", command=\"${remote_path}\""
     fi
 fi
+
+# pagein
+for sd_arg in ${1+"$@"} ; do
+    case ${sd_arg} in
+    -calc)
+        sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-calc"
+        break;
+        ;;
+    -draw)
+        sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-draw"
+        break;
+        ;;
+    -impress)
+        sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-impress"
+        break;
+        ;;
+    -writer)
+        sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-writer"
+        break;
+        ;;
+    *)
+        ;;
+    esac
+done
+
+sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-common"
+${sd_prog}/pagein -L${sd_prog} ${sd_pagein_args}
 
 # set path so that other apps can be started from soffice just by name
 PATH="$sd_prog":$PATH
