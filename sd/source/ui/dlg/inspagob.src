@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:49:40 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,11 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Text [ danish ] = "Indsæt sider/objekter" ;
     Text [ portuguese ] = "Inserir páginas/objectos" ;
     Text [ portuguese_brazilian ] = "Seiten/Objekte einf?en" ;
-    Text[ chinese_simplified ] = "²åÈëÒ³Ãæ»ò¶ÔÏó";
+    Text[ chinese_simplified ] = "æ’å…¥é¡µé¢æˆ–å¯¹è±¡";
     Text[ russian ] = "Âñòàâèòü ñëàéäû/îáúåêòû";
     Text[ polish ] = "Wstaw slajdy/obiekty";
-    Text[ japanese ] = "Íß°¼Ş/µÌŞ¼Şª¸Ä‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J­¶­±©Îª«¥ó";
+    Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾/ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥é é¢æˆ–ç‰©ä»¶";
     Text[ arabic ] = "ÅÏÑÇÌ ÕİÍÇÊ/ßÇÆäÇÊ";
     OKButton BTN_OK
     {
@@ -127,14 +127,14 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text [ danish ] = "Kæde" ;
         Text [ portuguese ] = "~Ligação" ;
         Text [ portuguese_brazilian ] = "~Verkn?fung" ;
-        Text[ chinese_simplified ] = "Á´½Ó(~L)";
+        Text[ chinese_simplified ] = "é“¾æ¥(~L)";
         Text[ russian ] = "~Ññûëêà";
         Text[ polish ] = "£¹cze";
-        Text[ japanese ] = "Øİ¸(~L)";
-        Text[ chinese_traditional ] = "±¶®|(~L)";
+        Text[ japanese ] = "ï¾˜ï¾ï½¸(~L)";
+        Text[ chinese_traditional ] = "æ·å¾‘(~L)";
         Text[ arabic ] = "ÇÑÊÈÇØ";
         Text[ greek ] = "Óıíäåóç";
-        Text[ korean ] = "¸µÅ©(~L)";
+        Text[ korean ] = "ë§í¬(~L)";
         Text[ turkish ] = "Bağlantı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vínculo";
@@ -158,23 +158,24 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ swedish ] = "Radera ej a~nvända bakgrundssidor";
         Text[ polish ] = "Usuñ nieu¿ywane strony t³a";
         Text[ portuguese_brazilian ] = "~Remove not used master pages";
-        Text[ japanese ] = "–¢g—p‚Ì”wŒiÍß°¼Ş‚Ííœ‚·‚é(~R)";
-        Text[ chinese_simplified ] = "Çå³ı²»²ÉÓÃµÄ±³¾°Ò³Ãæ(~R)";
-        Text[ chinese_traditional ] = "§R°£¤£¥Îªº­I´º­¶­±(~R)";
+        Text[ japanese ] = "æœªä½¿ç”¨ã®èƒŒæ™¯ï¾ï¾Ÿï½°ï½¼ï¾ã¯å‰Šé™¤ã™ã‚‹(~R)";
+        Text[ chinese_simplified ] = "æ¸…é™¤ä¸é‡‡ç”¨çš„èƒŒæ™¯é¡µé¢(~R)";
+        Text[ chinese_traditional ] = "åˆªé™¤ä¸ç”¨çš„èƒŒæ™¯é é¢(~R)";
         Text[ arabic ] = "ÍĞİ ÕİÍÇÊ ÇáÎáİíÉ ÇáÊí áã ÊõÓÊÚãá";
         Text[ greek ] = "ÄéáãñáöŞ ìç ÷ñçóéìïğïéïõìİ~íùí óåëéäşí öüíôïõ.";
-        Text[ korean ] = "»ç¿ëÇÏÁö ¾ÊÀº ¹è°æ ÆäÀÌÁö »èÁ¦(~R)";
+        Text[ korean ] = "ì‚¬ìš©í•˜ì§€ ì•Šì€ ë°°ê²½ í˜ì´ì§€ ì‚­ì œ(~R)";
         Text[ turkish ] = "Artalandaki kullanılmayan sayfaları sil";
         Text[ catalan ] = "~Eliminar páginas de fondo no usadas";
         Text[ finnish ] = "Poista käyttämättömät taus~tat";
     };
     Text[ greek ] = "ÅéóáãùãŞ áíôéêåéìİíùí/óåëßäùí";
-    Text[ korean ] = "½½¶óÀÌµå/°³Ã¼ »ğÀÔ";
+    Text[ korean ] = "ìŠ¬ë¼ì´ë“œ/ê°œì²´ ì‚½ì…";
     Text[ turkish ] = "Sayfa/nesne ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar páginas/objetos";
     Text[ finnish ] = "Lisää diat/objektit";
 };
+
 
 
 
