@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xpoly.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:34:19 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <math.h>
 #include <string.h>
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
@@ -1617,10 +1620,10 @@ SvStream& operator>>( SvStream& rIStream, XPolygon& rXPoly )
     else
     {
         // Feststellen, ob ueber die Operatoren gelesen werden muss
-#if (__SIZEOFLONG) != 4
+#if (SAL_TYPES_SIZEOFLONG) != 4
         if ( 1 )
 #else
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
         if ( rIStream.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN )
 #else
         if ( rIStream.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN )
@@ -1741,10 +1744,10 @@ SvStream& operator<<( SvStream& rOStream, const XPolygon& rXPoly )
     else
     {
         // Feststellen, ob ueber die Operatoren geschrieben werden muss
-#if (__SIZEOFLONG) != 4
+#if (SAL_TYPES_SIZEOFLONG) != 4
         if ( 1 )
 #else
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
         if ( rOStream.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN )
 #else
         if ( rOStream.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN )
