@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-18 17:22:26 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 16:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,36 @@ sal_Bool UCBContentHelper::IsDocument( const String& rContent )
 }
 
 // -----------------------------------------------------------------------
+
+Any UCBContentHelper::GetProperty( const String& rContent, const ::rtl::OUString& rName )
+{
+    sal_Bool bRet = sal_False;
+    INetURLObject aObj( rContent );
+    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+    try
+    {
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        return aCnt.getPropertyValue( rName );
+    }
+    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    {
+        DBG_WARNING( "CommandAbortedException" );
+    }
+    catch( ::com::sun::star::ucb::IllegalIdentifierException& )
+    {
+        DBG_WARNING( "IllegalIdentifierException" );
+    }
+    catch( ContentCreationException& )
+    {
+        DBG_WARNING( "IllegalIdentifierException" );
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+        DBG_WARNING( "Any other exception" );
+    }
+
+    return Any();
+}
 
 sal_Bool UCBContentHelper::IsFolder( const String& rContent )
 {

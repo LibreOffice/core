@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-06 15:04:56 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 16:33:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@ namespace utl
         static sal_Bool             IsFolder( const String& rContent );
         static sal_Bool             GetTitle( const String& rContent, String& rTitle );
         static sal_Bool             Kill( const String& rContent );
+
+        static ::com::sun::star::uno::Any GetProperty( const String& rURL, const ::rtl::OUString& rName );
 
         static ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                     GetFolderContents( const String& rFolder, sal_Bool bFolder, sal_Bool bSorted = sal_False );
