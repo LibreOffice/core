@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testfile.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:31 $
+ *  last change: $Author: hro $ $Date: 2001-05-11 12:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #endif
 
 using namespace osl;
+using namespace rtl;
 
 #define MAXIMPATH   256
 
@@ -159,10 +160,10 @@ sal_Bool Initialize( void )
 {
     DirectoryItem   aItem;
     FileStatus      aStatus( FileStatusMask_All );
-    rtl_uString     *strExeFilePath=NULL;
+    rtl_uString     *strExeFileURL=NULL;
     oslProcessError ProcessError;
 
-    rtl::OUString   iniFilePath;
+    rtl::OUString   iniFileURL;
     File            *pFile;
     sal_Unicode     *pExeFileCount;
 
@@ -178,40 +179,40 @@ sal_Bool Initialize( void )
 
     // Open to the ini-file
 
-    ProcessError=osl_getExecutableFile(&strExeFilePath);
+    ProcessError=osl_getExecutableFile(&strExeFileURL);
 
     if ( ProcessError == osl_Process_E_None)
     {
-        pExeFileCount=rtl_uString_getStr(strExeFilePath)+rtl_uString_getLength(strExeFilePath);
+        pExeFileCount=rtl_uString_getStr(strExeFileURL)+rtl_uString_getLength(strExeFileURL);
 
         // Search for the last slash in the Path
-        while (*pExeFileCount!=L'/' && pExeFileCount>rtl_uString_getStr(strExeFilePath))
+        while (*pExeFileCount!=L'/' && pExeFileCount>rtl_uString_getStr(strExeFileURL))
             pExeFileCount--;
 
-        // iniFilePath = strExeFilePath without the filename of the exe-File
-        iniFilePath=rtl::OUString( rtl_uString_getStr(strExeFilePath) ,(int) (pExeFileCount-rtl_uString_getStr(strExeFilePath)) );
+        // iniFileURL = strExeFileURL without the filename of the exe-File
+        iniFileURL=rtl::OUString( rtl_uString_getStr(strExeFileURL) ,(int) (pExeFileCount-rtl_uString_getStr(strExeFileURL)) );
 
-        // add "/testfile.ini" to iniFilePath
-        iniFilePath+=rtl::OUString::createFromAscii("/testfile.ini");
+        // add "/testfile.ini" to iniFileURL
+        iniFileURL+=rtl::OUString::createFromAscii("/testfile.ini");
 
         // Open the ini-File
-        pFile=new File( iniFilePath );
+        pFile=new File( iniFileURL );
         rc=pFile->open( OpenFlag_Read | OpenFlag_Write );
         if ( rc!=FileBase::E_None )
         {
-            rtl_uString_release(strExeFilePath);
+            rtl_uString_release(strExeFileURL);
             return sal_False;
         }
     }
     else
     {
-        rtl_uString_release(strExeFilePath);
+        rtl_uString_release(strExeFileURL);
         return sal_False;
     }
 
     // Get filesize of the ini-File
 
-    rc=DirectoryItem::get( iniFilePath, aItem );
+    rc=DirectoryItem::get( iniFileURL, aItem );
     if ( rc!=FileBase::E_None )
         return sal_False;
 
@@ -1603,8 +1604,8 @@ void DirectoryItemTest( void )
 
     if ( rc==FileBase::E_None )
     {
-        printf( "GetFileStatus: FilePath: ");
-        printFileName(pStatus->getFilePath() );
+        printf( "GetFileStatus: FileURL: ");
+        printFileName(pStatus->getFileURL() );
         printf( "\n" );
     }
 
@@ -1641,8 +1642,8 @@ void DirectoryItemTest( void )
 
     if ( rc==FileBase::E_None )
     {
-        printf( "GetFileStatus: FilePath: ");
-        printFileName( pStatus->getFilePath() );
+        printf( "GetFileStatus: FileURL: ");
+        printFileName( pStatus->getFileURL() );
         printf( "\n" );
     }
 
@@ -1697,8 +1698,8 @@ void DirectoryItemTest( void )
 
         if ( rc==FileBase::E_None )
         {
-            printf( "GetFileStatus: FilePath:  ");
-            printFileName( pStatus->getFilePath() );
+            printf( "GetFileStatus: FileURL:  ");
+            printFileName( pStatus->getFileURL() );
             printf( "\n");
         }
 
@@ -1906,29 +1907,29 @@ void FileStatusTest( FileStatus *pStatus )
     printf( "\n" );
 
     //--------------------------------------------------
-    // GetFilePath
+    // GetFileURL
     //--------------------------------------------------
 
-    rtl::OUString           FilePath;
+    rtl::OUString           FileURL;
 
-    printf( "\ngetFilePath:\n" );
+    printf( "\ngetFileURL:\n" );
 
-    FilePath=pStatus->getFilePath();
-    printf( "FilePath: ");
-    printFileName( FilePath );
+    FileURL=pStatus->getFileURL();
+    printf( "FileURL: ");
+    printFileName( FileURL );
     printf( "\n" );
 
     //--------------------------------------------------
-    // GetNativePath
+    // GetLinkTargetURL
     //--------------------------------------------------
 
-    rtl::OUString           NativePath;
+    rtl::OUString           LinkTargetURL;
 
-    printf( "\ngetNativePath:\n");
+    printf( "\ngetLinkTargetURL:\n");
 
-    NativePath=pStatus->getNativePath();
-    printf( "NativePath: ");
-    printFileName( NativePath );
+    LinkTargetURL=pStatus->getLinkTargetURL();
+    printf( "LinkTargetURL: ");
+    printFileName( LinkTargetURL );
     printf( "\n" );
 
     return;
@@ -2164,7 +2165,7 @@ void ConvertPathTest(rtl::OUString& strPath)
     // normalizePath
     //--------------------------------------------------
 
-    rc=FileBase::normalizePath( strPath, strNormPath );
+    rc=FileBase::getFileURLFromSystemPath( strPath, strNormPath );
 
     if ( rc == FileBase::E_None )
     {
@@ -2176,12 +2177,12 @@ void ConvertPathTest(rtl::OUString& strPath)
         printf( "normalizePath: Error \n" );
 
     //--------------------------------------------------
-    // getFileURLFromNormalizedPath
+    // getFileURLFromSystemPath
     //--------------------------------------------------
 
     if ( strNormPath.getLength() != 0 )
     {
-        rc=FileBase::getFileURLFromNormalizedPath( strNormPath, strFileURL );
+        rc=FileBase::getFileURLFromSystemPath( strNormPath, strFileURL );
 
         if ( rc == FileBase::E_None )
         {
@@ -2190,10 +2191,10 @@ void ConvertPathTest(rtl::OUString& strPath)
             printf( "\n" );
         }
         else
-            printf( "getFileURLFromNormalizedPath: Error \n" );
+            printf( "getFileURLFromSystemPath: Error \n" );
     }
     else
-        printf( "getFileURLFromNormalizedPath: not tested \n" );
+        printf( "getFileURLFromSystemPath: not tested \n" );
 
     //--------------------------------------------------
     // getNormalizedPathFromFileURL
@@ -2201,7 +2202,7 @@ void ConvertPathTest(rtl::OUString& strPath)
 
     if ( strFileURL.getLength() != 0 )
     {
-        rc=FileBase::getNormalizedPathFromFileURL( strFileURL, strNormPathFromFileURL );
+        rc=FileBase::getSystemPathFromFileURL( strFileURL, strNormPathFromFileURL );
 
         if ( rc == FileBase::E_None )
         {
@@ -2217,12 +2218,12 @@ void ConvertPathTest(rtl::OUString& strPath)
 
 
     //--------------------------------------------------
-    // getSystemPathFromNormalizedPath
+    // getSystemPathFromFileURL
     //--------------------------------------------------
 
     if ( strNormPath.getLength() != 0 )
     {
-        rc=FileBase::getSystemPathFromNormalizedPath( strNormPath, strSystemPath );
+        rc=FileBase::getSystemPathFromFileURL( strNormPath, strSystemPath );
 
         if ( rc == FileBase::E_None )
         {
@@ -2231,10 +2232,10 @@ void ConvertPathTest(rtl::OUString& strPath)
             printf( "\n");
         }
         else
-            printf( "getSystemPathFromNormalizedPath: Error \n" );
+            printf( "getSystemPathFromFileURL: Error \n" );
     }
     else
-        printf( "getSystemPathFromNormalizedPath: not tested \n" );
+        printf( "getSystemPathFromFileURL: not tested \n" );
 
     //--------------------------------------------------
     // Verify
@@ -2295,7 +2296,7 @@ void DoAbsolutePathTest(rtl::OUString strDirBase, rtl::OUString strRelative)
     printFileName ( strRelative );
     printf( "\n" );
 
-    rc=FileBase::getAbsolutePath( strDirBase, strRelative, strAbsolute );
+    rc=FileBase::getAbsoluteFileURL( strDirBase, strRelative, strAbsolute );
 
     if ( rc == FileBase::E_None )
     {
@@ -2349,13 +2350,13 @@ void SearchPathTest(void)
     printf( "--------------------------------------------\n\n" );
 
 
-    rc=FileBase::getFileURLFromNormalizedPath( strNormPath, strFileURL );
-    print_error( rtl::OString( "GetFileURLFromNormalizedPath" ), rc );
-    rc=FileBase::getSystemPathFromNormalizedPath( strNormPath, strSystemPath );
-    print_error( rtl::OString( "GetSystemPathFromNormalizedPath" ), rc );
+    rc=FileBase::getFileURLFromSystemPath( strNormPath, strFileURL );
+    print_error( rtl::OString( "getFileURLFromSystemPath" ), rc );
+    rc=FileBase::getSystemPathFromFileURL( strNormPath, strSystemPath );
+    print_error( rtl::OString( "getSystemPathFromFileURL" ), rc );
 
     //--------------------------------------------------
-    // searchNormalizedPath (with a normalized path)
+    // searchFileURL (with a normalized path)
     //--------------------------------------------------
 
     if ( strNormPath.getLength() != 0 )
@@ -2364,7 +2365,7 @@ void SearchPathTest(void)
         printFileName ( strNormPath );
         printf( "\n" );
 
-        rc=FileBase::searchNormalizedPath( strNormPath , rtl::OUString() , strResultPath );
+        rc=FileBase::searchFileURL( strNormPath , rtl::OUString() , strResultPath );
 
         if ( rc == FileBase::E_None )
         {
@@ -2373,13 +2374,13 @@ void SearchPathTest(void)
             printf( "\n" );
         }
         else
-            printf( "SearchNormalizedPath (with a normalized path): Error\n" );
+            printf( "searchFileURL (with a normalized path): Error\n" );
     }
     else
-        printf( "SearchNormalizedPath (with a normalized path): not tested\n" );
+        printf( "searchFileURL (with a normalized path): not tested\n" );
 
     //--------------------------------------------------
-    // searchNormalizedPath (with a File-URL)
+    // searchFileURL (with a File-URL)
     //--------------------------------------------------
 
     if ( strFileURL.getLength() != 0 )
@@ -2388,7 +2389,7 @@ void SearchPathTest(void)
         printFileName( strFileURL );
         printf( "\n" );
 
-        rc=FileBase::searchNormalizedPath( strFileURL , rtl::OUString() , strResultPath );
+        rc=FileBase::searchFileURL( strFileURL , rtl::OUString() , strResultPath );
 
         if ( rc == FileBase::E_None )
         {
@@ -2397,13 +2398,13 @@ void SearchPathTest(void)
             printf( "\n" );
         }
         else
-            printf( "SearchNormalizedPath (with a FileURL path): Error\n" );
+            printf( "searchFileURL (with a FileURL path): Error\n" );
     }
     else
-        printf( "SearchNormalizedPath (with a FileURL path): not tested\n" );
+        printf( "searchFileURL (with a FileURL path): not tested\n" );
 
     //--------------------------------------------------
-    // searchNormalizedPath (with a systempath)
+    // searchFileURL (with a systempath)
     //--------------------------------------------------
 
     if ( strSystemPath.getLength() != 0 )
@@ -2412,7 +2413,7 @@ void SearchPathTest(void)
         printFileName( strSystemPath );
         printf( "\n" );
 
-        rc=FileBase::searchNormalizedPath( strSystemPath , rtl::OUString() , strResultPath );
+        rc=FileBase::searchFileURL( strSystemPath , rtl::OUString() , strResultPath );
 
         if ( rc == FileBase::E_None )
         {
@@ -2421,20 +2422,20 @@ void SearchPathTest(void)
             printf( "\n" );
         }
         else
-            printf( "SearchNormalizedPath (with a systempath): Error\n" );
+            printf( "searchFileURL (with a systempath): Error\n" );
     }
     else
-        printf( "SearchNormalizedPath (with a systempath): not tested\n" );
+        printf( "searchFileURL (with a systempath): not tested\n" );
 
     //--------------------------------------------------
-    // searchNormalizedPath (File and no searchpath)
+    // searchFileURL (File and no searchpath)
     //--------------------------------------------------
 
-    printf( "\nSearchNormalizedPath:  File (no searchpath) : ");
+    printf( "\nsearchFileURL:  File (no searchpath) : ");
     printFileName( file3 );
     printf( "\n" );
 
-    rc=FileBase::searchNormalizedPath( file3 , rtl::OUString::createFromAscii("") , strResultPath );
+    rc=FileBase::searchFileURL( file3 , rtl::OUString::createFromAscii("") , strResultPath );
 
     if ( rc == FileBase::E_None )
     {
@@ -2443,19 +2444,19 @@ void SearchPathTest(void)
         printf( "\n" );
     }
     else
-        printf( "SearchNormalizedPath:  File not found: OK ! \n" );
+        printf( "searchFileURL:  File not found: OK ! \n" );
 
     //--------------------------------------------------
-    // searchNormalizedPath (File and Path)
+    // searchFileURL (File and Path)
     //--------------------------------------------------
 
-    printf( "\nSearchNormalizedPath:  File : ");
+    printf( "\nsearchFileURL:  File : ");
     printFileName( file3 );
     printf( "\tSearchPath ");
     printFileName( dir1 );
     printf( "\n");
 
-    rc=FileBase::searchNormalizedPath( file3 , dir1 , strResultPath );
+    rc=FileBase::searchFileURL( file3 , dir1 , strResultPath );
 
     if ( rc == FileBase::E_None )
     {
@@ -2464,23 +2465,23 @@ void SearchPathTest(void)
         printf( "\n");
     }
     else
-        printf( "SearchNormalizedPath:  File not found: Error\n" );
+        printf( "searchFileURL:  File not found: Error\n" );
 
     //------------------------------------------------------------
-    // searchNormalizedPath (File and searchpath with two entries)
+    // searchFileURL (File and searchpath with two entries)
     //------------------------------------------------------------
 
     rtl::OUString       strSearchPath( dir_not_exist );
     strSearchPath+=rtl::OUString::createFromAscii(";");
     strSearchPath+=dir_on_server;
 
-    printf( "\nSearchNormalizedPath:  File : ");
+    printf( "\nsearchFileURL:  File : ");
     printFileName( file3 );
     printf( "SearchPath ");
     printFileName( strSearchPath );
     printf( "\n");
 
-    rc=FileBase::searchNormalizedPath( file3 , strSearchPath , strResultPath );
+    rc=FileBase::searchFileURL( file3 , strSearchPath , strResultPath );
 
     if ( rc == FileBase::E_None )
     {
@@ -2489,26 +2490,26 @@ void SearchPathTest(void)
         printf( "\n" );
     }
     else
-        printf( "SearchNormalizedPath:  File not found: Error\n" );
+        printf( "searchFileURL:  File not found: Error\n" );
 
     //-------------------------------------------------------------------
-    // searchNormalizedPath (File and searchpath (with a wrong semantic))
+    // searchFileURL (File and searchpath (with a wrong semantic))
     //-------------------------------------------------------------------
 
     strSearchPath=rtl::OUString( dir_wrong_semantic );
 
-    printf( "\nSearchNormalizedPath:  File : ");
+    printf( "\nsearchFileURL:  File : ");
     printFileName( file3 );
     printf( "SearchPath ");
     printFileName( strSearchPath );
     printf( "\n");
 
-    rc=FileBase::searchNormalizedPath( file3 , strSearchPath , strResultPath );
+    rc=FileBase::searchFileURL( file3 , strSearchPath , strResultPath );
 
     if ( rc == FileBase::E_None )
         printf( "Error: Wrong Semantich but no error occurs !\n" );
     else
-        printf( "SearchNormalizedPath:  File not found: OK !\n" );
+        printf( "searchFileURL:  File not found: OK !\n" );
 
     return;
 }
@@ -2718,6 +2719,21 @@ void print_error( ::rtl::OString& str, FileBase::RC rc )
 
 int MAIN( int argc, char* argv[] )
 {
+    OUString    aSearchPathList(L"");
+    OUString    aSearchFile(L"./testfile.exe");
+    OUString    aFoundPath;
+
+    FileBase::RC    error = FileBase::searchFileURL( aSearchFile, aSearchPathList, aFoundPath );
+
+    aSearchFile = L"file:///c:/winnt/explorer.exe";
+    error = FileBase::searchFileURL( aSearchFile, aSearchPathList, aFoundPath );
+
+    aSearchFile = L"testfile.exe";
+    error = FileBase::searchFileURL( aSearchFile, aSearchPathList, aFoundPath );
+
+    aSearchFile = L"explorer.exe";
+    error = FileBase::searchFileURL( aSearchFile, aSearchPathList, aFoundPath );
+
     sal_Bool fSuccess=sal_False;
 
     //Initialization
