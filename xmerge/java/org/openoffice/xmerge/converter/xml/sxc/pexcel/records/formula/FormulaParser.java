@@ -107,7 +107,7 @@ public class FormulaParser {
         tokenVector.clear();
         if(formula.startsWith("=")) {
             formulaStr = formula;
-            Debug.log(Debug.TRACE,"Creating a Formula Parser");
+            Debug.log(Debug.TRACE,"Creating a Formula Parser for " + formulaStr);
             getChar();
             expression();
         } else {
@@ -123,14 +123,7 @@ public class FormulaParser {
      * @return A boolean returning the result of the comparison
      */
     private boolean isAddOp(char c) {
-
-         boolean eq;
-
-         if(c=='-' | c=='+')
-             eq = true;
-         else
-             eq = false;
-         return eq;
+         return (c == '-') || (c == '+');
      }
 
     /**
@@ -196,14 +189,7 @@ public class FormulaParser {
      * @return A boolean returning the result of the comparison
       */
      private boolean isCellRefSpecialChar(char c) {
-
-        boolean eq;
-
-         if(c==':' || c=='$')
-             eq = true;
-         else
-             eq = false;
-         return eq;
+         return (c == ':') || (c == '$');
      }
 
      /**
@@ -233,14 +219,7 @@ public class FormulaParser {
      * @return A boolean returning the result of the comparison
       */
      private boolean isPercent(char c) {
-
-        boolean eq;
-
-         if(c=='%')
-             eq = true;
-         else
-             eq = false;
-         return eq;
+         return (c == '%');
      }
 
      /**
@@ -314,6 +293,11 @@ public class FormulaParser {
       * This is a factor for multiplication and division operators
       */
      private void factor() throws FormulaParsingException {
+        if(isAddOp(look)) {         // handle unary addop
+            Character ch = new Character(look);
+            match(look);
+            tokenVector.add(tokenFactory.getOperatorToken(ch.toString(), 1));
+        }
          if(look=='(') {
              match('(');
             tokenVector.add(tokenFactory.getOperatorToken("(", 1));
@@ -380,7 +364,7 @@ public class FormulaParser {
      private void ident() throws FormulaParsingException {
 
          String cell = getTokenString();
-         if(look=='(') {
+        if(look=='(') {
             Debug.log(Debug.TRACE,"Found Function : " + cell);
 
             int index = tokenVector.size();
@@ -484,11 +468,7 @@ public class FormulaParser {
       */
      private void expression() throws FormulaParsingException {
 
-        if(isAddOp(look)) {
-            Character ch = new Character(look);
-            match(look);
-            tokenVector.add(tokenFactory.getOperatorToken(ch.toString(), 1));
-        } else if (look == '"') { //Extract a quoted string...
+        if (look == '"') { //Extract a quoted string...
             StringBuffer buff = new StringBuffer();
             boolean success = true;
             success = getChar();
