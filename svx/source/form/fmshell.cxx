@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 16:28:29 $
+ *  last change: $Author: fs $ $Date: 2000-10-24 15:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ sal_uInt16 ControllerSlotMap[] =    // slots des Controllers
     SID_FM_IMAGECONTROL,
     SID_FM_USE_WIZARDS,
     SID_FM_FORMATTEDFIELD,
-    SID_DATASOURCE_ADMINISTRATION,
+    SID_FM_AUTOCONTROLFOCUS,
     0
 };
 
