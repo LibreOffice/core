@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-07 07:39:36 $
+ *  last change: $Author: dvo $ $Date: 2001-06-07 13:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1424,9 +1424,9 @@ void XMLTextParagraphExport::exportParagraph(
                 }
             }
 
-            if( rPropSetHelper.hasProperty( PARA_CONDITIONAL_STYLE_NAME ) )
+            if( rPropSetHelper.hasProperty( PARA_CHAPTER_NUMERBING_LEVEL ) )
             {
-                aAny = rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME );
+                aAny = rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL );
                 aAny >>= nOutlineLevel;
                 if( -1 != nOutlineLevel )
                 {
