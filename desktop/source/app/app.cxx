@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:20:30 $
+ *  last change: $Author: kz $ $Date: 2004-07-26 15:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1357,16 +1357,16 @@ void Desktop::Main()
 
         // create title string
         sal_Bool bCheckOk = sal_False;
-        LanguageType aLanguageType = LANGUAGE_DONTKNOW;
+        ::com::sun::star::lang::Locale aLocale;
         String aMgrName = String::CreateFromAscii( "iso" );
         aMgrName += String::CreateFromInt32(SUPD); // current build version
-        ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+        ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale );
         if ( !pLabelResMgr )
         {
             // no "iso" resource -> search for "ooo" resource
             aMgrName = String::CreateFromAscii( "ooo" );
             aMgrName += String::CreateFromInt32(SUPD); // current build version
-            pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+            pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale);
         }
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, pLabelResMgr ) ) : String();
         delete pLabelResMgr;

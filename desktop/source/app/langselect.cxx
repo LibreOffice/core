@@ -2,8 +2,8 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.8 $
- *  last change: $Author: hr $ $Date: 2004-07-23 11:22:27 $
+ *  $Revision: 1.9 $
+ *  last change: $Author: kz $ $Date: 2004-07-26 15:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,29 +162,28 @@ OUString LanguageSelection::getLanguageString()
     if (aUserLanguage.getLength() > 0 )
     {
         bFoundLanguage = sal_True;
-        aFoundLanguageType = aUserLanguage;
+        aFoundLanguage = aUserLanguage;
         // return aFoundLanguageType;
         // we can not return yet, we need to check whether this instance supports
         // the language that was previously chosen by the user...
     }
 
-    // fill list of available languages
-    if (m_lLanguages.size() < 1)
-        m_lLanguages = getInstalledLanguages();
-
+    // fill list
+    IsoList &rLanguages = lLanguages::get();
+    if (rLanguages.size() < 1)
+        rLanguages = getInstalledIsoLanguages();
     // check whether found language is available
     if (bFoundLanguage)
     {
-        LangList::const_iterator iLang = m_lLanguages.begin();
-        while (iLang != m_lLanguages.end())
+        IsoList::const_iterator iLang = rLanguages.begin();
+        while (iLang != rLanguages.end())
         {
-            if (*iLang == aFoundLanguageType)
-                return aFoundLanguageType;
+            if (iLang->equals(aFoundLanguage))
+                return aFoundLanguage;
             else
                 iLang++;
         }
     }
-
     if (rLanguages.size() > 1) {
         // are there multiple languages installed?
         // get resource
