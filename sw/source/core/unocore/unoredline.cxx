@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:48:25 $
+ *  last change: $Author: os $ $Date: 2001-06-20 08:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,10 @@ Sequence<sal_Int8> SwXRedlineText::getImplementationId()
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = FALSE;
     if(!bInit)
+    {
         rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+        bInit = TRUE;
+    }
     return aId;
 }
 /* ---------------------------------------------------------------------------
@@ -394,7 +397,10 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  ) th
     static uno::Sequence< sal_Int8 > aId( 16 );
     static BOOL bInit = FALSE;
     if(!bInit)
+    {
         rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+        bInit = TRUE;
+    }
     return aId;
 }
 /* -----------------------------11.01.01 16:39--------------------------------
@@ -797,7 +803,10 @@ Sequence<sal_Int8> SwXRedline::getImplementationId()
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = FALSE;
     if(!bInit)
+    {
         rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+        bInit = TRUE;
+    }
     return aId;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 13:03:06 $
+ *  last change: $Author: os $ $Date: 2001-06-20 08:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,21 +758,24 @@ sal_Int64 SAL_CALL SwXCell::getSomething( const uno::Sequence< sal_Int8 >& rId )
  ---------------------------------------------------------------------------*/
 Sequence< uno::Type > SAL_CALL SwXCell::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    uno::Sequence< uno::Type > aCellTypes = SwXCellBaseClass::getTypes();
-    uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
+    static Sequence< uno::Type > aRetTypes;
+    if(!aRetTypes.getLength())
+    {
+        aRetTypes = SwXCellBaseClass::getTypes();
+        uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
 
-    long nIndex = aCellTypes.getLength();
-    aCellTypes.realloc(
-        aCellTypes.getLength() +
-        aTextTypes.getLength());
+        long nIndex = aRetTypes.getLength();
+        aRetTypes.realloc(
+            aRetTypes.getLength() +
+            aTextTypes.getLength());
 
-    uno::Type* pCellTypes = aCellTypes.getArray();
+        uno::Type* pRetTypes = aRetTypes.getArray();
 
-    const uno::Type* pTextTypes = aTextTypes.getConstArray();
-    for(long nPos = 0; nPos <aTextTypes.getLength(); nPos++)
-        pCellTypes[nIndex++] = pTextTypes[nPos];
-
-    return aCellTypes;
+        const uno::Type* pTextTypes = aTextTypes.getConstArray();
+        for(long nPos = 0; nPos <aTextTypes.getLength(); nPos++)
+            pRetTypes[nIndex++] = pTextTypes[nPos];
+    }
+    return aRetTypes;
 }
 /* -----------------------------18.05.00 10:18--------------------------------
 
@@ -782,7 +785,10 @@ Sequence< sal_Int8 > SAL_CALL SwXCell::getImplementationId(  ) throw(::com::sun:
     static uno::Sequence< sal_Int8 > aId( 16 );
     static BOOL bInit = FALSE;
     if(!bInit)
+    {
         rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+        bInit = TRUE;
+    }
     return aId;
 }
 /* -----------------------------18.05.00 10:18--------------------------------

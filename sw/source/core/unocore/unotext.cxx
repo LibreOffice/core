@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-12 07:25:32 $
+ *  last change: $Author: os $ $Date: 2001-06-20 08:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1235,7 +1235,10 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXBodyText::getImplementationId(  ) throw(un
     static uno::Sequence< sal_Int8 > aId( 16 );
     static BOOL bInit = FALSE;
     if(!bInit)
+    {
         rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+        bInit = TRUE;
+    }
     return aId;
 }
 /*-- 10.12.98 11:17:28---------------------------------------------------
@@ -1470,7 +1473,10 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXHeadFootText::getImplementationId(  ) thro
     static uno::Sequence< sal_Int8 > aId( 16 );
     static BOOL bInit = FALSE;
     if(!bInit)
+    {
         rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+        bInit = TRUE;
+    }
     return aId;
 }
 /* -----------------------------21.03.00 15:46--------------------------------
