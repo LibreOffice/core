@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:04:06 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,8 +359,8 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
     {
         // read leading bytes
         bEof = ! rInFile.read( buffer, 6, nRead ) && nRead == 6 ? false : true;
-        int nType = buffer[ 1 ];
-        int nBytesToRead = buffer[2] | buffer[3] << 8 | buffer[4] << 16 | buffer[5] << 24;
+        unsigned int nType = buffer[ 1 ];
+        unsigned int nBytesToRead = buffer[2] | buffer[3] << 8 | buffer[4] << 16 | buffer[5] << 24;
         if( buffer[0] != 0x80 ) // test for pfb m_agic number
         {
             // this migt be a pfa font already
@@ -395,8 +395,8 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
                     // ascii data, convert dos lineends( \r\n ) and
                     // m_ac lineends( \r ) to \n
                     unsigned char * pWriteBuffer = new unsigned char[ nBytesToRead ];
-                    int nBytesToWrite = 0;
-                    for( int i = 0; i < nBytesToRead; i++ )
+                    unsigned int nBytesToWrite = 0;
+                    for( unsigned int i = 0; i < nBytesToRead; i++ )
                     {
                         if( pBuffer[i] != '\r' )
                             pWriteBuffer[ nBytesToWrite++ ] = pBuffer[i];
@@ -416,8 +416,8 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
                 else
                 {
                     // binary data
-                    int nBuffer = 0;
-                    for( int i = 0; i < nBytesToRead && bSuccess; i++ )
+                    unsigned int nBuffer = 0;
+                    for( unsigned int i = 0; i < nBytesToRead && bSuccess; i++ )
                     {
                         buffer[ nBuffer++ ] = hexDigits[ pBuffer[ i ] >> 4 ];
                         buffer[ nBuffer++ ] = hexDigits[ pBuffer[ i ] & 15 ];
