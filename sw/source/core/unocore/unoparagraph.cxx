@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-13 11:27:35 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 12:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,11 +401,11 @@ BOOL SwXParagraph::getDefaultTextContentValue(Any& rAny, const OUString& rProper
 {
     if(!nWID)
     {
-        if(0 == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPE))
+        if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE)))
             nWID = FN_UNO_ANCHOR_TYPE;
-        else if(0 == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPES))
+        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES)))
             nWID = FN_UNO_ANCHOR_TYPES;
-        else if(0 == rPropertyName.compareToAscii(UNO_NAME_TEXT_WRAP))
+        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_TEXT_WRAP)))
             nWID = FN_UNO_TEXT_WRAP;
         else
             return FALSE;
@@ -589,10 +589,10 @@ void SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        if(0 == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPE) ||
-            0 == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPES)||
-                0 == rPropertyName.compareToAscii(UNO_NAME_TEXT_WRAP))
-            return;
+        if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE)) ||
+            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES)) ||
+            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_TEXT_WRAP)))
+                return;
 
         // Absatz selektieren
         SwParaSelection aParaSel(pUnoCrsr);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-12 07:31:43 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 12:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,9 +440,9 @@ void SwXTextCursor::insertDocumentFromURL(const OUString& rURL,
         String sFilterName;
         String sFilterOption;
         String sPassword;
-        OUString uFilterName(C2U(   UNO_NAME_FILTER_NAME    ));
-        OUString uFilterOption(C2U( UNO_NAME_FILTER_OPTION  ));
-        OUString uPassword(C2U( UNO_NAME_PASSWORD ));
+        OUString uFilterName(C2U(SW_PROP_NAME_STR(UNO_NAME_FILTER_NAME)));
+        OUString uFilterOption(C2U(SW_PROP_NAME_STR(UNO_NAME_FILTER_OPTION)));
+        OUString uPassword(C2U(SW_PROP_NAME_STR(UNO_NAME_PASSWORD)));
         sal_Bool bIllegalArgument = sal_False;
 
         for ( int n = 0; n < aOptions.getLength(); ++n )

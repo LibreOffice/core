@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-12 16:09:07 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 12:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1879,7 +1879,7 @@ Any SwXTextCursor::GetPropertyValue(
     if(pMap)
     {
         PropertyState eTemp;
-        BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue(pMap, rPaM, &aAny, eTemp );
+        BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue( pMap, rPaM, &aAny, eTemp );
         if(!bDone)
         {
             SfxItemSet aSet(rPaM.GetDoc()->GetAttrPool(),
@@ -2133,12 +2133,12 @@ void SwXTextCursor::setPropertyValue(const OUString& rPropertyName, const uno::A
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        if(!rPropertyName.compareToAscii(UNO_NAME_IS_SKIP_HIDDEN_TEXT.pName))
+        if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)))
         {
             sal_Bool bSet = *(sal_Bool*)aValue.getValue();
             pUnoCrsr->SetSkipOverHiddenSections(bSet);
         }
-        else if(!rPropertyName.compareToAscii(UNO_NAME_IS_SKIP_PROTECTED_TEXT.pName))
+        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)))
         {
             sal_Bool bSet = *(sal_Bool*)aValue.getValue();
             pUnoCrsr->SetSkipOverProtectSections(bSet);
@@ -2161,12 +2161,12 @@ Any SwXTextCursor::getPropertyValue(const OUString& rPropertyName)
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        if(!rPropertyName.compareToAscii(UNO_NAME_IS_SKIP_HIDDEN_TEXT.pName))
+        if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)))
         {
             BOOL bSet = pUnoCrsr->IsSkipOverHiddenSections();
             aAny.setValue(&bSet, ::getBooleanCppuType());
         }
-        else if(!rPropertyName.compareToAscii(UNO_NAME_IS_SKIP_PROTECTED_TEXT.pName))
+        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)))
         {
             BOOL bSet = pUnoCrsr->IsSkipOverProtectSections();
             aAny.setValue(&bSet, ::getBooleanCppuType());
@@ -2262,8 +2262,8 @@ uno::Any SwXTextCursor::getPropertyDefault(const OUString& rPropertyName)
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        if( !rPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( UNO_NAME_IS_SKIP_HIDDEN_TEXT.pName ) ) &&
-            !rPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( UNO_NAME_IS_SKIP_PROTECTED_TEXT.pName ) ) )
+        if( !rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT) ) &&
+            !rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT) ) )
             aRet = GetPropertyDefault(*pUnoCrsr, aPropSet, rPropertyName);
     }
     else
