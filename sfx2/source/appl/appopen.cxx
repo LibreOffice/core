@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:10:12 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 10:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1168,7 +1168,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         Reference< ::com::sun::star::document::XTypeDetection > xTypeDetection(
                                                                     ::comphelper::getProcessServiceFactory()->createInstance(
-                                                                    ::rtl::OUString::createFromAscii( "com.sun.star.comp.framework.TypeDetection" )),
+                                                                    ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" )),
                                                                     UNO_QUERY );
         if ( xTypeDetection.is() )
         {
