@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,12 +196,12 @@ TabDialog RID_SCDLG_OPTIONS
                 Text [ english_us ] = "Grid" ;
                  //             PageResID = 263;
                 Text[ chinese_simplified ] = "Íø¸ñ";
-                Text[ russian ] = "Ğåøåòêà";
+                Text[ russian ] = "Ñåòêà";
                 Text[ polish ] = "Raster";
                 Text[ japanese ] = "¸ŞØ¯ÄŞ";
                 Text[ chinese_traditional ] = "ºô®æ";
                 Text[ arabic ] = "ÇáÔÈßÉ";
-                Text[ greek ] = "Ğëİãìá (êïõêßäåò)";
+                Text[ greek ] = "Ğëİãìá";
                 Text[ korean ] = "±¥¼±";
                 Text[ turkish ] = "Kılavuz çizgileri";
                 Text[ language_user1 ] = " ";
@@ -250,7 +250,7 @@ TabDialog RID_SCDLG_OPTIONS
                 Text [ spanish ] = "Calcular" ;
                 Text [ english_us ] = "Calculation" ;
                 Text[ chinese_simplified ] = "¼ÆËã";
-                Text[ russian ] = "Âû÷èñëèòü";
+                Text[ russian ] = "Âû÷èñëåíèÿ";
                 Text[ polish ] = "Oblicz";
                 Text[ japanese ] = "ŒvZ";
                 Text[ chinese_traditional ] = "­pºâ";
@@ -357,7 +357,7 @@ TabDialog RID_SCDLG_OPTIONS
     StringList [ danish ] = \
     {\
         < "Vis" ; Default ; > ; \
-        < "Gem" ; Default ; > ; \
+        < "Skjul" ; Default ; > ; \
         < "Pladsholdere" ; Default ; > ; \
     };\
     StringList [ french ] = \
@@ -583,7 +583,7 @@ TabPage RID_SCPAGE_CALC
         Text [ spanish ] = "Referencias circulares" ;
         Text [ ENGLISH_US ] = "Iterative references" ;
         Text[ chinese_simplified ] = "·´¸´ÒıÓÃ";
-        Text[ russian ] = "Öèêëè÷åñêèå ññûëêè";
+        Text[ russian ] = "Èòåğàöèîííûå ññûëêè";
         Text[ polish ] = "Odwo³ania iteracyjne";
         Text[ japanese ] = "üŠúQÆ";
         Text[ chinese_traditional ] = "¤ÏÎ`°Ñ·Ó";
@@ -869,7 +869,7 @@ TabPage RID_SCPAGE_CALC
         Text [ portuguese_brazilian ] = "Suchkri~terien = und <> müssen auf ganze Zellen zutreffen" ;
         Text [ portuguese ] = "~Critérios de localização = e <> devem ajustar-se às células inteiras" ;
         Text[ chinese_simplified ] = "ËÑÑ°·¶Î§ = ºÍ <> ±ØĞëÊÊÓÃÈ«²¿µÄµ¥Ôª¸ñ(~W)";
-        Text[ russian ] = "Óñëîâèÿ ïîèñêà = und <> äîëæíû ğàñïğîñòğàíÿòüñÿ íà âñş ÿ÷åéêó";
+        Text[ russian ] = "Óñëîâèÿ ïîèñêà = è <> äîëæíû ğàñïğîñòğàíÿòüñÿ íà âñş ÿ÷åéêó";
         Text[ polish ] = "Kryt~eria wyszukiwania = i <> musz¹ odnosiæ siê do ca³ych komórek";
         Text[ japanese ] = "ŒŸõğŒ=‚Æ<>‚Í‚·‚×‚Ä‚Ì¾Ù‚É“K—p(~W)";
         Text[ chinese_traditional ] = "´M§ä½d³ò = ©M <> ¥²¶·¾A¥Î¥ş³¡ªºÀx¦s®æ(~W)";
@@ -966,7 +966,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ portuguese_brazilian ] = "En~tradas" ;
         Text [ portuguese ] = "En~tradas" ;
         Text [ finnish ] = "~Syötteet" ;
-        Text [ danish ] = "Indsættelser" ;
+        Text [ danish ] = "Elementer" ;
         Text [ french ] = "En~trées" ;
         Text [ swedish ] = "Pos~ter" ;
         Text [ dutch ] = "~Items" ;
@@ -1413,7 +1413,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ polish ] = "Wyr~ó¿nianie wartoœci";
         Text[ japanese ] = "’l‚Ì‹­’²•\\¦(~H)";
         Text[ chinese_traditional ] = "¬ğ¥XÅã¥Ü¼Æ­È(~H)";
-        Text[ arabic ] = "ÊãííÒ ÇáŞíã";
+        Text[ arabic ] = "ÅÈÑÇÒ ÇáŞíã";
         Text[ greek ] = "ÅğéóŞìáíóç ôéìşí";
         Text[ korean ] = "°ª ÇÏÀÏ¶óÀÌÆÃ(~V)";
         Text[ turkish ] = "Değerleri ~vurgula";
@@ -1510,7 +1510,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese_brazilian ] = "Objects/Images" ;
         Text [ portuguese ] = "~Objectos/Imagens" ;
         Text [ finnish ] = "Objects/Images" ;
-        Text [ danish ] = "Objekter/billeder" ;
+        Text [ danish ] = "Objekter/grafik" ;
         Text [ french ] = "~Objets/images" ;
         Text [ swedish ] = "~Objekt/grafik" ;
         Text [ dutch ] = "~Objecten/afbeeldingen" ;
@@ -1663,7 +1663,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ japanese ] = "¸ŞØ¯ÄŞü(~G)";
         Text[ chinese_traditional ] = "ºô®æ½u(~G)";
         Text[ arabic ] = "ÎØæØ ÇáÔÈßÉ";
-        Text[ greek ] = "Ãñáììİò ğëİãìáôïò";
+        Text[ greek ] = "Ãñáììİò ğëİ~ãìáôïò";
         Text[ korean ] = "´«±İ¼±(~G)";
         Text[ turkish ] = "~Kılavuz çizgileri";
         Text[ language_user1 ] = " ";
@@ -1857,7 +1857,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ spanish ] = "~Títulos de filas y columnas" ;
         Text [ english_us ] = "Colu~mn/Row headers" ;
         Text[ chinese_simplified ] = "ĞĞ±êÌâºÍÁĞ±êÌâ(~M)";
-        Text[ russian ] = "Íàçâàíèÿ ñòğîê/ñòîëáöîâ";
+        Text[ russian ] = "Çàãîëîâêè ñòğîê/ñòîëáöîâ";
         Text[ polish ] = "~Nag³ówki wierszy i kolumn";
         Text[ japanese ] = "s‚Æ—ñ‚Ì”Ô†(~M)";
         Text[ chinese_traditional ] = "Äæ©M¦C¼ĞÃD(~M)";
@@ -2505,10 +2505,10 @@ TabPage RID_SCPAGE_INPUT
     };
     StringList [ russian ] =
     {
-            < "ñíèçó" ; Default ; > ;
-        < "ñïğàâà" ; Default ; > ;
-        < "ñâåğõó" ; Default ; > ;
-        < "ñëåâà" ; Default ; > ;
+            < "âíèç" ; Default ; > ;
+        < "âïğàâî" ; Default ; > ;
+        < "ââåğõ" ; Default ; > ;
+        < "âëåâî" ; Default ; > ;
     };
     StringList [ polish ] =
     {
@@ -2663,7 +2663,7 @@ TabPage RID_SCPAGE_INPUT
         Text [ dutch ] = "Ver~wijzingen bij invoegen van kolommen/rijen aan de randen verbreden" ;
         Text [ portuguese ] = "Expandir ~referências para as margens ao inserir colunas ou linhas " ;
         Text[ chinese_simplified ] = "ÔÚ²åÈëĞĞÁĞÊ±Ì×ÓÃÒıÓÃ(~R)";
-        Text[ russian ] = "Ğàñòÿãèâàòü ññûëêè ïğè âñòàâêå íîâûõ ñòîëáöîâ/ñòğîê äî èõ ïîëåé";
+        Text[ russian ] = "Ğàñòÿãèâàòü ññûëêè ïğè âñòàâêå íîâûõ ñòîëáöîâ/ñòğîê";
         Text[ polish ] = "Rozszerz odwo³ania przy wstawia~niu kolumn i wierszy do ich krawêdzi";
         Text[ japanese ] = "—ñ/s‚Ì‘}“üŒã‚ÉQÆ‚ğC³(~R)";
         Text[ chinese_traditional ] = "¦b´¡¤J¦CÄæ®É®M¥Î°Ñ·Ó(~R)";
@@ -2693,7 +2693,7 @@ TabPage RID_SCPAGE_INPUT
         Text[ polish ] = "~Wyró¿nij zaznaczanie w nag³ówkach kolumn i wierszy";
         Text[ japanese ] = "‘I‘ğ‚µ‚½¾Ù‚Ìs—ñ”Ô†‚ğ‹­’²•\\¦(~H)";
         Text[ chinese_traditional ] = "¬ğ¥XÅã¥Ü¦CÄæ¼ĞÃD(~H)";
-        Text[ arabic ] = "ÊãííÒ ÇáÊÍÏíÏ İí ÑÄæÓ ÇáÃÚãÏÉ/ÇáÕİæİ";
+        Text[ arabic ] = "ÅÈÑÇÒ ÇáÊÍÏíÏ İí ÑÄæÓ ÇáÃÚãÏÉ/ÇáÕİæİ";
         Text[ greek ] = "ÅğéóŞìáíó~ç ôùí åğéëïãşí óå ãñáììİò/óôŞëåò êåöáëßäùí";
         Text[ korean ] = "¿­°ú Çà ¸Ó¸®±Û ¿¡¼­ ¼±ÅÃ ÇÏÀÏ¶óÀÌÆ®(~H)";
         Text[ turkish ] = "Sütun/satır başlıklarında seçimi ~vurgula";
