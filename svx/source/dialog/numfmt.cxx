@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:52:20 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,13 +388,13 @@ void SvxNumberFormatTabPage::Init_Impl()
     nStdFormatY     =aLbCurrency.GetPosPixel().Y();
     nStdFormatHeight=nCurFormatY-nStdFormatY+nCurFormatHeight;
 
-    aIbAdd.     SetImage( aIconList.GetImage( IID_ADD ) );
+    aIbAdd.     SetModeImage( aIconList.GetImage( IID_ADD ) );
     aIbAdd.     SetModeImage( aIconListHC.GetImage( IID_ADD ), BMP_COLOR_HIGHCONTRAST );
 
-    aIbRemove.  SetImage( aIconList.GetImage( IID_REMOVE ) );
+    aIbRemove.  SetModeImage( aIconList.GetImage( IID_REMOVE ) );
     aIbRemove.  SetModeImage( aIconListHC.GetImage( IID_REMOVE ), BMP_COLOR_HIGHCONTRAST );
 
-    aIbInfo.    SetImage( aIconList.GetImage( IID_INFO ) );
+    aIbInfo.    SetModeImage( aIconList.GetImage( IID_INFO ) );
     aIbInfo.    SetModeImage( aIconListHC.GetImage( IID_INFO ), BMP_COLOR_HIGHCONTRAST );
 
     aIbAdd.Enable(FALSE );
