@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:15 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 19:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,7 @@ static sal_Char __READONLY_DATA FIELD_SERVICE_BIBLIOGRAPHY[] = "Bibliography";
 static sal_Char __READONLY_DATA FIELD_SERVICE_SCRIPT[] = "Script";
 static sal_Char __READONLY_DATA FIELD_SERVICE_ANNOTATION[] = "Annotation";
 static sal_Char __READONLY_DATA FIELD_SERVICE_COMBINED_CHARACTERS[] = "CombinedCharacters";
+static sal_Char __READONLY_DATA FIELD_SERVICE_MEASURE[] = "Measure";
 
 
 SvXMLEnumMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
@@ -354,6 +355,7 @@ SvXMLEnumMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
     // non-writer fields
     { FIELD_SERVICE_SHEET_NAME,             FIELD_ID_SHEET_NAME },
     { FIELD_SERVICE_URL,                    FIELD_ID_URL },
+    { FIELD_SERVICE_MEASURE,                FIELD_ID_MEASURE },
 
     { 0,                                    0 }
 };
@@ -454,6 +456,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
       sPropertyURLContent(RTL_CONSTASCII_USTRINGPARAM("URLContent")),
       sPropertyAuthor(RTL_CONSTASCII_USTRINGPARAM("Author")),
       sPropertyDate(RTL_CONSTASCII_USTRINGPARAM("Date")),
+      sPropertyMeasureKind(RTL_CONSTASCII_USTRINGPARAM("Kind")),
       pCombinedCharactersPropertyState(pCombinedCharState)
 {
 }
@@ -685,6 +688,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
         case FIELD_ID_CHAPTER:
         case FIELD_ID_FILE_NAME:
         case FIELD_ID_SHEET_NAME:
+        case FIELD_ID_MEASURE:
         case FIELD_ID_URL:
             ; // these field IDs are final
             break;
@@ -787,6 +791,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_AUTHOR:
     case FIELD_ID_PAGESTRING:
     case FIELD_ID_SHEET_NAME:
+    case FIELD_ID_MEASURE:
     case FIELD_ID_URL:
         // always string:
         return sal_True;
@@ -948,6 +953,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_CHAPTER:
     case FIELD_ID_FILE_NAME:
     case FIELD_ID_SHEET_NAME:
+    case FIELD_ID_MEASURE:
     case FIELD_ID_URL:
         ; // no formats for these fields!
         break;
@@ -1641,6 +1647,12 @@ void XMLTextFieldExport::ExportFieldHelper(
         break;
     }
 
+    case FIELD_ID_MEASURE:
+    {
+        ProcessString(sXML_kind, MapMeasureKind(GetInt16Property(sPropertyMeasureKind, rPropSet)));
+        ExportElement( sXML_measure, sPresentation );
+        break;
+    }
 
     case FIELD_ID_UNKNOWN:
     default:
@@ -2991,6 +3003,17 @@ const sal_Char* XMLTextFieldExport::MapBibliographyFieldName(OUString sName)
     return pName;
 }
 
+const sal_Char* XMLTextFieldExport::MapMeasureKind(sal_Int16 nKind)
+{
+    switch( nKind )
+    {
+    case 0:
+        return sXML_value;
+    case 1:
+        return sXML_unit;
+    }
+    return sXML_gap;
+}
 
 OUString XMLTextFieldExport::MakeFootnoteRefName(
     sal_Int16 nSeqNo)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-31 16:14:27 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 19:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,14 @@
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_MEASURETEXTHORZPOS_HPP_
+#include <com/sun/star/drawing/MeasureTextHorzPos.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_MEASURETEXTVERTPOS_HPP_
+#include <com/sun/star/drawing/MeasureTextVertPos.hpp>
+#endif
+
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmlkywd.hxx>
 #endif
@@ -202,100 +210,102 @@ using namespace ::com::sun::star;
 const XMLPropertyMapEntry aXMLSDProperties[] =
 {
     // stroke attributes
-    { "LineStyle",      XML_NAMESPACE_DRAW, sXML_stroke,                XML_SD_TYPE_STROKE, 0 },
-    { "LineDashName",   XML_NAMESPACE_DRAW, sXML_stroke_dash,           XML_TYPE_STRING, CTF_DASHNAME },
-    { "LineWidth",      XML_NAMESPACE_SVG,  sXML_stroke_width,          XML_TYPE_MEASURE, 0 },
-    { "LineColor",      XML_NAMESPACE_SVG,  sXML_stroke_color,          XML_TYPE_COLOR, 0 },
-    { "LineStartName",  XML_NAMESPACE_DRAW, sXML_marker_start,          XML_TYPE_STRING, CTF_LINESTARTNAME },
-    { "LineStartWidth", XML_NAMESPACE_DRAW, sXML_marker_start_width,    XML_TYPE_MEASURE, 0 },
-    { "LineStartCenter",XML_NAMESPACE_DRAW, sXML_marker_start_center,   XML_TYPE_BOOL, 0 },
-    { "LineEndName",    XML_NAMESPACE_DRAW, sXML_marker_end,            XML_TYPE_STRING, CTF_LINEENDNAME },
-    { "LineEndWidth",   XML_NAMESPACE_DRAW, sXML_marker_end_width,      XML_TYPE_MEASURE, 0 },
-    { "LineEndCenter",  XML_NAMESPACE_DRAW, sXML_marker_end_center,     XML_TYPE_BOOL, 0 },
-    { "LineTransparence", XML_NAMESPACE_SVG,sXML_stroke_opacity,        XML_SD_TYPE_OPACITY, 0 },
-    { "LineJoint",      XML_NAMESPACE_SVG,  sXML_stroke_linejoin,       XML_SD_TYPE_LINEJOIN, 0 },
+    { "LineStyle",                      XML_NAMESPACE_DRAW, sXML_stroke,                XML_SD_TYPE_STROKE, 0 },
+    { "LineDashName",                   XML_NAMESPACE_DRAW, sXML_stroke_dash,           XML_TYPE_STRING, CTF_DASHNAME },
+    { "LineWidth",                      XML_NAMESPACE_SVG,  sXML_stroke_width,          XML_TYPE_MEASURE, 0 },
+    { "LineColor",                      XML_NAMESPACE_SVG,  sXML_stroke_color,          XML_TYPE_COLOR, 0 },
+    { "LineStartName",                  XML_NAMESPACE_DRAW, sXML_marker_start,          XML_TYPE_STRING, CTF_LINESTARTNAME },
+    { "LineStartWidth",                 XML_NAMESPACE_DRAW, sXML_marker_start_width,    XML_TYPE_MEASURE, 0 },
+    { "LineStartCenter",                XML_NAMESPACE_DRAW, sXML_marker_start_center,   XML_TYPE_BOOL, 0 },
+    { "LineEndName",                    XML_NAMESPACE_DRAW, sXML_marker_end,            XML_TYPE_STRING, CTF_LINEENDNAME },
+    { "LineEndWidth",                   XML_NAMESPACE_DRAW, sXML_marker_end_width,      XML_TYPE_MEASURE, 0 },
+    { "LineEndCenter",                  XML_NAMESPACE_DRAW, sXML_marker_end_center,     XML_TYPE_BOOL, 0 },
+    { "LineTransparence",               XML_NAMESPACE_SVG,  sXML_stroke_opacity,        XML_SD_TYPE_OPACITY, 0 },
+    { "LineJoint",                      XML_NAMESPACE_SVG,  sXML_stroke_linejoin,       XML_SD_TYPE_LINEJOIN, 0 },
 
     // fill attributes
-    { "FillStyle",      XML_NAMESPACE_DRAW, sXML_fill,                  XML_SD_TYPE_FILLSTYLE, 0 },
-    { "FillColor",      XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },
-    { "FillGradientName",   XML_NAMESPACE_DRAW, sXML_fill_gradient_name,XML_TYPE_STRING, CTF_FILLGRADIENTNAME },
-    { "FillGradientStepCount",  XML_NAMESPACE_DRAW, sXML_gradient_step_count,   XML_TYPE_NUMBER, 0 },
-    { "FillHatchName",      XML_NAMESPACE_DRAW, sXML_fill_hatch_name,   XML_TYPE_STRING, CTF_FILLHATCHNAME },
-    { "FillBitmapName",     XML_NAMESPACE_DRAW, sXML_fill_image_name,   XML_TYPE_STRING, CTF_FILLBITMAPNAME },
-    { "FillTransparence",   XML_NAMESPACE_DRAW, sXML_transparency,      XML_TYPE_PERCENT16, 0 },
-    { "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, sXML_transparency_name, XML_TYPE_STRING, CTF_FILLTRANSNAME },
+    { "FillStyle",                      XML_NAMESPACE_DRAW, sXML_fill,                  XML_SD_TYPE_FILLSTYLE, 0 },
+    { "FillColor",                      XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },
+    { "FillGradientName",               XML_NAMESPACE_DRAW, sXML_fill_gradient_name,    XML_TYPE_STRING, CTF_FILLGRADIENTNAME },
+    { "FillGradientStepCount",          XML_NAMESPACE_DRAW, sXML_gradient_step_count,   XML_TYPE_NUMBER, 0 },
+    { "FillHatchName",                  XML_NAMESPACE_DRAW, sXML_fill_hatch_name,       XML_TYPE_STRING, CTF_FILLHATCHNAME },
+    { "FillBitmapName",                 XML_NAMESPACE_DRAW, sXML_fill_image_name,       XML_TYPE_STRING, CTF_FILLBITMAPNAME },
+    { "FillTransparence",               XML_NAMESPACE_DRAW, sXML_transparency,          XML_TYPE_PERCENT16, 0 },
+    { "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, sXML_transparency_name,     XML_TYPE_STRING, CTF_FILLTRANSNAME },
 
-    { "FillBitmapSizeX",            XML_NAMESPACE_DRAW, sXML_fill_image_width,  XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, sXML_fill_image_width,  XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MULTI_ATTRIBUTE, 0 },
-    { "FillBitmapSizeY",            XML_NAMESPACE_DRAW, sXML_fill_image_height, XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, sXML_fill_image_height, XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MULTI_ATTRIBUTE, 0 },
-    { "FillBitmapMode",             XML_NAMESPACE_STYLE, sXML_repeat,           XML_SD_TYPE_BITMAP_MODE, 0 },
-    { "FillBitmapPositionOffsetX",  XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_x,                XML_TYPE_PERCENT, 0 },
-    { "FillBitmapPositionOffsetY",  XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_y,                XML_TYPE_PERCENT, 0 },
-    { "FillBitmapRectanglePoint",   XML_NAMESPACE_DRAW, sXML_fill_image_ref_point, XML_SD_TYPE_BITMAP_REFPOINT, 0 },
-    { "FillBitmapOffsetX",          XML_NAMESPACE_DRAW, sXML_tile_repeat_offset,XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X },
-    { "FillBitmapOffsetY",          XML_NAMESPACE_DRAW, sXML_tile_repeat_offset,XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y },
+    { "FillBitmapSizeX",                XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MULTI_ATTRIBUTE, 0 },
+    { "FillBitmapSizeY",                XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MULTI_ATTRIBUTE, 0 },
+    { "FillBitmapMode",                 XML_NAMESPACE_STYLE,sXML_repeat,                XML_SD_TYPE_BITMAP_MODE, 0 },
+    { "FillBitmapPositionOffsetX",      XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_x,XML_TYPE_PERCENT, 0 },
+    { "FillBitmapPositionOffsetY",      XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_y,XML_TYPE_PERCENT, 0 },
+    { "FillBitmapRectanglePoint",       XML_NAMESPACE_DRAW, sXML_fill_image_ref_point,  XML_SD_TYPE_BITMAP_REFPOINT, 0 },
+    { "FillBitmapOffsetX",              XML_NAMESPACE_DRAW, sXML_tile_repeat_offset,    XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X },
+    { "FillBitmapOffsetY",              XML_NAMESPACE_DRAW, sXML_tile_repeat_offset,    XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y },
 
     // text frame attributes
-    { "TextHorizontalAdjust",   XML_NAMESPACE_FO,   sXML_text_align,        XML_SD_TYPE_TEXT_ALIGN, 0 },
-    { "TextVerticalAdjust",     XML_NAMESPACE_FO,   sXML_vertical_align,    XML_SD_TYPE_VERTICAL_ALIGN, 0 },
-    { "TextAutoGrowHeight",     XML_NAMESPACE_DRAW, sXML_auto_grow_width,   XML_TYPE_BOOL, 0 },
-    { "TextAutoGrowWidth",      XML_NAMESPACE_DRAW, sXML_auto_grow_height,  XML_TYPE_BOOL, 0 },
-    { "TextFitToSize",          XML_NAMESPACE_DRAW, sXML_fit_to_size,       XML_SD_TYPE_FITTOSIZE, 0 },
-    { "TextMaximumFrameHeight", XML_NAMESPACE_FO,   sXML_max_height,        XML_TYPE_MEASURE, 0 },
-    { "TextMaximumFrameWidth",  XML_NAMESPACE_FO,   sXML_max_width,         XML_TYPE_MEASURE, 0 },
-    { "TextMinimumFrameHeight", XML_NAMESPACE_FO,   sXML_min_height,        XML_TYPE_MEASURE, 0 },
-    { "TextMinimumFrameWidth",  XML_NAMESPACE_FO,   sXML_min_width,         XML_TYPE_MEASURE, 0 },
-    { "TextUpperDistance",      XML_NAMESPACE_FO,   sXML_margin_top,        XML_TYPE_MEASURE, 0 },
-    { "TextLowerDistance",      XML_NAMESPACE_FO,   sXML_margin_bottom,     XML_TYPE_MEASURE, 0 },
-    { "TextLeftDistance",       XML_NAMESPACE_FO,   sXML_margin_left,       XML_TYPE_MEASURE, 0 },
-    { "TextRightDistance",      XML_NAMESPACE_FO,   sXML_margin_right,      XML_TYPE_MEASURE, 0 },
-    { "TextWritingMode",        XML_NAMESPACE_FO,   sXML_writing_mode,      XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE },
-    { "NumberingRules",         XML_NAMESPACE_TEXT, sXML_list_style,        XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES },
-    { "NumberingRules",         XML_NAMESPACE_TEXT, sXML_list_style_name,   XML_TYPE_STRING, CTF_NUMBERINGRULES_NAME },
+    { "TextHorizontalAdjust",           XML_NAMESPACE_FO,   sXML_text_align,            XML_SD_TYPE_TEXT_ALIGN, 0 },
+    { "TextVerticalAdjust",             XML_NAMESPACE_FO,   sXML_vertical_align,        XML_SD_TYPE_VERTICAL_ALIGN, 0 },
+    { "TextAutoGrowHeight",             XML_NAMESPACE_DRAW, sXML_auto_grow_width,       XML_TYPE_BOOL, 0 },
+    { "TextAutoGrowWidth",              XML_NAMESPACE_DRAW, sXML_auto_grow_height,      XML_TYPE_BOOL, 0 },
+    { "TextFitToSize",                  XML_NAMESPACE_DRAW, sXML_fit_to_size,           XML_SD_TYPE_FITTOSIZE, 0 },
+    { "TextMaximumFrameHeight",         XML_NAMESPACE_FO,   sXML_max_height,            XML_TYPE_MEASURE, 0 },
+    { "TextMaximumFrameWidth",          XML_NAMESPACE_FO,   sXML_max_width,             XML_TYPE_MEASURE, 0 },
+    { "TextMinimumFrameHeight",         XML_NAMESPACE_FO,   sXML_min_height,            XML_TYPE_MEASURE, 0 },
+    { "TextMinimumFrameWidth",          XML_NAMESPACE_FO,   sXML_min_width,             XML_TYPE_MEASURE, 0 },
+    { "TextUpperDistance",              XML_NAMESPACE_FO,   sXML_margin_top,            XML_TYPE_MEASURE, 0 },
+    { "TextLowerDistance",              XML_NAMESPACE_FO,   sXML_margin_bottom,         XML_TYPE_MEASURE, 0 },
+    { "TextLeftDistance",               XML_NAMESPACE_FO,   sXML_margin_left,           XML_TYPE_MEASURE, 0 },
+    { "TextRightDistance",              XML_NAMESPACE_FO,   sXML_margin_right,          XML_TYPE_MEASURE, 0 },
+    { "TextWritingMode",                XML_NAMESPACE_FO,   sXML_writing_mode,          XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE },
+    { "NumberingRules",                 XML_NAMESPACE_TEXT, sXML_list_style,            XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES },
+    { "NumberingRules",                 XML_NAMESPACE_TEXT, sXML_list_style_name,       XML_TYPE_STRING, CTF_NUMBERINGRULES_NAME },
 
     // shadow attributes
-    { "Shadow",         XML_NAMESPACE_DRAW, sXML_shadow,                XML_SD_TYPE_SHADOW, 0 },
-    { "ShadowXDistance",XML_NAMESPACE_DRAW, sXML_shadow_offset_x,       XML_TYPE_MEASURE, 0 },
-    { "ShadowYDistance",XML_NAMESPACE_DRAW, sXML_shadow_offset_y,       XML_TYPE_MEASURE, 0 },
-    { "ShadowColor",    XML_NAMESPACE_DRAW, sXML_shadow_color,          XML_TYPE_COLOR, 0 },
-    { "ShadowTransparence", XML_NAMESPACE_DRAW, sXML_shadow_transparency, XML_TYPE_PERCENT, 0 },
+    { "Shadow",                         XML_NAMESPACE_DRAW, sXML_shadow,                XML_SD_TYPE_SHADOW, 0 },
+    { "ShadowXDistance",                XML_NAMESPACE_DRAW, sXML_shadow_offset_x,       XML_TYPE_MEASURE, 0 },
+    { "ShadowYDistance",                XML_NAMESPACE_DRAW, sXML_shadow_offset_y,       XML_TYPE_MEASURE, 0 },
+    { "ShadowColor",                    XML_NAMESPACE_DRAW, sXML_shadow_color,          XML_TYPE_COLOR, 0 },
+    { "ShadowTransparence",             XML_NAMESPACE_DRAW, sXML_shadow_transparency,   XML_TYPE_PERCENT, 0 },
 
     // graphic attributes
-    { "GraphicColorMode", XML_NAMESPACE_DRAW, sXML_color_mode,          XML_TYPE_COLOR_MODE, 0 },
-    { "AdjustLuminance",  XML_NAMESPACE_DRAW, sXML_luminance,           XML_TYPE_PERCENT16, 0 },        // signed?
-    { "AdjustContrast", XML_NAMESPACE_DRAW, sXML_contrast,              XML_TYPE_PERCENT16, 0 },        // signed?
-    { "Gamma",          XML_NAMESPACE_DRAW, sXML_gamma,                 XML_TYPE_DOUBLE, 0 },           // signed?
-    { "AdjustRed",      XML_NAMESPACE_DRAW, sXML_red,                   XML_TYPE_PERCENT16, 0 },        // signed?
-    { "AdjustGreen",    XML_NAMESPACE_DRAW, sXML_green,                 XML_TYPE_PERCENT16, 0 },        // signed?
-    { "AdjustBlue",     XML_NAMESPACE_DRAW, sXML_blue,                  XML_TYPE_PERCENT16, 0 },        // signed?
+    { "GraphicColorMode",               XML_NAMESPACE_DRAW, sXML_color_mode,            XML_TYPE_COLOR_MODE, 0 },
+    { "AdjustLuminance",                XML_NAMESPACE_DRAW, sXML_luminance,             XML_TYPE_PERCENT16, 0 },        // signed?
+    { "AdjustContrast",                 XML_NAMESPACE_DRAW, sXML_contrast,              XML_TYPE_PERCENT16, 0 },        // signed?
+    { "Gamma",                          XML_NAMESPACE_DRAW, sXML_gamma,                 XML_TYPE_DOUBLE, 0 },           // signed?
+    { "AdjustRed",                      XML_NAMESPACE_DRAW, sXML_red,                   XML_TYPE_PERCENT16, 0 },        // signed?
+    { "AdjustGreen",                    XML_NAMESPACE_DRAW, sXML_green,                 XML_TYPE_PERCENT16, 0 },        // signed?
+    { "AdjustBlue",                     XML_NAMESPACE_DRAW, sXML_blue,                  XML_TYPE_PERCENT16, 0 },        // signed?
 
     // animation text attributes
-    { "TextAnimationKind",          XML_NAMESPACE_STYLE,sXML_text_blinking,             XML_TYPE_TEXT_ANIMATION_BLINKING|MID_FLAG_MULTI_ATTRIBUTE, CTF_TEXTANIMATION_BLINKING },
-    { "TextAnimationKind",          XML_NAMESPACE_TEXT, sXML_animation,                 XML_TYPE_TEXT_ANIMATION|MID_FLAG_MULTI_ATTRIBUTE, CTF_TEXTANIMATION_KIND },
-    { "TextAnimationDirection",     XML_NAMESPACE_TEXT, sXML_animation_direction,       XML_TYPE_TEXT_ANIMATION_DIRECTION, 0 },
-    { "TextAnimationStartInside",   XML_NAMESPACE_TEXT, sXML_animation_start_inside,    XML_TYPE_BOOL, 0 },
-    { "TextAnimationStopInside",    XML_NAMESPACE_TEXT, sXML_animation_stop_inside,     XML_TYPE_BOOL, 0 },
-    { "TextAnimationCount",         XML_NAMESPACE_TEXT, sXML_animation_repeat,          XML_TYPE_NUMBER16, 0 },
-    { "TextAnimationDelay",         XML_NAMESPACE_TEXT, sXML_animation_delay,           XML_TYPE_DURATION16_MS, 0 },
-    { "TextAnimationAmount",        XML_NAMESPACE_TEXT, sXML_animation_steps,           XML_TYPE_TEXT_ANIMATION_STEPS, 0 },
+    { "TextAnimationKind",              XML_NAMESPACE_STYLE,sXML_text_blinking,         XML_TYPE_TEXT_ANIMATION_BLINKING|MID_FLAG_MULTI_ATTRIBUTE, CTF_TEXTANIMATION_BLINKING },
+    { "TextAnimationKind",              XML_NAMESPACE_TEXT, sXML_animation,             XML_TYPE_TEXT_ANIMATION|MID_FLAG_MULTI_ATTRIBUTE, CTF_TEXTANIMATION_KIND },
+    { "TextAnimationDirection",         XML_NAMESPACE_TEXT, sXML_animation_direction,   XML_TYPE_TEXT_ANIMATION_DIRECTION, 0 },
+    { "TextAnimationStartInside",       XML_NAMESPACE_TEXT, sXML_animation_start_inside,XML_TYPE_BOOL, 0 },
+    { "TextAnimationStopInside",        XML_NAMESPACE_TEXT, sXML_animation_stop_inside, XML_TYPE_BOOL, 0 },
+    { "TextAnimationCount",             XML_NAMESPACE_TEXT, sXML_animation_repeat,      XML_TYPE_NUMBER16, 0 },
+    { "TextAnimationDelay",             XML_NAMESPACE_TEXT, sXML_animation_delay,       XML_TYPE_DURATION16_MS, 0 },
+    { "TextAnimationAmount",            XML_NAMESPACE_TEXT, sXML_animation_steps,       XML_TYPE_TEXT_ANIMATION_STEPS, 0 },
 
     // connector attributes
-    { "EdgeNode1HorzDist",  XML_NAMESPACE_DRAW, sXML_start_line_spacing_horizontal, XML_TYPE_MEASURE, 0 },
-    { "EdgeNode1VertDist",  XML_NAMESPACE_DRAW, sXML_start_line_spacing_vertical,   XML_TYPE_MEASURE, 0 },
-    { "EdgeNode2HorzDist",  XML_NAMESPACE_DRAW, sXML_end_line_spacing_horizontal,   XML_TYPE_MEASURE, 0 },
-    { "EdgeNode2VertDist",  XML_NAMESPACE_DRAW, sXML_end_line_spacing_vertical,     XML_TYPE_MEASURE, 0 },
+    { "EdgeNode1HorzDist",              XML_NAMESPACE_DRAW, sXML_start_line_spacing_horizontal, XML_TYPE_MEASURE, 0 },
+    { "EdgeNode1VertDist",              XML_NAMESPACE_DRAW, sXML_start_line_spacing_vertical,   XML_TYPE_MEASURE, 0 },
+    { "EdgeNode2HorzDist",              XML_NAMESPACE_DRAW, sXML_end_line_spacing_horizontal,   XML_TYPE_MEASURE, 0 },
+    { "EdgeNode2VertDist",              XML_NAMESPACE_DRAW, sXML_end_line_spacing_vertical,     XML_TYPE_MEASURE, 0 },
 
     // measure attributes
-    { "MeasureLineDistance",        XML_NAMESPACE_DRAW, sXML_line_distance,             XML_TYPE_MEASURE, 0 },
-    { "MeasureHelpLineOverhang",    XML_NAMESPACE_DRAW, sXML_guide_overhang,            XML_TYPE_MEASURE, 0 },
-    { "MeasureHelpLineDistance",    XML_NAMESPACE_DRAW, sXML_guide_distance,            XML_TYPE_MEASURE, 0 },
-    { "MeasureHelpLine1Length",     XML_NAMESPACE_DRAW, sXML_start_guide,               XML_TYPE_MEASURE, 0 },
-    { "MeasureHelpLine2Length",     XML_NAMESPACE_DRAW, sXML_end_guide,                 XML_TYPE_MEASURE, 0 },
-//  { "MeasureUnit",                XML_NAMESPACE_DRAW, sXML_unit,                      XML_TYPE_MEASURE_UNIT|MID_FLAG_MULTI_PROPERTY, 0 },
-//  { "MeasureShowUnit",            XML_NAMESPACE_DRAW, sXML_unit,                      XML_TYPE_MEASURE_UNIT|MID_FLAG_MULTI_PROPERTY, 0 },
-//  { "MeasureBelowReferenceEdge",  XML_NAMESPACE_DRAW, sXML_placing,                   XML_TYPE_MEASURE_PLACING, 0 },
-    { "MeasureTextRotate90",        XML_NAMESPACE_DRAW, sXML_parallel,                  XML_TYPE_BOOL, 0 },
+    { "MeasureLineDistance",            XML_NAMESPACE_DRAW, sXML_line_distance,         XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLineOverhang",        XML_NAMESPACE_DRAW, sXML_guide_overhang,        XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLineDistance",        XML_NAMESPACE_DRAW, sXML_guide_distance,        XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLine1Length",         XML_NAMESPACE_DRAW, sXML_start_guide,           XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLine2Length",         XML_NAMESPACE_DRAW, sXML_end_guide,             XML_TYPE_MEASURE, 0 },
+    { "MeasureTextHorizontalPosition",  XML_NAMESPACE_DRAW, sXML_measure_align,         XML_SD_TYPE_MEASURE_HALIGN, 0 },
+    { "MeasureTextVerticalPosition",    XML_NAMESPACE_DRAW, sXML_measure_vertical_align,XML_SD_TYPE_MEASURE_VALIGN, 0 },
+    { "MeasureUnit",                    XML_NAMESPACE_DRAW, sXML_unit,                  XML_SD_TYPE_MEASURE_UNIT, 0 },
+    { "MeasureShowUnit",                XML_NAMESPACE_DRAW, sXML_show_unit,             XML_TYPE_BOOL, 0 },
+    { "MeasureBelowReferenceEdge",      XML_NAMESPACE_DRAW, sXML_placing,               XML_SD_TYPE_MEASURE_PLACING, 0 },
+    { "MeasureTextRotate90",            XML_NAMESPACE_DRAW, sXML_parallel,              XML_TYPE_BOOL, 0 },
 
     // 3D geometry attributes
     { "D3DHorizontalSegments",          XML_NAMESPACE_DR3D, sXML_horizontal_segments,   XML_TYPE_NUMBER, 0 },
@@ -334,13 +344,13 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
 
 const XMLPropertyMapEntry aXMLSDPresPageProps[] =
 {
-    { "Change",             XML_NAMESPACE_PRESENTATION, "transition-type",  XML_SD_TYPE_PRESPAGE_TYPE, CTF_PAGE_TRANS_TYPE },
-    { "Effect",             XML_NAMESPACE_PRESENTATION, "transition-style", XML_SD_TYPE_PRESPAGE_STYLE, CTF_PAGE_TRANS_STYLE },
-    { "Speed",              XML_NAMESPACE_PRESENTATION, "transition-speed", XML_SD_TYPE_PRESPAGE_SPEED, CTF_PAGE_TRANS_SPEED },
-    { "Duration",           XML_NAMESPACE_PRESENTATION, "duration",         XML_SD_TYPE_PRESPAGE_DURATION, CTF_PAGE_TRANS_DURATION },
-    { "Visible",            XML_NAMESPACE_PRESENTATION, "visibility",       XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_VISIBLE },
-    { "Sound",              XML_NAMESPACE_PRESENTATION, "sound",            XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM, CTF_PAGE_SOUND_URL },
-    { "BackgroundFullSize", XML_NAMESPACE_DRAW,         "background-size",  XML_SD_TYPE_PRESPAGE_BACKSIZE, CTF_PAGE_BACKSIZE },
+    { "Change",                     XML_NAMESPACE_PRESENTATION, "transition-type",  XML_SD_TYPE_PRESPAGE_TYPE, CTF_PAGE_TRANS_TYPE },
+    { "Effect",                     XML_NAMESPACE_PRESENTATION, "transition-style", XML_SD_TYPE_PRESPAGE_STYLE, CTF_PAGE_TRANS_STYLE },
+    { "Speed",                      XML_NAMESPACE_PRESENTATION, "transition-speed", XML_SD_TYPE_PRESPAGE_SPEED, CTF_PAGE_TRANS_SPEED },
+    { "Duration",                   XML_NAMESPACE_PRESENTATION, "duration",         XML_SD_TYPE_PRESPAGE_DURATION, CTF_PAGE_TRANS_DURATION },
+    { "Visible",                    XML_NAMESPACE_PRESENTATION, "visibility",       XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_VISIBLE },
+    { "Sound",                      XML_NAMESPACE_PRESENTATION, "sound",            XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM, CTF_PAGE_SOUND_URL },
+    { "BackgroundFullSize",         XML_NAMESPACE_DRAW,         "background-size",  XML_SD_TYPE_PRESPAGE_BACKSIZE, CTF_PAGE_BACKSIZE },
 
     { "FillStyle",                  XML_NAMESPACE_DRAW, sXML_fill,                  XML_SD_TYPE_FILLSTYLE, 0 },
     { "FillColor",                  XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },
@@ -353,7 +363,7 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
     { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MULTI_ATTRIBUTE, 0 },
     { "FillBitmapSizeY",            XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
     { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MULTI_ATTRIBUTE, 0 },
-    { "FillBitmapMode",             XML_NAMESPACE_STYLE, sXML_repeat,               XML_SD_TYPE_BITMAP_MODE, 0 },
+    { "FillBitmapMode",             XML_NAMESPACE_STYLE,sXML_repeat,                XML_SD_TYPE_BITMAP_MODE, 0 },
     { "FillBitmapPositionOffsetX",  XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_x,XML_TYPE_PERCENT, 0 },
     { "FillBitmapPositionOffsetY",  XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_y,XML_TYPE_PERCENT, 0 },
     { "FillBitmapRectanglePoint",   XML_NAMESPACE_DRAW, sXML_fill_image_ref_point,  XML_SD_TYPE_BITMAP_REFPOINT, 0 },
@@ -368,9 +378,9 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
 
 SvXMLEnumMapEntry aXML_LineStyle_EnumMap[] =
 {
-    { sXML_none, drawing::LineStyle_NONE },
-    { sXML_solid, drawing::LineStyle_SOLID },
-    { sXML_dash, drawing::LineStyle_DASH },
+    { sXML_none,    drawing::LineStyle_NONE },
+    { sXML_solid,   drawing::LineStyle_SOLID },
+    { sXML_dash,    drawing::LineStyle_DASH },
     { NULL, 0 }
 };
 
@@ -396,10 +406,10 @@ SvXMLEnumMapEntry aXML_FillStyle_EnumMap[] =
 
 SvXMLEnumMapEntry aXML_PresChange_EnumMap[] =
 {
-    { sXML_manual,  0 },
-    { sXML_automatic, 1 },
-    { sXML_semi_automatic, 2 },
-    { NULL, 0 }
+    { sXML_manual,          0 },
+    { sXML_automatic,       1 },
+    { sXML_semi_automatic,  2 },
+    { NULL,                 0 }
 };
 
 SvXMLEnumMapEntry aXML_TransSpeed_EnumMap[] =
@@ -549,57 +559,90 @@ SvXMLEnumMapEntry aXML_WritingMode_EnumMap[] =
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_TextAnimation_Enum[] =
 {
-    { sXML_none,            com::sun::star::drawing::TextAnimationKind_NONE },
-    { sXML_blinking,        com::sun::star::drawing::TextAnimationKind_BLINK }, // will be filtered
-    { sXML_scroll,          com::sun::star::drawing::TextAnimationKind_SCROLL },
-    { sXML_alternate,       com::sun::star::drawing::TextAnimationKind_ALTERNATE },
-    { sXML_slide,           com::sun::star::drawing::TextAnimationKind_SLIDE },
+    { sXML_none,        drawing::TextAnimationKind_NONE },
+    { sXML_blinking,    drawing::TextAnimationKind_BLINK }, // will be filtered
+    { sXML_scroll,      drawing::TextAnimationKind_SCROLL },
+    { sXML_alternate,   drawing::TextAnimationKind_ALTERNATE },
+    { sXML_slide,       drawing::TextAnimationKind_SLIDE },
     { 0, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_TextAnimation_Blinking_Enum[] =
 {
-    { sXML_false,           com::sun::star::drawing::TextAnimationKind_NONE },
-    { sXML_true,            com::sun::star::drawing::TextAnimationKind_BLINK },
-    { sXML_false,           com::sun::star::drawing::TextAnimationKind_SCROLL },
-    { sXML_false,           com::sun::star::drawing::TextAnimationKind_ALTERNATE },
-    { sXML_false,           com::sun::star::drawing::TextAnimationKind_SLIDE },
+    { sXML_false,       drawing::TextAnimationKind_NONE },
+    { sXML_true,        drawing::TextAnimationKind_BLINK },
+    { sXML_false,       drawing::TextAnimationKind_SCROLL },
+    { sXML_false,       drawing::TextAnimationKind_ALTERNATE },
+    { sXML_false,       drawing::TextAnimationKind_SLIDE },
     { 0, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_TextAnimationDirection_Enum[] =
 {
-    { sXML_left,            com::sun::star::drawing::TextAnimationDirection_LEFT },
-    { sXML_right,           com::sun::star::drawing::TextAnimationDirection_RIGHT },    // will be filtered
-    { sXML_up,              com::sun::star::drawing::TextAnimationDirection_UP },
-    { sXML_down,            com::sun::star::drawing::TextAnimationDirection_DOWN },
+    { sXML_left,        drawing::TextAnimationDirection_LEFT },
+    { sXML_right,       drawing::TextAnimationDirection_RIGHT },    // will be filtered
+    { sXML_up,          drawing::TextAnimationDirection_UP },
+    { sXML_down,        drawing::TextAnimationDirection_DOWN },
     { 0, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_TextAlign_Enum[] =
 {
-    { sXML_left,            com::sun::star::drawing::TextHorizontalAdjust_LEFT },
-    { sXML_center,          com::sun::star::drawing::TextHorizontalAdjust_CENTER },
-    { sXML_right,           com::sun::star::drawing::TextHorizontalAdjust_RIGHT },
-    { sXML_justify,         com::sun::star::drawing::TextHorizontalAdjust_BLOCK },
+    { sXML_left,        drawing::TextHorizontalAdjust_LEFT },
+    { sXML_center,      drawing::TextHorizontalAdjust_CENTER },
+    { sXML_right,       drawing::TextHorizontalAdjust_RIGHT },
+    { sXML_justify,     drawing::TextHorizontalAdjust_BLOCK },
     { 0, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
 {
-    { sXML_top,             com::sun::star::drawing::TextVerticalAdjust_TOP },
-    { sXML_middle,          com::sun::star::drawing::TextVerticalAdjust_CENTER },
-    { sXML_bottom,          com::sun::star::drawing::TextVerticalAdjust_BOTTOM },
+    { sXML_top,         drawing::TextVerticalAdjust_TOP },
+    { sXML_middle,      drawing::TextVerticalAdjust_CENTER },
+    { sXML_bottom,      drawing::TextVerticalAdjust_BOTTOM },
     { 0, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_FitToSize_Enum[] =
 {
-    { sXML_false,           com::sun::star::drawing::TextFitToSizeType_NONE },
-    { sXML_true,            com::sun::star::drawing::TextFitToSizeType_PROPORTIONAL },
-    { sXML_true,            com::sun::star::drawing::TextFitToSizeType_ALLLINES },
-    { sXML_true,            com::sun::star::drawing::TextFitToSizeType_RESIZEATTR },
+    { sXML_false,       drawing::TextFitToSizeType_NONE },
+    { sXML_true,        drawing::TextFitToSizeType_PROPORTIONAL },
+    { sXML_true,        drawing::TextFitToSizeType_ALLLINES },
+    { sXML_true,        drawing::TextFitToSizeType_RESIZEATTR },
     { 0, 0 }
+};
+
+SvXMLEnumMapEntry __READONLY_DATA pXML_MeasureUnit_Enum[] =
+{
+    { sXML_automatic,   0 },
+    { sXML_unit_mm,     1 },
+    { sXML_unit_cm,     2 },
+    { sXML_unit_m,      3 },
+    { sXML_unit_km,     4 },
+    { sXML_unit_pt,     6 },
+    { sXML_unit_pc,     7 },
+    { sXML_unit_inch,   8 },
+    { sXML_unit_foot,   9 },
+    { sXML_unit_miles,  10 },
+    { 0,0 }
+};
+
+SvXMLEnumMapEntry __READONLY_DATA pXML_Measure_HAlign_Enum[] =
+{
+    { sXML_automatic,       drawing::MeasureTextHorzPos_AUTO },
+    { sXML_left_outside,    drawing::MeasureTextHorzPos_LEFTOUTSIDE },
+    { sXML_inside,          drawing::MeasureTextHorzPos_INSIDE },
+    { sXML_right_outside,   drawing::MeasureTextHorzPos_RIGHTOUTSIDE},
+    { 0,0 }
+};
+
+SvXMLEnumMapEntry __READONLY_DATA pXML_Measure_VAlign_Enum[] =
+{
+    { sXML_automatic,   drawing::MeasureTextVertPos_AUTO },
+    { sXML_above,       drawing::MeasureTextVertPos_EAST },
+    { sXML_below,       drawing::MeasureTextVertPos_WEST },
+    { sXML_center,      drawing::MeasureTextVertPos_CENTERED },
+    { 0,0 }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -793,6 +836,22 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
             case XML_SD_TYPE_FITTOSIZE:
                 pHdl = new XMLEnumPropertyHdl( pXML_FitToSize_Enum, ::getCppuType((const com::sun::star::drawing::TextFitToSizeType*)0) );
+                break;
+            case XML_SD_TYPE_MEASURE_UNIT:
+                pHdl = new XMLEnumPropertyHdl( pXML_MeasureUnit_Enum, ::getCppuType((const sal_Int32*)0) );
+                break;
+            case XML_SD_TYPE_MEASURE_HALIGN:
+                pHdl = new XMLEnumPropertyHdl( pXML_Measure_HAlign_Enum, ::getCppuType((const com::sun::star::drawing::MeasureTextHorzPos*)0) );
+                break;
+            case XML_SD_TYPE_MEASURE_VALIGN:
+                pHdl = new XMLEnumPropertyHdl( pXML_Measure_VAlign_Enum, ::getCppuType((const com::sun::star::drawing::MeasureTextVertPos*)0) );
+                break;
+            case XML_SD_TYPE_MEASURE_PLACING:
+                const OUString aTrueStr( OUString::createFromAscii(sXML_below) );
+                const OUString aFalseStr( OUString::createFromAscii(sXML_above) );
+                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                break;
+
         }
 
         if(pHdl)

@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.32 2001-02-01 17:40:31 sab Exp $
+	$Id: drawing.mod,v 1.33 2001-02-01 19:12:31 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -384,10 +384,12 @@
 <!ATTLIST style:properties draw:guide-distance %distance; #IMPLIED>
 <!ATTLIST style:properties draw:start-guide %distance; #IMPLIED>
 <!ATTLIST style:properties draw:end-guide %distance; #IMPLIED>
-<!ATTLIST style:properties draw:placing (below|atop) #IMPLIED>
+<!ATTLIST style:properties draw:measure-align (automatic|left-outside|inside|right-outside) #IMPLIED>
+<!ATTLIST style:properties draw:measure-vertical-align (automatic|above|below|center) #IMPLIED>
+<!ATTLIST style:properties draw:unit (automatic|mm|cm|m|km|pt|pc|inch|ft|mi) #IMPLIED>
+<!ATTLIST style:properties draw:show-unit %boolean; #IMPLIED>
+<!ATTLIST style:properties draw:placing (below|above) #IMPLIED>
 <!ATTLIST style:properties draw:parallel %boolean; #IMPLIED>
-<!ATTLIST style:properties draw:text-position-vertical (left|center|right|auto) #IMPLIED>
-<!ATTLIST style:properties draw:text-position-horizontal (top|center|bottom|auto) #IMPLIED>
 
 <!-- Animations -->
 <!ELEMENT presentation:sound EMPTY>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-25 14:05:34 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 19:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,8 @@ enum XMLTextFieldAttrTokens
     XML_TOK_TEXTFIELD_OFFICE_AUTHOR,
     XML_TOK_TEXTFIELD_ANNOTATION,
     XML_TOK_TEXTFIELD_LANGUAGE,
+
+    XML_TOK_TEXTFIELD_MEASURE_KIND,
 
     XML_TOK_TEXTFIELD_UNKNOWN
 };
@@ -1406,6 +1408,31 @@ protected:
                                    const ::rtl::OUString& sAttrValue );
 
     /// set properties
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+};
+
+/** import measure fields (<text:measure>) */
+class XMLMeasureFieldImportContext : public XMLTextFieldImportContext
+{
+    sal_Int16 mnKind;
+public:
+
+    TYPEINFO();
+
+    XMLMeasureFieldImportContext(SvXMLImport& rImport,
+                                    XMLTextImportHelper& rHlp,
+                                    sal_uInt16 nPrfx,
+                                    const ::rtl::OUString& sLocalName);
+
+protected:
+
+    /// process attribute values
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const ::rtl::OUString& sAttrValue );
+
+    /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);

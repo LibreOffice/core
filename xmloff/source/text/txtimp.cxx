@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:15 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 19:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,6 +408,9 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
 
     // Calc fields
     { XML_NAMESPACE_TEXT, sXML_sheet_name, XML_TOK_TEXT_SHEET_NAME },
+
+    // draw fields
+    { XML_NAMESPACE_TEXT, sXML_measure, XML_TOK_TEXT_MEASURE },
 
     // redlining (aka change tracking)
     { XML_NAMESPACE_TEXT, sXML_change_start, XML_TOK_TEXTP_CHANGE_START },

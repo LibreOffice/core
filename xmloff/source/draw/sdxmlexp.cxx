@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-19 16:25:18 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 19:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2868,7 +2868,7 @@ void SdXMLExport::ImpExportMeasureShape(SvXMLExport& rExp,
 
     // export text
     uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-    if( xText.is() && xText->getString().getLength() )
+    if( xText.is() )
         rExp.GetTextParagraphExport()->exportText( xText );
 }
 

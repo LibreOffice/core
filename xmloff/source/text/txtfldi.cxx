@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-25 14:05:36 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 19:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,6 +286,7 @@ const sal_Char sAPI_url[]                       = "URL";
 const sal_Char sAPI_bibliography[]              = "Bibliography";
 const sal_Char sAPI_annotation[]                = "Annotation";
 const sal_Char sAPI_script[]                    = "Script";
+const sal_Char sAPI_measure[]                   = "Measure";
 
 // property names
 const sal_Char sAPI_is_fixed[]          = "IsFixed";
@@ -396,6 +397,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
     { XML_NAMESPACE_OFFICE, sXML_author, XML_TOK_TEXTFIELD_OFFICE_AUTHOR },
     { XML_NAMESPACE_TEXT, sXML_annotation, XML_TOK_TEXTFIELD_ANNOTATION },
     { XML_NAMESPACE_SCRIPT, sXML_language, XML_TOK_TEXTFIELD_LANGUAGE },
+    { XML_NAMESPACE_TEXT, sXML_kind, XML_TOK_TEXTFIELD_MEASURE_KIND },
 
     XML_TOKEN_MAP_END
 };
@@ -776,6 +778,11 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
         case XML_TOK_TEXT_SCRIPT:
             pContext = new XMLScriptImportContext( rImport, rHlp,
                                                    nPrefix, rName);
+            break;
+
+        case XML_TOK_TEXT_MEASURE:
+            pContext = new XMLMeasureFieldImportContext( rImport, rHlp,
+                                                         nPrefix, rName );
             break;
 
         default:
@@ -3546,4 +3553,52 @@ void XMLScriptImportContext::PrepareField(
 
     aAny <<= sScriptType;
     xPropertySet->setPropertyValue(sPropertyScriptType, aAny);
+}
+
+//
+// measure field
+//
+
+TYPEINIT1(XMLMeasureFieldImportContext, XMLTextFieldImportContext);
+
+XMLMeasureFieldImportContext::XMLMeasureFieldImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_uInt16 nPrfx,
+    const OUString& sLocalName) :
+        XMLTextFieldImportContext(rImport, rHlp, sAPI_measure,
+                                  nPrfx, sLocalName),
+        mnKind( 0 )
+{
+}
+
+void XMLMeasureFieldImportContext::ProcessAttribute(
+    sal_uInt16 nAttrToken,
+    const OUString& sAttrValue )
+{
+    switch (nAttrToken)
+    {
+        case XML_TOK_TEXTFIELD_MEASURE_KIND:
+            if( sAttrValue.equalsAsciiL(sXML_value, sizeof(sXML_value)-1))
+            {
+                mnKind = 0; bValid = sal_True;
+            }
+            else if( sAttrValue.equalsAsciiL(sXML_unit, sizeof(sXML_unit)-1))
+            {
+                mnKind = 1; bValid = sal_True;
+            }
+            else if( sAttrValue.equalsAsciiL(sXML_gap, sizeof(sXML_gap)-1))
+            {
+                mnKind = 2; bValid = sal_True;
+            }
+            break;
+    }
+}
+
+void XMLMeasureFieldImportContext::PrepareField(
+    const Reference<XPropertySet> & xPropertySet)
+{
+    Any aAny;
+    aAny <<= mnKind;
+    xPropertySet->setPropertyValue(OUString::createFromAscii("Kind"), aAny);
 }

@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.21 2001-01-24 16:47:57 dvo Exp $
+	$Id: text.mod,v 1.22 2001-02-01 19:12:31 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -129,7 +129,8 @@
 				   text:image-count |
 				   text:object-count |
 				   office:annotation |
-				   text:script" >
+				   text:script |
+				   text:measure" >
 
 <!ENTITY % inline-text "(#PCDATA|
 						 text:span|text:tab-stop|text:s|text:line-break|
@@ -1051,6 +1052,8 @@ indices, and there may be only one text:index-title element.
 <!ATTLIST text:script xlink:href CDATA #IMPLIED>
 <!ATTLIST text:script xlink:type (simple) #FIXED "simple">
 
+<!ELEMENT text:measure (#PCDATA)>
+<!ATTLIST text:measure text:kind (value|unit|gap) #REQUIRED>
 
 <!-- elements for change tracking -->
 

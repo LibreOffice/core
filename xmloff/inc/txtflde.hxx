@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:15 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 19:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,8 @@ enum FieldIdEnum {
 
     FIELD_ID_COMBINED_CHARACTERS,   // combined characters (asian typography)
 
+    FIELD_ID_MEASURE,               // for measure shapes
+
     FIELD_ID_UNKNOWN        // invalid or unknown field type!
 };
 
@@ -224,6 +226,7 @@ public:
     static const sal_Char* MapReferenceType(sal_Int16 nType);
     static const sal_Char* MapCountFieldName(sal_Int16 nToken);
     static const sal_Char* MapBibliographyFieldName(::rtl::OUString sName);
+    static const sal_Char* MapMeasureKind(sal_Int16 nKind);
     const sal_Char* MapPageNumberName(const ::com::sun::star::uno::Reference<
                       ::com::sun::star::beans::XPropertySet> & xPropSet,
                       sal_Int32& nOffset);  /// also adjust page offset
@@ -474,6 +477,7 @@ private:
     const ::rtl::OUString sPropertyURLContent;
     const ::rtl::OUString sPropertyAuthor;
     const ::rtl::OUString sPropertyDate;
+    const ::rtl::OUString sPropertyMeasureKind;
 
     const ::rtl::OUString sEmpty;
 

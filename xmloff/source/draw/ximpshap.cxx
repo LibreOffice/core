@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-01 12:17:05 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 19:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1350,8 +1350,40 @@ void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             aAny <<= maEnd;
             xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")), aAny );
         }
+
+        // delete pre created fields
+        uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
+        if( xText.is() )
+        {
+            const OUString aEmpty( RTL_CONSTASCII_USTRINGPARAM( " " ) );
+            xText->setString( aEmpty );
+        }
+
         SdXMLShapeContext::StartElement(xAttrList);
     }
+}
+
+void SdXMLMeasureShapeContext::EndElement()
+{
+    SdXMLShapeContext::EndElement();
+
+    do
+    {
+        // delete pre created fields
+        uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
+        if( !xText.is() )
+            break;
+
+        uno::Reference< text::XTextCursor > xCursor( xText->createTextCursor() );
+        if( !xCursor.is() )
+            break;
+
+        const OUString aEmpty;
+        xCursor->collapseToStart();
+        xCursor->goRight( 1, sal_True );
+        xCursor->setString( aEmpty );
+    }
+    while(0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-31 16:14:27 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 19:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,10 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define XML_SD_TYPE_TEXT_ALIGN                      (XML_SD_TYPES_START + 25 )
 #define XML_SD_TYPE_VERTICAL_ALIGN                  (XML_SD_TYPES_START + 26 )
 #define XML_SD_TYPE_FITTOSIZE                       (XML_SD_TYPES_START + 27 )
+#define XML_SD_TYPE_MEASURE_HALIGN                  (XML_SD_TYPES_START + 28 )
+#define XML_SD_TYPE_MEASURE_VALIGN                  (XML_SD_TYPES_START + 29 )
+#define XML_SD_TYPE_MEASURE_UNIT                    (XML_SD_TYPES_START + 30 )
+#define XML_SD_TYPE_MEASURE_PLACING                 (XML_SD_TYPES_START + 31 )
 
 // 3D property types
 #define XML_SD_TYPE_BACKFACE_CULLING                (XML_SD_TYPES_START + 40 )
