@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-05 14:36:18 $
+ *  last change: $Author: jp $ $Date: 2001-02-13 15:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,8 +653,8 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
             SdrModel *pModel = (SdrModel*)pObject;
             pModel->SetStreamingSdrModel( TRUE );
             xStream->SetBufferSize( 16348 );
-            xStream->SetVersion( SOFFICE_FILEFORMAT_NOW );
-            pModel->GetItemPool().SetFileFormatVersion( SOFFICE_FILEFORMAT_NOW );
+            xStream->SetVersion( SOFFICE_FILEFORMAT_50 );
+            pModel->GetItemPool().SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );
             pModel->GetItemPool().GetSecondaryPool()->Store( *xStream );
             pModel->PreSave();
             *xStream << *pModel;
@@ -1902,7 +1902,7 @@ int SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
     SotStorageStreamRef xStrm;
     if( rData.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xStrm ))
     {
-        xStrm->SetVersion( SOFFICE_FILEFORMAT_NOW );
+        xStrm->SetVersion( SOFFICE_FILEFORMAT_50 );
         rSh.Paste( *xStrm, nAction, pPt );
         nRet = 1;
 
