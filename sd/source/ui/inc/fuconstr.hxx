@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconstr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:58:16 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,14 @@ public:
 
     virtual void SelectionHasChanged() { bSelectionChanged = TRUE; }
 
+    // SJ: setting stylesheet, the use of a filled or unfilled style
+    // is determined by the member nSlotId :
     void SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj);
+
+    // SJ: setting stylesheet, the use of a filled or unfilled style
+    // is determinded by the parameters bUseFillStyle and bUseNoFillStyle :
+    void SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
+            const sal_Bool bUseFillStyle, const sal_Bool bUseNoFillStyle );
 
 protected:
     bool bSelectionChanged;
