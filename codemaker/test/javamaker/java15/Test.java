@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:15:56 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,5 +124,11 @@ public final class Test extends ComplexTestCase {
                 context, false, (byte) 1, (short) 2, Integer.valueOf(4));
             failed();
         } catch (DeploymentException e) {}
+    }
+
+    private static final class Ifc implements XIfc {
+        public void f1(PolyStruct<Integer, Integer> arg) {}
+
+        public void f2(PolyStruct<Object, Object> arg) {}
     }
 }
