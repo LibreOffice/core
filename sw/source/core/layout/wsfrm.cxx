@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:52:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3322,7 +3322,10 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 nAvail -= nWidth;
             }
 
-            ::CalcCntnt( this );
+            // OD 14.03.2003 #i11760# - adjust method call <CalcCntnt(..)>:
+            // Set 3rd parameter to true in order to forbid format of follow
+            // during format of text frames. (2nd parameter = default value.)
+            ::CalcCntnt( this, false, true );
 
             pCol = (SwLayoutFrm*)Lower();
             ASSERT( pCol && pCol->GetNext(), ":-( Spalten auf Urlaub?");
@@ -3495,7 +3498,8 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
     ::CalcCntnt( this );
     if( IsSctFrm() )
     {
-        ::CalcCntnt( this, TRUE );
+        // OD 14.03.2003 #i11760# - adjust 2nd parameter - TRUE --> true
+        ::CalcCntnt( this, true );
         if( bBackLock )
             ((SwSectionFrm*)this)->SetFtnLock( FALSE );
     }
