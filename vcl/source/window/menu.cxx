@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-17 09:57:15 $
+ *  last change: $Author: tbe $ $Date: 2002-05-22 13:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1564,7 +1564,9 @@ BOOL Menu::ImplIsVisible( USHORT nPos ) const
     if ( !bIsMenuBar && ( nMenuFlags & MENU_FLAG_HIDEDISABLEDENTRIES ) )
     {
         MenuItemData* pData = pItemList->GetDataFromPos( nPos );
-        if ( pData->eType != MENUITEM_SEPARATOR )
+        if( !pData ) // e.g. nPos == ITEMPOS_INVALID
+            bVisible = FALSE;
+        else if ( pData->eType != MENUITEM_SEPARATOR )
         {
             // bVisible = pData->bEnabled && ( !pData->pSubMenu || pData->pSubMenu->HasValidEntries( TRUE ) );
             bVisible = pData->bEnabled; // SubMenus nicht pruefen, weil sie ggf. erst im Activate() gefuellt werden.
@@ -1599,6 +1601,24 @@ BOOL Menu::ImplIsVisible( USHORT nPos ) const
     }
 
     return bVisible;
+}
+
+BOOL Menu::IsItemVisible( USHORT nItemId ) const
+{
+    return ImplIsVisible( GetItemPos( nItemId ) );
+}
+
+BOOL Menu::IsMenuVisible() const
+{
+    return pWindow && pWindow->IsReallyVisible();
+}
+
+void Menu::SelectItem( USHORT nItemId )
+{
+    if( bIsMenuBar )
+        static_cast<MenuBar*>(this)->SelectEntry( nItemId );
+    else
+        static_cast<PopupMenu*>(this)->SelectEntry( nItemId );
 }
 
 Size Menu::ImplCalcSize( Window* pWin )
@@ -2262,12 +2282,30 @@ void PopupMenu::SelectEntry( USHORT nId )
 {
     if ( ImplGetWindow() )
     {
-        USHORT nPos;
-        MenuItemData* pData = GetItemList()->GetData( nId, nPos );
-        if ( pData->pSubMenu )
-            ImplGetFloatingWindow()->ChangeHighlightItem( nPos, TRUE );
+        if( nId != ITEMPOS_INVALID )
+        {
+            USHORT nPos;
+            MenuItemData* pData = GetItemList()->GetData( nId, nPos );
+            if ( pData->pSubMenu )
+                ImplGetFloatingWindow()->ChangeHighlightItem( nPos, TRUE );
+            else
+                ImplGetFloatingWindow()->EndExecute( nId );
+        }
         else
-            ImplGetFloatingWindow()->EndExecute( nId );
+        {
+            MenuFloatingWindow* pFloat = ImplGetFloatingWindow();
+            pFloat->GrabFocus();
+            USHORT nPos;
+            for( nPos = 0; nPos < GetItemList()->Count(); nPos++ )
+            {
+                MenuItemData* pData = (MenuItemData*)GetItemList()->GetObject( nPos );
+                if( pData->pSubMenu )
+                {
+                    pFloat->KillActivePopup();
+                }
+            }
+            pFloat->ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
+        }
     }
 }
 
@@ -3103,9 +3141,14 @@ void MenuFloatingWindow::ChangeHighlightItem( USHORT n, BOOL bStartPopupTimer )
         HighlightItem( nHighlightedItem, FALSE );
 
     nHighlightedItem = (USHORT)n;
-    DBG_ASSERT( ( nHighlightedItem == ITEMPOS_INVALID ) || pMenu->ImplIsVisible( nHighlightedItem ), "ChangeHighlightItem: Not visible!" );
-    HighlightItem( nHighlightedItem, TRUE );
-    pMenu->ImplCallHighlight( nHighlightedItem );
+    DBG_ASSERT( pMenu->ImplIsVisible( nHighlightedItem ) || nHighlightedItem == ITEMPOS_INVALID, "ChangeHighlightItem: Not visible!" );
+    if( nHighlightedItem != ITEMPOS_INVALID )
+    {
+        HighlightItem( nHighlightedItem, TRUE );
+        pMenu->ImplCallHighlight( nHighlightedItem );
+    }
+    else
+        pMenu->nSelectedId = 0;
 
     if ( bStartPopupTimer )
         aHighlightChangedTimer.Start();
