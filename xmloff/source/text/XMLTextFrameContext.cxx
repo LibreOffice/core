@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-16 10:56:37 $
+ *  last change: $Author: mib $ $Date: 2001-11-12 14:23:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,10 +905,11 @@ XMLTextFrameContext::XMLTextFrameContext(
         }
     }
 
-    if( (XML_TEXT_FRAME_APPLET  == nType || XML_TEXT_FRAME_PLUGIN == nType ||
-         XML_TEXT_FRAME_GRAPHIC == nType || XML_TEXT_FRAME_OBJECT == nType ||
-         XML_TEXT_FRAME_OBJECT_OLE == nType)
-        && !sHRef.getLength() )
+    if( ( (XML_TEXT_FRAME_PLUGIN == nType || XML_TEXT_FRAME_GRAPHIC == nType ||
+           XML_TEXT_FRAME_OBJECT == nType ||
+           XML_TEXT_FRAME_OBJECT_OLE == nType) &&
+          !sHRef.getLength() ) ||
+        ( XML_TEXT_FRAME_APPLET  == nType && !sCode.getLength() ) )
         return; // no URL: no image or OLE object
 
     Create( sal_True );
