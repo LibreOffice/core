@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-07 14:14:36 $
+ *  last change: $Author: fs $ $Date: 2000-12-07 17:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1053,17 +1053,18 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
         sSymbol.EraseLeadingChars(' ');
         sSymbol.EraseTrailingChars(' ');
 
-        XubString sTemp = sSymbol;
-        sTemp += ' ';
+        XubString sTemp = String::CreateFromAscii("[$");
+        sTemp += sSymbol;
+        sTemp.AppendAscii("] ");
         sTemp += sNewFormat;
 
         // for negative values : $ -0.00, not -$ 0.00 ...
         // (the real solution would be a possibility to choose a "positive currency format" and a "negative currency format" ...
         // But not now ... (and hey, you could take a formatted field for this ....))
         // FS - 31.03.00 74642
-        sTemp += ';';
+        sTemp.AppendAscii(";[$");
         sTemp += sSymbol;
-        sTemp.AppendAscii(" -");
+        sTemp.AppendAscii("] -");
         sTemp += sNewFormat;
 
         sNewFormat = sTemp;
@@ -1074,8 +1075,9 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
         sTemp.EraseLeadingChars(' ');
         sTemp.EraseTrailingChars(' ');
 
-        sNewFormat += ' ';
+        sNewFormat += String::CreateFromAscii(" [$");
         sNewFormat += sTemp;
+        sNewFormat += ']';
     }
 
     // set this new basic format
