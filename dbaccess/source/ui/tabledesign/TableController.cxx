@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 10:04:23 $
+ *  last change: $Author: oj $ $Date: 2001-05-08 14:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,13 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     try
     {
         // check the columns for double names
-        checkColumns(bNew || !xTables->hasByName(m_sName));
+        if(!checkColumns(bNew || !xTables->hasByName(m_sName)))
+        {
+            m_sName = ::rtl::OUString();
+            stopTableListening();
+            m_xTable = NULL;
+            return sal_False;
+        }
 
         Reference<XPropertySet> xTable;
         if(bNew || !xTables->hasByName(m_sName)) // just to make sure the table already exists
@@ -1317,8 +1323,9 @@ Reference<XNameAccess> OTableController::getKeyColumns() const
     return xKeyColumns;
 }
 // -----------------------------------------------------------------------------
-void OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::sdbc::SQLException)
+sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::sdbc::SQLException)
 {
+    sal_Bool bOk = sal_True;
     sal_Bool bFoundPKey = sal_False;
     Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData>();
 
@@ -1397,8 +1404,11 @@ void OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::sdbc
                     static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->DisplayData(0);
                 }
             }
+            else
+                bOk = sal_False;
         }
     }
+    return bOk;
 }
 // -----------------------------------------------------------------------------
 void OTableController::alterColumns()
