@@ -339,49 +339,52 @@ public class Container extends java.awt.Container implements javax.accessibility
 
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
-            switch (event.EventId) {
-                case AccessibleEventId.NAME_CHANGED:
-                    // Set the accessible name for the corresponding context, which will fire a property
-                    // change event itself
-                    handleNameChangedEvent(event.NewValue);
-                    break;
-                case AccessibleEventId.DESCRIPTION_CHANGED:
-                    // Set the accessible description for the corresponding context, which will fire a property
-                    // change event itself - so do not set propertyName !
-                    handleDescriptionChangedEvent(event.NewValue);
-                    break;
-                case AccessibleEventId.STATE_CHANGED:
-                    // Update the internal state set and fire the appropriate PropertyChangedEvent
-                    handleStateChangedEvent(event.OldValue, event.NewValue);
-                    break;
-                case AccessibleEventId.TEXT_CHANGED:
-                    firePropertyChange(AccessibleContext.ACCESSIBLE_TEXT_PROPERTY,
-                                            AccessibleTextImpl.convertTextSegment(event.OldValue),
-                                            AccessibleTextImpl.convertTextSegment(event.NewValue));
-                    break;
-                case AccessibleEventId.CHILD:
-                    if (AnyConverter.isObject(event.OldValue)) {
-                        AccessibleObjectFactory.removeChild(Container.this, event.OldValue);
-                    } else if (AnyConverter.isObject(event.NewValue)) {
-                        AccessibleObjectFactory.addChild(Container.this, event.NewValue);
-                    }
-                    break;
-                case AccessibleEventId.VISIBLE_DATA_CHANGED:
-                case AccessibleEventId.BOUNDRECT_CHANGED:
-                    firePropertyChange(AccessibleContext.ACCESSIBLE_VISIBLE_DATA_PROPERTY, null, null);
-                    break;
-                case AccessibleEventId.SELECTION_CHANGED:
-                    firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY, null, null);
-                    break;
-                case AccessibleEventId.INVALIDATE_ALL_CHILDREN:
-                    handleAllChildrenChangedEvent();
-                    break;
 
-                default:
-                    // Warn about unhandled events
-                    if(Build.DEBUG) {
-                        System.out.println(this + ": unhandled accessibility event id=" + event.EventId);
-                    }
+            if ( !disposed ) {
+
+                switch (event.EventId) {
+                    case AccessibleEventId.NAME_CHANGED:
+                        // Set the accessible name for the corresponding context, which will fire a property
+                        // change event itself
+                        handleNameChangedEvent(event.NewValue);
+                        break;
+                    case AccessibleEventId.DESCRIPTION_CHANGED:
+                        // Set the accessible description for the corresponding context, which will fire a property
+                        // change event itself - so do not set propertyName !
+                        handleDescriptionChangedEvent(event.NewValue);
+                        break;
+                    case AccessibleEventId.STATE_CHANGED:
+                        // Update the internal state set and fire the appropriate PropertyChangedEvent
+                        handleStateChangedEvent(event.OldValue, event.NewValue);
+                        break;
+                    case AccessibleEventId.TEXT_CHANGED:
+                        firePropertyChange(AccessibleContext.ACCESSIBLE_TEXT_PROPERTY,
+                                                AccessibleTextImpl.convertTextSegment(event.OldValue),
+                                                AccessibleTextImpl.convertTextSegment(event.NewValue));
+                        break;
+                    case AccessibleEventId.CHILD:
+                        if (AnyConverter.isObject(event.OldValue)) {
+                            AccessibleObjectFactory.removeChild(Container.this, event.OldValue);
+                        } else if (AnyConverter.isObject(event.NewValue)) {
+                            AccessibleObjectFactory.addChild(Container.this, event.NewValue);
+                        }
+                        break;
+                    case AccessibleEventId.VISIBLE_DATA_CHANGED:
+                    case AccessibleEventId.BOUNDRECT_CHANGED:
+                        firePropertyChange(AccessibleContext.ACCESSIBLE_VISIBLE_DATA_PROPERTY, null, null);
+                        break;
+                    case AccessibleEventId.SELECTION_CHANGED:
+                        firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY, null, null);
+                        break;
+                    case AccessibleEventId.INVALIDATE_ALL_CHILDREN:
+                        handleAllChildrenChangedEvent();
+                        break;
+                    default:
+                        // Warn about unhandled events
+                        if(Build.DEBUG) {
+                            System.out.println(this + ": unhandled accessibility event id=" + event.EventId);
+                        }
+                }
             }
         }
 
@@ -566,6 +569,10 @@ public class Container extends java.awt.Container implements javax.accessibility
 
         /** Gets the AccessibleText associated with this object presenting text on the display */
         public javax.accessibility.AccessibleText getAccessibleText() {
+
+            if (disposed)
+                return null;
+
             return accessibleText;
         }
 
