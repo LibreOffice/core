@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:51:02 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,7 +673,7 @@ void SwLabPage::InitDatabaseBox()
         String sDBName = sActDBName.GetToken( 0, DB_DELIM );
         String sTableName = sActDBName.GetToken( 1, DB_DELIM );
         aDatabaseLB.SelectEntry(sDBName);
-        if (GetNewDBMgr()->GetTableNames(&aTableLB, sDBName))
+        if( sDBName.Len() && GetNewDBMgr()->GetTableNames(&aTableLB, sDBName))
         {
             aTableLB.SelectEntry(sTableName);
             GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sActDBName, sTableName);
