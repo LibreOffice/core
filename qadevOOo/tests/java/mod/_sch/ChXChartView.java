@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChXChartView.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:20:02 $
+ *  last change:$Date: 2003-09-08 12:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,19 +62,20 @@
 package mod._sch;
 
 import java.io.PrintWriter;
-import com.sun.star.lang.XMultiServiceFactory;
 import java.util.Comparator;
 
-import com.sun.star.chart.XChartDocument;
-import com.sun.star.drawing.XShapeDescriptor;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XModel;
-import com.sun.star.uno.UnoRuntime;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.chart.XChartDocument;
+import com.sun.star.drawing.XShapeDescriptor;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
 
 /**
 * Test for object which is represented by service
