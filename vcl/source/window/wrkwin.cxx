@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:31:17 $
+ *  last change: $Author: kz $ $Date: 2003-11-20 14:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #endif
 #ifndef _SV_OPENGL_HXX
 #include <opengl.hxx>
+#endif
+#ifndef _SV_SYSDATA_HXX
+#include <sysdata.hxx>
 #endif
 
 #include <rvp.hxx>
