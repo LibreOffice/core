@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:05:14 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ namespace configmgr
     namespace css = ::com::sun::star;
     namespace uno = css::uno;
     namespace lang = css::lang;
-    struct ServiceInfo;
+    struct ServiceRegistrationInfo;
     class ConnectionSettings;
 
     typedef uno::Reference< lang::XMultiServiceFactory > CreationContext;
@@ -105,19 +105,7 @@ namespace configmgr
             ConnectionSettings const& _rConnectionSettings
         );
 
-    uno::Reference< uno::XInterface > SAL_CALL instantiateUserAdminProvider
-        (
-            CreationContext const& rServiceManager,
-            ConnectionSettings const& _rConnectionSettings
-        );
-
     uno::Reference< uno::XInterface > SAL_CALL instantiateLocalAdminProvider
-        (
-            CreationContext const& rServiceManager,
-            ConnectionSettings const& _rConnectionSettings
-        );
-
-    uno::Reference< uno::XInterface > SAL_CALL instantiateRemoteAdminProvider
         (
             CreationContext const& rServiceManager,
             ConnectionSettings const& _rConnectionSettings
@@ -125,21 +113,15 @@ namespace configmgr
 
 
 // provider service info
-    const ServiceInfo* getConfigurationProviderServices();
-    const ServiceInfo* getAdminProviderServices();
-    const ServiceInfo* getUserAdminProviderServices();
-
-    const ServiceInfo* getLocalAdminProviderServices();
-    const ServiceInfo* getRemoteAdminProviderServices();
-
-    const ServiceInfo* getConfigurationProviderServiceInfo(ConnectionSettings const& _rConnectionSettings);
-    const ServiceInfo* getAdminProviderServiceInfo(ConnectionSettings const& _rConnectionSettings);
+    const ServiceRegistrationInfo* getConfigurationProviderServices();
+    const ServiceRegistrationInfo* getAdminProviderServices();
+    const ServiceRegistrationInfo* getLocalAdminProviderServices();
 
 // other services - instantiation and info
     uno::Reference< uno::XInterface > SAL_CALL instantiateConfigRegistry
         ( CreationContext const& rServiceManager );
 
-    const ServiceInfo* getConfigurationRegistryServiceInfo();
+    const ServiceRegistrationInfo* getConfigurationRegistryServiceInfo();
 
     namespace xml
     {
@@ -150,9 +132,9 @@ namespace configmgr
         uno::Reference< uno::XInterface > SAL_CALL instantiateLayerWriter
         ( CreationContext const& rServiceManager );
 
-        const ServiceInfo* getSchemaParserServiceInfo();
-        const ServiceInfo* getLayerParserServiceInfo();
-        const ServiceInfo* getLayerWriterServiceInfo();
+        const ServiceRegistrationInfo* getSchemaParserServiceInfo();
+        const ServiceRegistrationInfo* getLayerParserServiceInfo();
+        const ServiceRegistrationInfo* getLayerWriterServiceInfo();
     }
     namespace backend
     {
@@ -168,10 +150,10 @@ namespace configmgr
         uno::Reference< uno::XInterface > SAL_CALL
             instantiateCopyImporter( CreationContext const& rServiceManager );
 
-        const ServiceInfo * getUpdateMergerServiceInfo();
-        const ServiceInfo * getSingleBackendAdapterServiceInfo() ;
-        const ServiceInfo * getMergeImportServiceInfo();
-        const ServiceInfo * getCopyImportServiceInfo();
+        const ServiceRegistrationInfo * getUpdateMergerServiceInfo();
+        const ServiceRegistrationInfo * getSingleBackendAdapterServiceInfo() ;
+        const ServiceRegistrationInfo * getMergeImportServiceInfo();
+        const ServiceRegistrationInfo * getCopyImportServiceInfo();
     }
     namespace localbe {
         uno::Reference<uno::XInterface> SAL_CALL
@@ -183,9 +165,9 @@ namespace configmgr
         uno::Reference<uno::XInterface> SAL_CALL
             instantiateLocalHierarchyBrowser(const CreationContext& aServiceManager) ;
 
-        const ServiceInfo * getLocalBackendServiceInfo() ;
-        const ServiceInfo * getLocalDataImportServiceInfo() ;
-        const ServiceInfo * getLocalHierarchyBrowserServiceInfo() ;
+        const ServiceRegistrationInfo * getLocalBackendServiceInfo() ;
+        const ServiceRegistrationInfo * getLocalDataImportServiceInfo() ;
+        const ServiceRegistrationInfo * getLocalHierarchyBrowserServiceInfo() ;
     } // localbe
 } //  namespace configmgr
 
