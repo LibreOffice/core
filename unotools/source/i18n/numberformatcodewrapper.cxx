@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberformatcodewrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-11-03 16:06:17 $
+ *  last change: $Author: hr $ $Date: 2000-11-07 10:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _UNOTOOLS_COMPONENTFACTORY_HXX_
-#include <unotools/componentfactory.hxx>
+#ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
+#include <comphelper/componentfactory.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
@@ -114,7 +114,7 @@ NumberFormatCodeWrapper::NumberFormatCodeWrapper(
         DBG_ERRORFILE( "NumberFormatCodeWrapper: no service manager, trying own" );
         try
         {
-            Reference< XInterface > xI = ::utl::getComponentInstance(
+            Reference< XInterface > xI = ::comphelper::getComponentInstance(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LLCF_LIBNAME( LOCALEDATA_LIBRARYNAME ) ) ),
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LOCALEDATA_SERVICENAME ) ) );
             if ( xI.is() )

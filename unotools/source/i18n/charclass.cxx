@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:15:39 $
+ *  last change: $Author: hr $ $Date: 2000-11-07 10:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _UNOTOOLS_COMPONENTFACTORY_HXX_
-#include <unotools/componentfactory.hxx>
+#ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
+#include <comphelper/componentfactory.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
@@ -138,7 +138,7 @@ void CharClass::getComponentInstance()
     {
         // CharClass may be needed by "small tools" like the Setup
         // => maybe no service manager => loadLibComponentFactory
-        Reference < XInterface > xI = ::utl::getComponentInstance(
+        Reference < XInterface > xI = ::comphelper::getComponentInstance(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LLCF_LIBNAME( CHARCLASS_LIBRARYNAME ) ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CHARCLASS_SERVICENAME ) ) );
         if ( xI.is() )
