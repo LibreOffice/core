@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-08 09:09:05 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 08:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,6 @@ OQueryTableWindow::OQueryTableWindow( Window* pParent, OQueryTableWindowData* pT
 //------------------------------------------------------------------------------
 OQueryTableWindow::~OQueryTableWindow()
 {
-    EmptyListBox();
     DBG_DTOR(OQueryTableWindow,NULL);
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-02 07:54:11 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 08:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,8 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
 // -----------------------------------------------------------------------------
 OScrollWindowHelper::~OScrollWindowHelper()
 {
-    DELETEZ(m_pCornerWindow);
+    ::std::auto_ptr<Window> aTemp(m_pCornerWindow);
+    m_pCornerWindow = NULL;
     m_pTableView = NULL;
     DBG_DTOR(OScrollWindowHelper,NULL);
 }

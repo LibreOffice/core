@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-08 09:09:31 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 08:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,8 @@ OTableWindow::~OTableWindow()
     if (m_pListBox)
     {
         EmptyListBox();
-        DELETEZ(m_pListBox);
+        ::std::auto_ptr<Window> aTemp(m_pListBox);
+        m_pListBox = NULL;
     }
     m_pAccessible = NULL;
     DBG_DTOR(OTableWindow,NULL);

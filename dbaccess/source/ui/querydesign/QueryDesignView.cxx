@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-07 07:17:35 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 08:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2205,7 +2205,8 @@ namespace
                 break;
         }
         //  ErrorBox( _pWindow, ModuleRes( nResId ) ).Execute();
-        ::rtl::OUString sError(String(ModuleRes(nResId)));
+        ModuleRes aRes(nResId);
+        String sError(aRes);
         _pEnvironment->appendError(SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000") ),1000,Any()));
     }
     // -----------------------------------------------------------------------------
