@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
+ *  last change: $Author: sab $ $Date: 2001-02-22 18:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@
 #include "scmsocximexp.hxx"
 #include "XclAddInNameTrans.hxx"
 
+using namespace com::sun::star;
 
 extern const sal_Char* pVBAStorageName;
 extern const sal_Char* pVBASubStorageName;
@@ -1309,7 +1310,10 @@ void ImportExcel8::RecString( void )
 void ImportExcel8::Protect( void )
 {
     if( aIn.ReaduInt16() )
-        pD->SetTabProtection( nTab, TRUE, EMPTY_STRING );
+    {
+        uno::Sequence<sal_uInt8> aEmptyPass;
+        pD->SetTabProtection( nTab, TRUE, aEmptyPass );
+    }
 }
 
 

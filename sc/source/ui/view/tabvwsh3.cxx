@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:31:22 $
+ *  last change: $Author: sab $ $Date: 2001-02-22 18:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,7 +833,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     BOOL    bCancel = FALSE;
                     String  aPassword;
 
-                    if (pDoc->GetDocPassword().Len())
+                    if (pDoc->GetDocPassword().getLength())
                     {
                         String  aText( ScResId(SCSTR_PASSWORD) );
 
@@ -923,7 +923,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     if (bOldProtection)
                     {
-                        if (pDoc->GetTabPassword(nTab).Len())
+                        if (pDoc->GetTabPassword(nTab).getLength())
                         {
                             String  aText( ScResId(SCSTR_PASSWORD) );
 

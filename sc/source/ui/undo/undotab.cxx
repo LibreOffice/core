@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-05 10:55:35 $
+ *  last change: $Author: sab $ $Date: 2001-02-22 18:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@
 #include "chgtrack.hxx"
 
 extern BOOL bDrawIsInUndo;          //! irgendwo als Member !!!
+
+using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -1175,7 +1177,7 @@ String __EXPORT ScUndoShowHideTab::GetComment() const
 //
 
 ScUndoProtect::ScUndoProtect( ScDocShell* pShell, USHORT nNewTab,
-                            BOOL bNewProtect, const String& rNewPassword ) :
+                            BOOL bNewProtect, const uno::Sequence<sal_uInt8>& rNewPassword ) :
     ScSimpleUndo( pShell ),
     nTab( nNewTab ),
     bProtect( bNewProtect ),
@@ -1200,10 +1202,11 @@ void ScUndoProtect::DoProtect( BOOL bDo )
     }
     else
     {
+        uno::Sequence<sal_uInt8> aEmptyPass;
         if ( nTab == TABLEID_DOC )
-            pDoc->SetDocProtection( FALSE, EMPTY_STRING );
+            pDoc->SetDocProtection( FALSE, aEmptyPass );
         else
-            pDoc->SetTabProtection( nTab, FALSE, EMPTY_STRING );
+            pDoc->SetTabProtection( nTab, FALSE, aEmptyPass );
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();

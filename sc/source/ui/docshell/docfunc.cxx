@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
+ *  last change: $Author: sab $ $Date: 2001-02-22 18:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <svtools/zforlist.hxx>
+#ifndef _SVTOOLS_PASSWORDHELPER_HXX
+#include <svtools/PasswordHelper.hxx>
+#endif
 
 #include "docfunc.hxx"
 
@@ -112,6 +115,8 @@
 #include "undodraw.hxx"
 #include "undotab.hxx"
 #include "waitoff.hxx"
+
+using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -2373,9 +2378,9 @@ BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
 //------------------------------------------------------------------------
 
 BOOL lcl_ValidPassword( ScDocument* pDoc, USHORT nTab,
-                        const String& rPassword, String* pReturnOld = NULL )
+                        const uno::Sequence<sal_uInt8>& rPassword, uno::Sequence<sal_uInt8>* pReturnOld = NULL )
 {
-    String aOldPassword;
+    uno::Sequence<sal_uInt8> aOldPassword;
     if ( nTab == TABLEID_DOC )
     {
         if (pDoc->IsDocProtected())
@@ -2390,7 +2395,7 @@ BOOL lcl_ValidPassword( ScDocument* pDoc, USHORT nTab,
     if (pReturnOld)
         *pReturnOld = aOldPassword;
 
-    return ( aOldPassword.Len() == 0 || aOldPassword == rPassword );
+    return ((aOldPassword.getLength() == 0) || (rPassword == aOldPassword));
 }
 
 BOOL ScDocFunc::Protect( USHORT nTab, const String& rPassword, BOOL bApi )
@@ -2399,20 +2404,23 @@ BOOL ScDocFunc::Protect( USHORT nTab, const String& rPassword, BOOL bApi )
 
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo(pDoc->IsUndoEnabled());
-    BOOL bOk = lcl_ValidPassword( pDoc, nTab, rPassword );
+    uno::Sequence<sal_uInt8> aPass;
+    if (rPassword.Len())
+        SvPasswordHelper::GetHashPassword(aPass, rPassword);
+    BOOL bOk = lcl_ValidPassword( pDoc, nTab, aPass );
 
     if ( bOk )
     {
         if (bUndo)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoProtect( &rDocShell, nTab, TRUE, rPassword ) );
+                        new ScUndoProtect( &rDocShell, nTab, TRUE, aPass ) );
         }
 
         if ( nTab == TABLEID_DOC )
-            pDoc->SetDocProtection( TRUE, rPassword );
+            pDoc->SetDocProtection( TRUE, aPass );
         else
-            pDoc->SetTabProtection( nTab, TRUE, rPassword );
+            pDoc->SetTabProtection( nTab, TRUE, aPass );
 
         rDocShell.PostPaintGridAll();
         aModificator.SetDocumentModified();
@@ -2436,15 +2444,19 @@ BOOL ScDocFunc::Unprotect( USHORT nTab, const String& rPassword, BOOL bApi )
 
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo(pDoc->IsUndoEnabled());
-    String aOldPassword;
-    BOOL bOk = lcl_ValidPassword( pDoc, nTab, rPassword, &aOldPassword );
+    uno::Sequence<sal_uInt8> aOldPassword;
+    uno::Sequence<sal_uInt8> aPass;
+    if (rPassword.Len())
+        SvPasswordHelper::GetHashPassword(aPass, rPassword);
+    BOOL bOk = lcl_ValidPassword( pDoc, nTab, aPass, &aOldPassword );
 
     if ( bOk )
     {
+        uno::Sequence<sal_uInt8> aEmptyPass;
         if ( nTab == TABLEID_DOC )
-            pDoc->SetDocProtection( FALSE, String() );
+            pDoc->SetDocProtection( FALSE, aEmptyPass );
         else
-            pDoc->SetTabProtection( nTab, FALSE, String() );
+            pDoc->SetTabProtection( nTab, FALSE, aEmptyPass );
 
         if (bUndo)
         {

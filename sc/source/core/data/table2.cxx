@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-02-13 18:58:28 $
+ *  last change: $Author: sab $ $Date: 2001-02-22 18:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,9 @@
 #include <svtools/poolcach.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>
+#ifndef _SVTOOLS_PASSWORDHELPER_HXX
+#include <svtools/PasswordHelper.hxx>
+#endif
 
 #include "patattr.hxx"
 #include "docpool.hxx"
@@ -2748,7 +2751,10 @@ BOOL ScTable::Load( SvStream& rStream, USHORT nVersion, ScProgress* pProgress )
                     rStream.ReadByteString( aComment, rStream.GetStreamCharSet() );
 
                     rStream >> bProtected;
-                    rStream.ReadByteString( aProtectPass, rStream.GetStreamCharSet() );
+                    String aPass;
+                    rStream.ReadByteString( aPass, rStream.GetStreamCharSet() );
+                    if (aPass.Len())
+                        SvPasswordHelper::GetHashPassword(aProtectPass, aPass);
 
                     BOOL bOutline;
                     rStream >> bOutline;
@@ -3010,7 +3016,9 @@ BOOL ScTable::Save( SvStream& rStream, long& rSavedDocCells, ScProgress* pProgre
         rStream.WriteByteString( aComment, rStream.GetStreamCharSet() );
 
         rStream << bProtected;
-        rStream.WriteByteString( aProtectPass, rStream.GetStreamCharSet() );
+        String aPass;
+        //rStream.WriteByteString( aProtectPass, rStream.GetStreamCharSet() );
+        rStream.WriteByteString( aPass, rStream.GetStreamCharSet() );
 
         BOOL bOutline = ( pOutlineTable != NULL );
         rStream << bOutline;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: sab $ $Date: 2001-02-22 18:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#ifndef _SVTOOLS_PASSWORDHELPER_HXX
+#include <svtools/PasswordHelper.hxx>
+#endif
 
 #include "global.hxx"
 #include "sc.hrc"
@@ -111,6 +114,8 @@
 #include "fltprgrs.hxx"
 #include "globstr.hrc"
 
+
+using namespace com::sun::star;
 
 #define DEFCHARSET          RTL_TEXTENCODING_MS_1252
 
@@ -1157,7 +1162,9 @@ void Sc10Import::LoadProtect()
     //rStream.Read(&SheetProtect, sizeof(SheetProtect));
     lcl_ReadSheetProtect(rStream, SheetProtect);
     nError = rStream.GetError();
-    pDoc->SetDocProtection( SheetProtect.Protect, SC10TOSTRING( SheetProtect.PassWord ) );
+    uno::Sequence<sal_uInt8> aPass;
+    SvPasswordHelper::GetHashPassword(aPass, SC10TOSTRING( SheetProtect.PassWord ));
+    pDoc->SetDocProtection( SheetProtect.Protect,  aPass);
 }
 
 
@@ -1510,8 +1517,10 @@ void Sc10Import::LoadTables()
 
         //rStream.Read(&TabProtect, sizeof(TabProtect));
         lcl_ReadTabProtect(rStream, TabProtect);
+        uno::Sequence<sal_uInt8> aPass;
+        SvPasswordHelper::GetHashPassword(aPass, SC10TOSTRING( TabProtect.PassWord ));
 
-        pDoc->SetTabProtection( Tab, TabProtect.Protect, SC10TOSTRING( TabProtect.PassWord ) );
+        pDoc->SetTabProtection( Tab, TabProtect.Protect, aPass);
 
         rStream >> TabNo;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-16 16:11:05 $
+ *  last change: $Author: sab $ $Date: 2001-02-22 18:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,9 @@
 #include <svtools/zformat.hxx>
 #include <vcl/system.hxx>
 #include <comphelper/processfactory.hxx>
+#ifndef _SVTOOLS_PASSWORDHELPER_HXX
+#include <svtools/PasswordHelper.hxx>
+#endif
 
 #include "document.hxx"
 #include "table.hxx"
@@ -716,7 +719,10 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
                         rStream >> nVersion;                // 312 abwaerts
                         rStream.ReadByteString( aPageStyle, rStream.GetStreamCharSet() );
                         rStream >> bProtected;              // Dokument geschuetzt
-                        rStream.ReadByteString( aProtectPass, rStream.GetStreamCharSet() );
+                        String aPass;
+                        rStream.ReadByteString( aPass, rStream.GetStreamCharSet() );
+                        if (aPass.Len())
+                            SvPasswordHelper::GetHashPassword(aProtectPass, aPass);
                         if ( aFlagsHdr.BytesLeft() )
                         {
                             rStream >> nEnumDummy;
@@ -1070,7 +1076,9 @@ BOOL ScDocument::Save( SvStream& rStream, ScProgress* pProgress ) const
                         String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_STANDARD)),
                         rStream.GetStreamCharSet() );
             rStream << bProtected;                  // Dokument geschuetzt
-            rStream.WriteByteString( aProtectPass, rStream.GetStreamCharSet() );
+            String aPass;
+            //rStream.WriteByteString( aProtectPass, rStream.GetStreamCharSet() );
+            rStream.WriteByteString( aPass, rStream.GetStreamCharSet() );
             rStream << (USHORT) eLanguage;
             rStream << bAutoCalc;
 
