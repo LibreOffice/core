@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:00:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,16 +60,14 @@
  ************************************************************************/
 
 #include <rtl/ustrbuf.hxx>
-#include <tools/string.hxx>
 #include <nativenumbersupplier.hxx>
 #include <localedata.hxx>
 #include <data/numberchar.h>
-#include <x_rtl_ustring.h>
+#include <i18nutil/x_rtl_ustring.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::lang;
-using namespace ::drafts::com::sun::star::i18n;
 using namespace ::rtl;
 
 
