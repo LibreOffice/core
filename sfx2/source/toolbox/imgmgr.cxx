@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:55:04 $
+ *  last change: $Author: kz $ $Date: 2004-05-20 21:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,8 @@ public:
     virtual BOOL    Store(SotStorage&);
     void            AddLink( const Link& );
     void            RemoveLink( const Link& );
-    void            LoadBitmap( Bitmap&, SotStorage&, const String& );
+
+    template< typename BitmapType > void LoadBitmap( BitmapType&, SotStorage&, const String& );
 
                     SfxImageManager_Impl( SfxConfigManager* pCfg );
                     ~SfxImageManager_Impl();
@@ -209,15 +210,15 @@ sal_Int16 SfxImageManager::GetCurrentSymbolSet()
 // Enth"alt eine Kombination aus Bitmap und zugeordneter SlotId
 struct ToolboxBitmap_Impl
 {
-    USHORT  nId;
-    Bitmap* pBitmap;
+    USHORT      nId;
+    BitmapEx*   pBitmapEx;
 
-    ToolboxBitmap_Impl( USHORT n, const Bitmap& rBmp ) : nId( n )
+    explicit ToolboxBitmap_Impl( USHORT n, const BitmapEx& rBmpEx ) : nId( n )
     {
-        pBitmap = new Bitmap( rBmp );
+        pBitmapEx = new BitmapEx( rBmpEx );
     }
 
-    ~ToolboxBitmap_Impl() { delete pBitmap; }
+    ~ToolboxBitmap_Impl() { delete pBitmapEx; }
 };
 
 // Enth"alt einen Ptr auf eine registrierte Toolbox und Flags f"ur die
@@ -256,17 +257,17 @@ friend SvStream& operator << (SvStream& rStream, const SfxBitmapList_Impl& rList
                 delete pList;
             }
 
-    USHORT  GetBitmapCount() const
+    USHORT  GetBitmapExCount() const
             { return pList->Count(); }
 
-    USHORT  GetBitmapId(USHORT n) const
+    USHORT  GetBitmapExId(USHORT n) const
             { return (*pList)[n]->nId; }
 
-    USHORT  GetBitmapPos(USHORT nId) const;
-    Bitmap* GetBitmap(USHORT nId) const;
-    void    AddBitmap (USHORT nId, const Bitmap& rpBmp);
-    void    ReplaceBitmap (USHORT nId, const Bitmap& rpBmp);
-    void    RemoveBitmap (USHORT nId);
+    USHORT  GetBitmapExPos(USHORT nId) const;
+    BitmapEx* GetBitmapEx(USHORT nId) const;
+    void    AddBitmapEx (USHORT nId, const BitmapEx& rpBmpEx);
+    void    ReplaceBitmapEx (USHORT nId, const BitmapEx& rpBmpEx);
+    void    RemoveBitmapEx (USHORT nId);
 };
 
 //=========================================================================
@@ -276,7 +277,7 @@ friend SvStream& operator << (SvStream& rStream, const SfxBitmapList_Impl& rList
     Liefert die Position einer Bitmap in der internen Bitmapliste
 */
 
-USHORT SfxBitmapList_Impl::GetBitmapPos( USHORT nId ) const
+USHORT SfxBitmapList_Impl::GetBitmapExPos( USHORT nId ) const
 {
     USHORT nPos;
     for ( nPos=0; nPos<pList->Count(); nPos++ )
@@ -295,14 +296,14 @@ USHORT SfxBitmapList_Impl::GetBitmapPos( USHORT nId ) const
     Liefert die Bitmap an der "uebergebenen Position der internen Bitmapliste
 */
 
-Bitmap* SfxBitmapList_Impl::GetBitmap(USHORT nId) const
+BitmapEx* SfxBitmapList_Impl::GetBitmapEx(USHORT nId) const
 {
     USHORT nPos;
     for ( nPos=0; nPos<pList->Count(); nPos++ )
         if ( (*pList)[nPos]->nId == nId ) break;
 
     if ( nPos < pList->Count() )
-        return (*pList)[nPos]->pBitmap;
+        return (*pList)[nPos]->pBitmapEx;
     else
         return 0;
 }
@@ -316,15 +317,15 @@ Bitmap* SfxBitmapList_Impl::GetBitmap(USHORT nId) const
     "uber.
 */
 
-void SfxBitmapList_Impl::AddBitmap( USHORT nId, const Bitmap& rBmp )
+void SfxBitmapList_Impl::AddBitmapEx( USHORT nId, const BitmapEx& rBmpEx )
 {
     USHORT nPos;
     for ( nPos=0; nPos<pList->Count(); nPos++ )
         if ( (*pList)[nPos]->nId == nId ) break;
 
-    DBG_ASSERT( nPos>=pList->Count(), "Bitmap mit dieser Id schon vorhanden!" );
+    DBG_ASSERT( nPos>=pList->Count(), "BitmapEx mit dieser Id schon vorhanden!" );
 
-    ToolboxBitmap_Impl *pTbBmp = new ToolboxBitmap_Impl( nId, rBmp );
+    ToolboxBitmap_Impl *pTbBmp = new ToolboxBitmap_Impl( nId, rBmpEx );
     pList->Append( pTbBmp );
 }
 
@@ -337,10 +338,10 @@ void SfxBitmapList_Impl::AddBitmap( USHORT nId, const Bitmap& rBmp )
     Die Bitmap geht in den Besitz des ImageManagers "uber.
 */
 
-void SfxBitmapList_Impl::ReplaceBitmap( USHORT nId, const Bitmap& rBmp )
+void SfxBitmapList_Impl::ReplaceBitmapEx( USHORT nId, const BitmapEx& rBmpEx )
 {
-    RemoveBitmap( nId );
-    AddBitmap( nId, rBmp );
+    RemoveBitmapEx( nId );
+    AddBitmapEx( nId, rBmpEx );
 }
 
 //-------------------------------------------------------------------------
@@ -352,13 +353,13 @@ void SfxBitmapList_Impl::ReplaceBitmap( USHORT nId, const Bitmap& rBmp )
     Da die Bitmap dem ImageManagers geh"ort, wird sie zerst"ort.
 */
 
-void SfxBitmapList_Impl::RemoveBitmap( USHORT nId )
+void SfxBitmapList_Impl::RemoveBitmapEx( USHORT nId )
 {
     USHORT nPos;
     for (nPos=0; nPos<pList->Count(); nPos++)
         if ((*pList)[nPos]->nId == nId) break;
 
-    DBG_ASSERT(nPos<pList->Count(), "Bitmap mit dieser Id unbekannt!");
+    DBG_ASSERT(nPos<pList->Count(), "BitmapEx mit dieser Id unbekannt!");
 
     if (nPos<pList->Count())
     {
@@ -380,9 +381,9 @@ SvStream& operator >> (SvStream& rStream, SfxBitmapList_Impl& rList)
     rStream >> nCount;
     for (USHORT n=0; n<nCount; n++)
     {
-        Bitmap aBmp;
-        rStream >> nId >> aBmp;
-        rList.AddBitmap(nId, aBmp);
+        BitmapEx aBmpEx;
+        rStream >> nId >> aBmpEx;
+        rList.AddBitmapEx(nId, aBmpEx);
     }
 
     return rStream;
@@ -397,9 +398,9 @@ SvStream& operator >> (SvStream& rStream, SfxBitmapList_Impl& rList)
 
 SvStream& operator << (SvStream& rStream, const SfxBitmapList_Impl& rList)
 {
-    rStream << rList.GetBitmapCount();
-    for (USHORT n=0; n<rList.GetBitmapCount(); n++)
-        rStream << (*rList.pList)[n]->nId << *((*rList.pList)[n]->pBitmap);
+    rStream << rList.GetBitmapExCount();
+    for (USHORT n=0; n<rList.GetBitmapExCount(); n++)
+        rStream << (*rList.pList)[n]->nId << *((*rList.pList)[n]->pBitmapEx);
 
     return rStream;
 }
@@ -443,7 +444,9 @@ void SfxImageManager_Impl::RemoveLink( const Link& rLink )
 
 //-------------------------------------------------------------------------
 
-void SfxImageManager_Impl::LoadBitmap( Bitmap& rBmp, SotStorage& rStorage, const String& rURL )
+template< typename BitmapType > void SfxImageManager_Impl::LoadBitmap( BitmapType& rBitmapType,
+                                                                       SotStorage& rStorage,
+                                                                       const String& rURL)
 {
     // locate and open bitmap for ImageList
     SotStorageStreamRef xBitmapStream;
@@ -475,7 +478,7 @@ void SfxImageManager_Impl::LoadBitmap( Bitmap& rBmp, SotStorage& rStorage, const
         pStream = xBitmapStream;
     }
 
-    *pStream >> rBmp;
+    *pStream >> rBitmapType;
     if ( !xBitmapStream.Is() )
         DELETEZ( pStream );
 }
@@ -506,7 +509,7 @@ int SfxImageManager_Impl::Load( SotStorage& rStorage )
 
         Bitmap aBmp;
         Bitmap aHCBmp;
-        LoadBitmap( aBmp, rStorage, pList->aURL );
+        LoadBitmap< Bitmap >( aBmp, rStorage, pList->aURL );
 
         if ( pList->aHighContrastURL.Len() == 0 )
         {
@@ -514,10 +517,10 @@ int SfxImageManager_Impl::Load( SotStorage& rStorage )
             // for the high contrast image list!! The normal case for 6.1 should be that both
             // lists are filled, so this document was created by 6.0.
             // #98979#
-            LoadBitmap( aHCBmp, rStorage, pList->aURL );
+            LoadBitmap< Bitmap >( aHCBmp, rStorage, pList->aURL );
         }
         else
-            LoadBitmap( aHCBmp, rStorage, pList->aHighContrastURL );
+            LoadBitmap< Bitmap >( aHCBmp, rStorage, pList->aHighContrastURL );
 
         // get the Ids of the ImageList
         USHORT* pIds = new USHORT[nCount];
@@ -542,14 +545,25 @@ int SfxImageManager_Impl::Load( SotStorage& rStorage )
 
         if ( pList->nMaskMode = ::framework::ImageMaskMode_Color )
         {
-            m_pUserImageList = new ImageList( aBmp, pList->aMaskColor, nCount, pIds );
-            m_pHCUserImageList = new ImageList( aHCBmp, pList->aMaskColor, nCount, pIds );
+            const BitmapEx aBmpEx( aBmp, pList->aMaskColor );
+            const BitmapEx aHCBmpEx( aHCBmp, pList->aMaskColor );
+
+            m_pUserImageList = new ImageList( aBmpEx, nCount, pIds );
+            m_pHCUserImageList = new ImageList( aHCBmpEx, nCount, pIds );
         }
         else
         {
-            Bitmap aMask;
-            LoadBitmap( aMask, rStorage, pList->aMaskURL );
-            m_pUserImageList = new ImageList( aBmp, aMask, nCount, pIds );
+            BitmapEx aBmpEx;
+            Bitmap   aMaskBmp;
+
+            LoadBitmap< Bitmap >( aMaskBmp, rStorage, pList->aMaskURL );
+
+            if( ( aMaskBmp.GetBitCount() == 8 ) && aMaskBmp.HasGreyPalette() )
+                aBmpEx = BitmapEx( aBmp, AlphaMask( aMaskBmp ) );
+            else
+                aBmpEx = BitmapEx( aBmp, aMaskBmp );
+
+            m_pUserImageList = new ImageList( aBmpEx, nCount, pIds );
 
             if ( pList->aHighContrastMaskURL.Len() == 0 )
             {
@@ -557,12 +571,17 @@ int SfxImageManager_Impl::Load( SotStorage& rStorage )
                 // for the high contrast image list!! The normal case for 6.1 should be that both
                 // lists are filled, so this document was created by 6.0.
                 // #98979#
-                LoadBitmap( aMask, rStorage, pList->aMaskURL );
+                LoadBitmap< Bitmap >( aMaskBmp, rStorage, pList->aMaskURL );
             }
             else
-                LoadBitmap( aMask, rStorage, pList->aHighContrastMaskURL );
+                LoadBitmap< Bitmap >( aMaskBmp, rStorage, pList->aHighContrastMaskURL );
 
-            m_pHCUserImageList = new ImageList( aHCBmp, aMask, nCount, pIds );
+            if( ( aMaskBmp.GetBitCount() == 8 ) && aMaskBmp.HasGreyPalette() )
+                aBmpEx = BitmapEx( aHCBmp, AlphaMask( aMaskBmp ) );
+            else
+                aBmpEx = BitmapEx( aHCBmp, aMaskBmp );
+
+            m_pHCUserImageList = new ImageList( aBmpEx, nCount, pIds );
         }
 
         DELETEZ( pIds );
@@ -585,9 +604,9 @@ int SfxImageManager_Impl::Load( SotStorage& rStorage )
                 nId = aInfo.GetSlotId();
             }
 
-            Bitmap aBmp;
-            LoadBitmap( aBmp, rStorage, pItem->aURL );
-            m_pUserDefList->AddBitmap( nId, aBmp );
+            BitmapEx aUserDefBmpEx;
+            LoadBitmap< BitmapEx >( aUserDefBmpEx, rStorage, pItem->aURL );
+            m_pUserDefList->AddBitmapEx( nId, aUserDefBmpEx );
         }
     }
 
@@ -613,35 +632,31 @@ BOOL SfxImageManager_Impl::Store( SotStorage& rStorage )
         aDescriptor.pImageList->Insert( pList, 0 );
 
         // bitmaps are stored in an internal bitmap directory
-        SotStorageRef xBitmapStorage = rStorage.OpenSotStorage( String::CreateFromAscii("Bitmaps"), STREAM_STD_READWRITE );
+        SotStorageRef       xBitmapStorage = rStorage.OpenSotStorage( String::CreateFromAscii("Bitmaps"), STREAM_STD_READWRITE );
+        SotStorageStreamRef xBitmapStream;
+        const BitmapEx      aBmpEx( m_pUserImageList->GetBitmapEx() );
+        const BitmapEx      aHCBmpEx( m_pHCUserImageList->GetBitmapEx() );
+        Bitmap              aStoreBmp;
+        String              aStreamName;
 
-        if ( m_pUserImageList->HasMaskColor() )
-        {
-            // mask color
-            pList->nMaskMode = ::framework::ImageMaskMode_Color;
-            pList->aMaskColor = m_pUserImageList->GetMaskColor();
-        }
-        else
-        {
-            // masking is done by a mask bitmap, store bitmap and set URL
-            pList->nMaskMode = ::framework::ImageMaskMode_Bitmap;
+        // masking is done by a mask bitmap, store bitmap and set URL
+        pList->nMaskMode = ::framework::ImageMaskMode_Bitmap;
 
-            pList->aMaskURL = String::CreateFromAscii("Bitmaps/");
-            String aStreamName = String::CreateFromAscii("userimagesmask.bmp");
-            pList->aMaskURL += aStreamName;
+        pList->aMaskURL = String::CreateFromAscii("Bitmaps/");
+        aStreamName = String::CreateFromAscii("userimagesmask.bmp");
+        pList->aMaskURL += aStreamName;
 
-            // store bitmap
-            SotStorageStreamRef xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
-            *xBitmapStream << m_pUserImageList->GetMaskBitmap();
+        // store bitmap
+        xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
+        *xBitmapStream << ( aBmpEx.IsAlpha() ? aBmpEx.GetAlpha().GetBitmap() : aBmpEx.GetMask() );
 
-            pList->aHighContrastMaskURL = String::CreateFromAscii( "Bitmaps/" );
-            aStreamName = String::CreateFromAscii( "hcuserimagesmask.bmp" );
-            pList->aHighContrastMaskURL += aStreamName;
+        pList->aHighContrastMaskURL = String::CreateFromAscii( "Bitmaps/" );
+        aStreamName = String::CreateFromAscii( "hcuserimagesmask.bmp" );
+        pList->aHighContrastMaskURL += aStreamName;
 
-            // store bitmap
-            xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
-            *xBitmapStream << m_pHCUserImageList->GetMaskBitmap();
-        }
+        // store bitmap
+        xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
+        *xBitmapStream << ( aHCBmpEx.IsAlpha() ? aHCBmpEx.GetAlpha().GetBitmap() : aHCBmpEx.GetMask() );
 
         // a modified list always contains a userlist
         pList->pImageItemList = new ::framework::ImageItemListDescriptor;
@@ -667,12 +682,12 @@ BOOL SfxImageManager_Impl::Store( SotStorage& rStorage )
 
         // store URL of bitmap relative to configuration storage; name is "BitmapXXX.bmp", where XXX is an index
         pList->aURL = String::CreateFromAscii("Bitmaps/");
-        String aStreamName = String::CreateFromAscii("userimages.bmp");
+        aStreamName = String::CreateFromAscii("userimages.bmp");
         pList->aURL += aStreamName;
 
         // store bitmap
-        SotStorageStreamRef xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
-        *xBitmapStream << m_pUserImageList->GetBitmap();
+        xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
+        *xBitmapStream << aBmpEx.GetBitmap();
 
         // store high contrast URL of bitmap relative to configuration storage; name is "BitmapXXX.bmp", where XXX is an index
         pList->aHighContrastURL = String::CreateFromAscii("Bitmaps/");
@@ -681,17 +696,17 @@ BOOL SfxImageManager_Impl::Store( SotStorage& rStorage )
 
         // store high contrast bitmap
         xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
-        *xBitmapStream << m_pHCUserImageList->GetBitmap();
+        *xBitmapStream << aHCBmpEx.GetBitmap();
 
         // collect all external bitmaps
-        USHORT nCount = m_pUserDefList->GetBitmapCount();
+        USHORT nCount = m_pUserDefList->GetBitmapExCount();
         if ( nCount )
         {
             aDescriptor.pExternalImageList = new ::framework::ExternalImageItemListDescriptor;
             for ( USHORT i=0; i<nCount; i++ )
             {
                 ::framework::ExternalImageItemDescriptor* pItem = new ::framework::ExternalImageItemDescriptor;
-                USHORT nId = m_pUserDefList->GetBitmapId(i);
+                USHORT nId = m_pUserDefList->GetBitmapExId(i);
                 if ( SfxMacroConfig::IsMacroSlot( nId ) )
                 {
                     const SfxMacroInfo* pInfo = pCfg->GetMacroInfo( nId );
@@ -705,20 +720,21 @@ BOOL SfxImageManager_Impl::Store( SotStorage& rStorage )
 
                 // store URL of bitmap relative to configuration storage; name is "BitmapXXX.bmp", where XXX is an index
                 pItem->aURL = String::CreateFromAscii("Bitmaps/");
-                String aStreamName = String::CreateFromAscii("image");
+                aStreamName = String::CreateFromAscii("image");
                 aStreamName += String::CreateFromInt32(i);
                 aStreamName += String::CreateFromAscii(".bmp");
                 pItem->aURL += aStreamName;
 
                 aDescriptor.pExternalImageList->Insert( pItem, aDescriptor.pExternalImageList->Count() );
 
-                // store bitmap
-                SotStorageStreamRef xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
-                *xBitmapStream << *m_pUserDefList->GetBitmap( nId );
+                // store BitmapEx
+                xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
+                *xBitmapStream << *m_pUserDefList->GetBitmapEx( nId );
             }
         }
 
         // store configuration
+        xBitmapStream.Clear();
         xBitmapStorage->Commit();
 
         // #110897#
@@ -856,35 +872,31 @@ void SfxImageManager::ExchangeItemImage_Impl( USHORT nId, const Image& rImage )
 void SfxImageManager_Impl::RebuildUserList()
 {
     // Userliste neu aufbauen
-    Color aColor (0xC0, 0xC0, 0xC0);
-    VirtualDevice aDev;
-    Size aNewSize = pImageList->GetImageSize();
-    aDev.SetOutputSizePixel(aNewSize);
+    Size aNewSize( pImageList->GetImageSize() );
 
     ImageList *pOldList = m_pUserImageList;
     ImageList *pOldHCList = m_pHCUserImageList;
+
     m_pUserImageList = new ImageList( pOldList->GetImageCount() );
     m_pHCUserImageList = new ImageList( pOldHCList->GetImageCount() );
 
     for ( USHORT i=0; i<pOldList->GetImageCount(); i++ )
     {
-        USHORT nId = pOldList->GetImageId( i );
-        Image aImage;
+        Image   aImage;
+        USHORT  nId = pOldList->GetImageId( i );
 
         // Image benutzerdefiniert ?
-        if ( m_pUserDefList->GetBitmapPos(nId) != USHRT_MAX )
+        if( m_pUserDefList->GetBitmapExPos(nId) != USHRT_MAX )
         {
-            Bitmap *pBmp = m_pUserDefList->GetBitmap( nId );
-            if ( pBmp->GetSizePixel() != aNewSize )
-            {
-                aDev.DrawBitmap( Point(), aNewSize, *pBmp );
-                aImage = Image( aDev.GetBitmap(Point(), aNewSize), aColor );
-            }
-            else
-                aImage = Image( *pBmp, aColor );
+            BitmapEx* pBmpEx = m_pUserDefList->GetBitmapEx( nId );
 
-            if ( aImage.GetSizePixel() == aNewSize )
+            if( pBmpEx )
             {
+                if( pBmpEx->GetSizePixel() != aNewSize )
+                    pBmpEx->SetSizePixel( aNewSize );
+
+                aImage = Image( *pBmpEx );
+
                 m_pUserImageList->AddImage( nId, aImage );
                 m_pHCUserImageList->AddImage( nId, aImage ); // user images are always used as non high contrast
             }
@@ -893,6 +905,7 @@ void SfxImageManager_Impl::RebuildUserList()
         {
             aImage = SeekImage( nId, NULL, FALSE ); // look for non high contrast mode image
             m_pUserImageList->AddImage( nId, aImage );
+
             aImage = SeekImage( nId, NULL, TRUE ); // look for high contrast mode image
             m_pHCUserImageList->AddImage( nId, aImage );
         }
@@ -1385,14 +1398,14 @@ void SfxImageManager::EndCustomize()
     bzw. entfernt die Bindung an eine Bitmap.
 */
 
-void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
+void SfxImageManager::ReplaceImage( USHORT nId, BitmapEx* pBmpEx )
 {
     ImageList *pUserImageList = pImp->m_pUserImageList;
     ImageList *pHCUserImageList = pImp->m_pHCUserImageList;
 
     SfxBitmapList_Impl* pUserDefList = pImp->m_pUserDefList;
     BOOL bReplaced = FALSE;
-    if ( !pBmp && GetImage( nId ).GetSizePixel().Width() )
+    if ( !pBmpEx && GetImage( nId ).GetSizePixel().Width() )
     {
         // Auf default zuruecksetzen; zuerst das Userdef-Image entfernen
         pUserImageList->RemoveImage( nId );
@@ -1400,9 +1413,9 @@ void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
 
         // Falls zu der "ubergebenen Id eine UserBitmap vorliegt, wird sie
         // jetzt wieder entfernt
-        for ( USHORT i=0; i<pUserDefList->GetBitmapCount(); i++ )
-            if ( pUserDefList->GetBitmapId(i) == nId )
-                pUserDefList->RemoveBitmap( nId );
+        for ( USHORT i=0; i<pUserDefList->GetBitmapExCount(); i++ )
+            if ( pUserDefList->GetBitmapExId(i) == nId )
+                pUserDefList->RemoveBitmapEx( nId );
 
         Image aImage = GetImage( nId );
 
@@ -1412,33 +1425,32 @@ void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
 
         bReplaced = TRUE;
     }
-    else if ( pBmp )
+    else if ( pBmpEx )
     {
         // Eine neue Bitmap aufnehmen
-        Size aSize = pBmp->GetSizePixel();
+        Size aSize = pBmpEx->GetSizePixel();
         BOOL bBitmapCreated = FALSE;
         if ( aSize.Width() > 208 || aSize.Height() > 208 )
         {
             // Use size that fits both toolbar image size (16x16/26x26)
             Size aSz( 208, 208 );
-            pBmp = new Bitmap( *pBmp );
-            pBmp->Scale( aSz, BMP_SCALE_INTERPOLATE );
+            pBmpEx = new BitmapEx( *pBmpEx );
+            pBmpEx->Scale( aSz, BMP_SCALE_INTERPOLATE );
             bBitmapCreated = TRUE;
         }
 
-        if ( pUserDefList->GetBitmapPos( nId ) == USHRT_MAX )
-            pUserDefList->AddBitmap( nId, *pBmp );
+        if ( pUserDefList->GetBitmapExPos( nId ) == USHRT_MAX )
+            pUserDefList->AddBitmapEx( nId, *pBmpEx );
         else
-            pUserDefList->ReplaceBitmap( nId, *pBmp );
+            pUserDefList->ReplaceBitmapEx( nId, *pBmpEx );
 
-        Color aColor( GetMaskColor() );
-        Image aImage( *pBmp, aColor );
-        if ( pBmp->GetSizePixel() != pImageList->GetImageSize() )
+        Image aImage( *pBmpEx );
+        if ( pBmpEx->GetSizePixel() != pImageList->GetImageSize() )
         {
             // Scale bitmap to fit current toolbar image size
             Size aSize = pImageList->GetImageSize();
-            pBmp->Scale( aSize, BMP_SCALE_INTERPOLATE );
-            aImage = Image( *pBmp, aColor );
+            pBmpEx->Scale( aSize, BMP_SCALE_INTERPOLATE );
+            aImage = Image( *pBmpEx );
         }
 
         // In die User-Liste aufnehmen
@@ -1458,8 +1470,9 @@ void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
 
         bReplaced = TRUE;
         if ( bBitmapCreated )
-            delete pBmp; // Delete temporary bitmap again!
+            delete pBmpEx; // Delete temporary bitmap again!
     }
+
 
     if ( bReplaced )
     {
@@ -1558,21 +1571,6 @@ void SfxImageManager::ReleaseToolBoxManager( SfxToolBoxManager *pMgr )
 
 /*  [Beschreibung]
 
-    Gibt die Color zu"ruck, die als Maskenfarbe verwendet wird.
-*/
-
-Color SfxImageManager::GetMaskColor() const
-{
-    if ( pImageList->HasMaskColor() )
-        return pImageList->GetMaskColor();
-    else
-        return Color( COL_LIGHTMAGENTA );
-}
-
-//-------------------------------------------------------------------------
-
-/*  [Beschreibung]
-
     Versorgt die "ubergebene Toolbox mit allen Images, die f"ur die enthaltenen
     Ids konfiguriert sind.
     Es wird ( genauso wie bei GetImage ) nicht in der Office-Liste gesucht.
@@ -1635,7 +1633,7 @@ void SfxImageManager::SetImages( ToolBox& rToolBox, SfxModule *pModule, BOOL bHi
 
 BOOL SfxImageManager::IsUserDef_Impl(USHORT nId) const
 {
-    return ( pImp->m_pUserDefList->GetBitmapPos(nId) != USHRT_MAX );
+    return ( pImp->m_pUserDefList->GetBitmapExPos(nId) != USHRT_MAX );
 }
 
 //-------------------------------------------------------------------------
@@ -1646,12 +1644,12 @@ BOOL SfxImageManager::IsUserDef_Impl(USHORT nId) const
     vorher mu\s mit IsUserDef_Impl "uberpr"uft werden, ob es auch eine gibt.
 */
 
-const Bitmap& SfxImageManager::GetUserDefBitmap_Impl( USHORT nId ) const
+const BitmapEx& SfxImageManager::GetUserDefBitmapEx_Impl( USHORT nId ) const
 {
     SfxBitmapList_Impl* pUserDefList = pImp->m_pUserDefList;
-    USHORT nPos = pUserDefList->GetBitmapPos( nId );
-    DBG_ASSERT( nPos != USHRT_MAX, "Bitmap nicht vorhanden!" );
-    return ( *pUserDefList->GetBitmap(nId) );
+    USHORT nPos = pUserDefList->GetBitmapExPos( nId );
+    DBG_ASSERT( nPos != USHRT_MAX, "BitmapEx nicht vorhanden!" );
+    return ( *pUserDefList->GetBitmapEx(nId) );
 }
 
 void SfxImageManager::SetOutStyle_Impl( sal_Int16 nNewStyle )
