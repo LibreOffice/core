@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 22:05:05 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 #define NUMBER_OF_OPTION_PAGES  12
 class SfxModule;
 class SfxShell;
-struct OptionsPageInfo;
 
 class OfaOptionsTreeListBox : public SvTreeListBox
 {
@@ -124,10 +123,8 @@ private:
     OfaOptionsTreeListBox   aTreeLB;
 
     String          sTitle;
-    String          sHintTitle;
     String          sNotLoadedError;
 
-    const OptionsPageInfo*  pHintInfo;
     SvLBoxEntry*            pCurrentPageEntry;
 
     // for the ColorTabPage
@@ -143,13 +140,10 @@ private:
     BOOL            bImageResized;
     bool            bInSelectHdl_Impl;
 
-    Timer           aHintTimer;
     Timer           aSelectTimer;
 
     static USHORT   nLastDialogPageId;
 
-    void            StartHint( const OptionsPageInfo* pInfo, const XubString& rTitle );
-    void            ShowHint();
     SfxItemSet*     CreateItemSet( USHORT nId );
     void            ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
     void            Initialize();
