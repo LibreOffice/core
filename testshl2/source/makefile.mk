@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 13:16:46 $
+#   last change: $Author: vg $ $Date: 2003-05-19 13:13:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,9 @@ VERSIONINFO_OBJFILES=\
     $(OBJ)$/versionhelper.obj \
     $(OBJ)$/versioner.obj 
 
+BMSMA_OBJFILES=\
+    $(OBJ)$/bmsma.obj
+
 # for right dependencies
 # OBJFILES= $(COMMON_OBJFILES) $(TESTSHL_OBJFILES) $(VERSIONINFO_OBJFILES)
 
@@ -115,7 +118,6 @@ APP2STDLIBS=$(SALLIB)
 
 APP2DEPN= 
 APP2LIBS= 
-
 
 # --- Targets ------------------------------------------------------
 
