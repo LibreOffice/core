@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-09 10:37:37 $
+ *  last change: $Author: mba $ $Date: 2000-10-25 13:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1644,7 +1644,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
         pDisp = pDisp->pImp->pParent;
     }
 
-    if ( !bUpdate )
+    if ( !bUpdate || pImp->pFrame->GetFrame()->IsClosing_Impl() )
         return 0;
 
     SfxTopViewFrame* pTop = pImp->pFrame ? PTR_CAST( SfxTopViewFrame, pImp->pFrame->GetTopViewFrame() ) : NULL;
