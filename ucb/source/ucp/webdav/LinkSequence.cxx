@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinkSequence.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-22 14:44:26 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,12 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
+#ifndef NE_XML_H
+#include <neon/ne_xml.h>
+#endif
+
 #ifndef _LINKSEQUENCE_HXX_
 #include "LinkSequence.hxx"
 #endif
@@ -68,62 +74,101 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////
 
-#define DAV_ELM_LOCK_FIRST (NE_ELM_UNUSED)
-
-#define DAV_ELM_link    (DAV_ELM_LOCK_FIRST +  1)
-#define DAV_ELM_src     (DAV_ELM_LOCK_FIRST +  2)
-#define DAV_ELM_dst     (DAV_ELM_LOCK_FIRST +  3)
-
-// static
-const struct ne_xml_elm LinkSequence::elements[] =
-{
-    { "", "link", DAV_ELM_link, 0 },
-    { "", "src",  DAV_ELM_src,  NE_XML_CDATA },
-    { "", "dst",  DAV_ELM_dst,  NE_XML_CDATA },
-    { 0 }
-};
-
 struct LinkSequenceParseContext
 {
     ucb::Link * pLink;
+    bool hasSource;
+    bool hasDestination;
 
-    LinkSequenceParseContext() : pLink( 0 ) {}
+    LinkSequenceParseContext()
+    : pLink( 0 ), hasSource( false ), hasDestination( false ) {}
     ~LinkSequenceParseContext() { delete pLink; }
 };
 
+#define STATE_TOP (1)
+
+#define STATE_LINK (STATE_TOP)
+#define STATE_DST  (STATE_TOP + 1)
+#define STATE_SRC  (STATE_TOP + 2)
+
 //////////////////////////////////////////////////////////////////////////
-extern "C" int LinkSequence_validate_callback( void * userdata,
-                                               ne_xml_elmid parent,
-                                               ne_xml_elmid child )
+extern "C" int LinkSequence_startelement_callback(
+    void *userdata,
+    int parent,
+    const char *nspace,
+    const char *name,
+    const char **atts )
 {
-    // @@@
-    return NE_XML_VALID;
+    if ( ( name != 0 ) &&
+         ( ( nspace == 0 ) || ( strcmp( nspace, "" ) == 0 ) ) )
+    {
+        switch ( parent )
+        {
+            case NE_XML_STATEROOT:
+                if ( strcmp( name, "link" ) == 0 )
+                    return STATE_LINK;
+                break;
+
+            case STATE_LINK:
+                if ( strcmp( name, "dst" ) == 0 )
+                    return STATE_DST;
+                else if ( strcmp( name, "src" ) == 0 )
+                    return STATE_SRC;
+                break;
+        }
+    }
+    return NE_XML_DECLINE;
 }
 
 //////////////////////////////////////////////////////////////////////////
-extern "C" int LinkSequence_endelement_callback( void * userdata,
-                                                 const struct ne_xml_elm * s,
-                                                 const char * cdata )
+extern "C" int LinkSequence_chardata_callback(
+    void *userdata,
+    int state,
+    const char *buf,
+    size_t len )
 {
     LinkSequenceParseContext * pCtx
                     = static_cast< LinkSequenceParseContext * >( userdata );
     if ( !pCtx->pLink )
         pCtx->pLink = new ucb::Link;
 
-    switch ( s->id )
+    switch ( state )
     {
-        case DAV_ELM_src:
-            pCtx->pLink->Source = rtl::OUString::createFromAscii( cdata );
+        case STATE_DST:
+            pCtx->pLink->Destination
+                = rtl::OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
+            pCtx->hasDestination = true;
             break;
 
-        case DAV_ELM_dst:
-            pCtx->pLink->Destination = rtl::OUString::createFromAscii( cdata );
-            break;
-
-        default:
+        case STATE_SRC:
+            pCtx->pLink->Source
+                = rtl::OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
+            pCtx->hasSource = true;
             break;
     }
-    return 0;
+    return 0; // zero to continue, non-zero to abort parsing
+}
+
+//////////////////////////////////////////////////////////////////////////
+extern "C" int LinkSequence_endelement_callback(
+    void *userdata,
+    int state,
+    const char *nspace,
+    const char *name )
+{
+    LinkSequenceParseContext * pCtx
+                    = static_cast< LinkSequenceParseContext * >( userdata );
+    if ( !pCtx->pLink )
+        pCtx->pLink = new ucb::Link;
+
+    switch ( state )
+    {
+        case STATE_LINK:
+            if ( !pCtx->hasDestination || !pCtx->hasSource )
+                return 1; // abort
+            break;
+    }
+    return 0; // zero to continue, non-zero to abort parsing
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -149,9 +194,8 @@ bool LinkSequence::createFromXML( const rtl::OString & rInData,
 
         LinkSequenceParseContext aCtx;
         ne_xml_push_handler( parser,
-                             elements,
-                             LinkSequence_validate_callback,
-                             0, // startelement_callback
+                             LinkSequence_startelement_callback,
+                             LinkSequence_chardata_callback,
                              LinkSequence_endelement_callback,
                              &aCtx );
 
@@ -179,7 +223,6 @@ bool LinkSequence::createFromXML( const rtl::OString & rInData,
         nEnd   = rInData.indexOf( "</link>", nStart );
     }
 
-//  rOutData.realloc( nCount );
     return success;
 }
 
