@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnControlWindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:53:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ OColumnControlWindow::OColumnControlWindow(Window* pParent
             , m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
             , m_bAutoIncrementEnabled(sal_True)
 {
+    m_bRight = sal_True;
     try
     {
         m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
