@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-18 11:53:11 $
+ *  last change: $Author: ka $ $Date: 2002-03-20 13:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,34 +205,35 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
 
     try
     {
-        ExecuteDropEvent aEvt( rDTDE.DropAction & ~DNDConstants::ACTION_DEFAULT, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE );
-        aEvt.mbDefault = ( ( rDTDE.DropAction & DNDConstants::ACTION_DEFAULT ) != 0 );
+        AcceptDropEvent  aAcceptEvent;
+        ExecuteDropEvent aExecuteEvt( rDTDE.DropAction & ~DNDConstants::ACTION_DEFAULT, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE );
+        sal_Int8         nRet = DNDConstants::ACTION_NONE;
 
-        if( aEvt.mbDefault )
+        aExecuteEvt.mbDefault = ( ( rDTDE.DropAction & DNDConstants::ACTION_DEFAULT ) != 0 );
+
+        // in case of a default action, call ::AcceptDrop first and use the returned
+        // accepted action as the execute action in the call to ::ExecuteDrop
+        aAcceptEvent.mnAction = aExecuteEvt.mnAction;
+        aAcceptEvent.maPosPixel = aExecuteEvt.maPosPixel;
+        (DropTargetEvent&)( aAcceptEvent.maDragEvent ) = (DropTargetEvent&) rDTDE;
+        ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).DropAction = rDTDE.DropAction;
+        ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).LocationX = rDTDE.LocationX;
+        ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).LocationY = rDTDE.LocationY;
+        ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).SourceActions = rDTDE.SourceActions;
+        aAcceptEvent.mbLeaving = sal_False;
+        aAcceptEvent.mbDefault = aExecuteEvt.mbDefault;
+
+        nRet = mrParent.AcceptDrop( aAcceptEvent );
+
+        if( DNDConstants::ACTION_NONE != nRet )
         {
-            // in case of a default action, call ::AcceptDrop first and use the returned
-            // accepted action as the execute action in the call to ::ExecuteDrop
-            AcceptDropEvent aAcceptEvent;
-
-            aAcceptEvent.mnAction = aEvt.mnAction;
-            aAcceptEvent.maPosPixel = aEvt.maPosPixel;
-            (DropTargetEvent&)( aAcceptEvent.maDragEvent ) = (DropTargetEvent&) rDTDE;
-            ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).DropAction = rDTDE.DropAction;
-            ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).LocationX = rDTDE.LocationX;
-            ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).LocationY = rDTDE.LocationY;
-            ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).SourceActions = rDTDE.SourceActions;
-            aAcceptEvent.mbLeaving = sal_False;
-            aAcceptEvent.mbDefault = sal_True;
-
-            aEvt.mnAction = mrParent.AcceptDrop( aAcceptEvent );
-        }
-
-        const sal_Int8 nRet = mrParent.ExecuteDrop( aEvt );
-
-        if( DNDConstants::ACTION_NONE == nRet )
-            rDTDE.Context->rejectDrop();
-        else
             rDTDE.Context->acceptDrop( nRet );
+
+            if( aExecuteEvt.mbDefault )
+                aExecuteEvt.mnAction = nRet;
+
+            nRet = mrParent.ExecuteDrop( aExecuteEvt );
+        }
 
         rDTDE.Context->dropComplete( DNDConstants::ACTION_NONE != nRet );
 
