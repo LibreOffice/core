@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_srs.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 14:49:21 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:40:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,65 +61,6 @@
 #*************************************************************************
 
 
-
-# und so mit response file
-#.IF "$(OS)" == "DOS"
-# fuer DOSSTCIX nicht \" sondern "
-.IF "$(GUI)" == "MAC"
-RSCUPDVERMAC+=-DUPDVER=¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"$(RSCUPDVER)¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"
-.ELSE
-RSCUPDVERMAC+=-DUPDVER="$(RSCUPDVER)"
-.ENDIF
-#.ELSE
-#RSCUPDVERMAC=-DUPDVER=\"$(RSCUPDVER)\"
-#.ENDIF
-
-# und so mit response file
-.IF "$(GUI)" == "MAC"
-RSCUPDVERMAC+=-DUPDVER=¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"$(RSCUPDVER)¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"
-.ELSE
-RSCUPDVERMAC+=-DUPDVER="$(RSCUPDVER)"
-.ENDIF
-
-.IF "$(lintit)"==""
-.IF "$(GUI)"=="WNT"
-.IF "$(CPU)"=="I"
-.IF "$(no_hids)$(NO_HIDS)"==""
-.IF "$(USE_SHELL)"=="4nt"
-.IF "$(SRCFILES)"!=""
-HIDFILES=$(foreach,i,$(SRCFILES:f) $(SRS)$/$(i:s/.src/.hid/))
-HIDSRSPARTICLE=$(MISC)$/$(TARGET)_srs.hid
-$(HIDSRSPARTICLE) : $(HIDFILES)
-    @echo ------------------------------
-    @echo Making: $@
-    @+if exist $(HIDSRSPARTICLE) rm $(HIDSRSPARTICLE)
-    +$(TYPE) $(HIDFILES) > $(HIDSRSPARTICLE)
-ALLTAR : $(HIDSRSPARTICLE)
-.ENDIF
-.ENDIF                  # "$(USE_SHELL)"=="4nt"
-.ENDIF
-.ENDIF
-.ENDIF
-.ENDIF
-
-
-.IF "$(SRCTARGET)"!=""
-$(SRCTARGET) : $(SRCFILES)
-    @echo ------------------------------
-    @echo Making: $@
-.IF "$(make_srs_deps)" != ""
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERMAC) -fp$@ $(SRCFILES)
-.ELSE
-    $(RSC) -presponse @$(mktmp $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
-        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERMAC) \
-        -fp$@ \
-        $(SRCFILES) \
-    )
-.ENDIF
-.ENDIF
-
-
-
 .IF "$(MULTI_SRC_FLAG)"==""
 
 SRC1 ?= TNR!:=1
@@ -149,117 +90,87 @@ $(SRC8TARGET) .NULL : SRC8
 SRC9 ?= TNR!:=9
 $(SRC9TARGET) .NULL : SRC9
 
-.ENDIF
+# -----------------
 
-# -------
-# - SRC1 -
-# -------
+DEPSRS1 ?= TNR!:=1
+$(DEPSRS1FILE) .NULL : DEPSRS1
+
+DEPSRS2 ?= TNR!:=2
+$(DEPSRS2FILE) .NULL : DEPSRS2
+
+DEPSRS3 ?= TNR!:=3
+$(DEPSRS3FILE) .NULL : DEPSRS3
+
+DEPSRS4 ?= TNR!:=4
+$(DEPSRS4FILE) .NULL : DEPSRS4
+
+DEPSRS5 ?= TNR!:=5
+$(DEPSRS5FILE) .NULL : DEPSRS5
+
+DEPSRS6 ?= TNR!:=6
+$(DEPSRS6FILE) .NULL : DEPSRS6
+
+DEPSRS7 ?= TNR!:=7
+$(DEPSRS7FILE) .NULL : DEPSRS7
+
+DEPSRS8 ?= TNR!:=8
+$(DEPSRS8FILE) .NULL : DEPSRS8
+
+DEPSRS9 ?= TNR!:=9
+$(DEPSRS9FILE) .NULL : DEPSRS9
+
+.ENDIF
 
 .IF "$(MULTI_SRC_FLAG)" == ""
-SRC1 SRC2 SRC3 SRC4 SRC5 SRC6 SRC7 SRC8 SRC9 :
-.IF "$(GUI)" != "MAC"
+SRC1 SRC2 SRC3 SRC4 SRC5 SRC6 SRC7 SRC8 SRC9:
     @+dmake $(SRS)$/$(SRS$(TNR)NAME).srs MULTI_SRC_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
-    @+dmake "$(SRS)$/$(SRS$(TNR)NAME).srs" MULTI_SRC_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ENDIF
+
+DEPSRS1 DEPSRS2 DEPSRS3 DEPSRS4 DEPSRS5 DEPSRS6 DEPSRS7 DEPSRS8 DEPSRS9:
+    @+dmake $(DEPSRS$(TNR)FILE) MULTI_SRC_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
 .ELSE
 
-.IF "$(lintit)"==""
-.IF "$(GUI)"=="WNT"
-.IF "$(CPU)"=="I"
-.IF "$(no_hids)$(NO_HIDS)"==""
-.IF "$(USE_SHELL)"=="4nt"
+#######################################################
+# unroll begin
+
+.IF "$(SRS$(TNR)NAME)"!=""
+.IF "$(BUILDHIDS)"!=""
 HID$(TNR)FILES=$(foreach,i,$(SRC$(TNR)FILES:f) $(SRS)$/$(i:s/.src/.hid/))
-HIDSRS$(TNR)PARTICLE=$(MISC)$/$(SRS$(TNR)NAME)_srs.hid
+HIDSRS$(TNR)PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS$(TNR)NAME)_srs.hid
 $(HIDSRS$(TNR)PARTICLE) : $(HID$(TNR)FILES)
         @echo ------------------------------
         @echo Making: $@
-        @+if exist $(HIDSRS$(TNR)PARTICLE) rm $(HIDSRS$(TNR)PARTICLE)
-        +$(TYPE) $(HID$(TNR)FILES) > $(HIDSRS$(TNR)PARTICLE)
+        @+if exist $@ rm $@
+        +$(TYPE) $(HID$(TNR)FILES) > $@.$(ROUT).tmp
+        @+$(RENAME) $@.$(ROUT).tmp $@
 
-SRS$(TNR) : $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES)
-.ENDIF                  # "$(USE_SHELL)"=="4nt"
-.ENDIF
-.ENDIF
-.ENDIF
-.ENDIF
+.IF "$(L10N_framework)"==""
+ALLTAR : $(HIDSRS$(TNR)PARTICLE)
+.ENDIF			# "$(L10N_framework)"==""
 
-$(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES)
+.ENDIF # "$(BUILDHIDS)"!=""
+
+$(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(make_srs_deps)" != ""
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERMAC) -fp$@ $(SRC$(TNR)FILES)
-.ELSE
+    +-$(RM) $(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr >& $(NULLDEV)
+    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$@ $(SRC$(TNR)FILES)
+
+$(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
+    @echo ------------------------------
+    @echo Making: $@
     echo $(SRC$(TNR)FILES)
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
-        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERMAC) \
+        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp$@ \
         $(SRC$(TNR)FILES) \
     )
-.ENDIF
-.ENDIF
 
-.IF "$(MULTI_SRS_FLAG)"==""
+.ENDIF          # "$(SRS$(TNR)NAME)"!=""
 
-SRS1 ?= TNR!:=1
-$(SRS1TARGET) .NULL : SRS1
+# unroll end
+#######################################################
 
-SRS2 ?= TNR!:=2
-$(SRS2TARGET) .NULL : SRS2
+.ENDIF          # "$(MULTI_SRC_FLAG)"==""
 
-SRS3 ?= TNR!:=3
-$(SRS3TARGET) .NULL : SRS3
-
-SRS4 ?= TNR!:=4
-$(SRS4TARGET) .NULL : SRS4
-
-SRS5 ?= TNR!:=5
-$(SRS5TARGET) .NULL : SRS5
-
-SRS6 ?= TNR!:=6
-$(SRS6TARGET) .NULL : SRS6
-
-SRS7 ?= TNR!:=7
-$(SRS7TARGET) .NULL : SRS7
-
-SRS8 ?= TNR!:=8
-$(SRS8TARGET) .NULL : SRS8
-
-SRS9 ?= TNR!:=9
-$(SRS9TARGET) .NULL : SRS9
-
-.ENDIF
-
-# -------
-# - SRS1 -
-# -------
-
-.IF "$(MULTI_SRS_FLAG)" == ""
-SRS1 SRS2 SRS3 SRS4 SRS5 SRS6 SRS7 SRS8 SRS9:
-.IF "$(GUI)" != "MAC"
-    @+dmake $(SRS$(TNR)TARGET) MULTI_SRS_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
-    @+dmake "$(SRS$(TNR)TARGET)" MULTI_SRS_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ENDIF	# "$(GUI)" != "MAC"
-.ELSE
-$(SRS$(TNR)TARGET): $(SRS$(TNR)FILES) $(SRS$(TNR)DEPN)
-    @echo ------------------------------
-    @echo Making: $@
-.IF "$(GUI)" != "MAC"
-.IF "$(GUI)" == "UNX"
-    +$(RSC) -r $(RSC_RES_CHARSET) -fs$(SRS$(TNR)TARGET)	-I$(INPATH)$/res \
-    -I$(RES) \
-    -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(RSCLOCINC) -I$(RSCGLOINC) $(SOLARINC) \
-    $(RSC$(TNR)HEADER) $(SRS$(TNR)FILES)
-.ELSE		# "$(GUI)" == "UNX"
-    +$(RSC) -r $(RSC_RES_CHARSET) -fs$(SRS$(TNR)TARGET) 					\
-    -I$(INPATH)$/res -I$(RES) \
-    -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INCLUDE) \
-    $(RSC$(TNR)HEADER) $(SRS$(TNR)FILES)
-.ENDIF		# "$(GUI)" == "UNX"
-.ELSE		# "$(GUI)" != "MAC"
-    +$(RSC) -r $(RSC_RES_CHARSET) -fs$(SRS$(TNR)TARGET)  -fo$(RES)$/$(RES$(TNR)TARGET).res -I$(SOLARENV)$/res -I$(INPATH)$/res -I$(RSCEXTINC) -I"$(INCLUDE:s/inc/inc:/)" -I$(SOLARINCDIR)$/ $(RSCDEFS) $(RSCUPDVERMAC)  $(RSC$(TNR)HEADER) $(SRS$(TNR)FILES)
-.ENDIF		# "$(GUI)" != "MAC"
-.ENDIF		# "$(MULTI_SRS_FLAG)" == ""
 
