@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:44:46 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                                         xLayoutManager->showElement( aToolBarResName );
                                     }
                                     else
-                                        xLayoutManager->hideElement( aToolBarResName );
+                                        xLayoutManager->destroyElement( aToolBarResName );
                                 }
                             }
                         }
