@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-15 19:19:13 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,8 @@ void SvXMLImport::_InitCtor()
                                sXML_n_chart, XML_NAMESPACE_CHART );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_MATH_IDX, sXML_np__math,
                                sXML_n_math, XML_NAMESPACE_MATH );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_FORM_IDX, sXML_namespace_form,
+                                  sXML_url_form, XML_NAMESPACE_FORM );
 
 
     // namespaces used in the technical preview (SO 5.2)
@@ -495,6 +497,13 @@ SchXMLImportHelper* SvXMLImport::CreateChartImport()
 {
     return new SchXMLImportHelper();
 }
+
+#if SUPD>615 || defined(PRIV_DEBUG)
+::xmloff::OFormLayerXMLImport* SvXMLImport::CreateFormImport()
+{
+    return new ::xmloff::OFormLayerXMLImport(*this);
+}
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 //
