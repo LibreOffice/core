@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1137,8 +1137,7 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_rMutex );
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*this);
+    checkPositioningAllowed();
 
     if(notifyAllListenersCursorBeforeMove())
     {
@@ -1168,8 +1167,7 @@ void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 
     ::osl::MutexGuard aGuard( m_rMutex );
 
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*this);
+    checkPositioningAllowed();
 
     if(m_pCache && m_pCache->m_bInserted)
     {

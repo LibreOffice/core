@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,10 +927,11 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& 
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         OSL_ENSURE(m_aCurrentRow,"CurrentRow is null!");
         m_aCurrentRow.setBookmark(m_aBookmark);
-        OSL_ENSURE((*(*m_aCurrentRow))[0].makeAny().hasValue(),"Bookamrk has no value!");
-
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd(),"Position of matrix iterator isn't valid!");
         OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
+        OSL_ENSURE((*(*m_aCurrentRow))[0].makeAny().hasValue(),"Bookmark has no value!");
+
+
     }
     else
     {
@@ -1027,6 +1028,7 @@ void ORowSetBase::firePropertyChange(const ORowSetMatrix::iterator& _rOldRow)
         aRow = *_rOldRow;
 
     OSL_ENSURE(m_pColumns,"Columns can not be NULL here!");
+    OSL_ENSURE(m_aCurrentRow,"ORowSetBase::firePropertyChange: we don't stand on a valid row! Row is null.");
     sal_Int32 i=0;
     try
     {
