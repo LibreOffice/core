@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:47:37 $
+#   last change: $Author: hr $ $Date: 2004-02-04 12:38:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@
 ASM=gcc
 AFLAGS=-Wa,-Av8plus,-K,PIC -c $(CDEFS)
 
-SOLAR_JAVA=TRUE
+SOLAR_JAVA*=TRUE
 JAVAFLAGSDEBUG=-g
 
 # filter for supressing verbose messages from linker
@@ -95,6 +95,14 @@ CC*=gcc
 CFLAGS=
 .ENDIF
 CFLAGS+=-fmessage-length=0 -c $(INCLUDE)
+
+# flags to enable build with symbols; required for crashdump feature
+.IF "$(ENABLE_SYMBOLS)"=="SMALL"
+CFLAGSENABLESYMBOLS=-g1
+.ELSE
+CFLAGSENABLESYMBOLS=-g
+.ENDIF
+
 # flags for the C++ Compiler
 CFLAGSCC= -pipe 
 # Flags for enabling exception handling
@@ -103,7 +111,7 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
-CFLAGSCXX= -pipe -fno-for-scope -fpermissive -fno-rtti 
+CFLAGSCXX= -pipe -fpermissive -fno-rtti 
 
 # HACK: enable Hamburg developers to build on glibc-2.2 machines but compile vs. glibc-2.1 headers
 .IF "$(BUILD_SPECIAL)"==""
@@ -130,9 +138,12 @@ CFLAGSDBGUTIL=
 # Compiler flags for enabling optimazations
 # CFLAGSOPT=-O2
 # reduce to -O1 to avoid optimisation problems
-CFLAGSOPT=-O1
+# CFLAGSOPT=-01
+# We use -03, also see IZ 17788 -fno-strict-aliasing
+CFLAGSOPT=-O3 -fno-strict-aliasing
 # Compiler flags for disabling optimazations
-CFLAGSNOOPT=
+#CFLAGSNOOPT=
+CFLAGSNOOPT=-fno-strict-aliasing
 # Compiler flags for discibing the output path
 CFLAGSOUTOBJ=-o
 # Enable all warnings
