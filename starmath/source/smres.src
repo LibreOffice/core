@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:27:53 $
+ *  last change: $Author: cmc $ $Date: 2001-08-01 13:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10271,6 +10271,68 @@ String RID_DOCUMENTSTR
     Text[ catalan ] = "Fórmula";
     Text[ finnish ] = "Kaava";
 };
+
+String STR_STATSTR_READING
+{
+    Text = "Dokument wird geladen..." ;
+    Text [ English ] = "Loading..." ;
+    Text [ norwegian ] = "Laster inn..." ;
+    Text [ italian ] = "Il documento viene caricato..." ;
+    Text [ portuguese_brazilian ] = "Carregando..." ;
+    Text [ portuguese ] = "A carregar documento..." ;
+    Text [ finnish ] = "Ladataan asiakirjaa..." ;
+    Text [ danish ] = "Indlæser dokument..." ;
+    Text [ french ] = "Document en cours de chargement..." ;
+    Text [ swedish ] = "Dokument laddas..." ;
+    Text [ dutch ] = "Document wordt gemaakt..." ;
+    Text [ spanish ] = "Cargando el documento..." ;
+    Text [ english_us ] = "Loading document..." ;
+    Text[ chinese_simplified ] = "×°ÈëÎÄµµ...";
+    Text[ language_user1 ] = " ";
+    Text[ russian ] = "Äîêóìåíò çàãğóæàåòñÿ...";
+    Text[ polish ] = "£adowanie dokumentu...";
+    Text[ japanese ] = "•¶‘‚Ì“Ç‚İ‚İ...";
+    Text[ chinese_traditional ] = "¸ü¤J¤å¥ó...";
+    Text[ arabic ] = "ÌÇÑí ÊÍãíá ÇáãÓÊäÏ...";
+    Text[ dutch ] = "Document wordt gemaakt...";
+    Text[ chinese_simplified ] = "×°ÈëÎÄµµ...";
+    Text[ greek ] = "Ôï İããñáöï öïñôşíåôáé...";
+    Text[ korean ] = "¹®¼­ ·Îµå Áß...";
+    Text[ turkish ] = "Belge yükleniyor...";
+    Text[ catalan ] = "Cargando el documento...";
+};
+
+String STR_STATSTR_WRITING
+{
+    Text = "Dokument wird gespeichert..." ;
+    Text [ English ] = "Saving..." ;
+    Text [ norwegian ] = "Lagrer..." ;
+    Text [ italian ] = "Il documento viene salvato..." ;
+    Text [ portuguese_brazilian ] = "Gravando..." ;
+    Text [ portuguese ] = "A guardar documento..." ;
+    Text [ finnish ] = "Tallennetaan asiakirjaa..." ;
+    Text [ danish ] = "Gemmer dokument..." ;
+    Text [ french ] = "Enreg. du document en cours..." ;
+    Text [ swedish ] = "Dokument sparas..." ;
+    Text [ dutch ] = "Document wordt opgeslagen..." ;
+    Text [ spanish ] = "Guardando el documento..." ;
+    Text [ english_us ] = "Saving document..." ;
+    Text = "Dokument wird gespeichert..." ;
+    Text[ chinese_simplified ] = "´æÅÌÎÄµµ...";
+    Text[ russian ] = "Äîêóìåíò ñîõğàíÿåòñÿ...";
+    Text[ polish ] = "Zapisywanie dokumentu...";
+    Text[ japanese ] = "•¶‘‚Ì•Û‘¶...";
+    Text[ chinese_traditional ] = "¥¿¦bÀx¦s¤å¥ó...";
+    Text[ arabic ] = "ÌÇÑí ÍİÙ ÇáãÓÊäÏ...";
+    Text[ dutch ] = "Document wordt opgeslagen...";
+    Text[ chinese_simplified ] = "´æÅÌÎÄµµ...";
+    Text[ greek ] = "ÁğïèŞêåõóç åããñÜöïõ...";
+    Text[ korean ] = "¹®¼­ ÀúÀå...";
+    Text[ turkish ] = "Belge kaydediliyor...";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Guardando el documento...";
+};
+
 
 String STR_MATH_DOCUMENT_FULLTYPE_60
 {

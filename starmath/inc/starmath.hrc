@@ -2,9 +2,9 @@
  *
  *  $RCSfile: starmath.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-22 12:41:08 $
+ *  last change: $Author: cmc $ $Date: 2001-08-01 13:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,8 @@
 #define STR_MATH_DOCUMENT_FULLTYPE_50   (RID_APP_START + 820)
 #define STR_MATH_DOCUMENT_FULLTYPE_60   (RID_APP_START + 821)
 #define RID_SMPLUGINMENU                (RID_APP_START + 822)
+#define STR_STATSTR_READING             (RID_APP_START + 823)
+#define STR_STATSTR_WRITING             (RID_APP_START + 824)
 
 #define RID_ERR_IDENT               (RID_APP_START + 920)
 #define RID_ERR_UNKOWN              (RID_APP_START + 921)
