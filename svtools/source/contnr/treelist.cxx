@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treelist.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 09:50:03 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 13:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1691,7 +1691,7 @@ SvListEntry* SvTreeList::GetRootLevelParent( SvListEntry* pEntry ) const
         pCurParent = pEntry->pParent;
         if ( pCurParent == pRootItem )
             return pEntry; // ist sein eigener Parent
-        while( pCurParent->pParent != pRootItem )
+        while( pCurParent && pCurParent->pParent != pRootItem )
             pCurParent = pCurParent->pParent;
     }
     return pCurParent;
