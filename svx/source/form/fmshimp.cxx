@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-27 15:19:36 $
+ *  last change: $Author: fs $ $Date: 2002-05-02 16:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,17 +452,6 @@ DECL_CURSOR_ACTION_THREAD(FmMoveToLastThread);
 IMPL_CURSOR_ACTION_THREAD(FmMoveToLastThread, SVX_RES(RID_STR_MOVING_CURSOR), last());
 
 //------------------------------------------------------------------------------
-sal_Bool hasObject(SdrObjListIter& rIter, SdrObject* pObj)
-{
-    sal_Bool bFound = sal_False;
-    while (rIter.IsMore() && !bFound)
-        bFound = pObj == rIter.Next();
-
-    rIter.Reset();
-    return bFound;
-}
-
-//------------------------------------------------------------------------------
 sal_Bool isControlList(const SdrMarkList& rMarkList)
 {
     // enthaelt die liste nur Controls und mindestens ein control
@@ -633,7 +622,6 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
         ,m_eNavigate(NavigationBarMode_NONE)
         ,m_bActiveModified(sal_False)
         ,m_bTrackProperties(sal_True)
-        ,m_pCheckForRemoval(NULL)
         ,m_bInActivate(sal_False)
         ,m_bSetFocus(sal_False)
         ,m_nLockSlotInvalidation(0)
@@ -1026,12 +1014,6 @@ void FmXFormShell::disposing()
         if (HasAnyPendingCursorAction())
             CancelAnyPendingCursorAction();
         aGuard.clear();
-
-        if (m_pCheckForRemoval)
-        {
-            delete m_pCheckForRemoval;
-            m_pCheckForRemoval = NULL;
-        }
 
         DBG_ASSERT(!m_nInvalidationEvent, "FmXFormShell::~FmXFormShell : still have an invalidation event !");
             // should habe been deleted while beeing disposed
@@ -3290,145 +3272,38 @@ void FmXFormShell::DetermineSelection(const SdrMarkList& rMarkList)
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::SaveMarkList(const FmFormView* pView)
-{
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    m_aMark = pView->GetMarkList();
-    m_aMarkTimer.Stop();
-}
-
-//------------------------------------------------------------------------------
-void FmXFormShell::RestoreMarkList(FmFormView* pView)
-{
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    const SdrMarkList& rCurrentList = pView->GetMarkList();
-    FmFormPage* pPage = m_pShell->GetCurPage();
-    if (pPage)
-    {
-        // es gibt eine Markierung, dann diese beibehalten
-        if (rCurrentList.GetMarkCount())
-        {
-            m_aMark.Clear();
-            SetSelection(rCurrentList);
-        }
-        else
-        {
-            // wichtig ist das auf die Objecte der markliste nicht zugegriffen wird
-            // da diese bereits zerstoert sein koennen
-            SdrPageView* pCurPageView = pView->GetPageViewPvNum(0);
-            SdrObjListIter aPageIter( *pPage );
-            sal_Bool bFound = sal_True;
-
-            // gibt es noch alle Objecte
-            sal_uInt32 nCount = m_aMark.GetMarkCount();
-            for (sal_uInt32 i = 0; i < nCount && bFound; i++)
-            {
-                SdrMark*   pMark = m_aMark.GetMark(i);
-                SdrObject* pObj  = pMark->GetObj();
-                if (pObj->IsGroupObject())
-                {
-                    SdrObjListIter aIter(*pObj->GetSubList());
-                    while (aIter.IsMore() && bFound)
-                        bFound = hasObject(aPageIter, aIter.Next());
-                }
-                else
-                    bFound = hasObject(aPageIter, pObj);
-
-                bFound = bFound && pCurPageView == pMark->GetPageView();
-            }
-
-            if (bFound)
-            {
-                // Das LastObject auswerten
-                if (nCount) // Objecte jetzt Markieren
-                {
-                    sal_Bool bEnable = sal_False;
-                    if (IsTrackPropertiesEnabled())
-                    {
-                        EnableTrackProperties(sal_False);
-                        bEnable = sal_True;
-                    }
-
-                    for (sal_uInt32 i = 0; i < nCount; i++)
-                    {
-                        SdrMark* pMark = m_aMark.GetMark(i);
-                        pView->MarkObj(pMark->GetObj(), pMark->GetPageView());
-                    }
-
-                    if (bEnable)
-                        EnableTrackProperties(sal_True);
-
-                    SetSelection(m_aMark);
-                }
-                else
-                {
-                    Reference< XIndexAccess> xCont(pPage->GetForms(), UNO_QUERY);
-
-                    // Ist das aktuelle Object ein Element eines SelectionSuppliers?
-                    Reference< XChild> xChild(m_xCurControl,UNO_QUERY);
-                    Reference< ::com::sun::star::view::XSelectionSupplier> xSelectionSupplier;
-                    if (xChild.is())
-                        xSelectionSupplier = Reference< ::com::sun::star::view::XSelectionSupplier>(xChild->getParent(), UNO_QUERY);
-                    if (xSelectionSupplier.is())
-                    {
-                        // suchen der Zugehoreigen Form
-                        Reference< XForm> xForm(GetForm(m_xCurControl));
-                        Reference< XInterface> xIface(xForm, UNO_QUERY);
-                        if (xForm.is() && searchElement(xCont, xIface))
-                        {
-                            setCurForm(xForm);
-                            setCurControl(m_xCurControl);
-
-                            // jetzt noch die Selection vornehmen
-                            xSelectionSupplier->select(makeAny(m_xCurControl));
-                        }
-                    }
-                    else
-                    {
-                        // Auswerten des letzen Objects
-                        Reference< XForm> xForm(m_xCurForm, UNO_QUERY);
-                        Reference< XInterface> xIface(xForm, UNO_QUERY);
-                        if (xForm.is() && searchElement(xCont, xIface))
-                        {
-                            setCurForm(xForm);
-                        }
-                        else
-                        {
-                            if (pPage->GetImpl()->getCurForm().is())
-                                xForm = pPage->GetImpl()->getCurForm();
-                            else if (xCont.is() && xCont->getCount())
-                                xForm = pPage->GetImpl()->getDefaultForm();
-
-                            if (xForm.is())
-                                setCurForm(xForm);
-                        }
-                    }
-
-                    Reference< XInterface> xPreviousObject(getSelObject());
-
-                    // wurde vorher Form angezeigt, dann wieder die Form anzeigen
-                    Reference< XForm> xOldForm(xPreviousObject, UNO_QUERY);
-                    if (xOldForm.is())
-                        setSelObject(m_xCurForm);
-                    else
-                        setSelObject(m_xCurControl);
-
-                    if (IsPropBrwOpen() && m_xSelObject != xPreviousObject)
-                        ShowProperties(m_xSelObject, sal_True);
-                }
-            }
-            m_aMark.Clear();
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
 sal_Bool FmXFormShell::IsPropBrwOpen() const
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     return( ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() ) ?
             m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow(SID_FM_SHOW_PROPERTIES) : sal_False );
 }
+
+//------------------------------------------------------------------------------
+class FmXFormShell::SuspendPropertyTracking
+{
+private:
+    FmXFormShell*   m_pShell;
+    sal_Bool        m_bEnabled;
+
+public:
+    SuspendPropertyTracking( FmXFormShell* _pShell )
+        :m_pShell( _pShell )
+        ,m_bEnabled( sal_False )
+    {
+        if ( m_pShell && m_pShell->IsTrackPropertiesEnabled() )
+        {
+            m_pShell->EnableTrackProperties( sal_False );
+            m_bEnabled = sal_True;
+        }
+    }
+
+    ~SuspendPropertyTracking( )
+    {
+        if ( m_bEnabled )   // note that ( sal_False != m_bEnabled ) implies ( NULL != m_pShell )
+            m_pShell->EnableTrackProperties( sal_True );
+    }
+};
 
 //------------------------------------------------------------------------------
 void FmXFormShell::SetDesignMode(sal_Bool bDesign)
@@ -3455,15 +3330,15 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
             stopFiltering(sal_False);
 
         // an den Objekten meiner MarkList als Listener abmelden
-        if (m_pCheckForRemoval)
-        {
-            m_pCheckForRemoval->EndListeningAll();
-            delete m_pCheckForRemoval;
-            m_pCheckForRemoval = NULL;
-        }
+        pFormView->GetImpl()->stopMarkListWatching();
     }
     else
-        SaveMarkList(pFormView);
+    {
+        m_aMarkTimer.Stop();
+
+        SuspendPropertyTracking aSuspend( this );
+        pFormView->GetImpl()->saveMarkList( sal_True );
+    }
 
     if (bDesign && m_xExternalViewController.is())
         CloseExternalFormViewer();
@@ -3488,20 +3363,24 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
 
     m_pShell->m_bDesignMode = bDesign;
     if (bDesign)
-        RestoreMarkList(pFormView);
+    {
+        SdrMarkList aList;
+        {
+            // during changing the mark list, don't track the selected objects in the property browser
+            SuspendPropertyTracking aSuspend( this );
+            // restore the marks
+            pFormView->GetImpl()->restoreMarkList( aList );
+        }
+
+        // synchronize with the restored mark list
+        if ( aList.GetMarkCount() )
+            SetSelection( aList );
+    }
     else
     {
         // am Model der View als Listener anmelden (damit ich mitbekomme, wenn jemand waehrend des Alive-Modus
-        // Controls loescht, die ich eigentlich mit SaveMarkList gespeichert habe) (60343)
-        if (!m_pCheckForRemoval)
-        {
-            m_pCheckForRemoval = new ObjectRemoveListener(this);
-            FmFormModel* pModel = m_pShell->GetFormModel();
-            DBG_ASSERT(pModel != NULL, "FmXFormShell::SetDesignMode : shell has no model !");
-            m_pCheckForRemoval->StartListening(*(SfxBroadcaster*)pModel);
-        }
-        else
-            DBG_ERROR("FmXFormShell::SetDesignMode : already listening !");
+        // Controls loescht, die ich eigentlich mit saveMarkList gespeichert habe) (60343)
+        pFormView->GetImpl()->startMarkListWatching();
     }
 
     m_pShell->UIFeatureChanged();
@@ -3518,28 +3397,6 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
             &aInterfaceItem, 0L );
     }
     m_bChangingDesignMode = sal_False;
-}
-
-//------------------------------------------------------------------------------
-void FmXFormShell::ObjectRemovedInAliveMode(const SdrObject* pObject)
-{
-    // wenn das entfernte Objekt in meiner MarkList, die ich mir beim Umschalten in den Alive-Mode gemerkt habe, steht,
-    // muss ich es jetzt da rausnehmen, da ich sonst beim Zurueckschalten versuche, die Markierung wieder zu setzen
-    // (interesanterweise geht das nur bei gruppierten Objekten schief (beim Zugriff auf deren ObjList GPF), nicht bei einzelnen)
-
-    sal_uInt32 nCount = m_aMark.GetMarkCount();
-    for (sal_uInt32 i = 0; i < nCount; ++i)
-    {
-        SdrMark* pMark = m_aMark.GetMark(i);
-        SdrObject* pCurrent = pMark->GetObj();
-        if (pObject == pCurrent)
-        {
-            m_aMark.DeleteMark(i);
-            return;
-        }
-        // ich brauche nicht in GroupObjects absteigen : wenn dort unten ein Objekt geloescht wird, dann bleibt der
-        // Zeiger auf das GroupObject, den ich habe, trotzdem weiter gueltig bleibt ...
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -3662,20 +3519,6 @@ Reference< XPropertySet> FmXFormShell::GetBoundField(const Reference< XControl>&
 //  aValues[0] = bool2any(m_bUseWizards);
 //  m_aWizardUsing.SetProperties(aNames, aValues);
 //}
-
-//------------------------------------------------------------------------------
-FmXFormShell::ObjectRemoveListener::ObjectRemoveListener(FmXFormShell* pParent)
-    :SfxListener()
-    ,m_pParent(pParent)
-{
-}
-
-//------------------------------------------------------------------------------
-void FmXFormShell::ObjectRemoveListener::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
-{
-    if (rHint.ISA(SdrHint) && (((SdrHint&)rHint).GetKind() == HINT_OBJREMOVED))
-        m_pParent->ObjectRemovedInAliveMode(((SdrHint&)rHint).GetObject());
-}
 
 //------------------------------------------------------------------------------
 void FmXFormShell::startFiltering()
