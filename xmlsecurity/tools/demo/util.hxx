@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-16 05:18:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,4 +84,6 @@
 ::rtl::OUString getSignatureInformations(
     const SignatureInformations& SignatureInformations,
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecurityEnvironment );
-    
+
+::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >
+    getCertificateFromEnvironment( ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >  xSecurityEnvironment  , BOOL nType);
