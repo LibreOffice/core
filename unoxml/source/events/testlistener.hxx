@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testlistener.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-16 16:41:54 $
+ *  last change: $Author: lo $ $Date: 2004-02-27 17:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace DOM { namespace events
     private:
         Reference< XMultiServiceFactory > m_factory;
         Reference <XEventTarget> m_target;
-        EventType m_type;
+        OUString m_type;
         sal_Bool m_capture;
         OUString m_name;
         

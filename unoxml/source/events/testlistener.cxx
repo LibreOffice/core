@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testlistener.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-16 16:41:53 $
+ *  last change: $Author: lo $ $Date: 2004-02-27 17:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,13 +131,9 @@ namespace DOM { namespace events
         if(! (args[0] >>= aTarget)) throw IllegalArgumentException(
                 OUString::createFromAscii("Illegal argument 1"), Reference< XInterface >(), 1);
 
-        EventType aType = (EventType)0;
-        if (! (args[1] >>= aType)) {
-            sal_Int32 i = 0;
-            if (args[1] >>= i) aType = (EventType)i;
-            else throw IllegalArgumentException(
-                OUString::createFromAscii("Illegal argument 2"), Reference< XInterface >(), 2);
-        }
+        OUString aType;
+        if (! (args[1] >>= aType))
+            throw IllegalArgumentException(OUString::createFromAscii("Illegal argument 2"), Reference< XInterface >(), 2);
 
         sal_Bool bCapture = sal_False;
         if(! (args[2]  >>=  bCapture)) throw IllegalArgumentException(
@@ -167,7 +163,7 @@ namespace DOM { namespace events
     {
         FILE* f = fopen("C:\\listener.out", "a");
         fprintf(f, "CTestListener::handleEvent in %s\n", U2S(m_name));
-        fprintf(f, "    type: %d\n\n", evt->getType());        
+        fprintf(f, "    type: %s\n\n", OUStringToOString(evt->getType(), RTL_TEXTENCODING_ASCII_US).getStr());        
         fclose(f);
 
     }
