@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-14 11:01:23 $
+ *  last change: $Author: mt $ $Date: 2001-11-28 11:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -985,16 +985,27 @@ Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
     const SvxNumberFormat* pFmt = ImplGetBullet( nPara );
     DBG_ASSERT( pFmt && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) && ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ), "ImpCalcBulletFont: Missing or BitmapBullet!" );
 
-    USHORT nScale = pEditEngine->IsFlatMode() ? DEFAULT_SCALE : pFmt->GetBulletRelSize();
-    ULONG nScaledLineHeight = pEditEngine->GetStandardFont( nPara ).GetSize().Height();
-    nScaledLineHeight *= nScale*10;
-    nScaledLineHeight /= 1000;
+    ESelection aSel( nPara, 0, nPara, 0 );
+    Font aStdFont = EditEngine::CreateFontFromItemSet( pEditEngine->GetAttribs( aSel ), GetScriptType( aSel ) );
 
     Font aBulletFont;
     if ( pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL )
+    {
         aBulletFont = *pFmt->GetBulletFont();
+    }
     else
-        aBulletFont = pEditEngine->GetStandardFont( nPara );
+    {
+        aBulletFont = aStdFont;
+        aBulletFont.SetUnderline( UNDERLINE_NONE );
+        aBulletFont.SetStrikeout( STRIKEOUT_NONE );
+        aBulletFont.SetEmphasisMark( EMPHASISMARK_NONE );
+        aBulletFont.SetRelief( RELIEF_NONE );
+    }
+
+    USHORT nScale = pEditEngine->IsFlatMode() ? DEFAULT_SCALE : pFmt->GetBulletRelSize();
+    ULONG nScaledLineHeight = aStdFont.GetSize().Height();
+    nScaledLineHeight *= nScale*10;
+    nScaledLineHeight /= 1000;
 
     aBulletFont.SetAlign( ALIGN_BOTTOM );
     aBulletFont.SetSize( Size( 0, nScaledLineHeight ) );
