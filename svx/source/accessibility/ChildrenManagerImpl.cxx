@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:27:00 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,16 +727,23 @@ void  SAL_CALL
 
 void SAL_CALL ChildrenManagerImpl::disposing (void)
 {
-    // Remove from broadcasters.
-    Reference<view::XSelectionSupplier> xSelectionSupplier (
-        maShapeTreeInfo.GetController(), uno::UNO_QUERY);
-    if (xSelectionSupplier.is())
-        xSelectionSupplier->removeSelectionChangeListener (
-            static_cast<view::XSelectionChangeListener*>(this));
+    try
+    {
+        // Remove from broadcasters.
+        Reference<view::XSelectionSupplier> xSelectionSupplier (
+            maShapeTreeInfo.GetController(), uno::UNO_QUERY);
+        if (xSelectionSupplier.is())
+            xSelectionSupplier->removeSelectionChangeListener (
+                static_cast<view::XSelectionChangeListener*>(this));
 
-    if (maShapeTreeInfo.GetModelBroadcaster().is())
-        maShapeTreeInfo.GetModelBroadcaster()->removeEventListener (
-            static_cast<document::XEventListener*>(this));
+        if (maShapeTreeInfo.GetModelBroadcaster().is())
+            maShapeTreeInfo.GetModelBroadcaster()->removeEventListener (
+                static_cast<document::XEventListener*>(this));
+    }
+    catch( uno::RuntimeException& )
+    {
+        // our XSelectionSupplier may be already disposed
+    }
 
     ClearAccessibleShapeList ();
 }
