@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 17:12:25 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,22 +74,15 @@
 #include "MtaFop.hxx"
 #include <wchar.h>
 #include <process.h>
-#include <comdef.h>
 
 #ifndef _RESOURCEPROVIDER_HXX_
 #include "..\misc\resourceprovider.hxx"
 #endif
 
-//----------------------------------------------------------------
-//  namespace directives
-//----------------------------------------------------------------
+#include <systools/win32/comtools.hxx>
 
 using rtl::OUString;
 using osl::Condition;
-
-//--------------------------------------------------------
-// messages constants
-//--------------------------------------------------------
 
 const sal_uInt32 MSG_BROWSEFORFOLDER = WM_USER + 1;
 const sal_uInt32 MSG_SHUTDOWN        = WM_USER + 2;
@@ -100,9 +93,8 @@ const sal_Bool MANUAL_RESET     = sal_True;
 const sal_Bool AUTO_RESET       = sal_False;
 const sal_Bool INIT_NONSIGNALED = sal_False;
 
-//----------------------------------------------------------------
-//  defines
-//----------------------------------------------------------------
+typedef sal::systools::COMReference<IMalloc> IMallocPtr;
+typedef sal::systools::COMReference<IShellFolder> IShellFolderPtr;
 
 namespace
 {
@@ -478,16 +470,11 @@ sal_Bool SAL_CALL CMtaFolderPicker::onBrowseForFolder( )
 void SAL_CALL CMtaFolderPicker::releaseItemIdList( LPITEMIDLIST lpItemIdList )
 {
     IMallocPtr pIMalloc;
-    SHGetMalloc( &pIMalloc );
-
-    try
+    SHGetMalloc(&pIMalloc);
+    if (pIMalloc.is())
     {
-        pIMalloc->Free( lpItemIdList );
+        pIMalloc->Free(lpItemIdList);
         lpItemIdList = NULL;
-    }
-    catch( _com_error& )
-    {
-        OSL_ASSERT( sal_False );
     }
 }
 
@@ -502,20 +489,18 @@ LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const rtl::OUStri
         return NULL;
 
     IMallocPtr pIMalloc;
-    SHGetMalloc( &pIMalloc );
+    SHGetMalloc(&pIMalloc);
 
-    LPITEMIDLIST lpItemIdList = NULL;
+    LPITEMIDLIST lpItemIdList = static_cast<LPITEMIDLIST>(
+        pIMalloc->Alloc(sizeof(ITEMIDLIST)));
 
-    try
+    if (lpItemIdList)
     {
-        lpItemIdList = static_cast< LPITEMIDLIST >(
-            pIMalloc->Alloc( sizeof( ITEMIDLIST ) ) );
+        IShellFolderPtr pIShellFolder;
+        SHGetDesktopFolder(&pIShellFolder);
 
-        if ( lpItemIdList )
+        if (pIShellFolder.is())
         {
-            IShellFolderPtr pIShellFolder;
-            SHGetDesktopFolder( &pIShellFolder );
-
             pIShellFolder->ParseDisplayName(
                 NULL,
                 NULL,
@@ -525,13 +510,11 @@ LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const rtl::OUStri
                 NULL );
         }
     }
-    catch( _com_error& )
-    {
-        if ( pIMalloc )
-            pIMalloc->Free( lpItemIdList );
 
-        lpItemIdList = NULL;
-    }
+    if (pIMalloc.is())
+        pIMalloc->Free(lpItemIdList);
+
+    lpItemIdList = NULL;
 
     return lpItemIdList;
 }
