@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuconfiguration.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-10 07:43:34 $
+ *  last change: $Author: pb $ $Date: 2001-05-11 10:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,19 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
+
+#define BOOKMARK_NEWMENU        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_new" ))
+#define BOOKMARK_WIZARDMENU     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_wizard" ))
 
 const USHORT START_ITEMID_PICKLIST      = 4500;
 const USHORT END_ITEMID_PICKLIST        = 4599;
@@ -109,6 +116,11 @@ class MenuConfiguration
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream )
             throw ( ::com::sun::star::lang::WrappedTargetException );
 
+        Menu* CreateBookmarkMenu(
+                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                const ::rtl::OUString& aURL )
+            throw ( ::com::sun::star::lang::WrappedTargetException );
+
         ToolBox* CreateToolBoxFromConfiguration(
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream )
             throw ( ::com::sun::star::lang::WrappedTargetException );
@@ -128,3 +140,4 @@ class MenuConfiguration
 }
 
 #endif // __FRAMEWORK_CLASSES_MENUCONFIGURATION_HXX_
+

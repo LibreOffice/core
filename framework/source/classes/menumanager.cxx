@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-10 07:50:01 $
+ *  last change: $Author: pb $ $Date: 2001-05-11 10:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,8 +172,6 @@ namespace framework
 #define SID_MDIWINDOWLIST       (SID_SFX_START + 610)
 
 #define SFX_REFERER_USER        "private:user"
-#define BOOKMARK_NEWMENU        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_new" ))
-#define BOOKMARK_WIZARDMENU     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_wizard" ))
 #define DESKTOP_SERVICE         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))
 
 const ::rtl::OUString aSlotString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
@@ -233,7 +231,8 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
             if ( nItemId == SID_NEWDOCDIRECT ||
                  aItemCommand == aSlotNewDocDirect )
             {
-                BmkMenu* pSubMenu = CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU );
+                MenuConfiguration aMenuCfg( ::comphelper::getProcessServiceFactory() );
+                BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
                 MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
@@ -246,7 +245,8 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
             else if ( nItemId == SID_AUTOPILOTMENU ||
                       aItemCommand == aSlotAutoPilot )
             {
-                BmkMenu* pSubMenu = CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU );
+                MenuConfiguration aMenuCfg( ::comphelper::getProcessServiceFactory() );
+                BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
                 MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
@@ -271,7 +271,7 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
 
 
     // retrieve label information for all menu items without item text
-#if SUPD > 631
+#if 0
     if ( aQueryLabelItemIdVector.size() > 0 )
     {
         Sequence< ::rtl::OUString > aURLSequence( aQueryLabelItemIdVector.size() );
@@ -352,10 +352,6 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bo
                     delete pBmkAttributes;
                     pBmkMenu->SetUserValue( nItemId, 0 );
                 }
-
-                Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE );
-                if ( !!aImage )
-                    pBmkMenu->SetItemImage( nItemId, aImage );
 
                 m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
             }
@@ -548,19 +544,6 @@ void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIM
             }
         }
     }
-}
-
-
-BmkMenu* MenuManager::CreateBookmarkMenu(
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    const ::rtl::OUString& aURL )
-{
-    if ( aURL == BOOKMARK_NEWMENU )
-        return new BmkMenu( rFrame, BmkMenu::BMK_NEWMENU );
-    else if ( aURL == BOOKMARK_WIZARDMENU )
-        return new BmkMenu( rFrame, BmkMenu::BMK_WIZARDMENU );
-    else
-        return NULL;
 }
 
 
@@ -912,6 +895,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                 Reference< XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
                                                 DESKTOP_SERVICE ), UNO_QUERY );
                 USHORT  nWindowItemId = START_ITEMID_WINDOWLIST;
+
                 if ( xDesktop.is() )
                 {
                     USHORT nTaskId = START_ITEMID_WINDOWLIST;
@@ -941,6 +925,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
                     aTargetURL.Complete = pMenuItemHandler->aMenuItemURL;
                     xTrans->parseStrict( aTargetURL );
+
                     if ( nCurItemId >= START_ITEMID_PICKLIST &&
                          nCurItemId <  START_ITEMID_WINDOWLIST )
                     {
@@ -965,6 +950,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
 
     if ( xDispatch.is() )
         xDispatch->dispatch( aTargetURL, aArgs );
+
     return 1;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-03 08:03:31 $
+ *  last change: $Author: pb $ $Date: 2001-05-11 10:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,10 +170,6 @@ class MenuManager : public XSTATUSLISTENER      ,
         void UpdateSpecialFileMenu( Menu* pMenu );
         void UpdateSpecialWindowMenu( Menu* pMenu );
 
-
-        BmkMenu* CreateBookmarkMenu(
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-            const ::rtl::OUString& aURL );
 
         struct MenuItemHandler
         {
