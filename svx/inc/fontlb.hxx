@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontlb.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-23 10:47:34 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <vcl/virdev.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 
 // ============================================================================
 
@@ -107,7 +111,7 @@ public:
 // ============================================================================
 
 /** A list box supporting formatted string entries. */
-class SvxFontListBox : public SvTabListBox
+class SVX_DLLPUBLIC SvxFontListBox : public SvTabListBox
 {
 private:
     Font                        maStdFont;      /// Used for entries without specific font.
