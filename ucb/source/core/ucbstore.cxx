@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstore.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-26 12:34:56 $
+ *  last change: $Author: kso $ $Date: 2000-10-26 15:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1855,7 +1855,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
                                     OUString::createFromAscii( "Handle" ),
                                     makeAny( sal_Int32( -1 ) ) );
 
-                // Set defualt value
+                // Set default value
                 xNameReplace->replaceByName(
                                     OUString::createFromAscii( "Value" ),
                                     DefaultValue );
@@ -2240,10 +2240,13 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                                     = xHierNameAccess->getByHierarchicalName(
                                         aHierName );
 
-                                if ( !( aKeyValue >>= rValue.State ) )
+                                sal_Int32 nState = 0;
+                                if ( !( aKeyValue >>= nState ) )
                                     OSL_ENSURE( sal_False,
                                       "PersistentPropertySet::getPropertyValues - "
                                       "Error getting property state!" );
+                                else
+                                    rValue.State = PropertyState( nState );
                             }
                             catch ( NoSuchElementException& )
                             {
