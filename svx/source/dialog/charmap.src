@@ -2,8 +2,8 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.46 $
- *  last change: $Author: hr $ $Date: 2003-04-29 16:31:39 $
+ *  $Revision: 1.47 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text = "~Schrift" ;
         Text [ ENGLISH ] = "~Font" ;
         Text [ norwegian ] = "~Font" ;
-        Text [ italian ] = "~Font" ;
+        Text [ italian ] = "~Tipo di carattere" ;
         Text [ portuguese_brazilian ] = "~Fonte" ;
         Text [ portuguese ] = "~Tipo de letra" ;
         Text [ finnish ] = "~Fontti" ;
@@ -132,6 +132,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ czech ] = "Písmo";
         Text[ hebrew ] = "‮גופן‬";
         Text[ hindi ] = "~अक्षर";
+        Text[ slovak ] = "~Písmo";
     };
     ListBox LB_FONT
     {
@@ -171,6 +172,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ czech ] = "Podmnožina";
         Text[ hebrew ] = "‮תת קבוצה‬";
         Text[ hindi ] = "~उपसमूह";
+        Text[ slovak ] = "~Podmnožina";
     };
     ListBox LB_SUBSET
     {
@@ -211,6 +213,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ czech ] = "Znaky:";
         Text[ hebrew ] = "‮תווים:‬";
         Text[ hindi ] = "अक्षरें:";
+        Text[ slovak ] = "Znaky:";
     };
 /*
     Edit CT_SHOWTEXT
@@ -290,6 +293,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     Text[ greek ] = "������� ����������";
     Text[ korean ] = "기호 및 특수 문자";
@@ -301,6 +305,7 @@ ModalDialog RID_SVXDLG_CHARMAP
     Text[ czech ] = "Speciální znaky";
     Text[ hebrew ] = "‮תווים מיוחדים‬";
     Text[ hindi ] = "विशेष अक्षरें";
+    Text[ slovak ] = "Špeciálne znaky";
 };
 
 /*
@@ -338,6 +343,7 @@ String RID_SUBSETSTR_BASIC_LATIN
         Text[ czech ] = "Základní latinka";
         Text[ hebrew ] = "‮לטינית בסיסית‬";
         Text[ hindi ] = "मूलभूत लेटिन";
+        Text[ slovak ] = "Základná latinka";
     };
 String RID_SUBSETSTR_LATIN_1
 {
@@ -367,6 +373,7 @@ String RID_SUBSETSTR_LATIN_1
         Text[ czech ] = "Latin-1";
         Text[ hebrew ] = "‮לטינית 1‬";
         Text[ hindi ] = "लेटिन-1";
+        Text[ slovak ] = "Latin-1";
     };
 String RID_SUBSETSTR_LATIN_EXTENDED_A
 {
@@ -396,6 +403,7 @@ String RID_SUBSETSTR_LATIN_EXTENDED_A
         Text[ czech ] = "Latin Extended-A";
         Text[ hebrew ] = "‮לטינית מורחבת A‬";
         Text[ hindi ] = "लेटिन विस्तृत-A";
+        Text[ slovak ] = "Latin rozšírené-A";
     };
 String RID_SUBSETSTR_LATIN_EXTENDED_B
 {
@@ -425,6 +433,7 @@ String RID_SUBSETSTR_LATIN_EXTENDED_B
         Text[ czech ] = "Latin Extended-B";
         Text[ hebrew ] = "‮לטינית מורחבת B‬";
         Text[ hindi ] = "लेटिन विस्तृत-B";
+        Text[ slovak ] = "Latin rozšírené-B";
     };
 String RID_SUBSETSTR_IPA_EXTENSIONS
 {
@@ -454,6 +463,7 @@ String RID_SUBSETSTR_IPA_EXTENSIONS
         Text[ czech ] = "Rozšíření IPA";
         Text[ hebrew ] = "‮הרחבות IPA‬";
         Text[ hindi ] = "IPA विस्तार";
+        Text[ slovak ] = "IPA prípony";
     };
 String RID_SUBSETSTR_SPACING_MODIFIERS
 {
@@ -483,6 +493,7 @@ String RID_SUBSETSTR_SPACING_MODIFIERS
         Text[ czech ] = "Spacing Modifier Letters";
         Text[ hebrew ] = "‮תווי שינוי ריווח‬";
         Text[ hindi ] = "परिवर्तनीय अक्षरों के बीच में अंतर देना";
+        Text[ slovak ] = "Odsadenie písma";
     };
 String RID_SUBSETSTR_COMB_DIACRITICAL
 {
@@ -512,6 +523,7 @@ String RID_SUBSETSTR_COMB_DIACRITICAL
         Text[ czech ] = "Combining Diacritical Marks";
         Text[ hebrew ] = "‮שילוב ניקוד‬";
         Text[ hindi ] = "स्वरों का विशिष्ट चिन्हों को संयुक्त करना";
+        Text[ slovak ] = "Zlúčenie diakritických značiek";
     };
 String RID_SUBSETSTR_BASIC_GREEK
 {
@@ -541,6 +553,7 @@ String RID_SUBSETSTR_BASIC_GREEK
         Text[ czech ] = "Řecky (základní)";
         Text[ hebrew ] = "‮יוונית בסיסית‬";
         Text[ hindi ] = "मूलभूत ग्रीक";
+        Text[ slovak ] = "Grécky (základný)";
     };
 String RID_SUBSETSTR_GREEK_SYMS_COPTIC
 {
@@ -570,6 +583,7 @@ String RID_SUBSETSTR_GREEK_SYMS_COPTIC
         Text[ czech ] = "Řecké a koptické symboly";
         Text[ hebrew ] = "‮סמלים יווניים וקופתיים‬";
         Text[ hindi ] = "ग्रीक संकेत और कोप्टिक्";
+        Text[ slovak ] = "Grécke symboly a Coptic";
     };
 String RID_SUBSETSTR_CYRILLIC
 {
@@ -599,6 +613,7 @@ String RID_SUBSETSTR_CYRILLIC
         Text[ czech ] = "Azbuka";
         Text[ hebrew ] = "‮קירילית‬";
         Text[ hindi ] = "सिरिलिक";
+        Text[ slovak ] = "Azbuka";
     };
 String RID_SUBSETSTR_CYRILLIC_SUPPL
 {
@@ -606,13 +621,28 @@ String RID_SUBSETSTR_CYRILLIC_SUPPL
     Text [ ENGLISH ] = "Cyrillic Supplementary";
     Text[ english_us ] = "Cyrillic Supplementary";
         Text[ french ] = "Suppl�ment cyrillique";
-        Text[ spanish ] = "Cir�lico suplementario";
+        Text[ spanish ] = "Suplemento cir�lico";
         Text[ italian ] = "Supplemento cirillico";
-        Text[ swedish ] = "Kyrilliskt till�gg";
+        Text[ swedish ] = "Kompletterat kyrilliskt";
         Text[ japanese ] = "キリル文字補足";
         Text[ korean ] = "키릴 자모 추가";
         Text[ chinese_simplified ] = "附加的西里尔语";
         Text[ chinese_traditional ] = "附加的西里爾語";
+        Text[ portuguese ] = "Cyrillic Supplementary";
+        Text[ russian ] = "Cyrillic Supplementary";
+        Text[ greek ] = "Cyrillic Supplementary";
+        Text[ dutch ] = "Cyrillic Supplementary";
+        Text[ finnish ] = "Cyrillic Supplementary";
+        Text[ czech ] = "Cyrillic Supplementary";
+        Text[ danish ] = "Cyrillic Supplementary";
+        Text[ polish ] = "Cyrillic Supplementary";
+        Text[ portuguese_brazilian ] = "Cyrillic Supplementary";
+        Text[ turkish ] = "Cyrillic Supplementary";
+        Text[ arabic ] = "Cyrillic Supplementary";
+        Text[ hebrew ] = "Cyrillic Supplementary";
+        Text[ catalan ] = "Cyrillic Supplementary";
+        Text[ thai ] = "Cyrillic Supplementary";
+        Text[ slovak ] = "Doplnená Azbuka";
     };
 String RID_SUBSETSTR_ARMENIAN
 {
@@ -642,56 +672,28 @@ String RID_SUBSETSTR_ARMENIAN
         Text[ czech ] = "Arménsky";
         Text[ hebrew ] = "‮ארמנית‬";
         Text[ hindi ] = "अर्मेनियन";
+        Text[ slovak ] = "Arménčina";
     };
 String RID_SUBSETSTR_BASIC_HEBREW
 {
     Text = "Basis Hebr�isch" ;
     Text [ ENGLISH ] = "Basic Hebrew" ;
     Text[ english_us ] = "Basic Hebrew";
-        Text[ portuguese ] = "Hebraico b�sico";
-        Text[ russian ] = "�������� �����";
-        Text[ greek ] = "������� ������";
-        Text[ dutch ] = "Hebreeuws - basis";
-        Text[ french ] = "H�breu de base";
-        Text[ spanish ] = "Hebreo b�sico";
-        Text[ italian ] = "Ebraico di base";
-        Text[ danish ] = "Basis Hebraisk";
-        Text[ swedish ] = "Hebreisk (standard)";
-        Text[ polish ] = "Hebrajski podstawowy";
-        Text[ portuguese_brazilian ] = "Hebraico B�sico";
-        Text[ japanese ] = "基本ヘブライ文字";
-        Text[ korean ] = "히브리어(기본)";
-        Text[ chinese_simplified ] = "附加的希伯来语";
-        Text[ chinese_traditional ] = "基本的希伯來語";
-        Text[ turkish ] = "Temel �branice";
-        Text[ arabic ] = "���� �����";
-        Text[ catalan ] = "Hebreu b�sic";
-        Text[ finnish ] = "heprea (perusteet)";
-        Text[ thai ] = "ภาษาฮิบรูพื้นฐาน";
-        Text[ czech ] = "Hebrejsky (základní)";
-        Text[ hebrew ] = "‮עברית בסיסית‬";
-        Text[ hindi ] = "मूलभूत हिब्रू";
-    };
-String RID_SUBSETSTR_HEBREW_EXTENDED
-{
-    Text = "Erweitertes Hebr�isch" ;
-    Text [ ENGLISH ] = "Hebrew Extended" ;
-    Text[ english_us ] = "Hebrew Extended";
         Text[ portuguese ] = "Hebraico expandido";
         Text[ russian ] = "����������� �����";
         Text[ greek ] = "������� ����������";
         Text[ dutch ] = "Hebreeuws - uitgebreid";
-        Text[ french ] = "H�breu �tendu";
-        Text[ spanish ] = "Hebreo ampliado";
-        Text[ italian ] = "Ebraico esteso";
+        Text[ french ] = "H�breu de base";
+        Text[ spanish ] = "Hebreo b�sico";
+        Text[ italian ] = "Ebraico di base";
         Text[ danish ] = "Udvidet Hebraisk";
-        Text[ swedish ] = "Hebreisk (ut�kad)";
+        Text[ swedish ] = "Hebreisk (standard)";
         Text[ polish ] = "Hebrajski rozszerzony";
         Text[ portuguese_brazilian ] = "Hebraico Estendido";
-        Text[ japanese ] = "ヘブライ拡張文字";
-        Text[ korean ] = "히브리어 (확장)";
+        Text[ japanese ] = "基本ヘブライ文字";
+        Text[ korean ] = "히브리어(기본)";
         Text[ chinese_simplified ] = "附加的希伯来语";
-        Text[ chinese_traditional ] = "附加的希伯來語";
+        Text[ chinese_traditional ] = "基本的希伯來語";
         Text[ turkish ] = "Geni�letilmi� �branice";
         Text[ arabic ] = "���� �����";
         Text[ catalan ] = "Hebreu ampliat";
@@ -699,7 +701,38 @@ String RID_SUBSETSTR_HEBREW_EXTENDED
         Text[ thai ] = "ขยายภาษาฮิบรู";
         Text[ czech ] = "Hebrejsky (rozšířené)";
         Text[ hebrew ] = "‮עברית מורחבת‬";
+        Text[ hindi ] = "मूलभूत हिब्रू";
+        Text[ slovak ] = "Hebrejsky (rozšírené)";
+    };
+String RID_SUBSETSTR_HEBREW_EXTENDED
+{
+    Text = "Erweitertes Hebr�isch" ;
+    Text [ ENGLISH ] = "Hebrew Extended" ;
+    Text[ english_us ] = "Hebrew Extended";
+        Text[ portuguese ] = "Hebraico b�sico";
+        Text[ russian ] = "�������� �����";
+        Text[ greek ] = "������� ������";
+        Text[ dutch ] = "Hebreeuws - basis";
+        Text[ french ] = "H�breu �tendu";
+        Text[ spanish ] = "Hebreo ampliado";
+        Text[ italian ] = "Ebraico esteso";
+        Text[ danish ] = "Basis Hebraisk";
+        Text[ swedish ] = "Hebreisk (ut�kad)";
+        Text[ polish ] = "Hebrajski podstawowy";
+        Text[ portuguese_brazilian ] = "Hebraico B�sico";
+        Text[ japanese ] = "ヘブライ拡張文字";
+        Text[ korean ] = "히브리어 (확장)";
+        Text[ chinese_simplified ] = "附加的希伯来语";
+        Text[ chinese_traditional ] = "附加的希伯來語";
+        Text[ turkish ] = "Temel �branice";
+        Text[ arabic ] = "���� �����";
+        Text[ catalan ] = "Hebreu b�sic";
+        Text[ finnish ] = "heprea (perusteet)";
+        Text[ thai ] = "ภาษาฮิบรูพื้นฐาน";
+        Text[ czech ] = "Hebrejsky (základní)";
+        Text[ hebrew ] = "‮עברית בסיסית‬";
         Text[ hindi ] = "हिब्रू विस्तृत";
+        Text[ slovak ] = "Hebrejsky (základné)";
     };
 String RID_SUBSETSTR_BASIC_ARABIC
 {
@@ -729,6 +762,7 @@ String RID_SUBSETSTR_BASIC_ARABIC
         Text[ czech ] = "Arabsky (základní)";
         Text[ hebrew ] = "‮ערבית בסיסית‬";
         Text[ hindi ] = "मूलभूत अरेबिक";
+        Text[ slovak ] = "Arabsky (základné)";
     };
 String RID_SUBSETSTR_ARABIC_EXTENDED
 {
@@ -759,6 +793,7 @@ String RID_SUBSETSTR_ARABIC_EXTENDED
         Text[ czech ] = "Arabsky (rozšířené)";
         Text[ hebrew ] = "‮ערבית מורחבת‬";
         Text[ hindi ] = "अरेबिक विस्तृत";
+        Text[ slovak ] = "Arabsky (rozšírené)";
     };
 String RID_SUBSETSTR_DEVANAGARI
 {
@@ -788,6 +823,7 @@ String RID_SUBSETSTR_DEVANAGARI
         Text[ czech ] = "Devanagari";
         Text[ hebrew ] = "‮דוונאגרי‬";
         Text[ hindi ] = "देवनागरि";
+        Text[ slovak ] = "Devanagari";
     };
 String RID_SUBSETSTR_BENGALI
 {
@@ -817,6 +853,7 @@ String RID_SUBSETSTR_BENGALI
         Text[ czech ] = "Bengálsky";
         Text[ hebrew ] = "‮בנגלי‬";
         Text[ hindi ] = "बेंगालि";
+        Text[ slovak ] = "Bengálsky";
     };
 String RID_SUBSETSTR_GURMUKHI
 {
@@ -846,6 +883,7 @@ String RID_SUBSETSTR_GURMUKHI
         Text[ czech ] = "Gurmukhi";
         Text[ hebrew ] = "‮גורמוכי‬";
         Text[ hindi ] = "गुर्मुखि";
+        Text[ slovak ] = "Gurmukhi";
     };
 String RID_SUBSETSTR_GUJARATI
 {
@@ -875,6 +913,7 @@ String RID_SUBSETSTR_GUJARATI
         Text[ czech ] = "Gujarati";
         Text[ hebrew ] = "‮גוג'רטי‬";
         Text[ hindi ] = "गुजराति";
+        Text[ slovak ] = "Gujarati";
     };
 String RID_SUBSETSTR_ORIYA
 {
@@ -904,6 +943,7 @@ String RID_SUBSETSTR_ORIYA
         Text[ czech ] = "Oriya";
         Text[ hebrew ] = "‮אוריה‬";
         Text[ hindi ] = "ओरिया";
+        Text[ slovak ] = "Oriya";
     };
 String RID_SUBSETSTR_TAMIL
 {
@@ -933,6 +973,7 @@ String RID_SUBSETSTR_TAMIL
         Text[ czech ] = "Tamilsky";
         Text[ hebrew ] = "‮טמילית‬";
         Text[ hindi ] = "तमिल";
+        Text[ slovak ] = "Tamilsky";
     };
 String RID_SUBSETSTR_TELUGU
 {
@@ -963,6 +1004,7 @@ String RID_SUBSETSTR_TELUGU
         Text[ czech ] = "Telugu";
         Text[ hebrew ] = "‮טלוגו‬";
         Text[ hindi ] = "तेलुगु";
+        Text[ slovak ] = "Telugu";
     };
 String RID_SUBSETSTR_KANNADA
 {
@@ -992,6 +1034,7 @@ String RID_SUBSETSTR_KANNADA
         Text[ czech ] = "Kannada";
         Text[ hebrew ] = "‮קננאדה‬";
         Text[ hindi ] = "कन्नडा";
+        Text[ slovak ] = "Kanada";
     };
 String RID_SUBSETSTR_MALAYALAM
 {
@@ -1021,6 +1064,7 @@ String RID_SUBSETSTR_MALAYALAM
         Text[ czech ] = "Malayalam";
         Text[ hebrew ] = "‮מלאסית‬";
         Text[ hindi ] = "मलयालम";
+        Text[ slovak ] = "Malayalam";
     };
 String RID_SUBSETSTR_THAI
 {
@@ -1050,6 +1094,7 @@ String RID_SUBSETSTR_THAI
         Text[ czech ] = "Thajsky";
         Text[ hebrew ] = "‮תאי‬";
         Text[ hindi ] = "ताई";
+        Text[ slovak ] = "Thajsky";
     };
 String RID_SUBSETSTR_LAO
 {
@@ -1079,6 +1124,7 @@ String RID_SUBSETSTR_LAO
         Text[ czech ] = "Laosky";
         Text[ hebrew ] = "‮לאו‬";
         Text[ hindi ] = "लाओ";
+        Text[ slovak ] = "Laosky";
     };
 String RID_SUBSETSTR_BASIC_GEORGIAN
 {
@@ -1108,6 +1154,7 @@ String RID_SUBSETSTR_BASIC_GEORGIAN
         Text[ czech ] = "Gruzínsky (základní)";
         Text[ hebrew ] = "‮גרוזינית בסיסית‬";
         Text[ hindi ] = "मूलभूत जॉर्जियन";
+        Text[ slovak ] = "Gruzínsky (základné)";
     };
 String RID_SUBSETSTR_GEORGIAN_EXTENDED
 {
@@ -1137,6 +1184,7 @@ String RID_SUBSETSTR_GEORGIAN_EXTENDED
         Text[ czech ] = "Gruzínsky (rozšířené)";
         Text[ hebrew ] = "‮גרוזינית מורחבת‬";
         Text[ hindi ] = "जॉर्जियन विस्तृत";
+        Text[ slovak ] = "Gruzínsky (rozšírené)";
     };
 String RID_SUBSETSTR_HANGUL_JAMO
 {
@@ -1166,6 +1214,7 @@ String RID_SUBSETSTR_HANGUL_JAMO
         Text[ czech ] = "Hangul Jamo";
         Text[ hebrew ] = "‮הנגול ג'אמו‬";
         Text[ hindi ] = "हानगल जामो";
+        Text[ slovak ] = "Hangul Jamo";
     };
 String RID_SUBSETSTR_LATIN_EXTENDED_ADDS
 {
@@ -1195,6 +1244,7 @@ String RID_SUBSETSTR_LATIN_EXTENDED_ADDS
         Text[ czech ] = "Latin Extended Additionals";
         Text[ hebrew ] = "‮תוספות מורחבות לטיניות‬";
         Text[ hindi ] = "अधिकतर लेटिन विस्तृत";
+        Text[ slovak ] = "Latinka - rozšírené prídavky";
     };
 String RID_SUBSETSTR_GREEK_EXTENDED
 {
@@ -1224,6 +1274,7 @@ String RID_SUBSETSTR_GREEK_EXTENDED
         Text[ czech ] = "Řecky (rozšířené)";
         Text[ hebrew ] = "‮יוונית מורחבת‬";
         Text[ hindi ] = "ग्रीक विस्तृत";
+        Text[ slovak ] = "Grécky (rozšírené)";
     };
 String RID_SUBSETSTR_GENERAL_PUNCTUATION
 {
@@ -1253,6 +1304,7 @@ String RID_SUBSETSTR_GENERAL_PUNCTUATION
         Text[ czech ] = "Obecná interpunkce";
         Text[ hebrew ] = "‮סימני פיסוק כלליים‬";
         Text[ hindi ] = "सामान्य विराम-चिन्ह";
+        Text[ slovak ] = "všeobecná interpunkcia";
     };
 String RID_SUBSETSTR_SUB_SUPER_SCRIPTS
 {
@@ -1282,6 +1334,7 @@ String RID_SUBSETSTR_SUB_SUPER_SCRIPTS
         Text[ czech ] = "Horní a dolní indexy";
         Text[ hebrew ] = "‮כתוביות עיליות ותחתיות‬";
         Text[ hindi ] = "ऊपरी लेख और नीचे का लेख";
+        Text[ slovak ] = "Horný a dolný index";
     };
 String RID_SUBSETSTR_CURRENCY_SYMBOLS
 {
@@ -1311,6 +1364,7 @@ String RID_SUBSETSTR_CURRENCY_SYMBOLS
         Text[ czech ] = "Symboly měny";
         Text[ hebrew ] = "‮סימני מטבע‬";
         Text[ hindi ] = "मुद्रा संकेत";
+        Text[ slovak ] = "Symboly meny";
     };
 String RID_SUBSETSTR_COMB_DIACRITIC_SYMS
 {
@@ -1340,6 +1394,7 @@ String RID_SUBSETSTR_COMB_DIACRITIC_SYMS
         Text[ czech ] = "Combining Diacritical Symbols";
         Text[ hebrew ] = "‮סימני ניקוד משולבים‬";
         Text[ hindi ] = "स्वरों का विशिष्ट संकेतों को संयुक्त करना";
+        Text[ slovak ] = "Zlúčenie diakritických symbolov";
     };
 String RID_SUBSETSTR_LETTERLIKE_SYMBOLS
 {
@@ -1369,6 +1424,7 @@ String RID_SUBSETSTR_LETTERLIKE_SYMBOLS
         Text[ czech ] = "Letterlike Symbols";
         Text[ hebrew ] = "‮סימנים דמויי תווים‬";
         Text[ hindi ] = "अक्षर जैसे संकेत";
+        Text[ slovak ] = "Listové symboly";
     };
 String RID_SUBSETSTR_NUMBER_FORMS
 {
@@ -1398,6 +1454,7 @@ String RID_SUBSETSTR_NUMBER_FORMS
         Text[ czech ] = "Number Forms";
         Text[ hebrew ] = "‮צורות מספריות‬";
         Text[ hindi ] = "संख्या फ़ॉर्म";
+        Text[ slovak ] = "Očíslovať formuláre";
     };
 String RID_SUBSETSTR_ARROWS
 {
@@ -1427,6 +1484,7 @@ String RID_SUBSETSTR_ARROWS
         Text[ czech ] = "Šipky";
         Text[ hebrew ] = "‮חיצים‬";
         Text[ hindi ] = "तीर";
+        Text[ slovak ] = "Šípky";
     };
 String RID_SUBSETSTR_MATH_OPERATORS
 {
@@ -1456,6 +1514,7 @@ String RID_SUBSETSTR_MATH_OPERATORS
         Text[ czech ] = "Matematické operátory";
         Text[ hebrew ] = "‮אופרטורים מתמטיים‬";
         Text[ hindi ] = "गणित प्रवर्तक";
+        Text[ slovak ] = "Matematické operátory";
     };
 String RID_SUBSETSTR_MISC_TECHNICAL
 {
@@ -1486,6 +1545,7 @@ String RID_SUBSETSTR_MISC_TECHNICAL
         Text[ czech ] = "Různé technické symboly";
         Text[ hebrew ] = "‮סימנים טכניים שונים‬";
         Text[ hindi ] = "विविध सांकेतिक";
+        Text[ slovak ] = "Rôzne technické symboly";
     };
 String RID_SUBSETSTR_CONTROL_PICTURES
 {
@@ -1515,6 +1575,7 @@ String RID_SUBSETSTR_CONTROL_PICTURES
         Text[ czech ] = "Control Pictures";
         Text[ hebrew ] = "‮סימני שליטה‬";
         Text[ hindi ] = "नियंत्रण चित्र";
+        Text[ slovak ] = "Kontrolné znaky";
     };
 String RID_SUBSETSTR_OPTICAL_CHAR_REC
 {
@@ -1544,6 +1605,7 @@ String RID_SUBSETSTR_OPTICAL_CHAR_REC
         Text[ czech ] = "Optické rozpoznávání znaků";
         Text[ hebrew ] = "‮הכרת תווים בסריקה אופטיט‬";
         Text[ hindi ] = "दृष्टि-सम्बन्धी अक्षर पहचान";
+        Text[ slovak ] = "Optické rozpoznávanie znakov";
     };
 String RID_SUBSETSTR_ENCLOSED_ALPHANUM
 {
@@ -1573,6 +1635,7 @@ String RID_SUBSETSTR_ENCLOSED_ALPHANUM
         Text[ czech ] = "Enclosed Alphanumerics";
         Text[ hebrew ] = "‮תוים אלפאנומרים סגורים‬";
         Text[ hindi ] = "अन्तर्गत आल्फ़ान्यूमेरिक्";
+        Text[ slovak ] = "Priložené písmená a číslice";
     };
 String RID_SUBSETSTR_BOX_DRAWING
 {
@@ -1602,6 +1665,7 @@ String RID_SUBSETSTR_BOX_DRAWING
         Text[ czech ] = "Kreslení rámečků";
         Text[ hebrew ] = "‮תוים לסרטוט קופסאות‬";
         Text[ hindi ] = "बॉक्स रेखाचित्र";
+        Text[ slovak ] = "Kreslenie rámčekov";
     };
 String RID_SUBSETSTR_BLOCK_ELEMENTS
 {
@@ -1631,6 +1695,7 @@ String RID_SUBSETSTR_BLOCK_ELEMENTS
         Text[ czech ] = "Blokové prvky";
         Text[ hebrew ] = "‮לבנים‬";
         Text[ hindi ] = "ब्लॉक एलिमेन्टस्";
+        Text[ slovak ] = "Blokové prvky";
     };
 String RID_SUBSETSTR_GEOMETRIC_SHAPES
 {
@@ -1660,6 +1725,7 @@ String RID_SUBSETSTR_GEOMETRIC_SHAPES
         Text[ czech ] = "Geometrické tvary";
         Text[ hebrew ] = "‮צורות גאומאריות‬";
         Text[ hindi ] = "रेखागणित आकार";
+        Text[ slovak ] = "Geometrické tvary";
     };
 String RID_SUBSETSTR_MISC_DINGBATS
 {
@@ -1690,6 +1756,7 @@ String RID_SUBSETSTR_MISC_DINGBATS
         Text[ czech ] = "Různé symboly";
         Text[ hebrew ] = "‮סימנים שונים‬";
         Text[ hindi ] = "विविध संकेत";
+        Text[ slovak ] = "Rôzne symboly";
     };
 String RID_SUBSETSTR_DINGBATS
 {
@@ -1720,6 +1787,7 @@ String RID_SUBSETSTR_DINGBATS
         Text[ czech ] = "Symboly";
         Text[ hebrew ] = "‮דינגבטים‬";
         Text[ hindi ] = "डिन्गबाट्स";
+        Text[ slovak ] = "Symboly";
     };
 String RID_SUBSETSTR_CJK_SYMS_PUNCTUATION
 {
@@ -1728,7 +1796,7 @@ String RID_SUBSETSTR_CJK_SYMS_PUNCTUATION
     Text[ english_us ] = "CJK Symbols And Punctuation";
         Text[ portuguese ] = "S�mbolos e pontua��o CJK";
         Text[ russian ] = "�JK-������� � ����������";
-        Text[ greek ] = "CJK ������� ��� �����";
+        Text[ greek ] = "CJK ������� ��� �����";
         Text[ dutch ] = "CJK tekens en interpunctie";
         Text[ french ] = "Ponctuation et symboles CJC";
         Text[ spanish ] = "S�mbolos y puntuaci�n CJK";
@@ -1749,6 +1817,7 @@ String RID_SUBSETSTR_CJK_SYMS_PUNCTUATION
         Text[ czech ] = "CJK (symboly a interpunkce)";
         Text[ hebrew ] = "‮סימני פיסוק של המזרח הרחוק‬";
         Text[ hindi ] = "CJK संकेत और विराम-चिन्ह";
+        Text[ slovak ] = "CJK (symboly a interpunkcia)";
     };
 String RID_SUBSETSTR_HIRAGANA
 {
@@ -1778,6 +1847,7 @@ String RID_SUBSETSTR_HIRAGANA
         Text[ czech ] = "Hiragana";
         Text[ hebrew ] = "‮הירגאנה‬";
         Text[ hindi ] = "हिरगाना";
+        Text[ slovak ] = "Hiragana";
     };
 String RID_SUBSETSTR_KATAKANA
 {
@@ -1807,6 +1877,7 @@ String RID_SUBSETSTR_KATAKANA
         Text[ czech ] = "Katakana";
         Text[ hebrew ] = "‮קטאקנה‬";
         Text[ hindi ] = "कटकाना";
+        Text[ slovak ] = "Katakana";
     };
 String RID_SUBSETSTR_BOPOMOFO
 {
@@ -1836,6 +1907,7 @@ String RID_SUBSETSTR_BOPOMOFO
         Text[ czech ] = "Bopomofo";
         Text[ hebrew ] = "‮בופומופו‬";
         Text[ hindi ] = "बोपोमोफो";
+        Text[ slovak ] = "Bopomofo";
     };
 String RID_SUBSETSTR_HANGUL_COMPAT_JAMO
 {
@@ -1865,6 +1937,7 @@ String RID_SUBSETSTR_HANGUL_COMPAT_JAMO
         Text[ czech ] = "Hangul Compatibility Jamo";
         Text[ hebrew ] = "‮ג'אמו מתאימת הנגול‬";
         Text[ hindi ] = "हानगल योग्य जामो";
+        Text[ slovak ] = "Hangul kompatibilita Jamo";
     };
 String RID_SUBSETSTR_CJK_MISC
 {
@@ -1894,6 +1967,7 @@ String RID_SUBSETSTR_CJK_MISC
         Text[ czech ] = "CJK (různé)";
         Text[ hebrew ] = "‮סימנים שונים של שפות המזרח הרחוק‬";
         Text[ hindi ] = "CJK मिलावट";
+        Text[ slovak ] = "CJK (rôzne)";
     };
 String RID_SUBSETSTR_ENCLOSED_CJK_LETTERS
 {
@@ -1923,6 +1997,7 @@ String RID_SUBSETSTR_ENCLOSED_CJK_LETTERS
         Text[ czech ] = "Enclosed CJK Letters And Months";
         Text[ hebrew ] = "‮סימנים סגורים וחודשים של המזרח הרחוק‬";
         Text[ hindi ] = "CJK अक्षरें और महीनों को अन्तर्गत किया है";
+        Text[ slovak ] = "Priložené CJK listy a mesiace";
     };
 String RID_SUBSETSTR_CJK_COMPATIBILITY
 {
@@ -1953,6 +2028,7 @@ String RID_SUBSETSTR_CJK_COMPATIBILITY
         Text[ czech ] = "CJK (kompatibilní)";
         Text[ hebrew ] = "‮התאמות לשפות המזרח הרחוק‬";
         Text[ hindi ] = "CJK अनुरूपता";
+        Text[ slovak ] = "CJK (kompatibilné)";
     };
 String RID_SUBSETSTR_HANGUL
 {
@@ -1982,6 +2058,7 @@ String RID_SUBSETSTR_HANGUL
         Text[ czech ] = "Hangul";
         Text[ hebrew ] = "‮הנגול‬";
         Text[ hindi ] = "हानगल";
+        Text[ slovak ] = "Hangul";
     };
 String RID_SUBSETSTR_CJK_UNIFIED_IDGRAPH
 {
@@ -2011,6 +2088,7 @@ String RID_SUBSETSTR_CJK_UNIFIED_IDGRAPH
         Text[ czech ] = "CJK (unifikované ideografy)";
         Text[ hebrew ] = "‮אידיוגרפים מאוחדים‬";
         Text[ hindi ] = "CJK एकरूप की हुयी किसी कल्पना के लिये विशिष्ट संकेत";
+        Text[ slovak ] = "CJK (unifikované ideografy)";
     };
 String RID_SUBSETSTR_CJK_EXT_A_UNIFIED_IDGRAPH
 {
@@ -2040,6 +2118,7 @@ String RID_SUBSETSTR_CJK_EXT_A_UNIFIED_IDGRAPH
         Text[ czech ] = "CJK (ideografy, rozšíření A)";
         Text[ hebrew ] = "‮אידיוגרפים מאוחדים - הרחבה A‬";
         Text[ hindi ] = "CJK एकरूप की हुयी किसी कल्पना के लिये विशिष्ट संकेत विस्तार-A";
+        Text[ slovak ] = "CJK (ideografy, rozšírené A)";
     };
 String RID_SUBSETSTR_PRIVATE_USE_AREA
 {
@@ -2058,7 +2137,7 @@ String RID_SUBSETSTR_PRIVATE_USE_AREA
         Text[ polish ] = "Obszar do prywatnego u�ytku";
         Text[ portuguese_brazilian ] = "�rea de Uso Pessoal";
         Text[ japanese ] = "プライベートエリア";
-        Text[ korean ] = "사용자 지정 영역";
+        Text[ korean ] = "사용자 영역(고어/구결)";
         Text[ chinese_simplified ] = "专用区";
         Text[ chinese_traditional ] = "專用區域";
         Text[ turkish ] = "�zel Kullan�m Alan�";
@@ -2069,6 +2148,7 @@ String RID_SUBSETSTR_PRIVATE_USE_AREA
         Text[ czech ] = "Soukromá oblast";
         Text[ hebrew ] = "‮איזור שמור לשימוש פרטי‬";
         Text[ hindi ] = "निजी उपयोग का स्थान";
+        Text[ slovak ] = "Súkromná oblasť";
     };
 String RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS
 {
@@ -2098,6 +2178,7 @@ String RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS
         Text[ czech ] = "CJK (ideografy)";
         Text[ hebrew ] = "‮אידיוגרפים להתאמה לשפות המזרח הרחוק‬";
         Text[ hindi ] = "CJK अनुरूप का किसी कल्पना के लिये विशिष्ट संकेत";
+        Text[ slovak ] = "CJK (ideografy)";
     };
 String RID_SUBSETSTR_ALPHA_PRESENTATION
 {
@@ -2127,6 +2208,7 @@ String RID_SUBSETSTR_ALPHA_PRESENTATION
         Text[ czech ] = "Alphabetic Presentation Forms";
         Text[ hebrew ] = "‮צורות תצוגה אלפאבתיים‬";
         Text[ hindi ] = "वर्णमाला संबन्धी प्रस्तुति फ़ॉर्म";
+        Text[ slovak ] = "abecedné prezentačné formuláre";
     };
 String RID_SUBSETSTR_ARABIC_PRESENT_A
 {
@@ -2157,6 +2239,7 @@ String RID_SUBSETSTR_ARABIC_PRESENT_A
         Text[ czech ] = "Arabic Presentation Forms-A";
         Text[ hebrew ] = "‮צורות ערביות לתצוגה A‬";
         Text[ hindi ] = "अरेबिक प्रस्तुति फ़ॉर्म-A";
+        Text[ slovak ] = "Arabské formuláre prezentácie A";
     };
 String RID_SUBSETSTR_COMBINING_HALF_MARKS
 {
@@ -2186,6 +2269,7 @@ String RID_SUBSETSTR_COMBINING_HALF_MARKS
         Text[ czech ] = "Combining Half Marks";
         Text[ hebrew ] = "‮סימני חצאים לשילובים‬";
         Text[ hindi ] = "आधा चिन्हों को संयुक्त करना";
+        Text[ slovak ] = "Zlúčenie pol-značiek";
     };
 String RID_SUBSETSTR_CJK_COMPAT_FORMS
 {
@@ -2215,6 +2299,7 @@ String RID_SUBSETSTR_CJK_COMPAT_FORMS
         Text[ czech ] = "CJK (kompatibilní formy)";
         Text[ hebrew ] = "‮צורות להתאמה לשפות המזרח הרחוק‬";
         Text[ hindi ] = "CJK अनुरूप फ़ॉर्म";
+        Text[ slovak ] = "CJK (kompatibilné formy)";
     };
 String RID_SUBSETSTR_SMALL_FORM_VARIANTS
 {
@@ -2245,6 +2330,7 @@ String RID_SUBSETSTR_SMALL_FORM_VARIANTS
         Text[ czech ] = "Small Form Variants";
         Text[ hebrew ] = "‮גרסאות שונות של צורות קטנות‬";
         Text[ hindi ] = "छोटा फ़ॉर्म वेरिऍन्ट्स";
+        Text[ slovak ] = "Malé varianty foriem";
     };
 String RID_SUBSETSTR_ARABIC_PRESENT_B
 {
@@ -2274,6 +2360,7 @@ String RID_SUBSETSTR_ARABIC_PRESENT_B
         Text[ czech ] = "Arabic Presentation Forms-B";
         Text[ hebrew ] = "‮צורות ערביות B‬";
         Text[ hindi ] = "अरेबिक प्रस्तुति फ़ॉर्म-B";
+        Text[ slovak ] = "Arabské formuláre prezentácie B";
     };
 String RID_SUBSETSTR_HALFW_FULLW_FORMS
 {
@@ -2303,6 +2390,7 @@ String RID_SUBSETSTR_HALFW_FULLW_FORMS
         Text[ czech ] = "Half-width and Full-width Forms";
         Text[ hebrew ] = "‮צורות חצי רוחב ורוחב מלא‬";
         Text[ hindi ] = "आधा-विस्तार और पूरा-विस्तार फ़ॉर्म";
+        Text[ slovak ] = "Formuláre s polovičnou a plnou šírkou";
     };
 String RID_SUBSETSTR_SPECIALS
 {
@@ -2332,6 +2420,7 @@ String RID_SUBSETSTR_SPECIALS
         Text[ czech ] = "Speciální";
         Text[ hebrew ] = "‮סימנים מיוחדים‬";
         Text[ hindi ] = "विशेष";
+        Text[ slovak ] = "Zvláštnosti";
     };
 String RID_SUBSETSTR_HANGUL_GA
 {
@@ -2361,6 +2450,7 @@ String RID_SUBSETSTR_HANGUL_GA
         Text[ czech ] = "Hangul Ga";
         Text[ hebrew ] = "‮'גא' הנגולית‬";
         Text[ hindi ] = "हानगल ग";
+        Text[ slovak ] = "Hangul Ga";
     };
 String RID_SUBSETSTR_HANGUL_NA
 {
@@ -2390,6 +2480,7 @@ String RID_SUBSETSTR_HANGUL_NA
         Text[ czech ] = "Hangul Na";
         Text[ hebrew ] = "‮'נא' הנגולית‬";
         Text[ hindi ] = "हानगल न";
+        Text[ slovak ] = "Hangul Na";
     };
 String RID_SUBSETSTR_HANGUL_DA
 {
@@ -2419,6 +2510,7 @@ String RID_SUBSETSTR_HANGUL_DA
         Text[ czech ] = "Hangul Da";
         Text[ hebrew ] = "‮'דא' הנגולית‬";
         Text[ hindi ] = "हानगल द";
+        Text[ slovak ] = "Hangul Da";
     };
 String RID_SUBSETSTR_HANGUL_RA
 {
@@ -2448,6 +2540,7 @@ String RID_SUBSETSTR_HANGUL_RA
         Text[ czech ] = "Hangul Ra";
         Text[ hebrew ] = "‮'רא' הנגולית‬";
         Text[ hindi ] = "हानगल र";
+        Text[ slovak ] = "Hangul Ra";
     };
 String RID_SUBSETSTR_HANGUL_MA
 {
@@ -2477,6 +2570,7 @@ String RID_SUBSETSTR_HANGUL_MA
         Text[ czech ] = "Hangul Ma";
         Text[ hebrew ] = "‮'מא' הנגולית‬";
         Text[ hindi ] = "हानगल म";
+        Text[ slovak ] = "Hangul Ma";
     };
 String RID_SUBSETSTR_HANGUL_BA
 {
@@ -2506,6 +2600,7 @@ String RID_SUBSETSTR_HANGUL_BA
         Text[ czech ] = "Hangul Ba";
         Text[ hebrew ] = "‮'בא' הנגולית‬";
         Text[ hindi ] = "हानगल ब";
+        Text[ slovak ] = "Hangul Ba";
     };
 String RID_SUBSETSTR_HANGUL_SA
 {
@@ -2535,6 +2630,7 @@ String RID_SUBSETSTR_HANGUL_SA
         Text[ czech ] = "Hangul Sa";
         Text[ hebrew ] = "‮'סא' הנגולית‬";
         Text[ hindi ] = "हानगल स";
+        Text[ slovak ] = "Hangul Sa";
     };
 String RID_SUBSETSTR_HANGUL_AH
 {
@@ -2564,6 +2660,7 @@ String RID_SUBSETSTR_HANGUL_AH
         Text[ czech ] = "Hangul Ah";
         Text[ hebrew ] = "‮'אה' הנגולית‬";
         Text[ hindi ] = "हानगल आ";
+        Text[ slovak ] = "Hangul Ah";
     };
 String RID_SUBSETSTR_HANGUL_JA
 {
@@ -2593,6 +2690,7 @@ String RID_SUBSETSTR_HANGUL_JA
         Text[ czech ] = "Hangul Ja";
         Text[ hebrew ] = "‮'ג'א' הנגולית‬";
         Text[ hindi ] = "हानगल ज";
+        Text[ slovak ] = "Hangul Ja";
     };
 String RID_SUBSETSTR_HANGUL_CHA
 {
@@ -2622,6 +2720,7 @@ String RID_SUBSETSTR_HANGUL_CHA
         Text[ czech ] = "Hangul Cha";
         Text[ hebrew ] = "‮'צ'א' הנגולית‬";
         Text[ hindi ] = "हानगल छ";
+        Text[ slovak ] = "Hangul Cha";
     };
 String RID_SUBSETSTR_HANGUL_KA
 {
@@ -2651,6 +2750,7 @@ String RID_SUBSETSTR_HANGUL_KA
         Text[ czech ] = "Hangul Ka";
         Text[ hebrew ] = "‮'קא' הנגולית‬";
         Text[ hindi ] = "हानगल क";
+        Text[ slovak ] = "Hangul Ka";
     };
 String RID_SUBSETSTR_HANGUL_TA
 {
@@ -2680,6 +2780,7 @@ String RID_SUBSETSTR_HANGUL_TA
         Text[ czech ] = "Hangul Ta";
         Text[ hebrew ] = "‮'תא' הנגולית‬";
         Text[ hindi ] = "हानगल त";
+        Text[ slovak ] = "Hangul Ta";
     };
 String RID_SUBSETSTR_HANGUL_PA
 {
@@ -2709,6 +2810,7 @@ String RID_SUBSETSTR_HANGUL_PA
         Text[ czech ] = "Hangul Pa";
         Text[ hebrew ] = "‮'פא' הנגולית‬";
         Text[ hindi ] = "हानगल प";
+        Text[ slovak ] = "Hangul Pa";
     };
 String RID_SUBSETSTR_HANGUL_HA
 {
@@ -2738,6 +2840,7 @@ String RID_SUBSETSTR_HANGUL_HA
         Text[ czech ] = "Hangul Ha";
         Text[ hebrew ] = "‮'הא' הנגולית‬";
         Text[ hindi ] = "हानगल ह";
+        Text[ slovak ] = "Hangul Ha";
     };
 String RID_SUBSETSTR_YI
 {
@@ -2767,6 +2870,7 @@ String RID_SUBSETSTR_YI
         Text[ czech ] = "Yi";
         Text[ hebrew ] = "‮יי‬";
         Text[ hindi ] = "Yi";
+        Text[ slovak ] = "Yi";
     };
 String RID_SUBSETSTR_SINHALA
 {
@@ -2796,6 +2900,7 @@ String RID_SUBSETSTR_SINHALA
         Text[ czech ] = "Sinhala";
         Text[ hebrew ] = "‮סינהלית‬";
         Text[ hindi ] = "सिंहला";
+        Text[ slovak ] = "Sinhala";
     };
 String RID_SUBSETSTR_TIBETAN
 {
@@ -2825,6 +2930,7 @@ String RID_SUBSETSTR_TIBETAN
         Text[ czech ] = "Tibetsky";
         Text[ hebrew ] = "‮טיבטית‬";
         Text[ hindi ] = "टिबेटियन";
+        Text[ slovak ] = "Tibetsky";
     };
 String RID_SUBSETSTR_MYANMAR
 {
@@ -2854,6 +2960,7 @@ String RID_SUBSETSTR_MYANMAR
         Text[ czech ] = "Myanmar";
         Text[ hebrew ] = "‮מיינמרית‬";
         Text[ hindi ] = "मियान्मार";
+        Text[ slovak ] = "Myanmar";
     };
 String RID_SUBSETSTR_KHMER
 {
@@ -2883,6 +2990,7 @@ String RID_SUBSETSTR_KHMER
         Text[ czech ] = "Khmérsky";
         Text[ hebrew ] = "‮כמיר‬";
         Text[ hindi ] = "ख्मेर";
+        Text[ slovak ] = "Khmérsky";
     };
 String RID_SUBSETSTR_OGHAM
 {
@@ -2912,6 +3020,7 @@ String RID_SUBSETSTR_OGHAM
         Text[ czech ] = "Ogham";
         Text[ hebrew ] = "‮אוחם‬";
         Text[ hindi ] = "ओघम्";
+        Text[ slovak ] = "Ogham";
     };
 String RID_SUBSETSTR_RUNIC
 {
@@ -2941,6 +3050,7 @@ String RID_SUBSETSTR_RUNIC
         Text[ czech ] = "Runic";
         Text[ hebrew ] = "‮רונית‬";
         Text[ hindi ] = "रूनिक";
+        Text[ slovak ] = "Runové písmo";
     };
 String RID_SUBSETSTR_SYRIAC
 {
@@ -2970,6 +3080,7 @@ String RID_SUBSETSTR_SYRIAC
         Text[ czech ] = "Syriac";
         Text[ hebrew ] = "‮סוריאק‬";
         Text[ hindi ] = "शिरियक";
+        Text[ slovak ] = "Syriac";
     };
 String RID_SUBSETSTR_THAANA
 {
@@ -2999,6 +3110,7 @@ String RID_SUBSETSTR_THAANA
         Text[ czech ] = "Thaana";
         Text[ hebrew ] = "‮תאנה‬";
         Text[ hindi ] = "थाना";
+        Text[ slovak ] = "Thaana";
     };
 String RID_SUBSETSTR_ETHIOPIC
 {
@@ -3028,6 +3140,7 @@ String RID_SUBSETSTR_ETHIOPIC
         Text[ czech ] = "Etiopsky";
         Text[ hebrew ] = "‮אתיופית‬";
         Text[ hindi ] = "इथियोपिक";
+        Text[ slovak ] = "Etiópsky";
     };
 String RID_SUBSETSTR_CHEROKEE
 {
@@ -3057,6 +3170,7 @@ String RID_SUBSETSTR_CHEROKEE
         Text[ czech ] = "Cherokee";
         Text[ hebrew ] = "‮צ'רוקי‬";
         Text[ hindi ] = "चेरोकी";
+        Text[ slovak ] = "Cherokee";
     };
 String RID_SUBSETSTR_CANADIAN_ABORIGINAL
 {
@@ -3086,6 +3200,7 @@ String RID_SUBSETSTR_CANADIAN_ABORIGINAL
         Text[ czech ] = "Canadan Aboriginal Syllables";
         Text[ hebrew ] = "‮הברות קדמונים קנדיים (Aboriginal)‬";
         Text[ hindi ] = "केनडन् आदि देशवासि समुदाय";
+        Text[ slovak ] = "Kanadské pôvodné slabiky";
     };
 String RID_SUBSETSTR_MONGOLIAN
 {
@@ -3115,6 +3230,7 @@ String RID_SUBSETSTR_MONGOLIAN
         Text[ czech ] = "Mongolsky";
         Text[ hebrew ] = "‮מונגולית‬";
         Text[ hindi ] = "मंगोलियन";
+        Text[ slovak ] = "Mongolsky";
     };
 
 String RID_SUBSETSTR_MISC_MATH_SYMS_A
@@ -3130,6 +3246,21 @@ String RID_SUBSETSTR_MISC_MATH_SYMS_A
         Text[ korean ] = "기타 수학 기호 A";
         Text[ chinese_simplified ] = "各种数学符号-A";
         Text[ chinese_traditional ] = "各種數學符號-A";
+        Text[ portuguese ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ russian ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ greek ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ dutch ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ finnish ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ czech ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ danish ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ polish ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ portuguese_brazilian ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ turkish ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ arabic ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ hebrew ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ catalan ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ thai ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ slovak ] = "Rôzne matematické symboly-A";
     };
 
 String RID_SUBSETSTR_SUPPL_ARROWS_A
@@ -3145,6 +3276,21 @@ String RID_SUBSETSTR_SUPPL_ARROWS_A
         Text[ korean ] = "추가 화살표 A";
         Text[ chinese_simplified ] = "附加的箭头-A";
         Text[ chinese_traditional ] = "附加的箭頭-A";
+        Text[ portuguese ] = "Supplemental Arrows-A";
+        Text[ russian ] = "Supplemental Arrows-A";
+        Text[ greek ] = "Supplemental Arrows-A";
+        Text[ dutch ] = "Supplemental Arrows-A";
+        Text[ finnish ] = "Supplemental Arrows-A";
+        Text[ czech ] = "Supplemental Arrows-A";
+        Text[ danish ] = "Supplemental Arrows-A";
+        Text[ polish ] = "Supplemental Arrows-A";
+        Text[ portuguese_brazilian ] = "Supplemental Arrows-A";
+        Text[ turkish ] = "Supplemental Arrows-A";
+        Text[ arabic ] = "Supplemental Arrows-A";
+        Text[ hebrew ] = "Supplemental Arrows-A";
+        Text[ catalan ] = "Supplemental Arrows-A";
+        Text[ thai ] = "Supplemental Arrows-A";
+        Text[ slovak ] = "Doplňujúce šípky-A";
     };
 
 String RID_SUBSETSTR_BRAILLE_PATTERNS
@@ -3155,11 +3301,26 @@ String RID_SUBSETSTR_BRAILLE_PATTERNS
     Text[ french ] = "Combinaisons Braille";
         Text[ spanish ] = "Braille";
         Text[ italian ] = "Braille";
-        Text[ swedish ] = "Braille";
+        Text[ swedish ] = "Braille-m�nster";
         Text[ japanese ] = "点字パターン";
         Text[ korean ] = "브라유 점자";
         Text[ chinese_simplified ] = "盲文";
         Text[ chinese_traditional ] = "盲文";
+        Text[ portuguese ] = "Braille Patterns";
+        Text[ russian ] = "Braille Patterns";
+        Text[ greek ] = "Braille Patterns";
+        Text[ dutch ] = "Braille Patterns";
+        Text[ finnish ] = "Braille Patterns";
+        Text[ czech ] = "Braille Patterns";
+        Text[ danish ] = "Braille Patterns";
+        Text[ polish ] = "Braille Patterns";
+        Text[ portuguese_brazilian ] = "Braille Patterns";
+        Text[ turkish ] = "Braille Patterns";
+        Text[ arabic ] = "Braille Patterns";
+        Text[ hebrew ] = "Braille Patterns";
+        Text[ catalan ] = "Braille Patterns";
+        Text[ thai ] = "Braille Patterns";
+        Text[ slovak ] = "Braille vzory";
     };
 
 String RID_SUBSETSTR_SUPPL_ARROWS_B
@@ -3175,6 +3336,21 @@ String RID_SUBSETSTR_SUPPL_ARROWS_B
         Text[ korean ] = "추가 화살표 B";
         Text[ chinese_simplified ] = "附加的箭头-B";
         Text[ chinese_traditional ] = "附加的箭頭-B";
+        Text[ portuguese ] = "Supplemental Arrows-B";
+        Text[ russian ] = "Supplemental Arrows-B";
+        Text[ greek ] = "Supplemental Arrows-B";
+        Text[ dutch ] = "Supplemental Arrows-B";
+        Text[ finnish ] = "Supplemental Arrows-B";
+        Text[ czech ] = "Supplemental Arrows-B";
+        Text[ danish ] = "Supplemental Arrows-B";
+        Text[ polish ] = "Supplemental Arrows-B";
+        Text[ portuguese_brazilian ] = "Supplemental Arrows-B";
+        Text[ turkish ] = "Supplemental Arrows-B";
+        Text[ arabic ] = "Supplemental Arrows-B";
+        Text[ hebrew ] = "Supplemental Arrows-B";
+        Text[ catalan ] = "Supplemental Arrows-B";
+        Text[ thai ] = "Supplemental Arrows-B";
+        Text[ slovak ] = "Doplňujúce šípky-B";
     };
 
 String RID_SUBSETSTR_MISC_MATH_SYMS_B
@@ -3190,6 +3366,21 @@ String RID_SUBSETSTR_MISC_MATH_SYMS_B
         Text[ korean ] = "기타 수학 기호 B";
         Text[ chinese_simplified ] = "各种数学符号-B";
         Text[ chinese_traditional ] = "各種數學符號-B";
+        Text[ portuguese ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ russian ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ greek ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ dutch ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ finnish ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ czech ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ danish ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ polish ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ portuguese_brazilian ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ turkish ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ arabic ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ hebrew ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ catalan ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ thai ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ slovak ] = "Rôzne matematické symboly-B";
     };
 
 String RID_SUBSETSTR_CJK_RADICAL_SUPPL
@@ -3198,13 +3389,28 @@ String RID_SUBSETSTR_CJK_RADICAL_SUPPL
     Text [ ENGLISH ] = "CJK Radical Supplement" ;
     Text[ english_us ] = "CJK Radical Supplement";
     Text[ french ] = "Formes suppl�mentaires des cl�s CJC";
-        Text[ spanish ] = "Radical CJK ampliado";
+        Text[ spanish ] = "Radicales suplementarios de CJK";
         Text[ italian ] = "Radicali supplementari CJK";
-        Text[ swedish ] = "CJK-radikaltill�gg";
+        Text[ swedish ] = "Kompletterade CJK-radikaler";
         Text[ japanese ] = "CJK 部首補足";
         Text[ korean ] = "한중일 어근 추가";
         Text[ chinese_simplified ] = "附加的中日韩文字部首";
         Text[ chinese_traditional ] = "附加的中日韓文字部首";
+        Text[ portuguese ] = "CJK Radical Supplement";
+        Text[ russian ] = "CJK Radical Supplement";
+        Text[ greek ] = "CJK Radical Supplement";
+        Text[ dutch ] = "CJK Radical Supplement";
+        Text[ finnish ] = "CJK Radical Supplement";
+        Text[ czech ] = "CJK Radical Supplement";
+        Text[ danish ] = "CJK Radical Supplement";
+        Text[ polish ] = "CJK Radical Supplement";
+        Text[ portuguese_brazilian ] = "CJK Radical Supplement";
+        Text[ turkish ] = "CJK Radical Supplement";
+        Text[ arabic ] = "CJK Radical Supplement";
+        Text[ hebrew ] = "CJK Radical Supplement";
+        Text[ catalan ] = "CJK Radical Supplement";
+        Text[ thai ] = "CJK Radical Supplement";
+        Text[ slovak ] = "CJK Radical doplnky";
     };
 
 String RID_SUBSETSTR_KANXI_RADICALS
@@ -3220,6 +3426,21 @@ String RID_SUBSETSTR_KANXI_RADICALS
         Text[ korean ] = "Kanxi 어근";
         Text[ chinese_simplified ] = "康熙部首";
         Text[ chinese_traditional ] = "康熙部首";
+        Text[ portuguese ] = "Kanxi Radicals";
+        Text[ russian ] = "Kanxi Radicals";
+        Text[ greek ] = "Kanxi Radicals";
+        Text[ dutch ] = "Kanxi Radicals";
+        Text[ finnish ] = "Kanxi Radicals";
+        Text[ czech ] = "Kanxi Radicals";
+        Text[ danish ] = "Kanxi Radicals";
+        Text[ polish ] = "Kanxi Radicals";
+        Text[ portuguese_brazilian ] = "Kanxi Radicals";
+        Text[ turkish ] = "Kanxi Radicals";
+        Text[ arabic ] = "Kanxi Radicals";
+        Text[ hebrew ] = "Kanxi Radicals";
+        Text[ catalan ] = "Kanxi Radicals";
+        Text[ thai ] = "Kanxi Radicals";
+        Text[ slovak ] = "Kanxi Radicals";
     };
 
 String RID_SUBSETSTR_IDEO_DESC_CHARS
@@ -3235,6 +3456,21 @@ String RID_SUBSETSTR_IDEO_DESC_CHARS
         Text[ korean ] = "표의 설명 문자";
         Text[ chinese_simplified ] = "注音符号";
         Text[ chinese_traditional ] = "注音符號";
+        Text[ portuguese ] = "Ideographic Description Characters";
+        Text[ russian ] = "Ideographic Description Characters";
+        Text[ greek ] = "Ideographic Description Characters";
+        Text[ dutch ] = "Ideographic Description Characters";
+        Text[ finnish ] = "Ideographic Description Characters";
+        Text[ czech ] = "Ideographic Description Characters";
+        Text[ danish ] = "Ideographic Description Characters";
+        Text[ polish ] = "Ideographic Description Characters";
+        Text[ portuguese_brazilian ] = "Ideographic Description Characters";
+        Text[ turkish ] = "Ideographic Description Characters";
+        Text[ arabic ] = "Ideographic Description Characters";
+        Text[ hebrew ] = "Ideographic Description Characters";
+        Text[ catalan ] = "Ideographic Description Characters";
+        Text[ thai ] = "Ideographic Description Characters";
+        Text[ slovak ] = "Znaky opisujúce ideografy";
     };
 
 String RID_SUBSETSTR_TAGALOG
@@ -3250,6 +3486,21 @@ String RID_SUBSETSTR_TAGALOG
         Text[ korean ] = "타갈로그";
         Text[ chinese_simplified ] = "菲律宾汤加洛格语";
         Text[ chinese_traditional ] = "菲律賓湯加洛格語";
+        Text[ portuguese ] = "Tagalog";
+        Text[ russian ] = "Tagalog";
+        Text[ greek ] = "Tagalog";
+        Text[ dutch ] = "Tagalog";
+        Text[ finnish ] = "Tagalog";
+        Text[ czech ] = "Tagalog";
+        Text[ danish ] = "Tagalog";
+        Text[ polish ] = "Tagalog";
+        Text[ portuguese_brazilian ] = "Tagalog";
+        Text[ turkish ] = "Tagalog";
+        Text[ arabic ] = "Tagalog";
+        Text[ hebrew ] = "Tagalog";
+        Text[ catalan ] = "Tagalog";
+        Text[ thai ] = "Tagalog";
+        Text[ slovak ] = "Tagalog";
     };
 
 String RID_SUBSETSTR_HANUNOO
@@ -3265,6 +3516,21 @@ String RID_SUBSETSTR_HANUNOO
         Text[ korean ] = "하누누";
         Text[ chinese_simplified ] = "菲律宾的含努闹语";
         Text[ chinese_traditional ] = "菲律賓的含努鬧語";
+        Text[ portuguese ] = "Hanunoo";
+        Text[ russian ] = "Hanunoo";
+        Text[ greek ] = "Hanunoo";
+        Text[ dutch ] = "Hanunoo";
+        Text[ finnish ] = "Hanunoo";
+        Text[ czech ] = "Hanunoo";
+        Text[ danish ] = "Hanunoo";
+        Text[ polish ] = "Hanunoo";
+        Text[ portuguese_brazilian ] = "Hanunoo";
+        Text[ turkish ] = "Hanunoo";
+        Text[ arabic ] = "Hanunoo";
+        Text[ hebrew ] = "Hanunoo";
+        Text[ catalan ] = "Hanunoo";
+        Text[ thai ] = "Hanunoo";
+        Text[ slovak ] = "Hanunoo";
     };
 
 String RID_SUBSETSTR_TAGBANWA
@@ -3280,6 +3546,21 @@ String RID_SUBSETSTR_TAGBANWA
         Text[ korean ] = "탁반와";
         Text[ chinese_simplified ] = "菲律宾塔格板瓦语";
         Text[ chinese_traditional ] = "菲律賓的塔格板瓦語";
+        Text[ portuguese ] = "Tagbanwa";
+        Text[ russian ] = "Tagbanwa";
+        Text[ greek ] = "Tagbanwa";
+        Text[ dutch ] = "Tagbanwa";
+        Text[ finnish ] = "Tagbanwa";
+        Text[ czech ] = "Tagbanwa";
+        Text[ danish ] = "Tagbanwa";
+        Text[ polish ] = "Tagbanwa";
+        Text[ portuguese_brazilian ] = "Tagbanwa";
+        Text[ turkish ] = "Tagbanwa";
+        Text[ arabic ] = "Tagbanwa";
+        Text[ hebrew ] = "Tagbanwa";
+        Text[ catalan ] = "Tagbanwa";
+        Text[ thai ] = "Tagbanwa";
+        Text[ slovak ] = "Tagbanwa";
     };
 
 String RID_SUBSETSTR_BUHID
@@ -3295,6 +3576,21 @@ String RID_SUBSETSTR_BUHID
         Text[ korean ] = "부히드";
         Text[ chinese_simplified ] = "菲律宾的布黑德语";
         Text[ chinese_traditional ] = "菲律賓的布黑德語";
+        Text[ portuguese ] = "Buhid";
+        Text[ russian ] = "Buhid";
+        Text[ greek ] = "Buhid";
+        Text[ dutch ] = "Buhid";
+        Text[ finnish ] = "Buhid";
+        Text[ czech ] = "Buhid";
+        Text[ danish ] = "Buhid";
+        Text[ polish ] = "Buhid";
+        Text[ portuguese_brazilian ] = "Buhid";
+        Text[ turkish ] = "Buhid";
+        Text[ arabic ] = "Buhid";
+        Text[ hebrew ] = "Buhid";
+        Text[ catalan ] = "Buhid";
+        Text[ thai ] = "Buhid";
+        Text[ slovak ] = "Buhid";
     };
 
 String RID_SUBSETSTR_KANBUN
@@ -3310,6 +3606,21 @@ String RID_SUBSETSTR_KANBUN
         Text[ korean ] = "칸분";
         Text[ chinese_simplified ] = "日文的古汉文";
         Text[ chinese_traditional ] = "日文的古漢文";
+        Text[ portuguese ] = "Kanbun";
+        Text[ russian ] = "Kanbun";
+        Text[ greek ] = "Kanbun";
+        Text[ dutch ] = "Kanbun";
+        Text[ finnish ] = "Kanbun";
+        Text[ czech ] = "Kanbun";
+        Text[ danish ] = "Kanbun";
+        Text[ polish ] = "Kanbun";
+        Text[ portuguese_brazilian ] = "Kanbun";
+        Text[ turkish ] = "Kanbun";
+        Text[ arabic ] = "Kanbun";
+        Text[ hebrew ] = "Kanbun";
+        Text[ catalan ] = "Kanbun";
+        Text[ thai ] = "Kanbun";
+        Text[ slovak ] = "Kanbun";
     };
 
 String RID_SUBSETSTR_BOPOMOFO_EXTENDED
@@ -3325,6 +3636,21 @@ String RID_SUBSETSTR_BOPOMOFO_EXTENDED
         Text[ korean ] = "보포모포 확장";
         Text[ chinese_simplified ] = "附加的注音符号";
         Text[ chinese_traditional ] = "附加的注音符號";
+        Text[ portuguese ] = "Bopomofo Extended";
+        Text[ russian ] = "Bopomofo Extended";
+        Text[ greek ] = "Bopomofo Extended";
+        Text[ dutch ] = "Bopomofo Extended";
+        Text[ finnish ] = "Bopomofo Extended";
+        Text[ czech ] = "Bopomofo Extended";
+        Text[ danish ] = "Bopomofo Extended";
+        Text[ polish ] = "Bopomofo Extended";
+        Text[ portuguese_brazilian ] = "Bopomofo Extended";
+        Text[ turkish ] = "Bopomofo Extended";
+        Text[ arabic ] = "Bopomofo Extended";
+        Text[ hebrew ] = "Bopomofo Extended";
+        Text[ catalan ] = "Bopomofo Extended";
+        Text[ thai ] = "Bopomofo Extended";
+        Text[ slovak ] = "Bopomofo rozšírené";
     };
 
 String RID_SUBSETSTR_KATAKANA_PHONETIC
@@ -3340,8 +3666,25 @@ String RID_SUBSETSTR_KATAKANA_PHONETIC
         Text[ korean ] = "가타카나 발음 표기";
         Text[ chinese_simplified ] = "注音的片假名";
         Text[ chinese_traditional ] = "注音的片假名";
+        Text[ portuguese ] = "Katakana Phonetics";
+        Text[ russian ] = "Katakana Phonetics";
+        Text[ greek ] = "Katakana Phonetics";
+        Text[ dutch ] = "Katakana Phonetics";
+        Text[ finnish ] = "Katakana Phonetics";
+        Text[ czech ] = "Katakana Phonetics";
+        Text[ danish ] = "Katakana Phonetics";
+        Text[ polish ] = "Katakana Phonetics";
+        Text[ portuguese_brazilian ] = "Katakana Phonetics";
+        Text[ turkish ] = "Katakana Phonetics";
+        Text[ arabic ] = "Katakana Phonetics";
+        Text[ hebrew ] = "Katakana Phonetics";
+        Text[ catalan ] = "Katakana Phonetics";
+        Text[ thai ] = "Katakana Phonetics";
+        Text[ slovak ] = "Katakana fonetické";
     };
 };
 
 // ********************************************************************** EOF
+
+
 
