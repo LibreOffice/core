@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 20:51:37 $
+#   last change: $Author: rt $ $Date: 2005-01-11 14:57:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,11 +63,11 @@ PRJ=..$/..
 
 PRJNAME=sfx2
 TARGET=dialog
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------------
 
