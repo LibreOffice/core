@@ -1,3 +1,5 @@
+package embeddedobj.test;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -21,10 +23,18 @@ import com.sun.star.lang.*;
 
 public class EmbedContFrame extends Frame
 {
+    private EmbedContApp m_aApp;
+
     WindowListener m_aCloser = new WindowAdapter()
     {
         public void windowClosing( WindowEvent e )
         {
+            if ( m_aApp != null )
+            {
+                m_aApp.disposeObject();
+                m_aApp = null;
+            }
+
             dispose();
             System.exit( 0 );
         }
@@ -54,13 +64,13 @@ public class EmbedContFrame extends Frame
             System.exit( 1 );
         }
 
-        EmbedContApp aApp = new EmbedContApp( aFrame, aServiceFactory );
-        aApp.init();
-        aApp.start();
+        aFrame.m_aApp = new EmbedContApp( aFrame, aServiceFactory );
+        aFrame.m_aApp.init();
+        aFrame.m_aApp.start();
 
-        Dimension aSize = aApp.getSize();
+        Dimension aSize = aFrame.m_aApp.getSize();
 
-        aFrame.add( "Center", aApp );
+        aFrame.add( "Center", aFrame.m_aApp );
         aFrame.pack();
         aFrame.setSize( aSize );
 
