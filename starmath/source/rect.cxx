@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:06:42 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,34 +594,6 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
         nBaseline = nOldBaseline;
         bHasAlignInfo = bOldHasAlignInfo;
     }
-
-    return *this;
-}
-
-
-SmRect & SmRect::ExtendBy(const Point &rPoint)
-    // extend current rectangle to include 'rPoint'.
-    // The effect should be similar to
-    //      "ExtendBy(rRect, RCP_THIS, (BOOL) TRUE)"
-    // where 'rRect' is a SmRect of size and width 1 with no italic spaces
-    // (as by "SmRect (1, 1)") and position at 'rPoint'.
-{
-    // get some values used for italic spaces adaption
-    // ! (need to be done before changing current SmRect) !
-    long  nL = Min(GetItalicLeft(),  rPoint.X()),
-          nR = Max(GetItalicRight(), rPoint.X());
-
-    // this is the adaption of rectangle union
-    if (rPoint.X() < GetLeft())
-        SetLeft(rPoint.X());
-    if (rPoint.X() > GetRight())
-        SetRight(rPoint.X());
-    if (rPoint.Y() < GetTop())
-        SetTop(rPoint.Y());
-    if (rPoint.Y() > GetBottom())
-        SetBottom(rPoint.Y());
-
-    SetItalicSpaces(GetLeft() - nL, nR - GetRight());
 
     return *this;
 }
