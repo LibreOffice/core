@@ -54,32 +54,27 @@
  *
  *
  ************************************************************************/
-
 package org.openoffice.java.accessibility;
 
-import com.sun.star.uno.*;
 import com.sun.star.accessibility.*;
+import com.sun.star.uno.*;
+
 
 class RadioButton extends ToggleButton {
-
-    public RadioButton(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+    public RadioButton(XAccessible xAccessible,
+        XAccessibleContext xAccessibleContext) {
         super(xAccessible, xAccessibleContext);
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleRadioButton();
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleRadioButton();
     }
 
     protected class AccessibleRadioButton extends AccessibleToggleButton {
-
         /** Gets the role of this object */
         public javax.accessibility.AccessibleRole getAccessibleRole() {
             return javax.accessibility.AccessibleRole.RADIO_BUTTON;
         }
     }
 }
-
