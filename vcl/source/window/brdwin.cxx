@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3215,7 +3215,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
 {
     // Alle WindowBits entfernen, die wir nicht haben wollen
     WinBits nOrgStyle = nStyle;
-    WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_PINABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_NOSHADOW);
+    WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_PINABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_TOOLTIPWIN | WB_NOSHADOW);
     if ( nTypeStyle & BORDERWINDOW_STYLE_APP )
         nTestStyle |= WB_APP;
     nStyle &= nTestStyle;
