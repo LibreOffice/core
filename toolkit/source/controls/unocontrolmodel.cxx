@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-29 12:20:48 $
+ *  last change: $Author: fs $ $Date: 2002-10-08 12:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1158,6 +1158,20 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
 
                 switch (pDestType->getTypeClass())
                 {
+                    case TypeClass_DOUBLE:
+                    {
+                        // try as double
+                        double nAsDouble = 0;
+                        if ( bConverted = ( rValue >>= nAsDouble ) )
+                            rConvertedValue <<= nAsDouble;
+                        else
+                        {   // try as integer - 96136 - 2002-10-08 - fs@openoffice.org
+                            sal_Int32 nAsInteger = 0;
+                            if ( bConverted = ( rValue >>= nAsInteger ) )
+                                rConvertedValue <<= (double)nAsInteger;
+                        }
+                    }
+                    break;
                     case TypeClass_SHORT:
                     {
                         sal_Int16 n;
