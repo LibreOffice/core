@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:26:36 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,6 +684,12 @@ void ViewShell::PrintHandout (
     SdPage* pPage = GetDoc()->GetSdPage(0, PK_HANDOUT);
     SdPage* pMaster = (SdPage*) pPage->GetMasterPage(0);
 
+    BOOL        bScalePage = TRUE;
+    if ( pPrintOpts )
+    {
+        bScalePage = pPrintOpts->IsPagesize();
+    }
+
     // Papierschacht
     if( pPrintOpts && !pPrintOpts->IsPaperbin() ) // Drucken NICHT aus Druckereinstellung
     {
@@ -714,6 +720,26 @@ void ViewShell::PrintHandout (
         BOOL            bPrintExcluded = TRUE;
 
         aMap.SetOrigin(Point() - aPageOfs);
+
+        if ( bScalePage )
+        {
+            Size aPageSize(pPage->GetSize());
+            Size aPrintSize( rPrinter.GetOutputSize() );
+
+            double fHorz = (double) aPrintSize.Width()  / aPageSize.Width();
+            double fVert = (double) aPrintSize.Height() / aPageSize.Height();
+
+            Fraction    aFract;
+            if ( fHorz < fVert )
+                aFract = Fraction(aPrintSize.Width(), aPageSize.Width());
+            else
+                aFract = Fraction(aPrintSize.Height(), aPageSize.Height());
+
+            aMap.SetScaleX(aFract);
+            aMap.SetScaleY(aFract);
+            aMap.SetOrigin(Point());
+        }
+
         rPrinter.SetMapMode(aMap);
 
         if (this->ISA(DrawViewShell))
@@ -722,7 +748,8 @@ void ViewShell::PrintHandout (
         else
             pPrintView = new DrawView (GetDocSh(), &rPrinter, NULL);
 
-        List*   pList = pMaster->GetPresObjList();
+        sd::PresentationObjectList::iterator aIter;
+        const sd::PresentationObjectList::iterator aEnd( pMaster->GetPresObjList().end() );
         USHORT  nPageCount = nProgressOffset;
 
         WriteFrameViewData();
@@ -734,44 +761,62 @@ void ViewShell::PrintHandout (
 
         while ( nPage < nPageMax )
         {
-            pObj = (SdrObject*) pList->First();
+            aIter = pMaster->GetPresObjList().begin();
 
             // Anzahl ALLER Seiten im Dokument:
             USHORT nAbsPageCnt = GetDoc()->GetPageCount();
 
-            while ( pObj && nPage < nPageMax )
+            while( (aIter != aEnd) && (nPage < nPageMax) )
             {
-                if ( rSelPages.IsSelected(nPage+1) )
+                if( (*aIter).meKind == PRESOBJ_HANDOUT )
                 {
-                    //rProgress.SetState( nPageCount, nTotal );
-                    //rProgress.SetStateText( nPageCount, nPage+1, nTotal );
+                    pObj = (*aIter).mpObject;
 
-                    String aTmp = UniString::CreateFromInt32( nPage+1 );
-                    aTmp += String( SdResId( STR_PRINT_HANDOUT ) );
-                    rProgress.SetStateText( nPageCount, aTmp, nTotal );
-
-                    nPageCount += nCopies;
-
-                    SdPage* pPg = GetDoc()->GetSdPage(nPage, PK_STANDARD);
-
-                    if ( !pPg->IsExcluded() || bPrintExcluded )
+                    if ( rSelPages.IsSelected(nPage+1) )
                     {
-                        if ( pObj->ISA(SdrPageObj) )
+                        //rProgress.SetState( nPageCount, nTotal );
+                        //rProgress.SetStateText( nPageCount, nPage+1, nTotal );
+
+                        String aTmp = UniString::CreateFromInt32( nPage+1 );
+                        aTmp += String( SdResId( STR_PRINT_HANDOUT ) );
+                        rProgress.SetStateText( nPageCount, aTmp, nTotal );
+
+                        nPageCount += nCopies;
+
+                        SdPage* pPg = GetDoc()->GetSdPage(nPage, PK_STANDARD);
+
+                        if ( !pPg->IsExcluded() || bPrintExcluded )
                         {
-                            ((SdrPageObj*) pObj)->SetReferencedPage(pPg);
-                            pObj = (SdrObject*) pList->Next();
+                            if ( pObj->ISA(SdrPageObj) )
+                            {
+                                ((SdrPageObj*) pObj)->SetReferencedPage(pPg);
+                            }
+                            else
+                            {
+                                DBG_ERROR("SdViewShell::PrintHandout() - PRESOBJ_HANDOUT is no SdrPageObj?" );
+                            }
+                            aIter++;
                         }
                     }
+                    nPage++;
                 }
-                nPage++;
+                else
+                {
+                    aIter++;
+                }
             }
 
-            while ( pObj )
-            {   // restliche SdrPageObjs durch Angabe einer
-                // ungueltigen Seitennummer ausblenden
-                if ( pObj->ISA(SdrPageObj) )
-                    ((SdrPageObj*) pObj)->SetReferencedPage( 0L );
-                pObj = (SdrObject*) pList->Next();
+            while ( aIter != aEnd )
+            {
+                if( (*aIter).meKind == PRESOBJ_HANDOUT )
+                {
+                    pObj = (*aIter).mpObject;
+                    // invalidate remaining SdrPageObjs with
+                    // an invalid page number
+                    if ( pObj->ISA(SdrPageObj) )
+                        ((SdrPageObj*) pObj)->SetReferencedPage(0L);
+                }
+                aIter++;
             }
 
             nPrintedHandoutPageNum++;
@@ -798,18 +843,24 @@ void ViewShell::PrintHandout (
         }
 
         USHORT nRealPage = GetDoc()->GetSdPage(0, PK_STANDARD)->GetPageNum();
-        pObj = (SdrObject*) pList->First();
 
-        while ( pObj )
-        {   // Seitenobjekte wieder auf erste Seite setzen
-            if ( pObj->ISA(SdrPageObj) )
+        aIter = pMaster->GetPresObjList().begin();
+
+        pObj = (aIter != aEnd) ? (*aIter++).mpObject : NULL;
+
+        while( aIter != aEnd )
+        {
+            if( (*aIter).meKind == PRESOBJ_HANDOUT )
             {
-                ((SdrPageObj*) pObj)->SetReferencedPage(
-                    GetDoc()->GetPage(nRealPage));
-                nRealPage += 2;
+                pObj = (*aIter).mpObject;
+                // Seitenobjekte wieder auf erste Seite setzen
+                if ( pObj->ISA(SdrPageObj) )
+                {
+                    ((SdrPageObj*) pObj)->SetReferencedPage(GetDoc()->GetPage(nRealPage));
+                    nRealPage += 2;
+                }
             }
-
-            pObj = (SdrObject*) pList->Next();
+            aIter++;
         }
 
         nPrintedHandoutPageNum = 1;
