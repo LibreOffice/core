@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:54:28 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@ class GtkSalFrame : public SalFrame
 
     Size                            m_aMaxSize;
     Size                            m_aMinSize;
+    Rectangle                       m_aRestorePosSize;
 
     std::list< PreviousKeyPress >   m_aPrevKeyPresses;
     int                             m_nPrevKeyPresses; // avoid using size()
