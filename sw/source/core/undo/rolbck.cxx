@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-03 12:46:54 $
+ *  last change: $Author: jp $ $Date: 2001-10-31 20:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1053,44 +1053,20 @@ void SwHistory::Add( const SwTxtAttr* pHint, ULONG nNodeIdx, BOOL bNewAttr )
         switch ( nAttrWhich )
         {
         case RES_TXTATR_FTN:
-        {
             pHt = new SwSetFtnHint( (SwTxtFtn*)pHint, nNodeIdx );
-            const SwDoc* pDoc = ((SwTxtFtn*)pHint)->GetTxtNode().GetDoc();
-            SwModify* pCallBack = pDoc->GetUnoCallBack();
-            SwPtrMsgPoolItem aMsgHint( RES_FOOTNOTE_DELETED, (void*)pHint );
-            pCallBack->Modify(&aMsgHint, &aMsgHint );
-        }
-        break;
+            break;
         case RES_TXTATR_FLYCNT:
             pHt = new SwHstryTxtFlyCnt( (SwTxtFlyCnt*)pHint );
             break;
         case RES_TXTATR_FIELD:
-        {
             pHt = new SwSetTxtFldHint( (SwTxtFld*)pHint, nNodeIdx );
-            const SwDoc* pDoc = ((SwTxtFtn*)pHint)->GetTxtNode().GetDoc();
-            SwModify* pCallBack = pDoc->GetUnoCallBack();
-            SwPtrMsgPoolItem aMsgHint( RES_FIELD_DELETED, (void*)pHint );
-            pCallBack->Modify(&aMsgHint, &aMsgHint );
-        }
-        break;
+            break;
         case RES_TXTATR_TOXMARK:
-        {
             pHt = new SwSetTOXMarkHint( (SwTxtTOXMark*)pHint, nNodeIdx );
-            const SwDoc* pDoc = ((SwTxtTOXMark*)pHint)->GetTxtNode().GetDoc();
-            SwModify* pCallBack = pDoc->GetUnoCallBack();
-            SwPtrMsgPoolItem aMsgHint( RES_TOXMARK_DELETED, (void*)pHint );
-            pCallBack->Modify(&aMsgHint, &aMsgHint );
-        }
-        break;
+            break;
         case RES_TXTATR_REFMARK:
-        {
             pHt = new SwSetRefMarkHint( (SwTxtRefMark*)pHint, nNodeIdx );
-            const SwDoc* pDoc = ((SwTxtFtn*)pHint)->GetTxtNode().GetDoc();
-            SwModify* pCallBack = pDoc->GetUnoCallBack();
-            SwPtrMsgPoolItem aMsgHint( RES_REFMARK_DELETED, (void*)pHint );
-            pCallBack->Modify(&aMsgHint, &aMsgHint );
-        }
-        break;
+            break;
         default:
             pHt = new SwSetTxtHint((SwTxtAttr*)pHint, nNodeIdx );
         }
