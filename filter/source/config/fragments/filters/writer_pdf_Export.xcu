@@ -7,7 +7,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.PDF.PDFFilter</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">PDF - Portable Document Format</value>
+            <value>PDF - Portable Document Format</value>
         </prop>
         <prop oor:name="Flags"><value>EXPORT ALIEN 3RDPARTYFILTER</value></prop>
     </node>
