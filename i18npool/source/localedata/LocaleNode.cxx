@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-10 09:12:03 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #  endif
 #endif
 #include <assert.h>
+
+// NOTE: MUST match the Locale versionDTD attribute defined in data/locale.dtd
+#define LOCALE_VERSION_DTD "2.0"
 
 LocaleNode::LocaleNode (const OUString& name, const Reference< XAttributeList > & attr)
     : aName(name)
@@ -246,6 +249,12 @@ void print_node( const LocaleNode* p, int depth=0 )
 
 void LocaleNode :: generateCode (const OFileWriter &of) const
 {
+    ::rtl::OUString aDTD = getAttr()->getValueByName("versionDTD");
+    if (!aDTD.equalsAscii( LOCALE_VERSION_DTD))
+    {
+        ++nError;
+        fprintf( stderr, "Error: Locale versionDTD is not %s, see comment in locale.dtd\n", LOCALE_VERSION_DTD);
+    }
     for (sal_Int32 i=0; i<nChildren;i++)
         children[i]->generateCode (of);
 //      print_node( this );
@@ -513,7 +522,8 @@ void LCSearchNode::generateCode (const OFileWriter &of) const
 
     if( getNumberOfChildren() != 1 )
     {
-        exit(1);
+        ++nError;
+        fprintf( stderr, "Error: LC_SEARCH: more than 1 child: %d\n", getNumberOfChildren());
     }
     sal_Int32 i;
     LocaleNode* pSearchOptions = getChildAt( 0 );
