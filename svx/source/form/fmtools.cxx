@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 16:25:46 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 09:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2096,9 +2096,9 @@ Reference< ::com::sun::star::sdb::XSQLQueryComposer> getCurrentSettingsComposer(
 {
     Reference< ::com::sun::star::sdb::XSQLQueryComposer> xReturn;
     Reference< ::com::sun::star::sdbc::XRowSet> xRowSet(_rxRowSetProps, UNO_QUERY);
-    Reference< ::com::sun::star::sdbc::XConnection> xConn( ::dbtools::calcConnection(xRowSet,::comphelper::getProcessServiceFactory()));
     try
     {
+        Reference< ::com::sun::star::sdbc::XConnection> xConn( ::dbtools::calcConnection(xRowSet,::comphelper::getProcessServiceFactory()));
         if (xConn.is())     // implies xRowSet.is() implies _rxRowSetProps.is()
         {
             // build the statement the row set is based on (can't use the ActiveCommand property of the set
