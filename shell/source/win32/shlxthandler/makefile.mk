@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:16:13 $
+#   last change: $Author: hr $ $Date: 2004-04-07 11:04:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,51 +67,29 @@ LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
-TARGET1=regsvrex
-TARGETTYPE=CUI
-
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
-# set the define _WINXPSDK if you compile
-# with a Microsoft platform sdk for Windows
-# 2000 and greater
-#
-# set ISOLATION_AWARE_ENABLE for activating
-# the Windows XP visual styles
-
-#-D_WINXPSDK set this for a Win2000/WinXP Platform SDK
-#-DBUILD_SOSL for extended functionality (Infotip and
-# Column Handler)
-
 CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501 
+
+CDEFS+=-D_WIN32_IE=0x501
 
 # --- Files --------------------------------------------------------
 
-RCFILES=$(TARGET).rc
-
-LNGFILES=$(TARGET).lng
-
 SLOFILES=$(SLO)$/classfactory.obj\
-    $(SLO)$/columnprovider.obj\
+    $(SLO)$/columninfo.obj\
     $(SLO)$/dbgmacros.obj\
     $(SLO)$/fileextensions.obj\
-    $(SLO)$/infotip.obj\
-    $(SLO)$/propshthdl.obj\
+    $(SLO)$/infotips.obj\
+    $(SLO)$/propsheets.obj\
     $(SLO)$/registry.obj\
-    $(SLO)$/saxdochdl.obj\
-    $(SLO)$/saxprsrexcptn.obj\
     $(SLO)$/shlxthdl.obj\
-    $(SLO)$/xmlprsr.obj\
-    $(SLO)$/ziparchv.obj\
-    $(SLO)$/zipexcptn.obj\
-    $(SLO)$/metaaccessor.obj\
     $(SLO)$/utilities.obj\
     $(SLO)$/listviewbuilder.obj\
     $(SLO)$/document_statistic.obj\
     $(SLO)$/iso8601_converter.obj
+    
     
 SHL1TARGET=$(TARGET)
 
@@ -122,11 +100,14 @@ SHL1STDLIBS=uwinapi.lib\
     uuid.lib\
     shell32.lib\
     comctl32.lib\
-    gdi32.lib
+    gdi32.lib\
+    kernel32.lib
     
 SHL1LIBS=$(SOLARLIBDIR)$/zlib.lib\
     $(SOLARLIBDIR)$/expat_xmlparse.lib\
-    $(SOLARLIBDIR)$/expat_xmltok.lib
+    $(SOLARLIBDIR)$/expat_xmltok.lib\
+    $(SLB)$/zipfile.lib\
+    $(SLB)$/sax.lib
 
 SHL1DEPN=
 
@@ -138,19 +119,8 @@ SHL1RES=$(RES)$/$(TARGET).res
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
-OBJFILES=$(OBJ)$/regsvrex.obj
-APP1TARGET=$(TARGET1)
-APP1OBJS=$(OBJFILES)
-APP1STDLIBS=kernel32.lib
-APP1DEF=$(MISC)$/$(APP1TARGET).def
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
 
-# Generate the native Windows resource file
-# using lngconvex.exe 
-
-$(RCFILES) : $(LNGFILES) makefile.mk rcfooter.txt rcheader.txt rctmpl.txt ctrylnglist.txt
-    +$(BIN)$/lngconvex.exe -lng shlxthdl.lng -rc shlxthdl.rc -c  ctrylnglist.txt  -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
     
