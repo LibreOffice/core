@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:10:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 
 #pragma hdrstop
+
+#include <tools/shl.hxx>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
