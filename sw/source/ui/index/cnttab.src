@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 22:51:31 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,7 @@ TabDialog DLG_MULTI_TOX
         Text[ japanese ] = "ÌßÚËŞ­°‚Ì•\\¦(~W)";
         Text[ korean ] = "¹Ì¸®º¸±â ³ªÅ¸³»±â(~W)";
         Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ chinese_traditional ] = "Åã¥Ü¹wÄı(~W)";
+        Text[ chinese_traditional ] = "¹wÄı";
         Text[ turkish ] = "Önizlemeyi görüntüle";
         Text[ arabic ] = "ÅÙåÇÑ ÇáãÚÇíäÉ";
         Text[ catalan ] = "Previsuali~zación";
@@ -812,7 +812,7 @@ TabPage TP_TOX_SELECT
         Text[ japanese ] = "–ÚŸ‚Æõˆø‚Ìì¬";
         Text[ korean ] = "Create index of";
         Text[ chinese_simplified ] = "ĞÂÔöÄ¿Â¼";
-        Text[ chinese_traditional ] = "Create index of";
+        Text[ chinese_traditional ] = "·s¼W¥Ø¿ı";
         Text[ turkish ] = "Create index of";
         Text[ arabic ] = "Create index of";
         Text[ catalan ] = "Create index of";
@@ -839,7 +839,7 @@ TabPage TP_TOX_SELECT
         Text[ japanese ] = "‘ÎÛ";
         Text[ korean ] = "Type";
         Text[ chinese_simplified ] = "ÓÃÓÚ";
-        Text[ chinese_traditional ] = "Type";
+        Text[ chinese_traditional ] = "¥Î©ó";
         Text[ turkish ] = "Type";
         Text[ arabic ] = "Type";
         Text[ catalan ] = "Type";
@@ -972,23 +972,23 @@ TabPage TP_TOX_SELECT
         Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Auswerten bis Ebene" ;
         Text [ ENGLISH ] = "Evaluation level" ;
-        Text[ english_us ] = "Evaluate levels";
+        Text[ english_us ] = "Evaluate up to level";
         Text[ portuguese ] = "A~valiar até nível";
-        Text[ russian ] = "Îöåíèòü óğîâíè";
+        Text[ russian ] = "Îöåíèòü äî óğîâíÿ";
         Text[ greek ] = "Áğïôßìçóç åğéğİäùí";
         Text[ dutch ] = "~Aantal niveaus";
         Text[ french ] = "Évaluation des niveaux";
-        Text[ spanish ] = "E~valuar hasta nivel";
+        Text[ spanish ] = "Evaluar hasta nivel";
         Text[ finnish ] = "Arviointitaso";
         Text[ italian ] = "Val~uta fino a livello";
         Text[ danish ] = "Evaluer indtil niveau";
-        Text[ swedish ] = "Utvärdera nivåer";
-        Text[ polish ] = "Ewaluuj poziomy";
+        Text[ swedish ] = "Utvärdera till nivå";
+        Text[ polish ] = "Ewaluuj do poziomu";
         Text[ portuguese_brazilian ] = "Evaluation level";
         Text[ japanese ] = "Ÿ‚ÌÚÍŞÙ‚Ü‚Å“K—p";
         Text[ korean ] = "Æò°¡£¬°èÃş±îÁö";
         Text[ chinese_simplified ] = "°üÀ¨¼¶±ğ";
-        Text[ chinese_traditional ] = "¥]¬A¼ĞÃD¯Å§O";
+        Text[ chinese_traditional ] = "¥]¬A¯Å§O";
         Text[ turkish ] = "Şu düzeye kadar:";
         Text[ arabic ] = "ÊŞííã ÍÊì ÇáãÓÊæì";
         Text[ catalan ] = "E~valuar hasta nivel";
@@ -2218,7 +2218,7 @@ TabPage TP_TOX_SELECT
         Text[ japanese ] = "€–Ú‚Ì‘®";
         Text[ korean ] = "ÀÔ·Â Æ÷¸ËÆÃ";
         Text[ chinese_simplified ] = "ÌõÄ¿µÄ¸ñÊ½»¯";
-        Text[ chinese_traditional ] = "¶µ¥Ø®æ¦¡";
+        Text[ chinese_traditional ] = "¶µ¥Øªº®æ¦¡¤Æ";
         Text[ arabic ] = "ÊäÓíŞ ÇáÅÏÎÇáÇÊ";
         Text[ turkish ] = "Giriş formatlama";
         Text[ language_user1 ] = " ";
@@ -2256,6 +2256,26 @@ TabPage TP_TOX_SELECT
         Size = MAP_APPFONT ( 248, 8 ) ;
         Text = "Sortieren";
         Text[English] = "Sort";
+        Text[ english_us ] = "Sort";
+        Text[ portuguese ] = "Sort";
+        Text[ russian ] = "Ñîğòèğîâàòü";
+        Text[ greek ] = "Sort";
+        Text[ dutch ] = "Sort";
+        Text[ french ] = "Sort";
+        Text[ spanish ] = "Ordenar";
+        Text[ finnish ] = "Sort";
+        Text[ italian ] = "Sort";
+        Text[ danish ] = "Sort";
+        Text[ swedish ] = "Sortera";
+        Text[ polish ] = "Sortuj";
+        Text[ portuguese_brazilian ] = "Sort";
+        Text[ japanese ] = "•À‚×‘Ö‚¦";
+        Text[ korean ] = "Sort";
+        Text[ chinese_simplified ] = "ÅÅĞò";
+        Text[ chinese_traditional ] = "±Æ§Ç";
+        Text[ turkish ] = "Sort";
+        Text[ arabic ] = "Sort";
+        Text[ catalan ] = "Sort";
     };
     FixedText FT_LANGUAGE
     {
@@ -2263,6 +2283,26 @@ TabPage TP_TOX_SELECT
         Size = MAP_APPFONT ( 33, 8 ) ;
         Text = "Sprache";
         Text[English] = "Language";
+        Text[ english_us ] = "Language";
+        Text[ portuguese ] = "Language";
+        Text[ russian ] = "ßçûê";
+        Text[ greek ] = "Language";
+        Text[ dutch ] = "Language";
+        Text[ french ] = "Language";
+        Text[ spanish ] = "Idioma";
+        Text[ finnish ] = "Language";
+        Text[ italian ] = "Language";
+        Text[ danish ] = "Language";
+        Text[ swedish ] = "Språk";
+        Text[ polish ] = "Jêzyk";
+        Text[ portuguese_brazilian ] = "Language";
+        Text[ japanese ] = "Œ¾Œê";
+        Text[ korean ] = "Language";
+        Text[ chinese_simplified ] = "ÓïÑÔ";
+        Text[ chinese_traditional ] = "»y¨¥";
+        Text[ turkish ] = "Language";
+        Text[ arabic ] = "Language";
+        Text[ catalan ] = "Language";
     };
     ListBox LB_LANGUAGE
     {
@@ -2277,6 +2317,26 @@ TabPage TP_TOX_SELECT
         Size = MAP_APPFONT ( 50, 8 ) ;
         Text = "Schlüsseltyp";
         Text[English] = "Key type";
+        Text[ english_us ] = "Key type";
+        Text[ portuguese ] = "Key type";
+        Text[ russian ] = "Òèï êëş÷à";
+        Text[ greek ] = "Key type";
+        Text[ dutch ] = "Key type";
+        Text[ french ] = "Key type";
+        Text[ spanish ] = "Tipo de clave";
+        Text[ finnish ] = "Key type";
+        Text[ italian ] = "Key type";
+        Text[ danish ] = "Key type";
+        Text[ swedish ] = "Nyckeltyp";
+        Text[ polish ] = "Typ klucza";
+        Text[ portuguese_brazilian ] = "Key type";
+        Text[ japanese ] = "·°‚Ìí—Ş";
+        Text[ korean ] = "Key type";
+        Text[ chinese_simplified ] = "¹Ø¼ü×ÖÀàĞÍ";
+        Text[ chinese_traditional ] = "ÃöÁä¦rÃş«¬";
+        Text[ turkish ] = "Key type";
+        Text[ arabic ] = "Key type";
+        Text[ catalan ] = "Key type";
     };
     ListBox LB_SORTALG
     {
@@ -3439,7 +3499,7 @@ TabPage TP_TOX_ENTRY
         Text[ japanese ] = "‰E‘µ‚¦(~O)";
         Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é(~O)";
         Text[ chinese_simplified ] = "ÓÒ¶ÔÆë";
-        Text[ chinese_traditional ] = "¦b¥kÃäªÅ¥Õ¤W(~O)";
+        Text[ chinese_traditional ] = "¾a¥k¹ï»ô";
         Text[ turkish ] = "Sağ kenar";
         Text[ arabic ] = "Úáì ÇáåÇãÔ ÇáÃíãä";
         Text[ catalan ] = "Al bor~de derecho";
@@ -3696,7 +3756,7 @@ TabPage TP_TOX_ENTRY
         Text[ japanese ] = "•\\¦‡˜";
         Text[ korean ] = "¿¡¡¡ÀÇÇÑ Á¤·Ä ...";
         Text[ chinese_simplified ] = "ÅÅĞò°´ÕÕ";
-        Text[ chinese_traditional ] = "½s±Æ«ö·Ó...";
+        Text[ chinese_traditional ] = "½s±Æ«ö·Ó";
         Text[ arabic ] = "ÇáİÑÒ ÍÓÈ";
         Text[ turkish ] = "Sıralama ölçütü:";
         Text[ language_user1 ] = " ";
@@ -4721,5 +4781,6 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
