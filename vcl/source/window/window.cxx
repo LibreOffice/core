@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.211 $
+ *  $Revision: 1.212 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:33:54 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@
 #ifndef _SV_BUTTON_HXX
 #include <button.hxx> // Button::GetStandardText
 #endif
+
 #include <com/sun/star/awt/XWindowPeer.hpp>
 
 #ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP_
@@ -2572,19 +2573,25 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, USHORT nFlags )
     if( ((IsPaintTransparent() && !(nFlags & INVALIDATE_NOTRANSPARENT)) || (nFlags & INVALIDATE_TRANSPARENT) )
             && ImplGetParent() )
     {
-        /* The following optimization shows problems when resizing (native) tabcontrols (eg the Help viewer)
-           So we pass a NULL region to the parent as well which will result in a IMPL_PAINT_PAINTALL on the parent...
+        Window *pParent = ImplGetParent();
+        while( pParent && pParent->IsPaintTransparent() )
+            pParent = pParent->ImplGetParent();
+        if( pParent )
+        {
+            Region *pChildRegion;
+            if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL )
+                // invalidate the whole child window region in the parent
+                pChildRegion = ImplGetWinChildClipRegion();
+            else
+                // invalidate the same region in the parent that has to be repainted in the child
+                pChildRegion = &mpWindowImpl->maInvalidateRegion;
 
-        Region aWindowRegion;
-        if( pRegion == NULL )
-            // compute real region to avoid full repaint in parent
-            aWindowRegion = Rectangle( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
-        ImplGetParent()->ImplInvalidateFrameRegion( pRegion==NULL ? &aWindowRegion : pRegion, nFlags );
-        */
-        ImplGetParent()->ImplInvalidateFrameRegion( pRegion, nFlags );
+            nFlags |= INVALIDATE_CHILDREN;  // paint should also be done on all children
+            nFlags &= ~INVALIDATE_NOERASE;  // parent should paint and erase to create proper background
+            pParent->ImplInvalidateFrameRegion( pChildRegion, nFlags );
+        }
     }
-    else
-        ImplPostPaint();
+    ImplPostPaint();
 }
 
 // -----------------------------------------------------------------------
@@ -2634,15 +2641,15 @@ void Window::ImplInvalidate( const Region* pRegion, USHORT nFlags )
     BOOL bInvalidateAll = !pRegion;
 
     // Transparent-Invalidate beruecksichtigen
-    Window* pWindow = this;
+    Window* pOpaqueWindow = this;
     if ( (mpWindowImpl->mbPaintTransparent && !(nFlags & INVALIDATE_NOTRANSPARENT)) || (nFlags & INVALIDATE_TRANSPARENT) )
     {
-        Window* pTempWindow = pWindow->ImplGetParent();
+        Window* pTempWindow = pOpaqueWindow->ImplGetParent();
         while ( pTempWindow )
         {
             if ( !pTempWindow->IsPaintTransparent() )
             {
-                pWindow = pTempWindow;
+                pOpaqueWindow = pTempWindow;
                 nFlags |= INVALIDATE_CHILDREN;
                 bInvalidateAll = FALSE;
                 break;
@@ -2659,15 +2666,15 @@ void Window::ImplInvalidate( const Region* pRegion, USHORT nFlags )
     USHORT nOrgFlags = nFlags;
     if ( !(nFlags & (INVALIDATE_CHILDREN | INVALIDATE_NOCHILDREN)) )
     {
-        if ( pWindow->GetStyle() & WB_CLIPCHILDREN )
+        if ( GetStyle() & WB_CLIPCHILDREN )
             nFlags |= INVALIDATE_NOCHILDREN;
         else
             nFlags |= INVALIDATE_CHILDREN;
     }
-    if ( (nFlags & INVALIDATE_NOCHILDREN) && pWindow->mpWindowImpl->mpFirstChild )
+    if ( (nFlags & INVALIDATE_NOCHILDREN) && mpWindowImpl->mpFirstChild )
         bInvalidateAll = FALSE;
     if ( bInvalidateAll )
-        pWindow->ImplInvalidateFrameRegion( NULL, nFlags );
+        ImplInvalidateFrameRegion( NULL, nFlags );
     else
     {
         Rectangle   aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
@@ -2684,27 +2691,27 @@ void Window::ImplInvalidate( const Region* pRegion, USHORT nFlags )
             else
                 aRegion.Intersect( *pRegion );
         }
-        pWindow->ImplClipBoundaries( aRegion, TRUE, TRUE );
+        ImplClipBoundaries( aRegion, TRUE, TRUE );
         if ( nFlags & INVALIDATE_NOCHILDREN )
         {
             nFlags &= ~INVALIDATE_CHILDREN;
             if ( !(nFlags & INVALIDATE_NOCLIPCHILDREN) )
             {
                 if ( nOrgFlags & INVALIDATE_NOCHILDREN )
-                    pWindow->ImplClipAllChilds( aRegion );
+                    ImplClipAllChilds( aRegion );
                 else
                 {
-                    if ( pWindow->ImplClipChilds( aRegion ) )
+                    if ( ImplClipChilds( aRegion ) )
                         nFlags |= INVALIDATE_CHILDREN;
                 }
             }
         }
         if ( !aRegion.IsEmpty() )
-            pWindow->ImplInvalidateFrameRegion( &aRegion, nFlags );
+            ImplInvalidateFrameRegion( &aRegion, nFlags );  // transparency is handled here, pOpaqueWindow not required
     }
 
     if ( nFlags & INVALIDATE_UPDATE )
-        pWindow->Update();
+        pOpaqueWindow->Update();        // start painting at the opaque parent
 }
 
 // -----------------------------------------------------------------------
@@ -3279,7 +3286,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
             }
         }
-        if ( mpWindowImpl->mnAbsScreenX != aPtDev.X() || nX != mpWindowImpl->mnX )
+        // check maPos as well, as it could have been changed for client windows (ImplCallMove())
+        if ( mpWindowImpl->mnAbsScreenX != aPtDev.X() || nX != mpWindowImpl->mnX || nOrgX != mpWindowImpl->maPos.X() )
         {
             if ( bCopyBits && !pOverlapRegion )
             {
@@ -3296,7 +3304,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
     }
     if ( nFlags & WINDOW_POSSIZE_Y )
     {
-        if ( nY != mpWindowImpl->mnY )
+        // check maPos as well, as it could have been changed for client windows (ImplCallMove())
+        if ( nY != mpWindowImpl->mnY || nY != mpWindowImpl->maPos.Y() )
         {
             if ( bCopyBits && !pOverlapRegion )
             {
@@ -3446,6 +3455,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                                     ImplInvalidateFrameRegion( pOverlapRegion, INVALIDATE_CHILDREN );
                             }
                         }
+                        else
+                            bInvalidate = TRUE;
                     }
                     else
                         bInvalidate = TRUE;
@@ -4474,6 +4485,23 @@ Window::~Window()
                 if ( pTempWin )
                     aTempStr += "; ";
             }
+            DBG_ERROR( aTempStr.GetBuffer() );
+        }
+
+        Window* pMyParent = this;
+        SystemWindow* pMySysWin = NULL;
+
+        while ( pMyParent )
+        {
+            if ( pMyParent->IsSystemWindow() )
+                pMySysWin = (SystemWindow*)pMyParent;
+            pMyParent = pMyParent->GetParent();
+        }
+        if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
+        {
+            ByteString aTempStr( "Window (" );
+            aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
+            aTempStr += ") still in TaskPanelList!";
             DBG_ERROR( aTempStr.GetBuffer() );
         }
     }
