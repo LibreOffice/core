@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 14:04:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ struct SystemParentData;
 //  class VCLXWINDOW
 //  ----------------------------------------------------
 
+class VCLXWindowImpl;
 class TOOLKIT_DLLPUBLIC VCLXWindow :    public ::com::sun::star::awt::XWindow2,
                     public ::com::sun::star::awt::XVclWindowPeer,
                     public ::com::sun::star::awt::XLayoutConstrains,
@@ -156,13 +157,13 @@ private:
 
     ULONG                           mnListenerLockLevel;
     ULONG                           nDummy2;
-    void*                           pDummy1;
+    VCLXWindowImpl*                 mpImpl;
     void*                           pDummy2;
 
     sal_Bool                        mbDisposing;
     sal_Bool                        mbDesignMode;
     sal_Bool                        mbSynthesizingVCLEvent;
-    sal_Bool                        mbDummy2;
+    sal_Bool                        mbDrawingOntoParent;
 
 
 protected:
