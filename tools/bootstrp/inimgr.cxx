@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inimgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:59 $
+ *  last change: $Author: nf $ $Date: 2001-10-24 10:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ IniManager::IniManager()
     mkdir( sLocalPath.GetBuffer(), 00777 );
 #endif
 
-    sGlobalDir = ByteString( _INIROOT );
+    sGlobalDir = GetGlobalIni();
 }
 
 /****************************************************************************/
@@ -188,6 +188,18 @@ ByteString IniManager::GetLocalIni()
     }
 
     return sLocalPath;
+}
+
+/****************************************************************************/
+ByteString IniManager::GetGlobalIni()
+/****************************************************************************/
+{
+    ByteString sGlobalPath = ByteString( getenv( "GLOBALINI" ));
+
+    if ( !sGlobalPath.Len())
+        sGlobalPath = ByteString( _INIROOT );
+
+    return sGlobalPath;
 }
 
 /****************************************************************************/
