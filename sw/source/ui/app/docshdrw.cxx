@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshdrw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: jp $ $Date: 2001-06-26 14:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
 
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
@@ -95,13 +97,12 @@
 #include <svx/svdoutl.hxx>
 #endif
 
-#ifndef _SVX_LANGITEM_HXX
-#include <svx/langitem.hxx>
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
 #endif
-
-#include "docsh.hxx"
-#include "doc.hxx"
-
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
 
 /*--------------------------------------------------------------------
     Beschreibung: Document laden
@@ -122,9 +123,6 @@ void  SwDocShell::InitDraw()
 
         Outliner& rOutliner = pDrDoc->GetDrawOutliner();
         rOutliner.SetHyphenator( ::GetHyphenator() );
-        const SfxPoolItem& rItem = GetDoc()->GetDefault(RES_CHRATR_LANGUAGE);
-        rOutliner.SetDefaultLanguage(((const SvxLanguageItem&)rItem).GetLanguage());
-
     }
     else
         PutItem( SvxColorTableItem( OFF_APP()->GetStdColorTable() ));
@@ -132,6 +130,9 @@ void  SwDocShell::InitDraw()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:31  hr
+    initial import
+
     Revision 1.18  2000/09/18 16:05:10  willem.vandorp
     OpenOffice header added.
 

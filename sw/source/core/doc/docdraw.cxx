@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 13:52:57 $
+ *  last change: $Author: jp $ $Date: 2001-06-26 14:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,8 +502,6 @@ void SwDoc::InitDrawModel()
     uno::Reference< XSpellChecker1 > xSpell = ::GetSpellChecker();
     rOutliner.SetSpeller( xSpell );
     rOutliner.SetHyphenator( ::GetHyphenator() );
-    const SfxPoolItem& rItem = GetDefault(RES_CHRATR_LANGUAGE);
-    rOutliner.SetDefaultLanguage(((const SvxLanguageItem&)rItem).GetLanguage());
 
     SetCalcFieldValueHdl(&rOutliner);
     SetCalcFieldValueHdl(&pDrawModel->GetHitTestOutliner());
