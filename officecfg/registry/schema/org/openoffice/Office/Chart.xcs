@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Chart.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:50:05 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 18:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,29 @@
 			<info>
 				<author>BM</author>
 				<desc xml:lang="en-US">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="el">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="nl">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="fr">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="fi">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="cs">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="da">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="zh-CN">指定用于建立新图表的颜色。</desc>
+				<desc xml:lang="zh-TW">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="ar">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="he">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="ca">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="pt">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="ru">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="es">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="it">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="sv">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="pl">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="pt-BR">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="ja">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="ko">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="tr">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="th">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="hi-IN">Specifies the colors for creating new charts.</desc>
 			</info>
 			<prop oor:name="Series" oor:type="oor:long-list">
 				<!-- OldPath: Chart/Default_Colors -->
@@ -78,10 +101,63 @@
 				<info>
 					<author>BM</author>
 					<desc xml:lang="en-US">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="el">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="nl">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="fr">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="fi">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="cs">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="da">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="zh-CN">指定要用于前 n 个系列的颜色值的列单，其中 n 为列单的大小。对于 i &gt; n，所用的颜色为数字 i 对 n 的模所对应的列单中的条目。应该将列单的大小保持在 12。还要注意，尽管在此列单中，以十进制显示时可以得到负数 (带符号的数字)，但这些值被解释为不带符号的 32 位值。</desc>
+						<desc xml:lang="zh-TW">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="ar">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="he">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="ca">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="pt">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="ru">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="es">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="it">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="sv">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="pl">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="pt-BR">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="ja">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="ko">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="tr">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="th">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="hi-IN">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
 					<label xml:lang="en-US">Chart colors</label>
+					<label xml:lang="el">Χρώματα διαγράμματος</label>
+					<label xml:lang="nl">Diagramkleuren</label>
+					<label xml:lang="fr">Couleurs du diagramme</label>
+					<label xml:lang="fi">Kaavion värit</label>
+					<label xml:lang="cs">Barvy grafu</label>
+					<label xml:lang="da">Diagramfarver</label>
+					<label xml:lang="zh-CN">图表颜色</label>
+					<label xml:lang="zh-TW">圖表顏色</label>
+					<label xml:lang="ar">ألوان الرسم البياني</label>
+					<label xml:lang="he">Diagrammfarben</label>
+					<label xml:lang="ca">Colors del diagrama</label>
+					<label xml:lang="pt">Cores do gráfico</label>
+					<label xml:lang="ru">Цвета диаграммы</label>
+					<label xml:lang="es">Colores de diagrama</label>
+					<label xml:lang="it">Colori diagramma</label>
+					<label xml:lang="sv">Diagramfärger</label>
+					<label xml:lang="pl">Kolory wykresu</label>
+					<label xml:lang="pt-BR">Cores do gráfico</label>
+					<label xml:lang="ja">グラフの色</label>
+					<label xml:lang="ko">차트 색상</label>
+					<label xml:lang="tr">Şema renkleri</label>
+					<label xml:lang="th">สีแผนภูมิ</label>
+					<label xml:lang="hi-IN">चार्ट के रंग</label>
 				</info>
 				<value>0x9999ff 0x993366 0xffffcc 0xccffff 0x660066 0xff8080 0x0066cc 0xccccff 0x000080 0xff00ff 0x00ffff 0xffff00</value>
 			</prop>
 		</group>
 	</component>
 </oor:component-schema>
+
+
+
+
+
+
+
