@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:09:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef SC_XEHELPER_HXX
 #define SC_XEHELPER_HXX
 
+#ifndef SC_XLADDRESS_HXX
+#include "xladdress.hxx"
+#endif
 #ifndef SC_XEROOT_HXX
 #include "xeroot.hxx"
 #endif
@@ -114,6 +117,109 @@ private:
     sal_Int32           mnSegRowFinal;      /// Progress segment for finalizing ROW records.
 
     sal_uInt32          mnRowCount;         /// Number of created ROW records.
+};
+
+// Calc->Excel cell address/range conversion ==================================
+
+/** Provides functions to convert Calc cell addresses to Excel cell addresses. */
+class XclExpAddressConverter : public XclAddressConverterBase
+{
+public:
+    explicit            XclExpAddressConverter( const XclExpRoot& rRoot );
+
+    // cell address -----------------------------------------------------------
+
+    /** Checks if the passed Calc cell address is valid.
+        @param rScPos  The Calc cell address to check.
+        @param bWarn  true = Sets the internal flag that produces a warning box
+            after loading/saving the file, if the cell address is not valid.
+        @return  true = Cell address in rScPos is valid. */
+    bool                CheckAddress( const ScAddress& rScPos, bool bWarn );
+
+    /** Converts the passed Calc cell address to an Excel cell address.
+        @param rXclPos  (Out) The converted Excel cell address, if valid.
+        @param rScPos  The Calc cell address to convert.
+        @param bWarn  true = Sets the internal flag that produces a warning box
+            after loading/saving the file, if the cell address is not valid.
+        @return  true = Cell address returned in rXclPos is valid. */
+    bool                ConvertAddress( XclAddress& rXclPos,
+                            const ScAddress& rScPos, bool bWarn );
+
+    /** Returns a valid cell address by moving it into allowed dimensions.
+        @param rScPos  The Calc cell address to convert.
+        @param bWarn  true = Sets the internal flag that produces a warning box
+            after loading/saving the file, if the cell address is invalid.
+        @return  The converted Excel cell address. */
+    XclAddress          CreateValidAddress( const ScAddress& rScPos, bool bWarn );
+
+    // cell range -------------------------------------------------------------
+
+    /** Checks if the passed cell range is valid (checks start and end position).
+        @param rScRange  The Calc cell range to check.
+        @param bWarn  true = Sets the internal flag that produces a warning box
+            after loading/saving the file, if the cell range is not valid.
+        @return  true = Cell range in rScRange is valid. */
+    bool                CheckRange( const ScRange& rScRange, bool bWarn );
+
+    /** Checks and eventually crops the cell range to valid dimensions.
+        @descr  The start position of the range will not be modified.
+        @param rScRange  (In/out) The cell range to validate.
+        @param bWarn  true = Sets the internal flag that produces a warning box
+            after loading/saving the file, if the cell range contains invalid
+            cells. If the range is partly valid, this function sets the warning
+            flag, corrects the range and returns true.
+        @return  true = Cell range in rScRange is valid (original or cropped). */
+    bool                ValidateRange( ScRange& rScRange, bool bWarn );
+
+    /** Converts the passed Calc cell range to an Excel cell range.
+        @param rXclRange  (Out) The converted Excel cell range, if valid.
+        @param rScRange  The Calc cell range to convert.
+        @param bWarn  true = Sets the internal flag that produces a warning box
+            after loading/saving the file, if the cell range contains invalid cells.
+        @return  true = Cell range returned in rXclRange is valid (original or cropped). */
+    bool                ConvertRange( XclRange& rXclRange, const ScRange& rScRange, bool bWarn );
+
+    /** Returns a valid cell range by moving it into allowed dimensions.
+        @descr  The start and/or end position of the range may be modified.
+        @param rScRange  The Calc cell range to convert.
+        @param bWarn  true = Sets the internal flag that produces a warning box
+            after loading/saving the file, if the cell range contains invalid cells.
+        @return  The converted Excel cell range. */
+    XclRange            CreateValidRange( const ScRange& rScRange, bool bWarn );
+
+    // cell range list --------------------------------------------------------
+
+    /** Checks if the passed cell range list is valid.
+        @param rScRanges  The Calc cell range list to check.
+        @param bWarn  true = Sets the internal flag that produces a warning box
+            after loading/saving the file, if the cell range list contains at
+            least one invalid range.
+        @return  true = Cell range list in rScRanges is completly valid. */
+    bool                CheckRangeList( const ScRangeList& rScRanges, bool bWarn );
+
+    /** Checks and eventually crops the cell ranges to valid dimensions.
+        @descr  The start position of the ranges will not be modified. Cell
+            ranges that fit partly into valid dimensions are cropped
+            accordingly. Cell ranges that do not fit at all, are removed from
+            the cell range list.
+        @param rScRanges  (In/out) The cell range list to check.
+        @param bWarn  true = Sets the internal flag that produces a warning box
+            after loading/saving the file, if at least one of the cell ranges
+            contains invalid cells. */
+    void                ValidateRangeList( ScRangeList& rScRanges, bool bWarn );
+
+    /** Converts the passed Calc cell range list to an Excel cell range list.
+        @descr  The start position of the ranges will not be modified. Cell
+            ranges that fit partly into valid dimensions are cropped
+            accordingly. Cell ranges that do not fit at all, are not inserted
+            into the Excel cell range list.
+        @param rXclRanges  (Out) The converted Excel cell range list.
+        @param rScRanges  The Calc cell range list to convert.
+        @param bWarn  true = Sets the internal flag that produces a warning box
+            after loading/saving the file, if at least one of the cell ranges
+            contains invalid cells. */
+    void                ConvertRangeList( XclRangeList& rXclRanges,
+                            const ScRangeList& rScRanges, bool bWarn );
 };
 
 // EditEngine->String conversion ==============================================
