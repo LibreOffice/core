@@ -62,7 +62,7 @@ import javax.accessibility.AccessibleState;
 
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 public class List extends DescendantManager implements javax.accessibility.Accessible {
 
@@ -149,10 +149,10 @@ public class List extends DescendantManager implements javax.accessibility.Acces
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
-                case AccessibleEventId.ACCESSIBLE_ACTIVE_DESCENDANT_EVENT:
+                case AccessibleEventId.ACTIVE_DESCENDANT_CHANGED:
                     setActiveDescendant(event.NewValue);
                     break;
-                case AccessibleEventId.ACCESSIBLE_CHILD_EVENT:
+                case AccessibleEventId.CHILD:
                     if (AnyConverter.isObject(event.OldValue)) {
                         remove(event.OldValue);
                     }
@@ -160,7 +160,7 @@ public class List extends DescendantManager implements javax.accessibility.Acces
                         add(event.NewValue);
                     }
                     break;
-                case AccessibleEventId.ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT:
+                case AccessibleEventId.INVALIDATE_ALL_CHILDREN:
                     // Since List items a transient a child events are mostly used
                     // to attach/detach listeners, it is save to ignore it here
                     break;
@@ -423,7 +423,7 @@ public class List extends DescendantManager implements javax.accessibility.Acces
                     if (unoAccessibleStateSet.contains(AccessibleStateType.SINGLE_LINE)) {
                         stateSet.add(javax.accessibility.AccessibleState.SINGLE_LINE);
                     }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.MULTILINE)) {
+                    if (unoAccessibleStateSet.contains(AccessibleStateType.MULTI_LINE)) {
                         stateSet.add(javax.accessibility.AccessibleState.MULTI_LINE);
                     }
                     if (unoAccessibleStateSet.contains(AccessibleStateType.SELECTABLE)) {
