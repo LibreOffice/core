@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:52:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ private:
     sal_Int32                           nSubTableSpanned;
     ScMysalIntList                      nChangedCols;
 public:
-                                        ScMyTableData(sal_Int16 nSheet = -1, sal_Int32 nCol = -1, sal_Int32 nRow = -1);
+                                        ScMyTableData(sal_Int32 nSheet = -1, sal_Int32 nCol = -1, sal_Int32 nRow = -1);
                                         ~ScMyTableData();
     com::sun::star::table::CellAddress  GetCellPos() const { return aTableCellPos; }
     sal_Int32                           GetRow() const { return aTableCellPos.Row; }
@@ -168,8 +168,8 @@ private:
     sal_Int32                           nCurrentColStylePos;
     sal_Int16                           nCurrentDrawPage;
     sal_Int16                           nCurrentXShapes;
-    sal_Int16                           nTableCount;
-    sal_Int16                           nCurrentSheet;
+    sal_Int32                           nTableCount;
+    sal_Int32                           nCurrentSheet;
     sal_Bool                            bProtection : 1;
 
     sal_Bool                            IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
@@ -198,7 +198,7 @@ public:
     void                                AddColCount(sal_Int32 nTempColCount);
     void                                AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName);
     rtl::OUString                       GetCurrentSheetName() const { return sCurrentSheetName; }
-    sal_Int16                           GetCurrentSheet() const { return nCurrentSheet; }
+    sal_Int32                           GetCurrentSheet() const { return nCurrentSheet; }
     sal_Int32                           GetCurrentColumn() const { return aTableVec[nTableCount - 1]->GetColCount(); }
     sal_Int32                           GetCurrentRow() const { return aTableVec[nTableCount - 1]->GetRow(); }
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
@@ -217,8 +217,8 @@ public:
                                                 com::sun::star::table::CellAddress& rEndAddress,
                                                 sal_Int32 nEndX, sal_Int32 nEndY);
 
-    void                                AddMatrixRange(sal_uInt32 nStartColumn, sal_uInt32 nStartRow, sal_uInt32 nEndColumn, sal_uInt32 nEndRow);
-    sal_Bool                            IsPartOfMatrix(sal_uInt32 nColumn, sal_uInt32 nRow);
+    void                                AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow);
+    sal_Bool                            IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow);
 };
 
 #endif
