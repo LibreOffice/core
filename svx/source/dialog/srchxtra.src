@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 23:15:16 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,11 +316,11 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
             };
         };
     };
-    Text[ chinese_simplified ] = "ÎÄ±¾ÊôĞÔ";
+    Text[ chinese_simplified ] = "ÎÄ×ÖÊôĞÔ";
     Text[ russian ] = "Àòğèáóòû òåêñòà";
     Text[ polish ] = "Atrybuty tekstu";
     Text[ japanese ] = "Ã·½Ä‚Ì‘®«";
-    Text[ chinese_traditional ] = "¤å¦rÄİ©Ê";
+    Text[ chinese_traditional ] = "¤å¦r®æ¦¡";
     Text[ arabic ] = "ÓãÇÊ ÇáäÕ";
     Text[ greek ] = "Éäéüôçôåò êåéìİíïõ";
     Text[ korean ] = "ÅØ½ºÆ® ¼Ó¼º";
