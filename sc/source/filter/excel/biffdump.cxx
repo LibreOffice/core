@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:27:11 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5047,39 +5047,15 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
 }
 
 
-void Biff8RecDumper::DumpSubStream( SotStorage* pStorage, const String& rStrmName )
+void Biff8RecDumper::DumpSubStream( SotStorageRef xStrg, const String& rStrmName )
 {
     ByteString sOutput;
 
-    if( !pStorage )
-    {
-        sOutput = "-- no storage available --";
-        Print( sOutput );
-        DBG_ERROR( "Biff8RecDumper::DumpSubStream - storage missing" );
-        return;
-    }
-
-    if( !pStorage->IsContained( rStrmName ) || !pStorage->IsStream( rStrmName ) )
-        return;
-
-    SotStorageStreamRef xSvStrm = OpenStream( pStorage, rStrmName );
-
-    if( !xSvStrm.Is() )
-    {
-        sOutput = "-- no stream available --";
-        Print( sOutput );
-        DBG_ERROR( "Biff8RecDumper::DumpSubStream - no stream available" );
-        return;
-    }
+    SotStorageStreamRef xSvStrm = OpenStream( xStrg, rStrmName );
+    if( !xSvStrm.Is() ) return;
 
     xSvStrm->Seek( STREAM_SEEK_TO_END );
-    if( xSvStrm->Tell() == STREAM_SEEK_TO_END )
-    {
-        sOutput = "-- no stream available --";
-        Print( sOutput );
-        DBG_ERROR( "Biff8RecDumper::DumpSubStream - no stream available" );
-        return;
-    }
+    if( xSvStrm->Tell() == STREAM_SEEK_TO_END ) return;
 
     sOutput = "-- substream dump --";
     Print( sOutput );
@@ -8711,7 +8687,7 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
         r.SeekGlobalPosition();
 
         // dump substreams
-        if( GetRootStorage() )
+        if( GetRootStorage().Is() )
         {
             pIn = NULL;
             bool bOldEncr = bEncrypted;
@@ -8724,9 +8700,9 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
 
             pIn = NULL;
 
-            SotStorageStream*    pContrIn = GetRootStorage()->OpenStream( _STRINGCONST( "Ctls" ), STREAM_STD_READ );
-            if( pContrIn )
-                ControlsDump( *pContrIn );
+            SotStorageStreamRef xCtlsStrm = OpenStream( EXC_STREAM_CTLS );
+            if( xCtlsStrm.Is() )
+                ControlsDump( *xCtlsStrm );
         }
     }
 
