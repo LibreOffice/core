@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: as $ $Date: 2001-06-05 10:18:45 $
+ *  last change: $Author: as $ $Date: 2001-06-06 05:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,35 +469,6 @@ class FilterCache   :   private FairRWLockBase
         static sal_Bool implcp_queryFilters                         (   const   ::rtl::OUString&                                    sQuery              );
 
     #endif  //  #ifdef ENABLE_ASSERTIONS
-
-        /*-****************************************************************************************************//**
-            @short      debug method to log current cache content
-            @descr      The stl vector is not suitable enough to show informations about his current content.
-                        To get a overview you can call this special debug method. It will log all important informations
-                        to a file on disk.
-        *//*-*****************************************************************************************************/
-
-    #ifdef ENABLE_FILTERCACHEDEBUG
-
-    public:
-
-        void impldbg_generateHTMLView           ();
-
-    private:
-
-        void impl_generateTypeListHTML          ();
-        void impl_generateFilterListHTML        ();
-        void impl_generateDetectorListHTML      ();
-        void impl_generateLoaderListHTML        ();
-
-        void impl_generateInvalidFiltersHTML    ();
-        void impl_generateInvalidDetectorsHTML  ();
-        void impl_generateInvalidLoadersHTML    ();
-
-        void impl_generateFilterFlagsHTML       ();
-        void impl_generateDefaultFiltersHTML    ();
-
-    #endif  //  #ifdef ENABLE_FILTERCACHEDEBUG
 
     //-------------------------------------------------------------------------------------------------------------
     //  private variables
