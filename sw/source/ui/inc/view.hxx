@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:30:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     friend class TestTemplateItem;
     friend class SwHHCWrapper;
-    friend class SwSpellWrapper;
     friend class SwHyphWrapper;
     friend class SwView_Impl;
     friend class SwClipboardChangeListener;
@@ -363,7 +362,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE void            CreatePageButtons(BOOL bShow);
 
     // Linguistik-Funktionen
-    SW_DLLPRIVATE void          SpellDocument( const String* pStr, BOOL bAllRight = FALSE );
     SW_DLLPRIVATE void          HyphenateDocument();
     SW_DLLPRIVATE BOOL          IsDrawTextHyphenate();
     SW_DLLPRIVATE void          HyphenateDrawText();
