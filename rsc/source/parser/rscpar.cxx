@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscpar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,18 @@ void RscFileInst::GetNewLine()
                 }
             }
             else
+            {
                 pLine[ nLen++ ] = pInput[ nInputPos++ ];
+                if( nLen > 2 )
+                {
+                    if( pLine[nLen-3] == (char)0xef &&
+                        pLine[nLen-2] == (char)0xbb &&
+                        pLine[nLen-1] == (char)0xbf )
+                    {
+                        nLen -= 3;
+                    }
+                }
+            }
         };
     };
 
