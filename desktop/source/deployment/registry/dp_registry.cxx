@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_registry.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:10:54 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,9 +480,8 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
         if (create_ucb_content(
                 &ucbContent, url, xCmdEnv, false /* no throw */ ))
         {
-            OUString title( extract_throw<OUString>(
-                                ucbContent.getPropertyValue(
-                                    StrTitle::get() ) ) );
+            OUString title( ucbContent.getPropertyValue(
+                                StrTitle::get() ).get<OUString>() );
             for (;;)
             {
                 const t_string2string::const_iterator iFind(
