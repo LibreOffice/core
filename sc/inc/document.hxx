@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:30:39 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,12 +338,12 @@ struct ScSymbolStringCellEntry
 
 // -----------------------------------------------------------------------
 
-// DDE Link Modes
+// DDE link modes
+const BYTE SC_DDE_DEFAULT       = 0;
+const BYTE SC_DDE_ENGLISH       = 1;
+const BYTE SC_DDE_TEXT          = 2;
+const BYTE SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink() only!
 
-#define SC_DDE_DEFAULT      0
-#define SC_DDE_ENGLISH      1
-#define SC_DDE_TEXT         2
-#define SC_DDE_IGNOREMODE   255     // for usage in FindDdeLink() only!
 
 // -----------------------------------------------------------------------
 
@@ -715,19 +715,39 @@ public:
 
                     // Fuer StarOne Api:
     USHORT          GetDdeLinkCount() const;
-    BOOL            GetDdeLinkData( USHORT nPos, String& rAppl, String& rTopic, String& rItem ) const;
     BOOL            UpdateDdeLink( const String& rAppl, const String& rTopic, const String& rItem );
 
-                    // For XCL/XML Export (nPos is index of DDE links only):
-    BOOL            GetDdeLinkMode(USHORT nPos, USHORT& nMode);
-    BOOL            GetDdeLinkResultDimension( USHORT nPos , USHORT& nCol, USHORT& nRow, ScMatrix*& pMatrix);
-    BOOL            GetDdeLinkResult(const ScMatrix* pMatrix, USHORT nCol, USHORT nRow, String& rStrValue, double& rDoubValue, BOOL& bIsString);
+    /** Tries to find a DDE link with the specified connection data.
+        @param rnDdePos  (out-param) Returns the index of the DDE link (does not include other links from link manager).
+        @return  true = DDE link found, rnDdePos valid. */
+    bool            FindDdeLink( const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode, USHORT& rnDdePos );
 
-                    // For XCL/XML Import (nPos is index of DDE links only):
-    void            CreateDdeLink(const String& rAppl, const String& rTopic, const String& rItem, const BYTE nMode = SC_DDE_DEFAULT );
-    BOOL            FindDdeLink(const String& rAppl, const String& rTopic, const String& rItem, const BYTE nMode, USHORT& nPos );
-    BOOL            CreateDdeLinkResultDimension(USHORT nPos, USHORT nCols, USHORT nRows, ScMatrix*& pMatrix);
-    void            SetDdeLinkResult(ScMatrix* pMatrix, const USHORT nCol, const USHORT nRow, const String& rStrValue, const double& rDoubValue, BOOL bString, BOOL bEmpty);
+    /** Returns the connection data of the specified DDE link.
+        @param nDdePos  Index of the DDE link (does not include other links from link manager).
+        @param rAppl  (out-param) The application name.
+        @param rTopic  (out-param) The DDE topic.
+        @param rItem  (out-param) The DDE item.
+        @return  true = DDE link found, out-parameters valid. */
+    bool            GetDdeLinkData( USHORT nDdePos, String& rAppl, String& rTopic, String& rItem ) const;
+    /** Returns the link mode of the specified DDE link.
+        @param nDdePos  Index of the DDE link (does not include other links from link manager).
+        @param rnMode  (out-param) The link mode of the specified DDE link.
+        @return  true = DDE link found, rnMode valid. */
+    bool            GetDdeLinkMode( USHORT nDdePos, BYTE& rnMode ) const;
+    /** Returns the result matrix of the specified DDE link.
+        @param nDdePos  Index of the DDE link (does not include other links from link manager).
+        @return  The result matrix, if the DDE link has been found, 0 otherwise. */
+    const ScMatrix* GetDdeLinkResultMatrix( USHORT nDdePos ) const;
+
+    /** Tries to find a DDE link or creates a new, if not extant.
+        @param pResults  If not 0, sets the matrix as as DDE link result matrix (also for existing links).
+        @return  true = DDE link found; false = Unpredictable error occured, no DDE link created. */
+    bool            CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode, ScMatrix* pResults = NULL );
+    /** Sets a result matrix for the specified DDE link.
+        @param nDdePos  Index of the DDE link (does not include other links from link manager).
+        @param pResults  The array containing all results of the DDE link (intrusive-ref-counted, do not delete).
+        @return  true = DDE link found and matrix set. */
+    bool            SetDdeLinkResultMatrix( USHORT nDdePos, ScMatrix* pResults );
 
 
     SfxBindings*    GetViewBindings();
