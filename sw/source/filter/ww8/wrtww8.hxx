@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:49:43 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,13 +309,11 @@ private:
     String msAltNm;
     bool mbAlt;
     bool mbWrtWW8;
-    String MapFont(const String &rFamilyNm);
 public:
     wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
         rtl_TextEncoding eChrSet, bool bWrtWW8);
     bool Write(SvStream *pTableStram) const;
     friend bool operator < (const wwFont &r1, const wwFont &r2);
-    static bool IsStarSymbol(const String &rFamilyNm);
 };
 
 class wwFontHelper
@@ -415,6 +413,11 @@ private:
     HdFtPlcDrawObj& operator=(const HdFtPlcDrawObj&);
 };
 
+typedef ::std::pair<String, ULONG> aPair;
+typedef std::vector<aPair> SwImplBookmarks;
+typedef std::vector<aPair>::iterator SwImplBookmarksIter;
+
+
 // der WW8-Writer
 class SwWW8Writer: public StgWriter
 {
@@ -487,6 +490,9 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     bool FmtHdFtContainsChapterField(const SwFrmFmt &rFmt) const;
     bool CntntContainsChapterField(const SwFmtCntnt &rCntnt) const;
 public:
+
+    /* implicit bookmark vector containing pairs of node indexes and bookmark names */
+    SwImplBookmarks maImplicitBookmarks;
     sw::Frames maFrames;             // The floating frames in this document
     const SwPageDesc *pAktPageDesc;
     WW8Fib* pFib;
@@ -654,6 +660,10 @@ public:
     WW8_BRC TranslateBorderLine(const SvxBorderLine& pLine,
         USHORT nDist, bool bShadow);
 
+    void ExportOutlineNumbering(BYTE nLvl, const SwNumFmt &rNFmt,
+        const SwFmt &rFmt);
+    void DisallowInheritingOutlineNumbering(const SwFmt &rFmt);
+
     unsigned int GetHdFtIndex() const { return mnHdFtIndex; }
     void SetHdFtIndex(unsigned int nHdFtIndex) { mnHdFtIndex = nHdFtIndex; }
 
@@ -724,6 +734,10 @@ public:
     void GetCurrentItems(WW8Bytes &rItems) const;
     void SetHdFtPageRoot(const SwTxtNode *pNd) { mpTopNodeOfHdFtPage = pNd; }
     const SwTxtNode *GetHdFtPageRoot() const { return mpTopNodeOfHdFtPage; }
+
+    void AddLinkTarget(const String& rURL);
+    void CollectOutlineBookmarks(const SwDoc &rDoc);
+    void AddBookmark(String sBkmkName);
 private:
     //No copying
     SwWW8Writer(const SwWW8Writer&);
