@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-12 07:20:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ FloatingWindow RID_INSERT_CTRL
     Text [ dutch ] = "Invoegen" ;
     Text [ swedish ] = "Infoga" ;
     Text [ danish ] = "Indsæt" ;
-    Text [ portuguese_brazilian ] = "Einfügen" ;
+    Text [ portuguese_brazilian ] = "Einf?en" ;
     Text [ portuguese ] = "Inserir" ;
     Text[ chinese_simplified ] = "²åÈë";
     Text[ russian ] = "Âñòàâèòü";
@@ -231,7 +231,7 @@ FloatingWindow RID_INSERT_OBJ_CTRL
     Text [ swedish ] = "Infoga objekt" ;
     Text [ danish ] = "Indsæt objekt" ;
     Text [ portuguese ] = "Inserir objecto" ;
-    Text [ portuguese_brazilian ] = "Objekt einfügen" ;
+    Text [ portuguese_brazilian ] = "Objekt einf?en" ;
     Text[ chinese_simplified ] = "²åÈë¶ÔÏó";
     Text[ russian ] = "Âñòàâèòü îáúåêò";
     Text[ polish ] = "Wstaw obiekt";
@@ -772,7 +772,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text = "Überschrift" ;
         Text [ English ] = "Outline" ;
         Text [ english_us ] = "Headings" ;
-        Text [ portuguese_brazilian ] = "Überschrift" ;
+        Text [ portuguese_brazilian ] = "?berschrift" ;
         Text [ swedish ] = "Överskrift" ;
         Text [ danish ] = "Overskrift" ;
         Text [ italian ] = "Intestazione" ;
@@ -825,7 +825,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text = "Fußnote" ;
         Text [ English ] = "Footnote" ;
         Text [ english_us ] = "Footnote" ;
-        Text [ portuguese_brazilian ] = "Fußnote" ;
+        Text [ portuguese_brazilian ] = "Fu?note" ;
         Text [ swedish ] = "Fotnot" ;
         Text [ danish ] = "Fodnote" ;
         Text [ italian ] = "Nota a piè pagina" ;
@@ -1068,7 +1068,7 @@ String STR_IMGBTN_TBL_DOWN
     Text = "Nächste Tabelle" ;
     Text [ English ] = "Next Table" ;
     Text [ english_us ] = "Next table" ;
-    Text [ portuguese_brazilian ] = "Nächste Tabelle" ;
+    Text [ portuguese_brazilian ] = "N?chste Tabelle" ;
     Text [ swedish ] = "Nästa tabell" ;
     Text [ danish ] = "Næste tabel" ;
     Text [ italian ] = "Tabella successiva" ;
@@ -1095,7 +1095,7 @@ String STR_IMGBTN_FRM_DOWN
     Text = "Nächster Textrahmen" ;
     Text [ English ] = "Next Frame" ;
     Text [ english_us ] = "Next text frame" ;
-    Text [ portuguese_brazilian ] = "Nächster Textrahmen" ;
+    Text [ portuguese_brazilian ] = "N?chster Textrahmen" ;
     Text [ swedish ] = "Nästa textram" ;
     Text [ danish ] = "Næste tekstboks" ;
     Text [ italian ] = "Cornice successiva" ;
@@ -1122,7 +1122,7 @@ String STR_IMGBTN_PGE_DOWN
     Text = "Nächste Seite" ;
     Text [ English ] = "Next Page" ;
     Text [ english_us ] = "Next page" ;
-    Text [ portuguese_brazilian ] = "Nächste Seite" ;
+    Text [ portuguese_brazilian ] = "N?chste Seite" ;
     Text [ swedish ] = "Nästa sida" ;
     Text [ danish ] = "Næste side" ;
     Text [ italian ] = "Pagina successiva" ;
@@ -1149,7 +1149,7 @@ String STR_IMGBTN_DRW_DOWN
     Text = "Nächstes Zeichenobjekt" ;
     Text [ English ] = "Next drawing" ;
     Text [ english_us ] = "Next drawing" ;
-    Text [ portuguese_brazilian ] = "Nächstes Zeichenobjekt" ;
+    Text [ portuguese_brazilian ] = "N?chstes Zeichenobjekt" ;
     Text [ swedish ] = "Nästa ritobjekt" ;
     Text [ danish ] = "Næste tegneobjekt" ;
     Text [ italian ] = "Oggetto di disegno successivo" ;
@@ -1176,7 +1176,7 @@ String STR_IMGBTN_CTRL_DOWN
     Text = "Nächstes Kontrollfeld" ;
     Text [ English ] = "Next control" ;
     Text [ english_us ] = "Next control" ;
-    Text [ portuguese_brazilian ] = "Nächstes Kontrollfeld" ;
+    Text [ portuguese_brazilian ] = "N?chstes Kontrollfeld" ;
     Text [ swedish ] = "Nästa kontrollfält" ;
     Text [ danish ] = "Næste kontrolelement" ;
     Text [ italian ] = "Campo di controllo successivo" ;
@@ -1203,7 +1203,7 @@ String STR_IMGBTN_REG_DOWN
     Text = "Nächster Bereich" ;
     Text [ English ] = "Next region" ;
     Text [ english_us ] = "Next section" ;
-    Text [ portuguese_brazilian ] = "Nächster Bereich" ;
+    Text [ portuguese_brazilian ] = "N?chster Bereich" ;
     Text [ swedish ] = "Nästa område" ;
     Text [ danish ] = "Næste område" ;
     Text [ italian ] = "Area successiva" ;
@@ -1230,7 +1230,7 @@ String STR_IMGBTN_BKM_DOWN
     Text = "Nächste Textmarke" ;
     Text [ English ] = "Next bookmark" ;
     Text [ english_us ] = "Next bookmark" ;
-    Text [ portuguese_brazilian ] = "Nächste Textmarke" ;
+    Text [ portuguese_brazilian ] = "N?chste Textmarke" ;
     Text [ swedish ] = "Nästa bokmärke" ;
     Text [ danish ] = "Næste tekstmarkering" ;
     Text [ italian ] = "Segnalibro successivo" ;
@@ -1257,7 +1257,7 @@ String STR_IMGBTN_GRF_DOWN
     Text = "Nächste Grafik" ;
     Text [ English ] = "Next graphic" ;
     Text [ english_us ] = "Next picture" ;
-    Text [ portuguese_brazilian ] = "Nächste Grafik" ;
+    Text [ portuguese_brazilian ] = "N?chste Grafik" ;
     Text [ swedish ] = "Nästa grafik" ;
     Text [ danish ] = "Næste grafik" ;
     Text [ italian ] = "Immagine successiva" ;
@@ -1285,7 +1285,7 @@ String STR_IMGBTN_OLE_DOWN
     Text = "Nächstes OLE-Objekt" ;
     Text [ English ] = "Next OLE object" ;
     Text [ english_us ] = "Next OLE object" ;
-    Text [ portuguese_brazilian ] = "Nächstes OLE object" ;
+    Text [ portuguese_brazilian ] = "N?chstes OLE object" ;
     Text [ swedish ] = "Nästa OLE-objekt" ;
     Text [ danish ] = "Næste OLE-objekt" ;
     Text [ italian ] = "Oggetto OLE successivo" ;
@@ -1312,7 +1312,7 @@ String STR_IMGBTN_OUTL_DOWN
     Text = "Nächste Überschrift" ;
     Text [ English ] = "Next outline" ;
     Text [ english_us ] = "Next heading" ;
-    Text [ portuguese_brazilian ] = "Nächste Überschrift" ;
+    Text [ portuguese_brazilian ] = "N?chste ?berschrift" ;
     Text [ swedish ] = "Nästa överskrift" ;
     Text [ danish ] = "Næste overskrift" ;
     Text [ italian ] = "Intestazione successiva" ;
@@ -1339,7 +1339,7 @@ String STR_IMGBTN_SEL_DOWN
     Text = "Nächste Markierung" ;
     Text [ English ] = "Next selection" ;
     Text [ english_us ] = "Next selection" ;
-    Text [ portuguese_brazilian ] = "Nächste Markierung" ;
+    Text [ portuguese_brazilian ] = "N?chste Markierung" ;
     Text [ swedish ] = "Nästa markering" ;
     Text [ danish ] = "Næste markering" ;
     Text [ italian ] = "Selezione successiva" ;
@@ -1366,7 +1366,7 @@ String STR_IMGBTN_FTN_DOWN
     Text = "Nächste Fußnote" ;
     Text [ English ] = "Next Footnote" ;
     Text [ english_us ] = "Next footnote" ;
-    Text [ portuguese_brazilian ] = "Nächste Fußnote" ;
+    Text [ portuguese_brazilian ] = "N?chste Fu?note" ;
     Text [ swedish ] = "Nästa fotnot" ;
     Text [ danish ] = "Næste fodnote" ;
     Text [ italian ] = "Nota a piè pagina successiva" ;
@@ -1393,7 +1393,7 @@ String STR_IMGBTN_MARK_DOWN
     Text = "Nächster Merker" ;
     Text [ English ] = "Next Reminder" ;
     Text [ english_us ] = "Next Reminder" ;
-    Text [ portuguese_brazilian ] = "Nächster Merker" ;
+    Text [ portuguese_brazilian ] = "N?chster Merker" ;
     Text [ swedish ] = "Nästa temporära bokmärke" ;
     Text [ danish ] = "Næste bogmærke" ;
     Text [ italian ] = "Contrassegno successivo" ;
@@ -1420,7 +1420,7 @@ String STR_IMGBTN_POSTIT_DOWN
     Text = "Nächste Notiz" ;
     Text [ English ] = "Next Annotation" ;
     Text [ english_us ] = "Next Note" ;
-    Text [ portuguese_brazilian ] = "Nächste Notiz" ;
+    Text [ portuguese_brazilian ] = "N?chste Notiz" ;
     Text [ swedish ] = "Nästa anteckning" ;
     Text [ danish ] = "Næste note" ;
     Text [ italian ] = "Nota successiva" ;
@@ -1446,7 +1446,7 @@ String STR_IMGBTN_SRCH_REP_DOWN
     Text = "Vorwärts weitersuchen" ;
     Text [ English ] = "Repeat search " ;
     Text [ english_us ] = "Continue search forward" ;
-    Text [ portuguese_brazilian ] = "Vorwärts weitersuchen" ;
+    Text [ portuguese_brazilian ] = "Vorw?rts weitersuchen" ;
     Text [ swedish ] = "Sök vidare framåt" ;
     Text [ danish ] = "Fortsæt søgning fremad" ;
     Text [ italian ] = "Continua a cercare in avanti" ;
@@ -1742,7 +1742,7 @@ String STR_IMGBTN_OUTL_UP
     Text = "Vorige Überschrift" ;
     Text [ English ] = "Previous outline" ;
     Text [ english_us ] = "Previous heading" ;
-    Text [ portuguese_brazilian ] = "Vorige Überschrift" ;
+    Text [ portuguese_brazilian ] = "Vorige ?berschrift" ;
     Text [ swedish ] = "Föregående överskrift" ;
     Text [ danish ] = "Forrige overskrift" ;
     Text [ italian ] = "Intestazione precedente" ;
@@ -1795,7 +1795,7 @@ String STR_IMGBTN_FTN_UP
     Text = "Vorige Fußnote" ;
     Text [ English ] = "Previous Footnote" ;
     Text [ english_us ] = "Previous footnote" ;
-    Text [ portuguese_brazilian ] = "Vorige Fußnote" ;
+    Text [ portuguese_brazilian ] = "Vorige Fu?note" ;
     Text [ swedish ] = "Föregående fotnot" ;
     Text [ danish ] = "Forrige fodnote" ;
     Text [ italian ] = "Nota a piè pagina precedente" ;
@@ -1873,7 +1873,7 @@ String STR_IMGBTN_SRCH_REP_UP
     Text = "Rückwärts weitersuchen" ;
     Text [ English ] = "Repeat search backwards" ;
     Text [ english_us ] = "Continue search backwards" ;
-    Text [ portuguese_brazilian ] = "Rückwärts weitersuchen" ;
+    Text [ portuguese_brazilian ] = "R?kw?rts weitersuchen" ;
     Text [ swedish ] = "Sök vidare bakåt" ;
     Text [ danish ] = "Fortsæt søgning tilbage" ;
     Text [ italian ] = "Cerca all'indietro" ;
