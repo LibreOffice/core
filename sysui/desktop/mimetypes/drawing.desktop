@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=drawing
+Type=MimeType
+Patterns=*.sxd
+MimeType=application/vnd.sun.xml.draw
+Comment=%PRODUCTNAME Drawing
