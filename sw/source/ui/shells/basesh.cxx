@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-30 14:49:11 $
+ *  last change: $Author: tl $ $Date: 2001-04-09 07:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,23 +637,28 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 void SwBaseShell::ExecUndo(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    switch(rReq.GetSlot())
+
+    USHORT nId = rReq.GetSlot(), nCnt = 1;
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    const SfxPoolItem* pItem;
+    if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, FALSE, &pItem ))
+        nCnt = ((SfxUInt16Item*)pItem)->GetValue();
+
+    switch( nId )
     {
         case SID_UNDO:
-            rSh.Do( SwWrtShell::UNDO );
+            rSh.Do( SwWrtShell::UNDO, nCnt );
             break;
 
         case SID_REDO:
-            rSh.Do( SwWrtShell::REDO );
+            rSh.Do( SwWrtShell::REDO, nCnt );
             break;
 
         case SID_REPEAT:
             rSh.Do( SwWrtShell::REPEAT );
             break;
-
         default:
             DBG_ERROR("falscher Dispatcher");
-            return;
     }
 }
 
@@ -672,8 +677,8 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
         {
             case SID_UNDO:
             {
-                if(rSh.GetUndoIds())
-                    rSet.Put(SfxStringItem(nWhich,
+                if( rSh.GetUndoIds() )
+                    rSet.Put( SfxStringItem(nWhich,
                         rSh.GetDoString(SwWrtShell::UNDO)));
                 else
                     rSet.DisableItem(nWhich);
@@ -698,6 +703,28 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
                     rSet.DisableItem(nWhich);
                 break;
             }
+
+            case SID_GETUNDOSTRINGS:
+                if( rSh.GetUndoIds() )
+                {
+                    SfxStringListItem aStrLst( nWhich );
+                    rSh.GetDoStrings( SwWrtShell::UNDO, aStrLst );
+                    rSet.Put( aStrLst );
+                }
+                else
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case SID_GETREDOSTRINGS:
+                if( rSh.GetRedoIds() )
+                {
+                    SfxStringListItem aStrLst( nWhich );
+                    rSh.GetDoStrings( SwWrtShell::REDO, aStrLst );
+                    rSet.Put( aStrLst );
+                }
+                else
+                    rSet.DisableItem( nWhich );
+                break;
         }
         nWhich = aIter.NextWhich();
     }
