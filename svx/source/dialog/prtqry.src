@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtqry.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 13:13:05 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ String RID_SVXSTR_QRY_PRINT_TITLE
     Text[ greek ] = "Εκτύπωση επιλογής";
     Text[ korean ] = "Ό±ΕΓΗΡ Ήόΐ§ ΐΞΌβ";
     Text[ turkish ] = "Seηilen aralύk yazdύrύlύyor";
+    Text[ catalan ] = "Imprimir la selecciσn";
 };
 String RID_SVXSTR_QRY_PRINT_MSG
 {
@@ -107,6 +108,7 @@ String RID_SVXSTR_QRY_PRINT_MSG
     Text[ greek ] = "Θέλετε να εκτυπώσετε την επιλεγμένη περιοχή ή ολόκληρο το έγγραφο;";
     Text[ korean ] = "Ό±ΕΓΗΡ Ήόΐ§ ¶Η΄Β Ή®Ό­ ΐόΓΌΈ¦ ΐΞΌβΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Seηilen aralύk ya da belgenin tόmό mό yazdύrύlsύn?";
+    Text[ catalan ] = "ΏDesea imprimir solo la selecciσn o todo el documento?";
 };
 String RID_SVXSTR_QRY_PRINT_ALL
 {
@@ -130,6 +132,7 @@ String RID_SVXSTR_QRY_PRINT_ALL
     Text[ greek ] = "Όλ~α";
     Text[ korean ] = "ΐόΓΌ(~A)";
     Text[ turkish ] = "~Tόmό";
+    Text[ catalan ] = "~Todo";
 };
 String RID_SVXSTR_QRY_PRINT_SELECTION
 {
@@ -153,5 +156,6 @@ String RID_SVXSTR_QRY_PRINT_SELECTION
     Text[ greek ] = "Επιλογή";
     Text[ korean ] = "Ό±ΕΓΗΡ Ήόΐ§(~S)";
     Text[ turkish ] = "~Seηilen aralύk";
+    Text[ catalan ] = "Sele~cciσn";
 };
 
