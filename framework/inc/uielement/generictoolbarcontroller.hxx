@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 17:55:02 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,8 @@ class GenericToolbarController : public svt::ToolboxController
     private:
         ToolBar*        m_pToolbar;
         sal_uInt16      m_nID;
-        sal_Bool        m_bEnumCommand;
+        sal_Bool        m_bEnumCommand : 1,
+                        m_bMadeInvisible : 1;
         rtl::OUString   m_aEnumCommand;
 };
 
