@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:40:34 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 10:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2792,8 +2792,14 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
             long nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
             if ( nWish != nPrtWidth )
             {
-                nWidth *= nPrtWidth;
-                nWidth /= nWish;
+                // #i12092# use double instead of long,
+                // otherwise this cut lead to overflows
+                double nTmpWidth = nWidth;
+                nTmpWidth *= nPrtWidth;
+                nTmpWidth /= nWish;
+                nWidth = (SwTwips)nTmpWidth;
+//                nWidth *= nPrtWidth;
+//              nWidth /= nWish;
             }
         }
         else
