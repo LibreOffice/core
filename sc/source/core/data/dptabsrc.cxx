@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-11 14:12:22 $
+ *  last change: $Author: er $ $Date: 2001-02-02 12:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,13 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+
+#ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
+#include <unotools/calendarwrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_CALENDARDISPLAYINDEX_HPP_
+#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
+#endif
 
 using namespace com::sun::star;
 
@@ -1844,15 +1851,20 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                 }
                 else if ( nHier == SC_DAPI_HIERARCHY_WEEK && nLev == SC_DAPI_LEVEL_WEEKDAY )
                 {
-                    nVal = nIndex;              // enum DayOfWeek is 0-based
-                    aName = ScGlobal::pScInternational->GetDayText((DayOfWeek)nVal);
+                    nVal = nIndex;              // DayOfWeek is 0-based
+                    aName = ScGlobal::pCalendar->getDisplayName(
+                        ::com::sun::star::i18n::CalendarDisplayIndex::DAY,
+                        nVal, 0 );
+                }
+                else if ( nHier == SC_DAPI_HIERARCHY_QUARTER && nLev == SC_DAPI_LEVEL_MONTH )
+                {
+                    nVal = nIndex;              // Month is 0-based
+                    aName = ScGlobal::pCalendar->getDisplayName(
+                        ::com::sun::star::i18n::CalendarDisplayIndex::MONTH,
+                        nVal, 0 );
                 }
                 else
-                {
-                    nVal = nIndex + 1;          // Quarter, Month, Day, Week are 1-based
-                    if ( nHier == SC_DAPI_HIERARCHY_QUARTER && nLev == SC_DAPI_LEVEL_MONTH )
-                        aName = ScGlobal::pScInternational->GetMonthText((USHORT)nVal);
-                }
+                    nVal = nIndex + 1;          // Quarter, Day, Week are 1-based
 
                 if ( !aName.Len() )
                     aName = String::CreateFromInt32(nVal);

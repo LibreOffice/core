@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optutil.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-02 19:08:49 $
+ *  last change: $Author: er $ $Date: 2001-02-02 12:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,11 @@
 #include <vcl/svapp.hxx>
 
 #include "optutil.hxx"
-#include "global.hxx"       // for pScInternational
+#include "global.hxx"       // for pLocaleData
+
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 
 //------------------------------------------------------------------
 
@@ -78,7 +82,7 @@ BOOL ScOptionsUtil::IsMetricSystem()
     //! which language should be used here - system language or installed office language?
 
 //  MeasurementSystem eSys = Application::GetAppInternational().GetMeasurementSystem();
-    MeasurementSystem eSys = ScGlobal::pScInternational->GetMeasurementSystem();
+    MeasurementSystem eSys = ScGlobal::pLocaleData->getMeasurementSystemEnum();
 
     return ( eSys == MEASURE_METRIC );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userlist.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:19 $
+ *  last change: $Author: er $ $Date: 2001-02-02 12:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 
 #include "global.hxx"
 #include "userlist.hxx"
+
+#ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
+#include <unotools/calendarwrapper.hxx>
+#endif
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -228,27 +232,40 @@ ScUserList::ScUserList(USHORT nLim, USHORT nDel) :
 {
     String  sMonthShort, sMonthLong, sDayShort, sDayLong;
     sal_Unicode cDelimiter = ScGlobal::cListDelimiter;
-    USHORT  i;
+    sal_Int32 i, nCount;
 
-    for (i = 1; i < 12; i++)
-    {
-        sMonthShort += ScGlobal::pScInternational->GetAbbrevMonthText(i);
-        sMonthShort += cDelimiter;
-        sMonthLong  += ScGlobal::pScInternational->GetMonthText(i);
-        sMonthLong  += cDelimiter;
-    }
-    sMonthShort += ScGlobal::pScInternational->GetAbbrevMonthText(i);
-    sMonthLong  += ScGlobal::pScInternational->GetMonthText(i);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem >
+        xCal = ScGlobal::pCalendar->getMonths();
 
-    for (i = 0; i < 6; i++)
+    if ( xCal.getLength() )
     {
-        sDayShort += ScGlobal::pScInternational->GetAbbrevDayText((DayOfWeek)i);
-        sDayShort += cDelimiter;
-        sDayLong  += ScGlobal::pScInternational->GetDayText((DayOfWeek)i);
-        sDayLong  += cDelimiter;
+        nCount = xCal.getLength() - 1;
+        for (i = 0; i < nCount; i++)
+        {
+            sMonthShort += String( xCal[i].AbbrevName );
+            sMonthShort += cDelimiter;
+            sMonthLong  += String( xCal[i].FullName );
+            sMonthLong  += cDelimiter;
+        }
+        sMonthShort += String( xCal[i].AbbrevName );
+        sMonthLong  += String( xCal[i].FullName );
     }
-    sDayShort += ScGlobal::pScInternational->GetAbbrevDayText((DayOfWeek)i);
-    sDayLong  += ScGlobal::pScInternational->GetDayText((DayOfWeek)i);
+
+    xCal = ScGlobal::pCalendar->getDays();
+
+    if ( xCal.getLength() )
+    {
+        nCount = xCal.getLength() - 1;
+        for (i = 0; i < nCount; i++)
+        {
+            sDayShort += String( xCal[i].AbbrevName );
+            sDayShort += cDelimiter;
+            sDayLong  += String( xCal[i].FullName );
+            sDayLong  += cDelimiter;
+        }
+        sDayShort += String( xCal[i].AbbrevName );
+        sDayLong  += String( xCal[i].FullName );
+    }
 
     Insert( new ScUserListData( sDayShort ));
     Insert( new ScUserListData( sDayLong ));
