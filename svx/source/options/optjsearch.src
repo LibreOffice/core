@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:40:55 $
+ *  last change: $Author: tl $ $Date: 2001-03-16 08:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,26 +375,26 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 56 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Hyu/iyu, byu/vyu" ;
-        Text [ ENGLISH ] = "Match hyu/iyu, byu/vyu" ;
-        Text[ english_us ] = "Match hyu/iyu, byu/vyu";
-        Text[ portuguese ] = "Match hyu/iyu, byu/vyu";
-        Text[ russian ] = "Hyu/iyu, byu/vyu";
-        Text[ greek ] = "Hyu/iyu, byu/vyu";
-        Text[ dutch ] = "Match hyu/iyu, byu/vyu";
-        Text[ french ] = "Match hyu/iyu, byu/vyu";
-        Text[ spanish ] = "Match hyu/iyu, byu/vyu";
-        Text[ italian ] = "Match hyu/iyu, byu/vyu";
-        Text[ danish ] = "Match hyu/iyu, byu/vyu";
-        Text[ swedish ] = "Match hyu/iyu, byu/vyu";
-        Text[ polish ] = "Match hyu/iyu, byu/vyu";
-        Text[ portuguese_brazilian ] = "Match hyu/iyu, byu/vyu";
-        Text[ japanese ] = "Match hyu/iyu, byu/vyu";
-        Text[ korean ] = "Match hyu/iyu, byu/vyu";
-        Text[ chinese_simplified ] = "Match hyu/iyu, byu/vyu";
-        Text[ chinese_traditional ] = "Match hyu/iyu, byu/vyu";
-        Text[ turkish ] = "Match hyu/iyu, byu/vyu";
-        Text[ arabic ] = "Match hyu/iyu, byu/vyu";
+        Text = "Hyu/fyu, byu/vyu" ;
+        Text [ ENGLISH ] = "Match hyu/fyu, byu/vyu" ;
+        Text[ english_us ] = "Match hyu/fyu, byu/vyu";
+        Text[ portuguese ] = "Match hyu/fyu, byu/vyu";
+        Text[ russian ] = "Hyu/fyu, byu/vyu";
+        Text[ greek ] = "Hyu/fyu, byu/vyu";
+        Text[ dutch ] = "Match hyu/fyu, byu/vyu";
+        Text[ french ] = "Match hyu/fyu, byu/vyu";
+        Text[ spanish ] = "Match hyu/fyu, byu/vyu";
+        Text[ italian ] = "Match hyu/fyu, byu/vyu";
+        Text[ danish ] = "Match hyu/fyu, byu/vyu";
+        Text[ swedish ] = "Match hyu/fyu, byu/vyu";
+        Text[ polish ] = "Match hyu/fyu, byu/vyu";
+        Text[ portuguese_brazilian ] = "Match hyu/fyu, byu/vyu";
+        Text[ japanese ] = "Match hyu/fyu, byu/vyu";
+        Text[ korean ] = "Match hyu/fyu, byu/vyu";
+        Text[ chinese_simplified ] = "Match hyu/fyu, byu/vyu";
+        Text[ chinese_traditional ] = "Match hyu/fyu, byu/vyu";
+        Text[ turkish ] = "Match hyu/fyu, byu/vyu";
+        Text[ arabic ] = "Match hyu/fyu, byu/vyu";
     };
     CheckBox CB_MATCH_SESHE_ZEJE
     {
