@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ORootElementGroupInfoAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:37:50 $
+ *  last change:$Date: 2003-12-11 11:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,11 @@ import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.XChangesBatch;
 
 
 public class ORootElementGroupInfoAccess extends TestCase {
@@ -105,6 +107,8 @@ public class ORootElementGroupInfoAccess extends TestCase {
         nodepath.State = PropertyState.DEFAULT_VALUE;
         nodeArgs[0] = nodepath;
 
+        XInterface changeView = null;
+        XInterface alternateObject = null;
         try {
             XInterface Provider = (XInterface) ((XMultiServiceFactory)tParam.getMSF())
                                                      .createInstance("com.sun.star.comp.configuration.ConfigurationProvider");
@@ -112,6 +116,17 @@ public class ORootElementGroupInfoAccess extends TestCase {
                                                 XMultiServiceFactory.class,
                                                 Provider);
             oObj = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
+                                                           pMSF.createInstanceWithArguments(
+                                                                   "com.sun.star.configuration.ConfigurationAccess",
+                                                                   nodeArgs));
+            // create a view on a different object that can change something, so listeners can be triggered.
+            // this is done for XContainer test
+            nodepath.Value = "org.openoffice.Office.Common/Internal";
+            changeView =  (XNameReplace) UnoRuntime.queryInterface(XNameReplace.class,
+                                                           pMSF.createInstanceWithArguments(
+                                                                   "com.sun.star.configuration.ConfigurationUpdateAccess",
+                                                                   nodeArgs));
+            alternateObject = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
                                                            pMSF.createInstanceWithArguments(
                                                                    "com.sun.star.configuration.ConfigurationAccess",
                                                                    nodeArgs));
@@ -148,8 +163,42 @@ public class ORootElementGroupInfoAccess extends TestCase {
 
         tEnv.addObjRelation("ElementName", "Accessibility");
 
+        tEnv.addObjRelation("XLocalizable.ReadOnly", "Locale of ORootElementGroupInfoAccess is read Only");
         tEnv.addObjRelation("allReadOnly",
                             "all Properties of ORootElementGroupInfoAccess are read Only");
+
+        tEnv.addObjRelation("XContainer.NewValue", "SenselessString");
+        tEnv.addObjRelation("XContainer.ElementName", "CurrentTempURL");
+        tEnv.addObjRelation("XContainer.Container", changeView);
+        tEnv.addObjRelation("XContainer.AlternateObject", alternateObject);
+
+        tEnv.addObjRelation("XChangesNotifier.ChangesBatch", (XChangesBatch)UnoRuntime.queryInterface(
+                                                                            XChangesBatch.class, changeView));
+
+        // set a new temp directory: use java.io.tmpdir as substitute, for XChangesNotifier test
+        // get a XPropertySet from the sub element
+        XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, changeView);
+        String newTempURL = util.utils.getFullURL(System.getProperty("java.io.tmpdir"));
+        String curTempURL = "";
+        try {
+            curTempURL = (String)xProp.getPropertyValue("CurrentTempURL");
+        }
+        catch(Exception e) {
+            log.println("Cannot get property for XChangesNotifier test: this test is bound to fail.");
+            e.printStackTrace((PrintWriter)log);
+        }
+        // fallback 1: get user home
+        if (newTempURL.equalsIgnoreCase(curTempURL)) {
+            newTempURL = util.utils.getFullURL(System.getProperty("user.home"));
+            // fallback 2: get user dir
+            if (newTempURL.equalsIgnoreCase(curTempURL)) {
+                newTempURL = util.utils.getFullURL(System.getProperty("user.dir"));
+            }
+        }
+        tEnv.addObjRelation("XChangesNotifier.ChangeElement", newTempURL);
+        tEnv.addObjRelation("XChangesNotifier.OriginalElement", curTempURL);
+        tEnv.addObjRelation("XChangesNotifier.PropertyName", "CurrentTempURL");
+        tEnv.addObjRelation("XChangesNotifier.PropertySet", xProp);
 
         tEnv.addObjRelation("expectedName", "OfficeObjects");
         tEnv.addObjRelation("HierachicalName", "/org.openoffice");

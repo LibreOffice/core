@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OInnerValueSetUpdateAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:37:39 $
+ *  last change:$Date: 2003-12-11 11:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ import util.utils;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -147,8 +148,12 @@ public class OInnerValueSetUpdateAccess extends TestCase {
         tEnv.addObjRelation("cannotSwitchParent",
                             "configmgr: BasicElement::setParent: cannot move Entry");
 
-        tEnv.addObjRelation("INSTANCE1", "NewOne");
+        String overwriteString = "NewOne";
+        tEnv.addObjRelation("INSTANCE1", overwriteString);
         tEnv.addObjRelation("NAMEREPLACE", pNames[1]);
+        // for XContainer
+        tEnv.addObjRelation("INSTANCE", overwriteString);
+
         tEnv.addObjRelation("HierachicalName", "/org.openoffice.Office");
         tEnv.addObjRelation("ElementName", "file");
         tEnv.addObjRelation("NoSetName", "OInnerValueSetInfoAccess");

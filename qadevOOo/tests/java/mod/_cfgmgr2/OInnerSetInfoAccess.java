@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OInnerSetInfoAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:37:23 $
+ *  last change:$Date: 2003-12-11 11:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@ import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameReplace;
+import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -96,8 +98,6 @@ public class OInnerSetInfoAccess extends TestCase {
                                                     PrintWriter log) {
         XInterface oObj = null;
         Object instance = null;
-        Object instance1 = null;
-        Object instance2 = null;
         log.println("creating the Environment");
 
         PropertyValue[] nodeArgs = new PropertyValue[1];
@@ -108,6 +108,7 @@ public class OInnerSetInfoAccess extends TestCase {
         nodepath.State = PropertyState.DEFAULT_VALUE;
         nodeArgs[0] = nodepath;
 
+        XNameReplace updateAccess = null;
         try {
             XInterface Provider = (XInterface) ((XMultiServiceFactory)tParam.getMSF())
                                                      .createInstance("com.sun.star.comp.configuration.ConfigurationProvider");
@@ -120,9 +121,20 @@ public class OInnerSetInfoAccess extends TestCase {
                                                             "com.sun.star.configuration.ConfigurationAccess",
                                                             nodeArgs));
             oObj = (XInterface) names.getByHierarchicalName("Jobs");
+
+            // create a changeable view on the element for XContainer interface
+            XNameAccess access = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, pMSF.createInstanceWithArguments(
+                                "com.sun.star.configuration.ConfigurationUpdateAccess", nodeArgs));
+            updateAccess = (XNameReplace) UnoRuntime.queryInterface(XNameReplace.class, access.getByName("Jobs"));
+
+            XSingleServiceFactory jobsFac = (XSingleServiceFactory) UnoRuntime.queryInterface(
+                                                    XSingleServiceFactory.class,
+                                                    updateAccess);
+            instance = jobsFac.createInstance();
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();
         }
+
 
         log.println("ImplementationName: " + utils.getImplName(oObj));
 
@@ -138,9 +150,12 @@ public class OInnerSetInfoAccess extends TestCase {
         tEnv.addObjRelation("cannotSwitchParent",
                             "configmgr: BasicElement::setParent: cannot move Entry");
 
+        tEnv.addObjRelation("XContainer.Container", updateAccess) ;
+        tEnv.addObjRelation("XContainer.NewValue", instance);
+        tEnv.addObjRelation("XContainer.ElementName", pNames[0]);
+
         tEnv.addObjRelation("expectedName", pNames[0]);
         tEnv.addObjRelation("HierachicalName", "/org.openoffice.Office");
-        tEnv.addObjRelation("NAMEREPLACE", pNames[0]);
         tEnv.addObjRelation("NoSetName", "OInnerTreeSetInfoAccess");
         tEnv.addObjRelation("TemplateName", "org.openoffice.Office.Jobs/Job");
 
