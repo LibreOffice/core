@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1234,7 +1234,7 @@ void SvPropertyBox::Resize()
 
     USHORT nCount=aTabControl.GetPageCount();
 
-    aSize=aTabControl.GetOutputSizePixel();
+    aSize=aTabControl.GetTabPageSizePixel();
     for(USHORT i=1;i<=nCount;i++)
     {
         SvTabPageForProperties* pPage=(SvTabPageForProperties*)
@@ -1250,7 +1250,7 @@ USHORT SvPropertyBox::AppendPage( const String & rText )
     USHORT nId=aTabControl.GetPageCount()+1;
     aTabControl.InsertPage( nId,rText);
     SvTabPageForProperties* pPage=new SvTabPageForProperties(&aTabControl);
-    pPage->SetSizePixel(aTabControl.GetOutputSizePixel());
+    pPage->SetSizePixel(aTabControl.GetTabPageSizePixel());
     pPage->GetTheListBox()->SetController(pThePropDataCtr);
     aTabControl.SetTabPage( nId, pPage);
     aTabControl.SetCurPageId(nId);
