@@ -19530,3 +19530,5 @@ _TI2?AVWrappedTargetException@lang@star@sun@com@@
 ?s_pType_com_sun_star_sdbc_SQLException@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBVSQLException@sdbc@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?s_pType_com_sun_star_sdbc_SQLWarning@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBVSQLWarning@sdbc@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ??0DbCellControl@@QAE@AAVDbGridColumn@@E@Z
+??C?$Reference@VIDataAccessTypeConversion@simple@connectivity@@@rtl@@QBAPAVIDataAccessTypeConversion@simple@connectivity@@XZ
+??0?$Reference@VXExecutableDialog@dialogs@ui@star@sun@com@@@uno@star@sun@com@@QAE@ABVBaseReference@1234@W4__UnoReference_Query@1234@@Z
