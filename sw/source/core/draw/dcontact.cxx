@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:37:03 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,94 +1202,115 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
         case SDRUSERCALL_CHILD_INSERTED :
         case SDRUSERCALL_CHILD_REMOVED :
         {
-            const Rectangle& aOldObjRect =
-                        static_cast<const SwAnchoredDrawObject*>(
-                                    GetAnchoredObj( &rObj ))->GetLastObjRect();
+            // --> OD 2004-08-04 #i31698# - improvement:
+            // get instance <SwAnchoredDrawObject> only once
+            const SwAnchoredDrawObject* pAnchoredDrawObj =
+                static_cast<const SwAnchoredDrawObject*>( GetAnchoredObj( &rObj ) );
+            // <--
+            const Rectangle& aOldObjRect = pAnchoredDrawObj->GetLastObjRect();
             // OD 2004-04-06 #i26791# - adjust positioning and alignment attributes,
             // if positioning of drawing object isn't in progress.
-            if ( !GetAnchoredObj( &rObj )->IsPositioningInProgress() )
+            if ( !pAnchoredDrawObj->IsPositioningInProgress() )
             {
-                const SwFrm* pAnchorFrm = GetAnchorFrm( &rObj );
-                if ( pAnchorFrm )
+                // --> OD 2004-08-04 #i31698# - determine layout direction
+                // via draw frame format.
+                SwFrmFmt::tLayoutDir eLayoutDir =
+                                pAnchoredDrawObj->GetFrmFmt().GetLayoutDir();
+                // <--
+                // use geometry of drawing object
+                SwRect aObjRect( rObj.GetSnapRect() );
+                // If drawing object is a member of a group, the adjustment
+                // of the positioning and the alignment attributes has to
+                // be done for the top group object.
+                if ( rObj.GetUpGroup() )
                 {
-                    const bool bVert = pAnchorFrm->IsVertical();
-                    const bool bR2L = pAnchorFrm->IsRightToLeft();
+                    const SdrObject* pGroupObj = rObj.GetUpGroup();
+                    while ( pGroupObj->GetUpGroup() )
+                    {
+                        pGroupObj = pGroupObj->GetUpGroup();
+                    }
                     // use geometry of drawing object
-                    SwRect aObjRect( rObj.GetSnapRect() );
-                    // If drawing object is a member of a group, the adjustment
-                    // of the positioning and the alignment attributes has to
-                    // be done for the top group object.
-                    if ( rObj.GetUpGroup() )
-                    {
-                        const SdrObject* pGroupObj = rObj.GetUpGroup();
-                        while ( pGroupObj->GetUpGroup() )
-                        {
-                            pGroupObj = pGroupObj->GetUpGroup();
-                        }
-                        // use geometry of drawing object
-                        aObjRect = pGroupObj->GetSnapRect();
-                    }
-                    SwTwips nXPosDiff(0L);
-                    SwTwips nYPosDiff(0L);
-                    if ( bVert )
-                    {
-                        nXPosDiff = aObjRect.Top() - aOldObjRect.Top();
-                        nYPosDiff = aOldObjRect.Right() - aObjRect.Right();
-                    }
-                    else if ( bR2L )
-                    {
-                        nXPosDiff = aOldObjRect.Right() - aObjRect.Right();
-                        nYPosDiff = aObjRect.Top() - aOldObjRect.Top();
-                    }
-                    else
+                    aObjRect = pGroupObj->GetSnapRect();
+                }
+                SwTwips nXPosDiff(0L);
+                SwTwips nYPosDiff(0L);
+                switch ( eLayoutDir )
+                {
+                    case SwFrmFmt::HORI_L2R:
                     {
                         nXPosDiff = aObjRect.Left() - aOldObjRect.Left();
                         nYPosDiff = aObjRect.Top() - aOldObjRect.Top();
                     }
-                    SfxItemSet aSet( GetFmt()->GetDoc()->GetAttrPool(),
-                                     RES_VERT_ORIENT, RES_HORI_ORIENT, 0 );
-                    const SwFmtVertOrient& rVert = GetFmt()->GetVertOrient();
-                    if ( nYPosDiff != 0 )
+                    break;
+                    case SwFrmFmt::HORI_R2L:
                     {
-
-                        if ( rVert.GetRelationOrient() == REL_CHAR ||
-                             rVert.GetRelationOrient() == REL_VERT_LINE )
-                        {
-                            nYPosDiff = -nYPosDiff;
-                        }
-                        aSet.Put( SwFmtVertOrient( rVert.GetPos()+nYPosDiff,
-                                                   VERT_NONE,
-                                                   rVert.GetRelationOrient() ) );
+                        nXPosDiff = aOldObjRect.Right() - aObjRect.Right();
+                        nYPosDiff = aObjRect.Top() - aOldObjRect.Top();
                     }
-
-                    const SwFmtHoriOrient& rHori = GetFmt()->GetHoriOrient();
-                    if ( !ObjAnchoredAsChar() && nXPosDiff != 0 )
+                    break;
+                    case SwFrmFmt::VERT_R2L:
                     {
-                        aSet.Put( SwFmtHoriOrient( rHori.GetPos()+nXPosDiff,
-                                                   HORI_NONE,
-                                                   rHori.GetRelationOrient() ) );
+                        nXPosDiff = aObjRect.Top() - aOldObjRect.Top();
+                        nYPosDiff = aOldObjRect.Right() - aObjRect.Right();
                     }
-
-                    if ( nYPosDiff ||
-                         ( !ObjAnchoredAsChar() && nXPosDiff != 0 ) )
+                    break;
+                    default:
                     {
-                        GetFmt()->GetDoc()->SetFlyFrmAttr( *(GetFmt()), aSet );
-                        // keep new object rectangle, to avoid multiple
-                        // changes of the attributes by multiple event from
-                        // the drawing layer - e.g. group objects and its members
-                        static_cast<SwAnchoredDrawObject*>(
-                            GetAnchoredObj( &(const_cast<SdrObject&>(rObj) )))
-                                ->LastObjRect() = aObjRect.SVRect();
-                    }
-                    else if ( aObjRect.SSize() != aOldObjRect.GetSize() )
-                    {
-                        _InvalidateObjs();
+                        ASSERT( false,
+                                "<SwDrawContact::_Changed(..)> - unsupported layout direction" );
                     }
                 }
-                else
+                SfxItemSet aSet( GetFmt()->GetDoc()->GetAttrPool(),
+                                 RES_VERT_ORIENT, RES_HORI_ORIENT, 0 );
+                const SwFmtVertOrient& rVert = GetFmt()->GetVertOrient();
+                if ( nYPosDiff != 0 )
                 {
-                    static_cast<SwAnchoredDrawObject*>(
-                            GetAnchoredObj( GetMaster() ))->SetPositioningAttr();
+
+                    if ( rVert.GetRelationOrient() == REL_CHAR ||
+                         rVert.GetRelationOrient() == REL_VERT_LINE )
+                    {
+                        nYPosDiff = -nYPosDiff;
+                    }
+                    // --> OD 2004-08-04 #i31698# - don't change orientation,
+                    // if drawing object isn't yet attached to a anchor frame
+                    SwVertOrient eVertOrient(
+                            pAnchoredDrawObj->NotYetAttachedToAnchorFrm()
+                            ? rVert.GetVertOrient()
+                            : VERT_NONE );
+                    // <--
+                    aSet.Put( SwFmtVertOrient( rVert.GetPos()+nYPosDiff,
+                                               eVertOrient,
+                                               rVert.GetRelationOrient() ) );
+                }
+
+                const SwFmtHoriOrient& rHori = GetFmt()->GetHoriOrient();
+                if ( !ObjAnchoredAsChar() && nXPosDiff != 0 )
+                {
+                    // --> OD 2004-08-04 #i31698# - don't change orientation,
+                    // if drawing object isn't yet attached to a anchor frame
+                    SwHoriOrient eHoriOrient(
+                            pAnchoredDrawObj->NotYetAttachedToAnchorFrm()
+                            ? rHori.GetHoriOrient()
+                            : HORI_NONE );
+                    // <--
+                    aSet.Put( SwFmtHoriOrient( rHori.GetPos()+nXPosDiff,
+                                               eHoriOrient,
+                                               rHori.GetRelationOrient() ) );
+                }
+
+                if ( nYPosDiff ||
+                     ( !ObjAnchoredAsChar() && nXPosDiff != 0 ) )
+                {
+                    GetFmt()->GetDoc()->SetFlyFrmAttr( *(GetFmt()), aSet );
+                    // keep new object rectangle, to avoid multiple
+                    // changes of the attributes by multiple event from
+                    // the drawing layer - e.g. group objects and its members
+                    const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)
+                                    ->LastObjRect() = aObjRect.SVRect();
+                }
+                else if ( aObjRect.SSize() != aOldObjRect.GetSize() )
+                {
+                    _InvalidateObjs();
                 }
             }
             if ( bNotify )
