@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourcehandling.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:00:49 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 08:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@ namespace abp
 
         /// creates a new MORK data source
         ODataSource createNewMORK( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+
+        /// creates a new Evolution data source
+        ODataSource createNewEvolution( const ::rtl::OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new LDAP data source
         ODataSource createNewLDAP( const ::rtl::OUString& _rName ) SAL_THROW (( ));
