@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_resource.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:52:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #if ! defined INCLUDED_DP_RESOURCE_H
 #define INCLUDED_DP_RESOURCE_H
 
-#include "vos/mutex.hxx"
 #include "tools/resmgr.hxx"
 #include "tools/string.hxx"
 #include "tools/resid.hxx"
@@ -73,9 +72,6 @@
 
 namespace dp_misc {
 
-// xxx todo: remove when PL has inserted res mgr mutex in tools:
-extern ::vos::IMutex * g_pResMgrMutex;
-
 //==============================================================================
 ResId getResId( USHORT id );
 
@@ -84,8 +80,8 @@ String getResourceString( USHORT id );
 
 template <typename Unique, USHORT id>
 struct StaticResourceString :
-        public rtl::StaticWithInit<const rtl::OUString, Unique> {
-    const rtl::OUString operator () () { return getResourceString(id); }
+        public ::rtl::StaticWithInit<const ::rtl::OUString, Unique> {
+    const ::rtl::OUString operator () () { return getResourceString(id); }
 };
 
 //==============================================================================
