@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:17:47 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,13 +698,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                 ASSERT( FALSE, "Hey, Joe: Where's my Null Pen?" );
                 GetOut()->SetLineColor( Color(COL_TRANSPARENT) );
             }
-/*          if( PEN_NULL != GetOut()->GetPen().GetStyle() )
-            {
-                ASSERT( FALSE, "Hey, Joe: Where's my Null Pen?" );
-                Pen aPen( PEN_NULL );
-                GetOut()->SetPen( aPen );
-            }
-*/#endif
+#endif
         }
     }
 
