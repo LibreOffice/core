@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 12:54:05 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 13:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1582,11 +1582,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
                         case etQuery:
                         case etQueryContainer:
                         {
-#if SUPD < 631
-                            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
-#else
                             TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-#endif
                             aReturn.bEnabled = aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
                             break;
                         }
@@ -1720,11 +1716,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
         case ID_BROWSER_PASTE:
             if(m_pTreeView->HasChildPathFocus())
             {
-#if SUPD<631
-                TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
-#else
                 TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-#endif
                 SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
                 EntryType eType = getEntryType(pEntry);
                 switch(eType)
@@ -1753,11 +1745,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
                 pTransfer       = implCopyObject( pEntry, eType == etQuery ? CommandType::QUERY : CommandType::TABLE);
                 aEnsureDelete   = pTransfer;
                 if (pTransfer)
-#if SUPD<631
-                    pTransfer->CopyToClipboard();
-#else
                     pTransfer->CopyToClipboard(getView());
-#endif
             }
             else if (getBrowserView() && getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing())
             {
@@ -3460,6 +3448,9 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             case etQueryContainer:
             case etQuery:
             {
+                TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
+                sal_Bool bPasteAble = aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
+                aContextMenu.EnableItem(ID_TREE_QUERY_PASTE, bPasteAble);
                 // 3.2 actions on existing queries
                 aContextMenu.EnableItem(ID_EDIT_QUERY_DESIGN,   etQuery == eType);
                 aContextMenu.EnableItem(ID_DROP_QUERY,          etQuery == eType);
@@ -3549,11 +3540,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             TransferableHelper* pTransfer = implCopyObject( pEntry, CommandType::QUERY );
             Reference< XTransferable> aEnsureDelete = pTransfer;
             if (pTransfer)
-#if SUPD<631
-                pTransfer->CopyToClipboard();
-#else
                 pTransfer->CopyToClipboard(getView());
-#endif
         }
         break;
 
@@ -3564,22 +3551,21 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             Reference< XTransferable> aEnsureDelete = pTransfer;
 
             if (pTransfer)
-#if SUPD<631
-                pTransfer->CopyToClipboard();
-#else
                 pTransfer->CopyToClipboard(getView());
-#endif
+        }
+        break;
+
+        case ID_TREE_QUERY_PASTE:
+        {
+            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
+            implPasteQuery( pEntry, aTransferData );
         }
         break;
 
         case ID_TREE_TABLE_PASTE:
         case ID_TREE_VIEW_PASTE:
         {
-#if SUPD<631
-            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
-#else
             TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-#endif
             implPasteTable( pEntry, aTransferData );
         }
         break;

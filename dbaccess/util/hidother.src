@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-25 08:23:11 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 13:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,10 +263,14 @@ hidspecial HID_DSBROWSER_BOOKMARKSELECTED               { HelpId = HID_DSBROWSER
 hidspecial HID_DSBROWSER_DISCONNECTING                  { HelpId = HID_DSBROWSER_DISCONNECTING ; };
 hidspecial HID_DSBROWSER_DIRECTSQL                      { HelpId = HID_DSBROWSER_DIRECTSQL   ; };
 hidspecial HID_DSADMIN_LDAP_ROWCOUNT                    { HelpId = HID_DSADMIN_LDAP_ROWCOUNT     ; };
+hidspecial HID_BROWSER_QUERY_PASTE                      { HelpId = HID_BROWSER_QUERY_PASTE   ; };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2001/06/25 08:23:11  oj
+ *  #88699# new helpids
+ *
  *  Revision 1.29  2001/06/20 06:56:39  oj
  *  #88434# new helpids for useradmin page
  *
