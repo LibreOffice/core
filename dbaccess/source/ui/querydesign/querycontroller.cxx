@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 11:00:09 $
+ *  last change: $Author: fs $ $Date: 2001-06-08 08:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,7 +524,10 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
 
         for(;pBegin != pEnd;++pBegin)
         {
-            if((*pBegin >>= aValue) && aValue.Name == PROPERTY_ACTIVECONNECTION)
+            if (!(*pBegin >>= aValue))
+                continue;
+
+            if (aValue.Name == PROPERTY_ACTIVECONNECTION)
             {
                 ::cppu::extractInterface(m_xConnection,aValue.Value);
                 // be notified when connection is in disposing
@@ -831,12 +834,20 @@ void OQueryController::setModified(sal_Bool _bModified)
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(RuntimeException)
 {
-    if(Reference<XFrame>(Source.Source,UNO_QUERY).is())
-    { // the beamer was closed so resize our window
-        m_pWindow->hideBeamer();
+    Reference< XFrame > xSource(Source.Source, UNO_QUERY);
+    if (xSource.is() && m_pWindow)
+    {
+        if (xSource.get() == m_xCurrentFrame.get())
+        {   // our frame is beeing disposed -> close the preview window (if we have one)
+            ::comphelper::disposeComponent(m_pWindow->getPreviewFrame());
+        }
+        else if (xSource.get() == m_pWindow->getPreviewFrame().get())
+        {
+            m_pWindow->disposingPreview();
+        }
     }
-    else
-        OJoinController::disposing(Source);
+
+    OJoinController::disposing(Source);
 }
 // -----------------------------------------------------------------------------
 void OQueryController::createNewConnection(sal_Bool _bUI)
@@ -980,13 +991,14 @@ void OQueryController::executeQuery()
     {
         try
         {
+            m_pWindow->showPreview(m_xCurrentFrame);
+
             URL aWantToDispatch;
             aWantToDispatch.Complete = ::rtl::OUString::createFromAscii(".component:DB/DataSourceBrowser");
 
-            ::rtl::OUString sFrameName = ::rtl::OUString::createFromAscii("_beamer");
+            ::rtl::OUString sFrameName = FRAME_NAME_QUERY_PREVIEW;
             //  | ::com::sun::star::frame::FrameSearchFlag::CREATE
             sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN;
-            m_pWindow->showBeamer(m_xCurrentFrame);
 
             Reference< ::com::sun::star::frame::XDispatch> xDisp;
             Reference< ::com::sun::star::frame::XDispatchProvider> xProv(m_xCurrentFrame->findFrame(sFrameName,nSearchFlags),UNO_QUERY);
@@ -1039,6 +1051,8 @@ void OQueryController::executeQuery()
                 Reference< XComponent >  xComponent(m_xCurrentFrame->findFrame(sFrameName,nSearchFlags), UNO_QUERY);
                 if (xComponent.is())
                 {
+                    OSL_ENSURE(Reference< XFrame >(xComponent, UNO_QUERY).get() == m_pWindow->getPreviewFrame().get(),
+                        "OQueryController::executeQuery: oops ... which window do I have here?");
                     Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
                     xComponent->addEventListener(xEvtL);
                 }
@@ -1163,10 +1177,10 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                     }
                     else
                     {
-                        xProp->setPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_TABLENAME,makeAny(m_sUpdateTableName));
-                        xProp->setPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_CATALOGNAME,makeAny(m_sUpdateCatalogName));
-                        xProp->setPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_SCHEMANAME,makeAny(m_sUpdateSchemaName));
-                        xProp->setPropertyValue(CONFIGKEY_QRYDESCR_USE_ESCAPE_PROCESSING,::cppu::bool2any(m_bEsacpeProcessing));
+                        xProp->setPropertyValue(PROPERTY_UPDATE_TABLENAME,makeAny(m_sUpdateTableName));
+                        xProp->setPropertyValue(PROPERTY_UPDATE_CATALOGNAME,makeAny(m_sUpdateCatalogName));
+                        xProp->setPropertyValue(PROPERTY_UPDATE_SCHEMANAME,makeAny(m_sUpdateSchemaName));
+                        xProp->setPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING,::cppu::bool2any(m_bEsacpeProcessing));
 
                         // now we save the layout information
                         //  create the output stream
