@@ -30,7 +30,7 @@ DIRLIST = \
     $(DESTDIRJAVAEXAMPLES)$/Inspector	\
     $(DESTDIRJAVAEXAMPLES)$/NotesAccess	\
     $(DESTDIRJAVAEXAMPLES)$/ToDo	\
-        $(DESTDIRJAVAEXAMPLES)$/WriterSelector   \
+    $(DESTDIRJAVAEXAMPLES)$/WriterSelector   \
     $(DESTDIRBASICEXAMPLES)		 	\
     $(DESTDIRBASICEXAMPLES)$/drawing 	\
     $(DESTDIRBASICEXAMPLES)$/forms_and_controls	 	\
@@ -39,6 +39,8 @@ DIRLIST = \
     $(DESTDIRBASICEXAMPLES)$/text	 			\
     $(DESTDIRBASICEXAMPLES)$/text$/creating_an_index 	\
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically 	\
+    $(DESTDIROLEEXAMPLES)		 	\
+    $(DESTDIROLEEXAMPLES)$/vbscript		 	\
     {$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLDIRLIST))}
 
 CPP_OFFICECLIENT= \
@@ -202,6 +204,10 @@ BASIC_EXAMPLES= \
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/replacing_text.sxw 		\
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/using_regular_expressions.sxw
 
+OLE_EXAMPLES= \
+    $(DESTDIROLEEXAMPLES)$/vbscript$/readme.txt \
+    $(DESTDIROLEEXAMPLES)$/vbscript$/WriterDemo.vbs
+
 EXAMPLESLIST= \
     $(CPP_OFFICECLIENT) \
     $(JAVA_DRAW)        \
@@ -221,7 +227,8 @@ EXAMPLESLIST= \
     $(JAVA_NOTESACCESS)            \
     $(JAVA_TODO)                   \
     $(JAVA_WRITERSELECTOR)         \
-    $(BASIC_EXAMPLES)
+    $(BASIC_EXAMPLES)              \
+    $(OLE_EXAMPLES)
 
 IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f -print))}
 DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
@@ -257,6 +264,10 @@ $(DESTDIRJAVAEXAMPLES)$/% : $(PRJ)$/examples$/java$/% $(DIRLIST) $(BIN)$/$(UDKNA
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRBASICEXAMPLES)$/% : $(PRJ)$/examples$/basic$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIROLEEXAMPLES)$/% : $(PRJ)$/examples$/OLE$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
