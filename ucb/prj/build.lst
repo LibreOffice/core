@@ -10,3 +10,5 @@ uc	ucb\source\ucp\file		    nmake	-	all	uc_file uc_unotypes NULL
 uc	ucb\source\ucp\hierarchy	nmake	-	all	uc_hierarchy uc_unotypes NULL
 uc	ucb\source\ucp\webdav		nmake	-	all	uc_webdav uc_unotypes NULL
 uc	ucb\source\ucp\package		nmake	-	all	uc_package uc_unotypes NULL
+uc	ucb\source\ucp\tdoc			nmake	-	all	uc_tdoc uc_unotypes NULL
+uc	ucb\source\ucp\expand		nmake	-	all	uc_expand uc_unotypes NULL
