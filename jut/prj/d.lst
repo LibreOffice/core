@@ -1,5 +1,7 @@
 ..\%__SRC%\class\jut.jar %_DEST%\bin%_EXT%\jut.jar
 
+..\%__SRC%\bin\jut_src.zip %COMMON_DEST%\bin%_EXT%\jut_src.zip
+
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sb $ $Date: 2002-12-06 11:35:36 $
+#   last change: $Author: hr $ $Date: 2003-03-26 12:41:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,10 @@ ENABLE_EXCEPTIONS = TRUE
 .INCLUDE: settings.mk
 
 SLOFILES = \
-    $(SLO)$/virtualmachine.obj
+    $(SLO)$/javainfo.obj \
+    $(SLO)$/javainfoimpl.obj \
+    $(SLO)$/sunversion.obj \
+    $(SLO)$/virtualmachine.obj \
+    $(SLO)$/windows.obj
 
 .INCLUDE: target.mk

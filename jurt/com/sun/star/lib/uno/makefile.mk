@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sb $ $Date: 2002-10-30 15:27:51 $
+#   last change: $Author: hr $ $Date: 2003-03-26 12:32:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,6 @@ PACKAGE = com$/sun$/star$/lib$/uno
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 
 JAVACLASSFILES = \
-    $(CLASSDIR)$/$(PACKAGE)$/TypedProxy.class
+    $(CLASSDIR)$/$(PACKAGE)$/Proxy.class
 
 .INCLUDE: target.mk

@@ -43,7 +43,7 @@ public class AnyConverter_Test
         anyLong= new Any(new Type(Long.TYPE), aLong);
         anyFloat= new Any(new Type(Float.TYPE), aFloat);
         anyDouble= new Any(new Type(Double.TYPE), aDouble);
-        anyObj= new Any(new Type(Object.class), aObj);
+        anyObj= new Any(new Type(Object.class) /* any */, aObj);
         anyStr= new Any(new Type(String.class), aStr);
         anyType= new Any(new Type(Type.class), aType);
         anyArByte= new Any(new Type(byte[].class), arByte);
@@ -236,6 +236,12 @@ public class AnyConverter_Test
             r[i++]= sh == ((Byte)anyByte.getObject()).byteValue() ? true : false;
             sh= AnyConverter.toShort(anyShort);
             r[i++]= sh == ((Short) anyShort.getObject()).shortValue() ? true : false;
+
+            Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
+            r[i++]= (5 == AnyConverter.toUnsignedShort( a ));
+            try { AnyConverter.toShort(a); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
+            try { AnyConverter.toUnsignedShort(anyShort); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
+
            // must fail with a com.sun.star.lang.IllegalArgumentException
             try { AnyConverter.toChar(aBool); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
             try { AnyConverter.toChar(anyBool); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
@@ -301,6 +307,16 @@ public class AnyConverter_Test
             r[i++]= val == ((Short) anyShort.getObject()).shortValue() ? true : false;
             val= AnyConverter.toInt(anyInt);
             r[i++]= val == ((Integer) anyInt.getObject()).intValue() ? true : false;
+
+            Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
+            r[i++]= (5 == AnyConverter.toInt(a));
+            r[i++]= (5 == AnyConverter.toUnsignedInt(a));
+            try { AnyConverter.toUnsignedInt(anyInt); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
+            a = new Any( Type.UNSIGNED_LONG, new Integer(5) );
+            r[i++]= (5 == AnyConverter.toUnsignedInt(a));
+            try { AnyConverter.toInt(a); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
+            try { AnyConverter.toUnsignedInt(anyShort); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
+
            // must fail with a com.sun.star.lang.IllegalArgumentException
             try { AnyConverter.toInt(aChar); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
             try { AnyConverter.toInt(anyChar); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
@@ -366,6 +382,20 @@ public class AnyConverter_Test
             r[i++]= val == ((Integer) anyInt.getObject()).intValue() ? true : false;
             val= AnyConverter.toLong(anyLong);
             r[i++]= val == ((Long) anyLong.getObject()).longValue() ? true : false;
+
+            Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
+            r[i++]= (5 == AnyConverter.toLong(a));
+            r[i++]= (5 == AnyConverter.toUnsignedLong(a));
+            try { AnyConverter.toUnsignedLong(anyShort); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
+            a = new Any( Type.UNSIGNED_LONG, new Integer(5) );
+            r[i++]= (5 == AnyConverter.toUnsignedLong(a));
+            r[i++]= (5 == AnyConverter.toLong(a));
+            try { AnyConverter.toUnsignedLong(anyInt); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
+            a = new Any( Type.UNSIGNED_HYPER, new Long(5) );
+            r[i++]= (5 == AnyConverter.toUnsignedLong(a));
+            try { AnyConverter.toLong(a); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
+            try { AnyConverter.toUnsignedLong(anyLong); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
+
            // must fail with a com.sun.star.lang.IllegalArgumentException
             try { AnyConverter.toLong(aChar); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
             try { AnyConverter.toLong(anyChar); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
@@ -390,6 +420,7 @@ public class AnyConverter_Test
         boolean bError= false;
         for (int c= 0; c < i; c++) {
             if (r[c] == false) {
+                System.err.println( "[toLong()] r[" + c + "] == false : failed!" );
                 bError= true;
                 break;
             }
@@ -549,11 +580,31 @@ public class AnyConverter_Test
             r[i++]= UnoRuntime.areSame(val, anyObj.getObject());
             val= AnyConverter.toObject(_type, new Any( new Type(XTypeProvider.class), null));
             r[i++]= val == null;
+
+            // structs, exceptions
+            com.sun.star.lang.IllegalArgumentException exc =
+                new com.sun.star.lang.IllegalArgumentException();
+            Any any_exc = new Any(
+                new Type( "com.sun.star.lang.IllegalArgumentException", TypeClass.EXCEPTION ), exc );
+            r[i++] = AnyConverter.toObject( new Type( com.sun.star.lang.IllegalArgumentException.class ), any_exc ).equals( exc );
+            r[i++] = AnyConverter.toObject( new Type( com.sun.star.uno.Exception.class ), any_exc ).equals( exc );
+            try { AnyConverter.toObject( new Type( com.sun.star.uno.RuntimeException.class ), any_exc ); } catch (com.sun.star.lang.IllegalArgumentException ie) {r[i]=true;};
+            ++i;
+            any_exc = new Any( com.sun.star.lang.IllegalArgumentException.class, exc );
+            r[i++] = AnyConverter.toObject( new Type( com.sun.star.lang.IllegalArgumentException.class ), any_exc ).equals( exc );
+            r[i++] = AnyConverter.toObject( new Type( com.sun.star.uno.Exception.class ), any_exc ).equals( exc );
+            try { AnyConverter.toObject( new Type( com.sun.star.uno.RuntimeException.class ), any_exc ); } catch (com.sun.star.lang.IllegalArgumentException ie) {r[i]=true;};
+            ++i;
+
             // must fail
-            try { AnyConverter.toObject(_type, aType); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
-            try { AnyConverter.toObject(_type, anyType); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
-            try { AnyConverter.toObject(_type, anyVoid); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
-            try { AnyConverter.toObject(_type, new Object()); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
+            try { AnyConverter.toObject(_type, aType); } catch (com.sun.star.lang.IllegalArgumentException ie) {r[i]=true;}
+            ++i;
+            try { AnyConverter.toObject(_type, anyType); } catch (com.sun.star.lang.IllegalArgumentException ie) {r[i]=true;}
+            ++i;
+            try { AnyConverter.toObject(_type, anyVoid); } catch (com.sun.star.lang.IllegalArgumentException ie) {r[i]=true;}
+            ++i;
+            try { AnyConverter.toObject(_type, new Object()); } catch (com.sun.star.lang.IllegalArgumentException ie) {r[i]=true;}
+            ++i;
 
         } catch (java.lang.Exception e) {
             i++;
@@ -561,6 +612,7 @@ public class AnyConverter_Test
         boolean bError= false;
         for (int c= 0; c < i; c++) {
             if (r[c] == false) {
+                System.err.println( "[toObject()] r[" + c + "] == false : failed!" );
                 bError= true;
                 break;
             }
@@ -850,7 +902,14 @@ public class AnyConverter_Test
             // must work
             r[i++]= AnyConverter.isShort(aShort);
             r[i++]= AnyConverter.isShort(anyShort);
+            r[i++]= Type.SHORT.equals( AnyConverter.getType(anyShort) );
+
+            Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
+            r[i++]= Type.UNSIGNED_SHORT.equals( AnyConverter.getType(a) );
+
             // must fail
+            r[i++]= AnyConverter.isShort(a) ? false : true;
+            r[i++]= ! Type.SHORT.equals( AnyConverter.getType(a) );
             r[i++]= AnyConverter.isShort(aBool) ? false : true;
         } catch (java.lang.Exception e) {
             i++;
@@ -882,7 +941,14 @@ public class AnyConverter_Test
             // must work
             r[i++]= AnyConverter.isInt(aInt);
             r[i++]= AnyConverter.isInt(anyInt);
+            r[i++]= Type.LONG.equals( AnyConverter.getType(anyInt) );
+
+            Any a = new Any( Type.UNSIGNED_LONG, new Integer(5) );
+            r[i++]= Type.UNSIGNED_LONG.equals( AnyConverter.getType(a) );
+
             // must fail
+            r[i++]= AnyConverter.isInt(a) ? false : true;
+            r[i++]= ! Type.LONG.equals( AnyConverter.getType(a) );
             r[i++]= AnyConverter.isInt(aBool) ? false : true;
         } catch (java.lang.Exception e) {
             i++;
@@ -914,7 +980,14 @@ public class AnyConverter_Test
             // must work
             r[i++]= AnyConverter.isLong(aLong);
             r[i++]= AnyConverter.isLong(anyLong);
+            r[i++]= Type.HYPER.equals( AnyConverter.getType(anyLong) );
+
+            Any a = new Any( Type.UNSIGNED_HYPER, new Long(5) );
+            r[i++]= Type.UNSIGNED_HYPER.equals( AnyConverter.getType(a) );
+
             // must fail
+            r[i++]= AnyConverter.isLong(a) ? false : true;
+            r[i++]= ! Type.HYPER.equals( AnyConverter.getType(a) );
             r[i++]= AnyConverter.isLong(aBool) ? false : true;
         } catch (java.lang.Exception e) {
             i++;
@@ -1018,6 +1091,7 @@ public class AnyConverter_Test
         boolean bError= false;
         for (int c= 0; c < i; c++) {
             if (r[c] == false) {
+                System.err.println( "[isObject()] r[" + c + "] == false : failed!" );
                 bError= true;
                 break;
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-30 15:32:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,390 +61,239 @@
 
 package com.sun.star.lib.uno.environments.java;
 
-
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import java.util.Hashtable;
-import java.util.Enumeration;
-
-
 import com.sun.star.lib.sandbox.Disposable;
-
-import com.sun.star.lib.sandbox.generic.Dispatcher;
-import com.sun.star.lib.sandbox.generic.DispatcherAdapterBase;
-import com.sun.star.lib.sandbox.generic.DispatcherAdapterFactory;
-
-import com.sun.star.lib.uno.TypedProxy;
-import com.sun.star.lib.uno.typedesc.TypeDescription;
-
 import com.sun.star.uno.IEnvironment;
-import com.sun.star.uno.IQueryInterface;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
 
 /**
  * The java_environment is the environment where objects and
  * interfaces are registered, which are mapped out of java or
- * into java. The java_environment implements the <code>IEnvironment</code>
- * interface defined in the uno runtime.
- * <p>
- * <p>
- * @version     $Revision: 1.10 $ $ $Date: 2002-10-30 15:32:05 $
- * @author      Kay Ramme
- * @see         com.sun.star.uno.UnoRuntime
- * @see         com.sun.star.uno.IEnvironment
- * @since       UDK1.0
+ * into java.
+ *
+ * <p>The java_environment implements the <code>IEnvironment</code> interface
+ * defined in the uno runtime.</p>
+ *
+ * @see com.sun.star.uno.UnoRuntime
+ * @see com.sun.star.uno.IEnvironment
+ * @since UDK1.0
  */
-public class java_environment implements IEnvironment, Disposable {
-    /**
-     * When set to true, enables various debugging output.
-     */
-    static public final boolean DEBUG = false;
-    final static String _holderProxyClassName = HolderProxy.class.getName().replace('.', '/');
-
-    /*
-    ** This is the holder proxy, which one gets while trying to get a registered object
-    */
-    static public class HolderProxy extends DispatcherAdapterBase
-        implements Dispatcher, XInterface, IQueryInterface, TypedProxy
-    {
-        static private Hashtable __methodss = new Hashtable();
-
-        /**
-         * Gets the methods of a class as a hashtable.
-         * Uses reflection for first time and stores the methods
-         * array in hashtable for later use.
-         * <p>
-         * This method does not belong to the provided <code>api</code>
-         * <p>
-         * @return the methods
-         * @param  zClass   the class
-         * @see    java.lang.Class#getMethods
-         */
-        static public Hashtable __getMethodsAsTable(Class zClass) {
-            Hashtable methods_tab = (Hashtable)__methodss.get(zClass);
-
-            if(methods_tab == null) {
-                methods_tab = new Hashtable();
-
-                Class [] interfaces = zClass.getInterfaces();
-                for( int j = 0 ; j < interfaces.length ; j ++ )
-                {
-                    Method methods [] = interfaces[j].getMethods();
-                    for(int i = 0; i < methods.length; ++ i) {
-                        methods_tab.put(methods[i].getName(), methods[i]);
-                    }
-                }
-
-                __methodss.put(zClass, methods_tab);
-            }
-
-            return methods_tab;
-        }
-
-        Holder _holder;
-        Type _type;
-
-        Hashtable _methods;
-
-        void setHolder(Holder holder) {
-            _holder = holder;
-        }
-
-        public Object invoke(Object object, String name, Object params[]) throws Exception  {
-            Method method = (Method)_methods.get(name);
-
-            Object result = null;
-
-            if(method == null) {
-                System.err.println(getClass().getName() + ".invoke - method not found:" + object + " " + name + " " + params);
-            }
-            else {
-                try {
-                    result = method.invoke(object, params);
-                }
-                // don't hide exceptions
-                catch(InvocationTargetException invocationTargetException) {
-                    throw (Exception)invocationTargetException.getTargetException();
-                }
-            }
-
-            return result;
-        }
-
-        public HolderProxy() {
-            super();
-        }
-
-        public void setInterface(Type type) {
-            _type = type;
-            _methods = __getMethodsAsTable(object.getClass());
-        }
-
-        public Type getInterface() {
-            return _type;
-        }
-
-        // IQueryInterface - delegate calls through this proxy
-        public Object queryInterface(Type type) {
-            return UnoRuntime.queryInterface(type, object);
-        }
-
-        public boolean isSame(Object object) {
-            if (object instanceof HolderProxy)
-                object=((HolderProxy) object).object;
-
-            return UnoRuntime.areSame(this.object, object);
-        }
-
-        public String getOid() {
-            return UnoRuntime.generateOid(object);
-        }
-
-        // @see com.sun.star.lib.uno.TypedProxy#getType
-        public Type getType() {
-            return _type;
-        }
-
-        public void finalize() {
-              if(java_environment.DEBUG) System.err.println("###################### Proxy Proxy is dying");
-            _holder.decRefCount();
-        }
-    }
-
-    /*
-    ** This is the holder class, whichs instances are put into the hashtable
-    */
-    class Holder {
-
-        int    _refCount;
-        String _oId;
-        Object _object;
-        Class _class;
-        boolean _instanceOfProxy;
-
-        Holder(String oId, Object object , Type type) {
-            _oId    = oId;
-            _object = object;
-            _refCount = 1;
-
-            com.sun.star.uno.ITypeDescription typedescr = type.getTypeDescription();
-            // [HACK] workaround uninitialized Type object:
-            if (null == typedescr)
-            {
-                try
-                {
-                    _class = Class.forName( type.getTypeName() );
-                }
-                catch (ClassNotFoundException exc)
-                {
-                }
-            }
-            else
-            {
-                _class = ((TypeDescription)type.getTypeDescription()).getZClass();
-            }
-            _instanceOfProxy = (object instanceof Proxy);
-        }
-
-        synchronized void incRefCount() {
-              if(DEBUG) System.err.println("##### " + getClass().getName() + ".incRefCount:" + _refCount);
-
-            ++ _refCount;
-        }
-
-        synchronized void decRefCount() {
-              if(DEBUG) System.err.println("##### " + getClass().getName() + ".decRefCount:" + _refCount);
-
-            -- _refCount;
-
-            if(_refCount == 0)
-                _objects.remove(_oId);
-        }
-
-        Object xxgetObject(Type type)
-        {
-            Object result = _object;
-            if( _instanceOfProxy ) {
-                if(DEBUG) System.err.println("##### " + getClass().getName() + " -  creating new Proxy Proxy");
-                Class holderProxyClass =
-                    DispatcherAdapterFactory.createDispatcherAdapter(
-                        _class,
-                        _holderProxyClassName);
-                try {
-                    HolderProxy holderProxy = (HolderProxy)holderProxyClass.newInstance();
-                    holderProxy.setObject(holderProxy, _object);
-                    holderProxy.setHolder(this);
-                    holderProxy.setInterface(type);
-                    result = holderProxy;
-                }
-                catch(Exception exception) {
-                    System.err.println("##### " + getClass().getName() + ".xxgetObject - exception occurred:" + exception);
-                    exception.printStackTrace();
-                    result = null;
-                }
-            }
-            return result;
-        }
-
-        public String toString() {
-            return "holder:" + _refCount + " " + _oId + " " + _object;
-        }
-    }
-
-    protected Hashtable _objects;
-    protected    String _name;
-    // free context pointer, that can be used for specific classes of environments,
-    protected    Object _context;
-
+public final class java_environment implements IEnvironment, Disposable {
     public java_environment(Object context) {
-        _name    = "java";
-        _context = context;
-        _objects = new Hashtable();
-
-        if(DEBUG) System.err.println("##### " + getClass().getName()  + " - instantiated ");
+        this.context = context;
     }
 
-        /**
-     * the context
-     */
+    // @see com.sun.star.uno.IEnvironment#getContext
     public Object getContext() {
-        return _context;
+        return context;
     }
 
-    /**
-     * a name for this environment
-     */
+    // @see com.sun.star.uno.IEnvironment#getName
     public String getName() {
-        return _name;
+        return "java";
     }
 
-    /**
-     * Tests if two environments are equal.
-     *<BR>
-     * @param environment       one environment
-     */
-    public boolean equals(Object object) {
-        return false;
-    }
-
-    /**
-     * You register internal and external interfaces via this method. Internal interfaces are
-     * proxies that are used in an environment. External interfaces are interfaces that are
-     * exported to another environment, thus providing an object identifier for this task.
-     * This can be called an external reference.
-     * Interfaces are held weakly at an environment; they demand a final revokeInterface()
-     * call for each interface that has been registered.
-     * <p>
-     * @return  a proxy to registered interface if necessare, otherwise the registered object itself
-     * @param object      the interface to register
-     * @param oId[]       inout parameter for the corresponding object id
-     * @param type  the type description of the given interface
-     * @see               com.sun.star.uno.IEnvironment#registerInterface
-     */
-    public Object registerInterface(Object object, String oId[], Type type) {
-        if(oId[0] == null)
-            oId[0] = UnoRuntime.generateOid(object);
-
-        String keyName = oId[0].concat( type.getTypeName());
-
-        synchronized(_objects) {
-            // get the holder
-            Holder holder = (Holder)_objects.get(keyName);
-
-            if(DEBUG)
-                System.err.println("##### " + getClass().getName() + ".registerInterface:" + object + " " + oId[0] + " " + type);
-
-            if(holder == null) {
-                holder = new Holder(keyName, object , type );
-                _objects.put(keyName, holder);
-            }
-            else
-                holder.incRefCount();
-
-            object = holder.xxgetObject(type);
+    // @see com.sun.star.uno.IEnvironment#registerInterface
+    public Object registerInterface(Object object, String[] oid, Type type) {
+        if (oid[0] == null) {
+            oid[0] = UnoRuntime.generateOid(object);
         }
-
-        return object;
+        return (isProxy(object) ? proxies : localObjects).register(
+            object, createKey(oid[0], type));
     }
 
     /**
-     * You have to revoke ANY interface that has been registered via this method.
-     * <p>
-     * @param oId         object id of interface to be revoked
-     * @param type  the type description of the interface
-     * @see               com.sun.star.uno.IEnvironment#revokeInterface
+     * You have to revoke ANY interface that has been registered via this
+     * method.
+     *
+     * @param oid object id of interface to be revoked
+     * @param type the type description of the interface
+     * @see com.sun.star.uno.IEnvironment#revokeInterface
      */
-    public void revokeInterface(String oId, Type type) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".revokeInterface:" + oId + " " + type);
-        synchronized(_objects) {
-            Holder holder = (Holder)_objects.get(oId.concat( type.getTypeName()));
-            if(holder != null)
-                holder.decRefCount();
-            else
-                System.err.println("java_environment.revokeInterface - unknown oid:" + oId + " " + type);
+    public void revokeInterface(String oid, Type type) {
+        String key = createKey(oid, type);
+        if (!proxies.revoke(key)) {
+            localObjects.revoke(key);
         }
     }
 
     /**
-     * Retrieves an interface identified by its object id and type from this environment.
-     * <p>
-     * @param oId        object id of interface to be retrieved
+     * Retrieves an interface identified by its object id and type from this
+     * environment.
+     *
+     * @param oid object id of interface to be retrieved
      * @param type the type description of the interface to be retrieved
-     * @see               com.sun.star.uno.IEnvironment#getRegisteredInterface
+     * @see com.sun.star.uno.IEnvironment#getRegisteredInterface
      */
-    public Object getRegisteredInterface(String oId, Type type)     {
-        Object result = null;
-
-        Holder holder = (Holder)_objects.get(oId.concat( type.getTypeName()));
-
-        if(holder != null) {
-            result = holder.xxgetObject(type);
+    public Object getRegisteredInterface(String oid, Type type) {
+        String key = createKey(oid, type);
+        Object o = proxies.get(key);
+        if (o == null) {
+            o = localObjects.get(key);
         }
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".getRegisteredInterface:>" + oId + "< " + type +" " + result);
-
-        return result;
+        return o;
     }
 
     /**
-     * Retrieves the object identifier for a registered interface from this environment.
-     * <p>
-     * @param object      a registered interface
-     * @see               com.sun.star.uno.IEnvironment#getRegisteredObjectIdentifier
+     * Retrieves the object identifier for a registered interface from this
+     * environment.
+     *
+     * @param object a registered interface
+     * @see com.sun.star.uno.IEnvironment#getRegisteredObjectIdentifier
      */
     public String getRegisteredObjectIdentifier(Object object) {
         return UnoRuntime.generateOid(object);
     }
 
-    /**
-     * List the registered interfaces.
-     * <p>
-     * @see               com.sun.star.uno.IEnvironment#list
-     */
+    // @see com.sun.star.uno.IEnvironment#list
     public void list() {
-        System.err.println("##### " + getClass().getName() + ".list(" + getName() + " " + getContext() + "):");
-
-        Enumeration elements = _objects.elements();
-        while(elements.hasMoreElements()) {
-            System.err.println("#### key:" + elements.nextElement());
-        }
+// TODO???
+//      synchronized (proxies) {
+//          System.err.println("##### " + getClass().getName() + ".list: "
+//                             + getName() + ", " + getContext());
+//          for (Iterator it = proxies.values().iterator(); it.hasNext();) {
+//              System.err.println("#### entry: " + it.next());
+//          }
+//      }
     }
 
-    /**
-     * Dispose this environment
-     * <p>
-     * @see               com.sun.star.uno.IEnvironment#dispose
-     */
+    // @see com.sun.star.uno.IEnvironment#dispose
     public void dispose() {
-        if(_objects.size() > 0)
-            list();
-
-        _objects = new Hashtable();
+// TODO???
+//       synchronized (proxies) {
+//           if (!proxies.isEmpty()) {
+//               list();
+//           }
+//           proxies.clear();
+//       }
     }
 
-}
+    // TODO  What's this???  java.lang.Object#equals requires reflexivity...
+    //
+    // Maybe this was hacked in so that different bridges use different
+    // instances of java_environment.  That is desirable for the following
+    // reason:  An OID is bridged in over bridge A, a proxy is created on the
+    // Java side, and recorded in the java_environment.  The same OID is then
+    // bridged in over another bridge B.  If there were only one
+    // java_environment shared by both bridges, the proxy from bridge A would be
+    // reused.  If now bridge A is taken down programatically (e.g., because
+    // some controlling code somehow deduced that no objects are mapped over
+    // that bridge any longer), but the proxy is still used by bridge B, using
+    // the proxy would now result in errors.  The explicit API to control
+    // bridges forbids to transparently share proxies between bridges, and using
+    // different java_environment instances for different bridges is the way to
+    // enforce this.
+    public boolean equals(Object obj) {
+        return false;
+    }
 
+    private static final class Registry {
+        public Object register(Object object, String key) {
+            synchronized (map) {
+                cleanUp();
+                Entry e = (Entry) map.get(key);
+                if (e != null) {
+                    Object o = e.get();
+                    if (o != null) {
+                        e.acquire();
+                        return o;
+                    }
+                }
+                // TODO  If a holder references an unreachable object, but still
+                // has a positive count, it is replaced with a new holder
+                // (referencing a reachable object, and with a count of 1).  Any
+                // later calls to revoke that should decrement the count of the
+                // previous holder would now decrement the count of the new
+                // holder, removing it prematurely.  This is a design flaw that
+                // will be fixed when IEnvironment.revokeInterface is changed to
+                // no longer use counting.  (And this problem is harmless, as
+                // currently a holder either references a strongly held object
+                // and uses register/revoke to control it, or references a
+                // weakly held proxy and never revokes it.)
+                map.put(key, new Entry(key, object, queue));
+            }
+            return object;
+        }
+
+        public boolean revoke(String key) {
+            synchronized (map) {
+                Entry e = (Entry) map.get(key);
+                if (e != null && e.release()) {
+                    map.remove(key);
+                }
+                cleanUp();
+                return e != null;
+            }
+        }
+
+        public Object get(String key) {
+            Entry e;
+            synchronized (map) {
+                e = (Entry) map.get(key);
+            }
+            return e == null ? null : e.get();
+        }
+
+        // must only be called while synchronized on map:
+        private void cleanUp() {
+            for (;;) {
+                Entry e = (Entry) queue.poll();
+                if (e == null) {
+                    break;
+                }
+                // It is possible that an Entry e1 for key k becomes weakly
+                // reachable, then another Entry e2 is registered for the same
+                // key k (a new Entry is created since now e1.get() == null),
+                // and only then e1 is enqueued.  To not erroneously remove the
+                // new e2 in that case, check whether the map still contains e1:
+                String key = e.getKey();
+                if (map.get(key) == e) {
+                    map.remove(key);
+                }
+            }
+        }
+
+        private static final class Entry extends WeakReference {
+            public Entry(String key, Object object, ReferenceQueue queue) {
+                super(object, queue);
+                this.key = key;
+            }
+
+            // must only be called while synchronized on map:
+            public void acquire() {
+                ++count;
+            }
+
+            // must only be called while synchronized on map:
+            public boolean release() {
+                return --count == 0;
+            }
+
+            public String getKey() {
+                return key;
+            }
+
+            private final String key;
+            private int count = 1;
+        }
+
+        private final HashMap map = new HashMap(); // from key (String) to Entry
+        private final ReferenceQueue queue = new ReferenceQueue();
+    }
+
+    private String createKey(String oid, Type type) {
+        return oid.concat(type.getTypeName());
+    }
+
+    private boolean isProxy(Object object) {
+        return object instanceof com.sun.star.lib.uno.Proxy;
+    }
+
+    private static final Registry localObjects = new Registry();
+
+    private final Object context;
+    private final Registry proxies = new Registry();
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-30 15:29:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@ import com.sun.star.uno.IEnvironment;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.TypeClass;
+import com.sun.star.uno.Any;
 
 /**
  * This class implements a remote bridge. Therefor
@@ -131,7 +133,7 @@ import com.sun.star.uno.Type;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.27 $ $ $Date: 2002-10-30 15:29:36 $
+ * @version     $Revision: 1.28 $ $ $Date: 2003-03-26 12:32:59 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -571,9 +573,8 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         if(object instanceof String)
             oid[0] = (String)object;
         else {
-            Object xobject = _java_environment.registerInterface(object, oid, type);
-              if(!(xobject instanceof com.sun.star.lib.uno.environments.java.java_environment.HolderProxy))
-                addRefHolder(type, oid[0]);
+            _java_environment.registerInterface(object, oid, type);
+            addRefHolder(type, oid[0]);
         }
           if(DEBUG) System.err.println("##### " + getClass() + " - mapInterfaceTo:" + object + " interface:" + type + " " + oid[0]);
 
@@ -853,6 +854,9 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
             dispose(e);
             throw new DisposedException(getClass().getName()
                                         + ".sendReply - unexpected: " + e);
+        } catch (Error e) {
+            dispose(e);
+            throw e;
         }
     }
 
@@ -909,6 +913,19 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         }
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".sendRequest left:" + result);
+
+        // On the wire (at least in URP), the result of queryInterface is
+        // transported as an ANY, but in Java it shall be transported as a
+        // direct reference to the UNO object (represented as a Java Object),
+        // never boxed in a com.sun.star.uno.Any:
+        if (operation.equals("queryInterface") && result instanceof Any) {
+            Any a = (Any) result;
+            if (a.getType().getTypeClass() == TypeClass.INTERFACE) {
+                result = a.getObject();
+            } else {
+                result = null; // should never happen
+            }
+        }
 
         return result;
     }

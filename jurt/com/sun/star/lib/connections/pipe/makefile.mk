@@ -4,7 +4,7 @@
 #
 #   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 12:37:16 $
+#   last change: $Author: hr $ $Date: 2003-03-26 12:32:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,29 +57,21 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
 
-PRJ		= ..
-PRJNAME	= jut
-TARGET	= jut
+PRJ = ..$/..$/..$/..$/..$/..
+PRJNAME = jurt
+TARGET = com_sun_star_connections_pipe
 
-# --- Settings -----------------------------------------------------
+PACKAGE = com$/sun$/star$/lib$/connections$/pipe
 
-.INCLUDE :  settings.mk
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
 
-JARCLASSDIRS	= com
-JARTARGET		= $(TARGET).jar
-JARCOMPRESS 	= TRUE
+JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 
-# Special work necessary for building java reference with javadoc.
-# The source of puplic APIs must be delivered and used later in the
-# odk module.
-ZIP1TARGET=$(TARGET)_src
-ZIP1FLAGS=-u -r
-ZIP1DIR=$(PRJ)
-ZIP1LIST=com -x "*makefile.mk"
+JAVACLASSFILES = \
+    $(CLASSDIR)$/$(PACKAGE)$/PipeConnection.class \
+    $(CLASSDIR)$/$(PACKAGE)$/pipeAcceptor.class \
+    $(CLASSDIR)$/$(PACKAGE)$/pipeConnector.class
 
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
+.INCLUDE:  target.mk

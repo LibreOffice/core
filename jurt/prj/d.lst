@@ -1,4 +1,9 @@
 ..\%__SRC%\class\jurt.jar %_DEST%\bin%_EXT%\jurt.jar
+..\%__SRC%\bin\jpipe*.dll %_DEST%\bin%_EXT%\jpipe*.dll
+..\%__SRC%\lib\libjpipe*.so %_DEST%\lib%_EXT%\libjpipe*.so
+..\%__SRC%\lib\libjpipe*.dylib %_DEST%\lib%_EXT%\libjpipe*.dylib
+
+..\%__SRC%\bin\jurt_src.zip %COMMON_DEST%\bin%_EXT%\jurt_src.zip
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx

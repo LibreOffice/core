@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-30 15:32:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,9 +382,18 @@ class Marshal implements IMarshal {
         case TypeClass.BOOLEAN_value:   writeBoolean((Boolean)object);                        break; // is it a boolean
         case TypeClass.CHAR_value:      writeCharacter((Character)object);                    break; // is it a character ?
         case TypeClass.BYTE_value:      writeByte((Byte)object);                              break; // is it a byte ?
-        case TypeClass.SHORT_value:     writeShort((Short)object);                            break; // is it a short ?
-        case TypeClass.LONG_value:      writeInteger((Integer)object);                        break; // is it an integer ?
-        case TypeClass.HYPER_value:     writeLong((Long)object);                              break; // is it a long ?
+        case TypeClass.SHORT_value:
+        case TypeClass.UNSIGNED_SHORT_value:
+            writeShort((Short) object);
+            break;
+        case TypeClass.LONG_value:
+        case TypeClass.UNSIGNED_LONG_value:
+            writeInteger((Integer) object);
+            break;
+        case TypeClass.HYPER_value:
+        case TypeClass.UNSIGNED_HYPER_value:
+            writeLong((Long) object);
+            break;
         case TypeClass.FLOAT_value:     writeFloat((Float)object);                            break; // is it a float ?
         case TypeClass.DOUBLE_value:    writeDouble((Double)object);                          break; // is it a double ?
         case TypeClass.STRING_value:    writeString((String)object);                          break; // is it a String ?

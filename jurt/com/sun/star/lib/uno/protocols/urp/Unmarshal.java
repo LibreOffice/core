@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-30 15:32:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,17 +119,64 @@ class Unmarshal implements IUnmarshal {
     }
 
     Object readAny() {
-        ITypeDescription iTypeDescription = readTypeDescription();
-        Object object = readObject(iTypeDescription);
-
-        // the object can only be null, if the return is an void-any or null interface
-        // cause java does not know a "void value", we create a special any
-        if(object == null && iTypeDescription.getZClass() == void.class)
-            object = new Any(new Type(iTypeDescription), null);
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readAny:" + object);
-
-        return object;
+        ITypeDescription t = readTypeDescription();
+        switch (t.getTypeClass().getValue()) {
+        case TypeClass.VOID_value:
+            return Any.VOID;
+        case TypeClass.CHAR_value:
+            return readCharacter();
+        case TypeClass.BOOLEAN_value:
+            return readBoolean();
+        case TypeClass.BYTE_value:
+            return readByte();
+        case TypeClass.SHORT_value:
+            return readShort();
+        case TypeClass.UNSIGNED_SHORT_value:
+            return new Any(Type.UNSIGNED_SHORT, readShort());
+        case TypeClass.LONG_value:
+            return readInteger();
+        case TypeClass.UNSIGNED_LONG_value:
+            return new Any(Type.UNSIGNED_LONG, readInteger());
+        case TypeClass.HYPER_value:
+            return readLong();
+        case TypeClass.UNSIGNED_HYPER_value:
+            return new Any(Type.UNSIGNED_HYPER, readLong());
+        case TypeClass.FLOAT_value:
+            return readFloat();
+        case TypeClass.DOUBLE_value:
+            return readDouble();
+        case TypeClass.STRING_value:
+            return readString();
+        case TypeClass.TYPE_value:
+            return new Type(readTypeDescription());
+        case TypeClass.ENUM_value:
+            return readEnum(t);
+        case TypeClass.STRUCT_value:
+            return readStruct(t);
+        case TypeClass.EXCEPTION_value:
+            return readThrowable(t);
+        case TypeClass.SEQUENCE_value:
+            Object os = readSequence(t);
+            ITypeDescription tc = t.getComponentType();
+            while (tc.getTypeClass() == TypeClass.SEQUENCE) {
+                tc = tc.getComponentType();
+            }
+            switch (tc.getTypeClass().getValue()) {
+            case TypeClass.UNSIGNED_SHORT_value:
+            case TypeClass.UNSIGNED_LONG_value:
+            case TypeClass.UNSIGNED_HYPER_value:
+                return new Any(new Type(t), os);
+            default:
+                return os;
+            }
+        case TypeClass.INTERFACE_value:
+            Object oi = readReference(t);
+            return t.getZClass() == XInterface.class ? oi
+                : new Any(new Type(t), oi);
+        default:
+            throw new com.sun.star.uno.RuntimeException(
+                "Reading Any with bad type " + t.getTypeClass());
+        }
     }
 
     boolean readboolean() {

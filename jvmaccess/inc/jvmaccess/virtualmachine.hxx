@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualmachine.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-06 11:33:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,10 @@ public:
 
         @param nVersion
         The JNI version of the virtual machine pointed to by pVm.  Must be at
-        least JNI_VERSION_1_2.
+        least JNI_VERSION_1_2.  This parameter should be of type jint, not int,
+        but at least on some platforms the definition of jint changed from
+        JDK 1.3 (long) to JDK 1.4 (int), so that the mangled C++ name of the
+        constructor would depend on the JDK version used at compile time.
 
         @param bDestroy
         Whether to destroy the virtual machine when destructing the wrapper
@@ -160,7 +163,7 @@ public:
         the virtual machine use the context class loader of the "initial Java
         thread."
      */
-    VirtualMachine(JavaVM * pVm, jint nVersion, bool bDestroy,
+    VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
                    JNIEnv * pMainThreadEnv);
 
 private:

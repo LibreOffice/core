@@ -4,7 +4,7 @@
 #
 #   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 12:37:16 $
+#   last change: $Author: hr $ $Date: 2003-03-26 12:41:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,29 +57,21 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
 
-PRJ		= ..
-PRJNAME	= jut
-TARGET	= jut
+PRJ = ..$/..
+PRJNAME = jvmaccess
+TARGET = workbench_javainfo
 
-# --- Settings -----------------------------------------------------
+ENABLE_EXCEPTIONS = TRUE
 
-.INCLUDE :  settings.mk
+LIBTARGET = NO
+TARGETTYPE = CUI
 
-JARCLASSDIRS	= com
-JARTARGET		= $(TARGET).jar
-JARCOMPRESS 	= TRUE
+.INCLUDE: settings.mk
 
-# Special work necessary for building java reference with javadoc.
-# The source of puplic APIs must be delivered and used later in the
-# odk module.
-ZIP1TARGET=$(TARGET)_src
-ZIP1FLAGS=-u -r
-ZIP1DIR=$(PRJ)
-ZIP1LIST=com -x "*makefile.mk"
-
-# --- Targets ------------------------------------------------------
+APP1TARGET = $(TARGET)
+APP1OBJS = $(OBJ)$/javainfotest.obj
+APP1STDLIBS = $(CPPULIB) $(JVMACCESSLIB) $(SALLIB)
 
 .INCLUDE :  target.mk

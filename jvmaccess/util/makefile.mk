@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sb $ $Date: 2002-12-06 11:35:37 $
+#   last change: $Author: hr $ $Date: 2003-03-26 12:41:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,10 @@ SHL1TARGET = $(TARGET)$(COMID)
 
 SHL1IMPLIB = i$(TARGET)
 SHL1LIBS = $(SLB)$/$(TARGET).lib
-SHL1STDLIBS = $(SALLIB) $(SALHELPERLIB)
+SHL1STDLIBS = $(CPPULIB) $(SALLIB) $(SALHELPERLIB)
+.IF "$(OS)" == "WNT"
+SHL1STDLIBS += advapi32.lib
+.ENDIF # WNT
 
 .IF "$(COMNAME)" == "msci"
 SHL1VERSIONMAP = msvc_win32_intel.map

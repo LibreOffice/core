@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualmachine.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-06 11:35:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ VirtualMachine::AttachGuard::~AttachGuard()
         m_xMachine->detachThread();
 }
 
-VirtualMachine::VirtualMachine(JavaVM * pVm, jint nVersion, bool bDestroy,
+VirtualMachine::VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
                                JNIEnv * pMainThreadEnv):
     m_pVm(pVm), m_nVersion(nVersion), m_bDestroy(bDestroy)
 {
@@ -112,8 +112,14 @@ VirtualMachine::~VirtualMachine()
     releaseInitialContextClassLoader();
     if (m_bDestroy)
     {
+        // Do not destroy the VM.  Under Java 1.3, the AWT event loop thread is
+        // not a daemon thread and is never terminated, so that calling
+        // DestroyJavaVM (waiting for all non-daemon threads to terminate) hangs
+        // forever.
+/*
         jint n = m_pVm->DestroyJavaVM();
         OSL_ENSURE(n == JNI_OK, "JNI: DestroyJavaVM failed");
+*/
     }
 }
 

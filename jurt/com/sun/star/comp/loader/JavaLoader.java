@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaLoader.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2002-10-22 15:46:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ import java.net.MalformedURLException;
  * service. Therefor the <code>JavaLoader</code> activates external UNO components which are implemented in Java.
  * The loader is used by the <code>ServiceManger</code>.
  * <p>
- * @version     $Revision: 1.10 $ $ $Date: 2002-10-22 15:46:43 $
+ * @version     $Revision: 1.11 $ $ $Date: 2003-03-26 12:32:54 $
  * @author      Markus Herzog
  * @see         com.sun.star.loader.XImplementationLoader
  * @see         com.sun.star.loader.Java
@@ -222,7 +222,8 @@ public class JavaLoader implements XImplementationLoader,
         if (args.length == 0) throw new com.sun.star.lang.IllegalArgumentException("No arguments specified");
 
         try {
-            multiServiceFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, args[0]);
+            multiServiceFactory = (XMultiServiceFactory) AnyConverter.toObject(
+                new Type(XMultiServiceFactory.class), args[0]);
         }
         catch (ClassCastException castEx) {
             throw new com.sun.star.lang.IllegalArgumentException(

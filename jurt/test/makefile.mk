@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dbo $ $Date: 2001-11-26 17:45:10 $
+#   last change: $Author: hr $ $Date: 2003-03-26 12:33:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,8 @@ test:
 #	cd ./com/sun/star/comp/bootstrap; make debug
 #	cd ./com/sun/star/comp/implementationregistration/makefile.mk
 #	cd ./com/sun/star/comp/loader; dmake debug=t
+#	cd ./com/sun/star/comp/rmclient/makefile.mk
+#	cd ./com/sun/star/comp/rmserver/makefile.mk
 #	cd ./com/sun/star/comp/typedescriptionmanager/makefile.mk
 #	cd ./com/sun/star/comp/testcomp/makefile.mk
     cd ./com/sun/star/comp/connections; dmake debug=t product=full
