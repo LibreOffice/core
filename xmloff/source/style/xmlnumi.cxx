@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-25 06:52:33 $
+ *  last change: $Author: mib $ $Date: 2001-07-27 13:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,6 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
             }
             pProps[nPos].Name =
                     OUString::createFromAscii( XML_UNO_NAME_NRULE_GRAPHICURL );
-            pProps[nPos++].Value <<= sImageURL;
             pProps[nPos++].Value <<= GetImport().ResolveGraphicObjectURL( sImageURL,
                                                                        sal_False );
 
