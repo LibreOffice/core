@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:18:00 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,11 +288,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_DELETE_MASTER_PAGE:
         case SID_DELETE: // we need SID_CUT to handle the delete key
                       // (DEL -> accelerator -> SID_CUT).
-             if (mrController.GetModel().GetPageCount() > 1
-                 && QueryBox (
-                     mrController.GetView().GetWindow(),
-                     WB_YES_NO,
-                     SdResId(STR_WARN_DEL_SEL_PAGES)).Execute() == RET_YES)
+             if (mrController.GetModel().GetPageCount() > 1)
              {
                  mrController.DeleteSelectedPages();
              }
