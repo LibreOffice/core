@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 13:24:09 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,11 @@ extern "C" {
 
         return pScriptURL;
     }
+    void basicide_macro_organizer( INT16 nTabId )
+    {
+        OSL_TRACE("in basicide_macro_organizer");
+        BasicIDE::Organize( nTabId );
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -116,7 +121,7 @@ SfxMacro* BasicIDE::CreateMacro()
     MacroChooser* pChooser = new MacroChooser( pParent, TRUE );
     Window* pOldModalDialogParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( pChooser );
-//  pChooser->SetMode( MACROCHOOSER_RECORDING );
+    //pChooser->SetMode( MACROCHOOSER_RECORDING );
     short nRetValue = pChooser->Execute();
 
     Application::SetDefDialogParent( pOldModalDialogParent );
@@ -130,10 +135,11 @@ SfxMacro* BasicIDE::CreateMacro()
 
 //----------------------------------------------------------------------------
 
-void BasicIDE::Organize()
+void BasicIDE::Organize( INT16 tabId )
 {
+    BasicIDEDLL::Init();
     Window* pParent = Application::GetDefDialogParent();
-    OrganizeDialog* pDlg = new OrganizeDialog( pParent );
+    OrganizeDialog* pDlg = new OrganizeDialog( pParent, tabId );
     if ( IDE_DLL()->GetShell() )
     {
         IDEBaseWindow* pWin = IDE_DLL()->GetShell()->GetCurWindow();
@@ -631,6 +637,7 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
     MacroChooser* pChooser = new MacroChooser( NULL, TRUE );
     if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
         pChooser->SetMode( MACROCHOOSER_CHOOSEONLY );
+
 
     if ( !bChooseOnly && !bExecute )
         // Hack!
