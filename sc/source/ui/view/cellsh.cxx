@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:48:51 $
+ *  last change: $Author: er $ $Date: 2001-02-06 14:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
         USHORT nRow = GetViewData()->GetCurY();
         USHORT nTab = GetViewData()->GetTabNo();
         ScDocument* pDoc = GetViewData()->GetDocShell()->GetDocument();
-        if (!pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
+        if ( FALSE )//!pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
             bDisable = TRUE;
         ScMarkData& rMark = GetViewData()->GetMarkData();
         if (rMark.IsMultiMarked())
@@ -653,8 +653,6 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case FID_COL_SHOW:
             case FID_COL_OPT_WIDTH:
             case FID_ROW_OPT_HEIGHT:
-            case SID_DEL_ROWS:
-            case SID_DEL_COLS:
             case FID_DELETE_CELL:
                 if ( pDoc->IsTabProtected(nTab) || pDocSh->IsReadOnly())
                     rSet.DisableItem( nWhich );

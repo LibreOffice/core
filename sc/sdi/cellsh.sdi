@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: hr $ $Date: 2000-09-18 16:44:52 $ $Revision: 1.1.1.1 $
+ // $Author: er $ $Date: 2001-02-06 14:46:11 $ $Revision: 1.2 $
  // $Logfile:   T:/sc/sdi/cellsh.sdv  $ $Workfile:   cellsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -93,8 +93,8 @@ interface CellSelection : Selection
     FID_INS_COLUMN          [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     FID_INS_CELLSDOWN       [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     FID_INS_CELLSRIGHT      [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
-    SID_DEL_ROWS            [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
-    SID_DEL_COLS            [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_DEL_ROWS            [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_DEL_COLS            [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     FID_INS_CELL            [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     FID_DELETE_CELL         [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     FID_INS_CELL_CONTENTS   [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
@@ -370,6 +370,9 @@ shell ScCellShell : ScFormatShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:44:52  hr
+    initial import
+
     Revision 1.3  1999/07/27 15:03:42  ANK
     #67793# changes for table-protection
 
