@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MNameMapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:38:55 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,24 @@ MNameMapper::ltstr::operator()( const ::rtl::OUString &s1, const ::rtl::OUString
 MNameMapper::MNameMapper()
 {
     mDirMap = new MNameMapper::dirMap;
+    mUriMap = new MNameMapper::uriMap;
 }
 MNameMapper::~MNameMapper()
 {
+    clear();
+}
+
+void MNameMapper::reset()
+{
+    clear();
+    mDirMap = new MNameMapper::dirMap;
+    mUriMap = new MNameMapper::uriMap;
+}
+void MNameMapper::clear()
+{
+    if ( mUriMap != NULL ) {
+        delete mUriMap;
+    }
     if ( mDirMap != NULL ) {
         MNameMapper::dirMap::iterator   iter;
         for (iter = mDirMap -> begin(); iter != mDirMap -> end(); ++iter) {
@@ -92,9 +107,19 @@ MNameMapper::~MNameMapper()
         delete mDirMap;
     }
 }
+const char * getURI(const nsIAbDirectory*  directory)
+{
+    nsresult retCode;
+    nsCOMPtr<nsIRDFResource> rdfResource = do_QueryInterface((nsISupports *)directory, &retCode) ;
+    if (NS_FAILED(retCode)) { return NULL; }
+    const char * uri;
+    retCode=rdfResource->GetValueConst(&uri);
+    if (NS_FAILED(retCode)) { return NULL; }
+    return uri;
+}
 
 // May modify the name passed in so that it's unique
-void
+nsresult
 MNameMapper::add( ::rtl::OUString& str, nsIAbDirectory* abook )
 {
     MNameMapper::dirMap::iterator   iter;
@@ -103,15 +128,28 @@ MNameMapper::add( ::rtl::OUString& str, nsIAbDirectory* abook )
 
     if ( abook == NULL ) {
         OSL_TRACE( "\tOUT MNameMapper::add() called with null abook\n" );
-        return;
+        return -1;
     }
 
-    if ( mDirMap->find( str ) != mDirMap->end() ) {
-        // TODO - There's already and entry, so make the name unique
+    ::rtl::OUString ouUri=::rtl::OUString::createFromAscii(getURI(abook));
+    if ( mUriMap->find (ouUri) != mUriMap->end() ) //There's already an entry with same uri
+    {
+        return -1;
     }
+    mUriMap->insert( MNameMapper::uriMap::value_type( ouUri, abook ) );
+
+    ::rtl::OUString tempStr=str;
+    long count =1;
+    while ( mDirMap->find( tempStr ) != mDirMap->end() ) {
+
+        tempStr = str + ::rtl::OUString::valueOf(count);;
+        count ++;
+    }
+    str = tempStr;
     NS_IF_ADDREF(abook);
     mDirMap->insert( MNameMapper::dirMap::value_type( str, abook ) );
     OSL_TRACE( "\tOUT MNameMapper::add()\n" );
+    return 0;
 }
 
 // Will replace the given dir
