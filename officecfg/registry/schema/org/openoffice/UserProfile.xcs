@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UserProfile.xcs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:32:11 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 				<desc xml:lang="th">Contains user-related information, such as name and address.</desc>
 				<desc xml:lang="hi-IN">Contains user-related information, such as name and address.</desc>
 				<desc xml:lang="x-comment">; Contains user-related information, such as name and address.</desc>
+				<desc xml:lang="sk">Contains user-related information, such as name and address.</desc>
 			</info>
 			<prop oor:name="o" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -125,6 +126,7 @@
 					<desc xml:lang="th">Specifies the name of the user&apos;s company.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the user&apos;s company.</desc>
 					<desc xml:lang="x-comment">; Specifies the name of the user&apos;s company.</desc>
+					<desc xml:lang="sk">Specifies the name of the user&apos;s company.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -160,6 +162,7 @@
 					<desc xml:lang="th">Specifies the first name of the user.</desc>
 					<desc xml:lang="hi-IN">Specifies the first name of the user.</desc>
 					<desc xml:lang="x-comment">; Specifies the first name of the user.</desc>
+					<desc xml:lang="sk">Specifies the first name of the user.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -195,6 +198,7 @@
 					<desc xml:lang="th">Specifies the last name of the user.</desc>
 					<desc xml:lang="hi-IN">Specifies the last name of the user.</desc>
 					<desc xml:lang="x-comment">; Specifies the last name of the user.</desc>
+					<desc xml:lang="sk">Specifies the last name of the user.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -230,6 +234,7 @@
 					<desc xml:lang="th">Specifies the user&apos;s initials.</desc>
 					<desc xml:lang="hi-IN">Specifies the user&apos;s initials.</desc>
 					<desc xml:lang="x-comment">; Specifies the user&apos;s initials.</desc>
+					<desc xml:lang="sk">Specifies the user&apos;s initials.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -265,6 +270,7 @@
 					<desc xml:lang="th">Specifies the street where the use lives.</desc>
 					<desc xml:lang="hi-IN">Specifies the street where the use lives.</desc>
 					<desc xml:lang="x-comment">; Specifies the street where the use lives.</desc>
+					<desc xml:lang="sk">Specifies the street where the use lives.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -300,6 +306,7 @@
 					<desc xml:lang="th">Specifies the city where the user lives.</desc>
 					<desc xml:lang="hi-IN">Specifies the city where the user lives.</desc>
 					<desc xml:lang="x-comment">; Specifies the city where the user lives.</desc>
+					<desc xml:lang="sk">Specifies the city where the user lives.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -335,6 +342,7 @@
 					<desc xml:lang="th">Specifies the state where the user lives.</desc>
 					<desc xml:lang="hi-IN">Specifies the state where the user lives.</desc>
 					<desc xml:lang="x-comment">; Specifies the state where the user lives.</desc>
+					<desc xml:lang="sk">Specifies the state where the user lives.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -370,6 +378,7 @@
 					<desc xml:lang="th">Specifies the user&apos;s ZIP-code.</desc>
 					<desc xml:lang="hi-IN">Specifies the user&apos;s ZIP-code.</desc>
 					<desc xml:lang="x-comment">; Specifies the user&apos;s ZIP-code.</desc>
+					<desc xml:lang="sk">Specifies the user&apos;s ZIP-code.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -405,6 +414,7 @@
 					<desc xml:lang="th">Specifies the country where the user lives.</desc>
 					<desc xml:lang="hi-IN">Specifies the country where the user lives.</desc>
 					<desc xml:lang="x-comment">; Specifies the country where the user lives.</desc>
+					<desc xml:lang="sk">Specifies the country where the user lives.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -440,6 +450,7 @@
 					<desc xml:lang="th">Specifies the user&apos;s title.</desc>
 					<desc xml:lang="hi-IN">Specifies the user&apos;s title.</desc>
 					<desc xml:lang="x-comment">; Specifies the user&apos;s title.</desc>
+					<desc xml:lang="sk">Specifies the user&apos;s title.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -475,6 +486,7 @@
 					<desc xml:lang="th">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
 					<desc xml:lang="hi-IN">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
 					<desc xml:lang="x-comment">; Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
+					<desc xml:lang="sk">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -510,6 +522,7 @@
 					<desc xml:lang="th">Specifies the user&apos;s private telephone number.</desc>
 					<desc xml:lang="hi-IN">Specifies the user&apos;s private telephone number.</desc>
 					<desc xml:lang="x-comment">; Specifies the user&apos;s private telephone number.</desc>
+					<desc xml:lang="sk">Specifies the user&apos;s private telephone number.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -545,6 +558,7 @@
 					<desc xml:lang="th">Specifies the user&apos;s telephone number at work.</desc>
 					<desc xml:lang="hi-IN">Specifies the user&apos;s telephone number at work.</desc>
 					<desc xml:lang="x-comment">; Specifies the user&apos;s telephone number at work.</desc>
+					<desc xml:lang="sk">Specifies the user&apos;s telephone number at work.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -580,6 +594,7 @@
 					<desc xml:lang="th">Specifies the user&apos;s fax number.</desc>
 					<desc xml:lang="hi-IN">Specifies the user&apos;s fax number.</desc>
 					<desc xml:lang="x-comment">; Specifies the user&apos;s fax number.</desc>
+					<desc xml:lang="sk">Specifies the user&apos;s fax number.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -615,6 +630,7 @@
 					<desc xml:lang="th">Specifies the user&apos;s e-mail address.</desc>
 					<desc xml:lang="hi-IN">Specifies the user&apos;s e-mail address.</desc>
 					<desc xml:lang="x-comment">; Specifies the user&apos;s e-mail address.</desc>
+					<desc xml:lang="sk">Specifies the user&apos;s e-mail address.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -650,12 +666,45 @@
 					<desc xml:lang="th">This field is kept for backwards compatibility.</desc>
 					<desc xml:lang="hi-IN">This field is kept for backwards compatibility.</desc>
 					<desc xml:lang="x-comment">; This field is kept for backwards compatibility.</desc>
+					<desc xml:lang="sk">This field is kept for backwards compatibility.</desc>
 				</info>
 				<value>UserGroup</value>
 			</prop>
 		</group>
 	</component>
 </oor:component-schema>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
