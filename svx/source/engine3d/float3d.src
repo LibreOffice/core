@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-08 21:14:02 $
+ *  last change: $Author: rt $ $Date: 2002-02-21 21:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3394,7 +3394,7 @@ DockingWindow RID_SVXFLOAT_3D
     Text[ dutch ] = "3D-effecten";
     Text[ chinese_simplified ] = "3 ç»´æ•ˆæžœ";
     Text[ greek ] = "ÅöÝ 3Ä";
-    Text[ korean ] = "3D-íš¨ê³¼";
+    Text[ korean ] = "3D íš¨ê³¼";
     Text[ turkish ] = "3B efektler";
     Text[ catalan ] = "Efectos 3D";
     Text[ finnish ] = "Kolmiulotteiset tehosteet";
