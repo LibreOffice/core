@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:23:01 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include "view/SlideSorterView.hxx"
 #include "view/SlsPageObjectViewContact.hxx"
 #include "view/SlsPageObject.hxx"
+#include "view/SlsFontProvider.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "res_bmp.hrc"
@@ -75,6 +76,7 @@
 #include "drawdoc.hxx"
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/xoutx.hxx>
 #include <svx/svdpagv.hxx>
@@ -86,11 +88,14 @@
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
 #include <tools/color.hxx>
+#include <boost/shared_ptr.hpp>
 
 using namespace ::sdr::contact;
 using namespace ::sd::slidesorter::model;
 
+
 namespace sd { namespace slidesorter { namespace view {
+
 
 const sal_Int32 PageObjectViewObjectContact::mnSelectionIndicatorOffset = 1;
 const sal_Int32 PageObjectViewObjectContact::mnSelectionIndicatorThickness = 3;
@@ -288,16 +293,8 @@ void PageObjectViewObjectContact::PaintObject (DisplayInfo& rDisplayInfo)
         const Color aOriginalLineColor (pDevice->GetLineColor());
         Font aOriginalFont (pDevice->GetFont());
 
-        // Set default sans serif font.
-        Font aNewFont (OutputDevice::GetDefaultFont (
-            DEFAULTFONT_SANS_UNICODE,
-            pDevice->GetSettings().GetInternational().GetLanguage(),
-            FALSE,
-            pDevice));
-        Size aFontModelSize (pDevice->PixelToLogic(aNewFont.GetSize()));
-        aNewFont.SetSize (aFontModelSize);
-        aNewFont.SetTransparent (TRUE);
-        pDevice->SetFont (aNewFont);
+        // Set default font.
+        pDevice->SetFont(*FontProvider::Instance().GetFont(*pDevice));
 
         PaintContent (rDisplayInfo);
 
@@ -642,15 +639,7 @@ void PageObjectViewObjectContact::PaintPageName (
     Rectangle aPageBox (GetModelBoundingBox ());
 
     Font aOriginalFont (pDevice->GetFont());
-    Font aNewFont (OutputDevice::GetDefaultFont (
-        DEFAULTFONT_SANS_UNICODE,
-        pDevice->GetSettings().GetInternational().GetLanguage(),
-        FALSE,
-        pDevice));
-    Size aFontModelSize (pDevice->PixelToLogic(aNewFont.GetSize()));
-    aNewFont.SetSize (aFontModelSize);
-    aNewFont.SetTransparent (TRUE);
-    pDevice->SetFont (aNewFont);
+    pDevice->SetFont(*FontProvider::Instance().GetFont(*pDevice));
 
     const SdPage* pPage = static_cast<const SdPage*>(GetPage());
     int nPage = (pPage->GetPageNum()-1) / 2;
@@ -663,7 +652,7 @@ void PageObjectViewObjectContact::PaintPageName (
     aPos.Y() += aSize.Height();
     aPos.X() += 2 * aIndicatorBox.GetWidth();
 
-    Size aTextBoxSize (aPageBox.Right() - aPos.X(), aFontModelSize.Height());
+    Size aTextBoxSize (aPageBox.Right() - aPos.X(), pDevice->GetFont().GetSize().Height());
 
     String sName (const_cast<SdPage*>(pPage)->GetName());
     if (sName.Len() == 0)
@@ -813,6 +802,8 @@ SvBorder PageObjectViewObjectContact::CalculatePageModelBorder (
 
         // Update the border.
         aModelBorder.Left() += aPageNumberModelSize.Width();
+        // The height of the page number area is the same as the height of
+        // the page name area.
         aModelBorder.Bottom() += aPageNumberModelSize.Height();
     }
 
@@ -828,16 +819,7 @@ Size PageObjectViewObjectContact::CalculatePageNumberAreaModelSize (
 {
     // Set the correct font.
     Font aOriginalFont (pDevice->GetFont());
-    Font aNewFont (OutputDevice::GetDefaultFont (
-        DEFAULTFONT_SANS_UNICODE,
-        pDevice->GetSettings().GetInternational().GetLanguage(),
-        FALSE,
-        pDevice));
-    Size aFontModelSize (pDevice->PixelToLogic(aNewFont.GetSize()));
-    aNewFont.SetSize (aFontModelSize);
-    aNewFont.SetWeight (WEIGHT_BOLD);
-    aNewFont.SetTransparent (TRUE);
-    pDevice->SetFont (aNewFont);
+    pDevice->SetFont(*FontProvider::Instance().GetFont(*pDevice));
 
     String sPageNumberTemplate;
     if (nPageCount < 10)
