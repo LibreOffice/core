@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-22 10:46:15 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,7 +633,26 @@ String RID_STR_BOOKMARKS_CONTAINER
     HelpId = HID_DSBROWSER_DIRECTSQL ; \
     Text = "SQL..." ; \
     Text [ english ] = "SQL..." ; \
-    Text [ english_us ] = "SQL..." ;
+    Text [ english_us ] = "SQL..." ;    \
+    Text[ portuguese ] = "SQL...";  \
+    Text[ russian ] = "SQL..."; \
+    Text[ greek ] = "SQL...";   \
+    Text[ dutch ] = "SQL...";   \
+    Text[ french ] = "SQL...";  \
+    Text[ spanish ] = "SQL..."; \
+    Text[ finnish ] = "SQL..."; \
+    Text[ italian ] = "SQL..."; \
+    Text[ danish ] = "SQL...";  \
+    Text[ swedish ] = "SQL..."; \
+    Text[ polish ] = "SQL...";  \
+    Text[ portuguese_brazilian ] = "SQL...";    \
+    Text[ japanese ] = "SQL...";    \
+    Text[ korean ] = "SQL...";  \
+    Text[ chinese_simplified ] = "SQL...";  \
+    Text[ chinese_traditional ] = "SQL..."; \
+    Text[ turkish ] = "SQL..."; \
+    Text[ arabic ] = "SQL...";  \
+    Text[ catalan ] = "SQL...";
 
 #define MID_CLOSECONN   \
     Identifier = ID_TREE_CLOSE_CONN ;   \
@@ -1284,6 +1303,7 @@ String STR_LOADING_TABLE
     Text[ finnish ] = "lade Tabelle $name$ ...";
     Text[ catalan ] = "loading table $name$ ...";
 };
+
 
 
 
