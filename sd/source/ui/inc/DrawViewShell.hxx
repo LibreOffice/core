@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:32:31 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ class XPolygon;
 class SdrPageView;
 class TransferableDataHelper;
 class TransferableClipboardListener;
-class SvxNameDialog;
+class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
 class SdrLayer;
 
 namespace sd {
@@ -441,8 +441,8 @@ protected:
                     DECL_LINK( CloseHdl, Timer* pTimer );
                     DECL_LINK( TabSplitHdl, TabBar * );
                     DECL_LINK( TabModeBtnHdl, Button * );
-                    DECL_LINK( NameObjectHdl, SvxNameDialog* );
-                    DECL_LINK( RenameSlideHdl, SvxNameDialog* );
+                    DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
+                    DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog* );
 
     void            DeleteActualPage();
     void            DeleteActualLayer();
