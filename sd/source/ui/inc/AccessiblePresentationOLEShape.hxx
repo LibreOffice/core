@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationOLEShape.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-03-07 09:31:48 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,9 @@ public:
     AccessiblePresentationOLEShape (const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& rxShape,
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent);
+        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+        AccessibleShapeTreeInfo& rShapeTreeInfo,
+        long nIndex = -1);
     virtual ~AccessiblePresentationOLEShape (void);
 
     //=====  XServiceInfo  ====================================================
@@ -90,14 +92,16 @@ public:
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    //=====  internal  ========================================================
+
     /// Create a name string that contains the accessible name.
     virtual ::rtl::OUString
-        createAccessibleBaseName ()
+        CreateAccessibleBaseName ()
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Create a description string that contains the accessible description.
     virtual ::rtl::OUString
-        createAccessibleDescription ()
+        CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
 };
 

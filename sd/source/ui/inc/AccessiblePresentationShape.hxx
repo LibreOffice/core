@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationShape.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-03-07 09:31:48 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_PRESENTATION_SHAPE_HXX
 #define _SD_ACCESSIBILITY_ACCESSIBLE_PRESENTATION_SHAPE_HXX
 
@@ -77,9 +76,11 @@ class AccessiblePresentationShape
 public:
     //=====  internal  ========================================================
     AccessiblePresentationShape (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& rxShape,
+            ::com::sun::star::drawing::XShape>& rxShape,
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent);
+            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+        AccessibleShapeTreeInfo& rShapeTreeInfo,
+        long nIndex = -1);
     virtual ~AccessiblePresentationShape (void);
 
     //=====  XServiceInfo  ====================================================
@@ -90,15 +91,34 @@ public:
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    //=====  internal  ========================================================
+
     /// Create a name string that contains the accessible name.
     virtual ::rtl::OUString
-        createAccessibleBaseName ()
+        CreateAccessibleBaseName ()
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Create a description string that contains the accessible description.
     virtual ::rtl::OUString
-        createAccessibleDescription ()
+        CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
+
+private:
+    /** Don't use the default constructor.  Use the public constructor that
+        takes the original shape and the parent as arguments instead.
+    */
+    AccessiblePresentationShape (void) : AccessibleShape (NULL,NULL,*(AccessibleShapeTreeInfo*)NULL)
+    { OSL_ENSURE (sal_False, "Illegal call of default constructor of AccessiblePresentationShape");};
+
+    /// Don't use the constructor.  Not yet implemented.
+    AccessiblePresentationShape (const AccessiblePresentationShape&)
+        : AccessibleShape (NULL,NULL,*(AccessibleShapeTreeInfo*)NULL)
+    { OSL_ENSURE (sal_False, "Illegal call of copy constructor of AccessiblePresentationShape");};
+
+    /// Don't use the assignment operator.  Not yet implemented.
+    AccessiblePresentationShape& operator= (const AccessiblePresentationShape&)
+    { OSL_ENSURE (sal_False, "Illegal call of asignment operator of AccessiblePresentationShape");
+    return *this;};
 };
 
 } // end of namespace accessibility
