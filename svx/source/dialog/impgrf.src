@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 14:37:55 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ english_us ] = "Standard" ;
         Text[ chinese_simplified ] = "±Í◊º(~O)";
         Text[ russian ] = "—Ú‡Ì‰‡Ú";
-        Text[ polish ] = "Standard";
+        Text[ polish ] = "Domyúlnie";
         Text[ japanese ] = "ïWèÄ(~O)";
         Text[ chinese_traditional ] = "º–∑«(~O)";
         Text[ arabic ] = "ﬁÌ«”Ì";
