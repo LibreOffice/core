@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-17 09:35:21 $
+ *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,6 @@
 
 #ifndef _WW8PAR_HXX
 #define _WW8PAR_HXX
-
-
-//#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
-//#include <com/sun/star/drawing/XShape.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
-//#include <com/sun/star/form/XFormComponent.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-//#include <com/sun/star/beans/XPropertySet.hpp>
-//#endif
 
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
@@ -249,11 +238,34 @@ typedef SwCharFmt* WW8aCFmt[ nWW8MaxListLevel ];
 // Redlining: match WinWord author ids to StarWriter author ids
 struct WW8AuthorInfo;
 typedef WW8AuthorInfo* WW8AuthorInfo_Ptr;
+struct WW8OleMap;
+typedef WW8OleMap* WW8OleMap_Ptr;
 
 SV_DECL_PTRARR_SORT_DEL(WW8LSTInfos,    WW8LSTInfo_Ptr,     16,16);
 SV_DECL_PTRARR_DEL(     WW8LFOInfos,    WW8LFOInfo_Ptr,     16,16);
 SV_DECL_PTRARR_SORT_DEL(WW8AuthorInfos, WW8AuthorInfo_Ptr,  16,16);
+SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,  16,16);
 SV_DECL_PTRARR(SwCharFmtPtrArray, SwCharFmt*,4,16);
+
+
+struct WW8OleMap
+{
+    UINT32 nWWid;
+    SvInPlaceObject *pWriterRef;
+
+    WW8OleMap(UINT32 nWWid_ , SvInPlaceObject *pWriterRef_ = 0):
+        nWWid( nWWid_), pWriterRef (pWriterRef_) {}
+
+    BOOL operator==( const WW8OleMap & rEntry ) const
+    {
+        return (nWWid == rEntry.nWWid);
+    }
+    BOOL operator<( const WW8OleMap & rEntry ) const
+    {
+        return (nWWid < rEntry.nWWid);
+    }
+};
+
 
 class SwWW8ImplReader;
 class WW8ListManager
@@ -588,6 +600,7 @@ friend class WW8FormulaControl;
     SvStringsDtor* pAtnNames;
 
     WW8AuthorInfos* pAuthorInfos;
+    WW8OleMaps* pOleMap;
 
     SwNodeIndex* pLastPgDeskIdx;// for inserting a section when Ft-/End-Note
                                 // with flag 'on end of section' set
@@ -852,10 +865,9 @@ friend class WW8FormulaControl;
                            BOOL        bSetToBackground = FALSE );
     BOOL ImportURL(String &sURL,String &sMark,WW8_CP nStart);
 
-    SdrObject* ImportOleBase( Graphic& rGraph,
-                                BOOL bTstOCXControls,
-                                const Graphic* pGrf,
-                                const SfxItemSet* pFlySet );
+    SdrObject* ImportOleBase( Graphic& rGraph, BOOL bTstOCXControls=FALSE,
+        const Graphic* pGrf=0, const SfxItemSet* pFlySet=0 );
+
     SwFrmFmt* ImportOle( const Graphic* = 0, const SfxItemSet* pFlySet = 0 );
 
     BOOL ImportFormulaControl(WW8FormulaControl &rBox,WW8_CP nStart,
@@ -1155,6 +1167,8 @@ public:     // eigentlich private, geht aber leider nur public
     static BOOL GetPictGrafFromStream( Graphic& rGraphic, SvStream& rSrc,
         ULONG nLen = ULONG_MAX );
     static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, BOOL bVer67);
+    static BOOL ImportOleWMF( SvStorageRef xSrc1, GDIMetaFile &rWMF,
+        INT16 &rX, INT16 &rY);
 
     SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
                      SvStream* pSt, SwDoc& rD, BOOL bNewDoc );

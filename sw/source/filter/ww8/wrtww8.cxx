@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1989,6 +1989,9 @@ ULONG SwWW8Writer::StoreDoc()
         pOLEExp = new SvxMSExportOLEObjects( nSvxMSDffOLEConvFlags );
     }
 
+    if( !pOleMap)
+        pOleMap = new WW8OleMaps;
+
     if( !pOCXExp )
         pOCXExp = new SwMSConvertControls(pDoc->GetDocShell(),pCurPam);
 
@@ -2276,7 +2279,7 @@ ULONG SwWW8Writer::WriteStorage()
 SwWW8Writer::SwWW8Writer( const String& rFltName )
     : pChpIter( 0 ), aMainStg( sMainStream ), pPapPlc( 0 ), pChpPlc( 0 ),
     pO( 0 ), pAktPageDesc( 0 ), pISet( 0 ), pUsedNumTbl( 0 ), pBmpPal( 0 ),
-    pKeyMap( 0 ), pOLEExp( 0 ), pOCXExp(0)
+    pKeyMap( 0 ), pOLEExp( 0 ), pOCXExp(0), pOleMap(0)
 {
     bWrtWW8 = rFltName.EqualsAscii( FILTER_WW8 );
 }
@@ -2294,6 +2297,7 @@ SwWW8Writer::~SwWW8Writer()
         delete pOLEExp;
     if( pOCXExp )
         delete pOCXExp;
+    delete pOleMap;
 }
 
 void GetWW8Writer( const String& rFltName, WriterRef& xRet )

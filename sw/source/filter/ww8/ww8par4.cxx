@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-16 12:21:56 $
+ *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
 
-using namespace ::com::sun::star;
-
 struct OLE_MFP
 {
     INT16 mm;       // 0x6  int
@@ -153,9 +151,10 @@ struct OLE_MFP
     INT16 hMF;      // 0xc  int
 };
 
+using namespace ::com::sun::star;
 
 SV_IMPL_OP_PTRARR_SORT(WW8AuthorInfos, WW8AuthorInfo_Ptr)
-
+SV_IMPL_OP_PTRARR_SORT(WW8OleMaps, WW8OleMap_Ptr)
 
 static BOOL SwWw8ReadScaling( INT16& rX, INT16& rY, SvStorageRef& rSrc1 )
 {
@@ -198,8 +197,10 @@ static BOOL SwWw8ReadScaling( INT16& rX, INT16& rY, SvStorageRef& rSrc1 )
         >> nCropRight
         >> nCropBottom;
 
-    rX = nOrgWidth  - nCropLeft - nCropRight;
-    rY = nOrgHeight - nCropTop  - nCropBottom;
+    if (!rX)
+        rX = nOrgWidth  - nCropLeft - nCropRight;
+    if (!rY)
+        rY = nOrgHeight - nCropTop  - nCropBottom;
     if(       10 > nScaleX
         || 65536 < nScaleX
         ||    10 > nScaleY
@@ -210,14 +211,14 @@ static BOOL SwWw8ReadScaling( INT16& rX, INT16& rY, SvStorageRef& rSrc1 )
     }
     else
     {
-        rX = (INT16)( (long)rX * nScaleX / 1000 );
-        rY = (INT16)( (long)rY * nScaleY / 1000 );
+        rX = (INT16)( ((long)rX * nScaleX) / 1000 );
+        rY = (INT16)( ((long)rY * nScaleY) / 1000 );
     }
     return TRUE;
 }
 
-static BOOL SwWw6ReadMetaStream( GDIMetaFile& rWMF, OLE_MFP* pMfp,
-                         SvStorageRef& rSrc1 )
+static BOOL SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
+    SvStorageRef& rSrc1)
 {
     SvStorageStreamRef xSrc2 = rSrc1->OpenStream( WW8_ASCII2STR( "\3META" ));
     SvStorageStream* pSt = xSrc2;
@@ -311,8 +312,10 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
 
             pFlySet = pTempSet;
 
+
+            // Abstand/Umrandung raus
             if( !bNew )
-                Reader::ResetFrmFmtAttrs( *pTempSet );  // Abstand/Umrandung raus
+                Reader::ResetFrmFmtAttrs( *pTempSet );
 
             SwFmtAnchor aAnchor( FLY_IN_CNTNT );
             aAnchor.SetAnchor( pPaM->GetPoint() );
@@ -338,8 +341,28 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
         {
             if( pRet->ISA( SdrOle2Obj ))
             {
+#ifdef NO_OLE_SIZE_OPTIMIZE
                 pFmt = rDoc.Insert( *pPaM, &((SdrOle2Obj*)pRet)->GetObjRef(),
-                                        pFlySet );
+                    pFlySet );
+#else
+                if( !pOleMap)
+                    pOleMap = new WW8OleMaps;
+
+                WW8OleMap *pMap = new WW8OleMap( nObjLocFc,
+                    &((SdrOle2Obj*)pRet)->GetObjRef());
+                const WW8OleMap *pEntry = pMap;
+
+                USHORT nPos;
+                if ( pOleMap->Seek_Entry(pMap, &nPos) )
+                {
+                    pEntry = pOleMap->GetObject( nPos );
+                    delete pMap;
+                }
+                else if( 0 == pOleMap->Insert( pMap) )
+                    delete pMap;
+
+                pFmt = rDoc.Insert( *pPaM, pEntry->pWriterRef, pFlySet );
+#endif
                 //JP 10.4.2001: Bug 85614 - don't remove in DTOR the
                 //              object from our persist
                 SvInPlaceObjectRef xEmpty;
@@ -364,10 +387,33 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
     return pFmt;
 }
 
-SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
-                                            BOOL bTstOCXControls,
-                                            const Graphic* pGrf,
-                                               const SfxItemSet* pFlySet )
+BOOL SwWW8ImplReader::ImportOleWMF(SvStorageRef xSrc1,GDIMetaFile &rWMF,
+    INT16 &rX,INT16 &rY)
+{
+    BOOL bOk=FALSE;
+    OLE_MFP aMfp;
+    if( SwWw6ReadMetaStream( rWMF, &aMfp, xSrc1 ) )
+    {
+        /*
+        take scaling factor as found in PIC and apply it to graphic.
+        */
+        SwWw8ReadScaling( rX, rY, xSrc1 );
+        Size aFinalSize, aOrigSize;
+        aFinalSize.Width() = rX;
+        aFinalSize.Height() = rY;
+        aFinalSize = OutputDevice::LogicToLogic(
+            aFinalSize, MAP_TWIP, rWMF.GetPrefMapMode() );
+        aOrigSize = rWMF.GetPrefSize();
+        Fraction aScaleX(aFinalSize.Width(),aOrigSize.Width());
+        Fraction aScaleY(aFinalSize.Height(),aOrigSize.Height());
+        rWMF.Scale( aScaleX, aScaleY );
+        bOk=TRUE;
+    }
+    return bOk;
+}
+
+SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph, BOOL bTstOCX,
+    const Graphic* pGrf, const SfxItemSet* pFlySet )
 {
     SdrObject* pRet = 0;
     if( !(nIniFlags & WW8FL_NO_OLE ))
@@ -376,11 +422,12 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 
         ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
 
-        INT16 nX, nY;               // nX, nY ist Ziel-Groesse
+        INT16 nX=0, nY=0;               // nX, nY ist Ziel-Groesse
         BOOL bOleOk = TRUE;
 
         String aSrcStgName = '_';
-        aSrcStgName += String::CreateFromInt32( nObjLocFc );        // ergibt Name "_4711"
+        // ergibt Name "_4711"
+        aSrcStgName += String::CreateFromInt32( nObjLocFc );
 
         SvStorageRef xSrc0 = pStg->OpenStorage( WW8_ASCII2STR( "ObjectPool" ) );
 
@@ -388,104 +435,77 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
         {
             rGraph = *pGrf;
             const Size aSizeTwip = OutputDevice::LogicToLogic(
-                                        rGraph.GetPrefSize(),
-                                        rGraph.GetPrefMapMode(),
-                                        MAP_TWIP );
+                rGraph.GetPrefSize(), rGraph.GetPrefMapMode(), MAP_TWIP );
             nX = (INT16) aSizeTwip.Width();
             nY = (INT16) aSizeTwip.Height();
         }
         else
         {
             SvStorageRef xSrc1 = xSrc0->OpenStorage( aSrcStgName,
-                                STREAM_READWRITE| STREAM_SHARE_DENYALL );
+                STREAM_READWRITE| STREAM_SHARE_DENYALL );
+#if 1
+            GDIMetaFile aWMF;
+
+            if (ImportOleWMF(xSrc1,aWMF,nX,nY))
+                rGraph = Graphic( aWMF );
+#else
             OLE_MFP aMfp;
             GDIMetaFile aWMF;
             if( SwWw6ReadMetaStream( aWMF, &aMfp, xSrc1 ) )
             {
-                /* ignore size, take Size in SwWw8ReadScaling instead!
-                INT16 nXO = (INT16)( (long)aMfp.xExt * 144 / 254 );
-                INT16 nYO = (INT16)( (long)aMfp.yExt * 144 / 254 );
+                /*
+                take scaling factor as found in PIC and apply it to graphic.
                 */
                 SwWw8ReadScaling( nX, nY, xSrc1 );
+                Size aFinalSize, aOrigSize;
+                aFinalSize.Width() = nX;
+                aFinalSize.Height() = nY;
+                aFinalSize = OutputDevice::LogicToLogic(
+                    aFinalSize, MAP_TWIP, aWMF.GetPrefMapMode() );
+                aOrigSize = aWMF.GetPrefSize();
+                Fraction aScaleX(aFinalSize.Width(),aOrigSize.Width());
+                Fraction aScaleY(aFinalSize.Height(),aOrigSize.Height());
+                aWMF.Scale( aScaleX, aScaleY );
                 rGraph = Graphic( aWMF );
             }
+#endif
             // 03-META-Stream nicht da. Vielleicht ein 03-PICT ?
             else if( SwWw6ReadMacPICTStream( rGraph, xSrc1 ) )
             {
                 const Size aSizeTwip = OutputDevice::LogicToLogic(
-                                            rGraph.GetPrefSize(),
-                                            rGraph.GetPrefMapMode(),
-                                            MAP_TWIP );
+                    rGraph.GetPrefSize(), rGraph.GetPrefMapMode(), MAP_TWIP );
                 nX = (INT16) aSizeTwip.Width();
                 nY = (INT16) aSizeTwip.Height();
-                bOleOk = FALSE;         // PICT: kein WMF da -> Grafik statt OLE
+                // PICT: kein WMF da -> Grafik statt OLE
+                bOleOk = FALSE;
             }
-#if 0
-//JP 23.06.99 - if the OLE-Storage does not contained the streams META
-//              or PICT, then import the grafic from the escher.
-//              But the Question is, is the OLE-Storage then a valid
-//              OLE-Object and is the user be able to activate it. So it's
-//              better to import it as grafic.
-
-
-//cmc 21 May 2001 - If we have an inline equation editor ole object we have no
-//META or PICT streams, so unless we import the graph associated with it, we
-//will not convert them to StarMath Formulas through CreateSdrOLEFromStorage
-//
-//This is now done in ImportGraf instead (#83396#)
-
-            else
-            {
-                ULONG nOldObjLocFc = nObjLocFc;
-                nObjLocFc = 0;
-
-                SwFrmFmt* pGrfFmt = ImportGraf();
-                if( pGrfFmt )
-                {
-                    const SwNodeIndex* pCntIdx = pGrfFmt->GetCntnt( FALSE ).
-                                            GetCntntIdx();
-                    if( pCntIdx )
-                    {
-                        SwNodeIndex aIdx( *pCntIdx, 1 );
-                        if( aIdx.GetNode().IsGrfNode() )
-                        {
-                            // get the grafic of the node and delete it then
-                            // complete, because its become a OLE-Object
-                            rGraph = aIdx.GetNode().GetGrfNode()->GetGrf();
-                            Size aSz( aIdx.GetNode().GetGrfNode()->GetTwipSize() );
-                            nX = (INT16) aSz.Width();
-                            nY = (INT16) aSz.Height();
-
-                            rDoc.DelLayoutFmt( pGrfFmt );
-                            pGrfFmt = 0;
-                        }
-                    }
-                }
-                nObjLocFc = nOldObjLocFc;
-            }
-#endif
         }       // StorageStreams wieder zu
 
         SvStorageRef xSrc1 = xSrc0->OpenStorage( aSrcStgName,
             STREAM_READWRITE| STREAM_SHARE_DENYALL );
 
-        if( bTstOCXControls )
+        if( bTstOCX )
         {
             if(!pFormImpl)
                 pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
             uno::Reference< drawing::XShape > xRef;
             if( pFormImpl->ReadOCXStream( xSrc1,&xRef,bFloatingCtrl))
             {
-                uno::Reference< beans::XPropertySet >  xPropSet( xRef, uno::UNO_QUERY );
-                uno::Reference< lang::XUnoTunnel> xTunnel( xPropSet, uno::UNO_QUERY);
+                uno::Reference< beans::XPropertySet >
+                    xPropSet( xRef, uno::UNO_QUERY );
+                uno::Reference< lang::XUnoTunnel>
+                    xTunnel( xPropSet, uno::UNO_QUERY);
 
                 if( xTunnel.is() )
                 {
                     SwXShape *pSwShape = (SwXShape*)xTunnel->getSomething(
-                                            SwXShape::getUnoTunnelId() );
+                        SwXShape::getUnoTunnelId() );
+
                     if( pSwShape )
                     {
-                        SwFrmFmt* pFrmFmt = (SwFrmFmt*)pSwShape->GetRegisteredIn();
+                        SwFrmFmt* pFrmFmt =
+                            (SwFrmFmt*)pSwShape->GetRegisteredIn();
+
                         if( pFrmFmt )
                             pRet = pFrmFmt->FindSdrObject();
                     }
@@ -499,32 +519,32 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
         {
             ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
 
+            const SwFmtFrmSize* pSize;
             Point aTmpPoint;
             Rectangle aRect( aTmpPoint, Size( nX, nY ) );
-            const SwFmtFrmSize* pSize;
+
             if( pFlySet && 0 != ( pSize = (SwFmtFrmSize*)pFlySet->GetItem(
-                                            RES_FRM_SIZE, FALSE )) )
+                RES_FRM_SIZE, FALSE )) )
+            {
                     aRect.SetSize( pSize->GetSize() );
+            }
 
             if( bOleOk && !( nIniFlags & WW8FL_OLE_TO_GRAF ))
             {
                 ULONG nOldPos = pDataStream->Tell();
-
                 pDataStream->Seek(STREAM_SEEK_TO_END);
-                SvStream *pTmpData;
+                SvStream *pTmpData = 0;
                 if (nObjLocFc < pDataStream->Tell())
                 {
                     pTmpData = pDataStream;
                     pTmpData->Seek( nObjLocFc );
                 }
-                else
-                    pTmpData = 0;
 
                 SvStorageRef xDst0( rDoc.GetDocShell()->GetStorage() );
+
                 pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-                                        aSrcStgName, xSrc0, xDst0,
-                                        rGraph, aRect, pTmpData,
-                                        SwMSDffManager::GetFilterFlags());
+                    aSrcStgName, xSrc0, xDst0, rGraph, aRect, pTmpData,
+                    SwMSDffManager::GetFilterFlags());
                 pDataStream->Seek( nOldPos );
             }
         }
@@ -553,6 +573,7 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
         if( 0 == pAuthorInfos->Insert( pAutorInfo ) )
             delete pAutorInfo;
     }
+
     aAuthorNames.DeleteAndDestroy( 0, aAuthorNames.Count() );
 }
 

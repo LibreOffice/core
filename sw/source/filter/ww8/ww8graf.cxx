@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-17 10:21:16 $
+ *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1169,8 +1169,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                 // SdrTextObj in dessen Gruppe einsetzen
 
                                 Graphic aGraph;
-                                SdrObject* pNew = ImportOleBase( aGraph, FALSE,
-                                    0, 0 );
+                                SdrObject* pNew = ImportOleBase( aGraph );
 
                                 if( !pNew )
                                 {

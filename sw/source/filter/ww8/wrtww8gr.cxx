@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-15 14:22:08 $
+ *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
 #endif
+#ifndef _SFXITEMITER_HXX //autogen
+#include <svtools/itemiter.hxx>
+#endif
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
 #endif
@@ -112,6 +115,9 @@
 #endif
 #ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX
+#include <svx/svdoole2.hxx>
 #endif
 #ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
@@ -140,7 +146,9 @@
 #ifndef _WRTWW8_HXX
 #include <wrtww8.hxx>
 #endif
-
+#ifndef _WW8PAR_HXX
+#include <ww8par.hxx>
+#endif
 
 #define WW8_ASCII2STR(s) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(s))
 
@@ -167,6 +175,82 @@ Writer& OutWW8_SwGrfNode( Writer& rWrt, SwCntntNode& rNode )
     rWW8Wrt.pFib->fHasPic = 1;
 
     return rWrt;
+}
+
+BOOL SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
+    SvStorageRef xOleStg, SvStorageRef xObjStg, String &rStorageName,
+    SwOLENode *pOLENd)
+{
+#ifdef NO_OLE_SIZE_OPTIMIZE
+    return TRUE;
+#else
+    BOOL bGraphicNeeded = FALSE;
+    SfxItemIter aIter( rSet );
+    const SfxPoolItem* pItem = aIter.GetCurItem();
+
+    do {
+        switch (pItem->Which())
+        {
+            /*
+            For an inline object these properties are irrelevent because they
+            will be the same as the defaults that msword applies in their
+            absence, so if that is all that there is for these inline objects
+            then if there turns out to be enough information in the object
+            itself to regenerate the correct size and preview of the object
+            then we will not need to provide an additional graphics preview in
+            the data stream, which can save a lot of disk space.
+            */
+            case RES_FRM_SIZE:
+            case RES_CNTNT:
+            case RES_VERT_ORIENT:
+            case RES_ANCHOR:
+                break;
+            default:
+                bGraphicNeeded=TRUE;
+        }
+    } while( !bGraphicNeeded && !aIter.IsAtEnd() &&
+        0 != ( pItem = aIter.NextItem() ) );
+
+    /*
+    Now we must see if the object contains a preview itself which is equal to
+    the preview that we are currently using. If the graphics are equal then we
+    dont need to store another preview
+    */
+    GDIMetaFile aWMF;
+    INT16 nX=0,nY=0;
+    if (!bGraphicNeeded && SwWW8ImplReader::ImportOleWMF(xOleStg,aWMF,nX,nY))
+    {
+        Point aTmpPoint;
+        Rectangle aRect( aTmpPoint, Size( nX, nY ) );
+        Graphic aGraph(aWMF);
+
+        SvStorageRef xRef( pDoc->GetDocStorage() );
+
+        SdrOle2Obj *pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
+            rStorageName,xObjStg,xRef,aGraph,aRect,0,0);
+
+        if (pRet)
+        {
+            const SvInPlaceObjectRef rO(pRet->GetObjRef());
+            GDIMetaFile aMtf;
+            rO->GetGDIMetaFile( aMtf );
+
+            SwOLEObj &rSObj= pOLENd->GetOLEObj();
+            const SvInPlaceObjectRef rO2(rSObj.GetOleRef());
+            GDIMetaFile aNewMtf;
+            rO2->GetGDIMetaFile( aNewMtf );
+#if 0
+            //The compare in gdimtf.cxx isn't good #94067#
+            if (aMtf != aNewMtf)
+#else
+            if (aMtf.GetChecksum() != aNewMtf.GetChecksum())
+#endif
+                bGraphicNeeded=TRUE;
+            delete pRet;
+        }
+    }
+    return bGraphicNeeded;
+#endif
 }
 
 Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
@@ -199,9 +283,7 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
             nSize = sizeof( aSpecOLE_WW6 );
         }
         pDataAdr = pSpecOLE + 2; //WW6 sprm is 1 but has 1 byte len as well.
-        const SwOLENode& rOLENd = (SwOLENode&)rNode;
-        UINT32 nPictureId = (long)&rOLENd;
-        Set_UInt32( pDataAdr, nPictureId );
+        SwOLENode *pOLENd = rNode.GetOLENode();
 
         SvStorageRef xObjStg = rWW8Wrt.GetStorage().OpenStorage(
                         String::CreateFromAscii(
@@ -209,34 +291,64 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                                 STREAM_READWRITE| STREAM_SHARE_DENYALL );
         if( xObjStg.Is()  )
         {
-            String sStorageName( '_' );
-            sStorageName += String::CreateFromInt32( nPictureId );
-            SvStorageRef xOleStg = xObjStg->OpenStorage( sStorageName,
-                                STREAM_READWRITE| STREAM_SHARE_DENYALL );
-            if( xOleStg.Is() )
+            SvInPlaceObjectRef xObj(pOLENd->GetOLEObj().GetOleRef());
+            if( xObj.Is() )
             {
-                SvInPlaceObjectRef xObj( ((SwOLENode&)rOLENd).
-                                            GetOLEObj().GetOleRef() );
-                if( xObj.Is() )
-                {
-                    rWW8Wrt.GetOLEExp().ExportOLEObject( *xObj, *xOleStg );
+                SvInPlaceObject *pObj = &xObj;
+                UINT32 nPictureId = (long)pObj;
+                Set_UInt32( pDataAdr, nPictureId );
 
-                    // write as embedded field - the other things will
-                    // be done in the escher export
+                WW8OleMap *pMap = new WW8OleMap(nPictureId, pObj);
+                const WW8OleMap *pEntry = pMap;
+                BOOL bDuplicate = FALSE;
+                WW8OleMaps &rOleMap = rWW8Wrt.GetOLEMap();
+                USHORT nPos;
+                if ( rOleMap.Seek_Entry(pMap, &nPos) )
+                {
+                    bDuplicate = TRUE;
+                    delete pMap;
+                }
+                else if( 0 == rOleMap.Insert( pMap) )
+                    delete pMap;
+
+                String sStorageName( '_' );
+                sStorageName += String::CreateFromInt32( nPictureId );
+                SvStorageRef xOleStg = xObjStg->OpenStorage( sStorageName,
+                                    STREAM_READWRITE| STREAM_SHARE_DENYALL );
+                if( xOleStg.Is() )
+                {
+                    /*
+                    If this object storage has been written already don't
+                    waste time rewriting it
+                    */
+                    if (!bDuplicate)
+                        rWW8Wrt.GetOLEExp().ExportOLEObject( *pObj, *xOleStg );
+
+                    // write as embedded field - the other things will be done
+                    // in the escher export
                     String sServer( String::CreateFromAscii(
                             RTL_CONSTASCII_STRINGPARAM( " EINBETTEN " )));
                     ( sServer += xOleStg->GetUserName() ) += ' ';
 
-                    rWW8Wrt.OutField( 0, 58, sServer,
-                                            WRITEFIELD_START |
-                                            WRITEFIELD_CMD_START |
-                                            WRITEFIELD_CMD_END );
-
-                    rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
-                                    nSize, pSpecOLE );
+                    rWW8Wrt.OutField( 0, 58, sServer, WRITEFIELD_START |
+                        WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
 
                     BOOL bEndCR = TRUE;
+                    BOOL bGraphicNeeded = FALSE;
                     if (rWW8Wrt.pFlyFmt)
+                    {
+                        bGraphicNeeded = TRUE;
+
+                        const SwAttrSet& rSet = rWW8Wrt.pFlyFmt->GetAttrSet();
+                        if (rSet.GetAnchor(FALSE).GetAnchorId() == FLY_IN_CNTNT)
+                        {
+                            bEndCR = FALSE;
+                            bGraphicNeeded = rWW8Wrt.TestOleNeedsGraphic(rSet,
+                                xOleStg, xObjStg, sStorageName, pOLENd);
+                        }
+                    }
+
+                    if (bGraphicNeeded)
                     {
                         /*
                         ##897##
@@ -245,21 +357,22 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                         has no place to find the dimensions of the ole
                         object, and will not be able to draw it
                         */
+                        rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
+                            nSize, pSpecOLE );
                         rWW8Wrt.OutGrf( rNode.GetOLENode() );
-                        if (rWW8Wrt.pFlyFmt->GetAttrSet().GetAnchor( FALSE ).
-                            GetAnchorId() == FLY_IN_CNTNT)
-                        {
-                            bEndCR = FALSE;
-                        }
                     }
                     else
+                    {
                         rWW8Wrt.WriteChar( 0x1 );
+                        rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
+                            nSize, pSpecOLE );
+                    }
 
                     rWW8Wrt.OutField( 0, 58, aEmptyStr,
                                             WRITEFIELD_END |
                                             WRITEFIELD_CLOSE );
-                    if (bEndCR) //No newline of inline case
-                        rWW8Wrt.WriteCR();              // CR danach
+                    if (bEndCR) //No newline in inline case
+                        rWW8Wrt.WriteCR();
                 }
             }
         }
@@ -306,7 +419,7 @@ void SwWW8Writer::OutGrf( const SwNoTxtNode* pNd )
             nHeight*=2;
 
             Set_UInt16( pArr, 0x4845 );
-            Set_UInt16( pArr, -nHeight);
+            Set_UInt16( pArr, -((INT16)nHeight));
         }
     }
 
@@ -662,7 +775,8 @@ void SwWW8WrGrf::Write1Grf( SvStream& rStrm, const SwNoTxtNode* pNd,
     }
     else if( pNd->IsOLENode() )
     {
-        SwOLENode*                  pOleNd = ((SwNoTxtNode*)pNd)->GetOLENode(); // const wegcasten
+        // cast away const
+        SwOLENode *pOleNd = ((SwNoTxtNode*)pNd)->GetOLENode();
         ASSERT( pOleNd, " Wer hat den OleNode versteckt ?" );
         SwOLEObj&                   rSObj= pOleNd->GetOLEObj();
         const SvInPlaceObjectRef    rObj(  rSObj.GetOleRef() );
@@ -673,9 +787,9 @@ void SwWW8WrGrf::Write1Grf( SvStream& rStrm, const SwNoTxtNode* pNd,
         Size aS( aMtf.GetPrefSize() );
 #ifdef DEBUG
         MapMode aMap ( aMtf.GetPrefMapMode() );
-        ASSERT( aMtf.GetActionCount(), "OLE schreiben OK ? ( No Meta-Action )" );
-        ASSERT( aMtf.GetPrefMapMode().GetMapUnit() == MAP_100TH_MM,
-                "MapMode des Ole ist nicht 1/100mm!" );
+        ASSERT(aMtf.GetActionCount(), "OLE schreiben OK ? ( No Meta-Action )");
+        ASSERT(aMtf.GetPrefMapMode().GetMapUnit() == MAP_100TH_MM,
+                "MapMode des Ole ist nicht 1/100mm!");
 #endif
         aMtf.WindStart();
         aMtf.Play( Application::GetDefaultDevice(),
@@ -721,14 +835,30 @@ void SwWW8WrGrf::Write()
     SvStream& rStrm = *rWrt.pDataStrm;
     for( USHORT i = 0; i < aNds.Count(); i++ )
     {
+        const SwNoTxtNode* pNd = (const SwNoTxtNode*)aNds[i];
+
         UINT32 nPos = rStrm.Tell();                 // auf 4 Bytes alignen
         if( nPos & 0x3 )
             SwWW8Writer::FillCount( rStrm, 4 - ( nPos & 0x3 ) );
 
-        aPos.Insert( rStrm.Tell(), aPos.Count() );  // Pos merken
-        const SwNoTxtNode* pNd = (const SwNoTxtNode*)aNds[i];
-        Write1Grf( rStrm, pNd, (const SwFlyFrmFmt*)aFlys[i],
-                                aWid[i], aHei[i] );
+        BOOL bDuplicated=FALSE;
+        for( USHORT nI = 0; nI < i; nI++ )
+        {
+            if ( (pNd == (const SwNoTxtNode*)aNds[nI]) && aWid[i] == aWid[nI]
+                && aHei[i] == aHei[nI] )
+            {
+                aPos.Insert( aPos[nI], aPos.Count() );  // Pos merken
+                bDuplicated=TRUE;
+                break;
+            }
+        }
+
+        if (!bDuplicated)
+        {
+            aPos.Insert( rStrm.Tell(), aPos.Count() );  // Pos merken
+            Write1Grf( rStrm, pNd, (const SwFlyFrmFmt*)aFlys[i], aWid[i],
+                aHei[i] );
+        }
     }
 }
 

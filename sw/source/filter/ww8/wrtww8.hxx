@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
+ *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,8 @@ class WW8_WrtBookmarks;
 class WW8_WrtRedlineAuthor;
 class SvxMSExportOLEObjects;
 class SwMSConvertControls;
+class WW8OleMaps;
+class SvStorageRef;
 struct WW8_PdAttrDesc;
 struct WW8_SHD;
 
@@ -201,6 +203,7 @@ extern SwNodeFnTab aWW8NodeFnTab;
 extern SwAttrFnTab aWW8AttrFnTab;
 
 SV_DECL_VARARR( WW8Bytes, BYTE, 128, 128 );
+
 
 struct WW8_SepInfo
 {
@@ -301,6 +304,7 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     void* pKeyMap;
     SvxMSExportOLEObjects* pOLEExp;
     SwMSConvertControls* pOCXExp;
+    WW8OleMaps* pOleMap;
 
     ULONG nIniFlags;                // Flags aus der writer.ini
     USHORT nCharFmtStart;
@@ -406,6 +410,7 @@ public:
 
     SvxMSExportOLEObjects& GetOLEExp()      { return *pOLEExp; }
     SwMSConvertControls& GetOCXExp()        { return *pOCXExp; }
+    WW8OleMaps& GetOLEMap()                 { return *pOleMap; }
     void ExportDopTypography(WW8DopTypography &rTypo);
 
     const SfxPoolItem* HasItem( USHORT nWhich ) const;
@@ -448,7 +453,10 @@ public:
     void StartCommentOutput( const String& rName );
     void EndCommentOutput(   const String& rName );
     void OutGrf( const SwNoTxtNode* pNd );
-    void AppendBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos, xub_StrLen nLen );
+    BOOL TestOleNeedsGraphic(const SwAttrSet& rSet, SvStorageRef xOleStg,
+        SvStorageRef xObjStg, String &rStorageName, SwOLENode *pOLENd);
+    void AppendBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos,
+        xub_StrLen nLen );
     void AppendBookmark( const String& rName, USHORT nOffset = 0 );
     String GetBookmarkName( USHORT nTyp, const String* pNm, USHORT nSeqNo );
     BOOL HasRefToObject( USHORT nTyp, const String* pNm, USHORT nSeqNo );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-17 15:04:25 $
+ *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1683,18 +1683,17 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
                 break;
 
     case 0x1:
+                /*
+                Current thinking is that if bObj is set then we have a
+                straightforward "traditional" ole object, otherwise we have a
+                graphic preview of an associated ole2 object (or a simple
+                graphic of course)
+                */
                 if( bObj )
                     pFmtOfJustInsertedGraphicOrOLE = ImportOle();
-                else if( bEmbeddObj )
-                {
-                    // wenn der OLE-Import nicht klappt, dann versuche
-                    // zumindest die Grafik zu importieren
-                    if( !ImportOle() )
-                        pFmtOfJustInsertedGraphicOrOLE = ImportGraf();
-                }
                 else
                     pFmtOfJustInsertedGraphicOrOLE = ImportGraf();
-                // das Flag auf immer zurueck setzen
+                // reset the flags.
                 bObj = bEmbeddObj = FALSE;
                 nObjLocFc = 0;
                 //##515## set nLastFlyNode so we can determine if a section
@@ -2059,8 +2058,8 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara,
                                     SvStorage* pStorage, SvStream* pSt,
                                     SwDoc& rD, BOOL bNewDoc )
     : pStg( pStorage ), rDoc( rD ), pStrm( pSt ), bNew( 0 != bNewDoc ),
-    pMSDffManager( 0 ), pAtnNames( 0 ), pAuthorInfos( 0 ), pLastPgDeskIdx( 0 ),
-    pDataStream( 0 ),   pTableStream( 0 )
+    pMSDffManager( 0 ), pAtnNames( 0 ), pAuthorInfos( 0 ), pOleMap(0),
+    pLastPgDeskIdx( 0 ), pDataStream( 0 ),   pTableStream( 0 )
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
@@ -2621,6 +2620,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             DELETEZ( pFonts );
             DELETEZ( pAtnNames );
             DELETEZ( pAuthorInfos );
+            DELETEZ( pOleMap );
             DELETEZ( pLastPgDeskIdx );
             ::EndProgress( rDoc.GetDocShell() );
         }

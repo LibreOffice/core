@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,22 +854,20 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                         aAttrSet.Put(aFlySet);
                     }
                     else
-                    {
                         ProcessEscherAlign(pRecord,0,aAttrSet,TRUE);
 
-                        Rectangle aInnerDist(   pRecord->nDxTextLeft,
-                            pRecord->nDyTextTop, pRecord->nDxTextRight,
-                            pRecord->nDyTextBottom  );
+                    Rectangle aInnerDist(   pRecord->nDxTextLeft,
+                        pRecord->nDyTextTop, pRecord->nDxTextRight,
+                        pRecord->nDyTextBottom  );
 
-                        MatchSdrItemsIntoFlySet( pObject, aAttrSet,
-                            pRecord->eLineStyle, pRecord->eShapeType,
-                            aInnerDist, !pRecord->bLastBoxInChain );
+                    MatchSdrItemsIntoFlySet( pObject, aAttrSet,
+                        pRecord->eLineStyle, pRecord->eShapeType,
+                        aInnerDist, !pRecord->bLastBoxInChain );
 
-                        //Groesse aus der WinWord PIC-Struktur als
-                        //Grafik-Groesse nehmen
-                        aAttrSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, aPD.nWidth,
-                            aPD.nHeight ) );
-                    }
+                    //Groesse aus der WinWord PIC-Struktur als
+                    //Grafik-Groesse nehmen
+                    aAttrSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, aPD.nWidth,
+                        aPD.nHeight ) );
                 }
 
                 // for the Grafik
