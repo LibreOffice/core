@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:34:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,11 +125,11 @@
 #ifndef SC_FAPIHELPER_HXX
 #include "fapihelper.hxx"
 #endif
-#ifndef SC_XLFORMULA_HXX
-#include "xlformula.hxx"
-#endif
 #ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"
+#endif
+#ifndef SC_XEFORMULA_HXX
+#include "xeformula.hxx"
 #endif
 
 using ::rtl::OUString;
@@ -143,7 +143,6 @@ using ::com::sun::star::table::CellRangeAddress;
 using ::com::sun::star::sheet::XAreaLinks;
 using ::com::sun::star::sheet::XAreaLink;
 
-#include "excupn.hxx"
 #include "excrecds.hxx"
 
 // Shared string table ========================================================
@@ -594,14 +593,12 @@ public:
     void                WriteBody( XclExpStream& rStrm );
 
 private:
-    typedef ::std::auto_ptr< ExcUPN > XclExpTokArrPtr;
-
     const ScCondFormatEntry& mrFormatEntry; /// Calc conditional format entry.
     XclFontData         maFontData;         /// Font formatting attributes.
     XclExpCellBorder    maBorder;           /// Border formatting attributes.
     XclExpCellArea      maArea;             /// Pattern formatting attributes.
-    XclExpTokArrPtr     mxTokArr1;          /// Formula for first condition.
-    XclExpTokArrPtr     mxTokArr2;          /// Formula for second condition.
+    XclExpTokenArrayRef mxTokArr1;          /// Formula for first condition.
+    XclExpTokenArrayRef mxTokArr2;          /// Formula for second condition.
     sal_uInt32          mnFontColorId;      /// Font color ID.
     sal_uInt8           mnType;             /// Type of the condition (cell/formula).
     sal_uInt8           mnOperator;         /// Comparison operator for cell type.
@@ -689,14 +686,15 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
 
     // *** formulas ***
 
+    XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
+
     ::std::auto_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateTokenArry( 0 ) );
-    EC_Codetype eDummy;
-    mxTokArr1.reset( new ExcUPN( mpRD, *xScTokArr, eDummy, 0, TRUE ) );
+    mxTokArr1 = rFmlaComp.CreateCondFormula( *xScTokArr );
 
     if( bFmla2 )
     {
         xScTokArr.reset( mrFormatEntry.CreateTokenArry( 1 ) );
-        mxTokArr2.reset( new ExcUPN( mpRD, *xScTokArr, eDummy, 0, TRUE ) );
+        mxTokArr2 = rFmlaComp.CreateCondFormula( *xScTokArr );
     }
 }
 
@@ -708,8 +706,8 @@ void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
 
     // *** formula sizes ***
 
-    sal_uInt16 nFmlaSize1 = mxTokArr1.get() ? mxTokArr1->GetLen() : 0;
-    sal_uInt16 nFmlaSize2 = mxTokArr2.get() ? mxTokArr2->GetLen() : 0;
+    sal_uInt16 nFmlaSize1 = mxTokArr1.get() ? mxTokArr1->GetSize() : 0;
+    sal_uInt16 nFmlaSize2 = mxTokArr2.get() ? mxTokArr2->GetSize() : 0;
     rStrm << nFmlaSize1 << nFmlaSize2;
 
     // *** formatting blocks ***
@@ -787,9 +785,9 @@ void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
     // *** formulas ***
 
     if( mxTokArr1.get() )
-        rStrm.Write( mxTokArr1->GetData(), mxTokArr1->GetLen() );
+        mxTokArr1->WriteArray( rStrm );
     if( mxTokArr2.get() )
-        rStrm.Write( mxTokArr2->GetData(), mxTokArr2->GetLen() );
+        mxTokArr2->WriteArray( rStrm );
 }
 
 // ----------------------------------------------------------------------------
@@ -904,13 +902,12 @@ void XclExpCondFormatBuffer::Save( XclExpStream& rStrm )
 namespace {
 
 /** Writes a formula for the DV record. */
-void lclWriteDvFormula( XclExpStream& rStrm, const ExcUPN* pXclTokArr )
+void lclWriteDvFormula( XclExpStream& rStrm, const XclExpTokenArray* pXclTokArr )
 {
-    sal_uInt16 nSize = pXclTokArr ? pXclTokArr->GetLen() : 0;
-    const sal_Char* pData = pXclTokArr ? pXclTokArr->GetData() : 0;
-
-    rStrm << nSize << sal_uInt16( 0 );
-    rStrm.Write( pData, nSize );
+    sal_uInt16 nFmlaSize = pXclTokArr ? pXclTokArr->GetSize() : 0;
+    rStrm << nFmlaSize << sal_uInt16( 0 );
+    if( pXclTokArr )
+        pXclTokArr->WriteArray( rStrm );
 }
 
 /** Writes a formula for the DV record, based on a single string. */
@@ -919,7 +916,7 @@ void lclWriteDvFormula( XclExpStream& rStrm, const XclExpString& rString )
     // fake a formula with a single tStr token
     rStrm   << static_cast< sal_uInt16 >( rString.GetSize() + 1 )
             << sal_uInt16( 0 )
-            << sal_uInt8( 0x17 )    // TODO: define tStr
+            << EXC_TOKID_STR
             << rString;
 }
 
@@ -1004,71 +1001,58 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
         ::set_flag( mnFlags, EXC_DV_SHOWERROR, bShowError );
 
         // formulas
+        XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
         ::std::auto_ptr< ScTokenArray > xScTokArr;
-        EC_Codetype eDummy;
 
         // first formula
         xScTokArr.reset( pValData->CreateTokenArry( 0 ) );
         if( xScTokArr.get() )
         {
-            String aString;
-            if( (pValData->GetDataMode() == SC_VALID_LIST) &&
-                XclTokenArrayHelper::GetStringList( aString, *xScTokArr, '\n' ) )
+            if( pValData->GetDataMode() == SC_VALID_LIST )
             {
-                /*  Formula is a list of string tokens -> build the Excel string.
-                    Data validity is BIFF8 only (important for the XclExpString object).
-                    Excel uses the NUL character as string list separator. */
-                mxString1.reset( new XclExpString( EXC_STR_8BITLENGTH ) );
-                xub_StrLen nTokenCnt = aString.GetTokenCount( '\n' );
-                xub_StrLen nStringIx = 0;
-                for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
+                String aString;
+                if( XclTokenArrayHelper::GetStringList( aString, *xScTokArr, '\n' ) )
                 {
-                    String aToken( aString.GetToken( 0, '\n', nStringIx ) );
-                    if( nToken > 0 )
-                        mxString1->Append( '\0' );
-                    mxString1->Append( aToken );
+                    /*  Formula is a list of string tokens -> build the Excel string.
+                        Data validity is BIFF8 only (important for the XclExpString object).
+                        Excel uses the NUL character as string list separator. */
+                    mxString1.reset( new XclExpString( EXC_STR_8BITLENGTH ) );
+                    xub_StrLen nTokenCnt = aString.GetTokenCount( '\n' );
+                    xub_StrLen nStringIx = 0;
+                    for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
+                    {
+                        String aToken( aString.GetToken( 0, '\n', nStringIx ) );
+                        if( nToken > 0 )
+                            mxString1->Append( '\0' );
+                        mxString1->Append( aToken );
+                    }
+                    ::set_flag( mnFlags, EXC_DV_STRINGLIST );
                 }
-                ::set_flag( mnFlags, EXC_DV_STRINGLIST );
+                else
+                {
+                    /*  All other formulas in validation are stored like conditional
+                        formatting formulas (with tRefN/tAreaN tokens as value or
+                        array class). But NOT the cell references and defined names
+                        in list validation - they are stored as reference class
+                        tokens... Example:
+                        1) Cell must be equal to A1 -> formula is =A1 -> writes tRefNV token
+                        2) List is taken from A1    -> formula is =A1 -> writes tRefNR token
+                        Formula compiler supports this by offering two different functions
+                        CreateDataValFormula() and CreateListValFormula(). */
+                    mxTokArr1 = rFmlaComp.CreateListValFormula( *xScTokArr );
+                }
             }
             else
             {
                 // no list validation -> convert the formula
-                mxTokArr1.reset( new ExcUPN( mpRD, *xScTokArr, eDummy, 0, true ) );
-            }
-
-            /*  All formulas are stored like conditional formatting formulas (with
-                tRefN/tAreaN tokens as value or array class). But NOT the cell references
-                and defined names in list validation - they are stored as reference class
-                tokens... Example:
-                1) Cell must be equal to A1 -> formula is =A1 -> writes tRefNV token
-                2) List is taken from A1    -> formula is =A1 -> writes tRefNR token
-
-                Following a VERY dirty hack that looks into the Excel token array. If there
-                is a leading tRefN*, tAreaN*, or tName* token, it is converted to reference
-                class. This is because the formula compiler is already too obscure, so
-                adding this special case will surely break anything else there.
-                TODO: Remove this mess when the formula compiler is cleaned up! */
-            if( (pValData->GetDataMode() == SC_VALID_LIST) && mxTokArr1.get() )
-            {
-                sal_Char* pData = const_cast< sal_Char* >( mxTokArr1->GetData() );
-                if( pData && mxTokArr1->GetLen() )
-                {
-                    if( (*pData == 0x43) || (*pData == 0x63) ||     // tNameV, tNameA
-                        (*pData == 0x4C) || (*pData == 0x6C) ||     // tRefNV, tRefNA
-                        (*pData == 0x4D) || (*pData == 0x6D) )      // tAreaNV, tAreaNA
-                        // remove any token class and add reference token class
-                        (*pData &= 0x1F) |= 0x20;
-                }
+                mxTokArr1 = rFmlaComp.CreateDataValFormula( *xScTokArr );
             }
         }
 
         // second formula
         xScTokArr.reset( pValData->CreateTokenArry( 1 ) );
         if( xScTokArr.get() )
-        {
-            EC_Codetype eDummy;
-            mxTokArr2.reset( new ExcUPN( mpRD, *xScTokArr, eDummy, 0, true ) );
-        }
+            mxTokArr2 = rFmlaComp.CreateDataValFormula( *xScTokArr );
     }
     else
     {
