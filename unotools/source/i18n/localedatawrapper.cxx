@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 09:51:22 $
+ *  last change: $Author: er $ $Date: 2001-07-05 14:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,90 +109,6 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #endif
 
-
-// ====================================================================
-
-// Enable multiple threads to read simultaneously, but a write blocks all other
-// reads and writes, and a read blocks any write.
-class LocaleDataWrapperGuard
-{
-            LocaleDataWrapperMutex&  rMutex;
-            ::osl::MutexGuard*  pGuard;
-public:
-                                LocaleDataWrapperGuard(
-                                    LocaleDataWrapperMutex& rMutex,
-                                    sal_Bool bRequestWrite = sal_False );
-                                ~LocaleDataWrapperGuard();
-
-            void                changeReadToWrite();
-};
-
-
-LocaleDataWrapperGuard::LocaleDataWrapperGuard(
-            LocaleDataWrapperMutex& rMutexP, sal_Bool bRequestWrite )
-        : rMutex( rMutexP )
-{
-    // don't do anything until a pending write completed
-    ::osl::MutexGuard aGuard( rMutex.pWriteMutex );
-    if ( bRequestWrite )
-    {
-        pGuard = new ::osl::MutexGuard( rMutex.pWriteMutex );
-        // wait for any read to complete
-// TODO: set up a waiting thread instead of a loop
-        sal_Bool bWait = TRUE;
-        do
-        {
-            ::osl::MutexGuard aGuard( rMutex.pMutex );
-            bWait = (rMutex.nReadCount != 0);
-        } while ( bWait );
-    }
-    else
-    {
-        pGuard = NULL;
-        ::osl::MutexGuard aGuard( rMutex.pMutex );
-        ++rMutex.nReadCount;
-    }
-}
-
-
-LocaleDataWrapperGuard::~LocaleDataWrapperGuard()
-{
-    if ( pGuard )
-        delete pGuard;
-    else
-    {
-        ::osl::MutexGuard aGuard( rMutex.pMutex );
-        --rMutex.nReadCount;
-    }
-}
-
-
-void LocaleDataWrapperGuard::changeReadToWrite()
-{
-    DBG_ASSERT( !pGuard, "LocaleDataWrapperGuard::changeReadToWrite: already write" );
-    if ( !pGuard )
-    {
-        // MUST release read before acquiring write mutex or dead lock would
-        // occur if there was another write waiting for this read to complete.
-        {   // own scope
-            ::osl::MutexGuard aGuard( rMutex.pMutex );
-            --rMutex.nReadCount;
-        }
-        pGuard = new ::osl::MutexGuard( rMutex.pWriteMutex );
-        // wait for any other read to complete
-// TODO: set up a waiting thread instead of a loop
-        sal_Bool bWait = TRUE;
-        do
-        {
-            ::osl::MutexGuard aGuard( rMutex.pMutex );
-            bWait = (rMutex.nReadCount != 0);
-        } while ( bWait );
-    }
-}
-
-
-// ====================================================================
-
 #define LOCALEDATA_LIBRARYNAME "i18n"
 #define LOCALEDATA_SERVICENAME "com.sun.star.i18n.LocaleData"
 
@@ -270,7 +186,7 @@ LocaleDataWrapper::~LocaleDataWrapper()
 
 void LocaleDataWrapper::setLocale( const ::com::sun::star::lang::Locale& rLocale )
 {
-    LocaleDataWrapperGuard aGuard( aMutex, sal_True );
+    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nCriticalChange );
     aLocale = rLocale;
     invalidateData();
 }
@@ -278,7 +194,7 @@ void LocaleDataWrapper::setLocale( const ::com::sun::star::lang::Locale& rLocale
 
 const ::com::sun::star::lang::Locale& LocaleDataWrapper::getLocale() const
 {
-    LocaleDataWrapperGuard aGuard( aMutex );
+    ::utl::ReadWriteGuard aGuard( aMutex );
     return aLocale;
 }
 
@@ -613,7 +529,7 @@ void LocaleDataWrapper::invalidateData()
 
 const String& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
 {
-    LocaleDataWrapperGuard aGuard( aMutex );
+    ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nItem >= LocaleItem::COUNT )
     {
         DBG_ERRORFILE( "getOneLocaleItem: bounds" );
@@ -709,7 +625,7 @@ void LocaleDataWrapper::getOneReservedWordImpl( sal_Int16 nWord )
 
 const String& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
 {
-    LocaleDataWrapperGuard aGuard( aMutex );
+    ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nWord < 0 || nWord >= reservedWords::COUNT )
     {
         DBG_ERRORFILE( "getOneReservedWord: bounds" );
@@ -738,7 +654,7 @@ MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const String& r
 
 const String& LocaleDataWrapper::getCurrSymbol() const
 {
-    LocaleDataWrapperGuard aGuard( aMutex );
+    ::utl::ReadWriteGuard aGuard( aMutex );
     if ( !aCurrSymbol.Len() )
     {
         aGuard.changeReadToWrite();
@@ -750,7 +666,7 @@ const String& LocaleDataWrapper::getCurrSymbol() const
 
 const String& LocaleDataWrapper::getCurrBankSymbol() const
 {
-    LocaleDataWrapperGuard aGuard( aMutex );
+    ::utl::ReadWriteGuard aGuard( aMutex );
     if ( !aCurrBankSymbol.Len() )
     {
         aGuard.changeReadToWrite();
@@ -762,7 +678,7 @@ const String& LocaleDataWrapper::getCurrBankSymbol() const
 
 USHORT LocaleDataWrapper::getCurrPositiveFormat() const
 {
-    LocaleDataWrapperGuard aGuard( aMutex );
+    ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nCurrPositiveFormat == nCurrFormatInvalid )
     {
         aGuard.changeReadToWrite();
@@ -774,7 +690,7 @@ USHORT LocaleDataWrapper::getCurrPositiveFormat() const
 
 USHORT LocaleDataWrapper::getCurrNegativeFormat() const
 {
-    LocaleDataWrapperGuard aGuard( aMutex );
+    ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nCurrNegativeFormat == nCurrFormatInvalid )
     {
         aGuard.changeReadToWrite();
@@ -786,7 +702,7 @@ USHORT LocaleDataWrapper::getCurrNegativeFormat() const
 
 USHORT LocaleDataWrapper::getCurrDigits() const
 {
-    LocaleDataWrapperGuard aGuard( aMutex );
+    ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nCurrDigits == nCurrFormatInvalid )
     {
         aGuard.changeReadToWrite();
@@ -1040,7 +956,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
 
 DateFormat LocaleDataWrapper::getDateFormat() const
 {
-    LocaleDataWrapperGuard aGuard( aMutex );
+    ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nDateFormat == nDateFormatInvalid )
     {
         aGuard.changeReadToWrite();
@@ -1052,7 +968,7 @@ DateFormat LocaleDataWrapper::getDateFormat() const
 
 DateFormat LocaleDataWrapper::getLongDateFormat() const
 {
-    LocaleDataWrapperGuard aGuard( aMutex );
+    ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nLongDateFormat == nDateFormatInvalid )
     {
         aGuard.changeReadToWrite();
@@ -1426,6 +1342,7 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
 
 String LocaleDataWrapper::getDate( const Date& rDate ) const
 {
+    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
 //!TODO: leading zeros et al
     sal_Unicode aBuf[128];
     sal_Unicode* pBuf = aBuf;
@@ -1472,6 +1389,7 @@ String LocaleDataWrapper::getDate( const Date& rDate ) const
 
 String LocaleDataWrapper::getTime( const Time& rTime, BOOL bSec, BOOL b100Sec ) const
 {
+    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
 //!TODO: leading zeros et al
     sal_Unicode aBuf[128];
     sal_Unicode* pBuf = aBuf;
@@ -1526,6 +1444,7 @@ String LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
         sal_Int16 nDisplayDayOfWeek, sal_Bool bDayOfMonthWithLeadingZero,
         sal_Int16 nDisplayMonth, sal_Bool bTwoDigitYear ) const
 {
+    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     using namespace ::com::sun::star::i18n;
     sal_Unicode     aBuf[20];
     sal_Unicode*    pBuf;
@@ -1580,6 +1499,7 @@ String LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
 
 String LocaleDataWrapper::getDuration( const Time& rTime, BOOL bSec, BOOL b100Sec ) const
 {
+    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     sal_Unicode aBuf[128];
     sal_Unicode* pBuf = aBuf;
 
@@ -1624,6 +1544,7 @@ inline long ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, USHOR
 
 String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals, BOOL bUseThousandSep ) const
 {
+    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     sal_Unicode aBuf[48];       // big enough for 64-bit long
     // check if digits and separators will fit into fixed buffer or allocate
     long nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
@@ -1651,6 +1572,7 @@ String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals ) const
 String LocaleDataWrapper::getCurr( long nNumber, USHORT nDecimals,
         const String& rCurrencySymbol, BOOL bUseThousandSep ) const
 {
+    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     sal_Unicode aBuf[75];
     sal_Unicode aNumBuf[48];    // big enough for 64-bit long
     sal_Unicode cZeroChar = getCurrZeroChar();
@@ -1861,7 +1783,7 @@ String LocaleDataWrapper::getCurr( long nNumber, USHORT nDecimals,
 #ifndef PRODUCT
 ByteString& LocaleDataWrapper::AppendLocaleInfo( ByteString& rDebugMsg ) const
 {
-    LocaleDataWrapperGuard aGuard( aMutex );
+    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     rDebugMsg += '\n';
     rDebugMsg += ByteString( String( aLocale.Language ), RTL_TEXTENCODING_UTF8 );
     rDebugMsg += '_';

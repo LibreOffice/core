@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 09:51:07 $
+ *  last change: $Author: er $ $Date: 2001-07-05 14:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,25 +79,9 @@
 #include <com/sun/star/i18n/reservedWords.hpp>
 #endif
 
-
-class LocaleDataWrapperGuard;
-class LocaleDataWrapperMutex
-{
-    friend class LocaleDataWrapperGuard;
-
-            sal_Int32           nReadCount;
-            ::osl::Mutex*       pMutex;
-            ::osl::Mutex*       pWriteMutex;
-
-public:
-                                LocaleDataWrapperMutex()
-                                    : nReadCount(0)
-                                    , pMutex( new ::osl::Mutex )
-                                    , pWriteMutex( new ::osl::Mutex )
-                                    {}
-                                ~LocaleDataWrapperMutex()
-                                    { delete pMutex; delete pWriteMutex; }
-};
+#ifndef INCLUDED_UNOTOOLS_READWRITEMUTEXGUARD_HXX
+#include <unotools/readwritemutexguard.hxx>
+#endif
 
 
 namespace com { namespace sun { namespace star {
@@ -131,7 +115,7 @@ class LocaleDataWrapper
     USHORT                      nCurrDigits;
     BOOL                        bLocaleDataItemValid;
     BOOL                        bReservedWordValid;
-    mutable LocaleDataWrapperMutex  aMutex;
+    mutable ::utl::ReadWriteMutex   aMutex;
 
     // dummies, to be implemented or provided by XML locale data
     sal_Unicode                 cCurrZeroChar;

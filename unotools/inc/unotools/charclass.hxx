@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-17 13:04:24 $
+ *  last change: $Author: er $ $Date: 2001-07-05 14:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #endif
 
+#ifndef INCLUDED_UNOTOOLS_READWRITEMUTEXGUARD_HXX
+#include <unotools/readwritemutexguard.hxx>
+#endif
+
 class String;
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -126,6 +130,7 @@ class CharClass
     ::com::sun::star::lang::Locale  aLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >    xCC;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
+    mutable ::utl::ReadWriteMutex   aMutex;
 
                                 // not implemented, prevent usage
                                 CharClass( const CharClass& );
@@ -153,7 +158,7 @@ public:
             void                setLocale( const ::com::sun::star::lang::Locale& rLocale );
 
     /// get current Locale
-    const ::com::sun::star::lang::Locale& getLocale() const { return aLocale; }
+    const ::com::sun::star::lang::Locale& getLocale() const;
 
 
     /// isdigit() on ascii values
