@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ploc_dir.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 13:48:51 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ Directory::GetContainedDirectories( StringVector & o_rResult ) const
           bFindMore == 0;
           bFindMore = _findnext( hFile, &aEntry ) )
     {
-        if (aEntry.attrib == _A_SUBDIR AND *aEntry.name != '.' )
+        if ( (aEntry.attrib & _A_SUBDIR) AND *aEntry.name != '.' )
         {
             sNew = aEntry.name;
             o_rResult.push_back( sNew );
