@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@
 #include <svx/numpages.hxx>
 #include <svx/numitem.hxx>
 
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "glob.hrc"
 #include "sdresid.hxx"
 #include "prltempl.hxx"
