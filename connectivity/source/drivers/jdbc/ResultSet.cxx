@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:13:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 09:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,13 +138,16 @@ jclass java_sql_ResultSet::theClass = 0;
 java_sql_ResultSet::java_sql_ResultSet( JNIEnv * pEnv, jobject myObj,java_sql_Statement_Base* pStmt)
 :   java_sql_ResultSet_BASE(m_aMutex),
     OPropertySetHelper(java_sql_ResultSet_BASE::rBHelper),
-
     java_lang_Object( pEnv, myObj )
 {
+    SDBThreadAttach::addRef();
+    osl_incrementInterlockedCount(&m_refCount);
     if ( pStmt )
         m_xStatement = *pStmt;
-    SDBThreadAttach::addRef();
+    osl_decrementInterlockedCount(&m_refCount);
 }
+// -----------------------------------------------------------------------------
+
 java_sql_ResultSet::~java_sql_ResultSet()
 {
     if ( !java_sql_ResultSet_BASE::rBHelper.bDisposed && !java_sql_ResultSet_BASE::rBHelper.bInDispose )
