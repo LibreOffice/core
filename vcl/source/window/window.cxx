@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ssa $ $Date: 2001-09-17 11:36:10 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 17:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4181,7 +4181,8 @@ Window::~Window()
         mpFrame->SetCallback( NULL, NULL );
         pSVData->mpDefInst->DestroyFrame( mpFrame );
 #else
-        mpGraphics->SetInterface( REF( NMSP_CLIENT::XRmOutputDevice )() );
+        REF( NMSP_CLIENT::XRmOutputDevice ) aTmp;
+        mpGraphics->SetInterface( aTmp );
         delete mpFrame;
 #endif
         delete mpFrameData;
