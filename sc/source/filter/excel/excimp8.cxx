@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-26 19:21:38 $
+ *  last change: $Author: dr $ $Date: 2001-08-21 13:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,17 +746,18 @@ void ImportExcel8::Dconref( void )
     UINT16  nR1, nR2;
     UINT8   nC1, nC2;
     String  aFileName, aTabName;
-    BOOL    bSelf, bEnc;
+    BOOL    bSelf;
 
     aIn >> nR1 >> nR2 >> nC1 >> nC2;
 
-    XclImpHelper::DecodeExternsheetUni( aIn, aFileName, aTabName, bSelf, bEnc );
+    XclImpHelper::DecodeExternsheetUni( aIn, aFileName, aTabName, bSelf );
 
     if( !aTabName.Len() )
     {
         aTabName = aFileName;
         aFileName.Erase();
     }
+    ScFilterTools::ConvertName( aTabName );
     pCurrPivotCache->SetSource( nC1, nR1, nC2, nR2, aFileName, aTabName, bSelf );
 }
 
