@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:03:54 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _REDLENUM_HXX
 #include <redlenum.hxx>
+#endif
+#ifndef _ITABENUM_HXX
+#include <itabenum.hxx>
 #endif
 
 class SwUndoIter;
@@ -637,6 +640,7 @@ public:
 class SwUndoInsTbl : public SwUndo
 {
     String sTblNm;
+    SwInsertTableOptions aInsTblOpts;
     SwDDEFieldType* pDDEFldType;
     SvUShorts* pColWidth;
     SwRedlineData*  pRedlData;
@@ -644,11 +648,10 @@ class SwUndoInsTbl : public SwUndo
     ULONG nSttNode;
     USHORT nRows, nCols;
     USHORT nAdjust;
-    USHORT nInsTblFlags;
 
 public:
     SwUndoInsTbl( const SwPosition&, USHORT nCols, USHORT nRows,
-                    USHORT eAdjust, USHORT nInsert,
+                    USHORT eAdjust, const SwInsertTableOptions& rInsTblOpts,
                     const SwTableAutoFmt* pTAFmt, const SvUShorts* pColArr );
     virtual ~SwUndoInsTbl();
     virtual void Undo( SwUndoIter& );
@@ -660,16 +663,16 @@ public:
 class SwUndoTxtToTbl : public SwUndo, public SwUndRng
 {
     String sTblNm;
+    SwInsertTableOptions aInsTblOpts;
     SvULongs* pDelBoxes;
     SwTableAutoFmt* pAutoFmt;
     SwHistory* pHistory;
     sal_Unicode cTrenner;
     USHORT nAdjust;
-    USHORT nInsTblFlags;
     BOOL bSplitEnd : 1;
 
 public:
-    SwUndoTxtToTbl( const SwPaM&, sal_Unicode , USHORT, USHORT nInsert,
+    SwUndoTxtToTbl( const SwPaM&, const SwInsertTableOptions&, sal_Unicode , USHORT,
                     const SwTableAutoFmt* pAFmt );
     virtual ~SwUndoTxtToTbl();
 
@@ -692,8 +695,8 @@ class SwUndoTblToTxt : public SwUndo
     ULONG nSttNd, nEndNd;
     USHORT nAdjust;
     sal_Unicode cTrenner;
+    USHORT nHdlnRpt;
     BOOL bCheckNumFmt : 1;
-    BOOL bHdlnRpt : 1;
 
 public:
     SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh );
@@ -1119,9 +1122,10 @@ public:
 class SwUndoTblHeadline : public SwUndo
 {
     ULONG nTblNd;
-    BOOL bOldHeadline;
+    USHORT nOldHeadline;
+    USHORT nNewHeadline;
 public:
-    SwUndoTblHeadline( const SwTable&, BOOL bOldHdl );
+    SwUndoTblHeadline( const SwTable&, USHORT nOldHdl,  USHORT nNewHdl );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
