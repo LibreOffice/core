@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:40:50 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1903,11 +1903,12 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
 
     if( pRead )
     {
-        //SwReader aReader( xStore, aEmptyStr, *rSh.GetCrsr() );
-        //if( !IsError( aReader.Read( *pRead )) )
-        //    nRet = 1;
-        //else if( bMsg )
-        //    InfoBox( 0, SW_RES(ERR_CLPBRD_READ) ).Execute();
+        SwPaM &rPAM = *rSh.GetCrsr();
+        SwReader aReader( xStore, aEmptyStr, rPAM );
+        if( !IsError( aReader.Read( *pRead )) )
+            nRet = 1;
+        else if( bMsg )
+            InfoBox( 0, SW_RES(ERR_CLPBRD_READ) ).Execute();
     }
     else if ( xStrm.is() )
     {
