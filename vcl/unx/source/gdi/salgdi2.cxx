@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-02 14:23:28 $
+ *  last change: $Author: cp $ $Date: 2001-05-31 11:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,6 +517,9 @@ SalPrinterBmp::GetDepth () const
     switch (mpBmpBuffer->mnBitCount)
     {
         case 1:
+            nDepth = 1;
+            break;
+
         case 4:
         case 8:
             nDepth = 8;
