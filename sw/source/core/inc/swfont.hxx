@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-24 15:55:16 $
+ *  last change: $Author: ama $ $Date: 2000-12-14 14:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ class SwSubFont : public SvxFont
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetItalic( const FontItalic eItalic );
     inline void SetOutline( const BOOL bOutline );
+    inline void SetVertical( const BOOL bNew );
     inline void SetShadow( const BOOL bShadow );
     inline void SetAutoKern( const BOOL bAutoKern );
     inline void SetWordLineMode( const BOOL bWordLineMode );
@@ -263,6 +264,7 @@ public:
     inline void SetUnderColor( const Color &rColor ) { aUnderColor = rColor; }
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetOutline( const BOOL bOutline );
+    inline void SetVertical( const BOOL bNew );
     inline void SetShadow( const BOOL bShadow );
     inline void SetAutoKern( const BOOL bAutoKern );
     inline void SetTransparent( const BOOL bTrans );
@@ -814,6 +816,24 @@ inline void SwFont::SetGreyWave( const BOOL bNew )
 inline void SwFont::SetNoCol( const BOOL bNew )
 {
     bNoColReplace = bNew;
+}
+
+inline void SwSubFont::SetVertical( const BOOL bNew )
+{
+    pMagic = 0;
+    Font::SetVertical( bNew );
+    Font::SetOrientation( bNew ? 2700 : 0 );
+}
+
+inline void SwFont::SetVertical( const BOOL bNew )
+{
+    if( bNew != aSub[0].IsVertical() )
+    {
+        bFntChg = TRUE;
+        aSub[0].SetVertical( bNew );
+        aSub[1].SetVertical( bNew );
+        aSub[2].SetVertical( bNew );
+    }
 }
 
 /*************************************************************************
