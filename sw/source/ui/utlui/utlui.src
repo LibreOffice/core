@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 18:03:38 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ portuguese_brazilian ] = "Benutzervorlagen ersetzen" ;
         Text[ chinese_simplified ] = "¸üÌæÓÃ»§ÑùÊ½";
         Text[ russian ] = "Çàìåíèòü ñòèëè ïîëüçîâàòåëÿ";
-        Text[ polish ] = "Zamieñ szablony u¿ytkownika";
+        Text[ polish ] = "Zamieñ style u¿ytkownika";
         Text[ japanese ] = "Õ°»Ş°İ’è‚Ì½À²Ù‚É’u‚«Š·‚¦‚é";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¥N´À¦Û­q¼Ë¦¡";
@@ -826,7 +826,7 @@ String STR_EVENT_FRM_KEYINPUT_A
     Text[ japanese ] = "±ÙÌ§ÍŞ¯Ä•¶š‚Ì“ü—Í";
     Text[ chinese_traditional ] = "¿é¤J§ÆÃ¾»y²Ä¤@­Ó¦r¥À";
     Text[ arabic ] = "ÅÏÎÇá ÃÍÑİ ÃáİÇ";
-    Text[ greek ] = "ÅéóáãùãŞ ÷áñáêôŞñùí áëöáâŞôïõ";
+    Text[ greek ] = "ÅéóáãùãŞ ÷áñáêôŞñùí ¢ëöá";
     Text[ korean ] = "¾ËÆÄºª ¹®ÀÚ ÀÔ·Â";
     Text[ turkish ] = "Alfa karakter girişi";
     Text[ language_user1 ] = " ";
@@ -850,7 +850,7 @@ String STR_EVENT_FRM_KEYINPUT_NOA
     Text[ japanese ] = "±ÙÌ§ÍŞ¯Ä‚Å‚È‚¢•¶š‚Ì“ü—Í";
     Text[ chinese_traditional ] = "¿é¤Jªº¤£¬O§ÆÃ¾»y²Ä¤@­Ó¦r¥À";
     Text[ arabic ] = "ÅÏÎÇá ÃÍÑİ ÛíÑ ÃáİÇ";
-    Text[ greek ] = "ÅéóáãùãŞ ìç-áëöáâçôéêşí ÷áñáêôŞñùí";
+    Text[ greek ] = "ÅéóáãùãŞ ìç-¢ëöá ÷áñáêôŞñùí";
     Text[ korean ] = "¾ËÆÄºªÀÌ ¾Æ´Ñ ¹®ÀÚ ÀÔ·Â";
     Text[ turkish ] = "Alfa olmayan karakter girişi";
     Text[ language_user1 ] = " ";
@@ -874,7 +874,7 @@ String STR_EVENT_FRM_RESIZE
     Text[ polish ] = "Zmieñ rozmiar ramki";
     Text[ japanese ] = "˜g‚Ì»²½Ş•ÏX";
     Text[ chinese_traditional ] = "ÅÜ§ó®Ø¤j¤p";
-    Text[ arabic ] = "ÊÚÏíá ÍÌã ÇáÅØÇÑ";
+    Text[ arabic ] = "ÊÚÏíá ÍÌã ÇáßÇÏÑ";
     Text[ greek ] = "ÁëëáãŞ ìåãİèïõò ğëáéóßïõ";
     Text[ korean ] = "ÇÁ·¹ÀÓ Å©±â º¯°æ";
     Text[ turkish ] = "Çerçeve boyutunu değiştir";
@@ -898,7 +898,7 @@ String STR_EVENT_FRM_MOVE
     Text[ polish ] = "Przenieœ ramkê";
     Text[ japanese ] = "˜g‚ÌˆÚ“®";
     Text[ chinese_traditional ] = "²¾°Ê®Ø";
-    Text[ arabic ] = "ÅÒÇÍÉ ÇáÅØÇÑ";
+    Text[ arabic ] = "ÅÒÇÍÉ ÇáßÇÏÑ";
     Text[ greek ] = "Ìåôáêßíçóç ğëáéóßïõ";
     Text[ korean ] = "ÇÁ·¹ÀÓ ÀÌµ¿";
     Text[ turkish ] = "Çerçeveyi taşı";
@@ -971,7 +971,7 @@ String STR_CONTENT_TYPE_FRAME
     Text[ polish ] = "Ramka tekstu";
     Text[ japanese ] = "Ã·½Ä˜g";
     Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
-    Text[ arabic ] = "ÅØÇÑÇÊ äÕ";
+    Text[ arabic ] = "ßæÇÏÑ äÕ";
     Text[ greek ] = "Ğëáßóéï êåéìİíïõ";
     Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓ";
     Text[ turkish ] = "Metin kutusu";
@@ -1039,7 +1039,7 @@ String STR_CONTENT_TYPE_BOOKMARK
     Text [ portuguese ] = "Marcadores de texto" ;
     Text [ portuguese_brazilian ] = "Textmarken" ;
     Text[ chinese_simplified ] = "ÊéÇ©";
-    Text[ russian ] = "Çàêëàäêè";
+    Text[ russian ] = "Òåêñòîâûå ïîìåòêè";
     Text[ polish ] = "Zak³adki";
     Text[ japanese ] = "Ã·½ÄÏ°¸";
     Text[ chinese_traditional ] = "¤º¤å¼ĞÅÒ";
@@ -1260,7 +1260,7 @@ String STR_CONTENT_TYPE_SINGLE_FRAME
     Text[ polish ] = "Ramka tekstu";
     Text[ japanese ] = "Ã·½Ä˜g";
     Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
-    Text[ arabic ] = "ÅØÇÑ äÕ";
+    Text[ arabic ] = "ßÇÏÑ äÕ";
     Text[ greek ] = "Ğëáßóéï êåéìİíïõ";
     Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓ";
     Text[ turkish ] = "Metin kutusu";
@@ -1328,7 +1328,7 @@ String STR_CONTENT_TYPE_SINGLE_BOOKMARK
     Text [ portuguese ] = "Marcador de texto" ;
     Text [ portuguese_brazilian ] = "Textmarke" ;
     Text[ chinese_simplified ] = "ÊéÇ©";
-    Text[ russian ] = "Çàêëàäêà";
+    Text[ russian ] = "Òåêñòîâàÿ ïîìåòêà";
     Text[ polish ] = "Zak³adka";
     Text[ japanese ] = "Ã·½ÄÏ°¸";
     Text[ chinese_traditional ] = "¤º¤å¼ĞÅÒ";
