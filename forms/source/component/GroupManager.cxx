@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:38:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,7 @@ void OGroupManager::InsertElement( const Reference<XPropertySet>& xSet )
     // Bei Component als PropertyChangeListener anmelden
     xSet->addPropertyChangeListener( PROPERTY_NAME, this );
 
-    // Tabindex muß nicht jeder unterstuetzen
+    // Tabindex muss nicht jeder unterstuetzen
     if (hasProperty(PROPERTY_TABINDEX, xSet))
         xSet->addPropertyChangeListener( PROPERTY_TABINDEX, this );
 
