@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDefaults.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-23 09:34:49 $
+ *  last change: $Author: mtg $ $Date: 2001-06-07 14:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,21 +118,11 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
         throw UnknownPropertyException();
     if ( pMap->nFlags & PropertyAttribute::READONLY)
         throw IllegalArgumentException();
-    switch (pMap->nWID)
-    {
-        case RES_CHRATR_FONT:
-        case RES_CHRATR_CJK_FONT:
-        case RES_CHRATR_CTL_FONT:
-        case RES_PARATR_TABSTOP:
-        {
-            const SfxPoolItem& rItem = pDoc->GetDefault(pMap->nWID);
-            SfxPoolItem * pNewItem = rItem.Clone();
-            pNewItem->PutValue( aValue, pMap->nMemberId);
-            pDoc->SetDefault(*pNewItem);
-            delete pNewItem;
-        }
-        break;
-    }
+    const SfxPoolItem& rItem = pDoc->GetDefault(pMap->nWID);
+    SfxPoolItem * pNewItem = rItem.Clone();
+    pNewItem->PutValue( aValue, pMap->nMemberId);
+    pDoc->SetDefault(*pNewItem);
+    delete pNewItem;
 }
 Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
@@ -146,19 +136,8 @@ Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
     if ( pMap->nFlags & PropertyAttribute::READONLY)
         throw IllegalArgumentException();
     Any aRet;
-    switch (pMap->nWID)
-    {
-        case RES_CHRATR_FONT:
-        case RES_CHRATR_CJK_FONT:
-        case RES_CHRATR_CTL_FONT:
-        case RES_PARATR_TABSTOP:
-        {
-            const SfxPoolItem& rItem = pDoc->GetDefault(pMap->nWID);
-            rItem.QueryValue( aRet, pMap->nMemberId );
-        }
-        break;
-    }
-
+    const SfxPoolItem& rItem = pDoc->GetDefault(pMap->nWID);
+    rItem.QueryValue( aRet, pMap->nMemberId );
     return aRet;
 }
 void SAL_CALL SwXTextDefaults::addPropertyChangeListener( const OUString& rPropertyName, const Reference< XPropertyChangeListener >& xListener )
@@ -194,19 +173,10 @@ PropertyState SAL_CALL SwXTextDefaults::getPropertyState( const OUString& rPrope
         throw UnknownPropertyException();
     if ( pMap->nFlags & PropertyAttribute::READONLY)
         throw IllegalArgumentException();
-    switch (pMap->nWID)
-    {
-        case RES_CHRATR_FONT:
-        case RES_CHRATR_CJK_FONT:
-        case RES_CHRATR_CTL_FONT:
-        case RES_PARATR_TABSTOP:
-        {
-            const SfxPoolItem& rItem = pDoc->GetDefault(pMap->nWID);
-            if (IsStaticDefaultItem ( &rItem ) )
-                eRet = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-    }
+
+    const SfxPoolItem& rItem = pDoc->GetDefault(pMap->nWID);
+    if (IsStaticDefaultItem ( &rItem ) )
+        eRet = PropertyState_DEFAULT_VALUE;
     return eRet;
 }
 Sequence< PropertyState > SAL_CALL SwXTextDefaults::getPropertyStates( const Sequence< OUString >& rPropertyNames )
