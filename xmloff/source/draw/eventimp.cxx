@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-09-25 11:56:48 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,10 +332,17 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImport,  sal_uInt16 nPrfx, c
         case XML_NAMESPACE_XLINK:
             if( IsXMLToken( aLocalName, XML_HREF ) )
             {
-                const UniString aTmp( rImport.GetAbsoluteReference(sValue) );
-                UniString aTmp2;
-                INetURLObject::translateToInternal( aTmp, aTmp2, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 );
-                msBookmark = aTmp2;
+                if ( mbScript )
+                {
+                    msMacroName = sValue;
+                }
+                else
+                {
+                    const UniString aTmp( rImport.GetAbsoluteReference(sValue) );
+                    UniString aTmp2;
+                    INetURLObject::translateToInternal( aTmp, aTmp2, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 );
+                    msBookmark = aTmp2;
+                }
             }
             break;
         }
@@ -394,7 +401,8 @@ void SdXMLEventContext::EndElement()
         case ClickAction_BOOKMARK:
         case ClickAction_DOCUMENT:
         case ClickAction_MACRO:
-            nPropertyCount += 1;
+            if ( msLanguage.compareToAscii("starbasic", 9) == COMPARE_EQUAL )
+                nPropertyCount += 1;
             break;
 
         case ClickAction_SOUND:
@@ -411,22 +419,41 @@ void SdXMLEventContext::EndElement()
 
         if( ClickAction_MACRO == meClickAction )
         {
-            pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
-            pProperties->Handle = -1;
-            pProperties->Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM("StarBasic") );
-            pProperties->State = beans::PropertyState_DIRECT_VALUE;
-            pProperties++;
+            if ( msLanguage.compareToAscii("starbasic", 9) == COMPARE_EQUAL )
+            {
+                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
+                pProperties->Handle = -1;
+                pProperties->Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM("StarBasic") );
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                pProperties++;
 
-            pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroName" ) );
-            pProperties->Handle = -1;
-            pProperties->Value <<= msMacroName;
-            pProperties->State = beans::PropertyState_DIRECT_VALUE;
-            pProperties++;
+                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroName" ) );
+                pProperties->Handle = -1;
+                pProperties->Value <<= msMacroName;
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                pProperties++;
 
-            pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Library" ) );
-            pProperties->Handle = -1;
-            pProperties->Value <<= msLibrary;
-            pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Library" ) );
+                pProperties->Handle = -1;
+                pProperties->Value <<= msLibrary;
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            }
+            else
+            {
+                pProperties->Name =
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
+                pProperties->Handle = -1;
+                pProperties->Value <<= OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("Script") );
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                pProperties++;
+
+                pProperties->Name = OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "Script" ) );
+                pProperties->Handle = -1;
+                pProperties->Value <<= msMacroName;
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            }
         }
         else
         {
