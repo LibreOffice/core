@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:39 $
+ *  last change: $Author: obr $ $Date: 2003-01-13 11:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ class RadioButton extends ToggleButton {
     public javax.accessibility.AccessibleContext getAccessibleContext() {
         if (accessibleContext == null) {
             accessibleContext = new AccessibleRadioButton();
+            System.err.println("RadioButton created");
         }
         return accessibleContext;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextImpl.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:33 $
+ *  last change: $Author: obr $ $Date: 2003-01-13 11:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,15 +150,21 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
             if (property.Name.equals("ParaAdjust")) {
                 ParagraphAdjust adjust = (ParagraphAdjust)
                     AnyConverter.toObject(new Type(ParagraphAdjust.class), property.Value);
-
-                if (adjust.equals(ParagraphAdjust.LEFT)) {
-                    StyleConstants.setAlignment(as, StyleConstants.ALIGN_LEFT);
-                } else if (adjust.equals(ParagraphAdjust.RIGHT)) {
-                    StyleConstants.setAlignment(as, StyleConstants.ALIGN_RIGHT);
-                } else if (adjust.equals(ParagraphAdjust.CENTER)) {
-                    StyleConstants.setAlignment(as, StyleConstants.ALIGN_CENTER);
-                } else if (adjust.equals(ParagraphAdjust.BLOCK) || adjust.equals(ParagraphAdjust.STRETCH)) {
-                    StyleConstants.setAlignment(as, StyleConstants.ALIGN_JUSTIFIED);
+                if (adjust == null) {
+                    adjust = ParagraphAdjust.fromInt(AnyConverter.toInt(property.Value));
+                }
+                if (adjust != null) {
+                    if (adjust.equals(ParagraphAdjust.LEFT)) {
+                        StyleConstants.setAlignment(as, StyleConstants.ALIGN_LEFT);
+                    } else if (adjust.equals(ParagraphAdjust.RIGHT)) {
+                        StyleConstants.setAlignment(as, StyleConstants.ALIGN_RIGHT);
+                    } else if (adjust.equals(ParagraphAdjust.CENTER)) {
+                        StyleConstants.setAlignment(as, StyleConstants.ALIGN_CENTER);
+                    } else if (adjust.equals(ParagraphAdjust.BLOCK) || adjust.equals(ParagraphAdjust.STRETCH)) {
+                        StyleConstants.setAlignment(as, StyleConstants.ALIGN_JUSTIFIED);
+                    }
+                } else if (Build.DEBUG) {
+                    System.err.println("Invalid property value for key ParaAdjust: " + property.Value.getClass().getName());
                 }
 
             // Map background color
@@ -243,41 +249,37 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
             // Set tabset attribute
             } else if (property.Name.equals("ParaTabStops")) {
                 TabStop[] unoTabStops = (TabStop[]) AnyConverter.toArray(property.Value);
-                java.util.ArrayList tabStops = new java.util.ArrayList(unoTabStops.length);
+                javax.swing.text.TabStop[] tabStops = new javax.swing.text.TabStop[unoTabStops.length];
 
                 for (int index2 = 0; index2 < unoTabStops.length; index2++) {
                     float pos = (float) (toPointFactor * unoTabStops[index2].Position);
 
                     if (unoTabStops[index2].Alignment.equals(TabAlign.LEFT)) {
-                        tabStops.add(new javax.swing.text.TabStop(pos,
+                        tabStops[index2] = new javax.swing.text.TabStop(pos,
                             javax.swing.text.TabStop.ALIGN_LEFT,
-                            javax.swing.text.TabStop.LEAD_NONE)
-                        );
+                            javax.swing.text.TabStop.LEAD_NONE);
                     }
                     else if (unoTabStops[index2].Alignment.equals(TabAlign.CENTER)) {
-                        tabStops.add(new javax.swing.text.TabStop(pos,
+                        tabStops[index2] = new javax.swing.text.TabStop(pos,
                             javax.swing.text.TabStop.ALIGN_CENTER,
-                            javax.swing.text.TabStop.LEAD_NONE)
-                        );
+                            javax.swing.text.TabStop.LEAD_NONE);
                     }
                     else if (unoTabStops[index2].Alignment.equals(TabAlign.RIGHT)) {
-                        tabStops.add(new javax.swing.text.TabStop(pos,
+                        tabStops[index2] = new javax.swing.text.TabStop(pos,
                             javax.swing.text.TabStop.ALIGN_RIGHT,
-                            javax.swing.text.TabStop.LEAD_NONE)
-                        );
+                            javax.swing.text.TabStop.LEAD_NONE);
                     }
                     else if (unoTabStops[index2].Alignment.equals(TabAlign.DECIMAL)) {
-                        tabStops.add(new javax.swing.text.TabStop(pos,
+                        tabStops[index2] = new javax.swing.text.TabStop(pos,
                             javax.swing.text.TabStop.ALIGN_DECIMAL,
-                            javax.swing.text.TabStop.LEAD_NONE)
-                        );
+                            javax.swing.text.TabStop.LEAD_NONE);
                     }
                     else {
-                        tabStops.add(new javax.swing.text.TabStop(pos));
+                        tabStops[index2] = new javax.swing.text.TabStop(pos);
                     }
                 }
 
-                StyleConstants.setTabSet(as, new javax.swing.text.TabSet((javax.swing.text.TabStop[]) tabStops.toArray()));
+                StyleConstants.setTabSet(as, new javax.swing.text.TabSet(tabStops));
 
             // Set underline attribute
             } else if (property.Name.equals("CharUnderline")) {
@@ -313,10 +315,10 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
     /** Given a point in local coordinates, return the zero-based index of the character under that point */
     public int getIndexAtPoint(java.awt.Point point) {
         try {
-//          if (Build.DEBUG) {
-//              System.err.println(this + "getIndexAtPoint(" + point.x + ", " + point.y + ") returns " +
-//                  unoObject.getIndexAtPoint(new Point(point.x, point.y)));
-//          }
+            if (Build.DEBUG) {
+                System.err.println(this + "getIndexAtPoint(" + point.x + ", " + point.y + ") returns " +
+                    unoObject.getIndexAtPoint(new Point(point.x, point.y)));
+            }
             return unoObject.getIndexAtPoint(new Point(point.x, point.y));
         } catch (com.sun.star.uno.RuntimeException e) {
             if (Build.DEBUG) {

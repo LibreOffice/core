@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextComponent.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:40 $
+ *  last change: $Author: obr $ $Date: 2003-01-13 11:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,19 +68,15 @@ import drafts.com.sun.star.accessibility.*;
  */
 public class TextComponent extends Component implements javax.accessibility.Accessible {
 
-    protected TextComponent(XAccessible accessible, XAccessibleComponent xAccessibleComponent, boolean multiLine) {
-        super();
-        initialize(accessible, xAccessibleComponent);
-    }
+    boolean multiLine = false;
+    boolean editable = false;
 
-    protected TextComponent(XAccessible accessible, XAccessibleComponent xAccessibleComponent) {
+    protected TextComponent(XAccessible accessible, XAccessibleComponent xAccessibleComponent, XAccessibleStateSet xAccessibleStateSet) {
         super();
-        initialize(accessible, xAccessibleComponent);
-    }
-
-    protected void initialize(XAccessible accessible, XAccessibleComponent xAccessibleComponent) {
         unoAccessible = accessible;
         unoAccessibleComponent = xAccessibleComponent;
+        editable = xAccessibleStateSet.contains(AccessibleStateType.EDITABLE);
+        multiLine = xAccessibleStateSet.contains(AccessibleStateType.MULTILINE);
         // To reflect focus and other component state changes, the accessibility
         // event listener must already be added here
         addAccessibleEventListener(new AccessibleTextComponentListener());
@@ -92,6 +88,24 @@ public class TextComponent extends Component implements javax.accessibility.Acce
             super();
         }
 
+        protected void setComponentState(short state, boolean enable) {
+            switch (state) {
+                case AccessibleStateType.EDITABLE:
+                    editable = enable;
+                    fireStatePropertyChange(javax.accessibility.AccessibleState.EDITABLE, enable);
+                    break;
+                case AccessibleStateType.MULTILINE:
+                    multiLine = enable;
+                    fireStatePropertyChange(javax.accessibility.AccessibleState.MULTI_LINE, enable);
+                    break;
+                case AccessibleStateType.SINGLE_LINE:
+                    break;
+                default:
+                    super.setComponentState(state, enable);
+                    break;
+            }
+        }
+
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
@@ -100,6 +114,9 @@ public class TextComponent extends Component implements javax.accessibility.Acce
                         null, new Integer(0));
                     break;
                 case AccessibleEventId.ACCESSIBLE_CARET_EVENT:
+                    if (Build.DEBUG) {
+                        System.err.println("Caret event");
+                    }
                     firePropertyChange(accessibleContext.ACCESSIBLE_CARET_PROPERTY,
                         toNumber(event.OldValue), toNumber(event.NewValue));
                     break;
@@ -187,20 +204,13 @@ public class TextComponent extends Component implements javax.accessibility.Acce
 
         public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
             javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSet();
-            try {
-                XAccessibleStateSet unoAccessibleStateSet =
-                    unoAccessible.getAccessibleContext().getAccessibleStateSet();
-
-                if (unoAccessibleStateSet.contains(AccessibleStateType.EDITABLE)) {
-                    states.add(javax.accessibility.AccessibleState.EDITABLE);
-                }
-                if (unoAccessibleStateSet.contains(AccessibleStateType.MULTILINE)) {
-                    states.add(javax.accessibility.AccessibleState.MULTI_LINE);
-                } else {
-                    states.add(javax.accessibility.AccessibleState.SINGLE_LINE);
-                }
-            } catch (NullPointerException e) {
-            } catch (com.sun.star.uno.RuntimeException e) {
+            if (editable) {
+                states.add(javax.accessibility.AccessibleState.EDITABLE);
+            }
+            if (multiLine) {
+                states.add(javax.accessibility.AccessibleState.MULTI_LINE);
+            } else {
+                states.add(javax.accessibility.AccessibleState.SINGLE_LINE);
             }
             return states;
         }
@@ -211,7 +221,7 @@ public class TextComponent extends Component implements javax.accessibility.Acce
                 XAccessibleRelationSet unoAccessibleRelationSet =
                     unoAccessible.getAccessibleContext().getAccessibleRelationSet();
                 if (unoAccessibleRelationSet == null) {
-                    return null;
+                    return super.getAccessibleRelationSet();
                 }
 
                 javax.accessibility.AccessibleRelationSet relationSet = new javax.accessibility.AccessibleRelationSet();
@@ -245,9 +255,9 @@ public class TextComponent extends Component implements javax.accessibility.Acce
                 }
                 return relationSet;
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                return null;
+                return super.getAccessibleRelationSet();
             } catch (com.sun.star.uno.RuntimeException e) {
-                return null;
+                return super.getAccessibleRelationSet();
             }
         }
     }

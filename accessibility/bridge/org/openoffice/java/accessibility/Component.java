@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Component.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:34 $
+ *  last change: $Author: obr $ $Date: 2003-01-13 11:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ public abstract class Component extends java.awt.Component {
     protected XAccessible unoAccessible = null;
     protected XAccessibleComponent unoAccessibleComponent = null;
 
+    protected boolean disposed = false;
+
     protected Component() {
         super();
 //      enableEvents(java.awt.AWTEvent.FOCUS_EVENT_MASK);
@@ -130,60 +132,24 @@ public abstract class Component extends java.awt.Component {
 
     /** Requests focus for this object */
     public void requestFocus() {
-        if (isShowing()) {
-            try {
-                unoAccessibleComponent.grabFocus();
-            } catch (com.sun.star.uno.RuntimeException e) {
-            }
-        }
     }
+
     /** Requests focus for this object */
-    protected boolean requestFocus(boolean temporary) {
+    public boolean requestFocus(boolean temporary) {
         // Must be a no-op to make focus handling work
         return true;
     }
 
-    /** Returns the location of the object on the screen. */
-    public java.awt.Point getLocationOnScreen() {
-        java.awt.Container parent = getParent();
-        if (parent != null) {
-            // Retrieve location of the parent object
-            java.awt.Point p = parent.getLocationOnScreen();
-
-            // Add relative coordinates of the object
-            if (p != null) {
-                p.translate(getX(), getY());
-                return p;
-            }
-        }
-
-        return null;
+    public boolean requestFocusInWindow() {
+        return requestFocusInWindow(false);
     }
 
-    /** Returns the foreground color of the object */
-    public java.awt.Color getForeground() {
-        if (isShowing()) {
-            try {
-                return new java.awt.Color(unoAccessibleComponent.getForeground());
-            } catch (com.sun.star.uno.RuntimeException e) {
-                return null;
-            }
-        } else {
-            return null;
+    protected boolean requestFocusInWindow(boolean temporary) {
+        if (isFocusable() && isVisible()) {
+            getEventQueue().postEvent(new java.awt.event.FocusEvent(this, java.awt.event.FocusEvent.FOCUS_GAINED, temporary));
+            return true;
         }
-    }
-
-    /** Returns the background color of the object */
-    public java.awt.Color getBackground() {
-        if (isShowing()) {
-            try {
-                return new java.awt.Color(unoAccessibleComponent.getBackground());
-            } catch (com.sun.star.uno.RuntimeException e) {
-                return null;
-            }
-        } else {
-            return null;
-        }
+        return false;
     }
 
     public Object[] getAccessibleComponents(Object[] targetSet) {
@@ -229,14 +195,23 @@ public abstract class Component extends java.awt.Component {
         }
 
         public void run() {
-            AccessibleContext ac = accessibleContext;
-            if (ac != null) {
-                ac.firePropertyChange(propertyName, oldValue, newValue);
-            } else if (Build.DEBUG) {
-                XAccessibleContext xac = unoAccessible.getAccessibleContext();
-                System.err.println("Ignoring event: " + propertyName + " for " +
-                    AccessibleRoleAdapter.getAccessibleRole(xac.getAccessibleRole()) +
-                    " " + xac.getAccessibleName());
+            // Because this code is executed in the DispatchThread, it is better to catch every
+            // exception that might occur
+            try {
+                AccessibleContext ac = accessibleContext;
+                if (ac != null) {
+                    ac.firePropertyChange(propertyName, oldValue, newValue);
+                } else if (Build.DEBUG) {
+                    XAccessibleContext xac = unoAccessible.getAccessibleContext();
+                    System.err.println("Ignoring event: " + propertyName + " for " +
+                        AccessibleRoleAdapter.getAccessibleRole(xac.getAccessibleRole()) +
+                        " " + xac.getAccessibleName());
+                }
+            } catch (java.lang.Exception e) {
+                if (Build.DEBUG) {
+                    System.err.println(e.getClass().getName() + " caught propagating " + propertyName + " event: " + e.getMessage());
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -285,19 +260,9 @@ public abstract class Component extends java.awt.Component {
                     fireStatePropertyChange(AccessibleState.SELECTED, enable);
                     break;
                 case AccessibleStateType.SHOWING:
-                    if (enable) {
-                        // Query bounding boxes if component becomes visible
-                        com.sun.star.awt.Rectangle r = unoAccessibleComponent.getBounds();
-                        Component.this.setBounds(r.X, r.Y, r.Width, r.Height);
-                    }
 //                  fireStatePropertyChange(AccessibleState.SHOWING, enable);
                     break;
                 case AccessibleStateType.VISIBLE:
-                    if (enable) {
-                        // Query bounding boxes if component becomes visible
-                        com.sun.star.awt.Rectangle r = unoAccessibleComponent.getBounds();
-                        Component.this.setBounds(r.X, r.Y, r.Width, r.Height);
-                    }
                     Component.this.setVisible(enable);
                     break;
                 default:
@@ -348,24 +313,6 @@ public abstract class Component extends java.awt.Component {
             }
         }
 
-        /** Fires a visible data property change event */
-        protected void handleVisibleDataEvent() {
-            try {
-                com.sun.star.awt.Rectangle r = unoAccessibleComponent.getBounds();
-                Component.this.setBounds(r.X, r.Y, r.Width, r.Height);
-            } catch (com.sun.star.uno.RuntimeException e) {
-            }
-        }
-
-        /** Updates internal bounding box cache */
-        protected void handleBoundRectEvent() {
-            try {
-                com.sun.star.awt.Rectangle r = unoAccessibleComponent.getBounds();
-                Component.this.setBounds(r.X, r.Y, r.Width, r.Height);
-            } catch (com.sun.star.uno.RuntimeException e) {
-            }
-        }
-
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
@@ -384,11 +331,8 @@ public abstract class Component extends java.awt.Component {
                     handleStateChangedEvent(event.OldValue, event.NewValue);
                     break;
                 case AccessibleEventId.ACCESSIBLE_VISIBLE_DATA_EVENT:
-                    handleVisibleDataEvent();
-                    firePropertyChange(AccessibleContext.ACCESSIBLE_VISIBLE_DATA_PROPERTY, null, null);
-                    break;
                 case AccessibleEventId.ACCESSIBLE_BOUNDRECT_EVENT:
-                    handleBoundRectEvent();
+                    firePropertyChange(AccessibleContext.ACCESSIBLE_VISIBLE_DATA_PROPERTY, null, null);
                     break;
                 case AccessibleEventId.ACCESSIBLE_TEXT_EVENT:
                     // FIXME: enhance text information ..
@@ -404,6 +348,8 @@ public abstract class Component extends java.awt.Component {
 
         /** Called by OpenOffice process to notify that the UNO component is disposing */
         public void disposing(com.sun.star.lang.EventObject eventObject) {
+            disposed = true;
+            AccessibleObjectFactory.getDefault().disposing(Component.this);
         }
     }
 
@@ -514,6 +460,205 @@ public abstract class Component extends java.awt.Component {
                 accessibleFocusHandler = null;
             }
             super.removePropertyChangeListener(listener);
+        }
+
+        /**
+        * Gets the current state set of this object.
+        *
+        * @return an instance of <code>AccessibleStateSet</code>
+        *    containing the current state set of the object
+        * @see AccessibleState
+        */
+        public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
+            javax.accessibility.AccessibleStateSet states = new javax.accessibility.AccessibleStateSet();
+            if (Component.this.isEnabled()) {
+                states.add(AccessibleState.ENABLED);
+            }
+            if (Component.this.isFocusTraversable()) {
+                states.add(AccessibleState.FOCUSABLE);
+            }
+            if (Component.this.isVisible()) {
+                states.add(AccessibleState.VISIBLE);
+            }
+            if (Component.this.isShowing()) {
+                states.add(AccessibleState.SHOWING);
+            }
+            if (Component.this.isFocusOwner()) {
+                states.add(AccessibleState.FOCUSED);
+            }
+
+            /**
+            * Never hold the tree lock when calling back into the office !!
+            * This may cause deadlocks when new native frames are registered
+            * with the Solar-Mutex acquired ..
+            */
+
+            javax.accessibility.Accessible ap = getAccessibleParent();
+            if (ap != null) {
+                javax.accessibility.AccessibleContext pac = ap.getAccessibleContext();
+                if (pac != null) {
+                    javax.accessibility.AccessibleSelection as = pac.getAccessibleSelection();
+                    if (as != null) {
+                        states.add(AccessibleState.SELECTABLE);
+                        int i = getAccessibleIndexInParent();
+                        if (i >= 0) {
+                            if (as.isAccessibleChildSelected(i)) {
+                                states.add(AccessibleState.SELECTED);
+                            }
+                        }
+                    }
+                }
+            }
+            return states;
+        }
+
+        /*
+        * AccessibleComponent
+        */
+
+        /** Returns the background color of the object */
+        public java.awt.Color getBackground() {
+            try {
+                return new java.awt.Color(unoAccessibleComponent.getBackground());
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        public void setBackground(java.awt.Color c) {
+            // Not supported by UNO accessibility API
+        }
+
+        /** Returns the foreground color of the object */
+        public java.awt.Color getForeground() {
+            try {
+                return new java.awt.Color(unoAccessibleComponent.getForeground());
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        public void setForeground(java.awt.Color c) {
+            // Not supported by UNO accessibility API
+        }
+
+        public java.awt.Cursor getCursor() {
+            // Not supported by UNO accessibility API
+            return null;
+        }
+
+        public void setCursor(java.awt.Cursor cursor) {
+            // Not supported by UNO accessibility API
+        }
+
+        public java.awt.Font getFont() {
+            // FIXME
+            return null;
+        }
+
+        public void setFont(java.awt.Font f) {
+            // Not supported by UNO accessibility API
+        }
+
+        public java.awt.FontMetrics getFontMetrics(java.awt.Font f) {
+            // FIXME
+            return null;
+        }
+
+        public boolean isEnabled() {
+            return Component.this.isEnabled();
+        }
+
+        public void setEnabled(boolean b) {
+            // Not supported by UNO accessibility API
+        }
+
+        public boolean isVisible() {
+            return Component.this.isVisible();
+        }
+
+        public void setVisible(boolean b) {
+            // Not supported by UNO accessibility API
+        }
+
+        public boolean isShowing() {
+            return Component.this.isShowing();
+        }
+
+        public boolean contains(java.awt.Point p) {
+            try {
+                return unoAccessibleComponent.contains(new com.sun.star.awt.Point(p.x, p.y));
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return false;
+            }
+        }
+
+        /** Returns the location of the object on the screen. */
+        public java.awt.Point getLocationOnScreen() {
+            try {
+                com.sun.star.awt.Point unoPoint = unoAccessibleComponent.getLocationOnScreen();
+                return new java.awt.Point(unoPoint.X, unoPoint.Y);
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        /** Gets the location of this component in the form of a point specifying the component's top-left corner */
+        public java.awt.Point getLocation() {
+            try {
+                com.sun.star.awt.Point unoPoint = unoAccessibleComponent.getLocation();
+                return new java.awt.Point( unoPoint.X, unoPoint.Y );
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        /** Moves this component to a new location */
+        public void setLocation(java.awt.Point p) {
+            // Not supported by UNO accessibility API
+        }
+
+        /** Gets the bounds of this component in the form of a Rectangle object */
+        public java.awt.Rectangle getBounds() {
+            try {
+                com.sun.star.awt.Rectangle unoRect = unoAccessibleComponent.getBounds();
+                return new java.awt.Rectangle(unoRect.X, unoRect.Y, unoRect.Width, unoRect.Height);
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        /** Moves and resizes this component to conform to the new bounding rectangle r */
+        public void setBounds(java.awt.Rectangle r) {
+            // Not supported by UNO accessibility API
+        }
+
+        /** Returns the size of this component in the form of a Dimension object */
+        public java.awt.Dimension getSize() {
+            try {
+                com.sun.star.awt.Size unoSize = unoAccessibleComponent.getSize();
+                return new java.awt.Dimension(unoSize.Width, unoSize.Height);
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        /** Resizes this component so that it has width d.width and height d.height */
+        public void setSize(java.awt.Dimension d) {
+            // Not supported by UNO accessibility API
+        }
+
+        public javax.accessibility.Accessible getAccessibleAt(java.awt.Point p) {
+            // Not supported by this implementation
+            return null;
+        }
+
+        public boolean isFocusTraversable() {
+            return Component.this.isFocusable();
+        }
+
+        public void requestFocus() {
+            unoAccessibleComponent.grabFocus();
         }
     }
 

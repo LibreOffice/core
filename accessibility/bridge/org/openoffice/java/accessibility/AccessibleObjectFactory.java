@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:32 $
+ *  last change: $Author: obr $ $Date: 2003-01-13 11:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,119 +126,6 @@ public class AccessibleObjectFactory extends java.awt.FocusTraversalPolicy {
         return null;
     }
 
-/*
-    public AccessibleUNOComponent createAccessibleContext(XAccessibleContext xAccessibleContext) {
-        AccessibleUNOComponent ac = null;
-
-        // Ensure that we really got an UNO accessible context
-        if( xAccessibleContext != null ) {
-            try {
-                short role = xAccessibleContext.getAccessibleRole();
-                XAccessibleStateSet xStateSet = null;
-
-                switch(role) {
-                    case AccessibleRole.LIST:
-                        ac = new AccessibleList(xAccessibleContext);
-                        break;
-                    case AccessibleRole.MENUBAR:
-                    case AccessibleRole.POPUPMENU:
-                        ac = new AccessibleContainer(
-                            AccessibleRoleMap.toAccessibleRole(role),
-                            xAccessibleContext
-                        );
-                        break;
-                    case AccessibleRole.LABEL:
-                    case AccessibleRole.TABLE_CELL:
-                        xStateSet = xAccessibleContext.getAccessibleStateSet();
-                        if( xStateSet != null && ! xStateSet.contains(AccessibleStateType.TRANSIENT)) {
-                            ac = new AccessibleLabel(xAccessibleContext);
-                        } else {
-                            ac = new AccessibleFixedText(
-                                javax.accessibility.AccessibleRole.LABEL,
-                                xAccessibleContext
-                            );
-                        }
-                        break;
-                    case AccessibleRole.COLUMNHEADER:
-                    case AccessibleRole.ROWHEADER:
-                        ac = new AccessibleFixedText(
-                            AccessibleRoleMap.toAccessibleRole(role),
-                            xAccessibleContext
-                        );
-                        break;
-                    case AccessibleRole.DIALOG:
-                    case AccessibleRole.FRAME:
-                        ac = new AccessibleFrame(
-                            AccessibleRoleMap.toAccessibleRole(role),
-                            xAccessibleContext
-                        );
-                        break;
-                    case AccessibleRole.ICON:
-                    case AccessibleRole.GRAPHIC:
-                    case AccessibleRole.SHAPE:
-                    case AccessibleRole.EMBEDDED_OBJECT:
-                        ac = new AccessibleImage(xAccessibleContext);
-                        break;
-                    case AccessibleRole.LISTITEM:
-                        ac = new AccessibleListItem(xAccessibleContext);
-                        break;
-                    case AccessibleRole.MENU:
-                        ac = new AccessibleMenu(xAccessibleContext);
-                        break;
-                    case AccessibleRole.MENUITEM:
-                        ac = new AccessibleMenuItem(xAccessibleContext);
-                        break;
-                    case AccessibleRole.PARAGRAPH:
-                        ac = new AccessibleParagraph(xAccessibleContext);
-                        break;
-                    case AccessibleRole.SCROLLBAR:
-                        ac = new AccessibleScrollBar(xAccessibleContext);
-                        break;
-                    case AccessibleRole.TABLE:
-                        xStateSet = xAccessibleContext.getAccessibleStateSet();
-                        if(xStateSet != null && ! xStateSet.contains(AccessibleStateType.CHILDREN_TRANSIENT)) {
-                            ac = new AccessibleTextTable(xAccessibleContext);
-                        } else {
-                            ac = new AccessibleSpreadsheet(xAccessibleContext);
-                        }
-                        break;
-                    case AccessibleRole.TEXT:
-                        ac = new AccessibleEditLine(xAccessibleContext);
-                        break;
-                    case AccessibleRole.TREE:
-                        ac = new AccessibleTreeList(xAccessibleContext);
-                        break;
-                    case AccessibleRole.CANVAS:
-                    case AccessibleRole.DOCUMENT:
-                    case AccessibleRole.ENDNOTE:
-                    case AccessibleRole.FILLER:
-                    case AccessibleRole.FOOTER:
-                    case AccessibleRole.FOOTNOTE:
-                    case AccessibleRole.HEADER:
-                    case AccessibleRole.PAGETABLIST:
-                    case AccessibleRole.PANEL:
-                    case AccessibleRole.TOOLBAR:
-                        ac = new AccessibleWindow(
-                            AccessibleRoleMap.toAccessibleRole(role),
-                            xAccessibleContext
-                        );
-                        break;
-                    default:
-                        if( Build.DEBUG) {
-                            System.out.println("Unmapped role: " + AccessibleRoleMap.toAccessibleRole(role)
-                             + " (id = " + role + ")");
-                        }
-                        break;
-                }
-
-                // Register as event listener if possible
-                AccessibleEventListener listener = null;
-                if( ac instanceof AccessibleEventListener ) {
-                    listener = (AccessibleEventListener) ac;
-                }
-
-    }
-*/
     private java.awt.EventQueue eventQueue = java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue();
 
     public java.awt.EventQueue getEventQueue() {
@@ -449,7 +336,7 @@ public class AccessibleObjectFactory extends java.awt.FocusTraversalPolicy {
                 break;
             case AccessibleRole.PARAGRAPH:
             case AccessibleRole.HEADING:
-                c = new TextComponent(xAccessible, xAccessibleComponent, true);
+                c = new TextComponent(xAccessible, xAccessibleComponent, xAccessibleStateSet);
                 break;
             case AccessibleRole.PANEL:
                 c = new Container(javax.accessibility.AccessibleRole.PANEL,
@@ -498,12 +385,20 @@ public class AccessibleObjectFactory extends java.awt.FocusTraversalPolicy {
                     xAccessible, xAccessibleComponent);
                 break;
             case AccessibleRole.TABLE:
-                c = new Table(xAccessible, xAccessibleComponent,
-                    xAccessibleStateSet.contains(AccessibleStateType.MULTISELECTABLE));
+                if (xAccessibleStateSet.contains(AccessibleStateType.MANAGES_DESCENDANT)) {
+                    c = new Table(xAccessible, xAccessibleComponent,
+                        xAccessibleStateSet.contains(AccessibleStateType.MULTISELECTABLE));
+                } else {
+                    c = new Container(javax.accessibility.AccessibleRole.TABLE,
+                        xAccessible, xAccessibleComponent);
+                }
+                break;
+            case AccessibleRole.TABLE_CELL:
+                c = new Container(javax.accessibility.AccessibleRole.PANEL,
+                    xAccessible, xAccessibleComponent);
                 break;
             case AccessibleRole.TEXT:
-                c = new TextComponent(xAccessible, xAccessibleComponent,
-                    xAccessibleStateSet.contains(AccessibleStateType.MULTILINE));
+                c = new TextComponent(xAccessible, xAccessibleComponent, xAccessibleStateSet);
                 break;
             case AccessibleRole.TEXT_FRAME:
                 c = new Container(javax.accessibility.AccessibleRole.PANEL,
@@ -539,19 +434,24 @@ public class AccessibleObjectFactory extends java.awt.FocusTraversalPolicy {
                 }
             }
             // Set the boundings of the component if it is visible ..
-            if (xAccessibleStateSet.contains(AccessibleStateType.VISIBLE)) {
-                com.sun.star.awt.Rectangle r = xAccessibleComponent.getBounds();
-                c.setBounds(r.X, r.Y, r.Width, r.Height);
-            } else {
+            if (!xAccessibleStateSet.contains(AccessibleStateType.VISIBLE)) {
                 c.setVisible(false);
             }
-            // Set the components' enabled enabled..
+            // Set the components' enabled state ..
             if (!xAccessibleStateSet.contains(AccessibleStateType.ENABLED)) {
                 c.setEnabled(false);
             }
         }
 
         return c;
+    }
+
+    protected void disposing(java.awt.Component c) {
+        if (c != null) {
+            synchronized (objectList) {
+                objectList.remove(c.toString());
+            }
+        }
     }
 
 /*

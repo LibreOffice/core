@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AbstractButton.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:30 $
+ *  last change: $Author: obr $ $Date: 2003-01-13 11:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,13 @@ public abstract class AbstractButton extends Component {
         */
         public AccessibleStateSet getAccessibleStateSet() {
             AccessibleStateSet states = super.getAccessibleStateSet();
+            // FIXME: quick hack to avoid dead lock in Window.dispose ..
+            if (java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().isDispatchThread()) {
+                return states;
+            }
+            if (!isShowing()) {
+                return states;
+            }
             try {
                 XAccessibleStateSet unoAccessibleStateSet =
                     unoAccessible.getAccessibleContext().getAccessibleStateSet();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dialog.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:35 $
+ *  last change: $Author: obr $ $Date: 2003-01-13 11:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 
 package org.openoffice.java.accessibility;
 
-import java.awt.event.WindowEvent;
-
 import javax.accessibility.AccessibleState;
 
 import com.sun.star.uno.*;
@@ -70,9 +68,6 @@ import drafts.com.sun.star.accessibility.*;
 
 public class Dialog extends java.awt.Dialog implements javax.accessibility.Accessible, NativeFrame {
     protected XAccessibleComponent unoAccessibleComponent;
-
-    // The coordinates of this frame on screen
-    java.awt.Point location = null;
 
     boolean opened = false;
     boolean visible = false;
@@ -108,6 +103,9 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
     java.awt.Component initialComponent = null;
 
     public java.awt.Component getInitialComponent() {
+        if (Build.DEBUG) {
+            System.err.println("returning initial component object of class: " + initialComponent.getClass().getName());
+        }
         return initialComponent;
     }
 
@@ -188,31 +186,29 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
         if (visible != b){
             visible = b;
             if (b) {
-                com.sun.star.awt.Point p = unoAccessibleComponent.getLocationOnScreen();
-                location = new java.awt.Point(p.X, p.Y);
-
                 // If it is the first show, fire WINDOW_OPENED event
                 if (!opened) {
-                    System.err.println("Posting Window opened");
-                    postWindowEvent(WindowEvent.WINDOW_OPENED);
+                    postWindowEvent(java.awt.event.WindowEvent.WINDOW_OPENED);
                     opened = true;
                 }
+                postComponentEvent(java.awt.event.ComponentEvent.COMPONENT_SHOWN);
             } else {
-                location = null;
+                postComponentEvent(java.awt.event.ComponentEvent.COMPONENT_HIDDEN);
             }
         }
     }
 
-    protected void postWindowEvent(int i) {
-        eventQueue.postEvent(new WindowEvent(this, i));
+    public void dispose() {
+        setVisible(false);
+        postWindowEvent(java.awt.event.WindowEvent.WINDOW_CLOSED);
     }
 
-    /** Returns the location of the object on the screen. */
-    public java.awt.Point getLocationOnScreen() {
-        if (visible) {
-            return new java.awt.Point(location);
-        }
-        return null;
+    protected void postWindowEvent(int i) {
+        eventQueue.postEvent(new java.awt.event.WindowEvent(this, i));
+    }
+
+    protected void postComponentEvent(int i) {
+        eventQueue.postEvent(new java.awt.event.ComponentEvent(this, i));
     }
 
     /**
@@ -264,8 +260,7 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
                 if (accessibleContext != null) {
                     accessibleContext.setAccessibleDescription(AnyConverter.toString(any));
                 }
-            }
-            catch (com.sun.star.lang.IllegalArgumentException e) {
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
             }
         }
 
@@ -279,9 +274,7 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
                 if (AnyConverter.isShort(any2)) {
                     setComponentState(AnyConverter.toShort(any2), true);
                 }
-            }
-
-            catch (com.sun.star.lang.IllegalArgumentException e) {
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
             }
         }
         /** Updates the internal child list and fires the appropriate PropertyChangeEvent */
@@ -292,9 +285,7 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
                 if (c != null) {
                     Dialog.this.remove(c);
                 }
-            }
-
-            catch (com.sun.star.uno.Exception e) {
+            } catch (com.sun.star.uno.Exception e) {
                 // FIXME: output
             }
         }
@@ -308,7 +299,7 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
                 java.awt.Component c = factory.getAccessibleComponent(xAccessible);
                 if (c != null) {
                     // Seems to be already in child list
-                    if (c.getParent().equals(this))
+                    if (this.equals(c.getParent()))
                         return;
                 } else {
                     c = factory.createAccessibleComponent(xAccessible);
@@ -317,33 +308,16 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
                     Dialog.this.add(c, xAccessible.getAccessibleContext().
                         getAccessibleIndexInParent());
                 }
-            }
-
-            catch (com.sun.star.uno.Exception e) {
+            } catch (com.sun.star.uno.Exception e) {
                 // FIXME: output
             }
         }
 
-
         /** Fires a visible data property change event */
         protected void handleVisibleDataEvent() {
-            try {
-                com.sun.star.awt.Rectangle r = unoAccessibleComponent.getBounds();
-                Dialog.this.setBounds(r.X, r.Y, r.Width, r.Height);
-                com.sun.star.awt.Point p = unoAccessibleComponent.getLocationOnScreen();
-                location = new java.awt.Point(p.X, p.Y);
-            } catch (com.sun.star.uno.RuntimeException e) {
-            }
-        }
-
-        /** Updates internal bounding box cache */
-        protected void handleBoundRectEvent() {
-            try {
-                com.sun.star.awt.Rectangle r = unoAccessibleComponent.getBounds();
-                Dialog.this.setBounds(r.X, r.Y, r.Width, r.Height);
-                com.sun.star.awt.Point p = unoAccessibleComponent.getLocationOnScreen();
-                location = new java.awt.Point(p.X, p.Y);
-            } catch (com.sun.star.uno.RuntimeException e) {
+            javax.accessibility.AccessibleContext ac = accessibleContext;
+            if (ac != null) {
+                ac.firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_VISIBLE_DATA_PROPERTY, null, null);
             }
         }
 
@@ -372,10 +346,8 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
                     }
                     break;
                 case AccessibleEventId.ACCESSIBLE_VISIBLE_DATA_EVENT:
-                    handleVisibleDataEvent();
-                    break;
                 case AccessibleEventId.ACCESSIBLE_BOUNDRECT_EVENT:
-                    handleBoundRectEvent();
+                    handleVisibleDataEvent();
                     break;
                 default:
                     // Warn about unhandled events
@@ -523,6 +495,155 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
                 accessibleWindowFocusHandler = null;
             }
             super.removePropertyChangeListener(listener);
+        }
+
+        /*
+        * AccessibleComponent
+        */
+
+        /** Returns the background color of the object */
+        public java.awt.Color getBackground() {
+            try {
+                return new java.awt.Color(unoAccessibleComponent.getBackground());
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        public void setBackground(java.awt.Color c) {
+            // Not supported by UNO accessibility API
+        }
+
+        /** Returns the foreground color of the object */
+        public java.awt.Color getForeground() {
+            try {
+                return new java.awt.Color(unoAccessibleComponent.getForeground());
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        public void setForeground(java.awt.Color c) {
+            // Not supported by UNO accessibility API
+        }
+
+        public java.awt.Cursor getCursor() {
+            // Not supported by UNO accessibility API
+            return null;
+        }
+
+        public void setCursor(java.awt.Cursor cursor) {
+            // Not supported by UNO accessibility API
+        }
+
+        public java.awt.Font getFont() {
+            // FIXME
+            return null;
+        }
+
+        public void setFont(java.awt.Font f) {
+            // Not supported by UNO accessibility API
+        }
+
+        public java.awt.FontMetrics getFontMetrics(java.awt.Font f) {
+            // FIXME
+            return null;
+        }
+
+        public boolean isEnabled() {
+            return Dialog.this.isEnabled();
+        }
+
+        public void setEnabled(boolean b) {
+            // Not supported by UNO accessibility API
+        }
+
+        public boolean isVisible() {
+            return Dialog.this.isVisible();
+        }
+
+        public void setVisible(boolean b) {
+            // Not supported by UNO accessibility API
+        }
+
+        public boolean isShowing() {
+            return Dialog.this.isShowing();
+        }
+
+        public boolean contains(java.awt.Point p) {
+            try {
+                return unoAccessibleComponent.contains(new com.sun.star.awt.Point(p.x, p.y));
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return false;
+            }
+        }
+
+        /** Returns the location of the object on the screen. */
+        public java.awt.Point getLocationOnScreen() {
+            try {
+                com.sun.star.awt.Point unoPoint = unoAccessibleComponent.getLocationOnScreen();
+                return new java.awt.Point(unoPoint.X, unoPoint.Y);
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        /** Gets the location of this component in the form of a point specifying the component's top-left corner */
+        public java.awt.Point getLocation() {
+            try {
+                com.sun.star.awt.Point unoPoint = unoAccessibleComponent.getLocation();
+                return new java.awt.Point( unoPoint.X, unoPoint.Y );
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        /** Moves this component to a new location */
+        public void setLocation(java.awt.Point p) {
+            // Not supported by UNO accessibility API
+        }
+
+        /** Gets the bounds of this component in the form of a Rectangle object */
+        public java.awt.Rectangle getBounds() {
+            try {
+                com.sun.star.awt.Rectangle unoRect = unoAccessibleComponent.getBounds();
+                return new java.awt.Rectangle(unoRect.X, unoRect.Y, unoRect.Width, unoRect.Height);
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        /** Moves and resizes this component to conform to the new bounding rectangle r */
+        public void setBounds(java.awt.Rectangle r) {
+            // Not supported by UNO accessibility API
+        }
+
+        /** Returns the size of this component in the form of a Dimension object */
+        public java.awt.Dimension getSize() {
+            try {
+                com.sun.star.awt.Size unoSize = unoAccessibleComponent.getSize();
+                return new java.awt.Dimension(unoSize.Width, unoSize.Height);
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        /** Resizes this component so that it has width d.width and height d.height */
+        public void setSize(java.awt.Dimension d) {
+            // Not supported by UNO accessibility API
+        }
+
+        public javax.accessibility.Accessible getAccessibleAt(java.awt.Point p) {
+            // Not supported by this implementation
+            return null;
+        }
+
+        public boolean isFocusTraversable() {
+            return Dialog.this.isFocusable();
+        }
+
+        public void requestFocus() {
+            unoAccessibleComponent.grabFocus();
         }
     }
 }

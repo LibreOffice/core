@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessBridge.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 12:54:43 $
+ *  last change: $Author: obr $ $Date: 2003-01-13 11:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,10 +314,10 @@ public class AccessBridge {
             try {
                 // The office sometimes registers frames more than once, so check here if already done
                 Integer handle = new Integer(AnyConverter.toInt(any));
-                if( ! frameMap.containsKey(handle) ) {
+                if (! frameMap.containsKey(handle)) {
                     java.awt.Window w = factory.getTopWindow(xAccessible);
 
-                    if( Build.DEBUG ) {
+                    if (Build.DEBUG) {
                         System.out.println("register native frame: " + handle);
                     }
 
@@ -351,7 +351,24 @@ public class AccessBridge {
                         System.out.println("revoke native frame: " + handle);
                     }
 
+                    // It seems that we have to do this synchronously, because otherwise on exit
+                    // the main thread of the office terminates before AWT has shut down and the
+                    // process will hang ..
                     w.dispose();
+
+/*
+                    class DisposeAction implements Runnable {
+                        java.awt.Window window;
+                        DisposeAction(java.awt.Window w) {
+                            window = w;
+                        }
+                        public void run() {
+                            window.dispose();
+                        }
+                    }
+
+                    java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().invokeLater(new DisposeAction(w));
+*/
                 }
             }
 

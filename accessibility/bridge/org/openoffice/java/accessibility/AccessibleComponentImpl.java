@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComponentImpl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:31 $
+ *  last change: $Author: obr $ $Date: 2003-01-13 11:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ public class AccessibleComponentImpl implements javax.accessibility.AccessibleCo
      * XAccessibleComponent
      */
 
+    /** Returns the background color of the object */
     public java.awt.Color getBackground() {
         try {
             return new java.awt.Color(unoObject.getBackground());
@@ -108,6 +109,7 @@ public class AccessibleComponentImpl implements javax.accessibility.AccessibleCo
         // Not supported by UNO accessibility API
     }
 
+    /** Returns the foreground color of the object */
     public java.awt.Color getForeground() {
         try {
             return new java.awt.Color(unoObject.getForeground());
@@ -171,6 +173,7 @@ public class AccessibleComponentImpl implements javax.accessibility.AccessibleCo
         }
     }
 
+    /** Returns the location of the object on the screen. */
     public java.awt.Point getLocationOnScreen() {
         try {
             com.sun.star.awt.Point unoPoint = unoObject.getLocationOnScreen();
@@ -180,6 +183,7 @@ public class AccessibleComponentImpl implements javax.accessibility.AccessibleCo
         }
     }
 
+    /** Gets the location of this component in the form of a point specifying the component's top-left corner */
     public java.awt.Point getLocation() {
         try {
             com.sun.star.awt.Point unoPoint = unoObject.getLocation();
@@ -189,10 +193,12 @@ public class AccessibleComponentImpl implements javax.accessibility.AccessibleCo
         }
     }
 
+    /** Moves this component to a new location */
     public void setLocation(java.awt.Point p) {
         // Not supported by UNO accessibility API
     }
 
+    /** Gets the bounds of this component in the form of a Rectangle object */
     public java.awt.Rectangle getBounds() {
         try {
             com.sun.star.awt.Rectangle unoRect = unoObject.getBounds();
@@ -202,10 +208,12 @@ public class AccessibleComponentImpl implements javax.accessibility.AccessibleCo
         }
     }
 
+    /** Moves and resizes this component to conform to the new bounding rectangle r */
     public void setBounds(java.awt.Rectangle r) {
         // Not supported by UNO accessibility API
     }
 
+    /** Returns the size of this component in the form of a Dimension object */
     public java.awt.Dimension getSize() {
         try {
             com.sun.star.awt.Size unoSize = unoObject.getSize();
@@ -215,6 +223,7 @@ public class AccessibleComponentImpl implements javax.accessibility.AccessibleCo
         }
     }
 
+    /** Resizes this component so that it has width d.width and height d.height */
     public void setSize(java.awt.Dimension d) {
         // Not supported by UNO accessibility API
     }
