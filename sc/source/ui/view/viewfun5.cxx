@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-09 09:47:41 $
+ *  last change: $Author: jl $ $Date: 2001-08-16 08:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,26 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 else
                     DBG_ERROR("Error in CreateAndLoad");
             }
+        }
+        else
+        {
+            if( aDataHelper.GetTransferableObjectDescriptor(
+                SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ))
+            {
+                UniString aEmptyStr;
+                SvStorage* xStore = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
+                SvInPlaceObjectRef xIPObj= &((SvFactory*)SvInPlaceObject::ClassFactory())
+                    ->CreateAndInit( rxTransferable, xStore);
+                if ( xIPObj.Is() )
+                {
+                    PasteObject( aPos, xIPObj, &aObjDesc.maSize );
+                    bRet = TRUE;
+                }
+                else
+                    DBG_ERROR("Error in CreateAndInit ( external OLE object)");
+
+            }
+
         }
     }
     else if ( nFormatId == SOT_FORMATSTR_ID_LINK )      // LINK is also in ScImportExport
