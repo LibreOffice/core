@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileidentifierconverter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2001-06-06 07:31:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace com { namespace sun { namespace star { namespace ucb {
     class XContentProviderManager;
@@ -93,7 +96,7 @@ namespace ucb {
     either a 'root' URL for the most 'local' file content provider, or an
     empty string, if no such URL can meaningfully be constructed.
  */
-rtl::OUString getLocalFileURL(
+UCBHELPER_DLLPUBLIC rtl::OUString getLocalFileURL(
     com::sun::star::uno::Reference<
             com::sun::star::ucb::XContentProviderManager > const &
         rManager)
@@ -123,7 +126,7 @@ rtl::OUString getLocalFileURL(
     @see
     com::sun::star::ucb::XFileIdentiferConverter::getFileURLFromSystemPath().
  */
-rtl::OUString
+UCBHELPER_DLLPUBLIC rtl::OUString
 getFileURLFromSystemPath(
     com::sun::star::uno::Reference<
             com::sun::star::ucb::XContentProviderManager > const &
@@ -153,7 +156,7 @@ getFileURLFromSystemPath(
     @see
     com::sun::star::ucb::XFileIdentiferConverter::getSystemPathFromFileURL().
  */
-rtl::OUString
+UCBHELPER_DLLPUBLIC rtl::OUString
 getSystemPathFromFileURL(
     com::sun::star::uno::Reference<
             com::sun::star::ucb::XContentProviderManager > const &
