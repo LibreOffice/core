@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:44:46 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -620,6 +619,13 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
         if ( pPre )
         {
             pPre->SetRetouche();
+            // --> OD 2004-11-23 #115759# - follow-up of #i26250#
+            // invalidate printing area of previous frame, if it's in a table
+            if ( pPre->IsInTab() )
+            {
+                pPre->_InvalidatePrt();
+            }
+            // <--
             pPre->InvalidatePage();
         }
         else
@@ -1706,7 +1712,9 @@ SwTwips SwFlowFrm::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
     // - correct consideration of table frames
     // - use new method <CalcAddLowerSpaceAsLastInTableCell(..)>
     if ( ( ( rThis.IsTabFrm() && rThis.GetUpper()->IsInTab() ) ||
-           rThis.IsInTab() ) &&
+           // --> OD 2004-11-16 #115759# - no lower spacing, if frame has a follow
+           ( rThis.IsInTab() && !GetFollow() ) ) &&
+           // <--
          !rThis.GetIndNext() )
     {
         nLowerSpace += CalcAddLowerSpaceAsLastInTableCell( _pAttrs );
@@ -2076,6 +2084,26 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
     if ( pFtn && pFtn->IsBackMoveLocked() )
         return FALSE;
 
+    // --> OD 2004-11-29 #115759# - text frames, which are directly inside
+    // tables aren't allowed to move backward.
+    if ( rThis.IsTxtFrm() && rThis.IsInTab() )
+    {
+        const SwLayoutFrm* pUpperFrm = rThis.GetUpper();
+        while ( pUpperFrm )
+        {
+            if ( pUpperFrm->IsTabFrm() )
+            {
+                return FALSE;
+            }
+            else if ( pUpperFrm->IsColumnFrm() && pUpperFrm->IsInSct() )
+            {
+                break;
+            }
+            pUpperFrm = pUpperFrm->GetUpper();
+        }
+    }
+    // <--
+
     SwFtnBossFrm * pOldBoss = rThis.FindFtnBossFrm();
     SwPageFrm * const pOldPage = pOldBoss->FindPageFrm();
     SwLayoutFrm *pNewUpper = 0;
@@ -2087,10 +2115,23 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
         //Wenn die Fussnote bereits auf der gleichen Seite/Spalte wie die Referenz
         //steht, ist nix mit zurueckfliessen. Die breaks brauche fuer die
         //Fussnoten nicht geprueft zu werden.
-        BOOL bEndnote = pFtn->GetAttr()->GetFtn().IsEndNote();
-        SwFrm* pRef = bEndnote && pFtn->IsInSct() ?
-            pFtn->FindSctFrm()->FindLastCntnt( FINDMODE_LASTCNT ) : pFtn->GetRef();
+
+        // --> FME 2004-11-15 #i37084# FindLastCntnt does not necessarily
+        // have to have a result != 0
+        SwFrm* pRef = 0;
+        const BOOL bEndnote = pFtn->GetAttr()->GetFtn().IsEndNote();
+        if( bEndnote && pFtn->IsInSct() )
+        {
+            SwSectionFrm* pSect = pFtn->FindSctFrm();
+            if( pSect->IsEndnAtEnd() )
+                pRef = pSect->FindLastCntnt( FINDMODE_LASTCNT );
+        }
+        if( !pRef )
+            pRef = pFtn->GetRef();
+        // <--
+
         ASSERT( pRef, "MoveBwd: Endnote for an empty section?" );
+
         if( !bEndnote )
             pOldBoss = pOldBoss->FindFtnBossFrm( TRUE );
         SwFtnBossFrm *pRefBoss = pRef->FindFtnBossFrm( !bEndnote );
