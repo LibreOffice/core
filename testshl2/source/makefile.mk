@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: lla $ $Date: 2003-01-09 11:06:02 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:16:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,12 +85,12 @@ TESTSHL_OBJFILES=\
     $(OBJ)$/autoregisterhelper.obj \
     $(OBJ)$/testshl.obj 
 
-VERSIONER_OBJFILES=\
+VERSIONINFO_OBJFILES=\
     $(OBJ)$/versionhelper.obj \
     $(OBJ)$/versioner.obj 
 
 # for right dependencies
-# OBJFILES= $(COMMON_OBJFILES) $(TESTSHL_OBJFILES) $(VERSIONER_OBJFILES)
+# OBJFILES= $(COMMON_OBJFILES) $(TESTSHL_OBJFILES) $(VERSIONINFO_OBJFILES)
 
 # ------------------------------------------------------------------
 APP1TARGET= $(TARGET)
@@ -108,8 +108,8 @@ APP1LIBS= \
 
 #
 # ------------------------------------------------------------------
-APP2TARGET= versioner
-APP2OBJS= $(COMMON_OBJFILES) $(VERSIONER_OBJFILES)
+APP2TARGET= versioninfo
+APP2OBJS= $(COMMON_OBJFILES) $(VERSIONINFO_OBJFILES)
 
 APP2STDLIBS=$(SALLIB)
 
