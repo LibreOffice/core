@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mav $ $Date: 2002-11-05 09:00:53 $
+ *  last change: $Author: mav $ $Date: 2002-12-09 16:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_ILLEGALIDENTIFIEREXCEPTION_HPP_
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_NAMECLASHEXCEPTION_HPP_
+#include <com/sun/star/ucb/NameClashException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
@@ -604,6 +607,8 @@ sal_Bool UCBContentHelper::MakeFolder( const String& rFolder )
 
 sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Content& rNew )
 {
+    sal_Bool bRecover = sal_False;
+
     try
     {
         Reference< XContentCreator > xCreator = Reference< XContentCreator >( aCnt.get(), UNO_QUERY );
@@ -648,11 +653,12 @@ sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Cont
     {
         if ( r.Code == IOErrorCode_ALREADY_EXISTING )
         {
-            INetURLObject aObj( aCnt.getURL() );
-            aObj.Append( aTitle );
-            rNew = Content( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference < XCommandEnvironment >() );
-            return TRUE;
+            bRecover = sal_True;
         }
+    }
+    catch ( NameClashException& )
+    {
+        bRecover = sal_True;
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
@@ -662,6 +668,14 @@ sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Cont
     }
     catch( Exception& )
     {
+    }
+
+    if( bRecover )
+    {
+        INetURLObject aObj( aCnt.getURL() );
+        aObj.Append( aTitle );
+        rNew = Content( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference < XCommandEnvironment >() );
+        return sal_True;
     }
 
     return sal_False;
