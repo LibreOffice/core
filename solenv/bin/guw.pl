@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:41:25 $
+#   last change: $Author: vg $ $Date: 2003-07-02 13:42:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ use Text::ParseWords;
                          'MAP', 'NODEFAULTLIB', 'OPT', 'PDB', 'RELEASE',
                          'SUBSYSTEM', 'STACK', 'out:', 'map:', 'ENTRY:',
                          'implib:', 'def' ],
-               'regcomp', [ '-env:', 'vnd.sun.star.expand:' ],
+               'regcomp', [ '-env:', 'vnd.sun.star.expand:' , 'vnd.openoffice.pymodule' ],
                'regmerge', [ '/UCR' ] );
 
 #---------------------------------------------------------------------------
