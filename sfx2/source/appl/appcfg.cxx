@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-01 16:05:26 $
+ *  last change: $Author: gh $ $Date: 2000-12-07 13:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1522,7 +1522,15 @@ void SfxApplicationClass::Property( ApplicationProperty& rProp )
             case TT_PR_DISPATCHER:
             {
                 // interface for TestTool
-                SfxDispatcher* pDispatcher = SfxViewFrame::Current()->GetDispatcher();
+                SfxViewFrame* pViewFrame;
+                SfxDispatcher* pDispatcher;
+                pViewFrame = SfxViewFrame::Current();
+                if ( !pViewFrame )
+                    pViewFrame = SfxViewFrame::GetFirst();
+                if ( pViewFrame )
+                    pDispatcher = pViewFrame->GetDispatcher();
+                else
+                    pDispatcher = NULL;
                 if ( !pDispatcher )
                     pTTProperties->nActualPR = TT_PR_ERR_NODISPATCHER;
                 else
