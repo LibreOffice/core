@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: os $ $Date: 2001-04-19 12:17:54 $
+ *  last change: $Author: os $ $Date: 2001-05-02 12:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1270,7 +1270,11 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_ENDNOTE_NUMBERING_SUFFIX)      ,RES_END_AT_TXTEND,     &::getCppuType((const OUString*)0)  ,        PROPERTY_NONE,   MID_SUFFIX       },
                     { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX), WID_SECT_DOCUMENT_INDEX, &::getCppuType((uno::Reference<text::XDocumentIndex>*)0), PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_IS_GLOBAL_DOCUMENT_SECTION), WID_SECT_IS_GLOBAL_DOC_SECTION, &::getBooleanCppuType(), PropertyAttribute::READONLY, 0 },
-                    { SW_PROP_NAME(UNO_NAME_PASSWORD),                  WID_SECT_PASSWORD,      &::getCppuType((const ::com::sun::star::uno::Sequence<sal_Int8>*)0), PROPERTY_NONE, 0 },
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+                    { SW_PROP_NAME(UNO_NAME_PROTECTION_KEY),             WID_SECT_PASSWORD,      new uno::Type(::getCppuType((Sequence<sal_Int8>*)0)), PROPERTY_NONE, 0 },
+#else
+                    { SW_PROP_NAME(UNO_NAME_PROTECTION_KEY),             WID_SECT_PASSWORD,      &::getCppuType((Sequence<sal_Int8>*)0), PROPERTY_NONE, 0 },
+#endif
                     COMMON_TEXT_CONTENT_PROPERTIES
                     _REDLINE_NODE_PROPERTIES
                     {0,0,0,0,0}
@@ -1805,7 +1809,12 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_WORD_SEPARATOR),                WID_DOC_WORD_SEPARATOR,     &::getCppuType((const OUString*)0), PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_HIDE_FIELD_TIPS),               WID_DOC_HIDE_TIPS,          &::getBooleanCppuType(),    PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_REDLINE_DISPLAY_TYPE),          WID_DOC_REDLINE_DISPLAY,    &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_FORBIDDEN_CHARACTERS),          WID_DOC_FORBIDDEN_CHARS,    &::getCppuType((Reference<XForbiddenCharacters>*)0),    PropertyAttribute::READONLY,   0},
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+                    { SW_PROP_NAME(UNO_NAME_REDLINE_PROTECTION_KEY),        WID_DOC_CHANGES_PASSWORD,      new uno::Type(::getCppuType((Sequence<sal_Int8>*)0)), PROPERTY_NONE, 0 },
+#else
+                    { SW_PROP_NAME(UNO_NAME_REDLINE_PROTECTION_KEY),        WID_DOC_CHANGES_PASSWORD,      &::getCppuType((Sequence<sal_Int8>*)0), PROPERTY_NONE, 0 },
+#endif
+                    { SW_PROP_NAME(UNO_NAME_FORBIDDEN_CHARACTERS),          WID_DOC_FORBIDDEN_CHARS,    &::getCppuType((Reference<XForbiddenCharacters>*)0), PropertyAttribute::READONLY,   0},
                     { SW_PROP_NAME(UNO_NAME_LINK_UPDATE_MODE),              WID_DOC_LINK_UPDATE_MODE,   &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_FIELD_AUTO_UPDATE),             WID_DOC_FIELD_AUTO_UPDATE,  &::getBooleanCppuType(),    PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_CHART_AUTO_UPDATE),             WID_DOC_CHART_AUTO_UPDATE,  &::getBooleanCppuType(),    PROPERTY_NONE,   0},
@@ -1822,6 +1831,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CURRENT_DATABASE_DATA_SOURCE),  WID_DOC_CURRENT_DATABASE_DATA_SOURCE, &::getCppuType((const OUString*)0),   PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_CURRENT_DATABASE_COMMAND),      WID_DOC_CURRENT_DATABASE_COMMAND, &::getCppuType((const OUString*)0),   PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_CURRENT_DATABASE_COMMAND_TYPE), WID_DOC_CURRENT_DATABASE_COMMAND_TYPE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,   0},
+
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aDocMap_Impl;

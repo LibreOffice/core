@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: os $ $Date: 2001-04-19 10:44:24 $
+ *  last change: $Author: os $ $Date: 2001-05-02 12:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,4 +707,6 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_SAVE_GLOBAL_DOCUMENT_LINKS;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_DATA_SOURCE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_COMMAND;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_COMMAND_TYPE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_PROTECTION_KEY        ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_PROTECTION_KEY;
 #endif
