@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:46:29 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ TabDialog DLG_FLD_INSERT
         Text [ swedish ] = "~Stäng" ;
         Text [ danish ] = "Luk" ;
         Text [ portuguese_brazilian ] = "~Schließen" ;
-        Text [ portuguese ] = "~Sair" ;
+        Text [ portuguese ] = "~Fechar" ;
         Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
         Text[ russian ] = "Çàêðûòü";
         Text[ polish ] = "Zamknij";
