@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 11:20:16 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 07:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1324,6 +1324,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         catch(Exception&)
         {
         }
+        InvalidateAll();
     }
     InvalidateFeature(ID_BROWSER_REMOVEFILTER);
 }
