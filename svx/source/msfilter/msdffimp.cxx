@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-02 09:21:14 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4979,14 +4979,22 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 VirtualDevice aVirDev( 1 );
                                 aVirDev.SetMapMode( MAP_100TH_MM );
                                 sal_uInt32 i, nParagraphs = rOutliner.GetParagraphCount();
-                                for ( i = 0; i < nParagraphs; i++ )
+                                if ( nParagraphs )
                                 {
-                                    BOOL bIsRTL = aVirDev.GetTextIsRTL( rOutliner.GetText( rOutliner.GetParagraph( i ) ), 0, STRING_LEN );
-                                    if ( bIsRTL )
+                                    sal_Bool bCreateNewParaObject = sal_False;
+                                    for ( i = 0; i < nParagraphs; i++ )
                                     {
-                                        SfxItemSet aSet( rOutliner.GetParaAttribs( i ) );
-                                        aSet.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
-                                        rOutliner.SetParaAttribs( i, aSet, false );
+                                        BOOL bIsRTL = aVirDev.GetTextIsRTL( rOutliner.GetText( rOutliner.GetParagraph( i ) ), 0, STRING_LEN );
+                                        if ( bIsRTL )
+                                        {
+                                            SfxItemSet aSet( rOutliner.GetParaAttribs( i ) );
+                                            aSet.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
+                                            rOutliner.SetParaAttribs( i, aSet, false );
+                                            bCreateNewParaObject = sal_True;
+                                        }
+                                    }
+                                    if  ( bCreateNewParaObject )
+                                    {
                                         OutlinerParaObject* pNewText = rOutliner.CreateParaObject();
                                         rOutliner.Init( OUTLINERMODE_TEXTOBJECT );
                                         ((SdrObjCustomShape*)pRet)->NbcSetOutlinerParaObject( pNewText );
