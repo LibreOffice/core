@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 10:43:17 $
+ *  last change: $Author: mtg $ $Date: 2001-03-21 15:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,6 +677,8 @@ const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_DISTANCE              (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ROTATION                       (MAP_CHAR_LEN("CharRotation"));
 const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE        (MAP_CHAR_LEN("CharRotationIsFitToLine"));
 const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_SCALE_WIDTH                    (MAP_CHAR_LEN("CharScaleWidth"));
+const SwPropNameLen __FAR_DATA UNO_NAME_TAB_STOP_DISTANCE                   (MAP_CHAR_LEN("TabStopDistance"));
+
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_WIDTH_RELATIVE                   (MAP_CHAR_LEN("IsWidthRelative"));
 const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_RELIEF                         (MAP_CHAR_LEN("CharRelief"));
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_HIDDEN                           (MAP_CHAR_LEN("IsHidden"));
