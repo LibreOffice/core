@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:40:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,10 +200,6 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     GetImport().GetShapeImport()->startPage( rShapes );
 
     uno::Reference< drawing::XDrawPage > xDrawPage(rShapes, uno::UNO_QUERY);
-
-    // set an id?
-    if( nPageId != -1 && xDrawPage.is() )
-        rImport.setDrawPageId( nPageId, xDrawPage );
 
     // set PageName?
     if(maName.getLength())
