@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-25 12:14:17 $
+ *  last change: $Author: sj $ $Date: 2002-07-03 13:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4450,9 +4450,9 @@ SvxMSDffAutoShape::~SvxMSDffAutoShape()
 }
 
 SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvStream& rSt,
-                                        DffObjData& rData, Rectangle& rGeo, sal_Int32 nAngle ) :
+                                        DffObjData& rData, Rectangle& rSnapRect, sal_Int32 nAngle ) :
     eSpType             ( rData.eShapeType ),
-    aSnapRect           ( rGeo ),
+    aSnapRect           ( rSnapRect ),
     nFix16Angle         ( nAngle ),
     nXRef               ( 0x80000000 ),
     nYRef               ( 0x80000000 ),
@@ -4476,8 +4476,6 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
     bFlipH              ( ( rData.nSpFlags & SP_FFLIPH ) != 0 ),
     bFlipV              ( ( rData.nSpFlags & SP_FFLIPV ) != 0 )
 {
-    nCoordWidth = nCoordHeight = 21600;
-
     const sal_Int32*        pDefData = NULL;
     const mso_AutoShape*    pDefAutoShape = NULL;
 
@@ -4771,6 +4769,8 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         default :
         break;
     }
+
+    nCoordHeight = nCoordWidth  = 21600;
     if ( pDefAutoShape )
     {
         bIsEmpty = FALSE;
@@ -4788,6 +4788,19 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         nXRef = pDefAutoShape->nXRef;
         nYRef = pDefAutoShape->nYRef;
     }
+    sal_Int32 nGeoRight = rPropReader.GetPropertyValue( DFF_Prop_geoRight, 0 );
+    if ( nGeoRight )
+    {
+        nGeoRight -= rPropReader.GetPropertyValue( DFF_Prop_geoLeft, 0 );
+        nCoordWidth = labs( nGeoRight );
+    }
+    sal_Int32 nGeoBottom = rPropReader.GetPropertyValue( DFF_Prop_geoBottom, 0 );
+    if ( nGeoBottom )
+    {
+        nGeoBottom -= rPropReader.GetPropertyValue( DFF_Prop_geoTop, 0 );
+        nCoordHeight = labs( nGeoBottom );
+    }
+
     if ( rPropReader.SeekToContent( DFF_Prop_pVertices, rSt ) )
     {
         sal_uInt16 nTmp16, nNumElemMemVert, nElemSizeVert;
