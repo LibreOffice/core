@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:57:40 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,12 +299,12 @@ sal_Bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
             const ScRange* pRange = pRangeList->GetObject( nRangeIndex );
             if( pRange )
             {
-                sal_uInt16 nTabEnd(pRange->aEnd.Tab());
-                sal_uInt16 nTab(pRange->aStart.Tab());
+                SCTAB nTabEnd(pRange->aEnd.Tab());
+                SCTAB nTab(pRange->aStart.Tab());
                 while (!bSubTotal && nTab <= nTabEnd)
                 {
-                    sal_uInt16 nRowEnd(pRange->aEnd.Row());
-                    sal_uInt16 nRow(pRange->aStart.Row());
+                    SCROW nRowEnd(pRange->aEnd.Row());
+                    SCROW nRow(pRange->aStart.Row());
                     while (!bSubTotal && nRow <= nRowEnd)
                     {
                         if (pDoc->IsFiltered(nRow, nTab))
