@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:40:08 $
+#   last change: $Author: rt $ $Date: 2003-04-17 09:58:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ JAVA_PACKAGES=\
         com.sun.star.lib.uno.helper \
         com.sun.star.tools.uno \
         com.sun.star.uno
+#        com.sun.star.beans \
 
 JAVA_SRC_FILES=\
         $(JAVA_SRC_DIR)$/jurt_src.zip \
@@ -91,6 +92,16 @@ JAVA_SRC_FILES=\
         $(JAVA_SRC_DIR)$/ridl_src.zip \
         $(JAVA_SRC_DIR)$/ridl2_src.zip \
         $(JAVA_SRC_DIR)$/sandbox_src.zip 
+
+JAVA_BEAN_SRC_FILES=\
+        $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/ContainerFactory.java \
+        $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/JavaWindowPeerFake.java \
+        $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/LocalOfficeConnection.java \
+        $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/LocalOfficeWindow.java \
+        $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/NativeConnection.java \
+        $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/NativeService.java \
+        $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/OfficeConnection.java \
+        $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/OfficeWindow.java
 
 IDLFILES={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f -print))}
 
@@ -114,28 +125,37 @@ DIRLIST = \
     $(DESTDIRCPPDOCU) \
     $(DESTDIRGENCPPREF) \
     $(DESTDIRJAVADOCU) \
-    $(DESTDIRGENJAVAREF) \
-    $(JAVA_SRC_DIR)
+    $(DESTDIRGENJAVAREF)
 
 all: \
     $(IDL_DOCU_INDEX_FILE) \
     $(CPP_DOCU_INDEX_FILE) \
     $(JAVA_DOCU_INDEX_FILE)
 
-$(DIR_CREATE_FLAG) :
-    -$(MKDIRHIER) $(DIRLIST)
-    +@echo "docu directories created" > $@    
-
-$(IDL_DOCU_INDEX_FILE) : $(IDL_CHAPTER_REFS) $(IDLFILES) $(DIR_CREATE_FLAG)
+$(IDL_DOCU_INDEX_FILE) : $(IDL_CHAPTER_REFS) $(IDLFILES)
+    +-$(MKDIRHIER) $(@:d)        
     +$(MY_AUTODOC) -html $(DESTDIRGENIDLREF) -dvgroot ..$/..$/DevelopersGuide -name $(IDLDOCREFNAME) -lg \
     idl -dvgfile $(IDL_CHAPTER_REFS) -t $(DESTDIRIDL)
 
-$(CPP_DOCU_INDEX_FILE) : $(INCLUDELIST) $(DIR_CREATE_FLAG)
+$(CPP_DOCU_INDEX_FILE) : $(INCLUDELIST)
+    +-$(MKDIRHIER) $(@:d)        
     +$(MY_AUTODOC) -html $(DESTDIRGENCPPREF) -name $(CPPDOCREFNAME) $(AUTODOCPARAMS)
 
 $(JAVA_SRC_DIR)$/%.zip : $(SOLARCOMMONBINDIR)$/%.zip
-    +$(MY_COPY) $? $@
-    +cd $(JAVA_SRC_DIR) && unzip -q -d . $(@:f)
+    +-$(MKDIRHIER) $(@:d)        
+    +$(MY_COPY) $< $@
+    +cd $(JAVA_SRC_DIR) && unzip -quod . $(@:f)
 
-$(JAVA_DOCU_INDEX_FILE) : $(DIR_CREATE_FLAG) $(JAVA_SRC_FILES)
+#$(JAVA_SRC_DIR)$/ridl2_src.zip : $(SOLARCOMMONBINDIR)$/ridl2_src.zip
+#	+$(MY_COPY) $(SOLARCOMMONBINDIR)$/ridl2_src.zip $@
+#	+cd $(JAVA_SRC_DIR) && unzip -quod . $(@:f)
+#	+-rm $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/*.java >& $(NULLDEV)
+     
+#$(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/%.java : $(PRJ)$/source$/bean$/com$/sun$/star$/beans$/%.java 
+#	+-$(MKDIRHIER) $(@:d)        
+#	+$(MY_COPY) $< $@
+
+#$(JAVA_DOCU_INDEX_FILE) : $(JAVA_SRC_FILES) $(JAVA_BEAN_SRC_FILES)
+$(JAVA_DOCU_INDEX_FILE) : $(JAVA_SRC_FILES)
+    +-$(MKDIRHIER) $(@:d)        
     +javadoc -J-Xmx120m $(JAVADOCPARAMS) > $(JAVADOCLOG)
