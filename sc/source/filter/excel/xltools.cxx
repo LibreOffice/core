@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:48:41 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,11 +268,12 @@ USHORT XclTools::GetScErrorCode( sal_uInt8 nXclError )
 }
 
 
-sal_Int32 XclTools::GetScRotation( sal_uInt16 nXclRot )
+sal_Int32 XclTools::GetScRotation( sal_uInt16 nXclRot, sal_Int32 nRotForStacked )
 {
-    if( nXclRot > 180 )
-        return 27000;
-    return static_cast< sal_Int32 >( 100 * ((nXclRot > 90) ? 450 - nXclRot : nXclRot) );
+    if( nXclRot == EXC_ROT_STACKED )
+        return nRotForStacked;
+    DBG_ASSERT( nXclRot <= 180, "XclTools::GetScRotation - illegal rotation angle" );
+    return static_cast< sal_Int32 >( (nXclRot <= 180) ? (100 * ((nXclRot > 90) ? (450 - nXclRot) : nXclRot)) : 0 );
 }
 
 sal_uInt8 XclTools::GetXclRotation( sal_Int32 nScRot )
