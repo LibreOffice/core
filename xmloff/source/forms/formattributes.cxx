@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 13:52:08 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ namespace xmloff
             case CCA_TITLE:             return "title";
             case CCA_VALUE:             return "value";
             case CCA_ORIENTATION:       return "orientation";
+            case CCA_VISUAL_EFFECT:     return "visual-effect";
             default:
                 OSL_ENSURE(sal_False, "OAttributeMetaData::getCommonControlAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
@@ -239,6 +240,8 @@ namespace xmloff
             case SCA_STEP_SIZE:             return "step-size";
             case SCA_PAGE_STEP_SIZE:        return "page-step-size";
             case SCA_REPEAT_DELAY:          return "delay-for-repeat";
+            case SCA_TOGGLE:                return "toggle";
+            case SCA_FOCUS_ON_CLICK:        return "focus-on-click";
             default:
                 OSL_ENSURE(sal_False, "OAttributeMetaData::getSpecialAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
