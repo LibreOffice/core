@@ -239,6 +239,9 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 installer::ziplist::set_default_productversion_if_required($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3a.log", $allvariableshashref); }
 
+installer::ziplist::add_variables_to_allvariableshashref($allvariableshashref);
+if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3b.log", $allvariableshashref); }
+
 # checking, whether this is an opensource product
 
 if (!($installer::globals::is_copy_only_project)) { installer::ziplist::set_manufacturer($allvariableshashref); }
@@ -1124,7 +1127,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                         installer::epmfile::call_epm($epmexecutable, $completeepmfilename, $packagename);
 
-                        my $newepmdir = installer::epmfile::prepare_packages($loggingdir, $packagename, $staticpath, $relocatablepath, $onepackage, $allvariableshashref);  # adding the line for Prefix / Basedir, include rpmdir
+                        my $newepmdir = installer::epmfile::prepare_packages($loggingdir, $packagename, $staticpath, $relocatablepath, $onepackage, $allvariableshashref, $filesinpackage); # adding the line for Prefix / Basedir, include rpmdir
 
                         installer::epmfile::create_packages_without_epm($newepmdir, $packagename, $includepatharrayref);    # start to package
 
@@ -1546,6 +1549,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # adding the custom action for removing the icon from the office folder in start menu (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll4", "1", "shlxtmsi.dll", "DeinstallStartmenuFolderIcon", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
             if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll4", "REMOVE=\"ALL\"", "qslnkmsidll", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+
+            if ( $installer::globals::tab )
+            {
+                # adding the tab custom action (CustomAc.idt and InstallE.idt)
+                $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "InstallTab", "65", "tabaction.dll", "TabSetup", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "tabaction.dll", "InstallTab", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            }
 
             # custom actions for language packs
 
