@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-20 05:17:16 $
+ *  last change: $Author: jp $ $Date: 2000-10-31 18:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4256,10 +4256,12 @@ SvxBrushItem::SvxBrushItem( const Color& rColor, sal_uInt16 nWhich) :
 
 // -----------------------------------------------------------------------
 
-SvxBrushItem::SvxBrushItem( const Graphic& rGraphic, SvxGraphicPosition ePos, sal_uInt16 nWhich ) :
+SvxBrushItem::SvxBrushItem( const Graphic& rGraphic, SvxGraphicPosition ePos,
+                            sal_uInt16 nWhich ) :
 
     SfxPoolItem( nWhich ),
 
+    aColor      ( COL_TRANSPARENT ),
     pImpl       ( new SvxBrushItem_Impl( new GraphicObject( rGraphic ) ) ),
     pStrLink    ( NULL ),
     pStrFilter  ( NULL ),
@@ -4272,10 +4274,12 @@ SvxBrushItem::SvxBrushItem( const Graphic& rGraphic, SvxGraphicPosition ePos, sa
 
 // -----------------------------------------------------------------------
 
-SvxBrushItem::SvxBrushItem( const GraphicObject& rGraphicObj, SvxGraphicPosition ePos, sal_uInt16 nWhich ) :
+SvxBrushItem::SvxBrushItem( const GraphicObject& rGraphicObj,
+                            SvxGraphicPosition ePos, sal_uInt16 nWhich ) :
 
     SfxPoolItem( nWhich ),
 
+    aColor      ( COL_TRANSPARENT ),
     pImpl       ( new SvxBrushItem_Impl( new GraphicObject( rGraphicObj ) ) ),
     pStrLink    ( NULL ),
     pStrFilter  ( NULL ),
@@ -4289,10 +4293,12 @@ SvxBrushItem::SvxBrushItem( const GraphicObject& rGraphicObj, SvxGraphicPosition
 // -----------------------------------------------------------------------
 
 SvxBrushItem::SvxBrushItem(
-    const String& rLink, const String& rFilter, SvxGraphicPosition ePos, sal_uInt16 nWhich ) :
+    const String& rLink, const String& rFilter,
+    SvxGraphicPosition ePos, sal_uInt16 nWhich ) :
 
     SfxPoolItem( nWhich ),
 
+    aColor      ( COL_TRANSPARENT ),
     pImpl       ( new SvxBrushItem_Impl( NULL ) ),
     pStrLink    ( new String( rLink ) ),
     pStrFilter  ( new String( rFilter ) ),
@@ -4305,10 +4311,12 @@ SvxBrushItem::SvxBrushItem(
 
 // -----------------------------------------------------------------------
 
-SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion, sal_uInt16 nWhich ) :
+SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
+                            sal_uInt16 nWhich ) :
 
     SfxPoolItem( nWhich ),
 
+    aColor      ( COL_TRANSPARENT ),
     pImpl       ( new SvxBrushItem_Impl( NULL ) ),
     pStrLink    ( NULL ),
     pStrFilter  ( NULL ),
