@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Helper.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: obo $ $Date: 2004-09-08 14:01:43 $
+*  last change: $Author: vg $ $Date: 2005-02-21 13:51:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,7 +57,6 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.common;
 
 import java.util.Calendar;
@@ -188,7 +187,6 @@ public class Helper {
                 XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oUnoObject);
                 Property[] aProps = xPSet.getPropertySetInfo().getProperties();
                 Object oObject = xPSet.getPropertyValue(PropertyName);
-//              Any aAny = (Any) oObject;
                 return oObject;
             }
         } catch (Exception exception) {
@@ -293,8 +291,7 @@ public class Helper {
 
             docNullTime = calendar.getTimeInMillis();
 
-            formatter  = Desktop.createNumberFormatter(xmsf, formatSupplier );
-
+            formatter  = NumberFormatter.createNumberFormatter(xmsf, formatSupplier );
         }
 
         /**
@@ -302,7 +299,7 @@ public class Helper {
          * @return
          */
         public int getFormat( short format ) {
-            return Desktop.getNumberFormatterKey( formatSupplier , format);
+            return NumberFormatter.getNumberFormatterKey( formatSupplier , format);
         }
 
         public XNumberFormatter getFormatter() {
