@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: cd $ $Date: 2002-08-20 10:21:59 $
+#   last change: $Author: as $ $Date: 2002-10-11 13:41:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,8 @@ LIB1OBJFILES=   $(SLO)$/wildcard.obj                            \
                 $(SLO)$/filtercache.obj                         \
                 $(SLO)$/filtercachedata.obj                     \
                 $(SLO)$/protocolhandlercache.obj				\
-                $(SLO)$/networkdomain.obj
+                $(SLO)$/networkdomain.obj                       \
+                $(SLO)$/configaccess.obj
 
 # --- export library for sfx2 -------------------------------------------------
 
@@ -249,6 +250,10 @@ SHL4OBJS=       $(SLO)$/asyncquit.obj               \
                 $(SLO)$/documentlist.obj            \
                 $(SLO)$/xmldocproperties.obj        \
                 $(SLO)$/jobexecutor.obj				\
+                $(SLO)$/jobhandler.obj              \
+                $(SLO)$/job.obj                     \
+                $(SLO)$/joburl.obj                  \
+                $(SLO)$/job.obj                     \
                 $(SLO)$/dispatchrecordersupplier.obj\
                 $(SLO)$/dispatchrecorder.obj		\
                 $(SLO)$/servicehandler.obj          \

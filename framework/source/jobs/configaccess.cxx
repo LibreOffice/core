@@ -1,0 +1,288 @@
+    /*************************************************************************
+ *
+ *  $RCSfile: configaccess.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: as $ $Date: 2002-10-11 13:41:13 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+//________________________________
+//  my own includes
+
+#ifndef __FRAMEWORK_CONFIG_CONFIGACCESS_HXX_
+#include <jobs/configaccess.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
+#include <threadhelp/readguard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
+#include <threadhelp/writeguard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
+#include <threadhelp/resetableguard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
+
+#ifndef __FRAMEWORK_SERVICES_H_
+#include <services.h>
+#endif
+
+//________________________________
+//  interface includes
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XMULTIHIERARCHICALPROPERTYSET_HPP_
+#include <com/sun/star/beans/XMultiHierarchicalPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
+#include <com/sun/star/util/XChangesBatch.hpp>
+#endif
+
+//________________________________
+//  includes of other projects
+
+#ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
+#include <unotools/configpathes.hxx>
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
+//________________________________
+//  namespace
+
+namespace framework{
+
+//________________________________
+//  non exported const
+
+//________________________________
+//  non exported definitions
+
+//________________________________
+//  declarations
+
+//________________________________
+/**
+    @short  open the configuration of this job
+    @descr  We open the configuration of this job only. Not the whole package or the whole
+            job set. We are interested on our own properties only.
+            We set the opened configuration access as our member. So any following method,
+            which needs cfg access, can use it. That prevent us against multiple open/close requests.
+            But you can use this method to upgrade an already opened configuration too.
+
+    @param  eMode
+                force opening of the configuration access in readonly or in read/write mode
+ */
+ConfigAccess::ConfigAccess( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
+                            /*IN*/ const ::rtl::OUString&                                        sRoot )
+    : ThreadHelpBase(          )
+    , m_xSMGR       ( xSMGR    )
+    , m_sRoot       ( sRoot    )
+    , m_eMode       ( E_CLOSED )
+{
+}
+
+//________________________________
+/**
+    @short  last chance to close an open configuration access point
+    @descr  In case our user forgot to close this configuration point
+            in the right way, normaly he will run into some trouble -
+            e.g. losing data.
+ */
+ConfigAccess::~ConfigAccess()
+{
+    close();
+}
+
+//________________________________
+/**
+    @short  open the configuration access in the specified mode
+    @descr  We set the opened configuration access as our member. So any following method,
+            which needs cfg access, can use it. That prevent us against multiple open/close requests.
+            But you can use this method to upgrade an already opened configuration too.
+            It's possible to open a config access in READONLY mode first and "open" it at a second
+            time within the mode READWRITE. Then we will upgrade it. Dowgrade will be possible too.
+
+            But note: closing will be done explicitly by calling method close() ... not by
+            downgrading with mode CLOSED!
+
+    @param  eMode
+                force (re)opening of the configuration access in readonly or in read/write mode
+ */
+void ConfigAccess::open( /*IN*/ EOpenMode eMode )
+{
+    /* SAFE { */
+    // We must lock the whole method to be shure, that nobody
+    // outside uses our internal member m_xAccess!
+    WriteGuard aWriteLock(m_aLock);
+
+    // check if configuration is already open in the right mode.
+    // By the way: Don't allow closing by using this method!
+    if (
+        (eMode  !=E_CLOSED) &&
+        (m_eMode!=eMode   )
+       )
+    {
+        // We have to close the old access point without any question here.
+        // It will be open again using the new mode.
+        // can be called without checks! It does the checks by itself ...
+        // e.g. for already closed or not opened configuration.
+        // Flushing of all made changes will be done here too.
+        close();
+
+        // create the configuration provider, which provides sub access points
+        css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(m_xSMGR->createInstance(SERVICENAME_CFGPROVIDER), css::uno::UNO_QUERY);
+        if (xConfigProvider.is())
+        {
+            css::beans::PropertyValue aParam;
+            aParam.Name    = DECLARE_ASCII("nodepath");
+            aParam.Value <<= m_sRoot;
+
+            css::uno::Sequence< css::uno::Any > lParams(1);
+            lParams[0] <<= aParam;
+
+            // open it
+            if (eMode==E_READONLY)
+                m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS  , lParams);
+            else
+            if (eMode==E_READWRITE)
+                m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGUPDATEACCESS, lParams);
+
+            m_eMode = E_CLOSED;
+            if (m_xConfig.is())
+                m_eMode = eMode;
+        }
+    }
+
+    aWriteLock.unlock();
+    /* } SAFE */
+}
+
+//________________________________
+/**
+    @short  close the internal opened configuration access and flush all changes
+    @descr  It checks, if the given access is valid and react in the right way.
+            It flushes all changes ... so nobody else must know this state.
+ */
+void ConfigAccess::close()
+{
+    /* SAFE { */
+    // Lock the whole method, to be shure that nobody else uses our internal members
+    // during this time.
+    WriteGuard aWriteLock(m_aLock);
+
+    // check already closed configuration
+    if (m_xConfig.is())
+    {
+        css::uno::Reference< css::util::XChangesBatch > xFlush(m_xConfig, css::uno::UNO_QUERY);
+        if (xFlush.is())
+            xFlush->commitChanges();
+        m_xConfig = css::uno::Reference< css::uno::XInterface >();
+        m_eMode   = E_CLOSED;
+    }
+
+    aWriteLock.unlock();
+    /* } SAFE */
+}
+
+//________________________________
+/**
+    @short  provides an access to the internal wrapped configuration access
+    @descr  It's not allowed to safe this c++ (!) reference outside. You have
+            to use it directly. Further you must use our public lock member m_aLock
+            to synchronize your code with our internal structures and our interface
+            methods. Acquire it before you call cfg() and release it afterwards immediatly.
+
+            E.g.:   ConfigAccess aAccess(...);
+                    ReadGuard aReadLock(aAccess.m_aLock);
+                    Reference< XPropertySet > xSet(aAccess.cfg(), UNO_QUERY);
+                    Any aProp = xSet->getPropertyValue("...");
+                    aReadLock.unlock();
+
+    @attention  During this time it's not allowed to call the methods open() or close()!
+                Otherwhise you will change your own referenced config access. Anything will
+                be possible then.
+
+    @return A c++(!) reference to the uno instance of the configuration access point.
+ */
+const css::uno::Reference< css::uno::XInterface >& ConfigAccess::cfg()
+{
+    // must be synchronized from outside!
+    // => no lock here ...
+    return m_xConfig;
+}
+
+} // namespace framework

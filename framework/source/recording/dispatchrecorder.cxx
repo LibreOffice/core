@@ -30,20 +30,24 @@ namespace framework{
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_4(
+DEFINE_XINTERFACE_6(
     DispatchRecorder,
     OWeakObject,
     DIRECT_INTERFACE(css::lang::XTypeProvider),
     DIRECT_INTERFACE(css::lang::XServiceInfo),
     DIRECT_INTERFACE(css::frame::XDispatchRecorder),
-    DIRECT_INTERFACE(css::container::XIndexReplace))
+    DIRECT_INTERFACE(css::container::XIndexReplace),
+    DIRECT_INTERFACE(css::container::XIndexAccess),
+    DIRECT_INTERFACE(css::container::XElementAccess))
 
-DEFINE_XTYPEPROVIDER_4(
+DEFINE_XTYPEPROVIDER_6(
     DispatchRecorder,
     css::lang::XTypeProvider,
     css::lang::XServiceInfo,
     css::frame::XDispatchRecorder,
-    css::container::XIndexReplace)
+    css::container::XIndexReplace,
+    css::container::XIndexAccess,
+    css::container::XElementAccess)
 
 DEFINE_XSERVICEINFO_MULTISERVICE(
     DispatchRecorder,

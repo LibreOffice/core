@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:38:17 $
+ *  last change: $Author: as $ $Date: 2002-10-11 13:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef __FRAMEWORK_CLASSES_CONVERTER_HXX_
 #include <classes/converter.hxx>
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 namespace framework{
@@ -130,6 +134,80 @@ OUStringList Converter::convert_seqOUString2OUStringList( const css::uno::Sequen
     }
 
     return lDestination;
+}
+
+//-----------------------------------------------------------------------------
+/**
+    @short  convert timestamp from String to tools::DateTime notation
+    @descr  Format: "<day>.<month>.<year>/<hour>:<min>:<sec>"
+            e.g.  : "1.11.2001/13:45:16"
+
+    @param  sString
+                timestamp in string notation
+
+    @return timestamp in DateTime notation
+ */
+DateTime Converter::convert_String2DateTime( /*IN*/ const ::rtl::OUString& sSource )
+{
+    DateTime  aStamp    ;
+    sal_Int32 nIndex = 0;
+
+    sal_uInt16 nDay = (sal_uInt16)(sSource.getToken( 0, (sal_Unicode)'.', nIndex ).toInt32());
+    if( nIndex>0 )
+    {
+        sal_uInt16 nMonth = (sal_uInt16)(sSource.getToken( 0, (sal_Unicode)'.', nIndex ).toInt32());
+        if( nIndex>0 )
+        {
+            sal_uInt16 nYear = (sal_uInt16)(sSource.getToken( 0, (sal_Unicode)'/', nIndex ).toInt32());
+            if( nIndex>0 )
+            {
+                sal_uInt32 nHour = sSource.getToken( 0, (sal_Unicode)':', nIndex ).toInt32();
+                if( nIndex>0 )
+                {
+                    sal_uInt32 nMin = sSource.getToken( 0, (sal_Unicode)':', nIndex ).toInt32();
+                    if( nIndex>0 && nIndex<sSource.getLength() )
+                    {
+                        sal_uInt32 nSec = sSource.copy( nIndex, sSource.getLength()-nIndex ).toInt32();
+
+                        Date aDate( nDay , nMonth, nYear );
+                        Time aTime( nHour, nMin  , nSec  );
+                        aStamp = DateTime( aDate, aTime );
+                    }
+                }
+            }
+        }
+    }
+    return aStamp;
+}
+
+//-----------------------------------------------------------------------------
+/**
+    @short  convert timestamp from DateTime to String notation
+    @descr  Format: "<day>.<month>.<year>/<hour>:<min>:<sec>"
+            e.g.  : "1.11.2001/13:45:16"
+
+    @param  aStamp
+                timestamp in DateTime notation
+
+    @return timestamp in String notation
+ */
+::rtl::OUString Converter::convert_DateTime2String( /*IN*/ const DateTime& aSource )
+{
+    ::rtl::OUStringBuffer sBuffer(25);
+
+    sBuffer.append( (sal_Int32)aSource.GetDay()   );
+    sBuffer.append( (sal_Unicode)'.'              );
+    sBuffer.append( (sal_Int32)aSource.GetMonth() );
+    sBuffer.append( (sal_Unicode)'.'              );
+    sBuffer.append( (sal_Int32)aSource.GetYear()  );
+    sBuffer.append( (sal_Unicode)'/'              );
+    sBuffer.append( (sal_Int32)aSource.GetHour()  );
+    sBuffer.append( (sal_Unicode)':'              );
+    sBuffer.append( (sal_Int32)aSource.GetMin()   );
+    sBuffer.append( (sal_Unicode)':'              );
+    sBuffer.append( (sal_Int32)aSource.GetSec()   );
+
+    return sBuffer.makeStringAndClear();
 }
 
 }       //  namespace framework

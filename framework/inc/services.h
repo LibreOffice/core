@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2002-09-16 10:07:19 $
+ *  last change: $Author: as $ $Date: 2002-10-11 13:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,8 @@ namespace framework{
 #define SERVICENAME_CFGREGISTRY                             DECLARE_ASCII("com.sun.star.configuration.ConfigurationRegistry"    )   // describe simple registry service for read access to configuration
 #define SERVICENAME_CFGPROVIDER                             DECLARE_ASCII("com.sun.star.configuration.ConfigurationProvider"    )   // describe cfg-provider service for fatoffice, network installation
 #define SERVICENAME_ADMINPROVIDER                           DECLARE_ASCII("com.sun.star.configuration.AdministrationProvider"   )   // describe cfg-provider service for sun webtop
-#define SERVICENAME_CFGUPDATEACCESS                         DECLARE_ASCII("com.sun.star.configuration.ConfigurationUpdateAccess")
+#define SERVICENAME_CFGUPDATEACCESS                         DECLARE_ASCII("com.sun.star.configuration.ConfigurationUpdateAccess")   // provides read/write access to the configuration
+#define SERVICENAME_CFGREADACCESS                           DECLARE_ASCII("com.sun.star.configuration.ConfigurationAccess"      )   // provides readonly access to the configuration
 #define SERVICENAME_SOUNDHANDLER                            DECLARE_ASCII("com.sun.star.frame.ContentHandler"                   )
 #define SERVICENAME_CONTENTHANDLERFACTORY                   DECLARE_ASCII("com.sun.star.frame.ContentHandlerFactory"            )
 #define SERVICENAME_APPDISPATCHPROVIDER                     DECLARE_ASCII("com.sun.star.comp.sfx2.AppDispatchProvider"          )
@@ -144,6 +145,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_UIINTERACTIONHANDLER             DECLARE_ASCII("com.sun.star.comp.uui.UUIInteractionHandler"         )
 #define IMPLEMENTATIONNAME_SUBSTITUTEPATHVARIABLES          DECLARE_ASCII("com.sun.star.comp.framework.PathSubstitution"        )
 #define IMPLEMENTATIONNAME_PATHSETTINGS                     DECLARE_ASCII("com.sun.star.comp.framework.PathSettings"            )
+#define IMPLEMENTATIONNAME_JOBHANDLER                       DECLARE_ASCII("com.sun.star.comp.framework.JobHandler"              )
 
 }       //  namespace framework
 

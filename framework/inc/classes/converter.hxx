@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:38:03 $
+ *  last change: $Author: as $ $Date: 2002-10-11 13:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#ifndef _DATETIME_HXX
+#include <tools/datetime.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -109,6 +113,8 @@ class Converter
         static css::uno::Sequence< css::uno::Any >             convert_seqProp2seqAny          ( const css::uno::Sequence< css::beans::PropertyValue >& lSource );
         static css::uno::Sequence< css::beans::PropertyValue > convert_seqAny2seqProp          ( const css::uno::Sequence< css::uno::Any >&             lSource );
         static OUStringList                                    convert_seqOUString2OUStringList( const css::uno::Sequence< ::rtl::OUString >&           lSource );
+        static DateTime                                        convert_String2DateTime         ( const ::rtl::OUString&                                 sSource );
+        static ::rtl::OUString                                 convert_DateTime2String         ( const DateTime&                                        aSource );
 };
 
 }       // namespace framework

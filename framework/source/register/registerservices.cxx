@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:53:30 $
+ *  last change: $Author: as $ $Date: 2002-10-11 13:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,10 @@
 #include <dispatch/servicehandler.hxx>
 #endif
 
+#ifndef __FRAMEWORK_JOBS_JOBHANDLER_HXX_
+#include <jobs/jobhandler.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
@@ -151,6 +155,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::DispatchRecorder            )
                         COMPONENTINFO( ::framework::MailToDispatcher            )
                         COMPONENTINFO( ::framework::ServiceHandler              )
+                        COMPONENTINFO( ::framework::JobHandler                  )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
@@ -163,5 +168,6 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::DispatchRecorderSupplier        )   else
                         IFFACTORY( ::framework::DispatchRecorder                )   else
                         IFFACTORY( ::framework::MailToDispatcher                )   else
-                        IFFACTORY( ::framework::ServiceHandler                  )
+                        IFFACTORY( ::framework::ServiceHandler                  )   else
+                        IFFACTORY( ::framework::JobHandler                      )
                     )
