@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:41:55 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 /// @HTML
 
+#ifndef SW_MS_MSFILTER_HXX
+#include <msfilter.hxx>
+#endif
 #ifndef SW_WRITERWORDGLUE
 #include "writerwordglue.hxx"
 #endif
@@ -71,6 +74,12 @@
 
 #ifndef _SVX_PAPERINF_HXX
 #include <svx/paperinf.hxx> //lA0Width...
+#endif
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>   //rtl_getBestWindowsCharsetFromTextEncoding
+#endif
+#ifndef _ERRHDL_HXX
+#include <errhdl.hxx>       // ASSERT()
 #endif
 
 namespace sw
@@ -124,7 +133,31 @@ namespace sw
             return nSize;
         }
 
+        sal_uInt8 rtl_TextEncodingToWinCharset(rtl_TextEncoding eTextEncoding)
+        {
+            sal_uInt8 nRet =
+                rtl_getBestWindowsCharsetFromTextEncoding(eTextEncoding);
+            if (eTextEncoding == RTL_TEXTENCODING_UCS2)
+            {
+                ASSERT(nRet != 0x80, "This method may be redundant");
+                nRet = 0x80;
+            }
+            else if (eTextEncoding == RTL_TEXTENCODING_DONTKNOW)
+            {
+                ASSERT(nRet != 0x80, "This method may be redundant");
+                nRet = 0x80;
+            }
+            return nRet;
+        }
+
+        rtl_TextEncoding rtl_TextEncodingToWinCharsetAndBack(
+            rtl_TextEncoding eTextEncoding)
+        {
+            return rtl_getTextEncodingFromWindowsCharset(
+                    rtl_TextEncodingToWinCharset(eTextEncoding));
+        }
     }
+
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
