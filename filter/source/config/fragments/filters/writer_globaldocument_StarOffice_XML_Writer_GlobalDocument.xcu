@@ -1,15 +1,10 @@
     <node oor:name="writer_globaldocument_StarOffice_XML_Writer_GlobalDocument" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN ALIEN PREFERRED</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value>CXML</value></prop>
         <prop oor:name="FileFormatVersion"><value>6200</value></prop>
         <prop oor:name="Type"><value>writer_globaldocument_StarOffice_XML_Writer_GlobalDocument</value></prop>
-        <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
-        <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"><value>CXML</value></prop>
-        <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
-        <prop oor:name="UIName">
-            <value xml:lang="de">%productname% %formatversion% Globaldokument</value>
-            <value xml:lang="en-US">%productname% %formatversion% Master Document</value>
-            <value xml:lang="x-translate">%productname% %formatversion% Master Document</value>
-        </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN ALIEN PREFERRED</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
     </node>
