@@ -2,9 +2,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-04 14:04:03 $
+#   last change: $Author: svesik $ $Date: 2004-04-20 12:35:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,7 @@ BEGIN
 
     $plat = $^O;
 
-    if ( $plat =~ /MSWin/i )
+    if (( $plat =~ /MSWin/i ) || (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )))
     {
         $separator = "\\";
         $pathseparator = "\;";
