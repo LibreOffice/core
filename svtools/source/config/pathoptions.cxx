@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-14 17:19:34 $
+ *  last change: $Author: mba $ $Date: 2000-11-14 17:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1462,7 +1462,7 @@ void SAL_CALL PathService::flush(  ) throw(::com::sun::star::uno::RuntimeExcepti
 
 sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    if ( ServiceName.compareToAscii("com.sun.star.config.specialconfigmanager") == COMPARE_EQUAL )
+    if ( ServiceName.compareToAscii("com.sun.star.config.SpecialConfigManager") == COMPARE_EQUAL )
         return sal_True;
     else
         return sal_False;
@@ -1472,7 +1472,7 @@ sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceNa
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL PathService::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     Sequence< ::rtl::OUString > aRet(1);
-    *aRet.getArray() = ::rtl::OUString::createFromAscii("com.sun.star.config.specialconfigmanager");
+    *aRet.getArray() = ::rtl::OUString::createFromAscii("com.sun.star.config.SpecialConfigManager");
     return aRet;
 }
 

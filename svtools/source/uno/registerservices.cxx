@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:06 $
+ *  last change: $Author: mba $ $Date: 2000-11-14 17:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@
 #include <unoifac3.hxx>
 #include <unoiface.hxx>
 
+#include <pathoptions.hxx>
+
 #include <toolkit/helper/macros.hxx>
 
 #define IMPL_CREATEINSTANCE( ImplName ) \
@@ -125,6 +127,9 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
 
         xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.util.NumberFormatsSupplier" ) );
+
+        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.comp.svtools.PathService/UNO/SERVICES" ) );
+        xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) );
 
 // !!!
 /*
@@ -172,6 +177,12 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.util.NumberFormatsSupplier" );
             xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), SvNumberFormatsSupplierServiceObject_CreateInstance, aServiceNames );
+        }
+        else if ( rtl_str_compare( sImplementationName, "com.sun.star.comp.svtools.PathService" ) == 0 )
+        {
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
+            aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" );
+            xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), ExtVCLXToolkit_CreateInstance, aServiceNames );
         }
 
         if ( xFactory.is() )
