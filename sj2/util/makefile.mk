@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pl $ $Date: 2001-10-24 16:25:03 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:43:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,24 +83,11 @@ SHL1TARGET= j$(UPD)$(DLLPOSTFIX)_g
 SHL1IMPLIB= $(TARGET)
 
 SHL1STDLIBS= \
-    $(SVTOOLLIB) \
-    $(SVLLIB)	\
-    $(TKLIB) \
-    $(VCLLIB)
-
-.IF "$(GUI)"=="UNX"
-.IF "$(OS)"!="MACOSX"
-SHL1STDLIBS+=-lX11
-.ENDIF
-.ENDIF
-
-SHL1STDLIBS+=\
+    $(VCLLIB) \
+    $(UNOTOOLSLIB) \
     $(TOOLSLIB) \
-    $(VOSLIB) \
-    $(SALLIB) \
-    $(RTLLIB) \
     $(CPPULIB) \
-    $(UNOTOOLSLIB)
+    $(SALLIB)
 
 SHL1LIBS=   $(SLB)$/$(TARGET).lib
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
