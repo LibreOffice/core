@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplChartModel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2003-10-06 12:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 #include "macros.hxx"
 #include "algohelper.hxx"
 #include "ContextHelper.hxx"
-#include "TitleHelper.hxx"
 // #include "SplitLayoutContainer.hxx"
 #include "LayoutDefaults.hxx"
 #include "ChartDocumentWrapper.hxx"

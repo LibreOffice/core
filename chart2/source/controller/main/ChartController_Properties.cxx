@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: bm $ $Date: 2003-10-06 12:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,13 +375,13 @@ rtl::OUString getTitleIDForSlotId( sal_Int32 nSlotID, const uno::Reference< XCha
             aRet = TitleHelper::getIdentifierForTitle(TitleHelper::SUB_TITLE);
             break;
         case SID_DIAGRAM_TITLE_X:
-            aRet = TitleHelper::getIdentifierForTitle(TitleHelper::X_AXIS_TITLE);
+//             aRet = TitleHelper::getIdentifierForTitle(TitleHelper::X_AXIS_TITLE);
             break;
         case SID_DIAGRAM_TITLE_Y:
-            aRet = TitleHelper::getIdentifierForTitle(TitleHelper::Y_AXIS_TITLE);
+//             aRet = TitleHelper::getIdentifierForTitle(TitleHelper::Y_AXIS_TITLE);
             break;
         case SID_DIAGRAM_TITLE_Z:
-            aRet = TitleHelper::getIdentifierForTitle(TitleHelper::Z_AXIS_TITLE);
+//             aRet = TitleHelper::getIdentifierForTitle(TitleHelper::Z_AXIS_TITLE);
             break;
         case SID_DIAGRAM_TITLE_ALL:
             break;

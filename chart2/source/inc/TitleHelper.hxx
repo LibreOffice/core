@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleHelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:29 $
+ *  last change: $Author: bm $ $Date: 2003-10-06 12:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,15 @@ class TitleHelper
 public:
     enum eTitleType
     {
-        MAIN_TITLE,
+        TITLE_BEGIN = 0,
+        MAIN_TITLE = 0,
         SUB_TITLE,
         X_AXIS_TITLE,
         Y_AXIS_TITLE,
         Z_AXIS_TITLE,
-        SECOND_X_AXIS_TITLE,
-        SECOND_Y_AXIS_TITLE
+//         SECOND_X_AXIS_TITLE,
+//         SECOND_Y_AXIS_TITLE,
+        TITLE_END
     };
 
     static rtl::OUString getIdentifierForTitle( eTitleType nTitleIndex );

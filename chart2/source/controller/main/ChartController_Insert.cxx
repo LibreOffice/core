@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Insert.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: bm $ $Date: 2003-10-06 12:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,9 @@ void fillInsertTitleDialogDataFromModel( InsertTitleDialogData& rDialogData
 
     //find out which title exsist and get their text
     //main title:
-    for( sal_Int32 nTitleIndex = 0; nTitleIndex<5; nTitleIndex++)
+    for( sal_Int32 nTitleIndex = static_cast< sal_Int32 >( TitleHelper::TITLE_BEGIN);
+         nTitleIndex < static_cast< sal_Int32 >( TitleHelper::TITLE_END );
+         nTitleIndex++)
     {
         uno::Reference< XTitle > xTitle =  TitleHelper::getTitle(
             static_cast< TitleHelper::eTitleType >( nTitleIndex ), xChartModel );
@@ -314,7 +316,9 @@ bool changeExistingTitles( const uno::Reference< frame::XModel >& xModel
                         , const uno::Reference< uno::XComponentContext >& xContext )
 {
     bool bChanged = false;
-    for(sal_Int32 nN=0;nN<5;nN++)
+    for( sal_Int32 nN = static_cast< sal_Int32 >( TitleHelper::TITLE_BEGIN );
+         nN < static_cast< sal_Int32 >( TitleHelper::TITLE_END );
+         nN++)
     {
         if( rOldState.aExistenceList[nN] != rNewState.aExistenceList[nN] )
         {

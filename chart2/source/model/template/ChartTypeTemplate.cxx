@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: bm $ $Date: 2003-10-06 12:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #include "macros.hxx"
 #include "ContextHelper.hxx"
 #include "Scale.hxx"
-#include "TitleHelper.hxx"
 
 #include "Diagram.hxx"
 #include "Scaling.hxx"
