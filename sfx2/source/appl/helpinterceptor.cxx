@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-16 12:09:15 $
+ *  last change: $Author: pb $ $Date: 2001-04-23 11:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include "helpinterceptor.hxx"
+#include "newhelp.hxx"
 #include "sfxuno.hxx"
 
 #ifndef _URLOBJ_HXX
@@ -74,6 +75,7 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
 #endif
+#include <vcl/window.hxx>
 #include <limits.h>
 
 using namespace ::com::sun::star::beans;
@@ -278,8 +280,15 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
                     aURL.Complete = pEntry->aURL;
                     Reference < XDispatch > xDisp = m_xSlaveDispatcher->queryDispatch( aURL, String(), 0 );
                     if ( xDisp.is() )
+                    {
+                        if ( m_pOpenListener && m_pWindow )
+                        {
+                            if ( !m_pWindow->IsWait() )
+                                m_pWindow->EnterWait();
+                            m_pOpenListener->AddListener( xDisp, aURL );
+                        }
                         xDisp->dispatch( aURL, Sequence < PropertyValue >() );
-
+                    }
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-10 14:17:57 $
+ *  last change: $Author: pb $ $Date: 2001-04-23 11:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ struct HelpHistoryEntry_Impl
 
 DECLARE_LIST(HelpHistoryList_Impl,HelpHistoryEntry_Impl*);
 
+class OpenStatusListener_Impl;
+class Window;
 class HelpInterceptor_Impl : public ::cppu::WeakImplHelper3<
 
         ::com::sun::star::frame::XDispatchProviderInterceptor,
@@ -121,8 +123,10 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > m_xListener;
 
-    HelpHistoryList_Impl*   m_pHistory;
-    ULONG                   m_nCurPos;
+    HelpHistoryList_Impl*       m_pHistory;
+    OpenStatusListener_Impl*    m_pOpenListener;
+    Window*                     m_pWindow;
+    ULONG                       m_nCurPos;
 
     void                    addURL( const String& rURL );
 
@@ -155,6 +159,10 @@ public:
     virtual void SAL_CALL   dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException);
+
+    // extras
+    void                    InitWaiter( OpenStatusListener_Impl* pListener, Window* pWindow )
+                                { m_pOpenListener = pListener; m_pWindow = pWindow; }
 };
 
 // HelpListener_Impl -----------------------------------------------------
