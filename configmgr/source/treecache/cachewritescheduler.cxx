@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachewritescheduler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-12 11:42:49 $
+ *  last change: $Author: jb $ $Date: 2002-10-30 12:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ void OCacheWriteScheduler::writeOneTreeFoundByOption(RequestOptions const& _aOpt
     if (aCache.is())
     {
         CFG_TRACE_INFO_NI("- Found matching data container  - starting write task");
-        if (m_rTreeManager.saveAllPendingChanges(aCache,_aOptions))
+        if (!m_rTreeManager.saveAllPendingChanges(aCache,_aOptions))
         {
             osl::MutexGuard aListGuard( m_aMutex );
             m_aWriteList.insert(_aOptions);
