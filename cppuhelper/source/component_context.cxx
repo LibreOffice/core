@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:16:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #endif
 
 #include <vector>
+#include <hash_map>
 #ifdef CONTEXT_DIAG
 #include <map>
 #endif
