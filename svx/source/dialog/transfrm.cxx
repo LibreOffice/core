@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
+ *  last change: $Author: aw $ $Date: 2001-08-06 15:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1607,7 +1607,9 @@ BOOL SvxAngleTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     BOOL bModified = FALSE;
 
-    if ( aMtrAngle.IsValueModified() )
+    if(aMtrAngle.IsValueModified()
+        || aMtrPosX.IsValueModified()
+        || aMtrPosY.IsValueModified())
     {
         rOutAttrs.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_ANGLE ),
                         aMtrAngle.GetValue() ) );
