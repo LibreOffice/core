@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentwindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 15:36:47 $
+ *  last change: $Author: hjs $ $Date: 2001-06-21 10:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include "svtools.hrc"
 #endif
 #ifndef _SVTOOLS_SVTDATA_HXX
-#include <svtools/svtdata.hxx>
+#include <svtdata.hxx>
 #endif
 
 #define WB_AGENT_STYLE  0
@@ -207,6 +207,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/06/18 15:36:47  mba
+ *  #87300#: always enable input for help agent window
+ *
  *  Revision 1.2  2001/05/11 09:07:24  rt
  *  #65293# fix for gcc (needs temporary variable for Point() )
  *
