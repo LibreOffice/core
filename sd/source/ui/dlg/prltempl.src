@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-16 08:10:14 $
+ *  last change: $Author: kz $ $Date: 2001-05-18 11:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
     Text [ ENGLISH ] = "Presentation layout" ;
     Text [ norwegian ] = "Presentation layout" ;
     Text [ italian ] = "Layout di presentazione" ;
-    Text [ portuguese_brazilian ] = "Layout de apresentaÁ„o" ;
+    Text [ portuguese_brazilian ] = "Layout de apresenta??o" ;
     Text [ portuguese ] = "Modelo de apresentaÁ„o" ;
     Text [ finnish ] = "Esityksen asettelu" ;
     Text [ danish ] = "PrÊsentationslayout" ;
@@ -189,7 +189,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ italian ] = "Trasparenza";
                 Text[ danish ] = "Transparens";
                 Text[ swedish ] = "Transparens";
-                Text[ polish ] = "PrzezroczystoúÊ";
+                Text[ polish ] = "Przezroczysto?Ê";
                 Text[ portuguese_brazilian ] = "Transparence";
                 Text[ japanese ] = "ìßâﬂê´";
                 Text[ korean ] = "≈ı∏Ì";
@@ -265,7 +265,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientro e spaziatura" ;
-                Text [ portuguese_brazilian ] = "Indentar e EspaÁar" ;
+                Text [ portuguese_brazilian ] = "Indentar e Espa?ar" ;
                 Text [ portuguese ] = "AvanÁos e espaÁamento" ;
                 Text [ finnish ] = "Sisennykset ja v‰lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -469,7 +469,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientro e spaziatura" ;
-                Text [ portuguese_brazilian ] = "Indentar e EspaÁar" ;
+                Text [ portuguese_brazilian ] = "Indentar e Espa?ar" ;
                 Text [ portuguese ] = "AvanÁos e espaÁamento" ;
                 Text [ finnish ] = "Sisennykset ja v‰lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
