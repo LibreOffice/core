@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-10 09:13:46 $
+ *  last change: $Author: os $ $Date: 2001-09-13 10:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,6 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
  ---------------------------------------------------------------------------*/
 void ConfigChangeListener_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
 {
-    OSL_ENSURE(sal_False, "ConfigChangeListener_Impl::disposing");
 }
 /* -----------------------------29.08.00 12:50--------------------------------
 
