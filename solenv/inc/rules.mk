@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:11 $
+#   last change: $Author: hr $ $Date: 2003-04-29 17:34:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -630,11 +630,11 @@ $(OUT)$/ucr$/$(IDLPACKAGE)$/%.urd : %.idl
 $(OUT)$/ucrdoc$/$(IDLPACKAGE)$/%.urd : %.idl
         +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $< )		
 
-.IF "$(GUI)"=="WNTtest"
-$(MISC)$/%.hid : %.src
-    +echo Making hids...
-    +mhids $< $(SRS) $(PRJNAME)
-.ENDIF
+# generate hid files
+$(SRS)$/%.hid : %.src
+    @echo ------------------------------
+    @echo Making hid $@
+        +mhids.bat $*.src $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
 
 # make *.xml descriptions available in $(MISC)
 $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml : %.xml
