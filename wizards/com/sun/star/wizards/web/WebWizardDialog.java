@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WebWizardDialog.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $  $Date: 2005-02-21 14:09:30 $
+ *  last change: $Author: kz $  $Date: 2005-03-18 16:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,13 +692,15 @@ public abstract class WebWizardDialog  extends WizardDialog implements WebWizard
    * renders the images and titles of
    * the layouts
    * @author rpiterman
-   *
+
    */
   private class LayoutRenderer implements ImageList.ImageRenderer {
 
-    public String getImageUrl(Object listItem) {
-        String s = listItem==null ? "" : ((CGLayout)listItem).getImageURL();
-        return s;
+    public Object[] getImageUrls(Object listItem) {
+        Object[] oResIds = null;
+        if (listItem != null)
+            oResIds = ((CGLayout)listItem).getImageUrls();
+        return oResIds;
     }
 
     public String render(Object listItem) {
