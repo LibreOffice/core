@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 12:59:21 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,8 +690,8 @@ void lcl_CheckObjects( SwSortDrawObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
             if( pFly->Frm().Top() != WEIT_WECH &&
                 ( pFrm->IsPageFrm() ? pFly->IsFlyLayFrm() :
                   ( pFly->IsFlyAtCntFrm() &&
-                    ( pFrm->IsBodyFrm() ? pFly->GetAnchor()->IsInDocBody() :
-                                          pFly->GetAnchor()->IsInFtn() ) ) ) )
+                    ( pFrm->IsBodyFrm() ? pFly->GetAnchorFrm()->IsInDocBody() :
+                                          pFly->GetAnchorFrm()->IsInFtn() ) ) ) )
             {
                 nTmp = pFly->Frm().Bottom();
             }
