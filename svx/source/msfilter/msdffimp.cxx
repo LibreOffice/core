@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-15 15:42:53 $
+ *  last change: $Author: sj $ $Date: 2001-09-06 12:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2206,6 +2206,98 @@ void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
         rStr.Erase();
 }
 
+static void Apply3dObjectRotation( E3dScene* pScene, sal_Int32 nXRotate, sal_Int32 nYRotate )
+{
+    // ## 3D changes
+    // create transformation for 3d object (rotation around
+    // Y-Axis, but aligned to front face)
+    Matrix4D aNewTransform;
+    const Volume3D& rVolume = pScene->GetBoundVolume();
+    const Matrix4D& rOldTransform = pScene->GetTransform();
+    Vector3D aObjCenter = pScene->GetCenter();
+
+    aNewTransform.Translate(-aObjCenter.X(), -aObjCenter.Y(), -rVolume.GetDepth());
+    if( nYRotate )
+        aNewTransform.RotateY((double)nYRotate * nPi180);
+    if( nXRotate )
+        aNewTransform.RotateX( (double)nXRotate * nPi180 );
+    aNewTransform.Translate(aObjCenter.X(), aObjCenter.Y(), rVolume.GetDepth());
+    pScene->SetTransform(aNewTransform * rOldTransform);
+}
+
+
+static void Apply3dSkewSettings( Camera3D& rCamera, E3dScene* pScene, sal_Int32 nSkewAmount, sal_Int32 nSkewAngle, double& fDepth )
+{
+
+    Rectangle aOldSnap( pScene->GetSnapRect() );
+
+    double fCaMX = 0.0;
+    double fCaMY = 0.0;
+
+    if ( nSkewAmount )
+    {
+        nSkewAngle %= 360;
+        if ( nSkewAngle < 0 )
+            nSkewAngle = 360 + nSkewAngle;
+
+        fCaMX = (double)aOldSnap.GetWidth() / 2;
+        fCaMY = (double)aOldSnap.GetHeight() / 2;
+
+        fCaMX += fDepth;
+        fCaMY += fDepth;
+
+        if ( nSkewAngle < 45 )
+        {
+            fCaMX *= -1.0;
+            fCaMY = 0.0;
+        }
+        else if ( nSkewAngle < 90 )
+        {
+            fCaMX *= -1.0;
+            fCaMY *= -1.0;
+        }
+        else if ( nSkewAngle < 135 )
+        {
+            fCaMX = 0.0;
+            fCaMY *= -1.0;
+        }
+        else if ( nSkewAngle < 180 )
+        {
+            fCaMY *= -1.0;
+        }
+        else if ( nSkewAngle < 225 )
+        {
+            fCaMY = 0.0;
+        }
+        else if ( nSkewAngle < 270 )
+        {
+            // default;
+        }
+        else if ( nSkewAngle < 315 )
+        {
+            fCaMX = 0.0;
+        }
+        else
+        {
+            fCaMX *= -1;
+        }
+    }
+    // ## 3D changes
+    Vector3D aNewCamPos( fCaMX, fCaMY, fDepth );
+    Vector3D aNewLookAt( fCaMX, fCaMY, 0 );
+    rCamera.SetPosAndLookAt( aNewCamPos, aNewLookAt );
+
+    pScene->SetCamera( rCamera );
+    pScene->FitSnapRectToBoundVol();
+    Rectangle aModifiedSnap( pScene->GetSnapRect() );
+    Point aPos( aOldSnap.TopLeft() );
+    if ( fCaMX < 0.0 )
+        aPos.X() -= ( aModifiedSnap.GetWidth() - aOldSnap.GetWidth() );
+    if ( fCaMY > 0.0 )
+        aPos.Y() -= ( aModifiedSnap.GetHeight() - aOldSnap.GetHeight() );
+    Rectangle aNewSnap( aPos, aModifiedSnap.GetSize() );
+    pScene->SetSnapRect( aNewSnap );
+}
 
 SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, Rectangle& aBoundRect, BOOL bIsAutoText ) const
 {
@@ -2245,23 +2337,26 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
     }
     else
     {
-        SdrObject* pNewObj = pRet->ConvertToPolyObj( FALSE, FALSE );
-        SdrPathObj* pPath = PTR_CAST( SdrPathObj, pNewObj );
+        sal_Bool bHasFillStyle = ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) != 0;
+        sal_Bool bHasLineStyle = ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 ) != 0;
 
-        if ( pPath )
+        if ( bHasFillStyle || bHasLineStyle )
         {
-            E3dCompoundObject* p3DObj = new E3dExtrudeObj( a3DDefaultAttr, pPath->GetPathPoly(), fDepth );
-            p3DObj->NbcSetLayer( pRet->GetLayer() );
-            aSet.Put( XLineStyleItem( XLINE_NONE ) );// ... aber keine Linien
-            // Feststellen, ob ein FILL_Attribut gesetzt ist.
-            // Falls nicht, Fuellattribut hart setzen
-            XFillStyle eFillStyle = ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem );
-            if( eFillStyle == XFILL_NONE )
-                aSet.Put( XFillStyleItem( XFILL_SOLID ) );
-            pScene->Insert3DObj( p3DObj );
-            bSceneHasObjects = TRUE;
+            SdrObject* pNewObj = pRet->ConvertToPolyObj( FALSE, FALSE );
+            SdrPathObj* pPath = PTR_CAST( SdrPathObj, pNewObj );
+
+            if ( pPath )
+            {
+                E3dCompoundObject* p3DObj = new E3dExtrudeObj( a3DDefaultAttr, pPath->GetPathPoly(), fDepth );
+                p3DObj->NbcSetLayer( pRet->GetLayer() );
+                aSet.Put( XLineStyleItem( XLINE_NONE ) );// ... aber keine Linien
+                if ( !bHasFillStyle )
+                    aSet.Put( XFillStyleItem( XFILL_SOLID ) );
+                pScene->Insert3DObj( p3DObj );
+                bSceneHasObjects = TRUE;
+            }
+            delete pNewObj; // Aufraeumen
         }
-        delete pNewObj; // Aufraeumen
     }
 
     // Hat das Umwandeln geklappt?
@@ -2272,13 +2367,14 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
         pRet = pScene;
 
         // Kameraeinstellungen, Perspektive ...
+        sal_Int32 nVal;
         Camera3D& rCamera = (Camera3D&)pScene->GetCamera();
         const Volume3D& rVolume = pScene->GetBoundVolume();
         Point aCenter = aBoundRect.Center();
         Matrix4D aMatrix;
         // 3D-Objekt auf die Mitte des Gesamtrechtecks zentrieren
         aMatrix.Translate( Vector3D( -aCenter.X(), aCenter.Y(), 0.0 ) );
-        pScene->SetTransform(pScene->GetTransform() * aMatrix);
+        pScene->SetTransform(aMatrix * pScene->GetTransform());
         pScene->CorrectSceneDimensions();
         pScene->NbcSetSnapRect( aBoundRect );
 
@@ -2290,36 +2386,19 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
         rCamera.SetAutoAdjustProjection( FALSE );
         rCamera.SetViewWindow( -fW / 2, - fH / 2, fW, fH);
         Vector3D aLookAt( 0.0, 0.0, 0.0 );
+        Vector3D aCamPos( 0.0, 0.0, 100.0 );
 
-        double fCaMX = 3472.0;
-        double fCaMY = 3472.0;
-        double fCaMZ = fCamZ < 100.0 ? 100.0 : fCamZ;
-        sal_Int32 nVal = GetPropertyValue( DFF_Prop_c3DXViewpoint, 0 );
-        if ( nVal )
-        {
-            ScaleEmu( nVal );
-            fCaMX = (double)nVal;
-        }
-        nVal = GetPropertyValue( DFF_Prop_c3DYViewpoint, 0 );
-        if ( nVal )
-        {
-            ScaleEmu(nVal);
-            fCaMY = (double)-nVal;
-        }
-        nVal = GetPropertyValue( DFF_Prop_c3DZViewpoint, 0 );
-        if ( nVal )
-        {
-            ScaleEmu(nVal);
-            fCaMZ = (double)nVal;
-        }
-        Vector3D aCamPos( fCaMX, fCaMY, fCaMZ );
+        rCamera.SetDefaults( Vector3D( 0.0, 0.0, 100.0 ), aLookAt, 100.0 );
         rCamera.SetPosAndLookAt( aCamPos, aLookAt );
         rCamera.SetFocalLength( 100.0 );
-        rCamera.SetDefaults( Vector3D( 0.0, 0.0, 100.0 ), aLookAt, 100.0 );
 
         // Default: non perspective
+//      rCamera.SetProjection( GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 4 ? PR_PARALLEL : PR_PERSPECTIVE );
 
-        rCamera.SetProjection( GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 4 ? PR_PARALLEL : PR_PERSPECTIVE );
+        // always set perspective mode because otherwise the camera positioning that reflects
+        // the skewangle will not work properly
+        rCamera.SetProjection( PR_PERSPECTIVE );
+
         pScene->SetCamera( rCamera );
         pScene->SetItemSet(aSet);
 
@@ -2346,12 +2425,7 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
         UINT32 nAmbient = GetPropertyValue( DFF_Prop_c3DAmbientIntensity, 16000 ) / 1000;
         UINT32 nSpecular = GetPropertyValue( DFF_Prop_c3DSpecularAmt, 0 );
         UINT32 nDiffuse = GetPropertyValue( DFF_Prop_c3DDiffuseAmt, 0 );
-        INT32 n3dRotate = GetPropertyValue( DFF_Prop_c3DYRotationAngle, 0 );
-        if ( n3dRotate )
-            pScene->NbcRotateY( (double)Fix16ToAngle( n3dRotate ) * nPi180 );
-        n3dRotate = GetPropertyValue( DFF_Prop_c3DXRotationAngle, 0 );
-        if ( n3dRotate )
-            pScene->NbcRotateX( (double)Fix16ToAngle( n3dRotate ) * nPi180 );
+
         if ( IsProperty( DFF_Prop_c3DRenderMode ) )
         {
             MSO_3DRenderMode eRenderMode = (MSO_3DRenderMode)GetPropertyValue( DFF_Prop_c3DRenderMode, 0 );
@@ -2455,69 +2529,29 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
             pScene->GetLightGroup().SetIntensity( aDiffuseCol, Base3DMaterialDiffuse );
         }
 
-        // Positionierung anpassen
-        // aBoundRect: 2D-Position des Ursprungsshapes
-        Rectangle aFrontPos;
-        Rectangle aNewSize;
-        Rectangle aOldSize;
-
-        // OldSize ermitteln. NICHT ueber pScene->GetSnapRect, dies liefert
-        // nur GetCamera().GetDeviceWindow() !!!
-        SdrObjListIter aIter( *pScene, IM_DEEPWITHGROUPS );
-        while ( aIter.IsMore() )
-        {
-            SdrObject* pSingleObj = aIter.Next();
-            if ( pSingleObj->ISA( E3dExtrudeObj ) )
-            {
-                E3dExtrudeObj* pSingleExtrude = (E3dExtrudeObj*)pSingleObj;
-                aOldSize.Union( pSingleExtrude->GetSnapRect() );
-            }
-        }
-
-        // Groesse der 2D-Bildschirmabbildung der Original-Frontpolygone berechnen
-        aIter.Reset();
-        while ( aIter.IsMore() )
-        {
-            SdrObject* pSingleObj = aIter.Next();
-            if ( pSingleObj->ISA( E3dExtrudeObj ) )
-            {
-                E3dExtrudeObj* pSingleExtrude = (E3dExtrudeObj*)pSingleObj;
-                double fFrontPlaneDepth = (double)pSingleExtrude->GetExtrudeDepth();
-
-                if ( bUseBackSide )
-                    fFrontPlaneDepth = 0.0;
-                Matrix4D aFullTransMat = pSingleExtrude->GetFullTransform();
-                pScene->GetCameraSet().SetObjectTrans( aFullTransMat );
-
-                const PolyPolygon3D& rSourcePolyPoly = pSingleExtrude->GetExtrudePolygon();
-                for ( UINT16 a = 0; a < rSourcePolyPoly.Count(); a++ )
-                {
-                    const Polygon3D& rSourcePoly = rSourcePolyPoly[ a ];
-                    for ( UINT16 b = 0; b < rSourcePoly.GetPointCount(); b++ )
-                    {
-                        Vector3D aPoint = rSourcePoly[ b ];
-                        aPoint.Z() = fFrontPlaneDepth;
-                        aPoint = pScene->GetCameraSet().ObjectToViewCoor( aPoint );
-                        Point aPolyPoint( (long)( aPoint.X() + 0.5 ), (long)( aPoint.Y() + 0.5 ) );
-                        aFrontPos.Union( Rectangle( aPolyPoint, aPolyPoint ) );
-                    }
-                }
-            }
-        }
-        // in aFrontPos steht nun die 2D-Abbildung des Urspruenglichen Objektes
-        if ( aFrontPos.Left() )
-            aNewSize.Left() = ( aOldSize.Left() * aBoundRect.Left() ) / aFrontPos.Left();
-        if ( aFrontPos.Right() )
-            aNewSize.Right() = ( aOldSize.Right() * aBoundRect.Right() ) / aFrontPos.Right();
-        if ( aFrontPos.Top() )
-            aNewSize.Top() = ( aOldSize.Top() * aBoundRect.Top() ) / aFrontPos.Top();
-        if ( aFrontPos.Bottom() )
-            aNewSize.Bottom() = ( aOldSize.Bottom() * aBoundRect.Bottom() ) / aFrontPos.Bottom();
-
+        aSet.Put( Svx3DPercentDiagonalItem( 0 ) );
         // UpperLeft uebertragen
-        pScene->NbcSetSnapRect( aNewSize );
         pScene->SetModel( pSdrModel );
         pScene->SetItemSet(aSet);
+
+        sal_Int32 nXRotate = GetPropertyValue( DFF_Prop_c3DXRotationAngle, 0 );
+        sal_Int32 nYRotate = GetPropertyValue( DFF_Prop_c3DYRotationAngle, 0 );
+        if ( nXRotate || nYRotate )
+            Apply3dObjectRotation( pScene, Fix16ToAngle( nXRotate ), Fix16ToAngle( nYRotate ) );
+
+        // set correct camera depth and evaluate new size
+        fDepth = pScene->GetBoundVolume().GetDepth(); // 100.0;
+        Vector3D aNewCamPos( 0.0, 0.0, fDepth );
+        rCamera.SetPosAndLookAt( aNewCamPos, aLookAt );
+        pScene->SetCamera( rCamera );
+        pScene->FitSnapRectToBoundVol();
+
+        sal_Int32 nSkewAmount = GetPropertyValue( DFF_Prop_c3DSkewAmount, 30 );
+        if ( nSkewAmount )
+        {
+            Apply3dSkewSettings( rCamera, pScene, nSkewAmount,
+                ((sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAngle, 225 << 16 ) ) >> 16, fDepth);
+        }
     }
     else
         delete pScene;  // Aufraeumen
@@ -4954,8 +4988,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                                 nConvertFlags, *xObjStg, *rDestStorage ));
                     if( xIPObj.Is() )
                     {
-                        pRet = new SdrOle2Obj( xIPObj, String(), rBoundRect,
-                                                /*TRUE*/ FALSE );
+                        pRet = new SdrOle2Obj( xIPObj, String(), rBoundRect, FALSE );
                         // we have the Object, don't create another
                         bValidStorage = FALSE;
                     }
