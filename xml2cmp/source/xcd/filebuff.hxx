@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filebuff.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2001-03-23 13:24:04 $
+ *  last change: $Author: np $ $Date: 2001-03-23 13:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

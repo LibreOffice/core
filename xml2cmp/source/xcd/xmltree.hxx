@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmltree.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
  *  last change: $Author: np $Date:  $
  *
