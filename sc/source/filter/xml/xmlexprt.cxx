@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.166 $
+ *  $Revision: 1.167 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:49:22 $
+ *  last change: $Author: vg $ $Date: 2003-05-13 12:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1177,7 +1177,7 @@ void ScXMLExport::OpenRow(const sal_uInt16 nTable, const sal_Int32 nStartRow, co
                 if (pDoc)
                     nFlag = (pDoc->GetRowFlags(static_cast<USHORT>(nRow), nTable)) & (CR_HIDDEN | CR_FILTERED);
                 if (nIndex == nPrevIndex && nFlag == nPrevFlag &&
-                    !(bHasRowHeader && ((nRow == aRowHeaderRange.StartRow) || (nRow > aRowHeaderRange.EndRow))) &&
+                    !(bHasRowHeader && ((nRow == aRowHeaderRange.StartRow) || (nRow - 1 == aRowHeaderRange.EndRow))) &&
                     !(pGroupRows->IsGroupStart(nRow)) &&
                     !(pGroupRows->IsGroupEnd(nRow - 1)))
                     nEqualRows++;
