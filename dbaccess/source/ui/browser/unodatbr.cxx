@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-22 16:30:18 $
+ *  last change: $Author: oj $ $Date: 2002-05-23 06:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1516,12 +1516,21 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
     if (!getBrowserView() || !getBrowserView()->getVclControl())
         return aReturn;
 
+    sal_Bool bHandled = sal_False;
     // "toggle explorer" is always enabled (if we have a explorer)
-    if (ID_BROWSER_EXPLORER == nId)
-    {       // this slot is available even if no form is loaded
-        aReturn.bEnabled = sal_True;
-        aReturn.aState = ::cppu::bool2any(haveExplorer());
-        return aReturn;
+    switch( nId)
+    {
+        case ID_BROWSER_EXPLORER:
+            // this slot is available even if no form is loaded
+            aReturn.bEnabled = sal_True;
+            aReturn.aState = ::cppu::bool2any(haveExplorer());
+            return aReturn;
+        break;
+        case ID_BROWSER_CLOSE:
+            // the close button should always be enabled
+            aReturn.bEnabled = sal_True;
+            bHandled = sal_True;
+            break;
     }
 
     if (!isLoaded())
@@ -1529,15 +1538,8 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
 
     try
     {
-        sal_Bool bHandled = sal_False;
         switch (nId)
         {
-            case ID_BROWSER_CLOSE:
-                // the close button should always be enabled
-                aReturn.bEnabled = sal_True;
-                bHandled = sal_True;
-                break;
-
             case ID_BROWSER_DOCUMENT_DATASOURCE:
                 // the slot is enabled if we have an external dispatcher able to handle it,
                 // and the dispatcher must have enabled the slot in general
