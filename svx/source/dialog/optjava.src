@@ -1,0 +1,337 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optjava.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-06-01 08:50:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+ // include --------------------------------------------------------------
+
+#include "optjava.hrc"
+#include "dialogs.hrc"
+#include "helpid.hrc"
+
+// RID_SVXPAGE_OPTIONS_JAVA ----------------------------------------------
+
+TabPage RID_SVXPAGE_OPTIONS_JAVA
+{
+    HelpId = HID_OPTIONS_JAVA ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Text = "Java" ;
+    Text [ english_us ] = "Java" ;
+
+    FixedLine FL_JAVA
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Java Optionen" ;
+        Text [ english_us ] = "Java options" ;
+    };
+    CheckBox CB_JAVA_ENABLE
+    {
+        Pos = MAP_APPFONT ( 12, 14 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Text = "~Eine Java-Laufzeitumgebung (Java runtime environment) verwenden" ;
+        Text [ english_us ] = "~Use a Java runtime environment" ;
+    };
+    FixedText FT_JAVA_FOUND
+    {
+        Pos = MAP_APPFONT ( 21 , 27 ) ;
+        Size = MAP_APPFONT ( 233 , 8 ) ;
+        Text = "~Bereits installierte Java-Laufzeitumgebungen (JRE):" ;
+        Text [ english_us ] = "~Java runtime environments (JRE) already installed:" ;
+    };
+    Control LB_JAVA
+    {
+        HelpId = HID_OPTIONS_JAVA_LIST;
+        Pos = MAP_APPFONT ( 21 , 38 ) ;
+        Size = MAP_APPFONT ( 177 , 130 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_JAVA_PATH
+    {
+        Pos = MAP_APPFONT ( 21 , 171 ) ;
+        Size = MAP_APPFONT ( 233 , 8 ) ;
+        NoLabel = TRUE ;
+    };
+    PushButton PB_ADD
+    {
+        Pos = MAP_APPFONT ( 204 , 38 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Hinzufügen..." ;
+        Text [ english_us ] = "~Add..." ;
+    };
+    PushButton PB_PARAMETER
+    {
+        Pos = MAP_APPFONT ( 204 , 55 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Parameter..." ;
+        Text [ english_us ] = "~Parameters..." ;
+    };
+    PushButton PB_CLASSPATH
+    {
+        Pos = MAP_APPFONT ( 204 , 72 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Class Path..." ;
+        Text [ english_us ] = "~Class Path..." ;
+    };
+    String STR_INSTALLED_IN
+    {
+        Text = "Speicherort: " ;
+        Text [ english_us ] = "Location: " ;
+    };
+    String STR_ACCESSIBILITY
+    {
+        Text = "mit Unterstützung der Zugänglichkeit" ;
+        Text [ english_us ] = "with accessibility support" ;
+    };
+    String STR_ADDDLGTEXT
+    {
+        Text = "Java-Laufzeitumgebung auswählen" ;
+        Text [ english_us ] = "Select a Java Runtime Environment" ;
+    };
+    String STR_HEADER_VENDOR
+    {
+        Text = "Hersteller" ;
+        Text [ english_us ] = "Vendor" ;
+    };
+    String STR_HEADER_VERSION
+    {
+        Text = "Version" ;
+        Text [ english_us ] = "Version" ;
+    };
+    String STR_HEADER_FEATURES
+    {
+        Text = "Besondere Merkmale" ;
+        Text [ english_us ] = "Features" ;
+    };
+};
+
+// RID_SVXDLG_JAVA_PARAMETER ---------------------------------------------
+
+ModalDialog RID_SVXDLG_JAVA_PARAMETER
+{
+    HelpId = HID_OPTIONS_JAVA_PARAMETER ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Text = "Start Parameter" ;
+    Text [ english_us ] = "Start Parameters" ;
+    Moveable = TRUE ;
+
+    FixedText FT_PARAMETER
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 202 , 8 ) ;
+        Text = "Start ~Parameter" ;
+        Text [ english_us ] = "Start ~parameter" ;
+    };
+    Edit ED_PARAMETER
+    {
+        Pos = MAP_APPFONT ( 6 , 15 ) ;
+        Size = MAP_APPFONT ( 202 , 12 ) ;
+        Border = TRUE ;
+    };
+    PushButton PB_ASSIGN
+    {
+        Pos = MAP_APPFONT ( 214 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Zuweisen" ;
+        Text [ english_us ] = "~Assign" ;
+    };
+    FixedText FT_ASSIGNED
+    {
+        Pos = MAP_APPFONT ( 6 , 31 ) ;
+        Size = MAP_APPFONT ( 202 , 8 ) ;
+        Text = "Zuge~wiesene Startparameter" ;
+        Text [ english_us ] = "Assig~ned start parameters" ;
+    };
+    ListBox LB_ASSIGNED
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Size = MAP_APPFONT ( 202 , 64 ) ;
+        AutoHScroll = TRUE ;
+    };
+    PushButton PB_REMOVE
+    {
+        Pos = MAP_APPFONT ( 214 , 42 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Entfernen" ;
+        Text [ english_us ] = "~Remove" ;
+    };
+    FixedLine FL_BUTTONS
+    {
+        Pos = MAP_APPFONT ( 3 , 109 ) ;
+        Size = MAP_APPFONT ( 264 , 8 ) ;
+    };
+    OKButton PB_PARAMETER_OK
+    {
+        Pos = MAP_APPFONT ( 105 , 120 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_PARAMETER_ESC
+    {
+        Pos = MAP_APPFONT ( 158 , 120 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton PB_PARAMETER_HLP
+    {
+        Pos = MAP_APPFONT ( 214 , 120 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+// RID_SVXDLG_JAVA_CLASSPATH ---------------------------------------------
+
+ModalDialog RID_SVXDLG_JAVA_CLASSPATH
+{
+    HelpId = HID_OPTIONS_JAVA_CLASSPATH ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 240 , 120 ) ;
+    Text = "Class Path" ;
+    Text [ english_us ] = "Class Path" ;
+    Moveable = TRUE ;
+
+    FixedText FT_PATH
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 172 , 8 ) ;
+        Text = "Z~ugewiesenen Ordner und Archive" ;
+        Text [ english_us ] = "A~ssigned folders and archives" ;
+    };
+    ListBox LB_PATH
+    {
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 172 , 72 ) ;
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    PushButton PB_ADDARCHIVE
+    {
+        Pos = MAP_APPFONT ( 184 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Archive hinzufügen..." ;
+        Text [ english_us ] = "~Add Archive..." ;
+    };
+    PushButton PB_ADDPATH
+    {
+        Pos = MAP_APPFONT ( 184 , 31 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Ordner hinzufügen..." ;
+        Text [ english_us ] = "Add ~Folder" ;
+    };
+    PushButton PB_REMOVE_PATH
+    {
+        Pos = MAP_APPFONT ( 184 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Entfernen" ;
+        Text [ english_us ] = "~Remove" ;
+    };
+    FixedLine FL_PATH_BUTTONS
+    {
+        Pos = MAP_APPFONT ( 3 , 89 ) ;
+        Size = MAP_APPFONT ( 236 , 8 ) ;
+    };
+    OKButton PB_PATH_OK
+    {
+        Pos = MAP_APPFONT ( 75 , 100 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_PATH_ESC
+    {
+        Pos = MAP_APPFONT ( 128 , 100 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton PB_PATH_HLP
+    {
+        Pos = MAP_APPFONT ( 186 , 100 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+ErrorBox RID_SVXERR_JRE_NOT_RECOGNIZED
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message = "Der von Ihnen gewählte Order enthält keine Java-Laufzeitumgebung.\nBitte wählen Sie einen anderen Ordner." ;
+    Message [ english_us ] = "The folder you selected does not contain a Java runtime environment.\nPlease select a different folder." ;
+};
+
+ErrorBox RID_SVXERR_JRE_FAILED_VERSION
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message = "Die ausgewählte Java-Laufzeitumgebung hat nicht die erforderliche Version.\nBitte wählen Sie einen anderen Ordner." ;
+    Message [ english_us ] = "The Java runtime environment you selected is not the required version.\nPlease select a different folder." ;
+};
+
+WarningBox RID_SVX_MSGBOX_JAVA_RESTART
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message = "Damit die ausgewählte Java-Laufzeitumgebung richtig funktioniert, muss %PRODUCTNAME neugestartet werden. Bitte starten Sie %PRODUCTNAME neu." ;
+    Message [ english_us ] = "For the selected Java runtime environment to work properly, %PRODUCTNAME must be restarted. Please restart %PRODUCTNAME now." ;
+};
+
