@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:21:32 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,8 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         Selection aTmpSel( maSelection );
         aTmpSel.Justify();
         // selection is highlighted
-        for( int i = 0; i < aText.Len(); i++ )
+        int i;
+        for( i = 0; i < aText.Len(); i++ )
         {
             Rectangle aRect( aPos, Size( 10, nTH ) );
             aRect.Left() = pDX[2*i] + mnXOffset + ImplGetExtraOffset();
