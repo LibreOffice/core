@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:25:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1399,6 +1399,7 @@ void MemberList::allocList( int nCount )
 struct WatchItem
 {
     String          maName;
+    String          maDisplayName;
     SbxObjectRef    mpObject;
     MemberList      maMemberList;
 
@@ -1407,15 +1408,18 @@ struct WatchItem
     int             nDimCount;
     short*          pIndices;
 
+    WatchItem*      mpArrayParentItem;
+
     WatchItem( void )
         : nDimLevel( 0 )
         , nDimCount( 0 )
         , pIndices( NULL )
+        , mpArrayParentItem( NULL )
     {}
     ~WatchItem()
-        { clear(); }
+        { clearWatchItem(); }
 
-    void clear( bool bIncludeArrayData=true )
+    void clearWatchItem( bool bIncludeArrayData=true )
     {
         mpObject = NULL;
         maMemberList.clear();
@@ -1429,7 +1433,28 @@ struct WatchItem
         }
     }
 
+    WatchItem* GetRootItem( void );
+    SbxDimArray* GetRootArray( void );
 };
+
+WatchItem* WatchItem::GetRootItem( void )
+{
+    WatchItem* pItem = mpArrayParentItem;
+    while( pItem )
+    {
+        if( pItem->mpArray.Is() )
+            break;
+        pItem = pItem->mpArrayParentItem;
+    }
+    return pItem;
+}
+
+SbxDimArray* WatchItem::GetRootArray( void )
+{
+    WatchItem* pRootItem = GetRootItem();
+    SbxDimArray* pRet = pRootItem ? pRootItem->mpArray : NULL;
+    return pRet;
+}
 
 void WatchWindow::AddWatch( const String& rVName )
 {
@@ -1847,6 +1872,14 @@ void WatchTreeListBox::RequestingChilds( SvLBoxEntry * pParent )
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
 
     SbxDimArray* pArray = pItem->mpArray;
+    SbxDimArray* pRootArray = pItem->GetRootArray();
+    bool bArrayIsRootArray = false;
+    if( !pArray && pRootArray )
+    {
+        pArray = pRootArray;
+        bArrayIsRootArray = true;
+    }
+
     SbxObject* pObj = pItem->mpObject;
     if( pObj )
     {
@@ -1877,7 +1910,7 @@ void WatchTreeListBox::RequestingChilds( SvLBoxEntry * pParent )
         USHORT nElementCount = 0;
 
         // Loop through indices of current level
-        int nParentLevel = pItem->nDimLevel;
+        int nParentLevel = bArrayIsRootArray ? pItem->nDimLevel : 0;
         int nThisLevel = nParentLevel + 1;
         short nMin, nMax;
         pArray->GetDim( nThisLevel, nMin, nMax );
@@ -1886,26 +1919,36 @@ void WatchTreeListBox::RequestingChilds( SvLBoxEntry * pParent )
             WatchItem* pChildItem = new WatchItem();
 
             // Copy data and create name
-            String aName( pItem->maName );
-            pChildItem->maName = aName;
+            String aBaseName( pItem->maName );
+            pChildItem->maName = aBaseName;
 
-            aName += String( RTL_CONSTASCII_USTRINGPARAM( "(" ) );
-            pChildItem->mpArray = pItem->mpArray;
-            pChildItem->nDimLevel = pItem->nDimLevel + 1;
+            String aIndexStr = String( RTL_CONSTASCII_USTRINGPARAM( "(" ) );
+            // pChildItem->mpArray = pItem->mpArray;
+            pChildItem->mpArrayParentItem = pItem;
+            pChildItem->nDimLevel = nThisLevel;
             pChildItem->nDimCount = pItem->nDimCount;
             pChildItem->pIndices = new short[ pChildItem->nDimCount ];
             USHORT j;
             for( j = 0 ; j < nParentLevel ; j++ )
             {
                 short n = pChildItem->pIndices[j] = pItem->pIndices[j];
-                aName += String::CreateFromInt32( n );
-                aName += String( RTL_CONSTASCII_USTRINGPARAM( "," ) );
+                aIndexStr += String::CreateFromInt32( n );
+                aIndexStr += String( RTL_CONSTASCII_USTRINGPARAM( "," ) );
             }
             pChildItem->pIndices[ nParentLevel ] = i;
-            aName += String::CreateFromInt32( i );
-            aName += String( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
+            aIndexStr += String::CreateFromInt32( i );
+            aIndexStr += String( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
 
-            SvLBoxEntry* pChildEntry = SvTreeListBox::InsertEntry( aName, pEntry );
+            String aDisplayName;
+            WatchItem* pArrayRootItem = pChildItem->GetRootItem();
+            if( pArrayRootItem && pArrayRootItem->mpArrayParentItem )
+                aDisplayName = pItem->maDisplayName;
+            else
+                aDisplayName = aBaseName;
+            aDisplayName += aIndexStr;
+            pChildItem->maDisplayName = aDisplayName;
+
+            SvLBoxEntry* pChildEntry = SvTreeListBox::InsertEntry( aDisplayName, pEntry );
             nElementCount++;
             pChildEntry->SetUserData( pChildItem );
             MakeVisible( pChildEntry );
@@ -1946,11 +1989,15 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArra
             }
         }
         // Array?
-        else if( (pArray = pItem->mpArray) != NULL )
+        else if( (pArray = pItem->GetRootArray()) != NULL )
+        // else if( (pArray = pItem->mpArray) != NULL )
         {
             rbArrayElement = true;
-            if( pItem->nDimLevel == pItem->nDimCount )
+            if( pParentItem->nDimLevel + 1 == pParentItem->nDimCount )
+            // if( pItem->nDimLevel == pItem->nDimCount )
                 pSBX = pArray->Get( pItem->pIndices );
+            // else
+                // pSBX = pArray;
         }
     }
     else
@@ -2101,29 +2148,34 @@ static String implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eTy
     String aRetStr = getBasicTypeName( eType );
 
     SbxDimArray* pArray = pItem->mpArray;
-
-    int nDimLevel = pItem->nDimLevel;
-    int nDims = pItem->nDimCount;
-    if( nDimLevel < nDims )
+    if( !pArray )
+        pArray = pItem->GetRootArray();
+    if( pArray )
     {
-        aRetStr += '(';
-        for( int i = nDimLevel ; i < nDims ; i++ )
+        int nDimLevel = pItem->nDimLevel;
+        int nDims = pItem->nDimCount;
+        if( nDimLevel < nDims )
         {
-            short nMin, nMax;
-            pArray->GetDim( i+1, nMin, nMax );
-            aRetStr += String::CreateFromInt32( nMin );
-            aRetStr += String( RTL_CONSTASCII_USTRINGPARAM( " to " ) );
-            aRetStr += String::CreateFromInt32( nMax );
-            if( i < nDims - 1 )
-                aRetStr += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
+            aRetStr += '(';
+            for( int i = nDimLevel ; i < nDims ; i++ )
+            {
+                short nMin, nMax;
+                pArray->GetDim( i+1, nMin, nMax );
+                aRetStr += String::CreateFromInt32( nMin );
+                aRetStr += String( RTL_CONSTASCII_USTRINGPARAM( " to " ) );
+                aRetStr += String::CreateFromInt32( nMax );
+                if( i < nDims - 1 )
+                    aRetStr += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
+            }
+            aRetStr += ')';
         }
-        aRetStr += ')';
     }
     return aRetStr;
 }
 
 
-inline void implEnableChildren( SvLBoxEntry* pEntry, bool bEnable )
+void implEnableChildren( SvLBoxEntry* pEntry, bool bEnable )
+// inline void implEnableChildren( SvLBoxEntry* pEntry, bool bEnable )
 {
     if( bEnable )
     {
@@ -2163,7 +2215,9 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
             // Array? If no end node create type string
             if( bArrayElement && pItem->nDimLevel < pItem->nDimCount )
             {
-                SbxDataType eType = pItem->mpArray->GetType();
+                SbxDimArray* pRootArray = pItem->GetRootArray();
+                SbxDataType eType = pRootArray->GetType();
+                // SbxDataType eType = pItem->mpArray->GetType();
                 aTypeStr = implCreateTypeStringForDimArray( pItem, eType );
                 implEnableChildren( pEntry, true );
             }
@@ -2213,7 +2267,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         if( pItem->mpObject != NULL )
                         {
                             bCollapse = true;
-                            pItem->clear( false );
+                            pItem->clearWatchItem( false );
 
                             implEnableChildren( pEntry, false );
                         }
@@ -2259,13 +2313,13 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         else if( pNewArray == NULL || pOldArray == NULL )
                             bArrayChanged = true;
 
+                        if( pNewArray )
+                            implEnableChildren( pEntry, true );
 
-                        if( bArrayChanged )
+                        // #i37227 Clear always and replace array
+                        if( pNewArray != pOldArray )
                         {
-                            if( pOldArray != NULL )
-                                bCollapse = true;
-
-                            pItem->clear();
+                            pItem->clearWatchItem( false );
                             if( pNewArray )
                             {
                                 implEnableChildren( pEntry, true );
@@ -2274,9 +2328,11 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                                 USHORT nDims = pNewArray->GetDims();
                                 pItem->nDimLevel = 0;
                                 pItem->nDimCount = nDims;
-                                pItem->pIndices = new short[ nDims ];
                             }
                         }
+                        if( bArrayChanged && pOldArray != NULL )
+                            bCollapse = true;
+
                         aTypeStr = implCreateTypeStringForDimArray( pItem, eType );
                     }
                     else
@@ -2287,7 +2343,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     if( pItem->mpObject != NULL )
                     {
                         bCollapse = true;
-                        pItem->clear( false );
+                        pItem->clearWatchItem( false );
 
                         implEnableChildren( pEntry, false );
                     }
