@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: od $ $Date: 2002-12-03 15:21:46 $
+ *  last change: $Author: os $ $Date: 2002-12-04 12:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,12 @@ public:
         @author OD
     */
     void AdjustPreviewToNewZoom( const sal_uInt16 nZoomFactor );
+    const Size&                GetPreviewDocSize() const
+                                    { return maPreviewDocSize;}
+
+    const Rectangle&           GetPaintedPreviewDocRect() const
+                                    { return maPaintedPreviewDocRect;}
+    void                       Scroll(long nXMove, long nYMove);
 
 #ifdef ACCESSIBLE_LAYOUT
     virtual ::com::sun::star::uno::Reference<
@@ -235,7 +241,7 @@ public:
     TYPEINFO();
 
     inline Window*          GetFrameWindow() const { return &(GetViewFrame())->GetWindow(); }
-    inline ViewShell&       GetViewShell() const { return *aViewWin.GetViewShell(); }
+    inline ViewShell*       GetViewShell() const { return aViewWin.GetViewShell(); }
     inline const Rectangle& GetVisArea() const { return aVisArea; }
     inline void             GrabFocusViewWin() { aViewWin.GrabFocus(); }
     inline void             RepaintCoreRect( const SwRect& rRect )
@@ -248,8 +254,8 @@ public:
 
     inline void     AdjustEditWin();
 
-    void            VScrollViewSzChg();
-    void            VScrollDocSzChg();
+    void            ScrollViewSzChg();
+    void            ScrollDocSzChg();
     void            ShowHScrollbar(sal_Bool bShow);
     sal_Bool        IsHScrollbarVisible()const;
 
