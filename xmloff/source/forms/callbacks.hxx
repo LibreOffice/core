@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 07:35:35 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 13:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,15 @@ namespace xmloff
                                             getServiceFactory() = 0;
         virtual SvXMLImport&                getGlobalContext() = 0;
 
+        virtual const SvXMLStyleContext*    getStyleElement(const ::rtl::OUString& _rStyleName) const = 0;
+
+        /** applies the given number style to the given object
+        */
+        virtual void applyControlNumberStyle(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::rtl::OUString& _rControlNumerStyleName
+        ) = 0;
+
         virtual void                        enterEventContext() = 0;
         virtual void                        leaveEventContext() = 0;
     };
@@ -185,6 +194,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2002/10/25 07:35:35  fs
+ *  #104402# +IFormsExportContext::getObjectStyleName
+ *
  *  Revision 1.7  2001/02/01 09:46:47  fs
  *  no own style handling anymore - the shape exporter is responsible for our styles now
  *
