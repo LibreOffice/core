@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-11 12:53:45 $
+ *  last change: $Author: cl $ $Date: 2002-11-13 15:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2046,10 +2046,19 @@ FASTBOOL SdrPage::HasTransparentObjects( BOOL bCheckForAlphaChannel ) const
 }
 
 /** returns an averaged background color of this page */
-Color SdrPage::GetBackgroundColor() const
+Color SdrPage::GetBackgroundColor( SdrPageView* pView ) const
 {
-    svx::ColorConfig aColorConfig;
-    Color aColor( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
+    Color aColor;
+
+    if( (NULL == pView) || (pView->GetApplicationDocumentColor() == COL_AUTO) )
+    {
+        svx::ColorConfig aColorConfig;
+        aColor = aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor;
+    }
+    else
+    {
+        aColor = pView->GetApplicationDocumentColor();
+    }
 
     // first, see if we have a background object
     SdrObject* pBackgroundObj = NULL;
@@ -2083,6 +2092,12 @@ Color SdrPage::GetBackgroundColor() const
     }
 
     return aColor;
+}
+
+/** *deprecated, use GetBackgroundColor with SdrPageView */
+Color SdrPage::GetBackgroundColor() const
+{
+    return GetBackgroundColor( NULL );
 }
 
 #ifdef GCC

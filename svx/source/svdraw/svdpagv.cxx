@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-08 15:44:12 $
+ *  last change: $Author: cl $ $Date: 2002-11-13 15:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,7 +656,8 @@ SdrPageView::SdrPageView(SdrPage* pPage1, const Point& rOffs, SdrView& rNewView)
     rView(rNewView),
     //aRedraw(1024,16,16),
     aOfs(rOffs),
-    pPaintingPageObj( NULL )
+    pPaintingPageObj( NULL ),
+    maDocumentColor( COL_AUTO )     // #103911# col_auto color lets the view takes the default SvxColorConfig entry
 {
     DBG_CTOR(SdrPageView,NULL);
     pDragPoly0=new XPolyPolygon;
@@ -1458,10 +1459,19 @@ void SdrPageView::DrawPaper(OutputDevice& rOut)
 {
     if( pPage )
     {
-        const svx::ColorConfig aColorConfig;
+        // #103911# use color that was set on this view as background if present
+        if( maDocumentColor != COL_AUTO )
+        {
+            rOut.SetFillColor( maDocumentColor );
+        }
+        else
+        {
+            const svx::ColorConfig aColorConfig;
+            rOut.SetFillColor( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
+        }
+
 
         rOut.SetLineColor();
-        rOut.SetFillColor( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
         rOut.DrawRect( GetPageRect() );
     }
 }
@@ -2322,6 +2332,17 @@ SvStream& operator>>(SvStream& rIn, SdrPageView& rPageView)
 void SdrPageView::SetApplicationBackgroundColor(Color aBackgroundColor)
 {
     maBackgroundColor = aBackgroundColor;
+}
+
+// #103911# Set document color for svx at SdrPageViews
+void SdrPageView::SetApplicationDocumentColor(Color aDocumentColor)
+{
+    maDocumentColor = aDocumentColor;
+}
+
+Color SdrPageView::GetApplicationDocumentColor() const
+{
+    return maDocumentColor;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

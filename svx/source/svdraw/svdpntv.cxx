@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-08 15:45:10 $
+ *  last change: $Author: cl $ $Date: 2002-11-13 15:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2155,6 +2155,16 @@ void SdrPaintView::SetApplicationBackgroundColor(Color aBackgroundColor)
     {
         SdrPageView* pPageView = GetPageViewPvNum(a);
         pPageView->SetApplicationBackgroundColor(aBackgroundColor);
+    }
+}
+
+// #103911# Set document color for svx at SdrPageViews
+void SdrPaintView::SetApplicationDocumentColor(Color aDocumentColor)
+{
+    for(sal_uInt16 a(0); a < GetPageViewCount(); a++)
+    {
+        SdrPageView* pPageView = GetPageViewPvNum(a);
+        pPageView->SetApplicationDocumentColor(aDocumentColor);
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-26 14:10:11 $
+ *  last change: $Author: cl $ $Date: 2002-11-13 15:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ FASTBOOL SdrPageObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                 SdrOutliner& rOutl=pModel->GetDrawOutliner(NULL);
                 aBackgroundColor = rOutl.GetBackgroundColor();
 
-                rOutl.SetBackgroundColor( pMainPage->GetBackgroundColor() );
+                rOutl.SetBackgroundColor( pMainPage->GetBackgroundColor(pPV) );
             }
 
             if (pMainPage!=NULL) {
