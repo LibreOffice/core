@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:05:10 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 15:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,8 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_SHOWTREEVIEWBUTTON, "ShowTreeViewButton");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CURRENTQUERY, "CurrentQuery");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_QUERYDESIGNVIEW, "QueryDesignView");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_LAYOUTINFORMATION, "LayoutInformation");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CURRENTTABLE, "CurrentTable");
+
 
 //============================================================
 //= service names
@@ -209,6 +211,7 @@ IMPLEMENT_CONSTASCII_USTRING(SERVICE_FRAME_DESKTOP, "com.sun.star.frame.Desktop"
 //= URLs
 //============================================================
 IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_QUERYDESIGN, ".component:DB/QueryDesign");
+IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_TABLEDESIGN, ".component:DB/TableDesign");
 
 //============================================================
 //= configuration key names
