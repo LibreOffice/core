@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:26:46 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@ FloatingWindow RID_SVXTBX_GRFFILTER
     {
         SVLook = TRUE ;
         MenuStrings = TRUE ;
-        Align = BOXALIGN_TOP; 
-        LineCount = 3; 
+        Align = BOXALIGN_TOP;
+        LineCount = 3;
         ItemList =
         {
             ToolBoxItem
@@ -425,7 +425,7 @@ String RID_SVXSTR_GRAFCROP
     Text[ english_us ] = "Crop";
     Text[ portuguese ] = "Recortar";
     Text[ russian ] = "Кадрировать";
-    Text[ greek ] = "РспубсмпгЮ";
+    Text[ greek ] = "РесйкпрЮ";
     Text[ dutch ] = "Uitknippen";
     Text[ french ] = "Rogner";
     Text[ spanish ] = "Recortar";
@@ -450,6 +450,7 @@ String RID_SVXSTR_GRAFCROP
 };
 
 // ********************************************************************** EOF
+
 
 
 
