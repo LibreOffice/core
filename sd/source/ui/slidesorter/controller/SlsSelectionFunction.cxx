@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:34:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,8 +219,8 @@ BOOL SelectionFunction::MouseButtonDown (const MouseEvent& rEvent)
                 else
                 {
                     // Without the shift key the selection is set to only
-                    // the page object under the mouse. The center pane
-                    // is switched to the edit view that shows the elected
+                    // the page object under the mouse. The center pane is
+                    // switched to the edit view that shows the selected
                     // slide when the slide sorter is not shown in the
                     // center pane.
                     if ( ! bIsMainView)
@@ -356,6 +356,14 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
             aDragTimer.Stop();
     }
 
+    // We handle three different cases when the mouse moves with pressed
+    // left button:
+    // 1. When the mouse leaves the window then we start an external
+    // drag-and-drop
+    // operation.
+    // 2. An existing selection frame is updated.
+    // 3. When over a page we start or update an internal drag-and-drop
+    // operation.
     if (rEvent.GetButtons() == MOUSE_LEFT)
     {
         mrController.GetScrollBarManager().AutoScroll (aMousePosition);
@@ -365,16 +373,22 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
             && mbPageHit
             && rOverlay.GetSubstitutionOverlay().IsShowing())
         {
-            // Mouse left the window with pressed left button.  Make it a
+            // 1. Mouse left the window with pressed left button.  Make it a
             // drag.
             StartDrag();
+        }
+        else if (mbDragSelection)
+        {
+            // 2. Update the selection frame.
+            mrController.GetView().MovEncirclement (aMouseModelPosition);
         }
         else if ((mbPageHit
                 && ! rEvent.IsShift()
                 || rOverlay.GetSubstitutionOverlay().IsShowing())
+            && mrController.GetModel().GetEditMode() == EM_PAGE
             && mrController.GetModel().GetPageCount() > 0)
         {
-            // Show the substitution of the page objects at the current
+            // 3. Show the substitution of the page objects at the current
             // mouse position.
             if (rOverlay.GetSubstitutionOverlay().IsShowing())
             {
@@ -402,10 +416,6 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
             rOverlay.GetInsertionIndicatorOverlay().Show();
 
             bResult = TRUE;
-        }
-        else if (mbDragSelection)
-        {
-            mrController.GetView().MovEncirclement (aMouseModelPosition);
         }
     }
 
@@ -453,7 +463,7 @@ BOOL SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
             int nSelectedPageCount (rSelector.GetSelectedPageCount());
             model::SlideSorterModel& rModel (mrController.GetModel());
             rModel.SynchronizeDocumentSelection();
-            if (rModel.GetDocument()->MovePages (nDocumentIndex))
+            if (mrController.MoveSelectedPages(nDocumentIndex))
             {
                 // Pages where moved.  Update the selection and make the
                 // first selected page the current page.
