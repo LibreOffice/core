@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:27:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,7 @@ Window* SvxFmTbxCtlRecText::CreateItemWindow( Window* pParent )
     pFixedText->SetText( aText );
     aSize.Width() += 6;
     pFixedText->SetSizePixel( aSize );
-
+    pFixedText->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
     return pFixedText;
 }
 
@@ -506,7 +506,7 @@ Window* SvxFmTbxCtlRecFromText::CreateItemWindow( Window* pParent )
     aSize.Width() += 12;
     pFixedText->SetText( aText );
     pFixedText->SetSizePixel( aSize );
-
+    pFixedText->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
     return pFixedText;
 }
 
@@ -539,6 +539,7 @@ Window* SvxFmTbxCtlRecTotal::CreateItemWindow( Window* pParent )
     Size aSize( pFixedText->GetTextWidth( aSample ), pFixedText->GetTextHeight( ) );
     aSize.Width() += 12;
     pFixedText->SetSizePixel( aSize );
+    pFixedText->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
     return pFixedText;
 }
 
