@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-16 09:27:42 $
+ *  last change: $Author: jp $ $Date: 2001-05-03 11:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1081,6 +1081,14 @@ sRTF_ACCDOT,        RTF_ACCDOT,
 sRTF_ACCCOMMA,      RTF_ACCCOMMA,
 sRTF_TWOINONE,      RTF_TWOINONE,
 sRTF_HORZVERT,      RTF_HORZVERT,
+sRTF_FAHANG,        RTF_FAHANG,
+sRTF_FAVAR,         RTF_FAVAR,
+sRTF_FACENTER,      RTF_FACENTER,
+sRTF_FAROMAN,       RTF_FAROMAN,
+sRTF_FAFIXED,       RTF_FAFIXED,
+sRTF_NOCWRAP,       RTF_NOCWRAP,
+sRTF_NOOVERFLOW,    RTF_NOOVERFLOW,
+sRTF_ASPALPHA,      RTF_ASPALPHA,
 
 // SWG spezifische Attribute
 sRTF_GRFALIGNV,     RTF_GRF_ALIGNV,

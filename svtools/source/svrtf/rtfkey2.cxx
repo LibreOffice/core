@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkey2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-16 09:27:42 $
+ *  last change: $Author: jp $ $Date: 2001-05-03 11:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1060,6 +1060,14 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ACCDOT,    "\\accdot" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ACCCOMMA,  "\\acccomma" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TWOINONE,  "\\twoinone" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_HORZVERT,  "\\horzvert" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_FAHANG,    "\\fahang" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_FAVAR,     "\\favar" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_FACENTER,  "\\facenter" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_FAROMAN,   "\\faroman" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_FAFIXED,   "\\fafixed" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_NOCWRAP,   "\\nocwrap" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_NOOVERFLOW,"\\nooverflow" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ASPALPHA,  "\\aspalpha" );
 
 // SWG spezifische Attribute
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_GRFALIGNV, "\\grfalignv" );
