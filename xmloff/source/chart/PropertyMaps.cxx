@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
+ *  last change: $Author: cl $ $Date: 2001-08-10 13:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,10 +310,14 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
     const ::std::vector< XMLPropertyState > *pProperties,
     sal_uInt32 nIdx ) const
 {
+    sal_Bool bHandled = sal_False;
+
     sal_Int32 nContextId = maPropMapper->GetEntryContextId( rProperty.mnIndex );
 
     if( nContextId )
     {
+        bHandled = sal_True;
+
         rtl::OUString sAttrName = maPropMapper->GetEntryXMLName( rProperty.mnIndex );
         sal_uInt16 nNameSpace = maPropMapper->GetEntryNameSpace( rProperty.mnIndex );
         rtl::OUStringBuffer sValueBuffer;
@@ -385,7 +389,17 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                     sValueBuffer.append( mrExport.AddEmbeddedGraphicObject( aURLStr ));
                 }
                 break;
+
+            case XML_SCH_CONTEXT_SPECIAL_NUMBER_FORMAT:
+                {
+                    // just for import
+                    break;
+                }
+            default:
+                bHandled = sal_False;
+                break;
         }
+
         if( sValueBuffer.getLength())
         {
             sValue = sValueBuffer.makeStringAndClear();
@@ -393,7 +407,8 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
             rAttrList.AddAttribute( sAttrName, msCDATA, sValue );
         }
     }
-    else
+
+    if( !bHandled )
     {
         // call parent
         SvXMLExportPropertyMapper::handleSpecialItem( rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx );
@@ -522,7 +537,10 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                 break;
         }
     }
-    else
+
+
+    // if we didn't handle it, the parent should
+    if( !bRet )
     {
         // call parent
         bRet = SvXMLImportPropertyMapper::handleSpecialItem( rProperty, rProperties, rValue, rUnitConverter, rNamespaceMap );
