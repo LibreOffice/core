@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleTableView.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $
+ *  last change: $Author: pjunck $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ public class SwAccessibleTableView extends TestCase {
         oObj = at.SearchedContext;
 
         log.println("ImplementationName " + utils.getImplName(oObj));
-        //at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
