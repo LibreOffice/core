@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-14 12:06:24 $
+ *  last change: $Author: fme $ $Date: 2002-04-22 12:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,15 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
                 pFnt->SetProportion( nPropFont );
             nStartIndex = nEndIndex = nPos = 0;
             nChgCnt = 0;
+
+            // Achtung!
+            // resetting the font here makes it necessary to apply any
+            // changes for extended input directly to the font
+            if ( pRedln && pRedln->ExtOn() )
+            {
+                pRedln->UpdateExtFont( *pFnt );
+                ++nChgCnt;
+            }
         }
         SeekFwd( nNewPos );
     }

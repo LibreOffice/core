@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 09:17:43 $
+ *  last change: $Author: fme $ $Date: 2002-04-22 12:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
             {
                 pArr = &pExtInp->GetAttrs();
                 nInputStt = pExtInp->Start()->nContent.GetIndex();
+                Seek( 0 );
             }
 
             pRedln = new SwRedlineItr( rTxtNode, *pFnt, aAttrHandler, nRedlPos,

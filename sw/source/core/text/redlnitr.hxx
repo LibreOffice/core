@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-22 11:01:58 $
+ *  last change: $Author: fme $ $Date: 2002-04-22 12:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ public:
     short Enter( SwFont& rFnt, xub_StrLen nNew );
     xub_StrLen Next( xub_StrLen nNext );
     SwFont* GetFont()  { return pFnt; }
+    void UpdateFont( SwFont &rFnt ) { ActualizeFont( rFnt, rArr[ nPos - nStart ] ); }
 };
 
 class SwRedlineItr
@@ -143,7 +144,9 @@ public:
     inline sal_Bool LeaveExtend( SwFont& rFnt, xub_StrLen nNew )
         { return pExt->Leave(rFnt, nNew ); }
     inline sal_Bool ExtOn() { if( pExt ) return pExt->IsOn(); return sal_False; }
-
+    inline void UpdateExtFont( SwFont &rFnt ) {
+        ASSERT( ExtOn(), "UpdateExtFont without ExtOn" )
+        pExt->UpdateFont( rFnt ); }
 };
 
 
