@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-19 17:17:19 $
+ *  last change: $Author: mba $ $Date: 2002-03-27 10:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,7 +592,7 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
             delete pStream;
             INetURLObject aObj( SvtPathOptions().GetConfigPath() );
             aObj.insertName( DEFINE_CONST_UNICODE( "slots.cfg" ) );
-            pStream = ::utl::UcbStreamHelper::CreateStream( aUserObj.GetMainURL(), STREAM_STD_READ );
+            pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), STREAM_STD_READ );
         }
 
         BOOL bSlotsEnabled = SvtInternalOptions().SlotCFGEnabled();
