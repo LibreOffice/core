@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 13:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,7 @@ BOOL ODbaseIndex::DropImpl()
     {
         // Verweist der Key auf ein Indexfile?...
         aKeyName = aInfFile.GetKeyName( nKey );
-        if (aKeyName.Copy(0,3) == "ndx")
+        if (aKeyName.Copy(0,3) == "NDX")
         {
             if(sEntry == String(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding()))
             {
