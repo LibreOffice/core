@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdet2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:38:28 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ bool IsDocShellRegistered()
     return SvtModuleOptions().IsWriter();
 }
 
-extern char __FAR_DATA sHTML[];
+extern const char __FAR_DATA sHTML[];
 
 //-------------------------------------------------------------------------
 
