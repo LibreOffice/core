@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: tl $ $Date: 2001-02-19 10:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #ifndef _COM_SUN_STAR_UTIL_XREPLACEDESCRIPTOR_HPP_
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
 #include <svtools/memberid.hrc>
 //ASDBG #include <usr/uno.hxx>
 
@@ -93,6 +97,13 @@
 
 #include <sfxuno.hxx>
 
+//using namespace uno;
+using namespace rtl;
+using namespace com::sun::star::util;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::i18n;
+
+
 // STATIC DATA -----------------------------------------------------------
 
 TYPEINIT1_AUTOFACTORY(SvxSearchItem, SfxPoolItem);
@@ -103,26 +114,22 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
 
+    aSearchOpt      (   SearchAlgorithms_ABSOLUTE,
+                        SearchFlags::ALL_IGNORE_CASE | SearchFlags::LEV_RELAXED,
+                          OUString(),
+                          OUString(),
+                          Locale(),
+                          2, 2, 2,
+                          0x00000000 ),
     nCommand        ( 0 ),
-    aSearchString   () ,
-    aReplaceString  (),
-    bWordOnly       ( sal_False ),
-    bExact          ( sal_False ),
     bBackward       ( sal_False ),
-    bSelection      ( sal_False ),
-    bRegExp         ( sal_False ),
     bPattern        ( sal_False ),
     bContent        ( sal_False ),
     eFamily         ( SFX_STYLE_FAMILY_PARA ),
     bRowDirection   ( sal_True ),
     bAllTables      ( sal_False ),
     nCellType       ( SVX_SEARCHIN_FORMULA ),
-    nAppFlag        ( SVX_SEARCHAPP_WRITER ),
-    bLevenshtein    ( sal_False ),
-    bLEVRelaxed     ( sal_True ),
-    nLEVOther       ( 2 ),
-    nLEVShorter     ( 2 ),
-    nLEVLonger      ( 2 )
+    nAppFlag        ( SVX_SEARCHAPP_WRITER )
 {
 }
 
@@ -132,55 +139,64 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
 
     SfxPoolItem ( rItem ),
 
+    aSearchOpt      ( rItem.aSearchOpt ),
     nCommand        ( rItem.nCommand ),
-    aSearchString   ( rItem.aSearchString ),
-    aReplaceString  ( rItem.aReplaceString ),
-    bWordOnly       ( rItem.bWordOnly ),
-    bExact          ( rItem.bExact ),
     bBackward       ( rItem.bBackward ),
-    bSelection      ( rItem.bSelection ),
-    bRegExp         ( rItem.bRegExp ),
     bPattern        ( rItem.bPattern ),
     bContent        ( rItem.bContent ),
     eFamily         ( rItem.eFamily ),
     bRowDirection   ( rItem.bRowDirection ),
     bAllTables      ( rItem.bAllTables ),
     nCellType       ( rItem.nCellType ),
-    nAppFlag        ( rItem.nAppFlag ),
-    bLevenshtein    ( rItem.bLevenshtein  ),
-    bLEVRelaxed     ( rItem.bLEVRelaxed  ),
-    nLEVOther       ( rItem.nLEVOther     ),
-    nLEVShorter     ( rItem.nLEVShorter ),
-    nLEVLonger      ( rItem.nLEVLonger )
+    nAppFlag        ( rItem.nAppFlag )
 {
 }
 
 // -----------------------------------------------------------------------
+SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *pPool) const
+{
+    return new SvxSearchItem(*this);
+}
+
+// -----------------------------------------------------------------------
+
+//! used below
+static BOOL operator == ( const Locale& rItem1, const Locale& rItem2 )
+{
+    return rItem1.Language  == rItem2.Language  &&
+           rItem1.Country   == rItem2.Country   &&
+           rItem1.Variant   == rItem2.Variant;
+}
+
+//! used below
+static BOOL operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
+{
+    return rItem1.algorithmType         == rItem2.algorithmType &&
+           rItem1.searchFlag            == rItem2.searchFlag    &&
+           rItem1.searchString          == rItem2.searchString  &&
+           rItem1.replaceString         == rItem2.replaceString &&
+           rItem1.Locale                == rItem2.Locale        &&
+           rItem1.changedChars          == rItem2.changedChars  &&
+           rItem1.deletedChars          == rItem2.deletedChars  &&
+           rItem1.insertedChars         == rItem2.insertedChars &&
+           rItem1.transliterateFlags    == rItem2.transliterateFlags;
+}
+
 
 int SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
-
-    return ( nCommand       == ( (SvxSearchItem&)rItem ).nCommand )       &&
-           ( aSearchString  == ( (SvxSearchItem&)rItem ).aSearchString )  &&
-           ( aReplaceString == ( (SvxSearchItem&)rItem ).aReplaceString ) &&
-           ( bWordOnly      == ( (SvxSearchItem&)rItem ).bWordOnly )      &&
-           ( bExact         == ( (SvxSearchItem&)rItem ).bExact )         &&
-           ( bBackward      == ( (SvxSearchItem&)rItem ).bBackward )      &&
-           ( bSelection     == ( (SvxSearchItem&)rItem ).bSelection )     &&
-           ( bRegExp        == ( (SvxSearchItem&)rItem ).bRegExp )        &&
-           ( bPattern       == ( (SvxSearchItem&)rItem ).bPattern )       &&
-           ( bContent       == ( (SvxSearchItem&)rItem ).bContent )       &&
-           ( eFamily        == ( (SvxSearchItem&)rItem ).eFamily )        &&
-           ( bRowDirection  == ( (SvxSearchItem&)rItem ).bRowDirection )  &&
-           ( bAllTables     == ( (SvxSearchItem&)rItem ).bAllTables )     &&
-           ( nCellType      == ( (SvxSearchItem&)rItem ).nCellType )      &&
-           ( nAppFlag       == ( (SvxSearchItem&)rItem ).nAppFlag )       &&
-           ( bLevenshtein   == ( (SvxSearchItem&)rItem ).bLevenshtein  )  &&
-           ( bLEVRelaxed    == ( (SvxSearchItem&)rItem ).bLEVRelaxed  )   &&
-           ( nLEVOther      == ( (SvxSearchItem&)rItem ).nLEVOther   )    &&
-           ( nLEVShorter    == ( (SvxSearchItem&)rItem ).nLEVShorter )    &&
-           ( nLEVLonger     == ( (SvxSearchItem&)rItem ).nLEVLonger  );
+    const SvxSearchItem &rSItem = (SvxSearchItem &) rItem;
+    return ( nCommand       == rSItem.nCommand )        &&
+           ( bBackward      == rSItem.bBackward )       &&
+           ( bPattern       == rSItem.bPattern )        &&
+           ( bContent       == rSItem.bContent )        &&
+           ( eFamily        == rSItem.eFamily )         &&
+           ( bRowDirection  == rSItem.bRowDirection )   &&
+           ( bAllTables     == rSItem.bAllTables )      &&
+           ( nCellType      == rSItem.nCellType )       &&
+           ( nAppFlag       == rSItem.nAppFlag )        &&
+           ( aSearchOpt     == rSItem.aSearchOpt );
 }
 
 
@@ -195,48 +211,6 @@ SfxItemPresentation SvxSearchItem::GetPresentation
     const International *
 )   const
 {
-/*
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
-            return SFX_ITEM_PRESENTATION_NONE;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            rText = SVX_RESSTR(RID_SVXITEMS_SEARCHCMD_BEGIN + nCommand);
-            rText += cpDelim;
-            rText += aSearchString;
-            rText += cpDelim;
-            rText += aReplaceString;
-            rText += cpDelim;
-            rText += ::GetBoolString( bWordOnly );
-            rText += cpDelim;
-            rText += ::GetBoolString( bExact );
-            rText += cpDelim;
-            rText += ::GetBoolString( bBackward );
-            rText += cpDelim;
-            rText += ::GetBoolString( bSelection );
-            rText += cpDelim;
-            rText += ::GetBoolString( bRegExp );
-            rText += cpDelim;
-            rText += ::GetBoolString( bPattern );
-            rText += cpDelim;
-            rText += ::GetBoolString( bContent );
-            rText += cpDelim;
-            rText += SVX_RESSTR(RID_SVXITEMS_SEARCHSTYLE_BEGIN + (sal_uInt16)eFamily );
-            rText += cpDelim;
-            rText += ::GetBoolString( bRowDirection );
-            rText += cpDelim;
-            rText += ::GetBoolString( bAllTables );
-            rText += cpDelim;
-            rText += SVX_RESSTR(RID_SVXITEMS_SEARCHIN_BEGIN + nCellType);
-            rText += cpDelim;
-            rText += SVX_RESSTR(RID_SVXITEMS_SEARCHAPP_BEGIN + nAppFlag);
-            return ePres;
-        }
-    }
- */
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -303,4 +277,73 @@ void SvxSearchItem::SetToDescriptor( ::com::sun::star::uno::Reference< ::com::su
     rDescr->setPropertyValue( DEFINE_CONST_UNICODE("SearchSimilarityAdd"), aAny );
 }
 
+
+void SvxSearchItem::SetMatchHalfFullWidthForms( sal_Bool bVal )
+{
+    if (bVal)
+        aSearchOpt.transliterateFlags |=  TransliterationModules_IGNORE_WIDTH;
+    else
+        aSearchOpt.transliterateFlags &= ~TransliterationModules_IGNORE_WIDTH;
+}
+
+
+void SvxSearchItem::SetWordOnly( sal_Bool bVal )
+{
+    if (bVal)
+        aSearchOpt.searchFlag |=  SearchFlags::NORM_WORD_ONLY;
+    else
+        aSearchOpt.searchFlag &= ~SearchFlags::NORM_WORD_ONLY;
+}
+
+
+void SvxSearchItem::SetExact( sal_Bool bVal )
+{
+    // Exact == !ALL_IGNORE_CASE
+    if (!bVal)
+        aSearchOpt.searchFlag |=  SearchFlags::ALL_IGNORE_CASE;
+    else
+        aSearchOpt.searchFlag &= ~SearchFlags::ALL_IGNORE_CASE;
+}
+
+
+void SvxSearchItem::SetSelection( sal_Bool bVal )
+{
+    if (bVal)
+    {
+        aSearchOpt.searchFlag |=  (SearchFlags::REG_NOT_BEGINOFLINE |
+                                   SearchFlags::REG_NOT_ENDOFLINE);
+    }
+    else
+    {
+        aSearchOpt.searchFlag &= ~(SearchFlags::REG_NOT_BEGINOFLINE |
+                                   SearchFlags::REG_NOT_ENDOFLINE);
+    }
+}
+
+
+void SvxSearchItem::SetRegExp( sal_Bool bVal )
+{
+    if (bVal)
+        aSearchOpt.algorithmType = SearchAlgorithms_REGEXP;
+    else
+        aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
+}
+
+
+void SvxSearchItem::SetLEVRelaxed( sal_Bool bVal )
+{
+    if (bVal)
+        aSearchOpt.searchFlag |=  SearchFlags::LEV_RELAXED;
+    else
+        aSearchOpt.searchFlag &= ~SearchFlags::LEV_RELAXED;
+}
+
+
+void SvxSearchItem::SetLevenshtein( sal_Bool bVal )
+{
+    if (bVal)
+        aSearchOpt.algorithmType = SearchAlgorithms_APPROXIMATE;
+    else
+        aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
+}
 
