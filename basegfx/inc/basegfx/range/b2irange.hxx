@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2irange.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:39:17 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,8 +250,13 @@ namespace basegfx
             maRangeX.expand(rRange.maRangeX);
             maRangeY.expand(rRange.maRangeY);
         }
-    };
 
+        void grow(sal_Int32 nValue)
+        {
+            maRangeX.grow(nValue);
+            maRangeY.grow(nValue);
+        }
+    };
 } // end of namespace basegfx
 
 #endif /* _BGFX_RANGE_B2IRANGE_HXX */
