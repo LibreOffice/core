@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2001-02-15 06:50:52 $
+ *  last change: $Author: dvo $ $Date: 2001-02-16 16:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,6 +655,7 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
 {
     // RES_COL
     M_E( "TextColumns",         STYLE,  columns,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_TEXTCOLUMNS ),
+
     // RES_BACKGROUND
     M_E( "BackColor",   FO, background_color,       XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
     M_E( "BackTransparent", FO, background_color,       XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
@@ -662,6 +663,25 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
     M_E( "BackGraphicFilter",STYLE, filter_name,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_FILTER ),
     M_E( "BackGraphicURL",  STYLE,  background_image,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_URL ),
     M_E( "IsProtected",         STYLE,  protect,    XML_TYPE_BOOL, 0 ),
+
+    // section footnote settings
+    M_E( "FootnoteIsOwnNumbering",      TEXT,   _empty, MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL,    CTF_SECTION_FOOTNOTE_NUM_OWN ),
+    M_E( "FootnoteIsRestartNumbering",  TEXT,   _empty, MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL,    CTF_SECTION_FOOTNOTE_NUM_RESTART ),
+    M_E( "FootnoteRestartNumberingAt",  TEXT,   _empty, MID_FLAG_SPECIAL_ITEM|XML_TYPE_NUMBER16,CTF_SECTION_FOOTNOTE_NUM_RESTART_AT ),
+    M_E( "FootnoteNumberingType",       TEXT,   _empty, MID_FLAG_SPECIAL_ITEM|XML_TYPE_NUMBER16,CTF_SECTION_FOOTNOTE_NUM_TYPE ),
+    M_E( "FootnoteNumberingPrefix",     TEXT,   _empty, MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_FOOTNOTE_NUM_PREFIX ),
+    M_E( "FootnoteNumberingSuffix",     TEXT,   _empty, MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_FOOTNOTE_NUM_SUFFIX ),
+    M_E( "FootnoteIsCollectAtTextEnd",  TEXT,   footnotes_configuration,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_BOOL,    CTF_SECTION_FOOTNOTE_END ),
+
+    // section footnote settings
+    M_E( "EndnoteIsOwnNumbering",       TEXT,   _empty,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL,    CTF_SECTION_ENDNOTE_NUM_OWN ),
+    M_E( "EndnoteIsRestartNumbering",   TEXT,   _empty,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL,    CTF_SECTION_ENDNOTE_NUM_RESTART ),
+    M_E( "EndnoteRestartNumberingAt",   TEXT,   _empty,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_NUMBER16,CTF_SECTION_ENDNOTE_NUM_RESTART_AT ),
+    M_E( "EndnoteNumberingType",        TEXT,   _empty,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_NUMBER16,CTF_SECTION_ENDNOTE_NUM_TYPE ),
+    M_E( "EndnoteNumberingPrefix",      TEXT,   _empty,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_ENDNOTE_NUM_PREFIX ),
+    M_E( "EndnoteNumberingSuffix",      TEXT,   _empty,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_ENDNOTE_NUM_SUFFIX ),
+    M_E( "EndnoteIsCollectAtTextEnd",   TEXT,   endnotes_configuration,     MID_FLAG_ELEMENT_ITEM|XML_TYPE_BOOL,    CTF_SECTION_ENDNOTE_END ),
+
     { 0, 0, 0, 0 }
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:28:36 $
+ *  last change: $Author: dvo $ $Date: 2001-02-16 16:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _XMLOFF_XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
+#ifndef _XMLOFF_XMLSECTIONFOOTNOTECONFIGEXPORT_HXX
+#include "XMLSectionFootnoteConfigExport.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -163,6 +166,18 @@ void XMLTextExportPropertySetMapper::handleElementItem(
         }
         break;
 
+    case CTF_SECTION_FOOTNOTE_END:
+        XMLSectionFootnoteConfigExport::export(GetExport(), sal_False,
+                                               pProperties, nIdx,
+                                               getPropertySetMapper());
+        break;
+
+    case CTF_SECTION_ENDNOTE_END:
+        XMLSectionFootnoteConfigExport::export(GetExport(), sal_True,
+                                               pProperties, nIdx,
+                                               getPropertySetMapper());
+        break;
+
     default:
         SvXMLExportPropertyMapper::handleElementItem( rHandler, rProperty, rUnitConverter, rNamespaceMap, nFlags, pProperties, nIdx );
         break;
@@ -196,6 +211,18 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
     case CTF_OLDTEXTBACKGROUND:
     case CTF_BACKGROUND_POS:
     case CTF_BACKGROUND_FILTER:
+    case CTF_SECTION_FOOTNOTE_NUM_OWN:
+    case CTF_SECTION_FOOTNOTE_NUM_RESTART:
+    case CTF_SECTION_FOOTNOTE_NUM_RESTART_AT:
+    case CTF_SECTION_FOOTNOTE_NUM_TYPE:
+    case CTF_SECTION_FOOTNOTE_NUM_PREFIX:
+    case CTF_SECTION_FOOTNOTE_NUM_SUFFIX:
+    case CTF_SECTION_ENDNOTE_NUM_OWN:
+    case CTF_SECTION_ENDNOTE_NUM_RESTART:
+    case CTF_SECTION_ENDNOTE_NUM_RESTART_AT:
+    case CTF_SECTION_ENDNOTE_NUM_TYPE:
+    case CTF_SECTION_ENDNOTE_NUM_PREFIX:
+    case CTF_SECTION_ENDNOTE_NUM_SUFFIX:
         // There's nothing to do here!
         break;
     default:
