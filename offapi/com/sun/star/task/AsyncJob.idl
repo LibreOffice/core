@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AsyncJob.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 23:45:36 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ module com { module sun { module star { module task {
 
     @see Job
 
-    @since #107627#
+    @since OOo 1.1.2
  */
 published service AsyncJob
 {
