@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:47:17 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1058,7 +1058,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
     }
 
     const Sequence< DataFlavor >& rTypes( it->second->m_aTypes );
-    const Sequence< Atom >& rNativeTypes( it->second->m_aNativeTypes );
+    const std::vector< Atom >& rNativeTypes( it->second->m_aNativeTypes );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "getPasteData( \"%s\", \"%s\" )\n",
              OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
@@ -1099,7 +1099,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
                     if( aEncoding != RTL_TEXTENCODING_DONTKNOW  &&
                         aEncoding != RTL_TEXTENCODING_UNICODE   &&
                         getPasteData( selection,
-                                      rNativeTypes.getConstArray()[i],
+                                      rNativeTypes[i],
                                       aData )
                         )
                     {
@@ -1215,11 +1215,10 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
         convertTypeToNative( rType, selection, nFormat, aTypes );
         ::std::list< Atom >::const_iterator type_it;
         Atom nSelectedType = None;
-        const Atom* pNativeTypes = rNativeTypes.getConstArray();
         for( type_it = aTypes.begin(); type_it != aTypes.end() && nSelectedType == None; ++type_it )
         {
-            for( int i = 0; i < rNativeTypes.getLength() && nSelectedType == None; i++ )
-                if( pNativeTypes[i] == *type_it )
+            for( int i = 0; i < rNativeTypes.size() && nSelectedType == None; i++ )
+                if( rNativeTypes[i] == *type_it )
                     nSelectedType = *type_it;
         }
         if( nSelectedType != None )
@@ -1331,15 +1330,15 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
     else if( ! getPasteData( selection, m_nTARGETSAtom, aAtoms ) )
         aAtoms = Sequence< sal_Int8 >();
 
-    Sequence< Atom > aNativeTypes;
+    std::vector< Atom > aNativeTypes;
     if( aAtoms.getLength() )
     {
         int nAtoms = aAtoms.getLength() / 4;
         Atom* pAtoms = (Atom*)aAtoms.getArray();
         rTypes.realloc( nAtoms );
-        aNativeTypes.realloc( nAtoms );
+        aNativeTypes.resize( nAtoms );
         DataFlavor* pFlavors = rTypes.getArray();
-        Atom* pNativeTypes = aNativeTypes.getArray();
+        sal_Int32 nNativeTypesIndex = 0;
         while( nAtoms-- )
         {
 #if OSL_DEBUG_LEVEL > 1
@@ -1374,7 +1373,8 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                     }
                 }
                 pFlavors++;
-                *pNativeTypes++ = *pAtoms;
+                aNativeTypes[ nNativeTypesIndex ] = *pAtoms;
+                nNativeTypesIndex++;
             }
             pAtoms++;
         }
@@ -1383,17 +1383,20 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         bSuccess = rTypes.getLength() ? true : false;
         if( bHaveText && ! bHaveUTF16 )
         {
+               int i = 0;
+
             int nNewFlavors = rTypes.getLength()+1;
             Sequence< DataFlavor > aTemp( nNewFlavors );
-            for( int i = 0; i < nNewFlavors-1; i++ )
+            for( i = 0; i < nNewFlavors-1; i++ )
                 aTemp.getArray()[i+1] = rTypes.getConstArray()[i];
             aTemp.getArray()[0].MimeType = OUString::createFromAscii( "text/plain;charset=utf-16" );
             aTemp.getArray()[0].DataType = getCppuType( (OUString*)0 );
             rTypes = aTemp;
 
-            Sequence< Atom > aNativeTemp( nNewFlavors );
-            memcpy( aNativeTemp.getArray()+1, aNativeTypes.getConstArray(), sizeof(Atom)*(nNewFlavors-1) );
-            aNativeTemp.getArray()[0] = None;
+            std::vector< Atom > aNativeTemp( nNewFlavors );
+            for( i = 0; i < nNewFlavors-1; i++ )
+                aNativeTemp[ i + 1 ] = aNativeTypes[ i ];
+            aNativeTemp[0] = None;
             aNativeTypes = aNativeTemp;
         }
     }
@@ -1416,7 +1419,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
             else
             {
                 it->second->m_aTypes            = Sequence< DataFlavor >();
-                it->second->m_aNativeTypes      = Sequence< Atom >();
+                it->second->m_aNativeTypes      = std::vector< Atom >();
                 it->second->m_nLastTimestamp    = 0;
                 it->second->m_bHaveUTF16        = false;
                 it->second->m_aUTF8Type         = None;
