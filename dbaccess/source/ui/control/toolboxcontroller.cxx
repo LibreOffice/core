@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:42:42 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
+#include <svtools/menuoptions.hxx>
+#endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
@@ -181,6 +184,7 @@ namespace dbaui
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuerySql")),sal_True));
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewForm")),sal_True));
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewReportAutoPilot")),sal_True));
+            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTable")),sal_True));
         }
         else
         {
@@ -231,7 +235,7 @@ namespace dbaui
             pMenu.reset( new PopupMenu( ModuleRes( RID_MENU_APP_NEW ) ) );
             sal_Bool bIsWriterInstalled = SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER);
 
-            sal_Bool bHighContrast = ::dbaui::isHiContrast(pToolBox);//getView()->GetBackground().GetColor().IsDark();
+            sal_Bool bHighContrast = ::dbaui::isHiContrast(pToolBox);
 
             try
             {
@@ -250,6 +254,9 @@ namespace dbaui
                 USHORT nCount = pMenu->GetItemCount();
                 for (USHORT nPos = 0; nPos < nCount; ++nPos)
                 {
+                    if ( pMenu->GetItemType( nPos ) == MENUITEM_SEPARATOR )
+                        continue;
+
                     USHORT nItemId = pMenu->GetItemId(nPos);
                     aSeq[0] = pMenu->GetItemCommand(nItemId);
                     Sequence< Reference<XGraphic> > aImages = xImageMgr->getImages(nImageType,aSeq);
@@ -272,8 +279,14 @@ namespace dbaui
         {
             pMenu.reset( new PopupMenu( ModuleRes( RID_MENU_REFRESH_DATA ) ) );
         }
-        // no disabled entries
-        pMenu->RemoveDisabledEntries();
+
+//        // show disabled entries?
+//        if ( !SvtMenuOptions().IsEntryHidingEnabled() )
+//            pMenu->RemoveDisabledEntries();
+//        else
+//            // force showing disabled entries. Due to #102790#, popup menus automatically
+//            // set the MENU_FLAG_HIDEDISABLEDENTRIES flag
+//            pMenu->SetMenuFlags( MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
 
         USHORT nSelected = pMenu->Execute(pToolBox, pToolBox->GetItemRect( m_nToolBoxId ),POPUPMENU_EXECUTE_DOWN);
         // "cleanup" the toolbox state
