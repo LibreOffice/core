@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptSecurity.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-02-26 17:00:34 $
+ *  last change:$Date: 2003-02-27 15:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,18 +151,18 @@ public class _XScriptSecurity extends MultiMethodTest {
         String output = null;
 
         // get the officeBasic setting
-        String officeBasic = null;
+        int officeBasic = 0;
         if( runmacro.equals("never") )
         {
-            officeBasic = "0";
+            officeBasic = 0;
         }
         else if ( runmacro.equals("pathlist") )
         {
-            officeBasic = "1";
+            officeBasic = 1;
         }
         else if ( runmacro.equals("always") )
         {
-            officeBasic = "2";
+            officeBasic = 2;
         }
 
         // should pathlist include doc?
@@ -200,11 +200,11 @@ public class _XScriptSecurity extends MultiMethodTest {
             String uri = util.utils.getFullTestURL(location);
             if ( oObj.checkPermission(uri, "execute" ) )
             {
-                output = "success";
+                output = "true";
             }
             else
             {
-                output = "failure";
+                output = "false";
             }
         }
         catch (com.sun.star.uno.RuntimeException re) {
@@ -275,7 +275,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         return result;
     }
 
-    private boolean setSecurity( String officeBasic, String confirm,
+    private boolean setSecurity( int officeBasic, String confirm,
                                 String warning, String secureURLs )
     {
         boolean success=false;
@@ -308,11 +308,11 @@ public class _XScriptSecurity extends MultiMethodTest {
 
         Object[] aSecureURLs = new Object[1];
         aSecureURLs[0]=secureURLs;
+        log.println("settting SecureURL");
         xNameReplace.replaceByName( "SecureURL", aSecureURLs );
 
-        Object[] aOfficeBasic = new Object[1];
-        aOfficeBasic[0]=officeBasic;
-        xNameReplace.replaceByName( "OfficeBasic", aOfficeBasic );
+        log.println("settting OfficeBasic");
+        xNameReplace.replaceByName( "OfficeBasic", new Integer(officeBasic) );
 
         Boolean bConfirm = null;
         if( ( confirm != null ) && ( confirm.equals("true") ) )
@@ -323,9 +323,8 @@ public class _XScriptSecurity extends MultiMethodTest {
         {
             bConfirm = new Boolean( false );
         }
-        Object[] aConfirm = new Object[1];
-        aConfirm[0] = bConfirm;
-        xNameReplace.replaceByName( "Confirmation", aConfirm );
+        log.println("settting Confirmation");
+        xNameReplace.replaceByName( "Confirmation", bConfirm );
 
         Boolean bWarning = null;
         if( ( warning != null ) && ( warning.equals("true") ) )
@@ -336,9 +335,8 @@ public class _XScriptSecurity extends MultiMethodTest {
         {
             bWarning = new Boolean( false );
         }
-        Object[] aWarning = new Object[1];
-        aWarning[0] = bWarning;
-        xNameReplace.replaceByName( "Warning", aWarning );
+        log.println("settting Warning");
+        xNameReplace.replaceByName( "Warning", bWarning );
 
         // and now commit the changes
         xChangesBatch.commitChanges();
