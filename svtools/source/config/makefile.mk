@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 12:12:16 $
+#   last change: $Author: obo $ $Date: 2004-11-15 17:22:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..
 PRJNAME=svtools
 TARGET=config
 TARGET1=heavyconfig
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
@@ -103,21 +104,7 @@ SLOFILES = \
     $(SLO)$/extendedsecurityoptions.obj \
     $(SLO)$/sourceviewconfig.obj		\
     $(SLO)$/compatibility.obj           \
-    $(SLO)$/eventcfg.obj
-
-EXCEPTIONSFILES = \
-    $(SLO)$/accelcfg.obj				\
-    $(SLO)$/inetoptions.obj				\
-    $(SLO)$/xmlaccelcfg.obj             \
-    $(SLO)$/moduleoptions.obj           \
-    $(SLO)$/pathoptions.obj         \
-    $(SLO)$/eventcfg.obj
-
-# --- heavyconfig.lib Files --------------------------------------------------------
-DEPOBJFILES=$(LIB1OBJFILES)
-LIB1TARGET= $(SLB)$/$(TARGET1).lib
-
-LIB1OBJFILES=  \
+    $(SLO)$/eventcfg.obj    \
     $(SLO)$/accessibilityoptions.obj	\
     $(SLO)$/fontsubstconfig.obj				\
     $(SLO)$/misccfg.obj				\
@@ -129,7 +116,76 @@ LIB1OBJFILES=  \
         $(SLO)$/colorcfg.obj            \
         $(SLO)$/undoopt.obj                 \
         $(SLO)$/useroptions.obj      \
-    $(SLO)$/syslocaleoptions.obj        
+    $(SLO)$/syslocaleoptions.obj \
+    $(SLO)$/itemholder1.obj    \
+    $(SLO)$/itemholder2.obj
+
+EXCEPTIONSFILES = \
+    $(SLO)$/accelcfg.obj				\
+    $(SLO)$/inetoptions.obj				\
+    $(SLO)$/xmlaccelcfg.obj             \
+    $(SLO)$/moduleoptions.obj           \
+    $(SLO)$/pathoptions.obj         \
+    $(SLO)$/eventcfg.obj    \
+    $(SLO)$/itemholder1.obj    \
+    $(SLO)$/itemholder2.obj
+    
+
+# --- heavyconfig.lib Files --------------------------------------------------------
+LIB1TARGET= $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES=  \
+    $(SLO)$/accelcfg.obj				\
+    $(SLO)$/xmlaccelcfg.obj				\
+    $(SLO)$/moduleoptions.obj           \
+    $(SLO)$/pathoptions.obj             \
+    $(SLO)$/saveopt.obj					\
+    $(SLO)$/helpopt.obj                 \
+    $(SLO)$/javaoptions.obj             \
+    $(SLO)$/securityoptions.obj			\
+    $(SLO)$/localisationoptions.obj		\
+    $(SLO)$/workingsetoptions.obj		\
+    $(SLO)$/viewoptions.obj				\
+    $(SLO)$/internaloptions.obj			\
+    $(SLO)$/startoptions.obj			\
+    $(SLO)$/historyoptions.obj			\
+    $(SLO)$/inetoptions.obj				\
+    $(SLO)$/menuoptions.obj				\
+    $(SLO)$/dynamicmenuoptions.obj		\
+    $(SLO)$/options3d.obj				\
+    $(SLO)$/fontoptions.obj				\
+    $(SLO)$/addxmltostorageoptions.obj	\
+    $(SLO)$/miscopt.obj					\
+    $(SLO)$/defaultoptions.obj			\
+    $(SLO)$/searchopt.obj				\
+    $(SLO)$/printwarningoptions.obj		\
+    $(SLO)$/printoptions.obj			\
+    $(SLO)$/cacheoptions.obj            \
+    $(SLO)$/regoptions.obj				\
+    $(SLO)$/cmdoptions.obj				\
+    $(SLO)$/extendedsecurityoptions.obj \
+    $(SLO)$/sourceviewconfig.obj		\
+    $(SLO)$/compatibility.obj           \
+    $(SLO)$/eventcfg.obj                \
+    $(SLO)$/itemholder1.obj
+    
+# --- heavyconfig.lib Files --------------------------------------------------------
+LIB2TARGET= $(SLB)$/$(TARGET1).lib
+
+LIB2OBJFILES=  \
+    $(SLO)$/accessibilityoptions.obj	\
+    $(SLO)$/fontsubstconfig.obj				\
+    $(SLO)$/misccfg.obj				\
+    $(SLO)$/apearcfg.obj				\
+    $(SLO)$/fltrcfg.obj				\
+        $(SLO)$/languageoptions.obj     \
+        $(SLO)$/ctloptions.obj          \
+        $(SLO)$/cjkoptions.obj          \
+        $(SLO)$/colorcfg.obj            \
+        $(SLO)$/undoopt.obj                 \
+        $(SLO)$/useroptions.obj      \
+    $(SLO)$/syslocaleoptions.obj \
+    $(SLO)$/itemholder2.obj
 
 # --- Targets ------------------------------------------------------
 
