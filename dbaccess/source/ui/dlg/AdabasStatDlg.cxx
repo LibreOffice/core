@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStatDlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:38:35 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ namespace dbaui
         return pExampleSet;
     }
     // -----------------------------------------------------------------------------
-    Reference< XConnection > OAdabasStatPageDlg::createConnection()
+    ::std::pair< Reference<XConnection>,sal_Bool> OAdabasStatPageDlg::createConnection()
     {
         return m_pImpl->createConnection();
     }
