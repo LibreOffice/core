@@ -26,6 +26,7 @@ pt-BR = "%PRODUCTNAME Textdokument"
 th = "%PRODUCTNAME Textdokument"
 hi-IN = "%PRODUCTNAME Textdokument"
 
+sk = "%PRODUCTNAME Textový Dokument"
 [writer-template]
 en = "%PRODUCTNAME Text Document Template"
 nl = "%PRODUCTNAME Tekstdocumentsjabloon"
@@ -53,6 +54,8 @@ pt-BR = "%PRODUCTNAME Textdokumentvorlage"
 tr = "%PRODUCTNAME Textdokumentvorlage"
 th = "%PRODUCTNAME Textdokumentvorlage"
 hi-IN = "%PRODUCTNAME Textdokumentvorlage"
+0ru = "%PRODUCTNAME Textdokumentvorlage"
+sk = "Šablóna textového dokumentu %PRODUCTNAME"
 
 [writer-global]
 en = "%PRODUCTNAME Master Document"
@@ -82,6 +85,7 @@ pt-BR = "%PRODUCTNAME Globaldokument"
 th = "%PRODUCTNAME Globaldokument"
 hi-IN = "%PRODUCTNAME Globaldokument"
 
+sk = "Hlavný dokument %PRODUCTNAME"
 [writer-math]
 en = "%PRODUCTNAME Formula"
 ru = "%PRODUCTNAME Формула"
@@ -110,6 +114,7 @@ pt-BR = "%PRODUCTNAME Formel"
 th = "%PRODUCTNAME Formel"
 hi-IN = "%PRODUCTNAME Formel"
 
+sk = "%PRODUCTNAME vzorec"
 [impress]
 en = "%PRODUCTNAME Presentation"
 ru = "%PRODUCTNAME Презентация"
@@ -130,14 +135,15 @@ zh-TW = "%PRODUCTNAME 簡報"
 tr = "%PRODUCTNAME Pr?sentation"
 ar = "%PRODUCTNAME Pr?sentation"
 0en = "%PRODUCTNAME Presentation"
-fi = "%PRODUCTNAME Pr�sentation"
+fi = "%PRODUCTNAME Präsentation"
 cs = "%PRODUCTNAME Präsentation"
 he = "%PRODUCTNAME Präsentation"
 0pt = "%PRODUCTNAME Pr�sentation"
-pt-BR = "%PRODUCTNAME Pr�sentation"
+pt-BR = "%PRODUCTNAME Präsentation"
 th = "%PRODUCTNAME Präsentation"
 hi-IN = "%PRODUCTNAME Präsentation"
 
+sk = "Prezentácia %PRODUCTNAME"
 [impress-template]
 en = "%PRODUCTNAME Presentation Template"
 nl = "%PRODUCTNAME Presentatiesjabloon"
@@ -153,18 +159,20 @@ zh-CN = "%PRODUCTNAME 演示文稿样式"
 zh-TW = "%PRODUCTNAME 簡報樣式"
 0en = "%PRODUCTNAME Presentation Template"
 el = "%PRODUCTNAME Pr?sentationsvorlage"
-fi = "%PRODUCTNAME Pr�sentationsvorlage"
+fi = "%PRODUCTNAME Präsentationsvorlage"
 cs = "%PRODUCTNAME Präsentationsvorlage"
 ar = "%PRODUCTNAME Pr?sentationsvorlage"
 he = "%PRODUCTNAME Präsentationsvorlage"
-ca = "%PRODUCTNAME Pr�sentationsvorlage"
+ca = "%PRODUCTNAME Präsentationsvorlage"
 0pt = "%PRODUCTNAME Pr�sentationsvorlage"
 0ru = "%PRODUCTNAME Pr?sentationsvorlage"
-pl = "%PRODUCTNAME Pr�sentationsvorlage"
-pt-BR = "%PRODUCTNAME Pr�sentationsvorlage"
-tr = "%PRODUCTNAME Pr�sentationsvorlage"
+pl = "%PRODUCTNAME Präsentationsvorlage"
+pt-BR = "%PRODUCTNAME Präsentationsvorlage"
+tr = "%PRODUCTNAME Präsentationsvorlage"
 th = "%PRODUCTNAME Präsentationsvorlage"
 hi-IN = "%PRODUCTNAME Präsentationsvorlage"
+0ru = "%PRODUCTNAME Pr?sentationsvorlage"
+sk = "Šablóna prezentácie %PRODUCTNAME"
 
 [draw]
 en = "%PRODUCTNAME Drawing"
@@ -194,6 +202,7 @@ pt-BR = "%PRODUCTNAME Zeichnung"
 th = "%PRODUCTNAME Zeichnung"
 hi-IN = "%PRODUCTNAME Zeichnung"
 
+sk = "Kresba %PRODUCTNAME"
 [draw-template]
 en = "%PRODUCTNAME Drawing Template"
 nl = "%PRODUCTNAME Tekeningsjabloon"
@@ -221,6 +230,8 @@ pt-BR = "%PRODUCTNAME Zeichnungsvorlage"
 tr = "%PRODUCTNAME Zeichnungsvorlage"
 th = "%PRODUCTNAME Zeichnungsvorlage"
 hi-IN = "%PRODUCTNAME Zeichnungsvorlage"
+0ru = "%PRODUCTNAME Zeichnungsvorlage"
+sk = "Šablóna kresby %PRODUCTNAME"
 
 [calc]
 en = "%PRODUCTNAME Spreadsheet"
@@ -251,6 +262,7 @@ pt-BR = "%PRODUCTNAME Tabelle"
 th = "%PRODUCTNAME Tabelle"
 hi-IN = "%PRODUCTNAME Tabelle"
 
+sk = "Tabuľka %PRODUCTNAME"
 [calc-template]
 en = "%PRODUCTNAME Spreadsheet Template"
 nl = "%PRODUCTNAME Werkbladsjabloon"
@@ -278,6 +290,12 @@ pt-BR = "%PRODUCTNAME Tabellenvorlage"
 tr = "%PRODUCTNAME Tabellenvorlage"
 th = "%PRODUCTNAME Tabellenvorlage"
 hi-IN = "%PRODUCTNAME Tabellenvorlage"
+0ru = "%PRODUCTNAME Tabellenvorlage"
+sk = "Šablóna tabuľky %PRODUCTNAME"
+
+
+
+
 
 
 
