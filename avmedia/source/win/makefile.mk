@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: ka $ $Date: 2004-08-23 09:04:41 $
+#   last change: $Author: ka $ $Date: 2004-08-27 13:34:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,8 @@ TARGET=avmediawin
 
 .INCLUDE :  	settings.mk
 
+.IF "$(ENABLE_DIRECTX)" != ""
+
 .IF "$(verbose)"!="" || "$(VERBOSE)"!=""
 CDEFS+= -DVERBOSE
 .ENDIF
@@ -100,6 +102,7 @@ SHL1STDLIBS += gdi32.lib
 SHL1STDLIBS += ddraw.lib
 SHL1STDLIBS += dxguid.lib
 
+.ENDIF
 .ENDIF
 
 .INCLUDE :  	target.mk
