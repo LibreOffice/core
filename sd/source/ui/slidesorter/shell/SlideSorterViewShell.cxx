@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:07:07 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,11 @@ void SlideSorterViewShell::SetupListeners (void)
             mpSlideSorterController.get(),
             controller::SlideSorterController,
             WindowEventHandler));
+    Application::AddEventListener(
+        LINK(
+            mpSlideSorterController.get(),
+            controller::SlideSorterController,
+            WindowEventHandler));
 }
 
 
@@ -378,6 +383,10 @@ void SlideSorterViewShell::ReleaseListeners (void)
             controller::SlideSorterController,
             WindowEventHandler));
     GetParentWindow()->RemoveEventListener(
+        LINK(mpSlideSorterController.get(),
+            controller::SlideSorterController,
+            WindowEventHandler));
+    Application::RemoveEventListener(
         LINK(mpSlideSorterController.get(),
             controller::SlideSorterController,
             WindowEventHandler));
