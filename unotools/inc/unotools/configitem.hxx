@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:52 $
+ *  last change: $Author: os $ $Date: 2000-09-21 12:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ namespace com{ namespace sun{ namespace star{
         class Any;
     }
     namespace beans{
-        class XMultiPropertySet;
         struct PropertyValue;
     }
     namespace container{
@@ -100,8 +99,6 @@ namespace utl
             friend class ConfigChangeListener_Impl;
 
             const rtl::OUString         sSubTree;
-            com::sun::star::uno::Reference< com::sun::star::beans::XMultiPropertySet>
-                                        xMultPrSet;
             com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
                                         xHierarchyAccess;
             com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
