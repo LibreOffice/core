@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:34 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,11 +85,11 @@ PushButton RID_PREVIEW_BUTTON
     Text [ dutch ] = "Af~spelen" ;
     Text [ swedish ] = "~Spela upp" ;
     Text [ danish ] = "Afspil" ;
-    Text [ portuguese_brazilian ] = "Ab~spielen" ;
+    Text [ portuguese_brazilian ] = "Tocar" ;
     Text [ portuguese ] = "~Tocar" ;
     Text[ chinese_simplified ] = "ζ”Ύζ ";
     Text[ russian ] = "Βξροπξθηβερςθ";
-    Text[ polish ] = "Odtwσrz";
+    Text[ polish ] = "O~dtwσrz";
     Text[ japanese ] = "ε†η”";
     Text[ chinese_traditional ] = "ζ”Ύζ ";
     Text[ arabic ] = "ΚΤΫνα";
@@ -100,6 +100,9 @@ PushButton RID_PREVIEW_BUTTON
     Text[ catalan ] = "Reprodueix";
     Text[ finnish ] = "Toista";
     Text[ thai ] = "ΰΉ€ΰΈ¥ΰΉΰΈ™";
+    Text[ czech ] = "PΕ™ehrΓ΅t";
+    Text[ hebrew ] = "Ab~spielen";
+    Text[ hindi ] = "ΰ¤¶ΰ¥ΰ¤°ΰ¥";
 };
 Bitmap BMP_TAB_PAGEMODE
 {
@@ -1390,7 +1393,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ arabic ] = "ΓδγΗΨ ίΗΖδΗΚ ΥζΡΙ";
             Text[ greek ] = "Στυλ αντικειμένων γραφικών";
             Text[ korean ] = "κ·Έλ¦Ό μ¤νƒ€μΌ";
-            Text[ turkish ] = "Grafik nesne biηimi";
+            Text[ turkish ] = "Grafik Biηemleri";
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
             FilterList =
             {
@@ -1420,7 +1423,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ arabic ] = "ΓδγΗΨ ίΗΖδ ΪΡΦ ΚήΟνγν";
             Text[ greek ] = "Πρότυπα αντικειμένων παρουσίασης";
             Text[ korean ] = "ν”„λ μ  ν…μ΄μ… μ¤νƒ€μΌ";
-            Text[ turkish ] = "Sunu nesne biηimi";
+            Text[ turkish ] = "Sunum Biηemleri";
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
             FilterList =
             {
@@ -1500,6 +1503,23 @@ Bitmap BMP_PRESOBJ_IMAGE
     File = "image.bmp" ;
 };
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
