@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomtabl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-29 12:37:04 $
+ *  last change: $Author: cl $ $Date: 2001-05-02 15:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,8 @@ public:
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw ();
 
+    void SAL_CALL ImplInsertByName( const OUString& aName, const uno::Any& aElement );
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) throw( uno::RuntimeException);
@@ -214,16 +216,8 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames( 
     return aSNS;
 }
 
-// XNameContainer
-void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const uno::Any& aElement )
-    throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
+void SAL_CALL SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
 {
-    if( hasByName( aApiName ) )
-        throw container::ElementExistException();
-
-    String aName;
-    SvxUnogetInternalNameForItem( XATTR_LINEEND, aApiName, aName );
-
     SfxItemSet* mpInSet1 = new SfxItemSet( *mpModelPool, XATTR_LINESTART, XATTR_LINEEND );
     SfxItemSet* mpInSet2 = mpStylePool ? new SfxItemSet( *mpStylePool, XATTR_LINESTART, XATTR_LINEEND ) : NULL;
     maItemSetVector.push_back( std::pair< SfxItemSet*, SfxItemSet*>( mpInSet1, mpInSet2 ) );
@@ -244,6 +238,19 @@ void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const u
     mpInSet1->Put( aStartMarker, XATTR_LINESTART );
     if( mpInSet2 )
         mpInSet2->Put( aStartMarker, XATTR_LINESTART );
+}
+
+// XNameContainer
+void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const uno::Any& aElement )
+    throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
+{
+    if( hasByName( aApiName ) )
+        throw container::ElementExistException();
+
+    String aName;
+    SvxUnogetInternalNameForItem( XATTR_LINEEND, aApiName, aName );
+
+    ImplInsertByName( aName, aElement );
 }
 
 void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
@@ -314,7 +321,61 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         aIter++;
     }
 
-    if( !hasByName( aName ) )
+    // if it is not in our own sets, modify the pool!
+    sal_Bool bFound = sal_False;
+
+    USHORT nSurrogate;
+    USHORT nStartCount = mpModelPool ? mpModelPool->GetItemCount( XATTR_LINESTART ) : 0;
+    for( nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
+    {
+        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINESTART, nSurrogate);
+        if( pItem && pItem->GetName() == aSearchName )
+        {
+            pItem->PutValue( aElement );
+            bFound = sal_True;
+            break;
+        }
+    }
+
+    USHORT nEndCount = mpStylePool ? mpStylePool->GetItemCount( XATTR_LINEEND ) : 0;
+    for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
+    {
+        pItem = (NameOrIndex*)mpStylePool->GetItem( XATTR_LINEEND, nSurrogate);
+        if( pItem && pItem->GetName() == aSearchName )
+        {
+            pItem->PutValue( aElement );
+            bFound = sal_True;
+            break;
+        }
+    }
+
+    nStartCount = mpStylePool ? mpStylePool->GetItemCount( XATTR_LINESTART ) : 0;
+    for( nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
+    {
+        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINESTART, nSurrogate);
+        if( pItem && pItem->GetName() == aSearchName )
+        {
+            pItem->PutValue( aElement );
+            bFound = sal_True;
+            break;
+        }
+    }
+
+    nEndCount = mpModelPool ? mpModelPool->GetItemCount( XATTR_LINEEND ) : 0;
+    for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
+    {
+        pItem = (NameOrIndex*)mpStylePool->GetItem( XATTR_LINEEND, nSurrogate);
+        if( pItem && pItem->GetName() == aSearchName )
+        {
+            pItem->PutValue( aElement );
+            bFound = sal_True;
+            break;
+        }
+    }
+
+    if( bFound )
+        ImplInsertByName( aName, aElement );
+    else
         throw container::NoSuchElementException();
 }
 
@@ -447,7 +508,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
 
     NameOrIndex *pItem;
 
-    const USHORT nStartCount = mpModelPool ? mpModelPool->GetItemCount( XATTR_LINESTART ) : 0;
+    USHORT nStartCount = mpModelPool ? mpModelPool->GetItemCount( XATTR_LINESTART ) : 0;
     for( USHORT nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
     {
         pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINESTART, nSurrogate);
@@ -455,7 +516,23 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
             return sal_True;
     }
 
-    const USHORT nEndCount = mpStylePool ? mpStylePool->GetItemCount( XATTR_LINEEND ) : 0;
+    nStartCount = mpStylePool ? mpStylePool->GetItemCount( XATTR_LINESTART ) : 0;
+    for( nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
+    {
+        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINESTART, nSurrogate);
+        if( pItem && pItem->GetName() == aSearchName )
+            return sal_True;
+    }
+
+    USHORT nEndCount = mpModelPool ? mpModelPool->GetItemCount( XATTR_LINEEND ) : 0;
+    for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
+    {
+        pItem = (NameOrIndex*)mpStylePool->GetItem( XATTR_LINEEND, nSurrogate);
+        if( pItem && pItem->GetName() == aSearchName )
+            return sal_True;
+    }
+
+    nEndCount = mpStylePool ? mpStylePool->GetItemCount( XATTR_LINEEND ) : 0;
     for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
     {
         pItem = (NameOrIndex*)mpStylePool->GetItem( XATTR_LINEEND, nSurrogate);
