@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:23:35 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #include <Usp10.h>
 #endif // USE_UNISCRIBE
 
+#include <hash_map>
+typedef std::hash_map<int,int> IntMap;
+
 #define DROPPED_OUTGLYPH 0xFFFF
 
 using namespace rtl;
@@ -120,11 +123,32 @@ private:
 #ifdef USE_UNISCRIBE
 public:
     SCRIPT_CACHE&           GetScriptCache() const
-                                { return maScriptCache; }
+                            { return maScriptCache; }
 private:
     mutable SCRIPT_CACHE    maScriptCache;
 #endif // USE_UNISCRIBE
+
+public:
+    int                     GetCachedGlyphWidth( int nCharCode ) const;
+    void                    CacheGlyphWidth( int nCharCode, int nCharWidth );
+private:
+    IntMap                  maWidthMap;
 };
+
+// -----------------------------------------------------------------------
+
+inline void ImplWinFontEntry::CacheGlyphWidth( int nCharCode, int nCharWidth )
+{
+    maWidthMap[ nCharCode ] = nCharWidth;
+}
+
+inline int ImplWinFontEntry::GetCachedGlyphWidth( int nCharCode ) const
+{
+    IntMap::const_iterator it = maWidthMap.find( nCharCode );
+    if( it == maWidthMap.end() )
+        return -1;
+    return it->second;
+}
 
 // =======================================================================
 
@@ -229,8 +253,7 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet,
     mnCharSet( nCharSet ),
     mbDisableGlyphs( false )
 {
-    if( !aSalShlData.mbWNT )
-        mbDisableGlyphs = true;
+    mbDisableGlyphs = true;
 }
 
 // -----------------------------------------------------------------------
@@ -363,171 +386,48 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         nGcpOption |= GCP_USEKERNING;
 #endif // GCP_KERN_HACK
 
-    DWORD nRC;
-    if( aSalShlData.mbWNT )  // TODO: remove when unicode layer successful
-    {
-        GCP_RESULTSW aGCPW;
-        aGCPW.lStructSize   = sizeof(aGCPW);
-        aGCPW.lpDx          = mpGlyphAdvances;
-        aGCPW.lpCaretPos    = NULL;
-        aGCPW.lpClass       = NULL;
-        aGCPW.nGlyphs       = mnGlyphCount;
-        aGCPW.nMaxFit       = 0;
-        aGCPW.lpOrder       = NULL;
-
-        // get glyphs/outstring and kerned placement
-        if( mbDisableGlyphs )
-        {
-            aGCPW.lpOutString = mpOutGlyphs;
-            aGCPW.lpGlyphs = NULL;
-        }
-        else
-        {
-            aGCPW.lpOutString = NULL;
-            aGCPW.lpGlyphs = mpOutGlyphs;
-            nGcpOption |= GCP_GLYPHSHAPE;
-        }
-        nRC = ::GetCharacterPlacementW( mhDC, pBidiStr, mnGlyphCount,
-            0, &aGCPW, nGcpOption );
-
-        if( !aGCPW.lpGlyphs )
-            mnGlyphCount = aGCPW.nMaxFit;
-        else if( mnGlyphCount != aGCPW.nGlyphs )
-        {
-            // HOTFIX for #i27336# (automatic ligatures since XP_SP2):
-            // if the GCP call betrayed us by force feeding us ligatures
-            // then work around this by not giving GCP enough ligature context
-            nRC = 0;
-            for( int i = 0; i < mnGlyphCount; ++i )
-            {
-                aGCPW.lpDx = &mpGlyphAdvances[i];
-                aGCPW.lpGlyphs = &mpOutGlyphs[i];
-                ::GetCharacterPlacementW( mhDC, &pBidiStr[i], 1,
-                    0, &aGCPW, nGcpOption );
-                nRC += mpGlyphAdvances[i];
-            }
-        }
-
-#ifndef GCP_KERN_HACK
-        // get char placement only dependend on DX array, not on implicit kerning
-        if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
-        {
-            aGCPW.lpDx = mpGlyphOrigAdvs;
-            nRC = ::GetCharacterPlacementW( mhDC, pBidiStr, mnGlyphCount,
-                0, &aGCPW, (nGcpOption & ~GCP_USEKERNING) );
-        }
-#endif // GCP_KERN_HACK
-    }
-    else // Win95, Win98, WinME, etc.
-    {
-        if( mbDisableGlyphs )
-        {
-            // fake GetCharacterPlacementW needed for non-WNT platforms
-            bool bAliasSymbolsHigh = mrWinFontData.AliasSymbolsHigh();
-            bool bAliasSymbolsLow  = mrWinFontData.AliasSymbolsLow();
-            nRC = 0;
-            for( i = 0; i < mnGlyphCount; ++i )
-            {
-                WCHAR cChar = pBidiStr[ i ];
-
-                // manually apply symbol aliasing if needed
-                if( bAliasSymbolsHigh )
-                {
-                    // used to support symbol aliasing on bitmap fonts
-                    if( cChar < 0x0100)
-                        cChar += 0xF000;
-                }
-                else if( bAliasSymbolsLow )
-                {
-                    // used to support symbol mapping to printer builtin fonts
-                    if( (cChar ^ 0xF000) < 0x0100 )
-                        cChar -= 0xF000;
-                }
-
-                // the unicode chars will be interpreted as glyphs
-                mpOutGlyphs[ i ] = cChar;
-                // also get the corresponding metric
-                ::GetCharWidthW( mhDC, cChar, cChar, &mpGlyphAdvances[i] );
-                nRC += mpGlyphAdvances[i];
-            }
-        }
-        else
-        {
-            // TODO: emulate full GetCharacterPlacementW on non-unicode OS
-            // TODO: move into uwinapi.dll
-            // convert into ANSI code page
-            int nMBLen = ::WideCharToMultiByte( mnCharSet,
-                WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
-                pBidiStr, mnGlyphCount, NULL, 0, NULL, NULL );
-            if( (nMBLen <= 0) || (nMBLen >= 8 * mnGlyphCount) )
-                return false;
-            char* const pMBStr = (char*)alloca( nMBLen+1 );
-            ::WideCharToMultiByte( mnCharSet,
-                WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
-                pBidiStr, mnGlyphCount, pMBStr, nMBLen, NULL, NULL );
-
-            // get glyphs/outstring and placement
-            GCP_RESULTSA aGCPA;
-            aGCPA.lStructSize   = sizeof(aGCPA);
-            aGCPA.lpDx          = mpGlyphAdvances;
-            aGCPA.lpCaretPos    = NULL;
-            aGCPA.lpClass       = NULL;
-            aGCPA.nMaxFit       = 0;
-            aGCPA.nGlyphs       = mnGlyphCount;
-            aGCPA.lpOrder       = NULL;
-
-            aGCPA.lpGlyphs      = mpOutGlyphs;
-            aGCPA.lpOutString   = NULL;
-            nGcpOption |= GCP_GLYPHSHAPE;
-
-            nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen, 0, &aGCPA, nGcpOption );
-
-            mnGlyphCount = aGCPA.nGlyphs;
-        }
-
-#ifndef GCP_KERN_HACK
-        if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
-        {
-            aGCPA.lpDx = mpGlyphOrigAdvs;
-            nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
-                0, &aGCPA, (nGcpOption & ~GCP_USEKERNING) );
-        }
-#endif // GCP_KERN_HACK
-    }
-
-    mnWidth = 0;    // don't use nRC to calc width because of 16bit overflow
-
-    if( !nRC )
-        return false;
-
-    // #101097# fixup display of NotDef glyphs
-    // TODO: is there a way to convince Win32(incl W95) API to use notdef directly?
+    for( i = 0; i < mnGlyphCount; ++i )
+        mpOutGlyphs[i] = pBidiStr[ i ];
+    mnWidth = 0;
     for( i = 0; i < mnGlyphCount; ++i )
     {
-        mnWidth += mpGlyphAdvances[i];
+        const WCHAR* pCodes = &pBidiStr[i];
+        // check for surrogate pairs
+        if( (pCodes[0] & 0xFC00) == 0xDC00 )
+            continue;
+        bool bSurrogate = ((pCodes[0] & 0xFC00) == 0xD800);
 
-        // check with the font face whether it supports the unicode
-        sal_Unicode cChar;
-        int nCharPos;
-        if( mbDisableGlyphs )
+        // get the width of the corresponding code point
+        int nCharCode = pCodes[0];
+        if( bSurrogate )
+            nCharCode = 0x10000 + ((pCodes[0] & 0x03FF) << 10) + (pCodes[1] & 0x03FF);
+        int nGlyphWidth = mrWinFontEntry.GetCachedGlyphWidth( nCharCode );
+        if( nGlyphWidth == -1 )
         {
-            nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[i]: i + rArgs.mnMinCharPos;
-            cChar = mpOutGlyphs[i];
+            ABC aABC;
+            if( ::GetCharABCWidthsW( mhDC, nCharCode, nCharCode, &aABC ) )
+                nGlyphWidth = aABC.abcA + aABC.abcB + aABC.abcC;
+            else if( !::GetCharWidth32W( mhDC, nCharCode, nCharCode, &nGlyphWidth ) )
+                nGlyphWidth = 0;
+            mrWinFontEntry.CacheGlyphWidth( nCharCode, nGlyphWidth );
         }
-        else
-        {
-            if( mpGlyphAdvances[i] != 0 )
-                if( mpOutGlyphs[i] != 0 )
-                    continue;
-            nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[i]: i + rArgs.mnMinCharPos;
-            cChar = rArgs.mpStr[ nCharPos ];
-        }
-        if( mrWinFontData.HasChar( cChar ) )
+        mpGlyphAdvances[ i ] = nGlyphWidth;
+        mnWidth += nGlyphWidth;
+
+        // remaining codes of surrogate pair get a zero width
+        if( bSurrogate )
+            mpGlyphAdvances[ i+1 ] = 0;
+
+        // check with the font face if glyph fallback is needed
+        if( mrWinFontData.HasChar( nCharCode ) )
             continue;
 
         // request glyph fallback at this position in the string
         bool bRTL = mpGlyphRTLFlags ? mpGlyphRTLFlags[i] : false;
+        int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[i]: i + rArgs.mnMinCharPos;
         rArgs.NeedFallback( nCharPos, bRTL );
+        if( bSurrogate )
+            rArgs.NeedFallback( nCharPos+1, bRTL );
 
         if( rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK )
         {
@@ -2352,6 +2252,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 
 ImplWinFontEntry::ImplWinFontEntry( ImplFontSelectData& rFSD )
 :   ImplFontEntry( rFSD ),
+    maWidthMap( 512 ),
     mpKerningPairs( NULL ),
     mnKerningPairs( -1 )
 {
