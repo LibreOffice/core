@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:01:14 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
 #endif
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
+#endif
 
 #ifndef _SCH_DLL_HXX
 #include <sch/schdll.hxx>
@@ -151,6 +154,9 @@
 #endif
 #ifndef SC_CHARTARR_HXX
 #include "chartarr.hxx"
+#endif
+#ifndef SC_DETFUNC_HXX
+#include "detfunc.hxx"
 #endif
 #ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
@@ -461,15 +467,44 @@ void XclImpEscherTxo::SetSdrObj( SdrObject* pNewSdrObj )
 TYPEINIT1( XclImpEscherNote, XclImpEscherTxo );
 
 XclImpEscherNote::XclImpEscherNote( XclImpEscherObj& rSrcObj ) :
-    XclImpEscherTxo( rSrcObj )
+    XclImpEscherTxo( rSrcObj ),
+    mnCol(0),
+    mnRow(0)
 {
 }
 
 void XclImpEscherNote::Apply( ScfProgressBar& rProgress )
 {
-    // do not insert the note object, done via ScDetectiveFunc
-}
+    if( IsValid() )
+    {
+        ScPostIt aNote(GetDocPtr());
+        if(GetDoc().GetNote( GetCol(), GetRow(), mnScTab, aNote ))
+        {
+            Rectangle aRect = maAnchorRect;
+            aNote.SetRectangle(aRect);
+            SdrObject* pObj = mpSdrObj.get();
 
+            // get the actual container from this group object.
+            if (pObj->IsGroupObject())
+            {
+                SdrObjListIter aIter(*pObj->GetSubList());
+                pObj = aIter.Next();
+            }
+            if(pObj)
+            {
+                const SfxItemSet& aItemSet = pObj->GetMergedItemSet();
+                aNote.SetItemSet(aItemSet);
+            }
+            GetDoc().SetNote( GetCol(), GetRow(), mnScTab, aNote );
+
+            if(aNote.IsShown())
+            {
+                ScDetectiveFunc aDetFunc( GetDocPtr(), mnScTab );
+                aDetFunc.ShowComment( GetCol(), GetRow(), TRUE );
+            }
+        }
+    }
+}
 
 // ----------------------------------------------------------------------------
 
@@ -1710,10 +1745,6 @@ void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
             pTxoObj->SetAlignment( nAlign );
         }
     }
-    // The Notes text is formatted if there is more than 2 formatting
-    // runs present or if the first formatting run contains a non-
-    // standard font-index.
-    GetTracer().TraceFormattedNote(nFormCnt > 2);
 }
 
 
