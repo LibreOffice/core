@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:19:19 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include <vcl/fontcvt.hxx>
 #endif
 #include <tools/string.hxx>
+#ifndef _SD_PPT_EXANIMATIONS_HXX
+#include "pptexanimations.hxx"
+#endif
 
 // ------------------------------------------------------------------------
 
@@ -884,6 +887,7 @@ class TextObj
 class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvider
 {
         sal_Bool                        mbStatus;
+        sal_Bool                        mbUseNewAnimations;
         sal_uInt32                      mnStatMaxValue;
         sal_uInt32                      mnLatestStatValue;
         std::vector< PPTExStyleSheet* > maStyleSheetList;
@@ -948,7 +952,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
                                                 // 1 -> halbautomatisch
                                                 // 2 -> automatisch
 
-
         sal_uInt32          mnShapeMasterTitle;
         sal_uInt32          mnShapeMasterBody;
 
@@ -1008,7 +1011,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
                                 ::com::sun::star::presentation::AnimationEffect eEffect,
                                 ::com::sun::star::presentation::AnimationEffect eTextEffect,
                                 sal_uInt16 nOrder );
-        void                ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eAction );
+        void                ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eAction, sal_Bool bMediaClickAction );
         sal_Bool            ImplGetStyleSheets();
         void                ImplWriteParagraphs( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWritePortions( SvStream& rOutStrm, TextObj& rTextObj );
