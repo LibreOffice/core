@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-22 15:21:56 $
+ *  last change: $Author: aw $ $Date: 2001-08-29 14:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,6 +1309,48 @@ BOOL SdrAttrObj::HasLine() const
     return ((XLineStyleItem&)(GetItem(XATTR_LINESTYLE))).GetValue()!=XLINE_NONE;
 }
 
+// #91695# back to corrected old version. Have to check new version again for later builds.
+void SdrAttrObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
+{
+    SfxItemPool* pPool = GetItemPool();
+    if ( pPool && mpStyleSheet )
+    {
+        // Get StyleSheet attributes
+        SfxItemSet aSet(*pPool,
+            SDRATTR_START, SDRATTR_NOTPERSIST_FIRST-1,
+            SDRATTR_NOTPERSIST_LAST+1, SDRATTR_END,
+            EE_ITEMS_START,EE_ITEMS_END,
+            0,0);
+
+        SfxWhichIter aIter( mpStyleSheet->GetItemSet() );
+        sal_uInt16 nWhich( aIter.FirstWhich() );
+        const SfxPoolItem* pItem = NULL;
+
+        while( nWhich )
+        {
+            if( SFX_ITEM_SET == mpStyleSheet->GetItemSet().GetItemState(nWhich, TRUE, &pItem) )
+                aSet.Put( *pItem );
+
+            nWhich = aIter.NextWhich();
+        }
+
+        SfxWhichIter aHardAttrIter( GetItemSet() );
+        nWhich = aHardAttrIter.FirstWhich();
+
+        while( nWhich )
+        {
+            if( SFX_ITEM_SET == GetItemSet().GetItemState(nWhich, FALSE, &pItem) )
+                aSet.Put( *pItem );
+
+            nWhich = aHardAttrIter.NextWhich();
+        }
+
+        // Set StyleSheet attributes as hard attributes
+        SetItemSet( aSet );
+      }
+}
+
+/*
 void SdrAttrObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
 {
     // #89025# Added more performant implementation
@@ -1320,6 +1362,9 @@ void SdrAttrObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
         const SfxPoolItem *pItem = NULL;
 
         ImpForceItemSet();
+        const SfxItemSet* pParentSet = mpObjectItemSet->GetParent();
+        if(pParentSet != 0L)
+            mpObjectItemSet->SetParent(0L);
 
         while(nWhich)
         {
@@ -1327,8 +1372,11 @@ void SdrAttrObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
                 mpObjectItemSet->Put(*pItem);
             nWhich = aIter.NextWhich();
         }
+
+        if(pParentSet != 0L)
+            mpObjectItemSet->SetParent(pParentSet);
     }
 }
-
+*/
 
 
