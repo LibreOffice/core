@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,20 @@ public:
 };
 
 /**
+    PropertyHandler for the XML-data-type: XML_TYPE_NEG_PERCENT
+*/
+class XMLNegPercentPropHdl : public XMLPropertyHandler
+{
+    sal_Int8 nBytes;
+public:
+    XMLNegPercentPropHdl( sal_Int8 nB=4 ) : nBytes( nB ) {}
+    virtual ~XMLNegPercentPropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+/**
     PropertyHandler for the XML-data-type: XML_TYPE_PERCENT
 */
 class XMLMeasurePxPropHdl : public XMLPropertyHandler
@@ -183,6 +197,18 @@ public:
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
+
+/**
+    PropertyHandler for the XML-data-type: XML_TYPE_STYLENAME
+*/
+class XMLStyleNamePropHdl : public XMLStringPropHdl
+{
+public:
+    virtual ~XMLStyleNamePropHdl();
+
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
 
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_DOUBLE
