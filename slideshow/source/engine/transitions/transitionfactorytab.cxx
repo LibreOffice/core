@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transitionfactorytab.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:21:07 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 #include "tools.hxx"
 
-using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace presentation {
