@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDropDownComboBox.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2004-01-05 20:32:37 $
+ *  last change: $Date: 2004-07-23 10:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ public class AccessibleDropDownComboBox extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(
+        XWindow xWindow = at.getCurrentContainerWindow(
                                   (XMultiServiceFactory) Param.getMSF(),
                                   xTextDoc);
 
