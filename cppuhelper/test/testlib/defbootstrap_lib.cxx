@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defbootstrap_lib.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-09-03 14:28:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ static sal_Bool tryService(const char * serviceName)
     OUString iniName = libraryFileUrl.copy(0, libraryFileUrl.lastIndexOf((sal_Unicode)'.')); // cut the library extension
     iniName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE(""))); // add the rc file extension
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OString sIniName = OUStringToOString(iniName, RTL_TEXTENCODING_ASCII_US);
     fprintf(stderr, "defbootstrap.cxx:tryService: using ini: %s\n", sIniName.getStr());
 #endif
@@ -99,7 +99,7 @@ static sal_Bool tryService(const char * serviceName)
         OUString arg = OUString::createFromAscii(serviceName);
         Reference<XInterface> xInterface = smgr->createInstance(arg);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf(stderr, "got the %s service %p\n", serviceName, xInterface.get());
 #endif
         result = result && (xInterface.get() != 0);
@@ -110,7 +110,7 @@ static sal_Bool tryService(const char * serviceName)
         fprintf(stderr, "an exception occurred: %s\n", message.getStr());
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OSL_TRACE("---------------------------------- %i", result);
 #endif
 
