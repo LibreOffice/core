@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swddetbl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 20:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,8 @@ public:
     TYPEINFO();
     // Constructor movet alle Lines/Boxen aus der SwTable zu sich.
     // Die SwTable ist danach Leer und muss geloescht werden.
-    SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType );
+    SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
+                BOOL bUpdate = TRUE );
     ~SwDDETable();
 
     void Modify( SfxPoolItem*, SfxPoolItem* );

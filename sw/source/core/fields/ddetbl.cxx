@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddetbl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 20:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,8 @@ TYPEINIT1( SwDDETable, SwTable );
 
     // Constructor movet alle Lines/Boxen aus der SwTable zu sich.
     // Die SwTable ist danach Leer und muss geloescht werden.
-SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType )
+SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
+                        BOOL bUpdate )
     : SwTable( rTable ), aDepend( this, pDDEType )
 {
     // Kopiere/move die Daten der Tabelle
@@ -124,7 +125,9 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType )
             aDepend.UnlockModify();
 
             // Setzen der Werte in die einzelnen Boxen
-            ChangeContent();
+            // update box content only if update flag is set (false in import)
+            if (bUpdate)
+                ChangeContent();
         }
     }
 }
