@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-12-05 15:14:50 $
+ *  last change: $Author: kr $ $Date: 2001-01-16 17:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,21 +62,9 @@
 package com.sun.star.uno;
 
 
-import java.util.Hashtable;
-
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-
-
-import com.sun.star.lib.uno.typeinfo.AttributeTypeInfo;
-import com.sun.star.lib.uno.typeinfo.MemberTypeInfo;
-import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
-import com.sun.star.lib.uno.typeinfo.ParameterTypeInfo;
-import com.sun.star.lib.uno.typeinfo.TypeInfo;
-
+import java.lang.reflect.InvocationTargetException;
+//import java.lang.reflect.InstantiationException;
 
 /**
  * The Type class represents the IDL builtin type <code>type</code>.
@@ -90,7 +78,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-12-05 15:14:50 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 17:49:23 $
  * @author      Markus Meyer
  * @author      Kay Ramme
  * @since       UDK1.0
@@ -101,322 +89,309 @@ public class Type {
      */
     public static final boolean DEBUG = false;
 
-    static private final Hashtable __classToTypeClass = new Hashtable();
-    static private final Hashtable __typeNameToTypeClass = new Hashtable();
-    static private final Hashtable __typeClassToTypeName = new Hashtable();
+    static private Method __getFromClass;
+    static private Method __getFromName;
+    static private Method __getFromTypeClass;
+
+    /* these variables will be removed with UDK 3.0 */
+    static private Method __isTypeClassSimple;
+    static private Method __getTypeClass;
+    static private Method __getTypeName;
+    static private Method __getArrayTypeName;
+    static private Method __getZClass;
 
     static {
-        __classToTypeClass.put(Void.class,      new Object[]{TypeClass.VOID,    "void"});
-        __classToTypeClass.put(void.class,      new Object[]{TypeClass.VOID,    "void"});
-        __classToTypeClass.put(Character.class, new Object[]{TypeClass.CHAR,    "char"});
-        __classToTypeClass.put(char.class,      new Object[]{TypeClass.CHAR,    "char"});
-        __classToTypeClass.put(Boolean.class,   new Object[]{TypeClass.BOOLEAN, "boolean"});
-        __classToTypeClass.put(boolean.class,   new Object[]{TypeClass.BOOLEAN, "boolean"});
-        __classToTypeClass.put(Byte.class,      new Object[]{TypeClass.BYTE,    "byte"});
-        __classToTypeClass.put(byte.class,      new Object[]{TypeClass.BYTE,    "byte"});
-        __classToTypeClass.put(Short.class,     new Object[]{TypeClass.SHORT,   "short"});
-        __classToTypeClass.put(short.class,     new Object[]{TypeClass.SHORT,   "short"});
-        __classToTypeClass.put(Integer.class,   new Object[]{TypeClass.LONG,    "long"});
-        __classToTypeClass.put(int.class,       new Object[]{TypeClass.LONG,    "long"});
-        __classToTypeClass.put(Long.class,      new Object[]{TypeClass.HYPER,   "hyper"});
-        __classToTypeClass.put(long.class,      new Object[]{TypeClass.HYPER,   "hyper"});
-        __classToTypeClass.put(Float.class,     new Object[]{TypeClass.FLOAT,   "float"});
-        __classToTypeClass.put(float.class,     new Object[]{TypeClass.FLOAT,   "float"});
-        __classToTypeClass.put(Double.class,    new Object[]{TypeClass.DOUBLE,  "double"});
-        __classToTypeClass.put(double.class,    new Object[]{TypeClass.DOUBLE,  "double"});
-        __classToTypeClass.put(String.class,    new Object[]{TypeClass.STRING,  "string"});
-        __classToTypeClass.put(Type.class,      new Object[]{TypeClass.TYPE,    "type"});
-        __classToTypeClass.put(Any.class,       new Object[]{TypeClass.ANY,     "any"});
-        __classToTypeClass.put(Object.class,    new Object[]{TypeClass.ANY,     "any"});
+        System.err.println("##### com.sun.star.uno.Type.<sinit>");
 
-        __typeNameToTypeClass.put("boolean",        TypeClass.BOOLEAN);
-        __typeNameToTypeClass.put("short",          TypeClass.SHORT);
-        __typeNameToTypeClass.put("unsigned short", TypeClass.UNSIGNED_SHORT);
-        __typeNameToTypeClass.put("long",           TypeClass.LONG);
-        __typeNameToTypeClass.put("unsigned long",  TypeClass.UNSIGNED_LONG);
-        __typeNameToTypeClass.put("hyper",          TypeClass.HYPER);
-        __typeNameToTypeClass.put("unsigned hyper", TypeClass.UNSIGNED_HYPER);
-        __typeNameToTypeClass.put("float",          TypeClass.FLOAT);
-        __typeNameToTypeClass.put("double",         TypeClass.DOUBLE);
-        __typeNameToTypeClass.put("char",           TypeClass.CHAR);
-        __typeNameToTypeClass.put("byte",           TypeClass.BYTE);
-        __typeNameToTypeClass.put("string",         TypeClass.STRING);
-        __typeNameToTypeClass.put("any",            TypeClass.ANY);
-        __typeNameToTypeClass.put("void",           TypeClass.VOID);
+        Throwable throwable = null;
 
-        __typeClassToTypeName.put(TypeClass.BOOLEAN,        "boolean");
-        __typeClassToTypeName.put(TypeClass.SHORT,          "short");
-        __typeClassToTypeName.put(TypeClass.UNSIGNED_SHORT, "unsigned short");
-        __typeClassToTypeName.put(TypeClass.LONG,           "long");
-        __typeClassToTypeName.put(TypeClass.UNSIGNED_LONG,  "unsigned long");
-        __typeClassToTypeName.put(TypeClass.HYPER,          "hyper");
-        __typeClassToTypeName.put(TypeClass.UNSIGNED_HYPER, "unsigned hyper");
-        __typeClassToTypeName.put(TypeClass.FLOAT,          "float");
-        __typeClassToTypeName.put(TypeClass.DOUBLE,         "double");
-        __typeClassToTypeName.put(TypeClass.CHAR,           "char");
-        __typeClassToTypeName.put(TypeClass.BYTE,           "byte");
-        __typeClassToTypeName.put(TypeClass.STRING,         "string");
-        __typeClassToTypeName.put(TypeClass.ANY,            "any");
-        __typeClassToTypeName.put(TypeClass.VOID,           "void");
-    }
-
-    static private final Object[] __getTypeClassForClass(Class zClass) {
-        Object data[] = (Object[])__classToTypeClass.get(zClass);
-
-        if(data == null) { // it is a complex type
-            TypeClass typeClass = null;
-            String    typeName = null;
-
-            if(Enum.class.isAssignableFrom(zClass)) {
-               typeClass = TypeClass.ENUM;
-               typeName  = zClass.getName();
-            }
-            else if(Union.class.isAssignableFrom(zClass)) {
-                typeClass = TypeClass.UNION;
-                typeName  = zClass.getName();
-            }
-            else if(XInterface.class.isAssignableFrom(zClass)) {
-                typeClass = TypeClass.INTERFACE;
-                typeName  = zClass.getName();
-            }
-            else if(zClass.isArray()) {
-                typeClass = TypeClass.SEQUENCE;
-
-                Object tmp[] = __getTypeClassForClass(zClass.getComponentType());
-
-                typeName = "[]" + tmp[1];
-            }
-            else if(java.lang.Throwable.class.isAssignableFrom(zClass)) {
-                typeClass = TypeClass.EXCEPTION;
-                typeName  = zClass.getName();
-            }
-            else {
-                typeClass = TypeClass.STRUCT;
-                typeName  = zClass.getName();
-            }
-
-            data = new Object[]{typeClass, typeName};
-        }
-
-        return data;
-    }
-
-    static private final TypeClass __getTypeClassForTypeName(String typeName) {
-        TypeClass typeClass = (TypeClass)__typeNameToTypeClass.get(typeName);
-
-        if(typeClass == null) {
-            if(typeName.startsWith("[]"))
-                typeClass = TypeClass.SEQUENCE;
-            else {
-                try {
-                    typeClass = (TypeClass)__getTypeClassForClass(Class.forName(typeName))[0];
-                }
-                catch(ClassNotFoundException classNotFoundException) {
-                    // so we don't know the type class!
-                    typeClass = TypeClass.UNKNOWN;
-                }
-            }
-        }
-        if(DEBUG) System.err.println("##### __getTypeClassForTypeName:" + typeName + " " + typeClass.getValue());
-
-        return typeClass;
-    }
-
-    static private final Object[] __typeClassToClassNames = new Object[]{
-        new String[]{"java.lang.Void",        "V"},                       // VOID
-        new String[]{"java.lang.Character",   "C"},                       // CHAR
-        new String[]{"java.lang.Boolean",     "Z"},                       // BOOLEAN
-        new String[]{"java.lang.Byte",        "B"},                       // BYTE
-        new String[]{"java.lang.Short",       "S"},                       // SHORT
-        new String[]{"java.lang.Short",       "S"},                       // UNSIGNED SHORT
-        new String[]{"java.lang.Integer",     "I"},                       // LONG
-        new String[]{"java.lang.Integer",     "I"},                       // UNSIGNED_LONG
-        new String[]{"java.lang.Long",        "J"},                       // HYPER
-        new String[]{"java.lang.Long",        "J"},                       // UNSIGNED_HYPER
-        new String[]{"java.lang.Float",       "F"},                       // FLOAT
-        new String[]{"java.lang.Double",      "D"},                       // DOUBLE
-        new String[]{"java.lang.String",      "Ljava.lang.String;"},      // STRING
-        new String[]{"com.sun.star.uno.Type", "Lcom.sun.star.uno.Type;"}, // TYPE
-        new String[]{"java.lang.Object",      "Ljava.lang.Object;"}       // ANY
-    };
-
-    static public boolean isTypeClassSimple(TypeClass typeClass) {
-        return typeClass.getValue() < __typeClassToClassNames.length;
-    }
-
-    static private final String[] __getClassNamesForTypeClass(TypeClass typeClass, String typeName) {
-        String classNames[] = null;
-
-        if(typeClass == null)
-            typeClass = __getTypeClassForTypeName(typeName);
-
-        if(isTypeClassSimple(typeClass))
-            classNames = (String[])__typeClassToClassNames[typeClass.getValue()];
-        else {
-            switch(typeClass.getValue()) {
-            case TypeClass.ENUM_value:
-            case TypeClass.TYPEDEF_value:
-            case TypeClass.STRUCT_value:
-            case TypeClass.UNION_value:
-            case TypeClass.EXCEPTION_value:
-            case TypeClass.ARRAY_value:
-            case TypeClass.INTERFACE_value:
-            case TypeClass.SERVICE_value:
-            case TypeClass.MODULE_value:
-            case TypeClass.INTERFACE_METHOD_value:
-            case TypeClass.INTERFACE_ATTRIBUTE_value:
-            case TypeClass.UNKNOWN_value:
-                classNames = new String[]{typeName, "L" + typeName + ";"};
-                break;
-
-            case TypeClass.SEQUENCE_value:
-                String tmp[] = __getClassNamesForTypeClass(null, typeName.substring(2));
-
-                classNames = new String[]{"[" + tmp[1], "[" + tmp[1]};
-                break;
-            }
-        }
-
-        return classNames;
-    }
-
-    protected TypeClass _typeClass;
-    protected String    _typeName;
-    protected String    _arrayTypeName;
-    protected Class     _class;
-
-    public Type() {
         try {
-            init(TypeClass.VOID, null, void.class);
+            Class typeDesc_Class = Class.forName("com.sun.star.lib.uno.typedesc.TypeDescription");
+
+            __getFromName = typeDesc_Class.getMethod("getTypeDescription", new Class[]{String.class});
+            __getFromClass = typeDesc_Class.getMethod("getTypeDescription", new Class[]{Class.class});
+            __getFromTypeClass = typeDesc_Class.getMethod("getTypeDescription", new Class[]{TypeClass.class});
+
+            __isTypeClassSimple = typeDesc_Class.getMethod("isTypeClassSimple", new Class[]{TypeClass.class});
+
+            __getTypeClass = typeDesc_Class.getMethod("getTypeClass", new Class[]{});
+            __getTypeName = typeDesc_Class.getMethod("getTypeName", new Class[]{});
+            __getArrayTypeName = typeDesc_Class.getMethod("getArrayTypeName", new Class[]{});
+            __getZClass = typeDesc_Class.getMethod("getZClass", new Class[]{});
         }
-        catch(Exception exception) { // this can never happen, except something is very wrong
-            System.err.println("WARNING --- " + getClass().getName() + ".<init> exception occurred - " + exception);
+        catch(NoSuchMethodException noSuchMethodException) {
+            throwable = noSuchMethodException;
+        }
+        catch(ClassNotFoundException classNotFoundException) {
+            throwable = classNotFoundException;
+        }
+
+        if(throwable != null) {
+            String message = "com.sun.star.uno.Type.<sinit> - exception:" + throwable;
+            throwable.printStackTrace();
+            System.err.println(message);
+            throw new java.lang.RuntimeException(message);
         }
     }
 
-    public Type(Class zClass) throws Exception {
-        init(null, null, zClass);
+
+
+    /**
+     * Determines if the given <code>TypeClass</code> is simple.
+     * <p>
+     * @deprecated as of UDK 2.0 (moved to com.sun.star.lib.uno.typedesc.TypeDescription)
+     * <p>
+     * @return                <code>true</code> means simple
+     * @param  typeClass      the IDL typeClass
+     */
+    static public boolean isTypeClassSimple(TypeClass typeClass) {
+        boolean isSimple = false;
+
+        try {
+            isSimple = ((Boolean)__isTypeClassSimple.invoke(null, new Object[]{typeClass})).booleanValue();
+        }
+        catch(IllegalAccessException illegalAccessException) {
+        }
+        catch(InvocationTargetException invocationTargetException) {
+        }
+
+        return isSimple;
     }
 
-    public Type(String typeName) throws com.sun.star.uno.Exception, ClassNotFoundException {
-        init(null, typeName, null);
+
+
+    protected Object _typeDescription;
+
+    protected void init(Class zClass) {
+        Throwable throwable = null;
+
+        try {
+            _typeDescription = __getFromClass.invoke(null, new Object[]{zClass});
+        }
+        catch(InvocationTargetException invocationTargetException) {
+            throwable = invocationTargetException.getTargetException();
+        }
+        catch(IllegalAccessException illegalAccessException) {
+            throwable = illegalAccessException;
+        }
+
+        if(throwable != null)
+            throw new java.lang.RuntimeException(getClass().getName() + ".<init>(Class) - fatal - couldn't create typedescription - " + throwable + " " + zClass);
     }
 
+    protected void init(TypeClass typeClass) {
+        Throwable throwable = null;
+
+        try {
+            _typeDescription = __getFromTypeClass.invoke(null, new Object[]{typeClass});
+        }
+        catch(InvocationTargetException invocationTargetException) {
+            throwable = invocationTargetException.getTargetException();
+        }
+        catch(IllegalAccessException illegalAccessException) {
+            throwable = illegalAccessException;
+        }
+
+        if(throwable != null)
+            throw new java.lang.RuntimeException(getClass().getName() + ".<init>(TypeClass) - fatal - couldn't create typedescription - " + throwable + " " + typeClass);
+    }
+
+    protected void init(String typeName) throws ClassNotFoundException {
+        Throwable throwable = null;
+
+        try {
+            _typeDescription = __getFromName.invoke(null, new Object[]{typeName});
+        }
+        catch(InvocationTargetException invocationTargetException) {
+            throwable = invocationTargetException.getTargetException();
+        }
+        catch(IllegalAccessException illegalAccessException) {
+            throwable = illegalAccessException;
+        }
+
+        if(throwable != null)
+            throw new java.lang.ClassNotFoundException(getClass().getName() + ".<init>(String) - fatal - couldn't create typedescription - " + throwable);
+    }
+
+    /**
+     * Constructs a new <code>Type</code> with
+     * the given type description.
+     * <p>
+     * @param typeDescription   a type description
+     */
+    public Type(Object typeDescription) {
+        _typeDescription = typeDescription;
+    }
+
+    /**
+     * Constructs a new <code>Type</code> which defaults
+     * to <code>void</code>
+     * <p>
+     */
+    public Type() {
+        init(void.class);
+    }
+
+    /**
+     * Constructs a new <code>Type</code> with
+     * the given <code>class</code>.
+     * <p>
+     * @param zClass   the class of this type
+     */
+    public Type(Class zClass) throws Exception { // the exception is only for compatibility reasons
+        init(zClass);
+    }
+
+    /**
+     * Constructs a new <code>Type</code> with
+     * the given type name.
+     * <p>
+     * @param typeName   the name of this type
+     */
+    public Type(String typeName) throws com.sun.star.uno.Exception, ClassNotFoundException { // the com.sun.star.uno.Exception is only for compatibility reasons
+        init(typeName);
+    }
+
+    /**
+     * Constructs a new <code>Type</code> with
+     * the given <code>TypeClass</code>.
+     * <p>
+     * @param typeClass   the <code>TypeClass</code> of this type
+     */
     public Type(TypeClass typeClass) throws com.sun.star.uno.Exception {
-        init(typeClass, null, null);
+        init(typeClass);
     }
 
+    /**
+     * @deprecated as of UDK 2.0
+     */
     public Type(TypeClass typeClass, String typeName) throws com.sun.star.uno.Exception {
-        init(typeClass, typeName, null);
-    }
-
-    /**
-     * Constructs a new <code>Type</code>.
-     * <p>
-     * @param  typeClass      the IDL typeClass
-     * @param  typeName       must be valid java classname, if zClass is zero
-     * @param  zClass         the java class, can be omitted
-     */
-    public Type(TypeClass typeClass, String typeName, Class zClass) throws com.sun.star.uno.Exception {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".<init>:" + typeClass + " " + typeName);
-
-        init(typeClass, typeName, zClass);
-    }
-
-    /**
-     * Constructs a new <code>Type</code>.
-     * <p>
-     * @param  typeClass      the IDL typeClass
-     * @param  typeName       must be valid java classname, if zClass is zero
-     * @param  arrayTypeName  an java array classname
-     * @param  zClass         the java class, can be omitted
-     * @deprecated as of UDK 1.1
-     */
-    public Type(TypeClass typeClass, String typeName, String arrayTypeName, Class zClass) throws com.sun.star.uno.Exception {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".<init>:" + typeClass + " " + typeName);
-
-        init(typeClass, typeName, zClass);
-    }
-
-    protected void init(TypeClass typeClass, String typeName, Class zClass) throws com.sun.star.uno.Exception {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".init:" + typeClass + " " + typeName);
-
-        if(typeClass == null && zClass != null) {
-            Object tmp[] = __getTypeClassForClass(zClass);
-
-            typeClass = (TypeClass)tmp[0];
-            typeName  = (String)tmp[1];
-        }
-
-        if(typeClass == null && typeName != null)
-            typeClass = __getTypeClassForTypeName(typeName);
-
-        if(typeName == null && typeClass != null)
-            typeName = (String)__typeClassToTypeName.get(typeClass);
-
-        if(typeClass == null)
-            throw new com.sun.star.uno.Exception("Type - TypeClass must not be null");
-
-        if(zClass == null) {
-            String tmp[] = __getClassNamesForTypeClass(typeClass, typeName);
+        if(typeName != null) {
             try {
-                zClass = Class.forName(tmp[0]);
+                init(typeName);
             }
             catch(ClassNotFoundException classNotFoundException) {
-                throw new com.sun.star.uno.Exception("Type - ClassNotFoundException:" + tmp[0]);
+                throw new Exception(classNotFoundException.toString());
             }
-
-            _arrayTypeName = tmp[1];
         }
-
-        if(zClass == null)
-            throw new com.sun.star.uno.Exception("Type - Class must not be null");
-
-        _typeClass     = typeClass;
-        _typeName      = typeName;
-        _class         = zClass;
+        else
+            init(typeClass);
     }
+
+    /**
+     * @deprecated as of UDK 2.0
+     */
+    public Type(TypeClass typeClass, String typeName, Class zClass) throws com.sun.star.uno.Exception {
+        this(typeClass, typeName);
+    }
+
+
+    /**
+     * @deprecated as of UDK 2.0
+     */
+    public Type(TypeClass typeClass, String typeName, String arrayTypeName, Class zClass) throws com.sun.star.uno.Exception {
+        this(typeClass, typeName);
+    }
+
+
+    /**
+     * Gives the the type description of this type.
+     * <p>
+     * @return the type description
+     */
+    public Object getTypeDescription() {
+        return _typeDescription;
+    }
+
+
 
     /**
      * Gets the IDL <code>TypeClass</code> of the type.
      * <p>
+     * @deprecated as of UDK 2.0
+     * <p>
      * @return  the <code>TypeClass</code>.
      */
     public TypeClass getTypeClass() {
-        return _typeClass;
+        TypeClass typeClass = null;
+
+        try {
+            typeClass = (TypeClass)__getTypeClass.invoke(_typeDescription, null);
+        }
+        catch(IllegalAccessException illegalAccessException) {
+        }
+        catch(InvocationTargetException invocationTargetException) {
+        }
+
+        return typeClass;
     }
 
     /**
      * Gets the type name.
      * <p>
+     * @deprecated as of UDK 2.0
+     * <p>
      * @return  the type name.
      */
     public String getTypeName() {
-        return _typeName;
+        String typeName = null;
+
+        try {
+            typeName = (String)__getTypeName.invoke(_typeDescription, null);
+        }
+        catch(IllegalAccessException illegalAccessException) {
+        }
+        catch(InvocationTargetException invocationTargetException) {
+        }
+
+        return typeName;
     }
+
 
     /**
      * Gets the array type name.
      * <p>
+     * @deprecated as of UDK 2.0
+     * <p>
      * @return  the array type name.
      */
     public String getArrayTypeName() {
-        if(_arrayTypeName == null) {
-            String tmp[] = __getClassNamesForTypeClass(_typeClass, _typeName);
-            _arrayTypeName = tmp[1];
+        String arrayTypeName = null;
+
+        try {
+            arrayTypeName = (String)__getArrayTypeName.invoke(_typeDescription, null);
+        }
+        catch(IllegalAccessException illegalAccessException) {
+        }
+        catch(InvocationTargetException invocationTargetException) {
         }
 
-        return _arrayTypeName;
+        return arrayTypeName;
     }
 
     /**
      * Gets the corresponding java class for the type.
      * <p>
+     * @deprecated as of UDK 2.0
+     * <p>
      * @return   the corresponding java class.
      */
     public Class getDescription() throws ClassNotFoundException {
-        return _class;
+        Class zClass = null;
+
+        try {
+            zClass =  (Class)__getZClass.invoke(_typeDescription, null);
+        }
+        catch(IllegalAccessException illegalAccessException) {
+        }
+        catch(InvocationTargetException invocationTargetException) {
+        }
+
+        return zClass;
     }
+
+
+
 
     /**
      * Compares two types.
@@ -424,12 +399,25 @@ public class Type {
      * @return    true, if the given type and this type are equal
      */
     public boolean equals(Object type) {
-        return _typeName.equals(((Type)type)._typeName);
+        boolean result = false;
+
+        if(type != null) {
+            result = _typeDescription == ((Type)type)._typeDescription;
+
+            if(!result && _typeDescription != null)
+                result = _typeDescription.equals(((Type)type)._typeDescription);
+        }
+
+        return result;
     }
 
-
+    /**
+     * Calculates the hash code.
+     * <p>
+     * @return    the hash code
+     */
     public int hashCode() {
-        return _typeName.hashCode();
+        return _typeDescription.hashCode();
     }
 
     /**
@@ -438,7 +426,7 @@ public class Type {
      * @return   a descriptive <code>String</code>
      */
     public String toString() {
-        return "Type: " + _typeClass + " " + _typeName + " " + _class;
+        return "Type<" + _typeDescription + ">";
     }
 }
 
