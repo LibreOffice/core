@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-05 08:27:16 $
+ *  last change: $Author: hr $ $Date: 2001-07-11 13:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
+#include <vcl/image.hxx>
 
 #include "colrctrl.hxx"
 
@@ -419,7 +420,7 @@ void SvxColorDockingWindow::FillValueSet()
 
         Bitmap aBmp( aVD.GetBitmap( Point(), aColorSize ) );
 
-        aColorSet.InsertItem( (USHORT)1, aBmp, SVX_RESSTR( RID_SVXSTR_INVISIBLE ) );
+        aColorSet.InsertItem( (USHORT)1, Image(aBmp), SVX_RESSTR( RID_SVXSTR_INVISIBLE ) );
 
         XColorEntry* pEntry;
         nCount = pColorTable->Count();
