@@ -1,4 +1,4 @@
-wz      wizards     :   rsc javaunohelper jut unoil qadevOOo NULL
+wz      wizards     :   rsc javaunohelper jut unoil qadevOOo xalan NULL
 wz      wizards\util                                            nmake           -       all     wz_util NULL
 wz      wizards\source\config                                   nmake           -       all     wz_config NULL
 wz      wizards\source\euro                                     nmake           -       all     wz_eurowiz NULL
@@ -23,9 +23,3 @@ wz      wizards\com\sun\star\wizards\agenda                     nmake           
 wz      wizards\com\sun\star\wizards\web\data                   nmake           -       all     wz_webdata wz_commonwiz wz_agendawiz NULL
 wz      wizards\com\sun\star\wizards\web\export                 nmake           -       all     wz_webexport wz_webdata wz_commonwiz wz_agendawiz NULL
 wz      wizards\com\sun\star\wizards\web                        nmake           -       all     wz_webwiz wz_webexport wz_agendawiz NULL
-wz      wizards\com\sun\star\wizards\tutorial\executer\util     nmake           -       all     wz_tutexeutil wz_webwiz NULL
-wz      wizards\com\sun\star\wizards\tutorial\executer\officeHelper      nmake -        all     wz_tutexehelper wz_tutexeutil wz_webwiz NULL
-wz      wizards\com\sun\star\wizards\tutorial\creator\frame\objectFinder  nmake -       all     wz_tutcrefrafinder wz_tutexehelper wz_webwiz NULL
-wz      wizards\com\sun\star\wizards\tutorial\creator\frame     nmake           -       all     wz_tutcrefra wz_tutcrefrafinder wz_webwiz NULL
-wz      wizards\com\sun\star\wizards\tutorial\creator           nmake           -       all     wz_tutcre wz_tutcrefra wz_webwiz NULL
-wz      wizards\com\sun\star\wizards\tutorial\executer          nmake           -       all     wz_tutexe wz_tutcre wz_webwiz NULL
