@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:05:01 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ ModalDialog RID_DLG_GRIDWIZARD
     Text [ swedish ] = "AutoPilot för tabellelement";
     Text [ polish ] = "AutoPilot - Element tabeli";
     Text [ portuguese_brazilian ] = "AutoPilot Tabellenelement";
-    Text [ japanese ] = "µ°ÄÊß²Û¯Ä Ã°ÌŞÙ‚Ì—v‘f";
+    Text [ japanese ] = "µ°ÄÊß²Û¯Ä Ã°ÌŞÙ‚Ì\\¬—v‘f";
     Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ±í¸ñµ¥Ôª";
     Text [ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z ªí®æ³æ¤¸";
     Text [ arabic ] = "ÚäÕÑ ÌÏæá ÇáãÑÔÏ ÇáÂáí";
@@ -224,6 +224,9 @@ String RID_STR_COULDNOTOPENTABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/07/13 21:05:01  kz
+ *  Merge SRC638: 13.07.01 - 23:04:02
+ *
  *  Revision 1.15  2001/07/03 22:27:07  kz
  *  Merge SRC633: 04.07.01 - 00:25:33
  *
@@ -272,6 +275,7 @@ String RID_STR_COULDNOTOPENTABLE
  *
  *  Revision 1.0 14.02.01 10:47:53  fs
  ************************************************************************/
+
 
 
 
