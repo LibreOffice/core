@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2000-12-15 15:33:06 $
+ *  last change: $Author: os $ $Date: 2001-01-22 09:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,16 +277,16 @@ UINT32 SwMSDffManager::GetFilterFlags()
 {
     UINT32 nFlags = 0;
     const OfaFilterOptions* pOpt = OFF_APP()->GetFilterOptions();
-    if( pOpt->IsMathType2StarMath() )
+    if( pOpt->IsMathType2Math() )
         nFlags |= OLE_MATHTYPE_2_STARMATH;
 /*
     // !! don't convert the OLE-Object into the own format
-    if( pOpt->IsWinWord2StarWriter() )
+    if( pOpt->IsWinWord2Writer() )
         nFlags |= OLE_WINWORD_2_STARWRITER;
 */
-    if( pOpt->IsExcel2StarCalc() )
+    if( pOpt->IsExcel2Calc() )
         nFlags |= OLE_EXCEL_2_STARCALC;
-    if( pOpt->IsPowerPoint2StarImpress() )
+    if( pOpt->IsPowerPoint2Impress() )
         nFlags |= OLE_POWERPOINT_2_STARIMPRESS;
     return nFlags;
 }
@@ -2981,11 +2981,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.6 2000-12-15 15:33:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.7 2001-01-22 09:05:58 os Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/12/15 15:33:06  cmc
+      #79055# OCX FormControls changes
+
       Revision 1.5  2000/12/04 14:08:08  khz
       #78930# Pictures in Hyperlinks will be imported as Graphics with Hyperlink
 
