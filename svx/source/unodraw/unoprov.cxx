@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-30 13:57:50 $
+ *  last change: $Author: cl $ $Date: 2001-04-19 12:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,25 @@ SfxItemPropertyMap* ImplGetSvxControlShapePropertyMap()
 {
     static SfxItemPropertyMap aControlPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN("Transformation"),           OWN_ATTR_TRANSFORMATION     , &::getCppuType((const struct com::sun::star::drawing::HomogenMatrix3*)0), 0, 0 }, \
+        // the following properties are mapped to the XControl Model of this shape
+        { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_FONTNAME),        0,  &::getCppuType((const ::rtl::OUString*)0),  0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_FONTSTYLENAME),   0,  &::getCppuType((const ::rtl::OUString*)0),  0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_FONTFAMILY),      0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_FONTCHARSET),     0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_HEIGHT),          0,  &::getCppuType((const float*)0),            0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_FONTPITCH),       0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_POSTURE),         0,  &::getCppuType((const ::com::sun::star::awt::FontSlant*)0),0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_WEIGHT),          0,  &::getCppuType((const float*)0),            0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_UNDERLINE),       0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_STRIKEOUT),       0,  &::getCppuType((const sal_Int16*)0),        0, 0},
+        { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_COLOR),           0,  &::getCppuType((const sal_Int32*)0),        0, 0 },
+        { MAP_CHAR_LEN("CharKerning"),                      0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
+        { MAP_CHAR_LEN("CharWordMode"),                     0,  &::getBooleanCppuType(),                    0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_ADJUST),          0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
+        { MAP_CHAR_LEN("ParaBackColor"),                    0,  &::getCppuType((const sal_Int32*)0),        0, 0 },
+        { MAP_CHAR_LEN("ControlBorder"),                    0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
+        // the following properties are handled by SvxShape
+        { MAP_CHAR_LEN("Transformation"),           OWN_ATTR_TRANSFORMATION     , &::getCppuType((const struct com::sun::star::drawing::HomogenMatrix3*)0), 0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_ZORDER),   OWN_ATTR_ZORDER             , &::getCppuType((const sal_Int32*)0),      0,      0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERID),  SDRATTR_LAYERID             , &::getCppuType((const sal_Int16*)0),      0,  0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERNAME),SDRATTR_LAYERNAME           , &::getCppuType((const ::rtl::OUString*)0),    0,  0},

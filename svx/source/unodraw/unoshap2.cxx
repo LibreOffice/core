@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-05 11:31:27 $
+ *  last change: $Author: cl $ $Date: 2001-04-19 12:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #define _SVX_USE_UNOGLOBALS_
 
+#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
+#include <com/sun/star/awt/FontSlant.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #endif
@@ -746,6 +749,213 @@ uno::Sequence< OUString > SAL_CALL SvxShapeControl::getSupportedServiceNames() t
 {
     return SvxShape::getSupportedServiceNames();
 }
+
+static struct
+{
+    const sal_Char* mpAPIName;
+    sal_uInt16 mnAPINameLen;
+
+    const sal_Char* mpFormName;
+    sal_uInt16 mnFormNameLen;
+}
+SvxShapeControlPropertyMapping[] =
+{
+    // Warning: The first entry must be FontSlant because the any needs to be converted
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_POSTURE), MAP_CHAR_LEN("FontSlant")  }, //  const sal_Int16 => ::com::sun::star::awt::FontSlant
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_FONTNAME), MAP_CHAR_LEN("FontName") },
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_FONTSTYLENAME), MAP_CHAR_LEN("FontStyleName") },
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_FONTFAMILY), MAP_CHAR_LEN("FontFamily") },
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_FONTCHARSET), MAP_CHAR_LEN("FontCharset") },
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_HEIGHT), MAP_CHAR_LEN("FontHeight") },
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_FONTPITCH), MAP_CHAR_LEN("FontPitch" ) },
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_WEIGHT), MAP_CHAR_LEN("FontWeight" ) },
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_UNDERLINE), MAP_CHAR_LEN("FontUnderline") },
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_STRIKEOUT), MAP_CHAR_LEN("FontStrikeout") },
+    { MAP_CHAR_LEN("CharKerning"), MAP_CHAR_LEN("FontKerning") },
+    { MAP_CHAR_LEN("CharWordMode"), MAP_CHAR_LEN("FontWordLineMode" ) },
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_COLOR),   MAP_CHAR_LEN("TextColor") },
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_ADJUST), MAP_CHAR_LEN("Align") },
+    { MAP_CHAR_LEN("ParaBackColor"), MAP_CHAR_LEN("BackgroundColor") },
+    { MAP_CHAR_LEN("ControlBorder"), MAP_CHAR_LEN("Border") },
+    { NULL,0, NULL, 0 }
+};
+
+void SvxShapeControl::convertPropertyName( const OUString& rApiName, OUString& rInternalName, sal_Bool& rNeedsConversion )
+{
+    sal_uInt16 i = 0;
+    while( SvxShapeControlPropertyMapping[i].mpAPIName )
+    {
+        if( rApiName.reverseCompareToAsciiL( SvxShapeControlPropertyMapping[i].mpAPIName, SvxShapeControlPropertyMapping[i].mnAPINameLen ) == 0 )
+        {
+            rInternalName = OUString( SvxShapeControlPropertyMapping[i].mpFormName, SvxShapeControlPropertyMapping[i].mnFormNameLen, RTL_TEXTENCODING_ASCII_US );
+            rNeedsConversion = i == 0;
+        }
+        i++;
+    }
+}
+
+void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
+{
+    OUString aFormsName;
+    sal_Bool bNeedConversion;
+
+    convertPropertyName( aPropertyName, aFormsName, bNeedConversion );
+    if( aFormsName.getLength() )
+    {
+        uno::Reference< beans::XPropertySet > xControl( getControl(), uno::UNO_QUERY );
+        if( xControl.is() )
+        {
+            uno::Reference< beans::XPropertySetInfo > xInfo( xControl->getPropertySetInfo() );
+            if( xInfo.is() && xInfo->hasPropertyByName( aFormsName ) )
+            {
+                if( bNeedConversion )
+                {
+                    awt::FontSlant nSlant;
+                    if( !(aValue >>= nSlant ) )
+                        throw lang::IllegalArgumentException();
+
+                    xControl->setPropertyValue( aFormsName, uno::makeAny( (sal_Int16)nSlant ) );
+                }
+                else
+                {
+                    xControl->setPropertyValue( aFormsName, aValue );
+                }
+            }
+        }
+    }
+    else
+    {
+        SvxShape::setPropertyValue( aPropertyName, aValue );
+    }
+}
+
+uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyName )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OUString aFormsName;
+    sal_Bool bNeedConversion;
+
+    convertPropertyName( aPropertyName, aFormsName, bNeedConversion );
+    if( aFormsName.getLength() )
+    {
+        uno::Reference< beans::XPropertySet > xControl( getControl(), uno::UNO_QUERY );
+
+        if( xControl.is() )
+        {
+            uno::Reference< beans::XPropertySetInfo > xInfo( xControl->getPropertySetInfo() );
+            if( xInfo.is() && xInfo->hasPropertyByName( aFormsName ) )
+            {
+                if( bNeedConversion )
+                {
+                    sal_Int16 nSlant;
+                    xControl->getPropertyValue( aFormsName ) >>= nSlant;
+                    return uno::makeAny( (awt::FontSlant)nSlant );
+                }
+                else
+                {
+                    return xControl->getPropertyValue( aFormsName );
+                }
+            }
+        }
+
+        uno::Any aAny;
+        return aAny;
+    }
+    else
+    {
+        return SvxShape::getPropertyValue( aPropertyName );
+    }
+
+}
+
+// XPropertyState
+beans::PropertyState SAL_CALL SvxShapeControl::getPropertyState( const ::rtl::OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException )
+{
+    OUString aFormsName;
+    sal_Bool bNeedConversion;
+
+    convertPropertyName( PropertyName, aFormsName, bNeedConversion );
+    if( aFormsName.getLength() )
+    {
+        uno::Reference< beans::XPropertyState > xControl( getControl(), uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xPropSet( getControl(), uno::UNO_QUERY );
+
+        if( xControl.is() && xPropSet.is() )
+        {
+            uno::Reference< beans::XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
+            if( xInfo.is() && xInfo->hasPropertyByName( aFormsName ) )
+            {
+                return xControl->getPropertyState( aFormsName );
+            }
+        }
+
+        return beans::PropertyState_DEFAULT_VALUE;
+    }
+    else
+    {
+        return SvxShape::getPropertyState( PropertyName );
+    }
+}
+
+void SAL_CALL SvxShapeControl::setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException )
+{
+    OUString aFormsName;
+    sal_Bool bNeedConversion;
+
+    convertPropertyName( PropertyName, aFormsName, bNeedConversion );
+    if( aFormsName.getLength() )
+    {
+        uno::Reference< beans::XPropertyState > xControl( getControl(), uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xPropSet( getControl(), uno::UNO_QUERY );
+
+        if( xControl.is() && xPropSet.is() )
+        {
+            uno::Reference< beans::XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
+            if( xInfo.is() && xInfo->hasPropertyByName( aFormsName ) )
+            {
+                xControl->setPropertyToDefault( aFormsName );
+            }
+        }
+    }
+    else
+    {
+        SvxShape::setPropertyToDefault( PropertyName );
+    }
+}
+
+uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const ::rtl::OUString& aPropertyName )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+{
+    OUString aFormsName;
+    sal_Bool bNeedConversion;
+
+    convertPropertyName( aPropertyName, aFormsName, bNeedConversion );
+    if( aFormsName.getLength() )
+    {
+        uno::Reference< beans::XPropertyState > xControl( getControl(), uno::UNO_QUERY );
+
+        if( xControl.is() )
+        {
+            if( bNeedConversion )
+            {
+                sal_Int16 nSlant;
+                xControl->getPropertyDefault( aFormsName ) >>= nSlant;
+
+                return uno::makeAny( (awt::FontSlant)nSlant );
+            }
+            else
+            {
+                return xControl->getPropertyDefault( aFormsName );
+            }
+        }
+    }
+    else
+    {
+        return SvxShape::getPropertyDefault( aPropertyName );
+    }
+}
+
 
 /***********************************************************************
 * class SvxShapeDimensioning                                           *

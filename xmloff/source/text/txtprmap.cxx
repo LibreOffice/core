@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-10 12:04:45 $
+ *  last change: $Author: cl $ $Date: 2001-04-19 12:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_CHRATR_WEIGHT
     M_E( "CharWeight",      FO,     font_weight,        XML_TYPE_TEXT_WEIGHT, 0 ),
     // RES_CHRATR_WORDLINEMODE
-    M_E( "WordMode",        FO,     score_spaces,       XML_TYPE_NBOOL, 0 ),
+    M_E( "CharWordMode",    FO,     score_spaces,       XML_TYPE_NBOOL, 0 ),
     // RES_CHRATR_AUTOKERN
     M_E( "CharAutoKerning", STYLE,  letter_kerning,     XML_TYPE_BOOL, 0 ),
     // RES_CHRATR_BLINK
@@ -393,7 +393,7 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     // RES_CHRATR_WEIGHT
     M_E( "CharWeight",      FO,     font_weight,        XML_TYPE_TEXT_WEIGHT, 0 ),
     // RES_CHRATR_WORDLINEMODE
-    M_E( "WordMode",        FO,     score_spaces,       XML_TYPE_NBOOL, 0 ),
+    M_E( "CharWordMode",    FO,     score_spaces,       XML_TYPE_NBOOL, 0 ),
     // RES_CHRATR_AUTOKERN
     M_E( "CharAutoKerning", STYLE,  letter_kerning,     XML_TYPE_BOOL, 0 ),
     // RES_CHRATR_BLINK
