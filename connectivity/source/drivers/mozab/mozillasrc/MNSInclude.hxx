@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MNSInclude.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-10 15:32:47 $
+ *  last change: $Author: obo $ $Date: 2002-10-17 09:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
     #define DEBUG_WAS_DEFINED DEBUG
     #undef DEBUG
 #else
-    #undef DEBUG_WAS_DEFINED DEBUG
+    #undef DEBUG_WAS_DEFINED
 #endif
 
 #include <nsDebug.h>
