@@ -215,15 +215,13 @@ Dim sPath as String
 Dim InitPath as String
 Dim RefControlName as String
 Dim oUcb as object
-Dim i as Integer
-Dim MaxIndex as Integer
+Dim ListAny(0)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	oFileDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FilePicker&quot;)
-	MaxIndex = Ubound(FilterNames())
-	For i = 0 To MaxIndex
-		oFileDialog.AppendFilter(FilterNames(i,0), FilterNames(i,1))
-	Next i
-	oFileDialog.SetCurrentFilter(FilterNames(0,0)
+	ListAny(0) = com.sun.star.ui.dialogs.TemplateDescription.FILEOPEN_SIMPLE
+	oFileDialog.Initialize(ListAny())
+	AddFiltersToDialog(FilterNames(), oFileDialog)
+
 	InitPath = ConvertToUrl(oRefModel.Text)
 	If oUcb.Exists(InitPath) Then
 		oFileDialog.SetDisplayDirectory(InitPath)
@@ -236,4 +234,52 @@ Dim MaxIndex as Integer
 		End If
 	End If
 End Sub
+
+
+Function StoreDocument(oDocument as Object, FilterNames() as String, DefaultName as String, DisplayDirectory as String)
+Dim NoArgs() as New com.sun.star.beans.PropertyValue
+Dim oStoreProperties(0) as New com.sun.star.beans.PropertyValue
+Dim oStoreDialog as Object
+Dim iAccept as Integer
+Dim sPath as String
+Dim ListAny(0)
+Dim UIFilterName as String
+Dim FilterName as String
+Dim FilterIndex as Integer
+	ListAny(0) = com.sun.star.ui.dialogs.TemplateDescription.FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS
+	oStoreDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FilePicker&quot;)
+	oStoreDialog.Initialize(ListAny())
+	AddFiltersToDialog(FilterNames(), oStoreDialog)
+	oStoreDialog.SetDisplayDirectory(DisplayDirectory)
+	oStoreDialog.SetDefaultName(DefaultName)
+	iAccept = oStoreDialog.Execute()
+	If iAccept = 1 Then
+		sPath = oStoreDialog.Files(0)
+		UIFilterName = oStoreDialog.GetCurrentFilter()
+		FilterIndex = IndexInArray(UIFilterName, FilterNames())
+		FilterName = FilterNames(FilterIndex,2)
+		If FilterName = &quot;&quot;  Then
+			oDocument.StoreAsUrl(sPath, NoArgs())
+		Else
+			oStoreProperties(0).Name = &quot;FilterName&quot;
+			oStoreProperties(0).Value = FilterName
+			oDocument.StoreAsUrl(sPath, oStoreProperties())
+		End If
+		StoreDocument() = True
+	Else
+		StoreDocument() = False
+	End If
+End Function
+
+
+Sub AddFiltersToDialog(FilterNames() as String, oDialog as Object)	
+Dim i as Integer
+Dim MaxIndex as Integer
+	MaxIndex = Ubound(FilterNames(), 1)
+	For i = 0 To MaxIndex
+		oDialog.AppendFilter(FilterNames(i,0), FilterNames(i,1))
+	Next i
+	oDialog.SetCurrentFilter(FilterNames(0,0)
+End Sub	
+
 </script:module>
