@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:46:11 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -915,7 +915,7 @@ void SvtExtendedMultiLineEdit_Impl::InsertEntry( const String& rTitle, const Str
 
 const String& SvtDocInfoTable_Impl::GetString( long nId ) const
 {
-    USHORT nPos = FindIndex( nId );
+    USHORT nPos = static_cast< USHORT >( FindIndex( nId ) );
 
     if ( RESARRAY_INDEX_NOTFOUND != nPos )
         return ResStringArray::GetString( nPos );
@@ -1266,12 +1266,20 @@ IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, pView )
 IMPL_LINK ( SvtTemplateWindow , TimeoutHdl_Impl, Timer *, EMPTYARG )
 {
     aSelectHdl.Call( this );
-    String aURL = pFileWin->GetSelectedFile();
-    sal_Bool bIsFile = ( aURL.Len() != 0 && !::utl::UCBContentHelper::IsFolder( aURL ) &&
-                         INetURLObject( aURL ).GetProtocol() != INET_PROT_PRIVATE );
+    String sURL = pFileWin->GetSelectedFile();
+    sal_Bool bIsNewDoc = ( pIconWin->GetSelectEntryPos() == ICON_POS_NEWDOC );
+    sal_Bool bIsFile = ( sURL.Len() != 0 && !::utl::UCBContentHelper::IsFolder( sURL ) &&
+                         INetURLObject( sURL ).GetProtocol() != INET_PROT_PRIVATE && !bIsNewDoc );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, bIsFile );
+    aFrameWinTB.EnableItem( TI_DOCTEMPLATE_PREVIEW, !bIsNewDoc );
+
     if ( bIsFile )
-        pFrameWin->OpenFile( aURL, sal_True, sal_False, sal_False );
+        pFrameWin->OpenFile( sURL, sal_True, sal_False, sal_False );
+    else if ( bIsNewDoc && aFrameWinTB.IsItemChecked( TI_DOCTEMPLATE_PREVIEW ) )
+    {
+        aFrameWinTB.CheckItem( TI_DOCTEMPLATE_DOCINFO );
+        DoAction( TI_DOCTEMPLATE_DOCINFO );
+    }
     return 0;
 }
 
