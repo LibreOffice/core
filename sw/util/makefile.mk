@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 16:37:34 $
+#   last change: $Author: rt $ $Date: 2005-01-11 12:46:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,7 +154,7 @@ SHL1STDLIBS+= \
     $(SALLIB) \
         $(ICUUCLIB) \
     $(I18NUTILLIB)	\
-    $(AVMEDIALIB)	
+    $(AVMEDIALIB)
 
 .IF "$(OS)"=="MACOSX"
 # static libraries at end for OS X
@@ -213,7 +213,6 @@ SHL3STDLIBS= \
         $(ISWLIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
-            $(SO2LIB) \
             $(BASICLIB) \
             $(SVTOOLLIB) \
             $(TKLIB) \
@@ -228,7 +227,7 @@ SHL3STDLIBS= \
             $(CPPULIB) \
             $(SALLIB) \
             $(SOTLIB)
-            
+
 SHL3LIBS=   $(SLB)$/swui.lib
 LIB3TARGET = $(SLB)$/swui.lib
 
@@ -327,7 +326,7 @@ LIB3OBJFILES = \
         $(SLO)$/mmgreetingspage.obj \
         $(SLO)$/mmmergepage.obj \
         $(SLO)$/mmpreparemergepage.obj \
-        $(SLO)$/selectdbtabledialog.obj 
+        $(SLO)$/selectdbtabledialog.obj
 
 
 
