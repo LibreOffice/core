@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-01-27 17:18:21 $
+ *  last change: $Author: dfoster $ $Date: 2003-01-28 17:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,11 +142,32 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
  * we can't see a good reason not to return a bool, rather than throw
  * an exception if the request is not granted (as is the case in Java).
  */
-bool ScriptSecurityManager::checkPermission( const Reference<
-storage::XScriptInfo > & scriptInfo, const OUString & permissionRequest )
+sal_Bool ScriptSecurityManager::checkPermission( const OUString & scriptStorageURL,
+    const OUString & permissionRequest )
     throw ( RuntimeException )
 {
-    // warning dialog if necessary
+    if( permissionRequest.equals( OUString::createFromAscii( "execute" ) ) )
+    {
+        OSL_TRACE(
+            "ScriptSecurityManager::checkPermission: execute permission request for %s",
+            ::rtl::OUStringToOString( scriptStorageURI,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+        ::std::vector< StoragePerm >::const_iterator iter;
+        ::std::vector< StoragePerm >::const_iterator iterEnd =
+            m_permissionSettings.end();
+        for ( iter = m_permissionSettings.begin() ; iter != iterEnd; ++iter )
+        {
+            if ( iter->url.equals( scriptStorageURL ) )
+            {
+                // warning dialog if necessary
+                return iter->execPermission;
+            }
+        }
+        // we should never get here!!
+        throw RuntimeException( OUString::createFromAscii( "ScriptSecurityManager::checkPermission: storageURL not found" ) );
+    }
+    else
+        return sal_True;
 }
 
 void ScriptSecurityManager::readConfiguration()

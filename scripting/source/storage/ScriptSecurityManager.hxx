@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSecurityManager.hxx,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-01-27 17:18:21 $
+*  last change: $Author: dfoster $ $Date: 2003-01-28 17:09:26 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -99,9 +99,9 @@ public:
  * we can't see a good reason not to return a bool, rather than throw
  * an exception if the request is not granted (as is the case in Java).
  */
-    bool checkPermission( const css::uno::Reference<
-    dcsssf::storage::XScriptInfo > & scriptInfo, const rtl::OUString &
-    permissionRequest ) throw (css::uno::RuntimeException);
+    sal_Bool checkPermission( const rtl::OUString & scriptStorageURL,
+        const rtl::OUString & permissionRequest )
+        throw (css::uno::RuntimeException);
 private:
     void readConfiguration() throw (css::uno::RuntimeException);
     css::uno::Reference< css::uno::XComponentContext > m_xContext;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-01-27 17:18:22 $
+ *  last change: $Author: dfoster $ $Date: 2003-01-28 17:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ public:
 
     */
     virtual sal_Bool ScriptStorageManager::checkPermission(
-        const css::uno::Reference< dcsssf::storage::XScriptInfo > & scriptInfo,
+        const rtl::OUString & scriptStorageURI,
         const rtl::OUString & permissionRequest )
         throw ( css::uno::RuntimeException );
     //======================================================================

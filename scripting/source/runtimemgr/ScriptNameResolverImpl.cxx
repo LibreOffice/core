@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: npower $ $Date: 2003-01-28 11:52:16 $
+ *  last change: $Author: dfoster $ $Date: 2003-01-28 17:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
         {
             OSL_TRACE( "** about to resolve from storage using id %d from vector of size %d",
                 *iter, m_vSearchIDs.size() );
-            if ( ( resolvedName = resolveURIFromStorageID( *iter, scriptURI ) ).is() )
+            if ( ( resolvedName = resolveURIFromStorageID( *iter, docUri, scriptURI ) ).is() )
             {
                 OSL_TRACE( "found match in uri from storage %d", *iter );
                 xPropSetScriptingContext->setPropertyValue(
@@ -303,7 +303,8 @@ throw( RuntimeException )
 
 Reference< storage::XScriptInfo >
 ScriptNameResolverImpl::resolveURIFromStorageID
-( sal_Int32 sid, const ::rtl::OUString& scriptURI )
+( sal_Int32 sid, const ::rtl::OUString & docURI,
+  const ::rtl::OUString& scriptURI )
 SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
 {
     Reference< storage::XScriptInfo > resolvedScriptInfo;
@@ -316,7 +317,7 @@ SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
     }
     try
     {
-        Reference< storage::XScriptInfoAccess > storage = getStorageInstance( sid );
+        Reference< storage::XScriptInfoAccess > storage = getStorageInstance( sid, docURI );
         validateXRef( storage,
         "ScriptNameResolverImpl::resolveURIFromStorageID: cannot get XScriptInfoAccess" );
         Sequence< Reference< storage::XScriptInfo > > results =
@@ -395,7 +396,8 @@ SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
 
 Reference< storage::XScriptInfoAccess >
 
-ScriptNameResolverImpl::getStorageInstance( sal_Int32 sid ) SAL_THROW ( ( RuntimeException ) )
+ScriptNameResolverImpl::getStorageInstance( sal_Int32 sid,
+const ::rtl::OUString & docURI ) SAL_THROW ( ( RuntimeException ) )
 {
     Reference< storage::XScriptInfoAccess > xScriptInfoAccess;
     try
@@ -422,8 +424,7 @@ ScriptNameResolverImpl::getStorageInstance( sal_Int32 sid ) SAL_THROW ( ( Runtim
         // we need to check the permission
         if( ( sid != scriptingConstantsPool.USER_STORAGE_ID ) &&
             ( sid != scriptingConstantsPool.SHARED_STORAGE_ID ) &&
-            ( xScriptSecurity->checkPermission( Reference<
-                        storage::XScriptInfo> (),
+            ( xScriptSecurity->checkPermission( docURI,
                 OUString::createFromAscii( "execute" ) ) == false ) )
         {
             OSL_TRACE( "ScriptNameResolverImpl::getStorageInstance: no permission for ID=%d", sid );
