@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 12:37:44 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,8 +990,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShape::getImplementationId()
 
 Reference< uno::XInterface > SvxShape_NewInstance()
 {
-    uno::Reference< drawing::XShape > xShape( (OWeakObject*)new SvxShape(), UNO_QUERY );
-    return xShape;
+    return static_cast< OWeakObject* >(new SvxShape());
 }
 
 // SfxListener
