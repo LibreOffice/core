@@ -2,9 +2,9 @@
  *
  *  $RCSfile: verttexttbxctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-03 07:16:30 $
+ *  last change: $Author: os $ $Date: 2001-07-13 12:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ void SvxVertTextTbxCtrl::StateChanged( USHORT nSID, SfxItemState eState,
             pParent->SetOutputSizePixel( aSize );
         }
     }
+    SfxToolBoxControl::StateChanged(nSID, eState, pState);
 }
 /* -----------------------------27.04.01 15:50--------------------------------
 
