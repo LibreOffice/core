@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 07:16:57 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,21 @@ ScAccessibleCell::ScAccessibleCell(
 
 ScAccessibleCell::~ScAccessibleCell()
 {
+    if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
+    {
+        // increment refcount to prevent double call off dtor
+        osl_incrementInterlockedCount( &m_refCount );
+        // call dispose to inform object wich have a weak reference to this object
+        dispose();
+    }
+}
+
+void SAL_CALL ScAccessibleCell::disposing()
+{
     if (mpTextHelper)
-        delete mpTextHelper;
+        DELETEZ(mpTextHelper);
+
+    ScAccessibleCellBase::disposing();
 }
 
     //=====  XAccessibleComponent  ============================================
@@ -201,13 +214,22 @@ Rectangle ScAccessibleCell::GetBoundingBox(void)
         throw (uno::RuntimeException)
 {
     Rectangle aCellRect;
-    if (mpViewShell && mpViewShell->GetViewData())
+    if (mpViewShell)
     {
         sal_Int32 nSizeX, nSizeY;
         mpViewShell->GetViewData()->GetMergeSizePixel(
             maCellAddress.Col(), maCellAddress.Row(), nSizeX, nSizeY);
         aCellRect.SetSize(Size(nSizeX, nSizeY));
         aCellRect.SetPos(mpViewShell->GetViewData()->GetScrPos(maCellAddress.Col(), maCellAddress.Row(), meSplitPos));
+
+        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        if (pWindow)
+        {
+            Rectangle aRect(pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow()));
+            aRect.Move(-aRect.Left(), -aRect.Top());
+            aCellRect = aRect.Intersection(aCellRect);
+        }
+
     }
     return aCellRect;
 }
