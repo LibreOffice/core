@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-26 13:58:09 $
+ *  last change: $Author: ssa $ $Date: 2002-07-03 09:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,7 +683,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             nFrameStyle |= SAL_FRAME_STYLE_CLOSEABLE;
         if ( nStyle & WB_APP )
             nFrameStyle |= SAL_FRAME_STYLE_DEFAULT;
-        if( ! nFrameStyle &&
+        if( ! (nFrameStyle & ~SAL_FRAME_STYLE_CLOSEABLE) && // closeable only is ok, useful for undecorated floaters
             ( mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) || (nStyle & WB_SYSTEMFLOATWIN) )
             )
             nFrameStyle = SAL_FRAME_STYLE_FLOAT; // hmmm, was '0' before ????
@@ -3834,8 +3834,17 @@ void Window::ImplGrabFocus( USHORT nFlags )
 #endif
 
     BOOL bMustNotGrabFocus = FALSE;
-    if( ( mbFloatWin || ( GetStyle() & WB_SYSTEMFLOATWIN ) ) && !( GetStyle() & WB_MOVEABLE ) )
-        bMustNotGrabFocus = TRUE;
+    // #100242#, check parent hierarchy if some floater prohibits grab focus
+    Window *pParent = this;
+    while( pParent )
+    {
+        if( ( pParent->mbFloatWin || ( pParent->GetStyle() & WB_SYSTEMFLOATWIN ) ) && !( pParent->GetStyle() & WB_MOVEABLE ) )
+        {
+            bMustNotGrabFocus = TRUE;
+            break;
+        }
+        pParent = pParent->mpParent;
+    }
 
 
     if ( pSVData->maWinData.mpFocusWin != this || ( bAsyncFocusWaiting && !bHasFocus && !bMustNotGrabFocus ) )
@@ -7255,11 +7264,13 @@ void Window::SetComponentInterface( ::com::sun::star::uno::Reference< ::com::sun
 
 void Window::ImplCallDeactivateListeners( Window *pNew )
 {
-    // Ich werde nicht deaktiviert, wenn das neu aktivierte Window ein Child von mir ist
+    // no deactivation if the the newly activated window is my child
     if ( !pNew || !ImplIsChild( pNew ) )
     {
         ImplCallEventListeners( VCLEVENT_WINDOW_DEACTIVATE );
-        if ( ImplGetParent() )
+        // #100759#, avoid walking the wrong frame's hierarchy
+        //           eg, undocked docking windows (ImplDockFloatWin)
+        if ( ImplGetParent() && mpFrameWindow == ImplGetParent()->mpFrameWindow )
             ImplGetParent()->ImplCallDeactivateListeners( pNew );
     }
 }
@@ -7268,11 +7279,13 @@ void Window::ImplCallDeactivateListeners( Window *pNew )
 
 void Window::ImplCallActivateListeners( Window *pOld )
 {
-    // Ich werde nicht aktiviert, wenn das alte aktive Fenster ein Child von mir ist
+    // no activation if the the old active window is my child
     if ( !pOld || !ImplIsChild( pOld ) )
     {
         ImplCallEventListeners( VCLEVENT_WINDOW_ACTIVATE, pOld );
-        if ( ImplGetParent() )
+        // #100759#, avoid walking the wrong frame's hierarchy
+        //           eg, undocked docking windows (ImplDockFloatWin)
+        if ( ImplGetParent() && mpFrameWindow == ImplGetParent()->mpFrameWindow )
             ImplGetParent()->ImplCallActivateListeners( pOld );
     }
 }
@@ -7542,6 +7555,7 @@ Reference< XClipboard > Window::GetSelection()
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Window::GetAccessible( BOOL bCreate )
 {
     // do not optimize hierarchy for the top level border win (ie, when there is no parent)
+    /* // do not optimize accessible hierarchy at all to better reflect real VCL hierarchy
     if ( GetParent() && ( GetType() == WINDOW_BORDERWINDOW ) && ( GetChildCount() == 1 ) )
     //if( !ImplIsAccessibleCandidate() )
     {
@@ -7549,7 +7563,7 @@ Reference< XClipboard > Window::GetSelection()
         if ( pChild )
             return pChild->GetAccessible();
     }
-
+    */
     if ( !mxAccessible.is() && bCreate )
         mxAccessible = CreateAccessible();
 
@@ -8062,4 +8076,11 @@ void Window::DbgAssertNoEventListeners()
         maChildEventListeners.Call( &aEvent );
 }
 */
+
+// controls should return the window that gets the
+// focus by default, so keyevents can be sent to that window directly
+Window* Window::GetPreferredKeyInputWindow()
+{
+    return this;
+}
 
