@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:30:31 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_bIsAutoIncrement(FALSE)
     ,m_aDestColumns(sal_True)
     ,m_xFactory(_rM)
-    ,m_pTypeInfo(static_cast<dbaui::OTypeInfo*>(0))
+    ,m_pTypeInfo()
     ,m_vColumnSize(0)
     ,m_vFormatKey(0)
     ,m_vColumns(_rColumnPositions)
@@ -261,7 +261,7 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
     ,m_bIsAutoIncrement(sal_False)
     ,m_aDestColumns(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() == sal_True)
     ,m_xFactory(_rM)
-    ,m_pTypeInfo(static_cast<dbaui::OTypeInfo*>(0))
+    ,m_pTypeInfo()
     ,m_bFoundTable(sal_False)
     ,m_bCheckOnly(sal_False)
 {
