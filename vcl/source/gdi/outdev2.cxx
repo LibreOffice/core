@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-04 17:05:42 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoi
                 pPosAry->mnDestHeight = pPosAry->mnDestHeight * pPosAry->mnSrcHeight / nOldHeight;
             }
 
-            mpGraphics->CopyBits( pPosAry, pGraphics2 );
+            mpGraphics->CopyBits( pPosAry, pGraphics2, this, pSrcDev );
         }
     }
 }
@@ -381,7 +381,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                 aPosAry.mnDestHeight = aPosAry.mnDestHeight*aPosAry.mnSrcHeight/nOldHeight;
             }
 
-            mpGraphics->CopyBits( &aPosAry, NULL );
+            mpGraphics->CopyBits( &aPosAry, NULL, this, NULL );
         }
     }
 }
@@ -483,7 +483,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
                 mpGraphics->CopyArea( aPosAry.mnDestX, aPosAry.mnDestY,
                                       aPosAry.mnSrcX, aPosAry.mnSrcY,
                                       aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
-                                      SAL_COPYAREA_WINDOWINVALIDATE );
+                                      SAL_COPYAREA_WINDOWINVALIDATE, this );
 #else
                 mpGraphics->CopyArea( aPosAry.mnDestX, aPosAry.mnDestY,
                                       aPosAry.mnSrcX, aPosAry.mnSrcY,
@@ -495,7 +495,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
             {
                 aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
                 aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
-                mpGraphics->CopyBits( &aPosAry, NULL );
+                mpGraphics->CopyBits( &aPosAry, NULL, this, NULL );
             }
         }
     }
@@ -537,7 +537,7 @@ void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, cons
     if ( rRegion.IsNull() )
         mpGraphics->ResetClipRegion();
     else
-        ImplSelectClipRegion( mpGraphics, rRegion );
+        ImplSelectClipRegion( mpGraphics, rRegion, this );
 #else
     if ( rRegion.IsNull() )
         mpGraphics->SetClipRegion();
@@ -693,7 +693,7 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                 aBmp.Mirror( nMirrFlags );
 
 #ifndef REMOTE_APPSERVER
-            mpGraphics->DrawBitmap( &aPosAry, *aBmp.ImplGetImpBitmap()->ImplGetSalBitmap() );
+            mpGraphics->DrawBitmap( &aPosAry, *aBmp.ImplGetImpBitmap()->ImplGetSalBitmap(), this );
 #else
             aBmp.ImplDrawRemote( this,
                         Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
@@ -857,9 +857,9 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
             const ImpBitmap* pMaskBmp = aBmpEx.ImplGetMaskImpBitmap();
 
             if ( pMaskBmp )
-                mpGraphics->DrawBitmap( &aPosAry, *pImpBmp->ImplGetSalBitmap(), *pMaskBmp->ImplGetSalBitmap() );
+                mpGraphics->DrawBitmap( &aPosAry, *pImpBmp->ImplGetSalBitmap(), *pMaskBmp->ImplGetSalBitmap(), this );
             else
-                mpGraphics->DrawBitmap( &aPosAry, *pImpBmp->ImplGetSalBitmap() );
+                mpGraphics->DrawBitmap( &aPosAry, *pImpBmp->ImplGetSalBitmap(), this );
 
 #else
 
@@ -980,11 +980,11 @@ void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
                 Bitmap aTmp( rBitmap );
                 aTmp.Mirror( nMirrFlags );
                 mpGraphics->DrawMask( &aPosAry, *aTmp.ImplGetImpBitmap()->ImplGetSalBitmap(),
-                                      ImplColorToSal( rMaskColor ) );
+                                      ImplColorToSal( rMaskColor ) , this);
             }
             else
                 mpGraphics->DrawMask( &aPosAry, *pImpBmp->ImplGetSalBitmap(),
-                                      ImplColorToSal( rMaskColor ) );
+                                      ImplColorToSal( rMaskColor ), this );
 
 #else
 
@@ -1088,7 +1088,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                         aPosAry.mnDestHeight = nHeight;
 
                         if ( (nWidth > 0) && (nHeight > 0) )
-                            (((OutputDevice*)&aVDev)->mpGraphics)->CopyBits( &aPosAry, mpGraphics );
+                            (((OutputDevice*)&aVDev)->mpGraphics)->CopyBits( &aPosAry, mpGraphics, this, this );
 
                         aBmp = aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
                      }
@@ -1101,7 +1101,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 
             if ( !bClipped )
             {
-                SalBitmap* pSalBmp = mpGraphics->GetBitmap( nX, nY, nWidth, nHeight );
+                SalBitmap* pSalBmp = mpGraphics->GetBitmap( nX, nY, nWidth, nHeight, this );
 
                 if( pSalBmp )
                 {
@@ -1150,7 +1150,7 @@ Color OutputDevice::GetPixel( const Point& rPt ) const
         {
             const long      nX = ImplLogicXToDevicePixel( rPt.X() );
             const long      nY = ImplLogicYToDevicePixel( rPt.Y() );
-            const SalColor  aSalCol = mpGraphics->GetPixel( nX, nY );
+            const SalColor  aSalCol = mpGraphics->GetPixel( nX, nY, this );
             aColor.SetRed( SALCOLOR_RED( aSalCol ) );
             aColor.SetGreen( SALCOLOR_GREEN( aSalCol ) );
             aColor.SetBlue( SALCOLOR_BLUE( aSalCol ) );
@@ -1195,7 +1195,7 @@ Color* OutputDevice::GetPixel( const Polygon& rPts ) const
                     Color&          rCol = pColors[ i ];
                     const Point&    rPt = rPts[ i ];
                     const SalColor  aSalCol( mpGraphics->GetPixel( ImplLogicXToDevicePixel( rPt.X() ),
-                                                                   ImplLogicYToDevicePixel( rPt.Y() ) ) );
+                                                                   ImplLogicYToDevicePixel( rPt.Y() ) , this) );
 
                     rCol.SetRed( SALCOLOR_RED( aSalCol ) );
                     rCol.SetGreen( SALCOLOR_GREEN( aSalCol ) );
@@ -1246,7 +1246,7 @@ void OutputDevice::DrawPixel( const Point& rPt )
     if ( mbInitLineColor )
         ImplInitLineColor();
 
-    mpGraphics->DrawPixel( aPt.X(), aPt.Y() );
+    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), this );
 #else
     ImplServerGraphics* pGraphics = ImplGetServerGraphics();
     if ( pGraphics )
@@ -1321,7 +1321,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
     if ( mbOutputClipped )
         return;
 
-    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSal( aColor ) );
+    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSal( aColor ), this );
 #else
     ImplServerGraphics* pGraphics = ImplGetServerGraphics();
     if ( pGraphics )
@@ -1365,7 +1365,7 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
                 for ( USHORT i = 0; i < nSize; i++ )
                 {
                     const Point aPt( ImplLogicToDevicePixel( rPts[ i ] ) );
-                    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSal( pColors[ i ] ) );
+                    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSal( pColors[ i ] ), this );
                 }
             }
 #else

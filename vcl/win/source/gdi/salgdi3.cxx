@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-28 12:39:37 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1597,7 +1597,7 @@ void SalGraphics::DrawTextArray( long nX, long nY,
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphBoundRect( long nIndex, bool bIsGlyphIndex, Rectangle& rRect )
+BOOL SalGraphics::GetGlyphBoundRect( long nIndex, bool bIsGlyphIndex, Rectangle& rRect, const OutputDevice* )
 {
     HDC hDC = maGraphicsData.mhDC;
 
@@ -1632,7 +1632,7 @@ BOOL SalGraphics::GetGlyphBoundRect( long nIndex, bool bIsGlyphIndex, Rectangle&
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphOutline( long nIndex, bool bIsGlyphIndex, PolyPolygon& rPolyPoly )
+BOOL SalGraphics::GetGlyphOutline( long nIndex, bool bIsGlyphIndex, PolyPolygon& rPolyPoly, const OutputDevice* )
 {
     BOOL bRet = FALSE;
     HDC  hDC = maGraphicsData.mhDC;

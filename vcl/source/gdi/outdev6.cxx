@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-07 10:35:52 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
     {
         for( long i = 0L; i < nVertCount; i++ )
             for( long j = 0L, nY = aVertBuf[ i ]; j < nHorzCount; j++ )
-                mpGraphics->DrawPixel( aHorzBuf[ j ], nY );
+                mpGraphics->DrawPixel( aHorzBuf[ j ], nY, this );
     }
     else
     {
@@ -197,7 +197,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
             for( long i = 0L; i < nVertCount; i++ )
             {
                 nY = aVertBuf[ i ];
-                mpGraphics->DrawLine( nStartX, nY, nEndX, nY );
+                mpGraphics->DrawLine( nStartX, nY, nEndX, nY, this );
             }
         }
 
@@ -206,7 +206,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
             for( long i = 0L; i < nHorzCount; i++ )
             {
                 nX = aHorzBuf[ i ];
-                mpGraphics->DrawLine( nX, nStartY, nX, nEndY );
+                mpGraphics->DrawLine( nX, nStartY, nX, nEndY, this );
             }
         }
     }
@@ -596,7 +596,7 @@ void OutputDevice::ImplDrawColorWallpaper( long nX, long nY,
         ImplInitLineColor();
     if ( mbInitFillColor )
         ImplInitFillColor();
-    mpGraphics->DrawRect( nX+mnOutOffX, nY+mnOutOffY, nWidth, nHeight );
+    mpGraphics->DrawRect( nX+mnOutOffX, nY+mnOutOffY, nWidth, nHeight, this );
     SetLineColor( aOldLineColor );
     SetFillColor( aOldFillColor );
 #else
@@ -1025,7 +1025,7 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
             if( !mbOutputClipped )
             {
                 bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
-                                              (BYTE*) rGfxLink.GetData(), rGfxLink.GetDataSize() );
+                                              (BYTE*) rGfxLink.GetData(), rGfxLink.GetDataSize(), this );
             }
 #else
             DBG_ERROR( "No direct EPS-support for remote appserver!" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-22 07:51:24 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef REMOTE_APPSERVER
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
+#endif
+#ifndef _SV_SALLAYOUT_HXX
+#include <sallayout.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
@@ -250,7 +253,7 @@ static void ImplDeleteObjStack( ImplObjStack* pObjStack )
 
 #ifndef REMOTE_APPSERVER
 
-BOOL OutputDevice::ImplSelectClipRegion( SalGraphics* pGraphics, const Region& rRegion )
+BOOL OutputDevice::ImplSelectClipRegion( SalGraphics* pGraphics, const Region& rRegion, OutputDevice *pOutDev )
 {
     DBG_TESTSOLARMUTEX();
 
@@ -268,7 +271,7 @@ BOOL OutputDevice::ImplSelectClipRegion( SalGraphics* pGraphics, const Region& r
     bRegionRect = rRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
     while ( bRegionRect )
     {
-        if ( !pGraphics->UnionClipRegion( nX, nY, nWidth, nHeight ) )
+        if ( !pGraphics->UnionClipRegion( nX, nY, nWidth, nHeight, pOutDev ) )
             bClipRegion = FALSE;
         DBG_ASSERT( bClipRegion, "OutputDevice::ImplSelectClipRegion() - can't cerate region" );
         bRegionRect = rRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
@@ -355,15 +358,15 @@ void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPo
         // #100127# Forward beziers to sal, if any
         if( bHaveBezier )
         {
-            if( !mpGraphics->DrawPolygonBezier( *pPointAry, *pPointAryAry, *pFlagAryAry ) )
+            if( !mpGraphics->DrawPolygonBezier( *pPointAry, *pPointAryAry, *pFlagAryAry, this ) )
             {
                 Polygon aPoly = ImplSubdivideBezier( rPolyPoly.GetObject( last ) );
-                mpGraphics->DrawPolygon( aPoly.GetSize(), (const SalPoint*)aPoly.ImplGetConstPointAry() );
+                mpGraphics->DrawPolygon( aPoly.GetSize(), (const SalPoint*)aPoly.ImplGetConstPointAry(), this );
             }
         }
         else
         {
-            mpGraphics->DrawPolygon( *pPointAry, *pPointAryAry );
+            mpGraphics->DrawPolygon( *pPointAry, *pPointAryAry, this );
         }
     }
     else
@@ -371,7 +374,7 @@ void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPo
         // #100127# Forward beziers to sal, if any
         if( bHaveBezier )
         {
-            if( !mpGraphics->DrawPolyPolygonBezier( nPoly, pPointAry, pPointAryAry, pFlagAryAry ) )
+            if( !mpGraphics->DrawPolyPolygonBezier( nPoly, pPointAry, pPointAryAry, pFlagAryAry, this ) )
             {
                 PolyPolygon aPolyPoly = ImplSubdivideBezier( rPolyPoly );
                 ImplDrawPolyPolygon( aPolyPoly.Count(), aPolyPoly );
@@ -379,7 +382,7 @@ void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPo
         }
         else
         {
-            mpGraphics->DrawPolyPolygon( nPoly, pPointAry, pPointAryAry );
+            mpGraphics->DrawPolyPolygon( nPoly, pPointAry, pPointAryAry, this );
         }
     }
 
@@ -455,6 +458,7 @@ OutputDevice::OutputDevice() :
     mbTextLines         = FALSE;
     mbTextSpecial       = FALSE;
     mbRefPoint          = FALSE;
+    mbEnableRTL         = FALSE;    // mirroring must be explicitly allowed (typically for windows only)
 
     // struct ImplMapRes
     maMapRes.mnMapOfsX          = 0;
@@ -519,6 +523,17 @@ OutputDevice::~OutputDevice()
 
 // -----------------------------------------------------------------------
 
+BOOL OutputDevice::ImplHasMirroredGraphics()
+{
+#ifndef REMOTE_APPSERVER
+    return ( ImplGetGraphics() && (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) );
+#else
+    return FALSE;
+#endif
+}
+
+// -----------------------------------------------------------------------
+
 #ifndef REMOTE_APPSERVER
 
 int OutputDevice::ImplGetGraphics()
@@ -526,10 +541,7 @@ int OutputDevice::ImplGetGraphics()
     DBG_TESTSOLARMUTEX();
 
     if ( mpGraphics )
-    {
-        mpGraphics->SetCurrentOutputDevice( (OutputDevice*)this );
         return TRUE;
-    }
 
     mbInitLineColor     = TRUE;
     mbInitFillColor     = TRUE;
@@ -658,7 +670,6 @@ int OutputDevice::ImplGetGraphics()
     if ( mpGraphics )
     {
         mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp) );
-        mpGraphics->SetCurrentOutputDevice( (OutputDevice*)this );
         return TRUE;
     }
 
@@ -861,7 +872,7 @@ void OutputDevice::ImplInitClipRegion()
         {
             mbOutputClipped = FALSE;
 #ifndef REMOTE_APPSERVER
-            ImplSelectClipRegion( mpGraphics, aRegion );
+            ImplSelectClipRegion( mpGraphics, aRegion, this );
 #else
             mpGraphics->SetClipRegion( aRegion );
 #endif
@@ -878,7 +889,7 @@ void OutputDevice::ImplInitClipRegion()
             {
                 mbOutputClipped = FALSE;
 #ifndef REMOTE_APPSERVER
-                ImplSelectClipRegion( mpGraphics, maRegion );
+                ImplSelectClipRegion( mpGraphics, maRegion, this );
 #else
                 mpGraphics->SetClipRegion( maRegion );
 #endif
@@ -1340,7 +1351,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     Point aStartPt = ImplLogicToDevicePixel( rStartPt );
     Point aEndPt = ImplLogicToDevicePixel( rEndPt );
 
-    mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y() );
+    mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), this );
 #else
     ImplServerGraphics* pGraphics = ImplGetServerGraphics();
     if ( pGraphics )
@@ -1405,7 +1416,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
             ImplInitFillColor();
 
             for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-                mpGraphics->DrawPolygon( pPoly->GetSize(), (const SalPoint*) pPoly->ImplGetConstPointAry() );
+                mpGraphics->DrawPolygon( pPoly->GetSize(), (const SalPoint*) pPoly->ImplGetConstPointAry(), this );
 
             SetFillColor( aOldFillColor );
             SetLineColor( aOldLineColor );
@@ -1416,7 +1427,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
                 ImplInitLineColor();
 
             for ( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-                mpGraphics->DrawLine( (*pPoly)[ 0 ].X(), (*pPoly)[ 0 ].Y(), (*pPoly)[ 1 ].X(), (*pPoly)[ 1 ].Y() );
+                mpGraphics->DrawLine( (*pPoly)[ 0 ].X(), (*pPoly)[ 0 ].Y(), (*pPoly)[ 1 ].X(), (*pPoly)[ 1 ].Y(), this );
         }
         mpMetaFile = pOldMetaFile;
     }
@@ -1428,7 +1439,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
         if ( mbInitLineColor )
             ImplInitLineColor();
 
-        mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y() );
+        mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), this );
     }
 
 #else
@@ -1523,7 +1534,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
     if ( mbInitFillColor )
         ImplInitFillColor();
 
-    mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight() );
+    mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), this );
 #else
     ImplServerGraphics* pGraphics = ImplGetServerGraphics();
     if ( pGraphics )
@@ -1576,16 +1587,16 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
     if( aPoly.HasFlags() )
     {
         const BYTE* pFlgAry = aPoly.ImplGetConstFlagAry();
-        if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry ) )
+        if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, this ) )
         {
             aPoly = ImplSubdivideBezier(aPoly);
             pPtAry = (const SalPoint*)aPoly.ImplGetConstPointAry();
-            mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry );
+            mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry, this );
         }
     }
     else
     {
-        mpGraphics->DrawPolyLine( nPoints, pPtAry );
+        mpGraphics->DrawPolyLine( nPoints, pPtAry, this );
     }
 #else
     ImplServerGraphics* pGraphics = ImplGetServerGraphics();
@@ -1663,7 +1674,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
         ImplInitFillColor();
 
         for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-            mpGraphics->DrawPolygon( pPoly->GetSize(), (const SalPoint*) pPoly->ImplGetConstPointAry() );
+            mpGraphics->DrawPolygon( pPoly->GetSize(), (const SalPoint*) pPoly->ImplGetConstPointAry(), this );
 
         SetLineColor( aOldLineColor );
         SetFillColor( aOldFillColor );
@@ -1677,10 +1688,10 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
         {
             ImplLineConverter   aLineCvt( aPoly, aInfo, ( mbRefPoint ) ? &maRefPoint : NULL );
             for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-                mpGraphics->DrawPolyLine( pPoly->GetSize(), (const SalPoint*)pPoly->ImplGetConstPointAry() );
+                mpGraphics->DrawPolyLine( pPoly->GetSize(), (const SalPoint*)pPoly->ImplGetConstPointAry(), this );
         }
         else
-            mpGraphics->DrawPolyLine( nPoints, (const SalPoint*) aPoly.ImplGetConstPointAry() );
+            mpGraphics->DrawPolyLine( nPoints, (const SalPoint*) aPoly.ImplGetConstPointAry(), this );
     }
 #else
     ImplServerGraphics* pGraphics = ImplGetServerGraphics();
@@ -1767,16 +1778,16 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
     if( aPoly.HasFlags() )
     {
         const BYTE* pFlgAry = aPoly.ImplGetConstFlagAry();
-        if( !mpGraphics->DrawPolygonBezier( nPoints, pPtAry, pFlgAry ) )
+        if( !mpGraphics->DrawPolygonBezier( nPoints, pPtAry, pFlgAry, this ) )
         {
             aPoly = ImplSubdivideBezier(aPoly);
             pPtAry = (const SalPoint*)aPoly.ImplGetConstPointAry();
-            mpGraphics->DrawPolygon( aPoly.GetSize(), pPtAry );
+            mpGraphics->DrawPolygon( aPoly.GetSize(), pPtAry, this );
         }
     }
     else
     {
-        mpGraphics->DrawPolygon( nPoints, pPtAry );
+        mpGraphics->DrawPolygon( nPoints, pPtAry, this );
     }
 #else
     ImplServerGraphics* pGraphics = ImplGetServerGraphics();

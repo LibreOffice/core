@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 12:53:04 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ void OutputDevice::ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pCl
             return;
 
         const SalPoint* pPtAry = (const SalPoint*)rPoly.ImplGetConstPointAry();
-        mpGraphics->DrawPolygon( nPoints, pPtAry );
+        mpGraphics->DrawPolygon( nPoints, pPtAry, this );
     }
 }
 
@@ -188,7 +188,7 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
         if( nSize >= 2 )
         {
             const SalPoint* pPtAry = (const SalPoint*)rPoly.ImplGetConstPointAry();
-            mpGraphics->DrawPolygon( nSize, pPtAry );
+            mpGraphics->DrawPolygon( nSize, pPtAry, this );
         }
     }
     else if( pPolyPoly->Count() )
@@ -213,9 +213,9 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
         while( i < nCount );
 
         if( nCount == 1 )
-            mpGraphics->DrawPolygon( *pPointAry, *pPointAryAry );
+            mpGraphics->DrawPolygon( *pPointAry, *pPointAryAry, this );
         else
-            mpGraphics->DrawPolyPolygon( nCount, pPointAry, pPointAryAry );
+            mpGraphics->DrawPolyPolygon( nCount, pPointAry, pPointAryAry, this );
 
         delete[] pPointAry;
         delete[] pPointAryAry;
@@ -1456,7 +1456,7 @@ void OutputDevice::ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPol
                 const Point aPt1( ImplLogicToDevicePixel( pPtBuffer[ i ] ) );
                 const Point aPt2( ImplLogicToDevicePixel( pPtBuffer[ i + 1 ] ) );
 
-                mpGraphics->DrawLine( aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y() );
+                mpGraphics->DrawLine( aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y(), this );
             }
 #endif
         }

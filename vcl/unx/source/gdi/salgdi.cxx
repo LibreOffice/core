@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-11 07:56:48 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,7 +628,7 @@ void SalGraphics::BeginSetClipRegion( ULONG n )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nDX, long nDY )
+BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nDX, long nDY, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -899,7 +899,7 @@ void SalGraphics::SetXORMode( BOOL bSet )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalGraphics::DrawPixel( long nX, long nY )
+void SalGraphics::DrawPixel( long nX, long nY, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -916,7 +916,7 @@ void SalGraphics::DrawPixel( long nX, long nY )
 #endif
 }
 
-void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
+void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -960,7 +960,7 @@ void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
+void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -989,7 +989,7 @@ void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalGraphics::DrawRect( long nX, long nY, long nDX, long nDY )
+void SalGraphics::DrawRect( long nX, long nY, long nDX, long nDY, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -1019,7 +1019,7 @@ void SalGraphics::DrawRect( long nX, long nY, long nDX, long nDY )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
+void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -1040,7 +1040,7 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
+void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
@@ -1091,7 +1091,8 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
                                    const ULONG     *pPoints,
-                                   PCONSTSALPOINT  *pPtAry )
+                                   PCONSTSALPOINT  *pPtAry,
+                                   const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -1168,14 +1169,14 @@ void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* )
 {
     return sal_False;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* )
 {
     return sal_False;
 }
@@ -1183,7 +1184,7 @@ sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 sal_Bool SalGraphics::DrawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
-                                             const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
+                                             const SalPoint* const* pPtAry, const BYTE* const* pFlgAry, const OutputDevice* )
 {
     return sal_False;
 }
@@ -1192,7 +1193,8 @@ sal_Bool SalGraphics::DrawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
 
 void SalGraphics::Invert( ULONG nPoints,
                           const SalPoint* pPtAry,
-                          SalInvert nFlags )
+                          SalInvert nFlags,
+                          const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -1224,7 +1226,7 @@ void SalGraphics::Invert( ULONG nPoints,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize )
+BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)

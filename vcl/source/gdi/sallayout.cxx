@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-26 16:14:09 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector )
         // get outline of individual glyph, ignoring "empty" glyphs
         PolyPolygon aGlyphOutline;
         bool bSuccess
-            = rSalGraphics.GetGlyphOutline(nLGlyph, bHasGlyphs, aGlyphOutline);
+            = rSalGraphics.GetGlyphOutline(nLGlyph, bHasGlyphs, aGlyphOutline, NULL);
         if (bSuccess && aGlyphOutline.Count() > 0)
         {
             // insert outline at correct position
@@ -276,7 +276,7 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRectangle )
 
         // get bounding rectangle of individual glyph
         Rectangle aRectangle;
-        if( rSalGraphics.GetGlyphBoundRect( nLGlyph, bHasGlyphs, aRectangle ) )
+        if( rSalGraphics.GetGlyphBoundRect( nLGlyph, bHasGlyphs, aRectangle, NULL ) )
             bRet = true;
 
         // merge rectangle

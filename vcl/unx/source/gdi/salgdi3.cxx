@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 17:02:16 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1474,7 +1474,7 @@ ULONG SalGraphicsData::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 
 //--------------------------------------------------------------------------
 
-void SalGraphics::DrawSalLayout( const SalLayout& rSalLayout )
+void SalGraphics::DrawSalLayout( const SalLayout& rSalLayout, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if( maGraphicsData.m_pPrinterGfx != NULL )
@@ -2211,7 +2211,7 @@ ULONG SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 // ---------------------------------------------------------------------------
 
 #ifdef ENABLE_CTL
-BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, bool bIsGlyphIndex, Rectangle& rRect )
+BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, bool bIsGlyphIndex, Rectangle& rRect, const OutputDevice* )
 {
 #ifdef USE_BUILTIN_RASTERIZER
     if( maGraphicsData.mpServerSideFont != NULL )
@@ -2268,7 +2268,7 @@ SalGraphics::GetGlyphBoundRect( xub_Unicode cChar,
 // ---------------------------------------------------------------------------
 
 #ifdef ENABLE_CTL
-BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, bool bIsGlyphIndex, PolyPolygon& rPolyPoly )
+BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, bool bIsGlyphIndex, PolyPolygon& rPolyPoly, const OutputDevice* )
 {
     BOOL bRet = FALSE;
 

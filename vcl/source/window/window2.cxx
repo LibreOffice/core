@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-08-23 13:47:30 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,7 @@ void Window::Invert( const Rectangle& rRect, USHORT nFlags )
         nSalFlags |= SAL_INVERT_HIGHLIGHT;
     if ( nFlags & INVERT_50 )
         nSalFlags |= SAL_INVERT_50;
-    mpGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), nSalFlags );
+    mpGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), nSalFlags, this );
 #else
     ImplServerGraphics* pGraphics = ImplGetServerGraphics();
     if ( pGraphics )
@@ -551,7 +551,7 @@ void Window::Invert( const Polygon& rPoly, USHORT nFlags )
     if ( nFlags & INVERT_50 )
         nSalFlags |= SAL_INVERT_50;
     const SalPoint* pPtAry = (const SalPoint*)aPoly.ImplGetConstPointAry();
-    mpGraphics->Invert( nPoints, pPtAry, nSalFlags );
+    mpGraphics->Invert( nPoints, pPtAry, nSalFlags, this );
 #else
     ImplServerGraphics* pGraphics = ImplGetServerGraphics();
     if ( pGraphics )
@@ -649,24 +649,24 @@ void Window::InvertTracking( const Rectangle& rRect, USHORT nFlags )
             Region aRegion( Rectangle( aPoint,
                                        Size( mnOutWidth, mnOutHeight ) ) );
             ImplClipBoundaries( aRegion, FALSE, FALSE );
-            ImplSelectClipRegion( pGraphics, aRegion );
+            ImplSelectClipRegion( pGraphics, aRegion, this );
         }
     }
 
     USHORT nStyle = nFlags & SHOWTRACK_STYLE;
     if ( nStyle == SHOWTRACK_OBJECT )
-        pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), SAL_INVERT_TRACKFRAME );
+        pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), SAL_INVERT_TRACKFRAME, this );
     else if ( nStyle == SHOWTRACK_SPLIT )
-        pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), SAL_INVERT_50 );
+        pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), SAL_INVERT_50, this );
     else
     {
         long nBorder = 1;
         if ( nStyle == SHOWTRACK_BIG )
             nBorder = 3;
-        pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), nBorder, SAL_INVERT_50 );
-        pGraphics->Invert( aRect.Left(), aRect.Bottom()-nBorder+1, aRect.GetWidth(), nBorder, SAL_INVERT_50 );
-        pGraphics->Invert( aRect.Left(), aRect.Top()+nBorder, nBorder, aRect.GetHeight()-(nBorder*2), SAL_INVERT_50 );
-        pGraphics->Invert( aRect.Right()-nBorder+1, aRect.Top()+nBorder, nBorder, aRect.GetHeight()-(nBorder*2), SAL_INVERT_50 );
+        pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), nBorder, SAL_INVERT_50, this );
+        pGraphics->Invert( aRect.Left(), aRect.Bottom()-nBorder+1, aRect.GetWidth(), nBorder, SAL_INVERT_50, this );
+        pGraphics->Invert( aRect.Left(), aRect.Top()+nBorder, nBorder, aRect.GetHeight()-(nBorder*2), SAL_INVERT_50, this );
+        pGraphics->Invert( aRect.Right()-nBorder+1, aRect.Top()+nBorder, nBorder, aRect.GetHeight()-(nBorder*2), SAL_INVERT_50, this );
     }
 #else
     ImplServerGraphics* pGraphics;
@@ -743,12 +743,12 @@ void Window::InvertTracking( const Polygon& rPoly, USHORT nFlags )
             Region aRegion( Rectangle( aPoint,
                                        Size( mnOutWidth, mnOutHeight ) ) );
             ImplClipBoundaries( aRegion, FALSE, FALSE );
-            ImplSelectClipRegion( pGraphics, aRegion );
+            ImplSelectClipRegion( pGraphics, aRegion, this );
         }
     }
 
     const SalPoint* pPtAry = (const SalPoint*)aPoly.ImplGetConstPointAry();
-    pGraphics->Invert( nPoints, pPtAry, SAL_INVERT_TRACKFRAME );
+    pGraphics->Invert( nPoints, pPtAry, SAL_INVERT_TRACKFRAME, this );
 #else
     ImplServerGraphics* pGraphics;
     if ( nFlags & SHOWTRACK_WINDOW )

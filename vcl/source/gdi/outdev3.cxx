@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-28 11:10:06 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -36,8 +36,6 @@
  *
  *  Sun Industry Standards Source License Version 1.1
  *  =================================================
-
-
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
@@ -3123,7 +3121,7 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
     }
 
 #ifndef REMOTE_APPSERVER
-    mpGraphics->DrawRect( nX, nY, nWidth, nHeight );
+    mpGraphics->DrawRect( nX, nY, nWidth, nHeight, this );
 #else
     Rectangle aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
     mpGraphics->DrawRect( aRect );
@@ -3405,6 +3403,7 @@ static void ImplDrawWavePixel( long nOriginX, long nOriginY,
 #else
                                ImplServerGraphics* pGraphics,
 #endif
+                               OutputDevice* pOutDev,
                                BOOL bDrawPixAsRect,
 
                                long nPixWidth, long nPixHeight )
@@ -3416,7 +3415,7 @@ static void ImplDrawWavePixel( long nOriginX, long nOriginY,
     {
 #ifndef REMOTE_APPSERVER
 
-        pGraphics->DrawRect( nCurX, nCurY, nPixWidth, nPixHeight );
+        pGraphics->DrawRect( nCurX, nCurY, nPixWidth, nPixHeight, pOutDev );
 #else
         Point       aPos( nCurX, nCurY );
         Size        aSize( nPixWidth, nPixHeight );
@@ -3427,7 +3426,7 @@ static void ImplDrawWavePixel( long nOriginX, long nOriginY,
     else
     {
 #ifndef REMOTE_APPSERVER
-        pGraphics->DrawPixel( nCurX, nCurY );
+        pGraphics->DrawPixel( nCurX, nCurY, pOutDev );
 #else
         Point aPos( nCurX, nCurY );
         pGraphics->DrawPixel( aPos );
@@ -3467,7 +3466,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
             ImplRotatePos( nBaseX, nBaseY, nEndX, nEndY, nOrientation );
         }
 #ifndef REMOTE_APPSERVER
-        mpGraphics->DrawLine( nStartX, nStartY, nEndX, nEndY );
+        mpGraphics->DrawLine( nStartX, nStartY, nEndX, nEndY, this );
 #else
         mpGraphics->DrawLine( Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
 #endif
@@ -3538,7 +3537,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
             while ( nWidth )
             {
                 ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
-                                   mpGraphics,
+                                   mpGraphics, this,
                                    bDrawPixAsRect, nPixWidth, nPixHeight );
                 nCurX++;
                 nWidth--;
@@ -3553,7 +3552,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                 for( i = nDiffY; i; --i )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
-                                       mpGraphics,
+                                       mpGraphics, this,
                                        bDrawPixAsRect, nPixWidth, nPixHeight );
                     nCurX++;
                     nCurY += nOffY;
@@ -3561,7 +3560,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                 for( i = nDiffX; i; --i )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
-                                       mpGraphics,
+                                       mpGraphics, this,
                                        bDrawPixAsRect, nPixWidth, nPixHeight );
                     nCurX++;
                 }
@@ -3573,7 +3572,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                 for( i = nDiffY; i && nFreq; --i, --nFreq )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
-                                       mpGraphics,
+                                       mpGraphics, this,
                                        bDrawPixAsRect, nPixWidth, nPixHeight );
                     nCurX++;
                     nCurY += nOffY;
@@ -3582,7 +3581,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                 for( i = nDiffX; i && nFreq; --i, --nFreq )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
-                                       mpGraphics,
+                                       mpGraphics, this,
                                        bDrawPixAsRect, nPixWidth, nPixHeight );
                     nCurX++;
                 }
@@ -3732,7 +3731,7 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
             if( pSalLayout && ! (mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData)) )
             {
                 pSalLayout->SetDrawPosition( Point(nX+mnTextOffX, nY+mnTextOffY) );
-                mpGraphics->DrawSalLayout( *pSalLayout );
+                mpGraphics->DrawSalLayout( *pSalLayout, this );
                 pSalLayout->Release();
             }
         }
@@ -4578,7 +4577,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, BOOL bTextLines )
             return;
 
     if( ! (mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData) ) )
-        mpGraphics->DrawSalLayout( rSalLayout );
+        mpGraphics->DrawSalLayout( rSalLayout, this );
 
     if( bTextLines )
         ImplDrawTextLines( rSalLayout,
@@ -5577,7 +5576,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         pSalLayout = mpPDFWriter->createSalLayout( &mpFontEntry->maFontSelData, aLayoutArgs );
 
     if( ! pSalLayout )
-        pSalLayout = mpGraphics->LayoutText( aLayoutArgs );
+        pSalLayout = mpGraphics->LayoutText( aLayoutArgs, this );
 
     if( pSalLayout )
     {
@@ -5588,8 +5587,10 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         if( mnLayoutMode & TEXT_LAYOUT_DRAWPOS_REVERSED )
             bRightDrawPos = !bRightDrawPos;
 
+        // SSA: hack for western office, ie the text will be moved by its length to the left
+        //      just for debugging purposes of mirrored UI
         static const char* pEnv = getenv("SAL_RTL_MIRRORTEXT" );
-        bool bRTLWindow = (pEnv && GetSettings().GetStyleSettings().GetLayoutRTL());
+        bool bRTLWindow = (pEnv && IsRTLEnabled() );
         bRightDrawPos ^= bRTLWindow;
 
         if( bRightDrawPos )
@@ -5601,8 +5602,6 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
                 aRTLOffset = Point( -pDXArray[ nLength-1 ], 0 );
             else
                 aRTLOffset = Point( -pSalLayout->GetTextWidth(), 0 );
-            if( bRTLWindow )
-                aRTLOffset = Point(0,0) - aRTLOffset;
             Point aRTLPosition = pSalLayout->GetDrawPosition( aRTLOffset );
             pSalLayout->SetDrawPosition( aRTLPosition );
         }

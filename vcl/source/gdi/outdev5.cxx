@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev5.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
         ImplInitFillColor();
 
     if ( !nHorzRound && !nVertRound )
-        mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight() );
+        mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), this );
     else
     {
         const Polygon aRoundRectPoly( aRect, nHorzRound, nVertRound );
@@ -161,9 +161,9 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
             const SalPoint* pPtAry = (const SalPoint*) aRoundRectPoly.ImplGetConstPointAry();
 
             if ( !mbFillColor )
-                mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry );
+                mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry, this );
             else
-                mpGraphics->DrawPolygon( aRoundRectPoly.GetSize(), pPtAry );
+                mpGraphics->DrawPolygon( aRoundRectPoly.GetSize(), pPtAry, this );
         }
     }
 #else
@@ -220,12 +220,12 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
     {
         const SalPoint* pPtAry = (const SalPoint*)aRectPoly.ImplGetConstPointAry();
         if ( !mbFillColor )
-            mpGraphics->DrawPolyLine( aRectPoly.GetSize(), pPtAry );
+            mpGraphics->DrawPolyLine( aRectPoly.GetSize(), pPtAry, this );
         else
         {
             if ( mbInitFillColor )
                 ImplInitFillColor();
-            mpGraphics->DrawPolygon( aRectPoly.GetSize(), pPtAry );
+            mpGraphics->DrawPolygon( aRectPoly.GetSize(), pPtAry, this );
         }
     }
 #else
@@ -282,7 +282,7 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
     if ( aArcPoly.GetSize() >= 2 )
     {
         const SalPoint* pPtAry = (const SalPoint*)aArcPoly.ImplGetConstPointAry();
-        mpGraphics->DrawPolyLine( aArcPoly.GetSize(), pPtAry );
+        mpGraphics->DrawPolyLine( aArcPoly.GetSize(), pPtAry, this );
     }
 #else
     ImplServerGraphics* pGraphics = ImplGetServerGraphics();
@@ -341,12 +341,12 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
     {
         const SalPoint* pPtAry = (const SalPoint*)aPiePoly.ImplGetConstPointAry();
         if ( !mbFillColor )
-            mpGraphics->DrawPolyLine( aPiePoly.GetSize(), pPtAry );
+            mpGraphics->DrawPolyLine( aPiePoly.GetSize(), pPtAry, this );
         else
         {
             if ( mbInitFillColor )
                 ImplInitFillColor();
-            mpGraphics->DrawPolygon( aPiePoly.GetSize(), pPtAry );
+            mpGraphics->DrawPolygon( aPiePoly.GetSize(), pPtAry, this );
         }
     }
 #else
@@ -406,12 +406,12 @@ void OutputDevice::DrawChord( const Rectangle& rRect,
     {
         const SalPoint* pPtAry = (const SalPoint*)aChordPoly.ImplGetConstPointAry();
         if ( !mbFillColor )
-            mpGraphics->DrawPolyLine( aChordPoly.GetSize(), pPtAry );
+            mpGraphics->DrawPolyLine( aChordPoly.GetSize(), pPtAry, this );
         else
         {
             if ( mbInitFillColor )
                 ImplInitFillColor();
-            mpGraphics->DrawPolygon( aChordPoly.GetSize(), pPtAry );
+            mpGraphics->DrawPolygon( aChordPoly.GetSize(), pPtAry, this );
         }
     }
 #else

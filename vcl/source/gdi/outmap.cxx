@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-22 07:51:59 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,20 +128,6 @@ static long aImplNumeratorAry[MAP_PIXEL+1] =
 static long aImplDenominatorAry[MAP_PIXEL+1] =
      { 2540, 254, 127, 127, 1000, 100, 10, 1, 72, 1440, 1 };
 
-// -----------------------------------------------------------------------
-
-// macro to allow SalGraphics access to the calling outdev
-// required to re-mirror for not RTL windows
-#ifndef REMOTE_APPSERVER
-#define OUTDEV_INIT_GRAPHICS \
-    if( mpGraphics ) \
-    { \
-        mpGraphics->SetCurrentOutputDevice( (OutputDevice*)this ); \
-        /*mpGraphics->SetCurrentThreadId( ::vos::OThread::getCurrentIdentifier() ); */ \
-    }
-#else
-#define OUTDEV_INIT_GRAPHICS ;
-#endif
 // -----------------------------------------------------------------------
 
 /*
@@ -705,8 +691,6 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
 
 long OutputDevice::ImplLogicXToDevicePixel( long nX ) const
 {
-    OUTDEV_INIT_GRAPHICS;
-
     if ( !mbMap )
         return nX+mnOutOffX;
 
@@ -719,8 +703,6 @@ long OutputDevice::ImplLogicXToDevicePixel( long nX ) const
 
 long OutputDevice::ImplLogicYToDevicePixel( long nY ) const
 {
-    OUTDEV_INIT_GRAPHICS;
-
     if ( !mbMap )
         return nY+mnOutOffY;
 
@@ -733,8 +715,6 @@ long OutputDevice::ImplLogicYToDevicePixel( long nY ) const
 
 long OutputDevice::ImplLogicWidthToDevicePixel( long nWidth ) const
 {
-    OUTDEV_INIT_GRAPHICS;
-
     if ( !mbMap )
         return nWidth;
 
@@ -747,8 +727,6 @@ long OutputDevice::ImplLogicWidthToDevicePixel( long nWidth ) const
 
 long OutputDevice::ImplLogicHeightToDevicePixel( long nHeight ) const
 {
-    OUTDEV_INIT_GRAPHICS;
-
     if ( !mbMap )
         return nHeight;
 
@@ -785,8 +763,6 @@ long OutputDevice::ImplDevicePixelToLogicHeight( long nHeight ) const
 
 Point OutputDevice::ImplLogicToDevicePixel( const Point& rLogicPt ) const
 {
-    OUTDEV_INIT_GRAPHICS;
-
     if ( !mbMap )
         return Point( rLogicPt.X()+mnOutOffX, rLogicPt.Y()+mnOutOffY );
 
@@ -802,8 +778,6 @@ Point OutputDevice::ImplLogicToDevicePixel( const Point& rLogicPt ) const
 
 Size OutputDevice::ImplLogicToDevicePixel( const Size& rLogicSize ) const
 {
-    OUTDEV_INIT_GRAPHICS;
-
     if ( !mbMap )
         return rLogicSize;
 
@@ -819,8 +793,6 @@ Size OutputDevice::ImplLogicToDevicePixel( const Size& rLogicSize ) const
 
 Rectangle OutputDevice::ImplLogicToDevicePixel( const Rectangle& rLogicRect ) const
 {
-    OUTDEV_INIT_GRAPHICS;
-
     if ( rLogicRect.IsEmpty() )
         return rLogicRect;
 
@@ -848,8 +820,6 @@ Rectangle OutputDevice::ImplLogicToDevicePixel( const Rectangle& rLogicRect ) co
 
 Polygon OutputDevice::ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const
 {
-    OUTDEV_INIT_GRAPHICS;
-
     if ( !mbMap && !mnOutOffX && !mnOutOffY )
         return rLogicPoly;
 
@@ -894,8 +864,6 @@ Polygon OutputDevice::ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const
 
 PolyPolygon OutputDevice::ImplLogicToDevicePixel( const PolyPolygon& rLogicPolyPoly ) const
 {
-    OUTDEV_INIT_GRAPHICS;
-
     if ( !mbMap && !mnOutOffX && !mnOutOffY )
         return rLogicPolyPoly;
 
@@ -913,8 +881,6 @@ PolyPolygon OutputDevice::ImplLogicToDevicePixel( const PolyPolygon& rLogicPolyP
 
 LineInfo OutputDevice::ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const
 {
-    OUTDEV_INIT_GRAPHICS;
-
     LineInfo aInfo( rLineInfo );
 
     if( aInfo.GetStyle() == LINE_DASH )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ BOOL bFastTransparent = FALSE;
 
 // =======================================================================
 
-void SalGraphics::CopyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics )
+void SalGraphics::CopyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics, const OutputDevice* /*pOutDev*/, const OutputDevice* /*pSrcOutDev*/)
 {
     HDC     hSrcDC;
     DWORD   nRop;
@@ -181,7 +181,7 @@ void ImplCalcOutSideRgn( const RECT& rSrcRect,
 void SalGraphics::CopyArea( long nDestX, long nDestY,
                             long nSrcX, long nSrcY,
                             long nSrcWidth, long nSrcHeight,
-                            USHORT nFlags )
+                            USHORT nFlags, const OutputDevice* )
 {
     BitBlt( maGraphicsData.mhDC,
             (int)nDestX, (int)nDestY,
@@ -417,7 +417,7 @@ void ImplDrawBitmap( HDC hDC,
 // -----------------------------------------------------------------------
 
 void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
-                              const SalBitmap& rSalBitmap )
+                              const SalBitmap& rSalBitmap, const OutputDevice* )
 {
     ImplDrawBitmap( maGraphicsData.mhDC, pPosAry, rSalBitmap,
                     maGraphicsData.mbPrinter,
@@ -428,7 +428,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
 
 void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
                               const SalBitmap& rSalBitmap,
-                              SalColor nTransparentColor )
+                              SalColor nTransparentColor, const OutputDevice* pOutDev )
 {
     DBG_ASSERT( !maGraphicsData.mbPrinter, "No transparency print possible!" );
 
@@ -474,7 +474,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
 
     // hMaskBitmap is destroyed by new SalBitmap 'pMask' ( bDIB==FALSE, bCopy == FALSE )
     if( pMask->Create( hMaskBitmap, FALSE, FALSE ) )
-        DrawBitmap( pPosAry, rSalBitmap, *pMask );
+        DrawBitmap( pPosAry, rSalBitmap, *pMask, pOutDev );
 
     delete pMask;
 }
@@ -483,7 +483,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
 
 void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
                               const SalBitmap& rSalBitmap,
-                              const SalBitmap& rTransparentBitmap )
+                              const SalBitmap& rTransparentBitmap, const OutputDevice* )
 {
     DBG_ASSERT( !maGraphicsData.mbPrinter, "No transparency print possible!" );
 
@@ -570,7 +570,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
 
 void SalGraphics::DrawMask( const SalTwoRect* pPosAry,
                             const SalBitmap& rSalBitmap,
-                            SalColor nMaskColor )
+                            SalColor nMaskColor, const OutputDevice* )
 {
     DBG_ASSERT( !maGraphicsData.mbPrinter, "No transparency print possible!" );
 
@@ -601,7 +601,7 @@ void SalGraphics::DrawMask( const SalTwoRect* pPosAry,
 
 // -----------------------------------------------------------------------
 
-SalBitmap* SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY )
+SalBitmap* SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY, const OutputDevice* )
 {
     DBG_ASSERT( !maGraphicsData.mbPrinter, "No ::GetBitmap() from printer possible!" );
 
@@ -634,7 +634,7 @@ SalBitmap* SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY )
 
 // -----------------------------------------------------------------------
 
-SalColor SalGraphics::GetPixel( long nX, long nY )
+SalColor SalGraphics::GetPixel( long nX, long nY, const OutputDevice* )
 {
     COLORREF aWinCol = ::GetPixel( maGraphicsData.mhDC, (int) nX, (int) nY );
 
@@ -652,7 +652,7 @@ SalColor SalGraphics::GetPixel( long nX, long nY )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::Invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
+void SalGraphics::Invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags, const OutputDevice * )
 {
     if ( nFlags & SAL_INVERT_TRACKFRAME )
     {
@@ -697,7 +697,7 @@ void SalGraphics::Invert( long nX, long nY, long nWidth, long nHeight, SalInvert
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::Invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
+void SalGraphics::Invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nSalFlags, const OutputDevice* )
 {
     HPEN        hPen;
     HPEN        hOldPen;

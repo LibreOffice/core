@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-23 10:05:47 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #endif
 #ifndef _SV_DOCKWIN_HXX
 #include <dockwin.hxx>
+#endif
+#ifndef _SV_SALGDI_HXX
+#include <salgdi.hxx>
 #endif
 #undef private
 
@@ -487,6 +490,13 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     // Ein paar Test ausfuehren und Message abfangen oder Status umsetzen
     if ( pChild )
     {
+#ifndef REMOTE_APPSERVER
+        if( pChild->ImplHasMirroredGraphics() && !pChild->IsRTLEnabled() )
+        {
+            // - RTL - re-mirror frame pos
+            ((SalGraphicsLayout*)pChild->mpGraphics)->mirror( aMousePos.X() );
+        }
+#endif
         // no mouse messages to system object windows
 #ifndef REMOTE_APPSERVER
         if ( pChild->mpSysObj )
@@ -1449,10 +1459,11 @@ long ImplHandleWheelEvent( Window* pWindow,
 }
 
 // -----------------------------------------------------------------------
+#define IMPL_PAINT_CHECKRTL         ((USHORT)0x0020)
 
 static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect )
 {
-    // Bei Paints vom System, auch Hintergrund-Sicherung aufgeben
+    // give up background save when sytem paints arrive
     Window* pSaveBackWin = pWindow->mpFrameData->mpFirstBackWin;
     while ( pSaveBackWin )
     {
@@ -1464,8 +1475,10 @@ static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect )
         pSaveBackWin = pNext;
     }
 
-    // Paint fuer alle Fenster ausloesen, die im neu zu malenden Bereich
-    // liegen
+    // system paint events must be checked for re-mirroring
+    //pWindow->mnPaintFlags |= IMPL_PAINT_CHECKRTL;
+
+    // trigger paint for all windows that live in the new paint region
     Region aRegion( rBoundRect );
     pWindow->ImplInvalidateOverlapFrameRegion( aRegion );
 }

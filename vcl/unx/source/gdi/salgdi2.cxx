@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-17 14:35:54 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,8 @@ SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
 // -=-= SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
-                                  SalGraphics      *pSrcGraphics )
+                                  SalGraphics      *pSrcGraphics,
+                                  const OutputDevice*, const OutputDevice*)
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -713,7 +714,7 @@ void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
 void SalGraphics::CopyArea ( long nDestX,    long nDestY,
                                    long nSrcX,     long nSrcY,
                                    long nSrcWidth, long nSrcHeight,
-                                   USHORT nFlags )
+                                   USHORT nFlags, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -744,7 +745,7 @@ void SalGraphics::CopyArea ( long nDestX,    long nDestY,
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
+void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -796,7 +797,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,
-                                    const SalBitmap& rTransBitmap )
+                                    const SalBitmap& rTransBitmap, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -901,7 +902,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,
-                              SalColor nTransparentColor )
+                              SalColor nTransparentColor, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -921,7 +922,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rSalBitmap,
-                                  SalColor nMaskColor )
+                                  SalColor nMaskColor, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -979,7 +980,7 @@ void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rSalBitm
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY )
+SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -1061,7 +1062,7 @@ SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-SalColor SalGraphics::GetPixel( long nX, long nY )
+SalColor SalGraphics::GetPixel( long nX, long nY, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -1114,7 +1115,7 @@ void SalGraphics::Invert( long      nX,
                                 long        nY,
                                 long        nDX,
                                 long        nDY,
-                                SalInvert   nFlags )
+                                SalInvert   nFlags, const OutputDevice* )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-26 16:16:47 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1353,7 +1353,7 @@ void UniscribeLayout::Justify( long nNewWidth )
 
 // =======================================================================
 
-SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
+SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs, const OutputDevice* )
 {
     WinLayout* pWinLayout = NULL;
 
@@ -1390,7 +1390,7 @@ SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawSalLayout( const SalLayout& rSalLayout )
+void SalGraphics::DrawSalLayout( const SalLayout& rSalLayout, const OutputDevice* )
 {
     // we know the SalLayout created by this SalGraphics is a WinLayout
     const WinLayout& rWinLayout = reinterpret_cast<const WinLayout&>( rSalLayout );

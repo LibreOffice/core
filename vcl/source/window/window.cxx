@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-28 13:28:53 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,7 @@ DBG_NAME( Window );
 #define IMPL_PAINT_PAINTALLCHILDS   ((USHORT)0x0004)
 #define IMPL_PAINT_PAINTCHILDS      ((USHORT)0x0008)
 #define IMPL_PAINT_ERASE            ((USHORT)0x0010)
+#define IMPL_PAINT_CHECKRTL         ((USHORT)0x0020)
 
 // -----------------------------------------------------------------------
 
@@ -606,6 +607,7 @@ void Window::ImplInitData( WindowType nType )
     mbInFocusHdl        = FALSE;        // TRUE: Innerhalb vom GetFocus-Handler
     mbCreatedWithToolkit = FALSE;
     mbSuppressAccessibilityEvents = FALSE; // TRUE: do not send any accessibility events
+    mbEnableRTL         = TRUE;         // TRUE: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 
 #ifdef REMOTE_APPSERVER
     mpRmEvents          = NULL;
@@ -1338,12 +1340,20 @@ Window* Window::ImplFindWindow( const Point& rFramePos )
 
 USHORT Window::ImplHitTest( const Point& rFramePos )
 {
+    Point aFramePos( rFramePos );
+#ifndef REMOTE_APPSERVER
+    if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+    {
+        // - RTL - re-mirror frame pos
+        ((SalGraphicsLayout*)mpGraphics)->mirror( aFramePos.X() );
+    }
+#endif
     Rectangle aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
-    if ( !aRect.IsInside( rFramePos ) )
+    if ( !aRect.IsInside( aFramePos ) )
         return 0;
     if ( mbWinRegion )
     {
-        Point aTempPos = rFramePos;
+        Point aTempPos = aFramePos;
         aTempPos.X() -= mnOutOffX;
         aTempPos.Y() -= mnOutOffY;
         if ( !maWinRegion.IsInside( aTempPos ) )
@@ -2261,6 +2271,8 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
         mnPaintFlags |= IMPL_PAINT_PAINTCHILDS;
     if ( nPaintFlags & IMPL_PAINT_ERASE )
         mnPaintFlags |= IMPL_PAINT_ERASE;
+    if ( nPaintFlags & IMPL_PAINT_CHECKRTL )
+        mnPaintFlags |= IMPL_PAINT_CHECKRTL;
     if ( !mpFirstChild )
         mnPaintFlags &= ~IMPL_PAINT_PAINTALLCHILDS;
 
@@ -2284,7 +2296,21 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
         else
         {
             if ( pRegion )
-                maInvalidateRegion.Union( *pRegion );
+            {
+#ifndef REMOTE_APPSERVER
+                if( ImplHasMirroredGraphics() && !IsRTLEnabled() && !maInvalidateRegion.IsEmpty() )
+                {
+                    Rectangle devRect = pRegion->GetBoundRect();
+                    long nWidth = devRect.getWidth();
+                    devRect.nLeft = mpFrame->maGeometry.nWidth-nWidth-1-devRect.nLeft;
+                    devRect.nRight = devRect.nLeft + nWidth;
+                    Region aRgn( devRect );
+                    maInvalidateRegion.Union( aRgn );
+                }
+                else
+#endif
+                    maInvalidateRegion.Union( *pRegion );
+            }
             if( mpWinData && mbTrackVisible )
                 /* #98602# need to repaint all children within the
                * tracking rectangle, so the following invert
@@ -2308,7 +2334,22 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
 
             // Paint-Region zuruecksetzen
             Region      aPaintRegion( maInvalidateRegion );
-            Rectangle   aPaintRect = ImplDevicePixelToLogic( aPaintRegion.GetBoundRect() );
+            Rectangle   aPaintRect = aPaintRegion.GetBoundRect();
+
+#ifndef REMOTE_APPSERVER
+            // - RTL - re-mirror paint rect, if no mirroring for this window
+            if( ImplHasMirroredGraphics() && !IsRTLEnabled() && (nPaintFlags & IMPL_PAINT_CHECKRTL) )
+            {
+                Rectangle devRect = aPaintRect;
+                long nWidth = devRect.getWidth();
+                devRect.nLeft = mpFrame->maGeometry.nWidth-nWidth-1-devRect.nLeft;
+                devRect.nRight = devRect.nLeft + nWidth;
+                aPaintRect = devRect;
+                // mirror region as well, although it will be an ordinary rectangle now
+                aPaintRegion = Region( aPaintRect );
+            }
+#endif
+            aPaintRect = ImplDevicePixelToLogic( aPaintRect);
             mpPaintRegion = &aPaintRegion;
             maInvalidateRegion.SetEmpty();
 
@@ -2324,6 +2365,7 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
                 else
                     Erase();
             }
+
             Paint( aPaintRect );
 
             if ( mpWinData )
@@ -2378,7 +2420,11 @@ void Window::ImplCallOverlapPaint()
 
     // und dann erst uns selber
     if ( mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDS) )
-        ImplCallPaint( NULL, mnPaintFlags );
+    {
+        // - RTL - notify ImplCallPaint to check for re-mirroring (CHECKRTL)
+        //         because we were called from the Sal layer
+        ImplCallPaint( NULL, mnPaintFlags | IMPL_PAINT_CHECKRTL );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2439,6 +2485,7 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, USHORT nFlags )
 void Window::ImplInvalidateOverlapFrameRegion( const Region& rRegion )
 {
     Region aRegion = rRegion;
+
     ImplClipBoundaries( aRegion, TRUE, TRUE );
     if ( !aRegion.IsEmpty() )
         ImplInvalidateFrameRegion( &aRegion, INVALIDATE_CHILDREN );
@@ -2779,11 +2826,11 @@ void Window::ImplScroll( const Rectangle& rRect,
         SalGraphics* pGraphics = ImplGetFrameGraphics();
         if ( pGraphics )
         {
-            ImplSelectClipRegion( pGraphics, aRegion );
+            ImplSelectClipRegion( pGraphics, aRegion, this );
             pGraphics->CopyArea( rRect.Left()+nHorzScroll, rRect.Top()+nVertScroll,
                                  rRect.Left(), rRect.Top(),
                                  rRect.GetWidth(), rRect.GetHeight(),
-                                 SAL_COPYAREA_WINDOWINVALIDATE );
+                                 SAL_COPYAREA_WINDOWINVALIDATE, this );
         }
 #else
         ImplServerGraphics* pGraphics = ImplGetServerGraphics( TRUE );
@@ -3085,12 +3132,24 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 
     if ( nFlags & WINDOW_POSSIZE_X )
     {
+        long nOrgX = nX;
         //if ( nX != mnX )
         // --- RTL ---  (compare the screen coordinates)
         Point aPtDev( ImplLogicToDevicePixel( Point( nX, 0 ) ) );
 #ifndef REMOTE_APPSERVER
-        if( ImplGetGraphics() && mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL )
+        if( ImplHasMirroredGraphics() )
+        {
             ((SalGraphicsLayout*)mpGraphics)->mirror( aPtDev.X() );
+            if( IsRTLEnabled() != mpParent->IsRTLEnabled() )
+            {
+                // --- RTL --- use the mirrored nX, re-mirroring is required here
+                long frameX = mpParent->mnOutOffX+nX;
+                ((SalGraphicsLayout*)mpGraphics)->mirror( frameX );
+                nX = frameX - mnOutWidth + 1;
+                nX = nX - mpParent->mnOutOffX;  // nX in local coordinates
+            }
+
+        }
 #endif //REMOTE_APPSERVER
         if ( mnAbsScreenX != aPtDev.X() || nX != mnX )
         {
@@ -3102,7 +3161,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                                        *pOverlapRegion, FALSE, TRUE, TRUE );
             }
             mnX = nX;
-            maPos.X() = nX;
+            maPos.X() = nOrgX;
             mnAbsScreenX = aPtDev.X();  // --- RTL --- (store real screen pos)
             bNewPos = TRUE;
         }
@@ -3248,13 +3307,13 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                             SalGraphics* pGraphics = ImplGetFrameGraphics();
                             if ( pGraphics )
                             {
-                                BOOL bSelectClipRegion = ImplSelectClipRegion( pGraphics, aRegion );
+                                BOOL bSelectClipRegion = ImplSelectClipRegion( pGraphics, aRegion, this );
                                 if ( bSelectClipRegion )
                                 {
                                     pGraphics->CopyArea( mnOutOffX, mnOutOffY,
                                                          nOldOutOffX, nOldOutOffY,
                                                          nOldOutWidth, nOldOutHeight,
-                                                         SAL_COPYAREA_WINDOWINVALIDATE );
+                                                         SAL_COPYAREA_WINDOWINVALIDATE, this );
                                 }
                                 else
                                     bInvalidate = TRUE;
@@ -6440,6 +6499,7 @@ void Window::SetPosSizePixel( long nX, long nY,
     }
     else
     {
+
         pWindow->ImplPosSizeWindow( nX, nY, nWidth, nHeight, nFlags );
         if ( IsReallyVisible() )
             ImplGenerateMouseMove();
@@ -6916,6 +6976,13 @@ void Window::SetPointerPosPixel( const Point& rPos )
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     Point aPos = ImplOutputToFrame( rPos );
+#ifndef REMOTE_APPSERVER
+    if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+    {
+        // --- RTL --- (re-mirror mouse pos)
+        ((SalGraphicsLayout*)mpGraphics)->mirror( aPos.X() );
+    }
+#endif
     mpFrame->SetPointerPos( aPos.X(), aPos.Y() );
 }
 
@@ -6925,7 +6992,15 @@ Point Window::GetPointerPosPixel()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    return ImplFrameToOutput( Point( mpFrameData->mnLastMouseX, mpFrameData->mnLastMouseY ) );
+    Point aPos( mpFrameData->mnLastMouseX, mpFrameData->mnLastMouseY );
+#ifndef REMOTE_APPSERVER
+    if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+    {
+        // --- RTL --- (re-mirror mouse pos)
+        ((SalGraphicsLayout*)mpGraphics)->mirror( aPos.X() );
+    }
+#endif
+    return ImplFrameToOutput( aPos );
 }
 
 // -----------------------------------------------------------------------
@@ -8087,7 +8162,7 @@ BOOL Window::ImplGetCurrentBackgroundColor( Color& rCol )
 void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly )
 {
     // colors used for item highlighting
-    Color aSelectionBorderCol( GetSettings().GetStyleSettings().GetActiveColor() );
+    Color aSelectionBorderCol( GetSettings().GetStyleSettings().GetHighlightColor() );
     Color aSelectionFillCol( aSelectionBorderCol );
     Color aSelectionMaskCol( aSelectionBorderCol );
 

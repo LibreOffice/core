@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-05 16:36:44 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 15:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,7 +905,7 @@ void SalGraphics::BeginSetClipRegion( ULONG nRectCount )
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nWidth, long nHeight, const OutputDevice* )
 {
     if ( nWidth && nHeight )
     {
@@ -1227,7 +1227,7 @@ void SalGraphics::SetROPFillColor( SalROPColor nROPColor )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPixel( long nX, long nY )
+void SalGraphics::DrawPixel( long nX, long nY, const OutputDevice* )
 {
     if ( maGraphicsData.mbXORMode )
     {
@@ -1243,7 +1243,7 @@ void SalGraphics::DrawPixel( long nX, long nY )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
+void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor, const OutputDevice*  )
 {
     COLORREF nCol = PALETTERGB( SALCOLOR_RED( nSalColor ),
                                 SALCOLOR_GREEN( nSalColor ),
@@ -1268,7 +1268,7 @@ void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
+void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2, const OutputDevice* )
 {
     MoveToEx( maGraphicsData.mhDC, (int)nX1, (int)nY1, NULL );
 
@@ -1310,7 +1310,7 @@ void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
+void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight, const OutputDevice* )
 {
     if ( !maGraphicsData.mbPen )
     {
@@ -1335,7 +1335,7 @@ void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint* pPtAry )
+void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint* pPtAry, const OutputDevice* )
 {
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
@@ -1350,7 +1350,7 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint* pPtAry )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
+void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry, const OutputDevice* )
 {
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
@@ -1366,7 +1366,7 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 // -----------------------------------------------------------------------
 
 void SalGraphics::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
-                                   PCONSTSALPOINT* pPtAry )
+                                   PCONSTSALPOINT* pPtAry, const OutputDevice* )
 {
     UINT    aWinPointAry[SAL_POLYPOLYCOUNT_STACKBUF];
     UINT*   pWinPointAry;
@@ -1438,7 +1438,7 @@ void SalGraphics::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
 
 // -----------------------------------------------------------------------
 
-sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* )
 {
 #ifdef USE_GDI_BEZIERS
     // Unter NT koennen wir das Array direkt weiterreichen
@@ -1455,7 +1455,7 @@ sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry,
 
 // -----------------------------------------------------------------------
 
-sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* )
 {
 #ifdef USE_GDI_BEZIERS
     // Unter NT koennen wir das Array direkt weiterreichen
@@ -1507,7 +1507,7 @@ sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, 
 // -----------------------------------------------------------------------
 
 sal_Bool SalGraphics::DrawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
-                                             const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
+                                             const SalPoint* const* pPtAry, const BYTE* const* pFlgAry, const OutputDevice* )
 {
 #ifdef USE_GDI_BEZIERS
     // Unter NT koennen wir das Array direkt weiterreichen
@@ -1663,7 +1663,7 @@ inline void ImplWriteString( BYTE** pBuf, const char* sString )
     *pBuf += strlen( sString );
 }
 
-BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize )
+BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize, const OutputDevice* )
 {
     BOOL bRetValue = FALSE;
 
