@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:09:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,11 @@
 #include <sfx2/viewfrm.hxx>
 #endif
 
+// --> FME 2005-01-04 #i35572#
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
+// <--
 
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
@@ -138,12 +143,88 @@ SFX_IMPL_INTERFACE(SwListShell, SwBaseShell, SW_RES(STR_SHELLNAME_LIST))
 
 TYPEINIT1(SwListShell,SwBaseShell)
 
+// --> FME 2005-01-04 #i35572# Functionality of Numbering/Bullet toolbar
+// for outline numbered paragraphs should match the functions for outlines
+// available in the navigator. Therefore the code in the following
+// function is quite similar the the code in SwContentTree::ExecCommand.
+void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
+{
+    const sal_uInt16 nActPos = rSh.GetOutlinePos();
+    if ( nActPos < USHRT_MAX && rSh.IsOutlineMovable( nActPos ) )
+    {
+        rSh.Push();
+        rSh.MakeOutlineSel( nActPos, nActPos, TRUE );
+
+        if ( bMove )
+        {
+            const sal_uInt16 nActLevel = rSh.GetOutlineLevel( nActPos );
+            sal_uInt16 nActEndPos = nActPos + 1;
+            sal_Int16 nDir = 0;
+
+            if ( !bUp )
+            {
+                // Move down with subpoints:
+                while ( nActEndPos < rSh.GetOutlineCnt() &&
+                        rSh.GetOutlineLevel( nActEndPos ) > nActLevel )
+                    ++nActEndPos;
+
+                if ( nActEndPos < rSh.GetOutlineCnt() )
+                {
+                    // The current subpoint which should be moved
+                    // starts at nActPos and ends at nActEndPos - 1
+                    --nActEndPos;
+                    sal_uInt16 nDest = nActEndPos + 2;
+                    while ( nDest < rSh.GetOutlineCnt() &&
+                            rSh.GetOutlineLevel( nDest ) > nActLevel )
+                        ++nDest;
+
+                    nDir = nDest - 1 - nActEndPos;
+                }
+            }
+            else
+            {
+                // Move up with subpoints:
+                if ( nActPos > 0 )
+                {
+                    --nActEndPos;
+                    sal_uInt16 nDest = nActPos - 1;
+                    while ( nDest > 0 && rSh.GetOutlineLevel( nDest ) > nActLevel )
+                        --nDest;
+
+                    nDir = nDest - nActPos;
+                }
+            }
+
+            if ( nDir )
+            {
+                rSh.MoveOutlinePara( nDir );
+                rSh.GotoOutline( nActPos + nDir );
+            }
+        }
+        else
+        {
+            // Up/down with subpoints:
+            rSh.OutlineUpDown( bUp ? -1 : 1 );
+        }
+
+        rSh.ClearMark();
+        rSh.Pop( sal_False );
+    }
+}
+// <--
 
 void SwListShell::Execute(SfxRequest &rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     USHORT nSlot = rReq.GetSlot();
     SwWrtShell& rSh = GetShell();
+
+    // --> FME 2005-01-04 #i35572#
+    const SwNumRule* pCurRule = rSh.GetCurNumRule();
+    ASSERT( pCurRule, "SwListShell::Execute without NumRule" )
+    bool bOutline = pCurRule && pCurRule->IsOutlineRule();
+    // <--
+
     switch (nSlot)
     {
         case FN_NUM_BULLET_DOWN:
@@ -173,22 +254,34 @@ void SwListShell::Execute(SfxRequest &rReq)
         }
 
         case FN_NUM_BULLET_OUTLINE_DOWN:
-            rSh.MoveNumParas(FALSE, FALSE);
+            if ( bOutline )
+                lcl_OutlineUpDownWithSubPoints( rSh, false, false );
+            else
+                rSh.MoveNumParas(FALSE, FALSE);
             rReq.Done();
             break;
 
         case FN_NUM_BULLET_OUTLINE_MOVEDOWN:
-            rSh.MoveNumParas(TRUE, FALSE);
+            if ( bOutline )
+                lcl_OutlineUpDownWithSubPoints( rSh, true, false );
+            else
+                rSh.MoveNumParas(TRUE, FALSE);
             rReq.Done();
             break;
 
         case FN_NUM_BULLET_OUTLINE_MOVEUP:
-            rSh.MoveNumParas(TRUE, TRUE);
+            if ( bOutline )
+                lcl_OutlineUpDownWithSubPoints( rSh, true, true );
+            else
+                rSh.MoveNumParas(TRUE, TRUE);
             rReq.Done();
             break;
 
         case FN_NUM_BULLET_OUTLINE_UP:
-            rSh.MoveNumParas(FALSE, TRUE);
+            if ( bOutline )
+                lcl_OutlineUpDownWithSubPoints( rSh, false, true );
+            else
+                rSh.MoveNumParas(FALSE, TRUE);
             rReq.Done();
             break;
 
