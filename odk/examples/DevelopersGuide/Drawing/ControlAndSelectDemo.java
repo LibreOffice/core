@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlAndSelectDemo.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:52:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,24 +40,27 @@
 
 // __________ Imports __________
 
-// base classes
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 
-// property access
-import com.sun.star.beans.*;
+import com.sun.star.awt.Point;
+import com.sun.star.awt.Size;
+import com.sun.star.awt.XControlModel;
 
-// application specific classes
-import com.sun.star.drawing.*;
+import com.sun.star.beans.PropertyValue;
 
-// XModel, XController
-import com.sun.star.frame.*;
+import com.sun.star.drawing.XShape;
+import com.sun.star.drawing.XShapes;
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.drawing.XDrawPages;
+import com.sun.star.drawing.XDrawPagesSupplier;
 
-// Point, Size
-import com.sun.star.awt.*;
+import com.sun.star.frame.XModel;
+import com.sun.star.frame.XController;
 
-//
-import com.sun.star.view.*;
+import com.sun.star.view.XSelectionSupplier;
 
 
 // __________ Implementation __________
@@ -76,22 +79,19 @@ public class ControlAndSelectDemo
         XComponent xComponent = null;
         try
         {
-            String sConnection;
-            if ( args.length >= 1 )
-                sConnection = args[ 0 ];
-            else
-                sConnection = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
-            XMultiServiceFactory xServiceFactory =
-                Helper.connect( sConnection );
+            // get the remote office context of a running office (a new office
+            // instance is started if necessary)
+            com.sun.star.uno.XComponentContext xOfficeContext = Helper.connect();
 
             // suppress Presentation Autopilot when opening the document
-            // properties are the same as described for com.sun.star.document.MediaDescriptor
+            // properties are the same as described for
+            // com.sun.star.document.MediaDescriptor
             PropertyValue[] pPropValues = new PropertyValue[ 1 ];
             pPropValues[ 0 ] = new PropertyValue();
             pPropValues[ 0 ].Name = "Silent";
             pPropValues[ 0 ].Value = new Boolean( true );
 
-            xComponent = Helper.createDocument( xServiceFactory,
+            xComponent = Helper.createDocument( xOfficeContext,
                 "private:factory/sdraw", "_blank", 0, pPropValues );
 
             XMultiServiceFactory xFactory =
@@ -104,33 +104,39 @@ public class ControlAndSelectDemo
             XDrawPages xDrawPages = xDrawPagesSupplier.getDrawPages();
             XDrawPage xDrawPage = (XDrawPage)UnoRuntime.queryInterface(
                 XDrawPage.class, xDrawPages.getByIndex( 0 ));
-            XShapes xShapes = (XShapes)UnoRuntime.queryInterface( XShapes.class, xDrawPage );
+            XShapes xShapes = (XShapes)UnoRuntime.queryInterface(XShapes.class,
+                                                                 xDrawPage );
 
 
             // create and insert the ControlShape
-            Object xObj = xFactory.createInstance( "com.sun.star.drawing.ControlShape" );
+            Object xObj = xFactory.createInstance(
+                "com.sun.star.drawing.ControlShape" );
             XShape xShape = (XShape)UnoRuntime.queryInterface( XShape.class, xObj );
             xShape.setPosition( new Point( 1000, 1000 ) );
             xShape.setSize( new Size( 2000, 2000 ) );
             xShapes.add( xShape );
 
             // create and set the control
-            XControlModel xControlModel = (XControlModel)UnoRuntime.queryInterface( XControlModel.class,
+            XControlModel xControlModel = (XControlModel)UnoRuntime.queryInterface(
+                XControlModel.class,
                 xFactory.createInstance( "com.sun.star.form.component.GroupBox" ) );
-            XControlShape xControlShape = (XControlShape)UnoRuntime.queryInterface( XControlShape.class, xShape );
+            XControlShape xControlShape = (XControlShape)UnoRuntime.queryInterface(
+                XControlShape.class, xShape );
             xControlShape.setControl( xControlModel );
 
 
             // the following code will demonstrate how to
             // make a selection that contains our new created ControlShape
-            XModel xModel = (XModel)UnoRuntime.queryInterface( XModel.class, xComponent );
+            XModel xModel = (XModel)UnoRuntime.queryInterface( XModel.class,
+                                                               xComponent );
             XController xController = xModel.getCurrentController();
             XSelectionSupplier xSelectionSupplier =(XSelectionSupplier)
                 UnoRuntime.queryInterface( XSelectionSupplier.class, xController );
-            // take care to use the global service factory only and not the one that is
-            // provided by the component if you create the ShapeColletion
+            // take care to use the global service factory only and not the one
+            // that is provided by the component if you create the ShapeColletion
             XShapes xSelection = (XShapes)UnoRuntime.queryInterface( XShapes.class,
-                xServiceFactory.createInstance( "com.sun.star.drawing.ShapeCollection" ) );
+                xOfficeContext.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.drawing.ShapeCollection", xOfficeContext ) );
             xSelection.add( xShape );
             xSelectionSupplier.select( xSelection );
         }
