@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:26:27 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,9 @@
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>      // StatLine-String
 #endif
-
+#ifndef _CNTFRM_HXX
+#include <cntfrm.hxx>
+#endif
 #ifdef LINGU_STATISTIK
 #include <txtfrm.hxx>       // SwLinguStat.Flush()
 #endif
@@ -1056,7 +1058,7 @@ void SwEditShell::HyphIgnore()
 
 
 uno::Reference< XSpellAlternatives >
-    SwEditShell::GetCorrection( const Point* pPt )
+    SwEditShell::GetCorrection( const Point* pPt, SwRect& rSelectRect )
 {
      uno::Reference< XSpellAlternatives >  xSpellAlt;
 
@@ -1095,6 +1097,15 @@ uno::Reference< XSpellAlternatives >
 
             if ( xSpellAlt.is() )
             {
+                //save the start and end positons of the line and the starting point
+                xub_StrLen nStartPos = GetCrsr()->GetPoint()->nContent.GetIndex();
+                Push();
+                LeftMargin();
+                xub_StrLen nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
+                RightMargin();
+                xub_StrLen nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
+                Pop(FALSE);
+
 #if OSL_DEBUG_LEVEL > 1
                 pNode->GetWrong()->Invalidate( 0, STRING_LEN );
                 pNode->SetWrongDirty( sal_True );
@@ -1114,9 +1125,30 @@ uno::Reference< XSpellAlternatives >
                     ++nRight;
 
                 aPos.nContent = nBegin + nLeft;
+                pCrsr = GetCrsr();
                 *pCrsr->GetPoint() = aPos;
                 pCrsr->SetMark();
                 ExtendSelection( sal_True, nLen - nLeft - nRight );
+                //no determine the rectangle in the current line
+                xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
+                //take one less than the line end - otherwise the next line would be calculated
+                xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd - 1: (nBegin + nLen - nLeft - nRight);
+                Push();
+                pCrsr->DeleteMark();
+                SwIndex& rContent = GetCrsr()->GetPoint()->nContent;
+                rContent = nWordStart;
+                SwRect aStartRect;
+                SwCrsrMoveState aState;
+                aState.bRealWidth = TRUE;
+                SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
+                SwCntntFrm *pCntntFrame = pCntntNode->GetFrm(pPt, pCrsr->GetPoint(), FALSE);
+
+                pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
+                rContent = nWordEnd;
+                SwRect aEndRect;
+                pCntntFrame->GetCharRect( aEndRect, *pCrsr->GetPoint(),&aState );
+                rSelectRect = aStartRect.Union( aEndRect );
+                Pop(FALSE);
             }
         }
     }
