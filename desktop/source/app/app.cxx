@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:11:50 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 18:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1229,6 +1229,16 @@ void Desktop::Main()
 
     // ----  Startup screen ----
     OpenSplashScreen();
+
+    // check if accessibility is enabled but not working and allow to quit
+    if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
+    {
+        BOOL bQuitApp;
+
+        if( !InitAccessBridge( true, bQuitApp ) )
+            if( bQuitApp )
+                return;
+    }
 
     //  Initialise Single Signon
     if ( !InitSSO() ) return;
