@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:50:30 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,7 +492,7 @@ String STR_FLY_REL_PG_LEFT
     Text[ polish ] = "Lewa krawêdŸ ramki";
     Text[ japanese ] = "¶—]”’";
     Text[ chinese_traditional ] = "¥ª®ØÃä";
-    Text[ arabic ] = "åÇãÔ ÇáÅØÇÑ ÇáÃíÓÑ";
+    Text[ arabic ] = "åÇãÔ ÇáßÇÏÑ ÇáÃíÓÑ";
     Text[ greek ] = "Ğåñéèşñéï ğëáéóßïõ - áñéóôåñÜ";
     Text[ korean ] = "¿ŞÂÊ ÇÁ·¹ÀÓ ¿Ü°û¼±";
     Text[ turkish ] = "Sol çerçeve kenarı";
@@ -516,7 +516,7 @@ String STR_FLY_MIR_REL_PG_LEFT
     Text[ polish ] = "Wewnêtrzna krawêdŸ ramki";
     Text[ japanese ] = "—]”’ “à‘¤";
     Text[ chinese_traditional ] = "®ØÃä¤º«h";
-    Text[ arabic ] = "åÇãÔ ÇáÅØÇÑ ÇáÏÇÎáí";
+    Text[ arabic ] = "åÇãÔ ÇáßÇÏÑ ÇáÏÇÎáí";
     Text[ greek ] = "Ğåñéèşñéï ğëáéóßïõ - åóùôåñéêÜ";
     Text[ korean ] = "³»ºÎ ÇÁ·¹ÀÓ ¿Ü°û¼±";
     Text[ turkish ] = "İç çerçeve kenarı";
@@ -540,7 +540,7 @@ String STR_FLY_REL_PG_RIGHT
     Text[ polish ] = "Prawa krawêdŸ ramki";
     Text[ japanese ] = "‰E—]”’";
     Text[ chinese_traditional ] = "¥k®ØÃä";
-    Text[ arabic ] = "åÇãÔ ÇáÅØÇÑ ÇáÃíãä";
+    Text[ arabic ] = "åÇãÔ ÇáßÇÏÑ ÇáÃíãä";
     Text[ greek ] = "Ğåñéèşñéï ğëáéóßïõ - äåîéÜ";
     Text[ korean ] = "¿À¸¥ÂÊ ÇÁ·¹ÀÓ ¿Ü°û¼±";
     Text[ turkish ] = "Sağ çerçeve kenarı";
@@ -564,7 +564,7 @@ String STR_FLY_MIR_REL_PG_RIGHT
     Text[ polish ] = "Zewnêtrzna krawêdŸ ramki";
     Text[ japanese ] = "—]”’ ŠO‘¤";
     Text[ chinese_traditional ] = "®ØÃä¥~°¼";
-    Text[ arabic ] = "åÇãÔ ÇáÅØÇÑ ÇáÎÇÑÌí";
+    Text[ arabic ] = "åÇãÔ ÇáßÇÏÑ ÇáÎÇÑÌí";
     Text[ greek ] = "Ğåñéèşñéï ğëáéóßïõ - åîùôåñéêÜ";
     Text[ korean ] = "¿ÜºÎ ÇÁ·¹ÀÓ ¿Ü°û¼±";
     Text[ turkish ] = "Dış çerçeve kenarı";
@@ -588,7 +588,7 @@ String STR_FLY_REL_PG_FRAME
     Text[ polish ] = "Ca³a ramka";
     Text[ japanese ] = "˜g‘S‘Ì";
     Text[ chinese_traditional ] = "¾ã­Ó®Ø";
-    Text[ arabic ] = "ÇáÅØÇÑ ÈÃßãáå";
+    Text[ arabic ] = "ÇáßÇÏÑ ÈÃßãáå";
     Text[ greek ] = "Ïëüêëçñï ğëáßóéï";
     Text[ korean ] = "ÀüÃ¼ ÇÁ·¹ÀÓ";
     Text[ turkish ] = "Çerçevenin tümü";
@@ -612,7 +612,7 @@ String STR_FLY_REL_PG_PRTAREA
     Text[ polish ] = "Obszar tekstu ramki";
     Text[ japanese ] = "˜g•t‚¯”ÍˆÍ";
     Text[ chinese_traditional ] = "®Ø¤º¤å¦r°Ï";
-    Text[ arabic ] = "äØÇŞ äÕ ÇáÅØÇÑ";
+    Text[ arabic ] = "äØÇŞ äÕ ÇáßÇÏÑ";
     Text[ greek ] = "Ğåñéï÷Ş êåéìİíïõ ôïõ ğëáéóßïõ";
     Text[ korean ] = "ÇÁ·¹ÀÓ ÅØ½ºÆ® ¿µ¿ª";
     Text[ turkish ] = "Çerçeve metin alanı";
