@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nf $ $Date: 2001-12-17 11:12:25 $
+ *  last change: $Author: svesik $ $Date: 2002-01-02 11:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ void SourceTreeLocalizer::WorkOnFile(
     const ByteString &rParameter, const ByteString &rIso )
 /*****************************************************************************/
 {
-    if (( rIso == "noiso" ) || sIsoCode99.Len()) {
+    if (( rIso.Equals("noiso") ) || sIsoCode99.Len()) {
         String sFull( rFileName, RTL_TEXTENCODING_ASCII_US );
         DirEntry aEntry( sFull );
         ByteString sFileName( aEntry.GetName(), RTL_TEXTENCODING_ASCII_US );
@@ -512,7 +512,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
     ByteString sExtension( aEntry.GetExtension(), RTL_TEXTENCODING_ASCII_US );
     ByteString sCandidate( ExeTable[ nIndex ][ 0 ] );
 
-    while( !sCandidate.Equals ("NULL") && sCandidate != sExtension )
+    while( !sCandidate.Equals ("NULL") && !sCandidate.Equals(sExtension) )
         sCandidate = ExeTable[ ++nIndex ][ 0 ];
 
     ByteString sIso( ExeTable[ nIndex ][ 4 ] );
@@ -597,7 +597,7 @@ BOOL SourceTreeLocalizer::ExecuteMerge()
         sFileName = sLine.GetToken( 0, '\t' );
         sFileName += "#";
         sFileName += sLine.GetToken( 1, '\t' );
-        if ( sFileName.Len() && ( sOldFileName != sFileName )) {
+        if ( sFileName.Len() && ( !sOldFileName.Equals(sFileName) )) {
             if ( aFile.IsOpen()) {
                 aFile.Close();
 
