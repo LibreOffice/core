@@ -16,6 +16,7 @@
 "SwXDocumentIndex";"com::sun::star::text::BaseIndex";"BackGraphicURL"
 "SwXDocumentIndex";"com::sun::star::text::BaseIndex";"BackGraphicFilter"
 "SwXDocumentIndex";"com::sun::star::text::BaseIndex";"BackGraphicLocation"
+"SwXDocumentIndex";"com::sun::star::text::BaseIndex";"BackColor"
 "SwXDocumentIndex";"com::sun::star::text::BaseIndex";"BackTransparent"
 "SwXDocumentIndex";"com::sun::star::text::BaseIndex";"LevelFormat#optional"
 "SwXDocumentIndex";"com::sun::star::text::BaseIndex";"CreateFromChapter#optional"
