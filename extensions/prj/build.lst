@@ -27,4 +27,4 @@ ex	extensions\source\dbpilots			nmake	-	all	ex_dbpilots NULL
 ex	extensions\source\abpilot			nmake	-	all	ex_abpilot NULL
 ex	extensions\source\preload			nmake	-	all	ex_preload	NULL
 ex	extensions\source\config\ldap		nmake 	-	all ex_ldap NULL
-ex  extensions\util						nmake   -   all ex_util ex_preload ex_abpilot ex_dbpilots ex_dbimport ex_propctrlr ex_pchk.w ex_bib ex_plutil NULL
+ex  extensions\util						nmake   -   all ex_util ex_preload ex_abpilot ex_dbpilots ex_ldap ex_propctrlr ex_pchk.w ex_bib ex_plutil NULL
