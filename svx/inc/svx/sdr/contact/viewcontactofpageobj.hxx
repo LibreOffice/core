@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofpageobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:31:40 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@ namespace sdr
             // page objects.
             unsigned                                    mbIsPainting : 1;
 
+            // #i35972# flag to avoid recursive ActionChange events
+            unsigned                                    mbIsInActionChange : 1;
+
         protected:
             // internal access to SdrObject
             SdrPageObj& GetPageObj() const
@@ -172,6 +175,9 @@ namespace sdr
             virtual sal_Bool PaintObject(
                 DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle,
                 const ViewObjectContact& rAssociatedVOC);
+
+            // #WIP# React on changes of the object of this ViewContact
+            virtual void ActionChanged();
         };
     } // end of namespace contact
 } // end of namespace sdr
