@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-09 15:46:37 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 17:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,8 +626,9 @@ void PADialog::RenameDevice()
     if( ! aPrinter.Len() )
         return;
 
+    String aTmpString( PaResId( RID_QRY_PRTNAME ) );
     QueryString aQuery( this,
-                        String( PaResId( RID_QRY_PRTNAME ) ),
+                        aTmpString,
                         aPrinter );
     aQuery.SetText( m_aRenameStr );
     aQuery.Execute();
