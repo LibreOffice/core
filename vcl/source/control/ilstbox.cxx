@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-01 14:11:55 $
+ *  last change: $Author: mt $ $Date: 2001-08-08 10:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 #ifndef _SV_ILSTBOX_HXX
 #include <ilstbox.hxx>
 #endif
+#ifndef _VCL_I18NHELP_HXX
+#include <i18nhelp.hxx>
+#endif
+
 
 #ifndef _VCL_UNOHELP_HXX
 #include <unohelp.hxx>
@@ -145,8 +149,9 @@ void ImplInitDropDownButton( PushButton* pButton )
 
 // =======================================================================
 
-ImplEntryList::ImplEntryList()
+ImplEntryList::ImplEntryList( Window* pWindow )
 {
+    mpWindow = pWindow;
     mnLastSelected = LISTBOX_ENTRY_NOTFOUND;
     mnSelectionAnchor = LISTBOX_ENTRY_NOTFOUND;
     mnImages = 0;
@@ -306,40 +311,45 @@ void ImplEntryList::RemoveEntry( USHORT nPos )
 
 // -----------------------------------------------------------------------
 
-USHORT ImplEntryList::FindEntry( const XubString& rStr, MatchMode nMatchMode, USHORT nMatchLen, USHORT nStart, BOOL bForward ) const
+USHORT ImplEntryList::FindEntry( const XubString& rString ) const
 {
-    BOOL    bEqual;
+    USHORT nEntries = GetEntryCount();
+    for ( USHORT n = GetMRUCount(); n < nEntries; n++ )
+    {
+        ImplEntryType* pImplEntry = GetEntry( n );
+        if ( pImplEntry->maStr == rString )
+            return n;
+    }
+    return LISTBOX_ENTRY_NOTFOUND;
+}
+
+    // -----------------------------------------------------------------------
+
+USHORT ImplEntryList::FindMatchingEntry( const XubString& rStr, USHORT nStart, BOOL bForward, BOOL bLazy ) const
+{
     USHORT  nPos = LISTBOX_ENTRY_NOTFOUND;
     USHORT  nEntryCount = GetEntryCount();
     if ( !bForward )
         nStart++;   // wird sofort dekrementiert
+
+    const vcl::I18nHelper& rI18nHelper = mpWindow->GetSettings().GetLocaleI18nHelper();
     for ( USHORT n = nStart; bForward ? ( n < nEntryCount ) : n; )
     {
         if ( !bForward )
             n--;
 
         ImplEntryType* pImplEntry = GetEntry( n );
-        if ( nMatchMode == MATCH_CASE )
-            bEqual = pImplEntry->maStr.Equals( rStr, 0, nMatchLen );
-        else
-            bEqual = pImplEntry->maStr.EqualsIgnoreCaseAscii( rStr, 0, nMatchLen );
-        if (  bEqual )
+        BOOL bMatch = bLazy ? rI18nHelper.MatchString( rStr, pImplEntry->maStr ) : ( rStr.Match( pImplEntry->maStr ) == STRING_MATCH );
+        if ( bMatch )
         {
-            // Wenn Case-Insensitiv matching, dann einen Eintrag bevorzugen,
-            // der trotzdem case-sensitiv matched.
-            if ( (nMatchMode == MATCH_CASE) ||
-                 ((nMatchMode == MATCH_BEST) && (pImplEntry->maStr.Equals( rStr, 0, nMatchLen ))) )
-            {
-                nPos = n;
-                break;
-            }
-            else if ( nPos == LISTBOX_ENTRY_NOTFOUND )
-                nPos = n;   // Bei Case-Insensitiv gewinnt der erste, wenn keiner 100%
+            nPos = n;
+            break;
         }
 
         if ( bForward )
             n++;
     }
+
     return nPos;
 }
 
@@ -476,7 +486,7 @@ BOOL ImplEntryList::IsEntryPosSelected( USHORT nIndex ) const
 ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     Control( pParent, 0 )
 {
-    mpEntryList         = new ImplEntryList;
+    mpEntryList         = new ImplEntryList( this );
 
     mnTop               = 0;
     mnLeft              = 0;
@@ -1358,7 +1368,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 maSearchStr += c;
                 XubString aTmpSearch( maSearchStr );
 
-                nSelect = mpEntryList->FindEntry( aTmpSearch, MATCH_IGNORECASE, aTmpSearch.Len(), mnCurrentPos );
+                nSelect = mpEntryList->FindMatchingEntry( aTmpSearch, mnCurrentPos );
                 if ( (nSelect == LISTBOX_ENTRY_NOTFOUND) && (aTmpSearch.Len() > 1) )
                 {
                     // Wenn alles die gleichen Buchstaben, dann anderer Such-Modus
@@ -1368,11 +1378,11 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                     if ( bAllEqual )
                     {
                         aTmpSearch = c;
-                        nSelect = mpEntryList->FindEntry( aTmpSearch, MATCH_IGNORECASE, aTmpSearch.Len(), mnCurrentPos+1 );
+                        nSelect = mpEntryList->FindMatchingEntry( aTmpSearch, mnCurrentPos+1 );
                     }
                 }
                 if ( nSelect == LISTBOX_ENTRY_NOTFOUND )
-                    nSelect = mpEntryList->FindEntry( aTmpSearch, MATCH_IGNORECASE, aTmpSearch.Len(), 0 );
+                    nSelect = mpEntryList->FindMatchingEntry( aTmpSearch, 0 );
 
                 if ( nSelect != LISTBOX_ENTRY_NOTFOUND )
                 {
@@ -1450,7 +1460,7 @@ void ImplListBoxWindow::ImplPaint( USHORT nPos, BOOL bErase )
         mnUserDrawEntry = nPos;
         aRect.Left() -= mnLeft;
         if ( nPos < GetEntryList()->GetMRUCount() )
-            nPos = GetEntryList()->FindEntry( GetEntryList()->GetEntryText( nPos ), MATCH_CASE, STRING_LEN, GetEntryList()->GetMRUCount() );
+            nPos = GetEntryList()->FindEntry( GetEntryList()->GetEntryText( nPos ) );
         nPos -= GetEntryList()->GetMRUCount();
         UserDrawEvent aUDEvt( this, aRect, nPos, 0 );
         maUserDrawHdl.Call( &aUDEvt );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-17 16:45:11 $
+ *  last change: $Author: mt $ $Date: 2001-08-08 10:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,10 +369,10 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
             bForward = FALSE;
             nStart = nStart ? (nStart--) : mpImplLB->GetEntryList()->GetEntryCount()-1;
         }
-        MatchMode eMatchMode = mbMatchCase ? MATCH_CASE : MATCH_BEST;
-        USHORT nPos = mpImplLB->GetEntryList()->FindEntry( aStartText, eMatchMode, aStartText.Len(), nStart, bForward );
+        BOOL bLazy = mbMatchCase ? FALSE : TRUE;
+        USHORT nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, nStart, bForward, bLazy );
         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
-            nPos = mpImplLB->GetEntryList()->FindEntry( aStartText, eMatchMode, aStartText.Len(), bForward ? 0 : (mpImplLB->GetEntryList()->GetEntryCount()-1), bForward );
+            nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, bForward ? 0 : (mpImplLB->GetEntryList()->GetEntryCount()-1), bForward, bLazy );
 
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
@@ -801,10 +801,10 @@ void ComboBox::ImplUpdateFloatSelection()
         }
 
         if ( nSelect == LISTBOX_ENTRY_NOTFOUND )
-            nSelect = mpImplLB->GetEntryList()->FindEntry( aSearchStr, MATCH_CASE, STRING_LEN );
+            nSelect = mpImplLB->GetEntryList()->FindEntry( aSearchStr );
         if ( nSelect == LISTBOX_ENTRY_NOTFOUND )
         {
-            nSelect = mpImplLB->GetEntryList()->FindEntry( aSearchStr, MATCH_BEST, aSearchStr.Len() );
+            nSelect = mpImplLB->GetEntryList()->FindMatchingEntry( aSearchStr );
             bSelect = FALSE;
         }
 
@@ -876,7 +876,7 @@ void ComboBox::Clear()
 
 USHORT ComboBox::GetEntryPos( const XubString& rStr ) const
 {
-    USHORT nPos = mpImplLB->GetEntryList()->FindEntry( rStr, MATCH_CASE, STRING_LEN, mpImplLB->GetEntryList()->GetMRUCount() );
+    USHORT nPos = mpImplLB->GetEntryList()->FindEntry( rStr );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         nPos -= mpImplLB->GetEntryList()->GetMRUCount();
     return nPos;

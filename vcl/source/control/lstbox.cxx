@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 07:29:53 $
+ *  last change: $Author: mt $ $Date: 2001-08-08 10:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ IMPL_LINK( ListBox, ImplSelectionChangedHdl, void*, n )
         {
             // Sollte mal ein ImplPaintEntry werden...
             if ( nChanged < pEntryList->GetMRUCount() )
-                nChanged = pEntryList->FindEntry( pEntryList->GetEntryText( nChanged ), MATCH_CASE, STRING_LEN, pEntryList->GetMRUCount() );
+                nChanged = pEntryList->FindEntry( pEntryList->GetEntryText( nChanged ) );
             mpImplWin->SetItemPos( nChanged );
             mpImplWin->SetString( mpImplLB->GetEntryList()->GetEntryText( nChanged ) );
             if( mpImplLB->GetEntryList()->HasImages() )
@@ -813,7 +813,7 @@ void ListBox::RemoveEntry( USHORT nPos )
 
 USHORT ListBox::GetEntryPos( const XubString& rStr ) const
 {
-    USHORT nPos = mpImplLB->GetEntryList()->FindEntry( rStr, MATCH_CASE, STRING_LEN, mpImplLB->GetEntryList()->GetMRUCount() );
+    USHORT nPos = mpImplLB->GetEntryList()->FindEntry( rStr );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         nPos -= mpImplLB->GetEntryList()->GetMRUCount();
     return nPos;
@@ -865,7 +865,7 @@ USHORT ListBox::GetSelectEntryPos( USHORT nIndex ) const
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         if ( nPos < mpImplLB->GetEntryList()->GetMRUCount() )
-            nPos = mpImplLB->GetEntryList()->FindEntry( mpImplLB->GetEntryList()->GetEntryText( nPos ), MATCH_CASE, STRING_LEN, mpImplLB->GetEntryList()->GetMRUCount() );
+            nPos = mpImplLB->GetEntryList()->FindEntry( mpImplLB->GetEntryList()->GetEntryText( nPos ) );
         nPos -= mpImplLB->GetEntryList()->GetMRUCount();
     }
     return nPos;
