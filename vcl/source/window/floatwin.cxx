@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-16 07:58:29 $
+ *  last change: $Author: pl $ $Date: 2002-04-16 10:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     }
     else
     {
+        if ( !(nStyle & WB_NODIALOGCONTROL) )
+            nStyle |= WB_DIALOGCONTROL;
+
         if( nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE) )
         {
             WinBits nFloatWinStyle = nStyle;
@@ -132,8 +135,6 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
             if ( (nStyle & WB_SYSTEMWINDOW) && !(nStyle & (WB_MOVEABLE | WB_SIZEABLE)) )
                 nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
             pBorderWin  = new ImplBorderWindow( pParent, nStyle, nBorderStyle );
-            if ( !(nStyle & WB_NODIALOGCONTROL) )
-                nStyle |= WB_DIALOGCONTROL;
             SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
             pBorderWin->mpClientWindow = this;
             pBorderWin->GetBorder( mnLeftBorder, mnTopBorder, mnRightBorder, mnBottomBorder );
