@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-27 09:59:30 $
+ *  last change: $Author: os $ $Date: 2002-12-10 14:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1081,7 +1081,8 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
     aJustify.SetClickHdl( aLink );
     aLastLineLB.SetSelectHdl( LINK( this, SvxParaAlignTabPage, LastLineHdl_Impl ) );
 
-    if( ( GetHtmlMode_Impl( rSet ) & HTMLMODE_ON ) == 0 )
+    USHORT nHtmlMode = GetHtmlMode_Impl(rSet);
+    if(!(nHtmlMode & HTMLMODE_ON) || (0 != (nHtmlMode & HTMLMODE_SOME_STYLES)) )
     {
         SvtLanguageOptions  aLangOptions;
         if( aLangOptions.IsCTLFontEnabled() )
