@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2000-12-19 16:44:43 $
+ *  last change: $Author: oj $ $Date: 2001-01-04 14:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,30 +633,31 @@ void ORowSet::freeResources()
     m_aClones.clear();
     if (m_bCreateStatement)
     {
-        // dispose the composer to avoid that everbody knows that the querycomposer is eol
-        Reference< XComponent > xComp(m_xComposer, UNO_QUERY);
-        if (xComp.is())
-            xComp->dispose();
-        m_xComposer     = NULL;
-
-        delete m_pCache;
-        m_pCache        = NULL;
-
-        if(m_pTables)
-        {
-            m_pTables->dispose(); // clear all references
-            delete m_pTables;
-            m_pTables   = NULL;
-        }
-
-        m_xStatement    = NULL;
-        m_xTypeMap      = NULL;
+        // the columns must be disposed before the querycomposer is disposed because
+        // their owner can be the composer
         m_xColumns      = NULL;
         if(m_pColumns)
         {
             m_pColumns->disposing();
             DELETEZ(m_pColumns);
         }
+        // dispose the composer to avoid that everbody knows that the querycomposer is eol
+        Reference< XComponent > xComp(m_xComposer, UNO_QUERY);
+        if (xComp.is())
+            xComp->dispose();
+        m_xComposer     = NULL;
+
+        DELETEZ(m_pCache);
+
+        if(m_pTables)
+        {
+            m_pTables->dispose(); // clear all references
+            DELETEZ(m_pTables);
+        }
+
+        m_xStatement    = NULL;
+        m_xTypeMap      = NULL;
+
         m_aBookmark     = Any();
         m_bBeforeFirst  = sal_True;
         m_bAfterLast    = sal_False;
@@ -2106,8 +2107,8 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
                         xQuery->getPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_CATALOGNAME) >>= aCatalog;
                         xQuery->getPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_SCHEMANAME)  >>= aSchema;
                         xQuery->getPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_TABLENAME)   >>= aTable;
-
-                        composeTableName(m_xActiveConnection->getMetaData(),aCatalog,aSchema,aTable,m_aUpdateTableName,sal_False);
+                        if(aTable.getLength())
+                            composeTableName(m_xActiveConnection->getMetaData(),aCatalog,aSchema,aTable,m_aUpdateTableName,sal_False);
 
                         Reference<XColumnsSupplier> xSup(xQuery,UNO_QUERY);
                         if(xSup.is())
