@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-16 17:00:30 $
+ *  last change: $Author: dg $ $Date: 2001-09-18 19:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@ namespace configmgr
         virtual void handle(RemoveNode const& _rRemoveNode);
         virtual void handle(SubtreeChange const& _rSubtree);
     };
+
+    // method that applies changes on a existing subtree
+    void applyChanges(TreeChangeList & _aTreeChangeList, ISubtree& _aSubtree);
 
     // -----------------------------------------------------------------------------
     class OMergeChanges : private ChangeTreeAction, private OPathCreator<RelativePath>

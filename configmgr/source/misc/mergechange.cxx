@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-16 17:00:31 $
+ *  last change: $Author: dg $ $Date: 2001-09-18 19:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,8 +574,29 @@ namespace configmgr
         }
     }
 // -----------------------------------------------------------------------------
-    // in localsession.cxx
-    void apply(TreeChangeList & _aTreeChangeList, ISubtree& _aSubtree);
+    void applyChanges(TreeChangeList & _aTreeChangeList, ISubtree& _aSubtree)
+    {
+        // coarse: _aSubtree = _aSubtree + _aSubtreeChange;
+
+        TreeUpdate aTreeUpdate(&_aSubtree);
+
+        // pSubtree = pSubtree + aChangeList
+        TreeChangeList aMergeChangeList(_aTreeChangeList, SubtreeChange::NoChildCopy());
+
+        OMergeTreeAction aChangeHandler(aMergeChangeList.root, &_aSubtree);
+        _aTreeChangeList.root.forEachChange(aChangeHandler);
+
+        // now check the real modifications
+        OChangeActionCounter aChangeCounter;
+        aChangeCounter.handle(aMergeChangeList.root);
+        CFG_TRACE_INFO_NI("cache manager: counted changes from notification : additions: %i , removes: %i, value changes: %i", aChangeCounter.nAdds, aChangeCounter.nRemoves, aChangeCounter.nValues);
+        if (aChangeCounter.hasChanges())
+        {
+            // aTree.updateTree(aMergeChangeList);
+            aMergeChangeList.root.forEachChange(aTreeUpdate);
+        }
+    }
+
 // -----------------------------------------------------------------------------
 
     void OMergeTreeChangeList::handle(SubtreeChange const& _rSubtree)
@@ -632,11 +653,7 @@ namespace configmgr
 
                 // Now apply _rSubtree to the subtree
                 TreeChangeList aChangeList(m_aTreeChangeList.getOptions(), aSubtreePath, Chg(), _rSubtree); // expensive!
-                apply(aChangeList, *pSubtree);
-
-                // This isn't correct today because _rSubtree is const and this construct require that _rSubtree isn't const
-                // TreeUpdate aTreeUpdate(pSubtree);
-                // _rSubtree.applyToChildren(aTreeUpdate);
+                applyChanges(aChangeList, *pSubtree);
             }
             else
             {

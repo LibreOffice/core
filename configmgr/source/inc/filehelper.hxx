@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lla $ $Date: 2001-05-14 12:06:26 $
+ *  last change: $Author: dg $ $Date: 2001-09-18 19:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,31 +70,64 @@
 #include <com/sun/star/io/IOException.hpp>
 #endif
 
+namespace io = com::sun::star::io;
+
 namespace configmgr
 {
+    //==========================================================================
+    //= FileHelper
+    //==========================================================================
+    /** Within the FileHelper namespace there is a list of methods declared, which ease
+        specific file operations.
+    */
     namespace FileHelper
     {
-        namespace io = com::sun::star::io;
+        /// delimiter used in URLs and ConfPath
+        static const ::sal_Unicode  delimiter = sal_Unicode('/');
 
-        // convert a filename like "d:\foo\bar\file.xyz to
-        // something like file:///d|/foo/bar/file.xyz
-        rtl::OUString convertFilenameToFileURL(rtl::OUString const& _sFilename);
+        /// string representation of the delimiter
+        const rtl::OUString& delimiterAsString();
 
-        void createBackupRemoveAndRename(
-            const rtl::OUString& _aFromURL, const rtl::OUString &_aToURL) throw (io::IOException);
+        /// Tests if the file exists.
+        bool fileExists(rtl::OUString const& _sFileURL);
 
+        /// Tests if the directory exists.
+        bool dirExists(rtl::OUString const& _sDirURL);
 
-        void tryToRemoveFile(const rtl::OUString& _aURL) throw (io::IOException);
+        /** Returns the parent part of the pathname of this File URL,
+            or an empty string if the name has no parent part.
+            The parent part is generally everything leading up to the last occurrence
+            of the separator character.
+        */
+        rtl::OUString getParentDir(rtl::OUString const& _aFileURL);
 
+        /** creates a directory whose pathname is specified by a FileURL.
+            @return true if directory could be created or does exist, otherwise false.
+        */
+        bool mkdir(rtl::OUString const& _sDirURL);
+
+        /** creates a directory whose pathname is specified by a FileURL,
+            including any necessary parent directories.
+            @return true if directory (or directories) could be created or do(es) exist, otherwise false.
+        */
+        bool mkdirs(rtl::OUString const& _aDirectory);
+
+        /** replaces a file specified by _aFromURL with a file specified by _aToURL.
+        */
+        void replaceFile(const rtl::OUString& _aFromURL, const rtl::OUString &_aToURL) throw (io::IOException);
+
+        /** removes a file specified by _aURL. Ignores the case of a non-existing file.
+        */
+        void removeFile(const rtl::OUString& _aURL) throw (io::IOException);
+
+        /** creates an error msg string for a given file error return code.
+        */
         rtl::OUString createOSLErrorString(osl::FileBase::RC eError);
 
-        bool fileExist(rtl::OUString const& _aFileURL);
-        bool directoryExist(rtl::OUString const& _aDirexURL);
-
-        rtl::OUString splitDirectoryOff(rtl::OUString const& _sFilename);
-        inline const sal_Unicode getFileDelimiter() { return sal_Unicode('/'); }
-
-        TimeValue getFileModificationStamp(rtl::OUString const& _aNormalizedFilename) throw (io::IOException);
+        /** determines the modification time of a directory entry specified by a URL.
+            @return the TimeValue of the last modification, if the file exists, otherwise a TimeValue(0,0).
+        */
+        TimeValue getModifyTime(rtl::OUString const& _aNormalizedFilename) throw (io::IOException);
     }
 } // namespace configmgr
 

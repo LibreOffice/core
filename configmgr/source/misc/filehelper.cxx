@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-30 10:12:48 $
+ *  last change: $Author: dg $ $Date: 2001-09-18 19:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,159 +76,87 @@
 #include <osl/diagnose.h>
 #endif
 
+#define ASCII(x) rtl::OUString::createFromAscii(x)
+
 namespace configmgr
 {
     using namespace ::osl;
-    namespace io = com::sun::star::io;
 
-#define ASCII(x) rtl::OUString::createFromAscii(x)
-// -----------------------------------------------------------------------------
-    rtl::OUString FileHelper::convertFilenameToFileURL(rtl::OUString const& _sFilename)
+    //==========================================================================
+    //= FileHelper
+    //==========================================================================
+
+    // -----------------------------------------------------------------------------
+    const rtl::OUString& FileHelper::delimiterAsString()
     {
-        rtl::OUString sURL;
-
-        osl::FileBase::getFileURLFromSystemPath( _sFilename, sURL );
-
-        return sURL;
+        static const rtl::OUString aStringDelimiter( &FileHelper::delimiter,1);
+        return aStringDelimiter;
     }
 
-// ---------------------------- tryToRemoveFile ----------------------------
-void FileHelper::tryToRemoveFile(const rtl::OUString& _aURL) throw (io::IOException)
+    // -----------------------------------------------------------------------------
+    void FileHelper::removeFile(const rtl::OUString& _aURL) throw (io::IOException)
     {
-        {
-            File aFile(_aURL);
-            FileBase::RC eError = aFile.open(OpenFlag_Read);
-            if (eError != osl_File_E_None)
-            {
-                // IF not exists
-                return;
-            }
-            aFile.close();
-        }
         FileBase::RC eError = File::remove(_aURL);
-        if (eError != osl_File_E_None)
+        if (eError != osl_File_E_None &&
+            eError != osl_File_E_NOENT)
         {
             rtl::OUString sError = ASCII("tryToRemoveFile: ");
             sError += FileHelper::createOSLErrorString(eError);
             sError += ASCII("\n with URL: ");
             sError += _aURL;
-#ifdef DEBUG
-            rtl::OString aStr = rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(0, aStr.getStr());
-#endif
+            OSL_ENSURE(0, rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US).getStr());
             throw io::IOException(sError, NULL);
-            // return 1;
         }
     }
 
-// -----------------------------------------------------------------------------
-    void FileHelper::createBackupRemoveAndRename(
+    // -----------------------------------------------------------------------------
+    void FileHelper::replaceFile(
         const rtl::OUString& _aFromURL, const rtl::OUString &_aToURL) throw (io::IOException)
     {
-        // remove FromURL
-        // rename ToURL to FromURL
-        FileHelper::tryToRemoveFile(_aFromURL);
-
+        FileHelper::removeFile(_aFromURL);
         FileBase::RC eError = File::move(_aToURL, _aFromURL);
         if (eError != osl_File_E_None)
         {
             rtl::OUString sError = ASCII("createBackupAndRemove: ") + FileHelper::createOSLErrorString(eError) + ASCII("\n with URL: ") + _aFromURL;
-#ifdef DEBUG
-            rtl::OString aStr = rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(0, aStr.getStr());
-#endif
+            OSL_ENSURE(0, rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US).getStr());
             throw io::IOException(sError, NULL);
         }
     }
-// -----------------------------------------------------------------------------
-    bool FileHelper::fileExist(rtl::OUString const& _aFileURL)
+
+    // -----------------------------------------------------------------------------
+    bool FileHelper::fileExists(rtl::OUString const& _sFileURL)
     {
         DirectoryItem aItem;
-        FileBase::RC eError = DirectoryItem::get(_aFileURL, aItem);
-        if (eError != osl_File_E_None)
-        {
-            // IF not exists
-            return false;
-        }
-        return true;
+        return DirectoryItem::get(_sFileURL, aItem) == osl_File_E_None;
     }
 
     // -----------------------------------------------------------------------------
-    bool FileHelper::directoryExist(rtl::OUString const& _aDirexURL)
+    bool FileHelper::dirExists(rtl::OUString const& _sDirURL)
     {
-        bool bDirectoryExist;
-        Directory aDirex(_aDirexURL);
-        FileBase::RC eError = aDirex.open();
-        if (eError != osl_File_E_None)
-        {
-            bDirectoryExist = false;
-        }
-        else
-        {
-            bDirectoryExist = true;
-        }
-
-        aDirex.close();
-        return bDirectoryExist;
+        return Directory(_sDirURL).open() == osl_File_E_None;
     }
 
-// -----------------------------------------------------------------------------
-    rtl::OUString FileHelper::splitDirectoryOff(rtl::OUString const& _sFilename)
-    {
-        // split off the directory
-        // there is no test, if last string after '/' is a directory, it will cut off
-
-        // evtl. should a test like: check if the last string contain a dot '.'
-        // help to test it.
-
-        sal_Int32 nIdx = _sFilename.lastIndexOf(FileHelper::getFileDelimiter(), _sFilename.getLength());
-        rtl::OUString sDirex = _sFilename.copy(0,nIdx);
-        return sDirex;
-    }
-// -----------------------------------------------------------------------------
-// return a TimeValue at which time the given file is modified
-
-    TimeValue FileHelper::getFileModificationStamp(rtl::OUString const& _aNormalizedFilename) throw (io::IOException)
+    // -----------------------------------------------------------------------------
+    TimeValue FileHelper::getModifyTime(rtl::OUString const& _sURL)
     {
         TimeValue aTime = {0,0};
-
         DirectoryItem aItem;
-        osl::FileBase::RC eError = DirectoryItem::get(_aNormalizedFilename, aItem);
-        if (eError != osl::FileBase::E_None)
+        if (osl::FileBase::E_None == DirectoryItem::get(_sURL, aItem))
         {
-            rtl::OUString aUStr = FileHelper::createOSLErrorString(eError);
-            throw io::IOException(aUStr, NULL);
-        }
-
-        FileStatus aStatus(osl_FileStatus_Mask_ModifyTime|osl_FileStatus_Mask_Type);
-        eError = aItem.getFileStatus(aStatus);
-        if (eError != osl::FileBase::E_None)
-        {
-            return aTime;
-            rtl::OUString aUStr = FileHelper::createOSLErrorString(eError);
-            throw io::IOException(aUStr, NULL);
-        }
-        if (aStatus.isValid(osl_FileStatus_Mask_Type))
-        {
-            FileStatus::Type eType = aStatus.getFileType();
-            volatile int dummy = 0;
-        }
-
-        if (aStatus.isValid(osl_FileStatus_Mask_ModifyTime))
-        {
-            aTime = aStatus.getModifyTime();
+            FileStatus aStatus(osl_FileStatus_Mask_ModifyTime|osl_FileStatus_Mask_Type);
+            if (osl::FileBase::E_None == aItem.getFileStatus(aStatus) && aStatus.isValid(osl_FileStatus_Mask_ModifyTime))
+                aTime = aStatus.getModifyTime();
         }
         return aTime;
     }
 
-// ------------------ Create a string from FileBase::RC Error ------------------
+    // -----------------------------------------------------------------------------
     rtl::OUString FileHelper::createOSLErrorString(FileBase::RC eError)
     {
         rtl::OUString aRet;
         switch(eError)
         {
         case osl_File_E_None:
-            aRet = ASCII("");
             break;
 
         case osl_File_E_PERM:
@@ -410,4 +338,39 @@ void FileHelper::tryToRemoveFile(const rtl::OUString& _aURL) throw (io::IOExcept
         }
         return aRet;
     }
+
+    // -----------------------------------------------------------------------------
+    rtl::OUString FileHelper::getParentDir(rtl::OUString const& _sURL)
+    {
+        // goto last '/' and cut the rest.
+        sal_Int32 nIdx = _sURL.lastIndexOf(delimiter, _sURL.getLength());
+        if (nIdx > 0)
+            return _sURL.copy(0, nIdx);
+        return rtl::OUString();
+    }
+
+    // -----------------------------------------------------------------------------
+    bool FileHelper::mkdir(rtl::OUString const& _sDirURL)
+    {
+        // direct create a directory
+        osl::FileBase::RC eError = osl::Directory::create(_sDirURL); // try to create the directory
+        if (eError == osl::FileBase::E_EXIST ||
+            eError == osl::FileBase::E_None ||
+            FileHelper::dirExists(_sDirURL)) return true; // Exists or created
+        else
+            return false;
+    }
+
+    // -----------------------------------------------------------------------------
+    bool FileHelper::mkdirs(rtl::OUString const& _sDirURL)
+    {
+        bool bRes = mkdir(_sDirURL);
+        if (!bRes)
+        {
+            rtl::OUString sParentDir = FileHelper::getParentDir(_sDirURL);
+            bRes = (sParentDir.getLength() > 0) && mkdirs(sParentDir) && mkdir(_sDirURL);
+        }
+        return bRes;
+    }
+
 } // namespace configmgr
