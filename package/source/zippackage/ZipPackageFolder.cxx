@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-07 10:51:26 $
+ *  last change: $Author: mtg $ $Date: 2001-02-26 13:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,10 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
     for (;aCI!=aContents.end();aCI++)
     {
         xTunnel = uno::Reference < lang::XUnoTunnel> ((*aCI).second, uno::UNO_QUERY);
-        sal_Int64 nTest=0;
+        sal_Int64 nTest = 0;
+        pFolder = NULL;
+        pStream = NULL;
+
         if ((nTest = xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId())) != 0)
         {
             pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
