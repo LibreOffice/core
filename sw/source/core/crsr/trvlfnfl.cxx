@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfnfl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:33:00 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,63 +376,6 @@ FASTBOOL SwCursor::GotoPrevFtnAnchor()
     return bRet;
 }
 
-FASTBOOL SwCursor::GotoNextFtnCntnt()
-{
-    SwCrsrSaveState aSaveState( *this );
-
-    const SwNode* pSttNd = GetNode()->FindFootnoteStartNode();
-    if( pSttNd )
-        GotoFtnAnchor();
-
-    SwTxtFtn *pFtn;
-    SwTxtNode* pTxtNd = GetPoint()->nNode.GetNode().GetTxtNode();
-
-    if( !pTxtNd || 0 == ( pFtn = (SwTxtFtn*)pTxtNd->GetTxtAttr(
-                                GetPoint()->nContent, RES_TXTATR_FTN ) ))
-        return GotoNextFtnAnchor();
-
-    FASTBOOL bRet = FALSE;
-    const SwFtnIdxs& rFtnArr = GetDoc()->GetFtnIdxs();
-    USHORT nPos = rFtnArr.GetPos( pFtn );
-    if( nPos < rFtnArr.Count() - 1 )
-    {
-        pFtn = rFtnArr[ nPos + 1 ];
-        pTxtNd = (SwTxtNode*)&pFtn->GetTxtNode();
-        GetPoint()->nNode = *pTxtNd;
-        GetPoint()->nContent.Assign( pTxtNd, *pFtn->GetStart() );
-        bRet = !IsSelOvr();
-    }
-    return bRet;
-}
-
-FASTBOOL SwCursor::GotoPrevFtnCntnt()
-{
-    SwCrsrSaveState aSaveState( *this );
-    const SwNode* pSttNd = GetNode()->FindFootnoteStartNode();
-    if( pSttNd )
-        GotoFtnAnchor();
-
-    SwTxtFtn *pFtn;
-    SwTxtNode* pTxtNd = GetPoint()->nNode.GetNode().GetTxtNode();
-
-    if( !pTxtNd || 0 == ( pFtn = (SwTxtFtn*)pTxtNd->GetTxtAttr(
-                                GetPoint()->nContent, RES_TXTATR_FTN ) ))
-        return GotoPrevFtnAnchor();
-
-    FASTBOOL bRet = FALSE;
-    const SwFtnIdxs& rFtnArr = GetDoc()->GetFtnIdxs();
-    USHORT nPos = rFtnArr.GetPos( pFtn );
-    if( nPos && USHRT_MAX != nPos )
-    {
-        pFtn = rFtnArr[ nPos - 1 ];
-        pTxtNd = (SwTxtNode*)&pFtn->GetTxtNode();
-        GetPoint()->nNode = *pTxtNd;
-        GetPoint()->nContent.Assign( pTxtNd, *pFtn->GetStart() );
-        bRet = !IsSelOvr();
-    }
-    return bRet;
-}
-
 FASTBOOL SwCrsrShell::GotoNextFtnAnchor()
 {
     return CallCrsrFN( &SwCursor::GotoNextFtnAnchor );
@@ -441,89 +384,6 @@ FASTBOOL SwCrsrShell::GotoNextFtnAnchor()
 FASTBOOL SwCrsrShell::GotoPrevFtnAnchor()
 {
     return CallCrsrFN( &SwCursor::GotoPrevFtnAnchor );
-}
-
-FASTBOOL SwCrsrShell::GotoNextFtnCntnt()
-{
-    return CallCrsrFN( &SwCursor::GotoNextFtnCntnt );
-}
-
-FASTBOOL SwCrsrShell::GotoPrevFtnCntnt()
-{
-    return CallCrsrFN( &SwCursor::GotoPrevFtnCntnt );
-}
-
-/*  */
-
-// springe aus dem Content zum Rahmen
-
-FASTBOOL SwCrsrShell::GotoFlyTxt()
-{
-    SET_CURR_SHELL( this );
-
-    // alle DrawSeiten nach Objekten durchsuchen.
-    USHORT nMaxPages = GetDoc()->GetDrawModel() ?
-        GetDoc()->GetDrawModel()->GetPageCount() : 0;
-    if( !nMaxPages )
-        return FALSE;
-
-    const SwFrm* pFrm = GetCurrFrm();
-    const SwLayoutFrm *pFndFly = 0;
-
-    Point aPt( pFrm->Frm().Pos() );
-    Point aNxtPt( LONG_MAX, LONG_MAX );
-
-    for( USHORT nPg = 0; nPg < nMaxPages; ++nPg )
-    {
-        SdrPage* pActPage = GetDoc()->GetDrawModel()->GetPage( nPg );
-        ASSERT( pActPage, "UUPs, keine Seite im Container" );
-
-        ULONG nObjs = pActPage->GetObjCount();
-        ASSERT( nObjs, "UUPs, was fuer Object auf der Seite" );
-
-        for( ULONG nObj = 0; nObj < nObjs; ++nObj )
-        {
-            SdrObject *pObj = pActPage->GetObj( nObj );
-            ASSERT( pObj ,
-                    "UUPs, kein Object" );
-            SwVirtFlyDrawObj *pVirt = pObj->ISA(SwVirtFlyDrawObj) ?
-                                                    (SwVirtFlyDrawObj*)pObj : 0;
-            if( pVirt && pVirt->GetFlyFrm()->Lower() &&
-                !pVirt->GetFlyFrm()->Lower()->IsNoTxtFrm() )
-            {
-
-                // Wie ist die Logik? Alle, die unterhalb des aktuellen Frames
-                // liegen (alle, die in den Frame hineinragen werden
-                // nicht beachtet !!)
-                Point aFlyPos( pVirt->GetFlyFrm()->Frm().Pos() );
-                aFlyPos += pVirt->GetFlyFrm()->Prt().Pos();
-                if( ( aFlyPos.Y() > aPt.Y() ||      // alle die unterhalb/daneben liegen,
-                    ( aFlyPos.Y() == aPt.Y() && aFlyPos.X() > aPt.X())) &&
-                    ( aFlyPos.Y() < aNxtPt.Y() ||   // Position kleiner
-                    ( aFlyPos.Y() == aNxtPt.Y() && aFlyPos.X() < aNxtPt.X() )) )
-                {
-                    aNxtPt = aFlyPos;
-                    pFndFly = pVirt->GetFlyFrm();
-                }
-            }
-        }
-    }
-
-    FASTBOOL bRet = FALSE;
-    if( pFndFly )
-    {
-        // Calc() ??
-        SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
-        SwCrsrSaveState aSaveState( *pCurCrsr );
-
-        aPt = pFndFly->Frm().Pos() + pFndFly->Prt().Pos();
-        pFndFly->GetCrsrOfst( pCurCrsr->GetPoint(), aPt );
-        bRet = !pCurCrsr->IsInProtectTable( TRUE ) && !pCurCrsr->IsSelOvr();
-        if( bRet )
-            UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
-                        SwCrsrShell::READONLY );
-    }
-    return bRet;
 }
 
 // springe aus dem Rahmen zum Anker
