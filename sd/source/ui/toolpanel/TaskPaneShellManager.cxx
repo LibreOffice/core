@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneShellManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:12:16 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 16:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,9 @@ TaskPaneShellManager::TaskPaneShellManager (
 
 void TaskPaneShellManager::AddSubShell (SfxShell* pShell)
 {
-    ViewShellManager::UpdateLocker aLocker (mrViewShellManager);
-    maShellStack.push_front (pShell);
+    ViewShellManager::UpdateLock aLocker (mrViewShellManager);
+
+    maShellStack.push_back (pShell);
 }
 
 
@@ -96,7 +97,8 @@ void TaskPaneShellManager::RemoveSubShell (SfxShell* pShell)
         pShell));
     if (aFoundShell != maShellStack.end())
     {
-        ViewShellManager::UpdateLocker aLocker (mrViewShellManager);
+        ViewShellManager::UpdateLock aLocker (mrViewShellManager);
+
         maShellStack.erase (aFoundShell);
     }
 }
@@ -106,15 +108,17 @@ void TaskPaneShellManager::RemoveSubShell (SfxShell* pShell)
 
 void TaskPaneShellManager::MoveToTop (SfxShell* pShell)
 {
-    ViewShellManager::UpdateLocker aLocker (mrViewShellManager);
+    ViewShellManager::UpdateLock aLocker (mrViewShellManager);
 
     if (maShellStack.empty() || maShellStack.front()!=pShell)
     {
+        // Tell the ViewShellManager to rebuild the stack at least from the
+        // current position of the shell.
+        mrViewShellManager.InvalidateShellStack(pShell);
+
         // Move the given shell to the top of the local stack.
         RemoveSubShell (pShell);
         AddSubShell (pShell);
-
-        mrViewShellManager.InvalidateShellStack();
     }
 
     // Move the view shell to the top of the view shell stack.  This has to
@@ -125,8 +129,7 @@ void TaskPaneShellManager::MoveToTop (SfxShell* pShell)
 
 
 
-void TaskPaneShellManager::GetLowerShellList (
-    ::std::vector<SfxShell*>& rShellList) const
+void TaskPaneShellManager::GetLowerShellList (::std::vector<SfxShell*>& rShellList) const
 {
     // No sub shells below the shell yet.
 }
@@ -134,16 +137,11 @@ void TaskPaneShellManager::GetLowerShellList (
 
 
 
-void TaskPaneShellManager::GetUpperShellList (
-    ::std::vector<SfxShell*>& rShellList) const
+void TaskPaneShellManager::GetUpperShellList (::std::vector<SfxShell*>& rShellList) const
 {
-    OSL_TRACE ("TaskPaneShellManager::GetUpperShellList");
     ShellStack::const_iterator iShell;
     for (iShell=maShellStack.begin(); iShell!=maShellStack.end(); ++iShell)
-    {
         rShellList.push_back (*iShell);
-        OSL_TRACE ("    %p", *iShell);
-    }
 }
 
 
