@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:15:31 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,6 +652,8 @@ const char* SalDisplay::GetKeyboardName( BOOL bRefresh )
                 XkbFreeKeyboard( pXkbDesc, 0, True );
             }
         }
+        if( ! m_aKeyboardName.Len() )
+            m_aKeyboardName = "<unknown keyboard>";
 #endif
     }
     return m_aKeyboardName.GetBuffer();
