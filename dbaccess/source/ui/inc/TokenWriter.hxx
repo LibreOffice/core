@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 06:09:47 $
+ *  last change: $Author: oj $ $Date: 2002-07-02 08:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,12 @@ namespace dbaui
         ::rtl::OUString m_sDataSourceName;
         sal_Int32       m_nCommandType;
         sal_Bool        m_bDisposeConnection;
+
+#if defined UNX || defined MAC
+        static const char __FAR_DATA sNewLine;
+#else
+        static const char __FAR_DATA sNewLine[];
+#endif
 
         ODatabaseExport*    m_pReader;
         sal_Int32*          m_pRowMarker; // wenn gesetzt, dann nur diese Rows kopieren
