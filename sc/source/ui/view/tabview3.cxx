@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:41:39 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1524,7 +1524,7 @@ void ScTabView::Unmark()
     }
 }
 
-void ScTabView::SelectNextTab( short nDir )
+void ScTabView::SelectNextTab( short nDir, BOOL bExtendSelection )
 {
     if (!nDir) return;
     DBG_ASSERT( nDir==-1 || nDir==1, "SelectNextTab: falscher Wert");
@@ -1553,14 +1553,14 @@ void ScTabView::SelectNextTab( short nDir )
         }
     }
 
-    SetTabNo(nTab);
+    SetTabNo( nTab, FALSE, bExtendSelection );
     PaintExtras();
 }
 
 
 //  SetTabNo    - angezeigte Tabelle
 
-void ScTabView::SetTabNo( USHORT nTab, BOOL bNew )
+void ScTabView::SetTabNo( USHORT nTab, BOOL bNew, BOOL bExtendSelection )
 {
     if ( nTab > MAXTAB )
     {
@@ -1641,10 +1641,34 @@ void ScTabView::SetTabNo( USHORT nTab, BOOL bNew )
 
         SfxBindings& rBindings = aViewData.GetBindings();
         ScMarkData& rMark = aViewData.GetMarkData();
-        if (!rMark.GetTableSelect(nTab))
+
+        BOOL bSelectOneTable = FALSE;
+        if (bExtendSelection)
+        {
+            // #i6327# if all tables are selected, a selection event (#i6330#) will deselect all
+            BOOL bAllSelected = TRUE;
+            for( USHORT nSelTab = 0; bAllSelected && (nSelTab < nTabCount); ++nSelTab )
+                bAllSelected = !pDoc->IsVisible( nSelTab ) || rMark.GetTableSelect( nSelTab );
+            if( bAllSelected )
+            {
+                bExtendSelection = FALSE;
+                bSelectOneTable = TRUE;
+            }
+        }
+        else
+        {
+            // move from multi-selection to unselected table
+            bSelectOneTable = !rMark.GetTableSelect( nTab );
+        }
+
+        if (bExtendSelection)
+        {
+            // #i6330# multi-selection with keyboard
+            rMark.SelectTable( nTab, TRUE );
+        }
+        else if (bSelectOneTable)
         {
             rMark.SelectOneTable( nTab );
-
             rBindings.Invalidate( FID_FILL_TAB );
         }
 
