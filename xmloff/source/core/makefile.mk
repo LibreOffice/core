@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 12:26:44 $
+#   last change: $Author: obo $ $Date: 2004-11-16 10:07:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,8 @@ SLOFILES =	\
         $(SLO)$/xmltkmap.obj	\
         $(SLO)$/xmltoken.obj	\
         $(SLO)$/xmluconv.obj	\
+        $(SLO)$/DomBuilderContext.obj \
+        $(SLO)$/DomExport.obj \
         $(SLO)$/ProgressBarHelper.obj	\
         $(SLO)$/PropertySetMerger.obj	\
         $(SLO)$/SettingsExportHelper.obj	\
