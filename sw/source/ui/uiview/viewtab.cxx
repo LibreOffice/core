@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:07:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,6 +696,11 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         {
             SwPosition aPos(*pNumRuleNodeFromDoc);
             rSh.NumIndent(aParaMargin.GetTxtLeft(), aPos);
+            // --> OD 2005-02-18 #i42921# - invalidate state of indent in order
+            // to get a ruler update.
+            aParaMargin.SetWhich( nSlot );
+            GetViewFrame()->GetBindings().SetState( aParaMargin );
+            // <--
         }
         else if(    pColl && pColl->IsAutoUpdateFmt() )
         {
