@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:56:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,20 +202,10 @@ struct SwContentAtPos
     bool     IsInRTLText()const;
 };
 
-
-// defines fuers GetCharCount
-#define GETCHARCOUNT_NONE       0
-#define GETCHARCOUNT_PARA       1
-#define GETCHARCOUNT_SECTION    2
-
-
 // ReturnWerte von SetCrsr (werden verodert)
 const int   CRSR_NOERROR =  0x00,
             CRSR_POSOLD =   0x01,   // Cursor bleibt an alter Doc-Position
             CRSR_POSCHG =   0x02;   // Position vom Layout veraendert
-
-
-
 
 // die Cursor - Shell
 class SwCrsrShell : public ViewShell, public SwModify
@@ -486,9 +476,6 @@ public:
     //  CRSR_POSOLD: wenn der Crsr nicht veraendert wurde
     int SetCrsr( const Point &rPt, BOOL bOnlyText = FALSE );
 
-    // #i23726#
-    SwPosition GetDocPos(const Point &rPt);
-
     /*
      * Benachrichtung, dass der sichtbare Bereich sich geaendert
      * hat. aVisArea wird neu gesetzt, anschliessend wird
@@ -681,11 +668,6 @@ public:
     String GetSelTxt() const;
     // gebe nur den Text ab der akt. Cursor Position zurueck (bis zum NodeEnde)
     String GetText() const;
-    // retrurne die Anzahl der selektierten Zeichen.
-    // Falls keine Selektion vorliegt entscheided nType was selektiert wird
-    // bIntrnlChar besagt ob interne Zeichen erhalten bleiben (TRUE) oder
-    // ob sie expandiert werden (z.B Felder/...)
-    ULONG GetCharCount( USHORT nType, BOOL bIntrnlChrs = TRUE ) const;
 
     // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
     CRSR_INLINE const SwTableNode* IsCrsrInTbl( BOOL bIsPtInTbl = TRUE ) const;
@@ -705,13 +687,11 @@ public:
     FASTBOOL GoNextCell( BOOL bAppendLine = TRUE );
     FASTBOOL GoPrevCell();
     // gehe zu dieser Box (wenn vorhanden und in Tabelle!)
-    FASTBOOL GotoTblBox( const String& rName );
     FASTBOOL GotoTable( const String& rName );
 
     // select a table row, column or box (based on the current cursor)
     FASTBOOL SelTblRow();
     FASTBOOL SelTblCol();
-    FASTBOOL SelTblBox();
 
     // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
     FASTBOOL GotoNextNum();
@@ -743,12 +723,9 @@ public:
 
     FASTBOOL GotoFtnTxt();      // springe aus dem Content zur Fussnote
     FASTBOOL GotoFtnAnchor();   // springe aus der Fussnote zum Anker
-    FASTBOOL GotoNextFtnAnchor();
     FASTBOOL GotoPrevFtnAnchor();
-    FASTBOOL GotoNextFtnCntnt();
-    FASTBOOL GotoPrevFtnCntnt();
+    FASTBOOL GotoNextFtnAnchor();
 
-    FASTBOOL GotoFlyTxt();          // springe aus dem Content zum "naechsten" Rahmen
     FASTBOOL GotoFlyAnchor();       // springe aus dem Rahmen zum Anker
     FASTBOOL GotoHeaderTxt();       // springe aus dem Content zum Header
     FASTBOOL GotoFooterTxt();       // springe aus dem Content zum Footer
@@ -847,9 +824,6 @@ public:
     // oder direkt (FALSE) angezeigt wird. (default ist Timer getriggert)
     FASTBOOL ChgCrsrTimerFlag( BOOL bTimerOn = TRUE );
 #endif
-
-    // steht der Curor auf einem "Symbol"-Zeichen
-    FASTBOOL IsInSymbolFont() const;
 
     BOOL BasicActionPend() const    { return nBasicActionCnt != nStartAction; }
 
