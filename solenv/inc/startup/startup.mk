@@ -99,10 +99,11 @@ MAXLINELENGTH	= 65530
    RMTARGET      *=  $<
 
 # Default recipe that is used to remove intermediate targets.
-.REMOVE :; +-echo dummy #$(RM) $(RMFLAGS) $(RMTARGET)
+.REMOVE :; +-echo dummy remove #$(RM) $(RMFLAGS) $(RMTARGET)
+#.REMOVE :; echo $(RM) $(RMFLAGS) $(RMTARGET)
 
 dummy_mh:
-    @+-echo dummy
+    @+-echo dummy mh
 
 # Check and enable AUGMAKE extensions for SYSV compatibility
 .IF $(AUGMAKE)
@@ -176,13 +177,13 @@ NULLPRQ *:= __.NULLPRQ
 
    # Implicit generation rules for making inferences.
    # lex and yacc rules
-   %.c : %.y %.Y
-    $(YACC) $(YFLAGS) $<
-    $(MV) $(YTAB).c $@
+#   %.c : %.y %.Y
+#	$(YACC) $(YFLAGS) $<
+#	$(MV) $(YTAB).c $@
 
-   %.c : %.l %.L
-    $(LEX) $(LFLAGS) $<
-    $(MV) $(LEXYY).c $@
+#   %.c : %.l %.L
+#	$(LEX) $(LFLAGS) $<
+#	$(MV) $(LEXYY).c $@
 
    # Rules for making *$O
    %$O : %.c ; $(CC) $(CFLAGS) -c $<
