@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:58:34 $
+ *  last change: $Author: ma $ $Date: 2001-03-21 17:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #else
 #include "linbox.hxx"
 #endif
-#include "colex.hxx"
 
 /*--------------------------------------------------------------------
     Beschreibung:   Fussnoteneinstellungs-TabPage
@@ -108,7 +107,7 @@ private:
     MetricField     aMaxHeightEdit;
     FixedText       aDistLbl;
     MetricField     aDistEdit;
-    GroupBox        aPosFrm;
+    FixedLine       aPosHeader;
 
     FixedText       aLinePosLbl;
     ListBox         aLinePosBox;
@@ -118,14 +117,11 @@ private:
     MetricField     aLineWidthEdit;
     FixedText       aLineDistLbl;
     MetricField     aLineDistEdit;
-    GroupBox        aLineFrm;
-    SwColExample    aBspWin;
-    GroupBox        aBspFrm;
+    FixedLine       aLineHeader;
 
     DECL_LINK( HeightPage, Button * );
     DECL_LINK( HeightMetric, Button * );
     DECL_LINK( HeightModify, MetricField * );
-    void            InitBsp(const SfxItemSet& rSet);
 
     long            lMaxHeight;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: ma $ $Date: 2001-03-21 17:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #define ED_MAXHEIGHT        3
 #define FT_DIST             4
 #define ED_DIST             5
-#define GB_FOOTNOTE_SIZE    10
+#define FL_FOOTNOTE_SIZE    10
 
 #define FT_LINETYPE         20
 #define DLB_LINETYPE        21
@@ -74,7 +74,5 @@
 #define ED_LINEWIDTH        25
 #define FT_LINEDIST         26
 #define ED_LINEDIST         27
-#define GB_LINE             30
+#define FL_LINE             30
 
-#define GB_BSP              31
-#define WN_BSP              32

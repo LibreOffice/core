@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:17:19 $
+ *  last change: $Author: ma $ $Date: 2001-03-21 17:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedText FT_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Pos = MAP_APPFONT ( 12 , 45 ) ;
         Size = MAP_APPFONT ( 95 , 8 ) ;
         Text = "~Abstand zum Textkörper" ;
         Text [ ENGLISH ] = "~Distance from Bodytext" ;
@@ -176,7 +176,7 @@ TabPage TP_FOOTNOTE_PAGE
     MetricField ED_DIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 118 , 41 ) ;
+        Pos = MAP_APPFONT ( 118 , 43 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -190,10 +190,10 @@ TabPage TP_FOOTNOTE_PAGE
         Last = 99999 ;
         SpinSize = 10 ;
     };
-    GroupBox GB_FOOTNOTE_SIZE
+    FixedLine FL_FOOTNOTE_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 157 , 53 ) ;
+        Size = MAP_APPFONT ( 247 , 8 ) ;
         Text = "Fußnotenbereich" ;
         Text [ ENGLISH ] = "Footnote range" ;
         Text [ norwegian ] = "+++Footnote range" ;
@@ -218,43 +218,9 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ turkish ] = "Dipnot bölümü";
         Text[ language_user1 ] = " ";
     };
-    Window WN_BSP
-    {
-        Pos = MAP_APPFONT ( 175 , 20 ) ;
-        Size = MAP_APPFONT ( 72 , 33 ) ;
-        Text = "Window" ;
-    };
-    GroupBox GB_BSP
-    {
-        Pos = MAP_APPFONT ( 169 , 3 ) ;
-        Size = MAP_APPFONT ( 84 , 53 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Example" ;
-        Text [ norwegian ] = "Eksempel" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ portuguese_brazilian ] = "Exemplo" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text [ finnish ] = "Malli" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ swedish ] = "Förhandsvisning" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-    };
     FixedText FT_LINEPOS
     {
-        Pos = MAP_APPFONT ( 12 , 72 ) ;
+        Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT ( 26 , 8 ) ;
         Text = "~Position" ;
         Text [ English ] = "~Position" ;
@@ -281,7 +247,7 @@ TabPage TP_FOOTNOTE_PAGE
     };
     ListBox DLB_LINEPOS
     {
-        Pos = MAP_APPFONT ( 40 , 70 ) ;
+        Pos = MAP_APPFONT ( 118 , 72 ) ;
         Size = MAP_APPFONT ( 57 , 40 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -428,7 +394,7 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedText FT_LINETYPE
     {
-        Pos = MAP_APPFONT ( 12 , 88 ) ;
+        Pos = MAP_APPFONT ( 12 , 90 ) ;
         Size = MAP_APPFONT ( 26 , 8 ) ;
         Text = "Stär~ke" ;
         Text [ ENGLISH ] = "~Thickness" ;
@@ -456,19 +422,20 @@ TabPage TP_FOOTNOTE_PAGE
     };
     ListBox DLB_LINETYPE
     {
-        Pos = MAP_APPFONT ( 40 , 86 ) ;
+        Pos = MAP_APPFONT ( 118 , 88 ) ;
         Size = MAP_APPFONT ( 57 , 50 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
     };
+
     FixedText FT_LINEWIDTH
     {
-        Pos = MAP_APPFONT ( 100 , 72 ) ;
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 105 , 8 ) ;
-        Text = "Län~ge" ;
-        Text [ ENGLISH ] = "~Length" ;
+        Text = "Län~ge bezogen auf Seitenbreite" ;
+        Text [ ENGLISH ] = "~Length relative to page width" ;
         Left = TRUE ;
         Text [ portuguese ] = "~Comprimento" ;
         Text [ english_us ] = "~Length" ;
@@ -493,7 +460,7 @@ TabPage TP_FOOTNOTE_PAGE
     MetricField ED_LINEWIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 208 , 70 ) ;
+        Pos = MAP_APPFONT ( 118 , 104 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -508,7 +475,7 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedText FT_LINEDIST
     {
-        Pos = MAP_APPFONT ( 100 , 88 ) ;
+        Pos = MAP_APPFONT ( 12 , 122 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "Abstan~d zum Fußnoteninhalt" ;
         Text [ ENGLISH ] = "Distan~ce" ;
@@ -538,7 +505,7 @@ TabPage TP_FOOTNOTE_PAGE
     MetricField ED_LINEDIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 208 , 86 ) ;
+        Pos = MAP_APPFONT ( 118 , 120 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -552,10 +519,10 @@ TabPage TP_FOOTNOTE_PAGE
         Last = 99999 ;
         SpinSize = 10 ;
     };
-    GroupBox GB_LINE
+    FixedLine FL_LINE
     {
-        Pos = MAP_APPFONT ( 6 , 59 ) ;
-        Size = MAP_APPFONT ( 247 , 42 ) ;
+        Pos = MAP_APPFONT ( 6 , 61 ) ;
+        Size = MAP_APPFONT ( 247 , 8 ) ;
         Text = "Trennlinie" ;
         Text [ ENGLISH ] = "Line" ;
         Text [ norwegian ] = "Linje" ;

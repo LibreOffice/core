@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:04:01 $
+ *  last change: $Author: ma $ $Date: 2001-03-21 17:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,18 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
-
+#ifndef _SVX_SIZEITEM_HXX
+#include <svx/sizeitem.hxx>
+#endif
+#ifndef _SVX_PAGEITEM_HXX
+#include <svx/pageitem.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX
+#include <svtools/eitem.hxx>
+#endif
+#ifndef _SVX_ULSPITEM_HXX
+#include <svx/ulspitem.hxx>
+#endif
 
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
@@ -212,7 +223,7 @@ SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
     aMaxHeightEdit(this,    SW_RES(ED_MAXHEIGHT)),
     aDistLbl(this,          SW_RES(FT_DIST)),
     aDistEdit(this,         SW_RES(ED_DIST)),
-    aPosFrm(this,           SW_RES(GB_FOOTNOTE_SIZE)),
+    aPosHeader(this,        SW_RES(FL_FOOTNOTE_SIZE)),
 
     aLinePosLbl(this,       SW_RES(FT_LINEPOS)),
     aLinePosBox(this,       SW_RES(DLB_LINEPOS)),
@@ -222,9 +233,7 @@ SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
     aLineWidthEdit(this,    SW_RES(ED_LINEWIDTH)),
     aLineDistLbl(this,      SW_RES(FT_LINEDIST)),
     aLineDistEdit(this,     SW_RES(ED_LINEDIST)),
-    aLineFrm(this,          SW_RES(GB_LINE)),
-    aBspWin(this,           SW_RES(WN_BSP)),
-    aBspFrm(this,           SW_RES(GB_BSP))
+    aLineHeader(this,       SW_RES(FL_LINE))
 {
     FreeResource();
 
@@ -296,13 +305,9 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
         aLineTypeBox.InsertEntry(nLines[i]);
 
     const USHORT nWidth = (USHORT)pFtnInfo->GetLineWidth() * TWIP_TO_LBOX;
-    if(lcl_HasLineWidth(nWidth))
-        aLineTypeBox.SelectEntry(nWidth);
-    else
-    {
+    if ( !lcl_HasLineWidth(nWidth) )
         aLineTypeBox.InsertEntry(nWidth);
-        aLineTypeBox.SelectEntry(nWidth);
-    }
+    aLineTypeBox.SelectEntry(nWidth);
 
         // Position
     aLinePosBox.SelectEntryPos(pFtnInfo->GetAdj());
@@ -345,12 +350,9 @@ BOOL SwFootNotePage::FillItemSet(SfxItemSet &rSet)
         aLineDistEdit.Denormalize(aLineDistEdit.GetValue(FUNIT_TWIP)));
 
         // Trennlinie
-    //Pen aPen(rFtnInfo.GetPen());
-
     const USHORT nPos = aLineTypeBox.GetSelectEntryPos();
-        if( LISTBOX_ENTRY_NOTFOUND != nPos )
-            rFtnInfo.SetLineWidth(nLines[nPos] / TWIP_TO_LBOX);
-    //rFtnInfo.SetPen(aPen);
+    if( LISTBOX_ENTRY_NOTFOUND != nPos )
+        rFtnInfo.SetLineWidth(nLines[nPos] / TWIP_TO_LBOX);
 
         // Position
     rFtnInfo.SetAdj((SwFtnAdj)aLinePosBox.GetSelectEntryPos());
@@ -366,29 +368,53 @@ BOOL SwFootNotePage::FillItemSet(SfxItemSet &rSet)
     return TRUE;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Bsp Uebernehmen
- --------------------------------------------------------------------*/
-
-
 void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
 {
-    aBspWin.UpdateExample( rSet );
-    lMaxHeight = aBspWin.GetSize().Height() -
-                 aBspWin.GetHdDist() - aBspWin.GetHdHeight() -
-                 aBspWin.GetFtDist() - aBspWin.GetFtHeight()-
-                 aBspWin.GetTop() - aBspWin.GetBottom();
+    const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get( RES_FRM_SIZE );
+    lMaxHeight = rSize.GetSize().Height();
+
+    const SfxPoolItem* pItem;
+    if( SFX_ITEM_SET == rSet.GetItemState( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_HEADERSET), FALSE, &pItem ) )
+    {
+        const SfxItemSet& rHeaderSet = ((SvxSetItem*)pItem)->GetItemSet();
+        const SfxBoolItem& rHeaderOn =
+            (const SfxBoolItem&)rHeaderSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_ON ) );
+
+        if ( rHeaderOn.GetValue() )
+        {
+            const SvxSizeItem& rSize =
+                (const SvxSizeItem&)rHeaderSet.Get(rSet.GetPool()->GetWhich(SID_ATTR_PAGE_SIZE));
+            lMaxHeight -= rSize.GetSize().Height();
+        }
+    }
+
+    if( SFX_ITEM_SET == rSet.GetItemState( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_FOOTERSET),
+            FALSE, &pItem ) )
+    {
+        const SfxItemSet& rFooterSet = ((SvxSetItem*)pItem)->GetItemSet();
+        const SfxBoolItem& rFooterOn =
+            (const SfxBoolItem&)rFooterSet.Get( SID_ATTR_PAGE_ON );
+
+        if ( rFooterOn.GetValue() )
+        {
+            const SvxSizeItem& rSize =
+                (const SvxSizeItem&)rFooterSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_SIZE ) );
+            lMaxHeight -= rSize.GetSize().Height();
+        }
+    }
+
+    if ( rSet.GetItemState( RES_UL_SPACE , FALSE ) == SFX_ITEM_SET )
+    {
+        const SvxULSpaceItem &rUL = (const SvxULSpaceItem&)rSet.Get( RES_UL_SPACE );
+        lMaxHeight -= rUL.GetUpper() + rUL.GetLower();
+    }
+
     lMaxHeight *= 8;
     lMaxHeight /= 10;
 
     // Maximalwerte setzen
     HeightModify(0);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 int SwFootNotePage::DeactivatePage( SfxItemSet* pSet)
 {
@@ -398,7 +424,6 @@ int SwFootNotePage::DeactivatePage( SfxItemSet* pSet)
     return TRUE;
 }
 
-
 USHORT* SwFootNotePage::GetRanges()
 {
     return aPageRg;
@@ -407,6 +432,9 @@ USHORT* SwFootNotePage::GetRanges()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/11/20 09:04:01  jp
+    should change: use LocaleDataWrapper
+
     Revision 1.1.1.1  2000/09/18 17:14:45  hr
     initial import
 
