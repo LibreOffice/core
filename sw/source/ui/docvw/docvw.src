@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:52:29 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ Menu MN_READONLY_POPUP
             Text[ danish ] = "Select Text";
             Text[ swedish ] = "Markera text";
             Text[ polish ] = "Select Text";
-            Text[ portuguese_brazilian ] = "Select Text";
+            Text[ portuguese_brazilian ] = "Selecionar texto";
             Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγ®ιΈζ";
             Text[ korean ] = "ν…μ¤νΈ μ„ νƒ";
             Text[ chinese_simplified ] = "ι€‰ζ‹©ζ–‡ε­—";
@@ -366,7 +366,7 @@ Menu MN_READONLY_POPUP
             Text[ japanese ] = "ζ»γ‚‹";
             Text[ chinese_traditional ] = "ε‘εΎ";
             Text[ arabic ] = "ααΞαέ";
-            Text[ language_user1 ] = "ΑϋSίστροφα ;";
+            Text[ language_user1 ] = "; ΑϋSίστροφα ;";
             Text[ dutch ] = "~Achteruit";
             Text[ chinese_simplified ] = "ε‘ε";
             Text[ greek ] = "~Πίσω";
@@ -870,7 +870,7 @@ Menu MN_READONLY_POPUP
             Text [ swedish ] = "Stδng av ~plug-ins" ;
             Text [ danish ] = "Sluk ~PlugIns" ;
             Text [ portuguese ] = "Desactivar ~PlugIns" ;
-            Text [ portuguese_brazilian ] = "Desativar PlugIns" ;
+            Text [ portuguese_brazilian ] = "Desativar Plug-Ins" ;
             Text[ chinese_simplified ] = "δΈδ½Ώη”¨ Plug-In";
             Text[ russian ] = "Βϋκλώχθςό οξδκλώχΰεμϋε μξδσλθ";
             Text[ polish ] = "Wy³Ήcz wtyczki ~plug-in";
@@ -910,7 +910,7 @@ Menu MN_READONLY_POPUP
             Text[ danish ] = "Leave Full-Screen Mode";
             Text[ swedish ] = "Lδmna helskδrmslδge";
             Text[ polish ] = "Leave Full-Screen Mode";
-            Text[ portuguese_brazilian ] = "Leave Full-Screen Mode";
+            Text[ portuguese_brazilian ] = "Sair do modo de tela cheia";
             Text[ japanese ] = "ε…¨η”»ιΆγƒΆγƒΌγƒ‰γ‚’δΏζ";
             Text[ korean ] = "μ „μ²΄ ν™”λ©΄ λª¨λ“ λ§μΉ¨";
             Text[ chinese_simplified ] = "η¦»εΌ€ε…¨ε±εΉ•ζ¨΅εΌ";
@@ -980,7 +980,7 @@ String STR_CHAIN_OK
     Text[ arabic ] = ".ΗδήΡ ΘΗαÒΡ ΗαΓνΣΡ ααγΗζΣ αΡΘΨ ΗαίζΗΟΡ";
     Text[ dutch ] = "Gebruik de linkermuistoets om het kader te koppelen.";
     Text[ chinese_simplified ] = "θ―·ζ‚¨ι€θΏ‡ζ‰ε‡»ιΌ ζ ‡ε·¦ι”®ζ¥θΏζ¥ζ΅†γ€‚";
-    Text[ greek ] = "Πατήστε το αριστερό πλήκτρο του ποντικιού για να συνδεθούν τα περιγράμματα.";
+    Text[ greek ] = "Πατήστε το αριστερό πλήκτρο του ποντικιού για να συνδεθούν τα πλαίσια.";
     Text[ korean ] = "ν”„λ μ„μ— μ—°κ²°ν•κΈ° μ„ν•΄ μ™Όμª½ λ§μ°μ¤ λ²„νΌμ„ ν΄λ¦­ν•μ‹­μ‹μ¤.";
     Text[ turkish ] = "Ηerηeveler arasύ baπlantύ oluώturmak iηin sol fare tuώunu kullanύn.";
     Text[ language_user1 ] = " ";
@@ -1443,7 +1443,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ arabic ] = "ΚήΪ ΪαΗγΙ ΗαίΚΗΘΙ Γζ ΗαΚΝΟνΟ έν γζΦΪ γΝγν ΦΟ ΗαίΚΗΘΙ.\nαεΠΗ αΗ νγίδ ήΘζα ΓνΙ ΚΫννΡΗΚ.";
     MESSAGE[ dutch ] = "De cursor of de selectie bevindt zich op een schrijfbeveiligde positie.\nDe inhoud kan daarom niet worden gewijzigd.";
     MESSAGE[ chinese_simplified ] = "θΎ“ε…¥ε…‰ζ ‡ζ–ι€‰δΈ­η„ε†…ε®Ήζ―ε—δΏζ¤η„γ€‚\nε› ζ­¤ζ— ζ³•ζ”Ήε†™ε†…ε®Ήγ€‚";
-    MESSAGE[ greek ] = "Το σημάδι της εγγραφής ή η επιλογή βρίσκεται σε μία προστατευόμενη θέση.\nΓι αυτό το λόγο δεν μπορούν να γίνουν δεκτές οποιεσδήποτε τροποπο? ";
+    MESSAGE[ greek ] = "Το περιεχόμενο που είναι μόνο για ανάγνωση δεν μπορεί να αλλάξει.\nΟι τροποποιήσεις δεν θα γίνουν δεκτές";
     MESSAGE[ korean ] = "μ“°κΈ° μ „μ© λλ” μ„ νƒμ€ λ³΄νΈ μ„μΉμ— μμΌλ―€λ΅ \nλ³€κ²½μ€ ν—μ©λμ§€ μ•μµλ‹λ‹¤.";
     MESSAGE[ turkish ] = "Salt okunur bir iηerik deπiώtirilemez.\nYapύlan deπiώiklikler nu nedenle kabul edilmeyecek.";
     MESSAGE[ language_user1 ] = " ";
@@ -1455,6 +1455,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ hindi ] = "ΰ¤•ΰ¥‡ΰ¤µΰ¤² ΰ¤ªΰ¤Άΰ¤Όΰ¤¨ΰ¥‡ ΰ¤µΰ¤Ύΰ¤²ΰ¥‡ ΰ¤µΰ¤Ώΰ¤·ΰ¤― ΰ¤•ΰ¥‹ ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤¬ΰ¤¦ΰ¤² ΰ¤Έΰ¤•ΰ¤¤ΰ¥‡ ΰ¤Ήΰ¥ ΰ¥¤\nΰ¤•ΰ¥‹ΰ¤ ΰ¤Έΰ¥ΰ¤§ΰ¤Ύΰ¤°ΰ¥‹ΰ¤‚ ΰ¤•ΰ¥‹ ΰ¤Έΰ¥ΰ¤µΰ¥€ΰ¤•ΰ¤Ύΰ¤° ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤•ΰ¤Ώΰ¤―ΰ¤Ύ ΰ¤ΰ¤Ύΰ¤―ΰ¥‡ΰ¤—ΰ¤Ύ ";
     MESSAGE[ slovak ] = "Obsah je len na ΔΓ­tanie.\nΕ½iadne zmeny sa nevykonajΓΊ.";
 };
+
 
 
 
