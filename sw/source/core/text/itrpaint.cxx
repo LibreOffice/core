@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-19 08:05:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
 void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                                  const sal_Bool bUnderSz )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //    USHORT nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
 //    USHORT nFntAscent = GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), GetInfo().GetOut() );
 #endif
@@ -302,7 +302,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             bClip = sal_False;
             rClip.ChgClip( rPaint, pFrm, pCurr->HasUnderscore() );
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         static sal_Bool bClipAlways = sal_False;
         if( bClip && bClipAlways )
         {   bClip = sal_False;
