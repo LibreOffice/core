@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2001-08-01 10:35:15 $
+ *  last change: $Author: os $ $Date: 2001-08-09 06:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1190,7 +1190,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 // OS: numerische Reihenfolge beachten!
                 static USHORT __READONLY_DATA aInva[] =
                                     {
-                                        SID_NEWWINDOW,
+                                        SID_NEWWINDOW,/*5620*/
+                                        SID_BROWSER_MODE, /*6313*/
                                         SID_RULER_BORDERS, SID_RULER_PAGE_POS,
                                         SID_ATTR_LONG_LRSPACE,
                                         SID_HTML_MODE,
@@ -1198,16 +1199,17 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                         SID_AUTOSPELL_CHECK,
                                         SID_AUTOSPELL_MARKOFF,
                                         FN_RULER,       /*20211*/
-                                        FN_VIEW_GRAPHIC,    /*20313*/
+                                        FN_VIEW_GRAPHIC,    /*20213*/
                                         FN_VIEW_BOUNDS,     /**/
-                                        FN_VIEW_FIELDS,     /**/
-                                        FN_VLINEAL,             /**/
-                                        FN_VSCROLLBAR,      /**/
-                                        FN_HSCROLLBAR,      /**/
+                                        FN_VIEW_FIELDS,     /*20215*/
+                                        FN_VLINEAL,             /*20216*/
+                                        FN_VSCROLLBAR,      /*20217*/
+                                        FN_HSCROLLBAR,      /*20218*/
                                         FN_VIEW_META_CHARS, /**/
                                         FN_VIEW_MARKS,      /**/
                                         FN_VIEW_FIELDNAME,  /**/
-                                        FN_VIEW_TABLEGRID,  /**/
+                                        FN_VIEW_TABLEGRID,  /*20227*/
+                                        FN_PRINT_LAYOUT, /*20237*/
                                         FN_QRY_MERGE,   /*20364*/
                                         FN_STAT_HYPERLINKS, /*21186*/
                                         FN_INSERT_HEADER, /*21405*/
