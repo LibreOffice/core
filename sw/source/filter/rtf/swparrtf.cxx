@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:09:01 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,6 +379,9 @@ void SwRTFParser::Continue( int nToken )
             pDoc->SetAddParaSpacingToTableCells( true );
             pDoc->SetUseFormerObjectPositioning( false );
             pDoc->SetUseFormerTextWrapping( false );
+            // --> OD 2004-06-24 #i27767# - set new compatibility option
+            //      'Conder Wrapping mode when positioning object' to <TRUE>
+            pDoc->SetConsiderWrapOnObjPos( true );
 
             //
             // COMPATIBILITY FLAGS END
