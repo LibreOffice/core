@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 19:32:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ portuguese_brazilian ] = "~Good quality";
         Text[ japanese ] = "崅搙側報嶞昳幙";
         Text[ korean ] = "~Good quality";
-        Text[ chinese_simplified ] = "良好的打印质量";
+        Text[ chinese_simplified ] = "优良的打印质量";
         Text[ chinese_traditional ] = "▆珇借";
         Text[ turkish ] = "~Good quality";
         Text[ arabic ] = "~Good quality";
