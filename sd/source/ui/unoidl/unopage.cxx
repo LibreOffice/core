@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:20:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,6 +854,8 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
             if( !(aHeaderFooterSettings == GetPage()->getHeaderFooterSettings()) )
                 GetPage()->setHeaderFooterSettings( aHeaderFooterSettings );
+
+            break;
         }
 
         case WID_PAGE_LDBITMAP:
