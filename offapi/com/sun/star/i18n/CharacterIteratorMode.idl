@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterIteratorMode.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com {  module sun {  module star {  module i18n {
     <p> Used with <member>XBreakIterator::nextCharacters()</member> and
     <method>XBreakIterator::previousCharacters</method> </p>
  */
-constants CharacterIteratorMode
+published constants CharacterIteratorMode
 {
     /// skip characters
     const short SKIPCHARACTER           = 0;
