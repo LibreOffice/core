@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 11:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#ifndef _CONNECTIVITY_EMPTYMETADATA_HXX_
+#include <connectivity/emptymetadata.hxx>
+#endif
 
 using namespace dbaccess;
 using namespace connectivity;
@@ -117,6 +120,12 @@ using namespace ::com::sun::star::util;
 using namespace ::cppu;
 using namespace ::osl;
 
+namespace dbaccess
+{
+
+// =========================================================================
+// = OEmptyCollection
+// =========================================================================
 // -------------------------------------------------------------------------
 class OEmptyCollection : public sdbcx::OCollection
 {
@@ -135,6 +144,10 @@ protected:
 public:
     OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent,sal_True,_rMutex,::std::vector< ::rtl::OUString>()){}
 };
+
+// =========================================================================
+// = ORowSetBase
+// =========================================================================
 // -------------------------------------------------------------------------
 ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper,::osl::Mutex& _rMutex)
             : OPropertyContainer(_rBHelper)
@@ -601,7 +614,7 @@ Reference< XResultSetMetaData > SAL_CALL ORowSetBase::getMetaData(  ) throw(SQLE
 
     if(m_pCache)
         return m_pCache->getMetaData();
-    return NULL;
+    return new OEmptyMetaData();
 }
 // -------------------------------------------------------------------------
 
@@ -1235,4 +1248,4 @@ sal_Int32 ORowSetBase::assginFormatByType(sal_Bool _bCurrency,sal_Int32 _nType,c
 // -----------------------------------------------------------------------------
 
 
-
+}   // namespace dbaccess
