@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-06 15:45:41 $
+ *  last change: $Author: mh $ $Date: 2002-06-28 09:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,11 @@ void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry
         ::std::vector< String > aNameVector;
 
         // get prefix for files
+#if SUPD >= 642
         if( ( aName.Len() >= 3 ) && ( aName.GetChar( 2 ) != '_' ) )
             aPrefix = String( aName, 0, 3 );
         else
+#endif
             aPrefix = String( aName, 0, 2 );
 
         if( rLang.mnLangNum != 49 )
@@ -291,7 +293,14 @@ void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry
                 const Size aSize( aBmp.GetSizePixel() );
 
                 if( !aSize.Width() || !aSize.Height() )
+                {
+#if SUPD >= 642
                     Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Bitmap is missing: " ) ).Append( aString ), EXIT_MISSING_BITMAP );
+#else
+                    //Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Bitmap is missing: " ) ).Append( aString ), EXIT_MISSING_BITMAP );
+                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "WARNING: Bitmap is missing: " ) ).Append( aString ) );
+#endif
+                }
                 else
                 {
                     if( aTotalBmp.IsEmpty() )
