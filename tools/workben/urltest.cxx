@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-04-24 16:30:25 $
+ *  last change: $Author: sb $ $Date: 2001-05-11 07:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,7 @@ main()
         }
     }
 
-    if (true)
+    if (false)
     {
         {
             INetURLObject aObj;
@@ -626,6 +626,48 @@ main()
                 || !bWasAbsolute)
             {
                 printf("BAD smartRel2Abs(\"a:\\\")\n");
+                bSuccess = false;
+            }
+        }
+    }
+
+    if (true)
+    {
+        {
+            INetURLObject aObj(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://xxx/yyy?abc/def~")));
+            if (!rtl::OUString(aObj.GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("http://xxx/yyy?abc%2Fdef%7E")))
+            {
+                printf("BAD http query 1\n");
+                bSuccess = false;
+            }
+        }
+        {
+            INetURLObject aObj(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("https://xxx/yyy?abc/def~")));
+            if (!rtl::OUString(aObj.GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("https://xxx/yyy?abc/def~")))
+            {
+                printf("BAD https query 1\n");
+                bSuccess = false;
+            }
+        }
+        {
+            INetURLObject aObj(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://xxx/yyy")));
+            aObj.SetParam("abc/def~");
+            if (!rtl::OUString(aObj.GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("http://xxx/yyy?abc%2Fdef%7E")))
+            {
+                printf("BAD http query 2\n");
+                bSuccess = false;
+            }
+        }
+        {
+            INetURLObject aObj(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("https://xxx/yyy")));
+            aObj.SetParam("abc/def~");
+            if (!rtl::OUString(aObj.GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("https://xxx/yyy?abc/def~")))
+            {
+                printf("BAD https query 2\n");
                 bSuccess = false;
             }
         }
