@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.39 $
- *  last change: $Author: vg $ $Date: 2005-02-21 16:59:23 $
+ *  $Revision: 1.40 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2415,9 +2415,10 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, char *pFile, int nLine 
                 // kein Controller mehr interessiert
                 if ( pCache->GetItemLink() == 0 && !pCache->GetInternalController() )
                 {
-                    // Cache entfernen
-                    delete (*pImp->pCaches)[nCache-1];
+                    // Cache entfernen. Safety: first remove and then delete
+                    SfxStateCache* pSfxStateCache = (*pImp->pCaches)[nCache-1];
                     pImp->pCaches->Remove(nCache-1, 1);
+                    delete pSfxStateCache;
                 }
                 else
                 {
