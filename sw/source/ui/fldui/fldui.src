@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-17 08:32:05 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 20:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,7 @@ String STR_SETFLD
     TEXT [ english_us ] = "Set variable" ;
     TEXT[ chinese_simplified ] = "Éè¶¨±äÁ¿";
     TEXT[ russian ] = "Óñòàíîâèòü ïåğåìåííóş";
-    TEXT[ polish ] = "Osad? zmienn¹";
+    TEXT[ polish ] = "OsadŸ zmienn¹";
     TEXT[ japanese ] = "•Ï”‚Ìİ’è";
     TEXT[ chinese_traditional ] = "³]©wÅÜ¶q";
     TEXT[ arabic ] = "ÊÚííä ãÊÛíÑÉ";
@@ -658,7 +658,7 @@ String STR_SETREFPAGEFLD
     Text [ portuguese_brazilian ] = "Seitenvariable setzen" ;
     Text[ chinese_simplified ] = "Éè¶¨Ò³Ãæ±äÊı";
     Text[ russian ] = "Óñòàíîâèòü ïåğåìåííûå ñòğàíèö";
-    Text[ polish ] = "Osad? zmienn¹ strony";
+    Text[ polish ] = "OsadŸ zmienn¹ strony";
     Text[ japanese ] = "Íß°¼Ş•Ï”‚Ìİ’è";
     Text[ chinese_traditional ] = "³]©w­¶­±ÅÜ¶q";
     Text[ arabic ] = "ÊÚííä ãÊÛíÑÉ ÕİÍÉ";
@@ -793,7 +793,7 @@ String STR_SETREFFLD
     TEXT [ english_us ] = "Set Reference" ;
     TEXT[ chinese_simplified ] = "Éè¶¨ÒıÓÃ";
     TEXT[ russian ] = "Óñòàíîâèòü ññûëêó";
-    TEXT[ polish ] = "Okre?l odwo³anie";
+    TEXT[ polish ] = "Okreœl odwo³anie";
     TEXT[ japanese ] = "QÆ‚Ìİ’è";
     TEXT[ chinese_traditional ] = "³]©w°Ñ·Ó";
     TEXT[ arabic ] = "ÊÚííä ãÑÌÚ";
@@ -1757,7 +1757,7 @@ String FLD_EU_ORT
     TEXT [ english_us ] = "City" ;
     TEXT[ chinese_simplified ] = "Î»ÖÃ";
     TEXT[ russian ] = "Ãîğîä";
-    TEXT[ polish ] = "Miejscowo?æ";
+    TEXT[ polish ] = "Miejscowoœæ";
     TEXT[ japanese ] = "B–¼A“s“¹•{Œ§–¼";
     TEXT[ chinese_traditional ] = "¦ì¸m";
     TEXT[ arabic ] = "ÇáãÏíäÉ";
@@ -2057,7 +2057,7 @@ String FMT_FF_PATHNAME
     TEXT [ english_us ] = "Path/File name" ;
     TEXT[ chinese_simplified ] = "Â·¾¶/ÎÄ¼şÃû";
     TEXT[ russian ] = "Ïóòü/Èìÿ ôàéëà";
-    TEXT[ polish ] = "?cie¿ka/Nazwa pliku";
+    TEXT[ polish ] = "Œcie¿ka/Nazwa pliku";
     TEXT[ japanese ] = "Êß½/Ì§²Ù–¼";
     TEXT[ chinese_traditional ] = "¸ô®|©MÀÉ®×¦W";
     TEXT[ arabic ] = "ÇáãÓÇÑ/ÇÓã Çáãáİ";
@@ -2084,7 +2084,7 @@ String FMT_FF_PATH
     TEXT [ english_us ] = "Path" ;
     TEXT[ chinese_simplified ] = "Â·¾¶";
     TEXT[ russian ] = "Ïóòü";
-    TEXT[ polish ] = "?cie¿ka";
+    TEXT[ polish ] = "Œcie¿ka";
     TEXT[ japanese ] = "Êß½";
     TEXT[ chinese_traditional ] = "¸ô®|";
     TEXT[ arabic ] = "ÇáãÓÇÑ";
@@ -2124,7 +2124,7 @@ String FMT_FF_UI_RANGE
     TEXT = "Bereich" ;
     TEXT [ English ] = "Group" ;
     Text [ portuguese ] = "Secção" ;
-    Text [ english_us ] = "Area" ;
+    Text [ english_us ] = "Category" ;
     Text [ portuguese_brazilian ] = "Bereich" ;
     Text [ swedish ] = "Område" ;
     Text [ danish ] = "Område" ;
@@ -2372,7 +2372,7 @@ String FMT_NUM_PAGEDESC
     TEXT[ chinese_simplified ] = "ºÍÒ³ÃæÑùÊ½ÏàÍ¬";
     TEXT[ russian ] = "Êàê ñòèëü ñòğàíèöû";
     TEXT[ polish ] = "Jako styl strony";
-    TEXT[ japanese ] = "Íß°¼Ş½À²Ù‚Ìİ’è‚ğ“K—p";
+    TEXT[ japanese ] = "Íß°¼Ş½À²Ù‚Ìİ’è";
     TEXT[ chinese_traditional ] = "©M­¶­±¼Ë¦¡¬Û¦P";
     TEXT[ arabic ] = "ãËá äãØ ÇáÕİÍÉ";
     TEXT[ greek ] = "¼ğùò ôï ğñüôõğï óåëßäáò";
@@ -2887,7 +2887,7 @@ String FMT_REF_PAGE_PGDSC
     TEXT[ chinese_simplified ] = "ºÍÒ³ÃæÑùÊ½ÏàÍ¬";
     TEXT[ russian ] = "Êàê ñòèëü ñòğàíèöû";
     TEXT[ polish ] = "Jako styl strony";
-    TEXT[ japanese ] = "Íß°¼Ş½À²Ù‚Ìİ’è‚ğ“K—p";
+    TEXT[ japanese ] = "Íß°¼Ş½À²Ù‚Ìİ’è";
     TEXT[ chinese_traditional ] = "©M­¶­±¼Ë¦¡¬Û¦P";
     TEXT[ arabic ] = "ãËá äãØ ÇáÕİÍÉ";
     TEXT[ greek ] = "¼ğùò ôï ğñüôõğï óåëßäáò";
@@ -3436,7 +3436,7 @@ String STR_VALUE
     Text [ english_us ] = "Value" ;
     Text[ chinese_simplified ] = "ÊıÖµ";
     Text[ russian ] = "Çíà÷åíèå";
-    Text[ polish ] = ", Warto?æ  ";
+    Text[ polish ] = ", Wartoœæ  ";
     Text[ japanese ] = "’l";
     Text[ chinese_traditional ] = "¼Æ­È";
     Text[ arabic ] = "ÇáŞíãÉ";
