@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2001-02-14 16:17:15 $
+ *  last change: $Author: er $ $Date: 2001-03-07 16:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1507,9 +1507,11 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
             break;
             case NUMBERFORMAT_SCIENTIFIC:
             {
-                SolarMath::DoubleToString(OutString, fNumber, 'E', 2,
-                    rLoc().getNumDecimalSep().GetChar(0));
-                return FALSE;
+                const ImpSvNumberformatInfo& rInfo = NumFor[0].Info();
+                SolarMath::DoubleToString( OutString, fNumber, 'E',
+                    rInfo.nCntPre + rInfo.nCntPost - 1,
+                    rLoc().getNumDecimalSep().GetChar(0) );
+                bHadStandard = TRUE;
             }
             break;
             default:
@@ -1857,34 +1859,46 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                 }
                 String sStr;
                 SolarMath::DoubleToString(sStr, fNumber, 'E',
-                               rInfo.nCntPre+rInfo.nCntPost-1);
+                    rInfo.nCntPre + rInfo.nCntPost - 1, '.' );
 
                 String ExpStr;
                 short nExpSign = 1;
                 xub_StrLen nExPos = sStr.Search('E');
                 if ( nExPos != STRING_NOTFOUND )
                 {
-                    ExpStr = sStr.Copy( nExPos );
-                    sStr.Erase( nExPos );
-                    ExpStr.Erase(0,2);              // get rid of "E+" or "E-"
-                    sStr.EraseAllChars('.');        // Komma (Punkt) weg
-                    if (rInfo.nCntPre != 1)         // Reskalierung Exp
+                    // split into mantisse and exponent and get rid of "E+" or "E-"
+                    xub_StrLen nExpStart = nExPos + 1;
+                    switch ( sStr.GetChar( nExpStart ) )
                     {
-                        sal_Int32 nExp = ExpStr.ToInt32();
+                        case '-' :
+                            nExpSign = -1;
+                            // fallthru
+                        case '+' :
+                            ++nExpStart;
+                        break;
+                    }
+                    ExpStr = sStr.Copy( nExpStart );    // part following the "E+"
+                    sStr.Erase( nExPos );
+                    sStr.EraseAllChars('.');        // cut any decimal delimiter
+                    if ( rInfo.nCntPre != 1 )       // rescale Exp
+                    {
+                        sal_Int32 nExp = ExpStr.ToInt32() * nExpSign;
                         nExp -= sal_Int32(rInfo.nCntPre)-1;
+                        if ( nExp < 0 )
+                        {
+                            nExpSign = -1;
+                            nExp = -nExp;
+                        }
+                        else
+                            nExpSign = 1;
                         ExpStr = String::CreateFromInt32( nExp );
                     }
-                    if (ExpStr.GetChar(0) == '-')
-                    {
-                        nExpSign = -1;
-                        ExpStr.Erase(0,1);                      // Vorzeichen weg
-                    }
                 }
-                USHORT j = nAnz-1;              // letztes Symbol
+                USHORT j = nAnz-1;              // last symbol
                 xub_StrLen k;
                 bRes |= ImpNumberFill(ExpStr, fNumber, k, j, nIx, SYMBOLTYPE_EXP);
 
-                while (k > 0)                   // fuehrende Nullen loeschen
+                while (k > 0)                   // erase leading zeros
                 {
                     k--;
                     if (ExpStr.GetChar(k) == '0')
@@ -1918,7 +1932,6 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                     sStr.Insert('-',0);
                 OutString = sStr;
                 OutString += ExpStr;
-                return bRes;
             }
             break;
         }
