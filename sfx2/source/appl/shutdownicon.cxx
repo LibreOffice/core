@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 12:20:39 $
+ *  last change: $Author: cd $ $Date: 2002-04-23 06:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,7 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
 {
     ::osl::ClearableMutexGuard  aGuard( m_aMutex );
 
-    if ( !ShutdownIcon::pShutdownIcon && aArguments.getLength() > 0 )
+    if ( aArguments.getLength() > 0 )
     {
         try
         {
@@ -540,7 +540,8 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
             if ( !m_xDesktop.is() )
                 return;
 
-            ShutdownIcon::pShutdownIcon = this;
+            if ( !ShutdownIcon::pShutdownIcon )
+                ShutdownIcon::pShutdownIcon = this;
 #ifdef WNT
             initSystray();
 #endif
