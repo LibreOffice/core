@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:15:49 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,19 +69,8 @@ TabPage RID_SVXPAGE_TABULATOR
 {
     HelpId = HID_TABULATOR ;
     Hide = TRUE ;
-    Text = "Tabulatoren" ;
-    Text [ English ] = "Tabs" ;
-    Text [ norwegian ] = "Tabulatorer" ;
-    Text [ italian ] = "Tabulazioni" ;
-    Text [ portuguese_brazilian ] = "Tabulações" ;
-    Text [ portuguese ] = "Tabulações" ;
-    Text [ finnish ] = "Sarkaimet" ;
-    Text [ danish ] = "Tabulatorer" ;
-    Text [ french ] = "Tabulations" ;
-    Text [ swedish ] = "Tabulatorer" ;
-    Text [ dutch ] = "Tabstops" ;
-    Text [ spanish ] = "Tabuladores" ;
-    Text [ english_us ] = "Tabs" ;
+    Text [ de ] = "Tabulatoren" ;
+    Text [ en-US ] = "Tabs" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     MetricBox ED_TABPOS
     {
@@ -96,37 +85,9 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
-        Text = "~Position" ;
-        Text [ ENGLISH ] = "~Position" ;
-        Text [ norwegian ] = "Posisjon" ;
-        Text [ italian ] = "Posizione" ;
-        Text [ portuguese_brazilian ] = "Posição" ;
-        Text [ portuguese ] = "Posição" ;
-        Text [ finnish ] = "Sijainti" ;
-        Text [ danish ] = "Placering" ;
-        Text [ french ] = "Position" ;
-        Text [ swedish ] = "~Position" ;
-        Text [ dutch ] = "~Positie" ;
-        Text [ spanish ] = "Posición" ;
-        Text [ english_us ] = "Position" ;
-        Text[ chinese_simplified ] = "ä½ç½®";
-        Text[ russian ] = "Ïîçèöèÿ";
-        Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "ä½ç½®";
-        Text[ chinese_traditional ] = "ä½ç½®";
-        Text[ arabic ] = "ÇáãæÖÚ";
-        Text[ greek ] = "Èİóç";
-        Text[ korean ] = "ìœ„ì¹˜";
-        Text[ turkish ] = "Konum";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Posició";
-        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-        Text[ czech ] = "UmÃ­stÄ›nÃ­";
-        Text[ hebrew ] = "â€®××™×§×•×â€¬";
-        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
-        Text[ slovak ] = "Umiestnenie";
-        Text[ hungarian ] = "PozÃ­ciÃ³";
-        Text[ slovenian ] = "PoloÅ¾aj";
+        Text [ de ] = "~Position" ;
+        Text [ en-US ] = "Position" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_TABPOS_VERT
     {
@@ -138,38 +99,10 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 66 , 14 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
-        Text = "~Links" ;
-        Text [ ENGLISH ] = "~Left" ;
-        Text [ norwegian ] = "~Left" ;
-        Text [ italian ] = "A ~sinistra" ;
-        Text [ portuguese_brazilian ] = "~Esquerda" ;
-        Text [ portuguese ] = "~Esquerda" ;
-        Text [ finnish ] = "~Vasen" ;
-        Text [ danish ] = "~Venstre" ;
-        Text [ french ] = "À gauche" ;
-        Text [ swedish ] = "~Vänster" ;
-        Text [ dutch ] = "~Links" ;
-        Text [ spanish ] = "~A la izquierda" ;
-        Text [ english_us ] = "~Left" ;
+        Text [ de ] = "~Links" ;
+        Text [ en-US ] = "~Left" ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "å·¦(~L)";
-        Text[ russian ] = "~Ñëåâà";
-        Text[ polish ] = "~Lewy";
-        Text[ japanese ] = "å·¦æƒãˆ(~L)";
-        Text[ chinese_traditional ] = "å‘å·¦(~L)";
-        Text[ arabic ] = "íÓÇÑ";
-        Text[ greek ] = "ÁñéóôåñÜ";
-        Text[ korean ] = "ì™¼ìª½(~L)";
-        Text[ turkish ] = "~Sol";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Esquerra";
-        Text[ thai ] = "~à¸‹à¹‰à¸²à¸¢";
-        Text[ czech ] = "Vlevo";
-        Text[ hebrew ] = "â€®×©×××œâ€¬";
-        Text[ hindi ] = "~à¤¬à¤¾à¤¯à¤¾à¤";
-        Text[ slovak ] = "VÄ¾~avo";
-        Text[ hungarian ] = "~Balra";
-        Text[ slovenian ] = "~Levo";
+        Text [ x-comment ] = " ";
     };
     Window WIN_TABLEFT
     {
@@ -180,37 +113,9 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 66 , 28 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
-        Text = "~Rechts" ;
-        Text [ ENGLISH ] = "~Right" ;
-        Text [ norwegian ] = "Hø~yre" ;
-        Text [ italian ] = "A dest~ra" ;
-        Text [ portuguese_brazilian ] = "Di~reita" ;
-        Text [ portuguese ] = "Di~reita" ;
-        Text [ finnish ] = "~Oikea" ;
-        Text [ danish ] = "~Højre" ;
-        Text [ french ] = "À droite" ;
-        Text [ swedish ] = "Höge~r" ;
-        Text [ dutch ] = "~Rechts" ;
-        Text [ spanish ] = "~A la derecha" ;
-        Text [ english_us ] = "Righ~t" ;
-        Text[ chinese_simplified ] = "å³(~T)";
-        Text[ russian ] = "Ñïğà~âà";
-        Text[ polish ] = "Pr~awy";
-        Text[ japanese ] = "å³æƒãˆ(~T)";
-        Text[ chinese_traditional ] = "å‘å³(~T)";
-        Text[ arabic ] = "íãíä";
-        Text[ greek ] = "ÄåîéÜ";
-        Text[ korean ] = "ì˜¤ë¥¸ìª½(~T)";
-        Text[ turkish ] = "Sağ~";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Dre~ta";
-        Text[ thai ] = "à¸‚~à¸§à¸²";
-        Text[ czech ] = "Vpravo";
-        Text[ hebrew ] = "â€®×™××™×Ÿâ€¬";
-        Text[ hindi ] = "à¤¦à¤¾à¤¹à¤¿~à¤¨à¤¾";
-        Text[ slovak ] = "Vp~ravo";
-        Text[ hungarian ] = "~Jobbra";
-        Text[ slovenian ] = "Des~no";
+        Text [ de ] = "~Rechts" ;
+        Text [ en-US ] = "Righ~t" ;
+        Text [ x-comment ] = " ";
     };
     Window WIN_TABRIGHT
     {
@@ -221,37 +126,9 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 66 , 42 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
-        Text = "~Zentriert" ;
-        Text [ ENGLISH ] = "~Center" ;
-        Text [ norwegian ] = "M~idtstill" ;
-        Text [ italian ] = "~Centrata" ;
-        Text [ portuguese_brazilian ] = "~Centralizado" ;
-        Text [ portuguese ] = "~Centrado" ;
-        Text [ finnish ] = "~Keskitetty" ;
-        Text [ danish ] = "~Centreret" ;
-        Text [ french ] = "Centré" ;
-        Text [ swedish ] = "~Centrerad" ;
-        Text [ dutch ] = "~Gecentreerd" ;
-        Text [ spanish ] = "Centrado" ;
-        Text [ english_us ] = "C~entered" ;
-        Text[ chinese_simplified ] = "å±…ä¸­(~E)";
-        Text[ russian ] = "Ïî ~öåíòğó";
-        Text[ polish ] = "~Poœrodku";
-        Text[ japanese ] = "ä¸­å¤®æƒãˆ(~E)";
-        Text[ chinese_traditional ] = "ç½®ä¸­(~E)";
-        Text[ arabic ] = "ÊæÓíØ";
-        Text[ greek ] = "Êå~íôñáñéóìİíá";
-        Text[ korean ] = "ê°€ìš´ë°(~E)";
-        Text[ turkish ] = "Or~talanmış";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "C~entrat";
-        Text[ thai ] = "à¸•~à¸£à¸‡à¸à¸¥à¸²à¸‡";
-        Text[ czech ] = "Na stÅ™ed";
-        Text[ hebrew ] = "â€®×××•×¨×›×–â€¬";
-        Text[ hindi ] = "à¤•à¥‡à¤¨à¥à¤¦à¥à¤°à¤¿~à¤¤";
-        Text[ slovak ] = "Na ~stred";
-        Text[ hungarian ] = "~KÃ¶zÃ©pre";
-        Text[ slovenian ] = "Na s~redini";
+        Text [ de ] = "~Zentriert" ;
+        Text [ en-US ] = "C~entered" ;
+        Text [ x-comment ] = " ";
     };
     Window WIN_TABCENTER
     {
@@ -262,37 +139,9 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 66 , 56 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
-        Text = "~Dezimal" ;
-        Text [ ENGLISH ] = "~Decimal" ;
-        Text [ norwegian ] = "Desi~mal" ;
-        Text [ italian ] = "~Decimale" ;
-        Text [ portuguese_brazilian ] = "Deci~mal" ;
-        Text [ portuguese ] = "Deci~mal" ;
-        Text [ finnish ] = "~Desimaali" ;
-        Text [ danish ] = "Decimal" ;
-        Text [ french ] = "Déci~male" ;
-        Text [ swedish ] = "~Decimal" ;
-        Text [ dutch ] = "~Decimaal" ;
-        Text [ spanish ] = "Deci~mal" ;
-        Text [ english_us ] = "Deci~mal" ;
-        Text[ chinese_simplified ] = "åè¿›åˆ¶(~M)";
-        Text[ russian ] = "~Äåñÿòè÷íûé";
-        Text[ polish ] = "Dziesiê~tny";
-        Text[ japanese ] = "å°æ•°ç‚¹æƒãˆ(~M)";
-        Text[ chinese_traditional ] = "å°æ•¸é»(~M)";
-        Text[ arabic ] = "ÚÔÑí";
-        Text[ greek ] = "~ÄåêáäéêÜ";
-        Text[ korean ] = "ì†Œìˆ˜ì (~M)";
-        Text[ turkish ] = "O~ndalık";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Deci~mal";
-        Text[ thai ] = "à¸—à¸¨à¸™à¸´~à¸¢à¸¡";
-        Text[ czech ] = "DesÃ­tkovÄ› ";
-        Text[ hebrew ] = "â€®×¢×©×¨×•× ×™â€¬";
-        Text[ hindi ] = "à¤¦à¤¶à¤¾à¤‚~à¤¶";
-        Text[ slovak ] = "De~siatkovo";
-        Text[ hungarian ] = "Tize~desjelhez";
-        Text[ slovenian ] = "Deci~malno";
+        Text [ de ] = "~Dezimal" ;
+        Text [ en-US ] = "Deci~mal" ;
+        Text [ x-comment ] = " ";
     };
     Window WIN_TABDECIMAL
     {
@@ -303,37 +152,9 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 75 , 70 ) ;
         Size = MAP_APPFONT ( 39 , 8 ) ;
-        Text = "Z~eichen" ;
-        Text [ ENGLISH ] = "~Char" ;
-        Text [ norwegian ] = "~Tegn" ;
-        Text [ italian ] = "Cara~ttere" ;
-        Text [ portuguese_brazilian ] = "~Caracter" ;
-        Text [ portuguese ] = "~Caracteres" ;
-        Text [ finnish ] = "~Merkki" ;
-        Text [ danish ] = "Te~gn" ;
-        Text [ french ] = "Caractères" ;
-        Text [ swedish ] = "T~ecken" ;
-        Text [ dutch ] = "T~eken" ;
-        Text [ spanish ] = "~Carácter" ;
-        Text [ english_us ] = "~Character" ;
-        Text[ chinese_simplified ] = "å­—ç¬¦(~C)";
-        Text[ russian ] = "Ñè~ìâîë";
-        Text[ polish ] = "~Znak";
-        Text[ japanese ] = "è¨˜å·(~C)";
-        Text[ chinese_traditional ] = "å­—å…ƒ(~C)";
-        Text[ arabic ] = "ÍÑİ";
-        Text[ greek ] = "~×áñáêôŞñáò";
-        Text[ korean ] = "ë¬¸ì ë° ê¸°í˜¸(~C)";
-        Text[ turkish ] = "~Karakter";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Caràcter";
-        Text[ thai ] = "~à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
-        Text[ czech ] = "Znak";
-        Text[ hebrew ] = "â€®×ª×•â€¬";
-        Text[ hindi ] = "~à¤…à¤•à¥à¤·à¤°";
-        Text[ slovak ] = "~Znak";
-        Text[ hungarian ] = "Ka~rakter";
-        Text[ slovenian ] = "~Znak";
+        Text [ de ] = "Z~eichen" ;
+        Text [ en-US ] = "~Character" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_TABTYPE_DECCHAR
     {
@@ -346,37 +167,9 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 60 , 3 ) ;
         Size = MAP_APPFONT ( 66 , 8 ) ;
-        Text = "Typ" ;
-        Text [ ENGLISH ] = "Type" ;
-        Text [ norwegian ] = "Type" ;
-        Text [ italian ] = "Tipo" ;
-        Text [ portuguese_brazilian ] = "Tipo" ;
-        Text [ portuguese ] = "Tipo" ;
-        Text [ finnish ] = "Tyyppi" ;
-        Text [ danish ] = "Type" ;
-        Text [ french ] = "Type" ;
-        Text [ swedish ] = "Typ" ;
-        Text [ dutch ] = "Type" ;
-        Text [ spanish ] = "Tipo" ;
-        Text [ english_us ] = "Type" ;
-        Text[ chinese_simplified ] = "ç±»å‹";
-        Text[ russian ] = "Òèï";
-        Text[ polish ] = "Typ";
-        Text[ japanese ] = "ç¨®é¡";
-        Text[ chinese_traditional ] = "é¡å‹";
-        Text[ arabic ] = "ÇáäæÚ";
-        Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "ìœ í˜•";
-        Text[ turkish ] = "Tür";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipus";
-        Text[ thai ] = "Type";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "â€®×¡×•×’â€¬";
-        Text[ hindi ] = "à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "Typ";
-        Text[ hungarian ] = "TÃ­pus";
-        Text[ slovenian ] = "Vrsta";
+        Text [ de ] = "Typ" ;
+        Text [ en-US ] = "Type" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_TABTYPE_VERT
     {
@@ -388,38 +181,10 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 138 , 14 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text = "~Keine" ;
-        Text [ ENGLISH ] = "~None" ;
-        Text [ norwegian ] = "I~ngen" ;
-        Text [ italian ] = "Nessuno" ;
-        Text [ portuguese_brazilian ] = "N~enhum" ;
-        Text [ portuguese ] = "N~enhum" ;
-        Text [ finnish ] = "~Ei mitään" ;
-        Text [ danish ] = "Ing~en" ;
-        Text [ french ] = "Aucun(e)" ;
-        Text [ swedish ] = "~Inga" ;
-        Text [ dutch ] = "~Geen" ;
-        Text [ spanish ] = "Nin~guno" ;
-        Text [ english_us ] = "N~one" ;
+        Text [ de ] = "~Keine" ;
+        Text [ en-US ] = "N~one" ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "æ— (~O)";
-        Text[ russian ] = "Íåò";
-        Text[ polish ] = "~Brak";
-        Text[ japanese ] = "ãªã—(~O)";
-        Text[ chinese_traditional ] = "ç„¡(~O)";
-        Text[ arabic ] = "ÈÏæä";
-        Text[ greek ] = "Êáíİíá";
-        Text[ korean ] = "ì—†ìŒ(~O)";
-        Text[ turkish ] = "~Yok";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "C~ap";
-        Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µ";
-        Text[ czech ] = "Å½Ã¡dnÃ½";
-        Text[ hebrew ] = "â€®×œ×œ×â€¬";
-        Text[ hindi ] = "à¤•à¥‹~à¤ˆ à¤¨à¤¹à¥€à¤‚";
-        Text[ slovak ] = "Å½ia~dny";
-        Text[ hungarian ] = "~Nincs";
-        Text[ slovenian ] = "B~rez";
+        Text [ x-comment ] = " ";
     };
     RadioButton BTN_FILLCHAR_POINTS
     {
@@ -443,37 +208,9 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 138 , 70 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text = "Ze~ichen" ;
-        Text [ ENGLISH ] = "Ch~aracter" ;
-        Text [ norwegian ] = "Te~gn" ;
-        Text [ italian ] = "C~arattere" ;
-        Text [ portuguese_brazilian ] = "Caracter" ;
-        Text [ portuguese ] = "Ca~racteres" ;
-        Text [ finnish ] = "Merkki" ;
-        Text [ danish ] = "Tegn" ;
-        Text [ french ] = "Caractères" ;
-        Text [ swedish ] = "Tec~ken" ;
-        Text [ dutch ] = "~Teken" ;
-        Text [ spanish ] = "C~arácter" ;
-        Text [ english_us ] = "Character" ;
-        Text[ chinese_simplified ] = "å­—ç¬¦";
-        Text[ russian ] = "Ñèìâîë";
-        Text[ polish ] = "Znak";
-        Text[ japanese ] = "è¨˜å·";
-        Text[ chinese_traditional ] = "å­—å…ƒ";
-        Text[ arabic ] = "ÍÑİ";
-        Text[ greek ] = "×áñáêôŞñåò";
-        Text[ korean ] = "ë¬¸ì ë° ê¸°í˜¸";
-        Text[ turkish ] = "Kara~kter";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "C~aràcter";
-        Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
-        Text[ czech ] = "Znak";
-        Text[ hebrew ] = "â€®×ª×•â€¬";
-        Text[ hindi ] = "à¤…à¤•à¥à¤·à¤°";
-        Text[ slovak ] = "Znak";
-        Text[ hungarian ] = "Karakter";
-        Text[ slovenian ] = "Znak";
+        Text [ de ] = "Ze~ichen" ;
+        Text [ en-US ] = "Character" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_FILLCHAR_OTHER
     {
@@ -486,226 +223,45 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 132 , 3 ) ;
         Size = MAP_APPFONT ( 66 , 8 ) ;
-        Text = "Füllzeichen" ;
-        Text [ ENGLISH ] = "Fill character" ;
-        Text [ norwegian ] = "Fylltegn" ;
-        Text [ italian ] = "Caratteri riempitivi" ;
-        Text [ portuguese_brazilian ] = "Caracter de preenchimento" ;
-        Text [ portuguese ] = "Carácter de preenchimento" ;
-        Text [ finnish ] = "Täyttömerkki" ;
-        Text [ danish ] = "Fyldtegn" ;
-        Text [ french ] = "Caractères de remplissage" ;
-        Text [ swedish ] = "Utfyllnadstecken" ;
-        Text [ dutch ] = "Opvulteken" ;
-        Text [ spanish ] = "Carácter de relleno" ;
-        Text [ english_us ] = "Fill character" ;
-        Text[ chinese_simplified ] = "å……å¡«å­—ç¬¦";
-        Text[ russian ] = "Çàïîëíèòåëü";
-        Text[ polish ] = "Znak-wype³niacz";
-        Text[ japanese ] = "ãƒªãƒ¼ãƒ€ãƒ¼";
-        Text[ chinese_traditional ] = "å……å¡«å­—å…ƒ";
-        Text[ arabic ] = "ÍÑİ ÓÇÈŞ";
-        Text[ greek ] = "×áñáêôŞñáò ãåìßóìáôïò";
-        Text[ korean ] = "ì±„ì›€ ë¬¸ì";
-        Text[ turkish ] = "Doldurma karakteri";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Caràcter de farciment";
-        Text[ thai ] = "Fill character";
-        Text[ czech ] = "Vyplnit znakem";
-        Text[ hebrew ] = "â€®×ª×• ××™×œ×•×™â€¬";
-        Text[ hindi ] = "à¤…à¤•à¥à¤·à¤° à¤­à¤°à¥‹";
-        Text[ slovak ] = "VyplniÅ¥ znakom";
-        Text[ hungarian ] = "KitÃ¶ltÅ‘ karakter";
-        Text[ slovenian ] = "Zapolnitveni znak";
+        Text [ de ] = "Füllzeichen" ;
+        Text [ en-US ] = "Fill character" ;
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_NEW
     {
         Pos = MAP_APPFONT ( 204 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Neu" ;
-        Text [ ENGLISH ] = "~New" ;
-        Text [ norwegian ] = "~New" ;
-        Text [ italian ] = "~Nuova" ;
-        Text [ portuguese_brazilian ] = "~Novo" ;
-        Text [ portuguese ] = "~Novo" ;
-        Text [ finnish ] = "~Uusi" ;
-        Text [ danish ] = "~Ny(t)" ;
-        Text [ french ] = "~Nouveau" ;
-        Text [ swedish ] = "~Ny" ;
-        Text [ dutch ] = "~Nieuw" ;
-        Text [ spanish ] = "~Nuevo" ;
-        Text [ english_us ] = "~New" ;
-        Text[ chinese_simplified ] = "æ–°å»º(~N)";
-        Text[ russian ] = "Äîáàâèòü";
-        Text[ polish ] = "~Nowy";
-        Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)";
-        Text[ chinese_traditional ] = "æ–°å»º(~N)";
-        Text[ arabic ] = "ÌÏíÏ";
-        Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";
-        Text[ turkish ] = "~Yeni";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nou";
-        Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ";
-        Text[ czech ] = "NovÃ½";
-        Text[ hebrew ] = "â€®×—×“×©â€¬";
-        Text[ hindi ] = "~à¤¨à¤¯à¤¾";
-        Text[ slovak ] = "~NovÃ½";
-        Text[ hungarian ] = "Ãš~j";
-        Text[ slovenian ] = "~Nov";
+        Text [ de ] = "~Neu" ;
+        Text [ en-US ] = "~New" ;
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_DELALL
     {
         Pos = MAP_APPFONT ( 204 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Alle löschen" ;
-        Text [ ENGLISH ] = "Dele~te all" ;
-        Text [ norwegian ] = "Sle~tt alle" ;
-        Text [ italian ] = "Elimina t~utti" ;
-        Text [ portuguese_brazilian ] = "~Excluir Tudo" ;
-        Text [ portuguese ] = "Eli~minar tudo" ;
-        Text [ finnish ] = "Poista ~kaikki" ;
-        Text [ danish ] = "Slet ~alle" ;
-        Text [ french ] = "Tout supprimer" ;
-        Text [ swedish ] = "Radera ~alla" ;
-        Text [ dutch ] = "~Alle wissen" ;
-        Text [ spanish ] = "~Borrar todo" ;
-        Text [ english_us ] = "Delete ~All" ;
-        Text[ chinese_simplified ] = "å…¨éƒ¨åˆ é™¤(~A)";
-        Text[ russian ] = "Óäàëèòü âñå";
-        Text[ polish ] = "Usuñ ~wszystko";
-        Text[ japanese ] = "ã™ã¹ã¦å‰Šé™¤(~A)";
-        Text[ chinese_traditional ] = "å…¨éƒ¨åˆªé™¤(~A)";
-        Text[ arabic ] = "ÍĞİ Çáßá";
-        Text[ greek ] = "ÄéáãñáöŞ üë~á";
-        Text[ korean ] = "ëª¨ë‘ ì‚­ì œ(~A)";
-        Text[ turkish ] = "~Tümünü sil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Suprimeix-ho ~tot";
-        Text[ thai ] = "à¸¥à¸š~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-        Text[ czech ] = "Smazat vÅ¡e";
-        Text[ hebrew ] = "â€®××—×™×§×ª ×”×›×œâ€¬";
-        Text[ hindi ] = "~à¤¸à¤¬ à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "ZmazaÅ¥ ~vÅ¡etko";
-        Text[ hungarian ] = "Ã–ss~zes tÃ¶rlÃ©se";
-        Text[ slovenian ] = "IzbriÅ¡i ~vse";
+        Text [ de ] = "~Alle löschen" ;
+        Text [ en-US ] = "Delete ~All" ;
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_DEL
     {
         Pos = MAP_APPFONT ( 204 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Lö~schen" ;
-        Text [ ENGLISH ] = "~Delete" ;
-        Text [ norwegian ] = "~Slett" ;
-        Text [ italian ] = "Eli~mina" ;
-        Text [ portuguese_brazilian ] = "~Excluir" ;
-        Text [ portuguese ] = "~Eliminar" ;
-        Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "~Slet" ;
-        Text [ french ] = "Supprimer" ;
-        Text [ swedish ] = "Ra~dera" ;
-        Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Borrar" ;
-        Text [ english_us ] = "~Delete" ;
-        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
-        Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "~Usuñ";
-        Text[ japanese ] = "å‰Šé™¤(~D)";
-        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
-        Text[ arabic ] = "ÍĞİ";
-        Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "ì‚­ì œ(~D)";
-        Text[ turkish ] = "~Sil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Suprimeix";
-        Text[ thai ] = "~à¸¥à¸š";
-        Text[ czech ] = "Smazat";
-        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-        Text[ hindi ] = "à¤®à¤¿~à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "~ZmazaÅ¥";
-        Text[ hungarian ] = "~TÃ¶rlÃ©s";
-        Text[ slovenian ] = "~IzbriÅ¡i";
+        Text [ de ] = "Lö~schen" ;
+        Text [ en-US ] = "~Delete" ;
+        Text [ x-comment ] = " ";
     };
     String ST_LEFTTAB_ASIAN
     {
-        Text = "~Links/Oben" ;
-        Text [ english_us ] = "~Left/Top" ;
-        Text[ portuguese ] = "~Left/Top";
-        Text[ russian ] = "~Left/Top";
-        Text[ greek ] = "~Left/Top";
-        Text[ dutch ] = "~Left/Top";
-        Text[ french ] = "À gauche/En haut";
-        Text[ spanish ] = "~Izquierda/Arriba";
-        Text[ finnish ] = "~Left/Top";
-        Text[ italian ] = "A sinistra/in alto";
-        Text[ danish ] = "~Venstre top";
-        Text[ swedish ] = "Vänster/uppe";
-        Text[ polish ] = "~Left/Top";
-        Text[ japanese ] = "å·¦/ä¸Š(~L)";
-        Text[ korean ] = "ì™¼ìª½/ìœ„(~L)";
-        Text[ chinese_simplified ] = "å·¦/ä¸Š(~L)";
-        Text[ chinese_traditional ] = "å·¦/ä¸Š(~L)";
-        Text[ turkish ] = "~Sol/Üst";
-        Text[ arabic ] = "~Left/Top";
-        Text[ czech ] = "Vlevo/nahoÅ™e";
-        Text[ hebrew ] = "â€®×©×××œ\\×¢×œ×™×•×Ÿâ€¬";
-        Text[ catalan ] = "~Left/Top";
-        Text[ portuguese_brazilian ] = "A esquerda / em cima";
-        Text[ thai ] = "~Left/Top";
-        Text[ hindi ] = "~Left/Top";
-        Text[ slovak ] = "~VÄ¾avo/Hore";
-        Text[ hungarian ] = "~Balra/fent";
-        Text[ slovenian ] = "~Levo/zgoraj";
+        Text [ de ] = "~Links/Oben" ;
+        Text [ en-US ] = "~Left/Top" ;
     };
     String ST_RIGHTTAB_ASIAN
     {
-        Text = "~Rechts/Unten" ;
-        Text [ english_us ] = "Righ~t/Bottom" ;
-        Text[ portuguese ] = "Righ~t/Bottom";
-        Text[ russian ] = "Righ~t/Bottom";
-        Text[ greek ] = "Righ~t/Bottom";
-        Text[ dutch ] = "Righ~t/Bottom";
-        Text[ french ] = "À droite/En bas";
-        Text[ spanish ] = "~Derecha/Abajo";
-        Text[ finnish ] = "Righ~t/Bottom";
-        Text[ italian ] = "A destra/in basso";
-        Text[ danish ] = "~Højre bund";
-        Text[ swedish ] = "Höger/nere";
-        Text[ polish ] = "Righ~t/Bottom";
-        Text[ japanese ] = "å³/ä¸‹(~T)";
-        Text[ korean ] = "ì˜¤ë¥¸ìª½/ì•„ë˜(~T)";
-        Text[ chinese_simplified ] = "å³/ä¸‹(~T)";
-        Text[ chinese_traditional ] = "å³/ä¸‹(~T)";
-        Text[ turkish ] = "Sağ/~Alt";
-        Text[ arabic ] = "Righ~t/Bottom";
-        Text[ czech ] = "Vpravo/dole";
-        Text[ hebrew ] = "â€®×™××™×Ÿ\\×ª×—×ª×•×Ÿâ€¬";
-        Text[ catalan ] = "Righ~t/Bottom";
-        Text[ portuguese_brazilian ] = "A direita / em baixo";
-        Text[ thai ] = "Righ~t/Bottom";
-        Text[ hindi ] = "Righ~t/Bottom";
-        Text[ slovak ] = "Vp~ravo/Dole";
-        Text[ hungarian ] = "J~obbra/lent";
-        Text[ slovenian ] = "Des~no/spodaj";
+        Text [ de ] = "~Rechts/Unten" ;
+        Text [ en-US ] = "Righ~t/Bottom" ;
     };
-    Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦";
-    Text[ russian ] = "Òàáóëÿöèÿ";
-    Text[ polish ] = "Tabulatory";
-    Text[ japanese ] = "ã‚¿ãƒ–";
-    Text[ chinese_traditional ] = "å®šä½éµ";
-    Text[ arabic ] = "ÚáÇãÇÊ ÇáÌÏæáÉ";
-    Text[ greek ] = "Óôçëïèİôåò";
-    Text[ korean ] = "íƒ­";
-    Text[ turkish ] = "Sekmeler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Pestanyes";
-    Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸à¸±à¹‰à¸™";
-    Text[ czech ] = "TabulÃ¡tory";
-    Text[ hebrew ] = "â€®×˜××‘×™×â€¬";
-    Text[ hindi ] = "à¤Ÿà¥‰à¤¬à¥à¤¸";
-    Text[ slovak ] = "TabulÃ¡tory";
-    Text[ hungarian ] = "TabulÃ¡torok";
-    Text[ slovenian ] = "Tabulatorji";
+    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
