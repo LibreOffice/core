@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:38:12 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,8 +631,8 @@ String TT_GPF
     Text[ portuguese_brazilian ] = "GPF Aufgetreten";
     Text[ japanese ] = "GPF ‚ª”­¶‚µ‚Ü‚µ‚½B";
     Text[ korean ] = "GPF ¹ß»ı";
-    Text[ chinese_simplified ] = "³öÏÖ´íÎó";
-    Text[ chinese_traditional ] = "µo¥X¿ù»~";
+    Text[ chinese_simplified ] = "·¢Éú·Ç³£ÑÏÖØµÄ´íÎó";
+    Text[ chinese_traditional ] = "µo¥Í«D±`ÄY­«ªº¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ GPF";
     Text[ turkish ] = "GKH oluştu";
     Text[ catalan ] = "Ha ocurrido un error";
@@ -663,5 +663,6 @@ String TT_ALTERNATE_CAPTION
     Text[ catalan ] = "HelpID difiere de UniqueID:";
     Text[ finnish ] = "Ohjetunnus ei täsmää seuraavan yksilöllisen tunnuksen kanssa: ";
 };
+
 
 
