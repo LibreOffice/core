@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:56:32 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,13 +532,11 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
                rAnchor.GetAnchorId() == FLY_AT_CNTNT ) &&
              rObjFmt.GetSurround().GetSurround() != SURROUND_THROUGHT )
         {
-            SdrLayerID nHellId = rObjFmt.GetDoc()->GetHellId();
-            SdrLayerID nInvisibleHellId = rObjFmt.GetDoc()->GetInvisibleHellId();
-            if ( GetDrawObj()->GetLayer() != nHellId &&
-                 GetDrawObj()->GetLayer() != nInvisibleHellId )
-            {
-                bRet = true;
-            }
+            // --> OD 2004-09-23 #i34520# - text also wraps around anchored
+            // objects in the layer Hell - see the text formatting.
+            // Thus, it hasn't to be checked here.
+            bRet = true;
+            // <--
         }
     }
 
@@ -698,10 +696,15 @@ bool SwAnchoredObject::InvalidationOfPosAllowed() const
     the given anchored object is.
 
     OD 2004-07-02 #i28701#
+    OD 2004-09-23 #i33751#, #i34060#
+    Adjust meaning of method and thus its name: If the anchored object
+    or its anchor isn't correctly inserted in the layout, no page frame
+    can be found. Thus, the return type changed to be a pointer and can
+    be NULL.
 
     @author OD
 */
-SwPageFrm& SwAnchoredObject::GetPageFrmOfAnchor()
+SwPageFrm* SwAnchoredObject::FindPageFrmOfAnchor()
 {
     SwPageFrm* pRetPageFrm = 0L;
 
@@ -722,12 +725,10 @@ SwPageFrm& SwAnchoredObject::GetPageFrmOfAnchor()
     else
     {
         ASSERT( false,
-                "<SwAnchoredObject::_GetPageFrmOfAnchor(..)> - unexcepted anchor type" );
+                "<SwAnchoredObject::FindPageFrmOfAnchor(..)> - unexcepted anchor type" );
     }
 
-    ASSERT( pRetPageFrm,
-            "<SwAnchoredObject::_GetPageFrmOfAnchor(..)> - missing page frame -> crash." );
-    return *pRetPageFrm;
+    return pRetPageFrm;
 }
 
 /** method to determine, if a format on the anchored object is possible
