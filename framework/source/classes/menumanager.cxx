@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 11:45:40 $
+ *  last change: $Author: cd $ $Date: 2002-04-22 07:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,12 @@ const ::rtl::OUString aSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "file" ));
 const ::rtl::OUString aSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "window" ));
 const ::rtl::OUString aSlotSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5510" ));
 const ::rtl::OUString aSlotSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5610" ));
+
+// special uno commands for picklist and window list
+const ::rtl::OUString aSpecialFileCommand( RTL_CONSTASCII_USTRINGPARAM( "PickList" ));
+const ::rtl::OUString aSpecialWindowCommand( RTL_CONSTASCII_USTRINGPARAM( "WindowList" ));
+
+const ::rtl::OUString UNO_COMMAND( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
 
 MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ) :
     ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject()
@@ -894,11 +900,20 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
 
         m_bActive = TRUE;
 
+        ::rtl::OUString aCommand( m_aMenuItemCommand );
+        if ( m_aMenuItemCommand.matchIgnoreAsciiCase( UNO_COMMAND, 0 ))
+        {
+            // Remove protocol part from command so we can use an easier comparision method
+            aCommand = aCommand.copy( UNO_COMMAND.getLength() );
+        }
+
         if ( m_aMenuItemCommand == aSpecialFileMenu ||
-             m_aMenuItemCommand == aSlotSpecialFileMenu )
+             m_aMenuItemCommand == aSlotSpecialFileMenu ||
+             aCommand == aSpecialFileCommand )
             UpdateSpecialFileMenu( pMenu );
         else if ( m_aMenuItemCommand == aSpecialWindowMenu ||
-                  m_aMenuItemCommand == aSlotSpecialWindowMenu )
+                  m_aMenuItemCommand == aSlotSpecialWindowMenu ||
+                  aCommand == aSpecialWindowCommand )
             UpdateSpecialWindowMenu( pMenu );
 
         // Check if some modes have changed so we have to update our menu images
