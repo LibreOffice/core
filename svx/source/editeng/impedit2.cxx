@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
+ *  last change: $Author: mt $ $Date: 2000-12-07 12:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1382,24 +1382,38 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
     if ( pNode->Len() )
     {
         uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
-        ::rtl::OUString aText( *pNode );
-        USHORT nTextLen = (USHORT)aText.getLength();
+        String aText( *pNode );
 
+        // Fields?
+        EditCharAttrib* pField = pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, 0 );
+        while ( pField )
+        {
+            String aFieldValue = ((EditCharAttribField*)pField)->GetFieldValue();
+            if ( aFieldValue.Len() )
+            {
+                // First char from field wins...
+                aText.SetChar( pField->GetStart(), aFieldValue.GetChar(0) );
+            }
+            pField = pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, pField->GetEnd() );
+        }
+
+        ::rtl::OUString aOUText( aText );
+        USHORT nTextLen = (USHORT)aOUText.getLength();
 
         long nPos = 0;
-        short nScriptType = xBI->getScriptType( aText, nPos );
+        short nScriptType = xBI->getScriptType( aOUText, nPos );
         rTypes.Insert( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ), rTypes.Count() );
-        nPos = xBI->endOfScript( aText, nPos, nScriptType );
+        nPos = xBI->endOfScript( aOUText, nPos, nScriptType );
         while ( ( nPos != (-1) ) && ( nPos < nTextLen ) )
         {
             rTypes[rTypes.Count()-1].nEndPos = (USHORT)nPos;
 
-            nScriptType = xBI->getScriptType( aText, nPos );
+            nScriptType = xBI->getScriptType( aOUText, nPos );
             if ( nScriptType == i18n::ScriptType::WEAK )
                 nScriptType = rTypes[rTypes.Count()-1].nScriptType;
 
             rTypes.Insert( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ), rTypes.Count() );
-            nPos = xBI->endOfScript( aText, nPos, nScriptType );
+            nPos = xBI->endOfScript( aOUText, nPos, nScriptType );
         }
 
         if ( rTypes[0].nScriptType == i18n::ScriptType::WEAK )
