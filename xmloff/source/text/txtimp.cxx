@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:47:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,15 +239,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_P,                XML_TOK_TEXT_P              },
     { XML_NAMESPACE_TEXT, XML_H,                XML_TOK_TEXT_H              },
-    { XML_NAMESPACE_TEXT, XML_ORDERED_LIST,     XML_TOK_TEXT_ORDERED_LIST   },
-    { XML_NAMESPACE_TEXT, XML_UNORDERED_LIST,   XML_TOK_TEXT_UNORDERED_LIST },
-    { XML_NAMESPACE_DRAW, XML_TEXT_BOX,         XML_TOK_TEXT_TEXTBOX_PAGE },
-    { XML_NAMESPACE_DRAW, XML_IMAGE,            XML_TOK_TEXT_IMAGE_PAGE },
-    { XML_NAMESPACE_DRAW, XML_OBJECT,           XML_TOK_TEXT_OBJECT_PAGE },
-    { XML_NAMESPACE_DRAW, XML_OBJECT_OLE,       XML_TOK_TEXT_OBJECT_OLE_PAGE },
-    { XML_NAMESPACE_DRAW, XML_APPLET,           XML_TOK_TEXT_APPLET_PAGE },
-    { XML_NAMESPACE_DRAW, XML_PLUGIN,           XML_TOK_TEXT_PLUGIN_PAGE },
-    { XML_NAMESPACE_DRAW, XML_FLOATING_FRAME,   XML_TOK_TEXT_FLOATING_FRAME_PAGE },
+    { XML_NAMESPACE_TEXT, XML_LIST,             XML_TOK_TEXT_LIST           },
+    { XML_NAMESPACE_DRAW, XML_FRAME,            XML_TOK_TEXT_FRAME_PAGE     },
     { XML_NAMESPACE_DRAW, XML_A,                XML_TOK_DRAW_A_PAGE },
     { XML_NAMESPACE_TABLE,XML_TABLE,            XML_TOK_TABLE_TABLE         },
 //  { XML_NAMESPACE_TABLE,XML_SUB_TABLE,        XML_TOK_TABLE_SUBTABLE      },
@@ -278,14 +271,13 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
 static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_SPAN, XML_TOK_TEXT_SPAN },
-    { XML_NAMESPACE_TEXT, XML_TAB_STOP, XML_TOK_TEXT_TAB_STOP },
+    { XML_NAMESPACE_TEXT, XML_TAB, XML_TOK_TEXT_TAB_STOP },
     { XML_NAMESPACE_TEXT, XML_LINE_BREAK, XML_TOK_TEXT_LINE_BREAK },
     { XML_NAMESPACE_TEXT, XML_S, XML_TOK_TEXT_S },
     { XML_NAMESPACE_TEXT, XML_A, XML_TOK_TEXT_HYPERLINK },
     { XML_NAMESPACE_TEXT, XML_RUBY, XML_TOK_TEXT_RUBY },
 
-    { XML_NAMESPACE_TEXT, XML_FOOTNOTE, XML_TOK_TEXT_FOOTNOTE },
-    { XML_NAMESPACE_TEXT, XML_ENDNOTE, XML_TOK_TEXT_ENDNOTE },
+    { XML_NAMESPACE_TEXT, XML_NOTE, XML_TOK_TEXT_NOTE },
     { XML_NAMESPACE_TEXT, XML_BOOKMARK, XML_TOK_TEXT_BOOKMARK },
     { XML_NAMESPACE_TEXT, XML_BOOKMARK_START, XML_TOK_TEXT_BOOKMARK_START },
     { XML_NAMESPACE_TEXT, XML_BOOKMARK_END, XML_TOK_TEXT_BOOKMARK_END },
@@ -295,13 +287,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_REFERENCE_MARK_END,
       XML_TOK_TEXT_REFERENCE_END },
 
-    { XML_NAMESPACE_DRAW, XML_TEXT_BOX, XML_TOK_TEXT_TEXTBOX },
-    { XML_NAMESPACE_DRAW, XML_IMAGE, XML_TOK_TEXT_IMAGE },
-    { XML_NAMESPACE_DRAW, XML_OBJECT, XML_TOK_TEXT_OBJECT },
-    { XML_NAMESPACE_DRAW, XML_OBJECT_OLE, XML_TOK_TEXT_OBJECT_OLE },
-    { XML_NAMESPACE_DRAW, XML_APPLET,           XML_TOK_TEXT_APPLET },
-    { XML_NAMESPACE_DRAW, XML_FLOATING_FRAME,   XML_TOK_TEXT_FLOATING_FRAME },
-    { XML_NAMESPACE_DRAW, XML_PLUGIN,           XML_TOK_TEXT_PLUGIN },
+    { XML_NAMESPACE_DRAW, XML_FRAME, XML_TOK_TEXT_FRAME },
     { XML_NAMESPACE_DRAW, XML_A,                XML_TOK_DRAW_A },
 
     // index marks
@@ -365,7 +351,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
       XML_TOK_TEXT_DATABASE_DISPLAY },
     { XML_NAMESPACE_TEXT, XML_DATABASE_NEXT,
       XML_TOK_TEXT_DATABASE_NEXT },
-    { XML_NAMESPACE_TEXT, XML_DATABASE_SELECT,
+    { XML_NAMESPACE_TEXT, XML_DATABASE_ROW_SELECT,
       XML_TOK_TEXT_DATABASE_SELECT },
     { XML_NAMESPACE_TEXT, XML_DATABASE_ROW_NUMBER,
       XML_TOK_TEXT_DATABASE_ROW_NUMBER },
@@ -429,8 +415,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_REFERENCE_REF, XML_TOK_TEXT_REFERENCE_REF },
     { XML_NAMESPACE_TEXT, XML_BOOKMARK_REF, XML_TOK_TEXT_BOOKMARK_REF },
     { XML_NAMESPACE_TEXT, XML_SEQUENCE_REF, XML_TOK_TEXT_SEQUENCE_REF },
-    { XML_NAMESPACE_TEXT, XML_FOOTNOTE_REF, XML_TOK_TEXT_FOOTNOTE_REF },
-    { XML_NAMESPACE_TEXT, XML_ENDNOTE_REF, XML_TOK_TEXT_ENDNOTE_REF },
+    { XML_NAMESPACE_TEXT, XML_NOTE_REF, XML_TOK_TEXT_NOTE_REF },
     { XML_NAMESPACE_TEXT, XML_BIBLIOGRAPHY_MARK,
       XML_TOK_TEXT_BIBLIOGRAPHY_MARK },
     { XML_NAMESPACE_OFFICE, XML_ANNOTATION, XML_TOK_TEXT_ANNOTATION },
@@ -461,7 +446,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPAttrTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_STYLE_NAME,   XML_TOK_TEXT_P_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_COND_STYLE_NAME,
                                             XML_TOK_TEXT_P_COND_STYLE_NAME },
-    { XML_NAMESPACE_TEXT, XML_LEVEL,        XML_TOK_TEXT_P_LEVEL },
+    { XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,XML_TOK_TEXT_P_LEVEL },
     XML_TOKEN_MAP_END
 };
 
@@ -970,16 +955,17 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
 #endif
 
 OUString XMLTextImportHelper::SetStyleAndAttrs(
+        SvXMLImport& rImport,
         const Reference < XTextCursor >& rCursor,
         const OUString& rStyleName,
         sal_Bool bPara )
 {
+    sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
+                               : XML_STYLE_FAMILY_TEXT_TEXT;
     XMLTextStyleContext *pStyle = 0;
     OUString sStyleName( rStyleName );
     if( sStyleName.getLength() && xAutoStyles.Is() )
     {
-        sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
-                                   : XML_STYLE_FAMILY_TEXT_TEXT;
         pStyle = PTR_CAST( XMLTextStyleContext,
               ((SvXMLStylesContext *)&xAutoStyles)->
                     FindStyleChildContext( nFamily, sStyleName, sal_True ) );
@@ -994,6 +980,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     // style
     if( sStyleName.getLength() )
     {
+        sStyleName =
+            rImport.GetStyleDisplayName( nFamily, sStyleName );
         const String& rPropName = bPara ? sParaStyleName : sCharStyleName;
         const Reference < XNameContainer > & rStyles = bPara ? xParaStyles
                                                           : xTextStyles;
@@ -1134,24 +1122,33 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         if( bPara && pStyle->HasMasterPageName() &&
             xPropSetInfo->hasPropertyByName( sPageDescName ) )
         {
-            const OUString& rMasterPageName = pStyle->GetMasterPageName();
-            if( !rMasterPageName.getLength() ||
+            OUString sDisplayName(
+                rImport.GetStyleDisplayName(
+                                XML_STYLE_FAMILY_MASTER_PAGE,
+                                pStyle->GetMasterPageName()) );
+            if( !sDisplayName.getLength() ||
                 (xPageStyles.is() &&
-                 xPageStyles->hasByName( rMasterPageName )) )
+                 xPageStyles->hasByName( sDisplayName )) )
             {
                 Any aAny;
-                aAny <<= rMasterPageName;
+                aAny <<= sDisplayName;
                 xPropSet->setPropertyValue( sPageDescName, aAny );
             }
         }
         if( bPara && pStyle->GetDropCapStyleName().getLength() &&
-            xTextStyles.is() &&
-            xTextStyles->hasByName( pStyle->GetDropCapStyleName() ) &&
-            xPropSetInfo->hasPropertyByName( pStyle->sDropCapCharStyleName ) )
+            xTextStyles.is() )
         {
-            Any aAny;
-            aAny <<= pStyle->GetDropCapStyleName();
-            xPropSet->setPropertyValue( pStyle->sDropCapCharStyleName, aAny );
+            OUString sDisplayName(
+                rImport.GetStyleDisplayName(
+                                XML_STYLE_FAMILY_TEXT_TEXT,
+                                pStyle->GetDropCapStyleName()) );
+            if( xTextStyles->hasByName( sDisplayName  ) &&
+                xPropSetInfo->hasPropertyByName( sDisplayName ) )
+            {
+                Any aAny;
+                aAny <<= sDisplayName;
+                xPropSet->setPropertyValue( pStyle->sDropCapCharStyleName, aAny );
+            }
         }
 
         // combined characters special treatment
@@ -1287,6 +1284,7 @@ void XMLTextImportHelper::SetOutlineStyles()
 }
 
 void XMLTextImportHelper::SetHyperlink(
+    SvXMLImport& rImport,
     const Reference < XTextCursor >& rCursor,
     const OUString& rHRef,
     const OUString& rName,
@@ -1340,25 +1338,32 @@ void XMLTextImportHelper::SetHyperlink(
 
     if( xTextStyles.is() )
     {
-        if( rStyleName.getLength() &&
+        OUString sDisplayName(
+            rImport.GetStyleDisplayName(
+                            XML_STYLE_FAMILY_TEXT_TEXT, rStyleName ) );
+        if( sDisplayName.getLength() &&
             xPropSetInfo->hasPropertyByName( sUnvisitedCharStyleName ) &&
-            xTextStyles->hasByName( rStyleName ) )
+            xTextStyles->hasByName( sDisplayName ) )
         {
-            aAny <<= rStyleName;
+            aAny <<= sDisplayName;
             xPropSet->setPropertyValue( sUnvisitedCharStyleName, aAny );
         }
 
-        if( rVisitedStyleName.getLength() &&
+        sDisplayName =
+            rImport.GetStyleDisplayName(
+                            XML_STYLE_FAMILY_TEXT_TEXT, rVisitedStyleName );
+        if( sDisplayName.getLength() &&
             xPropSetInfo->hasPropertyByName( sVisitedCharStyleName ) &&
-            xTextStyles->hasByName( rVisitedStyleName ) )
+            xTextStyles->hasByName( sDisplayName ) )
         {
-            aAny <<= rVisitedStyleName;
+            aAny <<= sDisplayName;
             xPropSet->setPropertyValue( sVisitedCharStyleName, aAny );
         }
     }
 }
 
 void XMLTextImportHelper::SetRuby(
+    SvXMLImport& rImport,
     const Reference < XTextCursor >& rCursor,
     const OUString& rStyleName,
     const OUString& rTextStyleName,
@@ -1396,11 +1401,14 @@ void XMLTextImportHelper::SetRuby(
         // the ruby text character style
         if( xTextStyles.is() )
         {
-            if( (rTextStyleName.getLength() > 0) &&
+            OUString sDisplayName(
+                rImport.GetStyleDisplayName(
+                            XML_STYLE_FAMILY_TEXT_TEXT, rTextStyleName ) );
+            if( (sDisplayName.getLength() > 0) &&
 //              xPropSetInfo->hasPropertyByName( sRubyCharStyleName ) &&
-                xTextStyles->hasByName( rTextStyleName ) )
+                xTextStyles->hasByName( sDisplayName ) )
             {
-                aAny <<= rTextStyleName;
+                aAny <<= sDisplayName;
                 xPropSet->setPropertyValue(sRubyCharStyleName, aAny);
             }
         }
@@ -1457,7 +1465,6 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap = GetTextElemTokenMap();
-    sal_Bool bOrdered = sal_False;
     sal_Bool bHeading = sal_False;
     sal_Bool bContent = sal_True;
     sal_Bool bObjectOLE = sal_False;
@@ -1475,12 +1482,10 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             rImport.GetProgressBarHelper()->Increment();
         }
         break;
-    case XML_TOK_TEXT_ORDERED_LIST:
-        bOrdered = sal_True;
-    case XML_TOK_TEXT_UNORDERED_LIST:
+    case XML_TOK_TEXT_LIST:
         pContext = new XMLTextListBlockContext( rImport, *this,
                                                 nPrefix, rLocalName,
-                                                xAttrList, bOrdered );
+                                                xAttrList );
         break;
     case XML_TOK_TABLE_TABLE:
         if( XML_TEXT_TYPE_BODY == eType ||
@@ -1532,100 +1537,17 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         }
         break;
 
-    case XML_TOK_TEXT_TEXTBOX_PAGE:
+    case XML_TOK_TEXT_FRAME_PAGE:
         if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
             XML_TEXT_TYPE_TEXTBOX == eType ||
             XML_TEXT_TYPE_CHANGED_REGION == eType )
-        {
-            if( HasDrawNameAttribute( xAttrList, rImport.GetNamespaceMap() ) )
-            {
-                TextContentAnchorType eAnchorType =
-                    XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
-                                                   : TextContentAnchorType_AT_PAGE;
-                pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                                    rLocalName, xAttrList,
-                                                    eAnchorType,
-                                                    XML_TEXT_FRAME_TEXTBOX );
-            }
-            else
-            {
-                Reference < XShapes > xShapes;
-                pContext = rImport.GetShapeImport()->CreateGroupChildContext(
-                        rImport, nPrefix, rLocalName, xAttrList, xShapes );
-            }
-            bContent = sal_False;
-        }
-        break;
-
-    case XML_TOK_TEXT_IMAGE_PAGE:
-        if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
-            XML_TEXT_TYPE_TEXTBOX == eType ||
-            XML_TEXT_TYPE_CHANGED_REGION == eType )
-        {
-            if( HasDrawNameAttribute( xAttrList, rImport.GetNamespaceMap() ) )
-            {
-                TextContentAnchorType eAnchorType =
-                    XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
-                                                   : TextContentAnchorType_AT_PAGE;
-                pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                                    rLocalName, xAttrList,
-                                                    eAnchorType,
-                                                    XML_TEXT_FRAME_GRAPHIC );
-            }
-            else
-            {
-                Reference < XShapes > xShapes;
-                pContext = rImport.GetShapeImport()->CreateGroupChildContext(
-                        rImport, nPrefix, rLocalName, xAttrList, xShapes );
-            }
-            bContent = sal_False;
-        }
-        break;
-
-    case XML_TOK_TEXT_OBJECT_OLE_PAGE:
-        bObjectOLE = sal_True;
-    case XML_TOK_TEXT_OBJECT_PAGE:
-        if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
-            XML_TEXT_TYPE_TEXTBOX == eType ||
-             XML_TEXT_TYPE_CHANGED_REGION == eType )
         {
             TextContentAnchorType eAnchorType =
                 XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
                                                : TextContentAnchorType_AT_PAGE;
             pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                    rLocalName, xAttrList, eAnchorType,
-                                    bObjectOLE ? XML_TEXT_FRAME_OBJECT_OLE
-                                               : XML_TEXT_FRAME_OBJECT );
-            bContent = sal_False;
-        }
-        break;
-
-    case XML_TOK_TEXT_APPLET_PAGE:
-    case XML_TOK_TEXT_PLUGIN_PAGE:
-    case XML_TOK_TEXT_FLOATING_FRAME_PAGE:
-        if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
-            XML_TEXT_TYPE_TEXTBOX == eType ||
-             XML_TEXT_TYPE_CHANGED_REGION == eType )
-        {
-            TextContentAnchorType eAnchorType =
-                XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
-                                               : TextContentAnchorType_AT_PAGE;
-            sal_uInt16 nType;
-            switch( nToken )
-            {
-            case XML_TOK_TEXT_APPLET_PAGE:
-                nType = XML_TEXT_FRAME_APPLET;
-                break;
-            case XML_TOK_TEXT_PLUGIN_PAGE:
-                nType = XML_TEXT_FRAME_PLUGIN;
-                break;
-            case XML_TOK_TEXT_FLOATING_FRAME_PAGE:
-                nType = XML_TEXT_FRAME_FLOATING_FRAME;
-                break;
-            }
-            pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                    rLocalName, xAttrList, eAnchorType,
-                                    nType );
+                                                rLocalName, xAttrList,
+                                                eAnchorType );
             bContent = sal_False;
         }
         break;
@@ -2060,12 +1982,8 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertFloatingFrame(
 }
 
 void XMLTextImportHelper::endAppletOrPlugin(
-        Reference < XPropertySet> & rPropSet,
-#if SUPD > 632 || DVO_TEST
+        const Reference < XPropertySet> & rPropSet,
         std::map < const rtl::OUString, rtl::OUString, UStringLess > &rParamMap)
-#else
-        std::map < const rtl::OUString, rtl::OUString, less_functor > &rParamMap)
-#endif
 {
 }
 // redline helper: dummy implementation to be overridden in sw/filter/xml
