@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfootnote.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 08:13:18 $
+ *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,13 +80,14 @@ protected:
     // This drived class additinaly sets MULTISELECTABLE(1)
     virtual void SetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
+    virtual ~SwAccessibleFootnote();
+
 public:
 
     SwAccessibleFootnote( SwAccessibleMap *pMap,
                           sal_Bool bIsEndnote,
                           sal_Int32 nFootEndNote,
                           const SwFtnFrm *pFtnFrm );
-    virtual ~SwAccessibleFootnote();
 
 
     //=====  XAccessibleContext  ==============================================

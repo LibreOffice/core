@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-27 09:32:33 $
+ *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,4 +443,10 @@ const SwFrm *SwAccessibleFrame::GetParent() const
     return pUpper;
 }
 
+void SwAccessibleFrame::SetVisArea( const Rectangle& rNewVisArea )
+{
+    Rectangle aOldVisArea( aVisArea );
+    aVisArea = rNewVisArea;
 
+    SetVisArea( GetFrm(), aOldVisArea, aVisArea, this );
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-08 13:26:29 $
+ *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,8 +144,9 @@ private:
                                         // event type
 
 public:
-    SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA ) :
-        eType( eT ), xAcc( pA ), pFrm( pA->GetFrm() ) {}
+    SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
+                             const SwFrm *pF ) :
+        eType( eT ), xAcc( pA ), pFrm( pF ) {}
     SwAccessibleEvent_Impl( EventType eT, const SwFrm *pF ) :
         eType( eT ), pFrm( pF ) {}
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
@@ -405,14 +406,14 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
     return xAccImpl;
 }
 
-void SwAccessibleMap::RemoveContext( SwAccessibleContext *pAcc )
+void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
 {
     vos::OGuard aGuard( aMutex );
 
     if( pMap )
     {
         SwAccessibleContextMap_Impl::iterator aIter =
-            pMap->find( pAcc->GetFrm() );
+            pMap->find( pFrm );
         if( aIter != pMap->end() )
         {
             pMap->erase( aIter );
@@ -481,7 +482,8 @@ void SwAccessibleMap::MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
                     if( GetShell()->ActionPend() )
                     {
                         SwAccessibleEvent_Impl aEvent(
-                            SwAccessibleEvent_Impl::POS_CHANGED, pAccImpl );
+                            SwAccessibleEvent_Impl::POS_CHANGED, pAccImpl,
+                            pFrm );
                         AppendEvent( aEvent );
                     }
                     else
@@ -546,7 +548,8 @@ void SwAccessibleMap::InvalidateFrmContent( const SwFrm *pFrm )
                     if( GetShell()->ActionPend() )
                     {
                         SwAccessibleEvent_Impl aEvent(
-                            SwAccessibleEvent_Impl::INVALID_CONTENT, pAccImpl );
+                            SwAccessibleEvent_Impl::INVALID_CONTENT, pAccImpl,
+                            pFrm );
                         AppendEvent( aEvent );
                     }
                     else

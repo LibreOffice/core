@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-08 13:26:29 $
+ *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,20 +330,34 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
         FireVisibleDataEvent();
     }
 
-    sal_Bool bIsNowHeading = IsHeading();
-    if( bIsNowHeading != bIsHeading || rText != sOldText )
+    sal_Bool bNewIsHeading = IsHeading();
+    sal_Bool bOldIsHeading;
     {
-        bIsHeading = bIsNowHeading;
+        vos::OGuard aGuard( aMutex );
+        bOldIsHeading = bIsHeading;
+        if( bIsHeading != bNewIsHeading )
+            bIsHeading = bNewIsHeading;
+    }
 
+
+    if( bNewIsHeading != bOldIsHeading || rText != sOldText )
+    {
         OUString sNewDesc( GetDescription() );
-        if( sNewDesc != sDesc )
+        OUString sOldDesc;
+        {
+            vos::OGuard aGuard( aMutex );
+            sOldDesc = sDesc;
+            if( sDesc != sNewDesc )
+                sDesc = sNewDesc;
+        }
+
+        if( sNewDesc != sOldDesc )
         {
             // The text is changed
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
-            aEvent.OldValue <<= sDesc;
+            aEvent.OldValue <<= sOldDesc;
             aEvent.NewValue <<= sNewDesc;
-            sDesc = sNewDesc;
 
             FireAccessibleEvent( aEvent );
         }
@@ -369,6 +383,8 @@ SwAccessibleParagraph::SwAccessibleParagraph(
 
 SwAccessibleParagraph::~SwAccessibleParagraph()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     delete pPortionData;
 }
 
@@ -499,6 +515,7 @@ OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
 
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
+    vos::OGuard aGuard2( aMutex );
     if( !sDesc.getLength() )
         sDesc = GetDescription();
 
@@ -578,8 +595,9 @@ Any SwAccessibleParagraph::queryInterface( const Type& rType )
 sal_Int32 SwAccessibleParagraph::getCaretPosition()
     throw (RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext );
 
     sal_Int32 nRet = -1;
 
@@ -614,8 +632,9 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
 sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext );
 
     OUString sText( GetString() );
 
@@ -640,6 +659,7 @@ com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     CHECK_FOR_DEFUNC( XAccessibleContext ); // we have a frame?
 
     if( (nIndex < 0) || (nIndex >= GetString().getLength()) )
@@ -677,8 +697,9 @@ com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 sal_Int32 SwAccessibleParagraph::getCharacterCount()
     throw (RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext );
 
     return GetString().getLength();
 }
@@ -686,8 +707,9 @@ sal_Int32 SwAccessibleParagraph::getCharacterCount()
 sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Point& rPoint )
     throw (RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext );
 
     // construct SwPosition (where GetCrsrOfst() will put the result into)
     SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
@@ -718,6 +740,7 @@ OUString SwAccessibleParagraph::getSelectedText()
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     CHECK_FOR_DEFUNC( XAccessibleContext ); // we have a frame?
 
     sal_Int32 nStart, nEnd;
@@ -729,6 +752,7 @@ sal_Int32 SwAccessibleParagraph::getSelectionStart()
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     CHECK_FOR_DEFUNC( XAccessibleContext ); // we have a frame?
 
     sal_Int32 nStart, nEnd;
@@ -740,6 +764,7 @@ sal_Int32 SwAccessibleParagraph::getSelectionEnd()
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     CHECK_FOR_DEFUNC( XAccessibleContext ); // we have a frame?
 
     sal_Int32 nStart, nEnd;
@@ -750,8 +775,9 @@ sal_Int32 SwAccessibleParagraph::getSelectionEnd()
 sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext );
 
     // parameter checking
     sal_Int32 nLength = GetString().getLength();
@@ -790,8 +816,9 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 OUString SwAccessibleParagraph::getText()
     throw (RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext );
 
     return GetString();
 }
@@ -800,8 +827,9 @@ OUString SwAccessibleParagraph::getTextRange(
     sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext );
 
     OUString sText( GetString() );
 
@@ -819,8 +847,9 @@ OUString SwAccessibleParagraph::getTextAtIndex(
     sal_Int32 nIndex, sal_Int16 nTextType )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext );
 
     const OUString rText = GetString();
 
@@ -837,8 +866,9 @@ OUString SwAccessibleParagraph::getTextBeforeIndex(
     sal_Int32 nIndex, sal_Int16 nTextType )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext );
 
     const OUString rText = GetString();
 
@@ -856,8 +886,9 @@ OUString SwAccessibleParagraph::getTextBehindIndex(
     sal_Int32 nIndex, sal_Int16 nTextType )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext );
 
     const OUString rText = GetString();
 
@@ -915,6 +946,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     CHECK_FOR_DEFUNC( XAccessibleContext );     // check for live frame
 
     const OUString& rText = GetString();

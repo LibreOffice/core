@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-08 15:13:03 $
+ *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,6 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
@@ -152,6 +149,15 @@ void SwAccessibleContext::FireVisibleDataEvent()
     FireAccessibleEvent( aEvent );
     DBG_MSG( "AccessibleVisibleData" )
 }
+
+void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
+{
+    vos::OGuard aGuard( aMutex );
+
+    ::com::sun::star::uno::Reference < ::drafts::com::sun::star::accessibility::XAccessible > xParent( pParent );
+    xWeakParent = xParent;
+}
+
 
 sal_Bool SwAccessibleContext::ChildScrolledIn( const SwFrm *pFrm )
 {
@@ -290,12 +296,18 @@ sal_Bool SwAccessibleContext::DisposeChild( const SwFrm *pFrm,
 
 void SwAccessibleContext::Dispose( sal_Bool bRecursive )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     // dispose children
     if( bRecursive )
         DisposeChildren( bRecursive );
 
     // get parent
-    Reference< XAccessible > xParent( xWeakParent );
+    Reference< XAccessible > xParent;
+    {
+        vos::OGuard aGuard( aMutex );
+        xParent = xWeakParent;
+    }
     Reference < XAccessibleContext > xThis( this );
 
     if( xParent.is() )
@@ -319,13 +331,15 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
 
     ASSERT( GetFrm(), "already disposed" );
     if( GetMap() && GetFrm() )
-        GetMap()->RemoveContext( this );
+        GetMap()->RemoveContext( GetFrm() );
     ClearFrm();
     pMap = 0;
 }
 
 void SwAccessibleContext::PosChanged()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     if( IsShowing() )
     {
         // The frame stays visible -> broadcast event
@@ -343,6 +357,8 @@ void SwAccessibleContext::PosChanged()
 void SwAccessibleContext::ChildPosChanged( const SwFrm *pFrm,
                                            const SwRect& rOldFrm )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     if( IsShowing( pFrm ) )
     {
         // If the object was not showing before, than there is nothing to do,
@@ -368,7 +384,16 @@ void SwAccessibleContext::ChildPosChanged( const SwFrm *pFrm,
 
 void SwAccessibleContext::InvalidateContent()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     _InvalidateContent( sal_False );
+}
+
+void SwAccessibleContext::SetVisArea( const Rectangle& rNewVisArea )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    SwAccessibleFrame::SetVisArea( rNewVisArea );
 }
 
 
@@ -487,8 +512,8 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
                                           sal_Int16 nR,
                                           const SwFrm *pF ) :
     SwAccessibleFrame( pM->GetShell()->VisArea().SVRect(), pF ),
-    aAccessibleEventListeners( aMutex ),
-    aFocusListeners( aMutex ),
+    aAccessibleEventListeners( aListenerMutex ),
+    aFocusListeners( aListenerMutex ),
     pMap( pM ),
     nRole( nR )
 {
@@ -501,8 +526,8 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
                                           const SwFrm *pF ) :
     SwAccessibleFrame( pM->GetShell()->VisArea().SVRect(), pF ),
     sName( rName ),
-    aAccessibleEventListeners( aMutex ),
-    aFocusListeners( aMutex ),
+    aAccessibleEventListeners( aListenerMutex ),
+    aFocusListeners( aListenerMutex ),
     pMap( pM ),
     nRole( nR )
 {
@@ -511,9 +536,11 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
 
 SwAccessibleContext::~SwAccessibleContext()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     DBG_MSG_CD( "destructed" )
     if( GetFrm() && GetMap() )
-        GetMap()->RemoveContext( this );
+        GetMap()->RemoveContext( GetFrm() );
 }
 
 Reference< XAccessibleContext > SAL_CALL
@@ -530,6 +557,7 @@ long SAL_CALL SwAccessibleContext::getAccessibleChildCount( void )
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
+
     return GetChildCount();
 }
 
@@ -581,7 +609,10 @@ Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (void)
     }
 
     // Remember the parent as weak ref.
-    xWeakParent = xAcc;
+    {
+        vos::OGuard aGuard( aMutex );
+        xWeakParent = xAcc;
+    }
 
     return xAcc;
 }
@@ -661,22 +692,6 @@ Locale SAL_CALL SwAccessibleContext::getLocale (void)
 
     Locale aLoc( Application::GetSettings().GetUILocale() );
     return aLoc;
-}
-
-void SAL_CALL SwAccessibleContext::addPropertyChangeListener (
-            const Reference< XPropertyChangeListener>& xListener)
-        throw (com::sun::star::uno::RuntimeException)
-{
-    DBG_MSG( "property change listener added" )
-    aAccessibleEventListeners.addInterface( xListener );
-}
-
-void SAL_CALL SwAccessibleContext::removePropertyChangeListener (
-            const Reference< XPropertyChangeListener>& xListener)
-        throw (com::sun::star::uno::RuntimeException)
-{
-    DBG_MSG( "property change listener removed" )
-    aAccessibleEventListeners.removeInterface( xListener );
 }
 
 void SAL_CALL SwAccessibleContext::addEventListener(

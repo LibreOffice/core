@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-08 13:26:29 $
+ *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ILLEGALACCESSIBLECOMPONENTSTATEEXCEPTION_HDL_
 #include <drafts/com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #endif
@@ -90,6 +87,9 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
 #endif
@@ -111,25 +111,31 @@ class SwAccessibleContext :
                 >,
     public SwAccessibleFrame
 {
-    ::rtl::OUString sName;
-    ::osl::Mutex aMutex;
+protected:
+
+    ::osl::Mutex aListenerMutex;
+    ::vos::OMutex aMutex;
+
+private:
+
+    ::rtl::OUString sName;  // immutable outside constructor
     ::cppu::OInterfaceContainerHelper aAccessibleEventListeners;
     ::cppu::OInterfaceContainerHelper aFocusListeners;
 
     // The parent if it has been retrieved. This is always an
-    // SwAccessibleContext.
+    // SwAccessibleContext. (protected by Mutex)
     ::com::sun::star::uno::WeakReference <
         ::drafts::com::sun::star::accessibility::XAccessible > xWeakParent;
 
-    SwAccessibleMap *pMap;
+    SwAccessibleMap *pMap;  // must be protected by solar mutex
 
-    sal_Int16 nRole;
+    sal_Int16 nRole;        // immutable outside constructor
 
 protected:
     void SetName( const ::rtl::OUString& rName ) { sName = rName; }
     sal_Int16 GetRole() const { return nRole; }
 
-    inline void SetParent( SwAccessibleContext *pParent );
+    void SetParent( SwAccessibleContext *pParent );
 
     // A child has been added while setting the vis area
     virtual sal_Bool ChildScrolledIn( const SwFrm *pFrm );
@@ -163,13 +169,14 @@ protected:
     Window *GetWindow();
     SwAccessibleMap *GetMap() { return pMap; }
 
+    virtual ~SwAccessibleContext();
+
 public:
 
     SwAccessibleContext( SwAccessibleMap *pMap, sal_Int16 nRole,
                          const SwFrm *pFrm );
     SwAccessibleContext( SwAccessibleMap *pMap, const ::rtl::OUString& rName,
                          sal_Int16 nRole, const SwFrm *pFrm );
-    virtual ~SwAccessibleContext();
 
     //=====  XAccessible  =====================================================
 
@@ -232,22 +239,6 @@ public:
     virtual ::com::sun::star::lang::Locale SAL_CALL
         getLocale (void)
         throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
-
-    /** Add listener that is informed of future changes of name and
-          description properties.
-    */
-    virtual void SAL_CALL
-        addPropertyChangeListener (
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertyChangeListener>& xListener)
-        throw (com::sun::star::uno::RuntimeException);
-
-    //  Remove an existing property change listener.
-    virtual void SAL_CALL
-        removePropertyChangeListener (
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertyChangeListener>& xListener)
-        throw (com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleEventBroadcaster  =====================================
 
@@ -328,7 +319,7 @@ public:
         getSupportedServiceNames (void)
              throw (::com::sun::star::uno::RuntimeException);
 
-    //====== C++ interface ====================================================
+    //====== thread safe C++ interface ========================================
 
     // The object is not visible an longer and should be destroyed
     virtual void Dispose( sal_Bool bRecursive = sal_False );
@@ -342,15 +333,11 @@ public:
     // The content may have changed (but it hasn't tohave changed)
     virtual void InvalidateContent();
 
+    // Scroll (update vis area)
+    virtual void SetVisArea( const Rectangle& rNewVisArea );
 
     const ::rtl::OUString& GetName() const { return sName; }
 };
-
-inline void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
-{
-    ::com::sun::star::uno::Reference < ::drafts::com::sun::star::accessibility::XAccessible > xParent( pParent );
-    xWeakParent = xParent;
-}
 
 // some heaviliy used exception support
 const sal_Char sDefunc[] = "object is defunctional";

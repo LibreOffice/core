@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-08 13:19:05 $
+ *  last change: $Author: mib $ $Date: 2002-03-11 11:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ public:
 
     ViewShell *GetShell() { return pVSh; }
 
-    void RemoveContext( SwAccessibleContext *pAcc );
+    void RemoveContext( const SwFrm *pFrm );
 
     void DisposeFrm( const SwFrm *pFrm );
 

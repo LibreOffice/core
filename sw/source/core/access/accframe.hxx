@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 08:14:51 $
+ *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #include <frame.hxx>
 #endif
 
+// Any method of this class must be called with an acquired solar mutex!
+
 class SwAccessibleFrame
 {
     Rectangle aVisArea;
@@ -116,8 +118,6 @@ protected:
 
     void ClearFrm() { pFrm = 0; }
 
-public:
-
     SwAccessibleFrame( const Rectangle& rVisArea,
                        const SwFrm *pFrm );
     virtual ~SwAccessibleFrame();
@@ -144,7 +144,7 @@ public:
                             const Rectangle& rOldVisArea,
                             const Rectangle& rNewVisArea,
                             SwAccessibleFrame *pAcc = 0 );
-    inline void SetVisArea( const Rectangle& rNewVisArea );
+    virtual void SetVisArea( const Rectangle& rNewVisArea );
 
     static void DisposeChildren( const SwFrm *pFrm,
                                   const Rectangle& rOldVisArea,
@@ -185,14 +185,6 @@ inline sal_Int32 SwAccessibleFrame::GetChildIndex( const SwFrm *pChild ) const
 inline const SwFrm *SwAccessibleFrame::GetChildAt( const Point& rPos ) const
 {
     return GetChildAt( aVisArea, pFrm, rPos );
-}
-
-inline void SwAccessibleFrame::SetVisArea( const Rectangle& rNewVisArea )
-{
-    Rectangle aOldVisArea( aVisArea );
-    aVisArea = rNewVisArea;
-
-    SetVisArea( GetFrm(), aOldVisArea, aVisArea, this );
 }
 
 inline void SwAccessibleFrame::DisposeChildren( sal_Bool bRecursive )

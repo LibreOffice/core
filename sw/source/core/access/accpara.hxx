@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-08 13:26:29 $
+ *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ namespace com { namespace sun { namespace star {
 class SwAccessibleParagraph : public    SwAccessibleContext,
                               public drafts::com::sun::star::accessibility::XAccessibleEditableText
 {
-    ::rtl::OUString sDesc;
+    ::rtl::OUString sDesc;  // protected by base classes mutex
 
     /// data for this paragraph's text portions; this contains the
     /// mapping from the core 'model string' to the accessible text
@@ -96,8 +96,7 @@ class SwAccessibleParagraph : public    SwAccessibleContext,
     /// Get/Clear/Has/UpdatePortionData() methods
     SwAccessiblePortionData* pPortionData;
 
-    sal_Bool bIsHeading;
-
+    sal_Bool bIsHeading;    // protected by base classes mutex
 
     /// get the SwTxtNode (requires frame; check before)
     const SwTxtNode* GetTxtNode() const;
@@ -124,12 +123,7 @@ protected:
 
     virtual void _InvalidateContent( sal_Bool bVisibleDataFired );
 
-public:
-
-    SwAccessibleParagraph( SwAccessibleMap *pMap, sal_Int32 nPara,
-                           const SwTxtFrm *pTxtFrm );
     virtual ~SwAccessibleParagraph();
-
 
     //=====  handling of data for the text portions ===========================
 
@@ -184,6 +178,10 @@ public:
             ::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::uno::RuntimeException);
 
+public:
+
+    SwAccessibleParagraph( SwAccessibleMap *pMap, sal_Int32 nPara,
+                           const SwTxtFrm *pTxtFrm );
 
     //=====  XAccessibleContext  ==============================================
 

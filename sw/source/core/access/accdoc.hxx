@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-20 17:55:57 $
+ *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,11 +78,12 @@ protected:
     // This drived class additinaly sets MULTISELECTABLE(1)
     virtual void SetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
+    virtual ~SwAccessibleDocument();
+
 public:
 
     SwAccessibleDocument(
         SwAccessibleMap *pMap );
-    virtual ~SwAccessibleDocument();
 
     //=====  XAccessibleContext  ==============================================
 
