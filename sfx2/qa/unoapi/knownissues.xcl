@@ -1,0 +1,11 @@
+### 112249 ###
+sfx.StandaloneDocumentInfo::com::sun::star::document::DocumentInfo
+
+### i23235 ###
+sfx.FrameLoader::com::sun::star::document::XExtendedFilterDetection
+
+### i23244 ###
+sfx.FrameLoader::com::sun::star::frame::XSynchronousFrameLoader
+
+### i23246 ###
+sfx.AppDispatchProvider::com::sun::star::frame::XDispatchProvider
