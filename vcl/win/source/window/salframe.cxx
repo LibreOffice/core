@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-18 15:12:49 $
+ *  last change: $Author: ssa $ $Date: 2002-04-22 12:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2374,6 +2374,7 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
         aStyleSettings.SetDarkShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DDKSHADOW ) ) );
     }
+    aStyleSettings.SetWorkspaceColor( ImplWinColorToSal( GetSysColor( COLOR_APPWORKSPACE ) ) );
     aStyleSettings.SetHelpColor( ImplWinColorToSal( GetSysColor( COLOR_INFOBK ) ) );
     aStyleSettings.SetHelpTextColor( ImplWinColorToSal( GetSysColor( COLOR_INFOTEXT ) ) );
     aStyleSettings.SetDialogColor( aStyleSettings.GetFaceColor() );
