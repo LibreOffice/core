@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-01-26 17:43:17 $
+ *  last change: $Author: er $ $Date: 2001-03-20 17:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,22 +97,21 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
 {
     pFormatter = pFormatterP;
     bConvertMode = FALSE;
-    //! alle Schluesselwoerter muessen aus Grossbuchstaben bestehen !!
-                                                    // 0 bleibt leer!!
-    sKeyword[NF_KEY_E].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "E" ) );                    // Exp.
-    sKeyword[NF_KEY_AMPM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "AM/PM" ) );                // AM/PM
-    sKeyword[NF_KEY_AP].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "A/P" ) );              // AM/PM
-    sKeyword[NF_KEY_MI].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "M" ) );                    // Minute
-    sKeyword[NF_KEY_MMI].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "MM" ) );                   // Minute
-    sKeyword[NF_KEY_S].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "S" ) );                    // Sekunde  2
-    sKeyword[NF_KEY_SS].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "SS" ) );                   // Sekunde 02
-    sKeyword[NF_KEY_Q].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "Q" ) );                    // Quartal
-    sKeyword[NF_KEY_QQ].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "QQ" ) );                   // Quartal lang
-    sKeyword[NF_KEY_NN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "NN" ) );                   // Wochentag kurz
-    sKeyword[NF_KEY_NNN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "NNN" ) );              // Wochentag lang
-    sKeyword[NF_KEY_NNNN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "NNNN" ) );             // Wochentag lang mit Sep
-    sKeyword[NF_KEY_WW].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "WW" ) );                   // Kalenderwoche
-    sKeyword[NF_KEY_CCC].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "CCC" ) );              // Waehrung Bank
+    //! All keywords MUST be UPPERCASE!
+    sKeyword[NF_KEY_E].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "E" ) );        // Exponent
+    sKeyword[NF_KEY_AMPM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "AM/PM" ) );    // AM/PM
+    sKeyword[NF_KEY_AP].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "A/P" ) );      // AM/PM short
+    sKeyword[NF_KEY_MI].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "M" ) );        // Minute
+    sKeyword[NF_KEY_MMI].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "MM" ) );       // Minute 02
+    sKeyword[NF_KEY_S].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "S" ) );        // Second
+    sKeyword[NF_KEY_SS].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "SS" ) );       // Second 02
+    sKeyword[NF_KEY_Q].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "Q" ) );        // Quarter short 'Q'
+    sKeyword[NF_KEY_QQ].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "QQ" ) );       // Quarter long
+    sKeyword[NF_KEY_NN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "NN" ) );       // Day of week short
+    sKeyword[NF_KEY_NNN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "NNN" ) );      // Day of week long
+    sKeyword[NF_KEY_NNNN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "NNNN" ) );     // Day of week long incl. separator
+    sKeyword[NF_KEY_WW].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "WW" ) );       // Week of year
+    sKeyword[NF_KEY_CCC].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "CCC" ) );      // Currency abbreviation
     SetDependentKeywords();
 
     StandardColor[0]  =  Color(COL_BLACK);
