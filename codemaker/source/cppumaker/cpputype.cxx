@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:15:48 $
+ *  last change: $Author: dbo $ $Date: 2001-10-19 13:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2876,7 +2876,13 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
 
         o << indent();
         dumpType(o, fieldType);
-        o << " " << fieldName << ";\n";
+        o << " " << fieldName;
+        if (i == 0 && superType.getLength() &&
+            !fieldType.equals("double") && !fieldType.equals("hyper") && !fieldType.equals("unsigned hyper"))
+        {
+            o << " CPPU_GCC3_ALIGN( " << scopedName(m_typeName, superType) << " )";
+        }
+        o << ";\n";
     }
 
     dec();
@@ -3222,7 +3228,13 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
 
         o << indent();
         dumpType(o, fieldType);
-        o << " " << fieldName << ";\n";
+        o << " " << fieldName;
+        if (i == 0 && superType.getLength() &&
+            !fieldType.equals("double") && !fieldType.equals("hyper") && !fieldType.equals("unsigned hyper"))
+        {
+            o << " CPPU_GCC3_ALIGN( " << scopedName(m_typeName, superType) << " )";
+        }
+        o << ";\n";
     }
 
 
