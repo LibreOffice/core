@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpref.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:07:23 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,37 +74,9 @@ ModelessDialog RID_SCDLG_SIMPLEREF
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
-        Text = "Bereich" ;
-        Text [ ENGLISH ] = "Refers to" ;
-        Text [ norwegian ] = "Refers to" ;
-        Text [ italian ] = "Area" ;
-        Text [ portuguese_brazilian ] = "¡rea" ;
-        Text [ portuguese ] = "¡rea" ;
-        Text [ finnish ] = "Alue" ;
-        Text [ danish ] = "OmrÂde" ;
-        Text [ french ] = "Plage" ;
-        Text [ swedish ] = "OmrÂde" ;
-        Text [ dutch ] = "Bereik" ;
-        Text [ spanish ] = "¡rea" ;
-        Text [ english_us ] = "Area" ;
-        Text[ chinese_simplified ] = "Âå∫Âüü";
-        Text[ russian ] = "ƒË‡Ô‡ÁÓÌ";
-        Text[ polish ] = "Obszar";
-        Text[ japanese ] = "ÁØÑÂõ≤";
-        Text[ chinese_traditional ] = "ÂçÄÂüü";
-        Text[ arabic ] = "«·‰ÿ«ﬁ";
-        Text[ greek ] = "–ÂÒÈÔ˜ﬁ";
-        Text[ korean ] = "ÏòÅÏó≠";
-        Text[ turkish ] = "Bˆl¸m";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "¿rea";
-        Text[ thai ] = "‡∏û‡∏∑‡πâ‡∏ô‡∏ó‡∏µ‡πà";
-        Text[ czech ] = "Oblast";
-        Text[ hebrew ] = "Bereich";
-        Text[ hindi ] = "‡§µ‡§ø‡§∏‡•ç‡§§‡•Ä‡§∞‡•ç‡§£";
-        Text[ slovak ] = "Oblas≈•";
-        Text[ hungarian ] = "Ter√ºlet";
-        Text[ slovenian ] = "Podroƒçje";
+        Text [ de ] = "Bereich" ;
+        Text [ en-US ] = "Area" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_ASSIGN
     {
@@ -116,39 +88,12 @@ ModelessDialog RID_SCDLG_SIMPLEREF
     };
     ImageButton RB_ASSIGN
     {
-        QuickHelpText = "Verkleinern" ;
-        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 142 , 6 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
-        QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Encolher" ;
-        QuickHelpText [ swedish ] = "Fˆrminska" ;
-        QuickHelpText [ danish ] = "Formindsk" ;
-        QuickHelpText [ italian ] = "Zoom indietro" ;
-        QuickHelpText [ spanish ] = "Reducir" ;
-        QuickHelpText [ french ] = "RÈduire" ;
-        QuickHelpText [ dutch ] = "Verkleinen" ;
-        QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ chinese_simplified ] = "Áº©Â∞è";
-        QuickHelpText[ chinese_traditional ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ arabic ] = " ’€Ì—";
-        QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Ï∂ïÏÜå";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Redueix";
-        QuickHelpText[ finnish ] = "Kutista";
-        QuickHelpText[ thai ] = "Shrink";
-        QuickHelpText[ czech ] = "Zmen≈°it";
-        QuickHelpText[ hebrew ] = "Verkleinern";
-        QuickHelpText[ hindi ] = "‡§∏‡§ø‡§ï‡•Å‡§°‡§®‡§æ";
-        QuickHelpText[ slovak ] = "Zmen≈°i≈•";
-        QuickHelpText[ hungarian ] = "Zsugor√≠t√°s";
-        QuickHelpText[ slovenian ] = "Skrƒçi";
+        QuickHelpText [ en-US ] = "Shrink" ;
+        QuickHelpText [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
