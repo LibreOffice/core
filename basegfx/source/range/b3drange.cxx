@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3drange.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:39:15 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,17 +73,26 @@
 
 namespace basegfx
 {
-    /** Round double to nearest integer for 3D range
-
-        @return the nearest integer for this range
-    */
-    B3IRange fround(const B3DRange& rRange)
+    B3DRange::B3DRange(const B3IRange& rRange) :
+        maRangeX( rRange.getMinX() ),
+        maRangeY( rRange.getMinY() ),
+        maRangeZ( rRange.getMinZ() )
     {
-        return B3IRange(
-            fround(rRange.getMinX()), fround(rRange.getMinX()),
-            fround(rRange.getMinY()), fround(rRange.getMinY()),
-            fround(rRange.getMinZ()), fround(rRange.getMinZ()));
+        maRangeX.expand( rRange.getMaxX() );
+        maRangeY.expand( rRange.getMaxY() );
+        maRangeZ.expand( rRange.getMaxZ() );
     }
+
+    B3IRange fround(const B3DRange& rRange )
+    {
+        return B3IRange(fround(rRange.getMinX()),
+                        fround(rRange.getMinY()),
+                        fround(rRange.getMinZ()),
+                        fround(rRange.getMaxX()),
+                        fround(rRange.getMaxY()),
+                        fround(rRange.getMaxZ()));
+    }
+
 } // end of namespace basegfx
 
 // eof
