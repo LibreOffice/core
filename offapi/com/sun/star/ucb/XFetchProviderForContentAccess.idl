@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFetchProviderForContentAccess.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com { module sun { module star { module ucb {
     <type>XContentAccess</type> for several rows of a
     <type>ContentResultSet</type> with a single function call.
 */
-interface XFetchProviderForContentAccess: com::sun::star::uno::XInterface
+published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** returns the content identifier strings of the columns of the indicated
