@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:05:34 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,12 +150,12 @@ SystemWindow::SystemWindow( WindowType nType ) :
     mbSysChild          = FALSE;
     mnMenuBarMode       = MENUBAR_MODE_NORMAL;
     mnIcon              = 0;
-    mpImplData->mpTaskPaneList      = NULL;
 }
 
 SystemWindow::~SystemWindow()
 {
     delete mpImplData;
+    mpImplData = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -901,4 +901,12 @@ void SystemWindow::SetMenuBarMode( USHORT nMode )
                 ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarMode( FALSE );
         }
     }
+}
+
+// -----------------------------------------------------------------------
+BOOL SystemWindow::ImplIsInTaskPaneList( Window* pWin )
+{
+    if( mpImplData && mpImplData->mpTaskPaneList )
+        return mpImplData->mpTaskPaneList->IsInList( pWin );
+    return FALSE;
 }
