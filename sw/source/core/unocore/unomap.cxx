@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 10:08:33 $
+ *  last change: $Author: mtg $ $Date: 2001-03-28 11:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1807,7 +1807,12 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_HIDE_FIELD_TIPS),               WID_DOC_HIDE_TIPS,          &::getBooleanCppuType(),    PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_REDLINE_DISPLAY_TYPE),          WID_DOC_REDLINE_DISPLAY,    &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_FORBIDDEN_CHARACTERS),          WID_DOC_FORBIDDEN_CHARS,    &::getCppuType((Reference<XForbiddenCharacters>*)0),    PropertyAttribute::READONLY,   0},
-                    {0,0,0,0}
+                    { SW_PROP_NAME(UNO_NAME_LINK_UPDATE_MODE),              WID_DOC_LINK_UPDATE_MODE,   &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
+                    { SW_PROP_NAME(UNO_NAME_FIELD_AUTO_UPDATE),             WID_DOC_FIELD_AUTO_UPDATE,  &::getBooleanCppuType(),    PROPERTY_NONE,   0},
+                    { SW_PROP_NAME(UNO_NAME_CHART_AUTO_UPDATE),             WID_DOC_CHART_AUTO_UPDATE,  &::getBooleanCppuType(),    PROPERTY_NONE,   0},
+                    { SW_PROP_NAME(UNO_NAME_ADD_PARA_TABLE_SPACING),        WID_DOC_ADD_PARA_TABLE_SPACING,     &::getBooleanCppuType(),    PROPERTY_NONE,   0},
+                    { SW_PROP_NAME(UNO_NAME_ADD_PARA_TABLE_SPACING_AT_START),WID_DOC_ADD_PARA_TABLE_SPACING_AT_START,   &::getBooleanCppuType(),    PROPERTY_NONE,   0},
+                    { SW_PROP_NAME(UNO_NAME_PRINTER_NAME),                  WID_DOC_PRINTER_NAME,       &::getCppuType((const OUString*)0), PROPERTY_NONE,   0},
                 };
                 aMapArr[nPropertyId] = aDocMap_Impl;
             }
