@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:14:37 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 
 #ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
+#endif
+
+#ifndef SW_MS_MSFILTER_HXX
+#include "../inc/msfilter.hxx"
 #endif
 
 extern void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, BYTE nCol, short nIdx,
@@ -314,6 +318,12 @@ public:
 
 class SwRTFParser : public SvxRTFParser
 {
+    /*
+     Knows which writer style a given word style should be imported as.
+    */
+    sw::util::ParaStyleMapper maParaStyleMapper;
+    sw::util::CharStyleMapper maCharStyleMapper;
+
     friend class rtfSections;
     DocPageInformation maPageDefaults;
     rtfSections maSegments;
@@ -385,13 +395,12 @@ class SwRTFParser : public SvxRTFParser
 
     // 3 Methoden zum Aufbauen der Styles
     SwTxtFmtColl* MakeColl( const String&, USHORT nPos, BYTE nOutlineLevel,
-                            int& rbCollExist );
+                            bool& rbCollExist );
     SwCharFmt* MakeCharFmt( const String& rName, USHORT nPos,
                             int& rbCollExist );
     void SetStyleAttr( SfxItemSet& rCollSet,
                         const SfxItemSet& rStyleSet,
                         const SfxItemSet& rDerivedSet );
-    String XlateFmtColName(const String &rName) const;  //Takashi Ono for CJK
     SwTxtFmtColl* MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle );
     SwCharFmt* MakeCharStyle( USHORT nNo, const SvxRTFStyleType& rStyle );
     void MakeStyleTab();
@@ -432,6 +441,7 @@ protected:
     virtual void ReadOLEData();
 #endif
     virtual void SetAttrInDoc( SvxRTFItemStackType &rSet );
+    virtual bool UncompressableStackEntry(const SvxRTFItemStackType &rSet) const;
     // fuer Tokens, die im ReadAttr nicht ausgewertet werden
     virtual void UnknownAttrToken( int nToken, SfxItemSet* pSet );
 
