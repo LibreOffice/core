@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:53:23 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,7 +525,7 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
         WW8Fib& rFib = *rWrt.pFib;
         WW8_CP nCpOffs = GetCpOffset(rFib);
 
-        typedef ::std::vector<DrawObj>::const_iterator myiter;
+        typedef std::vector<DrawObj>::const_iterator myiter;
         myiter aEnd = maDrawObjs.end();
         myiter aIter;
 
@@ -620,7 +620,8 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
                     nFlags |= 0x0400 | nContour;
                     break;
             }
-            if( pObj && pObj->GetLayer() == rWrt.pDoc->GetHellId() )
+            if( pObj && (pObj->GetLayer() == rWrt.pDoc->GetHellId() ||
+                    pObj->GetLayer() == rWrt.pDoc->GetInvisibleHellId()) )
                 nFlags |= 0x4000;
 
             SwWW8Writer::WriteShort(*rWrt.pTableStrm, nFlags);
@@ -679,19 +680,10 @@ bool PlcDrawObj::Append(SwWW8Writer& rWrt, WW8_CP nCp, const SwFrmFmt& rFmt,
     return bRet;
 }
 
-void PlcDrawObj::SetShapeDetails(const SwFrmFmt& rFmt, UINT32 nId,
-    INT32 nThick)
+void PlcDrawObj::SetShapeDetails(DrawObj &rShape, UINT32 nId, INT32 nThick)
 {
-    typedef ::std::vector<DrawObj>::iterator myiter;
-    myiter aEnd = maDrawObjs.end();
-    for (myiter aIter = maDrawObjs.begin(); aIter != aEnd; ++aIter)
-    {
-        if (&(aIter->mrCntnt) == &rFmt)
-        {
-            aIter->mnShapeId = nId;
-            aIter->mnThick = nThick;
-        }
-    }
+    rShape.mnShapeId = nId;
+    rShape.mnThick = nThick;
 }
 
 bool WW8_WrPlcTxtBoxes::WriteTxt(SwWW8Writer& rWrt)
@@ -1637,8 +1629,11 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeTyp
     }
 
     const SdrObject* pObj = rFmt.FindRealSdrObject();
-    if( pObj && pObj->GetLayer() == GetHellLayerId() )
+    if( pObj && (pObj->GetLayer() == GetHellLayerId() ||
+        pObj->GetLayer() == GetInvisibleHellId() ))
+    {
         rPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
+    }
 
     return nLineWidth;
 }
@@ -1781,7 +1776,8 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
         ULONG nSecondShapeId = pSdrObjs == rWrt.pSdrObjs ? GetShapeID() : 0;
 
         // write now all Writer-/DrawObjects
-        MakeZOrderArrAndFollowIds( pSdrObjs->GetObjArr() );
+        std::vector<DrawObj*> aSorted;
+        MakeZOrderArrAndFollowIds( pSdrObjs->GetObjArr(), aSorted );
 
         ULONG nShapeId=0;
         for( USHORT n = 0; n < aSortFmts.Count(); ++n )
@@ -1798,12 +1794,29 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
             else
             {
                 aWinwordAnchoring.SetAnchoring(rFmt, true);
-                const SdrObject* pObj = rFmt.FindRealSdrObject();
-                if( pObj )
-                    nShapeId = AddSdrObject( *pObj );
+                if (const SdrObject* pObj = rFmt.FindRealSdrObject())
+                {
+                    bool bSwapInPage = false;
+                    if (!pObj->GetPage())
+                    {
+                        if (SdrModel* pModel = rWrt.pDoc->GetDrawModel())
+                        {
+                            if (SdrPage *pPage = pModel->GetPage(0))
+                            {
+                                bSwapInPage = true;
+                                (const_cast<SdrObject*>(pObj))->SetPage(pPage);
+                            }
+                        }
+                    }
+
+                    nShapeId = AddSdrObject(*pObj);
+
+                    if (bSwapInPage)
+                        (const_cast<SdrObject*>(pObj))->SetPage(0);
+                }
 #ifndef PRODUCT
                 else
-                    ASSERT( !this, "wo ist das SDR-Object?" );
+                    ASSERT( !this, "Where is the SDR-Object?" );
 #endif
             }
 
@@ -1813,12 +1826,10 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
                 nShapeId = AddDummyShape( *pObj );
             }
 
-            pSdrObjs->SetShapeDetails(rFmt, nShapeId, nBorderThick);
+            pSdrObjs->SetShapeDetails(*(aSorted[n]), nShapeId, nBorderThick);
         }
 
         EndSdrObjectPage();         // ???? Bugfix for 74724
-
-//        LeaveGroup();             // done in EndSdrObjectPage()
 
         if( nSecondShapeId )
         {
@@ -2572,7 +2583,7 @@ Graphic wwUtility::MakeSafeGDIMetaFile(SvInPlaceObjectRef xObj)
 }
 
 void SwEscherEx::MakeZOrderArrAndFollowIds(
-    const ::std::vector<DrawObj>& rSrcArr)
+    std::vector<DrawObj>& rSrcArr, std::vector<DrawObj*>&rDstArr)
 {
     if (aSortFmts.Count())
         aSortFmts.Remove( 0, aSortFmts.Count() );
@@ -2581,6 +2592,8 @@ void SwEscherEx::MakeZOrderArrAndFollowIds(
     SvULongsSort aSort( 255 < nCnt ? 255 : nCnt, 255 );
     maDirections.clear();
     maDirections.reserve(nCnt);
+    rDstArr.clear();
+    rDstArr.reserve(nCnt);
     for( n = 0; n < nCnt; ++n )
     {
         ULONG nOrdNum = rWrt.GetSdrOrdNum(rSrcArr[n].mrCntnt);
@@ -2589,7 +2602,11 @@ void SwEscherEx::MakeZOrderArrAndFollowIds(
         aSort.Insert( nOrdNum, nPos );
         void* p = (void *)(&(rSrcArr[n].mrCntnt));
         aSortFmts.Insert( p, nPos );
-        maDirections.insert(maDirections.begin() + nPos, rSrcArr[n].mnDirection);
+        maDirections.insert(maDirections.begin() + nPos,
+                rSrcArr[n].mnDirection);
+        DrawObj &rObj = rSrcArr[n];
+        rDstArr.insert(rDstArr.begin() + nPos, &rObj);
+
     }
 
     if (aFollowShpIds.Count())
