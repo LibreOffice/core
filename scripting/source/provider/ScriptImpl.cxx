@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptImpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-07-23 13:58:46 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script::framework;
+using namespace ::com::sun::star::script::framework;
 
 namespace func_provider
 {
