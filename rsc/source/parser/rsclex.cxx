@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsclex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:51:28 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
 
 
         i = 0;
-        while( isalnum (c) || (c == '_') )
+        while( isalnum (c) || (c == '_') || (c == '-') )
         {
             if( nBufLen <= (USHORT)(i +1) )
             {
