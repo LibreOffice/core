@@ -20,6 +20,8 @@ mkdir: %_DEST%\bin%_EXT%\xslt\import
 mkdir: %_DEST%\bin%_EXT%\xslt\import\common
 mkdir: %_DEST%\bin%_EXT%\xslt\import\spreadsheetml
 mkdir: %_DEST%\bin%_EXT%\xslt\import\wordml
+mkdir: %_DEST%\xml%_EXT%\registry
+mkdir: %_DEST%\xml%_EXT%\registry\spool
 ..\source\xslt\common\*.xsl %_DEST%\bin%_EXT%\xslt\common\*.xsl
 ..\source\xslt\export\common\*.xsl %_DEST%\bin%_EXT%\xslt\export\common\*.xsl
 ..\source\xslt\export\common\styles\*.xsl %_DEST%\bin%_EXT%\xslt\export\common\styles\*.xsl
