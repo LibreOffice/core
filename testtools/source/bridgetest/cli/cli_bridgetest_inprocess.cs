@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_bridgetest_inprocess.cs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:16:44 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 12:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,137 +117,154 @@ internal class Factory :
 */
 public class BridgeTest
 {
-    public static void Main( String [] args )
+    public static int Main( String [] args )
     {
-        // bootstrap native UNO
-        XComponentContext xContext =
-            Bootstrap.defaultBootstrap_InitialComponentContext(
-                "cli_bridgetest_inprocess.ini", null );
-        
-        using (new uno.util.DisposeGuard( (XComponent) xContext ))
+        try
         {
-            XSet xSet = (XSet) xContext.getServiceManager();
-            xSet.insert(
-                new uno.Any(
-                    typeof (XSingleComponentFactory),
-                    new Factory(
-                        typeof (cs_testobj.BridgeTestObject),
-                        "com.sun.star.test.bridge.cli_uno.CsTestObject" ) ) );
-            xSet.insert(
-                new uno.Any(
-                    typeof (XSingleComponentFactory),
-                    new Factory(
-                        typeof (vb_testobj.VBBridgeTestObject),
-                        "com.sun.star.test.bridge.cli_uno.VbTestObject" ) ) );
-            xSet.insert(
-                new uno.Any(
-                    typeof (XSingleComponentFactory),
-                    new Factory(
-                        typeof (cpp_bridgetest.BridgeTest),
-                        "com.sun.star.test.bridge.cli_uno.CppBridgeTest" ) ) );
-            xSet.insert(
-                new uno.Any(
-                    typeof (XSingleComponentFactory),
-                    new Factory(
-                        typeof (cs_testobj.BridgeTest),
-                        "com.sun.star.test.bridge.cli_uno.CsBridgeTest" ) ) );
-            xSet.insert(
-                new uno.Any(
-                    typeof (XSingleComponentFactory),
-                    new Factory(
-                        typeof (vb_bridetest.BridgeTest),
-                        "com.sun.star.test.bridge.cli_uno.VbBridgeTest" ) ) );
+            // bootstrap native UNO
+            XComponentContext xContext =
+                Bootstrap.defaultBootstrap_InitialComponentContext(
+                    "cli_bridgetest_inprocess.ini", null );
+        
+            using (new uno.util.DisposeGuard( (XComponent) xContext ))
+            {
+                XSet xSet = (XSet) xContext.getServiceManager();
+                xSet.insert(
+                    new uno.Any(
+                        typeof (XSingleComponentFactory),
+                        new Factory(
+                            typeof (cs_testobj.BridgeTestObject),
+                            "com.sun.star.test.bridge.cli_uno.CsTestObject" ) ) );
+                xSet.insert(
+                    new uno.Any(
+                        typeof (XSingleComponentFactory),
+                        new Factory(
+                            typeof (vb_testobj.VBBridgeTestObject),
+                            "com.sun.star.test.bridge.cli_uno.VbTestObject" ) ) );
+                xSet.insert(
+                    new uno.Any(
+                        typeof (XSingleComponentFactory),
+                        new Factory(
+                            typeof (cpp_bridgetest.BridgeTest),
+                            "com.sun.star.test.bridge.cli_uno.CppBridgeTest" ) ) );
+                xSet.insert(
+                    new uno.Any(
+                        typeof (XSingleComponentFactory),
+                        new Factory(
+                            typeof (cs_testobj.BridgeTest),
+                            "com.sun.star.test.bridge.cli_uno.CsBridgeTest" ) ) );
+                xSet.insert(
+                    new uno.Any(
+                        typeof (XSingleComponentFactory),
+                        new Factory(
+                            typeof (vb_bridetest.BridgeTest),
+                            "com.sun.star.test.bridge.cli_uno.VbBridgeTest" ) ) );
             
-            // I.
-            // direct unbridged test
-            // get client object via singleton entry
-            Object test_client = new cs_testobj.BridgeTest( xContext );
-            XMain xClient = (XMain) test_client;
-            Console.WriteLine(
-                "[cli bridgetest] client: {0}", xClient.ToString() );
-            // run with CLI target object
-            xClient.run(
-                new String [] { "com.sun.star.test.bridge.cli_uno.CsTestObject" }
-                );
+                // I.
+                // direct unbridged test
+                // get client object via singleton entry
+                Object test_client = new cs_testobj.BridgeTest( xContext );
+                XMain xClient = (XMain) test_client;
+                Console.WriteLine(
+                    "[cli bridgetest] client: {0}", xClient.ToString() );
+                // run with CLI target object
+                xClient.run(
+                    new String [] {
+                    "com.sun.star.test.bridge.cli_uno.CsTestObject" } );
+                
+                // II:
+                // uno -ro uno_services.rdb -ro uno_types.rdb
+                //     -s com.sun.star.test.bridge.BridgeTest
+                //     -- com.sun.star.test.bridge.cli_uno.TestObject
             
-            // II:
-            // uno -ro uno_services.rdb -ro uno_types.rdb
-            //     -s com.sun.star.test.bridge.BridgeTest
-            //     -- com.sun.star.test.bridge.cli_uno.TestObject
+                // get native client
+                test_client =
+                    xContext.getServiceManager().createInstanceWithContext(
+                        "com.sun.star.test.bridge.BridgeTest", xContext );
+                xClient = (XMain) test_client;
+                Console.WriteLine(
+                    "[cli bridgetest] client: {0}", xClient.ToString() );
+                // run with CLI target object
+                xClient.run(
+                    new String [] {
+                    "com.sun.star.test.bridge.cli_uno.CsTestObject" } );
             
-            // get native client
-            test_client =
-                xContext.getServiceManager().createInstanceWithContext(
-                    "com.sun.star.test.bridge.BridgeTest", xContext );
-            xClient = (XMain) test_client;
-            Console.WriteLine(
-                "[cli bridgetest] client: {0}", xClient.ToString() );
-            // run with CLI target object
-            xClient.run(
-                new String [] { "com.sun.star.test.bridge.cli_uno.CsTestObject" }
-                );
+                // III:        
+                // uno -ro uno_services.rdb -ro uno_types.rdb
+                //     -s com.sun.star.test.bridge.cli_uno.BridgeTest
+                //     -- com.sun.star.test.bridge.CppTestObject
             
-            // III:        
-            // uno -ro uno_services.rdb -ro uno_types.rdb
-            //     -s com.sun.star.test.bridge.cli_uno.BridgeTest
-            //     -- com.sun.star.test.bridge.CppTestObject
-            
-            // get CLI client
-            test_client =
-                xContext.getServiceManager().createInstanceWithContext(
-                    "com.sun.star.test.bridge.cli_uno.CsBridgeTest", xContext );
-            xClient = (XMain) test_client;
-            Console.WriteLine(
-                "[cli bridgetest] client: {0}", xClient.ToString() );
-            // run with native target object
-            xClient.run(
-                new String [] { "com.sun.star.test.bridge.CppTestObject" } );
+                // get CLI client
+                test_client =
+                    xContext.getServiceManager().createInstanceWithContext(
+                        "com.sun.star.test.bridge.cli_uno.CsBridgeTest",
+                        xContext );
+                xClient = (XMain) test_client;
+                Console.WriteLine(
+                    "[cli bridgetest] client: {0}", xClient.ToString() );
+                // run with native target object
+                xClient.run(
+                    new String [] { "com.sun.star.test.bridge.CppTestObject" } );
 
-            // IV:        
-            // uno -ro uno_services.rdb -ro uno_types.rdb
-            //     -s com.sun.star.test.bridge.cli_uno.VbBridgeTest
-            //     -- com.sun.star.test.bridge.CppTestObject
-            // get CLI client
-            test_client =
-                xContext.getServiceManager().createInstanceWithContext(
-                    "com.sun.star.test.bridge.cli_uno.VbBridgeTest", xContext );
-            xClient = (XMain) test_client;
-            Console.WriteLine(
-                "[cli bridgetest] Visual Basic client: {0}", xClient.ToString() );
-            // run with native target object
-            xClient.run(
-                new String [] { "com.sun.star.test.bridge.CppTestObject" } );
+                // IV:        
+                // uno -ro uno_services.rdb -ro uno_types.rdb
+                //     -s com.sun.star.test.bridge.cli_uno.VbBridgeTest
+                //     -- com.sun.star.test.bridge.CppTestObject
+                // get CLI client
+                test_client =
+                    xContext.getServiceManager().createInstanceWithContext(
+                        "com.sun.star.test.bridge.cli_uno.VbBridgeTest",
+                        xContext );
+                xClient = (XMain) test_client;
+                Console.WriteLine(
+                    "[cli bridgetest] Visual Basic client: {0}", xClient.ToString() );
+                // run with native target object
+                xClient.run(
+                    new String [] { "com.sun.star.test.bridge.CppTestObject" } );
 
-            // V:
-            // uno -ro uno_services.rdb -ro uno_types.rdb
-            //     -s com.sun.star.test.bridge.BridgeTest
-            //     -- com.sun.star.test.bridge.cli_uno.VbTestObject
-            // get CLI client
-            test_client =
-                xContext.getServiceManager().createInstanceWithContext(
-                    "com.sun.star.test.bridge.BridgeTest", xContext );
-            xClient = (XMain) test_client;
-            Console.WriteLine(
-                "[cli bridgetest] Visual Basic client: {0}", xClient.ToString() );
-            // run with native target object
-            xClient.run(
-                new String [] { "com.sun.star.test.bridge.cli_uno.VbTestObject" } );
+                // V:
+                // uno -ro uno_services.rdb -ro uno_types.rdb
+                //     -s com.sun.star.test.bridge.BridgeTest
+                //     -- com.sun.star.test.bridge.cli_uno.VbTestObject
+                // get CLI client
+                test_client =
+                    xContext.getServiceManager().createInstanceWithContext(
+                        "com.sun.star.test.bridge.BridgeTest", xContext );
+                xClient = (XMain) test_client;
+                Console.WriteLine(
+                    "[cli bridgetest] Visual Basic client: {0}",
+                    xClient.ToString() );
+                // run with native target object
+                xClient.run(
+                    new String [] {
+                    "com.sun.star.test.bridge.cli_uno.VbTestObject" } );
 
-			// VI:
-			// uno -ro uno_services.rdb -ro uno_types.rdb 
-			// -s com.sun.star.test.bridge.cli_uno.CppBridgeTest 
-			// -- com.sun.star.test.bridge.CppTestObject
-			test_client =
-				xContext.getServiceManager().createInstanceWithContext(
-				"com.sun.star.test.bridge.cli_uno.CppBridgeTest", xContext );
-			xClient = (XMain) test_client;
-			Console.WriteLine(
-				"[cli bridgetest] Visual Basic client: {0}", xClient.ToString() );
-			// run with native target object
-			xClient.run(
-				new String [] { "com.sun.star.test.bridge.CppTestObject" } );
+                // VI:
+                // uno -ro uno_services.rdb -ro uno_types.rdb 
+                // -s com.sun.star.test.bridge.cli_uno.CppBridgeTest 
+                // -- com.sun.star.test.bridge.CppTestObject
+                test_client =
+                    xContext.getServiceManager().createInstanceWithContext(
+                        "com.sun.star.test.bridge.cli_uno.CppBridgeTest",
+                        xContext );
+                xClient = (XMain) test_client;
+                Console.WriteLine(
+                    "[cli bridgetest] Visual Basic client: {0}",
+                    xClient.ToString() );
+                // run with native target object
+                xClient.run(
+                    new String [] { "com.sun.star.test.bridge.CppTestObject" } );
+            }
+        }
+        catch (System.Exception exc)
+        {
+            GC.WaitForPendingFinalizers();
+            System.Console.WriteLine( exc );
+            return 1;
         }
         
         GC.WaitForPendingFinalizers();
+        System.Console.WriteLine( "====> all tests ok." );
+        return 0;
     }
 }
