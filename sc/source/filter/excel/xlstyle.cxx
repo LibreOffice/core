@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:44:12 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-#pragma hdrstop
-
-// ============================================================================
-
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
 #endif
@@ -99,7 +92,9 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
-
+#ifndef SC_XLROOT_HXX
+#include "xlroot.hxx"
+#endif
 
 // Color data =================================================================
 
@@ -149,11 +144,10 @@ static const ColorData pDefColorTable8[] =
 
 #undef EXC_PALETTE_BUILTIN_COLORS
 
-
 // ----------------------------------------------------------------------------
 
-XclDefaultPalette::XclDefaultPalette( XclBiff eBiff ) :
-    mpColorTable( NULL ),
+XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
+    mpColorTable( 0 ),
     mnTableSize( 0 )
 {
     const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
@@ -163,13 +157,8 @@ XclDefaultPalette::XclDefaultPalette( XclBiff eBiff ) :
     mnNoteText = rSett.GetHelpTextColor().GetColor();
     mnNoteBack = rSett.GetHelpColor().GetColor();
 
-    if( eBiff != xlBiffUnknown )
-        SetDefaultColors( eBiff );
-}
-
-void XclDefaultPalette::SetDefaultColors( XclBiff eBiff )
-{
-    switch( eBiff )
+    // default colors
+    switch( rRoot.GetBiff() )
     {
         case xlBiff2:
             mpColorTable = pDefColorTable2;
@@ -218,7 +207,6 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
     }
     return nColor;
 }
-
 
 // Font Data ==================================================================
 
@@ -274,7 +262,6 @@ void XclFontData::FillFromSvxFont( const SvxFont& rFont )
     FillFromFont( rFont );
     SetScEscapement( rFont.GetEscapement() );
 }
-
 
 // *** conversion of VCL/SVX constants *** ------------------------------------
 
@@ -438,7 +425,6 @@ void XclFontData::SetScStrikeout( FontStrikeout eScStrikeout )
         (eScStrikeout == STRIKEOUT_X);
 }
 
-
 // *** conversion of API constants *** ----------------------------------------
 
 namespace ApiAwt = ::com::sun::star::awt;
@@ -553,7 +539,6 @@ void XclFontData::SetApiStrikeout( sal_Int16 nApiStrikeout )
         (nApiStrikeout != ApiAwt::FontStrikeout::DONTKNOW);
 }
 
-
 // ----------------------------------------------------------------------------
 
 bool operator==( const XclFontData& rLeft, const XclFontData& rRight )
@@ -573,6 +558,593 @@ bool operator==( const XclFontData& rLeft, const XclFontData& rRight )
         (rLeft.maName      == rRight.maName);
 }
 
+// Number formats =============================================================
+
+namespace {
+
+// ----------------------------------------------------------------------------
+
+const sal_uInt16 EXC_BUILTIN_NOFORMAT = 0xFFFF;
+
+/** Special number format index describing a reused format. */
+const NfIndexTableOffset PRV_NF_INDEX_REUSE = NF_INDEX_TABLE_ENTRIES;
+
+/** German primary language not defined, LANGUAGE_GERMAN belongs to Germany. */
+const LanguageType PRV_LANGUAGE_GERMAN_PRIM = LANGUAGE_GERMAN & 0x03FF;
+/** French primary language not defined, LANGUAGE_FRENCH belongs to France. */
+const LanguageType PRV_LANGUAGE_FRENCH_PRIM = LANGUAGE_FRENCH & 0x03FF;
+
+// ----------------------------------------------------------------------------
+
+/** Stores the number format used in Calc for an Excel built-in number format. */
+struct XclBuiltInFormat
+{
+    sal_uInt16          mnXclNumFmt;    /// Excel built-in index.
+    const sal_Char*     mpFormat;       /// Format string, may be 0 (meOffset used then).
+    NfIndexTableOffset  meOffset;       /// SvNumberFormatter format index, if mpFormat==0.
+    sal_uInt16          mnXclReuseFmt;  /// Use this Excel format, if meOffset==PRV_NF_INDEX_REUSE.
+};
+
+// ----------------------------------------------------------------------------
+
+/** Defines a literal Excel built-in number format. */
+#define EXC_NUMFMT_STRING( nXclNumFmt, pcUtf8 ) \
+    { nXclNumFmt, pcUtf8, NF_NUMBER_STANDARD }
+
+/** Defines an Excel built-in number format that maps to an own built-in format. */
+#define EXC_NUMFMT_OFFSET( nXclNumFmt, eOffset ) \
+    { nXclNumFmt, 0, eOffset }
+
+/** Defines an Excel built-in number format that is the same as the specified. */
+#define EXC_NUMFMT_REUSE( nXclNumFmt, nXclReuse ) \
+    { nXclNumFmt, 0, PRV_NF_INDEX_REUSE, nXclReuse }
+
+/** Terminates an Excel built-in number format table. */
+#define EXC_NUMFMT_ENDTABLE() \
+    { EXC_BUILTIN_NOFORMAT }
+
+// ----------------------------------------------------------------------------
+
+// Special UTF-8 characters
+#define UTF8_EURO       "\342\202\254"
+
+// Japanese/Chinese date/time characters
+#define UTF8_YEAR       "\345\271\264"
+#define UTF8_MON        "\346\234\210"
+#define UTF8_DAY        "\346\227\245"
+#define UTF8_HOUR       "\346\231\202"
+#define UTF8_MIN        "\345\210\206"
+#define UTF8_SEC        "\347\247\222"
+
+// Chinese Simplified date/time characters
+#define UTF8_CS_HOUR    "\346\227\266"
+
+// Korean date/time characters
+#define UTF8_KO_YEAR    "\353\205\204"
+#define UTF8_KO_MON     "\354\233\224"
+#define UTF8_KO_DAY     "\354\235\274"
+#define UTF8_KO_HOUR    "\354\213\234"
+#define UTF8_KO_MIN     "\353\266\204"
+#define UTF8_KO_SEC     "\354\264\210"
+
+// ----------------------------------------------------------------------------
+
+/** Default number format table. Last parent of all other tables, used for unknown languages. */
+static const XclBuiltInFormat spBuiltInFormats_DONTKNOW[] =
+{
+    EXC_NUMFMT_OFFSET(   0, NF_NUMBER_STANDARD ),       // General
+    EXC_NUMFMT_OFFSET(   1, NF_NUMBER_INT ),            // 0
+    EXC_NUMFMT_OFFSET(   2, NF_NUMBER_DEC2 ),           // 0.00
+    EXC_NUMFMT_OFFSET(   3, NF_NUMBER_1000INT ),        // #,##0
+    EXC_NUMFMT_OFFSET(   4, NF_NUMBER_1000DEC2 ),       // #,##0.00
+    // 5...8 contained in file
+    EXC_NUMFMT_OFFSET(   9, NF_PERCENT_INT ),           // 0%
+    EXC_NUMFMT_OFFSET(  10, NF_PERCENT_DEC2 ),          // 0.00%
+    EXC_NUMFMT_OFFSET(  11, NF_SCIENTIFIC_000E00 ),     // 0.00E+00
+    EXC_NUMFMT_OFFSET(  12, NF_FRACTION_1 ),            // # ?/?
+    EXC_NUMFMT_OFFSET(  13, NF_FRACTION_2 ),            // # ??/??
+
+    // 14...22 date and time formats
+    EXC_NUMFMT_OFFSET(  14, NF_DATE_SYS_DDMMYYYY ),
+    EXC_NUMFMT_OFFSET(  15, NF_DATE_SYS_DMMMYY ),
+    EXC_NUMFMT_OFFSET(  16, NF_DATE_SYS_DDMMM ),
+    EXC_NUMFMT_OFFSET(  17, NF_DATE_SYS_MMYY ),
+    EXC_NUMFMT_OFFSET(  18, NF_TIME_HHMMAMPM ),
+    EXC_NUMFMT_OFFSET(  19, NF_TIME_HHMMSSAMPM ),
+    EXC_NUMFMT_OFFSET(  20, NF_TIME_HHMM ),
+    EXC_NUMFMT_OFFSET(  21, NF_TIME_HHMMSS ),
+    EXC_NUMFMT_OFFSET(  22, NF_DATETIME_SYSTEM_SHORT_HHMM ),
+
+    // 23...36 international formats
+    EXC_NUMFMT_REUSE(   23, 0 ),
+    EXC_NUMFMT_REUSE(   24, 0 ),
+    EXC_NUMFMT_REUSE(   25, 0 ),
+    EXC_NUMFMT_REUSE(   26, 0 ),
+    EXC_NUMFMT_REUSE(   27, 14 ),
+    EXC_NUMFMT_REUSE(   28, 14 ),
+    EXC_NUMFMT_REUSE(   29, 14 ),
+    EXC_NUMFMT_REUSE(   30, 14 ),
+    EXC_NUMFMT_REUSE(   31, 14 ),
+    EXC_NUMFMT_REUSE(   32, 21 ),
+    EXC_NUMFMT_REUSE(   33, 21 ),
+    EXC_NUMFMT_REUSE(   34, 21 ),
+    EXC_NUMFMT_REUSE(   35, 21 ),
+    EXC_NUMFMT_REUSE(   36, 14 ),
+
+    // 37...44 accounting formats
+    // 41...44 contained in file
+    EXC_NUMFMT_STRING(  37, "#,##0;-#,##0" ),
+    EXC_NUMFMT_STRING(  38, "#,##0;[RED]-#,##0" ),
+    EXC_NUMFMT_STRING(  39, "#,##0.00;-#,##0.00" ),
+    EXC_NUMFMT_STRING(  40, "#,##0.00;[RED]-#,##0.00" ),
+
+    // 45...49 more special formats
+    EXC_NUMFMT_STRING(  45, "mm:ss" ),
+    EXC_NUMFMT_STRING(  46, "[h]:mm:ss" ),
+    EXC_NUMFMT_STRING(  47, "mm:ss.0" ),
+    EXC_NUMFMT_STRING(  48, "##0.0E+0" ),
+    EXC_NUMFMT_OFFSET(  49, NF_TEXT ),
+
+    // 50...58 international formats
+    EXC_NUMFMT_REUSE(   50, 14 ),
+    EXC_NUMFMT_REUSE(   51, 14 ),
+    EXC_NUMFMT_REUSE(   52, 14 ),
+    EXC_NUMFMT_REUSE(   53, 14 ),
+    EXC_NUMFMT_REUSE(   54, 14 ),
+    EXC_NUMFMT_REUSE(   55, 14 ),
+    EXC_NUMFMT_REUSE(   56, 14 ),
+    EXC_NUMFMT_REUSE(   57, 14 ),
+    EXC_NUMFMT_REUSE(   58, 14 ),
+
+    // 59...?? repeating formats
+    EXC_NUMFMT_REUSE(   59, 1 ),
+    EXC_NUMFMT_REUSE(   60, 2 ),
+    EXC_NUMFMT_REUSE(   61, 3 ),
+    EXC_NUMFMT_REUSE(   62, 4 ),
+
+    EXC_NUMFMT_ENDTABLE()
+};
+
+// ENGLISH --------------------------------------------------------------------
+
+/** Base table for English locales. */
+static const XclBuiltInFormat spBuiltInFormats_ENGLISH[] =
+{
+    EXC_NUMFMT_STRING(  15, "DD-MMM-YY" ),
+    EXC_NUMFMT_STRING(  16, "DD-MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM-YY" ),
+    EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
+    EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
+    EXC_NUMFMT_STRING(  22, "DD/MM/YYYY hh:mm" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_ENGLISH_US[] =
+{
+    EXC_NUMFMT_STRING(  14, "M/D/YYYY" ),
+    EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
+    EXC_NUMFMT_STRING(  16, "D-MMM" ),
+    EXC_NUMFMT_STRING(  20, "h:mm" ),
+    EXC_NUMFMT_STRING(  21, "h:mm:ss" ),
+    EXC_NUMFMT_STRING(  22, "M/D/YYYY h:mm" ),
+    EXC_NUMFMT_STRING(  37, "#,##0_);(#,##0)" ),
+    EXC_NUMFMT_STRING(  38, "#,##0_);[RED](#,##0)" ),
+    EXC_NUMFMT_STRING(  39, "#,##0.00_);(#,##0.00)" ),
+    EXC_NUMFMT_STRING(  40, "#,##0.00_);[RED](#,##0.00)" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_ENGLISH_CAN[] =
+{
+    EXC_NUMFMT_STRING(  20, "h:mm" ),
+    EXC_NUMFMT_STRING(  21, "h:mm:ss" ),
+    EXC_NUMFMT_STRING(  22, "DD/MM/YYYY h:mm" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_ENGLISH_AUS[] =
+{
+    EXC_NUMFMT_STRING(  14, "D/MM/YYYY" ),
+    EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
+    EXC_NUMFMT_STRING(  16, "D-MMM" ),
+    EXC_NUMFMT_STRING(  20, "h:mm" ),
+    EXC_NUMFMT_STRING(  21, "h:mm:ss" ),
+    EXC_NUMFMT_STRING(  22, "D/MM/YYYY h:mm" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_ENGLISH_SAFRICA[] =
+{
+    EXC_NUMFMT_STRING(  14, "YYYY/MM/DD" ),
+    EXC_NUMFMT_OFFSET(  18, NF_TIME_HHMMAMPM ),
+    EXC_NUMFMT_OFFSET(  19, NF_TIME_HHMMSSAMPM ),
+    EXC_NUMFMT_STRING(  22, "YYYY/MM/DD hh:mm" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+// FRENCH ---------------------------------------------------------------------
+
+/** Base table for French locales. */
+static const XclBuiltInFormat spBuiltInFormats_FRENCH[] =
+{
+    EXC_NUMFMT_STRING(  15, "DD-MMM-YY" ),
+    EXC_NUMFMT_STRING(  16, "DD-MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM-YY" ),
+    EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
+    EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_FRENCH_FRANCE[] =
+{
+    EXC_NUMFMT_STRING(  22, "DD/MM/YYYY hh:mm" ),
+    EXC_NUMFMT_STRING(  37, "#,##0\\ _" UTF8_EURO ";-#,##0\\ _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  38, "#,##0\\ _" UTF8_EURO ";[RED]-#,##0\\ _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  39, "#,##0.00\\ _" UTF8_EURO ";-#,##0.00\\ _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  40, "#,##0.00\\ _" UTF8_EURO ";[RED]-#,##0.00\\ _" UTF8_EURO ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_FRENCH_CANADIAN[] =
+{
+    EXC_NUMFMT_STRING(  22, "YYYY-MM-DD hh:mm" ),
+    EXC_NUMFMT_STRING(  37, "#,##0\\ _$_-;#,##0\\ _$-" ),
+    EXC_NUMFMT_STRING(  38, "#,##0\\ _$_-;[RED]#,##0\\ _$-" ),
+    EXC_NUMFMT_STRING(  39, "#,##0.00\\ _$_-;#,##0.00\\ _$-" ),
+    EXC_NUMFMT_STRING(  40, "#,##0.00\\ _$_-;[RED]#,##0.00\\ _$-" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_FRENCH_SWISS[] =
+{
+    EXC_NUMFMT_STRING(  15, "DD.MMM.YY" ),
+    EXC_NUMFMT_STRING(  16, "DD.MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM.YY" ),
+    EXC_NUMFMT_STRING(  22, "DD.MM.YYYY hh:mm" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_FRENCH_BELGIAN[] =
+{
+    EXC_NUMFMT_STRING(  14, "D/MM/YYYY" ),
+    EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
+    EXC_NUMFMT_STRING(  16, "D-MMM" ),
+    EXC_NUMFMT_STRING(  20, "h:mm" ),
+    EXC_NUMFMT_STRING(  21, "h:mm:ss" ),
+    EXC_NUMFMT_STRING(  22, "D/MM/YYYY h:mm" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+// GERMAN ---------------------------------------------------------------------
+
+/** Base table for German locales. */
+static const XclBuiltInFormat spBuiltInFormats_GERMAN[] =
+{
+    EXC_NUMFMT_STRING(  15, "DD. MMM YY" ),
+    EXC_NUMFMT_STRING(  16, "DD. MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM YY" ),
+    EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
+    EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
+    EXC_NUMFMT_STRING(  22, "DD.MM.YYYY hh:mm" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_GERMAN_GERMANY[] =
+{
+    EXC_NUMFMT_STRING(  37, "#,##0 _" UTF8_EURO ";-#,##0 _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  38, "#,##0 _" UTF8_EURO ";[RED]-#,##0 _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  39, "#,##0.00 _" UTF8_EURO ";-#,##0.00 _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  40, "#,##0.00 _" UTF8_EURO ";[RED]-#,##0.00 _" UTF8_EURO ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_GERMAN_AUSTRIAN[] =
+{
+    EXC_NUMFMT_STRING(  15, "DD.MMM.YY" ),
+    EXC_NUMFMT_STRING(  16, "DD.MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM.YY" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_GERMAN_LUXEMBOURG[] =
+{
+    EXC_NUMFMT_STRING(  15, "DD.MMM.YY" ),
+    EXC_NUMFMT_STRING(  16, "DD.MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM.YY" ),
+    EXC_NUMFMT_STRING(  37, "#,##0 _" UTF8_EURO ";-#,##0 _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  38, "#,##0 _" UTF8_EURO ";[RED]-#,##0 _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  39, "#,##0.00 _" UTF8_EURO ";-#,##0.00 _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  40, "#,##0.00 _" UTF8_EURO ";[RED]-#,##0.00 _" UTF8_EURO ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+// ITALIAN --------------------------------------------------------------------
+
+static const XclBuiltInFormat spBuiltInFormats_ITALIAN_ITALY[] =
+{
+    EXC_NUMFMT_STRING(  15, "DD-MMM-YY" ),
+    EXC_NUMFMT_STRING(  16, "DD-MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM-YY" ),
+    EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
+    EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
+    EXC_NUMFMT_STRING(  20, "h:mm" ),
+    EXC_NUMFMT_STRING(  21, "h:mm:ss" ),
+    EXC_NUMFMT_STRING(  22, "DD/MM/YYYY h:mm" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_ITALIAN_SWISS[] =
+{
+    EXC_NUMFMT_STRING(  15, "DD.MMM.YY" ),
+    EXC_NUMFMT_STRING(  16, "DD.MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM.YY" ),
+    EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
+    EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
+    EXC_NUMFMT_STRING(  22, "DD.MM.YYYY hh:mm" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+// ASIAN ----------------------------------------------------------------------
+
+/** Base table for Asian locales. */
+static const XclBuiltInFormat spBuiltInFormats_CHINESE[] =
+{
+    EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
+    EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
+    EXC_NUMFMT_STRING(  20, "h:mm" ),
+    EXC_NUMFMT_STRING(  21, "h:mm:ss" ),
+    EXC_NUMFMT_STRING(  23, "$#,##0_);($#,##0)" ),
+    EXC_NUMFMT_STRING(  24, "$#,##0_);[RED]($#,##0)" ),
+    EXC_NUMFMT_STRING(  25, "$#,##0.00_);($#,##0.00)" ),
+    EXC_NUMFMT_STRING(  26, "$#,##0.00_);[RED]($#,##0.00)" ),
+    EXC_NUMFMT_REUSE(   29, 28 ),
+    EXC_NUMFMT_REUSE(   36, 27 ),
+    EXC_NUMFMT_REUSE(   50, 27 ),
+    EXC_NUMFMT_REUSE(   51, 28 ),
+    EXC_NUMFMT_REUSE(   52, 34 ),
+    EXC_NUMFMT_REUSE(   53, 35 ),
+    EXC_NUMFMT_REUSE(   54, 28 ),
+    EXC_NUMFMT_REUSE(   55, 34 ),
+    EXC_NUMFMT_REUSE(   56, 35 ),
+    EXC_NUMFMT_REUSE(   57, 27 ),
+    EXC_NUMFMT_REUSE(   58, 28 ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_JAPANESE[] =
+{
+    EXC_NUMFMT_STRING(  14, "YYYY/M/D" ),
+    EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
+    EXC_NUMFMT_STRING(  16, "D-MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM-YY" ),
+    EXC_NUMFMT_STRING(  22, "YYYY/M/D h:mm" ),
+    EXC_NUMFMT_STRING(  27, "[$-0411]GE.M.D" ),
+    EXC_NUMFMT_STRING(  28, "[$-0411]GGGE" UTF8_YEAR "M" UTF8_MON "D" UTF8_DAY ),
+    EXC_NUMFMT_STRING(  30, "[$-0411]M/D/YY" ),
+    EXC_NUMFMT_STRING(  31, "[$-0411]YYYY" UTF8_YEAR "M" UTF8_MON "D" UTF8_DAY ),
+    EXC_NUMFMT_STRING(  32, "[$-0411]h" UTF8_HOUR "mm" UTF8_MIN ),
+    EXC_NUMFMT_STRING(  33, "[$-0411]h" UTF8_HOUR "mm" UTF8_MIN "ss" UTF8_SEC ),
+    EXC_NUMFMT_STRING(  34, "[$-0411]YYYY" UTF8_YEAR "M" UTF8_MON ),
+    EXC_NUMFMT_STRING(  35, "[$-0411]M" UTF8_MON "D" UTF8_DAY ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_KOREAN[] =
+{
+    EXC_NUMFMT_STRING(  14, "YYYY-MM-DD" ),
+    EXC_NUMFMT_STRING(  15, "DD-MMM-YY" ),
+    EXC_NUMFMT_STRING(  16, "DD-MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM-YY" ),
+    EXC_NUMFMT_STRING(  22, "YYYY-MM-DD h:mm" ),
+    EXC_NUMFMT_STRING(  27, "[$-0412]YYYY" UTF8_YEAR " MM" UTF8_MON " DD" UTF8_DAY ),
+    EXC_NUMFMT_STRING(  28, "[$-0412]MM-DD" ),
+    EXC_NUMFMT_STRING(  30, "[$-0412]MM-DD-YY" ),
+    EXC_NUMFMT_STRING(  31, "[$-0412]YYYY" UTF8_KO_YEAR " MM" UTF8_KO_MON " DD" UTF8_KO_DAY ),
+    EXC_NUMFMT_STRING(  32, "[$-0412]h" UTF8_KO_HOUR " mm" UTF8_KO_MIN ),
+    EXC_NUMFMT_STRING(  33, "[$-0412]h" UTF8_KO_HOUR " mm" UTF8_KO_MIN " ss" UTF8_KO_SEC ),
+    EXC_NUMFMT_STRING(  34, "[$-0412]YYYY\"/\"MM\"/\"DD" ),
+    EXC_NUMFMT_STRING(  35, "[$-0412]YYYY-MM-DD" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_CHINESE_SIMPLIFIED[] =
+{
+    EXC_NUMFMT_STRING(  14, "YYYY-M-D" ),
+    EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
+    EXC_NUMFMT_STRING(  16, "D-MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM-YY" ),
+    EXC_NUMFMT_STRING(  22, "YYYY-M-D h:mm" ),
+    EXC_NUMFMT_STRING(  27, "[$-0804]YYYY" UTF8_YEAR "M" UTF8_MON ),
+    EXC_NUMFMT_STRING(  28, "[$-0804]M" UTF8_MON "D" UTF8_DAY ),
+    EXC_NUMFMT_STRING(  30, "[$-0804]M-D-YY" ),
+    EXC_NUMFMT_STRING(  31, "[$-0804]YYYY" UTF8_YEAR "M" UTF8_MON "D" UTF8_DAY ),
+    EXC_NUMFMT_STRING(  32, "[$-0804]h" UTF8_CS_HOUR "mm" UTF8_MIN ),
+    EXC_NUMFMT_STRING(  33, "[$-0804]h" UTF8_CS_HOUR "mm" UTF8_MIN "ss" UTF8_SEC ),
+    EXC_NUMFMT_STRING(  34, "[$-0804]AM/PMh" UTF8_CS_HOUR "mm" UTF8_MIN ),
+    EXC_NUMFMT_STRING(  35, "[$-0804]AM/PMh" UTF8_CS_HOUR "mm" UTF8_MIN "ss" UTF8_SEC ),
+    EXC_NUMFMT_REUSE(   52, 27 ),
+    EXC_NUMFMT_REUSE(   53, 28 ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_CHINESE_TRADITIONAL[] =
+{
+    EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
+    EXC_NUMFMT_STRING(  16, "D-MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM-YY" ),
+    EXC_NUMFMT_STRING(  18, "hh:mm AM/PM" ),
+    EXC_NUMFMT_STRING(  19, "hh:mm:ss AM/PM" ),
+    EXC_NUMFMT_OFFSET(  20, NF_TIME_HHMM ),
+    EXC_NUMFMT_OFFSET(  21, NF_TIME_HHMMSS ),
+    EXC_NUMFMT_STRING(  22, "YYYY/M/D hh:mm" ),
+    EXC_NUMFMT_STRING(  23, "US$#,##0_);(US$#,##0)" ),
+    EXC_NUMFMT_STRING(  24, "US$#,##0_);[RED](US$#,##0)" ),
+    EXC_NUMFMT_STRING(  25, "US$#,##0.00_);(US$#,##0.00)" ),
+    EXC_NUMFMT_STRING(  26, "US$#,##0.00_);[RED](US$#,##0.00)" ),
+    EXC_NUMFMT_STRING(  27, "[$-0404]E/M/D" ),
+    EXC_NUMFMT_STRING(  28, "[$-0404]E" UTF8_YEAR "M" UTF8_MON "D" UTF8_DAY ),
+    EXC_NUMFMT_STRING(  30, "[$-0404]M/D/YY" ),
+    EXC_NUMFMT_STRING(  31, "[$-0404]YYYY" UTF8_YEAR "M" UTF8_MON "D" UTF8_DAY ),
+    EXC_NUMFMT_STRING(  32, "[$-0404]hh" UTF8_HOUR "mm" UTF8_MIN ),
+    EXC_NUMFMT_STRING(  33, "[$-0404]hh" UTF8_HOUR "mm" UTF8_MIN "ss" UTF8_SEC ),
+    EXC_NUMFMT_STRING(  34, "[$-0404]AM/PMhh" UTF8_HOUR "mm" UTF8_MIN ),
+    EXC_NUMFMT_STRING(  35, "[$-0404]AM/PMhh" UTF8_HOUR "mm" UTF8_MIN "ss" UTF8_SEC ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+// OTHER ----------------------------------------------------------------------
+
+static const XclBuiltInFormat spBuiltInFormats_HEBREW[] =
+{
+    EXC_NUMFMT_STRING(  15, "DD-MMMM-YY" ),
+    EXC_NUMFMT_STRING(  16, "DD-MMMM" ),
+    EXC_NUMFMT_STRING(  17, "MMMM-YY" ),
+    EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
+    EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+// ----------------------------------------------------------------------------
+
+#undef EXC_NUMFMT_ENDTABLE
+#undef EXC_NUMFMT_REUSE
+#undef EXC_NUMFMT_OFFSET
+#undef EXC_NUMFMT_STRING
+
+// ----------------------------------------------------------------------------
+
+/** Specifies a number format table for a specific langauge. */
+struct XclBuiltInFormatTable
+{
+    LanguageType        meLanguage;         /// The language of this table.
+    LanguageType        meParentLang;       /// The language of the parent table.
+    const XclBuiltInFormat* mpFormats;      /// The number format table.
+};
+
+static const XclBuiltInFormatTable spBuiltInFormatTables[] =
+{   //  language                        parent language             format table
+    {   LANGUAGE_DONTKNOW,              LANGUAGE_NONE,              spBuiltInFormats_DONTKNOW               },
+
+    {   LANGUAGE_ENGLISH,               LANGUAGE_DONTKNOW,          spBuiltInFormats_ENGLISH                },
+    {   LANGUAGE_ENGLISH_UK,            LANGUAGE_ENGLISH,           0                                       },
+    {   LANGUAGE_ENGLISH_EIRE,          LANGUAGE_ENGLISH,           0                                       },
+    {   LANGUAGE_ENGLISH_US,            LANGUAGE_ENGLISH,           spBuiltInFormats_ENGLISH_US             },
+    {   LANGUAGE_ENGLISH_CAN,           LANGUAGE_ENGLISH,           spBuiltInFormats_ENGLISH_CAN            },
+    {   LANGUAGE_ENGLISH_AUS,           LANGUAGE_ENGLISH,           spBuiltInFormats_ENGLISH_AUS            },
+    {   LANGUAGE_ENGLISH_SAFRICA,       LANGUAGE_ENGLISH,           spBuiltInFormats_ENGLISH_SAFRICA        },
+    {   LANGUAGE_ENGLISH_NZ,            LANGUAGE_ENGLISH_AUS,       0                                       },
+
+    {   PRV_LANGUAGE_FRENCH_PRIM,       LANGUAGE_DONTKNOW,          spBuiltInFormats_FRENCH                 },
+    {   LANGUAGE_FRENCH,                PRV_LANGUAGE_FRENCH_PRIM,   spBuiltInFormats_FRENCH_FRANCE          },
+    {   LANGUAGE_FRENCH_CANADIAN,       PRV_LANGUAGE_FRENCH_PRIM,   spBuiltInFormats_FRENCH_CANADIAN        },
+    {   LANGUAGE_FRENCH_SWISS,          PRV_LANGUAGE_FRENCH_PRIM,   spBuiltInFormats_FRENCH_SWISS           },
+    {   LANGUAGE_FRENCH_BELGIAN,        LANGUAGE_FRENCH,            spBuiltInFormats_FRENCH_BELGIAN         },
+    {   LANGUAGE_FRENCH_LUXEMBOURG,     LANGUAGE_FRENCH,            0                                       },
+    {   LANGUAGE_FRENCH_MONACO,         LANGUAGE_FRENCH,            0                                       },
+
+    {   PRV_LANGUAGE_GERMAN_PRIM,       LANGUAGE_DONTKNOW,          spBuiltInFormats_GERMAN                 },
+    {   LANGUAGE_GERMAN,                PRV_LANGUAGE_GERMAN_PRIM,   spBuiltInFormats_GERMAN_GERMANY         },
+    {   LANGUAGE_GERMAN_AUSTRIAN,       PRV_LANGUAGE_GERMAN_PRIM,   spBuiltInFormats_GERMAN_AUSTRIAN        },
+    {   LANGUAGE_GERMAN_SWISS,          PRV_LANGUAGE_GERMAN_PRIM,   0                                       },
+    {   LANGUAGE_GERMAN_LUXEMBOURG,     PRV_LANGUAGE_GERMAN_PRIM,   spBuiltInFormats_GERMAN_LUXEMBOURG      },
+    {   LANGUAGE_GERMAN_LIECHTENSTEIN,  PRV_LANGUAGE_GERMAN_PRIM,   0                                       },
+
+    {   LANGUAGE_ITALIAN,               LANGUAGE_DONTKNOW,          spBuiltInFormats_ITALIAN_ITALY          },
+    {   LANGUAGE_ITALIAN_SWISS,         LANGUAGE_DONTKNOW,          spBuiltInFormats_ITALIAN_SWISS          },
+
+    {   LANGUAGE_CHINESE,               LANGUAGE_DONTKNOW,          spBuiltInFormats_CHINESE                },
+    {   LANGUAGE_JAPANESE,              LANGUAGE_CHINESE,           spBuiltInFormats_JAPANESE               },
+    {   LANGUAGE_KOREAN,                LANGUAGE_CHINESE,           spBuiltInFormats_KOREAN                 },
+    {   LANGUAGE_CHINESE_SIMPLIFIED,    LANGUAGE_CHINESE,           spBuiltInFormats_CHINESE_SIMPLIFIED     },
+    {   LANGUAGE_CHINESE_TRADITIONAL,   LANGUAGE_CHINESE,           spBuiltInFormats_CHINESE_TRADITIONAL    },
+
+    {   LANGUAGE_HEBREW,                LANGUAGE_DONTKNOW,          spBuiltInFormats_HEBREW                 }
+};
+
+// ----------------------------------------------------------------------------
+
+} // namespace
+
+// ============================================================================
+
+XclNumFmtBuffer::XclNumFmtBuffer( const XclRoot& rRoot ) :
+    meSysLang( rRoot.GetSysLanguage() ),
+    mnStdScNumFmt( rRoot.GetFormatter().GetStandardFormat( ScGlobal::eLnge ) )
+{
+    // *** insert default formats (BIFF5+ only)***
+
+    if( rRoot.GetBiff() >= xlBiff5 )
+        InsertBuiltinFormats();
+}
+
+const XclNumFmt* XclNumFmtBuffer::GetFormat( sal_uInt16 nXclNumFmt ) const
+{
+    XclNumFmtMap::const_iterator aIt = maFmtMap.find( nXclNumFmt );
+    return (aIt != maFmtMap.end()) ? &aIt->second : 0;
+}
+
+void XclNumFmtBuffer::InsertFormat( sal_uInt16 nXclNumFmt, const String& rFormat )
+{
+    XclNumFmt& rNumFmt = maFmtMap[ nXclNumFmt ];
+    rNumFmt.maFormat = rFormat;
+    rNumFmt.meLanguage = LANGUAGE_SYSTEM;
+}
+
+void XclNumFmtBuffer::InsertBuiltinFormats()
+{
+    // build a map containing tables for all languages
+    typedef ::std::map< LanguageType, const XclBuiltInFormatTable* > XclBuiltInMap;
+    XclBuiltInMap aBuiltInMap;
+    for( const XclBuiltInFormatTable* pTable = spBuiltInFormatTables;
+            pTable != STATIC_TABLE_END( spBuiltInFormatTables ); ++pTable )
+        aBuiltInMap[ pTable->meLanguage ] = pTable;
+
+    // build a list of table pointers for the current language, with all parent tables
+    typedef ::std::vector< const XclBuiltInFormatTable* > XclBuiltInVec;
+    XclBuiltInVec aBuiltInVec;
+    for( XclBuiltInMap::const_iterator aMIt = aBuiltInMap.find( meSysLang ), aMEnd = aBuiltInMap.end();
+            aMIt != aMEnd; aMIt = aBuiltInMap.find( aMIt->second->meParentLang ) )
+        aBuiltInVec.push_back( aMIt->second );
+    // language not supported
+    if( aBuiltInVec.empty() )
+    {
+        DBG_ERROR1( "XclNumFmtBuffer::InsertBuiltinFormats - language 0x%04hX not supported (#i29949#)", meSysLang );
+        XclBuiltInMap::const_iterator aMIt = aBuiltInMap.find( LANGUAGE_DONTKNOW );
+        DBG_ASSERT( aMIt != aBuiltInMap.end(), "XclNumFmtBuffer::InsertBuiltinFormats - default map not found" );
+        if( aMIt != aBuiltInMap.end() )
+            aBuiltInVec.push_back( aMIt->second );
+    }
+
+    // insert the default formats in the format map, from root parent to system language
+    typedef ::std::map< sal_uInt16, sal_uInt16 > XclReuseMap;
+    XclReuseMap aReuseMap;
+    for( XclBuiltInVec::reverse_iterator aVIt = aBuiltInVec.rbegin(), aVEnd = aBuiltInVec.rend(); aVIt != aVEnd; ++aVIt )
+    {
+        // put LANGUAGE_SYSTEM for all entries in default table
+        LanguageType eLang = ((*aVIt)->meLanguage == LANGUAGE_DONTKNOW) ? LANGUAGE_SYSTEM : meSysLang;
+        for( const XclBuiltInFormat* pBuiltIn = (*aVIt)->mpFormats; pBuiltIn && (pBuiltIn->mnXclNumFmt != EXC_BUILTIN_NOFORMAT); ++pBuiltIn )
+        {
+            XclNumFmt& rNumFmt = maFmtMap[ pBuiltIn->mnXclNumFmt ];
+
+            rNumFmt.meOffset = pBuiltIn->meOffset;
+            rNumFmt.meLanguage = eLang;
+
+            if( pBuiltIn->mpFormat )
+                rNumFmt.maFormat = String( pBuiltIn->mpFormat, RTL_TEXTENCODING_UTF8 );
+            else
+                rNumFmt.maFormat = EMPTY_STRING;
+
+            if( pBuiltIn->meOffset == PRV_NF_INDEX_REUSE )
+                aReuseMap[ pBuiltIn->mnXclNumFmt ] = pBuiltIn->mnXclReuseFmt;
+            else
+                aReuseMap.erase( pBuiltIn->mnXclNumFmt );
+        }
+    }
+
+    // copy reused number formats
+    for( XclReuseMap::const_iterator aRIt = aReuseMap.begin(), aREnd = aReuseMap.end(); aRIt != aREnd; ++aRIt )
+        maFmtMap[ aRIt->first ] = maFmtMap[ aRIt->second ];
+}
 
 // Cell formatting data (XF) ==================================================
 
@@ -586,7 +1158,6 @@ bool operator==( const XclCellProt& rLeft, const XclCellProt& rRight )
 {
     return (rLeft.mbLocked == rRight.mbLocked) && (rLeft.mbHidden == rRight.mbHidden);
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -609,7 +1180,6 @@ bool operator==( const XclCellAlign& rLeft, const XclCellAlign& rRight )
         (rLeft.meOrient   == rRight.meOrient)   && (rLeft.mnRotation == rRight.mnRotation) &&
         (rLeft.mnIndent   == rRight.mnIndent)   && (rLeft.mbWrapped  == rRight.mbWrapped);
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -634,7 +1204,6 @@ bool operator==( const XclCellBorder& rLeft, const XclCellBorder& rRight )
         (rLeft.mnTopLine   == rRight.mnTopLine)   && (rLeft.mnBottomLine  == rRight.mnBottomLine);
 }
 
-
 // ----------------------------------------------------------------------------
 
 XclCellArea::XclCellArea() :
@@ -655,7 +1224,6 @@ bool operator==( const XclCellArea& rLeft, const XclCellArea& rRight )
         (rLeft.mnForeColor == rRight.mnForeColor) && (rLeft.mnBackColor == rRight.mnBackColor) &&
         (rLeft.mnPattern == rRight.mnPattern);
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -681,3 +1249,4 @@ bool XclXFBase::Equals( const XclXFBase& rCmp ) const
 }
 
 // ============================================================================
+
