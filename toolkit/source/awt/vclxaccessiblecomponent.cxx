@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-05 08:27:51 $
+ *  last change: $Author: obr $ $Date: 2002-03-12 07:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,10 +424,8 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
     if ( GetWindow() )
     {
         Window* pWindow = GetWindow()->FindWindow( VCLPoint( rPoint ) );
-        if ( !pWindow )
-            pWindow = GetWindow();
-
-        xAcc = pWindow->GetAccessible();
+        if ( pWindow && pWindow != GetWindow() )
+            xAcc = pWindow->GetAccessible();
 
     }
     return xAcc;
