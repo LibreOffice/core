@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1class.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:57 $
+ *  last change: $Author: jp $ $Date: 2001-05-21 19:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,18 @@
 #ifndef _W1CLASS_HXX
 #include <w1class.hxx>
 #endif
+
+
+#ifdef DUMP
+static const sal_Char* pUnknown = "?";
+#define DUMPNAME(s) s
+#else
+#define DUMPNAME(s) 0
+#endif
+
+Ww1SingleSprm* Ww1Sprm::aTab[ 256 ];
+Ww1SingleSprm* Ww1Sprm::pSingleSprm = 0;
+
 
 
 /////////////////////////////////////////////////////////////////// Fib
@@ -612,279 +624,132 @@ BOOL Ww1Sprm::ReCalc()
     return bRet;
 }
 
-Ww1SingleSprm* Ww1Sprm::aTab[256];
 
 void Ww1Sprm::DeinitTab()
 {
-    for (int i=0;i<sizeof(aTab)/sizeof(*aTab);i++)
-    {
+    for( int i=0; i < sizeof(aTab)/sizeof(*aTab);i++)
         delete aTab[i];
-        aTab[i] = NULL;
-    }
+    memset( aTab, sizeof(aTab)/sizeof(*aTab), 0 );
+    delete pSingleSprm;
 }
+
+
 
 void Ww1Sprm::InitTab()
 {
-    int i = 0;
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //   0
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //   1
-    aTab[i++] = new Ww1SingleSprmByte("sprmPStc"); //   2 pap.istd (style code)
-    aTab[i++] = new Ww1SingleSprmByteSized(0, "sprmPIstdPermute"); //   3 pap.istd  permutation
-    aTab[i++] = new Ww1SingleSprmByte("sprmPIncLevel"); //   4 pap.istddifference
-    aTab[i++] = new Ww1SingleSprmPJc("sprmPJc"); //   5 pap.jc (justification)
-    aTab[i++] = new Ww1SingleSprmBool("sprmPFSideBySide"); //   6 pap.fSideBySide
-    aTab[i++] = new Ww1SingleSprmPFKeep("sprmPFKeep"); //   7 pap.fKeep
-    aTab[i++] = new Ww1SingleSprmPFKeepFollow("sprmPFKeepFollow"); //   8 pap.fKeepFollow
-    aTab[i++] = new Ww1SingleSprmPPageBreakBefore("sprmPPageBreakBefore"); //   9 pap.fPageBreakBefore
-    aTab[i++] = new Ww1SingleSprmByte("sprmPBrcl"); //  10 pap.brcl
-    aTab[i++] = new Ww1SingleSprmByte("sprmPBrcp"); //  11 pap.brcp
-    aTab[i++] = new Ww1SingleSprmByteSized(0, "sprmPAnld"); //  12 pap.anld (ANLD structure)
-    aTab[i++] = new Ww1SingleSprmByte("sprmPNLvlAnm"); //  13 pap.nLvlAnm nn
-    aTab[i++] = new Ww1SingleSprmBool("sprmPFNoLineNumb"); //  14 ap.fNoLnn
-    aTab[i++] = new Ww1SingleSprmPChgTabsPapx("sprmPChgTabsPapx"); //  15 pap.itbdMac, ...
-    aTab[i++] = new Ww1SingleSprmPDxaRight("sprmPDxaRight"); //  16 pap.dxaRight
-    aTab[i++] = new Ww1SingleSprmPDxaLeft("sprmPDxaLeft"); //  17 pap.dxaLeft
-    aTab[i++] = new Ww1SingleSprmWord("sprmPNest"); //  18 pap.dxaNest
-    aTab[i++] = new Ww1SingleSprmPDxaLeft1("sprmPDxaLeft1"); //  19 pap.dxaLeft1
-    aTab[i++] = new Ww1SingleSprmPDyaLine("sprmPDyaLine"); //  20 pap.lspd  an LSPD
-    aTab[i++] = new Ww1SingleSprmPDyaBefore("sprmPDyaBefore"); //  21 pap.dyaBefore
-    aTab[i++] = new Ww1SingleSprmPDyaAfter("sprmPDyaAfter"); //  22 pap.dyaAfter
-    aTab[i++] = new Ww1SingleSprmTab(0, "?"); // 23 pap.itbdMac, pap.rgdxaTab
-    aTab[i++] = new Ww1SingleSprmPFInTable("sprmPFInTable"); //  24 pap.fInTable
-    aTab[i++] = new Ww1SingleSprmPTtp("sprmPTtp"); //  25 pap.fTtp
-    aTab[i++] = new Ww1SingleSprmPDxaAbs("sprmPDxaAbs"); //  26 pap.dxaAbs
-    aTab[i++] = new Ww1SingleSprmPDyaAbs("sprmPDyaAbs"); //  27 pap.dyaAbs
-    aTab[i++] = new Ww1SingleSprmPDxaWidth("sprmPDxaWidth"); //  28 pap.dxaWidth
-    aTab[i++] = new Ww1SingleSprmPpc("sprmPPc"); //  29 pap.pcHorz, pap.pcVert
-    aTab[i++] = new Ww1SingleSprmPBrc10(BRC_TOP, "sprmPBrcTop10"); //  30 pap.brcTop BRC10
-    aTab[i++] = new Ww1SingleSprmPBrc10(BRC_LEFT, "sprmPBrcLeft10"); //  31 pap.brcLeft BRC10
-    aTab[i++] = new Ww1SingleSprmPBrc10(BRC_BOTTOM, "sprmPBrcBottom10"); //  32 pap.brcBottom BRC10
-    aTab[i++] = new Ww1SingleSprmPBrc10(BRC_RIGHT, "sprmPBrcRight10"); //  33 pap.brcRight BRC10
-    aTab[i++] = new Ww1SingleSprmWord("sprmPBrcBetween10"); //  34 pap.brcBetween BRC10
-    aTab[i++] = new Ww1SingleSprmPBrc10(BRC_LEFT, "sprmPBrcBar10"); //  35 pap.brcBar BRC10
-    aTab[i++] = new Ww1SingleSprmPFromText("sprmPFromText10"); //  36 pap.dxaFromText dxa
-    aTab[i++] = new Ww1SingleSprmByte("sprmPWr"); //  37 pap.wr wr
-    aTab[i++] = new Ww1SingleSprmWord("sprmPBrcTop"); //  38 pap.brcTop BRC
-    aTab[i++] = new Ww1SingleSprmWord("sprmPBrcLeft"); //  39 pap.brcLeft BRC
-    aTab[i++] = new Ww1SingleSprmWord("sprmPBrcBottom"); //  40 pap.brcBottom BRC
-    aTab[i++] = new Ww1SingleSprmWord("sprmPBrcRight"); //  41 pap.brcRight BRC
-    aTab[i++] = new Ww1SingleSprmWord("sprmPBrcBetween"); //  42 pap.brcBetween BRC
-    aTab[i++] = new Ww1SingleSprmWord("sprmPBrcBar"); //  43 pap.brcBar BRC word
-    aTab[i++] = new Ww1SingleSprmBool("sprmPFNoAutoHyph"); //  44 pap.fNoAutoHyph
-    aTab[i++] = new Ww1SingleSprmWord("sprmPWHeightAbs"); //  45 pap.wHeightAbs w
-    aTab[i++] = new Ww1SingleSprmWord("sprmPDcs"); //  46 pap.dcs DCS
-    aTab[i++] = new Ww1SingleSprmWord("sprmPShd"); //  47 pap.shd SHD
-    aTab[i++] = new Ww1SingleSprmWord("sprmPDyaFromText"); //  48 pap.dyaFromText dya
-    aTab[i++] = new Ww1SingleSprmWord("sprmPDxaFromText"); //  49 pap.dxaFromText dxa
-    aTab[i++] = new Ww1SingleSprmBool("sprmPFLocked"); //  50 pap.fLocked 0 or 1 byte
-    aTab[i++] = new Ww1SingleSprmBool("sprmPFWidowControl"); //  51 pap.fWidowControl 0 or 1 byte
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  52 sprmPRuler ?
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  53
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  54
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  55
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  56
-    aTab[i++] = new Ww1SingleSprmByteSized(0, "sprmCDefault"); //  57 whole CHP (see below) none variable length
-    aTab[i++] = new Ww1SingleSprm(0, "sprmCPlain"); //  58 whole CHP (see below) none 0
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  59
-    aTab[i++] = new Ww1SingleSprm4State("sprmCFBold"); //  60 chp.fBold 0,1, 128, or 129 (see below) byte
-    aTab[i++] = new Ww1SingleSprm4State("sprmCFItalic"); //  61 chp.fItalic 0,1, 128, or 129 (see below) byte
-    aTab[i++] = new Ww1SingleSprm4State("sprmCFStrike"); //  62 chp.fStrike 0,1, 128, or 129 (see below) byte
-    aTab[i++] = new Ww1SingleSprm4State("sprmCFOutline"); //  63 chp.fOutline 0,1, 128, or 129 (see below) byte
-    aTab[i++] = new Ww1SingleSprm4State("sprmCFShadow"); //  64 chp.fShadow 0,1, 128, or 129 (see below) byte
-    aTab[i++] = new Ww1SingleSprm4State("sprmCFSmallCaps"); //  65 chp.fSmallCaps 0,1, 128, or 129 (see below) byte
-    aTab[i++] = new Ww1SingleSprm4State("sprmCFCaps"); //  66 chp.fCaps 0,1, 128, or 129 (see below) byte
-    aTab[i++] = new Ww1SingleSprm4State("sprmCFVanish"); //  67 chp.fVanish 0,1, 128, or 129 (see below) byte
-    aTab[i++] = new Ww1SingleSprmWord("sprmCFtc"); //  68 chp.ftc ftc word
-    aTab[i++] = new Ww1SingleSprmByte("sprmCKul"); //  69 chp.kul kul byte
-    aTab[i++] = new Ww1SingleSprm(3, "sprmCSizePos"); //  70 chp.hps, chp.hpsPos (see below) 3 bytes
-    aTab[i++] = new Ww1SingleSprmWord("sprmCDxaSpace"); //  71 chp.dxaSpace dxa word
-    aTab[i++] = new Ww1SingleSprmWord("//"); //  72 //
-    aTab[i++] = new Ww1SingleSprmByte("sprmCIco"); //  73 chp.ico ico byte
-    aTab[i++] = new Ww1SingleSprmByte("sprmCHps"); //  74 chp.hps hps !byte!
-    aTab[i++] = new Ww1SingleSprmByte("sprmCHpsInc"); //  75 chp.hps (see below) byte
-    aTab[i++] = new Ww1SingleSprmWord("sprmCHpsPos"); //  76 chp.hpsPos hps !word!
-    aTab[i++] = new Ww1SingleSprmByte("sprmCHpsPosAdj"); //  77 chp.hpsPos hps (see below) byte
-    aTab[i++] = new Ww1SingleSprmByteSized(0, "?"); //  78 ?chp.fBold, chp.fItalic, chp.fSmallCaps, ...
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  79
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  80
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  81
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  82
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  83
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  84
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  85
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  86
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  87
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  88
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  89
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  90
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  91
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  92
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  93
-    aTab[i++] = new Ww1SingleSprmByte("sprmPicBrcl"); //  94 pic.brcl brcl (see PIC structure definition) byte
-    aTab[i++] = new Ww1SingleSprmByteSized(0, "sprmPicScale"); //  95 pic.mx, pic.my, pic.dxaCropleft,
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  96
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  97
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  99
-    aTab[i++] = new Ww1SingleSprm(0, "?"); //  99
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 100
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 101
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 102
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 103
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 104
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 105
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 106
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 107
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 108
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 109
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 110
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 111
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 112
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 113
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 114
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 115
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 116
-    aTab[i++] = new Ww1SingleSprmByte("sprmSBkc"); // 117 sep.bkc bkc byte
-    aTab[i++] = new Ww1SingleSprmBool("sprmSFTitlePage"); // 118 sep.fTitlePage 0 or 1 byte
-    aTab[i++] = new Ww1SingleSprmSColumns("sprmSCcolumns"); // 119 sep.ccolM1 # of cols - 1 word
-    aTab[i++] = new Ww1SingleSprmWord("sprmSDxaColumns"); // 120 sep.dxaColumns dxa word
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 121 sep.fAutoPgn obsolete byte
-    aTab[i++] = new Ww1SingleSprmByte("sprmSNfcPgn"); // 122 sep.nfcPgn nfc byte
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 123 sep.dyaPgn dya short
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 124 sep.dxaPgn dya short
-    aTab[i++] = new Ww1SingleSprmBool("sprmSFPgnRestart"); // 125 sep.fPgnRestart 0 or 1 byte
-    aTab[i++] = new Ww1SingleSprmBool("sprmSFEndnote"); // 126 sep.fEndnote 0 or 1 byte
-    aTab[i++] = new Ww1SingleSprmByte("sprmSLnc"); // 127 sep.lnc lnc byte
-    aTab[i++] = new Ww1SingleSprmSGprfIhdt("sprmSGprfIhdt"); // 128 sep.grpfIhdt grpfihdt (see Headers and Footers topic) byte
-    aTab[i++] = new Ww1SingleSprmWord("sprmSNLnnMod"); // 129 sep.nLnnMod non-neg int. word
-    aTab[i++] = new Ww1SingleSprmWord("sprmSDxaLnn"); // 130 sep.dxaLnn dxa word
-    aTab[i++] = new Ww1SingleSprmWord("sprmSDyaHdrTop"); // 131 sep.dyaHdrTop dya word
-    aTab[i++] = new Ww1SingleSprmWord("sprmSDyaHdrBottom"); // 132 sep.dyaHdrBottom dya word
-    aTab[i++] = new Ww1SingleSprmBool("sprmSLBetween"); // 133 sep.fLBetween 0 or 1 byte
-    aTab[i++] = new Ww1SingleSprmByte("sprmSVjc"); // 134 sep.vjc vjc byte
-    aTab[i++] = new Ww1SingleSprmWord("sprmSLnnMin"); // 135 sep.lnnMin lnn word
-    aTab[i++] = new Ww1SingleSprmWord("sprmSPgnStart"); // 136 sep.pgnStart pgn word
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 137
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 138
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 139
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 140
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 141
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 142
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 143
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 144
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 145
-    aTab[i++] = new Ww1SingleSprmWord("sprmTJc"); // 146 tap.jc jc word (low order byte is significant)
-    aTab[i++] = new Ww1SingleSprmWord("sprmTDxaLeft"); // 147 tap.rgdxaCenter (see below) dxa word
-    aTab[i++] = new Ww1SingleSprmWord("sprmTDxaGapHalf"); // 148 tap.dxaGapHalf, tap.rgdxaCenter (see below) dxa word
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 149 ???tap.fCantSplit 1 or 0 byte
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 150 ???tap.fTableHeader 1 or 0 byte
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 151 ???tap.rgbrcTable complex(see below) 12 bytes
-    aTab[i++] = new Ww1SingleSprmTDefTable10("sprmTDefTable10"); // 152 tap.rgdxaCenter, tap.rgtc complex (see below) variable length
-    aTab[i++] = new Ww1SingleSprmWord("sprmTDyaRowHeight"); // 153 tap.dyaRowHeight dya word
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 154 ???tap.rgtc complex (see below)
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 155 ???tap.rgshd complex (see below)
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 156 ???tap.tlp TLP 4 bytes
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 157 ???tap.rgtc[].rgbrc complex (see below) 5 bytes
-    aTab[i++] = new Ww1SingleSprm(4, "sprmTInsert"); // 158 tap.rgdxaCenter,tap.rgtc complex (see below) 4 bytes
-    aTab[i++] = new Ww1SingleSprmWord("sprmTDelete"); // 159 tap.rgdxaCenter, tap.rgtc complex (see below) word
-    aTab[i++] = new Ww1SingleSprm(4, "sprmTDxaCol"); // 160 tap.rgdxaCenter complex (see below) 4 bytes
-    aTab[i++] = new Ww1SingleSprmWord("sprmTMerge"); // 161 tap.fFirstMerged, tap.fMerged complex (see below) word
-    aTab[i++] = new Ww1SingleSprmWord("sprmTSplit"); // 162 tap.fFirstMerged, tap.fMerged complex (see below) word
-    aTab[i++] = new Ww1SingleSprm(5, "sprmTSetBrc10"); // 163 tap.rgtc[].rgbrc complex (see below) 5 bytes
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 164
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 165
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 166
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 167
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 168
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 169
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 170
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 171
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 172
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 173
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 174
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 175
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 176
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 177
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 178
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 179
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 180
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 181
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 182
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 183
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 184
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 185
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 186
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 187
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 188
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 189
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 190
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 191
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 192
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 193
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 194
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 195
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 196
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 197
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 198
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 199
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 200
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 201
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 202
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 203
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 204
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 205
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 206
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 207
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 208
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 209
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 210
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 211
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 212
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 213
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 214
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 215
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 216
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 217
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 218
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 219
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 220
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 221
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 222
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 223
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 224
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 225
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 226
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 227
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 228
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 229
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 230
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 231
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 232
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 233
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 234
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 235
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 236
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 237
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 238
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 239
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 240
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 241
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 242
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 243
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 244
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 245
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 246
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 247
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 248
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 249
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 250
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 251
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 252
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 253
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 254
-    aTab[i++] = new Ww1SingleSprm(0, "?"); // 255
-    if (aTab[i-1] == NULL)
-        DeinitTab(); //~ mdt: low mem und nu?
-    DBG_ASSERT(i==sizeof(aTab)/sizeof(*aTab), "Ww1Sprm");
+    memset( aTab, sizeof(aTab)/sizeof(*aTab), 0 );
+    pSingleSprm = new Ww1SingleSprm( 0, DUMPNAME(pUnknown));
+
+    aTab[  2] = new Ww1SingleSprmByte(DUMPNAME("sprmPStc")); //   2 pap.istd (style code)
+    aTab[  3] = new Ww1SingleSprmByteSized(0, DUMPNAME("sprmPIstdPermute")); //   3 pap.istd    permutation
+    aTab[  4] = new Ww1SingleSprmByte(DUMPNAME("sprmPIncLevel")); //   4 pap.istddifference
+    aTab[  5] = new Ww1SingleSprmPJc(DUMPNAME("sprmPJc")); //   5 pap.jc (justification)
+    aTab[  6] = new Ww1SingleSprmBool(DUMPNAME("sprmPFSideBySide")); //   6 pap.fSideBySide
+    aTab[  7] = new Ww1SingleSprmPFKeep(DUMPNAME("sprmPFKeep")); //   7 pap.fKeep
+    aTab[  8] = new Ww1SingleSprmPFKeepFollow(DUMPNAME("sprmPFKeepFollow")); //   8 pap.fKeepFollow
+    aTab[  9] = new Ww1SingleSprmPPageBreakBefore(DUMPNAME("sprmPPageBreakBefore")); //   9 pap.fPageBreakBefore
+    aTab[ 10] = new Ww1SingleSprmByte(DUMPNAME("sprmPBrcl")); //  10 pap.brcl
+    aTab[ 11] = new Ww1SingleSprmByte(DUMPNAME("sprmPBrcp")); //  11 pap.brcp
+    aTab[ 12] = new Ww1SingleSprmByteSized(0, DUMPNAME("sprmPAnld")); //  12 pap.anld (ANLD structure)
+    aTab[ 13] = new Ww1SingleSprmByte(DUMPNAME("sprmPNLvlAnm")); //  13 pap.nLvlAnm nn
+    aTab[ 14] = new Ww1SingleSprmBool(DUMPNAME("sprmPFNoLineNumb")); //  14 ap.fNoLnn
+    aTab[ 15] = new Ww1SingleSprmPChgTabsPapx(DUMPNAME("sprmPChgTabsPapx")); //  15 pap.itbdMac, ...
+    aTab[ 16] = new Ww1SingleSprmPDxaRight(DUMPNAME("sprmPDxaRight")); //  16 pap.dxaRight
+    aTab[ 17] = new Ww1SingleSprmPDxaLeft(DUMPNAME("sprmPDxaLeft")); //  17 pap.dxaLeft
+    aTab[ 18] = new Ww1SingleSprmWord(DUMPNAME("sprmPNest")); //  18 pap.dxaNest
+    aTab[ 19] = new Ww1SingleSprmPDxaLeft1(DUMPNAME("sprmPDxaLeft1")); //  19 pap.dxaLeft1
+    aTab[ 20] = new Ww1SingleSprmPDyaLine(DUMPNAME("sprmPDyaLine")); //  20 pap.lspd    an LSPD
+    aTab[ 21] = new Ww1SingleSprmPDyaBefore(DUMPNAME("sprmPDyaBefore")); //  21 pap.dyaBefore
+    aTab[ 22] = new Ww1SingleSprmPDyaAfter(DUMPNAME("sprmPDyaAfter")); //  22 pap.dyaAfter
+    aTab[ 23] = new Ww1SingleSprmTab(0, DUMPNAME(pUnknown)); // 23 pap.itbdMac, pap.rgdxaTab
+    aTab[ 24] = new Ww1SingleSprmPFInTable(DUMPNAME("sprmPFInTable")); //  24 pap.fInTable
+    aTab[ 25] = new Ww1SingleSprmPTtp(DUMPNAME("sprmPTtp")); //  25 pap.fTtp
+    aTab[ 26] = new Ww1SingleSprmPDxaAbs(DUMPNAME("sprmPDxaAbs")); //  26 pap.dxaAbs
+    aTab[ 27] = new Ww1SingleSprmPDyaAbs(DUMPNAME("sprmPDyaAbs")); //  27 pap.dyaAbs
+    aTab[ 28] = new Ww1SingleSprmPDxaWidth(DUMPNAME("sprmPDxaWidth")); //  28 pap.dxaWidth
+    aTab[ 29] = new Ww1SingleSprmPpc(DUMPNAME("sprmPPc")); //  29 pap.pcHorz, pap.pcVert
+    aTab[ 30] = new Ww1SingleSprmPBrc10(BRC_TOP, DUMPNAME("sprmPBrcTop10")); //  30 pap.brcTop BRC10
+    aTab[ 31] = new Ww1SingleSprmPBrc10(BRC_LEFT, DUMPNAME("sprmPBrcLeft10")); //  31 pap.brcLeft BRC10
+    aTab[ 32] = new Ww1SingleSprmPBrc10(BRC_BOTTOM, DUMPNAME("sprmPBrcBottom10")); //  32 pap.brcBottom BRC10
+    aTab[ 33] = new Ww1SingleSprmPBrc10(BRC_RIGHT, DUMPNAME("sprmPBrcRight10")); //  33 pap.brcRight BRC10
+    aTab[ 34] = new Ww1SingleSprmWord(DUMPNAME("sprmPBrcBetween10")); //  34 pap.brcBetween BRC10
+    aTab[ 35] = new Ww1SingleSprmPBrc10(BRC_LEFT, DUMPNAME("sprmPBrcBar10")); //  35 pap.brcBar BRC10
+    aTab[ 36] = new Ww1SingleSprmPFromText(DUMPNAME("sprmPFromText10")); //  36 pap.dxaFromText dxa
+    aTab[ 37] = new Ww1SingleSprmByte(DUMPNAME("sprmPWr")); //  37 pap.wr wr
+    aTab[ 38] = new Ww1SingleSprmWord(DUMPNAME("sprmPBrcTop")); //  38 pap.brcTop BRC
+    aTab[ 39] = new Ww1SingleSprmWord(DUMPNAME("sprmPBrcLeft")); //  39 pap.brcLeft BRC
+    aTab[ 40] = new Ww1SingleSprmWord(DUMPNAME("sprmPBrcBottom")); //  40 pap.brcBottom BRC
+    aTab[ 41] = new Ww1SingleSprmWord(DUMPNAME("sprmPBrcRight")); //  41 pap.brcRight BRC
+    aTab[ 42] = new Ww1SingleSprmWord(DUMPNAME("sprmPBrcBetween")); //  42 pap.brcBetween BRC
+    aTab[ 43] = new Ww1SingleSprmWord(DUMPNAME("sprmPBrcBar")); //  43 pap.brcBar BRC word
+    aTab[ 44] = new Ww1SingleSprmBool(DUMPNAME("sprmPFNoAutoHyph")); //  44 pap.fNoAutoHyph
+    aTab[ 45] = new Ww1SingleSprmWord(DUMPNAME("sprmPWHeightAbs")); //  45 pap.wHeightAbs w
+    aTab[ 46] = new Ww1SingleSprmWord(DUMPNAME("sprmPDcs")); //  46 pap.dcs DCS
+    aTab[ 47] = new Ww1SingleSprmWord(DUMPNAME("sprmPShd")); //  47 pap.shd SHD
+    aTab[ 48] = new Ww1SingleSprmWord(DUMPNAME("sprmPDyaFromText")); //  48 pap.dyaFromText dya
+    aTab[ 49] = new Ww1SingleSprmWord(DUMPNAME("sprmPDxaFromText")); //  49 pap.dxaFromText dxa
+    aTab[ 50] = new Ww1SingleSprmBool(DUMPNAME("sprmPFLocked")); //  50 pap.fLocked 0 or 1 byte
+    aTab[ 51] = new Ww1SingleSprmBool(DUMPNAME("sprmPFWidowControl")); //  51 pap.fWidowControl 0 or 1 byte
+
+    aTab[ 57] = new Ww1SingleSprmByteSized(0, DUMPNAME("sprmCDefault")); //  57 whole CHP (see below) none variable length
+    aTab[ 58] = new Ww1SingleSprm(0, DUMPNAME("sprmCPlain")); //  58 whole CHP (see below) none 0
+
+    aTab[ 60] = new Ww1SingleSprm4State(DUMPNAME("sprmCFBold")); //  60 chp.fBold 0,1, 128, or 129 (see below) byte
+    aTab[ 61] = new Ww1SingleSprm4State(DUMPNAME("sprmCFItalic")); //  61 chp.fItalic 0,1, 128, or 129 (see below) byte
+    aTab[ 62] = new Ww1SingleSprm4State(DUMPNAME("sprmCFStrike")); //  62 chp.fStrike 0,1, 128, or 129 (see below) byte
+    aTab[ 63] = new Ww1SingleSprm4State(DUMPNAME("sprmCFOutline")); //  63 chp.fOutline 0,1, 128, or 129 (see below) byte
+    aTab[ 64] = new Ww1SingleSprm4State(DUMPNAME("sprmCFShadow")); //  64 chp.fShadow 0,1, 128, or 129 (see below) byte
+    aTab[ 65] = new Ww1SingleSprm4State(DUMPNAME("sprmCFSmallCaps")); //  65 chp.fSmallCaps 0,1, 128, or 129 (see below) byte
+    aTab[ 66] = new Ww1SingleSprm4State(DUMPNAME("sprmCFCaps")); //  66 chp.fCaps 0,1, 128, or 129 (see below) byte
+    aTab[ 67] = new Ww1SingleSprm4State(DUMPNAME("sprmCFVanish")); //  67 chp.fVanish 0,1, 128, or 129 (see below) byte
+    aTab[ 68] = new Ww1SingleSprmWord(DUMPNAME("sprmCFtc")); //  68 chp.ftc ftc word
+    aTab[ 69] = new Ww1SingleSprmByte(DUMPNAME("sprmCKul")); //  69 chp.kul kul byte
+    aTab[ 70] = new Ww1SingleSprm(3, DUMPNAME("sprmCSizePos")); //  70 chp.hps, chp.hpsPos (see below) 3 bytes
+    aTab[ 71] = new Ww1SingleSprmWord(DUMPNAME("sprmCDxaSpace")); //  71 chp.dxaSpace dxa word
+    aTab[ 72] = new Ww1SingleSprmWord(DUMPNAME("//")); //  72 //
+    aTab[ 73] = new Ww1SingleSprmByte(DUMPNAME("sprmCIco")); //  73 chp.ico ico byte
+    aTab[ 74] = new Ww1SingleSprmByte(DUMPNAME("sprmCHps")); //  74 chp.hps hps !byte!
+    aTab[ 75] = new Ww1SingleSprmByte(DUMPNAME("sprmCHpsInc")); //  75 chp.hps (see below) byte
+    aTab[ 76] = new Ww1SingleSprmWord(DUMPNAME("sprmCHpsPos")); //  76 chp.hpsPos hps !word!
+    aTab[ 77] = new Ww1SingleSprmByte(DUMPNAME("sprmCHpsPosAdj")); //  77 chp.hpsPos hps (see below) byte
+    aTab[ 78] = new Ww1SingleSprmByteSized(0, DUMPNAME(pUnknown)); //  78 ?chp.fBold, chp.fItalic, chp.fSmallCaps, ...
+
+    aTab[ 94] = new Ww1SingleSprmByte(DUMPNAME("sprmPicBrcl")); //  94 pic.brcl brcl (see PIC structure definition) byte
+    aTab[ 95] = new Ww1SingleSprmByteSized(0, DUMPNAME("sprmPicScale")); //  95 pic.mx, pic.my, pic.dxaCropleft,
+
+    aTab[117] = new Ww1SingleSprmByte(DUMPNAME("sprmSBkc")); // 117 sep.bkc bkc byte
+    aTab[118] = new Ww1SingleSprmBool(DUMPNAME("sprmSFTitlePage")); // 118 sep.fTitlePage 0 or 1 byte
+    aTab[119] = new Ww1SingleSprmSColumns(DUMPNAME("sprmSCcolumns")); // 119 sep.ccolM1 # of cols - 1 word
+    aTab[120] = new Ww1SingleSprmWord(DUMPNAME("sprmSDxaColumns")); // 120 sep.dxaColumns dxa word
+
+    aTab[122] = new Ww1SingleSprmByte(DUMPNAME("sprmSNfcPgn")); // 122 sep.nfcPgn nfc byte
+
+    aTab[125] = new Ww1SingleSprmBool(DUMPNAME("sprmSFPgnRestart")); // 125 sep.fPgnRestart 0 or 1 byte
+    aTab[126] = new Ww1SingleSprmBool(DUMPNAME("sprmSFEndnote")); // 126 sep.fEndnote 0 or 1 byte
+    aTab[127] = new Ww1SingleSprmByte(DUMPNAME("sprmSLnc")); // 127 sep.lnc lnc byte
+    aTab[128] = new Ww1SingleSprmSGprfIhdt(DUMPNAME("sprmSGprfIhdt")); // 128 sep.grpfIhdt grpfihdt (see Headers and Footers topic) byte
+    aTab[129] = new Ww1SingleSprmWord(DUMPNAME("sprmSNLnnMod")); // 129 sep.nLnnMod non-neg int. word
+    aTab[130] = new Ww1SingleSprmWord(DUMPNAME("sprmSDxaLnn")); // 130 sep.dxaLnn dxa word
+    aTab[131] = new Ww1SingleSprmWord(DUMPNAME("sprmSDyaHdrTop")); // 131 sep.dyaHdrTop dya word
+    aTab[132] = new Ww1SingleSprmWord(DUMPNAME("sprmSDyaHdrBottom")); // 132 sep.dyaHdrBottom dya word
+    aTab[133] = new Ww1SingleSprmBool(DUMPNAME("sprmSLBetween")); // 133 sep.fLBetween 0 or 1 byte
+    aTab[134] = new Ww1SingleSprmByte(DUMPNAME("sprmSVjc")); // 134 sep.vjc vjc byte
+    aTab[135] = new Ww1SingleSprmWord(DUMPNAME("sprmSLnnMin")); // 135 sep.lnnMin lnn word
+    aTab[136] = new Ww1SingleSprmWord(DUMPNAME("sprmSPgnStart")); // 136 sep.pgnStart pgn word
+
+    aTab[146] = new Ww1SingleSprmWord(DUMPNAME("sprmTJc")); // 146 tap.jc jc word (low order byte is significant)
+    aTab[147] = new Ww1SingleSprmWord(DUMPNAME("sprmTDxaLeft")); // 147 tap.rgdxaCenter (see below) dxa word
+    aTab[148] = new Ww1SingleSprmWord(DUMPNAME("sprmTDxaGapHalf")); // 148 tap.dxaGapHalf, tap.rgdxaCenter (see below) dxa word
+
+    aTab[152] = new Ww1SingleSprmTDefTable10(DUMPNAME("sprmTDefTable10")); // 152 tap.rgdxaCenter, tap.rgtc complex (see below) variable length
+    aTab[153] = new Ww1SingleSprmWord(DUMPNAME("sprmTDyaRowHeight")); // 153 tap.dyaRowHeight dya word
+
+    aTab[158] = new Ww1SingleSprm(4, DUMPNAME("sprmTInsert")); // 158 tap.rgdxaCenter,tap.rgtc complex (see below) 4 bytes
+    aTab[159] = new Ww1SingleSprmWord(DUMPNAME("sprmTDelete")); // 159 tap.rgdxaCenter, tap.rgtc complex (see below) word
+    aTab[160] = new Ww1SingleSprm(4, DUMPNAME("sprmTDxaCol")); // 160 tap.rgdxaCenter complex (see below) 4 bytes
+    aTab[161] = new Ww1SingleSprmWord(DUMPNAME("sprmTMerge")); // 161 tap.fFirstMerged, tap.fMerged complex (see below) word
+    aTab[162] = new Ww1SingleSprmWord(DUMPNAME("sprmTSplit")); // 162 tap.fFirstMerged, tap.fMerged complex (see below) word
+    aTab[163] = new Ww1SingleSprm(5, DUMPNAME("sprmTSetBrc10")); // 163 tap.rgtc[].rgbrc complex (see below) 5 bytes
 }
 
 ////////////////////////////////////////////////////////////// SprmPapx
@@ -1515,11 +1380,14 @@ BOOL Ww1Manager::HasPDxaAbs()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/w1class.cxx,v 1.1.1.1 2000-09-18 17:14:57 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/w1class.cxx,v 1.2 2001-05-21 19:08:14 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:57  hr
+      initial import
+
       Revision 1.19  2000/09/18 16:04:56  willem.vandorp
       OpenOffice header added.
 

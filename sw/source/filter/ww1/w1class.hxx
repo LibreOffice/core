@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1class.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:57 $
+ *  last change: $Author: jp $ $Date: 2001-05-21 19:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,13 +829,17 @@ public:
 class Ww1Sprm
 {
     BOOL ReCalc();
-protected:
     static Ww1SingleSprm* aTab[256];
+    static Ww1SingleSprm* pSingleSprm;
+protected:
     static void InitTab();
-    Ww1SingleSprm& GetTab(USHORT nId) {
-        if (aTab[0] == 0)
+    Ww1SingleSprm& GetTab(USHORT nId)
+    {
+        if( !pSingleSprm )
             InitTab();
-        return *aTab[nId]; }
+        return aTab[ nId ] ? *aTab[nId] : *pSingleSprm;
+    }
+
     BYTE* p;
     USHORT nCountBytes;
     BOOL bOK;
@@ -1698,11 +1702,14 @@ public:
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/w1class.hxx,v 1.1.1.1 2000-09-18 17:14:57 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/w1class.hxx,v 1.2 2001-05-21 19:08:14 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:57  hr
+      initial import
+
       Revision 1.19  2000/09/18 16:04:56  willem.vandorp
       OpenOffice header added.
 
