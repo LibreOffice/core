@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 14:14:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1249,7 +1249,7 @@ void HatchingLB::UserDraw( const UserDrawEvent& rUDEvt )
             Hatch aHatch( (HatchStyle) rXHatch.GetHatchStyle(),
                           rXHatch.GetColor(),
                           rUDEvt.GetDevice()->LogicToPixel( Point( rXHatch.GetDistance(), 0 ), aMode ).X(),
-                          rXHatch.GetAngle() );
+                          (sal_uInt16)rXHatch.GetAngle() );
             const Polygon aPolygon( aRect );
             const PolyPolygon aPolypoly( aPolygon );
             pDevice->DrawHatch( aPolypoly, aHatch );
@@ -1929,25 +1929,85 @@ void LineEndLB::Modify( XLineEndEntry* pEntry, USHORT nPos, Bitmap* pBmp,
 |*
 *************************************************************************/
 
-SvxXLinePreview::SvxXLinePreview( Window* pParent, const ResId& rResId, XOutputDevice* pXOut ) :
+#ifndef _SVDMODEL_HXX
+#include <svdmodel.hxx>
+#endif
 
-    Control ( pParent, rResId ),
+#ifndef _SVDOPATH_HXX
+#include <svdopath.hxx>
+#endif
 
-    pXOutDev    ( pXOut ),
-    bWithSymbol ( FALSE ),
-    pGraphic    ( NULL )
+#ifndef _SDR_CONTACT_OBJECTCONTACTOFOBJLISTPAINTER_HXX
+#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#endif
 
+#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
+#include <svx/sdr/contact/displayinfo.hxx>
+#endif
+
+SvxXLinePreview::SvxXLinePreview( Window* pParent, const ResId& rResId, XOutputDevice* pXOut )
+:   Control( pParent, rResId ),
+    mpXOutDev( pXOut ),
+    mpLineObjA( 0L ),
+    mpLineObjB( 0L ),
+    mpLineObjC( 0L ),
+    mpModel( 0L ),
+    mpGraphic( 0L ),
+    mbWithSymbol( sal_False )
 {
     SetMapMode( MAP_100TH_MM );
-    Size aSize = GetOutputSize();
-    aPtA = Point( 500, aSize.Height() / 2 );
-    aPtB = Point( aSize.Width() - 500, aSize.Height() / 2 );
+    const Size aOutputSize(GetOutputSize());
     InitSettings( TRUE, TRUE );
+
+    const sal_Int32 nDistance(500L);
+    const sal_Int32 nAvailableLength(aOutputSize.Width() - (4 * nDistance));
+
+    // create model
+    mpModel = new SdrModel();
+    mpModel->GetItemPool().FreezeIdRanges();
+
+    // create DrawObectA
+    const sal_Int32 aYPosA(aOutputSize.Height() / 2);
+    const Point aPointA1( nDistance,  aYPosA);
+    const Point aPointA2( aPointA1.X() + ((nAvailableLength * 14) / 20), aYPosA );
+    mpLineObjA = new SdrPathObj(aPointA1, aPointA2);
+    mpLineObjA->SetModel(mpModel);
+
+    // create DrawObectB
+    const sal_Int32 aYPosB1((aOutputSize.Height() * 3) / 4);
+    const sal_Int32 aYPosB2((aOutputSize.Height() * 1) / 4);
+    const Point aPointB1( aPointA2.X() + nDistance,  aYPosB1);
+    const Point aPointB2( aPointB1.X() + ((nAvailableLength * 2) / 20), aYPosB2 );
+    const Point aPointB3( aPointB2.X() + ((nAvailableLength * 2) / 20), aYPosB1 );
+    XPolygon aPolygonB(3);
+    aPolygonB[0] = aPointB1;
+    aPolygonB[1] = aPointB2;
+    aPolygonB[2] = aPointB3;
+    mpLineObjB = new SdrPathObj(OBJ_PLIN, XPolyPolygon(aPolygonB));
+    mpLineObjB->SetModel(mpModel);
+
+    // create DrawObectC
+    const Point aPointC1( aPointB3.X() + nDistance,  aYPosB1);
+    const Point aPointC2( aPointC1.X() + ((nAvailableLength * 1) / 20), aYPosB2 );
+    const Point aPointC3( aPointC2.X() + ((nAvailableLength * 1) / 20), aYPosB1 );
+    XPolygon aPolygonC(3);
+    aPolygonC[0] = aPointC1;
+    aPolygonC[1] = aPointC2;
+    aPolygonC[2] = aPointC3;
+    mpLineObjC = new SdrPathObj(OBJ_PLIN, XPolyPolygon(aPolygonC));
+    mpLineObjC->SetModel(mpModel);
 
     //  Draw the control's border as a flat thin black line.
     SetBorderStyle (WINDOW_BORDER_MONO);
-
     SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+}
+
+SvxXLinePreview::~SvxXLinePreview()
+{
+    delete mpLineObjA;
+    delete mpLineObjB;
+    delete mpLineObjC;
+    delete mpModel;
 }
 
 // -----------------------------------------------------------------------
@@ -1980,32 +2040,72 @@ void SvxXLinePreview::InitSettings( BOOL bForeground, BOOL bBackground )
 
 void SvxXLinePreview::SetSymbol(Graphic* p,const Size& s)
 {
-    pGraphic = p;
-    aSymbolSize = s;
+    mpGraphic = p;
+    maSymbolSize = s;
 }
 
 // -----------------------------------------------------------------------
 
 void SvxXLinePreview::ResizeSymbol(const Size& s)
 {
-    if ( s != aSymbolSize )
+    if ( s != maSymbolSize )
     {
-        aSymbolSize = s;
+        maSymbolSize = s;
         Invalidate();
     }
 }
 
 // -----------------------------------------------------------------------
 
+void SvxXLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
+{
+    // Set ItemSet at objects
+    mpLineObjA->SetMergedItemSet(rItemSet);
+
+    // At line joints, do not use arrows
+    SfxItemSet aTempSet(rItemSet);
+    aTempSet.ClearItem(XATTR_LINESTART);
+    aTempSet.ClearItem(XATTR_LINEEND);
+
+    mpLineObjB->SetMergedItemSet(aTempSet);
+    mpLineObjC->SetMergedItemSet(aTempSet);
+}
+
+// -----------------------------------------------------------------------
+
 void SvxXLinePreview::Paint( const Rectangle& rRect )
 {
-    pXOutDev->DrawLine( aPtA, aPtB );
-    if ( bWithSymbol && pGraphic )
+    const Size aOutputSize(GetOutputSize());
+
+    // paint objects
+    sdr::contact::SdrObjectVector aObjectVector;
+    aObjectVector.push_back(mpLineObjA);
+    aObjectVector.push_back(mpLineObjB);
+    aObjectVector.push_back(mpLineObjC);
+
+    sdr::contact::ObjectContactOfObjListPainter aPainter(aObjectVector);
+    sdr::contact::DisplayInfo aDisplayInfo;
+    SdrPaintInfoRec aInfoRec;
+
+    aDisplayInfo.SetExtendedOutputDevice((ExtOutputDevice*)mpXOutDev);
+    aDisplayInfo.SetPaintInfoRec(&aInfoRec);
+    aDisplayInfo.SetOutputDevice(mpXOutDev->GetOutDev());
+
+    // keep draw hierarchy up-to-date
+    aPainter.PreProcessDisplay(aDisplayInfo);
+
+    // do processing
+    aPainter.ProcessDisplay(aDisplayInfo);
+
+    // prepare delete
+    aPainter.PrepareDelete();
+
+    if ( mbWithSymbol && mpGraphic )
     {
-        Point aPos = Point( GetOutputSize().Width() / 2, GetOutputSize().Height() / 2 );
-        aPos.X() -= aSymbolSize.Width() / 2;
-        aPos.Y() -= aSymbolSize.Height() / 2;
-        pGraphic->Draw( this, aPos, aSymbolSize );
+        Point aPos = Point( aOutputSize.Width() / 3, aOutputSize.Height() / 2 );
+        aPos.X() -= maSymbolSize.Width() / 2;
+        aPos.Y() -= maSymbolSize.Height() / 2;
+        mpGraphic->Draw( this, aPos, maSymbolSize );
     }
 }
 
