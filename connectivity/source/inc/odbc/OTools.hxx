@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:42 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,25 +154,33 @@ namespace connectivity
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
 
-        template <class T> T getValue(  SQLHANDLE _aStatementHandle,sal_Int32 columnIndex,
-                                        SQLSMALLINT _nType,sal_Bool &_bWasNull,
-                                                                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,const T& _rValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        template <class T> void getValue(   SQLHANDLE _aStatementHandle,
+                                        sal_Int32 columnIndex,
+                                        SQLSMALLINT _nType,
+                                        sal_Bool &_bWasNull,
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                                        T& _rValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
             SQLINTEGER pcbValue;
-            T nValue = _rValue;
+            //  T nValue = _rValue;
             OTools::ThrowException(N3SQLGetData(_aStatementHandle,
-                                                columnIndex,
+                                                (SQLUSMALLINT)columnIndex,
                                                 _nType,
-                                                &nValue,
-                                                (SQLINTEGER)sizeof nValue,
+                                                &_rValue,
+                                                (SQLINTEGER)sizeof _rValue,
                                                 &pcbValue),
                                     _aStatementHandle,SQL_HANDLE_STMT,_xInterface,sal_False);
             _bWasNull = pcbValue == SQL_NULL_DATA;
-            return nValue;
+            //  return nValue;
         }
 
         //-----------------------------------------------------------------------------
-        template < class T > void bindData(SWORD fSqlType,sal_Bool _bUseWChar,void *&_pData,SDWORD*& pLen,const T* _pValue,rtl_TextEncoding _nTextEncoding)
+        template < class T > void bindData( SWORD fSqlType,
+                                            sal_Bool _bUseWChar,
+                                            void *&_pData,
+                                            SDWORD*& pLen,
+                                            const T* _pValue,
+                                            rtl_TextEncoding _nTextEncoding)
         {
             SDWORD  nMaxLen = 0;
 
@@ -278,9 +286,14 @@ namespace connectivity
         }
 
         //-----------------------------------------------------------------------------
-        template < class T > sal_Bool bindParameter(    SQLHANDLE _hStmt,sal_Int32 nPos, sal_Int8* pDataBuffer,
-                                                    sal_Int8* pLenBuffer,SQLSMALLINT _nJDBCtype,
-                                                    sal_Bool _bUseWChar,sal_Bool _bUseOldTimeDate,const T* _pValue,
+        template < class T > void bindParameter(SQLHANDLE _hStmt,
+                                                    sal_Int32 nPos,
+                                                    sal_Int8* pDataBuffer,
+                                                    sal_Int8* pLenBuffer,
+                                                    SQLSMALLINT _nJDBCtype,
+                                                    sal_Bool _bUseWChar,
+                                                    sal_Bool _bUseOldTimeDate,
+                                                    const T* _pValue,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                                                     rtl_TextEncoding _nTextEncoding)
                                                      throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
@@ -301,10 +314,10 @@ namespace connectivity
             if(fSqlType == SQL_LONGVARCHAR || fSqlType == SQL_LONGVARBINARY)
                 memcpy(pData,&nPos,sizeof(nPos));
 
-            nRetcode = N3SQLDescribeParam(_hStmt,nPos,&fSqlType,&nColumnSize,&nDecimalDigits,&nNullable);
+            nRetcode = N3SQLDescribeParam(_hStmt,(SQLUSMALLINT)nPos,&fSqlType,&nColumnSize,&nDecimalDigits,&nNullable);
 
             nRetcode = N3SQLBindParameter(_hStmt,
-                          nPos,
+                          (SQLUSMALLINT)nPos,
                           SQL_PARAM_INPUT,
                           fCType,
                           fSqlType,
@@ -315,15 +328,19 @@ namespace connectivity
                           pLen);
 
             OTools::ThrowException(nRetcode,_hStmt,SQL_HANDLE_STMT,_xInterface);
-            return sal_True;
         }
 
 
-        template <class T> void bindValue(SQLHANDLE _aStatementHandle,sal_Int32 columnIndex,
-                                                   SQLSMALLINT _nType,SQLSMALLINT _nMaxLen,SQLSMALLINT _nScale,
-                                                   const T* _pValue,void* _pData,SQLINTEGER *pLen,
-                                          const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                                          rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        template <class T> void bindValue(  SQLHANDLE _aStatementHandle,
+                                            sal_Int32 columnIndex,
+                                            SQLSMALLINT _nType,
+                                            SQLSMALLINT _nMaxLen,
+                                            SQLSMALLINT _nScale,
+                                            const T* _pValue,
+                                            void* _pData,
+                                            SQLINTEGER *pLen,
+                                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                                            rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
             SQLRETURN nRetcode;
             SWORD   fSqlType;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:54 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,14 +93,14 @@ using namespace ::com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OCollection,"com.sun.star.sdbcx.VContainer" , "com.sun.star.sdbcx.Container")
 
-OCollection::OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::Mutex& _rMutex,const ::std::vector< ::rtl::OUString> &_rVector)
+OCollection::OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::Mutex& _rMutex,const TStringVector &_rVector)
                      : m_rParent(_rParent)
                      ,m_rMutex(_rMutex)
                      ,m_aContainerListeners(_rMutex)
                      ,m_aRefreshListeners(_rMutex)
                      ,m_aNameMap(_bCase)
 {
-    for(::std::vector< ::rtl::OUString>::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
+    for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
         m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNamed >())));
 }
 // -------------------------------------------------------------------------
@@ -203,10 +203,10 @@ void SAL_CALL OCollection::refresh(  ) throw(RuntimeException)
     NOTIFY_LISTENERS(m_aRefreshListeners, XRefreshListener, refreshed, aEvt);
 }
 // -----------------------------------------------------------------------------
-void OCollection::reFill(const ::std::vector< ::rtl::OUString> &_rVector)
+void OCollection::reFill(const TStringVector &_rVector)
 {
     OSL_ENSURE(m_aNameMap.size(),"OCollection::reFill: collection isn't empty");
-    for(::std::vector< ::rtl::OUString>::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
+    for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
         m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNamed >())));
 }
 // -------------------------------------------------------------------------

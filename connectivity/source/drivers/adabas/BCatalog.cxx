@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 07:02:32 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ OAdabasCatalog::OAdabasCatalog(SQLHANDLE _aConnectionHdl, OAdabasConnection* _pC
 // -------------------------------------------------------------------------
 void OAdabasCatalog::refreshTables()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
     Sequence< ::rtl::OUString > aTypes(1);
     aTypes[0] = ::rtl::OUString::createFromAscii("%");
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
@@ -134,7 +134,7 @@ void OAdabasCatalog::refreshTables()
 // -------------------------------------------------------------------------
 void OAdabasCatalog::refreshViews()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
 
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     Reference< XResultSet > xResult = xStmt->executeQuery(
@@ -159,7 +159,7 @@ void OAdabasCatalog::refreshViews()
 // -------------------------------------------------------------------------
 void OAdabasCatalog::refreshGroups()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     Reference< XResultSet > xResult = xStmt->executeQuery(
         ::rtl::OUString::createFromAscii("SELECT DISTINCT GROUPNAME FROM DOMAIN.USERS WHERE GROUPNAME IS NOT NULL AND GROUPNAME <> ' '"));
@@ -176,7 +176,7 @@ void OAdabasCatalog::refreshGroups()
 // -------------------------------------------------------------------------
 void OAdabasCatalog::refreshUsers()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     Reference< XResultSet >  xResult = xStmt->executeQuery(
         ::rtl::OUString::createFromAscii("SELECT DISTINCT USERNAME FROM DOMAIN.USERS WHERE USERNAME IS NOT NULL AND USERNAME <> ' ' AND USERNAME <> 'CONTROL'"));

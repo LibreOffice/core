@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 13:52:43 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ OSQLParseNode::OSQLParseNode(const OSQLParseNode& rParseNode)
     // Zeigers wieder eingehangen.
 
     // wenn kein Blatt, dann SubTrees bearbeiten
-    for (::std::vector<OSQLParseNode*>::const_iterator i = rParseNode.m_aChilds.begin();
+    for (OSQLParseNodes::const_iterator i = rParseNode.m_aChilds.begin();
          i != rParseNode.m_aChilds.end(); i++)
         append(new OSQLParseNode(**i));
 }
@@ -301,13 +301,13 @@ OSQLParseNode& OSQLParseNode::operator=(const OSQLParseNode& rParseNode)
         m_eNodeType  = rParseNode.m_eNodeType;
         m_nNodeID    = rParseNode.m_nNodeID;
 
-        for (::std::vector<OSQLParseNode*>::const_iterator i = m_aChilds.begin();
+        for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
             i != m_aChilds.end(); i++)
             delete *i;
 
         m_aChilds.clear();
 
-        for (::std::vector<OSQLParseNode*>::const_iterator j = rParseNode.m_aChilds.begin();
+        for (OSQLParseNodes::const_iterator j = rParseNode.m_aChilds.begin();
              j != rParseNode.m_aChilds.end(); j++)
             append(new OSQLParseNode(**j));
     }
@@ -336,7 +336,7 @@ sal_Bool OSQLParseNode::operator==(OSQLParseNode& rParseNode) const
 //-----------------------------------------------------------------------------
 OSQLParseNode::~OSQLParseNode()
 {
-    for (::std::vector<OSQLParseNode*>::const_iterator i = m_aChilds.begin();
+    for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
          i != m_aChilds.end(); i++)
         delete *i;
 }
@@ -492,7 +492,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString, const SQLParseNodeP
         }
         else
         {
-            for (::std::vector<OSQLParseNode*>::const_iterator i = m_aChilds.begin();
+            for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
                 i != m_aChilds.end();)
             {
                 const OSQLParseNode* pSubTree = *i;
@@ -791,7 +791,7 @@ OSQLParseNode* OSQLParseNode::getByRule(OSQLParseNode::Rule eRule) const
         pRetNode = (OSQLParseNode*)this;
     else
     {
-        for (::std::vector<OSQLParseNode*>::const_iterator i = m_aChilds.begin();
+        for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
             !pRetNode && i != m_aChilds.end(); i++)
             pRetNode = (*i)->getByRule(eRule);
     }
@@ -1254,7 +1254,7 @@ void OSQLParseNode::showParseTree(::rtl::OUString& rString, sal_uInt32 nLevel)
         // einmal auswerten wieviel Subtrees dieser Knoten besitzt
         sal_uInt32 nStop = count();
         // hol dir den ersten Subtree
-        for (::std::vector<OSQLParseNode*>::const_iterator i = m_aChilds.begin();
+        for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
             i != m_aChilds.end(); i++)
             (*i)->showParseTree(rString, nLevel+1);
     }
@@ -1337,7 +1337,7 @@ void OSQLParseNode::insert(sal_uInt32 nPos, OSQLParseNode* pNewSubTree)
 //-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParseNode::removeAt(sal_uInt32 nPos)
 {
-    ::std::vector<OSQLParseNode*>::iterator aPos(m_aChilds.begin() + nPos);
+    OSQLParseNodes::iterator aPos(m_aChilds.begin() + nPos);
     OSQLParseNode* pNode = *aPos;
 
     // setze den getParent des removeten auf NULL
@@ -1350,7 +1350,7 @@ OSQLParseNode* OSQLParseNode::removeAt(sal_uInt32 nPos)
 OSQLParseNode* OSQLParseNode::remove(OSQLParseNode* pSubTree)
 {
     OSL_ENSURE(pSubTree != NULL, "OSQLParseNode: ungueltiger SubTree");
-    ::std::vector<OSQLParseNode*>::iterator aPos = ::std::find(m_aChilds.begin(), m_aChilds.end(), pSubTree);
+    OSQLParseNodes::iterator aPos = ::std::find(m_aChilds.begin(), m_aChilds.end(), pSubTree);
     if (aPos != m_aChilds.end())
     {
         // setze den getParent des removeten auf NULL

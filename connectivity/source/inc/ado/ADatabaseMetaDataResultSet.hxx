@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
+#ifndef CONNECTIVITY_STDTYPEDEFS_HXX
+#include "connectivity/StdTypeDefs.hxx"
+#endif
 
 namespace connectivity
 {
@@ -129,8 +132,8 @@ namespace connectivity
             ::std::vector<void*>            m_aBindVector;
             ::std::vector<sal_Int32>        m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
 
-            ::std::map<sal_Int32, ::std::map<sal_Int32,sal_Int32> > m_aValueRange;
-            ::std::map<sal_Int32, ::std::map<sal_Int32,sal_Int32> >::iterator   m_aValueRangeIter;
+            ::std::map<sal_Int32, TInt2IntMap > m_aValueRange;
+            ::std::map<sal_Int32, TInt2IntMap >::iterator   m_aValueRangeIter;
 
             ::std::map<sal_Int32, ::std::map< ::rtl::OUString,sal_Int32> >              m_aStrValueRange;
             ::std::map<sal_Int32, ::std::map< ::rtl::OUString,sal_Int32> >::iterator    m_aStrValueRangeIter;

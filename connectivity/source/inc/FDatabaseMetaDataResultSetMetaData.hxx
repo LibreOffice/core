@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:26:47 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _CONNECTIVITY_COLUMN_HXX_
 #include "OColumn.hxx"
 #endif
+#ifndef CONNECTIVITY_STDTYPEDEFS_HXX
+#include "connectivity/StdTypeDefs.hxx"
+#endif
 
 namespace connectivity
 {
@@ -89,7 +92,7 @@ namespace connectivity
     {
         friend class ODatabaseMetaDataResultSet;
 
-        ::std::vector<sal_Int32>                    m_vMapping; // when not every column is needed
+        TIntVector                                  m_vMapping; // when not every column is needed
         ::std::map<sal_Int32,connectivity::OColumn> m_mColumns;
         ::std::map<sal_Int32,connectivity::OColumn>::const_iterator m_mColumnsIter;
 

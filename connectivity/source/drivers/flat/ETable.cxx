@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:31:45 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,7 @@ void OFlatTable::refreshColumns()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
 
     for(OSQLColumns::const_iterator aIter = m_aColumns->begin();aIter != m_aColumns->end();++aIter)
         aVector.push_back(Reference< XNamed>(*aIter,UNO_QUERY)->getName());

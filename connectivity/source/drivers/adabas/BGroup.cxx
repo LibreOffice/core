@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BGroup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:54:39 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ OAdabasGroup::OAdabasGroup( OAdabasConnection* _pConnection) : connectivity::sdb
                     ,m_pConnection(_pConnection)
 {
     construct();
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
     m_pUsers = new OUsers(*this,m_aMutex,aVector,m_pConnection,this);
 }
 // -------------------------------------------------------------------------
@@ -110,7 +110,7 @@ void OAdabasGroup::refreshUsers()
     if(!m_pConnection)
         return;
 
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
         Reference< XStatement > xStmt = m_pConnection->createStatement(  );
 
     ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("SELECT DISTINCT USERNAME FROM DOMAIN.USERS WHERE USERNAME IS NOT NULL AND USERNAME <> ' ' AND USERNAME <> 'CONTROL' AND GROUPNAME = '");

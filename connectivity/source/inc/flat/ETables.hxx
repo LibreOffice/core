@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETables.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:47:15 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
         public:
             OFlatTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const ::std::vector< ::rtl::OUString> &_rVector) : OFlatTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
+                const TStringVector &_rVector) : OFlatTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
             {}
 
             // XAppend

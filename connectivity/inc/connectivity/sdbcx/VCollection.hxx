@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:13:37 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
 #endif
+#ifndef CONNECTIVITY_STDTYPEDEFS_HXX
+#include "connectivity/StdTypeDefs.hxx"
+#endif
 
 
 namespace connectivity
@@ -167,7 +170,7 @@ namespace connectivity
             // the returned object is empty will be filled outside and added to the collection
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject() = 0;
 
-            OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::Mutex& _rMutex,const ::std::vector< ::rtl::OUString> &_rVector);
+            OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::Mutex& _rMutex,const TStringVector &_rVector);
 
             /** clear the name map
                 <p>Does <em>not</em> dispose the objects hold by the collection.</p>
@@ -179,7 +182,7 @@ namespace connectivity
 
             DECLARE_SERVICE_INFO();
 
-            void reFill(const ::std::vector< ::rtl::OUString> &_rVector);
+            void reFill(const TStringVector &_rVector);
             sal_Bool isCaseSensitive() const { return m_aNameMap.key_comp().isCaseSensitive(); }
 
             // only the name is identical to ::cppu::OComponentHelper

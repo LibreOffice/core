@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CColumns.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 18:27:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ namespace connectivity
         public:
             OCalcColumns(file::OFileTable* _pTable,
                             ::osl::Mutex& _rMutex,
-                            const ::std::vector< ::rtl::OUString> &_rVector
+                            const TStringVector &_rVector
                          ) : file::OColumns(_pTable,_rMutex,_rVector)
             {}
 

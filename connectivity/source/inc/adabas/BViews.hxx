@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 07:03:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ namespace connectivity
             void createView( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
         public:
             OViews(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const ::std::vector< ::rtl::OUString> &_rVector) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
+                const TStringVector &_rVector) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
                 ,m_xMetaData(_rMetaData)
             {}
 

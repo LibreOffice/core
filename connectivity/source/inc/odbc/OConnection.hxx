@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:14 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,9 @@ namespace connectivity
         class OStatement_Base;
         class ODBCDriver;
         class ODatabaseMetaData;
+
         typedef connectivity::OMetaConnection OConnection_BASE;
+        typedef ::std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
 
         class OConnection : public OConnection_BASE,
                             public connectivity::OSubComponent<OConnection, OConnection_BASE>
@@ -108,7 +110,7 @@ namespace connectivity
             //====================================================================
             // Data attributes
             //====================================================================
-            ::std::vector<connectivity::OTypeInfo>  m_aTypeInfo;    //  vector containing an entry
+            TTypeInfoVector m_aTypeInfo;    //  vector containing an entry
                                                         //  for each row returned by
                                                         //  DatabaseMetaData.getTypeInfo.
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;

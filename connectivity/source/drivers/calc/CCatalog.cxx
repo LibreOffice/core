@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CCatalog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 19:05:48 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ OCalcCatalog::OCalcCatalog(OCalcConnection* _pCon) : file::OFileCatalog(_pCon)
 // -------------------------------------------------------------------------
 void OCalcCatalog::refreshTables()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
     Sequence< ::rtl::OUString > aTypes;
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
         ::rtl::OUString::createFromAscii("%"),::rtl::OUString::createFromAscii("%"),aTypes);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:13:38 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,19 @@ Sequence< Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  ) throw(Runtime
 
     return ::comphelper::concatSequences(aTypes.getTypes(),ODatabaseMetaDataResultSet_BASE::getTypes());
 }
+// -----------------------------------------------------------------------------
+sal_Int32 ODatabaseMetaDataResultSet::mapColumn (sal_Int32  column)
+{
+    sal_Int32   map = column;
+
+    if (m_aColMapping.size())
+    {
+        // Validate column number
+        map = m_aColMapping[column];
+    }
+
+    return map;
+}
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
@@ -236,7 +249,11 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
     switch(nType)
     {
         case DataType::BIT:
-            bRet = sal_Int8(getValue(m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,sal_Int8(0))) != 0;
+            {
+                sal_Int8 nValue = 0;
+                getValue(m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,nValue);
+                bRet = nValue != 0;
+            }
             break;
         default:
             bRet = getInt(columnIndex) != 0;
@@ -252,7 +269,8 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-    sal_Int8  nVal = getValue(m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,sal_Int8(0));
+    sal_Int8  nVal = 0;
+    getValue(m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,nVal);
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
         return sal_Int8((*m_aValueRangeIter).second[(sal_Int32)nVal]);
@@ -273,12 +291,12 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
             {
-                ::rtl::OUString aRet = OTools::getStringValue(m_aStatementHandle,columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
+                ::rtl::OUString aRet = OTools::getStringValue(m_aStatementHandle,(SQLUSMALLINT)columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
                 return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
             }
             break;
     }
-    return OTools::getBytesValue(m_aStatementHandle,columnIndex,nType,m_bWasNull,**this);
+    return OTools::getBytesValue(m_aStatementHandle,(SQLUSMALLINT)columnIndex,nType,m_bWasNull,**this);
 }
 // -------------------------------------------------------------------------
 
@@ -293,7 +311,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
     aDate.day = 0;
     aDate.month = 0;
     aDate.year = 0;
-    aDate = getValue(m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,aDate);
+    getValue(m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,aDate);
     return Date(aDate.day,aDate.month,aDate.year);
 }
 // -------------------------------------------------------------------------
@@ -305,7 +323,9 @@ double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex ) t
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-    return getValue(m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,double(0.0));
+    double nValue(0.0);
+    getValue(m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,nValue);
+    return nValue;
 }
 // -------------------------------------------------------------------------
 
@@ -316,7 +336,9 @@ float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex ) thr
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-    return getValue(m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,float(0));
+    float nVal(0);
+    getValue(m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,nVal);
+    return nVal;
 }
 // -------------------------------------------------------------------------
 
@@ -327,7 +349,8 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-    sal_Int32 nVal = getValue(m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,sal_Int32(0));
+    sal_Int32 nVal = 0;
+    getValue(m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,nVal);
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
         return (*m_aValueRangeIter).second[(sal_Int32)nVal];
@@ -428,7 +451,8 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-    sal_Int16 nVal = getValue(m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,sal_Int16(0));
+    sal_Int16 nVal = 0;
+    getValue(m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,nVal);
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
         return sal_Int16((*m_aValueRangeIter).second[(sal_Int32)nVal]);
@@ -443,7 +467,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-    ::rtl::OUString aVal = OTools::getStringValue(m_aStatementHandle,columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
+    ::rtl::OUString aVal = OTools::getStringValue(m_aStatementHandle,(SQLUSMALLINT)columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
 
     return aVal;
 }
@@ -459,7 +483,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
     columnIndex = mapColumn(columnIndex);
     TIME_STRUCT aTime={0,0,0};
-    aTime = getValue(m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,aTime);
+    getValue(m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,aTime);
     return Time(0,aTime.second,aTime.minute,aTime.hour);
 }
 // -------------------------------------------------------------------------
@@ -473,7 +497,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
     columnIndex = mapColumn(columnIndex);
     TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
-    aTime = getValue(m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,aTime);
+    getValue(m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,aTime);
     return DateTime(aTime.fraction*1000,aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year);
 }
 // -------------------------------------------------------------------------
@@ -826,7 +850,7 @@ void ODatabaseMetaDataResultSet::getFastPropertyValue(
 void ODatabaseMetaDataResultSet::openTypeInfo() throw(SQLException, RuntimeException)
 {
 
-    ::std::map<sal_Int32,sal_Int32> aMap;
+    TInt2IntMap aMap;
     aMap[SQL_BIT]               = DataType::BIT;
     aMap[SQL_TINYINT]           = DataType::TINYINT;
     aMap[SQL_SMALLINT]          = DataType::SMALLINT;
@@ -1015,7 +1039,7 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
                             (SDB_ODBC_CHAR *) pCOL, SQL_NTS);
 
     OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    ::std::map<sal_Int32,sal_Int32> aMap;
+    TInt2IntMap aMap;
     aMap[SQL_BIT]               = DataType::BIT;
     aMap[SQL_TINYINT]           = DataType::TINYINT;
     aMap[SQL_SMALLINT]          = DataType::SMALLINT;

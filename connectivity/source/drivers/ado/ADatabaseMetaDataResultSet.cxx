@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,7 +974,7 @@ void ODatabaseMetaDataResultSet::setProceduresMap()
     m_aColMapping.push_back(6);
     m_aColMapping.push_back(4);
 
-    ::std::map<sal_Int32,sal_Int32> aMap;
+    TInt2IntMap aMap;
     aMap[DB_PT_UNKNOWN]     = ProcedureResult::UNKNOWN;
     aMap[DB_PT_PROCEDURE]   = ProcedureResult::NONE;
     aMap[DB_PT_FUNCTION]    = ProcedureResult::RETURN;
@@ -1039,7 +1039,7 @@ void ODatabaseMetaDataResultSet::setColumnsMap()
     m_aColMapping.push_back(7);
     m_aColMapping.push_back(11);
 
-    ::std::map<sal_Int32,sal_Int32> aMap;
+    TInt2IntMap aMap;
     aMap[adEmpty]           = ADOS::MapADOType2Jdbc(adEmpty);
     aMap[adTinyInt]         = ADOS::MapADOType2Jdbc(adTinyInt);
     aMap[adSmallInt]        = ADOS::MapADOType2Jdbc(adSmallInt);
@@ -1120,7 +1120,7 @@ void ODatabaseMetaDataResultSet::setProcedureColumnsMap()
     m_aColMapping.push_back(9);
     m_aColMapping.push_back(14);
 
-    ::std::map<sal_Int32,sal_Int32> aMap;
+    TInt2IntMap aMap;
     aMap[DBTYPE_EMPTY] = DataType::SQLNULL;
     aMap[DBTYPE_NULL] = DataType::SQLNULL;
     aMap[DBTYPE_I2] = DataType::SMALLINT;
@@ -1203,7 +1203,7 @@ void ODatabaseMetaDataResultSet::setIndexInfoMap()
     m_aColMapping.push_back(23);
     m_aColMapping.push_back(24);
 
-    ::std::map<sal_Int32,sal_Int32> aMap;
+    TInt2IntMap aMap;
     aMap[DBPROPVAL_IT_HASH] = IndexType::HASHED;
     aMap[DBPROPVAL_IT_CONTENT] = IndexType::OTHER;
     aMap[DBPROPVAL_IT_OTHER] = IndexType::OTHER;
@@ -1211,7 +1211,7 @@ void ODatabaseMetaDataResultSet::setIndexInfoMap()
 
     m_aValueRange[10] = aMap;
 
-    ::std::map<sal_Int32,sal_Int32> aMap2;
+    TInt2IntMap aMap2;
     aMap[0] = 1;
     aMap[1] = 0;
     m_aValueRange[8] = aMap2;
@@ -1292,7 +1292,7 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap()
 
     m_aStrValueRange[18] = aMap1;
 
-    ::std::map<sal_Int32,sal_Int32> aMap;
+    TInt2IntMap aMap;
     aMap[adEmpty]           = ADOS::MapADOType2Jdbc(adEmpty);
     aMap[adTinyInt]         = ADOS::MapADOType2Jdbc(adTinyInt);
     aMap[adSmallInt]        = ADOS::MapADOType2Jdbc(adSmallInt);

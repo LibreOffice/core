@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FColumns.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:28:24 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace connectivity
         public:
             OColumns(   OFileTable* _pTable,
                         ::osl::Mutex& _rMutex,
-                        const ::std::vector< ::rtl::OUString> &_rVector
+                        const TStringVector &_rVector
                     ) : sdbcx::OCollection(*_pTable,_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
                 ,m_pTable(_pTable)
             {}

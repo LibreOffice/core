@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:31:45 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@ OResultSetMetaData::~OResultSetMetaData()
     char *pName = new char[BUFFER_LEN];
     SQLSMALLINT nRealLen=0;
     OTools::ThrowException(N3SQLColAttribute(m_aStatementHandle,
-                                    column,
-                                    ident,
+                                    (SQLUSMALLINT)column,
+                                    (SQLUSMALLINT)ident,
                                     (SQLPOINTER)pName,
                                     BUFFER_LEN,
                                     &nRealLen,
@@ -98,8 +98,8 @@ OResultSetMetaData::~OResultSetMetaData()
         delete pName;
         pName = new char[nRealLen];
         OTools::ThrowException(N3SQLColAttribute(m_aStatementHandle,
-                                    column,
-                                    ident,
+                                    (SQLUSMALLINT)column,
+                                    (SQLUSMALLINT)ident,
                                     (SQLPOINTER)pName,
                                     nRealLen,
                                     &nRealLen,
@@ -119,8 +119,8 @@ sal_Int32 OResultSetMetaData::getNumColAttrib(sal_Int32 _column,sal_Int32 ident)
     sal_Int32 nValue=0;
     sal_Int16 nLen = sizeof(nValue);
     OTools::ThrowException(N3SQLColAttribute(m_aStatementHandle,
-                                         column,
-                                         ident,
+                                         (SQLUSMALLINT)column,
+                                         (SQLUSMALLINT)ident,
                                          NULL,
                                          NULL,
                                          NULL,

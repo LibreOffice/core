@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:55 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,22 +309,8 @@ namespace connectivity
             virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             // special methods
-            inline sal_Int32 mapColumn(sal_Int32    column);
+            sal_Int32 mapColumn(sal_Int32   column);
         };
-        // -------------------------------------------------------------------------
-        inline sal_Int32 OResultSet::mapColumn (sal_Int32   column)
-        {
-            sal_Int32   map = column;
-
-            if (m_aColMapping.size())
-            {
-                // Validate column number
-                OSL_ENSURE(column>0,"OResultSet::mapColumn column <= 0");
-                map = m_aColMapping[column];
-            }
-
-            return map;
-        }
     }
 }
 #endif // _CONNECTIVITY_ODBC_ORESULTSET_HXX_

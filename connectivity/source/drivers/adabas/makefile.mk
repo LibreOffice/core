@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: oj $ $Date: 2001-03-29 07:02:32 $
+#   last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,17 +100,17 @@ SLOFILES=\
         $(SLO)$/BDatabaseMetaData.obj			\
         $(SLO)$/BPreparedStatement.obj          \
         $(SLO)$/BStatement.obj                  \
-        $(SLO)$/BResultSet.obj                  \
-        $(SLO)$/OPreparedStatement.obj			\
-        $(SLO)$/OStatement.obj					\
-        $(SLO)$/OResultSetMetaData.obj			\
-        $(SLO)$/OResultSet.obj					\
-        $(SLO)$/OTools.obj						\
-        $(SLO)$/ODatabaseMetaData.obj			\
-        $(SLO)$/ODatabaseMetaDataResultSet.obj	\
-        $(SLO)$/ODriver.obj						\
-        $(SLO)$/OFunctions.obj					\
-        $(SLO)$/OConnection.obj
+        $(SLO)$/BResultSet.obj
+#		$(SLO)$/OPreparedStatement.obj			\
+#		$(SLO)$/OStatement.obj					\
+#		$(SLO)$/OResultSetMetaData.obj			\
+#		$(SLO)$/OResultSet.obj					\
+#		$(SLO)$/OTools.obj						\
+#		$(SLO)$/ODatabaseMetaData.obj			\
+#		$(SLO)$/ODatabaseMetaDataResultSet.obj	\
+#		$(SLO)$/ODriver.obj						\
+#		$(SLO)$/OFunctions.obj					\
+#		$(SLO)$/OConnection.obj
         
 .IF "$(OS)"=="MACOSX"
 #SHL1VERSIONMAP=$(ADABAS_TARGET).$(DLLPOSTFIX).map
@@ -131,9 +131,7 @@ SHL1STDLIBS=\
     $(DBTOOLSLIB)				\
     $(COMPHELPERLIB)
 
-.IF "$(COMPHELPERLIB)" == ""
-SHL1STDLIBS+= icomphelp2.lib
-.ENDIF
+SHL1STDLIBS+= $(SLB)$/odbc.lib
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)

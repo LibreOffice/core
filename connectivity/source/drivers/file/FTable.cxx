@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ OFileTable::OFileTable(OConnection* _pConnection) : OTable_TYPEDEF(_pConnection-
                 ,m_bWriteable(sal_False)
 {
     construct();
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
     m_pColumns  = new OColumns(this,m_aMutex,aVector);
     m_aColumns = new OSQLColumns();
 }
@@ -131,7 +131,7 @@ OFileTable::OFileTable( OConnection* _pConnection,
 // -------------------------------------------------------------------------
 void OFileTable::refreshColumns()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
         Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
                                                     m_SchemaName,m_Name,::rtl::OUString::createFromAscii("%"));
 

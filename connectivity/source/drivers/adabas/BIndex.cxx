@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:00:50 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ void OAdabasIndex::refreshColumns()
     if(!m_pTable)
         return;
 
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
     if(!isNew())
     {
         Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getIndexInfo(Any(),

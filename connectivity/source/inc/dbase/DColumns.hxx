@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DColumns.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:28:46 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ namespace connectivity
         public:
             ODbaseColumns(file::OFileTable* _pTable,
                             ::osl::Mutex& _rMutex,
-                            const ::std::vector< ::rtl::OUString> &_rVector
+                            const TStringVector &_rVector
                          ) : file::OColumns(_pTable,_rMutex,_rVector)
             {}
 

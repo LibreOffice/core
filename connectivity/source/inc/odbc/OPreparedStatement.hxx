@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:55 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ namespace connectivity
             //====================================================================
             // Data attributes
             //====================================================================
-            ::std::vector<OTypeInfo>                    m_aTypeInfo;    // Hashtable containing an entry
+            TTypeInfoVector                 m_aTypeInfo;    // Hashtable containing an entry
                                                                         //  for each row returned by
                                                                         //  DatabaseMetaData.getTypeInfo.
 
@@ -158,7 +158,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OPreparedStatement( OConnection* _pConnection,const ::std::vector<OTypeInfo>& _TypeInfo,const ::rtl::OUString& sql);
+            OPreparedStatement( OConnection* _pConnection,const TTypeInfoVector& _TypeInfo,const ::rtl::OUString& sql);
 
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

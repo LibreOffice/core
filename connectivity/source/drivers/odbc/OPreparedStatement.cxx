@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:13:38 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,8 @@ int OBoundParam::BINARY  = 3;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.OPreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
-OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::std::vector<OTypeInfo>& _TypeInfo,const ::rtl::OUString& sql)
+
+OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInfoVector& _TypeInfo,const ::rtl::OUString& sql)
     :OStatement_BASE2(_pConnection)
     ,m_aTypeInfo(_TypeInfo)
     ,boundParams(NULL)
@@ -1102,7 +1103,7 @@ sal_Int32 OPreparedStatement::getPrecision ( sal_Int32 sqlType)
     aInfo.nType = sqlType;
     if (m_aTypeInfo.size())
     {
-        ::std::vector<OTypeInfo>::const_iterator aIter = ::std::find(m_aTypeInfo.begin(),m_aTypeInfo.end(),aInfo);
+        TTypeInfoVector::const_iterator aIter = ::std::find(m_aTypeInfo.begin(),m_aTypeInfo.end(),aInfo);
         if(aIter != m_aTypeInfo.end())
             prec = (*aIter).nPrecision;
     }
@@ -1145,7 +1146,7 @@ void OPreparedStatement::setStream (
 
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    N3SQLBindParameter(m_aStatementHandle, ParameterIndex,SQL_PARAM_INPUT,Ctype,
+    N3SQLBindParameter(m_aStatementHandle, (SQLUSMALLINT)ParameterIndex,SQL_PARAM_INPUT,Ctype,
                                 SQLtype, length,0, dataBuf, sizeof(ParameterIndex),(SDWORD*)lenBuf);
 
     // Save the input stream

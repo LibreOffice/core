@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTables.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 18:27:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
         public:
             OCalcTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const ::std::vector< ::rtl::OUString> &_rVector) : OCalcTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
+                const TStringVector &_rVector) : OCalcTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
             {}
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

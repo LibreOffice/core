@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUsers.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 11:44:40 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace connectivity
         public:
             OUsers( ::cppu::OWeakObject& _rParent,
                     ::osl::Mutex& _rMutex,
-                    const ::std::vector< ::rtl::OUString> &_rVector,
+                    const TStringVector &_rVector,
                     OAdabasConnection* _pConnection,
                     connectivity::sdbcx::IRefreshableUsers* _pParent) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
                 ,m_pConnection(_pConnection)

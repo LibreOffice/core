@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:08:03 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ void OAdabasUser::refreshGroups()
     if(!m_pConnection)
         return;
 
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
         Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("SELECT DISTINCT GROUPNAME FROM DOMAIN.USERS WHERE GROUPNAME IS NOT NULL AND GROUPNAME <> ' ' AND USERNAME = '");
     aSql += getName( );

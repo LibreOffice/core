@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:13:38 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,20 @@ void OResultSet::disposing(void)
 
     m_aStatement    = NULL;
     m_xMetaData     = NULL;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 OResultSet::mapColumn (sal_Int32  column)
+{
+    sal_Int32   map = column;
+
+    if (m_aColMapping.size())
+    {
+        // Validate column number
+        OSL_ENSURE(column>0,"OResultSet::mapColumn column <= 0");
+        map = m_aColMapping[column];
+    }
+
+    return map;
 }
 // -------------------------------------------------------------------------
 void OResultSet::allocBuffer(sal_Bool _bAllocRow)
@@ -406,7 +420,9 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
     }
 
 
-    return getValue(m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,sal_Int8(0));
+    sal_Int8 nVal(0);
+    getValue(m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,nVal);
+    return nVal;
 }
 // -------------------------------------------------------------------------
 
@@ -427,7 +443,9 @@ sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLExceptio
         return nRet;
     }
 
-    return getValue(m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,sal_Int8(0));
+    sal_Int8 nVal = 0;
+    getValue(m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,nVal);
+    return nVal;
 }
 // -------------------------------------------------------------------------
 
@@ -488,7 +506,7 @@ Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, R
     aDate.day = 0;
     aDate.month = 0;
     aDate.year = 0;
-    aDate = getValue(m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,aDate);
+    getValue(m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,aDate);
     return Date(aDate.day,aDate.month,aDate.year);
 }
 // -------------------------------------------------------------------------
@@ -508,7 +526,9 @@ double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLExceptio
         m_aRow[columnIndex] >>= nRet;
         return nRet;
     }
-    return getValue(m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,double(0.0));
+    double nVal(0.0);
+    getValue(m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,nVal);
+    return nVal;
 }
 // -------------------------------------------------------------------------
 
@@ -519,7 +539,9 @@ float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException,
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-    return getValue(m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,float(0));
+    float nVal(0);
+    getValue(m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,nVal);
+    return nVal;
 }
 // -------------------------------------------------------------------------
 
@@ -538,7 +560,9 @@ sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLExceptio
         m_aRow[columnIndex] >>= nRet;
         return nRet;
     }
-    return getValue(m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,sal_Int32(0));
+    sal_Int32 nVal(0);
+    getValue(m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,nVal);
+    return nVal;
 }
 // -------------------------------------------------------------------------
 
@@ -648,7 +672,9 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
         m_aRow[columnIndex] >>= nRet;
         return nRet;
     }
-    return getValue(m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,sal_Int16(0));
+    sal_Int16 nVal(0);
+    getValue(m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,nVal);
+    return nVal;
 }
 // -------------------------------------------------------------------------
 
@@ -689,7 +715,7 @@ Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, R
         return nRet;
     }
     TIME_STRUCT aTime={0,0,0};
-    aTime = getValue(m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,aTime);
+    getValue(m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,aTime);
     return Time(0,aTime.second,aTime.minute,aTime.hour);
 }
 // -------------------------------------------------------------------------
@@ -711,7 +737,7 @@ DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLExc
         return nRet;
     }
     TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
-    aTime = getValue(m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,aTime);
+    getValue(m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,aTime);
     return DateTime(aTime.fraction*1000,aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year);
 }
 // -------------------------------------------------------------------------

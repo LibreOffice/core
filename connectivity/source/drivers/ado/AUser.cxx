@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ OAdoUser::OAdoUser(sal_Bool _bCase,   const ::rtl::OUString& _Name) : OUser_TYPE
 void OAdoUser::refreshGroups()
 {
 
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
 
     ADOGroups* pGroups = m_aUser.get_Groups();
     if(pGroups)

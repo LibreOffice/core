@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroup.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ OAdoGroup::OAdoGroup(sal_Bool _bCase, const ::rtl::OUString& _Name) : OGroup_ADO
 // -------------------------------------------------------------------------
 void OAdoGroup::refreshUsers()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
 
     ADOUsers* pUsers = m_aGroup.get_Users();
     if(pUsers)

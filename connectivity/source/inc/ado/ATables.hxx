@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ namespace connectivity
             void setComments(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         public:
             OTables(OCatalog* _pParent, ::osl::Mutex& _rMutex,
-                const ::std::vector< ::rtl::OUString> &_rVector,
+                const TStringVector &_rVector,
                 ADOTables* _pCollection,
                 sal_Bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
                 ,m_pCollection(_pCollection)

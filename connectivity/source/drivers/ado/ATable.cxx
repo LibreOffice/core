@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:13:38 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ OAdoTable::OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog)
 // -------------------------------------------------------------------------
 void OAdoTable::refreshColumns()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
 
     ADOColumns* pColumns = m_aTable.get_Columns();
     if(pColumns)
@@ -187,7 +187,7 @@ void OAdoTable::refreshColumns()
 // -------------------------------------------------------------------------
 void OAdoTable::refreshKeys()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
 
     ADOKeys* pKeys = m_aTable.get_Keys();
     if(pKeys)
@@ -213,7 +213,7 @@ void OAdoTable::refreshKeys()
 // -------------------------------------------------------------------------
 void OAdoTable::refreshIndexes()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
 
     ADOIndexes* pIndexes = m_aTable.get_Indexes();
     if(pIndexes)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-17 12:17:53 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ OResultSetMetaData::OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColum
 // -------------------------------------------------------------------------
 OResultSetMetaData::~OResultSetMetaData()
 {
+    m_xColumns = NULL;
 }
 
 // -------------------------------------------------------------------------
@@ -142,7 +143,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
         throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
 
-    Any aName((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_REALNAME));
+    Any aName((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_NAME));
     return aName.hasValue() ? getString(aName) : getString((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_NAME));
 }
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:25 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ OAdabasTable::OAdabasTable( OAdabasConnection* _pConnection,
 // -------------------------------------------------------------------------
 void OAdabasTable::refreshColumns()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
     if(!isNew())
     {
         Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
@@ -185,7 +185,7 @@ void OAdabasTable::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
 // -------------------------------------------------------------------------
 void OAdabasTable::refreshKeys()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
 
     if(!isNew())
     {
@@ -199,7 +199,7 @@ void OAdabasTable::refreshKeys()
 // -------------------------------------------------------------------------
 void OAdabasTable::refreshIndexes()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
     if(!isNew())
     {
         // fill indexes

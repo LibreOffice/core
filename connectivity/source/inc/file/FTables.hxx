@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTables.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ namespace connectivity
                         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
         public:
             OTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const ::std::vector< ::rtl::OUString> &_rVector) : sdbcx::OCollection(_rParent,_rMetaData->storesMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
+                const TStringVector &_rVector) : sdbcx::OCollection(_rParent,_rMetaData->storesMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
                 ,m_xMetaData(_rMetaData)
                 //  ,m_pParent(_pParent)
             {}

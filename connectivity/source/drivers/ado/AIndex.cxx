@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection)
 
 void OAdoIndex::refreshColumns()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
 
     ADOColumns* pColumns = m_aIndex.get_Columns();
     if(pColumns)

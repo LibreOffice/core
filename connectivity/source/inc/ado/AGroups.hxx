@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroups.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:25 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ namespace connectivity
         public:
             OGroups(::cppu::OWeakObject& _rParent,
                      ::osl::Mutex& _rMutex,
-                     const ::std::vector< ::rtl::OUString> &_rVector,
+                     const TStringVector &_rVector,
                      ADOGroups* _pCollection,sal_Bool _bCase) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
                     ,m_pCollection(_pCollection)
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:55 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
+#ifndef CONNECTIVITY_STDTYPEDEFS_HXX
+#include "connectivity/StdTypeDefs.hxx"
+#endif
 
 namespace connectivity
 {
@@ -123,17 +126,17 @@ namespace connectivity
                                     public  ::cppu::OPropertySetHelper,
                                     public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
         {
-            ::std::vector<void*>            m_aBindVector;
-            ::std::vector<sal_Int32>        m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+            ::std::vector<void*>                            m_aBindVector;
+            ::connectivity::TIntVector                      m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
 
-            ::std::map<sal_Int32, ::std::map<sal_Int32,sal_Int32> >                     m_aValueRange;
-            ::std::map<sal_Int32, ::std::map<sal_Int32,sal_Int32> >::iterator           m_aValueRangeIter;
+            ::std::map<sal_Int32, ::connectivity::TInt2IntMap >                 m_aValueRange;
+            ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator       m_aValueRangeIter;
 
-            ::std::map<sal_Int32, ::std::map< ::rtl::OUString,sal_Int32> >              m_aStrValueRange;
-            ::std::map<sal_Int32, ::std::map< ::rtl::OUString,sal_Int32> >::iterator    m_aStrValueRangeIter;
+            ::std::map<sal_Int32, ::connectivity::TString2IntMap >              m_aStrValueRange;
+            ::std::map<sal_Int32, ::connectivity::TString2IntMap >::iterator    m_aStrValueRangeIter;
 
-            ::std::map<sal_Int32, ::std::map< sal_Int32,::rtl::OUString> >              m_aIntValueRange;
-            ::std::map<sal_Int32, ::std::map< sal_Int32,::rtl::OUString> >::iterator    m_aIntValueRangeIter;
+            ::std::map<sal_Int32, ::connectivity::TInt2StringMap >              m_aIntValueRange;
+            ::std::map<sal_Int32, ::connectivity::TInt2StringMap >::iterator    m_aIntValueRangeIter;
 
 
             SQLHANDLE                                                                   m_aStatementHandle;
@@ -163,7 +166,7 @@ namespace connectivity
             void setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
 
-            inline sal_Int32 mapColumn (sal_Int32   column);
+            sal_Int32 mapColumn (sal_Int32  column);
 
         protected:
 
@@ -258,7 +261,7 @@ namespace connectivity
             // XColumnLocate
             virtual sal_Int32 SAL_CALL findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-            const ::std::vector<sal_Int32>& getColumnMapping() { return m_aColMapping; }
+            const ::connectivity::TIntVector& getColumnMapping() { return m_aColMapping; }
 
             void openTablesTypes( ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void openTypeInfo() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -291,19 +294,6 @@ namespace connectivity
             void openIndexInfo( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema,
                                                     const ::rtl::OUString& table,sal_Bool unique,sal_Bool approximate )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
-        // -------------------------------------------------------------------------
-        inline sal_Int32 ODatabaseMetaDataResultSet::mapColumn (sal_Int32   column)
-        {
-            sal_Int32   map = column;
-
-            if (m_aColMapping.size())
-            {
-                // Validate column number
-                map = m_aColMapping[column];
-            }
-
-            return map;
-        }
     }
 
 }

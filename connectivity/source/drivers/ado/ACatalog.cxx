@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACatalog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 11:38:25 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ OCatalog::OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon) : connectivity::sd
 // -------------------------------------------------------------------------
 void OCatalog::refreshTables()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
 
     ADOTables* pTables = m_aCatalog.get_Tables();
     if(pTables)
@@ -130,7 +130,7 @@ void OCatalog::refreshTables()
 // -------------------------------------------------------------------------
 void OCatalog::refreshViews()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
 
     ADOViews* pViews = m_aCatalog.get_Views();
     if(pViews)
@@ -158,7 +158,7 @@ void OCatalog::refreshViews()
 // -------------------------------------------------------------------------
 void OCatalog::refreshGroups()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
 
     ADOGroups* pGroups = m_aCatalog.get_Groups();
     if(pGroups)
@@ -186,7 +186,7 @@ void OCatalog::refreshGroups()
 // -------------------------------------------------------------------------
 void OCatalog::refreshUsers()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
 
     ADOUsers* pUsers = m_aCatalog.get_Users();
     if(pUsers)

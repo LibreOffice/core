@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCatalog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ void SAL_CALL OFileCatalog::disposing()
 // -------------------------------------------------------------------------
 void OFileCatalog::refreshTables()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
     Sequence< ::rtl::OUString > aTypes;
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
         ::rtl::OUString::createFromAscii("%"),::rtl::OUString::createFromAscii("%"),aTypes);

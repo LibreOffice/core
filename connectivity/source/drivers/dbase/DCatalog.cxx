@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DCatalog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-11 08:11:31 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ODbaseCatalog::ODbaseCatalog(ODbaseConnection* _pCon) : file::OFileCatalog(_pCon
 // -------------------------------------------------------------------------
 void ODbaseCatalog::refreshTables()
 {
-    ::std::vector< ::rtl::OUString> aVector;
+    TStringVector aVector;
     Sequence< ::rtl::OUString > aTypes;
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
         ::rtl::OUString::createFromAscii("%"),::rtl::OUString::createFromAscii("%"),aTypes);
