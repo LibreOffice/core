@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-27 09:22:28 $
+ *  last change: $Author: os $ $Date: 2000-11-27 20:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,21 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     Bitmap BMP_CHKBUT_CHECKED
     {
         File = "chkch.bmp" ;
+    };
+    String ST_SPELL
+    {
+        Text = "Rechtschreibung";
+        Text [ English ] = "Spelling";
+    };
+    String ST_HYPH
+    {
+        Text = "Silbentrennung" ;
+        Text [ English ] = "Hyphenation" ;
+    };
+    String ST_THES
+    {
+        Text = "Thesaurus" ;
+        Text [ English ] = "Thesaurus" ;
     };
 };
 

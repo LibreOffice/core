@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-27 09:22:28 $
+ *  last change: $Author: os $ $Date: 2000-11-27 20:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,5 +158,7 @@
 #define GB_GERMAN_SPELLING      80
 #define BTN_GERMAN_PRE_REFORM   81
 
-
+#define ST_SPELL                82
+#define ST_HYPH                 83
+#define ST_THES                 84
 
