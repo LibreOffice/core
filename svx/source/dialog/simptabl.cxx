@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simptabl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 10:27:34 $
+ *  last change: $Author: pb $ $Date: 2002-06-19 07:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,26 +223,24 @@ void SvxSimpleTable::SetTabs()
 {
     SvTabListBox::SetTabs();
 
-    USHORT nPrivTabCount=TabCount();
-    USHORT nPos=0;
-    USHORT nNewSize=(USHORT)GetTab(0);
-
-    if(nPrivTabCount)
+    USHORT nPrivTabCount = TabCount();
+    if ( nPrivTabCount )
     {
-        if(nPrivTabCount>aHeaderBar.GetItemCount())
-                nPrivTabCount=aHeaderBar.GetItemCount();
+        if ( nPrivTabCount > aHeaderBar.GetItemCount() )
+            nPrivTabCount = aHeaderBar.GetItemCount();
 
-        USHORT i;
-        for(i=1;i<nPrivTabCount;i++)
+        USHORT i, nNewSize = (USHORT)GetTab(0), nPos = 0;
+        for ( i = 1; i < nPrivTabCount; ++i )
         {
-            nNewSize=GetTab(i)-nPos;
-            aHeaderBar.SetItemSize(i,nNewSize );
-            nPos=(USHORT) GetTab(i);
+            nNewSize = GetTab(i) - nPos;
+            aHeaderBar.SetItemSize( i, nNewSize );
+            nPos = (USHORT)GetTab(i);
         }
-        aHeaderBar.SetItemSize(i,HEADERBAR_FULLSIZE); // Da fuer letzten Eintrag kein Tab
 
+        aHeaderBar.SetItemSize( i, HEADERBAR_FULLSIZE ); // because no tab for last entry
     }
 }
+
 void SvxSimpleTable::SetTabs( long* pTabs, MapUnit eMapUnit)
 {
     SvTabListBox::SetTabs(pTabs,eMapUnit);
@@ -252,9 +250,9 @@ void SvxSimpleTable::Paint( const Rectangle& rRect )
 {
     SvTabListBox::Paint(rRect );
 
-    USHORT nPrivTabCount=TabCount();
-    USHORT nPos=0;
-    USHORT nNewSize=(USHORT)GetTab(0);
+    USHORT nPrivTabCount = TabCount();
+    USHORT nPos = 0;
+    USHORT nNewSize = ( nPrivTabCount > 0 ) ? (USHORT)GetTab(0) : 0;
 
     long nOffset=-GetXOffset();
     nOldPos=nOffset;
