@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorplugin.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-21 15:07:06 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,8 @@ typedef enum
     freed by rtl_freeMemory.
     In case an error occurred <code>parJavaInfo</code> need not be freed.
     </p>
-
+    @param sVendor
+        [in] only JRE from this vendor are examined.
     @param sMinVersion
         [in] represents the minimum version of a JRE. It can be NULL.
     @param sMaxVersion
@@ -151,6 +152,7 @@ typedef enum
     version strings.
  */
 javaPluginError jfw_plugin_getAllJavaInfos(
+    rtl_uString *sVendor,
     rtl_uString *sMinVersion,
     rtl_uString *sMaxVersion,
     rtl_uString * * arExcludeList,
