@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaNotConfiguredException.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:37 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 09:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@ module com { module sun { module star { module java {
 /** indicates that the user did not configure Java for an Office installation. <p>
     This exception occurs if there is no java.ini or javarc available. This usually
     happens if a user cancels the Java configuration which of the office.
+
+    @since #107627#
  */
 exception JavaNotConfiguredException: JavaInitializationException
 {
