@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:26:59 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1639,6 +1639,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     break;
 
+                case KEY_DELETE:
+                    if (rSh.IsInFrontOfLabel() &&
+                        rSh.NumOrNoNum(FALSE))
+                        eKeyState = KS_NumOrNoNum;
+                    break;
+
                 case KEY_DELETE | KEY_MOD2:
                     if( !rSh.IsTableMode() && rSh.GetTableFmt() )
                     {
@@ -1976,6 +1982,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
         case KS_KeyToView:
             {
+                if (rSh.IsInFrontOfLabel())
+                {
+                    rSh.NumOrNoNum(FALSE);
+                }
+
                 eKeyState = KS_Ende;
                 bNormalChar = !rKeyCode.IsControlMod() &&
                                 SW_ISPRINTABLE( aCh );
