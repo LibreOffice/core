@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: oj $ $Date: 2002-07-25 07:20:40 $
+#   last change: $Author: oj $ $Date: 2002-08-12 09:11:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,8 @@ ENVCFLAGS+=/FR$(SLO)$/
 .INCLUDE : settings.mk
 # --- Files --------------------------------------------------------
 EXCEPTIONSFILES=\
-        $(SLO)$/predicateinput.obj							\
+        $(SLO)$/predicateinput.obj						\
+        $(SLO)$/ConnectionWrapper.obj					\
         $(SLO)$/TConnection.obj							\
         $(SLO)$/conncleanup.obj							\
         $(SLO)$/emptymetadata.obj						\
