@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:41:07 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 22:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1647,7 +1647,7 @@ String RID_SUBSETSTR_PRIVATE_USE_AREA
         Text[ polish ] = "Symbole specyficzne dla zbioru znaków";
         Text[ portuguese_brazilian ] = "Private Use Area";
         Text[ japanese ] = "Ìß×²ÍŞ°Ä´Ø±";
-        Text[ korean ] = "¹®ÀÚÁıÇÕ Æ¯À¯ÀÇ ±âÈ£";
+        Text[ korean ] = "¹®ÀÚÁıÇÕ °íÀ¯ÀÇ ±âÈ£";
         Text[ chinese_simplified ] = "×¨ÓÃÇø";
         Text[ chinese_traditional ] = "±M¥Î°Ï°ì";
         Text[ turkish ] = "Private Use Area";
@@ -1693,7 +1693,7 @@ String RID_SUBSETSTR_ALPHA_PRESENTATION
         Text[ polish ] = "Fromy prezentacji alfabetycznej";
         Text[ portuguese_brazilian ] = "Alphabetic Presentation Forms";
         Text[ japanese ] = "±ÙÌ§ÍŞ¯Ä•\\¦Œ`";
-        Text[ korean ] = "¾ËÆÄºª½Ä ÇÁ¸®Á¨Å×ÀÌ¼Ç Çü½Ä";
+        Text[ korean ] = "¾ËÆÄºª ÇÁ¸®Á¨Å×ÀÌ¼Ç Çü½Ä";
         Text[ chinese_simplified ] = "×ÖÄ¸µÄÑİÊ¾ĞÎÊ½";
         Text[ chinese_traditional ] = "¦r¥Àºt¥Ü¹Ï¼Ë";
         Text[ turkish ] = "Alphabetic Presentation Forms";
@@ -1762,7 +1762,7 @@ String RID_SUBSETSTR_CJK_COMPAT_FORMS
         Text[ polish ] = "Formy zgodnoœci CJK";
         Text[ portuguese_brazilian ] = "CJK Compatibility Forms";
         Text[ japanese ] = "CJKŒİŠ·•¶š";
-        Text[ korean ] = "CJK È£È¯ À¯Çü";
+        Text[ korean ] = "CJK È£È¯ Çü½Ä";
         Text[ chinese_simplified ] = "ÖĞÈÕº«¼æÈİĞÎÊ½";
         Text[ chinese_traditional ] = "¤¤¤éÁú¬Û®e¹Ï¼Ë";
         Text[ turkish ] = "CJK Compatibility Forms";
@@ -1785,7 +1785,7 @@ String RID_SUBSETSTR_SMALL_FORM_VARIANTS
         Text[ polish ] = "Warianty ma³ych form";
         Text[ portuguese_brazilian ] = "Small Form Variants";
         Text[ japanese ] = "¬šŒ`";
-        Text[ korean ] = "ÀÛÀº ÆùÆ® º¯È­";
+        Text[ korean ] = "ÀÛÀº Çü½Ä¡¡º¯Çü";
         Text[ chinese_simplified ] = "Ğ¡Ğ´±äÌå";
         Text[ chinese_traditional ] = "¤p¼gÅÜÅé";
         Text[ turkish ] = "Small Form Variants";
