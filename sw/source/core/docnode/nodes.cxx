@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-26 17:14:24 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 21:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,7 +774,9 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
         case ND_TABLENODE:
         case ND_STARTNODE:
             {
-                if( !nInsPos )          // empty section -> nothing to do
+                // Bug #78589# - empty section -> nothing to do
+                //  and only if it's a top level section
+                if( !nInsPos && !nLevel )
                 {
                     aRg.aEnd--;
                     break;
