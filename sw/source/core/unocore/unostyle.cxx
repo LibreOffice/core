@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: os $ $Date: 2002-10-24 09:35:02 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,12 @@ sal_Int32 lcl_GetCountOrName ( const SwDoc &rDoc, SfxStyleFamily eFamily, String
                 {
                     if ( nIndex == nCount )
                     {
-                        *pString = pFmt->GetName();
+                        // the default character format needs to be set to "Default!"
+                        if(rDoc.GetDfltCharFmt() == pFmt)
+                            SwStyleNameMapper::FillUIName(
+                                RES_POOLCOLL_STANDARD, *pString );
+                        else
+                            *pString = pFmt->GetName();
                         break;
                     }
                     nCount++;
