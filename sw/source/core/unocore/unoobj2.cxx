@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 09:37:26 $
+ *  last change: $Author: os $ $Date: 2001-05-23 09:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -943,7 +943,9 @@ SwXParagraphEnumeration::SwXParagraphEnumeration(SwXText* pParent,
         xParentText(pParent),
         bFirstParagraph(sal_True),
         eCursorType(eType),
-        nEndIndex(rPos.nNode.GetIndex())
+        nEndIndex(rPos.nNode.GetIndex()),
+        nFirstParaStart(-1),
+        nLastParaEnd(-1)
 {
     SwUnoCrsr* pUnoCrsr = pParent->GetDoc()->CreateUnoCrsr(rPos, sal_False);
     pUnoCrsr->Add(this);
@@ -959,12 +961,16 @@ SwXParagraphEnumeration::SwXParagraphEnumeration(SwXText* pParent,
         xParentText(pParent),
         bFirstParagraph(sal_True),
         eCursorType(eType),
-        nEndIndex(pCrsr->End()->nNode.GetIndex())
+        nEndIndex(pCrsr->End()->nNode.GetIndex()),
+        nFirstParaStart(-1),
+        nLastParaEnd(-1)
 {
     if(CURSOR_SELECTION == eCursorType || CURSOR_SELECTION_IN_TABLE == eCursorType)
     {
         if(*pCrsr->GetPoint() > *pCrsr->GetMark())
             pCrsr->Exchange();
+        nFirstParaStart = pCrsr->GetPoint()->nContent.GetIndex();
+        nLastParaEnd = pCrsr->GetMark()->nContent.GetIndex();
         if(pCrsr->HasMark())
             pCrsr->DeleteMark();
     }
@@ -1054,6 +1060,8 @@ uno::Any SwXParagraphEnumeration::nextElement(void)
 
         if( bFirstParagraph || bInTable || pUnoCrsr->MovePara(fnParaNext, fnParaStart))
         {
+            sal_Int32 nFirstContent = bFirstParagraph ? nFirstParaStart : -1;
+            sal_Int32 nLastContent = nEndIndex ==  pUnoCrsr->Start()->nNode.GetIndex() ? nLastParaEnd : -1;
             bFirstParagraph = sal_False;
             SwPosition* pStart = pUnoCrsr->Start();
             //steht man nun in einer Tabelle, oder in einem einfachen Absatz?
@@ -1069,7 +1077,7 @@ uno::Any SwXParagraphEnumeration::nextElement(void)
             else
             {
                 SwUnoCrsr* pNewCrsr = pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, sal_False);
-                aRef =  (XTextContent*)new SwXParagraph((SwXText*)pText, pNewCrsr);
+                aRef =  (XTextContent*)new SwXParagraph((SwXText*)pText, pNewCrsr, nFirstContent, nLastContent);
             }
         }
         else
