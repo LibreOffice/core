@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_jar.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-18 14:52:24 $
+#   last change: $Author: hr $ $Date: 2004-11-09 12:12:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -143,6 +143,6 @@ $(JARTARGETN) :
 .IF "$(OS)$(CPU)"=="SOLARISS"
     @+-find . -type d -user $(USER) ! -perm -5 -print | xargs test "$$1" != "" && chmod +r $$1 
 .ENDIF
-    +cd $(CLASSDIR) && zip -u -rX $(@:f) $(subst,$(CLASSDIR)$/, $(JARMANIFEST)) $(subst,\,/ $(JARCLASSDIRS))
+    +cd $(CLASSDIR) && zip -u -rX $(@:f) $(subst,$(CLASSDIR)$/, $(JARMANIFEST)) $(subst,\,/ $(JARCLASSDIRS)) $(CHECKZIPRESULT)
 .ENDIF
 
