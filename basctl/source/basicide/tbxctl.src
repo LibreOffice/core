@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-27 08:56:33 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 11:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_traditional ] = "®Ö¨ú¤è¶ô";
             Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
             Text[ greek ] = "Ğëáßóéï åëİã÷ïõ";
-            Text[ korean ] = "Ã¼Å© ¹Ú½º";
+            Text[ korean ] = "Ã¼Å©  ¹Ú½º";
             Text[ turkish ] = "Seçme kutusu";
             Text[ language_user1 ] = " ";
         };
@@ -585,7 +585,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_traditional ] = "¿E¬¡¸ÕÅç¼Ò¦¡";
             Text[ arabic ] = "ÊäÔíØ æÖÚ ÇáÇÎÊÈÇÑ";
             Text[ greek ] = "Åíåñãïğïßçóç êáôÜóôáóçò äïêéìŞò";
-            Text[ korean ] = "Å×½ºÆ® ¸ğµå È°¼º";
+            Text[ korean ] = "Å×½ºÆ®¸ğµå È°¼ºÈ­";
             Text[ turkish ] = "Deneme kipini etkinleştir";
             Text[ language_user1 ] = " ";
         };
