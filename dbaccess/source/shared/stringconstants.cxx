@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:27:16 $
+ *  last change: $Author: fs $ $Date: 2001-05-15 11:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@ IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDBCX_COLUMNS, "com.sun.star.sdbcx.Columns"
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDBCX_TABLES, "com.sun.star.sdbcx.Tables");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_QUERIES, "com.sun.star.sdb.Queries");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDBC_DRIVERMANAGER, "com.sun.star.sdbc.DriverManager");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDBC_CONNECTIONPOOL, "com.sun.star.sdbc.ConnectionPool");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDBCX_INDEXCOLUMN, "com.sun.star.sdbcx.IndexColumn");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDBCX_KEYCOLUMN, "com.sun.star.sdbcx.KeyColumn");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_INTERACTION_HANDLER, "com.sun.star.sdb.InteractionHandler");
