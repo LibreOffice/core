@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-08 10:33:21 $
+ *  last change: $Author: jsc $ $Date: 2001-02-05 16:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,7 @@ sal_Bool JavaType::dumpMemberConstructor(FileStream& o)
     if (superType.getLength() > 0)
         withIndent = dumpInheritedMembers(o, superType, sal_True);
 
-    sal_uInt32      fieldCount = m_reader.getFieldCount();
+    sal_uInt16      fieldCount = (sal_uInt16)m_reader.getFieldCount();
     RTFieldAccess   access = RT_ACCESS_INVALID;
     OString         fieldName;
     OString         fieldType;
@@ -700,7 +700,7 @@ sal_Bool JavaType::dumpInheritedMembers(FileStream& o, const OString& type, sal_
 
                 first = withIndent;
 
-                sal_uInt32      fieldCount = reader.getFieldCount();
+                sal_uInt16      fieldCount = (sal_uInt16)reader.getFieldCount();
                 RTFieldAccess   access = RT_ACCESS_INVALID;
                 for (sal_uInt16 i=0; i < fieldCount; i++)
                 {
@@ -787,7 +787,7 @@ OString JavaType::indent()
 {
     OStringBuffer tmp(m_indentLength);
 
-    for (int i=0; i < m_indentLength; i++)
+    for (sal_uInt32 i=0; i < m_indentLength; i++)
     {
         tmp.append(' ');
     }
@@ -798,7 +798,7 @@ OString JavaType::indent(sal_uInt32 num)
 {
     OStringBuffer tmp(m_indentLength + num);
 
-    for (int i=0; i < m_indentLength + num; i++)
+    for (sal_uInt32 i=0; i < m_indentLength + num; i++)
     {
         tmp.append(' ');
     }
@@ -943,7 +943,7 @@ void InterfaceType::dumpMethods(FileStream& o, UnoInfoList* pUnoInfos)
     sal_Bool first=sal_True;
 
     OString methodName, returnType, paramType, paramName;
-    sal_uInt32 paramCount = 0;
+    sal_uInt16 paramCount = 0;
     sal_uInt32 excCount = 0;
     RTMethodMode methodMode = RT_MODE_INVALID;
     RTParamMode  paramMode = RT_PARAM_INVALID;
@@ -955,7 +955,7 @@ void InterfaceType::dumpMethods(FileStream& o, UnoInfoList* pUnoInfos)
 
         methodName = m_reader.getMethodName(i);
         returnType = m_reader.getMethodReturnType(i);
-        paramCount = m_reader.getMethodParamCount(i);
+        paramCount = (sal_uInt16)m_reader.getMethodParamCount(i);
         excCount = m_reader.getMethodExcCount(i);
         methodMode = m_reader.getMethodMode(i);
 
