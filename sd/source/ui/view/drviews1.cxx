@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:54:23 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,9 +208,11 @@ void DrawViewShell::Activate(BOOL bIsMDIActivate)
 
     if (rObjectBarManager.GetTopObjectBarId() == 0)
     {
+    /*
         // There is not yet an active object bar.
         rObjectBarManager.PushObjectBar (RID_FORMLAYER_TOOLBOX);
         rObjectBarManager.PushObjectBar (RID_DRAW_OBJ_TOOLBOX);
+    */
     }
 
     if (bIsMDIActivate)
