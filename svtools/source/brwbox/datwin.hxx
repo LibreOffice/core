@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 14:19:34 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,8 @@ friend class BrowseBox;
     USHORT          nUpdateLock;    // lock count, dont call Control::Update()!
     short           nCursorHidden;  // new conuter for DoHide/ShowCursor
 
+    long            m_nDragRowDividerLimit;
+    long            m_nDragRowDividerOffset;
 
 public:
                     BrowserDataWin( BrowseBox* pParent );
@@ -209,6 +211,7 @@ public:
 
     virtual void    MouseButtonUp( const MouseEvent& rEvt );
     virtual void    KeyInput( const KeyEvent& rEvt );
+    virtual void    Tracking( const TrackingEvent& rTEvt );
 
     // DropTargetHelper overridables
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
@@ -232,6 +235,10 @@ public:
     void            DoOutstandingInvalidations();
     void            Invalidate();
     void            Invalidate( const Rectangle& rRect );
+
+protected:
+    void            StartRowDividerDrag( const Point& _rStartPos );
+    BOOL            ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent );
 };
 
 //-------------------------------------------------------------------
