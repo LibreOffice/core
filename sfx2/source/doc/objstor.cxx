@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:14:28 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1939,9 +1939,6 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
     SfxItemSet*     aParams
 )
 {
-    SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEASDOC,this));
-    BOOL bWasReadonly = IsReadOnly();
-
     if( aURL.HasError() )
     {
         SetError( ERRCODE_IO_INVALIDPARAMETER );
@@ -1968,14 +1965,16 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
     SfxMedium *pActMed = GetMedium();
     const INetURLObject aActName(pActMed->GetName());
 
-    if ( aURL == aActName
-        && aURL != INetURLObject( OUString::createFromAscii( "private:stream" ) ) )
+    BOOL bWasReadonly = IsReadOnly();
+
+    if ( aURL == aActName && aURL != INetURLObject( OUString::createFromAscii( "private:stream" ) ) )
     {
         if ( IsReadOnly() )
         {
             SetError(ERRCODE_SFX_DOCUMENTREADONLY);
             return sal_False;
         }
+
         // gleicher Filter? -> Save()
         const SfxFilter *pFilter = pActMed->GetFilter();
         if ( pFilter && pFilter->GetFilterName() == aFilterName )
@@ -1987,9 +1986,15 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
                 pSet->ClearItem( SID_PASSWORD );
                 pSet->Put( *aParams );
             }
-            return DoSave_Impl();
+
+            SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEDOC,this));
+            BOOL bRet = DoSave_Impl();
+            SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEDOCDONE,this));
+            return bRet;
         }
     }
+
+    SFX_APP()->NotifyEvent(SfxEventHint( bSaveTo? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC,this));
 
     if( SFX_ITEM_SET != aParams->GetItemState(SID_UNPACK) && SvtSaveOptions().IsSaveUnpacked() )
         aParams->Put( SfxBoolItem( SID_UNPACK, sal_False ) );
@@ -2032,7 +2037,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
                 pSet->Put( *pFilterOptItem );
         }
 
-        SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEASDOCDONE,this));
+        SFX_APP()->NotifyEvent(SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOCDONE : SFX_EVENT_SAVEASDOCDONE,this));
 
         if ( bWasReadonly && !bSaveTo )
             Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
