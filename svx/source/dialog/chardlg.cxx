@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pb $ $Date: 2001-03-19 12:33:03 $
+ *  last change: $Author: fs $ $Date: 2001-03-21 13:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3228,8 +3228,11 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pBox )
 void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
 {
     FontNameBox* pNameBox = bWest ? &m_aWestFontNameLB : &m_aEastFontNameLB;
+    FixedText* pNameLabel = bWest ? &m_aWestFontNameFT : &m_aEastFontNameFT;
     FontStyleBox* pStyleBox = bWest ? &m_aWestFontStyleLB : &m_aEastFontStyleLB;
+    FixedText* pStyleLabel = bWest ? &m_aWestFontStyleFT : &m_aEastFontStyleFT;
     FontSizeBox* pSizeBox = bWest ? &m_aWestFontSizeLB : &m_aEastFontSizeLB;
+    FixedText* pSizeLabel = bWest ? &m_aWestFontSizeFT : &m_aEastFontSizeFT;
     FixedText* pLangFT = bWest ? &m_aWestFontLanguageFT : &m_aEastFontLanguageFT;
     SvxLanguageBox* pLangBox = bWest ? &m_aWestFontLanguageLB : &m_aEastFontLanguageLB;
 
@@ -3248,11 +3251,16 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
         pNameBox->SetText( pFontItem->GetFamilyName() );
     }
     else
+    {
         pNameBox->SetText( String() );
+        pNameBox->Disable( );
+        pNameLabel->Disable( );
+    }
 
     FillStyleBox_Impl( pNameBox );
 
     FASTBOOL bStyle = FALSE;
+    FASTBOOL bStyleAvailable = TRUE;
     FontItalic eItalic = ITALIC_NONE;
     FontWeight eWeight = WEIGHT_NORMAL;
     nWhich = GetWhich( bWest ? SID_ATTR_CHAR_POSTURE : SID_ATTR_CHAR_CJK_POSTURE );
@@ -3264,6 +3272,7 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
         eItalic = (FontItalic)rItem.GetValue();
         bStyle = TRUE;
     }
+    bStyleAvailable = bStyleAvailable && (eState >= SFX_ITEM_DONTCARE);
 
     nWhich = GetWhich( bWest ? SID_ATTR_CHAR_WEIGHT : SID_ATTR_CHAR_CJK_WEIGHT );
     eState = rSet.GetItemState( nWhich );
@@ -3273,8 +3282,9 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
         SvxWeightItem& rItem = (SvxWeightItem&)rSet.Get( nWhich );
         eWeight = (FontWeight)rItem.GetValue();
     }
-    else if ( bStyle )
+    else
         bStyle = FALSE;
+    bStyleAvailable = bStyleAvailable && (eState >= SFX_ITEM_DONTCARE);
 
     // Aktuell eingestellter Font
     if ( bStyle && pFontItem )
@@ -3283,11 +3293,18 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
         pStyleBox->SetText( pFontList->GetStyleName( aInfo ) );
     }
     else if ( !m_pImpl->m_bInSearchMode || !bStyle )
+    {
         pStyleBox->SetText( String() );
+    }
     else if ( bStyle )
     {
         FontInfo aInfo = pFontList->Get( String(), eWeight, eItalic );
         pStyleBox->SetText( pFontList->GetStyleName( aInfo ) );
+    }
+    if (!bStyleAvailable)
+    {
+        pStyleBox->Disable( );
+        pStyleLabel->Disable( );
     }
 
     // SizeBox fuellen
@@ -3319,7 +3336,11 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
         pSizeBox->SetValue( (long)CalcToPoint( rItem.GetHeight(), eUnit, 10 ) );
     }
     else
+    {
         pSizeBox->SetText( String() );
+        pSizeBox->Disable( );
+        pSizeLabel->Disable( );
+    }
 
     nWhich = GetWhich( bWest ? SID_ATTR_CHAR_LANGUAGE : SID_ATTR_CHAR_CJK_LANGUAGE );
     pLangBox->SetNoSelection();
@@ -4284,6 +4305,11 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         rFont.SetEmphasisMark( eMark );
         m_aEmphasisLB.SelectEntryPos( (USHORT)( eMark & EMPHASISMARK_STYLE ) );
     }
+    else
+    {
+        m_aEmphasisFT.Disable( );
+        m_aEmphasisLB.Disable( );
+    }
 
     SelectHdl_Impl( NULL );
     SelectHdl_Impl( &m_aEmphasisLB );
@@ -4297,6 +4323,12 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         const SvxCaseMapItem& rItem = (const SvxCaseMapItem&)rSet.Get( nWhich );
         eCaseMap = (SvxCaseMap)rItem.GetValue();
     }
+    else
+    {
+        m_aEffectsFT.Disable( );
+        m_aEffectsLB.Disable( );
+        m_aEffects2LB.Disable( );
+    }
     SetCaseMap_Impl( eCaseMap );
 
     //Relief
@@ -4306,6 +4338,11 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         const SvxCharReliefItem& rItem = (const SvxCharReliefItem&)rSet.Get( nWhich );
         m_aReliefLB.SelectEntryPos(rItem.GetValue());
         SelectHdl_Impl(&m_aReliefLB);
+    }
+    else
+    {
+        m_aReliefFT.Disable( );
+        m_aReliefLB.Disable( );
     }
 
     // Outline
