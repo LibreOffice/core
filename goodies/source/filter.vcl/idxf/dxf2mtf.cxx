@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxf2mtf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:25:28 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <string.h>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/poly.hxx>
+#include <tools/poly.hxx>
 #include "dxf2mtf.hxx"
 
 
