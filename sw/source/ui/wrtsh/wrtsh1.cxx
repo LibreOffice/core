@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:57:38 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,21 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
+
+#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
+#include <com/sun/star/embed/XVisualObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
+#include <com/sun/star/embed/EmbedMisc.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 
 #ifndef _UIPARAM_HXX
 #include <uiparam.hxx>
 #endif
-#include <so3/outplace.hxx>
 
 #if STLPORT_VERSION>=321
 #include <math.h>   // prevent conflict between exception and std::exception
@@ -90,17 +98,9 @@
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _INSDLG_HXX //autogen
-#include <so3/insdlg.hxx>
-#endif
-#ifndef _APPLET_HXX
-#include <so3/applet.hxx>
-#endif
-#ifndef _FRAMEOBJ_HXX //autogen
-#include <sfx2/frameobj.hxx>
+#include <svtools/insdlg.hxx>
 #endif
 #ifndef _SFX_FRMDESCRHXX
 #include <sfx2/frmdescr.hxx>
@@ -108,11 +108,8 @@
 #ifndef _EHDL_HXX //autogen
 #include <svtools/ehdl.hxx>
 #endif
-#ifndef _IPENV_HXX //autogen
-#include <so3/ipenv.hxx>
-#endif
 #ifndef _SOERR_HXX //autogen
-#include <so3/soerr.hxx>
+#include <svtools/soerr.hxx>
 #endif
 #ifndef _CACHESTR_HXX //autogen
 #include <tools/cachestr.hxx>
@@ -147,6 +144,10 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
+
+#include <comphelper/storagehelper.hxx>
+#include <svx/svxdlg.hxx>
+
 #ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
 #endif
@@ -246,7 +247,12 @@
 #include <undobj.hxx>
 // <- #111827#
 
+#include <toolkit/helper/vclunohelper.hxx>
+#include <sfx2/viewfrm.hxx>
+
 #include <svx/acorrcfg.hxx>
+
+using namespace com::sun::star;
 
 #define COMMON_INI_LIST \
         rView(rShell),\
@@ -523,70 +529,50 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
 ------------------------------------------------------------------------*/
 
 
-void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName,
+void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName *pName,
                             BOOL bActivate, USHORT nSlotId, SfxRequest* pReq )
 {
     ResetCursorStack();
     if( !_CanInsert() )
-    {
-        delete pRef;
         return;
-    }
 
-    if( !pRef )
+    if( !xRef.is() )
     {
-        //Wir bauen uns ein neues OLE-Objekt, entweder per Dialog oder direkt
-        //ueber den Namen.
-        SvInPlaceObjectRef xIPObj;
+        // temporary storage
+        svt::EmbeddedObjectRef xObj;
+        uno::Reference < embed::XStorage > xStor = comphelper::OStorageHelper::GetTemporaryStorage();
         BOOL bDoVerb = TRUE;
         if ( pName )
         {
-            xIPObj = SvInPlaceObject::CreateObject( *pName );
+            comphelper::EmbeddedObjectContainer aCnt( xStor );
+            ::rtl::OUString aName;
+            // TODO/LATER: get aspect
+            xObj.Assign( aCnt.CreateEmbeddedObject( pName->GetByteSequence(), aName ), embed::Aspects::MSOLE_CONTENT );
         }
         else
         {
-            SvStorageRef aStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE);
-
+            SvObjectServerList aServerList;
             switch (nSlotId)
             {
                 case SID_INSERT_OBJECT:
                 {
-                    SvInsertOleObjectDialog aDlg;
-                    aDlg.SetHelpId(nSlotId);
-
-                    //Wir wollen uns nicht selbst servieren.
-                    SvObjectServerList aServerList;
-                    aDlg.FillObjectServerList( &aServerList );
-                    aServerList.Remove( *SwDocShell::ClassFactory() );
-
-                    xIPObj = aDlg.Execute( GetWin(), aStor, &aServerList);
-
-                    bDoVerb = aDlg.IsCreateNew();
+                    aServerList.FillInsertObjects();
+                    aServerList.Remove( SwDocShell::Factory().GetClassId() );
+                    // Intentionally no break!
                 }
-                break;
 
+                // TODO/LATER: recording! Convert properties to items
                 case SID_INSERT_PLUGIN:
-                {
-                    SvInsertPlugInDialog aDlg;
-                    aDlg.SetHelpId(nSlotId);
-
-                    xIPObj = aDlg.Execute( GetWin(), aStor);
-                    bDoVerb = FALSE;
+                    /*
                     if(pReq)
                     {
                         INetURLObject* pURL = aDlg.GetURL();
                         if(pURL)
                             pReq->AppendItem(SfxStringItem(FN_PARAM_2, pURL->GetMainURL(INetURLObject::NO_DECODE)));
                         pReq->AppendItem(SfxStringItem(FN_PARAM_3 , aDlg.GetCommands()));
-                    }
-                }
-                break;
-
+                    } */
                 case SID_INSERT_APPLET:
-                {
-                    SvInsertAppletDialog aDlg;
-                    aDlg.SetHelpId(nSlotId);
-                    xIPObj = aDlg.Execute( GetWin(), aStor);
+                    /*
                     if(pReq)
                     {
                         SvAppletObjectRef xApplet ( xIPObj );
@@ -594,16 +580,9 @@ void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName,
                             pReq->AppendItem(SfxStringItem(FN_PARAM_1 , xApplet->GetCodeBase()));
                         pReq->AppendItem(SfxStringItem(FN_PARAM_2 , aDlg.GetClass()));
                         pReq->AppendItem(SfxStringItem(FN_PARAM_3 , aDlg.GetCommands()));
-                    }
-                    bDoVerb = FALSE;
-                }
-                break;
-
+                    }*/
                 case SID_INSERT_FLOATINGFRAME:
-                {
-                    SfxInsertFloatingFrameDialog aDlg( GetWin() );
-                    xIPObj = aDlg.Execute( aStor );
-                    SfxFrameObjectRef xFloatingFrame( xIPObj );
+                    /*
                     if(pReq && xFloatingFrame.Is())
                     {
                         const SfxFrameDescriptor* pDescriptor = xFloatingFrame->GetFrameDescriptor();
@@ -614,8 +593,21 @@ void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName,
                         pReq->AppendItem(SvxSizeItem(FN_PARAM_3, pDescriptor->GetMargin()));
                         pReq->AppendItem(SfxByteItem(FN_PARAM_4, pDescriptor->GetScrollingMode()));
                         pReq->AppendItem(SfxBoolItem(FN_PARAM_5, pDescriptor->HasFrameBorder()));
+                    }*/
+                {
+                    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                    SfxAbstractInsertObjectDialog* pDlg =
+                            pFact->CreateInsertObjectDialog( GetWin(), nSlotId, xStor, &aServerList );
+                    if ( pDlg )
+                    {
+                        pDlg->Execute();
+                        bDoVerb = pDlg->IsCreateNew();
+                        // TODO/LATER: pass Aspect
+                        xObj.Assign( pDlg->GetObject(), embed::Aspects::MSOLE_CONTENT );
+                        DELETEZ( pDlg );
                     }
-                    bDoVerb = FALSE;
+
+                    break;
                 }
 
                 default:
@@ -623,35 +615,31 @@ void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName,
             }
         }
 
-        if ( xIPObj.Is() )
+        if ( xObj.is() )
         {
+            //TODO/LATER: RESIZEONPRINTERCHANGE
+            /*
             if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE &
                 xIPObj->GetMiscStatus() && GetPrt() )
-                xIPObj->OnDocumentPrinterChanged( GetPrt() );
+                xIPObj->OnDocumentPrinterChanged( GetPrt() );*/
 
-            if( InsertOle( xIPObj ) && bActivate && bDoVerb )
+            if( InsertOleObject( xObj ) && bActivate && bDoVerb )
             {
-                SfxInPlaceClientRef xCli = GetView().FindIPClient( xIPObj,
-                                                    &GetView().GetEditWin());
-                if ( !xCli.Is() )
+                SfxInPlaceClient* pClient = GetView().FindIPClient( xObj.GetObject(), &GetView().GetEditWin() );
+                if ( !pClient )
                 {
-                    xCli = new SwOleClient( &GetView(), &GetView().GetEditWin() );
+                    pClient = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
                     SetCheckForOLEInCaption( TRUE );
                 }
 
-                ErrCode nErr = xIPObj->DoConnect( xCli );
-                ErrorHandler::HandleError( nErr );
-                if ( !ERRCODE_TOERROR(nErr) )
-                {
+                CalcAndSetScale( xObj );
+                //#50270# Error brauchen wir nicht handeln, das erledigt das
+                //DoVerb in der SfxViewShell
+                ErrCode nErr = pClient->DoVerb( SVVERB_SHOW );
 
-                    SvEmbeddedObjectRef xObj = &xIPObj;
-                    CalcAndSetScale( xObj );
-                    //#50270# Error brauchen wir nicht handeln, das erledigt das
-                    //DoVerb in der SfxViewShell
-                    nErr = GetView().SfxViewShell::DoVerb( xCli, SVVERB_SHOW );
-                    if ( !ERRCODE_TOERROR( nErr ) )
-                        xIPObj->SetDocumentName( GetView().GetDocShell()->GetTitle() );
-                }
+                // TODO/LATER: set document name - should be done in Client
+                //if ( !ERRCODE_TOERROR( nErr ) )
+                //    xIPObj->SetDocumentName( GetView().GetDocShell()->GetTitle() );
             }
         }
     }
@@ -659,7 +647,7 @@ void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName,
     {
         if( HasSelection() )
             DelRight();
-        InsertOle( *pRef );
+        InsertOleObject( xRef );
     }
 }
 
@@ -668,9 +656,9 @@ void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName,
                  Vom ClipBoard oder Insert
 ------------------------------------------------------------------------*/
 
-BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
+BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
 {
-    if ( aRef.Is() )
+    if ( xRef.is() )
     {
         ResetCursorStack();
         StartAllAction();
@@ -688,12 +676,11 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
         BOOL bStarMath,
              bActivate = TRUE;
 
-        SvGlobalName aCLSID;
-        ULONG lDummy;
-        String aDummy;
         // determine source CLSID
-        aRef->SvPseudoObject::FillClass( &aCLSID, &lDummy, &aDummy, &aDummy, &aDummy);
-        bStarMath = 0 != SotExchange::IsMath( *aRef->GetSvFactory() );
+        SvGlobalName aCLSID( xRef->getClassID() );
+
+        // TODO/MBA: testing
+        bStarMath = ( SotExchange::IsMath( aCLSID ) != 0 );
 
         if( IsSelection() )
         {
@@ -701,13 +688,27 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
             {
                 String aMathData;
                 GetSelectedText( aMathData, GETSELTXT_PARABRK_TO_ONLYCR );
-                if( aMathData.Len() && aRef->SetData( aMathData ) )
+
+                if( aMathData.Len() )
                 {
-                    bActivate = FALSE;
-                    //StarMath size depends on the Printer, which is
-                    //passed here direct for avoiding time consuming
-                    //connections between StarWriter and StarMath
-                    aRef->OnDocumentPrinterChanged( GetPrt() );
+                    uno::Reference < beans::XPropertySet > xSet( xRef->getComponent(), uno::UNO_QUERY );
+                    if ( xSet.is() )
+                    {
+                        try
+                        {
+                            // TODO/MBA: testing
+                            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("Formula"), uno::makeAny( ::rtl::OUString( aMathData ) ) );
+                            bActivate = FALSE;
+                            //StarMath size depends on the Printer, which is
+                            //passed here direct for avoiding time consuming
+                            //connections between StarWriter and StarMath
+                            // TODO/LATER: OnDocumentPrinterChanged
+                            //aRef->OnDocumentPrinterChanged( GetPrt() );
+                        }
+                        catch ( uno::Exception& )
+                        {
+                        }
+                    }
                 }
             }
             DelRight();
@@ -725,8 +726,11 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
         CalcBoundRect( aBound, aFrmMgr.GetAnchor() );
 
         //The Size should be suggested by the OLE server
-        MapMode aRefMap( aRef->GetMapUnit() );
-        Size aSz( aRef->GetVisArea().GetSize() );
+        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+        MapMode aRefMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( xRef->getMapUnit( nAspect ) ) );
+
+        awt::Size aSize = xRef->getVisualAreaSize( nAspect );
+        Size aSz( aSize.Width, aSize.Height );
         if ( !aSz.Width() || !aSz.Height() )
         {
             aSz.Width() = aSz.Height() = 5000;
@@ -743,16 +747,16 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
             aSz.Width() = aBound.Width();
         }
         aFrmMgr.SetSize( aSz );
-        SwFEShell::Insert( &aRef, &aFrmMgr.GetAttrSet() );
+        SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
 
         EndAllAction();
         GetView().AutoCaption(OLE_CAP, &aCLSID);
 
         SwRewriter aRewriter;
 
-        if (SotExchange::IsMath(*aRef->GetSvFactory()))
+        if ( bStarMath )
             aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_FORMULA));
-        else if (SotExchange::IsChart(*aRef->GetSvFactory()))
+        else if ( SotExchange::IsChart( aCLSID ) )
             aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_CHART));
         else
             aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_OLE));
@@ -775,100 +779,114 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
 void SwWrtShell::LaunchOLEObj( long nVerb )
 {
     if ( GetCntType() == CNT_OLE &&
-         !GetView().GetDocShell()->IsInPlaceActive() )
+         !GetView().GetViewFrame()->GetFrame()->IsInPlace() )
     {
-        SvInPlaceObjectRef xRef = GetOLEObj();
-        ASSERT( xRef.Is(), "OLE not found" );
-        SfxInPlaceClientRef xCli;
+        svt::EmbeddedObjectRef& xRef = GetOLEObject();
+        ASSERT( xRef.is(), "OLE not found" );
+        SfxInPlaceClient* pCli=0;
 
         //  Link fuer Daten-Highlighting im Chart zuruecksetzen
         SvtModuleOptions aMOpt;
         if( aMOpt.IsChart() )
         {
-            SvGlobalName aObjClsId( *xRef->GetSvFactory() );
-            SchMemChart* pMemChart;
-            if( SotExchange::IsChart( aObjClsId ) &&
-                0 != (pMemChart = SchDLL::GetChartData( xRef ) ))
+            SchMemChart* pMemChart=0;
+            if( SotExchange::IsChart( SvGlobalName( xRef->getClassID() ) ) &&
+                0 != (pMemChart = SchDLL::GetChartData( xRef.GetObject() ) ))
             {
                 pMemChart->SetSelectionHdl( LINK( this, SwWrtShell,
                                             ChartSelectionHdl ) );
                 //#60043# Damit die DataBrowseBox nicht erscheint wird das
                 //Chart auf Readonly gesetzt wenn es eine Verbindung
                 //zu einer Tabelle hat.
-                if ( GetChartName( xRef ).Len() )
+                if ( GetChartName( xRef.GetObject() ).Len() )
                 {
                     pMemChart->SetReadOnly( TRUE );
                     pMemChart->SetNumberFormatter(GetDoc()->GetNumberFormatter( sal_True ));
-                    SchDLL::Update(xRef, pMemChart);
+                    SchDLL::Update(xRef.GetObject(), pMemChart);
+                    xRef.UpdateReplacement();
                 }
             }
         }
 
-        xCli = GetView().FindIPClient( xRef, &GetView().GetEditWin() );
-        if ( !xCli.Is() )
-            xCli = new SwOleClient( &GetView(), &GetView().GetEditWin() );
+        pCli = GetView().FindIPClient( xRef.GetObject(), &GetView().GetEditWin() );
+        if ( !pCli )
+            pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xRef );
 
-        ((SwOleClient*)&xCli)->SetInDoVerb( TRUE );
+        ((SwOleClient*)pCli)->SetInDoVerb( TRUE );
 
-        xRef->DoConnect( xCli );
-        SvEmbeddedObjectRef xObj = &xRef;
-        CalcAndSetScale( xObj );
-        //#50270# Error brauchen wir nicht handeln, das erledigt das
-        //DoVerb in der SfxViewShell
-        GetView().SfxViewShell::DoVerb( xCli, nVerb );
+        CalcAndSetScale( xRef );
+        pCli->DoVerb( nVerb );
 
-        ((SwOleClient*)&xCli)->SetInDoVerb( FALSE );
-        CalcAndSetScale( xObj );
+        ((SwOleClient*)pCli)->SetInDoVerb( FALSE );
+        CalcAndSetScale( xRef );
     }
 }
 
 
-void SwWrtShell::CalcAndSetScale( SvEmbeddedObjectRef xObj,
+void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                              const SwRect *pFlyPrtRect,
                              const SwRect *pFlyFrmRect )
 {
     //Einstellen der Skalierung am Client. Diese ergibt sich aus der Differenz
     //zwischen der VisArea des Objektes und der ObjArea.
-    ASSERT( xObj.Is(), "ObjectRef not  valid" );
+    ASSERT( xObj.is(), "ObjectRef not  valid" );
 
-    SfxInPlaceClientRef xCli = GetView().FindIPClient( xObj, &GetView().GetEditWin() );
-    if ( !xCli.Is() || !xCli->GetEnv() )
+    sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+    sal_Int64 nMisc = xObj->getStatus( nAspect );
+
+    //Das kann ja wohl nur ein nicht aktives Objekt sein. Diese bekommen
+    //auf Wunsch die neue Groesse als VisArea gesetzt (StarChart)
+    // TODO/LATER: how to get aspect?
+    if( embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE & nMisc )
     {
-        //Das kann ja wohl nur ein nicht aktives Objekt sein. Diese bekommen
-        //auf Wunsch die neue Groesse als VisArea gesetzt (StarChart)
-        if( SVOBJ_MISCSTATUS_SERVERRESIZE & xObj->GetMiscStatus() )
+        // TODO/MBA: testing
+        SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
+                    : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
+        if( !aRect.IsEmpty() )
         {
-            SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
-                        : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, &xObj ));
-            if( !aRect.IsEmpty() )
-                xObj->SetVisArea( OutputDevice::LogicToLogic(
-                            aRect.SVRect(), MAP_TWIP, xObj->GetMapUnit() ));
-            return;
+            MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+
+            // TODO/LATER: needs complete VisArea?!
+            Size aSize( OutputDevice::LogicToLogic( aRect.SVRect(), MAP_TWIP, aUnit ).GetSize() );
+            awt::Size aSz;
+            aSz.Width = aSize.Width();
+            aSz.Height = aSize.Height();
+            xObj->setVisualAreaSize( nAspect, aSz );
+            xObj.UpdateReplacement();
         }
-        if ( SVOBJ_MISCSTATUS_ALWAYSACTIVATE & xObj->GetMiscStatus() ||
-             SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->GetMiscStatus() )
+    }
+
+    SfxInPlaceClient* pCli = GetView().FindIPClient( xObj.GetObject(), &GetView().GetEditWin() );
+    if ( !pCli )
+    {
+        if ( (embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY & nMisc)
+            // TODO/LATER: ResizeOnPrinterChange
+             //|| SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->GetMiscStatus()
+             )
         {
-            xCli = new SwOleClient( &GetView(), &GetView().GetEditWin() );
+            pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
         }
         else
             return;
     }
 
-    Size aVisArea( xObj->GetVisArea().GetSize() );
+    awt::Size aSize = xObj->getVisualAreaSize( nAspect );
+    Size aVisArea( aSize.Width, aSize.Height );
+
     BOOL bSetScale100 = TRUE;
-    SvContainerEnvironment *pEnv = xCli->GetEnv();
 
     // solange keine vernuenftige Size vom Object kommt, kann nichts
     // skaliert werden
     if( aVisArea.Width() && aVisArea.Height() )
     {
         const MapMode aTmp( MAP_TWIP );
-        aVisArea = OutputDevice::LogicToLogic( aVisArea, xObj->GetMapUnit(), aTmp);
+        MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+        aVisArea = OutputDevice::LogicToLogic( aVisArea, aUnit, aTmp);
         Size aObjArea;
         if ( pFlyPrtRect )
             aObjArea = pFlyPrtRect->SSize();
         else
-            aObjArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, &xObj ).SSize();
+            aObjArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ).SSize();
 
         // differ the aObjArea and aVisArea by 1 Pixel then set new VisArea
         long nX, nY;
@@ -878,7 +896,9 @@ void SwWrtShell::CalcAndSetScale( SvEmbeddedObjectRef xObj,
                aVisArea.Height()- nY <= aObjArea.Height()&&
                aVisArea.Height()+ nY >= aObjArea.Height() ))
         {
-            if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->GetMiscStatus() )
+            // TODO/LATER: MISCSTATUS_RESIZEONPRINTERCHANGE
+            /*
+            if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & nMisc )
             {
                 //This type of objects should never be resized.
                 //If this request comes from the Writer core (inaktive Object
@@ -899,11 +919,11 @@ void SwWrtShell::CalcAndSetScale( SvEmbeddedObjectRef xObj,
                 //sogar rekursiv.
                 return;
             }
-            else
+            else*/
             {
                 const Fraction aScaleWidth ( aObjArea.Width(),  aVisArea.Width() );
                 const Fraction aScaleHeight( aObjArea.Height(), aVisArea.Height());
-                pEnv->SetSizeScale( aScaleWidth, aScaleHeight );
+                pCli->SetSizeScale( aScaleWidth, aScaleHeight );
                 bSetScale100 = FALSE;
             }
         }
@@ -912,7 +932,7 @@ void SwWrtShell::CalcAndSetScale( SvEmbeddedObjectRef xObj,
     if( bSetScale100 )
     {
         const Fraction aScale( 1, 1 );
-        pEnv->SetSizeScale( aScale, aScale );
+        pCli->SetSizeScale( aScale, aScale );
     }
 
     //Jetzt ist auch der guenstige Zeitpunkt die ObjArea einzustellen.
@@ -925,31 +945,26 @@ void SwWrtShell::CalcAndSetScale( SvEmbeddedObjectRef xObj,
     }
     else
     {
-        aArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, &xObj );
-        aArea.Pos() += GetAnyCurRect( RECT_FLY_EMBEDDED, 0, &xObj ).Pos();
+        aArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() );
+        aArea.Pos() += GetAnyCurRect( RECT_FLY_EMBEDDED, 0, xObj.GetObject() ).Pos();
     }
-    aArea.Width ( Fraction( aArea.Width()  ) / pEnv->GetScaleWidth() );
-    aArea.Height( Fraction( aArea.Height() ) / pEnv->GetScaleHeight());
-    pEnv->SetObjArea( aArea.SVRect() );
 
-    if ( SVOBJ_MISCSTATUS_ALWAYSACTIVATE & xObj->GetMiscStatus() )
-    {
-        xObj->DoConnect( xCli );
-        xObj->DoVerb();
-    }
+    aArea.Width ( Fraction( aArea.Width()  ) / pCli->GetScaleWidth() );
+    aArea.Height( Fraction( aArea.Height() ) / pCli->GetScaleHeight());
+    pCli->SetObjArea( aArea.SVRect() );
+
+    if ( embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY & nMisc )
+        xObj->doVerb(0);
 }
 
 
 
-void SwWrtShell::ConnectObj( SvInPlaceObjectRef xIPObj, const SwRect &rPrt,
+void SwWrtShell::ConnectObj( svt::EmbeddedObjectRef& xObj, const SwRect &rPrt,
                             const SwRect &rFrm )
 {
-    SfxInPlaceClientRef xCli = GetView().FindIPClient( xIPObj,
-                                                        &GetView().GetEditWin());
-    if ( !xCli.Is() )
-        xCli = new SwOleClient( &GetView(), &GetView().GetEditWin() );
-    xIPObj->DoConnect( xCli );
-    SvEmbeddedObjectRef xObj = &xIPObj;
+    SfxInPlaceClient* pCli = GetView().FindIPClient( xObj.GetObject(), &GetView().GetEditWin());
+    if ( !pCli )
+        pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
     CalcAndSetScale( xObj, &rPrt, &rFrm );
 }
 
