@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 05:44:17 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ String STR_HTML_TITLE
     Text[ polish ] = "Kopiuj tabelê HTML";
     Text[ portuguese_brazilian ] = "Copy HTML table";
     Text[ japanese ] = "HTML Ã°ÌŞÙ‚ÌºËß°";
-    Text[ korean ] = "HTMLÅ×ÀÌºíº¹»ç";
+    Text[ korean ] = "HTML Å×ÀÌºíº¹»ç";
     Text[ chinese_simplified ] = "¸´ÖÆ HTML ±í¸ñ";
     Text[ chinese_traditional ] = "½Æ»s HTML ªí®æ";
     Text[ arabic ] = "äÓÎ ÌÏæá HTML";
@@ -148,7 +148,7 @@ String STR_WIZ_COLUMN_SELECT_TITEL
     Text[ polish ] = "Przejmij kolumnê";
     Text[ portuguese_brazilian ] = "Undo";
     Text[ japanese ] = "—ñ‚Ì“K—p";
-    Text[ korean ] = "ÄÃ·³ Àû¿ë";
+    Text[ korean ] = "¿­ Àû¿ë";
     Text[ chinese_simplified ] = "Ì×ÓÃÁĞ";
     Text[ chinese_traditional ] = "®M¥ÎÄæ";
     Text[ arabic ] = "ÊØÈíŞ ÇáÃÚãÏÉ";
@@ -200,7 +200,7 @@ String STR_WIZ_PKEY_ALREADY_DEFINED
     Text[ polish ] = "Jako klucze g³ówne osadzono ju¿ nastêpuj¹ce pola:\n";
     Text[ portuguese_brazilian ] = "There are already primary keys defined for this fields:\n";
     Text[ japanese ] = "ˆÈ‰º‚ÌÌ¨°ÙÄŞ‚Í‚·‚Å‚ÉÌß×²ÏØ·°‚Æ‚µ‚Äİ’è‚³‚ê‚Ä‚¢‚Ü‚·B\n";
-    Text[ korean ] = "ÀÌ ÇÊµå¿¡´Â ÀÌ¹Ì±âº» Å°°¡ Á¤ÀÇµÇ¾î ÀÖ½À´Ï´Ù.:\n";
+    Text[ korean ] = "´ÙÀ½ ÇÊµå¿¡´Â ÀÌ¹Ì ±âº» Å°°¡ Á¤ÀÇµÇ¾î ÀÖ½À´Ï´Ù.:\n";
     Text[ chinese_simplified ] = "ÒÑ¾­ÎªÏÂÁĞ×Ö¶ÎÉè¶¨ÁËÖ÷¹Ø¼ü×Ö£º\n";
     Text[ chinese_traditional ] = "¥H¤UªºÄæ¦ì¤w¸g«ü©w¦¨¥DÃöÁä¦r¡G\n";
     Text[ arabic ] = "Êã ÊÚííä ÇáÍŞæá ÇáÊÇáíÉ ãÓÈŞÇğ ßãİÊÇÍ ÃÓÇÓí:\n";
@@ -226,7 +226,7 @@ String STR_WIZ_NAME_MATCHING_TITEL
     Text[ polish ] = "Przyporz¹dkuj kolumny";
     Text[ portuguese_brazilian ] = "Bind columns";
     Text[ japanese ] = "—ñ‚Ì•ª—Ş";
-    Text[ korean ] = "ÄÃ·³ ÁöÁ¤";
+    Text[ korean ] = "¿­ ÁöÁ¤";
     Text[ chinese_simplified ] = "±àÅÅÁĞ";
     Text[ chinese_traditional ] = "½s±ÆÄæ";
     Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ";
@@ -281,13 +281,13 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ polish ] = "Utwórz";
         Text[ portuguese_brazilian ] = "Finish";
         Text[ japanese ] = "Š®—¹(~R)";
-        Text[ korean ] = "¸¸µé±â(~R)";
+        Text[ korean ] = "¿Ï·á(~R)";
         Text[ chinese_simplified ] = "Íê³É(~R)";
         Text[ chinese_traditional ] = "§¹¦¨(~R)";
         Text[ arabic ] = "ÅäÔÇÁ";
         Text[ turkish ] = "Oluştur";
         Text[ catalan ] = "~Crear";
-        Text[ finnish ] = "~Fertig stellen";
+        Text[ finnish ] = "~Luo";
     };
 
     CancelButton PB_CANCEL
@@ -315,7 +315,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
         Text[ turkish ] = "İptal";
         Text[ catalan ] = "~Cancelar";
-        Text[ finnish ] = "~Abbrechen";
+        Text[ finnish ] = "~Peruuta";
     };
 
     PushButton PB_NEXT
@@ -607,7 +607,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ polish ] = "Informacja o kolumnnach:";
         Text[ portuguese_brazilian ] = "Tablename:";
         Text[ japanese ] = "—ñ‚Ìî•ñ:";
-        Text[ korean ] = "ÄÃ·³Á¤º¸";
+        Text[ korean ] = "¿­ Á¤º¸";
         Text[ chinese_simplified ] = "ÁĞµÄĞÅÏ¢";
         Text[ chinese_traditional ] = "Äæ¸ê°T";
         Text[ arabic ] = "ãÚáæãÇÊ ÇáÚãæÏ";
@@ -643,7 +643,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ polish ] = "Automat. identyfikacja typu";
         Text[ portuguese_brazilian ] = "Tablename:";
         Text[ japanese ] = "À²Ìß‚Ì©“®”F¯";
-        Text[ korean ] = "ÀÚµ¿ Å¸ÀÔ ÀÎ½Ä";
+        Text[ korean ] = "ÀÚµ¿ Å¸ÀÔÀÎ½Ä";
         Text[ chinese_simplified ] = "×Ô¶¯Ê¶±ğÀàĞÍ";
         Text[ chinese_traditional ] = "¦Û°ÊÃÑ§OÃş«¬";
         Text[ arabic ] = "ÇáÊÚÑİ Úáì ÇáäãØ ÊáŞÇÆíÇğ";
@@ -789,7 +789,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ polish ] = "Tabela docelowa: \n";
         Text[ portuguese_brazilian ] = "Destination table: \n";
         Text[ japanese ] = "À°¹Ş¯ÄÃ°ÌŞÙ: \n";
-        Text[ korean ] = "¸ñÀû Å×ÀÌºí: \n";
+        Text[ korean ] = "¸ñÇ¥ Å×ÀÌºí: \n";
         Text[ chinese_simplified ] = "Ä¿±ê±í¸ñ£º\n";
         Text[ chinese_traditional ] = "¥Ø¼Ğªí®æ¡G\n";
         Text[ arabic ] = "ÌÏæá ÇáæÌåÉ: \n";
@@ -874,7 +874,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ arabic ] = "áÃÓİá";
         Text[ turkish ] = "Aşağı";
         Text[ catalan ] = "a~bajo";
-        Text[ finnish ] = "~ab";
+        Text[ finnish ] = "~kohteessa";
     };
 
     PushButton PB_COLUMN_UP_RIGHT
@@ -933,7 +933,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ arabic ] = "áÃÓİá";
         Text[ turkish ] = "Aşağı";
         Text[ catalan ] = "a~bajo";
-        Text[ finnish ] = "a~b";
+        Text[ finnish ] = "~kohteessa";
     };
 
     PushButton PB_ALL
@@ -956,13 +956,13 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ polish ] = "wszystkie";
         Text[ portuguese_brazilian ] = "all";
         Text[ japanese ] = "‚·‚×‚Ä(~A)";
-        Text[ korean ] = "ÀüºÎ(~A)";
+        Text[ korean ] = "¸ğµÎ(~A)";
         Text[ chinese_simplified ] = "È«²¿(~A)";
         Text[ chinese_traditional ] = "¥ş³¡(~A)";
         Text[ arabic ] = "Çáßá";
         Text[ turkish ] = "Tümü";
         Text[ catalan ] = "to~dos";
-        Text[ finnish ] = "a~lle";
+        Text[ finnish ] = "~Kaikki";
     };
 
     PushButton PB_NONE
@@ -991,7 +991,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ arabic ] = "ÈÏæä";
         Text[ turkish ] = "Hiçbiri";
         Text[ catalan ] = "~ninguno";
-        Text[ finnish ] = "~keine";
+        Text[ finnish ] = "~Ei mitään";
     };
 };
 TabPage TAB_WIZ_COPYTABLE
@@ -1079,7 +1079,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ korean ] = "¿É¼Ç";
         Text[ turkish ] = "Seçenekler";
         Text[ catalan ] = "Opciones";
-        Text[ finnish ] = "Optionen";
+        Text[ finnish ] = "Mukauta";
     };
     RadioButton RB_DEFDATA
     {
@@ -1103,7 +1103,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ chinese_traditional ] = "©w¸q©M¸ê®Æ(~F)";
         Text[ arabic ]      = "ÇáÊÚÑíİ æÇáÈíÇäÇÊ";
         Text[ greek ] = "Ïñéóìüò êáé äåäïìİí~á";
-        Text[ korean ] = "Á¤ÀÇ ±×¸®°í µ¥ÀÌÅÍ(~F)";
+        Text[ korean ] = "Á¤ÀÇ¿Í µ¥ÀÌÅÍ(~F)";
         Text[ turkish ] = "Tanım ve veriler";
         Text[ catalan ] = "~Definición y datos";
         Text[ finnish ] = "Definition und D~aten";
@@ -1244,7 +1244,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ arabic ] = "ÇáÇÓã:";
         Text[ turkish ] = "Ad:";
         Text[ catalan ] = "Nombre:";
-        Text[ finnish ] = "Name:";
+        Text[ finnish ] = "Nimi:";
     };
 
     Edit ET_KEYNAME
@@ -1279,7 +1279,7 @@ String STR_WIZ_TABLE_COPY
     Text[ arabic ] = "äÓÎ ÇáÌÏæá";
     Text[ turkish ] = "Tabloyu kopyala";
     Text[ catalan ] = "Copiar tabla";
-    Text[ finnish ] = "Tabelle kopieren";
+    Text[ finnish ] = "Kopioi taulukko";
 };
 
 String STR_COPYTABLE_TITLE_COPY
@@ -1305,7 +1305,7 @@ String STR_COPYTABLE_TITLE_COPY
     Text[ korean ] = "Å×ÀÌºí º¹»ç";
     Text[ turkish ] = "Tabloyu kopyala";
     Text[ catalan ] = "Copiar tabla";
-    Text[ finnish ] = "Tabelle kopieren";
+    Text[ finnish ] = "Kopioi taulukko";
 };
 
 String STR_COPYTABLE_TITLE_MOVE
@@ -1331,7 +1331,7 @@ String STR_COPYTABLE_TITLE_MOVE
     Text[ korean ] = "Å×ÀÌºí ÀÌµ¿";
     Text[ turkish ] = "Tabloyu taşı";
     Text[ catalan ] = "Desplazar tabla";
-    Text[ finnish ] = "Tabelle verschieben";
+    Text[ finnish ] = "Siirrä lomaketta";
 };
 String STR_DUPL_FIELDNAME
 {
