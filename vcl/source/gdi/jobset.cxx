@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-14 11:38:26 $
+ *  last change: $Author: pl $ $Date: 2000-11-15 12:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ String JobSetup::GetValue( const String& rKey ) const
 {
     if( mpData )
     {
-        ::std::hash_map< ::rtl::OUString, ::rtl::OUString, OUStringHash >::const_iterator it;
+        ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
         it = mpData->maValueMap.find( rKey );
         return it != mpData->maValueMap.end() ? String( it->second ) : String();
     }
@@ -447,7 +447,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             rOStream.Write( (char*)&aOldData, sizeof( aOldData ) );
             rOStream.Write( (char*)&aOldJobData, nOldJobDataSize );
             rOStream.Write( (char*)pJobData->mpDriverData, pJobData->mnDriverDataLen );
-            ::std::hash_map< ::rtl::OUString, ::rtl::OUString, OUStringHash >::const_iterator it;
+            ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
             for( it = pJobData->maValueMap.begin(); it != pJobData->maValueMap.end(); ++it )
             {
                 rOStream.WriteByteString( it->first, RTL_TEXTENCODING_UTF8 );
