@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-09-27 14:14:13 $
+*  last change: $Author: jmrice $ $Date: 2002-09-30 10:59:39 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -93,7 +93,7 @@ extern ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
 
 //*************************************************************************
 // ScriptStorageManager Constructor
-ScriptStorageManager::ScriptStorageManager( const Reference< 
+ScriptStorageManager::ScriptStorageManager( const Reference<
     XComponentContext > & xContext ) SAL_THROW ( ( RuntimeException ) )
     : m_xContext( xContext ), m_count( 0 )
 {

@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.4 $
-*  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:29 $
+*  $Revision: 1.5 $
+*  last change: $Author: jmrice $ $Date: 2002-09-30 10:59:39 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -523,15 +523,21 @@ ScriptStorage::getImplementations( const Reference <
 throw ( lang::IllegalArgumentException,
         RuntimeException )
 {
-    ScriptInfo_hash::iterator h_it = mh_implementations.find( queryURI->getLogicalName() );
-    Sequence< Reference< scripturi::XScriptURI > > results( h_it->second.size() );
+
+    Sequence< Reference< scripturi::XScriptURI > > results;
+    ScriptInfo_hash::iterator h_it =
+        mh_implementations.find( queryURI->getLogicalName() );
+
+    if ( h_it == mh_implementations.end() )
+    {
+        OSL_TRACE("ScriptStorage::getImplementations: EMPTY STORAGE");
+        return results;
+    }
+    results.realloc( h_it->second.size() );
+
+    //find the implementations for the given logical name
     try
     {
-        //find the implementations for the given logical name
-        if ( h_it == mh_implementations.end() )
-        {
-            return results;
-        }
 
         ::osl::Guard< osl::Mutex > aGuard( m_mutex );
 
