@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-19 17:13:31 $
+ *  last change: $Author: sab $ $Date: 2002-09-13 09:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                         nTabAfter=j;
                                         break;
                                     }
+                                    else // #101672#; increase nTabAfter, because it is possible that the scenario tables are the last
+                                        nTabAfter = j + 1;
                                 }
 
                                 if(nCount==1 && pDlg->GetFirstTable()->Len()>0)
