@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:49:56 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,14 +355,22 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBO
 
     if(!bIsGroup || bIs3DScene)
     {
-        const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
+//BFS01     const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
 
-        if(!pUndoSet)
+        //BFS01
+        if(pUndoSet)
         {
-            pUndoSet = rObjItemSet.Clone(FALSE, (SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool());
+            delete pUndoSet;
         }
 
-        pUndoSet->Put(rObjItemSet);
+        pUndoSet = new SfxItemSet(pObj->GetMergedItemSet());
+
+//BFS01     if(!pUndoSet)
+//BFS01     {
+//BFS01         pUndoSet = rObjItemSet.Clone(FALSE, (SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool());
+//BFS01     }
+//BFS01
+//BFS01     pUndoSet->Put(rObjItemSet);
 
         if(bStyleSheet)
             pUndoStyleSheet = pObj->GetStyleSheet();
@@ -399,9 +407,11 @@ void SdrUndoAttrObj::SetRepeatAttr(const SfxItemSet& rSet)
     if(pRepeatSet)
         delete pRepeatSet;
 
-    pRepeatSet = pObj->GetMergedItemSet().Clone(FALSE, (SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool());
+    //BFS01
+    pRepeatSet = new SfxItemSet(rSet);
 
-    pRepeatSet->Put(rSet);
+//BFS01 pRepeatSet = pObj->GetMergedItemSet().Clone(FALSE, (SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool());
+//BFS01 pRepeatSet->Put(rSet);
 }
 
 void SdrUndoAttrObj::Undo()
@@ -416,14 +426,22 @@ void SdrUndoAttrObj::Undo()
         if(bHaveToTakeRedoSet)
         {
             bHaveToTakeRedoSet = FALSE;
-            const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
 
-            if(!pRedoSet)
+            if(pRedoSet)
             {
-                pRedoSet = rObjItemSet.Clone(FALSE, (SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool());
+                delete pRedoSet;
             }
 
-            pRedoSet->Put(rObjItemSet);
+            pRedoSet = new SfxItemSet(pObj->GetMergedItemSet());
+
+//BFS01         const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
+//BFS01
+//BFS01         if(!pRedoSet)
+//BFS01         {
+//BFS01             pRedoSet = rObjItemSet.Clone(FALSE, (SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool());
+//BFS01         }
+//BFS01
+//BFS01         pRedoSet->Put(rObjItemSet);
 
             if(bStyleSheet)
                 pRedoStyleSheet=pObj->GetStyleSheet();
@@ -786,15 +804,15 @@ void SdrUndoObjList::SetOwner(BOOL bNew)
         // Besitzuebergang des Objektes. Hier muss auch die Speicherung der
         // Items des Objektes zwischen dem allgemeinen Pool und dem Pool des
         // Undo-Managers wechseln
-        if(bNew)
-        {
-            pObj->MigrateItemPool(&rMod.GetItemPool(), ((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
-        }
-        else
-        {
-            pObj->MigrateItemPool(((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()), &rMod.GetItemPool());
-            pObj->SetStyleSheet(pObj->GetStyleSheet(), TRUE);
-        }
+//BFS01     if(bNew)
+//BFS01     {
+//BFS01         pObj->MigrateItemPool(&rMod.GetItemPool(), ((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
+//BFS01     }
+//BFS01     else
+//BFS01     {
+//BFS01         pObj->MigrateItemPool(((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()), &rMod.GetItemPool());
+//BFS01         pObj->SetStyleSheet(pObj->GetStyleSheet(), TRUE);
+//BFS01     }
 
         // umsetzen
         bOwner = bNew;
@@ -1035,14 +1053,14 @@ void SdrUndoReplaceObj::SetNewOwner(BOOL bNew)
         // Besitzuebergang des Objektes. Hier muss auch die Speicherung der
         // Items des Objektes zwischen dem allgemeinen Pool und dem Pool des
         // Undo-Managers wechseln
-        if(bNew)
-        {
-            pNewObj->MigrateItemPool(&rMod.GetItemPool(), ((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
-        }
-        else
-        {
-            pNewObj->MigrateItemPool(((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()), &rMod.GetItemPool());
-        }
+//BFS01     if(bNew)
+//BFS01     {
+//BFS01         pNewObj->MigrateItemPool(&rMod.GetItemPool(), ((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
+//BFS01     }
+//BFS01     else
+//BFS01     {
+//BFS01         pNewObj->MigrateItemPool(((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()), &rMod.GetItemPool());
+//BFS01     }
 
         // umsetzen
         bNewOwner = bNew;
@@ -1056,14 +1074,14 @@ void SdrUndoReplaceObj::SetOldOwner(BOOL bNew)
         // Besitzuebergang des Objektes. Hier muss auch die Speicherung der
         // Items des Objektes zwischen dem allgemeinen Pool und dem Pool des
         // Undo-Managers wechseln
-        if(bNew)
-        {
-            pObj->MigrateItemPool(&rMod.GetItemPool(), ((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
-        }
-        else
-        {
-            pObj->MigrateItemPool(((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()), &rMod.GetItemPool());
-        }
+//BFS01     if(bNew)
+//BFS01     {
+//BFS01         pObj->MigrateItemPool(&rMod.GetItemPool(), ((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
+//BFS01     }
+//BFS01     else
+//BFS01     {
+//BFS01         pObj->MigrateItemPool(((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()), &rMod.GetItemPool());
+//BFS01     }
 
         // umsetzen
         bOldOwner = bNew;
