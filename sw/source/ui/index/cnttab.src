@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-12 22:21:15 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 18:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ String STR_TITLE
     Text[ chinese_simplified ] = "标题";
     Text[ russian ] = "��������";
     Text[ polish ] = "Tytu�";
-    Text[ japanese ] = "ﾀｲﾄﾙ";
+    Text[ japanese ] = "タイトル";
     Text[ greek ] = "������";
     Text[ korean ] = "제목";
     Text[ chinese_traditional ] = "標題";
@@ -137,7 +137,7 @@ String STR_LEVEL
     Text[ chinese_simplified ] = "级 ";
     Text[ russian ] = "������� ";
     Text[ polish ] = "Poziom ";
-    Text[ japanese ] = "ﾚﾍﾞﾙ ";
+    Text[ japanese ] = "レベル ";
     Text[ greek ] = "������� ";
     Text[ korean ] = "계층 ";
     Text[ chinese_traditional ] = "級 ";
@@ -162,7 +162,7 @@ String STR_FILE_NOT_FOUND
     Text[ swedish ] = "Filen \"%1\" kunde inte hittas i s�kv�g \"%2\".";
     Text[ polish ] = "Nie znaleziono pliku \"%1\" w �cie�ce \"%2\".";
     Text[ portuguese_brazilian ] = "The file \"%1\" could not be found.";
-    Text[ japanese ] = "ﾌｧｲﾙ「%1」はﾊﾟｽ「%2」に見つかりませんでした。";
+    Text[ japanese ] = "ファイル「%1」はパス「%2」に見つかりませんでした。";
     Text[ korean ] = "\"%1\" 파일을\"%2\" 경로에서 찾지　못했습니다.";
     Text[ chinese_simplified ] = "在路径\"%2\"中无法找到文件\"%1\"。";
     Text[ chinese_traditional ] = "無法在路徑<%2>內找到檔案<%1>。";
@@ -261,7 +261,7 @@ TabDialog DLG_MULTI_TOX
                 Text[ swedish ] = "Mallar";
                 Text[ polish ] = "Style";
                 Text[ portuguese_brazilian ] = "Styles";
-                Text[ japanese ] = "ｽﾀｲﾙ";
+                Text[ japanese ] = "スタイル";
                 Text[ chinese_simplified ] = "样式";
                 Text[ chinese_traditional ] = "樣式";
                 Text[ arabic ] = "�����";
@@ -353,7 +353,7 @@ TabDialog DLG_MULTI_TOX
         Text[ swedish ] = "Anv�ndardefinierad f�rteckning";
         Text[ polish ] = "Indeks indywidualny";
         Text[ portuguese_brazilian ] = "User-define index";
-        Text[ japanese ] = "ﾕｰｻﾞｰ定義の索引";
+        Text[ japanese ] = "ユーザー定義の索引";
         Text[ korean ] = "사용자 정의 색인";
         Text[ chinese_simplified ] = "使用者定义的目录";
         Text[ chinese_traditional ] = "使用者自訂目錄";
@@ -380,7 +380,7 @@ TabDialog DLG_MULTI_TOX
         Text[ swedish ] = "F~�rhandsvisning";
         Text[ polish ] = "Podgl�d";
         Text[ portuguese_brazilian ] = "Show ~preview";
-        Text[ japanese ] = "ﾌﾟﾚﾋﾞｭｰの表示(~W)";
+        Text[ japanese ] = "プレビューの表示";
         Text[ korean ] = "미리보기";
         Text[ chinese_simplified ] = "预览";
         Text[ chinese_traditional ] = "預覽";
@@ -452,7 +452,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Typ och rubrik";
         Text[ polish ] = "Typ i tytu�";
         Text[ portuguese_brazilian ] = "Type and title";
-        Text[ japanese ] = "種類とﾀｲﾄﾙ";
+        Text[ japanese ] = "種類とタイトル";
         Text[ korean ] = "유형과 제목";
         Text[ chinese_simplified ] = "类型和标题";
         Text[ chinese_traditional ] = "類型和標題";
@@ -480,7 +480,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Rubr~ik";
         Text[ polish ] = "Tytu�";
         Text[ portuguese_brazilian ] = "Title";
-        Text[ japanese ] = "ﾀｲﾄﾙ(~T)";
+        Text[ japanese ] = "タイトル(~T)";
         Text[ korean ] = "제목(~T)";
         Text[ chinese_simplified ] = "标题(~T)";
         Text[ chinese_traditional ] = "標題(~T)";
@@ -686,8 +686,8 @@ TabPage TP_TOX_SELECT
         < "索引" ;    TO_INDEX        ;> ;
         < "図の索引" ; TO_ILLUSTRATION ;> ;
         < "表の索引" ;  TO_TABLE        ;> ;
-        < "ﾕｰｻﾞｰ定義" ;     TO_USER         ;> ;
-        < "ｵﾌﾞｼﾞｪｸﾄの索引" ;     TO_OBJECT       ;> ;
+        < "ユーザー定義" ;    TO_USER         ;> ;
+        < "オブジェクトの索引" ;   TO_OBJECT       ;> ;
         < "参考文献表" ;   TO_AUTHORITIES  ;> ;
     };
     StringList [ korean ] =
@@ -927,7 +927,7 @@ TabPage TP_TOX_SELECT
     };
     StringList [ japanese ] =
     {
-            < "ﾄﾞｷｭﾒﾝﾄ全体" ;   AREA_DOCUMENT       ;> ;
+            < "ドキュメント全体" ;  AREA_DOCUMENT       ;> ;
         < "現在の章" ;              AREA_CHAPTER        ;> ;
     };
     StringList [ korean ] =
@@ -985,7 +985,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Utv�rdera till niv�";
         Text[ polish ] = "Ewaluuj do poziomu";
         Text[ portuguese_brazilian ] = "Evaluation level";
-        Text[ japanese ] = "次のﾚﾍﾞﾙまで適用";
+        Text[ japanese ] = "次のレベルまで適用";
         Text[ korean ] = "평가 단계";
         Text[ chinese_simplified ] = "包括级别";
         Text[ chinese_traditional ] = "包括級別";
@@ -1055,7 +1055,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "~Disposition";
         Text[ polish ] = "Konspekt";
         Text[ portuguese_brazilian ] = "Outline";
-        Text[ japanese ] = "ｱｳﾄﾗｲﾝ";
+        Text[ japanese ] = "アウトライン";
         Text[ korean ] = "다단계";
         Text[ chinese_simplified ] = "大纲";
         Text[ chinese_traditional ] = "大綱";
@@ -1090,7 +1090,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Ytterligare ~mallar";
         Text[ polish ] = "Inne style";
         Text[ portuguese_brazilian ] = "additional styles";
-        Text[ japanese ] = "その他のｽﾀｲﾙ(~A)";
+        Text[ japanese ] = "その他のスタイル(~A)";
         Text[ korean ] = "기타 템플릿(~A)";
         Text[ chinese_simplified ] = "其它样式(~A)";
         Text[ chinese_traditional ] = "其他樣式(~A)";
@@ -1116,7 +1116,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "~Mallar";
         Text[ polish ] = "Style";
         Text[ portuguese_brazilian ] = "Styles";
-        Text[ japanese ] = "ｽﾀｲﾙ(~E)";
+        Text[ japanese ] = "スタイル(~E)";
         Text[ korean ] = "템플릿(~E)";
         Text[ chinese_simplified ] = "样式(~E)";
         Text[ chinese_traditional ] = "樣式(~E)";
@@ -1179,7 +1179,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Bi~ldtexter";
         Text[ polish ] = "Ety~kiety";
         Text[ portuguese_brazilian ] = "Captions";
-        Text[ japanese ] = "図表番号(~C)";
+        Text[ japanese ] = "図表番号";
         Text[ korean ] = "캡션";
         Text[ chinese_simplified ] = "标签";
         Text[ chinese_traditional ] = "標籤";
@@ -1207,7 +1207,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "~Kategori";
         Text[ polish ] = "Kategorie";
         Text[ portuguese_brazilian ] = "Category";
-        Text[ japanese ] = "ｶﾃｺﾞﾘｰ";
+        Text[ japanese ] = "カテゴリー";
         Text[ korean ] = "범주";
         Text[ chinese_simplified ] = "分类";
         Text[ chinese_traditional ] = "分類";
@@ -1351,8 +1351,8 @@ TabPage TP_TOX_SELECT
     StringList [ japanese ] =
     {
             < "すべて" ; > ;
-        < "ｶﾃｺﾞﾘｰと番号" ; > ;
-        < "図表番号ﾃｷｽﾄ" ; > ;
+        < "カテゴリーと番号" ; > ;
+        < "図表番号テキスト" ; > ;
     };
     StringList [ korean ] =
     {
@@ -1415,7 +1415,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Objektnamn";
         Text[ polish ] = "Nazwy obiekt�w";
         Text[ portuguese_brazilian ] = "Object names";
-        Text[ japanese ] = "ｵﾌﾞｼﾞｪｸﾄ名";
+        Text[ japanese ] = "オブジェクト名";
         Text[ korean ] = "개체 이름";
         Text[ chinese_simplified ] = "对象名称";
         Text[ chinese_traditional ] = "物件名稱";
@@ -1470,7 +1470,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Kombinera med ~f eller ff";
         Text[ polish ] = "Stre�� za pomoc� s lub ss";
         Text[ portuguese_brazilian ] = "Combine identical entries with ~pp.";
-        Text[ japanese ] = "続きﾍﾟｰｼﾞを ~p または pp で表示";
+        Text[ japanese ] = "続きページを ~p または pp で表示";
         Text[ korean ] = "f 또는 ff 동일 항목을 하나로 묶음(~P)";
         Text[ chinese_simplified ] = "合并带 f 或 ff 的条目(~P)";
         Text[ chinese_traditional ] = "合併用 f 或 ff(~P)";
@@ -1497,7 +1497,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Kombinera ~med -";
         Text[ polish ] = "~Scal z -";
         Text[ portuguese_brazilian ] = "Combine identical entries with -";
-        Text[ japanese ] = "続きﾍﾟｰｼﾞを - で表示";
+        Text[ japanese ] = "続きページを - で表示";
         Text[ korean ] = "동일 항목 하나로 묶음";
         Text[ chinese_simplified ] = "用 - 合并";
         Text[ chinese_traditional ] = "合併用 -";
@@ -1580,7 +1580,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "~Nyckel som egen post";
         Text[ polish ] = "Klucz ja~ko wpis w�asny";
         Text[ portuguese_brazilian ] = "Keys as separate entries";
-        Text[ japanese ] = "分類ﾀｲﾄﾙを項目表示";
+        Text[ japanese ] = "分類タイトルを項目表示";
         Text[ korean ] = "키를 고유 입력으로";
         Text[ chinese_simplified ] = "键码作为单独的条目";
         Text[ chinese_traditional ] = "鍵碼當作一個自己的條目";
@@ -1607,7 +1607,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Konkordansfil";
         Text[ polish ] = "Plik konkordancji";
         Text[ portuguese_brazilian ] = "Create entries from file";
-        Text[ japanese ] = "ｺﾝｺｰﾀﾞﾝｽﾌｧｲﾙ(~C)";
+        Text[ japanese ] = "コンコーダンスファイル(~C)";
         Text[ korean ] = "일치하는 파일(~C)";
         Text[ chinese_simplified ] = "由文件汇编出条目(~C)";
         Text[ chinese_traditional ] = "從檔案匯編條目(~C)";
@@ -1719,7 +1719,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "~Fil";
         Text[ polish ] = "~Plik";
         Text[ portuguese_brazilian ] = "File";
-        Text[ japanese ] = "ﾌｧｲﾙ(~F)";
+        Text[ japanese ] = "ファイル(~F)";
         Text[ korean ] = "파일(~F)";
         Text[ chinese_simplified ] = "文件(~F)";
         Text[ chinese_traditional ] = "檔案(~F)";
@@ -1774,7 +1774,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Textramar";
         Text[ polish ] = "Ramki tekstu";
         Text[ portuguese_brazilian ] = "Text frames";
-        Text[ japanese ] = "ﾃｷｽﾄ枠(~X)";
+        Text[ japanese ] = "テキスト枠(~X)";
         Text[ korean ] = "텍스트 프레임(~X)";
         Text[ chinese_simplified ] = "文本框(~X)";
         Text[ chinese_traditional ] = "文字方塊(~X)";
@@ -1830,7 +1830,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "~OLE-objekt";
         Text[ polish ] = "Obiekty OLE";
         Text[ portuguese_brazilian ] = "OLE objects";
-        Text[ japanese ] = "OLE ｵﾌﾞｼﾞｪｸﾄ";
+        Text[ japanese ] = "OLE オブジェクト";
         Text[ korean ] = "OLE 개체";
         Text[ chinese_simplified ] = "OLE 对象";
         Text[ chinese_traditional ] = "OLE 物件";
@@ -1858,7 +1858,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Niv� fr�n urs~prungskapitel";
         Text[ polish ] = "Poziom ze �r�d�a";
         Text[ portuguese_brazilian ] = "Use level from source";
-        Text[ japanese ] = "もとの章のﾚﾍﾞﾙ";
+        Text[ japanese ] = "もとの章のレベル";
         Text[ korean ] = "원래 장에서의 수준 사용";
         Text[ chinese_simplified ] = "使用源章节的级";
         Text[ chinese_traditional ] = "級從源章節";
@@ -1885,7 +1885,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Till�gg";
         Text[ polish ] = "Opcje";
         Text[ portuguese_brazilian ] = "Options";
-        Text[ japanese ] = "ｵﾌﾟｼｮﾝ";
+        Text[ japanese ] = "オプション";
         Text[ korean ] = "옵션";
         Text[ chinese_simplified ] = "其他";
         Text[ chinese_traditional ] = "其他";
@@ -2040,7 +2040,7 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Chart" ;            2;> ;
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
-            < "そのほかの OLE ｵﾌﾞｼﾞｪｸﾄ";   128;> ;
+            < "そのほかの OLE オブジェクト";     128;> ;
             };
         ItemList [ korean ] =
         {
@@ -2118,7 +2118,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Skapa fr�n f�ljande objekt";
         Text[ polish ] = "Utw�rz z nast�puj�cych obiekt�w";
         Text[ portuguese_brazilian ] = "Create from the following objects";
-        Text[ japanese ] = "次のｵﾌﾞｼﾞｪｸﾄから作成";
+        Text[ japanese ] = "次のオブジェクトから作成";
         Text[ korean ] = "다음의 개체로 부터 만들기";
         Text[ chinese_simplified ] = "从以下的对象来新建";
         Text[ chinese_traditional ] = "從下列物件製作";
@@ -2242,7 +2242,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Markeringsfil f�r sakregister (*.sdi)";
         Text[ polish ] = "Plik selekcyjny, przeznaczony dla skorowidza (*.sdi)";
         Text[ portuguese_brazilian ] = "Mark up file for index";
-        Text[ japanese ] = "索引用の選択ﾌｧｲﾙ (*.sdi)";
+        Text[ japanese ] = "索引用の選択ファイル (*.sdi)";
         Text[ korean ] = "키워드 색인을 위한 선택 표시 파일 (*.sdi)";
         Text[ chinese_simplified ] = "用于索引目录的标记文件(*.sdi)";
         Text[ chinese_traditional ] = "用於索引目錄的標記檔案(*.sdi)";
@@ -2331,7 +2331,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Nyckeltyp";
         Text[ polish ] = "Typ klucza";
         Text[ portuguese_brazilian ] = "Key type";
-        Text[ japanese ] = "ｷｰの種類";
+        Text[ japanese ] = "キーの種類";
         Text[ korean ] = "키 유형";
         Text[ chinese_simplified ] = "关键字类型";
         Text[ chinese_traditional ] = "關鍵字類型";
@@ -2371,7 +2371,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "~Niv�";
         Text[ polish ] = "Poziom";
         Text[ portuguese_brazilian ] = "Level";
-        Text[ japanese ] = "ﾚﾍﾞﾙ(~L)";
+        Text[ japanese ] = "レベル(~L)";
         Text[ korean ] = "수준(~L)";
         Text[ chinese_simplified ] = "级(~L)";
         Text[ chinese_traditional ] = "級(~L)";
@@ -2404,7 +2404,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "Ty~p";
         Text[ polish ] = "Typ";
         Text[ portuguese_brazilian ] = "Type";
-        Text[ japanese ] = "ﾀｲﾌﾟ(~T)";
+        Text[ japanese ] = "タイプ(~T)";
         Text[ korean ] = "형식(~T)";
         Text[ chinese_simplified ] = "类型(~T)";
         Text[ chinese_traditional ] = "類型(~T)";
@@ -2711,7 +2711,7 @@ TabPage TP_TOX_ENTRY
             Text[ swedish ] = "Tabulator";
             Text[ polish ] = "Tabulator";
             Text[ portuguese_brazilian ] = "Tab stop";
-            Text[ japanese ] = "ﾀﾌﾞ";
+            Text[ japanese ] = "タブ";
             Text[ korean ] = "탭 위치";
             Text[ chinese_simplified ] = "制表符";
             Text[ chinese_traditional ] = "定位鍵";
@@ -2763,7 +2763,7 @@ TabPage TP_TOX_ENTRY
             Text[ swedish ] = "Sidnummer";
             Text[ polish ] = "Numer strony";
             Text[ portuguese_brazilian ] = "Page number";
-            Text[ japanese ] = "ﾍﾟｰｼﾞ番号";
+            Text[ japanese ] = "ページ番号";
             Text[ korean ] = "페이지 번호";
             Text[ chinese_simplified ] = "页码";
             Text[ chinese_traditional ] = "頁碼";
@@ -2815,7 +2815,7 @@ TabPage TP_TOX_ENTRY
             Text[ swedish ] = "Hyperl�nk start";
             Text[ polish ] = "Pocz�tek hiper��cza";
             Text[ portuguese_brazilian ] = "Hyperlink start";
-            Text[ japanese ] = "ﾊｲﾊﾟｰﾘﾝｸ開始";
+            Text[ japanese ] = "ハイパーリンク開始";
             Text[ korean ] = "하이퍼링크 시작";
             Text[ chinese_simplified ] = "超链接开始处";
             Text[ chinese_traditional ] = "超連結 開始";
@@ -2841,7 +2841,7 @@ TabPage TP_TOX_ENTRY
             Text[ swedish ] = "Hyperl�nk slut";
             Text[ polish ] = "Koniec hiper��cza";
             Text[ portuguese_brazilian ] = "Hyperlink End";
-            Text[ japanese ] = "ﾊｲﾊﾟｰﾘﾝｸ終了";
+            Text[ japanese ] = "ハイパーリンク終了";
             Text[ korean ] = "하이퍼링크 끝";
             Text[ chinese_simplified ] = "超链接终止处";
             Text[ chinese_traditional ] = "超連結 結束";
@@ -2892,7 +2892,7 @@ TabPage TP_TOX_ENTRY
             Text[ swedish ] = "Teckenformatmall:  ";
             Text[ polish ] = "Styl znak�w:  ";
             Text[ portuguese_brazilian ] = "Character style: ";
-            Text[ japanese ] = "文字ｽﾀｲﾙ: ";
+            Text[ japanese ] = "文字スタイル: ";
             Text[ korean ] = "문자 템플릿: ";
             Text[ chinese_simplified ] = "字符样式： ";
             Text[ chinese_traditional ] = "字元樣式： ";
@@ -2921,7 +2921,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "~Alla niv�er";
         Text[ polish ] = "Wszystkie poziomy";
         Text[ portuguese_brazilian ] = "All levels";
-        Text[ japanese ] = "すべてのﾚﾍﾞﾙ(~A)";
+        Text[ japanese ] = "すべてのレベル(~A)";
         Text[ korean ] = "모든 수준(~A)";
         Text[ chinese_simplified ] = "全部的级(~A)";
         Text[ chinese_traditional ] = "所有的級(~A)";
@@ -2976,7 +2976,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "~Posttext";
         Text[ polish ] = "Tekst wpisu";
         Text[ portuguese_brazilian ] = "Entry text";
-        Text[ japanese ] = "項目ﾃｷｽﾄ";
+        Text[ japanese ] = "項目テキスト";
         Text[ korean ] = "항목 텍스트";
         Text[ chinese_simplified ] = "条目文字";
         Text[ chinese_traditional ] = "條目文字";
@@ -3032,7 +3032,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "~Sidnr";
         Text[ polish ] = "Numer str.";
         Text[ portuguese_brazilian ] = "Page no.";
-        Text[ japanese ] = "ﾍﾟｰｼﾞ番号";
+        Text[ japanese ] = "ページ番号";
         Text[ korean ] = "페이지 번호.";
         Text[ chinese_simplified ] = "页码";
         Text[ chinese_traditional ] = "頁碼";
@@ -3060,7 +3060,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "~Tabulator";
         Text[ polish ] = "Tabulator";
         Text[ portuguese_brazilian ] = "Tab stop";
-        Text[ japanese ] = "ﾀﾌﾞ";
+        Text[ japanese ] = "タブ";
         Text[ korean ] = "탭";
         Text[ chinese_simplified ] = "制表符";
         Text[ chinese_traditional ] = "定位鍵";
@@ -3088,7 +3088,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "H~yperl�nk";
         Text[ polish ] = "Hiper��cze";
         Text[ portuguese_brazilian ] = "Hyperlink";
-        Text[ japanese ] = "ﾊｲﾊﾟｰﾘﾝｸ(~Y)";
+        Text[ japanese ] = "ハイパーリンク(~Y)";
         Text[ korean ] = "하이퍼링크(~Y)";
         Text[ chinese_simplified ] = "超链接(~Y)";
         Text[ chinese_traditional ] = "超連結(~Y)";
@@ -3180,7 +3180,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "T~eckenformatmall";
         Text[ polish ] = "Styl znaku";
         Text[ portuguese_brazilian ] = "Character style";
-        Text[ japanese ] = "文字ｽﾀｲﾙ";
+        Text[ japanese ] = "文字スタイル";
         Text[ korean ] = "문자 템플릿";
         Text[ chinese_simplified ] = "字符样式";
         Text[ chinese_traditional ] = "字元樣式";
@@ -3243,7 +3243,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "Ut~fyllnadstecken";
         Text[ polish ] = "Wype�niacze";
         Text[ portuguese_brazilian ] = "Fill character";
-        Text[ japanese ] = "ﾘｰﾀﾞｰ";
+        Text[ japanese ] = "リーダー";
         Text[ korean ] = "채움 문자";
         Text[ chinese_simplified ] = "充填字符";
         Text[ chinese_traditional ] = "充填字元";
@@ -3451,7 +3451,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "Tab~ulatorposition";
         Text[ polish ] = "Pozycja tabulatora";
         Text[ portuguese_brazilian ] = "Tab stop position";
-        Text[ japanese ] = "ﾀﾌﾞ位置";
+        Text[ japanese ] = "タブ位置";
         Text[ korean ] = "탭 위치";
         Text[ chinese_simplified ] = "制表符位置";
         Text[ chinese_traditional ] = "定位鍵位置";
@@ -3498,7 +3498,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "H�gerjusterad";
         Text[ polish ] = "Z prawej";
         Text[ portuguese_brazilian ] = "Right border";
-        Text[ japanese ] = "右揃え(~O)";
+        Text[ japanese ] = "右揃え";
         Text[ korean ] = "오른쪽 맞춤";
         Text[ chinese_simplified ] = "右对齐";
         Text[ chinese_traditional ] = "向右對齊";
@@ -3553,7 +3553,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "Tabbarnas p~osition relativ till indraget fr�n styckeformatmallen";
         Text[ polish ] = "Pozycja relatywna do wci�cia ze stylu akapitu";
         Text[ portuguese_brazilian ] = "Position relativ to the paragraph style indent";
-        Text[ japanese ] = "ﾀﾌﾞ位置は段落ｽﾀｲﾙのｲﾝﾃﾞﾝﾄから(~V)";
+        Text[ japanese ] = "タブ位置は段落スタイルのインデントから(~V)";
         Text[ korean ] = "단락 템플릿의 첫 문장 들여쓰기에 관련된 탭 위치(~V)";
         Text[ chinese_simplified ] = "调整制表符和段落样式缩进的位置(~V)";
         Text[ chinese_traditional ] = "定位鍵位置和段落樣式的縮排保持相對位置(~V)";
@@ -3581,7 +3581,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "Te~ckenformatmall f�r huvudposter";
         Text[ polish ] = "Styl znaku wpis�w g��wnych";
         Text[ portuguese_brazilian ] = "Character style of main entries";
-        Text[ japanese ] = "主項目の文字ｽﾀｲﾙ";
+        Text[ japanese ] = "主項目の文字スタイル";
         Text[ korean ] = "주 항목의 문자 템플릿";
         Text[ chinese_simplified ] = "主条目的字符样式";
         Text[ chinese_traditional ] = "主項目的字元樣式";
@@ -3617,7 +3617,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "Alfabetiskt skiljetecken";
         Text[ polish ] = "Alfabetyczny separator";
         Text[ portuguese_brazilian ] = "Alphabetical delimiter";
-        Text[ japanese ] = "ｱﾙﾌｧﾍﾞｯﾄ分類文字";
+        Text[ japanese ] = "アルファベット分類文字";
         Text[ korean ] = "알파벳 구분 기호";
         Text[ chinese_simplified ] = "字母分隔符";
         Text[ chinese_traditional ] = "字母分隔符";
@@ -3645,7 +3645,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "Nyckel, kommaseparerad";
         Text[ polish ] = "Klucz odseparowany przecinkiem";
         Text[ portuguese_brazilian ] = "Comma separated keys";
-        Text[ japanese ] = "ｺﾝﾏ付きで連続表示";
+        Text[ japanese ] = "コンマ付きで連続表示";
         Text[ korean ] = "쉼표로 구분된 키";
         Text[ chinese_simplified ] = "键码用逗号分开";
         Text[ chinese_traditional ] = "鍵碼用逗號分開";
@@ -4036,7 +4036,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "Sorteringsnyckel";
         Text[ polish ] = "Klucz sortowania";
         Text[ portuguese_brazilian ] = "Sort keys";
-        Text[ japanese ] = "並べ替えｷｰ";
+        Text[ japanese ] = "並べ替えキー";
         Text[ korean ] = "정렬 키";
         Text[ chinese_simplified ] = "排序的关键字";
         Text[ chinese_traditional ] = "排序的關鍵字";
@@ -4151,7 +4151,7 @@ TabPage TP_TOX_STYLES
         Text[ chinese_simplified ] = "级(~L)";
         Text[ russian ] = "������";
         Text[ polish ] = "Poziomy";
-        Text[ japanese ] = "ﾚﾍﾞﾙ(~L)";
+        Text[ japanese ] = "レベル(~L)";
         Text[ chinese_traditional ] = "級(~L)";
         Text[ arabic ] = "���������";
         Text[ greek ] = "�������";
@@ -4189,7 +4189,7 @@ TabPage TP_TOX_STYLES
         Text[ chinese_simplified ] = "段落样式(~S)";
         Text[ russian ] = "����� �������";
         Text[ polish ] = "Style akapit�w";
-        Text[ japanese ] = "段落ｽﾀｲﾙ(~S)";
+        Text[ japanese ] = "段落スタイル(~S)";
         Text[ chinese_traditional ] = "段落樣式(~S)";
         Text[ arabic ] = "����� ����";
         Text[ greek ] = "������~� ����������";
@@ -4396,7 +4396,7 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ swedish ] = "~Mallar";
         Text[ polish ] = "Style";
         Text[ portuguese_brazilian ] = "Styles";
-        Text[ japanese ] = "ｽﾀｲﾙ(~E)";
+        Text[ japanese ] = "スタイル(~E)";
         Text[ korean ] = "템플릿(~E)";
         Text[ chinese_simplified ] = "样式(~E)";
         Text[ chinese_traditional ] = "樣式(~E)";
@@ -4463,7 +4463,7 @@ ModalDialog DLG_ADD_IDX_STYLES
     Text[ swedish ] = "Tilldela mall";
     Text[ polish ] = "Przypisz styl";
     Text[ portuguese_brazilian ] = "Assign styles";
-    Text[ japanese ] = "ｽﾀｲﾙの適用";
+    Text[ japanese ] = "スタイルの適用";
     Text[ korean ] = "템플릿 할당";
     Text[ chinese_simplified ] = "指定样式";
     Text[ chinese_traditional ] = "指定樣式";
@@ -4576,7 +4576,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ swedish ] = "1 nyckel";
             Text[ polish ] = "1 klucz";
             Text[ portuguese_brazilian ] = "1. Key";
-            Text[ japanese ] = "分類ﾀｲﾄﾙ1";
+            Text[ japanese ] = "分類タイトル1";
             Text[ korean ] = "1.키";
             Text[ chinese_simplified ] = "第一个关键字";
             Text[ chinese_traditional ] = "第一個關鍵字";
@@ -4601,7 +4601,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ swedish ] = "2 nyckel";
             Text[ polish ] = "2 klucz";
             Text[ portuguese_brazilian ] = "2. Key";
-            Text[ japanese ] = "分類ﾀｲﾄﾙ2";
+            Text[ japanese ] = "分類タイトル2";
             Text[ korean ] = "2.키";
             Text[ chinese_simplified ] = "第二个关键字";
             Text[ chinese_traditional ] = "第二個關鍵字";
@@ -4626,7 +4626,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ swedish ] = "Kommentar";
             Text[ polish ] = "Komentarz";
             Text[ portuguese_brazilian ] = "Comment";
-            Text[ japanese ] = "ｺﾒﾝﾄ";
+            Text[ japanese ] = "コメント";
             Text[ korean ] = "주석";
             Text[ chinese_simplified ] = "注解";
             Text[ chinese_traditional ] = "註解";
@@ -4775,7 +4775,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ swedish ] = "Redigera konkordansfil";
     Text[ polish ] = "Edytuj plik konkordancji";
     Text[ portuguese_brazilian ] = "Edit concordance file";
-    Text[ japanese ] = "ｺﾝｺｰﾀﾞﾝｽﾌｧｲﾙの編集";
+    Text[ japanese ] = "コンコーダンスファイルの編集";
     Text[ korean ] = "참조목록 파일 편집";
     Text[ chinese_simplified ] = "编辑语汇索引文件";
     Text[ chinese_traditional ] = "編輯語匯索引檔案";
@@ -4784,6 +4784,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
 
