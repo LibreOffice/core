@@ -33,6 +33,7 @@ hedabu: ..\inc\toolkit\helper\mutexhelper.hxx %_DEST%\inc%_EXT%\toolkit\helper\m
 hedabu: ..\inc\toolkit\helper\mutexandbroadcasthelper.hxx %_DEST%\inc%_EXT%\toolkit\helper\mutexandbroadcasthelper.hxx
 hedabu: ..\inc\toolkit\helper\listenermultiplexer.hxx %_DEST%\inc%_EXT%\toolkit\helper\listenermultiplexer.hxx
 hedabu: ..\inc\toolkit\helper\unowrapper.hxx %_DEST%\inc%_EXT%\toolkit\helper\unowrapper.hxx
+hedabu: ..\inc\toolkit\helper\externallock.hxx %_DEST%\inc%_EXT%\toolkit\helper\externallock.hxx
 
 hedabu: ..\inc\toolkit\helper\vclunohelper.hxx %_DEST%\inc%_EXT%\toolkit\unohlp.hxx
 
