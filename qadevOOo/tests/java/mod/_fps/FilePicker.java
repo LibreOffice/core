@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:46:34 $
+ *  last change:$Date: 2003-09-08 11:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,15 @@
 
 package mod._fps;
 
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.ui.dialogs.XFilePickerControlAccess;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for object which is represented by service
@@ -134,7 +134,6 @@ public class FilePicker extends TestCase {
         XInterface oObj = null;
         Object oInterface = null;
         XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
-        Object relationContainer = null ;
 
         Object[] iniArgs = new Object[] { new Short
             (com.sun.star.ui.dialogs.TemplateDescription.FILEOPEN_READONLY_VERSION)};
@@ -143,10 +142,6 @@ public class FilePicker extends TestCase {
         try {
             oInterface = xMSF.createInstance
                 ( "com.sun.star.ui.dialogs.FilePicker" );
-
-            XFilePickerControlAccess ca = (XFilePickerControlAccess)
-                UnoRuntime.queryInterface(XFilePickerControlAccess.class,
-                oInterface) ;
         } catch( com.sun.star.uno.Exception e ) {
             log.println("Can't create an object." );
             throw new StatusException( "Can't create an object", e );
