@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-12-12 14:30:50 $
+ *  last change: $Author: jp $ $Date: 2002-02-22 15:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,6 +548,7 @@ BOOL SwOLEObj::RemovedFromLRU()
         !( pDoc = pOLENd->GetDoc())->IsInDtor() &&
         SVOBJ_MISCSTATUS_ALWAYSACTIVATE != (*pOLERef)->GetMiscStatus() &&
         1 < (*pOLERef)->GetRefCount() &&
+        !(*pOLERef)->GetProtocol().IsConnect() &&
         !(*pOLERef)->GetProtocol().IsInPlaceActive() )
     {
         SvPersist* p = pDoc->GetPersist();
