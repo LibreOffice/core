@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:31:56 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 11:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,25 +270,25 @@ Resource RID_SW_ERRHDL
         TEXT = "Die Datei ist keine StarWriter-Datei" ;
         TEXT [ English ] = "This isn't a StarWriter file" ;
         TEXT [ norwegian ] = "Dette er ikke en Star Writer fil" ;
-        TEXT [ italian ] = "Questo non è un file di StarOffice Writer" ;
-        TEXT [ portuguese_brazilian ] = "Este não é um arquivo do StarOffice Writer" ;
-        TEXT [ portuguese ] = "Este não é um ficheiro do StarOffice Writer" ;
+        TEXT [ italian ] = "Questo non è un file di %PRODUCTNAME Writer" ;
+        TEXT [ portuguese_brazilian ] = "Este não é um arquivo do %PRODUCTNAME Writer" ;
+        TEXT [ portuguese ] = "Este não é um ficheiro do %PRODUCTNAME Writer" ;
         TEXT [ finnish ] = "Tämä ei ole StarWriter-tiedosto" ;
-        TEXT [ danish ] = "Filen er ingen StarOffice Writer-fil" ;
-        TEXT [ french ] = "Ceci n'est pas un fichier StarOffice Writer" ;
-        TEXT [ swedish ] = "Detta är inte en StarOffice Writer-fil" ;
-        TEXT [ dutch ] = "Dit bestand is geen StarOffice Writer-bestand" ;
-        TEXT [ spanish ] = "El archivo no es uno de StarOffice Writer" ;
-        TEXT [ english_us ] = "This is not a StarOffice Writer file" ;
-        TEXT[ chinese_simplified ] = "Õâ²»ÊÇÒ»¸ö StarOffice Writer ÎÄ¼ş";
-        TEXT[ russian ] = "İòîò ôàéë íå ÿâëÿåòñÿ ôàéëîì StarOffice Writer";
-        TEXT[ polish ] = "Ten plik nie jest plikiem StarOffice Writer";
-        TEXT[ japanese ] = "‚±‚ê‚ÍStarOffice Writer‚ÌÌ§²Ù‚Å‚Í‚ ‚è‚Ü‚¹‚ñB";
-        TEXT[ chinese_traditional ] = "³o¤£¬O¤@­Ó StarOffice Writer ÀÉ®×";
-        TEXT[ arabic ] = "åĞÇ Çáãáİ áíÓ ãáİ StarOffice Writer";
-        TEXT[ greek ] = "Ôï áñ÷åßï áõôü äåí åßíáé áñ÷åßï ôïõ StarOffice Writer";
-        TEXT[ korean ] = "ÀÌ ÆÄÀÏÀº  StarOffice Writer ÆÄÀÏÀÌ ¾Æ´Õ´Ï´Ù.";
-        TEXT[ turkish ] = "Bu dosya StarOffice Writer dosyası değil";
+        TEXT [ danish ] = "Filen er ingen %PRODUCTNAME Writer-fil" ;
+        TEXT [ french ] = "Ceci n'est pas un fichier %PRODUCTNAME Writer" ;
+        TEXT [ swedish ] = "Detta är inte en %PRODUCTNAME Writer-fil" ;
+        TEXT [ dutch ] = "Dit bestand is geen %PRODUCTNAME Writer-bestand" ;
+        TEXT [ spanish ] = "El archivo no es uno de %PRODUCTNAME Writer" ;
+        TEXT [ english_us ] = "This is not a %PRODUCTNAME Writer file" ;
+        TEXT[ chinese_simplified ] = "Õâ²»ÊÇÒ»¸ö %PRODUCTNAME Writer ÎÄ¼ş";
+        TEXT[ russian ] = "İòîò ôàéë íå ÿâëÿåòñÿ ôàéëîì %PRODUCTNAME Writer";
+        TEXT[ polish ] = "Ten plik nie jest plikiem %PRODUCTNAME Writer";
+        TEXT[ japanese ] = "‚±‚ê‚Í%PRODUCTNAME Writer‚ÌÌ§²Ù‚Å‚Í‚ ‚è‚Ü‚¹‚ñB";
+        TEXT[ chinese_traditional ] = "³o¤£¬O¤@­Ó %PRODUCTNAME Writer ÀÉ®×";
+        TEXT[ arabic ] = "åĞÇ Çáãáİ áíÓ ãáİ %PRODUCTNAME Writer";
+        TEXT[ greek ] = "Ôï áñ÷åßï áõôü äåí åßíáé áñ÷åßï ôïõ %PRODUCTNAME Writer";
+        TEXT[ korean ] = "ÀÌ ÆÄÀÏÀº  %PRODUCTNAME Writer ÆÄÀÏÀÌ ¾Æ´Õ´Ï´Ù.";
+        TEXT[ turkish ] = "Bu dosya %PRODUCTNAME Writer dosyası değil";
         TEXT[ language_user1 ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_UNEXPECTED_EOF )
@@ -654,25 +654,25 @@ Resource RID_SW_ERRHDL
         TEXT = "Interner Fehler im StarWriter Dateiformat" ;
         TEXT [ English ] = "Internal Error in StarWriter file" ;
         TEXT [ norwegian ] = "Intern feil i StarWriter fil" ;
-        TEXT [ italian ] = "Errore interno nel formato di file di StarOffice Writer" ;
-        TEXT [ portuguese_brazilian ] = "Erro interno em arquivo do StarOffice Writer" ;
-        TEXT [ portuguese ] = "Erro interno no formato de ficheiro do StarOffice Writer" ;
+        TEXT [ italian ] = "Errore interno nel formato di file di %PRODUCTNAME Writer" ;
+        TEXT [ portuguese_brazilian ] = "Erro interno em arquivo do %PRODUCTNAME Writer" ;
+        TEXT [ portuguese ] = "Erro interno no formato de ficheiro do %PRODUCTNAME Writer" ;
         TEXT [ finnish ] = "Sisäinen virhe StarWriter-tiedostossa" ;
-        TEXT [ danish ] = "Intern fejl i StarOffice Writer-filformatet" ;
-        TEXT [ french ] = "Erreur interne dans le format de fichier StarOffice Writer" ;
-        TEXT [ swedish ] = "Internt fel i StarOffice Writer-filformatet" ;
-        TEXT [ dutch ] = "Interne fout in StarOffice Writer bestandsformaat" ;
-        TEXT [ spanish ] = "Error interno en el formato de archivo de StarOffice Writer" ;
-        TEXT [ english_us ] = "Internal error in StarOffice Writer file format" ;
-        TEXT[ chinese_simplified ] = "ÄÚ²¿µÄ StarOffice Writer ÎÄ¼ş¸ñÊ½´íÎó";
-        TEXT[ russian ] = "Îøèáêà âíóòğè ôîğìàòà ôàéëà StarOffice Writer";
-        TEXT[ polish ] = "Wewnêtrzny b³¹d w formacie pliku StarOffice Writer";
-        TEXT[ japanese ] = "StarOffice Writer Ì§²Ù‘®‚Ì“à•”´×°";
-        TEXT[ chinese_traditional ] = "¤º³¡ªº StarOffice Writer ÀÉ®×®æ¦¡¿ù»~";
-        TEXT[ arabic ] = "ÍÏË ÎØÃ ÏÇÎáí İí ÊäÓíŞ ãáİ StarOffice Writer";
-        TEXT[ greek ] = "Åóùôåñéêü óöÜëìá óôç ìïñöŞ áñ÷åßïõ ôïõ StarOffice Writer";
-        TEXT[ korean ] = "StarOffice WriterÆÄÀÏ¼­½Ä ÀÇ ³»ºÎ ¿À·ù";
-        TEXT[ turkish ] = "Dahili StarOffice Writer dosyası format hatası";
+        TEXT [ danish ] = "Intern fejl i %PRODUCTNAME Writer-filformatet" ;
+        TEXT [ french ] = "Erreur interne dans le format de fichier %PRODUCTNAME Writer" ;
+        TEXT [ swedish ] = "Internt fel i %PRODUCTNAME Writer-filformatet" ;
+        TEXT [ dutch ] = "Interne fout in %PRODUCTNAME Writer bestandsformaat" ;
+        TEXT [ spanish ] = "Error interno en el formato de archivo de %PRODUCTNAME Writer" ;
+        TEXT [ english_us ] = "Internal error in %PRODUCTNAME Writer file format" ;
+        TEXT[ chinese_simplified ] = "ÄÚ²¿µÄ %PRODUCTNAME Writer ÎÄ¼ş¸ñÊ½´íÎó";
+        TEXT[ russian ] = "Îøèáêà âíóòğè ôîğìàòà ôàéëà %PRODUCTNAME Writer";
+        TEXT[ polish ] = "Wewnêtrzny b³¹d w formacie pliku %PRODUCTNAME Writer";
+        TEXT[ japanese ] = "%PRODUCTNAME Writer Ì§²Ù‘®‚Ì“à•”´×°";
+        TEXT[ chinese_traditional ] = "¤º³¡ªº %PRODUCTNAME Writer ÀÉ®×®æ¦¡¿ù»~";
+        TEXT[ arabic ] = "ÍÏË ÎØÃ ÏÇÎáí İí ÊäÓíŞ ãáİ %PRODUCTNAME Writer";
+        TEXT[ greek ] = "Åóùôåñéêü óöÜëìá óôç ìïñöŞ áñ÷åßïõ ôïõ %PRODUCTNAME Writer";
+        TEXT[ korean ] = "%PRODUCTNAME WriterÆÄÀÏ¼­½Ä ÀÇ ³»ºÎ ¿À·ù";
+        TEXT[ turkish ] = "Dahili %PRODUCTNAME Writer dosyası format hatası";
         TEXT[ language_user1 ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR )
@@ -680,25 +680,25 @@ Resource RID_SW_ERRHDL
         TEXT = "Interner Fehler im StarWriter Dateiformat" ;
         TEXT [ English ] = "Internal Error in StarWriter file" ;
         TEXT [ norwegian ] = "Intern feil i StarWriter fil" ;
-        TEXT [ italian ] = "Errore interno nel formato di file di StarOffice Writer" ;
-        TEXT [ portuguese_brazilian ] = "Erro interno em arquivo do StarOffice Writer" ;
-        TEXT [ portuguese ] = "Erro interno no formato de ficheiro do StarOffice Writer" ;
+        TEXT [ italian ] = "Errore interno nel formato di file di %PRODUCTNAME Writer" ;
+        TEXT [ portuguese_brazilian ] = "Erro interno em arquivo do %PRODUCTNAME Writer" ;
+        TEXT [ portuguese ] = "Erro interno no formato de ficheiro do %PRODUCTNAME Writer" ;
         TEXT [ finnish ] = "Sisäinen virhe StarWriter-tiedostossa" ;
-        TEXT [ danish ] = "Intern fejl i StarOffice Writer-filformatet" ;
-        TEXT [ french ] = "Erreur interne dans le format de fichier StarOffice Writer" ;
-        TEXT [ swedish ] = "Internt fel i StarOffice Writer-filformatet" ;
-        TEXT [ dutch ] = "Interne fout in StarOffice Writer bestandsformaat" ;
-        TEXT [ spanish ] = "Error interno en el formato de archivo de StarOffice Writer" ;
-        TEXT [ english_us ] = "Internal Error in StarOffice Writer file format" ;
-        TEXT[ chinese_simplified ] = "ÄÚ²¿µÄ StarOffice Writer ÎÄ¼ş¸ñÊ½´íÎó";
-        TEXT[ russian ] = "Îøèáêà âíóòğè ôîğìàòà ôàéëà StarOffice Writer";
-        TEXT[ polish ] = "Wewnêtrzny b³¹d w formacie pliku StarOffice Writer";
-        TEXT[ japanese ] = "StarOffice Writer Ì§²Ù‘®‚Ì“à•”´×°";
-        TEXT[ chinese_traditional ] = "¤º³¡ªº StarOffice Writer ÀÉ®×®æ¦¡¿ù»~";
-        TEXT[ arabic ] = "ÍÏË ÎØÃ ÏÇÎáí İí ÊäÓíŞ ãáİ StarOffice Writer";
-        TEXT[ greek ] = "Åóùôåñéêü óöÜëìá óôç ìïñöŞ áñ÷åßïõ ôïõ StarOffice Writer";
-        TEXT[ korean ] = "StarOffice Writer ÆÄÀÏ¼­½ÄÀÇ ³»ºÎ ¿À·ù";
-        TEXT[ turkish ] = "Dahili StarOffice Writer dosyası format hatası";
+        TEXT [ danish ] = "Intern fejl i %PRODUCTNAME Writer-filformatet" ;
+        TEXT [ french ] = "Erreur interne dans le format de fichier %PRODUCTNAME Writer" ;
+        TEXT [ swedish ] = "Internt fel i %PRODUCTNAME Writer-filformatet" ;
+        TEXT [ dutch ] = "Interne fout in %PRODUCTNAME Writer bestandsformaat" ;
+        TEXT [ spanish ] = "Error interno en el formato de archivo de %PRODUCTNAME Writer" ;
+        TEXT [ english_us ] = "Internal Error in %PRODUCTNAME Writer file format" ;
+        TEXT[ chinese_simplified ] = "ÄÚ²¿µÄ %PRODUCTNAME Writer ÎÄ¼ş¸ñÊ½´íÎó";
+        TEXT[ russian ] = "Îøèáêà âíóòğè ôîğìàòà ôàéëà %PRODUCTNAME Writer";
+        TEXT[ polish ] = "Wewnêtrzny b³¹d w formacie pliku %PRODUCTNAME Writer";
+        TEXT[ japanese ] = "%PRODUCTNAME Writer Ì§²Ù‘®‚Ì“à•”´×°";
+        TEXT[ chinese_traditional ] = "¤º³¡ªº %PRODUCTNAME Writer ÀÉ®×®æ¦¡¿ù»~";
+        TEXT[ arabic ] = "ÍÏË ÎØÃ ÏÇÎáí İí ÊäÓíŞ ãáİ %PRODUCTNAME Writer";
+        TEXT[ greek ] = "Åóùôåñéêü óöÜëìá óôç ìïñöŞ áñ÷åßïõ ôïõ %PRODUCTNAME Writer";
+        TEXT[ korean ] = "%PRODUCTNAME Writer ÆÄÀÏ¼­½ÄÀÇ ³»ºÎ ¿À·ù";
+        TEXT[ turkish ] = "Dahili %PRODUCTNAME Writer dosyası format hatası";
         TEXT[ language_user1 ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_MEM )
@@ -1238,23 +1238,23 @@ Resource RID_SW_ERRHDL
     {
         Text = "Das HTML-Dokument enthält StarBasic Makros.\nSie wurden mit den aktuellen Exporteinstellungen nicht gespeichert." ;
         Text [ English ] = "This HTML document contains StarBasic macros.\nThey were not saved because of the current export options." ;
-        Text[ english_us ] = "This HTML document contains StarOffice Basic macros.\nThey were not saved with the current export settings.";
-        Text[ portuguese ] = "Este documento HTML contém macros StarOffice Basic.\nEstas não foram guardadas com as predefinições de exportação activas.";
-        Text[ russian ] = "İòîò äîêóìåíò HTML ñîäåğæèò ìàêğîñû StarOffice Basic.\nÎíè íå ñîõğàíèëèñü ñ òåêóùèìè íàñòğîéêàìè ıêñïîğòà.";
-        Text[ greek ] = "Ôï áñ÷åßï HTML ğåñéİ÷åé ìáêñïåíôïëİò ôïõ StarOffice Basic.\nÁõôİò äåí áğïèçêåıôçêáí ìå ôéò ôñİ÷ïõóåò ñõèìßóåéò åéóáãùãŞò.";
-        Text[ dutch ] = "Dit HTML document bevat StarOffice Basic-macro's.\nDeze konden niet worden opgeslagen met de actuele exportinstellingen.";
-        Text[ french ] = "Le document HTML contient des macros StarOffice Basic.\nCelles-ci n'ont pas été enregistrées avec les paramètres d'export actifs.";
-        Text[ spanish ] = "El documento HTML contiene macros StarOffice Basic.\nNo se guardaron con la configuración actual de exportación.";
-        Text[ italian ] = "Il documento HTML contiene macro StarOffice Basic che\nnon sono state salvate con le impostazioni attuali di esportazione.";
-        Text[ danish ] = "Dette HTML-dokument indeholder StarOffice Basic-makroer.\nDe blev ikke gemt med de aktuelle eksportindstillinger.";
-        Text[ swedish ] = "HTML-dokumentet innehåller StarOffice Basic-makron.\nDe sparades inte med de aktuella exportinställningarna.";
-        Text[ polish ] = "Dokument HTML zawiera Makra StarOffice Basic.\nNie zosta³y one zapisane razem z aktualnymi ustawieniami ekspotru.";
-        Text[ portuguese_brazilian ] = "This HTML document contains StarOffice Basic macros.\nThey were not saved because of the current export options.";
-        Text[ japanese ] = "‚±‚ÌHTMLÄŞ·­ÒİÄ‚ÍStarOffice Basic Ï¸Û‚ğŠÜ‚ñ‚Å‚¢‚Ü‚·B\n‚»‚ê‚ç‚ÍŒ»İ‚Ì´¸½Îß°Äİ’è‚Å‚Í•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
-        Text[ korean ] = "ÀÌ HTML ¹®¼­´Â StarOffice Basic ¸ÅÅ©·Î¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù.\nÇöÀçÀÇ º¸³»±â ¼³Á¤À¸·Î´Â ¸ÅÅ©·Î°¡ ÀúÀåµÇÁö ¾Ê½À´Ï´Ù.";
-        Text[ chinese_simplified ] = "Õâ¸öHTMLÎÄµµº¬ÓĞStarOffice Basicºê¡£\nÓÉÓÚµ±Ç°µÄÊä³öÉè¶¨¶ø²»ÄÜ´æÅÌÕâĞ©ºê¡£";
-        Text[ chinese_traditional ] = "HTML ¤å¥ó§t¦³ StarOffice Basic ¥¨¶°¡C\n¦]·í«eªº¿é¥X³]©w¦Ó¤£¯àÀx¦s¤å¥ó¡C";
-        Text[ arabic ] = "íÍÊæí ÇáãÓÊäÏ HTML Úáì æÍÏÇÊ ãÇßÑæ StarOffice Basic.\náã íÊã ÍİÙåÇ ÈÅÚÏÇÏÇÊ ÇáÊÕÏíÑ ÇáÍÇáíÉ.";
+        Text[ english_us ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved with the current export settings.";
+        Text[ portuguese ] = "Este documento HTML contém macros %PRODUCTNAME Basic.\nEstas não foram guardadas com as predefinições de exportação activas.";
+        Text[ russian ] = "İòîò äîêóìåíò HTML ñîäåğæèò ìàêğîñû %PRODUCTNAME Basic.\nÎíè íå ñîõğàíèëèñü ñ òåêóùèìè íàñòğîéêàìè ıêñïîğòà.";
+        Text[ greek ] = "Ôï áñ÷åßï HTML ğåñéİ÷åé ìáêñïåíôïëİò ôïõ %PRODUCTNAME Basic.\nÁõôİò äåí áğïèçêåıôçêáí ìå ôéò ôñİ÷ïõóåò ñõèìßóåéò åéóáãùãŞò.";
+        Text[ dutch ] = "Dit HTML document bevat %PRODUCTNAME Basic-macro's.\nDeze konden niet worden opgeslagen met de actuele exportinstellingen.";
+        Text[ french ] = "Le document HTML contient des macros %PRODUCTNAME Basic.\nCelles-ci n'ont pas été enregistrées avec les paramètres d'export actifs.";
+        Text[ spanish ] = "El documento HTML contiene macros %PRODUCTNAME Basic.\nNo se guardaron con la configuración actual de exportación.";
+        Text[ italian ] = "Il documento HTML contiene macro %PRODUCTNAME Basic che\nnon sono state salvate con le impostazioni attuali di esportazione.";
+        Text[ danish ] = "Dette HTML-dokument indeholder %PRODUCTNAME Basic-makroer.\nDe blev ikke gemt med de aktuelle eksportindstillinger.";
+        Text[ swedish ] = "HTML-dokumentet innehåller %PRODUCTNAME Basic-makron.\nDe sparades inte med de aktuella exportinställningarna.";
+        Text[ polish ] = "Dokument HTML zawiera Makra %PRODUCTNAME Basic.\nNie zosta³y one zapisane razem z aktualnymi ustawieniami ekspotru.";
+        Text[ portuguese_brazilian ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved because of the current export options.";
+        Text[ japanese ] = "‚±‚ÌHTMLÄŞ·­ÒİÄ‚Í%PRODUCTNAME Basic Ï¸Û‚ğŠÜ‚ñ‚Å‚¢‚Ü‚·B\n‚»‚ê‚ç‚ÍŒ»İ‚Ì´¸½Îß°Äİ’è‚Å‚Í•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+        Text[ korean ] = "ÀÌ HTML ¹®¼­´Â %PRODUCTNAME Basic ¸ÅÅ©·Î¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù.\nÇöÀçÀÇ º¸³»±â ¼³Á¤À¸·Î´Â ¸ÅÅ©·Î°¡ ÀúÀåµÇÁö ¾Ê½À´Ï´Ù.";
+        Text[ chinese_simplified ] = "Õâ¸öHTMLÎÄµµº¬ÓĞ%PRODUCTNAME Basicºê¡£\nÓÉÓÚµ±Ç°µÄÊä³öÉè¶¨¶ø²»ÄÜ´æÅÌÕâĞ©ºê¡£";
+        Text[ chinese_traditional ] = "HTML ¤å¥ó§t¦³ %PRODUCTNAME Basic ¥¨¶°¡C\n¦]·í«eªº¿é¥X³]©w¦Ó¤£¯àÀx¦s¤å¥ó¡C";
+        Text[ arabic ] = "íÍÊæí ÇáãÓÊäÏ HTML Úáì æÍÏÇÊ ãÇßÑæ %PRODUCTNAME Basic.\náã íÊã ÍİÙåÇ ÈÅÚÏÇÏÇÊ ÇáÊÕÏíÑ ÇáÍÇáíÉ.";
         Text[ turkish ] = "HTML belgesinde StarBasic makroları var.\nBu makrolar, yürürlükteki verme ayarları ile kaydedilmemiş.";
         Text[ language_user1 ] = " ";
     };
