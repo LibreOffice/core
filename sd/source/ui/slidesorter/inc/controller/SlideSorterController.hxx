@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:19:05 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,6 @@ public:
     void GetAttrState (SfxItemSet& rSet);
     void ExecStatusBar (SfxRequest& rRequest);
 
-
     /** Prepare for several model changes, i.e. prevent time-consuming and
         non-critical operations like repaints until UnlockModelChange() is
         called.  Ciritcal operations like releasing references to pages that
@@ -197,8 +196,20 @@ public:
         update of model, view, and controller.  When HandleModelChange() has
         been called since the last LockModelChange() then this is done right
         away to bring the view up-to-date.
-*/
+    */
     void UnlockModelChange (void);
+
+    /** Create an object of this inner class to prevent updates due to model
+        changes.
+    */
+    class ModelChangeLock
+    {public:
+        ModelChangeLock (SlideSorterController& rController);
+        ~ModelChangeLock (void);
+        void ModelHasChanged (void);
+    private:
+        SlideSorterController& mrController;
+    };
 
     /** Prepare for a model change.  This method does all the things that
         need to be done _before_ the model changes, e.g. because they need
@@ -224,7 +235,7 @@ public:
 
     /** Move the maked pages to a position directly after the specified page.
     */
-    void MoveSelectedPages (USHORT nTargetPage);
+    bool MoveSelectedPages (USHORT nTargetPage);
 
     DECL_LINK(TabBarHandler, TabBar*);
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
@@ -267,6 +278,27 @@ public:
     */
     virtual FuPoor* CreateSelectionFunction (SfxRequest& rRequest);
 
+    /** Prepare for a change of the edit mode.  Depending on the current
+        edit mode we may save the selection so that it can be restored when
+        later changing back to the current edit mode.
+    */
+    void PrepareEditModeChange (void);
+
+    /** Set a new edit mode and return whether the edit mode really
+        has been changed.  For proper saving and restoring of the selection
+        this method should be called between calls to
+        PrepareEditModeChange() and FinishEditModeChange().
+        @return
+            A return value of <TRUE/> indicates that the edit mode has
+            changed.
+    */
+    bool ChangeEditMode (EditMode eEditMode);
+
+    /** Finish the change of the edit mode.  Here we may select a page or
+        restore a previously saved selection.
+    */
+    void FinishEditModeChange (void);
+
 private:
     SlideSorterViewShell& mrViewShell;
     model::SlideSorterModel& mrModel;
@@ -292,6 +324,20 @@ private:
         made and one to PostModelChange() is pending.
     */
     bool mbPostModelChangePending;
+
+    /** This array stores the indices of the  selected page descriptors at
+        the time when the edit mode is switched to EM_MASTERPAGE.  With this
+        we can restore the selection when switching back to EM_PAGE mode.
+    */
+    ::std::vector<SdPage*> maSelectionBeforeSwitch;
+    /// The current page before the edit mode is switched to EM_MASTERPAGE.
+    int mnCurrentPageBeforeSwitch;
+
+    /** The master page to select after the edit mode is changed.  This
+        member is used to pass the pointer from PrepareEditModeChange() to
+        FinishEditModeChange().
+    */
+    SdPage* mpEditModeChangeMasterPage;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
