@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:12:47 $
+ *  last change: $Author: pl $ $Date: 2001-08-27 09:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _SV_RC_H
 #include <rc.h>
+#endif
+#ifndef _SV_SVDATA_HXX
+#include <svdata.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
@@ -138,7 +141,12 @@ long Control::Notify( NotifyEvent& rNEvt )
         if ( !mbHasFocus )
         {
             mbHasFocus = TRUE;
+            ImplDelData aDelData;
+            ImplAddDel( &aDelData );
             maGetFocusHdl.Call( this );
+            if ( aDelData.IsDelete() )
+                return TRUE;
+            ImplRemoveDel( &aDelData );
         }
     }
     else
@@ -149,7 +157,12 @@ long Control::Notify( NotifyEvent& rNEvt )
             if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
             {
                 mbHasFocus = FALSE;
+                ImplDelData aDelData;
+                ImplAddDel( &aDelData );
                 maLoseFocusHdl.Call( this );
+                if ( aDelData.IsDelete() )
+                    return TRUE;
+                ImplRemoveDel( &aDelData );
             }
         }
     }
