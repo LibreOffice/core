@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 14:55:18 $
+ *  last change: $Author: as $ $Date: 2001-11-29 11:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,24 +511,48 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         if ( !pDispatcher && pBindings )
             pDispatcher = GetBindings().GetDispatcher_Impl();
 
-        SfxCallMode nCall = SFX_CALLMODE_SLOT;
-        sal_Int32 nCount = aArgs.getLength();
-        const ::com::sun::star::beans::PropertyValue* pPropsVal = aArgs.getConstArray();
+        // Try to find call mode and frame name inside given arguments...
+        SfxCallMode nCall         = SFX_CALLMODE_SLOT;
+        sal_Int32   nFileNameArg  = -1               ;
+
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lNewArgs( aArgs );
+        sal_Int32 nCount = lNewArgs.getLength();
+        for( sal_Int32 n=0; n<nCount; n++ )
+        {
+            const ::com::sun::star::beans::PropertyValue& rProp = lNewArgs[n];
+            sal_Bool bTemp;
+            if(
+                ( rProp.Name.compareToAscii("SynchronMode")== 0     )  &&
+                ( rProp.Value                              >>=bTemp )
+              )
+            {
+                nCall = SFX_CALLMODE_SYNCHRON;
+            }
+            else
+            if( rProp.Name.compareToAscii("FileName")== 0 )
+                nFileNameArg = n;
+        }
+
+        // Overwrite possible detected sychron argument, if real listener exist!
         if ( rListener.is() )
             nCall = SFX_CALLMODE_SYNCHRON;
-        else
+
+        // Special mode for dispatch of full qualified ... but relativ meaned URL's.
+        // Then we set jump mark as pure file name in argument list ...
+        if( GetId() == SID_JUMPTOMARK )
         {
-            for ( sal_Int32 n=0; n<nCount; n++ )
+            // We must map ID to OpenDoc here ... because
+            // We must open this relativ URL!
+            SetId( SID_OPENDOC );
+            if( nFileNameArg == - 1 )
             {
-                const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
-                String aName = rProp.Name;
-                sal_Bool bTemp ;
-                if ( aName.EqualsAscii("SynchronMode") && (rProp.Value >>= bTemp) )
-                {
-                    nCall = SFX_CALLMODE_SYNCHRON;
-                    break;
-                }
+                lNewArgs.realloc( lNewArgs.getLength()+1 );
+                nFileNameArg = lNewArgs.getLength()-1;
             }
+            ::rtl::OUString sTemp(RTL_CONSTASCII_USTRINGPARAM("#"));
+                            sTemp += aURL.Mark;
+            lNewArgs[nFileNameArg].Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
+            lNewArgs[nFileNameArg].Value <<= sTemp;
         }
 
         sal_Bool bSuccess = sal_False;
@@ -545,7 +569,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                         SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL) ) )
                 {
                     SfxAllItemSet aSet( pShell->GetPool() );
-                    TransformParameters( GetId(), aArgs, aSet );
+                    TransformParameters( GetId(), lNewArgs, aSet );
                     if ( aSet.Count() )
                     {
                         SfxRequest aReq( GetId(), nCall, aSet );
@@ -568,7 +592,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         else
         {
             SfxAllItemSet aSet( SFX_APP()->GetPool() );
-            TransformParameters( GetId(), aArgs, aSet );
+            TransformParameters( GetId(), lNewArgs, aSet );
             if ( aSet.Count() )
                 pItem = pDispatcher->Execute( GetId(), nCall, aSet );
             else
