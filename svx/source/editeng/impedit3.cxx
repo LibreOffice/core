@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:58:20 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3261,6 +3261,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
         // Wenn aClipRecPixel > XXXX, dann invalidieren ?!
 
         VirtualDevice* pVDev = GetVirtualDevice( pOutWin->GetMapMode() );
+        pVDev->SetDigitLanguage( GetRefDevice()->GetDigitLanguage() );
 
         pVDev->SetBackground( pView->GetBackgroundColor() );
 
