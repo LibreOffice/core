@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-16 11:55:52 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ sal_Bool ZipFile::readLOC(const package::ZipEntry &rEntry)
 
     if (nTestSig != LOCSIG)
     {
-        DBG_ERROR ("Invalid LOC header (bad signature)");
+        VOS_DEBUG_ONLY ("Invalid LOC header (bad signature)");
         return sal_False;
     }
     aGrabber >> nVersion;
@@ -346,12 +346,12 @@ sal_Int32 ZipFile::readCEN()
 
     if (nTotal<0 || nTotal * CENHDR > nCenLen)
     {
-        DBG_ERROR("invalid END header (bad entry count)");
+        VOS_DEBUG_ONLY("invalid END header (bad entry count)");
         return -1;
     }
     if (nTotal > ZIP_MAXENTRIES)
     {
-        DBG_ERROR("too many entries in ZIP File");
+        VOS_DEBUG_ONLY("too many entries in ZIP File");
         return -1;
     }
 
@@ -360,14 +360,14 @@ sal_Int32 ZipFile::readCEN()
 
     if (nCenLen < 0 || nCenLen > nEndPos)
     {
-        DBG_ERROR ("invalid END header (bad central directory size)");
+        VOS_DEBUG_ONLY ("invalid END header (bad central directory size)");
         return -1;
     }
     nCenPos = nEndPos - nCenLen;
 
     if (nCenOff < 0 || nCenOff > nCenPos)
     {
-        DBG_ERROR("invalid END header (bad central directory size)");
+        VOS_DEBUG_ONLY("invalid END header (bad central directory size)");
         return -1;
     }
     nLocPos = nCenPos - nCenOff;
@@ -387,27 +387,27 @@ sal_Int32 ZipFile::readCEN()
         sal_Int16 nDisk, nIntAttr;
         if (aGrabber.getPosition() - nCenPos + CENHDR > nCenLen)
         {
-            DBG_ERROR("invalid CEN header (bad header size check 1");
+            VOS_DEBUG_ONLY("invalid CEN header (bad header size check 1");
             break;
         }
         aGrabber >> nTestSig;
         if (nTestSig != CENSIG)
         {
-            DBG_ERROR ("invalid CEN header (bad signature)");
+            VOS_DEBUG_ONLY ("invalid CEN header (bad signature)");
             break;
         }
         aGrabber >> nVerMade;
         aGrabber >> nVersion;
         if ((nVersion & 1) == 1)
         {
-            DBG_ERROR ( "invalid CEN header (encrypted entry)");
+            VOS_DEBUG_ONLY ( "invalid CEN header (encrypted entry)");
             break;
         }
         aGrabber >> nFlag;
         aGrabber >> nHow;
         if (nHow != STORED && nHow != DEFLATED)
         {
-            DBG_ERROR ( "invalid CEN header (bad compression method)");
+            VOS_DEBUG_ONLY ( "invalid CEN header (bad compression method)");
             break;
         }
         aGrabber >> nTime;
@@ -424,17 +424,17 @@ sal_Int32 ZipFile::readCEN()
 
         if (aGrabber.getPosition() - nCenPos + nNameLen + nExtraLen + nCommentLen > nCenLen)
         {
-            DBG_ERROR ( "invalid CEN header (bad header size check 2)");
+            VOS_DEBUG_ONLY ( "invalid CEN header (bad header size check 2)");
             break;
         }
         if (nNameLen > ZIP_MAXNAMELEN)
         {
-            DBG_ERROR ( "name length exceeds 512 bytes");
+            VOS_DEBUG_ONLY ( "name length exceeds 512 bytes");
             break;
         }
         if (nExtraLen > ZIP_MAXEXTRA)
         {
-            DBG_ERROR ( "extra header info exceeds 256 bytes");
+            VOS_DEBUG_ONLY ( "extra header info exceeds 256 bytes");
             break;
         }
 
@@ -474,7 +474,7 @@ sal_Int32 ZipFile::readCEN()
 
     if (nCount != nTotal)
     {
-        DBG_ERROR("Count != total!");
+        VOS_DEBUG_ONLY("Count != total!");
         return -1;
     }
     return nCenPos;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-16 22:50:51 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,15 +78,15 @@ void Inflater::init (sal_Bool bNowrap)
         case Z_OK:
             break;
         case Z_MEM_ERROR:
-            DBG_ERROR ( pStream->msg);
+            VOS_DEBUG_ONLY ( pStream->msg);
             delete pStream;
             break;
         case Z_STREAM_ERROR:
-            DBG_ERROR ( pStream->msg);
+            VOS_DEBUG_ONLY ( pStream->msg);
             delete pStream;
             break;
         default:
-            DBG_ERROR ( pStream->msg);
+            VOS_DEBUG_ONLY ( pStream->msg);
             break;
     }
 }
@@ -260,7 +260,7 @@ sal_Int32 Inflater::doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 >  
         case Z_BUF_ERROR:
             return 0;
         case Z_DATA_ERROR:
-            DBG_ERROR(pStream->msg);
+            VOS_DEBUG_ONLY(pStream->msg);
             return 0;
     }
     return 0;

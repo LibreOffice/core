@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Deflater.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-16 22:50:51 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,10 +158,10 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
                 return nNewLength - pStream->avail_out;
             case Z_BUF_ERROR:
                 bSetParams = sal_False;
-                DBG_ERROR( pStream->msg );
+                VOS_DEBUG_ONLY( pStream->msg );
                 return 0;
             default:
-                DBG_ERROR( pStream->msg );
+                VOS_DEBUG_ONLY( pStream->msg );
                 return 0;
         }
     }
@@ -183,10 +183,10 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
                 return nNewLength - pStream->avail_out;
             case Z_BUF_ERROR:
                 bSetParams = sal_False;
-                DBG_ERROR( pStream->msg );
+                VOS_DEBUG_ONLY( pStream->msg );
                 return 0;
             default:
-                DBG_ERROR( pStream->msg );
+                VOS_DEBUG_ONLY( pStream->msg );
                 return 0;
         }
     }
@@ -196,7 +196,7 @@ void SAL_CALL Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffe
         throw(uno::RuntimeException)
 {
     if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
-        DBG_ERROR("Invalid parameters to Deflater::setInputSegment!");
+        VOS_DEBUG_ONLY("Invalid parameters to Deflater::setInputSegment!");
 
     sInBuffer = rBuffer;
     nOffset = nNewOffset;
@@ -215,7 +215,7 @@ void SAL_CALL Deflater::setDictionarySegment( const uno::Sequence< sal_Int8 >& r
     if (pStream == NULL)
     {
         // do error handling
-        DBG_ERROR("No stream!");
+        VOS_DEBUG_ONLY("No stream!");
     }
     if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
     {
@@ -229,7 +229,7 @@ void SAL_CALL Deflater::setDictionary( const uno::Sequence< sal_Int8 >& rBuffer 
     if (pStream == NULL)
     {
         // do error handling
-        DBG_ERROR("No stream!");
+        VOS_DEBUG_ONLY("No stream!");
 
     }
     sal_Int32 nResult = z_deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(), rBuffer.getLength());
@@ -281,7 +281,7 @@ sal_Int32 SAL_CALL Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffe
         throw(uno::RuntimeException)
 {
     if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
-        DBG_ERROR("Invalid Offset or Length passed to doDeflateSegment");
+        VOS_DEBUG_ONLY("Invalid Offset or Length passed to doDeflateSegment");
     return doDeflateBytes(rBuffer, nNewOffset, nNewLength);
 }
 sal_Int32 SAL_CALL Deflater::doDeflate( uno::Sequence< sal_Int8 >& rBuffer )

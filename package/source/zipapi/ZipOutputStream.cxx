@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-16 22:50:51 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,8 @@ void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
         closeEntry();
     if (pNonConstEntry->nTime == -1)
     {
-        Time aTime;
-        aTime = Time();
-        pNonConstEntry->nTime = aTime.GetTime();
+        time_t nTime =0;
+        pNonConstEntry->nTime = tmDateToDosDate(*localtime(&nTime));
     }
     if (pNonConstEntry->nMethod == -1)
     {
@@ -161,18 +160,18 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 {
                     if (pEntry->nSize != aDeflater.getTotalIn())
                     {
-                        DBG_ERROR("Invalid entry size");
+                        VOS_DEBUG_ONLY("Invalid entry size");
                     }
                     if (pEntry->nCompressedSize != aDeflater.getTotalOut())
                     {
-                        //DBG_ERROR("Invalid entry compressed size");
+                        //VOS_DEBUG_ONLY("Invalid entry compressed size");
                         // Different compression strategies make the merit of this
                         // test somewhat dubious
                         pEntry->nCompressedSize = aDeflater.getTotalOut();
                     }
                     if (pEntry->nCrc != aCRC.getValue())
                     {
-                        DBG_ERROR("Invalid entry CRC-32");
+                        VOS_DEBUG_ONLY("Invalid entry CRC-32");
                     }
                 }
                 else
@@ -188,12 +187,12 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 if (static_cast < sal_uInt32 > (pEntry->nCrc) != static_cast <sal_uInt32> (aCRC.getValue()))
                 {
                     // boom
-                    DBG_ERROR("Invalid entry crc32");
+                    VOS_DEBUG_ONLY("Invalid entry crc32");
                 }
                 break;
             default:
                 // boom;
-                DBG_ERROR("Invalid compression method");
+                VOS_DEBUG_ONLY("Invalid compression method");
                 break;
         }
         aCRC.reset();
@@ -230,7 +229,7 @@ void SAL_CALL ZipOutputStream::finish(  )
     if (aZipList.size() < 1)
     {
         // boom
-        DBG_ERROR("Zip file must have at least one entry!\n");
+        VOS_DEBUG_ONLY("Zip file must have at least one entry!\n");
     }
     sal_Int32 nOffset= aChucker.getPosition();
     for (int i =0, nEnd = aZipList.size(); i < nEnd; i++)
@@ -253,7 +252,7 @@ void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     uno::Sequence < sal_Int8 > aSequence (nCommentLength);
     for ( ; i < nCommentLength; i++)
     {
-        DBG_ASSERT (pChar[i] <127, "Non US ASCII character in zipfile comment!");
+        VOS_ENSURE (pChar[i] <127, "Non US ASCII character in zipfile comment!");
         aSequence[i] = static_cast < const sal_Int8 > (pChar[i]);
     }
     aChucker << ENDSIG;
@@ -294,7 +293,7 @@ void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
     uno::Sequence < sal_Int8 > aSequence (nNameLength);
     for ( ; i < nNameLength; i++)
     {
-        DBG_ASSERT (pChar[i] <127, "Non US ASCII character in zipentry name!");
+        VOS_ENSURE (pChar[i] <127, "Non US ASCII character in zipentry name!");
         aSequence[i] = static_cast < const sal_Int8 > (pChar[i]);
     }
 
@@ -306,7 +305,7 @@ void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
         aSequence.realloc (nCommentLength);
         for (i=0, pChar = rEntry.sName.getStr(); i < nCommentLength; i++)
         {
-            DBG_ASSERT (pChar[i] <127, "Non US ASCII character in zipentry comment!");
+            VOS_ENSURE (pChar[i] <127, "Non US ASCII character in zipentry comment!");
             aSequence[i] = static_cast < const sal_Int8 > (pChar[i]);
         }
         aChucker.writeBytes( aSequence );
@@ -347,10 +346,37 @@ void ZipOutputStream::writeLOC( const package::ZipEntry &rEntry )
     uno::Sequence < sal_Int8 > aSequence (nNameLength);
     for ( ; i < nNameLength; i++)
     {
-        DBG_ASSERT (pChar[i] <127, "Non US ASCII character in zipentry name!");
+        VOS_ENSURE (pChar[i] <127, "Non US ASCII character in zipentry name!");
         aSequence[i] = static_cast < const sal_Int8 > (pChar[i]);
     }
     aChucker.writeBytes( aSequence );
     if (rEntry.extra.getLength() != 0)
         aChucker.writeBytes( rEntry.extra );
 }
+sal_uInt32 ZipOutputStream::tmDateToDosDate ( tm &rTime)
+{
+    sal_uInt32 nYear = static_cast <sal_uInt32> (rTime.tm_year);
+
+    if (nYear>1980)
+        nYear-=1980;
+    else if (nYear>80)
+        nYear-=80;
+    return static_cast < sal_uInt32>( ( ( ( rTime.tm_mday) +
+                                          ( 32 * (rTime.tm_mon+1)) +
+                                          ( 512 * nYear ) ) << 16) |
+                                        ( ( rTime.tm_sec/2) +
+                                            ( 32 * rTime.tm_min) +
+                                          ( 2048 * static_cast <sal_uInt32 > (rTime.tm_hour) ) ) );
+}
+void ZipOutputStream::dosDateToTMDate ( tm &rTime, sal_uInt32 nDosDate)
+{
+    sal_uInt32 nDate = static_cast < sal_uInt32 > (nDosDate >> 16);
+    rTime.tm_mday = static_cast < sal_uInt32 > ( nDate & 0x1F);
+    rTime.tm_mon  = static_cast < sal_uInt32 > ( ( ( (nDate) & 0x1E0)/0x20)-1);
+    rTime.tm_year = static_cast < sal_uInt32 > ( ( (nDate & 0x0FE00)/0x0200)+1980);
+
+    rTime.tm_hour = static_cast < sal_uInt32 > ( (nDosDate & 0xF800)/0x800);
+    rTime.tm_min  = static_cast < sal_uInt32 > ( (nDosDate & 0x7E0)/0x20);
+    rTime.tm_sec  = static_cast < sal_uInt32 > ( 2 * (nDosDate & 0x1F) );
+}
+
