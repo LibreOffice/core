@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 15:23:45 $
+#   last change: $Author: rt $ $Date: 2004-07-13 17:33:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,9 +118,12 @@ RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
-# static libraries
+# static libraries must come at the end for MACOSX
+.IF "$(OS)" != "MACOSX"
 SHL1STDLIBS+=\
     $(ZLIB3RDLIB)
+.ENDIF
+
 
 # dynamic libraries
 SHL1STDLIBS+=\
@@ -132,10 +135,16 @@ SHL1STDLIBS+=\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(SALLIB)
+    $(SALLIB) 
 
 #	$(ONELIB)			\
 #	$(VOSLIB)			\
+
+# static libraries must come at the end for MACOSX
+.IF "$(OS)" == "MACOSX"
+SHL1STDLIBS+=\
+    $(ZLIB3RDLIB)
+.ENDIF
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
