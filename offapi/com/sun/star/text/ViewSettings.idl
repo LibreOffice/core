@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewSettings.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:07:31 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ published service ViewSettings
     //-------------------------------------------------------------------------
     /** Specifies whether to display the grid or not
 
-        @since i25719
+        @since OOo 2.0.0
      */
     [optional, property] boolean IsRasterVisible;
 
@@ -302,7 +302,7 @@ published service ViewSettings
     /** Specifies whether to move frames, drawing elements, and form
         functions only between grid points.
 
-        @since i25719
+        @since OOo 2.0.0
      */
     [optional, property] boolean IsSnapToRaster;
 
@@ -312,7 +312,7 @@ published service ViewSettings
         <p>The value must be greater or equal to 0, and the application
         may enforce an upper bound for the value.</p>
 
-        @since i25719
+        @since OOo 2.0.0
         @throws com::sun::star::lang::IllegalArgumentException
             if the value is out of bounds.
      */
@@ -324,7 +324,7 @@ published service ViewSettings
         <p>The value must be greater or equal to 0, and the application
         may enforce an upper bound for the value.</p>
 
-        @since i25719
+        @since OOo 2.0.0
         @throws com::sun::star::lang::IllegalArgumentException
             if the value is out of bounds.
      */
@@ -337,7 +337,7 @@ published service ViewSettings
         <p>The value must be greater than 0. The application
         may enforce more restricting bounds for the value.</p>
 
-        @since i25719
+        @since OOo 2.0.0
         @throws com::sun::star::lang::IllegalArgumentException
             if the value is out of bounds.
      */
@@ -350,7 +350,7 @@ published service ViewSettings
         <p>The value must be greater than 0. The application
         may enforce more restricting bounds for the value.</p>
 
-        @since i25719
+        @since OOo 2.0.0
         @throws com::sun::star::lang::IllegalArgumentException
             if the value is out of bounds.
      */
