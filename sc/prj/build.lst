@@ -1,4 +1,4 @@
-sc	sc	:	offmgr boost NULL
+sc	sc	:	offmgr boost sch NULL
 sc	sc										usr1	-	all	sc_mkout NULL
 sc	sc\inc									get		-	all	sc_inc NULL
 sc	sc\prj									get		-	all	sc_prj NULL
