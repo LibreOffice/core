@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:53:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,10 +474,11 @@ struct N2
 struct O : public M
 {
     double  p;
+    sal_Int16 q;
 };
 struct O2 : public O
 {
-    double  p2;
+    sal_Int16 p2 CPPU_GCC3_ALIGN( O );
 };
 
 struct P : public N
@@ -564,7 +565,11 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     BINTEST_VERIFYOFFSET( N, p, 8 );
     BINTEST_VERIFYSIZE( N2, 12 );
     BINTEST_VERIFYOFFSET( N2, p, 8 );
-    BINTEST_VERIFYSIZE( O, 16 );
+#ifdef MAX_ALIGNMENT_4
+    BINTEST_VERIFYSIZE( O, 20 );
+#else
+    BINTEST_VERIFYSIZE( O, 24 );
+#endif
     BINTEST_VERIFYSIZE( D, 8 );
     BINTEST_VERIFYOFFSET( D, e, 4 );
     BINTEST_VERIFYOFFSET( E, d, 4 );
@@ -587,6 +592,9 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     BINTEST_VERIFYSIZE( C6, 52 );
     BINTEST_VERIFYOFFSET( C6, c6, 4 );
     BINTEST_VERIFYOFFSET( C6, b6, 48 );
+
+    BINTEST_VERIFYSIZE( O2, 24 );
+    BINTEST_VERIFYOFFSET( O2, p2, 20 );
 #else
     BINTEST_VERIFYSIZE( C3, 24 );
     BINTEST_VERIFYOFFSET( C3, d3, 8 );
@@ -600,10 +608,10 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     BINTEST_VERIFYSIZE( C6, 72 );
     BINTEST_VERIFYOFFSET( C6, c6, 8 );
     BINTEST_VERIFYOFFSET( C6, b6, 64 );
-#endif
 
-    BINTEST_VERIFYSIZE( O2, 24 );
-    BINTEST_VERIFYOFFSET( O2, p2, 16 );
+    BINTEST_VERIFYSIZE( O2, 32 );
+    BINTEST_VERIFYOFFSET( O2, p2, 24 );
+#endif
 
     BINTEST_VERIFYSIZE( Char3, 3 );
     BINTEST_VERIFYOFFSET( Char4, c, 3 );
