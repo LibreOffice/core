@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:55:28 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 07:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1080,9 +1080,23 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->SetMapMode();
     pDev->SetFont( aFont );
     if ( nFlags & WINDOW_DRAW_MONO )
+    {
         pDev->SetTextColor( Color( COL_BLACK ) );
+    }
     else
+    {
         pDev->SetTextColor( GetTextColor() );
+
+        // DecoView uses the FaceColor...
+        AllSettings aSettings = pDev->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        if ( IsControlBackground() )
+            aStyleSettings.SetFaceColor( GetControlBackground() );
+        else
+            aStyleSettings.SetFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
+        aSettings.SetStyleSettings( aStyleSettings );
+        pDev->SetSettings( aSettings );
+    }
     pDev->SetTextFillColor();
 
     DecorationView aDecoView( pDev );
