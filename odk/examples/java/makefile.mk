@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 13:12:16 $
+#   last change: $Author: rt $ $Date: 2004-05-03 07:40:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,6 +150,11 @@ PROPERTYSET_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/PropertySet$/PropertySet.sxw \
     $(DESTDIRJAVAEXAMPLES)$/PropertySet$/Makefile
 
+SIMPLEBOOTSTRAP_FILES= \
+    $(DESTDIRJAVAEXAMPLES)$/SimpleBootstrap$/SimpleBootstrap.java \
+    $(DESTDIRJAVAEXAMPLES)$/SimpleBootstrap$/manifest.mf \
+    $(DESTDIRJAVAEXAMPLES)$/SimpleBootstrap$/Makefile
+
 DIR_FILE_LIST= \
     $(DRAWING_FILES) \
     $(SPREADSHEET_FILES) \
@@ -160,7 +165,8 @@ DIR_FILE_LIST= \
     $(NOTESACCESS_FILES) \
     $(TODO_FILES) \
     $(MINIMALCOMPONENT_FILES) \
-    $(PROPERTYSET_FILES)
+    $(PROPERTYSET_FILES) \
+    $(SIMPLEBOOTSTRAP_FILES)
 
 DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
 DIR_CREATE_FLAG=$(MISC)$/ex_java_dirs_created.txt
