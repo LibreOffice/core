@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.5 2000-11-06 14:43:09 cl Exp $
+	$Id: drawing.mod,v 1.6 2000-11-09 13:58:09 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -124,9 +124,9 @@
 <!ATTLIST draw:ellipse %draw-style-name; >
 <!ATTLIST draw:ellipse %draw-transform; >
 
-<!ELEMENT draw:connector text:p*>
+<!ELEMENT draw:connector (text:p)*>
 <!ATTLIST draw:connector draw:line-skew CDATA #IMPLIED>
-<!ATTLIST draw:connector %draw-style-name>
+<!ATTLIST draw:connector %draw-style-name;>
 <!ATTLIST draw:connector draw:start-x %coordinate; #IMPLIED>
 <!ATTLIST draw:connector draw:start-y %coordinate; #IMPLIED>
 <!ATTLIST draw:connector draw:start-shape %shapeId; #IMPLIED>
