@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreelistbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:04:28 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ sal_Int8 DBTreeListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
         if ( m_pDragedEntry && m_pDragedEntry != pDroppedEntry )
         {
             // check if drag is on child entry, which is not allowed
-            SvLBoxEntry* pParent = GetParent(pDroppedEntry);
+            SvLBoxEntry* pParent = pDroppedEntry ? GetParent(pDroppedEntry) : NULL;
             while ( pParent && pParent != m_pDragedEntry )
                 pParent = GetParent(pParent);
 
