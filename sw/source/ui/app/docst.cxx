@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:33:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@
 #include "charfmt.hxx"
 #include "poolfmt.hxx"
 #include "pagedesc.hxx"
-#include "tmpdlg.hxx"
+//CHINA001 #include "tmpdlg.hxx"
 #include "docstyle.hxx"
 #include "uiitems.hxx"
 #include "fmtcol.hxx"
@@ -133,8 +133,8 @@
 #include "edtwin.hxx"
 
 #include "app.hrc"
-
-
+#include <fmtui.hrc> //CHINA001
+#include "swabstdlg.hxx" //CHINA001
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -657,8 +657,14 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
         PutItem(SfxUInt16Item(SID_HTML_MODE, nHtmlMode));
         FieldUnit eMetric = ::GetDfltMetric(0 != (HTMLMODE_ON&nHtmlMode));
         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
-        SwTemplateDlg* pDlg = new SwTemplateDlg( 0, aTmp, nFamily, bColumn,
-                            pActShell ? pActShell : pWrtShell, bNew);
+//CHINA001      SwTemplateDlg* pDlg = new SwTemplateDlg( 0, aTmp, nFamily, bColumn,
+//CHINA001      pActShell ? pActShell : pWrtShell, bNew);
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        SfxAbstractTabDialog* pDlg = pFact->CreateTemplateDialog( ResId(DLG_TEMPLATE_BASE),
+                                                    0, aTmp, nFamily, bColumn,
+                                                    pActShell ? pActShell : pWrtShell, bNew);
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         if(RET_OK == pDlg->Execute())
         {
             GetWrtShell()->StartAllAction();
