@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 08:58:03 $
+ *  last change: $Author: oj $ $Date: 2001-09-19 11:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,9 @@ using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
 void ODbaseTable::readHeader()
 {
+    OSL_ENSURE(m_pFileStream,"No Stream available!");
+    if(!m_pFileStream)
+        return;
     sal_Bool bError = sal_False;
     m_pFileStream->RefreshBuffer(); // sicherstellen, dass die Kopfinformationen tatsaechlich neu gelesen werden
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
@@ -1998,5 +2001,10 @@ void ODbaseTable::throwInvalidDbaseFormat()
     sMessage += getEntry(m_pConnection,m_Name);
     sMessage += ::rtl::OUString::createFromAscii(" is an invalid (or unrecognized) dBase file.");
     throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
+}
+// -----------------------------------------------------------------------------
+void ODbaseTable::refreshHeader()
+{
+    readHeader();
 }
 // -----------------------------------------------------------------------------

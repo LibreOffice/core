@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:00:38 $
+ *  last change: $Author: oj $ $Date: 2001-09-19 11:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,8 @@ namespace connectivity
 
             static String   getEntry(file::OConnection* _pConnection,const ::rtl::OUString& _sURL );
             static BOOL     Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFields,sdbcx::OCollection* _pIndexes );
+
+            virtual void refreshHeader();
         };
     }
 }

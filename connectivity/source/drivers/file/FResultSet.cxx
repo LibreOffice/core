@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:15:31 $
+ *  last change: $Author: oj $ $Date: 2001-09-19 11:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1438,6 +1438,8 @@ BOOL OResultSet::OpenImpl()
         m_xColsIdx = Reference<XIndexAccess>(m_xColNames,UNO_QUERY);
         doTableSpecials(xTable);
     }
+
+    m_pTable->refreshHeader();
 
     sal_Int32 nColumnCount = m_xColsIdx->getCount();
 

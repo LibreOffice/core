@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 10:08:14 $
+ *  last change: $Author: oj $ $Date: 2001-09-19 11:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,8 @@ namespace connectivity
             virtual BOOL UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor);
             virtual void dropColumn(sal_Int32 _nPos);
+            // refresh the header of file based tables to see changes done by someone
+            virtual void refreshHeader();
 
             ::rtl::OUString SAL_CALL getName() throw() { return m_Name; }
 
