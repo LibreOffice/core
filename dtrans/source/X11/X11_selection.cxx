@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:52:28 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,6 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
-
-#define INCR_TIMEOUT        5
 
 #define DRAG_EVENT_MASK ButtonPressMask         |\
                               ButtonReleaseMask     |\
@@ -243,6 +241,7 @@ SelectionManager::SelectionManager() :
         m_aThread( NULL ),
         m_aDragExecuteThread( NULL ),
         m_aWindow( None ),
+        m_nSelectionTimeout( 0 ),
         m_aCurrentDropWindow( None ),
         m_bDropWaitingForCompletion( false ),
         m_aDropWindow( None ),
@@ -1000,10 +999,10 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
         gettimeofday( &tv_current, NULL );
         if( bAdjustTime )
             tv_last = tv_current;
-    } while( ! it->second->m_aDataArrived.check() && (tv_current.tv_sec - tv_last.tv_sec) < 3 );
+    } while( ! it->second->m_aDataArrived.check() && (tv_current.tv_sec - tv_last.tv_sec) < getSelectionTimeout() );
 
 #if OSL_DEBUG_LEVEL > 1
-    if( (tv_current.tv_sec - tv_last.tv_sec) > 2 )
+    if( (tv_current.tv_sec - tv_last.tv_sec) > getSelectionTimeout() )
         fprintf( stderr, "timed out\n" );
 #endif
     if( it->second->m_aDataArrived.check() &&
@@ -1934,7 +1933,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
             std::list< Atom > aTimeouts;
             for( inc_it = it->second.begin(); inc_it != it->second.end(); ++inc_it )
             {
-                if( (nCurrentTime - inc_it->second.m_nTransferStartTime) > INCR_TIMEOUT )
+                if( (nCurrentTime - inc_it->second.m_nTransferStartTime) > (getSelectionTimeout()+2) )
                 {
                     aTimeouts.push_back( inc_it->first );
 #if OSL_DEBUG_LEVEL > 1
