@@ -2169,3 +2169,5 @@ __CTA2?AVIllegalArgumentException@lang@star@sun@com@@
 ?_Construct@_STL@@YAXPAPAVOSQLParseNode@connectivity@@ABQAV23@@Z
 ?deallocate@?$_STL_alloc_proxy@PAPAVOSQLParseNode@connectivity@@PAV12@V?$allocator@PAVOSQLParseNode@connectivity@@@_STL@@@_STL@@QAEXPAPAVOSQLParseNode@connectivity@@I@Z
 ?dropColumn@OFileTable@file@connectivity@@UAEXJ@Z
+??1OSQLAnalyzer@file@connectivity@@QAE@XZ
+??1?$_Vector_base@U?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_N_Tr@U?$pair@$$CBJJ@_STL@@@2@@_STL@@V?$allocator@U?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_N_Tr@U?$pair@$$CBJJ@_STL@@@2@@_STL@@@2@@_STL@@QAE@XZ
