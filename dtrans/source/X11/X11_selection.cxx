@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-20 16:50:27 $
+ *  last change: $Author: pl $ $Date: 2001-02-21 10:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1771,6 +1771,9 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
                     dtde.Transferable   = m_xDragSourceTransferable;
                     it->second->drop( dtde );
                     bCancel = false;
+
+                    m_bDropSent                 = true;
+                    m_nDropTimeout              = time( NULL );
                 }
                 else bCancel = true;
             }
@@ -1882,6 +1885,17 @@ void SelectionManager::reject( Window aDropWindow, Time aTimestamp )
     if( aDropWindow == m_aCurrentDropWindow )
     {
         sendDragStatus( None );
+        if( m_bDropSent && m_xDragSourceListener.is() )
+        {
+            DragSourceDropEvent dsde;
+            dsde.Source             = static_cast< OWeakObject* >(this);
+            dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
+            dsde.DragSource         = static_cast< XDragSource* >(this);
+            dsde.DropAction         = DNDConstants::ACTION_NONE;
+            dsde.DropSuccess        = sal_False;
+            m_xDragSourceListener->dragDropEnd( dsde );
+            m_xDragSourceListener.clear();
+        }
     }
 }
 
