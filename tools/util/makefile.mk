@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-13 09:31:49 $
+#   last change: $Author: hr $ $Date: 2001-10-16 08:52:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,9 +106,6 @@ HXX9FILES=  $(INCGUI)$/svwin.h       \
             $(INCGUI)$/postwin.h \
             $(INCGUI)$/prewin.h
 .ENDIF
-.IF "$(GUI)" == "OS2"
-HXX9FILES=  $(INCGUI)$/svpm.h
-.ENDIF
 HXX10FILES= $(INC)$/errinf.hxx $(INC)$/errcode.hxx $(INC)$/string.hxx
 HXX11FILES= $(INC)$/urlobj.hxx
 HXX12FILES= $(INC)$/bigint.hxx
@@ -127,13 +124,8 @@ LIB3ARCHIV= $(LB)$/libstdstrm.a
 LIB3FILES=  $(LB)$/stream.lib
 .ENDIF                  # "$(UPDATER)"!=""
 
-.IF "$(GUI)"!="UNX"
 MEMMGRLIB=$(LB)$/memmgr.lib
 MEMMGRSLB=$(SLB)$/memmgr.lib
-.ELSE
-MEMMGRLIB=
-MEMMGRSLB=
-.ENDIF
 
 .IF "$(UPDATER)"!=""
 
@@ -202,14 +194,6 @@ SHL1LIBS=       $(LIB1TARGET)
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=     itools
 SHL1STDLIBS+=   $(SALLIB) $(VOSLIB)
-
-.IF "$(GUI)" == "OS2"
-SHL1OBJS=       $(SLO)\memmgr.obj
-.ENDIF
-.IF "$(GUI)"=="WIN"
-SHL1OBJS=       $(SLO)\memmgr.obj
-.ENDIF          # "$(GUI)"=="WIN"
-
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=   shell32.lib     \
