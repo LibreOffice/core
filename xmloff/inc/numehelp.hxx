@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 14:17:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > xNumberFormats;
     SvXMLExport*        pExport;
-    const rtl::OUString     sEmpty;
+    const rtl::OUString sEmpty;
     const rtl::OUString sStandardFormat;
     const rtl::OUString sType;
     const rtl::OUString sAttrValueType;
@@ -126,6 +126,8 @@ class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
     const rtl::OUString sAttrBooleanValue;
     const rtl::OUString sAttrStringValue;
     const rtl::OUString sAttrCurrency;
+    const rtl::OUString msCurrencySymbol;
+    const rtl::OUString msCurrencyAbbreviation;
     XMLNumberFormatSet  aNumberFormats;
 public :
     XMLNumberFormatAttributesExportHelper(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier);
