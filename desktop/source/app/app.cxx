@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:46:20 $
+ *  last change: $Author: hr $ $Date: 2003-06-16 11:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1980,8 +1980,12 @@ String GetURL_Impl( const String& rName )
     INetURLObject aObj( aWorkingDir );
     aObj.setFinalSlash();
 
+    // Use the provided parameters for smartRel2Abs to support the usage of '%' in system paths.
+    // Otherwise this char won't get encoded and we are not able to load such files later,
+    // see #110156#
     bool bWasAbsolute;
-    INetURLObject aURL     = aObj.smartRel2Abs( rName, bWasAbsolute );
+    INetURLObject aURL     = aObj.smartRel2Abs( rName, bWasAbsolute, false, INetURLObject::WAS_ENCODED,
+                                                RTL_TEXTENCODING_UTF8, true );
     String        aFileURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
     ::osl::FileStatus aStatus( FileStatusMask_FileURL );
