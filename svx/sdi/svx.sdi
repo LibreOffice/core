@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svx.sdi,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:13:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -13955,5 +13955,30 @@ SfxBoolItem ColorSettings SID_COLOR_SETTINGS
         GroupId = GID_MODIFY;
         PseudoSlots = TRUE;
         PseudoPrefix = SID_INSERT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem MailExportFinished SID_MAIL_EXPORT_FINISHED
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EXPLORER;
 ]
 
