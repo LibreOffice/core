@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:06:50 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 15:30:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -166,8 +166,10 @@ SHL2LIBS= \
     $(SLB)$/ui1.lib\
     $(SLB)$/ui2.lib
 
+.IF "$(OS)"!="MACOSX"
 # static libraries
 SHL2STDLIBS+= $(SCHLIB) $(SMLIB)
+.ENDIF
 
 # dynamic libraries
 SHL2STDLIBS+= \
@@ -192,6 +194,11 @@ SHL2STDLIBS+= \
     $(VOSLIB) \
     $(SALLIB) \
     $(ICUUCLIB)
+
+.IF "$(OS)"=="MACOSX"
+# static libraries at end for OS X
+SHL2STDLIBS+= $(SCHLIB) $(SMLIB)
+.ENDIF
 
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+= advapi32.lib
