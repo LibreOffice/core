@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:28:31 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,8 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
-using ::configmgr::ServiceInfo;
+using ::configmgr::ServiceRegistrationInfo;
+using ::configmgr::SingletonRegistrationInfo;
 using ::configmgr::AsciiServiceName;
 
 typedef Reference< XSingleServiceFactory > (SAL_CALL * createFactoryFunc)
@@ -109,10 +110,10 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL * createProviderFactoryFunc
 
 //---------------------------------------------------------------------------------------
 void RegisterService(
-        const ServiceInfo* pInfo,
+        const ServiceRegistrationInfo* pInfo,
         const Reference< XRegistryKey > & xKey)
 {
-    if (pInfo == 0 || pInfo->serviceNames==0 || pInfo->implementationName==0)
+    if (pInfo == 0 || pInfo->registeredServiceNames==0 || pInfo->implementationName==0)
         return;
 
     OUString aMainKeyName(OUString(RTL_CONSTASCII_USTRINGPARAM("/")));
@@ -122,13 +123,33 @@ void RegisterService(
     Reference< XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
     OSL_ENSURE(xNewKey.is(), "CONFMGR::component_writeInfo : could not create a registry key !");
 
-    AsciiServiceName const* p = pInfo->serviceNames;
-    if (p != 0)
-        for( ; *p; ++p)
-        {
-            xNewKey->createKey(OUString::createFromAscii(*p));
-        }
+    for(AsciiServiceName const* p = pInfo->registeredServiceNames ; *p; ++p)
+    {
+        xNewKey->createKey(OUString::createFromAscii(*p));
+    }
 }
+
+//---------------------------------------------------------------------------------------
+
+void RegisterSingleton(
+        const SingletonRegistrationInfo* pInfo,
+        const Reference< XRegistryKey > & xKey)
+{
+    if (pInfo == 0 || pInfo->singletonName==0 || pInfo->instantiatedServiceName==0)
+        return;
+
+    OUString aSingletonKeyName(OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SINGLETONS/")));
+    aSingletonKeyName += OUString::createFromAscii(pInfo->singletonName);
+
+    Reference< XRegistryKey >  xNewKey( xKey->createKey(aSingletonKeyName) );
+    OSL_ENSURE(xNewKey.is(), "CONFMGR::component_writeInfo : could not create a registry key !");
+
+    xNewKey->setStringValue(OUString::createFromAscii(pInfo->instantiatedServiceName));
+
+    if (pInfo->mappedImplementation != 0)
+        RegisterService(pInfo->mappedImplementation,xKey);
+}
+
 
 //-----------------------------------------------------------------------------
 struct ServiceImplementationRequest
@@ -148,7 +169,7 @@ struct ServiceImplementationRequest
     }
     //-------------------------------------------------------------------------
     inline
-    sal_Bool shouldCreate(const ServiceInfo* pInfo) const
+    sal_Bool shouldCreate(const ServiceRegistrationInfo* pInfo) const
     {
         OSL_ENSURE(!xRet.is(), "CreateProvider : invalid creation request: we already have a return value !");
         return !xRet.is()   &&
@@ -159,7 +180,7 @@ struct ServiceImplementationRequest
     //-------------------------------------------------------------------------
 
     sal_Bool CreateService(
-                const ServiceInfo* pInfo,
+                const ServiceRegistrationInfo* pInfo,
                 ::cppu::ComponentInstantiation Factory,
                 createFactoryFunc creator
             )
@@ -167,9 +188,11 @@ struct ServiceImplementationRequest
         if (this->shouldCreate(pInfo))
         try
         {
-            const Sequence< OUString > Services=  configmgr::ServiceInfoHelper(pInfo).getSupportedServiceNames();
+            configmgr::ServiceRegistrationHelper aInfo(pInfo);
 
-            xRet = creator( m_xServiceManager, OUString::createFromAscii(pInfo->implementationName),Factory, Services,0);
+            const Sequence< OUString > Services=  aInfo.getRegisteredServiceNames();
+
+            xRet = creator( m_xServiceManager, aInfo.getImplementationName(), Factory, Services, 0);
 
             OSL_ENSURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");
         }
@@ -182,7 +205,7 @@ struct ServiceImplementationRequest
     //-------------------------------------------------------------------------
 
     sal_Bool CreateProvider(
-                const ServiceInfo* pInfo,
+                const ServiceRegistrationInfo* pInfo,
                 ::configmgr::ProviderInstantiation Factory,
                 createProviderFactoryFunc creator
             )
@@ -190,15 +213,31 @@ struct ServiceImplementationRequest
         if (this->shouldCreate(pInfo))
         try
         {
-            const Sequence< OUString > Services=  configmgr::ServiceInfoHelper(pInfo).getSupportedServiceNames();
+            configmgr::ServiceRegistrationHelper aInfo(pInfo);
 
-            xRet = creator( m_xServiceManager, OUString::createFromAscii(pInfo->implementationName),Factory, Services);
+            const Sequence< OUString > Services=  aInfo.getRegisteredServiceNames();
+
+            xRet = creator( m_xServiceManager, aInfo.getImplementationName(), Factory, Services);
             OSL_ENSURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");
         }
         catch(Exception&)
         {
         }
         return xRet.is();
+    }
+
+    //-------------------------------------------------------------------------
+
+    sal_Bool MapSingleton(
+                const SingletonRegistrationInfo* pInfo,
+                ::cppu::ComponentInstantiation Mapper,
+                createFactoryFunc creator
+            )
+    {
+        OSL_ENSURE(pInfo && pInfo->mappedImplementation, "CreateProvider : Cannot map unmapped singleton !");
+
+        return pInfo && pInfo->mappedImplementation &&
+                CreateService(pInfo->mappedImplementation,Mapper,creator);
     }
 
     //-------------------------------------------------------------------------
@@ -286,11 +325,6 @@ extern "C" void* SAL_CALL component_getFactory(
         aReq.CreateProvider(
             configmgr::getAdminProviderServices(),
             &configmgr::instantiateAdminProvider,
-            ::configmgr::createProviderFactory)
-        ||
-        aReq.CreateProvider(
-            configmgr::getUserAdminProviderServices(),
-            &configmgr::instantiateUserAdminProvider,
             ::configmgr::createProviderFactory)
         ||
         // registry wrapper (deprecated)

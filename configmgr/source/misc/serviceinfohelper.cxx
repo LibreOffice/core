@@ -2,9 +2,9 @@
  *
  *  $RCSfile: serviceinfohelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-22 09:19:52 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,15 +67,25 @@ namespace configmgr
 
     sal_Int32 ServiceInfoHelper::countServices( ) const
     {
-        AsciiServiceName const* p= m_info ? m_info->serviceNames : 0;
-        if (p == 0)
+        if (m_info == 0)
             return 0;
 
         sal_Int32 nCount = 0;
-        while (*p != 0)
+        if (AsciiServiceName const* p= m_info->registeredServiceNames)
         {
-            ++nCount;
-            ++p;
+            while (*p != 0)
+            {
+                ++nCount;
+                ++p;
+            }
+        }
+        if (AsciiServiceName const* p= m_info->additionalServiceNames)
+        {
+            while (*p != 0)
+            {
+                ++nCount;
+                ++p;
+            }
         }
 
         return nCount;
@@ -94,15 +104,26 @@ namespace configmgr
     sal_Bool ServiceInfoHelper::supportsService( OUString const & ServiceName ) const
         throw(uno::RuntimeException)
     {
-        AsciiServiceName const* p= m_info ? m_info->serviceNames : 0;
-        if (p == 0)
+        if (m_info == 0)
             return false;
 
-        while (*p != 0)
+        if (AsciiServiceName const* p= m_info->registeredServiceNames)
         {
-            if (0 == ServiceName.compareToAscii(*p))
-                return true;
-            ++p;
+            while (*p != 0)
+            {
+                if (ServiceName.equalsAscii(*p))
+                    return true;
+                ++p;
+            }
+        }
+        if (AsciiServiceName const* p= m_info->additionalServiceNames)
+        {
+            while (*p != 0)
+            {
+                if (ServiceName.equalsAscii(*p))
+                    return true;
+                ++p;
+            }
         }
 
         return false;
@@ -116,8 +137,80 @@ namespace configmgr
 
         uno::Sequence< OUString > aServices( nCount );
 
-        for(sal_Int32 i= 0; i < nCount; ++i)
-            aServices[i] = OUString::createFromAscii(m_info->serviceNames[i]);
+        if (nCount)
+        {
+            OSL_ASSERT(m_info);
+            sal_Int32 i = 0;
+            if (AsciiServiceName const* p= m_info->registeredServiceNames)
+            {
+                while (*p != 0)
+                {
+                    aServices[i++] = OUString::createFromAscii(*p++);
+                }
+            }
+            if (AsciiServiceName const* p= m_info->additionalServiceNames)
+            {
+                while (*p != 0)
+                {
+                    aServices[i++] = OUString::createFromAscii(*p++);
+                }
+            }
+            OSL_ASSERT( i == nCount );
+        }
+
+        return aServices;
+    }
+// ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+
+    sal_Int32 ServiceRegistrationHelper::countServices( ) const
+    {
+        if (m_info == 0)
+            return 0;
+
+        sal_Int32 nCount = 0;
+        if (AsciiServiceName const* p= m_info->registeredServiceNames)
+        {
+            while (*p != 0)
+            {
+                ++nCount;
+                ++p;
+            }
+        }
+
+        return nCount;
+    }
+// ---------------------------------------------------------------------------
+
+    OUString ServiceRegistrationHelper::getImplementationName( ) const
+        throw(uno::RuntimeException)
+    {
+        AsciiServiceName p= m_info ? m_info->implementationName : 0;
+
+        return p ? OUString::createFromAscii(p) : OUString();
+    }
+// ---------------------------------------------------------------------------
+
+    uno::Sequence< OUString > ServiceRegistrationHelper::getRegisteredServiceNames( ) const
+        throw(uno::RuntimeException)
+    {
+        sal_Int32 const nCount = countServices();
+
+        uno::Sequence< OUString > aServices( nCount );
+
+        if (nCount)
+        {
+            OSL_ASSERT(m_info);
+            sal_Int32 i = 0;
+            if (AsciiServiceName const* p= m_info->registeredServiceNames)
+            {
+                while (*p != 0)
+                {
+                    aServices[i++] = OUString::createFromAscii(*p++);
+                }
+            }
+            OSL_ASSERT( i == nCount );
+        }
 
         return aServices;
     }

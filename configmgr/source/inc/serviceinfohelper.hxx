@@ -2,9 +2,9 @@
  *
  *  $RCSfile: serviceinfohelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-22 09:19:51 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,19 +77,79 @@ namespace configmgr
     typedef sal_Char const * AsciiServiceName;
 // -----------------------------------------------------------------------------
 
-    struct ServiceInfo
+    /// POD struct describing the registration information of a service implementation
+    struct ServiceRegistrationInfo
     {
+        /// The implementation name of this service implementation
         AsciiServiceName implementationName;
-        AsciiServiceName const * serviceNames;
+        /// The services for which this service implementation is registered
+        AsciiServiceName const * registeredServiceNames;
+    };
+// -----------------------------------------------------------------------------
+
+    /// POD struct describing the implementation information of a service implementation
+    struct ServiceImplementationInfo
+    {
+        /// The implementation name of this service implementation
+        AsciiServiceName implementationName;
+        /// The services for which this service implementation is registered
+        AsciiServiceName const * registeredServiceNames;
+        /// Additional services implemented by this service implementation, for which it is not registered
+        AsciiServiceName const * additionalServiceNames;
+    };
+// -----------------------------------------------------------------------------
+
+    // ServiceImplementationInfo has a compatible initial sequence with struct ServiceRegistrationInfo
+
+    inline
+    ServiceRegistrationInfo const *
+        getRegistrationInfo(ServiceImplementationInfo const * _info)
+    {
+        return reinterpret_cast<ServiceRegistrationInfo const *>(_info);
+    }
+// -----------------------------------------------------------------------------
+
+    /// POD struct describing the registration information of a singleton
+    struct SingletonRegistrationInfo
+    {
+        /// The name of this singleton
+        AsciiServiceName singletonName;
+        /// The implementation, which should be instatiated for this singleton
+        AsciiServiceName instantiatedServiceName;
+        /// A name for a pseudo-implementation, which is mapped to this singleton
+        ServiceRegistrationInfo const * mappedImplementation;
+    };
+// -----------------------------------------------------------------------------
+
+    class ServiceRegistrationHelper
+    {
+        ServiceRegistrationInfo const*const m_info;
+
+    public:
+        ServiceRegistrationHelper(ServiceRegistrationInfo const* _info)
+        : m_info(_info)
+        {}
+
+        ServiceRegistrationHelper(ServiceImplementationInfo const* _info)
+        : m_info(getRegistrationInfo(_info))
+        {}
+
+        sal_Int32 countServices() const;
+
+        OUString getImplementationName( ) const
+            throw(uno::RuntimeException);
+
+        uno::Sequence< OUString > getRegisteredServiceNames( ) const
+            throw(uno::RuntimeException);
     };
 // -----------------------------------------------------------------------------
 
     class ServiceInfoHelper
     {
-        ServiceInfo const*const m_info;
+        ServiceImplementationInfo const*const m_info;
 
     public:
-        ServiceInfoHelper(ServiceInfo const* _info)
+        ServiceInfoHelper(ServiceImplementationInfo const* _info)
         : m_info(_info)
         {}
 
