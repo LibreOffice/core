@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.118 $
+#   $Revision: 1.119 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-11 13:44:59 $
+#   last change: $Author: vg $ $Date: 2004-10-13 13:48:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,9 @@
     use Cwd;
     use File::Path;
 
+
     use lib ("$ENV{SOLARENV}/bin/modules");
+
     if (defined $ENV{COMMON_ENV_TOOLS}) {
         unshift(@INC, "$ENV{COMMON_ENV_TOOLS}/modules");
         require CopyPrj; import CopyPrj;
@@ -89,11 +91,14 @@
         $log = Logging->new() if (!$@);
     };
 
+    ### for XML file format
+    eval { require XMLBuildListParser; import XMLBuildListParser; };
+    $enable_xml = 1 if (!$@);
 #### script id #####
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.118 $ ';
+    $id_str = ' $Revision: 1.119 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -143,9 +148,8 @@
     %global_deps_hash = (); # hash of dependencies of the all modules
     %broken_modules_hashes = ();   # hash of modules hashes, which cannot be built further
     @broken_modules_names = ();   # array of modules, which cannot be built further
-    @UnresolvedParents = ();
     @dmake_args = ();
-    %DeadParents = ();
+    %dead_parents = ();
     $CurrentPrj = '';
     $no_projects = 0;
     $only_dependent = 0;
@@ -168,7 +172,11 @@
     %modules_types = (); # modules types ('mod', 'img', 'lnk') hash
     %platforms = (); # platforms available or being working with
     %platforms_to_copy = (); # copy output trees for the platforms when --prepare
-    $tmp_dir = ''; # temp directory for checkout
+    $tmp_dir = undef; # temp directory for checkout
+    @possible_build_lists = ('build.lst', 'build.xlist'); # build lists names
+    %build_lists_hash = (); # hash of arrays $build_lists_hash{$module} = \($path, $xml_list_object)
+    $pre_job = ' announce'; # job to add for not-single module build
+    $post_job = ' deliver'; # -"-
 ### main ###
 
     &get_options;
@@ -199,7 +207,6 @@
     $dmake = '';
     $echo = '';
     $new_line = "\n";
-#### main ####
 
     &get_commands();
     unlink ($cmd_file);
@@ -220,7 +227,7 @@
 
     &BuildAll();
     &cancel_build if (scalar keys %broken_build);
-    @TotenEltern = keys %DeadParents;
+    @TotenEltern = keys %dead_parents;
     if ($#TotenEltern != -1) {
         my ($DeadPrj);
         print $new_line.$new_line;
@@ -229,7 +236,7 @@
             print $echo."$DeadPrj\n";
         };
         print $new_line;
-        print $echo."not found and couldn't be built. Correct build.lsts.\n";
+        print $echo."not found and couldn't be built. Maybe you should correct build lists.\n";
         print $new_line;
     };
     if (($ENV{GUI} ne 'UNX') && $cmd_file) {
@@ -259,48 +266,49 @@
 #########################
 
 #
+# procedure retrieves build list path
+# (all possibilities are taken into account)
+#
+sub get_build_list_path {
+    my $module = shift;
+    my @possible_dirs = ($module, $module. '.lnk');
+    foreach (@possible_dirs) {
+        my $possible_dir_path = $StandDir.$_.'/prj/';
+        if (-d $possible_dir_path) {
+            foreach (@possible_build_lists) {
+                my $possible_build_list_path = $possible_dir_path . $_;
+                return $possible_build_list_path if (-f $possible_build_list_path);
+            }
+            print_error("There's no build list for $module");
+        };
+    };
+    $dead_parents{$module}++;
+    return retrieve_build_list($module);
+};
+
+#
 # Get dependencies hash of the current and all parent projects
 #
 sub GetParentDeps {
-    my (@DepsArray, $Prj, $parent);
+    my (%parents_deps_hash, $module, $parent);
     my $prj_dir = shift;
     my $deps_hash = shift;
-    @DepsArray = &GetDependenciesArray(&GetParentsString($prj_dir));
-    @UnresolvedParents = @DepsArray;
-    $$deps_hash{$prj_dir} = [@DepsArray];
-    while ($Prj = pop(@UnresolvedParents)) {
-        next if (defined $$deps_hash{$Prj});
-        my $ParentsString;
-        my @DepsArray;
-        my $prj_dir = $StandDir.$Prj;
-        if (!-d $prj_dir) {
-            $prj_dir .= '.lnk';
-            if (-e $prj_dir) {
-                $Prj = $Prj . '.lnk';
-            } elsif (-f $prj_dir . '/prj/build.lst') {
-                &print_error("There is no build.lst in link $prj_dir");
-            };
-        };
-        if (has_build_lst($prj_dir)) {
-            $ParentsString = GetParentsString($prj_dir);
-        } else {
-            $ParentsString = retrieve_parents_string($Prj);
-        };
-
-        if (!$ParentsString) {
-            $DeadParents{$Prj}++;
-            $$deps_hash{$Prj} = [];
-            next;
-        };
-        @DepsArray = &GetDependenciesArray($ParentsString, $Prj);
-        $$deps_hash{$Prj} = [@DepsArray];
-        foreach $Parent (@DepsArray) {
-            if ((!defined($$deps_hash{$Parent})) && (!defined($$deps_hash{$Parent . '.lnk'}))) {
+    my @UnresolvedParents = get_parents_array($prj_dir);
+    $parents_deps_hash{$_}++ foreach (@UnresolvedParents);
+    $$deps_hash{$prj_dir} = \%parents_deps_hash;
+    while ($module = pop(@UnresolvedParents)) {
+        my %parents_deps_hash = ();
+        #my @parents_array = get_parents_array($module);
+        $parents_deps_hash{$_}++ foreach (get_parents_array($module));
+        $$deps_hash{$module} = \%parents_deps_hash;
+        foreach $Parent (keys %parents_deps_hash) {
+            #if ((!defined($$deps_hash{$Parent})) && (!defined($$deps_hash{$Parent . '.lnk'}))) {
+            if (!defined($$deps_hash{$Parent})) {
                 push (@UnresolvedParents, $Parent);
             };
         };
     };
-    foreach $parent (keys %DeadParents) {
+    foreach $parent (keys %dead_parents) {
         delete $global_deps_hash{$parent};
         &RemoveFromDependencies($parent, $deps_hash);
     };
@@ -314,6 +322,7 @@ sub BuildAll {
     if ($BuildAllParents) {
         my ($Prj, $PrjDir, $orig_prj);
         &GetParentDeps( $CurrentPrj, \%global_deps_hash);
+        modules_classify(keys %global_deps_hash);
         &prepare_build_from(\%global_deps_hash) if ($build_from);
         &prepare_incompatible_build(\%global_deps_hash) if ($incompatible);
         if ($build_from_opt || $build_since) {
@@ -327,7 +336,7 @@ sub BuildAll {
         while ($Prj = &PickPrjToBuild(\%global_deps_hash)) {
             if (!defined $module_announced{$Prj}) {
                 print $new_line;
-                my $module_type = &module_classify($Prj);
+                my $module_type = $modules_types{$Prj};
 
                 &print_announce($Prj) if ($module_type eq 'lnk');
                 &print_announce($Prj . '.incomp') if ($module_type eq 'img');
@@ -355,6 +364,7 @@ sub BuildAll {
             $no_projects = 0;
         };
     } else {
+        store_build_list_content($CurrentPrj);
         &get_deps_hash($CurrentPrj, \%LocalDepsHash);
         &BuildDependent(\%LocalDepsHash);
     };
@@ -364,19 +374,18 @@ sub BuildAll {
 # Start build on a given project
 #
 sub dmake_dir {
-    my ($folder_nick, $BuildDir, $new_BuildDir, $OldBuildDir, $error_code);
-    $folder_nick = shift;
-    $BuildDir = &CorrectPath($StandDir . $PathHash{$folder_nick});
-    if ((!(-d $BuildDir)) && (defined $ENV{CWS_WORK_STAMP} && defined($log))) {
-        $OldBuildDir = $BuildDir;
-        my $modified_path = $PathHash{$folder_nick};
-        $modified_path =~ s/^([^\\\/]+)/$1\.lnk/;
-        $BuildDir = &CorrectPath($StandDir . $modified_path);
-    };
-    my $missing_dir;
-    $missing_dir = $OldBuildDir if ($OldBuildDir);
-    $missing_dir = $BuildDir if (!$missing_dir);
-    &print_error("$missing_dir not found!!\n") if (!(-d $BuildDir));
+    my ($new_BuildDir, $OldBuildDir, $error_code);
+    my $BuildDir = shift;
+#    if ((!(-d $BuildDir)) && (defined $ENV{CWS_WORK_STAMP} && defined($log))) {
+#        $OldBuildDir = $BuildDir;
+#        my $modified_path = $PathHash{$folder_nick};
+#        $modified_path =~ s/^([^\\\/]+)/$1\.lnk/;
+#        $BuildDir = &CorrectPath($StandDir . $modified_path);
+#    };
+#    my $missing_dir;
+#    $missing_dir = $OldBuildDir if ($OldBuildDir);
+#    $missing_dir = $BuildDir if (!$missing_dir);
+    &print_error("$BuildDir not found!!\n") if (!-d $BuildDir);
     if (!(-d $BuildDir)) {
         $new_BuildDir = $BuildDir;
         $new_BuildDir =~ s/_simple//g;
@@ -396,13 +405,13 @@ sub dmake_dir {
     } else {
         print "$BuildDir\n";
     };
-    &RemoveFromDependencies($folder_nick, \%LocalDepsHash) if (!$child);
+    &RemoveFromDependencies($BuildDir, \%LocalDepsHash) if (!$child);
     if (!$cmd_file && !$show) {
         chdir $BuildDir;
         cwd();
         $error_code = system ("$dmake");
         if ($error_code && $ignore) {
-            push(@ignored_errors, &CorrectPath($StandDir . $PathHash{$folder_nick}));
+            push(@ignored_errors, $BuildDir);
             $error_code = 0;
         };
     };
@@ -417,18 +426,45 @@ sub dmake_dir {
 };
 
 #
+# Procedure stores information about build list (and)
+# build list object in build_lists_hash
+#
+sub store_build_list_content {
+    my $module = shift;
+    my $build_list_path = get_build_list_path($module);
+    return undef if (!defined $build_list_path);
+    return if (!$build_list_path);
+    my $xml_list = undef;
+    if ($build_list_path =~ /\.xlist$/o) {
+        print_error("XMLBuildListParser.pm couldn\'t be found, so XML format for build lists is not enabled") if (!defined $enable_xml);
+        $xml_list = XMLBuildListParser->new();
+        if (!$xml_list->loadXMLFile($build_list_path)) {
+            print_error("Cannot use $build_list_path");
+        };
+        $build_lists_hash{$module} = $xml_list;
+    } else {
+        if (open (BUILD_LST, $build_list_path)) {
+            my @build_lst = <BUILD_LST>;
+            $build_lists_hash{$module} = \@build_lst;
+            close BUILD_LST;
+            return;
+        }
+        $dead_parents{$module}++;
+    };
+}
+#
 # Get string (list) of parent projects to build
 #
-sub GetParentsString {
-    my ($PrjDir);
-    $PrjDir = shift;
-    if (-f $PrjDir) {
-        return '' if (!open (BUILD_LST, $PrjDir));
-    } else {
-        $PrjDir = '.' if ($PrjDir eq $CurrentPrj);
-        return '' if (!open (BUILD_LST, $PrjDir.'/prj/build.lst'));
+sub get_parents_array {
+    my $module = shift;
+    store_build_list_content($module);
+    return if (defined $dead_parents{$module});
+    my $build_list_ref = $build_lists_hash{$module};
+
+    if (ref($build_list_ref) eq 'XMLBuildListParser') {
+        return $build_list_ref->getModuleDependencies($ENV{BUILD_TYPE});
     };
-    while (<BUILD_LST>) {
+    foreach (@$build_list_ref) {
         if ($_ =~ /#/) {
             if ($`) {
                 $_ = $`;
@@ -438,20 +474,19 @@ sub GetParentsString {
         };
         s/\r\n//;
         if ($_ =~ /\:+\s+/) {
-            close BUILD_LST;
-            return &pick_for_build_type($');
+            return pick_for_build_type($');
         };
     };
-    close BUILD_LST;
-    return 'NULL';
+    return [];
 };
 
 #
 # get folders' platform infos
 #
 sub get_prj_platform {
+    my $build_list_ref = shift;
     my ($prj_alias, $line);
-    while(<BUILD_LST>) {
+    foreach(@$build_list_ref) {
         s/\r\n//;
         $line++;
         if ($_ =~ /nmake/) {
@@ -465,8 +500,28 @@ sub get_prj_platform {
             };
         };
     };
-    seek(BUILD_LST, 0, 0);
+#seek(BUILD_LST, 0, 0);
 };
+
+#
+# Procedure populate the dependencies hash with
+# information from XML build list object
+#
+sub get_deps_from_object {
+    my ($module, $build_list_object, $dependencies_hash) = @_;
+
+    foreach my $dir ($build_list_object->getJobDirectories("make", $ENV{GUI})) {
+        $PathHash{$dir} = $StandDir . $module;
+        $PathHash{$dir} .= $dir if ($dir ne '/');
+        my %deps_hash = ();
+
+        foreach my $dep ($build_list_object->getJobDependencies($dir, "make", $ENV{GUI})) {
+            $deps_hash{$dep}++;
+        };
+        $$dependencies_hash{$dir} = \%deps_hash;
+    };
+};
+
 
 #
 # Getting hashes of all internal dependencies and additional
@@ -488,53 +543,102 @@ sub get_deps_hash {
         };
         return;
     };
-    open (BUILD_LST, 'prj/build.lst');
-    &get_prj_platform;
-    while (<BUILD_LST>) {
-        if ($_ =~ /#/o) {
-            next if (!$`);
-            $_ = $`;
-        };
-        s/\r\n//;
-        if ($_ =~ /nmake/o) {
-            my ($Platform, $Dependencies, $Dir, $DirAlias, @Array);
-            $Dependencies = $';
-            $dummy = $`;
-            $dummy =~ /(\S+)\s+(\S+)/o;
-            $Dir = $2;
-            $Dependencies =~ /(\w+)/o;
-            $Platform = $1;
-            $Dependencies = $';
-            while ($Dependencies =~ /,(\w+)/o) {
+
+    my  $build_list_ref = $build_lists_hash{$module_to_build};
+    delete $build_lists_hash{$module_to_build};
+    if (ref($build_list_ref) eq 'XMLBuildListParser') {
+        &get_deps_from_object($module_to_build, $build_list_ref, $dependencies_hash);
+    } else {
+        get_prj_platform($build_list_ref);
+        foreach (@$build_list_ref) {
+            if ($_ =~ /#/o) {
+                next if (!$`);
+                $_ = $`;
+            };
+            s/\r\n//;
+            if ($_ =~ /nmake/o) {
+                my ($Platform, $Dependencies, $Dir, $DirAlias);
+                my %deps_hash = ();
                 $Dependencies = $';
+                $dummy = $`;
+                $dummy =~ /(\S+)\s+(\S+)/o;
+                $Dir = $2;
+                $Dependencies =~ /(\w+)/o;
+                $Platform = $1;
+                $Dependencies = $';
+                while ($Dependencies =~ /,(\w+)/o) {
+                    $Dependencies = $';
+                };
+                $Dependencies =~ /\s+(\S+)\s+/o;
+                $DirAlias = $1;
+                if (!&CheckPlatform($Platform)) {
+                    $DeadDependencies{$DirAlias}++;
+                    next;
+                };
+                $PlatformHash{$DirAlias}++;
+                $Dependencies = $';
+                &print_error("$module_to_build/prj/build.lst has wrongly written dependencies string:\n$_\n") if (!$Dependencies);
+                $deps_hash{$_}++ foreach (GetDependenciesArray($Dependencies));
+                $$dependencies_hash{$DirAlias} = \%deps_hash;
+                $BuildQueue{$DirAlias}++;
+                if ($Dir =~ /(\\|\/)/o) {
+                    $Dir = $module_to_build . $1 . $';
+                } else {$Dir = $module_to_build;};
+                $PathHash{$DirAlias} = $StandDir . CorrectPath($Dir);
             };
-            $Dependencies =~ /\s+(\S+)\s+/o;
-            $DirAlias = $1;
-            if (!&CheckPlatform($Platform)) {
-                $DeadDependencies{$DirAlias}++;
-                next;
+        };
+        foreach my $alias (keys %DeadDependencies) {
+            next if defined $AliveDependencies{$alias};
+            if (!&IsHashNative($alias)) {
+                &RemoveFromDependencies($alias, $dependencies_hash);
+                delete $DeadDependencies{$alias};
             };
-            $PlatformHash{$DirAlias}++;
-            $Dependencies = $';
-            &print_error("$module_to_build/prj/build.lst has wrong written dependencies string:\n$_\n") if (!$Dependencies);
-            @Array = &GetDependenciesArray($Dependencies);
-            $$dependencies_hash{$DirAlias} = [@Array];
-            $BuildQueue{$DirAlias}++;
-            if ($Dir =~ /(\\|\/)/o) {
-                $Dir = $module_to_build . $1 . $';
-            } else {$Dir = $module_to_build;};
-            $PathHash{$DirAlias} = $Dir;
         };
     };
-    close BUILD_LST;
-    foreach $Dir (keys %DeadDependencies) {
-        next if defined $AliveDependencies{$Dir};
-        if (!&IsHashNative($Dir)) {
-            &RemoveFromDependencies($Dir, $dependencies_hash);
-            delete $DeadDependencies{$Dir};
-        };
+    check_deps_hash($dependencies_hash);
+    resolve_aliases($dependencies_hash, \%PathHash);
+    #add_pre_job($dependencies_hash);
+    #add_post_job($dependencies_hash) if ($module_to_build ne $CurrentPrj);
+};
+
+#
+# procedure adds $pre_job to each module's dependancy hash
+#
+sub add_pre_job {
+    my $dependencies_hash = shift;
+    # $pre_job is independent while all other jobs are dependent from it
+    foreach (keys %$dependencies_hash) {
+        $deps_hash = $$dependencies_hash{$_};
+        $$deps_hash{$pre_job}++;
     };
-    &check_deps_hash($dependencies_hash);
+    $$dependencies_hash{$pre_job} = {};
+
+};
+
+#
+# procedure adds $post_job to each module's dependancy hash
+#
+sub add_post_job {
+    # $post_job is dependent from all jobs
+    my %deps_hash = ();
+    $deps_hash{$_}++ foreach (keys %$dependencies_hash);
+    $$dependencies_hash{$post_job} = \%deps_hash;
+};
+
+#
+# this procedure converts aliases to absolute paths
+#
+sub resolve_aliases {
+    my ($dependencies_hash, $PathHash) = @_;
+    foreach my $dir_alias (keys %$dependencies_hash) {
+        my $aliases_hash_ref = $$dependencies_hash{$dir_alias};
+        my %paths_hash = ();
+        foreach (keys %$aliases_hash_ref) {
+            $paths_hash{$$PathHash{$_}}++;
+        };
+        delete $$dependencies_hash{$dir_alias};
+        $$dependencies_hash{$$PathHash{$dir_alias}} = \%paths_hash;
+    };
 };
 
 #
@@ -632,16 +736,17 @@ sub get_stand_dir {
     my $StandDir;
     do {
         $StandDir = cwd();
-        if (open(BUILD_LST, 'prj/build.lst')) {
-            $StandDir =~ /([\.\w]+$)/;
-            $StandDir = $`;
-            $CurrentPrj = $1;
-            close(BUILD_LST);
-            return $StandDir;
-        } elsif (&IsRootDir($StandDir)) {
-            $ENV{mk_tmp} = '';
-            &print_error ('Found no project to build');
-        };
+        foreach (@possible_build_lists) {# ('build.lst', 'build.xlist');
+            if (-e 'prj/'.$_) {
+                $StandDir =~ /([\.\w]+$)/;
+                $StandDir = $`;
+                $CurrentPrj = $1;
+                return $StandDir;
+            } elsif (&IsRootDir($StandDir)) {
+                $ENV{mk_tmp} = '';
+                &print_error ('Found no project to build');
+            };
+        }
     }
     while (chdir '..');
 };
@@ -650,10 +755,9 @@ sub get_stand_dir {
 # Picks project which can be built now from hash and then deletes it from hash
 #
 sub PickPrjToBuild {
-    my ($Prj, $DepsHash);
-    $DepsHash = shift;
+    my $DepsHash = shift;
     &handle_dead_children if ($QuantityToBuild);
-    $Prj = &FindIndepPrj($DepsHash);
+    my $Prj = &FindIndepPrj($DepsHash);
     delete $$DepsHash{$Prj};
     return $Prj;
 };
@@ -684,14 +788,18 @@ sub RemoveFromDependencies {
     $ExclPrj_orig = $` if ($ExclPrj =~ /\.lnk$/o);
     $Dependencies = shift;
     foreach $Prj (keys %$Dependencies) {
-        foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
-            if ((${$$Dependencies{$Prj}}[$i] eq $ExclPrj) ||
-                (${$$Dependencies{$Prj}}[$i] eq $ExclPrj_orig)) {
-                splice (@{$$Dependencies{$Prj}}, $i, 1);
-                $i = 0;
-                last;
-            };
-        };
+        my $prj_deps_hash = $$Dependencies{$Prj};
+        delete $$prj_deps_hash{$ExclPrj} if defined $$prj_deps_hash{$ExclPrj};
+#        foreach (keys %$prj_deps_hash) {print ("$_ ")};
+
+#        foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
+#            if ((${$$Dependencies{$Prj}}[$i] eq $ExclPrj) ||
+#                (${$$Dependencies{$Prj}}[$i] eq $ExclPrj_orig)) {
+#                splice (@{$$Dependencies{$Prj}}, $i, 1);
+#                $i = 0;
+#                last;
+#            };
+#        };
     };
 };
 
@@ -705,14 +813,15 @@ sub check_deps_hash {
     my %deps_hash = %$deps_hash_ref;
     my $consistent;
     foreach $key (keys %$deps_hash_ref) {
-        $deps_hash{$key} = [@{$$deps_hash_ref{$key}}];
+        my %values_hash = %{$$deps_hash_ref{$key}};
+        $deps_hash{$key} = \%values_hash;
     };
 
     do {
         $consistent = '';
         foreach $key (keys %deps_hash) {
-            @value_array = @{$deps_hash{$key}};
-            if ($#value_array == -1) {
+            $local_deps_ref = $deps_hash{$key};
+            if (!scalar keys %$local_deps_ref) {
                 &RemoveFromDependencies($key, \%deps_hash);
                 delete $deps_hash{$key};
                 $consistent = 1;
@@ -723,7 +832,7 @@ sub check_deps_hash {
     print STDERR "Fatal error:";
     foreach (keys %deps_hash) {
         print STDERR "\n\t$_ depends on: ";
-        foreach my $i (@{$deps_hash{$_}}) {
+        foreach my $i (keys %{$deps_hash{$_}}) {
             print STDERR (' ', $i);
         };
     };
@@ -740,7 +849,7 @@ sub check_deps_hash {
 # Find project with no dependencies left.
 #
 sub FindIndepPrj {
-    my ($Prj, @Prjs, @PrjDeps, $Dependencies, $i);
+    my ($Prj, @Prjs, $Dependencies, $i);
     my $children = &children_number;
     return '' if ($children && ($children >= $QuantityToBuild));
     $Dependencies = shift;
@@ -748,8 +857,8 @@ sub FindIndepPrj {
     if ($#Prjs != -1) {
         foreach $Prj (@Prjs) {
             next if (&IsHashNative($Prj));
-            @PrjDeps = @{$$Dependencies{$Prj}};
-            return $Prj if ($#PrjDeps == -1);
+            my $PrjDeps = $$Dependencies{$Prj};
+            return $Prj if (!scalar keys %$PrjDeps);
         };
         return '';
     } else {
@@ -941,15 +1050,12 @@ sub get_options {
     if ($QuantityToBuild && $ignore) {
         &print_error("Cannot ignore errors in multiprocessing build");
     };
-#    if ($incompatible && (!defined $ENV{CWS_WORK_STAMP})) {
-#        print "-incomp_from switch is implemented for cws only!\n";
-#        print "Ignored...";
-#        $incompatible = '';
-#    };
     if ($only_platform) {
         $only_common = 'common';
         $only_common .= '.pro' if ($only_platform =~ /\.pro$/);
     };
+    # Default build modes(for OpenOffice.org)
+    $ENV{BUILD_TYPE} = 'OOo EXT' if (!defined $ENV{BUILD_TYPE});
     @ARGV = @dmake_args;
 };
 
@@ -1115,7 +1221,7 @@ sub build_multiprocessing {
                                 # to build
     do {
         while ($Prj = &PickPrjToBuild(\%global_deps_hash)) {
-            my $module_type = &module_classify($Prj);
+            my $module_type = $modules_types{$Prj};
 
             if ($module_type eq 'lnk') {
                 &print_announce($Prj);
@@ -1230,13 +1336,13 @@ sub are_all_dependent {
 #
 sub checkout_module {
     my ($prj_name, $image, $path) = @_;
-    return if (!defined($ENV{CWS_WORK_STAMP}));
+    return '' if (!defined($ENV{CWS_WORK_STAMP}));
     $path = $StandDir if (!$path);
     my $cws = Cws->new();
     $cws->child($ENV{CWS_WORK_STAMP});
     $cws->master($ENV{WORK_STAMP});
     my $cvs_module = &get_cvs_module($cws, $prj_name);
-
+    return '' if defined($dead_parents{$prj_name});
     &print_error("Cannot get cvs_module for $prj_name") if (!$cvs_module);
     my ($master_branch_tag, $cws_branch_tag, $cws_root_tag, $master_milestone_tag) = $cws->get_tags();
 
@@ -1252,10 +1358,12 @@ sub checkout_module {
     if (!-d &CorrectPath($path.$prj_name)) {
         $cvs_module->checkout($path, '', '');
         if (!-d &CorrectPath($path.$prj_name)) {
-            &print_error ("Cannot checkout $prj_name. Check if you have to login to server");
+            $dead_parents{$prj_name}++;
+            print STDERR ("Cannot checkout $prj_name. Check if you have to login to server\n");
+            return;
         };
     };
-    return if ($image);
+    return 1 if ($image);
     copy_output_trees($prj_name, $path) if (defined $only_platform);
 };
 
@@ -1300,23 +1408,33 @@ sub copy_output_trees {
 #                img incomplete (image)
 #                mod complete (module)
 #
-sub module_classify {
-    my $Prj = shift;
-    return 'lnk' if ($Prj =~ /\.lnk$/o);
-    opendir DIRHANDLE, $StandDir.$Prj;
-    my @dir_content = readdir(DIRHANDLE);
-    closedir(DIRHANDLE);
-    # Check if there only 2 entries: CVS & prj
-    # dirty, but must work
-    if (scalar(@dir_content) <= 4) {
-        foreach (@dir_content) {
-            return 'mod' if ( ($_ ne 'CVS') &&
-                            ($_ ne 'prj') &&
-                            (!(/^\.+$/o))   );
+sub modules_classify {
+    my @modules = @_;
+    foreach my $module (sort @modules) {
+        if (-d $StandDir.$module) {
+            $modules_types{$module} = 'mod';
+            next;
         };
-        return 'img';
+        if (-e $StandDir.$module.'.lnk') {
+            $modules_types{$module} = 'lnk';
+            next;
+        };
+        $modules_types{$module} = 'img';
     };
-    return 'mod';
+#    opendir DIRHANDLE, $StandDir.$Prj;
+#    my @dir_content = readdir(DIRHANDLE);
+#    closedir(DIRHANDLE);
+#    # Check if there only 2 entries: CVS & prj
+#    # dirty, but must work
+#    if (scalar(@dir_content) <= 4) {
+#        foreach (@dir_content) {
+#            return 'mod' if ( ($_ ne 'CVS') &&
+#                            ($_ ne 'prj') &&
+#                            (!(/^\.+$/o))   );
+#        };
+#        return 'img';
+#   };
+#    return 'mod';
 };
 
 #
@@ -1403,12 +1521,12 @@ sub get_cvs_root
         $cvsroot = $workspace_db->get_value($key);
 
         if ( !$cvsroot  ) {
-            print_error("No such module '$module' for '$master' in workspace database.", 0);
+            print STDERR "\nWarning: No such module '$module' for '$master' in workspace database $workspace_lst. Maybe you should correct build lists.\n";
+            $dead_parents{$module}++;
             return (undef, undef, undef, undef);
         }
     };
     my ($dummy1, $method, $user_at_server, $repository) = split(/:/, $cvsroot);
-    $repository =~ s/^\d*//;
     my ($dummy2, $server) = split(/@/, $user_at_server);
 
     if ( ! ($method && $server && $repository ) ) {
@@ -1445,40 +1563,38 @@ sub get_workspace_lst
 # Procedure clears up module for incompatible build
 #
 sub ensure_clear_module {
-    my $Prj = shift;
-    my $module_type = shift;
+    my $module = shift;
+    my $module_type = $modules_types{$module};
+    my $lnk_name = $module . '.lnk';
     if ($module_type eq 'mod') {
-        &clear_module($$Prj);
-        my $lnk_name = $$Prj.'.lnk';
         if (-e ($StandDir.$lnk_name)) {
-            print "Last checkout for $$Prj seems to have been interrupted...\n";
+            print "Last checkout for $module seems to have been interrupted...\n";
             print "Checking it out again...\n";
+            #rmtree("$StandDir$module", 0, 1);
             $module_type = 'lnk';
-            $$Prj = $lnk_name;
         } else {
+            &clear_module($module);
             return;
         };
     };
     if ($module_type eq 'lnk') {
-        print "\nBreaking link $$Prj...\n";
+        print "\nBreaking link $lnk_name...\n";
         return if ($show);
-        $$Prj =~ /\.lnk$/o;
-        my $new_name = $`;
-        &checkout_module($new_name);
+        &checkout_module($module);
         my $action = '';
         if ( $^O eq 'MSWin32' ) {
-            if(!rename("$StandDir$$Prj", "$StandDir$new_name.backup.lnk")) {
+            if(!rename("$StandDir$lnk_name", "$StandDir$module.backup.lnk")) {
                 $action = 'rename';
             };
         } else {
-            if(!unlink $StandDir.$$Prj) {
+            if(!unlink $StandDir.$lnk_name) {
                 $action = 'remove';
             }
         };
-        &print_error("Cannot $action $StandDir$$Prj. Please $action it manually") if ($action);
+        &print_error("Cannot $action $StandDir$lnk_name. Please $action it manually") if ($action);
     } else {
-        print "Checking out consistent " . $$Prj . "...\n";
-        &checkout_module ($$Prj) if (!$show);
+        print "Checking out consistent " . $module . "...\n";
+        &checkout_module ($module) if (!$show);
     };
 };
 
@@ -1498,8 +1614,8 @@ sub clear_module {
         if ((!-d $dir.'/CVS') && &is_output_tree($dir)) {
             #print "I would delete $dir\n";
             rmtree("$dir", 0, 1);
-            if (defined $SIG{__WARN__}) {
-                &print_error($SIG{__WARN__}) if ($SIG{__WARN__} ne '');
+            if (defined $SIG{__WARN__} && -d $dir) {
+                &print_error("Cannot delete $dir");
             };
         };
     };
@@ -1522,7 +1638,7 @@ sub is_output_tree {
     return '';
 };
 
-sub retrieve_parents_string {
+sub retrieve_build_list {
     my $module = shift;
 
     # First try to get global depencies from solver's build.lst if such exists
@@ -1531,79 +1647,57 @@ sub retrieve_parents_string {
     $solver_inc_dir .= '/inc';
     $solver_inc_dir .= $ENV{UPDMINOREXT} if (defined $ENV{UPDMINOREXT});
     $solver_inc_dir .= "/$module";
-    print "Fetching dependencies for module $module from solver...";
-    if (-e "$solver_inc_dir/build.lst") {
-        my $parens_string = GetParentsString("$solver_inc_dir/build.lst");
-        if ($parens_string) {
+    $solver_inc_dir = CorrectPath($solver_inc_dir);
+    print STDERR "Fetching dependencies for module $module from solver...";
+    foreach (@possible_build_lists) {
+        my $possible_build_lst = "$solver_inc_dir/$_";
+        if (-e $possible_build_lst) {
             print " ok\n";
-            $module_announced{$module}++;
-            return $parens_string
+            return $possible_build_lst;
         };
-    };
-    print " failed...\n";
-    print "Fetching from CVS... ";
-    if( defined($ENV{TMP}) ) {
-       $tmp_dir = $ENV{TMP} . '/';
-    } else {
-       $tmp_dir = '/tmp/';
     }
-    $tmp_dir .= $$ while (-d $tmp_dir);
-    eval {mkpath($tmp_dir)};
-    print_error("Cannot create temporary directory for checkout in $tmp_dir") if ($@);
-    $tmp_dir .= '/';
-    checkout_module($module, 'image', $tmp_dir);
+    print STDERR " failed...\n";
+    print STDERR "Fetching from CVS... ";
+    if (!defined $tmp_dir) {
+        if( defined($ENV{TMP}) ) {
+           $tmp_dir = $ENV{TMP} . '/';
+        } else {
+           $tmp_dir = '/tmp/';
+        }
+        $tmp_dir .= $$ while (-d $tmp_dir);
+        $tmp_dir = CorrectPath($tmp_dir);
+        eval {mkpath($tmp_dir)};
+        print_error("Cannot create temporary directory for checkout in $tmp_dir") if ($@);
+    }
+    if (!checkout_module($module, 'image', $tmp_dir)) {
+        print " failed\n";
+        if (!defined $dead_parents{$module}) {
+            print STDERR "WARNING: Cannot figure out CWS for $module. Forgot to set CWS?\n";
+        }
+        return undef;
+    };
     # no need to announce this module
-    $module_announced{$module}++;
-    my $parent_string = GetParentsString($tmp_dir . $module);
     print " ok\n";
-    eval {mkpath($solver_inc_dir) if (-e $solver_inc_dir);
-        my $tmp_build_lst = $tmp_dir . $module . '/prj/build.lst';
-        my $solver_build_lst = $solver_inc_dir . '/build.lst';
-        my @from_stat = stat($tmp_build_lst);
-        File::Copy::move($tmp_build_lst, $solver_inc_dir);
-        my @to_stat = stat($solver_build_lst);
-        if (defined ($to_stat[9])) {
-            next if ($from_stat[9] <= $to_stat[9]);
+    eval {
+        mkpath($solver_inc_dir) if (-e $solver_inc_dir);
+    };
+    print_error("Cannot create $solver_inc_dir") if (!-d $solver_inc_dir);
+    foreach (@possible_build_lists) {
+        my $tmp_build_lst = $tmp_dir . $module . '/prj/' . $_;
+        $possible_build_lst = undef;
+        next if (!-e $tmp_build_lst);
+        $possible_build_lst = $solver_inc_dir . '/' .$_;
+         my @from_stat = stat($tmp_build_lst);
+        if (!File::Copy::move($tmp_build_lst, $solver_inc_dir)) {
+            print_error("Cannot copy build list to $solver_inc_dir");
         };
+        my @to_stat = stat($possible_build_lst);
         $from_stat[9]-- if $from_stat[9] % 2;
-        utime ($from_stat[9], $from_stat[9], $solver_build_lst);
-    };
+        utime ($from_stat[9], $from_stat[9], $possible_build_lst);
+        last;
+    }
     rmtree($tmp_dir, 0, 1);
-    return $parent_string;
-};
-
-#
-# This procedure checks if the module has build.lst file
-#
-sub has_build_lst {
-    my $prj_dir = shift;
-    my $prj_buld_lst = $prj_dir.'/prj/build.lst';
-    return '1' if (-f $prj_buld_lst);
-    return '';
-#    if (!-f $prj_buld_lst) {
-#        return ''
-#        &checkout_module($Prj, 'image');
-#        if (!-f $prj_buld_lst) {
-#            print "Cannot checkout consistent $Prj\n";
-#            # For Ause: Uncomment following line and
-#            # remove the upper one
-#            #&print_error "Cannot checkout consistent $Prj";
-#        };
-#    };
-};
-
-sub check_modules {
-    my $modules_ref = shift;
-    my @images = ();
-    foreach my $module (@$modules_ref) {
-        my $type = &module_classify($module);
-        push(@images, $module) if ($type eq 'img');
-        next if (scalar @images);
-        $modules_types{$module} = $type;
-    };
-    if (scalar @images) {
-        &print_error("You have incomplete modules: " . "@images\n" . "\nThis can cause incompatible binaries in the output tree. Please check these modules out or copy them with copyprj");
-    };
+    return $possible_build_lst;
 };
 
 #
@@ -1632,31 +1726,22 @@ sub prepare_incompatible_build {
         delete $$deps_hash{$build_from_opt};
     };
     @modules_built = keys %$deps_hash;
-    &check_modules(\@modules_built);
-    &clear_delivered if ($prepare);
-    print "\n";
-    foreach $prj (keys %$deps_hash) {
-        my $prj_lnk = '';
-        my $module_type = $modules_types{$prj};
-        $prj_lnk = $prj if ($module_type =~ /\.lnk$/o);
+    clear_delivered() if ($prepare);
+    foreach $prj (sort keys %$deps_hash) {
         if ($prepare) {
-            &ensure_clear_module(\$prj, $module_type);
+            ensure_clear_module($prj);
         } else {
             my $message;
-            if ($module_type ne 'mod') {
+            if ($modules_types{$prj} ne 'mod') {
                 $message = "$prj is not a complete module!";
-#            } elsif (-d &CorrectPath($StandDir.$prj.'/'. $ENV{INPATH})) {
-#                $message = "$prj contains old output tree!";
+            } elsif (-d &CorrectPath($StandDir.$prj.'/'. $ENV{INPATH})) {
+                $message = "$prj contains old output tree!";
             };
-#&print_error("$message Prepare workspace with -prepare switch!") if ($message);
-        };
-        if ($prj_lnk) {
-            $$deps_hash{$prj} = $$deps_hash{$prj_lnk};
-            delete $$deps_hash{$prj_lnk};
+            &print_error("$message Prepare workspace with --prepare switch!") if ($message);
         };
     };
     if ($build_from_opt) {
-        $$deps_hash{$build_from_opt} = [];
+        $$deps_hash{$build_from_opt} = ();
         $build_from_opt = '';
     };
     print "\nPreparation finished\n\n" and    do_exit(0) if ($prepare);
@@ -1670,7 +1755,7 @@ sub prepare_build_from {
     my ($prj, $deps_hash);
     $deps_hash = shift;
     my %from_deps_hash = ();   # hash of dependencies of the -from project
-    &GetParentDeps( $StandDir.$build_from,\%from_deps_hash);
+    &GetParentDeps($build_from, \%from_deps_hash);
     foreach $prj (keys %from_deps_hash) {
         delete $$deps_hash{$prj};
         &RemoveFromDependencies($prj, $deps_hash);
@@ -1695,7 +1780,7 @@ sub prepare_build_from_opt {
             next;
         } else {
             if ($build_from_opt) {
-                $$deps_hash{$prj} = [];
+                $$deps_hash{$prj} = ();
             } else {
                 &RemoveFromDependencies($prj, $deps_hash);
             };
@@ -1781,7 +1866,7 @@ sub clear_delivered {
             $ENV{$_} = $solar_vars{$_};
         };
         my $undeliver = "$deliver_commando -delete $nul";
-        foreach my $module (@modules_built) {
+        foreach my $module (sort @modules_built) {
             my $module_path = &CorrectPath($StandDir.$module);
             print "Removing delivered from module $module\n";
             next if ($show);
@@ -1935,9 +2020,6 @@ sub get_build_modes {
         };
         return;
     };
-    # Default build modes(for OpenOffice.org)
-    $build_modes{'OOo'}++;
-    $build_modes{'EXT'}++;
 };
 
 #
@@ -1947,20 +2029,24 @@ sub get_build_modes {
 sub pick_for_build_type {
     my $modules = shift;
     my @mod_array = split(/\s+/, $modules);
-    my $new_modules = '';
+    print_error("Wrongly written dependencies string:\n $modules\n") if ($mod_array[$#mod_array] ne 'NULL');
+    pop @mod_array;
+    my @modules_to_build;
+#my $new_modules = '';
     foreach (@mod_array) {
         if (/(\w+):(\S+)/o) {
-            $new_modules .= $2 . ' ' if (defined $build_modes{$1});
+            push(@modules_to_build, $2) if (defined $build_modes{$1});
             next;
         };
-        $new_modules .= $_ . ' '
+#next if (/^NULL$/);
+        push(@modules_to_build, $_);
     };
-    return $new_modules;
+    return @modules_to_build;
 };
 
 sub do_exit {
     my $exit_code = shift;
-    rmtree($tmp_dir, 0, 1) if ($tmp_dir);
+    rmtree(CorrectPath($tmp_dir), 0, 1) if ($tmp_dir);
     if ($exit_code) {
 #        &finish_logging("error occured");
     } else {
