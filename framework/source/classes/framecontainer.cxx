@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-10-16 13:36:48 $
+ *  last change: $Author: as $ $Date: 2000-10-19 11:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,7 @@ using namespace ::com::sun::star::frame     ;
 //  constructor
 //*****************************************************************************************************************
 FrameContainer::FrameContainer()
-        :   m_bLock         ( LOCK_OFF  )
-        ,   m_pQuitTimer    ( NULL      )
+        :   m_bLock( LOCK_OFF )
 {
 }
 
@@ -172,11 +171,11 @@ void FrameContainer::remove( const Reference< XFrame >& xFrame )
             // If last frame was removed and special quit timer is enabled by the desktop
             // we must terminate the desktop by using this timer!
             if  (
-                    ( getCount()    <   1       )   &&
-                    ( m_pQuitTimer  !=  NULL    )
+                    ( getCount()                <   1           )   &&
+                    ( m_rQuitTimer.isValid()    ==  sal_True    )
                 )
             {
-                m_pQuitTimer->start();
+                m_rQuitTimer->start();
             }
         }
     }
@@ -231,9 +230,9 @@ void FrameContainer::clear()
         m_xActiveFrame = Reference< XFrame >();
         // If special quit timer is used - we must terminate the desktop.
         // He is the owner of this container and can't work without any visible tasks/frames!
-        if( m_pQuitTimer != NULL )
+        if( m_rQuitTimer.isValid() == sal_True )
         {
-            m_pQuitTimer->start();
+            m_rQuitTimer->start();
         }
     }
 }
@@ -378,12 +377,12 @@ void FrameContainer::enableQuitTimer(   const   Reference< XDesktop >&  xDesktop
                                         const   TAsyncQuitMode&         aMode       )
 {
     // If no current timer exist - create a new one.
-    if( m_pQuitTimer == NULL )
+    if( m_rQuitTimer.isEmpty() == sal_True )
     {
-        m_pQuitTimer = new AsyncQuit( xDesktop );
+        m_rQuitTimer.bind( new AsyncQuit( xDesktop ) );
     }
     // Set given mode on existing or created timer member!
-    m_pQuitTimer->setMode( aMode );
+    m_rQuitTimer->setMode( aMode );
 }
 
 //*****************************************************************************************************************
@@ -393,10 +392,9 @@ void FrameContainer::disableQuitTimer()
 {
     // Delete current quit timer.
     // If user wish to create it again he must do it with "enableQuitTimer()".
-    if( m_pQuitTimer != NULL )
+    if( m_rQuitTimer.isValid() == sal_True )
     {
-        delete m_pQuitTimer;
-        m_pQuitTimer = NULL;
+        m_rQuitTimer.unbind();
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-10-16 13:36:26 $
+ *  last change: $Author: as $ $Date: 2000-10-19 11:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,16 +94,21 @@
 #include <stl/vector>
 #endif
 
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
-#define XFRAME                  ::com::sun::star::frame::XFrame
+#define OREF                    ::vos::ORef
 #define REFERENCE               ::com::sun::star::uno::Reference
 #define SEQUENCE                ::com::sun::star::uno::Sequence
 #define STLVECTOR               ::std::vector
+#define XFRAME                  ::com::sun::star::frame::XFrame
 
 //_________________________________________________________________________________________________________________
 //  exported const
@@ -436,7 +441,7 @@ class FrameContainer
         sal_Bool                                m_bLock             ;   /// lock to block append()-, remove()- or clear()-calls
         STLVECTOR< REFERENCE< XFRAME > >        m_aContainer        ;   /// list to hold all frames
         REFERENCE< XFRAME >                     m_xActiveFrame      ;   /// one container item can be the current active frame. Its neccessary for Desktop or Frame implementation.
-        AsyncQuit*                              m_pQuitTimer        ;   /// if an instance of these class used by desktop and last frame will be removed we must terminate the desktop
+        OREF< AsyncQuit >                       m_rQuitTimer        ;   /// if an instance of these class used by desktop and last frame will be removed we must terminate the desktop
 
 };      //  class FrameContainer
 
