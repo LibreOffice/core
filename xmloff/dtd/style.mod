@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.50 2002-04-04 13:45:03 dvo Exp $
+	$Id: style.mod,v 1.51 2002-04-05 06:31:50 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -349,6 +349,7 @@
 	table:border-model (collapsing | separating) #IMPLIED
 	fo:vertical-align (top | middle | bottom | automatic) #IMPLIED
 	fo:direction (ltr | ttb) #IMPLIED
+	style:glyph-orientation-vertical (auto | 0) #IMPLIED
 	style:rotation-angle %nonNegativeInteger; #IMPLIED
 	style:rotation-align (none | bottom | top | center) #IMPLIED
 	style:cell-protect CDATA #IMPLIED
