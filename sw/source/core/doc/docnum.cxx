@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 13:59:21 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 11:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3054,6 +3054,9 @@ void SwDoc::UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdPos )
             }
 
             BYTE nLevel = aNum.GetLevel();
+
+            SetNoNum(&nLevel, ! pStt->IsNumbered());
+
             BYTE nNdOldLvl = MAXLEVEL;
             if( pStt->GetNum() )
             {
@@ -3098,6 +3101,8 @@ void SwDoc::UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdPos )
                 }
 
                 aNum.SetLevel( nLevel );
+                aNum.SetNoNum(! IsNum(nLevel));
+
                 pStt->UpdateNum( aNum );
             }
             else //if( NO_NUM != nLevel )
@@ -3164,6 +3169,8 @@ void SwDoc::UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdPos )
                     }
                     nInitLevels &= ~( 1 << GetRealLevel(nLevel) );
                     aNum.SetLevel( GetRealLevel(nLevel) );
+
+                    aNum.SetNoNum(! IsNum(nLevel));
 
                     // OD 10.12.2002 #106111# - reset numbers of all sublevels and
                     // note in <nInitLevels> that numbering of all sublevels have
