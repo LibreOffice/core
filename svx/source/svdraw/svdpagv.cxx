@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:52:59 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1135,6 +1135,10 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
             pBmp=new ImpMasterBmp(*pWin);
             rView.pMasterBmp=pBmp;
         }
+
+        // Propagate digit language to device of bitmap.
+        pBmp->aVD.SetDigitLanguage (pWin->GetDigitLanguage());
+
         pBmp->aVD.SetClipRegion(); // ggf. gesetztes Clipping entfernen
         pBmp->aVD.SetMapMode(rMap);
         Size aNeedLogSize(aNeedLogRect.GetSize()); aNeedLogSize.Width()--; aNeedLogSize.Height()--;
