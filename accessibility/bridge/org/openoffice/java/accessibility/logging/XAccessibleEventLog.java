@@ -57,6 +57,8 @@
 
 package org.openoffice.java.accessibility.logging;
 
+import org.openoffice.java.accessibility.AccessibleObjectFactory;
+
 import com.sun.star.accessibility.*;
 import com.sun.star.uno.*;
 
@@ -92,23 +94,101 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
     public void notifyEvent(com.sun.star.accessibility.AccessibleEventObject accessibleEventObject) {
         switch (accessibleEventObject.EventId) {
             case AccessibleEventId.ACTIVE_DESCENDANT_CHANGED:
-                System.err.println("Retrieved active descendant event.");
+                logMessage(accessibleEventObject.Source, "Retrieved active descendant event.");
+                break;
+            case AccessibleEventId.STATE_CHANGED:
+                logStateChange(accessibleEventObject.Source,
+                    accessibleEventObject.OldValue,
+                    accessibleEventObject.NewValue);
                 break;
             case AccessibleEventId.CHILD:
-                System.err.println("Retrieved children event.");
+                logMessage(accessibleEventObject.Source, "Retrieved children event.");
                 break;
            case AccessibleEventId.BOUNDRECT_CHANGED:
-                System.err.println("Retrieved boundrect changed event.");
+                logMessage(accessibleEventObject.Source, "Retrieved boundrect changed event.");
                 break;
            case AccessibleEventId.VISIBLE_DATA_CHANGED:
-                System.err.println("Retrieved visible data changed event.");
+                logMessage(accessibleEventObject.Source, "Retrieved visible data changed event.");
                 break;
            case AccessibleEventId.INVALIDATE_ALL_CHILDREN:
-                System.err.println("Retrieved invalidate children event.");
+                logMessage(accessibleEventObject.Source, "Retrieved invalidate children event.");
                 break;
             default:
                 break;
         }
     }
 
+    public void logStateChange(Object o, Object any1, Object any2) {
+        try {
+            if (AnyConverter.isShort(any1)) {
+                logStateChange(o, AnyConverter.toShort(any1), " is no longer ");
+            }
+
+            if (AnyConverter.isShort(any2)) {
+                logStateChange(o, AnyConverter.toShort(any2), " is now ");
+            }
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+        }
+    }
+
+    public void logStateChange(Object o, short n, String s) {
+        switch(n) {
+            case AccessibleStateType.ACTIVE:
+                logMessage(o, s + javax.accessibility.AccessibleState.ACTIVE);
+                break;
+            case AccessibleStateType.ARMED:
+                logMessage(o, s + javax.accessibility.AccessibleState.ARMED);
+                break;
+            case AccessibleStateType.CHECKED:
+                logMessage(o, s + javax.accessibility.AccessibleState.CHECKED);
+                break;
+            case AccessibleStateType.ENABLED:
+                logMessage(o, s + javax.accessibility.AccessibleState.ENABLED);
+                break;
+            case AccessibleStateType.FOCUSED:
+                logMessage(o, s + javax.accessibility.AccessibleState.FOCUSED);
+                break;
+            case AccessibleStateType.PRESSED:
+                logMessage(o, s + javax.accessibility.AccessibleState.PRESSED);
+                break;
+            case AccessibleStateType.SELECTED:
+                logMessage(o, s + javax.accessibility.AccessibleState.SELECTED);
+                break;
+            case AccessibleStateType.SHOWING:
+                logMessage(o, s + javax.accessibility.AccessibleState.SELECTED);
+                break;
+            case AccessibleStateType.VISIBLE:
+                logMessage(o, s + javax.accessibility.AccessibleState.VISIBLE);
+                break;
+            default:
+                logMessage(o, s + "??? (FIXME)");
+                break;
+        }
+    }
+
+    protected static void logMessage(Object o, String s) {
+        XAccessible xa = (XAccessible) UnoRuntime.queryInterface(XAccessible.class, o);
+        logMessage((javax.accessibility.Accessible) AccessibleObjectFactory.getAccessibleComponent(xa), s);
+    }
+
+    protected static void logMessage(javax.accessibility.Accessible a, String s) {
+        if (a != null) {
+            logMessage(a.getAccessibleContext(), s);
+        } else {
+            logMessage(s);
+        }
+    }
+
+    protected static void logMessage(javax.accessibility.AccessibleContext ac, String s) {
+        if (ac != null) {
+            logMessage("[" + ac.getAccessibleRole() + "] "
+                + ac.getAccessibleName() + ": " + s);
+        } else {
+            logMessage(s);
+        }
+    }
+
+    protected static void logMessage(String s) {
+        System.err.println(s);
+    }
 }
