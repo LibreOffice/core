@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:49:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ void DrawViewShell::GetEffectWinState( SfxItemSet& rSet )
 {
     UINT32 nState = EFFECT_STATE_NONE;
 
-    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount();
 
     if( nCount > 0 )
@@ -287,7 +287,7 @@ void DrawViewShell::UpdateEffectWindow()
     {
         EffectWindow* pEffectWin = static_cast<EffectWindow*>(
             pWindow->GetWindow());
-        const SdrMarkList& rMarkList = pDrView->GetMarkList();
+        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
         ULONG nCount = rMarkList.GetMarkCount();
 
         if( pEffectWin && pEffectWin->IsUpdateMode() )
@@ -712,7 +712,7 @@ void DrawViewShell::AssignFromEffectWindow()
 
         EffectWindow* pEffectWin = static_cast<EffectWindow*>(
             pWindow->GetWindow());
-        const SdrMarkList& rMarkList = pDrView->GetMarkList();
+        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
         ULONG nCount = rMarkList.GetMarkCount();
         if( pEffectWin && nCount > 0 )
         {

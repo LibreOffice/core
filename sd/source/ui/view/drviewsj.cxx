@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:49:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
     // Status der Menueintraege, bzw. Buttons
     // Einfachselektion
 
-    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
 
     if ( nMarkCount == 1 )
