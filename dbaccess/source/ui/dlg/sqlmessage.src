@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:27 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,16 +133,19 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ danish ] = "Detaljer";
         Text[ swedish ] = "Detaljer";
         Text[ polish ] = "Szczeg�y";
-        Text[ portuguese_brazilian ] = "details";
+        Text[ portuguese_brazilian ] = "Detalhes";
         Text[ japanese ] = "詳細";
         Text[ korean ] = "자세히";
         Text[ chinese_simplified ] = "细节";
         Text[ chinese_traditional ] = "細節";
         Text[ arabic ] = "��������";
-        Text[ turkish ] = "Ayr�nt�lar";
+        Text[ turkish ] = "Detaylar";
         Text[ catalan ] = "Detalls";
         Text[ finnish ] = "Lis�tiedot";
         Text[ thai ] = "รายละเอียด";
+        Text[ czech ] = "Podrobnosti";
+        Text[ hebrew ] = "Details";
+        Text[ hindi ] = "विस्तारपूर्वक वर्णन";
     };
     FixedText FT_ERRORLIST
     {
@@ -162,16 +165,19 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ danish ] = "~Fejlliste:";
         Text[ swedish ] = "~Fellista:";
         Text[ polish ] = "~Lista b��d�w:";
-        Text[ portuguese_brazilian ] = "error ~list:";
+        Text[ portuguese_brazilian ] = "~Lista de erros:";
         Text[ japanese ] = "エラーリスト(~L):";
         Text[ korean ] = "오류 목록(~L):";
         Text[ chinese_simplified ] = "错误列单(~L)：";
         Text[ chinese_traditional ] = "錯誤清單(~L)：";
         Text[ arabic ] = "����� �������:";
-        Text[ turkish ] = "Hata listesi:";
+        Text[ turkish ] = "Hata ~listesi:";
         Text[ catalan ] = "~Llista d'errors:";
         Text[ finnish ] = "Virhe~luettelo:";
         Text[ thai ] = " ~รายการผิดพลาด:";
+        Text[ czech ] = "Seznam chyb:";
+        Text[ hebrew ] = "~Fehlerliste:";
+        Text[ hindi ] = "~गलती सूची:";
     };
     Control CTL_ERRORLIST
     {
@@ -199,16 +205,19 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ danish ] = "~Beskrivelse:";
         Text[ swedish ] = "~Beskrivning:";
         Text[ polish ] = "~Opis:";
-        Text[ portuguese_brazilian ] = "~description:";
+        Text[ portuguese_brazilian ] = "~Descri��o:";
         Text[ japanese ] = "説明(~D):";
         Text[ korean ] = "설명(~D):";
         Text[ chinese_simplified ] = "说明(~D)：";
         Text[ chinese_traditional ] = "描述(~D)：";
         Text[ arabic ] = "�����:";
-        Text[ turkish ] = "A��klama:";
+        Text[ turkish ] = "~Tan�m:";
         Text[ catalan ] = "~Descripci�";
         Text[ finnish ] = "~Kuvaus:";
         Text[ thai ] = "~คำอธิบาย:";
+        Text[ czech ] = "Popis:";
+        Text[ hebrew ] = "‮תאור:‬";
+        Text[ hindi ] = "~विवरण:";
     };
     MultiLineEdit ME_DESCRIPTION
     {
@@ -242,16 +251,19 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ danish ] = "Fejl";
         Text[ swedish ] = "Fel";
         Text[ polish ] = "B��d";
-        Text[ portuguese_brazilian ] = "Error";
+        Text[ portuguese_brazilian ] = "Erro";
         Text[ japanese ] = "エラー";
         Text[ korean ] = "오류";
         Text[ chinese_simplified ] = "错误";
         Text[ chinese_traditional ] = "錯誤";
-        Text[ turkish ] = "Error";
+        Text[ turkish ] = "Hata";
         Text[ arabic ] = "���";
-        Text[ catalan ] = "Error";
+        Text[ catalan ] = "S'ha produ�t un error";
         Text[ finnish ] = "Virhe";
         Text[ thai ] = "ผิดพลาด";
+        Text[ czech ] = "Chyba";
+        Text[ hebrew ] = "Fehler";
+        Text[ hindi ] = "गलती";
     };
     String STR_EXCEPTION_WARNING
     {
@@ -268,16 +280,19 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ danish ] = "Advarsel";
         Text[ swedish ] = "Varning";
         Text[ polish ] = "Ostrze�enie";
-        Text[ portuguese_brazilian ] = "Warning";
+        Text[ portuguese_brazilian ] = "Aviso";
         Text[ japanese ] = "警告";
         Text[ korean ] = "경고";
         Text[ chinese_simplified ] = "警告";
         Text[ chinese_traditional ] = "警告";
-        Text[ turkish ] = "Warning";
+        Text[ turkish ] = "Uyar�";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Advertiment";
         Text[ finnish ] = "Varoitus";
         Text[ thai ] = "คำเตือน";
+        Text[ czech ] = "Upozornění";
+        Text[ hebrew ] = "Warnung";
+        Text[ hindi ] = "चेतावनी";
     };
     String STR_EXCEPTION_INFO
     {
@@ -294,7 +309,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ danish ] = "Information";
         Text[ swedish ] = "Information";
         Text[ polish ] = "Informacja";
-        Text[ portuguese_brazilian ] = "Information";
+        Text[ portuguese_brazilian ] = "Informa��o";
         Text[ japanese ] = "情報";
         Text[ korean ] = "정보";
         Text[ chinese_simplified ] = "信息";
@@ -304,6 +319,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ catalan ] = "Informaci�";
         Text[ finnish ] = "Tiedot";
         Text[ thai ] = "ข้อมูล";
+        Text[ czech ] = "Informace";
+        Text[ hebrew ] = "Information";
+        Text[ hindi ] = "सूचना";
     };
     String STR_EXCEPTION_DETAILS
     {
@@ -320,16 +338,19 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ danish ] = "Detaljer";
         Text[ swedish ] = "Detaljer";
         Text[ polish ] = "Szczeg�y";
-        Text[ portuguese_brazilian ] = "Details";
+        Text[ portuguese_brazilian ] = "Detalhes";
         Text[ japanese ] = "詳細";
         Text[ korean ] = "자세히";
         Text[ chinese_simplified ] = "细节";
         Text[ chinese_traditional ] = "細節";
-        Text[ turkish ] = "Ayr�nt�lar";
+        Text[ turkish ] = "Detaylar";
         Text[ arabic ] = "������";
         Text[ catalan ] = "Detalls";
         Text[ finnish ] = "Lis�tiedot";
         Text[ thai ] = "รายละเอียด";
+        Text[ czech ] = "Podrobnosti";
+        Text[ hebrew ] = "Details";
+        Text[ hindi ] = "विस्तारपूर्वक वर्णन";
     };
     String STR_EXCEPTION_STATUS
     {
@@ -346,16 +367,19 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ danish ] = "SQL-status";
         Text[ swedish ] = "SQL-status";
         Text[ polish ] = "Stan SQL";
-        Text[ portuguese_brazilian ] = "SQL State";
+        Text[ portuguese_brazilian ] = "Estado SQL";
         Text[ japanese ] = "SQL ステータス";
         Text[ korean ] = "SQL 상태";
         Text[ chinese_simplified ] = "SQL 状态";
         Text[ chinese_traditional ] = "SQL 狀態";
-        Text[ turkish ] = "SQL State";
+        Text[ turkish ] = "SQL durumu";
         Text[ arabic ] = "����SQL";
         Text[ catalan ] = "Estat de l'SQL";
         Text[ finnish ] = "SQL-tila";
         Text[ thai ] = "สถานะ SQL ";
+        Text[ czech ] = "Stav SQL";
+        Text[ hebrew ] = "SQL-Status";
+        Text[ hindi ] = "SQL वस्तुस्थिति";
     };
     String STR_EXCEPTION_ERRORCODE
     {
@@ -372,16 +396,19 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ danish ] = "Fejlkode";
         Text[ swedish ] = "Felkod";
         Text[ polish ] = "Kod b��du";
-        Text[ portuguese_brazilian ] = "Error code";
+        Text[ portuguese_brazilian ] = "C�digo de erro";
         Text[ japanese ] = "エラーコード";
         Text[ korean ] = "오류 코드";
         Text[ chinese_simplified ] = "错误码";
         Text[ chinese_traditional ] = "錯誤碼";
-        Text[ turkish ] = "Error code";
+        Text[ turkish ] = "Hata Kodu";
         Text[ arabic ] = "��� �����";
         Text[ catalan ] = "Codi d'error";
         Text[ finnish ] = "Virhekoodi";
         Text[ thai ] = "รหัสผิดพลาด";
+        Text[ czech ] = "Kód chyby";
+        Text[ hebrew ] = "Fehler-Code";
+        Text[ hindi ] = "गलती कोड";
     };
     Text[ portuguese ] = "%PRODUCTNAME Base";
     Text[ russian ] = "%PRODUCTNAME Base";
@@ -403,12 +430,24 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
     Text[ arabic ] = "%PRODUCTNAME Base";
     Text[ catalan ] = "%PRODUCTNAME Base";
     Text[ thai ] = "ฐาน %PRODUCTNAME ";
+    Text[ czech ] = "%PRODUCTNAME Base";
+    Text[ hebrew ] = "%PRODUCTNAME Base";
+    Text[ hindi ] = "%PRODUCTNAME आधार";
 };
 
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.36.8.2  2003/04/29 08:34:02  gh
+ *  final merge for Beta2
+ *
+ *  Revision 1.36.8.1  2003/04/14 15:04:11  gh
+ *  merging all languages
+ *
+ *  Revision 1.36  2003/03/19 17:52:27  hr
+ *  MWS_SRX644: migrate branch mws_srx644 -> HEAD
+ *
  *  Revision 1.35.2.3  2003/02/23 12:01:04  nf
  *  trasnlation 6.1 Beta / OOo 1.1 Beta / final wave
  *
@@ -534,6 +573,16 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
  *
  *  Revision 1.0 02.10.00 12:43:18  fs
  ************************************************************************/
+
+
+
+
+
+
+
+
+
+
 
 
 
