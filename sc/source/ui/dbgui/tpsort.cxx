@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsort.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-13 10:05:29 $
+ *  last change: $Author: nn $ $Date: 2001-03-13 16:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,16 +837,20 @@ BOOL __EXPORT ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
     // get locale
     LanguageType eLang = aLbLanguage.GetSelectLanguage();
     String sLangStr, sCountry;
-    ConvertLanguageToIsoNames( eLang, sLangStr, sCountry );
+    if ( eLang != LANGUAGE_SYSTEM )
+        ConvertLanguageToIsoNames( eLang, sLangStr, sCountry );
     lang::Locale aLocale( sLangStr, sCountry, rtl::OUString() );
     theSortData.aCollatorLocale = aLocale;
 
     // get algorithm
     String sAlg;
-    uno::Sequence<rtl::OUString> aAlgos = pColWrap->listCollatorAlgorithms( aLocale );
-    USHORT nSel = aLbAlgorithm.GetSelectEntryPos();
-    if ( nSel < aAlgos.getLength() )
-        sAlg = aAlgos[nSel];
+    if ( eLang != LANGUAGE_SYSTEM )
+    {
+        uno::Sequence<rtl::OUString> aAlgos = pColWrap->listCollatorAlgorithms( aLocale );
+        USHORT nSel = aLbAlgorithm.GetSelectEntryPos();
+        if ( nSel < aAlgos.getLength() )
+            sAlg = aAlgos[nSel];
+    }
     theSortData.aCollatorAlgorithm = sAlg;
 
     rArgSet.Put( ScSortItem( SCITEM_SORTDATA, &theSortData ) );
@@ -1040,27 +1044,36 @@ void __EXPORT ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 
 IMPL_LINK( ScTabPageSortOptions, FillAlgorHdl, void *, EMPTYARG )
 {
-    LanguageType eLang = aLbLanguage.GetSelectLanguage();
-    String sLangStr, sCountry;
-    ConvertLanguageToIsoNames( eLang, sLangStr, sCountry );
-
-    lang::Locale aLocale( sLangStr, sCountry, rtl::OUString() );
-    uno::Sequence<rtl::OUString> aAlgos = pColWrap->listCollatorAlgorithms( aLocale );
-
     aLbAlgorithm.SetUpdateMode( FALSE );
     aLbAlgorithm.Clear();
 
-    long nCount = aAlgos.getLength();
-    const rtl::OUString* pArray = aAlgos.getConstArray();
-    for (long i=0; i<nCount; i++)
+    LanguageType eLang = aLbLanguage.GetSelectLanguage();
+    if ( eLang == LANGUAGE_SYSTEM )
     {
-        String sAlg = pArray[i];
-        String sUser = pColRes->GetTranslation( sAlg );
-        aLbAlgorithm.InsertEntry( sUser, LISTBOX_APPEND );
+        //  for LANGUAGE_SYSTEM no algorithm can be selected because
+        //  it wouldn't necessarily exist for other languages
+        //  -> leave list box empty if LANGUAGE_SYSTEM is selected
+        aLbAlgorithm.Enable( FALSE );           // nothing to select
     }
-    aLbAlgorithm.SelectEntryPos( 0 );       // first entry is default
+    else
+    {
+        String sLangStr, sCountry;
+        ConvertLanguageToIsoNames( eLang, sLangStr, sCountry );
 
-    aLbAlgorithm.Enable( nCount > 1 );      // enable only if there is a choice
+        lang::Locale aLocale( sLangStr, sCountry, rtl::OUString() );
+        uno::Sequence<rtl::OUString> aAlgos = pColWrap->listCollatorAlgorithms( aLocale );
+
+        long nCount = aAlgos.getLength();
+        const rtl::OUString* pArray = aAlgos.getConstArray();
+        for (long i=0; i<nCount; i++)
+        {
+            String sAlg = pArray[i];
+            String sUser = pColRes->GetTranslation( sAlg );
+            aLbAlgorithm.InsertEntry( sUser, LISTBOX_APPEND );
+        }
+        aLbAlgorithm.SelectEntryPos( 0 );       // first entry is default
+        aLbAlgorithm.Enable( nCount > 1 );      // enable only if there is a choice
+    }
 
     aLbAlgorithm.SetUpdateMode( TRUE );
     return 0;
