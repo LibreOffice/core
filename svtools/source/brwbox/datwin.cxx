@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:32:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,9 +341,15 @@ void BrowserDataWin::Paint( const Rectangle& rRect )
 {
     if ( !nUpdateLock && GetUpdateMode() )
     {
+        if ( bInPaint )
+        {
+            aInvalidRegion.Insert( new Rectangle( rRect ) );
+            return;
+        }
         bInPaint = TRUE;
         ( (BrowseBox*) GetParent() )->PaintData( *this, rRect );
         bInPaint = FALSE;
+        DoOutstandingInvalidations();
     }
     else
         aInvalidRegion.Insert( new Rectangle( rRect ) );
