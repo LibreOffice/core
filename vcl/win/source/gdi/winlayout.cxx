@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 14:32:06 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 11:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,8 +627,13 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
 
     Point aPos = GetDrawPosition( Point( mnBaseAdv, 0 ) );
 
-    // #108267#, break up into glyph portions of a limited size required by Win32 API
-    UINT limitedGlyphCount = min( 8192, mnGlyphCount );
+     // #108267#, limit the number of glyphs to avoid paint errors
+#if (_MSC_VER < 1300)
+    UINT limitedGlyphCount = std::min( 8192, mnGlyphCount );
+#else
+     UINT limitedGlyphCount = min( 8192, mnGlyphCount );
+#endif
+   // #108267#, break up into glyph portions of a limited size required by Win32 API
     const unsigned int maxGlyphCount = 8192;
     UINT numGlyphPortions = mnGlyphCount / maxGlyphCount;
     UINT remainingGlyphs = mnGlyphCount % maxGlyphCount;
