@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-11 13:33:56 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text = "Filtereinstellungen" ;
         Text [ ENGLISH ] = "Filter options" ;
         Text[ english_us ] = "Filter settings";
-        Text[ portuguese ] = "Filter options";
+        Text[ portuguese ] = "Parβmetros de filtros";
         Text[ russian ] = "Νΰρςπξικθ τθλόςπΰ";
         Text[ greek ] = "Ρυθμίσεις φίλτρων";
         Text[ dutch ] = "Filter options";
@@ -123,7 +123,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ japanese ] = "Μ¨Ωΐ‚Μέ’θ";
         Text[ korean ] = "Filter options";
         Text[ chinese_simplified ] = "Ρ΅ΟξΙθ¶¨";
-        Text[ chinese_traditional ] = "Filter options";
+        Text[ chinese_traditional ] = "³]©wΏzΏο";
         Text[ turkish ] = "Filter options";
         Text[ arabic ] = "Filter options";
         Text[ catalan ] = "Filter options";
@@ -177,7 +177,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ russian ] = "Οξκΰηΰςό ξςκλξνεννϋε θημενενθÿ";
         Text[ polish ] = "PokaΏ odrzucone zmiany";
         Text[ japanese ] = "”jό‚µ‚½•ΟX‰Σ‚π•\\¦(~R)";
-        Text[ chinese_traditional ] = "Εγ¥ά©Ϊµ΄ªΊΕά§σ(~R)";
+        Text[ chinese_traditional ] = "Εγ¥ά¤w©Ϊµ΄ªΊΕά§σ?®e(~R)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΚΫννΡΗΚ ΗαγΡέζΦΙ";
         Text[ greek ] = "Προβολή απορριπτέων αλλαγών";
         Text[ korean ] = "°ΕΊΞµΘ Ί―°ζ»ηΗΧ ΊΈΐΜ±β(~R)";
@@ -266,4 +266,5 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     Text[ catalan ] = "Mostrar modificaciones";
     Text[ finnish ] = "Nδytδ muutokset";
 };
+
 
