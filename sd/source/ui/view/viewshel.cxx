@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 09:01:43 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@
 #include "GluePointsObjectBar.hxx"
 #include "TextObjectBar.hxx"
 #include "GraphicObjectBar.hxx"
+#include "MediaObjectBar.hxx"
 #include "ViewShellManager.hxx"
 #include <svx/fmshell.hxx>
 #include "ViewTabBar.hxx"
@@ -1839,6 +1840,10 @@ SfxShell* ViewShellObjectBarFactory::CreateShell (
 
             case RID_DRAW_GRAF_TOOLBOX:
                 pShell = new ::sd::GraphicObjectBar(&mrViewShell, pView);
+                break;
+
+            case RID_DRAW_MEDIA_TOOLBOX:
+                pShell = new ::sd::MediaObjectBar(&mrViewShell, pView);
                 break;
 
             case RID_SVX_EXTRUSION_BAR:
