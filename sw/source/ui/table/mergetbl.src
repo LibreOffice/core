@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergetbl.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:14:41 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,8 @@ ModalDialog DLG_MERGE_TABLE
     Text[ hindi ] = "सारणियों को मिलाओ";
     Text[ slovak ] = "Zlúčiť tabuľky";
 };
+
+
 
 
 
