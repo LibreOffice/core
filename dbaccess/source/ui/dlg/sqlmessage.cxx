@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:27 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@ class OExceptionChainDialog : public ModalDialog
     MultiLineEdit   m_aExceptionText;
     OKButton        m_aOK;
 
+    String          m_sStatusLabel;
+    String          m_sErrorCodeLabel;
+
 public:
     OExceptionChainDialog(Window* pParent, const Any& _rStart);
     ~OExceptionChainDialog();
@@ -155,15 +158,15 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart
     String sWarningLabel(ResId(STR_EXCEPTION_WARNING));
     String sInfoLabel(ResId(STR_EXCEPTION_INFO));
     String sDetailsLabel(ResId(STR_EXCEPTION_DETAILS));
-    String sStatusLabel(ResId(STR_EXCEPTION_STATUS));
-    String sErrorCodeLabel(ResId(STR_EXCEPTION_ERRORCODE));
+    m_sStatusLabel = String( ResId( STR_EXCEPTION_STATUS ) );
+    m_sErrorCodeLabel = String( ResId( STR_EXCEPTION_ERRORCODE ) );
 
     FreeResource();
 
     m_aExceptionList.SetSelectionMode(SINGLE_SELECTION);
     m_aExceptionList.SetDragDropMode(0);
     m_aExceptionList.EnableInplaceEditing(sal_False);
-    m_aExceptionList.SetWindowBits(WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
+    m_aExceptionList.SetWindowBits(WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
 
     m_aExceptionList.SetSelectHdl(LINK(this, OExceptionChainDialog, OnExceptionSelected));
     sal_Bool bHiContrast = isHiContrast(this);
@@ -180,6 +183,8 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart
             aWarningImage(  ModuleRes( bHiContrast ? BMP_EXCEPTION_WARNING_SCH  : BMP_EXCEPTION_WARNING)),
             m_aInfoImage(   ModuleRes( bHiContrast ? BMP_EXCEPTION_INFO_SCH     : BMP_EXCEPTION_INFO));
 
+    bool bHave22018 = false;
+
     SQLExceptionInfo aCurrent;
     while (aIter.hasMoreElements())
     {
@@ -187,36 +192,24 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart
         if (aCurrent.isValid())
         {
             const SQLException* pCurrentException = (const SQLException*)aCurrent;
+            bHave22018 = pCurrentException->SQLState.equalsAscii( "22018" );
+
             SvLBoxEntry* pListEntry = NULL;
             void* pUserData = new SQLExceptionInfo(aCurrent);
+
             switch (aCurrent.getType())
             {
                 case SQLExceptionInfo::SQL_EXCEPTION:
                 {
                     pListEntry = m_aExceptionList.InsertEntry(sErrorLabel, aErrorImage, aErrorImage);
                     const SQLException* pException = (const SQLException*)aCurrent;
-                    if (pException->SQLState.getLength())
-                    {
-                        UniString sTitle(sStatusLabel);
-                        sTitle.AppendAscii(" : ");
-                        sTitle += pException->SQLState.getStr();
-                        SvLBoxEntry* pSQLstateEntry = m_aExceptionList.InsertEntry(sTitle, aErrorImage, aErrorImage, pListEntry);
-                        pSQLstateEntry->SetUserData(pUserData);
-//                      m_aExceptionList.Expand(pListEntry);
-                    }
-                    if (pException->ErrorCode != 0)
-                    {
-                        UniString sTitle(sErrorCodeLabel);
-                        sTitle.AppendAscii(" : ");
-                        sTitle += String::CreateFromInt32(pException->ErrorCode);
-                        SvLBoxEntry* pErrorCodeEntry = m_aExceptionList.InsertEntry(sTitle, aErrorImage, aErrorImage, pListEntry);
-                        pErrorCodeEntry->SetUserData(pUserData);
-//                      m_aExceptionList.Expand(pListEntry);
-                    }
-                }   break;
+                }
+                break;
+
                 case SQLExceptionInfo::SQL_WARNING:
                     pListEntry = m_aExceptionList.InsertEntry(sWarningLabel, aWarningImage, aWarningImage);
                     break;
+
                 case SQLExceptionInfo::SQL_CONTEXT:
                 {
                     pListEntry = m_aExceptionList.InsertEntry(sInfoLabel, m_aInfoImage, m_aInfoImage);
@@ -229,13 +222,28 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart
                     }
                 }
                 break;
+
                 default:
                     DBG_ERROR("OExceptionChainDialog::OExceptionChainDialog : valid SQLException but unknown type !");
                     break;
             }
-            if (pListEntry)
-                pListEntry->SetUserData(pUserData);
+            if ( pListEntry )
+                pListEntry->SetUserData( pUserData );
+            else
+                delete pUserData;
         }
+    }
+
+    // if the error has the code 22018, then add an additional explanation
+    // #i24021# / 2004-10-14 / frank.schoenheit@sun.com
+    if ( bHave22018 )
+    {
+        SvLBoxEntry* pExplanation = m_aExceptionList.InsertEntry( sInfoLabel, m_aInfoImage, m_aInfoImage );
+
+        SQLContext aExplanation;
+        aExplanation.Message = String( ModuleRes( STR_EXPLAN_STRINGCONVERSION_ERROR ) );
+
+        pExplanation->SetUserData( new SQLExceptionInfo( aExplanation ) );
     }
 }
 
@@ -263,17 +271,27 @@ IMPL_LINK(OExceptionChainDialog, OnExceptionSelected, void*, EMPTYARG)
     else
     {
         SQLExceptionInfo aInfo(*(const SQLExceptionInfo*)pSelected->GetUserData());
-        ::rtl::OUString aText = ((const SQLException*)aInfo)->Message;
+        const SQLException* pException = (const SQLException*)aInfo;
 
-        if (m_aExceptionList.GetParent(pSelected))
-            if (aInfo.isKindOf(SQLExceptionInfo::SQL_CONTEXT))
-                // Context-Details
-                aText = ((const SQLContext*)aInfo)->Details;
-            else
-                // all other children get the text of the parent
-                aText = ((const SQLException*)aInfo)->Message;
-
-        m_aExceptionText.SetText(aText);
+        String sText;
+        if ( pException->SQLState.getLength() )
+        {
+            sText += m_sStatusLabel;
+            sText.AppendAscii(": ");
+            sText += pException->SQLState.getStr();
+            sText.AppendAscii("\n");
+        }
+        if ( pException->ErrorCode )
+        {
+            sText += m_sErrorCodeLabel;
+            sText.AppendAscii(": ");
+            sText += String::CreateFromInt32( pException->ErrorCode );
+            sText.AppendAscii("\n");
+        }
+        if ( sText.Len() )
+            sText.AppendAscii( "\n" );
+        sText += String( pException->Message );
+        m_aExceptionText.SetText(sText);
     }
 
     return 0L;
@@ -357,7 +375,7 @@ void OSQLMessageBox::Construct(const UniString& rTitle,
     m_aMessage.SetText(rMessage);
 
     // Buttons anlegen
-    long   nBtnCount = (m_sInfo.Len() != 0) ? 1 : 0;
+    long   nBtnCount = 0;
     sal_Bool   bHelp = sal_False; //aHelpBtn.IsVisible();
 
     sal_uInt16 nDefId = 0;
