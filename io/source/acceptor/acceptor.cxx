@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2002-09-05 16:08:53 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 09:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include "cppuhelper/unourl.hxx"
+#include "rtl/malformeduriexception.hxx"
 
 #include <com/sun/star/connection/XAcceptor.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -147,74 +149,6 @@ namespace io_acceptor
         g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
-    // helper class
-    class TokenContainer
-    {
-    public:
-        TokenContainer( const OUString &sString );
-
-        ~TokenContainer()
-        {
-            delete [] m_aTokens;
-        }
-
-        inline OUString & getToken( sal_Int32 nElement )
-        {
-            return m_aTokens[nElement];
-        }
-
-        inline sal_Int32 getTokenCount()
-        {
-            return m_nTokenCount;
-        }
-
-        OUString *m_aTokens;
-        sal_Int32 m_nTokenCount;
-    };
-
-    TokenContainer::TokenContainer( const OUString & sString ) :
-        m_nTokenCount( 0 ),
-        m_aTokens( 0 )
-    {
-        // split into separate tokens
-        sal_Int32 i = 0,nMax;
-
-        nMax = sString.getLength();
-        for( i = 0 ; i < nMax ; i ++ )
-        {
-            if( ',' == sString.pData->buffer[i] )
-            {
-                m_nTokenCount ++;
-            }
-        }
-
-        if( sString.getLength() )
-        {
-            m_nTokenCount ++;
-        }
-        if( m_nTokenCount )
-        {
-            m_aTokens = new OUString[m_nTokenCount];
-            sal_Int32 nIndex = 0;
-            for( i = 0 ; i < m_nTokenCount ; i ++ )
-            {
-                sal_Int32 nLastIndex = nIndex;
-                nIndex = sString.indexOf( ( sal_Unicode ) ',' , nIndex );
-                if( -1 == nIndex )
-                {
-                    m_aTokens[i] = sString.copy( nLastIndex );
-                    break;
-                }
-                else
-                {
-                    m_aTokens[i] = sString.copy( nLastIndex , nIndex-nLastIndex );
-                }
-                m_aTokens[i] = m_aTokens[i].trim();
-                nIndex ++;
-            }
-        }
-    }
-
     struct BeingInAccept
     {
         BeingInAccept( sal_Bool *pFlag,const OUString & sConnectionDescription  ) throw( AlreadyAcceptingException)
@@ -261,120 +195,97 @@ namespace io_acceptor
         if( ! m_sLastDescription.getLength() )
         {
             // setup the acceptor
-            TokenContainer container( sConnectionDescription );
-            if( ! container.getTokenCount() )
+            try
             {
-                throw IllegalArgumentException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "empty connection string" ) ),
-                    Reference< XInterface > (),
-                    0 );
-            }
-
-            if( 0 == container.getToken(0).compareToAscii("pipe") )
-            {
-                OUString sName;
-                sal_Int32 i;
-                for( i = 1 ; i < container.getTokenCount() ; i ++ )
+                cppu::UnoUrlDescriptor aDesc(sConnectionDescription);
+                if (aDesc.getName().equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("pipe")))
                 {
-                    sal_Int32 nIndex = container.getToken(i).indexOf( '=' );
-                    if( -1 != nIndex )
+                    rtl::OUString aName(
+                        aDesc.getParameter(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                              "name"))));
+
+                    m_pPipe = new PipeAcceptor(aName, sConnectionDescription);
+
+                    try
                     {
-                        OUString aName = container.getToken(i).copy( 0 , nIndex ).trim().toAsciiLowerCase();
-                        if( nIndex < container.getToken(i).getLength() )
+                        m_pPipe->init();
+                    }
+                    catch( ... )
+                    {
                         {
-                            OUString oValue = container.getToken(i).copy(
-                                nIndex+1 , container.getToken(i).getLength() - nIndex -1 ).trim();
-                            if ( 0 == aName.compareToAscii("name") )
-                            {
-                                sName = oValue;
-                            }
+                            MutexGuard guard( m_mutex );
+                            delete m_pPipe;
+                            m_pPipe = 0;
                         }
+                        throw;
                     }
                 }
-                m_pPipe = new PipeAcceptor(sName , sConnectionDescription );
+                else if (aDesc.getName().equalsAsciiL(
+                             RTL_CONSTASCII_STRINGPARAM("socket")))
+                {
+                    rtl::OUString aHost;
+                    if (aDesc.hasParameter(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("host"))))
+                        aHost = aDesc.getParameter(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("host")));
+                    else
+                        aHost = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                  "localhost"));
+                    sal_uInt16 nPort = static_cast< sal_uInt16 >(
+                        aDesc.getParameter(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("port"))).
+                        toInt32());
+                    bool bTcpNoDelay
+                        = aDesc.getParameter(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                              "tcpnodelay"))).toInt32() != 0;
 
-                try
-                {
-                    m_pPipe->init();
-                }
-                catch( ... )
-                {
+                    m_pSocket = new SocketAcceptor(
+                        aHost, nPort, bTcpNoDelay, sConnectionDescription);
+
+                    try
                     {
-                        MutexGuard guard( m_mutex );
-                        delete m_pPipe;
-                        m_pPipe = 0;
+                        m_pSocket->init();
                     }
-                    throw;
-                }
-            }
-            else if ( 0 == container.getToken(0).compareToAscii("socket") )
-            {
-                OUString sHost = OUString( RTL_CONSTASCII_USTRINGPARAM("localhost"));
-                sal_uInt16 nPort = 0;
-                sal_Bool bTcpNoDelay = sal_False;
-                sal_Int32 i;
-
-                for( i = 1 ;i < container.getTokenCount() ; i ++ )
-                {
-                    sal_Int32 nIndex = container.getToken(i).indexOf( '=' );
-                    if( -1 != nIndex )
+                    catch( ... )
                     {
-                        OUString aName = container.getToken(i).copy( 0 , nIndex ).trim().toAsciiLowerCase();
-                        if( nIndex < container.getToken(i).getLength() )
                         {
-                            OUString oValue = container.getToken(i).copy( nIndex+1 , container.getToken(i).getLength() - nIndex -1 ).trim();
-                            if( aName.compareToAscii("host") == 0 )
-                            {
-                                sHost = oValue;
-                            }
-                            else if( aName.compareToAscii("port") == 0 )
-                            {
-                                nPort = (sal_uInt16) oValue.toInt32();
-                            }
-                            else if( aName.compareToAscii("tcpnodelay") == 0 )
-                            {
-                                bTcpNoDelay = oValue.toInt32() ? sal_True : sal_False;
-                            }
+                            MutexGuard guard( m_mutex );
+                            delete m_pSocket;
+                            m_pSocket = 0;
                         }
+                        throw;
                     }
                 }
-
-                m_pSocket = new SocketAcceptor(
-                    sHost , nPort, bTcpNoDelay, sConnectionDescription );
-
-                try
+                else
                 {
-                    m_pSocket->init();
-                }
-                catch( ... )
-                {
-                    {
-                        MutexGuard guard( m_mutex );
-                        delete m_pSocket;
-                        m_pSocket = 0;
-                    }
-                    throw;
-                }
-            }
-            else
-            {
-                OUString delegatee = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor."));
-                delegatee += container.getToken(0);
+                    OUString delegatee = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor."));
+                    delegatee += aDesc.getName();
 
 #ifdef DEBUG
-                OString tmp = OUStringToOString(delegatee, RTL_TEXTENCODING_ASCII_US);
-                OSL_TRACE("trying to get service %s\n", tmp.getStr());
+                    OString tmp = OUStringToOString(delegatee, RTL_TEXTENCODING_ASCII_US);
+                    OSL_TRACE("trying to get service %s\n", tmp.getStr());
 #endif
-                _xAcceptor = Reference<XAcceptor>(
-                    _xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY);
+                    _xAcceptor = Reference<XAcceptor>(
+                        _xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY);
 
-                if(!_xAcceptor.is())
-                {
-                    OUString message(RTL_CONSTASCII_USTRINGPARAM("Acceptor: unknown delegatee "));
-                    message += delegatee;
+                    if(!_xAcceptor.is())
+                    {
+                        OUString message(RTL_CONSTASCII_USTRINGPARAM("Acceptor: unknown delegatee "));
+                        message += delegatee;
 
-                    throw ConnectionSetupException(message, Reference<XInterface>());
+                        throw ConnectionSetupException(message, Reference<XInterface>());
+                    }
                 }
+            }
+            catch (rtl::MalformedUriException & rEx)
+            {
+                throw IllegalArgumentException(
+                    rEx.getMessage(),
+                    Reference< XInterface > (),
+                    0 );
             }
             m_sLastDescription = sConnectionDescription;
         }
@@ -389,9 +300,7 @@ namespace io_acceptor
         }
         else
         {
-            sal_Int32 index = sConnectionDescription.indexOf((sal_Unicode) ',');
-
-            r = _xAcceptor->accept(m_sLastDescription.copy(index + 1).trim());
+            r = _xAcceptor->accept(sConnectionDescription);
         }
 
         return r;

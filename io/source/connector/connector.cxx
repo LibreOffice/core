@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2002-09-05 16:12:35 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 09:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include "cppuhelper/unourl.hxx"
+#include "rtl/malformeduriexception.hxx"
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -123,74 +125,6 @@ namespace stoc_connector
         g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
-    class TokenContainer
-    {
-    public:
-        TokenContainer( const OUString &sString );
-
-        ~TokenContainer()
-        {
-            delete [] m_aTokens;
-        }
-
-        inline OUString & getToken( sal_Int32 nElement )
-        {
-            return m_aTokens[nElement];
-        }
-
-        inline sal_Int32 getTokenCount()
-        {
-            return m_nTokenCount;
-        }
-
-        OUString *m_aTokens;
-        sal_Int32 m_nTokenCount;
-    };
-
-    TokenContainer::TokenContainer( const OUString & sString ) :
-        m_nTokenCount( 0 ),
-        m_aTokens( 0 )
-    {
-        // split into separate tokens
-        sal_Int32 i = 0,nMax;
-
-        nMax = sString.getLength();
-        for( i = 0 ; i < nMax ; i ++ )
-        {
-            if( ',' == sString.pData->buffer[i] )
-            {
-                m_nTokenCount ++;
-            }
-        }
-
-        if( sString.getLength() )
-        {
-            m_nTokenCount ++;
-        }
-        if( m_nTokenCount )
-        {
-            m_aTokens = new OUString[m_nTokenCount];
-            sal_Int32 nIndex = 0;
-            for( i = 0 ; i < m_nTokenCount ; i ++ )
-            {
-                sal_Int32 nLastIndex = nIndex;
-                nIndex = sString.indexOf( ( sal_Unicode ) ',' , nIndex );
-                if( -1 == nIndex )
-                {
-                    m_aTokens[i] = sString.copy( nLastIndex );
-                    break;
-                }
-                else
-                {
-                    m_aTokens[i] = sString.copy( nLastIndex , nIndex-nLastIndex );
-                }
-                m_aTokens[i] = m_aTokens[i].trim();
-                nIndex ++;
-            }
-        }
-    }
-
-
     Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnectionDescription )
         throw( NoConnectException, ConnectionSetupException, RuntimeException)
     {
@@ -200,134 +134,109 @@ namespace stoc_connector
 #endif
 
         // split string into tokens
-        TokenContainer container( sConnectionDescription );
-
-        if( ! container.getTokenCount() )
+        try
         {
-            OUString message(RTL_CONSTASCII_USTRINGPARAM("Connector: empty connection string"));
-            throw ConnectionSetupException( message , Reference< XInterface > () );
-        }
+            cppu::UnoUrlDescriptor aDesc(sConnectionDescription);
 
-        Reference< XConnection > r;
-        if( 0 == container.getToken(0).compareToAscii( "pipe" ) )
-        {
-            OUString sName;
-            sal_Int32 i;
-            for( i = 1 ; i < container.getTokenCount() ; i ++ )
+            Reference< XConnection > r;
+            if (aDesc.getName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                                 "pipe")))
             {
-                sal_Int32 nIndex = container.getToken(i).indexOf( '=' );
-                if( -1 != nIndex )
+                rtl::OUString aName(
+                    aDesc.getParameter(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name"))));
+
+                PipeConnection *pConn = new PipeConnection( aName, sConnectionDescription );
+
+                if( pConn->m_pipe.create( aName.pData, osl_Pipe_OPEN ) )
                 {
-                    OUString aName = container.getToken(i).copy( 0 , nIndex ).trim().toAsciiLowerCase();
-                    if( nIndex < container.getToken(i).getLength() )
-                    {
-                        OUString oValue = container.getToken(i).copy( nIndex+1 , container.getToken(i).getLength() - nIndex -1 ).trim();
-                        if ( aName.compareToAscii("name") == 0 )
-                        {
-                            sName = oValue;
-                        }
-                    }
+                    r = Reference < XConnection > ( (XConnection * ) pConn );
+                }
+                else
+                {
+                    OUString sMessage = OUString::createFromAscii( "Connector : couldn't connect to pipe " );
+                    sMessage += aName;
+                    sMessage += OUString::createFromAscii( "(" );
+                    sMessage += OUString::valueOf( (sal_Int32 ) pConn->m_pipe.getError() );
+                    sMessage += OUString::createFromAscii( ")" );
+                    delete pConn;
+                    throw NoConnectException( sMessage ,Reference< XInterface > () );
                 }
             }
-
-            PipeConnection *pConn = new PipeConnection(sName , sConnectionDescription );
-
-            ;
-            if( pConn->m_pipe.create( sName.pData, osl_Pipe_OPEN ) )
+            else if (aDesc.getName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                                      "socket")))
             {
-                r = Reference < XConnection > ( (XConnection * ) pConn );
+                rtl::OUString aHost;
+                if (aDesc.hasParameter(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("host"))))
+                    aHost = aDesc.getParameter(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("host")));
+                else
+                    aHost = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                              "localhost"));
+                sal_uInt16 nPort = static_cast< sal_uInt16 >(
+                    aDesc.getParameter(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("port"))).
+                    toInt32());
+                bool bTcpNoDelay
+                    = aDesc.getParameter(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                          "tcpnodelay"))).toInt32() != 0;
+
+                SocketConnection *pConn = new SocketConnection( aHost,
+                                                                nPort,
+                                                                sConnectionDescription);
+
+                SocketAddr AddrTarget( aHost.pData, nPort );
+                if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
+                {
+                    OUString sMessage = OUString::createFromAscii( "Connector : couldn't connect to socket (" );
+                    OUString sError = pConn->m_socket.getErrorAsString();
+                    sMessage += sError;
+                    sMessage += OUString::createFromAscii( ")" );
+                    delete pConn;
+                    throw NoConnectException( sMessage, Reference < XInterface > () );
+                }
+                if( bTcpNoDelay )
+                {
+                    sal_Int32 nTcpNoDelay = sal_True;
+                    pConn->m_socket.setOption( osl_Socket_OptionTcpNoDelay , &nTcpNoDelay,
+                                               sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
+                }
+                pConn->completeConnectionString();
+                r = Reference< XConnection > ( (XConnection * ) pConn );
             }
             else
             {
-                OUString sMessage = OUString::createFromAscii( "Connector : couldn't connect to pipe " );
-                sMessage += sName;
-                sMessage += OUString::createFromAscii( "(" );
-                sMessage += OUString::valueOf( (sal_Int32 ) pConn->m_pipe.getError() );
-                sMessage += OUString::createFromAscii( ")" );
-                delete pConn;
-                throw NoConnectException( sMessage ,Reference< XInterface > () );
-            }
-        }
-        else if( 0 == container.getToken(0).compareToAscii("socket") )
-        {
-            OUString sHost;
-            sal_uInt16 nPort = 0;
-            sal_Bool bTcpNoDelay = sal_False;
-
-            int i;
-            for( i = 1 ; i < container.getTokenCount() ; i ++ )
-            {
-                sal_Int32 nIndex = container.getToken(i).indexOf( '=' );
-                if( -1 != nIndex )
-                {
-                    OUString aName = container.getToken(i).copy( 0 , nIndex ).trim().toAsciiLowerCase();
-                    if( nIndex < container.getToken(i).getLength() )
-                    {
-                        OUString oValue = container.getToken(i).copy( nIndex+1 , container.getToken(i).getLength() - nIndex -1 ).trim();
-                        if( 0 == aName.compareToAscii( "host") )
-                        {
-                            sHost = oValue;
-                        }
-                        else if( 0 == aName.compareToAscii("port") )
-                        {
-                            nPort = ( sal_uInt16 )  oValue.toInt32();
-                        }
-                        else if( aName.compareToAscii("tcpnodelay") == 0 )
-                        {
-                            bTcpNoDelay = oValue.toInt32() ? sal_True : sal_False;
-                        }
-                    }
-                }
-            }
-
-            SocketConnection *pConn = new SocketConnection( sHost,
-                                                            nPort,
-                                                            sConnectionDescription);
-
-            SocketAddr AddrTarget( sHost.pData, nPort );
-            if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
-            {
-                OUString sMessage = OUString::createFromAscii( "Connector : couldn't connect to socket (" );
-                OUString sError = pConn->m_socket.getErrorAsString();
-                sMessage += sError;
-                sMessage += OUString::createFromAscii( ")" );
-                delete pConn;
-                throw NoConnectException( sMessage, Reference < XInterface > () );
-            }
-            if( bTcpNoDelay )
-            {
-                sal_Int32 nTcpNoDelay = sal_True;
-                pConn->m_socket.setOption( osl_Socket_OptionTcpNoDelay , &nTcpNoDelay,
-                                           sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
-            }
-            pConn->completeConnectionString();
-            r = Reference< XConnection > ( (XConnection * ) pConn );
-        }
-        else
-        {
-            OUString delegatee = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector."));
-            delegatee += container.getToken(0);
+                OUString delegatee = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector."));
+                delegatee += aDesc.getName();
 
 #ifdef DEBUG
-            OString tmp = OUStringToOString(delegatee, RTL_TEXTENCODING_ASCII_US);
-            OSL_TRACE("connector: trying to get service %s\n", tmp.getStr());
+                OString tmp = OUStringToOString(delegatee, RTL_TEXTENCODING_ASCII_US);
+                OSL_TRACE("connector: trying to get service %s\n", tmp.getStr());
 #endif
-            Reference<XConnector> xConnector(
-                _xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY );
+                Reference<XConnector> xConnector(
+                    _xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY );
 
-            if(!xConnector.is())
-            {
-                OUString message(RTL_CONSTASCII_USTRINGPARAM("Connector: unknown delegatee "));
-                message += delegatee;
+                if(!xConnector.is())
+                {
+                    OUString message(RTL_CONSTASCII_USTRINGPARAM("Connector: unknown delegatee "));
+                    message += delegatee;
 
-                throw ConnectionSetupException(message, Reference<XInterface>());
+                    throw ConnectionSetupException(message, Reference<XInterface>());
+                }
+
+                sal_Int32 index = sConnectionDescription.indexOf((sal_Unicode) ',');
+
+                r = xConnector->connect(sConnectionDescription.copy(index + 1).trim());
             }
-
-            sal_Int32 index = sConnectionDescription.indexOf((sal_Unicode) ',');
-
-            r = xConnector->connect(sConnectionDescription.copy(index + 1).trim());
+            return r;
         }
-        return r;
+        catch (rtl::MalformedUriException & rEx)
+        {
+            throw ConnectionSetupException(rEx.getMessage(),
+                                           Reference< XInterface > ());
+        }
     }
 
     Sequence< OUString > connector_getSupportedServiceNames()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgefactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-11 13:51:37 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 09:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include "cppuhelper/unourl.hxx"
+#include "rtl/malformeduriexception.hxx"
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -253,11 +255,14 @@ namespace remotebridges_factory
     {
         init();
         OUString sService;
-        OUString sProtocolName = sProtocol.toAsciiLowerCase();
-        sal_Int32 nIndex = sProtocol.indexOf( (sal_Unicode)',' );
-        if( nIndex > 0 )
+        OUString sProtocolName;
+        try
         {
-            sProtocolName = sProtocol.copy( 0 , nIndex );
+            sProtocolName = cppu::UnoUrlDescriptor(sProtocol).getName();
+        }
+        catch (rtl::MalformedUriException &)
+        {
+            OSL_ENSURE(false, "MalformedUriException");
         }
         ServiceHashMap::iterator ii = m_mapProtocolToService.find( sProtocolName );
         if( ii != m_mapProtocolToService.end() )
@@ -268,12 +273,6 @@ namespace remotebridges_factory
         {
             // fallback to the old solution, deprecated, should be removed !
             OUString sService = OUString::createFromAscii( "com.sun.star.bridge.Bridge." );
-            OUString sProtocolName = sProtocol;
-            sal_Int32 nIndex = sProtocol.indexOf( (sal_Unicode)',' );
-            if( nIndex > 0 )
-            {
-                sProtocolName = sProtocol.copy( 0 , nIndex );
-            }
             sService += sProtocolName;
         }
         return sService;

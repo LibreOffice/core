@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unourl_resolver.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 09:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include "cppuhelper/unourl.hxx"
+#include "rtl/malformeduriexception.hxx"
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -190,19 +192,19 @@ Sequence< OUString > ResolverImpl::getSupportedServiceNames()
 Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
     throw (NoConnectException, ConnectionSetupException, RuntimeException)
 {
-    sal_Int32 nTokenCount = 0;
-    sal_Int32 nIndex = 0;
-    do
+    OUString aProtocolDescr;
+    OUString aConnectDescr;
+    OUString aInstanceName;
+    try
     {
-        rUnoUrl.getToken( 0 , ';' , nIndex );
-        nTokenCount++;
+        cppu::UnoUrl aUrl(rUnoUrl);
+        aProtocolDescr = aUrl.getProtocol().getDescriptor();
+        aConnectDescr = aUrl.getConnection().getDescriptor();
+        aInstanceName = aUrl.getObjectName();
     }
-    while ( nIndex >= 0 );
-
-    if (nTokenCount != 3 || rUnoUrl.getLength() < 10 ||
-        !rUnoUrl.copy( 0, 4 ).equalsIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM("uno:") ) ))
+    catch (rtl::MalformedUriException & rEx)
     {
-        throw ConnectionSetupException( OUString( RTL_CONSTASCII_USTRINGPARAM("illegal uno url given!" ) ), Reference< XInterface >() );
+        throw ConnectionSetupException(rEx.getMessage(), 0);
     }
 
     Reference< XConnector > xConnector(
@@ -213,11 +215,6 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
 
     if (! xConnector.is())
         throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("no connector!" ) ), Reference< XInterface >() );
-
-    nIndex = 0;
-    OUString aConnectDescr( rUnoUrl.getToken( 0, ';', nIndex ).copy( 4 ) ); // uno:CONNECTDESCR;iiop;InstanceName
-    nIndex = 0;
-    OUString aInstanceName( rUnoUrl.getToken( 2, ';', nIndex ) );
 
     Reference< XConnection > xConnection( xConnector->connect( aConnectDescr ) );
 
@@ -232,9 +229,8 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
         throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("no bridge factory!" ) ), Reference< XInterface >() );
 
     // bridge
-    nIndex = 0;
     Reference< XBridge > xBridge( xBridgeFactory->createBridge(
-        OUString(), rUnoUrl.getToken( 1, ';', nIndex ),
+        OUString(), aProtocolDescr,
         xConnection, Reference< XInstanceProvider >() ) );
 
     Reference< XInterface > xRet( xBridge->getInstance( aInstanceName ) );
