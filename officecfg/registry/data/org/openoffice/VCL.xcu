@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:28:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,7 +455,7 @@
         <value>OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
     </node>
-    <node oor:name="ja-jp" oor:op="replace">
+    <node oor:name="ja" oor:op="replace">
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
         <value>HG 明朝L Sun;HG 明朝L;HG Mincho Light J;MS P ゴシック;さざなみゴシック;TLPゴシック;LXゴシック;東風ゴシック;東風ゴシック;Gothic;MS 明朝;HG Mincho J;HG Mincho L;HG Mincho;Mincho;MS P 明朝;HG Mincho Light J;MS ゴシック;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS P ゴシック;Andale Sans UI</value>
       </prop>
