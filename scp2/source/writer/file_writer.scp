@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_writer.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:01:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 09:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,7 @@ File gid_File_Exe_Swriter
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = EXENAME(swriter);
-  #ifdef WNT
-    Styles = (PACKED, PATCH_SO_NAME);
-  #else
     Styles = (PACKED);
-  #endif
 End
 
 #ifdef UNX
