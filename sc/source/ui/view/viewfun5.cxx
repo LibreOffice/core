@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:10:24 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,10 +317,20 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             BOOL bAreaIsNew = !pDBData;
             SfxBoolItem aAreaNew(FN_PARAM_2, bAreaIsNew);
 
+            ::svx::ODataAccessDescriptor aDesc;
+            DataFlavorExVector& rVector = aDataHelper.GetDataFlavorExVector();
+            ::std::auto_ptr<SfxUsrAnyItem> pCursorItem;
+            if ( ::svx::ODataAccessObjectTransferable::canExtractObjectDescriptor(rVector) )
+            {
+                aDesc = ::svx::ODataAccessObjectTransferable::extractObjectDescriptor(aDataHelper);
+                if ( aDesc.has(::svx::daCursor) )
+                    pCursorItem.reset(new SfxUsrAnyItem(FN_PARAM_3, aDesc[::svx::daCursor]));
+            }
+
             //  asynchronous, to avoid doing the whole import in drop handler
             SfxDispatcher& rDisp = GetViewData()->GetDispatcher();
             rDisp.Execute(SID_SBA_IMPORT, SFX_CALLMODE_ASYNCHRON,
-                                        &aDataDesc, &aTarget, &aAreaNew, 0L );
+                                        &aDataDesc, &aTarget, &aAreaNew, pCursorItem.get() );
 
             bRet = TRUE;
         }
