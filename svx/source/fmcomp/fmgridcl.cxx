@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 08:00:26 $
+ *  last change: $Author: fs $ $Date: 2000-12-20 09:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1688,6 +1688,9 @@ void FmGridControl::HideColumn(sal_uInt16 nId)
     DbGridColumn* pColumn = GetColumns().GetObject(nPos);
     if (pColumn->IsHidden())
         GetPeer()->columnHidden(pColumn);
+
+    if (nId == m_nMarkedColumnId)
+        m_nMarkedColumnId = (sal_uInt16)-1;
 }
 
 //------------------------------------------------------------------------------
@@ -1702,6 +1705,17 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
     DbGridColumn* pColumn = GetColumns().GetObject(nPos);
     if (!pColumn->IsHidden())
         GetPeer()->columnVisible(pColumn);
+
+    // if the column which is shown here is selected ...
+    Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(GetPeer()->getColumns(), UNO_QUERY);
+    if (xSelSupplier.is())
+    {
+        Reference< ::com::sun::star::beans::XPropertySet >  xColumn;
+        ::cppu::extractInterface(xColumn, xSelSupplier->getSelection());
+        if (xColumn.get() == pColumn->getModel().get())
+            // ... -> mark it
+            markColumn(nId);
+    }
 }
 
 //------------------------------------------------------------------------------
