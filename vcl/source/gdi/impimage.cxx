@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-24 11:04:15 $
+ *  last change: $Author: ssa $ $Date: 2002-08-14 10:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,7 +595,7 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
 
                     BitmapEx aTmpBmpEx;
 
-                    if( nStyle && IMAGE_DRAW_SEMITRANSPARENT )
+                    if( nStyle & IMAGE_DRAW_SEMITRANSPARENT )
                     {
                         if( aTmpMsk.IsEmpty() )
                         {
