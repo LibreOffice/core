@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:48:28 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 12:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -955,7 +955,7 @@ ModalDialog DLG_SORTING
         Text[ chinese_traditional ] = "¦ζ(~R)";
         Text[ arabic ] = "Υέζέ";
         Text[ greek ] = "Γραμμές";
-        Text[ korean ] = "Ηΰ(~R)";
+        Text[ korean ] = "Ηΰ";
         Text[ turkish ] = "~Satύr";
         Text[ language_user1 ] = " ";
     };
@@ -1187,7 +1187,7 @@ InfoBox MSG_SRTERR
     MESSAGE[ chinese_traditional ] = "µLªk±Ζ§ΗΏοΎάªΊ¤Ί®e΅C";
     MESSAGE[ arabic ] = "ΚΪΠΡ έΡÒ ΗαΚΝΟνΟ";
     MESSAGE[ greek ] = "Η ταξινόμηση της επιλογής δεν ήταν δυνατή";
-    MESSAGE[ korean ] = "Ό±ΕΓΐ» Α¤·ΔΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
+    MESSAGE[ korean ] = "Ό±ΕΓΐ» Α¤·ΔΗÒ Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
     MESSAGE[ turkish ] = "Seηim sύralanamadύ";
     MESSAGE[ language_user1 ] = " ";
 };
