@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:28:23 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 07:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,6 +411,16 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         {
             const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArgs );
             SfxPoolItem* pItem = rArg.CreateItem();
+            if ( !pItem )
+            {
+#ifdef DBG_UTIL
+                ByteString aStr( "No creator method for argument: ");
+                aStr += rArg.pName;
+                DBG_ERROR( aStr.GetBuffer() );
+#endif
+                return;
+            }
+
             USHORT nWhich = rSet.GetPool()->GetWhich(rArg.nSlotId);
             BOOL bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
             pItem->SetWhich( nWhich );
