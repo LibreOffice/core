@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 16:36:25 $
+ *  last change: $Author: fs $ $Date: 2002-01-30 14:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,6 +798,19 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
 //-------------------------------------------------------------------------
 IMPL_LINK(ODbAdminDialog, OnDatasourceSelected, ListBox*, _pBox)
 {
+    // sometimes, the listbox calls the select handler even if the user simply clicked onto the already selected
+    // entry. To avoid problems raising from this, we check this condition and do nothing then
+    // 97122 - 30.01.2002 - fs@openoffice.org
+    if ( DELETED == m_aSelector.getSelectedState() )
+    {
+        if ( m_aSelector.getSelectedAccessKey() == m_nCurrentDeletedDataSource )
+            return 0L;
+    }
+    else
+        if ( m_aSelector.getSelected() == String( m_sCurrentDatasource ) )
+            return 0L;
+
+
     if (!prepareSwitchDatasource())
     {   // restore the old selection
         if (m_sCurrentDatasource.getLength())
@@ -2126,6 +2139,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.77  2001/10/26 16:36:25  hr
+ *  #92924#: includes
+ *
  *  Revision 1.76  2001/10/24 10:31:05  fs
  *  #93684# in implTranslateProperty, check for the correct SfxItem types (in case a data source has invalid indirect property types)
  *
