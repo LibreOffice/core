@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:32:56 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 19:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,7 +612,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Text[ italian ] = "Lunghezza minima della parola";
         Text[ danish ] = "Minimal wordlength";
         Text[ swedish ] = "Minimal ordlängd";
-        Text[ polish ] = "Minimalna d³ugo?æ s³owa";
+        Text[ polish ] = "Minimalna d³ugoœæ s³owa";
         Text[ portuguese_brazilian ] = "Minimal wordlength";
         Text[ japanese ] = "Å’á•¶š”";
         Text[ korean ] = "ÃÖ¼Ò ´Ü¾î ±æÀÌ";
@@ -803,7 +803,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ italian ] = "Parole maiuscole";
         Text[ danish ] = "Check uppercase words";
         Text[ swedish ] = "Kontrollera ord med stor bokstäver";
-        Text[ polish ] = "Sprawd? wyrazy napisane wielk¹ liter¹";
+        Text[ polish ] = "SprawdŸ wyrazy napisane wielk¹ liter¹";
         Text[ portuguese_brazilian ] = "Check uppercase words";
         Text[ japanese ] = "‘å•¶š‚Ì’PŒê‚ğ½ÍßÙÁª¯¸";
         Text[ korean ] = "´ë¹®ÀÚ ´Ü¾î °Ë»ç";
@@ -828,10 +828,10 @@ TabPage RID_SFXPAGE_LINGU
         Text[ italian ] = "Parole con numeri";
         Text[ danish ] = "Check words with numbers ";
         Text[ swedish ] = "Kontrollera ord med siffror";
-        Text[ polish ] = "Sprawd? s³owa z cyframi";
+        Text[ polish ] = "SprawdŸ s³owa z cyframi";
         Text[ portuguese_brazilian ] = "Check words with numbers ";
         Text[ japanese ] = "”š‚ğŠÜ‚Ş’PŒê‚Ì½ÍßÙÁª¯¸";
-        Text[ korean ] = "¼ıÀÚ°¡Æ÷ÇÔµÈ¡¡´Ü¾î¸¦ °Ë»ç";
+        Text[ korean ] = "¼ıÀÚ°¡ Æ÷ÇÔµÈ ´Ü¾î¸¦ °Ë»ç";
         Text[ chinese_simplified ] = "¼ì²é´ø±àºÅµÄ×Ö";
         Text[ chinese_traditional ] = "ÀË¬d±a½s¸¹ªº¦r";
         Text[ turkish ] = "Check words with numbers ";
@@ -853,7 +853,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ italian ] = "Maiuscole e minuscole";
         Text[ danish ] = "Check capitalization words";
         Text[ swedish ] = "Kontrollera stor och liten bokstav";
-        Text[ polish ] = "Sprawd? pisowniê ma³¹ i wielk¹ liter¹";
+        Text[ polish ] = "SprawdŸ pisowniê ma³¹ i wielk¹ liter¹";
         Text[ portuguese_brazilian ] = "Check capitalization words";
         Text[ japanese ] = "‘å•¶š/¬•¶š‚Ì½ÍßÙĞ½";
         Text[ korean ] = "´ë¹®ÀÚ/¼Ò¹®ÀÚ °Ë»ç";
@@ -878,7 +878,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ italian ] = "Controlla aree speciali";
         Text[ danish ] = "Proof special regions";
         Text[ swedish ] = "Kontrollera specialområden";
-        Text[ polish ] = "Sprawd? obszary specjalne";
+        Text[ polish ] = "SprawdŸ obszary specjalne";
         Text[ portuguese_brazilian ] = "Proof special regions";
         Text[ japanese ] = "“Á•Ê”ÍˆÍ‚ÌÁª¯¸";
         Text[ korean ] = "Æ¯¼ö¿µ¿ª  °Ë»ç";
@@ -903,7 +903,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ italian ] = "Tutte le lingue";
         Text[ danish ] = "Spell in all languages";
         Text[ swedish ] = "Kontrollera alla språk";
-        Text[ polish ] = "Sprawd? we wszystkich jêzykach";
+        Text[ polish ] = "SprawdŸ we wszystkich jêzykach";
         Text[ portuguese_brazilian ] = "Spell in all languages";
         Text[ japanese ] = "‚·‚×‚Ä‚ÌŒ¾Œê‚Å½ÍßÙÁª¯¸";
         Text[ korean ] = "¸ğµç ¾ğ¾î¿¡¼­ °Ë»ç";
@@ -1003,7 +1003,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ italian ] = "Larghezza minima della parola prima della sillabazione: ";
         Text[ danish ] = "Minimal wordlength for hyphenation: ";
         Text[ swedish ] = "Minimal ordlängd för avstavning: ";
-        Text[ polish ] = "Minimalna d³ugo?æ wyrazów do dzielenia:";
+        Text[ polish ] = "Minimalna d³ugoœæ wyrazów do dzielenia:";
         Text[ portuguese_brazilian ] = "Minimal wordlength for hyphenation: ";
         Text[ japanese ] = "Ê²Ìİ‚ğ‚Â‚¯‚é‘O‚ÌÅ’á•¶š”: ";
         Text[ korean ] = "ÇÏÀÌÇÂ ºĞ¸®¿¡ ´ëÇÑ ÃÖ¼Ò ´Ü¾î ±æÀÌ: ";
