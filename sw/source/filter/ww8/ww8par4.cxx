@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:11:04 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,6 @@
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
-
-#pragma hdrstop
 
 #ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
@@ -344,7 +342,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
         pMathFlySet->ClearItem(RES_FRM_SIZE);
     }
 
-    String sNewName = Sw3Io::UniqueName(rDoc.GetDocShell()->GetStorage(),"Obj");
+    String sNewName = Sw3Io::UniqueName(mpDocShell->GetStorage(),"Obj");
 
     /*
     Take complete responsibility of the object away from SdrOle2Obj and to
@@ -367,9 +365,9 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
 SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     const SfxItemSet* pFlySet)
 {
+    ::SetProgressState(nProgress, mpDocShell);     // Update
     SwFrmFmt* pFmt = 0;
 
-    ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
     GrafikCtor();
 
     Graphic aGraph;
@@ -532,7 +530,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     if (GRAPHIC_GDIMETAFILE == rGraph.GetType() ||
         GRAPHIC_BITMAP == rGraph.GetType())
     {
-        ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
+        ::SetProgressState(nProgress, mpDocShell);     // Update
 
         if (bOleOk)
         {
@@ -545,8 +543,10 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
                 pTmpData->Seek( nObjLocFc );
             }
 
+            SvStorageRef xDst0(mpDocShell->GetStorage());
+
             pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-                aSrcStgName, xSrc0, mxDstStg, rGraph, aRect, pTmpData,
+                aSrcStgName, xSrc0, xDst0, rGraph, aRect, pTmpData,
                 SwMSDffManager::GetFilterFlags());
             pDataStream->Seek( nOldPos );
         }
