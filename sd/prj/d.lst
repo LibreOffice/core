@@ -1,5 +1,7 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
+mkdir: %COMMON_DEST%\res%_EXT%
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
-touch: ..\%__SRC%\misc\sd.hid %_DEST%\bin%_EXT%\sd.hid
 ..\inc\sd.lst %_DEST%\inc%_EXT%\sd.lst
 ..\inc\sddll.hxx %_DEST%\inc%_EXT%\sddll.hxx
 ..\%__SRC%\misc\sd.csv %_DEST%\inc%_EXT%\sd.csv
@@ -18,6 +20,7 @@ touch: ..\%__SRC%\misc\sd.hid %_DEST%\bin%_EXT%\sd.hid
 ..\%__SRC%\lib\sdl.lib %_DEST%\lib%_EXT%\sdl.lib
 ..\%__SRC%\lib\libsdl.a %_DEST%\lib%_EXT%\libsdl.a
 ..\%__SRC%\srs\core.srs %_DEST%\res%_EXT%\sdcore.srs
+..\%COMMON_OUTDIR%\srs\core_srs.hid %COMMON_DEST%\res%_EXT%\sdcore_srs.hid
 
 mkdir: %_DEST%\pck%_EXT%
 ..\res\webview\common.inc %_DEST%\pck%_EXT%\common.inc
