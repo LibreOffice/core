@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APIDescGetter.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-11-18 16:13:55 $
+ *  last change:$Date: 2003-12-11 11:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,102 +58,121 @@
  *
  *
  ************************************************************************/
-
 package helper;
 
-import share.DescGetter;
-import share.DescEntry;
-
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+
+import share.DescEntry;
+import share.DescGetter;
+
 
 /*
  * This is the Office-API specific DescGetter
  *
  */
-
-public class APIDescGetter extends DescGetter{
-
+public class APIDescGetter extends DescGetter {
     /*
      * gets the needed information about a StarOffice component
      * @param descPath Path to the ComponentDescription
      * @param entry contains the entry name, e.g. sw.SwXBodyText
      * @param debug if true some debug information is displayed on standard out
      */
-
     public DescEntry[] getDescriptionFor(String job, String descPath,
-                                                                boolean debug) {
+                                         boolean debug) {
         if (job.startsWith("-o")) {
-            job = job.substring(3,job.length()).trim();
+            job = job.substring(3, job.length()).trim();
+
             if (job.indexOf(".") < 0) {
                 return null;
             }
-            DescEntry entry = getDescriptionForSingleJob(job,descPath,debug);
+
+            DescEntry entry = getDescriptionForSingleJob(job, descPath, debug);
+
             if (entry != null) {
-                return new DescEntry[]{entry};
-            } else return null;
-        } if (job.startsWith("-sce")) {
-            job = job.substring(5,job.length()).trim();
-            return getScenario(job,descPath,debug);
-        } else return null;
+                return new DescEntry[] { entry };
+            } else {
+                return null;
+            }
+        }
+
+        if (job.startsWith("-sce")) {
+            job = job.substring(5, job.length()).trim();
+
+            return getScenario(job, descPath, debug);
+        } else {
+            return null;
+        }
     }
 
-
-    protected DescEntry getDescriptionForSingleJob(
-                                    String job, String descPath, boolean debug) {
-        boolean isSingleInterface = job.indexOf("::")>0;
+    protected DescEntry getDescriptionForSingleJob(String job, String descPath,
+                                                   boolean debug) {
+        boolean isSingleInterface = job.indexOf("::") > 0;
         String fullJob = job;
+
         if (isSingleInterface) {
-            job = job.substring(0,job.indexOf("::"));
+            job = job.substring(0, job.indexOf("::"));
         }
+
         if (job.startsWith("bugs")) {
             DescEntry Entry = new DescEntry();
-            Entry.entryName=job;
-            Entry.longName=job;
-            Entry.EntryType="bugdoc";
-            Entry.isOptional=false;
-            Entry.isToTest=true;
-            Entry.SubEntryCount=0;
-            Entry.hasErrorMsg=false;
-            Entry.State="non possible";
+            Entry.entryName = job;
+            Entry.longName = job;
+            Entry.EntryType = "bugdoc";
+            Entry.isOptional = false;
+            Entry.isToTest = true;
+            Entry.SubEntryCount = 0;
+            Entry.hasErrorMsg = false;
+            Entry.State = "non possible";
+
             return Entry;
         }
+
         DescEntry entry = null;
+
         if (descPath != null) {
-            if (debug)
-                System.out.println("## reading from File "+descPath);
+            if (debug) {
+                System.out.println("## reading from File " + descPath);
+            }
+
             entry = getFromDirectory(descPath, job, debug);
         } else {
-            if (debug)
+            if (debug) {
                 System.out.println("## reading from jar");
+            }
+
             entry = getFromClassPath(job, debug);
         }
+
         boolean foundInterface = false;
-        if (isSingleInterface && entry !=null) {
-            for (int i = 0; i<entry.SubEntryCount; i++) {
+
+        if (isSingleInterface && (entry != null)) {
+            for (int i = 0; i < entry.SubEntryCount; i++) {
                 if (!(entry.SubEntries[i].longName).equals(fullJob)) {
-                    entry.SubEntries[i].isToTest=false;
+                    entry.SubEntries[i].isToTest = false;
                 } else {
-                    foundInterface=true;
-                    entry.SubEntries[i].isToTest=true;
+                    foundInterface = true;
+                    entry.SubEntries[i].isToTest = true;
                 }
             }
         }
+
         if (isSingleInterface && !foundInterface) {
-            entry.hasErrorMsg=true;
-            entry.ErrorMsg = "Couldn't find a description for "+fullJob;
+            entry.hasErrorMsg = true;
+            entry.ErrorMsg = "Couldn't find a description for " + fullJob;
         }
 
         return entry;
     }
 
     protected static DescEntry[] getSubEntries(BufferedReader cvsFile,
-                                            DescEntry parent, boolean debug) {
+                                               DescEntry parent, boolean debug) {
         String line = "";
         String old_ifc_name = "";
         ArrayList ifc_names = new ArrayList();
@@ -161,57 +180,83 @@ public class APIDescGetter extends DescGetter{
         DescEntry ifcDesc = null;
         DescEntry methDesc = null;
         String entryType = "service";
-        while (line != null ) {
+
+        while (line != null) {
             try {
                 line = cvsFile.readLine();
-                if (line != null && line.length()>0) {
-                    String ifc_name = line.substring(line.indexOf(";")+2,
-                                                        line.lastIndexOf(";")-1);
-                    String meth_name = line.substring(line.lastIndexOf(";")+2,
-                                                                line.length()-1);
 
-                    methDesc=new DescEntry();
-                    if (meth_name.indexOf("#optional")>0) {
-                        methDesc.isOptional=true;
-                        meth_name = meth_name.substring(0,meth_name.indexOf("#"));
+                if ((line != null) && (line.length() > 0)) {
+                    String ifc_name = line.substring(line.indexOf(";") + 2,
+                                                     line.lastIndexOf(";") - 1);
+                    String meth_name = line.substring(line.lastIndexOf(";") + 2,
+                                                      line.length() - 1);
+
+                    methDesc = new DescEntry();
+
+                    if (meth_name.indexOf("#optional") > 0) {
+                        methDesc.isOptional = true;
+                        meth_name = meth_name.substring(0,
+                                                        meth_name.indexOf("#"));
                     }
 
                     if (meth_name.endsWith("()")) {
-                        methDesc.EntryType="method";
+                        methDesc.EntryType = "method";
                         entryType = "interface";
                     } else {
-                        methDesc.EntryType="property";
+                        methDesc.EntryType = "property";
                         entryType = "service";
                     }
-                    methDesc.entryName=meth_name;
-                    methDesc.isToTest = true;
-                    String withoutHash = ifc_name;
-                    if (ifc_name.indexOf("#optional") > 0) {
-                        withoutHash = ifc_name.substring(0,ifc_name.indexOf("#"));
-                    }
-                    methDesc.longName=parent.entryName+"::"+ withoutHash
-                                                                +"::"+meth_name;
 
+                    methDesc.entryName = meth_name;
+                    methDesc.isToTest = true;
+
+                    String withoutHash = ifc_name;
+
+                    if (ifc_name.indexOf("#optional") > 0) {
+                        withoutHash = ifc_name.substring(0,
+                                                         ifc_name.indexOf("#"));
+                    }
+
+                    methDesc.longName = parent.entryName + "::" +
+                                        withoutHash + "::" + meth_name;
 
                     if (!ifc_name.equals(old_ifc_name)) {
                         if (ifcDesc != null) {
-                            ifcDesc.SubEntries=getDescArray(meth_names.toArray());
-                            ifcDesc.SubEntryCount=meth_names.size();
+                            ifcDesc.SubEntries = getDescArray(
+                                                         meth_names.toArray());
+                            ifcDesc.SubEntryCount = meth_names.size();
+
+                            //mark service/interface as optional if all methods/properties are optional
+                            boolean allOptional = true;
+
+                            for (int k = 0; k < ifcDesc.SubEntryCount; k++) {
+                                if (!ifcDesc.SubEntries[k].isOptional) {
+                                    allOptional = false;
+                                }
+                            }
+
+                            if (!ifcDesc.isOptional && allOptional) {
+                                ifcDesc.isOptional = allOptional;
+                            }
+
                             meth_names.clear();
                             ifc_names.add(ifcDesc);
                         }
+
                         ifcDesc = new DescEntry();
                         ifcDesc.isToTest = true;
                         old_ifc_name = ifc_name;
+
                         if (ifc_name.indexOf("#optional") > 0) {
                             ifcDesc.isOptional = true;
-                            ifc_name = ifc_name.substring(0,ifc_name.indexOf("#"));
+                            ifc_name = ifc_name.substring(0,
+                                                          ifc_name.indexOf("#"));
                         }
 
                         StringTokenizer st = new StringTokenizer(ifc_name, ":");
-                        String className="";
+                        String className = "";
 
-                        int count=3;
+                        int count = 3;
 
                         if (ifc_name.startsWith("drafts")) {
                             count = 4;
@@ -226,12 +271,15 @@ public class APIDescGetter extends DescGetter{
                                     // inserting '_' before the last token
                                     token = "_" + token;
                                 }
-                                className += "." + token;
+
+                                className += ("." + token);
                             }
                         }
-                        ifcDesc.EntryType=entryType;
-                        ifcDesc.entryName="ifc"+className;
-                        ifcDesc.longName=parent.entryName+"::"+ifc_name;
+
+                        ifcDesc.EntryType = entryType;
+                        ifcDesc.entryName = "ifc" + className;
+                        ifcDesc.longName = parent.entryName + "::" +
+                                           ifc_name;
                     }
 
                     meth_names.add(methDesc);
@@ -239,144 +287,191 @@ public class APIDescGetter extends DescGetter{
             } catch (java.io.IOException ioe) {
                 parent.hasErrorMsg = true;
                 parent.ErrorMsg = "IOException while reading the description";
+
                 return null;
             }
         }
 
-        ifcDesc.SubEntries=getDescArray(meth_names.toArray());
-        ifcDesc.SubEntryCount=meth_names.size();
+        ifcDesc.SubEntries = getDescArray(meth_names.toArray());
+        ifcDesc.SubEntryCount = meth_names.size();
+
+        //mark service/interface as optional if all methods/properties are optional
+        boolean allOptional = true;
+
+        for (int k = 0; k < ifcDesc.SubEntryCount; k++) {
+            if (!ifcDesc.SubEntries[k].isOptional) {
+                allOptional = false;
+            }
+        }
+
+        if (!ifcDesc.isOptional && allOptional) {
+            ifcDesc.isOptional = allOptional;
+        }
+
         ifc_names.add(ifcDesc);
+
         return getDescArray(makeArray(ifc_names));
     }
 
     /**
      * This method ensures that XComponent will be the last in the list of interfaces
      */
-
     protected static Object[] makeArray(ArrayList entries) {
         Object[] entriesArray = entries.toArray();
         ArrayList returnArray = new ArrayList();
         Object addAtEnd = null;
-        for (int k=0;k<entriesArray.length;k++) {
+
+        for (int k = 0; k < entriesArray.length; k++) {
             DescEntry entry = (DescEntry) entriesArray[k];
-            if (entry.entryName.equals("ifc.lang._XComponent")){
+
+            if (entry.entryName.equals("ifc.lang._XComponent")) {
                 addAtEnd = entry;
             } else {
                 returnArray.add(entry);
             }
         }
+
         if (addAtEnd != null) {
             returnArray.add(addAtEnd);
         }
+
         return returnArray.toArray();
     }
 
-    protected static DescEntry setErrorDescription(DescEntry entry, String ErrorMsg) {
+    protected static DescEntry setErrorDescription(DescEntry entry,
+                                                   String ErrorMsg) {
         entry.hasErrorMsg = true;
         entry.ErrorMsg = ErrorMsg;
+
         return entry;
     }
 
     protected static DescEntry[] getDescArray(Object[] list) {
         DescEntry[] entries = new DescEntry[list.length];
-        for (int i = 0; i<list.length;i++) {
+
+        for (int i = 0; i < list.length; i++) {
             entries[i] = (DescEntry) list[i];
         }
+
         return entries;
     }
 
     protected DescEntry getFromClassPath(String aEntry, boolean debug) {
         int dotindex = aEntry.indexOf('.');
-        if (dotindex == -1) return null;
+
+        if (dotindex == -1) {
+            return null;
+        }
+
         String module = null;
         String shortName = null;
-        if (aEntry.indexOf(".uno")==-1) {
-            module = aEntry.substring(0,aEntry.indexOf('.'));
-            shortName = aEntry.substring(aEntry.indexOf('.')+1);
+
+        if (aEntry.indexOf(".uno") == -1) {
+            module = aEntry.substring(0, aEntry.indexOf('.'));
+            shortName = aEntry.substring(aEntry.indexOf('.') + 1);
+        } else {
+            module = aEntry.substring(0, aEntry.lastIndexOf('.'));
+            shortName = aEntry.substring(aEntry.lastIndexOf('.') + 1);
         }
-        else {
-            module = aEntry.substring(0,aEntry.lastIndexOf('.'));
-            shortName = aEntry.substring(aEntry.lastIndexOf('.')+1);
-        }
+
         DescEntry theEntry = new DescEntry();
         theEntry.entryName = aEntry;
         theEntry.longName = aEntry;
         theEntry.isOptional = false;
         theEntry.EntryType = "component";
         theEntry.isToTest = true;
+
         BufferedReader csvFile = null;
 
-        java.net.URL url = this.getClass().getResource("/objdsc/"+module);
-        if (url == null && debug) {
-           System.out.println("Classpath doesn't contain descriptions for" +
-                            " module '" + module +"'.");
-           return null;
+        java.net.URL url = this.getClass().getResource("/objdsc/" + module);
+
+        if ((url == null) && debug) {
+            System.out.println("Classpath doesn't contain descriptions for" +
+                               " module '" + module + "'.");
+
+            return null;
         }
 
         try {
             java.net.URLConnection con = url.openConnection();
+
             if (con instanceof java.net.JarURLConnection) {
                 // get Jar file from connection
-                java.util.jar.JarFile f = ((java.net.JarURLConnection)con).getJarFile();
+                java.util.jar.JarFile f = ((java.net.JarURLConnection) con).getJarFile();
+
                 // Enumerate over all entries
                 java.util.Enumeration e = f.entries();
+
                 while (e.hasMoreElements()) {
-                   String entry = e.nextElement().toString();
-                   if (entry.endsWith("."+shortName.trim()+".csv")) {
-                       InputStream input =
-                                this.getClass().getResourceAsStream("/" + entry);
-                       csvFile =
-                                new BufferedReader(new InputStreamReader(input));
-                   }
+                    String entry = e.nextElement().toString();
+
+                    if (entry.endsWith("." + shortName.trim() + ".csv")) {
+                        InputStream input = this.getClass()
+                                                .getResourceAsStream("/" +
+                                                                     entry);
+                        csvFile = new BufferedReader(
+                                          new InputStreamReader(input));
+                    }
                 }
-            }
-            else {
+            } else {
                 InputStream in = con.getInputStream();
-                java.io.BufferedReader buf = new java.io.BufferedReader(new InputStreamReader(in));
+                java.io.BufferedReader buf = new java.io.BufferedReader(
+                                                     new InputStreamReader(in));
                 boolean found = false;
-                while(buf.ready() && !found) {
+
+                while (buf.ready() && !found) {
                     String entry = buf.readLine();
-                    if (debug)
-                        System.out.println("Read: "+ entry);
-                    if (entry.endsWith(shortName.trim()+".csv")) {
-                        InputStream input =
-                            this.getClass().getResourceAsStream("/objdsc/"+module+"/" + entry);
-                        csvFile =
-                            new BufferedReader(new InputStreamReader(input));
+
+                    if (debug) {
+                        System.out.println("Read: " + entry);
+                    }
+
+                    if (entry.endsWith(shortName.trim() + ".csv")) {
+                        InputStream input = this.getClass()
+                                                .getResourceAsStream("/objdsc/" +
+                                                                     module +
+                                                                     "/" +
+                                                                     entry);
+                        csvFile = new BufferedReader(
+                                          new InputStreamReader(input));
                         found = true;
                     }
                 }
+
                 buf.close();
             }
-        }
-        catch(java.io.IOException e) {
-           e.printStackTrace();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
         }
 
-        DescEntry[] subEntries = getSubEntries(csvFile,theEntry,debug);
+        DescEntry[] subEntries = getSubEntries(csvFile, theEntry, debug);
 
-        theEntry.SubEntryCount=subEntries.length;
-        theEntry.SubEntries=subEntries;
+        theEntry.SubEntryCount = subEntries.length;
+        theEntry.SubEntries = subEntries;
 
         return theEntry;
     }
 
     protected static DescEntry getFromDirectory(String descPath, String entry,
-                                                            boolean debug) {
-
+                                                boolean debug) {
         int dotindex = entry.indexOf('.');
-        if (dotindex == -1) return null;
+
+        if (dotindex == -1) {
+            return null;
+        }
+
         String fs = System.getProperty("file.separator");
         String module = null;
         String shortName = null;
-        if (entry.indexOf(".uno")==-1) {
-            module = entry.substring(0,entry.indexOf('.'));
-            shortName = entry.substring(entry.indexOf('.')+1);
+
+        if (entry.indexOf(".uno") == -1) {
+            module = entry.substring(0, entry.indexOf('.'));
+            shortName = entry.substring(entry.indexOf('.') + 1);
+        } else {
+            module = entry.substring(0, entry.lastIndexOf('.'));
+            shortName = entry.substring(entry.lastIndexOf('.') + 1);
         }
-        else {
-            module = entry.substring(0,entry.lastIndexOf('.'));
-            shortName = entry.substring(entry.lastIndexOf('.')+1);
-        }
+
         DescEntry aEntry = new DescEntry();
         aEntry.entryName = entry;
         aEntry.longName = entry;
@@ -385,47 +480,49 @@ public class APIDescGetter extends DescGetter{
         aEntry.isToTest = true;
 
         if (debug) {
-            System.out.println("Parsing Description Path: "+descPath);
-            System.out.println("Searching module: "+module);
-            System.out.println("For the Component "+shortName);
+            System.out.println("Parsing Description Path: " + descPath);
+            System.out.println("Searching module: " + module);
+            System.out.println("For the Component " + shortName);
         }
 
-        File modPath = new File(descPath+fs+module);
+        File modPath = new File(descPath + fs + module);
 
         if (!modPath.exists()) {
-            return setErrorDescription(aEntry,"Couldn't find module "+module);
+            return setErrorDescription(aEntry,
+                                       "Couldn't find module " + module);
         }
 
         String[] files = modPath.list();
         String found = "none";
 
-        for (int i=0;i<files.length;i++) {
-            if (files[i].endsWith(shortName+".csv")) {
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].endsWith(shortName + ".csv")) {
                 found = files[i];
+
                 break;
             }
         }
 
         if (found.equals("none")) {
-            return setErrorDescription(aEntry,"Couldn't find component "+entry);
+            return setErrorDescription(aEntry,
+                                       "Couldn't find component " + entry);
         }
 
-        String aUrl = descPath+fs+module+fs+found;
+        String aUrl = descPath + fs + module + fs + found;
 
         BufferedReader csvFile = null;
+
         try {
             csvFile = new BufferedReader(new FileReader(aUrl));
         } catch (java.io.FileNotFoundException fnfe) {
-            return setErrorDescription(aEntry,"Couldn't find file "+aUrl);
+            return setErrorDescription(aEntry, "Couldn't find file " + aUrl);
         }
 
-        DescEntry[] subEntries = getSubEntries(csvFile,aEntry,debug);
+        DescEntry[] subEntries = getSubEntries(csvFile, aEntry, debug);
 
-        aEntry.SubEntryCount=subEntries.length;
-        aEntry.SubEntries=subEntries;
+        aEntry.SubEntryCount = subEntries.length;
+        aEntry.SubEntries = subEntries;
 
         return aEntry;
-
     }
-
 }
