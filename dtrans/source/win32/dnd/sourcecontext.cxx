@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sourcecontext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-20 12:41:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ SourceContext::SourceContext( DragSource* pSource,
         m_dragSource( static_cast<XDragSource*>( m_pDragSource) )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if( listener.is())
 #endif
     rBHelper.addListener( ::getCppuType( &listener ), listener );
