@@ -13,7 +13,8 @@ import com.sun.star.embed.ElementModes;
  * @author  oj93728
  */
 public class StorageNativeOutputStream {
-
+    String name;
+    Object key;
     static {
     // preload shared libraries whichs import lips are linked to jpipe
     if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
@@ -28,8 +29,10 @@ public class StorageNativeOutputStream {
         NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "hsqldb2");
     }
     /** Creates a new instance of StorageNativeOutputStream */
-    public StorageNativeOutputStream(String name,Object key) {
-        openStream(name, (String)key, ElementModes.WRITE);
+    public StorageNativeOutputStream(String _name,Object _key) {
+        name = _name;
+        key = _key;
+        openStream(name, (String)key, ElementModes.WRITE | ElementModes.TRUNCATE);
     }
 
     public native void openStream(String name,String key, int mode);
@@ -62,7 +65,7 @@ public class StorageNativeOutputStream {
      *             an <code>IOException</code> is thrown if the output
      *             stream is closed.
      */
-    public native void write(XStorage storage,String key,String _file,byte[] b, int off, int len) throws java.io.IOException;
+    public native void write(String key,String _file,byte[] b, int off, int len) throws java.io.IOException;
 
     /**
      * Writes <code>b.length</code> bytes from the specified byte array
@@ -74,7 +77,7 @@ public class StorageNativeOutputStream {
      * @exception  IOException  if an I/O error occurs.
      * @see        java.io.OutputStream#write(byte[], int, int)
      */
-    public native void write(XStorage storage,String key,String _file,byte[] b) throws java.io.IOException;
+    public native void write(String key,String _file,byte[] b) throws java.io.IOException;
 
     /**
      * Closes this output stream and releases any system resources
@@ -88,7 +91,7 @@ public class StorageNativeOutputStream {
      *
      * @exception  IOException  if an I/O error occurs.
      */
-    public native void close(XStorage storage,String key,String _file) throws java.io.IOException;
+    public native void close(String key,String _file) throws java.io.IOException;
 
     /**
      * Writes the specified byte to this output stream. The general
@@ -107,7 +110,7 @@ public class StorageNativeOutputStream {
      *             an <code>IOException</code> may be thrown if the
      *             output stream has been closed.
      */
-    public native void write(XStorage storage,String key,String _file,int b) throws java.io.IOException;
+    public native void write(String key,String _file,int b) throws java.io.IOException;
 
     /**
      * Flushes this output stream and forces any buffered output bytes
@@ -123,6 +126,30 @@ public class StorageNativeOutputStream {
      *
      * @exception  IOException  if an I/O error occurs.
      */
-    public native void flush(XStorage storage,String key,String _file) throws java.io.IOException;
+    public native void flush(String key,String _file) throws java.io.IOException;
+
+    /**
+     * Force all system buffers to synchronize with the underlying
+     * device.  This method returns after all modified data and
+     * attributes have been written to the relevant device(s).
+     *
+     * sync is meant to be used by code that requires physical
+     * storage (such as a file) to be in a known state  For
+     * example, a class that provided a simple transaction facility
+     * might use sync to ensure that all changes to a file caused
+     * by a given transaction were recorded on a storage medium.
+     *
+     * sync only affects buffers downstream.  If
+     * any in-memory buffering is being done by the application (for
+     * example, by a BufferedOutputStream object), those buffers must
+     * be flushed (for example, by invoking
+     * OutputStream.flush) before that data will be affected by sync.
+     *
+     * @exception IOException
+     *        Thrown when the buffers cannot be flushed,
+     *        or because the system cannot guarantee that all the
+     *        buffers have been synchronized with physical media.
+     */
+    public native void sync(String key,String _file) throws java.io.IOException;
 
 }
