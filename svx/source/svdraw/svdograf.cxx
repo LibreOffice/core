@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:26:10 $
+ *  last change: $Author: ka $ $Date: 2001-05-17 15:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1599,16 +1599,9 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
 
 // -----------------------------------------------------------------------------
 
-Rectangle SdrGrafObj::ImpGetOutputRect( const OutputDevice* pOutDev ) const
-{
-    return GetSnapRect();
-}
-
-// -----------------------------------------------------------------------------
-
 Rectangle SdrGrafObj::GetAnimationRect(const OutputDevice* pOutDev) const
 {
-    return ImpGetOutputRect( pOutDev );
+    return GetSnapRect();
 }
 
 // -----------------------------------------------------------------------------
@@ -2035,6 +2028,7 @@ IMPL_LINK( SdrGrafObj, ImpAnimationHdl, Animation*, pAnimation )
             if( pView && ( pView->IsAnimationEnabled() || bExtern ) )
             {
                 FASTBOOL    bMrk=pView->IsObjMarked(this);
+                FASTBOOL    bPause=pView->IsAnimationPause();
                 USHORT      nPvAnz=pView->GetPageViewCount();
 
                 for (USHORT nPvNum=0; nPvNum<nPvAnz; nPvNum++)
@@ -2083,7 +2077,7 @@ IMPL_LINK( SdrGrafObj, ImpAnimationHdl, Animation*, pAnimation )
                                             if( pAInfo->nExtraData==0 )
                                                 pAInfo->nExtraData=1L;
 
-                                            pAInfo->bPause = bMrk;
+                                            pAInfo->bPause = ( bMrk || bPause );
                                             bFound = TRUE;
                                         }
 
@@ -2099,11 +2093,13 @@ IMPL_LINK( SdrGrafObj, ImpAnimationHdl, Animation*, pAnimation )
 
                                         // erst einmal soviel wie moeglich bekanntes setzen
                                         *pAInfo = *(AInfo*) pAInfoList->GetObject( 0L );
-                                        pAInfo->aStartOrg=aDrawRect.TopLeft();
-                                        pAInfo->aStartSize=aDrawRect.GetSize();
-                                        pAInfo->pOutDev=pOut;
-                                        pAInfo->nExtraData=1;
-                                        pAInfo->bPause=bMrk;
+
+                                        pAInfo->aStartOrg = aDrawRect.TopLeft();
+                                        pAInfo->aStartSize = aDrawRect.GetSize();
+                                        pAInfo->pOutDev = pOut;
+                                        pAInfo->nExtraData = 1;
+                                        pAInfo->bPause = ( bMrk || bPause );
+
                                         pAInfoList->Insert(pAInfo);
                                     }
                                 }
