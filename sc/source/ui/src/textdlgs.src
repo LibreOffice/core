@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdlgs.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:59:13 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@ TabDialog RID_SCDLG_CHAR
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट्";
                 Text[ slovak ] = "Písmo";
+                Text[ hungarian ] = "Betűkészlet";
+                Text[ slovenian ] = "Pisava";
             };
             PageItem
             {
@@ -135,7 +137,7 @@ TabDialog RID_SCDLG_CHAR
                 Text[ french ] = "Effets de caract�res";
                 Text[ spanish ] = "Efecto de fuente";
                 Text[ italian ] = "Effetto carattere";
-                Text[ danish ] = "Skrifteffekt";
+                Text[ danish ] = "Skrifteffekter";
                 Text[ swedish ] = "Teckeneffekt";
                 Text[ polish ] = "Efekty czcionki";
                 Text[ portuguese_brazilian ] = "Efeitos da Fonte";
@@ -152,6 +154,8 @@ TabDialog RID_SCDLG_CHAR
                 Text[ hebrew ] = "‮אפקטים לגופנים‬";
                 Text[ hindi ] = "फ़ॉन्ट् प्रभाव";
                 Text[ slovak ] = "Efekty pre písmo";
+                Text[ hungarian ] = "Betűhatások";
+                Text[ slovenian ] = "Učinki pisave";
             };
             PageItem
             {
@@ -183,6 +187,8 @@ TabDialog RID_SCDLG_CHAR
                 Text[ hebrew ] = "Schriftposition";
                 Text[ hindi ] = "फ़ॉन्ट् का स्थान";
                 Text[ slovak ] = "Pozícia písma";
+                Text[ hungarian ] = "Betűhelyzet";
+                Text[ slovenian ] = "Položaj pisave";
             };
         };
     };
@@ -239,6 +245,8 @@ TabDialog RID_SCDLG_CHAR
         Text[ hebrew ] = "‮קודם‬";
         Text[ hindi ] = "पीछे";
         Text[ slovak ] = "Späť";
+        Text[ hungarian ] = "Vissza";
+        Text[ slovenian ] = "Nazaj";
     };
     Text[ chinese_simplified ] = "字符";
     Text[ russian ] = "������";
@@ -256,6 +264,8 @@ TabDialog RID_SCDLG_CHAR
     Text[ hebrew ] = "Zeichen";
     Text[ hindi ] = "अक्षर";
     Text[ slovak ] = "Znak";
+    Text[ hungarian ] = "Karakter";
+    Text[ slovenian ] = "Znak";
 };
 
 TabDialog RID_SCDLG_PARAGRAPH
@@ -296,7 +306,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text [ portuguese_brazilian ] = "Recuo & Afastamentos" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
-                Text [ danish ] = "Indrykning og mellemrum" ;
+                Text [ danish ] = "Indrykning og afstand" ;
                 Text [ french ] = "Retraits et �carts" ;
                 Text [ swedish ] = "Indrag och avst�nd" ;
                 Text [ dutch ] = "Inspringingen en afstanden" ;
@@ -319,6 +329,8 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ hebrew ] = "‮שוליים ורווחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
                 Text[ slovak ] = "Odsadenie a medzery";
+                Text[ hungarian ] = "Behúzás és térköz";
+                Text[ slovenian ] = "Zamiki in razmiki";
             };
             /*
             PageItem  {
@@ -371,6 +383,8 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
                 Text[ slovak ] = "Zarovnanie";
+                Text[ hungarian ] = "Igazítás";
+                Text[ slovenian ] = "Poravnava";
             };
             PageItem
             {
@@ -402,6 +416,8 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ hebrew ] = "Asiatische Typographie";
                 Text[ hindi ] = "ऐशियन टइपोग्रफी";
                 Text[ slovak ] = "Ázijská typografia";
+                Text[ hungarian ] = "Ázsiai tipográfia";
+                Text[ slovenian ] = "Azijska tipografija";
             };
             PageItem
             {
@@ -436,6 +452,8 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ hebrew ] = "Tabulator";
                 Text[ hindi ] = "टॉब";
                 Text[ slovak ] = "Tabulátor";
+                Text[ hungarian ] = "Tabulátor";
+                Text[ slovenian ] = "Tabulator";
             };
         };
     };
@@ -492,6 +510,8 @@ TabDialog RID_SCDLG_PARAGRAPH
         Text[ hebrew ] = "‮קודם‬";
         Text[ hindi ] = "पीछे";
         Text[ slovak ] = "Späť";
+        Text[ hungarian ] = "Vissza";
+        Text[ slovenian ] = "Nazaj";
     };
     Text[ chinese_simplified ] = "段落";
     Text[ russian ] = "�����";
@@ -509,7 +529,10 @@ TabDialog RID_SCDLG_PARAGRAPH
     Text[ hebrew ] = "‮פסקאות‬";
     Text[ hindi ] = "परिच्छेद";
     Text[ slovak ] = "Odstavec";
+    Text[ hungarian ] = "Bekezdés";
+    Text[ slovenian ] = "Odstavek";
 };
+
 
 
 
