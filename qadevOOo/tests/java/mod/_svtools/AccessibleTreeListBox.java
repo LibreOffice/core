@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTreeListBox.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-04-28 12:17:52 $
+ *  last change:$Date: 2003-05-27 13:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@ import java.io.PrintWriter;
 
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XDispatch;
@@ -120,7 +121,7 @@ public class AccessibleTreeListBox extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop(Param.getMSF()));
+                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
     }
 
     /**
@@ -168,7 +169,7 @@ public class AccessibleTreeListBox extends TestCase {
         if (xTextDoc != null) xTextDoc.dispose();
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
         try {
             log.println( "creating a text document" );
@@ -213,7 +214,7 @@ public class AccessibleTreeListBox extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) tParam.getMSF().createInstance
+            oObj = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
