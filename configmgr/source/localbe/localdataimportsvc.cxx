@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localdataimportsvc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:19 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,9 @@
 #ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETRUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #endif
-#include <drafts/com/sun/star/configuration/backend/XImportLayer.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERIMPORTER_HPP_
+#include <com/sun/star/configuration/backend/XLayerImporter.hpp>
+#endif
 
 // -----------------------------------------------------------------------------
 #define OUSTRING( constascii ) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(constascii))
@@ -87,12 +89,11 @@ namespace configmgr
     namespace localbe
     {
 // -----------------------------------------------------------------------------
-        namespace backend = drafts::com::sun::star::configuration::backend;
+        namespace backend = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
 
 AsciiServiceName const aLocalDataImportServices[] =
 {
-    "com.sun.star.configuration.backend.local.DataImporter",
     "com.sun.star.configuration.backend.LocalDataImporter",
     0,
     "com.sun.star.configuration.backend.DataImporter",
@@ -100,7 +101,7 @@ AsciiServiceName const aLocalDataImportServices[] =
 };
 const ServiceImplementationInfo aLocalDataImportSI =
 {
-    "com.sun.star.comp.configuration.backend.local.DataImporter",
+    "com.sun.star.comp.configuration.backend.LocalDataImporter",
     aLocalDataImportServices,
     aLocalDataImportServices + 3
 };
@@ -283,7 +284,7 @@ uno::Any SAL_CALL
         throw lang::NullPointerException(sMessage,*this);
     }
 
-    uno::Reference< backend::XImportLayer > xImporter;
+    uno::Reference< backend::XLayerImporter > xImporter;
 
     int nArgCount = 0;
     if (aJob.use_overwrite) ++nArgCount;
