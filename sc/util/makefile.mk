@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: tbe $ $Date: 2001-07-25 07:49:07 $
+#   last change: $Author: rt $ $Date: 2001-10-02 12:52:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,9 @@ IENV!:=$(IENV);..$/res
 
 .IF "$(COM)"=="ICC"
 LINKFLAGS+=/SEGMENTS:512 /PACKD:32768
+.ENDIF
+.IF "$(OS)"=="IRIX"
+LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=20
 .ENDIF
 
 # --- Resourcen ----------------------------------------------------
