@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2002-12-04 11:10:47 $
+ *  last change: $Author: aw $ $Date: 2002-12-09 15:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,9 +539,6 @@ void SdrEditView::CheckPossibilities()
             BOOL bNoMovRotFound=FALSE;
             const SdrPageView* pPV0=NULL;
 
-            // #105899# Track if at least one SdrGrafObj is in selection
-            sal_Bool bAtLestOneGrafObj(sal_False);
-
             for (ULONG nm=0; nm<nMarkAnz; nm++) {
                 const SdrMark* pM=aMark.GetMark(nm);
                 const SdrObject* pObj=pM->GetObj();
@@ -549,12 +546,6 @@ void SdrEditView::CheckPossibilities()
                 if (pPV!=pPV0) {
                     if (pPV->IsReadOnly()) bReadOnly=TRUE;
                     pPV0=pPV;
-                }
-
-                // #105899#
-                if(!bAtLestOneGrafObj && pObj && pObj->ISA(SdrGrafObj))
-                {
-                    bAtLestOneGrafObj = sal_True;
                 }
 
                 SdrObjTransformInfoRec aInfo;
@@ -622,14 +613,6 @@ void SdrEditView::CheckPossibilities()
                     if (bOle2)
                         bImportMtfPossible=((SdrOle2Obj*)pObj)->HasGDIMetaFile();
                 }
-            }
-
-            // #105899# Forbid combination if selection contains at least one
-            // SDrGrafObj. This is set to TRUE here since bCanConvToPath for
-            // SDrGrafObj's is allowed to enable the trace dialog.
-            if(bAtLestOneGrafObj && nMarkAnz > 1 && bCombinePossible)
-            {
-                bCombinePossible = FALSE;
             }
 
             bMoreThanOneNotMovable=nMovableCount<nMarkAnz-1;
