@@ -73,8 +73,5 @@ cd ..
 sd_binary=`basename "$0"`".bin"
 cd "$sd_cwd"
 "$sd_prog/$sd_binary" "$@"
-if [ $? != 0 ] ; then
-sd_binary=`basename "$0"`"_with_gtk.bin"
-"$sd_prog/$sd_binary" "$@"
-fi
+
 
