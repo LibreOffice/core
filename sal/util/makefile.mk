@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-14 15:35:45 $
+#   last change: $Author: tra $ $Date: 2001-05-15 08:04:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -202,6 +202,13 @@ SHL2STDLIBS=\
             kernel32.lib\
             shell32.lib\
             user32.lib
+
+# --- the following libraries contain the 
+# --- code necessary to build the w9xucwrp 
+# --- dll ( see they come from the $(SLB) 
+# --- directory ), whereby the libraries
+# --- in the $(LB) directory contain the 
+# --- static code
 
 SHL2LIBS=\
         $(SLB)$/advapi9x.lib\
