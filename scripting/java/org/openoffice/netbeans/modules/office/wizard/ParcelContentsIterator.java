@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelContentsIterator.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:35 $
+ *  last change: $Author: toconnor $ $Date: 2003-03-04 17:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,10 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
                 if (fo.getExt().equals("java")) {
                     try {
                         PackageRemover.removeDeclaration(FileUtil.toFile(fo));
+
+                        // IssueZilla 11986 - rename the FileObject
+                        // so the JavaNode is resynchronized
+                        fo.rename(fo.lock(), fo.getName(), fo.getExt());
                     }
                     catch (IOException ioe) {
                         NotifyDescriptor d = new NotifyDescriptor.Message(
