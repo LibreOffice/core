@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:35:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,6 +410,7 @@ extern char *strdup(const char *);
 int  readdir_r( DIR *dirp, struct dirent *entry, struct dirent **result );
 char *asctime_r( const struct tm *tm, char *buffer );
 char *macxp_tempnam( const char *tmpdir, const char *prefix );
+void macxp_getSystemVersion( unsigned int *isDarwin, unsigned int *majorVersion, unsigned int *minorVersion, unsigned int *minorMinorVersion );
 #endif
 
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
