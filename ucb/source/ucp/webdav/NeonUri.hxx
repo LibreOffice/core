@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-10-25 13:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,7 @@ class NeonUri
         void SetScheme (const ::rtl::OUString& scheme)
             { mScheme = scheme; calculateURI (); };
 
-        void AppendPath (const ::rtl::OUString& path)
-            { mPath += path; calculateURI (); };
+        void AppendPath (const ::rtl::OUString& path);
 };
 
 }; // namespace webdav_ucp

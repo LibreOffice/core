@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-10-25 13:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,4 +138,13 @@ void NeonUri::calculateURI ()
     else
         return OUString::createFromAscii ("/");
 }
+
+void NeonUri::AppendPath (const OUString& path)
+{
+    if (mPath.lastIndexOf ('/') != mPath.getLength () - 1)
+        mPath += OUString::createFromAscii ("/");
+
+    mPath += path;
+    calculateURI ();
+};
 
