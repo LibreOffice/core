@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datatest.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:59:18 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <stdio.h>
+
 #include <com/sun/star/test/XSimpleTest.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
