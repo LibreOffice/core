@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:11:05 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 22:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
+#endif
+
+#ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
+#include "PropertySetMerger.hxx"
 #endif
 
 #ifndef _SDPROPLS_HXX
@@ -849,11 +853,17 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
                             }
                         }
 
-                        if(xPropSet2.is())
+                        uno::Reference< beans::XPropertySet > xPropSet;
+                        if( xPropSet2.is() )
+                            xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xPropSet2 );
+                        else
+                            xPropSet = xPropSet1;
+
+                        if(xPropSet.is())
                         {
                             try
                             {
-                                pPropStyle->FillPropertySet(xPropSet2);
+                                pPropStyle->FillPropertySet(xPropSet);
 
                                 uno::Any aAny;
                                 aAny <<= xPropSet2;

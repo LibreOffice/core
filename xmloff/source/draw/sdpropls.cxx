@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:11:04 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 22:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,7 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
     { "Duration",           XML_NAMESPACE_PRESENTATION, "duration",         XML_SD_TYPE_PRESPAGE_DURATION, CTF_PAGE_TRANS_DURATION },
     { "Visible",            XML_NAMESPACE_PRESENTATION, "visibility",       XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_VISIBLE },
     { "Sound",              XML_NAMESPACE_PRESENTATION, "sound",            XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM, CTF_PAGE_SOUND_URL },
+    { "BackgroundFullSize", XML_NAMESPACE_DRAW,         "background-size",  XML_SD_TYPE_PRESPAGE_BACKSIZE, CTF_PAGE_BACKSIZE },
 
     { "FillStyle",                  XML_NAMESPACE_DRAW, sXML_fill,                  XML_SD_TYPE_FILLSTYLE, 0 },
     { "FillColor",                  XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },
@@ -645,6 +646,13 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             {
                 const OUString aTrueStr( OUString::createFromAscii(sXML_visible) );
                 const OUString aFalseStr( OUString::createFromAscii(sXML_hidden) );
+                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                break;
+            }
+            case XML_SD_TYPE_PRESPAGE_BACKSIZE:
+            {
+                const OUString aTrueStr( OUString::createFromAscii(sXML_full) );
+                const OUString aFalseStr( OUString::createFromAscii(sXML_border) );
                 pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
                 break;
             }

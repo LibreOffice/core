@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:11:05 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 22:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define XML_SD_TYPE_FILLBITMAPSIZE                  (XML_SD_TYPES_START + 20 )
 #define XML_SD_TYPE_LOGICAL_SIZE                    (XML_SD_TYPES_START + 21 )
 #define XML_SD_TYPE_BITMAP_REFPOINT                 (XML_SD_TYPES_START + 22 )
+#define XML_SD_TYPE_PRESPAGE_BACKSIZE               (XML_SD_TYPES_START + 23 )
 
 // 3D property types
 #define XML_SD_TYPE_BACKFACE_CULLING                (XML_SD_TYPES_START + 40 )
@@ -157,6 +158,7 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define CTF_PAGE_TRANS_STYLE        1008
 #define CTF_PAGE_TRANS_SPEED        1009
 #define CTF_PAGE_TRANS_DURATION     1010
+#define CTF_PAGE_BACKSIZE           1011
 
 //////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:11:05 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 22:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1500,10 +1500,16 @@ void SdXMLExport::ImpPrepMasterPageInfos()
                         aAny >>= xPropSet2;
                     }
 
+                    uno::Reference< beans::XPropertySet > xPropSet;
                     if( xPropSet2.is() )
+                        xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xPropSet2 );
+                    else
+                        xPropSet = xPropSet1;
+
+                    if( xPropSet.is() )
                     {
                         const UniReference< SvXMLExportPropertyMapper > aMapperRef( GetPresPagePropsMapper() );
-                        std::vector< XMLPropertyState > xPropStates( aMapperRef->Filter( xPropSet2 ) );
+                        std::vector< XMLPropertyState > xPropStates( aMapperRef->Filter( xPropSet ) );
 
                         if( !xPropStates.empty() )
                         {
