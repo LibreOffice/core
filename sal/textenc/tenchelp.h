@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tenchelp.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:30 $
+ *  last change: $Author: th $ $Date: 2000-12-13 22:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ typedef struct _ImplByteConvertData
 /* - TextConverter - DBCS-Structures - */
 /* ----------------------------------- */
 
-typedef struct _ImplDBCSEUCData
+typedef struct _ImplDBCSEUDCData
 {
     sal_uChar                       mnLeadStart;
     sal_uChar                       mnLeadEnd;
@@ -212,7 +212,7 @@ typedef struct _ImplDBCSEUCData
     sal_uInt16                      mnTrailRangeCount;
     sal_uInt16                      mnUniStart;
     sal_uInt16                      mnUniEnd;
-} ImplDBCSEUCData;
+} ImplDBCSEUDCData;
 
 typedef struct _ImplDBCSToUniLeadTab
 {
@@ -235,8 +235,8 @@ typedef struct _ImplDBCSConvertData
     const ImplUniToDBCSHighTab*     mpToDBCSHighTab;
     sal_uChar                       mnTrailStart;
     sal_uChar                       mnTrailEnd;
-    const ImplDBCSEUCData*          mpEUCTab;
-    sal_uInt16                      mnEUCCount;
+    const ImplDBCSEUDCData*         mpEUDCTab;
+    sal_uInt16                      mnEUDCCount;
 } ImplDBCSConvertData;
 
 /* ---------------------------------- */
@@ -346,14 +346,6 @@ sal_Size ImplUnicodeToUTF8( const ImplTextConverterData* pData, void* pContext,
                             sal_Char* pDestBuf, sal_Size nDestBytes,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtChars );
-
-/* !!! Not finished, because should be merged with DBCS function !!! */
-sal_Size ImplUnicodeToJISX0208( const ImplTextConverterData* pData,
-                                void* pContext,
-                                const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                                sal_Char* pDestBuf, sal_Size nDestBytes,
-                                sal_uInt32 nFlags, sal_uInt32* pInfo,
-                                sal_Size* pSrcCvtChars );
 
 /* ------------------------------------ */
 /* - TextConverter - ReplaceFunctions - */

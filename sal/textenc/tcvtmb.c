@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtmb.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-12-07 10:48:42 $
+ *  last change: $Author: th $ $Date: 2000-12-13 22:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,54 +141,54 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
 
             if ( !cConv )
             {
-                /* EUC Ranges */
+                /* EUDC Ranges */
                 sal_uInt16              i;
-                const ImplDBCSEUCData*  pEUCTab = pConvertData->mpEUCTab;
-                for ( i = 0; i < pConvertData->mnEUCCount; i++ )
+                const ImplDBCSEUDCData* pEUDCTab = pConvertData->mpEUDCTab;
+                for ( i = 0; i < pConvertData->mnEUDCCount; i++ )
                 {
-                    if ( (cLead >= pEUCTab->mnLeadStart) &&
-                         (cLead <= pEUCTab->mnLeadEnd) )
+                    if ( (cLead >= pEUDCTab->mnLeadStart) &&
+                         (cLead <= pEUDCTab->mnLeadEnd) )
                     {
                         sal_uInt16 nTrailCount = 0;
-                        if ( (cTrail >= pEUCTab->mnTrail1Start) &&
-                             (cTrail <= pEUCTab->mnTrail1End) )
+                        if ( (cTrail >= pEUDCTab->mnTrail1Start) &&
+                             (cTrail <= pEUDCTab->mnTrail1End) )
                         {
-                            cConv = pEUCTab->mnUniStart+
-                                    ((cLead-pEUCTab->mnLeadStart)*pEUCTab->mnTrailRangeCount)+
-                                    (cTrail-pEUCTab->mnTrail1Start);
+                            cConv = pEUDCTab->mnUniStart+
+                                    ((cLead-pEUDCTab->mnLeadStart)*pEUDCTab->mnTrailRangeCount)+
+                                    (cTrail-pEUDCTab->mnTrail1Start);
                             break;
                         }
                         else
                         {
-                            nTrailCount = pEUCTab->mnTrail1End-pEUCTab->mnTrail1Start+1;
-                            if ( (pEUCTab->mnTrailCount >= 2) &&
-                                 (cTrail >= pEUCTab->mnTrail2Start) &&
-                                 (cTrail <= pEUCTab->mnTrail2End) )
+                            nTrailCount = pEUDCTab->mnTrail1End-pEUDCTab->mnTrail1Start+1;
+                            if ( (pEUDCTab->mnTrailCount >= 2) &&
+                                 (cTrail >= pEUDCTab->mnTrail2Start) &&
+                                 (cTrail <= pEUDCTab->mnTrail2End) )
                             {
-                                cConv = pEUCTab->mnUniStart+
-                                        ((cLead-pEUCTab->mnLeadStart)*pEUCTab->mnTrailRangeCount)+
+                                cConv = pEUDCTab->mnUniStart+
+                                        ((cLead-pEUDCTab->mnLeadStart)*pEUDCTab->mnTrailRangeCount)+
                                         nTrailCount+
-                                        (cTrail-pEUCTab->mnTrail2Start);
+                                        (cTrail-pEUDCTab->mnTrail2Start);
                                 break;
                             }
                             else
                             {
-                                nTrailCount = pEUCTab->mnTrail2End-pEUCTab->mnTrail2Start+1;
-                                if ( (pEUCTab->mnTrailCount >= 3) &&
-                                     (cTrail >= pEUCTab->mnTrail3Start) &&
-                                     (cTrail <= pEUCTab->mnTrail3End) )
+                                nTrailCount = pEUDCTab->mnTrail2End-pEUDCTab->mnTrail2Start+1;
+                                if ( (pEUDCTab->mnTrailCount >= 3) &&
+                                     (cTrail >= pEUDCTab->mnTrail3Start) &&
+                                     (cTrail <= pEUDCTab->mnTrail3End) )
                                 {
-                                    cConv = pEUCTab->mnUniStart+
-                                            ((cLead-pEUCTab->mnLeadStart)*pEUCTab->mnTrailRangeCount)+
+                                    cConv = pEUDCTab->mnUniStart+
+                                            ((cLead-pEUDCTab->mnLeadStart)*pEUDCTab->mnTrailRangeCount)+
                                             nTrailCount+
-                                            (cTrail-pEUCTab->mnTrail3Start);
+                                            (cTrail-pEUDCTab->mnTrail3Start);
                                     break;
                                 }
                             }
                         }
                     }
 
-                    pEUCTab++;
+                    pEUDCTab++;
                 }
 
                 if ( !cConv )
@@ -290,35 +290,35 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
 
         if ( !cConv && !c )
         {
-            /* EUC Ranges */
+            /* EUDC Ranges */
             sal_uInt16              i;
-            const ImplDBCSEUCData*  pEUCTab = pConvertData->mpEUCTab;
-            for ( i = 0; i < pConvertData->mnEUCCount; i++ )
+            const ImplDBCSEUDCData* pEUDCTab = pConvertData->mpEUDCTab;
+            for ( i = 0; i < pConvertData->mnEUDCCount; i++ )
             {
-                if ( (c >= pEUCTab->mnUniStart) && (c <= pEUCTab->mnUniEnd) )
+                if ( (c >= pEUDCTab->mnUniStart) && (c <= pEUDCTab->mnUniEnd) )
                 {
-                    sal_uInt16 nLead = (c-pEUCTab->mnUniStart) / pEUCTab->mnTrailRangeCount;
-                    sal_uInt16 nOff = c-(nLead*pEUCTab->mnTrailRangeCount);
-                    cConv = pEUCTab->mnLeadStart+nLead;
+                    sal_uInt16 nLead = (c-pEUDCTab->mnUniStart) / pEUDCTab->mnTrailRangeCount;
+                    sal_uInt16 nOff = c-(nLead*pEUDCTab->mnTrailRangeCount);
+                    cConv = pEUDCTab->mnLeadStart+nLead;
                     cConv <<= 8;
-                    if ( nOff < (pEUCTab->mnTrail1End-pEUCTab->mnTrail1Start+1) )
-                        cConv += pEUCTab->mnTrail1Start+nOff;
+                    if ( nOff < (pEUDCTab->mnTrail1End-pEUDCTab->mnTrail1Start+1) )
+                        cConv += pEUDCTab->mnTrail1Start+nOff;
                     else
                     {
-                        nOff -= pEUCTab->mnTrail1End-pEUCTab->mnTrail1Start+1;
-                        if ( nOff < (pEUCTab->mnTrail2End-pEUCTab->mnTrail2Start+1) )
-                            cConv += pEUCTab->mnTrail2Start+nOff;
+                        nOff -= pEUDCTab->mnTrail1End-pEUDCTab->mnTrail1Start+1;
+                        if ( nOff < (pEUDCTab->mnTrail2End-pEUDCTab->mnTrail2Start+1) )
+                            cConv += pEUDCTab->mnTrail2Start+nOff;
                         else
                         {
-                            nOff -= pEUCTab->mnTrail2End-pEUCTab->mnTrail2Start+1;
-                            cConv += pEUCTab->mnTrail3Start+nOff;
+                            nOff -= pEUDCTab->mnTrail2End-pEUDCTab->mnTrail2Start+1;
+                            cConv += pEUDCTab->mnTrail3Start+nOff;
                         }
                     }
 
                     break;
                 }
 
-                pEUCTab++;
+                pEUDCTab++;
             }
 
             if ( (c >= 0xF100) && (c <= 0xF1FF) )
@@ -685,61 +685,5 @@ sal_Size ImplUnicodeToEUCJP( const ImplTextConverterData* pData,
     }
 
     *pSrcCvtChars = nSrcChars - (pEndSrcBuf-pSrcBuf);
-    return (nDestBytes - (pEndDestBuf-pDestBuf));
-}
-
-/* ======================================================================= */
-
-sal_Size ImplUnicodeToJISX0208( const ImplTextConverterData* pData,
-                                void* pContext,
-                                const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                                sal_Char* pDestBuf, sal_Size nDestBytes,
-                                sal_uInt32 nFlags, sal_uInt32* pInfo,
-                                sal_Size* pSrcCvtChars )
-{
-    sal_Unicode                 c;
-    sal_uChar                   nHighChar;
-    sal_uChar                   nLowChar;
-    const ImplUniToDBCSHighTab* pHighTab;
-    const ImplUniToDBCSHighTab* pHighEntry;
-    sal_uInt16                  cConv;
-    sal_Char*                   pEndDestBuf;
-    const sal_Unicode*          pEndSrcBuf;
-
-    pEndDestBuf = pDestBuf+nDestBytes;
-    pEndSrcBuf = pSrcBuf+nSrcChars;
-
-    *pInfo = 0;
-    pHighTab = (ImplUniToDBCSHighTab*)pData->mpConvertTables;
-
-    while ( pSrcBuf < pEndSrcBuf)
-    {
-        c = *pSrcBuf;
-        nHighChar = (sal_uChar)((c >> 8) & 0xFF);
-        nLowChar = (sal_uChar)(c & 0xFF);
-
-        pHighEntry = pHighTab + nHighChar;
-        if ( (nLowChar >= pHighEntry->mnLowStart) && (nLowChar <= pHighEntry->mnLowEnd) )
-            cConv = pHighEntry->mpToUniTrailTab[nLowChar-pHighEntry->mnLowStart];
-        else
-            cConv = 0;
-
-        if ( cConv != 0 )
-        {
-            if ( pDestBuf+1 >=  pEndDestBuf )
-            {
-                *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
-                break;
-            }
-
-            *pDestBuf = (sal_Char)(sal_uChar)((cConv >> 8) & 0xFF);
-            pDestBuf++;
-            *pDestBuf = (sal_Char)(sal_uChar)(cConv & 0xFF);
-            pDestBuf++;
-        }
-        pSrcBuf++;
-    }
-
-    *pSrcCvtChars = nSrcChars -  (pEndSrcBuf-pSrcBuf);
     return (nDestBytes - (pEndDestBuf-pDestBuf));
 }
