@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TConnection.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:27:45 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 14:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ namespace connectivity
     public:
         OMetaConnection() : m_nTextEncoding(RTL_TEXTENCODING_MS_1252){}
 
-        rtl_TextEncoding getTextEncoding() const                            { m_nTextEncoding; }
+        rtl_TextEncoding getTextEncoding() const { return m_nTextEncoding; }
     };
 }
 #endif // CONNECTIVITY_CONNECTION_HXX
