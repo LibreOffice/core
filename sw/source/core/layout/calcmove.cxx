@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-30 10:21:56 $
+ *  last change: $Author: ama $ $Date: 2001-09-06 09:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,9 +949,13 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             //4. Der Abstand fuer TextFrms entspricht mindestens dem Durchschuss
 
             nUpper = CalcUpperSpace( &rAttrs, NULL );
-            Prt().V_Y = nUpper;
+            SwTwips nLower = rAttrs.GetBottomLine( this );
+            if( bVert )
+                Prt().V_Y = nLower;
+            else
+                Prt().V_Y = nUpper;
 
-            nUpper += rAttrs.GetBottomLine( this );
+            nUpper += nLower;
             nUpper -= Frm().V_HEIGHT - Prt().V_HEIGHT;
         }
         //Wenn Unterschiede zwischen Alter und neuer Groesse,

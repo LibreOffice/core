@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-30 10:21:41 $
+ *  last change: $Author: ama $ $Date: 2001-09-06 09:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1083,6 +1083,25 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
         rRect = pFrm->Frm();
     else
     {
+#ifdef VERTICAL_LAYOUT
+        PtPtr pDir1Pt, pDir2Pt;
+        SzPtr pDir1Sz, pDir2Sz;
+        const FASTBOOL bVert = pFrm->IsVertical();
+        if( bVert )
+        {
+            pDir1Pt = pY;
+            pDir2Pt = pX;
+            pDir1Sz = pHeight;
+            pDir2Sz = pWidth;
+        }
+        else
+        {
+            pDir1Pt = pX;
+            pDir2Pt = pY;
+            pDir1Sz = pWidth;
+            pDir2Sz = pHeight;
+        }
+#endif
         rRect = pFrm->Prt();
         rRect.Pos() += pFrm->Frm().Pos();
 
@@ -1090,43 +1109,95 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
              (bShadow && rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE) )
         {
             const SvxBoxItem &rBox = rAttrs.GetBox();
-            const FASTBOOL bTop = 0 != pFrm->Prt().Top();
+            const FASTBOOL bTop = 0 != pFrm->Prt().V_Y;
             if ( bTop )
             {
+#ifdef VERTICAL_LAYOUT
+                SwTwips nDiff = rBox.GetTop() ?
+                    rBox.CalcLineSpace( BOX_LINE_TOP ) :
+                    ( rAttrs.IsBorderDist() ?
+                      rBox.GetDistance( BOX_LINE_TOP ) + 1 : 0 );
+                if( nDiff )
+                {
+                    if( bVert )
+                        rRect.Width( rRect.Width() + nDiff );
+                    else
+                        rRect.Top( rRect.Top() - nDiff );
+                }
+#else
                 if ( rBox.GetTop() )
                     rRect.Top( rRect.Top() - rBox.CalcLineSpace( BOX_LINE_TOP ) );
                 else if ( rAttrs.IsBorderDist() )
                     rRect.Top( rRect.Top() - rBox.GetDistance( BOX_LINE_TOP ) - 1 );
+#endif
             }
 
-            const FASTBOOL bBottom = pFrm->Prt().Height()+pFrm->Prt().Top() < pFrm->Frm().Height();
+            const FASTBOOL bBottom = pFrm->Prt().V_HEIGHT + pFrm->Prt().V_Y
+                                     < pFrm->Frm().V_HEIGHT;
             if ( bBottom )
             {
+#ifdef VERTICAL_LAYOUT
+                SwTwips nDiff = rBox.GetBottom() ?
+                    rBox.CalcLineSpace( BOX_LINE_BOTTOM ) :
+                    ( rAttrs.IsBorderDist() ?
+                      rBox.GetDistance( BOX_LINE_BOTTOM ) + 1 : 0 );
+                if( nDiff )
+                {
+                    if( bVert )
+                        rRect.Left( rRect.Left() - nDiff );
+                    else
+                        rRect.Height( rRect.Height() + nDiff );
+                }
+#else
                 if ( rBox.GetBottom() )
-                    rRect.SSize().Height() += rBox.CalcLineSpace( BOX_LINE_BOTTOM );
+                    rRect.V_HEIGHT += rBox.CalcLineSpace( BOX_LINE_BOTTOM );
                 else if ( rAttrs.IsBorderDist() )
-                    rRect.SSize().Height() += rBox.GetDistance( BOX_LINE_BOTTOM ) + 1;
+                    rRect.V_HEIGHT += rBox.GetDistance( BOX_LINE_BOTTOM ) + 1;
+#endif
             }
 
             if ( rBox.GetLeft() )
-                rRect.Left( rRect.Left() - rBox.CalcLineSpace( BOX_LINE_LEFT ) );
+                rRect.V_X = rRect.V_X - rBox.CalcLineSpace( BOX_LINE_LEFT );
             else if ( rAttrs.IsBorderDist() )
-                rRect.Left( rRect.Left() - rBox.GetDistance( BOX_LINE_LEFT ) - 1 );
+                rRect.V_X = rRect.V_X - rBox.GetDistance( BOX_LINE_LEFT ) - 1;
 
             if ( rBox.GetRight() )
-                rRect.SSize().Width() += rBox.CalcLineSpace( BOX_LINE_RIGHT );
+                rRect.V_WIDTH += rBox.CalcLineSpace( BOX_LINE_RIGHT );
             else if ( rAttrs.IsBorderDist() )
-                rRect.SSize().Width() += rBox.GetDistance( BOX_LINE_RIGHT )  + 1;
+                rRect.V_WIDTH += rBox.GetDistance( BOX_LINE_RIGHT )  + 1;
 
             if ( bShadow && rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE )
             {
                 const SvxShadowItem &rShadow = rAttrs.GetShadow();
                 if ( bTop )
-                    rRect.Top ( rRect.Top() - rShadow.CalcShadowSpace(SHADOW_TOP) );
-                rRect.Left( rRect.Left()- rShadow.CalcShadowSpace(SHADOW_LEFT) );
+                {
+#ifdef VERTICAL_LAYOUT
+                    SwTwips nDiff = rShadow.CalcShadowSpace(SHADOW_TOP);
+                    if( nDiff )
+                    {
+                        if( bVert )
+                            rRect.Width( rRect.Width() + nDiff );
+                        else
+                            rRect.Top ( rRect.Top() - nDiff );
+                    }
+#else
+                    rRect.Top( rRect.Top()-rShadow.CalcShadowSpace(SHADOW_TOP));
+#endif
+                }
+                rRect.V_X = rRect.V_X - rShadow.CalcShadowSpace(SHADOW_LEFT);
                 if ( bBottom )
-                    rRect.SSize().Height() += rShadow.CalcShadowSpace(SHADOW_BOTTOM);
-                rRect.SSize().Width()  += rShadow.CalcShadowSpace(SHADOW_RIGHT);
+                {
+#ifdef VERTICAL_LAYOUT
+                    SwTwips nDiff = rShadow.CalcShadowSpace( SHADOW_BOTTOM );
+                    if( bVert )
+                        rRect.Left( rRect.Left() - nDiff );
+                    else
+                        rRect.Height ( rRect.Height() + nDiff );
+#else
+                    rRect.V_HEIGHT += rShadow.CalcShadowSpace(SHADOW_BOTTOM);
+#endif
+                }
+                rRect.V_WIDTH  += rShadow.CalcShadowSpace(SHADOW_RIGHT);
             }
         }
     }
@@ -2085,7 +2156,22 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     const FASTBOOL bTop    = !bCnt || rAttrs.GetTopLine  ( this ) ? TRUE : FALSE;
     const FASTBOOL bBottom = !bCnt || rAttrs.GetBottomLine( this ) ? TRUE : FALSE;
 
-    switch ( rShadow.GetLocation() )
+    SvxShadowLocation eLoc = rShadow.GetLocation();
+
+#ifdef VERTICAL_LAYOUT
+    if( IsVertical() )
+    {
+        switch( eLoc )
+        {
+            case SVX_SHADOW_BOTTOMRIGHT: eLoc = SVX_SHADOW_BOTTOMLEFT;  break;
+            case SVX_SHADOW_TOPLEFT:     eLoc = SVX_SHADOW_TOPRIGHT;    break;
+            case SVX_SHADOW_TOPRIGHT:    eLoc = SVX_SHADOW_BOTTOMRIGHT; break;
+            case SVX_SHADOW_BOTTOMLEFT:  eLoc = SVX_SHADOW_TOPLEFT;     break;
+        }
+    }
+#endif
+
+    switch ( eLoc )
     {
         case SVX_SHADOW_BOTTOMRIGHT:
             {
