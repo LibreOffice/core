@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-01 09:27:55 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 11:59:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,7 @@ LIBTARGET=NO
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 CFLAGS+=-DDG_DLL
+RSCDEFS += -Dause_hack
 
 # --- Files --------------------------------------------------------
 
