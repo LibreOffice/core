@@ -2,9 +2,9 @@
  *
  *  $RCSfile: public.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-03-26 14:22:01 $
+ *  last change: $Author: waratah $ $Date: 2003-01-13 14:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ void Clear_prerequisites ANSI((CELLPTR));
 int Test_circle ANSI((CELLPTR, int));
 STRINGPTR Def_recipe ANSI((char *, STRINGPTR, int, int));
 t_attr Rcp_attribute ANSI((char *));
-void main ANSI((int, char **));
 FILE *Openfile ANSI((char *, int, int));
 FILE *Closefile ANSI(());
 FILE *Search_file ANSI((char *, char **));
