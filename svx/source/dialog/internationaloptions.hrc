@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ *  $RCSfile: internationaloptions.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:34:36 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _OFFAPP_INTERNATIONALOPTIONS_HRC_
+#define _OFFAPP_INTERNATIONALOPTIONS_HRC_
+
+#include <svtools/controldims.hrc>
+
+// general sizes
+#define PAGE_SIZE_X                 260
+#define PAGE_SIZE_Y                 185
+
+// x-positions
+#define COL_0                       RSC_SP_TBPG_INNERBORDER_LEFT
+#define COL_1                       (COL_0 + RSC_SP_FLGR_SPACE_X)
+#define COL_2                       (COL_1 + RSC_SP_CHK_TEXTINDENT)
+#define COL_LAST                    (PAGE_SIZE_X - RSC_SP_TBPG_INNERBORDER_RIGHT)
+
+// heights
+#define HEIGHT_FL                   RSC_CD_FIXEDLINE_HEIGHT
+#define HEIGHT_RB                   RSC_CD_RADIOBUTTON_HEIGHT
+#define HEIGHT_CB                   RSC_CD_CHECKBOX_HEIGHT
+
+// vertical spacing
+#define SPACE_FL_NEXTCTRL_Y         RSC_SP_CTRL_DESC_Y
+
+// y-positions
+#define ROW_0                       RSC_SP_TBPG_INNERBORDER_TOP
+#define ROW_1                       (ROW_0 + HEIGHT_FL + SPACE_FL_NEXTCTRL_Y)
+#define ROW_2                       (ROW_1 + HEIGHT_RB + RSC_SP_CTRL_GROUP_Y)
+#define ROW_3                       (ROW_2 + HEIGHT_RB + RSC_SP_FLGR_SPACE_Y)
+#define ROW_4                       (ROW_3 + HEIGHT_FL + SPACE_FL_NEXTCTRL_Y)
+#define ROW_5                       (ROW_4 + HEIGHT_CB + RSC_SP_CTRL_GROUP_Y)
+
+// misc calculation makros
+#define WIDTH2END( startcol )       (COL_LAST - startcol)
+
+
+// resource IDs
+#define FL_DEFTXTDIRECTION          1
+#define RB_TXTDIR_LEFT2RIGHT        2
+#define RB_TXTDIR_RIGHT2LEFT        3
+#define FL_SHEETVIEW                4
+#define CB_SHTVW_RIGHT2LEFT         5
+#define CB_SHTVW_CURRENTDOCONLY     6
+
+#endif
+
