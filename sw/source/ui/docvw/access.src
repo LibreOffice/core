@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:57:18 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,7 +432,7 @@ String STR_ACCESS_FOOTNOTE_NAME
     Text[ portuguese_brazilian ] = "Nota de rodap� $(ARG1)";
     Text[ japanese ] = "脚注 $(ARG1)";
     Text[ korean ] = "각주 $(ARG1)";
-    Text[ chinese_simplified ] = "注脚 $(ARG1)";
+    Text[ chinese_simplified ] = "脚注 $(ARG1)";
     Text[ chinese_traditional ] = "註腳 $(ARG1)";
     Text[ turkish ] = "Dipnot $(ARG1)";
     Text[ arabic ] = "Footnote $(ARG1)";
@@ -464,7 +464,7 @@ String STR_ACCESS_FOOTNOTE_DESC
     Text[ portuguese_brazilian ] = "Nota de rodap� $(ARG1)";
     Text[ japanese ] = "脚注 $(ARG1)";
     Text[ korean ] = "각주 $(ARG1)";
-    Text[ chinese_simplified ] = "注脚 $(ARG1)";
+    Text[ chinese_simplified ] = "脚注 $(ARG1)";
     Text[ chinese_traditional ] = "註腳 $(ARG1)";
     Text[ turkish ] = "Dipnot $(ARG1)";
     Text[ arabic ] = "Footnote $(ARG1)";
