@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:25:30 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 13:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,41 +733,6 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
         }
     }
 
-    if ( pFilter )
-    {
-        aTypeName = pFilter->GetTypeName();
-        aFilterName = pFilter->GetName();
-    }
-
-    if ( aFilterName.Len() )
-    {
-        // successful detection, get the filter name (without prefix)
-        if ( nIndexOfFilterName != -1 )
-            // convert to format with factory ( makes load more easy to implement )
-            lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString( aFilterName );
-        else
-        {
-            lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("FilterName");
-            lDescriptor[nPropertyCount].Value <<= ::rtl::OUString( aFilterName );
-            nPropertyCount++;
-        }
-/*
-        if ( pFilter->IsOwnTemplateFormat() && nIndexOfTemplateFlag == -1 )
-        {
-            lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
-            lDescriptor[nPropertyCount].Value <<= sal_True;
-            nPropertyCount++;
-        }
-*/
-    }
-    else
-    {
-        aFilterName.Erase();
-        aTypeName.Erase();
-    }
-
     if ( nIndexOfInputStream == -1 && xStream.is() )
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
@@ -799,6 +764,10 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
             lDescriptor[nIndexOfReadOnlyFlag].Value <<= bReadOnly;
     }
 
+    if ( pFilter )
+        aTypeName = pFilter->GetTypeName();
+    else
+        aTypeName.Erase();
     return aTypeName;
 }
 
