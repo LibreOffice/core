@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:05 $
+ *  last change: $Author: af $ $Date: 2001-06-18 15:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,6 +483,10 @@ void SchXMLChartContext::EndElement()
         if( xLegendShape.is())
             xLegendShape->setPosition( maLegendPos );
     }
+
+    //  No more BuildCharts until Initialize is called (by Draw or SaveAs).
+    if( xDoc.is())
+        xDoc->lockControllers();
 }
 
 SvXMLImportContext* SchXMLChartContext::CreateChildContext(
