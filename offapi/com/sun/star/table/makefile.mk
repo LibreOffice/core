@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:44:19 $
+#   last change: $Author: mi $ $Date: 2002-11-01 18:43:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,9 @@ PACKAGE=com$/sun$/star$/table
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    TableChartsEnumeration.idl \
+    TableColumnsEnumeration.idl \
+    TableRowsEnumeration.idl \
     BorderLine.idl\
     Cell.idl\
     CellAddress.idl\
