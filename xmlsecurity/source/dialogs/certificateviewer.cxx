@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:33:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,13 +104,15 @@ namespace
 CertificateViewer::CertificateViewer(
         Window* _pParent,
         const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
-        const cssu::Reference< dcss::security::XCertificate >& _rXCert )
+        const cssu::Reference< dcss::security::XCertificate >& _rXCert, BOOL bCheckForPrivateKey )
     :TabDialog      ( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTVIEWER ) )
     ,maTabCtrl      ( this, ResId( 1 ) )
     ,maOkBtn        ( this, ResId( BTN_OK ) )
     ,maHelpBtn      ( this, ResId( BTN_HELP ) )
 {
     FreeResource();
+
+    mbCheckForPrivateKey = bCheckForPrivateKey;
 
     mxSecurityEnvironment = _rxSecurityEnvironment;
     mxCert = _rXCert;
@@ -181,10 +183,8 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     // insert data
     cssu::Reference< dcss::security::XCertificate > xCert = mpDlg->mxCert;
 
-    String  aCN_Id( String::CreateFromAscii( "CN" ) );
-
-    maIssuedToFI.SetText( XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id ) );
-    maIssuedByFI.SetText( XmlSec::GetContentPart( xCert->getIssuerName(), aCN_Id ) );
+    maIssuedToFI.SetText( XmlSec::GetContentPart( xCert->getSubjectName() ) );
+    maIssuedByFI.SetText( XmlSec::GetContentPart( xCert->getIssuerName() ) );
 
     // dynamic length because of the different languages
     long nWidth1 = maIssuedToLabelFI.GetTextWidth( maIssuedToLabelFI.GetText() );
@@ -225,8 +225,14 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     XmlSec::AlignAfterImage( maKeyImg, maHintCorrespPrivKeyFI, 12 );
 
     // Check if we have the private key...
-    long nCertificateCharacters = _pDlg->mxSecurityEnvironment->getCertificateCharacters( xCert );
-    if ( !( nCertificateCharacters & security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ) )
+    BOOL bHasPrivateKey = FALSE;
+    // #i41270# Check only if we have that certificate in our security environment
+    if ( _pDlg->mbCheckForPrivateKey )
+    {
+        long nCertificateCharacters = _pDlg->mxSecurityEnvironment->getCertificateCharacters( xCert );
+        bHasPrivateKey = ( nCertificateCharacters & security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ) ? TRUE : FALSE;
+    }
+    if ( !bHasPrivateKey )
     {
         maKeyImg.Hide();
         maHintCorrespPrivKeyFI.Hide();
@@ -458,29 +464,14 @@ void CertificateViewerCertPathTP::ActivatePage()
             mpParent->mxSecurityEnvironment->buildCertificatePath( mpParent->mxCert );
         const Reference< security::XCertificate >* pCertPath = aCertPath.getConstArray();
 
-        static char* aIDs[] = { "CN", "OU", "O", "E", NULL };
-        String aUnknown( String::CreateFromAscii( "unknown" ) );
         String aState;
-        sal_Int32 i, j, nCnt = aCertPath.getLength();
+        sal_Int32 i, nCnt = aCertPath.getLength();
         SvLBoxEntry* pParent = NULL;
         for( i = nCnt; i; )
         {
-            bool bNameFound = false;
             const Reference< security::XCertificate > rCert = pCertPath[ --i ];
-            j = 0;
-            while ( aIDs[j] )
-            {
-                String sName = XmlSec::GetContentPart(
-                    rCert->getSubjectName(), String::CreateFromAscii( aIDs[j++] ) );
-                if ( sName.Len() > 0 )
-                {
-                    pParent = InsertCert( pParent, sName, rCert );
-                    bNameFound = true;
-                    break;
-                }
-            }
-            if ( !bNameFound )
-                pParent = InsertCert( pParent, aUnknown, rCert );
+            String sName = XmlSec::GetContentPart( rCert->getSubjectName() );
+            pParent = InsertCert( pParent, sName, rCert );
         }
 
         maCertPathLB.Select( pParent );
@@ -499,7 +490,7 @@ IMPL_LINK( CertificateViewerCertPathTP, ViewCertHdl, void*, EMPTYARG )
     SvLBoxEntry* pEntry = maCertPathLB.FirstSelected();
     if( pEntry )
     {
-        CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, ((CertPath_UserData*)pEntry->GetUserData())->mxCert );
+        CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, ((CertPath_UserData*)pEntry->GetUserData())->mxCert, FALSE );
         aViewer.Execute();
     }
 
