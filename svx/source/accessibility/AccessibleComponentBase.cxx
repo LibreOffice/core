@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComponentBase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 16:20:07 $
+ *  last change: $Author: af $ $Date: 2002-05-03 13:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,17 +259,6 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
     return uno::Reference<awt::XFont>();
-}
-
-
-
-
-awt::FontDescriptor SAL_CALL
-        AccessibleComponentBase::getFontMetrics (const uno::Reference<awt::XFont >& xFont)
-        throw (::com::sun::star::uno::RuntimeException)
-{
-    awt::FontDescriptor aFontDescriptor;
-    return aFontDescriptor;
 }
 
 
