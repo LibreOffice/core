@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreKiKuFollowedBySa_ja_JP.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:51:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,8 @@ ignoreKiKuFollowedBySa_ja_JP::folding( const OUString& inStr, sal_Int32 startPos
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 
-    sal_Int32 *p, position;
+    sal_Int32 *p = 0;
+    sal_Int32 position = 0;
     if (useOffset) {
         // Allocate nCount length to offset argument.
         offset.realloc( nCount );
