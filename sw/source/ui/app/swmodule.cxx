@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 10:23:27 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _SVX_VERT_TEXT_TBXCTRL_HXX
+#include <svx/verttexttbxctrl.hxx>
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
@@ -605,6 +608,9 @@ void SwDLL::RegisterControls()
     SvxVertTextTbxCtrl::RegisterControl(SID_TEXTDIRECTION_TOP_TO_BOTTOM, pMod);
     SvxVertTextTbxCtrl::RegisterControl(SID_DRAW_CAPTION_VERTICAL, pMod);
     SvxVertTextTbxCtrl::RegisterControl(SID_DRAW_TEXT_VERTICAL, pMod);
+
+    SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_LEFT_TO_RIGHT, pMod);
+    SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_RIGHT_TO_LEFT, pMod);
 
     GalleryChildWindow::RegisterChildWindow(0, pMod);
 }
