@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:15:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,15 +75,15 @@
 
  module com {  module sun {  module star {  module sdbc {
 
-interface XStatement;
-interface XRow;
-interface XRowUpdate;
-interface XResultSet;
-interface XResultSetUpdate;
-interface XResultSetMetaDataSupplier;
-interface XWarningsSupplier;
-interface XColumnLocate;
-interface XCloseable;
+ published interface XStatement;
+ published interface XRow;
+ published interface XRowUpdate;
+ published interface XResultSet;
+ published interface XResultSetUpdate;
+ published interface XResultSetMetaDataSupplier;
+ published interface XWarningsSupplier;
+ published interface XColumnLocate;
+ published interface XCloseable;
 
 
 // DocMerge from xml: service com::sun::star::sdbc::ResultSet
@@ -132,7 +132,7 @@ interface XCloseable;
     method.
     </p>
  */
-service ResultSet
+published service ResultSet
 {
 
     // DocMerge from xml: service com::sun::star::sdbc::ResultSet: interface com::sun::star::lang::XComponent
