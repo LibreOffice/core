@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase_ex.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-04 09:03:08 $
+ *  last change: $Author: dbo $ $Date: 2001-09-05 10:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,14 @@
 
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
+
+/** Despite the fact that the following include is not used in this header, it has to remain,
+    because it is expected by files including cppuhelper/implbaseN.hxx.
+    So maybe we can omit it some time in the future...
+*/
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
 
