@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:35:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1560,6 +1560,13 @@ bool SwWW8Writer::TransBrush(const Color& rCol, WW8_SHD& rShd)
     return !rCol.GetTransparency();
 }
 
+sal_uInt32 SuitableBGColor(sal_uInt32 nIn)
+{
+    if (nIn == COL_AUTO)
+        return 0xFF000000;
+    return wwUtility::RGBToBGR(nIn);
+}
+
 static Writer& OutWW8_SwColor( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SvxColorItem& rAttr = (const SvxColorItem&)rHt;
@@ -1599,7 +1606,7 @@ static Writer& OutWW8_SwFmtCharBackground( Writer& rWrt, const SfxPoolItem& rHt 
         rWW8Wrt.InsUInt16(0xCA71);
         rWW8Wrt.pO->Insert(10, rWW8Wrt.pO->Count());
         rWW8Wrt.InsUInt32(0xFF000000);
-        rWW8Wrt.InsUInt32(wwUtility::RGBToBGR(rBack.GetColor().GetColor()));
+        rWW8Wrt.InsUInt32(SuitableBGColor(rBack.GetColor().GetColor()));
         rWW8Wrt.InsUInt16(0x0000);
     }
     return rWrt;
@@ -3747,7 +3754,7 @@ static Writer& OutWW8_SwFmtBackground( Writer& rWrt, const SfxPoolItem& rHt )
             rWW8Wrt.InsUInt16(0xC64D);
             rWW8Wrt.pO->Insert(10, rWW8Wrt.pO->Count());
             rWW8Wrt.InsUInt32(0xFF000000);
-            rWW8Wrt.InsUInt32(wwUtility::RGBToBGR(
+            rWW8Wrt.InsUInt32(SuitableBGColor(
                 rBack.GetColor().GetColor()));
             rWW8Wrt.InsUInt16(0x0000);
         }
