@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:49:06 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _VCL_POLY_HXX
-#include <vcl/poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _VCL_APP_HXX
 #include <vcl/svapp.hxx>
