@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:57:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1848,4 +1848,40 @@ sdr::contact::ViewContact* SdrObjCustomShape::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrObjCustomShape(*this);
 }
 
+// #i33136#
+bool SdrObjCustomShape::doConstructOrthogonal(const ::rtl::OUString& rName)
+{
+    bool bRetval(false);
+    static ::rtl::OUString Imps_sNameASOrtho_quadrat( RTL_CONSTASCII_USTRINGPARAM( "quadrat" ) );
+    static ::rtl::OUString Imps_sNameASOrtho_round_quadrat( RTL_CONSTASCII_USTRINGPARAM( "round-quadrat" ) );
+    static ::rtl::OUString Imps_sNameASOrtho_circle( RTL_CONSTASCII_USTRINGPARAM( "circle" ) );
+    static ::rtl::OUString Imps_sNameASOrtho_circle_pie( RTL_CONSTASCII_USTRINGPARAM( "circle-pie" ) );
+    static ::rtl::OUString Imps_sNameASOrtho_ring( RTL_CONSTASCII_USTRINGPARAM( "ring" ) );
+
+    if(Imps_sNameASOrtho_quadrat.equalsIgnoreAsciiCase(rName))
+    {
+        bRetval = true;
+    }
+    else if(Imps_sNameASOrtho_round_quadrat.equalsIgnoreAsciiCase(rName))
+    {
+        bRetval = true;
+    }
+    else if(Imps_sNameASOrtho_circle.equalsIgnoreAsciiCase(rName))
+    {
+        bRetval = true;
+    }
+    else if(Imps_sNameASOrtho_circle_pie.equalsIgnoreAsciiCase(rName))
+    {
+        bRetval = true;
+    }
+    else if(Imps_sNameASOrtho_ring.equalsIgnoreAsciiCase(rName))
+    {
+        bRetval = true;
+    }
+
+    return bRetval;
+}
+
 // eof
+
+
