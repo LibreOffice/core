@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-22 08:52:20 $
+ *  last change: $Author: dbo $ $Date: 2002-03-06 14:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ public:
     void readShortAttr( OUString const & rPropName, OUString const & rAttrName );
     void readBoolAttr( OUString const & rPropName, OUString const & rAttrName );
     void readAlignAttr( OUString const & rPropName, OUString const & rAttrName );
+    void readImageAlignAttr( OUString const & rPropName, OUString const & rAttrName );
     void readDateFormatAttr( OUString const & rPropName, OUString const & rAttrName );
     void readTimeFormatAttr( OUString const & rPropName, OUString const & rAttrName );
     void readOrientationAttr( OUString const & rPropName, OUString const & rAttrName );

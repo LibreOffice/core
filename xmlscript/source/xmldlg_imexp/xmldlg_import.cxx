@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-22 08:52:20 $
+ *  last change: $Author: dbo $ $Date: 2002-03-06 14:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,6 +717,43 @@ bool ImportContext::importAlignProperty(
         {
             throw xml::sax::SAXException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("invalid align value!") ),
+                Reference< XInterface >(), Any() );
+        }
+
+        _xControlModel->setPropertyValue( rPropName, makeAny( nAlign ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
+bool ImportContext::importImageAlignProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+{
+    OUString aAlign( xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName ) );
+    if (aAlign.getLength())
+    {
+        sal_Int16 nAlign;
+        if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("left") ))
+        {
+            nAlign = 0;
+        }
+        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("top") ))
+        {
+            nAlign = 1;
+        }
+        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("right") ))
+        {
+            nAlign = 2;
+        }
+        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bottom") ))
+        {
+            nAlign = 3;
+        }
+        else
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid image align value!") ),
                 Reference< XInterface >(), Any() );
         }
 

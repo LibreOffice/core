@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-14 12:08:03 $
+ *  last change: $Author: dbo $ $Date: 2002-03-06 14:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
     readButtonTypeAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PushButtonType") ),
                         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":button-type") ) );
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-src") ) );
+    readAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAlign") ),
+                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-align") ) );
     readEvents();
 }
 //__________________________________________________________________________________________________
@@ -527,6 +531,9 @@ void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-step") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
+    readBoolAttr(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("PrependCurrencySymbol") ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":prepend-symbol") ) );
     readEvents();
 }
 //__________________________________________________________________________________________________
@@ -567,6 +574,8 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-max") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Dropdown") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":dropdown") ) );
     readEvents();
 }
 //__________________________________________________________________________________________________

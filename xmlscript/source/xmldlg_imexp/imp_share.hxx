@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-18 09:44:47 $
+ *  last change: $Author: dbo $ $Date: 2002-03-06 14:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,6 +399,9 @@ public:
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
     bool importAlignProperty(
+        OUString const & rPropName, OUString const & rAttrName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
+    bool importImageAlignProperty(
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
     bool importDateFormatProperty(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-22 08:52:20 $
+ *  last change: $Author: dbo $ $Date: 2002-03-06 14:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,34 @@ void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString cons
                 break;
             default:
                 OSL_ENSURE( 0, "### illegal alignment value!" );
+            }
+        }
+    }
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readImageAlignAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any a( _xProps->getPropertyValue( rPropName ) );
+        if (a.getValueTypeClass() == TypeClass_SHORT)
+        {
+            switch (*(sal_Int16 const *)a.getValue())
+            {
+            case 0:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("left") ) );
+                break;
+            case 1:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("top") ) );
+                break;
+            case 2:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("right") ) );
+                break;
+            case 3:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("bottom") ) );
+                break;
+            default:
+                OSL_ENSURE( 0, "### illegal image alignment value!" );
             }
         }
     }

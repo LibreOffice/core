@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-18 09:44:47 $
+ *  last change: $Author: dbo $ $Date: 2002-03-06 14:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,6 +682,9 @@ void DateFieldElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Dropdown") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("dropdown") ),
+                               _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -761,6 +764,9 @@ void CurrencyFieldElement::endElement()
                               _xAttributes );
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("PrependCurrencySymbol") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("prepend-symbol") ),
                                _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
@@ -1601,6 +1607,12 @@ void ButtonElement::endElement()
                                _xAttributes );
     ctx.importButtonTypeProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("PushButtonType") ),
                                   OUString( RTL_CONSTASCII_USTRINGPARAM("button-type") ),
+                                  _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("image-src") ),
+                              _xAttributes );
+    ctx.importImageAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAlign") ),
+                                  OUString( RTL_CONSTASCII_USTRINGPARAM("image-align") ),
                                   _xAttributes );
 
     ctx.importEvents( _events );
