@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:57:11 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,11 @@ public:
     void CountWords( SwDocStat& rStat, xub_StrLen nStart, xub_StrLen nEnd ) const;
 
     USHORT GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd ) const;
+
+    // -> #i27615#
+    BOOL IsNumbered() const;
+    BOOL HasMarkedLabel() const;
+    // <- #i27615#
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };
