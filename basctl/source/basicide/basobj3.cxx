@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:12:59 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,13 +849,16 @@ void BasicIDE::BasicStopped( BOOL* pbAppWindowDisabled,
     // AppWait ?
     USHORT nWait = 0;
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-    while ( pIDEShell->GetViewFrame()->GetWindow().IsWait() )
+    if( pIDEShell )
     {
-        pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
-        nWait++;
+        while ( pIDEShell->GetViewFrame()->GetWindow().IsWait() )
+        {
+            pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
+            nWait++;
+        }
+        if ( pnWaitCount )
+            *pnWaitCount = nWait;
     }
-    if ( pnWaitCount )
-        *pnWaitCount = nWait;
 
     // Interactive = FALSE ?
     if ( SFX_APP()->IsDispatcherLocked() )
