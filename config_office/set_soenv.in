@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.11 $
-# Date:        $Date: 2003-08-18 14:54:11 $
+# Version:     $Revision: 1.12 $
+# Date:        $Date: 2003-12-01 17:39:16 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -49,8 +49,8 @@ my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $commen
 #-------------------------------------------------
 #
 # Platform independent constant values.
-my @LANGUAGES = ("ARAB", "CAT", "CHINSIM", "CHINTRAD", "CZECH", "DAN", "DTCH", "ENUS", "FREN", "GREEK", "ITAL",
-"JAPN", "KOREAN", "POL", "PORT", "PORTBR", "RUSS", "SLOVAK", "SPAN", "SWED", "TURK", "FINN" ); 
+my @LANGUAGES = ("ARAB", "CAT", "CHINSIM", "CHINTRAD", "CZECH", "DAN", "DTCH", "ENUS", "FREN", "GREEK", "HUNG", "ITAL",
+"JAPN", "KOREAN", "POL", "PORT", "PORTBR", "RUSS", "SLOVAK", "SLOVENIAN", "SPAN", "SWED", "TURK", "FINN", "ESTONIAN" ); 
 my @DICTIONARIES = ("DADK", "DEDE", "ENGB", "ENUS", "ITIT", "RURU" );
 my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $PRODUCT, $PROFULLSWITCH, $BIG_GOODIES, $BMP_WRITES_FLAG, 
      $common_build, $MK_UNROLL, $NO_REC_RES, $PROEXT, $SO3, $SOLAR_JAVA, 
@@ -82,11 +82,11 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $SHELL,
      $URD_ONLY, $SOLARROOT, $SOLARSRC, $RSCRES, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $STAR_REGISTRY, $STAR_RESOURCEPATH, $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH, 
-     $MSPDB_PATH, $MIDL_PATH, $WDEVENV_PATH, 
+     $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $WDEVENV_PATH, 
      $LD_LIBRARY_PATH, $PATH, $SOLARDEF, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARINCLUDES, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $MAC_LIB, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
-     $COMP_ENV, $IENV, $ILIB, $WIN_INCLUDE, $JAVAHOME, $WIN_LIB, $PSDK_HOME, $USE_NEW_SDK, $NO_HIDS,
-     $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
+     $COMP_ENV, $IENV, $ILIB, $WIN_INCLUDE, $JAVAHOME, $WIN_LIB, $PSDK_HOME, $USE_NEW_SDK, $FRAME_HOME, 
+     $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $USE_GCC3, $ENABLE_DEBUG, $ENABLE_STATIC_GTK,
      $PYTHONPATH, $PYTHONHOME );
 #
@@ -495,8 +495,10 @@ elsif ( $platform eq "$Winnt" )
       $COMPATH        = PosixFormat('@COMPATH@');
       $MSPDB_PATH     = PosixFormat('@MSPDB_PATH@');
       $MIDL_PATH      = PosixFormat('@MIDL_PATH@');
+      $CSC_PATH       = PosixFormat('@CSC_PATH@');
       $WDEVENV_PATH   = PosixFormat('@WDEVENV_PATH@');
       $PSDK_HOME      = PosixFormat('@PSDK_HOME@');
+      $FRAME_HOME     = PosixFormat('@FRAME_HOME@');
       $USE_NEW_SDK    = "TRUE";
       $NO_HIDS        = "TRUE";
       $CPUNAME        = "INTEL";
@@ -993,7 +995,8 @@ if ($platform eq "$Winnt")
                         $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$LIB.
                         $ps.$SOLARENV.$ds.$OUTPATH.$LIB.
                         $ps.$JAVA_HOME.$LIB.
-                        $ps.'$PSDK_HOME'.$LIB;
+                        $ps.'$PSDK_HOME'.$LIB.
+                        $ps.'$FRAME_HOME'.$LIB;
    # Mingw is different
    if ( $COM eq "MSC" )
    {  $WIN_LIB       .= $ps.'$COMPATH'.$LIB;
@@ -1096,6 +1099,10 @@ elsif ($platform eq "$Winnt")
 		   # .NET needs midl.exe
 		   if ( $noldPATH !~ /(?:[:]|\A)(?:$MIDL_PATH)(?:[:]|\Z)/ ) {
 			   $PATH .= $ps.$MIDL_PATH;
+		   }
+		   # .NET needs csc.exe
+		   if ( $noldPATH !~ /(?:[:]|\A)(?:$CSC_PATH)(?:[:]|\Z)/ ) {
+			   $PATH .= $ps.$CSC_PATH;
 		   }
 		   # .NET needs wdevenv.exe
 		   if ( $noldPATH !~ /(?:[:]|\A)(?:$WDEVENV_PATH)(?:[:]|\Z)/ ) {
@@ -1706,6 +1713,7 @@ if ( $COM ne "MSC" ) {
 }
 ToFile( "ENABLE_SYMBOLS",    "@ENABLE_SYMBOLS@",   "e" );
 ToFile( "ENABLE_CRASHDUMP",  "@ENABLE_CRASHDUMP@", "e" );
+ToFile( "VC_STANDARD",       "@VC_STANDARD@",      "e" );
 ToFile( "WITH_GPC",          "@WITH_GPC@",         "e" );
 ToFile( "WITH_LIBART",       "@WITH_LIBART@",      "e" );
 ToFile( "LIBART_CFLAGS",     "@LIBART_CFLAGS@",    "e" );
@@ -1761,8 +1769,13 @@ if (( $platform eq "$Winnt" ) and ( '@USE_SHELL@' eq "4nt" )) {
   ToFile( "GCCINSTLIB",        "gccinstlib.pl",    "e" );
 }
 ToFile( "USE_SHELL",         '@USE_SHELL@',         "e" );
-ToFile( "PYTHONPATH",        $PYTHONPATH,        "j" );
-ToFile( "PYTHONHOME",        $PYTHONHOME,        "j" );
+if ( $platform eq "$Winnt" ) {
+  ToFile( "PYTHONPATH",        $PYTHONPATH,        "j" );
+  ToFile( "PYTHONHOME",        $PYTHONHOME,        "j" );
+} else {
+  ToFile( "PYTHONPATH",        $PYTHONPATH,        "e" );
+  ToFile( "PYTHONHOME",        $PYTHONHOME,        "e" );
+}
 #
 # Writing the aliases to file.
 # (c = comment, e = environment variable, a = alias )
@@ -2027,7 +2040,8 @@ sub CreateFileHeader
 #                output file. 
 # Arguments:     1. Name of environment variable (string)
 #                2. Value of environment variable (string)
-#               3. e - env. var, a - alias, c - comment
+#                3. e - env. var, a - alias, c - comment
+#                   j - env. var in DOS style (WINNT only)
 # Return value:  void
 #---------------------------------------------------------
 sub ToFile 
@@ -2112,6 +2126,10 @@ sub ToFile
          $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
          $win_format_var =~ s/\\/\\\\/g;
          print OUT "$setenv $_[ 0 ] \"$win_format_var\" $newline";
+         if(defined($outfile_sh))
+         {  print OUT_SH "$_[ 0 ]=\"$win_format_var\"$newline";    # to sh file
+            $exportvars .= " $_[ 0 ]";                     # add to export list for sh file
+         }
          if (defined($outfile_bat))
          {
              $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
