@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_calc.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:11:14 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 18:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,14 @@ STD_UNO_LIB_FILE( gid_File_Lib_Scd , scd)
 
 //
 // start binfilter #110743#
-// 
+//
 
 STD_LIB_FILE( gid_File_Lib_Bf_Sc, bf_sc)
 STD_RES_FILE( gid_File_Res_Bf_Sc, bf_sc)
 
 //
 // end binfilter #110743#
-// 
+//
 
 STD_RES_FILE( gid_File_Res_Analysis, analysis)
 
@@ -104,20 +104,21 @@ File gid_File_Help_Scalc_Zip
 End
 
 // new user interface configuration files
+/*
 File gid_File_Share_Config_Sofficecfg_Calc_Menubar_Xml
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Config_Sofficecfg_Scalc_Menubar;
     Name = "/uiconfig/scalc/menubar/menubar.xml";
 End
-
+*/
 File gid_File_Oo_Office_Ui_Calccommands_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/CalcCommands.xcs";
 End
-       
+
 File gid_File_Oo_Office_Ui_Calccommands_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -137,6 +138,20 @@ File gid_File_Registry_Spool_Oo_Setup_Calc_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Spool;
     Name = "/registry/spool/org.openoffice.Setup-calc.xcu";
+End
+
+File gid_File_Oo_Office_Ui_Calcwindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/CalcWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Calcwindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/CalcWindowState.xcu";
 End
 
 File gid_File_Exe_Scalc
