@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Date: 2004-02-25 17:43:10 $
+#   last change: $Date: 2004-03-19 14:21:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ PRJNAME=framework
 TARGET=qa_unoapi
 
 ALLTAR:
-    +$(SOLARENV)$/bin$/checkapi -sce framework.sce -xcl knownissues.xcl -tdco $(PWD)$/testdocuments -THRCNT 1
+    +$(SOLARENV)$/bin$/checkapi -sce framework.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments -THRCNT 1
     +@echo =======================================================================
     +@echo In case you noticed a failures of fwk.JobExecutor or fwk.JobHandler make sure that you registered $(SOLARSRC)$/qadevOOo$/testdocs$/qadevlibs$/JobExecutor.jar
     +@echo =======================================================================
