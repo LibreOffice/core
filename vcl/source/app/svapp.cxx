@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-24 07:45:57 $
+ *  last change: $Author: th $ $Date: 2001-08-28 14:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1254,6 +1254,21 @@ void Application::FlushAccel()
 
     if ( pSVData->maAppData.mpAccelMgr )
         pSVData->maAppData.mpAccelMgr->FlushAccel();
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Application::CallAccel( const KeyCode& rKeyCode, USHORT nRepeat )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if ( pSVData->maAppData.mpAccelMgr )
+    {
+        if ( pSVData->maAppData.mpAccelMgr->IsAccelKey( rKeyCode, nRepeat ) )
+            return TRUE;
+    }
+
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
