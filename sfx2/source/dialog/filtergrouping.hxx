@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:00 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,8 @@ namespace sfx2
         SfxFilterMatcherIter& _rFilterMatcher,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
         ::rtl::OUString& /* [out] */ _rFirstNonEmpty,
-        FileDialogHelper_Impl& _rFileDlgImpl
+        FileDialogHelper_Impl& _rFileDlgImpl,
+        const ::rtl::OUString& _rFactory
     );
 
     void appendExportFilters(
