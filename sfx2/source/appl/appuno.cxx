@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:23:40 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@ using namespace ::com::sun::star::io;
 #include "sfxbasecontroller.hxx"
 #include "brokenpackageint.hxx"
 #include "eventsupplier.hxx"
+#include "xpackcreator.hxx"
 
 #define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
@@ -403,16 +404,19 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #endif
             }
 
-            if ( nFound == nSubCount )
+// Comment out: Make sure we can convert incomplete items, talked with MBA
+//            if ( nFound == nSubCount )
                 // only use completely converted items
                 rSet.Put( *pItem );
 #ifdef DBG_UTIL
+/*
             else
             {
                 ByteString aStr( "MacroPlayer: Complex property not convertable: ");
                 aStr += pSlot->pUnoName;
                 DBG_WARNING( aStr.GetBuffer() );
             }
+*/
 #endif
         }
 
@@ -666,7 +670,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         sal_Bool bOK = (rProp.Value >>= bVal);
                         DBG_ASSERT( bOK, "invalid type for Minimized" )
                         if (bOK)
-                            rSet.Put( SfxBoolItem( SID_MINIMIZEWINS, bVal ) );
+                            rSet.Put( SfxBoolItem( SID_MINIMIZED, bVal ) );
                      }
                 else if ( aName == sSilent )
                      {
@@ -966,7 +970,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_HIDDEN ) == SFX_ITEM_SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_MINIMIZEWINS ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_MINIMIZED ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_PREVIEW ) == SFX_ITEM_SET )
                 nAdditional++;
@@ -1066,7 +1070,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         continue;
                     if ( nId == SID_HIDDEN )
                         continue;
-                    if ( nId == SID_MINIMIZEWINS )
+                    if ( nId == SID_MINIMIZED )
                         continue;
                     if ( nId == SID_SILENT )
                         continue;
@@ -1313,7 +1317,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nProps].Name = sHidden;
                 pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
-            if ( rSet.GetItemState( SID_MINIMIZEWINS, sal_False, &pItem ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_MINIMIZED, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nProps].Name = sMinimized;
                 pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
@@ -1980,6 +1984,17 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ApplicationDialogLibraryContainer") );
 
+    // converter of fs folders to packages
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += OPackageStructureCreator::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    Sequence< ::rtl::OUString > &rServices = OPackageStructureCreator::impl_getStaticSupportedServiceNames();
+    for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
+        xNewKey->createKey( rServices.getConstArray()[ind] );
+
     return sal_True;
 }
 
@@ -2020,6 +2035,8 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         IF_NAME_CREATECOMPONENTFACTORY( TestKeyHandler )
         IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
 #endif
+        IF_NAME_CREATECOMPONENTFACTORY( OPackageStructureCreator )
+
         // Factory is valid - service was found.
         if ( xFactory.is() )
         {
