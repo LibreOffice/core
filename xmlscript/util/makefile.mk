@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2001-02-21 20:49:30 $
+#   last change: $Author: ab $ $Date: 2001-02-26 09:56:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ SHL1LIBS= \
 
 SHL1STDLIBS= \
         $(CPPUHELPERLIB)		\
+        $(COMPHELPERLIB)		\
         $(CPPULIB) 			\
         $(SALLIB)
 
