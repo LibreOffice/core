@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
+ *  last change: $Author: sab $ $Date: 2001-02-09 18:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #include "detdata.hxx"
 #endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
@@ -93,6 +97,8 @@
 class ScArea;
 class ScDocument;
 class ScRangeList;
+class DateTime;
+class SvXMLUnitConverter;
 
 
 //___________________________________________________________________
@@ -267,6 +273,11 @@ public:
     static void         ParseFormula(
                             ::rtl::OUString& sFormula,
                             const sal_Bool bIsFormula = sal_True);
+// EXPORT: Core Date Time
+    static void         ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUStringBuffer& sDate);
+// IMPORT: Core Date Time
+    static void         ConvertStringToDateTime(const rtl::OUString& sDate, DateTime& aDateTime, SvXMLUnitConverter* pUnitConverter);
+
 };
 
 

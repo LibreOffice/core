@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
+ *  last change: $Author: sab $ $Date: 2001-02-09 18:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,19 @@
 #include "document.hxx"
 #endif
 
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
+#ifndef _DATETIME_HXX
+#include <tools/datetime.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
+#endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
 #endif
 
 using namespace ::rtl;
@@ -736,4 +743,30 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
         chPrevious = sFormula[i];
     }
     sFormula = sBuffer.makeStringAndClear();
+}
+
+
+//_____________________________________________________________________
+
+void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUStringBuffer& sDate)
+{
+    util::DateTime aAPIDateTime;
+    aAPIDateTime.Year = aDateTime.GetYear();
+    aAPIDateTime.Month = aDateTime.GetMonth();
+    aAPIDateTime.Day = aDateTime.GetDay();
+    aAPIDateTime.Hours = aDateTime.GetHour();
+    aAPIDateTime.Minutes = aDateTime.GetMin();
+    aAPIDateTime.Seconds = aDateTime.GetSec();
+    aAPIDateTime.HundredthSeconds = aDateTime.Get100Sec();
+    SvXMLUnitConverter::convertDateTime(sDate, aAPIDateTime);
+}
+
+void ScXMLConverter::ConvertStringToDateTime(const rtl::OUString& sDate, DateTime& aDateTime, SvXMLUnitConverter* pUnitConverter)
+{
+    com::sun::star::util::DateTime aAPIDateTime;
+    pUnitConverter->convertDateTime(aAPIDateTime, sDate);
+    Date aDate(aAPIDateTime.Day, aAPIDateTime.Month, aAPIDateTime.Year);
+    Time aTime(aAPIDateTime.Hours, aAPIDateTime.Minutes, aAPIDateTime.Seconds, aAPIDateTime.HundredthSeconds);
+    DateTime aTempDateTime (aDate, aTime);
+    aDateTime = aTempDateTime;
 }
