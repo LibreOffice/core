@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-14 14:39:48 $
+#   last change: $Author: hro $ $Date: 2002-09-30 08:59:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,7 +118,6 @@ SHL1VERSIONMAP=	$(TARGET).map
 .IF "$(COM)"!="GCC"
 SHL1STDLIBS=	\
                 uwinapi.lib\
-                unicows.lib\
                 advapi32.lib\
                 wsock32.lib\
                 mpr.lib\
@@ -127,7 +126,7 @@ SHL1STDLIBS=	\
                 user32.lib\
                 ole32.lib
 .ELSE
-SHL1STDLIBS= -luwinapi.lib -lunicows.lib -ladvapi32 -lwsock32 -lmpr -lole32
+SHL1STDLIBS= -luwinapi.lib -ladvapi32 -lwsock32 -lmpr -lole32
 .ENDIF
 .ENDIF
 
