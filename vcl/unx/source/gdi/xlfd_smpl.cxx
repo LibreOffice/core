@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_smpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
+ *  last change: $Author: cp $ $Date: 2001-10-25 17:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,22 +177,41 @@ Advance( const char** pFrom, const char** pTo )
     *pTo   = pTmp;
 }
 
+Bool
+Xlfd::IsConformant (const char* pXlfd) const
+{
+    // X FontNameRegistry prefix "-"
+    if (*pXlfd++ != '-')
+        return False;
+
+    // All Xlfd FontName fields are defined
+    int nNumFields = 1;
+    while (*pXlfd != '\0')
+    {
+        if (*pXlfd++ == '-')
+            nNumFields++;
+    }
+    // enough entries ?
+    if (nNumFields != 14)
+        return False;
+    // and the last one is not empty as well ?
+    if (*(pXlfd - 1) == '-')
+        return False;
+
+    return True;
+}
+
 // this is the real workhorse function. Since this is called for every font
 // in the fontpath it has to be as fast a possible
 Bool
 Xlfd::FromString( const char* pXlfdstring, AttributeProvider *pFactory )
 {
-    mpFactory = pFactory;
-
-    const char*     pTo;
-    const char*     pFrom;
-
-    pFrom = pXlfdstring;
-    // first char must be '-'
-    if(*pFrom++ != '-')
+    if (!IsConformant(pXlfdstring))
         return False;
 
-    pTo = pFrom;
+    const char* pFrom = pXlfdstring + 1;
+    const char* pTo   = pFrom;
+    mpFactory         = pFactory;
 
     Advance( &pFrom, &pTo ); //-foundry-*
     mnFoundry = mpFactory->InsertFoundry( pFrom, pTo - pFrom - 1 );

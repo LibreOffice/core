@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_smpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
+ *  last change: $Author: cp $ $Date: 2001-10-25 17:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ class Xlfd {
                         // all foundry, family, weight ... information referres
                         // to this factory
         AttributeProvider *mpFactory;
+
+        Bool            IsConformant( const char* pXlfdstring ) const;
 
     public:
                         Xlfd();
