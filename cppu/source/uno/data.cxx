@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:37:21 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,8 @@ using namespace ::osl;
 namespace cppu
 {
 
-uno_Sequence g_emptySeq = { 1, 0, { 0 } }; // static empty sequence
+// Sequence<>() (default ctor) relies on this being static:
+uno_Sequence g_emptySeq = { 1, 0, { 0 } };
 typelib_TypeDescriptionReference * g_pVoidType = 0;
 
 //--------------------------------------------------------------------------------------------------
@@ -192,35 +193,26 @@ sal_Bool assignStruct(
 {
     return _assignStruct( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
 }
-//==================================================================================================
-void copyConstructSequence(
-    uno_Sequence ** ppDest, uno_Sequence * pSource,
+
+//==============================================================================
+uno_Sequence * copyConstructSequence(
+    uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    SAL_THROW( () )
 {
-    _copyConstructSequence( ppDest, pSource, pElementType, acquire, mapping );
+    return icopyConstructSequence( pSource, pElementType, acquire, mapping );
 }
-//==================================================================================================
+
+//==============================================================================
 void destructSequence(
-    uno_Sequence ** ppSequence,
-    typelib_TypeDescriptionReference * pElementType,
+    uno_Sequence * pSequence,
+    typelib_TypeDescriptionReference * pType,
+    typelib_TypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
-    SAL_THROW( () )
 {
-    uno_Sequence * pSequence = *ppSequence;
-    OSL_ASSERT( pSequence );
-    if (! ::osl_decrementInterlockedCount( &pSequence->nRefCount ))
-    {
-        if (pSequence->nElements)
-        {
-            _destructElements(
-                pSequence->elements, pElementType,
-                0, pSequence->nElements, release );
-        }
-        ::rtl_freeMemory( pSequence );
-    }
+    idestructSequence( pSequence, pType, pTypeDescr, release );
 }
+
 //==================================================================================================
 sal_Bool equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
