@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:01:33 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
+#include <com/sun/star/awt/XWindow2.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #endif
@@ -122,7 +125,7 @@ struct SystemParentData;
 //  class VCLXWINDOW
 //  ----------------------------------------------------
 
-class VCLXWindow :  public ::com::sun::star::awt::XWindow,
+class VCLXWindow :  public ::com::sun::star::awt::XWindow2,
                     public ::com::sun::star::awt::XVclWindowPeer,
                     public ::com::sun::star::awt::XLayoutConstrains,
                     public ::com::sun::star::awt::XView,
@@ -278,6 +281,15 @@ public:
     sal_Bool SAL_CALL isLocked(  ) throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL startPopupMode( const ::com::sun::star::awt::Rectangle& WindowRect ) throw (::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL isInPopupMode(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XWindow2
+    void SAL_CALL setOutputSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::Size SAL_CALL getOutputSize(  ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL isActive(  ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL isEnabled(  ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL hasFocus(  ) throw (::com::sun::star::uno::RuntimeException);
+
 };
 
 #endif // _TOOLKIT_AWT_VCLXWINDOW_HXX_
