@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:00:38 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,10 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                 --nIdx;
 
                 sal_uInt32 nToPageNum( 0L );
-                if ( _CheckMovedFwdCondition( nIdx, nToPageNum ) )
+                // --> OD 2005-03-30 #i43913#
+                bool bDummy( false );
+                if ( _CheckMovedFwdCondition( nIdx, nToPageNum, bDummy ) )
+                // <--
                 {
                     // Indicate that anchor text frame has to move forward and
                     // invalidate its position to force a re-format.
@@ -399,6 +402,9 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         // <--
 
         sal_uInt32 nToPageNum( 0L );
+        // --> OD 2005-03-30 #i43913#
+        bool bInFollow( false );
+        // <--
         SwAnchoredObject* pObj = 0L;
         if ( !mrAnchorTxtFrm.IsFollow() )
         {
@@ -406,7 +412,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
                     // --> OD 2004-10-18 #i35017# - constant name has changed
                     text::WrapInfluenceOnPosition::ONCE_CONCURRENT,
                     // <--
-                    nToPageNum );
+                    nToPageNum, bInFollow );
         }
         // --> OD 2004-10-25 #i35911#
         if ( pObj && pObj->HasClearedEnvironment() )
@@ -415,7 +421,11 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
             // --> OD 2005-03-08 #i44049# - consider, that anchor frame
             // could already been marked to move forward.
             SwPageFrm* pAnchorPageFrm( mrAnchorTxtFrm.FindPageFrm() );
-            if ( pAnchorPageFrm != pObj->GetPageFrm() )
+            // --> OD 2005-03-30 #i43913# - consider, that anchor frame
+            // is a follow or is in a follow row, which will move forward.
+            if ( pAnchorPageFrm != pObj->GetPageFrm() ||
+                 bInFollow )
+            // <--
             {
                 bool bInsert( true );
                 sal_uInt32 nToPageNum( 0L );
@@ -546,7 +556,8 @@ void SwObjectFormatterTxtFrm::_InvalidateFollowObjs( SwAnchoredObject& _rAnchore
 
 SwAnchoredObject* SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(
                                     const sal_Int16 _nWrapInfluenceOnPosition,
-                                    sal_uInt32& _noToPageNum )
+                                    sal_uInt32& _noToPageNum,
+                                    bool& _boInFollow )
 {
     // --> OD 2004-10-18 #i35017# - constant names have changed
     ASSERT( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
@@ -567,7 +578,8 @@ SwAnchoredObject* SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(
                     // <--
         {
             // --> OD 2004-10-11 #i26945# - use new method <_CheckMovedFwdCondition(..)>
-            if ( _CheckMovedFwdCondition( i, _noToPageNum ) )
+            // --> OD 2005-03-30 #i43913#
+            if ( _CheckMovedFwdCondition( i, _noToPageNum, _boInFollow ) )
             {
                 pRetAnchoredObj = pAnchoredObj;
                 break;
@@ -581,7 +593,8 @@ SwAnchoredObject* SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(
 
 bool SwObjectFormatterTxtFrm::_CheckMovedFwdCondition(
                                             const sal_uInt32 _nIdxOfCollected,
-                                            sal_uInt32& _noToPageNum )
+                                            sal_uInt32& _noToPageNum,
+                                            bool& _boInFollow )
 {
     bool bAnchorIsMovedForward( false );
 
@@ -639,6 +652,9 @@ bool SwObjectFormatterTxtFrm::_CheckMovedFwdCondition(
             {
                 _noToPageNum = nFromPageNum + 1;
                 bAnchorIsMovedForward = true;
+                // --> OD 2005-03-30 #i43913#
+                _boInFollow = true;
+                // <--
             }
         }
     }
