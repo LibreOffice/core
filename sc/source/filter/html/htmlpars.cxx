@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:35:55 $
+ *  last change: $Author: er $ $Date: 2002-04-03 14:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1951,9 +1951,8 @@ void ScHTMLParser::ProcToken( ImportInfo* pInfo )
             // If the encoding is set by a META tag, it may only overwrite the
             // current encoding if both, the current and the new encoding, are 1-BYTE
             // encodings. Everything else cannot lead to reasonable results.
-            if( RTL_TEXTENCODING_DONTKNOW != eEnc &&
-                    eEnc < RTL_TEXTENCODING_STD_COUNT &&
-                    pParser->GetSrcEncoding() < RTL_TEXTENCODING_STD_COUNT )
+            if ( rtl_isOctetTextEncoding( eEnc ) &&
+                    rtl_isOctetTextEncoding( pParser->GetSrcEncoding() ) )
             {
                 eEnc = GetExtendedCompatibilityTextEncoding( eEnc );
                 pParser->SetSrcEncoding( eEnc );
