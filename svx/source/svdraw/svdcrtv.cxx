@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:26:47 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ void SdrCreateView::SetConnectMarker(const SdrObjConnection& rCon, const SdrPage
         Rectangle aNewRect;
         USHORT nNewDist=0;
         if (rCon.bBestConn || rCon.bBestVertex) {
-            aNewRect=rCon.pObj->GetBoundRect();
+            aNewRect=rCon.pObj->GetCurrentBoundRect();
             nNewDist=2;
         } else {
             nNewDist=aHdl.GetHdlSize()+2;
@@ -457,7 +457,7 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
             }
             if (pAktCreate!=NULL) {
                 BOOL bStartEdit=FALSE; // nach Ende von Create automatisch TextEdit starten
-                if (pDefaultStyleSheet!=NULL) pAktCreate->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
+                if (pDefaultStyleSheet!=NULL) pAktCreate->NbcSetStyleSheet(pDefaultStyleSheet, sal_False);
 
                 // #101618# SW uses a naked SdrObject for frame construction. Normally, such an
                 // object should not be created. Since it is possible to use it as a helper
@@ -465,7 +465,7 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
                 // construction) at least no items should be set at that object.
                 if(nInvent != SdrInventor || nIdent != OBJ_NONE)
                 {
-                    pAktCreate->SetItemSet(aDefaultAttr);
+                    pAktCreate->SetMergedItemSet(aDefaultAttr);
                 }
 
                 if (HAS_BASE(SdrCaptionObj,pAktCreate))
@@ -474,7 +474,7 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
                     aSet.Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
                     aSet.Put(XFillStyleItem(XFILL_NONE));
 
-                    pAktCreate->SetItemSet(aSet);
+                    pAktCreate->SetMergedItemSet(aSet);
 
                     bStartEdit=TRUE;
                 }
@@ -488,7 +488,7 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
                     aSet.Put(XLineColorItem(String(),Color(COL_BLACK))); // Falls einer auf Solid umschaltet
                     aSet.Put(XLineStyleItem(XLINE_NONE));
 
-                    pAktCreate->SetItemSet(aSet);
+                    pAktCreate->SetMergedItemSet(aSet);
 
                     bStartEdit=TRUE;
                 }
@@ -572,9 +572,9 @@ BOOL SdrCreateView::BegCreateLibObj(const Point& rPnt, SdrObject* pObj, BOOL bMo
         bRet=TRUE;
         pObj->SetModel(pMod);
         if (bSetDefAttr) {
-            if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
+            if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet, sal_False);
 
-            pObj->SetItemSet(aDefaultAttr);
+            pObj->SetMergedItemSet(aDefaultAttr);
         }
         if (bSetDefLayer) {
             SdrLayerID nLayer=pCreatePV->GetPage()->GetLayerAdmin().GetLayerID(aAktLayer,TRUE);
@@ -642,7 +642,7 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
         if (IsSolidDraggingNow() && !IsSolidDraggingCheck()) {
             // Z.B. fuer Fill+Linelose Textrahmen bei SolidDragging
             SetSolidDraggingCheck(TRUE);
-            const SfxItemSet& rSet = pAktCreate->GetItemSet();
+            const SfxItemSet& rSet = pAktCreate->GetMergedItemSet();
             XFillStyle eFill=((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
             XLineStyle eLine=((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
             if (eLine==XLINE_NONE && eFill==XFILL_NONE) {
@@ -674,7 +674,7 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
             BOOL bMerk=aDragStat.IsMinMoved();
             if (aDragStat.CheckMinMoved(aPnt)) {
                 Rectangle aBound;
-                if (IsSolidDraggingNow()) aBound=pAktCreate->GetBoundRect();
+                if (IsSolidDraggingNow()) aBound=pAktCreate->GetCurrentBoundRect();
                 XPolyPolygon aXPP1;
                 if (!bMerk) aDragStat.NextPoint();
                 aDragStat.NextMove(aPnt);
@@ -686,7 +686,7 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
                 }
                 pCreatePV->DragPoly()=aXPP2;
                 if (IsSolidDraggingNow()) {
-                    aBound.Union(pAktCreate->GetBoundRect());
+                    aBound.Union(pAktCreate->GetCurrentBoundRect());
                     SdrObjList* pOL=pCreatePV->GetObjList();
                     SdrInsertReason aReason(SDRREASON_VIEWCALL);
                     pOL->NbcInsertObject(pAktCreate,CONTAINER_APPEND,&aReason);
@@ -868,7 +868,7 @@ void SdrCreateView::BrkCreateObj()
             if (!IsSolidDraggingNow()) {
                 HideCreateObj(pDragWin,TRUE);
             } else {
-                Rectangle aBound(pAktCreate->GetBoundRect());
+                Rectangle aBound(pAktCreate->GetCurrentBoundRect());
                 Point aPvOfs(pCreatePV->GetOffset());
                 aBound.Move(aPvOfs.X(),aPvOfs.Y());
                 InvalidateAllWin(aBound);
@@ -1072,7 +1072,7 @@ BOOL SdrCreateView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) co
 {
     if(pAktCreate)
     {
-        rTargetSet.Put(pAktCreate->GetItemSet());
+        rTargetSet.Put(pAktCreate->GetMergedItemSet());
         return TRUE;
     }
     else
@@ -1085,11 +1085,9 @@ BOOL SdrCreateView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
 {
     if(pAktCreate)
     {
-        SdrBroadcastItemChange aItemChange(*pAktCreate);
-        if(bReplaceAll)
-            pAktCreate->ClearItem();
-        pAktCreate->SetItemSet(rSet);
-        pAktCreate->BroadcastItemChange(aItemChange);
+        //pAktCreate->SetItemSetAndBroadcast(rSet, bReplaceAll);
+        pAktCreate->SetMergedItemSetAndBroadcast(rSet, bReplaceAll);
+
         return TRUE;
     }
     else
