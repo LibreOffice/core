@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:24:16 $
+ *  last change: $Author: cl $ $Date: 2000-11-30 15:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1194,6 +1194,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getMasterPage(  )
     {
         uno::Reference< drawing::XDrawPages > xPages( mpModel->getMasterPages() );
         uno::Reference< drawing::XDrawPage > xPage( ((SdrPage*)mpPage->GetMasterPage(0))->getUnoPage(), uno::UNO_QUERY );
+        return xPage;
     }
     return NULL;
 }
