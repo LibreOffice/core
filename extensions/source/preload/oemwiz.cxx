@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oemwiz.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-11-14 13:17:53 $
+ *  last change: $Author: os $ $Date: 2001-11-14 16:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,17 +202,16 @@ namespace preload
         ,aPrevPB(this,      ResId(PB_PREV   ))
         ,aNextPB(this,      ResId(PB_NEXT   ))
         ,aCancelPB(this,    ResId(PB_CANCEL ))
-        ,aHelpPB(this,      ResId(PB_HELP   ))
         ,aAcceptST(ResId(ST_ACCEPT))
         ,aFinishST(ResId(ST_FINISH))
         ,pImpl(new OEMPreloadDialog_Impl(this))
     {
           FreeResource();
+          aNextST = aNextPB.GetText();
           aPrevPB.SetClickHdl(LINK(this, OEMPreloadDialog, NextPrevPageHdl));
           aNextPB.SetClickHdl(LINK(this, OEMPreloadDialog, NextPrevPageHdl));
           AddButton( &aPrevPB, WIZARDDIALOG_BUTTON_STDOFFSET_X );
           AddButton( &aNextPB, WIZARDDIALOG_BUTTON_STDOFFSET_X );
-          AddButton( &aHelpPB, WIZARDDIALOG_BUTTON_STDOFFSET_X );
           AddButton( &aCancelPB, WIZARDDIALOG_BUTTON_STDOFFSET_X );
 
           SetPrevButton(&aPrevPB);
@@ -256,13 +255,11 @@ namespace preload
         switch(GetCurLevel())
         {
             case OEM_WELCOME:
-                aNextPB.SetText(String::CreateFromAscii(">>"));
+            case OEM_USERDATA:
+                aNextPB.SetText(aNextST);
             break;
             case OEM_LICENSE:
                 aNextPB.SetText(aAcceptST);
-            break;
-            case OEM_USERDATA:
-                aNextPB.SetText(String::CreateFromAscii(">>"));
             break;
             case OEM_README:
                 aNextPB.SetText(aFinishST);
