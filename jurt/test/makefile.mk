@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kr $ $Date: 2000-11-23 15:38:08 $
+#   last change: $Author: kr $ $Date: 2001-01-17 09:32:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,13 +69,14 @@ test:
 #	cd ./com/sun/star/comp/rmserver/makefile.mk
 #	cd ./com/sun/star/comp/typedescriptionmanager/makefile.mk
 #	cd ./com/sun/star/comp/testcomp/makefile.mk
-    cd ./com/sun/star/comp/connections; dmake debug=t
-    cd ./com/sun/star/lib/util; dmake debug=t
-    cd ./com/sun/star/uno; dmake debug=t
-    cd ./com/sun/star/lib/uno/environments/java; dmake debug=t
-    cd ./com/sun/star/lib/uno/bridges/java_remote; dmake debug=t
-    cd ./com/sun/star/lib/uno/environments/remote; dmake debug=t
-    cd ./com/sun/star/lib/uno/protocols; dmake debug=t
-    cd ./com/sun/star/comp/bridgefactory; dmake debug=t
+    cd ./com/sun/star/comp/connections; dmake debug=t product=full
+    cd ./com/sun/star/lib/util; dmake debug=t  product=full
+    cd ./com/sun/star/uno; dmake debug=t  product=full
+    cd ./com/sun/star/lib/uno/environments/java; dmake debug=t  product=full
+    cd ./com/sun/star/lib/uno/bridges/java_remote; dmake debug=t  product=full
+    cd ./com/sun/star/lib/uno/environments/remote; dmake debug=t  product=full
+    cd ./com/sun/star/lib/uno/protocols; dmake debug=t  product=full
+    cd ./com/sun/star/comp/bridgefactory; dmake debug=t product=full
+
     javac DoTests.java
     java -classpath $(CLASSPATH):. DoTests
