@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:56:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,10 @@ using namespace ::comphelper;
 using namespace ::osl;
 using namespace dbaccess;
 
-#define HAS_DESCRIPTION     0x00000001
-#define HAS_DEFAULTVALUE    0x00000002
-#define HAS_ROWVERSION      0x00000004
+#define HAS_DESCRIPTION             0x00000001
+#define HAS_DEFAULTVALUE            0x00000002
+#define HAS_ROWVERSION              0x00000004
+#define HAS_AUTOINCREMENT_CREATION  0x00000008
 
 //============================================================
 //= OTableColumnDescriptor
@@ -494,6 +495,7 @@ OColumnWrapper::OColumnWrapper(const Reference< XPropertySet > & rCol)
             m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_DESCRIPTION) ? HAS_DESCRIPTION : 0;
             m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE) ? HAS_DEFAULTVALUE : 0;
             m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_ISROWVERSION) ? HAS_ROWVERSION : 0;
+            m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) ? HAS_AUTOINCREMENT_CREATION : 0;
 
             m_xAggregate->getPropertyValue(PROPERTY_NAME) >>= m_sName;
         }
@@ -630,13 +632,8 @@ sal_Int64 SAL_CALL OTableColumnDescriptorWrapper::getSomething( const Sequence< 
         ++nPropertyCount;
     if (nId & HAS_ROWVERSION)
         ++nPropertyCount;
-
-    sal_Bool bAutoIncrement = sal_False;
-    if ( m_xAggregate.is() && m_xAggregate->getPropertySetInfo().is() && m_xAggregate->getPropertySetInfo()->hasPropertyByName( PROPERTY_AUTOINCREMENTCREATION) )
-    {
-        bAutoIncrement = sal_True;
+    if ( nId & HAS_AUTOINCREMENT_CREATION )
         ++nPropertyCount;
-    }
 
     Sequence< Property> aDescriptor(nPropertyCount);
     Property* pDesc = aDescriptor.getArray();
@@ -644,7 +641,7 @@ sal_Int64 SAL_CALL OTableColumnDescriptorWrapper::getSomething( const Sequence< 
 
     //      Description, Defaultvalue, IsRowVersion
         DECL_PROP2(ALIGN,                   sal_Int32,          BOUND,MAYBEVOID);
-        if ( bAutoIncrement )
+        if ( nId & HAS_AUTOINCREMENT_CREATION )
         {
             DECL_PROP1(AUTOINCREMENTCREATION,::rtl::OUString,   MAYBEVOID);
         }
@@ -869,6 +866,8 @@ Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) th
         nPropertyCount++;
     if (nId & HAS_ROWVERSION)
         nPropertyCount++;
+    if ( nId & HAS_AUTOINCREMENT_CREATION )
+        ++nPropertyCount;
 
     Sequence< Property> aDescriptor(nPropertyCount);
     Property* pDesc = aDescriptor.getArray();
@@ -876,6 +875,10 @@ Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) th
 
     //      Description, Defaultvalue, IsRowVersion
         DECL_PROP2(ALIGN,               sal_Int32,          BOUND, MAYBEVOID);
+        if ( nId & HAS_AUTOINCREMENT_CREATION )
+        {
+            DECL_PROP1(AUTOINCREMENTCREATION,::rtl::OUString,   MAYBEVOID);
+        }
         DECL_PROP2(CONTROLDEFAULT,          ::rtl::OUString,    BOUND,MAYBEVOID);
         DECL_PROP1_IFACE(CONTROLMODEL,  XPropertySet ,      BOUND);
         if (nId & HAS_DEFAULTVALUE)
