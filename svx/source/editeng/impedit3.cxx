@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-01 12:40:10 $
+ *  last change: $Author: mt $ $Date: 2000-12-05 19:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,9 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
         pView->HideCursor();
 
         Rectangle aClipRec( aInvalidRec );
-        aClipRec.Intersection( pView->GetVisArea() );
+        Rectangle aVisArea( pView->GetVisArea() );
+        aClipRec.Intersection( aVisArea );
+
         if ( !aClipRec.IsEmpty() )
         {
             // in Fensterkoordinaten umwandeln....
