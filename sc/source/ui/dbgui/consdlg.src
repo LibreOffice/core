@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:16:02 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,20 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Suma" ; Default ; > ;
+        < "Cantidad" ; Default ; > ;
+        < "Promedio" ; Default ; > ;
+        < "Máx" ; Default ; > ;
+        < "Mín" ; Default ; > ;
+        < "Producto" ; Default ; > ;
+        < "Cantidad (solo números)" ; Default ; > ;
+        < "DesvEst (Muestra)" ; Default ; > ;
+        < "DesvEstP (Población)" ; Default ; > ;
+        < "Varianza (Muestra)" ; Default ; > ;
+        < "VarP (Población)" ; Default ; > ;
+    };
     };
     Edit ED_DATA_AREA
     {
@@ -454,6 +468,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     ImageButton RB_DEST_AREA
     {
@@ -482,6 +497,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     ListBox LB_DATA_AREA
     {
@@ -534,6 +550,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ korean ] = "°è»ê¡¡±ÔÄ¢(~F)";
         Text[ turkish ] = "Fonksi~yon";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Instrucción de cálculo";
     };
     FixedText FT_CONSAREAS
     {
@@ -562,6 +579,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ korean ] = "ÅëÇÕ ¿µ¿ª(~C)";
         Text[ turkish ] = "Bir~leþtirme aralýklarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Áreas de consolidación";
     };
     FixedText FT_DATA_AREA
     {
@@ -590,6 +608,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ korean ] = "¼Ò½º µ¥ÀÌÅÍ ¿µ¿ª(~S)";
         Text[ turkish ] = "Kaynak veri a~ralýklarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Área de datos fuente";
     };
     FixedText FT_DEST_AREA
     {
@@ -618,6 +637,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ korean ] = "°á°ú¸¦ Ãâ·Â(~T)";
         Text[ turkish ] = "Sonuc~un gösterileceði yer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Re~sultado a partir de";
     };
     CheckBox BTN_BYROW
     {
@@ -647,6 +667,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ korean ] = "Çà ¶óº§(~R)";
         Text[ turkish ] = "Sa~týr etiketleri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Etiqueta ~de filas";
     };
     CheckBox BTN_BYCOL
     {
@@ -677,6 +698,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ korean ] = "¿­ ¸Ó¸®±Û(~O)";
         Text[ turkish ] = "S~ütun baþlýklarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Títulos de ~columnas";
     };
     GroupBox GB_CONSBY
     {
@@ -705,6 +727,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ korean ] = "·Î ÅëÇÕ";
         Text[ turkish ] = "Birleþtirme ölçütü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Consolidar según";
     };
     CheckBox BTN_REFS
     {
@@ -734,6 +757,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ korean ] = "¼Ò½º µ¥ÀÌÅÍ¿¡ ¿¬°á(~L)";
         Text[ turkish ] = "Kaynak verilerine ~baðla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Vincular con datos fuente";
     };
     OKButton BTN_OK
     {
@@ -806,6 +830,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     PushButton BTN_ADD
     {
@@ -836,6 +861,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ korean ] = "Ãß°¡(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Añadir";
     };
     Text[ chinese_simplified ] = "ºÏ²¢¼ÆËã";
     Text[ russian ] = "Êîíñîëèäèðîâàòü";
@@ -847,4 +873,5 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     Text[ korean ] = "ÅëÇÕ";
     Text[ turkish ] = "Birleþtir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Consolidar";
 };
