@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-04-23 11:21:28 $
+ *  last change: $Author: ab $ $Date: 2001-05-11 09:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,9 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         if( xLibContainer.is() && xLibContainer->hasByName( aLibName ) &&
             !xLibContainer->isLibraryLoaded( aLibName ) )
         {
+            EnterWait();
             xLibContainer->loadLibrary( aLibName );
+            LeaveWait();
         }
 
 
