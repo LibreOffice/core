@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MColumnAlias.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-23 17:44:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ void OColumnAlias::setAlias(const ::com::sun::star::uno::Reference<
                     // if this asserts, somebody stored a programmatic name in the configuration
                     // which is not allowed (i.e. not in the list of known programmatics).
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                 sal_Bool bExtractionSuccess =
 #endif
                 xAliasesNode->getByName( *pProgrammaticNames) >>= sAssignedAlias;
