@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-25 14:38:41 $
+ *  last change: $Author: os $ $Date: 2000-11-01 16:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,14 +484,20 @@ void SwXText::insertTextContent(const uno::Reference< XTextRange > & xRange,
             //this checks if (this) and xRange are in the same XText interface
             if(pOwnStartNode != pTmp)
             {
-                throw uno::RuntimeException();
+                RuntimeException aRunException;
+                aRunException.Message = C2U("text interface and cursor not related");
+                throw aRunException;
             }
             // Sonderbehandlung fuer Contents, die den Range nicht ersetzen, sonder darueber gelegt werden
             // Bookmarks, IndexEntry
             sal_Bool bAttribute = sal_False;
             uno::Reference<lang::XUnoTunnel> xContentTunnel( xContent, uno::UNO_QUERY);
             if(!xContentTunnel.is())
-                throw lang::IllegalArgumentException();
+            {
+                IllegalArgumentException aArgException;
+                aArgException.Message = C2U("text content doesn't support com::sun::star::lang::XUnoTunnel");
+                throw aArgException;
+            }
             SwXDocumentIndexMark* pDocumentIndexMark =
                 (SwXDocumentIndexMark*)xContentTunnel->getSomething(
                                         SwXDocumentIndexMark::getUnoTunnelId());
@@ -602,7 +608,9 @@ void SwXText::insertTextContent(const uno::Reference< XTextRange > & xRange,
                                                 }
                                                 else
                                                 {
-                                                    throw lang::IllegalArgumentException();
+                                                    IllegalArgumentException aArgException;
+                                                    aArgException.Message = C2U("unknown text content");
+                                                    throw aArgException;
                                                 }
                                             }
                                         }
