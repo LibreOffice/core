@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:42:00 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,8 +465,7 @@ Size SwOLENode::GetTwipSize() const
 {
     uno::Reference < embed::XEmbeddedObject > xObj = ((SwOLENode*)this)->aOLEObj.GetOleRef();
 
-    // TODO/LEAN: getMapUnit still needs running state
-    svt::EmbeddedObjectRef::TryRunningState( xObj );
+    // TODO/LEAN: getMapUnit may switch object to running state
     awt::Size aSize = xObj->getVisualAreaSize( nViewAspect );
     Size aSz( aSize.Width, aSize.Height );
     const MapMode aDest( MAP_TWIP );
