@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 11:16:37 $
+#   last change: $Author: obo $ $Date: 2004-11-16 10:44:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,9 @@ INCPRE+=$(SOLARINCDIR)$/offuh
 
 # --- Files -------------------------------------
 
-SLOFILES=	$(SLO)$/formnavigation.obj
+SLOFILES=	$(SLO)$/formnavigation.obj \
+            $(SLO)$/controlfeatureinterception.obj \
+            $(SLO)$/urltransformer.obj
 
 # --- Targets ----------------------------------
 
