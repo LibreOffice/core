@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSheetCondition.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:18 $
+ *  last change:$Date: 2003-09-08 11:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.sheet;
 
+import lib.MultiMethodTest;
+import util.ValueChanger;
+
 import com.sun.star.sheet.ConditionOperator;
 import com.sun.star.sheet.XSheetCondition;
 import com.sun.star.table.CellAddress;
-import lib.MultiMethodTest;
-import util.ValueChanger;
 
 /**
 * Testing <code>com.sun.star.sheet.XSheetCondition</code>
