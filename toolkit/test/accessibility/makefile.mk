@@ -2,17 +2,15 @@
 
 
 # Please modify the following lines to match your environment:
-#   If you use the run: target at the end of the file, then adapt port number
-#   and file URL.
+#   If you use the run: target at the end of the file, then adapt port number.
 PORT_NUMBER = 5678
-FILE_NAME = "file:///tmp/impress-test-document.sxi"
 
 
 # The following variables probably don't need to be changed.
 JAVAC = javac
 JAVA = java
 #   The JAR_PATH points to the jar files of your local office installation.
-JAR_PATH = $(STAR_RESOURCEPATH)$/
+JAR_PATH = $(SOLARVERSION)$/$(COMP_ENV)$/bin$(UPDMINOREXT)$/
 
 
 
@@ -86,5 +84,5 @@ dist:
 
 # Example of how to run the work bench.
 run:
-    $(JAVA) -classpath $(CLASSPATH) AccessibilityWorkBench -p $(PORT_NUMBER) -f $(FILE_NAME)
+    $(JAVA) -classpath $(CLASSPATH) AccessibilityWorkBench -p $(PORT_NUMBER)
 
