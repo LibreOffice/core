@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:55:42 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,12 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
         case SID_MAIL_SENDDOCASPDF:
         case SID_MAIL_SENDDOC:
+        {
+            SfxObjectShell* pDoc = GetObjectShell();
+            if ( pDoc && pDoc->QueryHiddenInformation(
+                            WhenSaving, &GetViewFrame()->GetWindow() ) != RET_YES )
+                break;
+
             if ( SvtInternalOptions().MailUIEnabled() )
             {
                 GetViewFrame()->SetChildWindow( SID_MAIL_CHILDWIN, TRUE );
@@ -240,6 +246,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             }
 
             break;
+        }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
