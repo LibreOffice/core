@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:34:54 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 11:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,6 @@ ScDBData::ScDBData( const String& rName,
     bHasHeader  (bHasH),
     bDBSelection(FALSE),
     nIndex      (0),
-    nExportIndex(0),
     bIsAdvanced (FALSE),
     bAutoFilter (FALSE),
     bModified   (FALSE)
@@ -128,7 +127,6 @@ ScDBData::ScDBData( SvStream& rStream, ScMultipleReadHeader& rHdr ) :
                     // nicht in der Datei:
     bAutoFilter     (FALSE),
     bModified       (FALSE),
-    nExportIndex    (0),
                     // nicht in alten Versionen:
     bDoSize         (FALSE),
     bKeepFmt        (FALSE),
@@ -464,7 +462,6 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bDBSql              (rData.bDBSql),
     nDBType             (rData.nDBType),
     nIndex              (rData.nIndex),
-    nExportIndex        (rData.nExportIndex),
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified)
 {
@@ -558,7 +555,6 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     bDBSql              = rData.bDBSql;
     nDBType             = rData.nDBType;
     nIndex              = rData.nIndex;
-    nExportIndex        = rData.nExportIndex;
     bAutoFilter         = rData.bAutoFilter;
 
     for (i=0; i<MAXSORT; i++)
