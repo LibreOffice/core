@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-19 15:48:27 $
+ *  last change: $Author: cl $ $Date: 2002-04-24 09:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1511,7 +1511,8 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         } while( !bUnique );
 
         String aLayoutName( aPrefix );
-        aLayoutName += String( RTL_CONSTASCII_USTRINGPARAM("~LT~Outline1") );
+        aLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
+        aLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
 
         // create styles
         ((SdStyleSheetPool*)pDoc->GetStyleSheetPool())->CreateLayoutStyleSheets( aPrefix );
