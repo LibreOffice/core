@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestMenu.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:38:29 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,33 +59,35 @@
  *
  ************************************************************************/
 
-#ifndef SD_TOOLPANEL_TEST_MENU_HXX
-#define SD_TOOLPANEL_TEST_MENU_HXX
+#ifndef SD_TASKPANE_COLOR_MENU_HXX
+#define SD_TASKPANE_COLOR_MENU_HXX
 
-#include "TaskPaneTreeNode.hxx"
+#include "taskpane/TaskPaneTreeNode.hxx"
 
 #ifndef _VALUESET_HXX
 #include <svtools/valueset.hxx>
 #endif
 #include <vcl/window.hxx>
 
+#include <memory>
 
-namespace sd {
 
+namespace sd { namespace toolpanel {
 
-namespace toolpanel {
-
+class ControlFactory;
 
 /** This demo menu shows the colors that are available from the
     StyleSettings.
 */
-class TestMenu
+class ColorMenu
     : public ::Window,
       public TreeNode
 {
 public:
-    TestMenu (TreeNode* pParent);
-    virtual ~TestMenu (void);
+    ColorMenu (TreeNode* pParent);
+    virtual ~ColorMenu (void);
+
+    static ::std::auto_ptr<ControlFactory> CreateControlFactory (void);
 
     // From ILayoutableWindow
     virtual Size GetPreferredSize (void);
