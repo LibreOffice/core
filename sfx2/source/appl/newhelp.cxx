@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-23 13:05:36 $
+ *  last change: $Author: pb $ $Date: 2002-10-16 12:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,12 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
@@ -204,6 +210,9 @@
 #ifndef _SVTOOLS_IMGDEF_HXX
 #include <svtools/imgdef.hxx>
 #endif
+#ifndef _VCL_UNOHELP_HXX
+#include <vcl/unohelp.hxx>
+#endif
 
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>
@@ -216,6 +225,7 @@ using namespace com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
@@ -290,6 +300,52 @@ namespace sfx2
                     pTaskPaneList->RemoveWindow( pWindow );
             }
         }
+    }
+
+    /** Prepare a search string for searching or selecting.
+        For searching every search word needs the postfix '*' and the delimiter ' ' if necessary.
+        For selecting the delimiter '|' is required to search with regular expressions.
+        Samples:
+        search string | output for searching | output for selecting
+        -----------------------------------------------------------
+        "text"        | "text*"              | "text"
+        "text*"       | "text*"              | "text"
+        "text menu"   | "text* menu*"        | "text|menu"
+    */
+    String PrepareSearchString( const String& rSearchString,
+                                Reference< XBreakIterator > xBreak, bool bForSearch )
+    {
+        String sSearchStr;
+        sal_Int32 nStartPos = 0;
+        const Locale aLocale = Application::GetSettings().GetUILocale();
+        Boundary aBoundary = xBreak->getWordBoundary(
+            rSearchString, nStartPos, aLocale, WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+
+        while ( aBoundary.startPos != aBoundary.endPos )
+        {
+            nStartPos = aBoundary.startPos;
+            String sSearchToken( rSearchString.Copy(
+                (USHORT)aBoundary.startPos, (USHORT)aBoundary.endPos - (USHORT)aBoundary.startPos ) );
+            if ( bForSearch && sSearchToken.GetChar( sSearchToken.Len() - 1 ) != '*' )
+                sSearchToken += '*';
+
+            if ( sSearchToken.Len() > 1 ||
+                 ( sSearchToken.Len() > 0 && sSearchToken.GetChar( 0 ) != '*' ) )
+            {
+                if ( sSearchStr.Len() > 0 )
+                {
+                    if ( bForSearch )
+                        sSearchStr += ' ';
+                    else
+                        sSearchStr += '|';
+                }
+                sSearchStr += sSearchToken;
+            }
+            aBoundary = xBreak->nextWord( rSearchString, nStartPos,
+                                          aLocale, WordType::ANYWORD_IGNOREWHITESPACES );
+        }
+
+        return sSearchStr;
     }
 //.........................................................................
 // namespace sfx2
@@ -994,13 +1050,14 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
 
     HelpTabPage_Impl( pParent, SfxResId( TP_HELP_SEARCH ) ),
 
-    aSearchFT   ( this, ResId( FT_SEARCH ) ),
-    aSearchED   ( this, ResId( ED_SEARCH ) ),
-    aSearchBtn  ( this, ResId( PB_SEARCH ) ),
-    aFullWordsCB( this, ResId( CB_FULLWORDS ) ),
-    aScopeCB    ( this, ResId( CB_SCOPE ) ),
-    aResultsLB  ( this, ResId( LB_RESULT ) ),
-    aOpenBtn    ( this, ResId( PB_OPEN_SEARCH ) )
+    aSearchFT       ( this, ResId( FT_SEARCH ) ),
+    aSearchED       ( this, ResId( ED_SEARCH ) ),
+    aSearchBtn      ( this, ResId( PB_SEARCH ) ),
+    aFullWordsCB    ( this, ResId( CB_FULLWORDS ) ),
+    aScopeCB        ( this, ResId( CB_SCOPE ) ),
+    aResultsLB      ( this, ResId( LB_RESULT ) ),
+    aOpenBtn        ( this, ResId( PB_OPEN_SEARCH ) ),
+    xBreakIterator  ( vcl::unohelper::CreateBreakIterator() )
 
 {
     FreeResource();
@@ -1034,9 +1091,6 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
             }
         }
     }
-
-    if ( aSearchED.GetEntryCount() )
-        aSearchED.SetText( aSearchED.GetEntry(0) );
 }
 
 // -----------------------------------------------------------------------
@@ -1103,39 +1157,9 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
     String aSearchURL = HELP_URL;
     aSearchURL += aFactory;
     aSearchURL += String( HELP_SEARCH_TAG );
-    if ( aFullWordsCB.IsChecked() )
-        aSearchURL += aSearchText;
-    else if ( aSearchText.Len() > 0 )
-    {
-        xub_StrLen nPos = aSearchText.Search( ' ' );
-        if ( nPos != STRING_NOTFOUND )
-        {
-            String aNewSearchText;
-            while ( nPos != STRING_NOTFOUND )
-            {
-                aNewSearchText += aSearchText.Copy( 0, nPos );
-                if ( aNewSearchText.GetChar( aNewSearchText.Len() - 1 ) != '*' )
-                    aNewSearchText += '*';
-                aNewSearchText += ' ';
-                aSearchText.Erase( 0, nPos + 1 );
-                aSearchText.EraseTrailingChars();
-                nPos = aSearchText.Search( ' ' );
-                if ( STRING_NOTFOUND == nPos )
-                {
-                    aNewSearchText += aSearchText;
-                    if ( aNewSearchText.GetChar( aNewSearchText.Len() - 1 ) != '*' )
-                        aNewSearchText += '*';
-                }
-            }
-            aSearchURL += aNewSearchText;
-        }
-        else
-        {
-            aSearchURL += aSearchText;
-            if ( aSearchURL.GetChar( aSearchURL.Len() - 1 ) != '*' )
-                aSearchURL += '*';
-        }
-    }
+    if ( !aFullWordsCB.IsChecked() )
+        aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
+    aSearchURL += aSearchText;
     AppendConfigToken_Impl( aSearchURL, sal_False );
     if ( aScopeCB.IsChecked() )
         aSearchURL += DEFINE_CONST_UNICODE("&Scope=Heading");
@@ -2123,6 +2147,16 @@ void SfxHelpTextWindow_Impl::InitToolBoxImages()
 
 // -----------------------------------------------------------------------
 
+Reference< XBreakIterator > SfxHelpTextWindow_Impl::GetBreakIterator()
+{
+    if ( !xBreakIterator.is() )
+        xBreakIterator = vcl::unohelper::CreateBreakIterator();
+    DBG_ASSERT( xBreakIterator.is(), "Could not create BreakIterator" );
+    return xBreakIterator;
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( SfxHelpTextWindow_Impl, SelectHdl, Timer*, EMPTYARG )
 {
     try
@@ -2137,13 +2171,17 @@ IMPL_LINK( SfxHelpTextWindow_Impl, SelectHdl, Timer*, EMPTYARG )
             {
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
+                Reference < XPropertySet > xPropSet( xSrchDesc, UNO_QUERY );
+                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchRegularExpression"),
+                                            makeAny( sal_Bool( sal_True ) ) );
                 if ( bIsFullWordSearch )
-                {
-                    Reference < XPropertySet > xPropSet( xSrchDesc, UNO_QUERY );
-                    xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchWords"), makeAny( sal_Bool( sal_True ) ) );
-                }
-                xSrchDesc->setSearchString( aSearchText );
+                    xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchWords"),
+                                                makeAny( sal_Bool( sal_True ) ) );
+
+                String sSearchString = sfx2::PrepareSearchString( aSearchText, GetBreakIterator(), false );
+                xSrchDesc->setSearchString( sSearchString );
                 Reference< XIndexAccess > xSelection = xSearchable->findAll( xSrchDesc );
+
                 // then select all found words
                 Reference < XSelectionSupplier > xSelectionSup( xController, UNO_QUERY );
                 if ( xSelectionSup.is() )
@@ -2783,7 +2821,7 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener 
         }
 
         // When the SearchPage opens the help doc, then select all words, which are equal to its text
-        String sSearchText = pIndexWin->GetSearchText();
+        String sSearchText = TRIM( pIndexWin->GetSearchText() );
         if ( sSearchText.Len() > 0 )
             pTextWin->SelectSearchText( sSearchText, pIndexWin->IsFullWordSearch() );
 
