@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_srs.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-18 10:14:44 $
+#   last change: $Author: vg $ $Date: 2005-03-23 15:51:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -139,9 +139,9 @@ HIDSRS$(TNR)PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS$(TNR)NAM
 $(HIDSRS$(TNR)PARTICLE) : $(HID$(TNR)FILES)
         @echo ------------------------------
         @echo Making: $@
-        @$(IFEXIST) $@ $(THEN) $(RM) $@
-        +$(TYPE) $(HID$(TNR)FILES) > $@.$(ROUT).tmp
-        @+$(RENAME) $@.$(ROUT).tmp $@
+    @$(IFEXIST) $@ $(THEN) $(RM) $@
+        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID$(TNR)FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    @+$(RENAME) $@.$(ROUT).tmp $@
 
 .IF "$(L10N_framework)"==""
 ALLTAR : $(HIDSRS$(TNR)PARTICLE)
