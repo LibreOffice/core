@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:37:43 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,13 @@
 #include <sfx2/stbitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // class SvxModifyControl ------------------------------------------------
 
-class SvxModifyControl : public SfxStatusBarControl
+class SVX_DLLPUBLIC SvxModifyControl : public SfxStatusBarControl
 {
 public:
     virtual void    StateChanged( USHORT nSID, SfxItemState eState,
@@ -86,7 +90,7 @@ private:
     BOOL    bState;
 
 #ifdef _SVX_MODCTRL_CXX
-    void    DrawItemText_Impl();
+    SVX_DLLPRIVATE void DrawItemText_Impl();
 #endif
 };
 
