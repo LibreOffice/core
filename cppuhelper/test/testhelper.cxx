@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testhelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:20 $
+ *  last change: $Author: hr $ $Date: 2002-08-15 13:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ int __cdecl main( int argc, char * argv[] )
 #ifdef UNX
 #define REG_PREFIX      "lib"
 #ifdef MACOSX
-#define DLL_POSTFIX     ".dylib.framework"
+#define DLL_POSTFIX     ".dylib"
 #else
 #define DLL_POSTFIX     ".so"
 #endif
