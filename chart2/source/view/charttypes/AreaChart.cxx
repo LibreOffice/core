@@ -8,7 +8,6 @@
 #include "ViewDefines.hxx"
 #include "TransformationHelper.hxx"
 #include "chartview/ObjectIdentifier.hxx"
-#include "Clipping.hxx"
 #include "Splines.hxx"
 #include "ChartTypeHelper.hxx"
 
@@ -63,8 +62,6 @@ public:
     //double              getSlotPos( double fCategoryX ) const;
 
     double              getTransformedDepth() const;
-    Rectangle           getTransformedClipRect() const;
-    DoubleRectangle     getTransformedClipDoubleRect() const;
 
     double              getLogicGrounding() const;
 
@@ -92,47 +89,6 @@ double AreaPositionHelper::getTransformedDepth() const
     return FIXED_SIZE_FOR_3D_CHART_VOLUME/(MaxZ-MinZ);
 }
 
-DoubleRectangle AreaPositionHelper::getTransformedClipDoubleRect() const
-{
-    //get logic clip values:
-    double MinX = getLogicMinX();
-    double MinY = getLogicMinY();
-    double MinZ = getLogicMinZ();
-    double MaxX = getLogicMaxX();
-    double MaxY = getLogicMaxY();
-    double MaxZ = getLogicMaxZ();
-
-    //apply scaling
-    doLogicScaling( &MinX, &MinY, &MinZ );
-    doLogicScaling( &MaxX, &MaxY, &MaxZ);
-
-    drawing::Position3D aMimimum( MinX, MinY, MinZ);
-    drawing::Position3D aMaximum( MaxX, MaxY, MaxZ);
-
-    //transform to screen coordinates
-    aMimimum = SequenceToPosition3D( getTransformationLogicToScene()
-                    ->transform( Position3DToSequence(aMimimum) ) );
-    aMaximum = SequenceToPosition3D( getTransformationLogicToScene()
-                    ->transform( Position3DToSequence(aMaximum) ) );
-
-    DoubleRectangle aRet( aMimimum.PositionX
-                  , aMaximum.PositionY
-                  , aMaximum.PositionX
-                  , aMimimum.PositionY );
-    return aRet;
-}
-
-Rectangle AreaPositionHelper::getTransformedClipRect() const
-{
-    DoubleRectangle aDoubleRect( this->getTransformedClipDoubleRect() );
-
-    Rectangle aRet( static_cast<long>(aDoubleRect.Left)
-                  , static_cast<long>(aDoubleRect.Top)
-                  , static_cast<long>(aDoubleRect.Right)
-                  , static_cast<long>(aDoubleRect.Bottom) );
-    return aRet;
-}
-
 double AreaPositionHelper::getLogicGrounding() const
 {
     //@todo get this from model axis crosses at if that value is between min and max
@@ -151,9 +107,8 @@ double AreaPositionHelper::getLogicGrounding() const
 //-----------------------------------------------------------------------------
 
 AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel, bool bCategoryXAxis, bool bNoArea )
-        : VSeriesPlotter( xChartTypeModel )
+        : VSeriesPlotter( xChartTypeModel, bCategoryXAxis )
         , m_pPosHelper( new AreaPositionHelper() )
-        , m_bCategoryXAxis(bCategoryXAxis)
         , m_bArea(!bNoArea)
         , m_bLine(bNoArea)
         , m_bSymbol( ChartTypeHelper::isSupportingSymbolProperties(xChartTypeModel) )
@@ -182,43 +137,6 @@ AreaChart::~AreaChart()
     delete m_pPosHelper;
 }
 
-double AreaChart::getMinimumX()
-{
-    if( m_bCategoryXAxis )
-        return VSeriesPlotter::getMinimumX();
-
-    double fMinimum, fMaximum;
-    this->getMinimumAndMaximiumX( fMinimum, fMaximum );
-    return fMinimum;
-}
-
-double AreaChart::getMaximumX()
-{
-    if( m_bCategoryXAxis )
-        return VSeriesPlotter::getMaximumX();
-
-    double fMinimum, fMaximum;
-    this->getMinimumAndMaximiumX( fMinimum, fMaximum );
-    return fMaximum;
-}
-
-double AreaChart::getMinimumYInRange( double fMinX, double fMaxX )
-{
-    if( m_bCategoryXAxis )
-        return VSeriesPlotter::getMinimumYInRange( fMinX, fMaxX );
-
-    double fMinY, fMaxY;
-    this->getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinX, fMaxX );
-    return fMinY;
-}
-double AreaChart::getMaximumYInRange( double fMinX, double fMaxX )
-{
-    if( m_bCategoryXAxis )
-        return VSeriesPlotter::getMaximumYInRange( fMinX, fMaxX );
-    double fMinY, fMaxY;
-    this->getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinX, fMaxX );
-    return fMaxY;
-}
 double AreaChart::getMaximumZ()
 {
     if( 3!=m_nDimension )
@@ -500,7 +418,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     this->setMappedProperties( xShape
                 , pSeries->getPropertiesOfSeries()
                 , m_aShapePropertyMapForArea );
-    //because of this name this line will be used for marking the axis
+    //because of this name this line will be used for marking
     m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
     return true;
 }
@@ -530,6 +448,8 @@ void AreaChart::impl_createSeriesShapes()
         for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
         {
             pSeriesPoly = &(*aSeriesIter)->m_aPolyPolygonShape3D;
+
+            createRegressionCurvesShapes( **aSeriesIter, m_xLogicTarget );
 
             if( m_bArea )
             {
