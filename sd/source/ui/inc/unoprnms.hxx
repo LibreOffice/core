@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 16:40:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,6 @@
 #define UNO_NAME_SHOW_AUTOMATIC         "IsAutomatic"
 #define UNO_NAME_SHOW_ENDLESS           "IsEndless"
 #define UNO_NAME_SHOW_FULLSCREEN        "IsFullScreen"
-#define UNO_NAME_SHOW_LIVEMODUS         "IsLivePresentation"
 #define UNO_NAME_SHOW_MOUSEVISIBLE      "IsMouseVisible"
 #define UNO_NAME_SHOW_PAGERANGE         "PageRange"
 #define UNO_NAME_SHOW_PAUSE             "Pause"
