@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-25 07:13:27 $
+ *  last change: $Author: cl $ $Date: 2002-04-30 11:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
 #include "AccessibleDrawDocumentView.hxx"
+#endif
+#ifndef _SVX_COLORCFG_HXX
+#include "colorcfg.hxx"
 #endif
 
 
@@ -281,9 +284,10 @@ void SdDrawViewShell::ReadFrameViewData(FrameView* pView)
     if (pDrView->GetSnapGridWidthX() != pView->GetSnapGridWidthX() || pDrView->GetSnapGridWidthY() != pView->GetSnapGridWidthY())
         pDrView->SetSnapGridWidth(pView->GetSnapGridWidthX(), pView->GetSnapGridWidthY());
 
+/* now in svx::ColorConfig
     if (pDrView->IsGridVisible() != pView->IsGridVisible())
         pDrView->SetGridVisible( pView->IsGridVisible() );
-
+*/
     if (pDrView->IsGridFront() != pView->IsGridFront())
         pDrView->SetGridFront( pView->IsGridFront() );
 
@@ -454,7 +458,9 @@ void SdDrawViewShell::WriteFrameViewData()
     pFrameView->SetGridFine( pDrView->GetGridFine() );
     pFrameView->SetSnapGrid( pDrView->GetSnapGrid() );
     pFrameView->SetSnapGridWidth(pDrView->GetSnapGridWidthX(), pDrView->GetSnapGridWidthY());
+/* now in svx::ColorConfig
     pFrameView->SetGridVisible( pDrView->IsGridVisible() );
+*/
     pFrameView->SetGridFront( pDrView->IsGridFront() );
     pFrameView->SetSnapAngle( pDrView->GetSnapAngle() );
     pFrameView->SetGridSnap( pDrView->IsGridSnap() );
@@ -561,9 +567,12 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
             const Color aOldFillColor( pWin->GetFillColor() );
             const ULONG nOldDrawMode( pWin->GetDrawMode() );
 
+            svx::ColorConfig aColorConfig;
+            svx::ColorConfigValue aWorkspace( aColorConfig.GetColorValue( svx::APPBACKGROUND ) );
+
             pWin->SetDrawMode( DRAWMODE_DEFAULT );
             pWin->SetLineColor();
-            pWin->SetFillColor( pWin->GetSettings().GetStyleSettings().GetWorkspaceColor() );
+            pWin->SetFillColor( Color( aWorkspace.nColor ) );
 
             Rectangle aSdRect( pWin->PixelToLogic( Point(0, 0) ), pWin->GetOutputSize() );
             Rectangle aPgRect( Point(0, 0), pActualPage->GetSize() );
@@ -835,4 +844,3 @@ void SdDrawViewShell::VisAreaChanged(const Rectangle& rRect)
         return SdViewShell::CreateAccessibleDocumentView (pWindow);
     }
 }
-
