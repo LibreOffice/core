@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgprov.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-10 16:13:42 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,6 @@ namespace dlgprov
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsAttacher > m_xScriptEventsAttacher;
 
-        ::rtl::OUString getLocationFromURL( const ::rtl::OUString& sURL );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > createDialogModel( const ::rtl::OUString& sURL );
 

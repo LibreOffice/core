@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgprov.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-10 16:13:24 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #include <xmlscript/xmldlg_imexp.hxx>
 #endif
 
+#include <com/sun/star/uri/XUriReference.hpp>
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -185,64 +188,57 @@ namespace dlgprov
 
     // -----------------------------------------------------------------------------
 
-    // TODO: this code needs removal after integration of URI parsing service
-
-    ::rtl::OUString DialogProviderImpl::getLocationFromURL( const ::rtl::OUString& sURL )
-    {
-        ::rtl::OUString language;
-        ::rtl::OUString attr;
-        sal_Int32 len = sURL.indexOf( '?' );
-        if( ( len < 0 ) || ( sURL.getLength() == 0 ) )
-        {
-            return language;
-        }
-        // if we have a match, then start the search after the ?
-
-        len++;
-        do
-        {
-            attr = sURL.getToken( 0, '&', len );
-            //OSL_TRACE( "chunk is %s, len is %d",
-            //    ::rtl::OUStringToOString( attr,
-            //        RTL_TEXTENCODING_ASCII_US ).pData->buffer, len  );
-            if( attr.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "location" ) )
-                == sal_True )
-            {
-                sal_Int32 len2 = attr.indexOf('=');
-                language = attr.copy( len2 + 1 );
-                //OSL_TRACE( "Language name is %s",
-                //    ::rtl::OUStringToOString( language,
-                //        RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
-                break;
-            }
-        }
-        while ( len >= 0 );
-        return language;
-
-    }
-
-    // -----------------------------------------------------------------------------
 
     Reference< XControlModel > DialogProviderImpl::createDialogModel( const ::rtl::OUString& sURL )
     {
         // parse URL
         // TODO: use URL parsing class
         // TODO: decoding of location
-        ::rtl::OUString sSchema( ::rtl::OUString::createFromAscii( "vnd.sun.star.script://" ) );
-        sal_Int32 nSchemaLen = sSchema.getLength();
-        sal_Int32 nLen = sURL.indexOf( '?' );
-        ::rtl::OUString sDescription;
-        if ( nLen - nSchemaLen > 0 )
+        Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
+
+        if ( !xSMgr.is() )
         {
-            sDescription = sURL.copy( nSchemaLen, nLen - nSchemaLen );
+            throw RuntimeException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogProviderImpl::getDialogModel: Couldn't instantiate MultiComponent factory" ) ),
+                    Reference< XInterface >() );
         }
+
+        Reference< uri::XUriReferenceFactory > xFac (
+            xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii(
+            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
+
+        if  ( !xFac.is() )
+        {
+            throw RuntimeException(
+                ::rtl::OUString::createFromAscii( "DialogProviderImpl::getDialogModel(), could not instatiate UriReferenceFactory." ),
+                Reference< XInterface >() );
+        }
+
+        Reference<  uri::XUriReference > uriRef(
+            xFac->parse( sURL ), UNO_QUERY );
+
+        Reference < uri::XVndSunStarScriptUrl > sfUri( uriRef, UNO_QUERY );
+
+        if ( !uriRef.is() || !sfUri.is() )
+        {
+            ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "DialogProviderImpl::getDialogModel: failed to parse URI: " );
+            errorMsg.concat( sURL );
+            throw IllegalArgumentException( errorMsg,
+                Reference< XInterface >(), 1 );
+        }
+
+        ::rtl::OUString sDescription = sfUri->getName();
+
         sal_Int32 nIndex = 0;
+
         ::rtl::OUString sLibName = sDescription.getToken( 0, (sal_Unicode)'.', nIndex );
         ::rtl::OUString sDlgName;
         if ( nIndex != -1 )
             sDlgName = sDescription.getToken( 0, (sal_Unicode)'.', nIndex );
 
-        ::rtl::OUString sLocation( getLocationFromURL( sURL ) );
+        ::rtl::OUString sLocation = sfUri->getParameter(
+            ::rtl::OUString::createFromAscii( "location" ) );
+
 
         // get dialog library container
         // TODO: dialogs in packages

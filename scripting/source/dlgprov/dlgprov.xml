@@ -38,7 +38,9 @@
         <type>com.sun.star.uno.XComponentContext</type>
         <type>drafts.com.sun.star.script.provider.XScript</type>
         <type>drafts.com.sun.star.script.provider.XScriptProvider</type>
-        <type>drafts.com.sun.star.script.provider.XScriptProviderSupplier</type>
+        <type>  com.sun.star.uri.XUriReference </type>
+        <type>  com.sun.star.uri.XUriReferenceFactory </type>
+        <type>  com.sun.star.uri.XVndSunStarScriptUrl </type>
     </component-description>
 
     <project-build-dependency>sfx2</project-build-dependency>
