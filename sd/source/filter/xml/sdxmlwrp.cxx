@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-25 10:49:18 $
+ *  last change: $Author: rt $ $Date: 2001-07-27 08:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ sal_Bool SdXMLFilter::Import()
 
                 if( mxStatusIndicator.is() )
                 {
-                    OUString aMsg( String( SdResId( STR_LOAD_DOC ) ) );
+                                        OUString aMsg = String( SdResId( STR_LOAD_DOC ) );
                     mxStatusIndicator->start(aMsg, 100);
                 }
             }
@@ -559,7 +559,7 @@ sal_Bool SdXMLFilter::Export()
                 {
                     sal_Int32 nProgressRange(1000000);
                     sal_Int32 nProgressCurrent(0);
-                    OUString aMsg( String( SdResId( STR_SAVE_DOC ) ) );
+                                        OUString aMsg = String( SdResId( STR_SAVE_DOC ) );
                     mxStatusIndicator->start(aMsg, nProgressRange);
 
                     // set ProgressRange
