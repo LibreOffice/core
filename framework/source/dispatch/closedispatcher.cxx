@@ -2,9 +2,9 @@
  *
  *  $RCSfile: closedispatcher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:15:51 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,20 +747,12 @@ sal_Bool CloseDispatcher::impl_establishBackingMode()
             if (xBackingComp.is())
             {
                 css::uno::Reference< css::awt::XWindow > xBackingWin(xBackingComp, css::uno::UNO_QUERY);
+                // Attention: You MUST(!) call setComponent() before you call attachFrame().
+                // Because the backing component set the property "IsBackingMode" of the frame
+                // to true inside attachFrame(). But setComponent() reset this state everytimes ...
                 m_xTarget->setComponent(xBackingWin, xBackingComp);
-
                 xBackingComp->attachFrame(m_xTarget);
                 xContainerWindow->setVisible(sal_True);
-
-                // Don't forget to set right state for this frame. It's in backing mode now.
-                // We have to do that AFTER xFrame->setComponent() was called. Because this method
-                // reset this state hardly!
-                css::uno::Reference< css::beans::XPropertySet > xSet(m_xTarget, css::uno::UNO_QUERY);
-                if (xSet.is())
-                {
-                    xSet->setPropertyValue(DECLARE_ASCII("IsBackingMode"), css::uno::makeAny(sal_True));
-                    bEstablished = sal_True;
-                }
             }
         }
     }
