@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:26:23 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,18 +71,18 @@ WarningBox WARNINGBOX_JAVANOTCONFIGURED
     Message[ russian ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ greek ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION a d�tect� une configuration java.ini d�fectueuse. %PRODUCTNAME requiert le fichier java.ini. Cliquez sur 'OK' pour lancer le Setup de Java et installer un JRE ou choisir parmi les JREs d�j� install�s.\nSi vous ne souhaitez pas installer de JRE, cliquez sur 'Annuler', ce qui annulera �galement l'op�ration en cours.";
-    Message[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION ha detectado una configuraci�n de java.ini defectuosa. %PRODUCTNAME requiere el archivo java.ini. Pulse en 'Aceptar' para iniciar el programa de instalaci�n de Java e instalar un entorno de ejecuci�n de Java JRE (Java Runtime Environment) o para seleccionar uno ya instalado.\nSi no desea instalar un entorno de ejecuci�n Java pulse en 'Cancelar'. Esta acci�n tambi�n cancelar� la operaci�n actual. ";
+    Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION n'est pas configur� pour ex�cuter Java.\nCliquez sur 'OK' pour lancer le Setup de Java de PRODUCTNAME %PRODUCTVERSION et installer un environnement d'ex�cution Java (JRE), ou pour choisir parmi les JRE d�j� install�s.\nSi vous ne souhaitez pas installer de JRE, cliquez sur 'Annuler' (ceci annulera �galement l'op�ration en cours).";
+    Message[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION no est� configurado para ejecutar Java.\nPulse en 'Aceptar' para iniciar el programa de instalaci�n de Java de %PRODUCTNAME %PRODUCTVERSION e instalar un entorno de ejecuci�n Java (JRE) o seleccione 'JREs' ya instalados.\nSi no desea instalar ning�n entorno de ejecuci�n Java, pulse en 'Cancelar'. Se cancelar� la operaci�n actual.";
     Message[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ italian ] = "%PRODUCTNAME %PRODUCTVERSION ha rilevato una configurazione difettosa di java.ini, che � un file necessario al funzionamento di %PRODUCTNAME. Fate click su 'OK' per avviare il setup di Java e installare un JRE (Java Runtime Environment) oppure per sceglierne uno gi� installato.\nSe preferite non installare JRE fate click su 'Annulla'. Quest'azione eliminer� la presente operazione.";
+    Message[ italian ] = "%PRODUCTNAME %PRODUCTVERSION non � stato configurato per lanciare Java\n.Fate click su 'OK' per avviare il setup di Java di %PRODUCTNAME %PRODUCTVERSION e installare un JRE (Java Runtime Environment) oppure per sceglierne uno gi� installato.\nSe preferite non installare JRE fate click su 'Annulla'. Quest'azione eliminer� la presente operazione.";
     Message[ danish ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION har hittat en felaktig java.ini-konfiguration. %PRODUCTNAME beh�ver java.ini. Klicka p� 'OK' f�r att starta Java Setup och installera en Java Runtime Environment (JRE) eller v�lja bland redan installerade JRE.\nKlicka p� 'Avbryt' om du inte vill installera en JRE. Detta avbryter i s� fall �ven den aktuella operationen.";
+    Message[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION �r inte konfigurerad f�r att k�ra Java.\nKlicka p� 'OK' f�r att starta %PRODUCTNAME %PRODUCTVERSION Java Setup och installera en Java Runtime Environment (JRE) eller v�lja bland redan installerade JRE.\nKlicka p� 'Avbryt' om du inte vill installera en JRE. Detta avbryter i s� fall �ven den aktuella operationen.";
     Message[ polish ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION が検出した java.ini の設定は正しくありません。%PRODUCTNAME には、java.ini が必要です。OK ボタンを押すと、Java セットアップが開始します。Java セットアップでは、JRE をインストールするか、すでにインストールされている JRE の中から１つ選択することができます。\nJRE のインストールが必要でなければ、[キャンセル]ボタンを押します。この場合、現在の操作も終了します。";
-    Message[ korean ] = "%PRODUCTNAME %PRODUCTVERSION에서 잘못된 java.ini설정이 발견되었습니다. %PRODUCTNAME 에는 java.ini 설정이 필요합니다. Java 설정을 시작하려면 [OK] 버튼을 클릭해주십시오. Java 설치에서 JRE를 설치하거나 기존 설치된 JRE 중 하나를 선택할 수 있습니다.\nJRE를 설치하고 싶지 않으면 [취소] 버튼을 클릭하십시오. ";
-    Message[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION 发现了一个错误的 java.ini 配置文档。%PRODUCTNAME 需要有效的 java.ini 。按一下“确定”，启动 Java 安装程式来安装 Java 运行时间环境或选择一个已经安装的 Java 运行时间环境。\n如果您不想安装 Java 运行时间环境，就点击“取消”。";
-    Message[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION 發現一個錯誤的 java.ini 配置文件。%PRODUCTNAME 需要有效的 java.ini 。按一下「確定」，啓動 Java 安裝程式來安裝 Java 運行時間環境或選擇一個已經安裝的 Java 運行時間環境。\n如果您不想安裝 Java 運行時間環境，就按一下「取消」。如此，就會取消目前的動作。";
+    Message[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION は、Java を実行するように設定されていません。\nOK ボタンをクリックして Java セットアップを開始し、Java Runtime Environment (JRE) をインストールするか、すでにインストールされている JRE の中から 1 つ選択してください。\nJRE をインストールする必要がなければ、[キャンセル] ボタンをクリックします。この場合、現在の操作も終了します。";
+    Message[ korean ] = "%PRODUCTNAME %PRODUCTVERSION은(는) Java가 실행되도록 구성되지 않았습니다.\n%PRODUCTNAME %PRODUCTVERSION Java 설치를 시작하려면 [OK] 버튼을 누릅니다. Java 설치를 사용하여 Java Runtime Environment(JRE)를 설치하거나 이미 설치된 JRE 중 하나를 선택할 수 있습니다.\nJRE의 설치가 필요하지 않은 경우 [취소] 버튼을 눌러 현재 작업을 취소합니다.  ";
+    Message[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION 尚未配置 Java 。\n按一下“确定”，启动 %PRODUCTNAME %PRODUCTVERSION Java 安装程式来安装 Java 运行时间环境(JRE)。\n如果您不想安装 Java 运行时间环境，就点击“取消”。";
+    Message[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION 尚未配置使用 Java 。\n按一下「確定」，啓動 %PRODUCTNAME %PRODUCTVERSION Java 安裝程式來安裝 Java 運行時間環境(JRE)。\n如果您不想安裝 Java 運行時間環境，就按一下「取消」。這樣也會取消目前的操作。";
     Message[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION java.ini yap�land�rmas� i�inde hata tespit etti. %PRODUCTNAME  java.ini gerektiriyor. Java Ayarlar� i�in 'OK' bas�n ve bir JRE kurun veya se�ilmi� JRE'ler aras�ndan se�im yap�n. \nJRE kurmak istemezseniz 'Cancel' e bas�n. Bu i�lem ayn� zamanda ge�erli i�lemi sona erdirecektir.";
     Message[ arabic ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ catalan ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
@@ -90,6 +90,7 @@ WarningBox WARNINGBOX_JAVANOTCONFIGURED
     Message[ czech ] = "%PRODUCTNAME %PRODUCTVERSION zjistil chybné nastavení java.ini. %PRODUCTNAME vyžaduje java.ini. Klikněte na 'OK' ke spuštění instalace Javy nebo zvolte z nainstalovaných JRE.\nPokud nechcete instalovat JRE, klikněte na 'Zrušit', což také přeruší současnou operaci.";
     Message[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION hat eine fehlerhafte java.ini-Konfiguration gefunden. %PRODUCTNAME benötigt die java.ini. Klicken Sie 'OK' um das Java-Setup zu starten. Mit dem Java-Setup können Sie ein JRE installieren oder aus vorhandenen JREs eins auswählen.\nUm die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'.";
     Message[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
+    Message[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION nebol nakonfigurovaný pre Javu.\nKliknite na 'OK' pre štart %PRODUCTNAME %PRODUCTVERSION nastavenie Javy a nainštalujte Java Runtime Environment (JRE) alebo si vyberte medzí už nainštalovanými JRE.\nAk nechcete inštalovať JRE, kliknite na 'Cancel'. To zruší aj práve prebiehajúcu operáciu.";
 };
 
 WarningBox WARNINGBOX_JAVADISABLED
@@ -122,6 +123,7 @@ WarningBox WARNINGBOX_JAVADISABLED
     Message[ czech ] = "Tato operace vyžaduje Javu, ale podpora pro Javu byla vypnuta. K zapnutí Javy klikněte na 'OK'. Kliknutím na 'Zrušit' přerušíte současnou operaci.";
     Message[ hebrew ] = "Für diese Operation ist Java erforderlich, aber die Java-Unterstützung wurde deaktiviert. Um die Java-Unterstützung zu reaktivieren, klicken Sie auf 'OK'. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'.";
     Message[ hindi ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
+    Message[ slovak ] = "Táto operácia si vyžaduje Javu, ale podpora Javy bola vypnutá. Pre zapnutie podpory Javy, kliknite 'OK'. Pre zrušenie prebiehajúcej operácie kliknite  'Cancel'.";
 };
 
 WarningBox WARNINGBOX_MISSINGJAVARUNTIME
@@ -154,6 +156,7 @@ WarningBox WARNINGBOX_MISSINGJAVARUNTIME
     Message[ czech ] = "Tato operace vyžaduje Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION byl nakonfigurován k použití JRE umístěném v %s, ale toto JRE zde nebylo nalezeno.\nKe spuštění instalace JRE klikněte na 'OK'. Kliknutím na 'Zrušit' přerušíte současnou operaci.";
     Message[ hebrew ] = "Für diese Operation ist ein Java Runtime Environment (JRE) erforderlich. %PRODUCTNAME %PRODUCTVERSION wurde konfiguriert das JRE im Ordner %s zu verwenden. Dieses JRE wurde nicht gefunden.\nKlicken Sie auf 'OK' um das Java-Setup zu starten. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'.";
     Message[ hindi ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
+    Message[ slovak ] = "Táto operácia vyžaduje Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION bol nakonfigurovaný používať JRE uložené v %s. Toto JRE nebolo nájdené.\nPre nastavenie Javy kliknite 'OK'. Pre zrušenie prebiehajúcej operácie kliknite 'Cancel'.";
 };
 
 WarningBox WARNINGBOX_JVMCREATIONFAILED
@@ -186,6 +189,7 @@ WarningBox WARNINGBOX_JVMCREATIONFAILED
     Message[ czech ] = "Tato operace vyžaduje Java Runtime Environment (JRE), ale %PRODUCTNAME %PRODUCTVERSION zjistil, že toto JRE je chybné.\nKe spuštění instalace JRE klikněte na 'OK'. Kliknutím na 'Zrušit' přerušíte současnou operaci.";
     Message[ hebrew ] = "Für diese Operation ist ein Java Runtime Environment (JRE) erforderlich. %PRODUCTNAME %PRODUCTVERSION hat ein fehlerhaftes JRE gefunden.\nKlicken Sie auf 'OK' um das Java-Setup zu starten. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'.";
     Message[ hindi ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
+    Message[ slovak ] = "Táto operácia vyžaduje Java Runtime Environment (JRE), ale JRE ktoré %PRODUCTNAME %PRODUCTVERSION zistil je porušené.\nPre nastavenie Javy kliknite 'OK'. Pre zrušenie prebiehajúcej operácie kliknite 'Cancel'.";
 };
 
 WarningBox WARNINGBOX_JVMSETUPNOTSTARTED
@@ -218,6 +222,7 @@ WarningBox WARNINGBOX_JVMSETUPNOTSTARTED
     Message[ czech ] = "%PRODUCTNAME %PRODUCTVERSION nemohl spustit instalaci Javy. Ukončete %PRODUCTNAME, spusťte instalaci %PRODUCTNAME %PRODUCTVERSION a zvolte 'Opravit'.";
     Message[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION konnte das Java-Setup nicht starten. Beenden Sie %PRODUCTNAME und starten Sie das %PRODUCTNAME %PRODUCTVERSION Installationsprogramm. Wählen Sie 'Reparieren'.";
     Message[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
+    Message[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION nemohol spustiť nastavenie Javy. Ukončite %PRODUCTNAME a spustite %PRODUCTNAME %PRODUCTVERSION Setup. Zvolte si možnosť 'Repair'.";
 };
 
 WarningBox WARNINGBOX_JAVALDXNOTSTARTED
@@ -250,6 +255,7 @@ WarningBox WARNINGBOX_JAVALDXNOTSTARTED
     Message[ czech ] = "%PRODUCTNAME %PRODUCTVERSION nemohl spustit Java LDX. Ukončete %PRODUCTNAME, spusťte instalaci %PRODUCTNAME %PRODUCTVERSION a zvolte 'Opravit'.";
     Message[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION konnte Java-LDX nicht starten. Beenden Sie %PRODUCTNAME und starten Sie das %PRODUCTNAME %PRODUCTVERSION Installationsprogramm. Wählen Sie 'Reparieren'.";
     Message[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
+    Message[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION nemohol spustiť Java LDX. Ukončite %PRODUCTNAME a spustite %PRODUCTNAME %PRODUCTVERSION Setup. Zvolte si možnosť 'Repair'.";
 };
 
 InfoBox INFOBOX_PLEASERESTARTOFFICE
@@ -282,6 +288,7 @@ InfoBox INFOBOX_PLEASERESTARTOFFICE
     Message[ hebrew ] = "Damit die neuen Java Einstellungen wirksam werden, ist ein Neustart von %PRODUCTNAME %PRODUCTVERSION erforderlich.";
     Message[ portuguese_brazilian ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
     Message[ hindi ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
+    Message[ slovak ] = "Musíte reštartovať %PRODUCTNAME %PRODUCTVERSION aby sa prejavili zmeny v nastaveniach Javy.";
 };
 
 String STR_RECOVER_QUERY
@@ -315,6 +322,7 @@ String STR_RECOVER_QUERY
     Text[ czech ] = "Obnovit soubor \"$1\"?";
     Text[ hebrew ] = "‮האם לנסות לאושש את הקובץ \"$1\"?‬";
     Text[ hindi ] = "फाइल \"$1\" को पूर्व अवस्था में पहुँचाना चाहते है?";
+    Text[ slovak ] = "Obnoviť súbor \"$1\"?";
 };
 
 String STR_RECOVER_TITLE
@@ -348,6 +356,7 @@ String STR_RECOVER_TITLE
     Text[ czech ] = "Obnovení souboru";
     Text[ hebrew ] = "Datei-Wiederherstellung";
     Text[ hindi ] = "फाइल पुनः प्राप्ति";
+    Text[ slovak ] = "Obnovenie súboru";
 };
 
 WarningBox STR_RECOVER_PREPARED
@@ -381,6 +390,7 @@ WarningBox STR_RECOVER_PREPARED
     Message[ czech ] = "Došlo k neodstranitelné chybě.\n\nVšechny změněné soubory byly uloženy a\npravděpodobně mohou být obnoveny při restartu programu.";
     Message[ hebrew ] = "‮ארעה שגיאה בתוכנית שממנה לא ניתן להתאושש.\n\nכל הקבצים ששונו נשמרו\n\nויש סיכוי שניתן לאושש אותם בהפעלה הבאה של התוכנית.‬";
     Message[ hindi ] = "पुनः प्राप्त न करने योग्य गलती घटित हुआ ।\n\nसब सुधार किया हुआ फाइलों को संचित किया है और\nशायद प्रोग्राम को पुनः प्रारंभ करने के समय पुनः प्राप्त कर सकते है ।";
+    Message[ slovak ] = "Objavila sa neodstrániteľná chyba.\n\nVšetky zmenené súbory boli uložené a môžu\nbyť pravdepodobne obnovené po reštarte programu.";
 };
 
 String STR_BOOTSTRAP_ERR_CANNOT_START
@@ -411,6 +421,7 @@ String STR_BOOTSTRAP_ERR_CANNOT_START
     Text[ hebrew ] = "Die Anwendung kann nicht gestartet werden.";
     Text[ thai ] = "The application cannot be started. ";
     Text[ hindi ] = "कार्यक्रम को प्रारंभ नहीं कर सकते है । ";
+    Text[ slovak ] = "Aplikácia nemôže byť spustená.";
 };
 
 String STR_BOOTSTRAP_ERR_DIR_MISSING
@@ -441,6 +452,7 @@ String STR_BOOTSTRAP_ERR_DIR_MISSING
     Text[ hebrew ] = "Der Konfigurationspfad \"$1\" wurde nicht gefunden.";
     Text[ thai ] = "The configuration directory \"$1\" could not be found.";
     Text[ hindi ] = "रूपरेखा डैरक्टरी \"$1\" नहीं प्राप्त हुआ ।";
+    Text[ slovak ] = "Nemôžem nájsť konfiguračný adresár \"$1\".";
 };
 
 String STR_BOOTSTRAP_ERR_PATH_INVALID
@@ -471,6 +483,7 @@ String STR_BOOTSTRAP_ERR_PATH_INVALID
     Text[ hebrew ] = "Der Installationspfad ist ungültig.";
     Text[ thai ] = "The installation path is invalid.";
     Text[ hindi ] = "प्रतिष्ठापन मार्ग अमान्य है ।";
+    Text[ slovak ] = "Adresár pre inštaláciu je neplatný.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_PATH
@@ -501,6 +514,7 @@ String STR_BOOTSTRAP_ERR_NO_PATH
     Text[ hebrew ] = "Der Installationspfad konnte nicht bestimmt werden.";
     Text[ thai ] = "The installation path is not available.";
     Text[ hindi ] = "प्रतिष्ठापन मार्ग";
+    Text[ slovak ] = "Adresár pre inštaláciu je nedostupný.";
 };
 
 String STR_BOOTSTRAP_ERR_INTERNAL
@@ -531,6 +545,7 @@ String STR_BOOTSTRAP_ERR_INTERNAL
     Text[ hebrew ] = "Ein interner Fehler ist aufgetreten.";
     Text[ thai ] = "An internal error occurred.";
     Text[ hindi ] = "भीतरी गलती घटित हुआ ।";
+    Text[ slovak ] = "Objavila sa interná chyba.";
 };
 
 String STR_BOOTSTRAP_ERR_FILE_CORRUPT
@@ -561,6 +576,7 @@ String STR_BOOTSTRAP_ERR_FILE_CORRUPT
     Text[ hebrew ] = "Die Konfigurationsdatei \"$1\" ist beschädigt.";
     Text[ thai ] = "The configuration file \"$1\" is corrupt.";
     Text[ hindi ] = "रूपरेखा फाइल \"$1\" दूषित हुआ है ।";
+    Text[ slovak ] = "Konfiguračný súbor \"$1\" je poškodený.";
 };
 
 String STR_BOOTSTRAP_ERR_FILE_MISSING
@@ -591,6 +607,7 @@ String STR_BOOTSTRAP_ERR_FILE_MISSING
     Text[ hebrew ] = "Die Konfigurationsdatei \"$1\" wurde nicht gefunden.";
     Text[ thai ] = "The configuration file \"$1\" was not found.";
     Text[ hindi ] = "रूपरेखा फाइल \"$1\" नहीं प्राप्त हुआ ।";
+    Text[ slovak ] = "Konfiguračný súbor \"$1\" nebol nájdený.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_SUPPORT
@@ -621,6 +638,7 @@ String STR_BOOTSTRAP_ERR_NO_SUPPORT
     Text[ hebrew ] = "Die Konfigurationsdatei \"$1\" unterstützt nicht diese Version.";
     Text[ thai ] = "The configuration file \"$1\" does not support the current version.";
     Text[ hindi ] = "रूपरेखा फाइल \"$1\" वर्तमान आवर्तन को समर्थित नहीं करता है ।";
+    Text[ slovak ] = "Konfiguračný súbor \"$1\" nepodporuje súčasnú verziu.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_SERVICE
@@ -651,6 +669,7 @@ String STR_BOOTSTRAP_ERR_NO_SERVICE
     Text[ hebrew ] = "Der Komponenten-Manager ist nicht verfügbar.";
     Text[ thai ] = "The component manager is not available.";
     Text[ hindi ] = "The component manager is not available.";
+    Text[ slovak ] = "Správca komponentov nieje dostupný.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
@@ -681,6 +700,7 @@ String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
     Text[ hebrew ] = "Der Konfigurations-Manager kann nicht erzeugt werden.";
     Text[ thai ] = "The configuration service is not available.";
     Text[ hindi ] = "The configuration service is not available.";
+    Text[ slovak ] = "Konfiguračná služba nieje dostupná.";
 };
 
 String STR_ASK_START_SETUP_REPAIR
@@ -711,6 +731,7 @@ String STR_ASK_START_SETUP_REPAIR
     Text[ hebrew ] = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu reparieren?";
     Text[ thai ] = "Do you want to start the setup application to repair your installation?";
     Text[ hindi ] = "आपका प्रतिष्ठापन को मरम्मत करने केलिए सेटप कार्यक्रम को प्रारंभ करना चाहते है?";
+    Text[ slovak ] = "Chcete spustiť setup aby opravil vašu inštaláciu?";
 };
 
 String STR_ASK_START_SETUP
@@ -741,6 +762,7 @@ String STR_ASK_START_SETUP
     Text[ hebrew ] = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu überprüfen?";
     Text[ thai ] = "Do you want to start the setup application to check your installation?";
     Text[ hindi ] = "आपका प्रतिष्ठापन को जाँच करने केलिए सेटप कार्यक्रम को प्रारंभ करना चाहते है?";
+    Text[ slovak ] = "Chcete spustiť setup aby skontroloval vašu inštaláciu?";
 };
 
 String STR_SETUP_ERR_CANNOT_START
@@ -771,6 +793,7 @@ String STR_SETUP_ERR_CANNOT_START
     Text[ hebrew ] = "Die Setup-Applikation konnte nicht automatisch gestartet werden! Bitte starten Sie diese manuell.";
     Text[ thai ] = "The Setup could not be started automatically. Please start it manually.";
     Text[ hindi ] = "स्वचालित प्रकार से सेटप को प्रारंभ नहीं कर सकते है । कृपया मानुवली प्रारंभ कीजिए ।";
+    Text[ slovak ] = "Setup nemohol byť spustený automaticky. Prosím spustite ho manuálne.";
 };
 
 String STR_ASK_START_SETUP_MANUALLY
@@ -801,6 +824,7 @@ String STR_ASK_START_SETUP_MANUALLY
     Text[ hebrew ] = "Um Ihre Installation zu reparieren starten Sie die Setup-Applikation von CD aus, oder aus dem Verzeichnis in dem sich die Installationspakete befinden.";
     Text[ thai ] = "Start the setup application to repair the installation from the CD or the folder containing the installation packages.";
     Text[ hindi ] = "Start the setup application to repair the installation from the CD or the folder containing the installation packages.";
+    Text[ slovak ] = "Pre opravu inštalácie spustite setup z inštalačného CD alebo z adresára obsahujúceho inštalačné balíčky.";
 };
 
 String STR_SSO_RELOGIN
@@ -831,6 +855,7 @@ String STR_SSO_RELOGIN
     Text[ hebrew ] = "Bitte wiederholen Sie Ihre Anmeldung.";
     Text[ portuguese_brazilian ] = "Please log in again. ";
     Text[ hindi ] = "Please log in again. ";
+    Text[ slovak ] = "Prosím prihláste sa znova. ";
 };
 
 String STR_CONFIG_WARN_LOCAL_FALLBACK
@@ -861,6 +886,7 @@ String STR_CONFIG_WARN_LOCAL_FALLBACK
     Text[ hebrew ] = "StarOffice wird Ihre lokal-gespeicherten persönlichen Einstellungen verwenden, um mit dem Programmstart fortzufahren.";
     Text[ portuguese_brazilian ] = "StarOffice will continue the startup using your locally stored personal settings. ";
     Text[ hindi ] = "StarOffice will continue the startup using your locally stored personal settings.";
+    Text[ slovak ] = "StarOffice bude pokračovať v štarte s použitím vašich lokálne uložených nastavení.";
 };
 
 String STR_CONFIG_WARN_OFFLINE
@@ -891,6 +917,7 @@ String STR_CONFIG_WARN_OFFLINE
     Text[ hebrew ] = "Ihre geänderten persönlichen Einstellungen werden von StarOffice zunächst lokal gespeichert und beim nächsten Programmstart synchronisiert.";
     Text[ portuguese_brazilian ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
     Text[ hindi ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice.";
+    Text[ slovak ] = "Zmeny, ktoré ste urobili vo vašich osobných nastaveniach, budú uložené lokálne a ich synchronizácia prebehne pri ďalšom štarte StarOffice.";
 };
 
 String STR_CONFIG_ERR_SETTINGS_INCOMPLETE
@@ -921,6 +948,7 @@ String STR_CONFIG_ERR_SETTINGS_INCOMPLETE
     Text[ hebrew ] = "Die Starteinstellungen für den Zugriff auf die zentrale Konfiguration sind unvollständig.";
     Text[ portuguese_brazilian ] = "The startup settings for accessing the central configuration are incomplete. ";
     Text[ hindi ] = "The startup settings for accessing the central configuration are incomplete. ";
+    Text[ slovak ] = "Počiatočné nastavenia pre prístup k centrálnej konfigurácii sú nekompletné. ";
 };
 
 String STR_CONFIG_ERR_CANNOT_CONNECT
@@ -951,6 +979,7 @@ String STR_CONFIG_ERR_CANNOT_CONNECT
     Text[ hebrew ] = "Eine Verbindung zur zentralen Konfiguration kann nicht hergestellt werden.";
     Text[ portuguese_brazilian ] = "A connection to the central configuration could not be established. ";
     Text[ hindi ] = "A connection to the central configuration could not be established. ";
+    Text[ slovak ] = "Nemohlo byť nadviazané spojenie s centrálnou konfiguráciou. ";
 };
 
 String STR_CONFIG_ERR_RIGHTS_MISSING
@@ -981,6 +1010,7 @@ String STR_CONFIG_ERR_RIGHTS_MISSING
     Text[ hebrew ] = "Aufgrund fehlender Zugriffsrechte können Sie nicht auf die zentrale Konfiguration zugreifen.";
     Text[ portuguese_brazilian ] = "You cannot access the central configuration because of missing access rights. ";
     Text[ hindi ] = "You cannot access the central configuration because of missing access rights. ";
+    Text[ slovak ] = "Nemôžete pristupovať k centrálnej konfigurácii, pretože nemáte prístupové práva. ";
 };
 
 String STR_CONFIG_ERR_LOGIN_FAILED
@@ -1011,6 +1041,7 @@ String STR_CONFIG_ERR_LOGIN_FAILED
     Text[ hebrew ] = "Die Anmeldung zur zentralen Konfiguration ist fehlgeschlagen. Der Benutzername oder das Kennwort ist falsch.";
     Text[ portuguese_brazilian ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
     Text[ hindi ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
+    Text[ slovak ] = "Vaše prihlásenie sa do centrálnej konfigurácie bolo neúspešné. Užívateľské meno alebo heslo je neplatné. ";
 };
 
 String STR_CONFIG_ERR_MECHANISM_INVALID
@@ -1041,6 +1072,7 @@ String STR_CONFIG_ERR_MECHANISM_INVALID
     Text[ hebrew ] = "Die gewählte Authentifizierungsmethode für den Zugriff auf die zentrale Konfiguration wird nicht unterstützt.";
     Text[ portuguese_brazilian ] = "The specified authentication method to access the central configuration is not supported. ";
     Text[ hindi ] = "The specified authentication method to access the central configuration is not supported. ";
+    Text[ slovak ] = "Vybraný spôsob prístupu k centrálnej konfigurácii nie je podporovaný. ";
 };
 
 String STR_CONFIG_ERR_ACCESS_GENERAL
@@ -1071,6 +1103,7 @@ String STR_CONFIG_ERR_ACCESS_GENERAL
     Text[ hebrew ] = "Ein genereller Fehler ist beim Zugriff auf die zentrale Konfiguration aufgetreten.";
     Text[ portuguese_brazilian ] = "A general access error occurred while accessing your central configuration. ";
     Text[ hindi ] = "A general error occurred while accessing your central configuration. ";
+    Text[ slovak ] = "Pri pristupovaní k centrálnej konfigurácii sa vyskytla chyba. ";
 };
 
 String STR_CONFIG_ERR_NO_WRITE_ACCESS
@@ -1101,6 +1134,7 @@ String STR_CONFIG_ERR_NO_WRITE_ACCESS
     Text[ hebrew ] = "Ihre geänderten persönlichen Einstellungen können aufgrund fehlender Zugriffsrechte nicht zentral gespeichert werden.";
     Text[ portuguese_brazilian ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
     Text[ hindi ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
+    Text[ slovak ] = "Zmeny vo vašich osobných nastaveniach nie je možné uložiť centrálne z dôvodu chýbajúcich prístupových práv.. ";
 };
 
 QueryBox QBX_CONFIG_IMPORTSETTINGS
@@ -1135,6 +1169,7 @@ QueryBox QBX_CONFIG_IMPORTSETTINGS
     Message[ czech ] = "Bylo nalezeno osobní nastavení %PRODUCTNAME na vašem počítači. \nPřejete si přenést tato nastavení do centrální konfigurace, abyste s nimi mohli pracovat i nadále?";
     Message[ hebrew ] = "Auf Ihrem Rechner wurden persönliche %PRODUCTNAME-Einstellungen gefunden. \n";
     Message[ hindi ] = "Personal %PRODUCTNAME settings have been detected on your computer. \nWould you like to transfer those settings to the central configuration in order to continue working with them?";
+    Message[ slovak ] = "Na vašom počítači boli zistené osobné nastavenia %PRODUCTNAME. \nChcete preniesť tieto nastavenia do centrálnej konfigurácie aby ste s nimi mohli pracovať?";
 };
 
 String STR_TITLE_CONFIG_MSGBOX
@@ -1165,6 +1200,7 @@ String STR_TITLE_CONFIG_MSGBOX
     Text[ czech ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ hindi ] = "इशारा";
+    Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
 
@@ -1195,6 +1231,7 @@ String STR_WARNING_FAULTYJAVACFG
     Text[ czech ] = "Poškozená konfigurace java.ini";
     Text[ hebrew ] = "Fehlerhafte java.ini-Konfiguration";
     Text[ hindi ] = "Defective java.ini Configuration";
+    Text[ slovak ] = "Vadná konfigurácia java.ini";
 };
 
 String STR_WARNING_JAVADISABLED
@@ -1225,6 +1262,7 @@ String STR_WARNING_JAVADISABLED
     Text[ czech ] = "Podpora pro Javu vypnuta";
     Text[ hebrew ] = "Java-Unterstützung deaktiviert";
     Text[ hindi ] = "Java Support Disabled";
+    Text[ slovak ] = "Podpora Javy vypnutá";
 };
 
 String STR_WARNING_MISSINGJAVARUNTIME
@@ -1255,6 +1293,7 @@ String STR_WARNING_MISSINGJAVARUNTIME
     Text[ czech ] = "Nelze najít JRE";
     Text[ hebrew ] = "JRE wurde nicht gefunden";
     Text[ hindi ] = "Unable to Locate JRE";
+    Text[ slovak ] = "Nebolo možné lokalizovať JRE";
 };
 
 String STR_WARNING_FAULTYJAVAINSTALL
@@ -1285,6 +1324,7 @@ String STR_WARNING_FAULTYJAVAINSTALL
     Text[ czech ] = "Poškozená instalace Javy";
     Text[ hebrew ] = "Fehlerhafte Java-Installation";
     Text[ hindi ] = "Defective Java Installation";
+    Text[ slovak ] = "Vadná inštalácia Javy";
 };
 
 String STR_WARNING_CANNOTSTARTJVMSETUP
@@ -1315,6 +1355,7 @@ String STR_WARNING_CANNOTSTARTJVMSETUP
     Text[ czech ] = "Nelze spustit instalaci Javy";
     Text[ hebrew ] = "Java-Setup konnte nicht gestartet werden";
     Text[ hindi ] = "Could Not Start Java Setup";
+    Text[ slovak ] = "Nebolo možné spustiť Java Setup";
 };
 
 String STR_WARNING_CANNOTSTARTJAVALDX
@@ -1345,6 +1386,7 @@ String STR_WARNING_CANNOTSTARTJAVALDX
     Text[ czech ] = "Nelze spustit Java LDX";
     Text[ hebrew ] = "Java-LDX konnte nicht gestartet werden";
     Text[ hindi ] = "Could Not Start Java LDX";
+    Text[ slovak ] = "Nebolo možné spustiť Java LDX";
 };
 
 String STR_BOOTSTRAP_ERR_CFG_DATAACCESS
@@ -1375,6 +1417,7 @@ String STR_BOOTSTRAP_ERR_CFG_DATAACCESS
     Text[ czech ] = "%PRODUCTNAME nemůže být spuštěn kvůli chybě v přístupu ke kenfiguračním datům %PRODUCTNAME.\n\nKontaktujte prosím vašeho systémového administrátora.";
     Text[ hebrew ] = "%PRODUCTNAME kann nicht gestartet werden, da beim Zugriff auf die %PRODUCTNAME Konfigurationsdaten ein Fehler aufgetreten ist.\n\nBitte wenden Sie sich an Ihren Systemadministrator.";
     Text[ hindi ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
+    Text[ slovak ] = "%PRODUCTNAME nemohol byť spustený kvôli chybe prístupu k nastaveniam %PRODUCTNAME.\n\nProsím kontaktujte vášho systémového administrátora.";
 };
 
 String STR_INTERNAL_ERRMSG
@@ -1405,6 +1448,7 @@ String STR_INTERNAL_ERRMSG
     Text[ czech ] = "Došlo k následující interní chybě: ";
     Text[ hebrew ] = "Folgender interner Fehler ist aufgetreten:";
     Text[ hindi ] = "The following internal error has occurred: ";
+    Text[ slovak ] = "Vyskytla sa nasledujúca vnútorná chyba: ";
 };
 
 QueryBox QBX_USERDATALOCKED
@@ -1448,6 +1492,7 @@ QueryBox QBX_USERDATALOCKED
     Message[ czech ] = "Jiná instance %PRODUCTNAME přistupuje k vašim osobním nastavením nebo jsou vaše osobní nastavení zamknuta.\nSimultánní přístup může vést k nekonzistencím ve vašich osobních nastaveních. Než budete pokračovat, ujistěte se, že uživatel '$u' uzavřel %PRODUCTNAME na počítači '$h'.\n\nOpravdu chcete pokračovat?";
     Message[ hebrew ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
     Message[ hindi ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Message[ slovak ] = "Vaše osobné nastavenia sú zamknuté alebo k nim pristupuje iná súčasť %PRODUCTNAME.\nSimultánny prístup môže viesť k nekonzistencii vašich osobných nastavení. Pred pokračovaním sa uistite, že užívateľ '$u' zatvorí %PRODUCTNAME na '$h'.\n\nUrčite chcete pokračovať?";
 };
 
 String STR_TITLE_USERDATALOCKED
@@ -1556,6 +1601,7 @@ InfoBox INFOBOX_EXPIRED
     Message[ portuguese_brazilian ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
     Message[ thai ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
     Message[ hindi ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
+    Message[ slovak ] = "Táto skúšobná verzia stratila platnosť. Ak chcete zistiť viac o %PRODUCTNAME,\nnavštívte www.sun.com/%PRODUCTNAME.";
 };
 
 String STR_TITLE_EXPIRED
@@ -1586,7 +1632,10 @@ String STR_TITLE_EXPIRED
     Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ thai ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ hindi ] = "इशारा";
+    Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
+
+
 
 
 
