@@ -2,9 +2,9 @@
  *
  *  $RCSfile: it_builtin.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:13:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ void
 BuiltInType::inq_Get_Text( StringVector &      o_module,
                            String &            o_name,
                            Ce_id &             o_nRelatedCe,
-                           int &               o_nSequemceCount,
+                           int &               o_nSequenceCount,
                            const Gate &        i_rGate ) const
 {
     o_name = Name();

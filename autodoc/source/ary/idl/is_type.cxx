@@ -2,9 +2,9 @@
  *
  *  $RCSfile: is_type.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:13:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ namespace idl
 
 namespace
 {
-const uintt C_nReservedElements = predefined::type_MAX;    // Skipping "0" and the GlobalNamespace
+const uintt C_nReservedElements = predefined::type_MAX;    // Skipping "0" and the built in types.
 }
 
 
