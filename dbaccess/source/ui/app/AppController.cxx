@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:38:28 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,6 +379,7 @@ void OApplicationController::clearConnections()
         TDataSourceConnections::iterator aEnd = m_aDataSourceConnections.end();
         for (; aIter != aEnd; ++aIter)
         {
+            stopConnectionListening(aIter->second);
             ::comphelper::disposeComponent(aIter->second);
         }
     }
@@ -398,6 +399,7 @@ void SAL_CALL OApplicationController::disposing()
 
     if ( getView() )
     {
+        getContainer()->showPreview(NULL);
         m_pClipbordNotifier->ClearCallbackLink();
         m_pClipbordNotifier->AddRemoveListener( getView(), sal_False );
         m_pClipbordNotifier->release();
@@ -506,6 +508,7 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
 //--------------------------------------------------------------------
 void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     Reference<XConnection> xCon(_rSource.Source, UNO_QUERY);
     if ( xCon.is() )
     {
@@ -539,13 +542,15 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
 //--------------------------------------------------------------------
 sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
     m_bSuspended = bSuspend;
     if ( bSuspend && !suspendDocuments( bSuspend ))
         return sal_False;
 
     sal_Bool bCheck = sal_True;
     Reference<XModifiable> xModi(m_xDataSource,UNO_QUERY);
-    if ( xModi.is() && xModi->isModified() )
+    if ( m_bCurrentlyModified || (xModi.is() && xModi->isModified()) )
     {
         QueryBox aQry(getView(), ModuleRes(APP_SAVEMODIFIED));
         switch (aQry.Execute())
@@ -1894,6 +1899,7 @@ void OApplicationController::onEntrySelect(SvLBoxEntry* _pEntry)
 //------------------------------------------------------------------------------
 void OApplicationController::frameAction(const FrameActionEvent& aEvent) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     if ((XFrame*)aEvent.Frame.get() == (XFrame*)m_xCurrentFrame.get())
         switch (aEvent.Action)
         {
