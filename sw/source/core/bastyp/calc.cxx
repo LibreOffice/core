@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 16:06:51 $
+ *  last change: $Author: os $ $Date: 2002-10-10 07:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1419,8 +1419,7 @@ SwSbxValue SwCalc::Prim()
 
         case CALC_NUMBER:   if( GetToken() == CALC_PHD )
                             {
-                                double aTmp = nLastLeft.GetDouble();
-                                aTmp *= nNumberValue.GetDouble();
+                                double aTmp = nNumberValue.GetDouble();
                                 aTmp *= 0.01;
                                 nErg.PutDouble( aTmp );
                                 GetToken();
