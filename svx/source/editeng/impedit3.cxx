@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:35:13 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2727,6 +2727,8 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
 
     FontMetric aMetric( pRefDev->GetFontMetric() );
     nAscent = (sal_uInt16)aMetric.GetAscent();
+    if ( IsAddExtLeading() )
+        nAscent += (sal_uInt16)aMetric.GetExtLeading();
     nDescent = (sal_uInt16)aMetric.GetDescent();
 
     if ( IsFixedCellHeight() )
@@ -2746,9 +2748,9 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     }
     else
     {
-        sal_uInt16 nLeading = ( aMetric.GetLeading() > 0 ) ? (sal_uInt16)aMetric.GetLeading() : 0;
+        sal_uInt16 nIntLeading = ( aMetric.GetIntLeading() > 0 ) ? (sal_uInt16)aMetric.GetIntLeading() : 0;
         // Fonts ohne Leading bereiten Probleme
-        if ( ( nLeading == 0 ) && ( pRefDev->GetOutDevType() == OUTDEV_PRINTER ) )
+        if ( ( nIntLeading == 0 ) && ( pRefDev->GetOutDevType() == OUTDEV_PRINTER ) )
         {
             // Da schaun wir mal, was fuer eine Leading ich auf dem
             // Bildschirm erhalte
