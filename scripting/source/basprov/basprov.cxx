@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:43:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,12 +444,6 @@ namespace basprov
         if ( nIndex != -1 )
             aMethod = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
 
-        OSL_TRACE("** aLibrary = %s",
-            ::rtl::OUStringToOString( aLibrary, RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
-        OSL_TRACE("** aModule = %s",
-            ::rtl::OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
-        OSL_TRACE("** aMethod = %s",
-            ::rtl::OUStringToOString( aMethod, RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
         if ( aLibrary.getLength() != 0 && aModule.getLength() != 0 && aMethod.getLength() != 0 && aLocation.getLength() != 0 )
         {
             BasicManager* pBasicMgr =  NULL;
