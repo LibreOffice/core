@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:34:07 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,11 @@
 #ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORYVIEWTYPE_HPP_
 #include <drafts/com/sun/star/script/browse/BrowseNodeFactoryViewType.hpp>
 #endif
+#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -160,6 +165,8 @@ using namespace ::drafts::com::sun::star::script;
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
+#include <svtools/imagemgr.hxx>
+#include <tools/urlobj.hxx>
 
 struct SfxStatBarInfo_Impl
 {
@@ -419,7 +426,11 @@ void SfxConfigFunctionListBox_Impl::FunctionSelected()
 SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     Window* pParent, const ResId& rResId, ULONG nConfigMode )
         : SvTreeListBox( pParent, rResId )
-        , nMode( nConfigMode ), bShowSF( FALSE ), bShowBasic( TRUE )
+        , nMode( nConfigMode ), bShowSF( FALSE ), bShowBasic( TRUE ),
+    m_sMyMacros(ResId(STR_MYMACROS)),
+    m_sProdMacros(ResId(STR_PRODMACROS)),
+    m_hdImage(ResId(IMG_HARDDISK)),
+    m_hdImage_hc(ResId(IMG_HARDDISK_HC))
 /*  Beschreibung
     Diese Listbox zeigt alle Funktionsgruppen und Basics an, die zur Konfiguration
     zur Verf"ugung stehen. Basics werden noch in Bibliotheken und Module untergliedert.
@@ -429,6 +440,11 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
     SetNodeBitmaps( Image( BMP_COLLAPSED ), Image( BMP_EXPANDED ) , BMP_COLOR_NORMAL );
     SetNodeBitmaps( Image( BMP_COLLAPSED_HC ), Image( BMP_EXPANDED_HC ), BMP_COLOR_HIGHCONTRAST );
+    ::rtl::OUString aResName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "basctl" ));
+    aResName += rtl::OUString::valueOf( sal_Int32( SUPD ));
+    ResMgr* pBasResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
+    m_aImagesNormal = ImageList(ResId(RID_IMGLST_OBJECTS, pBasResMgr ));
+    m_aImagesHighContrast = ImageList(ResId(RID_IMGLST_OBJECTS_HC, pBasResMgr ));
 
     // Check configuration to see whether only Basic macros,
   // only Scripting Framework scripts, or both should be listed
@@ -688,11 +704,12 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
         OSL_TRACE("** ** bShowSF");
         // Add Scripting Framework entries
         Reference< browse::XBrowseNode > rootNode;
+        Reference< XComponentContext > xCtx;
         try
         {
             Reference < beans::XPropertySet > xProps(
                 ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-            Reference< XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
+            xCtx.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
             Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
                 ::rtl::OUString::createFromAscii( "/singletons/drafts.com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
             rootNode.set( xFac->getView( browse::BrowseNodeFactoryViewType::SCRIPTSELECTOR ) );
@@ -761,12 +778,25 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
                             {
                                 currentDocTitle = SfxObjectShell::GetWorkingDocument()->GetTitle();
                             }
+                            ::rtl::OUString uiName = theChild->getName();
+
                             if ( bIsRootNode )
                             {
                                 if (  ! ((theChild->getName().equals( user )  ||                                    theChild->getName().equals( share ) ||
                                     theChild->getName().equals( currentDocTitle ) ) ) )
                                 {
                                     bDisplay=FALSE;
+                                }
+                                else
+                                {
+                                    if ( uiName.equals( user ) )
+                                    {
+                                        uiName = m_sMyMacros;
+                                    }
+                                    else if ( uiName.equals( share ) )
+                                    {
+                                        uiName = m_sProdMacros;
+                                    }
                                 }
                             }
                             if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
@@ -782,8 +812,14 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
                                     new SfxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
                                         0, static_cast<void *>( theChild.get()));
 
+                                Image aImage = GetImage( theChild, xCtx, bIsRootNode,BMP_COLOR_NORMAL );
                                 SvLBoxEntry* pNewEntry =
-                                    InsertEntry( theChild->getName(), NULL);
+                                    InsertEntry( uiName, NULL);
+                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                                aImage = GetImage( theChild, xCtx, bIsRootNode,BMP_COLOR_HIGHCONTRAST );
+                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
 
                                 pNewEntry->SetUserData( pInfo );
                                 aArr.Insert( pInfo, aArr.Count() );
@@ -814,6 +850,208 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
     }
     MakeVisible( GetEntry( 0,0 ) );
     SetUpdateMode( TRUE );
+}
+Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > node, Reference< XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast )
+{
+    Image aImage;
+    if ( bIsRootNode )
+    {
+        ::rtl::OUString user = ::rtl::OUString::createFromAscii("user");
+        ::rtl::OUString share = ::rtl::OUString::createFromAscii("share");
+        if (node->getName().equals( user ) || node->getName().equals(share ) )
+        {
+            if( bHighContrast == BMP_COLOR_NORMAL )
+                aImage = m_hdImage;
+            else
+                aImage = m_hdImage_hc;
+        }
+        else
+        {
+            ::rtl::OUString factoryURL;
+            ::rtl::OUString nodeName = node->getName();
+            Reference<XInterface> xDocumentModel = getDocumentModel(xCtx, nodeName );
+            if ( xDocumentModel.is() )
+            {
+                Reference< ::drafts::com::sun::star::frame::XModuleManager >
+                    xModuleManager(
+                        xCtx->getServiceManager()
+                            ->createInstanceWithContext(
+                                ::rtl::OUString::createFromAscii("drafts." // xxx todo
+                                      "com.sun.star.frame.ModuleManager"),
+                                xCtx ),
+                            UNO_QUERY_THROW );
+                Reference<container::XNameAccess> xModuleConfig(
+                    xModuleManager, UNO_QUERY_THROW );
+                // get the long name of the document:
+                ::rtl::OUString appModule( xModuleManager->identify(
+                                    xDocumentModel ) );
+                Sequence<beans::PropertyValue> moduleDescr;
+                Any aAny = xModuleConfig->getByName(appModule);
+                if( sal_True != ( aAny >>= moduleDescr ) )
+                {
+                    throw RuntimeException(::rtl::OUString::createFromAscii("SFTreeListBox::Init: failed to get PropertyValue"), Reference< XInterface >());
+                }
+                beans::PropertyValue const * pmoduleDescr =
+                    moduleDescr.getConstArray();
+                for ( sal_Int32 pos = moduleDescr.getLength(); pos--; )
+                {
+                    if (pmoduleDescr[ pos ].Name.equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM(
+                                "ooSetupFactoryEmptyDocumentURL") ))
+                    {
+                        pmoduleDescr[ pos ].Value >>= factoryURL;
+                        OSL_TRACE("factory url for doc images is %s",
+                        ::rtl::OUStringToOString( factoryURL , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                        break;
+                    }
+                }
+            }
+            if( factoryURL.getLength() > 0 )
+            {
+                if( bHighContrast == BMP_COLOR_NORMAL )
+                    aImage = SvFileInformationManager::GetFileImage(
+                        INetURLObject(factoryURL), false,
+                        BMP_COLOR_NORMAL );
+                else
+                    aImage = SvFileInformationManager::GetFileImage(
+                        INetURLObject(factoryURL), false,
+                        BMP_COLOR_HIGHCONTRAST );
+            }
+            else
+            {
+                if( bHighContrast == BMP_COLOR_NORMAL )
+                    aImage = m_aImagesNormal.GetImage(IMGID_DOCUMENT);
+                else
+                    aImage = m_aImagesHighContrast.GetImage(IMGID_DOCUMENT);
+            }
+        }
+    }
+    else
+    {
+        if( node->getType() == browse::BrowseNodeTypes::SCRIPT )
+        {
+            if( bHighContrast == BMP_COLOR_NORMAL )
+                aImage = m_aImagesNormal.GetImage(IMGID_MODULE);
+            else
+                aImage = m_aImagesHighContrast.GetImage(IMGID_MODULE);
+        }
+        else
+        {
+            if( bHighContrast == BMP_COLOR_NORMAL )
+                aImage = m_aImagesNormal.GetImage(IMGID_LIB);
+            else
+                aImage = m_aImagesHighContrast.GetImage(IMGID_LIB);
+        }
+    }
+    return aImage;
+}
+
+Reference< XInterface  >
+SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
+{
+    Reference< XInterface > xModel;
+    Reference< lang::XMultiComponentFactory > mcf =
+            xCtx->getServiceManager();
+    Reference< frame::XDesktop > desktop (
+        mcf->createInstanceWithContext(
+            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),                 xCtx ),
+            UNO_QUERY );
+
+    Reference< container::XEnumerationAccess > componentsAccess =
+        desktop->getComponents();
+    Reference< container::XEnumeration > components =
+        componentsAccess->createEnumeration();
+    sal_Int32 docIndex = 0;
+    while (components->hasMoreElements())
+    {
+        Reference< frame::XModel > model(
+            components->nextElement(), UNO_QUERY );
+        if ( model.is() )
+        {
+            ::rtl::OUString sTdocUrl = xModelToDocTitle( model );
+            if( sTdocUrl.equals( docName ) )
+            {
+                xModel = model;
+                break;
+            }
+        }
+    }
+    return xModel;
+}
+
+::rtl::OUString SfxConfigGroupListBox_Impl::xModelToDocTitle( const Reference< frame::XModel >& xModel )
+{
+    // Set a default name, this should never be seen.
+    ::rtl::OUString docNameOrURL =
+        ::rtl::OUString::createFromAscii("Unknown");
+    if ( xModel.is() )
+    {
+        ::rtl::OUString tempName;
+        try
+        {
+            Reference< beans::XPropertySet > propSet( xModel->getCurrentController()->getFrame(), UNO_QUERY );
+            if ( propSet.is() )
+            {
+                if ( sal_True == ( propSet->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) ) >>= tempName ) )
+                {
+                    docNameOrURL = tempName;
+                    if ( xModel->getURL().getLength() == 0 )
+                    {
+                        // process "UntitledX - YYYYYYYY"
+                        // to get UntitledX
+                        sal_Int32 pos = 0;
+                        docNameOrURL = tempName.getToken(0,' ',pos);
+                        OSL_TRACE("xModelToDocTitle() Title for document is %s.",
+                            ::rtl::OUStringToOString( docNameOrURL,
+                                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                    }
+                    else
+                    {
+                        Reference< document::XDocumentInfoSupplier >  xDIS( xModel, UNO_QUERY_THROW );
+                        Reference< beans::XPropertySet > xProp (xDIS->getDocumentInfo(),  UNO_QUERY_THROW );
+                        Any aTitle = xProp->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) );
+
+                        aTitle >>= docNameOrURL;
+                        if ( docNameOrURL.getLength() == 0 )
+                        {
+                            docNameOrURL =  parseLocationName( xModel->getURL() );
+                        }
+                    }
+                }
+            }
+        }
+        catch ( Exception& e )
+        {
+            OSL_TRACE("MiscUtils::xModelToDocTitle() exception thrown: !!! %s",
+                ::rtl::OUStringToOString( e.Message,
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        }
+
+    }
+    else
+    {
+        OSL_TRACE("MiscUtils::xModelToDocTitle() doc model is null" );
+    }
+    return docNameOrURL;
+}
+
+::rtl::OUString SfxConfigGroupListBox_Impl::parseLocationName( const ::rtl::OUString& location )
+{
+    // strip out the last leaf of location name
+    // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
+    ::rtl::OUString temp = location;
+    sal_Int32 lastSlashIndex = temp.lastIndexOf( ::rtl::OUString::createFromAscii( "/" ) );
+
+    if ( ( lastSlashIndex + 1 ) <  temp.getLength()  )
+    {
+        temp = temp.copy( lastSlashIndex + 1 );
+    }
+    // maybe we should throw here!!!
+    else
+    {
+        OSL_TRACE("Something wrong with name, perhaps we should throw an exception");
+    }
+    return temp;
 }
 
 void SfxConfigGroupListBox_Impl::GroupSelected()
@@ -947,8 +1185,14 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                                     new SfxGroupInfo_Impl(SFX_CFGFUNCTION_SCRIPT,
                                         aInfo->GetSlotId(), aInfo);
 
+                                Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
                                 SvLBoxEntry* pNewEntry =
                                     pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
+                                pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                                pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                                aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_HIGHCONTRAST );
+                                pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+                                pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
 
                                 pNewEntry->SetUserData( pInfo );
 
@@ -1152,8 +1396,14 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                                     new SfxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
                                         0, static_cast<void *>( theChild.get()));
 
+                                Image aImage = GetImage( theChild, Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
                                 SvLBoxEntry* pNewEntry =
                                     InsertEntry( theChild->getName(), pEntry );
+                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                                aImage = GetImage( theChild, Reference< XComponentContext >(), sal_False, BMP_COLOR_HIGHCONTRAST );
+                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
 
                                 pNewEntry->SetUserData( pInfo );
                                 aArr.Insert( pInfo, aArr.Count() );
