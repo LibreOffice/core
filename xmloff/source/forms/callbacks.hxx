@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2001-01-02 15:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
+#include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #endif
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
@@ -145,6 +148,29 @@ namespace xmloff
         virtual const SvXMLStyleContext*    getStyleElement(const ::rtl::OUString& _rStyleName) const = 0;
     };
 
+    //=====================================================================
+    //= IEventAttacherManager
+    //=====================================================================
+    class IEventAttacherManager
+    {
+    public:
+        virtual void registerEvents(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxElement,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
+            ) = 0;
+    };
+
+    //=====================================================================
+    //= IEventAttacher
+    //=====================================================================
+    class IEventAttacher
+    {
+    public:
+        virtual void registerEvents(
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
+            ) = 0;
+    };
+
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -154,6 +180,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.3  2000/12/13 10:35:50  fs
  *  included XPropertySet.hpp
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2001-01-02 15:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,18 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
+#include <com/sun/star/script/XEventAttacherManager.hpp>
+#endif
+#ifndef _XMLOFF_FORMS_EVENTEXPORT_HXX_
+#include "eventexport.hxx"
+#endif
+#ifndef _XMLOFF_XMLEVENTEXPORT_HXX
+#include "XMLEventExport.hxx"
+#endif
+#ifndef _XMLOFF_FORMS_FORMEVENTS_HXX_
+#include "formevents.hxx"
+#endif
 
 //.........................................................................
 namespace xmloff
@@ -125,6 +137,7 @@ namespace xmloff
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::drawing;
     using namespace ::com::sun::star::form;
+    using namespace ::com::sun::star::script;
 
     //=====================================================================
     //= OFormLayerXMLExport_Impl
@@ -145,6 +158,9 @@ namespace xmloff
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_NAME)),
             m_xExportMapper.getBodyPtr(),
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_PREFIX)));
+
+        // add our event translation table
+        m_rContext.GetEventExport().AddTranslationTable(g_pFormsEventTranslation);
 
         clear();
     }
@@ -173,15 +189,17 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLExport_Impl::exportGridColumn(const Reference< XPropertySet >& _rxColumn)
+    void OFormLayerXMLExport_Impl::exportGridColumn(const Reference< XPropertySet >& _rxColumn,
+        const Sequence< ScriptEventDescriptor >& _rEvents)
     {
         // do the exporting
-        OColumnExport aExportImpl(*this, _rxColumn);
+        OColumnExport aExportImpl(*this, _rxColumn, _rEvents);
         aExportImpl.doExport();
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLExport_Impl::exportControl(const Reference< XPropertySet >& _rxControl)
+    void OFormLayerXMLExport_Impl::exportControl(const Reference< XPropertySet >& _rxControl,
+        const Sequence< ScriptEventDescriptor >& _rEvents)
     {
         // the list of the referring controls
         ::rtl::OUString sReferringControls;
@@ -197,16 +215,17 @@ namespace xmloff
             sControlId = aControlId->second;
 
         // do the exporting
-        OControlExport aExportImpl(*this, _rxControl, sControlId, sReferringControls);
+        OControlExport aExportImpl(*this, _rxControl, sControlId, sReferringControls, _rEvents);
         aExportImpl.doExport();
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLExport_Impl::exportForm(const Reference< XPropertySet >& _rxProps) throw (Exception)
+    void OFormLayerXMLExport_Impl::exportForm(const Reference< XPropertySet >& _rxProps,
+        const Sequence< ScriptEventDescriptor >& _rEvents)
     {
         OSL_ENSHURE(_rxProps.is(), "OFormLayerXMLExport_Impl::exportForm: invalid property set!");
-        OFormExport aAttributeHandler(*this, _rxProps);
-            // this object will do everything necessary ...
+        OFormExport aAttributeHandler(*this, _rxProps, _rEvents);
+        aAttributeHandler.doExport();
     }
 
     //---------------------------------------------------------------------
@@ -226,6 +245,9 @@ namespace xmloff
     {
         // step through all the elements of the collection
         sal_Int32 nElements = _rxCollection->getCount();
+
+        Reference< XEventAttacherManager > xElementEventManager(_rxCollection, UNO_QUERY);
+        Sequence< ScriptEventDescriptor > aElementEvents;
 
         Reference< XPropertySet > xCurrentProps;
         Reference< XPropertySetInfo > xPropsInfo;
@@ -247,17 +269,20 @@ namespace xmloff
                     // without this, a lot of stuff in the export routines may fail
                     continue;
 
+                if (xElementEventManager.is())
+                    aElementEvents = xElementEventManager->getScriptEvents(i);
+
                 if (xPropsInfo->hasPropertyByName(PROPERTY_COLUMNSERVICENAME))
                 {
-                    exportGridColumn(xCurrentProps);
+                    exportGridColumn(xCurrentProps, aElementEvents);
                 }
                 else if (xPropsInfo->hasPropertyByName(PROPERTY_CLASSID))
                 {
-                    exportControl(xCurrentProps);
+                    exportControl(xCurrentProps, aElementEvents);
                 }
                 else
                 {
-                    exportForm(xCurrentProps);
+                    exportForm(xCurrentProps, aElementEvents);
                 }
             }
             catch(Exception&)
@@ -483,6 +508,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.6  2000/12/13 12:29:30  kz
  *  DEBUG -> _DEBUG for OSL_ENSURE
  *

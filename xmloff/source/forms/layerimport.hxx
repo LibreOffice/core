@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2001-01-02 15:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
-#ifndef _XMLOFF_FORMS_IFACECOMPARE_HXX_
-#include "ifacecompare.hxx"
+#ifndef _XMLOFF_FORMS_EVENTIMPORT_HXX_
+#include "eventimport.hxx"
 #endif
 #ifndef _REF_HXX
 #include <tools/ref.hxx>
@@ -125,6 +125,7 @@ namespace xmloff
                 :public OAttributeMetaData
                 ,public IControlIdMap
                 ,public IFormsImportContext
+                ,public ODefaultEventAttacherManager
     {
         friend class OFormLayerXMLImport;
 
@@ -215,6 +216,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.3  2000/12/13 10:40:15  fs
  *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
  *

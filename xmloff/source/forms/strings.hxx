@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2001-01-02 15:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,13 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( SERVICE_IMAGECONTROL,    "com.sun.star.form.component.DatabaseImageControl");
     XMLFORM_CONSTASCII_STRING( SERVICE_FORMATTEDFIELD,  "com.sun.star.form.component.FormattedField" );
 
+    // various strings
+    XMLFORM_CONSTASCII_STRING( EVENT_NAME_SEPARATOR, "::" );
+    XMLFORM_CONSTASCII_STRING( EVENT_TYPE, "EventType" );
+    XMLFORM_CONSTASCII_STRING( EVENT_LIBRARY, "Library" );
+    XMLFORM_CONSTASCII_STRING( EVENT_LOCALMACRONAME, "MacroName" );
+
+
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -233,6 +240,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.2  2000/11/19 15:41:32  fs
  *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
  *

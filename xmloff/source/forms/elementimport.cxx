@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2000-12-20 14:01:19 $
+ *  last change: $Author: fs $ $Date: 2001-01-02 15:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,12 @@
 #ifndef _XMLOFF_FORMS_ATTRIBLISTMERGE_HXX_
 #include "attriblistmerge.hxx"
 #endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
+#endif
+#ifndef _XMLOFF_FORMS_EVENTIMPORT_HXX_
+#include "eventimport.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
@@ -99,6 +105,7 @@ namespace xmloff
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::xml;
@@ -161,11 +168,12 @@ namespace xmloff
     //= OElementImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OElementImport::OElementImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OElementImport::OElementImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer)
         :OPropertyImport(_rImport, _nPrefix, _rName)
         ,m_xParentContainer(_rxParentContainer)
         ,m_rFormImport(_rImport)
+        ,m_rEventManager(_rEventManager)
     {
         OSL_ENSURE(m_xParentContainer.is(), "OElementImport::OElementImport: invalid parent container!");
     }
@@ -179,6 +187,17 @@ namespace xmloff
 
         // create the element
         m_xElement = createElement();
+    }
+
+    //---------------------------------------------------------------------
+    SvXMLImportContext* OElementImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+        const Reference< sax::XAttributeList >& _rxAttrList)
+    {
+        static const ::rtl::OUString s_sEventTagName = ::rtl::OUString::createFromAscii("events");
+        if ((s_sEventTagName == _rLocalName) && (XML_NAMESPACE_SCRIPT == _nPrefix))
+            return new OFormEventsImportContext(m_rFormImport.getGlobalContext(), _nPrefix, _rLocalName, *this);
+
+        return OPropertyImport::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
     }
 
     //---------------------------------------------------------------------
@@ -353,21 +372,28 @@ namespace xmloff
         return xReturn;
     }
 
+    //---------------------------------------------------------------------
+    void OElementImport::registerEvents(const Sequence< ScriptEventDescriptor >& _rEvents)
+    {
+        OSL_ENSURE(m_xElement.is(), "OElementImport::registerEvents: no element to register events for!");
+        m_rEventManager.registerEvents(m_xElement, _rEvents);
+    }
+
     //=====================================================================
     //= OControlImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OControlImport::OControlImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OControlImport::OControlImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer)
-        :OElementImport(_rImport, _nPrefix, _rName, _rxParentContainer)
+        :OElementImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
         ,m_eElementType(OControlElement::UNKNOWN)
     {
     }
 
     //---------------------------------------------------------------------
-    OControlImport::OControlImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OControlImport::OControlImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer, OControlElement::ElementType _eType)
-        :OElementImport(_rImport, _nPrefix, _rName, _rxParentContainer)
+        :OElementImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
         ,m_eElementType(_eType)
     {
     }
@@ -535,10 +561,10 @@ namespace xmloff
     //=====================================================================
     //---------------------------------------------------------------------
     OReferredControlImport::OReferredControlImport(
-            IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
-        :OControlImport(_rImport, _nPrefix, _rName, _rxParentContainer)
+        :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
     {
     }
 
@@ -567,9 +593,9 @@ namespace xmloff
     //= OPasswordImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OPasswordImport::OPasswordImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OPasswordImport::OPasswordImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer, OControlElement::ElementType _eType)
-        :OControlImport(_rImport, _nPrefix, _rName, _rxParentContainer, _eType)
+        :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
     {
     }
 
@@ -598,10 +624,10 @@ namespace xmloff
     //= OListAndComboImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OListAndComboImport::OListAndComboImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OListAndComboImport::OListAndComboImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
-        :OControlImport(_rImport, _nPrefix, _rName, _rxParentContainer, _eType)
+        :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
     {
     }
 
@@ -630,10 +656,7 @@ namespace xmloff
         // the string item list
         PropertyValue aItemList;
         aItemList.Name = PROPERTY_STRING_ITEM_LIST;
-        if (OControlElement::LISTBOX == m_eElementType)
-            aItemList.Value <<= m_aListSource;
-        else
-            aItemList.Value <<= m_aListSource.getLength() ? m_aListSource[0] : ::rtl::OUString();
+        aItemList.Value <<= m_aListSource;
         implPushBackPropertyValue(aItemList);
 
         if (OControlElement::LISTBOX == m_eElementType)
@@ -770,11 +793,12 @@ namespace xmloff
     //= OColumnWrapperImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OColumnWrapperImport::OColumnWrapperImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OColumnWrapperImport::OColumnWrapperImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer)
         :SvXMLImportContext(_rImport.getGlobalContext(), _nPrefix, _rName)
         ,m_rFormImport(_rImport)
         ,m_xParentContainer(_rxParentContainer)
+        ,m_rEventManager(_rEventManager)
     {
     }
 
@@ -796,11 +820,11 @@ namespace xmloff
             case OControlElement::COMBOBOX:
             case OControlElement::LISTBOX:
                 OSL_ENSURE(m_xOwnAttributes.is(), "OColumnWrapperImport::CreateChildContext: had no form:column element!");
-                return new OColumnImport<OListAndComboImport>(m_rFormImport, _nPrefix, _rLocalName, m_xParentContainer, eType, m_xOwnAttributes);
+                return new OColumnImport<OListAndComboImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, eType, m_xOwnAttributes);
 
             default:
                 OSL_ENSURE(m_xOwnAttributes.is(), "OColumnWrapperImport::CreateChildContext: had no form:column element!");
-                return new OColumnImport<OControlImport>(m_rFormImport, _nPrefix, _rLocalName, m_xParentContainer, eType, m_xOwnAttributes);
+                return new OColumnImport<OControlImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, eType, m_xOwnAttributes);
         }
     }
 
@@ -824,10 +848,10 @@ namespace xmloff
     //= OGridImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OGridImport::OGridImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OGridImport::OGridImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
-        :OGridImport_Base(_rImport, _nPrefix, _rName, _rxParentContainer)
+        :OGridImport_Base(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
     {
         setElementType(_eType);
     }
@@ -840,8 +864,7 @@ namespace xmloff
         {
             case OControlElement::COLUMN:
                 // this is the wrapper element.
-                return new OColumnWrapperImport(m_rFormImport, _nPrefix, _rLocalName, m_xMeAsContainer);
-                break;
+                return new OColumnWrapperImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer);
             default:
                 OSL_ENSURE(sal_False, "OGridImport::implCreateControlChild: invalid sub element!");
                 // below a form:grid element, the only allowed "control type" is COLUMN
@@ -855,10 +878,21 @@ namespace xmloff
     //= OFormImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OFormImport::OFormImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OFormImport::OFormImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer)
-        :OFormImport_Base(_rImport, _nPrefix, _rName, _rxParentContainer)
+        :OFormImport_Base(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
     {
+    }
+
+    //---------------------------------------------------------------------
+    SvXMLImportContext* OFormImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+        const Reference< sax::XAttributeList >& _rxAttrList)
+    {
+        static const ::rtl::OUString s_sFormElementName = ::rtl::OUString::createFromAscii("form");
+        if (s_sFormElementName.equals(_rLocalName))
+            return new OFormImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer);
+
+        return OFormImport_Base::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
     }
 
     //---------------------------------------------------------------------
@@ -869,17 +903,17 @@ namespace xmloff
         {
             case OControlElement::COMBOBOX:
             case OControlElement::LISTBOX:
-                return new OListAndComboImport(m_rFormImport, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
+                return new OListAndComboImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
 
             case OControlElement::FRAME:
             case OControlElement::FIXED_TEXT:
-                return new OReferredControlImport(m_rFormImport, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
+                return new OReferredControlImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
 
             case OControlElement::GRID:
-                return new OGridImport(m_rFormImport, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
+                return new OGridImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
 
             default:
-                return new OControlImport(m_rFormImport, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
+                return new OControlImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
         }
     }
 
@@ -969,6 +1003,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/20 14:01:19  vg
+ *  #65293# type (DEBUG instead of _DEBUG)
+ *
  *  Revision 1.4  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *

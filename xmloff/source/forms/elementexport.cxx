@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2001-01-02 15:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
+#ifndef _XMLOFF_FORMS_EVENTEXPORT_HXX_
+#include "eventexport.hxx"
+#endif
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
@@ -115,6 +118,9 @@
 #ifndef _SV_WINTYPES_HXX
 #include <vcl/wintypes.hxx>     // for check states
 #endif
+#ifndef _XMLOFF_XMLEVENTEXPORT_HXX
+#include "XMLEventExport.hxx"
+#endif
 
 
 //.........................................................................
@@ -129,14 +135,100 @@ namespace xmloff
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
+    using namespace ::com::sun::star::script;
+
+    //=====================================================================
+    //= OElementExport
+    //=====================================================================
+    OElementExport::OElementExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxProps,
+        const Sequence< ScriptEventDescriptor >& _rEvents)
+        :OPropertyExport(_rContext, _rxProps)
+        ,m_aEvents(_rEvents)
+        ,m_pXMLElement(NULL)
+    {
+    }
+
+    //---------------------------------------------------------------------
+    OElementExport::~OElementExport()
+    {
+        implEndElement();
+    }
+
+    //---------------------------------------------------------------------
+    void OElementExport::doExport()
+    {
+        // collect some general information about the element
+        examine();
+
+        // first add the attributes necessary for the element
+        m_rContext.getGlobalContext().ClearAttrList();
+
+        // add the attributes
+        exportAttributes();
+
+        // start the XML element
+        implStartElement(getXMLElementName());
+
+        // the sub elements (mostly control type dependent)
+        exportSubTags();
+
+        implEndElement();
+    }
+
+    //---------------------------------------------------------------------
+    void OElementExport::examine()
+    {
+        // nothing to do here
+    }
+
+    //---------------------------------------------------------------------
+    void OElementExport::exportAttributes()
+    {
+        // nothing to do here
+    }
+
+    //---------------------------------------------------------------------
+    void OElementExport::exportSubTags()
+    {
+        // the properties which where not exported 'til now
+        exportRemainingProperties();
+
+        // the script:events sub tags
+        exportEvents();
+    }
+
+    //---------------------------------------------------------------------
+    void OElementExport::implStartElement(const sal_Char* _pName)
+    {
+        m_pXMLElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, _pName, sal_True, sal_True);
+    }
+
+    //---------------------------------------------------------------------
+    void OElementExport::implEndElement()
+    {
+        delete m_pXMLElement;
+        m_pXMLElement = NULL;
+    }
+
+    //---------------------------------------------------------------------
+    void OElementExport::exportEvents()
+    {
+        if (!m_aEvents.getLength())
+            // nothing to do
+            return;
+
+        Reference< XNameReplace > xWrapper = new OEventDescriptorMapper(m_aEvents);
+        m_rContext.getGlobalContext().GetEventExport().Export(xWrapper);
+    }
 
     //=====================================================================
     //= OControlExport
     //=====================================================================
     //---------------------------------------------------------------------
     OControlExport::OControlExport(IFormsExportContext& _rContext,  const Reference< XPropertySet >& _rxControl,
-        const ::rtl::OUString& _rControlId, const ::rtl::OUString& _rReferringControls)
-        :OPropertyExport(_rContext, _rxControl)
+        const ::rtl::OUString& _rControlId, const ::rtl::OUString& _rReferringControls,
+        const Sequence< ScriptEventDescriptor >& _rEvents)
+        :OElementExport(_rContext, _rxControl, _rEvents)
         ,m_sControlId(_rControlId)
         ,m_sReferringControls(_rReferringControls)
         ,m_nIncludeCommon(0)
@@ -144,37 +236,13 @@ namespace xmloff
         ,m_nIncludeSpecial(0)
         ,m_nIncludeEvents(0)
         ,m_nClassId(FormComponentType::CONTROL)
-        ,m_pXMLElement(NULL)
     {
         OSL_ENSURE(m_xProps.is(), "OControlExport::OControlExport: invalid arguments!");
     }
 
     //---------------------------------------------------------------------
-    void OControlExport::doExport()
+    void OControlExport::exportAttributes()
     {
-        // collect some general information about the control
-        examine();
-
-        // start the element
-        startExportElement();
-
-        // the sub elements (mostly control type dependent)
-        exportSubTags();
-    }
-
-    //---------------------------------------------------------------------
-    OControlExport::~OControlExport()
-    {
-        delete m_pXMLElement;
-            // if we already started the element, this will end it, if not, nothing will happen
-    }
-
-    //---------------------------------------------------------------------
-    void OControlExport::startExportElement()
-    {
-        // first add the attributes necessary for the element
-        m_rContext.getGlobalContext().ClearAttrList();
-
         // common control attributes
         exportCommonControlAttributes();
 
@@ -188,8 +256,6 @@ namespace xmloff
         implExportStyleReference();
 
         // TODO: add the event attributes
-
-        m_pXMLElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, getElementName(m_eType), sal_True, sal_True);
     }
 
     //---------------------------------------------------------------------
@@ -209,10 +275,8 @@ namespace xmloff
         // know anything about this, we need to prevent that it tries to export this property
         exportedProperty(PROPERTY_CONTROLLABEL);
 
-        // the properties which where not exported 'til now
-        exportRemainingProperties();
-
-        // TODO: the script:events sub tags
+        // let the base class export the remaining properties and the events
+        OElementExport::exportSubTags();
 
         // special sub tags for some controls
         switch (m_eType)
@@ -814,6 +878,12 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    const sal_Char* OControlExport::getXMLElementName() const
+    {
+        return getElementName(m_eType);
+    }
+
+    //---------------------------------------------------------------------
     void OControlExport::examine()
     {
         // get the class id to decide which kind of element we need in the XML stream
@@ -1056,20 +1126,19 @@ namespace xmloff
     //= OColumnExport
     //=====================================================================
     //---------------------------------------------------------------------
-    OColumnExport::OColumnExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxControl)
-        :OControlExport(_rContext, _rxControl, ::rtl::OUString(), ::rtl::OUString())
+    OColumnExport::OColumnExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxControl,
+        const Sequence< ScriptEventDescriptor >& _rEvents)
+        :OControlExport(_rContext, _rxControl, ::rtl::OUString(), ::rtl::OUString(), _rEvents)
         ,m_pColumnXMLElement(NULL)
+        ,m_bExamined(sal_False)
     {
     }
 
     //---------------------------------------------------------------------
     OColumnExport::~OColumnExport()
     {
-        // delete m_pXMLElement before m_pColumnXMLElement !!
-            // TODO: this makes me seriously thinking about why OColumnExport is derived from OControlExport, and
-            // not the other way round
-        delete m_pXMLElement;
-        m_pXMLElement = NULL;
+        // end the base class element before our own one
+        implEndElement();
 
         delete m_pColumnXMLElement;
     }
@@ -1077,25 +1146,31 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OColumnExport::examine()
     {
-        OControlExport::examine();
+        if (!m_bExamined)
+        {
+            OControlExport::examine();
 
-        // grid columns miss some properties of the controls they're representing
-        m_nIncludeCommon &= ~(CCA_SERVICE_NAME | CCA_CONTROL_ID | CCA_FOR | CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_LABEL | CCA_NAME);
-        m_nIncludeSpecial &= ~(SCA_ECHO_CHAR | SCA_AUTOMATIC_COMPLETION | SCA_MULTIPLE | SCA_MULTI_LINE | SCA_IS_TRISTATE);
+            // grid columns miss some properties of the controls they're representing
+            m_nIncludeCommon &= ~(CCA_SERVICE_NAME | CCA_CONTROL_ID | CCA_FOR | CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_LABEL | CCA_NAME);
+            m_nIncludeSpecial &= ~(SCA_ECHO_CHAR | SCA_AUTOMATIC_COMPLETION | SCA_MULTIPLE | SCA_MULTI_LINE | SCA_IS_TRISTATE);
 
-        if (FormComponentType::DATEFIELD != m_nClassId)
-            // except date fields, no column has the DropDown property
-            m_nIncludeCommon &= ~CCA_DROPDOWN;
+            if (FormComponentType::DATEFIELD != m_nClassId)
+                // except date fields, no column has the DropDown property
+                m_nIncludeCommon &= ~CCA_DROPDOWN;
+
+            m_bExamined = sal_True;
+        }
     }
 
     //---------------------------------------------------------------------
-    void OColumnExport::startExportElement()
+    void OColumnExport::doExport()
     {
         // before the base class can start it's element, start an additional one stating that the following is
         // a grid column
 
-        // the attributes:
-        m_rContext.getGlobalContext().ClearAttrList();
+        // we do the examine here, cause we need the information about the column we're exporting
+        // (though the base class' doExport calls it, again, but we handle this in ::examine ...)
+        examine();
 
         // the attribute "name"
         exportStringPropertyAttribute(
@@ -1129,30 +1204,31 @@ namespace xmloff
         m_pColumnXMLElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "column", sal_True, sal_True);
 
         // let the base class do it's handling
-        OControlExport::startExportElement();
+        OControlExport::doExport();
     }
 
     //=====================================================================
     //= OFormExport
     //=====================================================================
     //---------------------------------------------------------------------
-    OFormExport::OFormExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxForm)
-        :OPropertyExport(_rContext, _rxForm)
-        ,m_pXMLElement(NULL)
+    OFormExport::OFormExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxForm,
+        const Sequence< ScriptEventDescriptor >& _rEvents)
+        :OElementExport(_rContext, _rxForm, _rEvents)
     {
         OSL_ENSURE(m_xProps.is(), "OFormExport::OFormExport: invalid arguments!");
+    }
 
-        // add the attributes
-        m_rContext.getGlobalContext().ClearAttrList();
-        exportAttributes();
+    //---------------------------------------------------------------------
+    const sal_Char* OFormExport::getXMLElementName() const
+    {
+        return "form";
+    }
 
-        // start the form element
-        m_pXMLElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "form", sal_True, sal_True);
-
-        // the properties which where not exported 'til now
-        exportRemainingProperties();
-
-        // TODO: the remaining scripts
+    //---------------------------------------------------------------------
+    void OFormExport::exportSubTags()
+    {
+        // let the base class export the remaining properties and the events
+        OElementExport::exportSubTags();
 
         // loop through all children
         Reference< XIndexAccess > xCollection(m_xProps, UNO_QUERY);
@@ -1160,13 +1236,6 @@ namespace xmloff
 
         if (xCollection.is())
             m_rContext.exportCollectionElements(xCollection);
-    }
-
-    //---------------------------------------------------------------------
-    OFormExport::~OFormExport()
-    {
-        delete m_pXMLElement;
-            // if we already started the element, this will end it, if not, nothing will happen
     }
 
     //---------------------------------------------------------------------
@@ -1292,6 +1361,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.6  2000/12/18 13:25:01  mib
  *  #82036#: new graphic properties
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2001-01-02 15:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
 #include "xmlexp.hxx"
+#endif
+#ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
+#include "callbacks.hxx"
 #endif
 
 //.........................................................................
@@ -344,7 +347,7 @@ namespace xmloff
 #else
         //  in the product version, inline this, so it does not cost us extra time calling into our method
         inline  void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue)
-            { m_rContext.AddAttribute(_nPrefix, _pName, _rValue); }
+            { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _pName, _rValue); }
 #endif
 
 #ifdef DBG_UTIL
@@ -394,6 +397,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.5  2000/12/13 10:38:49  fs
  *  slightly modified some documentations
  *

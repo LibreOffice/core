@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport_impl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
+ *  last change: $Author: fs $ $Date: 2001-01-02 15:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 // no namespace. Same as above: this file is included from elementimport.hxx only,
 // and this is done inside the namespace
 
+//=========================================================================
+//= OContainerImport
+//=========================================================================
 //-------------------------------------------------------------------------
 template <class BASE>
 SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
@@ -110,11 +113,26 @@ template <class BASE>
 
 //-------------------------------------------------------------------------
 template <class BASE>
-OColumnImport< BASE >::OColumnImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+void OContainerImport< BASE >::EndElement()
+{
+    BASE::EndElement();
+
+    // now that we have all children, attach the events
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > xIndexContainer(m_xMeAsContainer, ::com::sun::star::uno::UNO_QUERY);
+    if (xIndexContainer.is())
+        ODefaultEventAttacherManager::setEvents(xIndexContainer);
+}
+
+//=========================================================================
+//= OColumnImport
+//=========================================================================
+//-------------------------------------------------------------------------
+template <class BASE>
+OColumnImport< BASE >::OColumnImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
         OControlElement::ElementType _eType,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxOuterAttribs)
-    :BASE(_rImport, _nPrefix, _rName, _rxParentContainer, _eType)
+    :BASE(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
     ,m_xColumnFactory(_rxParentContainer, ::com::sun::star::uno::UNO_QUERY)
     ,m_xOuterAttributes(_rxOuterAttribs)
 {
@@ -141,7 +159,7 @@ template <class BASE>
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > OColumnImport< BASE >::createElement()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xReturn;
-    // no call of the base class. We have to use the grid column factory
+    // no call to the base class' method. We have to use the grid column factory
     if (m_xColumnFactory.is())
     {
         // create the column
@@ -154,6 +172,9 @@ template <class BASE>
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/12/13 10:40:15  fs
+ *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
+ *
  *  Revision 1.1  2000/12/12 12:02:53  fs
  *  initial checkin - implementations for the template classes in elementimport
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2001-01-02 15:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,14 @@
 #ifndef _COM_SUN_STAR_FORM_XGRIDCOLUMNFACTORY_HPP_
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
+#include <com/sun/star/script/XEventAttacherManager.hpp>
+#endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
+#endif
+#ifndef _XMLOFF_FORMS_EVENTIMPORT_HXX_
+#include "eventimport.hxx"
 #endif
 
 //.........................................................................
@@ -120,11 +126,13 @@ namespace xmloff
     class OElementImport
                 :public OPropertyImport
                 ,public OAttributeMetaData
+                ,public IEventAttacher
     {
     protected:
         ::rtl::OUString         m_sServiceName;     // the service name as extracted from the service-name attribute
         ::rtl::OUString         m_sName;            // the name of the object (redundant, already contained in the base class' array)
         IFormsImportContext&    m_rFormImport;      // the form import context
+        IEventAttacherManager&  m_rEventManager;    // the event attacher manager
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         m_xParentContainer;
@@ -137,6 +145,8 @@ namespace xmloff
         /** ctor
             @param _rImport
                 the importer
+            @param _rEventManager
+                the event attacher manager for the control beeing imported
             @param _nPrefix
                 the namespace prefix
             @param _rName
@@ -147,7 +157,8 @@ namespace xmloff
                 the container in which the new element should be inserted
         */
         OElementImport(
-            IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager,
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer
         );
 
@@ -155,12 +166,20 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+        virtual SvXMLImportContext* CreateChildContext(
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
         virtual void    EndElement();
 
         // OPropertyImport overridables
         virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
+
+        // IEventAttacher
+        virtual void registerEvents(
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
+            );
 
         /** create the (uninitialized) element which is to represent the read data
 
@@ -184,7 +203,6 @@ namespace xmloff
     {
     protected:
         ::rtl::OUString                 m_sControlId;
-        IControlIdMap*                  m_pIdCollector;
         OControlElement::ElementType    m_eElementType;
 
         PropertyValueArray              m_aValueProperties;
@@ -194,12 +212,14 @@ namespace xmloff
     protected:
         // for use by derived classes only
         OControlImport(
-            IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager,
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer);
 
     public:
         OControlImport(
-            IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager,
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
@@ -233,7 +253,7 @@ namespace xmloff
 
     public:
         OReferredControlImport(
-            IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
@@ -255,7 +275,7 @@ namespace xmloff
     {
     public:
         OPasswordImport(
-            IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
@@ -290,7 +310,7 @@ namespace xmloff
 
     public:
         OListAndComboImport(
-            IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
@@ -356,15 +376,18 @@ namespace xmloff
     //=====================================================================
     // BASE must be a derivee of OElementImport
     template <class BASE>
-    class OContainerImport : public BASE
+    class OContainerImport
+                :public BASE
+                ,public ODefaultEventAttacherManager
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                     m_xMeAsContainer;
+
     protected:
-        OContainerImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+        OContainerImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer)
-            :BASE(_rImport, _nPrefix, _rName, _rxParentContainer)
+            :BASE(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
         {
         }
 
@@ -372,6 +395,7 @@ namespace xmloff
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+        virtual void EndElement();
 
     protected:
         // OElementImport overridables
@@ -405,7 +429,7 @@ namespace xmloff
                     m_xOuterAttributes;
 
     public:
-        OColumnImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+        OColumnImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
                 OControlElement::ElementType _eType,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxOuterAttribs);
@@ -433,9 +457,10 @@ namespace xmloff
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                                 m_xParentContainer;
         IFormsImportContext&    m_rFormImport;
+        IEventAttacherManager&  m_rEventManager;
 
     public:
-        OColumnWrapperImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+        OColumnWrapperImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer);
 
         // SvXMLImportContext overridables
@@ -456,7 +481,7 @@ namespace xmloff
     {
     public:
         OGridImport(
-            IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType);
 
@@ -475,16 +500,18 @@ namespace xmloff
     */
     class OFormImport : public OFormImport_Base
     {
-    protected:
-        IControlIdMap*  m_pIdCollector;
-
     public:
         OFormImport(
-            IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer
         );
 
     protected:
+        // SvXMLImportContext overridables
+        virtual SvXMLImportContext* CreateChildContext(
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+
         // OContainerImport overridables
         virtual SvXMLImportContext* implCreateControlChild(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
@@ -512,6 +539,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.3  2000/12/13 10:40:15  fs
  *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-19 12:13:57 $
+ *  last change: $Author: fs $ $Date: 2001-01-02 15:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
+#include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #endif
 #ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
 #include "callbacks.hxx"
@@ -129,17 +132,22 @@ namespace xmloff
         /** exports one single grid column
         */
         void    exportGridColumn(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
+            );
 
         /** exports one single control
         */
         void    exportControl(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
+            );
 
         /** exports one single form
         */
-        void    exportForm(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps)
-            throw (::com::sun::star::uno::Exception);
+        void    exportForm(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
+            );
 
         /** seek to the page given.
 
@@ -224,6 +232,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/12/19 12:13:57  fs
+ *  some changes ... now the exported styles are XSL conform
+ *
  *  Revision 1.6  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *

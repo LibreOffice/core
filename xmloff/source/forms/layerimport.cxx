@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-19 12:13:57 $
+ *  last change: $Author: fs $ $Date: 2001-01-02 15:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,12 @@
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
 #include "xmlprmap.hxx"
 #endif
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
+#endif
+#ifndef _XMLOFF_EVENTIMPORTHELPER_HXX
+#include "XMLEventImportHelper.hxx"
+#endif
 #ifndef _XMLOFF_XMLIMPPR_HXX
 #include "xmlimppr.hxx"
 #endif
@@ -121,6 +127,9 @@
 #endif
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
 #include "controlpropertymap.hxx"
+#endif
+#ifndef _XMLOFF_FORMS_FORMEVENTS_HXX_
+#include "formevents.hxx"
 #endif
 
 SV_IMPL_REF( SvXMLStylesContext );
@@ -273,10 +282,13 @@ namespace xmloff
             TabulatorCycle_RECORDS, OEnumMapper::getEnumMap(OEnumMapper::epTabCyle),
             &::getCppuType( static_cast<TabulatorCycle*>(NULL) ));
 
-        // add our style family to the export context's style pool
+        // initialize our style map
         m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory;
         ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(aControlStyleProperties, m_xPropertyHandlerFactory.getBodyPtr());
         m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.getBodyPtr());
+
+        // add our event table to the event import helper
+        m_rImporter.GetEventImport().AddTranslationTable(g_pFormsEventTranslation);
 
         // 'initialize'
         m_aCurrentPageIds = m_aControlIds.end();
@@ -423,6 +435,11 @@ namespace xmloff
             OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::endPage: unable to knit the control references (caught an exception)!");
         }
 
+        // now that we have all children of the forms collection, attach the events
+        Reference< XIndexAccess > xIndexContainer(m_xForms, UNO_QUERY);
+        if (xIndexContainer.is())
+            ODefaultEventAttacherManager::setEvents(xIndexContainer);
+
         // clear the structures for the control references.
         m_aControlReferences.clear();
 
@@ -458,7 +475,7 @@ namespace xmloff
             return new SvXMLImportContext(m_rImporter, _nPrefix, _rLocalName);
         }
 
-        return new OFormImport(*this, _nPrefix, _rLocalName, m_xForms );
+        return new OFormImport(*this, *this, _nPrefix, _rLocalName, m_xForms );
     }
 
     //---------------------------------------------------------------------
@@ -476,6 +493,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/19 12:13:57  fs
+ *  some changes ... now the exported styles are XSL conform
+ *
  *  Revision 1.4  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *

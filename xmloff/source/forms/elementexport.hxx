@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2001-01-02 15:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
+#include <com/sun/star/script/ScriptEventDescriptor.hpp>
+#endif
 #ifndef _XMLOFF_FORMS_PROPERTYEXPORT_HXX_
 #include "propertyexport.hxx"
 #endif
@@ -88,6 +91,46 @@ namespace xmloff
 //.........................................................................
 
     //=====================================================================
+    //= OElementExport
+    //=====================================================================
+    class OElementExport : public OPropertyExport
+    {
+    protected:
+        ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >
+                                m_aEvents;
+
+        SvXMLElementExport*     m_pXMLElement;          // XML element doing the concrete startElement etc.
+
+    public:
+        OElementExport(IFormsExportContext& _rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents);
+        ~OElementExport();
+
+        virtual void doExport();
+
+    protected:
+        /// get the name of the XML element
+        virtual const sal_Char* getXMLElementName() const = 0;
+        /// examine the element we're exporting
+        virtual void examine();
+        /// export the attributes
+        virtual void exportAttributes();
+        /// export any sub tags
+        virtual void exportSubTags();
+
+        /** exports the events (as script:events tag)
+        */
+        void exportEvents();
+
+        /// start the XML element
+        void implStartElement(const sal_Char* _pName);
+
+        /// ends the XML element
+        void implEndElement();
+    };
+
+    //=====================================================================
     //= OControlExport
     //=====================================================================
     /** Helper class for handling xml elements representing a form control
@@ -95,7 +138,7 @@ namespace xmloff
     class OControlExport
                 :public OControlElement
                 ,public OValuePropertiesMetaData
-                ,public OPropertyExport
+                ,public OElementExport
     {
     protected:
         DECLARE_STL_STDKEY_SET(sal_Int16, Int16Set);
@@ -109,8 +152,6 @@ namespace xmloff
         sal_Int32               m_nIncludeDatabase;     // common database attributes to include
         sal_Int32               m_nIncludeSpecial;      // special attributes to include
         sal_Int32               m_nIncludeEvents;       // events to include
-
-        SvXMLElementExport*     m_pXMLElement;          // XML element doing the concrete startElement etc.
 
     public:
         /** constructs an object capable of exporting controls
@@ -127,32 +168,19 @@ namespace xmloff
         OControlExport(IFormsExportContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
             const ::rtl::OUString& _rControlId,
-            const ::rtl::OUString& _rReferringControls);
-
-        /** starts the export.
-
-            <p>This is an extra method because we need to call virtual methods here, else we would have placed
-            it in the ctor ...<p>
-        */
-        void doExport();
-
-        /** dtor.
-
-            <p>Automatically closes the element tag which was opened for the control in the ctor</p>
-        */
-        ~OControlExport();
+            const ::rtl::OUString& _rReferringControls,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rxEvents);
 
     protected:
+        // get the name of the XML element
+        virtual const sal_Char* getXMLElementName() const;
+
         /** examine the control. Some kind of CtorImpl.
         */
         virtual void examine();
 
-        /** starts the XML element which represents the control.
-
-            <p>The default implementation only creates <member>m_pXMLElement</member> with the parameters
-            derived from the results of <method>examine</method>.
-        */
-        virtual void startExportElement();
+        /// export the attributes
+        virtual void exportAttributes();
 
         /** writes everything which needs to be represented as sub tag
         */
@@ -218,19 +246,22 @@ namespace xmloff
         SvXMLElementExport*     m_pColumnXMLElement;
             // in addition to the element written by the base class, we need another one indicating that we're a
             // column
+        sal_Bool                m_bExamined;
 
     public:
         /** ctor
             @see OColumnExport::OColumnExport
         */
         OColumnExport(IFormsExportContext& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rxEvents);
 
         ~OColumnExport();
 
+        virtual void doExport();
+
     protected:
         virtual void examine();
-        virtual void startExportElement();
     };
 
     //=====================================================================
@@ -243,24 +274,20 @@ namespace xmloff
     */
     class OFormExport
                 :public OControlElement
-                ,public OPropertyExport
+                ,public OElementExport
     {
-    protected:
-        SvXMLElementExport*         m_pXMLElement;          // XML element doing the concrete startElement etc.
-
     public:
         /** constructs an object capable of exporting controls
         */
         OFormExport(IFormsExportContext& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rxEvents
+            );
 
-        /** dtor.
-        */
-        ~OFormExport();
-
-        /** adds form attributes of the form the object represents to the XMLExport
-        */
-        void exportAttributes();
+    protected:
+        virtual const sal_Char* getXMLElementName() const;
+        virtual void exportSubTags();
+        virtual void exportAttributes();
     };
 
 //.........................................................................
@@ -272,6 +299,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.4  2000/12/13 10:38:10  fs
  *  moved some code to a more central place to reuse it
  *
