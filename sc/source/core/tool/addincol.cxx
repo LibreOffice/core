@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2000-10-06 17:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,29 +535,27 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                             aFuncU ) ) );
 
                                         rtl::OUString aLocalU;
-                                        TRY
+                                        try
                                         {
                                             aLocalU = xAddIn->
                                                 getDisplayFunctionName( aFuncU );
                                         }
-                                        CATCH_ALL()
+                                        catch(uno::Exception&)
                                         {
                                             aLocalU = rtl::OUString::createFromAscii( "###" );
                                         }
-                                        END_CATCH
                                         String aLocalName = String( aLocalU );
 
                                         rtl::OUString aDescU;
-                                        TRY
+                                        try
                                         {
                                             aDescU = xAddIn->
                                                 getFunctionDescription( aFuncU );
                                         }
-                                        CATCH_ALL()
+                                        catch(uno::Exception&)
                                         {
                                             aDescU = rtl::OUString::createFromAscii( "###" );
                                         }
-                                        END_CATCH
                                         String aDescription = String( aDescU );
 
                                         ScAddInArgDesc* pVisibleArgs = NULL;
@@ -574,27 +572,25 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                                 if ( eArgType != SC_ADDINARG_CALLER )
                                                 {
                                                     rtl::OUString aArgName;
-                                                    TRY
+                                                    try
                                                     {
                                                         aArgName = xAddIn->
                                                             getDisplayArgumentName( aFuncU, nParamPos );
                                                     }
-                                                    CATCH_ALL()
+                                                    catch(uno::Exception&)
                                                     {
                                                         aArgName = rtl::OUString::createFromAscii( "###" );
                                                     }
-                                                    END_CATCH
                                                     rtl::OUString aArgDesc;
-                                                    TRY
+                                                    try
                                                     {
                                                         aArgDesc = xAddIn->
                                                             getArgumentDescription( aFuncU, nParamPos );
                                                     }
-                                                    CATCH_ALL()
+                                                    catch(uno::Exception&)
                                                     {
                                                         aArgName = rtl::OUString::createFromAscii( "###" );
                                                     }
-                                                    END_CATCH
 
                                                     BOOL bOptional =
                                                         ( eArgType == SC_ADDINARG_VALUE_OR_ARRAY ||
@@ -957,17 +953,17 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
         {
             aAny = xFunction->invoke( aObject, rCallArgs );
         }
-        catch(lang::IllegalArgumentException e)
+        catch(lang::IllegalArgumentException&)
         {
             nErrCode = errIllegalArgument;
         }
 #if 0
-        catch(FloatingPointException e)
+        catch(FloatingPointException&)
         {
             nErrCode = errIllegalFPOperation;
         }
 #endif
-        catch(...)
+        catch(uno::Exception&)
         {
             nErrCode = errNoValue;
         }
