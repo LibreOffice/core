@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:56:50 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,7 +410,7 @@ Menu RID_MAIN_MENU
 
                 };
             };
-            Text[ language_user1 ] = "May 2002 EM: \"has nothing to do with the clipboard\" (OS)";
+            Text[ language_user1 ] = "May ; May 2002 EM: \"has nothing to do with the clipboard\" (OS)";
             Text[ english_us ] = "~Insert";
             Text[ portuguese ] = "~Insert";
             Text[ russian ] = "~Insert";
