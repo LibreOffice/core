@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH HAVE_GCC_VISIBILITY_FEATURE RPM GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVADOC JAVA_HOME JDK XSLTPROC XMKMF PERL DMAKE BUILD_DMAKE EPM SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_NAS NAS_INCLUDES NEON_CFLAGS NEON_LIBS SYSTEM_NEON PSDK_HOME DIRECTXSDK_HOME EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN WITH_MOZILLA WITH_OPENLDAP MOZILLA_CFLAGS MOZILLA_LIBS MOZILLABASE_CFLAGS MOZILLABASE_LIBS SYSTEM_MOZILLA WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK CUSTOM_IMAGE_SETS LOCAL_SOLENV UPD SOURCEVERSION LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH HAVE_GCC_VISIBILITY_FEATURE RPM GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVADOC JAVA_HOME JDK XSLTPROC XMKMF PERL DMAKE BUILD_DMAKE EPM SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_NAS NAS_INCLUDES NEON_CFLAGS NEON_LIBS SYSTEM_NEON PSDK_HOME DIRECTXSDK_HOME EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GNOMEVFS_CFLAGS GNOMEVFS_LIBS GCONF_CFLAGS GCONF_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN WITH_MOZILLA WITH_OPENLDAP MOZILLA_CFLAGS MOZILLA_LIBS MOZILLABASE_CFLAGS MOZILLABASE_LIBS SYSTEM_MOZILLA WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK CUSTOM_IMAGE_SETS LOCAL_SOLENV UPD SOURCEVERSION LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -917,6 +917,9 @@ Optional Features:
 
   --enable-gtk            Determines whether to use Gtk+ vclplug on platforms
                           where Gtk+ is available.
+
+  --enable-gnome-vfs      Determines whether to use the Gnome Virtual Filing
+			  System on platforms where that VFS is available
 
   --enable-static-gtk:    Modules that are linked against gtk libraries use
                           the static libraries instead of the dynamic ones.
@@ -1727,6 +1730,11 @@ fi;
 # Check whether --enable-gtk or --disable-gtk was given.
 if test "${enable_gtk+set}" = set; then
   enableval="$enable_gtk"
+
+fi;
+# Check whether --enable-gnome-vfs or --disable-gnome-vfs was given.
+if test "${enable_gnome_vfs+set}" = set; then
+  enableval="$enable_gnome_vfs"
 
 fi;
 # Check whether --enable-static-gtk or --disable-static-gtk was given.
@@ -6275,7 +6283,7 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-   if test "$ac_cv_cxx_have_ext_hash_map" == "no"; then
+   if test "$ac_cv_cxx_have_ext_hash_map" = "no"; then
       { { echo "$as_me:$LINENO: error: Can't find hash_map. Try with stlport enabled" >&5
 echo "$as_me: error: Can't find hash_map. Try with stlport enabled" >&2;}
    { (exit 1); exit 1; }; }
@@ -6416,7 +6424,7 @@ else
 fi
 
 if test "$SOLAR_JAVA" != ""; then
-    if test "$JDK" == "gcj"; then
+    if test "$JDK" = "gcj"; then
         javacompiler="gcj"
     else
         javacompiler="javac"
@@ -6571,7 +6579,7 @@ fi
 if test "$SOLAR_JAVA" != ""; then
     if test "$JDK" != "gcj"; then
       # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
-      if test "$JAVA_HOME" == "/usr" -a "x$with_jdk_home" == "x"; then
+      if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
 
          if basename $(readlink $(readlink $JAVAC)) >/dev/null 2>/dev/null; then
           # try to recover first by looking whether we have a alternatives
@@ -6590,7 +6598,7 @@ echo "$as_me: WARNING: if this is the case, please inform the correct JAVA_HOME 
           fi
       fi
       # now check if $JAVA_HOME is really valid
-      if test ! -d "$JAVA_HOME/jre" -a "x$with_jdk_home" == "x"; then
+      if test ! -d "$JAVA_HOME/jre" -a "x$with_jdk_home" = "x"; then
          { echo "$as_me:$LINENO: WARNING: JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script" >&5
 echo "$as_me: WARNING: JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script" >&2;}
          { echo "$as_me:$LINENO: WARNING: attempted to find JAVA_HOME automatically, but apparently it failed" >&5
@@ -6659,7 +6667,7 @@ echo "$as_me: error: xsltproc is required" >&2;}
    fi
 fi
 # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
-if test "$JAVA_HOME" == "/usr" -a "x$with_jdk_home" == "x"; then
+if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
 
    if basename $(readlink $(readlink $JAVAC)) >/dev/null 2>/dev/null; then
 	# try to recover first by looking whether we have a alternatives
@@ -6678,7 +6686,7 @@ echo "$as_me: WARNING: if this is the case, please inform the correct JAVA_HOME 
     fi
 fi
 # now check if $JAVA_HOME is really valid
-if test ! -d "$JAVA_HOME/jre" -a "x$with_jdk_home" == "x" && \
+if test ! -d "$JAVA_HOME/jre" -a "x$with_jdk_home" = "x" && \
 	test "$XSLTPROC" = "NO_XSLTPROC"; then
    { echo "$as_me:$LINENO: WARNING: JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script" >&5
 echo "$as_me: WARNING: JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script" >&2;}
@@ -12112,14 +12120,14 @@ fi
 echo "$as_me:$LINENO: checking which VCLplugs shall be built" >&5
 echo $ECHO_N "checking which VCLplugs shall be built... $ECHO_C" >&6
 ENABLE_GTK=""
-if test "x$enable_gtk" == "xyes"; then
+if test "x$enable_gtk" = "xyes"; then
     ENABLE_GTK="TRUE"
     R="gtk"
 fi
 
 
 ENABLE_KDE=""
-if test "x$enable_kde" == "xyes"; then
+if test "x$enable_kde" = "xyes"; then
     ENABLE_KDE="TRUE"
     R="$R kde"
 fi
@@ -12132,6 +12140,216 @@ else
 	echo "$as_me:$LINENO: result: $R" >&5
 echo "${ECHO_T}$R" >&6
 fi
+
+
+ENABLE_GNOMEVFS=""
+echo "$as_me:$LINENO: checking whether to enable GNOME VFS support" >&5
+echo $ECHO_N "checking whether to enable GNOME VFS support... $ECHO_C" >&6
+if test "$enable_gnome_vfs" = "yes"; then
+    ENABLE_GNOMEVFS="TRUE"
+    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+if test -n "$PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        echo "$as_me:$LINENO: checking for gnome-vfs-2.0 " >&5
+echo $ECHO_N "checking for gnome-vfs-2.0 ... $ECHO_C" >&6
+
+        if $PKG_CONFIG --exists "gnome-vfs-2.0 " ; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            succeeded=yes
+
+            echo "$as_me:$LINENO: checking GNOMEVFS_CFLAGS" >&5
+echo $ECHO_N "checking GNOMEVFS_CFLAGS... $ECHO_C" >&6
+            GNOMEVFS_CFLAGS=`$PKG_CONFIG --cflags "gnome-vfs-2.0 "`
+            echo "$as_me:$LINENO: result: $GNOMEVFS_CFLAGS" >&5
+echo "${ECHO_T}$GNOMEVFS_CFLAGS" >&6
+
+            echo "$as_me:$LINENO: checking GNOMEVFS_LIBS" >&5
+echo $ECHO_N "checking GNOMEVFS_LIBS... $ECHO_C" >&6
+            GNOMEVFS_LIBS=`$PKG_CONFIG --libs "gnome-vfs-2.0 "`
+            echo "$as_me:$LINENO: result: $GNOMEVFS_LIBS" >&5
+echo "${ECHO_T}$GNOMEVFS_LIBS" >&6
+        else
+            GNOMEVFS_CFLAGS=""
+            GNOMEVFS_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            GNOMEVFS_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gnome-vfs-2.0 "`
+            echo $GNOMEVFS_PKG_ERRORS
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     :
+  else
+     { { echo "$as_me:$LINENO: error: Library requirements (gnome-vfs-2.0 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
+echo "$as_me: error: Library requirements (gnome-vfs-2.0 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+if test -n "$PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        echo "$as_me:$LINENO: checking for gconf-2.0 " >&5
+echo $ECHO_N "checking for gconf-2.0 ... $ECHO_C" >&6
+
+        if $PKG_CONFIG --exists "gconf-2.0 " ; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            succeeded=yes
+
+            echo "$as_me:$LINENO: checking GCONF_CFLAGS" >&5
+echo $ECHO_N "checking GCONF_CFLAGS... $ECHO_C" >&6
+            GCONF_CFLAGS=`$PKG_CONFIG --cflags "gconf-2.0 "`
+            echo "$as_me:$LINENO: result: $GCONF_CFLAGS" >&5
+echo "${ECHO_T}$GCONF_CFLAGS" >&6
+
+            echo "$as_me:$LINENO: checking GCONF_LIBS" >&5
+echo $ECHO_N "checking GCONF_LIBS... $ECHO_C" >&6
+            GCONF_LIBS=`$PKG_CONFIG --libs "gconf-2.0 "`
+            echo "$as_me:$LINENO: result: $GCONF_LIBS" >&5
+echo "${ECHO_T}$GCONF_LIBS" >&6
+        else
+            GCONF_CFLAGS=""
+            GCONF_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            GCONF_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gconf-2.0 "`
+            echo $GCONF_PKG_ERRORS
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     :
+  else
+     { { echo "$as_me:$LINENO: error: Library requirements (gconf-2.0 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
+echo "$as_me: error: Library requirements (gconf-2.0 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+
+else
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
 
 
 GTK_CFLAGS=""
@@ -12451,6 +12669,7 @@ if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
     qt_libdirs="$QTLIB /usr/local/qt/lib /usr/lib/qt /usr/include /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib $x_includes"
     if test -n "$QTDIR" ; then
         qt_incdirs="$QTDIR/include $qt_incdirs"
+        qt_libdirs="$QTDIR/lib $qt_libdirs"
     fi
     kde_incdirs="/usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /usr/include /opt/kde3/include /opt/kde/include $x_includes"
     kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/lib /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib"
@@ -12475,7 +12694,7 @@ echo $ECHO_N "checking for Qt headers... $ECHO_C" >&6
     done
     echo "$as_me:$LINENO: result: $qt_incdir" >&5
 echo "${ECHO_T}$qt_incdir" >&6
-    if test "x$qt_incdir" == "xno" ; then
+    if test "x$qt_incdir" = "xno" ; then
         { { echo "$as_me:$LINENO: error: Qt headers not found.  Please specify the root of
 your Qt installation by exporting QTDIR before running \"configure\"." >&5
 echo "$as_me: error: Qt headers not found.  Please specify the root of
@@ -12494,7 +12713,7 @@ echo $ECHO_N "checking for Qt libraries... $ECHO_C" >&6
     done
     echo "$as_me:$LINENO: result: $qt_libdir" >&5
 echo "${ECHO_T}$qt_libdir" >&6
-    if test "x$qt_libdir" == "xno" ; then
+    if test "x$qt_libdir" = "xno" ; then
         { { echo "$as_me:$LINENO: error: Qt libraries not found.  Please specify the root of
 your Qt installation by exporting QTDIR before running \"configure\"." >&5
 echo "$as_me: error: Qt libraries not found.  Please specify the root of
@@ -12513,7 +12732,7 @@ echo $ECHO_N "checking for KDE headers... $ECHO_C" >&6
     done
     echo "$as_me:$LINENO: result: $kde_incdir" >&5
 echo "${ECHO_T}$kde_incdir" >&6
-    if test "x$kde_incdir" == "xno" ; then
+    if test "x$kde_incdir" = "xno" ; then
         { { echo "$as_me:$LINENO: error: KDE headers not found.  Please specify the root of
 your KDE installation by exporting KDEDIR before running \"configure\"." >&5
 echo "$as_me: error: KDE headers not found.  Please specify the root of
@@ -12532,7 +12751,7 @@ echo $ECHO_N "checking for KDE libraries... $ECHO_C" >&6
     done
     echo "$as_me:$LINENO: result: $kde_libdir" >&5
 echo "${ECHO_T}$kde_libdir" >&6
-    if test "x$kde_libdir" == "xno" ; then
+    if test "x$kde_libdir" = "xno" ; then
         { { echo "$as_me:$LINENO: error: KDE libraries not found.  Please specify the root of
 your KDE installation by exporting KDEDIR before running \"configure\"." >&5
 echo "$as_me: error: KDE libraries not found.  Please specify the root of
@@ -13510,7 +13729,7 @@ if test "$_os" = "Darwin"; then
    XINERAMA_LINK=dynamic
    echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-elif test "$_os" = "Linux"; then
+elif test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
    if test -e "$XLIB/libXinerama.so" -a -e "$XLIB/libXinerama.a"; then
       # we have both versions, let the user decide but use the static one
       # per default
@@ -13908,7 +14127,7 @@ cat > conftest.xml << EOF
     </project>
 EOF
 
-  if test "$JDK" == "gcj"; then
+  if test "$JDK" = "gcj"; then
     ant_cmd="$ANT -Dbuild.compiler=gcj -buildfile conftest.xml 1>&2"
   else
     ant_cmd="$ANT -buildfile conftest.xml 1>&2"
@@ -14840,6 +15059,11 @@ s,@WITH_LIBART@,$WITH_LIBART,;t t
 s,@WITH_GPC@,$WITH_GPC,;t t
 s,@ENABLE_GTK@,$ENABLE_GTK,;t t
 s,@ENABLE_KDE@,$ENABLE_KDE,;t t
+s,@GNOMEVFS_CFLAGS@,$GNOMEVFS_CFLAGS,;t t
+s,@GNOMEVFS_LIBS@,$GNOMEVFS_LIBS,;t t
+s,@GCONF_CFLAGS@,$GCONF_CFLAGS,;t t
+s,@GCONF_LIBS@,$GCONF_LIBS,;t t
+s,@ENABLE_GNOMEVFS@,$ENABLE_GNOMEVFS,;t t
 s,@GTK_CFLAGS@,$GTK_CFLAGS,;t t
 s,@GTK_LIBS@,$GTK_LIBS,;t t
 s,@GDKPIXBUF_CFLAGS@,$GDKPIXBUF_CFLAGS,;t t
