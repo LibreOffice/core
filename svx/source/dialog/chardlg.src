@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: os $ $Date: 2002-08-22 13:22:43 $
+ *  last change: $Author: os $ $Date: 2002-10-09 12:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1076,23 +1076,23 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Pos = MAP_APPFONT ( 6 , 83 );
         Size = MAP_APPFONT ( 248 , 8 );
         Text = "Schriftart f�r CTL";
-        Text [ english_us ] = "Complex script font";
+        Text [ english_us ] = "CTL font";
         Text[ portuguese ] = "Complex script font";
         Text[ russian ] = "Complex script font";
         Text[ greek ] = "Complex script font";
         Text[ dutch ] = "Complex script font";
-        Text[ french ] = "Police pour scripts complexes";
-        Text[ spanish ] = "Tipo de fuente para scripts complejos";
+        Text[ french ] = "Police pour CTL";
+        Text[ spanish ] = "Fuente CTL";
         Text[ finnish ] = "Complex script font";
         Text[ italian ] = "Carattere per script complessi";
         Text[ danish ] = "Complex script font";
-        Text[ swedish ] = "Teckensnitt f�r komplexa skript";
+        Text[ swedish ] = "Teckensnitt f�r CTL";
         Text[ polish ] = "Complex script font";
         Text[ portuguese_brazilian ] = "Complex script font";
         Text[ japanese ] = "複合文字言語用フォント";
-        Text[ korean ] = "복합 스크립트용 글꼴";
-        Text[ chinese_simplified ] = "复杂的文字字型";
-        Text[ chinese_traditional ] = "複雜文字的字型";
+        Text[ korean ] = "CTL용 글꼴";
+        Text[ chinese_simplified ] = "适用于复杂的文字版式的字型";
+        Text[ chinese_traditional ] = "適用于複雜的文字版式的字型";
         Text[ turkish ] = "Complex script font";
         Text[ arabic ] = "Complex script font";
         Text[ catalan ] = "Complex script font";
@@ -1140,7 +1140,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT ( 40 , 8 );
         Text = "Schriftsch~nitt";
         Text [ ENGLISH ] = "T~ypeface";
-        Text [ english_us ] = "T~ypeface";
+        Text [ english_us ] = "Ty~peface";
         Text[ portuguese ] = "~Estilo";
         Text[ russian ] = "����������";
         Text[ greek ] = "����� ���~���";
@@ -1901,7 +1901,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ korean ] =
         {
-            < "(없이)" ; CHRDLG_UNDERLINE_NONE ; > ;
+            < "(없음)" ; CHRDLG_UNDERLINE_NONE ; > ;
             < "보통" ; CHRDLG_UNDERLINE_SINGLE ; > ;
             < "이중" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
             < "굵게"; CHRDLG_UNDERLINE_BOLD; > ;
