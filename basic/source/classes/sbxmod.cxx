@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-10 14:38:53 $
+ *  last change: $Author: ab $ $Date: 2001-07-03 10:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,6 +755,8 @@ void StarBASIC::ClearAllModuleVars( void )
         if( pModule->pImage && pModule->pImage->bInit )
             pModule->ClearPrivateVars();
     }
+
+    /* #88042 This code can delete already used public vars during runtime!
     // Alle Objekte ueberpruefen, ob es sich um ein Basic handelt
     // Wenn ja, auch dort initialisieren
     for ( USHORT nObj = 0; nObj < pObjs->Count(); nObj++ )
@@ -764,7 +766,7 @@ void StarBASIC::ClearAllModuleVars( void )
         if( pBasic )
             pBasic->ClearAllModuleVars();
     }
-
+    */
 }
 
 // Ausfuehren des Init-Codes aller Module
