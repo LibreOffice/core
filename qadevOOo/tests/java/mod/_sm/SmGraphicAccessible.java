@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SmGraphicAccessible.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-04-28 12:31:17 $
+ *  last change:$Date: 2003-05-27 13:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sm;
 
 import java.io.PrintWriter;
+import com.sun.star.lang.XMultiServiceFactory;
 
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.XPropertySet;
@@ -112,7 +113,7 @@ public class SmGraphicAccessible extends TestCase {
      */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
         try {
             xMathDoc = SOF.openDoc("smath","_blank");
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
@@ -155,7 +156,7 @@ public class SmGraphicAccessible extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole
