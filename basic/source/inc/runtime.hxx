@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-22 10:43:13 $
+ *  last change: $Author: ab $ $Date: 2001-09-04 09:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,6 +462,7 @@ class SbiRuntime
     void StepCASEIS( USHORT, USHORT ),  StepSTMNT( USHORT, USHORT );
     void StepOPEN( USHORT, USHORT ),    StepSTATIC( USHORT, USHORT );
     void StepTCREATE(USHORT,USHORT),    StepDCREATE(USHORT,USHORT);
+    void StepGLOBAL_P( USHORT, USHORT ),StepFIND_G( USHORT, USHORT );
 public:
     xub_StrLen  nLine,nCol1,nCol2;  // aktuelle Zeile, Spaltenbereich
     SbiRuntime* pNext;               // Stack-Chain
