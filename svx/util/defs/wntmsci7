@@ -21631,3 +21631,9 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?DataChanged@SvxFontNameBox@@MAEXABVDataChangedEvent@@@Z
 ?DataChanged@SvxFontSizeBox@@MAEXABVDataChangedEvent@@@Z
 ?DataChanged@SvxStyleBox@@UAEXABVDataChangedEvent@@@Z
+??0SvxViewHint@@QAE@K@Z
+?CreateType@SvxViewHint@@SAPAXXZ
+?IsA@SvxViewHint@@UBEEP6APAXXZ@Z
+?IsOf@SvxViewHint@@SAEP6APAXXZ@Z
+?StaticType@SvxViewHint@@SAP6APAXXZXZ
+?Type@SvxViewHint@@UBEP6APAXXZXZ
