@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jl $ $Date: 2002-06-05 13:21:38 $
+#   last change: $Author: jl $ $Date: 2002-09-13 06:23:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -152,7 +152,8 @@ SLOFILES= \
             $(SLO)$/olethread.obj	\
             $(SLO)$/oledll.obj		\
         $(SLO)$/jscriptclasses.obj	\
-        $(SLO)$/ole2uno.obj	
+        $(SLO)$/ole2uno.obj		
+
         
 
 

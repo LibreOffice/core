@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jl $ $Date: 2002-08-06 10:44:34 $
+ *  last change: $Author: jl $ $Date: 2002-09-13 06:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,11 @@ InterfaceOleWrapper_Impl::InterfaceOleWrapper_Impl( Reference<XMultiServiceFacto
 
 InterfaceOleWrapper_Impl::~InterfaceOleWrapper_Impl()
 {
-     UnoObjToWrapperMap.erase( (unsigned long) m_xOrigin.get());
+    MutexGuard guard(getBridgeMutex());
+    // remove entries in global map
+    IT_Uno it= UnoObjToWrapperMap.find( (sal_uInt32) m_xOrigin.get());
+    if(it != UnoObjToWrapperMap.end())
+        UnoObjToWrapperMap.erase(it);
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::QueryInterface(REFIID riid, LPVOID FAR * ppv)
@@ -194,25 +198,17 @@ STDMETHODIMP InterfaceOleWrapper_Impl::QueryInterface(REFIID riid, LPVOID FAR * 
 
 STDMETHODIMP_(ULONG) InterfaceOleWrapper_Impl::AddRef()
 {
-    return m_refCount.acquire();
+    acquire();
+    // does not need to guard because one should not rely on the return value of
+    // AddRef anyway
+    return m_refCount;
 }
 
 STDMETHODIMP_(ULONG) InterfaceOleWrapper_Impl::Release()
 {
-    ULONG n;
-
-    {
-        MutexGuard guard(getBridgeMutex());
-
-        n = m_refCount.release();
-    }
-
-    if (n == 0)
-    {
-        delete this;
-    }
-
-    return n;
+    ULONG n= m_refCount;
+    release();
+    return n - 1;
 }
 
 // IUnoObjectWrapper --------------------------------------------------------
@@ -615,14 +611,14 @@ Any SAL_CALL InterfaceOleWrapper_Impl::createBridge(const Any& modelDepObject,
 }
 
 // XInterface ------------------------------------------------------
-void SAL_CALL InterfaceOleWrapper_Impl::acquire(  ) throw()
-{
-    AddRef();
-}
-void SAL_CALL InterfaceOleWrapper_Impl::release(  ) throw()
-{
-    Release();
-}
+// void SAL_CALL InterfaceOleWrapper_Impl::acquire(  ) throw()
+// {
+//  AddRef();
+// }
+// void SAL_CALL InterfaceOleWrapper_Impl::release(  ) throw()
+// {
+//  Release();
+// }
 
 
 // XInitialization --------------------------------------------------

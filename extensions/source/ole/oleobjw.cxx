@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2002-06-05 13:21:38 $
+ *  last change: $Author: jl $ $Date: 2002-09-13 06:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ hash_map<sal_uInt32,sal_uInt32> AdapterToWrapperMap;
 // adapted interface which is then used to locate the entry in AdapterToWrapperMap.
 hash_map<sal_uInt32,sal_uInt32> WrapperToAdapterMap;
 
-//hash_map<sal_uInt32, WeakReference<XInterface> > ComPtrToWrapperMap;
+hash_map<sal_uInt32, WeakReference<XInterface> > ComPtrToWrapperMap;
 /*****************************************************************************
 
     class implementation IUnknownWrapper_Impl
@@ -176,12 +176,15 @@ IUnknownWrapper_Impl::IUnknownWrapper_Impl( Reference<XMultiServiceFactory>& xFa
 IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
 {
     MutexGuard guard(getBridgeMutex());
-    acquire(); // make sure we don't delete us twice
-    Reference<XInterface> xInt( static_cast<XWeak*>(this), UNO_QUERY);
+    XInterface * xIntRoot = (OWeakObject *)this;
+#ifdef _DEBUG
+    acquire(); // make sure we don't delete us twice because of Reference
+    OSL_ASSERT( Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY).get() == xIntRoot );
+#endif
 
     // remove entries in global maps
     typedef hash_map<sal_uInt32, sal_uInt32>::iterator _IT;
-    _IT it= WrapperToAdapterMap.find( (sal_uInt32) xInt.get());
+    _IT it= WrapperToAdapterMap.find( (sal_uInt32) xIntRoot);
     if( it != WrapperToAdapterMap.end())
     {
         sal_uInt32 adapter= it->second;
@@ -190,9 +193,9 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
         WrapperToAdapterMap.erase( it);
     }
 
-//  IT_Com it_c= ComPtrToWrapperMap.find( (sal_uInt32) m_pUnknown);
-//     if(it_c != ComPtrToWrapperMap.end())
-//         ComPtrToWrapperMap.erase(it_c);
+     IT_Com it_c= ComPtrToWrapperMap.find( (sal_uInt32) m_pUnknown);
+    if(it_c != ComPtrToWrapperMap.end())
+        ComPtrToWrapperMap.erase(it_c);
 
     o2u_attachCurrentThread();
 

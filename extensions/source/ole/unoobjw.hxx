@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2002-06-05 13:21:38 $
+ *  last change: $Author: jl $ $Date: 2002-09-13 06:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,10 +213,6 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetNameSpaceParent(
         /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
 
-    //XInterface ----------------------------------------------------------
-    void SAL_CALL InterfaceOleWrapper_Impl::acquire(  ) throw();
-    void SAL_CALL InterfaceOleWrapper_Impl::release(  ) throw();
-
     // XBridgeSupplier2 ---------------------------------------------------
     virtual Any SAL_CALL createBridge(const Any& modelDepObject,
                                 const Sequence<sal_Int8>& ProcessId,
@@ -256,7 +252,7 @@ protected:
 
     sal_Bool getInvocationInfoForCall(DISPID id, InvocationInfo& info);
 
-    vos::ORefCount                      m_refCount;
+//  vos::ORefCount                      m_refCount;
     Reference<XInvocation>                  m_xInvocation;
     Reference<XExactName>                   m_xExactName;
     Reference<XInterface>                   m_xOrigin;
