@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-04 18:07:28 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,9 @@
 #include <svtools/zforlist.hxx>
 #include <vcl/system.hxx>
 #include <unotools/charclass.hxx>
-#include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 
 #include "document.hxx"
 #include "table.hxx"
@@ -216,7 +218,7 @@ BOOL ScDocument::ValidNewTabName( const String& rName ) const
         {
             String aOldName;
             pTab[i]->GetName(aOldName);
-            bValid = (ScGlobal::pCollator->compareString(
+            bValid = (ScGlobal::pTransliteration->compareString(
                             rName, aOldName ) != COMPARE_EQUAL );
         }
     return bValid;
@@ -431,7 +433,7 @@ BOOL ScDocument::RenameTab( USHORT nTab, const String& rName, BOOL bUpdateRef,
                 {
                     String aOldName;
                     pTab[i]->GetName(aOldName);
-                    bValid = (ScGlobal::pCollator->compareString(
+                    bValid = (ScGlobal::pTransliteration->compareString(
                                     rName, aOldName ) != COMPARE_EQUAL );
                 }
             if (bValid)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2001-07-05 15:04:14 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
 #endif
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 
 #include "global.hxx"
 #include "scresid.hxx"
@@ -149,9 +152,12 @@ LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
 ::com::sun::star::lang::Locale*     ScGlobal::pLocale = NULL;
 SvtSysLocale*   ScGlobal::pSysLocale = NULL;
 const CharClass*  ScGlobal::pCharClass = NULL;
+const LocaleDataWrapper*  ScGlobal::pLocaleData = NULL;
 CalendarWrapper* ScGlobal::pCalendar = NULL;
 CollatorWrapper* ScGlobal::pCollator = NULL;
 CollatorWrapper* ScGlobal::pCaseCollator = NULL;
+::utl::TransliterationWrapper* ScGlobal::pTransliteration = NULL;
+::utl::TransliterationWrapper* ScGlobal::pCaseTransliteration = NULL;
 IntlWrapper*    ScGlobal::pScIntlWrapper = NULL;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
 String*         ScGlobal::pEmptyString = NULL;
@@ -597,16 +603,24 @@ void ScGlobal::Init()
     //! Wenn Sortierung etc. von der Sprache der installierten Offfice-Version
     //! abhaengen sollen, hier "Application::GetSettings().GetUILanguage()"
     String aLanguage, aCountry;
-    ConvertLanguageToIsoNames( Application::GetSettings().GetLanguage(), aLanguage, aCountry );
+    LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
+    ConvertLanguageToIsoNames( eOfficeLanguage, aLanguage, aCountry );
     pLocale = new ::com::sun::star::lang::Locale( aLanguage, aCountry, EMPTY_STRING );
     pSysLocale = new SvtSysLocale;
     pCharClass = pSysLocale->GetCharClassPtr();
+    pLocaleData = pSysLocale->GetLocaleDataPtr();
     pCalendar = new CalendarWrapper( ::comphelper::getProcessServiceFactory() );
     pCalendar->loadDefaultCalendar( *pLocale );
     pCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
     pCollator->loadDefaultCollator( *pLocale, SC_COLLATOR_IGNORES );
     pCaseCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
     pCaseCollator->loadDefaultCollator( *pLocale, 0 );
+    pTransliteration = new ::utl::TransliterationWrapper(
+        ::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_IGNORECASE );
+    pTransliteration->loadModuleIfNeeded( eOfficeLanguage );
+    pCaseTransliteration = new ::utl::TransliterationWrapper(
+        ::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_CASESENSE );
+    pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
     pScIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), *pLocale );
 
     ppRscString = new String *[ STR_COUNT+1 ];
@@ -707,11 +721,15 @@ void ScGlobal::Clear()
     DELETEZ(pOutlineBitmaps);
 //  DELETEZ(pAnchorBitmap);
 //  DELETEZ(pGrayAnchorBitmap);
+    DELETEZ(pCaseTransliteration);
+    DELETEZ(pTransliteration);
     DELETEZ(pCaseCollator);
     DELETEZ(pCollator);
     DELETEZ(pCalendar);
     //! do NOT delete pCharClass since it is a pointer to the single SvtSysLocale instance
     pCharClass = NULL;
+    //! do NOT delete pLocaleData since it is a pointer to the single SvtSysLocale instance
+    pLocaleData = NULL;
     DELETEZ(pSysLocale);
     DELETEZ(pLocale);
     DELETEZ(pScIntlWrapper);

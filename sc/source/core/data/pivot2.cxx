@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:05:33 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,9 @@
 #include <svx/boxitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <svx/algitem.hxx>
-#include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 
 #include "globstr.hrc"
 #include "subtotal.hxx"
@@ -333,7 +335,7 @@ short PivotStrCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
             nResult = pUserData->ICompare(rData1.aStrValue, rData2.aStrValue);
         else
         {
-            nResult = (short) ScGlobal::pCollator->compareString(
+            nResult = (short) ScGlobal::pTransliteration->compareString(
                 rData1.aStrValue, rData2.aStrValue );
         }
     }
@@ -355,7 +357,7 @@ short PivotStrCollection::GetIndex(TypedStrData* pData) const
 
 String ScPivotCollection::CreateNewName( USHORT nMin ) const
 {
-    String aBase = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("DataPilot"));
+    String aBase( RTL_CONSTASCII_USTRINGPARAM("DataPilot") );
     //! from Resource?
 
     for (USHORT nAdd=0; nAdd<=nCount; nAdd++)   //  nCount+1 Versuche

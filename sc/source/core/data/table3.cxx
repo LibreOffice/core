@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-22 09:34:29 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <stdlib.h>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 
 #include "table.hxx"
 #include "scitems.hxx"
@@ -917,6 +920,8 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
     BOOL    bMatchWholeCell = pDocument->GetDocOptions().IsMatchWholeCell();
     CollatorWrapper* pCollator = (rParam.bCaseSens ? ScGlobal::pCaseCollator :
         ScGlobal::pCollator);
+    ::utl::TransliterationWrapper* pTransliteration = (rParam.bCaseSens ?
+        ScGlobal::pCaseTransliteration : ScGlobal::pTransliteration);
 
     while ( (i < nEntryCount) && rParam.GetEntry(i).bDoQuery )
     {
@@ -1011,7 +1016,7 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
                 {
                     if ( bMatchWholeCell )
                     {
-                        bOk = (pCollator->compareString( aCellStr,
+                        bOk = (pTransliteration->compareString( aCellStr,
                             *rEntry.pStr ) == COMPARE_EQUAL);
                     }
                     else

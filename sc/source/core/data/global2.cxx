@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 09:54:16 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,11 +1260,11 @@ __EXPORT ScPostIt::~ScPostIt()
 void ScPostIt::AutoSetText( const String& rNewText )
 {
     aStrText   = rNewText;
-    aStrDate   = ScGlobal::pSysLocale->GetLocaleData().getDate( Date() );
+    aStrDate   = ScGlobal::pLocaleData->getDate( Date() );
 
     //  Der Einheitlichkeit halber das Datum immer ohne Uhrzeit (wie im Writer)
 //  aStrDate  += ", ";
-//  aStrDate  += ScGlobal::pSysLocale->GetLocaleData().getTime( Time() );
+//  aStrDate  += ScGlobal::pLocaleData->getTime( Time() );
 
     SvtUserOptions aUserOpt;
     aStrAuthor = aUserOpt.GetID();

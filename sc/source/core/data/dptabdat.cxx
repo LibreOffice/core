@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabdat.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:05:33 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,9 @@
 
 #include <tools/debug.hxx>
 #include <tools/date.hxx>
-#include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 
 #include "dptabdat.hxx"
 #include "global.hxx"
@@ -79,11 +81,11 @@
 BOOL ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
 {
     //! ApproxEqual ???
-    //! pass Collator?
+    //! pass Transliteration?
     //! inline?
     return bHasValue ? ( r.bHasValue && fValue == r.fValue ) :
                        ( !r.bHasValue &&
-                           (ScGlobal::pCollator->compareString(
+                        (ScGlobal::pTransliteration->compareString(
                             aString, r.aString ) == COMPARE_EQUAL) );
 }
 
