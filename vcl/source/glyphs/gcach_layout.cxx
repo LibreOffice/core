@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.16 $
- *  last change: $Author: hdu $ $Date: 2002-09-25 13:27:36 $
+ *  $Revision: 1.17 $
+ *  last change: $Author: hdu $ $Date: 2002-09-25 17:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,8 +564,8 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout,
         if( pLineBidi )
         {
             // TODO: reorder chars, layout at once, reorder charpos
-            nMinBidiPos = rArgs.mnMinCharPos;
             bRightToLeft = (UBIDI_RTL == ubidi_getVisualRun( pLineBidi, i, &nMinBidiPos, &nEndBidiPos ));
+            nMinBidiPos += rArgs.mnMinCharPos;
             nEndBidiPos += nMinBidiPos;
         }
 
@@ -642,10 +642,25 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout,
     rLayout.SetGlyphItems( pGlyphItems, nSumGlyphCount );
     rLayout.SetWantFallback( bWantFallback );
 
+    // general justification
     if( rArgs.mpDXArray )
         rLayout.ApplyDXArray( rArgs.mpDXArray );
     else if( rArgs.mnLayoutWidth )
         rLayout.Justify( rArgs.mnLayoutWidth );
+
+    // kashida justification
+    if( (rArgs.mpDXArray || rArgs.mnLayoutWidth)
+    &&  ((meScriptCode == arabScriptCode) || (meScriptCode == syrcScriptCode)) )
+    {
+        LEGlyphID nKashidaIndex = maIcuFont.mapCharToGlyph( 0x0640, NULL );
+        if( nKashidaIndex != 0 )
+        {
+            LEPoint aAdvance;
+            maIcuFont.getGlyphAdvance( nKashidaIndex, aAdvance );
+            rLayout.KashidaJustify( nKashidaIndex, (long)aAdvance.fX );
+            // TODO: kashida-GSUB/GPOS
+        }
+    }
 
     return true;
 }
