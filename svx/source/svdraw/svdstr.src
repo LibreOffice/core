@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-13 22:39:11 $
+ *  last change: $Author: rt $ $Date: 2001-11-22 23:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3110,7 +3110,7 @@ String STR_ObjNameSingulUno
     Text[ portuguese_brazilian ] = "Uno-Control Objekt";
     Text[ japanese ] = "ｺﾝﾄﾛｰﾙ";
     Text[ chinese_simplified ] = "控制";
-    Text[ chinese_traditional ] = "控製項";
+    Text[ chinese_traditional ] = "控制項";
     Text[ arabic ] = "���� ����";
     Text[ dutch ] = "Controleveld";
     Text[ chinese_simplified ] = "控制";
@@ -3138,7 +3138,7 @@ String STR_ObjNamePluralUno
     Text[ portuguese_brazilian ] = "Uno-Control Objekte";
     Text[ japanese ] = "ｺﾝﾄﾛｰﾙ";
     Text[ chinese_simplified ] = "控制";
-    Text[ chinese_traditional ] = "控製項";
+    Text[ chinese_traditional ] = "控制項";
     Text[ arabic ] = "����� ����";
     Text[ dutch ] = "Controlevelden";
     Text[ chinese_simplified ] = "控制";
@@ -17022,7 +17022,7 @@ String SIP_EE_CHAR_FONTWIDTH
     Text[ spanish ] = "Ancho de fuente";
     Text[ italian ] = "Larghezza carattere";
     Text[ danish ] = "Skriftbredde";
-    Text[ swedish ] = "Teckensnittsbredd";
+    Text[ swedish ] = "Teckenbredd";
     Text[ polish ] = "Szeroko�� czcionki";
     Text[ portuguese_brazilian ] = "Font width";
     Text[ japanese ] = "ﾌｫﾝﾄの幅";
@@ -17051,7 +17051,7 @@ String SIP_EE_CHAR_WEIGHT
     Text[ spanish ] = "Negrita";
     Text[ italian ] = "Grassetto (spessore carattere)";
     Text[ danish ] = "Skrifttykkelse";
-    Text[ swedish ] = "Teckensnittstjocklek";
+    Text[ swedish ] = "Tjocklek (tecken)";
     Text[ polish ] = "Grubo�� czcionki";
     Text[ portuguese_brazilian ] = "Bold";
     Text[ japanese ] = "ﾌｫﾝﾄの太さ";
@@ -17730,6 +17730,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
