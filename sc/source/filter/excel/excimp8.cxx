@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-10-26 11:22:20 $
+ *  last change: $Author: gt $ $Date: 2000-10-27 12:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 #include <svx/svdpage.hxx>
 
 #include <vcl/graph.hxx>
+#include <vcl/bmpacc.hxx>
 
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
@@ -1933,6 +1934,84 @@ void ImportExcel8::Cellmerging( void )
 }
 
 
+struct BackgroundGraphic
+{
+    sal_uInt32 nMagicNumber;
+    sal_uInt32 nUnknown1;
+    sal_uInt32 nUnknown2;
+    sal_uInt16 nWidth;
+    sal_uInt16 nHeight;
+    sal_uInt16 nPlanes;
+    sal_uInt16 nBitsPerPixel;
+};
+
+
+static sal_Bool lcl_ImportBackgroundGraphic( SvStream& rIn, sal_uInt32 nSize, Graphic& rGraphic )
+{
+    sal_Bool    bRetValue = FALSE;
+    sal_uInt16  nOldNumberFormat( rIn.GetNumberFormatInt() );
+
+    if( nSize > sizeof( BackgroundGraphic ) )
+    {
+        rIn.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+
+        BackgroundGraphic   aBackground;
+        rIn >> aBackground.nMagicNumber
+            >> aBackground.nUnknown1
+            >> aBackground.nUnknown2
+            >> aBackground.nWidth
+            >> aBackground.nHeight
+            >> aBackground.nPlanes
+            >> aBackground.nBitsPerPixel;
+        if( ( aBackground.nMagicNumber == 0x00010009 )
+            && ( aBackground.nBitsPerPixel == 24 )
+            && ( aBackground.nPlanes == 1 ) )
+        {
+            sal_Bool            bImportPossible;
+            sal_Bool            bAlignment = FALSE;
+            sal_uInt32          nSizeLeft = nSize - 20;
+            sal_uInt32          nWidth = aBackground.nWidth;
+            sal_uInt32          nHeight = aBackground.nHeight;
+            const sal_uInt32    nGuessSize = nWidth * nHeight * 3;
+            bImportPossible = ( nGuessSize == nSizeLeft );
+            if( !bImportPossible )
+            {
+                bImportPossible = ( ( nGuessSize + nHeight ) == nSizeLeft );
+                bAlignment = TRUE;
+            }
+            if( bImportPossible )
+            {
+                Bitmap              aBmp( Size( nWidth, nHeight ), aBackground.nBitsPerPixel );
+                BitmapWriteAccess*  pAcc = aBmp.AcquireWriteAccess();
+
+                sal_uInt8           nBlue, nGreen, nRed;
+                sal_uInt32          x, y;
+                for( y = 0 ; y < nHeight ; y++ )
+                {
+                    for( x = 0 ; x < nWidth ; x++ )
+                    {
+                        rIn >> nBlue >> nGreen >> nRed;
+
+                        pAcc->SetPixel( y, x, BitmapColor( nRed, nGreen, nBlue ) );
+
+                    }
+
+                    if( bAlignment )
+                        rIn.SeekRel( 1 );
+                }
+
+                aBmp.ReleaseAccess( pAcc );
+                rGraphic = aBmp;
+                bRetValue = TRUE;
+            }
+        }
+    }
+    rIn.SetNumberFormatInt( nOldNumberFormat );
+
+    return bRetValue;
+}
+
+
 UINT32 ImportExcel8::BGPic( UINT32 n )
 {
     // no documentation available, but it might be, that it's only wmf format
@@ -1945,19 +2024,17 @@ UINT32 ImportExcel8::BGPic( UINT32 n )
     SvMemoryStream*     pMemStr = CreateContinueStream( ( UINT16 ) n, nSumLen, nNextRecord, TRUE );
     pMemStr->Seek( STREAM_SEEK_TO_BEGIN );
 
-    BOOL                b = FALSE;
-    if( b )
-    {
-        SvFileStream    aOStr( _STRINGCONST( "svstr.dmp" ), STREAM_STD_WRITE );
-        aOStr << *pMemStr;
-        aOStr.Close();
-    }
+//  BOOL                b = FALSE;
+//  if( b )
+//  {
+//      SvFileStream    aOStr( _STRINGCONST( "svstr.dmp" ), STREAM_STD_WRITE );
+//      aOStr << *pMemStr;
+//      aOStr.Close();
+//  }
 
-//  SvxBrushItem        aBGItem( ( const SvxBrushItem& ) pStyleSheetItemSet->Get( ATTR_BACKGROUND ) );
-
-    GDIMetaFile         aGDIMF;
-    if( ConvertWMFToGDIMetaFile( *pMemStr, aGDIMF ) )
-        pStyleSheetItemSet->Put( SvxBrushItem( Graphic( aGDIMF ), GPOS_AREA ) );
+    Graphic             aGraphic;
+    if( lcl_ImportBackgroundGraphic( *pMemStr, nSumLen, aGraphic ) )
+        pStyleSheetItemSet->Put( SvxBrushItem( aGraphic, GPOS_AREA ) );
 
     delete pMemStr;
 
