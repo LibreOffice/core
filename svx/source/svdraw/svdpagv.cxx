@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-13 14:50:46 $
+ *  last change: $Author: fs $ $Date: 2000-11-24 16:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,15 @@ void SAL_CALL SdrUnoControlRec::disposing( const ::com::sun::star::lang::EventOb
 
         if (pParent)
         {
+            // now that the control is disposed, cancel any async events
+            // 11/24/2000 - 80508 - FS
+            {
+                ::osl::MutexGuard aEventGuard( m_aEventSafety );
+                if (nEvent)
+                    Application::RemoveUserEvent(nEvent);
+                nEvent = 0;
+            }
+
             uno::Reference< uno::XInterface > xThis(*this);
             xControl = NULL;
             pObj = NULL;
@@ -325,6 +334,8 @@ void SAL_CALL SdrUnoControlRec::propertyChange( const ::com::sun::star::beans::P
 void SAL_CALL SdrUnoControlRec::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& xProducer )
     throw(::com::sun::star::uno::RuntimeException)
 {
+    if (!pObj)
+        return;
     osl::MutexGuard aEventGuard( m_aEventSafety );
     // bild fertig gelesen, dann nochmals neuzeichnen (async)
     if (nEvent)
