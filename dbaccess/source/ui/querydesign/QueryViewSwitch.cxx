@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-29 08:31:08 $
+ *  last change: $Author: oj $ $Date: 2002-07-08 11:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ namespace
 }
 DBG_NAME(OQueryViewSwitch);
 OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
+: m_bAddTableDialogWasVisible(sal_False)
 {
     DBG_CTOR(OQueryViewSwitch,NULL);
 
@@ -284,7 +285,10 @@ sal_Bool OQueryViewSwitch::switchView()
     sal_Bool bGraphicalDesign = static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode();
 
     if ( !bGraphicalDesign ) // we have to hide the add table dialog
+    {
+        m_bAddTableDialogWasVisible = getAddTableDialog()->IsVisible();
         m_pDesignView->getAddTableDialog()->Hide();
+    }
 
     OQueryContainerWindow* pContainer = getContainer();
     ToolBox* pToolBox = pContainer ? pContainer->getToolBox() : NULL;
@@ -316,6 +320,8 @@ sal_Bool OQueryViewSwitch::switchView()
 
         m_pTextView->Show   ( !bGraphicalDesign );
         m_pDesignView->Show ( bGraphicalDesign );
+        if ( bGraphicalDesign && m_bAddTableDialogWasVisible )
+            getAddTableDialog()->Show();
     }
 
     if ( pContainer )
