@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-26 13:44:24 $
+ *  last change: $Author: cmc $ $Date: 2001-02-27 10:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -957,8 +957,8 @@ friend class WW8FormulaControl;
     void RegisterNumFmt(USHORT nActLFO, BYTE nActLevel);
 
 // Pictures mit Kode 100, die ueber MsoftbSpContainer abgespeichert sind.
-    BOOL WW8QuickHackForMSDFF_DirectBLIPImport( SvStream&   rSt,
-                                                WW8_PIC&    rPic,
+    int WW8QuickHackForMSDFF_DirectBLIPImport( SvStream&    rSt,
+                                                WW8PicDesc* pPic,
                                                 Graphic&    rData,
                                                 String&     rGraphName);
 // spaeter zu ersetzen durch Aufruf in entsprechend erweiterten SvxMSDffManager
@@ -1151,11 +1151,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.14 2001-02-26 13:44:24 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.15 2001-02-27 10:59:05 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2001/02/26 13:44:24  cmc
+      Ruby Text Import
+
       Revision 1.13  2001/02/21 13:49:03  cmc
       Combined Characters Field Import
 

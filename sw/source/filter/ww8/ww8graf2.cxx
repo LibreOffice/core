@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 13:31:12 $
+ *  last change: $Author: cmc $ $Date: 2001-02-27 10:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,32 +617,39 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf1( WW8_PIC& rPic, SvStream* pSt,
 
 
 
-BOOL SwWW8ImplReader::WW8QuickHackForMSDFF_DirectBLIPImport(SvStream& rSt,
-                                                            WW8_PIC& rPic,
-                                                            Graphic& rData,
-                                                            String& rGraphName)
+int SwWW8ImplReader::WW8QuickHackForMSDFF_DirectBLIPImport(SvStream& rSt,
+    WW8PicDesc* pPD, Graphic& rData, String& rGraphName)
 {
-    BOOL bOk = FALSE;
+    int nOk = FALSE;
     ULONG nFilePos = 0;
     ULONG nBLIPLen = 0;
     ULONG nLength;
-    ULONG nSpContainerLen;
     ULONG nCode;
-    rSt >> nSpContainerLen;
 
-    pMSDffManager->RetrieveNameOfBLIP( rSt,
-                                       rGraphName,
-                                       nSpContainerLen );
-    rSt.SeekRel( nSpContainerLen );
+    rSt.SeekRel(-4);
+    Rectangle aRect( 0,0, pPD->nWidth, pPD->nHeight);
+    SvxMSDffImportData aData( aRect );
+
+    DffRecordHeader aObjHd;
+    DffPropSet *pProps=0;
+    rSt >> aObjHd;
+    if (pMSDffManager->SeekToRec(*pDataStream, DFF_msofbtOPT,
+        aObjHd.nRecLen+aObjHd.nFilePos))
+    {
+        pProps = new DffPropSet(TRUE);
+        *pDataStream >> *pProps;
+    }
+
+    rSt.Seek(aObjHd.nRecLen+aObjHd.nFilePos+8);
     rSt >> nCode;
     if(0xF0070000 == (nCode & 0xFFFF0000))
     {
         ULONG nLenFBSE;
         rSt >> nLength;
 
-        const ULONG nSkipBLIPLen  = 20; // bis zu nBLIPLen zu ueberspringende Bytes
-        const ULONG nSkipShapePos =  4; // dahinter bis zu nShapePos zu skippen
-        const ULONG nSkipBLIP           =  4; // dahinter schliesst dann das BLIP an
+        const ULONG nSkipBLIPLen = 20;//bis zu nBLIPLen zu ueberspringende Bytes
+        const ULONG nSkipShapePos = 4;//dahinter bis zu nShapePos zu skippen
+        const ULONG nSkipBLIP = 4;    // dahinter schliesst dann das BLIP an
 
         nLenFBSE = nLength;
 
@@ -664,10 +671,22 @@ BOOL SwWW8ImplReader::WW8QuickHackForMSDFF_DirectBLIPImport(SvStream& rSt,
         {
             // das BLIP Atom steht im Daten Stream unmittelbar hinter dem FBSE
             //
-            bOk = pMSDffManager->GetBLIPDirect( rSt, rData );
+            nOk = pMSDffManager->GetBLIPDirect( rSt, rData );
+
+            //Let preexisting cropping values dominate if they exist
+            if ((pProps) && !(pPD->nCL || pPD->nCR || pPD->nCT || pPD->nCB))
+            {
+
+                pPD->nCT = pProps->GetPropertyValue( DFF_Prop_cropFromTop,0);
+                pPD->nCB = pProps->GetPropertyValue( DFF_Prop_cropFromBottom,0);
+                pPD->nCL = pProps->GetPropertyValue( DFF_Prop_cropFromLeft,0);
+                pPD->nCR = pProps->GetPropertyValue( DFF_Prop_cropFromRight,0);
+                nOk++;
+            }
         }
     }
-    return bOk;
+    delete pProps;
+    return nOk;
 }
 
 BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
@@ -1044,33 +1063,51 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                 *pDataStream >> nCode;
                 if(0xF004000F == nCode)
                 {
-                    if( !WW8QuickHackForMSDFF_DirectBLIPImport(
-                                        *pDataStream, aPic, aGraph, aGrName) )
+                    int nOK;
+                    if(!(nOK = WW8QuickHackForMSDFF_DirectBLIPImport(
+                        *pDataStream, &aPD, aGraph, aGrName) ))
                     {
                         ASSERT( !this, "Wo ist die Grafik ?" );
                     }
                     else
                     {
-                        // Positionieren, Skalieren und Zuschneiden des Pictures
-                        //
-                        SfxItemSet aGrfSet(rDoc.GetAttrPool(), RES_GRFATR_BEGIN,
-                                                               RES_GRFATR_END-1);
-                        if( aPD.nCL || aPD.nCR || aPD.nCT || aPD.nCB )
+                        //Set position, scaling and cropping of the pictures
+                        SfxItemSet aGrfSet(rDoc.GetAttrPool(),
+                                RES_GRFATR_BEGIN, RES_GRFATR_END-1);
+                        if ((nOK == 1) &&
+                            (aPD.nCL || aPD.nCR || aPD.nCT || aPD.nCB))
                         {
-                            SwCropGrf aCrop( aPD.nCL, aPD.nCR, aPD.nCT, aPD.nCB );
+                            SwCropGrf aCrop(aPD.nCL,aPD.nCR,aPD.nCT,aPD.nCB );
                             aGrfSet.Put( aCrop );
                         }
+
                         if( pOldFlyFmt )
+                        {
                             pRet = MakeGrafByFlyFmt(pTextObj, *pOldFlyFmt, aPD,
-                                                    &aGraph,
-                                                    aEmptyStr,
-                                                    aGrName,
-                                                    aGrfSet, bSetToBackground);
+                                &aGraph, aEmptyStr, aGrName, aGrfSet,
+                                bSetToBackground);
+                        }
                         else
+                        {
                             if( pWFlyPara && pWFlyPara->bGrafApo )
-                                pRet = MakeGrafNotInCntnt( aPD, &aGraph, aEmptyStr, aGrName, aGrfSet );
+                                pRet = MakeGrafNotInCntnt( aPD, &aGraph,
+                                    aEmptyStr, aGrName, aGrfSet );
                             else
-                                pRet = MakeGrafInCntnt( aPic, aPD, &aGraph, aEmptyStr, aGrName, aGrfSet );
+                                pRet = MakeGrafInCntnt( aPic, aPD, &aGraph,
+                                    aEmptyStr, aGrName, aGrfSet );
+                        }
+
+                        if ((nOK == 2) &&
+                            (aPD.nCL || aPD.nCR || aPD.nCT || aPD.nCB))
+                        {
+                            WW8_FSPA aDummy = {0};
+                            SvxMSDffImportRec aPseudoRecord;
+                            aPseudoRecord.nCropFromLeft = aPD.nCL;
+                            aPseudoRecord.nCropFromBottom = aPD.nCB;
+                            aPseudoRecord.nCropFromRight = aPD.nCR;
+                            aPseudoRecord.nCropFromTop = aPD.nCT;
+                            SetCropAtGrfNode(&aPseudoRecord,pRet,&aDummy);
+                        }
                     }
                 }
                 else
@@ -1167,11 +1204,14 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.4 2000-11-13 13:31:12 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.5 2001-02-27 10:59:05 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/13 13:31:12  jp
+      use new method GetStream from TempFile
+
       Revision 1.3  2000/11/06 09:42:28  jp
       must changes: tempfile
 
