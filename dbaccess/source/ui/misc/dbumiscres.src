@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:08:16 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ Resource RSC_DATASOURCE_TYPES
         Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;FolhaCбlculo;LivroEndereзos";
         Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;“екст;ƒокумент электронной таблицы;јдресна€ книга";
         Text[ greek ] = "Adabas;JDBC;ODBC;dBase;ADO; еяменп;Єггсбцп рянбкб;ЅфжЁнфб дйехиэнуещн";
-        Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Werkbladdocument";
+        Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Werkbladdocument;Adresboek";
         Text[ french ] = "Adabas;JDBC;ODBC;dBase;ADO;Texte;Classeur;CarnetAdresses";
         Text[ spanish ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Hoja de cбlculo;Libreta de direcciones";
         Text[ italian ] = "Adabas;JDBC;ODBC;dBase;ADO;Testo;Foglio elettronico;Rubrica";
@@ -305,6 +305,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27  2001/06/08 22:08:16  kz
+ *  Merge SRC633: 09.06.01 - 00:07:57
+ *
  *  Revision 1.26  2001/06/01 19:30:11  kz
  *  Merge SRC633: 01.06.01 - 21:29:38
  *
@@ -343,5 +346,6 @@ String STR_BUTTON_TEXT_ALL
  *
  *  Revision 1.0 26.09.00 08:26:13  fs
  ************************************************************************/
+
 
 
