@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:32:58 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1641,6 +1641,15 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                                     break;
                                 }
                             }
+                        }
+                        // --> OD 2004-06-15 #i29199# - It is possible, that
+                        // the anchor doesn't exist - E.g., reordering the
+                        // sub-documents in a master document.
+                        // Note: The anchor will be inserted later.
+                        if ( !pModify )
+                        {
+                            // break to end of the current switch case.
+                            break;
                         }
                     }
                     else
