@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 15:24:19 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 15:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1351,7 +1351,12 @@ String STR_DATASOURCE_DEFAULTNAME
     Text [ english ] = "data source";
     Text [ english_us ] = "datas source";
 };
-
+String STR_ERR_EMPTY_DSN_NAME
+{
+    Text = "Der Datenquellen-Name darf nicht leer sein!";
+    Text [ english ] = "The data source name must not be empty!";
+    Text [ english_us ] = "The data source name must not be empty!";
+};
 Menu MENU_DATASOURCELIST_POPUP
 {
     ItemList =
@@ -1383,6 +1388,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2000/10/30 15:24:19  fs
+ *  no password fields anymore - don't want to have them in and _data source aministration_ dialog
+ *
  *  Revision 1.9  2000/10/30 13:48:17  fs
  *  #79820# some help ids
  *

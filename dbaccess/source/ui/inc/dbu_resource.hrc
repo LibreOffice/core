@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 15:19:12 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 15:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@
 #define RID_STR_DATABROWSER_FILTERED        273
 #define STR_REMEMBERPASSWORD_SESSION        274
 #define STR_REMEMBERPASSWORD_PERSISTENT     275
+#define STR_ERR_EMPTY_DSN_NAME              276
 
 //========================================================================
 // untyped resources
@@ -174,6 +175,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2000/10/30 15:19:12  fs
+ *  #79816# STR_INVALID_REGISTEREDDRIVER is obsolete
+ *
  *  Revision 1.8  2000/10/26 18:05:29  fs
  *  DLG_PARAMETERS
  *
