@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: er $ $Date: 2001-07-12 21:31:46 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 15:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@
 #include <svtools/sbx.hxx>
 #include <svtools/zforlist.hxx>
 #include <tools/urlobj.hxx>
-#include <segmentc.hxx>
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
@@ -146,14 +145,10 @@ jmp_buf* ScInterpreter::pJumpBuf = NULL;    // fuer die mySignal-Funktion
 ScLibSignalFunc ScInterpreter::pSignalFunc = NULL;  // signal() Wrapper der App
 #endif
 
-#pragma code_seg("SCSTATICS")
-
 TabOpList ScInterpreter::aTableOpList;
 #if SC_SPEW_ENABLED
 ScSpew ScInterpreter::theSpew;
 #endif
-
-#pragma code_seg()
 
 //-------------------------------------------------------
 
