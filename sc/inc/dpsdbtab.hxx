@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsdbtab.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: er $ $Date: 2000-10-19 15:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,16 @@
 #ifndef SC_DPSDBTAB_HXX
 #define SC_DPSDBTAB_HXX
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+
+namespace com { namespace sun { namespace star {
+    namespace lang {
+        class XMultiServiceFactory;
+    }
+}}}
+
 #ifndef SC_DPTABDAT_HXX
 #include "dptabdat.hxx"
 #endif
@@ -96,7 +106,10 @@ private:
     void            InitAllColumnEntries();
 
 public:
-                    ScDatabaseDPData( const ScImportSourceDesc& rImport );
+                    ScDatabaseDPData(
+                        ::com::sun::star::uno::Reference<
+                            ::com::sun::star::lang::XMultiServiceFactory > xSMgr,
+                        const ScImportSourceDesc& rImport );
     virtual         ~ScDatabaseDPData();
 
     virtual long                    GetColumnCount();

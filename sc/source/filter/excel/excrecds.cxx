@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-22 14:54:25 $
+ *  last change: $Author: er $ $Date: 2000-10-19 15:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2517,7 +2517,7 @@ ExcFormat::ExcFormat( RootData* pExcRoot, UINT32 nNewScIndex ) : ExcRoot( pExcRo
 {
     // ACHTUNG: nIndex wird hier NICHT gesetzt -> bei Freunden machen!
     if( !nObjCnt )
-        pFormatter = new SvNumberFormatter( LANGUAGE_ENGLISH_US );
+        pFormatter = new SvNumberFormatter( pExcRoot->pDoc->GetServiceManager(), LANGUAGE_ENGLISH_US );
 
     nObjCnt++;  // Objektzaehler einen hoch
 

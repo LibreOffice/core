@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:44:06 $
+ *  last change: $Author: er $ $Date: 2000-10-19 15:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,10 @@
 #include <svtools/zformat.hxx>
 #include <vcl/system.hxx>
 
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
+
 #include "document.hxx"
 #include "table.hxx"
 #include "attrib.hxx"
@@ -298,6 +302,7 @@
 
 ScDocument::ScDocument( ScDocumentMode  eMode,
                         SfxObjectShell* pDocShell ) :
+        xServiceManager( ::utl::getProcessServiceFactory() ),
         pDrawLayer( NULL ),
         pColorTable( NULL ),
         bOwner( FALSE ),
@@ -376,7 +381,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pDocPool = new ScDocumentPool;
         pDocPool->FreezeIdRanges();
         pStylePool = new ScStyleSheetPool( *pDocPool, this );
-        pFormTable = new SvNumberFormatter( ScGlobal::eLnge );
+        pFormTable = new SvNumberFormatter( GetServiceManager(), ScGlobal::eLnge );
         aColorLink = LINK(this, ScDocument, GetUserDefinedColor);
         pFormTable->SetColorLink(&aColorLink);
         pFormTable->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:24:17 $
+ *  last change: $Author: er $ $Date: 2000-10-19 15:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,11 @@
 #ifndef _SV_TIMER_HXX //autogen
 #include <vcl/timer.hxx>
 #endif
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+
 
 #ifndef SC_TABLE_HXX
 #include "table.hxx"        // FastGetRowHeight (inline)
@@ -145,6 +150,12 @@ class ScFieldEditEngine;
 struct ScConsolidateParam;
 class ScDPObject;
 class ScDPCollection;
+
+namespace com { namespace sun { namespace star {
+    namespace lang {
+        class XMultiServiceFactory;
+    }
+}}}
 
 
 #ifdef _ZFORLIST_DECLARE_TABLE
@@ -298,6 +309,7 @@ friend class ScAttrRectIterator;
 friend class ScPivot;
 
 private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
     ScDocumentPool*     pDocPool;
     ScStyleSheetPool*   pStylePool;
     SfxItemPool*        pEditPool;                      // EditTextObjectPool
@@ -425,6 +437,9 @@ public:
                     ScDocument( ScDocumentMode eMode = SCDOCMODE_DOCUMENT,
                                 SfxObjectShell* pDocShell = NULL );
                     ~ScDocument();
+
+    inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                    GetServiceManager() const { return xServiceManager; }
 
     const String&   GetName() const { return aDocName; }
     void            SetName( const String& r ) { aDocName = r; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsdbtab.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: er $ $Date: 2000-10-19 15:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ using namespace com::sun::star;
 class ScDatabaseDPData_Impl
 {
 public:
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
     ScImportSourceDesc  aDesc;
     long                nColCount;
     BOOL                bValid;
@@ -115,9 +116,12 @@ public:
 
 // -----------------------------------------------------------------------
 
-ScDatabaseDPData::ScDatabaseDPData( const ScImportSourceDesc& rImport )
+ScDatabaseDPData::ScDatabaseDPData(
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr,
+    const ScImportSourceDesc& rImport )
 {
     pImpl = new ScDatabaseDPData_Impl;
+    pImpl->xServiceManager = xSMgr;
     pImpl->aDesc = rImport;
     pImpl->nColCount = 0;
     pImpl->bValid = FALSE;
@@ -320,7 +324,7 @@ void lcl_FillItemData( ScDPItemData& rData,
                     nNumType = NUMBERFORMAT_DATE;
 
                     if (!pImpl->pFormatter)
-                        pImpl->pFormatter = new SvNumberFormatter( ScGlobal::eLnge );
+                        pImpl->pFormatter = new SvNumberFormatter( pImpl->xServiceManager, ScGlobal::eLnge );
 
                     util::Date aDate = xRow->getDate(nRowPos);
                     rData.fValue = Date( aDate.Day, aDate.Month, aDate.Year ) -
@@ -356,7 +360,7 @@ void lcl_FillItemData( ScDPItemData& rData,
     if ( rData.bHasValue && bStringForVal )
     {
         if (!pImpl->pFormatter)
-            pImpl->pFormatter = new SvNumberFormatter( ScGlobal::eLnge );
+            pImpl->pFormatter = new SvNumberFormatter( pImpl->xServiceManager, ScGlobal::eLnge );
 
         ULONG nIndex = pImpl->pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
         pImpl->pFormatter->GetInputLineString( rData.fValue, nIndex, rData.aString );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: er $ $Date: 2000-10-19 15:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <svx/wghtitem.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/msgbox.hxx>
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
 
 #include "sc.hrc"
 #include "attrib.hxx"
@@ -537,7 +541,7 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes ) :
         nDataColWidth1  ( (USHORT)(((aPrvSize.Width()-4)-(nLabelColWidth*2)) / 3) ),
         nDataColWidth2  ( (USHORT)(((aPrvSize.Width()-4)-(nLabelColWidth*2)) / 4) ),
         nRowHeight      ( (USHORT)((aPrvSize.Height()-4) / 5) ),
-        pNumFmt         ( new SvNumberFormatter( ScGlobal::eLnge ) )
+        pNumFmt         ( new SvNumberFormatter( ::utl::getProcessServiceFactory(), ScGlobal::eLnge ) )
 {
     Init();
     if( bIsOlk )

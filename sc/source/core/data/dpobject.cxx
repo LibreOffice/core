@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 17:25:08 $
+ *  last change: $Author: er $ $Date: 2000-10-19 15:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ void ScDPObject::CreateObjects()
 
         if ( pImpDesc )
         {
-            ScDatabaseDPData* pData = new ScDatabaseDPData( *pImpDesc );
+            ScDatabaseDPData* pData = new ScDatabaseDPData( pDoc->GetServiceManager(), *pImpDesc );
             xSource = new ScDPSource( pData );
         }
         else if ( pServDesc )

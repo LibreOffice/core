@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-11 16:38:14 $
+ *  last change: $Author: er $ $Date: 2000-10-19 15:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3510,7 +3510,7 @@ BOOL ScDocument::LoadPool( SvStream& rStream, BOOL bLoadRefCounts )
         delete pEditPool;
         delete pEnginePool;
     }
-    pFormTable = new SvNumberFormatter( ScGlobal::eLnge );
+    pFormTable = new SvNumberFormatter( GetServiceManager(), ScGlobal::eLnge );
     pFormTable->SetColorLink(&aColorLink);
     pFormTable->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
     pDocPool = new ScDocumentPool( NULL, bLoadRefCounts );
