@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-16 14:47:12 $
+ *  last change: $Author: os $ $Date: 2001-02-19 07:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ static const sal_Char cRubyText[] = "RubyText";
 static const sal_Char cCharacterStyles[] = "CharacterStyles";
 static const sal_Char cRubyAdjust[] = "RubyAdjust";
 static const sal_Char cDisplayName[] = "DisplayName";
-static const sal_Char cCharStyleName[] = "CharStyleName";
+static const sal_Char cRubyCharStyleName[] = "RubyCharStyleName";
 /* -----------------------------09.01.01 17:24--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -425,7 +425,7 @@ void SvxRubyDialog::Update()
                     nAdjust = -2;
             }
             if(bCharStyleEqual &&
-                pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCharStyleName)))
+                pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyCharStyleName)))
             {
                 pProps[nProp].Value >>= sTmp;
                 if(!nRuby)
@@ -554,7 +554,7 @@ IMPL_LINK(SvxRubyDialog, CharStyleHdl_Impl, ListBox*, pBox)
         PropertyValue* pProps = rProps.getArray();
         for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
-            if(pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCharStyleName)))
+            if(pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyCharStyleName)))
             {
                 pProps[nProp].Value <<= sStyleName;
             }
