@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: af $ $Date: 2002-05-13 12:17:16 $
+ *  last change: $Author: af $ $Date: 2002-05-17 11:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,8 @@ AccessibleContextBase::AccessibleContextBase (
         pStateSet->AddState (AccessibleStateType::ENABLED);
         pStateSet->AddState (AccessibleStateType::SHOWING);
         pStateSet->AddState (AccessibleStateType::VISIBLE);
+        pStateSet->AddState (AccessibleStateType::FOCUSABLE);
+        pStateSet->AddState (AccessibleStateType::SELECTABLE);
     }
 
     // Create the relation set.
@@ -149,13 +151,16 @@ AccessibleContextBase::~AccessibleContextBase(void)
 
 
 
-void AccessibleContextBase::SetState (sal_Int16 aState)
+sal_Bool AccessibleContextBase::SetState (sal_Int16 aState)
 {
+    ::osl::ClearableMutexGuard aGuard (maMutex);
     ::utl::AccessibleStateSetHelper* pStateSet =
         static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
     if ((pStateSet != NULL) && !pStateSet->contains(aState))
     {
         pStateSet->AddState (aState);
+        // Clear the mutex guard so that it is not locked during calls to listeners.
+        aGuard.clear();
 
         uno::Any aNewValue;
         aNewValue <<= aState;
@@ -163,19 +168,26 @@ void AccessibleContextBase::SetState (sal_Int16 aState)
             AccessibleEventId::ACCESSIBLE_STATE_EVENT,
             aNewValue,
             uno::Any());
+        return sal_True;
     }
+    else
+        return sal_False;
 }
 
 
 
 
-void AccessibleContextBase::ResetState (sal_Int16 aState)
+sal_Bool AccessibleContextBase::ResetState (sal_Int16 aState)
 {
+    ::osl::ClearableMutexGuard aGuard (maMutex);
     ::utl::AccessibleStateSetHelper* pStateSet =
         static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+    bool bStateChanged;
     if ((pStateSet != NULL) && pStateSet->contains(aState))
     {
         pStateSet->RemoveState (aState);
+        // Clear the mutex guard so that it is not locked during calls to listeners.
+        aGuard.clear();
 
         uno::Any aOldValue;
         aOldValue <<= aState;
@@ -183,7 +195,10 @@ void AccessibleContextBase::ResetState (sal_Int16 aState)
             AccessibleEventId::ACCESSIBLE_STATE_EVENT,
             uno::Any(),
             aOldValue);
+        return sal_True;
     }
+    else
+        return sal_False;
 }
 
 
@@ -191,6 +206,7 @@ void AccessibleContextBase::ResetState (sal_Int16 aState)
 
 sal_Bool AccessibleContextBase::GetState (sal_Int16 aState)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     ::utl::AccessibleStateSetHelper* pStateSet =
         static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
     if (pStateSet != NULL)
@@ -389,7 +405,6 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 
 /** Return a copy of the state set.
     Possible states are:
-        EDITABLE
         ENABLED
         SHOWING
         VISIBLE
@@ -412,6 +427,19 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     {
         // Create a copy of the state set and return it.
         pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+
+        // Merge current focused state from edit engine.
+#if 0
+        if (aState == AccessibleStateType::FOCUSED
+            && pStateSet != NULL
+            && mpText != NULL)
+        {
+            if (mpText->GetFocusedState ())
+                pStateSet->AddState (aState);
+            else
+                pStateSet->RemoveState (aState);
+        }
+#endif
         if (pStateSet != NULL)
             pStateSet = new ::utl::AccessibleStateSetHelper (*pStateSet);
     }
