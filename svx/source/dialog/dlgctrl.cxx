@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
+ *  last change: $Author: os $ $Date: 2001-05-10 14:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1733,6 +1733,12 @@ SvxXRectPreview::SvxXRectPreview( Window* pParent, const ResId& rResId, XOutputD
 {
     SetMapMode( MAP_100TH_MM );
     Size aSize = GetOutputSize();
+
+    Size aTmp(1, 1);
+    aTmp = PixelToLogic(aTmp);
+    aSize.Width() -= aTmp.Width() /2;
+    aSize.Height() -= aTmp.Height() /2;
+
     aRect = Rectangle( Point(), aSize );
     InitSettings( TRUE, TRUE );
 }
