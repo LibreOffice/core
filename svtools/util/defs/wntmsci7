@@ -7231,3 +7231,6 @@ FreeSpaceStr
 ?PasteExchange@INetImage@@IAEXABVString@@@Z
 ?Read@INetImage@@QAEEAAVSvStream@@K@Z
 ?Write@INetImage@@QBEEAAVSvStream@@K@Z
+??1SvtLinguConfigItem@@UAE@XZ
+?GetProperties@SvtLinguConfigItem@@QAE?AV?$Sequence@VAny@uno@star@sun@com@@@uno@star@sun@com@@ABV?$Sequence@VOUString@rtl@@@3456@@Z
+?GetPropertyNames@SvtLinguConfigItem@@QAE?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@XZ
