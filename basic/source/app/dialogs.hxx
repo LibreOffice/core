@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:24 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ class ConfEdit : public PushButton
     ByteString aKeyName;
     Edit aEdit;
 public:
-    ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN );
+    ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf );
     void Save( Config &aConf );
     void Reload( Config &aConf );
     void Click();
@@ -170,6 +170,8 @@ private:
     OKButton aOK;
     CancelButton aCancel;
     DECL_LINK( OKClick, Button * );
+
+    Config aConfig;
 
 public:
     OptionsDialog( Window* pParent, const ResId& );
@@ -196,7 +198,7 @@ class ProfileOptions : public TabPage
     CheckBox aAutoSave;
     CheckBox aStopOnSyntaxError;
 
-    Config aConf;
+    Config &aConf;
 
     void LoadData();
 
@@ -206,10 +208,11 @@ class ProfileOptions : public TabPage
     DECL_LINK( CheckButtonsHdl, ComboBox* );
 
     void ReloadProfile();
+    void Save();
 
 public:
-    ProfileOptions( Window* );
-    void Save();
+    ProfileOptions( Window*, Config &aConfig );
+    void Save( Config &aConfig );
 };
 
 class MiscOptions : public TabPage
@@ -228,8 +231,8 @@ class MiscOptions : public TabPage
     NumericField aTFMaxLRU;
 
 public:
-    MiscOptions( Window* );
-    void Save();
+    MiscOptions( Window*, Config &aConfig );
+    void Save( Config &aConfig );
 };
 
 class FontOptions : public TabPage
@@ -244,9 +247,6 @@ class FontOptions : public TabPage
 
     FontList aFontList;
 
-//  FixedLine aDirs;
-//  FixedLine aOther;
-
     DECL_LINK( FontNameChanged, void* );
     DECL_LINK( FontStyleChanged, void* );
     DECL_LINK( FontSizeChanged, void* );
@@ -254,8 +254,8 @@ class FontOptions : public TabPage
     void UpdatePreview();
 
 public:
-    FontOptions( Window* );
-    void Save();
+    FontOptions( Window*, Config &aConfig );
+    void Save( Config &aConfig );
 };
 
 
@@ -276,13 +276,10 @@ class GenericOptions : public TabPage
     PushButton aPbNewValue;
     PushButton aPbDelValue;
 
-    Config aConf;
-    String aTempConfName;
-    Config *pTempConf;
+    Config &aConf;
     ByteString aLastGroupName;
 
     String ReadKey( const ByteString &aGroup, const ByteString &aKey );
-    BOOL HasKey( Config &aConfig, const ByteString &aKey );
 
     StringList* GetAllGroups();
     void LoadData();
@@ -295,9 +292,9 @@ class GenericOptions : public TabPage
     DECL_LINK( CheckButtonsHdl, ComboBox* );
 
 public:
-    GenericOptions( Window* );
+    GenericOptions( Window*, Config &aConfig );
     ~GenericOptions();
-    void Save();
+    void Save( Config &aConfig );
 };
 
 
