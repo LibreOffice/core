@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-01 13:19:03 $
+ *  last change: $Author: dr $ $Date: 2000-11-02 16:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,15 +79,19 @@
 #include <xmloff/xmlnumfi.hxx>
 #endif
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-
 #include "xmlimprt.hxx"
 #include "document.hxx"
 #include "docuno.hxx"
 #include "xmlbodyi.hxx"
 #include "xmlstyli.hxx"
 
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
@@ -164,6 +168,7 @@ static __FAR_DATA SvXMLTokenMapEntry aBodyTokenMap[] =
     { XML_NAMESPACE_TABLE, sXML_database_ranges,        XML_TOK_BODY_DATABASE_RANGES        },
     { XML_NAMESPACE_TABLE, sXML_database_range,         XML_TOK_BODY_DATABASE_RANGE         },
     { XML_NAMESPACE_TABLE, sXML_data_pilot_tables,      XML_TOK_BODY_DATA_PILOT_TABLES      },
+    { XML_NAMESPACE_TABLE, sXML_consolidation,          XML_TOK_BODY_CONSOLIDATION          },
     XML_TOKEN_MAP_END
 };
 
@@ -630,6 +635,16 @@ static __FAR_DATA SvXMLTokenMapEntry aDataPilotMemberAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, sXML_name,                   XML_TOK_DATA_PILOT_MEMBER_ATTR_NAME                 },
     { XML_NAMESPACE_TABLE, sXML_display,                XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY              },
     { XML_NAMESPACE_TABLE, sXML_display_details,        XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_DETAILS      },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aConsolidationAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE,  sXML_function,                      XML_TOK_CONSOLIDATION_ATTR_FUNCTION         },
+    { XML_NAMESPACE_TABLE,  sXML_source_cell_range_addresses,   XML_TOK_CONSOLIDATION_ATTR_SOURCE_RANGES    },
+    { XML_NAMESPACE_TABLE,  sXML_target_cell_address,           XML_TOK_CONSOLIDATION_ATTR_TARGET_ADDRESS   },
+    { XML_NAMESPACE_TABLE,  sXML_use_label,                     XML_TOK_CONSOLIDATION_ATTR_USE_LABEL        },
+    { XML_NAMESPACE_TABLE,  sXML_link_to_source_data,           XML_TOK_CONSOLIDATION_ATTR_LINK_TO_SOURCE   },
     XML_TOKEN_MAP_END
 };
 
@@ -1131,6 +1146,14 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotMemberAttrTokenMap()
     return *pDataPilotMemberAttrTokenMap;
 }
 
+const SvXMLTokenMap& ScXMLImport::GetConsolidationAttrTokenMap()
+{
+    if( !pConsolidationAttrTokenMap )
+        pConsolidationAttrTokenMap = new SvXMLTokenMap( aConsolidationAttrTokenMap );
+    return *pConsolidationAttrTokenMap;
+}
+
+
 SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
                                            const OUString& rLocalName,
                                            const uno::Reference<xml::sax::XAttributeList>& xAttrList )
@@ -1149,6 +1172,7 @@ SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
 
 ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::frame::XModel> xTempModel, sal_Bool bLDoc, sal_uInt16 nStyleFamMask ) :
     SvXMLImport( xTempModel ),
+    pDoc( NULL ),
     bLoadDoc( bLDoc ),
     nStyleFamilyMask( nStyleFamMask ),
 //  rDoc( rD ),
@@ -1214,6 +1238,7 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     pDataPilotSubTotalAttrTokenMap( 0 ),
     pDataPilotMembersElemTokenMap( 0 ),
     pDataPilotMemberAttrTokenMap( 0 ),
+    pConsolidationAttrTokenMap( 0 ),
     aTables(*this),
     aMyNamedExpressions(),
     aValidations(),
@@ -1238,6 +1263,8 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     GetNamespaceMap().AddAtIndex( XML_NAMESPACE_TABLE, sXML_np__table,
                                   sXML_n_table, XML_NAMESPACE_TABLE );*/
 
+    pDoc = ScXMLConverter::GetScDocument( xTempModel );
+    DBG_ASSERT( pDoc, "ScXMLImport::ScXMLImport - no ScDocument!" );
     pScPropHdlFactory = new XMLScPropHdlFactory;
     if(pScPropHdlFactory)
     {
@@ -1344,6 +1371,7 @@ ScXMLImport::~ScXMLImport()
     delete pDataPilotSubTotalAttrTokenMap;
     delete pDataPilotMembersElemTokenMap;
     delete pDataPilotMemberAttrTokenMap;
+    delete pConsolidationAttrTokenMap;
 
     if (pScPropHdlFactory)
     {
@@ -1437,104 +1465,5 @@ sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValida
     if (bFound)
         aValidation = *aItr;
     return bFound;
-}
-
-void ScXMLImport::GetRangeFromString( const rtl::OUString& rRangeStr, ScRange& rRange )
-{
-    ScModelObj* pDocObj = ScModelObj::getImplementation( GetModel() );
-    if( pDocObj )
-    {
-        ScDocument* pDoc = pDocObj->GetDocument();
-        if( pDoc )
-        {
-            ScAddress aStartCellAddress;
-            ScAddress aEndCellAddress;
-            sal_Int16 i( 0 );
-            while ((rRangeStr[i] != ':') && (i < rRangeStr.getLength()))
-                i++;
-            rtl::OUString sStartCellAddress( rRangeStr.copy(0, i) );
-            rtl::OUString sEndCellAddress( rRangeStr.copy(i + 1) );
-            aStartCellAddress.Parse(sStartCellAddress, pDoc);
-            aEndCellAddress.Parse(sEndCellAddress, pDoc);
-            rRange = ScRange(aStartCellAddress, aEndCellAddress);
-        }
-    }
-}
-
-void ScXMLImport::GetRangeListFromString( const rtl::OUString& rRangeListStr, ScRangeList& rRangeList )
-{
-    rtl::OUStringBuffer aBuffer;
-    sal_Int32           nLength     = rRangeListStr.getLength();
-    sal_Int32           nIndex      = 0;
-    sal_Bool            bQuote      = sal_False;
-    sal_Bool            bGetRange   = sal_False;
-    while( nIndex < nLength )
-    {
-        sal_Unicode nCode = rRangeListStr[nIndex];
-        if( (nCode != ' ') || bQuote )
-        {
-            aBuffer.append( nCode );
-            bQuote = (bQuote != (nCode == '\''));
-        }
-        else bGetRange = (nCode == ' ');
-        if( bGetRange || (nIndex == nLength - 1) )
-        {
-            ScRange* pRange = new ScRange;
-            GetRangeFromString( aBuffer.makeStringAndClear(), *pRange );
-            rRangeList.Insert( pRange, LIST_APPEND );
-            bGetRange = sal_False;
-        }
-        nIndex++;
-    }
-}
-
-sal_Int32 ScXMLImport::GetRangeFromString( const rtl::OUString& rRangeListStr, sal_Int32 nOffset,
-                table::CellRangeAddress& rCellRange )
-{
-    rtl::OUStringBuffer aBuffer;
-    sal_Int32           nLength     = rRangeListStr.getLength();
-    sal_Int32           nIndex      = nOffset;
-    sal_Bool            bQuote      = sal_False;
-    sal_Bool            bExitLoop   = sal_False;
-
-    while( !bExitLoop && (nIndex < nLength) )
-    {
-        sal_Unicode nCode = rRangeListStr[nIndex];
-        if( (nCode != ' ') || bQuote )
-        {
-            aBuffer.append( nCode );
-            bQuote = (bQuote != (nCode == '\''));
-        }
-        else bExitLoop = (nCode == ' ');
-        nIndex++;
-    }
-
-    ScRange aRange;
-    GetRangeFromString( aBuffer.makeStringAndClear(), aRange );
-    rCellRange.Sheet = aRange.aStart.Tab();
-    rCellRange.StartColumn = aRange.aStart.Col();
-    rCellRange.EndColumn = aRange.aEnd.Col();
-    rCellRange.StartRow = aRange.aStart.Row();
-    rCellRange.EndRow = aRange.aEnd.Row();
-
-    return (nIndex < nLength) ? nIndex : -1;
-}
-
-void ScXMLImport::GetCellFromString( const rtl::OUString& rCellStr, table::CellAddress& rCell)
-{
-    ScModelObj* pDocObj = ScModelObj::getImplementation( GetModel() );
-    if( pDocObj )
-    {
-        ScDocument* pDoc = pDocObj->GetDocument();
-        if( pDoc )
-        {
-            ScAddress aCellAddress;
-            sal_Int16 i( 0 );
-            aCellAddress.Parse(rCellStr, pDoc);
-            rCell.Column = aCellAddress.Col();
-            rCell.Row = aCellAddress.Row();
-            rCell.Sheet = aCellAddress.Tab();
-        }
-    }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-01 13:19:03 $
+ *  last change: $Author: dr $ $Date: 2000-11-02 16:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,8 @@ enum ScXMLBodyTokens
     XML_TOK_BODY_NAMED_EXPRESSIONS,
     XML_TOK_BODY_DATABASE_RANGES,
     XML_TOK_BODY_DATABASE_RANGE,
-    XML_TOK_BODY_DATA_PILOT_TABLES
+    XML_TOK_BODY_DATA_PILOT_TABLES,
+    XML_TOK_BODY_CONSOLIDATION
 };
 
 enum ScXMLContentValidationsElemTokens
@@ -555,6 +556,16 @@ enum ScXMLDataPilotMemberAttrTokens
     XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_DETAILS
 };
 
+enum ScXMLConsolidationAttrTokens
+{
+    XML_TOK_CONSOLIDATION_ATTR_FUNCTION,
+    XML_TOK_CONSOLIDATION_ATTR_SOURCE_RANGES,
+    XML_TOK_CONSOLIDATION_ATTR_TARGET_ADDRESS,
+    XML_TOK_CONSOLIDATION_ATTR_USE_LABEL,
+    XML_TOK_CONSOLIDATION_ATTR_LINK_TO_SOURCE
+};
+
+
 class SvI18NMap;
 class SvXMLTokenMap;
 //class SvXMLImportItemMapper;
@@ -603,7 +614,7 @@ typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
 
 class ScXMLImport: public SvXMLImport
 {
-//  ScDocument&             rDoc;
+    ScDocument*             pDoc;
 
 //  SvXMLAutoStylePoolP     *pScAutoStylePool;
     XMLScPropHdlFactory     *pScPropHdlFactory;
@@ -677,6 +688,7 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pDataPilotSubTotalAttrTokenMap;
     SvXMLTokenMap           *pDataPilotMembersElemTokenMap;
     SvXMLTokenMap           *pDataPilotMemberAttrTokenMap;
+    SvXMLTokenMap           *pConsolidationAttrTokenMap;
 
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Bool                bLoadDoc : 1;   // Load doc or styles only
@@ -718,8 +730,8 @@ public:
     SvXMLImportContext *CreateBodyContext(
                                     const NAMESPACE_RTL(OUString)& rLocalName );
 
-//  ScDocument& GetDoc() { return rDoc; }
-//  const ScDocument& GetDoc() const { return rDoc; }
+    inline ScDocument*          GetDocument()           { return pDoc; }
+    inline const ScDocument*    GetDocument() const     { return pDoc; }
 
     ScMyTables& GetTables() { return aTables; }
 
@@ -803,6 +815,7 @@ public:
     const SvXMLTokenMap& GetDataPilotSubTotalAttrTokenMap();
     const SvXMLTokenMap& GetDataPilotMembersElemTokenMap();
     const SvXMLTokenMap& GetDataPilotMemberAttrTokenMap();
+    const SvXMLTokenMap& GetConsolidationAttrTokenMap();
 //  const SvXMLTokenMap& GetTextPElemTokenMap();
 //  const SvXMLTokenMap& GetTextPAttrTokenMap();
 //  const SvXMLTokenMap& GetStyleStylesElemTokenMap();
@@ -814,12 +827,6 @@ public:
 
     void AddValidation(const ScMyImportValidation& aValidation) { aValidations.push_back(aValidation); }
     sal_Bool GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation);
-
-    void        GetRangeFromString( const rtl::OUString& rRangeStr, ScRange& rRange );
-    void        GetRangeListFromString( const rtl::OUString& rRangeListStr, ScRangeList& rRangeList );
-    sal_Int32   GetRangeFromString( const rtl::OUString& rRangeListStr, sal_Int32 nOffset,
-                                    com::sun::star::table::CellRangeAddress& rCellRange );
-    void        GetCellFromString( const rtl::OUString& rCellStr, com::sun::star::table::CellAddress& rCellAddress);
 };
 
 #endif
