@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-24 14:17:51 $
+ *  last change: $Author: dr $ $Date: 2000-10-25 14:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,36 @@ public:
     void SortAndRemoveDoublets();
 };
 
+
+struct ScMyAreaLink
+{
+    ::rtl::OUString                 sFilter;
+    ::rtl::OUString                 sFilterOptions;
+    ::rtl::OUString                 sURL;
+    ::rtl::OUString                 sSourceStr;
+    ::com::sun::star::table::CellRangeAddress aDestRange;
+
+    inline sal_Int32                GetColCount() const { return aDestRange.EndColumn - aDestRange.StartColumn + 1; }
+    inline sal_Int32                GetRowCount() const { return aDestRange.EndRow - aDestRange.StartRow + 1; }
+
+    sal_Bool                        Compare( const ScMyAreaLink& rAreaLink ) const;
+};
+
+class ScMyAreaLinks
+{
+private:
+    ::std::vector< ScMyAreaLink >   aAreaLinkVec;
+public:
+                                    ScMyAreaLinks();
+                                    ~ScMyAreaLinks();
+
+    inline void                     AddNewAreaLink( const ScMyAreaLink& rAreaLink )
+                                        { aAreaLinkVec.push_back( rAreaLink ); }
+    sal_Bool                        GetNextAreaLink( ScMyAreaLink& rAreaLink );
+    void                            Sort();
+};
+
+
 typedef std::vector<com::sun::star::table::CellRangeAddress> ScMyEmptyDatabaseRangesVec;
 typedef std::vector<ScMyEmptyDatabaseRangesVec> ScMyEmptyDatabaseRangesVecVec;
 
@@ -329,11 +359,13 @@ struct ScMyCell
     com::sun::star::table::CellAddress  aCellAddress;
     com::sun::star::table::CellRangeAddress aMatrixRange;
     com::sun::star::table::CellRangeAddress aMergeRange;
+    ScMyAreaLink                        aAreaLink;
     std::vector<ScMyShape>              aShapes;
     sal_Int32                           nValidationIndex;
     sal_Bool                            bHasShape;
     sal_Bool                            bIsMergedBase;
     sal_Bool                            bIsCovered;
+    sal_Bool                            bHasAreaLink;
     sal_Bool                            bHasAnnotation;
     sal_Bool                            bIsMatrixBase;
     sal_Bool                            bIsMatrixCovered;
@@ -397,6 +429,7 @@ class ScXMLExport : public SvXMLExport
     com::sun::star::table::CellRangeAddress GetEndAddress(com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable,
                                                         const sal_Int16 nTable);
     ScMyEmptyDatabaseRanges GetEmptyDatabaseRanges(const sal_Int16 nTableCount);
+    void GetAreaLinks( com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc, ScMyAreaLinks& rAreaLinks );
     sal_Bool GetxCurrentShapes(com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess>& xShapes);
     void WriteColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex, const sal_Bool bIsVisible);
     void ExportColumns(const sal_Int16 nTable, const com::sun::star::table::CellRangeAddress& aColumnHeaderRange, const sal_Bool bHasColumnHeader);
@@ -427,6 +460,7 @@ class ScXMLExport : public SvXMLExport
     rtl::OUString GetPrintRanges();
 
     void WriteCell (const ScMyCell& aCell);
+    void WriteAreaLink(const ScMyAreaLink& rAreaLink);
     void WriteAnnotation(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
     void WriteShapes(const ScMyCell& aCell);
     void SetRepeatAttribute (const sal_Int32 nEqualCellCount);
@@ -518,6 +552,7 @@ class ScMyNotEmptyCellsIterator
     ScShapesContainer*                      pShapes;
     ScMyEmptyDatabaseRanges*                pEmptyDatabaseRanges;
     ScMyMergedCells*                        pMergedCells;
+    ScMyAreaLinks*                          pAreaLinks;
     com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet> xTable;
 
     ScXMLExport&                            rExport;
@@ -527,6 +562,7 @@ class ScMyNotEmptyCellsIterator
     ScMyShape                               aCurrentShape;
     ScMyRange                               aNextMergedCells;
     com::sun::star::table::CellRangeAddress aNextEmptyCells;
+    ScMyAreaLink                            aNextAreaLink;
     sal_Int16                               nCurrentTable;
 
     sal_Bool                                bHasShapes; // Current Table has shapes
@@ -536,6 +572,8 @@ class ScMyNotEmptyCellsIterator
     sal_Bool                                bHasMergedCells; // Current Table has merged Cells
     sal_Bool                                bIsMergedBase; // Current Cell is the left top edge of merged Cells
     sal_Bool                                bIsCovered; // Current Cell is covered by a merged Cell
+    sal_Bool                                bHasAreaLinks; // Current document has area links
+    sal_Bool                                bHasAreaLink; // Current cell has a area link
     sal_Bool                                bHasAnnotation; // Current Cell has Annotation
     sal_Bool                                bIsMatrixBase; // Current Cell is the left top edge of a matrix Cell
     sal_Bool                                bIsMatrixCovered; // Current Cell is in a Matrix but not the left top edge of a matrix
@@ -548,6 +586,7 @@ public:
     void SetShapes(ScShapesContainer* pTempShapes);
     void SetEmptyDatabaseRanges(ScMyEmptyDatabaseRanges* pTempEmptyDatabaseRanges);
     void SetMergedCells(ScMyMergedCells* pTempMergedCells);
+    void SetAreaLinks(ScMyAreaLinks* pNewAreaLinks);
     void SetCurrentTable(const sal_Int32 nTable);
 
     sal_Bool GetNext(ScMyCell& aCell);

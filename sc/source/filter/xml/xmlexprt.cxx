@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-24 14:17:51 $
+ *  last change: $Author: dr $ $Date: 2000-10-25 14:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XLABELRANGE_HPP_
 #include <com/sun/star/sheet/XLabelRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XAREALINKS_HPP_
+#include <com/sun/star/sheet/XAreaLinks.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XAREALINK_HPP_
+#include <com/sun/star/sheet/XAreaLink.hpp>
 #endif
 
 #include "cellsuno.hxx"
@@ -766,6 +772,51 @@ void ScMyMergedCells::SortAndRemoveDoublets()
 
 //==============================================================================
 
+sal_Bool ScMyAreaLink::Compare( const ScMyAreaLink& rAreaLink ) const
+{
+    return  (GetRowCount() == rAreaLink.GetRowCount()) &&
+            (sFilter == rAreaLink.sFilter) &&
+            (sFilterOptions == rAreaLink.sFilterOptions) &&
+            (sURL == rAreaLink.sURL) &&
+            (sSourceStr == rAreaLink.sSourceStr);
+}
+
+sal_Bool ScMyAreaLinkIsLower( const ScMyAreaLink& rAreaLink1, const ScMyAreaLink& rAreaLink2 )
+{
+    if( rAreaLink1.aDestRange.Sheet != rAreaLink2.aDestRange.Sheet )
+        return (rAreaLink1.aDestRange.Sheet < rAreaLink2.aDestRange.Sheet);
+    if( rAreaLink1.aDestRange.StartRow != rAreaLink2.aDestRange.StartRow )
+        return (rAreaLink1.aDestRange.StartRow < rAreaLink2.aDestRange.StartRow);
+    return (rAreaLink1.aDestRange.StartColumn < rAreaLink2.aDestRange.StartColumn);
+}
+
+ScMyAreaLinks::ScMyAreaLinks()
+{
+}
+
+ScMyAreaLinks::~ScMyAreaLinks()
+{
+}
+
+sal_Bool ScMyAreaLinks::GetNextAreaLink( ScMyAreaLink& rAreaLink )
+{
+    ::std::vector< ScMyAreaLink >::iterator aIter = aAreaLinkVec.begin();
+    if( aIter != aAreaLinkVec.end() )
+    {
+        rAreaLink = *aIter;
+        aAreaLinkVec.erase( aIter );
+        return sal_True;
+    }
+    return sal_False;
+}
+
+void ScMyAreaLinks::Sort()
+{
+    ::std::sort( aAreaLinkVec.begin(), aAreaLinkVec.end(), ScMyAreaLinkIsLower );
+}
+
+//==============================================================================
+
 sal_Bool LessRange(const table::CellRangeAddress& aRange1, const table::CellRangeAddress& aRange2)
 {
     if ((aRange1.StartColumn < aRange2.StartColumn) && (aRange1.StartRow == aRange2.StartRow))
@@ -1286,6 +1337,11 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
 
 ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport)
     : rExport(rTempXMLExport),
+    pCellItr(NULL),
+    pShapes(NULL),
+    pEmptyDatabaseRanges(NULL),
+    pMergedCells(NULL),
+    pAreaLinks(NULL),
     nCurrentTable(-1),
     bHasShapes(sal_False),
     bHasShape(sal_False),
@@ -1298,7 +1354,6 @@ ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport
     bIsMatrixBase(sal_False),
     bIsMatrixCovered(sal_False)
 {
-    pCellItr = NULL;
 }
 
 ScMyNotEmptyCellsIterator::~ScMyNotEmptyCellsIterator()
@@ -1320,6 +1375,12 @@ void ScMyNotEmptyCellsIterator::SetEmptyDatabaseRanges(ScMyEmptyDatabaseRanges* 
 void ScMyNotEmptyCellsIterator::SetMergedCells(ScMyMergedCells* pTempMergedCells)
 {
     pMergedCells = pTempMergedCells;
+}
+
+void ScMyNotEmptyCellsIterator::SetAreaLinks(ScMyAreaLinks* pNewAreaLinks)
+{
+    pAreaLinks = pNewAreaLinks;
+    bHasAreaLinks = pAreaLinks->GetNextAreaLink( aNextAreaLink );
 }
 
 void ScMyNotEmptyCellsIterator::SetCurrentTable(const sal_Int32 nTable)
@@ -1444,6 +1505,29 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell)
     }
     else
         bHasShape = sal_False;
+    bHasAreaLink = sal_False;
+    if( bHasAreaLinks && (aNextAreaLink.aDestRange.Sheet == nCurrentTable) )
+    {
+        sal_Bool bIsEqual;
+        sal_Bool bIsNearer;
+        if( aNextAreaLink.aDestRange.StartRow != nCellRow )
+        {
+            bIsEqual = sal_False;
+            bIsNearer = (aNextAreaLink.aDestRange.StartRow < nCellRow);
+        }
+        else
+        {
+            bIsEqual = (aNextAreaLink.aDestRange.StartColumn == nCellCol);
+            bIsNearer = (aNextAreaLink.aDestRange.StartColumn < nCellCol);
+        }
+        if( bIsNearer )
+        {
+            nCellCol = aNextAreaLink.aDestRange.StartColumn;
+            nCellRow = aNextAreaLink.aDestRange.StartRow;
+            bIsMergedBase = bIsCovered = bHasShape = sal_False;
+        }
+        bHasAreaLink = bIsNearer || bIsEqual;
+    }
     while (bHasEmptyDatabaseRanges &&
         (((nCellCol > aNextEmptyCells.EndColumn) &&
         (nCellRow == aNextEmptyCells.EndRow)) ||
@@ -1476,8 +1560,6 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell)
         }
         else
             bHasMergedCells = pMergedCells->GetNextMergedRange(nCurrentTable, aNextMergedCells);
-//  if(bHasShape)
-//      bHasShapes = pShapes->GetNextShape(nCurrentTable, aCurrentShape);
     if (nCellCol < MAXCOL + 1 && nCellRow < MAXROW + 1)
     {
         bFoundCell = sal_True;
@@ -1488,6 +1570,8 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell)
         aCell.bIsMergedBase = bIsMergedBase;
         aCell.bIsCovered = bIsCovered;
         aCell.aMergeRange = aMergeRange;
+        aCell.bHasAreaLink = bHasAreaLink;
+        aCell.aAreaLink = aNextAreaLink;
         aCell.bIsMatrixCovered = sal_False;
         aCell.bIsMatrixBase = sal_False;
         aCell.aShapes.clear();
@@ -1511,6 +1595,9 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell)
                 }
             }
         }
+        if( bHasAreaLink )
+            if( (aNextAreaLink.aDestRange.StartColumn == nCellCol) && (aNextAreaLink.aDestRange.StartRow == nCellRow) )
+                bHasAreaLinks = pAreaLinks->GetNextAreaLink( aNextAreaLink );
         if (xTable.is())
         {
             uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
@@ -1792,6 +1879,51 @@ ScMyEmptyDatabaseRanges ScXMLExport::GetEmptyDatabaseRanges(const sal_Int16 nTab
         }
     }
     return aSkipRanges;
+}
+
+void ScXMLExport::GetAreaLinks( uno::Reference< sheet::XSpreadsheetDocument>& xSpreadDoc,
+                                ScMyAreaLinks& rAreaLinks )
+{
+    uno::Reference< beans::XPropertySet > xPropSet( xSpreadDoc, uno::UNO_QUERY );
+    if( !xPropSet.is() ) return;
+
+    uno::Reference< sheet::XAreaLinks > xAreaLinks;
+    uno::Any aAny( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_AREALINKS ) ) ) );
+    if( aAny >>= xAreaLinks )
+    {
+        uno::Reference< container::XIndexAccess > xLinksIAccess( xAreaLinks, uno::UNO_QUERY );
+        if( xLinksIAccess.is() )
+        {
+            const OUString sFilter( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTER ) );
+            const OUString sFilterOpt( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTOPT ) );
+            const OUString sURL( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_LINKURL ) );
+
+            sal_Int32 nCount = xLinksIAccess->getCount();
+            for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                uno::Reference< sheet::XAreaLink > xAreaLink;
+                uno::Any aLinkAny( xLinksIAccess->getByIndex( nIndex ) );
+                if( aLinkAny >>= xAreaLink )
+                {
+                    ScMyAreaLink aAreaLink;
+                    aAreaLink.aDestRange = xAreaLink->getDestArea();
+                    aAreaLink.sSourceStr = xAreaLink->getSourceArea();
+                    uno::Reference< beans::XPropertySet > xLinkProp( xAreaLink, uno::UNO_QUERY );
+                    if( xLinkProp.is() )
+                    {
+                        aLinkAny = xLinkProp->getPropertyValue( sFilter );
+                        aLinkAny >>= aAreaLink.sFilter;
+                        aLinkAny = xLinkProp->getPropertyValue( sFilterOpt );
+                        aLinkAny >>= aAreaLink.sFilterOptions;
+                        aLinkAny = xLinkProp->getPropertyValue( sURL );
+                        aLinkAny >>= aAreaLink.sURL;
+                    }
+                    rAreaLinks.AddNewAreaLink( aAreaLink );
+                }
+            }
+        }
+    }
+    rAreaLinks.Sort();
 }
 
 sal_Bool ScXMLExport::GetxCurrentShapes(uno::Reference<container::XIndexAccess>& xShapes)
@@ -2236,6 +2368,9 @@ void ScXMLExport::_ExportContent()
             ScMyEmptyDatabaseRanges aEmptyRanges = GetEmptyDatabaseRanges(nTableCount);
             aCellsItr.SetEmptyDatabaseRanges(&aEmptyRanges);
             aCellsItr.SetMergedCells(&aMergedCells);
+            ScMyAreaLinks aAreaLinks;
+            GetAreaLinks( xSpreadDoc, aAreaLinks );
+            aCellsItr.SetAreaLinks( &aAreaLinks );
             if (nTableCount > 0)
             {
                 pValidations->Sort();
@@ -3031,24 +3166,24 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
     {
         SvXMLElementExport aElemC(*this, XML_NAMESPACE_TABLE, sXML_covered_table_cell, sal_True, sal_True);
         CheckAttrList();
+        if (aCell.bHasAreaLink)
+            WriteAreaLink(aCell.aAreaLink);
         if (aCell.bHasAnnotation)
             WriteAnnotation(aCell.xCell);
+        if (!bIsEmpty)
         {
-            if (!bIsEmpty)
+            if (IsEditCell(aCell.xCell))
             {
-                if (IsEditCell(aCell.xCell))
-                {
-                    uno::Reference<text::XText> xText(aCell.xCell, uno::UNO_QUERY);
-                    if ( xText.is())
-                        GetTextParagraphExport()->exportText(xText);
-                }
-                else
-                {
-                    SvXMLElementExport aElemC(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
-                    OUString sOUText;
-                    if (GetCellText(aCell.xCell, sOUText))
-                        GetDocHandler()->characters(sOUText);
-                }
+                uno::Reference<text::XText> xText(aCell.xCell, uno::UNO_QUERY);
+                if ( xText.is())
+                    GetTextParagraphExport()->exportText(xText);
+            }
+            else
+            {
+                SvXMLElementExport aElemC(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
+                OUString sOUText;
+                if (GetCellText(aCell.xCell, sOUText))
+                    GetDocHandler()->characters(sOUText);
             }
         }
         if (aCell.bHasShape)
@@ -3069,25 +3204,26 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
         }
         SvXMLElementExport aElemC(*this, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True);
         CheckAttrList();
+
+        if (aCell.bHasAreaLink)
+            WriteAreaLink(aCell.aAreaLink);
         if (aCell.bHasAnnotation)
             WriteAnnotation(aCell.xCell);
+        if (!bIsEmpty)
         {
-            if (!bIsEmpty)
+            if (IsEditCell(aCell.xCell))
             {
-                if (IsEditCell(aCell.xCell))
-                {
-                    uno::Reference<text::XText> xText(aCell.xCell, uno::UNO_QUERY);
-                    OUString sOUText = xText->getString();
-                    if ( xText.is())
-                        GetTextParagraphExport()->exportText(xText);
-                }
-                else
-                {
-                    SvXMLElementExport aElemC(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
-                    rtl::OUString sOUText;
-                      if (GetCellText(aCell.xCell, sOUText))
-                        GetDocHandler()->characters(sOUText);
-                }
+                uno::Reference<text::XText> xText(aCell.xCell, uno::UNO_QUERY);
+                OUString sOUText = xText->getString();
+                if ( xText.is())
+                    GetTextParagraphExport()->exportText(xText);
+            }
+            else
+            {
+                SvXMLElementExport aElemC(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
+                rtl::OUString sOUText;
+                  if (GetCellText(aCell.xCell, sOUText))
+                    GetDocHandler()->characters(sOUText);
             }
         }
         if (aCell.bHasShape)
@@ -3121,6 +3257,20 @@ void ScXMLExport::WriteShapes(const ScMyCell& aCell)
             }
         }
     }
+}
+
+void ScXMLExport::WriteAreaLink( const ScMyAreaLink& rAreaLink )
+{
+    AddAttribute( XML_NAMESPACE_TABLE, sXML_name, rAreaLink.sSourceStr );
+    AddAttribute( XML_NAMESPACE_XLINK, sXML_href, rAreaLink.sURL );
+    AddAttribute( XML_NAMESPACE_TABLE, sXML_filter_name, rAreaLink.sFilter );
+    AddAttribute( XML_NAMESPACE_TABLE, sXML_filter_options, rAreaLink.sFilterOptions );
+    OUStringBuffer sValue;
+    SvXMLUnitConverter::convertNumber( sValue, rAreaLink.GetColCount() );
+    AddAttribute( XML_NAMESPACE_TABLE, sXML_last_column_spanned, sValue.makeStringAndClear() );
+    SvXMLUnitConverter::convertNumber( sValue, rAreaLink.GetRowCount() );
+    AddAttribute( XML_NAMESPACE_TABLE, sXML_last_row_spanned, sValue.makeStringAndClear() );
+    SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, sXML_cell_range_source, sal_True, sal_True );
 }
 
 void ScXMLExport::WriteAnnotation(const uno::Reference<table::XCell>& xCell)
@@ -3241,59 +3391,66 @@ sal_Bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell
         aCell1.bIsMatrixCovered == aCell2.bIsMatrixCovered &&
         aCell1.bHasAnnotation == aCell2.bHasAnnotation &&
         !aCell1.bHasShape && !aCell2.bHasShape &&
-        aCell1.nValidationIndex == aCell2.nValidationIndex)
+        aCell1.nValidationIndex == aCell2.nValidationIndex &&
+        aCell1.bHasAreaLink == aCell2.bHasAreaLink)
     {
-        if (!aCell1.bHasAnnotation || (aCell1.bHasAnnotation && IsAnnotationEqual(aCell1.xCell, aCell2.xCell)))
+        if( aCell1.bHasAreaLink &&
+            (aCell1.aAreaLink.GetColCount() == 1) &&
+            (aCell2.aAreaLink.GetColCount() == 1) &&
+            aCell1.aAreaLink.Compare( aCell2.aAreaLink ) )
         {
-            sal_Int32 nIndex1, nIndex2;
-            sal_Bool bIsAutoStyle1, bIsAutoStyle2;
-            if (GetCellStyleNameIndex(aCell1, nIndex1, bIsAutoStyle1) &&
-                GetCellStyleNameIndex(aCell2, nIndex2, bIsAutoStyle2))
+            if (!aCell1.bHasAnnotation || (aCell1.bHasAnnotation && IsAnnotationEqual(aCell1.xCell, aCell2.xCell)))
             {
-                if ((nIndex1 == nIndex2) && (bIsAutoStyle1 == bIsAutoStyle2) &&
-                    IsCellTypeEqual(aCell1.xCell, aCell2.xCell))
+                sal_Int32 nIndex1, nIndex2;
+                sal_Bool bIsAutoStyle1, bIsAutoStyle2;
+                if (GetCellStyleNameIndex(aCell1, nIndex1, bIsAutoStyle1) &&
+                    GetCellStyleNameIndex(aCell2, nIndex2, bIsAutoStyle2))
                 {
-                    table::CellContentType eCellType = aCell1.xCell->getType();
-                    switch ( eCellType )
+                    if ((nIndex1 == nIndex2) && (bIsAutoStyle1 == bIsAutoStyle2) &&
+                        IsCellTypeEqual(aCell1.xCell, aCell2.xCell))
                     {
-                    case table::CellContentType_EMPTY :
+                        table::CellContentType eCellType = aCell1.xCell->getType();
+                        switch ( eCellType )
                         {
-                            bIsEqual = sal_True;
-                        }
-                        break;
-                    case table::CellContentType_VALUE :
-                        {
-                            double fCell1 = aCell1.xCell->getValue();
-                            double fCell2 = aCell2.xCell->getValue();
-                            bIsEqual = (fCell1 == fCell2);
-                        }
-                        break;
-                    case table::CellContentType_TEXT :
-                        {
-                            if (IsEditCell(aCell1.xCell) || IsEditCell(aCell2.xCell))
-                                bIsEqual = sal_False;
-                            else
+                        case table::CellContentType_EMPTY :
                             {
-                                OUString sOUCell1, sOUCell2;
-                                if (GetCellText(aCell1.xCell, sOUCell1) && GetCellText(aCell2.xCell, sOUCell2))
-                                {
-                                    bIsEqual = (sOUCell1 == sOUCell2);
-                                }
-                                else
-                                    bIsEqual = sal_False;
+                                bIsEqual = sal_True;
                             }
+                            break;
+                        case table::CellContentType_VALUE :
+                            {
+                                double fCell1 = aCell1.xCell->getValue();
+                                double fCell2 = aCell2.xCell->getValue();
+                                bIsEqual = (fCell1 == fCell2);
+                            }
+                            break;
+                        case table::CellContentType_TEXT :
+                            {
+                                if (IsEditCell(aCell1.xCell) || IsEditCell(aCell2.xCell))
+                                    bIsEqual = sal_False;
+                                else
+                                {
+                                    OUString sOUCell1, sOUCell2;
+                                    if (GetCellText(aCell1.xCell, sOUCell1) && GetCellText(aCell2.xCell, sOUCell2))
+                                    {
+                                        bIsEqual = (sOUCell1 == sOUCell2);
+                                    }
+                                    else
+                                        bIsEqual = sal_False;
+                                }
+                            }
+                            break;
+                        case table::CellContentType_FORMULA :
+                            {
+                                bIsEqual = sal_False;
+                            }
+                            break;
+                        default :
+                            {
+                                bIsEqual = sal_False;
+                            }
+                            break;
                         }
-                        break;
-                    case table::CellContentType_FORMULA :
-                        {
-                            bIsEqual = sal_False;
-                        }
-                        break;
-                    default :
-                        {
-                            bIsEqual = sal_False;
-                        }
-                        break;
                     }
                 }
             }
