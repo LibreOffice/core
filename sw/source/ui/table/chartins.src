@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-16 21:47:46 $
+ *  last change: $Author: os $ $Date: 2001-06-27 14:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,42 +73,39 @@ ModelessDialog DLG_INSERT_CHART
     Text = "Autoformat Diagramm (1-4)" ;
     Text [ ENGLISH ] = "Autoformat Chart (1-4)" ;
     Text [ ENGLISH_US ] = "AutoFormat Chart (1-4)" ;
-    FixedText FT_TEXT
+    FixedLine FL_1
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 285 , 49 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Falls die markierten Zellen nicht die gewünschten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben möchten : Falls die markierten Zellen nicht die gew³nschten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben m÷chten */
-        Text = "Falls die markierten Zellen nicht die gewünschten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben möchten" ;
-        Text [ ENGLISH ] =
-        "If the marked area does not represent the desired data, mark your data now.\nInclude the cells containing the column- and row identifier in case you want them to be included in your chart." ;
-        Text [ ENGLISH_US ] = "If the marked cells do not represent the desired data, mark the area now.\nInclude the cells containing the column and row labels if you want them to be included in your chart." ;
-        WordBreak = TRUE ;
-        Text [ italian ] = "Se le celle evidenziate non contengono i dati voluti, selezionate l'area.\n\nIncludete le celle contenenti i titoli delle colonne e delle righe se volete che compaiano nel diagramma." ;
-        Text [ spanish ] = "En caso de que las celdas marcadas no contengan los datos deseados, marque ahora el área.\n\nIncluya las celdas con  los nombres de las columnas y filas si desea que estas aparezcan en su gráfico." ;
-        Text [ french ] = "Si les cellules marquées ne contiennent pas les données souhaitées, sélectionnez à présent la plage. \n\nIncluez les cellules avec les intitulés de colonnes et de lignes pour les faire figurer dans le diagramme." ;
-        Text [ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- resp. rijlabels als u deze in uw afbeelding wilt weergeven." ;
-        Text [ swedish ] = "Om de markerade cellerna inte innehåller de önskade data, markera då området nu.\n\nTa med de celler som innehåller kolumn- och radöverskrifter om dessa skall visas i grafiken." ;
-        Text [ danish ] = "Hvis de markerede celler ikke indeholder de ønskede data, marker det ønskede område nu.\n\nInkluder cellerne med kolonne- hhv.rækkeetiketter, hvis de skal vises i din grafik." ;
-        Text [ portuguese_brazilian ] = "Falls die markierten Zellen nicht die gew?schten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben m?hten" ;
-        Text [ portuguese ] = "Se as células marcadas não incluírem os dados desejados, marque-os agora.\n\nInclua as células contendo os títulos das colunas e linhas se desejar vê-las representadas no seu gráfico." ;
-        Text[ chinese_simplified ] = "Èç¹ûÑ¡ÖĞµÄµ¥Ôª¸ñÃ»ÓĞÊı¾İ£¬ÄÇÃ´ÇëÄúÑ¡ÔñÇøÓò¡£\n\nÄú¿ÉÒÔÒ²Ñ¡ÖĞÁĞ±êÌâºÍĞĞ±êÌâ£¬Èç´ËÕâĞ©×ÊÁÏÒ²»á±»ÏÔÊ¾ÔÚÍ¼±íÄÚ¡£";
-        Text[ russian ] = "Åñëè âûäåëåííûå ÿ÷åéêè íå ñîäåğæàò òğåáóåìûõ äàííûõ, âûäåëèòå ñåé÷àñ äèàïàçîí ÿ÷ååê ñ íóæíûì ñîäåğæèìûì.\n\nÂûäåëèòå òàêæå ÿ÷åéêè ñ íàçâàíèÿìè ñòîëáöîâ èëè ñòğîê, åñëè îíè äîëæíû áûòü ïğåäñòàâëåíû íà ğèñóíêå.";
-        Text[ polish ] = "Jeœli zaznaczone komórki nie zawieraj¹ potrzebnych danych, zaznacz teraz ten obszar ponownie.\n\nZaznacz równie¿ komórki z etykietami wierszy lub kolumn , jeœli maj¹ one zostaæ przedstawione w twojej grafice.";
-        Text[ japanese ] = "•K—v‚ÈÃŞ°À‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é¾Ù‚ª‚Ü‚¾‘I‘ğ‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍA¡‚»‚Ì”ÍˆÍ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B\n\n¸Ş×Ì‚É€–Ú–¼‚ğ•\\¦‚·‚é‚½‚ß‚É‚ÍAs‚Æ—ñ‚Ì€–Ú—“‚ğŠÜ‚ß‚½¾Ù”ÍˆÍ‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
-        Text[ chinese_traditional ] = "¦pªG¿ï¨úªºÀx¦s®æ¨S¦³¸ê®Æ¡M´N½Ğ±z¿ï¾Ü°Ï°ì¡C\n\n±z¥i¥H¿ï¤¤¦C¼ĞÃD©M¦æ¼ĞÃD¡A³o¼Ë¡A¹Ïªí¤]·|Åã¥Ü¥X³o¨Ç¸ê®Æ¡C";
-        Text[ arabic ] = "ÅĞÇ ßÇäÊ ÇáÎáÇíÇ ÇáãÍÏÏÉ áÇ ÊÍÊæí Úáì ÇáÈíÇäÇÊ ÇáãØáæÈÉ¡ Şã ÈÊÍÏíÏ ÇáäØÇŞ\n\nÈãÇ İí Ğáß ÇáÎáÇíÇ¡ ÇáÊí ÊÍÊæí Úáì ÚäÇæíä Õİæİ Ãæ ÃÚãÏÉ¡ æĞáß ÅĞ";
-        Text[ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- resp. rijlabels als u deze in uw afbeelding wilt weergeven.";
-        Text[ chinese_simplified ] = "Èç¹ûÑ¡ÖĞµÄµ¥Ôª¸ñÃ»ÓĞÊı¾İ£¬ÄÇÃ´ÇëÄúÑ¡ÔñÇøÓò¡£\n\nÄú¿ÉÒÔÒ²Ñ¡ÖĞÁĞ±êÌâºÍĞĞ±êÌâ£¬Èç´ËÕâĞ©×ÊÁÏÒ²»á±»ÏÔÊ¾ÔÚÍ¼±íÄÚ¡£";
-        Text[ greek ] = "Óôçí ğåñßğôùóç ğïõ ôá åğéëåãìİíá êåëéÜ äåí ğåñéİ÷ïõí ôá äåäïìİíá ğïõ åğéèõìåßôå, åğéëİîôå åóåßò ôçí óùóôŞ ğåñéï÷Ş.\n\n Áí èİëåôå íá åìöáíéóôïıí óôï ãñáöéêü óáò êáé ïé åğéãñáöİò ôùí óôçëşí êáé ôùí ãñáììşí, ôüôå èá ğñİğåé íá óõìğåñéëçöèïıí êáé áõôÜ ôá äåäïìİíá óôçí ğåñéï÷Ş ôçò åğéëïãŞò óáò.";
-        Text[ korean ] = "¼±ÅÃÇ¥½ÃµÈ ¼¿ÀÌ ¿øÇÏ´Â µ¥ÀÌÅÍ¸¦ Æ÷ÇÔÇÏ°í ÀÖÁö ¾ÊÀ» °æ¿ì, Áö±İ ¿µ¿ªÀ» ¼±ÅÃÇ¥½ÃÇÏ½Ê½Ã¿À.\n\n¿­ ³»Áö Çà ¶óº§À» °¡Áø ¼¿µéÀ» ±×·¡ÇÈ¿¡ ³ªÅ¸³»°íÀÚÇÏ¸é ÀÌ ¼¿µéÀ» ÇÔ²² Æ÷ÇÔ½ÃÅ°½Ê½Ã¿À.";
-        Text[ turkish ] = "Seçilen hücreler, istenen verileri içermiyorsa aralığı şimdi seçin.\n\nGrafikte görünmelerini istiyorsanız, sütun ya da satır başlıklarını içeren hücreleri de seçin";
-        Text[ catalan ] = "En caso de que las celdas marcadas no contengan los datos deseados, marque ahora el área.\n\nIncluya las celdas con  los nombres de las columnas y filas si desea que estas aparezcan en su gráfico.";
-        Text[ finnish ] = "Jos merkityt solut eivät esitä haluttuja tietoja, merkitse alue nyt.\nSisällytä valintaan sarake- ja riviotsikot sisältävät solut, jos haluat niiden näkyvän kaaviossa.";
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 285 , 8 ) ;
+        Text = "Auswahl" ;
+        Text [ English ] = "Selection" ;
+        Text [ english_us ] = "Selection" ;
+        Text [ italian ] = "Selezione" ;
+        Text [ spanish ] = "Selección" ;
+        Text [ french ] = "Sélection" ;
+        Text [ dutch ] = "Selectie" ;
+        Text [ swedish ] = "Urval" ;
+        Text [ danish ] = "Udvalg" ;
+        Text [ portuguese_brazilian ] = "Auswahl" ;
+        Text [ portuguese ] = "Selecção" ;
+        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ russian ] = "Âûáîğ";
+        Text[ polish ] = "Wybór";
+        Text[ japanese ] = "‘I‘ğ";
+        Text[ chinese_traditional ] = "¿ï¨ú";
+        Text[ arabic ] = "ÇáÊÍÏíÏ";
+        Text[ dutch ] = "Selectie";
+        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ greek ] = "ÅğéëïãŞ";
+        Text[ korean ] = "¼±ÅÃ";
+        Text[ turkish ] = "Seçim";
+        Text[ catalan ] = "Selección";
+        Text[ finnish ] = "Valinta";
     };
     FixedText FT_RANGE
     {
-        Pos = MAP_APPFONT ( 12 , 69 ) ;
-        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Bereich" ;
         Text [ ENGLISH ] = "~Area" ;
         Text [ ENGLISH_US ] = "A~rea" ;
@@ -137,13 +134,13 @@ ModelessDialog DLG_INSERT_CHART
     Edit ED_RANGE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 68 ) ;
+        Pos = MAP_APPFONT ( 56 , 14 ) ;
         Size = MAP_APPFONT ( 229 , 12 ) ;
     };
     CheckBox CB_FIRST_ROW
     {
-        Pos = MAP_APPFONT ( 12 , 86 ) ;
-        Size = MAP_APPFONT ( 150 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         TabStop = TRUE ;
         Text = "Erste ~Zeile als Beschriftung" ;
         Text [ ENGLISH ] = "First ~row as label" ;
@@ -173,8 +170,8 @@ ModelessDialog DLG_INSERT_CHART
     };
     CheckBox CB_FIRST_COL
     {
-        Pos = MAP_APPFONT ( 12 , 102 ) ;
-        Size = MAP_APPFONT ( 150 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         TabStop = TRUE ;
         Text = "Erste ~Spalte als Beschriftung" ;
         Text [ ENGLISH ] = "First ~column as label" ;
@@ -202,40 +199,41 @@ ModelessDialog DLG_INSERT_CHART
         Text[ catalan ] = "Primera c~olumna como etiqueta";
         Text[ finnish ] = "~Ensimmäinen sarake kuvaotsikkona";
     };
-    FixedLine FL_1
+    FixedText FT_TEXT
     {
-        Pos = MAP_APPFONT ( 6 , 56 ) ;
-        Size = MAP_APPFONT ( 285 , 8 ) ;
-        Text = "Auswahl" ;
-        Text [ English ] = "Selection" ;
-        Text [ english_us ] = "Selection" ;
-        Text [ italian ] = "Selezione" ;
-        Text [ spanish ] = "Selección" ;
-        Text [ french ] = "Sélection" ;
-        Text [ dutch ] = "Selectie" ;
-        Text [ swedish ] = "Urval" ;
-        Text [ danish ] = "Udvalg" ;
-        Text [ portuguese_brazilian ] = "Auswahl" ;
-        Text [ portuguese ] = "Selecção" ;
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
-        Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "Wybór";
-        Text[ japanese ] = "‘I‘ğ";
-        Text[ chinese_traditional ] = "¿ï¨ú";
-        Text[ arabic ] = "ÇáÊÍÏíÏ";
-        Text[ dutch ] = "Selectie";
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
-        Text[ greek ] = "ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ";
-        Text[ turkish ] = "Seçim";
-        Text[ catalan ] = "Selección";
-        Text[ finnish ] = "Valinta";
+        Pos = MAP_APPFONT ( 6 , 72 ) ;
+        Size = MAP_APPFONT ( 285 , 62 ) ;
+        Text = "Falls die markierten Zellen nicht die gewünschten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben möchten" ;
+        Text [ ENGLISH ] =
+        "If the marked area does not represent the desired data, mark your data now.\nInclude the cells containing the column- and row identifier in case you want them to be included in your chart." ;
+        Text [ ENGLISH_US ] = "If the marked cells do not represent the desired data, mark the area now.\nInclude the cells containing the column and row labels if you want them to be included in your chart." ;
+        WordBreak = TRUE ;
+        Text [ italian ] = "Se le celle evidenziate non contengono i dati voluti, selezionate l'area.\n\nIncludete le celle contenenti i titoli delle colonne e delle righe se volete che compaiano nel diagramma." ;
+        Text [ spanish ] = "En caso de que las celdas marcadas no contengan los datos deseados, marque ahora el área.\n\nIncluya las celdas con  los nombres de las columnas y filas si desea que estas aparezcan en su gráfico." ;
+        Text [ french ] = "Si les cellules marquées ne contiennent pas les données souhaitées, sélectionnez à présent la plage. \n\nIncluez les cellules avec les intitulés de colonnes et de lignes pour les faire figurer dans le diagramme." ;
+        Text [ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- resp. rijlabels als u deze in uw afbeelding wilt weergeven." ;
+        Text [ swedish ] = "Om de markerade cellerna inte innehåller de önskade data, markera då området nu.\n\nTa med de celler som innehåller kolumn- och radöverskrifter om dessa skall visas i grafiken." ;
+        Text [ danish ] = "Hvis de markerede celler ikke indeholder de ønskede data, marker det ønskede område nu.\n\nInkluder cellerne med kolonne- hhv.rækkeetiketter, hvis de skal vises i din grafik." ;
+        Text [ portuguese_brazilian ] = "Falls die markierten Zellen nicht die gew?schten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben m?hten" ;
+        Text [ portuguese ] = "Se as células marcadas não incluírem os dados desejados, marque-os agora.\n\nInclua as células contendo os títulos das colunas e linhas se desejar vê-las representadas no seu gráfico." ;
+        Text[ chinese_simplified ] = "Èç¹ûÑ¡ÖĞµÄµ¥Ôª¸ñÃ»ÓĞÊı¾İ£¬ÄÇÃ´ÇëÄúÑ¡ÔñÇøÓò¡£\n\nÄú¿ÉÒÔÒ²Ñ¡ÖĞÁĞ±êÌâºÍĞĞ±êÌâ£¬Èç´ËÕâĞ©×ÊÁÏÒ²»á±»ÏÔÊ¾ÔÚÍ¼±íÄÚ¡£";
+        Text[ russian ] = "Åñëè âûäåëåííûå ÿ÷åéêè íå ñîäåğæàò òğåáóåìûõ äàííûõ, âûäåëèòå ñåé÷àñ äèàïàçîí ÿ÷ååê ñ íóæíûì ñîäåğæèìûì.\n\nÂûäåëèòå òàêæå ÿ÷åéêè ñ íàçâàíèÿìè ñòîëáöîâ èëè ñòğîê, åñëè îíè äîëæíû áûòü ïğåäñòàâëåíû íà ğèñóíêå.";
+        Text[ polish ] = "Jeœli zaznaczone komórki nie zawieraj¹ potrzebnych danych, zaznacz teraz ten obszar ponownie.\n\nZaznacz równie¿ komórki z etykietami wierszy lub kolumn , jeœli maj¹ one zostaæ przedstawione w twojej grafice.";
+        Text[ japanese ] = "•K—v‚ÈÃŞ°À‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é¾Ù‚ª‚Ü‚¾‘I‘ğ‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍA¡‚»‚Ì”ÍˆÍ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B\n\n¸Ş×Ì‚É€–Ú–¼‚ğ•\\¦‚·‚é‚½‚ß‚É‚ÍAs‚Æ—ñ‚Ì€–Ú—“‚ğŠÜ‚ß‚½¾Ù”ÍˆÍ‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+        Text[ chinese_traditional ] = "¦pªG¿ï¨úªºÀx¦s®æ¨S¦³¸ê®Æ¡M´N½Ğ±z¿ï¾Ü°Ï°ì¡C\n\n±z¥i¥H¿ï¤¤¦C¼ĞÃD©M¦æ¼ĞÃD¡A³o¼Ë¡A¹Ïªí¤]·|Åã¥Ü¥X³o¨Ç¸ê®Æ¡C";
+        Text[ arabic ] = "ÅĞÇ ßÇäÊ ÇáÎáÇíÇ ÇáãÍÏÏÉ áÇ ÊÍÊæí Úáì ÇáÈíÇäÇÊ ÇáãØáæÈÉ¡ Şã ÈÊÍÏíÏ ÇáäØÇŞ\n\nÈãÇ İí Ğáß ÇáÎáÇíÇ¡ ÇáÊí ÊÍÊæí Úáì ÚäÇæíä Õİæİ Ãæ ÃÚãÏÉ¡ æĞáß ÅĞ";
+        Text[ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- resp. rijlabels als u deze in uw afbeelding wilt weergeven.";
+        Text[ chinese_simplified ] = "Èç¹ûÑ¡ÖĞµÄµ¥Ôª¸ñÃ»ÓĞÊı¾İ£¬ÄÇÃ´ÇëÄúÑ¡ÔñÇøÓò¡£\n\nÄú¿ÉÒÔÒ²Ñ¡ÖĞÁĞ±êÌâºÍĞĞ±êÌâ£¬Èç´ËÕâĞ©×ÊÁÏÒ²»á±»ÏÔÊ¾ÔÚÍ¼±íÄÚ¡£";
+        Text[ greek ] = "Óôçí ğåñßğôùóç ğïõ ôá åğéëåãìİíá êåëéÜ äåí ğåñéİ÷ïõí ôá äåäïìİíá ğïõ åğéèõìåßôå, åğéëİîôå åóåßò ôçí óùóôŞ ğåñéï÷Ş.\n\n Áí èİëåôå íá åìöáíéóôïıí óôï ãñáöéêü óáò êáé ïé åğéãñáöİò ôùí óôçëşí êáé ôùí ãñáììşí, ôüôå èá ğñİğåé íá óõìğåñéëçöèïıí êáé áõôÜ ôá äåäïìİíá óôçí ğåñéï÷Ş ôçò åğéëïãŞò óáò.";
+        Text[ korean ] = "¼±ÅÃÇ¥½ÃµÈ ¼¿ÀÌ ¿øÇÏ´Â µ¥ÀÌÅÍ¸¦ Æ÷ÇÔÇÏ°í ÀÖÁö ¾ÊÀ» °æ¿ì, Áö±İ ¿µ¿ªÀ» ¼±ÅÃÇ¥½ÃÇÏ½Ê½Ã¿À.\n\n¿­ ³»Áö Çà ¶óº§À» °¡Áø ¼¿µéÀ» ±×·¡ÇÈ¿¡ ³ªÅ¸³»°íÀÚÇÏ¸é ÀÌ ¼¿µéÀ» ÇÔ²² Æ÷ÇÔ½ÃÅ°½Ê½Ã¿À.";
+        Text[ turkish ] = "Seçilen hücreler, istenen verileri içermiyorsa aralığı şimdi seçin.\n\nGrafikte görünmelerini istiyorsanız, sütun ya da satır başlıklarını içeren hücreleri de seçin";
+        Text[ catalan ] = "En caso de que las celdas marcadas no contengan los datos deseados, marque ahora el área.\n\nIncluya las celdas con  los nombres de las columnas y filas si desea que estas aparezcan en su gráfico.";
+        Text[ finnish ] = "Jos merkityt solut eivät esitä haluttuja tietoja, merkitse alue nyt.\nSisällytä valintaan sarake- ja riviotsikot sisältävät solut, jos haluat niiden näkyvän kaaviossa.";
     };
-    FixedText FT_HORZLINE
+    FixedLine FL_HLINE
     {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 137 ) ;
-        Size = MAP_APPFONT ( 284 , 2 ) ;
+        Pos = MAP_APPFONT ( 0 , 140 ) ;
+        Size = MAP_APPFONT ( 297 , 8 ) ;
     };
     HelpButton BT_HELP
     {
