@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:10:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ void CfgParser::AddText(
         WorkOnText( rText, nLangIndex, rResTyp );
          pStackData->sText[ nLangIndex ] = rText;
     }
-    else {
+    else if ( rIsoLang != NO_TRANSLATE_ISO ) {
         ByteString sError( "Unknown language code: " );
         sError += rIsoLang;
         Error( sError );
@@ -459,13 +459,14 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         case CFG_TOKEN_TEMPLATE:
         case CFG_TOKEN_CONFIGNAME:
         case CFG_TOKEN_OORNAME:
+        case CFG_TOKEN_OORVALUE:
         case CFG_TAG:
         case ANYTOKEN:
         case CFG_TEXT_START:
         {
-              if ( !IsTokenClosed( sToken )) {
-                sTokenName = sToken.GetToken( 1, '<' ).GetToken( 0, '>' ).GetToken( 0, ' ' );
+            sTokenName = sToken.GetToken( 1, '<' ).GetToken( 0, '>' ).GetToken( 0, ' ' );
 
+              if ( !IsTokenClosed( sToken )) {
                 ByteString sSearch;
                 switch ( nToken ) {
                     case CFG_TOKEN_PACKAGE:
@@ -484,6 +485,9 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                         sSearch = "oor:name=";
                         bLocalize = TRUE;
                     break;
+                    case CFG_TOKEN_OORVALUE:
+                        sSearch = "oor:value=";
+                    break;
                     case CFG_TEXT_START: {
                         if ( sCurrentResTyp != sTokenName ) {
                             WorkOnRessourceEnd();
@@ -495,6 +499,9 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
 
                         ByteString sTemp = sToken.Copy( sToken.Search( "xml:lang=" ));
                         sCurrentIsoLang = sTemp.GetToken( 1, '\"' ).GetToken( 0, '\"' );
+
+                        if ( sCurrentIsoLang == NO_TRANSLATE_ISO )
+                            bLocalize = FALSE;
 
                         pStackData->sTextTag = sToken;
 
@@ -513,6 +520,15 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     bLocalize = (( sTemp.Search( "CFG:TYPE=\"STRING\"" ) != STRING_NOTFOUND ) &&
                         ( sTemp.Search( "CFG:LOCALIZED=\"TRUE\"" ) != STRING_NOTFOUND ));
                 }
+            }
+            else if ( sTokenName == "label" ) {
+                if ( sCurrentResTyp != sTokenName ) {
+                    WorkOnRessourceEnd();
+                    for ( ULONG i = 0; i < LANGUAGES; i++ )
+                        if ( LANGUAGE_ALLOWED( i ))
+                            pStackData->sText[ i ] = "";
+                }
+                sCurrentResTyp = sTokenName;
             }
         }
         break;
@@ -534,6 +550,10 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         case CFG_TEXTCHAR:
             sCurrentText += sToken;
             bOutput = FALSE;
+        break;
+
+        case CFG_TOKEN_NO_TRANSLATE:
+            bLocalize = FALSE;
         break;
     }
 
@@ -577,6 +597,8 @@ int CfgParser::Execute( int nToken, char * pToken )
                 return ExecuteAnalyzedToken( CFG_TOKEN_OORNAME, pToken );
             else if ( sToken.Search( "oor:name=" ) != STRING_NOTFOUND )
                 return ExecuteAnalyzedToken( CFG_TOKEN_OORNAME, pToken );
+            else if ( sToken.Search( "oor:value=" ) != STRING_NOTFOUND )
+                return ExecuteAnalyzedToken( CFG_TOKEN_OORVALUE, pToken );
         break;
     }
     return ExecuteAnalyzedToken( nToken, pToken );
