@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:43:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 08:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,7 @@ void ImportExcel::ChartSeriesText()
     UINT16  nId;
     aIn >> nId;
     if( pChart )
-        aIn.AppendByteString( pChart->aLastLabel, FALSE );
+        pChart->aLastLabel = aIn.ReadByteString( false );
 }
 
 
