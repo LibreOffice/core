@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-28 12:09:12 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 17:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include <osl/security.h>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 #include "runtime.hxx"
 
@@ -1087,10 +1091,13 @@ void SbiIoSystem::WriteCon( const ByteString& rText )
         while( aOut.GetBuffer()[0] == '\n' || aOut.GetBuffer()[0] == '\r' )
             aOut.Erase( 0, 1 );
         String aStr( s, gsl_getSystemTextEncoding() );
-        if( !MessBox( GetpApp()->GetDefModalDialogParent(),
-                      WinBits( WB_OK_CANCEL | WB_DEF_OK ),
-                      String(), aStr ).Execute() )
-            nError = SbERR_USER_ABORT;
+        {
+            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            if( !MessBox( GetpApp()->GetDefModalDialogParent(),
+                        WinBits( WB_OK_CANCEL | WB_DEF_OK ),
+                        String(), aStr ).Execute() )
+                nError = SbERR_USER_ABORT;
+        }
     }
 }
 
