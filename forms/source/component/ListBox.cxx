@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 12:36:28 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,9 +526,20 @@ void SAL_CALL OListBoxModel::read(const Reference<stario::XObjectInputStream>& _
         ::rtl::OUString sListSource;
         _rxInStream >> sListSource;
 
-        aListSourceSeq.realloc( sListSource.getTokenCount() );
-        for (sal_uInt16 i=0; i<sListSource.getTokenCount(); ++i)
-            aListSourceSeq.getArray()[i] = sListSource.getToken(i);
+        sal_int32 nTokens = 1;
+        const sal_Unicode* pStr = sListSource.getStr();
+        while ( *pStr )
+        {
+            if ( *pStr == ';' )
+                nTokens++;
+            pStr++;
+        }
+        aListSourceSeq.realloc( nTokens );
+        for (sal_uInt16 i=0; i<nTokens; ++i)
+        {
+            sal_Int32 nTmp = 0;
+            aListSourceSeq.getArray()[i] = sListSource.getToken(i,';',nTmp);
+        }
     }
     else
         _rxInStream >> aListSourceSeq;
@@ -620,7 +631,7 @@ void OListBoxModel::loadData()
     sal_Int32 i;
     for (i=0; i<m_aListSourceSeq.getLength(); ++i)
         sListSource = sListSource + pustrListSouceStrings[i];
-    if (!sListSource.len())
+    if (!sListSource.getLength())
         return;
 
     sal_Int16 nBoundColumn = 0;
@@ -698,7 +709,7 @@ void OListBoxModel::loadData()
                         disposeComponent(xComposer);
                     }
                 }
-                if (!aFieldName.len())
+                if (!aFieldName.getLength())
                     break;
 
                 Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
@@ -708,7 +719,7 @@ void OListBoxModel::loadData()
                     aStatement += ::rtl::OUString::createFromAscii("DISTINCT ");
 
                 aStatement += quoteName(aQuote,aFieldName);
-                if (aBoundFieldName.len())
+                if (aBoundFieldName.getLength())
                 {
                     aStatement += ::rtl::OUString::createFromAscii(", ");
                     aStatement += quoteName(aQuote, aBoundFieldName);
@@ -875,7 +886,7 @@ void OListBoxModel::loadData()
                         aValueList.push_back(aStr);
                     }
 
-                    if (bUseNULL && (m_nNULLPos == -1) && !aStr.len())
+                    if (bUseNULL && (m_nNULLPos == -1) && !aStr.getLength())
                         m_nNULLPos = (sal_Int16)aStringList.size() - 1;
                 }
             }

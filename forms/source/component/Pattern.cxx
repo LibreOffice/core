@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pattern.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ sal_Bool OPatternModel::_commit()
     ::rtl::OUString aNewValue = getString(m_xAggregateFastSet->getFastPropertyValue( OPatternModel::nTextHandle ));
     if (aNewValue != m_aSaveValue)
     {
-        if (!aNewValue.len() && !m_bRequired && m_bEmptyIsNull)
+        if (!aNewValue.getLength() && !m_bRequired && m_bEmptyIsNull)
             m_xColumnUpdate->updateNull();
         else
         {
