@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_resource.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-30 12:50:41 $
+ *  last change: $Author: sb $ $Date: 2004-07-30 09:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ static ResMgr * getResMgr()
             throw RuntimeException( OUSTR("Cannot determine language!"),
                                     Reference<XInterface>() );
 
-        sal_Int32 nIndex;
+        sal_Int32 nIndex = 0;
         ::com::sun::star::lang::Locale aLocale;
         aLocale.Language = slang.getToken( 0, '-', nIndex );
         aLocale.Country = slang.getToken( 1, '-', nIndex );
