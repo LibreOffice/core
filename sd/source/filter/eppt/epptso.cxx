@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-14 16:58:00 $
+ *  last change: $Author: sj $ $Date: 2001-03-15 15:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3847,11 +3847,7 @@ sal_Bool PPTWriter::ImplIsAutoShape ( const ::com::sun::star::uno::Reference< ::
                     ( aType == "com.sun.star.drawing.PolyPolygonShape" )
                         || ( aType == "com.sun.star.drawing.PolyLineShape" )
                                 || ( aType == "com.sun.star.drawing.OpenBezierShape" )
-                                    || ( aType == "com.sun.star.drawing.OpenFreeHandShape" )
-                                        || ( aType == "com.sun.star.drawing.PolyLinePathShape" )
-                                            || ( aType == "com.sun.star.drawing.ClosedBezierShape" )
-                                                || ( aType == "com.sun.star.drawing.ClosedFreeHandShape" )
-                                                    || ( aType == "com.sun.star.drawing.PolyPolygonPathShape" );
+                                            || ( aType == "com.sun.star.drawing.ClosedBezierShape" );
 
             if ( !bPossibleAutoShape )
                 return FALSE;
@@ -4061,12 +4057,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 nEffectCount = *(sal_uInt16*)mAny.getValue();
 
             sal_Bool bEffect = ImplGetEffect( mXPropSet, eAe, eTe, bIsSound );
-            sal_Bool bIsAutoShape = FALSE;
+            sal_Bool bIsAutoShape = sal_False;
             sal_Bool bGroup = mType == "drawing.Group";
-            sal_Bool bOpenBezier   = ( mType == "drawing.OpenBezier" ) || ( mType == "drawing.OpenFreeHand" )
-                                            || ( mType == "drawing.PolyLinePath" );
-            sal_Bool bClosedBezier = ( mType == "drawing.ClosedBezier" ) || ( mType == "drawing.ClosedFreeHand" )
-                                            || ( mType == "drawing.PolyPolygonPath" );
+            sal_Bool bOpenBezier   = mType == "drawing.OpenBezier";
+            sal_Bool bClosedBezier = mType == "drawing.ClosedBezier";
             sal_Bool bPolyPolygon  = mType == "drawing.PolyPolygon";
             sal_Bool bPolyLine = mType == "drawing.PolyLine";
 
