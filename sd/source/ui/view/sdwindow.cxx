@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-14 15:52:32 $
+ *  last change: $Author: af $ $Date: 2002-02-05 14:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #include "drviewsh.hxx"
 #include "sdview.hxx"
 #include "outlnvsh.hxx"
+#include "AccessibleDocumentView.hxx"
+
 
 
 #define SCROLL_LINE_FACT   0.05     // Faktor fuer Zeilenscrolling
@@ -844,3 +846,22 @@ sal_Int8 SdWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     return nRet;
 }
+
+
+::com::sun::star::uno::Reference<
+    ::drafts::com::sun::star::accessibility::XAccessible>
+    SdWindow::CreateAccessible (void)
+{
+    SdDrawDocument* pDocument = pViewShell->GetDoc();
+    ::com::sun::star::uno::Reference<
+          ::com::sun::star::frame::XController> xController (pViewShell->GetController());
+    if (xController.is())
+        return new accessibility::AccessibleDocumentView (this,
+            xController,
+            ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::accessibility::XAccessible>()
+            );
+    else
+        return NULL;
+}
+
