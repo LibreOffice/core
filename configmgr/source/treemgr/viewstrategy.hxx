@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstrategy.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:33:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,8 @@ namespace configmgr
 
         // direct update access to data
         public:
+            void releaseDataSegment();
+
             memory::Segment const * getDataSegment() const;
             memory::Segment  * getDataSegmentForUpdate();
 
@@ -271,6 +273,8 @@ namespace configmgr
 
         // virtual interface - these functions all have default implementations without support for pending changes
         protected:
+            virtual void doReleaseDataSegment() = 0;
+
             // special support for direct changes to underlying data - default is no support
             virtual data::NodeAddress::DataType * implAccessForUpdate(data::NodeAccessRef const & _aDataAccess);
             virtual memory::Segment const * doGetDataSegment() const = 0;
@@ -316,6 +320,9 @@ namespace configmgr
 
         inline NodeFactory& ViewStrategy::getNodeFactory()
         { return doGetNodeFactory(); }
+
+        inline void ViewStrategy::releaseDataSegment()
+        { doReleaseDataSegment(); }
 
         inline memory::Segment const * ViewStrategy::getDataSegment()   const
         { return doGetDataSegment(); }
