@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:26:55 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,21 +318,13 @@ void OTableEditorDelUndoAct::Redo()
 //==============================================================================
 // class OTableEditorInsUndoAct
 //==============================================================================
-OTableEditorInsUndoAct::OTableEditorInsUndoAct( OTableEditorCtrl* pOwner, long nInsertPosition ) :
-     OTableEditorUndoAct( pOwner,STR_TABED_UNDO_ROWINSERTED )
+OTableEditorInsUndoAct::OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
+                                               long nInsertPosition ,
+                                               const ::std::vector< OTableRow*>& _vInsertedRows)
+    :OTableEditorUndoAct( pOwner,STR_TABED_UNDO_ROWINSERTED )
     ,m_nInsPos( nInsertPosition )
+    ,m_vInsertedRows(_vInsertedRows)
 {
-    //////////////////////////////////////////////////////////////////////
-    // Clipboard-Inhalt in InsertedRowList kopieren
-    ::std::vector<OTableRow*>* pClipboardList = pOwner->GetClipboardRowList();
-    ::std::vector<OTableRow*>::iterator aIter = pClipboardList->begin();
-
-    OTableRow* pNewRow;
-    for(;aIter != pClipboardList->end();++aIter)
-    {
-        pNewRow = new OTableRow( **aIter );
-        m_aInsertedRows.push_back( pNewRow);
-    }
 }
 
 //-------------------------------------------------------------------------
@@ -340,11 +332,11 @@ OTableEditorInsUndoAct::~OTableEditorInsUndoAct()
 {
     //////////////////////////////////////////////////////////////////////
     // InsertedRowList loeschen
-    ::std::vector<OTableRow*>::iterator aIter = m_aInsertedRows.begin();
-    for(;aIter != m_aInsertedRows.end();++aIter)
+    ::std::vector<OTableRow*>::iterator aIter = m_vInsertedRows.begin();
+    for(;aIter != m_vInsertedRows.end();++aIter)
         delete *aIter;
 
-    m_aInsertedRows.clear();
+    m_vInsertedRows.clear();
 }
 
 //-------------------------------------------------------------------------
@@ -353,13 +345,13 @@ void OTableEditorInsUndoAct::Undo()
     //////////////////////////////////////////////////////////////////////
     // Eingefuegte Zeilen wieder loeschen
     ::std::vector<OTableRow*>* pOriginalRows = pTabEdCtrl->GetRowList();
-    for( long i=(m_nInsPos+m_aInsertedRows.size()-1); i>(m_nInsPos-1); i-- )
+    for( long i=(m_nInsPos+m_vInsertedRows.size()-1); i>(m_nInsPos-1); i-- )
     {
         delete (*pOriginalRows)[i];
         pOriginalRows->erase(pOriginalRows->begin()+i);
     }
 
-    pTabEdCtrl->RowRemoved( m_nInsPos, m_aInsertedRows.size(), TRUE );
+    pTabEdCtrl->RowRemoved( m_nInsPos, m_vInsertedRows.size(), TRUE );
     pTabEdCtrl->InvalidateHandleColumn();
 
     OTableEditorUndoAct::Undo();
@@ -372,16 +364,16 @@ void OTableEditorInsUndoAct::Redo()
     // Zeilen wieder einfuegen
     long nInsertRow = m_nInsPos;
     OTableRow* pRow;
-    ::std::vector<OTableRow*>::iterator aIter = m_aInsertedRows.begin();
+    ::std::vector<OTableRow*>::iterator aIter = m_vInsertedRows.begin();
     ::std::vector<OTableRow*>* pRowList = pTabEdCtrl->GetRowList();
-    for(;aIter != m_aInsertedRows.end();++aIter)
+    for(;aIter != m_vInsertedRows.end();++aIter)
     {
         pRow = new OTableRow( **aIter );
         pRowList->insert( pRowList->begin()+nInsertRow ,pRow );
         nInsertRow++;
     }
 
-    pTabEdCtrl->RowInserted( m_nInsPos, m_aInsertedRows.size(), TRUE );
+    pTabEdCtrl->RowInserted( m_nInsPos, m_vInsertedRows.size(), TRUE );
     pTabEdCtrl->InvalidateHandleColumn();
 
     OTableEditorUndoAct::Redo();

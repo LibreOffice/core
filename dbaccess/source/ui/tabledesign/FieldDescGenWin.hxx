@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescGenWin.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:24:58 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ namespace dbaui
 
         void DisplayData( OFieldDescription* pFieldDescr );
         void SaveData( OFieldDescription* pFieldDescr );
-        BOOL ChildHasFocus();
         void SetControlText( USHORT nControlId, const String& rText );
         String GetControlText( USHORT nControlId );
         void SetReadOnly( BOOL bReadOnly );
@@ -103,6 +102,10 @@ namespace dbaui
 
         String BoolStringPersistent(const String& rUIString) const;
         String BoolStringUI(const String& rPersistentString) const;
+        sal_Bool isCutAllowed();
+        void    cut();
+        void    copy();
+        void    paste();
     };
 }
 #endif // DBAUI_TABLEFIELDDESCGENPAGE_HXX

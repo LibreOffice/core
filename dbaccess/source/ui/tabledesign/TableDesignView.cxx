@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:25:30 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,15 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
 
 
 using namespace ::dbaui;
 using namespace ::utl;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
@@ -323,20 +327,54 @@ IMPL_LINK( OTableDesignView, SwitchHdl, Accelerator*, pAcc )
 // -----------------------------------------------------------------------------
 sal_Bool OTableDesignView::isCutAllowed()
 {
-    return sal_True;
+    sal_Bool bAllowed = sal_False;
+    if( GetDescWin()->HasChildPathFocus() )
+    {
+        bAllowed = GetDescWin()->isCutAllowed();
+    }
+    else
+    {
+        bAllowed = GetEditorCtrl()->IsCutAllowed();
+    }
+    return bAllowed;
 }
 // -----------------------------------------------------------------------------
 void OTableDesignView::copy()
 {
+    if( GetDescWin()->HasChildPathFocus() )
+    {
+        GetDescWin()->copy();
+    }
+    else
+    {
+        GetEditorCtrl()->Copy();
+    }
 }
 // -----------------------------------------------------------------------------
 void OTableDesignView::cut()
 {
+    if( GetDescWin()->HasChildPathFocus() )
+    {
+        GetDescWin()->cut();
+    }
+    else
+    {
+        GetEditorCtrl()->Cut();
+    }
 }
 // -----------------------------------------------------------------------------
 void OTableDesignView::paste()
 {
+    if( GetDescWin()->HasChildPathFocus() )
+    {
+        GetDescWin()->paste();
+    }
+    else
+    {
+        GetEditorCtrl()->Paste();
+    }
 }
+// -----------------------------------------------------------------------------
 // set the view readonly or not
 void OTableDesignView::setReadOnly(sal_Bool _bReadOnly)
 {
@@ -344,3 +382,9 @@ void OTableDesignView::setReadOnly(sal_Bool _bReadOnly)
     GetEditorCtrl()->SetReadOnly(_bReadOnly);
 }
 // -----------------------------------------------------------------------------
+void OTableDesignView::reSync()
+{
+    GetEditorCtrl()->DeactivateCell();
+}
+// -----------------------------------------------------------------------------
+

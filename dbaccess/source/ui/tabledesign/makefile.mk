@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: oj $ $Date: 2001-02-14 14:24:18 $
+#   last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ SLOFILES =\
             $(SLO)$/FieldDescGenWin.obj		\
             $(SLO)$/FieldDescriptions.obj	\
             $(SLO)$/TableRow.obj			\
+            $(SLO)$/TableRowExchange.obj	\
             $(SLO)$/TableUndo.obj
 
 

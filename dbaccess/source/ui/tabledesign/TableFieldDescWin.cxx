@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescWin.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:25:40 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,3 +278,30 @@ void OTableFieldDescWin::Resize()
     }
     Invalidate();
 }
+// -----------------------------------------------------------------------------
+sal_Bool OTableFieldDescWin::isCutAllowed()
+{
+    return (m_pGenPage && m_pGenPage->HasChildPathFocus() && m_pGenPage->isCutAllowed());
+}
+// -----------------------------------------------------------------------------
+void OTableFieldDescWin::cut()
+{
+    if(m_pGenPage && m_pGenPage->HasChildPathFocus())
+        m_pGenPage->cut();
+}
+// -----------------------------------------------------------------------------
+void OTableFieldDescWin::copy()
+{
+    if(m_pGenPage && m_pGenPage->HasChildPathFocus())
+        m_pGenPage->copy();
+}
+// -----------------------------------------------------------------------------
+void OTableFieldDescWin::paste()
+{
+    if(m_pGenPage && m_pGenPage->HasChildPathFocus())
+        m_pGenPage->paste();
+}
+// -----------------------------------------------------------------------------
+
+
+

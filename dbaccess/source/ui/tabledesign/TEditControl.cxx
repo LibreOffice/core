@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-21 13:30:42 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,21 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XALTERTABLE_HPP_
+#include <com/sun/star/sdbcx/XAlterTable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
+#include <com/sun/star/sdbcx/XDrop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
+#include <com/sun/star/sdbcx/XAppend.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -115,16 +130,24 @@
 #ifndef DBAUI_SQLNAMEEDIT_HXX
 #include "SqlNameEdit.hxx"
 #endif
+#ifndef DBAUI_TABLEROW_EXCHANGE_HXX
+#include "TableRowExchange.hxx"
+#endif
+#ifndef _SOT_STORAGE_HXX
+#include <sot/storage.hxx>
+#endif
 
 using namespace dbaui;
 using namespace comphelper;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
 
 namespace dbaui
@@ -195,13 +218,6 @@ void OTableEditorCtrl::Init()
     //////////////////////////////////////////////////////////////////////
     // Soll der Entwurf ReadOnly geoeffnet werden ?
     sal_Bool bRead(GetView()->getController()->isReadOnly());
-    Reference<XPropertySet> xTable = GetView()->getController()->getTable();
-    if(xTable.is() && !(xTable->getPropertySetInfo()->getPropertyByName(PROPERTY_NAME).Attributes & PropertyAttribute::READONLY))
-    {
-        Reference< XDatabaseMetaData> xMetaData = GetView()->getController()->getConnection()->getMetaData();
-        bRead = xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn();
-    }
-
 
     SetReadOnly( bRead );
 
@@ -260,10 +276,6 @@ OTableEditorCtrl::OTableEditorCtrl(Window* pWindow)
     SetHelpId(HID_TABDESIGN_BACKGROUND);
     GetDataWindow().SetHelpId(HID_CTL_TABLEEDIT);
 
-    //////////////////////////////////////////////////////////////////////
-    // Clipboard Format registrieren
-    Clipboard::Clear();
-    m_nClipboardFormat = Clipboard::RegisterFormatName( String::CreateFromAscii("Tabed") );
     m_pRowList = GetView()->getController()->getRows();
     m_nDataPos = 0;
 }
@@ -386,11 +398,6 @@ OTableEditorCtrl::~OTableEditorCtrl()
     delete pNameCell;
     delete pTypeCell;
     delete pDescrCell;
-    ::std::vector<OTableRow*>::iterator aIter = m_aClipboardList.begin();
-    for(;aIter != m_aClipboardList.end();++aIter)
-        delete *aIter;
-
-    m_aClipboardList.clear();
 }
 
 //------------------------------------------------------------------------------
@@ -401,6 +408,8 @@ sal_Bool OTableEditorCtrl::SetDataPtr( long nRow )
         return sal_False;
 
     OSL_ENSURE((xub_StrLen)nRow < m_pRowList->size(),"Row is greater than size!");
+    if(nRow >= m_pRowList->size())
+        return NULL;
     pActRow = (*m_pRowList)[nRow];
     return pActRow != NULL;
 }
@@ -849,15 +858,7 @@ void OTableEditorCtrl::CopyRows()
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
-    // Alte ClipboardListe loeschen
-    ::std::vector<OTableRow*>::iterator aIter = m_aClipboardList.begin();
-    for(;aIter != m_aClipboardList.end();++aIter)
-        delete *aIter;
-
-    m_aClipboardList.clear();
-
-    //////////////////////////////////////////////////////////////////////
-    // Sichergehen, dass Daten aus dem PropertyWin schon gespeichert sind.
+    // set to the right row and save it
     if( SetDataPtr(m_nDataPos) )
         pDescrWin->SaveData( pActRow->GetActFieldDescr() );
 
@@ -865,16 +866,20 @@ void OTableEditorCtrl::CopyRows()
     // Selektierte Zeilen in die ClipboardListe kopieren
     OTableRow* pClipboardRow;
     OTableRow* pRow;
+    ::std::vector<OTableRow*> vClipboardList;
 
     for( long nIndex=FirstSelectedRow(); nIndex>=0; nIndex=NextSelectedRow() )
     {
         pRow = (*m_pRowList)[nIndex];
         pClipboardRow = new OTableRow( *pRow );
-        m_aClipboardList.push_back( pClipboardRow);
+        vClipboardList.push_back( pClipboardRow);
     }
-
-    if( m_aClipboardList.size() )
-        m_bClipboardFilled = sal_True;
+    if(vClipboardList.size())
+    {
+        OTableRowExchange* pData = new OTableRowExchange(vClipboardList);
+        Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
+        pData->CopyToClipboard();
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -912,36 +917,52 @@ String OTableEditorCtrl::GenerateName( const String& rName )
 void OTableEditorCtrl::InsertRows( long nRow )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
+
+    ::std::vector< OTableRow*> vInsertedUndoRedoRows; // need for undo/redo handling
     //////////////////////////////////////////////////////////////////////
-    // Zeilen aus der Clipboardliste in die Datenstruktur einfügen
-    long nInsertRow = nRow;
-    String aFieldName;
-    OTableRow* pRow;
-    ::std::vector<OTableRow*>::const_iterator aIter = m_aClipboardList.begin();
-    for(;aIter != m_aClipboardList.end();++aIter)
+    // get rows from clipboard
+    TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+    if(aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_TABED))
     {
-        pRow = new OTableRow( **aIter );
-        pRow->SetReadOnly( sal_False );
+        SotStorageStreamRef aStreamRef;
+        aTransferData.GetSotStorageStream(SOT_FORMATSTR_ID_SBA_TABED,aStreamRef);
+        if(aStreamRef.Is())
+        {
+            aStreamRef->Seek(STREAM_SEEK_TO_BEGIN);
+            aStreamRef->ResetError();
+            long nInsertRow = nRow;
+            String aFieldName;
+            OTableRow* pRow;
+            sal_Int32 nSize = 0;
+            (*aStreamRef) >> nSize;
+            for(sal_Int32 i=0;i < nSize;++i)
+            {
+                pRow = new OTableRow();
+                (*aStreamRef) >> *pRow;
+                pRow->SetReadOnly( sal_False );
+                sal_Int32 nType = pRow->GetActFieldDescr()->GetType();
+                pRow->GetActFieldDescr()->SetType(GetView()->getController()->getTypeInfoByType(nType));
+                //////////////////////////////////////////////////////////////////////
+                // Anpassen des Feldnamens
+                aFieldName = GenerateName( pRow->GetActFieldDescr()->GetName() );
+                pRow->GetActFieldDescr()->SetName( aFieldName );
 
-        //////////////////////////////////////////////////////////////////////
-        // Anpassen des Feldnamens
-        aFieldName = GenerateName( pRow->GetActFieldDescr()->GetName() );
-        pRow->GetActFieldDescr()->SetName( aFieldName );
-
-        m_pRowList->insert( m_pRowList->begin()+nInsertRow,pRow );
-        nInsertRow++;
+                m_pRowList->insert( m_pRowList->begin()+nInsertRow,pRow );
+                vInsertedUndoRedoRows.push_back(new OTableRow(*pRow));
+                nInsertRow++;
+            }
+        }
     }
-
     //////////////////////////////////////////////////////////////////////
     // Beim RowInserted wird CursorMoved gerufen.
     // Die UI-Daten duerfen hier beim CursorMoved nicht gespeichert werden.
     bSaveOnMove = sal_False;
-    RowInserted( nRow,m_aClipboardList.size() ,sal_True );
+    RowInserted( nRow,vInsertedUndoRedoRows.size(),sal_True );
     bSaveOnMove = sal_True;
 
     //////////////////////////////////////////////////////////////////////
     // Undo-Action erzeugen
-    GetUndoManager()->AddUndoAction( new OTableEditorInsUndoAct(this, nRow) );
+    GetUndoManager()->AddUndoAction( new OTableEditorInsUndoAct(this, nRow,vInsertedUndoRedoRows) );
     GetView()->getController()->setModified( sal_True );
     GetView()->getController()->InvalidateFeature(SID_UNDO);
     GetView()->getController()->InvalidateFeature(SID_REDO);
@@ -951,6 +972,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
 void OTableEditorCtrl::DeleteRows()
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
+    OSL_ENSURE(GetView()->getController()->isDropAllowed(),"Call of DeleteRows not valid here. Please check isDropAllowed!");
     //////////////////////////////////////////////////////////////////////
     // Undo-Action erzeugen
     GetUndoManager()->AddUndoAction( new OTableEditorDelUndoAct(this) );
@@ -997,6 +1019,7 @@ void OTableEditorCtrl::DeleteRows()
 void OTableEditorCtrl::InsertNewRows( long nRow )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
+    OSL_ENSURE(GetView()->getController()->isAddAllowed(),"Call of InsertNewRows not valid here. Please check isAppendAllowed!");
     //////////////////////////////////////////////////////////////////////
     // Undo-Action erzeugen
     long nInsertRows = GetSelectRowCount();
@@ -1249,11 +1272,27 @@ OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
 sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    Reference<XPropertySet> xTable = GetView()->getController()->getTable();
-    if( !IsCopyAllowed(nRow) || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
-        return sal_False;
+    sal_Bool bIsCutAllowed = (GetView()->getController()->isAddAllowed() && GetView()->getController()->isDropAllowed()) ||
+                            GetView()->getController()->isAlterAllowed();
 
-    return IsDeleteAllowed( nRow );
+    if(bIsCutAllowed)
+    {
+        if(pDescrCell->HasChildPathFocus())
+            bIsCutAllowed = pDescrCell->GetSelected().Len() != 0;
+        else if(pNameCell->HasChildPathFocus())
+            bIsCutAllowed = pNameCell->GetSelected().Len() != 0;
+        else
+        // only rows are slected for cutting so we look if all rows are valid
+        // wwe don't waant to copy empty rows here
+            bIsCutAllowed = IsCopyAllowed(nRow);
+    }
+
+//  Reference<XPropertySet> xTable = GetView()->getController()->getTable();
+//  if( !IsCopyAllowed(nRow) || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
+//      return sal_False;
+
+    //  return bCutAllowed && IsDeleteAllowed( nRow );
+    return bIsCutAllowed;
 }
 
 //------------------------------------------------------------------------------
@@ -1284,82 +1323,97 @@ sal_Bool OTableEditorCtrl::IsCopyAllowed( long nRow )
 sal_Bool OTableEditorCtrl::IsPasteAllowed( long nRow )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    Reference<XPropertySet> xTable = GetView()->getController()->getTable();
-    if( !m_bClipboardFilled || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
-        return sal_False;
-
-    return sal_True;
+    return GetView()->getController()->isAddAllowed();
 }
 
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::Cut()
 {
-    if (nCutEvent)
-        Application::RemoveUserEvent(nCutEvent);
-    nCutEvent = Application::PostUserEvent(LINK(this, OTableEditorCtrl, DelayedCut));
+    if(pNameCell->HasChildPathFocus())
+    {
+        if(GetView()->getController()->isAlterAllowed())
+            pNameCell->Cut();
+    }
+    else if(pDescrCell->HasChildPathFocus())
+    {
+        if(GetView()->getController()->isAlterAllowed())
+            pDescrCell->Cut();
+    }
+    else
+    {
+        if (nCutEvent)
+            Application::RemoveUserEvent(nCutEvent);
+        nCutEvent = Application::PostUserEvent(LINK(this, OTableEditorCtrl, DelayedCut));
+    }
 }
 
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::Copy()
 {
-    OTableRowView::Copy();
+    if(GetSelectRowCount())
+        OTableRowView::Copy();
+    else if(pNameCell->HasChildPathFocus())
+        pNameCell->Copy();
+    else if(pDescrCell->HasChildPathFocus())
+        pDescrCell->Copy();
 }
 
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::Paste()
 {
-    if( nPasteEvent )
-        Application::RemoveUserEvent( nPasteEvent );
-    nPasteEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedPaste) );
+    TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+    if(aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_TABED))
+    {
+        if( nPasteEvent )
+            Application::RemoveUserEvent( nPasteEvent );
+        nPasteEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedPaste) );
+    }
+    else if(pNameCell->HasChildPathFocus())
+    {
+        if(GetView()->getController()->isAlterAllowed())
+            pNameCell->Paste();
+    }
+    else if(pDescrCell->HasChildPathFocus())
+    {
+        if(GetView()->getController()->isAlterAllowed())
+            pDescrCell->Paste();
+    }
 }
 
 //------------------------------------------------------------------------------
 sal_Bool OTableEditorCtrl::IsDeleteAllowed( long nRow )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    Reference<XPropertySet> xTable = GetView()->getController()->getTable();
-    if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
-        return sal_False;
 
-    // Wenn nur Felder hinzugefuegt werden duerfen, Delete nur auf neuen Feldern
-    Reference<XConnection> xCon = GetView()->getController()->getConnection();
-    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
-
-    return  !(xTable.is() && xTable->getPropertySetInfo()->getPropertyByName(PROPERTY_NAME).Attributes & PropertyAttribute::READONLY) ||
-            ( xMetaData.is() && xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn());
+    return GetSelectRowCount() != 0 && GetView()->getController()->isDropAllowed();
+//  Reference<XPropertySet> xTable = GetView()->getController()->getTable();
+//  if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
+//      return sal_False;
+//
+//  // Wenn nur Felder hinzugefuegt werden duerfen, Delete nur auf neuen Feldern
+//  Reference<XConnection> xCon = GetView()->getController()->getConnection();
+//  Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
+//
+//  return  !(xTable.is() && xTable->getPropertySetInfo()->getPropertyByName(PROPERTY_NAME).Attributes & PropertyAttribute::READONLY) ||
+//          ( xMetaData.is() && xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn());
 }
 
 //------------------------------------------------------------------------------
 sal_Bool OTableEditorCtrl::IsInsertNewAllowed( long nRow )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    Reference<XPropertySet> xTable = GetView()->getController()->getTable();
-    if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW"))
-        return sal_False;
-    // table is new
-    if(!(xTable.is() && xTable->getPropertySetInfo()->getPropertyByName(PROPERTY_NAME).Attributes & PropertyAttribute::READONLY))
-        return sal_True;
 
-    Reference<XConnection> xCon = GetView()->getController()->getConnection();
-    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
-    if(!xMetaData.is())
-        return sal_False;
-    //////////////////////////////////////////////////////////////
-    // Wenn nur Felder geloescht werden duerfen, Paste disablen
-
-    if ( !xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn())
-        return sal_False;
-
+    sal_Bool bInsertNewAllowed = GetView()->getController()->isAddAllowed();
     //////////////////////////////////////////////////////////////
     // Wenn nur Felder hinzugefuegt werden duerfen, Paste nur in neue Felder
-    if (xMetaData->supportsAlterTableWithAddColumn() && !xMetaData->supportsAlterTableWithDropColumn())
+    if (bInsertNewAllowed && !GetView()->getController()->isDropAllowed())
     {
         SetDataPtr(nRow);
         if( GetActRow()->IsReadOnly() )
             return sal_False;
     }
 
-    return xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn();
+    return bInsertNewAllowed;
 }
 
 //------------------------------------------------------------------------------
@@ -1369,22 +1423,26 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long nRow )
     if( !GetSelectRowCount() )
         return sal_False;
 
-    //////////////////////////////////////////////////////////////
-    // Datenbank kann keine PrimKeys verarbeiten oder keine Zeilenselektion
     Reference<XConnection> xCon = GetView()->getController()->getConnection();
+
     Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
-    if(!xMetaData.is() || !xMetaData->supportsCoreSQLGrammar())
-        return sal_False;
+    Reference<XPropertySet> xTable = GetView()->getController()->getTable();
+    Reference<XKeysSupplier> xKeySup(xTable,UNO_QUERY);
+    Reference<XIndexAccess> xIndexAccess;
+    if(xKeySup.is())
+        xIndexAccess = xKeySup->getKeys();
+
+    if(!xIndexAccess.is() && (!xMetaData.is() || !xMetaData->supportsCoreSQLGrammar()))
+        return sal_False; // no primary keys allowed
 
     //////////////////////////////////////////////////////////////
     // Key darf nicht veraendert werden
     // Dies gilt jedoch nur, wenn die Tabelle nicht neu ist und keine ::com::sun::star::sdbcx::View. Ansonsten wird kein DROP ausgeführt
-    Reference<XPropertySet> xTable = GetView()->getController()->getTable();
 
     sal_Bool bDropNotAllowed = sal_False;
-    if (!(  xMetaData->supportsAlterTableWithDropColumn() ||
+    if (!(  GetView()->getController()->isDropAllowed() ||
                 !(xTable.is() && xTable->getPropertySetInfo()->getPropertyByName(PROPERTY_NAME).Attributes & PropertyAttribute::READONLY)) &&
-            xMetaData->supportsAlterTableWithAddColumn() &&
+            GetView()->getController()->isAddAllowed() &&
                 (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) != ::rtl::OUString::createFromAscii("VIEW")))
         bDropNotAllowed = sal_True;
 
@@ -1722,6 +1780,8 @@ OTableDesignView* OTableEditorCtrl::GetView() const
     return static_cast<OTableDesignView*>(GetParent()->GetParent());
 }
 // -----------------------------------------------------------------------------
+
+
 
 
 

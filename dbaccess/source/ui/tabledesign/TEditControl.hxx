@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 06:04:38 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@ namespace dbaui
 
     class OTableEditorCtrl : public OTableRowView
     {
-        ::std::vector<OTableRow*>   m_aClipboardList;
         ::std::vector<OTableRow*>   m_aUndoList;
         ::std::vector<OTableRow*>*  m_pRowList;
 
@@ -177,16 +176,15 @@ namespace dbaui
         void            DisplayData( long nRow, BOOL bGrabFocus = TRUE );
             // erzwingt das Anzeigen der genannten Zeile (selbst wenn es eigentlich schon die aktuelle ist)
 
-        virtual void                SetData( long nRow, USHORT nColId, const OTypeInfo* _pTypeInfo );
-        virtual void                SetData( long nRow, USHORT nColId, const String& _rSaveData );
-        virtual String              GetData( long nRow, USHORT nColId );
-        virtual void                SetControlText( long nRow, USHORT nColId, const String& rText );
-        virtual String              GetControlText( long nRow, USHORT nColId );
+        virtual void    SetData( long nRow, USHORT nColId, const OTypeInfo* _pTypeInfo );
+        virtual void    SetData( long nRow, USHORT nColId, const String& _rSaveData );
+        virtual String  GetData( long nRow, USHORT nColId );
+        virtual void    SetControlText( long nRow, USHORT nColId, const String& rText );
+        virtual String  GetControlText( long nRow, USHORT nColId );
 
         virtual OTableDesignView* GetView() const;
 
         ::std::vector<OTableRow*>* GetRowList(){ return m_pRowList; }
-        ::std::vector<OTableRow*>* GetClipboardRowList(){ return &m_aClipboardList; }
 
         OTableRow*      GetActRow(){ return pActRow; }
         void            CellModified( long nRow, USHORT nColId );

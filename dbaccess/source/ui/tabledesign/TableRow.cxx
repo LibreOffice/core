@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-12 14:47:40 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 
 using namespace dbaui;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 //========================================================================
 // class OTableRow
 //========================================================================
@@ -82,10 +84,22 @@ OTableRow::OTableRow()
     ,m_bReadOnly( sal_False )
     ,m_bFirstNameModify( sal_True )
     ,m_bFirstDescrModify( sal_True )
+    ,m_bOwnsDescriptions(sal_False)
 {
     DBG_CTOR(OTableRow,NULL);
 }
-
+//------------------------------------------------------------------------------
+OTableRow::OTableRow(const Reference< XPropertySet >& xAffectedCol)
+    :m_pActFieldDescr( NULL )
+    ,m_nPos( -1 )
+    ,m_bReadOnly( sal_False )
+    ,m_bFirstNameModify( sal_True )
+    ,m_bFirstDescrModify( sal_True )
+    ,m_bOwnsDescriptions(sal_True)
+{
+    DBG_CTOR(OTableRow,NULL);
+    m_pActFieldDescr = new OFieldDescription(xAffectedCol);
+}
 //------------------------------------------------------------------------------
 OTableRow::OTableRow( const OTableRow& rRow, long nPosition ) :
     m_nPos( nPosition )
@@ -93,6 +107,7 @@ OTableRow::OTableRow( const OTableRow& rRow, long nPosition ) :
     ,m_bFirstNameModify(rRow.IsFirstNameModify())
     ,m_bFirstDescrModify(rRow.IsFirstDescrModify())
     ,m_pActFieldDescr(NULL)
+    ,m_bOwnsDescriptions(sal_False)
 {
     DBG_CTOR(OTableRow,NULL);
 
@@ -104,6 +119,8 @@ OTableRow::OTableRow( const OTableRow& rRow, long nPosition ) :
 //------------------------------------------------------------------------------
 OTableRow::~OTableRow()
 {
+    if(m_bOwnsDescriptions)
+        delete m_pActFieldDescr;
     DBG_DTOR(OTableRow,NULL);
 }
 
@@ -165,5 +182,77 @@ void OTableRow::SetFieldType( const OTypeInfo* _pType )
     }
 }
 // -----------------------------------------------------------------------------
+namespace dbaui
+{
+    // -----------------------------------------------------------------------------
+    SvStream& operator<<( SvStream& _rStr, const OTableRow& _rRow )
+    {
+        _rStr << _rRow.m_nPos;
+        OFieldDescription* pFieldDesc = _rRow.GetActFieldDescr();
+        if(pFieldDesc)
+        {
+            _rStr.WriteByteString(pFieldDesc->GetName());
+            _rStr.WriteByteString(pFieldDesc->GetDescription());
+            _rStr.WriteByteString(pFieldDesc->GetDefaultValue());
+
+            _rStr << pFieldDesc->GetType();
+
+            _rStr << pFieldDesc->GetPrecision();
+            _rStr << pFieldDesc->GetScale();
+            _rStr << pFieldDesc->GetIsNullable();
+            _rStr << pFieldDesc->GetFormatKey();
+            _rStr << (sal_Int32)pFieldDesc->GetHorJustify();
+            _rStr << sal_Int32(pFieldDesc->IsAutoIncrement() ? 1 : 0);
+            _rStr << sal_Int32(pFieldDesc->IsPrimaryKey() ? 1 : 0);
+            _rStr << sal_Int32(pFieldDesc->IsCurrency() ? 1 : 0);
+        }
+        return _rStr;
+    }
+    // -----------------------------------------------------------------------------
+    SvStream& operator>>( SvStream& _rStr, OTableRow& _rRow )
+    {
+        _rStr >> _rRow.m_nPos;
+
+        OFieldDescription* pFieldDesc = new OFieldDescription();
+        _rRow.m_pActFieldDescr = pFieldDesc;
+        if(pFieldDesc)
+        {
+            String sValue;
+            _rStr.ReadByteString(sValue);
+            pFieldDesc->SetName(sValue);
+
+            _rStr.ReadByteString(sValue);
+            pFieldDesc->SetDescription(sValue);
+
+            _rStr.ReadByteString(sValue);
+            pFieldDesc->SetDefaultValue(sValue);
+
+            sal_Int32 nValue;
+            _rStr >> nValue;
+            pFieldDesc->SetTypeValue(nValue);
+
+            _rStr >> nValue;
+            pFieldDesc->SetPrecision(nValue);
+            _rStr >> nValue;
+            pFieldDesc->SetScale(nValue);
+            _rStr >> nValue;
+            pFieldDesc->SetIsNullable(nValue);
+            _rStr >> nValue;
+            pFieldDesc->SetFormatKey(nValue);
+            _rStr >> nValue;
+            pFieldDesc->SetHorJustify((SvxCellHorJustify)nValue);
+
+            _rStr >> nValue;
+            pFieldDesc->SetAutoIncrement(nValue != 0);
+            _rStr >> nValue;
+            pFieldDesc->SetPrimaryKey(nValue != 0);
+            _rStr >> nValue;
+            pFieldDesc->SetCurrency(nValue != 0);
+        }
+        return _rStr;
+    }
+    // -----------------------------------------------------------------------------
+}
+
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescGenWin.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:28:01 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,13 +167,6 @@ void OFieldDescGenWin::SaveData( OFieldDescription* pFieldDescr )
     m_pFieldControl->SaveData(pFieldDescr);
 }
 //------------------------------------------------------------------------------
-sal_Bool OFieldDescGenWin::ChildHasFocus()
-{
-    DBG_CHKTHIS(OFieldDescGenWin,NULL);
-
-    return m_pFieldControl->ChildHasFocus();
-}
-//------------------------------------------------------------------------------
 void OFieldDescGenWin::GetFocus()
 {
     DBG_CHKTHIS(OFieldDescGenWin,NULL);
@@ -202,4 +195,30 @@ String OFieldDescGenWin::BoolStringUI(const String& rPersistentString) const
     return m_pFieldControl->BoolStringUI(rPersistentString);
 }
 // -----------------------------------------------------------------------------
+sal_Bool OFieldDescGenWin::isCutAllowed()
+{
+    return (m_pFieldControl && m_pFieldControl->isCutAllowed());
+}
+// -----------------------------------------------------------------------------
+void OFieldDescGenWin::cut()
+{
+    if(m_pFieldControl)
+        m_pFieldControl->cut();
+}
+// -----------------------------------------------------------------------------
+void OFieldDescGenWin::copy()
+{
+    if(m_pFieldControl)
+        m_pFieldControl->copy();
+}
+// -----------------------------------------------------------------------------
+void OFieldDescGenWin::paste()
+{
+    if(m_pFieldControl)
+        m_pFieldControl->paste();
+}
+// -----------------------------------------------------------------------------
+
+
+
 

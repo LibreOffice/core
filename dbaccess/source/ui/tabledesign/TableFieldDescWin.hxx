@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescWin.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:26:47 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@ namespace dbaui
 {
     class OFieldDescGenWin;
     class OTableDesignHelpBar;
-    class OFieldPropTabCtrl;
     class OFieldDescription;
     //==================================================================
     // Ableitung von TabPage ist ein Trick von TH,
@@ -83,7 +82,6 @@ namespace dbaui
     private:
         OTableDesignHelpBar*    m_pHelpBar;
         OFieldDescGenWin*       m_pGenPage;
-        OFieldPropTabCtrl*      m_pTabControl;
         FixedText*              m_pHeader;
 
     protected:
@@ -100,7 +98,6 @@ namespace dbaui
         void SaveData( OFieldDescription* pFieldDescr );
         void SetReadOnly( BOOL bReadOnly );
 
-        BOOL ChildHasFocus(){ return m_pGenPage->HasChildPathFocus(); }
         virtual void GetFocus(){ m_pGenPage->GetFocus(); }
         virtual void LoseFocus(){ m_pGenPage->LoseFocus(); }
         void SetControlText( USHORT nControlId, const String& rText )
@@ -115,6 +112,12 @@ namespace dbaui
 
         String  BoolStringPersistent(const String& rUIString) const { return m_pGenPage->BoolStringPersistent(rUIString); }
         String  BoolStringUI(const String& rPersistentString) const { return m_pGenPage->BoolStringUI(rPersistentString); }
+
+        sal_Bool isCutAllowed();
+        void    cut();
+        void    copy();
+        void    paste();
+
     };
 }
 #endif // DBAUI_TABLEFIELDDESCRIPTION_HXX

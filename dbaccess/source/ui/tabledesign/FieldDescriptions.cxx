@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:26:09 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,20 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
+#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
+#include "dbustrings.hrc"
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 
 //========================================================================
 // class OFieldDescription
@@ -92,6 +103,7 @@ OFieldDescription::OFieldDescription() :
     ,m_nPrecision(0)
     ,m_pType(NULL)
     ,m_nIsNullable(ColumnValue::NULLABLE)
+    ,m_nType(DataType::VARCHAR)
 {
     DBG_CTOR(OFieldDescription,NULL);
 }
@@ -110,6 +122,7 @@ OFieldDescription::OFieldDescription( const OFieldDescription& rDescr ) :
     ,m_eHorJustify(rDescr.m_eHorJustify)
     ,m_bIsAutoIncrement(rDescr.m_bIsAutoIncrement)
     ,m_bIsPrimaryKey(rDescr.m_bIsPrimaryKey)
+    ,m_nType(DataType::VARCHAR)
 {
     DBG_CTOR(OFieldDescription,NULL);
 }
@@ -120,7 +133,42 @@ OFieldDescription::~OFieldDescription()
     DBG_DTOR(OFieldDescription,NULL);
 }
 //------------------------------------------------------------------------------
-
+OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedCol)
+    :m_bIsPrimaryKey(sal_False)
+    ,m_nFormatKey(0)
+    ,m_bIsAutoIncrement(sal_False)
+    ,m_eHorJustify(SVX_HOR_JUSTIFY_STANDARD)
+    ,m_nScale(0)
+    ,m_nPrecision(0)
+    ,m_pType(NULL)
+    ,m_nIsNullable(ColumnValue::NULLABLE)
+    ,m_nType(DataType::VARCHAR)
+{
+    DBG_CTOR(OFieldDescription,NULL);
+    OSL_ENSURE(xAffectedCol.is(),"PropetySet can notbe null!");
+    Reference<XPropertySetInfo> xPropSetInfo = xAffectedCol->getPropertySetInfo();
+    if(xPropSetInfo->hasPropertyByName(PROPERTY_NAME))
+        SetName(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_NAME)));
+    if(xPropSetInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
+        SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
+    if(xPropSetInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE))
+        SetDefaultValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE)));
+    if(xPropSetInfo->hasPropertyByName(PROPERTY_TYPE))
+        SetTypeValue(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_TYPE)));
+    if(xPropSetInfo->hasPropertyByName(PROPERTY_PRECISION))
+        SetPrecision(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_PRECISION)));
+    if(xPropSetInfo->hasPropertyByName(PROPERTY_SCALE))
+        SetScale(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_SCALE)));
+    if(xPropSetInfo->hasPropertyByName(PROPERTY_ISNULLABLE))
+        SetIsNullable(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ISNULLABLE)));
+    if(xPropSetInfo->hasPropertyByName(PROPERTY_FORMATKEY))
+        SetFormatKey(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY)));
+    if(xPropSetInfo->hasPropertyByName(PROPERTY_ALIGN))
+        SetHorJustify((SvxCellHorJustify)::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ALIGN)));
+    if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
+        SetAutoIncrement(::cppu::any2bool(xAffectedCol->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
+}
+// -----------------------------------------------------------------------------
 
 
 

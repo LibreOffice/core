@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-21 13:34:42 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         {
             alterColumns();
         }
-        setModified(sal_False);
+        reSyncRows();
     }
     catch(SQLContext& e)
     {
@@ -1093,7 +1093,8 @@ void OTableController::loadData()
         // Bei Drop darf keine Zeile editierbar sein.
         // Bei Add duerfen nur die leeren Zeilen editierbar sein.
         // Bei Add und Drop koennen alle Zeilen editiert werden.
-        sal_Bool bReadOldRow = xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn();
+        //  sal_Bool bReadOldRow = xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn();
+        sal_Bool bIsAlterAllowed = isAlterAllowed();
         Sequence< ::rtl::OUString> aColumns = xColumns->getElementNames();
         const ::rtl::OUString* pBegin   = aColumns.getConstArray();
         const ::rtl::OUString* pEnd     = pBegin + aColumns.getLength();
@@ -1134,7 +1135,7 @@ void OTableController::loadData()
 
 
             pTabEdRow = new OTableRow();
-            pTabEdRow->SetReadOnly(bReadOldRow);
+            pTabEdRow->SetReadOnly(!bIsAlterAllowed);
             // search for type
             ::std::pair<OTypeInfoMap::iterator, OTypeInfoMap::iterator> aPair = m_aTypeInfo.equal_range(nType);
             OTypeInfoMap::iterator aIter = aPair.first;
@@ -1200,7 +1201,7 @@ void OTableController::loadData()
 
     OSL_ENSURE(aTypeIter != m_aTypeInfo.end(),"We have no type infomation!");
 
-    sal_Bool bReadRow = m_xTable.is() && xMetaData.is() && xMetaData->supportsAlterTableWithAddColumn();
+    sal_Bool bReadRow = !isAddAllowed();
     for(sal_Int32 i=m_vRowList.size(); i<128; i++ )
     {
         pTabEdRow = new OTableRow();
@@ -1277,22 +1278,21 @@ void OTableController::alterColumns()
 
     Reference<XNameAccess> xColumns = xColSup->getColumns();
     OSL_ENSURE(xColumns.is(),"No columns");
-    Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
-    if(!xAlter.is())
-    {
-        OSL_ENSURE(0,"Normally we should never reach this state!");
-        return;
-    }
-    Reference<XDrop> xDrop(xColumns,UNO_QUERY);
-    Reference<XAppend> xAppend(xColumns,UNO_QUERY);
-    Reference<XDataDescriptorFactory> xColumnFactory(xColumns,UNO_QUERY);
+    Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);  // can be null
+
+    sal_Int32 nColumnCount = xColumns->getElementNames().getLength();
+    Reference<XDrop> xDrop(xColumns,UNO_QUERY);         // can be null
+    Reference<XAppend> xAppend(xColumns,UNO_QUERY);     // can be null
+    Reference<XDataDescriptorFactory> xColumnFactory(xColumns,UNO_QUERY); // can be null
 
     sal_Bool bReload = sal_False; // refresh the data
 
+    // contains all columns names which are already handled those which are not in the list will be deleted
     Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData>();
+
     ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
     ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
-    for(;aIter != m_vRowList.end();++aIter)
+    for(sal_Int32 nPos = 0;aIter != m_vRowList.end();++aIter,++nPos)
     {
         OSL_ENSURE(*aIter,"OTableRow is null!");
         OFieldDescription* pField = (*aIter)->GetActFieldDescr();
@@ -1306,7 +1306,7 @@ void OTableController::alterColumns()
             xColumns->getByName(pField->GetName()) >>= xColumn;
             OSL_ENSURE(xColumn.is(),"Column is null!");
 
-            sal_Int32 nType,nPrecision,nScale,nNullable,nFormatKey,nAlignment;
+            sal_Int32 nType,nPrecision,nScale,nNullable,nFormatKey=0,nAlignment=0;
             sal_Bool bAutoIncrement;
             ::rtl::OUString sDescription,sDefaultValue;
 
@@ -1342,6 +1342,7 @@ void OTableController::alterColumns()
                 sal_Bool bNotOk = sal_False;
                 try
                 {
+                    // first try if we can alter the column
                     if(xAlter.is())
                         xAlter->alterColumnByName(pField->GetName(),xNewColumn);
                 }
@@ -1349,11 +1350,14 @@ void OTableController::alterColumns()
                 {
                     bNotOk = sal_True;
                 }
+                // if something went wrong or the can't alter columns
+                // drop and append a new one
                 if((!xAlter.is() || bNotOk) && xDrop.is() && xAppend.is())
                 {
                     xDrop->dropByName(pField->GetName());
                     xAppend->appendByDescriptor(xNewColumn);
                 }
+                // exceptions are catched outside
                 xNewColumn = NULL;
                 xColumns->getByName(pField->GetName()) >>= xColumn;
                 bReload = sal_True;
@@ -1370,14 +1374,15 @@ void OTableController::alterColumns()
                     xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(nAlignment));
             }
         }
-        else if(xColumnFactory.is())
-        {
+        else if(xColumnFactory.is() && xAppend.is())
+        {// column not found by its name so we assume it is new
             // Column is new
             xColumn = xColumnFactory->createDataDescriptor();
             setColumnProperties(xColumn,pField);
             xAppend->appendByDescriptor(xColumn);
             if(xColumns->hasByName(pField->GetName()))
-            {
+            {   // ask for the append by name
+                aColumns[pField->GetName()] = sal_True;
                 xColumns->getByName(pField->GetName()) >>= xColumn;
                 if(xColumn.is())
                 {
@@ -1392,6 +1397,31 @@ void OTableController::alterColumns()
                 OSL_ASSERT(0);
             }
         }
+        else if(xColumnFactory.is() && xAlter.is() && nPos < nColumnCount)
+        { // we can't find the column nor can we append a new one so we alter it by index
+            Reference<XPropertySet> xNewColumn;
+            xNewColumn = xColumnFactory->createDataDescriptor();
+            setColumnProperties(xNewColumn,pField);
+            xAlter->alterColumnByIndex(nPos,xNewColumn);
+            if(xColumns->hasByName(pField->GetName()))
+            {   // ask for the append by name
+                aColumns[pField->GetName()] = sal_True;
+                xColumns->getByName(pField->GetName()) >>= xColumn;
+                if(xColumn.is())
+                {
+                    if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
+                        xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
+                    if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
+                        xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny((sal_Int32)pField->GetHorJustify()));
+                }
+            }
+            else
+            {
+                OSL_ASSERT(0);
+            }
+        }
+        else
+            bReload = sal_True;
     }
 
     Reference<XNameAccess> xKeyColumns  = getKeyColumns();
@@ -1452,10 +1482,12 @@ void OTableController::alterColumns()
         appendKey(xKeySup);
     }
 
+    reSyncRows();
+
     if(bReload)
     {
         loadData();                 // fill the column information form the table
-        getView()->initialize();    // show the windows and fill with our informations
+        static_cast<OTableDesignView*>(getView())->reSync();    // show the windows and fill with our informations
         getUndoMgr()->Clear();      // clear all undo redo things
         setModified(sal_False);     // and we are not modified yet
     }
@@ -1520,8 +1552,9 @@ void OTableController::assignTable()
                 m_xTable = xProp;
                 startTableListening();
 
+                // check if we set the table editable
                 Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
-                m_bEditable = xAlter.is();
+                m_bEditable = isAlterAllowed() || isDropAllowed() || isAddAllowed();
                 if(!m_bEditable)
                 {
                     ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
@@ -1536,7 +1569,58 @@ void OTableController::assignTable()
     }
 }
 // -----------------------------------------------------------------------------
+sal_Bool OTableController::isAddAllowed() const
+{
+    Reference<XColumnsSupplier> xColsSup(m_xTable,UNO_QUERY);
+    sal_Bool bAddAllowed = !m_xTable.is();
+    if(xColsSup.is())
+        bAddAllowed = Reference<XAppend>(xColsSup->getColumns(),UNO_QUERY).is();
 
+    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : NULL;
+    bAddAllowed = bAddAllowed || ( xMetaData.is() && xMetaData->supportsAlterTableWithAddColumn());
+
+    return bAddAllowed;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OTableController::isDropAllowed() const
+{
+    Reference<XColumnsSupplier> xColsSup(m_xTable,UNO_QUERY);
+    sal_Bool bDropAllowed = !m_xTable.is();
+    if(xColsSup.is())
+        bDropAllowed = Reference<XDrop>(xColsSup->getColumns(),UNO_QUERY).is();
+
+    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : NULL;
+    bDropAllowed = bDropAllowed || ( xMetaData.is() && xMetaData->supportsAlterTableWithDropColumn());
+
+    return bDropAllowed;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OTableController::isAlterAllowed() const
+{
+    sal_Bool bAllowed(!m_xTable.is() || Reference<XAlterTable>(m_xTable,UNO_QUERY).is());
+    return bAllowed;
+}
+// -----------------------------------------------------------------------------
+void OTableController::reSyncRows()
+{
+    sal_Bool bAlterAllowed  = isAlterAllowed();
+    sal_Bool bAddAllowed    = isAddAllowed();
+    ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
+    for(;aIter != m_vRowList.end();++aIter)
+    {
+        OSL_ENSURE(*aIter,"OTableRow is null!");
+        OFieldDescription* pField = (*aIter)->GetActFieldDescr();
+        if(pField)
+            (*aIter)->SetReadOnly(!bAlterAllowed);
+        else
+            (*aIter)->SetReadOnly(!bAddAllowed);
+
+    }
+    static_cast<OTableDesignView*>(getView())->reSync();    // show the windows and fill with our informations
+    getUndoMgr()->Clear();      // clear all undo redo things
+    setModified(sal_False);     // and we are not modified yet
+}
+// -----------------------------------------------------------------------------
 
 
 
