@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 07:40:32 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,23 +119,6 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 
-// -------------------------------------------------------------------------
-void WpADOTable::Create()
-{
-    IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
-    HRESULT         hr = -1;
-    _ADOTable* pCommand;
-    hr = CoCreateInstance(ADOS::CLSID_ADOTABLE_25,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          ADOS::IID_ADOTABLE_25,
-                          (void**)&pCommand );
-
-
-    if( !FAILED( hr ) )
-        operator=(pCommand);
-}
 // -------------------------------------------------------------------------
 OAdoTable::OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable)
     : OTable_TYPEDEF(_bCase,::rtl::OUString(),::rtl::OUString())
@@ -362,44 +345,6 @@ void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rV
     OTable_TYPEDEF::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
 // -------------------------------------------------------------------------
-void OAdoTable::fillPropertyValues()
-{
-    if(m_aTable.IsValid())
-    {
-        m_Name  = m_aTable.get_Name();
-        m_Type  = m_aTable.get_Type();
-        {
-            WpADOCatalog aCat(m_aTable.get_ParentCatalog());
-            if(aCat.IsValid())
-                m_CatalogName = aCat.GetObjectOwner(m_aTable.get_Name(),adPermObjTable);
-        }
-        {
-            ADOProperties* pProps = m_aTable.get_Properties();
-            if(pProps)
-            {
-                pProps->AddRef();
-                ADOProperty* pProp = NULL;
-                pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Description")),&pProp);
-                WpADOProperty aProp(pProp);
-                if(pProp)
-                    m_Description = aProp.GetValue();
-                pProps->Release();
-            }
-        }
-    }
-}
-// -------------------------------------------------------------------------
-::rtl::OUString WpADOCatalog::GetObjectOwner(const ::rtl::OUString& _rName, ObjectTypeEnum _eNum)
-{
-    OLEVariant _rVar;
-    _rVar.setNoArg();
-    OLEString aBSTR;
-    OLEString sStr1(_rName);
-    pInterface->GetObjectOwner(sStr1,_eNum,_rVar,&aBSTR);
-    return aBSTR;
-}
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
 void SAL_CALL OAdoTable::acquire() throw(::com::sun::star::uno::RuntimeException)
 {
     OTable_TYPEDEF::acquire();

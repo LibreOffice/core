@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Timestamp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ namespace connectivity
         java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java_util_Date(_rOut) {}
         operator ::com::sun::star::util::Date()
         {
-            return ::com::sun::star::util::Date(getYear(),getMonth(),getDate());
+            return ::com::sun::star::util::Date((sal_uInt16)getYear(),(sal_uInt16)getMonth(),(sal_uInt16)getDate());
         }
     };
 
@@ -117,7 +117,7 @@ namespace connectivity
         java_sql_Time( const ::com::sun::star::util::Time& _rOut );
         operator ::com::sun::star::util::Time()
         {
-            return ::com::sun::star::util::Time(0,getSeconds(),getMinutes(),getHours());
+            return ::com::sun::star::util::Time(0,(sal_uInt16)getSeconds(),(sal_uInt16)getMinutes(),(sal_uInt16)getHours());
         }
     };
 
@@ -139,8 +139,8 @@ namespace connectivity
         java_sql_Timestamp( const ::com::sun::star::util::DateTime& _rOut);
         operator ::com::sun::star::util::DateTime()
         {
-            return ::com::sun::star::util::DateTime(getYear(),getMonth(),getDate(),
-                                                    getHours(),getMinutes(),getSeconds(),getNanos());
+            return ::com::sun::star::util::DateTime((sal_uInt16)getYear(),(sal_uInt16)getMonth(),(sal_uInt16)getDate(),
+                                                    (sal_uInt16)getHours(),(sal_uInt16)getMinutes(),(sal_uInt16)getSeconds(),(sal_uInt16)getNanos());
         }
 
         sal_Int32 getNanos();

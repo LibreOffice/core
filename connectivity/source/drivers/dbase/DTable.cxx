@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:08 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,6 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _CONNECTIVITY_DATECONVERSION_HXX_
-#include "connectivity/DateConversion.hxx"
 #endif
 #ifndef _INTN_HXX //autogen
 #include <tools/intn.hxx>
@@ -609,89 +606,6 @@ sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (R
     return ODbaseTable_BASE::getSomething(rId);
 }
 //------------------------------------------------------------------
-sal_Bool ODbaseTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
-{
-    // ----------------------------------------------------------
-    // Positionierung vorbereiten:
-
-    sal_uInt32  nNumberOfRecords = (sal_uInt32)m_aHeader.db_anz;
-    sal_uInt32 nTempPos = m_nFilePos;
-    m_nFilePos = nCurPos;
-
-    switch(eCursorPosition)
-    {
-        case FILE_NEXT:
-            m_nFilePos++;
-            break;
-        case FILE_PRIOR:
-            if (m_nFilePos > 0)
-                m_nFilePos--;
-            break;
-        case FILE_FIRST:
-            m_nFilePos = 1;
-            break;
-        case FILE_LAST:
-            m_nFilePos = nNumberOfRecords;
-            break;
-        case FILE_RELATIVE:
-            m_nFilePos = (((sal_Int32)m_nFilePos) + nOffset < 0) ? 0L
-                            : (sal_uInt32)(((sal_Int32)m_nFilePos) + nOffset);
-            break;
-        case FILE_ABSOLUTE:
-        case FILE_BOOKMARK:
-            m_nFilePos = (sal_uInt32)nOffset;
-            break;
-    }
-
-    if (m_nFilePos > (sal_Int32)nNumberOfRecords)
-        m_nFilePos = (sal_Int32)nNumberOfRecords + 1;
-
-    if (m_nFilePos == 0 || m_nFilePos == (sal_Int32)nNumberOfRecords + 1)
-        goto Error;
-    else
-    {
-        sal_uInt16 nEntryLen = m_aHeader.db_slng;
-
-        OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
-        sal_Int32 nPos = m_aHeader.db_kopf + (sal_Int32)(m_nFilePos-1) * nEntryLen;
-
-        ULONG nLen = m_pFileStream->Seek(nPos);
-        if (m_pFileStream->GetError() != ERRCODE_NONE)
-            goto Error;
-
-        nLen = m_pFileStream->Read((char*)m_pBuffer, nEntryLen);
-        if (m_pFileStream->GetError() != ERRCODE_NONE)
-            goto Error;
-    }
-    goto End;
-
-Error:
-    switch(eCursorPosition)
-    {
-        case FILE_PRIOR:
-        case FILE_FIRST:
-            m_nFilePos = 0;
-            break;
-        case FILE_LAST:
-        case FILE_NEXT:
-        case FILE_ABSOLUTE:
-        case FILE_RELATIVE:
-            if (nOffset > 0)
-                m_nFilePos = nNumberOfRecords + 1;
-            else if (nOffset < 0)
-                m_nFilePos = 0;
-            break;
-        case FILE_BOOKMARK:
-            m_nFilePos = nTempPos;   // vorherige Position
-    }
-    //  aStatus.Set(SDB_STAT_NO_DATA_FOUND);
-    return sal_False;
-
-End:
-    nCurPos = m_nFilePos;
-    return sal_True;
-}
-//------------------------------------------------------------------
 sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData)
 {
     // Einlesen der Daten
@@ -856,107 +770,6 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
     return sal_True;
 }
 //------------------------------------------------------------------
-BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
-{
-    BOOL bIsText = TRUE;
-    //  SdbConnection* pConnection = GetConnection();
-
-    m_pMemoStream->Seek(nBlockNo * m_aMemoHeader.db_size);
-    switch (m_aMemoHeader.db_typ)
-    {
-        case MemodBaseIII: // dBase III-Memofeld, endet mit Ctrl-Z
-        {
-            const char cEOF = (char) 0x1a;
-            ByteString aBStr;
-            static char aBuf[514];
-            aBuf[512] = 0;          // sonst kann der Zufall uebel mitspielen
-            BOOL bReady = sal_False;
-
-            do
-            {
-                m_pMemoStream->Read(&aBuf,512);
-
-                USHORT i = 0;
-                while (aBuf[i] != cEOF && ++i < 512)
-                    ;
-                bReady = aBuf[i] == cEOF;
-
-                aBuf[i] = 0;
-                aBStr += aBuf;
-
-            } while (!bReady && !m_pMemoStream->IsEof() && aBStr.Len() < STRING_MAXLEN);
-
-            ::rtl::OUString aStr(aBStr.GetBuffer(), aBStr.Len(),getConnection()->getTextEncoding());
-            aVariable = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),sizeof(sal_Unicode)*aStr.getLength());
-
-        } break;
-        case MemoFoxPro:
-        case MemodBaseIV: // dBase IV-Memofeld mit Laengenangabe
-        {
-            char sHeader[4];
-            m_pMemoStream->Read(sHeader,4);
-            // Foxpro stores text and binary data
-            if (m_aMemoHeader.db_typ == MemoFoxPro)
-            {
-                if (((BYTE)sHeader[0]) != 0 || ((BYTE)sHeader[1]) != 0 || ((BYTE)sHeader[2]) != 0)
-                {
-//                  String aText = String(SdbResId(STR_STAT_FILE_INVALID));
-//                  aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
-//                  aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
-//                  aStatus.Set(SDB_STAT_ERROR,
-//                          String::CreateFromAscii("01000"),
-//                          aStatus.CreateErrorMessage(aText),
-//                          0, String() );
-                    return sal_False;
-                }
-
-                bIsText = sHeader[3] != 0;
-            }
-            else if (((BYTE)sHeader[0]) != 0xFF || ((BYTE)sHeader[1]) != 0xFF || ((BYTE)sHeader[2]) != 0x08)
-            {
-//              String aText = String(SdbResId(STR_STAT_FILE_INVALID));
-//              aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
-//              aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
-//              aStatus.Set(SDB_STAT_ERROR,
-//                      String::CreateFromAscii("01000"),
-//                      aStatus.CreateErrorMessage(aText),
-//                      0, String() );
-                return sal_False;
-            }
-
-            ULONG nLength;
-            (*m_pMemoStream) >> nLength;
-
-            if (m_aMemoHeader.db_typ == MemodBaseIV)
-                nLength -= 8;
-
-            //  char cChar;
-            if (nLength < STRING_MAXLEN && bIsText)
-            {
-                ByteString aBStr;
-                aBStr.Expand(USHORT (nLength));
-                m_pMemoStream->Read(aBStr.AllocBuffer((USHORT)nLength),nLength);
-                aBStr.ReleaseBufferAccess();
-                ::rtl::OUString aStr(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
-                aVariable = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),sizeof(sal_Unicode)*aStr.getLength());
-            }
-            else
-            {
-                Sequence<sal_Int8> aText(nLength);
-                sal_Int8* pData = aText.getArray();
-                sal_Char cChar;
-                for (ULONG i = 0; i < nLength; i++)
-                {
-                    m_pMemoStream->Read(&cChar,1);
-                    (*pData++) = cChar;
-                }
-                aVariable = aText;
-                //  return sal_False;
-            }
-        }
-    }
-    return sal_True;
-}
 // -------------------------------------------------------------------------
 void ODbaseTable::FileClose()
 {
@@ -1464,171 +1277,6 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     m_pFileStream->Flush();
     return sal_True;;
 }
-
-//------------------------------------------------------------------
-BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
-{
-    // wird die BlockNr 0 vorgegeben, wird der block ans Ende gehaengt
-    char cChar = 0;
-    BOOL bIsText = TRUE;
-    //  SdbConnection* pConnection = GetConnection();
-
-    ULONG nSize = 0;
-    ULONG nStreamSize;
-    BYTE nHeader[4];
-
-    ByteString aStr;
-        //      ::Sequence<sal_Int8>* pData = NULL;
-//  if (aVariable.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence< sal_Int8 > *)0))
-//  {
-//              pData = (::Sequence<sal_Int8>*)aVariable.get();
-//      nSize = pData->getLength();
-//  }
-//  else
-//  {
-        aStr = ByteString(String(aVariable.getString()), getConnection()->getTextEncoding());
-        nSize = aStr.Len();
-    //  }
-
-    // Anhaengen oder ueberschreiben
-    BOOL bAppend = rBlockNr == 0;
-
-    if (!bAppend)
-    {
-        switch (m_aMemoHeader.db_typ)
-        {
-            case MemodBaseIII: // dBase III-Memofeld, endet mit 2 * Ctrl-Z
-                bAppend = nSize > (512 - 2);
-                break;
-            case MemoFoxPro:
-            case MemodBaseIV: // dBase IV-Memofeld mit Laengenangabe
-            {
-                char sHeader[4];
-                m_pMemoStream->Seek(rBlockNr * m_aMemoHeader.db_size);
-                m_pMemoStream->SeekRel(4L);
-                m_pMemoStream->Read(sHeader,4);
-
-                ULONG nOldSize;
-                if (m_aMemoHeader.db_typ == MemoFoxPro)
-                    nOldSize = ((((unsigned char)sHeader[0]) * 256 +
-                                 (unsigned char)sHeader[1]) * 256 +
-                                 (unsigned char)sHeader[2]) * 256 +
-                                 (unsigned char)sHeader[3];
-                else
-                    nOldSize = ((((unsigned char)sHeader[3]) * 256 +
-                                 (unsigned char)sHeader[2]) * 256 +
-                                 (unsigned char)sHeader[1]) * 256 +
-                                 (unsigned char)sHeader[0]  - 8;
-
-                // passt die neue Laenge in die belegten Bloecke
-                ULONG nUsedBlocks = ((nSize + 8) / m_aMemoHeader.db_size) + (((nSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0),
-                      nOldUsedBlocks = ((nOldSize + 8) / m_aMemoHeader.db_size) + (((nOldSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0);
-                bAppend = nUsedBlocks > nOldUsedBlocks;
-            }
-        }
-    }
-
-    if (bAppend)
-    {
-        ULONG nStreamSize;
-        nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
-        // letzten block auffuellen
-        rBlockNr = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
-
-        m_pMemoStream->SetStreamSize(rBlockNr * m_aMemoHeader.db_size);
-        m_pMemoStream->Seek(STREAM_SEEK_TO_END);
-    }
-    else
-    {
-        m_pMemoStream->Seek(rBlockNr * m_aMemoHeader.db_size);
-    }
-
-    switch (m_aMemoHeader.db_typ)
-    {
-        case MemodBaseIII: // dBase III-Memofeld, endet mit Ctrl-Z
-        {
-            const char cEOF = (char) 0x1a;
-            nSize++;
-
-//          if (pData)
-//          {
-//              m_pMemoStream->Write((const char*) pData->getConstArray(), pData->getLength());
-//          }
-//          else
-//          {
-                m_pMemoStream->Write(aStr.GetBuffer(), aStr.Len());
-            //  }
-
-            (*m_pMemoStream) << cEOF << cEOF;
-        } break;
-        case MemoFoxPro:
-        case MemodBaseIV: // dBase IV-Memofeld mit Laengenangabe
-        {
-            (*m_pMemoStream) << (BYTE)0xFF
-                                         << (BYTE)0xFF
-                                         << (BYTE)0x08;
-
-            UINT32 nWriteSize = nSize;
-            if (m_aMemoHeader.db_typ == MemoFoxPro)
-            {
-                (*m_pMemoStream) << (BYTE) 0x01; // ((pData = NULL) ? 0x01 : 0x00);
-                for (int i = 4; i > 0; nWriteSize >>= 8)
-                    nHeader[--i] = (BYTE) (nWriteSize % 256);
-            }
-            else
-            {
-                (*m_pMemoStream) << (BYTE) 0x00;
-                nWriteSize += 8;
-                for (int i = 0; i < 4; nWriteSize >>= 8)
-                    nHeader[i++] = (BYTE) (nWriteSize % 256);
-            }
-
-            m_pMemoStream->Write(nHeader,4);
-//          if (pData)
-//          {
-//              m_pMemoStream->Write((const char*) pData->getConstArray(), pData->getLength());
-//          }
-//          else
-//          {
-                m_pMemoStream->Write(aStr.GetBuffer(), aStr.Len());
-            //  }
-            m_pMemoStream->Flush();
-        }
-    }
-
-
-    // Schreiben der neuen Blocknummer
-    if (bAppend)
-    {
-        nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
-        m_aMemoHeader.db_next = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
-
-        // Schreiben der neuen Blocknummer
-        m_pMemoStream->Seek(0L);
-        (*m_pMemoStream) << m_aMemoHeader.db_next;
-        m_pMemoStream->Flush();
-    }
-    return sal_True;
-}
-//------------------------------------------------------------------
-void ODbaseTable::AllocBuffer()
-{
-    UINT16 nSize = m_aHeader.db_slng;
-    OSL_ENSURE(nSize > 0, "Size too small");
-
-    if (m_nBufferSize != nSize)
-    {
-        delete m_pBuffer;
-        m_pBuffer = NULL;
-    }
-
-    // Falls noch kein Puffer vorhanden: allozieren:
-    if (m_pBuffer == NULL && nSize)
-    {
-        m_nBufferSize = nSize;
-        m_pBuffer       = new BYTE[m_nBufferSize+1];
-    }
-}
 // -------------------------------------------------------------------------
 Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(const ::rtl::OUString& _rColName)
 {
@@ -1895,18 +1543,6 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
     }
     return sal_True;
 }
-
-
-//------------------------------------------------------------------
-BOOL ODbaseTable::WriteBuffer()
-{
-    OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
-
-    // Auf gewuenschten Record positionieren:
-    long nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
-    m_pFileStream->Seek(nPos);
-    return m_pFileStream->Write((char*) m_pBuffer, m_aHeader.db_slng) > 0;
-}
 // -----------------------------------------------------------------------------
 // XAlterTable
 void SAL_CALL ODbaseTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
@@ -2167,7 +1803,4 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable)
     }
 }
 // -----------------------------------------------------------------------------
-sal_Int32 ODbaseTable::getCurrentLastPos() const
-{
-    return m_aHeader.db_anz;
-}
+

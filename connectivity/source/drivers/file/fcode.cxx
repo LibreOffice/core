@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:31:20 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
-#include <com/sun/star/container/XIndexAccess.hpp>
-#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -94,12 +91,12 @@
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::file;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
+//using namespace ::com::sun::star::uno;
+//using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbcx;
+//using namespace ::com::sun::star::container;
+//using namespace ::com::sun::star::beans;
+//using namespace ::com::sun::star::sdbcx;
 
 TYPEINIT0(OCode);
 TYPEINIT1(OOperand, OCode);
@@ -169,12 +166,6 @@ void OOperandValue::setValue(const ORowSetValue& _rVal)
 {
     m_aValue = _rVal;
 }
-//------------------------------------------------------------------
-OOperandAttr::OOperandAttr(sal_uInt16 _nPos,const Reference< XPropertySet>& _xColumn)
-    : OOperandRow(_nPos,getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
-    , m_xColumn(_xColumn)
-{
-}
 // -------------------------------------------------------------------------
 sal_Bool OOperandAttr::isIndexed() const
 {
@@ -211,30 +202,6 @@ OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
     // der Wert wird erst kurz vor der Auswertung gesetzt
 }
 
-
-//------------------------------------------------------------------
-void OOperandParam::describe(const Reference< XPropertySet>& rColumn, ::vos::ORef<connectivity::OSQLColumns> rParameterColumns)
-{
-    // den alten namen beibehalten
-
-    Reference< XPropertySet> xColumn = (*rParameterColumns)[getRowPos()];
-
-    try
-    {
-        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)));
-        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
-        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
-        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
-        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
-        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));
-        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)));
-    }
-    catch(const Exception&)
-    {
-    }
-
-    m_eDBType = getINT32(rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
-}
 
 //------------------------------------------------------------------
 const ORowSetValue& OOperandValue::getValue() const
@@ -301,8 +268,10 @@ void OBoolOperator::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultBOOL(operate(pLeft, pRight)));
-    if (IS_TYPE(OOperandResult,pLeft)) delete pLeft;
-    if (IS_TYPE(OOperandResult,pRight)) delete pRight;
+    if (IS_TYPE(OOperandResult,pLeft))
+        delete pLeft;
+    if (IS_TYPE(OOperandResult,pRight))
+        delete pRight;
 }
 
 //------------------------------------------------------------------
@@ -327,7 +296,8 @@ void OOp_ISNULL::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultBOOL(operate(pOperand)));
-    if (IS_TYPE(OOperandResult,pOperand)) delete pOperand;
+    if (IS_TYPE(OOperandResult,pOperand))
+        delete pOperand;
 }
 
 //------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-08 13:26:37 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,19 +233,6 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
 }
 
 //------------------------------------------------------------------
-void OSQLAnalyzer::bindParameterRow(OValueRow _pRow)
-{
-    OCodeList& rCodeList    = m_aCompiler.m_aCodeList;
-    for(OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end();++aIter)
-    {
-        OOperandParam* pParam = PTR_CAST(OOperandParam,(*aIter));
-        if (pParam)
-            pParam->bindValue(_pRow);
-    }
-}
-
-
-//------------------------------------------------------------------
 void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
 {
     OCodeList& rCodeList    = m_aCompiler.m_aCodeList;
@@ -305,11 +292,6 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
     m_aCompiler.setParameterColumns(rParameterColumns);
 }
 
-//------------------------------------------------------------------
-void OSQLAnalyzer::clean()
-{
-    m_aCompiler.Clean();
-}
 // -----------------------------------------------------------------------------
 OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,
                                               const Reference< XPropertySet>& _xCol,

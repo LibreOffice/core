@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateConversion.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 14:53:23 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,16 +77,56 @@ namespace connectivity
     class DateConversion
     {
     public:
-        static sal_Int32 toINT32(const ::com::sun::star::util::Date& rVal);
-        static sal_Int32 toINT32(const ::com::sun::star::util::Time& rVal);
-        static sal_Int64 toINT64(const ::com::sun::star::util::DateTime& rVal);
-        static sal_Int32 getMsFromTime(const ::com::sun::star::util::Time& rVal);
-        static double    toDouble(const ::com::sun::star::util::Date& rVal);
-        static double    toDouble(const ::com::sun::star::util::Time& rVal);
-        static double    toDouble(const ::com::sun::star::util::DateTime& rVal);
-        static ::com::sun::star::util::Date          toDate(double dVal,const ::com::sun::star::util::Date& _rSTANDARD_DB_DATE=::com::sun::star::util::Date(01,01,1900));
-        static ::com::sun::star::util::Time          toTime(double dVal);
-        static ::com::sun::star::util::DateTime      toDateTime(double dVal,const ::com::sun::star::util::Date& _rSTANDARD_DB_DATE=::com::sun::star::util::Date(01,01,1900));
+        static sal_Int32 toINT32(const ::com::sun::star::util::Date& rVal)
+        {
+            OSL_ENSURE(0,"Please use DBConversion instead!");
+            return 0;
+        }
+        static sal_Int32 toINT32(const ::com::sun::star::util::Time& rVal)
+        {
+            OSL_ENSURE(0,"Please use DBConversion instead!");
+            return 0;
+        }
+        static sal_Int64 toINT64(const ::com::sun::star::util::DateTime& rVal)
+        {
+            OSL_ENSURE(0,"Please use DBConversion instead!");
+            return 0;
+        }
+        static sal_Int32 getMsFromTime(const ::com::sun::star::util::Time& rVal)
+        {
+            OSL_ENSURE(0,"Please use DBConversion instead!");
+            return 0;
+        }
+        static double    toDouble(const ::com::sun::star::util::Date& rVal)
+        {
+            OSL_ENSURE(0,"Please use DBConversion instead!");
+            return 0;
+        }
+        static double    toDouble(const ::com::sun::star::util::Time& rVal)
+        {
+            OSL_ENSURE(0,"Please use DBConversion instead!");
+            return 0;
+        }
+        static double    toDouble(const ::com::sun::star::util::DateTime& rVal)
+        {
+            OSL_ENSURE(0,"Please use DBConversion instead!");
+            return 0;
+        }
+        static ::com::sun::star::util::Date          toDate(double dVal,const ::com::sun::star::util::Date& _rSTANDARD_DB_DATE=::com::sun::star::util::Date(01,01,1900))
+        {
+            OSL_ENSURE(0,"Please use DBConversion instead!");
+            return ::com::sun::star::util::Date();
+        }
+        static ::com::sun::star::util::Time          toTime(double dVal)
+        {
+            OSL_ENSURE(0,"Please use DBConversion instead!");
+            return ::com::sun::star::util::Time();
+        }
+        static ::com::sun::star::util::DateTime      toDateTime(double dVal,const ::com::sun::star::util::Date& _rSTANDARD_DB_DATE=::com::sun::star::util::Date(01,01,1900))
+        {
+            OSL_ENSURE(0,"Please use DBConversion instead!");
+            return ::com::sun::star::util::DateTime();
+        }
     };
 }
 #endif // _CONNECTIVITY_DATECONVERSION_HXX_

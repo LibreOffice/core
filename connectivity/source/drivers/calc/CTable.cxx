@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:40:01 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,6 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _CONNECTIVITY_DATECONVERSION_HXX_
-#include "connectivity/DateConversion.hxx"
 #endif
 #ifndef _INTN_HXX //autogen
 #include <tools/intn.hxx>

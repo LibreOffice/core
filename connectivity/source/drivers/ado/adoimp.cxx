@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-24 08:21:49 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,49 +114,6 @@ const IID ADOS::IID_ADOUSER_25              =   MYADOID(0x00000619);
 const CLSID ADOS::CLSID_ADOVIEW_25          =   MYADOID(0x00000612);
 const IID ADOS::IID_ADOVIEW_25              =   MYADOID(0x00000613);
 
-void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
-{
-    ADOErrors *pErrors = NULL;
-    _pAdoCon->get_Errors(&pErrors);
-    if(!pErrors)
-        return; // no error found
-
-    pErrors->AddRef( );
-
-    // alle aufgelaufenen Fehler auslesen und ausgeben
-    sal_Int32 nLen;
-    pErrors->get_Count(&nLen);
-    if (nLen)
-    {
-        ::rtl::OUString sError;
-        ::rtl::OUString aSQLState;
-        SQLException aException;
-        for (sal_Int32 i = nLen-1; i>=0; i--)
-        {
-            ADOError *pError = NULL;
-            pErrors->get_Item(OLEVariant(i),&pError);
-            WpADOError aErr(pError);
-            OSL_ENSURE(pError,"No error in collection found! BAD!");
-            if(pError)
-            {
-                if(i==nLen-1)
-                    aException = SQLException(aErr.GetDescription(),_xInterface,aErr.GetSQLState(),aErr.GetNumber(),Any());
-                else
-                {
-                    SQLException aTemp = SQLException(aErr.GetDescription(),
-                        _xInterface,aErr.GetSQLState(),aErr.GetNumber(),makeAny(aException));
-                    aTemp.NextException <<= aException;
-                    aException = aTemp;
-                }
-            }
-        }
-        pErrors->Clear();
-        pErrors->Release();
-        throw aException;
-    }
-    pErrors->Release();
-}
-
 // -------------------------------------------------------------------------
 sal_Int32 ADOS::MapADOType2Jdbc(DataTypeEnum eType)
 {
@@ -240,6 +197,65 @@ DataTypeEnum ADOS::MapJdbc2ADOType(sal_Int32 _nType)
     return adEmpty;
 }
 // -----------------------------------------------------------------------------
+const int JET_ENGINETYPE_UNKNOWN    = 0;
+const int JET_ENGINETYPE_JET10      = 1;
+const int JET_ENGINETYPE_JET11      = 2;
+const int JET_ENGINETYPE_JET20      = 3;
+const int JET_ENGINETYPE_JET3X      = 4;
+const int JET_ENGINETYPE_JET4X      = 5;
+const int JET_ENGINETYPE_DBASE3     = 10;
+const int JET_ENGINETYPE_DBASE4     = 11;
+const int JET_ENGINETYPE_DBASE5     = 12;
+const int JET_ENGINETYPE_EXCEL30    = 20;
+const int JET_ENGINETYPE_EXCEL40    = 21;
+const int JET_ENGINETYPE_EXCEL50    = 22;
+const int JET_ENGINETYPE_EXCEL80    = 23;
+const int JET_ENGINETYPE_EXCEL90    = 24;
+const int JET_ENGINETYPE_EXCHANGE4  = 30;
+const int JET_ENGINETYPE_LOTUSWK1   = 40;
+const int JET_ENGINETYPE_LOTUSWK3   = 41;
+const int JET_ENGINETYPE_LOTUSWK4   = 42;
+const int JET_ENGINETYPE_PARADOX3X  = 50;
+const int JET_ENGINETYPE_PARADOX4X  = 51;
+const int JET_ENGINETYPE_PARADOX5X  = 52;
+const int JET_ENGINETYPE_PARADOX7X  = 53;
+const int JET_ENGINETYPE_TEXT1X     = 60;
+const int JET_ENGINETYPE_HTML1X     = 70;
+
+sal_Bool ADOS::isJetEngine(sal_Int32 _nEngineType)
+{
+    sal_Bool bRet = sal_False;
+    switch(_nEngineType)
+    {
+        case JET_ENGINETYPE_UNKNOWN:
+        case JET_ENGINETYPE_JET10:
+        case JET_ENGINETYPE_JET11:
+        case JET_ENGINETYPE_JET20:
+        case JET_ENGINETYPE_JET3X:
+        case JET_ENGINETYPE_JET4X:
+        case JET_ENGINETYPE_DBASE3:
+        case JET_ENGINETYPE_DBASE4:
+        case JET_ENGINETYPE_DBASE5:
+        case JET_ENGINETYPE_EXCEL30:
+        case JET_ENGINETYPE_EXCEL40:
+        case JET_ENGINETYPE_EXCEL50:
+        case JET_ENGINETYPE_EXCEL80:
+        case JET_ENGINETYPE_EXCEL90:
+        case JET_ENGINETYPE_EXCHANGE4:
+        case JET_ENGINETYPE_LOTUSWK1:
+        case JET_ENGINETYPE_LOTUSWK3:
+        case JET_ENGINETYPE_LOTUSWK4:
+        case JET_ENGINETYPE_PARADOX3X:
+        case JET_ENGINETYPE_PARADOX4X:
+        case JET_ENGINETYPE_PARADOX5X:
+        case JET_ENGINETYPE_PARADOX7X:
+        case JET_ENGINETYPE_TEXT1X:
+        case JET_ENGINETYPE_HTML1X:
+            bRet = sal_True;
+            break;
+    }
+    return bRet;
+}
 
 
 

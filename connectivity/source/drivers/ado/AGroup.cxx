@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroup.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 07:40:32 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,15 +70,6 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifdef DELETE
-#undef DELETE
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
-#include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGEOBJECT_HPP_
-#include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
@@ -247,81 +238,7 @@ void SAL_CALL OAdoGroup::revokePrivileges( const ::rtl::OUString& objName, sal_I
 {
     m_aGroup.SetPermissions(objName,MapObjectType(objType),adAccessDeny,Map2Right(objPrivileges));
 }
-// -------------------------------------------------------------------------
-ObjectTypeEnum OAdoGroup::MapObjectType(sal_Int32 _ObjType)
-{
-    ObjectTypeEnum eNumType= adPermObjTable;
-    switch(_ObjType)
-    {
-        case PrivilegeObject::TABLE:
-            break;
-        case PrivilegeObject::VIEW:
-            eNumType = adPermObjView;
-            break;
-        case PrivilegeObject::COLUMN:
-            eNumType = adPermObjColumn;
-            break;
-    }
-    return eNumType;
-}
-// -------------------------------------------------------------------------
-sal_Int32 OAdoGroup::MapRight(RightsEnum _eNum)
-{
-    sal_Int32 nRight = 0;
-    if(_eNum & adRightRead)
-                nRight |= Privilege::SELECT;
-    if(_eNum & adRightInsert)
-                nRight |= Privilege::INSERT;
-    if(_eNum & adRightUpdate)
-                nRight |= Privilege::UPDATE;
-    if(_eNum & adRightDelete)
-                nRight |= Privilege::DELETE;
-    if(_eNum & adRightReadDesign)
-                nRight |= Privilege::READ;
-    if(_eNum & adRightCreate)
-                nRight |= Privilege::CREATE;
-    if(_eNum & adRightWriteDesign)
-                nRight |= Privilege::ALTER;
-    if(_eNum & adRightReference)
-                nRight |= Privilege::REFERENCE;
-    if(_eNum & adRightDrop)
-                nRight |= Privilege::DROP;
 
-    return nRight;
-}
-// -------------------------------------------------------------------------
-RightsEnum OAdoGroup::Map2Right(sal_Int32 _eNum)
-{
-    sal_Int32 nRight = adRightNone;
-        if(_eNum & Privilege::SELECT)
-        nRight |= adRightRead;
-
-        if(_eNum & Privilege::INSERT)
-        nRight |= adRightInsert;
-
-        if(_eNum & Privilege::UPDATE)
-        nRight |= adRightUpdate;
-
-        if(_eNum & Privilege::DELETE)
-        nRight |= adRightDelete;
-
-        if(_eNum & Privilege::READ)
-        nRight |= adRightReadDesign;
-
-        if(_eNum & Privilege::CREATE)
-        nRight |= adRightCreate;
-
-        if(_eNum & Privilege::ALTER)
-        nRight |= adRightWriteDesign;
-
-        if(_eNum & Privilege::REFERENCE)
-        nRight |= adRightReference;
-
-        if(_eNum & Privilege::DROP)
-        nRight |= adRightDrop;
-
-    return (RightsEnum)nRight;
-}
 // -----------------------------------------------------------------------------
 void SAL_CALL OAdoGroup::acquire() throw(::com::sun::star::uno::RuntimeException)
 {

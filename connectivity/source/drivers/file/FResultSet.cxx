@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:05 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,12 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) t
             break;
     return i;
 }
+// -----------------------------------------------------------------------------
+void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException)
+{
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        ::dbtools::throwInvalidIndexException(*this);
+}
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
@@ -294,8 +300,8 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinarySt
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -306,8 +312,8 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacte
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -319,8 +325,8 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -333,8 +339,8 @@ sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLExceptio
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -347,8 +353,8 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     // it could happen that values are updated as string and then called for as getBytes
@@ -369,8 +375,8 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
 
@@ -384,8 +390,8 @@ double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLExceptio
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -398,8 +404,8 @@ float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException,
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -412,8 +418,8 @@ sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLExceptio
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -441,8 +447,8 @@ sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLExcepti
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
 
     columnIndex = mapColumn(columnIndex);
     return sal_Int64();
@@ -466,8 +472,8 @@ Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -480,8 +486,8 @@ Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(S
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -492,8 +498,8 @@ Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 columnIndex ) throw(S
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -505,8 +511,8 @@ Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) throw(SQL
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -529,8 +535,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -544,8 +550,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -560,8 +566,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
 
     columnIndex = mapColumn(columnIndex);
     return (*m_aRow)[columnIndex];
@@ -575,8 +581,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     return (*m_aRow)[columnIndex];
 }
@@ -928,8 +934,8 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -944,8 +950,8 @@ void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) thr
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -958,8 +964,8 @@ void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -973,8 +979,8 @@ void SAL_CALL OResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) thro
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -987,8 +993,8 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -997,8 +1003,8 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
 {
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     throw RuntimeException();
 }
@@ -1009,8 +1015,8 @@ void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQ
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1024,8 +1030,8 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1038,8 +1044,8 @@ void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUSt
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1052,8 +1058,8 @@ void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sa
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1066,8 +1072,8 @@ void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::s
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1081,8 +1087,8 @@ void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::s
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1096,8 +1102,8 @@ void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::s
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1113,8 +1119,8 @@ void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Refer
     if(!x.is())
         ::dbtools::throwFunctionSequenceException(*this);
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     Sequence<sal_Int8> aSeq;
     x->readSomeBytes(aSeq,length);
@@ -1130,8 +1136,8 @@ void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Re
     if(!x.is())
         ::dbtools::throwFunctionSequenceException(*this);
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     Sequence<sal_Int8> aSeq;
     x->readSomeBytes(aSeq,length);
@@ -1152,8 +1158,8 @@ void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) th
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1166,8 +1172,8 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     columnIndex = mapColumn(columnIndex);
     OSL_ENSURE(0,"OResultSet::updateNumericObject: NYI");
 }
@@ -1700,266 +1706,6 @@ sal_Bool OResultSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
     return bDataFound;
 }
 // -------------------------------------------------------------------------
-OFILEKeyValue* OResultSet::GetOrderbyKeyValue(OValueRow _rRow)
-{
-    UINT32 nBookmarkValue = Abs((sal_Int32)(*_rRow)[0]);
-
-    OFILEKeyValue* pKeyValue = new OFILEKeyValue((UINT32)nBookmarkValue);
-    for (int i = 0; i < sizeof m_nOrderbyColumnNumber / sizeof (* m_nOrderbyColumnNumber); i++)
-    {
-        if (m_nOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND) break;
-
-        ORowSetValue xKey = (*_rRow)[m_nOrderbyColumnNumber[i]];
-        switch (xKey.getTypeKind())
-        {
-            case ::com::sun::star::sdbc::DataType::VARCHAR:
-            case ::com::sun::star::sdbc::DataType::CHAR:
-                pKeyValue->SetKey(i,(rtl::OUString)xKey);
-                break;
-            default:
-                pKeyValue->SetKey(i,(double)xKey);
-                break;
-        }
-    }
-    return pKeyValue;
-}
-OFILESortIndex * OFILESortIndex::pCurrentIndex;
-CharSet OFILESortIndex::eCurrentCharSet;
-//------------------------------------------------------------------
-OFILESortIndex::OFILESortIndex(const OKeyType eKeyType2[],  // Genau 3 Eintraege!
-                           const BOOL bAscending2[],        // Genau 3 Eintraege!
-                           INT32 nMaxNumberOfRows, rtl_TextEncoding eSet)   // Obere Schranke fuer die Anzahl indizierbarer Zeilen
-    : nMaxCount(nMaxNumberOfRows),
-      nCount(0),
-      bFrozen(FALSE), eCharSet(eSet)
-{
-    for (int j = 0; j < SQL_ORDERBYKEYS; j++)
-    {
-        eKeyType[j] = eKeyType2[j];
-        bAscending[j] = bAscending2[j];
-    }
-
-#if defined MAX_KEYSET_SIZE
-    // Zur Sicherheit Maximalgroesse nochmal pruefen:
-    if (nMaxCount > MAX_KEYSET_SIZE)
-    {
-        DBG_WARNING("OFILESortIndex::OFILESortIndex: nMaxNumberOfRows zur Zeit auf <16K beschraenkt!");
-        nMaxCount = MAX_KEYSET_SIZE;
-    }
-#endif
-    if (nMaxCount <= 0)
-        nMaxCount = USHORT(-1);
-
-    ppKeyValueArray = new OFILEKeyValuePtr[nMaxCount];
-
-    for (INT32 i = 0; i < nMaxCount; i++)
-        ppKeyValueArray[i] = NULL;
-}
-
-//------------------------------------------------------------------
-OFILESortIndex::~OFILESortIndex()
-{
-    __DELETE(nMaxCount) ppKeyValueArray;
-}
-
-
-//------------------------------------------------------------------
-BOOL OFILESortIndex::AddKeyValue(OFILEKeyValue * pKeyValue)
-{
-    if (nCount < nMaxCount)
-    {
-        if (bFrozen)                            // wenn der Index schon eingefroren
-                                                // dann wird der Key einfach ans Ende gehaengt
-        {
-            OSL_ENSURE(pKeyValue != NULL,"OFILESortIndex::Freeze: pKeyValue == NULL");
-            INT32 nValue = pKeyValue->GetValue();       // Wert holen ...
-
-            // Strings in KeyValue freigeben!
-            for (int j = 0; j < SQL_ORDERBYKEYS; j++)
-            {
-                if (eKeyType[j] == SQL_ORDERBYKEY_STRING)
-                    delete pKeyValue->GetKeyString(j);
-            }
-            delete pKeyValue;
-            ppKeyValueArray[nCount++] = (OFILEKeyValuePtr) nValue;
-        }
-        else
-            ppKeyValueArray[nCount++] = pKeyValue;
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-
-
-//------------------------------------------------------------------
-void OFILESortIndex::Freeze()
-{
-    OSL_ENSURE(! bFrozen,"OFILESortIndex::Freeze: already frozen!");
-
-    // Kritischer Bereich: Hinterlegung von this in statischer Variable.
-    // Zugriff auf diese Variable von der OFILECompare-Funktion aus.
-    // Da dies NUR waehrend der Ausfuehrung der qsort-Funktion stattfindet,
-    // ist dies aber unkritisch: unter Windows 3.x ist diese Ausfuehrung
-    // UNUNTERBRECHBAR; unter NT, OS/2, Unix, ... hat jede DLL ihr
-    // eigenes Datensegment.
-    pCurrentIndex = this;
-    eCurrentCharSet = eCharSet;
-
-    // Sortierung:
-    if (eKeyType[0] != SQL_ORDERBYKEY_NONE)
-        // Sortierung, wenn mindestens nach dem ersten Key sortiert werden soll:
-        qsort(ppKeyValueArray,nCount,sizeof(void *),&OFILEKeyCompare);
-
-
-    // Ende des kritischen Bereiches
-    pCurrentIndex = NULL;
-
-    // Wert auslesen, KeyValue loeschen und in den void * den Value
-    // reinschreiben (uebler Trick mit Typecast!)
-    for (INT32 i = 0; i < nCount; i++)
-    {
-        OFILEKeyValuePtr pKeyValue = ppKeyValueArray[i];
-
-        OSL_ENSURE(pKeyValue != NULL,"OFILESortIndex::Freeze: pKeyValue == NULL");
-        INT32 nValue = pKeyValue->GetValue();       // Wert holen ...
-
-        // Strings in KeyValue freigeben!
-        for (int j = 0; j < SQL_ORDERBYKEYS; j++)
-        {
-            if (eKeyType[j] == SQL_ORDERBYKEY_STRING)
-                delete pKeyValue->GetKeyString(j);
-        }
-        delete pKeyValue;
-        ppKeyValueArray[i] = (OFILEKeyValuePtr) nValue;
-    }
-
-    bFrozen = TRUE;
-}
-
-//------------------------------------------------------------------
-INT32 OFILESortIndex::GetValue(INT32 nPos) const
-{
-    OSL_ENSURE(nPos > 0,"OFILESortIndex::GetValue: nPos == 0");
-    OSL_ENSURE(nPos <= nCount,"OFILESortIndex::GetValue: Zugriff ausserhalb der Array-Grenzen");
-
-//  OSL_ENSURE(ppKeyValueArray[nPos-1] != NULL,"OFILESortIndex::GetValue: interner Fehler: kein KeyValue an dieser Stelle");
-//  return ppKeyValueArray[nPos-1]->GetValue();
-
-    if (!bFrozen)
-    {
-        if (eKeyType[0] == SQL_ORDERBYKEY_NONE)  // wenn keine Sortierung vorliegt
-                                                 // darf auf die Values schon vorher zugegriffen werden
-            return ppKeyValueArray[nPos-1]->GetValue();
-        else
-        {
-            OSL_ASSERT("OFILESortIndex::GetValue: Invalid use of index!");
-            return 0;
-        }
-    }
-    else
-        return (INT32) ppKeyValueArray[nPos-1]; // Trick: nach Freeze sind hier nur noch Values, keine KeyValue-Strukturen mehr!
-
-}
-
-//------------------------------------------------------------------
-OKeySet* OFILESortIndex::CreateKeySet()
-{
-
-    OSL_ENSURE(! bFrozen,"OFILESortIndex::Freeze: already frozen!");
-
-    // Kritischer Bereich: Hinterlegung von this in statischer Variable.
-    // Zugriff auf diese Variable von der OFILECompare-Funktion aus.
-    // Da dies NUR waehrend der Ausfuehrung der qsort-Funktion stattfindet,
-    // ist dies aber unkritisch: unter Windows 3.x ist diese Ausfuehrung
-    // UNUNTERBRECHBAR; unter NT, OS/2, Unix, ... hat jede DLL ihr
-    // eigenes Datensegment.
-    pCurrentIndex = this;
-    eCurrentCharSet = eCharSet;
-
-    // Sortierung:
-    if (eKeyType[0] != SQL_ORDERBYKEY_NONE)
-        // Sortierung, wenn mindestens nach dem ersten Key sortiert werden soll:
-        qsort(ppKeyValueArray,nCount,sizeof(void *),&OFILEKeyCompare);
-
-
-    // Ende des kritischen Bereiches
-    pCurrentIndex = NULL;
-
-
-    OKeySet* pKeySet = new OKeySet(nCount);
-    OKeySet::iterator aIter = pKeySet->begin();
-    for (INT32 i = 0; i < nCount; i++,++aIter)
-    {
-        OFILEKeyValuePtr pKeyValue = ppKeyValueArray[i];
-
-        OSL_ENSURE(pKeyValue != NULL,"OFILESortIndex::Freeze: pKeyValue == NULL");
-        (*aIter) = pKeyValue->GetValue();       // Wert holen ...
-
-        // Strings in KeyValue freigeben!
-        for (int j = 0; j < SQL_ORDERBYKEYS; j++)
-        {
-            if (eKeyType[j] == SQL_ORDERBYKEY_STRING)
-                delete pKeyValue->GetKeyString(j);
-        }
-        delete pKeyValue;
-    }
-    bFrozen = TRUE;
-    pKeySet->setFrozen();
-    return pKeySet;
-}
-
-//------------------------------------------------------------------
-int
-#if defined(WIN) || defined(WNT)
-__cdecl
-#endif
-#if defined(ICC) && defined(OS2)
-_Optlink
-#endif
-connectivity::file::OFILEKeyCompare(const void * elem1, const void * elem2)
-{
-    const OFILESortIndex * pIndex = OFILESortIndex::pCurrentIndex;
-    const OFILEKeyValue * pKeyValue1 = (OFILEKeyValue *) * (OFILEKeyValue **) elem1;
-    const OFILEKeyValue * pKeyValue2 = (OFILEKeyValue *) * (OFILEKeyValue **) elem2;
-
-    // Ueber die (max.) drei ORDER BY-Columns iterieren. Abbruch des Vergleiches, wenn Ungleichheit erkannt
-    // oder alle Columns gleich.
-    for (UINT16 i = 0; i < SQL_ORDERBYKEYS && pIndex->eKeyType[i] != SQL_ORDERBYKEY_NONE; i++)
-    {
-        const int nGreater = (pIndex->bAscending[i]) ? 1 : -1;
-        const int nLess = - nGreater;
-
-        // Vergleich (je nach Datentyp):
-        switch (pIndex->eKeyType[i])
-        {
-            case SQL_ORDERBYKEY_STRING:
-            {
-                INT32 nRes = pKeyValue1->GetKeyString(i)->compareTo(*pKeyValue2->GetKeyString(i));
-                if (nRes < 0)
-                    return nLess;
-                else if (nRes > 0)
-                    return nGreater;
-            }
-            break;
-            case SQL_ORDERBYKEY_DOUBLE:
-            {
-                double d1 = pKeyValue1->GetKeyDouble(i);
-                double d2 = pKeyValue2->GetKeyDouble(i);
-
-                if (d1 < d2)
-                    return nLess;
-                else if (d1 > d2)
-                    return nGreater;
-            }
-            break;
-        }
-    }
-
-    // Wenn wir bis hierher gekommen sind, waren alle Werte gleich:
-    return 0;
-}
-//------------------------------------------------------------------
 BOOL OResultSet::OpenImpl()
 {
     m_pSQLAnalyzer = createAnalyzer();
@@ -2916,36 +2662,6 @@ void OResultSet::describeParameter()
 //          }
 //      }
     }
-}
-//------------------------------------------------------------------
-void OResultSet::scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes)
-{
-    DBG_ASSERT(pParseNode != NULL,"OResultSet: interner Fehler: ungueltiger ParseNode");
-
-    // Parameter Name-Regel gefunden?
-    if (SQL_ISRULE(pParseNode,parameter))
-    {
-        DBG_ASSERT(pParseNode->count() >= 1,"OResultSet: Parse Tree fehlerhaft");
-        DBG_ASSERT(pParseNode->getChild(0)->getNodeType() == SQL_NODE_PUNCTUATION,"OResultSet: Parse Tree fehlerhaft");
-
-        _rParaNodes.push_back(pParseNode);
-        // Weiterer Abstieg nicht erforderlich
-        return;
-    }
-
-    // Weiter absteigen im Parse Tree
-    for (UINT32 i = 0; i < pParseNode->count(); i++)
-        scanParameter(pParseNode->getChild(i),_rParaNodes);
-}
-// -----------------------------------------------------------------------------
-sal_Bool OResultSet::isCount() const
-{
-    return (m_pParseTree &&
-            m_pParseTree->count() > 2 &&
-            SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist) &&
-            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0),derived_column) &&
-            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0)->getChild(0),general_set_fct)
-            );
 }
 // -----------------------------------------------------------------------------
 void OResultSet::setBoundedColumns(const OValueRow& _rRow,

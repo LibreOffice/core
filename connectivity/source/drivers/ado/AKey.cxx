@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKey.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 07:40:32 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,6 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
-#include <com/sun/star/sdbc/KeyRule.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
-#include <com/sun/star/sdbcx/KeyType.hpp>
-#endif
 #ifndef _CONNECTIVITY_ADO_COLUMNS_HXX_
 #include "ado/AColumns.hxx"
 #endif
@@ -94,23 +88,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 
-// -------------------------------------------------------------------------
-void WpADOKey::Create()
-{
-    IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
-    HRESULT         hr = -1;
-    _ADOKey* pCommand;
-    hr = CoCreateInstance(ADOS::CLSID_ADOKEY_25,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          ADOS::IID_ADOKEY_25,
-                          (void**)&pCommand );
-
-
-    if( !FAILED( hr ) )
-        operator=(pCommand);
-}
 // -------------------------------------------------------------------------
 OAdoKey::OAdoKey(sal_Bool _bCase,OConnection* _pConnection, ADOKey* _pKey)
     : OKey_ADO(_bCase)
@@ -232,96 +209,6 @@ void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
     OKey_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
 // -------------------------------------------------------------------------
-void OAdoKey::fillPropertyValues()
-{
-    if(m_aKey.IsValid())
-    {
-        m_Type              = MapKeyRule(m_aKey.get_Type());
-        m_Name              = m_aKey.get_Name();
-        m_ReferencedTable   = m_aKey.get_RelatedTable();
-        m_UpdateRule        = MapRule(m_aKey.get_UpdateRule());
-        m_DeleteRule        = MapRule(m_aKey.get_DeleteRule());
-    }
-}
-// -------------------------------------------------------------------------
-sal_Int32 OAdoKey::MapRule(const RuleEnum& _eNum) const
-{
-        sal_Int32 eNum = KeyRule::NO_ACTION;
-    switch(_eNum)
-    {
-        case adRICascade:
-            eNum = KeyRule::CASCADE;
-            break;
-        case adRISetNull:
-            eNum = KeyRule::SET_NULL;
-            break;
-        case adRINone:
-            eNum = KeyRule::NO_ACTION;
-            break;
-        case adRISetDefault:
-            eNum = KeyRule::SET_DEFAULT;
-            break;
-    }
-    return eNum;
-}
-// -------------------------------------------------------------------------
-RuleEnum OAdoKey::Map2Rule(const sal_Int32& _eNum) const
-{
-    RuleEnum eNum = adRINone;
-    switch(_eNum)
-    {
-        case KeyRule::CASCADE:
-            eNum = adRICascade;
-            break;
-        case KeyRule::SET_NULL:
-            eNum = adRISetNull;
-            break;
-        case KeyRule::NO_ACTION:
-            eNum = adRINone;
-            break;
-        case KeyRule::SET_DEFAULT:
-            eNum = adRISetDefault;
-            break;
-    }
-    return eNum;
-}
-// -------------------------------------------------------------------------
-sal_Int32 OAdoKey::MapKeyRule(const KeyTypeEnum& _eNum) const
-{
-    sal_Int32 nKeyType = KeyType::PRIMARY;
-    switch(_eNum)
-    {
-        case adKeyPrimary:
-            nKeyType = KeyType::PRIMARY;
-            break;
-        case adKeyForeign:
-            nKeyType = KeyType::FOREIGN;
-            break;
-        case adKeyUnique:
-            nKeyType = KeyType::UNIQUE;
-            break;
-    }
-    return nKeyType;
-}
-// -------------------------------------------------------------------------
-KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum) const
-{
-    KeyTypeEnum eNum;
-    switch(_eNum)
-    {
-        case KeyType::PRIMARY:
-            eNum = adKeyPrimary;
-            break;
-        case KeyType::FOREIGN:
-            eNum = adKeyForeign;
-            break;
-        case KeyType::UNIQUE:
-            eNum = adKeyUnique;
-            break;
-    }
-    return eNum;
-}
-// -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 void SAL_CALL OAdoKey::acquire() throw(::com::sun::star::uno::RuntimeException)
 {

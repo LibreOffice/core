@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:34:03 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ OCollection::OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::M
                      ,m_rMutex(_rMutex)
                      ,m_aContainerListeners(_rMutex)
                      ,m_aRefreshListeners(_rMutex)
-                     ,m_aNameMap(_bCase)
+                     ,m_aNameMap(_bCase ? true : false)
 {
     for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
         m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNamed >())));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:07 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,65 +99,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 
-const int JET_ENGINETYPE_UNKNOWN    = 0;
-const int JET_ENGINETYPE_JET10      = 1;
-const int JET_ENGINETYPE_JET11      = 2;
-const int JET_ENGINETYPE_JET20      = 3;
-const int JET_ENGINETYPE_JET3X      = 4;
-const int JET_ENGINETYPE_JET4X      = 5;
-const int JET_ENGINETYPE_DBASE3     = 10;
-const int JET_ENGINETYPE_DBASE4     = 11;
-const int JET_ENGINETYPE_DBASE5     = 12;
-const int JET_ENGINETYPE_EXCEL30    = 20;
-const int JET_ENGINETYPE_EXCEL40    = 21;
-const int JET_ENGINETYPE_EXCEL50    = 22;
-const int JET_ENGINETYPE_EXCEL80    = 23;
-const int JET_ENGINETYPE_EXCEL90    = 24;
-const int JET_ENGINETYPE_EXCHANGE4  = 30;
-const int JET_ENGINETYPE_LOTUSWK1   = 40;
-const int JET_ENGINETYPE_LOTUSWK3   = 41;
-const int JET_ENGINETYPE_LOTUSWK4   = 42;
-const int JET_ENGINETYPE_PARADOX3X  = 50;
-const int JET_ENGINETYPE_PARADOX4X  = 51;
-const int JET_ENGINETYPE_PARADOX5X  = 52;
-const int JET_ENGINETYPE_PARADOX7X  = 53;
-const int JET_ENGINETYPE_TEXT1X     = 60;
-const int JET_ENGINETYPE_HTML1X     = 70;
-
-sal_Bool isJetEngine(sal_Int32 _nEngineType)
-{
-    sal_Bool bRet = sal_False;
-    switch(_nEngineType)
-    {
-        case JET_ENGINETYPE_UNKNOWN:
-        case JET_ENGINETYPE_JET10:
-        case JET_ENGINETYPE_JET11:
-        case JET_ENGINETYPE_JET20:
-        case JET_ENGINETYPE_JET3X:
-        case JET_ENGINETYPE_JET4X:
-        case JET_ENGINETYPE_DBASE3:
-        case JET_ENGINETYPE_DBASE4:
-        case JET_ENGINETYPE_DBASE5:
-        case JET_ENGINETYPE_EXCEL30:
-        case JET_ENGINETYPE_EXCEL40:
-        case JET_ENGINETYPE_EXCEL50:
-        case JET_ENGINETYPE_EXCEL80:
-        case JET_ENGINETYPE_EXCEL90:
-        case JET_ENGINETYPE_EXCHANGE4:
-        case JET_ENGINETYPE_LOTUSWK1:
-        case JET_ENGINETYPE_LOTUSWK3:
-        case JET_ENGINETYPE_LOTUSWK4:
-        case JET_ENGINETYPE_PARADOX3X:
-        case JET_ENGINETYPE_PARADOX4X:
-        case JET_ENGINETYPE_PARADOX5X:
-        case JET_ENGINETYPE_PARADOX7X:
-        case JET_ENGINETYPE_TEXT1X:
-        case JET_ENGINETYPE_HTML1X:
-            bRet = sal_True;
-            break;
-    }
-    return bRet;
-}
 //  using namespace connectivity;
 
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
@@ -167,77 +108,7 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
 {
 }
 // -------------------------------------------------------------------------
-void ODatabaseMetaData::fillLiterals() throw(SQLException, RuntimeException)
-{
-    ADORecordset *pRecordset = NULL;
-    OLEVariant  vtEmpty;
-    vtEmpty.setNoArg();
-    m_pADOConnection->OpenSchema(adSchemaDBInfoLiterals,vtEmpty,vtEmpty,&pRecordset);
-
-    ADOS::ThrowException(*m_pADOConnection,*this);
-
-    OSL_ENSURE(pRecordset,"getMaxSize no resultset!");
-    WpADORecordset aRecordset(pRecordset);
-
-    aRecordset.MoveFirst();
-    OLEVariant  aValue;
-    sal_Int32 nRet = 0;
-    LiteralInfo aInfo;
-    while(!aRecordset.IsAtEOF())
-    {
-        WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
-        WpADOField aField(aFields.GetItem(1));
-        aInfo.pwszLiteralValue = aField.get_Value();
-        aField = aFields.GetItem(5);
-        aInfo.fSupported = aField.get_Value();
-        aField = aFields.GetItem(6);
-        aInfo.cchMaxLen = aField.get_Value().getUInt32();
-
-        aField = aFields.GetItem(4);
-        sal_uInt32 nId = aField.get_Value().getUInt32();
-        m_aLiteralInfo[nId] = aInfo;
-
-        aRecordset.MoveNext();
-    }
-    aRecordset.Close();
-}
-// -------------------------------------------------------------------------
-sal_Int32 ODatabaseMetaData::getMaxSize(sal_uInt32 _nId) throw(SQLException, RuntimeException)
-{
-    if(!m_aLiteralInfo.size())
-        fillLiterals();
-
-    sal_Int32 nSize = 0;
-    ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
-    if(aIter != m_aLiteralInfo.end() && (*aIter).second.fSupported)
-        nSize = ((*aIter).second.cchMaxLen == (-1)) ? 0 : (*aIter).second.cchMaxLen;
-    return nSize;
-}
-// -------------------------------------------------------------------------
-sal_Bool ODatabaseMetaData::isCapable(sal_uInt32 _nId) throw(SQLException, RuntimeException)
-{
-    if(!m_aLiteralInfo.size())
-        fillLiterals();
-    sal_Bool bSupported = sal_False;
-    ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
-    if(aIter != m_aLiteralInfo.end())
-        bSupported = (*aIter).second.fSupported;
-    return bSupported;
-}
-
-// -------------------------------------------------------------------------
-::rtl::OUString ODatabaseMetaData::getLiteral(sal_uInt32 _nId)  throw(SQLException, RuntimeException)
-{
-    if(!m_aLiteralInfo.size())
-        fillLiterals();
-    ::rtl::OUString sStr;
-    ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
-    if(aIter != m_aLiteralInfo.end() && (*aIter).second.fSupported)
-        sStr = (*aIter).second.pwszLiteralValue;
-    return sStr;
-}
-// -------------------------------------------------------------------------
-sal_Int32 ODatabaseMetaData::getInt32Property(const ::rtl::OUString& _aProperty) throw(SQLException, RuntimeException)
+sal_Int32 ODatabaseMetaData::getInt32Property(const ::rtl::OUString& _aProperty)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     WpOLEAppendCollection<ADOProperties, ADOProperty, WpADOProperty> aProps(m_pADOConnection->get_Properties());
     //  ADOS::ThrowException(*m_pADOConnection,*this);
@@ -250,7 +121,7 @@ sal_Int32 ODatabaseMetaData::getInt32Property(const ::rtl::OUString& _aProperty)
 }
 
 // -------------------------------------------------------------------------
-sal_Bool ODatabaseMetaData::getBoolProperty(const ::rtl::OUString& _aProperty) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::getBoolProperty(const ::rtl::OUString& _aProperty)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     WpOLEAppendCollection<ADOProperties, ADOProperty, WpADOProperty> aProps(m_pADOConnection->get_Properties());
     ADOS::ThrowException(*m_pADOConnection,*this);
@@ -259,7 +130,7 @@ sal_Bool ODatabaseMetaData::getBoolProperty(const ::rtl::OUString& _aProperty) t
     return (!aVar.isNull() && !aVar.isEmpty() ? aVar.getBool() : sal_False);
 }
 // -------------------------------------------------------------------------
-::rtl::OUString ODatabaseMetaData::getStringProperty(const ::rtl::OUString& _aProperty) throw(SQLException, RuntimeException)
+::rtl::OUString ODatabaseMetaData::getStringProperty(const ::rtl::OUString& _aProperty)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     WpOLEAppendCollection<ADOProperties, ADOProperty, WpADOProperty> aProps(m_pADOConnection->get_Properties());
     ADOS::ThrowException(*m_pADOConnection,*this);
@@ -272,36 +143,13 @@ sal_Bool ODatabaseMetaData::getBoolProperty(const ::rtl::OUString& _aProperty) t
 
     return aValue;
 }
-
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
 {
-    HRESULT hr = S_OK;
-    // Create elements used in the array
-    OLEVariant varCriteria[2];
-    const int nCrit = sizeof varCriteria / sizeof varCriteria[0];
-    // Create SafeArray Bounds and initialize the array
-    SAFEARRAYBOUND rgsabound[1];
-    rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = nCrit;
-    SAFEARRAY *psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
-    sal_Int32 nPos = 0;
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
-
-    // Initialize and fill the SafeArray
-    OLEVariant vsa;
-    vsa.setArray(psa,VT_VARIANT);
-
-    OLEVariant aEmpty;
-    aEmpty.setNoArg();
-
-    ADORecordset *pRec=NULL;
-    m_pADOConnection->OpenSchema(adSchemaProviderTypes,vsa,aEmpty,&pRec);
+    ADORecordset *pRecordset = m_pADOConnection->getTypeInfo();
     //  ADOS::ThrowException(*m_pADOConnection,*this);
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRec);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setTypeInfoMap();
     Reference< XResultSet > xRef = pResult;
     return xRef;
@@ -351,41 +199,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
     const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    // Create elements used in the array
-    HRESULT hr = S_OK;
-    SAFEARRAYBOUND rgsabound[1];
-    SAFEARRAY *psa = NULL;
-    OLEVariant varCriteria[4];
-
-    // Create SafeArray Bounds and initialize the array
-    rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
-    psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
-    sal_Int32 nPos=0;
-    if(catalog.hasValue())
-        varCriteria[nPos].setString(getString(catalog));
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    if(schema.toChar() != '%')
-        varCriteria[nPos].setString(schema);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-
-    varCriteria[nPos].setString(table);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-    varCriteria[nPos].setString(columnNamePattern);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// COLUMN_NAME
-
-    OLEVariant  vtEmpty;
-    vtEmpty.setNoArg();
-
-    // Initialize and fill the SafeArray
-    OLEVariant vsa;
-    vsa.setArray(psa,VT_VARIANT);
-
-    ADORecordset *pRecordset = NULL;
-    m_pADOConnection->OpenSchema(adSchemaColumnPrivileges,vsa,vtEmpty,&pRecordset);
+    ADORecordset *pRecordset = m_pADOConnection->getColumnPrivileges(catalog,schema,table,columnNamePattern);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
     Reference< XResultSet > xRef = NULL;
@@ -400,42 +214,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern,
     const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    // Create elements used in the array
-    HRESULT hr = S_OK;
-    SAFEARRAYBOUND rgsabound[1];
-    SAFEARRAY *psa = NULL;
-    OLEVariant varCriteria[4];
-
-    // Create SafeArray Bounds and initialize the array
-    rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
-    psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
-    sal_Int32 nPos=0;
-    if(catalog.hasValue())
-        varCriteria[nPos].setString(getString(catalog));
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    if(schemaPattern.toChar() != '%')
-        varCriteria[nPos].setString(schemaPattern);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-
-    if(tableNamePattern.toChar() != '%')
-        varCriteria[nPos].setString(tableNamePattern);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-    varCriteria[nPos].setString(columnNamePattern);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// COLUMN_NAME
-
-    OLEVariant  vtEmpty;
-    vtEmpty.setNoArg();
-
-    // Initialize and fill the SafeArray
-    OLEVariant vsa;
-    vsa.setArray(psa,VT_VARIANT);
-
-    ADORecordset *pRecordset = NULL;
-    m_pADOConnection->OpenSchema(adSchemaColumns,vsa,vtEmpty,&pRecordset);
+    ADORecordset *pRecordset = m_pADOConnection->getColumns(catalog,schemaPattern,tableNamePattern,columnNamePattern);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
     Reference< XResultSet > xRef = NULL;
@@ -451,52 +230,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     const Any& catalog, const ::rtl::OUString& schemaPattern,
     const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
 {
-    // Create elements used in the array
-    HRESULT hr = S_OK;
-    SAFEARRAYBOUND rgsabound[1];
-    SAFEARRAY *psa = NULL;
-    OLEVariant varCriteria[4];
-
-    // Create SafeArray Bounds and initialize the array
-    rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
-    psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
-    sal_Int32 nPos=0;
-    if(catalog.hasValue())
-        varCriteria[nPos].setString(getString(catalog));
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    if(schemaPattern.toChar() != '%')
-        varCriteria[nPos].setString(schemaPattern);
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-    if(tableNamePattern.toChar() != '%')
-        varCriteria[nPos].setString(tableNamePattern);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-    ::rtl::OUString aTypes,aComma = ::rtl::OUString::createFromAscii(",");
-    const ::rtl::OUString* pBegin = types.getConstArray();
-    const ::rtl::OUString* pEnd = pBegin + types.getLength();
-    for(;pBegin != pEnd;++pBegin)
-        aTypes = aTypes + *pBegin + aComma;
-
-    if(aTypes.getLength())
-        varCriteria[nPos].setString(aTypes);
-    //  else
-        //  varCriteria[nPos].setString(::rtl::OUString::createFromAscii("TABLE"));
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_TYPE
-
-    OLEVariant  vtEmpty;
-    vtEmpty.setNoArg();
-
-    // Initialize and fill the SafeArray
-    OLEVariant vsa;
-    vsa.setArray(psa,VT_VARIANT);
-
-    ADORecordset *pRecordset = NULL;
-    m_pADOConnection->OpenSchema(adSchemaTables,vsa,vtEmpty,&pRecordset);
+    ADORecordset *pRecordset = m_pADOConnection->getTables(catalog,schemaPattern,tableNamePattern,types);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
     Reference< XResultSet > xRef = NULL;
@@ -512,43 +246,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     const Any& catalog, const ::rtl::OUString& schemaPattern,
     const ::rtl::OUString& procedureNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    // Create elements used in the array
-    HRESULT hr = S_OK;
-    SAFEARRAYBOUND rgsabound[1];
-    SAFEARRAY *psa = NULL;
-    OLEVariant varCriteria[4];
-
-    // Create SafeArray Bounds and initialize the array
-    rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
-    psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
-    sal_Int32 nPos=0;
-    if(catalog.hasValue())
-        varCriteria[nPos].setString(getString(catalog));
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    if(schemaPattern.toChar() != '%')
-        varCriteria[nPos].setString(schemaPattern);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-
-    if(procedureNamePattern.toChar() != '%')
-        varCriteria[nPos].setString(procedureNamePattern);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-    if(columnNamePattern.toChar() != '%')
-        varCriteria[nPos].setString(columnNamePattern);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// COLUMN_NAME
-
-    OLEVariant  vtEmpty;
-    vtEmpty.setNoArg();
-
-    // Initialize and fill the SafeArray
-    OLEVariant vsa;
-    vsa.setArray(psa,VT_VARIANT);
-
-    ADORecordset *pRecordset = NULL;
-    m_pADOConnection->OpenSchema(adSchemaProcedureParameters,vsa,vtEmpty,&pRecordset);
+    ADORecordset *pRecordset = m_pADOConnection->getProcedureColumns(catalog,schemaPattern,procedureNamePattern,columnNamePattern);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
     Reference< XResultSet > xRef = NULL;
@@ -565,38 +263,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     const ::rtl::OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
 {
     // Create elements used in the array
-    HRESULT hr = S_OK;
-    SAFEARRAYBOUND rgsabound[1];
-    SAFEARRAY *psa = NULL;
-    OLEVariant varCriteria[3];
-
-    // Create SafeArray Bounds and initialize the array
-    rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
-    psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
-    sal_Int32 nPos=0;
-    if(catalog.hasValue())
-        varCriteria[nPos].setString(getString(catalog));
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    if(schemaPattern.toChar() != '%')
-        varCriteria[nPos].setString(schemaPattern);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-
-    if(procedureNamePattern.toChar() != '%')
-        varCriteria[nPos].setString(procedureNamePattern);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-    OLEVariant  vtEmpty;
-    vtEmpty.setNoArg();
-
-    // Initialize and fill the SafeArray
-    OLEVariant vsa;
-    vsa.setArray(psa,VT_VARIANT);
-
-    ADORecordset *pRecordset = NULL;
-    m_pADOConnection->OpenSchema(adSchemaProcedures,vsa,vtEmpty,&pRecordset);
+    ADORecordset *pRecordset = m_pADOConnection->getProcedures(catalog,schemaPattern,procedureNamePattern);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
     Reference< XResultSet > xRef = NULL;
@@ -678,46 +345,10 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLExceptio
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    // Create elements used in the array
-    HRESULT hr = S_OK;
-    SAFEARRAYBOUND rgsabound[1];
-    SAFEARRAY *psa = NULL;
-    OLEVariant varCriteria[6];
-
-    // Create SafeArray Bounds and initialize the array
-    rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
-    psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
-    sal_Int32 nPos=0;
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-    if(catalog.hasValue())
-        varCriteria[nPos].setString(getString(catalog));
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    if(schema.toChar() != '%')
-        varCriteria[nPos].setString(schema);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-
-    varCriteria[nPos].setString(table);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-    OLEVariant  vtEmpty;
-    vtEmpty.setNoArg();
-
-    // Initialize and fill the SafeArray
-    OLEVariant vsa;
-    vsa.setArray(psa,VT_VARIANT);
-
-    ADORecordset *pRecordset = NULL;
-    m_pADOConnection->OpenSchema(adSchemaForeignKeys,vsa,vtEmpty,&pRecordset);
+    ADORecordset *pRecordset = m_pADOConnection->getExportedKeys(catalog,schema,table);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
     Reference< XResultSet > xRef = NULL;
-
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setCrossReferenceMap();
     xRef = pResult;
@@ -728,42 +359,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    // Create elements used in the array
-    HRESULT hr = S_OK;
-    SAFEARRAYBOUND rgsabound[1];
-    SAFEARRAY *psa = NULL;
-    OLEVariant varCriteria[6];
-
-    // Create SafeArray Bounds and initialize the array
-    rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
-    psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
-    sal_Int32 nPos=0;
-    if(catalog.hasValue())
-        varCriteria[nPos].setString(getString(catalog));
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    if(schema.toChar() != '%')
-        varCriteria[nPos].setString(schema);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-
-    varCriteria[nPos].setString(table);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-    OLEVariant  vtEmpty;
-    vtEmpty.setNoArg();
-
-    // Initialize and fill the SafeArray
-    OLEVariant vsa;
-    vsa.setArray(psa,VT_VARIANT);
-
-    ADORecordset *pRecordset = NULL;
-    m_pADOConnection->OpenSchema(adSchemaForeignKeys,vsa,vtEmpty,&pRecordset);
+    ADORecordset *pRecordset = m_pADOConnection->getImportedKeys(catalog,schema,table);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
     Reference< XResultSet > xRef = NULL;
@@ -778,39 +374,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    // Create elements used in the array
-    HRESULT hr = S_OK;
-    SAFEARRAYBOUND rgsabound[1];
-    SAFEARRAY *psa = NULL;
-    OLEVariant varCriteria[3];
-
-    // Create SafeArray Bounds and initialize the array
-    rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
-    psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
-    sal_Int32 nPos=0;
-    if(catalog.hasValue())
-        varCriteria[nPos].setString(getString(catalog));
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    if(schema.toChar() != '%')
-        varCriteria[nPos].setString(schema);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-
-    varCriteria[nPos].setString(table);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-
-    OLEVariant  vtEmpty;
-    vtEmpty.setNoArg();
-
-    // Initialize and fill the SafeArray
-    OLEVariant vsa;
-    vsa.setArray(psa,VT_VARIANT);
-
-    ADORecordset *pRecordset = NULL;
-    m_pADOConnection->OpenSchema(adSchemaPrimaryKeys,vsa,vtEmpty,&pRecordset);
+    ADORecordset *pRecordset = m_pADOConnection->getPrimaryKeys(catalog,schema,table);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
     Reference< XResultSet > xRef = NULL;
@@ -826,42 +390,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
     sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
 {
-    // Create elements used in the array
-    HRESULT hr = S_OK;
-    SAFEARRAYBOUND rgsabound[1];
-    SAFEARRAY *psa = NULL;
-    OLEVariant varCriteria[5];
-
-    // Create SafeArray Bounds and initialize the array
-    rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
-    psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
-    sal_Int32 nPos=0;
-    if(catalog.hasValue())
-        varCriteria[nPos].setString(getString(catalog));
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    if(schema.toChar() != '%')
-        varCriteria[nPos].setString(schema);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// INDEX_NAME
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TYPE
-
-    varCriteria[nPos].setString(table);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-    OLEVariant  vtEmpty;
-    vtEmpty.setNoArg();
-
-    // Initialize and fill the SafeArray
-    OLEVariant vsa;
-    vsa.setArray(psa,VT_VARIANT);
-
-    ADORecordset *pRecordset = NULL;
-    m_pADOConnection->OpenSchema(adSchemaIndexes,vsa,vtEmpty,&pRecordset);
+    ADORecordset *pRecordset = m_pADOConnection->getIndexInfo(catalog,schema,table,unique,approximate);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
     Reference< XResultSet > xRef = NULL;
@@ -890,44 +419,11 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
     sal_Int32 nEngineType = getInt32Property(::rtl::OUString::createFromAscii("Jet OLEDB:Engine Type"));
     Reference< XResultSet > xRef = NULL;
-    if(!isJetEngine(nEngineType))
+    if(!ADOS::isJetEngine(nEngineType))
     {   // the jet provider doesn't support this method
         // Create elements used in the array
-        HRESULT hr = S_OK;
-        SAFEARRAYBOUND rgsabound[1];
-        SAFEARRAY *psa = NULL;
-        OLEVariant varCriteria[5];
 
-        // Create SafeArray Bounds and initialize the array
-        rgsabound[0].lLbound   = 0;
-        rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
-        psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
-        sal_Int32 nPos=0;
-        if(catalog.hasValue())
-            varCriteria[nPos].setString(getString(catalog));
-
-        hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-        if(schemaPattern.toChar() != '%')
-            varCriteria[nPos].setString(schemaPattern);
-        hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-
-        if(tableNamePattern.toChar() != '%')
-            varCriteria[nPos].setString(tableNamePattern);
-        hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-        hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// GRANTOR
-        hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// GRANTEE
-
-        OLEVariant  vtEmpty;
-        vtEmpty.setNoArg();
-
-        // Initialize and fill the SafeArray
-        OLEVariant vsa;
-        vsa.setArray(psa,VT_VARIANT);
-
-        ADORecordset *pRecordset = NULL;
-        m_pADOConnection->OpenSchema(adSchemaTablePrivileges,vsa,vtEmpty,&pRecordset);
+        ADORecordset *pRecordset = m_pADOConnection->getTablePrivileges(catalog,schemaPattern,tableNamePattern);
         ADOS::ThrowException(*m_pADOConnection,*this);
 
         ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
@@ -979,49 +475,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     const ::rtl::OUString& primaryTable, const Any& foreignCatalog,
     const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
 {
-    // Create elements used in the array
-    HRESULT hr = S_OK;
-    SAFEARRAYBOUND rgsabound[1];
-    SAFEARRAY *psa = NULL;
-    OLEVariant varCriteria[6];
-
-    // Create SafeArray Bounds and initialize the array
-    rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
-    psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
-    sal_Int32 nPos=0;
-    if(primaryCatalog.hasValue())
-        varCriteria[nPos].setString(getString(primaryCatalog));
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    if(primarySchema.toChar() != '%')
-        varCriteria[nPos].setString(primarySchema);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-
-    varCriteria[nPos].setString(primaryTable);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-    if(foreignCatalog.hasValue())
-        varCriteria[nPos].setString(getString(foreignCatalog));
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    if(foreignSchema.toChar() != '%')
-        varCriteria[nPos].setString(foreignSchema);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-
-    varCriteria[nPos].setString(foreignTable);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-    OLEVariant  vtEmpty;
-    vtEmpty.setNoArg();
-
-    // Initialize and fill the SafeArray
-    OLEVariant vsa;
-    vsa.setArray(psa,VT_VARIANT);
-
-    ADORecordset *pRecordset = NULL;
-    m_pADOConnection->OpenSchema(adSchemaForeignKeys,vsa,vtEmpty,&pRecordset);
+    ADORecordset *pRecordset = m_pADOConnection->getCrossReference(primaryCatalog,primarySchema,primaryTable,foreignCatalog,foreignSchema,foreignTable);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
     Reference< XResultSet > xRef = NULL;

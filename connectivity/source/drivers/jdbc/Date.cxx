@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:04:24 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,9 @@
 #ifndef _CONNECTIVITY_JAVA_TOOLS_HXX_
 #include "java/tools.hxx"
 #endif
-#ifndef _CONNECTIVITY_DATECONVERSION_HXX_
-#include "connectivity/DateConversion.hxx"
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include "connectivity/dbconversion.hxx"
 #endif
-
 using namespace connectivity;
 //**************************************************************
 //************ Class: java.util.Date
@@ -84,7 +83,7 @@ java_util_Date::java_util_Date( const ::com::sun::star::util::Date& _rOut ) //: 
         return;
     jvalue args[1];
     // Parameter konvertieren
-    args[0].j = DateConversion::toINT32(_rOut);
+    args[0].j = ::dbtools::DBTypeConversion::toINT32(_rOut);
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
     char * cSignature = "(J)V";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 07:40:32 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,23 +95,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-// -------------------------------------------------------------------------
-void WpADOIndex::Create()
-{
-    IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
-    HRESULT         hr = -1;
-    _ADOIndex* pCommand;
-    hr = CoCreateInstance(ADOS::CLSID_ADOINDEX_25,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          ADOS::IID_ADOINDEX_25,
-                          (void**)&pCommand );
-
-
-    if( !FAILED( hr ) )
-        operator=(pCommand);
-}
 // -------------------------------------------------------------------------
 OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection,ADOIndex* _pIndex)
     : OIndex_ADO(::rtl::OUString(),::rtl::OUString(),sal_False,sal_False,sal_False,_bCase)
@@ -223,18 +206,6 @@ void SAL_CALL OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
     }
     OIndex_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
-// -------------------------------------------------------------------------
-void OAdoIndex::fillPropertyValues()
-{
-    if(m_aIndex.IsValid())
-    {
-        m_Name              = m_aIndex.get_Name();
-        m_IsUnique          = m_aIndex.get_Unique();
-        m_IsPrimaryKeyIndex = m_aIndex.get_PrimaryKey();
-        m_IsClustered       = m_aIndex.get_Clustered();
-    }
-}
-// -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 void SAL_CALL OAdoIndex::acquire() throw(::com::sun::star::uno::RuntimeException)
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:53 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xIndexes;
             sal_Int32                               m_nParamCounter;
             sal_Bool                                m_bORCondition;
-
         public:
             OPredicateCompiler(OSQLAnalyzer* pAnalyzer);
 

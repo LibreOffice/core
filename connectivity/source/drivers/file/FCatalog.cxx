@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCatalog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:54:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@ void OFileCatalog::refreshTables()
             aVector.push_back(xRow->getString(3));
     }
     if(m_pTables)
+        m_pTables->reFill(aVector);
+    else
         delete m_pTables;
     m_pTables = new OTables(m_xMetaData,*this,m_aMutex,aVector);
 }
@@ -153,8 +155,4 @@ Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException)
     }
     return aRet;
 }
-// -----------------------------------------------------------------------------
-void OFileCatalog::refreshViews(){}
-void OFileCatalog::refreshGroups(){}
-void OFileCatalog::refreshUsers(){}
 

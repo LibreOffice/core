@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolevariant.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:07 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,21 +523,3 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
-{
-    //
-    // If pDest is NULL, convert type in place
-    //
-    if (pSrc == NULL)
-        pSrc = this;
-
-    if ((this != pSrc) || (vartype != V_VT(this)))
-    {
-        if(FAILED(::VariantChangeType(static_cast<VARIANT*>(this),
-                          const_cast<VARIANT*>(static_cast<const VARIANT*>(pSrc)),
-                          0, vartype)))
-                          throw ::com::sun::star::sdbc::SQLException(::rtl::OUString::createFromAscii("Could convert type!"),NULL,::rtl::OUString(),1000,::com::sun::star::uno::Any());
-    }
-}
-

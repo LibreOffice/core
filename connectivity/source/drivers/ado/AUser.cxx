@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 07:40:32 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,23 +87,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-// -------------------------------------------------------------------------
-void WpADOUser::Create()
-{
-    IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
-    HRESULT         hr = -1;
-    _ADOUser* pCommand;
-    hr = CoCreateInstance(ADOS::CLSID_ADOUSER_25,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          ADOS::IID_ADOUSER_25,
-                          (void**)&pCommand );
-
-
-    if( !FAILED( hr ) )
-        operator=(pCommand);
-}
 // -------------------------------------------------------------------------
 OAdoUser::OAdoUser(sal_Bool _bCase, ADOUser* _pUser) : OUser_TYPEDEF(_bCase)
 {

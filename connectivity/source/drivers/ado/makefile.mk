@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-17 09:13:23 $
+#   last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=ado
 
-ENABLE_EXCEPTIONS=TRUE
+#	ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
@@ -80,6 +80,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files -------------------------------------
 
 SLOFILES=\
+        $(SLO)$/ADatabaseMetaDataImpl.obj				\
         $(SLO)$/Aolevariant.obj							\
         $(SLO)$/Awrapado.obj							\
         $(SLO)$/ADatabaseMetaData.obj					\
@@ -110,6 +111,33 @@ SLOFILES=\
         $(SLO)$/Aservices.obj							\
         $(SLO)$/adoimp.obj
         
+EXCEPTIONSFILES= \
+        $(SLO)$/ADatabaseMetaData.obj					\
+        $(SLO)$/AColumn.obj								\
+        $(SLO)$/AColumns.obj							\
+        $(SLO)$/AIndex.obj								\
+        $(SLO)$/AIndexes.obj							\
+        $(SLO)$/AKey.obj								\
+        $(SLO)$/AKeys.obj								\
+        $(SLO)$/AUser.obj								\
+        $(SLO)$/AUsers.obj								\
+        $(SLO)$/AGroup.obj								\
+        $(SLO)$/AGroups.obj								\
+        $(SLO)$/ACatalog.obj							\
+        $(SLO)$/AView.obj								\
+        $(SLO)$/AViews.obj								\
+        $(SLO)$/ATable.obj								\
+        $(SLO)$/ATables.obj								\
+        $(SLO)$/ACallableStatement.obj					\
+        $(SLO)$/ADatabaseMetaDataResultSetMetaData.obj	\
+        $(SLO)$/ADatabaseMetaDataResultSet.obj			\
+        $(SLO)$/AResultSet.obj							\
+        $(SLO)$/AConnection.obj							\
+        $(SLO)$/AStatement.obj							\
+        $(SLO)$/APreparedStatement.obj					\
+        $(SLO)$/AResultSetMetaData.obj					\
+        $(SLO)$/ADriver.obj								\
+        $(SLO)$/Aservices.obj
 
 # --- Library -----------------------------------
 

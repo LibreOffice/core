@@ -1,0 +1,688 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ADatabaseMetaDataImpl.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:16:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _CONNECTIVITY_ADO_ADATABASEMETADATA_HXX_
+#include "ado/ADatabaseMetaData.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADO_ADATABASEMETADATARESULTSETMETADATA_HXX_
+#include "ado/ADatabaseMetaDataResultSetMetaData.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
+#include "ado/Awrapado.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADABAS_GROUP_HXX_
+#include "ado/AGroup.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADO_ADOIMP_HXX_
+#include "ado/adoimp.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADO_INDEX_HXX_
+#include "ado/AIndex.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADO_KEY_HXX_
+#include "ado/AKey.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADO_TABLE_HXX_
+#include "ado/ATable.hxx"
+#endif
+#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
+#include <com/sun/star/sdbc/DataType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_PROCEDURERESULT_HPP_
+#include <com/sun/star/sdbc/ProcedureResult.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#endif
+#ifdef DELETE
+#undef DELETE
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGEOBJECT_HPP_
+#include <com/sun/star/sdbcx/PrivilegeObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
+#include <com/sun/star/sdbc/KeyRule.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
+#include <com/sun/star/sdbcx/KeyType.hpp>
+#endif
+
+using namespace connectivity;
+using namespace connectivity::ado;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::uno;
+
+// -------------------------------------------------------------------------
+void ODatabaseMetaData::fillLiterals()
+{
+    ADORecordset *pRecordset = NULL;
+    OLEVariant  vtEmpty;
+    vtEmpty.setNoArg();
+    m_pADOConnection->OpenSchema(adSchemaDBInfoLiterals,vtEmpty,vtEmpty,&pRecordset);
+
+    ADOS::ThrowException(*m_pADOConnection,*this);
+
+    OSL_ENSURE(pRecordset,"getMaxSize no resultset!");
+    WpADORecordset aRecordset(pRecordset);
+
+    aRecordset.MoveFirst();
+    OLEVariant  aValue;
+    sal_Int32 nRet = 0;
+    LiteralInfo aInfo;
+    while(!aRecordset.IsAtEOF())
+    {
+        WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
+        WpADOField aField(aFields.GetItem(1));
+        aInfo.pwszLiteralValue = aField.get_Value();
+        aField = aFields.GetItem(5);
+        aInfo.fSupported = aField.get_Value();
+        aField = aFields.GetItem(6);
+        aInfo.cchMaxLen = aField.get_Value().getUInt32();
+
+        aField = aFields.GetItem(4);
+        sal_uInt32 nId = aField.get_Value().getUInt32();
+        m_aLiteralInfo[nId] = aInfo;
+
+        aRecordset.MoveNext();
+    }
+    aRecordset.Close();
+}
+// -------------------------------------------------------------------------
+sal_Int32 ODatabaseMetaData::getMaxSize(sal_uInt32 _nId)
+{
+    if(!m_aLiteralInfo.size())
+        fillLiterals();
+
+    sal_Int32 nSize = 0;
+    ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
+    if(aIter != m_aLiteralInfo.end() && (*aIter).second.fSupported)
+        nSize = ((*aIter).second.cchMaxLen == (-1)) ? 0 : (*aIter).second.cchMaxLen;
+    return nSize;
+}
+// -------------------------------------------------------------------------
+sal_Bool ODatabaseMetaData::isCapable(sal_uInt32 _nId)
+{
+    if(!m_aLiteralInfo.size())
+        fillLiterals();
+    sal_Bool bSupported = sal_False;
+    ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
+    if(aIter != m_aLiteralInfo.end())
+        bSupported = (*aIter).second.fSupported;
+    return bSupported;
+}
+
+// -------------------------------------------------------------------------
+::rtl::OUString ODatabaseMetaData::getLiteral(sal_uInt32 _nId)
+{
+    if(!m_aLiteralInfo.size())
+        fillLiterals();
+    ::rtl::OUString sStr;
+    ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
+    if(aIter != m_aLiteralInfo.end() && (*aIter).second.fSupported)
+        sStr = (*aIter).second.pwszLiteralValue;
+    return sStr;
+}
+// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()
+{
+    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("IS_GRANTABLE"),
+        ColumnValue::NULLABLE,
+        3,3,0,
+        DataType::VARCHAR);
+}
+// -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
+{
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TYPE_NAME"),
+        ColumnValue::NO_NULLS,
+        0,0,0,
+        DataType::VARCHAR);
+    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NULLABLE"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::INTEGER);
+    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("REMARKS"),
+        ColumnValue::NULLABLE,
+        0,0,0,
+        DataType::VARCHAR);
+    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_DEF"),
+        ColumnValue::NULLABLE,
+        0,0,0,
+        DataType::VARCHAR);
+    m_mColumns[14] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SQL_DATA_TYPE"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::INTEGER);
+    m_mColumns[15] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SQL_DATETIME_SUB"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::INTEGER);
+    m_mColumns[16] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("CHAR_OCTET_LENGTH"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::INTEGER);
+}
+// -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setTablesMap()
+{
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("REMARKS"),
+        ColumnValue::NULLABLE,
+        0,0,0,
+        DataType::VARCHAR);
+}
+// -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
+{
+    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NULLABLE"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::INTEGER);
+}
+// -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setPrimaryKeysMap()
+{
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("KEY_SEQ"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::INTEGER);
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PK_NAME"),
+        ColumnValue::NULLABLE,
+        0,0,0,
+        DataType::VARCHAR);
+}
+// -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setIndexInfoMap()
+{
+    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NON_UNIQUE"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::BIT);
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("INDEX_QUALIFIER"),
+        ColumnValue::NULLABLE,
+        0,0,0,
+        DataType::VARCHAR);
+    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("ASC_OR_DESC"),
+        ColumnValue::NULLABLE,
+        0,0,0,
+        DataType::VARCHAR);
+}
+// -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setTablePrivilegesMap()
+{
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PRIVILEGE"),
+        ColumnValue::NULLABLE,
+        0,0,0,
+        DataType::VARCHAR);
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("IS_GRANTABLE"),
+        ColumnValue::NULLABLE,
+        0,0,0,
+        DataType::VARCHAR);
+}
+// -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setCrossReferenceMap()
+{
+    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("KEY_SEQ"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::INTEGER);
+}
+// -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setTypeInfoMap()
+{
+    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PRECISION"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::INTEGER);
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NULLABLE"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::INTEGER);
+    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("AUTO_INCREMENT"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::BIT);
+    m_mColumns[16] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SQL_DATA_TYPE"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::INTEGER);
+    m_mColumns[17] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SQL_DATETIME_SUB"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::INTEGER);
+    m_mColumns[18] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NUM_PREC_RADIX"),
+        ColumnValue::NO_NULLS,
+        1,1,0,
+        DataType::INTEGER);
+}
+// -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setProceduresMap()
+{
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("REMARKS"),
+        ColumnValue::NULLABLE,
+        0,0,0,
+        DataType::VARCHAR);
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException)
+{
+    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+        return (*m_mColumnsIter).second.isSearchable();
+    return sal_True;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
+{
+    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+        return (*m_mColumnsIter).second.isAutoIncrement();
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException)
+{
+    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+        return (*m_mColumnsIter).second.getColumnServiceName();
+    return ::rtl::OUString();
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
+{
+    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+        return (*m_mColumnsIter).second.getTableName();
+    return ::rtl::OUString();
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
+{
+    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+        return (*m_mColumnsIter).second.getCatalogName();
+    return ::rtl::OUString();
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
+{
+    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+        return (*m_mColumnsIter).second.getColumnTypeName();
+    return ::rtl::OUString();
+}
+// -------------------------------------------------------------------------
+
+sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(SQLException, RuntimeException)
+{
+    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+        return (*m_mColumnsIter).second.isCaseSensitive();
+    return sal_True;
+}
+// -------------------------------------------------------------------------
+
+::rtl::OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException)
+{
+    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+        return (*m_mColumnsIter).second.getSchemaName();
+    return ::rtl::OUString();
+}
+// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------
+ObjectTypeEnum OAdoGroup::MapObjectType(sal_Int32 _ObjType)
+{
+    ObjectTypeEnum eNumType= adPermObjTable;
+    switch(_ObjType)
+    {
+        case PrivilegeObject::TABLE:
+            break;
+        case PrivilegeObject::VIEW:
+            eNumType = adPermObjView;
+            break;
+        case PrivilegeObject::COLUMN:
+            eNumType = adPermObjColumn;
+            break;
+    }
+    return eNumType;
+}
+// -------------------------------------------------------------------------
+sal_Int32 OAdoGroup::MapRight(RightsEnum _eNum)
+{
+    sal_Int32 nRight = 0;
+    if(_eNum & adRightRead)
+                nRight |= Privilege::SELECT;
+    if(_eNum & adRightInsert)
+                nRight |= Privilege::INSERT;
+    if(_eNum & adRightUpdate)
+                nRight |= Privilege::UPDATE;
+    if(_eNum & adRightDelete)
+                nRight |= Privilege::DELETE;
+    if(_eNum & adRightReadDesign)
+                nRight |= Privilege::READ;
+    if(_eNum & adRightCreate)
+                nRight |= Privilege::CREATE;
+    if(_eNum & adRightWriteDesign)
+                nRight |= Privilege::ALTER;
+    if(_eNum & adRightReference)
+                nRight |= Privilege::REFERENCE;
+    if(_eNum & adRightDrop)
+                nRight |= Privilege::DROP;
+
+    return nRight;
+}
+// -------------------------------------------------------------------------
+RightsEnum OAdoGroup::Map2Right(sal_Int32 _eNum)
+{
+    sal_Int32 nRight = adRightNone;
+        if(_eNum & Privilege::SELECT)
+        nRight |= adRightRead;
+
+        if(_eNum & Privilege::INSERT)
+        nRight |= adRightInsert;
+
+        if(_eNum & Privilege::UPDATE)
+        nRight |= adRightUpdate;
+
+        if(_eNum & Privilege::DELETE)
+        nRight |= adRightDelete;
+
+        if(_eNum & Privilege::READ)
+        nRight |= adRightReadDesign;
+
+        if(_eNum & Privilege::CREATE)
+        nRight |= adRightCreate;
+
+        if(_eNum & Privilege::ALTER)
+        nRight |= adRightWriteDesign;
+
+        if(_eNum & Privilege::REFERENCE)
+        nRight |= adRightReference;
+
+        if(_eNum & Privilege::DROP)
+        nRight |= adRightDrop;
+
+    return (RightsEnum)nRight;
+}
+// -------------------------------------------------------------------------
+void WpADOIndex::Create()
+{
+    IClassFactory2* pIUnknown   = NULL;
+    IUnknown        *pOuter     = NULL;
+    HRESULT         hr = -1;
+    _ADOIndex* pCommand;
+    hr = CoCreateInstance(ADOS::CLSID_ADOINDEX_25,
+                          NULL,
+                          CLSCTX_INPROC_SERVER,
+                          ADOS::IID_ADOINDEX_25,
+                          (void**)&pCommand );
+
+
+    if( !FAILED( hr ) )
+        operator=(pCommand);
+}
+// -------------------------------------------------------------------------
+void OAdoIndex::fillPropertyValues()
+{
+    if(m_aIndex.IsValid())
+    {
+        m_Name              = m_aIndex.get_Name();
+        m_IsUnique          = m_aIndex.get_Unique();
+        m_IsPrimaryKeyIndex = m_aIndex.get_PrimaryKey();
+        m_IsClustered       = m_aIndex.get_Clustered();
+    }
+}
+// -----------------------------------------------------------------------------
+void WpADOKey::Create()
+{
+    IClassFactory2* pIUnknown   = NULL;
+    IUnknown        *pOuter     = NULL;
+    HRESULT         hr = -1;
+    _ADOKey* pCommand;
+    hr = CoCreateInstance(ADOS::CLSID_ADOKEY_25,
+                          NULL,
+                          CLSCTX_INPROC_SERVER,
+                          ADOS::IID_ADOKEY_25,
+                          (void**)&pCommand );
+
+
+    if( !FAILED( hr ) )
+        operator=(pCommand);
+}
+// -------------------------------------------------------------------------
+void OAdoKey::fillPropertyValues()
+{
+    if(m_aKey.IsValid())
+    {
+        m_Type              = MapKeyRule(m_aKey.get_Type());
+        m_Name              = m_aKey.get_Name();
+        m_ReferencedTable   = m_aKey.get_RelatedTable();
+        m_UpdateRule        = MapRule(m_aKey.get_UpdateRule());
+        m_DeleteRule        = MapRule(m_aKey.get_DeleteRule());
+    }
+}
+// -------------------------------------------------------------------------
+sal_Int32 OAdoKey::MapRule(const RuleEnum& _eNum) const
+{
+        sal_Int32 eNum = KeyRule::NO_ACTION;
+    switch(_eNum)
+    {
+        case adRICascade:
+            eNum = KeyRule::CASCADE;
+            break;
+        case adRISetNull:
+            eNum = KeyRule::SET_NULL;
+            break;
+        case adRINone:
+            eNum = KeyRule::NO_ACTION;
+            break;
+        case adRISetDefault:
+            eNum = KeyRule::SET_DEFAULT;
+            break;
+    }
+    return eNum;
+}
+// -------------------------------------------------------------------------
+RuleEnum OAdoKey::Map2Rule(const sal_Int32& _eNum) const
+{
+    RuleEnum eNum = adRINone;
+    switch(_eNum)
+    {
+        case KeyRule::CASCADE:
+            eNum = adRICascade;
+            break;
+        case KeyRule::SET_NULL:
+            eNum = adRISetNull;
+            break;
+        case KeyRule::NO_ACTION:
+            eNum = adRINone;
+            break;
+        case KeyRule::SET_DEFAULT:
+            eNum = adRISetDefault;
+            break;
+    }
+    return eNum;
+}
+// -------------------------------------------------------------------------
+sal_Int32 OAdoKey::MapKeyRule(const KeyTypeEnum& _eNum) const
+{
+    sal_Int32 nKeyType = KeyType::PRIMARY;
+    switch(_eNum)
+    {
+        case adKeyPrimary:
+            nKeyType = KeyType::PRIMARY;
+            break;
+        case adKeyForeign:
+            nKeyType = KeyType::FOREIGN;
+            break;
+        case adKeyUnique:
+            nKeyType = KeyType::UNIQUE;
+            break;
+    }
+    return nKeyType;
+}
+// -------------------------------------------------------------------------
+KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum) const
+{
+    KeyTypeEnum eNum;
+    switch(_eNum)
+    {
+        case KeyType::PRIMARY:
+            eNum = adKeyPrimary;
+            break;
+        case KeyType::FOREIGN:
+            eNum = adKeyForeign;
+            break;
+        case KeyType::UNIQUE:
+            eNum = adKeyUnique;
+            break;
+    }
+    return eNum;
+}
+// -----------------------------------------------------------------------------
+void WpADOTable::Create()
+{
+    IClassFactory2* pIUnknown   = NULL;
+    IUnknown        *pOuter     = NULL;
+    HRESULT         hr = -1;
+    _ADOTable* pCommand;
+    hr = CoCreateInstance(ADOS::CLSID_ADOTABLE_25,
+                          NULL,
+                          CLSCTX_INPROC_SERVER,
+                          ADOS::IID_ADOTABLE_25,
+                          (void**)&pCommand );
+
+
+    if( !FAILED( hr ) )
+        operator=(pCommand);
+}
+// -------------------------------------------------------------------------
+::rtl::OUString WpADOCatalog::GetObjectOwner(const ::rtl::OUString& _rName, ObjectTypeEnum _eNum)
+{
+    OLEVariant _rVar;
+    _rVar.setNoArg();
+    OLEString aBSTR;
+    OLEString sStr1(_rName);
+    pInterface->GetObjectOwner(sStr1,_eNum,_rVar,&aBSTR);
+    return aBSTR;
+}
+// -----------------------------------------------------------------------------
+void OAdoTable::fillPropertyValues()
+{
+    if(m_aTable.IsValid())
+    {
+        m_Name  = m_aTable.get_Name();
+        m_Type  = m_aTable.get_Type();
+        {
+            WpADOCatalog aCat(m_aTable.get_ParentCatalog());
+            if(aCat.IsValid())
+                m_CatalogName = aCat.GetObjectOwner(m_aTable.get_Name(),adPermObjTable);
+        }
+        {
+            ADOProperties* pProps = m_aTable.get_Properties();
+            if(pProps)
+            {
+                pProps->AddRef();
+                ADOProperty* pProp = NULL;
+                pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Description")),&pProp);
+                WpADOProperty aProp(pProp);
+                if(pProp)
+                    m_Description = aProp.GetValue();
+                pProps->Release();
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void WpADOUser::Create()
+{
+    IClassFactory2* pIUnknown   = NULL;
+    IUnknown        *pOuter     = NULL;
+    HRESULT         hr = -1;
+    _ADOUser* pCommand;
+    hr = CoCreateInstance(ADOS::CLSID_ADOUSER_25,
+                          NULL,
+                          CLSCTX_INPROC_SERVER,
+                          ADOS::IID_ADOUSER_25,
+                          (void**)&pCommand );
+
+
+    if( !FAILED( hr ) )
+        operator=(pCommand);
+}
+// -------------------------------------------------------------------------
+void WpADOView::Create()
+{
+    IClassFactory2* pIUnknown   = NULL;
+    IUnknown        *pOuter     = NULL;
+    HRESULT         hr = -1;
+    ADOView* pCommand;
+    hr = CoCreateInstance(ADOS::CLSID_ADOVIEW_25,
+                          NULL,
+                          CLSCTX_INPROC_SERVER,
+                          ADOS::IID_ADOVIEW_25,
+                          (void**)&pCommand );
+
+
+    if( !FAILED( hr ) )
+        operator=(pCommand);
+}
+
+// -------------------------------------------------------------------------
+
+

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-14 11:37:37 $
+#   last change: $Author: oj $ $Date: 2001-05-23 09:13:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=dbase
 
-ENABLE_EXCEPTIONS=TRUE
-
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
@@ -78,6 +76,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files -------------------------------------
 
 SLOFILES=\
+    $(SLO)$/DNoException.obj		\
     $(SLO)$/DCode.obj				\
     $(SLO)$/DResultSet.obj			\
     $(SLO)$/DStatement.obj			\
@@ -96,6 +95,27 @@ SLOFILES=\
     $(SLO)$/DConnection.obj			\
     $(SLO)$/Dservices.obj			\
     $(SLO)$/DDriver.obj
+
+EXCEPTIONSFILES=\
+    $(SLO)$/DCode.obj				\
+    $(SLO)$/DResultSet.obj			\
+    $(SLO)$/DStatement.obj			\
+    $(SLO)$/DPreparedStatement.obj	\
+    $(SLO)$/dindexnode.obj			\
+    $(SLO)$/DIndexPage.obj			\
+    $(SLO)$/DIndexIter.obj			\
+    $(SLO)$/DDatabaseMetaData.obj	\
+    $(SLO)$/DCatalog.obj			\
+    $(SLO)$/DColumns.obj			\
+    $(SLO)$/DIndexColumns.obj		\
+    $(SLO)$/DIndex.obj				\
+    $(SLO)$/DIndexes.obj			\
+    $(SLO)$/DTable.obj				\
+    $(SLO)$/DTables.obj				\
+    $(SLO)$/DConnection.obj			\
+    $(SLO)$/Dservices.obj			\
+    $(SLO)$/DDriver.obj
+
 
 .IF "$(OS)"=="MACOSX"
 #SHL1VERSIONMAP=$(TARGET).$(DLLPOSTFIX).map

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADriver.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 07:40:32 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,11 +175,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
 sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
-    if(!url.compareTo(::rtl::OUString::createFromAscii("sdbc:ado:"),9))
-    {
-        return sal_True;
-    }
-    return sal_False;
+    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:ado:"),9));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
@@ -240,30 +236,65 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const ::r
     return getDataDefinitionByConnection(connect(url,info));
 }
 
-//#include <tools/prewin.h>
-//namespace test__rr__
-//{
-//
-//#import "c:\Program Files\Common Files\system\ado\msadox.dll"
-//
-//}
-//#include <tools/postwin.h>
-
-void WpADOCatalog::Create()
+// -----------------------------------------------------------------------------
+void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
 {
-    IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
-    HRESULT         hr = -1;
-    _ADOCatalog* pCommand;
-    hr = CoCreateInstance(ADOS::CLSID_ADOCATALOG_25,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          ADOS::IID_ADOCATALOG_25,
-                          (void**)&pCommand );
+    //
+    // If pDest is NULL, convert type in place
+    //
+    if (pSrc == NULL)
+        pSrc = this;
 
+    if ((this != pSrc) || (vartype != V_VT(this)))
+    {
+        if(FAILED(::VariantChangeType(static_cast<VARIANT*>(this),
+                          const_cast<VARIANT*>(static_cast<const VARIANT*>(pSrc)),
+                          0, vartype)))
+                          throw ::com::sun::star::sdbc::SQLException(::rtl::OUString::createFromAscii("Could convert type!"),NULL,::rtl::OUString(),1000,::com::sun::star::uno::Any());
+    }
+}
+// -----------------------------------------------------------------------------
+void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
+{
+    ADOErrors *pErrors = NULL;
+    _pAdoCon->get_Errors(&pErrors);
+    if(!pErrors)
+        return; // no error found
 
-    if( !FAILED( hr ) )
-        operator=(pCommand);
+    pErrors->AddRef( );
+
+    // alle aufgelaufenen Fehler auslesen und ausgeben
+    sal_Int32 nLen;
+    pErrors->get_Count(&nLen);
+    if (nLen)
+    {
+        ::rtl::OUString sError;
+        ::rtl::OUString aSQLState;
+        SQLException aException;
+        for (sal_Int32 i = nLen-1; i>=0; i--)
+        {
+            ADOError *pError = NULL;
+            pErrors->get_Item(OLEVariant(i),&pError);
+            WpADOError aErr(pError);
+            OSL_ENSURE(pError,"No error in collection found! BAD!");
+            if(pError)
+            {
+                if(i==nLen-1)
+                    aException = SQLException(aErr.GetDescription(),_xInterface,aErr.GetSQLState(),aErr.GetNumber(),Any());
+                else
+                {
+                    SQLException aTemp = SQLException(aErr.GetDescription(),
+                        _xInterface,aErr.GetSQLState(),aErr.GetNumber(),makeAny(aException));
+                    aTemp.NextException <<= aException;
+                    aException = aTemp;
+                }
+            }
+        }
+        pErrors->Clear();
+        pErrors->Release();
+        throw aException;
+    }
+    pErrors->Release();
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:34:10 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,41 @@ namespace connectivity
              sal_Bool OpenSchema(SchemaEnum eNum,OLEVariant& Restrictions,OLEVariant& SchemaID,ADORecordset**pprset);
 
              ::rtl::OUString get_Version() const;
+
+             // special methods
+             ADORecordset* getExportedKeys( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table );
+             ADORecordset* getImportedKeys( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table );
+             ADORecordset* getPrimaryKeys( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table );
+             ADORecordset* getIndexInfo( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Bool unique, sal_Bool approximate );
+             ADORecordset* getTablePrivileges( const ::com::sun::star::uno::Any& catalog,
+                                                  const ::rtl::OUString& schemaPattern,
+                                                  const ::rtl::OUString& tableNamePattern );
+             ADORecordset* getCrossReference( const ::com::sun::star::uno::Any& primaryCatalog,
+                                                  const ::rtl::OUString& primarySchema,
+                                                  const ::rtl::OUString& primaryTable,
+                                                  const ::com::sun::star::uno::Any& foreignCatalog,
+                                                  const ::rtl::OUString& foreignSchema,
+                                                  const ::rtl::OUString& foreignTable);
+             ADORecordset* getProcedures( const ::com::sun::star::uno::Any& catalog,
+                                                  const ::rtl::OUString& schemaPattern,
+                                                  const ::rtl::OUString& procedureNamePattern );
+             ADORecordset* getProcedureColumns( const ::com::sun::star::uno::Any& catalog,
+                                                  const ::rtl::OUString& schemaPattern,
+                                                  const ::rtl::OUString& procedureNamePattern,
+                                                  const ::rtl::OUString& columnNamePattern );
+             ADORecordset* getTables( const ::com::sun::star::uno::Any& catalog,
+                                                  const ::rtl::OUString& schemaPattern,
+                                                  const ::rtl::OUString& tableNamePattern,
+                                                  const ::com::sun::star::uno::Sequence< ::rtl::OUString >& types );
+             ADORecordset* getColumns( const ::com::sun::star::uno::Any& catalog,
+                                                  const ::rtl::OUString& schemaPattern,
+                                                  const ::rtl::OUString& tableNamePattern,
+                                                  const ::rtl::OUString& columnNamePattern );
+             ADORecordset* getColumnPrivileges( const ::com::sun::star::uno::Any& catalog,
+                                                  const ::rtl::OUString& schemaPattern,
+                                                  const ::rtl::OUString& table,
+                                                  const ::rtl::OUString& columnNamePattern );
+             ADORecordset* getTypeInfo( );
         };
 
         //------------------------------------------------------------------------

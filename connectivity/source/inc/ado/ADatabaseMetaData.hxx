@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,11 @@ namespace connectivity
             WpADOConnection*                    m_pADOConnection;
             OConnection*                        m_pConnection;
 
-            void fillLiterals() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void fillLiterals();
             // get information out of rowset
-            sal_Int32 getMaxSize(sal_uInt32 _nId) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Bool isCapable(sal_uInt32 _nId) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            ::rtl::OUString getLiteral(sal_uInt32 _nProperty)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            sal_Int32 getMaxSize(sal_uInt32 _nId);
+            sal_Bool isCapable(sal_uInt32 _nId);
+            ::rtl::OUString getLiteral(sal_uInt32 _nProperty);
 
             // get info out of propertyst
             ::rtl::OUString getStringProperty(const ::rtl::OUString& _aProperty) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

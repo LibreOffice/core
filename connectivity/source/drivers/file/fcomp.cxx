@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:37:36 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,17 +115,6 @@ void OPredicateCompiler::dispose()
 }
 //------------------------------------------------------------------
 //  inline OCursor& OPredicateCompiler::Cursor() const {return m_rCursor;}
-//------------------------------------------------------------------
-void OPredicateCompiler::Clean()
-{
-    for(OCodeList::reverse_iterator aIter = m_aCodeList.rbegin(); aIter != m_aCodeList.rend();++aIter)
-    {
-        delete *aIter;
-        m_aCodeList.pop_back();
-    }
-    //  m_aCodeList.clear();
-}
-
 //------------------------------------------------------------------
 void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
 {
@@ -540,19 +529,6 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-
-//------------------------------------------------------------------
-OPredicateInterpreter::~OPredicateInterpreter()
-{
-    while(!m_aStack.empty())
-    {
-        delete m_aStack.top();
-        m_aStack.pop();
-    }
-    //  m_aStack.clear();
-}
-
-//------------------------------------------------------------------
 sal_Bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
 {
     static sal_Bool bResult;

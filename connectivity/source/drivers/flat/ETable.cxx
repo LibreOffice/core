@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:31:19 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
-#ifndef _CONNECTIVITY_DATECONVERSION_HXX_
-#include "connectivity/DateConversion.hxx"
-#endif
 #ifndef _INTN_HXX //autogen
 #include <tools/intn.hxx>
 #endif
@@ -154,127 +151,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 double toDouble(const ByteString& rString,rtl_TextEncoding _nrTextEncoding);
-//------------------------------------------------------------------
-xub_StrLen OFlatString::GetTokenCount( sal_uInt8 cTok, sal_uInt8 cStrDel ) const
-{
-    if ( !Len() )
-        return 0;
-
-    xub_StrLen nTokCount = 1;
-    BOOL bStart = TRUE;     // Stehen wir auf dem ersten Zeichen im Token?
-    BOOL bInString = FALSE; // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
-
-    // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
-    for( xub_StrLen i = 0; i < Len(); i++ )
-    {
-        if (bStart)
-        {
-            bStart = FALSE;
-            // Erstes Zeichen ein String-Delimiter?
-            if ((*this).GetChar(i) == cStrDel)
-            {
-                bInString = TRUE;   // dann sind wir jetzt INNERHALB des Strings!
-                continue;           // dieses Zeichen ueberlesen!
-            }
-        }
-
-        if (bInString) {
-            // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
-            if ( (*this).GetChar(i) == cStrDel )
-            {
-                if ((i+1 < Len()) && ((*this).GetChar(i+1) == cStrDel))
-                {
-                    // Verdoppeltes String-Delimiter-Zeichen:
-                    i++;    // kein String-Ende, naechstes Zeichen ueberlesen.
-                }
-                else
-                {
-                    // String-Ende
-                    bInString = FALSE;
-                }
-            }
-        } else {
-            // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
-            if ( (*this).GetChar(i) == cTok )
-            {
-                nTokCount++;
-                bStart = TRUE;
-            }
-        }
-    }
-
-    return nTokCount;
-}
-
-//------------------------------------------------------------------
-ByteString OFlatString::GetToken( xub_StrLen nToken, sal_uInt8 cTok, sal_uInt8 cStrDel ) const
-{
-    if ( !Len() )
-        return ByteString();
-
-    xub_StrLen nTok = 0;
-    BOOL bStart = TRUE;     // Stehen wir auf dem ersten Zeichen im Token?
-    BOOL bInString = FALSE; // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
-    ByteString aResult;         // Ergebnisstring
-
-    // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
-    for( xub_StrLen i = 0; i < Len(); i++ )
-    {
-        if (bStart) {
-            bStart = FALSE;
-            // Erstes Zeichen ein String-Delimiter?
-            if ((*this).GetChar(i) == cStrDel) {
-                bInString = TRUE;   // dann sind wir jetzt INNERHALB des Strings!
-                continue;           // dieses Zeichen ueberlesen!
-            }
-        }
-
-        if (bInString) {
-            // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
-            if ( (*this).GetChar(i) == cStrDel ) {
-                if ((i+1 < Len()) && ((*this).GetChar(i+1) == cStrDel))
-                {
-                    // Verdoppeltes String-Delimiter-Zeichen:
-                    i++;    // kein String-Ende, naechstes Zeichen ueberlesen.
-
-                    if (nTok == nToken)
-                    {
-                        aResult += (*this).GetChar(i);  // Zeichen gehoert zum Resultat-String
-                    }
-                }
-                else
-                {
-                    // String-Ende
-                    bInString = FALSE;
-                }
-            } else {
-                if (nTok == nToken) {
-                    aResult += (*this).GetChar(i);  // Zeichen gehoert zum Resultat-String
-                }
-            }
-
-        } else {
-            // Stimmt das Tokenzeichen ueberein, dann erhoehe nTok
-            if ( (*this).GetChar(i) == cTok ) {
-                nTok++;
-                bStart = TRUE;
-
-                if ( nTok > nToken )
-                {
-                    // Vorzeitiger Abbruch der Schleife moeglich, denn
-                    // wir haben, was wir wollten.
-                    return aResult;
-                }
-            } else {
-                if (nTok == nToken) {
-                    aResult += (*this).GetChar(i);  // Zeichen gehoert zum Resultat-String
-                }
-            }
-        }
-    }
-
-    return aResult;
-}
 
 // -------------------------------------------------------------------------
 void OFlatTable::fillColumns()
@@ -589,10 +465,6 @@ void OFlatTable::refreshColumns()
     else
         m_pColumns  = new OFlatColumns(this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
-void OFlatTable::refreshIndexes()
-{
-}
 
 // -------------------------------------------------------------------------
 void SAL_CALL OFlatTable::disposing(void)
@@ -665,176 +537,6 @@ sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
 
     return OFlatTable_BASE::getSomething(rId);
 }
-// -------------------------------------------------------------------------
-sal_Bool OFlatTable::checkHeaderLine()
-{
-    OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
-    if (m_nFilePos == 0 && pConnection->isHeaderLine())
-    {
-        BOOL bRead2;
-        do
-        {
-            bRead2 = m_pFileStream->ReadLine(m_aCurrentLine);
-        }
-        while(bRead2 && !m_aCurrentLine.Len());
-
-        m_nFilePos = m_pFileStream->Tell();
-        if (m_pFileStream->IsEof())
-            return sal_False;
-    }
-    return sal_True;
-}
-//------------------------------------------------------------------
-sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
-{
-    OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
-    // ----------------------------------------------------------
-    // Positionierung vorbereiten:
-
-    sal_uInt32 nTempPos = m_nFilePos;
-    m_nFilePos = nCurPos;
-
-    switch(eCursorPosition)
-    {
-        case FILE_FIRST:
-            m_nFilePos = 0;
-            m_nRowPos = 1;
-            // run through
-        case FILE_NEXT:
-            if(eCursorPosition != FILE_FIRST)
-                ++m_nRowPos;
-            m_pFileStream->Seek(m_nFilePos);
-            if (m_pFileStream->IsEof() || !checkHeaderLine())
-            {
-                m_nMaxRowCount = m_nRowPos;
-                return sal_False;
-            }
-
-            m_aRowToFilePos[m_nRowPos] = m_nFilePos;
-
-            m_pFileStream->ReadLine(m_aCurrentLine);
-            if (m_pFileStream->IsEof())
-            {
-                m_nMaxRowCount = m_nRowPos;
-                return sal_False;
-            }
-            nCurPos = m_pFileStream->Tell();
-            break;
-        case FILE_PRIOR:
-            --m_nRowPos;
-            if(m_nRowPos > 0)
-            {
-                m_nFilePos = m_aRowToFilePos.find(m_nRowPos)->second;
-                m_pFileStream->Seek(m_nFilePos);
-                if (m_pFileStream->IsEof() || !checkHeaderLine())
-                    return sal_False;
-                m_pFileStream->ReadLine(m_aCurrentLine);
-                if (m_pFileStream->IsEof())
-                    return sal_False;
-                nCurPos = m_pFileStream->Tell();
-            }
-            else
-                m_nRowPos = 0;
-
-            break;
-
-            break;
-        case FILE_LAST:
-            if(m_nMaxRowCount)
-            {
-                m_nFilePos = m_aRowToFilePos.rbegin()->second;
-                m_nRowPos  = m_aRowToFilePos.rbegin()->first;
-                m_pFileStream->Seek(m_nFilePos);
-                if (m_pFileStream->IsEof() || !checkHeaderLine())
-                    return sal_False;
-                m_pFileStream->ReadLine(m_aCurrentLine);
-                if (m_pFileStream->IsEof())
-                    return sal_False;
-                nCurPos = m_pFileStream->Tell();
-            }
-            else
-            {
-                while(seekRow(FILE_NEXT,1,nCurPos)) ; // run through after last row
-                // now I know all
-                seekRow(FILE_PRIOR,1,nCurPos);
-            }
-            break;
-        case FILE_RELATIVE:
-            if(nOffset > 0)
-            {
-                for(sal_Int32 i = 0;i<nOffset;++i)
-                    seekRow(FILE_NEXT,1,nCurPos);
-            }
-            else if(nOffset < 0)
-            {
-                for(sal_Int32 i = nOffset;i;++i)
-                    seekRow(FILE_PRIOR,1,nCurPos);
-            }
-            break;
-        case FILE_ABSOLUTE:
-            {
-                if(nOffset < 0)
-                    nOffset = m_nRowPos + nOffset;
-                ::std::map<sal_Int32,sal_Int32>::const_iterator aIter = m_aRowToFilePos.find(nOffset);
-                if(aIter != m_aRowToFilePos.end())
-                {
-                    m_nFilePos = aIter->second;
-                    m_pFileStream->Seek(m_nFilePos);
-                    if (m_pFileStream->IsEof() || !checkHeaderLine())
-                        return sal_False;
-                    m_pFileStream->ReadLine(m_aCurrentLine);
-                    if (m_pFileStream->IsEof())
-                        return sal_False;
-                    nCurPos = m_pFileStream->Tell();
-                }
-                else if(m_nMaxRowCount && nOffset > m_nMaxRowCount) // offset is outside the table
-                {
-                    m_nRowPos = m_nMaxRowCount;
-                    return sal_False;
-                }
-                else
-                {
-                    aIter = m_aRowToFilePos.upper_bound(nOffset);
-                    if(aIter == m_aRowToFilePos.end())
-                    {
-                        m_nRowPos   = m_aRowToFilePos.rbegin()->first;
-                        nCurPos = m_nFilePos = m_aRowToFilePos.rbegin()->second;
-                        while(m_nRowPos != nOffset)
-                            seekRow(FILE_NEXT,1,nCurPos);
-                    }
-                    else
-                    {
-                        --aIter;
-                        m_nRowPos   = aIter->first;
-                        m_nFilePos  = aIter->second;
-                        m_pFileStream->Seek(m_nFilePos);
-                        if (m_pFileStream->IsEof() || !checkHeaderLine())
-                            return sal_False;
-                        m_pFileStream->ReadLine(m_aCurrentLine);
-                        if (m_pFileStream->IsEof())
-                            return sal_False;
-                        nCurPos = m_pFileStream->Tell();
-                    }
-                }
-            }
-
-            break;
-        case FILE_BOOKMARK:
-            m_pFileStream->Seek(nOffset);
-            if (m_pFileStream->IsEof())
-                return sal_False;
-
-            m_nFilePos = m_pFileStream->Tell(); // Byte-Position in der Datei merken (am ZeilenANFANG)
-            m_pFileStream->ReadLine(m_aCurrentLine);
-            if (m_pFileStream->IsEof())
-                return sal_False;
-            nCurPos  = m_pFileStream->Tell();
-            break;
-    }
-
-
-    return sal_True;
-}
 //------------------------------------------------------------------
 sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Bool bIsTable,sal_Bool bRetrieveData)
 {
@@ -877,13 +579,13 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                     switch(nType)
                     {
                         case DataType::DATE:
-                            (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(DateConversion::toDate(nRes,aDate));
+                            (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
                             break;
                         case DataType::TIMESTAMP:
-                            (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(DateConversion::toDateTime(nRes,aDate));
+                            (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
                             break;
                         default:
-                            (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(DateConversion::toTime(nRes));
+                            (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
                     }
                 }
                 catch(Exception&)

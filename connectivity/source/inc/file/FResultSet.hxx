@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             sal_Bool moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData);
             // return true when the select statement is "select count(*) from table"
             sal_Bool isCount() const;
+            void checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
         protected:
 
             using OResultSet_BASE::rBHelper;

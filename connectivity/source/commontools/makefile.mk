@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: oj $ $Date: 2001-04-27 10:08:34 $
+#   last change: $Author: oj $ $Date: 2001-05-23 09:15:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,8 +86,18 @@ SLOFILES=\
         $(SLO)$/FDatabaseMetaDataResultSetMetaData.obj	\
         $(SLO)$/FDatabaseMetaDataResultSet.obj			\
         $(SLO)$/FValue.obj								\
-        $(SLO)$/DateConversion.obj						\
         $(SLO)$/TDatabaseMetaDataBase.obj
+
+EXCEPTIONSFILES=\
+        $(SLO)$/TConnection.obj							\
+        $(SLO)$/conncleanup.obj							\
+        $(SLO)$/emptymetadata.obj						\
+        $(SLO)$/dbtools.obj								\
+        $(SLO)$/dbexception.obj							\
+        $(SLO)$/dbconversion.obj						\
+        $(SLO)$/FDatabaseMetaDataResultSet.obj			\
+        $(SLO)$/TDatabaseMetaDataBase.obj
+
 
 .IF "$(COM)"=="GCC"
 NOOPTFILES= \

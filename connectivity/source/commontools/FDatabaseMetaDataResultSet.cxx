@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 07:27:04 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,12 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString
             break;
     return i;
 }
+// -----------------------------------------------------------------------------
+void ODatabaseMetaDataResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException)
+{
+    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
+        ::dbtools::throwInvalidIndexException(*this);
+}
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
@@ -217,8 +223,8 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
     if(m_aRowsIter == m_aRows.end())
         return NULL;
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
 
     m_nColPos = columnIndex;
     return NULL;
@@ -233,8 +239,8 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
     if(m_aRowsIter == m_aRows.end())
         return NULL;
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 
     return NULL;
@@ -249,8 +255,8 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
     if(m_aRowsIter == m_aRows.end())
         return sal_False;
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
     return (*m_aRowsIter)[columnIndex];
 }
@@ -264,8 +270,8 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
     if(m_aRowsIter == m_aRows.end())
         return 0;
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 
     return (*m_aRowsIter)[columnIndex];
@@ -280,8 +286,8 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
     if(m_aRowsIter == m_aRows.end())
         return Sequence< sal_Int8 >();
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 ;
 
@@ -297,8 +303,8 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
     if(m_aRowsIter == m_aRows.end())
         return ::com::sun::star::util::Date(0,0,0);
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 ;
 
@@ -314,8 +320,8 @@ double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex ) t
     if(m_aRowsIter == m_aRows.end())
         return 0.0;
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 ;
 
@@ -332,8 +338,8 @@ float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex ) thr
     if(m_aRowsIter == m_aRows.end())
         return 0.0;
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 ;
 
@@ -350,8 +356,8 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
     if(m_aRowsIter == m_aRows.end())
         return 0;
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 ;
 
@@ -378,8 +384,8 @@ sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex ) 
     if(m_aRowsIter == m_aRows.end())
         return sal_Int64();
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 ;
 
@@ -407,8 +413,8 @@ Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 col
     if(m_aRowsIter == m_aRows.end())
         return NULL;
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 
     return NULL;
@@ -424,8 +430,8 @@ Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 colum
     if(m_aRowsIter == m_aRows.end())
         return NULL;
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 
     return NULL;
@@ -439,8 +445,8 @@ Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 colum
     if(m_aRowsIter == m_aRows.end())
         return NULL;
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 
     return NULL;
@@ -455,8 +461,8 @@ Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 columnI
     if(m_aRowsIter == m_aRows.end())
         return NULL;
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 
     return NULL;
@@ -471,8 +477,8 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const
     if(m_aRowsIter == m_aRows.end())
         return Any();
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-                ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
     return (*m_aRowsIter)[columnIndex].makeAny();
 }
@@ -486,8 +492,8 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     if(m_aRowsIter == m_aRows.end())
         return 0;
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 
     return (*m_aRowsIter)[columnIndex];
@@ -503,8 +509,8 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     if(m_aRowsIter == m_aRows.end())
         return ::rtl::OUString();
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
 
 
     m_nColPos = columnIndex;
@@ -523,8 +529,8 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     if(m_aRowsIter == m_aRows.end())
         return ::com::sun::star::util::Time(0,0,0,0);
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
     m_nColPos = columnIndex;
 
 ;
@@ -543,8 +549,8 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     if(m_aRowsIter == m_aRows.end())
         return ::com::sun::star::util::DateTime(0,0,0,0,0,0,0);
 
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        ::dbtools::throwInvalidIndexException(*this);
+    checkIndex(columnIndex );
+
 
     m_nColPos = columnIndex;
 ;

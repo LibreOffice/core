@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 09:06:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,13 @@
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
+#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+#include "connectivity/CommonTools.hxx"
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
+
 
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
@@ -544,16 +551,6 @@ SQLContext prependContextInfo(SQLException& _rException, const Reference< XInter
     SQLContext aContextDescription(_rContextDescription, _rxContext, ::rtl::OUString(), 0, aInfo.get(), _rContextDetails);
     return aContextDescription;
 }
-
-//------------------------------------------------------------------------------
-::rtl::OUString quoteName(const ::rtl::OUString& _rQuote, const ::rtl::OUString& _rName)
-{
-    ::rtl::OUString sName = _rName;
-    if(_rQuote.getLength() && _rQuote.toChar() != ' ')
-        sName = _rQuote + _rName + _rQuote;
-    return sName;
-}
-
 //------------------------------------------------------------------------------
 ::rtl::OUString quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName)
 {
@@ -1130,63 +1127,6 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
     }
     return sName;
 }
-sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials);
-#include <ctype.h>      //isdigit
-//------------------------------------------------------------------------------
-sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
-{
-    // Überprüfung auf korrekte Namensgebung im SQL Sinne
-    // Dieses ist wichtig für Tabellennamen beispielsweise
-    ::rtl::OString aName(rName,rName.getLength(),RTL_TEXTENCODING_ASCII_US);
-    const char* pStr = aName.getStr();
-    if (isdigit(*pStr))
-        return sal_False;
-
-    for (; *pStr; ++pStr )
-        if(!isCharOk(*pStr,_rSpecials))
-            return sal_False;
-
-    if  (   rName.getLength()
-        &&  (   (rName.toChar() == '_')
-            ||  (   (rName.toChar() >= '0')
-                &&  (rName.toChar() <= '9')
-                )
-            )
-        )
-        return sal_False;
-    // the SQL-Standard requires the first character to be an alphabetic character, which
-    // isn't easy to decide in UniCode ...
-    // So we just prohibit the characters which already lead to problems ....
-    // 11.04.00 - 74902 - FS
-
-    return sal_True;
-}
-//------------------------------------------------------------------
-sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials)
-{
-
-    if ( ((c >= 97) && (c <= 122)) || ((c >= 65) && (c <=  90)) || ((c >= 48) && (c <=  57)) ||
-          c == '_' || _rSpecials.indexOf(c) != -1)
-          return sal_True;
-    else
-        return sal_False;
-}
-//------------------------------------------------------------------
-// Erzeugt einen neuen Namen falls noetig
-::rtl::OUString convertName2SQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
-{
-    if(isValidSQLName(rName,_rSpecials))
-        return rName;
-    ::rtl::OUString aNewName(rName);
-    const sal_Unicode* pStr = rName.getStr();
-    sal_Bool bValid(!isdigit(*pStr));
-    for (; bValid && *pStr; pStr++ )
-        if(!isCharOk(*pStr,_rSpecials))
-            aNewName.replace(*pStr,'_');
-
-    return aNewName;
-}
-
 // -----------------------------------------------------------------------------
 void showError(const SQLExceptionInfo& _rInfo,
                const Reference< XWindow>& _xParent,
@@ -1212,15 +1152,98 @@ void showError(const SQLExceptionInfo& _rInfo,
         }
     }
 }
-
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
+namespace connectivity
+{
+void release(oslInterlockedCount& _refCount,
+             ::cppu::OBroadcastHelper& rBHelper,
+             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+             ::com::sun::star::lang::XComponent* _pObject)
+{
+    if (osl_decrementInterlockedCount( &_refCount ) == 0)
+    {
+        osl_incrementInterlockedCount( &_refCount );
 
+        if (!rBHelper.bDisposed && !rBHelper.bInDispose)
+        {
+            // remember the parent
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xParent;
+            {
+                ::osl::MutexGuard aGuard( rBHelper.rMutex );
+                xParent = _xInterface;
+                _xInterface = NULL;
+            }
+
+            // First dispose
+            _pObject->dispose();
+
+            // only the alive ref holds the object
+            OSL_ASSERT( _refCount == 1 );
+
+            // release the parent in the ~
+            if (xParent.is())
+            {
+                ::osl::MutexGuard aGuard( rBHelper.rMutex );
+                _xInterface = xParent;
+            }
+
+//                  // destroy the object if xHoldAlive decrement the refcount to 0
+//                  m_pDerivedImplementation->WEAK::release();
+        }
+    }
+    else
+        osl_incrementInterlockedCount( &_refCount );
+}
+
+void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
+{
+    if (_bThrow)
+        throw DisposedException();
+
+}
+// -------------------------------------------------------------------------
+    OSQLColumns::const_iterator find(   OSQLColumns::const_iterator __first,
+                                        OSQLColumns::const_iterator __last,
+                                        const ::rtl::OUString& _rVal,
+                                        const ::comphelper::UStringMixEqual& _rCase)
+    {
+        while (__first != __last && !_rCase(getString((*__first)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),_rVal))
+            ++__first;
+        return __first;
+    }
+    // -------------------------------------------------------------------------
+    OSQLColumns::const_iterator findRealName(   OSQLColumns::const_iterator __first,
+                                        OSQLColumns::const_iterator __last,
+                                        const ::rtl::OUString& _rVal,
+                                        const ::comphelper::UStringMixEqual& _rCase)
+    {
+        while (__first != __last && !_rCase(getString((*__first)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME))),_rVal))
+            ++__first;
+        return __first;
+    }
+    // -------------------------------------------------------------------------
+    OSQLColumns::const_iterator find(   OSQLColumns::const_iterator __first,
+                                        OSQLColumns::const_iterator __last,
+                                        const ::rtl::OUString& _rProp,
+                                        const ::rtl::OUString& _rVal,
+                                        const ::comphelper::UStringMixEqual& _rCase)
+    {
+        while (__first != __last && !_rCase(getString(Reference<XPropertySet>((*__first),UNO_QUERY)->getPropertyValue(_rProp)),_rVal))
+            ++__first;
+        return __first;
+    }
+// -----------------------------------------------------------------------------
+} //namespace connexctivity
+// -----------------------------------------------------------------------------
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27  2001/05/21 09:06:17  oj
+ *  #87050# composeTableName corrected
+ *
  *  Revision 1.26  2001/05/17 07:27:04  oj
  *  #86528# size changes
  *

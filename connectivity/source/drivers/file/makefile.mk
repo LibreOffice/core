@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2001-05-16 15:31:48 $
+#   last change: $Author: oj $ $Date: 2001-05-23 09:10:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,6 @@ TARGET=file
 
 USE_LDUMP2=TRUE
 USE_DEFFILE=TRUE
-ENABLE_EXCEPTIONS=TRUE
 LDUMP=ldump2.exe
 
 # --- Settings ----------------------------------
@@ -81,6 +80,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files -------------------------------------
 
 SLOFILES=\
+    $(SLO)$/FNoException.obj		\
     $(SLO)$/FConnection.obj			\
     $(SLO)$/FResultSetMetaData.obj	\
     $(SLO)$/FColumns.obj			\
@@ -94,6 +94,21 @@ SLOFILES=\
     $(SLO)$/FDriver.obj				\
     $(SLO)$/fanalyzer.obj			\
     $(SLO)$/fcode.obj				\
+    $(SLO)$/fcomp.obj
+
+EXCEPTIONSFILES=\
+    $(SLO)$/FConnection.obj			\
+    $(SLO)$/FResultSetMetaData.obj	\
+    $(SLO)$/FColumns.obj			\
+    $(SLO)$/FTables.obj				\
+    $(SLO)$/FTable.obj				\
+    $(SLO)$/FCatalog.obj			\
+    $(SLO)$/FResultSet.obj			\
+    $(SLO)$/FStatement.obj			\
+    $(SLO)$/FPreparedStatement.obj	\
+    $(SLO)$/FDatabaseMetaData.obj	\
+    $(SLO)$/FDriver.obj				\
+    $(SLO)$/fanalyzer.obj			\
     $(SLO)$/fcomp.obj
 
 .IF "$(OS)"=="MACOSX"

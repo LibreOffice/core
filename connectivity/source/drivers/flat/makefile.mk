@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-17 06:46:52 $
+#   last change: $Author: oj $ $Date: 2001-05-23 09:13:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=flat
 
-ENABLE_EXCEPTIONS=TRUE
-
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
@@ -79,6 +77,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files -------------------------------------
 
 SLOFILES=\
+    $(SLO)$/ENoException.obj		\
     $(SLO)$/EResultSet.obj			\
     $(SLO)$/EStatement.obj			\
     $(SLO)$/EPreparedStatement.obj	\
@@ -90,6 +89,20 @@ SLOFILES=\
     $(SLO)$/EConnection.obj			\
     $(SLO)$/Eservices.obj			\
     $(SLO)$/EDriver.obj
+
+EXCEPTIONSFILES=\
+    $(SLO)$/EResultSet.obj			\
+    $(SLO)$/EStatement.obj			\
+    $(SLO)$/EPreparedStatement.obj	\
+    $(SLO)$/ETable.obj				\
+    $(SLO)$/EDatabaseMetaData.obj	\
+    $(SLO)$/ECatalog.obj			\
+    $(SLO)$/EColumns.obj			\
+    $(SLO)$/ETables.obj				\
+    $(SLO)$/EConnection.obj			\
+    $(SLO)$/Eservices.obj			\
+    $(SLO)$/EDriver.obj
+
 
 .IF "$(OS)"=="MACOSX"
 #SHL1VERSIONMAP=$(TARGET).$(DLLPOSTFIX).map

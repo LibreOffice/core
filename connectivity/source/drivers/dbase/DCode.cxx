@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DCode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:39:59 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ OOperandAttr* OFILEAnalyzer::createOperandAttr(sal_Int32 _nPos,
                                                const Reference< XPropertySet>& _xCol,
                                                const Reference< XNameAccess>& _xIndexes)
 {
-    return new OFILEOperandAttr(_nPos,_xCol,_xIndexes);
+    return new OFILEOperandAttr((sal_uInt16)_nPos,_xCol,_xIndexes);
 }
 
 //------------------------------------------------------------------

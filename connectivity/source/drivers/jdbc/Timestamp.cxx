@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Timestamp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:31:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 09:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 #ifndef _CONNECTIVITY_JAVA_TOOLS_HXX_
 #include "java/tools.hxx"
 #endif
-#ifndef _CONNECTIVITY_DATECONVERSION_HXX_
-#include "connectivity/DateConversion.hxx"
-#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include "connectivity/dbconversion.hxx"
 #endif
 
 using namespace ::comphelper;
@@ -143,7 +143,7 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
         return;
     jvalue args[1];
     // Parameter konvertieren
-    args[0].j = DateConversion::toINT32(_rOut);
+    args[0].j = ::dbtools::DBTypeConversion::toINT32(_rOut);
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
     char * cSignature = "(J)V";
@@ -194,7 +194,7 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
         return;
     jvalue args[1];
         // Parameter konvertieren
-    args[0].j = (jlong)DateConversion::toINT64(_rOut);
+    args[0].j = (jlong)::dbtools::DBTypeConversion::toINT64(_rOut);
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
     char * cSignature = "(J)V";
