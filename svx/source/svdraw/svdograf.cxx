@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-12 10:34:26 $
+ *  last change: $Author: ka $ $Date: 2002-03-14 15:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,7 @@ void SdrGraphicLink::DataChanged( const String& rMimeType,
 
     if( pLinkManager && rValue.hasValue() )
     {
-        pLinkManager->GetDisplayNames( this, 0, &pGrafObj->aFileName,
-                                            0, &pGrafObj->aFilterName );
+        pLinkManager->GetDisplayNames( this, 0, &pGrafObj->aFileName, 0, &pGrafObj->aFilterName );
 
         Graphic aGraphic;
         if( SvxLinkManager::GetGraphicFromAny( rMimeType, rValue, aGraphic ))
@@ -596,7 +595,7 @@ sal_Bool SdrGrafObj::ImpUpdateGraphicLink() const
         bRet = sal_True;
     }
 #else
-    if( aFileName.Len() && aFilterName.Len() )
+    if( aFileName.Len() )
     {
         // #92205# Load linked graphics for player
         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_READ | STREAM_SHARE_DENYNONE );
@@ -605,8 +604,7 @@ sal_Bool SdrGrafObj::ImpUpdateGraphicLink() const
         {
             Graphic         aGraphic;
             GraphicFilter*  pFilter = GetGrfFilter();
-            USHORT          nFilter = pFilter->GetImportFormatNumber( aFilterName );
-            USHORT          nError = pFilter->ImportGraphic( aGraphic, aFileName, *pIStm, nFilter );
+            USHORT          nError = pFilter->ImportGraphic( aGraphic, aFileName, *pIStm );
 
             pGraphic->SetGraphic( aGraphic );
 
@@ -1120,7 +1118,7 @@ void SdrGrafObj::operator=( const SdrObject& rObj )
 #ifndef SVX_LIGHT
     if( rGraf.pGraphicLink != NULL)
 #else
-    if( rGraf.aFileName.Len() && rGraf.aFilterName.Len() )
+    if( rGraf.aFileName.Len() )
 #endif
         SetGraphicLink( aFileName, aFilterName );
 
@@ -1470,8 +1468,7 @@ void SdrGrafObj::ReadDataTilV10( const SdrObjIOHeader& rHead, SvStream& rIn )
             if( pIStm )
             {
                 GraphicFilter*  pFilter = GetGrfFilter();
-                USHORT          nFilter = pFilter->GetImportFormatNumber( aFilterName );
-                USHORT          nError = pFilter->ImportGraphic( aGraphic, aFileURLStr, *pIStm, nFilter );
+                USHORT          nError = pFilter->ImportGraphic( aGraphic, aFileURLStr, *pIStm );
 
                 SetGraphicLink( aFileURLStr, aFilterName );
 
@@ -1600,7 +1597,7 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
         else
             bCopyToPoolOnAfterRead = TRUE;
 
-        if( bGraphicLink && aFileName.Len() && aFilterName.Len() )
+        if( bGraphicLink && aFileName.Len() )
         {
             SetGraphicLink( aFileName, aFilterName );
 
@@ -1952,8 +1949,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                 if( ( ( GRAFSTREAMPOS_INVALID != nGrafStreamPos ) || pGraphic->HasUserData() || pGraphicLink ) &&
                     ( nSwapMode & SDR_SWAPGRAPHICSMODE_PURGE ) )
 #else
-                if( ( ( GRAFSTREAMPOS_INVALID != nGrafStreamPos ) ||
-                      pGraphic->HasUserData() || (aFileName.Len() && aFilterName.Len()) ) &&
+                if( ( ( GRAFSTREAMPOS_INVALID != nGrafStreamPos ) || pGraphic->HasUserData() || aFileName.Len() ) &&
                     ( nSwapMode & SDR_SWAPGRAPHICSMODE_PURGE ) )
 #endif
                 {
