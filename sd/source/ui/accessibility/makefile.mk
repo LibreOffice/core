@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: af $ $Date: 2002-03-06 16:56:04 $
+#   last change: $Author: af $ $Date: 2002-04-11 13:31:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,7 @@ PROJECTPCH=sd
 PROJECTPCHSOURCE=$(PRJ)$/util$/sd
 PRJNAME=sd
 TARGET=accessibility
-#ENABLE_EXCEPTIONS=TRUE
+ENABLE_EXCEPTIONS=TRUE
 AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
@@ -84,6 +84,7 @@ SLOFILES =      									\
     $(SLO)$/AccessiblePresentationShape.obj			\
     $(SLO)$/AccessiblePresentationGraphicShape.obj	\
     $(SLO)$/AccessiblePresentationOLEShape.obj		\
+    $(SLO)$/AccessibleViewForwarder.obj				\
     $(SLO)$/SdShapeTypes.obj
 
 
