@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:57:04 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,10 @@ enum SbiToken {
     PRINT, PRIVATE, PROPERTY, PUBLIC,
     REDIM, REM, RESUME, RETURN, RSET,
     SELECT, SET, SHARED, STATIC, STEP, STOP, SUB,
-    TEXT, THEN, TO, TYPE,
+    TEXT, THEN, TO, TYPE, ENUM,
     UNTIL,
     WEND, WHILE, WITH, WRITE,
-    ENDIF, ENDFUNC, ENDPROPERTY, ENDSUB, ENDTYPE, ENDSELECT, ENDWITH,
+    ENDENUM, ENDIF, ENDFUNC, ENDPROPERTY, ENDSUB, ENDTYPE, ENDSELECT, ENDWITH,
     // Ende aller Keywords
     LASTKWD = ENDWITH,
     // Statement-Ende
