@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-10 15:22:54 $
+ *  last change: $Author: nf $ $Date: 2002-06-13 14:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,7 +835,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ russian ] = "From ~left/top";
         Text[ greek ] = "From ~left/top";
         Text[ dutch ] = "From ~left/top";
-        Text[ french ] = "De la gauche/du haut";
+        Text[ french ] = "De gauche/du haut";
         Text[ spanish ] = "De la ~Izquierda/de arriba";
         Text[ finnish ] = "From ~left/top";
         Text[ italian ] = "Da sinistra/in alto";
@@ -860,7 +860,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ russian ] = "From rig~ht/bottom";
         Text[ greek ] = "From rig~ht/bottom";
         Text[ dutch ] = "From rig~ht/bottom";
-        Text[ french ] = "De la droite/du bas";
+        Text[ french ] = "De droite/du bas";
         Text[ spanish ] = "De la ~derecha/Abajo";
         Text[ finnish ] = "From rig~ht/bottom";
         Text[ italian ] = "Da destra/in basso";
@@ -915,7 +915,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ finnish ] = "~Bottom/Right";
         Text[ italian ] = "In basso/a destra";
         Text[ danish ] = "~Bottom/Right";
-        Text[ swedish ] = "~Nere/till h�ger";
+        Text[ swedish ] = "Nere/h�ger";
         Text[ polish ] = "~Bottom/Right";
         Text[ portuguese_brazilian ] = "~Bottom/Right";
         Text[ japanese ] = "下/右";
@@ -2579,7 +2579,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ polish ] = "Odst�py mi�dzy znakami";
         Text[ portuguese_brazilian ] = "Character distance";
         Text[ japanese ] = "文字間隔の調整";
-        Text[ korean ] = "자간";
+        Text[ korean ] = "문자 간격 조정";
         Text[ chinese_simplified ] = "字符间隔";
         Text[ chinese_traditional ] = "字元間隔";
         Text[ turkish ] = "Character distance";
