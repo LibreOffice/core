@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:44:54 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 09:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1089,6 +1089,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pTextLen->SetDecimalDigits(0);
         pTextLen->SetMin(0);
         pTextLen->SetMax(0x7FFFFFFF);   // soll draussen geaendert werden, wenn noetig
+        pTextLen->SetStrictFormat(TRUE);
 
         pTextLen->SetHelpId(HID_TAB_ENT_TEXT_LEN);
         SetPosSize( (Control**)&pTextLenText, nPos, 0 );
@@ -1195,6 +1196,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pLength->SetDecimalDigits(0);
         pLength->SetMin(0);
         pLength->SetMax(0x7FFFFFFF);    // soll draussen geaendert werden, wenn noetig
+        pLength->SetStrictFormat(TRUE);
 
         pLength->SetHelpId(HID_TAB_ENT_LEN);
         SetPosSize( (Control**)&pLengthText, nPos, 0 );
@@ -1217,6 +1219,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pScale->SetDecimalDigits(0);
         pScale->SetMin(0);
         pScale->SetMax(0x7FFFFFFF); // soll draussen geaendert werden, wenn noetig
+        pScale->SetStrictFormat(TRUE);
 
         pScale->SetHelpId(HID_TAB_ENT_SCALE);
 
