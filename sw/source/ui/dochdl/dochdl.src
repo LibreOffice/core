@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE[ arabic ] = "ΚδΣνή ΗαΝΗέΩΙ ΗαγΨαζΘ ΫνΡ γΚζέΡ.";
     MESSAGE[ dutch ] = "Gevraagd clipboardformaat is niet beschikbaar.";
     MESSAGE[ chinese_simplified ] = "ΛωΠθÒªµΔ²ΓΌτ°εΈρΚ½²»΄ζΤΪ΅£";
-    MESSAGE[ greek ] = "Η ζητούμενη μορφή του clipboard δεν είναι διαθέσιμη.";
+    MESSAGE[ greek ] = "Η ζητούμενη μορφή του πρόχειρου δεν είναι διαθέσιμη.";
     MESSAGE[ korean ] = "ΏδΓ»µΘ Ε¬Έ³ΊΈµε Ό­½ΔΐΜ °΅΄ΙΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
     MESSAGE[ turkish ] = "έstenen pano formatύ mevcut deπil.";
     MESSAGE[ language_user1 ] = " ";
