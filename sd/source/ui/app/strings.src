@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-25 13:31:19 $
+ *  last change: $Author: ka $ $Date: 2001-07-04 16:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7369,7 +7369,7 @@ String STR_EFFECT_NONE
 String STR_EFFECT_FADE_FROM_L
 {
     /* ### ACHTUNG: Neuer Text in Resource? Von links ¸berblenden : Von links ≥berblenden */
-    Text = "Von links ¸berblenden" ;
+    Text = "‹berblenden von links" ;
     Text [ ENGLISH ] = "Fade from left" ;
     Text [ norwegian ] = "Fade from left" ;
     Text [ italian ] = "Dissolvi da sinistra" ;
@@ -7396,7 +7396,7 @@ String STR_EFFECT_FADE_FROM_L
 String STR_EFFECT_FADE_FROM_T
 {
     /* ### ACHTUNG: Neuer Text in Resource? Von oben ¸berblenden : Von oben ≥berblenden */
-    Text = "Von oben ¸berblenden" ;
+    Text = "‹berblenden von oben" ;
     Text [ ENGLISH ] = "Fade from top" ;
     Text [ norwegian ] = "Fade from top" ;
     Text [ italian ] = "Dissolvi dall'alto" ;
@@ -7423,7 +7423,7 @@ String STR_EFFECT_FADE_FROM_T
 String STR_EFFECT_FADE_FROM_R
 {
     /* ### ACHTUNG: Neuer Text in Resource? Von rechts ¸berblenden : Von rechts ≥berblenden */
-    Text = "Von rechts ¸berblenden" ;
+    Text = "‹berblenden von rechts" ;
     Text [ ENGLISH ] = "Fade from right" ;
     Text [ norwegian ] = "Fade from right" ;
     Text [ italian ] = "Dissolvi da destra" ;
@@ -7450,7 +7450,7 @@ String STR_EFFECT_FADE_FROM_R
 String STR_EFFECT_FADE_FROM_B
 {
     /* ### ACHTUNG: Neuer Text in Resource? Von unten ¸berblenden : Von unten ≥berblenden */
-    Text = "Von unten ¸berblenden" ;
+    Text = "‹berblenden von unten" ;
     Text [ ENGLISH ] = "Fade from bottom" ;
     Text [ norwegian ] = "Fade from bottom" ;
     Text [ italian ] = "Dissolvi dal basso" ;
@@ -7476,7 +7476,7 @@ String STR_EFFECT_FADE_FROM_B
 };
 String STR_EFFECT_FADE_TO_CENTER
 {
-    Text = "Blende nach innen" ;
+    Text = "Blenden nach innen" ;
     Text [ ENGLISH ] = "Fade to center" ;
     Text [ norwegian ] = "Fade to center" ;
     Text [ italian ] = "Diaframma verso il centro" ;
@@ -7503,7 +7503,7 @@ String STR_EFFECT_FADE_TO_CENTER
 String STR_EFFECT_FADE_FROM_CENTER
 {
     /* ### ACHTUNG: Neuer Text in Resource? Blende nach auﬂen : Blende nach auòen */
-    Text = "Blende nach auﬂen" ;
+    Text = "Blenden nach auﬂen" ;
     Text [ ENGLISH ] = "Fade from center" ;
     Text [ norwegian ] = "Fade from center" ;
     Text [ italian ] = "Diaframma dal centro" ;
@@ -7529,7 +7529,7 @@ String STR_EFFECT_FADE_FROM_CENTER
 };
 String STR_EFFECT_DISCARD_FROM_L
 {
-    Text = "Von links aufdecken" ;
+    Text = "Aufdecken von links" ;
     Text [ ENGLISH ] = "Discard from left" ;
     Text [ norwegian ] = "Discard from left" ;
     Text [ italian ] = "Scopri da sinistra" ;
@@ -7555,7 +7555,7 @@ String STR_EFFECT_DISCARD_FROM_L
 };
 String STR_EFFECT_DISCARD_FROM_UL
 {
-    Text = "Von links oben aufdecken" ;
+    Text = "Aufdecken von links oben" ;
     Text [ ENGLISH ] = "Discard from upper left" ;
     Text [ english_us ] = "Uncover From Top Left" ;
     Text[ portuguese ] = "Descobrir a partir do topo esquerdo";
@@ -7580,7 +7580,7 @@ String STR_EFFECT_DISCARD_FROM_UL
 };
 String STR_EFFECT_DISCARD_FROM_T
 {
-    Text = "Von oben aufdecken" ;
+    Text = "Aufdecken von oben" ;
     Text [ ENGLISH ] = "Discard from top" ;
     Text [ english_us ] = "Uncover From Top" ;
     Text[ portuguese ] = "Descobrir a partir do topo";
@@ -7605,7 +7605,7 @@ String STR_EFFECT_DISCARD_FROM_T
 };
 String STR_EFFECT_DISCARD_FROM_UR
 {
-    Text = "Von rechts oben aufdecken" ;
+    Text = "Aufdecken von rechts oben" ;
     Text [ ENGLISH ] = "Discard from upper right" ;
     Text [ english_us ] = "Uncover From Upper Right" ;
     Text[ portuguese ] = "Descobrir a partir do topo direito";
@@ -7630,7 +7630,7 @@ String STR_EFFECT_DISCARD_FROM_UR
 };
 String STR_EFFECT_DISCARD_FROM_R
 {
-    Text = "Von rechts aufdecken" ;
+    Text = "Aufdecken von rechts" ;
     Text [ ENGLISH ] = "Discard from right" ;
     Text [ norwegian ] = "Discard from right" ;
     Text [ italian ] = "Scopri da destra" ;
@@ -7656,7 +7656,7 @@ String STR_EFFECT_DISCARD_FROM_R
 };
 String STR_EFFECT_DISCARD_FROM_LR
 {
-    Text = "Von rechts unten aufdecken" ;
+    Text = "Aufdecken von rechts unten" ;
     Text [ ENGLISH ] = "Discard from lower right" ;
     Text [ english_us ] = "Uncover From Lower Right" ;
     Text[ portuguese ] = "Descobrir a partir da base direita";
@@ -7681,7 +7681,7 @@ String STR_EFFECT_DISCARD_FROM_LR
 };
 String STR_EFFECT_DISCARD_FROM_B
 {
-    Text = "Von unten aufdecken" ;
+    Text = "Aufdecken von unten" ;
     Text [ ENGLISH ] = "Discard from bottom" ;
     Text [ norwegian ] = "Discard from bottom" ;
     Text [ italian ] = "Scopri dal basso" ;
@@ -7707,7 +7707,7 @@ String STR_EFFECT_DISCARD_FROM_B
 };
 String STR_EFFECT_DISCARD_FROM_LL
 {
-    Text = "Von links unten aufdecken" ;
+    Text = "Aufdecken von links unten" ;
     Text [ ENGLISH ] = "Discard from lower left" ;
     Text [ english_us ] = "Uncover From Lower Left" ;
     Text[ portuguese ] = "Descobrir a partir da base esquerda";
@@ -7747,7 +7747,7 @@ String STR_EFFECT_DISCARD_S_FROM_L
     Text[ polish ] = "Odkryj w ramce obiektu z lewej";
     Text[ portuguese_brazilian ] = "Discard short from Left";
     Text[ japanese ] = "ç∂Ç©ÇÁÀﬂ∞∏";
-    Text[ korean ] = "øﬁ¬ ∫Œ≈Õ  ¥‹√‡«œø© ≥ªπ–±‚";
+    Text[ korean ] = "øﬁ¬ ∫Œ≈Õ ¥‹√‡«œø© ≥ªπ–±‚";
     Text[ chinese_simplified ] = "¥”◊Ûª∫¬˝¿©’π";
     Text[ chinese_traditional ] = "±q•™Ωw∫C¬XÆi";
     Text[ turkish ] = "Discard short from Left";
@@ -7772,7 +7772,7 @@ String STR_EFFECT_DISCARD_S_FROM_UL
     Text[ polish ] = "Odkryj w ramce obiektu z lewej od gÛry";
     Text[ portuguese_brazilian ] = "Discard short from Upper Left";
     Text[ japanese ] = "ç∂è„Ç©ÇÁÀﬂ∞∏";
-    Text[ korean ] = "¿ß øﬁ¬ ∫Œ≈Õ  ¥‹√‡«œø© ≥ªπ–±‚";
+    Text[ korean ] = "¿ß øﬁ¬ ∫Œ≈Õ ¥‹√‡«œø© ≥ªπ–±‚";
     Text[ chinese_simplified ] = "¥”◊Û…œª∫¿©’π";
     Text[ chinese_traditional ] = "±q•™§WΩw∫C¬XÆi";
     Text[ turkish ] = "Discard short from Upper Left";
@@ -7797,7 +7797,7 @@ String STR_EFFECT_DISCARD_S_FROM_T
     Text[ polish ] = "Odkryj w ramce obiektu od gÛry";
     Text[ portuguese_brazilian ] = "Discard short from Top";
     Text[ japanese ] = "è„Ç©ÇÁÀﬂ∞∏";
-    Text[ korean ] = "¿ß∫Œ≈Õ  ¥‹√‡«œø© ≥ªπ–±‚";
+    Text[ korean ] = "¿ß∫Œ≈Õ ¥‹√‡«œø© ≥ªπ–±‚";
     Text[ chinese_simplified ] = "¥”…œª∫¬˝¿©’π";
     Text[ chinese_traditional ] = "±q§WΩw∫C¬XÆi";
     Text[ turkish ] = "Discard short from Top";
@@ -7822,7 +7822,7 @@ String STR_EFFECT_DISCARD_S_FROM_UR
     Text[ polish ] = "Odkryj z prawej od gÛry";
     Text[ portuguese_brazilian ] = "Discard short from Upper Right";
     Text[ japanese ] = "âEè„Ç©ÇÁÀﬂ∞∏";
-    Text[ korean ] = "¿ß ø¿∏•¬ ∫Œ≈Õ  ¥‹√‡«œø© ≥ªπ–±‚";
+    Text[ korean ] = "¿ß ø¿∏•¬ ∫Œ≈Õ ¥‹√‡«œø© ≥ªπ–±‚";
     Text[ chinese_simplified ] = "¥””“…œª∫¬˝µÿ¿©’π";
     Text[ chinese_traditional ] = "±q•k§WΩw∫C¶a¬XÆi";
     Text[ turkish ] = "Discard short from Upper Right";
@@ -7847,7 +7847,7 @@ String STR_EFFECT_DISCARD_S_FROM_R
     Text[ polish ] = "Odkryj w ramce obiektu z prawej";
     Text[ portuguese_brazilian ] = "Discard short from Right";
     Text[ japanese ] = "âEÇ©ÇÁÀﬂ∞∏";
-    Text[ korean ] = "ø¿∏•¬ ∫Œ≈Õ  ¥‹√‡«œø© ≥ªπ–±‚";
+    Text[ korean ] = "ø¿∏•¬ ∫Œ≈Õ ¥‹√‡«œø© ≥ªπ–±‚";
     Text[ chinese_simplified ] = "¥””“ª∫¬˝¿©’π";
     Text[ chinese_traditional ] = "±q•kΩw∫C¬XÆi";
     Text[ turkish ] = "Discard short from Right";
@@ -7872,7 +7872,7 @@ String STR_EFFECT_DISCARD_S_FROM_LR
     Text[ polish ] = "Odkryj w ramce obiektu z prawej od do≥u";
     Text[ portuguese_brazilian ] = "Discard short from Lower Right";
     Text[ japanese ] = "âEâ∫Ç©ÇÁÀﬂ∞∏";
-    Text[ korean ] = "æ∆∑° ø¿∏•¬ ∫Œ≈Õ  ¥‹√‡«œø© ≥ªπ–±‚";
+    Text[ korean ] = "æ∆∑° ø¿∏•¬ ∫Œ≈Õ ¥‹√‡«œø© ≥ªπ–±‚";
     Text[ chinese_simplified ] = "¥””“œ¬ª∫¬˝µÿ¿©’π";
     Text[ chinese_traditional ] = "±q•k§UΩw∫C¶a¬XÆi";
     Text[ turkish ] = "Discard short from Lower Right";
@@ -7897,7 +7897,7 @@ String STR_EFFECT_DISCARD_S_FROM_B
     Text[ polish ] = "Odkryj w ramce obiektu od do≥u";
     Text[ portuguese_brazilian ] = "Discard short from Bottom";
     Text[ japanese ] = "â∫Ç©ÇÁÀﬂ∞∏";
-    Text[ korean ] = "æ∆∑°∫Œ≈Õ  ¥‹√‡«œø© ≥ªπ–±‚";
+    Text[ korean ] = "æ∆∑°∫Œ≈Õ ¥‹√‡«œø© ≥ªπ–±‚";
     Text[ chinese_simplified ] = "¥”œ¬ª∫¬˝¿©’π";
     Text[ chinese_traditional ] = "±q§UΩw∫C¬XÆi";
     Text[ turkish ] = "Discard short from Bottom";
@@ -7922,7 +7922,7 @@ String STR_EFFECT_DISCARD_S_FROM_LL
     Text[ polish ] = "Odkryj w ramce obiektu z lewej od do≥u";
     Text[ portuguese_brazilian ] = "Discard short from Lower Left";
     Text[ japanese ] = "ç∂â∫Ç©ÇÁÀﬂ∞∏";
-    Text[ korean ] = "æ∆∑° øﬁ¬ ∫Œ≈Õ  ¥‹√‡«œø© ≥ªπ–±‚";
+    Text[ korean ] = "æ∆∑° øﬁ¬ ∫Œ≈Õ ¥‹√‡«œø© ≥ªπ–±‚";
     Text[ chinese_simplified ] = "¥”◊Ûª∫¬˝µÿ¿©’π";
     Text[ chinese_traditional ] = "±q•™§UΩw∫C¶a¬XÆi";
     Text[ turkish ] = "Discard short from Lower Left";
@@ -7932,7 +7932,7 @@ String STR_EFFECT_DISCARD_S_FROM_LL
 };
 String STR_EFFECT_VERTICAL_STRIPES
 {
-    Text = "Vertikal blenden" ;
+    Text = "Blenden vertikal" ;
     Text [ ENGLISH ] = "Vertical stripes" ;
     Text [ norwegian ] = "Vertikal blenden" ;
     Text [ italian ] = "Scopertura a veneziana verticale" ;
@@ -7958,7 +7958,7 @@ String STR_EFFECT_VERTICAL_STRIPES
 };
 String STR_EFFECT_HORIZONTAL_STRIPES
 {
-    Text = "Horizontal blenden" ;
+    Text = "Blenden horizontal" ;
     Text [ ENGLISH ] = "Horizontal blenden" ;
     Text [ norwegian ] = "Horizontal blenden" ;
     Text [ italian ] = "Scopertura a veneziana orizzontale" ;
@@ -7984,7 +7984,7 @@ String STR_EFFECT_HORIZONTAL_STRIPES
 };
 String STR_EFFECT_VERTICAL_LINES
 {
-    Text = "Vertikale Linien" ;
+    Text = "Linien vertikal" ;
     Text [ ENGLISH ] = "Vertical lines" ;
     Text [ dutch ] = "Verticale lijnen" ;
     Text [ english_us ] = "Vertical Lines" ;
@@ -8009,7 +8009,7 @@ String STR_EFFECT_VERTICAL_LINES
 };
 String STR_EFFECT_HORIZONTAL_LINES
 {
-    Text = "Horizontale Linien" ;
+    Text = "Linien horizontal" ;
     Text [ ENGLISH ] = "Horizontal lines" ;
     Text [ dutch ] = "Horizontale lijnen" ;
     Text [ english_us ] = "Horizontal Lines" ;
@@ -8034,7 +8034,7 @@ String STR_EFFECT_HORIZONTAL_LINES
 };
 String STR_EFFECT_VERTICAL_CHECKERBOARD
 {
-    Text = "Vertikales Schachbrett" ;
+    Text = "Schachbrett vertikal" ;
     Text [ ENGLISH ] = "Vertical checkerboard";
     Text [ english_us ] = "Vertical Checkerboard";
     Text[ portuguese ] = "Tabuleiro de xadrez vertical";
@@ -8059,7 +8059,7 @@ String STR_EFFECT_VERTICAL_CHECKERBOARD
 };
 String STR_EFFECT_HORIZONTAL_CHECKERBOARD
 {
-    Text = "Horiziontales Schachbrett" ;
+    Text = "Schachbrett horizontal" ;
     Text [ ENGLISH ] = "Horizontal checkerboard";
     Text [ english_us ] = "Horizontal Checkerboard";
     Text[ portuguese ] = "Tabuleiro de xadrez horizontal";
@@ -8084,7 +8084,7 @@ String STR_EFFECT_HORIZONTAL_CHECKERBOARD
 };
 String STR_EFFECT_ROLL_FROM_L
 {
-    Text = "Von links rollen" ;
+    Text = "Rollen von links" ;
     Text [ ENGLISH ] = "Roll from left" ;
     Text [ norwegian ] = "Roll from left" ;
     Text [ italian ] = "Scorri da sinistra" ;
@@ -8110,7 +8110,7 @@ String STR_EFFECT_ROLL_FROM_L
 };
 String STR_EFFECT_ROLL_FROM_T
 {
-    Text = "Von oben rollen" ;
+    Text = "Rollen von oben" ;
     Text [ ENGLISH ] = "Roll from top" ;
     Text [ norwegian ] = "Roll from top" ;
     Text [ italian ] = "Scorri dall'alto" ;
@@ -8136,7 +8136,7 @@ String STR_EFFECT_ROLL_FROM_T
 };
 String STR_EFFECT_ROLL_FROM_R
 {
-    Text = "Von rechts rollen" ;
+    Text = "Rollen von rechts" ;
     Text [ ENGLISH ] = "Roll from right" ;
     Text [ norwegian ] = "Roll from right" ;
     Text [ italian ] = "Scorri da destra" ;
@@ -8162,7 +8162,7 @@ String STR_EFFECT_ROLL_FROM_R
 };
 String STR_EFFECT_ROLL_FROM_B
 {
-    Text = "Von unten rollen" ;
+    Text = "Rollen von unten" ;
     Text [ ENGLISH ] = "Roll from bottom" ;
     Text [ norwegian ] = "Roll from bottom" ;
     Text [ italian ] = "Scorri dal basso" ;
@@ -8288,7 +8288,7 @@ String STR_EFFECT_WAVYLINE_FROM_B
 };
 String STR_EFFECT_CLOCKWISE
 {
-    Text = "Im Uhrzeigersinn blenden" ;
+    Text = "Blenden im Uhrzeigersinn" ;
     Text [ ENGLISH ] = "Fade clockwise" ;
     Text [ dutch ] = "Volgens de wijzers van de klok bedekken" ;
     Text [ english_us ] = "Fade Clockwise" ;
@@ -8313,7 +8313,7 @@ String STR_EFFECT_CLOCKWISE
 };
 String STR_EFFECT_COUNTERCLOCKWISE
 {
-    Text = "Gegen den Uhrzeigersinn blenden" ;
+    Text = "Blenden gegen den Uhrzeigersinn" ;
     Text [ ENGLISH ] = "Fade counterclockwise" ;
     Text [ english_us ] = "Fade Counter-Clockwise" ;
     Text [ italian ] = "Scopri in senso antiorario" ;
@@ -8341,7 +8341,7 @@ String STR_EFFECT_FADE_FROM_UL
     /* ### ACHTUNG: Neuer Text in Resource? Von links oben ¸berblenden : Von links oben blenden */
     /* ### ACHTUNG: Neuer Text in Resource? Von links oben ¸berblenden : Von links oben blenden */
     /* ### ACHTUNG: Neuer Text in Resource? Von links oben ¸berblenden : Von links oben ≥berblenden */
-    Text = "Von links oben ¸berblenden" ;
+    Text = "‹berblenden von links oben" ;
     Text [ ENGLISH ] = "Fade from upper left" ;
     Text [ english_us ] = "Fade From Top Left" ;
     Text [ italian ] = "Dissolvi da sinistra in alto" ;
@@ -8369,7 +8369,7 @@ String STR_EFFECT_FADE_FROM_UR
     /* ### ACHTUNG: Neuer Text in Resource? Von rechts oben ¸berblenden : Von rechts oben blenden */
     /* ### ACHTUNG: Neuer Text in Resource? Von rechts oben ¸berblenden : Von rechts oben blenden */
     /* ### ACHTUNG: Neuer Text in Resource? Von rechts oben ¸berblenden : Von rechts oben ≥berblenden */
-    Text = "Von rechts oben ¸berblenden" ;
+    Text = "‹berblenden von rechts oben" ;
     Text [ ENGLISH ] = "Fade from upper right" ;
     Text [ english_us ] = "Fade From Top Right" ;
     Text [ italian ] = "Dissolvi da destra in alto" ;
@@ -8397,7 +8397,7 @@ String STR_EFFECT_FADE_FROM_LL
     /* ### ACHTUNG: Neuer Text in Resource? Von links unten ¸berblenden : Von links unten blenden */
     /* ### ACHTUNG: Neuer Text in Resource? Von links unten ¸berblenden : Von links unten blenden */
     /* ### ACHTUNG: Neuer Text in Resource? Von links unten ¸berblenden : Von links unten ≥berblenden */
-    Text = "Von links unten ¸berblenden" ;
+    Text = "‹berblenden von links unten" ;
     Text [ ENGLISH ] = "Fade from lower left" ;
     Text [ dutch ] = "Bedekken vanaf linksonder" ;
     Text [ english_us ] = "Fade From Bottom Left" ;
@@ -8425,7 +8425,7 @@ String STR_EFFECT_FADE_FROM_LR
     /* ### ACHTUNG: Neuer Text in Resource? Von rechts unten ¸berblenden : Von rechts unten blenden */
     /* ### ACHTUNG: Neuer Text in Resource? Von rechts unten ¸berblenden : Von rechts unten blenden */
     /* ### ACHTUNG: Neuer Text in Resource? Von rechts unten ¸berblenden : Von rechts unten ≥berblenden */
-    Text = "Von rechts unten ¸berblenden" ;
+    Text = "‹berblenden von rechts unten" ;
     Text [ ENGLISH ] = "Fade from lower right" ;
     Text [ english_us ] = "Fade From Bottom Right" ;
     Text [ italian ] = "Dissolvii da destra in basso" ;
@@ -8451,7 +8451,7 @@ String STR_EFFECT_FADE_FROM_LR
 String STR_EFFECT_CLOSE_VERTICAL
 {
     /* ### ACHTUNG: Neuer Text in Resource? Vertikal schlieﬂen : Vertikal schlieòen */
-    Text = "Vertikal schlieﬂen" ;
+    Text = "Schlieﬂen vertikal" ;
     Text [ ENGLISH ] = "Close vertical" ;
     Text [ dutch ] = "Verticaal sluiten" ;
     Text [ english_us ] = "Close Vertically" ;
@@ -8477,7 +8477,7 @@ String STR_EFFECT_CLOSE_VERTICAL
 String STR_EFFECT_CLOSE_HORIZONTAL
 {
     /* ### ACHTUNG: Neuer Text in Resource? Horizontal schlieﬂen : Horizontal schlieòen */
-    Text = "Horizontal schlieﬂen" ;
+    Text = "Schlieﬂen horizontal" ;
     Text [ ENGLISH ] = "Close horizontal" ;
     Text [ dutch ] = "Horizontaal sluiten" ;
     Text [ english_us ] = "Close Horizontally" ;
@@ -8503,7 +8503,7 @@ String STR_EFFECT_CLOSE_HORIZONTAL
 String STR_EFFECT_OPEN_VERTICAL
 {
     /* ### ACHTUNG: Neuer Text in Resource? Vertikal ˆffnen : Vertikal ˜ffnen */
-    Text = "Vertikal ˆffnen" ;
+    Text = "÷ffnen vertikal" ;
     Text [ ENGLISH ] = "Open vertical" ;
     Text [ english_us ] = "Open Vertically" ;
     Text [ italian ] = "Apertura verticale" ;
@@ -8529,7 +8529,7 @@ String STR_EFFECT_OPEN_VERTICAL
 String STR_EFFECT_OPEN_HORIZONTAL
 {
     /* ### ACHTUNG: Neuer Text in Resource? Horizontal ˆffnen : Horizontal ˜ffnen */
-    Text = "Horizontal ˆffnen" ;
+    Text = "÷ffnen horizontal" ;
     Text [ ENGLISH ] = "Open horizontal" ;
     Text [ dutch ] = "Horizontaal openen" ;
     Text [ english_us ] = "Open Horizontally" ;
@@ -8554,7 +8554,7 @@ String STR_EFFECT_OPEN_HORIZONTAL
 };
 String STR_EFFECT_PATH
 {
-    Text = "an Kurve entlang" ;
+    Text = "An Kurve entlang bewegen" ;
     Text [ ENGLISH ] = "along the curve" ;
     Text [ english_us ] = "Along Curve" ;
     Text [ italian ] = "lungo la curva" ;
@@ -8604,7 +8604,7 @@ String STR_EFFECT_MOVE
 };
 String STR_EFFECT_MOVE_TO_L
 {
-    Text = "Nach links bewegen" ;
+    Text = "Bewegen nach links" ;
     Text [ ENGLISH ] = "Move to left" ;
     Text [ english_us ] = "Move To Left" ;
     Text [ dutch ] = "Naar links bewegen" ;
@@ -8629,7 +8629,7 @@ String STR_EFFECT_MOVE_TO_L
 };
 String STR_EFFECT_MOVE_TO_UL
 {
-    Text = "Nach links oben bewegen" ;
+    Text = "Bewegen nach links oben" ;
     Text [ ENGLISH ] = "Move to upper left" ;
     Text [ english_us ] = "Move To Upper Left" ;
     Text[ portuguese ] = "Mover para topo esquerdo";
@@ -8654,7 +8654,7 @@ String STR_EFFECT_MOVE_TO_UL
 };
 String STR_EFFECT_MOVE_TO_T
 {
-    Text = "Nach oben bewegen" ;
+    Text = "Bewegen nach oben" ;
     Text [ ENGLISH ] = "Move to top" ;
     Text [ english_us ] = "Move Upwards" ;
     Text [ italian ] = "Sposta verso l'alto" ;
@@ -8679,7 +8679,7 @@ String STR_EFFECT_MOVE_TO_T
 };
 String STR_EFFECT_MOVE_TO_UR
 {
-    Text = "Nach rechts oben bewegen" ;
+    Text = "Bewegen nach rechts oben" ;
     Text [ ENGLISH ] = "Move to upper right" ;
     Text [ english_us ] = "Move To Upper Right" ;
     Text[ portuguese ] = "Mover para topo direito";
@@ -8704,7 +8704,7 @@ String STR_EFFECT_MOVE_TO_UR
 };
 String STR_EFFECT_MOVE_TO_R
 {
-    Text = "Nach rechts bewegen" ;
+    Text = "Bewegen nach rechts" ;
     Text [ ENGLISH ] = "Move to right" ;
     Text [ english_us ] = "Move To Right" ;
     Text [ italian ] = "Sposta a destra" ;
@@ -8729,7 +8729,7 @@ String STR_EFFECT_MOVE_TO_R
 };
 String STR_EFFECT_MOVE_TO_LR
 {
-    Text = "Nach rechts unten bewegen" ;
+    Text = "Bewegen nach rechts unten" ;
     Text [ ENGLISH ] = "Move to lower right" ;
     Text [ english_us ] = "Move To Lower Right" ;
     Text[ portuguese ] = "Mover para base direita";
@@ -8754,7 +8754,7 @@ String STR_EFFECT_MOVE_TO_LR
 };
 String STR_EFFECT_MOVE_TO_B
 {
-    Text = "Nach unten bewegen" ;
+    Text = "Bewegen nach unten" ;
     Text [ ENGLISH ] = "Move to bottom" ;
     Text [ english_us ] = "Move Downwards" ;
     Text [ dutch ] = "Naar beneden bewegen" ;
@@ -8779,7 +8779,7 @@ String STR_EFFECT_MOVE_TO_B
 };
 String STR_EFFECT_MOVE_TO_LL
 {
-    Text = "Nach links unten bewegen" ;
+    Text = "Bewegen nach links unten" ;
     Text [ ENGLISH ] = "Move to lower left" ;
     Text [ english_us ] = "Move To Lower Left" ;
     Text[ portuguese ] = "Mover para base esquerda";
@@ -8804,7 +8804,7 @@ String STR_EFFECT_MOVE_TO_LL
 };
 String STR_EFFECT_MOVE_S_TO_L
 {
-    Text = "Nach links verk¸rzt bewegen" ;
+    Text = "Verk¸rzt bewegen nach links" ;
     Text [ ENGLISH ] = "Move short to left" ;
     Text [ english_us ] = "Move Object To Left" ;
     Text[ portuguese ] = "Mover objecto para a esquerda";
@@ -8829,7 +8829,7 @@ String STR_EFFECT_MOVE_S_TO_L
 };
 String STR_EFFECT_MOVE_S_TO_UL
 {
-    Text = "Nach links oben verk¸rzt bewegen" ;
+    Text = "Verk¸rzt bewegen nach links oben" ;
     Text [ ENGLISH ] = "Move short to upper left" ;
     Text [ english_us ] = "Move Object To Upper Left" ;
     Text[ portuguese ] = "Mover objecto para topo esquerdo";
@@ -8854,7 +8854,7 @@ String STR_EFFECT_MOVE_S_TO_UL
 };
 String STR_EFFECT_MOVE_S_TO_T
 {
-    Text = "Nach oben verk¸rzt bewegen" ;
+    Text = "Verk¸rzt bewegen nach oben" ;
     Text [ ENGLISH ] = "Move short to top" ;
     Text [ english_us ] = "Move Object Upwards" ;
     Text[ portuguese ] = "Mover objecto para o topo";
@@ -8879,7 +8879,7 @@ String STR_EFFECT_MOVE_S_TO_T
 };
 String STR_EFFECT_MOVE_S_TO_UR
 {
-    Text = "Nach rechts oben verk¸rzt bewegen" ;
+    Text = "Verk¸rzt bewegen nach rechts oben" ;
     Text [ ENGLISH ] = "Move short to upper right" ;
     Text [ english_us ] = "Move Object To Upper Right" ;
     Text[ portuguese ] = "Mover objecto para topo direito";
@@ -8904,7 +8904,7 @@ String STR_EFFECT_MOVE_S_TO_UR
 };
 String STR_EFFECT_MOVE_S_TO_R
 {
-    Text = "Nach rechts verk¸rzt bewegen" ;
+    Text = "Verk¸rzt bewegen nach rechts" ;
     Text [ ENGLISH ] = "Move short to right" ;
     Text [ english_us ] = "Move Object To Right" ;
     Text[ portuguese ] = "Mover objecto para a direita";
@@ -8929,7 +8929,7 @@ String STR_EFFECT_MOVE_S_TO_R
 };
 String STR_EFFECT_MOVE_S_TO_LR
 {
-    Text = "Nach rechts unten verk¸rzt bewegen" ;
+    Text = "Verk¸rzt bewegen nach rechts unten" ;
     Text [ ENGLISH ] = "Move short to lower right" ;
     Text [ english_us ] = "Move Object To Lower Right" ;
     Text[ portuguese ] = "Mover objecto para a base direita";
@@ -8954,7 +8954,7 @@ String STR_EFFECT_MOVE_S_TO_LR
 };
 String STR_EFFECT_MOVE_S_TO_B
 {
-    Text = "Nach unten verk¸rzt bewegen" ;
+    Text = "Verk¸rzt bewegen nach unten" ;
     Text [ ENGLISH ] = "Move short to bottom" ;
     Text [ english_us ] = "Move Object Downwards" ;
     Text[ portuguese ] = "Mover objecto para a base";
@@ -8979,7 +8979,7 @@ String STR_EFFECT_MOVE_S_TO_B
 };
 String STR_EFFECT_MOVE_S_TO_LL
 {
-    Text = "Nach links unten verk¸rzt bewegen" ;
+    Text = "Verk¸rzt bewegen nach links unten" ;
     Text [ ENGLISH ] = "Move short to lower left" ;
     Text [ english_us ] = "Move Object To Lower Left" ;
     Text[ portuguese ] = "Mover objecto para a base esquerda";
@@ -9004,7 +9004,7 @@ String STR_EFFECT_MOVE_S_TO_LL
 };
 String STR_EFFECT_SPIRALIN_L
 {
-    Text = "Spirale nach innen links" ;
+    Text = "Spirale nach innen im Uhrzeigersinn" ;
     Text [ ENGLISH ] = "Spiral inward to the left" ;
     Text [ english_us ] = "Spiral Inward Left" ;
     Text [ italian ] = "Spirale verso l'interno a sinistra" ;
@@ -9029,7 +9029,7 @@ String STR_EFFECT_SPIRALIN_L
 };
 String STR_EFFECT_SPIRALIN_R
 {
-    Text = "Spirale nach innen rechts" ;
+    Text = "Spirale nach innen gegen den Uhrzeigersinn" ;
     Text [ ENGLISH ] = "Spiral inward to the right" ;
     Text [ english_us ] = "Spiral Inward Right" ;
     Text [ italian ] = "Spirale verso l'interno a destra" ;
@@ -9055,7 +9055,7 @@ String STR_EFFECT_SPIRALIN_R
 String STR_EFFECT_SPIRALOUT_L
 {
     /* ### ACHTUNG: Neuer Text in Resource? Spirale nach auﬂen links : Spirale nach auòen links */
-    Text = "Spirale nach auﬂen links" ;
+    Text = "Spirale nach auﬂen im Uhrzeigersinn" ;
     Text [ ENGLISH ] = "Spiral outward to the left" ;
     Text [ english_us ] = "Spiral Outward Left" ;
     Text [ italian ] = "Spirale verso l'esterno a sinistra" ;
@@ -9081,7 +9081,7 @@ String STR_EFFECT_SPIRALOUT_L
 String STR_EFFECT_SPIRALOUT_R
 {
     /* ### ACHTUNG: Neuer Text in Resource? Spirale nach auﬂen rechts : Spirale nach auòen rechts */
-    Text = "Spirale nach auﬂen rechts" ;
+    Text = "Spirale nach auﬂen gegen den Uhrzeigersinn" ;
     Text [ ENGLISH ] = "Spiral outward to the right" ;
     Text [ english_us ] = "Spiral Outward Right" ;
     Text [ italian ] = "Spirale verso l'esterno a destra" ;
@@ -9183,7 +9183,7 @@ String STR_EFFECT_STRTCH
 };
 String STR_EFFECT_STRTCH_FROM_L
 {
-    Text = "Von links dehnen";
+    Text = "Dehnen von links";
     Text[ english ] = "Stretch from left";
     Text[ english_us ] = "Stretch From Left";
     Text[ portuguese ] = "Expandir a partir da esquerda";
@@ -9208,7 +9208,7 @@ String STR_EFFECT_STRTCH_FROM_L
 };
 String STR_EFFECT_STRTCH_FROM_UL
 {
-    Text = "Von links oben dehnen";
+    Text = "Dehnen von links oben";
     Text[ english ] = "Stretch from upper left";
     Text[ english_us ] = "Stretch From Upper Left";
     Text[ portuguese ] = "Expandir a partir do topo esquerdo";
@@ -9233,7 +9233,7 @@ String STR_EFFECT_STRTCH_FROM_UL
 };
 String STR_EFFECT_STRTCH_FROM_T
 {
-    Text = "Von oben dehnen";
+    Text = "Dehnen von oben";
     Text[ english ] = "Stretch from top";
     Text[ english_us ] = "Stretch From Top";
     Text[ portuguese ] = "Expandir a partir do topo";
@@ -9258,7 +9258,7 @@ String STR_EFFECT_STRTCH_FROM_T
 };
 String STR_EFFECT_STRTCH_FROM_UR
 {
-    Text = "Von rechts oben dehnen";
+    Text = "Dehnen von rechts oben";
     Text[ english ] = "Stretch from upper right";
     Text[ english_us ] = "Stretch From Upper Right";
     Text[ portuguese ] = "Expandir a partir do topo direito";
@@ -9283,7 +9283,7 @@ String STR_EFFECT_STRTCH_FROM_UR
 };
 String STR_EFFECT_STRTCH_FROM_R
 {
-    Text = "Von rechts dehnen";
+    Text = "Dehnen von rechts";
     Text[ english ] = "Stretch from right";
     Text[ english_us ] = "Stretch From Right";
     Text[ portuguese ] = "Expandir a partir da direita";
@@ -9308,7 +9308,7 @@ String STR_EFFECT_STRTCH_FROM_R
 };
 String STR_EFFECT_STRTCH_FROM_LR
 {
-    Text = "Von rechts unten dehnen";
+    Text = "Dehnen von rechts unten";
     Text[ english ] = "Stretch from lower right";
     Text[ english_us ] = "Stretch From Lower Right";
     Text[ portuguese ] = "Expandir a partir da base direita";
@@ -9333,7 +9333,7 @@ String STR_EFFECT_STRTCH_FROM_LR
 };
 String STR_EFFECT_STRTCH_FROM_B
 {
-    Text = "Von unten dehnen";
+    Text = "Dehnen von unten";
     Text[ english ] = "Stretch from bottom";
     Text[ english_us ] = "Stretch From Bottom";
     Text[ portuguese ] = "Expandir a partir da base";
@@ -9358,7 +9358,7 @@ String STR_EFFECT_STRTCH_FROM_B
 };
 String STR_EFFECT_STRTCH_FROM_LL
 {
-    Text = "Von links unten dehnen";
+    Text = "Dehnen von links unten";
     Text[ english ] = "Stretch from lower left";
     Text[ english_us ] = "Stretch From Lower Left";
     Text[ portuguese ] = "Expandir a partir da base esquerda";
@@ -9383,7 +9383,7 @@ String STR_EFFECT_STRTCH_FROM_LL
 };
 String STR_EFFECT_STRTCH_ROTATE
 {
-    Text = "Dehnen und Drehen";
+    Text = "Dehnen und drehen";
     Text[ english ] = "Stretch and rotate";
     Text[ english_us ] = "Stretch And Rotate";
     Text[ portuguese ] = "Expandir e rodar";
@@ -9408,7 +9408,7 @@ String STR_EFFECT_STRTCH_ROTATE
 };
 String STR_EFFECT_STRTCH_HORIZONTAL
 {
-    Text = "Horizontal dehnen";
+    Text = "Dehnen horizontal";
     Text[ english ] = "Stretch horizontal";
     Text[ english_us ] = "Stretch Horizontally";
     Text[ portuguese ] = "Expandir na horizontal";
@@ -9433,7 +9433,7 @@ String STR_EFFECT_STRTCH_HORIZONTAL
 };
 String STR_EFFECT_STRTCH_VERTICAL
 {
-    Text = "Vertikal dehnen";
+    Text = "Dehnen vertikal";
     Text[ english ] = "Stretch vertical";
     Text[ english_us ] = "Stretch Vertically";
     Text[ portuguese ] = "Expandir na vertical";
@@ -9458,7 +9458,7 @@ String STR_EFFECT_STRTCH_VERTICAL
 };
 String STR_EFFECT_ROTATE_HORIZONTAL
 {
-    Text = "Horizontal drehen";
+    Text = "Drehen horizontal";
     Text[ english ] = "Rotate horizontally";
     Text[ english_us ] = "Rotate Horizontally";
     Text[ portuguese ] = "Rodar na horizontal";
@@ -9483,7 +9483,7 @@ String STR_EFFECT_ROTATE_HORIZONTAL
 };
 String STR_EFFECT_ROTATE_VERTICAL
 {
-    Text = "Vertikal drehen";
+    Text = "Drehen vertikal";
     Text[ english ] = "Rotate vertically";
     Text[ english_us ] = "Rotate Vertically";
     Text[ portuguese ] = "Rodar na vertical";
