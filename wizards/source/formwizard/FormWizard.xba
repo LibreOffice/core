@@ -64,7 +64,7 @@ Dim i as Integer
 Dim SelCount as Integer
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
-	bDebug = True
+        bDebug = False
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
@@ -126,7 +126,7 @@ Dim SelCount as Integer
 							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(SelIndex, True)
 						ElseIf CommandType = com.sun.star.sdb.CommandType.TABLE Then
 							SelIndex = IndexInArray(sContent, TableNames()
-							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True)		
+							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True)
 						End If
 					End If
 					CurCommandType = CommandType
@@ -166,10 +166,10 @@ Dim SelCount as Integer
 		oDocument.Dispose()
 	End If
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then	
+	If Err &lt;&gt; 0 Then
 		Msgbox(sMsgErrMsg, 16, GetProductName())
 		Resume LOCERROR
-		LOCERROR:		
+		LOCERROR:
 	End If
 End Sub
 
