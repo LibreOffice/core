@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-03 16:58:07 $
+ *  last change: $Author: dl $ $Date: 2000-12-14 13:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,12 +817,14 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
         INT32 nRight = pPage->GetRgtBorder();
         INT32 nUpper = pPage->GetUppBorder();
         INT32 nLower = pPage->GetLwrBorder();
+        Orientation eOrient = pPage->GetOrientation();
 
         Size  aNSize(pNPage->GetSize());
         INT32 nNLeft  = pNPage->GetLftBorder();
         INT32 nNRight = pNPage->GetRgtBorder();
         INT32 nNUpper = pNPage->GetUppBorder();
         INT32 nNLower = pNPage->GetLwrBorder();
+        Orientation eNOrient = pPage->GetOrientation();
 
         ULONG nExchangeListPos = 0;
         USHORT nSdPageStart = (nInsertPos - 1) / 2;
@@ -869,6 +871,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
             }
             pPage->SetSize(aSize);
             pPage->SetBorder(nLeft, nUpper, nRight, nLower);
+            pPage->SetOrientation( eOrient );
 
             pPage = GetSdPage(nSdPage, PK_NOTES);
             pPage->SetPresentationLayout(aLayout);
@@ -881,6 +884,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
             pPage->SetSize(aNSize);
             pPage->SetBorder(nNLeft, nNUpper, nNRight, nNLower);
+            pPage->SetOrientation( eNOrient );
         }
 
         for (USHORT nPage = nMPageCount; nPage < nNewMPageCount; nPage++)
@@ -895,6 +899,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                 }
                 pPage->SetSize(aSize);
                 pPage->SetBorder(nLeft, nUpper, nRight, nLower);
+                pPage->SetOrientation( eOrient );
             }
             else        // kann nur noch NOTES sein
             {
@@ -905,6 +910,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                 }
                 pPage->SetSize(aNSize);
                 pPage->SetBorder(nNLeft, nNUpper, nNRight, nNLower);
+                pPage->SetOrientation( eNOrient );
             }
         }
     }
@@ -1715,6 +1721,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                                pOldMaster->GetUppBorder(),
                                pOldMaster->GetRgtBorder(),
                                pOldMaster->GetLwrBorder());
+            pMaster->SetOrientation( pOldMaster->GetOrientation() );
             pMaster->SetAutoLayout(pMaster->GetAutoLayout());
 
             aSize = pOldNotesMaster->GetSize();
@@ -1728,6 +1735,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                                     pOldNotesMaster->GetUppBorder(),
                                     pOldNotesMaster->GetRgtBorder(),
                                     pOldNotesMaster->GetLwrBorder());
+            pNotesMaster->SetOrientation( pOldNotesMaster->GetOrientation() );
             pNotesMaster->SetAutoLayout(pNotesMaster->GetAutoLayout());
 
             // Liste der ersetzten Vorlagen mit Inhalt loeschen
