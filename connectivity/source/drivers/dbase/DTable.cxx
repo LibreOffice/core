@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-16 08:47:24 $
+ *  last change: $Author: oj $ $Date: 2002-01-21 14:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1713,10 +1713,8 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 
         // construct the new table
         if(!pNewTable->CreateImpl())
-        {
-            delete pNewTable;
             return;
-        }
+
         pNewTable->construct();
 
         // copy the data
@@ -1733,7 +1731,6 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         }
         else
         {
-            delete pNewTable;
             pNewTable = NULL;
         }
         FileClose();
@@ -1744,13 +1741,11 @@ void ODbaseTable::alterColumn(sal_Int32 index,
     }
     catch(const SQLException&)
     {
-        delete pNewTable;
         throw;
     }
     catch(const Exception&)
     {
         OSL_ENSURE(0,"ODbaseTable::alterColumn: Exception occured!");
-        delete pNewTable;
         throw;
     }
 }
@@ -1821,7 +1816,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     String sTempName = createTempFile();
 
     ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
-    pNewTable->acquire();
+    Reference< XPropertySet > xHold = pNewTable;
     pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
@@ -1850,10 +1845,8 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 
     // construct the new table
     if(!pNewTable->CreateImpl())
-    {
-        delete pNewTable;
         throw SQLException();
-    }
+
     BOOL bAlreadyDroped = FALSE;
     try
     {
@@ -1866,10 +1859,8 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
             bAlreadyDroped = TRUE;
             pNewTable->renameImpl(m_Name);
             // release the temp file
-            pNewTable->release();
         }
-        else
-            delete pNewTable;
+        xHold = pNewTable = NULL;
 
         FileClose();
         construct();
@@ -1880,7 +1871,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     {
         // here we know that the old table wasn't droped before
         if(!bAlreadyDroped)
-            delete pNewTable;
+            xHold = pNewTable = NULL;
 
         throw;
     }
@@ -1891,7 +1882,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     String sTempName = createTempFile();
 
     ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
-    pNewTable->acquire();
+    Reference< XPropertySet > xHold = pNewTable;
     pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
@@ -1920,7 +1911,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     // construct the new table
     if(!pNewTable->CreateImpl())
     {
-        delete pNewTable;
+        xHold = pNewTable = NULL;
         throw SQLException();
     }
     pNewTable->construct();
@@ -1928,19 +1919,13 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     copyData(pNewTable,_nPos);
     // drop the old table
     if(DropImpl())
-    {
         pNewTable->renameImpl(m_Name);
         // release the temp file
-        pNewTable->release();
-    }
-    else
-        delete pNewTable;
 
+    xHold = pNewTable = NULL;
 
     FileClose();
     construct();
-//  if(m_pColumns)
-//      m_pColumns->refresh();
 }
 // -----------------------------------------------------------------------------
 String ODbaseTable::createTempFile()
