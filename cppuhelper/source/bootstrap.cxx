@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-11-14 10:32:41 $
+ *  last change: $Author: kr $ $Date: 2001-11-23 10:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,7 +525,7 @@ Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext
     OUString libraryFileUrl;
     Module::getUrlFromAddress((void *)(Reference<XComponentContext> (*)())defaultBootstrap_InitialComponentContext, libraryFileUrl);
 
-    OUString iniName = libraryFileUrl.copy(0, libraryFileUrl.lastIndexOf((sal_Unicode)SAL_PATHDELIMITER) + 1); // cut the library extension
+    OUString iniName = libraryFileUrl.copy(0, libraryFileUrl.lastIndexOf((sal_Unicode)'/') + 1); // cut the library extension
     iniName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("uno"))); // add the rc file extension
 
     return defaultBootstrap_InitialComponentContext(iniName);
