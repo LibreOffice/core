@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:33:03 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _UCBHELPER_CONTENT_HXX
 #define _UCBHELPER_CONTENT_HXX
 
@@ -654,7 +653,7 @@ public:
       * Internally it executes the command "open" at the content.
       *
       * @param  rPropertyNames is a sequence of names of properties for
-      *         that the values should be accessable via the resultset
+      *         that the values should be accessible via the resultset
       *         returned by this method.
       * @param  eMode is a very simple filter for the children contained
       *         in the resultset.
@@ -676,7 +675,7 @@ public:
       * Internally it executes the command "open" at the content.
       *
       * @param nPropertyHandles is a sequence of handles of properties for
-      *        that the values should be accessable via the resultset
+      *        that the values should be accessible via the resultset
       *        returned by this method.
       * @param eMode is a very simple filter for the children contained
       *        in the resultset.
@@ -698,7 +697,7 @@ public:
       * Internally it executes the command "open" at the content.
       *
       * @param rPropertyNames is a sequence of names of properties for
-      *        that the values should be accessable via the resultset
+      *        that the values should be accessible via the resultset
       *        returned by this method.
       * @param eMode is a very simple filter for the children contained
       *        in the resultset.
@@ -721,7 +720,7 @@ public:
       * Internally it executes the command "open" at the content.
       *
       * @param nPropertyHandes is a sequence of handles of properties for
-      *        that the values should be accessable via the resultset
+      *        that the values should be accessible via the resultset
       *        returned by this method.
       * @param eMode is a very simple filter for the children contained
       *        in the resultset.
