@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: is $ $Date: 2004-02-10 17:46:31 $
+#   last change: $Author: rt $ $Date: 2004-03-04 14:10:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,7 @@ TARGETTYPE=CUI
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 
 SCP_PRODUCT_TYPE=osl
 
