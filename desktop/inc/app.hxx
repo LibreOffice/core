@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-24 10:23:59 $
+ *  last change: $Author: fs $ $Date: 2001-08-01 12:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,17 @@ class Desktop : public Application //public SfxApplicationClass
     private:
         void                OpenStartupScreen();
         void                CloseStartupScreen();
+
+        DECL_LINK(          AsyncInitFirstRun, void* );
+
+        /** checks if the office is run the first time
+            <p>If so, <method>DoFirstRunInitializations</method> is called (asynchronously and delayed) and the
+            respective flag in the configuration is reset.</p>
+        */
+        void                CheckFirstRun( );
+
+        /// does initializations which are necessary for the first run of the office
+        void                DoFirstRunInitializations();
 
         sal_Bool            m_bMinimized;
         sal_Bool            m_bInvisible;
