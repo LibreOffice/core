@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-11 15:17:49 $
+ *  last change: $Author: ka $ $Date: 2000-10-17 12:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -891,6 +891,9 @@ BOOL GraphicObject::SwapIn()
             mpMgr->ImplGraphicObjectWasSwappedIn( *this );
     }
 
+    if( bRet )
+        ImplAssignGraphicData();
+
     return bRet;
 }
 
@@ -914,6 +917,9 @@ BOOL GraphicObject::SwapIn( SvStream* pIStm )
         if( bRet && mpMgr )
             mpMgr->ImplGraphicObjectWasSwappedIn( *this );
     }
+
+    if( bRet )
+        ImplAssignGraphicData();
 
     return bRet;
 }
