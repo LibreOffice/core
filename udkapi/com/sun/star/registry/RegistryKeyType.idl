@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistryKeyType.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
     <p>A key can be a normal key with a value and subkeys, or it can be a
     link which references another key.</p>
  */
-enum RegistryKeyType
+published enum RegistryKeyType
 {
     //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RegistryKeyType::  KEY,
