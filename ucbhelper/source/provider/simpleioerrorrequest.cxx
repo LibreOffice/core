@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleioerrorrequest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-11 06:52:57 $
+ *  last change: $Author: kso $ $Date: 2001-06-15 08:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,13 @@ using namespace ucbhelper;
 
 //=========================================================================
 SimpleIOErrorRequest::SimpleIOErrorRequest(
-                            const uno::Reference< ucb::XContent > & xContent,
-                            const com::sun::star::ucb::IOErrorCode eError )
+                        const uno::Reference< ucb::XContentIdentifier > & xId,
+                        const com::sun::star::ucb::IOErrorCode eError )
 {
     // Fill request...
     ucb::InteractiveIOException aRequest;
 //    aRequest.Message        = // OUString
-    aRequest.Context         = xContent;
+    aRequest.Context         = xId;
     aRequest.Classification  = task::InteractionClassification_ERROR;
     aRequest.Code            = eError;
 

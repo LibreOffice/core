@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cancelcommandexecution.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-06 11:19:32 $
+ *  last change: $Author: kso $ $Date: 2001-06-15 08:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace uno { class Any; }
-    namespace ucb { class XCommandEnvironment; class XContent; }
+    namespace ucb { class XCommandEnvironment; class XContentIdentifier; }
 } } }
 
 namespace ucbhelper
@@ -114,7 +114,8 @@ void cancelCommandExecution( const com::sun::star::uno::Any & rException,
 
     NOTE THAT THIS FUNCTION NEVER RETURNS! IT ALWAYS THROWS AN EXCEPTION!
 
-    @param xContent is the UCB content executing the command to cancel.
+    @param xId is the identifier of the UCB content related to the command to
+           cancel.
 
     @param eError is an IO error code.
 
@@ -122,7 +123,7 @@ void cancelCommandExecution( const com::sun::star::uno::Any & rException,
            Handler to use before throwing the appropriate exception.
  */
 void cancelCommandExecution( const com::sun::star::uno::Reference<
-                                com::sun::star::ucb::XContent > & xContent,
+                                com::sun::star::ucb::XContentIdentifier > & xId,
                              const com::sun::star::ucb::IOErrorCode eError,
                              const com::sun::star::uno::Reference<
                                 com::sun::star::ucb::XCommandEnvironment > &

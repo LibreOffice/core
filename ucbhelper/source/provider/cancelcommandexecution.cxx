@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cancelcommandexecution.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-11 06:52:09 $
+ *  last change: $Author: kso $ $Date: 2001-06-15 08:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,14 +134,15 @@ void cancelCommandExecution( const uno::Any & rException,
 }
 
 //=========================================================================
-void cancelCommandExecution( const uno::Reference< ucb::XContent > & xContent,
+void cancelCommandExecution( const uno::Reference<
+                                        ucb::XContentIdentifier > & xId,
                              const ucb::IOErrorCode eError,
                              const uno::Reference<
                                         ucb::XCommandEnvironment > & xEnv )
     throw( uno::Exception )
 {
     rtl::Reference< ucbhelper::SimpleIOErrorRequest > xRequest
-        = new ucbhelper::SimpleIOErrorRequest( xContent, eError );
+        = new ucbhelper::SimpleIOErrorRequest( xId, eError );
 
     if ( xEnv.is() )
     {
@@ -157,7 +158,7 @@ void cancelCommandExecution( const uno::Reference< ucb::XContent > & xContent,
             if ( xSelection.is() )
                 throw ucb::CommandFailedException(
                                     rtl::OUString(),
-                                    xContent,
+                                    xId,
                                     xRequest->getRequest() );
         }
     }

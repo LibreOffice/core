@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleioerrorrequest.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-29 13:02:01 $
+ *  last change: $Author: kso $ $Date: 2001-06-15 08:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,14 @@
 #ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
-#include <com/sun/star/ucb/XContent.hpp>
-#endif
 
 #ifndef _UCBHELPER_INTERATIONREQUEST_HXX
 #include <ucbhelper/interactionrequest.hxx>
 #endif
+
+namespace com { namespace sun { namespace star { namespace ucb {
+    class XContentIdentifier;
+} } } }
 
 namespace ucbhelper {
 
@@ -90,13 +91,13 @@ public:
     /**
       * Constructor.
       *
-      * @param xContent contains the UCB content supplying the request.
-      *        For example, the interaction handler can use this interface
-      *        to obtain the content's URL.
+      * @param xId contains the identifier of the UCB content related to the
+      *        request.
+      *
       * @param eError
       */
     SimpleIOErrorRequest( const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XContent > & xContent,
+                            com::sun::star::ucb::XContentIdentifier > & xId,
                           const com::sun::star::ucb::IOErrorCode eError );
 };
 
