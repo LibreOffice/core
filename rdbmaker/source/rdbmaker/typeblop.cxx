@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeblop.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-13 12:45:16 $
+ *  last change: $Author: dbo $ $Date: 2001-05-14 10:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,15 @@
 #ifndef _COM_SUN_STAR_REFLECTION_XENUMTYPEDESCRIPTION_HPP_
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
 
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::registry;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
@@ -295,13 +301,30 @@ sal_Bool SAL_CALL initTypeMapper( const sal_Char* pRegName )
         if ( !xSMgr.is() )
             return sal_False;
 
-        Reference< XInterface > xIFace( xSMgr->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager"))) );
+        Reference< XHierarchicalNameAccess > xNAccess;
 
-        if ( !xIFace.is() )
-            return sal_False;
+        Reference< beans::XPropertySet > xProps( xSMgr, UNO_QUERY );
+        if (xProps.is())
+        {
+            try
+            {
+                Reference< XComponentContext > xContext;
+                if (xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext)
+                {
+                    xContext->getValueByName(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") ) ) >>= xNAccess;
+                }
+            }
+            catch (beans::UnknownPropertyException &)
+            {
+            }
+        }
 
-        Reference< XHierarchicalNameAccess > xNAccess(xIFace, UNO_QUERY);
+        if (! xNAccess.is())
+        {
+            xNAccess.set( xSMgr->createInstance(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager"))), UNO_QUERY );
+        }
 
         if ( !xNAccess.is() )
             return sal_False;

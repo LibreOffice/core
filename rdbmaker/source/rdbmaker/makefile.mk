@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: jsc $ $Date: 2001-03-13 12:45:16 $
+#   last change: $Author: dbo $ $Date: 2001-05-14 10:27:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,8 @@ UNOTYPES= \
         com.sun.star.lang.XMultiServiceFactory	\
         com.sun.star.lang.XSingleServiceFactory	\
         com.sun.star.container.XHierarchicalNameAccess	\
+        com.sun.star.beans.XPropertySet	\
+        com.sun.star.uno.XComponentContext	\
         com.sun.star.reflection.XInterfaceTypeDescription	\
         com.sun.star.reflection.XInterfaceMemberTypeDescription	\
         com.sun.star.reflection.XInterfaceMethodTypeDescription	\
