@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nameuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 18:03:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <svtools/lstner.hxx>
 #endif
 
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"   // ScRange
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_SHEET_XLABELRANGE_HPP_
