@@ -43,7 +43,7 @@
         <type> com.sun.star.ucb.XCommandEnvironment          </type>
         <type> com.sun.star.ucb.XContentAccess               </type>
         <type> com.sun.star.ucb.XContentCreator              </type>
-        <type> com.sun.star.ucb.XSimpleFileAccess2           </type>
+        <type> com.sun.star.ucb.XSimpleFileAccess3           </type>
     </component-description>
 
     <project-build-dependency> cppuhelper       </project-build-dependency>
