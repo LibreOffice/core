@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:44:08 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <sfx2/linkmgr.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class Graphic;
 class Size;
 
@@ -80,7 +84,7 @@ enum LinkState
     STATE_LOAD_ABORT
 };
 
-class SvxLinkManager : public ::sfx2::SvLinkManager
+class SVX_DLLPUBLIC SvxLinkManager : public ::sfx2::SvLinkManager
 {
     SvxLinkManager( const SvxLinkManager& );
     SvxLinkManager& operator=( const SvxLinkManager& );
