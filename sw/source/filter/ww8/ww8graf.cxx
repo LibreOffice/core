@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
+ *  last change: $Author: cmc $ $Date: 2002-03-01 17:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2188,6 +2188,13 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
             if( 4 <= nXAlign )
                 aHoriOri.SetPosToggle( TRUE );
             rFlySet.Put( aHoriOri );
+
+            //Writer honours this wrap distance when aligned as "left" or "right",
+            //Word doesn't. Writer doesn't honour it when its "from left".
+            if (eHoriOri == HORI_LEFT)
+                pRecord->nDxWrapDistLeft=0;
+            else if (eHoriOri == HORI_RIGHT)
+                pRecord->nDxWrapDistRight=0;
 
             SwVertOrient eVertOri;
             eVertOri = aVertOriTab[ nYAlign ];
