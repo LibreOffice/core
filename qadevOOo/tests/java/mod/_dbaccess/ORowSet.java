@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ORowSet.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:36 $
+ *  last change:$Date: 2003-01-31 10:37:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@ import com.sun.star.sdbc.XRowUpdate;
 import com.sun.star.sdbcx.XRowLocate;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Vector;
@@ -368,8 +371,15 @@ public class ORowSet extends TestCase {
 
             xORowSet.execute() ;
 
-            connection = (XConnection)
-                xSetProp.getPropertyValue("ActiveConnection") ;
+            connection = null;
+
+            try {
+                connection = (XConnection) AnyConverter.toObject(
+                                    new Type(XConnection.class),
+                                    xSetProp.getPropertyValue("ActiveConnection"));
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                throw new StatusException("couldn't convert Any",iae);
+            }
 
             oInterface = oRowSet ;
 

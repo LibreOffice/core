@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utils.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:26:55 $
+ *  last change:$Date: 2003-01-31 10:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@ import com.sun.star.lang.XServiceInfo;
 
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
+
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 //For database connection
 import java.sql.*;
@@ -239,7 +243,16 @@ public class utils {
             }
             XNameAccess settingNames = (XNameAccess)
                             UnoRuntime.queryInterface(XNameAccess.class,settings);
-            XPropertySet pthSettings = (XPropertySet) settingNames.getByName("PathSettings");
+            Object pSettings = settingNames.getByName("PathSettings");
+            XPropertySet pthSettings = null;
+
+            try {
+                pthSettings = (XPropertySet) AnyConverter.toObject(
+                                    new Type(XPropertySet.class),pSettings);
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                System.out.println("### couldn't convert Any");
+            }
+
             String tmp = (String) pthSettings.getPropertyValue("UserPath");
             tmpDir = getFullURL(tmp+"/temp/");
         } catch (Exception e) {
@@ -535,7 +548,14 @@ public class utils {
             Object settings = msf.createInstance("com.sun.star.frame.Settings");
             XNameAccess settingNames = (XNameAccess)
                             UnoRuntime.queryInterface(XNameAccess.class,settings);
-            XPropertySet pthSettings = (XPropertySet) settingNames.getByName("PathSettings");
+            Object pSettings = settingNames.getByName("PathSettings");
+            XPropertySet pthSettings = null;
+            try {
+                pthSettings = (XPropertySet) AnyConverter.toObject(
+                                    new Type(XPropertySet.class),pSettings);
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                System.out.println("### couldn't convert Any");
+            }
             String path = (String) pthSettings.getPropertyValue("ProgPath");
             return path;
         } catch (Exception e) {
