@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:50 $
+ *  last change: $Author: dr $ $Date: 2002-12-04 14:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,8 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
             nStrLen /= 2;       // it's byte count here...
             pLongName.reset( new String );
             AppendString32( *pLongName, rStrm, nStrLen, true );
+            if( !::get_flag( nFlags, EXC_HLINK_ABS ) )
+                GetAbsPath( *pLongName, 0, pDocShell );
         }
         else
             DBG_ERRORFILE( "XclImpHyperlink::ReadHlink - unknown content GUID" );
