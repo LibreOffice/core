@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prcntfld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-15 10:44:52 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@ class PercentField : public MetricField
     long        nLastPercent, nLastValue;
     USHORT      nOldDigits;
     FieldUnit   eOldUnit;
+    sal_Bool    bLockAutoCalculation; //prevent recalcution of percent values when the
+                                        //reference value is changed
 
     long        ImpPower10(USHORT n);
 
@@ -101,6 +103,8 @@ public:
 
     USHORT      GetOldDigits() const {return nOldDigits;}
 
+    void        LockAutoCalculation(sal_Bool bLock) {bLockAutoCalculation = bLock;}
+    sal_Bool    IsAutoCalculationLocked()const {return bLockAutoCalculation;}
 };
 
 #endif // _PRCNTFLD_HXX
