@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-17 09:07:32 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 11:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+
+#include <algorithm>
 
 //.........................................................................
 namespace comphelper
@@ -497,6 +499,9 @@ void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/08/17 09:07:32  fs
+ *  #91038# convertFastPropertyValue: allow for assigning different XInterface derivees
+ *
  *  Revision 1.7  2001/06/12 06:05:20  fs
  *  added some assertions
  *
