@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:00:42 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1180,26 +1180,28 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
         SwDrawVirtObj* pDrawVirtObj = (*aDrawVirtObjIter);
         if ( pDrawVirtObj->GetAnchorFrm() )
         {
-            SwPageFrm* pPage = pDrawVirtObj->AnchorFrm()->FindPageFrm();
+            // --> OD 2004-10-21 #i34640# - determine correct page frame
+            SwPageFrm* pPage = pDrawVirtObj->AnchoredObj()->FindPageFrmOfAnchor();
+            // <--
             if( pOldBoundRect && pPage )
             {
                 SwRect aOldRect( *pOldBoundRect );
                 aOldRect.Pos() += pDrawVirtObj->GetOffset();
                 if( aOldRect.HasArea() )
-                    ::Notify_Background( pDrawVirtObj ,pPage,
-                                       aOldRect, PREP_FLY_LEAVE,TRUE);
+                    ::Notify_Background( pDrawVirtObj, pPage,
+                                         aOldRect, PREP_FLY_LEAVE,TRUE);
             }
-            SwRect aRect( pDrawVirtObj->GetCurrentBoundRect() );
+            // --> OD 2004-10-21 #i34640# - include spacing for wrapping
+            SwRect aRect( pDrawVirtObj->GetAnchoredObj()->GetObjRectWithSpaces() );
+            // <--
             if( aRect.HasArea() )
             {
-                SwPageFrm *pPg = pDrawVirtObj->GetPageFrm();
-                if ( !pPg )
-                    pPg = pDrawVirtObj->AnchorFrm()->FindPageFrm();
+                // --> OD 2004-10-21 #i34640# - simplify
+                SwPageFrm* pPg = (SwPageFrm*)::FindPage( aRect, pPage );
+                // <--
                 if ( pPg )
-                    pPg = (SwPageFrm*)::FindPage( aRect, pPg );
-                if( pPg )
                     ::Notify_Background( pDrawVirtObj, pPg, aRect,
-                                        PREP_FLY_ARRIVE, TRUE );
+                                         PREP_FLY_ARRIVE, TRUE );
             }
             ::ClrContourCache( pDrawVirtObj );
         }
@@ -1211,20 +1213,30 @@ void lcl_NotifyBackgroundOfObj( SwDrawContact& _rDrawContact,
                                 const SdrObject& _rObj,
                                 const Rectangle* _pOldObjRect )
 {
-    if ( _rDrawContact.GetAnchorFrm( &_rObj ) )
+    // --> OD 2004-10-21 #i34640#
+    SwAnchoredObject* pAnchoredObj =
+        const_cast<SwAnchoredObject*>(_rDrawContact.GetAnchoredObj( &_rObj ));
+    if ( pAnchoredObj && pAnchoredObj->GetAnchorFrm() )
+    // <--
     {
-        SwPageFrm* pPageFrm = const_cast<SwPageFrm*>(
-                            _rDrawContact.GetAnchorFrm( &_rObj )->FindPageFrm() );
+        // --> OD 2004-10-21 #i34640# - determine correct page frame
+        SwPageFrm* pPageFrm = pAnchoredObj->FindPageFrmOfAnchor();
+        // <--
         if( _pOldObjRect && pPageFrm )
         {
             SwRect aOldRect( *_pOldObjRect );
             if( aOldRect.HasArea() )
             {
-                ::Notify_Background( &_rObj, pPageFrm, aOldRect,
+                // --> OD 2004-10-21 #i34640# - determine correct page frame
+                SwPageFrm* pOldPageFrm = (SwPageFrm*)::FindPage( aOldRect, pPageFrm );
+                // <--
+                ::Notify_Background( &_rObj, pOldPageFrm, aOldRect,
                                      PREP_FLY_LEAVE, TRUE);
             }
         }
-        SwRect aNewRect( _rObj.GetCurrentBoundRect() );
+        // --> OD 2004-10-21 #i34640# - include spacing for wrapping
+        SwRect aNewRect( pAnchoredObj->GetObjRectWithSpaces() );
+        // <--
         if( aNewRect.HasArea() && pPageFrm )
         {
             pPageFrm = (SwPageFrm*)::FindPage( aNewRect, pPageFrm );
@@ -1279,10 +1291,13 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                               SdrUserCallType eType,
                               const Rectangle* pOldBoundRect )
 {
-    /// OD 05.08.2002 #100843# - do *not* notify, if document is destructing
+    // OD 05.08.2002 #100843# - do *not* notify, if document is destructing
+    // --> OD 2004-10-21 #i35912# - do *not* notify for as-character anchored
+    // drawing objects.
     const bool bNotify = !(GetFmt()->GetDoc()->IsInDtor()) &&
-                         ( SURROUND_THROUGHT != GetFmt()->GetSurround().GetSurround() ||
-                           ObjAnchoredAsChar() );
+                         ( SURROUND_THROUGHT != GetFmt()->GetSurround().GetSurround() ) &&
+                         !ObjAnchoredAsChar();
+    // <--
     switch( eType )
     {
         case SDRUSERCALL_DELETE:
@@ -1290,6 +1305,10 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 if ( bNotify )
                 {
                     lcl_NotifyBackgroundOfObj( *this, rObj, pOldBoundRect );
+                    // --> OD 2004-10-27 #i36181# - background of 'virtual'
+                    // drawing objects have also been notified.
+                    NotifyBackgrdOfAllVirtObjs( pOldBoundRect );
+                    // <--
                 }
                 DisconnectFromLayout( false );
                 SetMaster( NULL );
@@ -1500,9 +1519,14 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 // determine old object retangle of 'master' drawing object
                 // for notification
                 const Rectangle* pOldRect = 0L;
+                Rectangle aOldRect;
                 if ( GetAnchorFrm() )
                 {
-                    pOldRect = &GetMaster()->GetCurrentBoundRect();
+                    // --> OD 2004-10-27 #i36181# - include spacing in object
+                    // rectangle for notification.
+                    aOldRect = maAnchoredDrawObj.GetObjRectWithSpaces().SVRect();
+                    pOldRect = &aOldRect;
+                    // <--
                 }
                 // re-connect to layout due to anchor format change
                 ConnectToLayout( pAnchorFmt );
@@ -1553,6 +1577,14 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         NotifyBackgrdOfAllVirtObjs( 0L );
         _InvalidateObjs();
     }
+    // --> OD 2004-10-26 #i35443#
+    else if ( RES_ATTRSET_CHG == nWhich )
+    {
+        lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
+        NotifyBackgrdOfAllVirtObjs( 0L );
+        _InvalidateObjs();
+    }
+    // <--
     else if ( RES_REMOVE_UNO_OBJECT == nWhich )
     {
         // nothing to do
@@ -1615,6 +1647,17 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
 {
     // OD 10.10.2003 #112299#
     mbDisconnectInProgress = true;
+
+    // --> OD 2004-10-27 #i36181# - notify background of drawing object
+    if ( _bMoveMasterToInvisibleLayer &&
+         !(GetFmt()->GetDoc()->IsInDtor()) &&
+         GetAnchorFrm() )
+    {
+        const Rectangle aOldRect( maAnchoredDrawObj.GetObjRectWithSpaces().SVRect() );
+        lcl_NotifyBackgroundOfObj( *this, *GetMaster(), &aOldRect );
+        NotifyBackgrdOfAllVirtObjs( &aOldRect );
+    }
+    // <--
 
     // OD 16.05.2003 #108784# - remove 'virtual' drawing objects from writer
     // layout and from drawing page
