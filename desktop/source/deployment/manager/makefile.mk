@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 12:06:44 $
+#   last change: $Author: kz $ $Date: 2004-06-11 12:08:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,10 @@ TARGET = deployment_manager
 ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE : settings.mk
+
+SRS1NAME = $(TARGET)
+SRC1FILES = \
+    dp_manager.src
 
 SLOFILES = \
         $(SLO)$/dp_manager.obj
