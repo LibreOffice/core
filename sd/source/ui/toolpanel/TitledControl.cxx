@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitledControl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:58:57 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,7 +397,6 @@ IMPL_LINK(TitledControl, WindowEventListener,
         switch (pWindowEvent->GetId())
         {
             case VCLEVENT_WINDOW_MOUSEBUTTONUP:
-                GrabFocus();
                 // Toggle expansion.
                 GetParentNode()->GetControlContainer().SetExpansionState (
                     this,
