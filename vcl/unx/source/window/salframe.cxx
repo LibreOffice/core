@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-24 07:51:29 $
+ *  last change: $Author: ssa $ $Date: 2001-04-27 15:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,12 +223,16 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
         XSelectInput( GetXDisplay(), XtWindow( hShell_ ), CLIENT_EVENTS );
         XSelectInput( GetXDisplay(), XtWindow( hComposite_ ), CLIENT_EVENTS );
 
-        Hints.flags |= InputHint|IconPixmapHint;
+        Hints.flags |= InputHint;
         Hints.input       = True;
-        Hints.icon_pixmap = GetAppIconPixmap( pDisplay_ );
-        Hints.icon_mask   = GetAppIconMask( pDisplay_ );
-        if( Hints.icon_mask )
-            Hints.flags |= IconMaskHint;
+        // default icon
+        if( SelectAppIconPixmap( pDisplay_, 1, 32,
+                Hints.icon_pixmap, Hints.icon_mask ))
+        {
+             Hints.flags     |= IconPixmapHint;
+            if( Hints.icon_mask )
+                Hints.flags |= IconMaskHint;
+        }
     }
     else if( nSalFrameStyle & SAL_FRAME_STYLE_FLOAT )
     {
@@ -439,11 +443,14 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
         }
         else
         {
-            Hints.flags      |= IconPixmapHint;
-            Hints.icon_pixmap = GetAppIconPixmap( pDisplay_ );
-            Hints.icon_mask   = GetAppIconMask( pDisplay_ );
-            if( Hints.icon_mask )
-                Hints.flags |= IconMaskHint;
+            // default icon
+            if( SelectAppIconPixmap( pDisplay_, 1, 32,
+                    Hints.icon_pixmap, Hints.icon_mask ))
+            {
+                 Hints.flags     |= IconPixmapHint;
+                if( Hints.icon_mask )
+                    Hints.flags |= IconMaskHint;
+            }
         }
 
         Hints.flags        |= WindowGroupHint;
@@ -690,7 +697,60 @@ void SalFrame::Enable( BOOL bEnable )
 
 void SalFrame::SetIcon( USHORT nIcon )
 {
-    // NYI: set a specific icon
+    if ( !( maFrameData.nStyle_ & SAL_FRAME_STYLE_CHILD )
+            && !( maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
+    {
+        XIconSize *pIconSize;
+        int nSizes;
+        int iconSize = 32;
+        if ( XGetIconSizes( _GetXDisplay(), maFrameData.GetShellWindow(), &pIconSize, &nSizes ) )
+        {
+#if defined DBG_UTIL || defined DEBUG
+            fprintf(stderr, "SalFrame::SetIcon(): found %d IconSizes:\n", nSizes);
+#endif
+            int i;
+            for( i=0; i<nSizes; i++)
+            {
+                // select largest supported icon
+                if( pIconSize[i].max_width > iconSize )
+                    iconSize = pIconSize[i].max_width;
+
+#if defined DBG_UTIL || defined DEBUG
+                fprintf(stderr, "min: %d, %d\nmax: %d, %d\ninc: %d, %d\n\n",
+                        pIconSize[i].min_width, pIconSize[i].min_height,
+                        pIconSize[i].max_width, pIconSize[i].max_height,
+                        pIconSize[i].width_inc, pIconSize[i].height_inc);
+#endif
+            }
+        }
+
+        XWMHints Hints;
+        Hints.flags = 0;
+        XWMHints *pHints = XGetWMHints( _GetXDisplay(), maFrameData.GetShellWindow() );
+        if( pHints )
+        {
+            memcpy(&Hints, pHints, sizeof( XWMHints ));
+            XFree( pHints );
+        }
+        pHints = &Hints;
+
+        BOOL bOk = SelectAppIconPixmap( maFrameData.GetDisplay(), nIcon, iconSize,
+                pHints->icon_pixmap, pHints->icon_mask );
+        if ( !bOk )
+        {
+            // load default icon (0)
+            bOk = SelectAppIconPixmap( maFrameData.GetDisplay(), 0, iconSize,
+                pHints->icon_pixmap, pHints->icon_mask );
+        }
+        if( bOk )
+        {
+            pHints->flags    |= IconPixmapHint;
+            if( pHints->icon_mask )
+                pHints->flags |= IconMaskHint;
+
+            XSetWMHints( _GetXDisplay(), maFrameData.GetShellWindow(), pHints );
+        }
+    }
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
