@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 11:37:57 $
+ *  last change: $Author: oj $ $Date: 2001-06-01 08:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1291,19 +1291,9 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
             pCreateFunc = OOdbcDetailsPage::Create;
             break;
         case DST_ADABAS:
-            nPageId     = PAGE_ADABAS;
-            nTextId     = STR_PAGETITLE_ADABAS;
-            pCreateFunc = OAdabasDetailsPage::Create;
-
-            // for adabas we have more than one page
-            {
-                // remove all current detail pages
-                removeDetailPages();
-                // open our own resource block, as the page titles are strings local to this block
-                OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
-                AddTabPage(TAB_PAG_ADABAS_SETTINGS, String(ResId(STR_PAGETITLE_ADABAS_STATISTIC)), OAdabasAdminSettings::Create, 0, sal_False, 1);
-                m_aCurrentDetailPages.push(TAB_PAG_ADABAS_SETTINGS);
-            }
+            nPageId     = TAB_PAG_ADABAS_SETTINGS;
+            nTextId     = STR_PAGETITLE_ADABAS_STATISTIC;
+            pCreateFunc = OAdabasAdminSettings::Create;
             break;
         case DST_ADDRESSBOOK:
             removeDetailPages();
@@ -1324,6 +1314,14 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
     {
         addDetailPage(nPageId,nTextId,pCreateFunc);
         m_aCurrentDetailPages.push(nPageId);
+        // for adabas we have more than one page
+        if(nPageId == TAB_PAG_ADABAS_SETTINGS)
+        {
+            // open our own resource block, as the page titles are strings local to this block
+            OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
+            AddTabPage(PAGE_ADABAS, String(ResId(STR_PAGETITLE_ADABAS)), OAdabasDetailsPage::Create, 0, sal_False, 1);
+            m_aCurrentDetailPages.push(PAGE_ADABAS);
+        }
     }
 
     if (bResetPasswordRequired)
@@ -2655,6 +2653,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.55  2001/05/31 11:37:57  oj
+ *  #87149# correct ldap protocol
+ *
  *  Revision 1.54  2001/05/31 11:09:07  oj
  *  #87149# change subprotocol and Propertynames
  *
