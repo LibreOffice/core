@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:56:54 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,28 +159,74 @@
 #include <comcore.hrc>
 #endif
 
-int lcl_IsInSameTblBox( SwNodes& rNds, const SwNode& rNd,
-                            const SwNodeIndex& rIdx2 )
+// OD 04.11.2003 #i21457# - new implementation of local method <lcl_IsInSameTblBox(..)>.
+// Method now determines the previous/next on its own. Thus, it can be controlled,
+// for which previous/next is checked, if it's visible.
+bool lcl_IsInSameTblBox( SwNodes& _rNds,
+                         const SwNode& _rNd,
+                         const bool _bPrev )
 {
-    const SwTableNode* pTblNd = rNd.FindTableNode();
-    if( !pTblNd )
-        return TRUE;
+    const SwTableNode* pTblNd = _rNd.FindTableNode();
+    if ( !pTblNd )
+    {
+        return true;
+    }
+
+    // determine index to be checked. Its assumed that a previous/next exist.
+    SwNodeIndex aChkIdx( _rNd );
+    {
+        // determine index of previous/next - skip hidden ones, which are
+        // inside the table.
+        // If found one is before/after table, this one isn't in the same
+        // table box as <_rNd>.
+        bool bFound = false;
+        do
+        {
+            if ( _bPrev
+                 ? !_rNds.GoPrevSection( &aChkIdx, FALSE, FALSE )
+                 : !_rNds.GoNextSection( &aChkIdx, FALSE, FALSE ) )
+            {
+                ASSERT( false, "<lcl_IsInSameTblBox(..)> - no previous/next!" );
+                return false;
+            }
+            else
+            {
+                if ( aChkIdx < pTblNd->GetIndex() ||
+                     aChkIdx > pTblNd->EndOfSectionNode()->GetIndex() )
+                {
+                    return false;
+                }
+                else
+                {
+                    // check, if found one isn't inside a hidden section, which
+                    // is also inside the table.
+                    SwSectionNode* pSectNd = aChkIdx.GetNode().FindSectionNode();
+                    if ( !pSectNd ||
+                         pSectNd->GetIndex() < pTblNd->GetIndex() ||
+                         !pSectNd->GetSection().IsHiddenFlag() )
+                    {
+                        bFound = true;
+                    }
+                }
+            }
+        } while ( !bFound );
+    }
 
     // dann suche den StartNode der Box
     const SwTableSortBoxes& rSortBoxes = pTblNd->GetTable().GetTabSortBoxes();
-    ULONG nIdx = rNd.GetIndex();
+    ULONG nIdx = _rNd.GetIndex();
     for( USHORT n = 0; n < rSortBoxes.Count(); ++n )
     {
         const SwStartNode* pNd = rSortBoxes[ n ]->GetSttNd();
-        if( pNd->GetIndex() < nIdx &&
-            nIdx < pNd->EndOfSectionIndex() )
+        if ( pNd->GetIndex() < nIdx && nIdx < pNd->EndOfSectionIndex() )
         {
             // dann muss der andere Index in derselben Section liegen
-            nIdx = rIdx2.GetIndex();
+            nIdx = aChkIdx.GetIndex();
             return pNd->GetIndex() < nIdx && nIdx < pNd->EndOfSectionIndex();
         }
     }
-    return TRUE;
+
+    return true;
 }
 
 void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSection& rSect,
@@ -189,12 +235,14 @@ void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSection& rSect,
     SwNodeIndex aIdx( rStt );
     if( !rNds.GoPrevSection( &aIdx, TRUE, FALSE ) ||
         !CheckNodesRange( rStt, aIdx, TRUE ) ||
-        !lcl_IsInSameTblBox( rNds, rStt, aIdx ))
+        // OD 04.11.2003 #i21457#
+        !lcl_IsInSameTblBox( rNds, rStt, true ))
     {
         aIdx = rEnd;
         if( !rNds.GoNextSection( &aIdx, TRUE, FALSE ) ||
             !CheckNodesRange( rEnd, aIdx, TRUE ) ||
-            !lcl_IsInSameTblBox( rNds, rEnd, aIdx ))
+            // OD 04.11.2003 #i21457#
+            !lcl_IsInSameTblBox( rNds, rEnd, false ))
             rSect.SetHidden( FALSE );
     }
 }
@@ -1196,12 +1244,14 @@ void SwSectionNode::DelFrms()
         SwNodeIndex aIdx( *this );
         if( !rNds.GoPrevSection( &aIdx, TRUE, FALSE ) ||
             !CheckNodesRange( *this, aIdx, TRUE ) ||
-            !lcl_IsInSameTblBox( rNds, *this, aIdx ))
+            // OD 04.11.2003 #i21457#
+            !lcl_IsInSameTblBox( rNds, *this, true ))
         {
             aIdx = *EndOfSectionNode();
             if( !rNds.GoNextSection( &aIdx, TRUE, FALSE ) ||
                 !CheckNodesRange( *EndOfSectionNode(), aIdx, TRUE ) ||
-                !lcl_IsInSameTblBox( rNds, *EndOfSectionNode(), aIdx ))
+                // OD 04.11.2003 #i21457#
+                !lcl_IsInSameTblBox( rNds, *EndOfSectionNode(), false ))
                 pSection->bHiddenFlag = FALSE;
         }
     }
