@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:08:22 $
+ *  last change: $Author: kz $ $Date: 2004-12-08 17:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,8 +784,13 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
     // use scale factor when calling GetTextBoundRect to counter
     // negative effects from antialiasing which may otherwise result
     // in significant incorrect bounding rectangles for some charcters.
-    long nScaleFactor = 16;
     Size aFntSize = aFnt.GetSize();
+
+    // HDU: workaround to avoid HUGE font sizes (#112783#)
+    long nScaleFactor = 1;
+    while( aFntSize.Height() > 400 * nScaleFactor )
+        nScaleFactor *= 2;
+
     aFnt.SetSize( Size( aFntSize.Width() * nScaleFactor, aFntSize.Height() * nScaleFactor ) );
     pGlyphDev->SetFont(aFnt);
 
