@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:56:32 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef MACOSX
+#if defined(MACOSX) || defined(FREEBSD)
 #include <sys/types.h>
 #include <sys/malloc.h>
 #else
