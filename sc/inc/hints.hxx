@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hints.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:04:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _SFXHINT_HXX //autogen
 #include <svtools/hint.hxx>
 #endif
@@ -87,12 +91,12 @@ public:
     void            SetPrintFlag(BOOL bSet) { bPrint = bSet; }
 
     const ScRange&  GetRange() const        { return aRange; }
-    USHORT          GetStartCol() const     { return aRange.aStart.Col(); }
-    USHORT          GetStartRow() const     { return aRange.aStart.Row(); }
-    USHORT          GetStartTab() const     { return aRange.aStart.Tab(); }
-    USHORT          GetEndCol() const       { return aRange.aEnd.Col(); }
-    USHORT          GetEndRow() const       { return aRange.aEnd.Row(); }
-    USHORT          GetEndTab() const       { return aRange.aEnd.Tab(); }
+    SCCOL           GetStartCol() const     { return aRange.aStart.Col(); }
+    SCROW           GetStartRow() const     { return aRange.aStart.Row(); }
+    SCTAB           GetStartTab() const     { return aRange.aStart.Tab(); }
+    SCCOL           GetEndCol() const       { return aRange.aEnd.Col(); }
+    SCROW           GetEndRow() const       { return aRange.aEnd.Row(); }
+    SCTAB           GetEndTab() const       { return aRange.aEnd.Tab(); }
     USHORT          GetParts() const        { return nParts; }
     BOOL            GetPrintFlag() const    { return bPrint; }
 };
@@ -102,22 +106,22 @@ class ScUpdateRefHint : public SfxHint
 {
     UpdateRefMode   eUpdateRefMode;
     ScRange         aRange;
-    short           nDx;
-    short           nDy;
-    short           nDz;
+    SCsCOL          nDx;
+    SCsROW          nDy;
+    SCsTAB          nDz;
 
 public:
                     TYPEINFO();
 
                     ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
-                                        short nX, short nY, short nZ );
+                                        SCsCOL nX, SCsROW nY, SCsTAB nZ );
                     ~ScUpdateRefHint();
 
     UpdateRefMode   GetMode() const         { return eUpdateRefMode; }
     const ScRange&  GetRange() const        { return aRange; }
-    short           GetDx() const           { return nDx; }
-    short           GetDy() const           { return nDy; }
-    short           GetDz() const           { return nDz; }
+    SCsCOL          GetDx() const           { return nDx; }
+    SCsROW          GetDy() const           { return nDy; }
+    SCsTAB          GetDz() const           { return nDz; }
 };
 
 
