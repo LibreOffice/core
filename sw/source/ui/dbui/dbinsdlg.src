@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 07:06:52 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 08:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text = "Daten einfügen als:" ;
         Text [ ENGLISH ] = "Insert data as:" ;
         Text [ english_us ] = "Insert data as:" ;
-        Text [ portuguese_brazilian ] = "Daten einfügen als:" ;
+        Text [ portuguese_brazilian ] = "Daten einf?en als:" ;
         Text [ swedish ] = "Infoga data som:" ;
         Text [ danish ] = "Indsæt data som:" ;
         Text [ italian ] = "Inserisci file come:" ;
@@ -361,7 +361,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TEXT [ English ] = "Paragraph Style:" ;
         TEXT [ norwegian ] = "Avsnittsmal:" ;
         TEXT [ italian ] = "Modello di paragrafo:" ;
-        TEXT [ portuguese_brazilian ] = "(Estilo de Parágrafo:" ;
+        TEXT [ portuguese_brazilian ] = "(Estilo de Par?grafo:" ;
         TEXT [ portuguese ] = "Estilo de ~parágrafo:" ;
         TEXT [ finnish ] = "~Kappaleen tyyli:" ;
         TEXT [ danish ] = "Afsnitstypografi:" ;
@@ -473,7 +473,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text = "Tabellenüberschrift" ;
         Text [ ENGLISH ] = "Table headline" ;
         Text [ english_us ] = "Table heading" ;
-        Text [ portuguese_brazilian ] = "Tabellenüberschrift" ;
+        Text [ portuguese_brazilian ] = "Tabellen?erschrift" ;
         Text [ swedish ] = "Tabellöverskrift" ;
         Text [ danish ] = "Tabeloverskrift" ;
         Text [ italian ] = "Titolo tabella" ;
@@ -605,7 +605,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÊôÐÔ(~O)...";
         Text[ russian ] = "Ñâîéñòâà...";
-        Text[ polish ] = "W³aœciwoœci";
+        Text[ polish ] = "W³a?ciwo?ci";
         Text[ japanese ] = "ÌßÛÊßÃ¨(~O)...";
         Text[ chinese_traditional ] = "ÄÝ©Ê(~O)...";
         Text[ arabic ] = "ÎÕÇÆÕ...";
@@ -675,7 +675,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ finnish ] = "<Ei mitään>";
     };
     Text [ english_us ] = "Insert Database Columns" ;
-    Text [ portuguese_brazilian ] = "Datenbankspalten einfügen" ;
+    Text [ portuguese_brazilian ] = "Datenbankspalten einf?en" ;
     Text [ swedish ] = "Infoga databaskolumner" ;
     Text [ danish ] = "Indsæt databasekolonner" ;
     Text [ italian ] = "Inserisci colonne di database" ;
