@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-02-09 15:29:59 $
+#   last change: $Author: vg $ $Date: 2005-02-24 16:19:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ sub put_productname_into_script
     my $productname = $variableshashref->{'PRODUCTNAME'};
     $productname = lc($productname);
     $productname =~ s/\.//g;    # openoffice.org -> openofficeorg
+    $productname =~ s/\s*//g;
 
     my $infoline = "Adding productname $productname into download shell script\n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -179,9 +180,16 @@ sub put_checksum_and_size_into_script
 
 sub call_sum
 {
-    my ($installdir) = @_;
+    my ($installdir, $getuidlibrary) = @_;
 
-    my $systemcall = "cd $installdir; tar -cf - * | /usr/bin/sum |";
+#   my $ownerstring = "";
+#   if ( $installer::globals::islinuxrpmbuild ) { $ownerstring = "--owner=0"; }
+#   my $systemcall = "cd $installdir; tar $ownerstring -cf - * | /usr/bin/sum |";
+
+#   $ENV{'LD_PRELOAD'} = $getuidlibrary;
+#   my $systemcall = "cd $installdir; tar -cf - * | /usr/bin/sum |";
+
+    my $systemcall = "cd $installdir; LD_PRELOAD=$getuidlibrary tar -cf - * | /usr/bin/sum |";
 
     my $sumoutput = "";
 
@@ -209,14 +217,36 @@ sub call_sum
 }
 
 #########################################################
+# Searching for the getuid.so in the solver
+#########################################################
+
+sub get_path_for_library
+{
+    my ($includepatharrayref) = @_;
+
+    my $getuidlibraryname = "getuid.so";
+    my $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$getuidlibraryname, $includepatharrayref, 0);
+    if ($$getuidlibraryref eq "") { installer::exiter::exit_program("ERROR: Could not find $getuidlibraryname!", "get_path_for_library"); }
+
+    return $$getuidlibraryref;
+}
+
+#########################################################
 # Including the binary package into the script
 #########################################################
 
 sub include_package_into_script
 {
-    my ( $installdir, $scriptfilename) = @_;
+    my ( $installdir, $scriptfilename, $getuidlibrary) = @_;
 
-    my $systemcall = "cd $installdir; tar -cf - * >> $scriptfilename";
+#   my $ownerstring = "";
+#   if ( $installer::globals::islinuxrpmbuild ) { $ownerstring = "--owner=0"; }
+#   my $systemcall = "cd $installdir; tar $ownerstring -cf - * >> $scriptfilename";
+
+#   $ENV{'LD_PRELOAD'} = $getuidlibrary;
+#   my $systemcall = "cd $installdir; tar -cf - * >> $scriptfilename";
+
+    my $systemcall = "cd $installdir; LD_PRELOAD=$getuidlibrary tar -cf - * >> $scriptfilename";
 
     my $returnvalue = system($systemcall);
 
@@ -926,8 +956,11 @@ sub create_download_sets
         # replace linenumber in script template
         put_linenumber_into_script($scriptfile);
 
+        # getting the path of the getuid.so
+        my $getuidlibrary = get_path_for_library($includepatharrayref);
+
         # calling sum to determine checksum and size of the tar file
-        my $sumout = call_sum($installationdir);
+        my $sumout = call_sum($installationdir, $getuidlibrary);
 
         # writing checksum and size into scriptfile
         put_checksum_and_size_into_script($scriptfile, $sumout);
@@ -938,7 +971,7 @@ sub create_download_sets
         print "... including installation set into $newscriptfilename ... \n";
 
         $newscriptfilename = save_script_file($downloaddir, $newscriptfilename, $scriptfile);
-        include_package_into_script($installationdir, $newscriptfilename);
+        include_package_into_script($installationdir, $newscriptfilename, $getuidlibrary);
     }
     else    # Windows specific part
     {
