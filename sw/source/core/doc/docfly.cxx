@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:01:23 $
+ *  last change: $Author: rt $ $Date: 2004-02-10 14:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,7 +1003,7 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
     if( !pTxtNd )
         return SW_CHAIN_NOT_FOUND;
 
-    ULONG nFlySttNd = pCntIdx->GetIndex(), nTstSttNd;
+    const ULONG nFlySttNd = pCntIdx->GetIndex();
     if( 2 != ( pCntIdx->GetNode().EndOfSectionIndex() - nFlySttNd ) ||
         pTxtNd->GetTxt().Len() )
         return SW_CHAIN_NOT_EMPTY;
@@ -1012,8 +1012,9 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
     for( USHORT n = 0; n < nArrLen; ++n )
     {
         const SwFmtAnchor& rAnchor = (*GetSpzFrmFmts())[ n ]->GetAnchor();
+        ULONG nTstSttNd;
+        // OD 11.12.2003 #i20622# - to-frame anchored objects are allowed.
         if ( ( rAnchor.GetAnchorId() == FLY_AT_CNTNT ||
-               rAnchor.GetAnchorId() == FLY_AT_FLY ||
                rAnchor.GetAnchorId() == FLY_AUTO_CNTNT ) &&
              0 != rAnchor.GetCntntAnchor() &&
              nFlySttNd <= ( nTstSttNd =
