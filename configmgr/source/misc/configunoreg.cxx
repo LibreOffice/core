@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:30:57 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,9 +288,12 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
         // backends
         RegisterService(configmgr::backend::getDefaultBackendServiceInfo(), xKey) ;
         RegisterService(configmgr::backend::getSingleBackendAdapterServiceInfo(), xKey) ;
+        RegisterService(configmgr::backend::getMultiStratumBackendServiceInfo(), xKey) ;
         RegisterService(configmgr::localbe::getLocalBackendServiceInfo(), xKey) ;
         RegisterService(configmgr::localbe::getLocalDataImportServiceInfo(), xKey) ;
         RegisterService(configmgr::localbe::getLocalHierarchyBrowserServiceInfo(), xKey) ;
+        RegisterService(configmgr::localbe::getLocalSchemaSupplierServiceInfo(), xKey) ;
+        RegisterService(configmgr::localbe::getLocalSingleStratumServiceInfo(), xKey) ;
 
         // im/export
         RegisterService(configmgr::backend::getMergeImportServiceInfo(), xKey);
@@ -373,6 +376,10 @@ extern "C" void* SAL_CALL component_getFactory(
                 configmgr::backend::instantiateSingleBackendAdapter)
         ||
         aReq.CreateServiceFactory(
+                configmgr::backend::getMultiStratumBackendServiceInfo(),
+                configmgr::backend::instantiateMultiStratumBackend)
+        ||
+        aReq.CreateServiceFactory(
                 configmgr::localbe::getLocalBackendServiceInfo(),
                 configmgr::localbe::instantiateLocalBackend)
         ||
@@ -383,6 +390,14 @@ extern "C" void* SAL_CALL component_getFactory(
         aReq.CreateServiceFactory(
                 configmgr::localbe::getLocalHierarchyBrowserServiceInfo(),
                 configmgr::localbe::instantiateLocalHierarchyBrowser)
+        ||
+         aReq.CreateServiceFactory(
+                configmgr::localbe::getLocalSchemaSupplierServiceInfo(),
+                configmgr::localbe::instantiateLocalSchemaSupplier)
+        ||
+         aReq.CreateServiceFactory(
+                configmgr::localbe::getLocalSingleStratumServiceInfo(),
+                configmgr::localbe::instantiateLocalSingleStratum)
         ||
         // im/export
         aReq.CreateServiceFactory(
