@@ -20428,3 +20428,5 @@ _real@8@400cfa00000000000000
 ?release@SvxCachedItemPropertySetInfo@@WBE@AAXXZ
 ?reserve@?$vector@PAXV?$allocator@U?$pair@QBUSfxItemPropertyMap@@V?$Reference@VXPropertySetInfo@beans@star@sun@com@@@uno@star@sun@com@@@_STL@@@_STL@@@_STL@@QAEXI@Z
 ?resize@?$hashtable@U?$pair@QBUSfxItemPropertyMap@@V?$Reference@VXPropertySetInfo@beans@star@sun@com@@@uno@star@sun@com@@@_STL@@PBUSfxItemPropertyMap@@USfxItemPropertyMapHash@@U?$_Select1st@U?$pair@QBUSfxItemPropertyMap@@V?$Reference@VXPropertySetInfo@beans@star@sun@com@@@uno@star@sun@com@@@_STL@@@2@U?$equal_to@PBUSfxItemPropertyMap@@@2@V?$allocator@U?$pair@QBUSfxItemPropertyMap@@V?$Reference@VXPropertySetInfo@beans@star@sun@com@@@uno@star@sun@com@@@_STL@@@2@@_STL@@QAEXI@Z
+?CreateFont@@YAXAAVSvxFont@@ABVSfxItemSet@@EF@Z
+?CreateFontFromItemSet@EditEngine@@SA?AVFont@@ABVSfxItemSet@@G@Z
