@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-09 14:31:30 $
+ *  last change: $Author: nn $ $Date: 2001-05-31 18:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,7 +1067,7 @@ static const sal_Char* pServiceNames[] =
     "com.sun.star.text.TextField.PageNumber",
     "com.sun.star.text.TextField.PageCount",
     "com.sun.star.text.TextField.DateTime",
-    "com.sun.star.text.TextField.FileName",
+    "com.sun.star.text.TextField.DocInfo.Title",    // SvxFileField is used for title
     "com.sun.star.text.TextField.SheetName",
     "com.sun.star.text.TextField.DateTime",
     "com.sun.star.text.TextField.FileName",

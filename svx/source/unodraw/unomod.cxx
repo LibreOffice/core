@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 19:17:16 $
+ *  last change: $Author: nn $ $Date: 2001-05-31 18:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,10 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
         else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FileName") ) )
         {
             nId = ID_EXT_FILEFIELD;
+        }
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DocInfo.Title") ) )
+        {
+            nId = ID_FILEFIELD;
         }
         else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Author") ) )
         {
