@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2002-01-15 09:24:23 $
+ *  last change: $Author: pb $ $Date: 2002-06-07 07:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ class SfxDocumentTemplates;
 class Path;
 
 //=========================================================================
+
 #ifndef _SFX_HXX
 
 class SfxOrganizeDlg_Impl;
@@ -86,13 +87,14 @@ class SfxOrganizeListBox_Impl: public SvTreeListBox
 {
 friend class SfxOrganizeDlg_Impl;
 
-    SfxOrganizeMgr *pMgr;
-    Image aOpenedFolderBmp;
-    Image aClosedFolderBmp;
-    Image aOpenedDocBmp;
-    Image aClosedDocBmp;
-    SfxOrganizeDlg_Impl *pDlg;
-    static BOOL bDropMoveOk;
+    SfxOrganizeMgr*         pMgr;
+    SfxOrganizeDlg_Impl*    pDlg;
+    Image                   aOpenedFolderBmp;
+    Image                   aClosedFolderBmp;
+    Image                   aOpenedDocBmp;
+    Image                   aClosedDocBmp;
+
+    static BOOL             bDropMoveOk;
 
     DECL_LINK( OnAsyncExecuteDrop, ExecuteDropEvent* );
 
@@ -108,7 +110,6 @@ protected:
     virtual void RequestingChilds( SvLBoxEntry* pParent );
     virtual long ExpandingHdl();
     virtual BOOL Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
-    virtual void Command( const CommandEvent& rCEvt );
 
     // new d&d
     virtual DragDropMode    NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* );
@@ -117,15 +118,12 @@ protected:
     virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
 
 public:
-    enum DataEnum {
-        VIEW_TEMPLATES,
-        VIEW_FILES
-    } eViewType;
-    SfxOrganizeListBox_Impl(SfxOrganizeDlg_Impl *pDlg,
-                            Window *pParent, WinBits, DataEnum);
+    enum DataEnum   { VIEW_TEMPLATES, VIEW_FILES } eViewType;
 
-    DataEnum GetViewType() const { return eViewType; }
-    void SetViewType(DataEnum eType) { eViewType = eType; }
+    SfxOrganizeListBox_Impl( SfxOrganizeDlg_Impl* pDlg, Window* pParent, WinBits, DataEnum );
+
+    DataEnum    GetViewType() const { return eViewType; }
+    void        SetViewType(DataEnum eType) { eViewType = eType; }
 
     void SetMgr(SfxOrganizeMgr *pM) { pMgr = pM; }
     void Reset();
@@ -141,6 +139,8 @@ public:
     const Image &GetClosedBmp(USHORT nLevel) const;
     const Image &GetOpenedBmp(USHORT nLevel) const;
 
+    virtual PopupMenu*  CreateContextMenu();
+
 private:
     BOOL IsStandard_Impl( SvLBoxEntry *) const;
     BOOL MoveOrCopyTemplates(SvLBox *pSourceBox,
@@ -155,13 +155,15 @@ private:
                             SvLBoxEntry *&pNewParent,
                             ULONG &rIdx,
                             BOOL bCopy);
-    inline USHORT   GetDocLevel() const;
-    SfxObjectShellRef GetObjectShell(const Path &);
-    BOOL   IsUniqName_Impl(const String &rText, SvLBoxEntry* pParent, SvLBoxEntry *pEntry = 0) const;
-    USHORT GetLevelCount_Impl(SvLBoxEntry* pParent) const;
+    inline USHORT       GetDocLevel() const;
+    SfxObjectShellRef   GetObjectShell( const Path& );
+    BOOL                IsUniqName_Impl( const String &rText,
+                                         SvLBoxEntry* pParent, SvLBoxEntry* pEntry = 0 ) const;
+    USHORT              GetLevelCount_Impl( SvLBoxEntry* pParent ) const;
 };
 
-#endif
+#endif // _SFX_HXX
+
 //=========================================================================
 
 class SfxTemplateOrganizeDlg : public ModalDialog

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pb $ $Date: 2002-04-05 08:54:55 $
+ *  last change: $Author: pb $ $Date: 2002-06-07 07:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,19 +462,6 @@ void Path::NewImp()
         pData->nRef--;
         pData = new ImpPath_Impl(*pData);
     }
-}
-
-//-------------------------------------------------------------------------
-
-void SfxOrganizeListBox_Impl::Command( const CommandEvent& rCEvt )
-{
-    if ( COMMAND_CONTEXTMENU  == rCEvt.GetCommand())
-    {
-        PopupMenu* pMenu = pDlg->aEditBtn.GetPopupMenu();
-        pMenu->Execute( this, rCEvt.GetMousePosPixel() );
-    }
-    else
-        SvTreeListBox::Command(rCEvt);
 }
 
 //-------------------------------------------------------------------------
@@ -1281,11 +1268,19 @@ USHORT SfxOrganizeListBox_Impl::GetLevelCount_Impl(SvLBoxEntry* pParent) const
 
 //-------------------------------------------------------------------------
 
-SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl(
-    SfxOrganizeDlg_Impl *pArgDlg, Window *pParent,
-    WinBits nBits, DataEnum eType)
-:   SvTreeListBox(pParent, nBits), pMgr(0), eViewType(eType),
-    pDlg(pArgDlg)
+SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl
+(
+    SfxOrganizeDlg_Impl* pArgDlg,
+    Window* pParent,
+    WinBits nBits,
+    DataEnum eType
+) :
+
+    SvTreeListBox( pParent, nBits ),
+
+    pMgr        ( NULL ),
+    pDlg        ( pArgDlg ),
+    eViewType   ( eType )
 
 /*  [Beschreibung]
 
@@ -1294,16 +1289,14 @@ SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl(
 */
 
 {
-    SetDragDropMode( SV_DRAGDROP_CTRL_MOVE |
-                     SV_DRAGDROP_CTRL_COPY |
-                     SV_DRAGDROP_APP_MOVE  |
-                     SV_DRAGDROP_APP_COPY  |
-                     SV_DRAGDROP_APP_DROP);
-//  SetDragOptions(DROP_COPY);
+    SetDragDropMode(
+        SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_CTRL_COPY |
+        SV_DRAGDROP_APP_MOVE  | SV_DRAGDROP_APP_COPY  | SV_DRAGDROP_APP_DROP );
     SetEntryHeight( 16 );
-    SetSelectionMode(SINGLE_SELECTION);
+    SetSelectionMode( SINGLE_SELECTION );
+    GetModel()->SetSortMode( SortNone );
 
-    GetModel()->SetSortMode(SortNone);      // Bug in SvTools 303
+    EnableContextMenuHandling();
 }
 
 //-------------------------------------------------------------------------
@@ -1417,6 +1410,13 @@ const Image &SfxOrganizeListBox_Impl::GetOpenedBmp(USHORT nLevel) const
     }
     DBG_ERROR("Bitmaps ueberindiziert");
     return aClosedFolderBmp;
+}
+
+//-------------------------------------------------------------------------
+
+PopupMenu* SfxOrganizeListBox_Impl::CreateContextMenu()
+{
+    return new PopupMenu( *( pDlg->aEditBtn.GetPopupMenu() ) );
 }
 
 //-------------------------------------------------------------------------
