@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderCache.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 14:17:54 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 12:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,8 @@ ProviderCache::getAllProviders() throw ( RuntimeException )
     if (  m_hProviderDetailsCache.size() )
     {
         sal_Int32 providerIndex = 0;
-        for ( sal_Int32 index  = 0; h_it !=  h_itEnd; ++h_it, index++ )
+    sal_Int32 index = 0;
+        for ( index = 0; h_it !=  h_itEnd; ++h_it, index++ )
         {
             Reference< provider::XScriptProvider > xScriptProvider  = h_it->second.provider;
             if ( xScriptProvider.is() )
