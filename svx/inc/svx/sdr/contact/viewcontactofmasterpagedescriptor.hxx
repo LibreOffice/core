@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofmasterpagedescriptor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-13 08:54:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,12 +103,6 @@ namespace sdr
 
             // the painter for the MasterPage content
             ::sdr::contact::OwnMasterPagePainter*           mpMasterPagePainter;
-
-            // Get the correct BackgroundObject
-            SdrObject* GetBackgroundObject() const;
-
-            // Get the LayerId of the BackgroundObject
-            sal_uInt8 GetBackgroundObjectLayerId() const;
 
             // Create a Object-Specific ViewObjectContact, set ViewContact and
             // ObjectContact. Always needs to return something. Default is to create
