@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 11:35:14 $
+ *  last change: $Author: kz $ $Date: 2002-09-12 09:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,16 +116,16 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ greek ] = "Assigned macro";
         Text[ dutch ] = "Assigned macro";
         Text[ french ] = "Assigned macro";
-        Text[ spanish ] = "Assigned macro";
+        Text[ spanish ] = "Macro asignada";
         Text[ finnish ] = "Assigned macro";
         Text[ italian ] = "Assigned macro";
         Text[ danish ] = "Assigned macro";
-        Text[ swedish ] = "Assigned macro";
+        Text[ swedish ] = "Tilldelat makro";
         Text[ polish ] = "Assigned macro";
         Text[ portuguese_brazilian ] = "Assigned macro";
         Text[ japanese ] = "Assigned macro";
         Text[ korean ] = "Assigned macro";
-        Text[ chinese_simplified ] = "Assigned macro";
+        Text[ chinese_simplified ] = "指定的宏";
         Text[ chinese_traditional ] = "指定的巨集";
         Text[ turkish ] = "Assigned macro";
         Text[ arabic ] = "Assigned macro";
@@ -172,16 +172,16 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ greek ] = "~Existing macros in:\n";
         Text[ dutch ] = "~Existing macros in:\n";
         Text[ french ] = "~Existing macros in:\n";
-        Text[ spanish ] = "~Existing macros in:\n";
+        Text[ spanish ] = "~Macros existentes en:\n";
         Text[ finnish ] = "~Existing macros in:\n";
         Text[ italian ] = "~Existing macros in:\n";
         Text[ danish ] = "~Existing macros in:\n";
-        Text[ swedish ] = "~Existing macros in:\n";
+        Text[ swedish ] = "~Existerande makron i:\n";
         Text[ polish ] = "~Existing macros in:\n";
         Text[ portuguese_brazilian ] = "~Existing macros in:\n";
         Text[ japanese ] = "~Existing macros in:\n";
         Text[ korean ] = "~Existing macros in:\n";
-        Text[ chinese_simplified ] = "~Existing macros in:\n";
+        Text[ chinese_simplified ] = "现有的宏的位置(~E)：\n";
         Text[ chinese_traditional ] = "現有的巨集位置：\n";
         Text[ turkish ] = "~Existing macros in:\n";
         Text[ arabic ] = "~Existing macros in:\n";
