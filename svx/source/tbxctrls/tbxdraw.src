@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:46:05 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Výběr";
                 Text[ hebrew ] = "‮מבחר‬";
                 Text[ hindi ] = "चुनाव";
+                Text[ slovak ] = "Výber";
             };
             ToolBoxItem
             {
@@ -149,6 +150,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Úsečka";
                 Text[ hebrew ] = "‮קו‬";
                 Text[ hindi ] = "रेखा";
+                Text[ slovak ] = "Čiara";
             };
             ToolBoxItem
             {
@@ -183,6 +185,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Obdélník";
                 Text[ hebrew ] = "‮מלבן‬";
                 Text[ hindi ] = "आयत";
+                Text[ slovak ] = "Obdĺžnik";
             };
             ToolBoxItem
             {
@@ -218,6 +221,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Elipsa";
                 Text[ hebrew ] = "‮אליפסה‬";
                 Text[ hindi ] = "दीर्घवृत्त";
+                Text[ slovak ] = "Elipsa";
             };
             ToolBoxItem
             {
@@ -252,6 +256,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Mnohoúhelník";
                 Text[ hebrew ] = "‮רב צלעות‬";
                 Text[ hindi ] = "बहुभुज क्षेत्र";
+                Text[ slovak ] = "Mnohouholník";
             };
             ToolBoxItem
             {
@@ -284,6 +289,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Křivka";
                 Text[ hebrew ] = "‮עקומה‬";
                 Text[ hindi ] = "वक्र";
+                Text[ slovak ] = "Krivka";
             };
             ToolBoxItem
             {
@@ -316,6 +322,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Čára od ruky";
                 Text[ hebrew ] = "‮סרטוט חופשי‬";
                 Text[ hindi ] = "मुक्त रचित रेखा";
+                Text[ slovak ] = "Ľubovoľná čiara";
             };
             ToolBoxItem
             {
@@ -350,6 +357,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Oblouk";
                 Text[ hebrew ] = "‮קשת‬";
                 Text[ hindi ] = "चाप";
+                Text[ slovak ] = "Oblúk";
             };
             ToolBoxItem
             {
@@ -383,6 +391,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Eliptická výseč";
                 Text[ hebrew ] = "‮עוגה אליפסית‬";
                 Text[ hindi ] = "दीर्घवृत्त पइ";
+                Text[ slovak ] = "Eliptický koláč";
             };
             ToolBoxItem
             {
@@ -416,6 +425,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Kruhová úseč";
                 Text[ hebrew ] = "‮מיקטע עיגול‬";
                 Text[ hindi ] = "वृत्त खण्ड";
+                Text[ slovak ] = "Kruhový výsek";
             };
             ToolBoxItem
             {
@@ -450,6 +460,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Text";
                 Text[ hebrew ] = "‮טקסט‬";
                 Text[ hindi ] = "टेक्स्ट्";
+                Text[ slovak ] = "Text";
             };
             ToolBoxItem
             {
@@ -482,6 +493,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Svislý text";
                 Text[ hebrew ] = "‮טקסט אנכי‬";
                 Text[ hindi ] = "लम्ब टेक्स्ट्";
+                Text[ slovak ] = "Zvislý text";
             };
             ToolBoxItem
             {
@@ -515,6 +527,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Animovaný text";
                 Text[ hebrew ] = "‮אנימצית טקסט‬";
                 Text[ hindi ] = "टेक्स्ट् हुलास";
+                Text[ slovak ] = "Animácia textu";
             };
             ToolBoxItem
             {
@@ -549,6 +562,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Bubliny";
                 Text[ hebrew ] = "‮דיבורים‬";
                 Text[ hindi ] = "कॉलौट्स";
+                Text[ slovak ] = "Bubliny";
             };
             ToolBoxItem
             {
@@ -581,6 +595,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Svislá bublina";
                 Text[ hebrew ] = "‮דיבורים אנכיים‬";
                 Text[ hindi ] = "लम्ब कॉलौट्";
+                Text[ slovak ] = "Zvislá bublina";
             };
         };
     };
@@ -609,6 +624,7 @@ FloatingWindow RID_SVXTBX_DRAW
     Text[ czech ] = "Kreslící funkce";
     Text[ hebrew ] = "‮פונקציות סרטוט‬";
     Text[ hindi ] = "खींचने का फंक्शन्स";
+    Text[ slovak ] = "Kreslenie";
 };
 FloatingWindow RID_SVXTBX_ALIGNMENT
 {
@@ -669,6 +685,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ czech ] = "Vlevo";
                 Text[ hebrew ] = "‮שמאל‬";
                 Text[ hindi ] = "बायाँ";
+                Text[ slovak ] = "Vľavo";
             };
             ToolBoxItem
             {
@@ -702,6 +719,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ czech ] = "Na střed";
                 Text[ hebrew ] = "‮מרכז‬";
                 Text[ hindi ] = "केन्द्र";
+                Text[ slovak ] = "Na stred";
             };
             ToolBoxItem
             {
@@ -735,6 +753,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ czech ] = "Vpravo";
                 Text[ hebrew ] = "‮ימין‬";
                 Text[ hindi ] = "दाहिना";
+                Text[ slovak ] = "Vpravo";
             };
             ToolBoxItem
             {
@@ -768,6 +787,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ czech ] = "Nahoru";
                 Text[ hebrew ] = "‮למעלה‬";
                 Text[ hindi ] = "ऊपर";
+                Text[ slovak ] = "Navrchu";
             };
             ToolBoxItem
             {
@@ -801,6 +821,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ czech ] = "Na střed";
                 Text[ hebrew ] = "‮ממורכז‬";
                 Text[ hindi ] = "केन्द्रित";
+                Text[ slovak ] = "Na stred";
             };
             ToolBoxItem
             {
@@ -834,6 +855,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ czech ] = "Dolů";
                 Text[ hebrew ] = "‮למטה‬";
                 Text[ hindi ] = "नीचे";
+                Text[ slovak ] = "Dole";
             };
         };
     };
@@ -852,8 +874,11 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
     Text[ czech ] = "Zarovnání";
     Text[ hebrew ] = "‮יישור‬";
     Text[ hindi ] = "पंक्तिकरण";
+    Text[ slovak ] = "Zarovnanie";
 };
  // ********************************************************************** EOF
+
+
 
 
 
