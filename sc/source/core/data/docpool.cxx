@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:07:08 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <svtools/itemiter.hxx>
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
+#include <svx/bolnitem.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/charreliefitem.hxx>
 #include <svx/cntritem.hxx>
@@ -124,6 +125,7 @@ USHORT* ScDocumentPool::pVersionMap6 = 0;
 USHORT* ScDocumentPool::pVersionMap7 = 0;
 USHORT* ScDocumentPool::pVersionMap8 = 0;
 USHORT* ScDocumentPool::pVersionMap9 = 0;
+USHORT* ScDocumentPool::pVersionMap10 = 0;
 
 // ATTR_FONT_TWOLINES (not used) was changed to ATTR_USERDEF (not saved in binary format) in 641c
 
@@ -160,12 +162,15 @@ static SfxItemInfo __READONLY_DATA  aItemInfos[] =
     { SID_ATTR_ALIGN_HOR_JUSTIFY,   SFX_ITEM_POOLABLE },    // ATTR_HOR_JUSTIFY
     { SID_ATTR_ALIGN_INDENT,        SFX_ITEM_POOLABLE },    // ATTR_INDENT          ab 350
     { SID_ATTR_ALIGN_VER_JUSTIFY,   SFX_ITEM_POOLABLE },    // ATTR_VER_JUSTIFY
-    { SID_ATTR_ALIGN_ORIENTATION,   SFX_ITEM_POOLABLE },    // ATTR_ORIENTATION
+    { SID_ATTR_ALIGN_STACKED,       SFX_ITEM_POOLABLE },    // ATTR_STACKED         from 680/dr14 (replaces ATTR_ORIENTATION)
     { SID_ATTR_ALIGN_DEGREES,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_VALUE    ab 367
     { SID_ATTR_ALIGN_LOCKPOS,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_MODE     ab 367
     { SID_ATTR_ALIGN_ASIANVERTICAL, SFX_ITEM_POOLABLE },    // ATTR_VERTICAL_ASIAN  from 642
     { SID_ATTR_FRAMEDIRECTION,      SFX_ITEM_POOLABLE },    // ATTR_WRITINGDIR      from 643
     { SID_ATTR_ALIGN_LINEBREAK,     SFX_ITEM_POOLABLE },    // ATTR_LINEBREAK
+    { SID_ATTR_ALIGN_SHRINKTOFIT,   SFX_ITEM_POOLABLE },    // ATTR_SHRINKTOFIT     from 680/dr14
+    { SID_ATTR_BORDER_DIAG_TLBR,    SFX_ITEM_POOLABLE },    // ATTR_BORDER_TLBR     from 680/dr14
+    { SID_ATTR_BORDER_DIAG_BLTR,    SFX_ITEM_POOLABLE },    // ATTR_BORDER_BLTR     from 680/dr14
     { SID_ATTR_ALIGN_MARGIN,        SFX_ITEM_POOLABLE },    // ATTR_MARGIN
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_MERGE
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_MERGE_FLAG
@@ -251,7 +256,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     pGlobalBorderInnerAttr->SetLine(NULL, BOXINFO_LINE_HORI);
     pGlobalBorderInnerAttr->SetLine(NULL, BOXINFO_LINE_VERT);
     pGlobalBorderInnerAttr->SetTable(TRUE);
-    pGlobalBorderInnerAttr->SetDist((BOOL)FALSE);
+    pGlobalBorderInnerAttr->SetDist(TRUE);
     pGlobalBorderInnerAttr->SetMinDist(FALSE);
 
     ppPoolDefaults = new SfxPoolItem*[ATTR_ENDINDEX-ATTR_STARTINDEX+1];
@@ -289,7 +294,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     ppPoolDefaults[ ATTR_HOR_JUSTIFY     - ATTR_STARTINDEX ] = new SvxHorJustifyItem;
     ppPoolDefaults[ ATTR_INDENT          - ATTR_STARTINDEX ] = new SfxUInt16Item( ATTR_INDENT, 0 );
     ppPoolDefaults[ ATTR_VER_JUSTIFY     - ATTR_STARTINDEX ] = new SvxVerJustifyItem;
-    ppPoolDefaults[ ATTR_ORIENTATION     - ATTR_STARTINDEX ] = new SvxOrientationItem;
+    ppPoolDefaults[ ATTR_STACKED         - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_STACKED, FALSE );
     ppPoolDefaults[ ATTR_ROTATE_VALUE    - ATTR_STARTINDEX ] = new SfxInt32Item( ATTR_ROTATE_VALUE, 0 );
     ppPoolDefaults[ ATTR_ROTATE_MODE     - ATTR_STARTINDEX ] = new SvxRotateModeItem( SVX_ROTATE_MODE_BOTTOM, ATTR_ROTATE_MODE );
     ppPoolDefaults[ ATTR_VERTICAL_ASIAN  - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_VERTICAL_ASIAN );
@@ -298,6 +303,9 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     //  The value from the page style is set as DefaultHorizontalTextDirection for the EditEngine.
     ppPoolDefaults[ ATTR_WRITINGDIR      - ATTR_STARTINDEX ] = new SvxFrameDirectionItem( FRMDIR_ENVIRONMENT, ATTR_WRITINGDIR );
     ppPoolDefaults[ ATTR_LINEBREAK       - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_LINEBREAK );
+    ppPoolDefaults[ ATTR_SHRINKTOFIT     - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_SHRINKTOFIT );
+    ppPoolDefaults[ ATTR_BORDER_TLBR     - ATTR_STARTINDEX ] = new SvxLineItem( ATTR_BORDER_TLBR );
+    ppPoolDefaults[ ATTR_BORDER_BLTR     - ATTR_STARTINDEX ] = new SvxLineItem( ATTR_BORDER_BLTR );
     ppPoolDefaults[ ATTR_MARGIN          - ATTR_STARTINDEX ] = new SvxMarginItem;
     ppPoolDefaults[ ATTR_MERGE           - ATTR_STARTINDEX ] = new ScMergeAttr;
     ppPoolDefaults[ ATTR_MERGE_FLAG      - ATTR_STARTINDEX ] = new ScMergeFlagAttr;
@@ -388,6 +396,9 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
 
     // ATTR_WRITINGDIR from 643y
     SetVersionMap( 9, 100, 182, pVersionMap9 );
+
+    // ATTR_SHRINKTOFIT, ATTR_BORDER_TL_BR, ATTR_BORDER_BL_TR added in 680/dr14
+    SetVersionMap( 10, 100, 137, pVersionMap10 );
 }
 
 __EXPORT ScDocumentPool::~ScDocumentPool()
@@ -410,7 +421,7 @@ void ScDocumentPool::InitVersionMaps()
                 !pVersionMap3 && !pVersionMap4 &&
                 !pVersionMap5 && !pVersionMap6 &&
                 !pVersionMap7 && !pVersionMap8 &&
-                !pVersionMap9, "InitVersionMaps call multiple times" );
+                !pVersionMap9 && !pVersionMap10, "InitVersionMaps call multiple times" );
 
     // alte WhichId's mappen
     // nicht mit ATTR_* zaehlen, falls die sich nochmal aendern
@@ -532,6 +543,19 @@ void ScDocumentPool::InitVersionMaps()
     // 1 entry inserted
     for ( i=nMap9New, j=nMap9Start+nMap9New+1; i < nMap9Count; i++, j++ )
         pVersionMap9[i] = j;
+
+    // 10th map: ATTR_SHRINKTOFIT, ATTR_BORDER_TL_BR, ATTR_BORDER_BL_TR added in 680/dr14
+
+    const USHORT nMap10Start = 100;  // ATTR_STARTINDEX
+    const USHORT nMap10End   = 185;  // ATTR_ENDINDEX
+    const USHORT nMap10Count = nMap10End - nMap10Start + 1;
+    const USHORT nMap10New   = 37;   // ATTR_SHRINKTOFIT - ATTR_STARTINDEX
+    pVersionMap10 = new USHORT [ nMap10Count ];
+    for ( i=0, j=nMap10Start; i < nMap10New; i++, j++ )
+        pVersionMap10[i] = j;
+    // 3 entries inserted
+    for ( i=nMap10New, j=nMap10Start+nMap10New+3; i < nMap10Count; i++, j++ )
+        pVersionMap10[i] = j;
 }
 
 void ScDocumentPool::DeleteVersionMaps()
@@ -540,8 +564,10 @@ void ScDocumentPool::DeleteVersionMaps()
                 pVersionMap3 && pVersionMap4 &&
                 pVersionMap5 && pVersionMap6 &&
                 pVersionMap7 && pVersionMap8 &&
-                pVersionMap9, "DeleteVersionMaps without maps" );
+                pVersionMap9 && pVersionMap10, "DeleteVersionMaps without maps" );
 
+    delete[] pVersionMap10;
+    pVersionMap10 = 0;
     delete[] pVersionMap9;
     pVersionMap9 = 0;
     delete[] pVersionMap8;
