@@ -520,7 +520,14 @@ sub include_regcomp_into_ld_library_path
     my $oldldlibrarypathstring = "";
     if ( $ENV{'LD_LIBRARY_PATH'} ) { $oldldlibrarypathstring = $ENV{'LD_LIBRARY_PATH'}; }
     else { $oldldlibrarypathstring = "\."; }
-    my $new_ld_library_path = $ld_library_path . $installer::globals::pathseparator . $oldldlibrarypathstring;
+    my $new_ld_library_path = $ld_library_path;
+    if ( $oldldlibrarypathstring ne "" ) {
+        $new_ld_library_path = $new_ld_library_path . $installer::globals::pathseparator . $oldldlibrarypathstring;
+    }
+    if ( $ENV{'SYSTEM_MOZILLA'} && $ENV{'SYSTEM_MOZILLA'} eq "YES" &&
+      (!$ENV{'WITH_OPENLDAP'} || $ENV{'WITH_OPENLDAP'} ne "YES")) {
+        $new_ld_library_path = $new_ld_library_path . $installer::globals::pathseparator . $ENV{'MOZ_LIB'};
+    }
     $ENV{'LD_LIBRARY_PATH'} = $new_ld_library_path;
 
     my $infoline = "Setting LD_LIBRARY_PATH to $ENV{'LD_LIBRARY_PATH'}\n";
