@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:31:40 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,6 +643,18 @@ BOOL EditEngine::IsKernAsianPunctuation() const
 {
     DBG_CHKTHIS( EditView, 0 );
     return pImpEditEngine->IsKernAsianPunctuation();
+}
+
+void EditEngine::SetAddExtLeading( BOOL b )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->SetAddExtLeading( b );
+}
+
+BOOL EditEngine::IsAddExtLeading() const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->IsAddExtLeading();
 }
 
 void EditEngine::SetPolygon( const XPolyPolygon& rPoly )
