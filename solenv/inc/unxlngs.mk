@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-04 12:38:35 $
+#   last change: $Author: rt $ $Date: 2004-03-02 11:34:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,12 +88,7 @@ JAVA_RUNTIME=-ljava_g
 CXX*=g++
 # name of C Compiler
 CC*=gcc
-# flags for C and C++ Compiler
-# do not use standard header search paths
-# if installed elsewhere
-.IF "$(BUILD_SOSL)"!=""
-CFLAGS=
-.ENDIF
+
 CFLAGS+=-fmessage-length=0 -c $(INCLUDE)
 
 # flags to enable build with symbols; required for crashdump feature
