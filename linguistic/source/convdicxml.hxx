@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdicxml.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:06:48 $
+ *  last change: $Author: rt $ $Date: 2004-05-04 10:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ public:
     ConvDicXMLExport( ConvDic &rConvDic,
         const rtl::OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > &rHandler) :
-        SvXMLExport ( rFileName, rHandler ),
+        SvXMLExport ( utl::getProcessServiceFactory(), rFileName, rHandler ),
         rDic        ( rConvDic ),
         bSuccess    ( sal_False )
     {
@@ -158,7 +158,7 @@ public:
 
     //!!  see comment for pDic member
     ConvDicXMLImport( ConvDic *pConvDic, const rtl::OUString &rFileName ) :
-        SvXMLImport ( IMPORT_ALL ),
+        SvXMLImport ( utl::getProcessServiceFactory(), IMPORT_ALL ),
         pDic        ( pConvDic )
     {
         nLanguage       = LANGUAGE_NONE;
