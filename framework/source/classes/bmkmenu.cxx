@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmkmenu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-15 09:06:19 $
+ *  last change: $Author: cd $ $Date: 2001-06-15 09:23:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,10 +199,13 @@ BmkMenu::~BmkMenu()
 
     for ( int i = 0; i < GetItemCount(); i++ )
     {
-        // delete user attributes created with new!
-        USHORT nId = GetItemId( i );
-        BmkMenu::Attributes* pUserAttributes = (BmkMenu::Attributes*)GetUserValue( nId );
-        delete pUserAttributes;
+        if ( GetItemType( i ) != MENUITEM_SEPARATOR )
+        {
+            // delete user attributes created with new!
+            USHORT nId = GetItemId( i );
+            BmkMenu::Attributes* pUserAttributes = (BmkMenu::Attributes*)GetUserValue( nId );
+            delete pUserAttributes;
+        }
     }
 }
 
