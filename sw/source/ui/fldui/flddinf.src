@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddinf.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:32:29 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 08:19:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ TabPage TP_FLD_DOKINF
         Text [ ENGLISH ] = "Selection" ;
         Text [ norwegian ] = "Selection" ;
         Text [ italian ] = "Selezione" ;
-        Text [ portuguese_brazilian ] = "Seleção" ;
+        Text [ portuguese_brazilian ] = "Sele??o" ;
         Text [ portuguese ] = "~Selecção" ;
         Text [ finnish ] = "~Valitse" ;
         Text [ danish ] = "Udvalg" ;
@@ -353,7 +353,7 @@ TabPage TP_FLD_DOKINF
         Text [ portuguese ] = "~Contéudo fixo" ;
         Text[ chinese_simplified ] = "¹Ì¶¨ÄÚÈÝ(~X)";
         Text[ russian ] = "Ôèêñ. ñîäåðæèìîå";
-        Text[ polish ] = "Sta³a treœæ";
+        Text[ polish ] = "Sta³a tre?æ";
         Text[ japanese ] = "“à—e‚ÌŒÅ’è(~X)";
         Text[ chinese_traditional ] = "©T©w¤º®e(~X)";
         Text[ arabic ] = "ÊËÈíÊ ÇáãÍÊæíÇÊ";
