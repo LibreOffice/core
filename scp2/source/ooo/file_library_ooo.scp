@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.56 $
+*  $Revision: 1.57 $
 *
-*  last change: $Author: obo $ $Date: 2004-10-21 11:39:05 $
+*  last change: $Author: rt $ $Date: 2004-10-22 08:00:32 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -186,6 +186,7 @@ File gid_File_Lib_Behelper
   #endif
 End
 
+#ifndef WITHOUT_LDAP
 File gid_File_Lib_Ldapbe2
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
@@ -197,6 +198,7 @@ File gid_File_Lib_Ldapbe2
     Name = "ldapbe2.uno.dll";
   #endif
 End
+#endif
 
 // BM: #117495# remove chart2 from setup.  I just comment this
 // out, because it will later be re-added
