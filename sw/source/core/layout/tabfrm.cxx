@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 10:22:26 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1832,17 +1832,27 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
 #endif
                 return pRet->FindSctFrm()->FindLastCntnt();
             }
+            ASSERT( false, "FindLastCntnt is going to return unexpected result" )
             return 0;   //Hier geht es nicht weiter. Inkonsistenter Zustand
                         //der Tabelle (z.B. Undo TextToTable).
         }
     }
-//  ASSERT( pRet && pRet->IsCntntFrm(), "Letzter Lower von Tab kein Cnt." );
-    if ( pRet ) //#50235#
+
+    // #112929# There actually is a situation, which results in pRet = 0:
+    // Insert frame, insert table via text <-> table. This gives you a frame
+    // containing a table without any other content frames. Split the table
+    // and undo the splitting. This operation gives us a table frame without
+    // a lower.
+    if ( pRet )
+    {
         while ( pRet->GetNext() )
             pRet = pRet->GetNext();
-    if( pRet->IsSctFrm() )
-        pRet = ((SwSectionFrm*)pRet)->FindLastCntnt();
-    ASSERT( pRet && pRet->IsCntntFrm(), "Letzter Lower von Tab kein Cnt." );
+
+        if( pRet->IsSctFrm() )
+            pRet = ((SwSectionFrm*)pRet)->FindLastCntnt();
+    }
+
+    ASSERT( pRet && pRet->IsCntntFrm(), "FindLastCntnt is going to return unexpected result" )
     return (SwCntntFrm*)pRet;
 }
 
