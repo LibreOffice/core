@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: dbo $ $Date: 2001-05-14 10:27:32 $
+#   last change: $Author: rt $ $Date: 2001-06-05 09:29:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,8 +115,7 @@ APP1STDLIBS=\
             $(SALHELPERLIB) \
             $(REGLIB) \
             $(CPPULIB) \
-            $(CPPUHELPERLIB) \
-            $(STDLIBCPP)
+            $(CPPUHELPERLIB)
 
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS+= \
