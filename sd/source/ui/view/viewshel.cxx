@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:24:13 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 16:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,13 +751,44 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
 void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
+    BOOL bDone = HandleScrollCommand (rCEvt, pWin);
+
+    if( !bDone )
+    {
+        if(mpSlideShow)
+        {
+            mpSlideShow->command(rCEvt);
+        }
+        else if (pFuActual)
+        {
+            pFuActual->Command(rCEvt);
+        }
+    }
+}
+
+long ViewShell::Notify(NotifyEvent& rNEvt, ::sd::Window* pWin)
+{
+    // handle scroll commands when they arrived at child windows
+    long nRet = FALSE;
+    if( rNEvt.GetType() == EVENT_COMMAND )
+    {
+        // note: dynamic_cast is not possible as GetData() returns a void*
+        CommandEvent* pCmdEvent = reinterpret_cast< CommandEvent* >(rNEvt.GetData());
+        nRet = HandleScrollCommand(*pCmdEvent, pWin);
+    }
+    return nRet;
+}
+
+
+BOOL ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin)
+{
     BOOL bDone = FALSE;
 
     switch( rCEvt.GetCommand() )
     {
-        case( COMMAND_WHEEL ):
-        case( COMMAND_STARTAUTOSCROLL ):
-        case( COMMAND_AUTOSCROLL ):
+        case COMMAND_WHEEL:
+        case COMMAND_STARTAUTOSCROLL:
+        case COMMAND_AUTOSCROLL:
         {
             const CommandWheelData* pData = rCEvt.GetWheelData();
 
@@ -780,10 +811,7 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             }
             else
             {
-                ScrollBar*  pWinHScroll = NULL;
-                ScrollBar*  pWinVScroll = NULL;
-
-                if (mpContentWindow.get() == pWin)
+                if( mpContentWindow.get() == pWin )
                 {
                     bDone = pWin->HandleScrollCommand( rCEvt,
                         mpHorizontalScrollBar.get(),
@@ -797,19 +825,8 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         break;
     }
 
-    if( !bDone )
-    {
-        if(mpSlideShow)
-        {
-            mpSlideShow->command(rCEvt);
-        }
-        else if (pFuActual)
-        {
-            pFuActual->Command(rCEvt);
-        }
-    }
+    return bDone;
 }
-
 
 
 
