@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:02:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,9 @@
 #endif
 #ifndef _WW8PAR_HXX
 #include "ww8par.hxx"
+#endif
+#ifndef _WW8PAR2_HXX
+#include "ww8par2.hxx"
 #endif
 
 #define WWF_INVISIBLE 86            // Bit-Nummer fuer Invisible ( IniFlags )
@@ -799,15 +802,13 @@ void SwWW8ImplReader::UpdateFields()
     rDoc.SetInitDBFields(true);             // Datenbank-Felder auch
 }
 
-void SwWW8ImplReader::End_Field()
+sal_uInt16 SwWW8ImplReader::End_Field()
 {
-    if (nIniFlags & WW8FL_NO_FLD)
-        return;
-
+    sal_uInt16 nRet = 0;
     WW8PLCFx_FLD* pF = pPlcxMan->GetFld();
     ASSERT(pF, "WW8PLCFx_FLD - Pointer nicht da");
     if (!pF || !pF->EndPosIsFieldEnd())
-        return;
+        return nRet;
 
     ASSERT(!maFieldStack.empty(), "Empty field stack\n");
     if (!maFieldStack.empty())
@@ -817,7 +818,8 @@ void SwWW8ImplReader::End_Field()
         cases we have inserted a field not an attribute with an unknown end
         point
         */
-        switch(maFieldStack.back())
+        nRet = maFieldStack.back();
+        switch (nRet)
         {
             case 88:
                 pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
@@ -827,6 +829,7 @@ void SwWW8ImplReader::End_Field()
         }
         maFieldStack.pop_back();
     }
+    return nRet;
 }
 
 // Read_Field liest ein Feld ein oder, wenn es nicht gelesen werden kann,
@@ -834,11 +837,9 @@ void SwWW8ImplReader::End_Field()
 // Returnwert: Gesamtlaenge des Feldes ( zum UEberlesen )
 long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 {
-    if (nIniFlags & WW8FL_NO_FLD)
-        return 0;
-
     typedef eF_ResT (SwWW8ImplReader:: *FNReadField)( WW8FieldDesc*, String& );
-    static FNReadField aWW8FieldTab[93] =
+    enum Limits {eMax = 96};
+    static FNReadField aWW8FieldTab[eMax+1] =
     {
         0,
         0,
@@ -936,11 +937,15 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         0,                                          // 89
         0,                                          // 90
         0,                                          // 91
-        0                                           // 92 - Dummy leer Methode
-    };                                          // 92   == alle ueber 91
+        0,                                          // 92
+        0,                                          // 93
+        0,                                          // 94
+        &SwWW8ImplReader::Read_F_Shape,             // 95
+        0                                           // eMax - Dummy leer Methode
+    };
+    ASSERT( ( sizeof( aWW8FieldTab ) / sizeof( *aWW8FieldTab ) == eMax+1 ),
+             "FeldFunc-Tabelle stimmt nicht" );
 
-    ASSERT( ( sizeof( aWW8FieldTab ) / sizeof( *aWW8FieldTab ) == 93 ),
-            "FeldFunc-Tabelle stimmt nicht" );
 
     WW8PLCFx_FLD* pF = pPlcxMan->GetFld();
     ASSERT(pF, "WW8PLCFx_FLD - Pointer nicht da");
@@ -972,7 +977,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     if (bNested)
         return 0;
 
-    USHORT n = ( aF.nId <= 91 ) ? aF.nId : 92; // alle > 91 werden 92
+    USHORT n = ( aF.nId <= eMax ) ? aF.nId : eMax; // alle > 91 werden 92
     USHORT nI = n / 32;                     // # des UINT32
     ULONG nMask = 1 << ( n % 32 );          // Maske fuer Bits
 
@@ -982,13 +987,17 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     if( !bOk || !aF.nId )                   // Feld kaputt
         return aF.nLen;                     // -> ignorieren
 
-    if( aF.nId > 91)                        // WW: Nested Field
+    if( aF.nId > eMax - 1)                        // WW: Nested Field
     {
         if( nFieldTagBad[nI] & nMask )      // Flag: Tag it when bad
             return Read_F_Tag( &aF );       // Resultat nicht als Text
         else
             return aF.nLen;
     }
+
+    //Only one type of field (hyperlink) in drawing textboxes exists
+    if (aF.nId != 88 && pPlcxMan && pPlcxMan->GetDoingDrawTextBox())
+        return aF.nLen;
 
     // keine Routine vorhanden
     if (bNested || !aWW8FieldTab[aF.nId] || aF.bCodeNest)
@@ -1312,7 +1321,7 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pFld,
     SwFltStackEntry *pEntry)
 {
     SwFltStackEntry *pRet=0;
-    if (RES_GETREFFLD == pFld->Which())
+    if (pFld && RES_GETREFFLD == pFld->Which())
     {
         //Get the name of the ref field, and see if actually a variable
         const String &rName = pFld->GetPar1();
@@ -1330,6 +1339,34 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pFld,
         }
     }
     return pRet;
+}
+
+String lcl_GetSelTxt(const SwPaM &rPaM)
+{
+    String aTxt;
+    if (rPaM.GetPoint()->nNode.GetIndex() == rPaM.GetMark()->nNode.GetIndex())
+    {
+        if (SwTxtNode* pTxtNd = rPaM.GetNode()->GetTxtNode())
+        {
+            xub_StrLen nStt = rPaM.Start()->nContent.GetIndex();
+            aTxt = pTxtNd->GetExpandTxt(nStt,
+                rPaM.End()->nContent.GetIndex() - nStt );
+        }
+    }
+    return aTxt;
+}
+
+bool SwWW8FltRefStack::RangeToHidden(SwField* pFld,
+    SwFltStackEntry *pEntry, SwPaM &rPaM)
+{
+    bool bRet = false;
+    if (pFld && RES_HIDDENTXTFLD == pFld->Which())
+    {
+        bRet = true;
+        if (pEntry->MakeRegion(pDoc, rPaM, false))
+            pFld->SetPar2(lcl_GetSelTxt(rPaM));
+    }
+    return bRet;
 }
 
 const String &SwWW8ImplReader::GetMappedBookmark(String &rOrigName)
@@ -3171,6 +3208,16 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     return FLD_OK;
 }
 
+eF_ResT SwWW8ImplReader::Read_F_Shape(WW8FieldDesc* pF, String& rStr)
+{
+    /*
+    #i3958# 0x8 followed by 0x1 where the shape is the 0x8 and its anchoring
+    to be ignored followed by a 0x1 with an empty drawing. Detect in inserting
+    the drawing that we are in the Shape field and respond accordingly
+    */
+    return FLD_TEXT;
+ }
+
 eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
 {
     String sURL, sTarget, sMark;
@@ -3338,9 +3385,6 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
                                             "\x02""TC"  };              // us
     const static BYTE  aFldId[] = { 9, 4, 9 };
 
-    if( nIniFlags & WW8FL_NO_FLD )
-        return;
-
     if( nLen < 0 )
     {
         bIgnoreText = false;
@@ -3420,22 +3464,51 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
 // ACHTUNG: Methode gelegentlich umstellen: unsichtbaren Text als
 //                  *Feld* integrieren...
 //
-void SwWW8ImplReader::Read_Invisible( USHORT, const BYTE*, short nLen )
+void SwWW8ImplReader::Read_Invisible(USHORT, const BYTE* pData, short nLen)
 {
-    USHORT n = WWF_INVISIBLE;               // Bit-Nummer fuer Invisible
-    USHORT nI = n / 32;                     // # des UINT32
-    ULONG nMask = 1 << ( n % 32 );  // Maske fuer Bits
-
-    if ( (nFieldTagBad[nI] & nMask) || (nFieldTagAlways[nI] & nMask) )
+    if (pAktItemSet)    //can't do them here.
+        return;
+    if (nLen < 0)
     {
-        String aTag(CREATE_CONST_ASC("{INVISIBLE "));
+        if (pRefStck->GetToggleVisFlag())
+        {
+            pRefStck->SetAttr(*pPaM->GetPoint(), RES_TXTATR_FIELD);
+            pRefStck->SetToggleVisFlag(false);
+        }
+    }
+    else
+    {
+        bool bOn = *pData & 1;
+        SwWW8StyInf* pSI = &pCollA[nAktColl];
+        if (pAktColl)
+        {
+            if ((*pData & 0x80) && (pSI->nBase < nColls))
+            {
+                if (*pData == 129)
+                    bOn = !pCollA[pSI->nBase].bInvisFlag;
+                else
+                    bOn = pCollA[pSI->nBase].bInvisFlag;
+            }
+            pSI->bInvisFlag = bOn;
+            return;
+        }
 
-        if( nLen < 0 )
-            aTag.APPEND_CONST_ASC("END}");
-        else
-            aTag.APPEND_CONST_ASC("START}");
+        if (*pData & 0x80)
+        {
+            if (*pData == 129)
+                bOn = !pSI->bInvisFlag;
+            else
+                bOn = pSI->bInvisFlag;
+        }
 
-        InsertTagField( n, aTag );
+        if (bOn)
+        {
+            SwHiddenTxtField aFld(
+                (SwHiddenTxtFieldType*)rDoc.GetSysFldType(RES_HIDDENTXTFLD),
+                false, aEmptyStr, aEmptyStr);
+            pRefStck->NewAttr(*pPaM->GetPoint(), SwFmtFld(aFld));
+            pRefStck->SetToggleVisFlag(true);
+        }
     }
 }
 
