@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-30 14:51:09 $
+ *  last change: $Author: nn $ $Date: 2002-01-30 08:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,6 +386,15 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
     }
 
     //  Auszeichnungen
+
+    if ( aColor.GetColor() == COL_AUTO )
+    {
+        //  WindowTextColor from StyleSettings should be used only when painting!
+        //  As long as GetFont is used for many different cases, always use black, so
+        //  there is no disappearing text with default style settings, and printing works.
+
+        aColor.SetColor( COL_BLACK );
+    }
 
     if (rFont.GetWeight() != eWeight)
         rFont.SetWeight( eWeight );
