@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:47:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,7 +744,7 @@ BOOL ScColRowNameRangesDlg::IsRefInputMode() const
 #*
 #*  Klasse:     ScColRowNameRangesDlg
 #*
-#*  Funktion:   Wird ausgeloest, wenn der OK- Button gedrückt wurde.
+#*  Funktion:   Wird ausgeloest, wenn der OK- Button gedrueckt wurde.
 #*              Hinzufuegen- Button ausloesen, und die neu einge-
 #*              stellten Bereiche ans Dokument uebergeben.
 #*              Fensterschliessen- Anweisung ausloesen.
