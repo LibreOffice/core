@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: as $ $Date: 2002-07-31 11:03:09 $
+ *  last change: $Author: as $ $Date: 2002-08-12 11:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -834,6 +834,14 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
                                                                                                                                                                         css::lang::IllegalArgumentException ,
                                                                                                                                                                         css::uno::RuntimeException          )
 {
+/*    // SAFE {
+    ReadGuard aReadLock(m_aLock);
+    ComponentLoader aLoader(m_xFactory,this);
+    aReadLock.unlock();
+    // } SAFE
+
+    return aLoader.loadComponentFromURL(sURL,sTargetFrameName,nSearchFlags,lArguments);
+*/
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -914,26 +922,28 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 
     if( xDispatcher.is() == sal_True )
     {
-        // ... dispatch URL at this dispatcher.
-        // Set us as listener for status events from this dispatcher.
+
+/* Enable UI Interaction used inside dispatch...() and allow macro execution by using the configured security rules
+   (configured by user)
 
         // We should set us as interaction handler for possible exceptions during load proccess ...
         // But we shouldn't do that - if anyone already is set!
         // Our interaction handler is called back in method "handle()". We set right condition there
         // to break following loop and throw detected exception from here again!
         css::uno::Sequence< css::beans::PropertyValue > lOwnArguments( lArguments    );
-        ArgumentAnalyzer                                aAnalyzer    ( lOwnArguments, (sal_Bool)sal_False );
+        ArgumentAnalyzer                                aAnalyzer    ( lOwnArguments );
         if( aAnalyzer.existArgument( E_INTERACTIONHANDLER ) == sal_False )
         {
             css::uno::Reference< css::task::XInteractionHandler > xHandler( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-            aAnalyzer.setArgument( E_INTERACTIONHANDLER, &xHandler );
+            aAnalyzer.setArgument( E_INTERACTIONHANDLER, xHandler );
         }
 
         if( !aAnalyzer.existArgument( E_MACROEXECUTIONMODE ) )
-            aAnalyzer.setArgument( E_MACROEXECUTIONMODE, &(css::document::MacroExecMode::NEVER_EXECUTE) );
+            aAnalyzer.setArgument( E_MACROEXECUTIONMODE, css::document::MacroExecMode::NEVER_EXECUTE );
 
         if( !aAnalyzer.existArgument( E_UPDATEDOCMODE ) )
-            aAnalyzer.setArgument( E_UPDATEDOCMODE, &(css::document::UpdateDocMode::NO_UPDATE) );
+            aAnalyzer.setArgument( E_UPDATEDOCMODE, css::document::UpdateDocMode::NO_UPDATE );
+*/
 
         // Reset loader state to default, because we must yield for a valid result! See next WHILE condition.
         // And we must do it before we call dispatch!
@@ -943,9 +953,12 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         aWriteLock.unlock();
         /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 
+        // ... dispatch URL at this dispatcher.
+        // Set us as listener for status events from this dispatcher.
+
         css::uno::Reference< css::frame::XNotifyingDispatch > xNotifyer( xDispatcher, css::uno::UNO_QUERY );
         if ( xNotifyer.is() )
-            xNotifyer->dispatchWithNotification( aURL, lOwnArguments, this );
+            xNotifyer->dispatchWithNotification( aURL, lArguments, this );
         else
         {
             // We can't work without any notification!
@@ -995,9 +1008,10 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 
         css::uno::Reference< css::frame::XFrame > xLoadTarget           = m_xLastFrame;
                                                   m_xLastFrame          = css::uno::Reference< css::frame::XFrame >(); // Don't hold last frame for ever - or he can't die!
-
+/* see comments before about interaction!
         css::uno::Any                             aRequest              = m_aInteractionRequest;
                                                   m_aInteractionRequest = css::uno::Any();
+*/
         aReadLock.unlock();
         /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 
@@ -1012,6 +1026,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
                                         }
                                     }
                                     break;
+/* see comments before about interaction!
             case E_INTERACTION  :   {
                                         // Interaction indicates throwed exception during load proccess.
                                         // Forward io exceptions to user ...
@@ -1028,6 +1043,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
                                         // tell user failed state of load operation!
                                     }
                                     break;
+*/
         }
     }
     // Return result of this operation.
