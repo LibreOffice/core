@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 14:02:34 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@
 #ifndef  _COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORYVIEWTYPE_HPP_
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #endif
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -180,7 +180,7 @@ namespace css = ::com::sun::star;
 #include <rtl/ustrbuf.hxx>
 
 static ::rtl::OUString SERVICE_UICATEGORYDESCRIPTION = ::rtl::OUString::createFromAscii("com.sun.star.ui.UICategoryDescription"         );
-static ::rtl::OUString SERVICE_UICMDDESCRIPTION      = ::rtl::OUString::createFromAscii("drafts.com.sun.star.frame.UICommandDescription");
+static ::rtl::OUString SERVICE_UICMDDESCRIPTION      = ::rtl::OUString::createFromAscii("com.sun.star.frame.UICommandDescription");
 
 SfxStylesInfo_Impl::SfxStylesInfo_Impl()
 {}
@@ -1210,11 +1210,11 @@ Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
             Reference<XInterface> xDocumentModel = getDocumentModel(xCtx, nodeName );
             if ( xDocumentModel.is() )
             {
-                Reference< ::drafts::com::sun::star::frame::XModuleManager >
+                Reference< ::com::sun::star::frame::XModuleManager >
                     xModuleManager(
                         xCtx->getServiceManager()
                             ->createInstanceWithContext(
-                                ::rtl::OUString::createFromAscii("drafts." // xxx todo
+                                ::rtl::OUString::createFromAscii("" // xxx todo
                                       "com.sun.star.frame.ModuleManager"),
                                 xCtx ),
                             UNO_QUERY_THROW );
