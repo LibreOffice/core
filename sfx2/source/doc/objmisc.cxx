@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-09 07:30:38 $
+ *  last change: $Author: mba $ $Date: 2002-07-10 10:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1635,4 +1635,26 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
     }
 
     return pWindow;
+}
+
+String SfxObjectShell::UpdateTitle( SfxMedium* pMed, USHORT nDocViewNumber )
+{
+    // Titel des Fensters
+    String aTitle;
+    if ( pMed )
+        aTitle = pMed->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+    else
+    {
+        aTitle = GetTitle(SFX_TITLE_CAPTION);
+        String aName(aTitle);
+        if ( nDocViewNumber )
+        {
+            aName += ':';
+            aName += String::CreateFromInt32( nDocViewNumber );
+        }
+    }
+
+    if ( IsReadOnly() )
+        aTitle += String( SfxResId(STR_READONLY) );
+    return aTitle;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-30 11:15:41 $
+ *  last change: $Author: mba $ $Date: 2002-07-10 10:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,6 @@
 
 #define STR_MDIFRAME_INTERFACE              (RID_SFX_VIEW_START+32)
 #define STR_ERROR_SAVE_TEMPLATE             (RID_SFX_VIEW_START+33)
-#define STR_READONLY                        (RID_SFX_VIEW_START+34)
 
 #define MSG_QUERY_OPENASTEMPLATE            (RID_SFX_VIEW_START+41)
 #define MSG_CANT_CLOSE                      (RID_SFX_VIEW_START+42)

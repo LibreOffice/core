@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 07:42:37 $
+ *  last change: $Author: mba $ $Date: 2002-07-10 10:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1349,54 +1349,24 @@ String SfxViewFrame::UpdateTitle()
 
 {
     SfxObjectShell *pObjSh = GetObjectShell();
-
     if ( !pObjSh )
-        return String( DEFINE_CONST_UNICODE( "UNO-Component" ) );
+        return String();
 
     if  ( pObjSh->GetInPlaceObject() && pObjSh->GetInPlaceObject()->GetProtocol().IsEmbed() )
         // kein UpdateTitle mit Embedded-ObjectShell
         return String();
 
-    // Bei jedem Namenswechsel einen ::com::sun::star::chaos::Anchor anlegen und GETDATA putten,
-    // damit das nicht bei jeder Anforderung ans Chaos immer wieder gemacht
-    // werden mu\s ( Images !! )
     const SfxMedium *pMedium = pObjSh->GetMedium();
     String aURL;
     SfxFrame *pFrm = GetFrame();
     if ( pObjSh->HasName() )
-    {
         aURL = pMedium->GetURLObject().GetURLNoPass();
-    }
-
-    // Erstmal den alten Anchor ignorieren
-//(dv)  if ( pImp->xAnchor.Is() )
-//(dv)      EndListening( *pImp->xAnchor );
 
     if ( aURL != pImp->aActualURL )
-        // ::com::sun::star::util::URL hat sich ge"andert
+        // URL hat sich ge"andert
         pImp->aActualURL = aURL;
 
-    // Selbst wenn die URL sich nicht ge"andert hat, vielleicht ja der Anchor !!
-#if 0   //(dv)
-    pImp->xAnchor = pMedium->GetAnchor( sal_True );
-    if ( pImp->xAnchor.Is() )
-    {
-        // PresentationURL aktualisieren
-        pImp->aActualPresentationURL = pImp->xAnchor->GetPresentationURL();
-
-        // Am neuen (?) ::com::sun::star::chaos::Anchor horchen
-        StartListening( *pImp->xAnchor );
-    }
-#endif  //(dv)
-
-    // Titel des Fensters
-    String aName( pObjSh->GetTitle(SFX_TITLE_CAPTION) );
-    String aTitle(aName);
-    String aOldTitle(aName);
-    aName += ':';
-    aName += String::CreateFromInt32(pImp->nDocViewNo);
-
-    // gibt es "uberhaupt noch eine weitere ::com::sun::star::sdbcx::View?
+    // gibt es noch eine weitere View?
     sal_uInt16 nViews=0;
     for ( SfxViewFrame *pView= GetFirst(pObjSh);
           pView && nViews<2;
@@ -1404,12 +1374,14 @@ String SfxViewFrame::UpdateTitle()
         if ( ( pView->GetFrameType() & SFXFRAME_HASTITLE ) &&
              !IsDowning_Impl())
             nViews++;
-    if ( nViews == 2 || pImp->nDocViewNo > 1 )
-        // nur dann die Nummer dranh"angen
-        aTitle = aName;
 
-    if ( pObjSh->IsReadOnly() )
-        aTitle += String( SfxResId(STR_READONLY) );
+    // Titel des Fensters
+    String aTitle;
+    if ( nViews == 2 || pImp->nDocViewNo > 1 )
+        // dann die Nummer dranh"angen
+        aTitle = pObjSh->UpdateTitle( NULL, pImp->nDocViewNo );
+    else
+        aTitle = pObjSh->UpdateTitle();
 
     // Name des SbxObjects
     String aSbxName = pObjSh->SfxShell::GetName();
@@ -1418,11 +1390,11 @@ String SfxViewFrame::UpdateTitle()
         aSbxName += ':';
         aSbxName += String::CreateFromInt32(pImp->nDocViewNo);
     }
+
     SetName( aSbxName );
     pImp->aFrameTitle = aTitle;
     GetBindings().Invalidate( SID_FRAMETITLE );
     GetBindings().Invalidate( SID_CURRENT_URL );
-
     return aTitle;
 }
 
@@ -3831,8 +3803,7 @@ SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( USHORT nId )
     return pWork;
 }
 
-/*
-void SfxViewFrame::SetChildWindow(USHORT nId, BOOL bOn)
+/*void SfxViewFrame::SetChildWindow(USHORT nId, BOOL bOn)
 {
     SetChildWindow( nId, bOn, TRUE );
 }*/
