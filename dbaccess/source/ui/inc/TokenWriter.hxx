@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
+ *  last change: $Author: oj $ $Date: 2001-03-27 06:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@ namespace dbaui
     class ODatabaseExport;
     class ODatabaseImportExport : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener>
     {
-        void initialize();
         void disposing();
     protected:
         SvStream*                               m_pStream;
@@ -152,6 +151,7 @@ namespace dbaui
         virtual BOOL Write()    = 0; // Export
         virtual BOOL Read()     = 0; // Import
 
+        void initialize();;
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
     };
 
