@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:37:51 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_pAddonOptions( 0 )
         ,   m_aCustomTbxPrefix( RTL_CONSTASCII_USTRINGPARAM( "custom_" ))
         ,   m_aStatusBarAlias( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ))
+        ,   m_aProgressBarAlias( RTL_CONSTASCII_USTRINGPARAM( "private:resource/progressbar/progressbar" ))
         ,   m_eDockOperation( DOCKOP_ON_COLROW )
 {
     // Initialize statusbar member
@@ -2915,21 +2916,6 @@ void LayoutManager::implts_createStatusBar( const rtl::OUString& aStatusBarName 
     {
         m_aStatusBarElement.m_aName      = aStatusBarName;
         m_aStatusBarElement.m_xUIElement = implts_createElement( aStatusBarName );
-
-/*
-        if ( m_aProgressBarElement.m_xUIElement.is() )
-        {
-            ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)m_aProgressBarElement.m_xUIElement.get();
-            if ( pWrapper )
-            {
-                Reference< css::awt::XWindow > xWindow(
-                    m_aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
-
-                // Set new status bar on our progress bar wrapper
-                pWrapper->setStatusBar( xWindow, sal_False );
-            }
-        }
-*/
     }
 
     implts_createProgressBar();
@@ -2952,13 +2938,12 @@ void LayoutManager::implts_createProgressBar()
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    if ( xProgressBar.is() )
-        return;
-
     sal_Bool            bRecycled = xProgressBarBackup.is();
     ProgressBarWrapper* pWrapper  = 0;
     if ( bRecycled )
         pWrapper = (ProgressBarWrapper*)xProgressBarBackup.get();
+    else if ( xProgressBar.is() )
+        pWrapper = (ProgressBarWrapper*)xProgressBar.get();
     else
         pWrapper = new ProgressBarWrapper();
 
@@ -3066,11 +3051,12 @@ sal_Bool LayoutManager::implts_showProgressBar()
     Reference< css::awt::XWindow > xWindow;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
+    WriteGuard aWriteLock( m_aLock );
     xStatusBar = Reference< XUIElement >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
     xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
     sal_Bool bVisible( m_bVisible );
 
+    m_aProgressBarElement.m_bVisible = sal_True;
     if ( bVisible )
     {
         if ( xStatusBar.is() && !m_aStatusBarElement.m_bMasterHide )
@@ -3083,15 +3069,18 @@ sal_Bool LayoutManager::implts_showProgressBar()
             if ( pWrapper )
                 xWindow = pWrapper->getStatusBar();
         }
-        aReadLock.unlock();
     }
+    aWriteLock.unlock();
 
     vos::OGuard aGuard( Application::GetSolarMutex() );
     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-    if ( pWindow && !pWindow->IsVisible() )
+    if ( pWindow )
     {
-        pWindow->Show();
-        doLayout();
+        if ( !pWindow->IsVisible() )
+        {
+            pWindow->Show();
+            doLayout();
+        }
         return sal_True;
     }
 
@@ -3104,7 +3093,7 @@ sal_Bool LayoutManager::implts_hideProgressBar()
     Reference< css::awt::XWindow > xWindow;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
+    WriteGuard aWriteLock( m_aLock );
     xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
 
     if ( xProgressBar.is() )
@@ -3113,14 +3102,18 @@ sal_Bool LayoutManager::implts_hideProgressBar()
         if ( pWrapper )
             xWindow = pWrapper->getStatusBar();
     }
-    aReadLock.unlock();
+    m_aProgressBarElement.m_bVisible = sal_False;
+    aWriteLock.unlock();
 
     vos::OGuard aGuard( Application::GetSolarMutex() );
     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-    if ( pWindow && pWindow->IsVisible() )
+    if ( pWindow )
     {
-        pWindow->Hide();
-        doLayout();
+        if ( pWindow->IsVisible() )
+        {
+            pWindow->Hide();
+            doLayout();
+        }
         return sal_True;
     }
 
@@ -4552,6 +4545,12 @@ throw (RuntimeException)
                 }
             }
         }
+        else if (( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
+                   aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" )))
+        {
+            if ( m_aProgressBarElement.m_xUIElement.is() )
+                return m_aProgressBarElement.m_bVisible;
+        }
         else
         {
             UIElementVector::const_iterator pIter;
@@ -5066,7 +5065,8 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
 ::Size LayoutManager::implts_getStatusBarSize()
 {
     ReadGuard aReadLock( m_aLock );
-    sal_Bool bStatusBarVisible = isElementVisible( m_aStatusBarAlias );
+    sal_Bool bStatusBarVisible( isElementVisible( m_aStatusBarAlias ));
+    sal_Bool bProgressBarVisible( isElementVisible( m_aProgressBarAlias ));
     sal_Bool bVisible = m_bVisible;
     Reference< XUIElement > xStatusBar = m_aStatusBarElement.m_xUIElement;
     Reference< XUIElement > xProgressBar = m_aProgressBarElement.m_xUIElement;
@@ -5074,7 +5074,7 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
     Reference< css::awt::XWindow > xWindow;
     if ( bStatusBarVisible && bVisible && xStatusBar.is() )
         xWindow = Reference< css::awt::XWindow >( xStatusBar->getRealInterface(), UNO_QUERY );
-    else if ( xProgressBar.is() && !xStatusBar.is() )
+    else if ( xProgressBar.is() && !xStatusBar.is() && bProgressBarVisible )
     {
         ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)xProgressBar.get();
         if ( pWrapper )
