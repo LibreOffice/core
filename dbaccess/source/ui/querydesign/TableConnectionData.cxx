@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnectionData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,9 +133,9 @@ void OTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 //------------------------------------------------------------------------
 OTableConnectionData::~OTableConnectionData()
 {
+    DBG_DTOR(OTableConnectionData,NULL);
     // LineDataList loeschen
     ResetConnLines(FALSE);
-    DBG_DTOR(OTableConnectionData,NULL);
 }
 
 //------------------------------------------------------------------------
