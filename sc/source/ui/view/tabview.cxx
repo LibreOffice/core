@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-01 07:32:37 $
+ *  last change: $Author: nn $ $Date: 2001-08-24 12:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,28 +1111,34 @@ BOOL ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
     const CommandWheelData* pData = rCEvt.GetWheelData();
     if ( pData && pData->GetMode() == COMMAND_WHEEL_ZOOM )
     {
-        const Fraction& rOldY = aViewData.GetZoomY();
-        long nOld = (USHORT)(( rOldY.GetNumerator() * 100 ) / rOldY.GetDenominator());
-        long nNew = nOld;
-        if ( pData->GetDelta() < 0 )
-            nNew = Max( (long) MINZOOM, (long)( nOld - SC_DELTA_ZOOM ) );
-        else
-            nNew = Min( (long) MAXZOOM, (long)( nOld + SC_DELTA_ZOOM ) );
-
-        if ( nNew != nOld )
+        if ( !aViewData.GetViewShell()->GetViewFrame()->ISA(SfxInPlaceFrame) )
         {
-            //! Zoom an AppOptions merken ???
+            //  for ole inplace editing, the scale is defined by the visarea and client size
+            //  and can't be changed directly
 
-            SetZoomType( SVX_ZOOM_PERCENT );
-            Fraction aFract( nNew, 100 );
-            SetZoom( aFract, aFract );
-            PaintGrid();
-            PaintTop();
-            PaintLeft();
-            aViewData.GetBindings().Invalidate( SID_ATTR_ZOOM );
+            const Fraction& rOldY = aViewData.GetZoomY();
+            long nOld = (USHORT)(( rOldY.GetNumerator() * 100 ) / rOldY.GetDenominator());
+            long nNew = nOld;
+            if ( pData->GetDelta() < 0 )
+                nNew = Max( (long) MINZOOM, (long)( nOld - SC_DELTA_ZOOM ) );
+            else
+                nNew = Min( (long) MAXZOOM, (long)( nOld + SC_DELTA_ZOOM ) );
+
+            if ( nNew != nOld )
+            {
+                //! Zoom an AppOptions merken ???
+
+                SetZoomType( SVX_ZOOM_PERCENT );
+                Fraction aFract( nNew, 100 );
+                SetZoom( aFract, aFract );
+                PaintGrid();
+                PaintTop();
+                PaintLeft();
+                aViewData.GetBindings().Invalidate( SID_ATTR_ZOOM );
+            }
+
+            bDone = TRUE;
         }
-
-        bDone = TRUE;
     }
     else
     {
