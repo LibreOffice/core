@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-01 11:22:52 $
+ *  last change: $Author: jp $ $Date: 2001-01-16 17:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,15 @@ void SwWW8Writer::Out_SfxItemSet( const SfxItemSet& rSet,
         {
             pOut = aWW8AttrFnTab[ RES_PARATR_NUMRULE - RES_CHRATR_BEGIN ];
             (*pOut)( *this, *pItem );
+            // switch off the numerbering?
+            if( !((SwNumRuleItem*)pItem)->GetValue().Len() && SFX_ITEM_SET
+                != rSet.GetItemState( RES_LR_SPACE, FALSE ) && SFX_ITEM_SET
+                == rSet.GetItemState( RES_LR_SPACE, TRUE, &pItem ) )
+            {
+                // the set the LR-Space of the parentformat!
+                pOut = aWW8AttrFnTab[ RES_LR_SPACE - RES_CHRATR_BEGIN ];
+                (*pOut)( *this, *pItem );
+            }
         }
 
         SfxItemIter aIter( rSet );
@@ -531,8 +540,8 @@ void SwWW8Writer::Out_SwFmt( const SwFmt& rFmt, BOOL bPapFmt, BOOL bChpFmt,
                             SwNumFmt aNumFmt( rNFmt );
                             const SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)
                                             rFmt.GetAttr( RES_LR_SPACE );
-                            aNumFmt.SetAbsLSpace( aNumFmt.GetAbsLSpace() +
-                                                    rLR.GetLeft() );
+                            aNumFmt.SetAbsLSpace(
+                                    aNumFmt.GetAbsLSpace() + rLR.GetLeft() );
                             Out_NumRuleAnld( *pDoc->GetOutlineNumRule(),
                                             aNumFmt, nLvl );
                         }
@@ -1687,7 +1696,7 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         else
         {
             const sal_Char* pAddStr;
-            USHORT nTyp;
+            BYTE nTyp;
             if( DATEFLD & nSubType )
             {
                 pAddStr = " AKTUALDAT ";
@@ -2389,8 +2398,8 @@ static Writer& OutWW8_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
         }
         else
             nLDist = nRDist = 0;
-        nLDist += rLR.GetLeft();
-        nRDist += rLR.GetRight();
+        nLDist += (USHORT)rLR.GetLeft();
+        nRDist += (USHORT)rLR.GetRight();
 
         // sprmSDxaLeft
         if( rWW8Wrt.bWrtWW8 )
@@ -2412,13 +2421,13 @@ static Writer& OutWW8_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
             rWW8Wrt.InsUInt16( 0x840F );
         else
             rWW8Wrt.pO->Insert( 17, rWW8Wrt.pO->Count() );
-        rWW8Wrt.InsUInt16( rLR.GetTxtLeft() );
+        rWW8Wrt.InsUInt16( (USHORT)rLR.GetTxtLeft() );
         // sprmPDxaRight
         if( rWW8Wrt.bWrtWW8 )
             rWW8Wrt.InsUInt16( 0x840E );
         else
             rWW8Wrt.pO->Insert( 16, rWW8Wrt.pO->Count() );
-        rWW8Wrt.InsUInt16( rLR.GetRight() );
+        rWW8Wrt.InsUInt16( (USHORT)rLR.GetRight() );
         // sprmPDxaLeft1
         if( rWW8Wrt.bWrtWW8 )
             rWW8Wrt.InsUInt16( 0x8411 );
@@ -3517,6 +3526,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/12/01 11:22:52  jp
+      Task #81077#: im-/export of CJK documents
+
       Revision 1.4  2000/11/24 19:47:04  er
       #80660# GetNumberFmt: new date keys
 
