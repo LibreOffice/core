@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:10:42 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,14 @@ struct SwPosition
     SwPosition( const SwPosition & );
 
     SwPosition &operator=(const SwPosition &);
+
+    // #111827#
+    /**
+       Returns the document this position is in.
+
+       @return the document this position is in.
+    */
+    SwDoc * GetDoc() const;
 
     FASTBOOL operator < (const SwPosition &) const;
     FASTBOOL operator > (const SwPosition &) const;
@@ -271,7 +279,9 @@ public:
     // etwas geschuetztes.
     FASTBOOL HasReadonlySel() const;
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwPaM)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
+
+    String GetTxt() const;
 };
 
 
