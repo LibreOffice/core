@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneShellManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:36:56 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,15 +106,19 @@ void TaskPaneShellManager::RemoveSubShell (SfxShell* pShell)
 
 void TaskPaneShellManager::MoveToTop (SfxShell* pShell)
 {
+    ViewShellManager::UpdateLocker aLocker (mrViewShellManager);
+
     if (maShellStack.empty() || maShellStack.front()!=pShell)
     {
         // Move the given shell to the top of the local stack.
-        ViewShellManager::UpdateLocker aLocker (mrViewShellManager);
-
         RemoveSubShell (pShell);
         AddSubShell (pShell);
+
+        mrViewShellManager.InvalidateShellStack();
     }
-    // Move the view shell to the top of the view shell stack.
+
+    // Move the view shell to the top of the view shell stack.  This has to
+    // be done even when the sub shell has not been moved.
     mrViewShellManager.MoveToTop (&mrViewShell);
 }
 
