@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:07:48 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2938,7 +2938,8 @@ void SwCellFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     {
         BOOL bInva = TRUE;
         if ( VERT_NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient() &&
-             Lower()->IsCntntFrm() )
+             // OD 04.11.2003 #112910#
+             Lower() && Lower()->IsCntntFrm() )
         {
             SWRECTFN( this )
             const long lYStart = (this->*fnRect->fnGetPrtTop)();
