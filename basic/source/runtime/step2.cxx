@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 11:02:08 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,17 @@ SbxVariable* SbiRuntime::FindElement
             BOOL bSave = rBasic.bNoRtl;
             rBasic.bNoRtl = TRUE;
             pElem = pObj->Find( aName, SbxCLASS_DONTCARE );
+
+            // #110004, #112015: Make private really private
+            if( bLocal && pElem )   // Local as flag for global search
+            {
+                if( pElem->IsSet( SBX_PRIVATE ) )
+                {
+                    SbiInstance* pInst = pINST;
+                    if( pInst && pInst->IsCompatibility() && pObj != pElem->GetParent() )
+                        pElem = NULL;   // Found but in wrong module!
+                }
+            }
             rBasic.bNoRtl = bSave;
 
             // Ist es ein globaler Uno-Bezeichner?
@@ -316,7 +327,8 @@ void SbiRuntime::SetupArgs( SbxVariable* p, USHORT nOp1 )
             StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
         BOOL bHasNamed = FALSE;
         USHORT i;
-        for( i = 1; i < refArgv->Count(); i++ )
+        USHORT nArgCount = refArgv->Count();
+        for( i = 1 ; i < nArgCount ; i++ )
         {
             if( refArgv->GetAlias( i ).Len() )
             {
@@ -330,12 +342,46 @@ void SbiRuntime::SetupArgs( SbxVariable* p, USHORT nOp1 )
             // Gibt es Parameter-Infos?
             SbxInfo* pInfo = p->GetInfo();
             if( !pInfo )
-                Error( SbERR_NO_NAMED_ARGS );
+            {
+                bool bError = true;
+
+                SbUnoMethod* pUnoMethod = PTR_CAST(SbUnoMethod,p);
+                if( pUnoMethod )
+                {
+                    SbUnoObject* pParentUnoObj = PTR_CAST( SbUnoObject,p->GetParent() );
+                    if( pParentUnoObj )
+                    {
+                        Any aUnoAny = pParentUnoObj->getUnoAny();
+                        Reference< XInvocation > xInvocation;
+                        aUnoAny >>= xInvocation;
+                        if( xInvocation.is() )  // TODO: if( xOLEAutomation.is() )
+                        {
+                            bError = false;
+
+                            USHORT nCurPar = 1;
+                            AutomationNamedArgsSbxArray* pArg =
+                                new AutomationNamedArgsSbxArray( nArgCount );
+                            OUString* pNames = pArg->getNames().getArray();
+                            for( i = 1 ; i < nArgCount ; i++ )
+                            {
+                                SbxVariable* pVar = refArgv->Get( i );
+                                const String& rName = refArgv->GetAlias( i );
+                                if( rName.Len() )
+                                    pNames[i] = rName;
+                                pArg->Put( pVar, nCurPar++ );
+                            }
+                            refArgv = pArg;
+                        }
+                    }
+                }
+                if( bError )
+                    Error( SbERR_NO_NAMED_ARGS );
+            }
             else
             {
                 USHORT nCurPar = 1;
                 SbxArray* pArg = new SbxArray;
-                for( i = 1; i < refArgv->Count(); i++ )
+                for( i = 1 ; i < nArgCount ; i++ )
                 {
                     SbxVariable* pVar = refArgv->Get( i );
                     const String& rName = refArgv->GetAlias( i );
@@ -554,7 +600,17 @@ void SbiRuntime::StepPARAM( USHORT nOp1, USHORT nOp2 )
         {
             const SbxParamInfo* pParam = pInfo->GetParam( i );
             if( pParam && ( (pParam->nFlags & SBX_OPTIONAL) != 0 ) )
+            {
+                // Default value?
+                if( pParam->nUserData > 0 )
+                {
+                    String aDefaultStr = pImg->GetString( pParam->nUserData );
+                    p = new SbxVariable();
+                    p->PutString( aDefaultStr );
+                    refParams->Put( p, i );
+                }
                 bOpt = TRUE;
+            }
         }
         if( bOpt == FALSE )
             Error( SbERR_NOT_OPTIONAL );
@@ -900,23 +956,31 @@ void SbiRuntime::StepDCREATE_IMPL( USHORT nOp1, USHORT nOp2, BOOL bRedimp )
 }
 
 // Objekt aus User-Type kreieren  (+StringID+StringID)
+
+SbxObject* createUserTypeImpl( const String& rClassName );  // sb.cxx
+TYPEINIT1(TypeHolderObject,SbxObject)
+
 void SbiRuntime::StepTCREATE( USHORT nOp1, USHORT nOp2 )
 {
     String aName( pImg->GetString( nOp1 ) );
     String aClass( pImg->GetString( nOp2 ) );
-    const SbxObject* pObj = pImg->FindType(aClass);
-    if (pObj)
+
+    SbxObject* pCopyObj = createUserTypeImpl( aClass );
+    if( pCopyObj )
     {
-        SbxObject *pCopyObj = new SbxObject(*pObj);
-        pCopyObj->SetName(pImg->GetString( nOp1 ));
+        pCopyObj->SetName( aName );
         SbxVariable* pNew = new SbxVariable;
         pNew->PutObject( pCopyObj );
         PushVar( pNew );
     }
     else
-        Error( SbERR_INVALID_OBJECT );
+    {
+        SbxVariable* pNew = new SbxVariable();
+        SbxObject* pObj = new TypeHolderObject( aClass );
+        pNew->PutObject( pObj );
+        PushVar( pNew );
+    }
 }
-
 
 
 // Einrichten einer lokalen Variablen (+StringID+Typ)
@@ -947,6 +1011,7 @@ void SbiRuntime::StepPUBLIC( USHORT nOp1, USHORT nOp2 )
     if( p.Is() )
         pMod->Remove (p);
     SbProperty* pProp = pMod->GetProperty( aName, t );
+    pProp->SetFlag( SBX_PRIVATE );
     if( !bFlag )
         pMod->ResetFlag( SBX_NO_MODIFY );
     if( pProp )
