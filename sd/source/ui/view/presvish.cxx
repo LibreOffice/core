@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-13 10:39:04 $
+ *  last change: $Author: cl $ $Date: 2001-08-13 14:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,13 @@ SdPresViewShell::~SdPresViewShell()
 
         if( pWorkWindow )
             pWorkWindow->StartPresentationMode( FALSE, pFuSlideShow ? pFuSlideShow->IsAlwaysOnTop() : 0 );
+    }
+
+    if( pFuSlideShow )
+    {
+        pFuSlideShow->Deactivate();
+        pFuSlideShow->Destroy();
+        pFuSlideShow = NULL;
     }
 }
 
