@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-13 17:27:58 $
+#   last change: $Author: rt $ $Date: 2005-03-29 13:00:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,6 +140,11 @@ IDLFILES=\
     DataPilotDescriptor.idl\
     DataPilotField.idl\
     DataPilotFieldAutoShowInfo.idl\
+    DataPilotFieldGroup.idl\
+    DataPilotFieldGroupBy.idl\
+    DataPilotFieldGroupInfo.idl\
+    DataPilotFieldGroupItem.idl\
+    DataPilotFieldGroups.idl\
     DataPilotFieldLayoutInfo.idl\
     DataPilotFieldLayoutMode.idl\
     DataPilotFieldOrientation.idl\
@@ -276,6 +281,7 @@ IDLFILES=\
     XDatabaseRanges.idl\
     XDataPilotDescriptor.idl\
     XDataPilotField.idl\
+    XDataPilotFieldGrouping.idl\
     XDataPilotMemberResults.idl\
     XDataPilotResults.idl\
     XDataPilotTable.idl\
