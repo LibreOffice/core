@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-29 15:45:28 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,5 +486,7 @@
 #define SID_DELETE_MASTER_PAGE              (SID_SD_START+432)
 #define SID_RENAME_MASTER_PAGE              (SID_SD_START+433)
 #define SID_CLOSE_MASTER_VIEW               (SID_SD_START+434)
+
+#define SID_ASSIGN_LAYOUT                   (SID_SD_START+435)
 
 #endif
