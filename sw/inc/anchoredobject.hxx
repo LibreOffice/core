@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:16:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,15 @@ class SwAnchoredObject
             @author OD
         */
         virtual void ObjectAttachedToAnchorFrame();
+
+        /** method to determine, if other anchored objects, also attached at
+            to the anchor frame, have to consider its wrap influence.
+
+            // --> OD 2005-02-22 #i43255#
+
+            @author OD
+        */
+        bool ConsiderObjWrapInfluenceOfOtherObjs() const;
 
     public:
         TYPEINFO();
@@ -472,6 +481,18 @@ class SwAnchoredObject
         // --> OD 2004-10-22 #i35911# - accessors for <mbClearedEnvironment>
         bool ClearedEnvironment() const;
         void SetClearedEnvironment( const bool _bClearedEnvironment );
+        // <--
+        // --> OD 2005-03-03 #i43913# - reset booleans for layout process
+        inline void ResetLayoutProcessBools()
+        {
+            mbPositioningInProgress = false;
+            mbConsiderForTextWrap = false;
+            mbPositionLocked = false;
+            mbKeepPositionLockedForSection = false;
+            mbRestartLayoutProcess = false;
+            mbClearedEnvironment = false;
+            mbTmpConsiderWrapInfluence = false;
+        }
         // <--
 
         /** method to determine, if due to anchored object size and wrapping
