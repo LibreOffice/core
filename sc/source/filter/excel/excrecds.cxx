@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:51:58 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2562,7 +2562,6 @@ XclExpDocProtection::XclExpDocProtection(bool bValue) :
     XclExpBoolRecord(EXC_ID_PROTECT,bValue)
 {
 }
-
 
 // ============================================================================
 //---------------------------------------------------------------- AutoFilter -
