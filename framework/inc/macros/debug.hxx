@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:33:58 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,6 @@
     #undef  ENABLE_EVENTDEBUG
     #undef  ENABLE_REGISTRATIONDEBUG
     #undef  ENABLE_TARGETINGDEBUG
-    #undef  ENABLE_PLUGINDEBUG
     #undef  ENABLE_MUTEXDEBUG
 //    #undef  ENABLE_TIMEMEASURE
     #undef  ENABLE_MEMORYMEASURE
@@ -162,15 +161,7 @@
 #endif
 
 //*****************************************************************************************************************
-//  special macros to debug our plugin and his asynchronous methods!
-//*****************************************************************************************************************
-
-#ifndef __FRAMEWORK_MACROS_DEBUG_PLUGIN_HXX_
-#include <macros/debug/plugin.hxx>
-#endif
-
-//*****************************************************************************************************************
-//  special macros to debug our plugin and his asynchronous methods!
+//  special macros to debug threading mechanism
 //*****************************************************************************************************************
 
 #ifndef __FRAMEWORK_MACROS_DEBUG_MUTEX_HXX_
