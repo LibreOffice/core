@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:24:20 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,12 +296,12 @@ typedef FmXFormShell_Base_Disambiguation    FmXFormShell_BASE;
 typedef ::utl::ConfigItem                   FmXFormShell_CFGBASE;
 
 struct SdrViewEvent;
+class FmFormShell;
 class FmXFormShell  :public FmXFormShell_BASE
                     ,public FmXFormShell_CFGBASE
                     ,public ::svxform::OStaticDataAccessTools
                     ,public ::svx::IControllerFeatureInvalidation
 {
-    friend class FmFormShell;
     friend class FmFormView;
     friend class FmXFormView;
     friend class WizardUsageConfigItem;
@@ -406,14 +406,28 @@ class FmXFormShell  :public FmXFormShell_BASE
                                                 //  PrepareClose had been called and the user denied to save changes
 
 public:
-    FmXFormShell(FmFormShell* _pShell, SfxViewFrame* _pViewFrame);
+    // attribute access
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
+                getHostFrame() const { return m_xAttachedFrame; }
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&
+                getExternallyDisplayedForm() const { return m_xExternalDisplayedForm; }
 
-protected:
-    ~FmXFormShell();
+    inline sal_Bool
+                didPrepareClose() const { return m_bPreparedClose; }
+    inline void
+                didPrepareClose( sal_Bool _bDid ) { m_bPreparedClose = _bDid; }
+
+public:
+    FmXFormShell(FmFormShell* _pShell, SfxViewFrame* _pViewFrame);
 
     // UNO Anbindung
     DECLARE_UNO3_DEFAULTS(FmXFormShell, FmXFormShell_BASE);
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
+
+protected:
+    ~FmXFormShell();
+
+// XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -453,6 +467,17 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >& _rxForForm
     );
 
+    // stuff
+    void ResetForms(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xForms = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(), sal_Bool bInvalidate = sal_False);
+    void AddElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
+    void RemoveElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
+
+    void ExecuteSearch();               // execute SID_FM_SEARCH
+    void CreateExternalView();          // execute SID_FM_VIEW_AS_GRID
+
+    sal_Bool    GetY2KState(sal_uInt16& n);
+    void        SetY2KState(sal_uInt16 n);
+
 protected:
     // form handling
     /// load or unload the forms on a page
@@ -460,19 +485,8 @@ protected:
             void        smartControlReset( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxModels );
 
 
-    // stuff
-    void ResetForms(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xForms = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(), sal_Bool bInvalidate = sal_False);
-    void AddElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
-    void RemoveElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
-
     void startListening();
     void stopListening();
-
-    void ExecuteSearch();               // execute SID_FM_SEARCH
-    void CreateExternalView();          // execute SID_FM_VIEW_AS_GRID
-
-    sal_Bool    GetY2KState(sal_uInt16& n);
-    void    SetY2KState(sal_uInt16 n);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> GetBoundField(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& _xControl, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm) const;
 
@@ -551,6 +565,20 @@ public:
     void    ForgetActiveControl();
     void    SetControlActivationHandler( const Link& _rHdl );
 
+    /// classifies our host document
+    ::svxform::DocumentType
+            getDocumentType();
+
+    // das Setzen des curObject/selObject/curForm erfolgt verzoegert (SetSelectionDelayed), mit den folgenden
+    // Funktionen laesst sich das abfragen/erzwingen
+    inline sal_Bool IsSelectionUpdatePending();
+    void            ForceUpdateSelection(sal_Bool bLockInvalidation);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>            getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const;
+        // if the form belongs to the controller (extern) displaying a grid, the according internal form will
+        // be displayed, _xForm else
+
 private:
     DECL_LINK(OnFoundData, FmFoundRecordInformation*);
     DECL_LINK(OnCanceledNotFound, FmFoundRecordInformation*);
@@ -558,11 +586,6 @@ private:
     DECL_LINK(OnTimeOut, void*);
 
     void LoopGrids(sal_Int16 nWhat);
-
-    // das Setzen des curObject/selObject/curForm erfolgt verzoegert (SetSelectionDelayed), mit den folgenden
-    // Funktionen laesst sich das abfragen/erzwingen
-    inline sal_Bool IsSelectionUpdatePending();
-    void        ForceUpdateSelection(sal_Bool bLockInvalidation);
 
     // Invalidierung von Slots
     void    InvalidateSlot(sal_Int16 nId, sal_Bool bWithItem = sal_True, sal_Bool bWithId = sal_False);
@@ -572,11 +595,6 @@ private:
 
     DECL_LINK(OnInvalidateSlots, void*);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>            getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const;
-        // if the form belongs to the controller (extern) displaying a grid, the according internal form will
-        // be displayed, _xForm else
-
     void    CloseExternalFormViewer();
         // closes the task-local beamer displaying a grid view for a form
 
@@ -584,7 +602,26 @@ private:
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
     void implAdjustConfigCache();
 
-    // helpers for slot handling
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+            getControlContainerForView();
+
+    // ---------------------------------------------------
+    // asyncronous cursor actions/navigation slot handling
+
+    void setControlLocks();     // lock all controls of the active controller
+    void restoreControlLocks(); // restore the lock state of all controls of the active controller
+
+public:
+    enum CURSOR_ACTION { CA_MOVE_TO_LAST, CA_MOVE_ABSOLUTE };
+    void DoAsyncCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController, CURSOR_ACTION _eWhat);
+    void DoAsyncCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm, CURSOR_ACTION _eWhat);
+
+    sal_Bool HasAnyPendingCursorAction() const;
+    void CancelAnyPendingCursorAction();
+
+    sal_Bool HasPendingCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController) const;
+    sal_Bool HasPendingCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const;
+
     /** execute the given form slot
         <p>Warning. Only a small set of slots implemented currently.</p>
         @param _nSlot
@@ -601,25 +638,7 @@ private:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >& _rxController
             );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
-            getControlContainerForView();
-
-    // ---------------------------------------------------
-    // asyncronous cursor actions/navigation slot handling
-
-    void setControlLocks();     // lock all controls of the active controller
-    void restoreControlLocks(); // restore the lock state of all controls of the active controller
-
-    enum CURSOR_ACTION { CA_MOVE_TO_LAST, CA_MOVE_ABSOLUTE };
-    void DoAsyncCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController, CURSOR_ACTION _eWhat);
-    void DoAsyncCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm, CURSOR_ACTION _eWhat);
-
-    sal_Bool HasAnyPendingCursorAction() const;
-    void CancelAnyPendingCursorAction();
-
-    sal_Bool HasPendingCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController) const;
-    sal_Bool HasPendingCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const;
-
+protected:
     DECL_LINK(OnCursorActionDone, FmCursorActionThread*);
     DECL_LINK(OnCursorActionDoneMainThread, FmCursorActionThread*);
 
