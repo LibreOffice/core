@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:01:12 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,6 +1057,28 @@ BOOL SwDoc::RemoveInvisibleContent()
             }
     }
 
+    //
+    // Remove any hidden paragraph (hidden text attribute)
+    //
+    for( ULONG n = GetNodes().Count(); n; )
+    {
+        SwTxtNode* pTxtNd = GetNodes()[ --n ]->GetTxtNode();
+        if ( pTxtNd )
+        {
+            if ( pTxtNd->HasHiddenCharAttribute( true ) )
+            {
+                bRet = TRUE;
+                SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
+                aPam.DeleteMark();
+                DelFullPara( aPam );
+            }
+            else if ( pTxtNd->HasHiddenCharAttribute( false ) )
+            {
+                SwScriptInfo::DeleteHiddenRanges( *pTxtNd );
+            }
+        }
+    }
+
     {
         // dann noch alle versteckten Bereiche loeschen/leeren
         SwSectionFmts aSectFmts;
@@ -1367,7 +1389,6 @@ xub_Unicode SwDoc::GetChar(const SwPosition & rPos)
 SwField * SwDoc::GetField(const SwPosition & rPos)
 {
     SwField * pResult = NULL;
-    xub_Unicode aChar;
 
     SwTxtFld * pAttr = rPos.nNode.GetNode().GetTxtNode()->
         GetTxtFld(rPos.nContent);
