@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: sb $ $Date: 2002-07-09 13:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,8 @@ private:
     FixedText       aPassText;
     NumericField    aNumericField;
 
-    BreakPointList& rBrkPointList;
+    BreakPointList & m_rOriginalBreakPointList;
+    BreakPointList m_aModifiedBreakPointList;
 
 protected:
     void            CheckButtons();

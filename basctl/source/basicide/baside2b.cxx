@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-05 10:22:53 $
+ *  last change: $Author: sb $ $Date: 2002-07-09 13:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,7 +1009,7 @@ void EditorWindow::ParagraphInsertedDeleted( ULONG nPara, BOOL bInserted )
 
     if ( !bInserted && ( nPara == TEXT_PARA_ALL ) )
     {
-        pModulWindow->GetBreakPoints().Reset();
+        pModulWindow->GetBreakPoints().reset();
         pModulWindow->GetBreakPointWindow().Invalidate();
         aHighlighter.initialize( HIGHLIGHT_BASIC );
     }
@@ -1098,7 +1098,6 @@ BreakPointWindow::BreakPointWindow( Window* pParent ) :
 
 __EXPORT BreakPointWindow::~BreakPointWindow()
 {
-    aBreakPointList.Reset();
 }
 
 

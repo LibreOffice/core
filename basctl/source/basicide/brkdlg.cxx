@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-09 08:53:12 $
+ *  last change: $Author: sb $ $Date: 2002-07-09 13:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,19 +111,20 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
         aBrkText(       this, IDEResId( RID_FT_BRKPOINTS ) ),
         aPassText(      this, IDEResId( RID_FT_PASS ) ),
         aNumericField(  this, IDEResId( RID_FLD_PASS ) ),
-        rBrkPointList( rBrkPntList )
+        m_rOriginalBreakPointList(rBrkPntList),
+        m_aModifiedBreakPointList(rBrkPntList)
 {
     FreeResource();
 
     aComboBox.SetUpdateMode( FALSE );
-    BreakPoint* pBrk = rBrkPointList.First();
+    BreakPoint* pBrk = m_aModifiedBreakPointList.First();
     BreakPoint* pFirstBrk = pBrk;
     while ( pBrk )
     {
         String aEntryStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
         aEntryStr += String::CreateFromInt32( pBrk->nLine );
         aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
-        pBrk = rBrkPointList.Next();
+        pBrk = m_aModifiedBreakPointList.Next();
     }
     aComboBox.SetUpdateMode( TRUE );
 
@@ -158,23 +159,12 @@ void BreakPointDialog::SetCurrentBreakPoint( const BreakPoint& rBrk )
 
 void BreakPointDialog::CheckButtons()
 {
-    BOOL bEnableAdd = FALSE;
-
-    String aEditText( aComboBox.GetText() );
-    if ( aEditText.Len() )
-        bEnableAdd = TRUE;  // es besteht die Moeglichkeit.
-
-    for ( USHORT i = 0; i < aComboBox.GetEntryCount(); i++ )
-    {
-        String aStr( aComboBox.GetEntry( i ) );
-        if ( aStr.CompareIgnoreCaseToAscii( aEditText ) == COMPARE_EQUAL )
-        {
-            bEnableAdd = FALSE;
-            break;
-        }
-    }
-
-    if ( bEnableAdd )
+    // "New" button is enabled if the combo box edit contains a valid line
+    // number that is not already present in the combo box list; otherwise
+    // "OK" and "Delete" buttons are enabled:
+    USHORT nLine;
+    if (lcl_ParseText(aComboBox.GetText(), nLine)
+        && m_aModifiedBreakPointList.FindBreakPoint(nLine) == 0)
     {
         aNewButton.Enable();
         aOKButton.Disable();
@@ -187,8 +177,6 @@ void BreakPointDialog::CheckButtons()
         aDelButton.Enable();
     }
 }
-
-
 
 IMPL_LINK_INLINE_START( BreakPointDialog, CheckBoxHdl, CheckBox *, pChkBx )
 {
@@ -209,7 +197,7 @@ IMPL_LINK( BreakPointDialog, ComboBoxHighlightHdl, ComboBox *, pBox )
     aDelButton.Enable();
 
     USHORT nEntry = pBox->GetEntryPos( pBox->GetText() );
-    BreakPoint* pBrk = rBrkPointList.GetObject( nEntry );
+    BreakPoint* pBrk = m_aModifiedBreakPointList.GetObject( nEntry );
     DBG_ASSERT( pBrk, "Kein passender Breakpoint zur Liste ?" );
     UpdateFields( pBrk );
 
@@ -236,7 +224,10 @@ IMPL_LINK( BreakPointDialog, EditModifyHdl, Edit *, pEdit )
 IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
 {
     if ( pButton == &aOKButton )
+    {
+        m_rOriginalBreakPointList.transfer(m_aModifiedBreakPointList);
         EndDialog( 1 );
+    }
     else if ( pButton == &aNewButton )
     {
         // Checkbox beruecksichtigen!
@@ -248,7 +239,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
             BreakPoint* pBrk = new BreakPoint( nLine );
             pBrk->bEnabled = aCheckBox.IsChecked();
             pBrk->nStopAfter = aNumericField.GetValue();
-            rBrkPointList.InsertSorted( pBrk );
+            m_aModifiedBreakPointList.InsertSorted( pBrk );
             String aEntryStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
             aEntryStr += String::CreateFromInt32( pBrk->nLine );
             aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
@@ -271,10 +262,10 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
     else if ( pButton == &aDelButton )
     {
         USHORT nEntry = aComboBox.GetEntryPos( aComboBox.GetText() );
-        BreakPoint* pBrk = rBrkPointList.GetObject( nEntry );
+        BreakPoint* pBrk = m_aModifiedBreakPointList.GetObject( nEntry );
         if ( pBrk )
         {
-            delete rBrkPointList.Remove( pBrk );
+            delete m_aModifiedBreakPointList.Remove( pBrk );
             aComboBox.RemoveEntry( nEntry );
             if ( nEntry && !( nEntry < aComboBox.GetEntryCount() ) )
                 nEntry--;
@@ -314,7 +305,7 @@ void BreakPointDialog::UpdateFields( BreakPoint* pBrk )
 BreakPoint* BreakPointDialog::GetSelectedBreakPoint()
 {
     USHORT nEntry = aComboBox.GetEntryPos( aComboBox.GetText() );
-    BreakPoint* pBrk = rBrkPointList.GetObject( nEntry );
+    BreakPoint* pBrk = m_aModifiedBreakPointList.GetObject( nEntry );
     return pBrk;
 }
 

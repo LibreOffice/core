@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-08 14:14:21 $
+ *  last change: $Author: sb $ $Date: 2002-07-09 13:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,15 +316,33 @@ SfxUndoManager* __EXPORT IDEBaseWindow::GetUndoManager()
     return NULL;
 }
 
-void BreakPointList::Reset()
+BreakPointList::BreakPointList()
+{}
+
+BreakPointList::BreakPointList(BreakPointList const & rList):
+    BreakPL(rList.Count())
 {
-    BreakPoint* pBrk = First();
-    while ( pBrk )
-    {
-        delete pBrk;
-        pBrk = Next();
-    }
-    Clear();
+    for (ULONG i = 0; i < rList.Count(); ++i)
+        Insert(new BreakPoint(*rList.GetObject(i)), i);
+}
+
+BreakPointList::~BreakPointList()
+{
+    reset();
+}
+
+void BreakPointList::reset()
+{
+    while (Count() > 0)
+        delete Remove(Count() - 1);
+}
+
+void BreakPointList::transfer(BreakPointList & rList)
+{
+    reset();
+    for (ULONG i = 0; i < rList.Count(); ++i)
+        Insert(rList.GetObject(i), i);
+    rList.Clear();
 }
 
 void BreakPointList::InsertSorted( BreakPoint* pNewBrk )
