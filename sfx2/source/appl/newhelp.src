@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-17 21:19:03 $
+ *  last change: $Author: kz $ $Date: 2002-01-24 21:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,7 +587,7 @@ String STR_HELP_WINDOW_TITLE
     Text[ spanish ] = "%PRODUCTNAME Ayuda";
     Text[ italian ] = "Guida %PRODUCTNAME";
     Text[ danish ] = "%PRODUCTNAME Help";
-    Text[ swedish ] = "%PRODUCTNAME hjälp";
+    Text[ swedish ] = "%PRODUCTNAME-hjälp";
     Text[ polish ] = "%PRODUCTNAME - Pomoc";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Help";
     Text[ japanese ] = "%PRODUCTNAME ãƒ˜ãƒ«ãƒ—";
