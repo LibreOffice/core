@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DiagramHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 17:18:23 $
+ *  last change: $Author: bm $ $Date: 2003-11-11 12:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #include "DiagramHelper.hxx"
 #include "LegendHelper.hxx"
+#include "PropertyHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <drafts/com/sun/star/chart2/XTitled.hpp>
@@ -90,6 +91,16 @@ void DiagramHelper::changeDiagram(
     LegendHelper::flushLegend( xLegend );
     LegendHelper::defaultFillEmptyLegend( xLegend, xDestination );
     xDestination->setLegend( xLegend );
+
+    uno::Reference< beans::XPropertySet > xSrcProp(  xSource->getWall());
+    uno::Reference< beans::XPropertySet > xDestProp( xDestination->getWall());
+    if( xSrcProp.is() && xDestProp.is())
+        PropertyHelper::copyProperties( xSrcProp, xDestProp );
+
+    xSrcProp.set(  xSource->getFloor());
+    xDestProp.set( xDestination->getFloor());
+    if( xSrcProp.is() && xDestProp.is())
+        PropertyHelper::copyProperties( xSrcProp, xDestProp );
 }
 
 } //  namespace helper
