@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.7 2001-02-14 10:29:29 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.8 2001-03-12 14:09:02 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-02-14 10:29:29 $ $Revision: 1.7 $
+//	$Author: oj $ $Date: 2001-03-12 14:09:02 $ $Revision: 1.8 $
 //
 // Description:
 //
@@ -597,7 +597,7 @@ sal_Int32 OSQLScanner::SQLyygetc(void)
 sal_Int32 OSQLScanner::getInternationalTokenID(const sal_Char* sToken) const
 {		
 	OSL_ENSHURE(m_pContext, "OSQLScanner::getInternationalTokenID: No Context set");			
-	return (m_bInternational) ? m_pContext->getIntlKeyCode(::rtl::OString(sToken, RTL_TEXTENCODING_ASCII_US)) : 0;	
+	return (m_bInternational) ? m_pContext->getIntlKeyCode(::rtl::OString(sToken)) : 0;	
 }
 // -------------------------------------------------------------------------
 sal_Int32	OSQLScanner::GetCurrentRule() const { return m_nRule; }
