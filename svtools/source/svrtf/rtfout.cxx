@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfout.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-16 09:13:46 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 16:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,23 +58,6 @@
  *
  *
  ************************************************************************/
- /*************************************************************************
-#*
-#*    $Workfile:   rtfout.cxx  $
-#*
-#*    class HTMLOutFuncs
-#*
-#*    Beschreibung      DOKUNAME.DOC
-#*
-#*    Ersterstellung    JP 20.02.96
-#*    Letzte Aenderung  $Author: jp $ $Date: 2000-10-16 09:13:46 $
-#*    $Revision: 1.2 $
-#*
-#*    $Logfile:   T:/svtools/source/svrtf/rtfout.cxv  $
-#*
-#*    Copyright (c) 1989 - 2000, STAR DIVISION
-#*
-#*************************************************************************/
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
