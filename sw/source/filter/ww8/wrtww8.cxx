@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:08:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@
 #define _SVSTDARR_BOOLS
 #include <svtools/svstdarr.hxx>
 
+#include <svtools/fltrcfg.hxx>
+
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>
 #endif
@@ -118,14 +120,6 @@
 #ifndef _MSOCXIMEX_HXX
 #include <svx/msocximex.hxx>
 #endif
-
-#ifndef _OFA_FLTRCFG_HXX
-#include <offmgr/fltrcfg.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -2198,7 +2192,7 @@ ULONG SwWW8Writer::StoreDoc()
     if( !pOLEExp )
     {
         UINT32 nSvxMSDffOLEConvFlags = 0;
-        const OfaFilterOptions* pOpt = OFF_APP()->GetFilterOptions();
+        const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
         if( pOpt->IsMath2MathType() )
             nSvxMSDffOLEConvFlags |= OLE_STARMATH_2_MATHTYPE;
         if( pOpt->IsWriter2WinWord() )
