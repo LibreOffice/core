@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hro $ $Date: 2001-03-20 16:15:56 $
+ *  last change: $Author: hro $ $Date: 2001-05-10 16:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
     }
 
 
-    osl_getSystemPathFromNormalizedPath(FileName, &FileName);
+    osl_getSystemPathFromFileURL(FileName, &FileName);
 
 
 #ifdef DEBUG_OSL_PROFILE
@@ -310,7 +310,7 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
 
 
     pProfile->m_Flags = Flags & FLG_USER;
-    osl_getSystemPathFromNormalizedPath(strProfileName, &pProfile->m_strFileName);
+    osl_getSystemPathFromFileURL(strProfileName, &pProfile->m_strFileName);
 //  rtl_uString_assign(&pProfile->m_strFileName, strProfileName);
 
     if (Flags & (osl_Profile_READLOCK | osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE ))
@@ -1150,7 +1150,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
 
     /* copy filename */
     rtl_uString_newFromStr_WithLength(&strTmp, wcsPath, nPathLen);
-    nError = osl_normalizePath(strTmp, strProfileName);
+    nError = osl_getFileURLFromSystemPath(strTmp, strProfileName);
     rtl_uString_release(strTmp);
 
     return nError == osl_File_E_None;
@@ -2177,7 +2177,7 @@ static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl* pProfile)
     }
 
 
-    osl_getSystemPathFromNormalizedPath(ustrTmpName, &ustrTmpName);
+    osl_getSystemPathFromFileURL(ustrTmpName, &ustrTmpName);
 
     if ( ! ( pProfile->m_Flags & osl_Profile_READLOCK ) )
     {
@@ -2565,7 +2565,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
             return (sal_False);
 
         /* convert to native path */
-        if (osl_getSystemPathFromNormalizedPath(strTmp, &strExecutable) != osl_File_E_None)
+        if (osl_getSystemPathFromFileURL(strTmp, &strExecutable) != osl_File_E_None)
         {
             rtl_uString_release(strTmp);
             return sal_False;

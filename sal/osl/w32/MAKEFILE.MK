@@ -2,9 +2,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obr $ $Date: 2001-04-11 11:25:20 $
+#   last change: $Author: hro $ $Date: 2001-05-10 16:28:04 $
 #
 #   Copyright according the GNU Public License.
 #
@@ -44,12 +44,12 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/security.obj \
             $(SLO)$/profile.obj  \
             $(SLO)$/time.obj     \
-            $(SLO)$/file.obj     \
             $(SLO)$/signal.obj   \
             $(SLO)$/pipe.obj     \
             $(SLO)$/util.obj \
             $(SLO)$/dir.obj \
             $(SLO)$/dirw9x.obj
+
 
 OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/diagnose.obj \
@@ -65,7 +65,6 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/security.obj \
             $(OBJ)$/profile.obj  \
             $(OBJ)$/time.obj     \
-            $(OBJ)$/file.obj     \
             $(OBJ)$/signal.obj   \
             $(OBJ)$/pipe.obj     \
             $(OBJ)$/util.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 13:04:44 $
+ *  last change: $Author: hro $ $Date: 2001-05-10 16:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,13 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
     rtl_uString* Module = NULL;
     oslModule ret = 0;
+    oslFileError    nError;
 
     OSL_ASSERT(strModuleName);
 
-    if (strModuleName->buffer[0] == L'/' && strModuleName->buffer[1] == L'/')
-        osl_getSystemPathFromNormalizedPath(strModuleName, &Module);
-    else
+    nError = osl_getSystemPathFromFileURL(strModuleName, &Module);
+
+    if ( osl_File_E_None != nError )
         rtl_uString_assign(&Module, strModuleName);
 
     hInstance = LoadLibraryW(Module->buffer);
