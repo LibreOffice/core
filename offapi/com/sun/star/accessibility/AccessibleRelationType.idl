@@ -1,0 +1,144 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AccessibleRelationType.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:32:49 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_AccessibleRelationType_idl__
+#define __com_sun_star_accessibility_AccessibleRelationType_idl__
+
+module com { module sun { module star { module accessibility {
+
+/** Collection of relation types.
+
+    <p>This list of constants defines the availabe types of relations that
+    are usable by <type>AccessibleRelation</type>.</p>
+
+    <p>We are using constants instead of a more typesafe enum.  The reason
+    for this is that IDL enums may not be extended.  Therefore, in order to
+    include future extensions to the set of roles we have to use constants
+    here.</p>
+*/
+constants AccessibleRelationType
+{
+    /** Invalid relation type.
+
+        <p>Indicates an invalid relation type.  This is used to indicate
+        that a retrieval method could not find a requested relation.</p>
+    */
+    const short INVALID = 0;
+
+    /** Content-flows-from relation.
+
+        <p>Indicates a content flow between the related objects.</p>
+    */
+    const short CONTENT_FLOWS_FROM = 1;
+
+    /** Content-flows-to relation.
+
+        <p>Indicates a content flow between the related objects.</p>
+    */
+    const short CONTENT_FLOWS_TO = 2;
+
+    /** Controlled-by relation type.
+
+        <p>Indicates an object is controlled by one or more target
+        objects.</p>
+    */
+    const short CONTROLLED_BY = 3;
+
+    /** Controller-for relation type.
+
+        <p>Indicates an object is a controller for one or more target
+        objects.</p>
+    */
+    const short CONTROLLER_FOR = 4;
+
+    /** Lable-for relation type.
+
+        <p>Indicates an object is a label for one or more target
+        objects.</p>
+    */
+    const short LABEL_FOR = 5;
+
+    /** Labeled-by relation type.
+
+        <p>Indicates an object is labeled by one or more target objects.</p>
+    */
+    const short LABELED_BY = 6;
+
+    /** Member-of relation type.
+
+        <p>Indicates an object is a member of a group of one or more target
+        objects.</p>
+    */
+    const short MEMBER_OF = 7;
+
+    /** Sub-Window-of relation type.
+
+        <p>With this relation you can realize an alternative parent-child
+        relationship.  The target of the relation contains the parent
+        window.  Note that there is no relation that points the other way,
+        from the parent window to the child window.</p>
+    */
+    const short SUB_WINDOW_OF = 8;
+};
+
+}; }; }; };
+
+#endif
