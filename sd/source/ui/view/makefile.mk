@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-30 09:44:45 $
+#   last change: $Author: rt $ $Date: 2005-03-31 07:15:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,7 @@ EXCEPTIONSFILES=				\
         $(SLO)$/sdview4.obj  \
         $(SLO)$/slidvish.obj \
         $(SLO)$/viewshe2.obj \
+        $(SLO)$/ObjectBarManager.obj \
         $(SLO)$/UpdateLockManager.obj
 
 EXCEPTIONSNOOPTFILES=\
