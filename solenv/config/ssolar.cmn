@@ -142,6 +142,7 @@ common
 		USE_NEW_RSC
 		USE_NEWCHARSET
 		use_shl_versions
+        VCL
 		WST
 		XCLASSPATH
 	}
