@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:18:50 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,7 @@ void OColumns::loadSettings(const OConfigurationNode& _rLocation, const IColumnF
                 append(*pColumNames, pExistent);
             else
             {
-                OSL_ASSERT("OColumns::loadSettings : createColumn returned nonsense !");
+                OSL_ENSURE(sal_False, "OColumns::loadSettings : createColumn returned nonsense !");
                 continue;
             }
         }
@@ -578,7 +578,7 @@ void OColumns::loadSettings(const OConfigurationNode& _rLocation, const IColumnF
         if (pExistentSettings)
             pExistentSettings->readUIFrom(aCurrent);
         else
-            OSL_ASSERT("OColumns::loadSettings : no settings for the column !");
+            OSL_ENSURE(sal_False, "OColumns::loadSettings : no settings for the column !");
     }
 }
 
@@ -588,12 +588,12 @@ void OColumns::storeSettings(const OConfigurationNode& _rLocation)
     MutexGuard aGuard(m_rMutex);
     if (!_rLocation.isValid())
     {
-        OSL_ASSERT("OColumns::storeSettings: have no location !");
+        OSL_ENSURE(sal_False, "OColumns::storeSettings: have no location !");
         return;
     }
     if (_rLocation.isReadonly())
     {
-        OSL_ASSERT("OColumns::storeSettings: the location is read-only !");
+        OSL_ENSURE(sal_False, "OColumns::storeSettings: the location is read-only !");
         return;
     }
 
@@ -625,7 +625,7 @@ void OColumns::storeSettings(const OConfigurationNode& _rLocation)
             OColumnSettings* pCurrentSettings = pCurrent->getSettings();
             if (!pCurrentSettings)
             {
-                OSL_ASSERT("OColumns::storeSettings: column without settings we can write !");
+                OSL_ENSURE(sal_False, "OColumns::storeSettings: can't write column without settings!");
                 continue;
             }
             sCurrent = pCurrent->m_sName;
@@ -649,7 +649,7 @@ void OColumns::storeSettings(const OConfigurationNode& _rLocation)
                 aColumnNode = _rLocation.createNode(sCurrent);
                 if (!aColumnNode.isValid())
                 {
-                    OSL_ASSERT("OColumns::storeSettings: could not create the structures for writing a column !");
+                    OSL_ENSURE(sal_False, "OColumns::storeSettings: could not create the structures for writing a column !");
                     continue;
                 }
             }
@@ -751,7 +751,7 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OColumns::createEmptyObject()
 {
-    OSL_ASSERT("Are not filled this way!");
+    OSL_ENSURE(sal_False, "Are not filled this way!");
     //  connectivity::sdbcx::OColumn* pRet = new OTableColumnDescriptor(isCaseSensitive());
     OTableColumnDescriptor* pRet = new OTableColumnDescriptor();
     Reference< XPropertySet > xRet = pRet;

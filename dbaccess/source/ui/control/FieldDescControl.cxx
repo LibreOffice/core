@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:57:36 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1841,7 +1841,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if( pNumType )
     {
-        OSL_ASSERT(0);
+        OSL_ENSURE(sal_False, "OFieldDescControl::DisplayData: invalid num type!");
     }
 
     if( pLength )

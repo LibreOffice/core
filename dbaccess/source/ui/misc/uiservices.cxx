@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:11:33 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     }
     catch (InvalidRegistryException& )
     {
-        OSL_ASSERT("DBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
+        OSL_ENSURE(sal_False, "DBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
     }
 
     return sal_False;

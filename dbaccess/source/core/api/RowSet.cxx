@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 08:28:23 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,9 +358,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
     switch(nHandle)
     {
         case PROPERTY_ID_ACTIVECONNECTION:
-            m_bOwnConnection        = sal_False;
-            m_bCreateStatement      = sal_True;
-            m_bRebuildConnOnExecute = sal_False;
+            // remove as event listener
             try
             {
                 Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
@@ -374,6 +372,15 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             catch(Exception&) // doesn't matter here
             {
             }
+
+            // if we owned the connection, dispose it
+            if(m_bOwnConnection)
+                ::comphelper::disposeComponent(m_xActiveConnection);
+
+            m_bOwnConnection        = sal_False;
+            m_bCreateStatement      = sal_True;
+            m_bRebuildConnOnExecute = sal_False;
+
             // we have to dispose our querycomposer
             try
             {

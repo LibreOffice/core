@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-27 07:34:13 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ void OSubComponent::release() throw (RuntimeException)
                 dispose();
 
                 // only the alive ref holds the object
-                OSL_ASSERT( m_refCount == 1 );
+                OSL_ENSURE( m_refCount == 1, "OSubComponent::release: invalid ref count!" );
 
                 // release the parent in the ~
                 if (xParent.is())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:24:16 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,11 +264,11 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
                     aControlProps = *(Sequence< ::com::sun::star::beans::PropertyValue>*)pArguments->Value.getValue();
             }
             else
-                OSL_ASSERT(((ByteString("SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (") += ByteString((const sal_Unicode*)pArguments->Name, gsl_getSystemTextEncoding()).GetBuffer()) += ") !").GetBuffer());
+                OSL_ENSURE(sal_False, ((ByteString("SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (") += ByteString((const sal_Unicode*)pArguments->Name, gsl_getSystemTextEncoding()).GetBuffer()) += ") !").GetBuffer());
         }
         if (!sControlType.getLength())
         {
-            OSL_ASSERT("SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnType) !");
+            OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnType) !");
             sControlType = ::rtl::OUString::createFromAscii("TextField");
         }
         OSL_ENSURE(aControlProps.getLength(), "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnProperties) !");
@@ -286,9 +286,8 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
             }
             catch(Exception&)
             {
-                OSL_ASSERT("SbaExternalSourceBrowser::dispatch : could not set a column property (maybe you forgot a READONLY attribute for a dispatch-argument ?) !");
+                OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::dispatch : could not set a column property (maybe you forgot a READONLY attribute for a dispatch-argument ?) !");
             }
-            ;
         }
 
         // correct the position
@@ -323,7 +322,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         }
         if (!xMasterForm.is())
         {
-            OSL_ASSERT("SbaExternalSourceBrowser::dispatch(FormSlots/AttachToForm) : please specify a form to attach to as argument !");
+            OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::dispatch(FormSlots/AttachToForm) : please specify a form to attach to as argument !");
             return;
         }
 
@@ -504,7 +503,7 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
         }
         catch(Exception&)
         {
-            OSL_ASSERT("SbaExternalSourceBrowser::Attach : couldn't restore the cursor position !");
+            OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::Attach : couldn't restore the cursor position !");
         }
 
     }
@@ -629,7 +628,7 @@ void SAL_CALL SbaExternalSourceBrowser::focusLost(const ::com::sun::star::awt::F
     if (xCommitable.is())
         xCommitable->commit();
     else
-        OSL_ASSERT("SbaExternalSourceBrowser::focusLost : why is my control not commitable ?");
+        OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::focusLost : why is my control not commitable ?");
 }
 
 //------------------------------------------------------------------
@@ -682,13 +681,13 @@ void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::removeActivateListen
 //------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::setModel(const Reference< ::com::sun::star::awt::XTabControllerModel > & Model) throw( RuntimeException )
 {
-    OSL_ASSERT("SbaExternalSourceBrowser::FormControllerImpl::setModel : invalid call, can't change my model !");
+    OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::FormControllerImpl::setModel : invalid call, can't change my model !");
 }
 
 //------------------------------------------------------------------
 Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::getModel(void) throw( RuntimeException )
 {
-    OSL_ASSERT("SbaExternalSourceBrowser::FormControllerImpl::getModel : don't (and won't) have a model !");
+    OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::FormControllerImpl::getModel : don't (and won't) have a model !");
     if (m_pOwner->m_pDataSourceImpl)
         return Reference< ::com::sun::star::awt::XTabControllerModel > ((Reference< XInterface > )*m_pOwner->m_pDataSourceImpl, UNO_QUERY);
 
@@ -698,7 +697,7 @@ Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL SbaExternalSou
 //------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::setContainer(const Reference< ::com::sun::star::awt::XControlContainer > & _Container) throw( RuntimeException )
 {
-    OSL_ASSERT("SbaExternalSourceBrowser::FormControllerImpl::setContainer : invalid call, can't change my container !");
+    OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::FormControllerImpl::setContainer : invalid call, can't change my container !");
 }
 
 //------------------------------------------------------------------
@@ -723,13 +722,13 @@ Sequence< Reference< ::com::sun::star::awt::XControl > > SAL_CALL SbaExternalSou
 //------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::autoTabOrder(void) throw( RuntimeException )
 {
-    OSL_ASSERT("SbaExternalSourceBrowser::FormControllerImpl::autoTabOrder : nothing to do (always have only one control) !");
+    OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::FormControllerImpl::autoTabOrder : nothing to do (always have only one control) !");
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::activateTabOrder(void) throw( RuntimeException )
 {
-    OSL_ASSERT("SbaExternalSourceBrowser::FormControllerImpl::activateTabOrder : nothing to do (always have only one control) !");
+    OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::FormControllerImpl::activateTabOrder : nothing to do (always have only one control) !");
 }
 
 //------------------------------------------------------------------

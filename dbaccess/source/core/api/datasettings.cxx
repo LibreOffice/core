@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-20 09:40:47 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ void ODataSettings_Base::storeTo(const OConfigurationNode& _rConfigLocation) con
 {
     if (!_rConfigLocation.isValid() || _rConfigLocation.isReadonly())
     {
-        OSL_ASSERT("ODataSettings_Base::storeTo : invalid config key (NULL or readonly) !");
+        OSL_ENSURE(sal_False, "ODataSettings_Base::storeTo : invalid config key (NULL or readonly) !");
         return;
     }
 
@@ -311,7 +311,7 @@ void ODataSettings_Base::loadFrom(const OConfigurationNode& _rConfigLocation)
 {
     if (!_rConfigLocation.isValid())
     {
-        OSL_ASSERT("ODataSettings_Base::loadFrom: invalid config key (NULL) !");
+        OSL_ENSURE(sal_False, "ODataSettings_Base::loadFrom: invalid config key (NULL) !");
         return;
     }
 

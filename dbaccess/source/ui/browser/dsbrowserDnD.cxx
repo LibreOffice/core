@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 13:42:02 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,7 +618,7 @@ namespace dbaui
         catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
         catch(Exception& )
         {
-            OSL_ASSERT(0);
+            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implPasteTable: caught a generic exception!");
         }
     }
 
@@ -801,6 +801,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/30 13:42:02  oj
+ *  remove <:
+ *
  *  Revision 1.4  2001/03/30 08:47:18  oj
  *  correct the creation of views
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,18 +180,15 @@ namespace dbaccess
 
         // fire a notification for all that are listening on column::VALUE property
         void firePropertyChange(const ORowSetMatrix::iterator& _rOldRow);
-        virtual void fireRowcount()
-        {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // fire if rowcount changed
+        virtual void fireRowcount() { }                             // fire if rowcount changed
         virtual void notifyAllListenersRowBeforeChange(const ::com::sun::star::sdb::RowChangeEvent &rEvt)
-        {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // notify before row will change
+            { }                                                     // fire if rowcount changed
         virtual void notifyAllListenersRowChanged(const ::com::sun::star::sdb::RowChangeEvent &rEvt)
-        {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // notify row changed
-        virtual void notifyAllListenersCursorBeforeMove()
-        {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // notify before cursor will move
-        virtual void notifyAllListenersCursorMoved()
-        {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // notify cursor moved
-        virtual void notifyAllListeners()
-        {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // notify all that rowset changed
+            { }                                                     // notify row changed
+        virtual void notifyAllListenersCursorBeforeMove() { }       // notify row changed
+
+        virtual void notifyAllListenersCursorMoved() { }            // notify cursor moved
+        virtual void notifyAllListeners() { }                       // notify all that rowset changed
         // check if the insert must be canceled
         virtual void checkInsert() = 0;
 

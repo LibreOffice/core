@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 10:18:20 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,7 +761,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
     }
     catch(SQLException&)
     {
-        OSL_ASSERT(0);
+        OSL_ENSURE(sal_False, "OQueryController::initialize: caught an exception!");
     }
 
 }

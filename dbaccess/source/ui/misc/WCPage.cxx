@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 08:44:50 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ sal_Bool OCopyTable::LeavePage()
         }
         else if(m_eOldStyle == OCopyTableWizard::WIZARD_APPEND_DATA)
         {
-            OSL_ASSERT(0);
+            OSL_ENSURE(sal_False, "OCopyTable::LeavePage: how this?");
             m_pParent->m_xSourceObject = NULL;
             return LeavePage();
         }

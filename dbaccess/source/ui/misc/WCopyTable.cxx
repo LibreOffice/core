@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 08:44:50 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
             break;
         default:
         {
-            OSL_ASSERT(0);
+            OSL_ENSURE(sal_False, "OCopyTableWizard::ImplOKHdl: invalid creation style!");
         }
     }
 
@@ -847,7 +847,7 @@ void OCopyTableWizard::appendColumns(Reference<XColumnsSupplier>& _rxColSup,cons
             }
             else
             {
-                OSL_ASSERT(0);
+                OSL_ENSURE(sal_False, "OCopyTableWizard::appendColumns: invalid field name!");
             }
 
         }

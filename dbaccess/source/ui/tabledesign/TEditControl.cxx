@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 09:54:18 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1106,7 +1106,7 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const OTypeInfo* _
             SwitchType( _pTypeInfo );
             break;
         default:
-            OSL_ASSERT(0);
+            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetData: invalid column!");
     }
     SetControlText(nRow,nColId,_pTypeInfo ? _pTypeInfo->aUIName : ::rtl::OUString());
 }
@@ -1133,7 +1133,7 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const String& _rNe
             break;
 
         case FIELD_TYPE:
-            OSL_ASSERT(0);
+            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetData: invalid column!");
             break;
 
         case FIELD_DESCR:
@@ -1155,7 +1155,7 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const String& _rNe
 
         case FIELD_PROPERTY_NUMTYPE:
             //  pFieldDescr->SetNumType( _rNewData );
-            OSL_ASSERT(0);
+            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetData: invalid column!");
             break;
 
         case FIELD_PROPERTY_AUTOINC:
@@ -1217,7 +1217,7 @@ String OTableEditorCtrl::GetData( long nRow, sal_uInt16 nColId )
             return String::CreateFromInt32(pFieldDescr->GetPrecision());
 
         case FIELD_PROPERTY_NUMTYPE:
-            OSL_ASSERT(0);
+            OSL_ENSURE(sal_False, "OTableEditorCtrl::GetData: invalid column!");
             //  return pFieldDescr->GetNumType();
 
         case FIELD_PROPERTY_AUTOINC:

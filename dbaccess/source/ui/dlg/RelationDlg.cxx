@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-20 08:46:15 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,7 +755,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, pButton )
     }
     catch(Exception&)
     {
-        OSL_ASSERT(0);
+        OSL_ENSURE(sal_False, "ORelationDialog, OKClickHdl: caught an exception!");
     }
 
     m_bTriedOneUpdate = TRUE;

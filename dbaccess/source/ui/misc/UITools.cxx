@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 08:04:43 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
                 Reference< XInteractionHandler > xHandler(_rMF->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
                 if (!xHandler.is())
                 {
-                    OSL_ASSERT(0);
+                    OSL_ENSURE(sal_False, "createConnection: could not instantiate an interaction handler!");
                     // ShowServiceNotAvailableError(NULL, String(SERVICE_SDB_INTERACTION_HANDLER), sal_True);
                         // TODO: a real parent!
                 }

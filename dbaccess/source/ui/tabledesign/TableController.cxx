@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 08:45:36 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,7 +670,7 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
     }
     catch(SQLException&)
     {
-        OSL_ASSERT(0);
+        OSL_ENSURE(sal_False, "OTableController::initialize: caught an exception!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -1021,7 +1021,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
                 }
                 else
                 {
-                    OSL_ASSERT(0);
+                    OSL_ENSURE(sal_False, "OTableController::appendColumns: invalid field name!");
                 }
 
             }
@@ -1033,7 +1033,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
     }
     catch(Exception&)
     {
-        OSL_ASSERT(0);
+        OSL_ENSURE(sal_False, "OTableController::appendColumns: caught an exception!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -1069,7 +1069,7 @@ void OTableController::appendKey(Reference<XKeysSupplier>& _rxSup)
     }
     catch(Exception&)
     {
-        OSL_ASSERT(0);
+        OSL_ENSURE(sal_False, "OTableController::appendKey: caught an exception!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -1399,7 +1399,7 @@ void OTableController::alterColumns()
             }
             else
             {
-                OSL_ASSERT(0);
+                OSL_ENSURE(sal_False, "OTableController::alterColumns: invalid column!");
             }
         }
         else if(xColumnFactory.is() && xAlter.is() && nPos < nColumnCount)
@@ -1422,7 +1422,7 @@ void OTableController::alterColumns()
             }
             else
             {
-                OSL_ASSERT(0);
+                OSL_ENSURE(sal_False, "OTableController::alterColumns: invalid column (2)!");
             }
         }
         else

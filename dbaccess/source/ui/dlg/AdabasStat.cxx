@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 11:49:33 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
     {
         ::comphelper::disposeComponent(xRes);
         ::comphelper::disposeComponent(xStmt);
-        OSL_ASSERT(0);
+        OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
     }
     m_ET_SYSDEVSPACE.SetSpecialReadOnly(sal_True);
     m_ET_TRANSACTIONLOG.SetSpecialReadOnly(sal_True);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-03 08:40:28 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,7 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
     }
     catch(SQLException&)
     {
-        OSL_ASSERT(0);
+        OSL_ENSURE(sal_False, "ORelationController::initialize: caught an exception!");
     }
 
 }
@@ -675,7 +675,7 @@ OTableWindowData* ORelationController::createTableWindowData()
 //              }
 //              else
 //              {
-//                  OSL_ASSERT(0);
+//                  OSL_ENSURE(sal_False, 0);
 //              }
 //
 //          }
@@ -687,7 +687,7 @@ OTableWindowData* ORelationController::createTableWindowData()
 //  }
 //  catch(Exception&)
 //  {
-//      OSL_ASSERT(0);
+//      OSL_ENSURE(sal_False, 0);
 //  }
 //}
 // -----------------------------------------------------------------------------
@@ -805,7 +805,7 @@ OTableWindowData* ORelationController::createTableWindowData()
 //          }
 //          else
 //          {
-//              OSL_ASSERT(0);
+//              OSL_ENSURE(sal_False, 0);
 //          }
 //      }
 //  }

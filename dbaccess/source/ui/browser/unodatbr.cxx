@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 08:16:53 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,7 +790,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             }
             catch(Exception&)
             {
-                OSL_ASSERT(0);
+                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::propertyChange: caught an exception!");
             }
         }
 

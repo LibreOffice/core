@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 13:34:30 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,7 @@ void ODatabaseImportExport::initialize()
                 m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
             }
             else
-                OSL_ASSERT(0);
+                OSL_ENSURE(sal_False, "ODatabaseImportExport::initialize: could not instantiate a rowset!");
         }
         catch(Exception& )
         {
@@ -823,7 +823,7 @@ void OHTMLImportExport::WriteTables()
                     }
                     catch ( Exception& )
                     {
-                        OSL_ASSERT(0);
+                        OSL_ENSURE(sal_False, "OHTMLImportExport::WriteTables: caught an exception!");
                     }
                     WriteCell(pFormat[i-1],pColWidth[i-1],nHeight,pHorJustify[i-1],aValue,sHTML_tabledata);
                 }

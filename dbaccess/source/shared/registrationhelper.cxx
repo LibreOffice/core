@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registrationhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 06:15:29 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ void OModuleRegistration::revokeComponent(const ::rtl::OUString& _rImplementatio
 {
     if (!s_pImplementationNames)
     {
-        OSL_ASSERT("OModuleRegistration::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
+        OSL_ENSURE(sal_False, "OModuleRegistration::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
         return;
     }
     OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
@@ -158,7 +158,7 @@ sal_Bool OModuleRegistration::writeComponentInfos(
 
     if (!s_pImplementationNames)
     {
-        OSL_ASSERT("OModuleRegistration::writeComponentInfos : have no class infos ! Are you sure called this method at the right time ?");
+        OSL_ENSURE(sal_False, "OModuleRegistration::writeComponentInfos : have no class infos ! Are you sure called this method at the right time ?");
         return sal_True;
     }
     OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
@@ -189,7 +189,7 @@ sal_Bool OModuleRegistration::writeComponentInfos(
         }
         catch(Exception&)
         {
-            OSL_ASSERT("OModuleRegistration::writeComponentInfos : something went wrong while creating the keys !");
+            OSL_ENSURE(sal_False, "OModuleRegistration::writeComponentInfos : something went wrong while creating the keys !");
             return sal_False;
         }
     }
@@ -207,7 +207,7 @@ Reference< XInterface > OModuleRegistration::getComponentFactory(
 
     if (!s_pImplementationNames)
     {
-        OSL_ASSERT("OModuleRegistration::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
+        OSL_ENSURE(sal_False, "OModuleRegistration::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
         return NULL;
     }
     OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
