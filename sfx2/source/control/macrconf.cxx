@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,6 +331,25 @@ String SfxMacroInfo::GetFullQualifiedName() const
     return aRet;
 }
 
+String SfxMacroInfo::GetURL()
+{
+    // 'macro:///lib.mod.proc(args)' => Macro via App-BASIC-Mgr
+    // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
+    // 'macro://obj.method(args)' => Object via App-BASIC-Mgr
+    String aURL( String::CreateFromAscii("macro://") );
+    if ( !bAppBasic )
+        aURL += '.';
+    aURL += '/';
+    aURL += aLibName;
+    aURL += '.';
+    aURL += aModuleName;
+    aURL += '.';
+    aURL += aMethodName;
+    aURL += String::CreateFromAscii("()");
+
+    return aURL;
+}
+
 //==========================================================================
 
 BasicManager* SfxMacroInfo::GetBasicManager() const
@@ -606,9 +625,11 @@ void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
                 // Falls ein Image belegt wwurde, kann das jetzt wieder frei
                 // gegeben werden (wenn nicht aus dtor gerufen, da ist der
                 // ImageManager schon weg)
-                SfxImageManager *pImgMgr = SFX_IMAGEMANAGER();
-                if (pImgMgr)
-                    pImgMgr->ReplaceImage(nId, 0);
+                DBG_ERROR("Image removal incomplete!");
+//!MBA          ToDo!
+                SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+                if ( pViewFrame )
+                    pViewFrame->GetBindings().GetImageManager()->ReplaceImage(nId, 0);
 
                 // Sofern nicht die Applikation heruntergefahren wird, mu\s
                 // der Slot asynchron gel"oscht werden, falls er in seinem
@@ -699,26 +720,6 @@ sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMac
     sal_Bool bIsStarScript = ( eSType == EXTENDED_STYPE && pMacro->GetLibName().SearchAscii( "StarScript" ) != STRING_NOTFOUND );
     sal_Bool bIsBasicLibBased = bIsBasic || bIsStarScript || !pSh;
 
-#if SUPD<582
-    if ( !bIsBasicLibBased && pSh && pApp->GetIniManager()->IsJavaScriptEnabled() )
-    {
-        // AB: #49303# hier muss Window als this gesetzt werden
-        SfxJS* pJS = pSh->GetMedium()->GetJavaScript();
-        SjJScriptWindowObject* pWindow = pJS ? pJS->GetWindowObject() : NULL;
-
-        Link aLink = LINK( this, SfxMacroConfig, CallbackHdl_Impl );
-        pImp->bWaitingForCallback = sal_True;
-        nErr = pSh->CallJavaScript( *pMacro, pWindow, &aLink );
-        sal_uInt32 nTicks = Time::GetSystemTicks();
-        nTicks += 5000;
-        while ( pImp->bWaitingForCallback && nTicks > Time::GetSystemTicks() )
-            Application::Yield();
-        pImp->bWaitingForCallback = sal_False;
-        return nErr != ERRCODE_NONE;
-    }
-    else
-#endif
-
     if ( bIsBasicLibBased )
     {
         pApp->EnterBasicCall();
@@ -775,26 +776,7 @@ sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMac
                 nErr = SbxERR_NO_METHOD;
 
         }
-#if SUPD<582
-        else if( bIsStarScript )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xSource;
 
-            // Haben wir eine Shell?
-            if( pSh )
-            {
-                // dann dort callen
-                nErr = pSh->CallScript( pMacro->GetLibName(), aCode, xSource, NULL, NULL );
-            }
-            else
-            {
-                // ::com::sun::star::script::Engine von der Standard-Bibliothek anfordern
-                StarBASIC* pStdLib = pAppMgr->GetStdLib();
-                ::com::sun::star::uno::Reference< ::com::sun::star::script::XEngine >  xEngine= pStdLib->getEngine( pAppMgr );
-                SfxMacroConfig::CallStarScript( xEngine, aCode, xSource, NULL, NULL );
-            }
-        }
-#endif
         pApp->LeaveBasicCall();
     }
     else
@@ -812,13 +794,6 @@ sal_Bool SfxMacroConfig::CheckMacro( SfxObjectShell *pSh, const SvxMacro* pMacro
     // Name des Macros oder Scripts bzw. ScriptCode
     String aCode( pMacro->GetMacName() );
     ErrCode nErr = ERRCODE_NONE;
-
-#if SUPD<582
-    // Ist es ein Basic-Macro ?
-    sal_Bool bIsBasic = pMacro->GetScriptType() == STARBASIC;
-    if ( !bIsBasic )
-        return pSh != NULL;
-#endif
 
     // BasicManager von Document oder Application
     pApp->EnterBasicCall();
