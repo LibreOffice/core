@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.8 $
+#  $Revision: 1.9 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:29:50 $
+#  last change: $Author: rt $ $Date: 2005-01-31 17:07:54 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -59,7 +59,7 @@ OUT_COMP_INC=$(OUT_INC)/$(COMPONENT_NAME)
 OUT_COMP_GEN=$(OUT_MISC)/$(COMPONENT_NAME)
 OUT_COMP_SLO=$(OUT_SLO)/$(COMPONENT_NAME)
 
-COMPOENNT_ENV_FLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_prepare_env.flag
+COMPONENT_ENV_FLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_prepare_env.flag
 COMPONENT_TYPEFLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_types.flag
 
 CXXFILES = remoteclient.cxx
@@ -79,12 +79,12 @@ include $(SETTINGS)/stdtarget.mk
 # This example type library will be extended by the office types
 $(OUT_BIN)/%.rdb :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
-	$(REGMERGE) $@ / $(DKREGISTRYNAME) 
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	$(REGMERGE) $@ / $(OFFICE_TYPE_LIBRARY) 
 
 $(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB) $(COMPONENT_XML)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
 	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
 	echo flagged > $@
 
@@ -92,30 +92,23 @@ $(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(OUT_COMP_GEN)/%.def : exports.dxp
 ifeq "$(OS)" "WIN"
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo EXPORTS > $@
-	$(CAT) exports.dxp >> $@
-endif
-
-ifeq "$(OS)" "WIN"
-$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(OUT_COMP_GEN)/%.def
+$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN))
-	$(LINK) $(LIBRARY_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),map,$(@F)) \
-	/DEF:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),def,$(@F)) $(SLOFILES) \
+	$(LINK) $(COMP_LINK_FLAGS) /OUT:$@ \
+	/MAP:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),map,$(@F)) $(SLOFILES) \
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) msvcrt.lib kernel32.lib
 else
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(LINK) $(LIBRARY_LINK_FLAGS) $(LINK_LIBS) -o $@ $^\
+	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $^\
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
 endif	
 
-$(COMPOENNT_ENV_FLAG) : $(COMPONENT_RDB) $(OUT_BIN)/remoteserver.rdb
+$(COMPONENT_ENV_FLAG) : $(COMPONENT_RDB) $(OUT_BIN)/remoteserver.rdb
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $@
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	@echo --------------------------------------------------------------------------------
 	@echo   Register necessary runtime components in remoteserver/remoteclientsample rdb
 	@echo --------------------------------------------------------------------------------
@@ -130,7 +123,7 @@ $(COMPOENNT_ENV_FLAG) : $(COMPONENT_RDB) $(OUT_BIN)/remoteserver.rdb
 	$(REGCOMP) -register -r $(COMPONENT_RDB) -c uuresolver.uno.$(SHAREDLIB_EXT)
 	@echo bla > $@
 
-CppOfficeClientExample : $(COMPONENT_IMPL) $(COMPOENNT_ENV_FLAG)
+CppOfficeClientExample : $(COMPONENT_IMPL) $(COMPONENT_ENV_FLAG)
 	@echo --------------------------------------------------------------------------------
 	@echo The remoteclient C++ component can be used by using the uno binary. Use the 
 	@echo the follwong command to start the example. The run target starts a remote 
@@ -139,15 +132,17 @@ CppOfficeClientExample : $(COMPONENT_IMPL) $(COMPOENNT_ENV_FLAG)
 	@echo make remoteclient.run
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(COMPONENT_IMPL) $(COMPOENNT_ENV_FLAG)
+%.run: $(COMPONENT_IMPL) $(COMPONENT_ENV_FLAG)
 	@echo Start the remote server process ...
 	@echo -
 ifeq "$(OS)" "WIN"
-	start uno -rw $(OUT_BIN)/remoteserver.rdb -s com.sun.star.io.Pipe \
+	start uno -rw $(OUT_BIN)/remoteserver.rdb --singleaccept -s com.sun.star.io.Pipe \
 	-u "uno:socket,host=localhost,port=2083;urp;MyPipe"
 else
-	uno -rw $(OUT_BIN)/remoteserver.rdb -s com.sun.star.io.Pipe \
+	uno -rw $(OUT_BIN)/remoteserver.rdb --singleaccept -s com.sun.star.io.Pipe \
 	-u "uno:socket,host=localhost,port=2083;urp;MyPipe" &
+	@echo waiting on the server process ...
+	sleep 3
 endif
 	@echo -
 	@echo ... remote server process runs ...
@@ -157,15 +152,13 @@ endif
 	uno -l $(COMPONENT_IMPL) -c com.sun.star.comp.product.example.RemoteClientSample \
 	-rw $(COMPONENT_RDB) -- "uno:socket,host=localhost,port=2083;urp;MyPipe"
 	@echo -
-	@echo ... remote process returned succesful, please kill the server process.
-	@echo - Windows: activate the server shell and press ctrl-c, 
-	@echo - Unix: use the kill command to kill the server process
 
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_ENV_FLAG)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMPONENT_NAME).*))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/remoteserver.rdb))
