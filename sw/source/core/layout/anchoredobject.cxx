@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:06:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,9 @@ SwAnchoredObject::SwAnchoredObject() :
     mbPositioningInProgress( false ),
     mbConsiderForTextWrap( false ),
     mbPositionLocked( false ),
+    // --> OD 2005-01-10 #i40147#
+    mbKeepPositionLockedForSection( false ),
+    // <--
     mbRestartLayoutProcess( false ),
     // <--
     // --> OD 2004-10-22 #i35911#
@@ -606,16 +609,6 @@ bool SwAnchoredObject::PositionLocked() const
         return false;
 }
 
-void SwAnchoredObject::LockPosition()
-{
-    mbPositionLocked = true;
-}
-
-void SwAnchoredObject::UnlockPosition()
-{
-    mbPositionLocked = false;
-}
-
 bool SwAnchoredObject::RestartLayoutProcess() const
 {
     if ( ConsiderObjWrapInfluenceOnObjPos() )
@@ -889,4 +882,83 @@ bool SwAnchoredObject::OverlapsPrevColumn() const
     }
 
     return bOverlapsPrevColumn;
+}
+
+/** method to determine position of anchored object relative to
+    anchor frame
+
+    OD 2005-01-06 #i30669#
+    Usage: Needed layout information for WW8 export
+
+    @author OD
+*/
+Point SwAnchoredObject::GetRelPosToAnchorFrm() const
+{
+    Point aRelPos;
+
+    ASSERT( GetAnchorFrm(),
+            "<SwAnchoredObject::GetRelPosToAnchorFrm()> - missing anchor frame." );
+    aRelPos = GetObjRect().Pos();
+    aRelPos -= GetAnchorFrm()->Frm().Pos();
+
+    return aRelPos;
+}
+
+/** method to determine position of anchored object relative to
+    page frame
+
+    OD 2005-01-06 #i30669#
+    Usage: Needed layout information for WW8 export
+
+    @author OD
+*/
+Point SwAnchoredObject::GetRelPosToPageFrm() const
+{
+    Point aRelPos;
+
+    ASSERT( GetAnchorFrm(),
+            "<SwAnchoredObject::GetRelPosToPageFrm()> - missing anchor frame." );
+    ASSERT( GetAnchorFrm()->FindPageFrm(),
+            "<SwAnchoredObject::GetRelPosToPageFrm()> - missing page frame." );
+
+    aRelPos = GetObjRect().Pos();
+    aRelPos -= GetAnchorFrm()->FindPageFrm()->Frm().Pos();
+
+    return aRelPos;
+}
+
+/** method to determine position of anchored object relative to
+    anchor character
+
+    OD 2005-01-06 #i30669#
+    Usage: Needed layout information for WW8 export
+
+    @author OD
+*/
+Point SwAnchoredObject::GetRelPosToChar() const
+{
+    Point aRelPos;
+
+    aRelPos = GetObjRect().Pos();
+    aRelPos -= GetLastCharRect().Pos();
+
+    return aRelPos;
+}
+
+/** method to determine position of anchored object relative to
+    top of line
+
+    OD 2005-01-06 #i30669#
+    Usage: Needed layout information for WW8 export
+
+    @author OD
+*/
+Point SwAnchoredObject::GetRelPosToLine() const
+{
+    Point aRelPos;
+
+    aRelPos = GetObjRect().Pos();
+    aRelPos.Y() -= GetLastTopOfLine();
+
+    return aRelPos;
 }
