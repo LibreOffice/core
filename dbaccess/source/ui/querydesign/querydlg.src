@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:25:51 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ ModalDialog DLG_QRY_JOIN
             Text[ czech ] = "Použité tabulky";
             Text[ hebrew ] = "beteiligte Tabellen";
             Text[ hindi ] = "Tables involved";
+            Text[ slovak ] = "Zahrnuté tabuľky";
         };
 
         ListBox LB_LEFT_TABLE
@@ -167,6 +168,7 @@ ModalDialog DLG_QRY_JOIN
             Text[ czech ] = "Použitá pole";
             Text[ hebrew ] = "beteiligte Felder";
             Text[ hindi ] = "Fields involved";
+            Text[ slovak ] = "Zahrnuté polia";
         };
     };
 
@@ -203,6 +205,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
+        Text[ slovak ] = "Nastavenia";
     };
 
     FixedText FT_LISTBOXTITLE
@@ -236,6 +239,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~Type";
+        Text[ slovak ] = "~Typ";
     };
 
     ListBox LB_JOINTYPE
@@ -435,6 +439,13 @@ ModalDialog DLG_QRY_JOIN
         < "Right join" ; Default; > ;
         < "Full (outer) join"  ; Default; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Vnútorné spojenie" ; Default; > ;
+        < "Ľavé spojenie" ; Default; > ;
+        < "Pravé spojenie" ; Default; > ;
+        < "Plné spojenie"  ; Default; > ;
+    };
     };
 
     FixedText ML_HELPTEXT
@@ -493,6 +504,7 @@ ModalDialog DLG_QRY_JOIN
     Text[ czech ] = "Vlastnosti spojení (join)";
     Text[ hebrew ] = "Verbundeigenschaften";
     Text[ hindi ] = "जोड़ विशेषतायें";
+    Text[ slovak ] = "Vlastnosti spojenia";
 };
 
 String STR_QUERY_INNER_JOIN
@@ -526,6 +538,7 @@ String STR_QUERY_INNER_JOIN
     Text[ czech ] = "Zahrnuje pouze záznamy, pro které jsou obsahy spojovaných polí identické.";
     Text[ hebrew ] = "Beinhaltet nur die Datensätze, bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
     Text[ hindi ] = "दोनों सारणियों का सम्बन्धित क्षेत्रों का विषय समान रहनेवाला अभिलेखों को सम्मिलित है ।";
+    Text[ slovak ] = "Zahŕňa len záznamy ktorých obsah v daných poliach je rovnaký pre obe tabuľky.";
 };
 
 String STR_QUERY_LEFTRIGHT_JOIN
@@ -559,6 +572,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ czech ] = "Obsahuje všechny záznamy z tabulky '%1', ale pouze takové záznamy z tabulky '%2', pro které jsou obsahy spojovaných polí identické.";
     Text[ hebrew ] = "Beinhaltet ALLE Datensätze aus '%1' und nur die Datensätze aus '%2', bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
     Text[ hindi ] = "सारणी '%1' का सभी अभिलेखों को , लेकिन सारणी '%2' का केवल उन अभिलेखों को जिनका सम्बन्धित क्षेत्रों का विषय समान है ।";
+    Text[ slovak ] = "Zahŕňa všetky záznamy z tabuľky '%1' ale z tabuľky '%2' len tie záznamy, kde sú zhodné záznamy v daných poliach.";
 };
 
 String STR_QUERY_FULL_JOIN
@@ -592,7 +606,10 @@ String STR_QUERY_FULL_JOIN
     Text[ czech ] = "Obsahuje všechny záznamy z tabulky '%1' a tabulky '%2'.";
     Text[ hebrew ] = "Beinhaltet ALLE Datensätze aus '%1' und aus '%2'.";
     Text[ hindi ] = "'%1' और '%2' के सब अभिलेख सम्मिलित है";
+    Text[ slovak ] = "Zahŕňa všetky záznamy z tabuľky'%1' a '%2'.";
 };
+
+
 
 
 
