@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-01 15:54:10 $
+ *  last change: $Author: mt $ $Date: 2002-02-05 08:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,10 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
+
 
 #ifdef REMOTE_APPSERVER
 #include "rmwindow.hxx"
@@ -478,6 +482,7 @@ void Window::ImplInitData( WindowType nType )
 
     mpDummy3_WindowEventListeners = new VclEventListeners;
     mpDummy4_WindowChildEventListeners = new VclEventListeners;
+    mnDummy3_AccessibleRole = 0xFFFF;
 
 #ifdef REMOTE_APPSERVER
     mpRmEvents          = NULL;
@@ -7127,3 +7132,138 @@ void Window::SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun
 {
     mxAccessible = x;
 }
+
+Window* Window::GetAccessibleParentWindow() const
+{
+    Window* pParent = GetParent();
+    if ( pParent && ( pParent->GetType() == WINDOW_BORDERWINDOW ) )
+    {
+        // DBG_ASSERT( pParent->GetChildCount() == 1, "BorderWindow with more than 1 child?" );
+        pParent = pParent->GetParent();
+    }
+    return pParent;
+}
+
+Window* Window::GetAccessibleChildWindow( USHORT n )
+{
+    Window* pChild = GetChild( n );
+    if ( pChild && ( pChild->GetType() == WINDOW_BORDERWINDOW ) )
+    {
+        // DBG_ASSERT( pChild->GetChildCount() == 1, "BorderWindow with more than 1 child?" );
+        pChild = pChild->GetChild( 0 );
+    }
+    return pChild;
+}
+
+void Window::SetAccessibleRole( USHORT nRole )
+{
+    DBG_ASSERT( mnDummy3_AccessibleRole == 0xFFFF, "AccessibleRole already set!" );
+    mnDummy3_AccessibleRole = nRole;
+}
+
+USHORT Window::GetAccessibleRole() const
+{
+    using namespace ::drafts::com::sun::star;
+
+    USHORT nRole = mnDummy3_AccessibleRole;
+    if ( nRole == 0xFFFF )
+    {
+        switch ( GetType() )
+        {
+            case WINDOW_MESSBOX:    // MT: Would be nice to have special roles!
+            case WINDOW_INFOBOX:
+            case WINDOW_WARNINGBOX:
+            case WINDOW_ERRORBOX:
+            case WINDOW_QUERYBOX: nRole = accessibility::AccessibleRole::OPTIONPANE; break;
+
+            case WINDOW_MODELESSDIALOG:
+            case WINDOW_MODALDIALOG:
+            case WINDOW_SYSTEMDIALOG:
+            case WINDOW_PRINTERSETUPDIALOG:
+            case WINDOW_PRINTDIALOG:
+            case WINDOW_TABDIALOG:
+            case WINDOW_BUTTONDIALOG:
+            case WINDOW_DIALOG: nRole = accessibility::AccessibleRole::DIALOG; break;
+
+            case WINDOW_PUSHBUTTON:
+            case WINDOW_OKBUTTON:
+            case WINDOW_CANCELBUTTON:
+            case WINDOW_HELPBUTTON:
+            case WINDOW_IMAGEBUTTON:
+            case WINDOW_MENUBUTTON:
+            case WINDOW_MOREBUTTON:
+            case WINDOW_SPINBUTTON:
+            case WINDOW_BUTTON: nRole = accessibility::AccessibleRole::PUSHBUTTON; break;
+
+            case WINDOW_PATHDIALOG: nRole = accessibility::AccessibleRole::DIRECTORYPANE; break;
+            case WINDOW_FILEDIALOG: nRole = accessibility::AccessibleRole::FILECHOOSER; break;
+            case WINDOW_COLORDIALOG: nRole = accessibility::AccessibleRole::COLORCHOOSER; break;
+            case WINDOW_FONTDIALOG: nRole = accessibility::AccessibleRole::FONTCHOOSER; break;
+
+            case WINDOW_IMAGERADIOBUTTON:
+            case WINDOW_RADIOBUTTON: nRole = accessibility::AccessibleRole::RADIOBUTTON; break;
+            case WINDOW_TRISTATEBOX:
+            case WINDOW_CHECKBOX: nRole = accessibility::AccessibleRole::CHECKBOX; break;
+
+            case WINDOW_MULTILINEEDIT:
+            case WINDOW_PATTERNFIELD:
+            case WINDOW_NUMERICFIELD:
+            case WINDOW_METRICFIELD:
+            case WINDOW_CURRENCYFIELD:
+            case WINDOW_LONGCURRENCYFIELD:
+            case WINDOW_EDIT: nRole = ( GetStyle() & WB_PASSWORD ) ? (accessibility::AccessibleRole::PASSWORDTEXT) : (accessibility::AccessibleRole::TEXT); break;
+
+            case WINDOW_PATTERNBOX:
+            case WINDOW_NUMERICBOX:
+            case WINDOW_METRICBOX:
+            case WINDOW_CURRENCYBOX:
+            case WINDOW_LONGCURRENCYBOX:
+            case WINDOW_COMBOBOX: nRole = accessibility::AccessibleRole::COMBOBOX; break;
+
+            case WINDOW_LISTBOX:
+            case WINDOW_MULTILISTBOX: nRole = accessibility::AccessibleRole::LIST; break;
+
+            case WINDOW_FIXEDTEXT: nRole = accessibility::AccessibleRole::LABEL; break;
+            case WINDOW_FIXEDBORDER:
+            case WINDOW_FIXEDLINE: nRole = accessibility::AccessibleRole::SEPARATOR; break;
+            case WINDOW_FIXEDBITMAP:
+            case WINDOW_FIXEDIMAGE: nRole = accessibility::AccessibleRole::ICON; break;
+            case WINDOW_GROUPBOX: nRole = accessibility::AccessibleRole::GROUPBOX; break;
+            case WINDOW_SCROLLBAR: nRole = accessibility::AccessibleRole::SCROLLBAR; break;
+
+            case WINDOW_SLIDER:
+            case WINDOW_SPLITTER:
+            case WINDOW_SPLITWINDOW: nRole = accessibility::AccessibleRole::SPLITPANE; break;
+
+            case WINDOW_DATEBOX:
+            case WINDOW_TIMEBOX:
+            case WINDOW_DATEFIELD:
+            case WINDOW_TIMEFIELD: nRole = accessibility::AccessibleRole::DATEEDITOR; break;
+
+            case WINDOW_SPINFIELD: nRole = accessibility::AccessibleRole::SPINBOX; break;
+
+            case WINDOW_TOOLBOX: nRole = accessibility::AccessibleRole::TOOLBAR; break;
+            case WINDOW_STATUSBAR: nRole = accessibility::AccessibleRole::STATUSBAR; break;
+
+            case WINDOW_TABPAGE: nRole = accessibility::AccessibleRole::PAGETAB; break;
+            case WINDOW_TABCONTROL: nRole = accessibility::AccessibleRole::PAGETABLIST; break;
+
+            case WINDOW_DOCKINGWINDOW:
+            case WINDOW_SYSWINDOW:
+            case WINDOW_FLOATINGWINDOW: nRole = accessibility::AccessibleRole::LAYEREDPANE; break;
+
+            case WINDOW_WORKWINDOW: nRole = accessibility::AccessibleRole::FRAME; break;
+
+
+            case WINDOW_SCROLLBARBOX: nRole = accessibility::AccessibleRole::FILLER; break;
+
+            case WINDOW_WINDOW:
+            case WINDOW_CONTROL:
+            case WINDOW_BORDERWINDOW:
+            case WINDOW_SYSTEMCHILDWINDOW:
+            default: nRole = accessibility::AccessibleRole::WINDOW;
+        }
+    }
+    return nRole;
+}
+
