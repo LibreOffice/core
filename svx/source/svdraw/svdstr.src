@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2001-12-04 18:37:40 $
+ *  last change: $Author: vg $ $Date: 2001-12-12 22:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -15789,7 +15789,7 @@ String SIP_SA_LAYERNAME
 {
     Text = "Ebene";
     Text [ ENGLISH ] = "Layer" ;
-    Text[ english_us ] = "Level";
+    Text[ english_us ] = "Layer";
     Text[ portuguese ] = "Nível";
     Text[ russian ] = "Óðîâåíü";
     Text[ dutch ] = "Niveau";
@@ -15800,7 +15800,7 @@ String SIP_SA_LAYERNAME
     Text[ swedish ] = "Nivå";
     Text[ polish ] = "Warstwa";
     Text[ portuguese_brazilian ] = "Layer";
-    Text[ japanese ] = "å±¤";
+    Text[ japanese ] = "ï¾šï½²ï¾”ï½°";
     Text[ chinese_simplified ] = "åˆ†å±‚";
     Text[ chinese_traditional ] = "åˆ†å±¤";
     Text[ arabic ] = "ØÈÞÉ";
@@ -17730,6 +17730,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
