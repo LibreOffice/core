@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-05 09:02:56 $
+ *  last change: $Author: fme $ $Date: 2002-01-07 13:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 }
 #ifdef VERTICAL_LAYOUT
                 pFnt->SetVertical( 0, IsVertical() );
+                SwFrmSwapper aSwapper( this, sal_True );
 #else
                 pFnt->SetVertical( 0 );
 #endif
