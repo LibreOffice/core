@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 10:07:39 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 14:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,7 @@
 #include "event.hxx"
 #include "appimp.hxx"
 #include "imestatuswindow.hxx"
+#include "module.hxx"
 
 #ifdef DBG_UTIL
 #include "tbxctrl.hxx"
@@ -564,6 +565,10 @@ SfxApplication::SfxApplication()
 
 SfxApplication::~SfxApplication()
 {
+    Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
+
+    SfxModule::DestroyModules_Impl();
+
     // delete global options
     SvtViewOptions::ReleaseOptions();
     delete pSaveOptions;
@@ -589,8 +594,6 @@ SfxApplication::~SfxApplication()
 
     if ( !bDowning )
         Deinitialize();
-
-    Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
     // better call SvFactory::DeInit, because this will remove ALL factories,
     // but it will fail because the ConfigManager has a storage that is a SvObject
