@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListBlockContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-23 10:17:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ class XMLTextListBlockContext : public SvXMLImportContext
     SvXMLImportContextRef   xParentListBlock;
     sal_Int16               nLevel;
     sal_Int16               nLevels;
-    sal_Bool                bOrdered : 1;
     sal_Bool                bRestartNumbering : 1;
     sal_Bool                bSetDefaults : 1;
 
@@ -97,8 +96,7 @@ public:
             XMLTextImportHelper& rTxtImp, sal_uInt16 nPrfx,
                 const ::rtl::OUString& rLName,
                    const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-                sal_Bool bOrdered );
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     virtual ~XMLTextListBlockContext();
 
     virtual void EndElement();
