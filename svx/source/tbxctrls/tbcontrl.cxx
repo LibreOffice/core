@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 16:15:59 $
+ *  last change: $Author: pb $ $Date: 2001-02-15 07:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ private:
     SfxBindings&    rBindings;
 
     void            ReleaseFocus_Impl();
-    void            EnableMRU_Impl();
+    void            EnableControls_Impl();
 
 protected:
     virtual void    Select();
@@ -609,10 +609,7 @@ SvxFontNameBox::SvxFontNameBox( Window* pParent, SfxBindings& rBind, WinBits nSt
 
 {
     SetSizePixel( Size( 120, 180 ) );
-    BOOL bEnable = SvtFontOptions().IsFontWYSIWYGEnabled();
-    EnableWYSIWYG( bEnable );
-    EnableSymbols( bEnable );
-    EnableMRU_Impl();
+    EnableControls_Impl();
     StartListening( *SFX_APP() );
 }
 
@@ -708,9 +705,10 @@ void SvxFontNameBox::ReleaseFocus_Impl()
 
 // -----------------------------------------------------------------------
 
-void SvxFontNameBox::EnableMRU_Impl()
+void SvxFontNameBox::EnableControls_Impl()
 {
-    BOOL bEnable = SvtFontOptions().IsFontHistoryEnabled();;
+    SvtFontOptions aFontOpt;
+    BOOL bEnable = aFontOpt.IsFontHistoryEnabled();
     USHORT nEntries = bEnable ? MAX_MRU_FONTNAME_ENTRIES : 0;
     if ( GetMaxMRUCount() != nEntries )
     {
@@ -719,6 +717,10 @@ void SvxFontNameBox::EnableMRU_Impl()
         Clear();
         SetMaxMRUCount( nEntries );
     }
+
+    bEnable = aFontOpt.IsFontWYSIWYGEnabled();
+    EnableWYSIWYG( bEnable );
+    EnableSymbols( bEnable );
 }
 
 // -----------------------------------------------------------------------
@@ -727,7 +729,7 @@ void SvxFontNameBox::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     SfxItemSetHint* pHint = PTR_CAST(SfxItemSetHint, &rHint);
     if ( pHint )
-        EnableMRU_Impl();
+        EnableControls_Impl();
 }
 
 // -----------------------------------------------------------------------
