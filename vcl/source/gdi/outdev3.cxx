@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:30:40 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7334,11 +7334,11 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
 BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
-    BOOL bOptimize ) const
+    BOOL bOptimize, const ULONG nTWidth, const long* pDXArray ) const
 {
     rPolyPoly.Clear();
     PolyPolyVector aVector;
-    if (!GetTextOutlines(aVector, rStr, nBase, nIndex, nLen, bOptimize))
+    if (!GetTextOutlines(aVector, rStr, nBase, nIndex, nLen, bOptimize, nTWidth, pDXArray ))
         return false;
     for (PolyPolyVector::iterator aIt(aVector.begin()); aIt != aVector.end();
          ++aIt)
@@ -7351,7 +7351,7 @@ BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
 
 BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
-    xub_StrLen nLen, BOOL bOptimize ) const
+    xub_StrLen nLen, BOOL bOptimize, const ULONG nTWidth, const long* pDXArray ) const
 {
     BOOL bRet = FALSE;
     rVector.clear();
@@ -7381,7 +7381,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
         xub_StrLen nStart = min( nBase, nIndex );
         xub_StrLen nOfsLen = max( nBase, nIndex ) - nStart;
 #endif
-        pSalLayout = ImplLayout( rStr, nStart, nOfsLen );
+        pSalLayout = ImplLayout( rStr, nStart, nOfsLen, Point( 0,0 ), nTWidth, pDXArray );
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
@@ -7392,7 +7392,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
         }
     }
 
-    pSalLayout = ImplLayout( rStr, nIndex, nLen );
+    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point( 0,0 ), nTWidth, pDXArray );
     if( pSalLayout )
     {
         int nWidthFactor = pSalLayout->GetUnitsPerPixel();
@@ -7437,7 +7437,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
 
     // fall back to bitmap method to get the bounding rectangle,
     // so we need a monochrome virtual device with matching font
-    pSalLayout = ImplLayout(rStr, nIndex, nLen );
+    pSalLayout = ImplLayout(rStr, nIndex, nLen, Point( 0,0 ), nTWidth, pDXArray );
     if (pSalLayout == 0)
         return false;
     long nOrgWidth = pSalLayout->GetTextWidth();
@@ -7462,7 +7462,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     aVDev.SetTextColor( Color(COL_BLACK) );
     aVDev.SetTextFillColor();
 
-    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen );
+    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen, Point( 0,0 ), nTWidth, pDXArray );
     if (pSalLayout == 0)
         return false;
     long nWidth = pSalLayout->GetTextWidth();
@@ -7482,7 +7482,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     {
         xub_StrLen nStart  = ((nBase < nIndex) ? nBase : nIndex);
         xub_StrLen nLength = ((nBase > nIndex) ? nBase : nIndex) - nStart;
-        pSalLayout = aVDev.ImplLayout( rStr, nStart, nLength );
+        pSalLayout = aVDev.ImplLayout( rStr, nStart, nLength, Point( 0,0 ), nTWidth, pDXArray );
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
@@ -7498,7 +7498,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
         bool bSuccess = false;
 
         // draw character into virtual device
-        pSalLayout = aVDev.ImplLayout(rStr, i, 1 );
+        pSalLayout = aVDev.ImplLayout(rStr, i, 1, Point( 0,0 ), nTWidth, pDXArray );
         if (pSalLayout == 0)
             return false;
         long nCharWidth = pSalLayout->GetTextWidth();
