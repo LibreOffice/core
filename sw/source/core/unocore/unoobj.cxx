@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-12 21:37:12 $
+ *  last change: $Author: jp $ $Date: 2000-10-13 08:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2582,6 +2582,54 @@ void SwXTextCursor::SetPropertyValue(
     else
         throw UnknownPropertyException();
 }
+
+PropertyState lcl_SwXTextCursor_GetPropertyState( SfxItemSet** ppSet,
+                                    SfxItemSet** ppSetParent,
+                                    SwPaM& rPaM,
+                                    SfxItemPropertySet& rPropSet,
+                                    const OUString& rPropertyName )
+{
+    PropertyState eRet = PropertyState_DEFAULT_VALUE;
+    const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
+                            rPropSet.getPropertyMap(), rPropertyName );
+    if( pMap )
+    {
+        String aPropertyName( rPropertyName );
+
+        if( !*ppSet )
+        {
+            *ppSet = new SfxItemSet( rPaM.GetDoc()->GetAttrPool(),
+                    RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
+                    RES_FILL_ORDER,     RES_FRMATR_END -1,
+                    0L );
+            SwXTextCursor::GetCrsrAttr( rPaM, **ppSet, FALSE );
+        }
+
+        Any aAny;
+        BOOL bDone = lcl_getCrsrPropertyValue(pMap, rPaM, **ppSet, aAny, eRet );
+        if(!bDone)
+            eRet = rPropSet.getPropertyState( aPropertyName,**ppSet );
+
+        //try again to find out if a value has been inherited
+        if( beans::PropertyState_DIRECT_VALUE == eRet )
+        {
+            if( !*ppSetParent )
+            {
+                *ppSetParent = (*ppSet)->Clone( FALSE );
+                SwXTextCursor::GetCrsrAttr( rPaM, **ppSetParent, TRUE );
+            }
+            bDone = lcl_getCrsrPropertyValue( pMap, rPaM, **ppSetParent,
+                                                aAny, eRet );
+            if( !bDone )
+                eRet = rPropSet.getPropertyState( aPropertyName,
+                                                  **ppSetParent );
+        }
+    }
+    else
+        throw UnknownPropertyException();
+    return eRet;
+}
+
 /* -----------------------------03.05.00 13:16--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2593,8 +2641,14 @@ Sequence< PropertyState > SwXTextCursor::GetPropertyStates(
     const OUString* pNames = PropertyNames.getConstArray();
     Sequence< PropertyState > aRet(PropertyNames.getLength());
     PropertyState* pStates = aRet.getArray();
-    for(INT32 i = 0; i < PropertyNames.getLength(); i++)
-        pStates[i] = GetPropertyState(rPaM, rPropSet, pNames[i]);
+
+    SfxItemSet *pSet = 0, *pSetParent = 0;
+    for( INT32 i = 0, nEnd = PropertyNames.getLength(); i < nEnd; i++ )
+        pStates[i] = ::lcl_SwXTextCursor_GetPropertyState( &pSet, &pSetParent,
+                                            rPaM, rPropSet, pNames[i] );
+    delete pSet;
+    delete pSetParent;
+
     return aRet;
 }
 /* -----------------------------03.05.00 13:17--------------------------------
@@ -2604,37 +2658,13 @@ PropertyState SwXTextCursor::GetPropertyState(
     SwPaM& rPaM, SfxItemPropertySet& rPropSet, const OUString& rPropertyName)
                         throw(UnknownPropertyException, RuntimeException)
 {
-    PropertyState eRet = PropertyState_DEFAULT_VALUE;
-    SfxItemSet aSet(rPaM.GetDoc()->GetAttrPool(),
-        RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
-        RES_FILL_ORDER,     RES_FRMATR_END -1,
-        0L);
-    SwXTextCursor::GetCrsrAttr(rPaM, aSet, FALSE);
-    String aPropertyName(rPropertyName);
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                            rPropSet.getPropertyMap(), rPropertyName);
+    PropertyState eRet;
+    SfxItemSet *pSet = 0, *pSetParent = 0;
+    eRet = ::lcl_SwXTextCursor_GetPropertyState( &pSet, &pSetParent,
+                                       rPaM, rPropSet, rPropertyName );
+    delete pSet;
+    delete pSetParent;
 
-    if(pMap)
-    {
-        Any aAny;
-        BOOL bDone = lcl_getCrsrPropertyValue(pMap, rPaM, aSet, aAny, eRet );
-        if(!bDone)
-                eRet = rPropSet.getPropertyState(aPropertyName, aSet);
-        //try again to find out if a value has been inherited
-        if(beans::PropertyState_DIRECT_VALUE == eRet)
-        {
-            SfxItemSet aDirectSet(rPaM.GetDoc()->GetAttrPool(),
-                RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
-                RES_FILL_ORDER,     RES_FRMATR_END -1,
-                0L);
-            SwXTextCursor::GetCrsrAttr(rPaM, aDirectSet, TRUE);
-            bDone = lcl_getCrsrPropertyValue(pMap, rPaM, aDirectSet, aAny, eRet );
-            if(!bDone)
-                    eRet = rPropSet.getPropertyState(aPropertyName, aDirectSet);
-        }
-    }
-    else
-        throw UnknownPropertyException();
     return eRet;
 }
 /* -----------------------------03.05.00 13:20--------------------------------
@@ -4590,6 +4620,60 @@ void SwXParagraph::removeVetoableChangeListener(const OUString& PropertyName, co
     DBG_WARNING("not implemented")
 }
 
+beans::PropertyState lcl_SwXParagraph_getPropertyState(
+                            SwUnoCrsr& rUnoCrsr,
+                            SfxItemSet** ppSet,
+                            SfxItemPropertySet& rPropSet,
+                            const OUString& rPropertyName )
+{
+    beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
+
+    if( !*ppSet )
+    {
+        // Absatz selektieren
+        SwParaSelection aParaSel( &rUnoCrsr );
+        *ppSet = new SfxItemSet( rUnoCrsr.GetDoc()->GetAttrPool(),
+                        RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
+                        RES_FILL_ORDER,     RES_FRMATR_END -1,
+                        0L);
+        SwXTextCursor::GetCrsrAttr( rUnoCrsr, **ppSet );
+    }
+    if(rPropertyName.equals(C2U(UNO_NAME_PAGE_DESC_NAME)))
+    {
+        // Sonderbehandlung RES_PAGEDESC
+        const SfxPoolItem* pItem;
+        if(SFX_ITEM_SET == (*ppSet)->GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
+        {
+            eRet = beans::PropertyState_DIRECT_VALUE;
+        }
+    }
+    else if(rPropertyName.equals(C2U(UNO_NAME_NUMBERING_RULES)))
+    {
+        //wenn eine Numerierung gesetzt ist, dann hier herausreichen, sonst nichts tun
+        lcl_getNumberingProperty( rUnoCrsr, eRet );
+    }
+    else if(rPropertyName.equals(C2U(UNO_NAME_PARA_STYLE_NAME)) ||
+            rPropertyName.equals(C2U(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME)))
+    {
+        SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl( rUnoCrsr,
+            rPropertyName.equals(C2U(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME)));
+        if( !pFmt )
+            eRet = beans::PropertyState_AMBIGUOUS_VALUE;
+    }
+    else if(rPropertyName.equals(C2U(UNO_NAME_PAGE_STYLE_NAME)))
+    {
+        String sVal = lcl_GetCurPageStyle( rUnoCrsr );
+        if( !sVal.Len() )
+            eRet = beans::PropertyState_AMBIGUOUS_VALUE;
+    }
+    else
+    {
+        eRet = rPropSet.getPropertyState( rPropertyName, **ppSet );
+    }
+
+    return eRet;
+}
+
 /*-- 05.03.99 11:37:30---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -4599,47 +4683,12 @@ beans::PropertyState SwXParagraph::getPropertyState(const OUString& rPropertyNam
     vos::OGuard aGuard(Application::GetSolarMutex());
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
     SwUnoCrsr* pUnoCrsr = ((SwXParagraph*)this)->GetCrsr();
-    if(pUnoCrsr)
+    if( pUnoCrsr )
     {
-        // Absatz selektieren
-        SwParaSelection aParaSel(pUnoCrsr);
-        SfxItemSet aSet(pUnoCrsr->GetDoc()->GetAttrPool(),
-            RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
-            RES_FILL_ORDER,     RES_FRMATR_END -1,
-            0L);
-        SwXTextCursor::GetCrsrAttr(*pUnoCrsr, aSet);
-        if(rPropertyName.equals(C2U(UNO_NAME_PAGE_DESC_NAME)))
-        {
-            // Sonderbehandlung RES_PAGEDESC
-            const SfxPoolItem* pItem;
-            if(SFX_ITEM_SET == aSet.GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
-            {
-                eRet = beans::PropertyState_DIRECT_VALUE;
-            }
-        }
-        else if(rPropertyName.equals(C2U(UNO_NAME_NUMBERING_RULES)))
-        {
-            //wenn eine Numerierung gesetzt ist, dann hier herausreichen, sonst nichts tun
-            lcl_getNumberingProperty(*pUnoCrsr, eRet);
-        }
-        else if(rPropertyName.equals(C2U(UNO_NAME_PARA_STYLE_NAME)) ||
-            rPropertyName.equals(C2U(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME)))
-        {
-            SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl(*pUnoCrsr,
-                rPropertyName.equals(C2U(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME)));
-            if(!pFmt)
-                eRet = beans::PropertyState_AMBIGUOUS_VALUE;
-        }
-        else if(rPropertyName.equals(C2U(UNO_NAME_PAGE_STYLE_NAME)))
-        {
-            String sVal = lcl_GetCurPageStyle(*pUnoCrsr);
-            if(!sVal.Len())
-                eRet = beans::PropertyState_AMBIGUOUS_VALUE;
-        }
-        else
-        {
-            eRet = aPropSet.getPropertyState(rPropertyName, aSet);
-        }
+        SfxItemSet* pSet = 0;
+        eRet = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet,
+                                                    aPropSet, rPropertyName );
+        delete pSet;
     }
     else
         throw uno::RuntimeException();
@@ -4648,6 +4697,7 @@ beans::PropertyState SwXParagraph::getPropertyState(const OUString& rPropertyNam
 /*-- 05.03.99 11:37:32---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+
 uno::Sequence< beans::PropertyState > SwXParagraph::getPropertyStates(
         const uno::Sequence< OUString >& PropertyNames)
         throw( beans::UnknownPropertyException, uno::RuntimeException )
@@ -4656,8 +4706,19 @@ uno::Sequence< beans::PropertyState > SwXParagraph::getPropertyStates(
     const OUString* pNames = PropertyNames.getConstArray();
     uno::Sequence< beans::PropertyState > aRet(PropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
-    for(sal_Int32 i = 0; i < PropertyNames.getLength(); i++)
-        pStates[i] = getPropertyState(pNames[i]);
+
+    SwUnoCrsr* pUnoCrsr = ((SwXParagraph*)this)->GetCrsr();
+    if( pUnoCrsr )
+    {
+        SfxItemSet* pSet = 0;
+        for(sal_Int32 i = 0, nEnd = PropertyNames.getLength(); i < nEnd; i++ )
+            pStates[i] = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet,
+                                                         aPropSet, pNames[i]);
+        delete pSet;
+    }
+    else
+        throw uno::RuntimeException();
+
     return aRet;
 }
 /*-- 05.03.99 11:37:33---------------------------------------------------
