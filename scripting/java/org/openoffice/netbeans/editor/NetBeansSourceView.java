@@ -2,9 +2,9 @@
 *
 *  $RCSfile: NetBeansSourceView.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: rt $ $Date: 2004-01-05 14:08:59 $
+*  last change: $Author: hr $ $Date: 2004-07-23 14:05:24 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -68,6 +68,7 @@ import javax.swing.event.DocumentEvent;
 import java.io.*;
 import java.util.ResourceBundle;
 
+import javax.swing.text.Caret;
 import org.netbeans.editor.*;
 import org.netbeans.editor.ext.*;
 
@@ -142,13 +143,46 @@ public class NetBeansSourceView extends JPanel
             System.err.println("Invalid file");
             System.exit(-1);
         }
+
+        java.net.URL url = null;
+        try {
+            url = f.toURL();
+        }
+        catch (java.net.MalformedURLException mue) {
+            System.err.println("Invalid file");
+            System.exit(-1);
+        }
+
         NetBeansSourceView view =
-            new NetBeansSourceView(new ScriptSourceModel(f.getAbsolutePath()));
+            new NetBeansSourceView(new ScriptSourceModel(url));
 
         JFrame frame = new JFrame();
         frame.getContentPane().add(view);
         frame.setSize(640, 480);
         frame.show();
+    }
+
+    // Code grabbed from NetBeans editor module
+    public void scrollToLine(int line)
+    {
+        BaseDocument doc = Utilities.getDocument(pane);
+
+        int pos = -1;
+        if (doc != null) {
+            // Obtain the offset where to jump
+            pos = Utilities.getRowStartFromLineOffset(doc, line);
+        }
+
+        if (pos != -1) {
+            Caret caret = pane.getCaret();
+            if (caret instanceof BaseCaret) { // support extended scroll mode
+                BaseCaret bCaret = (BaseCaret)caret;
+                bCaret.setDot(pos, bCaret, EditorUI.SCROLL_FIND);
+            }
+            else {
+                caret.setDot(pos);
+            }
+        }
     }
 
     public void clear() {
@@ -171,9 +205,7 @@ public class NetBeansSourceView extends JPanel
 
         // scroll to current position of the model
         try {
-            java.awt.Rectangle rect =
-                pane.modelToView(model.getCurrentPosition());
-            pane.scrollRectToVisible(rect);
+            scrollToLine(model.getCurrentPosition());
         }
         catch (Exception e) {
             // couldn't scroll to line, do nothing
