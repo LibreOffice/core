@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-22 12:09:56 $
+#   last change: $Author: hjs $ $Date: 2001-05-23 14:50:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -418,9 +418,9 @@ NEWCLASS+=$(CLASSGENDIR)
 .ENDIF			# "$(GENJAVACLASSFILES)"!=""
 .IF "$(NEWCLASS)"!=""
 .IF "$(GUI)"=="UNX"
-CLASSPATH=.:$(CLASSDIR):$(XCLASSPATH):$(NEWCLASS:s/ /:/)
+CLASSPATH:=.:$(CLASSDIR):$(XCLASSPATH):$(NEWCLASS:s/ /:/)
 .ELSE
-CLASSPATH=.;$(CLASSDIR);$(XCLASSPATH);$(NEWCLASS:s/ /;/)
+CLASSPATH:=.;$(CLASSDIR);$(XCLASSPATH);$(NEWCLASS:s/ /;/)
 .ENDIF
 .ENDIF			# "$(NEWCLASS)"!=""
 
