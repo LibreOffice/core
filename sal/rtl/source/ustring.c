@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:24 $
+ *  last change: $Author: jl $ $Date: 2000-11-21 10:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,11 +756,11 @@ sal_Int32 SAL_CALL numberToStringImpl(sal_Unicode * str, double d, sal_Int16 sig
      * (similar to Double.toString() in Java) */
     sal_Unicode buf[ RTL_USTR_MAX_VALUEOFDOUBLE ];
     sal_Unicode* charPos = buf;
-    sal_Int16 i, len, dig, dotPos;
+    sal_Int16 i, len, dig, dotPos, tmpDot;
     sal_Int16 lastNonZeroPos;
     sal_Int16 nExpDigits;
-    sal_Bool bExp;
-    double dExp;
+    sal_Bool bExp, bDotSet;
+    double dExp, rem;
 
     if( d == 0 )
     {
@@ -794,13 +794,24 @@ sal_Int32 SAL_CALL numberToStringImpl(sal_Unicode * str, double d, sal_Int16 sig
 
         dotPos = bExp ? 0 : (sal_Int16)dExp;
         lastNonZeroPos = 0;
+
+        bDotSet= sal_False;
         for( i = 0 ; i < significantDigits ; i++ )
         {
+            // handle leading zeros
+            if( dotPos < 0)
+            {
+                *(charPos++) = L'0';
+                *(charPos++) = L'.';
+                while( ++dotPos < 0)
+                   *(charPos++) = L'0';
+                bDotSet= sal_True;
+            }
             dig = (sal_Int16)d;
             if( dig )
                 lastNonZeroPos = i;
             *(charPos++) = L'0' + dig;
-            if( i == dotPos )
+            if( i == dotPos && ! bDotSet)
                 *(charPos++) = L'.';
             d -= (double)dig;
             d *= 10.0;
@@ -828,7 +839,11 @@ sal_Int32 SAL_CALL numberToStringImpl(sal_Unicode * str, double d, sal_Int16 sig
             }
             for( i = 0 ; i < nExpDigits ; i++ )
             {
-                dig = (sal_Int16)dExp;
+                dig = (sal_Int16)dExp; // sometimes if the debugger shows dExp= 2, the cast produces 1
+                rem= fmod( dExp, 1);
+                if( rem >0.999) // max exponent is about 357
+                    dig++;
+
                 *(charPos++) = L'0' + dig;
                 dExp -= (double)dig;
                 dExp *= 10.0;
