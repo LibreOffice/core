@@ -10950,3 +10950,4 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ?IsTransient@XMLHatchStyleContext@@UBEEXZ
 ?IsTransient@XMLMarkerStyleContext@@UBEEXZ
 ?IsTransient@XMLTransGradientStyleContext@@UBEEXZ
+?PROPERTY_HIDDEN_VALUE@xmloff@@3UConstAsciiString@1@B
