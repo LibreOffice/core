@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:58:44 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
             }
 
             // set end of selection to current position
-            if( rString.GetText().GetChar( nChar ) == EXC_NEWLINE )
+            if( rString.GetText().GetChar( nChar ) == '\n' )
             {
                 ++aSelection.nEndPara;
                 aSelection.nEndPos = 0;
@@ -333,7 +333,7 @@ void XclImpHFConverter::ParseString( const String& rHFString )
                         InsertText();
                         eState = xlPSFunc;
                     break;
-                    case EXC_NEWLINE:   // line break
+                    case '\n':          // line break
                         InsertText();
                         InsertLineBreak();
                     break;
