@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:21:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,20 +376,16 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
 //  Spelling Checker - Undo ok
 void ScViewFunc::DoSpellingChecker( BOOL bRecord )
 {
-    DoSheetConversion( SC_CONVERSION_SPELLCHECK, bRecord );
+    DoSheetConversion( ScConversionParam( SC_CONVERSION_SPELLCHECK ), bRecord );
 }
 
 void ScViewFunc::DoHangulHanjaConversion( BOOL bRecord )
 {
-    DoSheetConversion( SC_CONVERSION_HANGULHANJA, bRecord );
+    ScConversionParam aConvParam( SC_CONVERSION_HANGULHANJA, LANGUAGE_KOREAN, 0, true );
+    DoSheetConversion( aConvParam, bRecord );
 }
 
-void ScViewFunc::DoChineseTranslation( const ChineseTranslationParams &rParams, BOOL bRecord )
-{
-    DoSheetConversion( SC_CONVERSION_CHINESE_TRANSLATION, bRecord, &rParams );
-}
-
-void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord, const ChineseTranslationParams *pChParams )
+void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bRecord )
 {
     SCCOL nCol;
     SCROW nRow;
@@ -461,28 +457,16 @@ void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord, co
     // *** create and init the edit engine *** --------------------------------
 
     ScConversionEngineBase* pEngine = NULL;
-    switch( eConvType )
+    switch( rConvParam.GetType() )
     {
         case SC_CONVERSION_SPELLCHECK:
             pEngine = new ScSpellingEngine(
                 pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc, LinguMgr::GetSpellChecker() );
         break;
         case SC_CONVERSION_HANGULHANJA:
+        case SC_CONVERSION_CHINESE_TRANSL:
             pEngine = new ScTextConversionEngine(
-                pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc,
-                LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, 0, sal_True );
-        break;
-        case SC_CONVERSION_CHINESE_TRANSLATION:
-        {
-            DBG_ASSERT( pChParams, "paramter for Chinese translation missing" );
-            if (pChParams)
-            {
-                pEngine = new ScTextConversionEngine(
-                    pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc,
-                    pChParams->nSourceLang, pChParams->nTargetLang, &pChParams->aTargetFont,
-                    pChParams->nOptions, sal_False );
-            }
-        }
+                pDoc->GetEnginePool(), rViewData, rConvParam, pUndoDoc, pRedoDoc );
         break;
         default:
             DBG_ERRORFILE( "ScViewFunc::DoSheetConversion - unknown conversion type" );
@@ -517,7 +501,7 @@ void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord, co
                 new ScUndoConversion(
                         pDocSh, rMark,
                         nCol, nRow, nTab, pUndoDoc,
-                        nNewCol, nNewRow, nTab, pRedoDoc, eConvType ) );
+                        nNewCol, nNewRow, nTab, pRedoDoc, rConvParam ) );
         }
         pDoc->SetDirty();
         pDocSh->SetDocumentModified();
