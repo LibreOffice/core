@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:02:12 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_BLOCKINCREMENT,         "BlockIncrement");
     PCR_CONSTASCII_STRING( PROPERTY_VISIBLESIZE,            "VisibleSize");
     PCR_CONSTASCII_STRING( PROPERTY_ORIENTATION,            "Orientation");
-    PCR_CONSTASCII_STRING( PROPERTY_IMAGEALIGN,             "ImageAlign");
+    PCR_CONSTASCII_STRING( PROPERTY_IMAGEPOSITION,          "ImagePosition");
     PCR_CONSTASCII_STRING( PROPERTY_ACTIVE_CONNECTION,      "ActiveConnection");
     PCR_CONSTASCII_STRING( PROPERTY_ACTIVECOMMAND,          "ActiveCommand");
     PCR_CONSTASCII_STRING( PROPERTY_DATE,                   "Date");
@@ -225,6 +225,12 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_LINEEND_FORMAT,         "LineEndFormat");
 
     PCR_CONSTASCII_STRING( PROPERTY_HARDLINEBREAKS,         "HardLineBreaks");
+
+    PCR_CONSTASCII_STRING( PROPERTY_TOGGLE,                 "Toggle" );
+    PCR_CONSTASCII_STRING( PROPERTY_FOCUSONCLICK,           "FocusOnClick" );
+    PCR_CONSTASCII_STRING( PROPERTY_HIDEINACTIVESELECTION,  "HideInactiveSelection" );
+    PCR_CONSTASCII_STRING( PROPERTY_VISUALEFFECT,           "VisualEffect" );
+    PCR_CONSTASCII_STRING( PROPERTY_BORDERCOLOR,            "BorderColor" );
 
     PCR_CONSTASCII_STRING( PROPERTY_ADDRESS,                "Address");
     PCR_CONSTASCII_STRING( PROPERTY_REFERENCE_SHEET,        "ReferenceSheet");
