@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:36:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT( DIALOG_WIDTH - 2*SPACING, 8 );
         Text                = "Exportieren";
         Text [english_us]   = "Export";
+        Text[ french ] = "Export";
+        Text[ spanish ] = "Exportar";
+        Text[ italian ] = "Esporta";
+        Text[ swedish ] = "Exportera";
+        Text[ japanese ] = "エクスポートする";
+        Text[ korean ] = "내보내기";
+        Text[ chinese_simplified ] = "输出";
+        Text[ chinese_traditional ] = "匯出";
     };
 
     FixedText FT_EXPORT_XSLT
@@ -102,6 +110,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
         Text                = "Export-XSLT";
         Text [english_us]   = "XSLT for export";
+        Text[ french ] = "XSLT pour export";
+        Text[ spanish ] = "XSLT para exportaci�n";
+        Text[ italian ] = "XSLT per esportazione";
+        Text[ swedish ] = "XSLT f�r export";
+        Text[ japanese ] = "エクスポート用 XSLT";
+        Text[ korean ] = "내보내기용 XSLT";
+        Text[ chinese_simplified ] = "用于输出的 XSLT";
+        Text[ chinese_traditional ] = "用於匯出的 XSLT";
     };
 
     FixedText FT_EXPORT_XSLT_FILE
@@ -117,6 +133,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
         Text                = "Dokument transformieren";
         Text [english_us]   = "Transform document";
+        Text[ french ] = "Transformer le document";
+        Text[ spanish ] = "Transformar documento";
+        Text[ italian ] = "Trasforma il documento";
+        Text[ swedish ] = "Omvandla dokument";
+        Text[ japanese ] = "ドキュメントの変換";
+        Text[ korean ] = "문서 변환";
+        Text[ chinese_simplified ] = "转换文档";
+        Text[ chinese_traditional ] = "轉換文件";
     };
 
     PushButton PB_EXPORT_BROWSE
@@ -127,6 +151,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         HelpId              = HID_XML_FILTER_TEST_EXPORT_BROWSE;
         Text                = "~Ausw�hlen...";
         Text [english_us]   = "~Browse...";
+        Text[ french ] = "Parcourir...";
+        Text[ spanish ] = "~Buscar...";
+        Text[ italian ] = "~Sfoglia...";
+        Text[ swedish ] = "~Genoms�k...";
+        Text[ japanese ] = "検索(~B)...";
+        Text[ korean ] = "찾아보기(~B)...";
+        Text[ chinese_simplified ] = "浏览(~B)...";
+        Text[ chinese_traditional ] = "瀏覽(~B)...";
     };
 
     PushButton PB_CURRENT_DOCUMENT
@@ -137,6 +169,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         TabStop             = TRUE ;
         Text                = "A~ktuelles Dokument";
         Text [english_us]   = "~Current Document";
+        Text[ french ] = "Document actif";
+        Text[ spanish ] = "~Documento actual";
+        Text[ italian ] = "Documento attuale";
+        Text[ swedish ] = "~Aktuellt dokument";
+        Text[ japanese ] = "現在のドキュメント";
+        Text[ korean ] = "현재 문서";
+        Text[ chinese_simplified ] = "当前的文档(~C)";
+        Text[ chinese_traditional ] = "目前的文件(~C)";
     };
 
     FixedText FT_NAME_OF_CURRENT_FILE
@@ -155,6 +195,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT( DIALOG_WIDTH - 2*SPACING, 8 );
         Text                = "Importieren";
         Text [english_us]   = "Import";
+        Text[ french ] = "Import";
+        Text[ spanish ] = "Importar";
+        Text[ italian ] = "~Importa";
+        Text[ swedish ] = "Importera";
+        Text[ japanese ] = "インポートする";
+        Text[ korean ] = "가져오기";
+        Text[ chinese_simplified ] = "输入";
+        Text[ chinese_traditional ] = "匯入";
     };
 
     FixedText FT_IMPORT_XSLT
@@ -163,6 +211,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
         Text                = "Import-XSLT";
         Text [english_us]   = "XSLT for import";
+        Text[ french ] = "XSLT pour import";
+        Text[ spanish ] = "XSLT para importaci�n";
+        Text[ italian ] = "XSLT per importazione";
+        Text[ swedish ] = "XSLT f�r import";
+        Text[ japanese ] = "インポート用 XSLT";
+        Text[ korean ] = "가져오기용 XSLT";
+        Text[ chinese_simplified ] = "用于输入的 XSLT";
+        Text[ chinese_traditional ] = "用於匯入的 XSLT";
     };
 
     FixedText FT_IMPORT_XSLT_FILE
@@ -178,6 +234,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
         Text                = "Import-Dokumentvorlage";
         Text [english_us]   = "Template for import";
+        Text[ french ] = "Mod�le pour import";
+        Text[ spanish ] = "Plantilla para importaci�n";
+        Text[ italian ] = "Modello per importazione";
+        Text[ swedish ] = "Dokumentmall f�r import";
+        Text[ japanese ] = "インポート用テンプレート";
+        Text[ korean ] = "가져오기용 서식 파일";
+        Text[ chinese_simplified ] = "用于输入的文档样式";
+        Text[ chinese_traditional ] = "用於匯入的文件樣式";
     };
 
     FixedText FT_IMPORT_TEMPLATE_FILE
@@ -193,6 +257,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
         Text                = "Datei transformieren";
         Text [english_us]   = "Transform file";
+        Text[ french ] = "Transformer le fichier";
+        Text[ spanish ] = "Transformar archivo";
+        Text[ italian ] = "Trasforma il file";
+        Text[ swedish ] = "Omvandla fil";
+        Text[ japanese ] = "ファイルの変換";
+        Text[ korean ] = "파일 변환";
+        Text[ chinese_simplified ] = "转换文件";
+        Text[ chinese_traditional ] = "轉換檔案";
     };
 
     CheckBox CBX_DISPLAY_SOURCE
@@ -202,6 +274,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         HelpId              = HID_XML_FILTER_TEST_IMPORT_DISPLAY_SOURCE;
         Text                = "Quelltext anzeigen";
         Text [english_us]   = "~Display source";
+        Text[ french ] = "Affichage de la source";
+        Text[ spanish ] = "~Visualizar fuente";
+        Text[ italian ] = "~Visualizza sorgente";
+        Text[ swedish ] = "~Visa k�lltext";
+        Text[ japanese ] = "ソーステキストの表示";
+        Text[ korean ] = "원본 텍스트 표시";
+        Text[ chinese_simplified ] = "显示源文本(~D)";
+        Text[ chinese_traditional ] = "顯示原始檔(~D)";
     };
 
     PushButton PB_IMPORT_BROWSE
@@ -212,6 +292,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         TabStop             = TRUE ;
         Text                = "A~usw�hlen...";
         Text [english_us]   = "B~rowse...";
+        Text[ french ] = "Parcourir...";
+        Text[ spanish ] = "~Buscar...";
+        Text[ italian ] = "~Sfoglia...";
+        Text[ swedish ] = "Gen~oms�k...";
+        Text[ japanese ] = "検索(~R)...";
+        Text[ korean ] = "찾아보기(~R)...";
+        Text[ chinese_simplified ] = "浏览(~R)...";
+        Text[ chinese_traditional ] = "瀏覽(~R)...";
     };
 
     PushButton PB_RECENT_DOCUMENT
@@ -222,6 +310,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         TabStop             = TRUE ;
         Text                = "~Letzte Datei";
         Text [english_us]   = "~Recent File";
+        Text[ french ] = "Dernier fichier";
+        Text[ spanish ] = "~Archivo reciente";
+        Text[ italian ] = "File recenti";
+        Text[ swedish ] = "S~enaste fil";
+        Text[ japanese ] = "前回のファイル";
+        Text[ korean ] = "최근에 사용한 파일";
+        Text[ chinese_simplified ] = "上一个文件(~R)";
+        Text[ chinese_traditional ] = "上一個檔案(~R)";
     };
 
     FixedText FT_NAME_OF_RECENT_FILE
@@ -240,6 +336,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         TabStop             = TRUE ;
         Text                = "~Schlie�en";
         Text[ english_us ]  = "~Close";
+        Text[ french ] = "Fermer";
+        Text[ spanish ] = "~Cerrar";
+        Text[ italian ] = "~Chiudi";
+        Text[ swedish ] = "S~t�ng";
+        Text[ japanese ] = "閉じる(~C)";
+        Text[ korean ] = "닫기(~C)";
+        Text[ chinese_simplified ] = "关闭(~C)";
+        Text[ chinese_traditional ] = "關閉(~C)";
     };
 
     HelpButton PB_HELP
@@ -247,4 +351,14 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Pos                 = MAP_APPFONT ( DIALOG_WIDTH - 1*50 - 1*6 , DIALOG_HEIGHT - 6 - 14 );
         Size                = MAP_APPFONT ( 50, 14 );
     };
+    Text[ french ] = "Test du filtre XML : %s";
+    Text[ spanish ] = "Prueba del filtro XML: %s";
+    Text[ italian ] = "Test filtro XML: %s";
+    Text[ swedish ] = "Testa XML-filter: %s";
+    Text[ japanese ] = "XML フィルタを試す: %s";
+    Text[ korean ] = "XML 필터 검사: %s";
+    Text[ chinese_simplified ] = "测试 XML 筛选器：%s";
+    Text[ chinese_traditional ] = "測試 XML 篩選器：%s";
 };
+
+
