@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:01:42 $
+#   last change: $Author: hr $ $Date: 2004-02-02 19:05:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -164,8 +164,12 @@ OLE2DEF=
 .INCLUDE : unxaixp.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDI"
+.IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC295NETBSDI"
 .INCLUDE : unxbsdi.mk
+.ENDIF
+
+.IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC300NETBSDI"
+.INCLUDE : unxbsdi2.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDS"
