@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 16:51:17 $
+#   last change: $Author: obo $ $Date: 2005-01-27 12:00:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ TARGET=so_neon
     @echo "Using system neon...."
 .ENDIF
 
-NEON_NAME=neon-0.23.5
+NEON_NAME=neon-0.24.7
 
 TARFILE_NAME=$(NEON_NAME)
 PATCH_FILE_NAME=neon.patch
@@ -99,6 +99,7 @@ OUT2INC= \
     $(BUILD_DIR)$/ne_request.h \
     $(BUILD_DIR)$/ne_session.h \
     $(BUILD_DIR)$/ne_socket.h \
+    $(BUILD_DIR)$/ne_ssl.h \
     $(BUILD_DIR)$/ne_string.h \
     $(BUILD_DIR)$/ne_uri.h \
     $(BUILD_DIR)$/ne_utils.h \
