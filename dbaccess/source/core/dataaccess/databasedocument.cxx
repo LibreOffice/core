@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-03 14:34:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1072,6 +1072,25 @@ void SAL_CALL ODatabaseSource::removeFlushListener( const Reference< ::com::sun:
     m_aFlushListeners.removeInterface(_xListener);
 }
 // -----------------------------------------------------------------------------
+sal_Bool ODatabaseSource::commitEmbeddedStorage()
+{
+    sal_Bool bStore = sal_False;
+    try
+    {
+        TStorages::iterator aFind = m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
+        if ( aFind != m_aStorages.end() )
+        {
+            Reference<XTransactedObject> xTrans(aFind->second,UNO_QUERY);
+            if ( bStore = xTrans.is() )
+                xTrans->commit();
+        }
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"Exception Caught: Could not store embedded database!");
+    }
+    return bStore;
+}
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
