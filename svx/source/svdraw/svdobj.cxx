@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:56:18 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <math.h>
 #include <vcl/metaact.hxx>   // fuer TakeContour
 #include <vcl/cvtsvm.hxx>
-#include <vcl/line.hxx>
+#include <tools/line.hxx>
 #include <tools/bigint.hxx>
 #include <vector>
 #include "svdobj.hxx"
