@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:08:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,28 @@
 
 
 using namespace ::com::sun::star;
+
+//-------------------------------------------------------------------------
+sal_Bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& xInputStream,
+                                     const uno::Reference< io::XSeekable >& xSeekable )
+{
+    if ( !xInputStream.is() || !xSeekable.is() )
+        throw uno::RuntimeException();
+
+    if ( xSeekable->getLength() )
+    {
+        uno::Sequence< sal_Int8 > aData( 4 );
+        xSeekable->seek( 0 );
+        sal_Int32 nRead = xInputStream->readBytes( aData, 4 );
+        xSeekable->seek( 0 );
+
+        // TODO/LATER: should the disk spanned files be supported?
+        // 0x50, 0x4b, 0x07, 0x08
+        return ( nRead == 4 && aData[0] == 0x50 && aData[1] == 0x4b && aData[2] == 0x03 && aData[3] == 0x04 );
+    }
+    else
+        return sal_True; // allow to create a storage based on empty stream
+}
 
 //-------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > SAL_CALL OStorageFactory::impl_staticGetSupportedServiceNames()
@@ -242,6 +264,16 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( ( nStorageMode & embed::ElementModes::WRITE ) )
               throw uno::Exception(); // TODO: access denied
 
+        uno::Reference< io::XSeekable > xSeekable( xInputStream, uno::UNO_QUERY );
+        if ( !xSeekable.is() )
+        {
+            // TODO: wrap stream to let it be seekable
+            OSL_ENSURE( sal_False, "Nonseekable streams are not supported for now!\n" );
+        }
+
+        if ( !CheckPackageSignature_Impl( xInputStream, xSeekable ) )
+            throw io::IOException(); // TODO: this is not a package file
+
         return uno::Reference< uno::XInterface >(
                     static_cast< OWeakObject* >( new OStorage( xInputStream, nStorageMode, aPropsToSet, m_xFactory ) ),
                     uno::UNO_QUERY );
@@ -258,6 +290,9 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             // TODO: wrap stream to let it be seekable
             OSL_ENSURE( sal_False, "Nonseekable streams are not supported for now!\n" );
         }
+
+        if ( !CheckPackageSignature_Impl( xStream->getInputStream(), xSeekable ) )
+            throw io::IOException(); // TODO: this is not a package file
 
         return uno::Reference< uno::XInterface >(
                     static_cast< OWeakObject* >( new OStorage( xStream, nStorageMode, aPropsToSet, m_xFactory ) ),
