@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:24:27 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,6 +286,19 @@ public:
     void SetTotalPages(long nNew)                   { aData.nTotalPages = nNew; }
     void SetNumType(SvxNumType eNew)                { aData.eNumType = eNew; }
     void SetData(const ScHeaderFieldData& rNew)     { aData = rNew; }
+};
+
+// for Note text objects.
+class ScNoteEditEngine : public ScEditEngineDefaulter
+{
+
+public:
+    // pEnginePool = ScDocument.GetEnginePool()
+    // pTextObjectPool = ScDocument.GetEditPool()
+    ScNoteEditEngine( SfxItemPool* pEnginePool,
+                SfxItemPool* pTextObjectPool = NULL,
+                BOOL bDeleteEnginePool = FALSE );
+
 };
 
 //  SvxFieldData-Ableitungen sind nach Svx verschoben
