@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: testdefaultbootstrapping.pl,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: kr $ $Date: 2001-07-24 12:20:32 $
+#   last change: $Author: kr $ $Date: 2001-07-25 09:20:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,8 +67,8 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 # deliver.pl - copy from module output tree to solver
 #
 
-my $testexe;
-
+my $progname = "testdefaultbootstrapping";
+my $defExeExt;
 
 if ($ENV{GUI} eq "WNT") {
     %services = (
@@ -77,7 +77,7 @@ if ($ENV{GUI} eq "WNT") {
                  'com.sun.star.script.Converter' => 'tcv.dll'
                  );
 
-    $testexe = "testdefaultbootstrapping.exe";
+    $defExeExt = ".exe";
 
 }
 else {
@@ -87,7 +87,26 @@ else {
                  'com.sun.star.script.Converter' => 'libtcv.so'
                  );
 
-    $testexe = $ENV{PWD} . "/testdefaultbootstrapping";
+    $defExeExt = "";
+}
+
+sub extendProgName($) {
+    my $_extension = shift;
+    my $_result;
+
+    if ($ENV{GUI} eq "WNT") {
+        $_result = $progname . $_extension;
+    }
+    else {
+        $_result = $ENV{PWD} . "/" . $progname . $_extension;
+    }
+
+    return $_result;
+}
+
+
+sub rmDefRDB() {
+    unlink $progname . "_services.rdb";
 }
 
 
@@ -101,23 +120,24 @@ sub unregisterService($){
     return 1;
 }
 
-sub testForServices($$) {
-    my $services = shift;
-    my $pars    = shift;
+sub testForServices($$$) {
+    my $_services = shift;
+    my $_pars     = shift;
+    my $_testexe  = shift;
 
-#   my $rc = system 'echo', $testexe, @{$services}, $pars;
-    my $rc = system $testexe, @{$services}, $pars;
 
-    return $rc >> 8;
+#   my $_rc = system 'echo', $_testexe, @{$_services}, $_pars;
+    my $_rc = system $_testexe, @{$_services}, $_pars;
+
+    return $_rc >> 8;
 }
 
 
 sub registerService($$){
-    my $service_name = shift;
     my $service_lib  = shift;
+    my $rdb_name = shift;
 
-    my $rdb_name = $service_name . '.rdb';
-
+    system 'echo', "regcomp -register -r " . $rdb_name . " -c $service_lib";
     my $rc = system "regcomp -register -r " . $rdb_name . " -c $service_lib";
 
     return ! ( $rc >> 8 );
@@ -130,60 +150,92 @@ my @allservices;
 my $allservices_rdbs;
 my $rc;
 my $comment;
+my $testexe;
 
 
-# ensure that services can not be instantiated
-foreach $service ( keys %services ) {
-    # ensure that the current service is not reachable
-    unregisterService($service);
-    $rc = !testForServices([$service], "");
-    if(!$rc) {
-        $comment = $comment . "couldn't unregister service " . $service . "\n";
+sub registerServices() {
+    # ensure that services can not be instantiated
+    foreach $service ( keys %services ) {
+        # ensure that the current service is not reachable
+        unregisterService($service);
+        $rc = !testForServices([$service], "", $testexe);
+        if(!$rc) {
+            $comment = $comment . "couldn't unregister service " . $service . "\n";
+            $state = 0;
+        }
+
+
+        # register the service and ensure that it is reachable
+        $rc = registerService($services{$service}, $service . '.rdb');
+        if(!$rc) {
+            $comment = $comment . "couldn't register service " . $service . "\n";
+            $state = 0;
+        }
+
+        $rc = testForServices([$service], "-env:UNO_SERVICES=" . $service . ".rdb", $testexe);
+        if(!$rc) {
+            $comment = $comment . "couldn't reeach service " . $service . "\n";
+            $state = 0;
+        }
+
+        # memorize all services
+        $allservices_rdbs = $allservices_rdbs . $service . ".rdb" . " ";
+        push @allservices, $service;
+    }
+}
+
+sub testIndirection() {
+    #test indirection
+    $rc = testForServices(['com.sun.star.script.Invocation'], '-env:UNO_SERVICES=${testrc:Tests:TestKey1}', $testexe);
+    if (!$rc) {
+        $comment = $comment . "indirection test not passed\n";
         $state = 0;
     }
-
-
-    # register the service and ensure that it is reachable
-    $rc = registerService($service, $services{$service});
-    if(!$rc) {
-        $comment = $comment . "couldn't register service " . $service . "\n";
-        $state = 0;
-    }
-
-    $rc = testForServices([$service], "-env:UNO_SERVICES=" . $service . ".rdb");
-    if(!$rc) {
-        $comment = $comment . "couldn't reeach service " . $service . "\n";
-        $state = 0;
-    }
-
-    # memorize all services
-    $allservices_rdbs = $allservices_rdbs . $service . ".rdb" . " ";
-    push @allservices, $service;
 }
 
 
+sub testBeneathExe() {
+    my $service = 'com.sun.star.script.Invocation';
+    my $_testexe;
+
+    my @_exes = (extendProgName(".exe"),
+                 extendProgName(".Exe"),
+                 extendProgName(".bin"),
+                 extendProgName(".Bin"));
+
+    foreach $_testexe ( @_exes ) {
+        #test rdb found beneath executable
+        registerService($services{$service}, $progname . "_services.rdb");
+        my $_rc = testForServices([$service], "", $_testexe);
+        if (!$_rc) {
+            $comment = $comment . "beneath executable test not passed: " . $_testexe . "\n";
+            $state = 0;
+        }
+    }
+}
+
+
+sub testAllAvailable() {
+    # test that all services are reachable through different rdbs
+    # change the directory to ensure, that all paths become expanded
+    chdir "..";
+
+    $rc = testForServices(\@allservices, "-env:UNO_SERVICES=" . $allservices_rdbs, $testexe);
+    if (!$rc) {
+        $comment = $comment. "multi rdb test not passed\n";
+        $state = 0;
+    }
+}
+
+$testexe = extendProgName($defExeExt);
+
+rmDefRDB();
+registerServices();
 #print "alls:", @allservices, $allservices_rdbs, "\n";
 
-
-#test indirection
-$rc = testForServices(['com.sun.star.script.Invocation'], '-env:UNO_SERVICES=${testrc:Tests:TestKey1}');
-if (!$rc) {
-    $comment = $comment . "indirection test not passed\n";
-    $state = 0;
-}
-
-
-# test that all services are reachable through different rdbs
-# change the directory to ensure, that all paths become expanded
-chdir "..";
-
-$rc = testForServices(\@allservices, "-env:UNO_SERVICES=" . $allservices_rdbs);
-if (!$rc) {
-    $comment = $comment. "multi rdb test not passed\n";
-    $state = 0;
-}
-
-
+testIndirection();
+testBeneathExe();
+testAllAvailable();
 
 print "**************************\n";
 if($state) {

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kr $ $Date: 2001-07-24 12:20:32 $
+#   last change: $Author: kr $ $Date: 2001-07-25 09:20:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,11 +108,32 @@ APP2TARGET = testdefaultbootstrapping
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
-ALL : 	$(BIN)$/cpputest.rdb	\
-        unoheader 	\
-        $(BIN)$/testrc \
-        $(BIN)$/testdefaultbootstrapping.pl	\
-        ALLTAR 
+ALL: $(BIN)$/cpputest.rdb				\
+     unoheader 							\
+     $(BIN)$/testrc 					\
+     $(BIN)$/testdefaultbootstrapping.pl\
+     ALLTAR 							\
+     $(BIN)$/$(APP2TARGET).bin  		\
+     $(BIN)$/$(APP2TARGET).Bin  		\
+     $(BIN)$/$(APP2TARGET).Exe
+
+.IF "$(GUI)"=="UNX"
+ALL:  $(BIN)$/$(APP2TARGET).exe
+
+$(BIN)$/$(APP2TARGET).exe : $(APP2TARGETN)
+    cp $(APP2TARGETN) $@
+
+.ENDIF
+
+
+$(BIN)$/$(APP2TARGET).bin : $(APP2TARGETN)
+    cp $(APP2TARGETN) $@
+
+$(BIN)$/$(APP2TARGET).Bin : $(APP2TARGETN)
+    cp $(APP2TARGETN) $@
+
+$(BIN)$/$(APP2TARGET).Exe : $(APP2TARGETN)
+    cp $(APP2TARGETN) $@
 
 .ELSE
 ALL: 	ALLDEP
