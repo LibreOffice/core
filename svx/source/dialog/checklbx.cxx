@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checklbx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-19 07:59:40 $
+ *  last change: $Author: gt $ $Date: 2002-07-22 09:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,22 +278,5 @@ void SvxCheckListBox::KeyInput( const KeyEvent& rKEvt )
     }
     else if ( GetEntryCount() )
         SvTreeListBox::KeyInput( rKEvt );
-}
-
-// class SvxCheckListBoxBitmaps ------------------------------------------
-
-SvxCheckListBoxBitmaps::SvxCheckListBoxBitmaps() :
-
-    Resource        ( ResId( RID_CHECKLISTBOX_BITMAPS, DIALOG_MGR() ) ),
-
-    aUncheckedBmp   ( ResId( BMP_UNCHECKED ) ),
-    aCheckedBmp     ( ResId( BMP_CHECKED ) ),
-    aHiCheckedBmp   ( ResId( BMP_HICHECKED ) ),
-    aHiUncheckedBmp ( ResId( BMP_HIUNCHECKED ) ),
-    aTriStateBmp    ( ResId( BMP_TRISTATE ) ),
-    aHiTriStateBmp  ( ResId( BMP_HITRISTATE ) )
-
-{
-    FreeResource();
 }
 
