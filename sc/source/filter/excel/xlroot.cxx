@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:38 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,11 @@ SfxPrinter* XclRoot::GetPrinter() const
 SvNumberFormatter& XclRoot::GetFormatter() const
 {
     return *GetDoc().GetFormatTable();
+}
+
+ScStyleSheetPool& XclRoot::GetStyleSheetPool() const
+{
+    return *GetDoc().GetStyleSheetPool();
 }
 
 ScRangeName& XclRoot::GetNamedRanges() const
