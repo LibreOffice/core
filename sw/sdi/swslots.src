@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 15:59:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4927,7 +4927,7 @@ SfxSlotInfo FN_INSERT_REGION
     SlotName[ thai ] = "แทรกส่วน";
     SlotName[ czech ] = "Vložit oblast";
     SlotName[ hebrew ] = "‮הוספת קטע‬";
-    SlotName[ hindi ] = "विभाग जोड़ो";
+    SlotName[ hindi ] = "विभाग को जोड़ो";
     SlotName[ slovak ] = "Vložiť oblasť";
 };
 SfxSlotInfo FN_INSERT_SMA
@@ -6870,7 +6870,7 @@ SfxSlotInfo FN_PASTESPECIAL
     SlotName[ catalan ] = "Enganxament especial";
     SlotName[ finnish ] = "Liit� m��r�ten";
     SlotName[ thai ] = "วางพิเศษ";
-    SlotName[ czech ] = "Vložit jinak";
+    SlotName[ czech ] = "Vložit jako";
     SlotName[ hebrew ] = "‮הדבקה מיוחדת‬";
     SlotName[ hindi ] = "विशेष छिपकाओ";
     SlotName[ slovak ] = "Vložiť ináč";
@@ -7428,7 +7428,7 @@ SfxSlotInfo FN_QRY_MERGE
     SlotName[ catalan ] = "Prepara la impressi� en s�rie";
     SlotName[ finnish ] = "Valmistele yhdist�minen";
     SlotName[ thai ] = "เตรียมผสานเมล์";
-    SlotName[ czech ] = "Příprava pro sloučení";
+    SlotName[ czech ] = "Příprava sériového dopisu";
     SlotName[ hebrew ] = "‮הכנת מיזוג דואר‬";
     SlotName[ hindi ] = "मेइल मिलाने को तैयार करो";
     SlotName[ slovak ] = "Príprava pre zlúčenie pošty";
@@ -10711,7 +10711,7 @@ SfxSlotInfo FN_VSCROLLBAR
     SlotName[ catalan ] = "Barra de despla�ament vertical";
     SlotName[ finnish ] = "Pystyvierityspalkki";
     SlotName[ thai ] = "แถบเลื่อนแนวตั้ง";
-    SlotName[ czech ] = "Svislá posuvná lišta";
+    SlotName[ czech ] = "Svislý posuvník";
     SlotName[ hebrew ] = "‮פס גלילה אנכי‬";
     SlotName[ hindi ] = "लंबरूप स्क्रोल पट्टी";
     SlotName[ slovak ] = "Zvislá posuvná lišta";
@@ -11285,6 +11285,20 @@ SfxSlotInfo FN_READONLY_SELECTION_MODE
     SlotName[ hindi ] = "Select Text";
     SlotName[ slovak ] = "Vybrať text";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
