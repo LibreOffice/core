@@ -7,30 +7,27 @@ TARGET=odk
 .INCLUDE: makefile.pmk
 # ------------------------------------------------------------------
 
-ZIPFILE=$(PRODUCTZIPFILE)
-TARGZFILE=$(PRODUCTTARGZFILE)
-ZIPDIR=$(PRODUCT_NAME)
-
 .IF "$(OS)"=="WNT"
 all:\
-    $(BIN)$/$(ZIPFILE)
+    $(BIN)$/$(PRODUCTZIPFILE)
 .ELSE
 all:\
-    $(BIN)$/$(TARGZFILE)
+    $(BIN)$/$(PRODUCTTARGZFILE)
 .ENDIF
 
+$(BIN)$/$(PRODUCTZIPFILE) : $(SDK_CONTENT_CHECK_FILES) $(SDKCHECKFLAG)
+    +cd $(BIN) && $(WRAPCMD) zip -urq $(PRODUCTZIPFILE) $(PRODUCT_NAME)
 
-$(BIN)$/$(ZIPFILE) .SETDIR=$(DESTDIR)$/.. .PHONY:
-    +-$(WRAPCMD) zip -urq $(ZIPFILE) $(ZIPDIR)
-
-$(BIN)$/$(TARGZFILE) .SETDIR=$(DESTDIR)$/.. .PHONY:
+$(BIN)$/$(PRODUCTTARGZFILE) : $(SDK_CONTENT_CHECK_FILES) $(SDKCHECKFLAG)
+    +-rm -f $@ >& $(NULLDEV)
 #	tar does not properly support update
 .IF "$(OS)"=="SOLARIS"
 #	always use the system tar on Solaris
-    +/usr/bin/tar cf - $(ZIPDIR) | gzip - > $(TARGZFILE)
+    +cd $(BIN) && /usr/bin/tar cf - $(PRODUCT_NAME) | gzip - > $(PRODUCTTARGZFILE)
 .ELSE
-    +tar cf - $(ZIPDIR) | gzip - > $(TARGZFILE)
+    +cd $(BIN) && tar cf - $(PRODUCT_NAME) | gzip - > $(PRODUCTTARGZFILE)
 .ENDIF
+
     
 
 
