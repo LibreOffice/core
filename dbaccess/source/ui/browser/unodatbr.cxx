@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 13:53:55 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 14:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1378,9 +1378,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
                 }
             }
         }
-        catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
-        catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
         catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
+        catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
+        catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
         catch(Exception&) { DBG_ERROR("SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
 
         if (aInfo.isValid())
@@ -1443,36 +1443,47 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
 
     if(bRebuild)
     {
-        if (0 == m_pTreeModel->GetChildCount(_pEntry))
+        // tell the old entry it has been deselected
+        SvLBoxEntry* pEntry = m_pCurrentlyDisplayed;
+        while (pEntry)
         {
-            // tell the old entry it has been deselected
-            SvLBoxEntry* pEntry = m_pCurrentlyDisplayed;
-            while (pEntry)
+            SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+            if (pTextItem)
             {
-                SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
-                if (pTextItem)
-                {
-                    static_cast<DSBrowserString*>(pTextItem)->Select(sal_False);
-                    m_pTreeModel->InvalidateEntry( pEntry );
-                }
-                pEntry = m_pTreeModel->GetParent(pEntry);
+                static_cast<DSBrowserString*>(pTextItem)->Select(sal_False);
+                m_pTreeModel->InvalidateEntry( pEntry );
             }
-            m_pCurrentlyDisplayed = _pEntry;
-            // tell the new entry it has been selected
-            pEntry = m_pCurrentlyDisplayed;
-            while (pEntry)
+            pEntry = m_pTreeModel->GetParent(pEntry);
+        }
+        m_pCurrentlyDisplayed = _pEntry;
+        // tell the new entry it has been selected
+        pEntry = m_pCurrentlyDisplayed;
+        while (pEntry)
+        {
+            SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+            if (pTextItem)
             {
-                SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
-                if (pTextItem)
-                {
-                    static_cast<DSBrowserString*>(pTextItem)->Select(sal_True);
-                    m_pTreeModel->InvalidateEntry( pEntry );
-                }
-                pEntry = m_pTreeModel->GetParent(pEntry);
+                static_cast<DSBrowserString*>(pTextItem)->Select(sal_True);
+                m_pTreeModel->InvalidateEntry( pEntry );
             }
+            pEntry = m_pTreeModel->GetParent(pEntry);
+        }
+
+        // get the name of the data source currently selected
+        ::rtl::OUString sDataSourceName;
+        pEntry = m_pCurrentlyDisplayed;
+        while (pEntry && (NULL != m_pTreeModel->GetParent(pEntry)))
+            pEntry = m_pTreeModel->GetParent(pEntry);
+        if (pEntry)
+        {
+            SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+            if (pTextItem)
+                sDataSourceName = static_cast<SvLBoxString*>(pTextItem)->GetText();
         }
 
         // the values allowing the RowSet to re-execute
+        xProp->setPropertyValue(PROPERTY_DATASOURCENAME,makeAny(sDataSourceName));
+            // set this _before_ setting the connection, else the rowset would rebuild it ...
         xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(xConnection));
         xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(nCommandType));
         xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(aName));
