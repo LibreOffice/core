@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-22 08:15:33 $
+ *  last change: $Author: mba $ $Date: 2001-09-07 14:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,9 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame:
     else if ( pCtrlItem )
     {
         // pass new status to the SfxControllerItem
+        if ( aCommand.Complete.compareToAscii( "macro:", 6 ) == COMPARE_EQUAL )
+            return;
+
         SfxItemState eState = SFX_ITEM_DISABLED;
         SfxPoolItem* pItem = NULL;
         if ( rEvent.IsEnabled )
