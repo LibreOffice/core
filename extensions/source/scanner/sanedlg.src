@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:56:22 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,14 +122,14 @@ ModalDialog RID_SANE_DIALOG
         Text [ french ] = "Créer\nun ~aperçu" ;
         Text [ dutch ] = "~Voorbeeld\nmaken" ;
         Text [ portuguese ] = "Criar\n~previsualização" ;
-        Text[ chinese_simplified ] = "Éú³É\nÔ¤ÊÓ";
+        Text[ chinese_simplified ] = "½¨Á¢Ô¤ÀÀ";
         Text[ russian ] = "Ñîçäàòü\n ïğîñìîòğ";
         Text[ polish ] = "Utwórz\n podgl¹d";
         Text[ japanese ] = "ÌßÚËŞ­°\nì¬";
         Text[ chinese_traditional ] = "²£¥Í¹wµø";
         Text[ arabic ] = "ÅäÔÇÁ\nãÚÇíäÉ";
         Text[ dutch ] = "~Voorbeeld\nmaken";
-        Text[ chinese_simplified ] = "Éú³É\nÔ¤ÊÓ";
+        Text[ chinese_simplified ] = "½¨Á¢Ô¤ÀÀ";
         Text[ greek ] = "Äçìéïõñãßá\nğñïåğéóêüğçóçò";
         Text[ korean ] = "¹Ì¸® º¸±â\nÀÛ¼º";
         Text[ turkish ] = "Önizleme\noluştur";
@@ -150,14 +150,14 @@ ModalDialog RID_SANE_DIALOG
         Text [ spanish ] = "Previsualización" ;
         Text [ french ] = "Aperçu" ;
         Text [ dutch ] = "Voorbeeld" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËŞ­°";
         Text[ chinese_traditional ] = "¹wµø";
         Text[ arabic ] = "ãÚÇíäÉ";
         Text[ dutch ] = "Voorbeeld";
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ greek ] = "Ğñïåğéóêüğçóç";
         Text[ korean ] = "¹Ì¸® º¸±â";
         Text[ turkish ] = "Önizleme";
@@ -661,14 +661,14 @@ String RID_SANE_NORESOLUTIONOPTION_TXT
     Text [ spanish ] = "El dispositivo no está preparado para ofrecer opción de previsualización. En lugar de esta se utilizará un escaneado normal, que puede tardar considerablemente más." ;
     Text [ french ] = "Le périphérique utilisé ne permet pas de créer un aperçu. Il permet uniquement une digitalisation normale en guise d'aperçu, ce qui peut durer nettement plus longtemps." ;
     Text [ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren." ;
-    Text[ chinese_simplified ] = "Õâ¸öÉè±¸Ã»ÓĞÔ¤ÊÓ¹¦ÄÜ¡£²ÉÓÃÆÕÍ¨µÄÉ¨Ãè·½Ê½Ô¤ÊÓ¿ÉÄÜĞèÒª½Ï³¤µÄÊ±¼ä¡£";
+    Text[ chinese_simplified ] = "Õâ¸öÉè±¸Ã»ÓĞÔ¤ÀÀ¹¦ÄÜ¡£²ÉÓÃÆÕÍ¨É¨Ãè·½Ê½Ô¤ÀÀ¿ÉÄÜĞèÒª½Ï³¤µÄÊ±¼ä¡£";
     Text[ russian ] = "Óñòğîéñòâî íå íàñòğîåíî íà ñîçäàíèå ïğåäâàğèòåëüíîãî ïğîñìîòğà. Âìåñòî ıòîãî èñïîëüçóåòñÿ â êà÷åñòâå ïğåäâàğèòåëüíîãî ïğîñìîòğà îáû÷íîå ñêàíèğîâàíèå. İòîò ïğîöåññ ïğîäëèòñÿ çíà÷èòåëüíî äîëüøå.";
     Text[ polish ] = "To urz¹dzenie nie mo¿e utworzyæ podgl¹du. Zamiast tego zostanie zastosowany jako podgl¹d normalny tryb przegl¹du. To mo¿e trochê d³u¿ej potrwaæ.";
     Text[ japanese ] = "‚±‚ÌÃŞÊŞ²½‚ÍÌßÚËŞ­°‚Ìì¬‚É‚Í“K‚µ‚Ä‚¢‚Ü‚¹‚ñB‚©‚í‚è‚ÉÌßÚËŞ­°‚Æ‚µ‚Ä•’Ê‚Ì½·¬İ‚ªg—p‚³‚ê‚Ü‚·‚ªŠÔ‚ª­‚µ‚©‚©‚è‚Ü‚·B";
     Text[ chinese_traditional ] = "³o­Ó³]³Æ¨S¦³³]©w¹wµø¥\\¯à¡C¦]¦¹±Ä¥Î´¶³qªº±½´y¤è¦¡¹wµø·|»İ­n¸ûªøªº®É¶¡¡C";
     Text[ arabic ] = "ÇáÌåÇÒ ÛíÑ ãõÚÏ áÅäÔÇÁ ãÚÇíäÉ. ÈÏáÇğ ãä åĞÇ¡ Óæİ íÊã ÇÓÊÎÏÇã ãÓÍ ÚÇÏí ßãÚÇíäÉ. íãßä Ãä íÓÊÛÑŞ Ğáß İÊÑÉ ÃØæá ÈßËíÑ.";
     Text[ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren.";
-    Text[ chinese_simplified ] = "Õâ¸öÉè±¸Ã»ÓĞÔ¤ÊÓ¹¦ÄÜ¡£²ÉÓÃÆÕÍ¨µÄÉ¨Ãè·½Ê½Ô¤ÊÓ¿ÉÄÜĞèÒª½Ï³¤µÄÊ±¼ä¡£";
+    Text[ chinese_simplified ] = "Õâ¸öÉè±¸Ã»ÓĞÔ¤ÀÀ¹¦ÄÜ¡£²ÉÓÃÆÕÍ¨É¨Ãè·½Ê½Ô¤ÀÀ¿ÉÄÜĞèÒª½Ï³¤µÄÊ±¼ä¡£";
     Text[ greek ] = "Ç óõóêåõŞ äåí İ÷åé ñõèìéóôåß ãéá ôçí åìöÜíéóç ğñïåğéóêüğçóçò. Áíôß áõôïı ÷ñçóéìïğïéåßôáé ìéá êáíïíéêŞ óÜñùóç. Ç äéáäéêáóßá áõôŞ ìğïñåß íá áñãŞóåé ğåñéóóüôåñï.";
     Text[ korean ] = "ÀåÄ¡°¡ ¹Ì¸® º¸±â ¿É¼ÇÀ» Á¦°øÇÏÁö ¾Ê½À´Ï´Ù. ±× ´ë½Å º¸Åë ½ºÄµÀÌ ¹Ì¸® º¸±â·Î ÀÌ¿ëµÉ °ÍÀÔ´Ï´Ù. ÀÌ ½ºÄµÀº ½Ã°£ÀÌ ÈÎ¾À ´õ ¿À·¡ °É¸± ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Cihaz önizleme işlevine desteklemiyor. Bunun yerine önizleme olarak normal bir tarama görüntüsü kullanılacak. Bu işlem daha fazla zaman alabilir.";
