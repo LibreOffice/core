@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-04 09:10:44 $
+ *  last change: $Author: os $ $Date: 2001-04-05 11:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2374,15 +2374,7 @@ sal_Bool SwXParaFrameEnumeration::CreateNextObject()
           SdrObject* pSdr = pContact->GetMaster();
         if(pSdr)
         {
-            Reference<frame::XModel> xModel =
-                            pFormat->GetDoc()->GetDocShell()->GetBaseModel();
-            Reference<drawing::XDrawPageSupplier> xPageSupp(
-                        xModel, UNO_QUERY);
-
-            Reference<drawing::XDrawPage> xPage = xPageSupp->getDrawPage();
-            XDrawPage* pImpPage = xPage.get();
-            Reference <XShape> xShape = ((SwXDrawPage*)pImpPage)->GetSvxPage()->_CreateShape( pSdr );
-            xNextObject = uno::Reference< XTextContent >(xShape, uno::UNO_QUERY);
+            xNextObject = uno::Reference< XTextContent >(pSdr->getUnoShape(), uno::UNO_QUERY);
         }
        }
     else
