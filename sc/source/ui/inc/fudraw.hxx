@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: aw $ $Date: 2002-03-13 15:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@ class FuDraw : public FuPoor
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+
+    // #97016# II
+    virtual void SelectionHasChanged();
 
  private:
     void    DoModifiers(const MouseEvent& rMEvt);
