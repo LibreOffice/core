@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:13:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ void Clipboard::DoPaste (::Window* pWindow)
         // Determine the insertion position.  That is
         // a) When the focus indicator is visible, then before or after the
         // focused page, depending on user input to a dialog.
-        // b) When there is a selection but no focus, then before the
+        // b) When there is a selection but no focus, then after the
         // selection.
         // c) After the last page when there is no selection and no focus.
         if (mrController.GetFocusManager().IsFocusShowing())
@@ -225,13 +225,17 @@ void Clipboard::DoPaste (::Window* pWindow)
         {
             model::SlideSorterModel::Enumeration aSelectedPages
                 (mrController.GetModel().GetSelectedPagesEnumeration());
-            if (aSelectedPages.HasMoreElements())
+            // Initialize (for the case of an empty selection) with the
+            // position at the end of the document.
+            nInsertPosition = mrController.GetModel().GetPageCount();
+            while (aSelectedPages.HasMoreElements())
             {
                 nInsertPosition
                     = aSelectedPages.GetNextElement().GetPage()->GetPageNum();
+                // Convert *2+1 index to straight index (/2) after the page
+                // (+1).
+                nInsertPosition = nInsertPosition/2 + 1;
             }
-            else
-                nInsertPosition = mrController.GetModel().GetPageCount();
         }
 
 
