@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,25 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text = "Lauftext Effekte" ;
         Text [ ENGLISH ] = "Text Animation Effects" ;
         Text [ english_us ] = "Text Animation Effects" ;
+        Text[ portuguese ] = "Text Animation Effects";
+        Text[ russian ] = "Text Animation Effects";
+        Text[ greek ] = "Text Animation Effects";
+        Text[ dutch ] = "Text Animation Effects";
+        Text[ french ] = "Text Animation Effects";
+        Text[ spanish ] = "Efectos de animaciÛn de texto";
+        Text[ finnish ] = "Text Animation Effects";
+        Text[ italian ] = "Text Animation Effects";
+        Text[ danish ] = "Text Animation Effects";
+        Text[ swedish ] = "Effekter animerad text";
+        Text[ polish ] = "Efekty animowanego tekstu";
+        Text[ portuguese_brazilian ] = "Text Animation Effects";
+        Text[ japanese ] = "Text Animation Effects";
+        Text[ korean ] = "Text Animation Effects";
+        Text[ chinese_simplified ] = "ªÓ∂ØŒƒ◊÷µƒ–ßπ˚";
+        Text[ chinese_traditional ] = "¨°∞ §Â¶r™∫Æƒ™G";
+        Text[ turkish ] = "Text Animation Effects";
+        Text[ arabic ] = "Text Animation Effects";
+        Text[ catalan ] = "Text Animation Effects";
     };
 #define MA_CURR_Y       RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + MA_BUTTON_HEIGHT
     FixedText FT_EFFECTS
@@ -135,6 +154,25 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text = "Effekt" ;
         Text [ ENGLISH ] = "Effect" ;
         Text [ english_us ] = "Effect" ;
+        Text[ portuguese ] = "Effect";
+        Text[ russian ] = "Effect";
+        Text[ greek ] = "Effect";
+        Text[ dutch ] = "Effect";
+        Text[ french ] = "Effect";
+        Text[ spanish ] = "Efecto";
+        Text[ finnish ] = "Effect";
+        Text[ italian ] = "Effect";
+        Text[ danish ] = "Effect";
+        Text[ swedish ] = "Effekt";
+        Text[ polish ] = "Efekt";
+        Text[ portuguese_brazilian ] = "Effect";
+        Text[ japanese ] = "Effect";
+        Text[ korean ] = "Effect";
+        Text[ chinese_simplified ] = "–ßπ˚";
+        Text[ chinese_traditional ] = "Æƒ™G";
+        Text[ turkish ] = "Effect";
+        Text[ arabic ] = "Effect";
+        Text[ catalan ] = "Effect";
     };
     ListBox LB_EFFECT
     {
@@ -341,6 +379,25 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text = "Laufrichtung" ;
         Text [ ENGLISH ] = "Direction" ;
         Text [ english_us ] = "Direction" ;
+        Text[ portuguese ] = "Direction";
+        Text[ russian ] = "Direction";
+        Text[ greek ] = "Direction";
+        Text[ dutch ] = "Direction";
+        Text[ french ] = "Direction";
+        Text[ spanish ] = "OrientaciÛn";
+        Text[ finnish ] = "Direction";
+        Text[ italian ] = "Direction";
+        Text[ danish ] = "Direction";
+        Text[ swedish ] = "Riktning";
+        Text[ polish ] = "Orientacja";
+        Text[ portuguese_brazilian ] = "Direction";
+        Text[ japanese ] = "Direction";
+        Text[ korean ] = "Direction";
+        Text[ chinese_simplified ] = "∑ΩœÚ";
+        Text[ chinese_traditional ] = "§Ë¶V";
+        Text[ turkish ] = "Direction";
+        Text[ arabic ] = "Direction";
+        Text[ catalan ] = "Direction";
     };
     ImageButton BTN_UP
     {
@@ -361,7 +418,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText [ swedish ] = "UppÂt" ;
         QuickHelpText[ russian ] = "¬‚Âı";
         QuickHelpText[ greek ] = "–ÒÔÚ Ù· ‹Ì˘";
-        QuickHelpText[ polish ] = "W gÛrÍ";
+        QuickHelpText[ polish ] = "W gÛrÍ!";
         QuickHelpText[ japanese ] = "è„Ç÷!";
         QuickHelpText[ korean ] = "¿ß∑Œ!";
         QuickHelpText[ chinese_simplified ] = "œÚ…œ";
@@ -392,7 +449,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText [ swedish ] = "≈t v‰nster" ;
         QuickHelpText[ russian ] = "¬ÎÂ‚Ó";
         QuickHelpText[ greek ] = "–ÒÔÚ Ù· ·ÒÈÛÙÂÒ‹";
-        QuickHelpText[ polish ] = "W lewo";
+        QuickHelpText[ polish ] = "W lewo!";
         QuickHelpText[ japanese ] = "ç∂Ç÷!";
         QuickHelpText[ korean ] = "øﬁ¬ ¿∏∑Œ!";
         QuickHelpText[ chinese_simplified ] = "œÚ◊Û";
@@ -423,7 +480,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText [ swedish ] = "≈t hˆger" ;
         QuickHelpText[ russian ] = "¬Ô‡‚Ó";
         QuickHelpText[ greek ] = "–ÒÔÚ Ù· ‰ÂÓÈ‹";
-        QuickHelpText[ polish ] = "W prawo";
+        QuickHelpText[ polish ] = "W prawo!";
         QuickHelpText[ japanese ] = "âEÇ÷!";
         QuickHelpText[ korean ] = "ø¿∏•¬ ¿∏∑Œ!";
         QuickHelpText[ chinese_simplified ] = "œÚ”“";
@@ -454,7 +511,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText [ swedish ] = "NedÂt" ;
         QuickHelpText[ russian ] = "¬ÌËÁ";
         QuickHelpText[ greek ] = "–ÒÔÚ Ù· Í‹Ù˘";
-        QuickHelpText[ polish ] = "W dÛ≥";
+        QuickHelpText[ polish ] = "W dÛ≥!";
         QuickHelpText[ japanese ] = "â∫Ç÷!";
         QuickHelpText[ korean ] = "æ∆∑°∑Œ!";
         QuickHelpText[ chinese_simplified ] = "œÚœ¬";
@@ -474,6 +531,25 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text = "Eigenschaften" ;
         Text [ ENGLISH ] = "Properties" ;
         Text [ english_us ] = "Properties" ;
+        Text[ portuguese ] = "Properties";
+        Text[ russian ] = "Properties";
+        Text[ greek ] = "Properties";
+        Text[ dutch ] = "Properties";
+        Text[ french ] = "Properties";
+        Text[ spanish ] = "Propiedades";
+        Text[ finnish ] = "Properties";
+        Text[ italian ] = "Properties";
+        Text[ danish ] = "Properties";
+        Text[ swedish ] = "Egenskaper";
+        Text[ polish ] = "W≥aúciwoúci";
+        Text[ portuguese_brazilian ] = "Properties";
+        Text[ japanese ] = "Properties";
+        Text[ korean ] = "Properties";
+        Text[ chinese_simplified ] = " Ù–‘";
+        Text[ chinese_traditional ] = "ƒ›© ";
+        Text[ turkish ] = "Properties";
+        Text[ arabic ] = "Properties";
+        Text[ catalan ] = "Properties";
     };
 #define MA_CURR_Y2      RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_START_INSIDE
@@ -554,7 +630,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ portuguese ] = "Quantidade" ;
         Text[ chinese_simplified ] = " ˝ƒø";
         Text[ russian ] = " ÓÎË˜ÂÒÚ‚Ó";
-        Text[ polish ] = "Liczba";
+        Text[ polish ] = "Animacje";
         Text[ japanese ] = "âÒêî";
         Text[ chinese_traditional ] = "º∆•ÿ";
         Text[ greek ] = "–ÎﬁËÔÚ";
@@ -563,6 +639,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ turkish ] = "Adet say˝s˝";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cantidad";
+        Text[ finnish ] = "Count";
     };
 #define MA_CURR_Y5      MA_CURR_Y4 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_ENDLESS
@@ -664,6 +741,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ turkish ] = "~Piksel";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "PÌ~xel";
+        Text[ finnish ] = "~Kuvapisteet";
     };
     MetricField MTR_FLD_AMOUNT
     {
@@ -712,6 +790,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ turkish ] = "Gecikme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Retardo";
+        Text[ finnish ] = "Delay";
     };
 #define MA_CURR_Y9      MA_CURR_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_AUTO
