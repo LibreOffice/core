@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-20 07:37:45 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ USHORT SfxApplication::ParseCommandLine_Impl()
         {
             pAppData_Impl->bBean = TRUE;
             pAppData_Impl->bInvisible = TRUE;
-            pAppData_Impl->bIBMTitle = TRUE;
+            pAppData_Impl->bPlugged = TRUE;
         }
         if ( aArg.CompareIgnoreCaseToAscii("-ucb=",
                                            RTL_CONSTASCII_LENGTH("-ucb="))
@@ -413,61 +413,14 @@ IMPL_LINK( SfxApplication, LateInitNewMenu_Impl, void*, pvoid)
     DBG_PROFSTART(SfxAppMainNewMenu);
     pAppData_Impl->GetPopupMenu( SID_NEWDOCDIRECT );
     DBG_PROFSTOP(SfxAppMainNewMenu);
-
     return 0;
 }
-
-//-------------------------------------------------------------------------
-
-IMPL_LINK( SfxApplication, LateInitBmkMenu_Impl, void*, pvoid)
-{
-    DBG_PROFSTART(SfxAppMainBmkMenu);
-    pAppData_Impl->GetPopupMenu( SID_BOOKMARKS);
-    DBG_PROFSTOP(SfxAppMainBmkMenu);
-
-    return 0;
-}
-
-//-------------------------------------------------------------------------
 
 IMPL_LINK( SfxApplication, LateInitWizMenu_Impl, void*, pvoid)
 {
     DBG_PROFSTART(SfxAppMainWizMenu);
     pAppData_Impl->GetPopupMenu( SID_AUTOPILOTMENU );
     DBG_PROFSTOP(SfxAppMainWizMenu);
-
-    return 0;
-}
-
-//-------------------------------------------------------------------------
-
-IMPL_LINK( SfxApplication, LateInitOLEReg_Impl, void*, pvoid)
-{
-#if 0
-    // OLE-Registrierung nur wenn Default-Factory OLE-f"ahig ist
-    DBG_PROFSTART(SfxAppMainOLEReg);
-    if ( GetObjFacArray_Impl().Count() )
-        if ( SvGlobalName() != *GetObjFacArray_Impl()[0] )
-        {
-            // StarOffice-Manager hat keine Doc-Factories
-            WriteRegistration( GetObjFacArray_Impl()[0],
-                    HACK(MM will den folgenden Parameter rausnehmen)
-                    "So'n Sch..., war wohl doch wichtig! (MM oder MI fragen)" );
-            SfxShellObject *pShObj = GetShellObj_Impl();
-            if ( pShObj && pShObj->GetSvFactory() )
-                WriteRegistration( ( /*not const*/ SvFactory*) pShObj->GetSvFactory(),
-                    HACK(MM will den folgenden Parameter rausnehmen)
-                    "So'n Sch..., war wohl doch wichtig! (MM oder MI fragen)" );
-        }
-    DBG_PROFSTOP(SfxAppMainOLEReg);
- #endif
-    return 0;
-}
-
-//-------------------------------------------------------------------------
-
-IMPL_LINK( SfxApplication, LateInitCHAOSReg_Impl, void*, pvoid)
-{
     return 0;
 }
 
@@ -620,12 +573,3 @@ BOOL SfxApplication::IsStandalone() const
 #endif
     }
 }
-
-//========================================================================
-
-String& SfxApplication::GetSaveAsTargetURLHack()
-{
-    return pAppData_Impl->aSaveAsTarget;
-}
-
-
