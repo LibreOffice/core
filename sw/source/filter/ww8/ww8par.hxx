@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:27:20 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,8 +245,6 @@ public:
     enum ListLevel {nMinLevel=1, nMaxLevel=9};
     SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition, BYTE nLevel) const;
     SwNumRule* CreateNextRule(bool bSimple);
-    void MapStyleToOrigList(const SwNumRule &rNmRule, SwWW8StyInf& rStyleInf);
-    void StrengthReduceListStyles();
     ~WW8ListManager();
 private:
     wwSprmParser maSprmParser;
@@ -255,8 +253,6 @@ private:
     const WW8Fib&    rFib;
     SvStream&        rSt;
     std::vector<WW8LSTInfo* > maLSTInfos;
-    std::multimap<const SwNumRule *, SwWW8StyInf*> maStyleNumberingMap;
-    typedef std::map<const SwNumRule *, SwWW8StyInf*>::iterator myMapIter;
     WW8LFOInfos* pLFOInfos;// D. aus PLF LFO, sortiert genau wie im WW8 Stream
     USHORT       nUniqueList; // current number for creating unique list names
     BYTE* GrpprlHasSprm(USHORT nId, BYTE& rSprms, BYTE nLen);
@@ -1220,12 +1216,10 @@ friend class wwSectionManager;
 
     void RegisterNumFmtOnTxtNode(USHORT nActLFO, BYTE nActLevel,
         bool bSetAttr = true);
-    void RegisterNumFmtOnStyle(USHORT nStyle, USHORT nActLFO   = USHRT_MAX,
-        BYTE nActLevel = WW8ListManager::nMaxLevel);
+    void RegisterNumFmtOnStyle(USHORT nStyle);
+    void SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
+        sal_uInt8 nActLevel);
     void RegisterNumFmt(USHORT nActLFO, BYTE nActLevel);
-
-    SwNumRule* SyncStyleIndentWithList(SwWW8StyInf &rStyleInfo,
-        SwNumRule* pRule, BYTE nLevel);
 
 // spaeter zu ersetzen durch Aufruf in entsprechend erweiterten SvxMSDffManager
 
@@ -1443,14 +1437,15 @@ public:     // eigentlich private, geht aber leider nur public
     // Laden eines kompletten DocFiles
     ULONG LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
     CharSet GetCurrentCharSet();
-    void StrengthReduceListStyles()
-    {
-        ASSERT(pLstManager, "impossible");
-        if (pLstManager)
-            pLstManager->StrengthReduceListStyles();
-    }
 };
 
+void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt);
+void SetStyleIndent(SwWW8StyInf &rStyleInfo, const SwNumFmt &rFmt);
+void SyncParagraphIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt);
+void SyncStyleIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt);
+long GetListFirstLineIndent(const SwNumFmt &rFmt);
+const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode,
+    const SwDoc &rDocb);
 #endif
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
