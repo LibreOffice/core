@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: er $ $Date: 2001-08-02 14:53:08 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1633,8 +1633,8 @@ BOOL SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
 
         if ( !bEnglishFormat )
         {
-            if ( nCheckPos > 0 || xTransliteration->compareString( sFormatString,
-                    pEntry->GetFormatstring() ) == 0 )
+            if ( nCheckPos > 0 || xTransliteration->isEqual( sFormatString,
+                    pEntry->GetFormatstring() ) )
             {   // other Format
                 delete pEntry;
                 sTmpString = sFormatString;
@@ -1652,8 +1652,8 @@ BOOL SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
                     pStringScanner, nCheckPos2, eFormatLang );
                 pFormatScanner->SetConvertMode( FALSE );
                 ChangeIntl( eLnge );
-                if ( nCheckPos2 == 0 && xTransliteration->compareString( sFormatString,
-                        pEntry2->GetFormatstring() ) != 0 )
+                if ( nCheckPos2 == 0 && !xTransliteration->isEqual( sFormatString,
+                        pEntry2->GetFormatstring() ) )
                 {   // other Format
                     delete pEntry;
                     sTmpString = sFormatString;

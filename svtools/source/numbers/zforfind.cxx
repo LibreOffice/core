@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-08-02 14:53:08 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1650,7 +1650,7 @@ BOOL ImpSvNumberInputScan::ScanStringNumFor(
         {   // TeilFormate durchprobieren, erst positiv, dann negativ, dann anderes,
             // letztes (Text) nicht
             pStr = pFormat->GetNumForString( nSub, nString, TRUE );
-            if ( pStr && (pTransliteration->compareString( aString, *pStr ) == 0) )
+            if ( pStr && pTransliteration->isEqual( aString, *pStr ) )
             {
                 bFound = TRUE;
                 bContinue = FALSE;
