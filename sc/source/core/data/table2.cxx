@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:28:24 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 #include "dociter.hxx"
 #include "conditio.hxx"
 #include "chartlis.hxx"
+#include "fillinfo.hxx"
 #include "globstr.hrc"
 
 // STATIC DATA -----------------------------------------------------------
@@ -3175,10 +3176,10 @@ void ScTable::SetDrawPageSize()
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
     if( pDrawLayer )
     {
-        ULONG x = GetColOffset( MAXCOL + 1 );
-        ULONG y = GetRowOffset( MAXROW + 1 );
-        x = (ULONG) ((double) x * HMM_PER_TWIPS);
-        y = (ULONG) ((double) y * HMM_PER_TWIPS);
+        long x = GetColOffset( MAXCOL + 1 );
+        long y = GetRowOffset( MAXROW + 1 );
+        x = (long) ((double) x * HMM_PER_TWIPS);
+        y = (long) ((double) y * HMM_PER_TWIPS);
 
         if ( IsLayoutRTL() )        // IsNegativePage
             x = -x;
