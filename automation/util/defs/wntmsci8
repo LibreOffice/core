@@ -826,3 +826,5 @@ DestroyRemoteControl
 ?iquery@?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?iquery@?$Reference@VXCloneable@util@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?iquery@?$Reference@VXParser@sax@xml@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?Append@String@@QAEAAV1@D@Z
+??YString@@QAEAAV0@D@Z
