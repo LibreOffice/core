@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadminsetup.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 14:01:37 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ ModalDialog DLG_DATABASE_WIZARD
     OutputSize = TRUE ;
     Moveable = TRUE;
     Closeable = TRUE ;
+    HelpId = HID_DLG_DATABASE_WIZARD;
     Hide = TRUE;
     Text[ de ] = "Datenbank-Assistent" ;
     Text[ en-US ]  = "Database Wizard" ;
@@ -544,15 +545,15 @@ TabPage PAGE_DBWIZARD_LDAP
 
     FixedText FT_LDAP_HELPTEXT
     {
-        Pos = MAP_APPFONT (INIT_X , 27 )  ;
+        Pos = MAP_APPFONT (START_X , 27 )  ;
         Size = MAP_APPFONT (WIZARD_PAGE_X - START_X - 6, 5 * FIXEDTEXT_HEIGHT ) ;
         Text[ de ] = "Bitte geben Sie die benötigten Information ein, um eine Verbindung zu einem LDAP-Verzeichnis herzustellen.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
         Text[ en-US ] = "Please enter the required information to connect to an LDAP directory.\nPlease contact your system administrator if you are unsure about the following settings." ;
         WordBreak = TRUE ;
     };
-    AUTO_HOSTCONTROLGROUP(INIT_Y + 5 * FIXEDTEXT_HEIGHT + RELATED_CONTROLS, HID_PAGE_DBWIZARD_LDAP_ET_HOSTSERVER)
-    AUTO_BASEDNCONTROLGROUP(INIT_Y + 6 * FIXEDTEXT_HEIGHT + 2 * RELATED_CONTROLS +     UNRELATED_CONTROLS, HID_PAGE_DBWIZARD_LDAP_ET_BASEDN)
-    AUTO_PORTCONTROLGROUP(  INIT_Y + 7 * FIXEDTEXT_HEIGHT + 3 * RELATED_CONTROLS + 2 * UNRELATED_CONTROLS, HID_PAGE_DBWIZARD_LDAP_ET_PORTNUMBER)
+    AUTO_HOSTCONTROLGROUP(  INIT_Y + 7 * FIXEDTEXT_HEIGHT +     UNRELATED_CONTROLS,                         HID_PAGE_DBWIZARD_LDAP_ET_HOSTSERVER)
+    AUTO_BASEDNCONTROLGROUP(INIT_Y + 7 * FIXEDTEXT_HEIGHT +     UNRELATED_CONTROLS +     EDIT_HEIGHT +     RELATED_CONTROLS,    HID_PAGE_DBWIZARD_LDAP_ET_BASEDN)
+    AUTO_PORTCONTROLGROUP(  INIT_Y + 7 * FIXEDTEXT_HEIGHT +     UNRELATED_CONTROLS + 2 * EDIT_HEIGHT + 2 * RELATED_CONTROLS,    HID_PAGE_DBWIZARD_LDAP_ET_PORTNUMBER)
 
     String STR_LDAP_DEFAULT{
         Text[ de ] = "Standard: 389";
@@ -563,7 +564,7 @@ TabPage PAGE_DBWIZARD_LDAP
     CheckBox CB_USESSL
     {
         HelpId = HID_PAGE_DBWIZARD_LDAP_CB_USESSL ;
-        Pos = MAP_APPFONT (START_X + INDENTED_X, 128 )  ;
+        Pos = MAP_APPFONT (START_X , INIT_Y + 7 * FIXEDTEXT_HEIGHT +        UNRELATED_CONTROLS + 3 * EDIT_HEIGHT + 4 * RELATED_CONTROLS )  ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
         Text[ de ] = "Sichere ~Verbindung verwenden (SSL)";
         Text[ en-US ] = "Use ~secure connection (SSL)" ;
