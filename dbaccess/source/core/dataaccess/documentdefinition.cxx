@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mav $ $Date: 2004-10-14 07:07:15 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,7 +929,6 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
                 }
                 Sequence<PropertyValue> aArgs;
                 sal_Int32 nLen = aArgs.getLength();
-                if ( _xConnection.is() )
                 {
                     Sequence<PropertyValue> aDocumentContext(2);
                     aDocumentContext[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"));
