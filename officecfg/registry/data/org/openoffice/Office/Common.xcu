@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:01:00 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,9 @@
 <oor:component-data oor:name="Common" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="View">
     <node oor:name="Dialog">
-      <prop oor:name="MiddleMouseButton" install:module="unx">
-        <value >2</value>
-      </prop>
-      <prop oor:name="MiddleMouseButton" install:module="wnt">
-        <value >1</value>
+      <prop oor:name="MiddleMouseButton">
+        <value install:module="unx">2</value>
+        <value install:module="wnt">1</value>
       </prop>
     </node>
     <node oor:name="Localisation">
@@ -143,11 +141,9 @@
         <value>${REGISTRATIONURL}</value>
       </prop>
     </node>
-    <prop oor:name="System" install:module="unx">
-      <value>UNIX</value>
-    </prop>
-    <prop oor:name="System" install:module="wnt">
-      <value>WIN</value>
+    <prop oor:name="System">
+      <value install:module="unx">UNIX</value>
+      <value install:module="wnt">WIN</value>
     </prop>
   </node>
   <node oor:name="AutoCorrect">
