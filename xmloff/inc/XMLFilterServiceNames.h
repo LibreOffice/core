@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFilterServiceNames.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-09 12:06:29 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,18 +63,18 @@
 #define _XMLOFF_XMLFILTERSERVICENAMES_H
 
 
-#define XML_IMPORT_FILTER_WRITER    "com.sun.star.comp.Writer.XMLImporter"
-#define XML_IMPORT_FILTER_CALC      "com.sun.star.comp.Calc.XMLImporter"
-#define XML_IMPORT_FILTER_DRAW      "com.sun.star.comp.Draw.XMLImporter"
-#define XML_IMPORT_FILTER_IMPRESS   "com.sun.star.comp.Impress.XMLImporter"
+#define XML_IMPORT_FILTER_WRITER    "com.sun.star.comp.Writer.XMLOasisImporter"
+#define XML_IMPORT_FILTER_CALC      "com.sun.star.comp.Calc.XMLOasisImporter"
+#define XML_IMPORT_FILTER_DRAW      "com.sun.star.comp.Draw.XMLOasisImporter"
+#define XML_IMPORT_FILTER_IMPRESS   "com.sun.star.comp.Impress.XMLOasisImporter"
 #define XML_IMPORT_FILTER_MATH      "com.sun.star.comp.Math.XMLImporter"
-#define XML_IMPORT_FILTER_CHART     "com.sun.star.comp.Chart.XMLImporter"
+#define XML_IMPORT_FILTER_CHART     "com.sun.star.comp.Chart.XMLOasisImporter"
 
-#define XML_EXPORT_FILTER_WRITER    "com.sun.star.comp.Writer.XMLExporter"
-#define XML_EXPORT_FILTER_CALC      "com.sun.star.comp.Calc.XMLExporter"
-#define XML_EXPORT_FILTER_DRAW      "com.sun.star.comp.Draw.XMLExporter"
-#define XML_EXPORT_FILTER_IMPRESS   "com.sun.star.comp.Impress.XMLExporter"
+#define XML_EXPORT_FILTER_WRITER    "com.sun.star.comp.Writer.XMLOasisExporter"
+#define XML_EXPORT_FILTER_CALC      "com.sun.star.comp.Calc.XMLOasisExporter"
+#define XML_EXPORT_FILTER_DRAW      "com.sun.star.comp.Draw.XMLOasisExporter"
+#define XML_EXPORT_FILTER_IMPRESS   "com.sun.star.comp.Impress.XMLOasisExporter"
 #define XML_EXPORT_FILTER_MATH      "com.sun.star.comp.Math.XMLExporter"
-#define XML_EXPORT_FILTER_CHART     "com.sun.star.comp.Chart.XMLExporter"
+#define XML_EXPORT_FILTER_CHART     "com.sun.star.comp.Chart.XMLOasisExporter"
 
 #endif
