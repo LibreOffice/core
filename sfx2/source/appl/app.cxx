@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-28 10:49:47 $
+ *  last change: $Author: dv $ $Date: 2001-04-09 07:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,6 @@
 #include "cfgmgr.hxx"
 #include "fltfnc.hxx"
 #include "nfltdlg.hxx"
-#include "iodlg.hxx"
 #include "new.hxx"
 #include "bindings.hxx"
 #include "dispatch.hxx"
