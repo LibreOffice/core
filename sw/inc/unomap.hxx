@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:23:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:26:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,20 @@
 #define WID_SINGLE_PRINT_JOBS                   1083
 #define WID_FILE_NAME_FROM_COLUMN               1084
 #define WID_FILE_NAME_PREFIX                    1085
+#define WID_MAIL_SUBJECT                        1086
+#define WID_ADDRESS_FROM_COLUMN                 1087
+#define WID_SEND_AS_HTML                        1088
+#define WID_SEND_AS_ATTACHMENT                  1089
+#define WID_MAIL_BODY                           1090
+#define WID_ATTACHMENT_NAME                     1091
+#define WID_ATTACHMENT_FILTER                   1092
+#define WID_PRINT_OPTIONS                       1093
+#define WID_SAVE_AS_SINGLE_FILE                 1094
+#define WID_SAVE_FILTER                         1095
+#define WID_COPIES_TO                           1096
+#define WID_BLIND_COPIES_TO                     1097
+#define WID_IN_SERVER_PASSWORD                  1098
+#define WID_OUT_SERVER_PASSWORD                 1099
 
 //AutoText
 #define WID_GROUP_PATH                          0
