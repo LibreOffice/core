@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 19:51:41 $
+ *  last change: $Author: pb $ $Date: 2001-06-06 12:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,8 @@ public:
 
     rtl::OUString   SubstVar( const rtl::OUString& rVar );
     rtl::OUString   SubstituteAndConvert( const rtl::OUString& rPath );
+
+    LanguageType    GetLanguageType() const { return m_eLanguageType; }
 };
 
 // global ----------------------------------------------------------------
@@ -1567,6 +1569,15 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
 
     return bRet;
 }
+
+// -----------------------------------------------------------------------
+
+LanguageType SvtPathOptions::GetLanguageType() const
+{
+    return pImp->GetLanguageType();
+}
+
+// class PathService -----------------------------------------------------
 
 void SAL_CALL PathService::addPropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException) {}
 void SAL_CALL PathService::removePropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException) {}
