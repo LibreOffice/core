@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2000-11-30 13:46:04 $
+ *  last change: $Author: os $ $Date: 2000-12-04 10:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,50 @@ namespace utl{
 
     };
 }
+/* -----------------------------04.12.00 10:25--------------------------------
+
+ ---------------------------------------------------------------------------*/
+#if SUPD>615
+class ValueCounter_Impl
+{
+    sal_Int16& rCnt;
+public:
+    ValueCounter_Impl(sal_Int16& rCounter):
+        rCnt(rCounter)
+            {rCnt++;}
+    ~ValueCounter_Impl()
+            {
+                OSL_ENSURE(rCnt>0, "RefCount < 0 ??");
+                rCnt--;
+            }
+};
+#else
+class ValueCounter_Impl
+{
+    ConfigItem& rItem;
+    sal_Bool    bFlagChanged;
+public:
+    ValueCounter_Impl(ConfigItem& rCfgItem);
+    ~ValueCounter_Impl();
+};
+ValueCounter_Impl::ValueCounter_Impl(ConfigItem& rCfgItem):
+        rItem(rCfgItem),
+        bFlagChanged(sal_False)
+{
+    if(!rItem.IsInValueChange())
+    {
+        rItem.SetInValueChange(sal_True);
+        bFlagChanged = sal_True;
+    }
+}
+
+ValueCounter_Impl::~ValueCounter_Impl()
+{
+    if(bFlagChanged)
+        rItem.SetInValueChange(sal_False);
+}
+
+#endif
 /* -----------------------------29.08.00 16:34--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -212,8 +256,12 @@ ConfigItem::ConfigItem(const OUString rSubTree ) :
     pManager(ConfigManager::GetConfigManager()),
     sSubTree(rSubTree),
     bIsModified(sal_False),
-    bInPutValues(sal_False),
-    bHasChangedProperties(sal_False)
+    bHasChangedProperties(sal_False),
+#if SUPD>615
+    nInValueChange(0)
+#else
+    bInPutValues(sal_False)
+#endif
 {
     xHierarchyAccess = pManager->AddConfigItem(*this);
 }
@@ -224,7 +272,11 @@ ConfigItem::ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTr
     pManager(&rManager),
     sSubTree(rSubTree),
     bIsModified(sal_False),
+#if SUPD>615
+    nInValueChange(0),
+#else
     bInPutValues(sal_False),
+#endif
     bHasChangedProperties(sal_False)
 {
     xHierarchyAccess = pManager->AddConfigItem(*this);
@@ -291,7 +343,7 @@ void    ConfigItem::ReleaseConfigMgr()
  ---------------------------------------------------------------------------*/
 void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPropertyNames )
 {
-    if(!bInPutValues)
+    if(!IsInValueChange())
         Notify(rPropertyNames);
     else
         bHasChangedProperties = sal_True;
@@ -352,7 +404,11 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
 sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                                                 const Sequence< Any>& rValues)
 {
-    bInPutValues = sal_True;
+#if SUPD>615
+    ValueCounter_Impl aCounter(nInValueChange);
+#else
+    ValueCounter_Impl aCounter(*this);
+#endif
     Reference<XPropertySet> xPropSet(xHierarchyAccess, UNO_QUERY);
     sal_Bool bRet = xHierarchyAccess.is() && xPropSet.is();
     if(bRet)
@@ -407,7 +463,6 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         }
     }
 
-    bInPutValues = sal_False;
     return bRet;
 }
 /* -----------------------------29.08.00 16:19--------------------------------
@@ -488,6 +543,11 @@ Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode)
  ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
 {
+#if SUPD>615
+    ValueCounter_Impl aCounter(nInValueChange);
+#else
+    ValueCounter_Impl aCounter(*this);
+#endif
     sal_Bool bRet;
     if(xHierarchyAccess.is())
     {
@@ -536,6 +596,11 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
  ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString >& rElements)
 {
+#if SUPD>615
+    ValueCounter_Impl aCounter(nInValueChange);
+#else
+    ValueCounter_Impl aCounter(*this);
+#endif
     sal_Bool bRet;
     if(xHierarchyAccess.is())
     {
@@ -584,6 +649,11 @@ sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString
 sal_Bool ConfigItem::SetSetProperties(
     const OUString& rNode, Sequence< PropertyValue > rValues)
 {
+#if SUPD>615
+    ValueCounter_Impl aCounter(nInValueChange);
+#else
+    ValueCounter_Impl aCounter(*this);
+#endif
     sal_Bool bRet;
     if(xHierarchyAccess.is())
     {
@@ -712,6 +782,11 @@ sal_Bool ConfigItem::SetSetProperties(
 sal_Bool ConfigItem::ReplaceSetProperties(
     const OUString& rNode, Sequence< PropertyValue > rValues)
 {
+#if SUPD>615
+    ValueCounter_Impl aCounter(nInValueChange);
+#else
+    ValueCounter_Impl aCounter(*this);
+#endif
     sal_Bool bRet;
     if(xHierarchyAccess.is())
     {
