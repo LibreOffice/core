@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-03-05 08:09:05 $
+ *  last change: $Author: as $ $Date: 2001-03-05 09:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,7 +1309,12 @@ void SAL_CALL Desktop::dispose() throw( RuntimeException )
     // It's an programming error if dispose is called before terminate!
     LOG_ASSERT( !(m_bIsTerminated==sal_False), "Desktop::dispose()\nIt's not allowed to dispose the desktop before terminate() is called!\n" )
 
-    LOG_ASSERT( !(m_bAlreadyDisposed==sal_True), "Desktop::dispose()\nDont call dispose more then ones!\n" )
+/*
+    Warning temp. disabled - because the sfx fix some problems for other programmer and dispose the desktop!
+    Some programmer dont know, what a service could do or not!!!
+*/
+//  LOG_ASSERT( !(m_bAlreadyDisposed==sal_True), "Desktop::dispose()\nDont call dispose more then ones!\n" )
+
     if( m_bAlreadyDisposed == sal_False )
     {
         m_bAlreadyDisposed = sal_True ;
