@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchRecorder.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:05:42 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 13:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
     again. Which code will be generated depends from real implementation. So it's
     possible to generate e.g. Java/Basic or may Perl code.
     By using of a <type>DispatchRecorderSupplier</type>, which is available on
-    a property of a <member>Frame::RecorderSupplier</member>, it's possible to change such code generation
+    a property of a <member>Frame::DispatchRecorderSupplier</member>, it's possible to change such code generation
     for further requests or disable it in general by setting this property to <NULL/>.
     </p>
 

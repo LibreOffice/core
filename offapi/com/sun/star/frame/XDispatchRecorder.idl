@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDispatchRecorder.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:07:07 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 13:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,13 @@ interface XDispatchRecorder: com::sun::star::uno::XInterface
 
         <p>
         Must be called in pairs with <member>XDispatchRecorder::startRecording()</member>.
-        It's not allowed for the recorder to clear recorded data here - because
-        the must be provided later at method <member>XDispatchRecorder::getRecordedMacro()</member>.
         </p>
+
+        @attention  The recorder uses this method to control the lifetime of its internal
+                    used macro buffer. It will be cleared here. So the macro must be fetched
+                    before endRecording() is called.
+
+        @see        getRecordedMacro()
     */
     void endRecording();
 
@@ -159,7 +163,8 @@ interface XDispatchRecorder: com::sun::star::uno::XInterface
     /** returns the recorded source code
 
         <p>
-        The result of calling this method before calling <member>XDispatchRecorder::endRecording</member>() is undefined.
+        This method must be used before <member>endRecording()</member> is called!
+        Otherwhise the macro will be relased.
         </p>
 
         @returns
