@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSpreadsheet.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:08:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,13 @@ module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-interface XSheetCellCursor;
+ published interface XSheetCellCursor;
 
 //=============================================================================
 
 /** provides methods to create a cell range cursor.
  */
-interface XSpreadsheet: com::sun::star::sheet::XSheetCellRange
+published interface XSpreadsheet: com::sun::star::sheet::XSheetCellRange
 {
     //-------------------------------------------------------------------------
 
