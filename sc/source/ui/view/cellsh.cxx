@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:36:38 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,25 +740,31 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     List        aList;
 
                     Color   aDummyCol;
-                    USHORT  nDummyFlags;
 
                     if ( !pDoc->IsScenario(nTab) )
                     {
                         String aStr;
+                        USHORT nFlags;
                         USHORT nScTab = nTab + 1;
+                        String aProtect;
+                        bool bSheetProtected = pDoc->IsTabProtected(nTab);
 
                         while ( pDoc->IsScenario(nScTab) )
                         {
                             pDoc->GetName( nScTab, aStr );
                             aList.Insert( new String( aStr ), LIST_APPEND );
-                            pDoc->GetScenarioData( nScTab, aStr, aDummyCol, nDummyFlags );
+                            pDoc->GetScenarioData( nScTab, aStr, aDummyCol, nFlags );
                             aList.Insert( new String( aStr ), LIST_APPEND );
+                            // Protection is TRUE if both Sheet and Scenario are protected
+                            aProtect = (bSheetProtected && (nFlags & SC_SCENARIO_PROTECT)) ? '1' : '0';
+                            aList.Insert( new String( aProtect), LIST_APPEND );
                             ++nScTab;
                         }
                     }
                     else
                     {
                         String  aComment;
+                        USHORT  nDummyFlags;
                         pDoc->GetScenarioData( nTab, aComment, aDummyCol, nDummyFlags );
                         DBG_ASSERT( aList.Count() == 0, "List not empty!" );
                         aList.Insert( new String( aComment ) );
