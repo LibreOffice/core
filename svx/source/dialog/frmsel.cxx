@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-02-18 08:18:22 $
+ *  last change: $Author: os $ $Date: 2002-03-08 11:14:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,15 @@
 #ifndef _TOOLS_RESARY_HXX
 #include <tools/resary.hxx>
 #endif
+#ifndef _COM_SUN_STAR_AWT_KEYEVENT_HPP_
+#include <com/sun/star/awt/KeyEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
+#include <com/sun/star/awt/KeyModifier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_KEY_HPP_
+#include <com/sun/star/awt/Key.hpp>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
@@ -107,6 +116,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HDL_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HDL_
+#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HDL_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
@@ -123,11 +135,17 @@
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
+#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+#include <unotools/accessiblerelationsethelper.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
+#endif
+#ifndef MNEMONIC_CHAR
+#define MNEMONIC_CHAR               ((sal_Unicode)'~')
 #endif
 
 using namespace ::com::sun::star;
@@ -373,8 +391,24 @@ sal_Int16 SvxFrameSelectorAccessible_Impl::getAccessibleRole(  ) throw (uno::Run
 uno::Reference< XAccessibleRelationSet > SvxFrameSelectorAccessible_Impl::getAccessibleRelationSet(  )
     throw (uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
-    return uno::Reference< XAccessibleRelationSet > ();
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    utl::AccessibleRelationSetHelper* pHelper;
+    uno::Reference< XAccessibleRelationSet > xRet = pHelper = new utl::AccessibleRelationSetHelper;
+    if(eWhichChild == SVX_FRMSELLINE_NONE)
+    {
+        //add the label relation
+        Window* pPrev = pFrameSel->GetWindow( WINDOW_PREV );
+        if(pPrev && WINDOW_FIXEDTEXT == pPrev->GetType())
+        {
+            AccessibleRelation aLabelRelation;
+            aLabelRelation.RelationType = AccessibleRelationType::LABELED_BY;
+            aLabelRelation.TargetSet.realloc(1);
+            aLabelRelation.TargetSet.getArray()[0]  = pPrev->GetAccessible();
+            pHelper->AddRelation(aLabelRelation);
+        }
+    }
+    return xRet;
 }
 /*-- 04.02.2002 14:11:58---------------------------------------------------
 
@@ -634,8 +668,37 @@ void SvxFrameSelectorAccessible_Impl::grabFocus(  ) throw (uno::RuntimeException
   -----------------------------------------------------------------------*/
 uno::Any SvxFrameSelectorAccessible_Impl::getAccessibleKeyBinding(  ) throw (uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
-    return uno::Any();
+    uno::Any aRet;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    utl::AccessibleRelationSetHelper* pHelper;
+    uno::Reference< XAccessibleRelationSet > xRet = pHelper = new utl::AccessibleRelationSetHelper;
+    if(eWhichChild == SVX_FRMSELLINE_NONE)
+    {
+        Window* pPrev = pFrameSel->GetWindow( WINDOW_PREV );
+        if(pPrev && WINDOW_FIXEDTEXT == pPrev->GetType())
+        {
+            String sText = pPrev->GetText();
+            xub_StrLen nFound = sText.Search( MNEMONIC_CHAR );
+            if(STRING_NOTFOUND != nFound && ++nFound < sText.Len())
+            {
+                sText.ToUpperAscii();
+                sal_Unicode cChar = sText.GetChar(nFound);
+                awt::KeyEvent aEvent;
+
+                aEvent.KeyCode = 0;
+                aEvent.KeyChar = cChar;
+                aEvent.KeyFunc = 0;
+                if(cChar >= 'A' && cChar <= 'Z')
+                {
+                     aEvent.KeyCode = awt::Key::A + cChar - 'A';
+                }
+                aEvent.Modifiers = awt::KeyModifier::MOD2;
+                aRet <<= aEvent;
+            }
+        }
+    }
+    return aRet;
 }
 /*-- 04.02.2002 14:12:04---------------------------------------------------
 
