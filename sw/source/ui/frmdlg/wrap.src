@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-12-18 12:09:45 $
+ *  last change: $Author: os $ $Date: 2002-03-27 08:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,7 +624,7 @@ TabPage TP_FRM_WRAP
                                                                                                                                                         #define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
     ImageList IL_WRAP
     {
-        ImageBitmap = Bitmap { File = "wraplist.bmp" ; };
+        ImageBitmap = Bitmap { File = "wr_aplist.bmp" ; };
         MaskColor = IMAGE_STDBTN_COLOR ;
         IdList =
         {
