@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-11 16:05:42 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,8 @@ protected:
     virtual void SAL_CALL mapFromGregorian() throw(com::sun::star::uno::RuntimeException);
     void SAL_CALL getValue() throw(com::sun::star::uno::RuntimeException);
 private:
+    // submit fieldValue array according to fieldSet, plus YMDhms if >=0
+    void SAL_CALL submitValues( sal_Int32 nYear, sal_Int32 nMonth, sal_Int32 nDay, sal_Int32 nHour, sal_Int32 nMinute, sal_Int32 nSecond, sal_Int32 nMilliSecond) throw(com::sun::star::uno::RuntimeException);
     void SAL_CALL setValue() throw(com::sun::star::uno::RuntimeException);
     void SAL_CALL init(Era *_eraArray) throw(com::sun::star::uno::RuntimeException);
     Calendar aCalendar;
