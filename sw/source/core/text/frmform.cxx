@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-22 16:14:13 $
+ *  last change: $Author: fme $ $Date: 2001-11-23 16:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2117,6 +2117,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 
             SwTxtLineAccess aAccess( this );
             const sal_Bool bNew = !aAccess.SwTxtLineAccess::IsAvailable();
+            sal_Bool bSetOfst = sal_False;
 
             if( CalcPreps() )
                 ; // nothing
@@ -2133,7 +2134,8 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                 }
                 SetWidow( sal_False );
             }
-            else if( GetOfst() && GetOfst() > GetTxtNode()->GetTxt().Len() )
+            else if( ( bSetOfst = ( GetOfst() && GetOfst() > GetTxtNode()->GetTxt().Len() ) ) &&
+                     IsFollow() )
             {
                 SwTxtFrm *pMaster = FindMaster();
                 ASSERT( pMaster, "SwTxtFrm::Format: homeless follow" );
@@ -2159,6 +2161,10 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             }
             else
             {
+                // bSetOfst here means that we have the "red arrow situation"
+                if ( bSetOfst )
+                    _SetOfst( 0 );
+
                 const sal_Bool bOrphan = IsWidow();
                 const SwFtnBossFrm* pFtnBoss = HasFtn() ? FindFtnBossFrm() : 0;
                 SwTwips nFtnHeight;
