@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:59:18 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,7 @@ namespace xmloff
         ,m_nIncludeBindings(0)
         ,m_nClassId(FormComponentType::CONTROL)
         ,m_pOuterElement(NULL)
+        ,m_eType( UNKNOWN )
     {
         OSL_ENSURE(m_xProps.is(), "OControlExport::OControlExport: invalid arguments!");
     }
