@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseNumberOfSet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:08:23 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,12 +105,12 @@ published service DatabaseNumberOfSet
     [property] long SetNumber;
 
     /** indicates the URL of a database file.
-        @since #i25411#
+        @since OOo 2.0.0
      */
     [optional, property] string DataBaseURL;
 
     /** indicates a connection URL, which locates a database driver.
-        @since #i25411#
+        @since OOo 2.0.0
      */
     [optional, property] string DataBaseResource;
 
