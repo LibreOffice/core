@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: mav $ $Date: 2002-02-19 17:00:09 $
+ *  last change: $Author: mav $ $Date: 2002-02-22 16:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,9 +194,13 @@ class ActiveDataStreamer : public ::cppu::WeakImplHelper1< XActiveDataStreamer >
     Reference< XStream > mStream;
 public:
 
-    virtual Reference< XStream > SAL_CALL getStream() { return mStream; }
+    virtual Reference< XStream > SAL_CALL getStream()
+            throw( RuntimeException )
+            { return mStream; }
 
-    virtual void SAL_CALL setStream( const Reference< XStream >& stream ) { mStream = stream; }
+    virtual void SAL_CALL setStream( const Reference< XStream >& stream )
+            throw( RuntimeException )
+            { mStream = stream; }
 };
 
 //===========================================================================
