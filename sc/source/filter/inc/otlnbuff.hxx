@@ -2,9 +2,9 @@
  *
  *  $RCSfile: otlnbuff.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,22 +75,20 @@ class OutlineBuffer
         BYTE*           pLevel;
         BOOL*           pOuted;
         BOOL*           pHidden;
-        USHORT          nSize;
-        USHORT          nLast;
+        SCSIZE          nSize;
+        SCSIZE          nLast;
         BYTE            nMaxLevel;
         ScOutlineArray* pOutlineArray;
         BOOL            bButtonNormal;  // TRUE -> right / under
     public:
-                        OutlineBuffer( USHORT nNewSize );
+                        OutlineBuffer( SCSIZE nNewSize );
                         ~OutlineBuffer();
-        void            SetLevel( USHORT nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden );
-        void            SetOuted( USHORT nIndex );
-        void            SetOuted( USHORT nIndex, BOOL bOuted );
+        void            SetLevel( SCSIZE nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden );
         void            SetOutlineArray( ScOutlineArray* pOArray );
         void            Reset( void );
         void            Reset( ScOutlineArray* pOArray );
         void            MakeScOutline( void );
-        void            SetLevelRange( USHORT nF, USHORT nL, BYTE nVal,
+        void            SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
                             BOOL bOuted, BOOL bHidden );
 
         inline BOOL     HasOutline( void ) const;
