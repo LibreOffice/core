@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:16:23 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <so3/ipobj.hxx>
 #include <tools/poly.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include <svtools/accessibilityoptions.hxx>
 
 #ifndef SVX_FRAMELINKARRAY_HXX
@@ -2285,6 +2286,94 @@ void ScOutputData::DrawNoteMarks()
                     }
                     if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
                         pDev->DrawRect( Rectangle( nMarkX,nPosY,nMarkX+2*nLayoutSign,nPosY+2 ) );
+                }
+
+                nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
+            }
+        }
+        nPosY += pThisRowInfo->nHeight;
+    }
+}
+
+void ScOutputData::AddPDFNotes()
+{
+    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+    if ( !pPDFData || !pPDFData->GetIsExportNotes() )
+        return;
+
+    long nInitPosX = nScrX;
+    if ( bLayoutRTL )
+    {
+        Size aOnePixel = pDev->PixelToLogic(Size(1,1));
+        long nOneX = aOnePixel.Width();
+        nInitPosX += nMirrorW - nOneX;
+    }
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+    long nPosY = nScrY;
+    for (SCROW nArrY=1; nArrY+1<nArrCount; nArrY++)     // SCSIZE?
+    {
+        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        if ( pThisRowInfo->bChanged )
+        {
+            long nPosX = nInitPosX;
+            for (SCCOL nX=nX1; nX<=nX2; nX++)
+            {
+                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
+                ScBaseCell* pCell = pInfo->pCell;
+                BOOL bIsMerged = FALSE;
+                SCROW nY = pRowInfo[nArrY].nRowNo;
+                SCCOL nMergeX = nX;
+                SCROW nMergeY = nY;
+
+                if ( nX==nX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
+                {
+                    // find start of merged cell
+                    bIsMerged = TRUE;
+                    pDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
+                    pCell = pDoc->GetCell( ScAddress(nMergeX,nMergeY,nTab) );
+                    // use origin's pCell for NotePtr test below
+                }
+
+                if ( pCell && pCell->GetNotePtr() && ( bIsMerged ||
+                        ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
+                {
+                    long nNoteWidth = (long)( SC_CLIPMARK_SIZE * nPPTX );
+                    long nNoteHeight = (long)( SC_CLIPMARK_SIZE * nPPTY );
+
+                    long nMarkX = nPosX + ( pRowInfo[0].pCellInfo[nX+1].nWidth - nNoteWidth ) * nLayoutSign;
+                    if ( bIsMerged || pInfo->bMerged )
+                    {
+                        //  if merged, add widths of all cells
+                        SCCOL nNextX = nX + 1;
+                        while ( nNextX <= nX2 + 1 && pThisRowInfo->pCellInfo[nNextX+1].bHOverlapped )
+                        {
+                            nMarkX += pRowInfo[0].pCellInfo[nNextX+1].nWidth * nLayoutSign;
+                            ++nNextX;
+                        }
+                    }
+                    if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
+                    {
+                        Rectangle aNoteRect( nMarkX, nPosY, nMarkX+nNoteWidth*nLayoutSign, nPosY+nNoteHeight );
+                        const ScPostIt* pNote = pCell->GetNotePtr();
+
+                        // Note title is the cell address (as on printed note pages)
+                        String aTitle;
+                        ScAddress aAddress( nMergeX, nMergeY, nTab );
+                        aAddress.Format( aTitle, SCA_VALID, pDoc );
+
+                        // Content has to be a simple string without line breaks
+                        String aContent = pNote->GetText();
+                        aContent.ConvertLineEnd(LINEEND_LF);
+                        xub_StrLen nPos;
+                        while ( (nPos=aContent.Search('\n')) != STRING_NOTFOUND )
+                            aContent.SetChar( nPos, ' ' );
+
+                        vcl::PDFNote aNote;
+                        aNote.Title = aTitle;
+                        aNote.Contents = aContent;
+                        pPDFData->CreateNote( aNoteRect, aNote );
+                    }
                 }
 
                 nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
