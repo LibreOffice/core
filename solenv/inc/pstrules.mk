@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-14 14:14:33 $
+#   last change: $Author: hjs $ $Date: 2001-09-05 10:07:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,8 @@ $(OBJ)$/sxl_%.obj : %.cxx
 .ENDIF			# "$(SVXLIGHTOBJFILES)"!=""
 
 .IF "$(SVXLIGHTSLOFILES)"!=""
+
+SVXLIGHTDEFS=-DSVX_LIGHT
 
 $(SLO)$/sxl_%.obj : %.cxx
     @echo ------------------------------
