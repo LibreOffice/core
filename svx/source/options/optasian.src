@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:29:05 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ hebrew ] = "‮קירוב תווים‬";
         Text[ hindi ] = "केर्निंग";
         Text[ slovak ] = "Kerning";
+        Text[ hungarian ] = "Alávágás";
+        Text[ slovenian ] = "Spodsekavanje";
     };
     RadioButton RB_CHAR_KERNING
     {
@@ -136,6 +138,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ hebrew ] = "‮תווים מערביים בלבד‬";
         Text[ hindi ] = "केवल ~पाश्चात्य अक्षर";
         Text[ slovak ] = "Iba ~západné znaky";
+        Text[ hungarian ] = "~Csak nyugati karakterek közt";
+        Text[ slovenian ] = "Samo ~zahodni znaki";
     };
     RadioButton RB_CHAR_PUNCT
     {
@@ -152,7 +156,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ spanish ] = "Texto occidental y puntuaci�n asi�tica";
         Text[ finnish ] = "L�nsimainen teksti ja v�limerkit";
         Text[ italian ] = "~Testo occidentale e punteggiatura asiatica";
-        Text[ danish ] = "~Vestlig tekst og tegns�tning";
+        Text[ danish ] = "~Vestlig tekst og asiatisk tegns�tning";
         Text[ swedish ] = "~V�stliga tecken och asiatisk interpunktion";
         Text[ polish ] = "Znaki ~zachodnie i interpunkcja azjatycka";
         Text[ portuguese_brazilian ] = "~Texto Ocidental e pontua��o Asi�tica";
@@ -168,6 +172,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ hebrew ] = "‮טקסט מערבי וסימן פיסוק של מזרח הרחוק‬";
         Text[ hindi ] = "पाश्चात्य ~टेक्स्ट् और ऐशियन विराम-चिह्न";
         Text[ slovak ] = "Západný ~text a ázijská interpunkcia";
+        Text[ hungarian ] = "Nyugati karakterek és ázsiai írás~jelek közt";
+        Text[ slovenian ] = "Zahodno ~besedilo in azijska ločila";
     };
     FixedLine GB_CHAR_DIST
     {
@@ -183,7 +189,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ french ] = "Espacement des caract�res";
         Text[ spanish ] = "Espacio entre caracteres";
         Text[ italian ] = "Spazio tra caratteri";
-        Text[ danish ] = "Linjeafstand";
+        Text[ danish ] = "Tegnafstand";
         Text[ swedish ] = "Teckenavst�nd";
         Text[ polish ] = "Odst�py mi�dzy znakami";
         Text[ portuguese_brazilian ] = "Afastamento entre caracteres";
@@ -200,6 +206,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ hebrew ] = "‮ריווח תוים‬";
         Text[ hindi ] = "अक्षर का अंतर देना";
         Text[ slovak ] = "Rozostup znakov";
+        Text[ hungarian ] = "Betűköz";
+        Text[ slovenian ] = "Razmik med znaki";
     };
     RadioButton RB_NO_COMP
     {
@@ -215,7 +223,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ french ] = "~Sans compression";
         Text[ spanish ] = "Sin compresi�n";
         Text[ italian ] = "Senza compressione";
-        Text[ danish ] = "~Ingen kompression";
+        Text[ danish ] = "~Ingen komprimering";
         Text[ swedish ] = "Ingen ~kompression";
         Text[ polish ] = "~Bez kompresji";
         Text[ portuguese_brazilian ] = "~Sem compress�o";
@@ -232,6 +240,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ hebrew ] = "‮ללא דחיסה‬";
         Text[ hindi ] = "कोई दबाव ~नहीं";
         Text[ slovak ] = "~Bez kompresie";
+        Text[ hungarian ] = "~Tömörítetlen";
+        Text[ slovenian ] = "~Brez stiskanja";
     };
     RadioButton RB_PUNCT_COMP
     {
@@ -264,6 +274,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ hebrew ] = "‮דחיסת סימני פיסוק בלבד‬";
         Text[ hindi ] = "केवल विराम-चिह्न को ~दबाओ";
         Text[ slovak ] = "~Komprimovať iba interpunkciu";
+        Text[ hungarian ] = "~Csak a központozás tömörítése";
+        Text[ slovenian ] = "~Stisni samo ločila";
     };
     RadioButton RB_PUNCT_KANA_COMP
     {
@@ -296,6 +308,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ hebrew ] = "‮דחיסת סימני פיסוק וקנא יפנית‬";
         Text[ hindi ] = "~विराम-चिह्न और जपानीस काना को दबाओ";
         Text[ slovak ] = "Komprimovať ~interpunkciu a japonskú Kana";
+        Text[ hungarian ] = "Í~rásjelek és japán kana tömörítése is";
+        Text[ slovenian ] = "Stisni ~ločila in japonsko kano";
     };
     FixedLine GB_START_END
     {
@@ -328,6 +342,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ hebrew ] = "‮אותיות ראשונות ואחרונות‬";
         Text[ hindi ] = "प्रारंभ और अंत का अक्षरें";
         Text[ slovak ] = "Prvé a posledné znaky";
+        Text[ hungarian ] = "Első és utolsó karakter";
+        Text[ slovenian ] = "Prvi in zadnji znaki";
     };
     FixedText FT_LANGUAGE
     {
@@ -343,7 +359,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ french ] = "~Langue";
         Text[ spanish ] = "Idioma";
         Text[ italian ] = "~Lingua";
-        Text[ danish ] = "~Sprog";
+        Text[ danish ] = "S~prog";
         Text[ swedish ] = "~Spr�k";
         Text[ polish ] = "~J�zyk";
         Text[ portuguese_brazilian ] = "~Idioma";
@@ -360,6 +376,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "~भाषा";
         Text[ slovak ] = "~Jazyk";
+        Text[ hungarian ] = "~Nyelv";
+        Text[ slovenian ] = "~Jezik";
     };
     ListBox LB_LANGUAGE
     {
@@ -382,7 +400,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ french ] = "Par d�faut";
         Text[ spanish ] = "Predeterminado";
         Text[ italian ] = "~Standard";
-        Text[ danish ] = "Stan~dard";
+        Text[ danish ] = "Standar~d";
         Text[ swedish ] = "St~andard";
         Text[ polish ] = "~Domy�lnie";
         Text[ portuguese_brazilian ] = "~Padr�o";
@@ -399,6 +417,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
         Text[ slovak ] = "Výcho~dzí";
+        Text[ hungarian ] = "~Alapértelmezett";
+        Text[ slovenian ] = "~Privzeto";
     };
     FixedText FT_START
     {
@@ -414,7 +434,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ french ] = "Pas en d�~but de ligne :";
         Text[ spanish ] = "Sin inicio de fila:";
         Text[ italian ] = "No ad inizio riga:";
-        Text[ danish ] = "I~ngen linjestart:";
+        Text[ danish ] = "Ingen linjestart:";
         Text[ swedish ] = "Inte i ~b�rjan av rad:";
         Text[ polish ] = "~Nie na pocz�tku wiersza:";
         Text[ portuguese_brazilian ] = "N�o est� no in�cio da linha:";
@@ -432,6 +452,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ hebrew ] = "‮לא בתחילת שורה: ‬";
         Text[ hindi ] = "रेखा की प्रारंभ में नहीं:";
         Text[ slovak ] = "Nie na začiatku riadku:";
+        Text[ hungarian ] = "Sor elején nem állhat:";
+        Text[ slovenian ] = "Ne na začetku vrstice:";
     };
     Edit ED_START
     {
@@ -453,7 +475,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ french ] = "Pas en ~fin de ligne :";
         Text[ spanish ] = "Sin fin de l�nea:";
         Text[ italian ] = "No a fine riga:";
-        Text[ danish ] = "Ingen linje~afslutning:";
+        Text[ danish ] = "Ikke ved slutningen af linjen:";
         Text[ swedish ] = "Inte i slut~et av rad:";
         Text[ polish ] = "Ni~e na ko�cu wiersza:";
         Text[ portuguese_brazilian ] = "N�o est� no final da linha:";
@@ -471,6 +493,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ hebrew ] = "‮לא בסוף שורה:‬";
         Text[ hindi ] = "रेखा की अंत में नहीं:";
         Text[ slovak ] = "Nie na konci riadku:";
+        Text[ hungarian ] = "Sor végén nem állhat:";
+        Text[ slovenian ] = "Ne na koncu vrstice:";
     };
     Edit ED_END
     {
@@ -488,11 +512,11 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ portuguese ] = "Sem caracteres de quebra de linha personalizados";
         Text[ russian ] = "��� ������������ ������������� �������� �������� ������";
         Text[ greek ] = "����� ����������� ���������� ������� ������";
-        Text[ dutch ] = "Zonder door gebruiker gedefinieerde afbreekstreepjes";
+        Text[ dutch ] = "Zonder gebruikergedefinieerde afbreekstreepjes";
         Text[ french ] = "Sans caract�res personnalis�s de retour � la ligne";
         Text[ spanish ] = "Sin car�cter de cambio de fila definido por el usuario";
         Text[ italian ] = "Senza simbolo personalizzato di cambio riga";
-        Text[ danish ] = "Uden brugerdefinerede linjeskifttegn";
+        Text[ danish ] = "Uden brugerdefinerede linjeskiftstegn";
         Text[ swedish ] = "Utan anv�ndardefinierade radbrytningstecken";
         Text[ polish ] = "Bez zdefiniowanych indywidualnie znak�w podzia�u wiersza";
         Text[ portuguese_brazilian ] = "Sem s�mbolos de quebra de linha definidos pelo usu�rio";
@@ -509,6 +533,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ hebrew ] = "‮ללא סימני שבירת שורה מוגדרים בידי המשתמש‬";
         Text[ hindi ] = "उपभोक्ता से परिभाषा किया हुआ रेखा खण्डन संकेत रहित";
         Text[ slovak ] = "Bez užívateľom definovaných symbolov pre zalomenie riadku";
+        Text[ hungarian ] = "Felhasználói sortörésjelek nélkül";
+        Text[ slovenian ] = "Brez uporabniško določenih simbolov za prelom vrstic";
     };
     Text[ english_us ] = "Proxy";
     Text[ portuguese ] = "Proxy";
@@ -535,7 +561,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ hebrew ] = "‮פרוקסי‬";
     Text[ hindi ] = "प्रॉक्सी";
     Text[ slovak ] = "Proxy";
+    Text[ hungarian ] = "Proxy";
+    Text[ slovenian ] = "Proxy";
 };
+
 
 
 
