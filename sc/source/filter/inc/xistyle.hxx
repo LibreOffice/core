@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:23:52 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,11 +327,12 @@ struct XclImpCellBorder : public XclCellBorder
     bool                        mbRightUsed;    /// true = Right line style used.
     bool                        mbTopUsed;      /// true = Top line style used.
     bool                        mbBottomUsed;   /// true = Bottom line style used.
+    bool                        mbDiagUsed;     /// true = Diagonal line style used.
 
     explicit                    XclImpCellBorder();
 
-    /** Sets all line states to used or unused. */
-    void                        SetAllUsedFlags( bool bUsed );
+    /** Sets outer line states and diagonal line states to used or unused. */
+    void                        SetUsedFlags( bool bOuterUsed, bool bDiagUsed );
 
     /** Fills this struct with BIFF2 XF record data. */
     void                        FillFromXF2( sal_uInt8 nFlags );
@@ -367,7 +368,7 @@ struct XclImpCellArea : public XclCellArea
     explicit                    XclImpCellArea();
 
     /** Sets colors and pattern state to used or unused. */
-    void                        SetAllUsedFlags( bool bUsed );
+    void                        SetUsedFlags( bool bUsed );
 
     /** Fills this struct with BIFF2 XF record data. */
     void                        FillFromXF2( sal_uInt8 nFlags );
