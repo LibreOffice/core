@@ -7,7 +7,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">WITA</value>
+            <value>WITA</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT ALIEN</value></prop>
     </node>
