@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:27:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,11 @@
 #endif
 
 #include "global.hxx"
-#include "document.hxx"
 #include "rangeutl.hxx"
 #include "pivot.hxx"
 #include "rechead.hxx"
 #include "compiler.hxx"
+#include "paramisc.hxx"
 
 #include "sc.hrc"
 #include "globstr.hrc"
@@ -133,7 +133,8 @@ ScImportParam::~ScImportParam()
 
 void ScImportParam::Clear()
 {
-    nCol1=nRow1=nCol2=nRow2 = 0;
+    nCol1 = nCol2 = 0;
+    nRow1 = nRow2 = 0;
     bImport = FALSE;
     bNative = FALSE;
     bSql = TRUE;
@@ -266,6 +267,8 @@ BOOL ScQueryEntry::operator==( const ScQueryEntry& r ) const
 
 void ScQueryEntry::Load( SvStream& rStream )
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     BYTE cOp, cConnect;
     rStream >> bDoQuery
             >> bQueryByString
@@ -276,10 +279,13 @@ void ScQueryEntry::Load( SvStream& rStream )
     rStream.ReadByteString( *pStr, rStream.GetStreamCharSet() );
     eOp = (ScQueryOp) cOp;
     eConnect = (ScQueryConnect) cConnect;
+#endif
 }
 
 void ScQueryEntry::Store( SvStream& rStream ) const
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream << bDoQuery
             << bQueryByString
             << (BYTE) eOp
@@ -287,6 +293,7 @@ void ScQueryEntry::Store( SvStream& rStream ) const
             << nField
             << nVal;
     rStream.WriteByteString( *pStr, rStream.GetStreamCharSet() );
+#endif
 }
 
 utl::TextSearch* ScQueryEntry::GetSearchTextPtr( BOOL bCaseSens )
@@ -335,9 +342,10 @@ ScQueryParam::~ScQueryParam()
 
 void ScQueryParam::Clear()
 {
-    nCol1=nRow1=nCol2=nRow2=
-    nDestTab=nDestCol=nDestRow = 0;
-    nTab = USHRT_MAX;
+    nCol1=nCol2=nDestCol = 0;
+    nRow1=nRow2=nDestRow = 0;
+    nDestTab = 0;
+    nTab = SCTAB_MAX;
     bHasHeader=bCaseSens=bRegExp = FALSE;
     bInplace=bByRow=bDuplicate=bDestPers = TRUE;
 
@@ -412,11 +420,11 @@ BOOL ScQueryParam::operator==( const ScQueryParam& rOther ) const
 
 //------------------------------------------------------------------------
 
-void ScQueryParam::DeleteQuery( USHORT nPos )
+void ScQueryParam::DeleteQuery( SCSIZE nPos )
 {
     if (nPos<nEntryCount)
     {
-        for (USHORT i=nPos; i+1<nEntryCount; i++)
+        for (SCSIZE i=nPos; i+1<nEntryCount; i++)
             pEntries[i] = pEntries[i+1];
 
         pEntries[nEntryCount-1].Clear();
@@ -427,7 +435,7 @@ void ScQueryParam::DeleteQuery( USHORT nPos )
 
 //------------------------------------------------------------------------
 
-void ScQueryParam::Resize(USHORT nNew)
+void ScQueryParam::Resize(SCSIZE nNew)
 {
     if ( nNew < MAXQUERY )
         nNew = MAXQUERY;                // nie weniger als MAXQUERY
@@ -436,8 +444,8 @@ void ScQueryParam::Resize(USHORT nNew)
     if ( nNew )
         pNewEntries = new ScQueryEntry[nNew];
 
-    USHORT nCopy = Min( nEntryCount, nNew );
-    for (USHORT i=0; i<nCopy; i++)
+    SCSIZE nCopy = Min( nEntryCount, nNew );
+    for (SCSIZE i=0; i<nCopy; i++)
         pNewEntries[i] = pEntries[i];
 
     if ( nEntryCount )
@@ -452,9 +460,9 @@ void ScQueryParam::MoveToDest()
 {
     if (!bInplace)
     {
-        short nDifX = ((short) nDestCol) - ((short) nCol1);
-        short nDifY = ((short) nDestRow) - ((short) nRow1);
-        short nDifZ = ((short) nDestTab) - ((short) nTab);
+        SCsCOL nDifX = ((SCsCOL) nDestCol) - ((SCsCOL) nCol1);
+        SCsROW nDifY = ((SCsROW) nDestRow) - ((SCsROW) nRow1);
+        SCsTAB nDifZ = ((SCsTAB) nDestTab) - ((SCsTAB) nTab);
 
         nCol1 += nDifX;
         nRow1 += nDifY;
@@ -472,7 +480,7 @@ void ScQueryParam::MoveToDest()
 
 //------------------------------------------------------------------------
 
-void ScQueryParam::FillInExcelSyntax(String& aCellStr, USHORT nIndex)
+void ScQueryParam::FillInExcelSyntax(String& aCellStr, SCSIZE nIndex)
 {
     if (aCellStr.Len() > 0)
     {
@@ -533,6 +541,8 @@ void ScQueryParam::Load( SvStream& rStream )        // z.B. fuer Pivot-Tabelle
 
     ScReadHeader aHdr( rStream );
 
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream >> nCol1
             >> nRow1
             >> nCol2
@@ -546,6 +556,7 @@ void ScQueryParam::Load( SvStream& rStream )        // z.B. fuer Pivot-Tabelle
             >> bRegExp
             >> bDuplicate
             >> bByRow;
+#endif
 
     Resize( MAXQUERY );
 
@@ -571,6 +582,8 @@ void ScQueryParam::Store( SvStream& rStream ) const     // z.B. fuer Pivot-Tabel
         ((ScQueryParam*)this)->Resize( MAXQUERY );
     }
 
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream << nCol1
             << nRow1
             << nCol2
@@ -584,6 +597,7 @@ void ScQueryParam::Store( SvStream& rStream ) const     // z.B. fuer Pivot-Tabel
             << bRegExp
             << bDuplicate
             << bByRow;
+#endif
 
     for (USHORT i=0; i<MAXQUERY; i++)
         pEntries[i].Store(rStream);
@@ -620,10 +634,10 @@ ScSubTotalParam::ScSubTotalParam( const ScSubTotalParam& r ) :
         if ( (r.nSubTotals[i] > 0) && r.pSubTotals[i] && r.pFunctions[i] )
         {
             nSubTotals[i] = r.nSubTotals[i];
-            pSubTotals[i] = new USHORT          [r.nSubTotals[i]];
+            pSubTotals[i] = new SCCOL   [r.nSubTotals[i]];
             pFunctions[i] = new ScSubTotalFunc  [r.nSubTotals[i]];
 
-            for (USHORT j=0; j<r.nSubTotals[i]; j++)
+            for (SCCOL j=0; j<r.nSubTotals[i]; j++)
             {
                 pSubTotals[i][j] = r.pSubTotals[i][j];
                 pFunctions[i][j] = r.pFunctions[i][j];
@@ -642,7 +656,9 @@ ScSubTotalParam::ScSubTotalParam( const ScSubTotalParam& r ) :
 
 void ScSubTotalParam::Clear()
 {
-    nCol1=nRow1=nCol2=nRow2=nUserIndex = 0;
+    nCol1=nCol2= 0;
+    nRow1=nRow2 = 0;
+    nUserIndex = 0;
     bPagebreak=bCaseSens=bUserDef=bIncludePattern=bRemoveOnly = FALSE;
     bAscending=bReplace=bDoSort = TRUE;
 
@@ -653,7 +669,7 @@ void ScSubTotalParam::Clear()
 
         if ( (nSubTotals[i] > 0) && pSubTotals[i] && pFunctions[i] )
         {
-            for ( USHORT j=0; j<nSubTotals[i]; j++ ) {
+            for ( SCCOL j=0; j<nSubTotals[i]; j++ ) {
                 pSubTotals[i][j] = 0;
                 pFunctions[i][j] = SUBTOTAL_FUNC_NONE;
             }
@@ -690,10 +706,10 @@ ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
 
         if ( r.nSubTotals[i] > 0 )
         {
-            pSubTotals[i] = new USHORT          [r.nSubTotals[i]];
+            pSubTotals[i] = new SCCOL   [r.nSubTotals[i]];
             pFunctions[i] = new ScSubTotalFunc  [r.nSubTotals[i]];
 
-            for (USHORT j=0; j<r.nSubTotals[i]; j++)
+            for (SCCOL j=0; j<r.nSubTotals[i]; j++)
             {
                 pSubTotals[i][j] = r.pSubTotals[i][j];
                 pFunctions[i][j] = r.pFunctions[i][j];
@@ -741,7 +757,7 @@ BOOL ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
             {
                 bEqual = (pSubTotals != NULL) && (pFunctions != NULL);
 
-                for (USHORT j=0; (j<nSubTotals[i]) && bEqual; j++)
+                for (SCCOL j=0; (j<nSubTotals[i]) && bEqual; j++)
                 {
                     bEqual =   bEqual
                             && (pSubTotals[i][j] == rOther.pSubTotals[i][j])
@@ -757,7 +773,7 @@ BOOL ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
 //------------------------------------------------------------------------
 
 void ScSubTotalParam::SetSubTotals( USHORT                  nGroup,
-                                    const USHORT*           ptrSubTotals,
+                                    const SCCOL*            ptrSubTotals,
                                     const ScSubTotalFunc*   ptrFunctions,
                                     USHORT                  nCount )
 {
@@ -779,9 +795,9 @@ void ScSubTotalParam::SetSubTotals( USHORT                  nGroup,
         delete [] pSubTotals[nGroup];
         delete [] pFunctions[nGroup];
 
-        pSubTotals[nGroup] = new USHORT         [nCount];
+        pSubTotals[nGroup] = new SCCOL      [nCount];
         pFunctions[nGroup] = new ScSubTotalFunc [nCount];
-        nSubTotals[nGroup] = nCount;
+        nSubTotals[nGroup] = static_cast<SCCOL>(nCount);
 
         for ( USHORT i=0; i<nCount; i++ )
         {
@@ -844,7 +860,9 @@ void __EXPORT ScConsolidateParam::Clear()
 {
     ClearDataAreas();
 
-    nCol = nRow = nTab                  = 0;
+    nCol = 0;
+    nRow = 0;
+    nTab = 0;
     bByCol = bByRow = bReferenceData    = FALSE;
     eFunction                           = SUBTOTAL_FUNC_SUM;
 }
@@ -911,6 +929,8 @@ void ScConsolidateParam::Load( SvStream& rStream )
     ScReadHeader aHdr( rStream );
 
     BYTE nByte;
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream >> nCol >> nRow >> nTab
             >> bByCol >> bByRow >> bReferenceData >> nByte;
     eFunction = (ScSubTotalFunc) nByte;
@@ -925,11 +945,14 @@ void ScConsolidateParam::Load( SvStream& rStream )
             rStream >> *ppDataAreas[i];
         }
     }
+#endif
 }
 
 void ScConsolidateParam::Store( SvStream& rStream ) const
 {
     ScWriteHeader aHdr( rStream, 12+10*nDataAreaCount );
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
 
     rStream << nCol << nRow << nTab
             << bByCol << bByRow << bReferenceData << (BYTE) eFunction;
@@ -937,6 +960,7 @@ void ScConsolidateParam::Store( SvStream& rStream ) const
     rStream << nDataAreaCount;
     for (USHORT i=0; i<nDataAreaCount; i++)
         rStream << *ppDataAreas[i];
+#endif
 }
 
 //------------------------------------------------------------------------
@@ -978,7 +1002,9 @@ __EXPORT ScPivotParam::~ScPivotParam()
 
 void __EXPORT ScPivotParam::Clear()
 {
-    nCol = nRow = nTab = 0;
+    nCol = 0;
+    nRow = 0;
+    nTab = 0;
     bIgnoreEmptyRows = bDetectCategories = FALSE;
     bMakeTotalCol = bMakeTotalRow = TRUE;
     ClearLabelData();
@@ -991,7 +1017,7 @@ void __EXPORT ScPivotParam::ClearLabelData()
 {
     if ( (nLabels > 0) && ppLabelArr )
     {
-        for ( USHORT i=0; i<nLabels; i++ )
+        for ( SCSIZE i=0; i<nLabels; i++ )
             delete ppLabelArr[i];
         delete [] ppLabelArr;
         ppLabelArr = NULL;
@@ -1007,13 +1033,16 @@ void __EXPORT ScPivotParam::ClearPivotArrays()
     memset( aColArr, 0, PIVOT_MAXFIELD * sizeof(PivotField) );
     memset( aRowArr, 0, PIVOT_MAXFIELD * sizeof(PivotField) );
     memset( aDataArr, 0, PIVOT_MAXFIELD * sizeof(PivotField) );
-    nPageCount = nColCount = nRowCount = nDataCount = 0;
+    nPageCount = 0;
+    nColCount = 0;
+    nRowCount = 0;
+    nDataCount = 0;
 }
 
 //------------------------------------------------------------------------
 
 void __EXPORT ScPivotParam::SetLabelData( LabelData**   pLabArr,
-                                          USHORT        nLab )
+                                          SCSIZE        nLab )
 {
     ClearLabelData();
 
@@ -1021,7 +1050,7 @@ void __EXPORT ScPivotParam::SetLabelData( LabelData**   pLabArr,
     {
         nLabels = (nLab>MAX_LABELS) ? MAX_LABELS : nLab;
         ppLabelArr = new LabelData*[nLabels];
-        for ( USHORT i=0; i<nLabels; i++ )
+        for ( SCSIZE i=0; i<nLabels; i++ )
             ppLabelArr[i] = new LabelData( *(pLabArr[i]) );
     }
 }
@@ -1032,10 +1061,10 @@ void __EXPORT ScPivotParam::SetPivotArrays  ( const PivotField* pPageArr,
                                               const PivotField* pColArr,
                                               const PivotField* pRowArr,
                                               const PivotField* pDataArr,
-                                              USHORT            nPageCnt,
-                                              USHORT            nColCnt,
-                                              USHORT            nRowCnt,
-                                              USHORT            nDataCnt )
+                                              SCSIZE            nPageCnt,
+                                              SCSIZE            nColCnt,
+                                              SCSIZE            nRowCnt,
+                                              SCSIZE            nDataCnt )
 {
     ClearPivotArrays();
 
@@ -1091,7 +1120,7 @@ BOOL __EXPORT ScPivotParam::operator==( const ScPivotParam& r ) const
 
     if ( bEqual )
     {
-        USHORT i;
+        SCSIZE i;
 
         for ( i=0; i<nPageCount && bEqual; i++ )
             bEqual = ( aPageArr[i] == r.aPageArr[i] );
@@ -1195,10 +1224,10 @@ ScTabOpParam::ScTabOpParam( const ScTabOpParam& r )
 
 //------------------------------------------------------------------------
 
-ScTabOpParam::ScTabOpParam( const ScRefTripel& rFormulaCell,
-                            const ScRefTripel& rFormulaEnd,
-                            const ScRefTripel& rRowCell,
-                            const ScRefTripel& rColCell,
+ScTabOpParam::ScTabOpParam( const ScRefAddress& rFormulaCell,
+                            const ScRefAddress& rFormulaEnd,
+                            const ScRefAddress& rRowCell,
+                            const ScRefAddress& rColCell,
                                   BYTE       nMd)
     :   aRefFormulaCell ( rFormulaCell ),
         aRefFormulaEnd  ( rFormulaEnd ),
@@ -1332,467 +1361,6 @@ String ScGlobal::GetDocTabName( const String& rFileName,
     aDocTab += SC_COMPILER_FILE_TAB_SEP;
     aDocTab += rTabName;    // "'Doc'#Tab"
     return aDocTab;
-}
-
-
-USHORT lcl_ConvertSingleRef( BOOL& bExternal, const sal_Unicode* p,
-            ScDocument* pDoc, ScAddress& rAddr )
-{
-    if ( !*p )
-        return 0;
-    USHORT  nRes = 0;
-    String  aDocName;       // der pure Dokumentenname
-    String  aDocTab;        // zusammengesetzt fuer Table
-    String  aTab;
-    BOOL    bExtDoc = FALSE;
-    BOOL    bNeedExtTab = FALSE;
-
-    if ( *p == '\'' && ScGlobal::UnicodeStrChr( p, SC_COMPILER_FILE_TAB_SEP ) )
-    {
-        BOOL bQuote = TRUE;         // Dokumentenname ist immer quoted
-        aDocTab += *p++;
-        while ( bQuote && *p )
-        {
-            if ( *p == '\'' && *(p-1) != '\\' )
-                bQuote = FALSE;
-            else if( !(*p == '\\' && *(p+1) == '\'') )
-                aDocName += *p;     // falls escaped Quote: nur Quote in den Namen
-            aDocTab += *p++;
-        }
-        aDocTab += *p;              // den SC_COMPILER_FILE_TAB_SEP mitnehmen
-        if( *p++ == SC_COMPILER_FILE_TAB_SEP )
-            bExtDoc = TRUE;
-        else
-            return nRes;
-    }
-
-    USHORT  nCol = 0;
-    USHORT  nRow = 0;
-    USHORT  nTab = 0;
-    USHORT  nBits = SCA_VALID_TAB;
-    const sal_Unicode* q;
-    if ( ScGlobal::UnicodeStrChr( p, '.') )
-    {
-        nRes |= SCA_TAB_3D;
-        if ( bExtDoc )
-            nRes |= SCA_TAB_ABSOLUTE;
-        if (*p == '$')
-            nRes |= SCA_TAB_ABSOLUTE, p++;
-        BOOL bQuote = FALSE;
-        if( *p == '\'' )
-            p++, bQuote = TRUE;
-        while (*p && (*p != '.'))
-        {
-            if( bQuote && *p == '\'' )
-            {
-                p++; break;
-            }
-            aTab += *p++;
-        }
-        if( *p++ != '.' )
-            nBits = 0;
-        if ( pDoc )
-        {
-            if ( bExtDoc )
-            {
-                bExternal = TRUE;
-                aDocTab += aTab;    // "'Doc'#Tab"
-                if ( !pDoc->GetTable( aDocTab, nTab ) )
-                {
-                    if ( pDoc->ValidTabName( aTab ) )
-                    {
-                        aDocName = ScGlobal::GetAbsDocName( aDocName,
-                            pDoc->GetDocumentShell() );
-                        aDocTab = ScGlobal::GetDocTabName( aDocName, aTab );
-                        if ( !pDoc->GetTable( aDocTab, nTab ) )
-                        {
-                            // erst einfuegen, wenn Rest der Ref ok
-                            bNeedExtTab = TRUE;
-                            nBits = 0;
-                        }
-                    }
-                    else
-                        nBits = 0;
-                }
-            }
-            else
-            {
-                if ( !pDoc->GetTable( aTab, nTab ) )
-                    nBits = 0;
-            }
-        }
-        else
-            nBits = 0;
-    }
-    else
-    {
-        if ( bExtDoc )
-            return nRes;        // nach Dokument muss Tabelle folgen
-        nTab = rAddr.Tab();
-    }
-    nRes |= nBits;
-
-    q = p;
-    if (*p)
-    {
-        nBits = SCA_VALID_COL;
-        if (*p == '$')
-            nBits |= SCA_COL_ABSOLUTE, p++;
-        if( CharClass::isAsciiAlpha( *p ) )
-            nCol = toupper( char(*p++) ) - 'A';
-        else
-            nBits = 0;
-        if( CharClass::isAsciiAlpha( *p ) )
-            nCol = ((nCol + 1) * 26) + (toupper( char(*p++) ) - 'A');
-        if( nCol > MAXCOL )
-            nBits = 0;
-        while( CharClass::isAsciiAlpha( *p ) )
-            p++, nBits = 0;
-        nRes |= nBits;
-        if( !nBits )
-            p = q;
-    }
-
-    q = p;
-    if (*p)
-    {
-        nBits = SCA_VALID_ROW;
-        if (*p == '$')
-            nBits |= SCA_ROW_ABSOLUTE, p++;
-        if( !CharClass::isAsciiDigit( *p ) )
-        {
-            nBits = 0;
-            nRow = USHORT(-1);
-        }
-        else
-        {
-            String aTmp( p );
-            long n = aTmp.ToInt32() - 1;
-            while (CharClass::isAsciiDigit( *p ))
-                p++;
-            if( n < 0 || n > MAXROW )
-                nBits = 0;
-            nRow = (USHORT) n;
-        }
-        nRes |= nBits;
-        if( !nBits )
-            p = q;
-    }
-    if ( bNeedExtTab )
-    {
-        if ( (nRes & SCA_VALID_ROW) && (nRes & SCA_VALID_COL)
-          && pDoc->LinkExternalTab( nTab, aDocTab, aDocName, aTab ) )
-        {
-            nRes |= SCA_VALID_TAB;
-        }
-        else
-            nRes = 0;   // #NAME? statt #REF!, Dateiname bleibt erhalten
-    }
-    if ( !(nRes & SCA_VALID_ROW) && (nRes & SCA_VALID_COL)
-            && !( (nRes & SCA_TAB_3D) && (nRes & SCA_VALID_TAB)) )
-    {   // keine Row, keine Tab, aber Col => DM (...), B (...) o.ae.
-        nRes = 0;
-    }
-    if( !*p )
-    {
-        USHORT nMask = nRes & ( SCA_VALID_ROW | SCA_VALID_COL | SCA_VALID_TAB );
-        if( nMask == ( SCA_VALID_ROW | SCA_VALID_COL | SCA_VALID_TAB ) )
-            nRes |= SCA_VALID;
-    }
-    else
-        nRes = 0;
-    rAddr.Set( nCol, nRow, nTab );
-    return nRes;
-}
-
-
-//  ConvertSingleRef mit sal_Unicode* muss vorher stehen!!!
-
-BOOL ConvertSingleRef( ScDocument* pDoc, const String& rRefString,
-            USHORT nDefTab, ScRefTripel& rRefTripel )
-{
-    BOOL bExternal = FALSE;
-    ScAddress aAddr( 0, 0, nDefTab );
-    USHORT nRes = lcl_ConvertSingleRef( bExternal, rRefString.GetBuffer(), pDoc, aAddr );
-    if( nRes & SCA_VALID )
-    {
-        rRefTripel.Put( aAddr.Col(), aAddr.Row(), aAddr.Tab(),
-                        BOOL( ( nRes & SCA_COL_ABSOLUTE ) == 0 ),
-                        BOOL( ( nRes & SCA_ROW_ABSOLUTE ) == 0 ),
-                        BOOL( ( nRes & SCA_TAB_ABSOLUTE ) == 0 ) );
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-
-
-BOOL ConvertDoubleRef( ScDocument* pDoc, const String& rRefString, USHORT nDefTab,
-            ScRefTripel& rStartRefTripel, ScRefTripel& rEndRefTripel )
-{
-    BOOL bRet = FALSE;
-    xub_StrLen nPos = rRefString.Search(':');
-    if (nPos != STRING_NOTFOUND)
-    {
-        String aTmp( rRefString );
-        sal_Unicode* p = aTmp.GetBufferAccess();
-        p[ nPos ] = 0;
-        if ( ConvertSingleRef( pDoc, p, nDefTab, rStartRefTripel ) )
-        {
-            nDefTab = rStartRefTripel.GetTab();
-            bRet = ConvertSingleRef( pDoc, p + nPos + 1, nDefTab, rEndRefTripel );
-        }
-    }
-    return bRet;
-}
-
-
-USHORT ScAddress::Parse( const String& r, ScDocument* pDoc )
-{
-    BOOL bExternal = FALSE;
-    return lcl_ConvertSingleRef( bExternal, r.GetBuffer(), pDoc, *this );
-}
-
-BOOL ScRange::Intersects( const ScRange& r ) const
-{
-    return !(
-        Min( aEnd.Col(), r.aEnd.Col() ) < Max( aStart.Col(), r.aStart.Col() )
-     || Min( aEnd.Row(), r.aEnd.Row() ) < Max( aStart.Row(), r.aStart.Row() )
-     || Min( aEnd.Tab(), r.aEnd.Tab() ) < Max( aStart.Tab(), r.aStart.Tab() )
-        );
-}
-
-void ScRange::Justify()
-{
-    USHORT nTemp;
-    if ( aEnd.Col() < (nTemp = aStart.Col()) )
-    {
-        aStart.SetCol(aEnd.Col()); aEnd.SetCol(nTemp);
-    }
-    if ( aEnd.Row() < (nTemp = aStart.Row()) )
-    {
-        aStart.SetRow(aEnd.Row()); aEnd.SetRow(nTemp);
-    }
-    if ( aEnd.Tab() < (nTemp = aStart.Tab()) )
-    {
-        aStart.SetTab(aEnd.Tab()); aEnd.SetTab(nTemp);
-    }
-}
-
-void ScRange::ExtendOne()
-{
-    //  Range fuer Rahmen etc. in X und Y Richtung um 1 erweitern
-
-    USHORT nVal;
-
-    if ((nVal = aStart.Col()) > 0)
-        aStart.SetCol(nVal-1);
-    if ((nVal = aStart.Row()) > 0)
-        aStart.SetRow(nVal-1);
-
-    if ((nVal = aEnd.Col()) < MAXCOL)
-        aEnd.SetCol(nVal+1);
-    if ((nVal = aEnd.Row()) < MAXROW)
-        aEnd.SetRow(nVal+1);
-}
-
-USHORT ScRange::Parse( const String& r, ScDocument* pDoc )
-{
-    USHORT nRes1 = 0, nRes2 = 0;
-    xub_StrLen nTmp = 0;
-    xub_StrLen nPos = STRING_NOTFOUND;
-    while ( (nTmp = r.Search( ':', nTmp )) != STRING_NOTFOUND )
-        nPos = nTmp++;      // der letzte zaehlt, koennte 'd:\...'!a1:a2 sein
-    if (nPos != STRING_NOTFOUND)
-    {
-        String aTmp( r );
-        sal_Unicode* p = aTmp.GetBufferAccess();
-        p[ nPos ] = 0;
-        BOOL bExternal = FALSE;
-        if( nRes1 = lcl_ConvertSingleRef( bExternal, p, pDoc, aStart ) )
-        {
-            aEnd = aStart;  // die Tab _muss_ gleich sein, so ist`s weniger Code
-            if ( nRes2 = lcl_ConvertSingleRef( bExternal, p + nPos+ 1, pDoc, aEnd ) )
-            {
-                if ( bExternal && aStart.Tab() != aEnd.Tab() )
-                    nRes2 &= ~SCA_VALID_TAB;    // #REF!
-                else
-                {
-                    // PutInOrder / Justify
-                    USHORT nTemp, nMask, nBits1, nBits2;
-                    if ( aEnd.Col() < (nTemp = aStart.Col()) )
-                    {
-                        aStart.SetCol(aEnd.Col()); aEnd.SetCol(nTemp);
-                        nMask = (SCA_VALID_COL | SCA_COL_ABSOLUTE);
-                        nBits1 = nRes1 & nMask;
-                        nBits2 = nRes2 & nMask;
-                        nRes1 = (nRes1 & ~nMask) | nBits2;
-                        nRes2 = (nRes2 & ~nMask) | nBits1;
-                    }
-                    if ( aEnd.Row() < (nTemp = aStart.Row()) )
-                    {
-                        aStart.SetRow(aEnd.Row()); aEnd.SetRow(nTemp);
-                        nMask = (SCA_VALID_ROW | SCA_ROW_ABSOLUTE);
-                        nBits1 = nRes1 & nMask;
-                        nBits2 = nRes2 & nMask;
-                        nRes1 = (nRes1 & ~nMask) | nBits2;
-                        nRes2 = (nRes2 & ~nMask) | nBits1;
-                    }
-                    if ( aEnd.Tab() < (nTemp = aStart.Tab()) )
-                    {
-                        aStart.SetTab(aEnd.Tab()); aEnd.SetTab(nTemp);
-                        nMask = (SCA_VALID_TAB | SCA_TAB_ABSOLUTE | SCA_TAB_3D);
-                        nBits1 = nRes1 & nMask;
-                        nBits2 = nRes2 & nMask;
-                        nRes1 = (nRes1 & ~nMask) | nBits2;
-                        nRes2 = (nRes2 & ~nMask) | nBits1;
-                    }
-                    if ( ((nRes1 & ( SCA_TAB_ABSOLUTE | SCA_TAB_3D ))
-                            == ( SCA_TAB_ABSOLUTE | SCA_TAB_3D ))
-                            && !(nRes2 & SCA_TAB_3D) )
-                        nRes2 |= SCA_TAB_ABSOLUTE;
-                }
-            }
-            else
-                nRes1 = 0;      // #38840# keine Tokens aus halben Sachen
-        }
-    }
-    nRes1 = ( ( nRes1 | nRes2 ) & SCA_VALID )
-          | nRes1
-          | ( ( nRes2 & 0x070F ) << 4 );
-    return nRes1;
-}
-
-USHORT ScRange::ParseAny( const String& r, ScDocument* pDoc )
-{
-    USHORT nRet = Parse( r, pDoc );
-    const USHORT nValid = SCA_VALID | SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2;
-    if ( (nRet & nValid) != nValid )
-    {
-        ScAddress aAdr;
-        nRet = aAdr.Parse( r, pDoc );
-        if ( nRet & SCA_VALID )
-            aStart = aEnd = aAdr;
-    }
-    return nRet;
-}
-
-void ScAddress::Format( String& r, USHORT nFlags, ScDocument* pDoc ) const
-{
-    USHORT nTab = Tab();
-    USHORT nCol = Col();
-    r.Erase();
-    if( nFlags & SCA_VALID )
-        nFlags |= ( SCA_VALID_ROW | SCA_VALID_COL | SCA_VALID_TAB );
-    if( pDoc && (nFlags & SCA_VALID_TAB ) )
-    {
-        if ( nTab >= pDoc->GetTableCount() )
-        {
-            r = ScGlobal::GetRscString( STR_NOREF_STR );
-            return;
-        }
-//      if( nFlags & ( SCA_TAB_ABSOLUTE | SCA_TAB_3D ) )
-        if( nFlags & SCA_TAB_3D )
-        {
-            String aTabName;
-            pDoc->GetName( nTab, aTabName );
-
-            //  externe Referenzen (wie in ScCompiler::MakeTabStr)
-            String aDoc;
-            if ( aTabName.GetChar(0) == '\'' )
-            {   // "'Doc'#Tab"
-                xub_StrLen nPos, nLen = 1;
-                while( (nPos = aTabName.Search( '\'', nLen ))
-                        != STRING_NOTFOUND )
-                    nLen = nPos + 1;
-                if ( aTabName.GetChar(nLen) == SC_COMPILER_FILE_TAB_SEP )
-                {
-                    aDoc = aTabName.Copy( 0, nLen + 1 );
-                    aTabName.Erase( 0, nLen + 1 );
-                }
-            }
-            r += aDoc;
-
-            if( nFlags & SCA_TAB_ABSOLUTE )
-                r += '$';
-            ScCompiler::CheckTabQuotes( aTabName );
-            r += aTabName;
-            r += '.';
-        }
-    }
-    if( nFlags & SCA_VALID_COL )
-    {
-        if( nFlags & SCA_COL_ABSOLUTE )
-            r += '$';
-        if ( nCol < 26 )
-            r += (sal_Unicode) ( 'A' + nCol );
-        else
-        {
-            r += (sal_Unicode) ( 'A' + ( nCol / 26 ) - 1 );
-            r += (sal_Unicode) ( 'A' + ( nCol % 26 ) );
-        }
-    }
-    if( nFlags & SCA_VALID_ROW )
-    {
-        if ( nFlags & SCA_ROW_ABSOLUTE )
-            r += '$';
-        r += String::CreateFromInt32( Row()+1 );
-    }
-}
-
-
-void ScRange::Format( String& r, USHORT nFlags, ScDocument* pDoc ) const
-{
-    if( !( nFlags & SCA_VALID ) )
-        r = ScGlobal::GetRscString( STR_NOREF_STR );
-    else
-    {
-        BOOL bOneTab = (aStart.Tab() == aEnd.Tab());
-        if ( !bOneTab )
-            nFlags |= SCA_TAB_3D;
-        aStart.Format( r, nFlags, pDoc );
-        if( aStart != aEnd )
-        {
-            String aName;
-            nFlags = ( nFlags & SCA_VALID ) | ( ( nFlags >> 4 ) & 0x070F );
-            if ( bOneTab )
-                pDoc = NULL;
-            else
-                nFlags |= SCA_TAB_3D;
-            aEnd.Format( aName, nFlags, pDoc );
-            r += ':';
-            r += aName;
-        }
-    }
-}
-
-BOOL ScAddress::Move( short dx, short dy, short dz, ScDocument* pDoc )
-{
-    short nMaxTab = pDoc ? pDoc->GetTableCount() : MAXTAB+1;
-    dx = Col() + dx;
-    dy = Row() + dy;
-    dz = Tab() + dz;
-    BOOL bValid = TRUE;
-    if( dx < 0 )
-        dx = 0, bValid = FALSE;
-    else if( dx > MAXCOL )
-        dx = MAXCOL, bValid =FALSE;
-    if( dy < 0 )
-        dy = 0, bValid = FALSE;
-    else if( dy > MAXROW )
-        dy = MAXROW, bValid =FALSE;
-    if( dz < 0 )
-        dz = 0, bValid = FALSE;
-    else if( dz >= nMaxTab )
-        dz = nMaxTab-1, bValid =FALSE;
-    Set( dx, dy, dz );
-    return bValid;
-}
-
-BOOL ScRange::Move( short dx, short dy, short dz, ScDocument* pDoc )
-{
-    // Einfahces &, damit beides ausgefuehrt wird!!
-    return aStart.Move( dx, dy, dz, pDoc ) & aEnd.Move( dx, dy, dz, pDoc );
 }
 
 
