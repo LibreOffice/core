@@ -251,9 +251,7 @@ public class XMergeBridge {
                         XInputStream.class , xPipeObj );
             xOutStream = (XOutputStream) UnoRuntime.queryInterface(
                         XOutputStream.class , xPipeObj );
-
         convert (xis,xOutStream,false,udJarPath,sFileName,offMime,sdMime);
-
         Object xSaxParserObj=xMSF.createInstance("com.sun.star.xml.sax.Parser");
 
         XParser xParser = (XParser) UnoRuntime.queryInterface(
@@ -268,7 +266,6 @@ public class XMergeBridge {
             }
         aInput.sSystemId = sFileName;
         aInput.aInputStream =xInStream;
-
                 xParser.setDocumentHandler ( xDocHandler );
 
         xParser.parseStream ( aInput );
@@ -387,6 +384,9 @@ public class XMergeBridge {
         if (origString.indexOf("&")!=-1){
         origString=replace(origString,"&","&amp;");
         }
+         if (origString.indexOf("\"")!=-1){
+        origString=replace(origString,"\"","&quot;");
+        }
         if (origString.indexOf("<")!=-1){
         origString=replace(origString,"<","&lt;");
         }
@@ -405,6 +405,7 @@ public class XMergeBridge {
 
     public void endDocument()
     {
+
         try{
 
         convert (xInStream,xos,true,udJarPath,sURL,offMime,sdMime);
@@ -503,7 +504,6 @@ public class XMergeBridge {
 
 
          XOutputStreamToOutputStreamAdapter newxos =new XOutputStreamToOutputStreamAdapter(device);
-
          try{
          ConverterInfoReader cir = new ConverterInfoReader(jarName,false);
          ciEnum =cir.getConverterInfoEnumeration();
@@ -579,6 +579,10 @@ public class XMergeBridge {
              }
              ConverterInfoMgr.removeByJar(jarName);
          }
+         catch (StackOverflowError sOE){
+             System.out.println("\nERROR : Stack OverFlow. \n Increase of the JRE by adding the following line to the end of the javarc file \n \"-Xss1m\"\n");
+
+         }
          catch (Exception e) {
              System.out.println("Error:"+e);
               throw new IOException("Xmerge Exception");
@@ -588,7 +592,6 @@ public class XMergeBridge {
 
          try {
               //Check to see if jar contains a plugin Impl
-
                  ConverterInfoMgr.addPlugIn(ciEnum);
                  ConverterFactory cf = new ConverterFactory();
              Convert cv = cf.getConverter(ConverterInfoMgr.findConverterInfo(sdMime,offMime),true);
@@ -612,6 +615,9 @@ public class XMergeBridge {
                  newxos.close();
              }
              ConverterInfoMgr.removeByJar(jarName);
+         }
+         catch (StackOverflowError sOE){
+              System.out.println("\nERROR : Stack OverFlow. \n Increase of the JRE by adding the following line to the end of the javarc file \n \"-Xss1m\"\n");
          }
          catch (Exception e) {
              System.out.println("Error:"+e);

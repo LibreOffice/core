@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FlatXml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aidan $ $Date: 2002-10-23 15:52:16 $
+ *  last change: $Author: aidan $ $Date: 2002-10-24 09:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,9 @@ OUString needsMask(OUString origString){
 
         if (origString.indexOf(rtl::OUString::createFromAscii("&"))!=-1){
         origString=replace(origString,rtl::OUString::createFromAscii("&"),rtl::OUString::createFromAscii("&amp;"));
+        }
+        if (origString.indexOf(rtl::OUString::createFromAscii("\""))!=-1){
+        origString=replace(origString,rtl::OUString::createFromAscii("\""),rtl::OUString::createFromAscii("&quot;"));
         }
         if (origString.indexOf(rtl::OUString::createFromAscii("<"))!=-1){
         origString=replace(origString,rtl::OUString::createFromAscii("<"),rtl::OUString::createFromAscii("&lt;"));
