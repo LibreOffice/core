@@ -151,6 +151,7 @@ hedabu: ..\inc\resary.hxx %_DEST%\inc%_EXT%\tools\resary.hxx
 hedabu: ..\inc\poly.hxx %_DEST%\inc%_EXT%\tools\poly.hxx
 hedabu: ..\inc\line.hxx %_DEST%\inc%_EXT%\tools\line.hxx
 hedabu: ..\inc\vector2d.hxx %_DEST%\inc%_EXT%\tools\vector2d.hxx
+hedabu: ..\inc\testtoolloader.hxx %_DEST%\inc%_EXT%\tools\testtoolloader.hxx
 
 ..\testshl\inc\*.hxx %_DEST%\inc%_EXT%\testshl\*.hxx
 
