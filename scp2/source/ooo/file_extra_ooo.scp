@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_extra_ooo.scp,v $
 *
-*  $Revision: 1.10 $
+*  $Revision: 1.11 $
 *
-*  last change: $Author: rt $ $Date: 2004-12-16 10:52:28 $
+*  last change: $Author: rt $ $Date: 2005-01-28 16:24:57 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -75,12 +75,11 @@ File gid_File_Extra_Autotextshare_Lang
     EXTRA_ALL_LANG(autotextshare);
 End
 
-File gid_File_Extra_Autotextuser_Lang
-    NetDir = gid_Dir_User_Autotext_Language;
+File gid_File_Extra_Autotextuser
     Dir = gid_Dir_User_Autotext;
     USER_FILE_BODY;
     Styles = (ARCHIVE, WORKSTATION, DOCLANG, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(autotextuser);
+    Name = "autotextuser.zip";
 End
 
 #ifdef UNX
