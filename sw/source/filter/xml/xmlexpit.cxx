@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:53:21 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,14 +204,14 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
         SvXMLItemMapEntry* pEntry = mrMapEntries->getByIndex( nIndex );
 
         // we have a valid map entry here, so lets use it...
-        if( 0 == (pEntry->nMemberId & MID_FLAG_NO_ITEM_EXPORT) )
+        if( 0 == (pEntry->nMemberId & MID_SW_FLAG_NO_ITEM_EXPORT) )
         {
             const SfxPoolItem* pItem = GetItem( rSet, pEntry->nWhichId,
                                                 nFlags );
             // do we have an item?
             if(pItem)
             {
-                if( 0 != (pEntry->nMemberId & MID_FLAG_ELEMENT_ITEM_EXPORT) )
+                if( 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT) )
                 {
                     // element items do not add any properties,
                     // we export it later
@@ -243,7 +243,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
                                  sal_uInt16 nFlags,
                                  const SfxItemSet *pSet ) const
 {
-    if( 0 != (rEntry.nMemberId & MID_FLAG_SPECIAL_ITEM_EXPORT) )
+    if( 0 != (rEntry.nMemberId & MID_SW_FLAG_SPECIAL_ITEM_EXPORT) )
     {
         if( rItem.ISA( SvXMLAttrContainerItem ) )
         {
@@ -300,10 +300,10 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
                                   rNamespaceMap, pSet );
         }
     }
-    else if( 0 == (rEntry.nMemberId & MID_FLAG_ELEMENT_ITEM_EXPORT) )
+    else if( 0 == (rEntry.nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT) )
     {
         OUString aValue;
-        if( QueryXMLValue(rItem, aValue, rEntry.nMemberId & MID_FLAG_MASK,
+        if( QueryXMLValue(rItem, aValue, rEntry.nMemberId & MID_SW_FLAG_MASK,
                              rUnitConverter ) )
         {
             OUString sName(
@@ -328,7 +328,7 @@ void SvXMLExportItemMapper::exportElementItems(
     {
         const sal_uInt16 nElement = rIndexArray.GetObject( nIndex );
         SvXMLItemMapEntry* pEntry = mrMapEntries->getByIndex( nElement );
-        DBG_ASSERT( 0 != (pEntry->nMemberId & MID_FLAG_ELEMENT_ITEM_EXPORT),
+        DBG_ASSERT( 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT),
                     "wrong mid flag!" );
 
         const SfxPoolItem* pItem = GetItem( rSet, pEntry->nWhichId, nFlags );
@@ -414,7 +414,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
 }
 
 /** this method is called for every item that has the
-    MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
+    MID_SW_FLAG_SPECIAL_ITEM_EXPORT flag set */
 void SvXMLExportItemMapper::handleSpecialItem( SvXMLAttributeList& rAttrList,
                                     const SvXMLItemMapEntry& rEntry,
                                     const SfxPoolItem& rItem,
@@ -426,7 +426,7 @@ void SvXMLExportItemMapper::handleSpecialItem( SvXMLAttributeList& rAttrList,
 }
 
 /** this method is called for every item that has the
-    MID_FLAG_NO_ITEM_EXPORT flag set */
+    MID_SW_FLAG_NO_ITEM_EXPORT flag set */
 void SvXMLExportItemMapper::handleNoItem( SvXMLAttributeList& rAttrList,
                                const SvXMLItemMapEntry& rEntry,
                                const SvXMLUnitConverter& rUnitConverter,
@@ -437,7 +437,7 @@ void SvXMLExportItemMapper::handleNoItem( SvXMLAttributeList& rAttrList,
 }
 
 /** this method is called for every item that has the
-    MID_FLAG_ELEMENT_EXPORT flag set */
+    MID_SW_FLAG_ELEMENT_EXPORT flag set */
 void SvXMLExportItemMapper::handleElementItem(
                         SvXMLExport& rExport,
                         const SvXMLItemMapEntry& rEntry,
