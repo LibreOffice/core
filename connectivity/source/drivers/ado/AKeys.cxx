@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeys.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 09:56:08 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,20 +136,20 @@ void OKeys::appendObject( const Reference< XPropertySet >& descriptor )
                                 adKeyPrimary, // must be every time adKeyPrimary
                                 vOptional)) )
         {
-            ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+            ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
             // just make sure that an SQLExceptionis thrown here
-            throw SQLException(::rtl::OUString::createFromAscii("Could not append key!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+            throw SQLException(::rtl::OUString::createFromAscii("Could not append key!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
         }
     }
     else
-        throw SQLException(::rtl::OUString::createFromAscii("Could not append key!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Could not append key!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OKeys::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
     if(!m_aCollection.Delete(OLEVariant(_sElementName)))
-        ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+        ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
 }
 // -----------------------------------------------------------------------------
 Reference< XNamed > OKeys::cloneObject(const Reference< XPropertySet >& _xDescriptor)
