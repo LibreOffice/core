@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-17 10:12:08 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 11:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@
 #endif
 
 #include "unoapi.hxx"
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -243,7 +244,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
 
     default:
         {
-            SfxPoolItem* pNewItem = pPool->GetDefaultItem( nWhich ).Clone();
+            ::std::auto_ptr<SfxPoolItem> pNewItem( pPool->GetDefaultItem( nWhich ).Clone() );
 
             const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric(nWhich) : SFX_MAPUNIT_100TH_MM;
 
