@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-08 15:19:05 $
+ *  last change: $Author: mt $ $Date: 2002-02-08 08:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,10 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 #pragma hdrstop
@@ -2443,7 +2447,7 @@ void ImplBtn::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 // =======================================================================
-
+
 ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( Window* pParent ) :
     FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW )
 {
@@ -2452,6 +2456,15 @@ ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( Window* pParent ) :
     mbAutoWidth = FALSE;
 
     EnableSaveBackground();
+}
+
+// -----------------------------------------------------------------------
+
+uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ImplListBoxFloatingWindow::CreateAccessible()
+{
+    // Hide Accessible for this Window, because it's a top window we don't want to see as a top window.
+    // Must be handled in the ListBox/ComboBox Accessibility Implementation
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
