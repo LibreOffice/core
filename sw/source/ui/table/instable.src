@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:24:13 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 17:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,8 +267,8 @@ ModalDialog DLG_INSERT_TABLE
     };
     CheckBox CB_REPEAT_HEADER
     {
-        Pos = MAP_APPFONT ( 18 , 88 ) ;
-        Size = MAP_APPFONT ( 107 , 10 ) ;
+        Pos = MAP_APPFONT ( 21 , 88 ) ;
+        Size = MAP_APPFONT ( 104 , 10 ) ;
         Text = "Auf jeder Seite ~wiederholen" ;
         Text [ ENGLISH ] = "Repeat on every page" ;
         TabStop = TRUE ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:44:46 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 17:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,8 +272,8 @@ TabPage TP_OPTLOAD_PAGE
     };
     CheckBox CB_AUTO_UPDATE_CHARTS
     {
-        Pos = MAP_APPFONT ( 142 , 39) ;
-        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Pos = MAP_APPFONT ( 145 , 39) ;
+        Size = MAP_APPFONT ( 109 , 10 ) ;
         Text = "Dia~gramme automatisch" ;
         Text [ English ] = "Charts automatically" ;
         Text[ english_us ] = "~Charts";

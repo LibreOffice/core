@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:01:03 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 17:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     };
     RadioButton RB_HEADL_COLNMS
     {
-        Pos = MAP_APPFONT ( 117 , 142 ) ;
+        Pos = MAP_APPFONT ( 120 , 142 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "S~paltenamen übernehmen" ;
         Text [ English ] = "Column name" ;
@@ -591,7 +591,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     };
     RadioButton RB_HEADL_EMPTY
     {
-        Pos = MAP_APPFONT ( 117 , 156 ) ;
+        Pos = MAP_APPFONT ( 120 , 155 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "Nur Zeile erstellen" ;
         Text [ English ] = "empty" ;

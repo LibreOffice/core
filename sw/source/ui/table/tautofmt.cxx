@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:10 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 17:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
                     BOOL bSetAutoFormat, const SwTableAutoFmt* pSelFmt )
     : SfxModalDialog( pParent, SW_RES( DLG_AUTOFMT_TABLE ) ),
     //
-    aFtFormat       ( this, SW_RES( FT_FORMAT ) ),
+    aFlFormat       ( this, SW_RES( FL_FORMAT ) ),
     aLbFormat       ( this, SW_RES( LB_FORMAT ) ),
     pWndPreview     ( new AutoFmtPreview( this, SW_RES( WND_PREVIEW ) ) ),
     aBtnNumFormat   ( this, SW_RES( BTN_NUMFORMAT ) ),
@@ -266,7 +266,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
     aBtnFont        ( this, SW_RES( BTN_FONT ) ),
     aBtnPattern     ( this, SW_RES( BTN_PATTERN ) ),
     aBtnAlignment   ( this, SW_RES( BTN_ALIGNMENT ) ),
-    aFLFormat       ( this, SW_RES( FL_FORMAT ) ),
+    aFlFormats       ( this, SW_RES( FL_FORMATS ) ),
     aBtnOk          ( this, SW_RES( BTN_OK ) ),
     aBtnCancel      ( this, SW_RES( BTN_CANCEL ) ),
     aBtnHelp        ( this, SW_RES( BTN_HELP ) ),
@@ -331,7 +331,7 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
     aBtnMore.AddWindow( &aBtnFont );
     aBtnMore.AddWindow( &aBtnPattern );
     aBtnMore.AddWindow( &aBtnAlignment );
-    aBtnMore.AddWindow( &aFLFormat );
+    aBtnMore.AddWindow( &aFlFormats );
     aBtnMore.AddWindow( &aBtnRename );
 
     aBtnAdd.Enable( bSetAutoFmt );
@@ -1723,6 +1723,9 @@ void lcl_SwLinkLine(const SwLineStruct& dLine,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/06/01 11:14:10  fme
+    Fix #86988#: Redesign of dialogs
+
     Revision 1.4  2001/01/26 15:15:40  os
     #83247# CreateFromInt32
 

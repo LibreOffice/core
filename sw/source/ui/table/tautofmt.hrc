@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:10 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 17:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,8 @@
 
 // Autoformat
 #define LB_FORMAT       1
-#define FT_FORMAT       9
+#define FL_FORMAT               9
+#define FL_FORMATS               29
 #define WND_PREVIEW     19
 #define BTN_NUMFORMAT   20
 #define BTN_BORDER      21
@@ -84,7 +85,6 @@
 #define BTN_PATTERN     24
 #define BTN_ALIGNMENT   25
 //#define BTN_ADJUST        26
-#define FL_FORMAT               29
 #define STR_ADD_TITLE   100
 #define STR_ADD_LABEL   101
 #define STR_DEL_TITLE   102

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:36:07 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 17:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,46 +81,24 @@ ModalDialog DLG_AUTOFMT_TABLE
     Text [ spanish ] = "AutoFormato" ;
     Text [ english_us ] = "AutoFormat" ;
     Moveable = TRUE ;
-    FixedText FT_FORMAT
+    FixedLine FL_FORMAT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "~Format" ;
-        Text [ ENGLISH ] = "~Format" ;
-        Text [ norwegian ] = "~Format" ;
-        Text [ italian ] = "Formato" ;
-        Text [ portuguese_brazilian ] = "~Formato" ;
-        Text [ portuguese ] = "Fo~rmatar" ;
-        Text [ finnish ] = "~Muotoile" ;
-        Text [ danish ] = "~Format" ;
-        Text [ french ] = "Forma~t" ;
-        Text [ swedish ] = "~Format" ;
-        Text [ dutch ] = "~Formaat" ;
-        Text [ spanish ] = "~Formato" ;
-        Text [ english_us ] = "F~ormat" ;
-        Text[ chinese_simplified ] = "∏Ò Ω(~O)";
-        Text[ russian ] = "‘Ó~Ï‡Ú";
-        Text[ polish ] = "Format";
-        Text[ japanese ] = "èëéÆ(~O)";
-        Text[ chinese_traditional ] = "ÆÊ¶°(~O)";
-        Text[ arabic ] = " ‰”Ìﬁ";
-        Text[ greek ] = "ÃÔÒ~ˆﬁ";
-        Text[ korean ] = "º≠Ωƒ(~O)";
-        Text[ turkish ] = "~Format";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Formato";
+        Size = MAP_APPFONT ( 243 , 8 ) ;
+        Text = "Format" ;
+        Text [ english_us ] = "Format" ;
     };
     ListBox LB_FORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 16 ) ;
-        Size = MAP_APPFONT ( 65 , 98 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 65 , 100 ) ;
         TabStop = TRUE ;
     };
     Window WND_PREVIEW
     {
-        Pos = MAP_APPFONT ( 83 , 12 ) ;
-        Size = MAP_APPFONT ( 161 , 86 ) ;
+        Pos = MAP_APPFONT ( 83 , 14 ) ;
+        Size = MAP_APPFONT ( 161 , 100 ) ;
     };
     CheckBox BTN_NUMFORMAT
     {
@@ -277,7 +255,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Orienta~ciÛn";
     };
-    FixedLine FL_FORMAT
+    FixedLine FL_FORMATS
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 120 ) ;

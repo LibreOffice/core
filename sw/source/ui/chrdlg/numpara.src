@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:06:49 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 17:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ TabPage TP_NUMPARA
     };
     FixedText FT_NEW_START
     {
-        Pos = MAP_APPFONT ( 18 , 59 ) ;
+        Pos = MAP_APPFONT ( 21 , 59 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Beginnen mit:" ;
         Text [ English ] = "~Start at:" ;
@@ -394,7 +394,7 @@ TabPage TP_NUMPARA
     };
     FixedText FT_RESTART_NO
     {
-        Pos = MAP_APPFONT ( 18 , 116 ) ;
+        Pos = MAP_APPFONT ( 21 , 116 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "B~eginnen mit:" ;
         Text [ English ] = "~Start at:" ;

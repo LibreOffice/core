@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:00:27 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 17:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1915,8 +1915,8 @@ TabPage TP_OPTTABLE_PAGE
     };
     CheckBox CB_REPEAT_HEADER
     {
-        Pos = MAP_APPFONT ( 18 , 27 ) ;
-        Size = MAP_APPFONT ( 107 , 10 ) ;
+        Pos = MAP_APPFONT ( 21 , 27 ) ;
+        Size = MAP_APPFONT ( 104 , 10 ) ;
         Text = "Auf jeder Seite ~wiederholen" ;
         Text [ ENGLISH ] = "Repeat on every page" ;
         TabStop = TRUE ;
@@ -2065,7 +2065,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     CheckBox CB_NUMFMT_FORMATTING
     {
-        Pos = MAP_APPFONT ( 142 , 27 ) ;
+        Pos = MAP_APPFONT ( 145 , 27 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text = "Zahlenformater~kennung" ;
         Text [ ENGLISH ] = "Numberformat recognition" ;
@@ -2094,7 +2094,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     CheckBox CB_NUMALIGNMENT
     {
-        Pos = MAP_APPFONT ( 142 , 40 ) ;
+        Pos = MAP_APPFONT ( 145 , 40 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text = "Au~srichtung" ;
         Text [ ENGLISH ] = "Alignment" ;
@@ -2177,7 +2177,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_ROWMOVE
     {
-        Pos = MAP_APPFONT ( 18 , 93 ) ;
+        Pos = MAP_APPFONT ( 21 , 93 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "~Zeile" ;
         Text [ English ] = "~Row" ;
@@ -2221,7 +2221,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_COLMOVE
     {
-        Pos = MAP_APPFONT ( 18 , 108 ) ;
+        Pos = MAP_APPFONT ( 21 , 108 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "Sp~alte" ;
         Text [ English ] = "~Column" ;
@@ -2292,7 +2292,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_ROWINSERT
     {
-        Pos = MAP_APPFONT ( 142 , 93 ) ;
+        Pos = MAP_APPFONT ( 145 , 93 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "Zei~le" ;
         Text [ English ] = "Ro~w" ;
@@ -2336,7 +2336,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_COLINSERT
     {
-        Pos = MAP_APPFONT ( 142 , 108 ) ;
+        Pos = MAP_APPFONT ( 145 , 108 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "S~palte" ;
         Text [ English ] = "C~olumn" ;
@@ -2407,7 +2407,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     RadioButton RB_FIX
     {
-        Pos = MAP_APPFONT ( 18 , 133 ) ;
+        Pos = MAP_APPFONT ( 21 , 133 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Fix" ;
         Text [ English ] = "~Fix" ;
@@ -2464,7 +2464,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     RadioButton RB_FIXPROP
     {
-        Pos = MAP_APPFONT ( 18 , 151 ) ;
+        Pos = MAP_APPFONT ( 21 , 151 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "F~ix, proportional" ;
         Text [ English ] = "F~ix, proportional" ;
@@ -2521,7 +2521,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     RadioButton RB_VAR
     {
-        Pos = MAP_APPFONT ( 18 , 169 ) ;
+        Pos = MAP_APPFONT ( 21 , 169 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Variabel" ;
         Text [ English ] = "~Variable" ;
@@ -3125,7 +3125,7 @@ TabPage TP_OPTSHDWCRSR
     };
     RadioButton RB_SHDWCRSFILLMARGIN
     {
-        Pos = MAP_APPFONT ( 142 , 39 ) ;
+        Pos = MAP_APPFONT ( 145 , 39 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Absatzausrichtung" ;
         Text [ ENGLISH ] = "~Adjustment" ;
@@ -3155,7 +3155,7 @@ TabPage TP_OPTSHDWCRSR
     };
     RadioButton RB_SHDWCRSFILLINDENT
     {
-        Pos = MAP_APPFONT ( 142 , 52 ) ;
+        Pos = MAP_APPFONT ( 145 , 52 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "li~nker Absatzrand" ;
         Text [ ENGLISH ] = "Left ~margin" ;
@@ -3183,7 +3183,7 @@ TabPage TP_OPTSHDWCRSR
     };
     RadioButton RB_SHDWCRSFILLTAB
     {
-        Pos = MAP_APPFONT ( 142 , 66 ) ;
+        Pos = MAP_APPFONT ( 145 , 66 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Tabulator" ;
         Text [ ENGLISH ] = "~Tab" ;
@@ -3211,7 +3211,7 @@ TabPage TP_OPTSHDWCRSR
     };
     RadioButton RB_SHDWCRSFILLSPACE
     {
-        Pos = MAP_APPFONT ( 142 , 79 ) ;
+        Pos = MAP_APPFONT ( 145 , 79 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Tabulator und ~Leerzeichen" ;
         Text [ ENGLISH ] = "Tabs and ~space" ;

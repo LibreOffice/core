@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:10:48 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 17:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,8 +507,8 @@
         };                                                                      \
         CheckBox CB_CASESENSITIVE                                                \
         {                                                                       \
-            Pos = MAP_APPFONT ( 18 , 104 ) ;                                     \
-            Size = MAP_APPFONT ( 134 , 12 ) ;                                   \
+            Pos = MAP_APPFONT ( 21 , 104 ) ;                                     \
+            Size = MAP_APPFONT ( 131 , 12 ) ;                                   \
             Text = "E~xakte Suche" ;                       \
             Text [ ENGLISH ] = "Match case" ;                 \
             Hide = TRUE;\
@@ -535,8 +535,8 @@
         };                                                                      \
         CheckBox CB_WORDONLY                                                \
         {                                                                       \
-            Pos = MAP_APPFONT ( 18 , 118 ) ;                                     \
-            Size = MAP_APPFONT ( 134 , 12 ) ;                                   \
+            Pos = MAP_APPFONT ( 21 , 118 ) ;                                     \
+            Size = MAP_APPFONT ( 131 , 12 ) ;                                   \
             Text = "Nur ganze ~Wörter" ;                       \
             Text [ ENGLISH ] = "Whole words only" ;                 \
             Hide = TRUE;\

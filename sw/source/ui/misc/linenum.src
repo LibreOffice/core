@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:24:38 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 17:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@ TabPage TP_LINENUMBERING
     Text [ ENGLISH ] = "Line Numbering" ;
     CheckBox CB_NUMBERING_ON
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 6 ) ;
+        Size = MAP_APPFONT ( 242 , 8 ) ;
         Text = "~Nummerierung einschalten" ;
         Text [ ENGLISH ] = "~Turn line numbering on" ;
         TabStop = TRUE ;
