@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonsoptions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:30 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,13 +99,14 @@
 *//*-*************************************************************************************************************/
 #define ADDONSMENUITEM_PROPERTYNAME_URL                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"               ))
 #define ADDONSMENUITEM_PROPERTYNAME_TITLE               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"             ))
-#define ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageIdentifier"   ))
 #define ADDONSMENUITEM_PROPERTYNAME_TARGET              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Target"            ))
-#define ADDONSMENUITEM_PROPERTYNAME_SUBMENU             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Submenu"           ))
-#define ADDONSMENUITEM_PROPERTYNAME_COMPONENTID         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ComponentID"       ))
+#define ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageIdentifier"   ))
 #define ADDONSMENUITEM_PROPERTYNAME_CONTEXT             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Context"           ))
+#define ADDONSMENUITEM_PROPERTYNAME_SUBMENU             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Submenu"           ))
 
-#define ADDONSPOPUPMENU_URL_PREFIX                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:menu/Addon" ))
+#define ADDONSPOPUPMENU_URL_PREFIX_STR                  "private:menu/Addon"
+
+#define ADDONSPOPUPMENU_URL_PREFIX                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ADDONSPOPUPMENU_URL_PREFIX_STR ))
 
 namespace framework
 {
@@ -187,7 +188,7 @@ class AddonsOptions
         void Clear();
 
         /*-****************************************************************************************************//**
-            @short      returns if a addons menu is available
+            @short      returns if an addons menu is available
             @descr      Call to retrieve if a addons menu is available
 
 
@@ -195,6 +196,16 @@ class AddonsOptions
         *//*-*****************************************************************************************************/
 
         sal_Bool    HasAddonsMenu() const;
+
+        /*-****************************************************************************************************//**
+            @short      returns if an addons help menu is available
+            @descr      Call to retrieve if a addons menu is available
+
+
+            @return     sal_True if there is a menu otherwise sal_False
+        *//*-*****************************************************************************************************/
+
+        sal_Bool    HasAddonsHelpMenu() const;
 
         /*-****************************************************************************************************//**
             @short      returns the  complete addons menu
@@ -209,19 +220,6 @@ class AddonsOptions
         *//*-*****************************************************************************************************/
 
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsMenu() const;
-
-        /*-****************************************************************************************************//**
-            @short      Get the popup-menu/menu entries of the specified component
-            @descr      Call it to add a addons popup menu or menu item for a component
-
-            @seealso    -
-
-            @return     A list of menu items which belongs to the specified component
-
-            @onerror    We return sal_False
-        *//*-*****************************************************************************************************/
-
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetAddonsComponentMenu( const ::rtl::OUString aComponentID ) const;
 
         /*-****************************************************************************************************//**
             @short      Gets the menu bar part of all addon components registered
@@ -248,6 +246,18 @@ class AddonsOptions
         *//*-*****************************************************************************************************/
 
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsToolBarPart() const;
+
+        /*-****************************************************************************************************//**
+            @short      Gets the Add-On help menu part of all addon components registered
+            @descr      -
+
+            @seealso    -
+
+            @return     A complete
+
+            @onerror    We return sal_False
+        *//*-*****************************************************************************************************/
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsHelpMenu() const;
 
         /*-****************************************************************************************************//**
             @short      Retrieve an image for a command URL which is defined inside the addon menu configuration
