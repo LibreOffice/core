@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2000-12-11 17:00:22 $
+ *  last change: $Author: tra $ $Date: 2000-12-11 17:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,6 @@ static void InitDCOM( )
 
 sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 {
-    OSVERSIONINFO aInfo;
-
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
