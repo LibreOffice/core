@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-28 11:55:15 $
+ *  last change: $Author: cl $ $Date: 2001-04-20 14:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1779,43 +1779,6 @@ void __EXPORT SdViewShell::GetMenuState( SfxItemSet &rSet )
         }
         rSet.Put(SfxUInt16Item(SID_STYLE_FAMILY, nFamily ));
     }
-}
-
-#define NUM_VIEW_SETTINGS 1
-void SdViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
-{
-    rSequence.realloc ( NUM_VIEW_SETTINGS );
-    sal_Int16 nIndex = 0;
-    com::sun::star::beans::PropertyValue *pValue = rSequence.getArray();
-
-    sal_uInt16 nViewID( GetViewFrame()->GetCurViewId());
-    pValue->Name = rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( "view-id" ) );
-    OUStringBuffer sBuffer ( OUString(RTL_CONSTASCII_USTRINGPARAM( "view" ) ) );
-    sBuffer.append( static_cast<sal_Int32>(nViewID));
-    pValue->Value <<= sBuffer.makeStringAndClear();
-    pValue++;nIndex++;
-
-    if ( nIndex < NUM_VIEW_SETTINGS )
-        rSequence.realloc ( nIndex );
-}
-#undef NUM_VIEW_SETTINGS
-
-void SdViewShell::ReadUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
-{
-/*
-    const sal_Int32 nLength = rSequence.getLength();
-    if (nLength)
-    {
-        const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
-        for (sal_Int16 i = 0 ; i < nLength; i++)
-        {
-            if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewLeft" ) ) )
-            {
-               pValue->Value >>= nX;
-            }
-        }
-    }
-*/
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: cl $ $Date: 2001-04-20 14:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,18 @@
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 #pragma hdrstop
+
+#ifndef _SD_FRMVIEW_HXX
+#include "frmview.hxx"
+#endif
+#ifndef _SD_UNOKYWDS_HXX_
+#include "unokywds.hxx"
+#endif
 
 #include "app.hrc"
 
@@ -661,4 +671,358 @@ void SdDrawViewShell::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
 }
 
 
+static rtl::OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
+{
+    rtl::OUStringBuffer aLines;
 
+    const USHORT nCount = rHelpLines.GetCount();
+    for( USHORT nHlpLine = 0; nHlpLine < nCount; nHlpLine++ )
+    {
+        const SdrHelpLine& rHelpLine = rHelpLines[nHlpLine];
+        const Point& rPos = rHelpLine.GetPos();
+
+        switch( rHelpLine.GetKind() )
+        {
+            case SDRHELPLINE_POINT:
+                aLines.append( (sal_Unicode)'P' );
+                aLines.append( (sal_Int32)rPos.X() );
+                aLines.append( (sal_Unicode)',' );
+                aLines.append( (sal_Int32)rPos.Y() );
+                break;
+            case SDRHELPLINE_VERTICAL:
+                aLines.append( (sal_Unicode)'V' );
+                aLines.append( (sal_Int32)rPos.X() );
+                break;
+            case SDRHELPLINE_HORIZONTAL:
+                aLines.append( (sal_Unicode)'H' );
+                aLines.append( (sal_Int32)rPos.Y() );
+                break;
+            default:
+                DBG_ERROR( "Unsupported helpline Kind!" );
+        }
+    }
+
+    return aLines.makeStringAndClear();
+}
+
+
+#define NUM_VIEW_SETTINGS 19
+void SdDrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+{
+    WriteFrameViewData();
+
+    rSequence.realloc ( NUM_VIEW_SETTINGS );
+    sal_Int16 nIndex = 0;
+    com::sun::star::beans::PropertyValue *pValue = rSequence.getArray();
+
+    sal_uInt16 nViewID( GetViewFrame()->GetCurViewId());
+    pValue->Name = rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_ViewId ) );
+    rtl::OUStringBuffer sBuffer ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "drawing-view" ) ) );
+    sBuffer.append( static_cast<sal_Int32>(nViewID));
+    pValue->Value <<= sBuffer.makeStringAndClear();
+    pValue++;nIndex++;
+
+    if( pFrameView->GetStandardHelpLines().GetCount() )
+    {
+        pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_SnapLinesDrawing ) );
+        pValue->Value <<= createHelpLinesString( pFrameView->GetStandardHelpLines() );
+        pValue++;nIndex++;
+    }
+
+    if( pFrameView->GetNotesHelpLines().GetCount() )
+    {
+        pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_SnapLinesNotes ) );
+        pValue->Value <<= createHelpLinesString( pFrameView->GetNotesHelpLines() );
+        pValue++;nIndex++;
+    }
+
+    if( pFrameView->GetHandoutHelpLines().GetCount() )
+    {
+        pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_SnapLinesHandout ) );
+        pValue->Value <<= createHelpLinesString( pFrameView->GetHandoutHelpLines() );
+        pValue++;nIndex++;
+    }
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_RulerIsVisible ) );
+    pValue->Value <<= (sal_Bool)pFrameView->HasRuler();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_PageKind ) );
+    pValue->Value <<= (sal_Int16)pFrameView->GetPageKind();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_SelectedPage ) );
+    pValue->Value <<= (sal_Int16)pFrameView->GetSelectedPage();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsLayerMode ) );
+    pValue->Value <<= (sal_Bool)pFrameView->IsLayerMode();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsQuickEdit ) );
+    pValue->Value <<= (sal_Bool)pFrameView->IsQuickEdit();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsBigHandles ) );
+    pValue->Value <<= (sal_Bool)pFrameView->IsBigHandles();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsDoubleClickTextEdit ) );
+    pValue->Value <<= (sal_Bool)pFrameView->IsDoubleClickTextEdit();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsClickChangeRotation ) );
+    pValue->Value <<= (sal_Bool)pFrameView->IsClickChangeRotation();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsDragWithCopy ) );
+    pValue->Value <<= (sal_Bool)pFrameView->IsDragWithCopy();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_SlidesPerRow ) );
+    pValue->Value <<= (sal_Int16)pFrameView->GetSlidesPerRow();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_DrawMode ) );
+    pValue->Value <<= (sal_Int32)pFrameView->GetDrawMode();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_PreviewDrawMode ) );
+    pValue->Value <<= (sal_Int32)pFrameView->GetPreviewDrawMode();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsShowPreviewInPageMode ) );
+    pValue->Value <<= (sal_Bool)pFrameView->IsShowPreviewInPageMode();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsShowPreviewInMasterPageMode ) );
+    pValue->Value <<= (sal_Bool)pFrameView->IsShowPreviewInMasterPageMode();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_SetShowPreviewInOutlineMode ) );
+    pValue->Value <<= (sal_Bool)pFrameView->IsShowPreviewInOutlineMode();
+    pValue++;nIndex++;
+
+    if ( nIndex < NUM_VIEW_SETTINGS )
+        rSequence.realloc ( nIndex );
+}
+
+static void createHelpLinesFromString( const rtl::OUString& rLines, SdrHelpLineList& rHelpLines )
+{
+    const sal_Unicode * pStr = rLines.getStr();
+    SdrHelpLine aNewHelpLine;
+    rtl::OUStringBuffer sBuffer;
+
+    while( *pStr )
+    {
+        Point aPoint;
+
+        switch( *pStr )
+        {
+        case (sal_Unicode)'P':
+            aNewHelpLine.SetKind( SDRHELPLINE_POINT );
+            break;
+        case (sal_Unicode)'V':
+            aNewHelpLine.SetKind( SDRHELPLINE_VERTICAL );
+            break;
+        case (sal_Unicode)'H':
+            aNewHelpLine.SetKind( SDRHELPLINE_HORIZONTAL );
+            break;
+        default:
+            DBG_ERROR( "syntax error in snap lines settings string" );
+            return;
+        }
+
+        pStr++;
+
+        while( *pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9') )
+        {
+            sBuffer.append( *pStr++ );
+        }
+
+        sal_Int32 nValue = sBuffer.makeStringAndClear().toInt32();
+
+        if( aNewHelpLine.GetKind() == SDRHELPLINE_HORIZONTAL )
+        {
+            aPoint.Y() = nValue;
+        }
+        else
+        {
+            aPoint.X() = nValue;
+
+            if( aNewHelpLine.GetKind() == SDRHELPLINE_POINT )
+            {
+                if( *pStr++ != ',' )
+                    return;
+
+                while( *pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9') )
+                {
+                    sBuffer.append( *pStr++ );
+                }
+
+                aPoint.Y() = sBuffer.makeStringAndClear().toInt32();
+
+            }
+        }
+
+        aNewHelpLine.SetPos( aPoint );
+        rHelpLines.Insert( aNewHelpLine );
+    }
+}
+
+void SdDrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+{
+    WriteFrameViewData();
+
+    const sal_Int32 nLength = rSequence.getLength();
+    if (nLength)
+    {
+        sal_Bool bBool;
+        sal_Int32 nInt32;
+        sal_Int16 nInt16;
+        rtl::OUString aString;
+
+        const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
+        for (sal_Int16 i = 0 ; i < nLength; i++, pValue++ )
+        {
+            if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_ViewId ) ) )
+            {
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_SnapLinesDrawing ) ) )
+            {
+                if( pValue->Value >>= aString )
+                {
+                    SdrHelpLineList aHelpLines;
+                    createHelpLinesFromString( aString, aHelpLines );
+                    pFrameView->SetStandardHelpLines( aHelpLines );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_SnapLinesNotes ) ) )
+            {
+                if( pValue->Value >>= aString )
+                {
+                    SdrHelpLineList aHelpLines;
+                    createHelpLinesFromString( aString, aHelpLines );
+                    pFrameView->SetNotesHelpLines( aHelpLines );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_SnapLinesHandout ) ) )
+            {
+                if( pValue->Value >>= aString )
+                {
+                    SdrHelpLineList aHelpLines;
+                    createHelpLinesFromString( aString, aHelpLines );
+                    pFrameView->SetHandoutHelpLines( aHelpLines );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_RulerIsVisible ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    pFrameView->SetRuler( bBool );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_PageKind ) ) )
+            {
+                if( pValue->Value >>= nInt16 )
+                {
+                    pFrameView->SetPageKind( (PageKind)nInt16 );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_SelectedPage ) ) )
+            {
+                if( pValue->Value >>= nInt16 )
+                {
+                    pFrameView->SetSelectedPage( (USHORT)nInt16 );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsLayerMode ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    pFrameView->SetLayerMode( bBool );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsQuickEdit ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    pFrameView->SetQuickEdit( bBool );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsBigHandles ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    pFrameView->SetBigHandles( bBool );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsDoubleClickTextEdit ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    pFrameView->SetDoubleClickTextEdit( bBool );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsClickChangeRotation ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    pFrameView->SetClickChangeRotation( bBool );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsDragWithCopy ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    pFrameView->SetDragWithCopy( bBool );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_SlidesPerRow ) ) )
+            {
+                if( pValue->Value >>= nInt16 )
+                {
+                    pFrameView->SetSlidesPerRow( (USHORT)nInt16 );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_DrawMode ) ) )
+            {
+                if( pValue->Value >>= nInt32 )
+                {
+                    pFrameView->SetDrawMode( (ULONG)nInt32 );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_PreviewDrawMode ) ) )
+            {
+                if( pValue->Value >>= nInt32 )
+                {
+                    pFrameView->SetPreviewDrawMode( (ULONG)nInt32 );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsShowPreviewInPageMode ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    pFrameView->SetShowPreviewInPageMode( bBool );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsShowPreviewInMasterPageMode ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    pFrameView->SetShowPreviewInMasterPageMode( bBool );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_SetShowPreviewInOutlineMode ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    pFrameView->SetShowPreviewInOutlineMode( bBool );
+                }
+            }
+        }
+    }
+
+    ReadFrameViewData( pFrameView );
+}
+#undef NUM_VIEW_SETTINGS

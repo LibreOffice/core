@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-06 13:40:26 $
+ *  last change: $Author: cl $ $Date: 2001-04-20 14:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,5 +176,27 @@ SD_CONSTASCII_ACTION( sUNO_Prop_TabStop,                "TabStop" );
 SD_CONSTASCII_ACTION( sUNO_Prop_CharLocale,             "CharLocale" );
 SD_CONSTASCII_ACTION( sUNO_Prop_AutomContFocus,         "AutomaticControlFocus" );
 SD_CONSTASCII_ACTION( sUNO_Prop_ApplyFrmDsgnMode,       "ApplyFormDesignMode" );
+
+// view settings
+SD_CONSTASCII_ACTION( sUNO_View_ViewId,                         "ViewId" );
+SD_CONSTASCII_ACTION( sUNO_View_SnapLinesDrawing,               "SnapLinesDrawing" );
+SD_CONSTASCII_ACTION( sUNO_View_SnapLinesNotes,                 "SnapLinesNotes" );
+SD_CONSTASCII_ACTION( sUNO_View_SnapLinesHandout,               "SnapLinesHandout" );
+SD_CONSTASCII_ACTION( sUNO_View_RulerIsVisible,                 "RulerIsVisible" );
+SD_CONSTASCII_ACTION( sUNO_View_PageKind,                       "PageKind" );
+SD_CONSTASCII_ACTION( sUNO_View_SelectedPage,                   "SelectedPage" );
+SD_CONSTASCII_ACTION( sUNO_View_IsLayerMode,                    "IsLayerMode" );
+SD_CONSTASCII_ACTION( sUNO_View_IsQuickEdit,                    "IsQuickEdit" );
+SD_CONSTASCII_ACTION( sUNO_View_IsBigHandles,                   "IsBigHandles" );
+SD_CONSTASCII_ACTION( sUNO_View_IsDoubleClickTextEdit,          "IsDoubleClickTextEdit" );
+SD_CONSTASCII_ACTION( sUNO_View_IsClickChangeRotation,          "IsClickChangeRotation" );
+SD_CONSTASCII_ACTION( sUNO_View_IsDragWithCopy,                 "IsDragWithCopy" );
+SD_CONSTASCII_ACTION( sUNO_View_SlidesPerRow,                   "SlidesPerRow" );
+SD_CONSTASCII_ACTION( sUNO_View_DrawMode,                       "DrawMode" );
+SD_CONSTASCII_ACTION( sUNO_View_PreviewDrawMode,                "PreviewDrawMode" );
+SD_CONSTASCII_ACTION( sUNO_View_IsShowPreviewInPageMode,        "IsShowPreviewInPageMode" );
+SD_CONSTASCII_ACTION( sUNO_View_IsShowPreviewInMasterPageMode,  "IsShowPreviewInMasterPageMode" );
+SD_CONSTASCII_ACTION( sUNO_View_SetShowPreviewInOutlineMode,    "SetShowPreviewInOutlineMode" );
+
 #endif
 
