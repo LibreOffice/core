@@ -177,7 +177,7 @@ public class SimpleOffice
 
 
 
-    public XAccessible getAccessibleRoot (XInterface xObject)
+    public XAccessible getAccessibleObject (XInterface xObject)
     {
         XAccessible xAccessible = null;
         try
@@ -188,7 +188,34 @@ public class SimpleOffice
         catch (Exception e)
         {
             println (
+                "caught exception while getting accessible object" + e);
+            e.printStackTrace();
+        }
+        return xAccessible;
+    }
+
+    /** Return the root object of the accessibility hierarchy.
+    */
+    public XAccessible getAccessibleRoot (XAccessible xAccessible)
+    {
+        try
+        {
+            XAccessible xParent = null;
+            do
+            {
+                XAccessibleContext xContext = xAccessible.getAccessibleContext();
+                if (xContext != null)
+                    xParent = xContext.getAccessibleParent();
+                if (xParent != null)
+                    xAccessible = xParent;
+            }
+            while (xParent != null);
+        }
+        catch (Exception e)
+        {
+            println (
                 "caught exception while getting accessible root" + e);
+            e.printStackTrace();
         }
         return xAccessible;
     }
@@ -233,8 +260,6 @@ public class SimpleOffice
 
         return xWindow;
     }
-
-
 
 
     /** @descr Return the current draw page of the given desktop.
