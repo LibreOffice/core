@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:05:28 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,12 +649,26 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
             pImpl->aText = pSh->GetSelectionText();
             pImpl->bGetSelection = TRUE;
             pImpl->bSelection = pImpl->aText.Len() != 0;
+
         }
 
         if ( !pImpl->bSelection )
             pImpl->aText = rFont.GetName();
 
         if ( !pImpl->aText.Len() )
+            pImpl->aText = GetText();
+
+        // remove line feeds and carriage returns from string
+        bool bNotEmpty = false;
+        for ( int i = 0; i < pImpl->aText.Len(); ++i )
+        {
+            if ( 0xa == pImpl->aText.GetChar( i ) ||
+                 0xd == pImpl->aText.GetChar( i ) )
+                 pImpl->aText.SetChar( i, ' ' );
+            else
+                bNotEmpty = true;
+        }
+        if ( !bNotEmpty )
             pImpl->aText = GetText();
 
         if ( pImpl->aText.Len() > (TEXT_WIDTH-1) )
