@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-06 09:46:48 $
+ *  last change: $Author: rt $ $Date: 2002-03-12 09:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@
 #include <unotools/servicehelper.hxx>
 
 #ifndef _SVX_RECTENUM_HXX //autogen
-#include <svx/rectenum.hxx>
+#include <rectenum.hxx>
 #endif
 
 namespace com { namespace sun { namespace star { namespace awt {

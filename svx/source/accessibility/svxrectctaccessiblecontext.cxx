@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2002-03-11 12:28:22 $
+ *  last change: $Author: rt $ $Date: 2002-03-12 09:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@
 #include "dlgctrl.hxx"
 
 #ifndef _SVX_DIALMGR_HXX
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #endif
 
 
