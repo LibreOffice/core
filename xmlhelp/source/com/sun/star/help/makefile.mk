@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: abi $ $Date: 2001-02-05 09:23:25 $
+#*    last change       $Author: abi $ $Date: 2001-03-23 12:18:23 $
 #*
-#*    $Revision: 1.11 $
+#*    $Revision: 1.12 $
 #*
 #*    $Logfile:$
 #*
@@ -22,8 +22,8 @@ TARGET  = com_sun_star_help
 
 .INCLUDE : settings.mk
 
-JARFILES 		= jaxp.jar parser.jar xt.jar unoil.jar ridl.jar jurt.jar jut.jar xmlsearch.jar db31.jar
-EXTRAJARFILES 	=  
+JARFILES 		= jaxp.jar parser.jar xt.jar unoil.jar ridl.jar jurt.jar jut.jar xmlsearch.jar
+EXTRAJARFILES 	=  ;e:$/src626a$/program$/classes$/db.jar
 
 CLASSGENDIR		= $(OUT)$/classgen
 RDB		 		= $(SOLARBINDIR)$/applicat.rdb
