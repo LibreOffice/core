@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 09:01:47 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,52 @@ namespace configmgr
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    struct TreeChangeList;
+
+    //==========================================================================
+    //= TreeChangeList
+    //==========================================================================
+    struct TreeChangeList
+    {
+        vos::ORef < OOptions > m_xOptions;       // options for the tree that is concerned by these changes
+        rtl::OUString pathToRoot;                // path to the root of the whole to-be-updated subtree
+        SubtreeChange root;                      // changes made within this sub tree
+        // TreeChangeList(): root(::rtl::OUString(), configuration::Attributes()){}
+
+        /** ctor
+        @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
+        @param      _rLocalName         relative path within the to-be-updated subtree
+        */
+        TreeChangeList( const vos::ORef < OOptions >& _xOptions,
+                        const rtl::OUString& _rPathToRoot,
+                        const rtl::OUString& _rLocalName,
+                        const rtl::OUString& _rChildTemplateName,
+                        const configuration::Attributes& _rAttr)
+                : m_xOptions(_xOptions)
+                , pathToRoot(_rPathToRoot)
+                , root(_rLocalName, _rChildTemplateName, _rAttr)
+        {}
+
+        /** ctor
+        @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
+        @param      _rLocalName         relative path within the to-be-updated subtree
+        */
+        TreeChangeList( const vos::ORef < OOptions >& _xOptions,
+                        const rtl::OUString& _rPathToRoot,
+                        const ISubtree& _rTree)
+                : m_xOptions(_xOptions)
+                , pathToRoot(_rPathToRoot)
+                , root(_rTree)
+        {}
+
+        /** ctor
+        @param      _rTreeList          list to initialize the path, no childs are copied
+        */
+        TreeChangeList( const TreeChangeList& _rTree, SubtreeChange::NoChildCopy _rNoCopy)
+            : m_xOptions(_rTree.m_xOptions)
+            , pathToRoot(_rTree.pathToRoot)
+            , root(_rTree.root, _rNoCopy)
+        {}
+    };
 
     //==========================================================================
     //= ITreeProvider
@@ -131,39 +176,24 @@ namespace configmgr
         virtual ISubtree * requestSubtree(OUString const& aSubtreePath,
                                           const vos::ORef < OOptions >& _xOptions,
                                           sal_Int16 nMinLevels = ALL_LEVELS) throw (container::NoSuchElementException) = 0;
-        virtual void updateTree(TreeChangeList& aChanges,
-                                const vos::ORef < OOptions >& _xOptions) throw (lang::WrappedTargetException, uno::RuntimeException) = 0;
-    };
+        virtual void updateTree(TreeChangeList& aChanges) throw (lang::WrappedTargetException, uno::RuntimeException) = 0;
 
-    class ITreeNotifier;
-
-    //==========================================================================
-    //= ITreeListener
-    //==========================================================================
-    class ITreeListener
-    {
-    public:
-          virtual void disposing(ITreeNotifier* pNotifier) = 0;
-          virtual void changes(TreeChangeList const& , sal_Bool _bError) = 0;
     };
 
     //==========================================================================
-    //= ITreeNotifier
+    //= ITreeManager
     //==========================================================================
-    class ITreeNotifier
-    {
-    public:
-        virtual void setListener(ITreeListener* _pListener) = 0;
-    };
+    // a ITreeProvider which can notify changes that were done, and manages the lifetime of subtrees
 
-    //==========================================================================
-    //= ITreeProvider2
-    //==========================================================================
-    // a ITreeProvider which can notify changes that were done
-    class ITreeProvider2 : public ITreeProvider
+    class ITreeManager : public ITreeProvider
     {
     public:
-        virtual void notifyUpdate(TreeChangeList const& aChanges) const throw (uno::RuntimeException) = 0;
+        // notification
+        virtual void notifyUpdate(TreeChangeList const& aChanges ) throw (uno::RuntimeException) = 0;
+
+        // bookkeeping support
+        virtual void releaseSubtree(OUString const& aSubtreePath,
+                                    const vos::ORef < OOptions >& _xOptions ) throw () = 0;
     };
 
 
@@ -175,14 +205,6 @@ namespace configmgr
     public:
         virtual ::std::auto_ptr<INode> createInstance(const ::rtl::OUString& _rTemplateName) throw (uno::Exception) = 0;
     };
-
-    //==========================================================================
-    //= ref-counted providers
-    //==========================================================================
-    class IRefCountedTreeProvider : public ITreeProvider2, public IInterface
-    {
-    };
-
 
 ////////////////////////////////////////////////////////////////////////////////
 

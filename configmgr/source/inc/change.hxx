@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:59:20 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,40 +488,6 @@ namespace configmgr
     { aSubtree.forEachChange(*this); }
 
 ////////////////////////////////////////////////////////////////////////////////
-
-    //==========================================================================
-    //= TreeChangeList
-    //==========================================================================
-    struct TreeChangeList
-    {
-        rtl::OUString pathToRoot;                // path to the root of the whole to-be-updated subtree
-        SubtreeChange root;                      // changes made within this sub tree
-        // TreeChangeList(): root(::rtl::OUString(), configuration::Attributes()){}
-
-        /** ctor
-        @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
-        @param      _rLocalName         relative path within the to-be-updated subtree
-        */
-        TreeChangeList( const rtl::OUString& _rPathToRoot,
-                        const rtl::OUString& _rLocalName,
-                        const rtl::OUString& _rChildTemplateName,
-                        const configuration::Attributes& _rAttr)
-                :pathToRoot(_rPathToRoot), root(_rLocalName, _rChildTemplateName, _rAttr){}
-
-        /** ctor
-        @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
-        @param      _rLocalName         relative path within the to-be-updated subtree
-        */
-        TreeChangeList( const rtl::OUString& _rPathToRoot,
-                        const ISubtree& _rTree)
-                :pathToRoot(_rPathToRoot), root(_rTree){}
-
-        /** ctor
-        @param      _rTreeList          list to initialize the path, no childs are copied
-        */
-        TreeChangeList( const TreeChangeList& _rTree, SubtreeChange::NoChildCopy _rNoCopy)
-            :pathToRoot(_rTree.pathToRoot),root(_rTree.root, _rNoCopy){}
-    };
 
 } // namespace configmgr
 
