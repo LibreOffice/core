@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-28 11:58:58 $
+ *  last change: $Author: fme $ $Date: 2002-08-14 09:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
 
 #ifdef BIDI
     const BOOL bBidiPor = rInf.GetTxtFrm()->IsRightToLeft() ==
-                          ( TEXT_LAYOUT_COMPLEX_DISABLED ==
+                          ( TEXT_LAYOUT_BIDI_STRONG ==
                             rInf.GetOut()->GetLayoutMode() );
 
     USHORT nDir = bBidiPor ?

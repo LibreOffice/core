@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: os $ $Date: 2002-06-20 09:37:52 $
+ *  last change: $Author: fme $ $Date: 2002-08-14 09:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     }
     else
     {
-        pOut->SetLayoutMode( TEXT_LAYOUT_COMPLEX_DISABLED );
+        pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
         nDirection = DIR_LEFT2RIGHT;
     }
 #endif

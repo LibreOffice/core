@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-13 09:10:41 $
+ *  last change: $Author: fme $ $Date: 2002-08-14 09:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm*
     if ( pFrm && pFrm->IsRightToLeft() )
         pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL );
     else
-        pOut->SetLayoutMode( TEXT_LAYOUT_COMPLEX_DISABLED );
+        pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
 #endif
 
     // set font to vertical if frame layout is vertical

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-24 09:22:24 $
+ *  last change: $Author: fme $ $Date: 2002-08-14 09:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ void SwLayoutModeModifier::Modify( sal_Bool bChgToRTL )
 {
     ((OutputDevice&)rOut).SetLayoutMode( bChgToRTL ?
                                          TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL :
-                                         TEXT_LAYOUT_COMPLEX_DISABLED );
+                                         TEXT_LAYOUT_BIDI_STRONG );
 }
 
 #endif

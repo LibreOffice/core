@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-12 08:35:21 $
+ *  last change: $Author: fme $ $Date: 2002-08-14 09:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1086,7 +1086,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     }
 
     // this is the default direction
-    const BYTE nDefaultDir = TEXT_LAYOUT_COMPLEX_DISABLED != rOut.GetLayoutMode() ?
+    const BYTE nDefaultDir = TEXT_LAYOUT_BIDI_STRONG != rOut.GetLayoutMode() ?
                              UBIDI_RTL :
                              UBIDI_LTR;
 
