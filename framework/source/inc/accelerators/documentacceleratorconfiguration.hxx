@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentacceleratorconfiguration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2004-12-07 13:18:16 $
+ *  last change: $Author: rt $ $Date: 2004-12-08 08:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace framework
 class DocumentAcceleratorConfiguration : public AcceleratorConfiguration
                                        , public css::lang::XServiceInfo
                                        , public css::lang::XInitialization
-                                       , public dcss::ui::XUIConfigurationStorage
+//                                       , public dcss::ui::XUIConfigurationStorage
 {
     //______________________________________
     // member
