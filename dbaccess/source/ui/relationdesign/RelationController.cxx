@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 11:02:41 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 06:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,6 +490,7 @@ void ORelationController::loadData()
     }
     catch(Exception&)
     {
+        OSL_ENSURE(0,"Exception catched!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -564,6 +565,7 @@ void ORelationController::loadTableData(const Any& _aTable)
                             {
                                 Reference<XPropertySet> xPropSet;
                                 xColumns->getByName(*pBegin) >>= xPropSet;
+                                OSL_ENSURE(xPropSet.is(),"Invalid column found in KeyColumns!");
                                 xPropSet->getPropertyValue(PROPERTY_NAME)           >>= sColumnName;
                                 xPropSet->getPropertyValue(PROPERTY_RELATEDCOLUMN)  >>= sRelatedName;
                                 pTabConnData->SetConnLine( j, sColumnName, sRelatedName );
