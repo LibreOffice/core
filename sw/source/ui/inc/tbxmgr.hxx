@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxmgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,14 @@
 #ifndef _TBXDRAW_HXX //autogen
 #include <svx/tbxdraw.hxx>
 #endif
-
+/*
 class SwPopupWindowTbxMgr : public SvxPopupWindowTbxMgr
 {
     BOOL                bWeb:1;     //gilt der WebMode?
     ResId               aRIdWinTemp;
     ResId               aRIdTbxTemp;
+    WindowAlign         eAlignment;
+    SfxBindings&        mrBindings;
 
 public:
     SwPopupWindowTbxMgr(    USHORT nId,
@@ -81,6 +83,6 @@ public:
     virtual void StateChanged(USHORT nSID, SfxItemState eState, const SfxPoolItem* pState);
     virtual SfxPopupWindow* Clone() const;
 };
-
+*/
 
 #endif      // _TBX_DRAW_HXX
