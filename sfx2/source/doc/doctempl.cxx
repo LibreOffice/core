@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-10 16:17:13 $
+ *  last change: $Author: dv $ $Date: 2000-12-10 17:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,7 @@ class RegionData_Impl
 private:
     long                GetEntryPos( const OUString& rTitle,
                                      sal_Bool& rFound ) const;
+
 public:
                         RegionData_Impl( const OUString& rTitle );
                         ~RegionData_Impl();
@@ -1270,13 +1271,20 @@ BOOL SfxDocumentTemplates::CopyFrom
     if ( !pTargetRgn )
         return FALSE;
 
+#if 0
+    // dv! what is the nIdx needed for?
     EntryData_Impl *pTarget = pTargetRgn->GetEntry( nIdx );
     if ( !pTarget )
         return FALSE;
+#endif
 
-    INetURLObject aSource( rName );
+    OUString aTitle = pImp->GetTitleFromURL( rName );
 
-    OUString aTitle( aSource.GetName() );
+    if ( !aTitle.len() )
+    {
+        INetURLObject aSource( rName );
+        aTitle = aSource.GetName();
+    }
 
     Reference< XCommandEnvironment > aCmdEnv;
     Content aTarget;
@@ -1304,16 +1312,30 @@ BOOL SfxDocumentTemplates::CopyFrom
     { return FALSE; }
 
     // update data structures ...
-    EntryData_Impl *pEntry;
-    pEntry = pTargetRgn->AddEntry( aTarget, aTitle, rName );
+    INetURLObject aTmp( pTargetRgn->GetTargetURL() );
+    aTmp.insertName( aTitle, false,
+                     INetURLObject::LAST_SEGMENT, true,
+                     INetURLObject::ENCODE_ALL );
 
-    if ( pEntry )
+    try
     {
-        OUString aType = pImp->GetTypeFromURL( rName );
-        pEntry->SetType( aType );
-    }
+        aTarget = Content( pTargetRgn->GetHierarchyURL(), aCmdEnv );
+        EntryData_Impl *pEntry;
+        pEntry = pTargetRgn->AddEntry( aTarget, aTitle,
+                                       aTmp.GetMainURL() );
+        if ( pEntry )
+        {
+            OUString aType = pImp->GetTypeFromURL( rName );
+            pEntry->SetType( aType );
+        }
 
-    return TRUE;
+        return TRUE;
+    }
+    catch ( ContentCreationException& ) {}
+    catch ( CommandAbortedException& ) {}
+    catch ( Exception& ) {}
+
+    return FALSE;
 }
 
 //------------------------------------------------------------------------
@@ -2620,7 +2642,10 @@ void SfxDocTemplate_Impl::Construct( const String& rDirs )
         Rescan( sal_True );
     }
     else
+    {
         CreateFromHierarchy( aTemplRoot );
+        Rescan( sal_False );
+    }
 }
 
 // -----------------------------------------------------------------------
