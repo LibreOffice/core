@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poly2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:45:24 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,14 @@ extern "C"
 #endif
 #ifndef _VCOMPAT_HXX
 #include <vcompat.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
 #endif
 
 // ---------------
@@ -1190,3 +1198,45 @@ void PolyPolygon::Write( SvStream& rOStream ) const
     for ( USHORT i = 0; i < nPolyCount; i++ )
         mpImplPolyPolygon->mpPolyAry[i]->ImplWrite( rOStream );;
 }
+
+// -----------------------------------------------------------------------
+// convert to ::basegfx::B2DPolyPolygon and return
+::basegfx::B2DPolyPolygon PolyPolygon::getB2DPolyPolygon() const
+{
+    ::basegfx::B2DPolyPolygon aRetval;
+
+    for(sal_uInt16 a(0); a < mpImplPolyPolygon->mnCount; a++)
+    {
+        Polygon* pCandidate = mpImplPolyPolygon->mpPolyAry[a];
+        aRetval.append(pCandidate->getB2DPolygon());
+    }
+
+    return aRetval;
+}
+
+// -----------------------------------------------------------------------
+// constructor to convert from ::basegfx::B2DPolyPolygon
+PolyPolygon::PolyPolygon(const ::basegfx::B2DPolyPolygon& rPolyPolygon)
+{
+    DBG_CTOR( PolyPolygon, NULL );
+    const sal_uInt16 nCount(sal_uInt16(rPolyPolygon.count()));
+    DBG_ASSERT(sal_uInt32(nCount) == rPolyPolygon.count(),
+        "PolyPolygon::PolyPolygon: Too many sub-polygons in given ::basegfx::B2DPolyPolygon (!)");
+
+    if ( nCount )
+    {
+        mpImplPolyPolygon = new ImplPolyPolygon( nCount );
+
+        for(sal_uInt16 a(0); a < nCount; a++)
+        {
+            ::basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(sal_uInt32(a)));
+            mpImplPolyPolygon->mpPolyAry[a] = new Polygon( aCandidate );
+        }
+    }
+    else
+    {
+        mpImplPolyPolygon = new ImplPolyPolygon( 16, 16 );
+    }
+}
+
+// eof
