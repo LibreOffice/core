@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:23:47 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,6 +427,15 @@ void ScDrawView::RecalcScale()
 //  SdrPaintInfoRec aInfoRec;
 //  pObject->Paint( *pXOut, aInfoRec );
 //}
+
+void ScDrawView::DoConnect(SdrOle2Obj* pOleObj)
+{
+    // needed for plug-ins etc.
+    // query for status embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE is in SdrOle2Obj::DoPaintObject
+
+    if ( pViewData )
+        pViewData->GetViewShell()->ConnectObject( pOleObj );
+}
 
 void __EXPORT ScDrawView::MarkListHasChanged()
 {
