@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-05-31 07:19:24 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ class SwDBTreeList : public SvTreeListBox
 
 public:
      SwDBTreeList( Window* pParent, const ResId& rResId,
-                    SwWrtShell& rSh,
+                    SwWrtShell* pSh,
                     const String& rDefDBName = aEmptyStr,
                     const BOOL bShowCol = FALSE );
     virtual ~SwDBTreeList();
@@ -115,6 +115,7 @@ public:
 
     void    Show();
     void    ShowColumns(BOOL bShowCol);
+    void    SetWrtShell(SwWrtShell& rSh);
 };
 
 #endif
