@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UrlResolver.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tpf $ $Date: 2000-11-20 11:59:18 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 11:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,14 +84,13 @@ import com.sun.star.lang.XSingleServiceFactory;
 
 import com.sun.star.registry.XRegistryKey;
 
-import com.sun.star.uno.MappingException;
 import com.sun.star.uno.UnoRuntime;
 
 
 /**
  * This component gives a factory for an <code>UnoUrlResolver</code> service.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-11-20 11:59:18 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-05-04 11:38:13 $
  * @author      Kay Ramme
  * @see         com.sun.star.brige.XBrideFactory
  * @see         com.sun.star.connection.Connector
