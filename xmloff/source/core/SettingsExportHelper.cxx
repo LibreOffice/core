@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-05 16:41:01 $
+ *  last change: $Author: sab $ $Date: 2001-04-06 14:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+
 #ifndef _COMPHELPER_PROCESSFACTORYHXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -89,6 +90,12 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XIndexCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
@@ -181,13 +188,15 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 rAny >>= aProps;
                 exportSequencePropertyValue(aProps, rName);
             }
-            else if (aType.equals(getCppuType( (uno::Reference<container::XNameAccess> *)0 ) ) )
+            else if (aType.equals(getCppuType( (uno::Reference<container::XNameContainer> *)0 ) ) ||
+                    aType.equals(getCppuType( (uno::Reference<container::XNameAccess> *)0 ) ))
             {
                 uno::Reference< container::XNameAccess> aNamed;
                 rAny >>= aNamed;
                 exportNameAccess(aNamed, rName);
             }
-            else if (aType.equals(getCppuType( (uno::Reference<container::XIndexAccess> *)0 ) ) )
+            else if (aType.equals(getCppuType( (uno::Reference<container::XIndexAccess> *)0 ) ) ||
+                    aType.equals(getCppuType( (uno::Reference<container::XIndexContainer> *)0 ) ) )
             {
                 uno::Reference<container::XIndexAccess> aIndexed;
                 rAny >>= aIndexed;
