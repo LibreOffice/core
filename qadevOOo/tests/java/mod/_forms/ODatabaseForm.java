@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseForm.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-04 08:51:36 $
+ *  last change:$Date: 2003-05-27 12:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,13 +265,13 @@ public class ODatabaseForm extends TestCase {
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         //log.println( "creating a draw document" );
-        //xTextDoc = WriterTools.createTextDoc(tParam.getMSF());
+        //xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
 
-        tmpDir = utils.getOfficeTemp(tParam.getMSF());
+        tmpDir = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
 
         origDB = util.utils.getFullTestDocName("TestDB/testDB.dbf");
 
-        dbTools = new DBTools(tParam.getMSF()) ;
+        dbTools = new DBTools((XMultiServiceFactory)tParam.getMSF()) ;
 
         // creating DataSource and registering it in DatabaseContext
 
@@ -324,9 +324,9 @@ public class ODatabaseForm extends TestCase {
             do {
                 tableName = "ODatabaseForm_tmp" + uniqueSuffix ;
                 oldF = utils.getFullURL(origDB);
-                newF = utils.getOfficeTemp(tParam.getMSF()) +
+                newF = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) +
                     tableName + ".dbf";
-            } while (!utils.overwriteFile(tParam.getMSF(), oldF, newF)
+            } while (!utils.overwriteFile((XMultiServiceFactory)tParam.getMSF(), oldF, newF)
                      && uniqueSuffix++ < 50);
             }
     }
@@ -342,7 +342,7 @@ public class ODatabaseForm extends TestCase {
         }
 
         log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc(Param.getMSF());
+        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
 
         //initialize test table
         if (isMySQLDB) {
@@ -665,7 +665,7 @@ public class ODatabaseForm extends TestCase {
         // Adding relations for XRow as a Vector with all data
         // of current row of RowSet.
         try {
-            XMultiServiceFactory xMSF = Param.getMSF() ;
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF() ;
             Object oBinStream = xMSF.
                 createInstance("com.sun.star.io.DataInputStream") ;
             XDataInputStream xBinStream = (XDataInputStream)
