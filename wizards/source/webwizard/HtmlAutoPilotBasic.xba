@@ -59,7 +59,6 @@ On Local Error Goto GlobalErrorHandler
 	SetProgressValue(2)
 	oBaseDocument.LockControllers
 	oViewSettings.ShowTableBoundaries = False
-	oViewSettings.ShowTextBoundaries = False
 	LoadLanguage
 	SetProgressValue(10)
 	GetPaths()
