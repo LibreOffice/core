@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-16 10:35:15 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:14:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,9 +67,9 @@
 # setup INCLUDE variable for use by VC++
 .IF "$(GUI)$(COM)"=="WNTMSC"
 .IF "$(EXT_USE_STLPORT)"==""
-INCLUDE!:=$(shell $(WRAPCMD) echo $(SOLARINC) | sed 's/\\stl//g;s/[ \t]*-I/;/g' )
+INCLUDE!:=$(shell $(WRAPCMD) echo $(SOLARINC) | sed 's/$(EES)\$(EES)\stl//g;s/[ $(EES)\t]*-I/;/g' )
 .ELSE			# "$(EXT_USE_STLPORT)"==""
-INCLUDE!:=$(shell $(WRAPCMD) echo $(SOLARINC) | sed "s/[ \t]*-I/;/g" )
+INCLUDE!:=$(shell $(WRAPCMD) echo $(SOLARINC) | sed 's/[ $(EES)\t]*-I/;/g' )
 .ENDIF			# "$(EXT_USE_STLPORT)"==""
 .EXPORT : INCLUDE
 .ENDIF			# "$(GUI)$(COM)"=="WNTMSC"
