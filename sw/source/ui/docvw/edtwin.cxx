@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-06 09:52:59 $
+ *  last change: $Author: os $ $Date: 2002-05-13 12:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4004,7 +4004,8 @@ void QuickHelpData::Move( QuickHelpData& rCpy )
     pCETID = rCpy.pCETID;
     rCpy.pCETID = 0;
 
-    if( pAttrs ) delete pAttrs;
+    if( pAttrs )
+        delete[] pAttrs;
     pAttrs = rCpy.pAttrs;
     rCpy.pAttrs = 0;
 }
@@ -4018,14 +4019,14 @@ void QuickHelpData::ClearCntnt()
     bIsTip = TRUE;
     bIsAutoText = TRUE;
     delete pCETID, pCETID = 0;
-    delete pAttrs, pAttrs = 0;
+    delete[] pAttrs, pAttrs = 0;
 }
 
 
 void QuickHelpData::Start( SwWrtShell& rSh, USHORT nWrdLen )
 {
     if( pCETID ) delete pCETID, pCETID = 0;
-    if( pAttrs ) delete pAttrs, pAttrs = 0;
+    if( pAttrs ) delete[] pAttrs, pAttrs = 0;
 
     if( USHRT_MAX != nWrdLen )
     {

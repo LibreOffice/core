@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-08 13:31:18 $
+ *  last change: $Author: os $ $Date: 2002-05-13 12:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,10 +499,10 @@ SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
         delete pDescArr[i];
         delete pxIndexSectionsArr[i];
     }
-    delete pxIndexSectionsArr;
+    delete[] pxIndexSectionsArr;
 
-    delete pFormArr;
-    delete pDescArr;
+    delete[] pFormArr;
+    delete[] pDescArr;
     delete pMgr;
     delete pExampleFrame;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
+ *  last change: $Author: os $ $Date: 2002-05-13 12:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender)
                                 pNewRanges);
 
         pSet->Put(pColl->GetAttrSet());
-        delete pNewRanges;
+        delete[] pNewRanges;
     }
 
     return pSet;
@@ -684,6 +684,9 @@ void __EXPORT SwEnvFmtPage::Reset(const SfxItemSet& rSet)
 
 /*--------------------------------------------------------------------
 $Log: not supported by cvs2svn $
+Revision 1.4  2001/05/30 16:32:13  fme
+Fix #86988#: Redesign of dialogs
+
 Revision 1.3  2001/03/20 17:01:50  jp
 use stdarr
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-08 13:51:26 $
+ *  last change: $Author: os $ $Date: 2002-05-13 12:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1529,7 +1529,7 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol, BOOL bCplx )
 --------------------------------------------------*/
 SwTableRep::~SwTableRep()
 {
-    delete pTColumns;
+    delete[] pTColumns;
 }
 
 /*-----------------20.08.96 13.33-------------------
@@ -1605,7 +1605,7 @@ DEBUG_TBLDLG_TCOLUMN(pOldTColumns, nAllCols);
         }
         rTabCols.SetRight(nLeft + nTblWidth);
 
-        delete pOldTColumns;
+        delete[] pOldTColumns;
     }
     else
     {
