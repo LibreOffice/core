@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:16:52 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "DrawDocShell.hxx"
 
 #define ITEMID_FONTLIST                 SID_ATTR_CHAR_FONTLIST
 #define ITEMID_COLOR_TABLE              SID_COLOR_TABLE
@@ -145,21 +147,52 @@
 #include "strmname.h"
 #include "stlpool.hxx"
 #include "strings.hrc"
-#include "docshell.hxx"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "glob.hrc"
 #include "res_bmp.hrc"
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
+#endif
+#ifndef SD_FU_SEARCH_HXX
 #include "fusearch.hxx"
-#include "viewshel.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "sdresid.hxx"
+#ifndef SD_FU_SLIDE_SHOW_DLG_HXX
 #include "fuslshow.hxx"
-#include "preview.hxx"
+#endif
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#include "frmview.hxx"
+#endif
+#ifndef SD_FRAMW_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 #include "unomodel.hxx"
+
+
+using namespace sd;
+#define DrawDocShell
+#include "sdslots.hxx"
+
+SFX_IMPL_INTERFACE(DrawDocShell, SfxObjectShell, SdResId(0))
+{
+    SFX_CHILDWINDOW_REGISTRATION(SID_SEARCH_DLG);
+}
+
+
+namespace sd {
 
 #define POOL_BUFFER_SIZE                (USHORT)32768
 #define BASIC_BUFFER_SIZE               (USHORT)8192
@@ -168,35 +201,33 @@
 
 GraphicFilter* GetGrfFilter();
 
-SfxProgress* SdDrawDocShell::mpSpecialProgress = NULL;
-Link*        SdDrawDocShell::mpSpecialProgressHdl = NULL;
+SfxProgress* DrawDocShell::mpSpecialProgress = NULL;
+Link*        DrawDocShell::mpSpecialProgressHdl = NULL;
 
 /*************************************************************************
 |*
 |* SFX-Slotmaps und -Definitionen
 |*
 \************************************************************************/
-TYPEINIT1( SdDrawDocShell, SfxObjectShell );
-
-#define SdDrawDocShell
-#include "sdslots.hxx"
+TYPEINIT1( DrawDocShell, SfxObjectShell );
 
 
-SFX_IMPL_INTERFACE(SdDrawDocShell, SfxObjectShell, SdResId(0))
+
+
+SFX_IMPL_OBJECTFACTORY(
+    DrawDocShell,
+    SFXOBJECTSHELL_STD_NORMAL,
+    simpress,
+    SvGlobalName(SO3_SIMPRESS_CLASSID) )
 {
-    SFX_CHILDWINDOW_REGISTRATION(SID_SEARCH_DLG);
+    DrawDocShell::Factory().SetCreateNewSlotId( SID_SD_AUTOPILOT );
+    DrawDocShell::Factory().SetDocumentServiceName( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) );
+    //DrawDocShell::Factory().GetFilterContainer()->SetDetectFilter( &SdDLL::DetectFilter );
+    DrawDocShell::Factory().RegisterMenuBar( SdResId( RID_DRAW_DEFAULTMENU ) );
+    DrawDocShell::Factory().RegisterPluginMenuBar( SdResId( RID_DRAW_PORTALMENU ) );
+    DrawDocShell::Factory().RegisterAccel( SdResId( RID_DRAW_DEFAULTACCEL ) );
 }
 
-
-SFX_IMPL_OBJECTFACTORY( SdDrawDocShell, SFXOBJECTSHELL_STD_NORMAL, simpress, SvGlobalName(SO3_SIMPRESS_CLASSID) )
-{
-    SdDrawDocShell::Factory().SetCreateNewSlotId( SID_SD_AUTOPILOT );
-    SdDrawDocShell::Factory().SetDocumentServiceName( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) );
-    //SdDrawDocShell::Factory().GetFilterContainer()->SetDetectFilter( &SdDLL::DetectFilter );
-    SdDrawDocShell::Factory().RegisterMenuBar( SdResId( RID_DRAW_DEFAULTMENU ) );
-    SdDrawDocShell::Factory().RegisterPluginMenuBar( SdResId( RID_DRAW_PORTALMENU ) );
-    SdDrawDocShell::Factory().RegisterAccel( SdResId( RID_DRAW_DEFAULTACCEL ) );
-}
 
 /*************************************************************************
 |*
@@ -204,7 +235,7 @@ SFX_IMPL_OBJECTFACTORY( SdDrawDocShell, SFXOBJECTSHELL_STD_NORMAL, simpress, SvG
 |*
 \************************************************************************/
 
-void SdDrawDocShell::Construct()
+void DrawDocShell::Construct()
 {
     bInDestruction = FALSE;
     SetSlotFilter();     // setzt Filter zurueck
@@ -224,7 +255,7 @@ void SdDrawDocShell::Construct()
 |*
 \************************************************************************/
 
-SdDrawDocShell::SdDrawDocShell(SfxObjectCreateMode eMode,
+DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
                                BOOL bDataObject,
                                DocumentType eDocumentType) :
     SfxObjectShell(eMode),
@@ -252,7 +283,7 @@ SdDrawDocShell::SdDrawDocShell(SfxObjectCreateMode eMode,
 |*
 \************************************************************************/
 
-SdDrawDocShell::SdDrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
+DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
                                BOOL bDataObject,
                                DocumentType eDocumentType) :
     SfxObjectShell(eMode),
@@ -279,7 +310,7 @@ SdDrawDocShell::SdDrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
 |*
 \************************************************************************/
 
-SdDrawDocShell::~SdDrawDocShell()
+DrawDocShell::~DrawDocShell()
 {
     bInDestruction = TRUE;
     delete pFuActual;
@@ -311,7 +342,7 @@ SdDrawDocShell::~SdDrawDocShell()
 |*
 \************************************************************************/
 
-void SdDrawDocShell::GetState(SfxItemSet &rSet)
+void DrawDocShell::GetState(SfxItemSet &rSet)
 {
 
     SfxWhichIter aIter( rSet );
@@ -341,9 +372,9 @@ void SdDrawDocShell::GetState(SfxItemSet &rSet)
                     // Es laeuft ein Effekt in der SlideShow
                     bDisabled = TRUE;
                 }
-                else if (pViewShell && pViewShell->GetView() && pViewShell->GetView()->ISA(SdDrawView) &&
-                         ((SdDrawView*) pViewShell->GetView())->GetSlideShow() &&
-                         ((SdDrawView*) pViewShell->GetView())->GetSlideShow()->IsInputLocked())
+                else if (pViewShell && pViewShell->GetView() && pViewShell->GetView()->ISA(DrawView) &&
+                         static_cast<DrawView*>(pViewShell->GetView())->GetSlideShow() &&
+                    static_cast<DrawView*>(pViewShell->GetView())->GetSlideShow()->IsInputLocked())
                 {
                     // Es laeuft ein Effekt auf dem Zeichentisch
                     bDisabled = TRUE;
@@ -356,9 +387,12 @@ void SdDrawDocShell::GetState(SfxItemSet &rSet)
                         pFrame = SfxViewFrame::GetFirst( this );
                     DBG_ASSERT( pFrame, "kein ViewFrame" );
 
-                    SfxChildWindow* pPreviewChildWindow = pFrame->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
-                    SdPreviewWin*   pPreviewWin = (SdPreviewWin*) ( pPreviewChildWindow ? pPreviewChildWindow->GetWindow() : NULL );
-                    FuSlideShow*    pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
+                    SfxChildWindow* pPreviewChildWindow = pFrame->GetChildWindow(PreviewChildWindow::GetChildWindowId());
+                    PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
+                        pPreviewChildWindow
+                        ? pPreviewChildWindow->GetWindow()
+                        : NULL);
+                    FuSlideShow* pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
 
                     if (pShow && pShow->IsInputLocked())
                     {
@@ -422,7 +456,7 @@ void SdDrawDocShell::GetState(SfxItemSet &rSet)
     }
 }
 
-void SdDrawDocShell::InPlaceActivate( BOOL bActive )
+void DrawDocShell::InPlaceActivate( BOOL bActive )
 {
     if( !bActive )
     {
@@ -444,7 +478,7 @@ void SdDrawDocShell::InPlaceActivate( BOOL bActive )
 
             pFrameViewList->Clear();
 
-            SdViewShell* pViewSh = NULL;
+            ViewShell* pViewSh = NULL;
             SfxViewShell* pSfxViewSh = NULL;
             SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, 0, false);
 
@@ -452,7 +486,7 @@ void SdDrawDocShell::InPlaceActivate( BOOL bActive )
             {
                 // Anzahl FrameViews ermitteln
                 pSfxViewSh = pSfxViewFrame->GetViewShell();
-                pViewSh = PTR_CAST( SdViewShell, pSfxViewSh );
+                pViewSh = PTR_CAST( ViewShell, pSfxViewSh );
 
                 if ( pViewSh && pViewSh->GetFrameView() )
                 {
@@ -475,7 +509,7 @@ void SdDrawDocShell::InPlaceActivate( BOOL bActive )
         DBG_ASSERT( pFrameViewList, "No FrameViewList?" );
         if( pFrameViewList )
         {
-            SdViewShell* pViewSh = NULL;
+            ViewShell* pViewSh = NULL;
             SfxViewShell* pSfxViewSh = NULL;
             SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, 0,false);
 
@@ -484,7 +518,7 @@ void SdDrawDocShell::InPlaceActivate( BOOL bActive )
             {
                 // Anzahl FrameViews ermitteln
                 pSfxViewSh = pSfxViewFrame->GetViewShell();
-                pViewSh = PTR_CAST( SdViewShell, pSfxViewSh );
+                pViewSh = PTR_CAST( ViewShell, pSfxViewSh );
 
                 if ( pViewSh )
                 {
@@ -503,7 +537,7 @@ void SdDrawDocShell::InPlaceActivate( BOOL bActive )
 |*
 \************************************************************************/
 
-void SdDrawDocShell::Activate( BOOL bMDI)
+void DrawDocShell::Activate( BOOL bMDI)
 {
     if (bMDI)
     {
@@ -518,7 +552,7 @@ void SdDrawDocShell::Activate( BOOL bMDI)
 |*
 \************************************************************************/
 
-void SdDrawDocShell::Deactivate( BOOL )
+void DrawDocShell::Deactivate( BOOL )
 {
 }
 
@@ -528,7 +562,7 @@ void SdDrawDocShell::Deactivate( BOOL )
 |*
 \************************************************************************/
 
-SfxUndoManager* SdDrawDocShell::GetUndoManager()
+SfxUndoManager* DrawDocShell::GetUndoManager()
 {
     return pUndoManager;
 }
@@ -541,7 +575,7 @@ SfxUndoManager* SdDrawDocShell::GetUndoManager()
 |*
 \************************************************************************/
 
-void SdDrawDocShell::UpdateTablePointers()
+void DrawDocShell::UpdateTablePointers()
 {
     PutItem( SvxColorTableItem( pDoc->GetColorTable() ) );
     PutItem( SvxGradientListItem( pDoc->GetGradientList() ) );
@@ -562,7 +596,7 @@ void SdDrawDocShell::UpdateTablePointers()
 |*
 \************************************************************************/
 
-void SdDrawDocShell::CancelSearching()
+void DrawDocShell::CancelSearching()
 {
     if ( pFuActual && pFuActual->ISA(FuSearch) )
     {
@@ -577,15 +611,16 @@ void SdDrawDocShell::CancelSearching()
 |*
 \************************************************************************/
 
-void SdDrawDocShell::ApplySlotFilter() const
+void DrawDocShell::ApplySlotFilter() const
 {
     SfxViewShell* pTestViewShell = SfxViewShell::GetFirst();
 
     while( pTestViewShell )
     {
-        if( pTestViewShell->GetObjectShell() == const_cast< SdDrawDocShell* >( this ) &&
-            pTestViewShell->GetViewFrame() &&
-            pTestViewShell->GetViewFrame()->GetDispatcher() )
+        if( pTestViewShell->GetObjectShell()
+            == const_cast<DrawDocShell*>( this )
+            && pTestViewShell->GetViewFrame()
+            && pTestViewShell->GetViewFrame()->GetDispatcher() )
         {
             SfxDispatcher* pDispatcher = pTestViewShell->GetViewFrame()->GetDispatcher();
 
@@ -603,7 +638,7 @@ void SdDrawDocShell::ApplySlotFilter() const
 }
 
 
-void SdDrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
+void DrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
 {
     SfxInPlaceObject::SetModified( bSet );
 
@@ -615,7 +650,7 @@ void SdDrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
     Broadcast( SfxSimpleHint( SFX_HINT_DOCCHANGED ) );
 }
 
-Window* SdDrawDocShell::GetWindow() const
+::Window* DrawDocShell::GetWindow() const
 {
     SfxViewFrame* pFrame = GetFrame();
     if( pFrame == NULL )
@@ -625,7 +660,7 @@ Window* SdDrawDocShell::GetWindow() const
         return &(pFrame->GetWindow());
     else
     {
-        DBG_ASSERT( 0, "No active window for SdDrawDocShell found! (next gpf is caused by this assertion)" );
+        DBG_ASSERT( 0, "No active window for DrawDocShell found! (next gpf is caused by this assertion)" );
         return NULL;
     }
 }
@@ -636,10 +671,10 @@ Window* SdDrawDocShell::GetWindow() const
 |*
 \************************************************************************/
 
-// #91457# ExecuteSpellPopup now handled by SdDrawDocShell. This is necessary
+// #91457# ExecuteSpellPopup now handled by DrawDocShell. This is necessary
 // to get hands on the outliner and the text object.
 #ifndef SVX_LIGHT
-IMPL_LINK(SdDrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
+IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 {
     SdrObject* pObj = NULL;
     SdrOutliner* pOutl = NULL;
@@ -655,3 +690,4 @@ IMPL_LINK(SdDrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 }
 #endif // !SVX_LIGHT
 
+} // end of namespace sd
