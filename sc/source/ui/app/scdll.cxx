@@ -1,9 +1,9 @@
 /*
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 13:27:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,16 @@
 
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
+
+#ifndef _FM_FMOBJFAC_HXX
+#include <svx/fmobjfac.hxx>
+#endif
+#ifndef _SVX_SIIMPORT_HXX
+#include <svx/siimport.hxx>
+#endif
+#ifndef _OBJFAC3D_HXX
+#include <svx/objfac3d.hxx>
+#endif
 
 #include <sot/clsids.hxx>
 #include <sfx2/docfilt.hxx>
@@ -135,7 +145,8 @@
 #include "inputwin.hxx"
 #include <svx/fontwork.hxx>
 #include <svx/srchdlg.hxx>
-#include <offmgr/hyprlink.hxx>
+#include <svx/hyprlink.hxx>
+#include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>
 
 #include "editutil.hxx"
@@ -336,7 +347,8 @@ void ScDLL::Init()
     ScSimpleRefDlgWrapper       ::RegisterChildWindow(FALSE, pMod);
     ScHighlightChgDlgWrapper    ::RegisterChildWindow(FALSE, pMod);
 
-
+    SvxSearchDialogWrapper::RegisterChildWindow(FALSE, pMod);
+    SvxHlinkDlgWrapper::RegisterChildWindow(FALSE, pMod);
     SvxFontWorkChildWindow      ::RegisterChildWindow(FALSE, pMod);
     SvxHyperlinkDlgWrapper      ::RegisterChildWindow(FALSE, pMod);
     SvxIMapDlgChildWindow       ::RegisterChildWindow(FALSE, pMod);
@@ -355,6 +367,16 @@ void ScDLL::Init()
     rClassManager.SV_CLASS_REGISTER( SvxTableField );
 
     SdrRegisterFieldClasses();      // SvDraw-Felder registrieren
+
+    // 3D-Objekt-Factory eintragen
+    E3dObjFactory();
+
+    // ::com::sun::star::form::component::Form-Objekt-Factory eintragen
+    FmFormObjFactory();
+
+    // factory for dummy import of old si-controls in 3.1 documents
+    SiImportFactory();
+
 
     pMod->PutItem( SfxUInt16Item( SID_ATTR_METRIC, pMod->GetAppOptions().GetAppMetric() ) );
 
