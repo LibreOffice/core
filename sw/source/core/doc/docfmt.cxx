@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:34:24 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ SO2_DECL_REF(SvLinkName)
 #include <sfx2/app.hxx>
 #endif
 #ifndef _SFX_MISCCFG_HXX
-#include <sfx2/misccfg.hxx>
+#include <svtools/misccfg.hxx>
 #endif
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
