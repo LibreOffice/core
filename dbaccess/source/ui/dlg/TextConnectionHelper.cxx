@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextConnectionHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:00:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ namespace dbaui
         SFX_ITEMSET_GET(_rSet, pExtensionItem, SfxStringItem, DSID_TEXTFILEEXTENSION, sal_True);
         if (_bValid)
         {
-            if (m_bWizardMode)
+            if (!m_bWizardMode)
             {
                 SFX_ITEMSET_GET(_rSet, pHdrItem, SfxBoolItem, DSID_TEXTFILEHEADER, sal_True);
                 m_aHeader.Check( pHdrItem->GetValue() );
@@ -465,11 +465,16 @@ namespace dbaui
     {
         String sExtension;
         if (m_aRBAccessTextFiles.IsChecked())
-            return (String) ::rtl::OUString::createFromAscii("txt");
+            sExtension = String::CreateFromAscii("txt");
         else if (m_aRBAccessCSVFiles.IsChecked())
-            return (String) ::rtl::OUString::createFromAscii("csv");
+            sExtension = String::CreateFromAscii("csv");
         else
-            return m_aETOwnExtension.GetText();
+        {
+            sExtension = m_aETOwnExtension.GetText();
+            if ( !sExtension.Len() )
+                sExtension = m_aFTExtensionExample.GetText();
+        }
+        return sExtension;
     }
 
 
