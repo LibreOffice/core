@@ -7,5 +7,8 @@ oc  officecfg\registry\schema               nmake       -   all oc_reg_schema oc
 oc  officecfg\registry\data                 nmake       -   all oc_reg_data oc_reg_schema NULL
 oc  officecfg\util                          nmake       -   all oc_util oc_reg_data NULL
 oc  officecfg\registry\schema\org\openoffice	get       -   all oc_reg_get1  NULL
-oc  officecfg\registry\schema\org\openoffice\office	get       -   all oc_reg_get2  NULL
+oc  officecfg\registry\schema\org\openoffice\Office	get       -   all oc_reg_get2  NULL
 oc  officecfg\registry\schema\org\openoffice\ucb	get       -   all oc_reg_get3  NULL
+oc  officecfg\registry\data\org\openoffice	get       -   all oc_reg_data_get1  NULL
+oc  officecfg\registry\data\org\openoffice\Office	get       -   all oc_reg_data_get2  NULL
+oc  officecfg\registry\data\org\openoffice\ucb	get       -   all oc_reg_data_get3  NULL
