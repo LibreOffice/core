@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-22 10:39:15 $
+ *  last change: $Author: fs $ $Date: 2001-03-23 10:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,17 +87,26 @@
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
 
 // =========================================================================
 class SvLBoxEntry;
 class Splitter;
 struct SvSortData;
 
+#define CONTAINER_QUERIES       0
+#define CONTAINER_TABLES        1
+
+// .........................................................................
 namespace dbaui
 {
+// .........................................................................
+
     class DBTreeView;
     class DBTreeListModel;
-    // =========================================================================
+    // =====================================================================
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XStatusListener
                                 >   SbaTableQueryBrowser_Base;
     class SbaTableQueryBrowser
@@ -111,6 +120,7 @@ namespace dbaui
         Splitter*               m_pSplitter;
         DBTreeListModel*        m_pTreeModel;           // contains the datasources of the registry
         SvLBoxEntry*            m_pCurrentlyDisplayed;
+        sal_Int32               m_nAsyncDrop;
 
         DECLARE_STL_STDKEY_MAP( sal_Int32, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >, SpecialSlotDispatchers);
         DECLARE_STL_STDKEY_MAP( sal_Int32, sal_Bool, SpecialSlotStates);
@@ -124,6 +134,17 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
                                 m_xCollator;
+
+        // ---------------------------
+        struct DropDescriptor
+        {
+            TransferableDataHelper  aDroppedData;
+            SvLBoxEntry*            pDroppedAt;
+            sal_Bool                bTable;
+
+            DropDescriptor() : pDroppedAt(NULL), bTable(sal_True) { }
+        };
+        DropDescriptor              m_aAsyncDrop;
 
     // attribute access
     public:
@@ -188,7 +209,9 @@ namespace dbaui
 
         // IControlActionListener overridables
         virtual sal_Bool    requestContextMenu( const CommandEvent& _rEvent );
-        virtual void        requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+        virtual sal_Bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+        virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
+        virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt );
 
         String getURL() const;
 
@@ -242,20 +265,47 @@ namespace dbaui
         sal_Bool ensureConnection(SvLBoxEntry* _pDSEntry,void * pDSData,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
         sal_Bool ensureConnection(SvLBoxEntry* _pAnyEntry, ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
-        void implAdministrate( SvLBoxEntry* _pApplyTo );
-        void implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 _nAction );
-        void implRemoveQuery( const String& _rDSName, const String& _rQueryName );
-        void implDropTable( SvLBoxEntry* _pApplyTo );
-        void implPasteTable( SvLBoxEntry* _pApplyTo );
-        void implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType );
+        void    implAdministrate( SvLBoxEntry* _pApplyTo );
+        void    implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 _nAction );
+        void    implRemoveQuery( SvLBoxEntry* _pApplyTo );
+        void    implDropTable( SvLBoxEntry* _pApplyTo );
+        void    implPasteTable( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rPasteData );
+        void    implPasteQuery( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rPasteData );
+
+        TransferableHelper*
+                implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );
+
+        enum EntryType
+        {
+            ET_DATASOURCE,
+            ET_TABLE_CONTAINER,
+            ET_QUERY_CONTAINER,
+            ET_TABLE,
+            ET_QUERY,
+            ET_UNKNOWN
+        };
+        EntryType   getEntryType( SvLBoxEntry* _pEntry );
+        sal_Bool    isObject( EntryType _eType ) { return (ET_TABLE == _eType) || (ET_QUERY == _eType); }
+        sal_Bool    isContainer( EntryType _eType ) { return (ET_TABLE_CONTAINER == _eType) || (ET_QUERY_CONTAINER == _eType); }
+
+        // ensure that the xObject for the given entry is set on the user data
+        sal_Bool    ensureEntryObject( SvLBoxEntry* _pEntry );
+
+        // get the display text of the entry given
+        String      getEntryText( SvLBoxEntry* _pEntry );
 
         // is called when a table or a query was selected
         DECL_LINK( OnSelectEntry, SvLBoxEntry* );
         DECL_LINK( OnExpandEntry, SvLBoxEntry* );
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );
+        DECL_LINK( OnAsyncDrop, void* );
 
         void implRemoveStatusListeners();
     };
-}
+
+// .........................................................................
+}   // namespace dbaui
+// .........................................................................
+
 #endif // _SBA_UNODATBR_HXX_
 
