@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-09 12:24:29 $
+ *  last change: $Author: tl $ $Date: 2001-08-16 09:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,7 +538,7 @@ void SmFontSizeDialog::WriteTo(SmFormat &rFormat) const
 
     const Size aTmp (rFormat.GetBaseSize());
     for (USHORT  i = FNT_BEGIN;  i <= FNT_END;  i++)
-        rFormat.Font(i).SetSize(aTmp);
+        rFormat.SetFontSize(i, aTmp);
 
     rFormat.RequestApplyChanges();
 }
@@ -665,9 +665,6 @@ void SmFontTypeDialog::WriteTo(SmFormat &rFormat) const
     rFormat.SetFont( FNT_SERIF,    aSerifFont   .Get(0) );
     rFormat.SetFont( FNT_SANS,     aSansFont    .Get(0) );
     rFormat.SetFont( FNT_FIXED,    aFixedFont   .Get(0) );
-
-    for (USHORT i = FNT_BEGIN;  i <= FNT_FIXED;  i++)
-        rFormat.Font(i).SetTransparent(TRUE);
 
     rFormat.RequestApplyChanges();
 }

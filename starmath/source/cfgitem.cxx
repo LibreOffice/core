@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-08 11:22:18 $
+ *  last change: $Author: tl $ $Date: 2001-08-16 09:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #include "cfgitem.hxx"
 
@@ -818,7 +822,6 @@ void SmMathConfig::SaveFontFormatList()
     SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ) );
 
     Sequence< OUString > aNames = lcl_GetFontPropertyNames();
-    const OUString *pNames = aNames.getConstArray();
     INT32 nSymbolProps = aNames.getLength();
 
     USHORT nCount = rFntFmtList.GetCount();
@@ -838,7 +841,7 @@ void SmMathConfig::SaveFontFormatList()
         aNodeNameDelim += aFntFmtId;
         aNodeNameDelim += aDelim;
 
-        const OUString *pName = pNames;
+        const OUString *pName = aNames.getConstArray();;
 
         // Name
         pVal->Name  = aNodeNameDelim;
@@ -992,56 +995,36 @@ void SmMathConfig::SaveOther()
 
     SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ));
 
-    Sequence< OUString > aNames( aCfg.GetOtherPropertyNames() );
-    const OUString *pNames = aNames.getConstArray();
-    const OUString *pName = pNames;
+    const Sequence< OUString > aNames( aCfg.GetOtherPropertyNames() );
     INT32 nProps = aNames.getLength();
 
-    Sequence< PropertyValue > aValues( nProps );
-    PropertyValue *pValues = aValues.getArray();
-    PropertyValue *pVal = pValues;
+    Sequence< Any > aValues( nProps );
+    Any *pValues = aValues.getArray();
+    Any *pValue  = pValues;
 
     // Print/Title
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (BOOL) pOther->bPrintTitle;
-    pVal++;
+    *pValue++ <<= (BOOL) pOther->bPrintTitle;
     // Print/FormulaText
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (BOOL) pOther->bPrintFormulaText;
-    pVal++;
+    *pValue++ <<= (BOOL) pOther->bPrintFormulaText;
     // Print/Frame
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (BOOL) pOther->bPrintFrame;
-    pVal++;
+    *pValue++ <<= (BOOL) pOther->bPrintFrame;
     // Print/Size
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (INT16) pOther->ePrintSize;
-    pVal++;
+    *pValue++ <<= (INT16) pOther->ePrintSize;
     // Print/ZoomFactor
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (INT16) pOther->nPrintZoomFactor;
-    pVal++;
+    *pValue++ <<= (INT16) pOther->nPrintZoomFactor;
     // Misc/NoSymbolsWarning
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (BOOL) pOther->bNoSymbolsWarning;
-    pVal++;
+    *pValue++ <<= (BOOL) pOther->bNoSymbolsWarning;
     // Misc/IgnoreSpacesRight
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (BOOL) pOther->bIgnoreSpacesRight;
-    pVal++;
+    *pValue++ <<= (BOOL) pOther->bIgnoreSpacesRight;
     // View/ToolboxVisible
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (BOOL) pOther->bToolboxVisible;
-    pVal++;
+    *pValue++ <<= (BOOL) pOther->bToolboxVisible;
     // View/AutoRedraw
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (BOOL) pOther->bAutoRedraw;
-    pVal++;
+    *pValue++ <<= (BOOL) pOther->bAutoRedraw;
     // View/FormulaCursor
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (BOOL) pOther->bFormulaCursor;
-    pVal++;
-    DBG_ASSERT( pVal - pValues == nProps, "property mismatch" );
+    *pValue++ <<= (BOOL) pOther->bFormulaCursor;
+
+    DBG_ASSERT( pValue - pValues == nProps, "property mismatch" );
+    aCfg.PutProperties( aNames , aValues );
 
     SetOtherModified( FALSE );
 }
@@ -1098,21 +1081,31 @@ void SmMathConfig::LoadFormat()
             ++pVal;
         }
 
+        LanguageType nLang = Application::GetSettings().GetUILanguage();
         for (i = FNT_BEGIN;  i < FNT_END;  ++i)
         {
             Font aFnt;
-
+            BOOL bUseDefaultFont = TRUE;
             if (pVal->hasValue()  &&  (*pVal >>= aTmpStr))
             {
-                const SmFontFormat *pFntFmt = GetFontFormatList().GetFontFormat( aTmpStr );
-                DBG_ASSERT( pFntFmt, "unknown FontFormat" );
-                if (pFntFmt)
-                    aFnt = pFntFmt->GetFont();
+                bUseDefaultFont = 0 == aTmpStr.getLength();
+                if (bUseDefaultFont)
+                {
+                    aFnt = pFormat->GetFont( i );
+                    aFnt.SetName( GetDefaultFontName( nLang, i ) );
+                }
+                else
+                {
+                    const SmFontFormat *pFntFmt = GetFontFormatList().GetFontFormat( aTmpStr );
+                    DBG_ASSERT( pFntFmt, "unknown FontFormat" );
+                    if (pFntFmt)
+                        aFnt = pFntFmt->GetFont();
+                }
             }
             ++pVal;
 
             aFnt.SetSize( pFormat->GetBaseSize() );
-            pFormat->SetFont( i, aFnt );
+            pFormat->SetFont( i, aFnt, bUseDefaultFont );
         }
 
         DBG_ASSERT( pVal - pValues == nProps, "property mismatch" );
@@ -1128,59 +1121,46 @@ void SmMathConfig::SaveFormat()
 
     SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ));
 
-    Sequence< OUString > aNames( aCfg.GetFormatPropertyNames() );
-    const OUString *pNames = aNames.getConstArray();
-    const OUString *pName = pNames;
+    const Sequence< OUString > aNames( aCfg.GetFormatPropertyNames() );
     INT32 nProps = aNames.getLength();
 
-    Sequence< PropertyValue > aValues( nProps );
-    PropertyValue *pValues = aValues.getArray();
-    PropertyValue *pVal = pValues;
+    Sequence< Any > aValues( nProps );
+    Any *pValues = aValues.getArray();
+    Any *pValue  = pValues;
 
     // StandardFormat/Textmode
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (BOOL) pFormat->IsTextmode();
-    pVal++;
+    *pValue++ <<= (BOOL) pFormat->IsTextmode();
     // StandardFormat/ScaleNormalBracket
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (BOOL) pFormat->IsScaleNormalBrackets();
-    pVal++;
+    *pValue++ <<= (BOOL) pFormat->IsScaleNormalBrackets();
     // StandardFormat/HorizontalAlignment
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (INT16) pFormat->GetHorAlign();
-    pVal++;
+    *pValue++ <<= (INT16) pFormat->GetHorAlign();
     // StandardFormat/BaseSize
-    pVal->Name  = *pNames++;
-    pVal->Value <<= (INT16) SmRoundFraction( Sm100th_mmToPts(
+    *pValue++ <<= (INT16) SmRoundFraction( Sm100th_mmToPts(
                                     pFormat->GetBaseSize().Height() ) );
-    pVal++;
 
     USHORT i;
     for (i = SIZ_BEGIN;  i <= SIZ_END;  ++i)
-    {
-        pVal->Name  = *pNames++;
-        pVal->Value <<= (INT16) pFormat->GetRelSize( i );
-        ++pVal;
-    }
+        *pValue++ <<= (INT16) pFormat->GetRelSize( i );
 
     for (i = DIS_BEGIN;  i <= DIS_END;  ++i)
-    {
-        pVal->Name  = *pNames++;
-        pVal->Value <<= (INT16) pFormat->GetDistance( i );
-        ++pVal;
-    }
+        *pValue++ <<= (INT16) pFormat->GetDistance( i );
 
     for (i = FNT_BEGIN;  i < FNT_END;  ++i)
     {
-        SmFontFormat aFntFmt( pFormat->GetFont( i ) );
-        String aFntFmtId( GetFontFormatList().GetFontFormatId( aFntFmt ) );
-        DBG_ASSERT( aFntFmtId.Len(), "FontFormatId not found" );
+        OUString aFntFmtId;
 
-        pVal->Name  = *pNames++;
-        pVal->Value <<= OUString( aFntFmtId );
-        ++pVal;
+        if (!pFormat->IsDefaultFont( i ))
+        {
+            SmFontFormat aFntFmt( pFormat->GetFont( i ) );
+            aFntFmtId = GetFontFormatList().GetFontFormatId( aFntFmt, TRUE );
+            DBG_ASSERT( aFntFmtId.getLength(), "FontFormatId not found" );
+        }
+
+        *pValue++ <<= aFntFmtId;
     }
-    DBG_ASSERT( pVal - pValues == nProps, "property mismatch" );
+
+    DBG_ASSERT( pValue - pValues == nProps, "property mismatch" );
+    aCfg.PutProperties( aNames , aValues );
 
     SetFormatModified( FALSE );
 }

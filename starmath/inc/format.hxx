@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-17 08:28:19 $
+ *  last change: $Author: tl $ $Date: 2001-08-16 09:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,9 +145,12 @@
 
 enum SmHorAlign { AlignLeft, AlignCenter, AlignRight };
 
+String GetDefaultFontName( LanguageType nLang, USHORT nIdent );
+
 class SmFormat : public SfxBroadcaster
 {
     SmFace      vFont[FNT_END + 1];
+    BOOL        bDefaultFont[FNT_END + 1];
     Size        aBaseSize;
     long        nVersion;
     USHORT      vSize[SIZ_END + 1];
@@ -164,8 +167,11 @@ public:
     void            SetBaseSize(const Size &rSize)  { aBaseSize = rSize; }
 
     const SmFace &  GetFont(USHORT nIdent) const { return vFont[nIdent]; }
-    SmFace &        Font   (USHORT nIdent)       { return vFont[nIdent]; }
-    void            SetFont(USHORT nIdent, const SmFace &rFont);
+    void            SetFont(USHORT nIdent, const SmFace &rFont, BOOL bDefault = FALSE);
+    void            SetFontSize(USHORT nIdent, const Size &rSize)   { vFont[nIdent].SetSize( rSize ); }
+
+    void            SetDefaultFont(USHORT nIdent, BOOL bVal)    { bDefaultFont[nIdent] = bVal; }
+    BOOL            IsDefaultFont(USHORT nIdent) const   { return bDefaultFont[nIdent]; }
 
     USHORT          GetRelSize(USHORT nIdent) const         { return vSize[nIdent]; }
     void            SetRelSize(USHORT nIdent, USHORT nVal)  { vSize[nIdent] = nVal;}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-08 11:22:18 $
+ *  last change: $Author: tl $ $Date: 2001-08-16 09:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,89 @@
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
+#endif
 
 #ifndef FORMAT_HXX
 #include "format.hxx"
 #endif
+
+/////////////////////////////////////////////////////////////////
+
+// Latin default-fonts
+static const USHORT aLatinDefFnts[FNT_END] =
+{
+    DEFAULTFONT_SERIF,  // FNT_VARIABLE
+    DEFAULTFONT_SERIF,  // FNT_FUNCTION
+    DEFAULTFONT_SERIF,  // FNT_NUMBER
+    DEFAULTFONT_SERIF,  // FNT_TEXT
+    DEFAULTFONT_SERIF,  // FNT_SERIF
+    DEFAULTFONT_SANS,   // FNT_SANS
+    DEFAULTFONT_FIXED   // FNT_FIXED
+    //StarSymbol,    // FNT_MATH
+};
+
+// CJK default-fonts
+//! we use non-asian fonts for variables, functions and numbers since they
+//! look better and even in asia only latin letters will be used for those.
+//! At least that's what I was told...
+static const USHORT aCJKDefFnts[FNT_END] =
+{
+    DEFAULTFONT_SERIF,          // FNT_VARIABLE
+    DEFAULTFONT_SERIF,          // FNT_FUNCTION
+    DEFAULTFONT_SERIF,          // FNT_NUMBER
+    DEFAULTFONT_CJK_TEXT,       // FNT_TEXT
+    DEFAULTFONT_CJK_TEXT,       // FNT_SERIF
+    DEFAULTFONT_CJK_DISPLAY,    // FNT_SANS
+    DEFAULTFONT_CJK_TEXT        // FNT_FIXED
+    //StarSymbol,    // FNT_MATH
+};
+
+// CTL default-fonts
+static const USHORT aCTLDefFnts[FNT_END] =
+{
+    DEFAULTFONT_CTL_TEXT,    // FNT_VARIABLE
+    DEFAULTFONT_CTL_TEXT,    // FNT_FUNCTION
+    DEFAULTFONT_CTL_TEXT,    // FNT_NUMBER
+    DEFAULTFONT_CTL_TEXT,    // FNT_TEXT
+    DEFAULTFONT_CTL_TEXT,    // FNT_SERIF
+    DEFAULTFONT_CTL_TEXT,    // FNT_SANS
+    DEFAULTFONT_CTL_TEXT     // FNT_FIXED
+    //StarSymbol,    // FNT_MATH
+};
+
+
+String GetDefaultFontName( LanguageType nLang, USHORT nIdent )
+{
+    DBG_ASSERT( FNT_BEGIN <= nIdent  &&  nIdent <= FNT_END,
+            "index out opd range" );
+
+    if (FNT_MATH == nIdent)
+        return String::CreateFromAscii( FNTNAME_MATH );
+    else
+    {
+        const USHORT *pTable;
+        switch (GetScriptTypeOfLanguage( nLang ))
+        {
+            case SCRIPTTYPE_LATIN :     pTable = aLatinDefFnts; break;
+            case SCRIPTTYPE_ASIAN :     pTable = aCJKDefFnts; break;
+            case SCRIPTTYPE_COMPLEX :   pTable = aCTLDefFnts; break;
+            default :
+                pTable = aLatinDefFnts;
+                DBG_ERROR( "unknown script-type" );
+        }
+
+        return Application::GetDefaultDevice()->GetDefaultFont(
+                        pTable[ nIdent ], nLang,
+                        DEFAULTFONT_FLAGS_ONLYONE ).GetName();
+    }
+}
+
+/////////////////////////////////////////////////////////////////
 
 SmFormat::SmFormat()
 :   aBaseSize(0, SmPtsTo100th_mm(12))
@@ -127,15 +206,18 @@ SmFormat::SmFormat()
     {
         vFont[i].SetTransparent(TRUE);
         vFont[i].SetAlign(ALIGN_BASELINE);
+        bDefaultFont[i] = FALSE;
     }
 }
 
 
-void SmFormat::SetFont(USHORT nIdent, const SmFace &rFont)
+void SmFormat::SetFont(USHORT nIdent, const SmFace &rFont, BOOL bDefault )
 {
     vFont[nIdent] = rFont;
     vFont[nIdent].SetTransparent( TRUE );
     vFont[nIdent].SetAlign( ALIGN_BASELINE );
+
+    bDefaultFont[nIdent] = bDefault;
 }
 
 SmFormat & SmFormat::operator = (const SmFormat &rFormat)
@@ -148,7 +230,10 @@ SmFormat & SmFormat::operator = (const SmFormat &rFormat)
 
     USHORT  i;
     for (i = FNT_BEGIN;  i <= FNT_END;  i++)
+    {
         SetFont(i, rFormat.GetFont(i));
+        SetDefaultFont(i, rFormat.IsDefaultFont(i));
+    }
     for (i = SIZ_BEGIN;  i <= SIZ_END;  i++)
         SetRelSize(i, rFormat.GetRelSize(i));
     for (i = DIS_BEGIN;  i <= DIS_END;  i++)
@@ -178,7 +263,8 @@ BOOL SmFormat::operator == (const SmFormat &rFormat) const
     }
     for (i = 0;  i <= FNT_END && bRes;  ++i)
     {
-        if (vFont[i] != rFormat.vFont[i])
+        if (vFont[i] != rFormat.vFont[i]  ||
+            bDefaultFont[i] != rFormat.bDefaultFont[i])
             bRes = FALSE;
     }
 
@@ -317,7 +403,7 @@ void SmFormat::ReadSM20Format(SvStream &rStream)
     rStream >> n;
 
     for (i = FNT_BEGIN;  i <= FNT_FIXED;  i++)
-        ReadSM20Font(rStream, Font(i));
+        ReadSM20Font(rStream, vFont[i]);
 
     for (i = DIS_BEGIN;  i <= DIS_OPERATORSPACE;  i++)
     {   rStream >> n;
@@ -331,11 +417,12 @@ void SmFormat::ReadSM20Format(SvStream &rStream)
     const Size  aTmp (GetBaseSize());
     for (i = FNT_BEGIN;  i <= FNT_FIXED;  i++)
     {
-        Font(i).SetSize(aTmp);
-        Font(i).SetTransparent(TRUE);
-        Font(i).SetAlign(ALIGN_BASELINE);
+        SmFace &rFace = vFont[i];
+        rFace.SetSize(aTmp);
+        rFace.SetTransparent(TRUE);
+        rFace.SetAlign(ALIGN_BASELINE);
     }
-    Font(FNT_MATH).SetSize(aTmp);
+    vFont[FNT_MATH].SetSize(aTmp);
 }
 
 
