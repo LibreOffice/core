@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:38:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1213,6 +1213,7 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
     {
         ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(Window::GetSelection());
         ImplPaste( aSelection );
+        ImplModified();
     }
 }
 
