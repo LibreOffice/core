@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-18 15:28:28 $
+ *  last change: $Author: cmc $ $Date: 2001-04-25 09:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1753,7 +1753,7 @@ void SmXMLUnderContext_Impl::HandleAccent()
     aSubNodes.SetSize(2);
 
     SmStructureNode *pNode = new SmAttributNode(aToken);
-    if (pTest->GetToken().cMathChar == (0x0332|0xf000))
+    if ((pTest->GetToken().cMathChar & 0x0FFF) == 0x0332)
     {
         aSubNodes.Put(0, new SmRectangleNode(aToken));
         delete pTest;
