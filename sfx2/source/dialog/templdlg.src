@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:47:16 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ russian ] = "Ñîçäàòü ñòèëü èç âûáğàííîãî";
                 Text[ polish ] = "Nowy styl z selekcji";
                 Text[ japanese ] = "‘I‘ğ½À²Ù‚©‚çV‹Kì¬";
-                Text[ chinese_traditional ] = "·s¼Ë¦¡±q¿ï¾Ü";
+                Text[ chinese_traditional ] = "·s¼Ë¦¡±q¿ï¨ú";
                 Text[ arabic ] = "äãØ ÌÏíÏ ãä ÇáÊÍÏíÏ";
                 Text[ greek ] = "Íİï ğñüôõğï áğü åğéëïãŞ";
                 Text[ korean ] = "¼±ÅÃ¿¡ ÀÖ´Â »õ À¯Çü";
