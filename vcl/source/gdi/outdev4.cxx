@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:27 $
+ *  last change: $Author: thb $ $Date: 2002-10-14 09:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,19 +1033,18 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                     mbMap = FALSE;
 
                     aVDev.DrawOutDev( Point(), aDstSize, aDstRect.TopLeft(), aDstSize, *this );
-                    DrawGradient( aBoundRect, aGradient );
                     aVDev.SetRasterOp( ROP_XOR );
-                    aVDev.DrawOutDev( Point(), aDstSize, aDstRect.TopLeft(), aDstSize, *this );
-                    aVDev.SetFillColor( COL_BLACK );
-                    aVDev.SetRasterOp( ROP_0 );
                     aVDevMap.SetOrigin( Point( -aDstRect.Left(), -aDstRect.Top() ) );
                     aVDev.SetMapMode( aVDevMap );
+                    aVDev.DrawGradient( aBoundRect, aGradient );
+                    aVDev.SetFillColor( COL_BLACK );
+                    aVDev.SetRasterOp( ROP_0 );
                     aVDev.DrawPolyPolygon( aPolyPoly );
+                    aVDev.SetRasterOp( ROP_XOR );
+                    aVDev.DrawGradient( aBoundRect, aGradient );
                     aVDevMap.SetOrigin( Point() );
                     aVDev.SetMapMode( aVDevMap );
-                    SetRasterOp( ROP_XOR );
                     DrawOutDev( aDstRect.TopLeft(), aDstSize, Point(), aDstSize, aVDev );
-                    SetRasterOp( eOldROP );
 
                     mbMap = bOldMap;
                 }
