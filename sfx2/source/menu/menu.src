@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:17:53 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ String STR_MENU_ADDONS
     TEXT[ danish ] = "~Add-Ons";
     TEXT[ swedish ] = "~Till�gg";
     TEXT[ polish ] = "~Add-Ons";
-    TEXT[ portuguese_brazilian ] = "~Add-Ons";
+    TEXT[ portuguese_brazilian ] = "~Aditivos";
     TEXT[ japanese ] = "アドオン(~A)";
     TEXT[ korean ] = "~Add-Ons";
     TEXT[ chinese_simplified ] = "~Add-Ons";
@@ -411,7 +411,7 @@ String SID_WIN_FULLSCREEN
     Text[ danish ] = "Leave Full-Screen Mode";
     Text[ swedish ] = "L�mna helsk�rmsl�ge";
     Text[ polish ] = "Leave Full-Screen Mode";
-    Text[ portuguese_brazilian ] = "Leave Full-Screen Mode";
+    Text[ portuguese_brazilian ] = "Sair do modo de tela cheia";
     Text[ japanese ] = "全画面表示モードを保持";
     Text[ korean ] = "전체 화면 모드 마침";
     Text[ chinese_simplified ] = "离开全屏幕模式";
@@ -434,14 +434,16 @@ String STR_MENU_ADDONHELP
     TEXT[ spanish ] = "~Complemento (add-on) - Ayuda";
     TEXT[ italian ] = "Guida all'add-~on";
     TEXT[ swedish ] = "Till�ggs~hj�lp";
-    TEXT[ japanese ] = "アドオンヘルプ";
-    TEXT[ korean ] = "추가 기능(Add-On) 도움말";
+    TEXT[ japanese ] = "アドオンヘルプ(~O)";
+    TEXT[ korean ] = "추가 기능(Add-On) 도움말(~O)";
     TEXT[ chinese_simplified ] = "Add-~On 帮助";
     TEXT[ chinese_traditional ] = "Add-~On 說明";
     TEXT[ slovak ] = "Add-~On Pomocník";
+    TEXT[ portuguese_brazilian ] = "Ajuda dos Add-On";
 };
 
 // ******************************************************************* EOF
+
 
 
 
