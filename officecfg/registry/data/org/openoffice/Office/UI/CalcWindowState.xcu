@@ -3,9 +3,9 @@
  *
  *  $RCSfile: CalcWindowState.xcu,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 19:39:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,14 @@
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/graphicobjectbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,2</value>
+                </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>0</value>
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Picture</value>
