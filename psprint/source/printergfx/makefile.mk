@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-20 15:10:29 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:56:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,13 @@ TARGET=gfx
 
 # --- Files --------------------------------------------------------
 
+.IF "$(GUIBASE)"=="aqua"
+
+dummy:
+    @echo "Nothing to build for GUIBASE $(GUIBASE)"
+
+.ELSE		# "$(GUIBASE)"=="aqua"
+
 SLOFILES=\
     $(SLO)$/printerjob.obj		\
     $(SLO)$/text_gfx.obj		\
@@ -80,6 +87,8 @@ SLOFILES=\
     $(SLO)$/common_gfx.obj		\
     $(SLO)$/glyphset.obj		\
     $(SLO)$/bitmap_gfx.obj
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
