@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XReplaceable.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:31:33 $
+ *  last change:$Date: 2003-11-18 16:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.util;
 
+import com.sun.star.table.XCell;
 import lib.MultiMethodTest;
 
 import com.sun.star.util.XReplaceDescriptor;
@@ -86,6 +87,41 @@ public class _XReplaceable extends MultiMethodTest {
 
     public XReplaceable oObj = null;
     public XReplaceDescriptor Rdesc = null;
+    private String mSearchString = "xTextDoc";
+    private String mReplaceString = "** xTextDoc";
+    private boolean mDispose = false;
+
+    /**
+     * Creates an entry to search for, if the current object does not provide
+     * one. In this case, the environment is disposed after the test, since
+     * the inserted object may influence following tests.
+     *
+     */
+    protected void before() {
+        Object o = tEnv.getObjRelation("SEARCHSTRING");
+        if (o != null) {
+            mSearchString = (String)o;
+        }
+        // use object relation for XSearchable
+        o = tEnv.getObjRelation("XSearchable.MAKEENTRYINCELL");
+        if (o != null) {
+            XCell[] cells = new XCell[0];
+            if (o instanceof XCell) {
+                cells = new XCell[]{(XCell)o};
+            }
+            else if (o instanceof XCell[]) {
+                cells = (XCell[])o;
+            }
+            else {
+                log.println("Needed object relation 'XSearchable.MAKEENTRYINCELL' is there, but is of type '"
+                            + o.getClass().getName() + "'. Should be 'XCell' or 'XCell[]' instead.");
+            }
+            for (int i=0; i<cells.length; i++) {
+                cells[i].setFormula(mSearchString);
+            }
+            mDispose = true;
+        }
+    }
 
     /**
      * Creates the descriptor for replacing string 'xTextDoc'
@@ -98,8 +134,8 @@ public class _XReplaceable extends MultiMethodTest {
         log.println("testing createReplaceDescriptor() ... ");
 
         Rdesc = oObj.createReplaceDescriptor();
-        Rdesc.setSearchString("xTextDoc");
-        Rdesc.setReplaceString("** xTextDoc");
+        Rdesc.setSearchString(mSearchString);
+        Rdesc.setReplaceString(mReplaceString);
         tRes.tested("createReplaceDescriptor()", Rdesc != null);
 
     }
@@ -123,8 +159,23 @@ public class _XReplaceable extends MultiMethodTest {
         XSearchDescriptor SDesc = oObj.createSearchDescriptor();
         SDesc.setSearchString("**");
         boolean res = (oObj.findFirst(SDesc) != null);
+        // redo replacement
+        Rdesc.setSearchString(mReplaceString);
+        Rdesc.setReplaceString(mSearchString);
+        oObj.replaceAll(Rdesc);
+        res &= (oObj.findFirst(SDesc) == null);
+
         tRes.tested("replaceAll()",res);
     }
 
+    /**
+     * In case the interface itself made the entry to search for, the environment
+     * must be disposed
+     */
+    protected void after() {
+        if(mDispose) {
+            disposeEnvironment();
+        }
+    }
 }
 
