@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:54:21 $
+ *  last change: $Author: obo $ $Date: 2002-08-16 20:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,12 +1019,12 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ russian ] = "Ğàçğûâ ñòğîêè";
         Text[ polish ] = "Podzia³ wierszy";
         Text[ japanese ] = "æŠ˜ã‚Šè¿”ã™";
-        Text[ chinese_traditional ] = "æ›è¡Œ";
+        Text[ chinese_traditional ] = "è‡ªå‹•æ›è¡Œ";
         Text[ arabic ] = "İÇÕá ÃÓØÑ";
         Text[ dutch ] = "~Regelafbreking";
         Text[ chinese_simplified ] = "æ¢è¡Œ";
         Text[ greek ] = "ÁëëáãŞ ãñáììŞò";
-        Text[ korean ] = "ê°œí–‰";
+        Text[ korean ] = "ìë™ ë‹¨ë½";
         Text[ turkish ] = "Satır son~u";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Salt de ~línia";
