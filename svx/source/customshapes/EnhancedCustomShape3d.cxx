@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:31:57 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,14 @@
 #ifndef _COM_SUN_STAR_DRAWING_DIRECTION3D_HPP_
 #include <com/sun/star/drawing/Direction3D.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
+#include <com/sun/star/drawing/ShadeMode.hpp>
+#endif
 #ifndef _SDR_PROPERTIES_PROPERTIES_HXX
 #include <svx/sdr/properties/properties.hxx>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARIR_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
@@ -155,6 +161,66 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
 const rtl::OUString sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+
+void GetOrigin( SdrCustomShapeGeometryItem& rItem, double& rOriginX, double& rOriginY )
+{
+    ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aOriginParaPair;
+     const rtl::OUString    sOrigin( RTL_CONSTASCII_USTRINGPARAM ( "Origin" ) );
+    Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sOrigin );
+    if ( ! ( pAny && ( *pAny >>= aOriginParaPair ) && ( aOriginParaPair.First.Value >>= rOriginX ) && ( aOriginParaPair.Second.Value >>= rOriginY ) ) )
+    {
+        rOriginX = 0.50;
+        rOriginY =-0.50;
+    }
+}
+void GetRotateAngle( SdrCustomShapeGeometryItem& rItem, double& rAngleX, double& rAngleY )
+{
+    ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAngleParaPair;
+     const rtl::OUString    sRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "RotateAngle" ) );
+    Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sRotateAngle );
+    if ( ! ( pAny && ( *pAny >>= aRotateAngleParaPair ) && ( aRotateAngleParaPair.First.Value >>= rAngleX ) && ( aRotateAngleParaPair.Second.Value >>= rAngleY ) ) )
+    {
+        rAngleX = 0.0;
+        rAngleY = 0.0;
+    }
+    rAngleX *= F_PI180;
+    rAngleY *= F_PI180;
+}
+void GetSkew( SdrCustomShapeGeometryItem& rItem, double& rSkewAmount, double& rSkewAngle )
+{
+    ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
+     const rtl::OUString    sSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
+    Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sSkew );
+    if ( ! ( pAny && ( *pAny >>= aSkewParaPair ) && ( aSkewParaPair.First.Value >>= rSkewAmount ) && ( aSkewParaPair.Second.Value >>= rSkewAngle ) ) )
+    {
+        rSkewAmount = 50;
+        rSkewAngle = -135;
+    }
+    rSkewAngle *= F_PI180;
+}
+void GetExtrusionDepth( SdrCustomShapeGeometryItem& rItem, const double* pMap, double& rBackwardDepth, double& rForwardDepth )
+{
+    ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
+    double fDepth, fFraction;
+    const rtl::OUString sDepth( RTL_CONSTASCII_USTRINGPARAM ( "Depth" ) );
+    Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sDepth );
+    if ( pAny && ( *pAny >>= aDepthParaPair ) && ( aDepthParaPair.First.Value >>= fDepth ) && ( aDepthParaPair.Second.Value >>= fFraction ) )
+    {
+        rForwardDepth = fDepth * fFraction;
+        rBackwardDepth = fDepth - rForwardDepth;
+    }
+    else
+    {
+        rBackwardDepth = 1270;
+        rForwardDepth = 0;
+    }
+    if ( pMap )
+    {
+        double fMap = *pMap;
+        rBackwardDepth *= fMap;
+        rForwardDepth *= fMap;
+    }
+}
 double GetDouble( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, double fDefault, const double* pMap )
 {
     double fRetValue = fDefault;
@@ -165,16 +231,24 @@ double GetDouble( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPrope
         fRetValue *= *pMap;
     return fRetValue;
 }
-sal_Int32 GetInt32( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, sal_Int32 nDefault )
+drawing::ShadeMode GetShadeMode( SdrCustomShapeGeometryItem& rItem, const drawing::ShadeMode eDefault )
+{
+    drawing::ShadeMode eRet( eDefault );
+    const rtl::OUString sShadeMode( RTL_CONSTASCII_USTRINGPARAM ( "ShadeMode" ) );
+    Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sShadeMode );
+    if ( pAny )
+        *pAny >>= eRet;
+    return eRet;
+}
+sal_Int32 GetInt32( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, const sal_Int32 nDefault )
 {
     sal_Int32 nRetValue = nDefault;
     Any* pAny = rItem.GetPropertyValueByName( sExtrusion, rPropertyName );
     if ( pAny )
         *pAny >>= nRetValue;
     return nRetValue;
-
 }
-sal_Bool GetBool( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, sal_Bool bDefault )
+sal_Bool GetBool( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, const sal_Bool bDefault )
 {
     sal_Bool bRetValue = bDefault;
     const Any* pAny = rItem.GetPropertyValueByName( sExtrusion, rPropertyName );
@@ -217,28 +291,23 @@ drawing::Direction3D GetDirection3D( SdrCustomShapeGeometryItem& rItem, const rt
 
 EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCustomShape, const Rectangle& rBoundRect, const double *pM ) :
     aCenter( pCustomShape->GetSnapRect().Center() ),
-    pMap( pM )
+    pMap( pM ),
+    eProjectionMode( drawing::ProjectionMode_PARALLEL )
 {
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    const rtl::OUString sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
+    Any* pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, sProjectionMode );
+    if ( pAny )
+        *pAny >>= eProjectionMode;
 
-    const rtl::OUString sParallel( RTL_CONSTASCII_USTRINGPARAM ( "Parallel" ) );
-    bParallel = GetBool( rGeometryItem, sParallel, sal_True );
-    if ( bParallel )
-    {
-        const rtl::OUString sSkewAngle( RTL_CONSTASCII_USTRINGPARAM ( "SkewAngle" ) );
-        const rtl::OUString sSkew     ( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
-        fSkewAngle = GetDouble( rGeometryItem, sSkewAngle, -135, NULL ) * F_PI180;
-        fSkew = GetDouble( rGeometryItem, sSkew, 50, NULL );
-    }
+    if ( eProjectionMode == drawing::ProjectionMode_PARALLEL )
+        GetSkew( rGeometryItem, fSkew, fSkewAngle );
     else
     {
         fZScreen = 0.0;
-        const rtl::OUString sOriginX( RTL_CONSTASCII_USTRINGPARAM ( "OriginX" ) );
-        const rtl::OUString sOriginY( RTL_CONSTASCII_USTRINGPARAM ( "OriginY" ) );
-        fOriginX = GetDouble( rGeometryItem, sOriginX,  50.0, NULL );
-        fOriginY = GetDouble( rGeometryItem, sOriginY, -50.0, NULL );
-        fOriginX = ( fOriginX * pCustomShape->GetLogicRect().GetWidth() ) / 100;
-        fOriginY = ( fOriginY * pCustomShape->GetLogicRect().GetHeight()) / 100;
+        GetOrigin( rGeometryItem, fOriginX, fOriginY );
+        fOriginX = fOriginX * pCustomShape->GetLogicRect().GetWidth();
+        fOriginY = fOriginY * pCustomShape->GetLogicRect().GetHeight();
 
         const rtl::OUString sViewPoint( RTL_CONSTASCII_USTRINGPARAM ( "ViewPoint" ) );
         drawing::Position3D aViewPointDefault( 3472, -3472, 25000 );
@@ -249,7 +318,7 @@ EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCus
     }
 }
 
-void EnhancedCustomShape3d::Transformation2D::ApplySkewSettings( Polygon3D& rPoly3D )
+void EnhancedCustomShape3d::Transformation2D::ApplySkewSettings( Polygon3D& rPoly3D ) const
 {
     sal_uInt16 j;
     for ( j = 0; j < rPoly3D.GetPointCount(); j++ )
@@ -261,10 +330,10 @@ void EnhancedCustomShape3d::Transformation2D::ApplySkewSettings( Polygon3D& rPol
     }
 }
 
-Point EnhancedCustomShape3d::Transformation2D::Transform2D( const Vector3D& rPoint3D )
+Point EnhancedCustomShape3d::Transformation2D::Transform2D( const Vector3D& rPoint3D ) const
 {
     Point aPoint2D;
-    if ( bParallel )
+    if ( eProjectionMode == drawing::ProjectionMode_PARALLEL )
     {
         aPoint2D.X() = (sal_Int32)rPoint3D.X();
         aPoint2D.Y() = (sal_Int32)rPoint3D.Y();
@@ -280,6 +349,12 @@ Point EnhancedCustomShape3d::Transformation2D::Transform2D( const Vector3D& rPoi
     aPoint2D.Move( aCenter.X(), aCenter.Y() );
     return aPoint2D;
 }
+
+sal_Bool EnhancedCustomShape3d::Transformation2D::IsParallel() const
+{
+    return eProjectionMode == com::sun::star::drawing::ProjectionMode_PARALLEL;
+}
+
 
 void EnhancedCustomShape3d::Rotate( Vector3D& rPoint, const double x, const double y, const double z )
 {
@@ -357,8 +432,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pMap = &fMap;
         }
     }
-    const rtl::OUString sOn( RTL_CONSTASCII_USTRINGPARAM ( "On" ) );
-    if ( GetBool( rGeometryItem, sOn, sal_False ) )
+    if ( GetBool( rGeometryItem, sExtrusion, sal_False ) )
     {
         sal_Bool bIsMirroredX = ((SdrObjCustomShape*)pCustomShape)->IsMirroredX();
         sal_Bool bIsMirroredY = ((SdrObjCustomShape*)pCustomShape)->IsMirroredY();
@@ -379,18 +453,21 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         Point aCenter( aSnapRect.Center() );
 
         SfxItemSet aSet( pCustomShape->GetMergedItemSet() );
+        aSet.ClearItem( SDRATTR_TEXTDIRECTION );    //SJ: vertical writing is not required, by removing this item no outliner is created
         std::vector< E3dCompoundObject* > aPlaceholderObjectList;
 
-        const rtl::OUString sBackwardDepth( RTL_CONSTASCII_USTRINGPARAM ( "BackwardDepth" ) );
-        const rtl::OUString sForewardDepth( RTL_CONSTASCII_USTRINGPARAM ( "ForewardDepth" ) );
-        double fExtrusionBackward = GetDouble( rGeometryItem, sBackwardDepth, 1270, pMap );
-        double fExtrusionForward  = GetDouble( rGeometryItem, sForewardDepth, 0, pMap );
-
+        double fExtrusionBackward, fExtrusionForward;
+        GetExtrusionDepth( rGeometryItem, pMap, fExtrusionBackward, fExtrusionForward );
         double fDepth = fExtrusionBackward - fExtrusionForward;
         if ( fDepth < 1.0 )
             fDepth = 1.0;
-        const rtl::OUString sParallel( RTL_CONSTASCII_USTRINGPARAM ( "Parallel" ) );
-        ProjectionType eProjectionType( GetBool( rGeometryItem, sParallel, sal_True ) ? PR_PARALLEL : PR_PERSPECTIVE );
+
+        drawing::ProjectionMode eProjectionMode( drawing::ProjectionMode_PARALLEL );
+        const rtl::OUString sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
+        Any* pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, sProjectionMode );
+        if ( pAny )
+            *pAny >>= eProjectionMode;
+        ProjectionType eProjectionType( eProjectionMode == drawing::ProjectionMode_PARALLEL ? PR_PARALLEL : PR_PERSPECTIVE );
 
         // pShape2d Umwandeln in Szene mit 3D Objekt
         E3dDefaultAttributes a3DDefaultAttr;
@@ -402,8 +479,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         sal_Bool bSceneHasObjects ( sal_False );
         sal_Bool bUseTwoFillStyles( sal_False );
 
-        const rtl::OUString sRenderMode( RTL_CONSTASCII_USTRINGPARAM ( "RenderMode" ) );
-        MSO_3DRenderMode eRenderMode( (MSO_3DRenderMode)GetInt32( rGeometryItem, sRenderMode, mso_FullRender ) );
+        drawing::ShadeMode eShadeMode( GetShadeMode( rGeometryItem, drawing::ShadeMode_FLAT ) );
         const rtl::OUString sExtrusionColor( RTL_CONSTASCII_USTRINGPARAM ( "Color" ) );
         sal_Bool bUseExtrusionColor = GetBool( rGeometryItem, sExtrusionColor, sal_False );
 
@@ -413,7 +489,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         aSet.Put( Svx3DTextureModeItem( 1 ) );
         aSet.Put( Svx3DNormalsKindItem( 1 ) );
 
-        if ( eRenderMode == mso_Wireframe )
+        if ( eShadeMode == drawing::ShadeMode_DRAFT )
         {
             aSet.Put( XLineStyleItem( XLINE_SOLID ) );
             aSet.Put( XFillStyleItem ( XFILL_NONE ) );
@@ -569,19 +645,16 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pScene->SetCamera( rCamera );
             pScene->SetRectsDirty();
 
-            const rtl::OUString sOriginX( RTL_CONSTASCII_USTRINGPARAM ( "OriginX" ) );
-            const rtl::OUString sOriginY( RTL_CONSTASCII_USTRINGPARAM ( "OriginY" ) );
-            double fOriginX = GetDouble( rGeometryItem, sOriginX,  50.0, NULL );
-            double fOriginY = GetDouble( rGeometryItem, sOriginY, -50.0, NULL );
-            fOriginX = ( fOriginX * aSnapRect.GetWidth())  / 100;
-            fOriginY = ( fOriginY * aSnapRect.GetHeight()) / 100;
+            double fOriginX, fOriginY;
+            GetOrigin( rGeometryItem, fOriginX, fOriginY );
+            fOriginX = fOriginX * aSnapRect.GetWidth();
+            fOriginY = fOriginY * aSnapRect.GetHeight();
 
             Matrix4D aNewTransform( pScene->GetTransform() );
             aNewTransform.Translate( -aCenter.X(), aCenter.Y(), -pScene->GetBoundVolume().GetDepth() );
-            const rtl::OUString sAngleX( RTL_CONSTASCII_USTRINGPARAM ( "AngleX" ) );
-            const rtl::OUString sAngleY( RTL_CONSTASCII_USTRINGPARAM ( "AngleY" ) );
-            double fXRotate = GetDouble( rGeometryItem, sAngleX, 0, NULL ) * F_PI180 ;
-            double fYRotate = GetDouble( rGeometryItem, sAngleY, 0, NULL ) * F_PI180;
+
+            double fXRotate, fYRotate;
+            GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
             double fZRotate = ((SdrObjCustomShape*)pCustomShape)->GetObjectRotation() * F_PI180;
             if ( fZRotate != 0.0 )
                 aNewTransform.RotateZ( fZRotate );
@@ -595,12 +668,10 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 aNewTransform.RotateX( -fXRotate );
             if ( eProjectionType == PR_PARALLEL )
             {
-                const rtl::OUString sSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
-                double fSkew = GetDouble( rGeometryItem, sSkew, 50, NULL );
+                double fSkew, fAlpha;
+                GetSkew( rGeometryItem, fSkew, fAlpha );
                 if ( fSkew != 0.0 )
                 {
-                    const rtl::OUString sSkewAngle( RTL_CONSTASCII_USTRINGPARAM ( "SkewAngle" ) );
-                    double fAlpha = GetDouble( rGeometryItem, sSkewAngle, -135, NULL ) * F_PI180;
                     double fInvTanBeta( fSkew / 100.0 );
                     if(fInvTanBeta)
                     {
@@ -640,30 +711,30 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             double fAmbientIntensity = GetDouble( rGeometryItem, sBrightness, 22178.0 / 655.36, NULL ) / 100.0;
 
 
-            const rtl::OUString sLightDirection1( RTL_CONSTASCII_USTRINGPARAM ( "LightDirection1" ) );
-            drawing::Direction3D aLightDirection1Default( 50000, 0, 10000 );
-            drawing::Direction3D aLightDirection1( GetDirection3D( rGeometryItem, sLightDirection1, aLightDirection1Default ) );
-            if ( aLightDirection1.DirectionZ == 0.0 )
-                aLightDirection1.DirectionZ = 1.0;
+            const rtl::OUString sFirstLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightDirection" ) );
+            drawing::Direction3D aFirstLightDirectionDefault( 50000, 0, 10000 );
+            drawing::Direction3D aFirstLightDirection( GetDirection3D( rGeometryItem, sFirstLightDirection, aFirstLightDirectionDefault ) );
+            if ( aFirstLightDirection.DirectionZ == 0.0 )
+                aFirstLightDirection.DirectionZ = 1.0;
 
-            const rtl::OUString sLightLevel1( RTL_CONSTASCII_USTRINGPARAM ( "LightLevel1" ) );
-            double fLightIntensity = GetDouble( rGeometryItem, sLightLevel1, 43712.0 / 655.36, NULL ) / 100.0;
+            const rtl::OUString sFirstLightLevel( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightLevel" ) );
+            double fLightIntensity = GetDouble( rGeometryItem, sFirstLightLevel, 43712.0 / 655.36, NULL ) / 100.0;
 
-            const rtl::OUString sLightHarsh1( RTL_CONSTASCII_USTRINGPARAM ( "LightHarsh1" ) );
-            sal_Bool bLightHarsh1 = GetBool( rGeometryItem, sLightHarsh1, sal_False );
+            const rtl::OUString sFirstLightHarsh( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightHarsh" ) );
+            sal_Bool bFirstLightHarsh = GetBool( rGeometryItem, sFirstLightHarsh, sal_False );
 
-            const rtl::OUString sLightDirection2( RTL_CONSTASCII_USTRINGPARAM ( "LightDirection2" ) );
-            drawing::Direction3D aLightDirection2Default( -50000, 0, 10000 );
-            drawing::Direction3D aLightDirection2( GetDirection3D( rGeometryItem, sLightDirection2, aLightDirection2Default ) );
-            if ( aLightDirection2.DirectionZ == 0.0 )
-                aLightDirection2.DirectionZ = -1;
+            const rtl::OUString sSecondLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightDirection" ) );
+            drawing::Direction3D aSecondLightDirectionDefault( -50000, 0, 10000 );
+            drawing::Direction3D aSecondLightDirection( GetDirection3D( rGeometryItem, sSecondLightDirection, aSecondLightDirectionDefault ) );
+            if ( aSecondLightDirection.DirectionZ == 0.0 )
+                aSecondLightDirection.DirectionZ = -1;
 
-            const rtl::OUString sLightLevel2( RTL_CONSTASCII_USTRINGPARAM ( "LightLevel2" ) );
-            double fLight2Intensity = GetDouble( rGeometryItem, sLightLevel2, 43712.0 / 655.36, NULL ) / 100.0;
+            const rtl::OUString sSecondLightLevel( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightLevel" ) );
+            double fLight2Intensity = GetDouble( rGeometryItem, sSecondLightLevel, 43712.0 / 655.36, NULL ) / 100.0;
 
-            const rtl::OUString sLightHarsh2( RTL_CONSTASCII_USTRINGPARAM ( "LightHarsh2" ) );
+            const rtl::OUString sSecondLightHarsh( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightHarsh" ) );
             const rtl::OUString sLightFace( RTL_CONSTASCII_USTRINGPARAM ( "LightFace" ) );
-            sal_Bool bLight2Harsh = GetBool( rGeometryItem, sLightHarsh2, sal_False );
+            sal_Bool bLight2Harsh = GetBool( rGeometryItem, sSecondLightHarsh, sal_False );
             sal_Bool bLightFace = GetBool( rGeometryItem, sLightFace, sal_False );
 
             sal_uInt16 nAmbientColor = (sal_uInt16)( fAmbientIntensity * 255.0 );
@@ -673,7 +744,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pScene->GetProperties().SetObjectItem( Svx3DAmbientcolorItem( aGlobalAmbientColor ) );
 
             sal_uInt8 nSpotLight1 = (sal_uInt8)( fLightIntensity * 255.0 );
-            Vector3D aSpotLight1( aLightDirection1.DirectionX, - ( aLightDirection1.DirectionY ), -( aLightDirection1.DirectionZ ) );
+            Vector3D aSpotLight1( aFirstLightDirection.DirectionX, - ( aFirstLightDirection.DirectionY ), -( aFirstLightDirection.DirectionZ ) );
             aSpotLight1.Normalize();
             pScene->GetProperties().SetObjectItem( Svx3DLightOnOff1Item( sal_True ) );
             Color aAmbientSpot1Color( nSpotLight1, nSpotLight1, nSpotLight1 );
@@ -681,7 +752,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pScene->GetProperties().SetObjectItem( Svx3DLightDirection1Item( aSpotLight1 ) );
 
             sal_uInt8 nSpotLight2 = (sal_uInt8)( fLight2Intensity * 255.0 );
-            Vector3D aSpotLight2( aLightDirection2.DirectionX, -aLightDirection2.DirectionY, -aLightDirection2.DirectionZ );
+            Vector3D aSpotLight2( aSecondLightDirection.DirectionX, -aSecondLightDirection.DirectionY, -aSecondLightDirection.DirectionZ );
             aSpotLight2.Normalize();
             pScene->GetProperties().SetObjectItem( Svx3DLightOnOff2Item( sal_True ) );
             Color aAmbientSpot2Color( nSpotLight2, nSpotLight2, nSpotLight2 );
@@ -696,11 +767,11 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 pScene->GetProperties().SetObjectItem( Svx3DLightDirection3Item( aSpotLight3 ) );
 
             const rtl::OUString sSpecularity( RTL_CONSTASCII_USTRINGPARAM ( "Specularity" ) );
-            const rtl::OUString sDiffusity( RTL_CONSTASCII_USTRINGPARAM ( "Diffusity" ) );
+            const rtl::OUString sDiffusion( RTL_CONSTASCII_USTRINGPARAM ( "Diffusion" ) );
             const rtl::OUString sShininess( RTL_CONSTASCII_USTRINGPARAM ( "Shininess" ) );
             const rtl::OUString sMetal( RTL_CONSTASCII_USTRINGPARAM ( "Metal" ) );
             double fSpecular = GetDouble( rGeometryItem, sSpecularity, 0, NULL ) / 100;
-            double fDiffuse = GetDouble( rGeometryItem, sDiffusity, 0, NULL ) / 100;
+            double fDiffuse = GetDouble( rGeometryItem, sDiffusion, 0, NULL ) / 100;
             double fShininess = GetDouble( rGeometryItem, sShininess, 0, NULL ) / 100;
             sal_Bool bMetal = GetBool( rGeometryItem, sMetal, sal_False );
 
@@ -719,7 +790,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pScene->GetProperties().SetObjectItem( Svx3DMaterialSpecularItem( aSpecularCol ) );
             pScene->GetProperties().SetObjectItem( Svx3DMaterialSpecularIntensityItem( (sal_uInt16)nIntensity ) );
 
-            pScene->SetModel( pModel );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//          pScene->SetModel( pModel );
             pScene->InitTransformationSet();
             pRet->SetSnapRect( CalculateNewSnapRect( pCustomShape, aBoundRect2d, pMap ) );
 
@@ -742,10 +814,8 @@ Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomS
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const Point aCenter( pCustomShape->GetSnapRect().Center() );
 
-    const rtl::OUString sBackwardDepth( RTL_CONSTASCII_USTRINGPARAM ( "BackwardDepth" ) );
-    const rtl::OUString sForewardDepth( RTL_CONSTASCII_USTRINGPARAM ( "ForewardDepth" ) );
-    double fExtrusionBackward = GetDouble( rGeometryItem, sBackwardDepth, 1270, pMap );
-    double fExtrusionForward  = GetDouble( rGeometryItem, sForewardDepth, 0, pMap );
+    double fExtrusionBackward, fExtrusionForward;
+    GetExtrusionDepth( rGeometryItem, pMap, fExtrusionBackward, fExtrusionForward );
     sal_uInt16 i;
 
     // creating initial bound volume ( without rotation. skewing.and camera )
@@ -761,14 +831,9 @@ Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomS
         aBoundVolume[ i + 4 ].Z()  = fExtrusionBackward;
     }
 
-    const rtl::OUString sRotationCenterX( RTL_CONSTASCII_USTRINGPARAM ( "RotationCenterX" ) );
-    const rtl::OUString sRotationCenterY( RTL_CONSTASCII_USTRINGPARAM ( "RotationCenterY" ) );
-    const rtl::OUString sRotationCenterZ( RTL_CONSTASCII_USTRINGPARAM ( "RotationCenterZ" ) );
-
-    drawing::Position3D aRotationCenter( 0, 0, 0 ); // default seems to be wrong, a fractional size of shape has to be used!!
-    aRotationCenter.PositionX = GetDouble( rGeometryItem, sRotationCenterX, 0.0, NULL );
-    aRotationCenter.PositionY = GetDouble( rGeometryItem, sRotationCenterY, 0.0, NULL );
-    aRotationCenter.PositionZ = GetDouble( rGeometryItem, sRotationCenterZ, 0.0, NULL );
+    const rtl::OUString sRotationCenter( RTL_CONSTASCII_USTRINGPARAM ( "RotationCenter" ) );
+    drawing::Direction3D aRotationCenterDefault( 0, 0, 0 ); // default seems to be wrong, a fractional size of shape has to be used!!
+    drawing::Direction3D aRotationCenter( GetDirection3D( rGeometryItem, sRotationCenter, aRotationCenterDefault ) );
 
     // double XCenterInGUnits = rPropSet.GetPropertyValue( DFF_Prop_c3DRotationCenterX, 0 );
     // double YCenterInGUnits = rPropSet.GetPropertyValue( DFF_Prop_c3DRotationCenterY, 0 );
@@ -778,23 +843,21 @@ Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomS
     // sal_Int32 nRotationZAxisInProz = rPropSet.GetPropertyValue( DFF_Prop_c3DRotationAxisZ, 0 );
 
 
-    const rtl::OUString sAngleX( RTL_CONSTASCII_USTRINGPARAM ( "AngleX" ) );
-    const rtl::OUString sAngleY( RTL_CONSTASCII_USTRINGPARAM ( "AngleY" ) );
-    double fXRotate = GetDouble( rGeometryItem, sAngleX, 0, NULL ) * F_PI180;
-    double fYRotate = GetDouble( rGeometryItem, sAngleY, 0, NULL ) * F_PI180;
+    double fXRotate, fYRotate;
+    GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
     double fZRotate = -(360.0-(double)pCustomShape->GetRotateAngle()/100.0) * F_PI180;
     // double fRotationAngle = Fix16ToAngle( rPropSet.GetPropertyValue( DFF_Prop_c3DRotationAngle, 0 ) );       // * F_PI180;
 
     for( i = 0; i < 8; i++ )        // rotating bound volume
     {
         Vector3D& rPoint = aBoundVolume[ i ];
-        rPoint.X() -= aRotationCenter.PositionX;
-        rPoint.Y() -= aRotationCenter.PositionY;
-        rPoint.Z() -= aRotationCenter.PositionZ;
+        rPoint.X() -= aRotationCenter.DirectionX;
+        rPoint.Y() -= aRotationCenter.DirectionY;
+        rPoint.Z() -= aRotationCenter.DirectionZ;
         Rotate( rPoint, fXRotate, fYRotate, fZRotate );
-        rPoint.X() += aRotationCenter.PositionX;
-        rPoint.Y() += aRotationCenter.PositionY;
-        rPoint.Z() += aRotationCenter.PositionZ;
+        rPoint.X() += aRotationCenter.DirectionX;
+        rPoint.Y() += aRotationCenter.DirectionY;
+        rPoint.Z() += aRotationCenter.DirectionZ;
     }
     Transformation2D aTransformation2D( pCustomShape, rBoundRect, pMap );
     if ( aTransformation2D.IsParallel() )
