@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 07:21:51 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ namespace dbaui
         sal_Int32               m_nAsyncClose;
 
         sal_Bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
+        sal_Bool                m_bHiContrast;          // in which mode we are
 
     // attribute access
     public:
@@ -197,7 +198,6 @@ namespace dbaui
         DECLARE_UNO3_DEFAULTS(SbaTableQueryBrowser,SbaXDataBrowserController);
         // late construction
         virtual sal_Bool Construct(Window* pParent);
-
         // XInterface
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
 
@@ -239,6 +239,9 @@ namespace dbaui
         virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
         // ::com::sun::star::frame::XFrameActionListener
         virtual void SAL_CALL frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
+
+        //IController
+        virtual void notifyHiContrastChanged();
 
     protected:
         // SbaXDataBrowserController overridables
@@ -471,6 +474,8 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnectionFromEntry(SvLBoxEntry* _pEntry) const;
         // remove all grid columns and dispose them
         void clearGridColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _xColContainer);
+
+        sal_Bool isHiContrast() const;
     };
 
 // .........................................................................
