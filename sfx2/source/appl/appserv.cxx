@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:10:35 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,8 @@
 #include "topfrm.hxx"
 #include "sfxpicklist.hxx"
 #include "imestatuswindow.hxx"
+#include "sfxdlg.hxx"
+#include "dialogs.hrc"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -460,10 +462,13 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Reference < XDesktop > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
 
             // if terminate() failed, pAppData_Impl->bInQuit will now be FALSE, allowing further calls of SID_QUITAPP
-            pAppData_Impl->bInQuit = xDesktop->terminate();
+            BOOL bTerminated = xDesktop->terminate();
+            if (!bTerminated)
+                // if terminate() was successful, SfxApplication is now dead!
+                pAppData_Impl->bInQuit = FALSE;
 
             // Returnwert setzten, ggf. terminieren
-            rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), pAppData_Impl->bInQuit));
+            rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bTerminated ) );
             return;
         }
 
@@ -921,33 +926,6 @@ static const ::rtl::OUString& getProductRegistrationServiceName( )
     return s_sServiceName;
 }
 
-typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(BOOL, BOOL, rtl_uString*);
-
-#define DOSTRING( x )                       #x
-#define STRING( x )                         DOSTRING( x )
-
-::rtl::OUString ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc = ::rtl::OUString() )
-{
-    // get basctl dllname
-    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
-    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
-    ::rtl::OUString aLibName( sLibName );
-
-    // load module
-    oslModule handleMod = osl_loadModule( aLibName.pData, 0 );
-
-    // get symbol
-    ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_choose_macro" ) );
-    basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getSymbol( handleMod, aSymbol.pData );
-
-    // call basicide_choose_macro in basctl
-    rtl_uString* pScriptURL = pSymbol( bExecute, bChooseOnly, rMacroDesc.pData );
-
-    ::rtl::OUString aScriptURL( pScriptURL );
-    rtl_uString_release( pScriptURL );
-    return aScriptURL;
-}
-
 #define RID_ERRBOX_MODULENOTINSTALLED     (RID_OFA_START + 72)
 
 ResMgr* SfxApplication::GetOffResManager_Impl()
@@ -963,6 +941,18 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
     FASTBOOL bDone = FALSE;
     switch ( rReq.GetSlot() )
     {
+        case SID_OPTIONS_TREEDIALOG:
+        {
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                  VclAbstractDialog* pDlg = pFact->CreateVclDialog( NULL, ResId( rReq.GetSlot() ) );
+                  pDlg->Execute();
+                  delete pDlg;
+            }
+            break;
+        }
+
         case SID_ONLINE_REGISTRATION:
         {
             try
@@ -1062,6 +1052,26 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bRet ) );
         }
         break;
+
+        case SID_AUTO_CORRECT_DLG:
+        {
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                SfxItemSet aSet(GetPool(), SID_AUTO_CORRECT_DLG, SID_AUTO_CORRECT_DLG);
+                const SfxPoolItem* pItem=NULL;
+                const SfxItemSet* pSet = rReq.GetArgs();
+                SfxItemPool* pPool = pSet ? pSet->GetPool() : NULL;
+                if ( pSet && pSet->GetItemState( pPool->GetWhich( SID_AUTO_CORRECT_DLG ), FALSE, &pItem ) == SFX_ITEM_SET )
+                    aSet.Put( *pItem );
+
+                  SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog( ResId( RID_OFA_AUTOCORR_DLG ), NULL, &aSet, NULL );
+                  pDlg->Execute();
+                  delete pDlg;
+            }
+
+            break;
+        }
 
         case SID_SD_AUTOPILOT :
         case SID_NEWSD :
