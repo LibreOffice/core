@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleSetAccess.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-05 14:38:30 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,10 @@
 module com { module sun { module star { module configuration {
 
 //=============================================================================
-/** provides access to a dynamic homogeneous (nonhierarchical) set of values
+/** provides access to a dynamic homogeneous nonhierarchical set of values
  or objects.
 
- <p>Also rovides information about the template for elements.
+ <p>Also provides information about the template for elements.
  Allows normalizing externally generated names.
  </p>
 
@@ -99,25 +99,25 @@ service SimpleSetAccess
 {
 /** is the basic service for accessing child and descendent nodes.
 
- <p>External names (from foreign namespaces) should be normalized using
- <member scope="com::sun::star::util">XStringEscape::escapeString</member>
- (if available) before using them as element names.
+ <p>External names from foreign namespaces should be normalized using
+ <member scope="com::sun::star::util">XStringEscape::escapeString</member>,
+ if available, before using them as element names.
  </p>
 */
     interface com::sun::star::container::XNameAccess;
 
 /** provides additional information about the element type. [optional]
 
- <p>All set elements (if they are not just simple values but whole trees)
+ <p>All set elements, if they are not just simple values, but whole trees,
  must have a predetermined structure (their <em>type</em>)
- that is described by and can be generated from a <em>Template</em>.
+ that is described by and can be generated from a <em>template</em>.
  The semantics of the information provided about the template depends on the
  implementation.
  </p>
 
- <p>This interface may be missing, if the Implementation can support only
- one predefined type, or if the elements are of a simple type and
- no further information is available.  In the latter case
+ <p>This interface may be missing, if the implementation can support only
+ one predefined type or if the elements are of a simple type and
+ no further information is available.  In the latter case,
  <member scope="com::sun::star::container">XElementAccess::getElementType()</member>
  provides all the information there is about the elements' type.
  </p>
@@ -126,14 +126,14 @@ service SimpleSetAccess
 
 /** allows normalizing and denormalizing external names. [optional]
 
- <p>Elements of a <em>Set</em> often correspond to external entities
- (e.g.files, web pages, people, ...) whose names obey different rules and
+ <p>Elements of a <em>set</em> often correspond to external entities,
+ for example, files, web pages, and people whose names obey different rules and
  restrictions than names that are valid in the hierarchical naming scheme.
  </p>
 
- <p>This interface may be missing, if there are no naming restrictions,
+ <p>This interface may be missing if there are no naming restrictions,
  if the implementation handles any such conversions internally,
- or if clients must enforce such restrictions themselves. In the last case
+ or if clients must enforce such restrictions themselves. In the last case,
  the naming scheme documentation must fully document any restrictions.
  </p>
 */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationProvider.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,20 +74,22 @@
 module com { module sun { module star { module configuration {
 
 //=============================================================================
-/** manages one (or more) complete set(s) of configuration data and serves as a
+/** manages one, or more, complete sets of configuration data and serves as a
  factory for objects that provide access to a subset of the configuration.
 
  <p>An implementation is usually obtained from a (global)
  <type scope="com::sun::star::lang">ServiceManager</type>. The default
  <code>"com.sun.star.configuration.ConfigurationProvider"</code> object, that is
- instantiated without using no extra arguments, is a one instance service.
+ instantiated without using extra arguments, is a one instance service.
  </p>
-*/
+
+ <!-- Dennis: Why is "global" in ()? -->
+ <!-- Dennis: The <code> tag is doing nothing. -->*/
 service ConfigurationProvider
 {
-/** allows creating access objects for specific views (aka subsets,fragments)
+/** allows creating access objects for specific views such as subsets and fragments
  of the configuration.
-.
+
  <p>The parameter <var>aServiceSpecifier</var> passed to
  <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
  supports at least the service specifiers
@@ -95,16 +97,20 @@ service ConfigurationProvider
  <code>"com.sun.star.configuration.ConfigurationUpdateAccess"</code>.
  </p>
 
+ <!-- Dennis: the <code> is doing nothing -->
+
  <p>Using the first of these requests a read-only view of the configuration.
  The object that is created implements service <type>ConfigurationAccess</type>.
  To reflect its <em>element role</em> as root of the view, it implements
  service <type>AccessRootElement</type>.
  </p>
 
+ <!-- Dennis: The first sentence of the previous para appears to have a missing verb -->
+
  <p>Using the second form requests an updatable view of the configuration.
  The object that is created should implement service
  <type>ConfigurationUpdateAccess</type>. To reflect its <em>element role</em>
- which here includes controlling updates for the whole view, it implements
+ which includes controlling updates for the whole view, it implements
  service <type>UpdateRootElement</type>.
  <BR/>If the root element of the view is marked read-only (as indicated
  by <const scope="com::sun::star::beans">PropertyAttributes::READONLY</const>),
@@ -112,21 +118,25 @@ service ConfigurationProvider
  <type>ConfigurationAccess</type>/<type>AccessRootElement</type> instead.
  </p>
 
+ <!-- Dennis: <BR/> is doing nothing in the HTML -->
+
  <p>The arguments passed to
  <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
  in parameter <var>aArguments</var> specify the view of the configuration that
  should be created. That is, they determine the subset of elements that can be
  accessed starting from the returned object. Each element of the argument
  sequence should be a <type scope="com::sun::star::beans">PropertyValue</type>,
- so that the parameters can be identified by name (rather than by position).
+ so that the parameters can be identified by name rather than by position.
  </p>
+
+ <!-- Dennis: Is the <member> suppose to have a formatting effect on the HTML? -->
 
  <p>What combinations of arguments are supported depends on the service name.
  </p>
 
  <p>With both of the standard service-specifiers above, an implementation must
  accept a single argument named <code>nodepath</code> of type <atom>string</atom>.
- This argument must contain the (absolute) path to an element of the
+ This argument must contain the absolute path to an element of the
  configuration. The view that is selected consists of the named element and
  all its decendants.
  </p>
@@ -157,7 +167,10 @@ service ConfigurationProvider
           retrieved.
          </dt>
        </dl>
-       <p><strong>Example:<strong> In the hierarchy
+
+ <!-- Dennis: <dt> and <dd> tags are being generated out of order -->
+
+       <p><strong>Example:</strong> In the hierarchy
 <BR/><pre>
  A - B1 - C1
    |
@@ -211,9 +224,11 @@ service ConfigurationProvider
           returns.
          </dt>
 
+ <!-- Dennis: the data in the <member> is not being displayed. -->
+
          <dd><code>"nocache"</code> : <atom>boolean</atom></dd>
          <dt>specifies that data for the view is not taken from the cache, but
-          read directly from storage. This may entail that future changes that
+          read directly from storage. This may entail future changes that
           become visible in the cache are not reflected in this view and that
           changes done through this view are not reflected in the cache.
           <BR/><strong>Use with caution !</strong>
@@ -223,8 +238,8 @@ service ConfigurationProvider
  </ul>
 
  <p><member scope="com::sun::star::lang">XMultiServiceFactory::createInstance()</member>
- may be unusable. Only if an implementation supports service names that can be
- used with no further arguments, it should support this method, returning the
+ may be unusable. Only an implementation that supports service names that can be
+ used with no further arguments support this method. It should return the
  same result as if
  <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
  had been called using an empty sequence of arguments.
@@ -236,18 +251,17 @@ service ConfigurationProvider
 
 /** allows controlling or observing the lifetime of the configuration.
 
- <p>The owner of the provider may dispose this object
- (using <member scope="com::sun::star::lang">XComponent::dispose</member>).
+ <p>The owner of the provider may dispose of this object
+ using <member scope="com::sun::star::lang">XComponent::dispose</member>.
  Note that the default provider is owned by the
  <type scope="com::sun::star::lang">ServiceManager</type> and should not be
- disposed by user code.
+ disposed of by user code.
  </p>
 
  <p>Views created by the provider generally refer to data that is managed by
-  the provider. Therefore disposing the provider will cause all objects
-  belonging to these views to be disposed as well. This does not apply to
-  <em>snapshot</em> views that have their own copy of the data - if they are
-  available.
+  the provider. Therefore, disposing of the provider will cause all objects
+  belonging to these views to be disposed of as well. This does not apply to
+  <em>snapshot</em> views that have their own copy of the data, if available.
  </p>
 
 */

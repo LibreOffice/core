@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupUpdate.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@ module com { module sun { module star { module configuration {
 /** provides write access to a predefined heterogeneous group of values
  and nested trees as part of a (by name) hierarchy.
 
+ <!-- Dennis: alphabetical hierarchy? -->
+
  <p>Allows replacing values with new values.
  </p>
 
@@ -86,13 +88,15 @@ module com { module sun { module star { module configuration {
 */
 service GroupUpdate
 {
-/** is the basic service providing (read) access to a 'group' element of the
+/** is the basic service providing read access to a group element of the
  hierarchy.
 
- <p>Any hild and descendant objects shall again support modifying access,
- unless they represent a read-only tree element (as indicated by
- <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const>).
+ <p>Any child and descendant objects shall again support modifying access,
+ unless they represent a read-only tree element as indicated by
+ <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const>.
  </p>
+
+ <!-- Dennis: What is meant by "shall again"? -->
 */
     service GroupAccess;
 
@@ -112,10 +116,10 @@ service GroupUpdate
  <type scope="com::sun::star::beans">XMultiPropertySet</type>.
  </p>
 
- <p>Elements of this group may be replaced only if they are of simple type
- (the type returned by
+ <p>Elements of this group may be replaced only if they are of simple type.
+ The type returned by
  <member scope="com::sun::star::container">XElementAccess::getElementType</member>
- is not an interface type). Replacing whole subtrees is not supported.
+ is not an interface type. Replacing whole subtrees is not supported.
  </p>
 */
     interface com::sun::star::container::XNameReplace;

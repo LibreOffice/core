@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTemplateContainer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:24 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,9 @@
 
 //=============================================================================
 
-/** This is implemented by objects that contain instances of a named template.
+/** implemented by objects that contain instances of a named template.
 
-    <p> Often an implementation will also implement
+    <p> An implementation will also implement
         <type scope="com::sun::star::lang">XSingleServiceFactory</type>, in which case
         that interface creates instances of the specified template.
     </p>
@@ -92,6 +92,7 @@ interface XTemplateContainer: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** @returns
+
                 the name of the elements' template.
             <p> If instances of multiple templates are accepted by the container,
                 this is the name of the basic or primary template.
@@ -99,6 +100,8 @@ interface XTemplateContainer: com::sun::star::uno::XInterface
             <p> Instances of the template must be created
                 using an appropriate factory.
             </p>
+
+ <!-- Dennis: is the "@returns" a valid structure? -->
      */
     [const] string getElementTemplateName();
 
@@ -111,6 +114,9 @@ interface XTemplateContainer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/19 16:03:24  mi
+    documentations syntax errors fixed
+
     Revision 1.3  2000/11/08 12:42:38  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SetAccess.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,13 +81,17 @@ module com { module sun { module star { module configuration {
 /** provides access to a dynamic homogeneous set of values or nested
  trees within a (by name) hierarchy.
 
+ <!-- Dennis: (by name) ??? -->
+
  <p>Also provides information about the template for elements.
  Allows normalizing externally generated names.
  </p>
 
  <p><em>Sets</em> here are dynamic containers within the hierarchy.</p>
 
- <p>The number and names of contained elements is not fixed in advance,
+ <!-- Dennis: is the word "here" necessary because "Sets" elsewhere are not dynamic containers -->
+
+ <p>The number and names of contained elements are not fixed in advance,
  but all elements have to be of one predetermined type.
  </p>
 
@@ -99,7 +103,7 @@ module com { module sun { module star { module configuration {
     <member>XTemplateContainer::getElementTemplateName</member>.
 
  @see com::sun::star::configuration::GroupAccess
-    A complementary service, providing for static heterogeneous groups of
+    A complementary service that provides for static heterogeneous groups of
     elements within the hierarchy.
 
 */
@@ -115,16 +119,18 @@ service SetAccess
     service HierarchyAccess;
 
 /** is the basic service providing information about and access to elements
- of a (not necessarily hierarchical) <em>set</em>.
+ of a not necessarily hierarchical <em>set</em>.
 
  <p>Interface <type scope="com::sun::star::configuration>XTemplateContainer</type>,
  which is optional in <type>SimpleSetAccess</type> must always be implemented
  in this service, if the elements are of object type.
  </p>
 
+ <!-- The next paragraph is not being displayed in the HTML output. -->
+
  <p>If an implementation handles naming restrictions transparently, it must
  also handle the case of element names embedded in hierarchical names - passed
- to any object in the hierarchy. Otherwise the implementation should implement
+ to any object in the hierarchy. Otherwise, the implementation should implement
  <type scope="com::sun::star::util>XStringEscape</type>, in which case the
  client is responsible for constructing correct hierarchical names.
  </p>
@@ -133,7 +139,7 @@ service SetAccess
 
 /** allows attaching listeners to this node to monitor changes to the set.
 
- <p>In this service support for notifications is mandatory.
+ <p>In this service, support for notifications is mandatory.
  </p>
 */
     interface com::sun::star::container::XContainer;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTemplateInstance.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:38 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,13 @@
 
 //=============================================================================
 
-/** This is implemented by objects that are instances of a named template.
+/** implemented by objects that are instances of a named template.
 
     <p> Template names are similar service names, but apply to structure and
         content, rather than to type.
     </p>
-    <p> Often a template description can be retrieved from a repository, and be then
-        interpreted by a factory object, so templates provide a means to build
+    <p> Often a template description can be retrieved from a repository, and then be
+        interpreted by a factory object. So templates provide a means to build
         new kinds of objects dynamically.
     </p>
 
@@ -89,7 +89,7 @@ interface XTemplateInstance: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** @returns
-            the name of the template this object was build from or conforms to.
+            the name of the template this object was built from or conforms to.
      */
     [const] string getTemplateName();
 
@@ -102,6 +102,9 @@ interface XTemplateInstance: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:38  mi
+    moved from api
+
     Revision 1.1  2000/10/19 08:37:09  jb
     Added interfaces for accessing node's template information
 

@@ -2,12 +2,12 @@
  *
  *  $RCSfile: ConfigurationUpdateAccess.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
 <<<<<<< ConfigurationUpdateAccess.idl
- *  last change: $Author: jb $ $Date: 2001-02-05 14:39:42 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
 =======
- *  last change: $Author: jb $ $Date: 2001-02-05 14:39:42 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
 >>>>>>> 1.4
  *
  *  The Contents of this file are made available subject to the terms of
@@ -99,6 +99,10 @@ module com { module sun { module star { module configuration {
  in which case they only need implement <type>ConfigurationAccess</type>.
  </p>
 
+ <!-- Dennis: data in <const> not displaying. -->
+ <!-- Dennis: "(and so on recursively)" needs to be rewritten. -->
+ <!-- Dennis: only the @see is being displayed beyond this point. -->
+
  <p>The classification of implementations that is described for
  <type>ConfigurationAccess</type> applies to implementations of this service
  as well. Therefore an implementation will support one of several alternate
@@ -126,7 +130,7 @@ module com { module sun { module star { module configuration {
 */
 service ConfigurationUpdateAccess
 {
-    /** is the basic service providing (read) access to an element of the
+    /** is the basic service providing read access to an element of the
      configuration hierarchy and its child and descendent elements.
 
      <p>The <type>HierarchyAccess</type> specialization implemented will be
@@ -137,11 +141,11 @@ service ConfigurationUpdateAccess
 
      <p>If the <type>HierarchyElement</type> specialization that is implemented
      is <type>AccessRootElement</type>, the implementation must support the
-     extended functionality of <type>UpdateRootElement</type>. Otherwise there
+     extended functionality of <type>UpdateRootElement</type>. Otherwise, there
      are no new requirements mandated by the <em>Element</em> role.
      </p>
 
-    */
+*/
     service ConfigurationAccess;
 
     /** specializes <type>SetAccess</type> to support modifying the element.
@@ -149,6 +153,8 @@ service ConfigurationUpdateAccess
      <p>Implemented, if this element is a <em>Set</em>.
      <BR/>[Alternatively to <type>GroupUpdate</type>]
      </p>
+
+ <!-- Dennis: Should the last sentence read: "This is an alternative to <type>GroupUpdate</type>" -->
     */
     /*[optional]*/ service SetUpdate;
 
@@ -158,15 +164,20 @@ service ConfigurationUpdateAccess
      <p>Implemented, if this element is a <em>Group</em>.
      <BR/>[Alternatively to <type>SetUpdate</type>]
      </p>
-    */
+
+ <!-- Dennis: Same comment as above -->*/
     /*[optional]*/ service GroupUpdate;
 
-    /** specializes <type>AccessRootElement</type>, to support transaction-like
+    /** specializes <type>AccessRootElement</type> to support transaction-like
      control over a batch of changes accumulated within the tree (fragment).
+
+ <!-- Dennis: Why is "fragment" in ()? -->
 
      <p>Implemented, if this element is the <em>Root</em> of the whole hierarchy.
      <BR/>[Alternatively to <type>SetElement</type> or <type>GroupElement</type>]
      </p>
+
+ <!-- Dennis: BR is displaying -->
 
      @see ConfigurationProvider
         Instances obtained from a <type>ConfigurationProvider</type> will

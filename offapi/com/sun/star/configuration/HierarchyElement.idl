@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyElement.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ module com { module sun { module star { module configuration {
 
  <p>Implementations of this service usually also implement
  service <type>HierarchyAccess</type>, which concerns the complementary role
- of providing access to subelements of the Hierarchy.
+ of providing access to subelements of the hierarchy.
  </p>
 */
 service HierarchyElement
@@ -107,7 +107,11 @@ service HierarchyElement
 
 /** provides the (local) name of this element within its parent.
 
+ <!-- Why is local in ()? -->
+
  <p><em>Renaming an element is generally not supported.</em></p>
+
+ <!-- Should be more specific. When is it allowed? When is it not allowed? -->
 */
     interface com::sun::star::container::XNamed;
 
@@ -119,42 +123,45 @@ service HierarchyElement
  </p>
 
  <p>If the parent of this object implements
- <type scope="com::sun::star::beans">XPropertySetInfo</type> then this returns
+ <type scope="com::sun::star::beans">XPropertySetInfo</type>, then this returns
  the same <type scope="com::sun::star::beans">Property</type> as the
  <type scope="com::sun::star::beans">XPropertySetInfo</type> of the parent.
  </p>
 */
     [optional] interface com::sun::star::beans::XProperty;
 
-/** provides access to the (default) state of this element. [optional]
+/** provides access to the default state of this element. [optional]
 
  <p>This interface may be missing, if the hierarchy supports access to
- a default state and values only for simple values (or not at all)
+ a default state and values only for simple values or not at all.
  </p>
 
  <p>If the parent of this object implements
- <type scope="com::sun::star::beans">XPropertyState</type> then members
+ <type scope="com::sun::star::beans">XPropertyState</type>, then members
  of this interface have the same effect as corresponding members of the parent.
  </p>
 
  <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
  attempts to change property states will fail.
  </p>
+
+ <!-- Dennis: What "attempts"? -->
 */
     [optional] interface com::sun::star::beans::XPropertyWithState;
 
 /** provides access to the parent of this element [optional].
 
- <p>This interface may be missing, if this object is not obtained
- as child or descendant of another tree node
- (e.g. directly from a factory or provider).
+ <p>This interface may be missing if this object is not obtained
+ as a child or descendant of another tree node, for example, directly from a factory or provider.
  </p>
 
  <p><member scope="com::sun::star::container">XChild::getParent</member>
- returns NULL, if this object is (currently) not contained in another node.
+ returns NULL, if this object is currently not contained in another node.
  </p>
 
  <p><em>Setting a different parent is generally not supported.</em></p>
+
+ <!-- Dennis: "generally" is vague -->
 */
     [optional] interface com::sun::star::container::XChild;
 

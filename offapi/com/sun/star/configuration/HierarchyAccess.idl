@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyAccess.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,10 @@ module com { module sun { module star { module configuration {
 //=============================================================================
 /** provides access to a (by name) hierarchy of descendant elements.
 
+ <!-- Dennis: alphabetical? -->
+
  <p>Values that are direct or indirect descendants of this tree node can be
- retrieved, non-value subnodes can be navigated using container interfaces.
+ retrieved. Non-value subnodes can be navigated using container interfaces.
  Other interfaces provide access to information about this node.
  Changes to values in the subtree can be monitored by event listeners.
  </p>
@@ -95,9 +97,11 @@ module com { module sun { module star { module configuration {
  hierarchical tree.
  </p>
 
+ <!-- Dennis: "(by name)" ?? -->
+
  <p>Implementations of this service usually also implement
  service <type>HierarchyElement</type>, which concerns the complementary role
- of being accessible as an element of the Hierarchy.
+ of being accessible as an element of the hierarchy.
  </p>
 
 */
@@ -109,7 +113,8 @@ service HierarchyAccess
  returns an Any holding either a simple value or an interface
  on another HierarchyAccess if the child is not a simple value.
  </p>
-*/
+
+ <!-- Dennis: I don't understand the phrase "returns an Any holding" -->*/
     interface com::sun::star::container::XNameAccess;
 
 /** allows access to all descendants of this node
@@ -118,6 +123,8 @@ service HierarchyAccess
  returns an Any holding either a simple value or an interface
  on another HierarchyAccess if the descendant is not a simple value.
  </p>
+
+ <!-- Dennis: I don't understand the phrase "returns an Any holding" -->
 */
     interface com::sun::star::container::XHierarchicalNameAccess;
 
@@ -131,6 +138,8 @@ service HierarchyAccess
  <type scope="com::sun::star::container">XHierarchicalNameAccess</type>,
  <type scope="com::sun::star::beans">XPropertySet</type>, etc.
  </p>
+
+ <!-- Dennis: What constitutes "etc"? -->
 */
     interface com::sun::star::beans::XExactName;
 };

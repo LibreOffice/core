@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SetUpdate.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com { module sun { module star { module configuration {
  trees within a (by name) hierarchy.
 
  <p>Allows adding and removing elements.
- Helps creating new elements to be added.
+ Helps creates new elements to be added.
  </p>
 
  <p>This service extends <type>SetAccess</type> to support
@@ -89,29 +89,31 @@ module com { module sun { module star { module configuration {
  unless they represent a read-only tree element (as indicated by
  <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const>).
  </p>
+
+ <!-- Dennis: "again"? -->
 */
 service SetUpdate
 {
-/** is the basic service providing (read) access to a <em>set</em> within the
+/** is the basic service providing read access to a <em>set</em> within the
  hierarchy.
 */
     service SetAccess;
 
 /** is the basic service providing modifying access to a
- (not necessarily hierarchical) <em>set</em>.
+ not necessarily hierarchical <em>set</em>.
 
  <p>Changes can be observed by registering a listener with interface
  <type scope="com::sun::star::container">XContainer</type>.
  </p>
 
- <p>If the elements of this set are of object type,new elements are constructed
+ <p>If the elements of this set are of object type, new elements are constructed
  to match the tree structure prescribed by the element template of this set, when
  using interfaces <type scope="com::sun::star::lang">XSingleServiceFactory</type>
  and (if supported) <type scope="com::sun::star::lang">XMultiServiceFactory</type>.
  </p>
 
  <p>Objects that are removed from a set can be reinserted into any set supporting
- the same template within the same hierarchy (even under a different name).
+ the same template within the same hierarchy. Even under a different name.
  </p>
 
  <p>Implementations that support insertion of objects that weren't obtained

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupElement.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,14 @@ module com { module sun { module star { module configuration {
 /** provides information about a predefined element contained in a
  heterogeneous group of elements within a (by name) hierarchy.
 
+ <!-- Dennis: Can it be rewritten as "...within an alphabetical hierarchy."? -->
+
  <p>Provides information about the element.
- Provides access to its containing 'group' object.
+ Provides access to its containing group object.
  </p>
 
  <p>A group element bears a predefined name. It may only exist within a
- containing 'group' object.
+ containing group object.
  </p>
 
  @see com::sun::star::configuration::GroupAccess
@@ -102,7 +104,7 @@ service GroupElement
 */
     service HierarchyElement;
 
-/** provides access to the containing 'group' object.
+/** provides access to the containing group object.
 
  <p>In this service this interface is mandatory</p>
 

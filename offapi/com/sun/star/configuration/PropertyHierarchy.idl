@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyHierarchy.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,21 +91,22 @@ module com { module sun { module star { module configuration {
  direct access even to subproperties.
  </p>
 
+ <!-- Dennis: is the phrase "(and so on recursively)" necessary? -->
+
  <p>Properties of an implementation that are objects themselves will often
  implement <type scope="com::sun::star::beans">XProperty</type> to allow
  direct access to information about the object.
  If such properties have properties of their own, they should fully implement
- <type>PropertyHierarchy</type> (this service) again.
+ <type>PropertyHierarchy</type> again.
  </p>
 */
 service PropertyHierarchy
 {
-/** provides access to and information about the (immediate) properties
- of an implementation.
+/** provides access to and information about the immediate properties of an implementation.
 */
     interface com::sun::star::beans::XPropertySet;
 
-/** provides access to and information about the (immediate) properties
+/** provides access to and information about the immediate properties
  of an implementation.
 
  <p>This interface allows retrieving or setting multiple properties at once.

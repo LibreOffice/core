@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleSetUpdate.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,11 @@
 module com { module sun { module star { module configuration {
 
 //=============================================================================
-/** provides write access to a dynamic homogeneous (non-hierarchical) set of
+/** provides write access to a dynamic homogeneous non-hierarchical set of
  values or objects.
 
  <p>Allows adding and removing elements.
- Helps creating new elements to be added.
+ Helps create new elements to be added.
  </p>
 
  <p>This service extends <type>SimpleSetAccess</type> to support
@@ -96,20 +96,20 @@ module com { module sun { module star { module configuration {
 */
 service SimpleSetUpdate
 {
-/** is the basic service providing (read) access to a (not necessarily
+/** is the basic service providing read access to a (not necessarily
  hierarchical) <em>set</em>.
 */
     service SimpleSetAccess;
 
-/** allows inserting, removing and replacing elements.
+/** allows inserting, removing, and replacing elements.
 
  <p>This interface extends the interface
  <type scope="com::sun::star::container">XNameAccess</type> supported
  by service <type>SimpleSetAccess</type> to allow modifying the container.
  </p>
 
- <p>Changes can be observed by registering a listener with interface
- <type scope="com::sun::star::container">XContainer</type> (if available).
+ <p>If available, changes can be observed by registering a listener with interface
+ <type scope="com::sun::star::container">XContainer</type>.
  </p>
 
  <p>If the elements of this set are of simple type (the type returned by
@@ -123,25 +123,27 @@ service SimpleSetUpdate
  <p>Otherwise new elements have to be constructed to match the type
  prescribed by the element template of this set. Such elements can be created
  using interfaces <type scope="com::sun::star::lang">XSingleServiceFactory</type>
- and (if supported) <type scope="com::sun::star::lang">XMultiServiceFactory</type>.
+ and, if supported, <type scope="com::sun::star::lang">XMultiServiceFactory</type>.
  </p>
 
  <p>Objects to be inserted must not be contained in any set at the time of
- insertion (<member scope="com::sun::star::container">XChild::getParent</member>
- must return <NULL/>). A prior name they bear is ignored.
+ insertion. <member scope="com::sun::star::container">XChild::getParent</member>
+ must return <NULL/>. A prior name they bear is ignored.
  </p>
+
+ <!-- Dennis: The last sentence is vague. -->
 
  <p>Objects that are removed using
  <member scope="com::sun::star::container">XNameContainer::removeByName</member>
  or replaced using
  <member scope="com::sun::star::container">XNameContainer::replaceByName</member>
- remain valid and can be reinserted into a set supporting the same template
- (even under a different name).
+ remain valid and can be reinserted into a set supporting the same template and
+ even under a different name.
  </p>
 
- <p>An implementation need not support insertion of objects that weren't
+ <p>An implementation need not support insertion of objects that were not
  obtained in one of the ways described above. If it does, the implementation
- must reject elements that don't have the correct structure as described
+ must reject elements that do not have the correct structure as described
  by the template.
  </p>
 */
@@ -150,15 +152,14 @@ service SimpleSetUpdate
 /** allows creating an object that can be inserted into this set. [conditional]
 
  <p>This interface shall be implemented by an implementation,
- if and only if the element type of the set (as returned by
- <member scope="com::sun::star::container">XElementAccess::getElementType</member>)
- is an object type (i.e. an interface).
+ if and only if the element type of the set, as returned by
+ <member scope="com::sun::star::container">XElementAccess::getElementType</member>,
+ is an object type, such as an interface.
  </p>
 
- <p>Using
- <member scope="com::sun::star::lang">XSingleServiceFactory::createInstance</member>
+ <p>Using <member scope="com::sun::star::lang">XSingleServiceFactory::createInstance</member>
  an instance of the element template of this set is created. If the set
- supports multiple templates or variatios of the basic template, a default
+ supports multiple templates or variations of the basic template, a default
  variant of the basic template is instantiated. If an implementation supports
  variations, they may be specified by passing arguments to
  <member scope="com::sun::star::lang">XSingleServiceFactory::createInstanceWithArguments</member>.
@@ -166,7 +167,7 @@ service SimpleSetUpdate
  </p>
 
  <p>The object created is not contained in the set and does not have a name yet.
- It may subsequently be inserted into the set (and named) using
+ It may subsequently be inserted into the set and named using
  <member scope="com::sun::star::container">XNameContainer::insertByName</member>
  or
  <member scope="com::sun::star::container">XNameContainer::replaceByName</member>.
@@ -179,22 +180,22 @@ service SimpleSetUpdate
  <p>This interface may be implemented by an implementation of
  service SetUpdate to support creating elements from other than
  the basic element template. An example of this would be an
- implementation that supports 'inheritance', allowing the use of
- templates 'derived' from the basic template by extension.
+ implementation that supports inheritance, allowing the use of
+ templates derived from the basic template by extension.
  </p>
 
- <p>This interface may only be implemented, if the element type of the set
+ <p>This interface may only be implemented if the element type of the set
  (as returned by
  <member scope="com::sun::star::container">XElementAccess::getElementType</member>)
- is an object type (i.e an interface). An implementation should also implement
- interface <type>XTemplateContainer</type> (which also is optional in this service).
+ is an object type, such as an interface. An implementation should also implement
+ interface <type>XTemplateContainer</type> which is optional in this service.
  </p>
 
  <p>The service identifier argument passed
  to <member scope="com::sun::star::lang">XMultiServiceFactory::createInstance</member>
  or <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments</member>
- names the template to be instantiated (or otherwise identifies the structure
- to be built). The implementation must at least support using the template
+ names the template to be instantiated or otherwise identifies the structure
+ to be built. The implementation must at least support using the template
  name obtained from <member>XTemplateContainer::getElementTemplateName</member>
  as a service identifier, in which case the result shall be the same as if
  the corresponding member of <type scope="com::sun::star::lang">XSingleServiceFactory</type>
