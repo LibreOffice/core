@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-11-22 09:45:29 $
+ *  last change: $Author: iha $ $Date: 2002-11-26 15:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,16 +309,6 @@ ToolBox RID_WEBTOOLS_TOOLBOX
             Identifier = FN_INSERT_FIELD_CTRL ;
             HelpID = HID_INSERT_FIELD_CTRL ;
             DropDown = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_INSERT_HEADER ;
-            HelpID = FN_INSERT_HEADER ;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_INSERT_FOOTER ;
-            HelpID = FN_INSERT_FOOTER ;
         };
         ToolBoxItem
         {
