@@ -8,6 +8,7 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 
 ..\%__SRC%\bin\ulfconv %_DEST%\bin%_EXT%\ulfconv
 ..\%__SRC%\bin\langpackscript.sh %_DEST%\bin%_EXT%\langpackscript.sh
+..\%__SRC%\bin\downloadscript.sh %_DEST%\bin%_EXT%\downloadscript.sh
 ..\source\win32\msi-encodinglist.txt %_DEST%\bin%_EXT%\msi-encodinglist.txt
 
 ..\%__SRC%\lib\getuid.so %_DEST%\bin%_EXT%\getuid.so
