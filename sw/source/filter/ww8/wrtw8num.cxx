@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:07:35 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,7 +608,7 @@ void SwWW8Writer::SubstituteBullet(String& rNumStr,
 
     if (sFont.Len())
     {
-        rNumStr = cChar | 0xF000;
+        rNumStr = static_cast< sal_Unicode >(cChar | 0xF000);
         rFontName = sFont;
         rChrSet = RTL_TEXTENCODING_SYMBOL;
     }
@@ -633,7 +633,7 @@ void SwWW8Writer::SubstituteBullet(String& rNumStr,
         bullet symbol
         */
         rFontName.ASSIGN_CONST_ASC("Wingdings");
-        rNumStr = 0x6C;
+        rNumStr = static_cast< sal_Unicode >(0x6C);
      }
      delete pConvert;
 }
