@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:04:37 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,11 @@
  *
  *
  ************************************************************************/
-
 #ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
 #include <com/sun/star/embed/XClassifiedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
 #endif
 
 
@@ -312,12 +314,23 @@ void ScDocument::UpdateChart( const String& rChartName, Window* pWindow )
 
                         //  #72576# disable SetModified for readonly documents only
 
-                        // TODO/LATER: should be handled in future somehow
-//REMOVE                            BOOL bEnabled = ( ((pShell && pShell->IsReadOnly()) ||
-//REMOVE                                                IsImportingXML()) &&
-//REMOVE                                                aIPObj->IsEnableSetModified() );
-//REMOVE                            if (bEnabled)
-//REMOVE                                aIPObj->EnableSetModified(FALSE);
+                        sal_Bool bEnabled = ( (pShell && pShell->IsReadOnly()) || IsImportingXML() );
+                        sal_Bool bModified = sal_False;
+                        uno::Reference< util::XModifiable > xModif;
+
+                        if ( bEnabled )
+                        {
+                            try
+                            {
+                                xModif =
+                                    uno::Reference< util::XModifiable >( xIPObj->getComponent(), uno::UNO_QUERY_THROW );
+                                bModified = xModif->isModified();
+                            }
+                            catch( uno::Exception& )
+                            {
+                                bEnabled = sal_False;
+                            }
+                        }
 
                         SchDLL::Update( xIPObj, pMemChart, pWindow );
                         ((SdrOle2Obj*)pObject)->GetNewReplacement();
@@ -334,9 +347,16 @@ void ScDocument::UpdateChart( const String& rChartName, Window* pWindow )
                         pObject->ActionChanged();
                         // pObject->SendRepaintBroadcast();
 
-                        // TODO/LATER: should be handled in future somehow
-//REMOVE                            if (bEnabled)
-//REMOVE                                aIPObj->EnableSetModified(TRUE);
+                        if ( bEnabled && xModif.is() )
+                        {
+                            try
+                            {
+                                if ( xModif->isModified() != bModified )
+                                    xModif->setModified( bModified );
+                            }
+                            catch ( uno::Exception& )
+                            {}
+                        }
 
                         return;         // nicht weitersuchen
                     }
