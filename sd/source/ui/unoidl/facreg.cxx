@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:18:02 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,18 +59,28 @@
  *
  ************************************************************************/
 
-#include <string.h>
-
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
+#ifndef _CPPUHELPER_FACTORY_HXX_
+#include <cppuhelper/factory.hxx>
+#endif
+#ifndef _UNO_LBNAMES_H_
+#include <uno/lbnames.h>
 #endif
 
-#include <cppuhelper/factory.hxx>
-#include <uno/lbnames.h>
+#ifndef _OSL_DIAGNOSE_H_
+#include "osl/diagnose.h"
+#endif
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+
+#ifndef INCLUDED_STRING_H
+#include <string.h>
+#define INCLUDED_STRING_H
+#endif
 
 using namespace rtl;
 using namespace com::sun::star;
@@ -96,12 +106,17 @@ extern "C"
 {
 #endif
 
-void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
+    const sal_Char  ** ppEnvTypeName,
+    uno_Environment ** ppEnv )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-void SAL_CALL writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& rImplementationName, const uno::Sequence< OUString >& rServices )
+static void SAL_CALL writeInfo(
+    registry::XRegistryKey          * pRegistryKey,
+    const OUString                  & rImplementationName,
+    const uno::Sequence< OUString > & rServices )
 {
     uno::Reference< registry::XRegistryKey > xNewKey(
         pRegistryKey->createKey(
@@ -111,7 +126,9 @@ void SAL_CALL writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& 
         xNewKey->createKey( rServices.getConstArray()[i]);
 }
 
-sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
+    void * pServiceManager,
+    void * pRegistryKey )
 {
     if( pRegistryKey )
     {
@@ -132,7 +149,10 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
     return sal_True;
 }
 
-void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+    const sal_Char * pImplName,
+    void           * pServiceManager,
+    void           * pRegistryKey )
 {
     void * pRet = 0;
 
