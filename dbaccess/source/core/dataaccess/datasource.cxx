@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-03 14:34:21 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,12 +678,11 @@ void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObj
                 *i = OWeakConnection();
                 try
                 {
-                    TStorages::iterator aFind = m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
-                    if ( aFind != m_aStorages.end() )
+                    Reference<XTransactedObject> xTrans(xCon,UNO_QUERY);
+                    if ( bStore = xTrans.is() )
                     {
-                        Reference<XTransactedObject> xTrans(aFind->second,UNO_QUERY);
-                        if ( bStore = xTrans.is() )
-                            xTrans->commit();
+                        xTrans->commit();
+                        bStore = commitEmbeddedStorage();
                     }
                 }
                 catch(Exception&)
@@ -818,20 +817,7 @@ void ODatabaseSource::disposing()
 
     m_xCurrentController = NULL;
     m_xNumberFormatsSupplier = NULL;
-    try
-    {
-        TStorages::iterator aFind = m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
-        if ( aFind != m_aStorages.end() )
-        {
-            Reference<XTransactedObject> xTrans(aFind->second,UNO_QUERY);
-            if ( xTrans.is() )
-                xTrans->commit();
-        }
-    }
-    catch(Exception&)
-    {
-        OSL_ENSURE(0,"Exception Caught: Could not store embedded database!");
-    }
+
     try
     {
         TStorages::iterator aIter = m_aStorages.begin();
@@ -941,7 +927,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         ::rtl::OUString sMessage = DBACORE_RESSTRING( nExceptionMessageId );
 
         SQLContext aContext;
-        aContext.Details = m_sConnectURL;
+        aContext.Message = m_sConnectURL;
 
         throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), makeAny( aContext ) );
     }
