@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.49 2001-05-16 13:31:25 cl Exp $
+	$Id: drawing.mod,v 1.50 2001-05-16 14:04:04 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -702,6 +702,7 @@
 <!ATTLIST dr3d:rotate %draw-style-name; >
 
 <!ELEMENT dr3d:scene (dr3d:light*,(%shapes3d;)*)>
+<!ATTLIST dr3d:scene %draw-style-name; >
 <!ATTLIST dr3d:scene svg:x %coordinate; #IMPLIED>
 <!ATTLIST dr3d:scene svg:y %coordinate; #IMPLIED>
 <!ATTLIST dr3d:scene svg:width %length; #IMPLIED>
