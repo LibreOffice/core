@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:19:23 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,6 +782,18 @@ Color StyleSettings::GetFaceGradientColor() const
 
 // -----------------------------------------------------------------------
 
+Color StyleSettings::GetSeparatorColor() const
+{
+    // compute a brighter shadow color for separators (used in toolbars or between menubar and toolbars on Windows XP)
+    USHORT h, s, b;
+    GetShadowColor().RGBtoHSB( h, s, b );
+    b += b/4;
+    s -= s/4;
+    return Color( Color::HSBtoRGB( h, s, b ) );
+}
+
+// -----------------------------------------------------------------------
+
 const StyleSettings& StyleSettings::operator =( const StyleSettings& rSet )
 {
     DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "StyleSettings: RefCount overflow" );
@@ -1060,88 +1072,62 @@ BOOL MiscSettings::operator ==( const MiscSettings& rSet ) const
 
 BOOL MiscSettings::GetEnableATToolSupport() const
 {
+
+#ifdef WNT
     if( mpData->mnEnableATT == (USHORT)~0 )
     {
-#ifdef UNX
-        mpData->mnEnableATT = 0;
+        // Check in the Windows registry if an AT tool wants Accessibility support to
+        // be activated ..
+        HKEY hkey;
 
-        static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
+        if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
+            "Software\\OpenOffice.org\\Accessibility\\AtToolSupport",
+            &hkey) )
         {
-            char buf[16];
-            // use 2 shells to suppress the eventual "gcontool-2 not found" message
-            // of the shell trying to execute the command
-            FILE* fp = popen( "/bin/sh 2>/dev/null -c \"gconftool-2 -g /desktop/gnome/interface/accessibility\"", "r" );
-            if( fp )
+            DWORD dwType;
+            WIN_BYTE Data[6]; // possible values: "true", "false", "1", "0", DWORD
+            DWORD cbData = sizeof(Data);
+
+            if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
+                NULL, &dwType, Data, &cbData) )
             {
-                if( fgets( buf, sizeof(buf), fp ) )
+                switch (dwType)
                 {
-                    int nCompare = strncasecmp( buf, "true", 4 );
-                    mpData->mnEnableATT = (nCompare == 0 ? 1 : 0);
+                    case REG_SZ:
+                        mpData->mnEnableATT = ((0 == stricmp((const char *) Data, "1")) || (0 == stricmp((const char *) Data, "true")));
+                        break;
+                    case REG_DWORD:
+                        mpData->mnEnableATT = (USHORT) (((DWORD *) Data)[0]);
+                        break;
+                    default:
+                        // Unsupported registry type
+                        break;
                 }
-                pclose( fp );
             }
+
+            RegCloseKey(hkey);
         }
-#else
+    }
+#endif
+
+    if( mpData->mnEnableATT == (USHORT)~0 )
+    {
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
         if( !pEnv || !*pEnv )
         {
-#ifdef WNT
-            // Check in the Windows registry if an AT tool wants Accessibility support to
-            // be activated ..
-            HKEY hkey;
-
-            if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
-                "Software\\OpenOffice.org\\Accessibility\\AtToolSupport",
-                &hkey) )
-            {
-                DWORD dwType;
-                WIN_BYTE Data[6]; // possible values: "true", "false", "1", "0", DWORD
-                DWORD cbData = sizeof(Data);
-
-                if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
-                    NULL, &dwType, Data, &cbData) )
-                {
-                    switch (dwType)
-                    {
-                        case REG_SZ:
-                            mpData->mnEnableATT = ((0 == stricmp((const char *) Data, "1")) || (0 == stricmp((const char *) Data, "true")));
-                            break;
-                        case REG_DWORD:
-                            mpData->mnEnableATT = (USHORT) (((DWORD *) Data)[0]);
-                            break;
-                        default:
-                            // Unsupported registry type
-                            mpData->mnEnableATT = 0;
-                            break;
-                    }
-                }
-
-                RegCloseKey(hkey);
-            }
-
-            // Registry does not exist ..
-            if( mpData->mnEnableATT == (USHORT)~0 )
-            {
-                rtl::OUString aEnable =
-                    vcl::SettingsConfigItem::get()->
-                    getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
-                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ) );
-                mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCaseAscii( "true" ) ? 1 : 0;
-            }
-#else
             rtl::OUString aEnable =
                 vcl::SettingsConfigItem::get()->
                 getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ) );
             mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCaseAscii( "true" ) ? 1 : 0;
-#endif
         }
         else
+        {
             mpData->mnEnableATT = 1;
-#endif
+        }
     }
-    return (BOOL)mpData->mnEnableATT;
 
+    return (BOOL)mpData->mnEnableATT;
 }
 
 // -----------------------------------------------------------------------
