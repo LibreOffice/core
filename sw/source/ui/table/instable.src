@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 17:35:39 $
+ *  last change: $Author: hjs $ $Date: 2001-06-29 02:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ french ] = "Taille";
         Text[ spanish ] = "Tamaño de tabla";
         Text[ finnish ] = "Size";
-        Text[ italian ] = "Size";
+        Text[ italian ] = "Dimensioni tabella";
         Text[ danish ] = "Size";
         Text[ swedish ] = "Tabellstorlek";
         Text[ polish ] = "Rozmiar tabeli";
@@ -441,5 +441,6 @@ ModalDialog DLG_INSERT_TABLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar tabla";
 };
+
 
 
