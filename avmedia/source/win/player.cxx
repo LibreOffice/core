@@ -2,9 +2,9 @@
  *
  *  $RCSfile: player.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date:
+ *  last change: $Author: vg $ $Date:
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <tools/postwin.h>
 
 #include "player.hxx"
+#include "framegrabber.hxx"
 #include "window.hxx"
 
 #define AVMEDIA_WIN_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_DirectX"
@@ -82,7 +83,8 @@ namespace avmedia { namespace win {
 // - Player -
 // ----------------
 
-Player::Player() :
+Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
+    mxMgr( rxMgr ),
     mpGB( NULL ),
     mpOMF( NULL ),
     mpMC( NULL ),
@@ -175,6 +177,11 @@ bool Player::create( const ::rtl::OUString& rURL )
         }
     }
 
+    if( bRet )
+        maURL = rURL;
+    else
+        maURL = ::rtl::OUString();
+
     return bRet;
 }
 
@@ -221,8 +228,8 @@ long Player::processEvent()
             }
             else
             {
-                   setMediaTime( getDuration() );
-                   stop();
+                setMediaTime( getDuration() );
+                stop();
             }
         }
 
@@ -401,9 +408,7 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 sal_Int16 SAL_CALL Player::getVolumeDB(  )
     throw (uno::RuntimeException)
 {
-    return( mnUnmutedVolume / 100 );
-
-    return 0;
+    return( static_cast< sal_Int16 >( mnUnmutedVolume / 100 ) );
 }
 
 // ------------------------------------------------------------------------------
@@ -435,12 +440,32 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
     if( mpVW && aSize.Width > 0 && aSize.Height > 0 )
     {
-        ::avmedia::win::Window* pWindow = new ::avmedia::win::Window( *this );
+        ::avmedia::win::Window* pWindow = new ::avmedia::win::Window( mxMgr, *this );
 
         xRet = pWindow;
 
         if( !pWindow->create( aArguments ) )
             xRet = uno::Reference< ::media::XPlayerWindow >();
+    }
+
+    return xRet;
+}
+
+// ------------------------------------------------------------------------------
+
+uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
+    throw (uno::RuntimeException)
+{
+    uno::Reference< media::XFrameGrabber > xRet;
+
+    if( maURL.getLength() > 0 )
+    {
+        FrameGrabber* pGrabber = new FrameGrabber( mxMgr );
+
+        xRet = pGrabber;
+
+        if( !pGrabber->create( maURL ) )
+            xRet.clear();
     }
 
     return xRet;
