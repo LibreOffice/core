@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fulinend.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:04:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,11 @@
 #ifndef _XTABLE_HXX
 #include <svx/xtable.hxx>
 #endif
-#ifndef _SVX_DLG_NAME_HXX //autogen
-#include <svx/dlgname.hxx>
-#endif
+//CHINA001 #ifndef _SVX_DLG_NAME_HXX //autogen
+//CHINA001 #include <svx/dlgname.hxx>
+//CHINA001 #endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
 #endif
@@ -172,7 +174,11 @@ FuLineEnd::FuLineEnd(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
             }
         }
 
-        SvxNameDialog* pDlg = new SvxNameDialog( NULL, aName, aDesc );
+        //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( NULL, aName, aDesc );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( NULL, aName, aDesc, ResId(RID_SVXDLG_NAME) );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_LINEEND );
 
         if( pDlg->Execute() == RET_OK )
