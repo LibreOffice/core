@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:28:46 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,314 +166,6 @@ extern const sal_Char* pVBASubStorageName;
 
 
 
-ExcCondForm::ExcCondForm( RootData* p, const XclImpRoot& rRoot ) :
-    ExcRoot( p ),
-    XclImpRoot( rRoot )
-{
-    nCol = nRow = 0;
-    nNumOfConds = nCondCnt = 0;
-    pScCondForm = NULL;
-    pRangeList = new ScRangeList;
-}
-
-
-ExcCondForm::~ExcCondForm()
-{
-    delete pRangeList;
-}
-
-
-void ExcCondForm::Read( XclImpStream& rIn )
-{
-    rIn >> nNumOfConds;
-    rIn.Ignore( 2 );
-    rIn >> nRow;
-    rIn.Ignore( 2 );
-    rIn >> nCol;
-    rIn.Ignore( 2 );
-
-    UINT16  nRngCnt, nR1, nR2, nC1, nC2;
-    rIn >> nRngCnt;
-    while( nRngCnt )
-    {
-        rIn >> nR1 >> nR2 >> nC1 >> nC2;
-
-        pRangeList->Append( ScRange( nC1, nR1, GetScTab(), nC2, nR2, GetScTab() ) );
-
-        nRngCnt--;
-    }
-}
-
-
-void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv, sal_uInt32 nListIndex )
-{
-    if( nNumOfConds )
-    {
-        nNumOfConds--;
-
-//      const UINT32        nRecPos = rIn.Tell();
-        UINT8               nFormType, nFormOperator;
-        UINT16              nLenForm1, nLenForm2;
-        ULONG               nDummy;
-
-        rIn >> nFormType >> nFormOperator >> nLenForm1 >> nLenForm2;
-
-        ScConditionMode     eMode;
-        BOOL                bValid = FALSE;
-        BOOL                bSingForm = TRUE;
-
-        if( nFormType == 0x01 )
-        {// compare
-            bValid = TRUE;
-
-            switch( nFormOperator )
-            {
-                case 0x01:  eMode = SC_COND_BETWEEN;    bSingForm = FALSE;  break;
-                case 0x02:  eMode = SC_COND_NOTBETWEEN; bSingForm = FALSE;  break;
-                case 0x03:  eMode = SC_COND_EQUAL;      break;
-                case 0x04:  eMode = SC_COND_NOTEQUAL;   break;
-                case 0x05:  eMode = SC_COND_GREATER;    break;
-                case 0x06:  eMode = SC_COND_LESS;       break;
-                case 0x07:  eMode = SC_COND_EQGREATER;  break;
-                case 0x08:  eMode = SC_COND_EQLESS;     break;
-                default:    eMode = SC_COND_NONE;
-            }
-        }
-        else if( nFormType == 0x02 )
-        {
-            bValid = TRUE;
-            eMode = SC_COND_DIRECT;
-        }
-
-        if( bValid )
-        {
-            ULONG               nFormatsLen = nLenForm1 + nLenForm2 + 6;
-            if( nFormatsLen > rIn.GetRecSize() )
-                return;
-
-            nFormatsLen = rIn.GetRecSize() - nFormatsLen;    // >0!
-
-            ScDocument& rDoc = GetDoc();
-
-            const ScTokenArray* pFrmla1 = NULL;
-            const ScTokenArray* pFrmla2 = NULL;
-
-            ScAddress           aPos( nCol, nRow, GetScTab() );
-
-            if( !pScCondForm )
-            {
-                nDummy = 0;
-                pScCondForm = new ScConditionalFormat( nDummy, &rDoc );
-            }
-
-            // create style
-            ULONG nPosF = rIn.GetRecPos();      // font
-            ULONG nPosL = nPosF;                // line
-            ULONG nPosP = nPosF;                // pattern (fill)
-
-            switch( nFormatsLen )
-            {
-                case 10:    nPosF = 0;      nPosL = 0;      nPosP += 6;     break;  // P
-                case 14:    nPosF = 0;      nPosL += 6;     nPosP = 0;      break;  // L
-                case 18:    nPosF = 0;      nPosL += 6;     nPosP += 14;    break;  // L + P
-                case 124:   nPosF += 74;    nPosL = 0;      nPosP = 0;      break;  // F
-                case 128:   nPosF += 74;    nPosL = 0;      nPosP += 124;   break;  // F + P
-                case 132:   nPosF += 74;    nPosL += 124;   nPosP = 0;      break;  // F + L
-                case 136:   nPosF += 74;    nPosL += 124;   nPosP += 132;   break;  // F + L + P
-                default:    nPosF = 0;      nPosL = 0;      nPosP = 0;
-            }
-
-            String aStyleName( XclTools::GetCondFormatStyleName( nListIndex, nCondCnt ) );
-            SfxItemSet& rStyleItemSet = ScfTools::MakeCellStyleSheet( GetStyleSheetPool(), aStyleName, true ).GetItemSet();
-
-            const XclImpPalette& rPalette = GetPalette();
-
-            if( nPosF )     // font
-            {
-                UINT8           nAttr1, nAttr2, nAttr3, nUnder;
-                UINT16          nBold;
-                UINT32          nCol;
-                rIn.Seek( nPosF );
-                rIn >> nAttr1;          // italic / strike out
-                rIn.Ignore( 3 );
-                rIn >> nBold;           // boldness
-                rIn.Ignore( 2 );
-                rIn >> nUnder;          // num of underlines
-                rIn.Ignore( 3 );
-                rIn >> nCol;            // color
-                rIn.Ignore( 4 );
-                rIn >> nAttr2;          // strike out DC + italic/bold DC
-                rIn.Ignore( 7 );
-                rIn >> nAttr3;          // underline DC
-
-                BOOL            bItalic = nAttr1 & 0x02;
-                BOOL            bStrikeOut = nAttr1 & 0x80;
-
-                BOOL            bHasColor = ( nCol != 0xFFFFFFFF );
-                BOOL            bHasBoldItalic = !TRUEBOOL( nAttr2 & 0x02 );
-                BOOL            bHasStrikeOut = !TRUEBOOL( nAttr2 & 0x80 );
-                BOOL            bHasUnderline = !TRUEBOOL( nAttr3 & 0x01 );
-
-                if( bHasBoldItalic )
-                {
-                    SvxWeightItem   aWeightItem( XclImpFont::GetScFontWeight( nBold ) );
-                    rStyleItemSet.Put( aWeightItem );
-
-                    SvxPostureItem  aAttr( bItalic? ITALIC_NORMAL : ITALIC_NONE );
-                    rStyleItemSet.Put( aAttr );
-                }
-
-                if( bHasUnderline )
-                {
-                    FontUnderline   eUnder;
-                    switch( nUnder )
-                    {
-                        case 1:     eUnder = UNDERLINE_SINGLE;      break;
-                        case 2:     eUnder = UNDERLINE_DOUBLE;      break;
-                        default:    eUnder = UNDERLINE_NONE;
-                    }
-                    SvxUnderlineItem    aUndItem( eUnder );
-                    rStyleItemSet.Put( aUndItem );
-                }
-
-                if( bHasStrikeOut )
-                {
-                    SvxCrossedOutItem   aAttr( bStrikeOut? STRIKEOUT_SINGLE : STRIKEOUT_NONE );
-                    rStyleItemSet.Put( aAttr );
-                }
-
-                if( bHasColor )
-                    rStyleItemSet.Put( SvxColorItem( rPalette.GetColor( static_cast< sal_uInt16 >( nCol ) ) ) );
-            }
-
-            if( nPosL )     // line
-            {
-                sal_uInt16 nLineStyle;
-                sal_uInt32 nLineColor;
-                rIn.Seek( nPosL );
-                rIn >> nLineStyle >> nLineColor;
-
-                XclImpCellBorder aBorder;
-                aBorder.FillFromCF8( nLineStyle, nLineColor );
-                aBorder.FillToItemSet( rStyleItemSet, rPalette );
-            }
-
-            if( nPosP )     // pattern (fill)
-            {
-                sal_uInt16 nPattern, nColor;
-                rIn.Seek( nPosP );
-                rIn >> nPattern >> nColor;
-
-                XclImpCellArea aArea;
-                aArea.FillFromCF8( nPattern, nColor );
-                aArea.FillToItemSet( rStyleItemSet, rPalette );
-            }
-
-            // convert formulas
-            FORMULA_TYPE        eFT = FT_RangeName;
-            if( nLenForm1 )
-            {
-                rIn.Seek( rIn.GetRecSize() - nLenForm1 - nLenForm2 );
-
-                rConv.Reset( aPos );
-                rConv.Convert( pFrmla1, nLenForm1, eFT );
-            }
-
-            ScTokenArray*       pHelp;
-
-            if( nLenForm2 )
-            {
-                if( pFrmla1 )
-                {
-                    // copy unique ScTokenArry from formula converter!
-                    pHelp = pFrmla1->Clone();
-                    pFrmla1 = ( const ScTokenArray* ) pHelp;
-                }
-
-                rIn.Seek( rIn.GetRecSize() - nLenForm2 );
-
-                rConv.Reset( aPos );
-                rConv.Convert( pFrmla2, nLenForm2, eFT );
-            }
-
-            ScCondFormatEntry   aCFE( eMode, pFrmla1, pFrmla2, &rDoc, aPos, aStyleName );
-
-            pScCondForm->AddEntry( aCFE );
-
-            if( pFrmla1 && pFrmla2 )
-            {
-                // if both pointers are non null, 1 is a real copy
-                pHelp = ( ScTokenArray* ) pFrmla1;
-                delete pHelp;
-            }
-        }
-        nCondCnt++;
-    }
-}
-
-
-void ExcCondForm::Apply( void )
-{
-    if( pScCondForm )
-    {
-        ULONG           nCondFormat = GetDoc().AddCondFormat( *pScCondForm );
-        ScPatternAttr   aPat( GetDoc().GetPool() );
-        aPat.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nCondFormat ) );
-
-        const ScRange*  p = pRangeList->First();
-        UINT16          nC1, nC2, nR1, nR2;
-
-        while( p )
-        {
-            nC1 = p->aStart.Col();
-            nR1 = p->aStart.Row();
-            nC2 = p->aEnd.Col();
-            nR2 = p->aEnd.Row();
-
-            if( nC1 > MAXCOL )
-                nC1 = MAXCOL;
-            if( nC2 > MAXCOL )
-                nC2 = MAXCOL;
-            if( nR1 > MAXROW )
-                nR1 = MAXROW;
-            if( nR2 > MAXROW )
-                nR2 = MAXROW;
-
-            GetDoc().ApplyPatternAreaTab( nC1, nR1, nC2, nR2, p->aStart.Tab(), aPat );
-
-            p = pRangeList->Next();
-        }
-    }
-}
-
-
-
-
-ExcCondFormList::~ExcCondFormList()
-{
-    ExcCondForm*    p = ( ExcCondForm* ) List::First();
-
-    while( p )
-    {
-        delete p;
-        p = ( ExcCondForm* ) List::Next();
-    }
-}
-
-
-void ExcCondFormList::Apply( void )
-{
-    ExcCondForm*        p = ( ExcCondForm* ) List::First();
-
-    while( p )
-    {
-        p->Apply();
-        p = ( ExcCondForm* ) List::Next();
-    }
-}
-
-
-
 ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* pDoc, const String& rDocUrl, SvStorage* pPivotCache ) :
     ImportExcel( rStream, pDoc, rDocUrl )
 {
@@ -485,9 +177,6 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
     pCurrPivTab = NULL;
     pCurrPivotCache = NULL;
 
-    pActCondForm = NULL;
-    pCondFormList = NULL;
-
     pAutoFilterBuffer = NULL;
 
     pExcRoot->pRootStorage = pStorage;
@@ -498,8 +187,6 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
 
 ImportExcel8::~ImportExcel8()
 {
-    if( pCondFormList )
-        delete pCondFormList;
     if( pAutoFilterBuffer )
         delete pAutoFilterBuffer;
 }
@@ -744,26 +431,6 @@ void ImportExcel8::Msodrawingselection( void )
     GetObjectManager().ReadMsodrawingselection( maStrm );
 }
 
-void ImportExcel8::Condfmt( void )
-{
-    if( !pCondFormList )
-        pCondFormList = new ExcCondFormList;
-
-    pActCondForm = new ExcCondForm( pExcRoot, *this );
-
-    pCondFormList->Append( pActCondForm );
-
-    pActCondForm->Read( aIn );
-}
-
-
-void ImportExcel8::Cf( void )
-{
-    if( pActCondForm )
-        pActCondForm->ReadCf( aIn, *pFormConv, static_cast< sal_Int32 >( pCondFormList->Count() - 1 ) );
-}
-
-
 void ImportExcel8::Labelsst( void )
 {
     UINT16                      nRow, nCol, nXF;
@@ -996,18 +663,16 @@ void ImportExcel8::GetHFString( String& rStr )
 
 void ImportExcel8::EndSheet( void )
 {
-    pActCondForm = NULL;
-
+    GetCondFormatManager().Apply();
     ImportExcel::EndSheet();
 }
 
 
 void ImportExcel8::PostDocLoad( void )
 {
-    if( pCondFormList )
-        pCondFormList->Apply();
     if( pAutoFilterBuffer )
         pAutoFilterBuffer->Apply();
+
     GetWebQueryBuffer().Apply();    //! test if extant
 
     ApplyEscherObjects();
