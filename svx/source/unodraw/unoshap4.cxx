@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-07-25 19:00:08 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 12:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,7 +591,7 @@ Any SAL_CALL SvxPluginShape::getPropertyValue( const OUString& PropertyName ) th
                         OUString aURL;
                         DBG_ASSERT( xPlugin->GetURL(), "Plugin without a URL!" );
                         if( xPlugin->GetURL() )
-                            aURL = xPlugin->GetURL()->GetMainURL();
+                            aURL = xPlugin->GetURL()->GetMainURL( INetURLObject::NO_DECODE );
                         return makeAny( aURL );
                     }
                     case OWN_ATTR_PLUGIN_COMMANDS:
@@ -767,7 +767,7 @@ Any SAL_CALL SvxFrameShape::getPropertyValue( const OUString& PropertyName ) thr
             switch( pMap->nWID )
             {
                 case OWN_ATTR_FRAME_URL:
-                    return makeAny( OUString( pDescriptor->GetURL().GetMainURL() ) );
+                    return makeAny( OUString( pDescriptor->GetURL().GetMainURL( INetURLObject::NO_DECODE ) ) );
                 case OWN_ATTR_FRAME_NAME:
                     return makeAny( OUString( pDescriptor->GetName() ) );
                 case OWN_ATTR_FRAME_ISAUTOSCROLL:

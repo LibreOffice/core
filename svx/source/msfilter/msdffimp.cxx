@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-12 09:18:06 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 12:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4562,7 +4562,7 @@ BOOL SvxMSDffManager::GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData) const
             aURL.removeFinalSlash();
             aURL.Append( aFileName );
 
-            SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_TRUNC | STREAM_WRITE );
+            SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_TRUNC | STREAM_WRITE );
 
             if( pDbgOut )
             {
