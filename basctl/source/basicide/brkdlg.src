@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 14:05:28 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text [ spanish ] = "Nuevo" ;
         Text [ french ] = "Nouveau" ;
         Text [ swedish ] = "Ny" ;
-        Text [ danish ] = "Ny" ;
+        Text [ danish ] = "Ny(t)" ;
         Text [ portuguese ] = "Novo" ;
         Text [ portuguese_brazilian ] = "Novo" ;
         Text[ chinese_simplified ] = "Êñ∞Âª∫";
@@ -122,6 +122,8 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ hebrew ] = "‚ÄÆ◊ó◊ì◊©‚Ä¨";
         Text[ hindi ] = "‡§®‡§Ø‡§æ";
         Text[ slovak ] = "Nov√Ω";
+        Text[ hungarian ] = "√öj";
+        Text[ slovenian ] = "Nov";
     };
     PushButton RID_PB_DEL
     {
@@ -157,6 +159,8 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ hebrew ] = "‚ÄÆ◊û◊ó◊ô◊ß◊î‚Ä¨";
         Text[ hindi ] = "‡§Æ‡§ø‡§ü‡§æ‡§ì";
         Text[ slovak ] = "Zmaza≈•";
+        Text[ hungarian ] = "T√∂rl√©s";
+        Text[ slovenian ] = "Izbri≈°i";
     };
     CheckBox RID_CHKB_ACTIVE
     {
@@ -191,6 +195,8 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ hebrew ] = "Aktiv";
         Text[ hindi ] = "‡§ï‡•ç‡§∞‡§ø‡§Ø‡§æ‡§∂‡•Ä‡§≤";
         Text[ slovak ] = "Akt√≠vny";
+        Text[ hungarian ] = "Akt√≠v";
+        Text[ slovenian ] = "Aktivno";
     };
     FixedText RID_FT_PASS
     {
@@ -201,7 +207,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text [ english_us ] = "Pass Count:" ;
         Text [ portuguese_brazilian ] = "Passagens:" ;
         Text [ swedish ] = "Genomflˆde:" ;
-        Text [ danish ] = "Glid igennem:" ;
+        Text [ danish ] = "Antal genneml¯b:" ;
         Text [ italian ] = "Passaggi:" ;
         Text [ spanish ] = "AdaptaciÛn:" ;
         Text [ french ] = "Adaptation :" ;
@@ -224,6 +230,8 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ hebrew ] = "Durchlauf:";
         Text[ hindi ] = "‡§™‡§æ‡§∏ ‡§ó‡§ø‡§®‡§§‡•Ä:";
         Text[ slovak ] = "Poƒçet:";
+        Text[ hungarian ] = "Menetek sz√°ma:";
+        Text[ slovenian ] = "≈†tevec prehodov:";
     };
     FixedText RID_FT_BRKPOINTS
     {
@@ -257,6 +265,8 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ hebrew ] = "Haltepunkte";
         Text[ hindi ] = "‡§ñ‡§£‡•ç‡§°‡§® ‡§¨‡§ø‡§®‡•ç‡§¶‡•Å";
         Text[ slovak ] = "Body preru≈°enia";
+        Text[ hungarian ] = "T√∂r√©spontok";
+        Text[ slovenian ] = "Prekinitvene toƒçke";
     };
     NumericField RID_FLD_PASS
     {
@@ -271,7 +281,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
     Text [ french ] = "Gestion des points d'arrÍt" ;
     Text [ dutch ] = "Onderbrekingspunten" ;
     Text [ swedish ] = "Hantera brytpunkter" ;
-    Text [ danish ] = "Pausepunkter" ;
+    Text [ danish ] = "Ret pausepunkter" ;
     Text [ portuguese_brazilian ] = "Pontos de interrupÁ„o" ;
     Text [ portuguese ] = "Pontos de interrupÁ„o" ;
     Text[ chinese_simplified ] = "ÁÆ°ÁêÜ‰∏≠Êñ≠ÁÇπ";
@@ -280,7 +290,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
     Text[ japanese ] = "„Éñ„É¨„Éº„ÇØ„Éù„Ç§„É≥„Éà„ÅÆÁÆ°ÁêÜ";
     Text[ chinese_traditional ] = "ÁÆ°ÁêÜ‰∏≠Êñ∑Èªû";
     Text[ arabic ] = "‰ﬁ«ÿ «·≈Ìﬁ«›";
-    Text[ greek ] = "”ÁÏÂﬂ· ÛÙ‹ÛÁÚ";
+    Text[ greek ] = "ƒÈ·˜ÂﬂÒÈÛÁ ÛÁÏÂﬂ˘Ì ÛÙ‹ÛÁÚ";
     Text[ korean ] = "Ï§ëÎã®Ï†ê Í¥ÄÎ¶¨";
     Text[ turkish ] = "K˝r˝lma noktalar˝";
     Text[ language_user1 ] = " ";
@@ -291,7 +301,10 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
     Text[ hebrew ] = "Haltepunkte";
     Text[ hindi ] = "‡§ñ‡§£‡•ç‡§°‡§® ‡§¨‡§ø‡§®‡•ç‡§¶‡•Å";
     Text[ slovak ] = "Body preru≈°enia";
+    Text[ hungarian ] = "T√∂r√©spontok kezel√©se";
+    Text[ slovenian ] = "Uredi prekinitvene toƒçke";
 };
+
 
 
 
