@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:04:31 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,7 @@
 #define SC_UNONAME_INPTITLE         "InputTitle"
 #define SC_UNONAME_SHOWERR          "ShowErrorMessage"
 #define SC_UNONAME_SHOWINP          "ShowInputMessage"
+#define SC_UNONAME_SHOWLIST         "ShowList"
 #define SC_UNONAME_TYPE             "Type"
 
 //  links
