@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:44:30 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 
 class ScRange;
 struct SingleRefData;
+struct ComplRefData;
 
 /* ============================================================================
 Classes for export of different kinds of internal/external references.
@@ -216,7 +217,7 @@ public:
     /** Stores the cell with the given address in a CRN record list. */
     void                StoreCell( const SingleRefData& rRef );
     /** Stores all cells in the given range in a CRN record list. */
-    void                StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 );
+    void                StoreCellRange( const ComplRefData& rRef );
 
     /** Finds or inserts an EXTERNNAME record for an add-in function name.
         @param rnXti  Returns the index of the XTI structure which contains the add-in function name.
