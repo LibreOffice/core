@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-29 14:37:05 $
+ *  last change: $Author: dr $ $Date: 2002-09-25 15:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,14 +654,36 @@ void ScAutoFormatData::FillToItemSet( USHORT nIndex, SfxItemSet& rItemSet, ScDoc
         rItemSet.Put( rField.GetHeight() );
         rItemSet.Put( rField.GetWeight() );
         rItemSet.Put( rField.GetPosture() );
-        rItemSet.Put( rField.GetCJKFont() );
-        rItemSet.Put( rField.GetCJKHeight() );
-        rItemSet.Put( rField.GetCJKWeight() );
-        rItemSet.Put( rField.GetCJKPosture() );
-        rItemSet.Put( rField.GetCTLFont() );
-        rItemSet.Put( rField.GetCTLHeight() );
-        rItemSet.Put( rField.GetCTLWeight() );
-        rItemSet.Put( rField.GetCTLPosture() );
+        // #103065# do not insert empty CJK font
+        const SvxFontItem& rCJKFont = rField.GetCJKFont();
+        if( rCJKFont.GetStyleName().Len() )
+        {
+            rItemSet.Put( rCJKFont );
+            rItemSet.Put( rField.GetCJKHeight() );
+            rItemSet.Put( rField.GetCJKWeight() );
+            rItemSet.Put( rField.GetCJKPosture() );
+        }
+        else
+        {
+            rItemSet.Put( rField.GetHeight(), ATTR_CJK_FONT_HEIGHT );
+            rItemSet.Put( rField.GetWeight(), ATTR_CJK_FONT_WEIGHT );
+            rItemSet.Put( rField.GetPosture(), ATTR_CJK_FONT_POSTURE );
+        }
+        // #103065# do not insert empty CTL font
+        const SvxFontItem& rCTLFont = rField.GetCTLFont();
+        if( rCTLFont.GetStyleName().Len() )
+        {
+            rItemSet.Put( rCTLFont );
+            rItemSet.Put( rField.GetCTLHeight() );
+            rItemSet.Put( rField.GetCTLWeight() );
+            rItemSet.Put( rField.GetCTLPosture() );
+        }
+        else
+        {
+            rItemSet.Put( rField.GetHeight(), ATTR_CTL_FONT_HEIGHT );
+            rItemSet.Put( rField.GetWeight(), ATTR_CTL_FONT_WEIGHT );
+            rItemSet.Put( rField.GetPosture(), ATTR_CTL_FONT_POSTURE );
+        }
         rItemSet.Put( rField.GetUnderline() );
         rItemSet.Put( rField.GetCrossedOut() );
         rItemSet.Put( rField.GetContour() );
