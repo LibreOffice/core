@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Configuration.xcu,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:16:23 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,17 +127,6 @@
               </prop>
               <prop oor:name="URLTemplate">
                 <value>ftp</value>
-              </prop>
-              <prop oor:name="Arguments">
-                <value/>
-              </prop>
-            </node>
-            <node oor:name="Provider7" oor:op="replace">
-              <prop oor:name="ServiceName">
-                <value>com.sun.star.ucb.ChaosContentProvider</value>
-              </prop>
-              <prop oor:name="URLTemplate">
-                <value>vnd.sun.staroffice.out</value>
               </prop>
               <prop oor:name="Arguments">
                 <value/>
