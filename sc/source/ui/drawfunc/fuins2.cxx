@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 10:11:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,12 +128,12 @@ extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht 
 
 void lcl_ChartInit( SvInPlaceObjectRef aIPObj, ScViewData* pViewData, Window* pWin )
 {
-    USHORT nCol1 = 0;
-    USHORT nRow1 = 0;
-    USHORT nTab1 = 0;
-    USHORT nCol2 = 0;
-    USHORT nRow2 = 0;
-    USHORT nTab2 = 0;
+    SCCOL nCol1 = 0;
+    SCROW nRow1 = 0;
+    SCTAB nTab1 = 0;
+    SCCOL nCol2 = 0;
+    SCROW nRow2 = 0;
+    SCTAB nTab2 = 0;
 
     ScMarkData& rMark = pViewData->GetMarkData();
     if ( !rMark.IsMarked() )
@@ -190,8 +190,8 @@ void lcl_ChartInit2( SvInPlaceObjectRef aIPObj, ScViewData* pViewData, Window* p
     if( IS_AVAILABLE( SID_ATTR_COLHEADERS, &pItem ) )
         bColHeader = ((const SfxBoolItem*)pItem)->GetValue();
 
-    SchMemChart* pMemChart;
-    ScChartListener* pChartListener;
+    SchMemChart* pMemChart = 0;
+    ScChartListener* pChartListener = 0;
     BOOL bMulti;
     if ( IS_AVAILABLE( FN_PARAM_5, &pItem ) )
     {
@@ -217,11 +217,11 @@ void lcl_ChartInit2( SvInPlaceObjectRef aIPObj, ScViewData* pViewData, Window* p
     {
         ScRange aMarkRange;
         rMark.GetMarkArea( aMarkRange );
-        USHORT nColStart = aMarkRange.aStart.Col();
-        USHORT nRowStart = aMarkRange.aStart.Row();
-        USHORT nColEnd = aMarkRange.aEnd.Col();
-        USHORT nRowEnd = aMarkRange.aEnd.Row();
-        USHORT nTab = aMarkRange.aStart.Tab();
+        SCCOL nColStart = aMarkRange.aStart.Col();
+        SCROW nRowStart = aMarkRange.aStart.Row();
+        SCCOL nColEnd = aMarkRange.aEnd.Col();
+        SCROW nRowEnd = aMarkRange.aEnd.Row();
+        SCTAB nTab = aMarkRange.aStart.Tab();
 
         pDoc->LimitChartArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
 
@@ -558,7 +558,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
 
                 ScRangeListRef aDummy;
                 Rectangle aMarkDest;
-                USHORT nMarkTab;
+                SCTAB nMarkTab;
                 BOOL bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
 
                 //  Objekt-Groesse
@@ -603,15 +603,15 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                             //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
 
                             if ( ((const SfxBoolItem*)pItem)->GetValue() )
-                                nToTable = pScDoc->GetTableCount();
+                                nToTable = static_cast<UINT16>(pScDoc->GetTableCount());
                             else
-                                nToTable = pData->GetTabNo();
+                                nToTable = static_cast<UINT16>(pData->GetTabNo());
                         }
                     }
                     else
                     {
                         if (bDrawRect)
-                            nToTable = nMarkTab;
+                            nToTable = static_cast<UINT16>(nMarkTab);
                         rReq.AppendItem( SfxUInt16Item( FN_PARAM_4, nToTable ) );
                     }
 
@@ -620,7 +620,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                     {
                         // dann los...
                         String      aTabName;
-                        USHORT      nNewTab = pScDoc->GetTableCount();
+                        SCTAB       nNewTab = pScDoc->GetTableCount();
 
                         pScDoc->CreateValidTabName( aTabName );
 
@@ -659,7 +659,9 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                     aStart = aMarkDest.TopLeft();                       // marked by hand
                 else
                 {
-                    USHORT nC0, nR0, nT0, nC1, nR1, nT1;
+                    SCCOL nC0, nC1;
+                    SCROW nR0, nR1;
+                    SCTAB nT0, nT1;
                     if( pData->GetSimpleArea( nC0, nR0, nT0, nC1, nR1, nT1 )
                         && ( nT0 == nT1 ) )
                     {
@@ -668,7 +670,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                         // und 1 1/2 Zeilen unterhalb des Starts
                         ScDocument* pScDoc = pData->GetDocument();
                         ULONG x = 0, y = 0;
-                        USHORT i;
+                        SCCOL i;
                         for( i = 0; i <= nC1; i++ )
                             x += pScDoc->GetColWidth( i, nT0 );
                         while( ++i <= MAXCOL )
@@ -679,11 +681,12 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                                 x += n / 2; break;
                             }
                         }
-                        for( i = 0; i <= nR0; i++ )
-                            y += pScDoc->FastGetRowHeight( i, nT0 );
-                        while( ++i <= MAXROW )
+                        SCROW j;
+                        for( j = 0; j <= nR0; j++ )
+                            y += pScDoc->FastGetRowHeight( j, nT0 );
+                        while( ++j <= MAXROW )
                         {
-                            USHORT n = pScDoc->FastGetRowHeight( i, nT0 );
+                            USHORT n = pScDoc->FastGetRowHeight( j, nT0 );
                             if( n )
                             {
                                 y += n / 2; break;
