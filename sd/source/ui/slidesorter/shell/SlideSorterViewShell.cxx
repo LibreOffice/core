@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:59:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,14 @@ void SlideSorterViewShell::LoseFocus (void)
 
 
 
+
+SdPage* SlideSorterViewShell::getCurrentPage(void) const
+{
+    // since SlideSorterViewShell::GetActualPage() currently also
+    // returns master pages, which is a wrong behaviour for GetActualPage(),
+    // we can just use that for now
+    return const_cast<SlideSorterViewShell*>(this)->GetActualPage();
+}
 
 SdPage* SlideSorterViewShell::GetActualPage (void)
 {
