@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-09 10:59:34 $
+ *  last change: $Author: sab $ $Date: 2002-10-18 13:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #include "undotab.hxx"
 #include "waitoff.hxx"
 #include "sizedev.hxx"
+#include "scmod.hxx"
+#include "inputhdl.hxx"
+#include "inputwin.hxx"
 
 using namespace com::sun::star;
 
@@ -827,6 +830,16 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
 
     rDocShell.PostPaintCell( rPos.Col(), rPos.Row(), rPos.Tab() );
     aModificator.SetDocumentModified();
+
+    // #103934#; notify editline and cell in edit mode
+    if (bApi)
+    {
+        ScViewData* pViewData = rDocShell.GetViewData();
+        if (pViewData && pViewData->GetCurPos() == rPos)
+        {
+            pViewData->UpdateInputHandler(FALSE, !SC_MOD()->GetInputHdl()->IsEditMode());
+        }
+    }
 
     return TRUE;
 }
