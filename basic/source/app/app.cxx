@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gh $ $Date: 2000-12-14 17:11:57 $
+ *  last change: $Author: kso $ $Date: 2001-02-06 10:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,6 @@
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
-#include <com/sun/star/ucb/ContentProviderServiceInfo2.hpp>
 
 #include <ucbhelper/content.hxx>
 
