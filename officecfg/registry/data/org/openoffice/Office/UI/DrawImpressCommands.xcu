@@ -6856,6 +6856,50 @@
                     <value xml:lang="pt">Caixa/Caracteres</value>
                 </prop>
             </node>
+
+            <node oor:name=".uno:MasterLayoutsMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Masterlayouts</value>
+                    <value xml:lang="en-US">Master Lay~outs</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MasterLayoutsSlide" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Masterlayout...</value>
+                    <value xml:lang="en-US">Master Layout...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MasterLayoutsNotes" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Notizenmasterlayout...</value>
+                    <value xml:lang="en-US">Notes Master Layout...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MasterLayoutsHandouts" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Handzettelmasterlayout...</value>
+                    <value xml:lang="en-US">Handout Master Layout...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:HeaderAndFooter" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Kopf- und Fußzeile..</value>
+                    <value xml:lang="en-US">~Header and Footer...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertPageNumber" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Seitenzahl...</value>
+                    <value xml:lang="en-US">P~age Number...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertDateAndTime" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Datum und Uhrzeit...</value>
+                    <value xml:lang="en-US">Date and ~Time...</value>
+                </prop>
+            </node>
+
         </node>
     </node>
 </oor:component-data>
