@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 09:44:07 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 09:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,8 +154,11 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
+#ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
+#include "querycomposer.hxx"
+#endif
+#ifndef _DBA_CORE_TABLECONTAINER_HXX_
+#include "tablecontainer.hxx"
 #endif
 
 using namespace dbaccess;
@@ -500,6 +503,7 @@ void ORowSet::freeResources()
         delete m_pCache;
         m_pCache = NULL;
 
+        m_xTables = NULL;
         if(m_pColumns)
         {
             m_pColumns->disposing();
@@ -1373,7 +1377,7 @@ Reference< XArray > SAL_CALL ORowSet::getArray( sal_Int32 columnIndex ) throw(SQ
 }
 
 // -------------------------------------------------------------------------
-
+using namespace rtl;
 // XRowSet
 void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
 {
@@ -1426,19 +1430,6 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
             xProp->setPropertyValue(PROPERTY_FETCHDIRECTION,makeAny((sal_Int32)m_nFetchDirection));
 
             {
-                Reference<XNameAccess> xTables;
-
-                Reference< XTablesSupplier > xMasterTables(m_xActiveConnection,UNO_QUERY);
-                if(xMasterTables.is())
-                    xTables = xMasterTables->getTables();
-                else
-                {
-                    OTableContainer* pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection);
-                    Sequence< ::rtl::OUString > a;
-                    pTables->construct(a,a);
-                    xTables = pTables;
-                }
-
                 {
                     Reference<XParameters> xParam(m_xStatement,UNO_QUERY);
                     sal_Int32 i = 1;
@@ -1679,7 +1670,7 @@ Reference< XConnection >  ORowSet::calcConnection() throw( SQLException, Runtime
     return m_xActiveConnection;
 }
 //------------------------------------------------------------------------------
-rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing)
+rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing)  throw( SQLException)
 {
     // create the sql command
     // from a table name or get the command out of a query (not a view)
@@ -1688,23 +1679,32 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing)
     rtl::OUString aQuery;
     if (m_aCommand.len())
     {
+        // i always need a tables for the querycomposer
+        Reference< XTablesSupplier >  xTablesAccess(m_xActiveConnection, UNO_QUERY);
+        if (xTablesAccess.is())
+        {
+            m_xTables = xTablesAccess->getTables();
+        }
+        else // the connection is no table supplier so I make it myself
+        {
+            OTableContainer* pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection);
+            m_xTables = pTables;
+            pTables->construct(Sequence< ::rtl::OUString>(),Sequence< ::rtl::OUString>());
+        }
         switch (m_nCommandType)
         {
             case CommandType::TABLE:
             {
-                Reference< XTablesSupplier >  xTablesAccess(m_xActiveConnection, UNO_QUERY);
-                if (xTablesAccess.is())
-                {
-                    Reference< ::com::sun::star::container::XNameAccess >  xTables(xTablesAccess->getTables());
-                    if (xTables->hasByName(m_aCommand))
-                    {
-                        Reference< XPropertySet > xTable;
-                        xTables->getByName(m_aCommand) >>= xTable;
 
-                        Reference<XColumnsSupplier> xSup(xTable,UNO_QUERY);
-                        if(xSup.is())
-                            m_xColumns = xSup->getColumns();
-                    }
+                OSL_ENSHURE(m_xTables.is(),"ORowSet::getCommand: We got no tables from the connection!");
+                if (m_xTables.is() && m_xTables->hasByName(m_aCommand))
+                {
+                    Reference< XPropertySet > xTable;
+                    m_xTables->getByName(m_aCommand) >>= xTable;
+
+                    Reference<XColumnsSupplier> xSup(xTable,UNO_QUERY);
+                    if(xSup.is())
+                        m_xColumns = xSup->getColumns();
                 }
                 aQuery = rtl::OUString::createFromAscii("SELECT * FROM ");
                 aQuery += ::dbtools::quoteTableName(m_xActiveConnection->getMetaData(), m_aCommand);
@@ -1735,6 +1735,8 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing)
                             m_xColumns = xSup->getColumns();
                     }
                 }
+                else
+                    throw SQLException(::rtl::OUString::createFromAscii("The interface XQueriesSupplier is not available!"),*this,::rtl::OUString(),0,Any());
             }   break;
             default:
                 aQuery = m_aCommand;
@@ -1755,19 +1757,27 @@ rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bE
             try
             {
                 m_xComposer = xFactory->createQueryComposer();
-                m_xComposer->setQuery(rQuery);
-
-                if (m_aFilter.len() && m_bApplyFilter)
-                    m_xComposer->setFilter(m_aFilter);
-                if (m_aOrder.len())
-                    m_xComposer->setOrder(m_aOrder);
-
-                aFilterStatement = m_xComposer->getComposedQuery();
             }
             catch (...)
             {
                 m_xComposer = NULL;
             }
+        }
+        if(!m_xComposer.is()) // no composer so we create one
+        {
+            OQueryComposer* pComposer = new OQueryComposer(m_xTables,m_xActiveConnection,m_xServiceManager);
+            m_xComposer = pComposer;
+        }
+        if(m_xComposer.is())
+        {
+            m_xComposer->setQuery(rQuery);
+
+            if (m_aFilter.len() && m_bApplyFilter)
+                m_xComposer->setFilter(m_aFilter);
+            if (m_aOrder.len())
+                m_xComposer->setOrder(m_aOrder);
+
+            aFilterStatement = m_xComposer->getComposedQuery();
         }
     }
     return aFilterStatement;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 12:24:43 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 09:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ namespace dbaccess
         ::com::sun::star::uno::Any                                                      m_aTypeMap;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >  m_xStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;
-
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;  // tables of the connection
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns; // the columns from a table or query
 
         connectivity::OWeakRefArray                 m_aClones;
@@ -180,7 +180,7 @@ namespace dbaccess
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >  calcConnection() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
         rtl::OUString getComposedQuery(const rtl::OUString& rQuery, sal_Bool bEscapeProcessing) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-        rtl::OUString getCommand(sal_Bool& bEscapeProcessing);
+        rtl::OUString getCommand(sal_Bool& bEscapeProcessing) throw( ::com::sun::star::sdbc::SQLException);
         // free clones and ParseTree
         void freeResources();
 
@@ -410,6 +410,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/10/17 12:24:43  oj
+    remove some header
+
     Revision 1.4  2000/10/17 10:18:12  oj
     some changes for the rowset
 
