@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-03 15:25:52 $
+ *  last change: $Author: ab $ $Date: 2001-03-19 12:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@
 using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::io;
 
 
 
@@ -183,42 +184,36 @@ DialogWindow::DialogWindow( Window* pParent, VCSbxDialogRef aDialog, StarBASIC* 
     if( !mxLibContainer->isLibraryLoaded( aOULibName ) )
         mxLibContainer->loadLibrary( aOULibName );
 
+    // Create new uno dialog
+    Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
+    Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ),
+            uno::UNO_QUERY );
+
     // Does the dialog exist?
-    Reference< container::XNameContainer > xDialogModel;
     rtl::OUString aOUDlgName( maDlgName );
     if( xLib->hasByName( aOUDlgName ) )
     {
         // Get dialog data
         Any aElement = xLib->getByName( aOUDlgName );
-        Sequence< sal_Int8 > aDialogsSeq;
-        aElement >>= aDialogsSeq;
+        Reference< XInputStreamProvider > xISP;
+        aElement >>= xISP;
 
-        // Create a DialogModel
-        Sequence< Reference< container::XNameContainer > > aModelSeq;
-        xmlscript::importDialogModelsFromByteSequence( &aModelSeq, aDialogsSeq );
-        xDialogModel = aModelSeq.getConstArray()[0];
+        Reference< XInputStream > xInput( xISP->createInputStream() );
+        ::xmlscript::importDialogModel( xInput, xDialogModel );
     }
     else
     {
-        // Create new uno dialog
-        Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
-        xDialogModel = Reference< container::XNameContainer >( xMSF->createInstance
-            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), uno::UNO_QUERY );
-
         // Also set name as property
         Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
         Any aValue;
         aValue <<= aOUDlgName;
         xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aValue );
 
-        Sequence< Reference< container::XNameContainer > > aModelSeq( 1 );
-        aModelSeq.getArray()[0] = xDialogModel;
-        Sequence< sal_Int8 > aSeq;
-
-        xmlscript::exportDialogModelsToByteSequence( &aSeq, aModelSeq );
-        Any aSeqAny;
-        aSeqAny <<= aSeq;
-        xLib->insertByName( aOUDlgName, aSeqAny );
+        Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel );
+        Any aAny;
+        aAny <<= xISP;
+        xLib->insertByName( aOUDlgName, aAny );
     }
 
     InitSettings( TRUE, TRUE, TRUE );
@@ -699,10 +694,10 @@ void DialogWindow::StoreData()
             aModelSeq.getArray()[0] = xDialogModel;
             Sequence< sal_Int8 > aSeq;
 
-            xmlscript::exportDialogModelsToByteSequence( &aSeq, aModelSeq );
-            Any aSeqAny;
-            aSeqAny <<= aSeq;
-            xLib->replaceByName( rtl::OUString( maDlgName ), aSeqAny );
+            Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel );
+            Any aAny;
+            aAny <<= xISP;
+            xLib->replaceByName( rtl::OUString( maDlgName ), aAny );
 
             // HACK: Modify via old dialog to force SaveBasicManager()
             pDialog->SetModified( TRUE );
