@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:42:12 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1648,8 +1648,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG
         Rectangle aRect( aPos, aSize );
         if ( bBorder )
         {
-            DecorationView aDecoView( pDev );
-            aRect = aDecoView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
+            ImplDrawFrame( pDev, aRect );
         }
         if ( bBackground )
         {
