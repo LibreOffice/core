@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-26 12:07:07 $
+ *  last change: $Author: mtg $ $Date: 2001-03-28 11:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
+#endif
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
@@ -170,28 +173,28 @@
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #endif
 
-#define __IFC25 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
-Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25
+#define __IFC26 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
+Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25, Ifc26
 
-#define __CLASS_IFC25 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, \
+#define __CLASS_IFC26 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, \
 class Ifc8, class Ifc9, class Ifc10, class Ifc11, class Ifc12, class Ifc13, class Ifc14, class Ifc15, class Ifc16, \
 class Ifc17, class Ifc18, class Ifc19, class Ifc20, class Ifc21, class Ifc22, class Ifc23, class Ifc24,\
-class Ifc25
+class Ifc25, class Ifc26
 
-#define __PUBLIC_IFC25 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9, public Ifc10, public Ifc11, public Ifc12, \
+#define __PUBLIC_IFC26 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9, public Ifc10, public Ifc11, public Ifc12, \
 public Ifc13, public Ifc14, public Ifc15, public Ifc16, public Ifc17, public Ifc18, \
 public Ifc19, public Ifc20, public Ifc21, public Ifc22, public Ifc23 , public Ifc24, \
-public Ifc25
+public Ifc25, public Ifc26
 
-__DEF_IMPLHELPER_PRE( 25 )
+__DEF_IMPLHELPER_PRE( 26 )
     __IFC_WRITEOFFSET( 1 ) __IFC_WRITEOFFSET( 2 ) __IFC_WRITEOFFSET( 3 ) __IFC_WRITEOFFSET( 4 )
     __IFC_WRITEOFFSET( 5 ) __IFC_WRITEOFFSET( 6 ) __IFC_WRITEOFFSET( 7 ) __IFC_WRITEOFFSET( 8 )
     __IFC_WRITEOFFSET( 9 ) __IFC_WRITEOFFSET( 10) __IFC_WRITEOFFSET( 11) __IFC_WRITEOFFSET( 12)
     __IFC_WRITEOFFSET( 13) __IFC_WRITEOFFSET( 14) __IFC_WRITEOFFSET( 15) __IFC_WRITEOFFSET( 16)
     __IFC_WRITEOFFSET( 17) __IFC_WRITEOFFSET( 18) __IFC_WRITEOFFSET( 19) __IFC_WRITEOFFSET( 20)
     __IFC_WRITEOFFSET( 21) __IFC_WRITEOFFSET( 22) __IFC_WRITEOFFSET( 23) __IFC_WRITEOFFSET( 24)
-    __IFC_WRITEOFFSET( 25)
-__DEF_IMPLHELPER_POST( 25 )
+    __IFC_WRITEOFFSET( 25) __IFC_WRITEOFFSET( 26)
+__DEF_IMPLHELPER_POST( 26 )
 
 class SwDocShell;
 class UnoActionContext;
@@ -206,7 +209,7 @@ SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4);
 /******************************************************************************
  *
  ******************************************************************************/
-typedef cppu::WeakImplHelper25
+typedef cppu::WeakImplHelper26
 <
     ::com::sun::star::text::XTextDocument,
     ::com::sun::star::text::XLineNumberingProperties,
@@ -228,6 +231,7 @@ typedef cppu::WeakImplHelper25
     ::com::sun::star::drawing::XDrawPageSupplier,
     ::com::sun::star::text::XDocumentIndexesSupplier,
     ::com::sun::star::beans::XPropertySet,
+    ::com::sun::star::beans::XPropertyState,
     ::com::sun::star::document::XLinkTargetSupplier,
     ::com::sun::star::document::XRedlinesSupplier,
     ::com::sun::star::util::XRefreshable,
@@ -409,6 +413,12 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    //XPropertyState
+    virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState( const ::rtl::OUString& rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getPropertyStates( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rPropertyNames ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyToDefault( const ::rtl::OUString& rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     //XLinkTargetSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  SAL_CALL getLinks(void) throw( ::com::sun::star::uno::RuntimeException );
