@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:37:18 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,7 +696,7 @@ public:
 
         @return bool, indicating, if given layer ID belongs to the visible ones.
     */
-    bool IsVisibleLayerId( const SdrLayerID& _nLayerId );
+    bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const;
 
     /** method to determine, if the corresponding visible layer ID for a invisible one.
 
@@ -2000,6 +2000,12 @@ public:
     */
     void RemoveTmpCorr(const String & aWrong);
     // <- #102505#
+
+    /** Checks if any of the text node contains hidden characters.
+        Used for optimization. Changing the view option 'view hidden text'
+        has to trigger a reformatting only if some of the text is hidden.
+    */
+    bool ContainsHiddenChars() const;
 
     // call back for API wrapper
     SwModify*   GetUnoCallBack() const;
