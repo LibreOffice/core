@@ -65,7 +65,7 @@ Dim bIsDocCountry as Boolean
 	Else
 		Index = oInternetModel.Tag
 	End If
-	oMarketModel = GetControlModel(oDocument.Sheets(0), &quot;CmdHistory&quot;) &apos;getControlView(oDocument.Sheets(0), oController, &quot;CmdHistory&quot;)
+	oMarketModel = GetControlModel(oDocument.Sheets(0), &quot;CmdHistory&quot;)
 	sCurCurrency = sMarket(Index,1)
 	If Index = 0 Then
 		HistoryChartSource = sMarket(Index,4)
@@ -130,7 +130,7 @@ Dim sSimpleStr as String
 Dim nSimpleKey as Long
 Dim aFormat()
 Dim oLocale as New com.sun.star.lang.Locale
-	&apos; Numberformat mit dem neuen Symbol als Basis für generateFormat
+	&apos; Numberformat with the new Symbol as Base for new Format
 	sSimpleStr = &quot;0 [$&quot; &amp; sNewSymbol &amp; &quot;-&quot; &amp; sNewExtension &amp; &quot;]&quot;
 	nSimpleKey = Numberformat(oFormats, sSimpleStr, oDocLocale)
 	On Local Error Resume Next
@@ -143,8 +143,7 @@ Dim oLocale as New com.sun.star.lang.Locale
 	On Local Error GoTo NOKEY
 	aFormat() = oFormats.getByKey(iNumberFormat)
 	On Local Error GoTo 0
-	&apos; Typ und Währungssymbol des Numberformats heraussuchen
-	&apos; neues Währungsformat mit passenden Einstellungen setzen
+	&apos; set new currency format with according settings
 	nFormatDecimals = aFormat.Decimals
 	nFormatLeading = aFormat.LeadingZeros
 	bFormatNegRed = aFormat.NegativeRed
@@ -173,10 +172,6 @@ End Function
 
 Function CheckFormatType(oStyle as Object)
 Dim oFormatofObject as Object
-	&apos; Retrieve the Format of the Object
-&apos;On Local Error GoTo NOKEY
 	oFormatofObject = oDocFormats.getByKey(oStyle.NumberFormat)
-&apos;	On Local Error GoTo 0
-	&apos; Typ und Währungssymbol des Numberformats heraussuchen
   	CheckFormatType = INT(oFormatOfObject.Type) AND com.sun.star.util.NumberFormat.CURRENCY
 End Function</script:module>

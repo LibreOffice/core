@@ -14,8 +14,6 @@ Dim LastDate as Date
 	If bLocGoOn Then
 		If FirstDate &gt;= LastDate Then
 			Msgbox(sMsgStartDatebeforeEndDate,16, sProductname)
-&apos; Todo: Hier müsste eigentlich der Fokus auf die Textbox gelegt werden
-&apos;			StockRatesModel.txtStartDate.Text = &quot;&quot;
 			bLocGoOn = False
 		End If
 	End If
@@ -164,7 +162,6 @@ Dim bLeaveLoop as Boolean
 Dim RemoveCount as Integer
 Dim iLastRow as Integer
 Dim iLastLinkRow as Integer
-&apos;Dim sDate as String
 Dim dDate as Date
 Dim CurDate as Date
 Dim oLinkSheet as Object
@@ -204,7 +201,7 @@ Dim iCellValue as Long
 		oSheet.Rows.RemoveByIndex(iCurRow, RemoveCount-1)
 	End If
 	CurDate = EndDate
-	For i = 1 To iLastLinkRow &apos; To 1 Step -1
+	For i = 1 To iLastLinkRow
 		oCell = oSheet.GetCellbyPosition(SBDATECOLUMN,iCurRow)
 		iCellValue = oLinkSheet.GetCellByPosition(0,i).Value
 		If iCellValue &gt; 0 Then
@@ -340,7 +337,6 @@ Dim bLeaveLoop as Boolean
 			End If
 		Loop Until bLeaveLoop
 		oDateCell = oSheet.GetCellbyPosition(SBDATECOLUMN, SBSTARTROW + i-1)
-&apos;		CellDate = oDateCell.Value
 		oDateCell.Annotation.SetString(NoteText)
 	End If
 End Sub</script:module>

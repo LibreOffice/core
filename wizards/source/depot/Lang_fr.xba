@@ -3,8 +3,6 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Lang_fr" script:language="StarBasic">Option Explicit
 
 Sub LoadFrenchLanguage()
-&apos;Dim LocaleLangList()
-&apos;Dim LocaleCountryList()
 
 	sProductname = GetProductname
 	sOK = &quot;~OK&quot; 

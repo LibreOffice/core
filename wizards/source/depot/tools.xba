@@ -197,23 +197,4 @@ Dim bIsDocCountry as Boolean
 	bIsDocCountry = Instr(1, LocCountry, sDocCountry, SBBINARY) &lt;&gt; 0 OR SDocCountry = &quot;&quot;
 	CheckDocLocale = (bIsDocLanguage And bIsDocCountry)
 End Function
-
-
-&apos;Sub Dividend()
-&apos;Dim i, StockCount, iStartRow as Integer
-&apos;Dim oCell as Object
-&apos;Dim ListboxControl as Object
-&apos;	OpenStockRatePage(1)
-&apos;	
-&apos;	StockRatesModel.lstStockNames.StringItemList() = NullList()
-&apos;	StockCount = GetStocksCount(iStartRow)
-&apos;	ListboxControl = DlgStockRates.GetControl(&quot;lstStockNames&quot;)
-&apos;	For i = 1 To StockCount
-&apos;		oCell = oFirstSheet.GetCellByPosition(SBCOLUMNNAME1, iStartRow + i) 
-&apos;		ListBoxControl.AddItem(oCell.String, i-1)									&apos; Add stock name to list
-&apos;		oCell = oFirstSheet.GetCellByPosition(SBCOLUMNQUANTITY1, iStartRow + i) 
-&apos; Todo: Is this really necessary????????????????????
-&apos;		StockRatesModel.lstStockNames.ItemData(StockRatesModel.lstStockNames.NewIndex) = oCell.Value	&apos; Store quantity for later use
-&apos;	Next i 
-&apos;End Sub
 </script:module>

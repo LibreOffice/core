@@ -3,8 +3,6 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Lang_en" script:language="StarBasic">Option Explicit
 
 Sub LoadEnglishLanguage()
-&apos;Dim LocaleLangList()
-&apos;Dim LocaleCountryList()
 
 	sProductname = GetProductname
 	sOK = &quot;~OK&quot; 
@@ -13,7 +11,6 @@ Sub LoadEnglishLanguage()
 	sInsertStockName = &quot;Please enter shares in your portfolio.&quot;
 	sTitle = &quot;&lt;PRODUCTNAME&gt;&lt;PRODUCTNAME&gt;: Stocks Manager&quot;
 	sTitle = ReplaceString(sTitle, sProductName, &quot;&lt;PRODUCTNAME&gt;&quot;)
-&apos;	sInsertStocks = &quot;Fügen Sie zunächst einige Aktien ein!&quot;
 	sMsgError = &quot;Input Error&quot;
 	sMsgNoName = sInsertStockname
 	sMsgNoQuantity = &quot;Please enter a quantity larger than 0&quot;

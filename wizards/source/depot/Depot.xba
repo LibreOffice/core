@@ -110,7 +110,6 @@ Dim LocStockName as String
 	CurRate = TransactModel.txtRate.Value
 	TransactDate = CDateFromISO(TransactModel.txtDate.Date)
 	DlgTransaction.EndExecute()
-&apos;	oDocument.AddActionLock
 	UnprotectSheets(oSheets)
 
 	iNewRow = DuplicateRow(oMovementSheet, &quot;HiddenRow3&quot;)
@@ -130,7 +129,7 @@ Dim LocStockName as String
 	
 	oMovementSheet.GetCellByPosition(SBCOLUMNDATE2, iNewRow).Value = CDateFromISO(TransactModel.txtDate.Date)
 	oMovementSheet.GetCellByPosition(SBCOLUMNRATE2, iNewRow).Value = TransactModel.txtRate.Value
-	oMovementSheet.GetCellByPosition(SBCOLUMNPROVPERCENT2, iNewRow).Value = TransactModel.txtCommission.EffectiveValue &apos; Todo: Zellinhalt überprüfen!
+	oMovementSheet.GetCellByPosition(SBCOLUMNPROVPERCENT2, iNewRow).Value = TransactModel.txtCommission.EffectiveValue
 	oMovementSheet.GetCellByPosition(SBCOLUMNPROVMIN2, iNewRow).Value = TransactModel.txtMinimum.Value
 	oMovementSheet.GetCellByPosition(SBCOLUMNPROVFIX2, iNewRow).Value = TransactModel.txtFix.Value
 	
@@ -202,7 +201,6 @@ Dim LocStockName as String
 	End If
 	InsertCurrentValue(CurRate, iStockRow,TransactDate)	
 	ProtectSheets(oSheets)
-&apos;	oDocument.RemoveActionLock()	
 End Sub
 
 
@@ -301,7 +299,6 @@ Dim oModel as Object
 				 	SplitCellValue(oMovementSheet, NewNumber, OldNumber, SBCOLUMNQUANTITY2, iRow, NoteText)			
 		 			SplitCellValue(oMovementSheet, OldNumber, NewNumber, SBCOLUMNRATE2, iRow, &quot;&quot;)
 				 	SplitCellValue(oMovementSheet, NewNumber, OldNumber, SBCOLUMNQTYSOLD2, iRow, &quot;&quot;)
-				 	&apos; Todo: Muss die Zelle auf der ersten Seite in der 8 ten Spalte nicht auch geupdated werden?
 			End Select
 		End If
 		iRow = iRow + 1
@@ -375,11 +372,10 @@ End Sub
 Sub SetupTransactionControls(CurStep as Integer)
 	DlgReference = DlgTransaction
 	With TransactModel
-&apos; Todo: Wie kriege ich das aktuelle Datum in das nachfolgende Format konvertiert?	
 		.txtDate.Date = CDateToISO(Date())
 		.txtDate.DateMax = CDateToISO(Date())
-		.txtStockID.Enabled = False &apos; Curstep = SBDIALOGBUY
-		.lblStockID.Enabled = False &apos; Curstep = SBDIALOGBUY
+		.txtStockID.Enabled = False
+		.lblStockID.Enabled = False
 		.lblStockID.Label = sCurStockIDLabel
 		.txtRate.CurrencySymbol = sCurCurrency
 		.txtFix.CurrencySymbol = sCurCurrency
