@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOASISTContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 11:09:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,6 +482,16 @@ void XMLPropertiesTContext_Impl::StartElement(
                     GetTransformer().NegPercent(aImageOpacityValueRemember);
                     break;
 
+                case XML_OPTACTION_KEEP_TOGETHER:
+                    pAttrList->AddAttribute(
+                        GetTransformer().GetNamespaceMap().GetQNameByKey(
+                            XML_NAMESPACE_STYLE,GetXMLToken(XML_BREAK_INSIDE)),
+                        GetXMLToken(
+                            IsXMLToken( rAttrValue, XML_ALWAYS )
+                            ? XML_COLUMNSPLIT_AVOID
+                            : XML_COLUMNSPLIT_AUTO ) );
+                    break;
+
                 case XML_OPTACTION_CONTROL_TEXT_ALIGN:
                     if ( m_bControlStyle )
                     {
@@ -563,7 +573,6 @@ void XMLPropertiesTContext_Impl::StartElement(
                         pAttrList->AddAttribute( rAttrName, OUString::valueOf( fValue ) );
                     }
                     break;
-
                 default:
                     OSL_ENSURE( !this, "unknown action" );
                     break;
@@ -865,6 +874,7 @@ void XMLStyleOASISTContext::StartElement(
 
                 break;
             case XML_ATACTION_STYLE_DISPLAY_NAME:
+            case XML_ATACTION_REMOVE:
                 pMutableAttrList->RemoveAttributeByIndex( i );
                 --i;
                 --nAttrCount;
