@@ -146,16 +146,6 @@
 
     <component-description>
         <author>Malte Timmermann</author>
-        <name>com.sun.star.awt.UnoControlImageButtonModel</name>
-        <description>UnoControlImageButtonModel...</description>
-        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
-        <language>c++</language>
-        <status value="final"/>
-        <supported-service>com.sun.star.awt.UnoControlImageButtonModel</supported-service>
-    </component-description>
-
-    <component-description>
-        <author>Malte Timmermann</author>
         <name>com.sun.star.awt.UnoControlImageControl</name>
         <description>UnoControlImageControl...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
