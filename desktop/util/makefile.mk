@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: mh $ $Date: 2003-04-02 10:16:17 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:31:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,16 +119,28 @@ RESLIB1SRSFILES=	$(SRS)$/desktop.srs
 
 APP1TARGET=so$/$(TARGET)
 APP1STDLIBS=			\
-    $(APP1_STDPRE)		\
-    $(SVLLIB)			\
-    $(SVMEMLIB)			\
     $(VCLLIB)			\
-    $(APP1_STDPOST)		\
+    $(SVLLIB)			\
     $(UNOTOOLSLIB)		\
-    $(UCBHELPERLIB)		\
+    $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
-    $(SALHELPERLIB)		\
-    $(SVTOOLLIB)
+    $(UCBHELPERLIB)		\
+    $(VOSLIB)			\
+    $(CPPUHELPERLIB)	\
+    $(CPPULIB)			\
+    $(SALLIB)
+
+#	$(APP1_STDPRE)		\
+#	$(SVLLIB)			\
+#	$(SVMEMLIB)			\
+#	$(VCLLIB)			\
+#    $(APP1_STDPOST)		\
+#	$(UNOTOOLSLIB)		\
+#	$(UCBHELPERLIB)		\
+#	$(COMPHELPERLIB)	\
+#	$(SALHELPERLIB)		\
+#	$(SVTOOLLIB)
+
 APP1OBJS=$(TARGETOBJS)
 APP1OBJS += $(OBJ)$/copyright_ascii_sun.obj
 
@@ -158,7 +170,7 @@ APP1LINKRES=$(MISC)$/$(TARGET).res
 #$(BIN)$/$(TARGET).exe.manifest: template.manifest
 #+$(COPY) $< $@ 
    
-.ENDIF
+.ENDIF # WNT
 
 .IF "$(GUI)" == "WNT"
 
@@ -206,28 +218,40 @@ APP4LINKRES=$(MISC)$/$(APP4TARGET).res
 
 APP5TARGET=soffice
 APP5STDLIBS=			\
-    $(APP1_STDPRE)		\
-    $(SVLLIB)			\
-    $(SVMEMLIB)			\
     $(VCLLIB)			\
-    $(APP1_STDPOST)		\
+    $(SVLLIB)			\
     $(UNOTOOLSLIB)		\
-    $(UCBHELPERLIB)		\
+    $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
-    $(SALHELPERLIB)		\
-    $(SVTOOLLIB)
+    $(UCBHELPERLIB)		\
+    $(VOSLIB)			\
+    $(CPPUHELPERLIB)	\
+    $(CPPULIB)			\
+    $(SALLIB)
+
+#	$(APP1_STDPRE)		\
+#	$(SVLLIB)			\
+#	$(SVMEMLIB)			\
+#	$(VCLLIB)			\
+#    $(APP1_STDPOST)		\
+#	$(UNOTOOLSLIB)		\
+#	$(UCBHELPERLIB)		\
+#	$(COMPHELPERLIB)	\
+#	$(SALHELPERLIB)		\
+#	$(SVTOOLLIB)
+
 APP5OBJS=$(TARGETOBJS)
 APP5OBJS += $(OBJ)$/copyright_ascii_ooo.obj
 
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" != "MACOSX"
 APP5OBJS +=	$(OBJ)$/icon_resource_ooo.obj
-.ENDIF
-.ENDIF
+.ENDIF # MACOSX
+.ENDIF # UNX
 
 .IF "$(OS)" == "LINUX"
 APP5STDLIBS+= -lXext -lSM -lICE
-.ENDIF
+.ENDIF # LINUX
 
 APP5DEPN= $(APP1RES) ooverinfo.rc
 APP5DEF=    $(MISCX)$/$(TARGET).def
@@ -237,7 +261,7 @@ APP5RES=    $(RES)$/oodesktop.res
 APP5ICON=$(SOLARRESDIR)$/icons/ooo_gulls.ico
 APP5VERINFO=ooverinfo.rc
 APP5LINKRES=$(MISC)$/ooffice.res
-.ENDIF
+.ENDIF # WNT
 
 
 
@@ -247,7 +271,7 @@ all: $(BIN)$/so ALLTAR
 
 ALLTAR: $(BIN)$/$(TARGET).exe.manifest
 
-.ENDIF
+.ENDIF # WNT
 
 # --- Targets -------------------------------------------------------------
 
@@ -256,7 +280,7 @@ ALLTAR: $(BIN)$/$(TARGET).exe.manifest
 .IF "$(GUI)" == "WNT"
 
 # create a manifest file with the same name as the
-#office executable file soffice.exe.manifest
+# office executable file soffice.exe.manifest
 $(BIN)$/$(TARGET).exe.manifest: template.manifest
    +$(COPY) $< $@ 
    
@@ -264,7 +288,8 @@ $(MISCX)$/$(APP1TARGET).def : makefile.mk
     echo  NAME			soffice								>$@
     echo  DESCRIPTION   'StarDesktop Version 5'           >>$@
     echo  DATA			READ WRITE NONSHARED		   >>$@
-.ENDIF
+
+.ENDIF # WNT
 
 $(BIN)$/so: makefile.mk
     @echo APP5 : $(APP5TARGET)
