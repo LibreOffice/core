@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleComponent.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-07 12:43:15 $
+ *  last change:$Date: 2003-03-25 12:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,8 +245,20 @@ public class _XAccessibleComponent extends MultiMethodTest {
                     + chBnd.Width + "," + chBnd.Height + "): "
                     +  util.AccessibilityTools.accessibleToString(children[i]));
 
+                XAccessibleContext xAc = (XAccessibleContext)
+                    UnoRuntime.queryInterface(XAccessibleContext.class, children[i]) ;
+
+                boolean isShowing = xAc.getAccessibleStateSet().contains(
+                        drafts.com.sun.star.accessibility.AccessibleStateType.SHOWING);
+                log.println("\tStateType contains SHOWING: "+isShowing);
+
+                if (!isShowing) {
+                    log.println("Child is invisible - OK");
+                    continue;
+                }
+
                 String pos = "(" + chBnd.X + "," + chBnd.Y + ")";
-                if (KnownBounds.contains(pos)) {
+                if (KnownBounds.contains(pos) && isShowing) {
                     log.println("Child is covered by another and can't be reached");
                     continue;
                 }
@@ -262,7 +274,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
                     curY--;
                 };
 
-                if (curX==chBnd.Width) {
+                if (curX==chBnd.Width && isShowing) {
                     log.println("Couldn't find a point with contains");
                     continue;
                 }
@@ -273,7 +285,9 @@ public class _XAccessibleComponent extends MultiMethodTest {
                 if (xAcc == null) {
                     log.println("The child not found at point ("
                         + (chBnd.X +curX ) + "," + (chBnd.Y+curY) + ") - FAILED");
-                    result = false;
+                    if (!isShowing) {
+                        result = false;
+                    } else result = true;
                 } else {
                     XAccessible xAccCh = (XAccessible) UnoRuntime.queryInterface
                         (XAccessible.class, children[i]);
@@ -313,7 +327,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
                     boolean res = util.AccessibilityTools.equals(xAccCh, xAcc);
                     if (res) {
                         log.println("The same child found outside "
-                            + "its bounds - FAILED");
+                            + "its bounds at ("+(chBnd.X - 1) +","+ (chBnd.Y - 1)+") - FAILED");
                         result = false ;
                     }
                 }
