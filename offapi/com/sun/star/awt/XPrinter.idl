@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrinter.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:51 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,29 +84,23 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XPrinter
 /** represents a virtual printer.
 
-
-
-    <p>All properties are vetoable properties. If you change the
-    properties between a call to <member scope="com::sun::star::awt">XPrinter::startPage</member>
-    and a call to <member scope="com::sun::star::awt">XPrinter::endPage</member>, a
-    <type scope="com::sun::star::beans">PropertyVetoException</type> is thrown.</p>
+    <p>All properties are vetoable properties.
+    If you change the properties between a call to
+    <member scope="com::sun::star::awt">XPrinter::startPage</member> and a call
+    to <member scope="com::sun::star::awt">XPrinter::endPage</member>,
+    a <type scope="com::sun::star::beans">PropertyVetoException</type> is
+    thrown.</p>
  */
 interface XPrinter: com::sun::star::awt::XPrinterPropertySet
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPrinter::start
     /** puts the job into the printer spooler.
 
-
-
         <p>This call may block the thread. So release all resources
-        (mutex, semaphore, etc.) before this call.
-
-        </p>
+        (mutex, semaphore, etc.) before this call.</p>
      */
     boolean start( [in] string nJobName,
              [in] short nCopies,
@@ -116,34 +110,33 @@ interface XPrinter: com::sun::star::awt::XPrinterPropertySet
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPrinter::end
     /** notifies the printer spooler that the job is done and printing
-        starts.@see terminate
+        starts.
+
+        @see terminate
      */
     void end()
             raises( com::sun::star::awt::PrinterException );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPrinter::terminate
     /** stops the current print job.
 
-
-
-        <p>If the method <member scope="com::sun::star::awt">XPrinter::end</member> is called
-        beforehand, then this call does nothing. If you call
-        <member scope="com::sun::star::awt">XPrinter::terminate</member> in or before the call to
+        <p>If the method
+        <member scope="com::sun::star::awt">XPrinter::end</member>
+        is called beforehand, then this call does nothing. If you call
+        <member scope="com::sun::star::awt">XPrinter::terminate</member>
+        in or before the call to
         <member scope="com::sun::star::awt">XPrinter::start</member>,
-        <member scope="com::sun::star::awt">XPrinter::termnate</member> returns <FALSE/>.
-        This call must not block the thread.
+        <member scope="com::sun::star::awt">XPrinter::terminate</member>
+        returns <FALSE/>. This call must not block the thread.</p>
 
-        </p>@see end
+        @see end
      */
     void terminate();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPrinter::startPage
     /** begins with a new page.
      */
     com::sun::star::awt::XDevice startPage()
@@ -151,7 +144,6 @@ interface XPrinter: com::sun::star::awt::XPrinterPropertySet
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPrinter::endPage
     /** ends the current page.
      */
     void endPage()
