@@ -4,6 +4,7 @@ hedabu: ..\inc\sjapplet.hxx %_DEST%\inc%_EXT%\sj2\sjapplet.hxx
 
 ..\%__SRC%\lib\sj.lib %_DEST%\lib%_EXT%\sj.lib
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\slb\sj.lib %_DEST%\lib%_EXT%\xsj.lib
 ..\%__SRC%\bin\j%UPD%*_g.dll %_DEST%\bin%_EXT%\j%UPD%*_g.dll
 
