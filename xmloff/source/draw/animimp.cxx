@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-29 15:36:20 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,17 +721,23 @@ void XMLAnimationsEffectContext::EndElement()
                     }
                 }
             }
-
             if( maSoundURL.getLength() != 0 )
             {
-                aAny <<= maSoundURL;
-                xSet->setPropertyValue( mpImpl->msSound, aAny );
+                if( xSet.is() )
+                {
+                    aAny <<= maSoundURL;
+                    xSet->setPropertyValue( mpImpl->msSound, aAny );
 
-                aAny <<= bool2any( mbPlayFull );
-                xSet->setPropertyValue( mpImpl->msPlayFull, aAny );
+                    aAny <<= bool2any( mbPlayFull );
+                    xSet->setPropertyValue( mpImpl->msPlayFull, aAny );
 
-                aAny <<= bool2any( sal_True );
-                xSet->setPropertyValue( mpImpl->msSoundOn, aAny );
+                    aAny <<= bool2any( sal_True );
+                    xSet->setPropertyValue( mpImpl->msSoundOn, aAny );
+                }
+                else
+                {
+                    DBG_ERROR("XMLAnimationsEffectContext::EndElement - Sound URL without a XPropertySet!");
+                }
             }
         }
     }
