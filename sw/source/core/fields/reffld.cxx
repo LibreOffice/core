@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
+ *  last change: $Author: os $ $Date: 2002-01-11 11:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,11 +154,18 @@
 #ifndef _UNOFLDMID_H
 #include <unofldmid.h>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 #ifndef _SHELLRES_HXX
 #include <shellres.hxx>
 #endif
-
+#ifndef _POOLFMT_HXX
+#include <poolfmt.hxx>
+#endif
+#ifndef _POOLFMT_HRC
+#include <poolfmt.hrc>
+#endif
 
 
 using namespace ::com::sun::star;
@@ -540,8 +547,25 @@ BOOL SwGetRefField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         }
         break;
     case FIELD_PROP_PAR1:
-        rAny <<= rtl::OUString(GetPar1());
-        break;
+    {
+        String  sTmp(GetPar1());
+        if(REF_SEQUENCEFLD == nSubType)
+        {
+            sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sTmp, GET_POOLID_TXTCOLL );
+            USHORT nResId = USHRT_MAX;
+            switch( nPoolId )
+            {
+                case RES_POOLCOLL_LABEL_ABB:
+                case RES_POOLCOLL_LABEL_TABLE:
+                case RES_POOLCOLL_LABEL_FRAME:
+                case RES_POOLCOLL_LABEL_DRAWING:
+                    SwStyleNameMapper::FillProgName(nPoolId, sTmp) ;
+                break;
+            }
+        }
+        rAny <<= rtl::OUString(sTmp);
+    }
+    break;
     case FIELD_PROP_PAR3:
         rAny <<= rtl::OUString(Expand());
         break;
@@ -587,7 +611,40 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, BYTE nMId )
             switch(nSource)
             {
             case ReferenceFieldSource::REFERENCE_MARK : nSubType = REF_SETREFATTR ; break;
-            case ReferenceFieldSource::SEQUENCE_FIELD : nSubType = REF_SEQUENCEFLD; break;
+            case ReferenceFieldSource::SEQUENCE_FIELD :
+            {
+                //convert the possibly programmatic name to a UIName
+                if(REF_SEQUENCEFLD == nSubType && GetTyp())
+                {
+                    SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
+                    //don't convert when the name points to an existing field type
+                    const String& rPar1 = GetPar1();
+                    if(!pDoc->GetFldType(RES_SETEXPFLD, rPar1))
+                    {
+                        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, GET_POOLID_TXTCOLL );
+                        USHORT nResId = USHRT_MAX;
+                        switch( nPoolId )
+                        {
+                            case RES_POOLCOLL_LABEL_ABB:
+                                nResId = STR_POOLCOLL_LABEL_ABB;
+                            break;
+                            case RES_POOLCOLL_LABEL_TABLE:
+                                nResId = STR_POOLCOLL_LABEL_TABLE;
+                            break;
+                            case RES_POOLCOLL_LABEL_FRAME:
+                                nResId = STR_POOLCOLL_LABEL_FRAME;
+                            break;
+                            case RES_POOLCOLL_LABEL_DRAWING:
+                                nResId = STR_POOLCOLL_LABEL_DRAWING;
+                            break;
+                        }
+                        if( nResId != USHRT_MAX )
+                            SetPar1(SW_RESSTR( nResId ));
+                    }
+                }
+                nSubType = REF_SEQUENCEFLD;
+            }
+            break;
             case ReferenceFieldSource::BOOKMARK       : nSubType = REF_BOOKMARK   ; break;
             case ReferenceFieldSource::FOOTNOTE       : nSubType = REF_FOOTNOTE   ; break;
             case ReferenceFieldSource::ENDNOTE        : nSubType = REF_ENDNOTE    ; break;
@@ -595,8 +652,14 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, BYTE nMId )
         }
         break;
     case FIELD_PROP_PAR1:
-        SetPar1( ::GetString( rAny, sTmp ));
-        break;
+    {
+        OUString sTmp;
+        rAny >>= sTmp;
+        if(REF_SEQUENCEFLD == nSubType)
+            sTmp = SwStyleNameMapper::GetUIName(sTmp, GET_POOLID_TXTCOLL );
+        SetPar1(sTmp);
+    }
+    break;
     case FIELD_PROP_PAR3:
         SetExpand( ::GetString( rAny, sTmp ));
         break;
