@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:36:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ danish ] = "Kolonne";
         Text[ swedish ] = "Kolumn";
         Text[ polish ] = "Kolumna";
-        Text[ portuguese_brazilian ] = "Column";
+        Text[ portuguese_brazilian ] = "Coluna";
         Text[ japanese ] = "ε—";
         Text[ korean ] = "μ—΄";
         Text[ chinese_simplified ] = "ε—";
@@ -157,7 +157,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ danish ] = "Rζkke";
         Text[ swedish ] = "Rad";
         Text[ polish ] = "Wiersz";
-        Text[ portuguese_brazilian ] = "Row";
+        Text[ portuguese_brazilian ] = "Linha";
         Text[ japanese ] = "θ΅";
         Text[ korean ] = "ν–‰";
         Text[ chinese_simplified ] = "θ΅";
@@ -195,7 +195,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ danish ] = "DATA";
         Text[ swedish ] = "Data";
         Text[ polish ] = "DANE";
-        Text[ portuguese_brazilian ] = "Data";
+        Text[ portuguese_brazilian ] = "Dados";
         Text[ japanese ] = "γƒ‡γƒΌγ‚Ώ";
         Text[ korean ] = "λ°μ΄ν„°";
         Text[ chinese_simplified ] = "ζ•°ζ®";
@@ -225,7 +225,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     {
         Text = "Auswahlbereich";
         Text [ english ] = "Selection area";
-        Text[ language_user1 ] = "EM Oct 2002: (not \"range\") In the datapilot dialog, object description of control that lists the fields that you can drag to one of the other three areas/controls.";
+        Text[ language_user1 ] = "; EM Oct 2002: (not \"range\") In the datapilot dialog, object description of control that lists the fields that you can drag to one of the other three areas/controls.";
         Text[ english_us ] = "Selection area";
         Text[ portuguese ] = "Selection area";
         Text[ russian ] = "Selection area";
@@ -238,7 +238,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ danish ] = "Selection area";
         Text[ swedish ] = "Markeringsomrεde";
         Text[ polish ] = "Selection area";
-        Text[ portuguese_brazilian ] = "Selection area";
+        Text[ portuguese_brazilian ] = "Αrea de seleηγo";
         Text[ japanese ] = "ιΈζη―„ε›²";
         Text[ korean ] = "μμ—­ μ„ νƒ";
         Text[ chinese_simplified ] = "ι€‰ζ‹©εΊε";
@@ -283,7 +283,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ japanese ] = "ε³ε΄γ«γ‚γ‚‹γƒ•γ‚£γƒΌγƒ«γƒ‰γƒγ‚Ώγƒ³γ‚’δ»»ζ„γ®η―„ε›²γ«γƒ‰γƒ©γƒƒγ‚°γ—γΎγ™γ€‚";
         Text[ chinese_traditional ] = "θ«‹δ½Ώη”¨ζ»‘ιΌ ιµε°‡ζ¬„δ½ζ‹–ζ‹‰ε°ε³ι η„δ»»ζ„δΈ€ε€‹ε€εγ€‚";
         Text[ arabic ] = "ΗΣΝΘ ΗαΝήζα γδ ΗαΥέΝΙ Ηανγδμ ΘζΗΣΨΙ ΗαγΗζΣ Εαμ ΗαγδΗΨή ΗαΚν ΚΡΫΘ ένεΗ.";
-        Text[ greek ] = "Σύρετε με το ποντίκι τα πεδία της δεξιάς σελίδας στις περιοχές που επιθυμείτε.";
+        Text[ greek ] = "Σύρετε με το ποντίκι τα πεδία από το δεξί μέρος στην επιθυμητή θέση.";
         Text[ korean ] = "λ§μ°μ¤λ¥Ό μ΄μ©ν•μ—¬ μ¤λ¥Έμª½μ—μ„λ¶€ν„° μ›ν•λ” μμ—­μΌλ΅ ν•„λ“λ¥Ό λ„μ‹­μ‹μ¤";
         Text[ turkish ] = "Saπdaki alanlarύ istenilen konuma sόrόkleyin.";
         Text[ language_user1 ] = " ";
@@ -364,7 +364,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ danish ] = "Fjern";
         Text[ swedish ] = "Ta bort";
         Text[ polish ] = "usuρ";
-        Text[ portuguese_brazilian ] = "Remove";
+        Text[ portuguese_brazilian ] = "Remover";
         Text[ japanese ] = "ε‰ι™¤";
         Text[ korean ] = "μ κ±°";
         Text[ chinese_simplified ] = "η§»ι™¤";
@@ -397,7 +397,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ danish ] = "Options...";
         Text[ swedish ] = "Alternativ...";
         Text[ polish ] = "Options...";
-        Text[ portuguese_brazilian ] = "Options...";
+        Text[ portuguese_brazilian ] = "Opηυes...";
         Text[ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³(O)...";
         Text[ korean ] = "μµμ…...";
         Text[ chinese_simplified ] = "ι€‰ι΅Ή...";
@@ -1052,6 +1052,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Text[ hindi ] = "ΰ¤΅ΰ¤Όΰ¥‰ΰ¤ΰ¤Ύΰ¤ªΰ¥ΰ¤²ΰ¤ΰ¥";
     Text[ slovak ] = "Sprievodca dΓ΅tami";
 };
+
 
 
 
