@@ -1,0 +1,9 @@
+UDK_3.1 {
+    global:
+    Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo;
+    Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory;
+    Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory;
+    Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap;
+    local:
+    *;
+};
