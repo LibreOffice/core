@@ -1604,3 +1604,12 @@ _TI2?AVRuntimeException@uno@star@sun@com@@
 ??BOString@rtl@@QBEPBDXZ
 ?OUStringToOString@rtl@@YA?AVOString@1@ABVOUString@1@GK@Z
 ?getStr@OUString@rtl@@QBEPBGXZ
+?iquery@?$Reference@VXComponent@lang@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXSingleServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXStorage@embed@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXTransactionBroadcaster@embed@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXContentAccess@ucb@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXContentCreator@ucb@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXManifestReader@manifest@packages@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXManifestWriter@manifest@packages@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXRow@sdbc@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
