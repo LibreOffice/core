@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:46:12 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,8 +339,8 @@ Reference< XConnection> calcConnection(
     if (xRowSetProps.is())
     {
         Any aConn( xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) );
-        if (aConn.getValueType().getTypeClass() == TypeClass_INTERFACE)
-            xReturn = Reference< XConnection>(*(Reference< XInterface>*)aConn.getValue(), UNO_QUERY);
+        aConn >>= xReturn;
+
 
         if (!xReturn.is())
         {
@@ -1064,6 +1064,9 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/10/30 07:46:12  oj
+ *  descriptors inserted
+ *
  *  Revision 1.3  2000/10/27 15:56:00  fs
  *  modified some implementations, so that they work with the new sdb interfaces (DatabaseContext instead of DatabaseAccessContext, no DatabaseEnvironment anymore, ....)
  *
