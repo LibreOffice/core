@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-30 20:33:05 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 22:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ portuguese ] = "Ordenar por" ;
         Text [ finnish ] = "Lajitteluperuste" ;
         Text [ danish ] = "Sorter efter" ;
-        Text [ french ] = "Trier selon" ;
+        Text [ french ] = "~Trier selon" ;
         Text [ swedish ] = "~Sortera efter" ;
         Text [ dutch ] = "Sorteren op" ;
         Text [ spanish ] = "Ordenar según" ;
@@ -244,7 +244,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ portuguese ] = "Concluindo por" ;
         Text [ finnish ] = "Toinen lajitteluehto" ;
         Text [ danish ] = "Og derefter" ;
-        Text [ french ] = "Puis selon" ;
+        Text [ french ] = "~Puis selon" ;
         Text [ swedish ] = "Sed~an efter" ;
         Text [ dutch ] = "Daarna op" ;
         Text [ spanish ] = "Después según" ;
@@ -342,7 +342,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ portuguese ] = "Concluindo por" ;
         Text [ finnish ] = "Toinen lajitteluehto" ;
         Text [ danish ] = "Og derefter" ;
-        Text [ french ] = "Puis selon" ;
+        Text [ french ] = "P~uis selon" ;
         Text [ swedish ] = "Seda~n efter" ;
         Text [ dutch ] = "Daarna op" ;
         Text [ spanish ] = "Después según" ;
@@ -645,10 +645,10 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ ENGLISH ] = "O~ptions" ;
         Text[ english_us ] = "O~ptions";
         Text[ portuguese ] = "O~ptions";
-        Text[ russian ] = "O~ptions";
+        Text[ russian ] = "Ïàðàìåòðû";
         Text[ greek ] = "O~ptions";
         Text[ dutch ] = "O~ptions";
-        Text[ french ] = "O~ptions";
+        Text[ french ] = "Op~tions";
         Text[ spanish ] = "Opciones";
         Text[ finnish ] = "O~ptions";
         Text[ italian ] = "O~ptions";
@@ -656,7 +656,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ swedish ] = "Al~ternativ";
         Text[ polish ] = "Opcje";
         Text[ portuguese_brazilian ] = "O~ptions";
-        Text[ japanese ] = "O~ptions";
+        Text[ japanese ] = "µÌß¼®Ý";
         Text[ korean ] = "O~ptions";
         Text[ chinese_simplified ] = "Ñ¡Ïî";
         Text[ chinese_traditional ] = "¿ï¶µ";
@@ -747,7 +747,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ swedish ] = "Från vänster til~l höger (sortera kolumner)" ;
         Text [ dutch ] = "Van ~links naar rechts (kolommen sorteren)" ;
         Text [ spanish ] = "De ~izquierda a derecha (ordenar columnas)" ;
-        Text [ english_us ] = "~Left to right (sort columns)" ;
+        Text [ english_us ] = "L~eft to right (sort columns)" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "´Ó×óÏòÓÒ(ÁÐÅÅÐò) (~L)";
         Text[ russian ] = "Ñëåâà íàïðàâî (ñîðòèðîâêà ñòîëáöîâ)";
