@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-01 15:23:33 $
+ *  last change: $Author: aw $ $Date: 2001-03-02 11:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@
 
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>     // FRound
+#endif
+
+#ifndef _SVX_XFLGRIT_HXX
+#include "xflgrit.hxx"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -859,7 +863,7 @@ OutlinerParaObject* SdrTextObj::ImpGetEditOutlinerParaObject() const
                 nParaAnz = 0;
         }
         if (p1stPara!=NULL && nParaAnz!=0) {
-            pPara=pEdtOutl->CreateParaObject(0, nParaAnz);
+            pPara = pEdtOutl->CreateParaObject(0, (sal_uInt16)nParaAnz);
         }
     }
     return pPara;
@@ -1463,7 +1467,7 @@ SdrObject* SdrTextObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
             if( pRef )
                 nHitTol = pRef->LogicToLogic( nHitTol, MAP_100TH_MM, pRef->GetMapMode().GetMapUnit() );
 
-            bRet = pOutliner->IsTextPos( aPt, nHitTol );
+            bRet = pOutliner->IsTextPos( aPt, (sal_uInt16)nHitTol );
         }
     }
 
@@ -1894,6 +1898,32 @@ void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
          !pOutlinerParaObject->IsEditDoc() )
     {
         pOutlinerParaObject->MergeParaAttribs( GetItemSet() );
+    }
+
+    // #84529# correct gradient rotation for 5.2 and earlier
+    if(aGeo.nDrehWink != 0 && rHead.GetVersion() <= 16)
+    {
+        XFillStyle eStyle = ((const XFillStyleItem&)GetItem(XATTR_FILLSTYLE)).GetValue();
+        if(XFILL_GRADIENT == eStyle)
+        {
+            XFillGradientItem aItem = (XFillGradientItem&)GetItem(XATTR_FILLGRADIENT);
+            XGradient aGradient = aItem.GetValue();
+
+            // calc new angle. aGeo.nDrehWink is 1/100th degree, aGradient.GetAngle()
+            // is 1/10th degree. Match this.
+            sal_Int32 nNewAngle = ((aGeo.nDrehWink + (aGradient.GetAngle() * 10)) + 5) / 10;
+
+            while(nNewAngle < 0)
+                nNewAngle += 3600;
+
+            while(nNewAngle >= 3600)
+                nNewAngle -= 3600;
+
+            // create new item and set
+            aGradient.SetAngle(nNewAngle);
+            aItem.SetValue(aGradient);
+            SetItem(aItem);
+        }
     }
 
     ImpSetTextStyleSheetListeners();
