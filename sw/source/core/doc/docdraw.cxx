@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-23 17:20:51 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,7 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
 
 void SwDoc::InitDrawModel()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwDoc::InitDrawModel" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::InitDrawModel" );
 
     //!!Achtung im sw3-Reader (sw3imp.cxx) gibt es aehnlichen Code, der
     //mitgepfelgt werden muss.

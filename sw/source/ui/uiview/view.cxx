@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-23 17:17:02 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,7 +807,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     nSelectionType( INT_MAX ),
     nLastPasteDestination( 0xFFFF )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwView::SwView" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwView::SwView" );
     bCenterCrsr = bTopCrsr = bAllwaysShowSel = bTabColFromDoc =
     bSetTabColFromDoc = bAttrChgNotified = bAttrChgNotifiedWithRegistrations =
     bVerbsActive = bIsApi = bDrawRotate = bInOuterResizePixel =

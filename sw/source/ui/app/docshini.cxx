@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-07-27 08:01:47 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ using namespace ::rtl;
 
 sal_Bool SwDocShell::InitNew( SvStorage * pStor )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::InitNew" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::InitNew" );
 
     sal_Bool bRet = SfxInPlaceObject::InitNew( pStor );
     SetMapUnit( MAP_TWIP );
@@ -418,7 +418,7 @@ SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
     pView( 0 ),
     pWrtShell( 0 )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::SwDocShell" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
     SetShell(this);
     SetBaseModel(new SwXTextDocument(this));
     // wir als BroadCaster werden auch unser eigener Listener
@@ -440,7 +440,7 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     pView( 0 ),
     pWrtShell( 0 )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::SwDocShell" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
     SetShell(this);
     SetBaseModel(new SwXTextDocument(this));
     // wir als BroadCaster werden auch unser eigener Listener
@@ -568,7 +568,7 @@ void SwDocShell::ReactivateModel()
 
 sal_Bool  SwDocShell::Load(SvStorage* pStor)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::Load" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::Load" );
     sal_Bool bRet = sal_False;
     sal_Bool bXML = pStor->GetVersion() >= SOFFICE_FILEFORMAT_60;
     if( SfxInPlaceObject::Load( pStor ))
@@ -757,7 +757,7 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
 
 sal_Bool  SwDocShell::LoadFrom(SvStorage* pStor)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::LoadFrom" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::LoadFrom" );
     sal_Bool bRet = sal_False;
     if( pDoc )
         RemoveLink();

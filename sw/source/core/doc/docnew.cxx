@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-23 17:20:51 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ SwDoc::SwDoc() :
     nLinkUpdMode( GLOBALSETTING ),
     nFldUpdMode( AUTOUPD_GLOBALSETTING )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwDoc::SwDoc" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
 
     bGlossDoc =
     bModified =

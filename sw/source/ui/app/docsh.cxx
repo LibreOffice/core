@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-23 17:15:21 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,7 +463,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
 
 BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::ConvertFrom" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::ConvertFrom" );
 
     SwReader* pRdr;
     SwRead pRead = StartConvertFrom(rMedium, &pRdr);
@@ -532,7 +532,7 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
 BOOL SwDocShell::Save()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::Save" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::Save" );
     sal_Bool bXML = pIo->GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_60;
 
     SwWait aWait( *this, TRUE );
@@ -622,7 +622,7 @@ BOOL SwDocShell::Save()
 
 BOOL SwDocShell::SaveAs( SvStorage * pStor )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::SaveAs" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveAs" );
     sal_Bool bXML = pStor->GetVersion() >= SOFFICE_FILEFORMAT_60;
 
     SwWait aWait( *this, TRUE );
@@ -739,7 +739,7 @@ SwSrcView* lcl_GetSourceView( SwDocShell* pSh )
 
 BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::ConvertTo" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::ConvertTo" );
     const SfxFilter* pFlt = rMedium.GetFilter();
     if( !pFlt )
         return FALSE;
@@ -987,7 +987,7 @@ void SwDocShell::HandsOff()
 
 BOOL SwDocShell::SaveCompleted( SvStorage * pStor )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::SaveCompleted" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveCompleted" );
     BOOL bRet = SfxInPlaceObject::SaveCompleted( pStor );
     if( bRet )
     {

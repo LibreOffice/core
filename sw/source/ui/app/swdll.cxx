@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-23 17:15:21 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@
 
 void SwDLL::Init()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "SwDLL" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDLL" );
 
     // called directly after loading the DLL
     // do whatever you want, you may use Sw-DLL too

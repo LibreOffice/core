@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-23 17:18:16 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@
 
 void ViewShell::Init( const SwViewOption *pNewOpt )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "ViewShell::Init" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::Init" );
 
     bDocSizeChgd = FALSE;
 
@@ -215,7 +215,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     pImp( new SwViewImp( this ) ),
     aBrowseBorder()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "ViewShell::SwViewShell" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
 
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
     bEndActionByVirDev = FALSE;
@@ -267,7 +267,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     pImp( new SwViewImp( this ) ),
     aBrowseBorder( rShell.GetBrowseBorder() )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "ViewShell::SwViewShell" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
     bPaintWorks = bEnableSmooth = TRUE;
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
     bEndActionByVirDev = FALSE;
@@ -394,6 +394,9 @@ SdrView* ViewShell::GetDrawViewWithValidMarkList()
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/07/23 17:18:16  jp
+      Task #90121#: add profiling statements
+
       Revision 1.3  2000/10/25 12:03:41  jp
       Spellchecker/Hyphenator are not longer member of the shells
 
