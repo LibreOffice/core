@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 07:58:45 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2540,12 +2540,22 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
 
             if( xProps.is() )
             {
-                uno::Any        aAny;
-                OUString        aPersistName( GetImport().ResolveEmbeddedObjectURL( maHref, maCLSID ) );
-                const OUString  sURL(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ));
+                OUString aPersistName = GetImport().ResolveEmbeddedObjectURL( maHref, maCLSID );
 
-                aAny <<= ( aPersistName = aPersistName.copy( sURL.getLength() ) );
-                xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ), aAny );
+                if ( aPersistName.getLength() )
+                {
+                    const OUString  sURL(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ));
+                    uno::Any        aAny;
+
+                    aAny <<= ( aPersistName = aPersistName.copy( sURL.getLength() ) );
+                    xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ), aAny );
+                }
+                else
+                {
+                    // this is OOo link object
+                    xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LinkURL" ) ),
+                                              uno::makeAny( maHref ) );
+                }
             }
         }
 
