@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:45:36 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,8 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ hebrew ] = "Druckoptionen";
         Text[ hindi ] = "Print options";
         Text[ slovak ] = "Nastavenia tlače";
+        Text[ hungarian ] = "Nyomtatás beállításai";
+        Text[ slovenian ] = "Možnosti tiskanja";
     };
     RadioButton RBT_SCALE
     {
@@ -131,7 +133,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text [ english_us ] = "~Fit page to print range" ;
         Text [ portuguese ] = "~Ajustar p�gina � �rea de impress�o" ;
         Text [ swedish ] = "Anpassa ~sida till utskriftomr�de" ;
-        Text [ danish ] = "Tilpas side til udskriftsomr�de" ;
+        Text [ danish ] = "~Tilpas side til udskriftsomr�de" ;
         Text [ italian ] = "Adatta la pagina all'area di stampa" ;
         Text [ spanish ] = "Ajustar ~p�gina a �rea de impresi�n" ;
         Text [ french ] = "~Adapter la page � la zone d'impression" ;
@@ -153,6 +155,8 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ hebrew ] = "~Seite an Druckbereich anpassen";
         Text[ hindi ] = "छपा~ई फैलाव केलिए योग्य पृष्ठ";
         Text[ slovak ] = "Roztiahnuť stránku na celý rozsah t~lače";
+        Text[ hungarian ] = "~Oldal méretezése a nyomtatási tartományhoz";
+        Text[ slovenian ] = "Prila~godi velikost obsegu tiskanja";
     };
     RadioButton RBT_POSTER
     {
@@ -165,7 +169,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text [ english_us ] = "~Posterize" ;
         Text [ portuguese ] = "Imprimir em ~v�rias p�ginas" ;
         Text [ swedish ] = "Skriv ut p� ~flera sidor" ;
-        Text [ danish ] = "Udskriv p� flere sider" ;
+        Text [ danish ] = "~Udskriv p� flere sider" ;
         Text [ italian ] = "Stampa su pi� pagine" ;
         Text [ spanish ] = "Imprimir en ~varias p�ginas" ;
         Text [ french ] = "Imprimer sur plusieurs pages" ;
@@ -187,6 +191,8 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ hebrew ] = "Auf ~mehrere Seiten drucken";
         Text[ hindi ] = "~पोस्टरैज";
         Text[ slovak ] = "~Posterizovať";
+        Text[ hungarian ] = "~Poszterizálás";
+        Text[ slovenian ] = "~Zmanjšaj št. barv";
     };
     RadioButton RBT_CUT
     {
@@ -199,7 +205,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text [ english_us ] = "~Trim" ;
         Text [ portuguese ] = "~Cortar" ;
         Text [ swedish ] = "~Klipp" ;
-        Text [ danish ] = "Besk�r" ;
+        Text [ danish ] = "~Besk�r" ;
         Text [ italian ] = "Ritaglia" ;
         Text [ spanish ] = "~Recortar" ;
         Text [ french ] = "~Couper" ;
@@ -221,6 +227,8 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ hebrew ] = "~Abschneiden";
         Text[ hindi ] = "~सुगठित";
         Text[ slovak ] = "O~rezať";
+        Text[ hungarian ] = "~Nyesés";
+        Text[ slovenian ] = "~Obreži";
     };
     FixedText FI_INFO
     {
@@ -256,6 +264,8 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ hebrew ] = "Die Seiteneinstellungen stimmen nicht mit dem Druckbereich überein.\nSie können folgende Optionen wählen";
         Text[ hindi ] = "पृष्ठ निर्धारण छपाई फैलाव से भिन्न है ।\nनिम्नलिखित विकल्पों में एक चुनो";
         Text[ slovak ] = "Nastavenie tlače nezodpovedá rozsahu tlače.\nVyberte jednu z nasledujúcich možností";
+        Text[ hungarian ] = "Az oldalbeállítás nem felel meg a nyomtatási területnek.\nVálasszon egyet az alábbiakból.";
+        Text[ slovenian ] = "Nastavitve strani se ne ujemajo z obsegom tiskanja.\nIzberite eno od naslednjih možnosti";
     };
     Text [ english_us ] = "Warning Print Options" ;
     Text [ portuguese ] = "Advert�ncia sobre op��es de impress�o" ;
@@ -283,7 +293,11 @@ ModalDialog DLG_PRINT_WARNINGS
     Text[ hebrew ] = "Warnung Druckoptionen";
     Text[ hindi ] = "चेतावनी छापना विकल्प";
     Text[ slovak ] = "Varovanie - nastavenie tlače";
+    Text[ hungarian ] = "Nyomtatási figyelmeztetés";
+    Text[ slovenian ] = "Opozorilo pred tiskanjem";
 };
+
+
 
 
 
