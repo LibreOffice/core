@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,16 +776,16 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         }
                         if ( bChanged && bTestPrevSub )
                         {
-                            //  kein Gruppenwechsel bei Teilergebniszeilen
-
-                            ScBaseCell* pCell;
-                            for (i=nStartCol; i<=nEndCol && bChanged; i++)
+                            // No group change on rows that will contain subtotal formulas
+                            for ( ::std::vector< RowEntry >::const_iterator
+                                    iEntry( aRowVector.begin());
+                                    iEntry != aRowVector.end(); ++iEntry)
                             {
-                                pCell = GetCell( i, nRow );
-                                if ( pCell )
-                                    if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-                                        if (((ScFormulaCell*)pCell)->IsSubTotal())
-                                            bChanged = FALSE;
+                                if ( iEntry->nDestRow == nRow )
+                                {
+                                    bChanged = FALSE;
+                                    break;
+                                }
                             }
                         }
                     }
