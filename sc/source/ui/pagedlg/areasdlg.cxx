@@ -2,9 +2,9 @@
  *
  *  $RCSfile: areasdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:44:46 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,7 @@ void ScPrintAreasDlg::Impl_FillLists()
     BOOL bSimple = TRUE;
 
     if ( pViewData )
-        bSimple = pViewData->GetSimpleArea( aRange, FALSE );
+        bSimple = pViewData->GetSimpleArea( aRange );
 
     if ( bSimple )
         aRange.Format( aStrRange, SCR_ABS, pDoc );
