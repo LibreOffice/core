@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:53:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,6 @@ public:
 
     void            ScannerEvent( const ::com::sun::star::lang::EventObject& rEventObject );
 
-    //af    SdUnoDrawView*  GetController() const { return pController; }
     BOOL            GetLayerMode() const { return bLayerMode; }
 
     USHORT*         GetSlotArray() const { return pSlotArray; }
