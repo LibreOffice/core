@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:24:14 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,9 @@
     Text[ czech ] = "Měřítko";   \
     Text[ hebrew ] = "‮התאמת גודל‬";   \
     Text[ hindi ] = "नापना";  \
-    Text[ slovak ] = "Pravítko";
+    Text[ slovak ] = "Pravítko"; \
+    Text[ hungarian ] = "Méretezés"; \
+    Text[ slovenian ] = "Merilo";
 
  // Contents (Inhalte)
 TabPage TP_OPTIONS_CONTENTS
@@ -142,6 +144,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ hebrew ] = "Ersatzdarstellung";
         Text[ hindi ] = "विकल्प प्रदर्शन";
         Text[ slovak ] = "Alternatívne zobrazenie";
+        Text[ hungarian ] = "Alternatív megjelenés";
+        Text[ slovenian ] = "Alternativni prikaz";
     };
     CheckBox CBX_EXTERN_GRAPHIC
     {
@@ -151,13 +155,13 @@ TabPage TP_OPTIONS_CONTENTS
         Text = "~Fremdgrafiken andeuten" ;
         Text [ ENGLISH ] = "Fremdgrafiken andeuten" ;
         Text [ NORWEGIAN ] = "Fremdgrafiken andeuten" ;
-        Text [ DANISH ] = "Antyd ekstern grafik" ;
+        Text [ DANISH ] = "~Antyd ekstern grafik" ;
         Text [ ENGLISH_US ] = "~Image placeholders" ;
         Text [ SPANISH ] = "~Indicar im�genes externas" ;
         Text [ FINNISH ] = "~Kuvien paikkamerkit" ;
         Text [ FRENCH ] = "�baucher les images externes" ;
         Text [ ITALIAN ] = "Mostra solo ingombro immagini" ;
-        Text [ DUTCH ] = "~Externe afbeeldingen aanduiden" ;
+        Text [ DUTCH ] = "Alleen afbeeldingomtrek weergeven" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Espa�o reservado da ~imagem" ;
         Text [ SWEDISH ] = "Antyd extern gra~fik" ;
         Text [ PORTUGUESE ] = "Delinear imagens e~xternas" ;
@@ -177,6 +181,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ hebrew ] = "~Fremdgrafiken andeuten";
         Text[ hindi ] = "~चित्र स्थानधारकें";
         Text[ slovak ] = "Zástupcov~ia obrázku";
+        Text[ hungarian ] = "~Kép helye";
+        Text[ slovenian ] = "Ograde za sl~ike";
     };
     CheckBox CBX_OUTLINEMODE
     {
@@ -191,7 +197,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ french ] = "Mode Contour" ;
         Text [ dutch ] = "~Contourmodus" ;
         Text [ swedish ] = "~Konturl�ge" ;
-        Text [ danish ] = "Konturmodus" ;
+        Text [ danish ] = "Konturtilstand" ;
         Text [ portuguese ] = "Modo de ~contorno" ;
         Text [ portuguese_brazilian ] = "Modo de ~contorno" ;
         Text[ chinese_simplified ] = "轮廓模式(~O)";
@@ -211,6 +217,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ hebrew ] = "~Umrissmodus";
         Text[ hindi ] = "~परिवेश प्रकार";
         Text[ slovak ] = "Režim ~obrysov";
+        Text[ hungarian ] = "Kö~rvonal mód";
+        Text[ slovenian ] = "~Obrisni način";
     };
     CheckBox CBX_NOTEXT
     {
@@ -219,7 +227,7 @@ TabPage TP_OPTIONS_CONTENTS
         TabStop = TRUE ;
         Text = "~Text andeuten" ;
         Text [ ENGLISH ] = "Text andeuten" ;
-        Text [ dutch ] = "~Tekst aanduiden" ;
+        Text [ dutch ] = "Alleen ~Tekstomtrek weergeven" ;
         Text [ english_us ] = "~Text placeholders" ;
         Text [ italian ] = "~Accenna testo" ;
         Text [ spanish ] = "C~omod�n de texto" ;
@@ -245,6 +253,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ hebrew ] = "~Text andeuten";
         Text[ hindi ] = "~टेक्स्ट् स्थानधारक";
         Text[ slovak ] = "~Zástupca za texty";
+        Text[ hungarian ] = "Szövegek helye";
+        Text[ slovenian ] = "Ograde za ~besedilo";
     };
     CheckBox CBX_HAIRLINEMODE
     {
@@ -254,7 +264,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text = "~Nur Haarlinien anzeigen" ;
         Text [ ENGLISH ] = "Nur Haarlinien anzeigen" ;
         Text [ NORWEGIAN ] = "Nur Haarlinien anzeigen" ;
-        Text [ DANISH ] = "Vis kun konturlinjer" ;
+        Text [ DANISH ] = "~Vis kun konturlinjer" ;
         Text [ ENGLISH_US ] = "~Line contour only" ;
         Text [ SPANISH ] = "~Mostrar s�lo l�neas finas" ;
         Text [ FINNISH ] = "~Vain ��riviiva" ;
@@ -280,6 +290,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ hebrew ] = "~Nur Haarlinien anzeigen";
         Text[ hindi ] = "~केवल रेखा परिवेश";
         Text[ slovak ] = "~Iba čiarová kontúra";
+        Text[ hungarian ] = "~Csak körvonal";
+        Text[ slovenian ] = "Sa~mo obris črte";
     };
     FixedLine GRP_DISPLAY
     {
@@ -313,6 +325,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ hebrew ] = "Anzeigen";
         Text[ hindi ] = "दिखओ";
         Text[ slovak ] = "Zobraziť";
+        Text[ hungarian ] = "Megjelenítés";
+        Text[ slovenian ] = "Prikaz";
     };
     CheckBox CBX_RULER
     {
@@ -348,6 +362,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ hebrew ] = "~Lineale sichtbar";
         Text[ hindi ] = "~रूलर गोचर";
         Text[ slovak ] = "P~ravítka viditeľné";
+        Text[ hungarian ] = "V~onalzó megjelenítése";
+        Text[ slovenian ] = "~Ravnila vidna";
     };
     CheckBox CBX_HELPLINES
     {
@@ -382,6 +398,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ hebrew ] = "‮הנחיה בזמן הזזה‬";
         Text[ hindi ] = "~स्थान परिवर्तन के समय सलाह देना";
         Text[ slovak ] = "~Vodiace čiary";
+        Text[ hungarian ] = "V~ezetővonalak látszanak áthelyezéskor";
+        Text[ slovenian ] = "~Vodila pri premikanju";
     };
     CheckBox CBX_HANDLES_BEZIER
     {
@@ -396,7 +414,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ spanish ] = "~Todos los puntos de control en el editor B�zier" ;
         Text [ french ] = "~Tous les points de contr�le de l'�diteur B�zier" ;
         Text [ swedish ] = "~Alla kontrollpunkter i B�zier-redigeraren" ;
-        Text [ danish ] = "~Alle kontrolpunkter i Bezier-editor" ;
+        Text [ danish ] = "~Alle kontrolpunkter i B�zier-editor" ;
         Text [ portuguese_brazilian ] = "~Todos os pontos de controle no editor B�zier" ;
         Text [ portuguese ] = "~Todos os pontos de controlo do editor B�zier" ;
         Text[ chinese_simplified ] = "曲线编辑器之内的全部控点(~A)";
@@ -416,6 +434,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ hebrew ] = "~Alle Steuerpunkte im Bezier-Editor";
         Text[ hindi ] = "~BÃ©zier संपादक का सभी नियंत्रण बिन्दु";
         Text[ slovak ] = "Všetky kontrolné ~body v Bézierovom editore";
+        Text[ hungarian ] = "~Minden vezérlőpont a Bézier-szerkesztőben";
+        Text[ slovenian ] = "~Vse kontrolne točke v urejev. Bezierovih krivulj";
     };
     CheckBox CBX_MOVE_OUTLINE
     {
@@ -450,6 +470,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ hebrew ] = "U~mriss jedes einzelnen Objektes";
         Text[ hindi ] = "~हरेक वस्तु केलिए परिवेश";
         Text[ slovak ] = "O~brysy každého individuálneho objektu";
+        Text[ hungarian ] = "O~bjektumok saját körvonala látható áthelyezéskor";
+        Text[ slovenian ] = "O~bris vsakega predmeta posebej";
     };
     Text[ chinese_simplified ] = "内容";
     Text[ russian ] = "����������";
@@ -468,6 +490,8 @@ TabPage TP_OPTIONS_CONTENTS
     Text[ hebrew ] = "‮תוכן עיניינים‬";
     Text[ hindi ] = "विषयसूची";
     Text[ slovak ] = "Obsah";
+    Text[ hungarian ] = "Tartalom";
+    Text[ slovenian ] = "Vsebina";
 };
  // MISC (Sonstiges)
 TabPage TP_OPTIONS_MISC
@@ -518,6 +542,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "Textobjekte";
         Text[ hindi ] = "टेक्स्ट् वस्तु";
         Text[ slovak ] = "Textové objekty";
+        Text[ hungarian ] = "Szövegobjektumok";
+        Text[ slovenian ] = "Predmeti besedila";
     };
     CheckBox CBX_QUICKEDIT
     {
@@ -532,7 +558,7 @@ TabPage TP_OPTIONS_MISC
         Text [ spanish ] = "~Permitir edici�n r�pida" ;
         Text [ french ] = "Permettre l'�dition ~rapide" ;
         Text [ swedish ] = "Till�t ~snabbredigering" ;
-        Text [ danish ] = "T~illad hurtigredigering" ;
+        Text [ danish ] = "Tillad hurtigredigering" ;
         Text [ portuguese ] = "Permitir edi��o r�pida" ;
         Text [ portuguese_brazilian ] = "Permitir edi��o r�pida" ;
         Text[ chinese_simplified ] = "允许快速编辑";
@@ -552,6 +578,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "~Schnellbearbeitung zulassen";
         Text[ hindi ] = "शीघ्र संपादन स्वीकृत";
         Text[ slovak ] = "Povoliť rýchlu editáciu";
+        Text[ hungarian ] = "Gyorsszerkesztés engedélyezése";
+        Text[ slovenian ] = "Dopusti hitro urejanje";
     };
     CheckBox CBX_PICKTHROUGH
     {
@@ -586,6 +614,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "~Nur Textbereich selektierbar";
         Text[ hindi ] = "केवल टेक्स्ट् विस्तीर्ण चुनने योग्य है";
         Text[ slovak ] = "Možné vybrať iba textovú oblasť";
+        Text[ hungarian ] = "Csak a szöveges terület jelölhető ki";
+        Text[ slovenian ] = "Izbor možen samo v območju besedila";
     };
     FixedLine GRP_PROGRAMSTART
     {
@@ -619,6 +649,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "Neues Dokument";
         Text[ hindi ] = "नया लेखपत्र";
         Text[ slovak ] = "Nový dokument";
+        Text[ hungarian ] = "Új dokumentum";
+        Text[ slovenian ] = "Nov dokument";
     };
     CheckBox CBX_START_WITH_TEMPLATE
     {
@@ -634,7 +666,7 @@ TabPage TP_OPTIONS_MISC
         Text[ french ] = "D�marrer avec l'AutoPilote";
         Text[ spanish ] = "~Comenzar con el Piloto autom�tico ";
         Text[ italian ] = "Avvia con il Pilota ~automatico";
-        Text[ danish ] = "Start med AutoPiloter";
+        Text[ danish ] = "Start med AutoPilot";
         Text[ swedish ] = "Starta med ~AutoPiloten";
         Text[ polish ] = "~Generuj, korzystaj�c z AutoPilota";
         Text[ portuguese_brazilian ] = "Iniciar com o assistente de apresenta��es";
@@ -653,6 +685,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "Mit ~Autopiloten starten";
         Text[ hindi ] = "ओटोपैलट् सहित प्रारंभ";
         Text[ slovak ] = "Spustiť so sprievodcom";
+        Text[ hungarian ] = "Indítás a Tündérrel";
+        Text[ slovenian ] = "Začni z Avtopilotom";
     };
     FixedLine GRP_SETTINGS
     {
@@ -685,6 +719,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Nastavitve";
     };
     CheckBox CBX_MASTERPAGE_CACHE
     {
@@ -719,6 +755,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "~Cache für Hintergrund benutzen";
         Text[ hindi ] = "पृष्टभूमि कॉश का उपयोग करो";
         Text[ slovak ] = "Použiť background cache";
+        Text[ hungarian ] = "Háttérgyorsítótár használata";
+        Text[ slovenian ] = "Uporabljaj medpomnilnik v ozadju";
     };
     CheckBox CBX_COPY
     {
@@ -753,6 +791,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "~Kopie beim Verschieben";
         Text[ hindi ] = "स्थान परिवर्तन के समय प्रतिलिपि";
         Text[ slovak ] = "Kopírovať pri presune";
+        Text[ hungarian ] = "Másolatkészítés áthelyezéskor";
+        Text[ slovenian ] = "Pri premikanju naredi kopijo";
     };
     CheckBox CBX_MARKED_HIT_MOVES_ALWAYS
     {
@@ -788,6 +828,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "~Objekte immer verschiebbar";
         Text[ hindi ] = "वस्तु हमेशा स्थान परिवर्तन करने योग्य";
         Text[ slovak ] = "Vždy presúvateľné objekty";
+        Text[ hungarian ] = "Az objektumok mindig áthelyezhetők";
+        Text[ slovenian ] = "Predmeti so vedno premakljivi";
     };
     CheckBox CBX_CROOK_NO_CONTORTION
     {
@@ -798,7 +840,7 @@ TabPage TP_OPTIONS_MISC
         Text = "S~etzen auf Kreis: nicht verzerren" ;
         Text [ ENGLISH ] = "Setzen auf Kreis: nicht verzerren" ;
         Text [ NORWEGIAN ] = "Setzen auf Kreis: nicht verzerren" ;
-        Text [ DANISH ] = "S�t p� cirkel: vrid ikke" ;
+        Text [ DANISH ] = "Vrid ikke objekter p� kurve" ;
         Text [ ENGLISH_US ] = "Do not distort objects in curve" ;
         Text [ SPANISH ] = "~Inscribir en c�rculo sin distorsi�n" ;
         Text [ FINNISH ] = "�l� v��rist� k�yr�n objekteja" ;
@@ -824,6 +866,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "S~etzen auf Kreis: nicht verzerren";
         Text[ hindi ] = "वक्र के वस्तुओं को डिसटोर्ट मत करो";
         Text[ slovak ] = "Nedeformovať objekty na krivke";
+        Text[ hungarian ] = "Ne torzítsa el az objektumot";
+        Text[ slovenian ] = "Ne popači predmetov na krivulji";
     };
     FixedText FT_METRIC
     {
@@ -858,6 +902,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "~Maßeinheit";
         Text[ hindi ] = "नापने का ~यूनिट्";
         Text[ slovak ] = "Jednotka ~miery";
+        Text[ hungarian ] = "~Mértékegység";
+        Text[ slovenian ] = "~Merska enota";
     };
     ListBox LB_METRIC
     {
@@ -899,6 +945,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "~Tabulatorabstand";
         Text[ hindi ] = "~टॉब रुकावट";
         Text[ slovak ] = "Kroky ta~bulátoru";
+        Text[ hungarian ] = "Ta~bulátorpozíciók";
+        Text[ slovenian ] = "Ta~bulatorska mesta";
     };
     MetricField MTR_FLD_TABSTOP
     {
@@ -949,6 +997,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "Starten der Präsentation";
         Text[ hindi ] = "प्रस्तुति प्रारंभ करो";
         Text[ slovak ] = "Spustiť prezentáciu";
+        Text[ hungarian ] = "Bemutató indítása";
+        Text[ slovenian ] = "Zaženi predstavitev";
     };
     CheckBox CBX_START_WITH_ACTUAL_PAGE
     {
@@ -960,7 +1010,7 @@ TabPage TP_OPTIONS_MISC
         Text [ english_us ] = "Always with current page" ;
         Text [ portuguese_brazilian ] = "Sempre com a p�gina atual" ;
         Text [ swedish ] = "Allt~id med aktuell sida" ;
-        Text [ danish ] = "Altid med aktuel side" ;
+        Text [ danish ] = "Altid med nuv�rende side" ;
         Text [ italian ] = "Sempre con la pagina attiva" ;
         Text [ spanish ] = "~Siempre con la p�gina actual" ;
         Text [ french ] = "Toujours avec la page active" ;
@@ -983,6 +1033,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "~Immer mit aktueller Seite";
         Text[ hindi ] = "हमेशा वर्तमान पृष्ठ के सहित";
         Text[ slovak ] = "Vždy s aktuálnou stránkou";
+        Text[ hungarian ] = "Mindig az aktuális oldallal";
+        Text[ slovenian ] = "Vedno s trenutno stranjo";
     };
     FixedLine FT_COMPATIBILITY
     {
@@ -1015,6 +1067,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "Kompatibilität";
         Text[ hindi ] = "योग्य";
         Text[ slovak ] = "Kompatibilita";
+        Text[ hungarian ] = "Kompatibilitás";
+        Text[ slovenian ] = "Združljivost";
     };
     CheckBox CB_USE_PRINTER_METRICS
     {
@@ -1036,10 +1090,10 @@ TabPage TP_OPTIONS_MISC
         Text[ portuguese ] = "Us~e printer metrics for document formatting";
         Text[ russian ] = "Us~e printer metrics for document formatting";
         Text[ greek ] = "Us~e printer metrics for document formatting";
-        Text[ dutch ] = "Us~e printer metrics for document formatting";
+        Text[ dutch ] = "G~ebruik printer metrieken voor documentopmaak";
         Text[ finnish ] = "Us~e printer metrics for document formatting";
         Text[ czech ] = "Pro formátování dokumentu použít metriky tiskárny";
-        Text[ danish ] = "Us~e printer metrics for document formatting";
+        Text[ danish ] = "~Brug printerens m�l til dokumentformatering";
         Text[ polish ] = "Us~e printer metrics for document formatting";
         Text[ portuguese_brazilian ] = "Usar m�tricas da impressora para a formata��o do documento";
         Text[ turkish ] = "Us~e printer metrics for document formatting";
@@ -1049,6 +1103,8 @@ TabPage TP_OPTIONS_MISC
         Text[ thai ] = "Us~e printer metrics for document formatting";
         Text[ slovak ] = "Použiť mi~erky tlačiarne pri formátovaní textu";
         Text[ hindi ] = "Us~e printer metrics for document formatting";
+        Text[ hungarian ] = "A ~nyomtató mérettáblázatának használata a dokumentum formázásához";
+        Text[ slovenian ] = "Za oblikovanje dokumenta ~uporabi tiskalnikovo metriko";
     };
     CheckBox CB_MERGE_PARA_DIST
     {
@@ -1064,7 +1120,7 @@ TabPage TP_OPTIONS_MISC
         Text[ french ] = "Additionner les espacements entre paragraphes et tables (document actif)";
         Text[ spanish ] = "~A�adir los espacios entre p�rrafos y tablas (en el documento actual)";
         Text[ italian ] = "Aggiungi gli spazi tra ~paragrafi e tabelle nel documento attuale";
-        Text[ danish ] = "Adder alle afsnitsafst~ande i det aktuelle dokument";
+        Text[ danish ] = "Tilf�j afstand mellem afsnit og tabeller (i nuv�rende dokument)";
         Text[ swedish ] = "A~ddera avst�nd mellan stycken och tabeller (i det aktuella dokumentet)";
         Text[ polish ] = "D~odaj odst�py mi�dzy akapitami bie��cego dokumentu";
         Text[ portuguese_brazilian ] = "Aumentar a~fastamento entre par�grafos no documento atual";
@@ -1081,6 +1137,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "Im aktuellen Dokument alle Absatzabst~ände addieren";
         Text[ hindi ] = "वर्त~मान लेखपत्र में परिच्छेदों के बीच अंतर जोड़ो";
         Text[ slovak ] = "Pridať od~sadenie medzi odstavcami a tabuľkami (v aktuálnom dokumente)";
+        Text[ hungarian ] = "~Térköz elhelyezése a bekezdések és a táblázatok között (az aktuális dokumentumban)";
+        Text[ slovenian ] = "Dodaj ~razmike med odstavke in tabele (v trenutnem dokumentu)";
     };
     FixedLine GRP_SCALE
     {
@@ -1121,6 +1179,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "Original";
         Text[ hindi ] = "यथार्थ";
         Text[ slovak ] = "Pôvodná";
+        Text[ hungarian ] = "Eredeti";
+        Text[ slovenian ] = "Izvirno";
     };
     FixedText FT_EQUIVALENT
     {
@@ -1154,6 +1214,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "Entspricht";
         Text[ hindi ] = "के समान";
         Text[ slovak ] = "Zhodný s";
+        Text[ hungarian ] = "Megegyezik a ";
+        Text[ slovenian ] = "Enakovredno";
     };
     FixedText FT_SCALE
     {
@@ -1187,6 +1249,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "Zeichn~ungsmaßstab";
         Text[ hindi ] = "~रेखाचित्र स्केल";
         Text[ slovak ] = "~Mierka kresby";
+        Text[ hungarian ] = "~Rajzolás aránya";
+        Text[ slovenian ] = "Merilo ~risanja";
     };
     ComboBox CB_SCALE
     {
@@ -1229,6 +1293,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "Seiten~breite";
         Text[ hindi ] = "~पृष्ठ चौड़ाई";
         Text[ slovak ] = "Šírka ~stránky";
+        Text[ hungarian ] = "~Oldalszélesség";
+        Text[ slovenian ] = "~Širini strani";
     };
     FixedText FI_INFO_1
     {
@@ -1287,6 +1353,8 @@ TabPage TP_OPTIONS_MISC
         Text[ hebrew ] = "Se~itenhöhe";
         Text[ hindi ] = "~पृष्ठ ऊँचाई";
         Text[ slovak ] = "Výška strá~nky";
+        Text[ hungarian ] = "~Oldalmagasság";
+        Text[ slovenian ] = "~Višini strani";
     };
     FixedText FI_INFO_2
     {
@@ -1330,7 +1398,11 @@ TabPage TP_OPTIONS_MISC
     Text[ hebrew ] = "Sonstiges";
     Text[ hindi ] = "अन्य";
     Text[ slovak ] = "Ostatné";
+    Text[ hungarian ] = "Egyéb";
+    Text[ slovenian ] = "Drugo";
 };
+
+
 
 
 
