@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,12 @@
 #include <rtl/logfile.hxx>
 #endif
 #define RTL_LOGFILE_OU2A(rtlOUString)   (::rtl::OUStringToOString((rtlOUString), RTL_TEXTENCODING_ASCII_US).getStr())
+
+#include <drafts/com/sun/star/configuration/backend/MalformedDataException.hpp>
+
+#ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#endif
 
 namespace configmgr { namespace backend {
 
@@ -234,7 +240,32 @@ NodeResult BackendAccess::getDefaultData(const NodeRequest& aRequest)
     merge(mFactory, schemaBuilder->result(), layers,layers.getLength() - 1,
           aRequest.getOptions().getLocale());
 
-    NodeInstance retCode(schemaBuilder->result().extractSchemaTree(), aRequest.getPath()) ;
+    promoteToDefault(schemaBuilder->result());
+    //Extract required tree form the schemaTree
+    std::auto_ptr<ISubtree> aSubTree =  schemaBuilder->result().extractSchemaTree();
+    AbsolutePath aPath = aRequest.getPath();
+    if( aPath.begin()+1 != aPath.end())
+    {
+        for(AbsolutePath::Iterator it=aPath.begin()+1,endIt=aPath.end();it!=endIt; ++it)
+        {
+            std::auto_ptr<INode> aChild=aSubTree->removeChild(it->getName().toString());
+            if(aChild.get()== NULL)
+            {
+                OUString sMsg = OUString::createFromAscii("BackendAccess:getDefaultData: No Such Element");
+                throw container::NoSuchElementException( sMsg, mBackend);
+            }
+            ISubtree *pChildAsSubtree = aChild->asISubtree();
+            if(pChildAsSubtree == NULL)
+            {
+                OUString sMsg = OUString::createFromAscii("BackendAccess:getDefaultData: Node Expected, Found Property ");
+                throw MalformedDataException(sMsg, mBackend);
+            }
+            aSubTree.reset(pChildAsSubtree);
+            aChild.release();
+        }
+    }
+
+    NodeInstance retCode(aSubTree, aRequest.getPath()) ;
     return NodeResult(retCode) ;
 }
 //------------------------------------------------------------------------------
