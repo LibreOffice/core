@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:20:34 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1542,24 +1542,25 @@ String S_NO_MENU
 {
     Text = "Kein Menü Vorhanden bei ($Arg1)";
     Text[ english_us ] = "There is no menu at ($Arg1)";
-    Text[ portuguese ] = "Botão Ajuda inexistente em ($Arg1)";
+    Text[ portuguese ] = "Menu inexistente em ($Arg1)";
     Text[ russian ] = "There is no Help button at ($Arg1)";
     Text[ greek ] = "There is no Help button at ($Arg1)";
     Text[ dutch ] = "Geen Help-button beschikbaar bij ($Arg1)";
-    Text[ french ] = "Absence de bouton Aide pour ($Arg1)";
-    Text[ spanish ] = "No existe botón Ayuda para ($Arg1)";
+    Text[ french ] = "Absence de menu pour ($Arg1)";
+    Text[ spanish ] = "No existe menú para ($Arg1)";
     Text[ italian ] = "There is no Help button at ($Arg1)";
     Text[ danish ] = "There is no Help button at ($Arg1)";
-    Text[ swedish ] = "There is no Help button at ($Arg1)";
-    Text[ polish ] = "There is no Help button at ($Arg1)";
+    Text[ swedish ] = "There is no menu at ($Arg1)";
+    Text[ polish ] = "There is no menu at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "There is no Help button at ($Arg1)";
     Text[ korean ] = "($Arg1)¿¡ µµ¿ò¸» ¹öÆ°ÀÌ ¾ø½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "There is no Help button at ($Arg1)";
+    Text[ chinese_simplified ] = "There is no menu at ($Arg1)";
     Text[ chinese_traditional ] = "There is no Help button at ($Arg1)";
     Text[ arabic ] = "There is no Help button at ($Arg1)";
     Text[ turkish ] = "There is no Help button at ($Arg1)";
     Text[ catalan ] = "No existe botón Ayuda para ($Arg1)";
     Text[ finnish ] = "Kohteessa ($Arg1) ei ole Ohje-painiketta";
 };
+
 
