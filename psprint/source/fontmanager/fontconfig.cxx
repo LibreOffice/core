@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:08:07 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@ typedef char FcChar8;
 #endif
 #ifndef _OSL_THREAD_H
 #include <osl/thread.h>
+#endif
+#ifndef _RTL_USTRBUF_HXX
+#include <rtl/ustrbuf.hxx>
 #endif
 
 using namespace psp;
@@ -546,7 +549,7 @@ void PrintFontManager::deinitFontconfig()
     FontCfgWrapper::release();
 }
 
-bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo )
+bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale )
 {
 #ifdef ENABLE_FONTCONFIG
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
@@ -556,7 +559,22 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo )
     FcConfig* pConfig = rWrapper.getDefConfig();
     FcPattern* pPattern = rWrapper.FcPatternCreate();
 
+    OString aLangAttrib;
     // populate pattern with font characteristics
+    if( rLocale.Language.getLength() )
+    {
+        OUStringBuffer aLang(6);
+        aLang.append( rLocale.Language );
+        if( rLocale.Country.getLength() )
+        {
+            aLang.append( sal_Unicode('-') );
+            aLang.append( rLocale.Country );
+        }
+        aLangAttrib = OUStringToOString( aLang.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+    }
+    if( aLangAttrib.getLength() )
+        rWrapper.FcPatternAddString( pPattern, FC_LANG, (FcChar8*)aLangAttrib.getStr() );
+
     OString aFamily = OUStringToOString( rInfo.m_aFamilyName, RTL_TEXTENCODING_UTF8 );
     if( aFamily.getLength() )
         rWrapper.FcPatternAddString( pPattern, FC_FAMILY, (FcChar8*)aFamily.getStr() );
