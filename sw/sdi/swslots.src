@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-27 20:18:30 $
+ *  last change: $Author: kz $ $Date: 2002-06-11 12:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,16 +995,16 @@ SfxSlotInfo FN_EDIT_FORMULA
     SlotName[ greek ] = "ÅéóáãùãŞ ôığïõ";
     SlotName[ dutch ] = "Formule invoegen";
     SlotName[ french ] = "Insérer une formule";
-    SlotName[ spanish ] = "Insertar fórmula";
+    SlotName[ spanish ] = "Barra de fórmulas";
     SlotName[ finnish ] = "Lisää kaava";
-    SlotName[ italian ] = "Inserisci formula";
+    SlotName[ italian ] = "Barra di calcolo";
     SlotName[ danish ] = "Indsæt formel";
     SlotName[ swedish ] = "Formellist";
     SlotName[ polish ] = "Wstaw formu³ê";
     SlotName[ portuguese_brazilian ] = "InsertFormula";
-    SlotName[ japanese ] = "æ•°å¼ã®æŒ¿å…¥";
-    SlotName[ korean ] = "ìˆ˜ì‹ ì‚½ì…";
-    SlotName[ chinese_simplified ] = "æ’å…¥å…¬å¼";
+    SlotName[ japanese ] = "æ•°å¼ãƒãƒ¼";
+    SlotName[ korean ] = "ìˆ˜ì‹ í‘œì‹œì¤„";
+    SlotName[ chinese_simplified ] = "ç¼–è¾‘æ ";
     SlotName[ chinese_traditional ] = "ç·¨è¼¯åˆ—";
     SlotName[ turkish ] = "Formül ekle";
     SlotName[ arabic ] = "ÅÏÑÇÌ ÕíÛÉ";
@@ -9868,7 +9868,7 @@ SfxSlotInfo FN_NAME_GROUP
     SlotName[ dutch ] = "Naam object";
     SlotName[ chinese_simplified ] = "å‘½åå¯¹è±¡";
     SlotName[ greek ] = "Ïíïìáóßá áíôéêåéìİíïõ";
-    SlotName[ korean ] = "ê±”ì²´ ëª…ëª…";
+    SlotName[ korean ] = "ê°œì²´ ì´ë¦„ ì§€ì •";
     SlotName[ turkish ] = "Nesneyi adlandır";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Anomena l'objecte";
@@ -9885,16 +9885,16 @@ SfxSlotInfo FN_CLOSE_PAGEPREVIEW
     SlotName[ greek ] = "Close preview";
     SlotName[ dutch ] = "Close preview";
     SlotName[ french ] = "Close preview";
-    SlotName[ spanish ] = "Close preview";
+    SlotName[ spanish ] = "Cerrar Vista preliminar";
     SlotName[ finnish ] = "Close preview";
-    SlotName[ italian ] = "Close preview";
+    SlotName[ italian ] = "Chiudi anteprima";
     SlotName[ danish ] = "Close preview";
     SlotName[ swedish ] = "Stäng förhandsgranskning";
     SlotName[ polish ] = "Close preview";
     SlotName[ portuguese_brazilian ] = "Close preview";
-    SlotName[ japanese ] = "Close preview";
-    SlotName[ korean ] = "Close preview";
-    SlotName[ chinese_simplified ] = "Close preview";
+    SlotName[ japanese ] = "å°åˆ·ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’é–‰ã˜ã‚‹";
+    SlotName[ korean ] = "ë¯¸ë¦¬ ë³´ê¸° ë‹«ê¸°";
+    SlotName[ chinese_simplified ] = "å…³é—­é¡µé¢é¢„è§ˆ";
     SlotName[ chinese_traditional ] = "é—œé–‰é è¦½";
     SlotName[ turkish ] = "Close preview";
     SlotName[ arabic ] = "Close preview";
