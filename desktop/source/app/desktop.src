@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-17 21:53:18 $
+ *  last change: $Author: rt $ $Date: 2001-10-22 05:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ String STR_BOOTSTRAP_ERR_CANNOT_START
     Text[ portuguese ] = "Impossнvel iniciar a aplicaзгo. ";
     Text[ russian ] = "Запуск приложения невозможен. ";
     Text[ greek ] = "The program cannot be started. ";
-    Text[ dutch ] = "The program cannot be started. ";
+    Text[ dutch ] = "De applicatie kan niet worden gestart.";
     Text[ french ] = "Impossible de lancer l'application ! ";
     Text[ spanish ] = "No se puede iniciar la aplicaciуn. ";
     Text[ finnish ] = "The program cannot be started. ";
@@ -182,7 +182,7 @@ String STR_BOOTSTRAP_ERR_DIR_MISSING
     Text[ portuguese ] = "Impossнvel encontrar o caminho de configuraзгo \"$1\".";
     Text[ russian ] = "Конфигурационный путь \"$1\" ненайден.";
     Text[ greek ] = "The configuration directory \"$1\" is missing.";
-    Text[ dutch ] = "The configuration directory \"$1\" is missing.";
+    Text[ dutch ] = "Configuratie-directory \"$1\" ontbreekt.";
     Text[ french ] = "Impossible de dйtecter le chemin de configuration \"$1\" !";
     Text[ spanish ] = "No se encontrу el directorio de configuraciуn \"$1\".";
     Text[ finnish ] = "The configuration directory \"$1\" is missing.";
@@ -208,7 +208,7 @@ String STR_BOOTSTRAP_ERR_PATH_INVALID
     Text[ portuguese ] = "O caminho de instalaзгo nгo й vбlido.";
     Text[ russian ] = "Инсталляционный путь недопустим.";
     Text[ greek ] = "The installation path is invalid.";
-    Text[ dutch ] = "The installation path is invalid.";
+    Text[ dutch ] = "Het installatiepad is ongeldig.";
     Text[ french ] = "Le chemin d'installation n'est pas valide.";
     Text[ spanish ] = "La ruta de instalaciуn no es vбlida.";
     Text[ finnish ] = "The installation path is invalid.";
@@ -234,7 +234,7 @@ String STR_BOOTSTRAP_ERR_NO_PATH
     Text[ portuguese ] = "Foi impossнvel determinar o caminho de instalaзгo.";
     Text[ russian ] = "Инсталляционный путь недоступен.";
     Text[ greek ] = "The installation path is not available.";
-    Text[ dutch ] = "The installation path is not available.";
+    Text[ dutch ] = "Geen installatiepad beschikbaar.";
     Text[ french ] = "Impossible de dйterminer le chemin d'installation !";
     Text[ spanish ] = "No se pudo determinar la ruta de instalaciуn.";
     Text[ finnish ] = "The installation path is not available.";
@@ -260,7 +260,7 @@ String STR_BOOTSTRAP_ERR_INTERNAL
     Text[ portuguese ] = "Ocorreu um erro interno.";
     Text[ russian ] = "Возникла внутренняя ошибка.";
     Text[ greek ] = "An internal failure occurred.";
-    Text[ dutch ] = "An internal failure occurred.";
+    Text[ dutch ] = "Interne fout.";
     Text[ french ] = "Une erreur interne est survenue.";
     Text[ spanish ] = "Ha occurrido un error interno.";
     Text[ finnish ] = "An internal failure occurred.";
@@ -286,7 +286,7 @@ String STR_BOOTSTRAP_ERR_FILE_CORRUPT
     Text[ portuguese ] = "O ficheiro de configuraзгo \"$1\" estб danificado.";
     Text[ russian ] = "Конфигурационный файл \"$1\" поврежден.";
     Text[ greek ] = "The configuration file \"$1\" is corrupt.";
-    Text[ dutch ] = "The configuration file \"$1\" is corrupt.";
+    Text[ dutch ] = "Configuratie-bestand \"$1\" is niet in orde.";
     Text[ french ] = "Le fichier de configuration \"$1\" est dйfectueux.";
     Text[ spanish ] = "El archivo de configuraciуn \"$1\" estб daсado.";
     Text[ finnish ] = "The configuration file \"$1\" is corrupt.";
@@ -312,7 +312,7 @@ String STR_BOOTSTRAP_ERR_FILE_MISSING
     Text[ portuguese ] = "Impossнvel encontrar o ficheiro de configuraзгo \"$1\".";
     Text[ russian ] = "Конфигурационный файл \"$1\" ненайден.";
     Text[ greek ] = "The configuration file \"$1\" is missing.";
-    Text[ dutch ] = "The configuration file \"$1\" is missing.";
+    Text[ dutch ] = "Configuratiebestand \"$1\" ontbreekt.";
     Text[ french ] = "Impossible de dйtecter le fichier de configuration \"$1\" !";
     Text[ spanish ] = "No se encontrу el archivo de configuraciуn \"$1\".";
     Text[ finnish ] = "The configuration file \"$1\" is missing.";
@@ -338,7 +338,7 @@ String STR_BOOTSTRAP_ERR_NO_SUPPORT
     Text[ portuguese ] = "The main configuration file \"$1\" does not support the current version.";
     Text[ russian ] = "Конфигурационный файл \"$1\" не поддерживает данную версию.";
     Text[ greek ] = "The main configuration file \"$1\" does not support the current version.";
-    Text[ dutch ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ dutch ] = "Configuratie-bestand \"$1\" ondersteunt deze versie niet.";
     Text[ french ] = "Le fichier de configuration \"$1\" ne supporte pas cette version.";
     Text[ spanish ] = "El archivo de configuraciуn \"$1\" no apoya esta versiуn.";
     Text[ finnish ] = "The main configuration file \"$1\" does not support the current version.";
@@ -364,7 +364,7 @@ String STR_BOOTSTRAP_ERR_NO_SERVICE
     Text[ portuguese ] = "O gestor de componentes nгo estб disponнvel.";
     Text[ russian ] = "Диспетчер компонентов недоступен.";
     Text[ greek ] = "The service manager is not available.";
-    Text[ dutch ] = "The service manager is not available.";
+    Text[ dutch ] = "De componenten-manager is niet beschikbaar.";
     Text[ french ] = "Le gestionnaire de composants n'est pas disponible.";
     Text[ spanish ] = "El gestor de componentes no estб disponible.";
     Text[ finnish ] = "The service manager is not available.";
@@ -390,7 +390,7 @@ String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
     Text[ portuguese ] = "The configuration service is not available.";
     Text[ russian ] = "Создать диспетчера файлов невозможно.";
     Text[ greek ] = "The configuration service is not available.";
-    Text[ dutch ] = "The configuration service is not available.";
+    Text[ dutch ] = "De configuratie-manager is niet beschibaar.";
     Text[ french ] = "Impossible de crйer le gestionnaire de configuration !";
     Text[ spanish ] = "No se puede crear el gestor de configuraciуn.";
     Text[ finnish ] = "The configuration service is not available.";
@@ -416,7 +416,7 @@ String STR_ASK_START_SETUP_REPAIR
     Text[ portuguese ] = "Iniciar a aplicaзгo Setup para reparar a instalaзгo?";
     Text[ russian ] = "Запустить инсталляционное приложение для восстановления инсталлированной версии?";
     Text[ greek ] = "Start setup application to repair installation?";
-    Text[ dutch ] = "Start setup application to repair installation?";
+    Text[ dutch ] = "Wilt u de Setup-applicatie starten om uw installatie te repareren?";
     Text[ french ] = "Voulez-vous lancer l'application Setup afin de rйparer l'installation ?";
     Text[ spanish ] = "їDesea iniciar el programa de instalaciуn setup para reparar la instalaciуn?";
     Text[ finnish ] = "Start setup application to repair installation?";
@@ -442,7 +442,7 @@ String STR_ASK_START_SETUP
     Text[ portuguese ] = "Start setup application to check installation?";
     Text[ russian ] = "Запустить инсталляционное приложение для проверки инсталлированной версии?";
     Text[ greek ] = "Start setup application to check installation?";
-    Text[ dutch ] = "Start setup application to check installation?";
+    Text[ dutch ] = "Wilt u de Setup-applicatie starten om uw installatie te controleren?";
     Text[ french ] = "Voulez-vous lancer l'application Setup afin de vйrifier l'installation ?";
     Text[ spanish ] = "їDesea iniciar el programa de instalaciуn setup para comprobar la instalaciуn?";
     Text[ finnish ] = "Start setup application to check installation?";
@@ -468,7 +468,7 @@ String STR_SETUP_ERR_CANNOT_START
     Text[ portuguese ] = "Foi impossнvel iniciar a aplicaзгo Setup automaticamente! Queira iniciб-la manualmente.";
     Text[ russian ] = "Автоматический запуск инсталляционного приложения невозможен. Запустите его вручную.";
     Text[ greek ] = "Couldn't start setup application! Please start it manually.";
-    Text[ dutch ] = "Couldn't start setup application! Please start it manually.";
+    Text[ dutch ] = "De Setup-applicatie kon niet automatisch worden gestart. Start deze handmatig.";
     Text[ french ] = "Impossible de lancer automatiquement l'application Setup ! Veuillez la dйmarrer manuellement.";
     Text[ spanish ] = "No se pudo iniciar automбticamente el programa de instalaciуn setup. Inнcielo manualmente.";
     Text[ finnish ] = "Couldn't start setup application! Please start it manually.";
@@ -485,5 +485,6 @@ String STR_SETUP_ERR_CANNOT_START
     Text[ arabic ] = "Couldn't start setup application! Please start it manually.";
     Text[ catalan ] = "Couldn't start setup application! Please start it manually.";
 };
+
 
 
