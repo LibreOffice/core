@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2461,7 +2461,7 @@ sal_Bool OQueryDesignView::isPasteAllowed()
     switch(m_eChildFocus)
     {
         case SELECTION:
-            bAllowed = sal_True;
+            bAllowed = m_pSelectionBox->isPasteAllowed();
             break;
         case TABLEVIEW:
             break;
@@ -2475,7 +2475,7 @@ sal_Bool OQueryDesignView::isCopyAllowed()
     switch(m_eChildFocus)
     {
         case SELECTION:
-            bAllowed = sal_True;
+            bAllowed = m_pSelectionBox->isCopyAllowed();
             break;
         case TABLEVIEW:
             break;
