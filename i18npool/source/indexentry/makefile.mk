@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.9 $
+#*  $Revision: 1.10 $
 #*
-#*  last change: $Author: khong $ $Date: 2002-05-13 21:53:36 $
+#*  last change: $Author: khong $ $Date: 2002-05-24 22:36:59 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -84,6 +84,7 @@ SLOFILES=   \
             $(SLO)$/indexentrysupplier_zh_TW_radical.obj \
             $(SLO)$/indexentrysupplier_zh_TW_stroke.obj \
             $(SLO)$/indexentrysupplier_ko_dict.obj \
+            $(SLO)$/indexentrysupplier_ja_phonetic.obj \
             $(SLO)$/indexentrysupplier_western.obj \
             $(SLO)$/indexentrysupplier_alphanumeric.obj \
             $(SLO)$/indexentrysupplier_da_alphanumeric.obj \

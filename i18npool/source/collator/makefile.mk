@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.2 $
+#*  $Revision: 1.3 $
 #*
-#*  last change: $Author: er $ $Date: 2002-03-26 17:02:11 $
+#*  last change: $Author: khong $ $Date: 2002-05-24 22:31:36 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -91,7 +91,8 @@ SLOFILES=   \
         $(SLO)$/collator_zh_TW_charset.obj \
         $(SLO)$/collator_ko_dict.obj \
         $(SLO)$/collator_ko_charset.obj \
-        $(SLO)$/collator_ja_charset.obj
+        $(SLO)$/collator_ja_charset.obj \
+        $(SLO)$/collator_ja_phonetic.obj
 
 # --- Targets ------------------------------------------------------
 

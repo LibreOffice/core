@@ -181,8 +181,8 @@
 </FormatElement>
 </LC_FORMAT>
 <LC_COLLATION>
-<Collator unoid="charset" default="true">
-</Collator>
+<Collator unoid="charset" default="true"/>
+<Collator unoid="phonetic" default="false"/>
 <CollationOptions>
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
 </CollationOptions>

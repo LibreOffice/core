@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-20 23:15:34 $
+ *  last change: $Author: khong $ $Date: 2002-05-24 22:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_zhuyin )
 IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_TW_radical )
 IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_TW_stroke )
 IMPL_CREATEINSTANCE( IndexEntrySupplier_ko_dict )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_ja_phonetic )
 IMPL_CREATEINSTANCE( IndexEntrySupplier_alphanumeric )
 IMPL_CREATEINSTANCE( IndexEntrySupplier_nl_alphanumeric )
 IMPL_CREATEINSTANCE( IndexEntrySupplier_da_alphanumeric )
@@ -216,6 +217,7 @@ IMPL_CREATEINSTANCE( Collator_ko_dict )
 IMPL_CREATEINSTANCE( Collator_ko_charset )
 IMPL_CREATEINSTANCE( Collator_zh_charset )
 IMPL_CREATEINSTANCE( Collator_ja_charset )
+IMPL_CREATEINSTANCE( Collator_ja_phonetic )
 IMPL_CREATEINSTANCE( Collator_zh_TW_charset )
 IMPL_CREATEINSTANCE( Collator_de_phonebook )
 
@@ -364,6 +366,9 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.IndexEntrySupplier_ko_charset",
         "com.sun.star.i18n.IndexEntrySupplier_ko_charset",
         &IndexEntrySupplier_ko_dict_CreateInstance },   // share same table with ko_dict
+    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic",
+        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic",
+        &IndexEntrySupplier_ja_phonetic_CreateInstance },
     {   "com.sun.star.i18n.IndexEntrySupplier_da_alphanumeric",
         "com.sun.star.i18n.IndexEntrySupplier_da_alphanumeric",
         &IndexEntrySupplier_da_alphanumeric_CreateInstance },
@@ -469,6 +474,9 @@ static const struct InstancesArray {
         {       "com.sun.star.i18n.Collator_ko_charset",
                 "com.sun.star.i18n.Collator_ko_charset",
                 &Collator_ko_charset_CreateInstance },
+        {       "com.sun.star.i18n.Collator_ja_phonetic",
+                "com.sun.star.i18n.Collator_ja_phonetic",
+                &Collator_ja_phonetic_CreateInstance },
         {       "com.sun.star.i18n.Collator_ja_charset",
                 "com.sun.star.i18n.Collator_ja_charset",
                 &Collator_ja_charset_CreateInstance },
