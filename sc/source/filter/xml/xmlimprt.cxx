@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:29:28 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() t
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new ScXMLImport(IMPORT_ALL);
+    // #110680#
+    // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_ALL);
+    return (cppu::OWeakObject*)new ScXMLImport( rSMgr, IMPORT_ALL );
 }
 
 OUString SAL_CALL ScXMLImport_Meta_getImplementationName() throw()
@@ -227,7 +229,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Meta_getSupportedServiceName
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META);
+    // #110680#
+    // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META);
+    return (cppu::OWeakObject*)new ScXMLImport( rSMgr, IMPORT_META );
 }
 
 OUString SAL_CALL ScXMLImport_Styles_getImplementationName() throw()
@@ -245,7 +249,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Styles_getSupportedServiceNa
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new ScXMLImport(IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES|IMPORT_FONTDECLS);
+    // #110680#
+    // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES|IMPORT_FONTDECLS);
+    return (cppu::OWeakObject*)new ScXMLImport( rSMgr, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES|IMPORT_FONTDECLS);
 }
 
 OUString SAL_CALL ScXMLImport_Content_getImplementationName() throw()
@@ -263,7 +269,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Content_getSupportedServiceN
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS);
+    // #110680#
+    // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS);
+    return (cppu::OWeakObject*)new ScXMLImport( rSMgr, IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS);
 }
 
 OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw()
@@ -281,7 +289,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Settings_getSupportedService
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new ScXMLImport(IMPORT_SETTINGS);
+    // #110680#
+    // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_SETTINGS);
+    return (cppu::OWeakObject*)new ScXMLImport( rSMgr, IMPORT_SETTINGS );
 }
 
 //----------------------------------------------------------------------------
@@ -1412,8 +1422,11 @@ SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
     return pContext;
 }
 
-ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
-    SvXMLImport(nImportFlag),
+// #110680#
+ScXMLImport::ScXMLImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const sal_uInt16 nImportFlag)
+:   SvXMLImport( xServiceFactory, nImportFlag ),
     pDoc( NULL ),
     bLoadDoc( sal_True ),
     nStyleFamilyMask( 0 ),
