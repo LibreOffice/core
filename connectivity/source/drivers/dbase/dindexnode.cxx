@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 13:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
            ,ppNodes(NULL)
            ,m_refCount(0)
 {
-    sal_uInt16 nT=rIndex.getHeader().db_maxkeys;
+    sal_uInt16 nT = rIndex.getHeader().db_maxkeys;
     ppNodes = new ONDXNode[nT];
     aParent = new ONDXPagePtr(pParent);
     aChild = new ONDXPagePtr();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 13:22:34 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 13:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@ ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(_pTable->getConnection()
     , m_pTable(_pTable)
     ,m_pFileStream(NULL)
     ,m_bUnique(sal_False)
+    ,m_nCurNode(NODE_NOTFOUND)
 {
     m_aHeader.db_maxkeys = m_aHeader.db_maxkeys = m_aHeader.db_keylen = m_aHeader.db_pagecount = m_aHeader.db_rootpage = 0;
     m_aHeader.db_name[0] = '\0';
@@ -165,6 +166,7 @@ ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
     , m_pTable(_pTable)
     ,m_pFileStream(NULL)
     ,m_bUnique(sal_False)
+    ,m_nCurNode(NODE_NOTFOUND)
 {
     construct();
 }
@@ -705,8 +707,8 @@ BOOL ODbaseIndex::CreateImpl()
                     throw SQLException(::rtl::OUString::createFromAscii("Can not create index values are not unique!"),*this,SQLSTATE_GENERAL,1000,Any());
                 }
             }
-            ONDXKey aKey(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)), nType, xSet->getRow());
-            ONDXNode aNewNode(aKey);
+            ONDXKey aKey2(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)), nType, xSet->getRow());
+            ONDXNode aNewNode(aKey2);
             if (!m_aCurLeaf->Insert(aNewNode, --nRowsLeft))
                 break;
 
