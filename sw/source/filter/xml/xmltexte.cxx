@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-11 14:45:25 $
+ *  last change: $Author: mib $ $Date: 2001-05-09 12:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <so3/ipobj.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDOBJECTSUPPLIER_HPP_
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+#endif
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include <xmloff/families.hxx>
 #endif
@@ -140,6 +143,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::document;
 
 enum SvEmbeddedObjectTypes
 {
@@ -534,14 +538,15 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     {
     case SV_EMBEDDED_OUTPLACE:
     case SV_EMBEDDED_OWN:
+        if( (rExport.getExportFlags() & EXPORT_EMBEDDED) == 0 )
         {
             OUString sURL( sEmbeddedObjectProtocol );
             sURL += rOLEObj.GetName();
             sURL = GetExport().AddEmbeddedObject( sURL );
             lcl_addURL( rExport, sURL, sal_False );
-            pElementName = SV_EMBEDDED_OUTPLACE==nType ? sXML_object_ole
-                                                       : sXML_object;
         }
+        pElementName = SV_EMBEDDED_OUTPLACE==nType ? sXML_object_ole
+                                                   : sXML_object;
         break;
     case SV_EMBEDDED_APPLET:
         {
@@ -608,6 +613,15 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                                   sal_False, sal_True );
     switch( nType )
     {
+    case SV_EMBEDDED_OWN:
+        if( (rExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
+        {
+            Reference < XEmbeddedObjectSupplier > xEOS( rPropSet, UNO_QUERY );
+            ASSERT( xEOS.is(), "no embedded object supplier for own object" );
+            Reference < XComponent > xComp = xEOS->getEmbeddedObject();
+            rExport.ExportEmbeddedOwnObject( xComp );
+        }
+        break;
     case SV_EMBEDDED_APPLET:
         {
             const SvCommandList& rCommands = xApplet->GetCommandList();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 16:26:26 $
+ *  last change: $Author: mib $ $Date: 2001-05-09 12:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #ifndef _XMLREDLINEIMPORTHELPER_HXX
 #include "XMLRedlineImportHelper.hxx"
 #endif
+#ifndef _XMLOFF_XMLFILTERSERVICENAMES_H
+#include <xmloff/XMLFilterServiceNames.h>
+#endif
 
 #ifndef _SW_APPLET_IMPL_HXX
 #include <SwAppletImpl.hxx>
@@ -147,6 +150,30 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 
 
+struct XMLServiceMapEntry_Impl
+{
+    const sal_Char *sFilterService;
+    sal_Int32      nFilterServiceLen;
+
+    sal_uInt32  n1;
+    sal_uInt16  n2, n3;
+    sal_uInt8   n4, n5, n6, n7, n8, n9, n10, n11;
+};
+
+#define SERVICE_MAP_ENTRY( app, s ) \
+    { XML_IMPORT_FILTER_##app, sizeof(XML_IMPORT_FILTER_##app)-1, \
+      SO3_##s##_CLASSID }
+
+const XMLServiceMapEntry_Impl aServiceMap[] =
+{
+    SERVICE_MAP_ENTRY( WRITER, SW ),
+    SERVICE_MAP_ENTRY( CALC, SC ),
+    SERVICE_MAP_ENTRY( DRAW, SDRAW ),
+    SERVICE_MAP_ENTRY( IMPRESS, SIMPRESS ),
+    SERVICE_MAP_ENTRY( CHART, SCH ),
+    SERVICE_MAP_ENTRY( MATH, SM ),
+    { 0, 0, 0, 0 }
+};
 static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet, sal_Int32 nHeight, sal_Int32 nWidth)
 {
     if( nWidth > 0 && nHeight > 0 )
@@ -219,9 +246,9 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     if( -1 == nPos )
         return xPropSet;
 
-    String aObjName( rHRef.copy( nPos+1) );
+    OUString aObjName( rHRef.copy( nPos+1) );
 
-    if( !aObjName.Len() )
+    if( !aObjName.getLength() )
         return xPropSet;
 
     Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
@@ -236,8 +263,48 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                          RES_FRMATR_END );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
-    SwFrmFmt *pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(),
-                                         aObjName, &aItemSet );
+    SwFrmFmt *pFrmFmt = 0;
+    if( rHRef.copy( 0, nPos ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.ServiceName") ) )
+    {
+        sal_Bool bInsert = sal_False;
+        SvGlobalName aClassName;
+        const XMLServiceMapEntry_Impl *pEntry = aServiceMap;
+        while( pEntry->sFilterService )
+        {
+            if( aObjName.equalsAsciiL( pEntry->sFilterService,
+                                     pEntry->nFilterServiceLen ) )
+            {
+                aClassName = SvGlobalName( pEntry->n1, pEntry->n2,
+                                           pEntry->n3, pEntry->n4,
+                                           pEntry->n5, pEntry->n6,
+                                           pEntry->n7, pEntry->n8,
+                                           pEntry->n9, pEntry->n10,
+                                           pEntry->n11  );
+                bInsert = sal_True;
+                break;
+            }
+            pEntry++;
+        }
+
+        if( bInsert )
+        {
+            SvStorageRef aStor = new SvStorage( aEmptyStr );
+            SvInPlaceObjectRef xIPObj =
+                &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
+                        aClassName, aStor );
+            pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(), xIPObj, &aItemSet );
+        }
+    }
+    else
+    {
+        String aName( aObjName );
+        pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(), aName, &aItemSet );
+        aObjName = aName;
+    }
+
+    if( !pFrmFmt )
+        return xPropSet;
+
     xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
 
     Rectangle aVisArea( 0, 0, nWidth, nHeight );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-04 13:44:09 $
+ *  last change: $Author: mib $ $Date: 2001-05-09 12:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,8 +604,10 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
         pValue[nIndex].Name = sPrinterName;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sPrinterName );
 
+#if SUPD > 630
         pValue[nIndex].Name = sPrinterSetup;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sPrinterSetup );
+#endif
 
         pValue[nIndex].Name = sIsKernAsianPunctuation;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sIsKernAsianPunctuation );

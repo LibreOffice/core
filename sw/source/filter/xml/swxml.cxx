@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-07 06:01:50 $
+ *  last change: $Author: mib $ $Date: 2001-05-09 12:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,7 @@ sal_Int32 ReadThroughComponent(
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
 #endif
+        return ERR_SWG_READ_ERROR;
     }
 
     // success!
