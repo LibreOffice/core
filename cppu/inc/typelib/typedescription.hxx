@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
+ *  last change: $Author: dbo $ $Date: 2002-01-07 09:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,10 +238,11 @@ inline TypeDescription::~TypeDescription() SAL_THROW( () )
 //__________________________________________________________________________________________________
 inline TypeDescription & TypeDescription::operator = ( typelib_TypeDescription * pTypeDescr ) SAL_THROW( () )
 {
+    if (pTypeDescr)
+        typelib_typedescription_acquire( pTypeDescr );
     if (_pTypeDescr)
         typelib_typedescription_release( _pTypeDescr );
-    if (_pTypeDescr = pTypeDescr)
-        typelib_typedescription_acquire( _pTypeDescr );
+    _pTypeDescr = pTypeDescr;
     return *this;
 }
 //__________________________________________________________________________________________________
