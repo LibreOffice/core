@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSettingsExporter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:20:06 $
+ *  last change:$Date: 2003-05-27 14:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ public class XMLSettingsExporter extends TestCase {
     * New text document created.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
         try {
             log.println( "creating an impress document" );
@@ -153,7 +153,7 @@ public class XMLSettingsExporter extends TestCase {
     public synchronized TestEnvironment createTestEnvironment
         (TestParameters tParam, PrintWriter log ) throws StatusException {
 
-        XMultiServiceFactory xMSF = tParam.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
         XInterface oObj = null;
         FilterChecker filter = new FilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
