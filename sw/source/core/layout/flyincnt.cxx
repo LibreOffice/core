@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:12:06 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #endif
 #include "txtfrm.hxx"       //fuer IsLocked()
 #include "flyfrms.hxx"
+// OD 2004-01-19 #110582#
+#ifndef _DFLYOBJ_HXX
+#include <dflyobj.hxx>
+#endif
 
 //aus FlyCnt.cxx
 void DeepCalc( const SwFrm *pFrm );
@@ -334,6 +338,12 @@ void SwFlyInCntFrm::RegistFlys()
 |*************************************************************************/
 void SwFlyInCntFrm::MakeAll()
 {
+    // OD 2004-01-19 #110582#
+    if ( !GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
+    {
+        return;
+    }
+
     if ( !GetAnchor() || IsLocked() || IsColLocked() || !FindPageFrm() )
         return;
 
