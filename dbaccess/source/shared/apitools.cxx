@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-30 11:50:53 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ Any OSubComponent::queryInterface( const Type & rType ) throw(RuntimeException)
 //--------------------------------------------------------------------------
 void OSubComponent::disposing()
 {
+    OComponentHelper::disposing();
     MutexGuard aGuard( rBHelper.rMutex );
     m_xParent = NULL;
 }
