@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excscen.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:53:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 
 
 struct RootData;
+class XclImpRoot;
 class XclImpStream;
 class ScDocument;
 
@@ -109,7 +110,7 @@ protected:
 
     const UINT16                nTab;
 
-    void                        Apply( ScDocument& rDoc, const BOOL bLast = FALSE );
+    void                        Apply( const XclImpRoot& rRoot, const BOOL bLast = FALSE );
 public:
                                 ExcScenario( XclImpStream& rIn, const RootData& rRoot );
     virtual                     ~ExcScenario();
@@ -128,7 +129,7 @@ private:
     inline ExcScenario*         _Prev( void )   { return ( ExcScenario* ) List::Prev(); }
 protected:
 public:
-    inline                      ExcScenarioList( void );
+                                ExcScenarioList( void );
     virtual                     ~ExcScenarioList();
 
     inline void                 Append( ExcScenario* pNew );
@@ -140,7 +141,7 @@ public:
 
     List::Count;
 
-    void                        Apply( ScDocument& rDoc );
+    void                        Apply( const XclImpRoot& rRoot );
 };
 
 
