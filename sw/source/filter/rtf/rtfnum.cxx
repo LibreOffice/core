@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:50:27 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,9 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 }
 
                 ReadAttr( nToken, &aSet );
+
+                //#i24880# Word appears to ignore char background for numbering
+                aSet.ClearItem(RES_CHRATR_BACKGROUND);
 
                 // put all CharFmt Items into the charfmt
                 rCFmtSet.Put( aSet );
