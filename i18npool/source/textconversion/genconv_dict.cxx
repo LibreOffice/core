@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genconv_dict.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:56:53 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sal/main.h>
 #include <sal/types.h>
 #include <tools/string.hxx>
 #include <rtl/strbuf.hxx>
@@ -74,7 +75,7 @@ void make_stc_word(FILE *sfp, FILE *cfp);
 
 /* Main Procedure */
 
-int SAL_CALL main(int argc, char* argv[])
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     FILE *sfp, *cfp;
 
