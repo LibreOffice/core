@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 15:12:12 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,7 +455,7 @@ ModalDialog DLG_QRY_JOIN
     Text[ turkish ] = "Birleюme цzellikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Propietats de la uniу";
-    Text[ finnish ] = "Liitoksen ominaisuudet";
+    Text[ finnish ] = "Yhteyden ominaisuudet";
     Text[ thai ] = "аё„аёёаё“аёЄаёЎаёљаё±аё•аёґаёЃаёІаёЈа№ЂаёЉаё·а№€аё­аёЎаё•а№€аё­";
 };
 
@@ -465,7 +465,7 @@ String STR_QUERY_INNER_JOIN
     Text [ ENGLISH ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
     Text[ english_us ] = "Includes only records for which the contents of the related fields of both tables are identical.";
     Text[ portuguese ] = "Contйm apenas os registos de dados, cujos conteъdos dos campos ligados sejam iguais em ambas as tabelas.";
-    Text[ russian ] = "Содержит только такие записи, при которых содержимое связанных полей обеих таблиц является одинаковым.";
+    Text[ russian ] = "Содержит только записи, в которых содержимое связанных полей обеих таблиц одинаково.";
     Text[ dutch ] = "Bevat alleen records waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
     Text[ french ] = "Contient uniquement les enregistrements pour lesquels les contenus des champs liйs des deux tables sont identiques.";
     Text[ spanish ] = "Contiene sуlo los registros en los que los contenidos de los campos vinculados de ambas tablas sean iguales.";
@@ -485,7 +485,7 @@ String STR_QUERY_INNER_JOIN
     Text[ turkish ] = "Yalnэzca her iki tablodaki iliюkili alan iзeriklerinin aynэ olduрu kayэtlarэ iзerir.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inclou nomйs els registres per als quals el contingut dels camps afins de les dues taules йs idиntic.";
-    Text[ finnish ] = "Sisдltдд vain tietueet, joissa toisiinsa liittyvдt kentдt ovat identtiset molemmissa taulukoissa.";
+    Text[ finnish ] = "Sisдltдд vain tietueet, joissa toisiinsa liittyvдt kentдt ovat identtiset molemmissa tauluissa.";
     Text[ thai ] = "аёЈаё§аёЎаёЈаё°а№Ђаёљаёµаёўаё™а№Ђаё—а№€аёІаё™аё±а№‰аё™аёЄаёіаё«аёЈаё±аёља№Ђаё™аё·а№‰аё­аё«аёІаё‚аё­аё‡а№Ђаё‚аё•аё‚а№‰аё­аёЎаё№аёҐаё—аёµа№€аёЄаё±аёЎаёћаё±аё™аёа№ЊаёЃаё±аё™аё‚аё­аё‡аё—аё±а№‰аё‡аёЄаё­аё‡аё•аёІаёЈаёІаё‡аё—аёµа№€а№Ђаё«аёЎаё·аё­аё™аёЃаё±аё™";
 };
 
@@ -495,7 +495,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text [ ENGLISH ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
     Text[ english_us ] = "Contains ALL records from table '%1' but only records from table '%2' where the values in the related fields are matching.";
     Text[ portuguese ] = "Contйm TODOS os registos de dados de '%1' e somente os registos de dados de '%2', cujos conteъdos dos campos ligados sejam iguais em ambas as tabelas.";
-    Text[ russian ] = "Содержит ВСЕ записи из '%1', а также только такие записи из '%2', при которых содержимое связанных полей обех таблиц является одинаковым.";
+    Text[ russian ] = "Содержит ВСЕ записи из '%1', а также только те записи из '%2', в которых содержимое связанных полей обеих таблиц является одинаковым.";
     Text[ dutch ] = "Bevat ALLE records uit '%1' en alleen de records uit '%2' waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
     Text[ french ] = "Contient TOUS les enregistrements de '%1', et uniquement les enregistrements de '%2' pour lesquels les contenus des champs liйs des deux tables sont identiques.";
     Text[ spanish ] = "Contiene TODOS los registros de la tabla '%1' y sуlo los registros de la tabla '%2' para los que los contenidos de los campos vinculados de las dos tablas son iguales.";
@@ -515,7 +515,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ turkish ] = "'%1' tablosundaki kayэtlarэn TAMAMINI ve '%2' tablosundaki kayэtlardan yalnэzca her iki tablodaki iliюkili alan iзerikleri aynэ olan kayэtlarэ iзerir.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Contй TOTS els registres de dades de '%1' i nomйs els registres de '%2' en els que els continguts dels camps vinculats a totes dues taules sуn iguals.";
-    Text[ finnish ] = "Sisдltдд KAIKKI taulukon '%1' tietueet, mutta vain sellaiset taulukon '%2' tietueet, joissa ensimmдiseen taulukkoon liittyvien kenttien arvot ovat identtiset.";
+    Text[ finnish ] = "Sisдltдд KAIKKI taulun '%1' tietueet, mutta vain sellaiset taulun '%2' tietueet, joissa ensimmдiseen tauluun liittyvien kenttien arvot ovat identtiset.";
     Text[ thai ] = "аёЎаёµаёЈаё°а№Ђаёљаёµаёўаё™аё—аё±а№‰аё‡аё«аёЎаё”аё€аёІаёЃаё•аёІаёЈаёІаё‡ '%1' а№Ѓаё•а№€аёљаёІаё‡аёЈаё°а№Ђаёљаёµаёўаё™а№Ђаё—а№€аёІаё™аё±а№‰аё™аё€аёІаёЃаё•аёІаёЈаёІаё‡ '%2' аё—аёµа№€аё„а№€аёІа№ѓаё™а№Ђаё‚аё•аё‚а№‰аё­аёЎаё№аёҐаё—аёµа№€аёЄаё±аёЎаёћаё±аё™аёа№ЊаёЃаё±аё™аё•аёЈаё‡аёЃаё±аё™";
 };
 
