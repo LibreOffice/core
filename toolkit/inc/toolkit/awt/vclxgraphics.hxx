@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxgraphics.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 09:38:18 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #endif
 
 #include <vcl/font.hxx>
-#include <vcl/color.hxx>
+#include <tools/color.hxx>
 #include <vcl/vclenum.hxx>
 
 class OutputDevice;
