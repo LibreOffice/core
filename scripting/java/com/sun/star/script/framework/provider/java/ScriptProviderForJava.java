@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForJava.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: hr $ $Date: 2004-10-11 13:31:09 $
+*  last change: $Author: rt $ $Date: 2004-10-22 15:07:35 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -96,15 +96,15 @@ import java.net.URL;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 
-import drafts.com.sun.star.script.provider.XScriptContext;
-import drafts.com.sun.star.script.provider.XScriptProvider;
-import drafts.com.sun.star.script.provider.XScript;
-import drafts.com.sun.star.script.browse.XBrowseNode;
-import drafts.com.sun.star.script.browse.BrowseNodeTypes;
-import drafts.com.sun.star.script.provider.ScriptErrorRaisedException;
-import drafts.com.sun.star.script.provider.ScriptExceptionRaisedException;
-import drafts.com.sun.star.script.provider.ScriptFrameworkErrorException;
-import drafts.com.sun.star.script.provider.ScriptFrameworkErrorType;
+import com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScriptProvider;
+import com.sun.star.script.provider.XScript;
+import com.sun.star.script.browse.XBrowseNode;
+import com.sun.star.script.browse.BrowseNodeTypes;
+import com.sun.star.script.provider.ScriptErrorRaisedException;
+import com.sun.star.script.provider.ScriptExceptionRaisedException;
+import com.sun.star.script.provider.ScriptFrameworkErrorException;
+import com.sun.star.script.provider.ScriptFrameworkErrorType;
 
 import com.sun.star.script.framework.container.ScriptMetaData;
 
@@ -186,7 +186,7 @@ public class ScriptProviderForJava
         {
               xSingleServiceFactory = FactoryHelper.getServiceFactory(
                 ScriptProviderForJava._ScriptProviderForJava.class,
-                "drafts.com.sun.star.script.provider.ScriptProviderForJava",
+                "com.sun.star.script.provider.ScriptProviderForJava",
                 multiFactory,
                 regKey );
         }
@@ -209,21 +209,25 @@ public class ScriptProviderForJava
         String impl = "com.sun.star.script.framework.provider.java." +
             "ScriptProviderForJava$_ScriptProviderForJava";
 
-        String service1 = "drafts.com.sun.star.script.provider." +
+        String service1 = "com.sun.star.script.provider." +
             "ScriptProvider";
-        String service2 = "drafts.com.sun.star.script.provider." +
+        String service2 = "com.sun.star.script.provider." +
             "LanguageScriptProvider";
-        String service3 = "drafts.com.sun.star.script.provider." +
+        String service3 = "com.sun.star.script.provider." +
             "ScriptProviderForJava";
+        String service4 = "com.sun.star.script.browse." +
+            "BrowseNode";
 
         if ( FactoryHelper.writeRegistryServiceInfo(impl, service1, regKey) &&
             FactoryHelper.writeRegistryServiceInfo(impl, service2, regKey) &&
-            FactoryHelper.writeRegistryServiceInfo(impl, service3, regKey) )
+            FactoryHelper.writeRegistryServiceInfo(impl, service3, regKey) &&
+            FactoryHelper.writeRegistryServiceInfo(impl, service4, regKey) )
         {
               return true;
         }
         return false;
     }
+
 }
 
 class ScriptImpl implements XScript
