@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ............................................................... -->
-<!-- Locale specification DTD ......................................... -->
+<!-- Locale data specification DTD ................................. -->
 <!-- ............................................................... -->
 
 <!--
+    ===========================================================================
+    ATTENTION! PLEASE! HEADS UP! IMPORTANT!
+    ===========================================================================
+    Please test locale data files in a non-product (!) build, which implements
+    some checks and pops up assertion message boxes if the tests fail, by
+    following this procedure:
+    1. Create a new spreadsheet document.
+    2. On a cell use context menu -> Format Cells -> Numbers.
+    3. Select the locale in the Language list box => MUST be assertion free.
+    3.a. Assertions are only shown at the very first time a number formatter
+         is created, respectively the first time a specific locale data is
+         used.  To repeat steps 1.-3. you'd need to create another spreadsheet
+         document.
 
-PURPOSE:
-      Locale Defn
+    ===========================================================================
+    NOTE the FormatElement comments further down.
+    ===========================================================================
 
 -->
 
@@ -61,6 +75,10 @@ PURPOSE:
     for each usage category defined. Each group, if defined, needs excactly one
     default. The type roughly determines the display string length, for example
     short, medium, and long date formats.
+
+    The number formatter determines an ultimate default format of a specific
+    usage category by looking at the medium, long, and short default formats,
+    in that very particular order.
 -->
 <!ATTLIST FormatElement    usage    CDATA #REQUIRED >
 <!--
@@ -77,6 +95,20 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
         offapi/com/sun/star/i18n/NumberFormatIndex.idl.
         Note that 48 and 49 are used internally and must not be used in locale
         data XML files. All other formats have to be present.
+        Note also that "must be used as stated" does not mean that the format
+        codes must be identical, of course the meaning of a format code should
+        match, for example en_US MM/DD/YY matches de_DE DD.MM.YY
+        Just imagine the same index being used with another locale shouldn't
+        change the meaning of representation significantly.
+
+        You'll notice differences of non-matching format codes only if
+        documents use the Default language in number formats and either are
+        stored in old SO5 binary file format and loaded on another system where
+        languages/locales aren't the same, or if the default locale is switched
+        under menu Tools.Options.LanguageSettings.Languages.LocaleSetting
+        dialog, which exchanges formats on the fly in the spreadsheet
+        application. Please check it out! So far _no_ locale data file we
+        received got that right, especially not in date formats!
 
     Of usage="DATE":
         formatindex="21" is used to edit already existing date data. In order
@@ -88,14 +120,29 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
         TODO: Future versions should make use of an edit="true" attribute
         instead of relying on this special requirement.
 
+        Formatindices 32 and 33 are always used for ISO 8601 YY-MM-DD
+        respectively YYYY-MM-DD format codes.
+
     Of usage="DATE_TIME":
         formatindex="47" is used to edit already existing combined date/time
         data. The requirements are the same as for formatindex="21" above.
 
+    Of usage="TIME":
+        formatindices 43, 44, 45 are special in the sense that they are
+        programmatically used to automatically display values that meet certain
+        criteria:
+        Formatindex="43" contains the [HH] format code that displays hour
+        values greater than or equal to 24 (as opposed to a simple HH that
+        displays modulo 24).
+        Formatindex="44" uses no hour code but 100th seconds and the
+        Time100SecSeparator.
+        Formatindex="45" uses both [HH] hour code and 100th seconds to be able
+        to edit such time values without loosing information.
+
     Of usage="CURRENCY":
         formatindices 12, 13, 14, 15, 17 with [$xxx-yyy] notation must use the
         xxx currency symbol that has the attribute
-        usedInCompatibleFormatCodes="true".  The hexadecimal yyy LCID must be
+        usedInCompatibleFormatCodes="true".  The hexadecimal yyy LANGID must be
         properly set. It can be found in project util module tools file
         tools/inc/lang.hxx.  You may verify the proper use of the xxx currency
         symbol with the AWK script
