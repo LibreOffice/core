@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
+ *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,14 @@ public:
         and its memory freed. After this has been called, the any does not contain a value.
     */
     inline void SAL_CALL clear() SAL_THROW( () );
+
+    /** Tests whether this any is extractable to a value of given type.
+        Widening conversion without data loss is taken into account.
+
+        @param rType destination type
+        @return true if this any is extractable to value of given type (e.g. using >>= operator)
+    */
+    inline sal_Bool SAL_CALL isExtractableTo( const Type & rType ) const SAL_THROW( () );
 
     /** Equality operator: compares two anys.
         The values need not be of equal type, e.g. a short integer is compared to a long integer.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
+ *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,9 +219,10 @@ void SAL_CALL uno_type_constructData(
     void * pMem, struct _typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
 
-/** Assigns a destination value with a source value. Widening conversion WITHOUT data loss is
-    allowed (e.g., assigning a long with a short). Assignment from any value to a value of type
-    Any and vice versa is allowed.
+/** Assigns a destination value with a source value.
+    Widening conversion WITHOUT data loss is allowed (e.g., assigning a long with a short).
+    Querying for demanded interface type is allowed.
+    Assignment from any value to a value of type Any and vice versa is allowed.
 
     @param pDest            pointer to destination value
     @param pDestTypeDescr   type description of destination value
@@ -241,9 +242,10 @@ sal_Bool SAL_CALL uno_assignData(
     void * pSource, struct _typelib_TypeDescription * pSourceTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
-/** Assigns a destination value with a source value. Widening conversion WITHOUT data loss is
-    allowed (e.g., assigning a long with a short). Assignment from any value to a value of type
-    Any and vice versa is allowed.
+/** Assigns a destination value with a source value.
+    Widening conversion WITHOUT data loss is allowed (e.g., assigning a long with a short).
+    Querying for demanded interface type is allowed.
+    Assignment from any value to a value of type Any and vice versa is allowed.
 
     @param pDest            pointer to destination value
     @param pDestType        type of destination value
@@ -262,6 +264,26 @@ sal_Bool SAL_CALL uno_type_assignData(
     void * pDest, struct _typelib_TypeDescriptionReference * pDestType,
     void * pSource, struct _typelib_TypeDescriptionReference * pSourceType,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
+    SAL_THROW_EXTERN_C();
+
+/** Tests whether a value of given type is assignable from given value.
+    Widening conversion WITHOUT data loss is allowed (e.g., assigning a long with a short).
+    Querying for demanded interface type is allowed.
+    Assignment from any value to a value of type Any and vice versa is allowed.
+
+    @param pAssignable      type
+    @param pFrom            pointer to value
+    @param pFromType        type of value
+    @param queryInterface   function called each time an interface needs to be queried;
+                            defaults (0) to uno
+    @param release          function called each time an interface needs to be released;
+                            defaults (0) to uno
+    @return true if value is destination has been successfully assigned
+*/
+sal_Bool SAL_CALL uno_type_isAssignableFromData(
+    struct _typelib_TypeDescriptionReference * pAssignable,
+    void * pFrom, struct _typelib_TypeDescriptionReference * pFromType,
+    uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus

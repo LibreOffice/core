@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-17 13:02:12 $
+ *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,8 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     a3.td.dDouble = 2;
     a3.bBool = sal_True;
     a3.aAny = makeAny( (sal_Int32)2 );
+    OSL_ASSERT( a3.aAny.isExtractableTo( ::getCppuType( (sal_Int64 const *)0 ) ) );
+    OSL_ASSERT( ::getCppuType( (sal_Int64 const *)0 ).isAssignableFrom( a3.aAny.getValueType() ) );
     bAssignable = uno_type_assignData(
         &sz3, getCppuType( (Test3*)0).getTypeLibType(),
         &a3, getCppuType( (Test3*)0).getTypeLibType(),
@@ -1129,10 +1131,13 @@ int SAL_CALL main(int argc, char **argv)
     test_interface();
     test_inheritance();
 
-      // shutdown
 #ifdef SAL_W32
-    Reference< XComponent > xComp( xContext, UNO_QUERY );
-    OSL_ENSURE( xComp.is(), "### root component context implement XComponent!" );
+      // shutdown
+    Reference< XComponent > xComp( xContext, UNO_QUERY_THROW );
+    xComp.set( xContext, UNO_QUERY_THROW );
+    Reference< XInterface > x(
+        xContext->getValueByName(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) ), UNO_QUERY_THROW );
     xComp->dispose();
 #endif
     }

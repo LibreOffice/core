@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2002-08-19 07:18:50 $
+#   last change: $Author: dbo $ $Date: 2002-08-19 07:18:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,44 +59,24 @@
 #
 #
 #*************************************************************************
-PRJ=..
+PRJ=..$/..
 
 PRJNAME=cppu
-TARGET=cppu
-USE_DEFFILE=TRUE
-ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
-
-UNIXVERSIONNAMES=UDK
+TARGET=cppu_cppu
 
 # --- Settings -----------------------------------------------------
 
+.INCLUDE :  ..$/..$/util$/makefile.pmk
+.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
+.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
-SHL1LIBS= \
-    $(SLB)$/cppu_typelib.lib	\
-    $(SLB)$/cppu_uno.lib		\
-    $(SLB)$/cppu_threadpool.lib	\
-    $(SLB)$/cppu_cppu.lib
-
-SHL1TARGET=$(TARGET)
-
-SHL1STDLIBS= \
-    $(SALLIB)
-
-SHL1DEPN=
-SHL1IMPLIB=i$(TARGET)
-.IF "$(OS)"!="FREEBSD"
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-.ENDIF
-
-SHL1VERSIONMAP=$(TARGET).map
-
-DEF1NAME=$(SHL1TARGET)
+SLOFILES= \
+    $(SLO)$/cppu_opt.obj
 
 # --- Targets ------------------------------------------------------
 
+.INCLUDE :      ..$/..$/util$/target.pmk
 .INCLUDE :	target.mk
-

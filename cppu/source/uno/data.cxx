@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-19 13:25:14 $
+ *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,64 @@ sal_Bool SAL_CALL uno_assignData(
         pDest, pDestTD->pWeakRef, pDestTD,
         pSource, pSourceTD->pWeakRef, pSourceTD,
         queryInterface, acquire, release );
+}
+//##################################################################################################
+sal_Bool SAL_CALL uno_type_isAssignableFromData(
+    typelib_TypeDescriptionReference * pAssignable,
+    void * pFrom, typelib_TypeDescriptionReference * pFromType,
+    uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
+    SAL_THROW_EXTERN_C()
+{
+    if (::typelib_typedescriptionreference_isAssignableFrom( pAssignable, pFromType ))
+        return sal_True;
+    if (typelib_TypeClass_INTERFACE != pFromType->eTypeClass ||
+        typelib_TypeClass_INTERFACE != pAssignable->eTypeClass)
+    {
+        return sal_False;
+    }
+
+    // query
+    if (!pFrom)
+        return sal_False;
+    void * pInterface = *(void **)pFrom;
+    if (! pInterface)
+        return sal_False;
+
+    if (queryInterface)
+    {
+        void * p = (*queryInterface)( pInterface, pAssignable );
+        if (p)
+        {
+            (*release)( p );
+        }
+        return (0 != p);
+    }
+    else /* bin UNO */
+    {
+        uno_Any aRet, aExc;
+        uno_Any * pExc = &aExc;
+
+        void * aArgs[1];
+        aArgs[0] = &pAssignable;
+
+        typelib_TypeDescription * pMTqueryInterface = __getQueryInterfaceTypeDescr();
+        (*((uno_Interface *)pInterface)->pDispatcher)(
+            (uno_Interface *)pInterface, pMTqueryInterface, &aRet, aArgs, &pExc );
+        ::typelib_typedescription_release( pMTqueryInterface );
+
+        OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
+        if (pExc)
+        {
+            __destructAny( pExc, 0 );
+            return sal_False;
+        }
+        else
+        {
+            sal_Bool ret = (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass);
+            __destructAny( &aRet, 0 );
+            return ret;
+        }
+    }
 }
 }
 

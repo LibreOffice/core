@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2002-04-24 13:43:27 $
+ *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
 
@@ -652,6 +653,16 @@ static void checkInvalidInterfaceQuery(
     }
     catch (RuntimeException &)
     {
+    }
+    try
+    {
+        Reference< lang::XComponent > xComp( xObj, UNO_QUERY_THROW );
+        OSL_ASSERT( 0 );
+    }
+    catch (RuntimeException & exc)
+    {
+//         OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+//         OSL_TRACE( str.getStr() );
     }
 }
 

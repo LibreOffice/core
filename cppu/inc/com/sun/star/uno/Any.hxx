@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-17 12:49:34 $
+ *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,13 @@ inline void Any::clear() SAL_THROW( () )
 {
     ::uno_any_clear(
         this, (uno_ReleaseFunc)cpp_release );
+}
+//__________________________________________________________________________________________________
+inline sal_Bool Any::isExtractableTo( const Type & rType ) const SAL_THROW( () )
+{
+    return ::uno_type_isAssignableFromData(
+        rType.getTypeLibType(), pData, pType,
+        (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_ReleaseFunc)cpp_release );
 }
 //__________________________________________________________________________________________________
 inline sal_Bool Any::operator == ( const Any & rAny ) const SAL_THROW( () )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-20 11:04:52 $
+ *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,17 @@ public:
     */
     inline typelib_TypeDescriptionReference * SAL_CALL getTypeLibType() const SAL_THROW( () )
         { return _pType; }
+
+    /** Tests if values of this reflected type can be assigned by values of given type.
+        This includes widening conversion (e.g., long assignable from short), as long as there
+        is no data loss.
+
+        @param rType another type
+        @return true if values of this type can be assigned from values of given type,
+                false otherwise
+    */
+    inline sal_Bool SAL_CALL isAssignableFrom( const Type & rType ) const SAL_THROW( () )
+        { return ::typelib_typedescriptionreference_isAssignableFrom( _pType, rType._pType ); }
 
     /** Compares two types.
 

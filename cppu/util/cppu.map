@@ -47,6 +47,7 @@ UDK_3_0_0 {
         uno_type_copyAndConvertData;
         uno_assignData;
         uno_type_assignData;
+        uno_type_isAssignableFromData;
 
         uno_any_assign;
         uno_type_any_assign;
@@ -91,6 +92,8 @@ UDK_3_0_0 {
         uno_threadpool_dispose;
         uno_threadpool_attach;
         uno_threadpool_detach;
+
+        __cppu_unsatisfied_query_msg;
     local:
         *;
 };
