@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:24:25 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,8 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टेक्स्ट्";
         Text[ slovak ] = "Text";
+        Text[ hungarian ] = "Szöveg";
+        Text[ slovenian ] = "Besedilo";
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
@@ -148,6 +150,8 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ hebrew ] = "~Breite an Text anpassen";
         Text[ hindi ] = "टेक्स्ट् केलिए योग्य चौ~डाई";
         Text[ slovak ] = "Prispôsobiť ší~rku na text";
+        Text[ hungarian ] = "~Szélesség igazítása a szöveghez";
+        Text[ slovenian ] = "Prilagodi ši~rino besedilu";
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
@@ -182,6 +186,8 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ hebrew ] = "~Höhe an Text anpassen";
         Text[ hindi ] = "टेक्स्ट् केलिए योग्य ऊँ~चाई";
         Text[ slovak ] = "Prispôsobiť ~výšku na text";
+        Text[ hungarian ] = "M~agasság igazítása a szöveghez";
+        Text[ slovenian ] = "Prilagodi vi~šino besedilu";
     };
     TriStateBox TSB_FIT_TO_SIZE
     {
@@ -216,6 +222,8 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ hebrew ] = "Am Rahmen ~anpassen";
         Text[ hindi ] = "फ़्रेम केलिए ~योग्य";
         Text[ slovak ] = "Prispôsobiť do ~rámca";
+        Text[ hungarian ] = "~Igazítás a kerethez";
+        Text[ slovenian ] = "~Prilagodi okviru";
     };
     TriStateBox TSB_CONTOUR
     {
@@ -228,7 +236,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ english_us ] = "~Adjust to contour" ;
         Text [ portuguese_brazilian ] = "Ajustar ao ~contorno" ;
         Text [ swedish ] = "~Konturfl�de" ;
-        Text [ danish ] = "Konturforl�b" ;
+        Text [ danish ] = "~Konturforl�b" ;
         Text [ italian ] = "Flusso di contorno" ;
         Text [ spanish ] = "Ajustar al ~contorno" ;
         Text [ french ] = "Adapter au ~contour" ;
@@ -250,6 +258,8 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ hebrew ] = "~Konturfluss";
         Text[ hindi ] = "परिवेश केलिए ~ठीक करो";
         Text[ slovak ] = "Prispôsobiť na ~krivku";
+        Text[ hungarian ] = "~Igazítás a körvonalhoz";
+        Text[ slovenian ] = "~Prilagodi obrisu";
     };
     FixedLine FL_DISTANCE
     {
@@ -263,7 +273,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ french ] = "�cart du cadre" ;
         Text [ dutch ] = "Afstand tot kader" ;
         Text [ swedish ] = "Avst�nd till ram" ;
-        Text [ danish ] = "Afstand fra ramme" ;
+        Text [ danish ] = "Afstand til kanter" ;
         Text [ portuguese_brazilian ] = "Afastamento at� as bordas" ;
         Text [ portuguese ] = "Espa�o at� moldura" ;
         Text[ chinese_simplified ] = "至边框的距离";
@@ -283,6 +293,8 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ hebrew ] = "Abstand vom Rahmen";
         Text[ hindi ] = "किनारों के बीच अंतर देना";
         Text[ slovak ] = "Vzdialenosť od okrajov";
+        Text[ hungarian ] = "Távolság a szegélyektől";
+        Text[ slovenian ] = "Razmik do obrob";
     };
     FixedText FT_LEFT
     {
@@ -296,7 +308,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ french ] = "� gauche" ;
         Text [ dutch ] = "~Links" ;
         Text [ swedish ] = "~V�nster" ;
-        Text [ danish ] = "Venstre" ;
+        Text [ danish ] = "~Venstre" ;
         Text [ portuguese_brazilian ] = "~Esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
         Text[ chinese_simplified ] = "左(~L)";
@@ -316,6 +328,8 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ hebrew ] = "~Links";
         Text[ hindi ] = "~बायाँ";
         Text[ slovak ] = "Vľ~avo";
+        Text[ hungarian ] = "~Bal";
+        Text[ slovenian ] = "~Levo";
     };
     FixedText FT_RIGHT
     {
@@ -329,7 +343,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ french ] = "� droite" ;
         Text [ dutch ] = "~Rechts" ;
         Text [ swedish ] = "H�g~er" ;
-        Text [ danish ] = "H�jre" ;
+        Text [ danish ] = "~H�jre" ;
         Text [ portuguese_brazilian ] = "~Direita" ;
         Text [ portuguese ] = "~Direita" ;
         Text[ chinese_simplified ] = "右(~R)";
@@ -349,6 +363,8 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ hebrew ] = "~Rechts";
         Text[ hindi ] = "~दाहिना";
         Text[ slovak ] = "Vp~ravo";
+        Text[ hungarian ] = "~Jobb";
+        Text[ slovenian ] = "~Desno";
     };
     FixedText FT_TOP
     {
@@ -362,7 +378,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ french ] = "En haut" ;
         Text [ dutch ] = "~Boven" ;
         Text [ swedish ] = "~�verkant" ;
-        Text [ danish ] = "Top" ;
+        Text [ danish ] = "~Top" ;
         Text [ portuguese_brazilian ] = "~Superior" ;
         Text [ portuguese ] = "~Superior" ;
         Text[ chinese_simplified ] = "上(~T)";
@@ -382,6 +398,8 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ hebrew ] = "~Oben";
         Text[ hindi ] = "~ऊपर";
         Text[ slovak ] = "~Hore";
+        Text[ hungarian ] = "~Felül";
+        Text[ slovenian ] = "~Zgoraj";
     };
     FixedText FT_BOTTOM
     {
@@ -395,7 +413,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ french ] = "En bas" ;
         Text [ dutch ] = "~Onder" ;
         Text [ swedish ] = "~Underkant" ;
-        Text [ danish ] = "Bund" ;
+        Text [ danish ] = "~Bund" ;
         Text [ portuguese_brazilian ] = "~Inferior" ;
         Text [ portuguese ] = "~Inferior" ;
         Text[ chinese_simplified ] = "下(~B)";
@@ -415,6 +433,8 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ hebrew ] = "~Unten";
         Text[ hindi ] = "~नीचे";
         Text[ slovak ] = "~Dole";
+        Text[ hungarian ] = "A~lul";
+        Text[ slovenian ] = "~Spodaj";
     };
     MetricField MTR_FLD_LEFT
     {
@@ -518,6 +538,8 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ hebrew ] = "Textverankerung";
         Text[ hindi ] = "टेक्स्ट् ऐन्कर";
         Text[ slovak ] = "Ukotvenie textu";
+        Text[ hungarian ] = "Szöveghorgonypont";
+        Text[ slovenian ] = "Sidro besedila";
     };
     Control CTL_POSITION
     {
@@ -560,6 +582,8 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ hebrew ] = "‮רוחב מלא‬";
         Text[ hindi ] = "सम्पूर्ण ~चौडाई";
         Text[ slovak ] = "Plná ší~rka";
+        Text[ hungarian ] = "Teljes ~szélesség";
+        Text[ slovenian ] = "Polna ~širina";
     };
     Text[ chinese_simplified ] = "文字";
     Text[ russian ] = "�����";
@@ -578,8 +602,11 @@ TabPage RID_SVXPAGE_TEXTATTR
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
     Text[ slovak ] = "Text";
+    Text[ hungarian ] = "Szöveg";
+    Text[ slovenian ] = "Besedilo";
 };
  // ********************************************************************** EOF
+
 
 
 
