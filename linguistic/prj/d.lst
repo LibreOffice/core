@@ -1,5 +1,8 @@
 ..\%__SRC%\bin\lng* %_DEST%\bin%_EXT%\lng*
 ..\%__SRC%\lib\ilng* %_DEST%\lib%_EXT%\ilng*
+..\%__SRC%\lib\liblng.a %_DEST%\lib%_EXT%\liblng.a
+..\%__SRC%\lib\liblng*.so %_DEST%\lib%_EXT%\liblng*.so
+
 mkdir: %_DEST%\inc%_EXT%\linguistic
 hedabu: ..\inc\lngprops.hxx %_DEST%\inc%_EXT%\linguistic\lngprops.hxx
 hedabu: ..\inc\misc.hxx %_DEST%\inc%_EXT%\linguistic\misc.hxx
