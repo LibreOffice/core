@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 14:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,7 +705,7 @@ void SAL_CALL typelib_typedescription_revokeCallback(
     { \
         typelib_typedescriptionreference_getDescription( __ppMacroTypeDescr, __pMacroTypeRef ); \
     } \
-    else if (! __pMacroTypeRef->pType->pWeakRef) \
+    else if (!__pMacroTypeRef->pType || !__pMacroTypeRef->pType->pWeakRef) \
     { \
         typelib_typedescriptionreference_getDescription( __ppMacroTypeDescr, __pMacroTypeRef ); \
         if (*__ppMacroTypeDescr) \
