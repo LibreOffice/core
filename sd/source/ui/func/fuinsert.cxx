@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:02:36 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <sfx2/request.hxx>
 #include <so3/outplace.hxx>
 #include <svtools/globalnameitem.hxx>
+#include <svtools/pathoptions.hxx>
 #include <so3/plugin.hxx>
 #include <so3/pastedlg.hxx>
 #include <svx/pfiledlg.hxx>
@@ -77,6 +78,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/linkmgr.hxx>
 #include <svx/svdetc.hxx>
+#include <avmedia/mediawindow.hxx>
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
@@ -106,6 +108,9 @@
 #endif
 #ifndef _SVDOOLE2_HXX //autogen
 #include <svx/svdoole2.hxx>
+#endif
+#ifndef _SVDOMEDIA_HXX //autogen
+#include <svx/svdomedia.hxx>
 #endif
 #ifndef _EDITENG_HXX //autogen
 #include <svx/editeng.hxx>
@@ -174,6 +179,7 @@ SO2_DECL_REF(SvStorage)
 TYPEINIT1( FuInsertGraphic, FuPoor );
 TYPEINIT1( FuInsertClipboard, FuPoor );
 TYPEINIT1( FuInsertOLE, FuPoor );
+TYPEINIT1( FuInsertAVMedia, FuPoor );
 
 /*************************************************************************
 |*
@@ -735,5 +741,91 @@ FuInsertOLE::FuInsertOLE (
 FuInsertOLE::~FuInsertOLE()
 {
 }
+
+/*************************************************************************
+|*
+|* FuInsertAVMedia::Konstruktor
+|*
+\************************************************************************/
+
+FuInsertAVMedia::FuInsertAVMedia(
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+{
+    ::rtl::OUString     aURL;
+    const SfxItemSet*   pReqArgs = rReq.GetArgs();
+    bool                bAPI = false;
+
+    if( pReqArgs )
+    {
+        const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, &pReqArgs->Get( rReq.GetSlot() ) );
+
+        if( pStringItem )
+        {
+            aURL = pStringItem->GetValue();
+            bAPI = aURL.getLength();
+        }
+    }
+
+    if( bAPI || ::avmedia::MediaWindow::executeMediaURLDialog( pWindow, aURL ) )
+    {
+        Size aPrefSize;
+
+        if( pWin )
+            pWin->EnterWait();
+
+        if( !::avmedia::MediaWindow::isMediaURL( aURL, true, &aPrefSize ) )
+        {
+            if( pWin )
+                pWin->LeaveWait();
+
+            if( !bAPI )
+                ::avmedia::MediaWindow::executeFormatErrorBox( pWindow );
+        }
+        else
+        {
+            Point       aPos;
+            Size        aSize;
+            sal_Int8    nAction = DND_ACTION_COPY;
+
+            if( aPrefSize.Width() && aPrefSize.Height() )
+            {
+                if( pWin )
+                    aSize = pWin->PixelToLogic( aPrefSize, MAP_100TH_MM );
+                else
+                    aSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_100TH_MM );
+            }
+            else
+                aSize = Size( 5000, 5000 );
+
+            if( pWin )
+            {
+                aPos = pWindow->PixelToLogic( Rectangle( aPos, pWin->GetOutputSizePixel() ).Center() );
+                aPos.X() -= aSize.Width() >> 1;
+                aPos.Y() -= aSize.Height() >> 1;
+            }
+
+            pView->InsertMediaURL( aURL, nAction, aPos, aSize ) ;
+
+            if( pWin )
+                pWin->LeaveWait();
+        }
+    }
+}
+
+/*************************************************************************
+|*
+|* FuInsertClipboard::Destruktor
+|*
+\************************************************************************/
+
+FuInsertAVMedia::~FuInsertAVMedia()
+{
+}
+
 
 } // end of namespace sd
