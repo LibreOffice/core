@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-30 12:50:08 $
+ *  last change: $Author: fme $ $Date: 2002-09-12 11:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1220,11 +1220,11 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 
 sal_Bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
 {
-    if ( RES_VIRTPAGENUM_INFO == rHnt.Which() && IsInDocBody() )
+    if ( RES_VIRTPAGENUM_INFO == rHnt.Which() && IsInDocBody() && ! IsFollow() )
     {
         SwVirtPageNumInfo &rInfo = (SwVirtPageNumInfo&)rHnt;
         const SwPageFrm *pPage = FindPageFrm();
-        if ( pPage  )
+        if ( pPage )
         {
             if ( pPage == rInfo.GetOrigPage() && !GetPrev() )
             {
