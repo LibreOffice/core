@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-14 00:34:47 $
+ *  last change: $Author: bmahbod $ $Date: 2000-11-15 04:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,8 @@ void SalFrame::Show( BOOL bVisible )
     VCLVIEW hView = VCLWindow_contentView( maFrameData.mhWnd );
 
     // Draw a line on the native content view
-    VCLGraphics_drawLine( hView, 0L, 0L, 1000L, 1000L );
+
+    VCLGraphics_drawRect ( hView, 75L, 75L, 150L, 150L );
 }
 
 // -----------------------------------------------------------------------
