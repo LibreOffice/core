@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:37:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,14 +166,14 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
 #include <com/sun/star/document/XEventBroadcaster.hpp>
@@ -187,7 +187,7 @@
 #endif
 
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::document;
 using namespace ::rtl;
@@ -617,8 +617,8 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
             if( rEvent.IsInvalidateRelation() )
                 xAccImpl->InvalidateRelation(
                     (rEvent.GetAllStates() & ACC_STATE_RELATION_FROM) != 0 ?
-                    AccessibleEventId::CONTENT_FLOWS_FROM_EVENT :
-                    AccessibleEventId::CONTENT_FLOWS_TO_EVENT );
+                    AccessibleEventId::CONTENT_FLOWS_FROM_RELATION_CHANGED :
+                    AccessibleEventId::CONTENT_FLOWS_TO_RELATION_CHANGED );
         }
     }
 }
@@ -846,7 +846,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
                 if( xParentAccImpl.isValid() )
                 {
                     AccessibleEventObject aEvent;
-                    aEvent.EventId = AccessibleEventId::ACCESSIBLE_SELECTION_EVENT;
+                    aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
                     xParentAccImpl->FireAccessibleEvent( aEvent );
                 }
 
@@ -1826,8 +1826,8 @@ void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
             {
                 FireEvents();
                 pAccImpl->InvalidateRelation( bFrom ?
-                    AccessibleEventId::CONTENT_FLOWS_FROM_EVENT :
-                    AccessibleEventId::CONTENT_FLOWS_TO_EVENT );
+                    AccessibleEventId::CONTENT_FLOWS_FROM_RELATION_CHANGED :
+                    AccessibleEventId::CONTENT_FLOWS_TO_RELATION_CHANGED );
             }
         }
     }
