@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impltools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 11:59:36 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,13 @@ namespace vclcanvas
                                  const ::com::sun::star::rendering::RenderState&    renderState,
                                  ::OutputDevice&                                            rOutDev );
 
+        /** Predicate, to determine whether polygon is equal to given rectangle
+
+            @return true, if the polygon exactly describes the given rectangle
+         */
+        bool isPolyPolygonEqualRectangle( const PolyPolygon& rPolyPoly,
+                                          const Rectangle&   rRect );
+
 
         // Little helper to encapsulate locking into policy class
         class LocalGuard
@@ -243,10 +250,10 @@ namespace vclcanvas
             MODULATE_WITH_DEVICECOLOR
         };
 
-        ::BitmapEx transformBitmap( const BitmapEx&                                         rBitmap,
-                                    const ::com::sun::star::rendering::ViewState&   rViewState,
-                                    const ::com::sun::star::rendering::RenderState& rRenderState,
-                                    ModulationMode                                          eModulationMode=MODULATE_NONE );
+        ::BitmapEx transformBitmap( const BitmapEx&                                     rBitmap,
+                                    const ::basegfx::B2DHomMatrix&                      rTransform,
+                                    const ::com::sun::star::uno::Sequence< double >&    rDeviceColor,
+                                    ModulationMode                                      eModulationMode );
 
     }
 }
