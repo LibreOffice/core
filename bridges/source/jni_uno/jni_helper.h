@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_helper.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:06:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #if ! defined INCLUDED_JNI_HELPER_H
 #define INCLUDED_JNI_HELPER_H
 
@@ -68,8 +69,9 @@
 namespace jni_uno
 {
 
-//--------------------------------------------------------------------------------------------------
-inline void jstring_to_ustring( JNI_context const & jni, rtl_uString ** out_ustr, jstring jstr )
+//------------------------------------------------------------------------------
+inline void jstring_to_ustring(
+    JNI_context const & jni, rtl_uString ** out_ustr, jstring jstr )
 {
     if (0 == jstr)
     {
@@ -79,9 +81,10 @@ inline void jstring_to_ustring( JNI_context const & jni, rtl_uString ** out_ustr
     {
         jsize len = jni->GetStringLength( jstr );
         ::std::auto_ptr< rtl_mem > mem(
-            rtl_mem::allocate( sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
+            rtl_mem::allocate(
+                sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
         rtl_uString * ustr = (rtl_uString *)mem.get();
-        jni->GetStringRegion( jstr, 0, len, (jchar *)ustr->buffer );
+        jni->GetStringRegion( jstr, 0, len, (jchar *) ustr->buffer );
         jni.ensure_no_exception();
         ustr->refCount = 1;
         ustr->length = len;
@@ -92,24 +95,27 @@ inline void jstring_to_ustring( JNI_context const & jni, rtl_uString ** out_ustr
         *out_ustr = ustr;
     }
 }
-//--------------------------------------------------------------------------------------------------
-inline ::rtl::OUString jstring_to_oustring( JNI_context const & jni, jstring jstr )
+
+//------------------------------------------------------------------------------
+inline ::rtl::OUString jstring_to_oustring(
+    JNI_context const & jni, jstring jstr )
 {
     rtl_uString * ustr = 0;
     jstring_to_ustring( jni, &ustr, jstr );
     return ::rtl::OUString( ustr, SAL_NO_ACQUIRE );
 }
-//--------------------------------------------------------------------------------------------------
-inline jstring ustring_to_jstring( JNI_context const & jni, rtl_uString const * ustr )
+
+//------------------------------------------------------------------------------
+inline jstring ustring_to_jstring(
+    JNI_context const & jni, rtl_uString const * ustr )
 {
-    jstring jstr = jni->NewString( (jchar const *)ustr->buffer, ustr->length );
+    jstring jstr = jni->NewString( (jchar const *) ustr->buffer, ustr->length );
     jni.ensure_no_exception();
     return jstr;
 }
 
-//##################################################################################################
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 inline jclass find_class( JNI_context const & jni, char const * class_name )
 {
     jclass jo_class = jni->FindClass( class_name );
@@ -117,20 +123,20 @@ inline jclass find_class( JNI_context const & jni, char const * class_name )
     return jo_class;
 }
 
-//##################################################################################################
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 inline jobject create_type( JNI_context const & jni, jclass clazz )
 {
     JNI_info const * jni_info = jni.get_info();
     jvalue arg;
     arg.l = clazz;
-    jobject jo_type =
-        jni->NewObjectA( jni_info->m_class_Type, jni_info->m_ctor_Type_with_Class, &arg );
+    jobject jo_type = jni->NewObjectA(
+        jni_info->m_class_Type, jni_info->m_ctor_Type_with_Class, &arg );
     jni.ensure_no_exception();
     return jo_type;
 }
-//--------------------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
 inline jobject create_type(
     JNI_context const & jni, typelib_TypeDescriptionReference * type )
 {
@@ -140,26 +146,30 @@ inline jobject create_type(
     args[ 0 ].i = type->eTypeClass;
     JLocalAutoRef jo_type_class(
         jni, jni->CallStaticObjectMethodA(
-            jni_info->m_class_TypeClass, jni_info->m_method_TypeClass_fromInt, args ) );
+            jni_info->m_class_TypeClass,
+            jni_info->m_method_TypeClass_fromInt, args ) );
     jni.ensure_no_exception();
     // construct type
-    JLocalAutoRef jo_type_name( jni, ustring_to_jstring( jni, type->pTypeName ) );
+    JLocalAutoRef jo_type_name(
+        jni, ustring_to_jstring( jni, type->pTypeName ) );
     args[ 0 ].l = jo_type_name.get();
     args[ 1 ].l = jo_type_class.get();
     jobject jo_type = jni->NewObjectA(
-        jni_info->m_class_Type, jni_info->m_ctor_Type_with_Name_TypeClass, args );
+        jni_info->m_class_Type,
+        jni_info->m_ctor_Type_with_Name_TypeClass, args );
     jni.ensure_no_exception();
     return jo_type;
 }
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 inline jobject compute_oid( JNI_context const & jni, jobject jo )
 {
     JNI_info const * jni_info = jni.get_info();
     jvalue arg;
     arg.l= jo;
     jobject jo_oid = jni->CallStaticObjectMethodA(
-        jni_info->m_class_UnoRuntime, jni_info->m_method_UnoRuntime_generateOid, &arg );
+        jni_info->m_class_UnoRuntime,
+        jni_info->m_method_UnoRuntime_generateOid, &arg );
     jni.ensure_no_exception();
     return jo_oid;
 }
