@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *  last change: $Author: ka $ $Date: 2000-12-07 08:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,10 +206,10 @@ ImpTwain::ImpTwain( ScannerManager* pMgr, const Link& rNotifyLink ) :
     aAppIdent.ProtocolMajor = TWON_PROTOCOLMAJOR;
     aAppIdent.ProtocolMinor = TWON_PROTOCOLMINOR;
     aAppIdent.SupportedGroups = DG_IMAGE | DG_CONTROL;
-    strcpy( aAppIdent.Version.Info, "StarOffice" );
+    strcpy( aAppIdent.Version.Info, "6.0" );
     strcpy( aAppIdent.Manufacturer, "Sun Microsystems");
     strcpy( aAppIdent.ProductFamily,"Office");
-    strcpy( aAppIdent.ProductName, "StarOffice");
+    strcpy( aAppIdent.ProductName, "Office");
 
     HWND        hParentWnd = HWND_DESKTOP;
     WNDCLASS    aWc = { 0, &TwainWndProc, 0, sizeof( WNDCLASS ), GetModuleHandle( NULL ),
