@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-01 17:12:52 $
+#   last change: $Author: hjs $ $Date: 2001-06-21 17:05:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -405,6 +405,7 @@ DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell $(FIND) . -name $i -print) 
 .ENDIF			# "$(LOCALIDLFILES)$(EXTERNIDLFILES)"!=""
 .ENDIF			# "$(IDLFILES)"!=""
 
+.IF "$(L10N-framework)"==""
 .IF "$(JARFILES)"!=""
 NEWCLASS:=$(foreach,i,$(JARFILES) $(null,$(shell $(FIND) $(JARDIR) -name $i) $(SOLARBINDIR)$/$i $(shell $(FIND) $(JARDIR) -name $i)))
 .ENDIF			# "$(JARFILES)"!=""
@@ -425,6 +426,7 @@ CLASSPATH:=.:$(CLASSDIR):$(XCLASSPATH):$(NEWCLASS:s/ /:/)
 CLASSPATH:=.;$(CLASSDIR);$(XCLASSPATH);$(NEWCLASS:s/ /;/)
 .ENDIF
 .ENDIF			# "$(NEWCLASS)"!=""
+.ENDIF			# "$(L10N-framework)"==""
 
 .IF "$(NOOPTFILES)" != ""
 NOOPTTARGET=do_it_noopt
@@ -1927,7 +1929,9 @@ UNOIDLDEPTARGETS+=$(MISC)$/$(TARGET).dp3
 .ENDIF			# "$(IDLFILES)"!=""
 
 .IF "$(JAVACLASSFILES:s/DEFINED//)"!="" || "$(javauno)"!=""
+.IF "$(L10N-framework)"==""
 TARGETDPJ=$(MISC)$/$(TARGET).dpj
+.ENDIF			# "$(L10N-framework)"==""
 .ENDIF
 
 .IF "$(UPDATER)"=="YES"
@@ -1980,6 +1984,7 @@ MAKELANGDIR=makelang.dir
 .IF "$(L10N-framework)"!=""
 ALLTAR:	\
         $(OS2_COPY_MK)		\
+        $(SUBDIRS)		\
         $(DPRTARGET) \
         $(IDLTARGET)	$(IDL1TARGET)	$(IDL2TARGET)		\
         $(IDL3TARGET)	$(IDL4TARGET)	$(IDL5TARGET)		\
@@ -2578,8 +2583,10 @@ CXXFILES+=$(IDL_S2U_FILES)
 .ENDIF			# "$(IDLFILES)"!=""
 
 .IF "$(JAVACLASSFILES:s/DEFINED//)"!=""
+.IF "$(L10N-framework)"==""
 .INCLUDE .IGNORE : $(MISC)$/$(TARGET).dpj
 $(TARGETDPJ) : $(JAVAFILES) $(JAVATARGET)
+.ENDIF			# "$(L10N-framework)"==""
 .ENDIF
 
 .INCLUDE : tg_jar.mk
