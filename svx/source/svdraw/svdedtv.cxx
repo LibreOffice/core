@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-22 10:06:06 $
+ *  last change: $Author: aw $ $Date: 2002-11-07 14:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,41 +172,71 @@ SdrLayer* SdrEditView::InsertNewLayer(const XubString& rName, USHORT nPos)
     return pNewLayer;
 }
 
+#include "svdogrp.hxx"
+#include "scene3d.hxx"
+
 BOOL SdrEditView::ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const
 {
-    BOOL bDelAll=TRUE;
-    ULONG nObjAnz=pOL->GetObjCount();
-    for (ULONG nObjNum=nObjAnz; nObjNum>0 && bDelAll;) {
+    sal_Bool bDelAll(sal_True);
+    sal_uInt32 nObjAnz(pOL->GetObjCount());
+
+    for(sal_uInt32 nObjNum(nObjAnz); nObjNum > 0 && bDelAll;)
+    {
         nObjNum--;
-        SdrObject* pObj=pOL->GetObj(nObjNum);
-        SdrObjList* pSubOL=pObj->GetSubList();
-        if (pSubOL!=NULL) { // Gruppenobjekt
-            if (!ImpDelLayerCheck(pSubOL,nDelID)) bDelAll=FALSE; // Rekursion
-        } else {
-            if (pObj->GetLayer()!=nDelID) bDelAll=FALSE;
+        SdrObject* pObj = pOL->GetObj(nObjNum);
+        SdrObjList* pSubOL = pObj->GetSubList();
+
+        // #104809# Test explicitely for group objects and 3d scenes
+        if(pSubOL && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dScene)))
+        {
+            if(!ImpDelLayerCheck(pSubOL, nDelID))
+            {
+                // Rekursion
+                bDelAll = sal_False;
+            }
+        }
+        else
+        {
+            if(pObj->GetLayer() != nDelID)
+            {
+                bDelAll = sal_False;
+            }
         }
     }
+
     return bDelAll;
 }
 
 void SdrEditView::ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID)
 {
-    ULONG nObjAnz=pOL->GetObjCount();
-    pOL->GetObj(0)->GetOrdNum(); // Sicherstellen, dass die OrdNums stimmen
-    for (ULONG nObjNum=nObjAnz; nObjNum>0;) {
+    sal_uInt32 nObjAnz(pOL->GetObjCount());
+    // make sure OrdNums are correct
+    pOL->GetObj(0)->GetOrdNum();
+
+    for(sal_uInt32 nObjNum(nObjAnz); nObjNum > 0;)
+    {
         nObjNum--;
-        SdrObject* pObj=pOL->GetObj(nObjNum);
-        SdrObjList* pSubOL=pObj->GetSubList();
-        if (pSubOL!=NULL) { // Gruppenobjekt
-            if (ImpDelLayerCheck(pSubOL,nDelID)) {
-                AddUndo(new SdrUndoDelObj(*pObj,TRUE));
+        SdrObject* pObj = pOL->GetObj(nObjNum);
+        SdrObjList* pSubOL = pObj->GetSubList();
+
+        // #104809# Test explicitely for group objects and 3d scenes
+        if(pSubOL && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dScene)))
+        {
+            if(ImpDelLayerCheck(pSubOL, nDelID))
+            {
+                AddUndo(new SdrUndoDelObj(*pObj, TRUE));
                 pOL->RemoveObject(nObjNum);
-            } else {
-                ImpDelLayerDelObjs(pSubOL,nDelID);
             }
-        } else {
-            if (pObj->GetLayer()==nDelID) {
-                AddUndo(new SdrUndoDelObj(*pObj,TRUE));
+            else
+            {
+                ImpDelLayerDelObjs(pSubOL, nDelID);
+            }
+        }
+        else
+        {
+            if(pObj->GetLayer() == nDelID)
+            {
+                AddUndo(new SdrUndoDelObj(*pObj, TRUE));
                 pOL->RemoveObject(nObjNum);
             }
         }
@@ -215,41 +245,64 @@ void SdrEditView::ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID)
 
 void SdrEditView::DeleteLayer(const XubString& rName)
 {
-    SdrLayerAdmin& rLA=pMod->GetLayerAdmin();
-    SdrLayer* pLayer=rLA.GetLayer(rName,TRUE);
-    USHORT nLayerNum=rLA.GetLayerPos(pLayer);
-    if (nLayerNum!=SDRLAYER_NOTFOUND) {
-        SdrLayerID nDelID=pLayer->GetID();
+    SdrLayerAdmin& rLA = pMod->GetLayerAdmin();
+    SdrLayer* pLayer = rLA.GetLayer(rName, TRUE);
+    sal_uInt16 nLayerNum(rLA.GetLayerPos(pLayer));
+
+    if(SDRLAYER_NOTFOUND != nLayerNum)
+    {
+        SdrLayerID nDelID = pLayer->GetID();
         BegUndo(ImpGetResStr(STR_UndoDelLayer));
-        BOOL bMaPg=TRUE;
-        for (USHORT nPageKind=0; nPageKind<2; nPageKind++) { // MasterPages und Zeichenseiten
-            USHORT nPgAnz=bMaPg ? pMod->GetMasterPageCount() : pMod->GetPageCount();
-            for (USHORT nPgNum=0; nPgNum<nPgAnz; nPgNum++) { // ueber alle Seiten
-                SdrPage* pPage=bMaPg ? pMod->GetMasterPage(nPgNum) : pMod->GetPage(nPgNum);
-                ULONG nObjAnz=pPage->GetObjCount();
-                if (nObjAnz!=0) pPage->GetObj(0)->GetOrdNum(); // Sicherstellen, dass die OrdNums stimmen
-                for (ULONG nObjNum=nObjAnz; nObjNum>0;) {
+        sal_Bool bMaPg(sal_True);
+
+        for(sal_uInt16 nPageKind(0); nPageKind < 2; nPageKind++)
+        {
+            // MasterPages and DrawPages
+            sal_uInt16 nPgAnz(bMaPg ? pMod->GetMasterPageCount() : pMod->GetPageCount());
+
+            for(sal_uInt16 nPgNum(0); nPgNum < nPgAnz; nPgNum++)
+            {
+                // over all pages
+                SdrPage* pPage = (bMaPg) ? pMod->GetMasterPage(nPgNum) : pMod->GetPage(nPgNum);
+                sal_uInt32 nObjAnz(pPage->GetObjCount());
+
+                // make sure OrdNums are correct
+                if(nObjAnz)
+                    pPage->GetObj(0)->GetOrdNum();
+
+                for(sal_uInt32 nObjNum(nObjAnz); nObjNum > 0;)
+                {
                     nObjNum--;
-                    SdrObject* pObj=pPage->GetObj(nObjNum);
-                    SdrObjList* pSubOL=pObj->GetSubList();
-                    if (pSubOL!=NULL) { // Gruppenobjekt
-                        if (ImpDelLayerCheck(pSubOL,nDelID)) {
-                            AddUndo(new SdrUndoDelObj(*pObj,TRUE));
+                    SdrObject* pObj = pPage->GetObj(nObjNum);
+                    SdrObjList* pSubOL = pObj->GetSubList();
+
+                    // #104809# Test explicitely for group objects and 3d scenes
+                    if(pSubOL && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dScene)))
+                    {
+                        if(ImpDelLayerCheck(pSubOL, nDelID))
+                        {
+                            AddUndo(new SdrUndoDelObj(*pObj, TRUE));
                             pPage->RemoveObject(nObjNum);
-                        } else {
-                            ImpDelLayerDelObjs(pSubOL,nDelID);
                         }
-                    } else {
-                        if (pObj->GetLayer()==nDelID) {
-                            AddUndo(new SdrUndoDelObj(*pObj,TRUE));
+                        else
+                        {
+                            ImpDelLayerDelObjs(pSubOL, nDelID);
+                        }
+                    }
+                    else
+                    {
+                        if(pObj->GetLayer() == nDelID)
+                        {
+                            AddUndo(new SdrUndoDelObj(*pObj, TRUE));
                             pPage->RemoveObject(nObjNum);
                         }
                     }
                 }
             }
-            bMaPg=FALSE;
+            bMaPg = sal_False;
         }
-        AddUndo(new SdrUndoDelLayer(nLayerNum,rLA,*pMod));
+
+        AddUndo(new SdrUndoDelLayer(nLayerNum, rLA, *pMod));
         rLA.RemoveLayer(nLayerNum);
         EndUndo();
         pMod->SetChanged();
