@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-09-26 14:40:12 $
+ *  last change: $Author: pl $ $Date: 2000-09-28 12:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,12 +376,19 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
             XtSetArg( aArgs[nArgs], XtNoverrideRedirect, True );    nArgs++;
         }
 
-        hShell_ = XtAppCreateShell( "", "VCLSalFrame",
-                                    mpParent
-                                    ? transientShellWidgetClass :
-                                    applicationShellWidgetClass,
-                                    GetXDisplay(),
-                                    aArgs, nArgs );
+        // Motif sometimes gets stuck on transientShell if the parent was constructed
+        // with SystemParentData ( and is therefore not a real top level
+        // window anymore )
+        if( mpParent && ! mpParent->maFrameData.hForeignParent_ )
+          hShell_ = XtAppCreateShell( "", "VCLSalFrame",
+                                      transientShellWidgetClass,
+                                      GetXDisplay(),
+                                      aArgs, nArgs );
+        else
+          hShell_ = XtAppCreateShell( "", "VCLSalFrame",
+                                      applicationShellWidgetClass,
+                                      GetXDisplay(),
+                                      aArgs, nArgs );
 
         // X-Window erzeugen
         XtSetMappedWhenManaged( hShell_, FALSE );
