@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:21:54 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,7 +1444,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 
         aSet.Put( *pSet );
         if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_COLUMNS, FALSE, &pItem)||
-            SFX_ITEM_SET == pSet->GetItemState(FN_INSERT_COLUMN_SECTION, FALSE, &pItem))
+            SFX_ITEM_SET == pSet->GetItemState(FN_INSERT_REGION, FALSE, &pItem))
         {
             SwFmtCol aCol;
             SwRect aRect;
