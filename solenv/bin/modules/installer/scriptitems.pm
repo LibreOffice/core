@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:29:47 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:17:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -194,6 +194,33 @@ sub remove_delete_only_files_from_productlists
         {
             push(@newitems, $oneitem);
         }
+    }
+
+    return \@newitems;
+}
+
+#############################################################################
+# Registryitems for Uninstall have to be removed
+#############################################################################
+
+sub remove_uninstall_regitems_from_script
+{
+    my ($registryarrayref) = @_;
+
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_uninstall_regitems_from_script : $#{$registryarrayref}"); }
+
+    my @newitems = ();
+
+    for ( my $i = 0; $i <= $#{$registryarrayref}; $i++ )
+    {
+        my $oneitem = ${$registryarrayref}[$i];
+        my $subkey = "";
+
+        if ( $oneitem->{'Subkey'} ) { $subkey = $oneitem->{'Subkey'}; }
+
+        if ( $subkey =~ /Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall/ ) { next; }
+
+        push(@newitems, $oneitem);
     }
 
     return \@newitems;
@@ -604,6 +631,45 @@ sub get_Source_Directory_For_Files_From_Includepathlist
 }
 
 #################################################################################
+# Removing files, that are not part of ada products
+#################################################################################
+
+sub remove_Files_For_Ada_Products
+{
+    my ($filesarrayref) = @_;
+
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Files_For_Ada_Products : $#{$filesarrayref}"); }
+
+    my $infoline;
+
+    my @newfilesarray = ();
+
+    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    {
+        my $onefile = ${$filesarrayref}[$i];
+
+        my $filename = $onefile->{'Name'};
+
+        # only adabas.zip and license and readme files for Ada products.
+
+        if (($filename eq "adabas.zip") || ($filename =~ /license/i) || ($filename =~ /readme/i) || ($filename =~ /services.bat/i))
+        {
+            push(@newfilesarray, $onefile);
+        }
+        else
+        {
+            $infoline = "Warning: Removing file $filename from file list for Ada product.\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+
+    $infoline = "\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    return \@newfilesarray;
+}
+
+#################################################################################
 # Files, whose source directory is not found, are removed now (this is an ERROR)
 #################################################################################
 
@@ -794,6 +860,8 @@ sub remove_Setup_from_Installset
         my $oneitem = ${$itemsarrayref}[$i];
         my $gid = $oneitem->{'gid'};
 
+        # scp Todo: Remove asap after removal of old setup
+
         if (( $gid eq "gid_File_Lib_Set" ) ||
             ( $gid eq "gid_File_Res_Set" ) ||
             ( $gid eq "gid_File_Lib_Tplx" ) ||
@@ -803,10 +871,17 @@ sub remove_Setup_from_Installset
             ( $gid eq "gid_File_Lib_Usp" ) ||
             ( $gid eq "gid_File_Bin_Setup" ) ||
             ( $gid eq "gid_File_Binary_Setup" ) ||
+            ( $gid eq "gid_File_Bin_Jre117" ) ||
+            ( $gid eq "gid_File_Exe_Regsvrex" ) ||
             ( $gid eq "GID_FILE_RDB_SETUP_SERVICES" ) ||
             ( $gid eq "gid_File_Rdb_Setup_Services" ) ||
             ( $gid eq "gid_File_Rdb_Setup_Services_Rdb" ) ||
-            ( $gid eq "gid_Shortcut_Setup" ))
+            ( $gid eq "gid_Shortcut_Setup" ) ||
+            ( $gid eq "gid_File_Extra_Cdemath" ) ||
+            ( $gid eq "gid_File_Extra_Cdewriter" ) ||
+            ( $gid eq "gid_File_Extra_Cdecalc" ) ||
+            ( $gid eq "gid_File_Extra_Cdedraw" ) ||
+            ( $gid eq "gid_File_Extra_Cdeimpress" ))
         {
             $infoline = "ATTENTION: Removing setup item $oneitem->{'gid'} from the installation set.\n";
             push( @installer::globals::logfileinfo, $infoline);
