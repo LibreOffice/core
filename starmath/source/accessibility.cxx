@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:21:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,20 +59,20 @@
  *
  ************************************************************************/
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTextType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleEventListener.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
+#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventObject.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
+#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_FOCUSEVENT_HPP_
 #include <com/sun/star/awt/FocusEvent.hpp>
@@ -156,7 +156,7 @@ using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
-using namespace drafts::com::sun::star::accessibility;
+using namespace com::sun::star::accessibility;
 
 #define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
 
@@ -286,7 +286,7 @@ uno::Reference< XAccessibleContext > SAL_CALL SmGraphicAccessible::getAccessible
     return this;
 }
 
-sal_Bool SAL_CALL SmGraphicAccessible::contains( const awt::Point& aPoint )
+sal_Bool SAL_CALL SmGraphicAccessible::containsPoint( const awt::Point& aPoint )
     throw (RuntimeException)
 {
     //! the arguments coordinates are relativ to the current window !
@@ -301,13 +301,13 @@ sal_Bool SAL_CALL SmGraphicAccessible::contains( const awt::Point& aPoint )
             aPoint.X < aSz.Width()  &&  aPoint.Y < aSz.Height();
 }
 
-uno::Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleAt(
+uno::Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleAtPoint(
         const awt::Point& aPoint )
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     XAccessible *pRes = 0;
-    if (contains( aPoint ))
+    if (containsPoint( aPoint ))
         pRes = this;
     return pRes;
 }
@@ -580,7 +580,7 @@ sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
 }
 
 Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttributes(
-        sal_Int32 nIndex )
+        sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -886,10 +886,10 @@ sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
     throw (RuntimeException)
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
-    return  rServiceName == C2U( "drafts::com::sun::star::accessibility::Accessible" ) ||
-            rServiceName == C2U( "drafts::com::sun::star::accessibility::AccessibleComponent" ) ||
-            rServiceName == C2U( "drafts::com::sun::star::accessibility::AccessibleContext" ) ||
-            rServiceName == C2U( "drafts::com::sun::star::accessibility::AccessibleText" );
+    return  rServiceName == C2U( "com::sun::star::accessibility::Accessible" ) ||
+            rServiceName == C2U( "com::sun::star::accessibility::AccessibleComponent" ) ||
+            rServiceName == C2U( "com::sun::star::accessibility::AccessibleContext" ) ||
+            rServiceName == C2U( "com::sun::star::accessibility::AccessibleText" );
 }
 
 Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
@@ -898,10 +898,10 @@ Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
     //vos::OGuard aGuard(Application::GetSolarMutex());
     Sequence< OUString > aNames(4);
     OUString *pNames = aNames.getArray();
-    pNames[0] = C2U( "drafts::com::sun::star::accessibility::Accessible" );
-    pNames[1] = C2U( "drafts::com::sun::star::accessibility::AccessibleComponent" );
-    pNames[2] = C2U( "drafts::com::sun::star::accessibility::AccessibleContext" );
-    pNames[3] = C2U( "drafts::com::sun::star::accessibility::AccessibleText" );
+    pNames[0] = C2U( "com::sun::star::accessibility::Accessible" );
+    pNames[1] = C2U( "com::sun::star::accessibility::AccessibleComponent" );
+    pNames[2] = C2U( "com::sun::star::accessibility::AccessibleContext" );
+    pNames[3] = C2U( "com::sun::star::accessibility::AccessibleText" );
     return aNames;
 }
 
@@ -1340,7 +1340,22 @@ EBulletInfo SmTextForwarder::GetBulletInfo( USHORT nPara ) const
 
 Rectangle SmTextForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
 {
-    return rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex) );
+    // #108900# Handle virtual position one-past-the end of the string
+    if( nIndex >= rEditEngine.GetTextLen(nPara) )
+    {
+        Rectangle aLast(0,0,0,0);
+
+        if( nIndex )
+            aLast = rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex-1) );
+
+        aLast.Move( aLast.Right() - aLast.Left(), 0 );
+        aLast.SetSize( Size(1, rEditEngine.GetTextHeight()) );
+        return aLast;
+    }
+    else
+    {
+        return rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex) );
+    }
 }
 
 Rectangle SmTextForwarder::GetParaBounds( USHORT nPara ) const
@@ -1585,7 +1600,7 @@ void SmEditAccessible::Init()
         {
             ::std::auto_ptr< SvxEditSource > pEditSource(
                     new SmEditSource( pWin, *pEditEngine, *pEditView ) );
-            pTextHelper = new accessibility::AccessibleTextHelper( pEditSource );
+            pTextHelper = new ::accessibility::AccessibleTextHelper( pEditSource );
             pTextHelper->SetEventSource( this );
         }
     }
@@ -1618,7 +1633,7 @@ uno::Reference< XAccessibleContext > SAL_CALL SmEditAccessible::getAccessibleCon
 }
 
 // XAccessibleComponent
-sal_Bool SAL_CALL SmEditAccessible::contains( const awt::Point& aPoint )
+sal_Bool SAL_CALL SmEditAccessible::containsPoint( const awt::Point& aPoint )
     throw (RuntimeException)
 {
     //! the arguments coordinates are relativ to the current window !
@@ -1633,7 +1648,7 @@ sal_Bool SAL_CALL SmEditAccessible::contains( const awt::Point& aPoint )
             aPoint.X < aSz.Width()  &&  aPoint.Y < aSz.Height();
 }
 
-uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleAt( const awt::Point& aPoint )
+uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleAtPoint( const awt::Point& aPoint )
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1821,7 +1836,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SmEditAccessible::getAccessibleSt
     else
     {
         //pStateSet->AddState( AccessibleStateType::EDITABLE );
-        pStateSet->AddState( AccessibleStateType::MULTILINE );
+        pStateSet->AddState( AccessibleStateType::MULTI_LINE );
         //pStateSet->AddState( AccessibleStateType::HORIZONTAL );
         //pStateSet->AddState( AccessibleStateType::TRANSIENT );
         pStateSet->AddState( AccessibleStateType::ENABLED );
@@ -1880,9 +1895,9 @@ sal_Bool SAL_CALL SmEditAccessible::supportsService(
     throw (RuntimeException)
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
-    return  rServiceName == C2U( "drafts::com::sun::star::accessibility::Accessible" ) ||
-            rServiceName == C2U( "drafts::com::sun::star::accessibility::AccessibleComponent" ) ||
-            rServiceName == C2U( "drafts::com::sun::star::accessibility::AccessibleContext" );
+    return  rServiceName == C2U( "com::sun::star::accessibility::Accessible" ) ||
+            rServiceName == C2U( "com::sun::star::accessibility::AccessibleComponent" ) ||
+            rServiceName == C2U( "com::sun::star::accessibility::AccessibleContext" );
 }
 
 Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
@@ -1891,9 +1906,9 @@ Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
     //vos::OGuard aGuard(Application::GetSolarMutex());
     Sequence< OUString > aNames(3);
     OUString *pNames = aNames.getArray();
-    pNames[0] = C2U( "drafts::com::sun::star::accessibility::Accessible" );
-    pNames[1] = C2U( "drafts::com::sun::star::accessibility::AccessibleComponent" );
-    pNames[2] = C2U( "drafts::com::sun::star::accessibility::AccessibleContext" );
+    pNames[0] = C2U( "com::sun::star::accessibility::Accessible" );
+    pNames[1] = C2U( "com::sun::star::accessibility::AccessibleComponent" );
+    pNames[2] = C2U( "com::sun::star::accessibility::AccessibleContext" );
     return aNames;
 }
 
