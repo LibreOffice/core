@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:25:43 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,7 +812,7 @@ namespace pcr
         aCoreSet.Put(aFormatter);
 
         // a tab dialog with a single page
-        SfxSingleTabDialog* pDlg = new SfxSingleTabDialog(GetpApp()->GetAppWindow(), aCoreSet, 0);
+        SfxSingleTabDialog* pDlg = new SfxSingleTabDialog(Application::GetDefDialogParent(), aCoreSet, 0);
         SvxNumberFormatTabPage* pPage = (SvxNumberFormatTabPage*) SvxNumberFormatTabPage::Create(pDlg, aCoreSet);
         const SfxPoolItem& rInfoItem = pPage->GetItemSet().Get(SID_ATTR_NUMBERFORMAT_INFO);
         pDlg->SetTabPage(pPage);
@@ -1247,7 +1247,7 @@ namespace pcr
 
         {   // do this in an own block. The dialog needs to be destroyed before we call
             // destroyItemSet
-            ControlCharacterDialog aDlg(GetpApp()->GetAppWindow(), *pSet);
+            ControlCharacterDialog aDlg(Application::GetDefDialogParent(), *pSet);
             if (RET_OK == aDlg.Execute())
             {
                 const SfxItemSet* pOut = aDlg.GetOutputItemSet();
@@ -1440,8 +1440,7 @@ namespace pcr
 
             SfxItemSet aSet( SFX_APP()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
             aSet.Put(aMacroItem, SID_ATTR_MACROITEM);
-            pMacroDlg = new SfxMacroAssignDlg(
-                GetpApp()->GetAppWindow(), aSet );
+            pMacroDlg = new SfxMacroAssignDlg(Application::GetDefDialogParent(), aSet );
             SfxMacroTabPage* pMacroTabPage = (SfxMacroTabPage*)pMacroDlg->GetTabPage();
 
             for (sal_uInt32 j = 0 ; j < aNameArray.size(); j++ )
@@ -2461,7 +2460,7 @@ namespace pcr
             {
                 sal_uInt32 nColor = aVal.ToInt32();
                 Color aColor( nColor );
-                SvColorDialog aColorDlg( GetpApp()->GetAppWindow() );
+                SvColorDialog aColorDlg( Application::GetDefDialogParent() );
                 aColorDlg.SetColor( aColor );
 
                 if (aColorDlg.Execute() )
@@ -2481,7 +2480,7 @@ namespace pcr
 
             else if (PROPERTY_ID_CONTROLLABEL == nPropId)
             {
-                OSelectLabelDialog dlgSelectLabel(GetpApp()->GetAppWindow(), m_xPropValueAccess);
+                OSelectLabelDialog dlgSelectLabel(Application::GetDefDialogParent(), m_xPropValueAccess);
                 if (RET_OK == dlgSelectLabel.Execute())
                 {
                     // if the properties transport would be via UsrAnys (instead of strings) we would have a chance
