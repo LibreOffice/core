@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:04:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@ class SwRect;
 class SwBorderAttrs;
 class SwDoc;
 class SwNodeIndex;
+// --> OD 2005-03-04 #i44049#
+class SwObjectFormatterTxtFrm;
+// <--
 
 class SwFlowFrm
 {
@@ -96,6 +99,9 @@ class SwFlowFrm
     friend inline void PrepareUnlock( SwFlowFrm * );
     friend inline void TableSplitRecalcLock( SwFlowFrm * );
     friend inline void TableSplitRecalcUnlock( SwFlowFrm * );
+    // --> OD 2005-03-04 #i44049#
+    friend class SwObjectFormatterTxtFrm;
+    // <--
 
     //TblSel darf das Follow-Bit zuruecksetzen.
     friend inline void UnsetFollow( SwFlowFrm *pFlow );
@@ -163,6 +169,9 @@ protected:
 
     //Prueft ob Vorwaertsfluss noch Sinn macht Endloswanderschaften (unterbinden)
     inline BOOL IsFwdMoveAllowed();
+    // --> OD 2005-03-08 #i44049# - method <CalcCntnt(..)> has to check this property.
+    friend void CalcCntnt( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
+    // <--
     BOOL IsKeepFwdMoveAllowed();    //Wie oben, Move fuer Keep.
 
     //Prueft ob ein Obj das Umlauf wuenscht ueberlappt.
