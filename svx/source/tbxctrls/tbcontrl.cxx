@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-07 15:29:35 $
+ *  last change: $Author: pb $ $Date: 2001-01-24 10:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,6 +653,12 @@ long SvxFontNameBox::PreNotify( NotifyEvent& rNEvt )
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         FillList();
+    else if ( EVENT_LOSEFOCUS == nType )
+    {
+        String aCurName = aCurFont.GetName();
+        if ( GetText() != aCurName )
+            SetText( aCurName );
+    }
     return FontNameBox::PreNotify( rNEvt );
 }
 
@@ -806,16 +812,14 @@ void SvxFontSizeBox::Select()
 
     if ( !IsTravelSelect() )
     {
-       SfxMapUnit eUnit = pCtrl->GetCoreMetric();
-       long nSelVal = GetValue();
-       long nVal = LogicToLogic( nSelVal, MAP_POINT, (MapUnit)eUnit ) / 10;
-
-       SvxFontHeightItem aFontHeightItem( nVal, 100,
-                                          SID_ATTR_CHAR_FONTHEIGHT );
-
-       rBindings.GetDispatcher()->Execute(
-               SID_ATTR_CHAR_FONTHEIGHT, SFX_CALLMODE_RECORD, &aFontHeightItem, 0L );
-       ReleaseFocus_Impl();
+        SfxMapUnit eUnit = pCtrl->GetCoreMetric();
+        long nSelVal = GetValue();
+        long nVal = LogicToLogic( nSelVal, MAP_POINT, (MapUnit)eUnit ) / 10;
+        SvxFontHeightItem aFontHeightItem( nVal, 100, SID_ATTR_CHAR_FONTHEIGHT );
+        rBindings.GetDispatcher()->Execute(
+            SID_ATTR_CHAR_FONTHEIGHT, SFX_CALLMODE_RECORD, &aFontHeightItem, 0L );
+        ReleaseFocus_Impl();
+        aCurText = GetText();
     }
 }
 
@@ -872,8 +876,9 @@ void SvxFontSizeBox::Update( const SvxFontItem& rFontItem )
 long SvxFontSizeBox::Notify( NotifyEvent& rNEvt )
 {
     long nHandled = 0;
+    USHORT nType = rNEvt.GetType();
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( EVENT_KEYINPUT == nType )
     {
         USHORT nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 
@@ -897,6 +902,12 @@ long SvxFontSizeBox::Notify( NotifyEvent& rNEvt )
                 break;
         }
     }
+    else if ( EVENT_LOSEFOCUS == nType )
+    {
+        if ( GetText() != aCurText )
+            SetText( aCurText );
+    }
+
     return nHandled ? nHandled : FontSizeBox::Notify( rNEvt );
 }
 
