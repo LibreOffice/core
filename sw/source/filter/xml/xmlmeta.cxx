@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-18 12:39:02 $
+ *  last change: $Author: mib $ $Date: 2001-04-06 05:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,12 @@ void SwXMLExport::_ExportMeta()
         SvXMLElementExport aElem( *this, XML_NAMESPACE_META,
                                   sXML_document_statistic,
                                   sal_True, sal_True );
+
+        if( IsShowProgress() )
+        {
+            ProgressBarHelper *pProgress = GetProgressBarHelper();
+            pProgress->SetValue( pProgress->GetValue() + 2 );
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
+ *  last change: $Author: mib $ $Date: 2001-04-06 05:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@ class SwXMLTableFrmFmtsSort_Impl;
 class SwTableNode;
 class XMLPropertySetMapper;
 
+#ifndef XML_PROGRESS_REF_NOT_SET
+#define XML_PROGRESS_REF_NOT_SET ((sal_Int32)-1)
+#endif
+
 
 class SwXMLExport : public SvXMLExport
 {
@@ -110,7 +114,6 @@ class SwXMLExport : public SvXMLExport
     SvXMLItemMapEntriesRef      xTableCellItemMap;
     UniReference < XMLPropertySetMapper > xParaPropMapper;
 
-    sal_Int32                   nContentProgressStart;
     sal_Bool                    bExportWholeDoc : 1;// export whole document?
     sal_Bool                    bBlock : 1;         // export text block?
     sal_Bool                    bExportFirstTableOnly : 1;
@@ -199,6 +202,7 @@ public:
     }
 
     sal_Bool IsShowProgress() const { return bShowProgress; }
+    void SetShowProgress( sal_Bool b ) { bShowProgress = b; }
     sal_Bool IsBlockMode() const { return bBlock; }
 
     // XUnoTunnel

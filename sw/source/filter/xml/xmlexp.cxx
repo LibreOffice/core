@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-05 20:00:06 $
+ *  last change: $Author: mib $ $Date: 2001-04-06 05:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,6 @@ SwXMLExport::SwXMLExport(sal_uInt16 nExportFlags) :
 #endif
     pTableItemMapper( 0 ),
     pTableLines( 0 ),
-    nContentProgressStart( 0 ),
 #ifdef XML_CORE_API
     bExportWholeDoc( bExpWholeDoc ),
     bExportFirstTableOnly( bExpFirstTableOnly ),
@@ -254,7 +253,6 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
     pOrigPaM( &rPaM ),
     pTableItemMapper( 0 ),
     pTableLines( 0 ),
-    nContentProgressStart( 0 ),
     bExportWholeDoc( bExpWholeDoc ),
     bExportFirstTableOnly( bExpFirstTableOnly ),
     bShowProgress( bShowProg ),
@@ -361,10 +359,32 @@ sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
     }
     if( bShowProgress )
     {
-        nContentProgressStart = (sal_Int32)aDocStat.nPara / 2;
         ProgressBarHelper *pProgress = GetProgressBarHelper();
-        pProgress->SetReference( nContentProgressStart + 2*aDocStat.nPara );
-        pProgress->SetValue( 0 );
+        if( XML_PROGRESS_REF_NOT_SET == pProgress->GetReference() )
+        {
+            // progress isn't initialized:
+            // We assume that the whole doc is exported, and the following
+            // durations:
+            // - meta information: 2
+            // - settings: 4 (TODO: not now!)
+            // - styles (except page styles): 2
+            // - page styles: 2 (TODO: not now!) + 2 for each paragraph
+            // - paragraph: 2 (1 for automatic styles and one for content)
+
+            // If required, update doc stat, so that
+            // the progress works correctly.
+            if( aDocStat.bModified )
+                pDoc->UpdateDocStat( aDocStat );
+//          sal_Int32 nRef = 6; // meta + settings
+            sal_Int32 nRef = 2;
+            nRef += pDoc->GetCharFmts()->Count();
+            nRef += pDoc->GetFrmFmts()->Count();
+            nRef += pDoc->GetTxtFmtColls()->Count();
+//          nRef += pDoc->GetPageDescCnt();
+            nRef += 2*aDocStat.nPara;
+            pProgress->SetReference( nRef );
+            pProgress->SetValue( 0 );
+        }
     }
 
     if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )

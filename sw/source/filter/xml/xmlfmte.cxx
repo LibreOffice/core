@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-04 14:56:07 $
+ *  last change: $Author: mib $ $Date: 2001-04-06 05:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,9 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
     ASSERT( !pParent || pParent->IsDefault(), "unexpected parent" );
 
     ASSERT( USHRT_MAX == rFmt.GetPoolFmtId(), "pool ids arent'supported" );
-    ASSERT( UCHAR_MAX == rFmt.GetPoolHlpFileId(), "help ids aren't supported" );
+    ASSERT( USHRT_MAX == rFmt.GetPoolHelpId(), "help ids arent'supported" );
+    ASSERT( USHRT_MAX == rFmt.GetPoolHelpId() ||
+            UCHAR_MAX == rFmt.GetPoolHlpFileId(), "help file ids aren't supported" );
 
     // style:master-page-name
     if( RES_FRMFMT == rFmt.Which() && sXML_table == pStr )
@@ -255,18 +257,21 @@ void SwXMLExport::_ExportStyles( sal_Bool bUsed )
                                        GetShapeExport()->CreateShapePropMapper(*this));
         }
     }
-    GetTextParagraphExport()->exportTextStyles( bUsed );
+#if SUPD <628 && !defined(TEST_MIB)
+    GetTextParagraphExport()->SetProgress( IsShowProgress() ? 1 : 0 );
+#endif
+    GetTextParagraphExport()->exportTextStyles( bUsed
+#if SUPD >627 || defined(TEST_MIB)
+                                             ,IsShowProgress()
+#endif
+                                              );
+#if SUPD <628 && !defined(TEST_MIB)
+    GetTextParagraphExport()->SetProgress( 0 );
+#endif
 }
 
 void SwXMLExport::_ExportAutoStyles()
 {
-    if( bShowProgress )
-    {
-        ProgressBarHelper *pProgress = GetProgressBarHelper();
-        pProgress->SetValue( nContentProgressStart );
-        GetTextParagraphExport()->SetProgress( nContentProgressStart );
-    }
-
     // The order in which styles are collected *MUST* be the same as
     // the order in which they are exported. Otherwise, caching will
     // fail.

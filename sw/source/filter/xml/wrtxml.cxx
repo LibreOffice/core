@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-02 11:26:14 $
+ *  last change: $Author: mib $ $Date: 2001-04-06 05:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #endif
 #ifndef _XMLEXP_HXX
 #include <xmlexp.hxx>
+#endif
+#ifndef _STATSTR_HRC
+#include <statstr.hrc>
 #endif
 
 using namespace ::rtl;
@@ -324,6 +327,7 @@ sal_uInt32 SwXMLWriter::_Write()
 
     // create XStatusIndicator
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
+
     if (bShowProgress)
     {
         uno::Reference<frame::XModel> xModel( pDoc->GetDocShell()->GetModel());
@@ -350,13 +354,17 @@ sal_uInt32 SwXMLWriter::_Write()
         sal_Int32 nProgressRange(1000000);
         if (xStatusIndicator.is())
         {
-            OUString sLoading(RTL_CONSTASCII_USTRINGPARAM("Saving ..."));
-            xStatusIndicator->start(sLoading, nProgressRange);
+            xStatusIndicator->start(SW_RESSTR( STR_STATSTR_SWGWRITE),
+                                    nProgressRange);
         }
-        uno::Any aProgRange;
-        aProgRange <<= nProgressRange;
+        uno::Any aAny;
+        aAny <<= nProgressRange;
         OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM("ProgressRange"));
-        xInfoSet->setPropertyValue(sProgressRange, aProgRange);
+        xInfoSet->setPropertyValue(sProgressRange, aAny);
+
+        aAny <<= XML_PROGRESS_REF_NOT_SET;
+        OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM("ProgressMax"));
+        xInfoSet->setPropertyValue(sProgressMax, aAny);
     }
 
     // filter arguments
@@ -482,11 +490,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.23 2001-04-02 11:26:14 dvo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.24 2001-04-06 05:21:32 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.23  2001/04/02 11:26:14  dvo
+      #85021# progress bar enabled (change mail from SAB)
+
       Revision 1.22  2001/03/19 13:45:17  mtg
       added support for export of settings.xml
 

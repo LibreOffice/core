@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-21 16:20:47 $
+ *  last change: $Author: mib $ $Date: 2001-04-06 05:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,8 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                     ExportFmt( *pFrmFmt, sXML_table_cell );
 
                 GetTextParagraphExport()->collectTextAutoStyles(
-                    lcl_xml_CreateTableBoxTextRange( *pBoxSttNd )->getText() );
+                    lcl_xml_CreateTableBoxTextRange( *pBoxSttNd )->getText(),
+                    IsShowProgress() );
             }
             else
             {
@@ -868,7 +869,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
 
             // export cell content
             GetTextParagraphExport()->exportText( xRange->getText(),
-                                                  bShowProgress );
+                                                  IsShowProgress() );
         }
         else
         {
@@ -1111,14 +1112,10 @@ void SwXMLTextParagraphExport::exportTable(
         const Reference < XTextContent > & rTextContent,
         sal_Bool bAutoStyles, sal_Bool bProgress )
 {
-//  ASSERT( ((SwXMLExport&)GetExport()).IsShowProgress() == bProgress,
-//          "inconsistent progress flags" );
-
-//  Reference < XPropertySet > xPropSet( rTextContent, UNO_QUERY );
-//  Any aAny = xPropSet->getPropertyValue( sTextTable );
+    sal_Bool bOldShowProgress = ((SwXMLExport&)GetExport()).IsShowProgress();
+    ((SwXMLExport&)GetExport()).SetShowProgress( bProgress );
 
     Reference < XTextTable > xTxtTbl( rTextContent, UNO_QUERY );
-//  aAny >>= xTxtTbl;
     DBG_ASSERT( xTxtTbl.is(), "text table missing" );
     if( xTxtTbl.is() )
     {
@@ -1148,4 +1145,6 @@ void SwXMLTextParagraphExport::exportTable(
             }
         }
     }
+
+    ((SwXMLExport&)GetExport()).SetShowProgress( bOldShowProgress );
 }
