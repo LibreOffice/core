@@ -3,6 +3,7 @@
 #include <cppunit/simpleheader.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>
 
@@ -14,6 +15,23 @@
 
 using namespace ::basegfx;
 using namespace ::std;
+
+namespace
+{
+    void plotRes( const B2DPolygon& res )
+    {
+        cout << "plot '-' using ($1):($2) with lp" << endl;
+
+        unsigned int i;
+        for( i=0; i<res.count(); ++i )
+        {
+            const B2DPoint currPoint( res.getB2DPoint(i) );
+
+            cout << currPoint.getX() << " " << currPoint.getY() << endl;
+        }
+        cout << "e" << endl;
+    }
+}
 
 namespace basegfx2d
 {
@@ -58,21 +76,33 @@ public:
 
         // Choosing R=1, A=0, B=pi/2
         const double h( 4.0/3.0 * tan(F_PI/8.0) );
-        aQuarterCircle  = B2DCubicBezier(a10,
-                                         B2DPoint( 1.0, h ),
-                                         B2DPoint( h, 1.0),
-                                         a01);
+        aQuarterCircle  = B2DCubicBezier(a10 + B2DPoint(1.0,0.0),
+                                         B2DPoint( 1.0, h ) + B2DPoint(1.0,0.0),
+                                         B2DPoint( h, 1.0) + B2DPoint(1.0,0.0),
+                                         a01 + B2DPoint(1.0,0.0));
 
-        aCusp           = B2DCubicBezier(a00, a11, a01, a10);
+        aCusp           = B2DCubicBezier(a00 + B2DPoint(2.0,0.0),
+                                         a11 + B2DPoint(2.0,0.0),
+                                         a01 + B2DPoint(2.0,0.0),
+                                         a10 + B2DPoint(2.0,0.0));
 
-        aLoop           = B2DCubicBezier(a00, a01, a10, a00);
+        aLoop           = B2DCubicBezier(a00 + B2DPoint(3.0,0.0),
+                                         a01 + B2DPoint(3.0,0.0),
+                                         a10 + B2DPoint(3.0,0.0),
+                                         a00 + B2DPoint(3.0,0.0));
 
-        aStraightLineDistinctEndPoints  = B2DCubicBezier(a00, middle, middle, a11);
-        aStraightLineIdenticalEndPoints = B2DCubicBezier(a00, a11, a11, a00);
-        aCrossing       = B2DCubicBezier(a00,
-                                         B2DPoint(2.0,2.0),
-                                         B2DPoint(-1.0,2.0),
-                                         a10);
+        aStraightLineDistinctEndPoints  = B2DCubicBezier(a00 + B2DPoint(4.0,0.0),
+                                                         middle + B2DPoint(4.0,0.0),
+                                                         middle + B2DPoint(4.0,0.0),
+                                                         a11 + B2DPoint(4.0,0.0));
+        aStraightLineIdenticalEndPoints = B2DCubicBezier(a00 + B2DPoint(5.0,0.0),
+                                                         a11 + B2DPoint(5.0,0.0),
+                                                         a11 + B2DPoint(5.0,0.0),
+                                                         a00 + B2DPoint(5.0,0.0));
+        aCrossing       = B2DCubicBezier(a00 + B2DPoint(6.0,0.0),
+                                         B2DPoint(2.0,2.0) + B2DPoint(6.0,0.0),
+                                         B2DPoint(-1.0,2.0) + B2DPoint(6.0,0.0),
+                                         a10 + B2DPoint(6.0,0.0));
 
         cout << "#!/usr/bin/gnuplot -persist" << endl
              << "#" << endl
@@ -89,6 +119,8 @@ public:
 
         cout << "# bezier subdivision" << endl
              << "plot [t=0:1] ";
+
+
         cout << " bez("
              << aHalfCircle.getStartPoint().getX() << ","
              << aHalfCircle.getControlPointA().getX() << ","
@@ -172,13 +204,63 @@ public:
     {
     }
 
-    void adaptiveSubdivideByDistance()
+    void adaptiveByDistance()
     {
+#if 0
+        const double fBound( 0.0001 );
+        B2DPolygon result;
+
+        adaptiveSubdivideByDistance( result, aHalfCircle, fBound );
+        plotRes(result); result.clear();
+
+        adaptiveSubdivideByDistance( result, aQuarterCircle, fBound );
+        plotRes(result); result.clear();
+
+        adaptiveSubdivideByDistance( result, aLoop, fBound );
+        plotRes(result); result.clear();
+
+        adaptiveSubdivideByDistance( result, aStraightLineDistinctEndPoints, fBound );
+        plotRes(result); result.clear();
+
+        adaptiveSubdivideByDistance( result, aStraightLineIdenticalEndPoints, fBound );
+        plotRes(result); result.clear();
+
+        adaptiveSubdivideByDistance( result, aCrossing, fBound );
+        plotRes(result); result.clear();
+
+        adaptiveSubdivideByDistance( result, aCusp, fBound );
+        plotRes(result); result.clear();
+#endif
+
         CPPUNIT_ASSERT_MESSAGE("identity", true );
     }
 
-    void adaptiveSubdivideByAngle()
+    void adaptiveByAngle()
     {
+        const double fBound( 5.0 );
+        B2DPolygon result;
+
+        adaptiveSubdivideByAngle( result, aHalfCircle, fBound );
+        plotRes(result); result.clear();
+
+        adaptiveSubdivideByAngle( result, aQuarterCircle, fBound );
+        plotRes(result); result.clear();
+
+        adaptiveSubdivideByAngle( result, aLoop, fBound );
+        plotRes(result); result.clear();
+
+        adaptiveSubdivideByAngle( result, aStraightLineDistinctEndPoints, fBound );
+        plotRes(result); result.clear();
+
+        adaptiveSubdivideByAngle( result, aStraightLineIdenticalEndPoints, fBound );
+        plotRes(result); result.clear();
+
+        adaptiveSubdivideByAngle( result, aCrossing, fBound );
+        plotRes(result); result.clear();
+
+        adaptiveSubdivideByAngle( result, aCusp, fBound );
+        plotRes(result); result.clear();
+
         CPPUNIT_ASSERT_MESSAGE("identity", true );
     }
 
@@ -187,8 +269,8 @@ public:
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b2dbeziertools);
-    CPPUNIT_TEST(adaptiveSubdivideByDistance);  // TODO: add tests for quadratic bezier (subdivide and degree reduction)
-    CPPUNIT_TEST(adaptiveSubdivideByAngle);
+    CPPUNIT_TEST(adaptiveByDistance);   // TODO: add tests for quadratic bezier (subdivide and degree reduction)
+    CPPUNIT_TEST(adaptiveByAngle);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dcubicbezier
 
