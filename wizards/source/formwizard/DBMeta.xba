@@ -6,6 +6,7 @@ Option Explicit
 Public sDatabaseList()
 Public iCommandTypes() as Integer
 Public CurCommandType as Integer
+Dim oDataSource as Object
 
 
 Sub GetDatabaseNames()
@@ -43,9 +44,7 @@ End Sub
 
 
 Function GetConnection(sDBName as String)
-Dim oDatabase as Object
 Dim oInteractionHandler as Object
-Dim oDataSource as Object
 Dim bExitLoop as Boolean
 Dim bGetConnection as Boolean
 Dim iMsg as Integer
@@ -53,8 +52,8 @@ Dim Nulllist()
 	If Not IsNull(oDBConnection) Then
 		oDBConnection.Dispose()
 	End If
-	oDatabase = oDBContext.GetByName(sDBName)
-	If Not oDatabase.IsPasswordRequired Then
+	oDataSource = oDBContext.GetByName(sDBName)
+	If Not oDataSource.IsPasswordRequired Then
 		oDBConnection = oDBContext.GetByName(sDBName).GetConnection(&quot;&quot;,&quot;&quot;)
 		GetConnection() = True
 	Else
@@ -111,6 +110,7 @@ Dim i as Integer
 Dim sFieldName as String
 Dim n as Integer
 Dim WidthIndex as Integer
+Dim oField as Object
 	MaxIndex = Ubound(oDialogModel.lstSelFields.StringItemList())
 	Dim ColumnMap(MaxIndex)as Integer	
 	FieldNames() = oDialogModel.lstSelFields.StringItemList()
@@ -132,11 +132,12 @@ Dim WidthIndex as Integer
 
 	For n = 0 to MaxIndex
 		sFieldname = FieldNames(n)
-		iType = oColumns.GetByName(sFieldName).Type
+		oField = oColumns.GetByName(sFieldName) 
+		iType = oField.Type
 		FieldMetaValues(n,0) = iType
-		FieldMetaValues(n,1) = GetValueoutofList(iType, WidthList(),1, WidthIndex)		
-		FieldMetaValues(n,2) = WidthList(WidthIndex,2)
-		FieldMetaValues(n,3) = WidthList(WidthIndex,4)
+		FieldMetaValues(n,1) = oField.Precision 		
+		FieldMetaValues(n,2) = GetValueoutofList(iType, WidthList(),1, WidthIndex)		
+		FieldMetaValues(n,3) = WidthList(WidthIndex,3)
 	Next
 	ReDim oDBShapeList(MaxIndex) as Object
 	ReDim oTCShapeList(MaxIndex) as Object
@@ -234,4 +235,14 @@ Dim LocCommandTypes(MaxTableIndex + MaxQueryIndex + 1) as Integer
 		LocCommandTypes(a) = com.sun.star.sdb.CommandType.QUERY
 	Next i
 	CreateCommandTypeList() = LocCommandTypes()
-End Function</script:module>
+End Function
+
+
+Sub GetCurrentMetaValues(Index as Integer)
+	CurFieldType = FieldMetaValues(Index,0)
+	CurFieldLength = FieldMetaValues(Index,1)
+	CurControlType = FieldMetaValues(Index,2)
+	CurControlName = FieldMetaValues(Index,3)
+    CurFieldName = FieldNames(Index)
+End Sub	    
+</script:module>

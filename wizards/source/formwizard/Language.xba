@@ -27,11 +27,11 @@ Dim sMsgCreatedForm as String
 Dim sMsgErrCouldNotOpenObject as String
 Dim sMsgErrNameToLong as String
 
-&apos;	Internal Logic
+
 Dim Form_ilFormTitleSuggestPrefix as String
 
-Dim sMsgDatetime_DateComponent as String
-Dim sMsgDatetime_TimeComponent as String
+Dim sTimeAppendix as String
+Dim sDateAppendix as String
 
 Public sGoOn as String
 Public sReady as String
@@ -40,7 +40,6 @@ Public sWriterFilterName as String
 Public sWriterTemplateFiltername as String		
 Public XPixelFactor as Long		
 Public YPixelFactor as Long
-
 
 
 Sub LoadLanguage ()
@@ -60,8 +59,8 @@ Sub LoadLanguage ()
 
 	&apos;	Internal Logic
 	Form_ilFormTitleSuggestPrefix = GetResText(RID_FORM + 3)
-	sMsgDatetime_DateComponent = GetResText(RID_FORM + 4)
-	sMsgDatetime_TimeComponent = GetResText(RID_FORM + 5)
+	sDateAppendix = GetResText(RID_FORM + 4)
+	sTimeAppendix = GetResText(RID_FORM + 5)
 	
 	sReady = GetResText(RID_COMMON + 0)
 	SetDialogLanguage()
@@ -147,127 +146,106 @@ Sub InitializeWidthList()
 	End If
 
 	WidthList(0,0) = com.sun.star.sdbc.DataType.BIT   			&apos; = -7;
-	WidthList(0,1) = 8
-	WidthList(0,2) = cCheckbox
-	WidthList(0,3) = False
-	WidthList(0,4) = &quot;CheckBox&quot;
+	WidthList(0,1) = cCheckbox
+	WidthList(0,2) = False
+	WidthList(0,3) = &quot;CheckBox&quot;
 
 	WidthList(1,0) = com.sun.star.sdbc.DataType.TINYINT			&apos; =  -6;
-	WidthList(1,1) = 20
-	WidthList(1,2) = cNumericBox
-	WidthList(1,3) = False
-	WidthList(1,4) = &quot;FormattedField&quot;
+	WidthList(1,1) = cNumericBox
+	WidthList(1,2) = False
+	WidthList(1,3) = &quot;FormattedField&quot;
 	
 	WidthList(2,0) = com.sun.star.sdbc.DataType.SMALLINT		&apos; =   5;
-	WidthList(2,1) = 20
-	WidthList(2,2) = cNumericBox
-	WidthList(2,3) = False
-	WidthList(2,4) = &quot;FormattedField&quot;
+	WidthList(2,1) = cNumericBox
+	WidthList(2,2) = False
+	WidthList(2,3) = &quot;FormattedField&quot;
 	
 	WidthList(3,0) = com.sun.star.sdbc.DataType.INTEGER			&apos; =   4;
-	WidthList(3,1) = 30
-	WidthList(3,2) = cNumericBox
-	WidthList(3,3) = False
-	WidthList(3,4) = &quot;FormattedField&quot;
+	WidthList(3,1) = cNumericBox
+	WidthList(3,2) = False
+	WidthList(3,3) = &quot;FormattedField&quot;
 	
 	WidthList(4,0) = com.sun.star.sdbc.DataType.BIGINT			&apos; =  -5;
-	WidthList(4,1) = 30
-	WidthList(4,2) = cNumericBox
-	WidthList(4,3) = False
-	WidthList(4,4) = &quot;FormattedField&quot;
+	WidthList(4,1) = cNumericBox
+	WidthList(4,2) = False
+	WidthList(4,3) = &quot;FormattedField&quot;
 	
 	WidthList(5,0) = com.sun.star.sdbc.DataType.FLOAT			&apos; =   6;
-	WidthList(5,1) = 40
-	WidthList(5,2) = cNumericBox
-	WidthList(5,3) = False
-	WidthList(5,4) = &quot;FormattedField&quot;
+	WidthList(5,1) = cNumericBox
+	WidthList(5,2) = False
+	WidthList(5,3) = &quot;FormattedField&quot;
 	
 	WidthList(6,0) = com.sun.star.sdbc.DataType.REAL			&apos; =   7;
-	WidthList(6,1) = 40	&apos;Property &apos;Scale&apos;, keine maximalwerte
-	WidthList(6,2) = cNumericBox
-	WidthList(6,3) = False
-	WidthList(6,4) = &quot;FormattedField&quot;
+	WidthList(6,1) = cNumericBox
+	WidthList(6,2) = False
+	WidthList(6,3) = &quot;FormattedField&quot;
 	
 	WidthList(7,0) = com.sun.star.sdbc.DataType.DOUBLE			&apos; =   8;
-	WidthList(7,1) = 40&apos; dynamisch erstellen
-	&apos;Property &apos;Scale&apos;
-	WidthList(7,2) = cNumericBox
-	WidthList(7,3) = False
-	WidthList(7,4) = &quot;FormattedField&quot;
+	WidthList(7,1) = cNumericBox
+	WidthList(7,2) = False
+	WidthList(7,3) = &quot;FormattedField&quot;
 	
 	WidthList(8,0) = com.sun.star.sdbc.DataType.NUMERIC			&apos; =   2;
-	WidthList(8,1) = 40
-	WidthList(8,2) = cNumericBox
-	WidthList(8,3) = False
-	WidthList(8,4) = &quot;FormattedField&quot;
+	WidthList(8,1) = cNumericBox
+	WidthList(8,2) = False
+	WidthList(8,3) = &quot;FormattedField&quot;
 	
 	WidthList(9,0) = com.sun.star.sdbc.DataType.DECIMAL			&apos; =   3;  (mit Nachkommastellen)
-	WidthList(9,1) = 40	&apos; ToDo: Dies muss in einer Routine errechnet werden
-	WidthList(9,2) = cNumericBox
-	WidthList(9,3) = False
-	WidthList(9,4) = &quot;FormattedField&quot;
+	WidthList(9,1) = cNumericBox
+	WidthList(9,2) = False
+	WidthList(9,3) = &quot;FormattedField&quot;
 	
 	WidthList(10,0) = com.sun.star.sdbc.DataType.CHAR			&apos; =   1;
-	WidthList(10,1) = 30
-	WidthList(10,2) = cTextBox
-	WidthList(10,3) = False
-	WidthList(10,4) = &quot;TextField&quot;
+	WidthList(10,1) = cTextBox
+	WidthList(10,2) = False
+	WidthList(10,3) = &quot;TextField&quot;
 
 	&apos; Todo: Sollte die Feldlänge vielleicht lieber aus den Metadaten ausgelesen werden?	
 	WidthList(11,0) = com.sun.star.sdbc.DataType.VARCHAR		&apos; =  12;
-	WidthList(11,1) = 30
-	WidthList(11,2) = cTextBox
-	WidthList(11,3) = True
-	WidthList(11,4) = &quot;TextField&quot;
+	WidthList(11,1) = cTextBox
+	WidthList(11,2) = True
+	WidthList(11,3) = &quot;TextField&quot;
 	
 	WidthList(12,0) = com.sun.star.sdbc.DataType.LONGVARCHAR	&apos; =  -1;
-	WidthList(12,1) = 50
-	WidthList(12,2) = cTextBox
-	WidthList(12,3) = True
-	WidthList(12,4) = &quot;TextField&quot;
-	
+	WidthList(12,1) = cTextBox
+	WidthList(12,2) = True
+	WidthList(12,3) = &quot;TextField&quot;
+
 	WidthList(13,0) = com.sun.star.sdbc.DataType.DATE			&apos; =  91;
-	WidthList(13,1) = 20
-	WidthList(13,2) = cDateBox
-	WidthList(13,3) = False
-	WidthList(13,4) = &quot;DateField&quot;
+	WidthList(13,1) = cDateBox
+	WidthList(13,2) = False
+	WidthList(13,3) = &quot;DateField&quot;
 	
 	WidthList(14,0) = com.sun.star.sdbc.DataType.TIME			&apos; =  92;
-	WidthList(14,1) = 20
-	WidthList(14,2) = cTimeBox
-	WidthList(14,3) = False
-	WidthList(14,4) = &quot;TimeField&quot;
+	WidthList(14,1) = cTimeBox
+	WidthList(14,2) = False
+	WidthList(14,3) = &quot;TimeField&quot;
 	
 	WidthList(15,0) = com.sun.star.sdbc.DataType.TIMESTAMP		&apos; =  93;
-	WidthList(15,1) = 20
 &apos; Todo: Dieses Control ist keine cDatebox sondern Kollektion aus Time und Datefield
-	WidthList(15,2) = cDateBox
-	WidthList(15,3) = False
-	WidthList(15,4) = &quot;DateField&quot;
+	WidthList(15,1) = cDateBox
+	WidthList(15,2) = False
+	WidthList(15,3) = &quot;DateField&quot;
 
 	ImgWidthList(0,0) = com.sun.star.sdbc.DataType.BINARY			&apos; =  -2;
-	ImgWidthList(0,1) = 1000
-	ImgWidthList(0,2) = cImageControl
-	ImgWidthList(0,3) = False
-	ImgWidthList(0,4) = &quot;ImageControl&quot;
+	ImgWidthList(0,1) = cImageControl
+	ImgWidthList(0,2) = False
+	ImgWidthList(0,3) = &quot;ImageControl&quot;
 	
 	ImgWidthList(1,0) = com.sun.star.sdbc.DataType.VARBINARY		&apos; =  -3;
-	ImgWidthList(1,1) = 1000
-	ImgWidthList(1,2) = cImageControl
-	ImgWidthList(1,3) = False
-	ImgWidthList(1,4) = &quot;ImageControl&quot;
+	ImgWidthList(1,1) = cImageControl
+	ImgWidthList(1,2) = False
+	ImgWidthList(1,3) = &quot;ImageControl&quot;
 
 	ImgWidthList(2,0) = com.sun.star.sdbc.DataType.LONGVARBINARY	&apos; =  -4;
-	ImgWidthList(2,1) = 1000
-	ImgWidthList(2,2) = cImageControl
-	ImgWidthList(2,3) = False
-	ImgWidthList(2,4) = &quot;ImageControl&quot;
+	ImgWidthList(2,1) = cImageControl
+	ImgWidthList(2,2) = False
+	ImgWidthList(2,3) = &quot;ImageControl&quot;
 
 	ImgWidthList(3,0) = com.sun.star.sdbc.DataType.BLOB			&apos; = 2004;
-	ImgWidthList(3,1) = 1000
-	ImgWidthList(3,2) = cImageControl
-	ImgWidthList(3,3) = False
-	ImgWidthList(3,4) = &quot;ImageControl&quot;
+	ImgWidthList(3,1) = cImageControl
+	ImgWidthList(3,2) = False
+	ImgWidthList(3,3) = &quot;ImageControl&quot;
 
 &apos; Note: the following Fieldtypes cannot be presented
 &apos; Todo: This should be mentioned in the help	

@@ -16,15 +16,17 @@ Function GetPreferredWidth(oModel as Object, bGetMaxWidth as Boolean, Optional L
 Dim aPeerSize as new com.sun.star.awt.Size
 Dim nWidth as Integer
 Dim oControl as Object
-&apos; Todo: Wie geht das mit ImageControls
-&apos; kann nur fest verdrahtet werden
-	If Not IsMissing(LocText) Then
-		aPeerSize = GetPeerSize(oModel, oControl, LocText)
-	Else
-		aPeerSize = GetPeerSize(oModel, oControl)
+	If CurControlType = cImageControl Then
+		GetPreferredWidth() = 2000
+	Else		
+		If Not IsMissing(LocText) Then
+			aPeerSize = GetPeerSize(oModel, oControl, LocText)
+		Else
+			aPeerSize = GetPeerSize(oModel, oControl)
+		End If
+		nWidth = aPeerSize.Width
+		GetPreferredWidth = (nWidth + 4) * XPixelFactor	&apos; PixelTo100thmm(nWidth)
 	End If
-	nWidth = aPeerSize.Width
-	GetPreferredWidth = nWidth * XPixelFactor	&apos; PixelTo100thmm(nWidth)
 End Function
 
 
@@ -49,26 +51,28 @@ Dim oPeer as Object
 Dim aPeerSize as new com.sun.star.awt.Size
 	oControl = oController.GetControl(oModel)
 	oPeer = oControl.GetPeer()
-&apos; Todo: Wie geht es bei Image Controls?	
 	If oControl.Model.PropertySetInfo.HasPropertybyName(&quot;EffectiveMax&quot;) Then
 		If oControl.Model.EffectiveMax = 0 Then
+			&apos; This is relevant for decimal fields
 			oControl.Model.EffectiveValue = 999.9999			
 		Else
 			oControl.Model.EffectiveValue = oControl.Model.EffectiveMax
 		End If
-		aPeerSize = oPeer.PreferredSize()
-
+	ElseIf CurFieldType = com.sun.star.sdbc.DataType.BIT Then
+		aPeerSize = oPeer.PreferredSize
 	ElseIf Not IsMissing(LocText) Then
 		oControl.Text = LocText
-		aPeerSize = oPeer.PreferredSize()
-	ElseIf CurFieldType = com.sun.star.sdbc.DataType.BIT Then
-		oPeer.PreferredSize
-		aPeerSize = oPeer.PreferredSize
+	ElseIf CurFieldType = com.sun.star.sdbc.DataType.DATE Then
+		oControl.Model.Date = Date
+	ElseIf CurFieldType = com.sun.star.sdbc.DataType.TIME Then
+		oControl.Time = Time
 	Else
-		oControl.Text = &quot;2222222222&quot;
-		aPeerSize = oPeer.PreferredSize()
-		oControl.Text = &quot;&quot;
+		Dim sText as String	
+		sText = Mid(SBSIZETEXT,1,CurFieldLength)
+		oControl.Text = sText
+&apos;		oControl.Model.Text = sText
 	End If
+	aPeerSize = oPeer.PreferredSize()	
 	GetPeerSize = aPeerSize
 End Function
 
@@ -137,27 +141,40 @@ Dim bWithBackGraphic as Boolean
 End Sub
 
 
-Function SetNumerics(ByVal oLocObject as Object) as Object	
+Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Object	
 	&apos; Todo: FS fragen, ob dies alles richtig ist
 	&apos; Todo: Es sollte in der Hilfe darauf hingewiesen werden, dass der untere Wertbereich negativ ist.
-	Select Case CurFieldType
+	Select Case iLocFieldType
 		Case com.sun.star.sdbc.DataType.BIGINT
 			oLocObOject.EffectiveMax = 2147483647 * 2147483647 
 			oLocbject.EffectiveMin = -(-2147483648 * -2147483648)
-		Case com.sun.star.sdbc.DataType.INTEGER 
+			oLocObject.DecimalAccuracy = 0
+		Case com.sun.star.sdbc.DataType.INTEGER
 			oLocObject.EffectiveMax = 2147483647 
 			oLocObject.EffectiveMin = -2147483648
 		Case  com.sun.star.sdbc.DataType.SMALLINT
 			oLocObject.EffectiveMax = 32767 
 			oLocObject.EffectiveMin = -32768
+			oLocObject.DecimalAccuracy = 0
 		Case com.sun.star.sdbc.DataType.TINYINT
 			oLocObject.EffectiveMax = 127
 			oLocObject.EffectiveMin = -128
+			oLocObject.DecimalAccuracy = 0
 		Case com.sun.star.sdbc.DataType.FLOAT, com.sun.star.sdbc.DataType.REAL, com.sun.star.sdbc.DataType.DOUBLE, com.sun.star.sdbc.DataType.DECIMAL, com.sun.star.sdbc.DataType.NUMERIC
-		&apos; Todo: Hier sollte der Numberformatter angeworfen werden um die Nachkommastellen
-		&apos; festzulegen, da ein EffectiveMax/EffectiveMin hier keinen Sinn macht
+&apos;		oLocObject.Scale = 0
+		&apos; Todo: Hier sollte die Property &quot;Scale&quot; zusammen mit der Precision abgefragt werden, um die Nachkommastellen richtig darzustellen,
+		&apos; da ein EffectiveMax/EffectiveMin hier keinen Sinn macht
 &apos;			oLocObject.DecimalAccuracy = FieldDecimalAccuracy%(n%) &apos; Nachkommastellen
+		Case com.sun.star.sdbc.DataType.CHAR, com.sun.star.sdbc.DataType.VARCHAR, com.sun.star.sdbc.DataType.LONGVARCHAR
+			If oLocObject.MaxTextLen = 0 Or oLocObject.MaxTextLen &gt; 30 Then
+				oLocObject.MaxTextLen = 30
+			Else
+				oLocObject.MaxTextLen = CurFieldLength			
+			End If
+		Case com.sun.star.sdbc.DataType.DATE, com.sun.star.sdbc.DataType.TIME
+			oLocObject.MaxTextLen = CurFieldLength			
 	End Select
+	
 End Function
 
 
@@ -199,8 +216,6 @@ Dim sReturn as String
 End Function
 
 
-
-
 Function CountItemsInArray(BigArray(), SearchItem)
 Dim i as Integer
 Dim MaxIndex as Integer
@@ -213,4 +228,26 @@ Dim ResCount as Integer
 		End If
 	Next i
 	CountItemsInArray() = ResCount
-End Function					</script:module>
+End Function
+
+
+Function GetDBHeight(oDBModel as Object)		
+	If CurControlType = cImageControl Then
+		nDBWidth = 2000
+	Else
+		If bIsVeryFirstValueField Then
+			&apos; Todo: Hier wird vereinfachend davon ausgegangen, dass alle DB-Feldern immer die selbe Höhe wie Textfelder haben
+			nDBRefHeight = GetPreferredHeight(oDBModel)
+			bIsVeryFirstValueField = False
+		End If
+		&apos;Todo: Vielleicht könnte man dieses Feld auch noch tiefer machen
+		If CurFieldType = com.sun.star.sdbc.DataType.LONGVARCHAR Then
+			oDBModel.MultiLine = True
+			nDBHeight = nDBRefHeight * 4
+		Else
+			nDBHeight = nDBRefHeight
+		End If
+	End If
+	GetDBHeight() = nDBHeight
+End Function
+</script:module>

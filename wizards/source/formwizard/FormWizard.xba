@@ -25,12 +25,12 @@ Public FieldNames() as String
 Public oDBContext as Object
 Public oUcb as Object
 Public oDocInfo as Object
-&apos;Public TemplateList(50,1) as String
-Public WidthList(15,4)
-Public ImgWidthList(3,4)
+Public WidthList(15,3)
+Public ImgWidthList(3,3)
 Public sDBName as String
 Public Tablename as String
-
+Public Const SBSIZETEXT = &quot;The quick brown fox jumps over the lazy dog.The quick brown fox jumps over the lazy dog.&quot;
+Public bDisposeDoc as Boolean
 &apos; Todo: Mit FS abschnacken, dass als CommandType Nur Queries und Tables zugelassen sind. Dabei müsste noch abgklärt werden
 &apos; wann ein Content ein &apos;Command&apos; ist.
 
@@ -72,6 +72,7 @@ Dim SelCount as Integer
 &apos; Todo: Variable is initialized due to Bug#88329
 	CurArrangement = 0
 	bControlsareCreated = False
+	bDisposeDoc = True
 	MaxIndex = -1
 	If Not InitResources(&quot;Formwizard&quot;,&quot;dbw&quot;) Then
 		Exit Sub
@@ -141,13 +142,16 @@ Dim SelCount as Integer
 	ToggleWindow(True)
 	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	oDialogModel.cmdBack.Enabled = False
+	oDialogModel.cmdGoOn.Enabled = False
 
 	DlgFormDB.Execute()
 	DlgFormDB.Dispose
 	If Not IsNull(oDBConnection) Then
 		oDBConnection.Dispose()
 	End If
-	oDocument.Dispose
+	If bDisposeDoc Then
+		oDocument.Dispose
+	End If
 	Exit Sub
 GlobalError:
 	MsgBox(sMsgErrMsg , 16, sMsgWizardName)
@@ -211,7 +215,7 @@ End Sub
 
 
 Sub NextStep()
-Dim bOldVisible
+Dim bOldVisible as Boolean
 	&apos; Note: Unfortunately it is not possible to query the visibility of the imagecontrol directly
 	bOldVisible = oDialogModel.Height &gt; 40
 	Select Case oDialogModel.Step
@@ -260,6 +264,7 @@ Sub ToggleDatabasePage(bDoEnable as Boolean)
 		.optIgnoreBinaries.Enabled = bDoEnable
 		.optBinariesasGraphics.Enabled = bDoEnable
 		.cmdHelp.Enabled = bDoEnable
+		.cmdGoOn.Enabled = Ubound(oDialogModel.lstSelFields.StringItemList()) &lt;&gt; -1
 	End With
 End Sub
 
@@ -269,6 +274,8 @@ Dim bDocIsStored as Boolean
 Dim FilterNames(1,2) as String
 Dim oMasterKey as Object
 Dim oFilters() as Object
+Dim sTargetPath as String
+Dim sBookmarkName as String
 	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
 	oFilters() = oMasterKey.Types
 	FilterNames(0,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
@@ -277,8 +284,11 @@ Dim oFilters() as Object
 	FilterNames(1,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer_Template&quot;).UIName
 	FilterNames(1,1) = &quot;*.stw&quot;
 	FilterNames(1,2) = &quot;swriter: writer_StarOffice_XML_Writer_Template&quot;
-	bDocIsStored = StoreDocument(oDocument, FilterNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;.&quot; &amp; TableName, WorkPath)
-	If bDocIsStored Then
+	sTargetPath = StoreDocument(oDocument, FilterNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;.&quot; &amp; TableName, WorkPath)
+	If sTargetPath &lt;&gt; &quot;&quot; Then
+		sBookmarkName = GetFileNamewithoutExtension(FileNameoutofPath(sTargetPath))
+		oDatasource.getBookmarks().insertByName(sBookmarkName, sTargetPath)
+		bDisposeDoc = False
 		DlgFormDB.EndExecute()
 	End If
 End Sub</script:module>

@@ -57,7 +57,7 @@ Public Const cXOffset = 1000
 Public Const cYOffset = 700
 &apos; This is the viewed space that we lose because of the symbol bars
 Public Const cSymbolMargin = 2000
-Public Const MaxFieldIndex% = 200
+Public Const MaxFieldIndex = 200
    
 Public Const cControlCollectionCount = 9
 Public Const cLabel 		= 1
@@ -85,15 +85,15 @@ Public oGridModel as Object
 Public nFieldPostfixes (MaxFieldIndex%) as string
 
 
-Function InsertControl (oControlObject as object, aPoint as Object, aSize as Object)
+Function InsertControl(oContainer as Object, oControlObject as object, aPoint as Object, aSize as Object)
 Dim oShape as object
 	oShape = oDocument.CreateInstance (&quot;com.sun.star.drawing.ControlShape&quot;)
 	oShape.Size = aSize
 	oShape.Position = aPoint
 	oShape.AnchorType = com.sun.star.text.TextContentAnchorType.AT_PARAGRAPH
 	oShape.control = oControlObject
-	oDrawPage.Add (oShape)
-	InsertControl = oShape
+	oContainer.Add(oShape)
+	InsertControl() = oShape
 End Function
 
 
