@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-13 16:56:38 $
+ *  last change: $Author: jp $ $Date: 2001-02-16 10:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,15 @@
 #endif
 #ifndef _SVX_EMPHITEM_HXX
 #include <svx/emphitem.hxx>
+#endif
+#ifndef _SVX_TWOLINESITEM_HXX
+#include <svx/twolinesitem.hxx>
+#endif
+#ifndef _SVX_CHARSCALEITEM_HXX
+#include <svx/charscaleitem.hxx>
+#endif
+#ifndef _SVX_CHARROTATEITEM_HXX
+#include <svx/charrotateitem.hxx>
 #endif
 #ifndef _XOUTBMP_HXX //autogen
 #include <svx/xoutbmp.hxx>
@@ -1898,6 +1907,52 @@ static Writer& OutRTF_SwEmphasisMark( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutRTF_SwTwoInOne( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    if( ((SvxTwoLinesItem&)rHt).GetValue() )
+    {
+        SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
+
+        sal_Unicode cStart = ((SvxTwoLinesItem&)rHt).GetStartBracket();
+        sal_Unicode cEnd = ((SvxTwoLinesItem&)rHt).GetStartBracket();
+
+        USHORT nType;
+        if( !cStart && !cEnd )
+            nType = 0;
+        else if( '{' == cStart || '}' == cEnd )
+            nType = 4;
+        else if( '<' == cStart || '>' == cEnd )
+            nType = 3;
+        else if( '[' == cStart || ']' == cEnd )
+            nType = 2;
+        else                            // all other kind of brackets
+            nType = 1;
+
+        rWrt.Strm() << sRTF_TWOINONE;
+        rWrt.OutULong( nType );
+        rRTFWrt.bOutFmtAttr = TRUE;
+    }
+    return rWrt;
+}
+
+static Writer& OutRTF_SwCharRotate( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
+    rRTFWrt.bOutFmtAttr = TRUE;
+    rWrt.Strm() << sRTF_HORZVERT;
+    rWrt.OutLong( ((SvxCharRotateItem&)rHt).IsFitToLine() ? 1 : 0 );
+    return rWrt;
+}
+static Writer& OutRTF_SwCharScaleW( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
+    rRTFWrt.bOutFmtAttr = TRUE;
+    rWrt.Strm() << sRTF_CHARSCALEX;
+    rWrt.OutLong( ((SvxCharScaleWidthItem&)rHt).GetValue() );
+    return rWrt;
+}
+
+
 static Writer& OutRTF_SwShadowed( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
@@ -3457,10 +3512,10 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_CHRATR_CTL_LANGUAGE */       OutRTF_SwLanguage,
 /* RES_CHRATR_CTL_POSTURE */        OutRTF_SwPosture,
 /* RES_CHRATR_CTL_WEIGHT */         OutRTF_SwWeight,
-/* RES_CHRATR_WRITING_DIRECTION */  0,
+/* RES_CHRATR_ROTATE */             OutRTF_SwCharRotate,
 /* RES_CHRATR_EMPHASIS_MARK */      OutRTF_SwEmphasisMark,
-/* RES_CHRATR_DUMMY3 */             0,
-/* RES_CHRATR_DUMMY4 */             0,
+/* RES_CHRATR_TWO_LINES */          OutRTF_SwTwoInOne,
+/* RES_CHRATR_SCALEW */             OutRTF_SwCharScaleW,
 /* RES_CHRATR_DUMMY5 */             0,
 /* RES_CHRATR_DUMMY1 */             0, // Dummy:
 
@@ -3575,11 +3630,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.11 2001-02-13 16:56:38 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.12 2001-02-16 10:27:59 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/02/13 16:56:38  jp
+      export CJK Font attributes
+
       Revision 1.10  2001/02/13 09:24:35  jp
       Bug #83787#: export default attributes, which are different to RTF-specification
 
