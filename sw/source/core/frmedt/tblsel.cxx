@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:56:15 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,8 +383,16 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
 void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                 SwSelBoxes& rBoxes, const SwTblSearchType eSearchType )
 {
+    // #112697# Robust:
+    const SwTabFrm* pStartTab = pStart->FindTabFrm();
+    if ( !pStartTab )
+    {
+        ASSERT( false, "GetTblSel without start table" )
+        return;
+    }
+
     //Muss ein HeadlineRepeat beachtet werden?
-    const BOOL bRepeat = pStart->FindTabFrm()->GetTable()->IsHeadlineRepeat();
+    const BOOL bRepeat = pStartTab->GetTable()->IsHeadlineRepeat();
     int bChkProtected = TBLSEARCH_PROTECT & eSearchType;
 
     BOOL bTblIsValid;
@@ -499,7 +507,10 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
     // #109394# if table is invisible, return
     // (layout needed for forming table selection further down, so we can't
     //  continue with invisible tables)
-    if( pCNd->GetFrm() == NULL )
+    // OD 07.11.2003 #i22135# - Also the content of the table could be
+    //                          invisible - e.g. in a hidden section
+    // Robust: check, if content was found (e.g. empty table cells)
+    if ( !pCNd || pCNd->GetFrm() == NULL )
             return FALSE;
 
     const SwLayoutFrm *pStart = pCNd ? pCNd->GetFrm( &aNullPos )->GetUpper() : 0;
@@ -509,6 +520,12 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
     pCNd = aIdx.GetNode().GetCntntNode();
     if( !pCNd )
         pCNd = aIdx.GetNodes().GoNextSection( &aIdx, FALSE, FALSE );
+
+    // OD 07.11.2003 #i22135# - Robust: check, if content was found and if it's visible
+    if ( !pCNd || pCNd->GetFrm() == NULL )
+    {
+        return FALSE;
+    }
 
     const SwLayoutFrm *pEnd = pCNd ? pCNd->GetFrm( &aNullPos )->GetUpper() : 0;
     ASSERT( pEnd, "ohne Frame geht gar nichts" );
@@ -1769,7 +1786,8 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     sal_Bool bRTL = pTab->IsRightToLeft();
 #endif
 
-    const long nWish = pOrg->GetFmt()->GetFrmSize().GetWidth();
+    const long nTmpWish = pOrg->GetFmt()->GetFrmSize().GetWidth();
+    const long nWish = ( nTmpWish > 0 ) ? nTmpWish : 1;
     while ( pTab->IsFollow() )
     {
         const SwFrm *pTmp = pTab->FindPrev();
@@ -1781,8 +1799,7 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     const SwTwips nSX = ::lcl_CalcWish( rpStart, nWish, nPrtWidth ) +
                         (pTab->*fnRect->fnGetPrtLeft)();
 
-    const SwTwips nSX2= nSX + (rpStart->GetFmt()->GetFrmSize().GetWidth() *
-                                            nPrtWidth / nWish);
+    const SwTwips nSX2= nSX + (rpStart->GetFmt()->GetFrmSize().GetWidth() * nPrtWidth / nWish);
 
     const SwLayoutFrm *pTmp = pTab->FirstCell();
 
@@ -1886,6 +1903,13 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
         pStart = pStart->GetUpper();
     while ( !pEnd->IsCellFrm() )
         pEnd = pEnd->GetUpper();
+
+    // #112697# Robust:
+    if ( !pStart || !pEnd )
+    {
+        ASSERT( false, "MakeSelUnions with pStart or pEnd not in CellFrm" )
+        return;
+    }
 
     const SwTabFrm *pTable = pStart->FindTabFrm();
     const SwTabFrm *pEndTable = pEnd->FindTabFrm();
