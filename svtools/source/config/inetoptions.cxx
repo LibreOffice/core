@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2001-02-12 15:54:52 $
+ *  last change: $Author: kso $ $Date: 2001-03-16 12:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,12 +389,6 @@ void SvtInetOptions::Impl::setProperty(Index nIndex, uno::Any const & rValue,
         m_aEntries[nIndex].m_aValue = rValue;
         m_aEntries[nIndex].m_eState = bFlush ? Entry::KNOWN : Entry::MODIFIED;
     }
-
-    //SB: Remove the following hack once #83237# is fixed.
-    /* KSO: Interim fix for #83237#. Otherwise changes will be written */
-    /*      and notified to listeners listening directly at the config */
-    /*      server only at application end.                            */
-    bFlush = true;
 
     uno::Sequence< rtl::OUString > aKeys(1);
     aKeys[0] = m_aEntries[nIndex].m_aName;
