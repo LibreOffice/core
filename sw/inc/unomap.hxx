@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-11 12:50:18 $
+ *  last change: $Author: mtg $ $Date: 2001-06-05 14:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,9 @@
 #define WID_DOC_FORBIDDEN_CHARS                 1009
 #define WID_DOC_CHANGES_PASSWORD                1010
 #define WID_DOC_TWO_DIGIT_YEAR                  1011
+#define WID_DOC_AUTOMATIC_CONTROL_FOCUS         1012
+#define WID_DOC_APPLY_FORM_DESIGN_MODE          1013
+
 
 //AutoText
 #define WID_GROUP_PATH                          0
