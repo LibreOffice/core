@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-29 13:39:52 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,8 +267,8 @@ void SwXPrintSettings::setPropertyValue(const OUString& rPropertyName,
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bVal = sal_False;
 
-    if(   COMPARE_EQUAL != rPropertyName.compareToAscii(UNO_NAME_PRINT_ANNOTATION_MODE)
-       && COMPARE_EQUAL != rPropertyName.compareToAscii(UNO_NAME_PRINT_FAX_NAME) )
+    if( !rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_PRINT_ANNOTATION_MODE))
+       && !rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_PRINT_FAX_NAME) ))
         bVal = *(sal_Bool*)aValue.getValue();
 
     SwPrintOptions* pPrtOpt = SW_MOD()->GetPrtOptions(bWeb);
@@ -702,6 +702,9 @@ Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( Runt
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/05/29 13:39:52  jp
+    Bug #87355#: setPropertyValue - call ToggleBrowseMode only if it needed
+
     Revision 1.5  2001/04/27 10:51:54  os
     new zoom type for preview added
 
