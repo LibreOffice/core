@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-19 17:34:40 $
+ *  last change: $Author: hdu $ $Date: 2001-11-20 09:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8562,7 +8562,7 @@ xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const String& rStr,
     if( nIndex >= rStr.Len() )
         return nIndex;
     xub_StrLen nEnd = nIndex + nLen;
-    if( (ULONG)nEnd+nLen >= rStr.Len() )
+    if( (ULONG)nIndex+nLen > rStr.Len() )
         nEnd = rStr.Len();
 
     DBG_ASSERT( nIndex < nEnd, "StartPos >= EndPos?" );
