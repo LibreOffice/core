@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:25:20 $
+ *  last change: $Author: cl $ $Date: 2000-10-20 14:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_END_AT_TXTEND
     // not required
     // RES_UNKNOWNATR_CONTAINER
-//  M_E_SE( TEXT, xmlns, RES_UNKNOWNATR_CONTAINER, 0 ),
+    M_E( "ParaUserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     { 0, 0, 0, 0 }
 };
 
@@ -370,9 +370,8 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     // TODO
     // RES_TXTATR_HARDBLANK
     // TODO
-
     // RES_UNKNOWNATR_CONTAINER
-//  M_E_SE( TEXT, xmlns, RES_UNKNOWNATR_CONTAINER, 0 ),
+    M_E( "CharUserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     { 0, 0, 0, 0 }
 };
 
