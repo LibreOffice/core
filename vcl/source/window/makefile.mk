@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.15 $
+#	$Revision: 1.16 $
 #
-#	last change: $Author: obo $ $Date: 2004-08-12 10:46:50 $
+#	last change: $Author: obo $ $Date: 2004-11-16 15:11:19 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -86,6 +86,7 @@ SLOFILES= \
             $(SLO)$/dlgctrl.obj 	\
             $(SLO)$/dndevdis.obj	\
             $(SLO)$/dndlcon.obj     \
+            $(SLO)$/dockingarea.obj \
             $(SLO)$/dockmgr.obj 	\
             $(SLO)$/dockwin.obj 	\
             $(SLO)$/floatwin.obj	\
