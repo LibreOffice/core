@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:37:55 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2039,9 +2039,14 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
                     rDBFormatData.xFormatter,
                     rDBFormatData.aLocale,
                     rDBFormatData.aNullDate);
-                double fVal = xColumn->getDouble();
                 if (pNumber)
-                    *pNumber = fVal;
+                {
+                    double fVal = xColumn->getDouble();
+                    if(!xColumn->wasNull())
+                    {
+                        *pNumber = fVal;
+                    }
+                }
             }
             catch(Exception& )
             {
@@ -3065,14 +3070,18 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         sSourceDocURL = URIHelper::SmartRel2Abs(
             INetURLObject(), utl::TempFile::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
-        SfxStringItem aURL( SID_FILE_NAME, sSourceDocURL );
         const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
                 String::CreateFromAscii( FILTER_XML ),
                 SwDocShell::Factory().GetFilterContainer() );
 
         SfxStringItem aFilterName( SID_FILTER_NAME, pSfxFlt->GetFilterName());
-        rSourceView.GetViewFrame()->GetDispatcher()->Execute(
-                            SID_EXPORTDOC, SFX_CALLMODE_SYNCHRON, &aURL, &aFilterName, 0);
+        uno::Sequence< beans::PropertyValue > aValues(1);
+        beans::PropertyValue* pValues = aValues.getArray();
+        pValues[0].Name = C2U("FilterName");
+        pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
+        uno::Reference< frame::XStorable > xStore( rSourceView.GetDocShell()->GetModel(), uno::UNO_QUERY);
+        xStore->storeToURL( sSourceDocURL, aValues );
+
 
         // create a target docshell to put the merged document into
         SfxObjectShellRef xTargetDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
@@ -3124,6 +3133,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             SfxBoolItem aHidden( SID_HIDDEN, TRUE );
             SfxStringItem aReferer( SID_REFERER, String::CreateFromAscii(URL_PREFIX_PRIV_SOFFICE ));
             SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
+            SfxStringItem aURL( SID_FILE_NAME, sSourceDocURL );
             const SfxPoolItem* pReturnValue =
                             rSourceView.GetViewFrame()->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
                                     &aURL, &aFilterName, &aHidden, &aReferer, &aTarget, 0);
