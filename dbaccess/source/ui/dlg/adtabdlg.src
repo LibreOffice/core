@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:57:00 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,16 +109,16 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ PORTUGUESE_BRAZILIAN ] = "~Nome da tabela" ;
         Text [ SWEDISH ] = "~Tabellnamn" ;
         Text [ PORTUGUESE ] = "~Nome da tabela" ;
-        Text[ chinese_simplified ] = "±í¸ñÃû³Æ(~T)";
+        Text[ chinese_simplified ] = "è¡¨æ ¼åç§°(~T)";
         Text[ russian ] = "Èìÿ òàáëèöû";
         Text[ polish ] = "Nazwa tabeli";
-        Text[ japanese ] = "Ã°ÌŞÙ–¼(~T)";
-        Text[ chinese_traditional ] = "ªí®æ¦WºÙ(~T)";
+        Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™å(~T)";
+        Text[ chinese_traditional ] = "è¡¨æ ¼åç¨±(~T)";
         Text[ arabic ] = "ÇÓã ÇáÌÏæá";
         Text[ dutch ] = "~Tabelnaam";
-        Text[ chinese_simplified ] = "±í¸ñÃû³Æ(~T)";
+        Text[ chinese_simplified ] = "è¡¨æ ¼åç§°(~T)";
         Text[ greek ] = "¼íïìá ğßíáêá";
-        Text[ korean ] = "Å×ÀÌºí ÀÌ¸§(~T)";
+        Text[ korean ] = "í…Œì´ë¸” ì´ë¦„(~T)";
         Text[ turkish ] = "Tablo adı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre de la tabla";
@@ -150,16 +150,16 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ PORTUGUESE ] = "A~dicionar" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text[ chinese_simplified ] = "ĞÂÔö(~A)";
+        Text[ chinese_simplified ] = "æ–°å¢(~A)";
         Text[ russian ] = "Äîáàâèòü";
         Text[ polish ] = "Dodaj";
-        Text[ japanese ] = "’Ç‰Á(~A)";
-        Text[ chinese_traditional ] = "·s¼W(~A)";
+        Text[ japanese ] = "è¿½åŠ (~A)";
+        Text[ chinese_traditional ] = "æ–°å¢(~A)";
         Text[ arabic ] = "ÅÖÇİÉ";
         Text[ dutch ] = "Toe~voegen";
-        Text[ chinese_simplified ] = "ĞÂÔö(~A)";
+        Text[ chinese_simplified ] = "æ–°å¢(~A)";
         Text[ greek ] = "ĞñïóèŞêç";
-        Text[ korean ] = "Ãß°¡(~A)";
+        Text[ korean ] = "ì¶”ê°€(~A)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Añadir";
@@ -184,16 +184,16 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ spanish ] = "~Cerrar" ;
         Text [ english_us ] = "~Close" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ chinese_simplified ] = "å…³é—­(~C)";
         Text[ russian ] = "~Çàêğûòü";
         Text[ polish ] = "Zamknij";
-        Text[ japanese ] = "•Â‚¶‚é(~C)";
-        Text[ chinese_traditional ] = "Ãö³¬(~C)";
+        Text[ japanese ] = "é–‰ã˜ã‚‹(~C)";
+        Text[ chinese_traditional ] = "é—œé–‰(~C)";
         Text[ arabic ] = "ÅÛáÇŞ";
         Text[ dutch ] = "~Sluiten";
-        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ chinese_simplified ] = "å…³é—­(~C)";
         Text[ greek ] = "Êëåßóéìï";
-        Text[ korean ] = "´İ±â(~C)";
+        Text[ korean ] = "ë‹«ê¸°(~C)";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cerrar";
@@ -221,16 +221,16 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ PORTUGUESE_BRAZILIAN ] = "Tabela" ;
         Text [ SWEDISH ] = "Tabell" ;
         Text [ PORTUGUESE ] = "Tabela" ;
-        Text[ chinese_simplified ] = "±í¸ñ";
+        Text[ chinese_simplified ] = "è¡¨æ ¼";
         Text[ russian ] = "Òàáëèöà";
         Text[ polish ] = "Tabela";
-        Text[ japanese ] = "Ã°ÌŞÙ";
-        Text[ chinese_traditional ] = "ªí®æ";
+        Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™";
+        Text[ chinese_traditional ] = "è¡¨æ ¼";
         Text[ arabic ] = "ÇáÌÏæá";
         Text[ dutch ] = "Tabel";
-        Text[ chinese_simplified ] = "±í¸ñ";
+        Text[ chinese_simplified ] = "è¡¨æ ¼";
         Text[ greek ] = "Ğßíáêáò";
-        Text[ korean ] = "Å×ÀÌºí";
+        Text[ korean ] = "í…Œì´ë¸”";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tabla";
@@ -250,34 +250,35 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ PORTUGUESE_BRAZILIAN ] = "<padr?o>" ;
         Text [ SWEDISH ] = "<standard>" ;
         Text [ PORTUGUESE ] = "<padrão>" ;
-        Text[ chinese_simplified ] = "<Ä¬ÈÏ>";
+        Text[ chinese_simplified ] = "<é»˜è®¤>";
         Text[ russian ] = "<Ñòàíäàğò>";
         Text[ polish ] = "<Domyœlnie>";
-        Text[ japanese ] = "<•W€>";
-        Text[ chinese_traditional ] = "<Àq»{>";
+        Text[ japanese ] = "<æ¨™æº–>";
+        Text[ chinese_traditional ] = "<é»˜èª>";
         Text[ arabic ] = "<ÇİÊÑÇÖí>";
         Text[ dutch ] = "<Standaard>";
-        Text[ chinese_simplified ] = "<Ä¬ÈÏ>";
+        Text[ chinese_simplified ] = "<é»˜è®¤>";
         Text[ greek ] = "<ĞñïåğéëïãŞ>";
-        Text[ korean ] = "<±âº»>";
+        Text[ korean ] = "<ê¸°ë³¸>";
         Text[ turkish ] = "<Standart>";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "<predeterminado>";
     };
-    Text[ chinese_simplified ] = "ĞÂÔö±í¸ñ";
+    Text[ chinese_simplified ] = "æ–°å¢è¡¨æ ¼";
     Text[ russian ] = "Äîáàâèòü òàáëèöû";
     Text[ polish ] = "Dodaj tabelê";
-    Text[ japanese ] = "Ã°ÌŞÙ‚Ì’Ç‰Á";
-    Text[ chinese_traditional ] = "·s¼Wªí®æ";
+    Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ã®è¿½åŠ ";
+    Text[ chinese_traditional ] = "æ–°å¢è¡¨æ ¼";
     Text[ arabic ] = "ÅÖÇİÉ ÌÏÇæá";
     Text[ dutch ] = "Tabellen toevoegen";
-    Text[ chinese_simplified ] = "ĞÂÔö±í¸ñ";
+    Text[ chinese_simplified ] = "æ–°å¢è¡¨æ ¼";
     Text[ greek ] = "ĞñïóèŞêç ğßíáêá";
-    Text[ korean ] = "Å×ÀÌºí Ãß°¡";
+    Text[ korean ] = "í…Œì´ë¸” ì¶”ê°€";
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Añadir tablas";
 };
+
 
 
 
