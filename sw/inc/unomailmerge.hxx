@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:26:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,8 @@ class SwXMailMerge :
 
     sal_Bool                                                bSaveAsSingleFile;
     ::rtl::OUString                                         sSaveFilter;
+    ::rtl::OUString                                         sSaveFilterOptions;
+    com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSaveFilterData;
 
 
 
