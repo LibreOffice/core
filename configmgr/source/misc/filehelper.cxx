@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-18 19:12:17 $
+ *  last change: $Author: rt $ $Date: 2001-09-21 13:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ namespace configmgr
     }
 
     // -----------------------------------------------------------------------------
-    TimeValue FileHelper::getModifyTime(rtl::OUString const& _sURL)
+    TimeValue FileHelper::getModifyTime(rtl::OUString const& _sURL) throw (io::IOException)
     {
         TimeValue aTime = {0,0};
         DirectoryItem aItem;
