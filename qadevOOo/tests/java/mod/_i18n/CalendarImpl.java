@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CalendarImpl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:38 $
+ *  last change:$Date: 2003-05-27 12:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ public class CalendarImpl extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = Param.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance
                 ( "com.sun.star.i18n.LocaleCalendar" );
         }
