@@ -229,6 +229,10 @@ public final class DocumentDeserializerImpl
           //System.out.println("\n** Transform Complete ***");
 
        }
+       catch (StackOverflowError sOE){
+              System.out.println("\nERROR : Stack Overflow Error During Transformation\n Try increasing the stack size by passing the -Xss1m option to the JRE.");
+          throw sOE;
+       }
        catch(Exception e){
               System.out.println("An error occured in the transformation : "+e);
        }
