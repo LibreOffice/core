@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:36:27 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 08:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ void SAL_CALL OTable::disposing(void)
 Reference< XNameAccess > SAL_CALL OTable::getColumns(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (rBHelper.bDisposed)
+    if (OTableDescriptor_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     if(!m_pColumns)

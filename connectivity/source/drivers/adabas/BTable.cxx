@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:08:03 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 08:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,13 +383,7 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
 void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (
-#ifdef GCC
-        sdbcx::OTable_BASE::rBHelper.bDisposed
-#else
-        rBHelper.bDisposed
-#endif
-        )
+    if ( connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed)
                 throw DisposedException();
 
     if(!isNew())
@@ -418,13 +412,7 @@ void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLEx
 void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (
-#ifdef GCC
-        sdbcx::OTable_BASE::rBHelper.bDisposed
-#else
-        rBHelper.bDisposed
-#endif
-        )
+    if ( connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed)
                 throw DisposedException();
 
     if(!isNew())
@@ -488,13 +476,7 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
 void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (
-#ifdef GCC
-        sdbcx::OTable_BASE::rBHelper.bDisposed
-#else
-        rBHelper.bDisposed
-#endif
-        )
+    if ( connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed)
                 throw DisposedException();
 
         Reference< XPropertySet > xOld;
