@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 19:37:02 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ english_us ] = "Redo $(ARG1) action(s)";
     Text[ portuguese ] = "Restaurar operaзгo $(ARG1)";
     Text[ russian ] = "¬осстановить действие(€) $(ARG1)";
-    Text[ greek ] = "Redo $(ARG1) action";
+    Text[ greek ] = "≈рбнбцпс№ $(ARG1) енЁсгейбт(юн)";
     Text[ dutch ] = "Redo $(ARG1) action";
     Text[ french ] = "Restaurer les opйrations $(ARG1)";
     Text[ spanish ] = "Restaurar $(ARG1) acciуn(es)";
@@ -140,4 +140,5 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ arabic ] = "Redo $(ARG1) action";
     Text[ catalan ] = "Redo $(ARG1) action";
 };
+
 
