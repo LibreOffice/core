@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACollection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 18:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,11 +142,11 @@ namespace connectivity
             }
 
             // dispatch the refcounting to the parent
-            virtual void SAL_CALL acquire() throw(staruno::RuntimeException)
+            virtual void SAL_CALL acquire() throw()
             {
                 m_rParent.acquire();
             }
-            virtual void SAL_CALL release() throw(staruno::RuntimeException)
+            virtual void SAL_CALL release() throw()
             {
                 m_rParent.release();
             }
