@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-08 14:21:18 $
+ *  last change: $Author: ssa $ $Date: 2001-11-12 13:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7548,6 +7548,8 @@ String OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
                         do
                         {
                             aStr = aTempStr;
+                            if( nLastContent > aStr.Len() )
+                                nLastContent = aStr.Len();
                             while ( nFirstContent < nLastContent )
                             {
                                 nLastContent--;
