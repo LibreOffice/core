@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-08-28 12:21:35 $
+ *  last change: $Author: os $ $Date: 2002-09-02 13:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,36 +433,6 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ arabic ] = "Support ~assistive technology tools (program restart required)";
         Text[ catalan ] = "Support ~assistive technology tools (program restart required)";
         Text[ thai ] = "Support ~assistive technology tools (program restart required)";
-    };
-    FixedText FT_NOTE
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( COL2 , ROWB_8 ) ;
-        Size = MAP_APPFONT ( DIFF((COL2-COL1),CB_WIDTH) , LASTTEXT_HEIGHT ) ;
-        WordBreak = TRUE;
-        Text = "Hinweis: F�r die Kommunikation mit Programmen, die einen behindertengerechten Zugriff auf den Computer erm�glichen, wird Sun Microsystems Java benutzt. Beim ersten Programmstart muss daher die Java Laufzeitumgebung geladen werden. Dies kann zu einer verl�ngerten Startzeit f�hren." ;
-        Text [ ENGLISH ] = "Please note that accessibility support relies on Sun Microsystems Java for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the Java runtime environment has to be started as well." ;
-        Text[ english_us ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ portuguese ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ russian ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ greek ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ dutch ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ french ] = "Remarque : Les logiciels offrant les fonctions d'accessibilit� aux personnes souffrant d'un handicap communiquent par le biais de Sun Microsystems JAVA. Ceci signifie que l'Environnement Runtime Java doit �tre charg� au premier d�marrage du programme, ce qui peut occasionner un d�lai de chargement plus important.";
-        Text[ spanish ] = "Advertencia: Sun Microsystems utiliza Java para la comunicaci�n con programas que faciliten el acceso al ordenador a personas disminuidas. El primer inicio del programa puede durar unos minutos ya que primero se debe cargar el entorno de ejecuci�n Java. ";
-        Text[ finnish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ italian ] = "Nota: la Sun Microsystems utilizza Java per la comunicazione con programmi che facilitano l'accesso al computer a persone disabili. Pertanto, il primo avvio del programma pu� ritardare qualche minuto per caricare JAVA runtime environment.";
-        Text[ danish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ swedish ] = "Observera att Sun Microsystems Java anv�nds f�r kommunikation med hj�lpprogram som ger st�d f�r funktionsnedsatta personer i deras arbete med datorer. D�rf�r m�ste Java-k�rtidsmilj�n laddas f�rsta g�ngen programmet startas vilket kan leda till f�rl�ngd starttid.";
-        Text[ polish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ portuguese_brazilian ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ japanese ] = "注意: ハンディキャップを乗り越えたプログラム操作がコンピュータで行えるよう、すべてのユーザーの方々のためにプログラムの使いやすさを配慮した Sun Microsystems JAVA 使用のユーザー補助機能を搭載しています。これを使用するには、初回プログラム起動時に JAVA runtime 環境をロードする必要があります。";
-        Text[ korean ] = "주의: Sun Microsystems JAVA가 핸디캡을 지닌 사용자의 편의를 위한 액세스 기능의 지원을 위해 사용됩니다. 그러므로 프로그램 첫 실행 시 JAVA runtime 환경 역시 실시됨으로 프로그램 시작이 늦어질 수 있습니다.  ";
-        Text[ chinese_simplified ] = "请注意，通过辅助功能来操作电脑必须使用 Sun Microsystems Java 。在第一次启动程序时必须装载  Java 运行时间环境。因此，第一次启动的启动过程比平时慢几秒钟。";
-        Text[ chinese_traditional ] = "請注意，透過協助工具操作電腦必須使用 Sun Microsystems Java 。在第一次啓動程式時必須裝載 Java 運行時間環境。因此，第一次啓動的過程比平時慢幾秒鍾。";
-        Text[ turkish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ arabic ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ catalan ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ thai ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
     };
 };
 
