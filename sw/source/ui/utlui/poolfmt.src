@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-21 21:07:42 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ String STR_POOLCHR_JUMPEDIT
     Text [ portuguese_brazilian ] = "Platzhalter" ;
     Text[ chinese_simplified ] = "Í¨Åä·û";
     Text[ russian ] = "Ìåñòîçàïîëíèòåëü";
-    Text[ polish ] = "Symbol wieloznaczny";
+    Text[ polish ] = "Znak-wype³niacz";
     Text[ japanese ] = "Ü²ÙÄŞ¶°ÄŞ";
     Text[ chinese_traditional ] = "³q°t²Å";
     Text[ arabic ] = "ÚäÕÑ äÇÆÈ";
@@ -515,7 +515,7 @@ String STR_POOLCHR_HTML_CODE
     Text[ chinese_simplified ] = "Ô´ÎÄ±¾";
     Text[ russian ] = "Èñõîäíûé òåêñò";
     Text[ polish ] = "Tekst Ÿród³owy";
-    Text[ japanese ] = "¿°½";
+    Text[ japanese ] = "¿°½Ã·½Ä";
     Text[ chinese_traditional ] = "­ì©lÀÉ";
     Text[ arabic ] = "äÕ ÇáãÕÏÑ";
     Text[ greek ] = "Êåßìåíï ğñïİëåõóçò";
