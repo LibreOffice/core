@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: os $ $Date: 2002-12-03 16:21:15 $
+ *  last change: $Author: os $ $Date: 2002-12-05 14:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,7 @@ BOOL SvtPathOptions_Impl::IsPathReadonly(SvtPathOptions::Pathes ePath)const
         {
             Reference<XPropertySetInfo> xInfo = xPrSet->getPropertySetInfo();
             Property aProperty = xInfo->getPropertyByName(OUString::createFromAscii(aPropNames[ePath].pPropName));
-            bReadonly = 0 != aProperty.Attributes & PropertyAttribute::READONLY;
+            bReadonly = 0 != (aProperty.Attributes & PropertyAttribute::READONLY);
         }
     }
     return bReadonly;
