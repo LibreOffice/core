@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:05:10 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,14 +102,12 @@ class _ScRangeListTabs;
 
 class XclExpChTrTabId;
 class XclExpUserBViewList;
-class XclExpCellMerging;
 
 class ExcNameList;
 class XclObjList;
 class XclEscher;
 class SfxStyleSheet;
 class ExcRecordList;
-class XclExpHyperlink;
 
 class XclImpRoot;
 class XclExpRoot;
@@ -144,7 +142,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     // Erweiterungen fuer Export
     XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy
     XclExpUserBViewList*    pUserBViewList;     // pointer to rec list, do not destroy
-    XclExpCellMerging*      pCellMerging;       // pointer to rec list, do not destroy
 
     ExcNameList*        pNameList;
     ScRangeName*        pScNameList;        // stores range names and DB ranges
@@ -153,17 +150,9 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     SCROW               nRowMax;
     // Biff8
     XclObjList*         pObjRecs;
-    String              sAddNoteText;       // text to append at current note (multiple hyperlinks)
     XclEscher*          pEscher;
 
     BOOL                bWriteVBAStorage;
-
-//  const SvxURLField*  pLastHlink;             // last found hyperlink
-    XclExpHyperlink*    pLastHlink;
-
-    // #113567# #114980# old static ExcCell members
-    UINT32              nCellCount;     // zaehlt DOPPELT: im Ctor und SaveCont
-    ScProgress*         pPrgrsBar;
 
     XclImpRoot*         pIR;
     XclExpRoot*         pER;
@@ -231,6 +220,82 @@ struct LOTUS_ROOT
 };
 
 extern LOTUS_ROOT*      pLotusRoot; // -> Inkarn. in filter.cxx
+
+// ----------------------------------------------------------------------------
+
+/** List class for sal_uInt16 values.
+    @deprecated */
+class ScfUInt16List : protected List
+{
+public:
+    inline              ScfUInt16List() : List() {}
+    inline              ScfUInt16List( const ScfUInt16List& rCopy ) : List( rCopy ) {}
+
+    inline ScfUInt16List& operator=( const ScfUInt16List& rSource )
+                            { List::operator=( rSource ); return *this; }
+
+                        List::Clear;
+                        List::Count;
+    inline bool         Empty() const   { return List::Count() == 0; }
+
+    inline sal_uInt16   First() { return (sal_uInt16)(sal_uInt32) List::First(); }
+    inline sal_uInt16   Last()  { return (sal_uInt16)(sal_uInt32) List::Last(); }
+    inline sal_uInt16   Next()  { return (sal_uInt16)(sal_uInt32) List::Next(); }
+    inline sal_uInt16   Prev()  { return (sal_uInt16)(sal_uInt32) List::Prev(); }
+
+    inline sal_uInt16   GetValue( ULONG nIndex ) const
+                            { return (sal_uInt16)(sal_uInt32) List::GetObject( nIndex ); }
+    inline bool         Contains( sal_uInt16 nValue ) const
+                            { return List::GetPos( (void*)(sal_uInt32) nValue ) != LIST_ENTRY_NOTFOUND; }
+
+    inline void         Insert( sal_uInt16 nValue, ULONG nIndex )
+                            { List::Insert( (void*)(sal_uInt32) nValue, nIndex ); }
+    inline void         Append( sal_uInt16 nValue )
+                            { List::Insert( (void*)(sal_uInt32) nValue, LIST_APPEND ); }
+    inline sal_uInt16   Replace( sal_uInt16 nValue, ULONG nIndex )
+                            { return (sal_uInt16)(sal_uInt32) List::Replace( (void*)(sal_uInt32) nValue, nIndex ); }
+    inline sal_uInt16   Remove( ULONG nIndex )
+                            { return (sal_uInt16)(sal_uInt32) List::Remove( nIndex ); }
+};
+
+// ----------------------------------------------------------------------------
+
+/** List class for sal_uInt32 values.
+    @deprecated */
+class ScfUInt32List : protected List
+{
+public:
+    inline              ScfUInt32List() : List() {}
+    inline              ScfUInt32List( const ScfUInt32List& rCopy ) : List( rCopy ) {}
+
+    inline ScfUInt32List& operator=( const ScfUInt32List& rSource )
+                            { List::operator=( rSource ); return *this; }
+
+                        List::Clear;
+                        List::Count;
+    inline bool         Empty() const   { return List::Count() == 0; }
+
+    inline sal_uInt32   First() { return (sal_uInt32) List::First(); }
+    inline sal_uInt32   Last()  { return (sal_uInt32) List::Last(); }
+    inline sal_uInt32   Next()  { return (sal_uInt32) List::Next(); }
+    inline sal_uInt32   Prev()  { return (sal_uInt32) List::Prev(); }
+
+    inline sal_uInt32   GetValue( ULONG nIndex ) const
+                            { return (sal_uInt32) List::GetObject( nIndex ); }
+    inline bool         Contains( sal_uInt32 nValue ) const
+                            { return List::GetPos( (void*) nValue ) != LIST_ENTRY_NOTFOUND; }
+
+    inline void         Insert( sal_uInt32 nValue, ULONG nIndex )
+                            { List::Insert( (void*) nValue, nIndex ); }
+    inline void         Append( sal_uInt32 nValue )
+                            { List::Insert( (void*) nValue, LIST_APPEND ); }
+    inline sal_uInt32   Replace( sal_uInt32 nValue, ULONG nIndex )
+                            { return (sal_uInt32) List::Replace( (void*) nValue, nIndex ); }
+    inline sal_uInt32   Remove( sal_uInt32 nIndex )
+                            { return (sal_uInt32) List::Remove( nIndex ); }
+};
+
+// ----------------------------------------------------------------------------
 
 #endif
 
