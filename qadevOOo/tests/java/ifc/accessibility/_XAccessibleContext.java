@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleContext.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-04-28 12:22:40 $
+ *  last change:$Date: 2003-09-08 10:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,15 @@
 
 package ifc.accessibility;
 
-import com.sun.star.lang.Locale;
+import lib.MultiMethodTest;
+import util.AccessibilityTools;
+
 import com.sun.star.accessibility.IllegalAccessibleComponentStateException;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleRelationSet;
 import com.sun.star.accessibility.XAccessibleStateSet;
-import com.sun.star.accessibility.AccessibleRelationType;
-import lib.MultiMethodTest;
-import util.AccessibilityTools;
+import com.sun.star.lang.Locale;
 
 /**
  * Testing <code>com.sun.star.accessibility.XAccessibleContext</code>
@@ -91,15 +91,8 @@ import util.AccessibilityTools;
  */
 public class _XAccessibleContext extends MultiMethodTest {
 
-    private static final String className =
-        "com.sun.star.accessibility.XAccessibleContext" ;
-
     public XAccessibleContext oObj = null;
 
-    // temporary while accessibility package is in com.sun.star
-    protected String getTestedClassName() {
-        return className;
-    }
 
     private int childCount = 0;
     private XAccessible parent = null ;
@@ -142,6 +135,8 @@ public class _XAccessibleContext extends MultiMethodTest {
                 if (!AccessibilityTools.equals
                     (chAC.getAccessibleParent().getAccessibleContext(), oObj)){
 
+                    log.println("The parent of child and component "+
+                        "itself differ.");
                     log.println("Role:");
                     log.println("Getting: "+chAC.getAccessibleParent().getAccessibleContext().getAccessibleRole());
                     log.println("Expected: "+oObj.getAccessibleRole());
@@ -150,16 +145,36 @@ public class _XAccessibleContext extends MultiMethodTest {
                     log.println("Getting: "+util.utils.getImplName(chAC.getAccessibleParent().getAccessibleContext()));
                     log.println("Expected: "+util.utils.getImplName(oObj));
 
-                    log.println("The parent of child and component "+
-                        "itself differ.");
+                    log.println("AccessibleDescription:");
                     log.println("Getting(Description): "
                             +chAC.getAccessibleParent().getAccessibleContext().getAccessibleDescription());
                     log.println("Expected(Description): "
                             +oObj.getAccessibleDescription());
 
+                    log.println("AccessibleName:");
+                    log.println("Getting(Name): "
+                            +chAC.getAccessibleParent().getAccessibleContext().getAccessibleName());
+                    log.println("Expected(Name): "
+                            +oObj.getAccessibleName());
+
+                    log.println("ChildCount:");
+                    log.println("Getting: "
+                            +chAC.getAccessibleParent().getAccessibleContext().getAccessibleChildCount());
+                    log.println("Expected(Name): "
+                            +oObj.getAccessibleChildCount());
+
+                    log.println("ParentName:");
+                    log.println("Getting (Name): "
+                            +chAC.getAccessibleParent().getAccessibleContext().getAccessibleParent().getAccessibleContext().getAccessibleName());
+                    log.println("Expected(Name): "
+                            +oObj.getAccessibleParent().getAccessibleContext().getAccessibleName());
+
                     bOK = false;
                 } else {
-                    log.println("Getting the expected Child -- OK");
+                    log.println("Role: "+chAC.getAccessibleRole());
+                    log.println("Name: "+chAC.getAccessibleName());
+                    log.println("IndexInParent: "+chAC.getAccessibleIndexInParent());
+                    log.println("ImplementationName: "+util.utils.getImplName(chAC));
                 }
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                 e.printStackTrace(log);
@@ -265,6 +280,10 @@ public class _XAccessibleContext extends MultiMethodTest {
      */
     public void _getAccessibleRelationSet() {
         XAccessibleRelationSet set = oObj.getAccessibleRelationSet();
+        if (set != null) {
+            log.println("Found "+set.getRelationCount()+" relations");
+
+        }
         tRes.tested("getAccessibleRelationSet()", true);
     }
 
@@ -275,7 +294,16 @@ public class _XAccessibleContext extends MultiMethodTest {
      */
     public void _getAccessibleStateSet() {
         XAccessibleStateSet set = oObj.getAccessibleStateSet();
-        tRes.tested("getAccessibleStateSet()", set != null);
+        boolean res = true;
+        String[] expectedStateNames = (String[]) tEnv.getObjRelation("expectedStateNames");
+        short[] expectedStates = (short[]) tEnv.getObjRelation("expectedStates");
+        if (expectedStateNames != null && expectedStates != null) {
+            res = checkStates(expectedStateNames, expectedStates, set);
+        } else {
+            res = set != null;
+        }
+
+        tRes.tested("getAccessibleStateSet()", res);
     }
 
     /**
@@ -297,5 +325,21 @@ public class _XAccessibleContext extends MultiMethodTest {
         tRes.tested("getLocale()", loc != null &&
             loc.Language.length() > 0 && loc.Country.length() > 0);
     }
+
+    protected boolean checkStates(String[] expectedStateNames, short[] expectedStates, XAccessibleStateSet set) {
+        boolean works = true;
+        for (int k = 0;k<expectedStateNames.length;k++) {
+            boolean contains = set.contains(expectedStates[k]);
+            if (contains) {
+                log.println("Set contains "+expectedStateNames[k]+" ... OK");
+                works &= true;
+            } else {
+                log.println("Set doesn't contain "+expectedStateNames[k]+" ... FAILED");
+                works &= false;
+            }
+        }
+        return works;
+    }
+
 }
 
