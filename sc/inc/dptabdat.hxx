@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabdat.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:22:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef SC_DPTABDAT_HXX
 #define SC_DPTABDAT_HXX
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -126,16 +130,16 @@ struct ScDPTableIteratorParam
 {
     //  all pointers are just copied
 
-    USHORT          nColCount;
+    SCSIZE          nColCount;
     const long*     pCols;
     ScDPItemData*   pColData;
-    USHORT          nRowCount;
+    SCSIZE          nRowCount;
     const long*     pRows;
     ScDPItemData*   pRowData;
-    USHORT          nPageCount;
+    SCSIZE          nPageCount;
     const long*     pPages;
     ScDPItemData*   pPageData;
-    USHORT          nDatCount;
+    SCSIZE          nDatCount;
     const long*     pDats;
     ScDPValueData*  pValues;
 
