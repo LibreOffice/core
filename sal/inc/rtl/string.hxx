@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: th $ $Date: 2001-07-27 13:26:37 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 12:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ namespace rtl
 
 class OString
 {
-    friend class ByteString;
+    friend class ::ByteString;
 
 public:
     rtl_String * pData;
