@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2004-01-20 10:46:09 $
+#   last change: $Author: rt $ $Date: 2004-03-30 15:49:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,9 @@ BMP_IN=$(PRJ)$/res/imagelst
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
+    masterlayoutdlg.src\
     ins_page.src\
+    headerfooterdlg.src\
     ins_paste.src\
     inspagob.src\
     present.src\
@@ -113,6 +115,8 @@ SRC1FILES =\
 
 
 SLOFILES =  \
+        $(SLO)$/masterlayoutdlg.obj\
+        $(SLO)$/headerfooterdlg.obj\
         $(SLO)$/inspage.obj \
         $(SLO)$/inspagob.obj \
         $(SLO)$/ins_paste.obj \
