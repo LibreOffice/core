@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-07 10:56:30 $
+ *  last change: $Author: sab $ $Date: 2002-08-07 12:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,7 @@ private:
     ScAccessibleDocument* mpAccessibleDocument;
     ScSplitPos meSplitPos;
 
+    void FillShapes(std::vector < uno::Reference < drawing::XShape > >& rShapes) const;
     sal_Bool FindSelectedShapesChanges(const com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>& xShapes, sal_Bool bCommitChange) const;
     void FillSelectionSupplier() const;
 
@@ -647,44 +648,52 @@ void ScChildrenShapes::SelectAll()
     }
 }
 
-sal_Int32 ScChildrenShapes::GetSelectedCount() const
+void ScChildrenShapes::FillShapes(std::vector < uno::Reference < drawing::XShape > >& rShapes) const
 {
-    sal_Int32 nResult(0);
-    if (!xSelectionSupplier.is())
-        throw uno::RuntimeException();
-
-    uno::Reference<container::XIndexAccess> xIndexAccess;
-    xSelectionSupplier->getSelection() >>= xIndexAccess;
-
-    if (xIndexAccess.is())
-        nResult = xIndexAccess->getCount();
-
-    return nResult;
-}
-
-uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedChildIndex) const
-{
-    uno::Reference< XAccessible > xAccessible;
     uno::Reference<container::XIndexAccess> xIndexAccess;
     xSelectionSupplier->getSelection() >>= xIndexAccess;
 
     if (xIndexAccess.is())
     {
-        if ( nSelectedChildIndex >= xIndexAccess->getCount())
-            throw lang::IndexOutOfBoundsException();
-
-        uno::Reference<drawing::XShape> xShape;
-        xIndexAccess->getByIndex(nSelectedChildIndex) >>= xShape;
-        if (xShape.is())
+        sal_uInt32 nCount(xIndexAccess->getCount());
+        for (sal_uInt32 i = 0; i < nCount; ++i)
         {
-            if (maShapes.empty())
-                GetCount(); // fill list with filtered shapes (no internal shapes)
-
-            SortedShapesList::iterator aItr;
-            if (FindShape(xShape, aItr))
-                xAccessible = Get(aItr->nVectorIndex);
+            uno::Reference<drawing::XShape> xShape;
+            xIndexAccess->getByIndex(i) >>= xShape;
+            if (xShape.is())
+                rShapes.push_back(xShape);
         }
     }
+}
+
+sal_Int32 ScChildrenShapes::GetSelectedCount() const
+{
+    if (!xSelectionSupplier.is())
+        throw uno::RuntimeException();
+
+    std::vector < uno::Reference < drawing::XShape > > aShapes;
+    FillShapes(aShapes);
+
+    return aShapes.size();
+}
+
+uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedChildIndex) const
+{
+    uno::Reference< XAccessible > xAccessible;
+
+    std::vector < uno::Reference < drawing::XShape > > aShapes;
+    FillShapes(aShapes);
+
+    if ( static_cast<sal_uInt32>(nSelectedChildIndex) >= aShapes.size())
+        throw lang::IndexOutOfBoundsException();
+
+    if (maShapes.empty())
+        GetCount(); // fill list with filtered shapes (no internal shapes)
+
+    SortedShapesList::iterator aItr;
+    if (FindShape(aShapes[nSelectedChildIndex], aItr))
+        xAccessible = Get(aItr->nVectorIndex);
+
     return xAccessible;
 }
 
