@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenuSeparator.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:04:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ module com { module sun { module star { module awt {
 
     @since #108645#
  */
-service AccessibleMenuSeparator
+published service AccessibleMenuSeparator
 {
     /** This interface gives access to the structural information of a
         menu separator:
