@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:32:00 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2634,7 +2634,7 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         uno::Reference< container::XNameAccess > xNameAccess(
                     ::comphelper::getProcessServiceFactory()->
                     createInstance( ::rtl::OUString::createFromAscii(
-                            "drafts.com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+                            "com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
         uno::Reference< container::XNameAccess > xUICommands;
         if ( xNameAccess.is() )
         {
