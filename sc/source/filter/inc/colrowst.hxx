@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:26:23 $
+ *  last change: $Author: dr $ $Date: 2001-05-11 09:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,10 @@ private:
     BOOL                bSetByStandard;     // StandardWidth hat Vorrang vor DefColWidth!
 
     void                _SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
+
+    inline ScExtTabOptions& GetExtTabOpt()
+                            { if( !pExtTabOpt ) pExtTabOpt = new ScExtTabOptions; return *pExtTabOpt; }
+
 public:
                         ColRowSettings( void );
                         ~ColRowSettings();
@@ -134,17 +138,15 @@ public:
     inline void         SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
                                     // Auswertung/Umrechung von nExcelHeight und Auswertung nGrbit
 
-    inline ScExtTabOptions& GetExtTabOpt()
-                            { if( !pExtTabOpt ) pExtTabOpt = new ScExtTabOptions; return *pExtTabOpt; }
     inline UINT16       GetActivePane() const
                             { return pExtTabOpt ? pExtTabOpt->nActPane : 3; }
 
-
     void                ReadSplit( XclImpStream& rIn );
+    void                SetVisCorner( UINT16 nCol, UINT16 nRow );
     void                SetFrozen( const BOOL bFrozen );
     inline void         SetTabSelected( const BOOL bSelected )
                             { GetExtTabOpt().bSelected = bSelected; }
-    inline void         SetSelection( const ScRange& rSel );
+    inline void         SetSelection( const ScRange& rSel )
                             { GetExtTabOpt().SetSelection( rSel ); }
     inline void         SetDimension( const ScRange& rDim )
                             { GetExtTabOpt().SetDimension( rDim ); }

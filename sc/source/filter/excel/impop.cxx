@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:24:42 $
+ *  last change: $Author: dr $ $Date: 2001-05-11 09:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2025,14 +2025,12 @@ void ImportExcel::Window2_5( void )
 
     aIn >> nOpt >> nRow >> nCol >> nColorIndex;
 
-    if( nOpt & EXC_WIN2_DISPLAYED )
-    {
-        nRow = Min( nRow, (UINT16)MAXROW );
-        nCol = Min( nCol, (UINT16)MAXCOL );
+    nRow = Min( nRow, (UINT16)MAXROW );
+    nCol = Min( nCol, (UINT16)MAXCOL );
+    aColRowBuff.SetVisCorner( nCol, nRow );
 
+    if( nOpt & EXC_WIN2_DISPLAYED )
         rExtOpt.SetActTab( nTab );
-        rExtOpt.SetVisCorner( nCol, nRow );
-    }
     aColRowBuff.SetTabSelected( TRUEBOOL( nOpt & EXC_WIN2_SELECTED ) );
 
     if( nOpt & EXC_WIN2_FROZEN )        // Frozen

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:24:42 $
+ *  last change: $Author: dr $ $Date: 2001-05-11 09:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,14 @@ void ColRowSettings::ReadSplit( XclImpStream& rIn )
 
     pExtTabOpt->nTabNum = *pExcRoot->pAktTab;
 }
+
+
+void ColRowSettings::SetVisCorner( UINT16 nCol, UINT16 nRow )
+{
+    GetExtTabOpt().nLeftCol = nCol;
+    GetExtTabOpt().nTopRow = nRow;
+}
+
 
 
 void ColRowSettings::SetFrozen( const BOOL bFrozen )
@@ -912,7 +920,7 @@ CodenameList::~CodenameList()
 ScExtDocOptions::ScExtDocOptions( void )
 {
     pGridCol = NULL;
-    nActTab = nSelTabs = nVisLeftCol = nVisTopRow = nCurCol = nCurRow = 0;
+    nActTab = nSelTabs = nCurCol = nCurRow = 0;
     nLinkCnt = 0;       // -> 'Root'-Dokument
     nZoom = 100;
 
@@ -952,8 +960,6 @@ ScExtDocOptions& ScExtDocOptions::operator =( const ScExtDocOptions& rCpy )
     nLinkCnt = rCpy.nLinkCnt;
     nActTab = rCpy.nActTab;
     nSelTabs = rCpy.nSelTabs;
-    nVisLeftCol = rCpy.nVisLeftCol;
-    nVisTopRow = rCpy.nVisTopRow;
     nCurCol = rCpy.nCurCol;
     nCurRow = rCpy.nCurRow;
 
