@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:37:32 $
+#   last change: $Author: kz $ $Date: 2004-01-19 18:21:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,8 @@ UNOIDLDBFILES= \
     $(UCR)$/cssiop.db \
     $(UCR)$/cssiiop.db \
     $(UCR)$/cssgiop.db \
-    $(UCR)$/csstask.db
+    $(UCR)$/csstask.db \
+    $(UCR)$/cssuri.db
 
 # --- Targets ------------------------------------------------------
 
