@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtrange.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: ama $ $Date: 2000-11-16 16:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,13 +91,14 @@
 #endif
 
 TextRanger::TextRanger( const XPolyPolygon& rXPoly, const XPolyPolygon* pXLine,
-    USHORT nCacheSz, USHORT nLft, USHORT nRght, BOOL bSimpl, BOOL bInnr ) :
+    USHORT nCacheSz, USHORT nLft, USHORT nRght, BOOL bSimpl, BOOL bInnr,
+    BOOL bVert ) :
     pBound( NULL ), nCacheSize( nCacheSz ), nCacheIdx( 0 ), nPointCount( 0 ),
     nLeft( nLft ), nRight( nRght ), nUpper( 0 ), nLower( 0 ),
-    bSimple( bSimpl ), bInner( bInnr )
+    bSimple( bSimpl ), bInner( bInnr ), bVertical( bVert )
 {
 #ifndef PRODUCT
-    bFlag2 = bFlag3 = bFlag4 = bFlag5 = bFlag6 = bFlag7 = FALSE;
+    bFlag3 = bFlag4 = bFlag5 = bFlag6 = bFlag7 = FALSE;
 #endif
     pRangeArr = new Range[ nCacheSize ];
     pCache = new SvLongsPtr[ nCacheSize ];
@@ -191,6 +192,8 @@ class SvxBoundArgs
     long nLowDiff;
     long nUpper;
     long nLower;
+    long nStart;
+    long nEnd;
     USHORT nCut;
     USHORT nLast;
     USHORT nNext;
@@ -200,6 +203,7 @@ class SvxBoundArgs
     BOOL bInner : 1;
     BOOL bMultiple : 1;
     BOOL bConcat : 1;
+    BOOL bRotate : 1;
     void NoteRange( BOOL bToggle );
     long Cut( long nY, const Point& rPt1, const Point& rPt2 );
     void Add();
@@ -208,28 +212,15 @@ class SvxBoundArgs
         { if( nDiff ) _NoteFarPoint( nPx, nPyDiff, nDiff ); }
     long CalcMax( const Point& rPt1, const Point& rPt2, long nRange, long nFar );
     void CheckCut( const Point& rLst, const Point& rNxt );
+    inline long A( const Point& rP ) const { return bRotate ? rP.Y() : rP.X(); }
+    inline long B( const Point& rP ) const { return bRotate ? rP.X() : rP.Y(); }
 public:
-    SvxBoundArgs( TextRanger* pRanger, SvLongs *pLong, const Range& rRange )
-        : aBoolArr( 4, 4 ), pLongArr( pLong ), pTextRanger( pRanger ),
-        nTop( rRange.Min() ), nBottom( rRange.Max() ),
-        // pRanger->GetUpper() ist der Abstand des Objekts nach _oben_, von der
-        // Textzeile aus betrachtet ist dies der Bereich _unter_ der Zeile,
-        // der mit beruecksichtigt werden muss.
-        nLowDiff( pRanger->GetUpper() ), nUpDiff( pRanger->GetLower() ),
-        bInner( pRanger->IsInner() ), bMultiple( bInner || !pRanger->IsSimple() ),
-        bConcat( FALSE )
-        {
-            nUpper = nTop - nUpDiff;
-            nLower = nBottom + nLowDiff;
-            pLongArr->Remove( 0, pLongArr->Count() );
-        }
-
-    void NotePoint( const long nX )
-    { NoteMargin( nX - pTextRanger->GetLeft(), nX + pTextRanger->GetRight() );}
+    SvxBoundArgs( TextRanger* pRanger, SvLongs *pLong, const Range& rRange );
+    void NotePoint( const long nA ) { NoteMargin( nA - nStart, nA + nEnd ); }
     void NoteMargin( const long nL, const long nR )
         { if( nMin > nL ) nMin = nL; if( nMax < nR ) nMax = nR; }
     USHORT Area( const Point& rPt );
-    void NoteUpLow( long nX, const BYTE nArea );
+    void NoteUpLow( long nA, const BYTE nArea );
     void Calc( const PolyPolygon& rPoly );
     void Concat( const PolyPolygon* pPoly );
     // inlines
@@ -241,29 +232,55 @@ public:
     BYTE GetAct() const { return nAct; }
 };
 
+SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, SvLongs *pLong,
+    const Range& rRange )
+    : aBoolArr( 4, 4 ), pLongArr( pLong ), pTextRanger( pRanger ),
+    nTop( rRange.Min() ), nBottom( rRange.Max() ),
+    bInner( pRanger->IsInner() ), bMultiple( bInner || !pRanger->IsSimple() ),
+    bConcat( FALSE ), bRotate( pRanger->IsVertical() )
+{
+    if( bRotate )
+    {
+        nStart = pRanger->GetUpper();
+        nEnd = pRanger->GetLower();
+        nLowDiff = pRanger->GetLeft();
+        nUpDiff = pRanger->GetRight();
+    }
+    else
+    {
+        nStart = pRanger->GetLeft();
+        nEnd = pRanger->GetRight();
+        nLowDiff = pRanger->GetUpper();
+        nUpDiff = pRanger->GetLower();
+    }
+    nUpper = nTop - nUpDiff;
+    nLower = nBottom + nLowDiff;
+    pLongArr->Remove( 0, pLongArr->Count() );
+}
+
 long SvxBoundArgs::CalcMax( const Point& rPt1, const Point& rPt2,
     long nRange, long nFarRange )
 {
-    double nDx = Cut( nRange, rPt1, rPt2 ) - Cut( nFarRange, rPt1, rPt2 );
-    double nYps;
-    if( nDx < 0 )
+    double nDa = Cut( nRange, rPt1, rPt2 ) - Cut( nFarRange, rPt1, rPt2 );
+    double nB;
+    if( nDa < 0 )
     {
-        nDx = -nDx;
-        nYps = pTextRanger->GetRight();
+        nDa = -nDa;
+        nB = nEnd;
     }
     else
-        nYps = pTextRanger->GetLeft();
-    nYps *= nYps;
-    nYps += nDx * nDx;
-    nYps = nRange + nDx * ( nFarRange - nRange ) / sqrt( nYps );
+        nB = nStart;
+    nB *= nB;
+    nB += nDa * nDa;
+    nB = nRange + nDa * ( nFarRange - nRange ) / sqrt( nB );
 
     BOOL bNote;
-    if( nYps < rPt2.Y() )
-        bNote = nYps > rPt1.Y();
+    if( nB < B(rPt2) )
+        bNote = nB > B(rPt1);
     else
-        bNote = nYps < rPt1.Y();
+        bNote = nB < B(rPt1);
     if( bNote )
-        return( long( nYps ) );
+        return( long( nB ) );
     return 0;
 }
 
@@ -291,28 +308,16 @@ void SvxBoundArgs::CheckCut( const Point& rLst, const Point& rNxt )
     }
 }
 
-void SvxBoundArgs::_NoteFarPoint( long nPx, long nPyDiff, long nDiff )
+void SvxBoundArgs::_NoteFarPoint( long nPa, long nPbDiff, long nDiff )
 {
-    long nTmpX;
-#ifndef PRODUCT
-    if( pTextRanger->IsFlag7() || pTextRanger->IsFlag6() )
-    {
-        if( pTextRanger->IsFlag7() )
-            nPyDiff = nDiff;
-        nTmpX = nPx - ( nPyDiff * pTextRanger->GetLeft() ) / nDiff;
-        nPyDiff = nPx + ( nPyDiff * pTextRanger->GetRight() ) / nDiff;
-    }
-    else
-#endif
-    {
-        double nQuot = 2 * nDiff - nPyDiff;
-        nQuot *= nPyDiff;
-        nQuot = sqrt( nQuot );
-        nQuot /= nDiff;
-        nTmpX = nPx - long( pTextRanger->GetLeft() * nQuot );
-        nPyDiff = nPx + long( pTextRanger->GetRight() * nQuot );
-    }
-    NoteMargin( nTmpX, nPyDiff );
+    long nTmpA;
+    double nQuot = 2 * nDiff - nPbDiff;
+    nQuot *= nPbDiff;
+    nQuot = sqrt( nQuot );
+    nQuot /= nDiff;
+    nTmpA = nPa - long( nStart * nQuot );
+    nPbDiff = nPa + long( nEnd * nQuot );
+    NoteMargin( nTmpA, nPbDiff );
 }
 
 void SvxBoundArgs::NoteRange( BOOL bToggle )
@@ -384,13 +389,6 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
         {
             const Point& rNull = rPol[ 0 ];
             SetClosed( IsConcat() || ( rNull == rPol[ nCount - 1 ] ) );
-#ifndef PRODUCT
-#ifdef DEBUG
-            static bAllwaysClosed = FALSE;
-            if( bAllwaysClosed )
-                SetClosed( TRUE );
-#endif
-#endif
             nLast = Area( rNull );
             if( nLast & 12 )
             {
@@ -409,19 +407,19 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
                         nMax = 0;
                     }
                     if( nLast & 1 )
-                        NoteFarPoint( rNull.X(), nLower - rNull.Y(), nLowDiff );
+                        NoteFarPoint( A(rNull), nLower - B(rNull), nLowDiff );
                     else
-                        NoteFarPoint( rNull.X(), rNull.Y() - nUpper, nUpDiff );
+                        NoteFarPoint( A(rNull), B(rNull) - nUpper, nUpDiff );
                 }
                 else
                 {
                     if( bMultiple || !nAct )
                     {
-                        nMin = rNull.X() - pTextRanger->GetLeft();
-                        nMax = rNull.X() + pTextRanger->GetRight();
+                        nMin = A(rNull) - nStart;
+                        nMax = B(rNull) + nEnd;
                     }
                     else
-                        NotePoint( rNull.X() );
+                        NotePoint( A(rNull) );
                 }
                 nFirst = 0; // In welcher Richtung wird die Zeile verlassen?
                 nAct = 3;   // Wir sind z.Z. innerhalb der Zeile.
@@ -464,11 +462,11 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
                     if( !( nNext & 12 ) )
                     {
                         if( !nNext )
-                            NotePoint( rNext.X() );
+                            NotePoint( A(rNext) );
                         else if( nNext & 1 )
-                            NoteFarPoint( rNext.X(),nLower-rNext.Y(),nLowDiff );
+                            NoteFarPoint( A(rNext), nLower-B(rNext), nLowDiff );
                         else
-                            NoteFarPoint( rNext.X(),rNext.Y()-nUpper,nUpDiff );
+                            NoteFarPoint( A(rNext), B(rNext)-nUpper, nUpDiff );
                     }
                     nLast = nNext;
                     if( ++nIdx == nCount && !IsClosed() )
@@ -495,8 +493,8 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
             {
                 long nTmpMin, nTmpMax;
                 {
-                    nTmpMin = nMin + 2 * pTextRanger->GetLeft();
-                    nTmpMax = nMax - 2 * pTextRanger->GetRight();
+                    nTmpMin = nMin + 2 * nStart;
+                    nTmpMax = nMax - 2 * nEnd;
                     if( nTmpMin <= nTmpMax )
                     {
                         pLongArr->Insert( nTmpMin, 0 );
@@ -659,15 +657,16 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
 
 USHORT SvxBoundArgs::Area( const Point& rPt )
 {
-    if( rPt.Y() >= nBottom )
+    long nB = B( rPt );
+    if( nB >= nBottom )
     {
-        if( rPt.Y() >= nLower )
+        if( nB >= nLower )
             return 5;
         return 1;
     }
-    if( rPt.Y() <= nTop )
+    if( nB <= nTop )
     {
-        if( rPt.Y() <= nUpper )
+        if( nB <= nUpper )
             return 10;
         return 2;
     }
@@ -681,24 +680,26 @@ USHORT SvxBoundArgs::Area( const Point& rPt )
  * unterhalb der Y-Koordinate liegt.
  *************************************************************************/
 
-long SvxBoundArgs::Cut( long nY, const Point& rPt1, const Point& rPt2 )
+long SvxBoundArgs::Cut( long nB, const Point& rPt1, const Point& rPt2 )
 {
-    double nQuot = nY - rPt1.Y();
+    if( pTextRanger->IsVertical() )
+    {
+        double nQuot = nB - rPt1.X();
+        nQuot /= ( rPt2.X() - rPt1.X() );
+        nQuot *= ( rPt2.Y() - rPt1.Y() );
+        return long( rPt1.Y() + nQuot );
+    }
+    double nQuot = nB - rPt1.Y();
     nQuot /= ( rPt2.Y() - rPt1.Y() );
     nQuot *= ( rPt2.X() - rPt1.X() );
     return long( rPt1.X() + nQuot );
 }
 
-void SvxBoundArgs::NoteUpLow( long nX, const BYTE nArea )
+void SvxBoundArgs::NoteUpLow( long nA, const BYTE nArea )
 {
     if( nAct )
     {
-#ifndef PRODUCT
-        if( pTextRanger->IsFlag7() )
-            NotePoint( nX );
-        else
-#endif
-        NoteMargin( nX, nX );
+        NoteMargin( nA, nA );
         if( bMultiple )
         {
             NoteRange( nArea != nAct );
@@ -710,18 +711,8 @@ void SvxBoundArgs::NoteUpLow( long nX, const BYTE nArea )
     else
     {
         nAct = nArea;
-#ifndef PRODUCT
-        if( pTextRanger->IsFlag7() )
-        {
-            nMin = nX - pTextRanger->GetLeft();
-            nMax = nX + pTextRanger->GetRight();
-        }
-        else
-#endif
-        {
-            nMin = nX;
-            nMax = nX;
-        }
+        nMin = nA;
+        nMax = nA;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtrange.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:03 $
+ *  last change: $Author: ama $ $Date: 2000-11-16 16:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ class TextRanger
     BOOL bSimple : 1;   // Nur Aussenkante
     BOOL bInner  : 1;   // TRUE: Objekt beschriften (EditEngine);
                         // FALSE: Objekt umfliessen (StarWriter);
-    BOOL bFlag2 :1;     // TestFlags fuer Umlaufexperimente
+    BOOL bVertical :1;  // for vertical writing mode
     BOOL bFlag3 :1;
     BOOL bFlag4 :1;
     BOOL bFlag5 :1;
@@ -112,7 +112,7 @@ class TextRanger
 public:
     TextRanger( const XPolyPolygon& rXPoly, const XPolyPolygon* pXLine,
                 USHORT nCacheSize, USHORT nLeft, USHORT nRight,
-                BOOL bSimple, BOOL bInner );
+                BOOL bSimple, BOOL bInner, BOOL bVert = sal_False );
     ~TextRanger();
     SvLongsPtr GetTextRanges( const Range& rRange );
     USHORT GetRight() const { return nRight; }
@@ -122,6 +122,7 @@ public:
     USHORT GetPointCount() const { return nPointCount; }
     BOOL IsSimple() const { return bSimple; }
     BOOL IsInner() const { return bInner; }
+    BOOL IsVertical() const { return bVertical; }
     BOOL HasBorder() const { return nRight || nLeft; }
     const PolyPolygon& GetPolyPolygon() const { return *pPoly; }
     const PolyPolygon* GetLinePolygon() const { return pLine; }
@@ -129,8 +130,6 @@ public:
         { return pBound ? *pBound : _GetBoundRect(); }
     void SetUpper( USHORT nNew ){ nUpper = nNew; }
     void SetLower( USHORT nNew ){ nLower = nNew; }
-    BOOL IsFlag2() const { return bFlag2; }
-    void SetFlag2( BOOL bNew ) { bFlag2 = bNew; }
     BOOL IsFlag3() const { return bFlag3; }
     void SetFlag3( BOOL bNew ) { bFlag3 = bNew; }
     BOOL IsFlag4() const { return bFlag4; }
