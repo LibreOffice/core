@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-09 12:37:50 $
+ *  last change: $Author: jb $ $Date: 2001-04-11 08:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 #include <osl/mutex.hxx>
 #include <vos/timer.hxx>
 #include <map>
-#include <list>
+#include <set>
 
 namespace uno   = ::com::sun::star::uno;
 namespace lang  = ::com::sun::star::lang;
@@ -223,7 +223,7 @@ namespace configmgr
     // (better control)
     class OTreeCacheWriteScheduler
     {
-        typedef std::list<vos::ORef< OOptions > > CacheWriteList; // fire and forget!
+        typedef std::set< vos::ORef< OOptions >, ltOptions > CacheWriteList; // fire and forget!
 
         class Timer : public vos::OTimer
         {

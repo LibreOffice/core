@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-09 12:37:50 $
+ *  last change: $Author: jb $ $Date: 2001-04-11 08:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,7 @@ void OTreeCacheWriteScheduler::runWriter()
         if (it->isValid())
         {
             vos::ORef< OOptions > xTaskOption = *it;
-            ++it; // advance iterator now iterator  -writeOneTree ...may erase current element
+            ++it; // advance iterator now - writeOneTree.. may erase current element
             try
             {
                 writeOneTreeFoundByOption(xTaskOption);
@@ -454,8 +454,10 @@ void OTreeCacheWriteScheduler::runWriter()
         }
         else
         {
+            OSL_ENSURE(false, "Cannot have NULL options in write list");
             CFG_TRACE_WARNING_NI("runDisposer: TaskOption not valid");
-            it = m_aWriteList.erase(it);
+            // should erase ? - must not happen
+            ++it; // at least we wont loop
         }
     }
     // m_aWriteList.clear();
@@ -474,7 +476,7 @@ void OTreeCacheWriteScheduler::writeOneTreeFoundByOption(vos::ORef< OOptions > c
     {
         CFG_TRACE_WARNING_NI("- Data container (TreeInfo) to write not found: Ignoring task");
     }
-    m_aWriteList.remove(_xOptions);
+    m_aWriteList.erase(_xOptions);
 }
 
 // -----------------------------------------------------------------------------
@@ -483,10 +485,7 @@ bool OTreeCacheWriteScheduler::clearTasks(vos::ORef< OOptions > const& _xOptions
     osl::MutexGuard aGuard( m_rTreeManager.m_aUpdateMutex );
 
     // sadly list::remove doesn't return an indication of what it did
-    bool bFound = std::find(m_aWriteList.begin(),m_aWriteList.end(),_xOptions) != m_aWriteList.end();
-
-    if (bFound)
-        m_aWriteList.remove(_xOptions);
+    bool bFound = m_aWriteList.erase(_xOptions) !=0;
 
     return bFound;
 }
@@ -531,7 +530,7 @@ void OTreeCacheWriteScheduler::scheduleWrite(vos::ORef< OOptions > const& _xOpti
                         OUSTRING2ASCII(_xOptions->getUser()), OUSTRING2ASCII(_xOptions->getLocale()));
 
         // lasy writing
-        m_aWriteList.push_back(_xOptions);
+        m_aWriteList.insert(_xOptions);
 
         TimeStamp aNewTime = implGetCleanupTime(TimeStamp::getCurrentTime(), m_aCleanupInterval);
         implStartBefore(aNewTime);
