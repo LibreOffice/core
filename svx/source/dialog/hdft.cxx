@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:28:15 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,9 @@
 #include "dialogs.hrc" //CHINA001
 // static ----------------------------------------------------------------
 
-static const long MINBODY = 284;            // 0,5cm in twips aufgerundet
+// --> OD 2004-06-18 #i19922#
+//static const long MINBODY = 284;            // 0,5cm in twips aufgerundet
+static const long MINBODY = 56;  // 1mm in twips rounded
 
 // default distance to Header or footer
 static const long DEF_DIST_WRITER = 500;    // 5mm (Writer)
