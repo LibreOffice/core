@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-11 12:52:58 $
+ *  last change: $Author: mt $ $Date: 2001-12-04 14:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
 #ifndef SVX_LIGHT
 
 #if defined (EDITDEBUG) && !defined(MAC) && !defined( UNX )
-    SvFileStream aRTFOut( "d:\\rtfout.rtf", STREAM_WRITE );
+    SvFileStream aRTFOut( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtfout.rtf" ) ), STREAM_WRITE );
     aRTFOut << rInput;
     aRTFOut.Close();
     rInput.Seek( 0 );
@@ -308,6 +308,18 @@ void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelectio
             WriteBin( rOutput, aSel );
         else
             DBG_ERROR( "Write: Unbekanntes Format" );
+
+#ifdef EDITDEBUG
+        if ( eFormat == EE_FORMAT_RTF )
+        {
+            SvFileStream aStream( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtf_out.log" ) ), STREAM_WRITE|STREAM_TRUNC );
+            ULONG nP = rOutput.Tell();
+            rOutput.Seek( 0 );
+            aStream << rOutput;
+            rOutput.Seek( nP );
+        }
+#endif
+
     }
 }
 #endif
@@ -362,7 +374,7 @@ sal_Bool ImpEditEngine::WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, s
     return ( rLst.Count() ? sal_True : sal_False );
 }
 
-void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_uInt16 nIndex, sal_Bool bStartAtPos )
+void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_uInt16 nIndex, USHORT nScriptType )
 {
     sal_uInt16 nAttr = 0;
     EditCharAttrib* pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
@@ -371,7 +383,7 @@ void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_uInt16 nIndex
         // Start wird in While ueberprueft...
         if ( pAttr->GetEnd() > nIndex )
         {
-            if ( !bStartAtPos || ( pAttr->GetStart() == nIndex) )
+            if ( IsScriptItemValid( pAttr->GetItem()->Which(), nScriptType ) )
                 rLst.Insert( pAttr->GetItem(), LIST_APPEND );
         }
         nAttr++;
@@ -430,20 +442,39 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     SvxFontTable aFontTable;
     // DefaultFont muss ganz vorne stehen, damit DEF-Font im RTF
     aFontTable.Insert( 0, new SvxFontItem( (const SvxFontItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO ) ) );
-    sal_uInt16 i = 0;
-    SvxFontItem* pFontItem = (SvxFontItem*)aEditDoc.GetItemPool().GetItem( EE_CHAR_FONTINFO, i );
-    while ( pFontItem )
+    aFontTable.Insert( 1, new SvxFontItem( (const SvxFontItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CJK ) ) );
+    aFontTable.Insert( 2, new SvxFontItem( (const SvxFontItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CTL ) ) );
+    for ( USHORT nScriptType = 0; nScriptType < 3; nScriptType++ )
     {
-        // i+1, da Default-Font an Stelle 0.
-        aFontTable.Insert( (sal_uInt32)i+1, new SvxFontItem( *pFontItem ) );
-        pFontItem = (SvxFontItem*)aEditDoc.GetItemPool().GetItem( EE_CHAR_FONTINFO, ++i );
+        USHORT nWhich = EE_CHAR_FONTINFO;
+        if ( nScriptType == 1 )
+            nWhich = EE_CHAR_FONTINFO_CJK;
+        else if ( nScriptType == 2 )
+            nWhich = EE_CHAR_FONTINFO_CTL;
+
+        sal_uInt16 i = 0;
+        SvxFontItem* pFontItem = (SvxFontItem*)aEditDoc.GetItemPool().GetItem( nWhich, i );
+        while ( pFontItem )
+        {
+            BOOL bAlreadyExist = FALSE;
+            USHORT nTestMax = nScriptType ? aFontTable.Count() : 1;
+            for ( USHORT nTest = 0; !bAlreadyExist && ( nTest < nTestMax ); nTest++ )
+            {
+                bAlreadyExist = *aFontTable.Get( nTest ) == *pFontItem;
+            }
+            if ( !bAlreadyExist )
+            {
+                aFontTable.Insert( aFontTable.Count(), new SvxFontItem( *pFontItem ) );
+                pFontItem = (SvxFontItem*)aEditDoc.GetItemPool().GetItem( nWhich, ++i );
+            }
+        }
     }
 
     rOutput << endl << '{' << sRTF_FONTTBL;
     sal_uInt16 j;
     for ( j = 0; j < aFontTable.Count(); j++ )
     {
-        pFontItem = aFontTable.Get( j );
+        SvxFontItem* pFontItem = aFontTable.Get( j );
         rOutput << '{';
         rOutput << sRTF_F;
         rOutput.WriteNumber( j );
@@ -487,7 +518,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
     // ColorList rausschreiben...
     SvxColorList aColorList;
-    i = 0;
+    sal_uInt16 i = 0;
     SvxColorItem* pColorItem = (SvxColorItem*)aEditDoc.GetItemPool().GetItem( EE_CHAR_COLOR, i );
     while ( pColorItem )
     {
@@ -662,7 +693,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             if ( nStartPos != 0 )
             {
                 aAttribItems.Clear();
-                lcl_FindValidAttribs( aAttribItems, pNode, nStartPos, sal_False );
+                lcl_FindValidAttribs( aAttribItems, pNode, nStartPos, GetScriptType( EditPaM( pNode, 0 ) ) );
                 if ( aAttribItems.Count() )
                 {
                     // Diese Attribute duerfen nicht fuer den gesamten
@@ -682,6 +713,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
         EditCharAttrib* pNextFeature = pNode->GetCharAttribs().FindFeature( nIndex );
         // Bei 0 anfangen, damit der Index richtig ist...
+
         for ( sal_uInt16 n = 0; n <= nEndPortion; n++ )
         {
             TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject(n);
@@ -699,7 +731,18 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             else
             {
                 aAttribItems.Clear();
-                lcl_FindValidAttribs( aAttribItems, pNode, nIndex, sal_False );
+                USHORT nScriptType = GetScriptType( EditPaM( pNode, nIndex+1 ) );
+                lcl_FindValidAttribs( aAttribItems, pNode, nIndex, nScriptType );
+                if ( !n || IsScriptChange( EditPaM( pNode, nIndex ) ) )
+                {
+                    SfxItemSet aAttribs( GetEmptyItemSet() );
+                    GetAttribs( nNode, nIndex+1, nIndex+1 );
+                    aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_FONTINFO, nScriptType ) ), LIST_APPEND );
+                    aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_FONTHEIGHT, nScriptType ) ), LIST_APPEND );
+                    aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_WEIGHT, nScriptType ) ), LIST_APPEND );
+                    aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_ITALIC, nScriptType ) ), LIST_APPEND );
+                    aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType ) ), LIST_APPEND );
+                }
 
                 rOutput << '{';
                 if ( WriteItemListAsRTF( aAttribItems, rOutput, nNode, nIndex, aFontTable, aColorList ) )
@@ -830,6 +873,8 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         }
         break;
         case EE_CHAR_FONTINFO:
+        case EE_CHAR_FONTINFO_CJK:
+        case EE_CHAR_FONTINFO_CTL:
         {
             sal_uInt32 n = rFontTable.GetId( (const SvxFontItem&)rItem );
             rOutput << sRTF_F;
@@ -837,6 +882,8 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         }
         break;
         case EE_CHAR_FONTHEIGHT:
+        case EE_CHAR_FONTHEIGHT_CJK:
+        case EE_CHAR_FONTHEIGHT_CTL:
         {
             rOutput << sRTF_FS;
             long nHeight = ((const SvxFontHeightItem&)rItem).GetHeight();
@@ -847,6 +894,8 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         }
         break;
         case EE_CHAR_WEIGHT:
+        case EE_CHAR_WEIGHT_CJK:
+        case EE_CHAR_WEIGHT_CTL:
         {
             FontWeight e = ((const SvxWeightItem&)rItem).GetWeight();
             switch ( e )
@@ -882,6 +931,8 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         }
         break;
         case EE_CHAR_ITALIC:
+        case EE_CHAR_ITALIC_CJK:
+        case EE_CHAR_ITALIC_CTL:
         {
             FontItalic e = ((const SvxPostureItem&)rItem).GetPosture();
             switch ( e )
@@ -988,134 +1039,6 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
 sal_uInt32 ImpEditEngine::WriteHTML( SvStream& rOutput, EditSelection aSel )
 {
     return 0;
-/*
-    // Das hier ist erstmal das grobe Geruest vom RTF...
-    // Noch klaeren:
-    // - Wann Absaetze aufmachen?
-    // - Attribute beenden
-
-    DBG_ASSERT( GetUpdateMode(), "WriteHTML bei UpdateMode = sal_False!" );
-    CheckIdleFormatter();
-    if ( !IsFormatted() )
-        FormatDoc();
-
-    sal_uInt16 nStartNode, nEndNode;
-    EditSelection aTmpSel;
-
-    aSel.Adjust( aEditDoc );
-
-    nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
-    nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
-
-    // Vorspann...
-    // ..............
-
-    // ueber die Absaetze iterieren...
-    for ( sal_uInt16 nNode = nStartNode; nNode <= nEndNode; nNode++  )
-    {
-        ContentNode* pNode = aEditDoc.SaveGetObject( nNode );
-        DBG_ASSERT( pNode, "Node nicht gefunden: Search&Replace" );
-
-        // Die Absatzattribute vorweg...
-        // .....
-
-        // Vorlage ?
-        // ....
-        if ( pNode->GetStyleSheet() )
-        {
-            // Hx, PRE oder anderes StyleSheet
-            // .............
-        }
-        for ( sal_uInt16 nParAttr = EE_ITEMS_START; nParAttr <= EE_CHAR_END; nParAttr++ )
-        {
-            // ...
-        }
-
-        ItemList aAttribItems;
-        ParaPortion* pParaPortion = FindParaPortion( pNode );
-        DBG_ASSERT( pParaPortion, "Portion nicht gefunden: WriteRTF" );
-
-        sal_uInt16 nIndex = 0;
-        sal_uInt16 nStartPos = 0;
-        sal_uInt16 nEndPos = pNode->Len();
-        sal_uInt16 nStartPortion = 0;
-        sal_uInt16 nEndPortion = (sal_uInt16)pParaPortion->GetTextPortions().Count() - 1;
-        sal_Bool bFinishPortion = sal_False;
-        sal_uInt16 nPortionStart;
-
-        if ( nNode == nStartNode )
-        {
-            nStartPos = aSel.Min().GetIndex();
-            nStartPortion = pParaPortion->GetTextPortions().FindPortion( nStartPos, nPortionStart );
-            if ( nStartPos != 0 )
-            {
-                aAttribItems.Clear();
-                lcl_FindValidAttribs( aAttribItems, pNode, nStartPos, sal_False );
-                if ( aAttribItems.Count() )
-                {
-                    // Diese Attribute duerfen nicht fuer den gesamten
-                    // Absatz gelten:
-                    // .....
-                }
-                aAttribItems.Clear();
-            }
-        }
-        if ( nNode == nEndNode ) // kann auch == nStart sein!
-        {
-            nEndPos = aSel.Max().GetIndex();
-            nEndPortion = pParaPortion->GetTextPortions().FindPortion( nEndPos, nPortionStart );
-        }
-
-        EditCharAttrib* pNextFeature = pNode->GetCharAttribs().FindFeature( nIndex );
-        // Bei 0 anfangen, damit der Index richtig ist...
-        for ( sal_uInt16 n = 0; n <= nEndPortion; n++ )
-        {
-            TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject(n);
-            if ( n < nStartPortion )
-            {
-                nIndex += pTextPortion->GetLen();
-                continue;
-            }
-
-            if ( pNextFeature && ( pNextFeature->GetStart() == nIndex ) )
-            {
-                // .. Feature rausschreiben => TAB, ...
-                pNextFeature = pNode->GetCharAttribs().FindFeature( pNextFeature->GetStart() + 1 );
-            }
-            else
-            {
-                // Attribute !!!
-                // Eine Portion kann auch durch einen Zeilenumbruch
-                // entstanden sein, dann brauch ich keine neuen Attribute schreiben...
-                aAttribItems.Clear();
-                lcl_FindValidAttribs( aAttribItems, pNode, nIndex, sal_False );
-                // Items schreiben...
-                XubString aTmpStr( *pNode, nIndex, pTextPortion->GetLen() );
-                if ( ( n == nStartPortion ) && nStartPos )
-                {
-                    aTmpStr.Cut( 0, nStartPos - nIndex );
-                }
-                if ( ( n == nEndPortion ) && ( nEndPos != pNode->Len() ) )
-                {
-                    sal_uInt16 nLen = pTextPortion->GetLen();
-                    sal_uInt16 nDelChars = nIndex+nLen-nEndPos;
-                    aTmpStr.Cut( aTmpStr.Len()-nDelChars, nDelChars );
-                }
-                // Auf bestimmte Zeichen pruefen ?!
-                // .....
-
-                rOutput << aTmpStr.GetStr();
-            }
-
-            nIndex += pTextPortion->GetLen();
-        }
-    }
-    // Nachspann
-    // ....
-
-    rOutput.Flush();
-    return rOutput.GetError();
-*/
 }
 
 
