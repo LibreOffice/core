@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 18:15:27 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ String SAMPLES + 1
     Text[English] = "Hint";
     Text[ english_us ] = "Remarks";
     Text[ portuguese ] = "Observaηγo";
-    Text[ greek ] = "Υπόδειξη";
+    Text[ greek ] = "Συμβουλή";
     Text[ dutch ] = "Aanwijzing";
     Text[ french ] = "Remarque";
     Text[ spanish ] = "Indicaciσn";
@@ -340,7 +340,7 @@ String CorrespondenceNoTextmark
     Text[ spanish ] = "Falta la marca de texto 'Recipient'.";
     Text[ italian ] = "Manca il segnalibro 'Recipient'.";
     Text[ swedish ] = "Bokmδrket 'Recipient' saknas.";
-    Text[ russian ] = "Νες ηΰκλΰδκθ 'Recipient'.";
+    Text[ russian ] = "Νες ςεκρςξβξι οξμεςκθ 'Recipient'.";
     Text[ greek ] = "Λείπει το σημάδι του κειμένου 'Recipient' (Παραλήπτης).";
     Text[ danish ] = "Tekstmarkeringen 'Recipient' mangler.";
     Text[ polish ] = "Brak zak³adki 'Recipient'.";
