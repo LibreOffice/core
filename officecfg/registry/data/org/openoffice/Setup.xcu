@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:31:51 $
+ *  last change: $Author: obo $ $Date: 2004-07-08 13:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >scalc</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >CalcWindowState</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace" install:module="draw" >
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -127,6 +130,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >sdraw</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >DrawWindowState</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace" install:module="impress">
@@ -151,6 +157,9 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >simpress</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >ImpressWindowState</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.formula.FormulaProperties" oor:op="replace" install:module="math">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -173,6 +182,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >smath</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >MathWindowState</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace" install:module="writer">
@@ -197,6 +209,9 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >sglobal</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >WriterGlobalWindowState</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.text.TextDocument" oor:op="replace" install:module="writer">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -219,6 +234,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >swriter</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >WriterWindowState</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.text.WebDocument" oor:op="replace" install:module="writer">
@@ -243,6 +261,9 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >sweb</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >WriterWebWindowState</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.sdb.RelationDesign" oor:op="replace">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -250,6 +271,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >dbrelation</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >DbRelationWindowState</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.sdb.QueryDesign" oor:op="replace">
@@ -259,6 +283,9 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >dbquery</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >DbQueryWindowState</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.sdb.TableDesign" oor:op="replace">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -266,6 +293,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >dbtable</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >DbTableWindowState</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.frame.Bibliography" oor:op="replace">
@@ -275,6 +305,9 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >sbibliography</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >BibliographyWindowState</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.script.BasicIDE" oor:op="replace">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -283,6 +316,9 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >BasicIDE</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >BasicIDEWindowState</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.frame.StartModule" oor:op="replace">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -290,6 +326,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >StartModule</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >StartModuleWindowState</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.chart.ChartDocument" oor:op="replace">
@@ -313,6 +352,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >schart</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >ChartWindowState</value>
                 </prop>
             </node>
         </node>
