@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-07 15:46:09 $
+ *  last change: $Author: dbo $ $Date: 2002-11-13 11:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,6 +682,7 @@ public:
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 protected:
+    inline void check_undisposed() const SAL_THROW( (lang::DisposedException) );
 
     sal_Bool haveFactoryWithThisImplementation(const OUString& aImplName);
 
@@ -710,6 +711,16 @@ private:
     HashMap_OWString_Interface      m_ImplementationNameMap;
     Reference<XEventListener >      xFactoryListener;
 };
+//__________________________________________________________________________________________________
+inline void OServiceManager::check_undisposed() const SAL_THROW( (lang::DisposedException) )
+{
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        throw lang::DisposedException(
+            OUSTR("service manager instance has already been disposed!"),
+            (OWeakObject *)this );
+    }
+}
 
 //##################################################################################################
 //##################################################################################################
@@ -723,8 +734,8 @@ class OServiceManagerWrapper : public OServiceManagerMutex, public t_OServiceMan
     {
         if (! m_root)
         {
-            throw DisposedException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("call on already disposed smgr!") ),
+            throw lang::DisposedException(
+                OUSTR("service manager instance has already been disposed!"),
                 Reference< XInterface >() );
         }
         return m_root;
@@ -934,6 +945,7 @@ static Reference<XInterface > SAL_CALL OServiceManagerWrapper_CreateInstance(
 sal_Int64 OServiceManager::getSomething( Sequence< sal_Int8 > const & id )
     throw (RuntimeException)
 {
+    check_undisposed();
     if (id == smgr_getImplementationId())
         return (sal_Int64)this;
     else
@@ -1062,10 +1074,9 @@ void OServiceManager::onUnloadingNotify()
 void OServiceManager::dispose()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    // notify the disposing listener, the service manager is still full alive
-    EventObject aEvt;
-    aEvt.Source = Reference<XInterface >( *this );
-    rBHelper.aLC.disposeAndClear( aEvt );
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+        return;
+    t_OServiceManager_impl::dispose();
 
     // dispose all factories
     HashSet_Ref aImpls;
@@ -1090,9 +1101,6 @@ void OServiceManager::dispose()
 #endif
         }
     }
-
-    // set the service manager to disposed
-    t_OServiceManager_impl::dispose();
 
     // dispose
     HashSet_Ref aImplMap;
@@ -1120,6 +1128,7 @@ void OServiceManager::dispose()
 Reference<XPropertySetInfo > OServiceManager::getPropertySetInfo()
     throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     if (! m_xPropertyInfo.is())
     {
         Sequence< beans::Property > seq( 1 );
@@ -1140,6 +1149,7 @@ void OServiceManager::setPropertyValue(
     const OUString& PropertyName, const Any& aValue )
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DefaultContext") ))
     {
         Reference< XComponentContext > xContext;
@@ -1166,6 +1176,7 @@ void OServiceManager::setPropertyValue(
 Any OServiceManager::getPropertyValue(const OUString& PropertyName)
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DefaultContext") ))
     {
         MutexGuard aGuard( m_mutex );
@@ -1188,6 +1199,7 @@ void OServiceManager::addPropertyChangeListener(
     const Reference<XPropertyChangeListener >& aListener)
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     throw UnknownPropertyException();
 }
 
@@ -1196,6 +1208,7 @@ void OServiceManager::removePropertyChangeListener(
     const Reference<XPropertyChangeListener >& aListener)
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     throw UnknownPropertyException();
 }
 
@@ -1204,6 +1217,7 @@ void OServiceManager::addVetoableChangeListener(
     const Reference<XVetoableChangeListener >& aListener)
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     throw UnknownPropertyException();
 }
 
@@ -1212,12 +1226,14 @@ void OServiceManager::removeVetoableChangeListener(
     const Reference<XVetoableChangeListener >& aListener)
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     throw UnknownPropertyException();
 }
 
 // OServiceManager
 Reference<XEventListener > OServiceManager::getFactoryListener()
 {
+    check_undisposed();
     MutexGuard aGuard( m_mutex );
     if( !xFactoryListener.is() )
         xFactoryListener = new OServiceManager_Listener( this );
@@ -1227,8 +1243,8 @@ Reference<XEventListener > OServiceManager::getFactoryListener()
 // XMultiServiceFactory, XContentEnumeration
 Sequence< OUString > OServiceManager::getAvailableServiceNames( HashSet_OWString & aNameSet )
 {
+    check_undisposed();
     MutexGuard aGuard( m_mutex );
-
     HashMultimap_OWString_Interface::iterator aSIt = m_ServiceMap.begin();
     while( aSIt != m_ServiceMap.end() )
         aNameSet.insert( (*aSIt++).first );
@@ -1256,6 +1272,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
     Reference< XComponentContext > const & xContext )
     throw (Exception, RuntimeException)
 {
+    check_undisposed();
 #ifdef _DEBUG
     Reference< beans::XPropertySet > xProps( xContext->getServiceManager(), UNO_QUERY );
     OSL_ASSERT( xProps.is() );
@@ -1316,6 +1333,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
     Reference< XComponentContext > const & xContext )
     throw (Exception, RuntimeException)
 {
+    check_undisposed();
 #ifdef _DEBUG
     Reference< beans::XPropertySet > xProps( xContext->getServiceManager(), UNO_QUERY );
     OSL_ASSERT( xProps.is() );
@@ -1374,6 +1392,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
 Sequence< OUString > OServiceManager::getAvailableServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     // all names
     HashSet_OWString aNameSet;
     return getAvailableServiceNames( aNameSet );
@@ -1402,6 +1421,7 @@ Reference<XInterface > OServiceManager::createInstanceWithArguments(
 void OServiceManager::initialize( Sequence< Any > const & )
     throw (Exception)
 {
+    check_undisposed();
     OSL_ENSURE( 0, "not impl!" );
 }
 
@@ -1409,6 +1429,7 @@ void OServiceManager::initialize( Sequence< Any > const & )
 OUString OServiceManager::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     return getImplementationName_Static();
 }
 
@@ -1416,6 +1437,7 @@ OUString OServiceManager::getImplementationName()
 sal_Bool OServiceManager::supportsService(const OUString& ServiceName)
     throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
@@ -1428,6 +1450,7 @@ sal_Bool OServiceManager::supportsService(const OUString& ServiceName)
 Sequence< OUString > OServiceManager::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     return smgr_getSupportedServiceNames();
 }
 
@@ -1473,6 +1496,7 @@ Sequence< Reference< XInterface > > OServiceManager::queryServiceFactories(
 Reference<XEnumeration > OServiceManager::createContentEnumeration(const OUString& aServiceName)
     throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     Sequence< Reference< XInterface > > factories(
         OServiceManager::queryServiceFactories( aServiceName ) );
     if (factories.getLength())
@@ -1484,6 +1508,7 @@ Reference<XEnumeration > OServiceManager::createContentEnumeration(const OUStrin
 // XEnumeration
 Reference<XEnumeration > OServiceManager::createEnumeration() throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     MutexGuard aGuard( m_mutex );
     return new ImplementationEnumeration_Impl( m_ImplementationMap );
 }
@@ -1492,6 +1517,7 @@ Reference<XEnumeration > OServiceManager::createEnumeration() throw(::com::sun::
 Type OServiceManager::getElementType()
     throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     return ::getCppuType( (const Reference< XInterface > *)0 );
 }
 
@@ -1499,6 +1525,7 @@ Type OServiceManager::getElementType()
 sal_Bool OServiceManager::hasElements()
     throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     MutexGuard aGuard( m_mutex );
     return !m_ImplementationMap.empty();
 }
@@ -1507,6 +1534,7 @@ sal_Bool OServiceManager::hasElements()
 sal_Bool OServiceManager::has( const Any & Element )
     throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     if( Element.getValueTypeClass() == TypeClass_INTERFACE )
     {
         MutexGuard aGuard( m_mutex );
@@ -1521,6 +1549,7 @@ sal_Bool OServiceManager::has( const Any & Element )
 void OServiceManager::insert( const Any & Element )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     if( Element.getValueTypeClass() != TypeClass_INTERFACE )
     {
         throw IllegalArgumentException(
@@ -1582,6 +1611,7 @@ void OServiceManager::remove( const Any & Element )
            ::com::sun::star::container::NoSuchElementException,
            ::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     if( Element.getValueTypeClass() != TypeClass_INTERFACE )
     {
         throw IllegalArgumentException(
@@ -1718,6 +1748,8 @@ ORegistryServiceManager::~ORegistryServiceManager()
 void ORegistryServiceManager::dispose()
     throw(::com::sun::star::uno::RuntimeException)
 {
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+        return;
     OServiceManager::dispose();
     // dispose
     MutexGuard aGuard( m_mutex );
@@ -1850,6 +1882,7 @@ void ORegistryServiceManager::fillAllNamesFromRegistry( HashSet_OWString & rSet 
 void ORegistryServiceManager::initialize(const Sequence< Any >& Arguments)
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     MutexGuard aGuard( m_mutex );
     if (Arguments.getLength() > 0)
     {
@@ -1867,6 +1900,7 @@ void ORegistryServiceManager::initialize(const Sequence< Any >& Arguments)
 Sequence< OUString > ORegistryServiceManager::getAvailableServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     MutexGuard aGuard( m_mutex );
     // all names
     HashSet_OWString aNameSet;
@@ -1881,6 +1915,7 @@ Sequence< OUString > ORegistryServiceManager::getAvailableServiceNames()
 Sequence< OUString > ORegistryServiceManager::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     return regsmgr_getSupportedServiceNames();
 }
 
@@ -1909,6 +1944,7 @@ Sequence< Reference< XInterface > > ORegistryServiceManager::queryServiceFactori
 Reference<XEnumeration > ORegistryServiceManager::createContentEnumeration(const OUString& aServiceName)
     throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     MutexGuard aGuard( ((ORegistryServiceManager *)this)->m_mutex );
     // get all implementation names registered under this service name from the registry
     Sequence<OUString> aImpls = ((ORegistryServiceManager *)this)->getFromServiceName( aServiceName );
@@ -1931,6 +1967,7 @@ Reference<XEnumeration > ORegistryServiceManager::createContentEnumeration(const
 Reference<XPropertySetInfo > ORegistryServiceManager::getPropertySetInfo()
     throw(::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     if (! m_xPropertyInfo.is())
     {
         Sequence< beans::Property > seq( 2 );
@@ -1953,6 +1990,7 @@ Reference<XPropertySetInfo > ORegistryServiceManager::getPropertySetInfo()
 Any ORegistryServiceManager::getPropertyValue(const OUString& PropertyName)
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
+    check_undisposed();
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Registry") ))
     {
         MutexGuard aGuard( m_mutex );

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: cppumaker.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-12 20:19:41 $
+#   last change: $Author: dbo $ $Date: 2002-11-13 11:00:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,4 +73,13 @@ CPPUMAKERFLAGS = -L
 .ENDIF
 UNOUCROUT=	$(OUT)$/inc$/light
 INCPRE+=	$(OUT)$/inc$/light
+.ENDIF
+
+.IF "$(debug)" != ""
+
+# MSVC++: no inlining
+.IF "$(COM)" == "MSC"
+CFLAGS += -Ob0
+.ENDIF
+
 .ENDIF

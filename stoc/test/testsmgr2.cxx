@@ -6,6 +6,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -58,12 +60,27 @@ int main()
         {
             printf( "test passed\n" );
         }
+
+        Reference< XComponent > xComp( rComp, UNO_QUERY );
+        xComp->dispose();
+        try
+        {
+            xCtAccess->createContentEnumeration(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "blabla" ) ) );
+        }
+        catch (DisposedException &)
+        {
+            printf( "already disposed results in DisposedException: ok.\n" );
+            return 0;
+        }
+        fprintf( stderr, "missing DisposedException!\n" );
+        return 1;
     }
     catch ( Exception & e )
     {
         OString o =  OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
         printf( "%s\n" , o.getStr() );
         OSL_ASSERT( 0 );
+        return 1;
     }
-    return 0;
 }
