@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:34 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,13 +348,13 @@ sal_uInt16 XclExpString::CalcStrLen( sal_Int32 nCurrLen, sal_uInt16 nMaxLen )
 void XclExpString::Init( XclStrFlags nFlags, sal_Int32 nCurrLen, sal_uInt16 nMaxLen, bool bBiff8 )
 {
     DBG_ASSERT( (nFlags & ~(bBiff8 ? nAllowedFlags : nAllowedFlags27)) == 0, "XclExpString::Init - unknown flag" );
-    mnLen = CalcStrLen( nCurrLen, nMaxLen );
     mbIsBiff8 = bBiff8;
     mbIsUnicode = bBiff8 && ::get_flag( nFlags, EXC_STR_FORCEUNICODE );
     mb8BitLen = ::get_flag( nFlags, EXC_STR_8BITLENGTH );
     mbSmartFlags = bBiff8 && ::get_flag( nFlags, EXC_STR_SMARTFLAGS );
     mbKeepZero = ::get_flag( nFlags, EXC_STR_KEEPZEROCHARS );
     mbWrapped = false;
+    mnLen = CalcStrLen( nCurrLen, nMaxLen );
 
     maFormats.clear();
     if( mbIsBiff8 )
@@ -625,7 +625,7 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
                 aAttr.GetFont( aFont, SC_AUTOCOL_RAW );
 
                 // font name and style
-                aNewData.maName = aFont.GetName();
+                aNewData.maName = XclTools::GetXclFontName( aFont.GetName() );
                 aNewData.mnWeight = (aFont.GetWeight() > WEIGHT_NORMAL) ? EXC_FONTWGHT_BOLD : EXC_FONTWGHT_NORMAL;
                 aNewData.mbItalic = (aFont.GetItalic() != ITALIC_NONE);
                 bool bNewFont = !(aFontData.maName == aNewData.maName);
@@ -722,7 +722,7 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
                 else
                 {
                     String aPortionText( mrEE.GetText( aSel ) );
-                    aPortionText.SearchAndReplaceAll( String( '&' ), String::CreateFromAscii( "&&" ) );
+                    aPortionText.SearchAndReplaceAll( String( '&' ), String( RTL_CONSTASCII_USTRINGPARAM( "&&" ) ) );
                     aParaText.Append( aPortionText );
                 }
             }
