@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-07 07:46:42 $
+ *  last change: $Author: mtg $ $Date: 2001-10-09 15:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace SwUnoCursorHelper
                                         , com::sun::star::beans::PropertyState& eState
                                         , const SwTxtNode* pNode = 0 );
 
-    String                      GetCurPageStyle(SwPaM& rPaM);
+    void                        GetCurPageStyle(SwPaM& rPaM, String &rString);
 
     inline sal_Bool             IsStartOfPara(SwPaM& rUnoCrsr)
                                         { return rUnoCrsr.GetPoint()->nContent == 0;}
@@ -105,9 +105,10 @@ namespace SwUnoCursorHelper
                                     const String& rFilterOption,
                                     const String& rPassword);
 
-    com::sun::star::uno::Any    getNumberingProperty(
+    void                        getNumberingProperty(
                                     SwPaM& rPam,
-                                    com::sun::star::beans::PropertyState& eState);
+                                    com::sun::star::beans::PropertyState& eState,
+                                    com::sun::star::uno::Any *pAny );
 
     void                        setNumberingProperty(
                                     const com::sun::star::uno::Any& rValue,
