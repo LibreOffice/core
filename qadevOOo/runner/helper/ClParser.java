@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClParser.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2003-11-18 16:14:09 $
+ *  last change:$Date: 2004-03-19 14:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,51 +58,59 @@
  *
  *
  ************************************************************************/
-
 package helper;
 
-import lib.TestParameters;
 import java.util.Properties;
+
+import lib.TestParameters;
+
+
 /**
  * This class parses commandline Argument and stores <br>
  * them into TestParameter
  */
 public class ClParser {
-
     /*
      * Parses the commandline argument and puts them<br>
      * into the TestParameters
      */
-    public void getCommandLineParameter(TestParameters param,String[] args) {
+    public void getCommandLineParameter(TestParameters param, String[] args) {
         Properties mapping = getMapping();
         boolean isTestJob = false;
-        for (int i=0; i<args.length;) {
-            String pName = getParameterFor(mapping,args[i]).trim();
+
+        for (int i = 0; i < args.length;) {
+            String pName = getParameterFor(mapping, args[i]).trim();
             String pValue = "";
+
             if (pName.equals("TestJob")) {
-                pValue = args[i].trim()+" "+args[i+1].trim();
-                i+=2;
-            }
-            else{
-                if (i+1<args.length) {
-                    pValue = args[i+1].trim();
+                if (args.length > (i + 1)) {
+                    pValue = args[i].trim() + " " + args[i + 1].trim();
+                    i += 2;
+                } else {
+                    pValue = args[i].trim() + " unknown";
+                    i += 2;
+                }
+            } else {
+                if ((i + 1) < args.length) {
+                    pValue = args[i + 1].trim();
+
                     if (pValue.startsWith("-")) {
                         i++;
-                        pValue="yes";
+                        pValue = "yes";
+                    } else {
+                        i += 2;
                     }
-                    else {
-                        i+=2;
-                    }
+
                     if (pName.equals("TestDocumentPath")) {
-                        System.setProperty("DOCPTH",pValue);
+                        System.setProperty("DOCPTH", pValue);
                     }
-                }
-                else {
-                    pValue="yes";
+                } else {
+                    pValue = "yes";
                     i++;
                 }
             }
-            param.put(pName,pValue);
+
+            param.put(pName, pValue);
         }
     }
 
@@ -110,40 +118,43 @@ public class ClParser {
      * This method returns the path to a Configuration file <br>
      * if defined as command line parameter, an empty String elsewhere
      */
-
     public String getIniPath(String[] args) {
-        String iniFile="";
-        for (int i=0;i<args.length;i++) {
+        String iniFile = "";
+
+        for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-ini")) {
-                iniFile=args[i+1];
+                iniFile = args[i + 1];
             }
         }
+
         return iniFile;
     }
 
     /*
      * This method maps commandline Parameters to TestParameters
      */
-
     protected Properties getMapping() {
         Properties map = new Properties();
-        map.setProperty("-cs","ConnectionString");
-        map.setProperty("-tb","TestBase");
-        map.setProperty("-tdoc","TestDocumentPath");
-        map.setProperty("-objdsc","DescriptionPath");
-        map.setProperty("-cmd","AppExecutionCommand");
-        map.setProperty("-o","TestJob");
-        map.setProperty("-sce","TestJob");
+        map.setProperty("-cs", "ConnectionString");
+        map.setProperty("-tb", "TestBase");
+        map.setProperty("-tdoc", "TestDocumentPath");
+        map.setProperty("-objdsc", "DescriptionPath");
+        map.setProperty("-cmd", "AppExecutionCommand");
+        map.setProperty("-o", "TestJob");
+        map.setProperty("-sce", "TestJob");
         map.setProperty("-aca", "AdditionalConnectionArguments");
         map.setProperty("-xcl", "ExclusionList");
+
         return map;
     }
 
     protected String getParameterFor(Properties map, String name) {
         String ret = map.getProperty(name);
+
         if (ret == null) {
             ret = name.substring(1);
         }
+
         return ret;
     }
 }
