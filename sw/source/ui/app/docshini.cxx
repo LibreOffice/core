@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2002-08-20 13:34:44 $
+ *  last change: $Author: os $ $Date: 2002-09-24 14:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,13 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
             FONT_STANDARD_CJK,
             FONT_STANDARD_CTL
         };
+        USHORT nFontTypes[] =
+        {
+            DEFAULTFONT_LATIN_TEXT,
+            DEFAULTFONT_CJK_TEXT,
+            DEFAULTFONT_CTL_TEXT
+        };
+
         for(USHORT i = 0; i < 3; i++)
         {
             USHORT nFontWhich = aFontWhich[i];
@@ -354,9 +361,10 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
             }
             else
             {
-                const SvxLanguageItem& rLang = (const SvxLanguageItem&)pDoc->GetDefault(i ?  RES_CHRATR_CJK_LANGUAGE : RES_CHRATR_LANGUAGE );
+                const SvxLanguageItem& rLang = (const SvxLanguageItem&)pDoc->GetDefault( nFontWhich );
+
                 Font aLangDefFont = OutputDevice::GetDefaultFont(
-                    i ? DEFAULTFONT_CJK_TEXT : DEFAULTFONT_LATIN_TEXT,
+                    nFontTypes[i],
                     rLang.GetLanguage(),
                     DEFAULTFONT_FLAGS_ONLYONE );
                 pFontItem = new SvxFontItem(aLangDefFont.GetFamily(), aLangDefFont.GetName(),
