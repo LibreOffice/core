@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-23 11:38:10 $
+ *  last change: $Author: os $ $Date: 2002-09-05 12:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,37 +623,21 @@ String  SwScrollNaviPopup::GetQuickHelpText(BOOL bNext)
         nResId += NID_COUNT;
     return String(SW_RES(nResId));
 }
+/* -----------------------------05.09.2002 13:53------------------------------
 
-
-/*-----------------20.02.97 10:17-------------------
-
---------------------------------------------------*/
-
-void SwNaviImageButton::MouseButtonDown( const MouseEvent& rMEvt )
+ ---------------------------------------------------------------------------*/
+void SwNaviImageButton::Click()
 {
-    if(MOUSE_LEFT == rMEvt.GetButtons())
-    {
-        SfxBindings& rBind = SfxViewFrame::Current()->GetBindings();
-        rBind.ENTERREGISTRATIONS();
-        pPopup = new
-            SwScrollNaviPopup(FN_SCROLL_NAVIGATION,
-                            rBind);
-        rBind.LEAVEREGISTRATIONS();
-        Point aPos = OutputToScreenPixel(Point(0,0));
-        Rectangle aRect(aPos, GetSizePixel());
-        pPopup->StartPopupMode(aRect, FLOATWIN_POPUPMODE_LEFT|FLOATWIN_POPUPMODE_ALLOWTEAROFF);
-    }
-    else
-        ImageButton::MouseButtonDown(rMEvt);
+    SfxBindings& rBind = SfxViewFrame::Current()->GetBindings();
+    rBind.ENTERREGISTRATIONS();
+    pPopup = new
+        SwScrollNaviPopup(FN_SCROLL_NAVIGATION,
+                        rBind);
+    rBind.LEAVEREGISTRATIONS();
+    Point aPos = OutputToScreenPixel(Point(0,0));
+    Rectangle aRect(aPos, GetSizePixel());
+    pPopup->StartPopupMode(aRect, FLOATWIN_POPUPMODE_LEFT|FLOATWIN_POPUPMODE_ALLOWTEAROFF);
 }
-/*-----------------20.02.97 10:17-------------------
-
---------------------------------------------------*/
-
-void SwNaviImageButton::MouseButtonUp( const MouseEvent& rMEvt )
-{
-}
-
 /*-----------------21.02.97 09:41-------------------
 
 --------------------------------------------------*/

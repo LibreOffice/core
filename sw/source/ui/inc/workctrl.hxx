@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-07-05 07:56:38 $
+ *  last change: $Author: os $ $Date: 2002-09-05 12:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,8 +209,7 @@ class SwNaviImageButton : public ImageButton
         String              sQuickText;
 
     protected:
-        virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void    MouseButtonUp( const MouseEvent& rMEvt );
+        virtual void    Click();
         virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     public:
         SwNaviImageButton(Window* pParent);
