@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-24 15:07:30 $
+ *  last change: $Author: fs $ $Date: 2002-11-08 13:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@
 #define ID_BROWSER_QUERY_VIEW_TABLES        SID_SBA_QUERY_VIEW_TABLES
 #define ID_BROWSER_QUERY_VIEW_ALIASES       SID_SBA_QUERY_VIEW_ALIASES
 #define ID_BROWSER_QUERY_DISTINCT_VALUES    SID_SBA_QUERY_DISTINCT_VALUES
-#define ID_BROWSER_CLOSE                    SID_CLOSEDOC
+#define ID_BROWSER_CLOSE                    SID_CLOSEWIN
 #define ID_BROWSER_ESACPEPROCESSING         SID_FM_NATIVESQL
 
 #define ID_QUERY_FUNCTION                   (SID_SBA_START + 41) // Funktionen anzeigen

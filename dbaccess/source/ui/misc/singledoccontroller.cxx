@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:51:11 $
+ *  last change: $Author: fs $ $Date: 2002-11-08 13:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,7 +533,7 @@ namespace dbaui
     {
         switch(_nId)
         {
-            case SID_CLOSEDOC:
+            case ID_BROWSER_CLOSE:
                 closeTask();
                 return;
                 break;
@@ -579,6 +579,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2002/08/19 07:51:11  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.7  2002/07/08 08:15:44  oj
  *  #97156# check if we are already suspended
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-24 05:54:24 $
+ *  last change: $Author: fs $ $Date: 2002-11-08 13:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2015,7 +2015,7 @@ Menu RID_TABLE_DESIGN_MAIN_MENU
             };
             MenuItem
             {
-                ITEM_FILE_CLOSEDOC
+                ITEM_WINDOW_CLOSEWIN
             };
             MenuItem
             {

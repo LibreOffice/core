@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:48:19 $
+ *  last change: $Author: fs $ $Date: 2002-11-08 13:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
 
     switch (_nId)
     {
-        case SID_CLOSEDOC:
+        case ID_BROWSER_CLOSE:
             aReturn.bEnabled = sal_True;
             break;
         case ID_TABLE_DESIGN_NO_CONNECTION:
@@ -799,7 +799,6 @@ void OTableController::AddSupportedFeatures()
 
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/IndexDesign")]  = SID_INDEXDESIGN;
 
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:CloseDoc")]        = SID_CLOSEDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/EditDoc")] = ID_BROWSER_EDITDOC;
 }
 // -----------------------------------------------------------------------------

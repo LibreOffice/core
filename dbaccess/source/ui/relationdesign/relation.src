@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-24 05:50:21 $
+ *  last change: $Author: fs $ $Date: 2002-11-08 13:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             };
             MenuItem
             {
-                ITEM_FILE_CLOSEDOC
+                ITEM_WINDOW_CLOSEWIN
             };
             MenuItem
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2002-11-04 17:51:33 $
+ *  last change: $Author: fs $ $Date: 2002-11-08 13:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1790,7 +1790,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             };
             MenuItem
             {
-                ITEM_FILE_CLOSEDOC
+                ITEM_WINDOW_CLOSEWIN
             };
             MenuItem
             {
