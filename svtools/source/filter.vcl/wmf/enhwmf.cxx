@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-10 16:05:39 $
+ *  last change: $Author: sj $ $Date: 2001-01-12 12:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
     INT32   nX32, nY32, nx32, ny32;
     INT16   nX16, nY16;
 
-    BOOL    bFlag, bStatus = ReadHeader();
+    sal_Bool    bFlag, bStatus = ReadHeader();
 
     while( bStatus && nRecordCount-- )
     {
@@ -227,14 +227,33 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
         if( aBmpSaveList.Count() && ( nRecType != EMR_STRETCHBLT ) && ( nRecType != EMR_STRETCHDIBITS ) )
                 pOut->ResolveBitmapActions( aBmpSaveList );
 
-        bFlag = FALSE;
+        bFlag = sal_False;
 
         switch( nRecType )
         {
             case EMR_HEADER :                           // wir haben schon laengst einen header eingelesen
             break;
 
+            case EMR_POLYBEZIERTO :
+                bFlag = sal_True;
             case EMR_POLYBEZIER :
+            {
+                pWMF->SeekRel( 16 );
+                *pWMF >> nPoints;
+                sal_uInt16 i = 0;
+                if ( bFlag )
+                {
+                    i++;
+                    nPoints++;
+                }
+                Polygon aPoly( (sal_uInt16)nPoints );
+                for( ; i < (sal_uInt16)nPoints; i++ )
+                {
+                    *pWMF >> nX32 >> nY32;
+                    aPoly[ i ] = Point( nX32, nY32 );
+                }
+                pOut->DrawPolyBezier( aPoly, bFlag, bRecordPath );
+            }
             break;
 
             case EMR_POLYGON :
@@ -247,15 +266,12 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                     *pWMF >> nX32 >> nY32;
                     aPoly[ k ] = Point( nX32, nY32 );
                 }
-                pOut->DrawPolygon( aPoly );
+                pOut->DrawPolygon( aPoly, bRecordPath );
             }
             break;
 
-            case EMR_POLYBEZIERTO :
-            break;
-
             case EMR_POLYLINETO :
-                bFlag = TRUE;
+                bFlag = sal_True;
             case EMR_POLYLINE :
             {
                 pWMF->SeekRel( 0x10 );
@@ -272,7 +288,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                     *pWMF >> nX32 >> nY32;
                     aPolygon[ i ] = Point( nX32, nY32 );
                 }
-                pOut->DrawPolyLine( aPolygon, bFlag );
+                pOut->DrawPolyLine( aPolygon, bFlag, bRecordPath );
             }
             break;
 
@@ -305,7 +321,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                         *pWMF >> nX32 >> nY32;
                         aPoly[ k ] = Point( nX32, nY32 );
                     }
-                    pOut->DrawPolyLine( aPoly, FALSE );
+                    pOut->DrawPolyLine( aPoly, sal_False, bRecordPath );
                 }
                 delete pnPoints;
             }
@@ -340,8 +356,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 }
                 // PolyPolygon Actions erzeugen
                 PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
-
-                pOut->DrawPolyPolygon( aPolyPoly );
+                pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
                 delete (char*) pPtAry;
                 delete pnPoints;
             }
@@ -639,7 +654,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             case EMR_LINETO :
             {
                 *pWMF >> nX32 >> nY32;
-                pOut->LineTo( Point( nX32, nY32 ) );
+                pOut->LineTo( Point( nX32, nY32 ), bRecordPath );
             }
             break;
 
@@ -653,16 +668,34 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             case EMR_POLYDRAW :
             case EMR_SETARCDIRECTION :
             case EMR_SETMITERLIMIT :
+            break;
             case EMR_BEGINPATH :
+            {
+                pOut->ClearPath();
+                bRecordPath = sal_True;
+            }
+            break;
+            case EMR_ABORTPATH :
+                pOut->ClearPath();
             case EMR_ENDPATH :
+                bRecordPath = sal_False;
+            break;
             case EMR_CLOSEFIGURE :
+                pOut->ClosePath();
+            break;
             case EMR_FILLPATH :
             case EMR_STROKEANDFILLPATH :
             case EMR_STROKEPATH :
             case EMR_FLATTENPATH :
             case EMR_WIDENPATH :
+            break;
             case EMR_SELECTCLIPPATH :
-            case EMR_ABORTPATH :
+            {
+                sal_Int32 nClippingMode;
+                *pWMF >> nClippingMode;
+                pOut->SelectClipPath( nClippingMode );
+            }
+            break;
 
             case EMR_GDICOMMENT :
             case EMR_FILLRGN :
@@ -808,7 +841,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             }
             break;
             case EMR_EXTTEXTOUTA :
-                bFlag = TRUE;
+                bFlag = sal_True;
             case EMR_EXTTEXTOUTW :
             {
                 INT32           nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
@@ -837,7 +870,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                         sal_Char* pBuf = new sal_Char[ nLen ];
                         pWMF->Read( pBuf, nLen );
                         String aText( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
-                        pOut->DrawText( aPos, aText );
+                        pOut->DrawText( aPos, aText, NULL, bRecordPath );
                         delete pBuf;
                     }
                     else
@@ -854,7 +887,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                         }
 #endif
                         String aText( pBuf, (xub_StrLen)nLen );
-                        pOut->DrawText( aPos, aText );
+                        pOut->DrawText( aPos, aText, NULL, bRecordPath );
                         delete pBuf;
                     }
                 }
@@ -862,7 +895,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             break;
 
             case EMR_POLYBEZIERTO16 :
-                bFlag = TRUE;
+                bFlag = sal_True;
             case EMR_POLYBEZIER16 :
             {
                 pWMF->SeekRel( 16 );
@@ -879,7 +912,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                     *pWMF >> nX16 >> nY16;
                     aPoly[ i ] = Point( nX16, nY16 );
                 }
-                pOut->DrawPolyBezier( aPoly, bFlag );   // Line( aPoly, bFlag );
+                pOut->DrawPolyBezier( aPoly, bFlag, bRecordPath );  // Line( aPoly, bFlag );
             }
             break;
             case EMR_POLYGON16 :
@@ -892,11 +925,11 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                     *pWMF >> nX16 >> nY16;
                     aPoly[ k ] = Point( nX16, nY16 );
                 }
-                pOut->DrawPolygon( aPoly );
+                pOut->DrawPolygon( aPoly, bRecordPath );
             }
             break;
             case EMR_POLYLINETO16 :
-                bFlag = TRUE;
+                bFlag = sal_True;
             case EMR_POLYLINE16 :
             {
                 pWMF->SeekRel( 16 );
@@ -914,7 +947,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                     *pWMF >> nX16 >> nY16;
                     aPoly[ i ] = Point( nX16, nY16 );
                 }
-                pOut->DrawPolyLine( aPoly, bFlag );
+                pOut->DrawPolyLine( aPoly, bFlag, bRecordPath );
             }
             break;
 
@@ -942,7 +975,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                         *pWMF >> nX16 >> nY16;
                         aPolygon[ k ] = Point( nX16, nY16 );
                     }
-                    pOut->DrawPolyLine( aPolygon );
+                    pOut->DrawPolyLine( aPolygon, sal_False, bRecordPath );
                 }
                 delete pnPoints;
             }
@@ -974,7 +1007,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
 
                 // PolyPolygon Actions erzeugen
                 PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
-                pOut->DrawPolyPolygon( aPolyPoly );
+                pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
                 delete (char*) pPtAry;
                 delete pnPoints;
             };
@@ -1070,4 +1103,9 @@ Rectangle EnhWMFReader::ReadRectangle( INT32 x1, INT32 y1, INT32 x2, INT32 y2 )
     Point aBR( Point( --x2, --y2 ) );
     return Rectangle( aTL, aBR );
 }
+
+EnhWMFReader::~EnhWMFReader()
+{
+
+};
 
