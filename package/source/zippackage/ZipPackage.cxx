@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-29 13:46:23 $
+ *  last change: $Author: mtg $ $Date: 2001-12-04 17:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,8 @@ void ZipPackage::getZipFileContents()
                     }
                 }
             }
+            else
+                VOS_ENSURE ( 0, "Couldn't get a ManifestReader!" );
         }
     }
     const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
@@ -715,6 +717,8 @@ void ZipPackage::writeTempFile()
             VOS_ENSURE( 0, "Error adding META-INF/manifest.xml to the ZipOutputStream" );
         }
     }
+    else
+        VOS_ENSURE ( 0, "Couldn't get a ManifestWriter!" );
     try
     {
         aZipOut.finish();
