@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-08 13:11:19 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,7 @@ String SBA_BROWSER_SETTING_ORDER
     Text[ greek ] = "Σφάλμα κατά τον ορισμό των κριτηρίων ταξινόμησης";
     Text[ dutch ] = "Fout bij instellen van sorteercriteria";
     Text[ french ] = "Erreur de dιfinition des critθres de tri";
-    Text[ spanish ] = "Error al definir los criterios de ordenaciσn";
+    Text[ spanish ] = "Error al definir los criterios de orden";
     Text[ italian ] = "Errore nell'impostare i criteri";
     Text[ danish ] = "Fejl under definering af sorteringskriterierne";
     Text[ swedish ] = "Fel vid definition av sorteringskriterier";
@@ -1232,7 +1232,7 @@ String STR_CONNECTING_DATASOURCE
     Text[ greek ] = "Σύνδεση με το \"$name$\" ...";
     Text[ dutch ] = "Bezig met verbinden met \"$name$\" ...";
     Text[ french ] = "Connexion ΰ \"$name$\" ...";
-    Text[ spanish ] = "Conectando a \"$name$\" ...";
+    Text[ spanish ] = "Conexiσn con \"$name$\" ...";
     Text[ italian ] = "Collegamento a \"$name$\" ...";
     Text[ danish ] = "Opretter forbindelse til \"$name$\" ...";
     Text[ swedish ] = "Kopplar till \"$name$\" ...";
