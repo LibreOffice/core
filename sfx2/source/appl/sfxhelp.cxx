@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-24 11:49:51 $
+ *  last change: $Author: pb $ $Date: 2001-11-06 12:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,8 +465,6 @@ String SfxHelp::GetHelpModuleName_Impl( ULONG nHelpId )
                 bHasModule = pImp->HasModule( aModuleName );
                 pParentViewFrame = pParentViewFrame->GetParentViewFrame_Impl();
             }
-
-            DBG_ASSERT( bHasModule, "no installed help module found" );
         }
     }
 
