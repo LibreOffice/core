@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:52:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,9 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "glob.hrc"
+#include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
-#ifndef SD_SUB_SHELL_MANAGER_HXX
-#include "SubShellManager.hxx"
 #endif
 #ifndef SD_FACTORY_IDS_HXX
 #include "FactoryIds.hxx"
@@ -103,6 +101,93 @@
 #define PresentationViewShell
 using namespace sd;
 #include "sdslots.hxx"
+
+namespace {
+
+/** Objects of this class wait for the execution of an asynchronous view
+    shell change and finish the initialization of a new
+    PresentationViewShell object.
+
+    After it has done its job the object removes itself as listener from the
+    view shell base and destroyes itself.
+*/
+class ViewShellChangeListener
+{
+public:
+    ViewShellChangeListener (
+        ViewShellBase& rBase,
+        FrameView* pFrameView,
+        USHORT nPageNumber,
+        const SfxRequest& rRequest)
+        : mrBase (rBase),
+          mpFrameView(pFrameView),
+          mnPageNumber(nPageNumber),
+          maRequest(rRequest)
+    {
+        if (mpFrameView != NULL)
+            mpFrameView->Connect();
+        rBase.GetPaneManager().AddEventListener (
+            LINK(this, ViewShellChangeListener, HandleViewShellChange));
+    }
+private:
+    ViewShellBase& mrBase;
+    FrameView* const mpFrameView;
+    const USHORT mnPageNumber;
+    SfxRequest maRequest;
+
+    DECL_LINK(HandleViewShellChange, PaneManagerEvent*);
+};
+
+IMPL_LINK(ViewShellChangeListener, HandleViewShellChange,
+    PaneManagerEvent*, pEvent)
+{
+    if (pEvent->meEventId == PaneManagerEvent::EID_VIEW_SHELL_ADDED
+        && pEvent->mePane == PaneManager::PT_CENTER)
+    {
+        if (pEvent->mpShell->ISA(PresentationViewShell))
+        {
+            PresentationViewShell* pShell
+                = PTR_CAST(PresentationViewShell, pEvent->mpShell);
+            pShell->FinishInitialization (
+                mpFrameView,
+                maRequest,
+                mnPageNumber);
+            if (mpFrameView != NULL)
+                mpFrameView->Disconnect();
+            /*
+            mpFrameView->Connect();
+            pShell->GetFrameView()->Disconnect();
+            pShell->SetFrameView (mpFrameView);
+            pShell->SwitchPage (mnPageNumber);
+            pShell->WriteFrameViewData();
+
+            SfxBoolItem aShowItem (SID_SHOWPOPUPS, FALSE);
+            SfxUInt16Item aId (SID_CONFIGITEMID, SID_NAVIGATOR);
+            pShell->GetViewFrame()->GetDispatcher()->Execute(
+                SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON, &aShowItem, &aId, 0L );
+            pShell->GetViewFrame()->Show();
+            pShell->SetSlideShowFunction (new FuSlideShow(
+                pShell,
+                pShell->GetActiveWindow(),
+                pShell->GetView(),
+                pShell->GetDoc(),
+                maRequest));
+            pShell->GetActiveWindow()->GrabFocus();
+            pShell->GetSlideShow()->Activate();
+            pShell->GetSlideShow()->StartShow();
+            */
+        }
+
+        // Remove this listener from the view shell base and destroy it.
+        mrBase.GetPaneManager().RemoveEventListener (
+            LINK(this,ViewShellChangeListener,HandleViewShellChange));
+        delete this;
+    }
+
+    return 0;
+}
+
+} // end of anonymouse namespace
 
 namespace sd {
 
@@ -128,13 +213,20 @@ SFX_IMPL_INTERFACE( PresentationViewShell, DrawViewShell, SdResId( STR_PRESVIEWS
 
 TYPEINIT1( PresentationViewShell, DrawViewShell );
 
-// -----------------------------------------------------------------------------
+
+
 
 PresentationViewShell::PresentationViewShell (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
-    FrameView* pFrameViewArgument)
-    : DrawViewShell (pFrame, rViewShellBase, PK_STANDARD, pFrameViewArgument),
+    ::Window* pParentWindow,
+    FrameView* pFrameView)
+    : DrawViewShell (
+        pFrame,
+        rViewShellBase,
+        pParentWindow,
+        PK_STANDARD,
+        pFrameView),
     mbShowStarted( sal_False )
 {
     if( GetDocSh() && GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
@@ -142,20 +234,25 @@ PresentationViewShell::PresentationViewShell (
     meShellType = ST_PRESENTATION;
 }
 
-// -----------------------------------------------------------------------------
 
-PresentationViewShell::PresentationViewShell( SfxViewFrame* pFrame, const DrawViewShell& rShell ) :
-    DrawViewShell( pFrame, rShell ),
-    mbShowStarted( sal_False )
+
+
+PresentationViewShell::PresentationViewShell (
+    SfxViewFrame* pFrame,
+    ::Window* pParentWindow,
+    const DrawViewShell& rShell)
+    : DrawViewShell (pFrame, pParentWindow, rShell),
+      mbShowStarted( sal_False )
 {
     if( GetDocSh() && GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         maOldVisArea = GetDocSh()->GetVisArea( ASPECT_CONTENT );
     meShellType = ST_PRESENTATION;
 }
 
-// -----------------------------------------------------------------------------
 
-PresentationViewShell::~PresentationViewShell()
+
+
+PresentationViewShell::~PresentationViewShell (void)
 {
     if( GetDocSh() && GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !maOldVisArea.IsEmpty() )
         GetDocSh()->SetVisArea( maOldVisArea );
@@ -177,7 +274,47 @@ PresentationViewShell::~PresentationViewShell()
     }
 }
 
-// -----------------------------------------------------------------------------
+
+
+
+void PresentationViewShell::FinishInitialization (
+    FrameView* pFrameView,
+    SfxRequest& rRequest,
+    USHORT nPageNumber)
+{
+    DrawViewShell::Init();
+
+    // Use the frame view that comes form the view shell that initiated our
+    // creation.
+    if (pFrameView != NULL)
+    {
+        GetFrameView()->Disconnect();
+        SetFrameView (pFrameView);
+        pFrameView->Connect();
+    }
+    SwitchPage (nPageNumber);
+    WriteFrameViewData();
+
+    SfxBoolItem aShowItem (SID_SHOWPOPUPS, FALSE);
+    SfxUInt16Item aId (SID_CONFIGITEMID, SID_NAVIGATOR);
+    GetViewFrame()->GetDispatcher()->Execute(
+        SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON, &aShowItem, &aId, 0L );
+    GetViewFrame()->Show();
+    SetSlideShowFunction (new FuSlideShow(
+        this,
+        GetActiveWindow(),
+        GetView(),
+        GetDoc(),
+        rRequest));
+    GetActiveWindow()->GrabFocus();
+
+    // Start the show.
+    GetSlideShow()->Activate();
+    GetSlideShow()->StartShow();
+}
+
+
+
 
 void PresentationViewShell::Activate( BOOL bIsMDIActivate )
 {
@@ -222,44 +359,64 @@ void PresentationViewShell::Paint( const Rectangle& rRect, ::sd::Window* pWin )
 
 // -----------------------------------------------------------------------------
 
-void PresentationViewShell::CreateFullScreenShow( ViewShell* pOriginShell, SfxRequest& rReq )
+void PresentationViewShell::CreateFullScreenShow (
+    ViewShell* pOriginShell,
+    SfxRequest& rRequest)
 {
-    SFX_REQUEST_ARG( rReq, pAlwaysOnTop, SfxBoolItem, ATTR_PRESENT_ALWAYS_ON_TOP, FALSE );
+    SFX_REQUEST_ARG (rRequest, pAlwaysOnTop, SfxBoolItem,
+        ATTR_PRESENT_ALWAYS_ON_TOP, FALSE);
 
-    WorkWindow*     pWorkWindow = new WorkWindow( NULL, WB_HIDE | WB_CLIPCHILDREN );
+    WorkWindow* pWorkWindow = new WorkWindow (
+        NULL,
+        WB_HIDE | WB_CLIPCHILDREN);
     SdDrawDocument* pDoc = pOriginShell->GetDoc();
-    SdPage*         pActualPage = pOriginShell->GetActualPage();
-    BOOL            bAlwaysOnTop = ( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) && pAlwaysOnTop ) ? pAlwaysOnTop->GetValue() : pDoc->GetPresAlwaysOnTop();
+    SdPage* pCurrentPage = pOriginShell->GetActualPage();
+    bool bAlwaysOnTop =
+        ((rRequest.GetSlot() !=  SID_REHEARSE_TIMINGS) && pAlwaysOnTop )
+        ? pAlwaysOnTop->GetValue()
+        : pDoc->GetPresAlwaysOnTop();
 
-    pWorkWindow->StartPresentationMode( TRUE, bAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0 );
-    SfxTopFrame* pNewFrame = SfxTopFrame::Create (
-        pDoc->GetDocSh(), pWorkWindow, PRESENTATION_FACTORY_ID, TRUE );
-    pNewFrame->SetPresentationMode( TRUE );
+    pWorkWindow->StartPresentationMode (
+        TRUE,
+        bAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0);
+    if (pWorkWindow->IsVisible())
+    {
+        //AF The bHidden paramter (the fourth one) was previously set to
+        // TRUE.  This does not work anymore for some unknown reason.  The
+        // ViewShellBase does then not get activated and the whole
+        // initialization process is not started: the screen becomes blank.
+        SfxTopFrame* pNewFrame = SfxTopFrame::Create (
+            pDoc->GetDocSh(),
+            pWorkWindow,
+            PRESENTATION_FACTORY_ID,
+            FALSE/*TRUE*/);
+        pNewFrame->SetPresentationMode (TRUE);
 
-    ViewShellBase* pBase = static_cast<ViewShellBase*>(
-        pNewFrame->GetCurrentViewFrame()->GetViewShell());
-    PresentationViewShell *pShell = NULL;
-    if (pBase != NULL)
-        pShell = static_cast<PresentationViewShell*>(
-            pBase->GetSubShellManager().GetMainSubShell());
-    DBG_ASSERT(pShell!=NULL, "can not create presenation view shell");
+        ViewShellBase* pBase = static_cast<ViewShellBase*>(
+            pNewFrame->GetCurrentViewFrame()->GetViewShell());
+        if (pBase != NULL)
+        {
+            // Get the page where the show is to be started.  This normally
+            // is the current page of the shell from which the show has been
+            // started.  This, however, may be NULL, e.g. when started from
+            // the slide sorter and that has an empty selection.
+            USHORT nStartPage = 0;
+            if (pCurrentPage != NULL)
+                nStartPage = (pCurrentPage->GetPageNum() - 1) / 2;
 
-    SfxUInt16Item       aId( SID_CONFIGITEMID, SID_NAVIGATOR );
-    SfxBoolItem         aShowItem( SID_SHOWPOPUPS, FALSE );
-    const USHORT        nCurSdPageNum = ( pActualPage->GetPageNum() - 1 ) / 2;
-    FrameView*          pNewFrameView = pOriginShell->GetFrameView();
-
-    pNewFrameView->Connect();
-    pShell->GetFrameView()->Disconnect();
-    pShell->pFrameView = pNewFrameView;
-    pShell->ReadFrameViewData( pNewFrameView );
-    pShell->SwitchPage( nCurSdPageNum );
-    pShell->WriteFrameViewData();
-
-    pShell->GetViewFrame()->GetDispatcher()->Execute( SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON, &aShowItem, &aId, 0L );
-    pShell->GetViewFrame()->Show();
-    pShell->pFuSlideShow = new FuSlideShow( pShell, pShell->pWindow, pShell->pDrView, pShell->GetDoc(), rReq );
-    pShell->GetActiveWindow()->GrabFocus();
+            // The rest of the initialization is done by an object that
+            // waits until the PresentationViewShell object has been
+            // created.  This is necessary because the creation is done
+            // asynchronously.
+            new ViewShellChangeListener(
+                *pBase,
+                pOriginShell->GetFrameView(),
+                nStartPage,
+                rRequest);
+            pBase->LateInit();
+            pBase->GetViewFrame()->Show();
+        }
+    }
 }
 
 } // end of namespace sd
