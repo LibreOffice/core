@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: abi $ $Date: 2001-09-28 15:01:59 $
+ *  last change: $Author: abi $ $Date: 2001-10-05 14:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #include <berkeleydb/db_cxx.h>
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
+#endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
 #endif
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
@@ -412,13 +415,13 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
             getInstallPathAsSystemPath() +
             key;
 
-        rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),RTL_TEXTENCODING_UTF8 );
+        rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),osl_getThreadTextEncoding() );
 
         if( table->open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
-          {
-          table->close( 0 );
-          delete table;
-          table = 0;
+        {
+            table->close( 0 );
+            delete table;
+            table = 0;
         }
 
         it->second = table;
@@ -587,7 +590,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
             key +
             rtl::OUString::createFromAscii( ".key" );
 
-        rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),RTL_TEXTENCODING_UTF8 );
+        rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),osl_getThreadTextEncoding() );
 
         Db table( 0,DB_CXX_NO_EXCEPTIONS );
         if( 0 == table.open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )

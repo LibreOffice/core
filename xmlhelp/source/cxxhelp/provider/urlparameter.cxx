@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: abi $ $Date: 2001-10-01 14:24:08 $
+ *  last change: $Author: abi $ $Date: 2001-10-05 14:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #include <string.h>
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
+#endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
 #endif
 #ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
@@ -851,7 +854,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 #endif
         xslURLascii += rtl::OString( xslURL.getStr()+OFFSET,
                                      xslURL.getLength()-OFFSET,
-                                     RTL_TEXTENCODING_UTF8 );
+                                     osl_getThreadTextEncoding() );
 #undef OFFSET
         xslURLascii += "main_transform.xsl";
 
