@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-15 14:34:07 $
+ *  last change: $Author: fme $ $Date: 2002-12-03 11:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,6 +747,7 @@ BYTE lcl_WhichPunctuation( xub_Unicode cChar )
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 {
 
+
 static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     BOOL bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType();
     Font* pTmpFont = bPrt ? pPrtFont : GetScrFont();
@@ -766,7 +767,8 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     const BOOL bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft() &&
                             ! rInf.IsIgnoreFrmRTL();
     const ULONG nMode = rInf.GetpOut()->GetLayoutMode();
-    const BOOL bBidiPor = ( bSwitchL2R == ( TEXT_LAYOUT_BIDI_STRONG == nMode ) );
+    const BOOL bBidiPor = ( bSwitchL2R !=
+                            ( 0 != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
 
     // be sure to have the correct layout mode at the printer
     if ( pPrinter )

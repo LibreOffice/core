@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-14 08:55:47 $
+ *  last change: $Author: fme $ $Date: 2002-12-03 11:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1252,8 +1252,8 @@ void SwDrawTextInfo::Shift( USHORT nDir )
     ASSERT( bSize, "DrawTextInfo: Undefined Width" );
 
 #ifdef BIDI
-    const BOOL bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) ==
-                          ( TEXT_LAYOUT_BIDI_STRONG == GetpOut()->GetLayoutMode() );
+    const BOOL bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) !=
+                          ( 0 != ( TEXT_LAYOUT_BIDI_RTL & GetpOut()->GetLayoutMode() ) );
 
     nDir = bBidiPor ?
             1800 :
