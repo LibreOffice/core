@@ -132,6 +132,8 @@ hedabu: ..\inc\imagemgr.hxx %_DEST%\inc%_EXT%\sfx2\imagemgr.hxx
 hedabu: ..\inc\accelinfo.hxx %_DEST%\inc%_EXT%\sfx2\accelinfo.hxx
 hedabu: ..\inc\sfxdlg.hxx %_DEST%\inc%_EXT%\sfx2\sfxdlg.hxx
 hedabu: ..\inc\dialogs.hrc %_DEST%\inc%_EXT%\sfx2\dialogs.hrc
+hedabu: ..\inc\itemwrapper.hxx %_DEST%\inc%_EXT%\sfx2\itemwrapper.hxx
+hedabu: ..\inc\controlwrapper.hxx %_DEST%\inc%_EXT%\sfx2\controlwrapper.hxx
 hedabu: ..\inc\itemconnect.hxx %_DEST%\inc%_EXT%\sfx2\itemconnect.hxx
 hedabu: ..\inc\querystatus.hxx %_DEST%\inc%_EXT%\sfx2\querystatus.hxx
 hedabu: ..\inc\sfxstatuslistener.hxx %_DEST%\inc%_EXT%\sfx2\sfxstatuslistener.hxx
