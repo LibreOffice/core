@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-20 19:30:54 $
+ *  last change: $Author: jp $ $Date: 2001-07-20 20:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,19 +202,9 @@
 //      from pos cPosEmDash to cPosEnd    all chars changed to emdashes
 //      all other chars are changed to the user configuration
 
-// ---> Unicode En-/Emdash??
-#ifdef MAC
-const sal_Char* pBulletChar = "+*-\xD0\xD1";    // plus endash & emdash
+const sal_Unicode pBulletChar[6] = { '+', '*', '-', 0x2013, 0x2014, 0 };
 const int cnPosEnDash = 2, cnPosEmDash = 4, cnPosEnd = 5;
-#else
-#if defined(PM2 ) || defined(UNX)
-const sal_Char* pBulletChar = "+*-";
-const int cnPosEnDash = 2, cnPosEmDash = 3, cnPosEnd = 3;
-#else
-const sal_Char* pBulletChar = "+*-\x96\x97";    // plus endash & emdash
-const int cnPosEnDash = 2, cnPosEmDash = 4, cnPosEnd = 5;
-#endif // PM2 / UNX
-#endif // MAC
+
 const sal_Unicode cStarSymbolEnDash = 0x2013;
 const sal_Unicode cStarSymbolEmDash = 0x2014;
 
@@ -376,6 +366,12 @@ public:
     }
 };
 
+const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
+{
+    while( *pSrc && *pSrc != c )
+        ++pSrc;
+    return *pSrc ? pSrc : 0;
+}
 
 SwTxtFrm* SwAutoFormat::GetFrm( const SwTxtNode& rTxtNd ) const
 {
@@ -536,8 +532,7 @@ BOOL SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
     // -, +, * getrennt durch Blank ??
     if( 2 < nLen && IsSpace( rTxt.GetChar( nBlnks + 1 ) ) )
     {
-        if( rTxt.GetChar( nBlnks ) < 256 &&
-            strchr( pBulletChar, rTxt.GetChar( nBlnks ) ) )
+        if( StrChr( pBulletChar, rTxt.GetChar( nBlnks ) ) )
             return TRUE;
         // sollte an der Position ein Symbolfont existieren ?
         SwTxtFrmInfo aFInfo( GetFrm( rNd ) );
@@ -1559,11 +1554,11 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
     // ersetze das Bullet-Zeichen mit dem definiertem
     const String& rStr = pAktTxtNd->GetTxt();
     xub_StrLen nTxtStt = 0, nOrigTxtStt = 0;
-    const sal_Char* pFndBulletChr;
+    const sal_Unicode* pFndBulletChr;
 //  if( aFlags.bAFmtByInput ? aFlags.bSetNumRule : aFlags.bChgEnumNum &&
     if( aFlags.bChgEnumNum &&
-        2 < rStr.Len() && 256 > rStr.GetChar( nTxtStt ) &&
-        0 != ( pFndBulletChr = strchr( pBulletChar, rStr.GetChar( nTxtStt ) ))
+        2 < rStr.Len() &&
+        0 != ( pFndBulletChr = StrChr( pBulletChar, rStr.GetChar( nTxtStt ) ))
         && IsSpace( rStr.GetChar( nTxtStt + 1 ) ) )
     {
         if( aFlags.bAFmtByInput )
