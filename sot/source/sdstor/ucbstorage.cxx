@@ -1404,6 +1404,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
             aName += '/';
             aName += rEleName;
             UCBStorageStream* pStream = new UCBStorageStream( aName, nMode, bDirect );
+            pStream->SetError( GetError() );
             pStream->pImp->m_aName = rEleName;
             return pStream;
         }
@@ -1486,7 +1487,16 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
     {
         // element does not exist, check if creation is allowed
         if( ( nMode & STREAM_NOCREATE ) )
+        {
             SetError( ( nMode & STREAM_WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
+            String aName( pImp->m_aURL );
+            aName += '/';
+            aName += rEleName;  //  ???
+            UCBStorage *pStorage = new UCBStorage( aName, nMode, bDirect, FALSE );
+            pStorage->pImp->m_bIsRoot = FALSE;
+            pStorage->SetError( GetError() );
+            return pStorage;
+        }
 
         // create a new UCBStorageElement and insert it into the list
         // problem: perhaps an OLEStorage should be created ?!
