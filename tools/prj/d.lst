@@ -153,6 +153,7 @@ hedabu: ..\inc\tcpdef.hxx %_DEST%\inc%_EXT%\tools\tcpdef.hxx
 hedabu: ..\inc\config.hxx %_DEST%\inc%_EXT%\tools\config.hxx
 hedabu: ..\inc\resary.hxx %_DEST%\inc%_EXT%\tools\resary.hxx
 hedabu: ..\inc\abthread.hxx %_DEST%\inc%_EXT%\tools\abthread.hxx
+hedabu: ..\inc\SafePureVirtual.hxx %_DEST%\inc%_EXT%\tools\SafePureVirtual.hxx
 
 ..\testshl\inc\*.hxx %_DEST%\inc%_EXT%\testshl\*.hxx
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: nf $ $Date: 2001-11-01 14:05:55 $
+#   last change: $Author: gh $ $Date: 2002-04-19 07:59:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ TARGET=communi
 CXXFILES=   simplecm.cxx	bcst.cxx
 
 OBJFILES=   \
+            $(OBJ)$/SafePureVirtual.obj	\
             $(OBJ)$/tcpio.obj		\
             $(OBJ)$/packethandler.obj \
             $(OBJ)$/simplecm.obj	\
@@ -91,6 +92,7 @@ OBJFILES=   \
             $(OBJ)$/abthread.obj
 
 SLOFILES=   \
+            $(SLO)$/SafePureVirtual.obj     \
             $(SLO)$/tcpio.obj       \
             $(SLO)$/packethandler.obj \
             $(SLO)$/simplecm.obj	\
