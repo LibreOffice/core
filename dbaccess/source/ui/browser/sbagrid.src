@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:24:36 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ portuguese ] = "~Largura de coluna..." ;
             Text[ chinese_simplified ] = "ÁĞ¿í(~W)...";
             Text[ russian ] = "Øèğèíà êîëîíîê...";
-            Text[ polish ] = "Szeroko?æ kolumn...";
+            Text[ polish ] = "Szerokoœæ kolumn...";
             Text[ japanese ] = "—ñ•(~W)...";
             Text[ chinese_traditional ] = "Äæ¼e(~W)...";
             Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ...";
@@ -208,7 +208,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text [ english_us ] = "Row Height..." ;
             Text[ chinese_simplified ] = "ĞĞ¸ß...";
             Text[ russian ] = "Âûñîòà ñòğîê...";
-            Text[ polish ] = "Wysoko?æ wierszy...";
+            Text[ polish ] = "Wysokoœæ wierszy...";
             Text[ japanese ] = "s‚Ì‚‚³...";
             Text[ chinese_traditional ] = "¦C°ª...";
             Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİæİ...";
@@ -337,7 +337,7 @@ String STR_VIEW_TITLE
     Text [ english_us ] = "View #" ;
     Text[ portuguese ] = "Vista #";
     Text[ russian ] = "Âèä #";
-    Text[ greek ] = "View #";
+    Text[ greek ] = "ĞñïâïëŞ #";
     Text[ dutch ] = "Beeld #";
     Text[ french ] = "Vue #";
     Text[ spanish ] = "Ver #";
@@ -348,11 +348,12 @@ String STR_VIEW_TITLE
     Text[ portuguese_brazilian ] = "View #";
     Text[ japanese ] = "ËŞ­° #";
     Text[ korean ] = "View #";
-    Text[ chinese_simplified ] = "&#35270;&#22270; #";
+    Text[ chinese_simplified ] = "ÊÓÍ¼ #";
     Text[ chinese_traditional ] = "ÀËµø #";
     Text[ turkish ] = "View #";
     Text[ arabic ] = "View #";
     Text[ catalan ] = "View #";
     Text[ finnish ] = "Ansicht #";
 };
+
 
