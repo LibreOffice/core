@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-19 05:06:57 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 19:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ russian ] = "Êà÷åñòâî";
         Text[ polish ] = "Jakoœæ";
         Text[ japanese ] = "‰æ‘œ•i¿";
-        Text[ chinese_traditional ] = "½è¶q";
+        Text[ chinese_traditional ] = "«~½è";
         Text[ arabic ] = "ÇáÌæÏÉ";
         Text[ dutch ] = "Kwaliteit";
         Text[ chinese_simplified ] = "ÖÊÁ¿";
@@ -131,23 +131,23 @@ ModalDialog DLG_EXPORT_JPG
         Size = MAP_APPFONT ( 81 , 16 ) ;
         Text = "1: min. Qualität\n100: max. Qualität" ;
         Text [ ENGLISH ] = "1: min. quality\n100: max. quality" ;
-        Text [ english_us ] = "0: min. Quality\n100: max. Quality" ;
+        Text [ english_us ] = "1: min. quality\n100: max. quality" ;
         Text [ italian ] = "Q: min. qualità\n100: max. qualità" ;
-        Text [ spanish ] = "0: mín. calidad\n100: máx. calidad" ;
-        Text [ french ] = "0: qualité min.\n100: qualité max." ;
+        Text [ spanish ] = "1: mín. calidad\n100: máx. calidad" ;
+        Text [ french ] = "1 : qualité min.\n100 : qualité max." ;
         Text [ dutch ] = "0: min. kwaliteit\n100: max. kwaliteit" ;
-        Text [ swedish ] = "0: min. kvalitet\n100: max. kvalitet" ;
+        Text [ swedish ] = "1: min. kvalitet\n100: max. kvalitet" ;
         Text [ danish ] = "0: min. kvalitet\n100: maks. kvalitet" ;
         Text [ portuguese_brazilian ] = "0: min. Qualidade\n100: max. Qualidade" ;
         Text [ portuguese ] = "0: min. Qualidade\n100: max. Qualidade" ;
-        Text[ chinese_simplified ] = "0: ×î²î \n100: ×î¼Ñ¡¡";
-        Text[ russian ] = "0: íèçêîå êà÷åñòâî\n100: âûñîêîå êà÷åñòâî";
-        Text[ polish ] = "0: min. jako?æ\n100: max. jako?æ";
-        Text[ japanese ] = "0: Å’á\n100: Å‚";
-        Text[ chinese_traditional ] = "0: ³Ì®t \n100: ³Ì¨Î¡@";
+        Text[ chinese_simplified ] = "1: ×î²îÖÊÁ¿ \n100: ×î¼ÑÖÊÁ¿";
+        Text[ russian ] = "1: íèçêîå êà÷åñòâî\n100: âûñîêîå êà÷åñòâî";
+        Text[ polish ] = "1: min. jakoœæ\n100: maks. jakoœæ";
+        Text[ japanese ] = "1: Å’á\n100: Å‚";
+        Text[ chinese_traditional ] = "1: ³Ì®t«~½è \n100: ³Ì¨Î«~½è";
         Text[ arabic ] = "0: ÇáÍÏ ÇáÃÏäì ááÌæÏÉ\n100: ÇáÍÏ ÇáÃŞÕì ááÌæÏÉ";
         Text[ dutch ] = "0: min. kwaliteit\n100: max. kwaliteit";
-        Text[ chinese_simplified ] = "0: ×î²î \n100: ×î¼Ñ¡¡";
+        Text[ chinese_simplified ] = "1: ×î²îÖÊÁ¿ \n100: ×î¼ÑÖÊÁ¿";
         Text[ greek ] = "0: åëÜ÷éóôç ğïéüôçôá\n100: ìİãéóôç ğïéüôçôá";
         Text[ korean ] = "0: ÃÖ¼Ò ¼º´É\n100: ÃÖ´ë ¼º´É";
         Text[ turkish ] = "0: asg. kalite\n100: azm. kalite";
@@ -183,14 +183,14 @@ ModalDialog DLG_EXPORT_JPG
         Text [ french ] = "Résolution couleur" ;
         Text [ dutch ] = "Kleurdichtheid" ;
         Text [ portuguese ] = "Resolução de cores" ;
-        Text[ chinese_simplified ] = "ÑÕÉ«·Ö±æÂÊ";
+        Text[ chinese_simplified ] = "²ÊÉ«·Ö±æÂÊ";
         Text[ russian ] = "Öâåòîâîå ğàçğåøåíèå";
         Text[ polish ] = "Rozdzielczoœæ kolorów";
         Text[ japanese ] = "F‚Ì‰ğ‘œ“x";
-        Text[ chinese_traditional ] = "ÃC¦â¸ÑªR«×";
+        Text[ chinese_traditional ] = "±m¦â¸ÑªR«×";
         Text[ arabic ] = "ÇÓÊÈÇäÉ Çááæä";
         Text[ dutch ] = "Kleurdichtheid";
-        Text[ chinese_simplified ] = "ÑÕÉ«·Ö±æÂÊ";
+        Text[ chinese_simplified ] = "²ÊÉ«·Ö±æÂÊ";
         Text[ greek ] = "ÁíÜëõóç ÷ñùìÜôùí";
         Text[ korean ] = "ÄÃ·¯ ÇØ»óµµ";
         Text[ turkish ] = "Renk çözünürlüğü";
@@ -216,7 +216,7 @@ ModalDialog DLG_EXPORT_JPG
         Text [ dutch ] = "Grijswaarden" ;
         Text[ chinese_simplified ] = "»Ò¶È";
         Text[ russian ] = "Îòòåíêè ñåğîãî";
-        Text[ polish ] = "Odcienie szaro?ci";
+        Text[ polish ] = "Odcienie szaroœci";
         Text[ japanese ] = "¸ŞÚ°½¹°Ù";
         Text[ chinese_traditional ] = "¦Ç¶¥";
         Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
