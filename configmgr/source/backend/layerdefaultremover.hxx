@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerdefaultremover.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:15:56 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,4 +170,4 @@ namespace configmgr
     // -----------------------------------------------------------------------------
 
 } // namespace configmgr
-#endif 
+#endif
