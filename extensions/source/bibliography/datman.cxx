@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-08-02 12:23:58 $
+ *  last change: $Author: fs $ $Date: 2001-08-17 09:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,12 +280,9 @@ Reference< sdbc::XConnection >  getConnection(const rtl::OUString& _rURL)
         {
             // TODO : a real error handling
         }
-#ifdef DBG_UTIL
         catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
         {
+            e;  // make compiler happy
         }
 
     }
@@ -310,12 +307,9 @@ Reference< sdbc::XConnection >  getConnection(const Reference< XInterface > & xR
             DBG_ERROR("no active connection")
         }
     }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+    catch(Exception& e )
     {
+        e;  // make compiler happy
         DBG_ERROR("exception in getConnection");
     }
 
@@ -796,12 +790,9 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
         }
         aSelectionLB.GetModel()->Resort();
     }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+    catch(Exception& e )
     {
+        e;  // make compiler happy
         DBG_ERROR("Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl")
     }
 
@@ -956,12 +947,9 @@ try
         xColContainer->insertByName(aCurrentColName, Any(&xCurrentCol, ::getCppuType((Reference<XPropertySet>*)0)));
     }
 }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+catch(Exception& e )
 {
+    e;  // make compiler happy
     DBG_ERROR("Exception in BibDataManager::InsertFields")
 }
 
@@ -998,12 +986,9 @@ Reference< awt::XControlModel >  BibDataManager::createGridModel(const Reference
         xNameCont->insertByName(aName, Any(&xGridModel, ::getCppuType((Reference<XFormComponent>*)0)));
 
     }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+    catch(Exception& e )
     {
+        e;  // make compiler happy
         DBG_ERROR("::createGridModel: something went wrong !");
     }
 
@@ -1092,12 +1077,9 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
             }
         }
     }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+    catch(Exception& e )
     {
+        e;  // make compiler happy
         DBG_ERROR("::createDatabaseForm: something went wrong !");
     }
 
@@ -1118,12 +1100,9 @@ Sequence<rtl::OUString> BibDataManager::getDataSources()
         if (xTables.is())
             aTableNameSeq = xTables->getElementNames();
     }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+    catch(Exception& e )
     {
+        e;  // make compiler happy
         DBG_ERROR("::getDataSources: something went wrong !");
     }
 
@@ -1134,11 +1113,6 @@ Sequence<rtl::OUString> BibDataManager::getDataSources()
 rtl::OUString BibDataManager::getActiveDataTable()
 {
     return aActiveDataTable;
-}
-//------------------------------------------------------------------------
-Reference< XSQLQueryComposer >  BibDataManager::getParser()
-{
-    return xParser;
 }
 //------------------------------------------------------------------------
 void BibDataManager::setFilter(const rtl::OUString& rQuery)
@@ -1156,12 +1130,9 @@ void BibDataManager::setFilter(const rtl::OUString& rQuery)
         Reference< XLoadable >  xLoadable(xForm, UNO_QUERY );
         xLoadable->reload();
     }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+    catch(Exception& e )
     {
+        e;  // make compiler happy
         DBG_ERROR("::setFilterOnActiveDataSource: something went wrong !");
     }
 
@@ -1182,12 +1153,9 @@ rtl::OUString BibDataManager::getFilter()
             aQueryString=*(OUString*)aQuery.getValue();
         }
     }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+    catch(Exception& e )
     {
+        e;  // make compiler happy
         DBG_ERROR("::getFilterOnActiveDataSource: something went wrong !");
     }
 
@@ -1383,12 +1351,9 @@ void BibDataManager::setActiveDataTable(const rtl::OUString& rTable)
                 pBibView->UpdatePages();
         }
     }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+    catch(Exception& e )
     {
+        e;  // make compiler happy
         DBG_ERROR("::setActiveDataTable: something went wrong !");
     }
 
@@ -1401,7 +1366,6 @@ void BibDataManager::loadDatabase()
         Reference< XLoadable >  xFormAsLoadable(xForm, UNO_QUERY );
         DBG_ASSERT(xFormAsLoadable.is(), "BibDataManager::loadDatabase : invalid form !");
         xFormAsLoadable->load();
-        xFormAsLoadable->reload();  // why ? may be very expensive !
 
         SetMeAsUidListener();
     }
@@ -1447,12 +1411,9 @@ Reference< awt::XControlModel >  BibDataManager::loadGridModel(const rtl::OUStri
             xPropSet->setPropertyValue(uProp, aVal);
         }
     }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+    catch(Exception& e )
     {
+        e;  // make compiler happy
         DBG_ERROR("::loadGridModel: something went wrong !");
     }
 
@@ -1550,12 +1511,9 @@ Reference< awt::XControlModel >  BibDataManager::loadControlModel(
             xNameCont->insertByName(aName, Any(&xModel, ::getCppuType((Reference<XFormComponent>*)0)));
         }
     }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+    catch(Exception& e )
     {
+        e;  // make compiler happy
         DBG_ERROR("::loadControlModel: something went wrong !");
     }
     return xModel;
@@ -1576,12 +1534,9 @@ void BibDataManager::saveCtrModel(const rtl::OUString& rName,const Reference< aw
 
             xSourceProps->setPropertyValue(aName,aModel);
         }
-    #ifdef DBG_UTIL
-            catch(Exception& e )
-    #else
-            catch(Exception&)
-    #endif
+        catch(Exception& e )
         {
+            e;  // make compiler happy
             DBG_ERROR("::saveCtrModel: something went wrong !");
         }
     }
@@ -1598,12 +1553,9 @@ void BibDataManager::disposing( const lang::EventObject& Source )
 //          aPropSet->removePropertyChangeListener(FM_PROP_EDITMODE, this);
 //      }
     }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+    catch(Exception& e )
     {
+        e;  // make compiler happy
         DBG_ERROR("::propertyChange: something went wrong !");
     }
 
@@ -1632,12 +1584,9 @@ void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw
             bFlag = xLocate->moveToBookmark(aUID);
         }
     }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+    catch(Exception& e )
     {
+        e;  // make compiler happy
         DBG_ERROR("::propertyChange: something went wrong !");
     }
 
@@ -1680,12 +1629,9 @@ try
     }
 
 }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+catch(Exception& e )
 {
+    e;  // make compiler happy
     DBG_ERROR("Exception in BibDataManager::SetMeAsUidListener")
 }
 
@@ -1729,12 +1675,9 @@ try
     }
 
 }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+catch(Exception& e )
 {
+    e;  // make compiler happy
     DBG_ERROR("Exception in BibDataManager::RemoveMeAsUidListener")
 }
 
@@ -1757,12 +1700,9 @@ sal_Bool BibDataManager::moveRelative(sal_Int32 nCount)
                 xCursorUpdate->moveToInsertRow();
         }
     }
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
+    catch(Exception& e )
     {
+        e;  // make compiler happy
         DBG_ERROR("Exception in BibDataManager::moveRelative")
     }
 
