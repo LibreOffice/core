@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:41:33 $
+ *  last change: $Author: os $ $Date: 2002-08-05 08:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,27 +88,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Left = TRUE ;
         Text = "~Vor Text" ;
-        Text [ english ] = "~Before text" ;
-        Text [ english_us ] = "Before text" ;
-        Text[ portuguese ] = "~Esquerda";
-        Text[ russian ] = "—ÎÂ‚‡";
-        Text[ greek ] = "A¸ ·ÒÈÛÙÂÒ‹";
-        Text[ dutch ] = "Van ~links";
-        Text[ french ] = "De gauche";
-        Text[ spanish ] = "De i~zquierda";
-        Text[ finnish ] = "~Vasemmalta";
-        Text[ italian ] = "Da sinistra";
-        Text[ danish ] = "Fra venstre";
-        Text[ swedish ] = "FrÂn ~v‰nster";
-        Text[ polish ] = "Od lewej";
-        Text[ portuguese_brazilian ] = "Da ~esquerda";
-        Text[ japanese ] = "Â∑¶„Åã„Çâ(~L)";
-        Text[ korean ] = "ÏôºÏ™ΩÎ∂ÄÌÑ∞(~L)";
-        Text[ chinese_simplified ] = "‰ªéÂ∑¶(~L)";
-        Text[ chinese_traditional ] = "ÂæûÂ∑¶(~L)";
-        Text[ turkish ] = "S~oldan";
-        Text[ arabic ] = "„‰ «·Ì”«—";
-        Text[ thai ] = "‡∏à‡∏≤‡∏Å~‡∏ã‡πâ‡∏≤‡∏¢";
+        Text [ english_us ] = "Bef~ore text" ;
     };
     MetricField ED_LEFTINDENT
     {
@@ -130,28 +110,8 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Left = TRUE ;
-        Text = "~Hinter Text" ;
-        Text [ english ] = "Aft~er text" ;
-        Text [ english_us ] = "After text" ;
-        Text[ portuguese ] = "~Direita";
-        Text[ russian ] = "—Ô‡‚‡";
-        Text[ greek ] = "¡¸ ‰ÂÓÈ‹";
-        Text[ dutch ] = "Van ~rechts";
-        Text[ french ] = "De droite";
-        Text[ spanish ] = "Desde la drc~ha";
-        Text[ finnish ] = "~Oikealta";
-        Text[ italian ] = "Da destra";
-        Text[ danish ] = "Fra h¯jre";
-        Text[ swedish ] = "FrÂn hˆge~r";
-        Text[ polish ] = "Od prawej";
-        Text[ portuguese_brazilian ] = "Da dire~ita";
-        Text[ japanese ] = "Âè≥„Åã„Çâ(~H)";
-        Text[ korean ] = "Ïò§Î•∏Ï™ΩÎ∂ÄÌÑ∞(~H)";
-        Text[ chinese_simplified ] = "‰ªéÂè≥(~H)";
-        Text[ chinese_traditional ] = "ÂæûÂè≥(~H)";
-        Text[ turkish ] = "Sa~dan";
-        Text[ arabic ] = "„‰ «·Ì„Ì‰";
-        Text[ thai ] = "‡∏à‡∏≤‡∏Å‡∏Ç~‡∏ß‡∏≤";
+        Text = "H~inter Text" ;
+        Text [ english_us ] = "Aft~er text" ;
     };
     MetricField ED_RIGHTINDENT
     {
@@ -814,56 +774,6 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ catalan ] = "Conformidad registro";
         Text[ finnish ] = "Rekisteri-tosi";
         Text[ thai ] = "‡∏•‡∏á‡∏ó‡∏∞‡πÄ‡∏ö‡∏µ‡∏¢‡∏ô-‡∏à‡∏£‡∏¥‡∏á";
-    };
-    String ST_LEFTINDENT_ASIAN
-    {
-        Text = "Von ~links/oben" ;
-        Text [ english_us ] = "From ~left/top" ;
-        Text[ portuguese ] = "From ~left/top";
-        Text[ russian ] = "From ~left/top";
-        Text[ greek ] = "From ~left/top";
-        Text[ dutch ] = "From ~left/top";
-        Text[ french ] = "De gauche/du haut";
-        Text[ spanish ] = "De la ~Izquierda/de arriba";
-        Text[ finnish ] = "From ~left/top";
-        Text[ italian ] = "Da sinistra/in alto";
-        Text[ danish ] = "From ~left/top";
-        Text[ swedish ] = "FrÂn ~v‰nster/uppifrÂn";
-        Text[ polish ] = "From ~left/top";
-        Text[ portuguese_brazilian ] = "From ~left/top";
-        Text[ japanese ] = "Â∑¶/‰∏ä„Åã„Çâ";
-        Text[ korean ] = "ÏôºÏ™Ω/ÏúÑÎ°úÎ∂ÄÌÑ∞";
-        Text[ chinese_simplified ] = "‰ªéÂ∑¶/‰∏ä";
-        Text[ chinese_traditional ] = "ÂæûÂ∑¶/‰∏ä";
-        Text[ turkish ] = "From ~left/top";
-        Text[ arabic ] = "From ~left/top";
-        Text[ catalan ] = "From ~left/top";
-        Text[ thai ] = "From ~left/top";
-    };
-    String ST_RIGHTINDENT_ASIAN
-    {
-        Text = "Von ~rechts/unten" ;
-        Text [ english_us ] = "From rig~ht/bottom" ;
-        Text[ portuguese ] = "From rig~ht/bottom";
-        Text[ russian ] = "From rig~ht/bottom";
-        Text[ greek ] = "From rig~ht/bottom";
-        Text[ dutch ] = "From rig~ht/bottom";
-        Text[ french ] = "De droite/du bas";
-        Text[ spanish ] = "De la ~derecha/Abajo";
-        Text[ finnish ] = "From rig~ht/bottom";
-        Text[ italian ] = "Da destra/in basso";
-        Text[ danish ] = "From rig~ht/bottom";
-        Text[ swedish ] = "FrÂn hˆge~r/nedifrÂn";
-        Text[ polish ] = "From rig~ht/bottom";
-        Text[ portuguese_brazilian ] = "From rig~ht/bottom";
-        Text[ japanese ] = "Âè≥/‰∏ã„Åã„Çâ";
-        Text[ korean ] = "Ïò§Î•∏Ï™Ω/ÏïÑÎûòÎ°úÎ∂ÄÌÑ∞";
-        Text[ chinese_simplified ] = "‰ªéÂè≥/‰∏ã";
-        Text[ chinese_traditional ] = "ÂæûÂè≥/‰∏ã";
-        Text[ turkish ] = "From rig~ht/bottom";
-        Text[ arabic ] = "From rig~ht/bottom";
-        Text[ catalan ] = "From rig~ht/bottom";
-        Text[ thai ] = "From rig~ht/bottom";
     };
     String ST_TOPSPACE_ASIAN
     {
