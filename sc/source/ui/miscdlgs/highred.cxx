@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:12:33 $
+ *  last change: $Author: sab $ $Date: 2001-08-31 08:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ IMPL_LINK( ScHighlightChgDlg, OKBtnHdl, PushButton*, pOKBtn )
         aChangeViewSet.SetHasComment(aFilterCtr.IsComment());
         aChangeViewSet.SetTheComment(aFilterCtr.GetComment());
         ScRangeList aRangeList;
-        aRangeList.Parse(aFilterCtr.GetRange());
+        aRangeList.Parse(aFilterCtr.GetRange(), pDoc);
         aChangeViewSet.SetTheRangeList(aRangeList);
         pDoc->SetChangeViewSettings(aChangeViewSet);
         pViewData->GetDocShell()->PostPaintGridAll();
