@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+ *  last change: $Author: mba $ $Date: 2000-10-20 17:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,6 @@ friend class BindDispatch_Impl;
 private:
                             SfxStateCache( const SfxStateCache& rOrig ); // n.i.
     void                    SetState_Impl( SfxItemState, const SfxPoolItem * );
-    sal_Bool                    UpdateDispatch( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & xProv );
 
 public:
                             SfxStateCache( sal_uInt16 nFuncId );
