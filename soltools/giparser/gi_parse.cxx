@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gi_parse.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2001-06-11 16:04:51 $
+ *  last change: $Author: np $ $Date: 2001-06-12 14:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ GenericInfo_Parser::ReadLine( istream & i_rSrc )
 
     i_rSrc.get(sInput, nInputSize);
     UINT32 nGot = UINT32(i_rSrc.gcount());
-    if (nGot == 0)
+    if (nGot == 0 && i_rSrc.eof())
     {
         bGoon = false;
         return;
@@ -257,7 +257,7 @@ GenericInfo_Parser::ClassifyLine()
          case '{':   return lt_open_list;
         case '}':   return lt_close_list;
         case '#':   return lt_comment;
-        case '0':   return lt_empty;
+        case '\0':   return lt_empty;
     }
 
     return lt_key;
@@ -277,6 +277,7 @@ GenericInfo_Parser::ReadKey()
                      pSearch,               strlen(pSearch),
                      sCurComment.str(),     sCurComment.l()
                    );
+    sCurComment = "";
 }
 
 void
