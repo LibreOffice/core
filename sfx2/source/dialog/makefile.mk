@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: mba $ $Date: 2002-07-18 07:13:56 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:28:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,13 +64,10 @@ PRJ=..$/..
 PRJNAME=sfx2
 TARGET=dialog
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-AUTOSEG=true
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------------
 
@@ -117,7 +114,8 @@ SLOFILES =\
                 $(SLO)$/recfloat.obj            \
         $(SLO)$/cfgtreelstbox.obj
 
-SRCFILES =\
+SRS1NAME=$(TARGET)
+SRC1FILES =\
                 recfloat.src                       \
         about.src			\
         cfg.src				\
