@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-03 08:02:43 $
+ *  last change: $Author: rt $ $Date: 2001-04-26 20:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,7 +635,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "Ç∑Ç◊ÇƒÇÃΩ¿≤Ÿ" ; SFXSTYLEBIT_ALL ; > ;
             < "égópÇµÇΩΩ¿≤Ÿ" ; SFXSTYLEBIT_USED ; > ;
             < "’∞ªﬁ∞íËã`ÇÃΩ¿≤Ÿ" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "ï∂èëΩ¿≤Ÿ" ; SWSTYLEBIT_TEXT ; > ;
+            < "ï∂èëópΩ¿≤Ÿ" ; SWSTYLEBIT_TEXT ; > ;
             < "èÕÇÃΩ¿≤Ÿ" ; SWSTYLEBIT_CHAPTER ; > ;
             < "ÿΩƒÇÃΩ¿≤Ÿ" ; SWSTYLEBIT_LIST ; > ;
             < "çıà¯Ω¿≤Ÿ" ; SWSTYLEBIT_IDX ; > ;
@@ -764,7 +764,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ portuguese ] = "Estilos de caracteres" ;
             Text [ finnish ] = "Merkkityylit" ;
             Text [ danish ] = "Tegntypografier" ;
-            Text [ french ] = "Styles de caractËre" ;
+            Text [ french ] = "Styles de caractËres" ;
             Text [ swedish ] = "Teckenformatmallar" ;
             Text [ dutch ] = "Tekenopmaakprofielen" ;
             Text [ spanish ] = "Estilos de caracteres" ;
@@ -1622,7 +1622,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_50
     Text [ spanish ] = "%PRODUCTNAME 5.0 Texto" ;
     Text [ french ] = "%PRODUCTNAME 5.0 Texte" ;
     Text [ dutch ] = "%PRODUCTNAME 5.0 Tekst" ;
-    Text [ portuguese ] = "Texto (%PRODUCTNAME 5.0)" ;
+    Text [ portuguese ] = "%PRODUCTNAME 5.0 Texto" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 Œƒ±æ";
     Text[ russian ] = "“ÂÍÒÚ ‚ %PRODUCTNAME 5.0";
     Text[ polish ] = "%PRODUCTNAME 5.0 - Tekst";
@@ -1640,6 +1640,24 @@ String STR_WRITER_DOCUMENT_FULLTYPE
 {
     Text = "%PRODUCTNAME 6.0 Text Dokument" ;
     Text [ English ] = "%PRODUCTNAME 6.0 Text Document" ;
+    Text[ english_us ] = "Text Document (%PRODUCTNAME 6.0)";
+    Text[ portuguese ] = "%PRODUCTNAME 6.0 Texto";
+    Text[ russian ] = "“ÂÍÒÚÓ‚˚È ‰ÓÍÛÏÂÌÚ (%PRODUCTNAME 6.0)";
+    Text[ greek ] = " ÂﬂÏÂÌÔ %PRODUCTNAME 6.0";
+    Text[ dutch ] = "%PRODUCTNAME 6.0 Tekst";
+    Text[ french ] = "%PRODUCTNAME 6.0 Texte";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Documento de texto";
+    Text[ italian ] = "Testo %PRODUCTNAME 6.0";
+    Text[ danish ] = "%PRODUCTNAME 4.0 tekst";
+    Text[ swedish ] = "Textdokument %PRODUCTNAME 6.0";
+    Text[ polish ] = "%PRODUCTNAME 6.0 - Dokument tekstowy";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Text";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 ï∂èë";
+    Text[ korean ] = "%PRODUCTNAME 5.0°°Text ";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Œƒ◊÷";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 §Â¶r";
+    Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
+    Text[ arabic ] = "‰’ „‰ %PRODUCTNAME 6.0";
 };
 
 
