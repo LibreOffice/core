@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-07 17:09:05 $
+ *  last change: $Author: ka $ $Date: 2001-01-25 15:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,13 +341,17 @@ ImpSwap::ImpSwap( BYTE* pData, ULONG nDataSize ) :
                         aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
                                              ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                     }
-                    catch( ::com::sun::star::ucb::CommandAbortedException& )
+                    catch( const ::com::sun::star::ucb::ContentCreationException& )
                     {
-                        DBG_ERRORFILE( "CommandAbortedException" );
+                        DBG_ERROR( "ContentCreationException" );
                     }
-                    catch( ... )
+                    catch( const ::com::sun::star::uno::RuntimeException& )
                     {
-                        DBG_ERRORFILE( "Any other exception" );
+                        DBG_ERROR( "RuntimeException" );
+                    }
+                    catch( const ::com::sun::star::ucb::CommandAbortedException& )
+                    {
+                        DBG_ERROR( "CommandAbortedException" );
                     }
 
                     maURL = INetURLObject();
@@ -371,13 +375,17 @@ ImpSwap::~ImpSwap()
             aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
                                  ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
         }
-        catch( ::com::sun::star::ucb::CommandAbortedException& )
+        catch( const ::com::sun::star::ucb::ContentCreationException& )
         {
-            DBG_ERRORFILE( "CommandAbortedException" );
+            DBG_ERROR( "ContentCreationException" );
         }
-        catch( ... )
+        catch( const ::com::sun::star::uno::RuntimeException& )
         {
-            DBG_ERRORFILE( "Any other exception" );
+            DBG_ERROR( "RuntimeException" );
+        }
+        catch( const ::com::sun::star::ucb::CommandAbortedException& )
+        {
+            DBG_ERROR( "CommandAbortedException" );
         }
     }
 }

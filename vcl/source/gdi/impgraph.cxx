@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:53:38 $
+ *  last change: $Author: ka $ $Date: 2001-01-25 15:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,13 +403,17 @@ void ImpGraphic::ImplClear()
                 aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
                                      ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
             }
-            catch( ::com::sun::star::ucb::CommandAbortedException& )
+            catch( const ::com::sun::star::ucb::ContentCreationException& )
             {
-                DBG_ERRORFILE( "CommandAbortedException" );
+                DBG_ERROR( "ContentCreationException" );
             }
-            catch( ... )
+            catch( const ::com::sun::star::uno::RuntimeException& )
             {
-                DBG_ERRORFILE( "Any other exception" );
+                DBG_ERROR( "RuntimeException" );
+            }
+            catch( const ::com::sun::star::ucb::CommandAbortedException& )
+            {
+                DBG_ERROR( "CommandAbortedException" );
             }
 
             delete mpSwapFile;
@@ -1039,14 +1043,18 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
                                     aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
                                                          ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                                 }
-                                catch( ::com::sun::star::ucb::CommandAbortedException& )
+                                catch( const ::com::sun::star::ucb::ContentCreationException& )
                                 {
-                                    DBG_ERRORFILE( "CommandAbortedException" );
+                                    DBG_ERROR( "ContentCreationException" );
                                 }
-                                catch( ... )
+                                catch( const ::com::sun::star::uno::RuntimeException& )
                                 {
-                                    DBG_ERRORFILE( "Any other exception" );
+                                    DBG_ERROR( "RuntimeException" );
                                 }
+                                catch( const ::com::sun::star::ucb::CommandAbortedException& )
+                                {
+                                    DBG_ERROR( "CommandAbortedException" );
+                    }
                             }
                         }
 
@@ -1220,13 +1228,17 @@ BOOL ImpGraphic::ImplSwapOut()
                             aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
                                                  ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                         }
-                        catch( ::com::sun::star::ucb::CommandAbortedException& )
+                        catch( const ::com::sun::star::ucb::ContentCreationException& )
                         {
-                            DBG_ERRORFILE( "CommandAbortedException" );
+                            DBG_ERROR( "ContentCreationException" );
                         }
-                        catch( ... )
+                        catch( const ::com::sun::star::uno::RuntimeException& )
                         {
-                            DBG_ERRORFILE( "Any other exception" );
+                            DBG_ERROR( "RuntimeException" );
+                        }
+                        catch( const ::com::sun::star::ucb::CommandAbortedException& )
+                        {
+                            DBG_ERROR( "CommandAbortedException" );
                         }
                     }
 
@@ -1318,13 +1330,17 @@ BOOL ImpGraphic::ImplSwapIn()
                             aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
                                                  ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                         }
-                        catch( ::com::sun::star::ucb::CommandAbortedException& )
+                        catch( const ::com::sun::star::ucb::ContentCreationException& )
                         {
-                            DBG_ERRORFILE( "CommandAbortedException" );
+                            DBG_ERROR( "ContentCreationException" );
                         }
-                        catch( ... )
+                        catch( const ::com::sun::star::uno::RuntimeException& )
                         {
-                            DBG_ERRORFILE( "Any other exception" );
+                            DBG_ERROR( "RuntimeException" );
+                        }
+                        catch( const ::com::sun::star::ucb::CommandAbortedException& )
+                        {
+                            DBG_ERROR( "CommandAbortedException" );
                         }
 
                         delete mpSwapFile;
