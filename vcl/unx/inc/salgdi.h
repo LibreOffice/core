@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:32 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@ class   SalGraphicsData;
 #ifndef _SALSTD_HXX
 #include <salstd.hxx>
 #endif
+#ifndef _SV_SALGDI_HXX
+#include <salgdi.hxx>
+#endif
 #ifndef _SV_SALGTYPE_HXX
 #include <salgtype.hxx>
 #endif
@@ -88,10 +91,10 @@ class   SalBitmap;
 class   SalColormap;
 class   SalDisplay;
 class   SalFrame;
-class   SalVirtualDevice;
+class   X11SalVirtualDevice;
 class   SalPolyLine;
-class   SalPrinter;
-class   SalInfoPrinter;
+class   PspSalPrinter;
+class   PspSalInfoPrinter;
 class   ServerFont;
 class   ImplLayoutArgs;
 class   X11FontLayout;
@@ -107,17 +110,16 @@ typedef SalColormap         *SalColormapRef;
 
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-class SalGraphicsData
+class X11SalGraphics : public SalGraphics
 {
-    friend class            SalGraphics;
-    friend class            SalPrinter;
-    friend class            SalInfoPrinter;
+    friend class            PspSalPrinter;
+    friend class            PspSalInfoPrinter;
     friend class            X11FontLayout;
     friend class            ServerFontLayout;
 
-    STDAPI( SalGraphicsData );
+    STDAPI( X11SalGraphics );
     SalFrame*               m_pFrame; // the SalFrame which created this Graphics or NULL
-    SalVirtualDevice*       m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
+    X11SalVirtualDevice*    m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
 
 #ifndef _USE_PRINT_EXTENSION_
     ::psp::JobData*         m_pJobData;
@@ -228,35 +230,30 @@ class SalGraphicsData
 #endif
 
     GC                      SelectFont();
-    bool                    SetFont( const ImplFontSelectData* pEntry, int nFallbackLevel );
+    bool                    setFont( const ImplFontSelectData* pEntry, int nFallbackLevel );
 
 protected:
-    ULONG                   GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
-
     void                    DrawStringUCS2MB( ExtendedFontStruct& rFont, const Point&,
                                 const sal_Unicode* pStr, int nLength );
 
     void                    DrawPrinterString( const SalLayout& );
 
     void                    DrawServerFontString( const ServerFontLayout& );
-    void                    DispatchServerFontString( const ServerFontLayout& );
     void                    DrawServerSimpleFontString( const ServerFontLayout& );
     void                    DrawServerAAFontString( const ServerFontLayout& );
     bool                    DrawServerAAForcedString( const ServerFontLayout& );
-
-    SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
 public:
-                            SalGraphicsData();
-                            ~SalGraphicsData();
+                            X11SalGraphics();
+    virtual             ~X11SalGraphics();
 
             void            Init( SalFrame *pFrame );
-            void            Init( SalVirtualDevice *pVirtualDevice,
-                                SalGraphics *pSalGraphics );
+            void            Init( X11SalVirtualDevice *pVirtualDevice );
             void            Init( class ImplSalPrinterData *pPrinter );
             void            DeInit();
 
     inline  SalDisplay     *GetDisplay() const;
     inline  Display        *GetXDisplay() const;
+    inline  SalVisual       *GetVisual() const;
     inline  Drawable        GetDrawable() const { return hDrawable_; }
     inline  void            SetDrawable( Drawable d ) { hDrawable_ = d; }
     inline  SalColormap    &GetColormap() const { return *xColormap_; }
@@ -265,63 +262,123 @@ public:
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
 
             String            FaxPhoneComment( const String& rOrig, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop ) const;
+
+    // overload all pure virtual methods
+    virtual void            GetResolution( long& rDPIX, long& rDPIY );
+    virtual void            GetScreenFontResolution( long& rDPIX, long& rDPIY );
+    virtual USHORT          GetBitCount();
+    virtual long            GetGraphicsWidth();
+
+    virtual void            ResetClipRegion();
+    virtual void            BeginSetClipRegion( ULONG nCount );
+    virtual BOOL            unionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void            EndSetClipRegion();
+
+    virtual void            SetLineColor();
+    virtual void            SetLineColor( SalColor nSalColor );
+    virtual void            SetFillColor();
+
+    virtual void            SetFillColor( SalColor nSalColor );
+
+    virtual void            SetXORMode( BOOL bSet );
+
+    virtual void            SetROPLineColor( SalROPColor nROPColor );
+    virtual void            SetROPFillColor( SalROPColor nROPColor );
+
+    virtual void            SetTextColor( SalColor nSalColor );
+    virtual USHORT         SetFont( ImplFontSelectData*, int nFallbackLevel );
+    virtual void            GetFontMetric( ImplFontMetricData* );
+    virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
+    virtual ULONG           GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
+    virtual void            GetDevFontList( ImplDevFontList* );
+    virtual void            GetDevFontSubstList( OutputDevice* );
+    virtual ImplFontData*   AddTempDevFont( const String& rFileURL, const String& rFontName );
+    virtual BOOL            CreateFontSubset( const rtl::OUString& rToFile,
+                                              ImplFontData* pFont,
+                                              long* pGlyphIDs,
+                                              sal_uInt8* pEncoding,
+                                              sal_Int32* pWidths,
+                                              int nGlyphs,
+                                              FontSubsetInfo& rInfo
+                                              );
+    virtual const std::map< sal_Unicode, sal_Int32 >* GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** ppNonEncoded );
+    virtual const void* GetEmbedFontData( ImplFontData* pFont,
+                                          sal_Int32* pWidths,
+                                          FontSubsetInfo& rInfo,
+                                          long* pDataLen );
+    virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
+    virtual BOOL            GetGlyphBoundRect( long nIndex, Rectangle& );
+    virtual BOOL            GetGlyphOutline( long nIndex, PolyPolygon& );
+    virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
+    virtual void            DrawServerFontLayout( const ServerFontLayout& );
+    virtual void            drawPixel( long nX, long nY );
+    virtual void            drawPixel( long nX, long nY, SalColor nSalColor );
+    virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 );
+    virtual void            drawRect( long nX, long nY, long nWidth, long nHeight );
+    virtual void            drawPolyLine( ULONG nPoints, const SalPoint* pPtAry );
+    virtual void            drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
+    virtual void            drawPolyPolygon( ULONG nPoly,
+                                             const ULONG* pPoints,
+                                             PCONSTSALPOINT* pPtAry );
+    virtual sal_Bool        drawPolyLineBezier( ULONG nPoints,
+                                                const SalPoint* pPtAry,
+                                                const BYTE* pFlgAry );
+    virtual sal_Bool        drawPolygonBezier( ULONG nPoints,
+                                               const SalPoint* pPtAry,
+                                               const BYTE* pFlgAry );
+    virtual sal_Bool        drawPolyPolygonBezier( ULONG nPoly,
+                                                   const ULONG* pPoints,
+                                                   const SalPoint* const* pPtAry,
+                                                   const BYTE* const* pFlgAry );
+    virtual void            copyArea( long nDestX,
+                                      long nDestY,
+                                      long nSrcX,
+                                      long nSrcY,
+                                      long nSrcWidth,
+                                      long nSrcHeight,
+                                      USHORT nFlags );
+    virtual void            copyBits( const SalTwoRect* pPosAry,
+                                      SalGraphics* pSrcGraphics );
+    virtual void            drawBitmap( const SalTwoRect* pPosAry,
+                                        const SalBitmap& rSalBitmap );
+    virtual void            drawBitmap( const SalTwoRect* pPosAry,
+                                        const SalBitmap& rSalBitmap,
+                                        SalColor nTransparentColor );
+    virtual void            drawBitmap( const SalTwoRect* pPosAry,
+                                        const SalBitmap& rSalBitmap,
+                                        const SalBitmap& rTransparentBitmap );
+    virtual void            drawMask( const SalTwoRect* pPosAry,
+                                      const SalBitmap& rSalBitmap,
+                                      SalColor nMaskColor );
+    virtual SalBitmap*      getBitmap( long nX, long nY, long nWidth, long nHeight );
+    virtual SalColor        getPixel( long nX, long nY );
+    virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags );
+    virtual void            invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nFlags );
+
+    virtual BOOL            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
 };
 
 
-#ifdef _SV_SALDATA_HXX
-
-inline SalDisplay *SalGraphicsData::GetDisplay() const
+inline SalDisplay *X11SalGraphics::GetDisplay() const
 { return GetColormap().GetDisplay(); }
 
-inline Display *SalGraphicsData::GetXDisplay() const
+inline SalVisual *X11SalGraphics::GetVisual() const
+{ return GetColormap().GetDisplay()->GetVisual(); }
+
+inline Display *X11SalGraphics::GetXDisplay() const
 { return GetColormap().GetXDisplay(); }
 
-inline BOOL SalGraphicsData::IsCompatible( USHORT       nDepth,
-                                           SalColormap *pMap ) const
+inline BOOL X11SalGraphics::IsCompatible( USHORT       nDepth,
+                                          SalColormap *pMap ) const
 {
-    return (GetDisplay()->GetImageDepths() & (1 << (nDepth-1))) != 0
-            && &xColormap_ == pMap;
+    return (GetDisplay()->GetImageDepths() & (1 << (nDepth-1))) != 0 && &xColormap_ == pMap;
 }
 
-inline Pixel SalGraphicsData::GetPixel( SalColor nSalColor ) const
+inline Pixel X11SalGraphics::GetPixel( SalColor nSalColor ) const
 { return GetColormap().GetPixel( nSalColor ); }
 
-#endif
 
 // -=-= Shortcuts =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#if defined _SV_SALGDI_CXX || defined _SV_SALGDI2_CXX || defined _SV_SALGDI3_CXX
-#define _GetXDisplay()      maGraphicsData.GetXDisplay()
-#define _GetDisplay()       maGraphicsData.GetDisplay()
-#define _GetVisual()        maGraphicsData.GetDisplay()->GetVisual()
-#define _GetDrawable()      maGraphicsData.hDrawable_
-#define _GetColormap()      maGraphicsData.GetColormap()
-#define _GetClipRegion()    maGraphicsData.pClipRegion_
-#define _GetPenPixel()      maGraphicsData.nPenPixel_
-#define _GetTextPixel()     maGraphicsData.nTextPixel_
-#define _GetBrushPixel()    maGraphicsData.nBrushPixel_
-#define _GetPenColor()      maGraphicsData.nPenColor_
-#define _GetTextColor()     maGraphicsData.nTextColor_
-#define _GetBrushColor()    maGraphicsData.nBrushColor_
-#define _GetPixel(n)        maGraphicsData.GetPixel( n )
-#define _GetColor(n)        maGraphicsData.GetColormap().GetColor( n )
-#define _IsPenGC()          maGraphicsData.bPenGC_
-#define _IsFontGC()         maGraphicsData.bFontGC_
-#define _IsBrushGC()        maGraphicsData.bBrushGC_
-#define _IsMonoGC()         maGraphicsData.bMonoGC_
-#define _IsCopyGC()         maGraphicsData.bCopyGC_
-#define _IsInvertGC()       maGraphicsData.bInvertGC_
-#define _IsInvert50GC()     maGraphicsData.bInvert50GC_
-#define _IsStippleGC()      maGraphicsData.bStippleGC_
-#define _IsTrackingGC()     maGraphicsData.bTrackingGC_
-#define _IsXORMode()        maGraphicsData.bXORMode_
-#define _IsWindow()         maGraphicsData.bWindow_
-#define _IsPrinter()        maGraphicsData.bPrinter_
-#define _IsVirtualDevice()  maGraphicsData.bVirDev_
-#define _IsDitherBrush()    maGraphicsData.bDitherBrush_
-#define _SelectPen()        maGraphicsData.SelectPen()
-#define _SelectBrush()      maGraphicsData.SelectBrush()
-#define _GetTrackingGC()    maGraphicsData.GetTrackingGC()
-#endif
 
 #ifdef DBG_UTIL
 #define stderr0( s )            fprintf( stderr, s )
