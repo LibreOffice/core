@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-27 16:09:08 $
+ *  last change: $Author: cl $ $Date: 2001-03-08 14:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
@@ -177,7 +181,18 @@ XMLShapeExport::~XMLShapeExport()
 // This method collects all automatic styles for the given XShape
 void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShape >& xShape)
 {
-    ImplXMLShapeExportInfo aShapeInfo;
+    if( maCurrentShapesIter == maShapesInfos.end() )
+    {
+        DBG_ERROR( "XMLShapeExport::collectShapeAutoStyles(): no call to seekShapes()!" );
+        return;
+    }
+
+    sal_Int32 nZIndex = 0;
+    uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
+    if( xSet.is() )
+        xSet->getPropertyValue(msZIndex) >>= nZIndex;
+
+    ImplXMLShapeExportInfo& aShapeInfo = (*maCurrentShapesIter).second[nZIndex];
 
     // -----------------------------
     // first compute the shapes type
@@ -353,16 +368,30 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                                  sal_Int32 nFeatures /* = SEF_DEFAULT */,
                                  com::sun::star::awt::Point* pRefPoint /* = NULL */ )
 {
-    if( maCurrentInfo == maShapeInfos.end() )
+    if( maCurrentShapesIter == maShapesInfos.end() )
     {
-        DBG_ERROR( "exportShape callings do not correspond to collectShapeAutoStyles calls!" );
+        DBG_ERROR( "XMLShapeExport::exportShape(): no auto styles where collected before export" );
         return;
     }
 
-    const ImplXMLShapeExportInfo aShapeInfo( *maCurrentInfo );
-    maCurrentInfo++;
+    sal_Int32 nZIndex = 0;
+    uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
+    if( xSet.is() )
+        xSet->getPropertyValue(msZIndex) >>= nZIndex;
 
-#ifdef DBG_UTIL
+    const ImplXMLShapeExportInfo& aShapeInfo = (*maCurrentShapesIter).second[nZIndex];
+
+#ifndef PRODUCT
+    // ---------------------------------------
+    // check if this is the correct ShapesInfo
+    // ---------------------------------------
+    uno::Reference< container::XChild > xChild( xShape, uno::UNO_QUERY );
+    if( xChild.is() )
+    {
+        uno::Reference< drawing::XShapes > xParent( xChild->getParent(), uno::UNO_QUERY );
+        DBG_ASSERT( xParent.is() && xParent.get() == (*maCurrentShapesIter).first.get(), "XMLShapeExport::exportShape(): Wrong call to XMLShapeExport::seekShapes()" );
+    }
+
     // -----------------------------
     // first compute the shapes type
     // -----------------------------
@@ -573,6 +602,9 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 // This method collects all automatic styles for the shapes inside the given XShapes collection
 void XMLShapeExport::collectShapesAutoStyles( const uno::Reference < drawing::XShapes >& xShapes )
 {
+    ShapesInfos::iterator aOldCurrentShapesIter = maCurrentShapesIter;
+    seekShapes( xShapes );
+
     uno::Reference< drawing::XShape > xShape;
     const sal_Int32 nShapeCount(xShapes->getCount());
     for(sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++)
@@ -584,6 +616,8 @@ void XMLShapeExport::collectShapesAutoStyles( const uno::Reference < drawing::XS
 
         collectShapeAutoStyles( xShape );
     }
+
+    maCurrentShapesIter = aOldCurrentShapesIter;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -591,6 +625,9 @@ void XMLShapeExport::collectShapesAutoStyles( const uno::Reference < drawing::XS
 // This method exports all XShape inside the given XShapes collection
 void XMLShapeExport::exportShapes( const uno::Reference < drawing::XShapes >& xShapes, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */ )
 {
+    ShapesInfos::iterator aOldCurrentShapesIter = maCurrentShapesIter;
+    seekShapes( xShapes );
+
     uno::Reference< drawing::XShape > xShape;
     const sal_Int32 nShapeCount(xShapes->getCount());
     for(sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++)
@@ -601,6 +638,35 @@ void XMLShapeExport::exportShapes( const uno::Reference < drawing::XShapes >& xS
             continue;
 
         exportShape( xShape, nFeatures, pRefPoint );
+    }
+
+    maCurrentShapesIter = aOldCurrentShapesIter;
+}
+
+///////////////////////////////////////////////////////////////////////
+
+void XMLShapeExport::seekShapes( const uno::Reference< drawing::XShapes >& xShapes ) throw()
+{
+    if( xShapes.is() )
+    {
+        maCurrentShapesIter = maShapesInfos.find( xShapes );
+        if( maCurrentShapesIter == maShapesInfos.end() )
+        {
+            ImplXMLShapeExportInfoVector aNewInfoVector;
+            aNewInfoVector.resize( (ShapesInfos::size_type) xShapes->getCount() );
+            maShapesInfos[ xShapes ] = aNewInfoVector;
+
+            maCurrentShapesIter = maShapesInfos.find( xShapes );
+
+            DBG_ASSERT( maCurrentShapesIter != maShapesInfos.end(), "XMLShapeExport::seekShapes(): insert into stl::map failed" );
+        }
+
+        DBG_ASSERT( (*maCurrentShapesIter).second.size() == (ShapesInfos::size_type)xShapes->getCount(), "XMLShapeExport::seekShapes(): XShapes size varied between calls" );
+
+    }
+    else
+    {
+        maCurrentShapesIter = maShapesInfos.end();
     }
 }
 
