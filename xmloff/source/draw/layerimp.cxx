@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:35:56 $
+ *  last change: $Author: aw $ $Date: 2001-05-04 11:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,15 +155,15 @@ SvXMLImportContext * SdXMLLayerSetContext::CreateChildContext( USHORT nPrefix, c
                 {
                     aName = sValue;
                 }
-                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_locked ) ) )
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_locked ) ) )
                 {
                     bIsLocked = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) );
                 }
-                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_printable ) ) )
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_printable ) ) )
                 {
                     bIsPrintable = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) );
                 }
-                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_visible ) ) )
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_visible ) ) )
                 {
                     bIsVisible = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) );
                 }
