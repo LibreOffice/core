@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:21 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,9 @@ namespace xmloff
     //---------------------------------------------------------------------
     void implSortMap(XMLPropertyMapEntry* _pMap)
     {
+        XMLPropertyMapEntry* pEnd;
         // determine the last element
-        for (XMLPropertyMapEntry* pEnd = _pMap; pEnd->msApiName; ++pEnd)
+        for ( pEnd = _pMap; pEnd->msApiName; ++pEnd)
             ;
         ::std::sort(_pMap, pEnd, XMLPropertyMapEntryLess());
     }
