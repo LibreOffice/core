@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
+ *  last change: $Author: os $ $Date: 2002-04-26 11:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,17 +217,19 @@
 //sonstige Hilfslinien an?
 #define IS_SUBS (!pGlobalShell->GetViewOptions()->IsPagePreview() && SwViewOption::IsDocBoundaries())
 //Hilfslinien fuer Bereiche
-#define IS_SUBS_SECTION SwViewOption::IsSectionBoundaries()
+#define IS_SUBS_SECTION (!pGlobalShell->GetViewOptions()->IsPagePreview() && SwViewOption::IsSectionBoundaries())
+#define IS_SUBS_FLYS (!pGlobalShell->GetViewOptions()->IsPagePreview() && SwViewOption::IsObjectBoundaries())
 
 #define SW_MAXBORDERCACHE 20
 
 //Klassendeklarationen. Hier weil sie eben nur in diesem File benoetigt
 //werden.
 
-#define SUBCOL_STANDARD 0x01    //normale Hilfslinien
-#define SUBCOL_BREAK    0x02    //Hilfslinien bei Umbruechen
-#define SUBCOL_GRAY     0x04    //normale Hilfslinien bei LIGHTGRAY-Hintergrund
-
+#define SUBCOL_PAGE     0x01    //Helplines of the page
+#define SUBCOL_BREAK    0x02    //Helpline for a page or column break
+#define SUBCOL_TAB      0x08    //Helplines inside tables
+#define SUBCOL_FLY      0x10    //Helplines inside fly frames
+#define SUBCOL_SECT     0x20    //Helplines inside sections
 
 //----- Klassen zum Sammeln von Umrandungen und Hilfslinien ---
 class SwLineRect : public SwRect
@@ -239,7 +241,7 @@ class SwLineRect : public SwRect
           BYTE      nLock;      //Um die Linien zum Hell-Layer abzugrenzen.
 public:
     SwLineRect( const SwRect &rRect, const Color *pCol,
-                const SwTabFrm *pT, const BYTE nSCol = SUBCOL_STANDARD );
+                const SwTabFrm *pT , const BYTE nSCol );
 
     const Color         *GetColor() const { return pColor;}
     const SwTabFrm      *GetTab()   const { return pTab;  }
@@ -264,7 +266,7 @@ class SwLineRects : public SwLRects
 public:
     SwLineRects() : nLastCount( 0 ) {}
     void AddLineRect( const SwRect& rRect,  const Color *pColor,
-                      const SwTabFrm *pTab, const BYTE nSCol = SUBCOL_STANDARD );
+                      const SwTabFrm *pTab, const BYTE nSCol );
     void ConnectEdges( OutputDevice *pOut );
     void PaintLines  ( OutputDevice *pOut );
     void LockLines( BOOL bLock );
@@ -634,7 +636,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                                 continue;
                             const USHORT nFree = Free();
                             Insert( SwLineRect( aIns, rL1.GetColor(),
-                                        rL1.GetTab() ), Count() );
+                                        rL1.GetTab(), SUBCOL_TAB ), Count() );
                             if ( !nFree )
                             {
                                 --i;
@@ -674,7 +676,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                                 continue;
                             const USHORT nFree = Free();
                             Insert( SwLineRect( aIns, rL1.GetColor(),
-                                        rL1.GetTab() ), Count() );
+                                        rL1.GetTab(), SUBCOL_TAB ), Count() );
                             if ( !nFree )
                             {
                                 --i;
@@ -952,7 +954,6 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
         {
             pOut->Push( PUSH_FILLCOLOR );
 
-            const Color aGray( COL_GRAY );
             const Color aBreak(COL_BLUE );
 
             for ( USHORT i = 0; i < Count(); ++i )
@@ -963,9 +964,11 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                     const Color *pCol;
                     switch ( rLRect.GetSubColor() )
                     {
-                        case SUBCOL_STANDARD: pCol = &SwViewOption::GetDocBoundariesColor(); break;
+                        case SUBCOL_PAGE: pCol = &SwViewOption::GetDocBoundariesColor(); break;
+                        case SUBCOL_FLY: pCol = &SwViewOption::GetObjectBoundariesColor(); break;
+                        case SUBCOL_TAB: pCol = &SwViewOption::GetTableBoundariesColor(); break;
+                        case SUBCOL_SECT: pCol = &SwViewOption::GetSectionBoundColor(); break;
                         case SUBCOL_BREAK:    pCol = &aBreak;    break;
-                        case SUBCOL_GRAY:     pCol = &aGray;     break;
                     }
                     if ( pOut->GetFillColor() != *pCol )
                         pOut->SetFillColor( *pCol );
@@ -2397,15 +2400,18 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
     aOut._Intersection( rRect );
 
     const SwTabFrm *pTab = IsCellFrm() ? FindTabFrm() : 0;
+    BYTE nSubCol = ( IsCellFrm() || IsRowFrm() ) ? SUBCOL_TAB :
+                   ( IsInSct() ? SUBCOL_SECT :
+                   ( IsInFly() ? SUBCOL_FLY : SUBCOL_PAGE ) );
     if ( pPage->GetSortedObjs() )
     {
         SwRegionRects aRegion( aOut, 4, 1 );
         ::lcl_SubtractFlys( this, pPage, aOut, aRegion );
         for ( USHORT i = 0; i < aRegion.Count(); ++i )
-            pLines->AddLineRect( aRegion[i], pColor, pTab );
+            pLines->AddLineRect( aRegion[i], pColor, pTab, nSubCol );
     }
     else
-        pLines->AddLineRect( aOut, pColor, pTab );
+        pLines->AddLineRect( aOut, pColor, pTab, nSubCol );
 }
 
 /*************************************************************************
@@ -3579,7 +3585,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
 
 void SwPageFrm::RefreshSubsidiary( const SwRect &rRect ) const
 {
-    if ( IS_SUBS || IS_SUBS_TABLE || IS_SUBS_SECTION )
+    if ( IS_SUBS || IS_SUBS_TABLE || IS_SUBS_SECTION || IS_SUBS_FLYS )
     {
         SwRect aRect( rRect );
         ::SwAlignRect( aRect, pGlobalShell );
@@ -3641,8 +3647,8 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
     const FASTBOOL bSubsSect  = IsSctFrm() &&
                                 bNoLowerColumn &&
                                 IS_SUBS_SECTION;
-    const FASTBOOL bSubsFly   = (GetType() & FRM_FLY) &&
-                                bSubsOpt &&
+    const FASTBOOL bSubsFly   = IS_SUBS_FLYS &&
+                                (GetType() & FRM_FLY) &&
                                 bNoLowerColumn &&
                                 (!Lower() || !Lower()->IsNoTxtFrm() ||
                                  !((SwNoTxtFrm*)Lower())->HasAnimation());
@@ -3824,15 +3830,9 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
     const Point aRB( nRight, nBottom );
     const Point aLB( aOut.Left(), nBottom );
 
-    BYTE nSubColor = SUBCOL_STANDARD;
-    const SvxBrushItem &rBrush = pPage->GetFmt()->GetBackground();
-    const Color aTmp( SwViewOption::GetTableBoundariesColor() );
-    if ( rBrush.GetColor() == aTmp ||
-         (rBrush.GetColor().GetTransparency() &&
-          aGlobalRetoucheColor == aTmp ))
-    {
-        nSubColor = SUBCOL_GRAY;
-    }
+    BYTE nSubColor = ( bCell || IsRowFrm() ) ? SUBCOL_TAB :
+                     ( IsInSct() ? SUBCOL_SECT :
+                     ( IsInFly() ? SUBCOL_FLY : SUBCOL_PAGE ) );
 
     BOOL bBreak = FALSE;
     if ( GetType() & 0x0084 ) //Body oder Column
