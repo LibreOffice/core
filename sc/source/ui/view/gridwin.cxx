@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-26 18:18:28 $
+ *  last change: $Author: nn $ $Date: 2002-01-22 17:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3197,7 +3197,11 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
             {
                 // keep a reference to the data in case the selection is changed during paste
                 uno::Reference<datatransfer::XTransferable> xRef( pDrawTransfer );
-                pViewData->GetView()->PasteDraw( aLogicPos, pDrawTransfer->GetModel() );
+
+                //  #96821# bSameDocClipboard argument for PasteDraw is needed
+                //  because only DragData is checked directly inside PasteDraw
+                pViewData->GetView()->PasteDraw( aLogicPos, pDrawTransfer->GetModel(), FALSE,
+                            pDrawTransfer->GetSourceDocID() == pViewData->GetDocument()->GetDocumentID() );
             }
         }
     }
