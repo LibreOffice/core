@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdXImpressDocument.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-12-11 12:15:20 $
+ *  last change:$Date: 2004-01-05 19:40:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,8 @@ public class SdXImpressDocument extends TestCase {
     */
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("disposing xImpressDoc");
-        xImpressDoc.dispose();
-        xImpressDoc2.dispose();
+        util.DesktopTools.closeDoc(xImpressDoc);;
+        util.DesktopTools.closeDoc(xImpressDoc2);;
     }
 
     /**
