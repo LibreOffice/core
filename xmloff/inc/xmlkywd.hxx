@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-10 10:52:50 $
+ *  last change: $Author: dr $ $Date: 2000-10-10 11:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,6 +758,7 @@ XML_CONSTASCII_ACTION( sXML_previous, "previous" );
 XML_CONSTASCII_ACTION( sXML_print_content, "print-content");
 XML_CONSTASCII_ACTION( sXML_print_date, "print-date" );
 XML_CONSTASCII_ACTION( sXML_print_range, "print-range");
+XML_CONSTASCII_ACTION( sXML_print_ranges, "print-ranges");
 XML_CONSTASCII_ACTION( sXML_print_time, "print-time" );
 XML_CONSTASCII_ACTION( sXML_printed_by, "printed-by" );
 XML_CONSTASCII_ACTION( sXML_properties, "properties" );
