@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 12:52:15 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 13:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,6 +509,7 @@ ULONG SwTextBlocks::ConvertToNew()
                 USHORT nCount = pOld->GetCount();
                 for( USHORT i = 0; i < nCount; i++ )
                 {
+                    pNew->ClearDoc();
                     String aShort( pOld->GetShortName( i ) );
                     String aLong( pOld->GetLongName( i ) );
                     pNew->AddName( aShort, aLong );
@@ -520,7 +521,6 @@ ULONG SwTextBlocks::ConvertToNew()
                     }
                     else
                     {
-                        pNew->ClearDoc();
                         if (SWBLK_SW2 == nType )
                         {
                             // I think this is how it should work (!!!!!!) mtg

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 12:52:15 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 13:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,7 @@ void SwXMLTextBlocks::ClearDoc()
     pDocShell->InvalidateModel();
     pDocShell->ReactivateModel();
     static_cast < SfxObjectShell * > (pDocShell)->Clear();
+    pDoc->ClearDoc();
 }
 void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong, BOOL bOnlyTxt )
 {
