@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impprn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:19:29 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_IMPPRN_CXX
 #define _SPOOLPRINTER_EXT
 
 #ifndef _QUEUE_HXX
@@ -148,8 +147,6 @@ void ImplQPrinter::Destroy()
 
 void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxBmpDPIY )
 {
-    const PrinterOptions& rPrinterOptions = GetPrinterOptions();
-
     for( MetaAction* pAct = rMtf.FirstAction(); pAct && !mbAborted; pAct = rMtf.NextAction() )
     {
         const ULONG     nType = pAct->GetType();
@@ -189,8 +186,6 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxB
 
                 if( pAct && ( pAct->GetType() == META_BMPSCALE_ACTION ) )
                 {
-                    MetaBmpScaleAction* pBmpScaleAction = (MetaBmpScaleAction*) pAct;
-
                     // execute action here to avoid DPI processing of bitmap;
                     pAct->Execute( this );
 
@@ -401,8 +396,6 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
 
         for ( USHORT i = 0; i < nCopyCount; i++ )
         {
-            ULONG nActionPos = 0UL;
-
             if ( pActPage->mpSetup )
             {
                 SetJobSetup( *pActPage->mpSetup );
