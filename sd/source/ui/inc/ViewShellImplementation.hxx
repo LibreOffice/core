@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:04:47 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@ namespace sd {
 class ViewShell::Implementation
 {
 public:
+    bool mbIsShowingUIControls;
+    bool mbIsMainViewShell;
+
     Implementation (ViewShell& rViewShell);
     ~Implementation (void);
 
