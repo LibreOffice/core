@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npshell.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:07:21 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 11:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,13 @@ NPP_GetMIMEDescription(void)
 
 #ifdef UNIX
 NPError
+// I am not actually sure wrt this, it ast least compiles with external
+// npapi.h now...
+#ifdef SYSTEM_MOZILLA
+NPP_GetValue(NPP instance, NPPVariable variable, void *value)
+#else
 NPP_GetValue(void * instance, NPPVariable variable, void *value)
+#endif
 {
     NPError err = NPERR_NO_ERROR;
 
