@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 07:53:41 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 //
 //
 //
-// $Author: os $ $Date: 2001-07-11 07:53:41 $ $Revision: 1.17 $
+// $Author: kz $ $Date: 2001-07-17 20:31:26 $ $Revision: 1.18 $
 // $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
 //------------------------------------------------------------------
 
@@ -489,6 +489,26 @@ ModalDialog RID_DLG_MAPPING
         Text[ catalan ] = "<ninguno>";
         Text[ finnish ] = "<ei mitään>";
     };
+    Text[ english_us ] = "Column Layout for Table %1";
+    Text[ portuguese ] = "Atribuição de colunas para a tabela %1";
+    Text[ russian ] = "Ğàñïîëîæåíèå êîëîíîê äëÿ òàáëèöû %1";
+    Text[ greek ] = "Ğñïóäéïñéóìüò óôçëşí ãéá ğßíáêá %1";
+    Text[ dutch ] = "Kolomindeling voor tabel %1";
+    Text[ french ] = "Assignation de colonnes pour la table %1";
+    Text[ spanish ] = "Asignación de columnas para tabla %1";
+    Text[ finnish ] = "Taulukon %1 sarakeasettelu";
+    Text[ italian ] = "Assegnazione colonne per la tabella %1";
+    Text[ danish ] = "Kolonnetildeling for tabel %1";
+    Text[ swedish ] = "Kolumntilldelning för tabell %1";
+    Text[ polish ] = "Przyporz¹dkowanie kolumn tabeli %1";
+    Text[ portuguese_brazilian ] = "Column assignment for table %1";
+    Text[ japanese ] = "%1 Ã°ÌŞÙ‚Ì—ñ•ª—Ş";
+    Text[ korean ] = "Å×ÀÌºí %1ÀÇ ¿­ ·¹ÀÌ¾Æ¿ô";
+    Text[ chinese_simplified ] = "Îª±í¸ñ %1 ±àÅÅÉè¼ÆÁĞ";
+    Text[ chinese_traditional ] = "½s±Æ %1 ªí®æªºÄæ";
+    Text[ turkish ] = "Tablo %1 için sütun düzeni";
+    Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ ááÌÏæá %1";
+    Text[ catalan ] = "Asignación de columnas para tabla %1";
 };
 ModalDialog RID_DLG_DBCHANGE
 {
@@ -557,6 +577,7 @@ ModalDialog RID_DLG_DBCHANGE
         Border = TRUE;
     };
 };
+
 
 
 
