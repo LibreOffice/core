@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 11:20:25 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,7 +1033,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ english_us ] = "A~utomatic" ;
         Text [ italian ] = "~automatico" ;
         Text [ spanish ] = "~automático" ;
-        Text [ french ] = "~automatique" ;
+        Text [ french ] = "automatique" ;
         Text [ dutch ] = "~automatisch" ;
         Text [ swedish ] = "~automatisk" ;
         Text [ danish ] = "automatisk" ;
@@ -1149,7 +1149,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ english_us ] = "~Original" ;
         Text [ italian ] = "~Originale" ;
         Text [ spanish ] = "Ori~ginal" ;
-        Text [ french ] = "~Original" ;
+        Text [ french ] = "Original" ;
         Text [ swedish ] = "~Original" ;
         Text [ danish ] = "Original" ;
         Text [ portuguese ] = "~Original" ;
@@ -1251,7 +1251,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ english_us ] = "H~eight" ;
         Text [ italian ] = "Altezza" ;
         Text [ spanish ] = "A~ltura" ;
-        Text [ french ] = "H~auteur" ;
+        Text [ french ] = "Hauteur" ;
         Text [ dutch ] = "H~oogte" ;
         Text [ swedish ] = "H~öjd" ;
         Text [ danish ] = "Højde" ;
@@ -1451,7 +1451,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ english_us ] = "Auto~Fit" ;
         Text [ italian ] = "Adatta" ;
         Text [ spanish ] = "Aju~star" ;
-        Text [ french ] = "A~dapter" ;
+        Text [ french ] = "Adapter" ;
         Text [ swedish ] = "A~npassa" ;
         Text [ danish ] = "Tilpas" ;
         Text [ portuguese ] = "~Ajustar" ;
@@ -1534,7 +1534,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ english_us ] = "Colu~mn" ;
         Text [ italian ] = "Colonna" ;
         Text [ spanish ] = "~Columna" ;
-        Text [ french ] = "C~olonne" ;
+        Text [ french ] = "Colonne" ;
         Text [ dutch ] = "K~olom" ;
         Text [ swedish ] = "~Kolumn" ;
         Text [ danish ] = "Kolonne" ;
@@ -3663,7 +3663,7 @@ TabPage RID_SVXPAGE_COLOR
         Text [ portuguese ] = "~Nome" ;
         Text [ finnish ] = "~Nimi" ;
         Text [ danish ] = "Navn" ;
-        Text [ french ] = "~Nom" ;
+        Text [ french ] = "Nom" ;
         Text [ swedish ] = "~Namn" ;
         Text [ dutch ] = "~Naam" ;
         Text [ spanish ] = "~Nombre" ;
