@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMouseListener.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,36 +76,31 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XMouseListener
 /** makes it possible to receive events from the mouse in a certain window.
  */
 interface XMouseListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XMouseListener::mousePressed
-    /** gets invoked when a mouse button has been pressed on a window.
+    /** is invoked when a mouse button has been pressed on a window.
      */
     [oneway] void mousePressed( [in] com::sun::star::awt::MouseEvent e );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XMouseListener::mouseReleased
-    /** gets invoked when a mouse button has been released on a window.
+    /** is invoked when a mouse button has been released on a window.
      */
     [oneway] void mouseReleased( [in] com::sun::star::awt::MouseEvent e );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XMouseListener::mouseEntered
-    /** gets invoked when the mouse enters a window.
+    /** is invoked when the mouse enters a window.
      */
     [oneway] void mouseEntered( [in] com::sun::star::awt::MouseEvent e );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XMouseListener::mouseExited
-    /** gets invoked when the mouse exits a window.
+    /** is invoked when the mouse exits a window.
      */
     [oneway] void mouseExited( [in] com::sun::star::awt::MouseEvent e );
 
