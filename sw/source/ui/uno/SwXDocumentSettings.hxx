@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,11 +123,12 @@ protected:
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
     virtual void _postGetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
-
-public:
-    SwXDocumentSettings( SwXTextDocument* pModel );
+protected:
     virtual ~SwXDocumentSettings()
         throw();
+public:
+    SwXDocumentSettings( SwXTextDocument* pModel );
+
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
