@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-09 16:32:53 $
+ *  last change: $Author: jp $ $Date: 2000-11-15 14:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4987,12 +4987,21 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                                 STREAM_READWRITE| STREAM_SHARE_DENYALL );
             if( xObjStg.Is()  )
             {
-                BYTE aTestA[10];        // Ist der 01Ole-Stream ueberhaupt vorhanden
+                BYTE aTestA[10];    // exist the \1CompObj-Stream ?
                 SvStorageStreamRef xSrcTst = xObjStg->OpenStream(
-                            String( RTL_CONSTASCII_STRINGPARAM( "\1Ole" ),
+                            String( RTL_CONSTASCII_STRINGPARAM( "\1CompObj" ),
                                     RTL_TEXTENCODING_MS_1252 ));
                 bValidStorage = xSrcTst.Is() && sizeof( aTestA ) ==
                                 xSrcTst->Read( aTestA, sizeof( aTestA ) );
+                if( !bValidStorage )
+                {
+                    // or the \1Ole-Stream ?
+                    xSrcTst = xObjStg->OpenStream(
+                                String( RTL_CONSTASCII_STRINGPARAM( "\1Ole" ),
+                                        RTL_TEXTENCODING_MS_1252 ));
+                    bValidStorage = xSrcTst.Is() && sizeof( aTestA ) ==
+                                    xSrcTst->Read( aTestA, sizeof( aTestA ) );
+                }
 
                 if( bValidStorage && nConvertFlags )
                 {
