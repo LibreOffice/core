@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 16:22:08 $
+ *  last change: $Author: jp $ $Date: 2001-01-26 18:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1602,6 +1602,48 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
         break;
     case RES_TXTATR_REFMARK:
         ((SwTxtRefMark*)pHint)->ChgTxtNode( &rNode );
+        if( rNode.GetNodes().IsDocNodes() )
+        {
+            //search for a refernce with the same name
+            SwTxtAttr* pHt;
+            xub_StrLen *pHtEnd, *pHintEnd;
+            for( USHORT n = 0, nEnd = Count(); n < nEnd; ++n )
+                if( RES_TXTATR_REFMARK == (pHt = GetHt( n ))->Which() &&
+                    pHint->GetAttr() == pHt->GetAttr() &&
+                    0 != ( pHtEnd = pHt->GetEnd() ) &&
+                    0 != ( pHintEnd = pHint->GetEnd() ) )
+                {
+                    SwComparePosition eCmp = ::ComparePosition(
+                            *pHt->GetStart(), *pHtEnd,
+                            *pHint->GetStart(), *pHintEnd );
+                    BOOL bDelOld = TRUE, bChgStart = FALSE, bChgEnd = FALSE;
+                    switch( eCmp )
+                    {
+                    case POS_BEFORE:
+                    case POS_BEHIND:    bDelOld = FALSE; break;
+
+                    case POS_OUTSIDE:   bChgStart = bChgEnd = TRUE; break;
+
+                    case POS_COLLIDE_END:
+                    case POS_OVERLAP_BEFORE:    bChgStart = TRUE; break;
+                    case POS_COLLIDE_START:
+                    case POS_OVERLAP_BEHIND:    bChgEnd = TRUE; break;
+                    }
+
+                    if( bChgStart )
+                        *pHint->GetStart() = *pHt->GetStart();
+                    if( bChgEnd )
+                        *pHintEnd = *pHtEnd;
+
+                    if( bDelOld )
+                    {
+                        if( pHistory )
+                            pHistory->Add( pHt );
+                        rNode.DestroyAttr( Cut( n-- ) );
+                        --nEnd;
+                    }
+                }
+        }
         break;
     case RES_TXTATR_TOXMARK:
         ((SwTxtTOXMark*)pHint)->ChgTxtNode( &rNode );
