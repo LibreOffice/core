@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-24 10:23:55 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 09:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,10 +201,10 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OFormLayerXMLExport_Impl::implCheckPage(const Reference< XDrawPage >& _rxDrawPage, Reference< XIndexAccess >& _rxForms)
+    sal_Bool OFormLayerXMLExport_Impl::impl_isFormPageContainingForms(const Reference< XDrawPage >& _rxDrawPage, Reference< XIndexAccess >& _rxForms)
     {
         Reference< XFormsSupplier2 > xFormsSupp(_rxDrawPage, UNO_QUERY);
-        OSL_ENSURE(xFormsSupp.is(), "OFormLayerXMLExport_Impl::implCheckPage: invalid draw page (no XFormsSupplier)! Doin' nothing!");
+        OSL_ENSURE(xFormsSupp.is(), "OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid draw page (no XFormsSupplier)! Doin' nothing!");
         if (!xFormsSupp.is())
             return sal_False;
 
@@ -214,13 +214,13 @@ namespace xmloff
 
         _rxForms = Reference< XIndexAccess >(xFormsSupp->getForms(), UNO_QUERY);
         Reference< XServiceInfo > xSI(_rxForms, UNO_QUERY); // order is important!
-        OSL_ENSURE(xSI.is(), "OFormLayerXMLExport_Impl::implCheckPage: invalid collection (must not be NULL and must have a ServiceInfo)!");
+        OSL_ENSURE(xSI.is(), "OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (must not be NULL and must have a ServiceInfo)!");
         if (!xSI.is())
             return sal_False;
 
         if (!xSI->supportsService(SERVICE_FORMSCOLLECTION))
         {
-            OSL_ENSURE(sal_False, "OFormLayerXMLExport_Impl::implCheckPage: invalid collection (is no com.sun.star.form.Forms)!");
+            OSL_ENSURE(sal_False, "OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (is no com.sun.star.form.Forms)!");
             // nothing to do
             return sal_False;
         }
@@ -391,7 +391,7 @@ namespace xmloff
     {
         // get the forms collection of the page
         Reference< XIndexAccess > xCollectionIndex;
-        if (!implCheckPage(_rxDrawPage, xCollectionIndex))
+        if (!impl_isFormPageContainingForms(_rxDrawPage, xCollectionIndex))
             return;
 
 #if OSL_DEBUG_LEVEL > 0
@@ -467,7 +467,25 @@ namespace xmloff
     //---------------------------------------------------------------------
     sal_Bool OFormLayerXMLExport_Impl::seekPage(const Reference< XDrawPage >& _rxDrawPage)
     {
-        return implMoveIterators(_rxDrawPage, sal_False);
+        sal_Bool bKnownPage = implMoveIterators( _rxDrawPage, sal_False );
+        if ( bKnownPage )
+            return sal_True;
+
+        // if the page is not yet know, this does not automatically mean that it has
+        // not been examined. Instead, examineForms returns silently and successfully
+        // if a page is a XFormsPageSupplier2, but does not have a forms collection
+        // (This behaviour of examineForms is a performance optimization, to not force
+        // the page to create a forms container just to see that it's empty.)
+
+        // So, in such a case, seekPage is considered to be successfull, too, though the
+        // page was not yet known
+        Reference< XFormsSupplier2 > xFormsSupp( _rxDrawPage, UNO_QUERY );
+        if ( xFormsSupp.is() && !xFormsSupp->hasForms() )
+            return sal_True;
+
+        // anything else means that the page has not been examined before, or it's no
+        // valid form page. Both cases are Bad (TM).
+        return sal_False;
     }
 
     //---------------------------------------------------------------------
@@ -513,7 +531,7 @@ namespace xmloff
     {
         // get the forms collection of the page
         Reference< XIndexAccess > xCollectionIndex;
-        if (!implCheckPage(_rxDrawPage, xCollectionIndex))
+        if (!impl_isFormPageContainingForms(_rxDrawPage, xCollectionIndex))
             return;
 
         // move the iterator which specify the currently handled page
