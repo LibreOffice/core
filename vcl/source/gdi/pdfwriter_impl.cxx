@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:29:34 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 11:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,55 @@ static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
                                            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
     rBuffer.append( pHexDigits[ (nInt >> 4) & 15 ] );
     rBuffer.append( pHexDigits[ nInt & 15 ] );
+}
+
+static void appendName( const OUString& rStr, OStringBuffer& rBuffer )
+{
+    OString aStr( OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 ) );
+    const sal_Char* pStr = aStr.getStr();
+    int nLen = aStr.getLength();
+    for( int i = 0; i < nLen; i++ )
+    {
+        /*  #i16920# PDF recommendation: output UTF8, any byte
+         *  outside the interval [33(=ASCII'!');126(=ASCII'~')]
+         *  should be escaped hexadecimal
+         *  for the sake of ghostscript which also reads PDF
+         *  but has a narrower acceptance rate we only pass
+         *  alphanumerics and '-' literally.
+         */
+        if( (pStr[i] >= 'A' && pStr[i] <= 'Z' ) ||
+            (pStr[i] >= 'a' && pStr[i] <= 'z' ) ||
+            (pStr[i] >= '0' && pStr[i] <= '9' ) ||
+            pStr[i] == '-' )
+        {
+            rBuffer.append( pStr[i] );
+        }
+        else
+        {
+            rBuffer.append( '#' );
+            appendHex( (sal_Int8)pStr[i], rBuffer );
+        }
+    }
+}
+
+static void appendName( const sal_Char* pStr, OStringBuffer& rBuffer )
+{
+    while( pStr && *pStr )
+    {
+        if( (*pStr >= 'A' && *pStr <= 'Z' ) ||
+            (*pStr >= 'a' && *pStr <= 'z' ) ||
+            (*pStr >= '0' && *pStr <= '9' ) ||
+            *pStr == '-' )
+        {
+            rBuffer.append( *pStr );
+        }
+        else
+        {
+            rBuffer.append( '#' );
+            appendHex( (sal_Int8)*pStr, rBuffer );
+        }
+        pStr++;
+    }
 }
 
 static void appendUnicodeTextString( const String& rString, OStringBuffer& rBuffer )
@@ -1265,7 +1314,7 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( ImplFontData* pFont )
                           "<< /Type /Font\r\n"
                           "   /Subtype /Type1\r\n"
                           "   /BaseFont /" );
-            aLine.append( m_aBuiltinFonts[i].m_pPSName );
+            appendName( m_aBuiltinFonts[i].m_pPSName, aLine );
             aLine.append( "\r\n" );
             if( m_aBuiltinFonts[i].m_eCharSet != RTL_TEXTENCODING_SYMBOL )
                 aLine.append( "   /Encoding /WinAnsiEncoding\r\n" );
@@ -1626,7 +1675,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
                 if( it->second != -1 )
                 {
                     sal_Int32 nCode = (sal_Int32)(it->second & 0x000000ff);
-                    nEncoding[ nCode ] = nCode;
+                    nEncoding[ nCode ] = static_cast<sal_uInt8>( nCode );
                     nEncodedCodes[ nCode ] = it->first;
                 }
             }
@@ -1644,7 +1693,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
                       "<< /Type /Font\r\n"
                       "   /Subtype /Type1\r\n"
                       "   /BaseFont /" );
-        aLine.append( OUStringToOString( aInfo.m_aPSName, osl_getThreadTextEncoding() ) );
+        appendName( aInfo.m_aPSName, aLine );
         aLine.append( "\r\n" );
         if( pFont->meCharSet != RTL_TEXTENCODING_SYMBOL &&  pEncoding == 0 )
             aLine.append( "   /Encoding /WinAnsiEncoding\r\n" );
@@ -1730,7 +1779,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
                           "<< /Type /Font\r\n"
                           "   /Subtype /Type1\r\n"
                           "   /BaseFont /" );
-            aLine.append( OUStringToOString( aInfo.m_aPSName, osl_getThreadTextEncoding() ) );
+            appendName( aInfo.m_aPSName, aLine );
             aLine.append( "\r\n" );
             aLine.append( "   /Encoding " );
             aLine.append( nEncObject );
@@ -1783,7 +1832,7 @@ static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuf
         }
         rBuffer.append( '+' );
     }
-    rBuffer.append( OUStringToOString( rPSName, osl_getThreadTextEncoding() ) );
+    appendName( rPSName, rBuffer );
 }
 
 sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode* pUnicodes, int nGlyphs )
