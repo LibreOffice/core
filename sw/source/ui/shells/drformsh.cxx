@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: jp $ $Date: 2001-08-13 21:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,30 +165,33 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
 
                     uno::Reference< beans::XPropertySet >  xPropSet(xControlModel, uno::UNO_QUERY);
 
-                    uno::Any aTmp;
-
                     // Darf man eine URL an dem Objekt setzen?
+                    OUString sTargetURL( C2U( "TargetURL" ));
                     uno::Reference< beans::XPropertySetInfo >  xPropInfoSet = xPropSet->getPropertySetInfo();
-                    beans::Property aProp = xPropInfoSet->getPropertyByName( C2U("TargetURL" ));
-                    if (aProp.Name.getLength())
+                    if( xPropInfoSet->hasPropertyByName( sTargetURL ))
                     {
-                        // Ja!
-                        aTmp <<= OUString(rHLinkItem.GetName());
-                        xPropSet->setPropertyValue(C2U("Label"), aTmp );
-
-                        aTmp <<=  OUString(INetURLObject::RelToAbs(rHLinkItem.GetURL()));
-                        xPropSet->setPropertyValue( C2U("TargetURL"), aTmp );
-
-                        if( rHLinkItem.GetTargetFrame().Len() )
+                        beans::Property aProp = xPropInfoSet->getPropertyByName( sTargetURL );
+                        if( aProp.Name.getLength() )
                         {
-                            aTmp <<=  OUString(rHLinkItem.GetTargetFrame());
-                            xPropSet->setPropertyValue( C2U("TargetFrame"), aTmp );
+                            uno::Any aTmp;
+                            // Ja!
+                            aTmp <<= OUString(rHLinkItem.GetName());
+                            xPropSet->setPropertyValue(C2U("Label"), aTmp );
+
+                            aTmp <<=  OUString(INetURLObject::RelToAbs(rHLinkItem.GetURL()));
+                            xPropSet->setPropertyValue( sTargetURL, aTmp );
+
+                            if( rHLinkItem.GetTargetFrame().Len() )
+                            {
+                                aTmp <<=  OUString(rHLinkItem.GetTargetFrame());
+                                xPropSet->setPropertyValue( C2U("TargetFrame"), aTmp );
+                            }
+
+
+                             form::FormButtonType eButtonType = form::FormButtonType_URL;
+                            aTmp.setValue( &eButtonType, ::getCppuType((const form::FormButtonType*)0));
+                            xPropSet->setPropertyValue( C2U("ButtonType"), aTmp );
                         }
-
-
-                         form::FormButtonType eButtonType = form::FormButtonType_URL;
-                        aTmp.setValue( &eButtonType, ::getCppuType((const form::FormButtonType*)0));
-                        xPropSet->setPropertyValue( C2U("ButtonType"), aTmp );
                     }
                 }
             }
@@ -309,6 +312,9 @@ SwDrawFormShell::~SwDrawFormShell()
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:46  hr
+      initial import
+
       Revision 1.19  2000/09/18 16:06:03  willem.vandorp
       OpenOffice header added.
 
