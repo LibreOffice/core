@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-26 11:06:29 $
+ *  last change: $Author: hr $ $Date: 2001-01-03 14:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ OArgumentList::OArgumentList() :
 OArgumentList::OArgumentList( sal_uInt32 nArgs, const NAMESPACE_RTL(OUString)* aArgument1, ... ) :
     n_Args( nArgs )
 {
+    using namespace std;
     m_aVec = new rtl_uString* [nArgs];
     va_list pArgs;
     sal_uInt32 i = 0;
@@ -177,6 +178,7 @@ OEnvironment::OEnvironment() :
 OEnvironment::OEnvironment( sal_uInt32 nVars, const NAMESPACE_RTL(OUString)* aArgument1, ... ) :
     n_Vars( nVars )
 {
+    using namespace std;
     m_aVec = new rtl_uString* [nVars];
     va_list pArgs;
     sal_uInt32 i = 0;
