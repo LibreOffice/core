@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPackageRegistry.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:03:48 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 #define INCLUDED_com_sun_star_deployment_XPackageRegistry_idl
 
 #include <com/sun/star/deployment/XPackage.idl>
+#include <com/sun/star/deployment/XPackageTypeInfo.idl>
+#include <com/sun/star/beans/StringPair.idl>
 
 
 module com { module sun { module star { module deployment {
@@ -73,7 +75,7 @@ module com { module sun { module star { module deployment {
 */
 interface XPackageRegistry
 {
-    /** binds a package URL to a <type>Package</type> handle.
+    /** binds a package URL to a <type>XPackage</type> handle.
         The returned UNO package handle ought to late-initialize itself,
         thus the process of binding must not be an expensive operation, because
         it is not abortable.
@@ -95,12 +97,12 @@ interface XPackageRegistry
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    /** gets the supported media types of this registry(backend).
+    /** gets the supported <type>XPackageTypeInfo</type>s.
 
         @return
-                supported media types
+                supported <type>XPackageTypeInfo</type>s.
     */
-    sequence<string> getSupportedMediaTypes();
+    sequence<XPackageTypeInfo> getSupportedPackageTypes();
 };
 
 }; }; }; };
