@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-07 14:27:21 $
+ *  last change: $Author: obo $ $Date: 2001-03-08 16:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,29 +92,29 @@ private:
                         //export to a .sxm (or whatever) package
 
     sal_Bool ReadThroughComponent(
-        ::com::sun::star::uno::Reference<::com::sun::star::io::XInputStream> xInputStream,
-        ::com::sun::star::uno::Reference<::com::sun::star::lang::XComponent> xModelComponent,
-        ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory> & rFactory,
+        ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
         const sal_Char* pFilterName );
 
     sal_Bool ReadThroughComponent(
         SvStorage* pStorage,
-        ::com::sun::star::uno::Reference<::com::sun::star::lang::XComponent> xModelComponent,
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
         const sal_Char* pStreamName,
         const sal_Char* pCompatibilityStreamName,
-        ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory> & rFactory,
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
         const sal_Char* pFilterName );
 
     sal_Bool WriteThroughComponent(
-        ::com::sun::star::uno::Reference<::com::sun::star::io::XOutputStream> xOutputStream,
-        ::com::sun::star::uno::Reference<::com::sun::star::lang::XComponent> xComponent,
-        ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory> & rFactory,
+        ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutputStream,
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent,
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
         const sal_Char* pComponentName );
     sal_Bool WriteThroughComponent(
         SvStorage* pStorage,
-        ::com::sun::star::uno::Reference<::com::sun::star::lang::XComponent> xComponent,
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent,
         const sal_Char* pStreamName,
-        ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory> & rFactory,
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
         const sal_Char* pComponentName,
         sal_Bool bCompress=sal_True );
 
