@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-10 16:37:43 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ Bitmap SdDrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
 
     pView->InitRedraw( &aVDev, Rectangle( aNullPt, aSize ) );
 
-    while ( !pView->IsRedrawReady() ) {}
+    // #111097# IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
     delete pView;
 
     aVDev.SetMapMode( MapMode() );
