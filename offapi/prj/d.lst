@@ -71,6 +71,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\xml\sax
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 
+..\%__SRC%\misc\offapi.autodoc %_DEST%\idl%_EXT%\offapi.autodoc
 ..\%__SRC%\ucr\offapi.db %_DEST%\bin%_EXT%\offapi.rdb
 ..\%__SRC%\ucrdoc\offapi_doc.db %_DEST%\bin%_EXT%\offapi_doc.rdb
 ..\%__SRC%\ucr\types.db %_DEST%\bin%_EXT%\types.rdb
