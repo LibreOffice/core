@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_misc.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-25 12:23:02 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #define INCLUDED_DP_MISC_H
 
 #include "rtl/ustrbuf.hxx"
+#include "rtl/instance.hxx"
 #include "osl/mutex.hxx"
 #include "osl/process.h"
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -77,8 +78,7 @@
 
 namespace css = ::com::sun::star;
 
-namespace dp_misc
-{
+namespace dp_misc {
 
 const sal_Char CR = 0x0d;
 const sal_Char LF = 0x0a;
@@ -102,13 +102,12 @@ inline void try_dispose( css::uno::Reference<css::uno::XInterface> const & x )
 //##############################################################################
 
 //==============================================================================
-template< typename T >
+template<typename T>
 inline void extract_throw( T * p, css::uno::Any const & a )
 {
-    if (! (a >>= *p))
-    {
+    if (! (a >>= *p)) {
         throw css::uno::RuntimeException(
-            OUSTR("expected ") + getCppuType( p ).getTypeName(),
+            OUSTR("expected ") + getCppuType(p).getTypeName(),
             css::uno::Reference<css::uno::XInterface>() );
     }
 }
@@ -125,17 +124,20 @@ inline T extract_throw( css::uno::Any const & a )
 //##############################################################################
 
 //==============================================================================
+::rtl::OUString expandUnoRcTerm( ::rtl::OUString const & term );
+
+//==============================================================================
+::rtl::OUString expandUnoRcUrl( ::rtl::OUString const & url );
+
+//==============================================================================
 ::rtl::OUString const & getPlatformString();
 
 //==============================================================================
 bool platform_fits( ::rtl::OUString const & platform_string );
 
 //==============================================================================
-::rtl::OUString make_url(
-    ::rtl::OUString const & base_url, ::rtl::OUString const & url );
-
-//==============================================================================
-::rtl::OUString expand_url( ::rtl::OUString const & url );
+::rtl::OUString makeURL(
+    ::rtl::OUString const & baseURL, ::rtl::OUString const & relPath );
 
 //==============================================================================
 ::rtl::OUString generateRandomPipeId();
@@ -154,6 +156,31 @@ bool office_is_running();
 oslProcess raiseProcess( ::rtl::OUString const & appURL,
                          css::uno::Sequence< ::rtl::OUString > const & args );
 
+}
+
+//##############################################################################
+
+// xxx todo: shift to rtl/instance.hxx
+namespace rtl {
+template<typename T, typename InitData,
+         typename Unique = InitData, typename Data = T>
+class StaticData {
+    struct StaticInstanceWithInit {
+        T * operator () ( Data d ) {
+            static T aInstance(d);
+            return &aInstance;
+        }
+    };
+public:
+    static T & get() {
+        return *rtl_Instance<
+            T, StaticInstanceWithInit,
+            ::osl::MutexGuard, ::osl::GetGlobalMutex,
+            Data, InitData >::create( StaticInstanceWithInit(),
+                                      ::osl::GetGlobalMutex(),
+                                      InitData() );
+    }
+};
 }
 
 #endif
