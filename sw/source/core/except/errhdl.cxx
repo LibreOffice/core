@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errhdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 14:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 #define _ERRHDL_CXX
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
