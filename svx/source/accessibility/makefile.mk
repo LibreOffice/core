@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: af $ $Date: 2002-04-11 13:07:36 $
+#   last change: $Author: af $ $Date: 2002-04-12 08:45:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,6 @@ CXXFILES =								\
 
 SLOFILES =	\
     $(SLO)$/svxrectctaccessiblecontext.obj		\
-    $(SLO)$/DescriptionGenerator.obj			\
     $(SLO)$/GraphCtlAccessibleContext.obj		\
     $(SLO)$/ChildrenManager.obj 				\
     $(SLO)$/ChildrenManagerImpl.obj 			\
