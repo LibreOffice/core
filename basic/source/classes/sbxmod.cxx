@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:52:42 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2083,7 +2083,7 @@ void SbMethod::Broadcast( ULONG nHintId )
             if( !CanWrite() )
                 return;
 
-        if( !pMod->IsCompiled() )
+        if( pMod && !pMod->IsCompiled() )
             pMod->Compile();
 
         // Block broadcasts while creating new method
