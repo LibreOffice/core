@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 11:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
-#include <unotools/types.hxx>
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 #include <toolkit/helper/property.hxx>
 
@@ -338,7 +340,7 @@ sal_Bool DoesDependOnOthers( sal_uInt16 nPropertyId )
 
 sal_Bool CompareProperties( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 )
 {
-    return ::utl::compare( r1, r2 );
+    return ::comphelper::compare( r1, r2 );
 }
 
 

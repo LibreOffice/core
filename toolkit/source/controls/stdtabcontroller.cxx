@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtabcontroller.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 11:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,9 @@
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>
 
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 
 //  ----------------------------------------------------
 //  class StdTabController
@@ -137,7 +139,7 @@ StdTabController::~StdTabController()
         if ( (::com::sun::star::awt::XControlModel*)xModel.get() == (::com::sun::star::awt::XControlModel*)rxCtrlModel.get() )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xCtrl( pCtrls[n] );
-            ::utl::removeElementAt( rCtrls, n );
+            ::comphelper::removeElementAt( rCtrls, n );
             return xCtrl;
         }
     }

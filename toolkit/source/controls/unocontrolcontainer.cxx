@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 11:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,9 @@
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
 
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 
 #include <tools/debug.hxx>
 #include <tools/list.hxx>
@@ -366,7 +368,7 @@ void UnoControlContainer::removeTabController( const ::com::sun::star::uno::Refe
     {
         if( maTabControllers.getConstArray()[n] == TabController )
         {
-            ::utl::removeElementAt( maTabControllers, n );
+            ::comphelper::removeElementAt( maTabControllers, n );
             break;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 11:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,9 @@
 
 #include <cppuhelper/typeprovider.hxx>
 
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
@@ -811,7 +813,7 @@ UnoImageControlControl::UnoImageControlControl()
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 100;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( szServiceName_ImageProducer ) );
     if ( xI.is() )
         mxImageProducer = ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >( xI, ::com::sun::star::uno::UNO_QUERY );

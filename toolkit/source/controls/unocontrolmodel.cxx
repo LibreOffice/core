@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-19 15:09:44 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 11:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,9 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/emptyfontdescriptor.hxx>
 
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 
 #include <vcl/svapp.hxx>
 #include <tools/intn.hxx>
@@ -871,8 +873,8 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
         {
             if ( !aProps.getConstArray()[n].len() )
             {
-                ::utl::removeElementAt( aProps, n );
-                ::utl::removeElementAt( aValues, n );
+                ::comphelper::removeElementAt( aProps, n );
+                ::comphelper::removeElementAt( aValues, n );
                 n--;
             }
         }

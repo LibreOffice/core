@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 11:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #include <toolkit/helper/unowrapper.hxx>
@@ -564,7 +564,7 @@ void UnoWrapper::WindowEvent_Normalize( Window* pWindow )
 
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  UnoWrapper::getNewUnoServiceManager()
 {
-    return ::utl::getProcessServiceFactory();
+    return ::comphelper::getProcessServiceFactory();
 }
 
 
