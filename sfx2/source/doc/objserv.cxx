@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mba $ $Date: 2002-11-04 09:11:55 $
+ *  last change: $Author: mba $ $Date: 2002-11-18 12:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,16 +214,19 @@ void SAL_CALL PDFExportFileDialog::DirectoryChanged( const ::com::sun::star::ui:
 
         if ( xControlAccess.is() )
         {
-            String aExportButtonStr;
-#if SUPD>643
-            if ( m_bNoOptionsDlg )
-                aExportButtonStr = String( SfxResId( STR_EXPORTBUTTON ));
-            else
-#endif
-                aExportButtonStr = String( SfxResId( STR_EXPORTWITHCFGBUTTON ));
+            String aResStr;
 
-            ::rtl::OUString aStrExport = aExportButtonStr;
+            if ( m_bNoOptionsDlg )
+                aResStr = String( SfxResId( STR_EXPORTBUTTON ));
+            else
+                aResStr = String( SfxResId( STR_EXPORTWITHCFGBUTTON ));
+
+            ::rtl::OUString aStrExport = aResStr;
             xControlAccess->setLabel( ::com::sun::star::ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, aStrExport );
+
+            aResStr = String( SfxResId( STR_LABEL_FILEFORMAT ));
+            aStrExport = aResStr;
+            xControlAccess->setLabel( ::com::sun::star::ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER_LABEL, aStrExport );
         }
     }
 
@@ -523,9 +526,12 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                     Reference< ::com::sun::star::ui::dialogs::XFilePickerControlAccess >( xFilePicker, UNO_QUERY );
                 if ( xControlAccess.is() )
                 {
-                    String aExportButtonStr = String( SfxResId( STR_EXPORTBUTTON ));
-                    ::rtl::OUString aStrExport = aExportButtonStr;
-                    xControlAccess->setLabel( ::com::sun::star::ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, aStrExport );
+                    String aResStr = String( SfxResId( STR_EXPORTBUTTON ));
+                    ::rtl::OUString aCtrlText = aResStr;
+                    xControlAccess->setLabel( ::com::sun::star::ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, aCtrlText );
+                    aResStr = String( SfxResId( STR_LABEL_FILEFORMAT ));
+                    aCtrlText = aResStr;
+                    xControlAccess->setLabel( ::com::sun::star::ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER_LABEL, aCtrlText );
                 }
             }
             else
@@ -1067,7 +1073,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     const SfxFilter* pFilter = GetFactory().GetFilter(0);
                     String aExtension( pFilter->GetDefaultExtension().Copy(2) );
                     aObj.setExtension( aExtension, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
-                    rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aObj.GetMainURL() ) );
+                    rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aObj.GetMainURL( INetURLObject::NO_DECODE ) ) );
                     rReq.AppendItem( SfxBoolItem( SID_RENAME, TRUE ) );
                 }
             }
@@ -1438,7 +1444,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         INetURLObject aTargetObj( aTargetURL );
                         String aTplExtension( pFilter->GetDefaultExtension().Copy(2) );
                         aTargetObj.setExtension( aTplExtension );
-                        aTargetURL = aTargetObj.GetMainURL();
+                        aTargetURL = aTargetObj.GetMainURL( INetURLObject::NO_DECODE );
                     }
 
                     rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aTargetURL ) );
@@ -1495,7 +1501,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 String aExtension( pFilter->GetDefaultExtension().Copy(2) );
                 aURLObj.setExtension( aExtension, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
 
-                rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aURLObj.GetMainURL() ) );
+                rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aURLObj.GetMainURL( INetURLObject::NO_DECODE ) ) );
             }
 
             // Dateiname
