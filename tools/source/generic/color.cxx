@@ -2,9 +2,9 @@
  *
  *  $RCSfile: color.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-05 09:09:47 $
+ *  last change: $Author: ssa $ $Date: 2002-03-22 17:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,14 +158,14 @@ void Color::Invert()
 
 BOOL Color::IsDark() const
 {
-    return GetLuminance() <= 50;
+    return GetLuminance() <= 30;
 }
 
 // -----------------------------------------------------------------------
 
 BOOL Color::IsBright() const
 {
-    return GetLuminance() >= 200;
+    return GetLuminance() >= 225;
 }
 
 // -----------------------------------------------------------------------
