@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-28 20:11:41 $
+ *  last change: $Author: os $ $Date: 2001-12-20 09:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,10 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
 
     pSvxShape->setPosition(aMM100Pos);
     SdrObject* pObj = pSvxShape->GetSdrObject();
-    pObj->SetLayer( bOpaque ? pDoc->GetHeavenId() : pDoc->GetHellId() );
+    if(FmFormInventor != pObj->GetObjInventor())
+        pObj->SetLayer( bOpaque ? pDoc->GetHeavenId() : pDoc->GetHellId() );
+    else
+        pObj->SetLayer(pDoc->GetControlsId());
 
     SwPaM* pPam = new SwPaM(pDoc->GetNodes().GetEndOfContent());
     SwUnoInternalPaM* pInternalPam = 0;
@@ -1042,6 +1045,9 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         if(FmFormInventor != pObj->GetObjInventor())
                             pObj->SetLayer( *(sal_Bool*)aValue.getValue() ?
                                         pDoc->GetHeavenId() : pDoc->GetHellId() );
+                        else
+                            pObj->SetLayer(pDoc->GetControlsId());
+
                     }
 
                 }
@@ -1154,7 +1160,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     if(pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
-                        sal_Bool bOpaque = pObj->GetLayer() == pFmt->GetDoc()->GetHeavenId();
+                        sal_Bool bOpaque = pObj->GetLayer() != pFmt->GetDoc()->GetHellId();
                         aRet.setValue(&bOpaque, ::getBooleanCppuType());
                     }
                 }
@@ -1675,8 +1681,13 @@ void SwXGroupShape::add( const Reference< XShape >& xShape ) throw (RuntimeExcep
                 if(pObj)
                 {
                     SwDoc* pDoc = pFmt->GetDoc();
-                    pObj->SetLayer( pSwShape->pImpl->GetOpaque() ?
-                                        pDoc->GetHeavenId() : pDoc->GetHellId() );
+                    if( FmFormInventor != pObj->GetObjInventor())
+                    {
+                        pObj->SetLayer( pSwShape->pImpl->GetOpaque() ?
+                                            pDoc->GetHeavenId() : pDoc->GetHellId() );
+                    }
+                    else
+                        pObj->SetLayer(pDoc->GetControlsId());
                 }
             }
             pSwShape->m_bDescriptor = sal_False;
