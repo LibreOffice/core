@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:38:07 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,10 +370,10 @@ BOOL SwGlossaryHdl::CopyOrMove( const String& rSourceGroupName,  String& rSource
     SwTextBlocks* pDestGroup = rStatGlossaries.GetGroupDoc(rDestGroupName, FALSE);
     if(pDestGroup->IsReadOnly() || (bMove && pSourceGroup->IsReadOnly()) )
         return FALSE;
-    if(pDestGroup->IsOld()&& 0!= pDestGroup->ConvertToNew())
+    /*if(pDestGroup->IsOld()&& 0!= pDestGroup->ConvertToNew())
         return FALSE;
     if(bMove && pSourceGroup->IsOld() && 0 != pSourceGroup->ConvertToNew())
-        return FALSE;
+        return FALSE;*/
 
     //Der Index muss hier ermittelt werden, weil rSourceShortName in CopyBlock evtl veraendert wird
     USHORT nDeleteIdx = pSourceGroup->GetIndex( rSourceShortName );
@@ -483,7 +483,7 @@ BOOL SwGlossaryHdl::HasShortName(const String& rShortName) const
  ---------------------------------------------------------------------------*/
 BOOL    SwGlossaryHdl::ConvertToNew(SwTextBlocks& rOld)
 {
-    if( rOld.IsOld() )
+    /*if( rOld.IsOld() )
     {
         QueryBox aAsk( pWrtShell->GetView().GetWindow(), SW_RES( MSG_UPDATE_NEW_GLOS_FMT ) );
         if( aAsk.Execute() == RET_YES )
@@ -496,7 +496,7 @@ BOOL    SwGlossaryHdl::ConvertToNew(SwTextBlocks& rOld)
         }
         else
             return FALSE;
-    }
+    }*/
     return TRUE;
 }
 
