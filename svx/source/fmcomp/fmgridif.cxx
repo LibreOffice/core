@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-21 08:54:51 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 11:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1788,6 +1788,58 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const ::com:
     sal_Bool bVoid = !Value.hasValue();
     switch (nId)
     {
+        case FM_ATTR_TEXTLINECOLOR:
+        {
+            Color aTextLineColor(::comphelper::getINT32(Value));
+            if (bVoid)
+            {
+                pGrid->SetTextLineColor();
+                pGrid->GetDataWindow().SetTextLineColor();
+            }
+            else
+            {
+                pGrid->SetTextLineColor(aTextLineColor);
+                pGrid->GetDataWindow().SetTextLineColor(aTextLineColor);
+            }
+
+            // need to forward this to the columns
+            DbGridColumns& rColumns = const_cast<DbGridColumns&>(pGrid->GetColumns());
+            DbGridColumn* pLoop = rColumns.First();
+            while (pLoop)
+            {
+                FmXGridCell* pXCell = pLoop->GetCell();
+                if (pXCell)
+                    if (bVoid)
+                        pXCell->SetTextLineColor();
+                    else
+                        pXCell->SetTextLineColor(aTextLineColor);
+
+                pLoop = rColumns.Next();
+            }
+
+            if (isDesignMode())
+                pGrid->Invalidate();
+        }
+        break;
+
+        case FM_ATTR_FONTEMPHASISMARK:
+        {
+            Font aGridFont = pGrid->GetControlFont();
+            sal_Int16 nValue = ::comphelper::getINT16(Value);
+            aGridFont.SetEmphasisMark( nValue );
+            pGrid->SetControlFont( aGridFont );
+        }
+        break;
+
+        case FM_ATTR_FONTRELIEF:
+        {
+            Font aGridFont = pGrid->GetControlFont();
+            sal_Int16 nValue = ::comphelper::getINT16(Value);
+            aGridFont.SetRelief( (FontRelief)nValue );
+            pGrid->SetControlFont( aGridFont );
+        }
+        break;
+
         case FM_ATTR_HELPURL:
         {
             String sHelpURL(::comphelper::getString(Value));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-23 16:17:06 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 11:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,10 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_REALNAME,"RealName");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_CONTROLSOURCEPROPERTY,"DataFieldProperty");
 
+    IMPLEMENT_CONSTASCII_USTRING(FM_PROP_TEXTLINECOLOR, "TextLineColor");
+    IMPLEMENT_CONSTASCII_USTRING(FM_PROP_FONTEMPHASISMARK, "FontEmphasisMark");
+    IMPLEMENT_CONSTASCII_USTRING(FM_PROP_FONTRELIEF, "FontRelief");
+
 }   // namespace svxform
 
 using namespace svxform;
@@ -485,8 +489,10 @@ const FmPropertyInfo* FmPropertyInfoService::getPropertyInfo()
             FmPropertyInfo(FM_PROP_ACTIVE_CONNECTION,   FM_ATTR_ACTIVE_CONNECTION,  sal_False, ::rtl::OUString(),                                   nPos++, 0),
             FmPropertyInfo(FM_PROP_SCALE,               FM_ATTR_SCALE,              sal_False, ::rtl::OUString(),                                   nPos++, 0),
             FmPropertyInfo(FM_PROP_REALNAME,            FM_ATTR_REALNAME,           sal_False, ::rtl::OUString(),                                   nPos++, 0),
-            FmPropertyInfo(FM_PROP_CONTROLSOURCEPROPERTY,FM_ATTR_CONTROLSOURCEPROPERTY, sal_False, ::rtl::OUString(),                               nPos++, 0)
-
+            FmPropertyInfo(FM_PROP_CONTROLSOURCEPROPERTY,FM_ATTR_CONTROLSOURCEPROPERTY, sal_False, ::rtl::OUString(),                               nPos++, 0),
+            FmPropertyInfo(FM_PROP_TEXTLINECOLOR,       FM_ATTR_TEXTLINECOLOR,      sal_False, ::rtl::OUString(),                                   nPos++, 0),
+            FmPropertyInfo(FM_PROP_FONTEMPHASISMARK,    FM_ATTR_FONTEMPHASISMARK,   sal_False, ::rtl::OUString(),                                   nPos++, 0),
+            FmPropertyInfo(FM_PROP_FONTRELIEF,          FM_ATTR_FONTRELIEF,         sal_False, ::rtl::OUString(),                                   nPos++, 0)
         };
 
         pPropertyInfos = (FmPropertyInfo*)aPropertyInfos;
