@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:47:44 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2794,7 +2794,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     StringList [ russian ] =
     {
-            < "Задано пользователем" ; > ;
+            < "Определяемый пользователем" ; > ;
         < "Металл" ; > ;
         < "Золото" ; > ;
         < "Хром" ; > ;
@@ -2821,7 +2821,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     StringList [ chinese_traditional ] =
     {
-            < "¦Ы­q" ; > ;
+            < "ЁПҐОЄМ¦Ы­q" ; > ;
         < "ЄчДЭ" ; > ;
         < "Єч" ; > ;
         < "»М" ; > ;
@@ -3231,7 +3231,7 @@ DockingWindow RID_SVXFLOAT_3D
     Text[ russian ] = "Эффекты 3-М";
     Text[ polish ] = "Efekty 3-W";
     Text[ japanese ] = "3D Њш‰К";
-    Text[ chinese_traditional ] = "3 єы®ДЄG";
+    Text[ chinese_traditional ] = "3D ®ДЄG";
     Text[ arabic ] = "КГЛнСЗК ЛбЗЛнЙ ЗбГИЪЗП";
     Text[ dutch ] = "3D-effecten";
     Text[ chinese_simplified ] = "3 О¬-Р§№ы";
