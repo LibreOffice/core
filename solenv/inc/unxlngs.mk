@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 08:38:34 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:30:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,7 +112,7 @@ CFLAGSCXX+= -Wno-ctor-dtor-privacy
 .IF "$(BUILD_SPECIAL)"==""
 CFLAGSCXX+=-include preinclude.h
 .ENDIF
-
+PICSWITCH:=-fPIC
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
 # Compiler flags for compiling static object in single threaded environment with character user interface
@@ -122,9 +122,9 @@ CFLAGSOBJGUIMT=
 # Compiler flags for compiling static object in multi threaded environment with character user interface
 CFLAGSOBJCUIMT=
 # Compiler flags for compiling shared object in multi threaded environment with graphical user interface
-CFLAGSSLOGUIMT=-fPIC
+CFLAGSSLOGUIMT=$(PICSWITCH)
 # Compiler flags for compiling shared object in multi threaded environment with character user interface
-CFLAGSSLOCUIMT=-fPIC
+CFLAGSSLOCUIMT=$(PICSWITCH)
 # Compiler flags for profiling
 CFLAGSPROF=
 # Compiler flags for debugging
