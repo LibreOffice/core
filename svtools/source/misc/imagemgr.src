@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-06 22:10:27 $
+ *  last change: $Author: rt $ $Date: 2001-12-10 22:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1221,6 +1221,25 @@ String STR_DESCRIPTION_FLOPPY_VOLUME
 {
     Text = "Diskettenlaufwerk" ;
     Text [ english_us ] = "Floppy disk" ;
+    Text[ portuguese ] = "Floppy disk";
+    Text[ russian ] = "Floppy disk";
+    Text[ greek ] = "Floppy disk";
+    Text[ dutch ] = "Floppy disk";
+    Text[ french ] = "Unit� disquette";
+    Text[ spanish ] = "Floppy disk";
+    Text[ finnish ] = "Floppy disk";
+    Text[ italian ] = "Floppy disk";
+    Text[ danish ] = "Floppy disk";
+    Text[ swedish ] = "Diskettenhet";
+    Text[ polish ] = "Floppy disk";
+    Text[ portuguese_brazilian ] = "Floppy disk";
+    Text[ japanese ] = "ﾌﾛｯﾋﾟｰﾃﾞｨｽｸ";
+    Text[ korean ] = "Floppy disk";
+    Text[ chinese_simplified ] = "软盘";
+    Text[ chinese_traditional ] = "軟碟機";
+    Text[ turkish ] = "Floppy disk";
+    Text[ arabic ] = "Floppy disk";
+    Text[ catalan ] = "Floppy disk";
 };
 String STR_DESCRIPTION_CDROM_VOLUME
 {
@@ -1347,4 +1366,5 @@ String STR_DESCRIPTION_POWERPOINT_SHOW
     Text[ arabic ] = "MS PowerPoint Show";
     Text[ catalan ] = "MS PowerPoint Show";
 };
+
 
