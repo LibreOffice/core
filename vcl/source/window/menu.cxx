@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-29 08:27:00 $
+ *  last change: $Author: cd $ $Date: 2002-11-29 13:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1866,6 +1866,22 @@ Size Menu::ImplCalcSize( Window* pWin )
     long nMaxTextWidth = 0;
     long nMaxAccWidth = 0;
 
+    static long nMinMenuItemHeight = 16;
+
+    for ( USHORT i = (USHORT)pItemList->Count(); i; )
+    {
+        MenuItemData* pData = pItemList->GetDataFromPos( --i );
+        if ( ImplIsVisible( i ) && ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ))
+        {
+            Size aImgSz = pData->aImage.GetSizePixel();
+            if ( aImgSz.Height() > aMaxImgSz.Height() )
+                aMaxImgSz.Height() = aImgSz.Height();
+            if ( aImgSz.Height() > nMinMenuItemHeight )
+                nMinMenuItemHeight = aImgSz.Height();
+            break;
+        }
+    }
+
     for ( USHORT n = (USHORT)pItemList->Count(); n; )
     {
         MenuItemData* pData = pItemList->GetDataFromPos( --n );
@@ -1902,8 +1918,11 @@ Size Menu::ImplCalcSize( Window* pWin )
                 if ( nTextWidth > nMaxTextWidth )
                     nMaxTextWidth = nTextWidth;
                 long nTextHeight = pWin->GetTextHeight();
-                if ( nTextHeight > pData->aSz.Height() )
-                    pData->aSz.Height() = nTextHeight;
+
+                pData->aSz.Height() = std::max( std::max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight );
+
+//                if ( nTextHeight > pData->aSz.Height() )
+//                    pData->aSz.Height() = nTextHeight;
 
                 if ( bIsMenuBar )
                 {
@@ -1927,8 +1946,11 @@ Size Menu::ImplCalcSize( Window* pWin )
             {
                 if ( nFontHeight > nMaxAccWidth )
                     nMaxAccWidth = nFontHeight;
-                if ( nFontHeight > pData->aSz.Height() )
-                    pData->aSz.Height() = nFontHeight;
+
+                pData->aSz.Height() = std::max( std::max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight );
+
+//                if ( nFontHeight > pData->aSz.Height() )
+//                    pData->aSz.Height() = nFontHeight;
             }
 
             pData->aSz.Height() += EXTRAITEMHEIGHT; // Etwas mehr Abstand:
