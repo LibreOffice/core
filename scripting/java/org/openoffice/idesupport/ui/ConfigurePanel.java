@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurePanel.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:17 $
+ *  last change: $Author: toconnor $ $Date: 2003-06-04 13:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,11 +98,12 @@ public class ConfigurePanel extends JPanel {
     public static final String DIALOG_TITLE =
         "Choose What to Export as Scripts";
 
-    public ConfigurePanel(String basedir, Vector classpath, Document doc) {
+    public ConfigurePanel(String basedir, Vector classpath,
+        ParcelDescriptor descriptor) {
 
         this.basedir = new File(basedir);
         this.classpath = classpath;
-        this.descriptor = new ParcelDescriptor(doc);
+        this.descriptor = descriptor;
         initUI();
     }
 
@@ -116,7 +117,8 @@ public class ConfigurePanel extends JPanel {
         initUI();
     }
 
-    public void reload(String basedir, Vector classpath, Document doc) {
+    public void reload(String basedir, Vector classpath,
+        ParcelDescriptor descriptor) {
 
         if (basedir != null)
             this.basedir = new File(basedir);
@@ -124,8 +126,8 @@ public class ConfigurePanel extends JPanel {
         if (classpath != null)
             this.classpath = classpath;
 
-        if (doc != null) {
-            descriptor = new ParcelDescriptor(doc);
+        if (descriptor != null) {
+            descriptor = descriptor;
         }
 
         methodPanel.reload(this.basedir, this.classpath,
@@ -150,10 +152,10 @@ public class ConfigurePanel extends JPanel {
         scriptPanel.reload(descriptor.getScriptEntries());
     }
 
-    public Document getConfiguration() throws Exception {
+    public ParcelDescriptor getConfiguration() throws Exception {
         Enumeration scripts = scriptPanel.getScriptEntries();
         descriptor.setScriptEntries(scripts);
-        return descriptor.getDocument();
+        return descriptor;
     }
 
     private void initUI() {

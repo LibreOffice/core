@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolder.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-24 12:53:10 $
+ *  last change: $Author: toconnor $ $Date: 2003-06-04 13:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,10 +134,13 @@ public class ParcelFolder extends DataFolder {
             ParcelFolderCookie cookie =
                 (ParcelFolderCookie)pf.getCookie(ParcelFolderCookie.class);
             String s = cookie.getClasspath();
-            if (s != null)
+            if (s != null) {
                 classpath = s;
-            else
+            }
+            else {
                 classpath = ".";
+                cookie.setClasspath(classpath);
+            }
         }
 
         public File getTargetDir() {

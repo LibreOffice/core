@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolderSupport.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-24 12:53:09 $
+ *  last change: $Author: toconnor $ $Date: 2003-06-04 13:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,54 +102,55 @@ import org.openoffice.idesupport.xml.ParcelDescriptor;
 
 public class ParcelFolderSupport implements ParcelFolderCookie
 {
-    protected ParcelFolder pf;
+    protected ParcelFolder parcelFolder;
     private ConfigurePanel configuror = null;
+    private ParcelDescriptor descriptor = null;
 
-    public ParcelFolderSupport(ParcelFolder pf) {
-        this.pf = pf;
+    public ParcelFolderSupport(ParcelFolder parcelFolder) {
+        this.parcelFolder = parcelFolder;
     }
 
     public String getClasspath() {
-        FileObject primary = pf.getPrimaryFile();
-
-        File contents = FileUtil.toFile(
-            primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
-
-        try {
-            ParcelDescriptor pd = new ParcelDescriptor(
-                new File(contents, ParcelZipper.PARCEL_DESCRIPTOR_XML));
-
-            return pd.getLanguageProperty("classpath");
+        if (descriptor == null) {
+            try {
+                descriptor = getParcelDescriptor();
+            }
+            catch (IOException ioe) {
+                ErrorManager.getDefault().notify(ioe);
+                return null;
+            }
         }
-        catch (IOException ioe) {
-            ErrorManager.getDefault().notify(ioe);
-        }
-        return "";
+        return descriptor.getLanguageProperty("classpath");
     }
 
     public void setClasspath(String value) {
-        FileObject primary = pf.getPrimaryFile();
-
-        File contents = FileUtil.toFile(
-            primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
-
         try {
-            ParcelDescriptor pd = new ParcelDescriptor(
-                new File(contents, ParcelZipper.PARCEL_DESCRIPTOR_XML));
-
-            pd.setLanguageProperty("classpath", value);
-            pd.write();
+            if (descriptor == null) {
+                descriptor = getParcelDescriptor();
+            }
+            descriptor.setLanguageProperty("classpath", value);
+            descriptor.write();
         }
         catch (IOException ioe) {
             ErrorManager.getDefault().notify(ioe);
         }
+    }
+
+    private ParcelDescriptor getParcelDescriptor() throws IOException {
+        FileObject primary = parcelFolder.getPrimaryFile();
+
+        File contents = FileUtil.toFile(
+            primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
+
+        return new ParcelDescriptor(
+                new File(contents, ParcelZipper.PARCEL_DESCRIPTOR_XML));
     }
 
     public void generate() {
         ParcelFolder.ParcelFolderNode node =
-            (ParcelFolder.ParcelFolderNode)pf.getNodeDelegate();
+            (ParcelFolder.ParcelFolderNode)parcelFolder.getNodeDelegate();
 
-        FileObject parcelBase = pf.getPrimaryFile();
+        FileObject parcelBase = parcelFolder.getPrimaryFile();
         FileObject contentsBase =
             parcelBase.getFileObject(ParcelZipper.CONTENTS_DIRNAME);
 
@@ -158,13 +159,14 @@ public class ParcelFolderSupport implements ParcelFolderCookie
 
         // The Location property is not displayed so just
         // use the Parcel Recipe directory as the target directory
-        File targetDir = FileUtil.toFile(pf.getPrimaryFile());
+        File targetDir = FileUtil.toFile(parcelFolder.getPrimaryFile());
         File targetfile = new File(targetDir, File.separator +
             parcelBase.getName() + "." + ParcelZipper.PARCEL_EXTENSION);
 
         boolean proceed = configure();
-        if (proceed == false)
+        if (proceed == false) {
             return;
+        }
 
         final OutputWriter out =
             ParcelSupport.getOutputWindowWriter(parcelDir.getName() + " (generating)");
@@ -174,8 +176,9 @@ public class ParcelFolderSupport implements ParcelFolderCookie
             out.println("\nGENERATION SUCCESSFUL.");
             out.println("\nRight click on the generated parcel to deploy it");
 
-            if (targetDir.equals(parcelDir))
+            if (targetDir.equals(parcelDir)) {
                 parcelBase.refresh(true);
+            }
         }
         catch (IOException ioe) {
             out.println("GENERATION FAILED: reason: " + ioe.getClass().getName() + ": "+ ioe.getMessage());
@@ -191,26 +194,31 @@ public class ParcelFolderSupport implements ParcelFolderCookie
 
     public boolean configure() {
 
-        FileObject primary = pf.getPrimaryFile();
+        FileObject primary = parcelFolder.getPrimaryFile();
 
         File contents = FileUtil.toFile(
             primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
-
-        File parcelDescriptor = new File(contents,
-            ParcelZipper.PARCEL_DESCRIPTOR_XML);
 
         Vector classpath = getConfigureClasspath();
         classpath.addElement(contents.getAbsolutePath());
 
         try {
-            if (configuror == null)
-                configuror = new ConfigurePanel(
-                    contents.getAbsolutePath(), classpath);
-            else
-                configuror.reload(contents.getAbsolutePath(), classpath);
+            if (descriptor == null) {
+                descriptor = getParcelDescriptor();
+            }
+
+            if (configuror == null) {
+                configuror = new ConfigurePanel(contents.getAbsolutePath(),
+                    classpath, descriptor);
+            }
+            else {
+                configuror.reload(contents.getAbsolutePath(), classpath,
+                    descriptor);
+            }
         }
         catch (IOException ioe) {
             ErrorManager.getDefault().notify(ioe);
+            return false;
         }
 
         DialogDescriptor dd = new DialogDescriptor(configuror,
@@ -221,9 +229,8 @@ public class ParcelFolderSupport implements ParcelFolderCookie
 
         if (dd.getValue() == DialogDescriptor.OK_OPTION) {
             try {
-                Document doc = configuror.getConfiguration();
-                FileOutputStream fos = new FileOutputStream(parcelDescriptor);
-                XMLUtil.write(doc, fos, "");
+                descriptor = configuror.getConfiguration();
+                descriptor.write();
             }
             catch (Exception e) {
                 ErrorManager.getDefault().notify(e);
