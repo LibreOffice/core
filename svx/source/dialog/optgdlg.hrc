@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:27:42 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,28 +58,12 @@
  *
  *
  ************************************************************************/
-#ifndef _OFA_OPTGDLG_HRC
-#define _OFA_OPTGDLG_HRC
+#ifndef _SVX_OPTGDLG_HRC
+#define _SVX_OPTGDLG_HRC
 
 #include <svtools/controldims.hrc>
 
-// TabPage Sonstiges -----------------------------------------------------
-
-#define GB_TWOFIGURE            20
-#define NF_YEARVALUE            21
-#define FT_TO                   22
-#define FT_INTERPRET            23
-#define FL_HELPAGENT            120
-#define CB_HELPAGENT            121
-#define PB_HELPAGENT_RESET      122
-#define FT_HELPAGENT_TIME       123
-#define ED_HELPAGENT_TIME       124
-#define FT_HELPAGENT_RESET      125
-#define FL_HELPFORMATTING       126
-#define FT_STYLESHEET           127
-#define LB_STYLESHEET           128
-
-// defines for positions and sizes
+// defines for positions and sizes ---------------------------------------
 
 #define WHOLE_WIDTH             248
 #define EDIT_WIDTH              25
@@ -97,62 +81,20 @@
 #define ROWSPACE                RSC_SP_CTRL_DESC_Y
 #define ROW0                    3
 #define ROW1                    (ROW0+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW2                    (ROW1)
-#define ROW3                    (ROW2+RSC_CD_TEXTBOX_HEIGHT+ROWSPACE)
-#define ROW4                    (ROW3+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW5                    (ROW4+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
-#define ROW6                    (ROW5+RSC_CD_TEXTBOX_HEIGHT+ROWSPACE)
-#define ROW7                    (ROW6+RSC_CD_PUSHBUTTON_HEIGHT+ROWSPACE)
-#define ROW8                    (ROW7+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW9                    (ROW8+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
-#define ROW10                   (ROW9+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW11                   (ROW10+RSC_CD_TEXTBOX_HEIGHT+ROWSPACE)
-#define ROW12                    (ROW11+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW2                    (ROW1+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#define ROW3                    (ROW2+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#define ROW4                    (ROW3+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#define ROW5                    (ROW4+RSC_CD_PUSHBUTTON_HEIGHT+ROWSPACE)
+#define ROW6                    (ROW5+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
+#define ROW7                    (ROW6+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW8                    (ROW7+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#define ROW9                    (ROW8+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW10                   (ROW9+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#define ROW11                   (ROW10+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 
-#define DIFF(v1,v2)             (v2-v1)
+#define DIFF(v1,v2)                     (v2-v1)
 #define OFFS_TEXTBOX_FIXEDTEXT(base)    (base+(RSC_CD_TEXTBOX_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
-#define OFFS_PUSHBUTTON_FIXEDTEXT(base) (base+(RSC_CD_PUSHBUTTON_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
-
-
-// TabPage Ansicht -------------------------------------------------------
-
-#define GB_3D                   1
-#define CB_3D_OPENGL            2
-#define CB_3D_OPENGL_FASTER     3
-#define CB_3D_DITHERING         4
-#define CB_3D_SHOWFULL          5
-
-#define FL_USERINTERFACE        14
-#define FT_WINDOWSIZE           17
-#define MF_WINDOWSIZE           18
-
-#define FL_MOUSE                20
-#define LB_MOUSEPOS             21
-#define FT_MOUSEPOS             22
-#define FT_MOUSEMIDDLE          23
-#define LB_MOUSEMIDDLE          24
-
-#define CB_MENU_ICONS           30
-#define FL_MENU                 31
-#define FL_FONTLISTS            32
-
-#define GB_WORKINGSET           33
-#define BTN_DOCVIEW             34
-#define BTN_OPENWIN             35
-#define LB_ICONSIZE             37
-#define FT_ICONSIZE             38
-#define CB_SYSTEM_FONT          39
-
-#define CB_FONT_SHOW            44
-#define CB_SHOW_INACTIVE        45
-#define CB_FONT_HISTORY         46
-
-#define CB_FONTANTIALIASING     47
-#define NF_AA_POINTLIMIT        48
-#define FT_POINTLIMIT_LABEL     49
-#define FT_POINTLIMIT_UNIT      50
-
-// defines for positions and sizes
+//#define OFFS_PUSHBUTTON_FIXEDTEXT(base)   (base+(RSC_CD_PUSHBUTTON_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
 
 #define ROW_MF_SCALING          (13)
 #define ROW_LB_BIG              (ROW_MF_SCALING+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
@@ -167,47 +109,95 @@
 #define ROW_CB_FONT_SHOW        (ROW_FL_FONTLISTS + RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 #define ROW_CB_FONT_HISTORY     (ROW_CB_FONT_SHOW + RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 
+// tabpage general -------------------------------------------------------
 
-// TabPage Languages -------------------------------------------------------
+#define FL_HELP                     10
+#define CB_TOOLTIP                  11
+#define CB_EXTHELP                  12
+#define CB_HELPAGENT                13
+#define PB_HELPAGENT_RESET          14
+#define FT_HELPFORMAT               15
+#define LB_HELPFORMAT               16
 
-#define GB_UI_LANG              1
-//#define FT_UI_LANG              2
-//#define LB_UI_LANG              3
-#define GB_LINGU_LANG           4
-#define FT_WEST_LANG            5
-#define LB_WEST_LANG            6
-#define FT_ASIAN_LANG           7
-#define LB_ASIAN_LANG           8
-#define FT_COMPLEX_LANG         9
-#define LB_COMPLEX_LANG         10
-#define CB_CURRENT_DOC          11
-#define FL_ASIANSUPPORT         12
-#define CB_ASIANSUPPORT         13
-#define FL_CTLSUPPORT           14
-#define CB_CTLSUPPORT           15
-#define FT_LOCALESETTING        16
-#define LB_LOCALESETTING        17
-#define FT_CURRENCY             18
-#define LB_CURRENCY             19
-#define FI_WEST_LANG            20
-#define FI_ASIAN_LANG           21
-#define FI_COMPLEX_LANG         22
-#define FI_ASIANSUPPORT         23
-#define FI_CTLSUPPORT           24
-#define FI_LOCALESETTING        25
-#define FI_CURRENCY             26
-#define FT_DECIMALSEPARATOR     27
-#define CB_DECIMALSEPARATOR     28
+#define FL_FILEDLG                  20
+#define CB_FILEDLG                  21
 
-#define FL_FILEDLG              53
-#define CB_FILEDLG              54
-#define FT_GRAPHICCACHE_UNIT        55
-#define FT_GRAPHICOBJECTCACHE_UNIT  56
-#define FT_GRAPHICOBJECTTIME_UNIT   57
-#define FT_HELPAGENT_TIME_UNIT      58
-#define FL_DOCSTATUS                59
-#define CB_DOCSTATUS                60
-#endif // #ifndef _OFA_OPTGDLG_HRC
+#define FL_DOCSTATUS                30
+#define CB_DOCSTATUS                31
+
+#define FL_TWOFIGURE                40
+#define FT_INTERPRET                41
+#define NF_YEARVALUE                42
+#define FT_TOYEAR                   43
+
+// tabpage view ----------------------------------------------------------
+
+#define FL_3D                       10
+#define CB_3D_OPENGL                11
+#define CB_3D_OPENGL_FASTER         12
+#define CB_3D_DITHERING             13
+#define CB_3D_SHOWFULL              14
+
+#define FL_USERINTERFACE            20
+#define FT_WINDOWSIZE               21
+#define MF_WINDOWSIZE               22
+
+#define FL_MOUSE                    30
+#define LB_MOUSEPOS                 31
+#define FT_MOUSEPOS                 32
+#define FT_MOUSEMIDDLE              33
+#define LB_MOUSEMIDDLE              34
+
+#define CB_MENU_ICONS               40
+#define FL_MENU                     41
+#define FL_FONTLISTS                42
+
+#define FL_WORKINGSET               50
+#define BTN_DOCVIEW                 51
+#define BTN_OPENWIN                 52
+#define LB_ICONSIZE                 53
+#define FT_ICONSIZE                 54
+#define CB_SYSTEM_FONT              55
+
+#define CB_FONT_SHOW                60
+#define CB_SHOW_INACTIVE            61
+#define CB_FONT_HISTORY             62
+
+#define CB_FONTANTIALIASING         63
+#define NF_AA_POINTLIMIT            64
+#define FT_POINTLIMIT_LABEL         65
+#define FT_POINTLIMIT_UNIT          66
+
+// tabpage languages -----------------------------------------------------
+
+#define FL_UI_LANG                  10
+#define FL_LINGU_LANG               11
+#define FT_WEST_LANG                12
+#define LB_WEST_LANG                13
+#define FT_ASIAN_LANG               14
+#define LB_ASIAN_LANG               15
+#define FT_COMPLEX_LANG             16
+#define LB_COMPLEX_LANG             17
+#define CB_CURRENT_DOC              18
+#define FL_ASIANSUPPORT             19
+#define CB_ASIANSUPPORT             20
+#define FL_CTLSUPPORT               21
+#define CB_CTLSUPPORT               22
+#define FT_LOCALESETTING            23
+#define LB_LOCALESETTING            24
+#define FT_CURRENCY                 25
+#define LB_CURRENCY                 26
+#define FI_WEST_LANG                27
+#define FI_ASIAN_LANG               28
+#define FI_COMPLEX_LANG             29
+#define FI_ASIANSUPPORT             30
+#define FI_CTLSUPPORT               31
+#define FI_LOCALESETTING            32
+#define FI_CURRENCY                 33
+#define FT_DECIMALSEPARATOR         34
+#define CB_DECIMALSEPARATOR         35
+
+#endif // #ifndef _SVX_OPTGDLG_HRC
 
 // ******************************************************************* EOF
 
