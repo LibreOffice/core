@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-23 13:46:58 $
+ *  last change: $Author: pl $ $Date: 2001-06-07 08:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1463,10 +1463,7 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
             nNewDragAction = DNDConstants::ACTION_NONE;
         nNewDragAction &= m_nSourceActions;
         if( nNewDragAction != m_nUserDragAction )
-        {
-            m_nUserDragAction = nNewDragAction;
-            setCursor( getDefaultCursor( m_nUserDragAction ), m_aDropWindow, m_nDragTimestamp );
-        }
+            setCursor( getDefaultCursor( nNewDragAction ), m_aDropWindow, m_nDragTimestamp );
 
         DragSourceDragEvent dsde;
         dsde.Source             = static_cast< OWeakObject* >(this);
