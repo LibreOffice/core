@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:23:08 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 11:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include <osl/mutex.h>
 #include <osl/signal.h>
 #include <osl/process.h>
+#include <osl/thread.h>
 #include <rtl/digest.h>
 
 
@@ -358,9 +359,12 @@ static int fputs_xml( const char *string, FILE *stream )
 
 /* Create intermediate files and run crash reporter */
 
+#define REPORTENV_PARAM     "-crashreportenv:"
+
 static int ReportCrash( int Signal )
 {
     static sal_Bool bCrashReporterExecuted = sal_False;
+    sal_Bool        bNoUI = sal_False;
 
     sal_uInt32  argi;
     sal_uInt32  argc;
@@ -377,6 +381,39 @@ static int ReportCrash( int Signal )
                 rtl_uString_release( ustrCommandArg );
                 return -1;
             }
+            else if ( 0 == rtl_ustr_ascii_compare( rtl_uString_getStr( ustrCommandArg ), "-autocrashreport" ) )
+            {
+                bNoUI = sal_True;
+            }
+            else if ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength(
+                rtl_uString_getStr( ustrCommandArg ), rtl_uString_getLength( ustrCommandArg ),
+                REPORTENV_PARAM, strlen(REPORTENV_PARAM) )
+                )
+            {
+                rtl_uString *ustrEnvironment = NULL;
+                rtl_String *strEnv = NULL;
+
+                rtl_uString_newFromStr( &ustrEnvironment, rtl_uString_getStr( ustrCommandArg ) + strlen(REPORTENV_PARAM) );
+
+                if ( ustrEnvironment )
+                {
+                    rtl_uString2String(
+                        &strEnv,
+                        rtl_uString_getStr( ustrEnvironment ), rtl_uString_getLength( ustrEnvironment ),
+                        osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS
+                        );
+
+                    if ( strEnv )
+                    {
+                        putenv( rtl_string_getStr( strEnv ) );
+                        rtl_string_release( strEnv );
+                    }
+
+                    rtl_uString_release( ustrEnvironment );
+                }
+
+            }
+
         }
     }
 
@@ -550,25 +587,27 @@ static int ReportCrash( int Signal )
 #if defined( LINUX )
                 if ( pXMLTempName && pChecksumTempName && pStackTempName )
                     snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
-                        "crash_report -p %d -s %d -xml %s -chksum %s -stack %s",
+                        "crash_report -p %d -s %d -xml %s -chksum %s -stack %s%s",
                         getpid(),
                         Signal,
                         pXMLTempName,
                         pChecksumTempName,
-                        pStackTempName );
+                        pStackTempName,
+                        bNoUI ? " -noui" : "" );
 #elif defined ( SOLARIS )
                 if ( pXMLTempName && pChecksumTempName )
                     snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
-                        "crash_report -p %d -s %d -xml %s -chksum %s",
+                        "crash_report -p %d -s %d -xml %s -chksum %s%s",
                         getpid(),
                         Signal,
                         pXMLTempName,
-                        pChecksumTempName );
+                        pChecksumTempName,
+                        bNoUI ? " -noui" : "" );
 #endif
 
 #else /* defined INCLUDE BACKTRACE */
                 snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
-                "crash_report -p %d -s %d", getpid(), Signal );
+                "crash_report -p %d -s %d%s", getpid(), Signal, bNoUI ? " -noui" : "" );
 #endif /* defined INCLUDE BACKTRACE */
 
 
