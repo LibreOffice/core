@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-02 13:38:54 $
+ *  last change: $Author: sb $ $Date: 2002-07-08 14:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,6 +630,13 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
             aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, FALSE );
             aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
             aPopup.EnableItem( SID_BASICIDE_HIDECURPAGE, FALSE );
+        }
+
+        if (StarBASIC::IsRunning())
+        {
+            aPopup.EnableItem(SID_BASICIDE_DELETECURRENT, false);
+            aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, false);
+            aPopup.EnableItem(SID_BASICIDE_MODULEDLG, false);
         }
 
         if ( pCurrentLib )
