@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:49:52 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(
 {
     //the module may not be loaded
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    SW_MOD()->Load();
+    SwDLL::Init();
     static Reference< uno::XInterface > xAText = (cppu::OWeakObject*)new SwXAutoTextContainer();;
     return xAText;
 }
