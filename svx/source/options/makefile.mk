@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+#   last change: $Author: os $ $Date: 2000-11-21 16:21:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,10 +98,8 @@ CXXFILES = \
         optsave.cxx		\
         adritem.cxx		\
         optlingu.cxx    \
-        optmail.cxx		\
         optgrid.cxx		\
         optinet2.cxx	\
-        optldap.cxx		\
         ldapdlg.cxx		\
         multipat.cxx	\
         multifil.cxx	\
@@ -114,10 +112,8 @@ SRCFILES =  \
         optsave.src		\
         optpath.src		\
         optlingu.src	\
-        optmail.src		\
         optgrid.src		\
         optinet2.src	\
-        optldap.src		\
         multipat.src    \
         optextbr.src
 
@@ -130,11 +126,8 @@ SLOFILES=	\
         $(SLO)$/optsave.obj	\
         $(SLO)$/adritem.obj	\
         $(SLO)$/optlingu.obj \
-        $(SLO)$/optmail.obj	\
         $(SLO)$/optgrid.obj	\
         $(SLO)$/optinet2.obj	\
-        $(SLO)$/optldap.obj	\
-        $(SLO)$/ldapdlg.obj	\
         $(SLO)$/multipat.obj    \
         $(SLO)$/multifil.obj    \
         $(SLO)$/optextbr.obj
