@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:27:56 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4469,7 +4469,19 @@ SvStream& operator<<(SvStream& rOut, const SdrObject& rObj)
 {
     DBG_ASSERT(!rObj.IsNotPersistent(),"operator<<(SdrObject): Ein nicht persistentes Zeichenobjekts wird gestreamt");
     SdrObjIOHeader aHead(rOut,STREAM_WRITE,&rObj);
-    rObj.WriteData(rOut);
+
+    if(rObj.ISA(SdrVirtObj))
+    {
+        // #108784#
+        // force to write a naked SdrObj
+        aHead.nIdentifier = OBJ_NONE;
+        rObj.SdrObject::WriteData(rOut);
+    }
+    else
+    {
+        rObj.WriteData(rOut);
+    }
+
     return rOut;
 }
 
