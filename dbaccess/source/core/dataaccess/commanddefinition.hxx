@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2003-07-10 13:02:09 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,8 @@
 #ifndef _DBA_CORE_COMMANDBASE_HXX_
 #include "commandbase.hxx"
 #endif
-#ifndef _DBA_CORE_CONTAINERELEMENT_HXX_
-#include "containerelement.hxx"
-#endif
 #ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #include <comphelper/propertycontainer.hxx>
-#endif
-#ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
-#include "configurationflushable.hxx"
 #endif
 #ifndef _DBA_REGHELPER_HXX_
 #include "dba_reghelper.hxx"
@@ -80,26 +74,31 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
-
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
 #include <com/sun/star/sdbcx/XRename.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
 #endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
-#include <comphelper/broadcasthelper.hxx>
+#ifndef _DBA_CORE_DATASETTINGS_HXX_
+#include "datasettings.hxx"
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef DBA_CONTENTHELPER_HXX
+#include "ContentHelper.hxx"
+#endif
+#ifndef DBA_COREDATAACESS_COMPONENTDEFINITION_HXX
+#include "ComponentDefinition.hxx"
+#endif
+
 
 //........................................................................
 namespace dbaccess
@@ -109,59 +108,47 @@ namespace dbaccess
 //=========================================================================
 //= OCommandDefinition - a database "document" which describes a query
 //=========================================================================
-
-typedef ::cppu::WeakImplHelper3 <   ::com::sun::star::lang::XUnoTunnel
-                                ,   ::com::sun::star::lang::XServiceInfo
-                                ,   ::com::sun::star::sdbcx::XRename
+    class OCommandDefinition_Impl : public OComponentDefinition_Impl
+                                  ,public OCommandBase
+    {
+    public:
+    };
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::sdbcx::XRename
                                 >   OCommandDefinition_Base;
+class OCommandDefinition;
+typedef ::comphelper::OPropertyArrayUsageHelper< OCommandDefinition >
+                        OCommandDefinition_PROP;
 
-class OCommandDefinition    :public OCommandDefinition_Base
-                            ,public OCommandBase
-                            ,public OContainerElement
-                            ,public comphelper::OMutexAndBroadcastHelper
-                            ,public ::comphelper::OPropertyContainer
-                            ,public OConfigurationFlushable
-                            ,public ::comphelper::OPropertyArrayUsageHelper< OCommandDefinition >
+
+class OCommandDefinition    :public OComponentDefinition
+                            ,public OCommandDefinition_Base
+                            ,public OCommandDefinition_PROP
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xContainer;
+    virtual ~OCommandDefinition();
 
-protected:
-    ~OCommandDefinition();
-
-private:
-    OCommandDefinition();
-
+    OCommandDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
+        ,const TContentPtr& _pImpl
+        );
 public:
-    // helper class for controlling access privileges
-    class AccessControl
-    {
-        friend class OCommandContainer;
-    private:
-        AccessControl() { }
-    };
-
-    // --------------------------------------------------------------------
-    // some kind of default ctor, accessible for selected classes only
-    OCommandDefinition(AccessControl&);
 
     OCommandDefinition(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
-            const ::rtl::OUString& _rElementName,
-            const ::utl::OConfigurationTreeRoot& _rConfigRoot
+             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer
+            ,const ::rtl::OUString& _rElementName
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+            ,const TContentPtr& _pImpl
         );
 
 // com::sun::star::lang::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
+    DECLARE_TYPEPROVIDER( );
 
 // ::com::sun::star::uno::XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw() { OCommandDefinition_Base::acquire(); }
-    virtual void SAL_CALL release(  ) throw() { OCommandDefinition_Base::release(); }
+    DECLARE_XINTERFACE( )
 
 // ::com::sun::star::lang::XServiceInfo
-    DECLARE_SERVICE_INFO();
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XServiceInfo - static methods
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -172,35 +159,8 @@ public:
     // XRename
     virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::lang::XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::beans::XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-
-// OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
-// OContainerElement
-    virtual void        inserted(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
-        const ::rtl::OUString& _rElementName,
-        const ::utl::OConfigurationTreeRoot& _rConfigRoot);
-
-    virtual void        removed();
-
-    virtual sal_Bool    isContainerElement() const { return m_aConfigurationNode.isValid(); }
-
-protected:
-// OPropertyArrayUsageHelper
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-
-// OConfigurationFlushable
-    void flush_NoBroadcast_NoCommit(  ) throw(::com::sun::star::uno::RuntimeException);
-
-// initialize the members from the current configuration node
-    void initializeFromConfiguration();
-
+    // OPropertySetHelper
+    DECLARE_PROPERTYCONTAINER_DEFAULTS( );
 private:
     // helper
     void registerProperties();
