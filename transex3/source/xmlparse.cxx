@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 12:43:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-18 08:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,6 +549,7 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
         //(*elem)[langid]=pElement;
         (*elem)[ language ]=pElement;
         XMLStrings->insert( XMLHashMap::value_type( id , elem ) );
+        order.push_back( id );
     }else{                                  // Already there
         elem=pos->second;
         //(*elem)[langid]=pElement;
