@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddefld.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:43:03 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,14 @@
 #ifndef _LNKBASE_HXX //autogen
 #include <so3/lnkbase.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
+#ifndef _FLDBAS_HXX
 #include "fldbas.hxx"
+#endif
 
 class SwDoc;
 
@@ -72,7 +79,7 @@ class SwDoc;
     Beschreibung: FieldType fuer DDE
  --------------------------------------------------------------------*/
 
-class SwDDEFieldType : public SwFieldType
+class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
 {
     String aName;
     String aExpansion;
@@ -84,7 +91,8 @@ class SwDDEFieldType : public SwFieldType
     BOOL bCRLFFlag : 1;
     BOOL bDeleted : 1;
 
-    void _RefCntChgd();
+    SW_DLLPRIVATE void _RefCntChgd();
+
 public:
     SwDDEFieldType( const String& rName, const String& rCmd,
                     USHORT = so3::LINKUPDATE_ONCALL );
