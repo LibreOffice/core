@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:50 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabPage RID_SVXPAGE_CONNECTION
     Text = "Verbinder" ;
     Text [ ENGLISH ] = "Connectors" ;
     Text [ english_us ] = "Connector" ;
-    Text [ portuguese_brazilian ] = "Verbinder" ;
+    Text [ portuguese_brazilian ] = "Conector" ;
     Text [ swedish ] = "Förbindelse" ;
     Text [ danish ] = "Forbindelse" ;
     Text [ italian ] = "Connettore" ;
@@ -90,7 +90,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text = "~Typ" ;
         Text [ ENGLISH ] = "~Type" ;
         Text [ english_us ] = "~Type" ;
-        Text [ portuguese_brazilian ] = "~Typ" ;
+        Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ swedish ] = "~Typ" ;
         Text [ danish ] = "Type" ;
         Text [ italian ] = "~Tipo" ;
@@ -100,7 +100,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ portuguese ] = "~Tipo" ;
         Text[ chinese_simplified ] = "ç±»å‹(~T)";
         Text[ russian ] = "Òèï";
-        Text[ polish ] = "Typ";
+        Text[ polish ] = "~Typ";
         Text[ japanese ] = "ç¨®é¡(~T)";
         Text[ chinese_traditional ] = "é¡å‹(~T)";
         Text[ arabic ] = "ÇáäæÚ";
@@ -111,6 +111,9 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ catalan ] = "~Tipus";
         Text[ finnish ] = "~Tyyppi";
         Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "â€®×¡×•×’â€¬";
+        Text[ hindi ] = "~à¤µà¤°à¥à¤—";
     };
     ListBox LB_TYPE
     {
@@ -127,7 +130,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text = "Linienversatz" ;
         Text [ ENGLISH ] = "Delta" ;
         Text [ english_us ] = "Line skew" ;
-        Text [ portuguese_brazilian ] = "Linienversatz" ;
+        Text [ portuguese_brazilian ] = "Inclinação da linha" ;
         Text [ swedish ] = "Linjeförskjutning" ;
         Text [ danish ] = "Linjeforskydning" ;
         Text [ italian ] = "Spostamento linea" ;
@@ -137,7 +140,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ portuguese ] = "Transposição de linhas" ;
         Text[ chinese_simplified ] = "çº¿åç¦»";
         Text[ russian ] = "Íàêëîí ëèíèè";
-        Text[ polish ] = "Przesuniêcie linii";
+        Text[ polish ] = "Przekrzywienie linii";
         Text[ japanese ] = "ç·šã®ãšã‚Œ";
         Text[ chinese_traditional ] = "ç·šåé›¢";
         Text[ arabic ] = "ÊÎÇáİ ÇáÎØæØ";
@@ -148,6 +151,9 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ catalan ] = "Desplaçament de línies";
         Text[ finnish ] = "Viivanosien viistoudet";
         Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¹€à¸‰";
+        Text[ czech ] = "ZkosenÃ­ ÄÃ¡ry";
+        Text[ hebrew ] = "â€®×”×˜×™×ª ×§×•â€¬";
+        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ à¤¤à¤¿à¤°à¤›à¤¾";
     };
     FixedText FT_LINE_1
     {
@@ -156,7 +162,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text = "Linie ~1" ;
         Text [ ENGLISH ] = "Line ~1" ;
         Text [ english_us ] = "Line ~1" ;
-        Text [ portuguese_brazilian ] = "Linie ~1" ;
+        Text [ portuguese_brazilian ] = "Linha ~1" ;
         Text [ swedish ] = "Linje ~1" ;
         Text [ danish ] = "Linje 1" ;
         Text [ italian ] = "Linea ~1" ;
@@ -166,7 +172,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ portuguese ] = "Linha ~1" ;
         Text[ chinese_simplified ] = "çº¿æ¡ ~1";
         Text[ russian ] = "Ëèíèÿ ~1";
-        Text[ polish ] = "Linia 1";
+        Text[ polish ] = "Linia ~1";
         Text[ japanese ] = "ç·š1";
         Text[ chinese_traditional ] = "ç·šæ¢ ~1";
         Text[ arabic ] = "ÇáÎØ 1";
@@ -177,6 +183,9 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ catalan ] = "Línia ~1";
         Text[ finnish ] = "Viivanosa ~1";
         Text[ thai ] = "Line ~1";
+        Text[ czech ] = "ÄŒÃ¡ra 1";
+        Text[ hebrew ] = "â€®×§×• 1â€¬";
+        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ ~1";
     };
     MetricField MTR_FLD_LINE_1
     {
@@ -201,7 +210,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text = "Linie ~2" ;
         Text [ ENGLISH ] = "Line ~2" ;
         Text [ english_us ] = "Line ~2" ;
-        Text [ portuguese_brazilian ] = "Linie ~2" ;
+        Text [ portuguese_brazilian ] = "Linha ~2" ;
         Text [ swedish ] = "Linje ~2" ;
         Text [ danish ] = "Linje 2" ;
         Text [ italian ] = "Linea ~2" ;
@@ -211,7 +220,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ portuguese ] = "Linha ~2" ;
         Text[ chinese_simplified ] = "çº¿æ¡ ~2";
         Text[ russian ] = "Ëèíèÿ ~2";
-        Text[ polish ] = "Linia 2";
+        Text[ polish ] = "Linia ~2";
         Text[ japanese ] = "ç·š2";
         Text[ chinese_traditional ] = "ç·šæ¢ ~2";
         Text[ arabic ] = "ÇáÎØ 2";
@@ -222,6 +231,9 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ catalan ] = "Línia ~2";
         Text[ finnish ] = "Viivanosa ~2";
         Text[ thai ] = "Line ~2";
+        Text[ czech ] = "ÄŒÃ¡ra 2";
+        Text[ hebrew ] = "â€®×§×• 2â€¬";
+        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ ~2";
     };
     MetricField MTR_FLD_LINE_2
     {
@@ -246,7 +258,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text = "Linie ~3" ;
         Text [ ENGLISH ] = "Line ~3" ;
         Text [ english_us ] = "Line ~3" ;
-        Text [ portuguese_brazilian ] = "Linie ~3" ;
+        Text [ portuguese_brazilian ] = "Linha ~3" ;
         Text [ swedish ] = "Linje ~3" ;
         Text [ danish ] = "Linje 3" ;
         Text [ italian ] = "Linea ~3" ;
@@ -256,7 +268,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ portuguese ] = "Linha ~3" ;
         Text[ chinese_simplified ] = "çº¿æ¡ ~3";
         Text[ russian ] = "Ëèíèÿ ~3";
-        Text[ polish ] = "Linia 3";
+        Text[ polish ] = "Linia ~3";
         Text[ japanese ] = "ç·š3";
         Text[ chinese_traditional ] = "ç·šæ¢ ~3";
         Text[ arabic ] = "ÇáÎØ 3";
@@ -267,6 +279,9 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ catalan ] = "Línia ~3";
         Text[ finnish ] = "Viivanosa ~3";
         Text[ thai ] = "Line ~3";
+        Text[ czech ] = "ÄŒÃ¡ra 3";
+        Text[ hebrew ] = "â€®×§×• 3â€¬";
+        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ ~3";
     };
     MetricField MTR_FLD_LINE_3
     {
@@ -291,7 +306,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text = "Linienabstand" ;
         Text [ ENGLISH ] = "Distance" ;
         Text [ english_us ] = "Line spacing" ;
-        Text [ portuguese_brazilian ] = "Linienabstand" ;
+        Text [ portuguese_brazilian ] = "Entrelinhas" ;
         Text [ swedish ] = "Linjeavstånd" ;
         Text [ danish ] = "Linjeafstand" ;
         Text [ italian ] = "Distanza tra le linee" ;
@@ -301,17 +316,20 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ portuguese ] = "Intervalo entre linhas" ;
         Text[ chinese_simplified ] = "çº¿é—´éš”";
         Text[ russian ] = "Èíòåğâàë ìåæäó ëèíèÿìè";
-        Text[ polish ] = "Odstêpy miêdzy liniami";
+        Text[ polish ] = "Odstêp miêdzy liniami";
         Text[ japanese ] = "ç·šé–“éš”";
         Text[ chinese_traditional ] = "ç·šé–“éš”";
         Text[ arabic ] = "ÊÈÇÚÏ ÇáÎØæØ";
         Text[ greek ] = "ÄéÜóôé÷ï";
         Text[ korean ] = "ì„  ê°„ê²©";
-        Text[ turkish ] = "Çizgi aralığı";
+        Text[ turkish ] = "Satır aralığı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Distància entre línies";
         Text[ finnish ] = "Viivan välit";
         Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¸šà¸£à¸£à¸—à¸±à¸”";
+        Text[ czech ] = "Å˜Ã¡dkovÃ¡nÃ­";
+        Text[ hebrew ] = "â€®×¨×™×•×•×— ×©×•×¨×”â€¬";
+        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ à¤•à¥‡ à¤¬à¥€à¤š à¤…à¤‚à¤¤à¤° à¤¦à¥‡à¤¨à¤¾";
     };
     FixedText FT_HORZ_1
     {
@@ -320,7 +338,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text = "Anfang h~orizontal" ;
         Text [ ENGLISH ] = "Start h~orizontal" ;
         Text [ english_us ] = "~Begin horizontal" ;
-        Text [ portuguese_brazilian ] = "H~orizontal 1" ;
+        Text [ portuguese_brazilian ] = "Inicio h~orizontal" ;
         Text [ swedish ] = "Start h~orisontellt" ;
         Text [ danish ] = "Start vandret" ;
         Text [ italian ] = "Inizio ~orizzontale" ;
@@ -330,7 +348,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ portuguese ] = "Início h~orizontal" ;
         Text[ chinese_simplified ] = "èµ·å§‹éƒ¨åˆ†æ˜¯æ°´å¹³æ–¹å‘(~B)";
         Text[ russian ] = "Íà÷àëî ãîğèçîíòàëüíî";
-        Text[ polish ] = "Pocz¹tek poziomo";
+        Text[ polish ] = "~Pocz¹tek poziomo";
         Text[ japanese ] = "æ¨ªç·šã®å§‹ç‚¹(~B)";
         Text[ chinese_traditional ] = "èµ·å§‹æ–¹å‘æ˜¯æ°´å¹³æ–¹å‘(~B)";
         Text[ arabic ] = "ÇáÈÏÇíÉ ÃİŞíÇğ";
@@ -341,6 +359,9 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ catalan ] = "Inici h~oritzontal";
         Text[ finnish ] = "Alussa, ~vaakasuuntaan";
         Text[ thai ] = "~Begin horizontal";
+        Text[ czech ] = "VodorovnÃ½ poÄÃ¡tek";
+        Text[ hebrew ] = "â€®×”×—×œ ××•×¤×§×™â€¬";
+        Text[ hindi ] = "~à¤¸à¤®à¤¤à¤² à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
     };
     MetricField MTR_FLD_HORZ_1
     {
@@ -365,7 +386,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text = "Ende ho~rizontal" ;
         Text [ ENGLISH ] = "End ho~rizontal" ;
         Text [ english_us ] = "End ~horizontal" ;
-        Text [ portuguese_brazilian ] = "Ho~rizontal 2" ;
+        Text [ portuguese_brazilian ] = "Fim hori~zontal" ;
         Text [ swedish ] = "Slut ho~risontellt" ;
         Text [ danish ] = "Slut vandret" ;
         Text [ italian ] = "Fine o~rizzontale" ;
@@ -375,7 +396,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ portuguese ] = "Fim ho~rizontal" ;
         Text[ chinese_simplified ] = "ç»“å°¾ä¸ºæ°´å¹³æ–¹å‘(~H)";
         Text[ russian ] = "Êîíåö ãîğèçîíòàëüíî";
-        Text[ polish ] = "Koniec poziomo";
+        Text[ polish ] = "Ko~niec poziomo";
         Text[ japanese ] = "æ¨ªç·šã®çµ‚ç‚¹(~H)";
         Text[ chinese_traditional ] = "çµå°¾æ˜¯æ°´å¹³æ–¹å‘(~H)";
         Text[ arabic ] = "ÇáäåÇíÉ ÃİŞíÇğ";
@@ -386,6 +407,9 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ catalan ] = "Fi ~horitzontal";
         Text[ finnish ] = "~Lopussa, vaa~kasuuntaan";
         Text[ thai ] = "End ~horizontal";
+        Text[ czech ] = "VodorovnÃ½ konec";
+        Text[ hebrew ] = "â€®×§×¦×” ××•×¤×§×™â€¬";
+        Text[ hindi ] = "à¤¸~à¤®à¤¤à¤² à¤…à¤‚à¤¤";
     };
     MetricField MTR_FLD_HORZ_2
     {
@@ -410,7 +434,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text = "Anfang ~vertikal" ;
         Text [ ENGLISH ] = "Start ~vertical" ;
         Text [ english_us ] = "Begin ~vertical" ;
-        Text [ portuguese_brazilian ] = "~Vertikal 1" ;
+        Text [ portuguese_brazilian ] = "Inicio ~vertical" ;
         Text [ swedish ] = "Start ~vertikalt" ;
         Text [ danish ] = "Start lodret" ;
         Text [ italian ] = "Inizio ~verticale" ;
@@ -420,7 +444,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ portuguese ] = "Início ~vertical" ;
         Text[ chinese_simplified ] = "èµ·å§‹éƒ¨åˆ†æ˜¯å‚ç›´æ–¹å‘(~V)";
         Text[ russian ] = "Íà~÷àëî âåğòèêàëüíî";
-        Text[ polish ] = "Pocz¹tek pionowo";
+        Text[ polish ] = "P~ocz¹tek pionowo";
         Text[ japanese ] = "ç¸¦ç·šã®å§‹ç‚¹(~V)";
         Text[ chinese_traditional ] = "èµ·å§‹æ–¹å‘æ˜¯å‚ç›´æ–¹å‘(~V)";
         Text[ arabic ] = "ÇáÈÏÇíÉ ÑÃÓíÇğ";
@@ -431,6 +455,9 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ catalan ] = "Inici ~vertical";
         Text[ finnish ] = "Alussa, ~pystysuuntaan";
         Text[ thai ] = "Begin ~vertical";
+        Text[ czech ] = "SvislÃ½ poÄÃ¡tek";
+        Text[ hebrew ] = "â€®×”×—×œ ×× ×›×™â€¬";
+        Text[ hindi ] = "~à¤²à¤®à¥à¤¬ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
     };
     MetricField MTR_FLD_VERT_1
     {
@@ -455,7 +482,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text = "Ende v~ertikal" ;
         Text [ ENGLISH ] = "End v~ertical" ;
         Text [ english_us ] = "~End vertical" ;
-        Text [ portuguese_brazilian ] = "V~ertikal 2" ;
+        Text [ portuguese_brazilian ] = "Fim ~vertical" ;
         Text [ swedish ] = "Slut v~ertikalt" ;
         Text [ danish ] = "Slut lodret" ;
         Text [ italian ] = "~Fine verticale" ;
@@ -465,7 +492,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ portuguese ] = "Fim v~ertical" ;
         Text[ chinese_simplified ] = "ç»“å°¾éƒ¨åˆ†æ˜¯å‚ç›´æ–¹å‘(~E)";
         Text[ russian ] = "Êîíåö âåğòèêàëüíî";
-        Text[ polish ] = "Koniec pionowo";
+        Text[ polish ] = "~Koniec pionowo";
         Text[ japanese ] = "ç¸¦ç·šã®çµ‚ç‚¹(~E)";
         Text[ chinese_traditional ] = "çµå°¾éƒ¨åˆ†æ˜¯å‚ç›´æ–¹å‘(~E)";
         Text[ arabic ] = "ÇáäåÇíÉ ÑÃÓíÇğ";
@@ -476,6 +503,9 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ catalan ] = "~Fi vertical";
         Text[ finnish ] = "Lopussa, pyst~ysuuntaan";
         Text[ thai ] = "~End vertical";
+        Text[ czech ] = "SvislÃ½ konec";
+        Text[ hebrew ] = "â€®×§×¦×” ×× ×›×™â€¬";
+        Text[ hindi ] = "à¤²à¤®à¥à¤¬ ~à¤…à¤‚à¤¤";
     };
     MetricField MTR_FLD_VERT_2
     {
@@ -515,13 +545,16 @@ TabPage RID_SVXPAGE_CONNECTION
         QuickHelpText[ polish ] = "Podgl¹d";
         QuickHelpText[ portuguese_brazilian ] = "Preview";
         QuickHelpText[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼";
-        QuickHelpText[ korean ] = "ë¯¸ë¦¬ë³´ê¸°";
+        QuickHelpText[ korean ] = "ë¯¸ë¦¬ ë³´ê¸°";
         QuickHelpText[ chinese_simplified ] = "é¢„è§†";
         QuickHelpText[ chinese_traditional ] = "é è¦½";
-        QuickHelpText[ turkish ] = "Preview";
+        QuickHelpText[ turkish ] = "Önizleme";
         QuickHelpText[ arabic ] = "Preview";
         QuickHelpText[ catalan ] = "Previsualitza";
         QuickHelpText[ thai ] = "Preview";
+        QuickHelpText[ czech ] = "NÃ¡hled";
+        QuickHelpText[ hebrew ] = "Vorschau";
+        QuickHelpText[ hindi ] = "à¤ªà¥‚à¤°à¥à¤µà¤¦à¥ƒà¤¶à¥à¤¯";
     };
     Text[ chinese_simplified ] = "è¿æ¥ç¬¦";
     Text[ russian ] = "Ñîåäèíèòåëüíàÿ ëèíèÿ";
@@ -536,8 +569,20 @@ TabPage RID_SVXPAGE_CONNECTION
     Text[ catalan ] = "Connector";
     Text[ finnish ] = "Yhdysviiva";
     Text[ thai ] = "à¸•à¸±à¸§à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­";
+    Text[ czech ] = "Spojnice";
+    Text[ hebrew ] = "â€®××—×‘×¨â€¬";
+    Text[ hindi ] = "à¤•à¤¨à¥‡à¤•à¥à¤Ÿà¤°";
 };
  // ******************************************************************* EOF
+
+
+
+
+
+
+
+
+
 
 
 
