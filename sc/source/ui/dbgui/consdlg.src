@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:53:07 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "consdlg.hrc"
 ModelessDialog RID_SCDLG_CONSOLIDATE
 {
@@ -689,7 +688,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ dutch ] = "~Consolideringsbereik" ;
         Text [ spanish ] = "Áreas de consolidación" ;
         Text [ english_us ] = "~Consolidation ranges" ;
-        Text[ chinese_simplified ] = "åˆå¹¶è®¡ç®—åŒºåŸŸ(~C)";
+        Text[ chinese_simplified ] = "åˆå¹¶è®¡ç®—æ•°æ®åŒºåŸŸ";
         Text[ russian ] = "Îáëàñòè îáúåäèíåíèÿ";
         Text[ polish ] = "~Obszary konsolidacji";
         Text[ japanese ] = "çµ±åˆç¯„å›²(~C)";
@@ -725,7 +724,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ dutch ] = "~Brongegevensbereik" ;
         Text [ spanish ] = "~Área de datos fuente" ;
         Text [ english_us ] = "~Source data range" ;
-        Text[ chinese_simplified ] = "æºæ•°æ®åŒºåŸŸ(~S)";
+        Text[ chinese_simplified ] = "æºæ•°æ®åŒºåŸŸ";
         Text[ russian ] = "Îáëàñòü èñõîäíûõ äàííûõ";
         Text[ polish ] = "O~bszar danych Ÿród³owych";
         Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ç¯„å›²(~S)";
@@ -835,7 +834,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ spanish ] = "~Títulos de columna" ;
         Text [ english_us ] = "C~olumn labels" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "åˆ—æ ‡é¢˜(~O)";
+        Text[ chinese_simplified ] = "åˆ—æ ‡ç­¾";
         Text[ russian ] = "Çàãîëîâêè ñòîëáöîâ";
         Text[ polish ] = "~Nag³ówki kolumn";
         Text[ japanese ] = "åˆ—ã®é …ç›®æ¬„(~O)";
