@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-02 11:33:09 $
+#   last change: $Author: rt $ $Date: 2004-03-04 17:19:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,7 +127,7 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-.IF "$(BSCLIENT)"!=""
+.IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 
@@ -144,7 +144,7 @@ EXPORT$(TNR)_PROTECT=$(TMP)$/$(DEF$(TNR)UNIQE:b).bat &&
 
 .ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BSCLIENT)"==""
+.ENDIF			# "$(MWS_BUILD)"!=""
 
 .IF "$(APP$(TNR)HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -156,7 +156,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
         $(DEF$(TNR)DEPN) \
         $(DEF$(TNR)EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-.IF "$(BSCLIENT)"!=""
+.IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(BUILD_DRIVE$(TNR))"=="O"
@@ -167,7 +167,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 .ENDIF			# "$(BUILD_DRIVE$(TNR))"=="O"
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BSCLIENT)"==""
+.ENDIF			# "$(MWS_BUILD)"!=""
 #	+-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -194,7 +194,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +$(EXPORT$(TNR)_PROTECT) $(RM) $(SHL$(TNR)TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(BSCLIENT)"==""
+.IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_DRIVE$(TNR))"=="O"
 #
@@ -204,7 +204,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
     +$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(RM) $(TMP)$/$(DEF$(TNR)UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE$(TNR))"=="O"
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BSCLIENT)"==""
+.ENDIF			# "$(MWS_BUILD)"!=""
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(DEF$(TNR)EXPORT1)"!=""
     @echo $(DEF$(TNR)EXPORT1)										>>$@
