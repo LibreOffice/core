@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,6 @@
 #ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
-#include <cppuhelper/implbase7.hxx>
-#endif
 
 #ifndef CONFIGMGR_APITYPES_HXX_
 #include "apitypes.hxx"
@@ -133,7 +130,6 @@ namespace configmgr
     typedef  ::cppu::WeakImplHelper2
                 < css::container::XChild
                 , css::container::XNamed
-//              , css::lang::XComponent
 //              , css::lang::XServiceInfo
                 >
                 InnerElementImplHelper;
@@ -186,10 +182,9 @@ namespace configmgr
             <type scope='configmgr::configapi'>NodeAccess</type> and
             <type scope='configmgr::configapi'>SetElement</type>.</p>
     */
-    typedef ::cppu::WeakImplHelper7
+    typedef ::cppu::WeakImplHelper6
                 < css::container::XChild
                 , css::container::XNamed
-                , css::util::XChangesNotifier
                 , css::lang::XComponent
                 , css::lang::XServiceInfo
                 , css::configuration::XTemplateInstance
@@ -231,15 +226,6 @@ namespace configmgr
 
         virtual void SAL_CALL  // generally not supported (! - missing exception)
             setName( const OUString& aName )
-                throw(uno::RuntimeException);
-
-        // XChangesNotifier
-        virtual void SAL_CALL
-            addChangesListener( const uno::Reference< css::util::XChangesListener >& xListener )
-                throw(uno::RuntimeException);
-
-        virtual void SAL_CALL
-            removeChangesListener( const uno::Reference< css::util::XChangesListener >& xListener )
                 throw(uno::RuntimeException);
 
         // XComponent

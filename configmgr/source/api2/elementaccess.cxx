@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,13 +244,6 @@ void SAL_CALL BasicUpdateElement::setName( const OUString& aName ) throw(Runtime
 // XChangesNotifier
 //-----------------------------------------------------------------------------------
 
-void SAL_CALL BasicSetElement::addChangesListener( const Reference< css::util::XChangesListener >& xListener )
-    throw(RuntimeException)
-{
-    implAddListener( getNodeAccess(), xListener );
-}
-//-----------------------------------------------------------------------------------
-
 void SAL_CALL BasicRootElement::addChangesListener( const Reference< css::util::XChangesListener >& xListener )
     throw(RuntimeException)
 {
@@ -266,13 +259,6 @@ void SAL_CALL BasicUpdateElement::addChangesListener( const Reference< css::util
 //-----------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------
-void SAL_CALL BasicSetElement::removeChangesListener( const Reference< css::util::XChangesListener >& xListener )
-    throw(RuntimeException)
-{
-    implRemoveListener( getNodeAccess(), xListener );
-}
-//-----------------------------------------------------------------------------------
-
 void SAL_CALL BasicRootElement::removeChangesListener( const Reference< css::util::XChangesListener >& xListener )
     throw(RuntimeException)
 {
