@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-18 10:31:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@
 #define L_undef         ('u' + ('d' << 1))
 #define L_error         ('e' + ('r' << 1))      /* BP 5.3.92, #error */
 #define MAXLINE 80                              /* BP 5.3.92, #error */
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define L_debug         ('d' + ('b' << 1))      /* #debug               */
 #define L_nodebug       ('n' + ('d' << 1))      /* #nodebug             */
 #endif
@@ -149,7 +149,7 @@ int             counter;        /* Pending newline counter              */
         case L_pragma:  tp = "pragma";          break;
         case L_undef:   tp = "undef";           break;
         case L_error:   tp = "error";           break;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         case L_debug:   tp = "debug";           break;
         case L_nodebug: tp = "nodebug";         break;
 #endif
@@ -304,7 +304,7 @@ nest_err:       cerror("#%s must be in an #if", token);
             unget();
             break;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         case L_debug:
             if (debug == 0)
                 dumpdef("debug set on");
