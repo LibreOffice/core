@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-15 13:13:05 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,7 @@ public:
     const String &GetCurGroup() const { return aCurGrp; }
 
     USHORT  GetGlossaryCnt();
-    USHORT  GetGlossaryCnt(const String& rGrpName); //fuer Basic
     String  GetGlossaryName(USHORT);
-    String  GetGlossaryName(USHORT, const String& rGrpName); //fuer Basic
     String  GetGlossaryShortName(const String &rName);
     String  GetGlossaryShortName(USHORT);
 
@@ -122,7 +120,6 @@ public:
     BOOL    CopyToClipboard(SwWrtShell& rSh, const String& rShortName);
 
     BOOL    ExpandGlossary(BOOL bUseStandard = TRUE, BOOL bApi = FALSE);
-    BOOL    ExpandGlossary( const String& rShortName, BOOL bApi = FALSE );
     BOOL    InsertGlossary(const String &rName);
 
     void    SetMacros(const String& rName,
