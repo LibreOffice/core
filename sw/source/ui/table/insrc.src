@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:06:31 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,14 +247,14 @@ ModalDialog DLG_INS_ROW_COL
         Text [ norwegian ] = " rader" ;
         Text [ italian ] = " righe" ;
         Text [ portuguese_brazilian ] = "fileiras" ;
-        Text [ portuguese ] = "Linhas" ;
+        Text [ portuguese ] = " Linhas" ;
         Text [ finnish ] = " rivejä" ;
         Text [ danish ] = "rækker" ;
         Text [ french ] = " Lignes" ;
         Text [ swedish ] = " rader" ;
         Text [ dutch ] = " rijen" ;
-        Text [ spanish ] = "Filas" ;
-        Text [ english_us ] = "Rows" ;
+        Text [ spanish ] = "  Filas" ;
+        Text [ english_us ] = " Rows" ;
         Text[ chinese_simplified ] = "ÐÐ";
         Text[ russian ] = "Ñòðîêè";
         Text[ polish ] = " Wiersze";
@@ -273,14 +273,14 @@ ModalDialog DLG_INS_ROW_COL
         Text [ norwegian ] = " kolonner" ;
         Text [ italian ] = " colonne" ;
         Text [ portuguese_brazilian ] = "colunas" ;
-        Text [ portuguese ] = "Colunas" ;
+        Text [ portuguese ] = " Colunas" ;
         Text [ finnish ] = " sarakkeita" ;
         Text [ danish ] = "kolonner" ;
-        Text [ french ] = "  Colonnes" ;
+        Text [ french ] = " Colonnes" ;
         Text [ swedish ] = " kolumner" ;
         Text [ dutch ] = " kolommen" ;
-        Text [ spanish ] = "Columnas" ;
-        Text [ english_us ] = "Columns" ;
+        Text [ spanish ] = "  Columnas" ;
+        Text [ english_us ] = " Columns" ;
         Text[ chinese_simplified ] = "À¸";
         Text[ russian ] = "Êîëîíêè";
         Text[ polish ] = " Kolumny";
