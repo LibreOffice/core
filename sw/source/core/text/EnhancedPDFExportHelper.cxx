@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:22:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1481,7 +1481,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport( bool bEditEngineOnly )
             const SwTxtNode* pTNd = mrSh.GetNodes().GetOutLineNds()[ i ]->GetTxtNode();
             ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
 
-            if ( pTNd->IsHidden() )
+            if ( pTNd->IsHidden() ||
+                 // --> FME 2005-01-10 #i40292# Skip empty outlines:
+                 0 == pTNd->GetTxt().Len() )
+                 // <--
                 continue;
 
             // Get parent id from stack:
