@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-01-10 16:26:20 $
+ *  last change: $Author: os $ $Date: 2001-01-25 11:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,15 @@ Sequence<OUString>& BibConfig::GetPropertyNames()
     static Sequence<OUString> aNames;
     if(!aNames.getLength())
     {
-        aNames.realloc(3);
+        aNames.realloc(7);
         OUString* pNames = aNames.getArray();
         pNames[0] = C2U("CurrentDataSource/DataSourceName");
         pNames[1] = C2U("CurrentDataSource/Command");
         pNames[2] = C2U("CurrentDataSource/CommandType");
+        pNames[3] = C2U("BeamerHeight");
+        pNames[4] = C2U("ViewHeight");
+        pNames[5] = C2U("QueryText");
+        pNames[6] = C2U("QueryField");
     }
     return aNames;
 }
@@ -162,6 +166,10 @@ BibConfig::BibConfig() :
                     case  0: pValues[nProp] >>= sDataSource; break;
                     case  1: pValues[nProp] >>= sTableOrQuery; break;
                     case  2: pValues[nProp] >>= nTblOrQuery;  break;
+                    case  3: pValues[nProp] >>= nBeamerSize;  break;
+                    case  4: pValues[nProp] >>= nViewSize  ;  break;
+                    case  5: pValues[nProp] >>= sQueryText ;  break;
+                    case  6: pValues[nProp] >>= sQueryField;  break;
                 }
             }
         }
@@ -288,6 +296,10 @@ void    BibConfig::Commit()
             case  0: pValues[nProp] <<= sDataSource; break;
             case  1: pValues[nProp] <<= sTableOrQuery; break;
             case  2: pValues[nProp] <<= nTblOrQuery;  break;
+            case  3: pValues[nProp] <<= nBeamerSize;  break;
+            case  4: pValues[nProp] <<= nViewSize;  break;
+            case  5: pValues[nProp] <<= sQueryText;  break;
+            case  6: pValues[nProp] <<= sQueryField;  break;
         }
     }
     PutProperties(aNames, aValues);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
+ *  last change: $Author: os $ $Date: 2001-01-25 11:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,16 +157,16 @@ public:
                                             {return aColumnDefaults[nIndex];}
 
 
-    void                    setBeamerSize(long nSize) {nBeamerSize = nSize;}
+    void                    setBeamerSize(long nSize) {SetModified(); nBeamerSize = nSize;}
     long                    getBeamerSize()const {return nBeamerSize;}
-    void                    setViewSize(long nSize) {nViewSize = nSize;}
+    void                    setViewSize(long nSize) {SetModified(); nViewSize = nSize;}
     long                    getViewSize() {return nViewSize;}
 
     const rtl::OUString&    getQueryField() const {return sQueryField;}
-    void                    setQueryField(const rtl::OUString& rSet) {sQueryField = rSet;}
+    void                    setQueryField(const rtl::OUString& rSet) {SetModified(); sQueryField = rSet;}
 
     const rtl::OUString&    getQueryText() const {return sQueryText;}
-    void                    setQueryText(const rtl::OUString& rSet) {sQueryText = rSet;}
+    void                    setQueryText(const rtl::OUString& rSet) {SetModified(); sQueryText = rSet;}
 
 };
 /* -----------------------------20.11.00 11:47--------------------------------
