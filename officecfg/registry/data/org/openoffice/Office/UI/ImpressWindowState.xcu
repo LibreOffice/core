@@ -3,9 +3,9 @@
  *
  *  $RCSfile: ImpressWindowState.xcu,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:27:57 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 15:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@
                     <value xml:lang="de">3D-Objekte</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/alignmentbar" oor:op="replace">
@@ -222,7 +222,7 @@
                     <value>false</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/formsfilterbar" oor:op="replace">
@@ -255,7 +255,7 @@
                     <value>1</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -312,7 +312,7 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/fontworkshapetypes" oor:op="replace">
@@ -381,7 +381,7 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/insertbar" oor:op="replace">
@@ -525,7 +525,7 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/positionbar" oor:op="replace">
@@ -561,7 +561,7 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/slideviewobjectbar" oor:op="replace">
@@ -582,7 +582,7 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/standardbar" oor:op="replace">
@@ -618,7 +618,7 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/textobjectbar" oor:op="replace">
@@ -687,7 +687,7 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/viewerbar" oor:op="replace">
@@ -705,7 +705,7 @@
                     <value xml:lang="de">Standard (Lesemodus)</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/mediaobjectbar" oor:op="replace">
@@ -763,6 +763,9 @@
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Master View</value>
                     <value xml:lang="de">Master Ansicht</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>false</value>
                 </prop>
            </node>
         </node>
