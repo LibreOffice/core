@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javadep.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-04-23 08:48:07 $
+ *  last change: $Author: hr $ $Date: 2001-04-23 10:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,7 +804,7 @@ simple_getopt(int nargc, char *pargv[], const char *poptstring)
         if ( (popt = strchr(poptstring, c)) == NULL ) {
             optopt = c;
             if ( opterr )
-                fprintf("Unknown option character `\\x%x'.\n", optopt);
+                fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
             return '?';
         }
         if ( *(++popt) == ':') {
