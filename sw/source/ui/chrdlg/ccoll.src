@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:13:41 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:30:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,7 +741,7 @@ TabPage TP_CONDCOLL
         < "文字方塊" ; > ;
         < "區域" ; > ;
         < "註腳" ; > ;
-        < "尾注" ; > ;
+        < "尾註" ; > ;
         < "頁首" ; > ;
         < "頁尾" ; > ;
         < "第一個大綱級" ; > ;
