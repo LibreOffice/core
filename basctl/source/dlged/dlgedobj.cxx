@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-16 13:43:17 $
+ *  last change: $Author: tbe $ $Date: 2001-03-20 14:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <vector>
+#include <algorithm>
 
 #ifndef _BASCTL_DLGEDOBJ_HXX
 #include "dlgedobj.hxx"
@@ -133,6 +136,18 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
 using namespace ::rtl;
+
+//----------------------------------------------------------------------------
+
+// helper class for sorting by tabindex
+class TabSortHelper
+{
+public:
+    ::rtl::OUString name;
+    sal_Int16       tabindex;
+
+    bool operator<(const TabSortHelper& rComp) const { return tabindex < rComp.tabindex ? true : false; }
+};
 
 //----------------------------------------------------------------------------
 
@@ -519,33 +534,33 @@ void DlgEdObj::SetPropsFromRect()
 
 //----------------------------------------------------------------------------
 
-void SAL_CALL DlgEdObj::SetNameFromProp( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
+void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
 {
-    if ( !ISA(DlgEdForm) )
+    // get old name
+    ::rtl::OUString aOldName;
+    evt.OldValue >>= aOldName;
+
+    // get new name
+    ::rtl::OUString aNewName;
+    evt.NewValue >>= aNewName;
+
+    // remove the control by the old name and insert the control by the new name in the container
+    uno::Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), uno::UNO_QUERY);
+    if ( xNameAcc.is() && xNameAcc->hasByName(aOldName) )
     {
-        // get old name
-        ::rtl::OUString aOldName;
-        evt.OldValue >>= aOldName;
-
-        // get new name
-        ::rtl::OUString aNewName;
-        evt.NewValue >>= aNewName;
-
-        // remove the control by the old name and insert the control by the new name in the container
-        uno::Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), uno::UNO_QUERY);
-        if ( xNameAcc.is() && xNameAcc->hasByName(aOldName) )
+        uno::Reference< container::XNameContainer > xCont(xNameAcc, uno::UNO_QUERY );
+        if ( xCont.is() )
         {
-            uno::Reference< container::XNameContainer > xCont(xNameAcc, uno::UNO_QUERY );
-            if ( xCont.is() )
-            {
-                uno::Reference< awt::XControlModel > xCtrl(GetUnoControlModel(), uno::UNO_QUERY);
-                uno::Any aAny;
-                aAny <<= xCtrl;
-                xCont->removeByName( aOldName );
-                xCont->insertByName( aNewName , aAny );
-            }
+            uno::Reference< awt::XControlModel > xCtrl(GetUnoControlModel(), uno::UNO_QUERY);
+            uno::Any aAny;
+            aAny <<= xCtrl;
+            xCont->removeByName( aOldName );
+            xCont->insertByName( aNewName , aAny );
         }
     }
+
+    // sort the controls by tabindex
+    GetDlgEdForm()->SortByTabIndex();
 }
 
 //----------------------------------------------------------------------------
@@ -599,6 +614,84 @@ void DlgEdObj::UpdateStep()
     else
     {
         SetLayer( 0 );
+    }
+}
+
+//----------------------------------------------------------------------------
+
+
+void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
+{
+    // stop listening with all childs
+    ::std::vector<DlgEdObj*> aChildList = GetDlgEdForm()->GetChilds();
+    ::std::vector<DlgEdObj*>::iterator aIter;
+    for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; aIter++ )
+    {
+        (*aIter)->EndListening(sal_False);
+    }
+
+    Reference< ::com::sun::star::container::XNameAccess > xNameAcc( GetDlgEdForm()->GetUnoControlModel() , UNO_QUERY );
+    if ( xNameAcc.is() )
+    {
+        // get sequence of control names
+        Sequence< ::rtl::OUString > aNames = xNameAcc->getElementNames();
+        const ::rtl::OUString* pNames = aNames.getConstArray();
+        sal_Int32 nCtrls = aNames.getLength();
+        ::std::vector<::rtl::OUString> aNameList(nCtrls);
+
+        // fill helper list
+        for ( sal_Int16 i = 0; i < nCtrls; i++ )
+        {
+            aNameList[i] = pNames[i];
+        }
+
+        // check tabindex
+        sal_Int16 nOldTabIndex;
+        evt.OldValue >>= nOldTabIndex;
+        sal_Int16 nNewTabIndex;
+        evt.NewValue >>= nNewTabIndex;
+        if (nNewTabIndex < 0)
+        {
+            nNewTabIndex = 0;
+        }
+        else if (nNewTabIndex > nCtrls - 1)
+        {
+            nNewTabIndex = nCtrls - 1;
+        }
+
+        // reorder helper list
+        ::rtl::OUString aCtrlName = aNameList[nOldTabIndex];
+        aNameList.erase( aNameList.begin() + nOldTabIndex );
+        aNameList.insert( aNameList.begin() + nNewTabIndex , aCtrlName );
+
+        // sort name container by tabindex
+        Reference< container::XNameContainer > xCont( xNameAcc, UNO_QUERY );
+        for ( i = 0; i < nCtrls; i++ )
+        {
+            // get control model
+            ::rtl::OUString aName = aNameList[i];
+            Any aCtrl = xNameAcc->getByName( aName );
+
+            // set new tabindex
+            Reference< ::com::sun::star::beans::XPropertySet > xPSet;
+               aCtrl >>= xPSet;
+            if (xPSet.is())
+            {
+                Any aTabIndex;
+                aTabIndex <<= (sal_Int16) i;
+                xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
+            }
+
+            // sort name container
+            xCont->removeByName( aName );
+            xCont->insertByName( aName , aCtrl );
+        }
+    }
+
+    // start listening with all childs
+    for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; aIter++ )
+    {
+        (*aIter)->StartListening();
     }
 }
 
@@ -824,8 +917,14 @@ FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     sal_Bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
+    // stop listening
+    EndListening(sal_False);
+
     // set parent form
     pDlgEdForm = ((DlgEdPage*)GetPage())->GetDlgEd()->GetDlgEdForm();
+
+    // add child to parent form
+    pDlgEdForm->AddChild(this);
 
     // get unique name
     ::rtl::OUString aOUniqueName( GetUniqueName() );
@@ -835,9 +934,6 @@ FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     uno::Any aUniqueName;
     aUniqueName <<= aOUniqueName;
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aUniqueName );
-
-    // set geometry properties
-    SetPropsFromRect();
 
     // set labels
     ::rtl::OUString aServiceName = GetServiceName();
@@ -850,12 +946,28 @@ FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" ) ), aUniqueName );
     }
 
+    // set geometry properties
+    SetPropsFromRect();
+
+    // set tabindex
+    uno::Reference< container::XNameAccess > xNameAcc( (GetDlgEdForm()->GetUnoControlModel()) , uno::UNO_QUERY );
+       Sequence< OUString > aNames = xNameAcc->getElementNames();
+    uno::Any aTabIndex;
+    aTabIndex <<= (sal_Int16) aNames.getLength();
+    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
+
     // insert control model in dialog model
-    uno::Reference< container::XNameContainer > xC((GetDlgEdForm()->GetUnoControlModel()), uno::UNO_QUERY);
-    uno::Reference< awt::XControlModel > xCtrl(GetUnoControlModel(), uno::UNO_QUERY);
+    uno::Reference< container::XNameContainer > xC( xNameAcc , uno::UNO_QUERY );
+    uno::Reference< awt::XControlModel > xCtrl( xPSet , uno::UNO_QUERY );
     uno::Any aAny;
     aAny <<= xCtrl;
     xC->insertByName( aOUniqueName , aAny );
+
+    // dialog model changed
+    GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
+
+    // start listening
+    StartListening();
 
     return bResult;
 }
@@ -973,12 +1085,23 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
         // change name of control in dialog model
         else if ( evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) )
         {
-            SetNameFromProp(evt);
+            if ( !ISA(DlgEdForm) )
+            {
+                NameChange(evt);
+            }
         }
         // update step
         else if ( evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Step")) )
         {
             UpdateStep();
+        }
+        // change tabindex
+        else if ( evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex")) )
+        {
+            if ( !ISA(DlgEdForm) )
+            {
+                TabIndexChange(evt);
+            }
         }
     }
 }
@@ -1076,6 +1199,20 @@ DlgEdForm::~DlgEdForm()
 
 //----------------------------------------------------------------------------
 
+void DlgEdForm::AddChild( DlgEdObj* pDlgEdObj )
+{
+    pChilds.push_back( pDlgEdObj );
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdForm::RemoveChild( DlgEdObj* pDlgEdObj )
+{
+    pChilds.erase( ::std::find( pChilds.begin() , pChilds.end() , pDlgEdObj ) );
+}
+
+//----------------------------------------------------------------------------
+
 void DlgEdForm::UpdateStep()
 {
     ULONG nObjCount;
@@ -1090,6 +1227,80 @@ void DlgEdForm::UpdateStep()
             if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
                 pDlgEdObj->UpdateStep();
         }
+    }
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdForm::SortByTabIndex()
+{
+    // stop listening with all childs
+    ::std::vector<DlgEdObj*>::iterator aIter;
+    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; aIter++ )
+    {
+        (*aIter)->EndListening(sal_False);
+    }
+
+    Reference< ::com::sun::star::container::XNameAccess > xNameAcc( GetUnoControlModel() , UNO_QUERY );
+    if ( xNameAcc.is() )
+    {
+        // get sequence of control names
+        Sequence< ::rtl::OUString > aNames = xNameAcc->getElementNames();
+        const ::rtl::OUString* pNames = aNames.getConstArray();
+        sal_Int32 nCtrls = aNames.getLength();
+        ::std::vector<TabSortHelper> aTabSortList(nCtrls);
+
+        for ( sal_Int16 i = 0; i < nCtrls; i++ )
+        {
+            // name
+            TabSortHelper aTabSortHelper;
+            aTabSortHelper.name = pNames[i];
+
+            // tabindex
+            Any aCtrl = xNameAcc->getByName( pNames[i] );
+            Reference< ::com::sun::star::beans::XPropertySet > xPSet;
+               aCtrl >>= xPSet;
+            if (xPSet.is())
+            {
+                xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ) ) >>= aTabSortHelper.tabindex;
+            }
+
+            // insert element into helper list
+            aTabSortList[i] = aTabSortHelper;
+        }
+
+        // sort helper list by tabindex
+        ::std::sort( aTabSortList.begin() , aTabSortList.end() );
+
+        // sort name container by tabindex
+        Reference< container::XNameContainer > xCont( xNameAcc, UNO_QUERY );
+
+        for ( i = 0; i < nCtrls; i++ )
+        {
+            // get control model
+            ::rtl::OUString aName = aTabSortList[i].name;
+            Any aCtrl = xNameAcc->getByName( aName );
+
+            // set new tabindex
+            Reference< ::com::sun::star::beans::XPropertySet > xPSet;
+               aCtrl >>= xPSet;
+            if (xPSet.is())
+            {
+                Any aTabIndex;
+                aTabIndex <<= (sal_Int16) i;
+                xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
+            }
+
+            // sort name container
+            xCont->removeByName( aName );
+            xCont->insertByName( aName , aCtrl );
+        }
+    }
+
+    // start listening with all childs
+    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; aIter++ )
+    {
+        (*aIter)->StartListening();
     }
 }
 

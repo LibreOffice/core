@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-12 11:31:09 $
+ *  last change: $Author: tbe $ $Date: 2001-03-20 14:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,6 +447,7 @@ void VCDlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoCon
     pDlgEdForm->SetUnoControlModel(xDlgMod);
     pDlgEdForm->StartListening();
     pDlgEdForm->SetDlgEditor( this );
+    pDlgEdForm->SortByTabIndex();       // for backward compatibility
     pDlgEdForm->SetRectFromProps();
     pSdrModel->GetPage(0)->InsertObject( pDlgEdForm );
     pDlgEdForm->SendRepaintBroadcast(); //?
@@ -466,6 +467,7 @@ void VCDlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoCon
                aA >>= xCtrlModel;
             DlgEdObj* pCtrlObj = new DlgEdObj();
             pCtrlObj->SetDlgEdForm(pDlgEdForm);
+            pDlgEdForm->AddChild(pCtrlObj);             // add child to parent form
             pCtrlObj->SetUnoControlModel( xCtrlModel );
             pCtrlObj->StartListening();
             pCtrlObj->SetRectFromProps();
@@ -797,6 +799,7 @@ void VCDlgEditor::Delete()
                 xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ) ) >>= aName;
             }
 
+            // remove control from dialog model
             Reference< ::com::sun::star::container::XNameAccess > xNameAcc(pDlgEdObj->GetDlgEdForm()->GetUnoControlModel(), UNO_QUERY );
             if ( xNameAcc.is() && xNameAcc->hasByName(aName) )
             {
@@ -806,8 +809,14 @@ void VCDlgEditor::Delete()
                     xCont->removeByName( aName );
                 }
             }
+
+            // remove child from parent form
+            pDlgEdForm->RemoveChild( pDlgEdObj );
         }
     }
+
+    // update tabindex
+    pDlgEdForm->SortByTabIndex();
 
     pSdrView->BrkAction();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-16 13:43:42 $
+ *  last change: $Author: tbe $ $Date: 2001-03-20 14:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #endif
 
+#include <vector>
+
 class DlgEdForm;
 
 //============================================================================
@@ -89,6 +91,7 @@ class DlgEdObj: public SdrUnoObj
     friend class VCDlgEditor;
     friend class VCDlgEditFactory;
     friend class DlgEdPropListenerImpl;
+    friend class DlgEdForm;
 
 private:
     sal_Bool        bIsListening;
@@ -114,11 +117,13 @@ public:
 
     virtual void SetRectFromProps();
     virtual void SetPropsFromRect();
-    virtual void SAL_CALL SetNameFromProp( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
 
     virtual sal_Int32   GetStep() const;
     virtual void        SetStep( sal_Int32 nStep );
     virtual void        UpdateStep();
+
+    virtual void SAL_CALL TabIndexChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
 
     ::rtl::OUString GetServiceName();
     ::rtl::OUString GetDefaultName();
@@ -143,6 +148,12 @@ protected:
 
     DECL_LINK(OnCreate, void* );
 
+    // start listening
+    void StartListening();
+    // end listening
+    void EndListening(sal_Bool bRemoveListener = sal_True);
+    sal_Bool    isListening() const { return bIsListening; }
+
 public:
     // PropertyChangeListener
     virtual void SAL_CALL _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
@@ -151,13 +162,6 @@ public:
     virtual void SAL_CALL _elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL _elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL _elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-
-private:
-    // start listening
-    void StartListening();
-    // end listening
-    void EndListening(sal_Bool bRemoveListener = sal_True);
-    sal_Bool    isListening() const { return bIsListening; }
 };
 
 
@@ -172,6 +176,7 @@ class DlgEdForm: public DlgEdObj
 
 private:
     VCDlgEditor* pDlgEditor;
+    ::std::vector<DlgEdObj*> pChilds;
 
 public:
     TYPEINFO();
@@ -187,7 +192,12 @@ public:
     virtual void SetDlgEditor( VCDlgEditor* pEditor ) { pDlgEditor = pEditor; }
     virtual VCDlgEditor* GetDlgEditor() const { return pDlgEditor; }
 
+    virtual void AddChild( DlgEdObj* pDlgEdObj );
+    virtual void RemoveChild( DlgEdObj* pDlgEdObj );
+    virtual ::std::vector<DlgEdObj*> GetChilds() const { return pChilds; }
+
     virtual void UpdateStep();
+    virtual void SortByTabIndex();
 
     virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
 
