@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-12 10:28:45 $
+ *  last change: $Author: iha $ $Date: 2003-12-12 22:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xShape;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xLabelsShape;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xErrorBarsShape;
 
     //the following group shapes will be created as children of m_xShape on demand
     //they can be used to assure that some parts of a series shape are always in front of others (e.g. symbols in front of lines)
@@ -149,6 +150,7 @@ public:
 
     rtl::OUString       getCID() const;
     rtl::OUString       getPointCID_Stub() const;
+    rtl::OUString       getErrorBarsCID() const;
     rtl::OUString       getLabelsCID() const;
     rtl::OUString       getLabelCID_Stub() const;
 
