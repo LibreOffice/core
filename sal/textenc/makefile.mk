@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 16:47:12 $
+#   last change: $Author: rt $ $Date: 2004-06-17 11:42:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ SLOFILES = \
     $(SLO)$/convertiso2022cn.obj \
     $(SLO)$/convertiso2022jp.obj \
     $(SLO)$/convertiso2022kr.obj \
+    $(SLO)$/convertsinglebytetobmpunicode.obj \
     $(SLO)$/tcvtbyte.obj \
     $(SLO)$/tcvtmb.obj \
     $(SLO)$/tcvtutf7.obj \
@@ -84,8 +85,6 @@ SLOFILES = \
     $(SLO)$/textenc.obj \
     $(SLO)$/unichars.obj
 
-#.IF "$(UPDATER)" != ""
-
 OBJFILES = \
     $(OBJ)$/context.obj \
     $(OBJ)$/convertbig5hkscs.obj \
@@ -95,6 +94,7 @@ OBJFILES = \
     $(OBJ)$/convertiso2022cn.obj \
     $(OBJ)$/convertiso2022jp.obj \
     $(OBJ)$/convertiso2022kr.obj \
+    $(OBJ)$/convertsinglebytetobmpunicode.obj \
     $(OBJ)$/tcvtbyte.obj \
     $(OBJ)$/tcvtmb.obj \
     $(OBJ)$/tcvtutf7.obj \
@@ -104,8 +104,6 @@ OBJFILES = \
     $(OBJ)$/textcvt.obj \
     $(OBJ)$/textenc.obj \
     $(OBJ)$/unichars.obj
-
-#.ENDIF # UPDATER
 
 # Optimization off on Solaris Intel due to internal compiler error; to be
 # reevaluated after compiler upgrade:
