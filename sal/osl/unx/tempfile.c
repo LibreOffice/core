@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:24:00 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
         rtl_uString *ustrTempPath = NULL;
 
         rtl_string2UString( &ustrTempPath, pValue, strlen( pValue ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+        OSL_ASSERT(ustrTempPath != NULL);
         error = osl_getFileURLFromSystemPath( ustrTempPath, pustrTempDir );
         rtl_uString_release( ustrTempPath );
 
@@ -166,6 +167,7 @@ static void osl_gen_random_name_impl_(rtl_uString** rand_name)
             RAND_NAME_LENGTH,
             RTL_TEXTENCODING_ASCII_US,
             OSTRING_TO_OUSTRING_CVTFLAGS);
+    OSL_ASSERT(*rand_name != NULL);
 }
 
 /*****************************************************************
