@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obr $ $Date: 2000-10-23 09:52:11 $
+#   last change: $Author: obr $ $Date: 2000-11-06 12:40:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,9 +78,7 @@ TARGETTYPE=CUI
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -98,12 +96,10 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/security.obj \
             $(SLO)$/profile.obj  \
             $(SLO)$/time.obj     \
-            $(SLO)$/daemon.obj   \
             $(SLO)$/file.obj     \
             $(SLO)$/signal.obj   \
             $(SLO)$/pipe.obj   	 \
             $(SLO)$/system.obj	 \
-            $(SLO)$/channel.obj	 \
             $(SLO)$/util.obj
 
 #.IF "$(UPDATER)"=="YES"
@@ -119,16 +115,12 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/security.obj \
             $(OBJ)$/profile.obj  \
             $(OBJ)$/time.obj     \
-            $(OBJ)$/daemon.obj   \
             $(OBJ)$/file.obj     \
             $(OBJ)$/signal.obj   \
             $(OBJ)$/pipe.obj   	 \
             $(OBJ)$/system.obj	 \
-            $(OBJ)$/channel.obj	 \
             $(OBJ)$/util.obj
 #.ENDIF
-
-DEPOBJFILES = $(OBJ)$/sdaemon.obj
 
 # --- Targets ------------------------------------------------------
 
@@ -136,14 +128,5 @@ DEPOBJFILES = $(OBJ)$/sdaemon.obj
 APP1STDLIBS+=-lC
 .ENDIF
 
-ALL: \
-    ALLTAR \
-    $(BIN)$/$(START_SCRIPT) 
-
 .INCLUDE :  target.mk
-
-
-$(BIN)$/$(START_SCRIPT): $(START_SCRIPT)
-    @+$(COPY) $(START_SCRIPT) $@
-    @+echo $(START_SCRIPT) copied
 

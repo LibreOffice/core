@@ -2,9 +2,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obr $ $Date: 2000-10-23 09:53:37 $
+#   last change: $Author: obr $ $Date: 2000-11-06 12:43:07 $
 #
 #   Copyright according the GNU Public License.
 #
@@ -24,37 +24,11 @@ MULTITHREAD_OBJ=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
 .IF "$(header)" == ""
-
-#CFILES=     conditn.c       \
-#            diagnose.c      \
-#            dllentry.c      \
-#            semaphor.c      \
-#            socket.c        \
-#            interlck.c      \
-#            mutex.c         \
-#            thread.c        \
-#            module.c        \
-#            process.c       \
-#            security.c      \
-#            profile.c       \
-#            time.c          \
-#            file.c          \
-#            signal.c        \
-#            pipe.c          \
-#            daemon.c		\
-#            daemregw.c		\
-#            channel.c		\
-#            util.c		\
-#			ports.c	\
-#			dir.c	\
-#			dirw9x.c
 
 SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/diagnose.obj \
@@ -72,9 +46,6 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/file.obj     \
             $(SLO)$/signal.obj   \
             $(SLO)$/pipe.obj     \
-            $(SLO)$/daemon.obj	 \
-            $(SLO)$/daemregw.obj \
-            $(SLO)$/channel.obj \
             $(SLO)$/util.obj \
             $(SLO)$/dir.obj \
             $(SLO)$/dirw9x.obj
@@ -96,14 +67,9 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/file.obj     \
             $(OBJ)$/signal.obj   \
             $(OBJ)$/pipe.obj     \
-            $(OBJ)$/daemon.obj	 \
-            $(OBJ)$/daemregw.obj \
-            $(OBJ)$/channel.obj \
             $(OBJ)$/util.obj \
             $(OBJ)$/dir.obj \
             $(OBJ)$/dirw9x.obj
-
-DEPOBJFILES = $(OBJ)$/sdaemon.obj
 
 .ENDIF
 
