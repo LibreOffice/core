@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: lla $ $Date: 2001-03-07 14:58:38 $
+ *  last change: $Author: lla $ $Date: 2001-03-27 07:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #include "apitypes.hxx"
 #include "configexcept.hxx"
 #include <vector>
+
+#include "attributes.hxx"
 
 namespace configmgr
 {
@@ -139,28 +141,12 @@ namespace configmgr
         Name validateElementName(OUString const& sName);
     //------------------------------------------------------------------------
 
-        /// holds attributes a node in the schema
-        struct Attributes
-        {
-            bool bWritable      : 1;
-            bool bNullable      : 1;
-            bool bNotified      : 1;
-            bool bConstrained   : 1;
-
-            bool bReplacing     : 1;    // remember the state of a node
-            bool bLocalized     : 1;
-            bool bDefaultable   : 1;
-
-            Attributes():bWritable(true), bNullable(true), bNotified(true), bConstrained(false), bReplacing(false), bLocalized(false), bDefaultable(false){}
-            //! IMPORTANT: if this defaults are changed, you MUST change also the handling in CmXMLFormater::handleAttributes() and OValueHandler::startElement()
-        };
-
         //--------------------------------------------------------------------
         /// holds information about a node in the schema
         struct NodeInfo
         {
             Name        aName;
-            Attributes  aAttributes;
+            configuration::Attributes aAttributes;
         };
     //-------------------------------------------------------------------------
 

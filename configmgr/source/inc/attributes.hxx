@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributes.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:40 $
+ *  last change: $Author: lla $ $Date: 2001-03-27 07:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,58 +59,29 @@
  *
  ************************************************************************/
 
-#ifndef _CONFIGMGR_MISC_ATTRIBUTES_HXX_
-#define _CONFIGMGR_MISC_ATTRIBUTES_HXX_
-
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-
-/*----------------------------------------
-*
-*   Attributlist implementation
-*
-*----------------------------------------*/
-
-//..........................................................................
+#ifndef CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
+#define CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
 namespace configmgr
 {
-//..........................................................................
+    namespace configuration
+    {
+        /// holds attributes a node in the schema
+        struct Attributes
+        {
+            bool bWritable      : 1;
+            bool bNullable      : 1;
+            bool bNotified      : 1;
+            bool bConstrained   : 1;
 
-struct AttributeListImpl_impl;
-class AttributeListImpl : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XAttributeList >
-{
-protected:
-    ~AttributeListImpl();
+            bool bReplacing     : 1;    // remember the state of a node
+            bool bLocalized     : 1;
+            bool bDefaultable   : 1;
 
-public:
-    AttributeListImpl();
-    AttributeListImpl( const AttributeListImpl & );
+            Attributes():bWritable(true), bNullable(true), bNotified(true), bConstrained(false), bReplacing(false), bLocalized(false), bDefaultable(false){}
+            //! IMPORTANT: if this defaults are changed, you MUST change also the handling in CmXMLFormater::handleAttributes() and OValueHandler::startElement()
+        };
 
-public:
-    virtual sal_Int16 SAL_CALL getLength(void) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString  SAL_CALL getNameByIndex(sal_Int16 i) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString  SAL_CALL getTypeByIndex(sal_Int16 i) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString  SAL_CALL getTypeByName(const ::rtl::OUString& aName) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString  SAL_CALL getValueByIndex(sal_Int16 i) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString  SAL_CALL getValueByName(const ::rtl::OUString& aName) throw (::com::sun::star::uno::RuntimeException);
+    }
+}
 
-public:
-    void addAttribute( const ::rtl::OUString &sName , const ::rtl::OUString &sType , const ::rtl::OUString &sValue );
-    void clear();
-
-private:
-    struct AttributeListImpl_impl *m_pImpl;
-};
-
-//..........................................................................
-}   // namespace configmgr
-//..........................................................................
-
-#endif // _CONFIGMGR_MISC_ATTRIBUTES_HXX_
-
-
+#endif
