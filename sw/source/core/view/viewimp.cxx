@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:01:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,10 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
         if ( !pRoot->GetDrawPage() )
             pRoot->SetDrawPage( pSh->GetDoc()->GetDrawModel()->GetPage( 0 ) );
 
-        pRoot->GetDrawPage()->SetSize( pRoot->Frm().SSize() );
-         pSdrPageView = pDrawView->ShowPage( pRoot->GetDrawPage(), Point());
+        if ( pRoot->GetDrawPage()->GetSize() != pRoot->Frm().SSize() )
+            pRoot->GetDrawPage()->SetSize( pRoot->Frm().SSize() );
+
+        pSdrPageView = pDrawView->ShowPage( pRoot->GetDrawPage(), Point());
         // OD 26.06.2003 #108784# - notify drawing page view about invisible
         // layers.
         pSh->GetDoc()->NotifyInvisibleLayers( *pSdrPageView );
