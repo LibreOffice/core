@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentwindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-03 08:02:10 $
+ *  last change: $Author: pb $ $Date: 2001-10-24 09:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef _SVTOOLS_HELPAGENTWIDNOW_HXX_
 #include "helpagentwindow.hxx"
 #endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -71,11 +72,15 @@
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
 #endif
+#ifndef _SVTOOLS_SVTDATA_HXX
+#include <svtdata.hxx>
+#endif
+
 #ifndef _SVTOOLS_HRC
 #include "svtools.hrc"
 #endif
-#ifndef _SVTOOLS_SVTDATA_HXX
-#include <svtdata.hxx>
+#ifndef _SVT_HELPID_HRC
+#include "helpid.hrc"
 #endif
 
 #define WB_AGENT_STYLE  0
@@ -144,6 +149,9 @@ namespace svt
 
         SetPointer(Pointer(POINTER_REFHAND));
         AlwaysEnableInput( TRUE, TRUE );
+
+        // unique id for the testtool
+        SetUniqueId( HID_HELPAGENT_WINDOW );
     }
 
     //--------------------------------------------------------------------
@@ -227,6 +235,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/07/03 08:02:10  pb
+ *  fix: #88808# closer button always clickable
+ *
  *  Revision 1.4  2001/06/21 10:20:38  hjs
  *  no project prefix
  *
