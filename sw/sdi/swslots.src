@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:45:13 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,7 +598,7 @@ SfxSlotInfo FN_DELETE_BACK_LINE
     SlotName[ portuguese_brazilian ] = "DelToStartOfLine";
     SlotName[ japanese ] = "s“ª‚Ü‚Åíœ";
     SlotName[ chinese_simplified ] = "É¾³ıÖÁĞĞÊ×";
-    SlotName[ chinese_traditional ] = "§R°£¦Ü¦æ­º";
+    SlotName[ chinese_traditional ] = "§R°£¦Ü¦æªº°_©l¦ì¸m";
     SlotName[ arabic ] = "ÍĞİ ÍÊì ÈÏÇíÉ ÇáÓØÑ";
     SlotName[ dutch ] = "Tot regelbegin wissen";
     SlotName[ chinese_simplified ] = "É¾³ıÖÁĞĞÊ×";
@@ -624,7 +624,7 @@ SfxSlotInfo FN_DELETE_BACK_PARA
     SlotName[ portuguese_brazilian ] = "DelToStartOfParagraph";
     SlotName[ japanese ] = "’i—“ª‚Ü‚Åíœ";
     SlotName[ chinese_simplified ] = "É¾³ıÖÁ¶ÎÂäÊ×¶Ë";
-    SlotName[ chinese_traditional ] = "§R°£¦Ü¬q¸¨­ººİ";
+    SlotName[ chinese_traditional ] = "§R°£¦Ü¬q¸¨°_©l";
     SlotName[ arabic ] = "ÍĞİ ÍÊì ÈÏÇíÉ ÇáİŞÑÉ";
     SlotName[ dutch ] = "Tot aan begin alinea wissen";
     SlotName[ chinese_simplified ] = "É¾³ıÖÁ¶ÎÂäÊ×¶Ë";
@@ -650,7 +650,7 @@ SfxSlotInfo FN_DELETE_BACK_SENT
     SlotName[ portuguese_brazilian ] = "DelToStartOfSentence";
     SlotName[ japanese ] = "•¶“ª‚Ü‚Åíœ";
     SlotName[ chinese_simplified ] = "É¾³ıÖÁ¾äÊ×";
-    SlotName[ chinese_traditional ] = "§R°£¦Ü¬q¸¨­ººİ";
+    SlotName[ chinese_traditional ] = "§R°£¦Ü¬q¸¨ªº°_©l¦ì¸m";
     SlotName[ arabic ] = "ÍĞİ ÍÊì ÈÏÇíÉ ÇáÌãáÉ";
     SlotName[ dutch ] = "Tot aan begin van de zin wissen";
     SlotName[ chinese_simplified ] = "É¾³ıÖÁ¾äÊ×";
@@ -3068,7 +3068,7 @@ SfxSlotInfo FN_INSERT_BREAK_DLG
     SlotName[ portuguese_brazilian ] = "InsertBreak";
     SlotName[ japanese ] = "”CˆÓ‰üÍß°¼Ş‚Ì‘}“ü";
     SlotName[ chinese_simplified ] = "²åÈëÊÖ¹¤»»ĞĞ·û";
-    SlotName[ chinese_traditional ] = "´¡¤J¤â¤u´«¦æ²Å";
+    SlotName[ chinese_traditional ] = "¤â°Ê´¡¤J´«¦æ²Å";
     SlotName[ arabic ] = "ÅÏÑÇÌ İÇÕá íÏæí";
     SlotName[ dutch ] = "Handmatig einde invoegen";
     SlotName[ chinese_simplified ] = "²åÈëÊÖ¹¤»»ĞĞ·û";
@@ -3172,7 +3172,7 @@ SfxSlotInfo FN_INSERT_ENDNOTE
     SlotName[ portuguese_brazilian ] = "InsertEndnoteDirect";
     SlotName[ japanese ] = "•¶––‹r’‚Ì’¼Ú‘}“ü";
     SlotName[ chinese_simplified ] = "Ö±½Ó²åÈëÎ²×¢";
-    SlotName[ chinese_traditional ] = "ª½±µ´¡¤J§Àª`";
+    SlotName[ chinese_traditional ] = "ª½±µ´¡¤J§Àµù";
     SlotName[ arabic ] = "ÅÏÑÇÌ ÊÚáíŞ ÎÊÇãí ãÈÇÔÑÉ";
     SlotName[ dutch ] = "Eindnoot direct invoegen";
     SlotName[ chinese_simplified ] = "Ö±½Ó²åÈëÎ²×¢";
@@ -3538,7 +3538,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
     SlotName[ japanese ] = "1—ñ‚Ì˜g‚ğè“®‚Å‘}“ü";
     SlotName[ korean ] = "1¿­ ÇÁ·¹ÀÓ ¼öµ¿À¸·Î »ğÀÔ";
     SlotName[ chinese_simplified ] = "ÊÖ¹¤²åÈëµ¥À¸Ê½¿ò";
-    SlotName[ chinese_traditional ] = "¤â¤u´¡¤J³æÄæ¤å¦r®Ø¡C";
+    SlotName[ chinese_traditional ] = "¤â°Ê´¡¤J³æÄæ¤å¦r®Ø¡C";
     SlotName[ turkish ] = "Insert single column frame manually";
     SlotName[ arabic ] = "ÅÏÑÇÌ ßÇÏÑ íÊßæä ãä ÚãæÏ æÇÍÏ íÏæíÇğ";
 };
@@ -3559,7 +3559,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT
     SlotName[ portuguese_brazilian ] = "InsertFrameInteract";
     SlotName[ japanese ] = "˜g‚ğè“®‚Å‘}“ü";
     SlotName[ chinese_simplified ] = "ÊÖ¹¤²åÈë¿ò";
-    SlotName[ chinese_traditional ] = "´¡¤J¤å¦r¤è¶ô";
+    SlotName[ chinese_traditional ] = "¤â°Ê´¡¤J¤å¦r¤è¶ô";
     SlotName[ arabic ] = "ÅÏÑÇÌ ßÇÏÑ íÏæíÇğ";
     SlotName[ dutch ] = "Kader handmatig invoegen";
     SlotName[ chinese_simplified ] = "ÊÖ¹¤²åÈë¿ò";
@@ -3740,7 +3740,7 @@ SfxSlotInfo FN_INSERT_LINEBREAK
     SlotName[ portuguese_brazilian ] = "InsertManualLineBreak";
     SlotName[ japanese ] = "è“®‰üs‚Ì‘}“ü";
     SlotName[ chinese_simplified ] = "ÊÖ¹¤²åÈë»»ĞĞ·û";
-    SlotName[ chinese_traditional ] = "¤â¤u´¡¤J´«¦æ²Å";
+    SlotName[ chinese_traditional ] = "¤â°Ê´¡¤J´«¦æ²Å";
     SlotName[ arabic ] = "ÅÏÑÇÌ İÇÕá ÃÓØÑ íÏæí";
     SlotName[ dutch ] = "Handmatig regeleinde invoegen";
     SlotName[ chinese_simplified ] = "ÊÖ¹¤²åÈë»»ĞĞ·û";
@@ -3818,7 +3818,7 @@ SfxSlotInfo FN_INSERT_PAGEBREAK
     SlotName[ portuguese_brazilian ] = "InsertManualPageBreak";
     SlotName[ japanese ] = "”CˆÓ‰üÍß°¼Ş‚Ì‘}“ü";
     SlotName[ chinese_simplified ] = "ÊÖ¹¤²åÈë»»Ò³·û";
-    SlotName[ chinese_traditional ] = "¤â¤u´¡¤J´«­¶²Å";
+    SlotName[ chinese_traditional ] = "¤â°Ê´¡¤J´«­¶²Å";
     SlotName[ arabic ] = "ÅÏÑÇÌ İÇÕá ÕİÍÇÊ íÏæí";
     SlotName[ dutch ] = "Handmatig pagina-einde invoegen";
     SlotName[ chinese_simplified ] = "ÊÖ¹¤²åÈë»»Ò³·û";
@@ -4284,7 +4284,7 @@ SfxSlotInfo FN_NEW_GLOBAL_DOC
     SlotName[ portuguese_brazilian ] = "NewGlobalDoc";
     SlotName[ japanese ] = "Ï½À°ÄŞ·­ÒİÄ‚Ìì¬";
     SlotName[ chinese_simplified ] = "Éú³ÉÖ÷¿ØÎÄµµ";
-    SlotName[ chinese_traditional ] = "«Ø¥ß¥D±±¤å¥ó";
+    SlotName[ chinese_traditional ] = "²£¥Í¥D±±¤å¥ó";
     SlotName[ arabic ] = "ÅäÔÇÁ ãÓÊäÏ ÔÇãá";
     SlotName[ dutch ] = "Master-document maken";
     SlotName[ chinese_simplified ] = "Éú³ÉÖ÷¿ØÎÄµµ";
@@ -5480,7 +5480,7 @@ SfxSlotInfo FN_POSTIT
     SlotName[ portuguese_brazilian ] = "InsertNote";
     SlotName[ japanese ] = "ºÒİÄ‚Ì‘}“ü";
     SlotName[ chinese_simplified ] = "²åÈë±¸×¢";
-    SlotName[ chinese_traditional ] = "´¡¤J³Æª`";
+    SlotName[ chinese_traditional ] = "´¡¤J³Æµù";
     SlotName[ arabic ] = "ÅÏÑÇÌ ãáÇÍÙÉ";
     SlotName[ dutch ] = "Aantekening invoegen";
     SlotName[ chinese_simplified ] = "²åÈë±¸×¢";
@@ -5997,7 +5997,7 @@ SfxSlotInfo FN_REDLINE_ON
     SlotName[ portuguese_brazilian ] = "ActivateRedlining";
     SlotName[ japanese ] = "•ÏX—š—ğ‚Ì‹L˜^";
     SlotName[ chinese_simplified ] = "¼¤»îĞŞ¸Ä";
-    SlotName[ chinese_traditional ] = "¿E¬¡­×§ï";
+    SlotName[ chinese_traditional ] = "±Ò°Ê­×§ï";
     SlotName[ arabic ] = "ÊÊÈÚ ÇáÊäŞíÍ";
     SlotName[ dutch ] = "Opnieuw bewerken inschakelen";
     SlotName[ chinese_simplified ] = "¼¤»îĞŞ¸Ä";
@@ -6246,7 +6246,7 @@ SfxSlotInfo FN_SET_PAGE_STYLE
     SlotName [ english ] =  "Seitenvorlage zuweisen";
     SlotName[ english_us ] = "Apply Page Style";
     SlotName[ portuguese ] = "Aplicar estilo de página";
-    SlotName[ russian ] = "Ïğèìåíèòü ñòèëè ñòğàíèöû";
+    SlotName[ russian ] = "Ïğèìåíèòü ñòèëü ñòğàíèöû";
     SlotName[ dutch ] = "Pagina-opmaakprofiel toewijzen";
     SlotName[ french ] = "Assigner le style de page";
     SlotName[ spanish ] = "Aplicar estilo de página";
@@ -6543,7 +6543,7 @@ SfxSlotInfo FN_START_DOC_DIRECT
     SlotName[ portuguese_brazilian ] = "BeginDocument";
     SlotName[ japanese ] = "’¼Ú•¶‘‚Ìn‚ß‚Ö";
     SlotName[ chinese_simplified ] = "Ö±½Ó×ªµ½ÎÄµµÊ×¶Ë";
-    SlotName[ chinese_traditional ] = "ª½±µÂà¨ì¤å¥ó­ººİ";
+    SlotName[ chinese_traditional ] = "ª½±µÂà¨ì¤å¥ó°_©l";
     SlotName[ arabic ] = "Åáì ÈÏÇíÉ ÇáãÓÊäÏ ãÈÇÔÑÉ";
     SlotName[ dutch ] = "Direct naar documentbegin";
     SlotName[ chinese_simplified ] = "Ö±½Ó×ªµ½ÎÄµµÊ×¶Ë";
@@ -6569,7 +6569,7 @@ SfxSlotInfo FN_START_OF_COLUMN
     SlotName[ portuguese_brazilian ] = "GoToBeginOfColumn";
     SlotName[ japanese ] = "—ñ‚Ìn‚ß‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½ÁĞÊ×";
-    SlotName[ chinese_traditional ] = "Âà¨ìÄæ­º";
+    SlotName[ chinese_traditional ] = "Âà¨ìÄæªº°_©l¦ì¸m";
     SlotName[ arabic ] = "Åáì ÈÏÇíÉ ÇáÚãæÏ";
     SlotName[ dutch ] = "Naar kolombegin";
     SlotName[ chinese_simplified ] = "×ªµ½ÁĞÊ×";
@@ -6595,7 +6595,7 @@ SfxSlotInfo FN_START_OF_DOCUMENT
     SlotName[ portuguese_brazilian ] = "GoToStartOfDoc";
     SlotName[ japanese ] = "•¶‘‚Ìn‚ß‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½ÎÄµµÊ×¶Ë";
-    SlotName[ chinese_traditional ] = "Âà¨ì¤å¥ó­ººİ";
+    SlotName[ chinese_traditional ] = "Âà¨ì¤å¥ó°_©l";
     SlotName[ arabic ] = "Åáì ÈÏÇíÉ ÇáãÓÊäÏ";
     SlotName[ dutch ] = "Naar begin document";
     SlotName[ chinese_simplified ] = "×ªµ½ÎÄµµÊ×¶Ë";
@@ -6621,7 +6621,7 @@ SfxSlotInfo FN_START_OF_DOCUMENT_SEL
     SlotName[ portuguese_brazilian ] = "BeginDocumentSel";
     SlotName[ japanese ] = "•¶‘‚Ìn‚ß‚Ü‚Å‘I‘ğ";
     SlotName[ chinese_simplified ] = "Ñ¡ÖĞÖÁÎÄµµÊ×¶Ë";
-    SlotName[ chinese_traditional ] = "¿ï¨ú¦Ü¤å¥ó­ººİ";
+    SlotName[ chinese_traditional ] = "¿ï¨ú¦Ü¤å¥óªº°_©l¦ì¸m";
     SlotName[ arabic ] = "ÊÍÏíÏ ÍÊì ÈÏÇíÉ ÇáãÓÊäÏ";
     SlotName[ dutch ] = "Tot aan begin document selecteren";
     SlotName[ chinese_simplified ] = "Ñ¡ÖĞÖÁÎÄµµÊ×¶Ë";
@@ -6647,7 +6647,7 @@ SfxSlotInfo FN_START_OF_LINE
     SlotName[ portuguese_brazilian ] = "GoToStartOfLine";
     SlotName[ japanese ] = "s“ª‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½ĞĞÊ×";
-    SlotName[ chinese_traditional ] = "Âà¨ì¦æ­º";
+    SlotName[ chinese_traditional ] = "Âà¨ì¦æªº°_©l¦ì¸m";
     SlotName[ arabic ] = "Åáì ÈÏÇíÉ ÇáÓØÑ";
     SlotName[ dutch ] = "Naar regelbegin";
     SlotName[ chinese_simplified ] = "×ªµ½ĞĞÊ×";
@@ -6673,7 +6673,7 @@ SfxSlotInfo FN_START_OF_LINE_SEL
     SlotName[ portuguese_brazilian ] = "BeginLineSel";
     SlotName[ japanese ] = "s“ª‚Ü‚Å‘I‘ğ";
     SlotName[ chinese_simplified ] = "Ñ¡Ôñµ½ĞĞÊ×";
-    SlotName[ chinese_traditional ] = "¿ï¾Ü¨ì¦æ­º";
+    SlotName[ chinese_traditional ] = "¿ï¾Ü¨ì¦æªº°_©l¦ì¸m";
     SlotName[ arabic ] = "ÊÍÏíÏ ÍÊì ÈÏÇíÉ ÇáÓØÑ";
     SlotName[ dutch ] = "Tot regelbegin selecteren";
     SlotName[ chinese_simplified ] = "Ñ¡Ôñµ½ĞĞÊ×";
@@ -6699,7 +6699,7 @@ SfxSlotInfo FN_START_OF_NEXT_COLUMN
     SlotName[ portuguese_brazilian ] = "GoToBeginOfNextColumn";
     SlotName[ japanese ] = "Ÿ‚Ì—ñ‚Ìn‚ß‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½ÏÂÒ»ÁĞµÄÊ×¶Ë";
-    SlotName[ chinese_traditional ] = "Âà¨ì¤U¤@Äæ";
+    SlotName[ chinese_traditional ] = "Âà¨ì¤U¤@Äæªº°_©l¦ì¸m";
     SlotName[ arabic ] = "Åáì ÈÏÇíÉ ÇáÚãæÏ ÇáÊÇáí";
     SlotName[ dutch ] = "Naar begin volgende kolom";
     SlotName[ chinese_simplified ] = "×ªµ½ÏÂÒ»ÁĞµÄÊ×¶Ë";
@@ -6725,7 +6725,7 @@ SfxSlotInfo FN_START_OF_NEXT_PAGE
     SlotName[ portuguese_brazilian ] = "GoToBeginOfNextPage";
     SlotName[ japanese ] = "ŸÍß°¼Ş‚Ìn‚ß‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½ÏÂ¸öÒ³ÃæµÄÊ×¶Ë";
-    SlotName[ chinese_traditional ] = "Âà¨ì¤U¤@­¶­º";
+    SlotName[ chinese_traditional ] = "Âà¨ì¤U¤@­¶ªº°_©l¦ì¸m";
     SlotName[ arabic ] = "Åáì ÈÏÇíÉ ÇáÕİÍÉ ÇáÊÇáíÉ";
     SlotName[ dutch ] = "Naar begin volgende pagina";
     SlotName[ chinese_simplified ] = "×ªµ½ÏÂ¸öÒ³ÃæµÄÊ×¶Ë";
@@ -6751,7 +6751,7 @@ SfxSlotInfo FN_START_OF_NEXT_PAGE_SEL
     SlotName[ portuguese_brazilian ] = "GoToBeginOfNextPageSel";
     SlotName[ japanese ] = "ŸÍß°¼Ş‚Ìn‚ß‚Ü‚Å‘I‘ğ";
     SlotName[ chinese_simplified ] = "Ñ¡ÔñÖÁÏÂÒ³Ê×¶Ë";
-    SlotName[ chinese_traditional ] = "¿ï¤¤¦Ü¤U¤@­¶­º";
+    SlotName[ chinese_traditional ] = "¿ï¤¤¦Ü¤U¤@­¶ªº°_©l¦ì¸m";
     SlotName[ arabic ] = "ÊÍÏíÏ ÍÊì ÈÏÇíÉ ÇáÕİÍÉ ÇáÊÇáíÉ";
     SlotName[ dutch ] = "Tot aan begin volgende pagina selecteren";
     SlotName[ chinese_simplified ] = "Ñ¡ÔñÖÁÏÂÒ³Ê×¶Ë";
@@ -6777,7 +6777,7 @@ SfxSlotInfo FN_START_OF_PAGE
     SlotName[ portuguese_brazilian ] = "GoToBeginOfPage";
     SlotName[ japanese ] = "Íß°¼Ş‚Ìn‚ß‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½Ò³Ê×";
-    SlotName[ chinese_traditional ] = "Âà¨ì­¶­º";
+    SlotName[ chinese_traditional ] = "Âà¨ì­¶ªº°_©l¦ì¸m";
     SlotName[ arabic ] = "Åáì ÈÏÇíÉ ÇáÕİÍÉ";
     SlotName[ dutch ] = "Naar begin pagina";
     SlotName[ chinese_simplified ] = "×ªµ½Ò³Ê×";
@@ -6803,7 +6803,7 @@ SfxSlotInfo FN_START_OF_PAGE_SEL
     SlotName[ portuguese_brazilian ] = "GoToBeginOfPageSel";
     SlotName[ japanese ] = "Íß°¼Ş‚Ìn‚ß‚Ü‚Å‘I‘ğ";
     SlotName[ chinese_simplified ] = "Ñ¡ÔñÖÁÒ³Ê×";
-    SlotName[ chinese_traditional ] = "¿ï¨ú¦Ü­¶­º";
+    SlotName[ chinese_traditional ] = "¿ï¨ú¦Ü­¶ªº°_©l¦ì¸m";
     SlotName[ arabic ] = "ÊÍÏíÏ ÍÊì ÈÏÇíÉ ÇáÕİÍÉ";
     SlotName[ dutch ] = "Tot aan paginabegin selecteren";
     SlotName[ chinese_simplified ] = "Ñ¡ÔñÖÁÒ³Ê×";
@@ -6829,7 +6829,7 @@ SfxSlotInfo FN_START_OF_PARA
     SlotName[ portuguese_brazilian ] = "GoToStartOfPara";
     SlotName[ japanese ] = "’i—‚Ìn‚ß‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½¶ÎÂäÊ×¶Ë";
-    SlotName[ chinese_traditional ] = "Âà¨ì¬q¸¨­ººİ";
+    SlotName[ chinese_traditional ] = "Âà¨ì¬q¸¨ªº°_©l¦ì¸m";
     SlotName[ arabic ] = "Åáì ÈÏÇíÉ ÇáİŞÑÉ";
     SlotName[ dutch ] = "Naar begin alinea";
     SlotName[ chinese_simplified ] = "×ªµ½¶ÎÂäÊ×¶Ë";
@@ -6855,7 +6855,7 @@ SfxSlotInfo FN_START_OF_PARA_SEL
     SlotName[ portuguese_brazilian ] = "BeginParagraphSel";
     SlotName[ japanese ] = "’i—‚Ìn‚ß‚Ü‚Å‘I‘ğ";
     SlotName[ chinese_simplified ] = "Ñ¡ÔñÖÁ¶ÎÂäÊ×¶Ë";
-    SlotName[ chinese_traditional ] = "¿ï¨ú¦Ü¬q¸¨­ººİ";
+    SlotName[ chinese_traditional ] = "¿ï¨ú¦Ü¬q¸¨ªº°_©l¦ì¸m";
     SlotName[ arabic ] = "ÊÍÏíÏ ÍÊì ÈÏÇíÉ ÇáİŞÑÉ";
     SlotName[ dutch ] = "Tot aan begin alinea selecteren";
     SlotName[ chinese_simplified ] = "Ñ¡ÔñÖÁ¶ÎÂäÊ×¶Ë";
@@ -6881,7 +6881,7 @@ SfxSlotInfo FN_START_OF_PREV_COLUMN
     SlotName[ portuguese_brazilian ] = "GoToBeginOfPrevColumn";
     SlotName[ japanese ] = "‘O‚Ì—ñ‚Ìn‚ß‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½ÉÏÒ»ÁĞÊ×¶Ë";
-    SlotName[ chinese_traditional ] = "Âà¨ì¤W¤@Äæ­ººİ";
+    SlotName[ chinese_traditional ] = "Âà¨ì¤W¤@Äæªº°_©l¦ì¸m";
     SlotName[ arabic ] = "Åáì ÈÏÇíÉ ÇáÚãæÏ ÇáÓÇÈŞ";
     SlotName[ dutch ] = "Naar begin vorige kolom";
     SlotName[ chinese_simplified ] = "×ªµ½ÉÏÒ»ÁĞÊ×¶Ë";
@@ -6907,7 +6907,7 @@ SfxSlotInfo FN_START_OF_PREV_PAGE
     SlotName[ portuguese_brazilian ] = "GoToBeginOfPrevPage";
     SlotName[ japanese ] = "‘OÍß°¼Ş‚Ìn‚ß‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½ÉÏÒ»Ò³Ê×¶Ë";
-    SlotName[ chinese_traditional ] = "Âà¨ì¤W¤@­¶­º";
+    SlotName[ chinese_traditional ] = "Âà¨ì¤W¤@­¶ªº°_©l¦ì¸m";
     SlotName[ arabic ] = "Åáì ÈÏÇíÉ ÇáÕİÍÉ ÇáÓÇÈŞÉ";
     SlotName[ dutch ] = "Naar begin vorige pagina";
     SlotName[ chinese_simplified ] = "×ªµ½ÉÏÒ»Ò³Ê×¶Ë";
@@ -6933,7 +6933,7 @@ SfxSlotInfo FN_START_OF_PREV_PAGE_SEL
     SlotName[ portuguese_brazilian ] = "GoToBeginOfPrevPageSel";
     SlotName[ japanese ] = "‘OÍß°¼Ş‚Ìn‚ß‚Ü‚Å‘I‘ğ";
     SlotName[ chinese_simplified ] = "Ñ¡ÔñÖÁÉÏÒ»Ò³Ê×¶Ë";
-    SlotName[ chinese_traditional ] = "¿ï¨ú¦Ü¤W¤@­¶­º";
+    SlotName[ chinese_traditional ] = "¿ï¨ú¦Ü¤W¤@­¶ªº°_©l¦ì¸m";
     SlotName[ arabic ] = "ÊÍÏíÏ ÍÊì ÈÏÇíÉ ÇáÕİÍÉ ÇáÓÇÈŞÉ";
     SlotName[ dutch ] = "Tot begin vorige pagina selecteren";
     SlotName[ chinese_simplified ] = "Ñ¡ÔñÖÁÉÏÒ»Ò³Ê×¶Ë";
@@ -6959,7 +6959,7 @@ SfxSlotInfo FN_START_TABLE
     SlotName[ portuguese_brazilian ] = "GoToBeginOfTable";
     SlotName[ japanese ] = "•\\‚Ìn‚ß‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½±í¸ñÊ×¶Ë";
-    SlotName[ chinese_traditional ] = "Âà¨ìªí®æ­ººİ";
+    SlotName[ chinese_traditional ] = "Âà¨ìªí®æªº°_©l¦ì¸m";
     SlotName[ arabic ] = "Åáì ÈÏÇíÉ ÇáÌÏæá";
     SlotName[ dutch ] = "Naar tabelbegin";
     SlotName[ chinese_simplified ] = "×ªµ½±í¸ñÊ×¶Ë";
@@ -6985,7 +6985,7 @@ SfxSlotInfo FN_STAT_HYPERLINKS
     SlotName[ portuguese_brazilian ] = "ExecHyperlinks";
     SlotName[ japanese ] = "Ê²Êß°Øİ¸ µİ";
     SlotName[ chinese_simplified ] = "¼¤»î³¬Á´½Ó";
-    SlotName[ chinese_traditional ] = "¿E¬¡¶W³sµ²";
+    SlotName[ chinese_traditional ] = "¨Ï¥Îªº¶W³sµ²";
     SlotName[ arabic ] = "ÇÑÊÈÇØÇÊ ÊÔÚÈíÉ äÔØÉ";
     SlotName[ dutch ] = "Hyperlinks actief";
     SlotName[ chinese_simplified ] = "¼¤»î³¬Á´½Ó";
@@ -7089,7 +7089,7 @@ SfxSlotInfo FN_TABLE_ADJUST_CELLS
     SlotName[ portuguese_brazilian ] = "TableCellsAdjust";
     SlotName[ japanese ] = "Å“K‚È—ñ‚Ì•";
     SlotName[ chinese_simplified ] = "×î¼ÑÁĞ¿í";
-    SlotName[ chinese_traditional ] = "³ÌÓìÄæ¼e";
+    SlotName[ chinese_traditional ] = "³Ì¾AÄæ¼e";
     SlotName[ arabic ] = "ÇáÚÑÖ ÇáÃãËá ááÚãæÏ";
     SlotName[ dutch ] = "Optimale kolombreedte";
     SlotName[ chinese_simplified ] = "×î¼ÑÁĞ¿í";
@@ -7424,7 +7424,7 @@ SfxSlotInfo FN_TABLE_OPTIMAL_HEIGHT
     SlotName[ portuguese_brazilian ] = "SetOptimalRowHeight";
     SlotName[ japanese ] = "Å“K‚Ès‚Ì‚‚³";
     SlotName[ chinese_simplified ] = "×î¼ÑĞĞ¸ß";
-    SlotName[ chinese_traditional ] = "³ÌÓìÄæ°ª";
+    SlotName[ chinese_traditional ] = "³Ì¾AÄæ°ª";
     SlotName[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃãËá ááÕİ";
     SlotName[ dutch ] = "Optimale rijhoogte";
     SlotName[ chinese_simplified ] = "×î¼ÑĞĞ¸ß";
