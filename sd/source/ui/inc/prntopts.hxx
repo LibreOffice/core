@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-02 14:09:50 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,9 @@
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
 #endif
-
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
+#endif
 
 /*
 enum PrintType
