@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: gt $ $Date: 2004-07-14 11:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,17 +84,52 @@ using namespace ::com::sun::star;
 
 namespace
 {
+    void ShrinkToFit( FixedImage& _rImage );
+    long ShrinkToFitWidth( Control& _rCtrl, long _nOffs = 0 );      // return = new width
     void AdjustPosAndSize( Control& _rCtrl, Point& _rStartIn_EndOut, long _nXOffset = 0 );
+    void AlignAfterImage( const FixedImage& _rImage, Control& _rCtrl, long _nXOffset = 0 );
+    void AlignAfterImage( const FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset = 0 );
 
-    void AdjustPosAndSize( Control& _rCtrl, Point& _rStartIn_EndOut, long _nOffs )
+    void ShrinkToFit( FixedImage& _rImg )
+    {
+        _rImg.SetSizePixel( _rImg.GetImage().GetSizePixel() );
+    }
+
+    long ShrinkToFitWidth( Control& _rCtrl, long _nOffs )
     {
         long    nWidth = _rCtrl.GetTextWidth( _rCtrl.GetText() );
         Size    aSize( _rCtrl.GetSizePixel() );
         nWidth += _nOffs;
         aSize.Width() = nWidth;
-        _rCtrl.SetPosPixel( _rStartIn_EndOut );
         _rCtrl.SetSizePixel( aSize );
-        _rStartIn_EndOut.X() += nWidth;
+        return nWidth;
+    }
+
+    void AdjustPosAndSize( Control& _rCtrl, Point& _rStartIn_EndOut, long _nOffs )
+    {
+        _rCtrl.SetPosPixel( _rStartIn_EndOut );
+        _rStartIn_EndOut.X() += ShrinkToFitWidth( _rCtrl, _nOffs );
+    }
+
+    void AlignAfterImage( const FixedImage& _rImage, Control& _rCtrl, long _nXOffset )
+    {
+        Point   aPos( _rImage.GetPosPixel() );
+        Size    aSize( _rImage.GetSizePixel() );
+        long    n = aPos.X();
+        n += aSize.Width();
+        n += _nXOffset;
+        aPos.X() = n;
+        n = aPos.Y();
+        n += aSize.Height() / 2;                    // y-position is in the middle of the image
+        n -= _rCtrl.GetSizePixel().Height() / 2;    // center Control
+        aPos.Y() = n;
+        _rCtrl.SetPosPixel( aPos );
+    }
+
+    void AlignAfterImage( const FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset )
+    {
+        AlignAfterImage( _rImage, static_cast< Control& >( _rFI ), _nXOffset );
+        ShrinkToFitWidth( _rFI );
     }
 };
 
@@ -193,42 +228,34 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
 
     // recalc positions for date fields according to real size
     Point   aPos( maValidFromLabelFI.GetPosPixel() );
-//  long    nWidth;
-
-//  nWidth = GetTextWidth( maValidFromLabelFI.GetText() );
-//  maValidFromLabelFI.SetSizePixel
-//  aPos.X() += nWidth;
     AdjustPosAndSize( maValidFromLabelFI, aPos );
-
-//  maValidFromFI.SetPosPixel( aPos );
-//  nWidth = GetTextWidth( maValidFromFI.GetText() );
-//  aPos.X() += nWidth;
     AdjustPosAndSize( maValidFromFI, aPos );
-
-//  maValidToLabelFI.SetPosPixel( aPos );
-//  nWidth = GetTextWidth( maValidToLabelFI.GetText() );
-//  aPos.X() += nWidth;
-
-//  maValidToFI.SetPosPixel( aPos );
     AdjustPosAndSize( maValidToLabelFI, aPos );
     AdjustPosAndSize( maValidToFI, aPos );
 
     // adjust position of fixed text depending on image sizes
-    long nWidth = maCertImg.GetSizePixel().Width();
-    aPos = maCertInfoFI.GetPosPixel();
-    aPos.X() = maCertImg.GetPosPixel().X();
-    aPos.X() += nWidth;
-    maCertInfoFI.SetPosPixel( aPos );
-
-    nWidth = maKeyImg.GetSizePixel().Width();
-    aPos = maHintCorrespPrivKeyFI.GetPosPixel();
-    aPos.X() = maKeyImg.GetPosPixel().X();
-    aPos.X() += nWidth;
-//  maHintCorrespPrivKeyFI.SetPosPixel( aPos );
-    AdjustPosAndSize( maHintCorrespPrivKeyFI, aPos );
+    ShrinkToFit( maCertImg );
+    ShrinkToFit( maKeyImg );
+    AlignAfterImage( maCertImg, maCertInfoFI, 12 );
+    AlignAfterImage( maKeyImg, maHintCorrespPrivKeyFI, 12 );
 }
 
 void CertificateViewerGeneralTP::ActivatePage()
+{
+}
+
+
+struct Details_UserDatat
+{
+    String          maTxt;
+    bool            mbFixedWidthFont;
+
+    inline          Details_UserDatat( const String& _rTxt, bool _bFixedWidthFont );
+};
+
+inline Details_UserDatat::Details_UserDatat( const String& _rTxt, bool _bFixedWidthFont )
+    :maTxt              ( _rTxt )
+    ,mbFixedWidthFont   ( _bFixedWidthFont )
 {
 }
 
@@ -240,7 +267,8 @@ void CertificateViewerDetailsTP::Clear( void )
     SvLBoxEntry*    pEntry = maElementsLB.GetEntry( i );
     while( pEntry )
     {
-        delete ( String* ) pEntry->GetUserData();
+//      delete ( String* ) pEntry->GetUserData();
+        delete ( Details_UserDatat* ) pEntry->GetUserData();
         ++i;
         pEntry = maElementsLB.GetEntry( i );
     }
@@ -248,18 +276,21 @@ void CertificateViewerDetailsTP::Clear( void )
     maElementsLB.Clear();
 }
 
-void CertificateViewerDetailsTP::InsertElement( const String& _rField, const String& _rValue, const String& _rDetails )
+void CertificateViewerDetailsTP::InsertElement( const String& _rField, const String& _rValue,
+                                                const String& _rDetails, bool _bFixedWidthFont )
 {
     SvLBoxEntry*    pEntry = maElementsLB.InsertEntry( _rField );
     maElementsLB.SetEntryText( _rValue, pEntry, 1 );
-    pEntry->SetUserData( ( void* ) new String( _rDetails ) );       // extended view of value
-//  pEntry->SetUserData( ( void* ) new String( XmlSec::GetPureContent( _rValue, "\n", true ) ) );
+//  pEntry->SetUserData( ( void* ) new String( _rDetails ) );       // extended view of value
+    pEntry->SetUserData( ( void* ) new Details_UserDatat( _rDetails, _bFixedWidthFont ) );
 }
 
 CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, CertificateViewer* _pDlg )
     :CertificateViewerTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_DETAILS ), _pDlg  )
     ,maElementsLB           ( this, ResId( LB_ELEMENTS ) )
     ,maElementML            ( this, ResId( ML_ELEMENT ) )
+    ,maStdFont              ( maElementML.GetFont() )
+    ,maFixedWidthFont       ( )
 {
     static long nTabs[] = { 2, 0, 40*CS_LB_WIDTH/100 };
     maElementsLB.SetTabs( &nTabs[ 0 ] );
@@ -288,8 +319,8 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
 //      aSerNumStr.AppendAscii( " " );
         aSerNumStr.AppendAscii( pBuffer );
     }
-    InsertElement( String( ResId( STR_SERIALNUM ) ), aSerNumStr, aSerNumStr );
-    InsertElement( String( ResId( STR_SIGALGORITHM ) ), String::CreateFromAscii( "n/a" ), String() );
+    InsertElement( String( ResId( STR_SERIALNUM ) ), aSerNumStr, aSerNumStr, true );
+//  InsertElement( String( ResId( STR_SIGALGORITHM ) ), String::CreateFromAscii( "n/a" ), String() );
     aLBEntry = XmlSec::GetPureContent( xCert->getIssuerName(), ", " );
     aDetails = XmlSec::GetPureContent( xCert->getIssuerName(), "\n", true );
     InsertElement( String( ResId( STR_ISSUER ) ), aLBEntry, aDetails );
@@ -319,11 +350,18 @@ IMPL_LINK( CertificateViewerDetailsTP, ElementSelectHdl, void*, EMPTYARG )
 {
     SvLBoxEntry*    pEntry = maElementsLB.FirstSelected();
     String          aElementText;
+    bool            bFixedWidthFont;
     if( pEntry )
     {
-        aElementText = *( ( String* ) pEntry->GetUserData() );
+//      aElementText = *( ( String* ) pEntry->GetUserData() );
+        const Details_UserDatat*    p = ( Details_UserDatat* ) pEntry->GetUserData();
+        aElementText = p->maTxt;
+        bFixedWidthFont = p->mbFixedWidthFont;
     }
+    else
+        bFixedWidthFont = false;
 
+    maElementML.SetFont( bFixedWidthFont? maFixedWidthFont : maStdFont );
     maElementML.SetText( aElementText );
 
     return 0;

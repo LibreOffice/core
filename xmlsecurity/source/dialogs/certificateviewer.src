@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: gt $ $Date: 2004-07-14 11:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,12 +129,12 @@ TabPage RID_XMLSECTP_GENERAL
     FixedImage IMG_CERT
     {
         Pos = MAP_APPFONT( CW_COL_0, CW_ROW_0 );
-        Size = MAP_APPFONT( CW_COL_2-CW_COL_0, CW_ROW_2-CW_ROW_0 );
-//      Fixed = Image
-//      {
-//          ImageBitmap = Bitmap { File = "xmlsec_cert_l.bmp"; };
-//          MaskColor = STD_MASKCOLOR;
-//      };
+        Size = MAP_APPFONT( IMG1_WIDTH, IMG1_HEIGHT );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "certificate_40x56.png"; };
+            MaskColor = STD_MASKCOLOR;
+        };
     };
     FixedText FI_CERTINFO
     {
@@ -212,12 +212,12 @@ TabPage RID_XMLSECTP_GENERAL
     FixedImage IMG_KEY
     {
         Pos = MAP_APPFONT( CW_COL_0, CW_ROW_9 );
-        Size = MAP_APPFONT( CW_COL_2-CW_COL_0, CW_ROW_11-CW_ROW_9 );
-//      Fixed = Image
-//      {
-//          ImageBitmap = Bitmap { File = "xmlsec_key.bmp"; };
-//          MaskColor = STD_MASKCOLOR;
-//      };
+        Size = MAP_APPFONT( IMG2_WIDTH, IMG2_HEIGHT );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "key_12.png"; };
+            MaskColor = STD_MASKCOLOR;
+        };
     };
     FixedText FI_CORRPRIVKEY
     {

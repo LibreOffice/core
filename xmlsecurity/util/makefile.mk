@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mt $ $Date: 2004-07-14 11:05:46 $
+#   last change: $Author: gt $ $Date: 2004-07-14 11:38:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,6 +150,7 @@ SRSFILELIST=	\
                 $(SRS)$/dialogs.srs
 
 RESLIB1NAME=xmlsec
+RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES= $(SRSFILELIST)
 
 SHL4TARGET=$(TARGET)

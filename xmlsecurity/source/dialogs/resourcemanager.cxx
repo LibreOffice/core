@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourcemanager.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:24 $
+ *  last change: $Author: gt $ $Date: 2004-07-14 11:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,24 +105,25 @@ namespace XmlSec
 
     String GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT )
     {
-        return GetInternational()->GetLongDate( GetDateTime( _rDT ) );
+        return GetInternational()->GetDate( GetDateTime( _rDT ) );
     }
 
     String GetDateString( const ::com::sun::star::util::DateTime& _rDT )
     {
-        return GetInternational()->GetLongDate( GetDateTime( _rDT ) );
+        return GetInternational()->GetDate( GetDateTime( _rDT ) );
     }
 
     String GetPureContent( const String& _rRawString, const char* _pCommaReplacement, bool _bPreserveId )
     {
-        enum STATE { ID, EQUALSIGN, CONT };
+        enum STATE { PRE_ID, ID, EQUALSIGN, PRE_CONT, CONT };
         String      s;
-        STATE       e = ID;
+        STATE       e = _bPreserveId? PRE_ID : ID;
 
         const sal_Unicode*  p = _rRawString.GetBuffer();
         sal_Unicode         c;
         const sal_Unicode   cComma = ',';
         const sal_Unicode   cEqualSign = '=';
+        const sal_Unicode   cSpace = ' ';
         String              aCommaReplacement;
         if( _pCommaReplacement )
             aCommaReplacement = String::CreateFromAscii( _pCommaReplacement );
@@ -132,20 +133,34 @@ namespace XmlSec
             c = *p;
             switch( e )
             {
+                case PRE_ID:
+                    if( c != cSpace )
+                    {
+                        s += c;
+                        e = ID;
+                    }
+                    break;
                 case ID:
                     if( _bPreserveId )
                         s += c;
 
                     if( c == cEqualSign )
-                        e = CONT;
+                        e = _bPreserveId? PRE_CONT : CONT;
                     break;
 //              case EQUALSIGN:
 //                  break;
+                case PRE_CONT:
+                    if( c != cSpace )
+                    {
+                        s += c;
+                        e = CONT;
+                    }
+                    break;
                 case CONT:
                     if( c == cComma )
                     {
                         s += aCommaReplacement;
-                        e = ID;
+                        e = _bPreserveId? PRE_ID : ID;
                     }
                     else
                         s += c;

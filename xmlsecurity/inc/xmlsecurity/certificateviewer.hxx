@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:20 $
+ *  last change: $Author: gt $ $Date: 2004-07-14 11:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,10 +150,13 @@ class CertificateViewerDetailsTP : public CertificateViewerTP
 private:
     SvxSimpleTable      maElementsLB;
     MultiLineEdit       maElementML;
+    Font                maStdFont;
+    Font                maFixedWidthFont;
 
     DECL_LINK(          ElementSelectHdl, void* );
     void                Clear( void );
-    void                InsertElement( const String& _rField, const String& _rValue, const String& _rDetails );
+    void                InsertElement( const String& _rField, const String& _rValue,
+                                        const String& _rDetails, bool _bFixedWidthFont = false );
 public:
                         CertificateViewerDetailsTP( Window* pParent, CertificateViewer* _pDlg );
     virtual             ~CertificateViewerDetailsTP();
