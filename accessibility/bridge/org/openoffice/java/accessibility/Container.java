@@ -440,70 +440,6 @@ public class Container extends java.awt.Container implements javax.accessibility
              */
         }
 
-        /** Check if the parent of an selectable object supports AccessibleSelection */
-        protected void dbgCheckSelectable() {
-            javax.accessibility.Accessible parent = getAccessibleParent();
-            if (parent != null) {
-                javax.accessibility.AccessibleContext parentAC = parent.getAccessibleContext();
-                if (parentAC != null) {
-                    if (parentAC.getAccessibleSelection() == null) {
-                        System.err.println("*** ERROR *** Object claims to be selectable, but parent does not support AccessibleSelection");
-                    }
-                } else {
-                    System.err.println("*** ERROR *** Object claims to be selectable, but parent is not accessible");
-                }
-            } else {
-                System.err.println("*** ERROR *** Object claims to be selectable, but has no accessible parent");
-            }
-        }
-
-        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
-        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
-            javax.accessibility.AccessibleStateSet states = new javax.accessibility.AccessibleStateSet();
-            if (Container.this.isEnabled()) {
-                states.add(AccessibleState.ENABLED);
-            }
-            if (Container.this.isFocusTraversable()) {
-                states.add(AccessibleState.FOCUSABLE);
-            }
-            if (Container.this.isVisible()) {
-                states.add(AccessibleState.VISIBLE);
-            }
-            if (Container.this.isShowing()) {
-                states.add(AccessibleState.SHOWING);
-            }
-            if (Container.this.isFocusOwner()) {
-                states.add(AccessibleState.FOCUSED);
-            }
-
-            try {
-                if (unoAS != null) {
-                    if (unoAS.contains(AccessibleStateType.SELECTABLE)) {
-                        states.add(AccessibleState.SELECTABLE);
-                    }
-                    if (unoAS.contains(AccessibleStateType.SELECTED)) {
-                        states.add(AccessibleState.SELECTED);
-
-                        if (Build.DEBUG) {
-                            dbgCheckSelectable();
-                        }
-                    }
-                    if (unoAS.contains(AccessibleStateType.MULTI_SELECTABLE)) {
-                        states.add(AccessibleState.MULTISELECTABLE);
-                    }
-                    if (unoAS.contains(AccessibleStateType.HORIZONTAL)) {
-                        states.add(AccessibleState.HORIZONTAL);
-                    }
-                    if (unoAS.contains(AccessibleStateType.VERTICAL)) {
-                        states.add(AccessibleState.VERTICAL);
-                    }
-                }
-            } catch (com.sun.star.uno.RuntimeException e) {
-            }
-
-            return states;
-        }
-
         protected java.awt.event.ComponentListener accessibleComponentHandler = null;
 
         /**
@@ -640,15 +576,15 @@ public class Container extends java.awt.Container implements javax.accessibility
         *    containing the current state set of the object
         * @see AccessibleState
         */
-        public final javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
+        public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
+            if (disposed)
+                return AccessibleStateAdapter.getDefunctStateSet();
+
             try {
-                XAccessibleStateSet unoASS = null;
-                if ( !disposed ) {
-                    unoASS = unoAccessibleContext.getAccessibleStateSet();
-                }
-                return getAccessibleStateSetImpl(unoASS);
+                return AccessibleStateAdapter.getAccessibleStateSet(Container.this,
+                    unoAccessibleContext.getAccessibleStateSet());
             } catch (com.sun.star.uno.RuntimeException e) {
-                return getAccessibleStateSetImpl(null);
+                return AccessibleStateAdapter.getDefunctStateSet();
             }
         }
 
