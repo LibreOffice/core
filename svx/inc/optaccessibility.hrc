@@ -1,0 +1,119 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optaccessibility.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:32:42 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SVX_OPTACCESSIBILITY_HRC
+#define _SVX_OPTACCESSIBILITY_HRC
+
+#include <svtools/controldims.hrc>
+
+// defines for positions and sizes
+
+#define GB_WIDTH                248
+#define CB_WIDTH                240
+#define EDIT_WIDTH              25
+
+#define COL0                    6
+#define COL1                    (COL0+6)
+#define COL2                    (COL1+10)
+#define COL3                    (COL1+(CB_WIDTH/2))
+#define COL4                    (COL3+EDIT_WIDTH+RSC_SP_CTRL_DESC_X)
+
+#define UNIT_WIDTH              (CB_WIDTH-COL4)
+
+#define ROWSPACE                RSC_SP_CTRL_DESC_Y
+#define LINESPACE               1
+#define GROUPSPACE              RSC_SP_CTRL_DESC_Y + 2
+#define ROWA_0                  3
+#define ROWA_1                  ( ROWA_0 + RSC_CD_FIXEDLINE_HEIGHT      + ROWSPACE )
+#define ROWA_2                  ( ROWA_1 + RSC_CD_CHECKBOX_HEIGHT       + ROWSPACE )
+#define ROWA_3                  ( ROWA_2 + RSC_CD_CHECKBOX_HEIGHT       + ROWSPACE )
+#define ROWA_4                  ( ROWA_3 + RSC_CD_CHECKBOX_HEIGHT       + ROWSPACE )
+#define ROWA_5                  ( ROWA_4 + RSC_CD_CHECKBOX_HEIGHT       + ROWSPACE )
+#define ROWA_6                  ( ROWA_5 + RSC_CD_FIXEDLINE_HEIGHT      + ROWSPACE )
+
+#define ROWB_0                  ( ROWA_6 + RSC_CD_TEXTBOX_HEIGHT        + ROWSPACE + GROUPSPACE )
+#define ROWB_1                  ( ROWB_0 + RSC_CD_FIXEDLINE_HEIGHT      + ROWSPACE )
+#define ROWB_2                  ( ROWB_1 + RSC_CD_CHECKBOX_HEIGHT       + ROWSPACE )
+#define ROWB_3                  ( ROWB_2 + RSC_CD_CHECKBOX_HEIGHT       + ROWSPACE )
+
+#define WHOLE_HEIGHT            185
+#define LASTTEXT_HEIGHT         (WHOLE_HEIGHT-ROWB_8)
+#define OFFS_TEXTBOX_FIXEDTEXT(base)    (base+(RSC_CD_TEXTBOX_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
+#define DIFF(v1,v2)             (v2-v1)
+#define SUM(v1,v2)              (v2+v1)
+
+//
+
+#define FL_MISCELLANEOUS        1
+#define CB_PAGE_PREVIEWS        2
+#define FL_HC_OPTIONS           3
+#define CB_TIPHELP              4
+#define NF_TIPHELP              5
+#define FT_TIPHELP              6
+#define CB_ANIMATED_GRAPHICS    7
+#define CB_ANIMATED_TEXTS       8
+#define CB_AUTOMATIC_FONT_COLOR 9
+#define CB_SYSTEM_FONT          10
+#define CB_ACCESSIBILITY_TOOL   11
+#define CB_TEXTSELECTION        12
+#define CB_AUTO_DETECT_HC       13
+
+#endif
+
