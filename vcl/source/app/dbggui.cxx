@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2001-07-04 10:42:52 $
+ *  last change: $Author: th $ $Date: 2001-07-06 15:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1316,7 +1316,7 @@ DbgInfoDialog::DbgInfoDialog( Window* pParent, BOOL bHelpText ) :
 
     if ( !bHelpText )
     {
-        Font aFont = System::GetStandardFont( STDFONT_FIXED );
+        Font aFont = GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US, 0 );
         aFont.SetHeight( 8 );
         aFont.SetPitch( PITCH_FIXED );
         maListBox.SetControlFont( aFont );
