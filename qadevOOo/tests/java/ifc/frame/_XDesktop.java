@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDesktop.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 12:36:29 $
+ *  last change:$Date: 2003-09-08 10:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,16 @@
 
 package ifc.frame;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.uno.XInterface;
-import lib.MultiMethodTest;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.XInterface;
 
 /**
 * Testing <code>com.sun.star.frame.XDesktop</code>
