@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:11:21 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,15 @@
 
 #ifndef _VIEW_HRC
 #include <view.hrc>
+#endif
+#ifndef _SW_REWRITER_HXX
+#include <SwRewriter.hxx>
+#endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
+#endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
 #endif
 
 using namespace com::sun::star;
@@ -659,13 +668,18 @@ void SwView::Replace()
 
     if( pSrchItem->GetPattern() ) // Vorlagen?
     {
-        pWrtShell->StartUndo(UIUNDO_REPLACE); // #111827#
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UNDO_ARG1, pSrchItem->GetSearchString());
+        aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
+        aRewriter.AddRule(UNDO_ARG3, pSrchItem->GetReplaceString());
+
+        pWrtShell->StartUndo(UIUNDO_REPLACE_STYLE, &aRewriter); // #111827#
 
         pWrtShell->SetTxtFmtColl( pWrtShell->GetParaStyle(
                             pSrchItem->GetReplaceString(),
                             SwWrtShell::GETSTYLE_CREATESOME ));
 
-        pWrtShell->EndUndo(UIUNDO_REPLACE); // #111827#
+        pWrtShell->EndUndo(UIUNDO_REPLACE_STYLE); // #111827#
     }
     else
     {
