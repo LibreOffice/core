@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1sprm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:22:33 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,6 @@
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
-
-#pragma hdrstop
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 
@@ -610,26 +608,8 @@ void Ww1SingleSprmPFInTable::Stop(
     Ww1Manager& rMan)
 {
     ASSERT(rOut.IsInTable(), "");
-//  if (rOut.IsInTable() && rMan.HasInTable() && !rMan.IsInTtp() && !rMan.HasTtp())
-//      rOut.NextTableCell();
     rMan.SetInTtp( FALSE );
 }
-
-void Ww1SingleSprmTJc::Start(
-    Ww1Shell& rOut, BYTE nId, BYTE* pSprm, USHORT nSize, Ww1Manager& rMan)
-{
-    short nSpace = SVBT16ToShort(pSprm);
-}
-
-#if 0
-void Ww1SingleSprmTDxaLeft::Start(
-    Ww1Shell& rOut, BYTE nId, BYTE* pSprm, USHORT nSize, Ww1Manager& rMan)
-{
-    short nSpace = SVBT16ToShort(pSprm);
-    rOut.SetCellWidth(nSpace - rMan.GetX());
-    rMan.SetX(nSpace);
-}
-#endif
 
 void Ww1SingleSprmTDxaGapHalf::Start(
     Ww1Shell& rOut, BYTE nId, BYTE* pSprm, USHORT nSize, Ww1Manager& rMan)
@@ -688,7 +668,6 @@ void Ww1SingleSprmTDefTable10::Start(
     for( i = 0; i < nCount; i++ ){
 // Info sammeln
         W1_TC* pTc = (W1_TC*)pTc0;
-        BOOL bFirstMerged = (pTc) ? pTc->fFirstMergedGet() : FALSE;
         BOOL bMerged = (pTc) ? pTc->fMergedGet() : FALSE;
 
 // Zellenbreiten setzen
@@ -703,7 +682,6 @@ void Ww1SingleSprmTDefTable10::Start(
 
         if( pTc0 ){                     // gibts TCs ueberhaupt ?
             W1_TC* pTc = (W1_TC*)pTc0;
-            BOOL bFirstMerged = pTc->fFirstMergedGet();
             BOOL bMerged = pTc->fMergedGet();
 //          ASSERT( !bMerged, "Gemergte Tabellenzellen noch nicht vollstaendig implementiert" );
             if( !bMerged ){
