@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:23:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ SfxPopupWindow* SvxFmTbxCtlConfig::CreatePopupWindow()
             pToolbarAsciiName = "databasecontrols";
             break;
 
-        case ::svxform::eElectronicForm:
+        case ::svxform::eEnhancedForm:
             pToolbarAsciiName = "xformcontrols";
             break;
 
