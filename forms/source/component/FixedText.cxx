@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FixedText.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,26 +79,37 @@
 //.........................................................................
 namespace frm
 {
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //------------------------------------------------------------------------------
-InterfaceRef SAL_CALL OFixedTextModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (staruno::RuntimeException)
+InterfaceRef SAL_CALL OFixedTextModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OFixedTextModel(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OFixedTextModel::_getTypes()
+Sequence<Type> OFixedTextModel::_getTypes()
 {
-    static staruno::Sequence<staruno::Type> aTypes = OControlModel::_getTypes();
+    static Sequence<Type> aTypes = OControlModel::_getTypes();
     return aTypes;
 }
 
 //------------------------------------------------------------------
-OFixedTextModel::OFixedTextModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rFactory)
+OFixedTextModel::OFixedTextModel(const Reference<XMultiServiceFactory>& _rFactory)
         :OControlModel(_rFactory, VCL_CONTROLMODEL_FIXEDTEXT)
 
 {
-    m_nClassId = starform::FormComponentType::FIXEDTEXT;
+    m_nClassId = FormComponentType::FIXEDTEXT;
 }
 
 //------------------------------------------------------------------------------
@@ -113,9 +124,9 @@ StringSequence SAL_CALL OFixedTextModel::getSupportedServiceNames() throw(::com:
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OFixedTextModel::getPropertySetInfo() throw(staruno::RuntimeException)
+Reference<starbeans::XPropertySetInfo> SAL_CALL OFixedTextModel::getPropertySetInfo() throw(RuntimeException)
 {
-    staruno::Reference<starbeans::XPropertySetInfo> xInfo(createPropertySetInfo(getInfoHelper()));
+    Reference<starbeans::XPropertySetInfo> xInfo(createPropertySetInfo(getInfoHelper()));
     return xInfo;
 }
 
@@ -127,8 +138,8 @@ cppu::IPropertyArrayHelper& OFixedTextModel::getInfoHelper()
 
 //------------------------------------------------------------------------------
 void OFixedTextModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< starbeans::Property >& _rProps,
+        Sequence< starbeans::Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(4)
         RemoveProperty(_rAggregateProps, PROPERTY_TABSTOP);
@@ -141,14 +152,14 @@ void OFixedTextModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFixedTextModel::getServiceName() throw(staruno::RuntimeException)
+::rtl::OUString SAL_CALL OFixedTextModel::getServiceName() throw(RuntimeException)
 {
     return FRM_COMPONENT_FIXEDTEXT; // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OFixedTextModel::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
-    throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL OFixedTextModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+    throw(IOException, RuntimeException)
 {
     OControlModel::write(_rxOutStream);
 
@@ -158,7 +169,7 @@ void SAL_CALL OFixedTextModel::write(const staruno::Reference<stario::XObjectOut
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OFixedTextModel::read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL OFixedTextModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
 {
     OControlModel::read(_rxInStream);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _FORMS_EDITBASE_HXX_
 #include "EditBase.hxx"
 #endif
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
+#endif
 
 //.........................................................................
 namespace frm
@@ -77,10 +80,10 @@ class OEditModel
                 :public OEditBaseModel
                 ,public ::comphelper::OAggregationArrayUsageHelper< OEditModel >
 {
-    staruno::Reference<starutil::XNumberFormatter>      m_xFormatter;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>         m_xFormatter;
     ::rtl::OUString                 m_aSaveValue;
     sal_Int32                   m_nFormatKey;
-    starutil::Date              m_aNullDate;
+    ::com::sun::star::util::Date                m_aNullDate;
     sal_Int32                   m_nFieldType;
     sal_Int16                   m_nKeyType;
     sal_Int16                   m_nMaxLen;
@@ -92,49 +95,49 @@ class OEditModel
 
 protected:
     virtual void _onValueChanged();
-    virtual staruno::Sequence<staruno::Type> _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
-    OEditModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OEditModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     virtual ~OEditModel();
 
     void enableFormattedWriteFake() { m_bWritingFormattedFake = sal_True; }
     void disableFormattedWriteFake() { m_bWritingFormattedFake = sal_False; }
     sal_Bool lastReadWasFormattedFake() const { return (getLastReadVersion() & PF_FAKE_FORMATTED_FIELD) != 0; }
 
-    friend InterfaceRef SAL_CALL OEditModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    friend InterfaceRef SAL_CALL OEditModel_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     friend class OFormattedFieldWrapper;
     friend class OFormattedModel;   // temporary
 
 public:
     virtual void SAL_CALL disposing();
 
-// starform::XBoundComponent
+// ::com::sun::star::form::XBoundComponent
     virtual sal_Bool _commit();
 
-// stario::XPersistObject
-    virtual void SAL_CALL write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream);
-    virtual void SAL_CALL read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream);
+// ::com::sun::star::io::XPersistObject
+    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
+    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
     virtual ::rtl::OUString SAL_CALL getServiceName();
 
-// starbeans::XPropertySet
-    virtual staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(staruno::RuntimeException);
+// ::com::sun::star::beans::XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-// starlang::XServiceInfo
+// ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OEditModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-// starform::XLoadListener
-    virtual void _loaded(const starlang::EventObject& rEvent);
+// ::com::sun::star::form::XLoadListener
+    virtual void _loaded(const ::com::sun::star::lang::EventObject& rEvent);
     virtual void _unloaded();
 
-// starform::XReset
+// ::com::sun::star::form::XReset
     virtual void _reset();
 
 // OAggregationArrayUsageHelper
     virtual void fillProperties(
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rProps,
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rAggregateProps
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
 
@@ -145,10 +148,12 @@ protected:
 //==================================================================
 //= OEditControl
 //==================================================================
+typedef ::cppu::ImplHelper3<    ::com::sun::star::awt::XFocusListener,
+                                ::com::sun::star::awt::XKeyListener,
+                                ::com::sun::star::form::XChangeBroadcaster > OEditControl_BASE;
+
 class OEditControl : public OBoundControl
-                      ,public starawt::XFocusListener
-                      ,public starawt::XKeyListener
-                      ,public starform::XChangeBroadcaster
+                      ,public OEditControl_BASE
 {
     ::cppu::OInterfaceContainerHelper
                         m_aChangeListeners;
@@ -157,35 +162,35 @@ class OEditControl : public OBoundControl
     sal_uInt32              m_nKeyEvent;
 
 public:
-    OEditControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OEditControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     virtual ~OEditControl();
 
     DECLARE_UNO3_AGG_DEFAULTS(OEditControl, OBoundControl);
-    virtual staruno::Any SAL_CALL queryAggregation(const staruno::Type& _rType) throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
-    virtual staruno::Sequence<staruno::Type> _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
 // OComponentHelper
     virtual void SAL_CALL disposing();
 
-// starlang::XEventListener
-    virtual void SAL_CALL disposing(const starlang::EventObject& _rSource) throw(staruno::RuntimeException);
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
 
-// starlang::XServiceInfo
+// ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OEditControl);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-// starform::XChangeBroadcaster
-    virtual void SAL_CALL addChangeListener(const staruno::Reference<starform::XChangeListener>& _rxListener);
-    virtual void SAL_CALL removeChangeListener(const staruno::Reference<starform::XChangeListener>& _rxListener);
+// ::com::sun::star::form::XChangeBroadcaster
+    virtual void SAL_CALL addChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener>& _rxListener);
+    virtual void SAL_CALL removeChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener>& _rxListener);
 
-// starawt::XFocusListener
-    virtual void SAL_CALL focusGained( const starawt::FocusEvent& e );
-    virtual void SAL_CALL focusLost( const starawt::FocusEvent& e );
+// ::com::sun::star::awt::XFocusListener
+    virtual void SAL_CALL focusGained( const ::com::sun::star::awt::FocusEvent& e );
+    virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& e );
 
-// starawt::XKeyListener
-    virtual void SAL_CALL keyPressed(const starawt::KeyEvent& e);
-    virtual void SAL_CALL keyReleased(const starawt::KeyEvent& e);
+// ::com::sun::star::awt::XKeyListener
+    virtual void SAL_CALL keyPressed(const ::com::sun::star::awt::KeyEvent& e);
+    virtual void SAL_CALL keyReleased(const ::com::sun::star::awt::KeyEvent& e);
 
 private:
     DECL_LINK( OnKeyPressed, void* );

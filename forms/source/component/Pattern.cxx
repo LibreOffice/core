@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pattern.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:06 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,24 +71,35 @@
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //==================================================================
 // OPatternControl
 //==================================================================
 //------------------------------------------------------------------
-OPatternControl::OPatternControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OPatternControl::OPatternControl(const Reference<XMultiServiceFactory>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_PATTERNFIELD)
 {
 }
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OPatternControl_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OPatternControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OPatternControl(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OPatternControl::_getTypes()
+Sequence<Type> OPatternControl::_getTypes()
 {
     return OBoundControl::_getTypes();
 }
@@ -110,23 +121,23 @@ StringSequence OPatternControl::getSupportedServiceNames() throw()
 sal_Int32   OPatternModel::nTextHandle = -1;
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OPatternModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OPatternModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OPatternModel(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OPatternModel::_getTypes()
+Sequence<Type> OPatternModel::_getTypes()
 {
     return OEditBaseModel::_getTypes();
 }
 
 //------------------------------------------------------------------
-OPatternModel::OPatternModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OPatternModel::OPatternModel(const Reference<XMultiServiceFactory>& _rxFactory)
     :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_PATTERNFIELD, FRM_CONTROL_PATTERNFIELD)
                                     // use the old control name for compytibility reasons
 {
-    m_nClassId = starform::FormComponentType::PATTERNFIELD;
+    m_nClassId = FormComponentType::PATTERNFIELD;
     m_sDataFieldConnectivityProperty = PROPERTY_TEXT;
     if (OPatternModel::nTextHandle == -1)
         OPatternModel::nTextHandle = getOriginalHandle(PROPERTY_ID_TEXT);
@@ -137,7 +148,7 @@ OPatternModel::~OPatternModel()
 {
 }
 
-// starlang::XServiceInfo
+// XServiceInfo
 //------------------------------------------------------------------------------
 StringSequence SAL_CALL OPatternModel::getSupportedServiceNames() throw()
 {
@@ -152,20 +163,20 @@ StringSequence SAL_CALL OPatternModel::getSupportedServiceNames() throw()
 
 
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OPatternModel::getPropertySetInfo() throw( staruno::RuntimeException )
+Reference<XPropertySetInfo> SAL_CALL OPatternModel::getPropertySetInfo() throw( RuntimeException )
 {
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
 //------------------------------------------------------------------------------
 void OPatternModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(12)
         // Text auf transient setzen
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, starbeans::PropertyAttribute::TRANSIENT, 0);
+//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, PropertyAttribute::TRANSIENT, 0);
         DECL_PROP1(NAME,            ::rtl::OUString,    BOUND);
         DECL_PROP2(CLASSID,         sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP2(DEFAULT_TEXT,    ::rtl::OUString,    BOUND, MAYBEDEFAULT);
@@ -174,9 +185,9 @@ void OPatternModel::fillProperties(
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
         DECL_PROP1(CONTROLSOURCE,   ::rtl::OUString,    BOUND);
         DECL_PROP1(HELPTEXT,        ::rtl::OUString,    BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,    starbeans::XPropertySet,    READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,   READONLY, TRANSIENT);
         DECL_PROP2(FILTERPROPOSAL,  sal_Bool,           BOUND, MAYBEDEFAULT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  starbeans::XPropertySet,    BOUND, MAYBEVOID);
+        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,   BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
@@ -193,7 +204,7 @@ void OPatternModel::fillProperties(
     return FRM_COMPONENT_PATTERNFIELD;  // old (non-sun) name for compatibility !
 }
 
-// starform::XBoundComponent
+// XBoundComponent
 //------------------------------------------------------------------------------
 sal_Bool OPatternModel::_commit()
 {
@@ -208,7 +219,7 @@ sal_Bool OPatternModel::_commit()
             {
                 m_xColumnUpdate->updateString(aNewValue);
             }
-            catch(...)
+            catch(Exception&)
             {
                 return sal_False;
             }
@@ -218,7 +229,7 @@ sal_Bool OPatternModel::_commit()
     return sal_True;
 }
 
-// starbeans::XPropertyChangeListener
+// XPropertyChangeListener
 //------------------------------------------------------------------------------
 void OPatternModel::_onValueChanged()
 {
@@ -228,11 +239,11 @@ void OPatternModel::_onValueChanged()
         // our own mutex locked
         // FS - 72451 - 31.01.00
         MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(OPatternModel::nTextHandle, staruno::makeAny(m_aSaveValue));
+        m_xAggregateFastSet->setFastPropertyValue(OPatternModel::nTextHandle, makeAny(m_aSaveValue));
     }
 }
 
-// starform::XReset
+// XReset
 //------------------------------------------------------------------------------
 void OPatternModel::_reset( void )
 {
@@ -241,7 +252,7 @@ void OPatternModel::_reset( void )
         // our own mutex locked
         // FS - 72451 - 31.01.00
         MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(OPatternModel::nTextHandle, staruno::makeAny(m_aDefaultText));
+        m_xAggregateFastSet->setFastPropertyValue(OPatternModel::nTextHandle, makeAny(m_aDefaultText));
     }
 }
 

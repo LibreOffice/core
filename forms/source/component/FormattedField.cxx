@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-09 17:25:12 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,16 +149,20 @@
 #include <vos/mutex.hxx>
 #endif
     // needed as long as we use the SolarMutex
-
-// temporary, 'til the base class of StandardFormatsSupplier is implemented with new UNO
-#if SUPD<583
-#ifndef _USR_SMARTCONV_HXX_
-#include <usr/smartconv.hxx>
-#endif
-#endif
-
 using namespace dbtools;
-namespace staruno   = ::com::sun::star::uno;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
+
+
 //namespace stario       = ::com::sun::star::io;
 
 /** implements handling for compatibly reading/writing data from/into an input/output stream.
@@ -169,9 +173,9 @@ namespace staruno   = ::com::sun::star::uno;
 
 class OMarkableStreamBlock
 {
-        com::sun::star::uno::Reference< com::sun::star::io::XMarkableStream >           m_xMarkStream;
-        com::sun::star::uno::Reference< com::sun::star::io::XDataInputStream >          m_xInStream;
-        com::sun::star::uno::Reference< com::sun::star::io::XDataOutputStream >         m_xOutStream;
+        Reference< XMarkableStream >           m_xMarkStream;
+        Reference< XDataInputStream >          m_xInStream;
+        Reference< XDataOutputStream >         m_xOutStream;
 
     sal_Int32   m_nBlockStart;
     sal_Int32   m_nBlockLen;
@@ -180,19 +184,19 @@ public:
     /** starts reading of a "skippable" block of data within the given input stream<BR>
         The object given by _rxInput must support the XMarkableStream interface.
     */
-        OMarkableStreamBlock(const com::sun::star::uno::Reference< com::sun::star::io::XDataInputStream >& _rxInput);
+        OMarkableStreamBlock(const Reference< XDataInputStream >& _rxInput);
     /** starts writing of a "skippable" block of data into the given output stream
         The object given by _rxOutput must support the XMarkableStream interface.
     */
-        OMarkableStreamBlock(const com::sun::star::uno::Reference< com::sun::star::io::XDataOutputStream >& _rxOutput);
+        OMarkableStreamBlock(const Reference< XDataOutputStream >& _rxOutput);
 
     ~OMarkableStreamBlock();
 };
 
 //-------------------------------------------------------------------------
-OMarkableStreamBlock::OMarkableStreamBlock(const com::sun::star::uno::Reference< com::sun::star::io::XDataInputStream >& _rxInput)
+OMarkableStreamBlock::OMarkableStreamBlock(const Reference< XDataInputStream >& _rxInput)
     :m_xInStream(_rxInput)
-    ,m_xMarkStream(_rxInput, ::com::sun::star::uno::UNO_QUERY)
+    ,m_xMarkStream(_rxInput, UNO_QUERY)
     ,m_nBlockStart(-1)
     ,m_nBlockLen(-1)
 {
@@ -205,9 +209,9 @@ OMarkableStreamBlock::OMarkableStreamBlock(const com::sun::star::uno::Reference<
 }
 
 //-------------------------------------------------------------------------
-OMarkableStreamBlock::OMarkableStreamBlock(const com::sun::star::uno::Reference< com::sun::star::io::XDataOutputStream >& _rxOutput)
+OMarkableStreamBlock::OMarkableStreamBlock(const Reference< XDataOutputStream >& _rxOutput)
     :m_xOutStream(_rxOutput)
-    ,m_xMarkStream(_rxOutput, ::com::sun::star::uno::UNO_QUERY)
+    ,m_xMarkStream(_rxOutput, UNO_QUERY)
     ,m_nBlockStart(-1)
     ,m_nBlockLen(-1)
 {
@@ -240,9 +244,6 @@ OMarkableStreamBlock::~OMarkableStreamBlock()
     }
 }
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-
 //.........................................................................
 namespace frm
 {
@@ -257,7 +258,7 @@ protected:
 public:
     StandardFormatsSupplier(const Reference<XMultiServiceFactory>& _rxFactory);
 
-    operator com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier> ();
+    operator Reference<XNumberFormatsSupplier> ();
     SvNumberFormatsSupplierObj::operator new;
     SvNumberFormatsSupplierObj::operator delete;
 
@@ -267,7 +268,7 @@ protected:
 
 
 //------------------------------------------------------------------
-StandardFormatsSupplier::StandardFormatsSupplier(const com::sun::star::uno::Reference< starlang::XMultiServiceFactory > & _rxFactory)
+StandardFormatsSupplier::StandardFormatsSupplier(const Reference< XMultiServiceFactory > & _rxFactory)
     :SvNumberFormatsSupplierObj()
     ,m_pMyPrivateFormatter(new SvNumberFormatter(_rxFactory, Application::GetAppInternational().GetLanguage()))
 {
@@ -275,76 +276,44 @@ StandardFormatsSupplier::StandardFormatsSupplier(const com::sun::star::uno::Refe
 }
 
 //------------------------------------------------------------------
-StandardFormatsSupplier::operator com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier> ()
+StandardFormatsSupplier::operator Reference<XNumberFormatsSupplier> ()
 {
-#if SUPD<583
-    // our base class is still implemented with old UNO
-        com::sun::star::uno::Any aOldUno;
-    XNumberFormatsSupplierRef xOldUnoRef = static_cast<XNumberFormatsSupplier*>(static_cast<SvNumberFormatsSupplierObj*>(this));
-    aOldUno.set(&xOldUnoRef, XNumberFormatsSupplier_getReflection());
-
-        com::sun::star::uno::Any aNewUno;
-    ::usr::convertUsr2UnoAny(aNewUno, aOldUno);
-    DBG_ASSERT(isAReference(aNewUno, static_cast<starutil::XNumberFormatsSupplier*>(NULL)),
-        "StandardFormatsSupplier::operator.... : unexpected conversion result !");
-
-        com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier> xNewUnoRef;
-    if (isAReference(aNewUno, static_cast<starutil::XNumberFormatsSupplier*>(NULL)))
-        aNewUno >>= xNewUnoRef;
-
-    return xNewUnoRef;
-#endif
-
-    return static_cast<starutil::XNumberFormatsSupplier*>(static_cast<SvNumberFormatsSupplierObj*>(this));
+    return static_cast<XNumberFormatsSupplier*>(static_cast<SvNumberFormatsSupplierObj*>(this));
 }
 
 //------------------------------------------------------------------
-com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  OFormattedModel::s_xDefaultFormatter;
+Reference<XNumberFormatsSupplier>  OFormattedModel::s_xDefaultFormatter;
 sal_Int32 OFormattedModel::nValueHandle = -1;
 
 /*************************************************************************/
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OFormattedControl_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OFormattedControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OFormattedControl(_rxFactory));
 }
 
 //------------------------------------------------------------------
-com::sun::star::uno::Sequence<com::sun::star::uno::Type> OFormattedControl::_getTypes()
+Sequence<Type> OFormattedControl::_getTypes()
 {
-        static com::sun::star::uno::Sequence<com::sun::star::uno::Type> aTypes;
+        static Sequence<Type> aTypes;
     if (!aTypes.getLength())
-    {
-        // my two base classes
-                com::sun::star::uno::Sequence<com::sun::star::uno::Type> aBaseClassTypes = OBoundControl::_getTypes();
-
-                com::sun::star::uno::Sequence<com::sun::star::uno::Type> aOwnTypes(1);
-                com::sun::star::uno::Type* pOwnTypes = aOwnTypes.getArray();
-                pOwnTypes[0] = getCppuType((com::sun::star::uno::Reference<starawt::XKeyListener>*)NULL);
-
-        aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
-    }
+        aTypes = concatSequences(OFormattedControl_BASE::getTypes(), OBoundControl::_getTypes());
     return aTypes;
 }
 
 //------------------------------------------------------------------
-com::sun::star::uno::Any SAL_CALL OFormattedControl::queryAggregation(const com::sun::star::uno::Type& _rType) throw (com::sun::star::uno::RuntimeException)
+Any SAL_CALL OFormattedControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-        com::sun::star::uno::Any aReturn;
-
-    aReturn = OBoundControl::queryAggregation(_rType);
+    Any aReturn = OBoundControl::queryAggregation(_rType);
     if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType
-            ,static_cast<starawt::XKeyListener*>(this)
-        );
-
+        aReturn = OFormattedControl_BASE::queryInterface(_rType);
     return aReturn;
 }
 
 
 DBG_NAME(OFormattedControl);
 //------------------------------------------------------------------------------
-OFormattedControl::OFormattedControl(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+OFormattedControl::OFormattedControl(const Reference<XMultiServiceFactory>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_FORMATTEDFIELD)
                ,m_nKeyEvent(0)
 {
@@ -352,7 +321,7 @@ OFormattedControl::OFormattedControl(const com::sun::star::uno::Reference<com::s
 
     increment(m_refCount);
     {   // als FocusListener anmelden
-                com::sun::star::uno::Reference<starawt::XWindow>  xComp;
+                Reference<XWindow>  xComp;
         if (query_aggregation(m_xAggregate, xComp))
         {
             xComp->addKeyListener(this);
@@ -377,49 +346,51 @@ OFormattedControl::~OFormattedControl()
     DBG_DTOR(OFormattedControl,NULL);
 }
 
-// starawt::XKeyListener
+// XKeyListener
 //------------------------------------------------------------------------------
-void OFormattedControl::disposing(const com::sun::star::lang::EventObject& _rSource) throw(com::sun::star::uno::RuntimeException)
+void OFormattedControl::disposing(const EventObject& _rSource) throw(RuntimeException)
 {
     OBoundControl::disposing(_rSource);
 }
 
 //------------------------------------------------------------------------------
-void OFormattedControl::keyPressed(const starawt::KeyEvent& e)
+void OFormattedControl::keyPressed(const KeyEvent& e)
 {
     if( e.KeyCode != KEY_RETURN || e.Modifiers != 0 )
         return;
 
     // Steht das Control in einem Formular mit einer Submit-URL?
-        com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>  xSet(getModel(), com::sun::star::uno::UNO_QUERY);
+    Reference<com::sun::star::beans::XPropertySet>  xSet(getModel(), UNO_QUERY);
     if( !xSet.is() )
         return;
 
-        com::sun::star::uno::Reference<starform::XFormComponent>  xFComp(xSet, com::sun::star::uno::UNO_QUERY);
+    Reference<XFormComponent>  xFComp(xSet, UNO_QUERY);
     InterfaceRef  xParent = xFComp->getParent();
     if( !xParent.is() )
         return;
 
-        com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>  xFormSet(xParent, com::sun::star::uno::UNO_QUERY);
+    Reference<com::sun::star::beans::XPropertySet>  xFormSet(xParent, UNO_QUERY);
     if( !xFormSet.is() )
         return;
 
-        com::sun::star::uno::Any aTmp(xFormSet->getPropertyValue( PROPERTY_TARGET_URL ));
+    Any aTmp(xFormSet->getPropertyValue( PROPERTY_TARGET_URL ));
     if (!isA(aTmp, static_cast< ::rtl::OUString* >(NULL)) ||
         !getString(aTmp).getLength() )
         return;
 
-        com::sun::star::uno::Reference<starcontainer::XIndexAccess>  xElements(xParent, com::sun::star::uno::UNO_QUERY);
+    Reference<XIndexAccess>  xElements(xParent, UNO_QUERY);
     sal_Int32 nCount = xElements->getCount();
     if( nCount > 1 )
     {
+
+        Reference<com::sun::star::beans::XPropertySet>  xFCSet;
         for( sal_Int32 nIndex=0; nIndex < nCount; nIndex++ )
         {
-            //  staruno::Any aElement(xElements->getByIndex(nIndex));
-                        com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>  xFCSet(*(InterfaceRef *)xElements->getByIndex(nIndex).getValue(), com::sun::star::uno::UNO_QUERY);
+            //  Any aElement(xElements->getByIndex(nIndex));
+            xElements->getByIndex(nIndex) >>= xFCSet;
 
             if (hasProperty(PROPERTY_CLASSID, xFCSet) &&
-                getINT16(xFCSet->getPropertyValue(PROPERTY_CLASSID)) == starform::FormComponentType::TEXTFIELD)
+                getINT16(xFCSet->getPropertyValue(PROPERTY_CLASSID)) == FormComponentType::TEXTFIELD)
             {
                 // Noch ein weiteres Edit gefunden ==> dann nicht submitten
                 if (xFCSet != xSet)
@@ -436,7 +407,7 @@ void OFormattedControl::keyPressed(const starawt::KeyEvent& e)
 }
 
 //------------------------------------------------------------------------------
-void OFormattedControl::keyReleased(const starawt::KeyEvent& e)
+void OFormattedControl::keyReleased(const KeyEvent& e)
 {
 }
 
@@ -445,11 +416,11 @@ IMPL_LINK(OFormattedControl, OnKeyPressed, void*, EMPTYARG)
 {
     m_nKeyEvent = 0;
 
-        com::sun::star::uno::Reference<starform::XFormComponent>  xFComp(getModel(), com::sun::star::uno::UNO_QUERY);
+        Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);
     InterfaceRef  xParent = xFComp->getParent();
-        com::sun::star::uno::Reference<starform::XSubmit>  xSubmit(xParent, com::sun::star::uno::UNO_QUERY);
+        Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
     if (xSubmit.is())
-                xSubmit->submit( com::sun::star::uno::Reference<starawt::XControl> (), starawt::MouseEvent() );
+                xSubmit->submit( Reference<XControl> (), MouseEvent() );
     return 0L;
 }
 
@@ -472,13 +443,13 @@ void OFormattedControl::setDesignMode(sal_Bool bOn)
 
 /*************************************************************************/
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OFormattedModel(_rxFactory));
 }
 
 //------------------------------------------------------------------
-OFormattedModel::OFormattedModel(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFactory)
             :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_CONTROL_FORMATTEDFIELD )
                                     // use the old control name for compytibility reasons
             ,OPropertyChangeListener(m_aMutex)
@@ -486,9 +457,9 @@ OFormattedModel::OFormattedModel(const com::sun::star::uno::Reference<com::sun::
             ,m_bNumeric(sal_False)
             ,m_xOriginalFormatter(NULL)
             ,m_aNullDate(DBTypeConversion::STANDARD_DB_DATE)
-            ,m_nKeyType(starutil::NumberFormat::UNDEFINED)
+            ,m_nKeyType(NumberFormat::UNDEFINED)
 {
-    m_nClassId = starform::FormComponentType::TEXTFIELD;
+    m_nClassId = FormComponentType::TEXTFIELD;
 
     increment(m_refCount);
     setPropertyToDefaultByHandle(PROPERTY_ID_FORMATSSUPPLIER);
@@ -507,7 +478,7 @@ OFormattedModel::OFormattedModel(const com::sun::star::uno::Reference<com::sun::
     decrement(m_refCount);
 }
 
-// com::sun::star::lang::XServiceInfo
+// XServiceInfo
 //------------------------------------------------------------------------------
 StringSequence OFormattedModel::getSupportedServiceNames() throw()
 {
@@ -520,7 +491,7 @@ StringSequence OFormattedModel::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-// stario::XPersistObject
+// XPersistObject
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OFormattedModel::getServiceName()
 {
@@ -528,11 +499,11 @@ StringSequence OFormattedModel::getSupportedServiceNames() throw()
 //  return ::rtl::OUString(FRM_COMPONENT_FORMATTEDFIELD);   // old (non-sun) name for compatibility !
 }
 
-// starbeans::XPropertySet
+// XPropertySet
 //------------------------------------------------------------------------------
-com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> SAL_CALL OFormattedModel::getPropertySetInfo() throw(com::sun::star::uno::RuntimeException)
+Reference<com::sun::star::beans::XPropertySetInfo> SAL_CALL OFormattedModel::getPropertySetInfo() throw(RuntimeException)
 {
-        com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+        Reference<com::sun::star::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -544,8 +515,8 @@ com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> SAL_CALL
 
 //------------------------------------------------------------------------------
 void OFormattedModel::fillProperties(
-                com::sun::star::uno::Sequence< com::sun::star::beans::Property >& _rProps,
-                com::sun::star::uno::Sequence< com::sun::star::beans::Property >& _rAggregateProps ) const
+                Sequence< com::sun::star::beans::Property >& _rProps,
+                Sequence< com::sun::star::beans::Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(11)
 
@@ -556,16 +527,16 @@ void OFormattedModel::fillProperties(
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,        BOUND);
         DECL_PROP1(HELPTEXT,            ::rtl::OUString,        BOUND);
-                DECL_IFACE_PROP2(BOUNDFIELD,    com::sun::star::beans::XPropertySet,READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(BOUNDFIELD,    com::sun::star::beans::XPropertySet,READONLY, TRANSIENT);
         DECL_BOOL_PROP2(FILTERPROPOSAL,                         BOUND, MAYBEDEFAULT);
-                DECL_IFACE_PROP2(CONTROLLABEL,  com::sun::star::beans::XPropertySet,BOUND, MAYBEVOID);
+        DECL_IFACE_PROP2(CONTROLLABEL,  com::sun::star::beans::XPropertySet,BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
 
         // den Value auf transient, damit das Dokument waehrend der Eingabe nicht als modifiziert gilt ....
         // (und da der selbstverstaendlich nicht gespeichert werden muss)
 //              ModifyPropertyAttributes(_rAggregateProps, PROPERTY_EFFECTIVE_VALUE, com::sun::star::beans::PropertyAttribute::TRANSIENT, 0);
         // der Supplier ist fuer uns nur read-only
-                ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATSSUPPLIER, com::sun::star::beans::PropertyAttribute::READONLY, 0);
+        ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATSSUPPLIER, com::sun::star::beans::PropertyAttribute::READONLY, 0);
         // TreatAsNumeric nicht transient : wir wollen es an der UI anbinden (ist noetig, um dem EffectiveDefault
         // - der kann Text oder Zahl sein - einen Sinn zu geben)
                 ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TREATASNUMERIC, 0, com::sun::star::beans::PropertyAttribute::TRANSIENT);
@@ -574,20 +545,20 @@ void OFormattedModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-void OFormattedModel::getFastPropertyValue(com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const
+void OFormattedModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
 {
     OEditBaseModel::getFastPropertyValue(rValue, nHandle);
 }
 
 //------------------------------------------------------------------------------
-void OFormattedModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const com::sun::star::uno::Any& rValue)
+void OFormattedModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
 {
     OEditBaseModel::setFastPropertyValue_NoBroadcast(nHandle, rValue);
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OFormattedModel::convertFastPropertyValue(com::sun::star::uno::Any& rConvertedValue, com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const com::sun::star::uno::Any& rValue)
-                                                        throw( com::sun::star::lang::IllegalArgumentException )
+sal_Bool OFormattedModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
+                                                        throw( IllegalArgumentException )
 {
     return OEditBaseModel::convertFastPropertyValue(rConvertedValue, rOldValue, nHandle, rValue);
 }
@@ -597,17 +568,17 @@ void OFormattedModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 {
     if (nHandle == PROPERTY_ID_FORMATSSUPPLIER)
     {   // das aggregierte Model koennte auf die Idee kommen
-                com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  xSupplier = calcDefaultFormatsSupplier();
+                Reference<XNumberFormatsSupplier>  xSupplier = calcDefaultFormatsSupplier();
         DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::setPropertyToDefaultByHandle(FORMATSSUPPLIER) : have no aggregate !");
         if (m_xAggregateSet.is())
-                        m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, com::sun::star::uno::makeAny(xSupplier));
+            m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(xSupplier));
     }
     else
         OEditBaseModel::setPropertyToDefaultByHandle(nHandle);
 }
 
 //------------------------------------------------------------------------------
-void OFormattedModel::setPropertyToDefault(const ::rtl::OUString& aPropertyName) throw( com::sun::star::beans::UnknownPropertyException, com::sun::star::uno::RuntimeException )
+void OFormattedModel::setPropertyToDefault(const ::rtl::OUString& aPropertyName) throw( com::sun::star::beans::UnknownPropertyException, RuntimeException )
 {
     OPropertyArrayAggregationHelper& rPH = (OPropertyArrayAggregationHelper&)getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
@@ -619,19 +590,19 @@ void OFormattedModel::setPropertyToDefault(const ::rtl::OUString& aPropertyName)
 }
 
 //------------------------------------------------------------------------------
-com::sun::star::uno::Any OFormattedModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
+Any OFormattedModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
     if (nHandle == PROPERTY_ID_FORMATSSUPPLIER)
     {
-                com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  xSupplier = calcFormFormatsSupplier();
-                return com::sun::star::uno::makeAny(xSupplier);
+        Reference<XNumberFormatsSupplier>  xSupplier = calcFormFormatsSupplier();
+        return makeAny(xSupplier);
     }
     else
         return OEditBaseModel::getPropertyDefaultByHandle(nHandle);
 }
 
 //------------------------------------------------------------------------------
-com::sun::star::uno::Any SAL_CALL OFormattedModel::getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw( com::sun::star::beans::UnknownPropertyException, com::sun::star::uno::RuntimeException )
+Any SAL_CALL OFormattedModel::getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw( com::sun::star::beans::UnknownPropertyException, RuntimeException )
 {
     OPropertyArrayAggregationHelper& rPH = (OPropertyArrayAggregationHelper&)getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
@@ -643,17 +614,17 @@ com::sun::star::uno::Any SAL_CALL OFormattedModel::getPropertyDefault( const ::r
 }
 
 //------------------------------------------------------------------------------
-void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyChangeEvent& evt ) throw(com::sun::star::uno::RuntimeException)
+void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyChangeEvent& evt ) throw(RuntimeException)
 {
     if (evt.Source == m_xAggregate)
     {
         if (evt.PropertyName.equals(PROPERTY_FORMATKEY))
         {
-                        if (evt.NewValue.getValueType().getTypeClass() == com::sun::star::uno::TypeClass_LONG)
+            if (evt.NewValue.getValueType().getTypeClass() == TypeClass_LONG)
             {
                 try
                 {
-                                        com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier> xSupplier(calcFormatsSupplier());
+                    Reference<XNumberFormatsSupplier> xSupplier(calcFormatsSupplier());
                     m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32(evt.NewValue));
                     // as m_aSaveValue (which is used by _commit) is format dependent we have
                     // to recalc it, which is done by _onValueChanged
@@ -663,7 +634,7 @@ void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyCha
                         _onValueChanged();
                     }
                 }
-                catch(...)
+                catch(Exception&)
                 {
                 }
             }
@@ -676,16 +647,15 @@ void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyCha
 }
 
 //------------------------------------------------------------------------------
-com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  OFormattedModel::calcFormatsSupplier() const
+Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormatsSupplier() const
 {
-        com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  xSupplier;
+    Reference<XNumberFormatsSupplier>  xSupplier;
 
     DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::calcFormatsSupplier : have no aggregate !");
     // hat mein aggregiertes Model einen FormatSupplier ?
-        com::sun::star::uno::Any aSupplier( m_xAggregateSet.is() ? m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER) : com::sun::star::uno::Any());
-    if (aSupplier.hasValue())
-                xSupplier = *(com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier> *)aSupplier.getValue();
+    if( m_xAggregateSet.is() )
 
+        m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xSupplier;
     if (!xSupplier.is())
         // testen, ob meine Parent-starform einen Formatter hat
         xSupplier = calcFormFormatsSupplier();
@@ -699,21 +669,21 @@ com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  OFormattedMode
 }
 
 //------------------------------------------------------------------------------
-com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() const
+Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() const
 {
-        com::sun::star::uno::Reference<starcontainer::XChild>  xMe;
-        query_interface(static_cast<com::sun::star::uno::XWeak*>(const_cast<OFormattedModel*>(this)), xMe);
+    Reference<XChild>  xMe;
+    query_interface(static_cast<XWeak*>(const_cast<OFormattedModel*>(this)), xMe);
     // damit stellen wir sicher, dass wir auch fuer den Fall der Aggregation das richtige
     // Objekt bekommen
     DBG_ASSERT(xMe.is(), "OFormattedModel::calcFormFormatsSupplier : I should have a content interface !");
 
     // jetzt durchhangeln nach oben, bis wir auf eine starform treffen (angefangen mit meinem eigenen Parent)
-        com::sun::star::uno::Reference<starcontainer::XChild>  xParent(xMe->getParent(), com::sun::star::uno::UNO_QUERY);
-        com::sun::star::uno::Reference<starform::XForm>  xNextParentForm(xParent, com::sun::star::uno::UNO_QUERY);
+    Reference<XChild>  xParent(xMe->getParent(), UNO_QUERY);
+    Reference<XForm>  xNextParentForm(xParent, UNO_QUERY);
     while (!xNextParentForm.is() && xParent.is())
     {
-                xParent = com::sun::star::uno::Reference<starcontainer::XChild> (xParent->getParent(), com::sun::star::uno::UNO_QUERY);
-                xNextParentForm = com::sun::star::uno::Reference<starform::XForm> (xParent, com::sun::star::uno::UNO_QUERY);
+        xParent         = Reference<XChild> (xParent->getParent(), UNO_QUERY);
+        xNextParentForm = Reference<XForm> (xParent, UNO_QUERY);
     }
 
     if (!xNextParentForm.is())
@@ -723,15 +693,15 @@ com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  OFormattedMode
     }
 
     // den FormatSupplier von meinem Vorfahren (falls der einen hat)
-        com::sun::star::uno::Reference<starsdbc::XRowSet>  xRowSet(xNextParentForm, com::sun::star::uno::UNO_QUERY);
-        com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  xSupplier;
+        Reference<XRowSet>  xRowSet(xNextParentForm, UNO_QUERY);
+        Reference<XNumberFormatsSupplier>  xSupplier;
     if (xRowSet.is())
         xSupplier = getNumberFormats(getConnection(xRowSet), sal_True, m_xServiceFactory);
     return xSupplier;
 }
 
 //------------------------------------------------------------------------------
-com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  OFormattedModel::calcDefaultFormatsSupplier() const
+Reference<XNumberFormatsSupplier>  OFormattedModel::calcDefaultFormatsSupplier() const
 {
     if (!s_xDefaultFormatter.is())
         s_xDefaultFormatter = *new StandardFormatsSupplier(m_xServiceFactory);
@@ -743,7 +713,7 @@ sal_Int32 OFormattedModel::calcFormatKey() const
 {
     DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::calcFormatKey : have no aggregate !");
     // hat mein aggregiertes Model einen FormatSupplier ?
-        com::sun::star::uno::Any aFormatKey = m_xAggregateSet.is() ? m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY): com::sun::star::uno::Any();
+        Any aFormatKey = m_xAggregateSet.is() ? m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY): Any();
     if (aFormatKey.hasValue())
         return getINT32(aFormatKey);
 
@@ -758,9 +728,9 @@ void OFormattedModel::getFormatDescription(::rtl::OUString& sFormat, LanguageTyp
 {
 }
 
-// starform::XBoundComponent
+// XBoundComponent
 //------------------------------------------------------------------------------
-void OFormattedModel::loaded(const com::sun::star::lang::EventObject& rEvent)
+void OFormattedModel::loaded(const EventObject& rEvent)
 {
     // HACK : our _loaded accesses our NumberFormatter which locks the solar mutex (as it doesn't have
     // an own one). To prevent deadlocks with other threads which may request a property from us in an
@@ -777,7 +747,7 @@ void OFormattedModel::loaded(const com::sun::star::lang::EventObject& rEvent)
 }
 
 //------------------------------------------------------------------------------
-void OFormattedModel::_loaded(const com::sun::star::lang::EventObject& rEvent)
+void OFormattedModel::_loaded(const EventObject& rEvent)
 {
     static const ::rtl::OUString s_aNullDataProp = ::rtl::OUString::createFromAscii("NullDate");
 
@@ -786,66 +756,66 @@ void OFormattedModel::_loaded(const com::sun::star::lang::EventObject& rEvent)
     DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::_loaded : have no aggregate !");
     if (m_xAggregateSet.is())
     {   // all the following doesn't make any sense if we have no aggregate ...
-                com::sun::star::uno::Any aSupplier = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
-                DBG_ASSERT(((com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier> *)aSupplier.getValue())->is(), "OFormattedModel::_loaded : invalid property value !");
-            // das sollte im Constructor oder im read auf was richtiges gesetzt worden sein
+        Any aSupplier = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
+        DBG_ASSERT(((Reference<XNumberFormatsSupplier> *)aSupplier.getValue())->is(), "OFormattedModel::_loaded : invalid property value !");
+        // das sollte im Constructor oder im read auf was richtiges gesetzt worden sein
 
-                com::sun::star::uno::Any aFmtKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
+        Any aFmtKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
         if (!aFmtKey.hasValue())
         {   // unser aggregiertes Model hat noch keine Format-Informationen, also geben wir die von dem Feld, an das
             // wir gebunden sind, weiter
-            sal_Int32 nType = starsdbc::DataType::VARCHAR;
+            sal_Int32 nType = DataType::VARCHAR;
             if (m_xField.is())
             {
                 aFmtKey = m_xField->getPropertyValue(PROPERTY_FORMATKEY);
                 m_xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nType ;
             }
 
-                        com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  xSupplier = calcFormFormatsSupplier();
+            Reference<XNumberFormatsSupplier>  xSupplier = calcFormFormatsSupplier();
             DBG_ASSERT(xSupplier.is(), "OFormattedModel::_loaded : bound to a field but no parent with a formatter ? how this ?");
             if (xSupplier.is())
             {
                 if (!aFmtKey.hasValue())
                 {   // we aren't bound to a field (or this field's format is invalid)
                     // -> determine the standard text format of the supplier
-                                        com::sun::star::uno::Reference<starutil::XNumberFormatTypes>  xTypes(xSupplier->getNumberFormats(), com::sun::star::uno::UNO_QUERY);
+                                        Reference<XNumberFormatTypes>  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
                     if (xTypes.is())
                     {
                         UniString sLanguage, sCountry;
                         ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
-                                                com::sun::star::lang::Locale aNewLanguage(
+                                                Locale aNewLanguage(
                             sLanguage,
                             sCountry,
                             ::rtl::OUString());
                     }
                 }
 
-                                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, com::sun::star::uno::makeAny(xSupplier));
+                                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(xSupplier));
                 m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, aFmtKey);
-                                m_xOriginalFormatter = *(com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier> *)aSupplier.getValue();
+                                m_xOriginalFormatter = *(Reference<XNumberFormatsSupplier> *)aSupplier.getValue();
 
                 // das Numeric-Flag an mein gebundenes Feld anpassen
                 m_bNumeric = sal_False;
                 switch (nType)
                 {
-                    case starsdbc::DataType::BIT:
-                    case starsdbc::DataType::TINYINT:
-                    case starsdbc::DataType::SMALLINT:
-                    case starsdbc::DataType::INTEGER:
-                    case starsdbc::DataType::BIGINT:
-                    case starsdbc::DataType::FLOAT:
-                    case starsdbc::DataType::REAL:
-                    case starsdbc::DataType::DOUBLE:
-                    case starsdbc::DataType::NUMERIC:
-                    case starsdbc::DataType::DECIMAL:
-                    case starsdbc::DataType::DATE:
-                    case starsdbc::DataType::TIME:
-                    case starsdbc::DataType::TIMESTAMP:
+                    case DataType::BIT:
+                    case DataType::TINYINT:
+                    case DataType::SMALLINT:
+                    case DataType::INTEGER:
+                    case DataType::BIGINT:
+                    case DataType::FLOAT:
+                    case DataType::REAL:
+                    case DataType::DOUBLE:
+                    case DataType::NUMERIC:
+                    case DataType::DECIMAL:
+                    case DataType::DATE:
+                    case DataType::TIME:
+                    case DataType::TIMESTAMP:
                         m_bNumeric = sal_True;
                         break;
                 }
                 m_bOriginalNumeric = getBOOL(getPropertyValue(PROPERTY_TREATASNUMERIC));
-                                setPropertyValue(PROPERTY_TREATASNUMERIC, com::sun::star::uno::makeAny((sal_Bool)m_bNumeric));
+                setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny((sal_Bool)m_bNumeric));
 
                 m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32(aFmtKey));
                 xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp)
@@ -854,7 +824,7 @@ void OFormattedModel::_loaded(const com::sun::star::lang::EventObject& rEvent)
         }
         else
         {
-                        com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
+                        Reference<XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
 
             m_bNumeric = getBOOL(getPropertyValue(PROPERTY_TREATASNUMERIC));
             m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32(aFmtKey));
@@ -864,7 +834,7 @@ void OFormattedModel::_loaded(const com::sun::star::lang::EventObject& rEvent)
     }
     else
     {   // try to get some defaults ...
-                com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
+                Reference<XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
 
         m_bNumeric = getBOOL(getPropertyValue(PROPERTY_TREATASNUMERIC));
         m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), 0);
@@ -881,18 +851,18 @@ void OFormattedModel::_unloaded()
     OEditBaseModel::_unloaded();
     if (m_xOriginalFormatter.is())
     {   // unser aggregiertes Model hatte keinerlei Format-Informationen
-                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, com::sun::star::uno::makeAny(m_xOriginalFormatter));
-                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, com::sun::star::uno::Any());
-                setPropertyValue(PROPERTY_TREATASNUMERIC, com::sun::star::uno::makeAny((sal_Bool)m_bOriginalNumeric));
+                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(m_xOriginalFormatter));
+                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, Any());
+                setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny((sal_Bool)m_bOriginalNumeric));
         m_xOriginalFormatter = NULL;
     }
 
-    m_nKeyType   = starutil::NumberFormat::UNDEFINED;
+    m_nKeyType   = NumberFormat::UNDEFINED;
     m_aNullDate  = DBTypeConversion::STANDARD_DB_DATE;
 }
 
 //------------------------------------------------------------------------------
-void OFormattedModel::write(const com::sun::star::uno::Reference<stario::XObjectOutputStream>& _rxOutStream)
+void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     OEditBaseModel::write(_rxOutStream);
     _rxOutStream->writeShort(0x0003);
@@ -902,17 +872,17 @@ void OFormattedModel::write(const com::sun::star::uno::Reference<stario::XObject
     // mein Format (evtl. void) in ein persistentes Format bringen (der Supplier zusammen mit dem Key ist es zwar auch,
     // aber deswegen muessen wir ja nicht gleich den ganzen Supplier speichern, das waere ein klein wenig Overhead ;)
 
-        com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  xSupplier;
-        com::sun::star::uno::Any aFmtKey;
+        Reference<XNumberFormatsSupplier>  xSupplier;
+        Any aFmtKey;
     sal_Bool bVoidKey = sal_True;
     if (m_xAggregateSet.is())
     {
-                com::sun::star::uno::Any aSupplier = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
-                if (aSupplier.getValueType().getTypeClass() != com::sun::star::uno::TypeClass_VOID)
+                Any aSupplier = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
+                if (aSupplier.getValueType().getTypeClass() != TypeClass_VOID)
         {
-            DBG_ASSERT(isAReference(aSupplier, static_cast<starutil::XNumberFormatsSupplier*>(NULL)),
+            DBG_ASSERT(isAReference(aSupplier, static_cast<XNumberFormatsSupplier*>(NULL)),
                 "OFormattedModel::write : invalid formats supplier !");
-                        xSupplier = *(com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier> *)aSupplier.getValue();
+                        xSupplier = *(Reference<XNumberFormatsSupplier> *)aSupplier.getValue();
         }
 
         aFmtKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
@@ -925,23 +895,23 @@ void OFormattedModel::write(const com::sun::star::uno::Reference<stario::XObject
     {
         // aus dem FormatKey und dem Formatter persistente Angaben basteln
 
-                com::sun::star::uno::Any aKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
+                Any aKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
         sal_Int32 nKey = aKey.hasValue() ? getINT32(aKey) : 0;
 
-                com::sun::star::uno::Reference<starutil::XNumberFormats>  xFormats = xSupplier->getNumberFormats();
+                Reference<XNumberFormats>  xFormats = xSupplier->getNumberFormats();
 
         ::rtl::OUString         sFormatDescription;
         LanguageType    eFormatLanguage = LANGUAGE_DONTKNOW;
 
         static const ::rtl::OUString s_aLocaleProp = ::rtl::OUString::createFromAscii("Locale");
-                com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>  xFormat = xFormats->getByKey(nKey);
+                Reference<com::sun::star::beans::XPropertySet>  xFormat = xFormats->getByKey(nKey);
         if (hasProperty(s_aLocaleProp, xFormat))
         {
-                        com::sun::star::uno::Any aLocale = xFormat->getPropertyValue(s_aLocaleProp);
-                        DBG_ASSERT(isA(aLocale, static_cast<com::sun::star::lang::Locale*>(NULL)), "OFormattedModel::write : invalid language property !");
-                        if (isA(aLocale, static_cast<com::sun::star::lang::Locale*>(NULL)))
+                        Any aLocale = xFormat->getPropertyValue(s_aLocaleProp);
+                        DBG_ASSERT(isA(aLocale, static_cast<Locale*>(NULL)), "OFormattedModel::write : invalid language property !");
+                        if (isA(aLocale, static_cast<Locale*>(NULL)))
             {
-                                com::sun::star::lang::Locale* pLocale = (com::sun::star::lang::Locale*)aLocale.getValue();
+                                Locale* pLocale = (Locale*)aLocale.getValue();
                 eFormatLanguage = ConvertIsoNamesToLanguage(
                     ::rtl::OUStringToOString(pLocale->Language, RTL_TEXTENCODING_ASCII_US).getStr(),
                     ::rtl::OUStringToOString(pLocale->Country, RTL_TEXTENCODING_ASCII_US).getStr()
@@ -967,28 +937,28 @@ void OFormattedModel::write(const com::sun::star::uno::Reference<stario::XObject
 
     // and to be a little bit more compatible we make the following section skippable
     {
-                com::sun::star::uno::Reference< stario::XDataOutputStream > xOut(_rxOutStream, com::sun::star::uno::UNO_QUERY);
+                Reference< XDataOutputStream > xOut(_rxOutStream, UNO_QUERY);
         OMarkableStreamBlock aDownCompat(xOut);
 
         // a sub version within the skippable block
         _rxOutStream->writeShort(0x0000);
 
         // version 0: the effective value of the aggregate
-                com::sun::star::uno::Any aEffectiveValue;
+                Any aEffectiveValue;
         if (m_xAggregateSet.is())
         {
-            try { aEffectiveValue = m_xAggregateSet->getPropertyValue(PROPERTY_EFFECTIVE_VALUE); } catch(...) { }
+            try { aEffectiveValue = m_xAggregateSet->getPropertyValue(PROPERTY_EFFECTIVE_VALUE); } catch(Exception&) { }
         }
 
         {
             OMarkableStreamBlock aDownCompat2(xOut);
             switch (aEffectiveValue.getValueType().getTypeClass())
             {
-                                case com::sun::star::uno::TypeClass_STRING:
+                case TypeClass_STRING:
                     _rxOutStream->writeShort(0x0000);
                     _rxOutStream->writeUTF(::comphelper::getString(aEffectiveValue));
                     break;
-                                case com::sun::star::uno::TypeClass_DOUBLE:
+                case TypeClass_DOUBLE:
                     _rxOutStream->writeShort(0x0001);
                     _rxOutStream->writeDouble(::comphelper::getDouble(aEffectiveValue));
                     break;
@@ -1002,12 +972,12 @@ void OFormattedModel::write(const com::sun::star::uno::Reference<stario::XObject
 }
 
 //------------------------------------------------------------------------------
-void OFormattedModel::read(const com::sun::star::uno::Reference<stario::XObjectInputStream>& _rxInStream)
+void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     OEditBaseModel::read(_rxInStream);
     sal_uInt16 nVersion = _rxInStream->readShort();
 
-        com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  xSupplier;
+        Reference<XNumberFormatsSupplier>  xSupplier;
     sal_Int32 nKey = -1;
     switch (nVersion)
     {
@@ -1018,20 +988,20 @@ void OFormattedModel::read(const com::sun::star::uno::Reference<stario::XObjectI
             sal_Bool bNonVoidKey = _rxInStream->readBoolean();
             if (bNonVoidKey)
             {
-                // den String und die starutil::Language lesen ....
+                // den String und die Language lesen ....
                 ::rtl::OUString sFormatDescription = _rxInStream->readUTF();
                 LanguageType eDescriptionLanguage = (LanguageType)_rxInStream->readLong();
 
                 // und daraus von einem Formatter zu einem Key zusammenwuerfeln lassen ...
                 xSupplier = calcFormatsSupplier();
                     // calcFormatsSupplier nimmt erst den vom Model, dann einen von der starform, dann einen ganz neuen ....
-                                com::sun::star::uno::Reference<starutil::XNumberFormats>  xFormats = xSupplier->getNumberFormats();
+                                Reference<XNumberFormats>  xFormats = xSupplier->getNumberFormats();
 
                 if (xFormats.is())
                 {
                     UniString sLanguage, sCountry;
                     ConvertLanguageToIsoNames(eDescriptionLanguage, sLanguage, sCountry);
-                                        com::sun::star::lang::Locale aDescriptionLanguage(
+                                        Locale aDescriptionLanguage(
                         sLanguage,
                         sCountry,
                         ::rtl::OUString());
@@ -1047,13 +1017,13 @@ void OFormattedModel::read(const com::sun::star::uno::Reference<stario::XObjectI
 
             if (nVersion == 0x0003)
             {   // since version 3 there is a "skippable" block at this position
-                                com::sun::star::uno::Reference< stario::XDataInputStream > xIn(_rxInStream, com::sun::star::uno::UNO_QUERY);
+                                Reference< XDataInputStream > xIn(_rxInStream, UNO_QUERY);
                 OMarkableStreamBlock aDownCompat(xIn);
 
                 sal_Int16 nSubVersion = _rxInStream->readShort();
 
                 // version 0 and higher : the "effective value" property
-                                com::sun::star::uno::Any aEffectiveValue;
+                                Any aEffectiveValue;
                 {
                     OMarkableStreamBlock aDownCompat2(xIn);
                     switch (_rxInStream->readShort())
@@ -1079,7 +1049,7 @@ void OFormattedModel::read(const com::sun::star::uno::Reference<stario::XObjectI
                     {
                         m_xAggregateSet->setPropertyValue(PROPERTY_EFFECTIVE_VALUE, aEffectiveValue);
                     }
-                    catch(...)
+                    catch(Exception&)
                     {
                     }
                 }
@@ -1095,8 +1065,8 @@ void OFormattedModel::read(const com::sun::star::uno::Reference<stario::XObjectI
 
     if ((nKey != -1) && m_xAggregateSet.is())
     {
-                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, com::sun::star::uno::makeAny(xSupplier));
-                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, com::sun::star::uno::makeAny((sal_Int32)nKey));
+                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(xSupplier));
+                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, makeAny((sal_Int32)nKey));
     }
     else
     {
@@ -1114,12 +1084,12 @@ sal_Int16 OFormattedModel::getPersistenceFlags() const
 //------------------------------------------------------------------------------
 sal_Bool OFormattedModel::_commit()
 {
-        com::sun::star::uno::Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( OFormattedModel::nValueHandle );
+        Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( OFormattedModel::nValueHandle );
     if (!compare(aNewValue, m_aSaveValue))
     {
         // Leerstring + EmptyIsNull = void
         if (!aNewValue.hasValue() ||
-                        (aNewValue.getValueType().getTypeClass() == com::sun::star::uno::TypeClass_STRING)
+                        (aNewValue.getValueType().getTypeClass() == TypeClass_STRING)
              && (getString(aNewValue).getLength() == 0) && m_bEmptyIsNull)
             m_xColumnUpdate->updateNull();
         else
@@ -1127,17 +1097,17 @@ sal_Bool OFormattedModel::_commit()
             // als Value koennen nur double, string oder void auftreten
             try
             {
-                                if (aNewValue.getValueType().getTypeClass() == com::sun::star::uno::TypeClass_DOUBLE)
+                                if (aNewValue.getValueType().getTypeClass() == TypeClass_DOUBLE)
                 {
                     DBTypeConversion::setValue(m_xColumnUpdate, m_aNullDate, getDouble(aNewValue), m_nKeyType);
                 }
                 else
                 {
-                                        DBG_ASSERT(aNewValue.getValueType().getTypeClass() == com::sun::star::uno::TypeClass_STRING, "OFormattedModel::_commit : invalud value type !");
+                                        DBG_ASSERT(aNewValue.getValueType().getTypeClass() == TypeClass_STRING, "OFormattedModel::_commit : invalud value type !");
                     m_xColumnUpdate->updateString(getString(aNewValue));
                 }
             }
-            catch(...)
+            catch(Exception&)
             {
                 return sal_False;
             }
@@ -1147,7 +1117,7 @@ sal_Bool OFormattedModel::_commit()
     return sal_True;
 }
 
-// starbeans::XPropertyChangeListener
+// XPropertyChangeListener
 //------------------------------------------------------------------------------
 void OFormattedModel::_onValueChanged()
 {
@@ -1168,7 +1138,7 @@ void OFormattedModel::_onValueChanged()
     }
 }
 
-// starform::XReset
+// XReset
 //------------------------------------------------------------------------------
 void OFormattedModel::_reset( void )
 {
@@ -1177,7 +1147,7 @@ void OFormattedModel::_reset( void )
         DBG_ERROR("OFormattedModel::_reset : no aggregate !");
         return;
     }
-        com::sun::star::uno::Any aValue = m_xAggregateSet->getPropertyValue(PROPERTY_EFFECTIVE_DEFAULT);
+        Any aValue = m_xAggregateSet->getPropertyValue(PROPERTY_EFFECTIVE_DEFAULT);
     {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
         // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
         // our own mutex locked
@@ -1190,4 +1160,8 @@ void OFormattedModel::_reset( void )
 //.........................................................................
 }
 //.........................................................................
+
+
+
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,24 +78,35 @@
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //==================================================================
 //= OImageButtonModel
 //==================================================================
 DBG_NAME(OImageButtonModel)
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OImageButtonModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OImageButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OImageButtonModel(_rxFactory));
 }
 
 //------------------------------------------------------------------
-OImageButtonModel::OImageButtonModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OImageButtonModel::OImageButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
                     :OImageModel(_rxFactory, VCL_CONTROLMODEL_IMAGEBUTTON, FRM_CONTROL_IMAGEBUTTON)
                                     // use the old control name for compytibility reasons
 {
     DBG_CTOR(OImageButtonModel, NULL);
-    m_nClassId = starform::FormComponentType::IMAGEBUTTON;
+    m_nClassId = FormComponentType::IMAGEBUTTON;
 }
 
 //------------------------------------------------------------------------------
@@ -105,13 +116,13 @@ OImageButtonModel::~OImageButtonModel()
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OImageButtonModel::getPropertySetInfo() throw( staruno::RuntimeException )
+Reference<XPropertySetInfo> SAL_CALL OImageButtonModel::getPropertySetInfo() throw( RuntimeException )
 {
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
-// starlang::XServiceInfo
+// XServiceInfo
 //------------------------------------------------------------------------------
 StringSequence  OImageButtonModel::getSupportedServiceNames() throw()
 {
@@ -125,12 +136,12 @@ StringSequence  OImageButtonModel::getSupportedServiceNames() throw()
 
 //------------------------------------------------------------------------------
 void OImageButtonModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(8)
         DECL_PROP2(CLASSID,         sal_Int16,                  READONLY, TRANSIENT);
-        DECL_PROP1(BUTTONTYPE,      starform::FormButtonType,   BOUND);
+        DECL_PROP1(BUTTONTYPE,      FormButtonType, BOUND);
         DECL_PROP1(TARGET_URL,      ::rtl::OUString,            BOUND);
         DECL_PROP1(TARGET_FRAME,    ::rtl::OUString,            BOUND);
         DECL_PROP1(NAME,            ::rtl::OUString,            BOUND);
@@ -153,7 +164,7 @@ void OImageButtonModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-void OImageButtonModel::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
+void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     OControlModel::write(_rxOutStream);
 
@@ -168,7 +179,7 @@ void OImageButtonModel::write(const staruno::Reference<stario::XObjectOutputStre
 }
 
 //------------------------------------------------------------------------------
-void OImageButtonModel::read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream)
+void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     OControlModel::read(_rxInStream);
 
@@ -179,12 +190,12 @@ void OImageButtonModel::read(const staruno::Reference<stario::XObjectInputStream
     {
         case 0x0001:
         {
-            m_eButtonType = (starform::FormButtonType)_rxInStream->readShort();
+            m_eButtonType = (FormButtonType)_rxInStream->readShort();
         }
         break;
         case 0x0002:
         {
-            m_eButtonType = (starform::FormButtonType)_rxInStream->readShort();
+            m_eButtonType = (FormButtonType)_rxInStream->readShort();
             ::rtl::OUString sTmp;
             _rxInStream >> sTmp;
             m_sTargetURL = INetURLObject::RelToAbs( sTmp );
@@ -193,7 +204,7 @@ void OImageButtonModel::read(const staruno::Reference<stario::XObjectInputStream
         break;
         case 0x0003:
         {
-            m_eButtonType = (starform::FormButtonType)_rxInStream->readShort();
+            m_eButtonType = (FormButtonType)_rxInStream->readShort();
             ::rtl::OUString sTmp;
             _rxInStream >> sTmp;
             m_sTargetURL = INetURLObject::RelToAbs( sTmp );
@@ -204,7 +215,7 @@ void OImageButtonModel::read(const staruno::Reference<stario::XObjectInputStream
 
         default :
             DBG_ERROR("OImageButtonModel::read : unknown version !");
-            m_eButtonType = starform::FormButtonType_PUSH;
+            m_eButtonType = FormButtonType_PUSH;
             m_sTargetURL = ::rtl::OUString();
             m_sTargetFrame = ::rtl::OUString();
             break;
@@ -215,26 +226,17 @@ void OImageButtonModel::read(const staruno::Reference<stario::XObjectInputStream
 // OImageButtonControl
 //==================================================================
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OImageButtonControl_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OImageButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OImageButtonControl(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OImageButtonControl::_getTypes()
+Sequence<Type> OImageButtonControl::_getTypes()
 {
-    static staruno::Sequence<staruno::Type> aTypes;
+    static Sequence<Type> aTypes;
     if (!aTypes.getLength())
-    {
-        // my base class
-        staruno::Sequence<staruno::Type> aBaseClassTypes = OImageControl::_getTypes();
-
-        staruno::Sequence<staruno::Type> aOwnTypes(1);
-        staruno::Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = getCppuType((staruno::Reference<starawt::XMouseListener>*)NULL);
-
-        aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
-    }
+        aTypes = concatSequences(OImageControl::_getTypes(), OImageButtonControl_BASE::getTypes());
     return aTypes;
 }
 
@@ -250,16 +252,16 @@ StringSequence  OImageButtonControl::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-OImageButtonControl::OImageButtonControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OImageButtonControl::OImageButtonControl(const Reference<XMultiServiceFactory>& _rxFactory)
             :OImageControl(_rxFactory, VCL_CONTROL_IMAGEBUTTON)
 {
     increment(m_refCount);
     {
         // als MouseListener anmelden
-        staruno::Reference<starawt::XWindow>  xComp;
+        Reference<XWindow>  xComp;
         query_aggregation( m_xAggregate, xComp);
         if (xComp.is())
-            xComp->addMouseListener((starawt::XMouseListener*)this);
+            xComp->addMouseListener((XMouseListener*)this);
     }
     // Refcount bei 1 fuer angemeldeten Listener
     sal_Int32 n = decrement(m_refCount);
@@ -267,25 +269,21 @@ OImageButtonControl::OImageButtonControl(const staruno::Reference<starlang::XMul
 
 // UNO Anbindung
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OImageButtonControl::queryAggregation(const staruno::Type& _rType) throw (staruno::RuntimeException)
+Any SAL_CALL OImageButtonControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    staruno::Any aReturn;
-
-    aReturn = OImageControl::queryAggregation(_rType);
+    Any aReturn = OImageControl::queryAggregation(_rType);
     if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType
-            ,static_cast<starawt::XMouseListener*>(this)
-        );
+        aReturn = OImageButtonControl_BASE::queryInterface(_rType);
 
     return aReturn;
 }
 
 //------------------------------------------------------------------------------
-void OImageButtonControl::mousePressed(const starawt::MouseEvent& e)
+void OImageButtonControl::mousePressed(const MouseEvent& e)
 {
     //////////////////////////////////////////////////////////////////////
     // Nur linke Maustaste
-    if (e.Buttons != starawt::MouseButton::LEFT)
+    if (e.Buttons != MouseButton::LEFT)
         return;
 
     ::osl::ClearableMutexGuard aGuard( m_aMutex );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-24 13:02:32 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,17 @@ using namespace dbtools;
 //.........................................................................
 namespace frm
 {
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //========================================================================
 // class OComboBoxModel
@@ -142,23 +153,23 @@ namespace frm
 sal_Int32 OComboBoxModel::nTextHandle = -1;
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OComboBoxModel_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory) throw (com::sun::star::uno::RuntimeException)
+InterfaceRef SAL_CALL OComboBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return (*new OComboBoxModel(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-com::sun::star::uno::Sequence<com::sun::star::uno::Type> OComboBoxModel::_getTypes()
+Sequence<Type> OComboBoxModel::_getTypes()
 {
-        static com::sun::star::uno::Sequence<com::sun::star::uno::Type> aTypes;
+        static Sequence<Type> aTypes;
     if (!aTypes.getLength())
     {
         // my two base classes
-                com::sun::star::uno::Sequence<com::sun::star::uno::Type> aBaseClassTypes = OBoundControlModel::_getTypes();
+                Sequence<Type> aBaseClassTypes = OBoundControlModel::_getTypes();
 
-                com::sun::star::uno::Sequence<com::sun::star::uno::Type> aOwnTypes(1);
-                com::sun::star::uno::Type* pOwnTypes = aOwnTypes.getArray();
-                pOwnTypes[0] = getCppuType((com::sun::star::uno::Reference<starsdb::XSQLErrorBroadcaster>*)NULL);
+                Sequence<Type> aOwnTypes(1);
+                Type* pOwnTypes = aOwnTypes.getArray();
+                pOwnTypes[0] = getCppuType((Reference<XSQLErrorBroadcaster>*)NULL);
 
         aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
     }
@@ -167,7 +178,7 @@ com::sun::star::uno::Sequence<com::sun::star::uno::Type> OComboBoxModel::_getTyp
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException)
+StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -179,32 +190,32 @@ StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(com::su
 }
 
 //------------------------------------------------------------------------------
-com::sun::star::uno::Any SAL_CALL OComboBoxModel::queryAggregation(const com::sun::star::uno::Type& _rType) throw (com::sun::star::uno::RuntimeException)
+Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-        com::sun::star::uno::Any aReturn;
+        Any aReturn;
 
     aReturn = OBoundControlModel::queryAggregation(_rType);
     if (!aReturn.hasValue())
         aReturn = ::cppu::queryInterface(_rType
-            ,static_cast<starsdb::XSQLErrorBroadcaster*>(this)
+            ,static_cast<XSQLErrorBroadcaster*>(this)
         );
 
     return aReturn;
 }
 
 //------------------------------------------------------------------
-OComboBoxModel::OComboBoxModel(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
                  :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_CONTROL_COMBOBOX)
                                     // use the old control name for compytibility reasons
-                 ,m_eListSourceType(starform::ListSourceType_TABLE)
+                 ,m_eListSourceType(ListSourceType_TABLE)
                  ,m_bEmptyIsNull(sal_True)
                  ,m_aNullDate(DBTypeConversion::STANDARD_DB_DATE)
-                 ,m_nKeyType(starutil::NumberFormat::UNDEFINED)
+                 ,m_nKeyType(NumberFormat::UNDEFINED)
                  ,m_nFormatKey(0)
-                 ,m_nFieldType(starsdbc::DataType::OTHER)
+                 ,m_nFieldType(DataType::OTHER)
                  ,m_aErrorListeners(m_aMutex)
 {
-    m_nClassId = starform::FormComponentType::COMBOBOX;
+    m_nClassId = FormComponentType::COMBOBOX;
     m_sDataFieldConnectivityProperty = PROPERTY_TEXT;
     if (OComboBoxModel::nTextHandle == -1)
         OComboBoxModel::nTextHandle = getOriginalHandle(PROPERTY_ID_TEXT);
@@ -228,7 +239,7 @@ void OComboBoxModel::disposing()
 }
 
 //------------------------------------------------------------------------------
-void OComboBoxModel::getFastPropertyValue(com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle) const
+void OComboBoxModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
     switch (_nHandle)
     {
@@ -242,23 +253,23 @@ void OComboBoxModel::getFastPropertyValue(com::sun::star::uno::Any& _rValue, sal
 }
 
 //------------------------------------------------------------------------------
-void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const com::sun::star::uno::Any& _rValue)
-                        throw (com::sun::star::uno::Exception)
+void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
+                        throw (Exception)
 {
     switch (_nHandle)
     {
         case PROPERTY_ID_LISTSOURCETYPE :
-            DBG_ASSERT(_rValue.getValueType().equals(::getCppuType(reinterpret_cast<starform::ListSourceType*>(NULL))),
+            DBG_ASSERT(_rValue.getValueType().equals(::getCppuType(reinterpret_cast<ListSourceType*>(NULL))),
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_eListSourceType;
             break;
 
         case PROPERTY_ID_LISTSOURCE :
-                        DBG_ASSERT(_rValue.getValueType().getTypeClass() == com::sun::star::uno::TypeClass_STRING,
+                        DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_STRING,
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_aListSource;
             // die ListSource hat sich geaendert -> neu laden
-            if (starform::ListSourceType_VALUELIST != m_eListSourceType)
+            if (ListSourceType_VALUELIST != m_eListSourceType)
             {
                 if (m_xCursor.is() && !m_xField.is()) // combobox bereits mit Datenbank verbunden ?
                     // neu laden
@@ -267,13 +278,13 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
             break;
 
         case PROPERTY_ID_EMPTY_IS_NULL :
-                        DBG_ASSERT(_rValue.getValueType().getTypeClass() == com::sun::star::uno::TypeClass_BOOLEAN,
+                        DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN,
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_bEmptyIsNull;
             break;
 
         case PROPERTY_ID_DEFAULT_TEXT :
-                        DBG_ASSERT(_rValue.getValueType().getTypeClass() == com::sun::star::uno::TypeClass_STRING,
+                        DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_STRING,
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_aDefaultText;
             _reset();
@@ -286,8 +297,8 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
 
 //------------------------------------------------------------------------------
 sal_Bool OComboBoxModel::convertFastPropertyValue(
-                        com::sun::star::uno::Any& _rConvertedValue, com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const com::sun::star::uno::Any& _rValue)
-                        throw (com::sun::star::lang::IllegalArgumentException)
+                        Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
+                        throw (IllegalArgumentException)
 {
     sal_Bool bModified(sal_False);
     switch (_nHandle)
@@ -316,9 +327,9 @@ sal_Bool OComboBoxModel::convertFastPropertyValue(
 }
 
 //------------------------------------------------------------------------------
-com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> SAL_CALL OComboBoxModel::getPropertySetInfo() throw(com::sun::star::uno::RuntimeException)
+Reference<XPropertySetInfo> SAL_CALL OComboBoxModel::getPropertySetInfo() throw(RuntimeException)
 {
-        com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
+        Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -330,38 +341,38 @@ cppu::IPropertyArrayHelper& OComboBoxModel::getInfoHelper()
 
 //------------------------------------------------------------------------------
 void OComboBoxModel::fillProperties(
-                com::sun::star::uno::Sequence< com::sun::star::beans::Property >& _rProps,
-                com::sun::star::uno::Sequence< com::sun::star::beans::Property >& _rAggregateProps ) const
+                Sequence< Property >& _rProps,
+                Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(13)
         // Text auf transient setzen
-                ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, com::sun::star::beans::PropertyAttribute::TRANSIENT, 0);
+                ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP2(CLASSID,             sal_Int16,                  READONLY, TRANSIENT);
         DECL_PROP1(NAME,                ::rtl::OUString,            BOUND);
         DECL_PROP1(TAG,                 ::rtl::OUString,            BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
-        DECL_PROP1(LISTSOURCETYPE,      starform::ListSourceType,   BOUND);
+        DECL_PROP1(LISTSOURCETYPE,      ListSourceType, BOUND);
         DECL_PROP1(LISTSOURCE,          ::rtl::OUString,            BOUND);
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                              BOUND);
         DECL_PROP1(DEFAULT_TEXT,        ::rtl::OUString,            BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,            BOUND);
         DECL_PROP1(HELPTEXT,            ::rtl::OUString,            BOUND);
-                DECL_IFACE_PROP2(BOUNDFIELD,    com::sun::star::beans::XPropertySet,        READONLY, TRANSIENT);
-                DECL_IFACE_PROP2(CONTROLLABEL,  com::sun::star::beans::XPropertySet,        BOUND, MAYBEVOID);
+                DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,        READONLY, TRANSIENT);
+                DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,        BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OComboBoxModel::getServiceName() throw(com::sun::star::uno::RuntimeException)
+::rtl::OUString SAL_CALL OComboBoxModel::getServiceName() throw(RuntimeException)
 {
     return FRM_COMPONENT_COMBOBOX;  // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OComboBoxModel::write(const com::sun::star::uno::Reference<stario::XObjectOutputStream>& _rxOutStream)
-        throw(stario::IOException, com::sun::star::uno::RuntimeException)
+void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
+        throw(stario::IOException, RuntimeException)
 {
     OBoundControlModel::write(_rxOutStream);
 
@@ -374,7 +385,7 @@ void SAL_CALL OComboBoxModel::write(const com::sun::star::uno::Reference<stario:
 
     // Maskierung fuer any
     sal_uInt16 nAnyMask = 0;
-        if (m_aBoundColumn.getValueType().getTypeClass() == com::sun::star::uno::TypeClass_SHORT)
+        if (m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT)
         nAnyMask |= BOUNDCOLUMN;
     _rxOutStream << nAnyMask;
 
@@ -398,7 +409,7 @@ void SAL_CALL OComboBoxModel::write(const com::sun::star::uno::Reference<stario:
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OComboBoxModel::read(const com::sun::star::uno::Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, com::sun::star::uno::RuntimeException)
+void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
 {
     OBoundControlModel::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -413,7 +424,7 @@ void SAL_CALL OComboBoxModel::read(const com::sun::star::uno::Reference<stario::
         m_aListSource = ::rtl::OUString();
         m_aBoundColumn <<= (sal_Int16)0;
         m_aDefaultText = ::rtl::OUString();
-        m_eListSourceType = starform::ListSourceType_TABLE;
+        m_eListSourceType = ListSourceType_TABLE;
         m_bEmptyIsNull = sal_True;
         defaultCommonProperties();
         return;
@@ -442,7 +453,7 @@ void SAL_CALL OComboBoxModel::read(const com::sun::star::uno::Reference<stario::
 
     sal_Int16 nValue;
     _rxInStream >> nValue;
-    m_eListSourceType = (starform::ListSourceType)nValue;
+    m_eListSourceType = (ListSourceType)nValue;
 
     if ((nAnyMask & BOUNDCOLUMN) == BOUNDCOLUMN)
     {
@@ -466,7 +477,7 @@ void SAL_CALL OComboBoxModel::read(const com::sun::star::uno::Reference<stario::
     if (m_aListSource.len() && m_xAggregateSet.is())
     {
         StringSequence aSequence;
-                m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, com::sun::star::uno::makeAny(aSequence));
+                m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, makeAny(aSequence));
     }
 
     if (nVersion > 0x0004)
@@ -484,44 +495,44 @@ void SAL_CALL OComboBoxModel::read(const com::sun::star::uno::Reference<stario::
 //------------------------------------------------------------------------------
 void OComboBoxModel::loadData()
 {
-    DBG_ASSERT(m_eListSourceType != starform::ListSourceType_VALUELIST, "OComboBoxModel::loadData : do not call for a value list !");
+    DBG_ASSERT(m_eListSourceType != ListSourceType_VALUELIST, "OComboBoxModel::loadData : do not call for a value list !");
     ////
     // Connection holen
-        com::sun::star::uno::Reference<starsdbc::XRowSet> xForm(m_xCursor, com::sun::star::uno::UNO_QUERY);
+        Reference<XRowSet> xForm(m_xCursor, UNO_QUERY);
     if (!xForm.is())
         return;
-        com::sun::star::uno::Reference<starsdbc::XConnection> xConnection = getConnection(xForm);
+        Reference<XConnection> xConnection = getConnection(xForm);
     if (!xConnection.is())
         return;
 
     // we need a com::sun::star::sdb::Connection for some of the code below ...
-        com::sun::star::uno::Reference<com::sun::star::lang::XServiceInfo> xServiceInfo(xConnection, com::sun::star::uno::UNO_QUERY);
+        Reference<XServiceInfo> xServiceInfo(xConnection, UNO_QUERY);
     if (!xServiceInfo.is() || !xServiceInfo->supportsService(SRV_SDB_CONNECTION))
     {
         DBG_ERROR("OComboBoxModel::loadData : invalid connection !");
         return;
     }
 
-        com::sun::star::uno::Reference<starsdbc::XResultSet> xListCursor;
+        Reference<XResultSet> xListCursor;
 
-    if (!m_aListSource.len() || m_eListSourceType == starform::ListSourceType_VALUELIST)
+    if (!m_aListSource.len() || m_eListSourceType == ListSourceType_VALUELIST)
         return;
 
     try
     {
         switch (m_eListSourceType)
         {
-            case starform::ListSourceType_TABLEFIELDS:
+            case ListSourceType_TABLEFIELDS:
                 // don't work with a statement here, the fields will be collected below
                 break;
-            case starform::ListSourceType_TABLE:
+            case ListSourceType_TABLE:
             {
                 // does the bound field belong to the table ?
                 // if we use an alias for the bound field, we won't find it
                 // in that case we use the first field of the table
 
-                                com::sun::star::uno::Reference<starcontainer::XNameAccess> xFieldsByName = getTableFields(xConnection, m_aListSource);
-                                com::sun::star::uno::Reference<starcontainer::XIndexAccess> xFieldsByIndex(xFieldsByName, com::sun::star::uno::UNO_QUERY);
+                                Reference<XNameAccess> xFieldsByName = getTableFields(xConnection, m_aListSource);
+                                Reference<XIndexAccess> xFieldsByIndex(xFieldsByName, UNO_QUERY);
 
                 ::rtl::OUString aFieldName;
                 if (xFieldsByName.is() && xFieldsByName->hasByName(m_aControlSource))
@@ -531,32 +542,32 @@ void OComboBoxModel::loadData()
                 else
                 {
                     // otherwise look for the alias
-                                        com::sun::star::uno::Reference<starsdb::XSQLQueryComposerFactory> xFactory(xConnection, com::sun::star::uno::UNO_QUERY);
+                    Reference<XSQLQueryComposerFactory> xFactory(xConnection, UNO_QUERY);
                     if (!xFactory.is())
                         break;
 
-                                        com::sun::star::uno::Reference<starsdb::XSQLQueryComposer> xComposer = xFactory->createQueryComposer();
+                    Reference<XSQLQueryComposer> xComposer = xFactory->createQueryComposer();
                     try
                     {
-                                                com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xFormAsSet(xForm, com::sun::star::uno::UNO_QUERY);
+                        Reference<XPropertySet> xFormAsSet(xForm, UNO_QUERY);
                         ::rtl::OUString aStatement;
                         xFormAsSet->getPropertyValue(PROPERTY_ACTIVECOMMAND) >>= aStatement;
                         xComposer->setQuery(aStatement);
                     }
-                    catch(...)
+                    catch(Exception&)
                     {
                         disposeComponent(xComposer);
                         break;
                     }
 
                     // search the field
-                                        com::sun::star::uno::Reference<starsdbcx::XColumnsSupplier> xSupplyFields(xComposer, com::sun::star::uno::UNO_QUERY);
+                                        Reference<XColumnsSupplier> xSupplyFields(xComposer, UNO_QUERY);
                     DBG_ASSERT(xSupplyFields.is(), "OComboBoxModel::loadData : invalid query composer !");
 
-                                        com::sun::star::uno::Reference<starcontainer::XNameAccess> xFieldNames = xSupplyFields->getColumns();
+                                        Reference<XNameAccess> xFieldNames = xSupplyFields->getColumns();
                     if (xFieldNames->hasByName(m_aControlSource))
                     {
-                                                com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xComposerFieldAsSet(*(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>*)xFieldNames->getByName(m_aControlSource).getValue());
+                                                Reference<XPropertySet> xComposerFieldAsSet(*(Reference<XPropertySet>*)xFieldNames->getByName(m_aControlSource).getValue());
                         if (hasProperty(PROPERTY_FIELDSOURCE, xComposerFieldAsSet))
                             xComposerFieldAsSet->getPropertyValue(PROPERTY_FIELDSOURCE) >>= aFieldName;
                     }
@@ -567,7 +578,7 @@ void OComboBoxModel::loadData()
                 if (!aFieldName.len())
                     break;
 
-                                com::sun::star::uno::Reference<starsdbc::XDatabaseMetaData> xMeta = xConnection->getMetaData();
+                                Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
                 ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
                 ::rtl::OUString aStatement = ::rtl::OUString::createFromAscii("SELECT DISTINCT ");
 
@@ -575,15 +586,15 @@ void OComboBoxModel::loadData()
                 aStatement += ::rtl::OUString::createFromAscii(" FROM ");
                 aStatement += quoteTableName(xMeta, m_aListSource);
 
-                                com::sun::star::uno::Reference<starsdbc::XStatement> xStmt = xConnection->createStatement();
+                                Reference<XStatement> xStmt = xConnection->createStatement();
                 xListCursor = xStmt->executeQuery(aStatement);
             }   break;
-            case starform::ListSourceType_QUERY:
+            case ListSourceType_QUERY:
             {
-                                com::sun::star::uno::Reference<starsdb::XQueriesSupplier> xSupplyQueries(xConnection, com::sun::star::uno::UNO_QUERY);
-                                com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xQuery(*(InterfaceRef*)xSupplyQueries->getQueries()->getByName(m_aListSource).getValue(), com::sun::star::uno::UNO_QUERY);
-                                com::sun::star::uno::Reference<starsdbc::XStatement> xStmt = xConnection->createStatement();
-                                com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>(xStmt, com::sun::star::uno::UNO_QUERY)->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
+                Reference<XQueriesSupplier> xSupplyQueries(xConnection, UNO_QUERY);
+                Reference<XPropertySet> xQuery(*(InterfaceRef*)xSupplyQueries->getQueries()->getByName(m_aListSource).getValue(), UNO_QUERY);
+                Reference<XStatement> xStmt = xConnection->createStatement();
+                Reference<XPropertySet>(xStmt, UNO_QUERY)->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
 
                 ::rtl::OUString sStatement;
                 xQuery->getPropertyValue(PROPERTY_COMMAND) >>= sStatement;
@@ -591,30 +602,30 @@ void OComboBoxModel::loadData()
             }   break;
             default:
             {
-                                com::sun::star::uno::Reference<starsdbc::XStatement> xStmt = xConnection->createStatement();
-                if (starform::ListSourceType_SQLPASSTHROUGH == m_eListSourceType)
+                                Reference<XStatement> xStmt = xConnection->createStatement();
+                if (ListSourceType_SQLPASSTHROUGH == m_eListSourceType)
                 {
-                                        com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xStatementProps(xStmt, com::sun::star::uno::UNO_QUERY);
-                                        xStatementProps->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, com::sun::star::uno::makeAny(sal_Bool(sal_False)));
+                    Reference<XPropertySet> xStatementProps(xStmt, UNO_QUERY);
+                    xStatementProps->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, makeAny(sal_Bool(sal_False)));
                 }
                 xListCursor = xStmt->executeQuery(m_aListSource);
             }
         }
     }
-    catch(starsdbc::SQLException& eSQL)
+    catch(SQLException& eSQL)
     {
         onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
         disposeComponent(xListCursor);
         return;
     }
-        catch(com::sun::star::uno::Exception& eUnknown)
+        catch(Exception& eUnknown)
     {
         eUnknown;
         disposeComponent(xListCursor);
         return;
     }
 
-    if (starform::ListSourceType_TABLEFIELDS != m_eListSourceType && !xListCursor.is())
+    if (ListSourceType_TABLEFIELDS != m_eListSourceType && !xListCursor.is())
         // something went wrong ...
         return;
 
@@ -624,23 +635,23 @@ void OComboBoxModel::loadData()
     {
         switch (m_eListSourceType)
         {
-            case starform::ListSourceType_SQL:
-            case starform::ListSourceType_SQLPASSTHROUGH:
-            case starform::ListSourceType_TABLE:
-            case starform::ListSourceType_QUERY:
+            case ListSourceType_SQL:
+            case ListSourceType_SQLPASSTHROUGH:
+            case ListSourceType_TABLE:
+            case ListSourceType_QUERY:
             {
                 // die XDatabaseVAriant der ersten Spalte
-                                com::sun::star::uno::Reference<starsdbcx::XColumnsSupplier> xSupplyCols(xListCursor, com::sun::star::uno::UNO_QUERY);
+                                Reference<XColumnsSupplier> xSupplyCols(xListCursor, UNO_QUERY);
                 DBG_ASSERT(xSupplyCols.is(), "OComboBoxModel::loadData : cursor supports the row set service but is no column supplier ??!");
-                                com::sun::star::uno::Reference<starcontainer::XIndexAccess> xColumns;
+                                Reference<XIndexAccess> xColumns;
                 if (xSupplyCols.is())
                 {
-                                        xColumns = com::sun::star::uno::Reference<starcontainer::XIndexAccess>(xSupplyCols->getColumns(), com::sun::star::uno::UNO_QUERY);
+                                        xColumns = Reference<XIndexAccess>(xSupplyCols->getColumns(), UNO_QUERY);
                     DBG_ASSERT(xColumns.is(), "OComboBoxModel::loadData : no columns supplied by the row set !");
                 }
-                                com::sun::star::uno::Reference<starsdb::XColumn> xDataField;
+                                Reference<XColumn> xDataField;
                 if (xColumns.is())
-                                        xDataField = com::sun::star::uno::Reference<starsdb::XColumn>(*(InterfaceRef*)xColumns->getByIndex(0).getValue(), com::sun::star::uno::UNO_QUERY);
+                                        xDataField = Reference<XColumn>(*(InterfaceRef*)xColumns->getByIndex(0).getValue(), UNO_QUERY);
                 if (!xDataField.is())
                 {
                     disposeComponent(xListCursor);
@@ -661,9 +672,9 @@ void OComboBoxModel::loadData()
                 }
             }
             break;
-            case starform::ListSourceType_TABLEFIELDS:
+            case ListSourceType_TABLEFIELDS:
             {
-                                com::sun::star::uno::Reference<starcontainer::XNameAccess> xFieldNames = getTableFields(xConnection, m_aListSource);
+                                Reference<XNameAccess> xFieldNames = getTableFields(xConnection, m_aListSource);
                 if (xFieldNames.is())
                 {
                     StringSequence seqNames = xFieldNames->getElementNames();
@@ -677,34 +688,34 @@ void OComboBoxModel::loadData()
             break;
         }
     }
-    catch(starsdbc::SQLException& eSQL)
+    catch(SQLException& eSQL)
     {
         onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
         disposeComponent(xListCursor);
         return;
     }
-        catch(com::sun::star::uno::Exception& eUnknown)
+        catch(Exception& eUnknown)
     {
         eUnknown;
         disposeComponent(xListCursor);
         return;
     }
 
-        // String-com::sun::star::uno::Sequence fuer ListBox erzeugen
+        // String-Sequence fuer ListBox erzeugen
     StringSequence aStringSeq(aStringList.size());
     ::rtl::OUString* pStringAry = aStringSeq.getArray();
     for (sal_Int32 i = 0; i<aStringSeq.getLength(); ++i)
         pStringAry[i] = aStringList[i];
 
-        // String-com::sun::star::uno::Sequence an ListBox setzen
-        m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, com::sun::star::uno::makeAny(aStringSeq));
+        // String-Sequence an ListBox setzen
+        m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, makeAny(aStringSeq));
 
     // Statement + Cursor zerstoeren
     disposeComponent(xListCursor);
 }
 
 //------------------------------------------------------------------------------
-void OComboBoxModel::_loaded(const com::sun::star::lang::EventObject& rEvent)
+void OComboBoxModel::_loaded(const EventObject& rEvent)
 {
     if (m_xField.is())
     {
@@ -713,13 +724,13 @@ void OComboBoxModel::_loaded(const com::sun::star::lang::EventObject& rEvent)
         m_xField->getPropertyValue(PROPERTY_FORMATKEY) >>= m_nFormatKey;
 
         // XNumberFormatter besorgen
-                com::sun::star::uno::Reference<starsdbc::XRowSet> xRowSet(rEvent.Source, com::sun::star::uno::UNO_QUERY);
+                Reference<XRowSet> xRowSet(rEvent.Source, UNO_QUERY);
         DBG_ASSERT(xRowSet.is(), "OComboBoxModel::_loaded : invalid event source !");
-                com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier> xSupplier = getNumberFormats(getConnection(xRowSet), sal_False, m_xServiceFactory);
+                Reference<XNumberFormatsSupplier> xSupplier = getNumberFormats(getConnection(xRowSet), sal_False, m_xServiceFactory);
         if (xSupplier.is())
         {
-                        m_xFormatter =  com::sun::star::uno::Reference<starutil::XNumberFormatter>(
-                                                                m_xServiceFactory->createInstance(FRM_NUMBER_FORMATTER), com::sun::star::uno::UNO_QUERY
+            m_xFormatter =  Reference<XNumberFormatter>(
+                                                    m_xServiceFactory->createInstance(FRM_NUMBER_FORMATTER), UNO_QUERY
                                 );
             if (m_xFormatter.is())
                 m_xFormatter->attachNumberFormatsSupplier(xSupplier);
@@ -740,9 +751,9 @@ void OComboBoxModel::_unloaded()
     if (m_xField.is())
     {
         m_xFormatter = 0;
-        m_nFieldType = starsdbc::DataType::OTHER;
+        m_nFieldType = DataType::OTHER;
         m_nFormatKey = 0;
-        m_nKeyType   = starutil::NumberFormat::UNDEFINED;
+        m_nKeyType   = NumberFormat::UNDEFINED;
         m_aNullDate  = DBTypeConversion::STANDARD_DB_DATE;
     }
 
@@ -750,12 +761,12 @@ void OComboBoxModel::_unloaded()
     if (m_aListSource.len() && m_xCursor.is())
     {
         StringSequence aSequence;
-                m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, com::sun::star::uno::makeAny(aSequence));
+                m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, makeAny(aSequence));
     }
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OComboBoxModel::reloaded( const com::sun::star::lang::EventObject& aEvent ) throw(com::sun::star::uno::RuntimeException)
+void SAL_CALL OComboBoxModel::reloaded( const EventObject& aEvent ) throw(RuntimeException)
 {
     OBoundControlModel::reloaded(aEvent);
 
@@ -781,7 +792,7 @@ sal_Bool OComboBoxModel::_commit()
                 DBTypeConversion::setValue(m_xColumnUpdate, m_xFormatter, m_aNullDate, aNewValue,
                                            m_nFormatKey, m_nFieldType, m_nKeyType);
             }
-            catch(...)
+            catch(Exception&)
             {
                 return sal_False;
             }
@@ -795,7 +806,7 @@ sal_Bool OComboBoxModel::_commit()
     if  (m_bResetting)
         bAddToList = sal_False;
 
-        com::sun::star::uno::Any aAnyList = m_xAggregateSet->getPropertyValue(PROPERTY_STRINGITEMLIST);
+        Any aAnyList = m_xAggregateSet->getPropertyValue(PROPERTY_STRINGITEMLIST);
     if (bAddToList && aAnyList.getValueType().equals(::getCppuType(reinterpret_cast<StringSequence*>(NULL))))
     {
         StringSequence aStringItemList = *(StringSequence*)aAnyList.getValue();
@@ -840,7 +851,7 @@ void OComboBoxModel::_onValueChanged()
                                               m_nFormatKey,
                                               m_nKeyType);
 
-        m_xAggregateFastSet->setFastPropertyValue(OComboBoxModel::nTextHandle, com::sun::star::uno::makeAny(m_aSaveValue));
+        m_xAggregateFastSet->setFastPropertyValue(OComboBoxModel::nTextHandle, makeAny(m_aSaveValue));
 }
 
 //------------------------------------------------------------------------------
@@ -851,34 +862,34 @@ void OComboBoxModel::_reset()
         // our own mutex locked
         // FS - 72451 - 31.01.00
         MutexRelease aRelease(m_aMutex);
-                m_xAggregateFastSet->setFastPropertyValue(OComboBoxModel::nTextHandle, com::sun::star::uno::makeAny(m_aDefaultText));
+                m_xAggregateFastSet->setFastPropertyValue(OComboBoxModel::nTextHandle, makeAny(m_aDefaultText));
     }
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OComboBoxModel::addSQLErrorListener(const com::sun::star::uno::Reference<starsdb::XSQLErrorListener>& _rxListener) throw(com::sun::star::uno::RuntimeException)
+void SAL_CALL OComboBoxModel::addSQLErrorListener(const Reference<XSQLErrorListener>& _rxListener) throw(RuntimeException)
 {
     m_aErrorListeners.addInterface(_rxListener);
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OComboBoxModel::removeSQLErrorListener(const com::sun::star::uno::Reference<starsdb::XSQLErrorListener>& _rxListener) throw(com::sun::star::uno::RuntimeException)
+void SAL_CALL OComboBoxModel::removeSQLErrorListener(const Reference<XSQLErrorListener>& _rxListener) throw(RuntimeException)
 {
     m_aErrorListeners.removeInterface(_rxListener);
 }
 
 //------------------------------------------------------------------------------
-void OComboBoxModel::onError(starsdbc::SQLException& _rException, const ::rtl::OUString& _rContextDescription)
+void OComboBoxModel::onError(SQLException& _rException, const ::rtl::OUString& _rContextDescription)
 {
-        starsdb::SQLContext aError = prependContextInfo(_rException, static_cast<com::sun::star::uno::XWeak*>(this), _rContextDescription);
+        SQLContext aError = prependContextInfo(_rException, static_cast<XWeak*>(this), _rContextDescription);
 
     if (m_aErrorListeners.getLength())
     {
-                starsdb::SQLErrorEvent aEvent(static_cast<com::sun::star::uno::XWeak*>(this), com::sun::star::uno::makeAny(aError));
+                SQLErrorEvent aEvent(static_cast<XWeak*>(this), makeAny(aError));
 
         ::cppu::OInterfaceIteratorHelper aIter(m_aErrorListeners);
         while (aIter.hasMoreElements())
-            static_cast<starsdb::XSQLErrorListener*>(aIter.next())->errorOccured(aEvent);
+            static_cast<XSQLErrorListener*>(aIter.next())->errorOccured(aEvent);
     }
 }
 
@@ -887,19 +898,19 @@ void OComboBoxModel::onError(starsdbc::SQLException& _rException, const ::rtl::O
 //========================================================================
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OComboBoxControl_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory) throw (com::sun::star::uno::RuntimeException)
+InterfaceRef SAL_CALL OComboBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OComboBoxControl(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-OComboBoxControl::OComboBoxControl(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+OComboBoxControl::OComboBoxControl(const Reference<XMultiServiceFactory>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_COMBOBOX)
 {
 }
 
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL OComboBoxControl::getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException)
+StringSequence SAL_CALL OComboBoxControl::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);

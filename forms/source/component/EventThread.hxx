@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventThread.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,19 +92,16 @@ namespace frm
 {
 //.........................................................................
 
-    namespace starlang  = ::com::sun::star::lang;
-    namespace staruno   = ::com::sun::star::uno;
-
 // ***************************************************************************************************
 // ***************************************************************************************************
 
 class OComponentEventThread
             :public ::vos::OThread
-            ,public starlang::XEventListener
+            ,public ::com::sun::star::lang::XEventListener
             ,public ::cppu::OWeakObject
 {
-    DECLARE_STL_VECTOR(starlang::EventObject*, ThreadEvents);
-    DECLARE_STL_VECTOR(staruno::Reference<staruno::XAdapter> , ThreadObjects);
+    DECLARE_STL_VECTOR(::com::sun::star::lang::EventObject*, ThreadEvents);
+    DECLARE_STL_VECTOR(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAdapter> , ThreadObjects);
     DECLARE_STL_VECTOR(sal_Bool,    ThreadBools);
 
     OCountedMutex                   m_aMutex;
@@ -114,7 +111,7 @@ class OComponentEventThread
     ThreadBools                     m_aFlags;           // Flags fuer Submit/Reset
 
     ::cppu::OComponentHelper*                   m_pCompImpl;    // Implementierung des Controls
-    staruno::Reference<starlang::XComponent>    m_xComp;        // starlang::XComponent des Controls
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>   m_xComp;        // ::com::sun::star::lang::XComponent des Controls
 
 protected:
 
@@ -123,7 +120,7 @@ protected:
 
     // Die folgende Methode wird gerufen um das Event unter Beruecksichtigung
     // seines Typs zu duplizieren.
-    virtual starlang::EventObject* cloneEvent(const starlang::EventObject* _pEvt) const = 0;
+    virtual ::com::sun::star::lang::EventObject* cloneEvent(const ::com::sun::star::lang::EventObject* _pEvt) const = 0;
 
     // Ein Event bearbeiten. Der Mutex ist dabei nicht gelockt, pCompImpl
     // bleibt aber in jedem Fall gueltig. Bei pEvt kann es sich auch um
@@ -132,25 +129,25 @@ protected:
     // Control uebergeben wurde. Da das Control nur als WeakRef gehalten
     // wird kann es auch zwischenzeitlich verschwinden.
     virtual void processEvent( ::cppu::OComponentHelper* _pCompImpl,
-                               const starlang::EventObject* _pEvt,
-                               const staruno::Reference<starawt::XControl>& _rControl,
+                               const ::com::sun::star::lang::EventObject* _pEvt,
+                               const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& _rControl,
                                sal_Bool _bFlag) = 0;
 
 public:
 
     // UNO Anbindung
     DECLARE_UNO3_DEFAULTS(OComponentEventThread, OWeakObject);
-    virtual staruno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
 
     OComponentEventThread(::cppu::OComponentHelper* pCompImpl);
     virtual ~OComponentEventThread();
 
-    void addEvent( const starlang::EventObject* _pEvt, sal_Bool bFlag = sal_False );
-    void addEvent( const starlang::EventObject* _pEvt, const staruno::Reference<starawt::XControl>& rControl,
+    void addEvent( const ::com::sun::star::lang::EventObject* _pEvt, sal_Bool bFlag = sal_False );
+    void addEvent( const ::com::sun::star::lang::EventObject* _pEvt, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& rControl,
                    sal_Bool bFlag = sal_False );
 
-    // starlang::XEventListener
-    virtual void SAL_CALL disposing(const starlang::EventObject& _rSource );
+    // ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource );
 
 /* resolve ambiguity : both OWeakObject and OObject have these memory operators */
     void * SAL_CALL operator new( size_t size ) throw() { return OThread::operator new(size); }

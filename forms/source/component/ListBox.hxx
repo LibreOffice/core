@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 10:29:44 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,31 @@
 #include <vcl/timer.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
 #include <com/sun/star/util/XRefreshable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSQLERRORBROADCASTER_HPP_
 #include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_LISTSOURCETYPE_HPP_
 #include <com/sun/star/form/ListSourceType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XITEMLISTENER_HPP_
 #include <com/sun/star/awt/XItemListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
 #include <com/sun/star/awt/XFocusListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_XCHANGEBROADCASTER_HPP_
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+
 
 //.........................................................................
 namespace frm
@@ -95,19 +113,20 @@ const ::rtl::OUString LISTBOX_EMPTY_VALUE = ::rtl::OUString::createFromAscii("$$
 //==================================================================
 //= OListBoxModel
 //==================================================================
-class OListBoxModel
-            :public OBoundControlModel
-            ,public starsdb::XSQLErrorBroadcaster
-            ,public starutil::XRefreshable
-            ,public ::comphelper::OAggregationArrayUsageHelper< OListBoxModel >
+typedef ::cppu::ImplHelper2<    ::com::sun::star::sdb::XSQLErrorBroadcaster,
+                                ::com::sun::star::util::XRefreshable> OListBoxModel_BASE;
+
+class OListBoxModel :   public OBoundControlModel
+                        ,public OListBoxModel_BASE
+                        ,public ::comphelper::OAggregationArrayUsageHelper< OListBoxModel >
 {
-    ::com::sun::star::uno::Any                      m_aSaveValue;
+    ::com::sun::star::uno::Any                  m_aSaveValue;
 
     // <properties>
-    starform::ListSourceType        m_eListSourceType;      // type der list source
+    ::com::sun::star::form::ListSourceType      m_eListSourceType;      // type der list source
     ::com::sun::star::uno::Any                  m_aBoundColumn;
-    StringSequence                  m_aListSourceSeq;       //
-    StringSequence                  m_aValueSeq;            // alle Werte, readonly
+    StringSequence                              m_aListSourceSeq;       //
+    StringSequence                              m_aValueSeq;            // alle Werte, readonly
     ::com::sun::star::uno::Sequence<sal_Int16>  m_aDefaultSelectSeq;    // DefaultSelected
     // </properties>
 
@@ -130,7 +149,7 @@ protected:
     virtual void _onValueChanged();
 
 public:
-    OListBoxModel(const ::com::sun::star::uno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OListBoxModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     virtual ~OListBoxModel();
 
 // XServiceInfo
@@ -150,63 +169,64 @@ public:
                 throw (::com::sun::star::uno::Exception);
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
                 ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
-                throw (starlang::IllegalArgumentException);
+                throw (::com::sun::star::lang::IllegalArgumentException);
 
 // XLoadListener
-    virtual void         _loaded(const starlang::EventObject& rEvent);
+    virtual void         _loaded(const ::com::sun::star::lang::EventObject& rEvent);
     virtual void         _unloaded();
 
 // XBoundComponent
     virtual sal_Bool _commit();
 
 // XPropertySet
-    virtual ::com::sun::star::uno::Reference<starbeans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
 // XPersistObject
     virtual ::rtl::OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
-        write(const ::com::sun::star::uno::Reference<stario::XObjectOutputStream>& _rxOutStream) throw(stario::IOException, ::com::sun::star::uno::RuntimeException);
+        write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
-        read(const ::com::sun::star::uno::Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, ::com::sun::star::uno::RuntimeException);
+        read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 // XReset
     virtual void _reset();
 
 // XRefreshable
     virtual void SAL_CALL refresh() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addRefreshListener(const ::com::sun::star::uno::Reference<starutil::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeRefreshListener(const ::com::sun::star::uno::Reference<starutil::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
 
 // XSQLErrorBroadcaster
-    virtual void SAL_CALL addSQLErrorListener(const ::com::sun::star::uno::Reference<starsdb::XSQLErrorListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeSQLErrorListener(const ::com::sun::star::uno::Reference<starsdb::XSQLErrorListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addSQLErrorListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeSQLErrorListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
 
     // OAggregationArrayUsageHelper
     virtual void fillProperties(
-        ::com::sun::star::uno::Sequence< starbeans::Property >& /* [out] */ _rProps,
-        ::com::sun::star::uno::Sequence< starbeans::Property >& /* [out] */ _rAggregateProps
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
 
 protected:
     void loadData();
 
-    void onError(starsdbc::SQLException& _rException, const ::rtl::OUString& _rContextDescription);
+    void onError(::com::sun::star::sdbc::SQLException& _rException, const ::rtl::OUString& _rContextDescription);
 };
 
 //==================================================================
 //= OListBoxControl
 //==================================================================
+typedef ::cppu::ImplHelper3<    ::com::sun::star::awt::XFocusListener,
+                                ::com::sun::star::awt::XItemListener,
+                                ::com::sun::star::form::XChangeBroadcaster > OListBoxControl_BASE;
 
 class OListBoxControl   :public OBoundControl
-                        ,public starawt::XFocusListener
-                        ,public starawt::XItemListener
-                        ,public starform::XChangeBroadcaster
+                        ,public OListBoxControl_BASE
 {
     ::cppu::OInterfaceContainerHelper       m_aChangeListeners;
 
-    ::com::sun::star::uno::Any                          m_aCurrentSelection;
+    ::com::sun::star::uno::Any              m_aCurrentSelection;
     Timer                                   m_aChangeTimer;
 
 protected:
@@ -214,7 +234,7 @@ protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
 
 public:
-    OListBoxControl(const ::com::sun::star::uno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OListBoxControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     virtual ~OListBoxControl();
 
     // UNO Anbindung
@@ -226,18 +246,18 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
 // XChangeBroadcaster
-    virtual void SAL_CALL addChangeListener(const ::com::sun::star::uno::Reference<starform::XChangeListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeChangeListener(const ::com::sun::star::uno::Reference<starform::XChangeListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
 
 // XFocusListener
-    virtual void SAL_CALL focusGained(const starawt::FocusEvent& _rEvent) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL focusLost(const starawt::FocusEvent& _rEvent) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& _rEvent) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& _rEvent) throw(::com::sun::star::uno::RuntimeException);
 
 // XItemListener
-    virtual void SAL_CALL itemStateChanged(const starawt::ItemEvent& _rEvent) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL itemStateChanged(const ::com::sun::star::awt::ItemEvent& _rEvent) throw(::com::sun::star::uno::RuntimeException);
 
 // XEventListener
-    virtual void SAL_CALL disposing(const starlang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
 
 // OComponentHelper
     virtual void SAL_CALL disposing();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FixedText.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,15 +79,15 @@ class OFixedTextModel
 {
 protected:
     // UNO Anbindung
-    virtual staruno::Sequence<staruno::Type>    _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
 
 public:
     OFixedTextModel(
-        const staruno::Reference<starlang::XMultiServiceFactory>& _rFactory // factory to create the aggregate with
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory    // factory to create the aggregate with
     );
 
 // XPropertySetRef
-    virtual staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL    getPropertySetInfo() throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL   getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
 // XServiceInfo
@@ -95,16 +95,16 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
 // XPersistObject
-    virtual ::rtl::OUString SAL_CALL    getServiceName() throw(staruno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
-        write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream) throw(stario::IOException, staruno::RuntimeException);
+        write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
-        read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, staruno::RuntimeException);
+        read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 // OAggregationArrayUsageHelper
     virtual void fillProperties(
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rProps,
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rAggregateProps
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
 };

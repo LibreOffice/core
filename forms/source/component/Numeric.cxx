@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Numeric.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:06 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,24 @@
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //==================================================================
 // ONumericControl
 //==================================================================
 
 //------------------------------------------------------------------
-ONumericControl::ONumericControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+ONumericControl::ONumericControl(const Reference<XMultiServiceFactory>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_NUMERICFIELD)
 {
 }
@@ -95,13 +106,13 @@ StringSequence ONumericControl::getSupportedServiceNames() throw()
 
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL ONumericControl_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL ONumericControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new ONumericControl(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> ONumericControl::_getTypes()
+Sequence<Type> ONumericControl::_getTypes()
 {
     return OBoundControl::_getTypes();
 }
@@ -111,23 +122,23 @@ staruno::Sequence<staruno::Type> ONumericControl::_getTypes()
 //==================================================================
 sal_Int32   ONumericModel::nValueHandle = -1;
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL ONumericModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL ONumericModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new ONumericModel(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> ONumericModel::_getTypes()
+Sequence<Type> ONumericModel::_getTypes()
 {
     return OEditBaseModel::_getTypes();
 }
 
 //------------------------------------------------------------------
-ONumericModel::ONumericModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+ONumericModel::ONumericModel(const Reference<XMultiServiceFactory>& _rxFactory)
                 :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_NUMERICFIELD, FRM_CONTROL_NUMERICFIELD)
                                     // use the old control name for compytibility reasons
 {
-    m_nClassId = starform::FormComponentType::NUMERICFIELD;
+    m_nClassId = FormComponentType::NUMERICFIELD;
     m_sDataFieldConnectivityProperty = PROPERTY_VALUE;
     if (ONumericModel::nValueHandle == -1)
         ONumericModel::nValueHandle = getOriginalHandle(PROPERTY_ID_VALUE);
@@ -138,7 +149,7 @@ ONumericModel::~ONumericModel()
 {
 }
 
-// starlang::XServiceInfo
+// XServiceInfo
 //------------------------------------------------------------------------------
 StringSequence ONumericModel::getSupportedServiceNames() throw()
 {
@@ -152,20 +163,20 @@ StringSequence ONumericModel::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL ONumericModel::getPropertySetInfo() throw( staruno::RuntimeException )
+Reference<XPropertySetInfo> SAL_CALL ONumericModel::getPropertySetInfo() throw( RuntimeException )
 {
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
 //------------------------------------------------------------------------------
 void ONumericModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(10)
         // Value auf transient setzen
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, starbeans::PropertyAttribute::TRANSIENT, 0);
+//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP2(CLASSID,         sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP3(DEFAULT_VALUE,   double,             BOUND, MAYBEDEFAULT, MAYBEVOID);
@@ -174,8 +185,8 @@ void ONumericModel::fillProperties(
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
         DECL_PROP1(CONTROLSOURCE,   ::rtl::OUString,    BOUND);
         DECL_PROP1(HELPTEXT,        ::rtl::OUString,    BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,        starbeans::XPropertySet,READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,      starbeans::XPropertySet,    BOUND, MAYBEVOID);
+        DECL_IFACE_PROP2(BOUNDFIELD,        XPropertySet,READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,   BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
@@ -192,11 +203,11 @@ void ONumericModel::fillProperties(
     return FRM_COMPONENT_NUMERICFIELD;  // old (non-sun) name for compatibility !
 }
 
-// starform::XBoundComponent
+// XBoundComponent
 //------------------------------------------------------------------------------
 sal_Bool ONumericModel::_commit()
 {
-    staruno::Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( ONumericModel::nValueHandle );
+    Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( ONumericModel::nValueHandle );
     if (!compare(aNewValue, m_aSaveValue))
     {
         if (!aNewValue.hasValue())
@@ -207,7 +218,7 @@ sal_Bool ONumericModel::_commit()
             {
                 m_xColumnUpdate->updateDouble(getDouble(aNewValue));
             }
-            catch(...)
+            catch(Exception&)
             {
                 return sal_False;
             }
@@ -233,12 +244,12 @@ void ONumericModel::_onValueChanged()
     }
 }
 
-// starform::XReset
+// XReset
 //------------------------------------------------------------------------------
 void ONumericModel::_reset()
 {
-    staruno::Any aValue;
-    if (m_aDefault.getValueType().getTypeClass() == staruno::TypeClass_DOUBLE)
+    Any aValue;
+    if (m_aDefault.getValueType().getTypeClass() == TypeClass_DOUBLE)
         aValue = m_aDefault;
 
     {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,48 +88,48 @@ class OCheckBoxModel    :public OBoundControlModel
     sal_Bool            m_bInReset;
 
 protected:
-    sal_Int16   getState(const staruno::Any& rValue);
+    sal_Int16   getState(const ::com::sun::star::uno::Any& rValue);
 
     virtual void            _onValueChanged();
-    virtual void            _loaded(const starlang::EventObject& rEvent);
-    virtual staruno::Any    _getControlValue() const;
+    virtual void            _loaded(const ::com::sun::star::lang::EventObject& rEvent);
+    virtual ::com::sun::star::uno::Any  _getControlValue() const;
 
 public:
-    OCheckBoxModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OCheckBoxModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
     // XServiceInfo
     IMPLEMENTATION_NAME(OCheckBoxModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
     // OPropertySetHelper
-    virtual void SAL_CALL getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHandle) const;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const staruno::Any& rValue )
-                throw (staruno::Exception);
+    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+                throw (::com::sun::star::uno::Exception);
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, sal_Int32 _nHandle, const staruno::Any& _rValue )
-                throw (starlang::IllegalArgumentException);
+                ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
+                throw (::com::sun::star::lang::IllegalArgumentException);
 
     // XPropertySetRef
-    virtual staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
     // XPersistObject
-    virtual ::rtl::OUString SAL_CALL    getServiceName() throw(staruno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
-        write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream) throw(stario::IOException, staruno::RuntimeException);
+        write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
-        read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, staruno::RuntimeException);
+        read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     // OPropertyChangeListener
-    virtual void _propertyChanged(const starbeans::PropertyChangeEvent& evt) throw(staruno::RuntimeException);
+    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
     // XReset
-    virtual void SAL_CALL reset() throw(staruno::RuntimeException);
+    virtual void SAL_CALL reset() throw(::com::sun::star::uno::RuntimeException);
 
 // OAggregationArrayUsageHelper
     virtual void fillProperties(
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rProps,
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rAggregateProps
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
 
@@ -144,7 +144,7 @@ protected:
 class OCheckBoxControl : public OBoundControl
 {
 public:
-    OCheckBoxControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OCheckBoxControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
     // XServiceInfo
     IMPLEMENTATION_NAME(OCheckBoxControl);

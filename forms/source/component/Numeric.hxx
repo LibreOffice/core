@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Numeric.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,29 +78,29 @@ class ONumericModel
                 :public OEditBaseModel
                 ,public ::comphelper::OAggregationArrayUsageHelper< ONumericModel >
 {
-    staruno::Any            m_aSaveValue;
+    ::com::sun::star::uno::Any          m_aSaveValue;
     static sal_Int32    nValueHandle;
 
 protected:
     virtual void _onValueChanged();
-    virtual staruno::Sequence<staruno::Type> _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
 public:
-    ONumericModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    ONumericModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     virtual ~ONumericModel();
 
     // starform::XBoundComponent
     virtual sal_Bool _commit();
 
-    // starlang::XServiceInfo
+    // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(ONumericModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-    // staruno::Reference<starbeans::XPropertySet>
-    virtual staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(staruno::RuntimeException);
+    // ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-    // stario::XPersistObject
+    // ::com::sun::star::io::XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName();
 
     // starform::XReset
@@ -108,8 +108,8 @@ public:
 
     // OAggregationArrayUsageHelper
     virtual void fillProperties(
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rProps,
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rAggregateProps
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
 };
@@ -120,12 +120,12 @@ public:
 class ONumericControl: public OBoundControl
 {
 protected:
-    virtual staruno::Sequence<staruno::Type> _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
 public:
-    ONumericControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    ONumericControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
-    // starlang::XServiceInfo
+    // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(ONumericControl);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,24 +86,34 @@ using namespace dbtools;
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
 
 //==================================================================
 //= OTimeControl
 //==================================================================
 //------------------------------------------------------------------
-OTimeControl::OTimeControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OTimeControl::OTimeControl(const Reference<XMultiServiceFactory>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_TIMEFIELD)
 {
 }
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OTimeControl_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OTimeControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OTimeControl(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OTimeControl::_getTypes()
+Sequence<Type> OTimeControl::_getTypes()
 {
     return OBoundControl::_getTypes();
 }
@@ -125,12 +135,12 @@ StringSequence SAL_CALL OTimeControl::getSupportedServiceNames() throw()
 sal_Int32   OTimeModel::nTimeHandle = -1;
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OTimeModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OTimeModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OTimeModel(_rxFactory));
 }
 
-// starlang::XServiceInfo
+// XServiceInfo
 //------------------------------------------------------------------------------
 StringSequence SAL_CALL OTimeModel::getSupportedServiceNames() throw()
 {
@@ -144,17 +154,17 @@ StringSequence SAL_CALL OTimeModel::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OTimeModel::_getTypes()
+Sequence<Type> OTimeModel::_getTypes()
 {
     return OBoundControlModel::_getTypes();
 }
 
 //------------------------------------------------------------------
-OTimeModel::OTimeModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OTimeModel::OTimeModel(const Reference<XMultiServiceFactory>& _rxFactory)
              :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_CONTROL_TIMEFIELD )
                                     // use the old control name for compytibility reasons
 {
-    m_nClassId = starform::FormComponentType::TIMEFIELD;
+    m_nClassId = FormComponentType::TIMEFIELD;
     m_sDataFieldConnectivityProperty = PROPERTY_TIME;
     if (OTimeModel::nTimeHandle == -1)
         OTimeModel::nTimeHandle = getOriginalHandle(PROPERTY_ID_TIME);
@@ -166,22 +176,22 @@ OTimeModel::OTimeModel(const staruno::Reference<starlang::XMultiServiceFactory>&
     return FRM_COMPONENT_TIMEFIELD; // old (non-sun) name for compatibility !
 }
 
-// starbeans::XPropertySet
+// XPropertySet
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OTimeModel::getPropertySetInfo() throw( staruno::RuntimeException )
+Reference<XPropertySetInfo> SAL_CALL OTimeModel::getPropertySetInfo() throw( RuntimeException )
 {
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
 //------------------------------------------------------------------------------
 void OTimeModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(10)
         // starutil::Time auf transient setzen
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TIME, starbeans::PropertyAttribute::TRANSIENT, 0);
+//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TIME, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP1(NAME,        ::rtl::OUString, BOUND);
         DECL_PROP2(CLASSID,     sal_Int16, READONLY, TRANSIENT);
@@ -190,8 +200,8 @@ void OTimeModel::fillProperties(
         DECL_PROP1(TABINDEX,        sal_Int16, BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,    BOUND);
         DECL_PROP1(HELPTEXT,        ::rtl::OUString,            BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,        starbeans::XPropertySet, READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,      starbeans::XPropertySet,    BOUND, MAYBEVOID);
+        DECL_IFACE_PROP2(BOUNDFIELD,        XPropertySet, READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,   BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
@@ -202,9 +212,9 @@ void OTimeModel::fillProperties(
     return *const_cast<OTimeModel*>(this)->getArrayHelper();
 }
 
-// starform::XLoadListener
+// XLoadListener
 //------------------------------------------------------------------------------
-void OTimeModel::_loaded(const starlang::EventObject& rEvent)
+void OTimeModel::_loaded(const EventObject& rEvent)
 {
     OBoundControlModel::_loaded(rEvent);
     if (m_xField.is())
@@ -214,19 +224,19 @@ void OTimeModel::_loaded(const starlang::EventObject& rEvent)
         {
             sal_Int32 nFieldType;
             m_xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
-            m_bDateTimeField = (nFieldType == starsdbc::DataType::TIMESTAMP);
+            m_bDateTimeField = (nFieldType == DataType::TIMESTAMP);
         }
-        catch(...)
+        catch(Exception&)
         {
         }
     }
 }
 
-// starform::XBoundComponent
+// XBoundComponent
 //------------------------------------------------------------------------------
 sal_Bool OTimeModel::_commit()
 {
-    staruno::Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( OTimeModel::nTimeHandle );
+    Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( OTimeModel::nTimeHandle );
     if (!compare(aNewValue, m_aSaveValue))
     {
         if (!aNewValue.hasValue())
@@ -255,7 +265,7 @@ sal_Bool OTimeModel::_commit()
                     m_xColumnUpdate->updateTimestamp(aDateTime);
                 }
             }
-            catch(...)
+            catch(Exception&)
             {
                 return sal_False;
             }
@@ -287,8 +297,8 @@ void OTimeModel::_onValueChanged()
 //------------------------------------------------------------------------------
 void OTimeModel::_reset()
 {
-    staruno::Any aValue;
-    if  (m_aDefault.getValueType().getTypeClass() == staruno::TypeClass_LONG)
+    Any aValue;
+    if  (m_aDefault.getValueType().getTypeClass() == TypeClass_LONG)
         aValue = m_aDefault;
     else
     {   // aktuelles Datum einstellen

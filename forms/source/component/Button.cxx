@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:04 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,24 +77,35 @@
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //==================================================================
 //= OButtonModel
 //==================================================================
 DBG_NAME(OButtonModel)
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OButtonModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OButtonModel(_rxFactory));
 }
 
 //------------------------------------------------------------------
-OButtonModel::OButtonModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OButtonModel::OButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
                :OImageModel(_rxFactory, VCL_CONTROLMODEL_COMMANDBUTTON, FRM_CONTROL_COMMANDBUTTON)
                                     // use the old control name for compytibility reasons
 {
     DBG_CTOR(OButtonModel, NULL);
-    m_nClassId = starform::FormComponentType::COMMANDBUTTON;
+    m_nClassId = FormComponentType::COMMANDBUTTON;
 }
 
 //------------------------------------------------------------------------------
@@ -104,20 +115,20 @@ OButtonModel::~OButtonModel()
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OButtonModel::getPropertySetInfo() throw( staruno::RuntimeException )
+Reference<XPropertySetInfo> SAL_CALL OButtonModel::getPropertySetInfo() throw( RuntimeException )
 {
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
 //------------------------------------------------------------------------------
 void OButtonModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(8)
         DECL_PROP2(CLASSID,         sal_Int16,                  READONLY, TRANSIENT);
-        DECL_PROP1(BUTTONTYPE,      starform::FormButtonType,   BOUND);
+        DECL_PROP1(BUTTONTYPE,      FormButtonType, BOUND);
         DECL_PROP1(TARGET_URL,      ::rtl::OUString,            BOUND);
         DECL_PROP1(TARGET_FRAME,    ::rtl::OUString,            BOUND);
         DECL_PROP1(NAME,            ::rtl::OUString,            BOUND);
@@ -133,7 +144,7 @@ void OButtonModel::fillProperties(
     return *const_cast<OButtonModel*>(this)->getArrayHelper();
 }
 
-// starlang::XServiceInfo
+// XServiceInfo
 //------------------------------------------------------------------------------
 StringSequence  OButtonModel::getSupportedServiceNames() throw()
 {
@@ -152,7 +163,7 @@ StringSequence  OButtonModel::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-void OButtonModel::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
+void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     OImageModel::write(_rxOutStream);
 
@@ -166,7 +177,7 @@ void OButtonModel::write(const staruno::Reference<stario::XObjectOutputStream>& 
 }
 
 //------------------------------------------------------------------------------
-void OButtonModel::read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream)
+void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     OImageModel::read(_rxInStream);
 
@@ -175,7 +186,7 @@ void OButtonModel::read(const staruno::Reference<stario::XObjectInputStream>& _r
     {
         case 0x0001:
         {
-            m_eButtonType = (starform::FormButtonType)_rxInStream->readShort();
+            m_eButtonType = (FormButtonType)_rxInStream->readShort();
 
             ::rtl::OUString sTmp;
             _rxInStream >> sTmp;
@@ -185,7 +196,7 @@ void OButtonModel::read(const staruno::Reference<stario::XObjectInputStream>& _r
         break;
         case 0x0002:
         {
-            m_eButtonType = (starform::FormButtonType)_rxInStream->readShort();
+            m_eButtonType = (FormButtonType)_rxInStream->readShort();
 
             ::rtl::OUString sTmp;
             _rxInStream >> sTmp;
@@ -196,7 +207,7 @@ void OButtonModel::read(const staruno::Reference<stario::XObjectInputStream>& _r
         break;
         default :
             DBG_ERROR("OButtonModel::read : unknown version !");
-            m_eButtonType = starform::FormButtonType_PUSH;
+            m_eButtonType = FormButtonType_PUSH;
             m_sTargetURL = ::rtl::OUString();
             m_sTargetFrame = ::rtl::OUString();
             break;
@@ -207,24 +218,24 @@ void OButtonModel::read(const staruno::Reference<stario::XObjectInputStream>& _r
 // OButtonControl
 //==================================================================
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OButtonControl_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OButtonControl(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OButtonControl::_getTypes()
+Sequence<Type> OButtonControl::_getTypes()
 {
-    static staruno::Sequence<staruno::Type> aTypes;
+    static Sequence<Type> aTypes;
     if (!aTypes.getLength())
     {
         // my base class
-        staruno::Sequence<staruno::Type> aBaseClassTypes = OImageControl::_getTypes();
+        Sequence<Type> aBaseClassTypes = OImageControl::_getTypes();
 
-        staruno::Sequence<staruno::Type> aOwnTypes(2);
-        staruno::Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = getCppuType((staruno::Reference<starawt::XButton>*)NULL);
-        pOwnTypes[1] = getCppuType((staruno::Reference<starawt::XActionListener>*)NULL);
+        Sequence<Type> aOwnTypes(2);
+        Type* pOwnTypes = aOwnTypes.getArray();
+        pOwnTypes[0] = getCppuType((Reference<XButton>*)NULL);
+        pOwnTypes[1] = getCppuType((Reference<XActionListener>*)NULL);
 
         aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
     }
@@ -243,14 +254,14 @@ StringSequence  OButtonControl::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-OButtonControl::OButtonControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OButtonControl::OButtonControl(const Reference<XMultiServiceFactory>& _rxFactory)
                  :OImageControl(_rxFactory, VCL_CONTROL_COMMANDBUTTON)
                  ,nClickEvent(0)
 {
     increment(m_refCount);
     {
         // als ActionListener anmelden
-        staruno::Reference<starawt::XButton>  xButton;
+        Reference<XButton>  xButton;
         query_aggregation( m_xAggregate, xButton);
         if (xButton.is())
             xButton->addActionListener(this);
@@ -268,27 +279,21 @@ OButtonControl::~OButtonControl()
 
 // UNO Anbindung
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OButtonControl::queryAggregation(const staruno::Type& _rType) throw (staruno::RuntimeException)
+Any SAL_CALL OButtonControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    staruno::Any aReturn;
-
-    aReturn = OImageControl::queryAggregation(_rType);
+    Any aReturn = OImageControl::queryAggregation(_rType);
     if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType
-            ,static_cast<starawt::XActionListener*>(this)
-            ,static_cast<starawt::XButton*>(this)
-        );
+        aReturn = OButtonControl_BASE::queryInterface(_rType);
 
     return aReturn;
 }
 
 // ActionListener
 //------------------------------------------------------------------------------
-void OButtonControl::actionPerformed(const starawt::ActionEvent& rEvent)
+void OButtonControl::actionPerformed(const ActionEvent& rEvent)
 {
     // Asynchron fuer starutil::URL-Button
-    sal_uInt32 n = Application::PostUserEvent( LINK(this, OButtonControl,
-                                          OnClick) );
+    sal_uInt32 n = Application::PostUserEvent( LINK(this, OButtonControl,OnClick) );
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         nClickEvent = n;
@@ -320,18 +325,18 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
         aGuard.clear();
 
         // recognize the button type
-        staruno::Reference<starbeans::XPropertySet>  xSet(getModel(), staruno::UNO_QUERY);
+        Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
         if (!xSet.is())
             return 0L;
 
-        if (starform::FormButtonType_PUSH == *(starform::FormButtonType*)xSet->getPropertyValue(PROPERTY_BUTTONTYPE).getValue())
+        if (FormButtonType_PUSH == *(FormButtonType*)xSet->getPropertyValue(PROPERTY_BUTTONTYPE).getValue())
         {
             // notify the action listeners for a push button
             ::cppu::OInterfaceIteratorHelper aIter(m_aActionListeners);
-            starawt::ActionEvent aEvt(static_cast<staruno::XWeak*>(this), m_aActionCommand);
+            ActionEvent aEvt(static_cast<XWeak*>(this), m_aActionCommand);
             while(aIter.hasMoreElements() )
             {
-                ((starawt::XActionListener*)aIter.next())->actionPerformed(aEvt);
+                ((XActionListener*)aIter.next())->actionPerformed(aEvt);
             }
         }
         else
@@ -340,38 +345,38 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
     return 0L;
 }
 
-// starawt::XButton
+// XButton
 //------------------------------------------------------------------------------
-void OButtonControl::setLabel(const ::rtl::OUString& Label) throw( staruno::RuntimeException )
+void OButtonControl::setLabel(const ::rtl::OUString& Label) throw( RuntimeException )
 {
-    staruno::Reference<starawt::XButton>  xButton;
+    Reference<XButton>  xButton;
     query_aggregation( m_xAggregate, xButton);
     if (xButton.is())
         xButton->setLabel(Label);
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OButtonControl::setActionCommand(const ::rtl::OUString& _rCommand) throw( staruno::RuntimeException )
+void SAL_CALL OButtonControl::setActionCommand(const ::rtl::OUString& _rCommand) throw( RuntimeException )
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_aActionCommand = _rCommand;
     }
 
-    staruno::Reference<starawt::XButton>  xButton;
+    Reference<XButton>  xButton;
     query_aggregation( m_xAggregate, xButton);
     if (xButton.is())
         xButton->setActionCommand(_rCommand);
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OButtonControl::addActionListener(const staruno::Reference<starawt::XActionListener>& _rxListener) throw( staruno::RuntimeException )
+void SAL_CALL OButtonControl::addActionListener(const Reference<XActionListener>& _rxListener) throw( RuntimeException )
 {
     m_aActionListeners.addInterface(_rxListener);
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OButtonControl::removeActionListener(const staruno::Reference<starawt::XActionListener>& _rxListener) throw( staruno::RuntimeException )
+void SAL_CALL OButtonControl::removeActionListener(const Reference<XActionListener>& _rxListener) throw( RuntimeException )
 {
     m_aActionListeners.removeInterface(_rxListener);
 }

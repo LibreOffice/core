@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
 #include <comphelper/propmultiplex.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+
 
 //.........................................................................
 namespace frm
@@ -88,35 +92,35 @@ class OFormattedModel
 {
     // das Original, falls ich die Format-Properties meines aggregierten Models gefaket, d.h. von dem Feld, an das
     // ich gebunden bin, weitergereicht habe (nur gueltig wenn loaded)
-    staruno::Reference<starutil::XNumberFormatsSupplier>    m_xOriginalFormatter;
-    starutil::Date              m_aNullDate;
-    staruno::Any                m_aSaveValue;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>   m_xOriginalFormatter;
+    ::com::sun::star::util::Date                m_aNullDate;
+    ::com::sun::star::uno::Any              m_aSaveValue;
     sal_Int16                   m_nKeyType;
 
     sal_Bool                    m_bOriginalNumeric : 1,
                                 m_bNumeric : 1;
         // analog fuer TreatAsNumeric-Property
 
-    static staruno::Reference<starutil::XNumberFormatsSupplier>     s_xDefaultFormatter;
+    static ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>    s_xDefaultFormatter;
     static sal_Int32                        nValueHandle;
         // falls ich wirklich mal einen selber benutzen muss, wird der zwischen allen Instanzen geteilt
 
 protected:
     virtual void _onValueChanged();
 
-    staruno::Reference<starutil::XNumberFormatsSupplier>  calcDefaultFormatsSupplier() const;
-    staruno::Reference<starutil::XNumberFormatsSupplier>  calcFormFormatsSupplier() const;
-    staruno::Reference<starutil::XNumberFormatsSupplier>  calcFormatsSupplier() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcDefaultFormatsSupplier() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcFormFormatsSupplier() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcFormatsSupplier() const;
     sal_Int32 calcFormatKey() const;
     void getFormatDescription(::rtl::OUString& sFormat, LanguageType& eLanguage);
 
-    OFormattedModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OFormattedModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
-    friend InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    friend InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     friend class OFormattedFieldWrapper;
 public:
 
-// starlang::XServiceInfo
+// ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OFormattedModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
@@ -124,44 +128,44 @@ public:
     virtual sal_Bool _commit();
 
 // stario::XPersistObject
-    virtual void SAL_CALL write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream);
-    virtual void SAL_CALL read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream);
+    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference<stario::XObjectOutputStream>& _rxOutStream);
+    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference<stario::XObjectInputStream>& _rxInStream);
     virtual ::rtl::OUString SAL_CALL getServiceName();
 
-// starbeans::XPropertySet
-    virtual staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(staruno::RuntimeException);
+// ::com::sun::star::beans::XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-    virtual void SAL_CALL getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHandle ) const;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(staruno::Any& rConvertedValue, staruno::Any& rOldValue,
-                                          sal_Int32 nHandle, const staruno::Any& rValue )
-                                        throw(starlang::IllegalArgumentException);
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const staruno::Any& rValue);
+    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
+                                          sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+                                        throw(::com::sun::star::lang::IllegalArgumentException);
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue);
 
 // starform::XLoadListener
-    virtual void SAL_CALL loaded(const starlang::EventObject& rEvent);
-    virtual void _loaded(const starlang::EventObject& rEvent);
+    virtual void SAL_CALL loaded(const ::com::sun::star::lang::EventObject& rEvent);
+    virtual void _loaded(const ::com::sun::star::lang::EventObject& rEvent);
     virtual void _unloaded();
 
 // starform::XReset
     virtual void _reset( void );
 
-// starbeans::XPropertyState
+// ::com::sun::star::beans::XPropertyState
     void setPropertyToDefaultByHandle(sal_Int32 nHandle);
-    staruno::Any getPropertyDefaultByHandle(sal_Int32 nHandle) const;
+    ::com::sun::star::uno::Any getPropertyDefaultByHandle(sal_Int32 nHandle) const;
 
-    void SAL_CALL setPropertyToDefault(const ::rtl::OUString& aPropertyName) throw(starbeans::UnknownPropertyException, staruno::RuntimeException);
-    staruno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw(starbeans::UnknownPropertyException, staruno::RuntimeException);
+    void SAL_CALL setPropertyToDefault(const ::rtl::OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
     // OAggregationArrayUsageHelper
     virtual void fillProperties(
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rProps,
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rAggregateProps
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
 
 // OPropertyChangeListener
-    virtual void _propertyChanged(const starbeans::PropertyChangeEvent& evt) throw(staruno::RuntimeException);
+    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
 protected:
     virtual sal_Int16 getPersistenceFlags() const;
@@ -171,32 +175,33 @@ protected:
 //==================================================================
 //= OFormattedControl
 //==================================================================
+typedef ::cppu::ImplHelper1< ::com::sun::star::awt::XKeyListener> OFormattedControl_BASE;
 class OFormattedControl :    public OBoundControl
-                            ,public starawt::XKeyListener
+                            ,public OFormattedControl_BASE
 {
     sal_uInt32              m_nKeyEvent;
 
 public:
-    OFormattedControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OFormattedControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     virtual ~OFormattedControl();
 
     DECLARE_UNO3_AGG_DEFAULTS(OFormattedControl, OBoundControl);
-    virtual staruno::Any SAL_CALL queryAggregation(const staruno::Type& _rType) throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
-    virtual staruno::Sequence<staruno::Type> _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
-// starlang::XServiceInfo
+// ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OFormattedControl);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-// starlang::XEventListener
-    virtual void SAL_CALL disposing(const starlang::EventObject& _rSource) throw(staruno::RuntimeException);
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
 
-// starawt::XKeyListener
-    virtual void SAL_CALL keyPressed(const starawt::KeyEvent& e);
-    virtual void SAL_CALL keyReleased(const starawt::KeyEvent& e);
+// ::com::sun::star::awt::XKeyListener
+    virtual void SAL_CALL keyPressed(const ::com::sun::star::awt::KeyEvent& e);
+    virtual void SAL_CALL keyReleased(const ::com::sun::star::awt::KeyEvent& e);
 
-// starawt::XControl
+// ::com::sun::star::awt::XControl
     virtual void SAL_CALL setDesignMode(sal_Bool bOn);
 
 private:

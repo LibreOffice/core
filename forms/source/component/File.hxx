@@ -2,9 +2,9 @@
  *
  *  $RCSfile: File.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,53 +76,53 @@ namespace frm
 //==================================================================
 class OFileControlModel
                 :public OControlModel
-                ,public starform::XReset
+                ,public ::com::sun::star::form::XReset
                 ,public ::comphelper::OAggregationArrayUsageHelper< OFileControlModel >
 {
     ::cppu::OInterfaceContainerHelper       m_aResetListeners;
     ::rtl::OUString                         m_sDefaultValue;
 
 protected:
-    virtual staruno::Sequence<staruno::Type> _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
 public:
-    OFileControlModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OFileControlModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     ~OFileControlModel();
 
     DECLARE_UNO3_AGG_DEFAULTS(OFileControlModel, OControlModel);
-    virtual staruno::Any SAL_CALL queryAggregation(const staruno::Type& _rType) throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
-// starlang::XServiceInfo
+// ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OFileControlModel);
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(staruno::RuntimeException);
+    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
 // OComponentHelper
     virtual void SAL_CALL disposing();
 
-    virtual void SAL_CALL getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHandle) const;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const staruno::Any& rValue);
+    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue);
 
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(staruno::Any& rConvertedValue, staruno::Any& rOldValue, sal_Int32 nHandle, const staruno::Any& rValue )
-        throw(starlang::IllegalArgumentException);
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+        throw(::com::sun::star::lang::IllegalArgumentException);
 
-// starbeans::XPropertySet
-    virtual staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(staruno::RuntimeException);
+// ::com::sun::star::beans::XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-// stario::XPersistObject
+// ::com::sun::star::io::XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName();
-    virtual void SAL_CALL write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream);
-    virtual void SAL_CALL read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream);
+    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
+    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
 
-// starform::XReset
+// ::com::sun::star::form::XReset
     virtual void SAL_CALL reset();
-    virtual void SAL_CALL addResetListener(const staruno::Reference<starform::XResetListener>& _rxListener);
-    virtual void SAL_CALL removeResetListener(const staruno::Reference<starform::XResetListener>& _rxListener);
+    virtual void SAL_CALL addResetListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener>& _rxListener);
+    virtual void SAL_CALL removeResetListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener>& _rxListener);
 
 // OAggregationArrayUsageHelper
     virtual void fillProperties(
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rProps,
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rAggregateProps
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
 

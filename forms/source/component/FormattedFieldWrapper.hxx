@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedFieldWrapper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,37 +75,37 @@ class OEditModel;
 //= OFormattedFieldWrapper
 //==================================================================
 class OFormattedFieldWrapper
-        :public stario::XPersistObject
+        :public ::com::sun::star::io::XPersistObject
         ,public ::cppu::OWeakAggObject
 {
-    staruno::Reference<starlang::XMultiServiceFactory>  m_xServiceFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xServiceFactory;
 
 protected:
-    staruno::Reference<staruno::XAggregation>       m_xAggregate;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
 
     OEditModel*     m_pEditPart;
         // if we act as formatted this is used to write the EditModel part
-    staruno::Reference<stario::XPersistObject>  m_xFormattedPart;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>     m_xFormattedPart;
         // if we act as formatted, this is the PersistObject interface of our aggregate, used
         // to read and write the FormattedModel part
 
-    OFormattedFieldWrapper(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory, sal_Bool _bActAsFormatted);
+    OFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, sal_Bool _bActAsFormatted);
         // if _bActAsFormatted is sal_False, the state is undetermined until somebody calls ::read or does
         // anything which requires a living aggregate
     virtual ~OFormattedFieldWrapper();
 
-    friend InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
-    friend InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    friend InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    friend InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
 public:
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OFormattedFieldWrapper, OWeakAggObject);
-    virtual staruno::Any SAL_CALL queryAggregation(const staruno::Type& _rType) throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
-    // stario::XPersistObject
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw(staruno::RuntimeException);
-    virtual void SAL_CALL write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream) throw(stario::IOException, staruno::RuntimeException);
-    virtual void SAL_CALL read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, staruno::RuntimeException);
+    // ::com::sun::star::io::XPersistObject
+    virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 protected:
     /// ensure we're in a defined state, which means a FormattedModel _OR_ an EditModel

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:04 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,19 +78,30 @@
 //.........................................................................
 namespace frm
 {
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //==================================================================
 //= OCheckBoxControl
 //==================================================================
 
 //------------------------------------------------------------------
-OCheckBoxControl::OCheckBoxControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OCheckBoxControl::OCheckBoxControl(const Reference<XMultiServiceFactory>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_CHECKBOX)
 {
 }
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OCheckBoxControl_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (staruno::RuntimeException)
+InterfaceRef SAL_CALL OCheckBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OCheckBoxControl(_rxFactory));
 }
@@ -111,19 +122,19 @@ StringSequence SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com
 //==================================================================
 
 //==================================================================
-InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (staruno::RuntimeException)
+InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OCheckBoxModel(_rxFactory));
 }
 
 //------------------------------------------------------------------
-OCheckBoxModel::OCheckBoxModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OCheckBoxModel::OCheckBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
                  :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_CONTROL_CHECKBOX, sal_False)
                                     // use the old control name for compytibility reasons
                  ,OPropertyChangeListener(m_aMutex)
                  ,m_bInReset(sal_False)
 {
-    m_nClassId = starform::FormComponentType::CHECKBOX;
+    m_nClassId = FormComponentType::CHECKBOX;
     m_nDefaultChecked = CB_NOCHECK;
     m_sDataFieldConnectivityProperty = PROPERTY_STATE;
 
@@ -137,7 +148,7 @@ OCheckBoxModel::OCheckBoxModel(const staruno::Reference<starlang::XMultiServiceF
 }
 
 //------------------------------------------------------------------------------
-void OCheckBoxModel::_propertyChanged(const starbeans::PropertyChangeEvent& _rEvent) throw(staruno::RuntimeException)
+void OCheckBoxModel::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(RuntimeException)
 {
     // as we aren't commitable we have to take care of the field we are bound to ourself
     osl::MutexGuard aGuard(m_aMutex);
@@ -178,7 +189,7 @@ StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::
 }
 
 //------------------------------------------------------------------------------
-void OCheckBoxModel::getFastPropertyValue(staruno::Any& _rValue, sal_Int32 _nHandle) const
+void OCheckBoxModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
     switch (_nHandle)
     {
@@ -190,17 +201,17 @@ void OCheckBoxModel::getFastPropertyValue(staruno::Any& _rValue, sal_Int32 _nHan
 }
 
 //------------------------------------------------------------------------------
-void OCheckBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const staruno::Any& _rValue) throw (com::sun::star::uno::Exception)
+void OCheckBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (com::sun::star::uno::Exception)
 {
     switch (_nHandle)
     {
         case PROPERTY_ID_REFVALUE :
-            DBG_ASSERT(_rValue.getValueType().getTypeClass() == staruno::TypeClass_STRING, "OCheckBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+            DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_STRING, "OCheckBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_sReferenceValue;
             break;
 
         case PROPERTY_ID_DEFAULTCHECKED :
-            DBG_ASSERT(_rValue.getValueType().getTypeClass() == staruno::TypeClass_SHORT, "OCheckBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+            DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_SHORT, "OCheckBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_nDefaultChecked;
             _reset();
             break;
@@ -212,8 +223,8 @@ void OCheckBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
 
 //------------------------------------------------------------------------------
 sal_Bool OCheckBoxModel::convertFastPropertyValue(
-            staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, sal_Int32 _nHandle, const staruno::Any& _rValue)
-            throw (starlang::IllegalArgumentException)
+            Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
+            throw (IllegalArgumentException)
 {
     sal_Bool bModified(sal_False);
     switch (_nHandle)
@@ -232,9 +243,9 @@ sal_Bool OCheckBoxModel::convertFastPropertyValue(
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OCheckBoxModel::getPropertySetInfo() throw(staruno::RuntimeException)
+Reference<XPropertySetInfo> SAL_CALL OCheckBoxModel::getPropertySetInfo() throw(RuntimeException)
 {
-    staruno::Reference<starbeans::XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -246,12 +257,12 @@ cppu::IPropertyArrayHelper& OCheckBoxModel::getInfoHelper()
 
 //------------------------------------------------------------------------------
 void OCheckBoxModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(11)
         // the "State" property is transient, so change this
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_STATE, starbeans::PropertyAttribute::TRANSIENT, 0);
+//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_STATE, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP2(CLASSID,         sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP1(REFVALUE,        ::rtl::OUString,    BOUND);
@@ -261,21 +272,21 @@ void OCheckBoxModel::fillProperties(
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
         DECL_PROP1(CONTROLSOURCE,   rtl::OUString,      BOUND);
         DECL_PROP1(HELPTEXT,        rtl::OUString,      BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,    starbeans::XPropertySet,    READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  starbeans::XPropertySet,    BOUND, MAYBEVOID);
+        DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,   READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,   BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OCheckBoxModel::getServiceName() throw(staruno::RuntimeException)
+::rtl::OUString SAL_CALL OCheckBoxModel::getServiceName() throw(RuntimeException)
 {
     return FRM_COMPONENT_CHECKBOX;  // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OCheckBoxModel::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
-    throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL OCheckBoxModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
+    throw(stario::IOException, RuntimeException)
 {
     OBoundControlModel::write(_rxOutStream);
 
@@ -290,7 +301,7 @@ void SAL_CALL OCheckBoxModel::write(const staruno::Reference<stario::XObjectOutp
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OCheckBoxModel::read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
 {
     OBoundControlModel::read(_rxInStream);
     osl::MutexGuard aGuard(m_aMutex);
@@ -327,7 +338,7 @@ void SAL_CALL OCheckBoxModel::read(const staruno::Reference<stario::XObjectInput
 }
 
 //------------------------------------------------------------------------------
-void OCheckBoxModel::_loaded(const starlang::EventObject& rEvent)
+void OCheckBoxModel::_loaded(const EventObject& rEvent)
 {
     OBoundControlModel::_loaded(rEvent);
 }
@@ -339,7 +350,7 @@ void OCheckBoxModel::_onValueChanged()
     // Wert an ControlModel setzen
     if (m_xAggregateSet.is())
     {
-        staruno::Any aValue;
+        Any aValue;
         if (m_xColumn->getBoolean())
             aValue <<= (sal_Int16)CB_CHECK;
         else if (m_xColumn->wasNull())
@@ -363,7 +374,7 @@ void OCheckBoxModel::_onValueChanged()
 }
 
 //------------------------------------------------------------------------------
-staruno::Any OCheckBoxModel::_getControlValue() const
+Any OCheckBoxModel::_getControlValue() const
 {
     return m_xAggregateSet->getPropertyValue(PROPERTY_STATE);
 }
@@ -371,7 +382,7 @@ staruno::Any OCheckBoxModel::_getControlValue() const
 //------------------------------------------------------------------------------
 void OCheckBoxModel::_reset( void )
 {
-    staruno::Any aValue;
+    Any aValue;
     aValue <<= (sal_Int16)m_nDefaultChecked;
     {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
         // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
@@ -413,7 +424,7 @@ sal_Bool OCheckBoxModel::_commit()
                     DBG_ERROR("OCheckBoxModel::_commit : invalid value !");
             }
         }
-        catch(...)
+        catch(Exception&)
         {
             DBG_ERROR("OCheckBoxModel::_commit : could not commit !");
         }

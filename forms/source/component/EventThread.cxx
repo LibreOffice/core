@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventThread.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::lang;
+
 
 OComponentEventThread::OComponentEventThread( ::cppu::OComponentHelper* pCompImpl ) :
     m_pCompImpl( pCompImpl )
@@ -79,13 +83,13 @@ OComponentEventThread::OComponentEventThread( ::cppu::OComponentHelper* pCompImp
 
     // Eine Referenz des Controls halten
     {
-        InterfaceRef xIFace(static_cast<staruno::XWeak*>(pCompImpl));
+        InterfaceRef xIFace(static_cast<XWeak*>(pCompImpl));
         query_interface(xIFace, m_xComp);
     }
 
     // und uns an dem Control anmelden
     {
-        staruno::Reference<starlang::XEventListener> xEvtLstnr = static_cast<starlang::XEventListener*>(this);
+        Reference<XEventListener> xEvtLstnr = static_cast<XEventListener*>(this);
         m_xComp->addEventListener( xEvtLstnr );
     }
 
@@ -100,28 +104,28 @@ OComponentEventThread::~OComponentEventThread()
         delete *m_aEvents.erase(m_aEvents.begin());
 }
 
-staruno::Any SAL_CALL OComponentEventThread::queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException)
+Any SAL_CALL OComponentEventThread::queryInterface(const Type& _rType) throw (RuntimeException)
 {
-    staruno::Any aReturn;
+    Any aReturn;
 
     aReturn = OWeakObject::queryInterface(_rType);
 
     if (!aReturn.hasValue())
         aReturn = ::cppu::queryInterface(_rType,
-            static_cast<starlang::XEventListener*>(this)
+            static_cast<XEventListener*>(this)
         );
 
     return aReturn;
 }
 
-void OComponentEventThread::disposing( const starlang::EventObject& evt )
+void OComponentEventThread::disposing( const EventObject& evt )
 {
     if( evt.Source == m_xComp )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         // Event-Listener abmelden
-        staruno::Reference<starlang::XEventListener>  xEvtLstnr = static_cast<starlang::XEventListener*>(this);
+        Reference<XEventListener>  xEvtLstnr = static_cast<XEventListener*>(this);
         m_xComp->removeEventListener( xEvtLstnr );
 
         // Event-Queue loeschen
@@ -141,14 +145,14 @@ void OComponentEventThread::disposing( const starlang::EventObject& evt )
     }
 }
 
-void OComponentEventThread::addEvent( const starlang::EventObject* _pEvt, sal_Bool bFlag )
+void OComponentEventThread::addEvent( const EventObject* _pEvt, sal_Bool bFlag )
 {
-    staruno::Reference<starawt::XControl>  xTmp;
+    Reference<XControl>  xTmp;
     addEvent( _pEvt, xTmp, bFlag );
 }
 
-void OComponentEventThread::addEvent( const starlang::EventObject* _pEvt,
-                                   const staruno::Reference<starawt::XControl>& rControl,
+void OComponentEventThread::addEvent( const EventObject* _pEvt,
+                                   const Reference<XControl>& rControl,
                                    sal_Bool bFlag )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -156,8 +160,8 @@ void OComponentEventThread::addEvent( const starlang::EventObject* _pEvt,
     // Daten in die Queue stellen
     m_aEvents.push_back( cloneEvent( _pEvt ) );
 
-    staruno::Reference<staruno::XWeak>      xWeakControl(rControl, staruno::UNO_QUERY);
-    staruno::Reference<staruno::XAdapter>   xControlAdapter = xWeakControl.is() ? xWeakControl->queryAdapter() : staruno::Reference<staruno::XAdapter>();
+    Reference<XWeak>        xWeakControl(rControl, UNO_QUERY);
+    Reference<XAdapter> xControlAdapter = xWeakControl.is() ? xWeakControl->queryAdapter() : Reference<XAdapter>();
     m_aControls.push_back( xControlAdapter );
 
     m_aFlags.push_back( bFlag );
@@ -170,7 +174,7 @@ void OComponentEventThread::run()
 {
     // uns selbst festhalten, damit wir nicht geloescht werden,
     // wenn zwischendrinne mal ein dispose gerufen wird.
-    InterfaceRef xThis(static_cast<staruno::XWeak*>(this));
+    InterfaceRef xThis(static_cast<XWeak*>(this));
 
     do
     {
@@ -180,18 +184,18 @@ void OComponentEventThread::run()
         {
             // Das Control holen und festhalten, damit es waehrend des
             // actionPerformed nicht geloescht werden kann.
-            staruno::Reference<starlang::XComponent>  xComp = m_xComp;
+            Reference<XComponent>  xComp = m_xComp;
             ::cppu::OComponentHelper *pCompImpl = m_pCompImpl;
 
-            starlang::EventObject* pEvt = *m_aEvents.erase( m_aEvents.begin() );
-            staruno::Reference<staruno::XAdapter> xControlAdapter = *m_aControls.erase( m_aControls.begin() );
+            EventObject* pEvt = *m_aEvents.erase( m_aEvents.begin() );
+            Reference<XAdapter> xControlAdapter = *m_aControls.erase( m_aControls.begin() );
             sal_Bool bFlag = *m_aFlags.erase( m_aFlags.begin() );
 
             {
                 MutexRelease aReleaseOnce(m_aMutex);
-                // Weil ein queryHardRef eine staruno::Exception schmeissen kann sollte
+                // Weil ein queryHardRef eine Exception schmeissen kann sollte
                 // es nicht bei gelocktem Mutex aufgerufen werden.
-                staruno::Reference<starawt::XControl>  xControl;
+                Reference<XControl>  xControl;
                 if ( xControlAdapter.is() )
                     query_interface(xControlAdapter->queryAdapted(), xControl);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,21 +86,31 @@ using namespace dbtools;
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
 
 //------------------------------------------------------------------
-ODateControl::ODateControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+ODateControl::ODateControl(const Reference<XMultiServiceFactory>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_DATEFIELD)
 {
 }
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL ODateControl_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL ODateControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new ODateControl(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> ODateControl::_getTypes()
+Sequence<Type> ODateControl::_getTypes()
 {
     return OBoundControl::_getTypes();
 }
@@ -119,29 +129,29 @@ StringSequence SAL_CALL ODateControl::getSupportedServiceNames() throw()
 /*************************************************************************/
 sal_Int32   ODateModel::nDateHandle = -1;
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL ODateModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL ODateModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new ODateModel(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> ODateModel::_getTypes()
+Sequence<Type> ODateModel::_getTypes()
 {
     return OEditBaseModel::_getTypes();
 }
 
 //------------------------------------------------------------------
-ODateModel::ODateModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
              :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_CONTROL_DATEFIELD )
                                     // use the old control name for compytibility reasons
 {
-    m_nClassId = starform::FormComponentType::DATEFIELD;
+    m_nClassId = FormComponentType::DATEFIELD;
     m_sDataFieldConnectivityProperty = PROPERTY_DATE;
     if (ODateModel::nDateHandle == -1)
         ODateModel::nDateHandle = getOriginalHandle(PROPERTY_ID_DATE);
 }
 
-// starlang::XServiceInfo
+// XServiceInfo
 //------------------------------------------------------------------------------
 StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
 {
@@ -160,22 +170,22 @@ StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
     return FRM_COMPONENT_DATEFIELD; // old (non-sun) name for compatibility !
 }
 
-// starbeans::XPropertySet
+// XPropertySet
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL ODateModel::getPropertySetInfo() throw( staruno::RuntimeException )
+Reference<XPropertySetInfo> SAL_CALL ODateModel::getPropertySetInfo() throw( RuntimeException )
 {
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
 //------------------------------------------------------------------------------
 void ODateModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(10)
         // Date auf transient setzen
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_DATE, starbeans::PropertyAttribute::TRANSIENT, 0);
+//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_DATE, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP1(NAME,        ::rtl::OUString, BOUND);
         DECL_PROP2(CLASSID,     sal_Int16, READONLY, TRANSIENT);
@@ -184,8 +194,8 @@ void ODateModel::fillProperties(
         DECL_PROP1(TABINDEX,        sal_Int16, BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString, BOUND);
         DECL_PROP1(HELPTEXT,        ::rtl::OUString,            BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,        starbeans::XPropertySet,    READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,      starbeans::XPropertySet,    BOUND, MAYBEVOID);
+        DECL_IFACE_PROP2(BOUNDFIELD,        XPropertySet,   READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,   BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
@@ -196,9 +206,9 @@ void ODateModel::fillProperties(
     return *const_cast<ODateModel*>(this)->getArrayHelper();
 }
 
-// starform::XLoadListener
+// XLoadListener
 //------------------------------------------------------------------------------
-void ODateModel::_loaded(const starlang::EventObject& rEvent)
+void ODateModel::_loaded(const EventObject& rEvent)
 {
     OBoundControlModel::_loaded(rEvent);
     if (m_xField.is())
@@ -208,19 +218,19 @@ void ODateModel::_loaded(const starlang::EventObject& rEvent)
         {
             sal_Int32 nFieldType;
             m_xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
-            m_bDateTimeField = (nFieldType == starsdbc::DataType::TIMESTAMP);
+            m_bDateTimeField = (nFieldType == DataType::TIMESTAMP);
         }
-        catch(...)
+        catch(Exception&)
         {
         }
     }
 }
 
-// starform::XBoundComponent
+// XBoundComponent
 //------------------------------------------------------------------------------
 sal_Bool ODateModel::_commit()
 {
-    staruno::Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( ODateModel::nDateHandle );
+    Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( ODateModel::nDateHandle );
     if (!compare(aNewValue, m_aSaveValue))
     {
         if (!aNewValue.hasValue())
@@ -248,7 +258,7 @@ sal_Bool ODateModel::_commit()
                     m_xColumnUpdate->updateTimestamp(aDateTime);
                 }
             }
-            catch(...)
+            catch(Exception&)
             {
                 return sal_False;
             }
@@ -280,8 +290,8 @@ void ODateModel::_onValueChanged()
 //------------------------------------------------------------------------------
 void ODateModel::_reset()
 {
-    staruno::Any aValue;
-    if (m_aDefault.getValueType().getTypeClass() == staruno::TypeClass_LONG)
+    Any aValue;
+    if (m_aDefault.getValueType().getTypeClass() == TypeClass_LONG)
         aValue = m_aDefault;
     else
     {   // aktuelles Datum einstellen

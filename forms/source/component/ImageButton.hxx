@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,26 +83,26 @@ class OImageButtonModel
         ,public ::comphelper::OAggregationArrayUsageHelper< OImageButtonModel >
 {
 public:
-    OImageButtonModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OImageButtonModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     ~OImageButtonModel();
 
-// starlang::XServiceInfo
+// ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OImageButtonModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-// staruno::Reference<starbeans::XPropertySet>
-    virtual staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(staruno::RuntimeException);
+// ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-// stario::XPersistObject
+// ::com::sun::star::io::XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName();
-    virtual void SAL_CALL write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream);
-    virtual void SAL_CALL read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream);
+    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
+    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
 
 // OAggregationArrayUsageHelper
     virtual void fillProperties(
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rProps,
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rAggregateProps
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
 };
@@ -110,33 +110,34 @@ public:
 //==================================================================
 // OImageButtonControl
 //==================================================================
+typedef ::cppu::ImplHelper1< ::com::sun::star::awt::XMouseListener> OImageButtonControl_BASE;
 class OImageButtonControl : public OImageControl,
-                              public starawt::XMouseListener
+                            public OImageButtonControl_BASE
 {
 protected:
     // UNO Anbindung
-    virtual staruno::Sequence<staruno::Type> _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
 public:
-    OImageButtonControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OImageButtonControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
-// starlang::XServiceInfo
+// ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OImageButtonControl);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
     // UNO Anbindung
     DECLARE_UNO3_AGG_DEFAULTS(OImageButtonControl, OImageControl);
-    virtual staruno::Any SAL_CALL queryAggregation(const staruno::Type& _rType) throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
-// starlang::XEventListener
-    virtual void SAL_CALL disposing(const starlang::EventObject& _rSource) throw(staruno::RuntimeException)
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException)
         { OControl::disposing(_rSource); }
 
-// starawt::XMouseListener
-    virtual void SAL_CALL mousePressed(const starawt::MouseEvent& e);
-    virtual void SAL_CALL mouseReleased(const starawt::MouseEvent& e) { }
-    virtual void SAL_CALL mouseEntered(const starawt::MouseEvent& e) { }
-    virtual void SAL_CALL mouseExited(const starawt::MouseEvent& e) { }
+// ::com::sun::star::awt::XMouseListener
+    virtual void SAL_CALL mousePressed(const ::com::sun::star::awt::MouseEvent& e);
+    virtual void SAL_CALL mouseReleased(const ::com::sun::star::awt::MouseEvent& e) { }
+    virtual void SAL_CALL mouseEntered(const ::com::sun::star::awt::MouseEvent& e) { }
+    virtual void SAL_CALL mouseExited(const ::com::sun::star::awt::MouseEvent& e) { }
 };
 
 //.........................................................................

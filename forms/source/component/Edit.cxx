@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-24 08:53:13 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,59 +115,49 @@ using namespace dbtools;
 //.........................................................................
 namespace frm
 {
-namespace staruno   = ::com::sun::star::uno;
-namespace starawt   = ::com::sun::star::awt;
-namespace starlang  = ::com::sun::star::lang;
-namespace starform  = ::com::sun::star::form;
-namespace starutil  = ::com::sun::star::util;
-namespace starbeans      = ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OEditControl_CreateInstance(const
-com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & _rxFactory)
+InterfaceRef SAL_CALL OEditControl_CreateInstance(const Reference< XMultiServiceFactory > & _rxFactory)
 {
     return *(new OEditControl(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OEditControl::_getTypes()
+Sequence<Type> OEditControl::_getTypes()
 {
-    static staruno::Sequence<staruno::Type> aTypes;
+    static Sequence<Type> aTypes;
     if (!aTypes.getLength())
     {
         // my two base classes
-        staruno::Sequence<staruno::Type> aBaseClassTypes = OBoundControl::_getTypes();
-
-        staruno::Sequence<staruno::Type> aOwnTypes(3);
-        staruno::Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = getCppuType((staruno::Reference<starawt::XFocusListener>*)NULL);
-        pOwnTypes[1] = getCppuType((staruno::Reference<starawt::XKeyListener>*)NULL);
-        pOwnTypes[2] = getCppuType((staruno::Reference<starform::XChangeBroadcaster>*)NULL);
-
-        aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
+        aTypes = concatSequences(OBoundControl::_getTypes(), OEditControl_BASE::getTypes());
     }
     return aTypes;
 }
 
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OEditControl::queryAggregation(const staruno::Type& _rType) throw (staruno::RuntimeException)
+Any SAL_CALL OEditControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    staruno::Any aReturn;
-
-    aReturn = OBoundControl::queryAggregation(_rType);
+    Any aReturn = OBoundControl::queryAggregation(_rType);
     if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType
-            ,static_cast<starawt::XFocusListener*>(this)
-            ,static_cast<starawt::XKeyListener*>(this)
-            ,static_cast<starform::XChangeBroadcaster*>(this)
-        );
+        aReturn = OEditControl_BASE::queryInterface(_rType);
 
     return aReturn;
 }
 
 DBG_NAME(OEditControl);
 //------------------------------------------------------------------------------
-OEditControl::OEditControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OEditControl::OEditControl(const Reference<XMultiServiceFactory>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_EDIT)
                ,m_aChangeListeners(m_aMutex)
                ,m_nKeyEvent( 0 )
@@ -176,7 +166,7 @@ OEditControl::OEditControl(const staruno::Reference<starlang::XMultiServiceFacto
 
     increment(m_refCount);
     {   // als FocusListener anmelden
-        staruno::Reference<starawt::XWindow>  xComp;
+        Reference<XWindow>  xComp;
         if (query_aggregation(m_xAggregate, xComp))
         {
             xComp->addFocusListener(this);
@@ -202,15 +192,15 @@ OEditControl::~OEditControl()
     DBG_DTOR(OEditControl,NULL);
 }
 
-// starform::XChangeBroadcaster
+// XChangeBroadcaster
 //------------------------------------------------------------------------------
-void OEditControl::addChangeListener(const staruno::Reference<starform::XChangeListener>& l)
+void OEditControl::addChangeListener(const Reference<XChangeListener>& l)
 {
     m_aChangeListeners.addInterface( l );
 }
 
 //------------------------------------------------------------------------------
-void OEditControl::removeChangeListener(const staruno::Reference<starform::XChangeListener>& l)
+void OEditControl::removeChangeListener(const Reference<XChangeListener>& l)
 {
     m_aChangeListeners.removeInterface( l );
 }
@@ -221,11 +211,11 @@ void OEditControl::disposing()
 {
     OBoundControl::disposing();
 
-    starlang::EventObject aEvt(static_cast<staruno::XWeak*>(this));
+    EventObject aEvt(static_cast<XWeak*>(this));
     m_aChangeListeners.disposeAndClear(aEvt);
 }
 
-// starlang::XServiceInfo
+// XServiceInfo
 //------------------------------------------------------------------------------
 StringSequence  OEditControl::getSupportedServiceNames() throw()
 {
@@ -237,62 +227,62 @@ StringSequence  OEditControl::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-// starlang::XEventListener
+// XEventListener
 //------------------------------------------------------------------------------
-void OEditControl::disposing(const starlang::EventObject& Source) throw( staruno::RuntimeException )
+void OEditControl::disposing(const EventObject& Source) throw( RuntimeException )
 {
     OBoundControl::disposing(Source);
 }
 
-// starawt::XFocusListener
+// XFocusListener
 //------------------------------------------------------------------------------
-void OEditControl::focusGained( const starawt::FocusEvent& e )
+void OEditControl::focusGained( const FocusEvent& e )
 {
-    staruno::Reference<starbeans::XPropertySet>  xSet(getModel(), staruno::UNO_QUERY);
+    Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
     if (xSet.is())
         xSet->getPropertyValue( PROPERTY_TEXT ) >>= m_aHtmlChangeValue;
 }
 
 //------------------------------------------------------------------------------
-void OEditControl::focusLost( const starawt::FocusEvent& e )
+void OEditControl::focusLost( const FocusEvent& e )
 {
-    staruno::Reference<starbeans::XPropertySet>  xSet(getModel(), staruno::UNO_QUERY);
+    Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
     if (xSet.is())
     {
         ::rtl::OUString sNewHtmlChangeValue;
         xSet->getPropertyValue( PROPERTY_TEXT ) >>= sNewHtmlChangeValue;
         if( sNewHtmlChangeValue != m_aHtmlChangeValue )
         {
-            starlang::EventObject aEvt;
+            EventObject aEvt;
             aEvt.Source = *this;
-            NOTIFY_LISTENERS(m_aChangeListeners, starform::XChangeListener, changed, aEvt);
+            NOTIFY_LISTENERS(m_aChangeListeners, XChangeListener, changed, aEvt);
         }
     }
 }
 
-// starawt::XKeyListener
+// XKeyListener
 //------------------------------------------------------------------------------
-void OEditControl::keyPressed(const starawt::KeyEvent& e)
+void OEditControl::keyPressed(const KeyEvent& e)
 {
     if( e.KeyCode != KEY_RETURN || e.Modifiers != 0 )
         return;
 
-    // Steht das Control in einem Formular mit einer Submit-starutil::URL?
-    staruno::Reference<starbeans::XPropertySet>  xSet(getModel(), staruno::UNO_QUERY);
+    // Steht das Control in einem Formular mit einer Submit-URL?
+    Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
     if( !xSet.is() )
         return;
 
     // nicht fuer multiline edits
-    staruno::Any aTmp( xSet->getPropertyValue(PROPERTY_MULTILINE));
+    Any aTmp( xSet->getPropertyValue(PROPERTY_MULTILINE));
     if ((aTmp.getValueType().equals(::getBooleanCppuType())) && getBOOL(aTmp))
         return;
 
-    staruno::Reference<starform::XFormComponent>  xFComp(xSet, staruno::UNO_QUERY);
+    Reference<XFormComponent>  xFComp(xSet, UNO_QUERY);
     InterfaceRef  xParent = xFComp->getParent();
     if( !xParent.is() )
         return;
 
-    staruno::Reference<starbeans::XPropertySet>  xFormSet(xParent, staruno::UNO_QUERY);
+    Reference<XPropertySet>  xFormSet(xParent, UNO_QUERY);
     if( !xFormSet.is() )
         return;
 
@@ -301,17 +291,19 @@ void OEditControl::keyPressed(const starawt::KeyEvent& e)
         !getString(aTmp).getLength() )
         return;
 
-    staruno::Reference<starcontainer::XIndexAccess>  xElements(xParent, staruno::UNO_QUERY);
+    Reference<XIndexAccess>  xElements(xParent, UNO_QUERY);
     sal_Int32 nCount = xElements->getCount();
     if( nCount > 1 )
     {
+        Reference<XPropertySet>  xFCSet;
         for( sal_Int32 nIndex=0; nIndex < nCount; nIndex++ )
         {
-            //  staruno::Any aElement(xElements->getByIndex(nIndex));
-            staruno::Reference<starbeans::XPropertySet>  xFCSet(*(InterfaceRef *)xElements->getByIndex(nIndex).getValue(), staruno::UNO_QUERY);
+            //  Any aElement(xElements->getByIndex(nIndex));
+            xElements->getByIndex(nIndex) >>= xFCSet;
+            OSL_ENSHURE(xFCSet.is(),"OEditControl::keyPressed: No XPropertySet!");
 
             if (hasProperty(PROPERTY_CLASSID, xFCSet) &&
-                getINT16(xFCSet->getPropertyValue(PROPERTY_CLASSID)) == starform::FormComponentType::TEXTFIELD)
+                getINT16(xFCSet->getPropertyValue(PROPERTY_CLASSID)) == FormComponentType::TEXTFIELD)
             {
                 // Noch ein weiteres Edit gefunden ==> dann nicht submitten
                 if (xFCSet != xSet)
@@ -323,12 +315,11 @@ void OEditControl::keyPressed(const starawt::KeyEvent& e)
     // Da wir noch im Haender stehen, submit asynchron ausloesen
     if( m_nKeyEvent )
         Application::RemoveUserEvent( m_nKeyEvent );
-    m_nKeyEvent = Application::PostUserEvent( LINK(this, OEditControl,
-                                            OnKeyPressed) );
+    m_nKeyEvent = Application::PostUserEvent( LINK(this, OEditControl,OnKeyPressed) );
 }
 
 //------------------------------------------------------------------------------
-void OEditControl::keyReleased(const starawt::KeyEvent& e)
+void OEditControl::keyReleased(const KeyEvent& e)
 {
 }
 
@@ -337,11 +328,11 @@ IMPL_LINK(OEditControl, OnKeyPressed, void*, EMPTYARG)
 {
     m_nKeyEvent = 0;
 
-    staruno::Reference<starform::XFormComponent>  xFComp(getModel(), staruno::UNO_QUERY);
+    Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);
     InterfaceRef  xParent = xFComp->getParent();
-    staruno::Reference<starform::XSubmit>  xSubmit(xParent, staruno::UNO_QUERY);
+    Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
     if (xSubmit.is())
-        xSubmit->submit( staruno::Reference<starawt::XControl>(), starawt::MouseEvent() );
+        xSubmit->submit( Reference<XControl>(), MouseEvent() );
     return 0L;
 }
 
@@ -349,13 +340,13 @@ IMPL_LINK(OEditControl, OnKeyPressed, void*, EMPTYARG)
 sal_Int32 OEditModel::nTextHandle = -1;
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OEditModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OEditModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OEditModel(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OEditModel::_getTypes()
+Sequence<Type> OEditModel::_getTypes()
 {
     return OEditBaseModel::_getTypes();
 }
@@ -363,19 +354,19 @@ staruno::Sequence<staruno::Type> OEditModel::_getTypes()
 
 DBG_NAME(OEditModel);
 //------------------------------------------------------------------
-OEditModel::OEditModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
              :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_EDIT, FRM_CONTROL_EDIT )
                                     // use the old control name for compytibility reasons
              ,m_nMaxLen(0)
              ,m_aNullDate(DBTypeConversion::STANDARD_DB_DATE)
-             ,m_nKeyType(starutil::NumberFormat::UNDEFINED)
+             ,m_nKeyType(NumberFormat::UNDEFINED)
              ,m_nFormatKey(0)
-             ,m_nFieldType(starsdbc::DataType::OTHER)
+             ,m_nFieldType(DataType::OTHER)
              ,m_bWritingFormattedFake(sal_False)
 {
     DBG_CTOR(OEditModel,NULL);
 
-    m_nClassId = starform::FormComponentType::TEXTFIELD;
+    m_nClassId = FormComponentType::TEXTFIELD;
     m_sDataFieldConnectivityProperty = PROPERTY_TEXT;
     if (OEditModel::nTextHandle == -1)
         OEditModel::nTextHandle = getOriginalHandle(PROPERTY_ID_TEXT);
@@ -400,14 +391,14 @@ void OEditModel::disposing()
     m_xFormatter = NULL;
 }
 
-// stario::XPersistObject
+// XPersistObject
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEditModel::getServiceName()
 {
     return FRM_COMPONENT_EDIT;  // old (non-sun) name for compatibility !
 }
 
-// starlang::XServiceInfo
+// XServiceInfo
 //------------------------------------------------------------------------------
 StringSequence SAL_CALL OEditModel::getSupportedServiceNames() throw()
 {
@@ -416,26 +407,26 @@ StringSequence SAL_CALL OEditModel::getSupportedServiceNames() throw()
 
     ::rtl::OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = ::rtl::OUString::createFromAscii("com.sun.star.form.component.DatabaseTextField");
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_TEXTFIELD;
+    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_TEXTFIELD;
     return aSupported;
 }
 
-// starbeans::XPropertySet
+// XPropertySet
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OEditModel::getPropertySetInfo() throw(staruno::RuntimeException)
+Reference<XPropertySetInfo> SAL_CALL OEditModel::getPropertySetInfo() throw(RuntimeException)
 {
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
 //------------------------------------------------------------------------------
 void OEditModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(12)
         // Text auf transient setzen
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, starbeans::PropertyAttribute::TRANSIENT, 0);
+//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP1(NAME,                ::rtl::OUString,        BOUND);
         DECL_PROP2(CLASSID,             sal_Int16,              READONLY, TRANSIENT);
@@ -445,9 +436,9 @@ void OEditModel::fillProperties(
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,        BOUND);
         DECL_PROP1(HELPTEXT,            ::rtl::OUString,        BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,    starbeans::XPropertySet,READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,READONLY, TRANSIENT);
         DECL_BOOL_PROP2(FILTERPROPOSAL,                         BOUND, MAYBEDEFAULT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  starbeans::XPropertySet,BOUND, MAYBEVOID);
+        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
@@ -459,9 +450,9 @@ void OEditModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-void OEditModel::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
+void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
-    staruno::Any aCurrentText;
+    Any aCurrentText;
     // bin ich gerade loaded und habe dazu zeitweilig die MaxTextLen umgesetzt ?
     if (m_nMaxLen)
     {   // -> fuer die Dauer des Speicherns meinem aggregierten Model die alte TextLen einreden
@@ -470,25 +461,25 @@ void OEditModel::write(const staruno::Reference<stario::XObjectOutputStream>& _r
         // FS - 08.12.99 - 70606
         aCurrentText = m_xAggregateSet->getPropertyValue(PROPERTY_TEXT);
 
-        m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, staruno::makeAny((sal_Int16)0));
+        m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, makeAny((sal_Int16)0));
     }
 
     OEditBaseModel::write(_rxOutStream);
 
     if (m_nMaxLen)
     {   // wieder zuruecksetzen
-        m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, staruno::makeAny((sal_Int16)m_nMaxLen));
+        m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, makeAny((sal_Int16)m_nMaxLen));
         // and reset the text
         // First we set it to an empty string : Without this the second setPropertyValue would not do anything as it thinks
         // we aren't changing the prop (it didn't notify the - implicite - change of the text prop while setting the max text len)
         // This seems to be a bug with in toolkit's EditControl-implementation.
-        m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, staruno::makeAny(::rtl::OUString()));
+        m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, makeAny(::rtl::OUString()));
         m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, aCurrentText);
     }
 }
 
 //------------------------------------------------------------------------------
-void OEditModel::read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream)
+void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     OEditBaseModel::read(_rxInStream);
 
@@ -497,12 +488,12 @@ void OEditModel::read(const staruno::Reference<stario::XObjectInputStream>& _rxI
     // correct this ...
     if (m_xAggregateSet.is())
     {
-        staruno::Any aDefaultControl = m_xAggregateSet->getPropertyValue(PROPERTY_DEFAULTCONTROL);
-        if  (   (aDefaultControl.getValueType().getTypeClass() == staruno::TypeClass_STRING)
+        Any aDefaultControl = m_xAggregateSet->getPropertyValue(PROPERTY_DEFAULTCONTROL);
+        if  (   (aDefaultControl.getValueType().getTypeClass() == TypeClass_STRING)
             &&  (getString(aDefaultControl).compareTo(FRM_CONTROL_TEXTFIELD) == COMPARE_EQUAL)
             )
         {
-            m_xAggregateSet->setPropertyValue(PROPERTY_DEFAULTCONTROL, staruno::makeAny(::rtl::OUString(FRM_CONTROL_EDIT)));
+            m_xAggregateSet->setPropertyValue(PROPERTY_DEFAULTCONTROL, makeAny(::rtl::OUString(FRM_CONTROL_EDIT)));
             // Older as well as current versions should understand this : the former knew only the FRM_CONTROL_EDIT,
             // the latter are registered for both FRM_CONTROL_EDIT and FRM_CONTROL_TEXTFIELD.
         }
@@ -520,9 +511,9 @@ sal_Int16 OEditModel::getPersistenceFlags() const
     return nFlags;
 }
 
-// starform::XLoadListener
+// XLoadListener
 //------------------------------------------------------------------------------
-void OEditModel::_loaded(const starlang::EventObject& rEvent)
+void OEditModel::_loaded(const EventObject& rEvent)
 {
     if (m_xField.is())
     {
@@ -530,14 +521,14 @@ void OEditModel::_loaded(const starlang::EventObject& rEvent)
         m_nFieldType  = getINT32(m_xField->getPropertyValue(PROPERTY_FIELDTYPE));
         m_nFormatKey = getINT32(m_xField->getPropertyValue(PROPERTY_FORMATKEY));
 
-        // starutil::XNumberFormatter besorgen
-        staruno::Reference<starsdbc::XRowSet>  xRowSet(rEvent.Source, staruno::UNO_QUERY);
+        // XNumberFormatter besorgen
+        Reference<XRowSet>  xRowSet(rEvent.Source, UNO_QUERY);
         DBG_ASSERT(xRowSet.is(), "OEditModel::_loaded : source is not a row set ?");
-        staruno::Reference<starutil::XNumberFormatsSupplier>  xSupplier = getNumberFormats(getConnection(xRowSet), sal_False, m_xServiceFactory);
+        Reference<XNumberFormatsSupplier>  xSupplier = getNumberFormats(getConnection(xRowSet), sal_False, m_xServiceFactory);
         if (xSupplier.is())
         {
-            m_xFormatter =  staruno::Reference<starutil::XNumberFormatter>(m_xServiceFactory
-                                ->createInstance(FRM_NUMBER_FORMATTER), staruno::UNO_QUERY);
+            m_xFormatter =  Reference<XNumberFormatter>(m_xServiceFactory
+                                ->createInstance(FRM_NUMBER_FORMATTER), UNO_QUERY);
             if (m_xFormatter.is())
                 m_xFormatter->attachNumberFormatsSupplier(xSupplier);
 
@@ -546,7 +537,7 @@ void OEditModel::_loaded(const starlang::EventObject& rEvent)
                 >>= m_aNullDate;
         }
 
-        if (m_nKeyType != starutil::NumberFormat::SCIENTIFIC)
+        if (m_nKeyType != NumberFormat::SCIENTIFIC)
         {
             m_nMaxLen = getINT16(m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN));
             if (!m_nMaxLen)
@@ -556,7 +547,7 @@ void OEditModel::_loaded(const starlang::EventObject& rEvent)
 
                 if (nFieldLen && nFieldLen <= USHRT_MAX)
                 {
-                    staruno::Any aVal;
+                    Any aVal;
                     aVal <<= (sal_Int16)nFieldLen;
                     m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
 
@@ -577,16 +568,16 @@ void OEditModel::_unloaded()
     {
         if (m_nMaxLen)
         {
-            staruno::Any aVal;
+            Any aVal;
             aVal <<= (sal_Int16)0;  // nur wenn es 0 war, habe ich es in _loaded umgesetzt
             m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
             m_nMaxLen = 0;
         }
 
         m_xFormatter = 0;
-        m_nFieldType = starsdbc::DataType::OTHER;
+        m_nFieldType = DataType::OTHER;
         m_nFormatKey = 0;
-        m_nKeyType   = starutil::NumberFormat::UNDEFINED;
+        m_nKeyType   = NumberFormat::UNDEFINED;
         m_aNullDate  = DBTypeConversion::STANDARD_DB_DATE;
     }
 }
@@ -607,7 +598,7 @@ sal_Bool OEditModel::_commit()
                 DBTypeConversion::setValue(m_xColumnUpdate, m_xFormatter, m_aNullDate, aNewValue,
                                            m_nFormatKey, m_nFieldType, m_nKeyType);
             }
-            catch(...)
+            catch(Exception&)
             {
                 return sal_False;
             }
@@ -617,7 +608,7 @@ sal_Bool OEditModel::_commit()
     return sal_True;
 }
 
-// starbeans::XPropertyChangeListener
+// XPropertyChangeListener
 //------------------------------------------------------------------------------
 void OEditModel::_onValueChanged()
 {
@@ -635,10 +626,10 @@ void OEditModel::_onValueChanged()
                                               m_nFormatKey,
                                               m_nKeyType);
 
-    m_xAggregateFastSet->setFastPropertyValue(OEditModel::nTextHandle, staruno::makeAny(m_aSaveValue));
+    m_xAggregateFastSet->setFastPropertyValue(OEditModel::nTextHandle, makeAny(m_aSaveValue));
 }
 
-// starform::XReset
+// XReset
 //------------------------------------------------------------------------------
 void OEditModel::_reset()
 {
@@ -647,7 +638,7 @@ void OEditModel::_reset()
         // our own mutex locked
         // FS - 72451 - 31.01.00
         MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(OEditModel::nTextHandle, staruno::makeAny(m_aDefaultText));
+        m_xAggregateFastSet->setFastPropertyValue(OEditModel::nTextHandle, makeAny(m_aDefaultText));
     }
 }
 

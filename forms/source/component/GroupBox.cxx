@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupBox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,22 +78,33 @@
 //.........................................................................
 namespace frm
 {
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //==================================================================
 // OGroupBoxModel
 //==================================================================
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OGroupBoxModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (staruno::RuntimeException)
+InterfaceRef SAL_CALL OGroupBoxModel_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OGroupBoxModel(_rxFactory));
 }
 
 //------------------------------------------------------------------
-OGroupBoxModel::OGroupBoxModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OGroupBoxModel::OGroupBoxModel(const Reference<starlang::XMultiServiceFactory>& _rxFactory)
     :OControlModel(_rxFactory, VCL_CONTROLMODEL_GROUPBOX, VCL_CONTROL_GROUPBOX)
 {
-    m_nClassId = starform::FormComponentType::GROUPBOX;
+    m_nClassId = FormComponentType::GROUPBOX;
 }
 
 // XServiceInfo
@@ -114,9 +125,9 @@ OGroupBoxModel::~OGroupBoxModel()
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OGroupBoxModel::getPropertySetInfo() throw(staruno::RuntimeException)
+Reference<XPropertySetInfo> SAL_CALL OGroupBoxModel::getPropertySetInfo() throw(RuntimeException)
 {
-    staruno::Reference<starbeans::XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -128,8 +139,8 @@ cppu::IPropertyArrayHelper& OGroupBoxModel::getInfoHelper()
 
 //------------------------------------------------------------------------------
 void OGroupBoxModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(4)
         // don't want to have the TabStop property
@@ -143,14 +154,14 @@ void OGroupBoxModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OGroupBoxModel::getServiceName() throw(staruno::RuntimeException)
+::rtl::OUString SAL_CALL OGroupBoxModel::getServiceName() throw(RuntimeException)
 {
     return FRM_COMPONENT_GROUPBOX;  // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OGroupBoxModel::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
-    throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL OGroupBoxModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
+    throw(stario::IOException, RuntimeException)
 {
     OControlModel::write(_rxOutStream);
 
@@ -160,7 +171,7 @@ void SAL_CALL OGroupBoxModel::write(const staruno::Reference<stario::XObjectOutp
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OGroupBoxModel::read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL OGroupBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
 {
     OControlModel::read( _rxInStream );
 
@@ -183,13 +194,13 @@ void SAL_CALL OGroupBoxModel::read(const staruno::Reference<stario::XObjectInput
 //==================================================================
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OGroupBoxControl_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (staruno::RuntimeException)
+InterfaceRef SAL_CALL OGroupBoxControl_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OGroupBoxControl(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-OGroupBoxControl::OGroupBoxControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OGroupBoxControl::OGroupBoxControl(const Reference<starlang::XMultiServiceFactory>& _rxFactory)
                    :OControl(_rxFactory, VCL_CONTROL_GROUPBOX)
 {
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,13 @@ sal_Int32 findPos(const ::rtl::OUString& aStr, const StringSequence& rList);
 namespace frm
 {
 //.........................................................................
-
-    namespace starform  = ::com::sun::star::form;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
 
 const sal_uInt16 WIDTH              = 0x0001;
 const sal_uInt16 ALIGN              = 0x0002;
@@ -150,16 +155,16 @@ const StringSequence& getColumnTypes()
     if (!aColumnTypes.getConstArray()[0].getLength())
     {
         ::rtl::OUString* pNames = aColumnTypes.getArray();
-        pNames[TYPE_CHECKBOX] = FRM_COL_CHECKBOX;
-        pNames[TYPE_COMBOBOX] = FRM_COL_COMBOBOX;
-        pNames[TYPE_CURRENCYFIELD] = FRM_COL_CURRENCYFIELD;
-        pNames[TYPE_DATEFIELD] = FRM_COL_DATEFIELD;
+        pNames[TYPE_CHECKBOX]       = FRM_COL_CHECKBOX;
+        pNames[TYPE_COMBOBOX]       = FRM_COL_COMBOBOX;
+        pNames[TYPE_CURRENCYFIELD]  = FRM_COL_CURRENCYFIELD;
+        pNames[TYPE_DATEFIELD]      = FRM_COL_DATEFIELD;
         pNames[TYPE_FORMATTEDFIELD] = FRM_COL_FORMATTEDFIELD;
-        pNames[TYPE_LISTBOX] = FRM_COL_LISTBOX;
-        pNames[TYPE_NUMERICFIELD] = FRM_COL_NUMERICFIELD;
-        pNames[TYPE_PATTERNFIELD] = FRM_COL_PATTERNFIELD;
-        pNames[TYPE_TEXTFIELD] = FRM_COL_TEXTFIELD;
-        pNames[TYPE_TIMEFIELD] = FRM_COL_TIMEFIELD;
+        pNames[TYPE_LISTBOX]        = FRM_COL_LISTBOX;
+        pNames[TYPE_NUMERICFIELD]   = FRM_COL_NUMERICFIELD;
+        pNames[TYPE_PATTERNFIELD]   = FRM_COL_PATTERNFIELD;
+        pNames[TYPE_TEXTFIELD]      = FRM_COL_TEXTFIELD;
+        pNames[TYPE_TIMEFIELD]      = FRM_COL_TIMEFIELD;
     }
     return aColumnTypes;
 }
@@ -193,21 +198,21 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
 /*************************************************************************/
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OGridColumn_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OGridColumn_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OGridColumn(_rxFactory));
 }
 
 //------------------------------------------------------------------
-const staruno::Sequence<sal_Int8>& OGridColumn::getUnoTunnelImplementationId()
+const Sequence<sal_Int8>& OGridColumn::getUnoTunnelImplementationId()
 {
-    static staruno::Sequence< sal_Int8 > * pSeq = 0;
+    static Sequence< sal_Int8 > * pSeq = 0;
     if( !pSeq )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if( !pSeq )
         {
-            static staruno::Sequence< sal_Int8 > aSeq( 16 );
+            static Sequence< sal_Int8 > aSeq( 16 );
             rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
             pSeq = &aSeq;
         }
@@ -216,7 +221,7 @@ const staruno::Sequence<sal_Int8>& OGridColumn::getUnoTunnelImplementationId()
 }
 
 //------------------------------------------------------------------
-sal_Int64 SAL_CALL OGridColumn::getSomething( const staruno::Sequence<sal_Int8>& _rIdentifier) throw(staruno::RuntimeException)
+sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdentifier) throw(RuntimeException)
 {
     sal_Int64 nReturn(0);
 
@@ -228,7 +233,7 @@ sal_Int64 SAL_CALL OGridColumn::getSomething( const staruno::Sequence<sal_Int8>&
     }
     else
     {
-        staruno::Reference<starlang::XUnoTunnel> xAggregateTunnel(m_xAggregate, staruno::UNO_QUERY);
+        Reference<XUnoTunnel> xAggregateTunnel(m_xAggregate, UNO_QUERY);
         if (xAggregateTunnel.is())
             nReturn = xAggregateTunnel->getSomething(_rIdentifier);
     }
@@ -236,60 +241,47 @@ sal_Int64 SAL_CALL OGridColumn::getSomething( const staruno::Sequence<sal_Int8>&
 }
 
 //------------------------------------------------------------------
-staruno::Sequence<sal_Int8> SAL_CALL OGridColumn::getImplementationId() throw(staruno::RuntimeException)
+Sequence<sal_Int8> SAL_CALL OGridColumn::getImplementationId() throw(RuntimeException)
 {
     return OImplementationIds::getImplementationId(getTypes());
 }
 
 //------------------------------------------------------------------
-staruno::Sequence<staruno::Type> SAL_CALL OGridColumn::getTypes() throw(staruno::RuntimeException)
+Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException)
 {
-    staruno::Sequence<staruno::Type> aOwnTypes(5);
-    aOwnTypes.getArray()[0] = ::getCppuType((staruno::Reference<starbeans::XPropertySet>*)NULL);
-    aOwnTypes.getArray()[1] = ::getCppuType((staruno::Reference<starbeans::XFastPropertySet>*)NULL);
-    aOwnTypes.getArray()[2] = ::getCppuType((staruno::Reference<starbeans::XMultiPropertySet>*)NULL);
-    aOwnTypes.getArray()[3] = ::getCppuType((staruno::Reference<starbeans::XPropertyState>*)NULL);
-    aOwnTypes.getArray()[4] = ::getCppuType((staruno::Reference<starcontainer::XChild>*)NULL);
-
-    staruno::Reference<starlang::XTypeProvider> xProv;
+    Reference<XTypeProvider> xProv;
 
     if (query_aggregation(m_xAggregate, xProv))
-        return concatSequences(aOwnTypes, OComponentHelper::getTypes(), xProv->getTypes());
-    else
-        return concatSequences(aOwnTypes, OComponentHelper::getTypes(), xProv->getTypes());
+        return concatSequences(OGridColumn_BASE::getTypes(), xProv->getTypes());
+    return OGridColumn_BASE::getTypes();
 }
 
 //------------------------------------------------------------------
-staruno::Any SAL_CALL OGridColumn::queryAggregation( const staruno::Type& _rType ) throw (staruno::RuntimeException)
+Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeException)
 {
-    staruno::Any aReturn;
+    Any aReturn;
     // though our aggregate may be an XFormComponent or an XServiceInfo, we aren't anymore
-    if  (   _rType.equals(::getCppuType(static_cast< staruno::Reference< starform::XFormComponent >* >(NULL)))
-        ||  _rType.equals(::getCppuType(static_cast< staruno::Reference< starlang::XServiceInfo >* >(NULL)))
+    if  (   _rType.equals(::getCppuType(static_cast< Reference< XFormComponent >* >(NULL)))
+        ||  _rType.equals(::getCppuType(static_cast< Reference< XServiceInfo >* >(NULL)))
         )
         return aReturn;
 
-    aReturn = OComponentHelper::queryAggregation(_rType);
+    aReturn = OGridColumn_BASE::queryAggregation(_rType);
     if (!aReturn.hasValue())
+    {
         aReturn = OPropertySetAggregationHelper::queryInterface(_rType);
-
-    if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType,
-            static_cast<starcontainer::XChild*>(this),
-            static_cast<starlang::XUnoTunnel*>(this)
-        );
-
-    if (!aReturn.hasValue() && m_xAggregate.is())
-        aReturn = m_xAggregate->queryAggregation(_rType);
+        if (!aReturn.hasValue() && m_xAggregate.is())
+            aReturn = m_xAggregate->queryAggregation(_rType);
+    }
 
     return aReturn;
 }
 
 DBG_NAME(OGridColumn);
 //------------------------------------------------------------------------------
-OGridColumn::OGridColumn(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sModelName)
-          :OComponentHelper(m_aMutex)
-          ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
+OGridColumn::OGridColumn(const Reference<XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sModelName)
+          :OGridColumn_BASE(m_aMutex)
+          ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
           ,m_aModelName(_sModelName)
 {
     DBG_CTOR(OGridColumn,NULL);
@@ -301,7 +293,7 @@ OGridColumn::OGridColumn(const staruno::Reference<starlang::XMultiServiceFactory
         // Muss im eigenen Block,
         // da xAgg vor dem delegator setzen wieder freigesetzt sein muß !
         {
-            m_xAggregate = staruno::Reference<staruno::XAggregation> (_rxFactory->createInstance(m_aModelName), staruno::UNO_QUERY);
+            m_xAggregate = Reference<XAggregation> (_rxFactory->createInstance(m_aModelName), UNO_QUERY);
             setAggregation(m_xAggregate);
         }
 
@@ -320,7 +312,7 @@ OGridColumn::OGridColumn(const staruno::Reference<starlang::XMultiServiceFactory
 //------------------------------------------------------------------------------
 OGridColumn::~OGridColumn()
 {
-    if (!OComponentHelper::rBHelper.bDisposed)
+    if (!OGridColumn_BASE::rBHelper.bDisposed)
     {
         acquire();
         dispose();
@@ -335,32 +327,32 @@ OGridColumn::~OGridColumn()
     DBG_DTOR(OGridColumn,NULL);
 }
 
-// starcontainer::XChild
+// XChild
 //------------------------------------------------------------------------------
-void SAL_CALL OGridColumn::setParent(const InterfaceRef& Parent) throw(starlang::NoSupportException, staruno::RuntimeException)
+void SAL_CALL OGridColumn::setParent(const InterfaceRef& Parent) throw(NoSupportException, RuntimeException)
 {
     m_xParent = Parent;
 }
 
-// starlang::XEventListener
+// XEventListener
 //------------------------------------------------------------------------------
-void SAL_CALL OGridColumn::disposing(const starlang::EventObject& _rSource) throw(staruno::RuntimeException)
+void SAL_CALL OGridColumn::disposing(const EventObject& _rSource) throw(RuntimeException)
 {
     OPropertySetAggregationHelper::disposing(_rSource);
 
-    staruno::Reference<starlang::XEventListener>  xEvtLstner;
+    Reference<XEventListener>  xEvtLstner;
     if (query_aggregation(m_xAggregate, xEvtLstner))
         xEvtLstner->disposing(_rSource);
 }
 
-// OComponentHelper
+// OGridColumn_BASE
 //-----------------------------------------------------------------------------
 void OGridColumn::disposing()
 {
-    OComponentHelper::disposing();
+    OGridColumn_BASE::disposing();
     OPropertySetAggregationHelper::disposing();
 
-    staruno::Reference<starlang::XComponent>  xComp;
+    Reference<XComponent>  xComp;
     if (query_aggregation(m_xAggregate, xComp))
         xComp->dispose();
 
@@ -368,7 +360,7 @@ void OGridColumn::disposing()
 }
 
 //------------------------------------------------------------------------------
-void OGridColumn::clearAggregateProperties(staruno::Sequence<starbeans::Property>& seqProps, sal_Bool bAllowDropDown)
+void OGridColumn::clearAggregateProperties(Sequence<Property>& seqProps, sal_Bool bAllowDropDown)
 {
     RemoveProperty(seqProps, PROPERTY_ALIGN);
     RemoveProperty(seqProps, PROPERTY_AUTOCOMPLETE);
@@ -405,10 +397,10 @@ void OGridColumn::clearAggregateProperties(staruno::Sequence<starbeans::Property
 }
 
 //------------------------------------------------------------------------------
-void OGridColumn::setOwnProperties(staruno::Sequence<starbeans::Property>& aDescriptor)
+void OGridColumn::setOwnProperties(Sequence<Property>& aDescriptor)
 {
     aDescriptor.realloc(5);
-    starbeans::Property* pProps = aDescriptor.getArray();
+    Property* pProps = aDescriptor.getArray();
     sal_Int32 nPos = 0;
     DECL_PROP1(LABEL,               ::rtl::OUString,    BOUND);
     DECL_PROP3(WIDTH,               sal_Int32,          BOUND, MAYBEVOID, MAYBEDEFAULT);
@@ -417,12 +409,12 @@ void OGridColumn::setOwnProperties(staruno::Sequence<starbeans::Property>& aDesc
     DECL_PROP1(COLUMNSERVICENAME,   ::rtl::OUString,    READONLY);
 }
 
-// staruno::Reference<starbeans::XPropertySet>
+// Reference<XPropertySet>
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OGridColumn::getPropertySetInfo() throw(staruno::RuntimeException)
+Reference<XPropertySetInfo> SAL_CALL OGridColumn::getPropertySetInfo() throw(RuntimeException)
 {
     DBG_ERROR("OGridColumn::getPropertySetInfo() : Dummy Called");
-    return staruno::Reference<starbeans::XPropertySetInfo> ();
+    return Reference<XPropertySetInfo> ();
 }
 
 //------------------------------------------------------------------------------
@@ -430,13 +422,13 @@ staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OGridColumn::getPropert
 {
     DBG_ERROR("OGridColumn::getInfoHelper() : Dummy Called");
 
-    staruno::Sequence<starbeans::Property> aDescriptor, aAggProperties;
+    Sequence<Property> aDescriptor, aAggProperties;
     static OPropertyArrayAggregationHelper aDescAry(aDescriptor, aAggProperties);
     return aDescAry;
 }
 
 //------------------------------------------------------------------------------
-void OGridColumn::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHandle ) const
+void OGridColumn::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
 {
     switch (nHandle)
     {
@@ -461,8 +453,8 @@ void OGridColumn::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHandle )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OGridColumn::convertFastPropertyValue( staruno::Any& rConvertedValue, staruno::Any& rOldValue,
-                                            sal_Int32 nHandle, const staruno::Any& rValue )throw( starlang::IllegalArgumentException )
+sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
+                                            sal_Int32 nHandle, const Any& rValue )throw( IllegalArgumentException )
 {
     sal_Bool bModified(sal_False);
     switch (nHandle)
@@ -484,12 +476,12 @@ sal_Bool OGridColumn::convertFastPropertyValue( staruno::Any& rConvertedValue, s
 }
 
 //------------------------------------------------------------------------------
-void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const staruno::Any& rValue )
+void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
 {
     switch (nHandle)
     {
         case PROPERTY_ID_LABEL:
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == staruno::TypeClass_STRING, "invalid type" );
+            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "invalid type" );
             rValue >>= m_aLabel;
             break;
         case PROPERTY_ID_WIDTH:
@@ -505,24 +497,24 @@ void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const sta
 }
 
 
-// starbeans::XPropertyState
+// XPropertyState
 //------------------------------------------------------------------------------
-starbeans::PropertyState OGridColumn::getPropertyStateByHandle(sal_Int32 nHandle)
+PropertyState OGridColumn::getPropertyStateByHandle(sal_Int32 nHandle)
 {
-    starbeans::PropertyState eState;
+    PropertyState eState;
     switch (nHandle)
     {
         case PROPERTY_ID_WIDTH:
             if (!m_aWidth.hasValue())
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             else
-                eState = starbeans::PropertyState_DIRECT_VALUE;
+                eState = PropertyState_DIRECT_VALUE;
             break;
         case PROPERTY_ID_ALIGN:
             if (!m_aAlign.hasValue())
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             else
-                eState = starbeans::PropertyState_DIRECT_VALUE;
+                eState = PropertyState_DIRECT_VALUE;
             break;
         default:
             eState = OPropertySetAggregationHelper::getPropertyStateByHandle(nHandle);
@@ -537,10 +529,10 @@ void OGridColumn::setPropertyToDefaultByHandle(sal_Int32 nHandle)
     {
         case PROPERTY_ID_WIDTH:
         case PROPERTY_ID_ALIGN:
-            setFastPropertyValue(nHandle, staruno::Any());
+            setFastPropertyValue(nHandle, Any());
             break;
         case PROPERTY_ID_HIDDEN:
-            setFastPropertyValue(nHandle, staruno::makeAny((sal_Bool)sal_True));
+            setFastPropertyValue(nHandle, makeAny((sal_Bool)sal_True));
             break;
         default:
             OPropertySetAggregationHelper::setPropertyToDefaultByHandle(nHandle);
@@ -548,15 +540,15 @@ void OGridColumn::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 }
 
 //------------------------------------------------------------------------------
-staruno::Any OGridColumn::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
+Any OGridColumn::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
     switch (nHandle)
     {
         case PROPERTY_ID_WIDTH:
         case PROPERTY_ID_ALIGN:
-            return staruno::Any();
+            return Any();
         case PROPERTY_ID_HIDDEN:
-            return staruno::makeAny((sal_Bool)sal_False);
+            return makeAny((sal_Bool)sal_False);
         default:
             return OPropertySetAggregationHelper::getPropertyDefaultByHandle(nHandle);
     }
@@ -564,16 +556,16 @@ staruno::Any OGridColumn::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 
 //XPersistObject
 //------------------------------------------------------------------------------
-void SAL_CALL OGridColumn::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
+void SAL_CALL OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     // 1. Schreiben des UnoControls
-    staruno::Reference<stario::XMarkableStream>  xMark(_rxOutStream, staruno::UNO_QUERY);
+    Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
     sal_Int32 nMark = xMark->createMark();
 
     sal_Int32 nLen = 0;
     _rxOutStream->writeLong(nLen);
 
-    staruno::Reference<stario::XPersistObject>  xPersist;
+    Reference<XPersistObject>  xPersist;
     if (query_aggregation(m_xAggregate, xPersist))
         xPersist->write(_rxOutStream);
 
@@ -588,10 +580,10 @@ void SAL_CALL OGridColumn::write(const staruno::Reference<stario::XObjectOutputS
     _rxOutStream->writeShort(0x0002);
 
     sal_uInt16 nAnyMask = 0;
-    if (m_aWidth.getValueType().getTypeClass() == staruno::TypeClass_LONG)
+    if (m_aWidth.getValueType().getTypeClass() == TypeClass_LONG)
         nAnyMask |= WIDTH;
 
-    if (m_aAlign.getValueType().getTypeClass() == staruno::TypeClass_SHORT)
+    if (m_aAlign.getValueType().getTypeClass() == TypeClass_SHORT)
         nAnyMask |= ALIGN;
 
     nAnyMask |= COMPATIBLE_HIDDEN;
@@ -612,15 +604,15 @@ void SAL_CALL OGridColumn::write(const staruno::Reference<stario::XObjectOutputS
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OGridColumn::read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream)
+void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     // 1. Lesen des UnoControls
     sal_Int32 nLen = _rxInStream->readLong();
     if (nLen)
     {
-        staruno::Reference<stario::XMarkableStream>  xMark(_rxInStream, staruno::UNO_QUERY);
+        Reference<XMarkableStream>  xMark(_rxInStream, UNO_QUERY);
         sal_Int32 nMark = xMark->createMark();
-        staruno::Reference<stario::XPersistObject>  xPersist;
+        Reference<XPersistObject>  xPersist;
         if (query_aggregation(m_xAggregate, xPersist))
             xPersist->read(_rxInStream);
 

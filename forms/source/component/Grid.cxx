@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,18 @@ sal_Int32 findPos(const ::rtl::OUString& aStr, const StringSequence& rList)
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::view;
 
 const sal_uInt16 ROWHEIGHT          =   0x0001;
 const sal_uInt16 FONTTYPE           =   0x0002;
@@ -150,35 +162,25 @@ const sal_uInt16 RECORDMARKER       =   0x0080;
 const sal_uInt16 BACKGROUNDCOLOR    =   0x0100;
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OGridControlModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OGridControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OGridControlModel(_rxFactory));
 }
 
 //------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OGridControlModel::_getTypes()
+Sequence<Type> OGridControlModel::_getTypes()
 {
-    static staruno::Sequence<staruno::Type> aTypes;
+    static Sequence<Type> aTypes;
     if (!aTypes.getLength())
-    {
-        staruno::Sequence<staruno::Type> aOwnTypes(5);
-        staruno::Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = getCppuType((staruno::Reference<starform::XGridColumnFactory>*)NULL);
-        pOwnTypes[1] = getCppuType((staruno::Reference<starview::XSelectionSupplier>*)NULL);
-        pOwnTypes[2] = getCppuType((staruno::Reference<starawt::XControlModel>*)NULL);
-        pOwnTypes[3] = getCppuType((staruno::Reference<starform::XReset>*)NULL);
-        pOwnTypes[4] = getCppuType((staruno::Reference<starform::XLoadListener>*)NULL);
-
-        aTypes = concatSequences(OControlModel::_getTypes(), OInterfaceContainer::getTypes(), aOwnTypes);
-    }
+        aTypes = concatSequences(OControlModel::_getTypes(), OInterfaceContainer::getTypes(), OGridControlModel_BASE::getTypes());
     return aTypes;
 }
 
 DBG_NAME(OGridControlModel);
 //------------------------------------------------------------------
-OGridControlModel::OGridControlModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
                     :OControlModel(_rxFactory, ::rtl::OUString())
-                    ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<staruno::Reference<starbeans::XPropertySet>*>(NULL)))
+                    ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<Reference<XPropertySet>*>(NULL)))
                     ,m_aSelectListeners(m_aMutex)
                     ,m_aResetListeners(m_aMutex)
                     ,m_aDefaultControl(FRM_CONTROL_GRID)        // use the old control name for compytibility reasons
@@ -193,7 +195,7 @@ OGridControlModel::OGridControlModel(const staruno::Reference<starlang::XMultiSe
 {
     DBG_CTOR(OGridControlModel,NULL);
 
-    m_nClassId = starform::FormComponentType::GRIDCONTROL;
+    m_nClassId = FormComponentType::GRIDCONTROL;
 }
 
 //------------------------------------------------------------------
@@ -211,9 +213,9 @@ OGridControlModel::~OGridControlModel()
 
 }
 
-// starlang::XServiceInfo
+// XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence OGridControlModel::getSupportedServiceNames() throw(staruno::RuntimeException)
+StringSequence OGridControlModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -224,40 +226,33 @@ StringSequence OGridControlModel::getSupportedServiceNames() throw(staruno::Runt
 }
 
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OGridControlModel::queryAggregation( const staruno::Type& _rType ) throw (staruno::RuntimeException)
+Any SAL_CALL OGridControlModel::queryAggregation( const Type& _rType ) throw (RuntimeException)
 {
-    staruno::Any aReturn =
-        ::cppu::queryInterface(_rType,
-            static_cast<starform::XGridColumnFactory*>(this),
-            static_cast<starawt::XControlModel*>(this),
-            static_cast<starview::XSelectionSupplier*>(this),
-            static_cast<starform::XReset*>(this),
-            static_cast<starform::XLoadListener*>(this),
-            static_cast<starlang::XEventListener*>(static_cast<starform::XLoadListener*>(this))
-        );
+    Any aReturn = OGridControlModel_BASE::queryInterface(_rType);
 
     if (!aReturn.hasValue())
+    {
         aReturn = OControlModel::queryAggregation(_rType);
 
-    if (!aReturn.hasValue())
-        aReturn = OInterfaceContainer::queryInterface(_rType);
-
+        if (!aReturn.hasValue())
+            aReturn = OInterfaceContainer::queryInterface(_rType);
+    }
     return aReturn;
 }
 
-// starcontainer::XChild
+// XChild
 //------------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::setParent(const InterfaceRef& Parent) throw(starlang::NoSupportException, staruno::RuntimeException)
+void SAL_CALL OGridControlModel::setParent(const InterfaceRef& Parent) throw(NoSupportException, RuntimeException)
 {
-    staruno::Reference<starform::XForm>  xForm(m_xParent, staruno::UNO_QUERY);
-    staruno::Reference<starform::XLoadable>  xLoadable(xForm, staruno::UNO_QUERY);
+    Reference<XForm>  xForm(m_xParent, UNO_QUERY);
+    Reference<XLoadable>  xLoadable(xForm, UNO_QUERY);
     if (xLoadable.is())
         xLoadable->removeLoadListener(this);
 
     OControlModel::setParent(Parent);
 
-    xForm = staruno::Reference<starform::XForm>  (m_xParent, staruno::UNO_QUERY);
-    xLoadable = staruno::Reference<starform::XLoadable>  (xForm, staruno::UNO_QUERY);
+    xForm = Reference<XForm>  (m_xParent, UNO_QUERY);
+    xLoadable = Reference<XLoadable>  (xForm, UNO_QUERY);
     if (xLoadable.is())
         xLoadable->addLoadListener(this);
 }
@@ -269,91 +264,90 @@ void OGridControlModel::disposing()
     OControlModel::disposing();
     OInterfaceContainer::disposing();
 
-    starlang::EventObject aEvt(static_cast<staruno::XWeak*>(this));
+    EventObject aEvt(static_cast<XWeak*>(this));
     m_aSelectListeners.disposeAndClear(aEvt);
     m_aResetListeners.disposeAndClear(aEvt);
 }
 
-// starlang::XEventListener
+// XEventListener
 //------------------------------------------------------------------------------
-void OGridControlModel::disposing(const starlang::EventObject& e) throw( staruno::RuntimeException )
+void OGridControlModel::disposing(const EventObject& e) throw( RuntimeException )
 {
     OControlModel::disposing(e);
 }
 
-// starview::XSelectionSupplier
+// XSelectionSupplier
 //-----------------------------------------------------------------------------
-sal_Bool SAL_CALL OGridControlModel::select(const staruno::Any& rElement) throw(starlang::IllegalArgumentException, staruno::RuntimeException)
+sal_Bool SAL_CALL OGridControlModel::select(const Any& rElement) throw(IllegalArgumentException, RuntimeException)
 {
-    staruno::Reference<starbeans::XPropertySet> xSel;
+    Reference<XPropertySet> xSel;
     if (rElement.hasValue() && !::cppu::extractInterface(xSel, rElement))
     {
-        throw starlang::IllegalArgumentException();
+        throw IllegalArgumentException();
     }
-    InterfaceRef xMe = static_cast<staruno::XWeak*>(this);
+    InterfaceRef xMe = static_cast<XWeak*>(this);
 
     if (xSel.is())
     {
-        staruno::Reference<starcontainer::XChild> xAsChild(xSel, staruno::UNO_QUERY);
+        Reference<XChild> xAsChild(xSel, UNO_QUERY);
         if (!xAsChild.is() || (xAsChild->getParent() != xMe))
         {
-            throw starlang::IllegalArgumentException();
+            throw IllegalArgumentException();
         }
     }
 
     if (xSel != m_xSelection)
     {
         m_xSelection = xSel;
-        starlang::EventObject aEvt(xMe);
-        NOTIFY_LISTENERS(m_aSelectListeners, starview::XSelectionChangeListener, selectionChanged, aEvt);
+        EventObject aEvt(xMe);
+        NOTIFY_LISTENERS(m_aSelectListeners, XSelectionChangeListener, selectionChanged, aEvt);
         return sal_True;
     }
-    else
-        return sal_False;
+    return sal_False;
 }
 
 //-----------------------------------------------------------------------------
-staruno::Any SAL_CALL OGridControlModel::getSelection() throw(staruno::RuntimeException)
+Any SAL_CALL OGridControlModel::getSelection() throw(RuntimeException)
 {
-    return staruno::makeAny(m_xSelection);
+    return makeAny(m_xSelection);
 }
 
 //-----------------------------------------------------------------------------
-void OGridControlModel::addSelectionChangeListener(const staruno::Reference< starview::XSelectionChangeListener >& _rxListener) throw( staruno::RuntimeException )
+void OGridControlModel::addSelectionChangeListener(const Reference< XSelectionChangeListener >& _rxListener) throw( RuntimeException )
 {
     m_aSelectListeners.addInterface(_rxListener);
 }
 
 //-----------------------------------------------------------------------------
-void OGridControlModel::removeSelectionChangeListener(const staruno::Reference< starview::XSelectionChangeListener >& _rxListener) throw( staruno::RuntimeException )
+void OGridControlModel::removeSelectionChangeListener(const Reference< XSelectionChangeListener >& _rxListener) throw( RuntimeException )
 {
     m_aSelectListeners.removeInterface(_rxListener);
 }
 
-// starform::XGridColumnFactory
+// XGridColumnFactory
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySet> SAL_CALL OGridControlModel::createColumn(const ::rtl::OUString& ColumnType)
+Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const ::rtl::OUString& ColumnType)
 {
-    const staruno::Sequence< ::rtl::OUString >& rColumnTypes = frm::getColumnTypes();
+    const Sequence< ::rtl::OUString >& rColumnTypes = frm::getColumnTypes();
     return createColumn(::internal::findPos(ColumnType, rColumnTypes));
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySet>  OGridControlModel::createColumn(sal_Int32 nTypeId) const
+Reference<XPropertySet>  OGridControlModel::createColumn(sal_Int32 nTypeId) const
 {
-    staruno::Reference<starbeans::XPropertySet>  xReturn;
+    Reference<XPropertySet>  xReturn;
     switch (nTypeId)
     {
-        case TYPE_CHECKBOX: xReturn = new CheckBoxColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_COMBOBOX: xReturn = new ComboBoxColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_CURRENCYFIELD: xReturn = new CurrencyFieldColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_DATEFIELD: xReturn = new DateFieldColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_LISTBOX: xReturn = new ListBoxColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_NUMERICFIELD: xReturn = new NumericFieldColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_PATTERNFIELD: xReturn = new PatternFieldColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_TEXTFIELD: xReturn = new TextFieldColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_TIMEFIELD: xReturn = new TimeFieldColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_FORMATTEDFIELD: xReturn = new FormattedFieldColumn(OControlModel::m_xServiceFactory); break;
+        case TYPE_CHECKBOX:         xReturn = new CheckBoxColumn(OControlModel::m_xServiceFactory); break;
+        case TYPE_COMBOBOX:         xReturn = new ComboBoxColumn(OControlModel::m_xServiceFactory); break;
+        case TYPE_CURRENCYFIELD:    xReturn = new CurrencyFieldColumn(OControlModel::m_xServiceFactory); break;
+        case TYPE_DATEFIELD:        xReturn = new DateFieldColumn(OControlModel::m_xServiceFactory); break;
+        case TYPE_LISTBOX:          xReturn = new ListBoxColumn(OControlModel::m_xServiceFactory); break;
+        case TYPE_NUMERICFIELD:     xReturn = new NumericFieldColumn(OControlModel::m_xServiceFactory); break;
+        case TYPE_PATTERNFIELD:     xReturn = new PatternFieldColumn(OControlModel::m_xServiceFactory); break;
+        case TYPE_TEXTFIELD:        xReturn = new TextFieldColumn(OControlModel::m_xServiceFactory); break;
+        case TYPE_TIMEFIELD:        xReturn = new TimeFieldColumn(OControlModel::m_xServiceFactory); break;
+        case TYPE_FORMATTEDFIELD:   xReturn = new FormattedFieldColumn(OControlModel::m_xServiceFactory); break;
         default:
             DBG_ERROR("OGridControlModel::createColumn: Unknown Column");
             break;
@@ -367,31 +361,31 @@ StringSequence SAL_CALL OGridControlModel::getColumnTypes()
     return frm::getColumnTypes();
 }
 
-// starform::XReset
+// XReset
 //-----------------------------------------------------------------------------
 void SAL_CALL OGridControlModel::reset()
 {
     ::cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
-    starlang::EventObject aEvt(static_cast<staruno::XWeak*>(this));
+    EventObject aEvt(static_cast<XWeak*>(this));
     sal_Bool bContinue = sal_True;
     while (aIter.hasMoreElements() && bContinue)
-        bContinue =((starform::XResetListener*)aIter.next())->approveReset(aEvt);
+        bContinue =((XResetListener*)aIter.next())->approveReset(aEvt);
 
     if (bContinue)
     {
         _reset();
-        NOTIFY_LISTENERS(m_aResetListeners, starform::XResetListener, resetted, aEvt);
+        NOTIFY_LISTENERS(m_aResetListeners, XResetListener, resetted, aEvt);
     }
 }
 
 //-----------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::addResetListener(const staruno::Reference<starform::XResetListener>& _rxListener)
+void SAL_CALL OGridControlModel::addResetListener(const Reference<XResetListener>& _rxListener)
 {
     m_aResetListeners.addInterface(_rxListener);
 }
 
 //-----------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::removeResetListener(const staruno::Reference<starform::XResetListener>& _rxListener)
+void SAL_CALL OGridControlModel::removeResetListener(const Reference<XResetListener>& _rxListener)
 {
     m_aResetListeners.removeInterface(_rxListener);
 }
@@ -399,21 +393,21 @@ void SAL_CALL OGridControlModel::removeResetListener(const staruno::Reference<st
 //-----------------------------------------------------------------------------
 void OGridControlModel::_reset()
 {
+    Reference<XReset> xReset;
     sal_Int32 nCount = getCount();
     for (sal_Int32 nIndex=0; nIndex < nCount; nIndex++)
     {
-        staruno::Reference<starform::XReset> xReset;
-        ::cppu::extractInterface(xReset, getByIndex( nIndex ));
+        getByIndex( nIndex ) >>= xReset;
         if (xReset.is())
             xReset->reset();
     }
 }
 
-// starbeans::XPropertySet
+// XPropertySet
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OGridControlModel::getPropertySetInfo() throw(staruno::RuntimeException)
+Reference<XPropertySetInfo> SAL_CALL OGridControlModel::getPropertySetInfo() throw(RuntimeException)
 {
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -425,30 +419,30 @@ staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OGridControlModel::getP
 
 //------------------------------------------------------------------------------
 void OGridControlModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     BEGIN_AGGREGATION_PROPERTY_HELPER(29, m_xAggregateSet)
-        DECL_PROP1(NAME,                ::rtl::OUString,        BOUND);
+        DECL_PROP1(NAME,                ::rtl::OUString,    BOUND);
         DECL_PROP2(CLASSID,             sal_Int16,          READONLY, TRANSIENT);
-        DECL_PROP1(TAG,                 ::rtl::OUString,        BOUND);
+        DECL_PROP1(TAG,                 ::rtl::OUString,    BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,          BOUND);
         DECL_PROP3(TABSTOP,             sal_Bool,           BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP2(HASNAVIGATION,       sal_Bool,           BOUND, MAYBEDEFAULT);
         DECL_PROP1(ENABLED,             sal_Bool,           BOUND);
         DECL_PROP1(BORDER,              sal_Int16,          BOUND);
-        DECL_PROP1(DEFAULTCONTROL,      ::rtl::OUString,        BOUND);
+        DECL_PROP1(DEFAULTCONTROL,      ::rtl::OUString,    BOUND);
         DECL_PROP3(TEXTCOLOR,           sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP3(BACKGROUNDCOLOR,     sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP2(FONT,                starawt::FontDescriptor,    BOUND, MAYBEDEFAULT);
+        DECL_PROP2(FONT,                FontDescriptor,     BOUND, MAYBEDEFAULT);
         DECL_PROP3(ROWHEIGHT,           sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP1(HELPTEXT,            ::rtl::OUString,        BOUND);
-        DECL_PROP1(FONT_NAME,           ::rtl::OUString,        MAYBEDEFAULT);
-        DECL_PROP1(FONT_STYLENAME,      ::rtl::OUString,        MAYBEDEFAULT);
+        DECL_PROP1(HELPTEXT,            ::rtl::OUString,    BOUND);
+        DECL_PROP1(FONT_NAME,           ::rtl::OUString,    MAYBEDEFAULT);
+        DECL_PROP1(FONT_STYLENAME,      ::rtl::OUString,    MAYBEDEFAULT);
         DECL_PROP1(FONT_FAMILY,         sal_Int16,          MAYBEDEFAULT);
         DECL_PROP1(FONT_CHARSET,        sal_Int16,          MAYBEDEFAULT);
-        DECL_PROP1(FONT_HEIGHT,         Float,          MAYBEDEFAULT);
-        DECL_PROP1(FONT_WEIGHT,         Float,          MAYBEDEFAULT);
+        DECL_PROP1(FONT_HEIGHT,         Float,              MAYBEDEFAULT);
+        DECL_PROP1(FONT_WEIGHT,         Float,              MAYBEDEFAULT);
         DECL_PROP1(FONT_SLANT,          sal_Int16,          MAYBEDEFAULT);
         DECL_PROP1(FONT_UNDERLINE,      sal_Int16,          MAYBEDEFAULT);
         DECL_PROP1(FONT_STRIKEOUT,      sal_Int16,          MAYBEDEFAULT);
@@ -462,7 +456,7 @@ void OGridControlModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHandle ) const
+void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
 {
     switch (nHandle)
     {
@@ -506,7 +500,7 @@ void OGridControlModel::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHa
             rValue = m_aBackgroundColor;
             break;
         case PROPERTY_ID_FONT:
-            rValue = staruno::makeAny(m_aFont);
+            rValue = makeAny(m_aFont);
             break;
         case PROPERTY_ID_ROWHEIGHT:
             rValue = m_aRowHeight;
@@ -530,7 +524,7 @@ void OGridControlModel::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHa
             rValue <<= (float)m_aFont.Weight;
             break;
         case PROPERTY_ID_FONT_SLANT:
-            rValue = staruno::makeAny(m_aFont.Slant);
+            rValue = makeAny(m_aFont.Slant);
             break;
         case PROPERTY_ID_FONT_UNDERLINE:
             rValue <<= (sal_Int16)m_aFont.Underline;
@@ -544,8 +538,8 @@ void OGridControlModel::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHa
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OGridControlModel::convertFastPropertyValue( staruno::Any& rConvertedValue, staruno::Any& rOldValue,
-                                                    sal_Int32 nHandle, const staruno::Any& rValue )throw( starlang::IllegalArgumentException )
+sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
+                                                    sal_Int32 nHandle, const Any& rValue )throw( IllegalArgumentException )
 {
     sal_Bool bModified(sal_False);
     switch (nHandle)
@@ -562,9 +556,9 @@ sal_Bool OGridControlModel::convertFastPropertyValue( staruno::Any& rConvertedVa
         case PROPERTY_ID_CURSORCOLOR:
             if (!rValue.hasValue() || !m_aCursorColor.hasValue())
             {
-                if (rValue.hasValue() && (staruno::TypeClass_LONG != rValue.getValueType().getTypeClass()))
+                if (rValue.hasValue() && (TypeClass_LONG != rValue.getValueType().getTypeClass()))
                 {
-                    throw starlang::IllegalArgumentException();
+                    throw IllegalArgumentException();
                 }
                 rOldValue = m_aCursorColor;
                 rConvertedValue = rValue;
@@ -601,7 +595,7 @@ sal_Bool OGridControlModel::convertFastPropertyValue( staruno::Any& rConvertedVa
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aBackgroundColor, ::getCppuType((const sal_Int32*)NULL));
             break;
         case PROPERTY_ID_FONT:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, staruno::makeAny(m_aFont), ::getCppuType((const starawt::FontDescriptor*)NULL));
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, makeAny(m_aFont), ::getCppuType((const FontDescriptor*)NULL));
             break;
         case PROPERTY_ID_ROWHEIGHT:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aRowHeight, ::getCppuType((const sal_Int32*)NULL));
@@ -640,7 +634,7 @@ sal_Bool OGridControlModel::convertFastPropertyValue( staruno::Any& rConvertedVa
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const staruno::Any& rValue )
+void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
 {
     switch (nHandle)
     {
@@ -748,9 +742,9 @@ void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
 //------------------------------------------------------------------------------
 IMPL_LINK( OGridControlModel, OnFontChanged, void*, EMPTYARG )
 {
-    staruno::Any aOldVal;
+    Any aOldVal;
     aOldVal >>= m_aOldFont;
-    staruno::Any aNewVal;
+    Any aNewVal;
     aNewVal >>= m_aFont;
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -763,90 +757,90 @@ IMPL_LINK( OGridControlModel, OnFontChanged, void*, EMPTYARG )
 
 //XPropertyState
 //------------------------------------------------------------------------------
-starbeans::PropertyState OGridControlModel::getPropertyStateByHandle(sal_Int32 nHandle)
+PropertyState OGridControlModel::getPropertyStateByHandle(sal_Int32 nHandle)
 {
-    starbeans::PropertyState eState(starbeans::PropertyState_DIRECT_VALUE);
+    PropertyState eState(PropertyState_DIRECT_VALUE);
     switch (nHandle)
     {
         case PROPERTY_ID_HELPURL:
             if (m_sHelpURL.getLength() == 0)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_DISPLAYSYNCHRON:
             if (m_bDisplaySynchron)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_ALWAYSSHOWCURSOR:
             if (!m_bAlwaysShowCursor)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_CURSORCOLOR:
             if (!m_aCursorColor.hasValue())
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_PRINTABLE:
             if (m_bPrintable)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_HASNAVIGATION:
             if (m_bNavigation)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_RECORDMARKER:
             if (m_bRecordMarker)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_TABSTOP:
             if (!m_aTabStop.hasValue())
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_TEXTCOLOR:
             if (!m_aTextColor.hasValue())
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_BACKGROUNDCOLOR:
             if (!m_aBackgroundColor.hasValue())
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONT_NAME:
             if (!m_aFont.Name.len())
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONT_STYLENAME:
             if (!m_aFont.StyleName.len())
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONT_FAMILY:
             if (!m_aFont.Family)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONT_CHARSET:
             if (!m_aFont.CharSet)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONT_HEIGHT:
             if (!m_aFont.Height)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONT_WEIGHT:
             if (!m_aFont.Weight)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONT_SLANT:
-            if (m_aFont.Slant == starawt::FontSlant_NONE)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+            if (m_aFont.Slant == FontSlant_NONE)
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONT_UNDERLINE:
             if (!m_aFont.Underline)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONT_STRIKEOUT:
             if (!m_aFont.Strikeout)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_ROWHEIGHT:
             if (!m_aRowHeight.hasValue())
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             break;
         default:
             eState = OControlModel::getPropertyStateByHandle(nHandle);
@@ -874,12 +868,12 @@ void OGridControlModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
         case PROPERTY_ID_BACKGROUNDCOLOR:
         case PROPERTY_ID_ROWHEIGHT:
         case PROPERTY_ID_CURSORCOLOR:
-            setFastPropertyValue(nHandle, staruno::Any());
+            setFastPropertyValue(nHandle, Any());
             break;
         case PROPERTY_ID_HELPURL:
         case PROPERTY_ID_FONT_NAME:
         case PROPERTY_ID_FONT_STYLENAME:
-            setFastPropertyValue(nHandle, staruno::makeAny(::rtl::OUString()));
+            setFastPropertyValue(nHandle, makeAny(::rtl::OUString()));
             break;
         case PROPERTY_ID_FONT_FAMILY:
         case PROPERTY_ID_FONT_CHARSET:
@@ -887,15 +881,15 @@ void OGridControlModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
         case PROPERTY_ID_FONT_UNDERLINE:
         case PROPERTY_ID_FONT_STRIKEOUT:
         {
-            staruno::Any aVal;
+            Any aVal;
             aVal <<= (sal_Int16)0;
             setFastPropertyValue(nHandle, aVal);
         }   break;
         case PROPERTY_ID_FONT_HEIGHT:
-            setFastPropertyValue(nHandle, staruno::makeAny((float)0));
+            setFastPropertyValue(nHandle, makeAny((float)0));
             break;
         case PROPERTY_ID_FONT_WEIGHT:
-            setFastPropertyValue(nHandle, staruno::makeAny((float)0));
+            setFastPropertyValue(nHandle, makeAny((float)0));
             break;
         default:
             OControlModel::setPropertyToDefaultByHandle(nHandle);
@@ -903,7 +897,7 @@ void OGridControlModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 }
 
 //------------------------------------------------------------------------------
-staruno::Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle )
+Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle )
 {
     switch (nHandle)
     {
@@ -915,87 +909,86 @@ staruno::Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle )
         case PROPERTY_ID_TEXTCOLOR:
         case PROPERTY_ID_BACKGROUNDCOLOR:
         case PROPERTY_ID_ROWHEIGHT:
-            return staruno::Any();
+            return Any();
         case PROPERTY_ID_FONT_NAME:
         case PROPERTY_ID_FONT_STYLENAME:
-            return staruno::makeAny(::rtl::OUString());
+            return makeAny(::rtl::OUString());
         case PROPERTY_ID_FONT_FAMILY:
         case PROPERTY_ID_FONT_CHARSET:
         case PROPERTY_ID_FONT_SLANT:
         case PROPERTY_ID_FONT_UNDERLINE:
         case PROPERTY_ID_FONT_STRIKEOUT:
-            return staruno::makeAny((sal_Int16)0);
+            return makeAny((sal_Int16)0);
         case PROPERTY_ID_FONT_HEIGHT:
-            return staruno::makeAny((float)0);
+            return makeAny((float)0);
         case PROPERTY_ID_FONT_WEIGHT:
-            return staruno::makeAny((float)0);
+            return makeAny((float)0);
         default:
             return OControlModel::getPropertyDefaultByHandle(nHandle);
     }
 }
 
-// starform::XLoadListener
+// XLoadListener
 //------------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::loaded(const starlang::EventObject& rEvent) throw(staruno::RuntimeException)
+void SAL_CALL OGridControlModel::loaded(const EventObject& rEvent) throw(RuntimeException)
 {
+    Reference<XLoadListener>  xListener;
     sal_Int32 nCount = getCount();
     for (sal_Int32 nIndex=0; nIndex < nCount; ++nIndex)
     {
-        //  staruno::Any aElement(getByIndex( nIndex ));
-        staruno::Reference<starform::XLoadListener>  xListener;
-        ::cppu::extractInterface(xListener, getByIndex(nIndex));
+        getByIndex(nIndex) >>= xListener;
         if (xListener.is())
             xListener->loaded(rEvent);
     }
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::unloaded(const starlang::EventObject& rEvent) throw(staruno::RuntimeException)
+void SAL_CALL OGridControlModel::unloaded(const EventObject& rEvent) throw(RuntimeException)
 {
+    Reference<XLoadListener>  xListener;
     sal_Int32 nCount = getCount();
     for (sal_Int32 nIndex=0; nIndex < nCount; nIndex++)
     {
-        staruno::Reference<starform::XLoadListener>  xListener;
-        ::cppu::extractInterface(xListener, getByIndex(nIndex));
+        getByIndex(nIndex) >>= xListener;
         if (xListener.is())
             xListener->unloaded(rEvent);
     }
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::reloading(const starlang::EventObject& rEvent) throw(staruno::RuntimeException)
+void SAL_CALL OGridControlModel::reloading(const EventObject& rEvent) throw(RuntimeException)
 {
+    Reference<XLoadListener>  xListener;
     sal_Int32 nCount = getCount();
     for (sal_Int32 nIndex=0; nIndex < nCount; nIndex++)
     {
-        staruno::Reference<starform::XLoadListener>  xListener;
-        ::cppu::extractInterface(xListener, getByIndex(nIndex));
+        getByIndex(nIndex) >>= xListener;
         if (xListener.is())
             xListener->reloading(rEvent);
     }
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::unloading(const starlang::EventObject& rEvent) throw(staruno::RuntimeException)
+void SAL_CALL OGridControlModel::unloading(const EventObject& rEvent) throw(RuntimeException)
 {
+    Reference<XLoadListener>  xListener;
     sal_Int32 nCount = getCount();
     for (sal_Int32 nIndex=0; nIndex < nCount; nIndex++)
     {
-        staruno::Reference<starform::XLoadListener>  xListener;
-        ::cppu::extractInterface(xListener, getByIndex(nIndex));
+        getByIndex(nIndex) >>= xListener;
         if (xListener.is())
             xListener->unloading(rEvent);
     }
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::reloaded(const starlang::EventObject& rEvent) throw(staruno::RuntimeException)
+void SAL_CALL OGridControlModel::reloaded(const EventObject& rEvent) throw(RuntimeException)
 {
+    Reference<XLoadListener>  xListener;
     sal_Int32 nCount = getCount();
     for (sal_Int32 nIndex=0; nIndex < nCount; nIndex++)
     {
-        staruno::Reference<starform::XLoadListener>  xListener;
-        ::cppu::extractInterface(xListener, getByIndex(nIndex));
+        getByIndex(nIndex) >>= xListener;
         if (xListener.is())
             xListener->reloaded(rEvent);
     }
@@ -1005,7 +998,7 @@ void SAL_CALL OGridControlModel::reloaded(const starlang::EventObject& rEvent) t
 OGridColumn* OGridControlModel::getColumnImplementation(const InterfaceRef& _rxIFace) const
 {
     OGridColumn* pImplementation = NULL;
-    staruno::Reference<starlang::XUnoTunnel> xUnoTunnel(_rxIFace, staruno::UNO_QUERY);
+    Reference<XUnoTunnel> xUnoTunnel(_rxIFace, UNO_QUERY);
     if (xUnoTunnel.is())
         pImplementation = reinterpret_cast<OGridColumn*>(xUnoTunnel->getSomething(OGridColumn::getUnoTunnelImplementationId()));
 
@@ -1013,17 +1006,17 @@ OGridColumn* OGridControlModel::getColumnImplementation(const InterfaceRef& _rxI
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::insert(sal_Int32 _nIndex, const InterfaceRef& xElement, sal_Bool bEvents) throw( starlang::IllegalArgumentException )
+void OGridControlModel::insert(sal_Int32 _nIndex, const InterfaceRef& xElement, sal_Bool bEvents) throw( IllegalArgumentException )
 {
     OGridColumn* pCol = getColumnImplementation(xElement);
     if (!pCol)
     {
-        throw starlang::IllegalArgumentException();
+        throw IllegalArgumentException();
     }
     OInterfaceContainer::insert(_nIndex, xElement, bEvents);
 }
 
-// stario::XPersistObject
+// XPersistObject
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OGridControlModel::getServiceName()
 {
@@ -1031,11 +1024,11 @@ void OGridControlModel::insert(sal_Int32 _nIndex, const InterfaceRef& xElement, 
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
+void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     OControlModel::write(_rxOutStream);
 
-    staruno::Reference<stario::XMarkableStream>  xMark(_rxOutStream, staruno::UNO_QUERY);
+    Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
 
     // 1. Version
     _rxOutStream->writeShort(0x0008);
@@ -1074,15 +1067,15 @@ void OGridControlModel::write(const staruno::Reference<stario::XObjectOutputStre
     // 4. Attribute
     // Maskierung fuer alle any Typen
     sal_uInt16 nAnyMask = 0;
-    if (m_aRowHeight.getValueType().getTypeClass() == staruno::TypeClass_LONG)
+    if (m_aRowHeight.getValueType().getTypeClass() == TypeClass_LONG)
         nAnyMask |= ROWHEIGHT;
     if (!(m_aFont == getDefaultFont()))     // have no !=, only a ==
         nAnyMask |= FONTATTRIBS | FONTSIZE | FONTTYPE | FONTDESCRIPTOR;
-    if (m_aTabStop.getValueType().getTypeClass() == staruno::TypeClass_BOOLEAN)
+    if (m_aTabStop.getValueType().getTypeClass() == TypeClass_BOOLEAN)
         nAnyMask |= TABSTOP;
-    if (m_aTextColor.getValueType().getTypeClass() == staruno::TypeClass_LONG)
+    if (m_aTextColor.getValueType().getTypeClass() == TypeClass_LONG)
         nAnyMask |= TEXTCOLOR;
-    if (m_aBackgroundColor.getValueType().getTypeClass() == staruno::TypeClass_LONG)
+    if (m_aBackgroundColor.getValueType().getTypeClass() == TypeClass_LONG)
         nAnyMask |= BACKGROUNDCOLOR;
     if (!m_bRecordMarker)
         nAnyMask |= RECORDMARKER;
@@ -1104,7 +1097,7 @@ void OGridControlModel::write(const staruno::Reference<stario::XObjectOutputStre
         _rxOutStream->writeBoolean( m_aFont.Kerning );
         _rxOutStream->writeBoolean( m_aFont.WordLineMode );
 
-        // starawt::Size
+        // Size
         _rxOutStream->writeLong( m_aFont.Width );
         _rxOutStream->writeLong( m_aFont.Height );
         _rxOutStream->writeShort( VCLUnoHelper::ConvertFontWidth( m_aFont.CharacterWidth ) );
@@ -1147,11 +1140,11 @@ void OGridControlModel::write(const staruno::Reference<stario::XObjectOutputStre
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream)
+void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     OControlModel::read(_rxInStream);
 
-    staruno::Reference<stario::XMarkableStream>  xMark(_rxInStream, staruno::UNO_QUERY);
+    Reference<XMarkableStream>  xMark(_rxInStream, UNO_QUERY);
 
     // 1. Version
     sal_Int16 nVersion = _rxInStream->readShort();
@@ -1167,7 +1160,7 @@ void OGridControlModel::read(const staruno::Reference<stario::XObjectInputStream
             ::rtl::OUString sModelName;
             _rxInStream >> sModelName;
 
-            staruno::Reference<starbeans::XPropertySet>  xCol(createColumn(getColumnTypeByModelName(sModelName)));
+            Reference<XPropertySet>  xCol(createColumn(getColumnTypeByModelName(sModelName)));
             DBG_ASSERT(xCol.is(), "OGridControlModel::read : unknown column type !");
             sal_Int32 nObjLen = _rxInStream->readLong();
             if (nObjLen)
@@ -1195,7 +1188,7 @@ void OGridControlModel::read(const staruno::Reference<stario::XObjectInputStream
     if (nObjLen)
     {
         sal_Int32 nMark = xMark->createMark();
-        staruno::Reference<stario::XPersistObject>  xObj(m_xEventAttacher, staruno::UNO_QUERY);
+        Reference<XPersistObject>  xObj(m_xEventAttacher, UNO_QUERY);
         if (xObj.is())
             xObj->read(_rxInStream);
         xMark->jumpToMark(nMark);
@@ -1206,9 +1199,9 @@ void OGridControlModel::read(const staruno::Reference<stario::XObjectInputStream
     // Attachement lesen
     for (sal_Int32 i = 0; i < nLen; i++)
     {
-        InterfaceRef  xIfc(m_aItems[i], staruno::UNO_QUERY);
-        staruno::Reference<starbeans::XPropertySet>  xSet(xIfc, staruno::UNO_QUERY);
-        staruno::Any aHelper;
+        InterfaceRef  xIfc(m_aItems[i], UNO_QUERY);
+        Reference<XPropertySet>  xSet(xIfc, UNO_QUERY);
+        Any aHelper;
         aHelper <<= xSet;
         m_xEventAttacher->attach( i, xIfc, aHelper );
     }
@@ -1230,7 +1223,7 @@ void OGridControlModel::read(const staruno::Reference<stario::XObjectInputStream
     {
         m_aFont.Weight = VCLUnoHelper::ConvertFontWeight( _rxInStream->readShort() );
 
-        m_aFont.Slant = (starawt::FontSlant)_rxInStream->readShort();
+        m_aFont.Slant = (FontSlant)_rxInStream->readShort();
         m_aFont.Underline = _rxInStream->readShort();
         m_aFont.Strikeout = _rxInStream->readShort();
         m_aFont.Orientation = ( (double)_rxInStream->readShort() ) / 10;

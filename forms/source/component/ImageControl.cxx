@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 18:33:00 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,29 +129,40 @@
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //==================================================================
 // OImageControlModel
 //==================================================================
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OImageControlModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OImageControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OImageControlModel(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OImageControlModel::_getTypes()
+Sequence<Type> OImageControlModel::_getTypes()
 {
-    static staruno::Sequence<staruno::Type> aTypes;
+    static Sequence<Type> aTypes;
     if (!aTypes.getLength())
     {
         // my base class
-        staruno::Sequence<staruno::Type> aBaseClassTypes = OBoundControlModel::_getTypes();
+        Sequence<Type> aBaseClassTypes = OBoundControlModel::_getTypes();
 
-        staruno::Sequence<staruno::Type> aOwnTypes(1);
-        staruno::Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = getCppuType((staruno::Reference<starform::XImageProducerSupplier>*)NULL);
+        Sequence<Type> aOwnTypes(1);
+        Type* pOwnTypes = aOwnTypes.getArray();
+        pOwnTypes[0] = getCppuType((Reference<XImageProducerSupplier>*)NULL);
 
         aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
     }
@@ -160,7 +171,7 @@ staruno::Sequence<staruno::Type> OImageControlModel::_getTypes()
 
 DBG_NAME(OImageControlModel)
 //------------------------------------------------------------------
-OImageControlModel::OImageControlModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OImageControlModel::OImageControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
                     :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_CONTROL_IMAGECONTROL, sal_False)
                                     // use the old control name for compytibility reasons
                     ,OPropertyChangeListener(m_aMutex)
@@ -168,7 +179,7 @@ OImageControlModel::OImageControlModel(const staruno::Reference<starlang::XMulti
                     ,m_bReadOnly(sal_False)
 {
     DBG_CTOR(OImageControlModel,NULL);
-    m_nClassId = starform::FormComponentType::IMAGECONTROL;
+    m_nClassId = FormComponentType::IMAGECONTROL;
 
     m_xImageProducer = m_pImageProducer;
 
@@ -194,7 +205,7 @@ OImageControlModel::~OImageControlModel()
     DBG_DTOR(OImageControlModel,NULL);
 }
 
-// starlang::XServiceInfo
+// XServiceInfo
 //------------------------------------------------------------------------------
 StringSequence  OImageControlModel::getSupportedServiceNames() throw()
 {
@@ -207,14 +218,12 @@ StringSequence  OImageControlModel::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OImageControlModel::queryAggregation(const staruno::Type& _rType) throw (staruno::RuntimeException)
+Any SAL_CALL OImageControlModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    staruno::Any aReturn;
-
-    aReturn = OBoundControlModel::queryAggregation(_rType);
+    Any aReturn = OBoundControlModel::queryAggregation(_rType);
     if (!aReturn.hasValue())
         aReturn = ::cppu::queryInterface(_rType
-            ,static_cast<starform::XImageProducerSupplier*>(this)
+            ,static_cast<XImageProducerSupplier*>(this)
         );
 
     return aReturn;
@@ -224,9 +233,9 @@ staruno::Any SAL_CALL OImageControlModel::queryAggregation(const staruno::Type& 
 sal_Bool OImageControlModel::_approve(sal_Int32 _nColumnType)
 {
     // zulaessing sind die binary Typen, OTHER- und LONGVARCHAR-Felder
-    if ((_nColumnType == starsdbc::DataType::BINARY) || (_nColumnType == starsdbc::DataType::VARBINARY)
-        || (_nColumnType == starsdbc::DataType::LONGVARBINARY) || (_nColumnType == starsdbc::DataType::OTHER)
-        || (_nColumnType == starsdbc::DataType::LONGVARCHAR))
+    if ((_nColumnType == DataType::BINARY) || (_nColumnType == DataType::VARBINARY)
+        || (_nColumnType == DataType::LONGVARBINARY) || (_nColumnType == DataType::OTHER)
+        || (_nColumnType == DataType::LONGVARCHAR))
         return sal_True;
 
     return sal_False;
@@ -234,18 +243,18 @@ sal_Bool OImageControlModel::_approve(sal_Int32 _nColumnType)
 
 
 //------------------------------------------------------------------------------
-void OImageControlModel::_propertyChanged( const starbeans::PropertyChangeEvent& rEvt )
-                                            throw( staruno::RuntimeException )
+void OImageControlModel::_propertyChanged( const PropertyChangeEvent& rEvt )
+                                            throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // Wenn eine starutil::URL gesetzt worden ist, muss die noch an den ImageProducer
+    // Wenn eine URL gesetzt worden ist, muss die noch an den ImageProducer
     // weitergereicht werden.
     // xInStream erzeugen
 
-    staruno::Reference<stario::XActiveDataSink>  xSink(
+    Reference<XActiveDataSink>  xSink(
         m_xServiceFactory->createInstance(
-        ::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), staruno::UNO_QUERY);
+        ::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), UNO_QUERY);
     if (!xSink.is())
         return;
 
@@ -264,11 +273,11 @@ void OImageControlModel::_propertyChanged( const starbeans::PropertyChangeEvent&
         if (pFileStream->GetBufferSize() < 8192)
             pFileStream->SetBufferSize(8192);
 
-        staruno::Reference<stario::XInputStream> xInput
+        Reference<XInputStream> xInput
             (new ::utl::OInputStreamHelper(new SvLockBytes(pFileStream, sal_True),
                                            pFileStream->GetBufferSize()));
         xSink->setInputStream(xInput);
-        staruno::Reference<stario::XInputStream>  xInStream(xSink, staruno::UNO_QUERY);
+        Reference<XInputStream>  xInStream(xSink, UNO_QUERY);
         if (m_xColumnUpdate.is())
             m_xColumnUpdate->updateBinaryStream(xInStream, xInput->available());
         else
@@ -278,7 +287,7 @@ void OImageControlModel::_propertyChanged( const starbeans::PropertyChangeEvent&
         }
 
         // usually the setBinaryStream should close the input, but just in case ....
-        try { xInStream->closeInput(); } catch (stario::NotConnectedException& e) { e; }
+        try { xInStream->closeInput(); } catch (NotConnectedException& e) { e; }
     }
     else
     {
@@ -286,7 +295,7 @@ void OImageControlModel::_propertyChanged( const starbeans::PropertyChangeEvent&
             m_xColumnUpdate->updateNull();
         else
         {
-            staruno::Reference<stario::XInputStream> xInStream;
+            Reference<XInputStream> xInStream;
             GetImageProducer()->setImage( xInStream );
             m_xImageProducer->startProduction();
         }
@@ -295,7 +304,7 @@ void OImageControlModel::_propertyChanged( const starbeans::PropertyChangeEvent&
 }
 
 //------------------------------------------------------------------------------
-void OImageControlModel::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHandle) const
+void OImageControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
 {
     switch (nHandle)
     {
@@ -306,12 +315,12 @@ void OImageControlModel::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nH
 }
 
 //------------------------------------------------------------------------------
-void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const staruno::Any& rValue)
+void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
 {
     switch (nHandle)
     {
         case PROPERTY_ID_READONLY :
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == staruno::TypeClass_BOOLEAN, "OImageControlModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN, "OImageControlModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             m_bReadOnly = getBOOL(rValue);
             break;
 
@@ -321,8 +330,8 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OImageControlModel::convertFastPropertyValue(staruno::Any& rConvertedValue, staruno::Any& rOldValue, sal_Int32 nHandle, const staruno::Any& rValue)
-                                throw( starlang::IllegalArgumentException )
+sal_Bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
+                                throw( IllegalArgumentException )
 {
     switch (nHandle)
     {
@@ -335,19 +344,19 @@ sal_Bool OImageControlModel::convertFastPropertyValue(staruno::Any& rConvertedVa
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OImageControlModel::getPropertySetInfo() throw( staruno::RuntimeException )
+Reference<XPropertySetInfo> SAL_CALL OImageControlModel::getPropertySetInfo() throw( RuntimeException )
 {
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo(createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo>  xInfo(createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
 //------------------------------------------------------------------------------
 void OImageControlModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(9)
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_IMAGE_URL, starbeans::PropertyAttribute::TRANSIENT, 0);
+//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_IMAGE_URL, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP2(CLASSID,             sal_Int16,                  READONLY, TRANSIENT);
         DECL_BOOL_PROP1(READONLY,                                   BOUND);
@@ -355,8 +364,8 @@ void OImageControlModel::fillProperties(
         DECL_PROP1(TAG,                 ::rtl::OUString,            BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,            BOUND);
         DECL_PROP1(HELPTEXT,            ::rtl::OUString,            BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,    starbeans::XPropertySet,    READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  starbeans::XPropertySet,    BOUND, MAYBEVOID);
+        DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,   READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,   BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
@@ -374,7 +383,7 @@ void OImageControlModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-void OImageControlModel::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
+void OImageControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     // Basisklasse
     OBoundControlModel::write(_rxOutStream);
@@ -388,7 +397,7 @@ void OImageControlModel::write(const staruno::Reference<stario::XObjectOutputStr
 }
 
 //------------------------------------------------------------------------------
-void OImageControlModel::read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream)
+void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     OBoundControlModel::read(_rxInStream);
 
@@ -422,7 +431,7 @@ void OImageControlModel::read(const staruno::Reference<stario::XObjectInputStrea
     }
 }
 
-// starbeans::XPropertyChangeListener
+// XPropertyChangeListener
 //------------------------------------------------------------------------------
 void OImageControlModel::_onValueChanged()
 {
@@ -430,10 +439,10 @@ void OImageControlModel::_onValueChanged()
 }
 
 //------------------------------------------------------------------------------
-staruno::Any OImageControlModel::_getControlValue() const
+Any OImageControlModel::_getControlValue() const
 {
     // hier macht ein Vergleich keinen Sinn, daher void siehe OBoundControlModel
-    return staruno::Any();
+    return Any();
 }
 
 // OComponentHelper
@@ -442,11 +451,7 @@ void OImageControlModel::disposing()
 {
     OBoundControlModel::disposing();
 
-#if SUPD<583
-    XInputStreamRef  xInStream;
-#else
-    staruno::Reference<stario::XInputStream>  xInStream;
-#endif
+    Reference<XInputStream>  xInStream;
     GetImageProducer()->setImage( xInStream );
     m_xImageProducer->startProduction();
 }
@@ -454,13 +459,9 @@ void OImageControlModel::disposing()
 //------------------------------------------------------------------------------
 void OImageControlModel::_reset()
 {
-#if SUPD<583
-    XInputStreamRef  xDummy;
-#else
-    staruno::Reference<stario::XInputStream>  xDummy;
-#endif
+    Reference<XInputStream>  xDummy;
     GetImageProducer()->setImage(xDummy);
-    staruno::Reference<starawt::XImageProducer> xProducer = m_xImageProducer;
+    Reference<XImageProducer> xProducer = m_xImageProducer;
     {   // release our mutex once (it's acquired in the calling method !), as starting the image production may
         // result in the locking of the solar mutex (unfortunally the default implementation of our aggregate,
         // VCLXImageControl, does this locking)
@@ -474,19 +475,10 @@ void OImageControlModel::_reset()
 //------------------------------------------------------------------------------
 void OImageControlModel::UpdateFromField()
 {
-    staruno::Reference<stario::XInputStream>  xInStream;
+    Reference<XInputStream>  xInStream;
     xInStream = m_xColumn->getBinaryStream();
 
-#if SUPD<583
-    //------------------------------------------------------------
-    // temporary as long as the ImageProducer is a Smart-UNO-Class
-    XInputStreamRef xUsrIFace;
-    convertIFace(xInStream, xUsrIFace);
-    GetImageProducer()->setImage(xUsrIFace);
-    //------------------------------------------------------------
-#else
     GetImageProducer()->setImage(xInStream);
-#endif
 
     m_xImageProducer->startProduction();
 }
@@ -496,23 +488,23 @@ void OImageControlModel::UpdateFromField()
 //==================================================================
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OImageControlControl_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OImageControlControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OImageControlControl(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OImageControlControl::_getTypes()
+Sequence<Type> OImageControlControl::_getTypes()
 {
-    static staruno::Sequence<staruno::Type> aTypes;
+    static Sequence<Type> aTypes;
     if (!aTypes.getLength())
     {
         // my base class
-        staruno::Sequence<staruno::Type> aBaseClassTypes = OBoundControl::_getTypes();
+        Sequence<Type> aBaseClassTypes = OBoundControl::_getTypes();
 
-        staruno::Sequence<staruno::Type> aOwnTypes(1);
-        staruno::Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = getCppuType((staruno::Reference<starawt::XMouseListener>*)NULL);
+        Sequence<Type> aOwnTypes(1);
+        Type* pOwnTypes = aOwnTypes.getArray();
+        pOwnTypes[0] = getCppuType((Reference<XMouseListener>*)NULL);
 
         aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
     }
@@ -520,13 +512,13 @@ staruno::Sequence<staruno::Type> OImageControlControl::_getTypes()
 }
 
 //------------------------------------------------------------------------------
-OImageControlControl::OImageControlControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OImageControlControl::OImageControlControl(const Reference<XMultiServiceFactory>& _rxFactory)
                        :OBoundControl(_rxFactory, VCL_CONTROL_IMAGECONTROL)
 {
     increment(m_refCount);
     {
         // als Focus- und MouseListener anmelden
-        staruno::Reference<starawt::XWindow>  xComp;
+        Reference<XWindow>  xComp;
         query_aggregation( m_xAggregate, xComp);
         if (xComp.is())
             xComp->addMouseListener(this);
@@ -537,14 +529,12 @@ OImageControlControl::OImageControlControl(const staruno::Reference<starlang::XM
 
 // UNO Anbindung
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OImageControlControl::queryAggregation(const staruno::Type& _rType) throw (staruno::RuntimeException)
+Any SAL_CALL OImageControlControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    staruno::Any aReturn;
-
-    aReturn = OBoundControl::queryAggregation(_rType);
+    Any aReturn = OBoundControl::queryAggregation(_rType);
     if (!aReturn.hasValue())
         aReturn = ::cppu::queryInterface(_rType
-            ,static_cast<starawt::XMouseListener*>(this)
+            ,static_cast<XMouseListener*>(this)
         );
 
     return aReturn;
@@ -561,25 +551,25 @@ StringSequence  OImageControlControl::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-// starawt::XControl
+// XControl
 //------------------------------------------------------------------------------
-void SAL_CALL OImageControlControl::createPeer(const staruno::Reference<starawt::XToolkit>& _rxToolkit, const staruno::Reference<starawt::XWindowPeer>& Parent) throw( staruno::RuntimeException )
+void SAL_CALL OImageControlControl::createPeer(const Reference<XToolkit>& _rxToolkit, const Reference<XWindowPeer>& Parent) throw( RuntimeException )
 {
     OBoundControl::createPeer(_rxToolkit, Parent);
     if (!m_xControl.is())
         return;
 
     // ImageConsumer vom Control holen
-    staruno::Reference<starawt::XWindowPeer>  xPeer = m_xControl->getPeer();
-    staruno::Reference<starawt::XImageConsumer>  xImageConsumer(xPeer, staruno::UNO_QUERY);
+    Reference<XWindowPeer>  xPeer = m_xControl->getPeer();
+    Reference<XImageConsumer>  xImageConsumer(xPeer, UNO_QUERY);
     if (!xImageConsumer.is())
         return;
 
     // ImageConsumer am Imageproducer setzen
-    staruno::Reference<starform::XImageProducerSupplier>  xImageSource(m_xControl->getModel(), staruno::UNO_QUERY);
+    Reference<XImageProducerSupplier>  xImageSource(m_xControl->getModel(), UNO_QUERY);
     if (!xImageSource.is())
         return;
-    staruno::Reference<starawt::XImageProducer>  xImageProducer = xImageSource->getImageProducer();
+    Reference<XImageProducer>  xImageProducer = xImageSource->getImageProducer();
 
     xImageProducer->addConsumer(xImageConsumer);
     xImageProducer->startProduction();
@@ -587,11 +577,11 @@ void SAL_CALL OImageControlControl::createPeer(const staruno::Reference<starawt:
 
 // MouseListener
 //------------------------------------------------------------------------------
-void OImageControlControl::mousePressed(const starawt::MouseEvent& e)
+void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent& e)
 {
     //////////////////////////////////////////////////////////////////////
     // Nur linke Maustaste
-    if (e.Buttons != starawt::MouseButton::LEFT)
+    if (e.Buttons != MouseButton::LEFT)
         return;
 
     //////////////////////////////////////////////////////////////////////
@@ -599,14 +589,14 @@ void OImageControlControl::mousePressed(const starawt::MouseEvent& e)
     if (e.ClickCount == 2)
     {
 
-        staruno::Reference<starbeans::XPropertySet>  xSet(getModel(), staruno::UNO_QUERY);
+        Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
         if (!xSet.is())
             return;
 
         // wenn Control nicht gebunden ist, kein Dialog (da die zu schickende URL hinterher sowieso
         // versanden wuerde)
         // FS - #64946# - 19.04.99
-        staruno::Reference<starbeans::XPropertySet> xBoundField;
+        Reference<XPropertySet> xBoundField;
         if (hasProperty(PROPERTY_BOUNDFIELD, xSet))
             ::cppu::extractInterface(xBoundField, xSet->getPropertyValue(PROPERTY_BOUNDFIELD));
         if (!xBoundField.is())
@@ -624,39 +614,39 @@ void OImageControlControl::mousePressed(const starawt::MouseEvent& e)
 
         ::rtl::OUString sTitle = FRM_RES_STRING(RID_STR_IMPORT_GRAPHIC);
         // build some arguments for the upcoming dialog
-        staruno::Sequence<staruno::Any> aParams(4);
-        aParams.getArray()[0] = staruno::makeAny(starbeans::PropertyValue(
+        Sequence<Any> aParams(4);
+        aParams.getArray()[0] = makeAny(PropertyValue(
             ::rtl::OUString::createFromAscii("Title"), -1,
-            staruno::makeAny(sTitle), starbeans::PropertyState_DIRECT_VALUE
+            makeAny(sTitle), PropertyState_DIRECT_VALUE
         ));
-        aParams.getArray()[1] = staruno::makeAny(starbeans::PropertyValue(
+        aParams.getArray()[1] = makeAny(PropertyValue(
             ::rtl::OUString::createFromAscii("PreviewActive"), -1,
-            staruno::makeAny((sal_Bool)sal_True), starbeans::PropertyState_DIRECT_VALUE
+            makeAny((sal_Bool)sal_True), PropertyState_DIRECT_VALUE
         ));
-        aParams.getArray()[2] = staruno::makeAny(starbeans::PropertyValue(
+        aParams.getArray()[2] = makeAny(PropertyValue(
             ::rtl::OUString::createFromAscii("AllowEmptyFileNames"), -1,
-            staruno::makeAny((sal_Bool)sal_True), starbeans::PropertyState_DIRECT_VALUE
+            makeAny((sal_Bool)sal_True), PropertyState_DIRECT_VALUE
         ));
-        staruno::Reference<starawt::XWindow> xWindow(getPeer(), staruno::UNO_QUERY);
-        aParams.getArray()[3] = staruno::makeAny(starbeans::PropertyValue(
+        Reference<XWindow> xWindow(getPeer(), UNO_QUERY);
+        aParams.getArray()[3] = makeAny(PropertyValue(
             ::rtl::OUString::createFromAscii("ParentWindow"), -1,
-            staruno::makeAny(xWindow), starbeans::PropertyState_DIRECT_VALUE
+            makeAny(xWindow), PropertyState_DIRECT_VALUE
         ));
 
         try
         {
-            staruno::Reference<starawt::XDialog> xDialog(
+            Reference<XDialog> xDialog(
                 m_xServiceFactory->createInstanceWithArguments(
                     ::rtl::OUString::createFromAscii("com.sun.star.dialogs.ImportGraphicsDialog"),
                     aParams),
-                staruno::UNO_QUERY
+                UNO_QUERY
             );
 
-            staruno::Reference<starbeans::XPropertySet> xDialogProps(xDialog, staruno::UNO_QUERY);
+            Reference<XPropertySet> xDialogProps(xDialog, UNO_QUERY);
             if (xDialog.is() && xDialogProps.is() && xDialog->execute())
             {
-                staruno::Any aSelectedPath = xDialogProps->getPropertyValue(::rtl::OUString::createFromAscii("SelectedPath"));
-                if (aSelectedPath.getValueType().getTypeClass() == staruno::TypeClass_STRING)
+                Any aSelectedPath = xDialogProps->getPropertyValue(::rtl::OUString::createFromAscii("SelectedPath"));
+                if (aSelectedPath.getValueType().getTypeClass() == TypeClass_STRING)
                 {
                     xSet->setPropertyValue(PROPERTY_IMAGE_URL, ::com::sun::star::uno::makeAny(::rtl::OUString()));
                         // reset the url property in case it already has the value we're about to set - in this case
@@ -665,7 +655,7 @@ void OImageControlControl::mousePressed(const starawt::MouseEvent& e)
                 }
             }
         }
-        catch(...)
+        catch(Exception&)
         {
         }
     }

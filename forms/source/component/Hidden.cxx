@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Hidden.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,22 +78,33 @@
 //.........................................................................
 namespace frm
 {
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OHiddenModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (staruno::RuntimeException)
+InterfaceRef SAL_CALL OHiddenModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OHiddenModel(_rxFactory));
 }
 
 //------------------------------------------------------------------
-OHiddenModel::OHiddenModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OHiddenModel::OHiddenModel(const Reference<XMultiServiceFactory>& _rxFactory)
     :OControlModel(_rxFactory, ::rtl::OUString())
 {
-    m_nClassId = starform::FormComponentType::HIDDENCONTROL;
+    m_nClassId = FormComponentType::HIDDENCONTROL;
 }
 
 //------------------------------------------------------------------------------
-void OHiddenModel::getFastPropertyValue(staruno::Any& _rValue, sal_Int32 _nHandle) const
+void OHiddenModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
     switch (_nHandle)
     {
@@ -104,12 +115,12 @@ void OHiddenModel::getFastPropertyValue(staruno::Any& _rValue, sal_Int32 _nHandl
 }
 
 //------------------------------------------------------------------------------
-void OHiddenModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const staruno::Any& _rValue) throw (com::sun::star::uno::Exception)
+void OHiddenModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (com::sun::star::uno::Exception)
 {
     switch (_nHandle)
     {
         case PROPERTY_ID_HIDDEN_VALUE :
-            DBG_ASSERT(_rValue.getValueType().getTypeClass() == staruno::TypeClass_STRING, "OHiddenModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+            DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_STRING, "OHiddenModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_sHiddenValue;
             break;
         default:
@@ -119,8 +130,8 @@ void OHiddenModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const st
 
 //------------------------------------------------------------------------------
 sal_Bool OHiddenModel::convertFastPropertyValue(
-            staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, sal_Int32 _nHandle, const staruno::Any& _rValue)
-            throw (starlang::IllegalArgumentException)
+            Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
+            throw (IllegalArgumentException)
 {
     sal_Bool bModified(sal_False);
     switch (_nHandle)
@@ -136,9 +147,9 @@ sal_Bool OHiddenModel::convertFastPropertyValue(
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OHiddenModel::getPropertySetInfo() throw(staruno::RuntimeException)
+Reference<XPropertySetInfo> SAL_CALL OHiddenModel::getPropertySetInfo() throw(RuntimeException)
 {
-    staruno::Reference<starbeans::XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -150,8 +161,8 @@ cppu::IPropertyArrayHelper& OHiddenModel::getInfoHelper()
 
 //------------------------------------------------------------------------------
 void OHiddenModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     BEGIN_AGGREGATION_PROPERTY_HELPER(4, m_xAggregateSet)
         DECL_PROP2(CLASSID,         sal_Int16,          READONLY, TRANSIENT);
@@ -175,14 +186,14 @@ StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::su
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OHiddenModel::getServiceName() throw(staruno::RuntimeException)
+::rtl::OUString SAL_CALL OHiddenModel::getServiceName() throw(RuntimeException)
 {
     return FRM_COMPONENT_HIDDEN;    // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OHiddenModel::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
-    throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL OHiddenModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
+    throw(stario::IOException, RuntimeException)
 {
     // Version
     _rxOutStream->writeShort(0x0002);
@@ -194,7 +205,7 @@ void SAL_CALL OHiddenModel::write(const staruno::Reference<stario::XObjectOutput
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OHiddenModel::read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL OHiddenModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
 {
     // Version
     UINT16 nVersion = _rxInStream->readShort();

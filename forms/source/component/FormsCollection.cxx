@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormsCollection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,43 +80,40 @@
 namespace frm
 {
 //.........................................................................
-
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::container;
 //------------------------------------------------------------------
 DBG_NAME(OFormsCollection)
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OFormsCollection_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OFormsCollection_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OFormsCollection(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFormsCollection::getServiceName() throw(staruno::RuntimeException)
+::rtl::OUString SAL_CALL OFormsCollection::getServiceName() throw(RuntimeException)
 {
     return FRM_SUN_FORMS_COLLECTION;
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  ) throw(staruno::RuntimeException)
+Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  ) throw(RuntimeException)
 {
     return OImplementationIds::getImplementationId(getTypes());
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> SAL_CALL OFormsCollection::getTypes() throw(staruno::RuntimeException)
+Sequence<Type> SAL_CALL OFormsCollection::getTypes() throw(RuntimeException)
 {
-    staruno::Sequence<staruno::Type> aBaseTypes = OInterfaceContainer::getTypes();
-    staruno::Sequence<staruno::Type> aComponentTypes = FormsCollectionComponentBase::getTypes();
-
-    staruno::Sequence<staruno::Type> aOwnTypes(1);
-    aOwnTypes.getArray()[0] = ::getCppuType(static_cast<staruno::Reference<starcontainer::XChild>*>(NULL));
-
-    return concatSequences(aBaseTypes, aComponentTypes, aOwnTypes);
+    return concatSequences(OInterfaceContainer::getTypes(), FormsCollectionComponentBase::getTypes(), OFormsCollection_BASE::getTypes());
 }
 
 //------------------------------------------------------------------
-OFormsCollection::OFormsCollection(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OFormsCollection::OFormsCollection(const Reference<XMultiServiceFactory>& _rxFactory)
          :FormsCollectionComponentBase(m_aMutex)
-         ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<staruno::Reference<starform::XForm>*>(NULL)))
+         ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<Reference<XForm>*>(NULL)))
 {
     DBG_CTOR(OFormsCollection, NULL);
 }
@@ -133,33 +130,30 @@ OFormsCollection::~OFormsCollection()
 }
 
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OFormsCollection::queryAggregation(const staruno::Type& _rType) throw(staruno::RuntimeException)
+Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(RuntimeException)
 {
-    staruno::Any aReturn = ::cppu::queryInterface(
-        _rType,
-        static_cast<starcontainer::XChild*>(this),
-        static_cast<starlang::XServiceInfo*>(this)
-    );
-
+    Any aReturn = OFormsCollection_BASE::queryInterface(_rType);
     if (!aReturn.hasValue())
+    {
         aReturn = OInterfaceContainer::queryInterface(_rType);
 
-    if (!aReturn.hasValue())
-        aReturn = FormsCollectionComponentBase::queryAggregation(_rType);
+        if (!aReturn.hasValue())
+            aReturn = FormsCollectionComponentBase::queryAggregation(_rType);
+    }
 
     return aReturn;
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFormsCollection::getImplementationName() throw(staruno::RuntimeException)
+::rtl::OUString SAL_CALL OFormsCollection::getImplementationName() throw(RuntimeException)
 {
     return ::rtl::OUString::createFromAscii("com.sun.star.form.OFormsCollection");
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OFormsCollection::supportsService( const ::rtl::OUString& _rServiceName ) throw(staruno::RuntimeException)
+sal_Bool SAL_CALL OFormsCollection::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
 {
-    staruno::Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
+    Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
     const rtl::OUString* pSupported = aSupported.getConstArray();
     for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
         if (pSupported->equals(_rServiceName))
@@ -168,7 +162,7 @@ sal_Bool SAL_CALL OFormsCollection::supportsService( const ::rtl::OUString& _rSe
 }
 
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(staruno::RuntimeException)
+StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aReturn(2);
 
@@ -189,14 +183,14 @@ void OFormsCollection::disposing()
 
 //XChild
 //------------------------------------------------------------------------------
-void OFormsCollection::setParent(const InterfaceRef& Parent) throw( starlang::NoSupportException, staruno::RuntimeException )
+void OFormsCollection::setParent(const InterfaceRef& Parent) throw( NoSupportException, RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xParent = Parent;
 }
 
 //------------------------------------------------------------------------------
-InterfaceRef  OFormsCollection::getParent() throw( staruno::RuntimeException )
+InterfaceRef  OFormsCollection::getParent() throw( RuntimeException )
 {
     return m_xParent;
 }

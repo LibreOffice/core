@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,12 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
+#endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
 
 using namespace comphelper;
 
@@ -96,84 +102,80 @@ namespace frm
 {
 //.........................................................................
 
-    namespace starcontainer = ::com::sun::star::container;
-    namespace stario        = ::com::sun::star::io;
-
 //==================================================================
 // OGridColumn
 //==================================================================
-class OGridColumn
-            :public ::cppu::OComponentHelper
-            ,public OPropertySetAggregationHelper
-            ,public starcontainer::XChild
-            ,public starlang::XUnoTunnel
+typedef ::cppu::WeakAggComponentImplHelper2<    ::com::sun::star::container::XChild,
+                                                ::com::sun::star::lang::XUnoTunnel > OGridColumn_BASE;
+class OGridColumn :  public ::comphelper::OBaseMutex
+                    ,public OGridColumn_BASE
+                    ,public OPropertySetAggregationHelper
 {
 protected:
 // [properties]
-    staruno::Any                    m_aWidth;                   // Spaltenbreite
-    staruno::Any                    m_aAlign;
-    staruno::Any                    m_aHidden;                  // Spalte ist versteckt ?
+    ::com::sun::star::uno::Any                  m_aWidth;                   // Spaltenbreite
+    ::com::sun::star::uno::Any                  m_aAlign;
+    ::com::sun::star::uno::Any                  m_aHidden;                  // Spalte ist versteckt ?
 // [properties]
 
-    ::osl::Mutex                                    m_aMutex;
     InterfaceRef                                    m_xParent;
-    staruno::Reference<staruno::XAggregation>       m_xAggregate;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
     ::rtl::OUString                                 m_aModelName;
 
 // [properties]
-    ::rtl::OUString                 m_aLabel;                   // Name der Spalte
+    ::rtl::OUString                                 m_aLabel;                   // Name der Spalte
 
 // [properties]
 
 public:
-    OGridColumn(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sModelName = ::rtl::OUString());
+    OGridColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sModelName = ::rtl::OUString());
     virtual ~OGridColumn();
 
     // UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OComponentHelper);
-    virtual staruno::Any SAL_CALL queryAggregation( const staruno::Type& _rType ) throw (staruno::RuntimeException);
+    DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OGridColumn_BASE);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
 
-    static const staruno::Sequence<sal_Int8>& getUnoTunnelImplementationId();
+    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelImplementationId();
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const staruno::Sequence<sal_Int8>& _rIdentifier) throw(staruno::RuntimeException);
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<sal_Int8>& _rIdentifier) throw(::com::sun::star::uno::RuntimeException);
 
 // XTypeProvider
-    virtual staruno::Sequence<sal_Int8>         SAL_CALL getImplementationId() throw(staruno::RuntimeException);
-    virtual staruno::Sequence<staruno::Type>    SAL_CALL getTypes() throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
 
 // OComponentHelper
     virtual void SAL_CALL disposing();
 
-// starlang::XEventListener
-    virtual void SAL_CALL disposing(const starlang::EventObject& _rSource) throw(staruno::RuntimeException);
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
 
-// starcontainer::XChild
-    virtual InterfaceRef SAL_CALL getParent() throw(staruno::RuntimeException){return m_xParent;}
-    virtual void SAL_CALL setParent(const InterfaceRef& Parent) throw(starlang::NoSupportException, staruno::RuntimeException);
+// ::com::sun::star::container::XChild
+    virtual InterfaceRef SAL_CALL getParent() throw(::com::sun::star::uno::RuntimeException){return m_xParent;}
+    virtual void SAL_CALL setParent(const InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
-// stario::XPersistObject
-    virtual void SAL_CALL write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream);
-    virtual void SAL_CALL read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream);
+// ::com::sun::star::io::XPersistObject
+    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
+    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
 
-// starbeans::XPropertySet
-    virtual staruno::Reference<starbeans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(staruno::RuntimeException);
+// ::com::sun::star::beans::XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-    virtual void SAL_CALL getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHandle ) const;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(staruno::Any& rConvertedValue, staruno::Any& rOldValue,
-                                          sal_Int32 nHandle, const staruno::Any& rValue )
-                                        throw(starlang::IllegalArgumentException);
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const staruno::Any& rValue);
+    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
+                                          sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+                                        throw(::com::sun::star::lang::IllegalArgumentException);
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue);
 
-// starbeans::XPropertyState
-    virtual starbeans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
+// ::com::sun::star::beans::XPropertyState
+    virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
     virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle);
-    virtual staruno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
+    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
 
     const ::rtl::OUString& getModelName() const { return m_aModelName; }
 
 protected:
-    static void clearAggregateProperties(staruno::Sequence<starbeans::Property>& seqProps, sal_Bool bAllowDropDown);
-    static void setOwnProperties(staruno::Sequence<starbeans::Property>& seqProps);
+    static void clearAggregateProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps, sal_Bool bAllowDropDown);
+    static void setOwnProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps);
 };
 
 #define DECL_COLUMN(ClassName)                                      \
@@ -182,9 +184,9 @@ class ClassName                                                     \
     ,public OAggregationArrayUsageHelper< ClassName >               \
 {                                                                                   \
 public:                                                                             \
-    ClassName(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);\
+    ClassName(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);\
                                                                                     \
-    virtual staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(staruno::RuntimeException); \
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);  \
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();             \
     \
     virtual void fillProperties(    \
@@ -195,11 +197,11 @@ public:                                                                         
 
 
 #define IMPL_COLUMN(ClassName, Model, bAllowDropDown)                               \
-ClassName::ClassName(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)  \
+ClassName::ClassName(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory) \
     :OGridColumn(_rxFactory, Model){}                                           \
-staruno::Reference<starbeans::XPropertySetInfo>  ClassName::getPropertySetInfo() throw(staruno::RuntimeException)\
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  ClassName::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)\
 {                                                                                   \
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) ); \
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );    \
     return xInfo;                                                                   \
 }                                                                                   \
 ::cppu::IPropertyArrayHelper& ClassName::getInfoHelper()                \

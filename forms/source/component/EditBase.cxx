@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EditBase.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,17 @@
 //.........................................................................
 namespace frm
 {
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 const sal_uInt16 DEFAULT_LONG    =  0x0001;
 const sal_uInt16 DEFAULT_DOUBLE  =  0x0002;
@@ -94,7 +105,7 @@ const sal_uInt16 FILTERPROPOSAL  =  0x0004;
 
 //------------------------------------------------------------------
 OEditBaseModel::OEditBaseModel(
-            const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory,
+            const Reference<XMultiServiceFactory>& _rxFactory,
             const ::rtl::OUString& rUnoControlModelName,
             const ::rtl::OUString& rDefault )
      :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault )
@@ -104,9 +115,9 @@ OEditBaseModel::OEditBaseModel(
 {
 }
 
-// stario::XPersist
+// XPersist
 //------------------------------------------------------------------------------
-void OEditBaseModel::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
+void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     OBoundControlModel::write(_rxOutStream);
 
@@ -125,9 +136,9 @@ void OEditBaseModel::write(const staruno::Reference<stario::XObjectOutputStream>
 
     // Maskierung fuer any
     sal_uInt16 nAnyMask = 0;
-    if (m_aDefault.getValueType().getTypeClass() == staruno::TypeClass_LONG)
+    if (m_aDefault.getValueType().getTypeClass() == TypeClass_LONG)
         nAnyMask |= DEFAULT_LONG;
-    else if (m_aDefault.getValueType().getTypeClass() == staruno::TypeClass_DOUBLE)
+    else if (m_aDefault.getValueType().getTypeClass() == TypeClass_DOUBLE)
         nAnyMask |= DEFAULT_DOUBLE;
 
     if (m_bFilterProposal)  // da boolean, kein Wert speichern
@@ -164,7 +175,7 @@ sal_Int16 OEditBaseModel::getPersistenceFlags() const
 }
 
 //------------------------------------------------------------------------------
-void OEditBaseModel::read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream)
+void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     OBoundControlModel::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -219,11 +230,11 @@ void OEditBaseModel::defaultCommonEditProperties()
 }
 
 //------------------------------------------------------------------------------
-void OEditBaseModel::readCommonEditProperties(const staruno::Reference<stario::XObjectInputStream>& _rxInStream)
+void OEditBaseModel::readCommonEditProperties(const Reference<XObjectInputStream>& _rxInStream)
 {
     sal_Int32 nLen = _rxInStream->readLong();
 
-    staruno::Reference<stario::XMarkableStream>  xMark(_rxInStream, staruno::UNO_QUERY);
+    Reference<XMarkableStream>  xMark(_rxInStream, UNO_QUERY);
     DBG_ASSERT(xMark.is(), "OBoundControlModel::readCommonProperties : can only work with markable streams !");
     sal_Int32 nMark = xMark->createMark();
 
@@ -239,9 +250,9 @@ void OEditBaseModel::readCommonEditProperties(const staruno::Reference<stario::X
 }
 
 //------------------------------------------------------------------------------
-void OEditBaseModel::writeCommonEditProperties(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
+void OEditBaseModel::writeCommonEditProperties(const Reference<XObjectOutputStream>& _rxOutStream)
 {
-    staruno::Reference<stario::XMarkableStream>  xMark(_rxOutStream, staruno::UNO_QUERY);
+    Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
     DBG_ASSERT(xMark.is(), "OEditBaseModel::writeCommonProperties : can only work with markable streams !");
     sal_Int32 nMark = xMark->createMark();
 
@@ -263,7 +274,7 @@ void OEditBaseModel::writeCommonEditProperties(const staruno::Reference<stario::
 }
 
 //------------------------------------------------------------------------------
-void OEditBaseModel::getFastPropertyValue( staruno::Any& rValue, sal_Int32 nHandle ) const
+void OEditBaseModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     switch (nHandle)
     {
@@ -287,8 +298,8 @@ void OEditBaseModel::getFastPropertyValue( staruno::Any& rValue, sal_Int32 nHand
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OEditBaseModel::convertFastPropertyValue( staruno::Any& rConvertedValue, staruno::Any& rOldValue,
-                                            sal_Int32 nHandle, const staruno::Any& rValue ) throw( starlang::IllegalArgumentException )
+sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
+                                            sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException )
 {
     sal_Bool bModified(sal_False);
     switch (nHandle)
@@ -320,21 +331,21 @@ sal_Bool OEditBaseModel::convertFastPropertyValue( staruno::Any& rConvertedValue
 }
 
 //------------------------------------------------------------------------------
-void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const staruno::Any& rValue )
+void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
 {
     switch (nHandle)
     {
         case PROPERTY_ID_EMPTY_IS_NULL:
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == staruno::TypeClass_BOOLEAN, "invalid type" );
+            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN, "invalid type" );
             m_bEmptyIsNull = getBOOL(rValue);
             break;
         case PROPERTY_ID_FILTERPROPOSAL:
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == staruno::TypeClass_BOOLEAN, "invalid type" );
+            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN, "invalid type" );
             m_bFilterProposal = getBOOL(rValue);
             break;
         // Aenderung der defaultwerte fuehrt zu reset
         case PROPERTY_ID_DEFAULT_TEXT:
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == staruno::TypeClass_STRING, "invalid type" );
+            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "invalid type" );
             rValue >>= m_aDefaultText;
             _reset();
             break;
@@ -351,30 +362,30 @@ void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
 
 //XPropertyState
 //------------------------------------------------------------------------------
-starbeans::PropertyState OEditBaseModel::getPropertyStateByHandle(sal_Int32 nHandle)
+PropertyState OEditBaseModel::getPropertyStateByHandle(sal_Int32 nHandle)
 {
-    starbeans::PropertyState eState;
+    PropertyState eState;
     switch (nHandle)
     {
         case PROPERTY_ID_DEFAULT_TEXT:
             if (!m_aDefaultText.len())
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             else
-                eState = starbeans::PropertyState_DIRECT_VALUE;
+                eState = PropertyState_DIRECT_VALUE;
             break;
         case PROPERTY_ID_FILTERPROPOSAL:
             if (!m_bFilterProposal)
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             else
-                eState = starbeans::PropertyState_DIRECT_VALUE;
+                eState = PropertyState_DIRECT_VALUE;
             break;
         case PROPERTY_ID_DEFAULT_VALUE:
         case PROPERTY_ID_DEFAULT_DATE:
         case PROPERTY_ID_DEFAULT_TIME:
             if (!m_aDefault.hasValue())
-                eState = starbeans::PropertyState_DEFAULT_VALUE;
+                eState = PropertyState_DEFAULT_VALUE;
             else
-                eState = starbeans::PropertyState_DIRECT_VALUE;
+                eState = PropertyState_DIRECT_VALUE;
             break;
         default:
             eState = OBoundControlModel::getPropertyStateByHandle(nHandle);
@@ -388,15 +399,15 @@ void OEditBaseModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
     switch (nHandle)
     {
         case PROPERTY_ID_DEFAULT_TEXT:
-            setFastPropertyValue(nHandle, staruno::makeAny(::rtl::OUString()));
+            setFastPropertyValue(nHandle, makeAny(::rtl::OUString()));
             break;
         case PROPERTY_ID_FILTERPROPOSAL:
-            setFastPropertyValue(nHandle, staruno::makeAny((sal_Bool)sal_False));
+            setFastPropertyValue(nHandle, makeAny((sal_Bool)sal_False));
             break;
         case PROPERTY_ID_DEFAULT_VALUE:
         case PROPERTY_ID_DEFAULT_DATE:
         case PROPERTY_ID_DEFAULT_TIME:
-            setFastPropertyValue(nHandle, staruno::Any());
+            setFastPropertyValue(nHandle, Any());
             break;
         default:
             OBoundControlModel::setPropertyToDefaultByHandle(nHandle);
@@ -404,20 +415,20 @@ void OEditBaseModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 }
 
 //------------------------------------------------------------------------------
-staruno::Any OEditBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
+Any OEditBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
     switch (nHandle)
     {
         case PROPERTY_ID_DEFAULT_TEXT:
-            return staruno::makeAny(::rtl::OUString());
+            return makeAny(::rtl::OUString());
             break;
         case PROPERTY_ID_FILTERPROPOSAL:
-            return staruno::Any(staruno::makeAny((sal_Bool)sal_False));
+            return Any(makeAny((sal_Bool)sal_False));
             break;
         case PROPERTY_ID_DEFAULT_VALUE:
         case PROPERTY_ID_DEFAULT_DATE:
         case PROPERTY_ID_DEFAULT_TIME:
-            return staruno::Any();
+            return Any();
         default:
             return OBoundControlModel::getPropertyDefaultByHandle(nHandle);
     }

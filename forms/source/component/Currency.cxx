@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Currency.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:04 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,24 +74,35 @@
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //==================================================================
 // OCurrencyControl
 //==================================================================
 //------------------------------------------------------------------
-OCurrencyControl::OCurrencyControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OCurrencyControl::OCurrencyControl(const Reference<XMultiServiceFactory>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_CURRENCYFIELD)
 {
 }
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OCurrencyControl_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OCurrencyControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OCurrencyControl(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OCurrencyControl::_getTypes()
+Sequence<Type> OCurrencyControl::_getTypes()
 {
     return OBoundControl::_getTypes();
 }
@@ -113,23 +124,23 @@ StringSequence SAL_CALL OCurrencyControl::getSupportedServiceNames() throw()
 sal_Int32   OCurrencyModel::nValueHandle = -1;
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OCurrencyModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OCurrencyModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OCurrencyModel(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OCurrencyModel::_getTypes()
+Sequence<Type> OCurrencyModel::_getTypes()
 {
     return OEditBaseModel::_getTypes();
 }
 
 //------------------------------------------------------------------
-OCurrencyModel::OCurrencyModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OCurrencyModel::OCurrencyModel(const Reference<XMultiServiceFactory>& _rxFactory)
     :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_CONTROL_CURRENCYFIELD)
                                     // use the old control name for compytibility reasons
 {
-    m_nClassId = starform::FormComponentType::CURRENCYFIELD;
+    m_nClassId = FormComponentType::CURRENCYFIELD;
     m_sDataFieldConnectivityProperty = PROPERTY_VALUE;
     if (OCurrencyModel::nValueHandle == -1)
         OCurrencyModel::nValueHandle = getOriginalHandle(PROPERTY_ID_VALUE);
@@ -163,11 +174,11 @@ OCurrencyModel::OCurrencyModel(const staruno::Reference<starlang::XMultiServiceF
             }
             if (sCurrencySymbol.getLength())
             {
-                m_xAggregateSet->setPropertyValue(PROPERTY_CURRENCYSYMBOL, staruno::makeAny(sCurrencySymbol));
-                m_xAggregateSet->setPropertyValue(PROPERTY_CURRSYM_POSITION, staruno::makeAny(bPrependCurrencySymbol));
+                m_xAggregateSet->setPropertyValue(PROPERTY_CURRENCYSYMBOL, makeAny(sCurrencySymbol));
+                m_xAggregateSet->setPropertyValue(PROPERTY_CURRSYM_POSITION, makeAny(bPrependCurrencySymbol));
             }
         }
-        catch(...)
+        catch(Exception&)
         {
         }
     }
@@ -178,7 +189,7 @@ OCurrencyModel::~OCurrencyModel()
 {
 }
 
-// starlang::XServiceInfo
+// XServiceInfo
 //------------------------------------------------------------------------------
 StringSequence SAL_CALL OCurrencyModel::getSupportedServiceNames() throw()
 {
@@ -192,20 +203,20 @@ StringSequence SAL_CALL OCurrencyModel::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OCurrencyModel::getPropertySetInfo() throw( staruno::RuntimeException )
+Reference<XPropertySetInfo> SAL_CALL OCurrencyModel::getPropertySetInfo() throw( RuntimeException )
 {
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
 //------------------------------------------------------------------------------
 void OCurrencyModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(10)
         // Value auf transient setzen
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, starbeans::PropertyAttribute::TRANSIENT, 0);
+//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP2(CLASSID,     sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP3(DEFAULT_VALUE,       double,         BOUND, MAYBEDEFAULT, MAYBEVOID);
@@ -214,8 +225,8 @@ void OCurrencyModel::fillProperties(
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,            BOUND);
         DECL_PROP1(HELPTEXT,        ::rtl::OUString,            BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,        starbeans::XPropertySet,    READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,      starbeans::XPropertySet,    BOUND, MAYBEVOID);
+        DECL_IFACE_PROP2(BOUNDFIELD,        XPropertySet,   READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,   BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
@@ -232,14 +243,14 @@ void OCurrencyModel::fillProperties(
     return FRM_COMPONENT_CURRENCYFIELD; // old (non-sun) name for compatibility !
 }
 
-// starform::XBoundComponent
+// XBoundComponent
 //------------------------------------------------------------------------------
 sal_Bool OCurrencyModel::_commit()
 {
-    staruno::Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( OCurrencyModel::nValueHandle );
+    Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( OCurrencyModel::nValueHandle );
     if (!compare(aNewValue, m_aSaveValue))
     {
-        if (aNewValue.getValueType().getTypeClass() == staruno::TypeClass_VOID)
+        if (aNewValue.getValueType().getTypeClass() == TypeClass_VOID)
             m_xColumnUpdate->updateNull();
         else
         {
@@ -247,7 +258,7 @@ sal_Bool OCurrencyModel::_commit()
             {
                 m_xColumnUpdate->updateDouble(getDouble(aNewValue));
             }
-            catch(...)
+            catch(Exception&)
             {
                 return sal_False;
             }
@@ -272,12 +283,12 @@ void OCurrencyModel::_onValueChanged()
     }
 }
 
-// starform::XReset
+// XReset
 //------------------------------------------------------------------------------
 void OCurrencyModel::_reset( void )
 {
-    staruno::Any aValue;
-    if (m_aDefault.getValueType().getTypeClass() == staruno::TypeClass_DOUBLE)
+    Any aValue;
+    if (m_aDefault.getValueType().getTypeClass() == TypeClass_DOUBLE)
         aValue = m_aDefault;
 
     {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties

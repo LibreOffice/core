@@ -2,9 +2,9 @@
  *
  *  $RCSfile: File.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,25 +84,36 @@
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OFileControlModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OFileControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OFileControlModel(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OFileControlModel::_getTypes()
+Sequence<Type> OFileControlModel::_getTypes()
 {
-    static staruno::Sequence<staruno::Type> aTypes;
+    static Sequence<Type> aTypes;
     if (!aTypes.getLength())
     {
         // my base class
-        staruno::Sequence<staruno::Type> aBaseClassTypes = OControlModel::_getTypes();
+        Sequence<Type> aBaseClassTypes = OControlModel::_getTypes();
 
-        staruno::Sequence<staruno::Type> aOwnTypes(1);
-        staruno::Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = getCppuType((staruno::Reference<starform::XReset>*)NULL);
+        Sequence<Type> aOwnTypes(1);
+        Type* pOwnTypes = aOwnTypes.getArray();
+        pOwnTypes[0] = getCppuType((Reference<XReset>*)NULL);
 
         aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
     }
@@ -110,9 +121,9 @@ staruno::Sequence<staruno::Type> OFileControlModel::_getTypes()
 }
 
 
-// starlang::XServiceInfo
+// XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence  OFileControlModel::getSupportedServiceNames() throw(staruno::RuntimeException)
+StringSequence  OFileControlModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -123,11 +134,11 @@ StringSequence  OFileControlModel::getSupportedServiceNames() throw(staruno::Run
 }
 
 //------------------------------------------------------------------
-OFileControlModel::OFileControlModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OFileControlModel::OFileControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
                     :OControlModel(_rxFactory, VCL_CONTROLMODEL_FILECONTROL)
                     ,m_aResetListeners(m_aMutex)
 {
-    m_nClassId = starform::FormComponentType::FILECONTROL;
+    m_nClassId = FormComponentType::FILECONTROL;
 }
 
 //------------------------------------------------------------------
@@ -141,14 +152,12 @@ OFileControlModel::~OFileControlModel()
 }
 
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OFileControlModel::queryAggregation(const staruno::Type& _rType) throw (staruno::RuntimeException)
+Any SAL_CALL OFileControlModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    staruno::Any aReturn;
-
-    aReturn = OControlModel::queryAggregation(_rType);
+    Any aReturn = OControlModel::queryAggregation(_rType);
     if (!aReturn.hasValue())
         aReturn = ::cppu::queryInterface(_rType
-            ,static_cast<starform::XReset*>(this)
+            ,static_cast<XReset*>(this)
         );
 
     return aReturn;
@@ -160,12 +169,12 @@ void OFileControlModel::disposing()
 {
     OControlModel::disposing();
 
-    starlang::EventObject aEvt(static_cast<staruno::XWeak*>(this));
+    EventObject aEvt(static_cast<XWeak*>(this));
     m_aResetListeners.disposeAndClear(aEvt);
 }
 
 //------------------------------------------------------------------------------
-void OFileControlModel::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHandle) const
+void OFileControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
 {
     switch (nHandle)
     {
@@ -176,12 +185,12 @@ void OFileControlModel::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHa
 }
 
 //------------------------------------------------------------------------------
-void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const staruno::Any& rValue)
+void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
 {
     switch (nHandle)
     {
         case PROPERTY_ID_DEFAULT_TEXT :
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == staruno::TypeClass_STRING, "OFileControlModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "OFileControlModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             rValue >>= m_sDefaultValue;
             break;
         default:
@@ -190,8 +199,8 @@ void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OFileControlModel::convertFastPropertyValue(staruno::Any& rConvertedValue, staruno::Any& rOldValue, sal_Int32 nHandle, const staruno::Any& rValue)
-                            throw( starlang::IllegalArgumentException )
+sal_Bool OFileControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
+                            throw( IllegalArgumentException )
 {
     switch (nHandle)
     {
@@ -203,16 +212,16 @@ sal_Bool OFileControlModel::convertFastPropertyValue(staruno::Any& rConvertedVal
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL OFileControlModel::getPropertySetInfo() throw( staruno::RuntimeException )
+Reference<XPropertySetInfo> SAL_CALL OFileControlModel::getPropertySetInfo() throw( RuntimeException )
 {
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
 //------------------------------------------------------------------------------
 void OFileControlModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(6)
         DECL_PROP2(CLASSID,         sal_Int16,          READONLY, TRANSIENT);
@@ -223,7 +232,7 @@ void OFileControlModel::fillProperties(
         DECL_PROP1(HELPTEXT,        ::rtl::OUString,    BOUND);
 
         // in den agregierten Properties muss ich noch PROPERTY_ID_TEXT auf transient setzen ...
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, starbeans::PropertyAttribute::TRANSIENT, 0);
+//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, PropertyAttribute::TRANSIENT, 0);
     FRM_END_PROP_HELPER();
 }
 
@@ -240,7 +249,7 @@ void OFileControlModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-void OFileControlModel::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
+void OFileControlModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
 {
     OControlModel::write(_rxOutStream);
 
@@ -254,7 +263,7 @@ void OFileControlModel::write(const staruno::Reference<stario::XObjectOutputStre
 }
 
 //------------------------------------------------------------------------------
-void OFileControlModel::read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream)
+void OFileControlModel::read(const Reference<stario::XObjectInputStream>& _rxInStream)
 {
     OControlModel::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -283,10 +292,10 @@ void OFileControlModel::read(const staruno::Reference<stario::XObjectInputStream
 void SAL_CALL OFileControlModel::reset()
 {
     ::cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
-    starlang::EventObject aEvt(static_cast<staruno::XWeak*>(this));
+    EventObject aEvt(static_cast<XWeak*>(this));
     sal_Bool bContinue = sal_True;
     while (aIter.hasMoreElements() && bContinue)
-        bContinue =((starform::XResetListener*)aIter.next())->approveReset(aEvt);
+        bContinue =((XResetListener*)aIter.next())->approveReset(aEvt);
 
     if (bContinue)
     {
@@ -295,18 +304,18 @@ void SAL_CALL OFileControlModel::reset()
             ::osl::MutexGuard aGuard(m_aMutex);
             _reset();
         }
-        NOTIFY_LISTENERS(m_aResetListeners, starform::XResetListener, resetted, aEvt);
+        NOTIFY_LISTENERS(m_aResetListeners, XResetListener, resetted, aEvt);
     }
 }
 
 //-----------------------------------------------------------------------------
-void OFileControlModel::addResetListener(const staruno::Reference<starform::XResetListener>& _rxListener)
+void OFileControlModel::addResetListener(const Reference<XResetListener>& _rxListener)
 {
     m_aResetListeners.addInterface(_rxListener);
 }
 
 //-----------------------------------------------------------------------------
-void OFileControlModel::removeResetListener(const staruno::Reference<starform::XResetListener>& _rxListener)
+void OFileControlModel::removeResetListener(const Reference<XResetListener>& _rxListener)
 {
     m_aResetListeners.removeInterface(_rxListener);
 }
@@ -319,7 +328,7 @@ void OFileControlModel::_reset()
         // our own mutex locked
         // FS - 72451 - 31.01.00
         MutexRelease aRelease(m_aMutex);
-        m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, staruno::makeAny(m_sDefaultValue));
+        m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, makeAny(m_sDefaultValue));
     }
 }
 

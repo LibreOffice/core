@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:06 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,16 +82,27 @@
 //.........................................................................
 namespace frm
 {
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //==================================================================
 //------------------------------------------------------------------------------
-InterfaceRef SAL_CALL ORadioButtonControl_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (staruno::RuntimeException)
+InterfaceRef SAL_CALL ORadioButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new ORadioButtonControl(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+StringSequence SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -103,25 +114,25 @@ StringSequence SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(::
 
 
 //------------------------------------------------------------------
-ORadioButtonControl::ORadioButtonControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+ORadioButtonControl::ORadioButtonControl(const Reference<XMultiServiceFactory>& _rxFactory)
                       :OBoundControl(_rxFactory, VCL_CONTROL_RADIOBUTTON)
 {
 }
 
 //==================================================================
-InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (staruno::RuntimeException)
+InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new ORadioButtonModel(_rxFactory));
 }
 
 //------------------------------------------------------------------
-ORadioButtonModel::ORadioButtonModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+ORadioButtonModel::ORadioButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
                     :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_CONTROL_RADIOBUTTON, sal_False)
                                     // use the old control name for compytibility reasons
                     ,OPropertyChangeListener(m_aMutex)
                     ,m_bInReset(sal_False)
 {
-    m_nClassId = starform::FormComponentType::RADIOBUTTON;
+    m_nClassId = FormComponentType::RADIOBUTTON;
     m_nDefaultChecked = RB_NOCHECK;
     m_aLabelServiceName = FRM_SUN_COMPONENT_GROUPBOX;
     m_sDataFieldConnectivityProperty = PROPERTY_STATE;
@@ -138,7 +149,7 @@ ORadioButtonModel::ORadioButtonModel(const staruno::Reference<starlang::XMultiSe
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -150,7 +161,7 @@ StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(::co
 }
 
 //------------------------------------------------------------------------------
-void ORadioButtonModel::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHandle) const
+void ORadioButtonModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
 {
     switch (nHandle)
     {
@@ -162,21 +173,21 @@ void ORadioButtonModel::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHa
 }
 
 //------------------------------------------------------------------------------
-void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, const staruno::Any& rValue)
+void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, const Any& rValue)
 {
     // mein Name
     ::rtl::OUString sMyName(m_aName);
 
     // meine Siblings durchiterieren
-    staruno::Reference<starcontainer::XIndexAccess> xIndexAccess(getParent(), staruno::UNO_QUERY);
+    Reference<XIndexAccess> xIndexAccess(getParent(), UNO_QUERY);
     if (xIndexAccess.is())
     {
-        staruno::Reference<starbeans::XPropertySet> xMyProps;
-        query_interface(static_cast<staruno::XWeak*>(this), xMyProps);
+        Reference<XPropertySet> xMyProps;
+        query_interface(static_cast<XWeak*>(this), xMyProps);
         ::rtl::OUString sCurrentName;
         for (sal_Int32 i=0; i<xIndexAccess->getCount(); ++i)
         {
-            staruno::Reference<starbeans::XPropertySet> xSiblingProperties(*(InterfaceRef*)xIndexAccess->getByIndex(i).getValue(), staruno::UNO_QUERY);
+            Reference<XPropertySet> xSiblingProperties(*(InterfaceRef*)xIndexAccess->getByIndex(i).getValue(), UNO_QUERY);
             if (!xSiblingProperties.is())
                 continue;
             if (xMyProps == xSiblingProperties)
@@ -187,7 +198,7 @@ void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, cons
                 continue;
             sal_Int16 nType;
             xSiblingProperties->getPropertyValue(PROPERTY_CLASSID) >>= nType;
-            if (nType != starform::FormComponentType::RADIOBUTTON)
+            if (nType != FormComponentType::RADIOBUTTON)
                 continue;
 
             // das 'zur selben Gruppe gehoeren' wird am Namen festgemacht
@@ -199,17 +210,17 @@ void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, cons
 }
 
 //------------------------------------------------------------------------------
-void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const staruno::Any& rValue) throw (::com::sun::star::uno::Exception)
+void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw (Exception)
 {
     switch (nHandle)
     {
         case PROPERTY_ID_REFVALUE :
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == staruno::TypeClass_STRING, "ORadioButtonModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "ORadioButtonModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             rValue >>= m_sReferenceValue;
             break;
 
         case PROPERTY_ID_DEFAULTCHECKED :
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == staruno::TypeClass_SHORT, "ORadioButtonModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_SHORT, "ORadioButtonModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             rValue >>= (sal_Int16)m_nDefaultChecked;
             _reset();
             break;
@@ -235,17 +246,17 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
     if (nHandle == PROPERTY_ID_NAME)
     {
         // ... muss ich testen, ob ich Siblings mit dem selben Namen habe, damit ich deren ControlSource uebernehmen kann
-        staruno::Reference<starcontainer::XIndexAccess> xIndexAccess(getParent(), staruno::UNO_QUERY);
+        Reference<XIndexAccess> xIndexAccess(getParent(), UNO_QUERY);
         if (xIndexAccess.is())
         {
             ::rtl::OUString         sName;
             ::rtl::OUString         sControlSource;
 
-            staruno::Reference<starbeans::XPropertySet> xMyProps;
-            query_interface(static_cast<staruno::XWeak*>(this), xMyProps);
+            Reference<XPropertySet> xMyProps;
+            query_interface(static_cast<XWeak*>(this), xMyProps);
             for (sal_Int32 i=0; i<xIndexAccess->getCount(); ++i)
             {
-                staruno::Reference<starbeans::XPropertySet> xSiblingProperties(*(InterfaceRef*)xIndexAccess->getByIndex(i).getValue(), staruno::UNO_QUERY);
+                Reference<XPropertySet> xSiblingProperties(*(InterfaceRef*)xIndexAccess->getByIndex(i).getValue(), UNO_QUERY);
                 if (!xSiblingProperties.is())
                     continue;
 
@@ -255,7 +266,7 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
 
                 sal_Int16 nType;
                 xSiblingProperties->getPropertyValue(PROPERTY_CLASSID) >>= nType;
-                if (nType != starform::FormComponentType::RADIOBUTTON)
+                if (nType != FormComponentType::RADIOBUTTON)
                     // nur Radio-Buttons
                     continue;
 
@@ -277,7 +288,7 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
         if (1 == nValue)
         {   // bei allen Radios der selben Gruppe das 'default checked' ruecksetzen, denn wie schon der highlander wusste :
             // es kann nur einen geben.
-            staruno::Any aZero;
+            Any aZero;
             nValue = 0;
             aZero <<= nValue;
             SetSiblingPropsTo(PROPERTY_DEFAULTCHECKED, aZero);
@@ -287,8 +298,8 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
 
 //------------------------------------------------------------------------------
 sal_Bool ORadioButtonModel::convertFastPropertyValue(
-            staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, sal_Int32 _nHandle, const staruno::Any& _rValue)
-            throw (starlang::IllegalArgumentException)
+            Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
+            throw (IllegalArgumentException)
 {
     sal_Bool bModified(sal_False);
     switch (_nHandle)
@@ -307,9 +318,9 @@ sal_Bool ORadioButtonModel::convertFastPropertyValue(
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL ORadioButtonModel::getPropertySetInfo() throw(staruno::RuntimeException)
+Reference<XPropertySetInfo> SAL_CALL ORadioButtonModel::getPropertySetInfo() throw(RuntimeException)
 {
-    staruno::Reference<starbeans::XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -321,12 +332,12 @@ cppu::IPropertyArrayHelper& ORadioButtonModel::getInfoHelper()
 
 //------------------------------------------------------------------------------
 void ORadioButtonModel::fillProperties(
-        staruno::Sequence< starbeans::Property >& _rProps,
-        staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
+        Sequence< Property >& _rProps,
+        Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(11)
         // the "State" property is transient, so change this
-        //  ModifyPropertyAttributes(_rAggregateProps, PROPERTY_STATE, starbeans::PropertyAttribute::TRANSIENT, 0);
+        //  ModifyPropertyAttributes(_rAggregateProps, PROPERTY_STATE, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP2(CLASSID,             sal_Int16,                  READONLY, TRANSIENT);
         DECL_PROP1(REFVALUE,            ::rtl::OUString,            BOUND);
@@ -336,21 +347,21 @@ void ORadioButtonModel::fillProperties(
         DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
         DECL_PROP1(CONTROLSOURCE,       rtl::OUString,              BOUND);
         DECL_PROP1(HELPTEXT,            rtl::OUString,              BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,    starbeans::XPropertySet,    READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  starbeans::XPropertySet,    BOUND, MAYBEVOID);
+        DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,   READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,   BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ORadioButtonModel::getServiceName() throw(staruno::RuntimeException)
+::rtl::OUString SAL_CALL ORadioButtonModel::getServiceName() throw(RuntimeException)
 {
     return FRM_COMPONENT_RADIOBUTTON;   // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL ORadioButtonModel::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
-    throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL ORadioButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+    throw(IOException, RuntimeException)
 {
     OBoundControlModel::write(_rxOutStream);
 
@@ -367,7 +378,7 @@ void SAL_CALL ORadioButtonModel::write(const staruno::Reference<stario::XObjectO
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL ORadioButtonModel::read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
 {
     OBoundControlModel::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -403,7 +414,7 @@ void SAL_CALL ORadioButtonModel::read(const staruno::Reference<stario::XObjectIn
 }
 
 //------------------------------------------------------------------------------
-void ORadioButtonModel::_propertyChanged(const starbeans::PropertyChangeEvent& _rEvent) throw(staruno::RuntimeException)
+void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(RuntimeException)
 {
     if (_rEvent.PropertyName.equals(PROPERTY_STATE))
     {
@@ -411,7 +422,7 @@ void ORadioButtonModel::_propertyChanged(const starbeans::PropertyChangeEvent& _
         {
             // wenn sich mein Status auf 'checked' geaendert hat, muss ich alle meine Siblings, die in der selben Gruppe
             // sind wie ich, entsprechend zuruecksetzen
-            staruno::Any aZero;
+            Any aZero;
             aZero <<= (sal_Int16)0;
 
             SetSiblingPropsTo(PROPERTY_STATE, aZero);
@@ -420,7 +431,7 @@ void ORadioButtonModel::_propertyChanged(const starbeans::PropertyChangeEvent& _
             // as we aren't commitable we have to take care of the field we are bound to ourself
             if (m_xField.is() && !m_bInReset)
             {
-                m_xField->setPropertyValue(PROPERTY_VALUE, staruno::makeAny(m_sReferenceValue));
+                m_xField->setPropertyValue(PROPERTY_VALUE, makeAny(m_sReferenceValue));
             }
         }
     }
@@ -429,7 +440,7 @@ void ORadioButtonModel::_propertyChanged(const starbeans::PropertyChangeEvent& _
 //------------------------------------------------------------------------------
 void ORadioButtonModel::_onValueChanged()
 {
-    staruno::Any aValue;
+    Any aValue;
     aValue <<= (sal_Int16)((m_xColumn->getString() == m_sReferenceValue) ? RB_CHECK : RB_NOCHECK);
     m_bInReset = sal_True;
     {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
@@ -443,13 +454,13 @@ void ORadioButtonModel::_onValueChanged()
 }
 
 //------------------------------------------------------------------------------
-staruno::Any ORadioButtonModel::_getControlValue() const
+Any ORadioButtonModel::_getControlValue() const
 {
     return m_xAggregateSet->getPropertyValue(PROPERTY_STATE);
 }
 
 //------------------------------------------------------------------------------
-sal_Int16 ORadioButtonModel::getState( const staruno::Any& rValue )
+sal_Int16 ORadioButtonModel::getState( const Any& rValue )
 {
     //::rtl::OUString aStrValue = DBTypeConversion::toString( rValue );
     return RB_NOCHECK;
@@ -458,7 +469,7 @@ sal_Int16 ORadioButtonModel::getState( const staruno::Any& rValue )
 //------------------------------------------------------------------------------
 void ORadioButtonModel::_reset( void )
 {
-    staruno::Any aValue;
+    Any aValue;
     aValue <<= (sal_Int16)m_nDefaultChecked;
     {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
         // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
@@ -486,9 +497,9 @@ sal_Bool ORadioButtonModel::_commit()
             sal_Int16 nValue;
             m_xAggregateSet->getPropertyValue(PROPERTY_STATE) >>= nValue;
             if (nValue == 1)
-                m_xField->setPropertyValue(PROPERTY_VALUE, staruno::makeAny(m_sReferenceValue));
+                m_xField->setPropertyValue(PROPERTY_VALUE, makeAny(m_sReferenceValue));
         }
-        catch(...)
+        catch(Exception&)
         {
             DBG_ERROR("ORadioButtonModel::_commit : could not commit !");
         }
@@ -497,7 +508,7 @@ sal_Bool ORadioButtonModel::_commit()
 }
 
 //-----------------------------------------------------------------------------
-void ORadioButtonModel::reset(void) throw (::com::sun::star::uno::RuntimeException)
+void ORadioButtonModel::reset(void) throw (RuntimeException)
 {
     m_bInReset = sal_True;
     OBoundControlModel::reset();
