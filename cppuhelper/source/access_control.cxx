@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_control.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-14 13:19:51 $
+ *  last change: $Author: dbo $ $Date: 2001-12-14 14:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
-#define AC_RESTRICTION "ac-restriction"
+#define AC_RESTRICTION "access-control.restriction"
 #define AC_SERVICE "com.sun.star.security.AccessController"
 
 
@@ -184,7 +184,7 @@ Any acc_CurrentContext::getValueByName( OUString const & name )
 }
 
 //--------------------------------------------------------------------------------------------------
-static inline Reference< security::XAccessControlContext > getCurrentRestriction(
+Reference< security::XAccessControlContext > ac_defimpl_getRestriction(
     Reference< XCurrentContext > const & xContext )
     SAL_THROW( (RuntimeException) )
 {
@@ -211,14 +211,6 @@ static inline Reference< security::XAccessControlContext > getCurrentRestriction
     return Reference< security::XAccessControlContext >();
 }
 //==================================================================================================
-Reference< security::XAccessControlContext > SAL_CALL ac_defimpl_getCurrentRestriction()
-    SAL_THROW( () )
-{
-    Reference< XCurrentContext > xContext;
-    ::uno_getCurrentContext( (void **)&xContext, str_envType.pData, 0 );
-    return getCurrentRestriction( xContext );
-}
-//==================================================================================================
 struct __cc_reset
 {
     void * m_cc;
@@ -230,30 +222,29 @@ struct __cc_reset
 //==================================================================================================
 Any SAL_CALL ac_defimpl_doRestricted(
     Reference< security::XAction > const & xAction,
-    Reference< security::XAccessControlContext > const & xRestriction )
+    Reference< security::XAccessControlContext > const & xRestriction,
+    Reference< XCurrentContext > const & xContext )
     SAL_THROW( (Exception) )
 {
     if (xRestriction.is())
     {
-        Reference< XCurrentContext > xOldContext;
-        ::uno_getCurrentContext( (void **)&xOldContext, str_envType.pData, 0 );
         Reference< security::XAccessControlContext > xOldRestr(
-            getCurrentRestriction( xOldContext ) );
+            ac_defimpl_getRestriction( xContext ) );
 
         if (xOldRestr.is())
         {
             Reference< XCurrentContext > xNewContext( new acc_CurrentContext(
-                xOldContext, new acc_Combiner( xRestriction, xOldRestr ) ) );
+                xContext, new acc_Combiner( xRestriction, xOldRestr ) ) );
             ::uno_setCurrentContext( xNewContext.get(), str_envType.pData, 0 );
         }
         else
         {
             Reference< XCurrentContext > xNewContext( new acc_CurrentContext(
-                xOldContext, xRestriction ) );
+                xContext, xRestriction ) );
             ::uno_setCurrentContext( xNewContext.get(), str_envType.pData, 0 );
         }
 
-        __cc_reset reset( xOldContext.get() );
+        __cc_reset reset( xContext.get() );
         return xAction->run();
     }
     else
@@ -264,18 +255,16 @@ Any SAL_CALL ac_defimpl_doRestricted(
 //==================================================================================================
 Any SAL_CALL ac_defimpl_doPrivileged(
     Reference< security::XAction > const & xAction,
-    Reference< security::XAccessControlContext > const & xRestriction )
+    Reference< security::XAccessControlContext > const & xRestriction,
+    Reference< XCurrentContext > const & xContext )
     SAL_THROW( (Exception) )
 {
-    Reference< XCurrentContext > xOldContext;
-    ::uno_getCurrentContext( (void **)&xOldContext, str_envType.pData, 0 );
-
     // override AC_RESTRICTION
-    Reference< XCurrentContext > xContext( new acc_CurrentContext(
-        xOldContext, xRestriction ) );
-    ::uno_setCurrentContext( xContext.get(), str_envType.pData, 0 );
+    Reference< XCurrentContext > xNewContext( new acc_CurrentContext(
+        xContext, xRestriction ) );
+    ::uno_setCurrentContext( xNewContext.get(), str_envType.pData, 0 );
 
-    __cc_reset reset( xOldContext.get() );
+    __cc_reset reset( xContext.get() );
     return xAction->run();
 }
 
@@ -310,7 +299,9 @@ void DefaultAccessController::checkPermission(
     throw (RuntimeException)
 {
     // only dynamic checks of ac contexts, no static checks concerning credentials
-    Reference< security::XAccessControlContext > xACC( ac_defimpl_getCurrentRestriction() );
+    Reference< XCurrentContext > xContext;
+    ::uno_getCurrentContext( (void **)&xContext, str_envType.pData, 0 );
+    Reference< security::XAccessControlContext > xACC( ac_defimpl_getRestriction( xContext ) );
     if (xACC.is())
     {
         xACC->checkPermission( perm );
@@ -322,7 +313,9 @@ Any DefaultAccessController::doRestricted(
     Reference< security::XAccessControlContext > const & xRestriction )
     throw (Exception)
 {
-    return ac_defimpl_doRestricted( xAction, xRestriction );
+    Reference< XCurrentContext > xContext;
+    ::uno_getCurrentContext( (void **)&xContext, str_envType.pData, 0 );
+    return ac_defimpl_doRestricted( xAction, xRestriction, xContext );
 }
 //__________________________________________________________________________________________________
 Any DefaultAccessController::doPrivileged(
@@ -330,13 +323,17 @@ Any DefaultAccessController::doPrivileged(
     Reference< security::XAccessControlContext > const & xRestriction )
     throw (Exception)
 {
-    return ac_defimpl_doPrivileged( xAction, xRestriction );
+    Reference< XCurrentContext > xContext;
+    ::uno_getCurrentContext( (void **)&xContext, str_envType.pData, 0 );
+    return ac_defimpl_doPrivileged( xAction, xRestriction, xContext );
 }
 //__________________________________________________________________________________________________
 Reference< security::XAccessControlContext > DefaultAccessController::getContext()
     throw (RuntimeException)
 {
-    return ac_defimpl_getCurrentRestriction();
+    Reference< XCurrentContext > xContext;
+    ::uno_getCurrentContext( (void **)&xContext, str_envType.pData, 0 );
+    return ac_defimpl_getRestriction( xContext );
 }
 
 //--------------------------------------------------------------------------------------------------
