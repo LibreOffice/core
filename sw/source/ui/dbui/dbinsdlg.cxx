@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-26 08:19:00 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,13 +376,7 @@ struct _DB_ColumnConfigData
         bIsField = bIsEmptyHeadln = FALSE;
     }
 
-//  _DB_ColumnConfigData( SvStream& rStream, UINT16 nVers );
-
     ~_DB_ColumnConfigData();
-
-//  void Save( SvStream& rStream ) const;
-
-    BOOL IsEqualDB( const _DB_ColumnConfigData& ) const;
 private:
     _DB_ColumnConfigData( const _DB_ColumnConfigData& );
     _DB_ColumnConfigData& operator =( const _DB_ColumnConfigData& );
@@ -1657,33 +1651,6 @@ void SwInsertDBColAutoPilot::SetTabSet()
 
 
 _DB_ColumnConfigData::~_DB_ColumnConfigData() {}
-
-BOOL _DB_ColumnConfigData::IsEqualDB( const _DB_ColumnConfigData& rCmp ) const
-{
-    // teste, ob die Daten von der gleiche Databanktabelle kommen und
-    // ob sie noch die gleichen Werte enthaelt.
-    BOOL bRet = FALSE;
-    if( sSource == rCmp.sSource &&
-        sTable == rCmp.sTable &&
-        aDBColumns.Count() == rCmp.aDBColumns.Count() )
-    {
-        bRet = TRUE;
-        for( USHORT n = aDBColumns.Count(); n; )
-        {
-            --n;
-            const SwInsDBColumn& rCmp1 = *aDBColumns[ n ];
-            const SwInsDBColumn& rCmp2 = *rCmp.aDBColumns[ n ];
-            if( rCmp1.sColumn != rCmp2.sColumn ||
-                rCmp1.nCol != rCmp2.nCol ||
-                rCmp1.bHasFmt != rCmp2.bHasFmt )
-            {
-                bRet = FALSE;
-                break;
-            }
-        }
-    }
-    return bRet;
-}
 
 /* -----------------------------05.12.00 16:15--------------------------------
 
