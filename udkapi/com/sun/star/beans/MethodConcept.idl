@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodConcept.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:34:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,12 @@
 
     <p>This list is not necessarily complete; new constants
     may be added.</p>
-
     @see Introspection
     @see XIntrospection
     @see XIntrospectionAccess
 
 */
-constants MethodConcept
+published constants MethodConcept
 {
     //-------------------------------------------------------------------------
     /** This value is used to query for all methods, see
