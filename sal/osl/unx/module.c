@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ int dladdr(void *address, Dl_info *dl)
 
 #include "system.h"
 
-#if defined(DEBUG)
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -205,7 +205,7 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
 
         if (!pLib) {
                 // Still couldn't find it - give up
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 // fixme use NSLinkEditError() to get a better error message
                 fprintf( stderr,
                          "osl_loadModule: cannot load module %s for reason: %s\n",
@@ -216,7 +216,7 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
 
         pModule = (oslModule)malloc( sizeof( struct _oslModule ) );
         if (!pModule) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr,
                          "osl_loadModule: cannot load module %s for reason: %s\n",
                          pszModuleName, "out of memory!" );
@@ -264,7 +264,7 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
     {
 #ifndef NO_DL_FUNCTIONS
         void* pLib = dlopen(pszModuleName, rtld_mode );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if( ! pLib )
             fprintf( stderr, "osl_loadModule: cannot load module %s for reason: %s\n",
                      pszModuleName, dlerror() );
@@ -304,12 +304,12 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
         int nRet = 0;
 
         nRet = dlclose(hModule);
-#if defined(DEBUG)
+#if OSL_DEBUG_LEVEL > 1
         if ( nRet != 0 )
         {
             fprintf( stderr, "osl_getsymbol: cannot close lib for reason: %s\n", dlerror() );
         }
-#endif /* if DEBUG */
+#endif /* if OSL_DEBUG_LEVEL */
 #endif /* ifndef GCC */
 
 #endif /* ifndef NO_DL_FUNCTIONS */
@@ -395,7 +395,7 @@ void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolNam
 
         pSym = dlsym(hModule, pszSymbolName);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if( ! pSym )
             fprintf( stderr, "osl_getsymbol: cannot get Symbol %s for reason: %s\n",
                      pszSymbolName, dlerror() );
@@ -468,7 +468,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
             /* Bad index was passed to _dyld_get_image_header() or the image
              * doesn't exist.
              */
-            #ifdef DEBUG
+            #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "osl_getModuleURLFromAddress(): bad index passed to _dyld_get_image_header(), mach_header returned was NULL.\n" );
             #endif
             result = sal_False;
@@ -480,7 +480,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
 
         osl_getProcessWorkingDir( &workDir );
 
-    #ifdef DEBUG
+    #if OSL_DEBUG_LEVEL > 1
         OSL_TRACE( "module.c::osl_getModuleURLFromAddress - %s\n", imageName );
     #endif
         rtl_string2UString( ppLibraryUrl, imageName, strlen(imageName), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
@@ -496,7 +496,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
         rtl_uString * workDir = NULL;
         osl_getProcessWorkingDir(&workDir);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s\n", dl_info.dli_fname);
 #endif
 
