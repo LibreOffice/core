@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestImport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:31:15 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,14 +68,13 @@
 #ifndef _COM_SUN_STAR_XML_SAX_XDUCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <vector>
 #include <stack>
+
+namespace com { namespace sun { namespace star {
+    namespace xml { namespace sax { class XAttributeList; } }
+    namespace beans { struct PropertyValue; }
+} } }
 
 enum ElementNames
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestImport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:31:48 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,13 @@
 #ifndef _BASE64_CODEC_HXX_
 #include <Base64Codec.hxx>
 #endif
+#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
+#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestExport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:09:35 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,16 +62,17 @@
 #ifndef _MANIFEST_EXPORT_HXX
 #define _MANIFEST_EXPORT_HXX
 
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HXX
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_BEANS_PROPERTYVALUE_HPP
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
 
+namespace com { namespace sun { namespace star {
+    namespace beans { struct PropertyValue;}
+    namespace xml { namespace sax { class XDocumentHandler; } }
+} } }
 class ManifestExport
 {
 public:

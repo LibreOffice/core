@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:30:40 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,15 @@
 #endif
 #ifndef _BASE64_CODEC_HXX_
 #include <Base64Codec.hxx>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HXX
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_BEANS_PROPERTYVALUE_HPP
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
 using namespace rtl;
