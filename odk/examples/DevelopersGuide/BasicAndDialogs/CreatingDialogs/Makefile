@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:20:09 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:04:14 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,15 +48,16 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-OUT_COMP_CLASS = $(OUT_CLASS)/BaDCreatingDialogsExample
+EXAMPLE_NAME=BaDCreatingDialogsExample
+OUT_COMP_CLASS = $(OUT_CLASS)/$(EXAMPLE_NAME)
 
 COMPONENT_NAME=SampleDialog
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).uno.zip
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).uno.zip")
+COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOPKG_EXT)
+COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOPKG_EXT)")
 COMPONENT_JAR_NAME = $(COMPONENT_NAME).uno.jar
 COMPONENT_JAR = $(OUT_CLASS)/$(COMPONENT_JAR_NAME)
 COMPONENT_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
-
+COMPONENT_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT_NAME)/META-INF/manifest.xml
 REGISTERFLAG = $(OUT_MISC)/devguide_basicanddialogs_creatingdialogs_register_component.flag
 
 # often the java files are structured in a hierarchy similar to the package, 
@@ -76,7 +77,7 @@ SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLA
 
 # Targets
 .PHONY: ALL
-ALL : CreatingDialogsExample
+ALL: $(EXAMPLE_NAME)
 
 include $(SETTINGS)/stdtarget.mk
 
@@ -88,19 +89,33 @@ $(OUT_COMP_CLASS)/%.class : %.java
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $<
 
+# rule for component jar file
 $(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_JAR) cvfm $@ $< -C $(OUT_COMP_CLASS) .
 
-$(COMPONENT_PACKAGE) : $(COMPONENT_JAR)
+# rule for component package manifest
+$(OUT_COMP_CLASS)/%/manifest.xml :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_JAR) cvfM ../bin/$(@F) $(<F)
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
+	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
+# rule for component package file
+$(COMPONENT_PACKAGE) : $(COMPONENT_JAR) $(COMPONENT_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_ZIP) ../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
 	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
@@ -111,16 +126,20 @@ else
 	@echo --------------------------------------------------------------------------------
 endif
 
-CreatingDialogsExample : $(REGISTERFLAG)
+$(EXAMPLE_NAME) : $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 	@echo The SampleDialog Java component was installed if SDK_AUTO_DEPLOYMENT = YES.
-	@echo Please load the "$(QM)CreatingDialogs.sxw$(QM)" document to use the component or use it
+	@echo Please load the "$(QM)CreatingDialogs.odt$(QM)" document to use the component or use it
 	@echo by yourself in your office installation, see the example description.
+	@echo -
+	@echo make CreatingDialogs.odt.load
 	@echo --------------------------------------------------------------------------------
+
+CreatingDialogs.odt.load : $(REGISTERFLAG)
+	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(basename $@)
 
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
