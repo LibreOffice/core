@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HStorageAccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:39:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include "hsqldb/HStorageMap.hxx"
 #include "hsqldb/StorageNativeInputStream.h"
 
+
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::embed;
@@ -94,6 +95,15 @@ using namespace ::connectivity::hsqldb;
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_openStream
   (JNIEnv * env, jobject obj_this,jstring name, jstring key, jint mode)
 {
+#if OSL_DEBUG_LEVEL > 1
+    {
+        ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+        sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"));
+        ::rtl::OString sName = ::rtl::OUStringToOString(sOrgName,RTL_TEXTENCODING_ASCII_US);
+        getStreams()[sOrgName] = fopen( sName.getStr(), "a+" );
+    }
+#endif
+
     StorageContainer::registerStream(env,name,key,mode);
 }
 // -----------------------------------------------------------------------------
@@ -105,6 +115,24 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_o
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_close
   (JNIEnv * env, jobject obj_this,jstring name, jstring key)
 {
+    ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
+    Reference< XOutputStream> xFlush = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
+    if ( xFlush.is() )
+        try
+        {
+            xFlush->flush();
+        }
+        catch(Exception&)
+        {}
+#if OSL_DEBUG_LEVEL > 1
+    {
+        ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+        sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"));
+        fclose( getStreams()[sOrgName] );
+        getStreams().erase(sOrgName);
+    }
+#endif
+
     StorageContainer::revokeStream(env,name,key);
 }
 // -----------------------------------------------------------------------------
@@ -145,19 +173,41 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
   (JNIEnv * env, jobject obj_this,jstring name, jstring key)
 {
     ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
-    OSL_ENSURE(pHelper.get(),"No stream helper!");
-    if ( pHelper.get() )
+    Reference< XInputStream> xIn = pHelper.get() ? pHelper->getInputStream() : Reference< XInputStream>();
+    OSL_ENSURE(xIn.is(),"Input stream is NULL!");
+    if ( xIn.is() )
     {
-        Sequence< ::sal_Int8 > aData(1);
-        sal_Int32 nBytesRead = pHelper->getInputStream()->readBytes(aData,1);
-        if (nBytesRead <= 0) {
-            return (-1);
-        } else {
-            sal_Int32 tmpInt = aData[0];
-            if (tmpInt < 0 ){
-                tmpInt = 256 +tmpInt;
+        sal_Bool bRead = sal_False;
+        Reference< XSeekable> xSeek = pHelper->getSeek();
+        if ( xSeek.is() )
+        {
+            sal_Int64 nStreamLen = xSeek->getLength();
+            sal_Int64 nPos = xSeek->getPosition();
+            bRead = (nPos + 1) <= nStreamLen;
+        }
+        else
+            bRead = xIn->available() > 0;
+        if ( bRead )
+        {
+            Sequence< ::sal_Int8 > aData(1);
+            sal_Int32 nBytesRead = xIn->readBytes(aData,1);
+            if (nBytesRead <= 0) {
+                return (-1);
+            } else {
+                sal_Int32 tmpInt = aData[0];
+                if (tmpInt < 0 ){
+                    tmpInt = 256 +tmpInt;
+                }
+#if OSL_DEBUG_LEVEL > 1
+                ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+                if ( getStreams().find(sOrgName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"))) != getStreams().end() )
+                    sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"));
+                else
+                    sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".input"));
+                fputc(tmpInt,getStreams()[sOrgName]);
+#endif
+                return(tmpInt);
             }
-            return(tmpInt);
         }
     }
     return -1;
@@ -167,9 +217,9 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess
  * Method:    read
- * Signature: (Ljava/lang/String;Ljava/lang/String;[BII)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;[BII)I
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_read__Ljava_lang_String_2Ljava_lang_String_2_3BII
+JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_read__Ljava_lang_String_2Ljava_lang_String_2_3BII
   (JNIEnv * env, jobject obj_this,jstring name, jstring key, jbyteArray buffer, jint off, jint len)
 {
     ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
@@ -177,34 +227,56 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
     OSL_ENSURE(xIn.is(),"Input stream is NULL!");
     if ( xIn.is() )
     {
-        sal_Int32 nBytesRead = 0;
-
         jsize nLen = env->GetArrayLength(buffer);
-        Sequence< ::sal_Int8 > aData(nLen);
-
-        sal_Int32 av = xIn->available();
-        if ( av != 0 && nLen > av)
-            nBytesRead = xIn->readBytes(aData, av);
-        else
-            nBytesRead = xIn->readBytes(aData,nLen);
-
-        // Casting bytesRead to an int is okay, since the user can
-        // only pass in an integer length to read, so the bytesRead
-        // must <= len.
-        //
-        if (nBytesRead <= 0) {
-            return ;
-        } else if (nBytesRead < len) {
-            env->SetByteArrayRegion(buffer,off,nBytesRead,&aData[0]);
-        } else {
-            env->SetByteArrayRegion(buffer,off,len,&aData[0]);
+        if ( nLen < len )
+        {
+            ThrowException( env,
+                    "java/io/IOException",
+                    "Stream is not valid");
+            return -1;
         }
-        return ;
+        sal_Int32 nBytesRead = -1;
+        Reference< XSeekable> xSeek = pHelper->getSeek();
+        if ( xSeek.is() )
+        {
+            sal_Int64 nStreamLen = xSeek->getLength();
+            sal_Int64 nPos = xSeek->getPosition();
+            nBytesRead = ((nPos + len) <= nStreamLen) ? len : (nStreamLen - nPos);
+        }
+        else
+        {
+            sal_Int32 av = xIn->available();
+            nBytesRead = len <= av ? len : av;
+        }
+
+        if ( nBytesRead > 0 )
+        {
+            Sequence< ::sal_Int8 > aData(nBytesRead);
+            nBytesRead = xIn->readBytes(aData, nBytesRead);
+
+            if (nBytesRead <= 0)
+                return -1;
+            OSL_ENSURE(nLen >= (off + nBytesRead),"Buffer is too small!");
+            OSL_ENSURE(aData.getLength() >= nBytesRead,"Buffer is too small!");
+            env->SetByteArrayRegion(buffer,off,nBytesRead,&aData[0]);
+
+#if OSL_DEBUG_LEVEL > 1
+            ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+            if ( getStreams().find(sOrgName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"))) != getStreams().end() )
+                sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"));
+            else
+                sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".input"));
+            fwrite(&aData[0],sizeof(sal_Int8),nBytesRead,getStreams()[sOrgName]);
+#endif
+        }
+        else
+            return -1;
+        return nBytesRead;
     }
     ThrowException( env,
                     "java/io/IOException",
                     "Stream is not valid");
-    return;
+    return -1;
 }
 // -----------------------------------------------------------------------------
 
@@ -221,33 +293,55 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
     OSL_ENSURE(xIn.is(),"Input stream is NULL!");
     if ( xIn.is() )
     {
-        Sequence< ::sal_Int8 > aData(4);
-        sal_Int32 nBytesRead = xIn->readBytes(aData, 4);
-
-        if (nBytesRead <= 0) {
-            ThrowException( env,
-                            "java/io/IOException",
-                            "Bytes read < 0");
-            return -1;
-        }
-
-        Sequence< sal_Int32 > ch(4);
-        for(sal_Int32 i = 0;i < 4; ++i)
+        sal_Bool bRead = sal_False;
+        Reference< XSeekable> xSeek = pHelper->getSeek();
+        if ( xSeek.is() )
         {
-            ch[i] = aData[i];
-            if (ch[i] < 0 )
-                ch[i] = 256 + ch[i];
+            sal_Int64 nStreamLen = xSeek->getLength();
+            sal_Int64 nPos = xSeek->getPosition();
+            bRead = (nPos + 4) <= nStreamLen;
         }
-
-        if ((ch[0] | ch[1] | ch[2] | ch[3]) < 0)
+        else
+            bRead = xIn->available() >= 4;
+        if ( bRead )
         {
-            ThrowException( env,
-                            "java/io/IOException",
-                            "One byte is < 0");
-            return -1;
+            Sequence< ::sal_Int8 > aData(4);
+            sal_Int32 nBytesRead = xIn->readBytes(aData, 4);
+
+            if (nBytesRead <= 0) {
+                ThrowException( env,
+                                "java/io/IOException",
+                                "Bytes read < 0");
+                return -1;
+            }
+
+            Sequence< sal_Int32 > ch(4);
+            for(sal_Int32 i = 0;i < 4; ++i)
+            {
+                ch[i] = aData[i];
+                if (ch[i] < 0 )
+                    ch[i] = 256 + ch[i];
+            }
+
+            if ((ch[0] | ch[1] | ch[2] | ch[3]) < 0)
+            {
+                ThrowException( env,
+                                "java/io/IOException",
+                                "One byte is < 0");
+                return -1;
+            }
+            jint nRet = ((ch[0] << 24) + (ch[1] << 16) + (ch[2] << 8) + (ch[3] << 0));
+#if OSL_DEBUG_LEVEL > 1
+            ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+            if ( getStreams().find(sOrgName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"))) != getStreams().end() )
+                sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"));
+            else
+                sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".input"));
+            fputc(nRet,getStreams()[sOrgName]);
+#endif
+            return nRet;
         }
-        jint nRet = ((ch[0] << 24) + (ch[1] << 16) + (ch[2] << 8) + (ch[3] << 0));
-        return nRet;
+        return -1;
     }
     ThrowException( env,
                     "java/io/IOException",
@@ -274,6 +368,17 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_s
         if ( nLen < position)
         {
             static ::sal_Int64 BUFFER_SIZE = 9192;
+#if OSL_DEBUG_LEVEL > 1
+            {
+                ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+                if ( getStreams().find(sOrgName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"))) != getStreams().end() )
+                    sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"));
+                else
+                    sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".output"));
+                int errr = fseek(getStreams()[sOrgName],nLen,SEEK_SET);
+            }
+#endif
+
             xSeek->seek(nLen);
             Reference< XOutputStream> xOut = pHelper->getOutputStream();
             OSL_ENSURE(xOut.is(),"No output stream!");
@@ -295,10 +400,28 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_s
                 Sequence< ::sal_Int8 > aData(n);
                 memset(aData.getArray(),0,n);
                 xOut->writeBytes(aData);
+#if OSL_DEBUG_LEVEL > 1
+                ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+                if ( getStreams().find(sOrgName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"))) != getStreams().end() )
+                    sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"));
+                else
+                    sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".output"));
+                fwrite(&aData[0],sizeof(sal_Int8),n,getStreams()[sOrgName]);
+#endif
             }
         }
-
         xSeek->seek(position);
+        OSL_ENSURE(xSeek->getPosition() == position,"Wrong position after seeking the stream");
+
+#if OSL_DEBUG_LEVEL > 1
+        ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+        if ( getStreams().find(sOrgName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"))) != getStreams().end() )
+            sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"));
+        else
+            sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".output"));
+        int errr = fseek(getStreams()[sOrgName],position,SEEK_SET);
+        OSL_ENSURE(xSeek->getPosition() == ftell(getStreams()[sOrgName]),"Wrong position after seeking the stream");
+#endif
     }
 }
 // -----------------------------------------------------------------------------
@@ -320,6 +443,9 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_w
         if ( xOut.is() )
         {
             jbyte *buf = env->GetByteArrayElements(buffer,NULL);
+#if OSL_DEBUG_LEVEL > 1
+            OSL_ENSURE(len <= env->GetArrayLength(buffer),"Length is greater than the buffer!");
+#endif
 
             if (JNI_FALSE != env->ExceptionCheck())
             {
@@ -329,9 +455,21 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_w
             OSL_ENSURE(buf,"buf is NULL");
             if ( buf )
             {
+#if OSL_DEBUG_LEVEL > 1
+                ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+                sal_Bool bCheck;
+                if ( bCheck = (getStreams().find(sOrgName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"))) != getStreams().end()) )
+                    sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"));
+                else
+                    sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".output"));
+#endif
+
                 Sequence< ::sal_Int8 > aData(buf + off,len);
                 xOut->writeBytes(aData);
                 env->ReleaseByteArrayElements(buffer, buf, JNI_ABORT);
+#if OSL_DEBUG_LEVEL > 1
+                fwrite(&aData[off],sizeof(sal_Int8),len,getStreams()[sOrgName]);
+#endif
             }
         }
         else
@@ -377,6 +515,15 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_w
             oneByte[3] = (sal_Int8) ((v >>  0) & 0xFF);
 
             xOut->writeBytes(oneByte);
+#if OSL_DEBUG_LEVEL > 1
+            ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+            if ( getStreams().find(sOrgName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"))) != getStreams().end() )
+                sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".data"));
+            else
+                sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".output"));
+
+            fwrite(&oneByte[0],sizeof(sal_Int8),4,getStreams()[sOrgName]);
+#endif
         }
         else
         {
