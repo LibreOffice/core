@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-12 12:28:12 $
+ *  last change: $Author: ssa $ $Date: 2002-03-05 09:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,4 +127,14 @@ void ImageControl::SetBitmap( const BitmapEx& rBmp )
 {
     maBmp = rBmp;
     StateChanged( STATE_CHANGE_DATA );
+}
+
+BOOL ImageControl::SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode )
+{
+    return FALSE;
+}
+
+const BitmapEx& ImageControl::GetModeBitmap( BmpColorMode eMode ) const
+{
+    return maBmp;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
+ *  last change: $Author: ssa $ $Date: 2002-03-05 09:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1136,6 +1136,16 @@ void PushButton::SetImage( const Image& rImage )
     }
 }
 
+BOOL PushButton::SetModeImage( const Image& rImage, BmpColorMode eMode )
+{
+    return FALSE;
+}
+
+const Image& PushButton::GetModeImage( BmpColorMode eMode ) const
+{
+    return maImage;
+}
+
 // -----------------------------------------------------------------------
 
 void PushButton::SetBitmap( const BitmapEx& rBmp )
@@ -1153,6 +1163,16 @@ BitmapEx PushButton::GetBitmap() const
     if ( mpBitmapEx )
         aBmp = *mpBitmapEx;
     return aBmp;
+}
+
+BOOL PushButton::SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode )
+{
+    return FALSE;
+}
+
+BitmapEx PushButton::GetModeBitmap( BmpColorMode eMode ) const
+{
+    return GetBitmap();
 }
 
 // -----------------------------------------------------------------------
@@ -2191,6 +2211,16 @@ void RadioButton::SetImage( const Image& rImage )
         maImage = rImage;
         StateChanged( STATE_CHANGE_DATA );
     }
+}
+
+BOOL RadioButton::SetModeImage( const Image& rImage, BmpColorMode eMode )
+{
+    return FALSE;
+}
+
+const Image& RadioButton::GetModeImage( BmpColorMode eMode ) const
+{
+    return maImage;
 }
 
 // -----------------------------------------------------------------------

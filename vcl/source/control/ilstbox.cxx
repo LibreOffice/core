@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-25 17:51:06 $
+ *  last change: $Author: ssa $ $Date: 2002-03-05 09:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2302,6 +2302,16 @@ ImplWin::ImplWin( Window* pParent, WinBits nWinStyle ) :
 }
 
 // -----------------------------------------------------------------------
+
+BOOL ImplWin::SetModeImage( const Image& rImage, BmpColorMode eMode )
+{
+    return FALSE;
+}
+
+const Image& ImplWin::GetModeImage( BmpColorMode eMode ) const
+{
+    return maImage;
+}
 
 void ImplWin::MBDown()
 {

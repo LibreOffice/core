@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2001-05-04 15:54:47 $
+ *  last change: $Author: ssa $ $Date: 2002-03-05 09:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,6 +466,16 @@ void MessBox::SetDefaultCheckBoxText()
 {
     XubString rText( ResId( SV_STDTEXT_DONTWARNAGAIN, ImplGetResMgr() ) );
     maCheckBoxText = rText;
+}
+
+BOOL MessBox::SetModeImage( const Image& rImage, BmpColorMode eMode )
+{
+    return FALSE;
+}
+
+const Image& MessBox::GetModeImage( BmpColorMode eMode ) const
+{
+    return maImage;
 }
 
 // -----------------------------------------------------------------------

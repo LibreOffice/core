@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-27 16:12:36 $
+ *  last change: $Author: ssa $ $Date: 2002-03-05 09:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -824,6 +824,42 @@ void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
 {
     maBitmap = rBitmap;
     StateChanged( STATE_CHANGE_DATA );
+}
+
+// -----------------------------------------------------------------------
+
+BOOL FixedBitmap::SetModeBitmap( const Bitmap& rBitmap, BmpColorMode eMode )
+{
+    if( eMode == BMP_COLOR_NORMAL )
+        SetBitmap( rBitmap );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        maBitmapHC = rBitmap;
+        StateChanged( STATE_CHANGE_DATA );
+    }
+    else
+        return FALSE;
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+const Bitmap& FixedBitmap::GetModeBitmap( BmpColorMode eMode) const
+{
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maBitmapHC;
+    else
+        return maBitmap;
+}
+
+BOOL FixedImage::SetModeImage( const Image& rImage, BmpColorMode eMode )
+{
+    return FALSE;
+}
+
+const Image& FixedImage::GetModeImage( BmpColorMode eMode ) const
+{
+    return maImage;
 }
 
 // =======================================================================
