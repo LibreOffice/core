@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdDrawPage.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-06 08:58:28 $
+ *  last change:$Date: 2003-05-27 13:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XMasterPagesSupplier;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
@@ -134,7 +135,8 @@ public class SdDrawPage extends TestCase {
     */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                    (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println( "creating a draw document" );
@@ -176,7 +178,8 @@ public class SdDrawPage extends TestCase {
     * @see com.sun.star.drawing.DrawPage
     * @see com.sun.star.drawing.XDrawPagesSupplier
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(
+                                    TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
 
@@ -184,7 +187,8 @@ public class SdDrawPage extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                (XMultiServiceFactory)Param.getMSF());
 
         // get the drawpage of drawing here
         log.println( "getting Drawpage" );
