@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 10:41:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#if defined(MACOSX)
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 // Initialize static template data here to break circular reference to libstatic
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
