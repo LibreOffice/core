@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:14:07 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ ModalDialog DLG_ORDERCRIT
     Text [ italian ] = "Ordine" ;
     Text [ portuguese_brazilian ] = "Critério de Ordenação" ;
     Text [ portuguese ] = "Ordenar" ;
-    Text [ finnish ] = "Sort Order" ;
+    Text [ finnish ] = "Lajittelujärjestys" ;
     Text [ danish ] = "Sortering" ;
     Text [ french ] = "Tri" ;
     Text [ swedish ] = "Sortering" ;
@@ -135,8 +135,8 @@ ModalDialog DLG_ORDERCRIT
         };
         StringList [ finnish ] =
         {
-            < "aufsteigend" ; Default ; > ;
-            < "absteigend" ; Default ; > ;
+            < "nouseva" ; Default ; > ;
+            < "laskeva" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -273,8 +273,8 @@ ModalDialog DLG_ORDERCRIT
         };
         StringList [ finnish ] =
         {
-            < "aufsteigend" ; Default ; > ;
-            < "absteigend" ; Default ; > ;
+            < "nouseva" ; Default ; > ;
+            < "laskeva" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -411,8 +411,8 @@ ModalDialog DLG_ORDERCRIT
         };
         StringList [ finnish ] =
         {
-            < "aufsteigend" ; Default ; > ;
-            < "absteigend" ; Default ; > ;
+            < "nouseva" ; Default ; > ;
+            < "laskeva" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -660,7 +660,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ italian ] = "Sequenza" ;
         Text [ portuguese_brazilian ] = "Direção" ;
         Text [ portuguese ] = "Ordem" ;
-        Text [ finnish ] = "Suunta" ;
+        Text [ finnish ] = "Järjestys" ;
         Text [ danish ] = "Rækkefølge" ;
         Text [ french ] = "Ordre" ;
         Text [ swedish ] = "Ordning" ;
@@ -736,7 +736,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ italian ] = "<nessuno>" ;
         Text [ portuguese_brazilian ] = "<nenhum>" ;
         Text [ portuguese ] = "<nenhum>" ;
-        Text [ finnish ] = "<ei ole>" ;
+        Text [ finnish ] = "<ei mitään>" ;
         Text [ danish ] = "<ingen>" ;
         Text [ french ] = "<aucun(e)>" ;
         Text [ swedish ] = "<ingen>" ;
