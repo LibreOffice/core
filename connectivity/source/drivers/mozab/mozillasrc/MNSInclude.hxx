@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MNSInclude.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:55 $
+ *  last change: $Author: vg $ $Date: 2001-11-13 15:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #include <nsXPIDLString.h>
 #include <nsIRDFService.h>
 #include <nsIRDFResource.h>
+#include <nsReadableUtils.h>
 #include <msgCore.h>
 #include <nsIServiceManager.h>
 #include <nsIAbCard.h>
