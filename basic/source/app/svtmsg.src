@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:18:33 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 05:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ String S_SID_EXECUTE_FAILED_NO_DISPATCHER
     Text[ polish ] = "Nie mÛg≥ wykonaÊ Slot ID: Brak ActiveDispatcher";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Slot ID cannot be run. No ActiveDispatcher";
-    Text[ korean ] = "ΩΩ∑‘ ID∏¶ Ω««‡«œ¡ˆ°°∏¯«ﬂΩ¿¥œ¥Ÿ. ActiveDispatcher∞° æ¯Ω¿¥œ¥Ÿ.";
+    Text[ korean ] = "ΩΩ∑‘ ID∏¶ Ω««‡«œ¡ˆ ∏¯«ﬂΩ¿¥œ¥Ÿ: ¥…µø µΩ∫∆–√≥∞° æ¯Ω¿¥œ¥Ÿ.";
     Text[ chinese_simplified ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ chinese_traditional ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ arabic ] = "Slot ID cannot be run. No ActiveDispatcher";
@@ -377,7 +377,7 @@ String S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES
     Text[ polish ] = "Selekcja wed≥ug atrybutÛw moøliwa jest tylko w wypadku katalogÛw.";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Selection by attributes only possible for directories";
-    Text[ korean ] = "º”º∫ø°¿««— º±≈√¿∫ µ∑∫≈‰∏Æø°º≠∏∏ ∞°¥…«’¥œ¥Ÿ.";
+    Text[ korean ] = "º”º∫ø° µ˚∏• º±≈√¿∫ µ∑∫≈‰∏Æø°º≠∏∏ ∞°¥…«’¥œ¥Ÿ.";
     Text[ chinese_simplified ] = "Selection by attributes only possible for directories";
     Text[ chinese_traditional ] = "Selection by attributes only possible for directories";
     Text[ arabic ] = "Selection by attributes only possible for directories";
@@ -906,7 +906,7 @@ String S_NO_SELECT_FALSE
     Text[ polish ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
-    Text[ korean ] = "FALSE º±≈√¿∫ «„øÎµ«¡ˆ æ Ω¿¥œ¥Ÿ.  ($Arg1)ø°º≠ ¥Ÿ¡ﬂ º±≈√ ªÁøÎ«œΩ Ω√ø¿.";
+    Text[ korean ] = "FALSE º±≈√¿∫ «„øÎµ«¡ˆ æ Ω¿¥œ¥Ÿ. ($Arg1)ø°º≠ ¥Ÿ¡ﬂ º±≈√¿ª ªÁøÎ«œΩ Ω√ø¿.";
     Text[ chinese_simplified ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
     Text[ chinese_traditional ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
     Text[ arabic ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
@@ -1218,7 +1218,7 @@ String S_NO_OK_BUTTON
     Text[ polish ] = "There is no OK button at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "There is no OK button at ($Arg1)";
-    Text[ korean ] = "($Arg1)ø° £œ£À πˆ∆∞¿Ã æ¯Ω¿¥œ¥Ÿ.";
+    Text[ korean ] = "($Arg1)ø° »Æ¿Œ πˆ∆∞¿Ã æ¯Ω¿¥œ¥Ÿ.";
     Text[ chinese_simplified ] = "There is no OK button at ($Arg1)";
     Text[ chinese_traditional ] = "There is no OK button at ($Arg1)";
     Text[ arabic ] = "There is no OK button at ($Arg1)";
@@ -1434,7 +1434,7 @@ String S_UNKNOWN_TYPE
     Text[ polish ] = "Nieznany typ obiektu ($Arg1) z UId lub nie obs≥ugiwana metoda '($Arg2)'";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "UId Ç†ÇÈÇ¢ÇÕ“øØƒﬁ'($Arg2)' Ç©ÇÁÇÃïsñæÇ»µÃﬁºﬁ™∏ƒÇÃéÌóﬁ ($Arg1) ÇÕéxâáÇ≥ÇÍÇ‹ÇπÇÒÅB";
-    Text[ korean ] = "UId∑Œ∫Œ≈Õ¿«  æÀ∑¡¡Æ°°¿÷¡ˆæ ¿∫°°∞≥√º ≈∏¿‘ ($Arg1)";
+    Text[ korean ] = "UId∑Œ∫Œ≈Õ¿« æÀ∑¡¡Æ ¿÷¡ˆ æ ¿∫ ∞≥√º ≈∏¿‘ ($Arg1) ∂«¥¬ ∏ﬁº“µÂ '($Arg2)'∞° ¡ˆø¯µ«¡ˆ æ Ω¿¥œ¥Ÿ";
     Text[ chinese_simplified ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ chinese_traditional ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ arabic ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
@@ -1482,7 +1482,7 @@ String S_NO_LIST_BOX_BUTTON
     Text[ polish ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ portuguese_brazilian ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ japanese ] = "ListBoxButton ÇÕ ($Arg1) Ç…Ç†ÇËÇ‹ÇπÇÒÅB";
-    Text[ korean ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
+    Text[ korean ] = "($Arg1)ø°º≠ ∏Ò∑œªÛ¿⁄ πˆ∆∞¿Ã ¡∏¿Á«œ¡ˆ æ Ω¿¥œ¥Ÿ";
     Text[ chinese_simplified ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ chinese_traditional ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ turkish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
