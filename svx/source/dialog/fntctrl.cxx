@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: os $ $Date: 2000-12-04 15:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,13 @@ struct FontPrevWin_Impl
     Color*  pColor;
     String  aText;
 
+    BOOL                bTwoLines;
+    sal_Unicode         cStartBracket;
+    sal_Unicode         cEndBracket;
+
     FontPrevWin_Impl() :
-        bSelection( FALSE ), bGetSelection( FALSE ), bUseResText( FALSE ), pColor( NULL ) {}
+        bSelection( FALSE ), bGetSelection( FALSE ), bUseResText( FALSE ), pColor( NULL ),
+        bTwoLines(FALSE), cStartBracket(0), cEndBracket(0) {}
 };
 
 // class SvxFontPrevWindow -----------------------------------------------
@@ -124,7 +129,6 @@ SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent, const ResId& rId ) :
     Window     ( pParent, rId ),
     pPrinter   ( NULL ),
     bDelPrinter( FALSE )
-
 {
     pImpl = new FontPrevWin_Impl;
     SfxViewShell* pSh = SfxViewShell::Current();
@@ -255,10 +259,89 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
         SetFillColor( aFillCol );
     }
 
-    nY += aMetric.GetAscent();
-    DrawLine( Point( 0,  nY ), Point( nX, nY ) );
-    DrawLine( Point( nX + aTxtSize.Width(), nY ), Point( aLogSize.Width(), nY ) );
-    aFont.DrawPrev( this, pPrinter, Point( nX, nY ), pImpl->aText );
-}
+    long nStdAscent = aMetric.GetAscent();
+    nY += nStdAscent;
 
+    if(pImpl->bTwoLines)
+    {
+        SvxFont aSmallFont(aFont);
+        aSmallFont.SetHeight(aSmallFont.GetHeight() * 60 / 100);
+
+        long nStartBracketWidth = 0;
+        long nEndBracketWidth = 0;
+        long nTextWidth = 0;
+        if(pImpl->cStartBracket)
+        {
+            String sBracket(pImpl->cStartBracket);
+            nStartBracketWidth = aFont.GetTxtSize( pPrinter, sBracket ).Width();
+        }
+        if(pImpl->cEndBracket)
+        {
+            String sBracket(pImpl->cEndBracket);
+            nEndBracketWidth = aFont.GetTxtSize( pPrinter, sBracket ).Width();
+        }
+        nTextWidth = aSmallFont.GetTxtSize( pPrinter, pImpl->aText ).Width();
+        long nResultWidth = nStartBracketWidth;
+        nResultWidth += nEndBracketWidth;
+        nResultWidth += nTextWidth;
+
+        long nX = (aLogSize.Width() - nResultWidth) / 2;
+        DrawLine( Point( 0,  nY ), Point( nX, nY ) );
+        DrawLine( Point( nX + nResultWidth, nY ), Point( aLogSize.Width(), nY ) );
+
+        Window::SetFont(aSmallFont);
+        FontMetric aSmallMetric(GetFontMetric());
+        long nSmallAscent = aSmallMetric.GetAscent();
+        long nOffset = (nStdAscent - nSmallAscent ) / 2;
+
+        if(pImpl->cStartBracket)
+        {
+            String sBracket(pImpl->cStartBracket);
+            aFont.DrawPrev( this, pPrinter, Point( nX, nY - nOffset - 4), sBracket );
+            nX += nStartBracketWidth;
+        }
+
+        Window::SetFont(aFont);
+
+        aSmallFont.DrawPrev( this, pPrinter, Point( nX, nY - nSmallAscent - 2 ), pImpl->aText );
+        aSmallFont.DrawPrev( this, pPrinter, Point( nX, nY ), pImpl->aText );
+
+        nX += nTextWidth;
+        Window::SetFont(aFont);
+        if(pImpl->cEndBracket)
+        {
+            String sBracket(pImpl->cEndBracket);
+            aFont.DrawPrev( this, pPrinter, Point( nX + 1, nY - nOffset - 4), sBracket );
+        }
+    }
+    else
+    {
+        DrawLine( Point( 0,  nY ), Point( nX, nY ) );
+        DrawLine( Point( nX + aTxtSize.Width(), nY ), Point( aLogSize.Width(), nY ) );
+        aFont.DrawPrev( this, pPrinter, Point( nX, nY ), pImpl->aText );
+    }
+
+}
+/* -----------------------------04.12.00 16:26--------------------------------
+
+ ---------------------------------------------------------------------------*/
+BOOL SvxFontPrevWindow::IsTwoLines() const
+{
+    return pImpl->bTwoLines;
+}
+/* -----------------------------04.12.00 16:26--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxFontPrevWindow::SetTwoLines(BOOL bSet)
+{
+    pImpl->bTwoLines = bSet;}
+
+/* -----------------------------04.12.00 16:26--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxFontPrevWindow::SetBrackets(sal_Unicode cStart, sal_Unicode cEnd)
+{
+    pImpl->cStartBracket = cStart;
+    pImpl->cEndBracket = cEnd;
+}
 

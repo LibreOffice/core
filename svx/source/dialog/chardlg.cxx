@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-01 18:20:26 $
+ *  last change: $Author: os $ $Date: 2000-12-04 15:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5177,6 +5177,9 @@ void SvxCharTwoLinesPage::Initialize()
     Link aLink = LINK( this, SvxCharTwoLinesPage, CharacterMapHdl_Impl );
     m_aStartBracketLB.SetSelectHdl( aLink );
     m_aEndBracketLB.SetSelectHdl( aLink );
+
+    SvxFont& rFont = m_aPreviewWin.GetFont();
+    rFont.SetSize( Size( 0, 220 ) );
 }
 
 // -----------------------------------------------------------------------
@@ -5231,6 +5234,7 @@ IMPL_LINK( SvxCharTwoLinesPage, TwoLinesHdl_Impl, CheckBox*, EMPTYARG )
     m_aEndBracketFT.Enable( bChecked );
     m_aEndBracketLB.Enable( bChecked );
 
+    UpdatePreview_Impl();
     return 0;
 }
 
@@ -5241,6 +5245,7 @@ IMPL_LINK( SvxCharTwoLinesPage, CharacterMapHdl_Impl, ListBox*, pBox )
     USHORT nPos = pBox->GetSelectEntryPos();
     if ( CHRDLG_ENCLOSE_SPECIAL_CHAR == (ULONG)pBox->GetEntryData( nPos ) )
         SelectCharacter( pBox );
+    UpdatePreview_Impl();
     return 0;
 }
 
@@ -5327,4 +5332,16 @@ BOOL SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
 
     return bModified;
 }
+/* -----------------------------04.12.00 09:48--------------------------------
 
+ ---------------------------------------------------------------------------*/
+void    SvxCharTwoLinesPage::UpdatePreview_Impl()
+{
+    sal_Unicode cStart = m_aStartBracketLB.GetSelectEntryPos() > 0
+        ? m_aStartBracketLB.GetSelectEntry().GetChar(0) : 0;
+    sal_Unicode cEnd = m_aEndBracketLB.GetSelectEntryPos() > 0
+        ? m_aEndBracketLB.GetSelectEntry().GetChar(0) : 0;
+    m_aPreviewWin.SetBrackets(cStart, cEnd);
+    m_aPreviewWin.SetTwoLines(m_aTwoLinesBtn.IsChecked());
+    m_aPreviewWin.Invalidate();
+}
