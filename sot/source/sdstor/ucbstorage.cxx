@@ -1076,7 +1076,13 @@ sal_Int16 UCBStorage_Impl::Commit()
                     {
                         nLocalRet = pElement->m_xStream->Commit();
                         if ( pElement->m_xStream->m_bIsOLEStorage )
+                        {
                             pElement->m_xStream->m_aContentType = String::CreateFromAscii("application/vnd.sun.star.oleobject");
+                            Any aValue;
+                            aValue <<= (BOOL) TRUE;
+                            pElement->m_xStream->m_pContent->setPropertyValue(String::CreateFromAscii("Encrypted"), aValue );
+                        }
+
                         pContent = pElement->GetContent();
                     }
 
