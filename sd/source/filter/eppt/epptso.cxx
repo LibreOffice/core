@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-09 13:55:57 $
+ *  last change: $Author: sj $ $Date: 2001-03-13 12:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
+#include <com/sun/star/text/WritingMode.hpp>
 #endif
 
 #include <svtools/fltcall.hxx>
@@ -1237,91 +1240,116 @@ void PPTWriter::ImplWriteTextBundle( EscherPropertyContainer& rPropOpt, sal_Bool
 {
     if ( ImplGetText() )
     {
-        ESCHER_AnchorText  eAnchor = ESCHER_AnchorTop;
-        sal_uInt32              nTextAttr = 0x40004;    // rotate text with shape
+        ::com::sun::star::uno::Any aAny;
+        ::com::sun::star::text::WritingMode             eWM( ::com::sun::star::text::WritingMode_LR_TB );
+        ::com::sun::star::drawing::TextVerticalAdjust   eVA( ::com::sun::star::drawing::TextVerticalAdjust_TOP );
+        ::com::sun::star::drawing::TextHorizontalAdjust eHA( ::com::sun::star::drawing::TextHorizontalAdjust_LEFT );
 
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextVerticalAdjust" ) ) ) )
-        {
-            ::com::sun::star::drawing::TextVerticalAdjust eVA;
-            if ( mAny >>= eVA )
-            {
-                switch ( eVA )
-                {
-                    case 1 :    // ::com::sun::star::drawing::TextVerticalAdjust_CENTER :
-                        eAnchor = ESCHER_AnchorMiddle;
-                    break;
+        sal_Int32 nLeft             ( 0 );
+        sal_Int32 nTop              ( 0 );
+        sal_Int32 nRight            ( 0 );
+        sal_Int32 nBottom           ( 0 );
+        sal_Bool bAutoGrowWidth     ( sal_False );
+        sal_Bool bAutoGrowHeight    ( sal_False );
 
-                    case 2 :    // ::com::sun::star::drawing::TextVerticalAdjust_BOTTOM :
-                        eAnchor = ESCHER_AnchorBottom;
-                    break;
-
-                    default :
-                    case 0 :    // ::com::sun::star::drawing::TextVerticalAdjust_TOP :
-                        eAnchor = ESCHER_AnchorTop;
-                    break;
-                }
-            }
-        }
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextHorizontalAdjust" ) ) ) )
-        {
-            ::com::sun::star::drawing::TextHorizontalAdjust eTA;
-            if ( mAny >>= eTA )
-            {
-                switch ( eTA )
-                {
-                    case 1 :    // ::com::sun::star::drawing::TextHorizontalAdjust_CENTER :
-                    {
-                        switch( eAnchor )
-                        {
-                            case ESCHER_AnchorMiddle :
-                                eAnchor = ESCHER_AnchorMiddleCentered;
-                            break;
-                            case ESCHER_AnchorBottom :
-                                eAnchor = ESCHER_AnchorBottomCentered;
-                            break;
-                            case ESCHER_AnchorTop :
-                                eAnchor = ESCHER_AnchorTopCentered;
-                            break;
-                        }
-                    }
-                    break;
-                    case 2 :    // ::com::sun::star::drawing::TextHorizontalAdjust_RIGHT :
-                    case 0 :    // ::com::sun::star::drawing::TextHorizontalAdjust_LEFT :
-                    case 3 :    // ::com::sun::star::drawing::TextHorizontalAdjust_BLOCK :
-                    break;
-                }
-            }
-        }
-/*
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextFitToSize" ) ) ) )
-        {
-            if ( *( (sal_Int16*)mAny.get() ) == 1 )
-            {
-                nTextAttr |= 0x10001;
-                rPropOpt.AddOpt( ESCHER_Prop_scaleText, ? );
-            }
-        }
-*/
-
-        sal_Int32 nLeft = ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextLeftDistance" ) ) ) ) ? *(sal_Int32*)mAny.getValue() : 0;
-        sal_Int32 nTop = ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextUpperDistance" ) ) ) ) ? *(sal_Int32*)mAny.getValue() : 0;
-        sal_Int32 nRight = ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextRightDistance" ) ) ) ) ? *(sal_Int32*)mAny.getValue() : 0;
-        sal_Int32 nBottom = ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) ) ) ) ? *(sal_Int32*)mAny.getValue() : 0;
+        if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextWritingMode" ) ), sal_True ) )
+            aAny >>= eWM;
+        if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextVerticalAdjust" ) ), sal_True ) )
+            aAny >>= eVA;
+        if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextHorizontalAdjust" ) ), sal_True ) )
+            aAny >>= eHA;
+        if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowWidth" ) ), sal_True ) )
+            aAny >>= bAutoGrowWidth;
+        if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowHeight" ) ), sal_True ) )
+            aAny >>= bAutoGrowHeight;
+        if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextLeftDistance" ) ) ) )
+            aAny >>= nLeft;
+        if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextUpperDistance" ) ) ) )
+            aAny >>= nTop;
+        if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextRightDistance" ) ) ) )
+            aAny >>= nRight;
+        if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) ) ) )
+            aAny >>= nBottom;
 
 
+        ESCHER_AnchorText eAnchor = ESCHER_AnchorTop;
         ESCHER_WrapMode eWrapMode = ESCHER_WrapSquare;
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowWidth" ) ) ) )
-        {
-            sal_Bool bBool;
-            mAny >>= bBool;
-            if ( bBool )
+        sal_uInt32 nTextAttr = 0x40004;     // rotate text with shape
+
+        if ( eWM == ::com::sun::star::text::WritingMode_TB_RL )
+        {   // verical writing
+            switch ( eHA )
+            {
+                case ::com::sun::star::drawing::TextHorizontalAdjust_LEFT :
+                     eAnchor = ESCHER_AnchorBottom;
+                break;
+                case ::com::sun::star::drawing::TextVerticalAdjust_CENTER :
+                    eAnchor = ESCHER_AnchorMiddle;
+                break;
+                default :
+                case ::com::sun::star::drawing::TextHorizontalAdjust_BLOCK :
+                case ::com::sun::star::drawing::TextHorizontalAdjust_RIGHT :
+                    eAnchor = ESCHER_AnchorTop;
+                break;
+            }
+            if ( eVA == ::com::sun::star::drawing::TextVerticalAdjust_CENTER )
+            {
+                switch ( eAnchor )
+                {
+                    case ESCHER_AnchorMiddle :
+                        eAnchor = ESCHER_AnchorMiddleCentered;
+                    break;
+                    case ESCHER_AnchorBottom :
+                        eAnchor = ESCHER_AnchorBottomCentered;
+                    break;
+                    default :
+                    case ESCHER_AnchorTop :
+                        eAnchor = ESCHER_AnchorTopCentered;
+                    break;
+                }
+            }
+            if ( bAutoGrowHeight )
                 eWrapMode = ESCHER_WrapNone;
+            if ( !bDisableAutoGrowHeight && bAutoGrowWidth )
+                nTextAttr |= 0x20002;
+
+             rPropOpt.AddOpt( ESCHER_Prop_txflTextFlow, ESCHER_txflTtoBA ); // rotate text within shape by 90
         }
-        if ( !bDisableAutoGrowHeight && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowHeight" ) ) ) )
-        {
-            sal_Bool bBool;
-            mAny >>= bBool;
-            if ( bBool )
+        else
+        {   // normal from left to right
+            switch ( eVA )
+            {
+                case ::com::sun::star::drawing::TextVerticalAdjust_CENTER :
+                    eAnchor = ESCHER_AnchorMiddle;
+                break;
+
+                case ::com::sun::star::drawing::TextVerticalAdjust_BOTTOM :
+                    eAnchor = ESCHER_AnchorBottom;
+                break;
+
+                default :
+                case ::com::sun::star::drawing::TextVerticalAdjust_TOP :
+                    eAnchor = ESCHER_AnchorTop;
+                break;
+            }
+            if ( eHA == ::com::sun::star::drawing::TextHorizontalAdjust_CENTER )
+            {
+                switch( eAnchor )
+                {
+                    case ESCHER_AnchorMiddle :
+                        eAnchor = ESCHER_AnchorMiddleCentered;
+                    break;
+                    case ESCHER_AnchorBottom :
+                        eAnchor = ESCHER_AnchorBottomCentered;
+                    break;
+                    case ESCHER_AnchorTop :
+                        eAnchor = ESCHER_AnchorTopCentered;
+                    break;
+                }
+            }
+            if ( bAutoGrowWidth )
+                eWrapMode = ESCHER_WrapNone;
+            if ( !bDisableAutoGrowHeight && bAutoGrowHeight )
                 nTextAttr |= 0x20002;
         }
         rPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, nLeft * 360 );
