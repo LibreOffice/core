@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 13:01:41 $
+ *  last change: $Author: os $ $Date: 2000-11-09 10:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ const char* __FAR_DATA aProvNames[] =
         "com.sun.star.text.TextField.DocInfo.Subject",      //SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT
         "com.sun.star.text.TextField.DocInfo.Title",            //SW_SERVICE_FIELDTYPE_DOCINFO_TITLE
         "com.sun.star.text.TextField.DocInfo.Revision",     //SW_SERVICE_FIELDTYPE_DOCINFO_REVISION
-        "",//SW_SERVICE_FIELDTYPE_DUMMY_1
+        "com.sun.star.text.TextField.Bibliography",//SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY
         "",//SW_SERVICE_FIELDTYPE_DUMMY_2
         "",//SW_SERVICE_FIELDTYPE_DUMMY_3
         "",//SW_SERVICE_FIELDTYPE_DUMMY_4
@@ -502,6 +502,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         case SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT           :
         case SW_SERVICE_FIELDTYPE_DOCINFO_TITLE             :
         case SW_SERVICE_FIELDTYPE_DOCINFO_REVISION          :
+        case SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY:
         case SW_SERVICE_FIELDTYPE_INPUT_USER                :
         case SW_SERVICE_FIELDTYPE_HIDDEN_TEXT               :
             xRet =  (cppu::OWeakObject*)new SwXTextField(nObjectType);
