@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionWrapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 09:57:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,86 +77,6 @@
 #ifndef _CONNECTIVITY_ZCONNECTIONWRAPPER_HXX_
 #include "connectivity/ConnectionWrapper.hxx"
 #endif
-
-#if SUPD < 643
-    #define DECLARE_XINTERFACE( )   \
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException); \
-        virtual void SAL_CALL acquire() throw(); \
-        virtual void SAL_CALL release() throw();
-
-    #define IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
-        void SAL_CALL classname::acquire() throw() { refcountbase::acquire(); } \
-        void SAL_CALL classname::release() throw() { refcountbase::release(); }
-
-    #define IMPLEMENT_FORWARD_XINTERFACE2( classname, refcountbase, baseclass2 ) \
-        IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
-        ::com::sun::star::uno::Any SAL_CALL classname::queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException) \
-        { \
-            ::com::sun::star::uno::Any aReturn = refcountbase::queryInterface( _rType ); \
-            if ( !aReturn.hasValue() ) \
-                aReturn = baseclass2::queryInterface( _rType ); \
-            return aReturn; \
-        }
-
-    #define IMPLEMENT_FORWARD_XINTERFACE3( classname, refcountbase, baseclass2, baseclass3 ) \
-        IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
-        ::com::sun::star::uno::Any SAL_CALL classname::queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException) \
-        { \
-            ::com::sun::star::uno::Any aReturn = refcountbase::queryInterface( _rType ); \
-            if ( !aReturn.hasValue() ) \
-            { \
-                aReturn = baseclass2::queryInterface( _rType ); \
-                if ( !aReturn.hasValue() ) \
-                    aReturn = baseclass3::queryInterface( _rType ); \
-            } \
-            return aReturn; \
-        }
-    //=====================================================================
-    //= forwarding/merging XTypeProvider funtionality
-    //=====================================================================
-    #define DECLARE_XTYPEPROVIDER( )    \
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException); \
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    #define IMPLEMENT_GET_IMPLEMENTATION_ID( classname ) \
-        ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL classname::getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException) \
-        { \
-            static ::cppu::OImplementationId* pId = NULL; \
-            if (!pId) \
-            { \
-                ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ); \
-                if (!pId) \
-                { \
-                    static ::cppu::OImplementationId aId; \
-                    pId = &aId; \
-                } \
-            } \
-            return pId->getImplementationId(); \
-        }
-
-    #define IMPLEMENT_FORWARD_XTYPEPROVIDER2( classname, baseclass1, baseclass2 ) \
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL classname::getTypes(  ) throw (::com::sun::star::uno::RuntimeException) \
-        { \
-            return ::comphelper::concatSequences( \
-                baseclass1::getTypes(), \
-                baseclass2::getTypes() \
-            ); \
-        } \
-        \
-        IMPLEMENT_GET_IMPLEMENTATION_ID( classname )
-
-    #define IMPLEMENT_FORWARD_XTYPEPROVIDER3( classname, baseclass1, baseclass2, baseclass3 ) \
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL classname::getTypes(  ) throw (::com::sun::star::uno::RuntimeException) \
-        { \
-            return ::comphelper::concatSequences( \
-                baseclass1::getTypes(), \
-                baseclass2::getTypes(), \
-                baseclass3::getTypes() \
-            ); \
-        } \
-        \
-        IMPLEMENT_GET_IMPLEMENTATION_ID( classname )
-#endif // SUPD < 643
 
 namespace connectivity
 {
