@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2000-11-03 20:43:41 $
+ *  last change: $Author: er $ $Date: 2000-11-04 21:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,14 @@ class LocaleDataWrapper
     String                      aCurrBankSymbol;
     USHORT                      nCurrPositiveFormat;
     USHORT                      nCurrNegativeFormat;
+    USHORT                      nCurrDigits;
     BOOL                        bLocaleDataItemValid;
     BOOL                        bReservedWordValid;
+
+    // dummies, to be implemented or provided by XML locale data
+    String                      aLongDateDayOfWeekSep;
+    sal_Unicode                 cCurrZeroChar;
+
 
                                 // not implemented, prevent usage
                                 LocaleDataWrapper( const LocaleDataWrapper& );
@@ -119,6 +125,11 @@ class LocaleDataWrapper
             void                getCurrSymbolsImpl();
             void                getCurrFormatsImpl();
 
+            void                scanCurrFormat( const String& rCode,
+                                    xub_StrLen nStart, xub_StrLen& nSign,
+                                    xub_StrLen& nPar, xub_StrLen& nNum,
+                                    xub_StrLen& nBlank, xub_StrLen& nSym );
+
 public:
                                 LocaleDataWrapper(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF,
@@ -135,7 +146,7 @@ public:
     const ::com::sun::star::lang::Locale& getLocale() const { return aLocale; }
 
     /// get current loaded Locale, which might differ from the requested Locale
-    const ::com::sun::star::lang::Locale getLoadedLocale() const;
+    ::com::sun::star::lang::Locale getLoadedLocale() const;
 
 
     // Wrapper implementations of class LocaleData
@@ -190,6 +201,13 @@ public:
             const String&       getCurrBankSymbol() const;
             USHORT              getCurrPositiveFormat() const;
             USHORT              getCurrNegativeFormat() const;
+            USHORT              getCurrDigits() const;
+
+    // dummy returns
+    inline  const String&       getLongDateDayOfWeekSep() const
+                                    { return aLongDateDayOfWeekSep; }
+    inline  sal_Unicode         getCurrZeroChar() const
+                                    { return cCurrZeroChar; }
 
 
     // reserved words
@@ -198,6 +216,11 @@ public:
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::TRUE_WORD ); }
     inline  const String&       getFalseWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::FALSE_WORD ); }
+
+#ifndef PRODUCT
+            ByteString&         AppendLocaleInfo( ByteString& rDebugMsg ) const;
+#endif
+
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2000-11-03 20:44:26 $
+ *  last change: $Author: er $ $Date: 2000-11-04 21:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,6 @@ LocaleDataWrapper::LocaleDataWrapper(
             )
         :
         xSMgr( xSF ),
-        nCurrPositiveFormat( nCurrFormatInvalid ),
-        nCurrNegativeFormat( nCurrFormatInvalid ),
         bLocaleDataItemValid( FALSE ),
         bReservedWordValid( FALSE )
 {
@@ -162,7 +160,7 @@ void LocaleDataWrapper::invalidateData()
 {
     aCurrSymbol.Erase();
     aCurrBankSymbol.Erase();
-    nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatInvalid;
+    nCurrPositiveFormat = nCurrNegativeFormat = nCurrDigits = nCurrFormatInvalid;
     if ( bLocaleDataItemValid )
     {
         for ( sal_Int32 j=0; j<LocaleItem::COUNT; j++ )
@@ -179,6 +177,9 @@ void LocaleDataWrapper::invalidateData()
         }
         bReservedWordValid = FALSE;
     }
+    // dummies
+    aLongDateDayOfWeekSep.AssignAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+    cCurrZeroChar = '0';
 }
 
 
@@ -458,6 +459,14 @@ USHORT LocaleDataWrapper::getCurrNegativeFormat() const
 }
 
 
+USHORT LocaleDataWrapper::getCurrDigits() const
+{
+    if ( nCurrDigits == nCurrFormatInvalid )
+        ((LocaleDataWrapper*)this)->getCurrFormatsImpl();
+    return nCurrDigits;
+}
+
+
 void LocaleDataWrapper::getCurrSymbolsImpl()
 {
     Sequence< Currency > aCurrSeq = getAllCurrencies();
@@ -465,32 +474,30 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
     sal_Int32 nElem;
     for ( nElem = 0; nElem < nCnt; nElem++ )
     {
-        if ( aCurrSeq[nElem].isDefault )
+        if ( aCurrSeq[nElem].Default )
             break;
     }
     if ( nElem >= nCnt )
     {
-        DBG_ERRORFILE( "getCurrFormatsImpl: no default currency" );
+        DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "getCurrSymbolsImpl: no default currency" ) ) ).GetBuffer() );
         nElem = 0;
         if ( nElem >= nCnt )
         {
-            DBG_ERRORFILE( "getCurrFormatsImpl: no currency at all" );
+            DBG_ERRORFILE( "getCurrSymbolsImpl: no currency at all" );
             aCurrSymbol.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "ShellsAndPebbles" ) );
             aCurrBankSymbol = aCurrSymbol;
             nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
             return ;
         }
     }
-    aCurrSymbol = aCurrSeq[nElem].symbol;
-    aCurrBankSymbol = aCurrSeq[nElem].bankSymbol;
+    aCurrSymbol = aCurrSeq[nElem].Symbol;
+    aCurrBankSymbol = aCurrSeq[nElem].BankSymbol;
 }
 
 
-// quasi static
-void lcl_LocaleDataWrapper_scanCurrFormat( const String& rCode,
-        xub_StrLen nStart, const String& rCurr, xub_StrLen& nSign,
-        xub_StrLen& nPar, xub_StrLen& nNum, xub_StrLen& nBlank,
-        xub_StrLen& nSym )
+void LocaleDataWrapper::scanCurrFormat( const String& rCode,
+        xub_StrLen nStart, xub_StrLen& nSign, xub_StrLen& nPar,
+        xub_StrLen& nNum, xub_StrLen& nBlank, xub_StrLen& nSym )
 {
     nSign = nPar = nNum = nBlank = nSym = STRING_NOTFOUND;
     const sal_Unicode* const pStr = rCode.GetBuffer();
@@ -498,6 +505,7 @@ void lcl_LocaleDataWrapper_scanCurrFormat( const String& rCode,
     const sal_Unicode* p = pStr + nStart;
     int nInSection = 0;
     BOOL bQuote = FALSE;
+    const String& rDecSep = getNumDecimalSep();
     while ( p < pStop )
     {
         if ( bQuote )
@@ -523,8 +531,24 @@ void lcl_LocaleDataWrapper_scanCurrFormat( const String& rCode,
                 break;
                 case '0' :
                 case '#' :
-                    if ( !nInSection && nNum == STRING_NOTFOUND )
-                        nNum = p - pStr;
+                    if ( !nInSection )
+                    {
+                        if ( nNum == STRING_NOTFOUND )
+                            nNum = p - pStr;
+                        if ( nCurrDigits == nCurrFormatInvalid )
+                        {
+                            if ( rCode.Equals( rDecSep, (p-pStr)+1, rDecSep.Len() ) )
+                            {
+                                nCurrDigits = 1;
+                                const sal_Unicode* pc = p + rDecSep.Len() + 1;
+                                while ( pc < pStop && (*pc == '0' || *pc == '#') )
+                                {
+                                    pc++;
+                                    nCurrDigits++;
+                                }
+                            }
+                        }
+                    }
                 break;
                 case '[' :
                     nInSection++;
@@ -551,12 +575,12 @@ void lcl_LocaleDataWrapper_scanCurrFormat( const String& rCode,
                         p = pStop;
                 break;
                 default:
-                    if ( nSym == STRING_NOTFOUND && rCurr.Equals( rCode, p-pStr, rCurr.Len() ) )
+                    if ( nSym == STRING_NOTFOUND && rCode.Equals( aCurrSymbol, p-pStr, aCurrSymbol.Len() ) )
                     {   // currency symbol not surrounded by [$...]
                         nSym = p - pStr;
                         if ( nBlank == STRING_NOTFOUND && pStr < p && *(p-1) == ' ' )
                             nBlank = p - pStr - 1;
-                        p += rCurr.Len() - 1;
+                        p += aCurrSymbol.Len() - 1;
                         if ( nBlank == STRING_NOTFOUND && p < pStop-2 && *(p+2) == ' ' )
                             nBlank = p - pStr + 2;
                     }
@@ -575,13 +599,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
     {   // bad luck
-#ifndef PRODUCT
-        ByteString aMsg( "getCurrFormatsImpl: no currency formats for " );
-        aMsg += ByteString( String(aLocale.Language), RTL_TEXTENCODING_UTF8 );
-        aMsg += '_';
-        aMsg += ByteString( String(aLocale.Country), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
-#endif
+        DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "getCurrFormatsImpl: no currency formats" ) ) ).GetBuffer() );
         nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
         return ;
     }
@@ -605,24 +623,23 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         }
     }
 
+    // make sure it's loaded
     getCurrSymbol();
 
     xub_StrLen nSign, nPar, nNum, nBlank, nSym;
 
     // positive format
     nElem = (nDef >= 0 ? nDef : (nNeg >= 0 ? nNeg : 0));
-    lcl_LocaleDataWrapper_scanCurrFormat( aFormatSeq[nElem].Code, 0,
-        aCurrSymbol, nSign, nPar, nNum, nBlank, nSym );
+    scanCurrFormat( aFormatSeq[nElem].Code, 0, nSign, nPar, nNum, nBlank, nSym );
 #ifndef PRODUCT
     if ( nNum == STRING_NOTFOUND || nSym == STRING_NOTFOUND )
     {
-        ByteString aMsg( "getCurrFormatsImpl: CurrPositiveFormat? " );
-        aMsg += ByteString( String(aLocale.Language), RTL_TEXTENCODING_UTF8 );
-        aMsg += '_';
-        aMsg += ByteString( String(aLocale.Country), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "getCurrFormatsImpl: CurrPositiveFormat?" ) ) ).GetBuffer() );
     }
 #endif
+    //! we assume that the default format code contains the necessary decimal digits
+    if ( nCurrDigits == nCurrFormatInvalid )
+        nCurrDigits = 0;
     if ( nBlank == STRING_NOTFOUND )
     {
         if ( nSym < nNum )
@@ -639,24 +656,18 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     }
 
     // negative format
-    nElem = (nNeg >= 0 ? nNeg : 0);
-    const ::rtl::OUString& rCode = aFormatSeq[nElem].Code;
-    sal_Int32 nDelim = rCode.indexOf( ';' );
-    if ( nDelim < 0 )
+    if ( nNeg < 0 )
         nCurrNegativeFormat = nCurrFormatDefault;
     else
     {
-        lcl_LocaleDataWrapper_scanCurrFormat( rCode, nDelim+1,
-            aCurrSymbol, nSign, nPar, nNum, nBlank, nSym );
+        const ::rtl::OUString& rCode = aFormatSeq[nNeg].Code;
+        sal_Int32 nDelim = rCode.indexOf( ';' );
+        scanCurrFormat( rCode, nDelim+1, nSign, nPar, nNum, nBlank, nSym );
 #ifndef PRODUCT
         if ( nNum == STRING_NOTFOUND || nSym == STRING_NOTFOUND
           || (nPar == STRING_NOTFOUND && nSign == STRING_NOTFOUND) )
         {
-            ByteString aMsg( "getCurrFormatsImpl: CurrNegativeFormat? " );
-            aMsg += ByteString( String(aLocale.Language), RTL_TEXTENCODING_UTF8 );
-            aMsg += '_';
-            aMsg += ByteString( String(aLocale.Country), RTL_TEXTENCODING_UTF8 );
-            DBG_ERRORFILE( aMsg.GetBuffer() );
+            DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "getCurrFormatsImpl: CurrNegativeFormat?" ) ) ).GetBuffer() );
         }
 #endif
         if ( nBlank == STRING_NOTFOUND )
@@ -713,8 +724,26 @@ void LocaleDataWrapper::getCurrFormatsImpl()
 }
 
 
-const ::com::sun::star::lang::Locale LocaleDataWrapper::getLoadedLocale() const
+::com::sun::star::lang::Locale LocaleDataWrapper::getLoadedLocale() const
 {
     LanguageCountryInfo aLCInfo = getLanguageCountryInfo();
     return lang::Locale( aLCInfo.Language, aLCInfo.Country, aLCInfo.Variant );
 }
+
+
+#ifndef PRODUCT
+ByteString& LocaleDataWrapper::AppendLocaleInfo( ByteString& rDebugMsg ) const
+{
+    rDebugMsg += '\n';
+    rDebugMsg += ByteString( String( aLocale.Language ), RTL_TEXTENCODING_UTF8 );
+    rDebugMsg += '_';
+    rDebugMsg += ByteString( String( aLocale.Country ), RTL_TEXTENCODING_UTF8 );
+    rDebugMsg.Append( RTL_CONSTASCII_STRINGPARAM( " requested\n" ) );
+    lang::Locale aLoaded = getLoadedLocale();
+    rDebugMsg += ByteString( String( aLoaded.Language ), RTL_TEXTENCODING_UTF8 );
+    rDebugMsg += '_';
+    rDebugMsg += ByteString( String( aLoaded.Country ), RTL_TEXTENCODING_UTF8 );
+    rDebugMsg.Append( RTL_CONSTASCII_STRINGPARAM( " loaded" ) );
+    return rDebugMsg;
+}
+#endif
