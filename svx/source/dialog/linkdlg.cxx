@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:47:34 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 15:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,6 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, SvLinkManager* pMgr, BOOL bHtm
     aFtFullSourceName( this, ResId( FT_FULL_SOURCE_NAME ) ),
     aFtFullTypeName( this, ResId( FT_FULL_TYPE_NAME ) )
 {
-    FreeResource();
-
     aStrAutolink = String( ResId( STR_AUTOLINK ) );
     aStrManuallink = String( ResId( STR_MANUALLINK ) );
     aStrBrokenlink = String( ResId( STR_BROKENLINK ) );
@@ -142,6 +140,8 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, SvLinkManager* pMgr, BOOL bHtm
     aStrCloselinkmsg = String( ResId( STR_CLOSELINKMSG ) );
     aStrCloselinkmsgMulti = String( ResId( STR_CLOSELINKMSG_MULTI ) );
     aStrWaitinglink = String( ResId( STR_WAITINGLINK ) );
+
+    FreeResource();
 
     aTbLinks.SetHelpId(HID_LINKDLG_TABLB);
     aTbLinks.SetSelectionMode( MULTIPLE_SELECTION );
