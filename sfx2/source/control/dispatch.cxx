@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 09:16:08 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1808,7 +1808,7 @@ void SfxDispatcher::CollectTools_Impl( SfxWorkWindow* pWorkWin )
     // Innerhalb eines ToolSpace werden auch die Tools von nicht aktiven Frames
     // angezeigt, damit es beim Wechsel der Frames nicht zappelt
     SfxApplication *pSfxApp = SFX_APP();
-    SfxToolBoxConfig *pTbxCfg = SfxToolBoxConfig::GetOrCreate();
+    SfxToolBoxConfig *pTbxCfg = pWorkWin->GetBindings().GetToolBoxConfig();
 
     // Die Objectbars aller ViewFrames der aktuellen Task einsammeln
     for ( SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
