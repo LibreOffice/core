@@ -1,0 +1,12 @@
+    <node oor:name="draw8_template" oor:op="replace">
+        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>otd</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>draw8_template</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Draw 8 Template</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Draw 8</value></prop>
+    </node>
