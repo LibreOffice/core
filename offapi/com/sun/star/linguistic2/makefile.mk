@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 17:58:20 $
+#   last change: $Author: rt $ $Date: 2004-09-17 13:39:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ IDLFILES=\
     ConversionDictionaryList.idl \
     ConversionDictionaryType.idl \
     ConversionDirection.idl \
+    ConversionPropertyType.idl \
     DictionaryEvent.idl\
     DictionaryEventFlags.idl\
     DictionaryList.idl\
@@ -95,6 +96,7 @@ IDLFILES=\
     XAvailableLocales.idl\
     XConversionDictionary.idl \
     XConversionDictionaryList.idl \
+    XConversionPropertyType.idl \
     XDictionary.idl\
     XDictionary1.idl\
     XDictionaryEntry.idl\
