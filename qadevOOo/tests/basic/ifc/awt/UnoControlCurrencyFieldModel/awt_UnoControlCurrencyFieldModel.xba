@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: awt_UnoControlCurrencyFieldModel.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:43:44 $ 
+'*  last change:$Date: 2003-10-06 12:45:17 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -66,9 +66,6 @@
 '*************************************************************************
 
 
-
-
-
 Sub RunTest()
 
 '*************************************************************************
@@ -87,8 +84,6 @@ On Error Goto ErrHndl
     PropertyTester.TestProperty("CurrencySymbol")
 
     PropertyTester.TestProperty("DecimalAccuracy")
-
-    PropertyTester.TestProperty("DefaultControl")
 
     PropertyTester.TestProperty("Enabled")
 
@@ -155,6 +150,15 @@ On Error Goto ErrHndl
     PropertyTester.TestProperty("HelpText")
 
     PropertyTester.TestProperty("HelpURL")
+
+    PropertyTester.TestProperty("FontEmphasisMark")
+
+    PropertyTester.TestProperty("FontRelief")
+
+    PropertyTester.TestProperty("PrependCurrencySymbol")
+
+    PropertyTester.TestProperty("TextLineColor")
+
 Exit Sub
 ErrHndl:
     Test.Exception()
