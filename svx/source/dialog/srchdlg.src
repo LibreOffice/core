@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-13 08:08:26 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     Text [ spanish ] = "Buscar y reemplazar" ;
     Text [ english_us ] = "Find & Replace" ;
     Text[ chinese_simplified ] = "À——∞∫Õ∏¸ÃÊ";
-    Text[ russian ] = "Õ‡ÈÚË Ë «‡ÏÂÌËÚ¸";
+    Text[ russian ] = "Õ‡ÈÚË Ë Á‡ÏÂÌËÚ¸";
     Text[ polish ] = "Znajdü & ZamieÒ";
     Text[ japanese ] = "åüçıÇ∆íuä∑";
     Text[ chinese_traditional ] = "¥Mß‰©M¥¿•N";
@@ -321,7 +321,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "Vain kokonaiset ~sanat" ;
         Text [ danish ] = "Kun hele ord" ;
         Text [ french ] = "~Mots entiers" ;
-        Text [ swedish ] = "Endast hela ~ord" ;
+        Text [ swedish ] = "Bara hela ~ord" ;
         Text [ dutch ] = "Alleen hele ~woorden" ;
         Text [ spanish ] = "Solo pa~labras completas" ;
         Text [ english_us ] = "Whole wor~ds only" ;
@@ -346,7 +346,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ norwegian ] = "Jam~f¯r Tilfelle" ;
         Text [ italian ] = "Ricerca esatta" ;
         Text [ portuguese_brazilian ] = "Igua~lar Caixa" ;
-        Text [ portuguese ] = "Localizar e~xacto" ;
+        Text [ portuguese ] = "Procura e~xacta" ;
         Text [ finnish ] = "Kir~jainkoko vaikuttaa" ;
         Text [ danish ] = "S¯g eksakt" ;
         Text [ french ] = "Respecter la ~casse" ;
@@ -408,7 +408,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Vain valittu alue" ;
         Text [ danish ] = "Kun det markerede" ;
         Text [ french ] = "Rechercher dans la ~sÈlection" ;
-        Text [ swedish ] = "Endast mar~kering" ;
+        Text [ swedish ] = "Bara markeri~ng" ;
         Text [ dutch ] = "Alleen in sele~ctie" ;
         Text [ spanish ] = "Solo e~n la selecciÛn" ;
         Text [ english_us ] = "Current selection ~only" ;
@@ -494,7 +494,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ italian ] = "Ricerca per simili" ;
         Text [ spanish ] = "B˙squeda por se~mejanza" ;
         Text [ french ] = "R~echerche de similaritÈ" ;
-        Text [ swedish ] = "L~ikhetssˆkning" ;
+        Text [ swedish ] = "Likh~etssˆkning" ;
         Text [ danish ] = "S¯g lignende" ;
         Text [ portuguese_brazilian ] = "~ƒhnlichkeitssuche" ;
         Text [ portuguese ] = "Pro~cura por semelhanÁa" ;
@@ -783,7 +783,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Hide = TRUE ;
         Text [ english_us ] = "Extras" ;
         Text [ portuguese_brazilian ] = "Extras" ;
-        Text [ swedish ] = "Verktyg" ;
+        Text [ swedish ] = "Till‰gg" ;
         Text [ danish ] = "Supplerende" ;
         Text [ italian ] = "Extra" ;
         Text [ spanish ] = "Considerar todas las hojas" ;
@@ -1083,7 +1083,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Kokonaiset solut" ;
         Text [ danish ] = "Kun hele rÊkker" ;
         Text [ french ] = "Cellules entiËres" ;
-        Text [ swedish ] = "Endast hela ce~ller" ;
+        Text [ swedish ] = "Bara hela ce~ller" ;
         Text [ dutch ] = "Alleen hele c~ellen" ;
         Text [ spanish ] = "Solo cel~das completas" ;
         Text [ english_us ] = "~Entire cells" ;
