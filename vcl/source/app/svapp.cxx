@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:13:36 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,20 +966,23 @@ BOOL Application::PostUserEvent( ULONG& rEventId, const Link& rLink, void* pCall
 
 void Application::RemoveUserEvent( ULONG nUserEvent )
 {
-    ImplSVEvent* pSVEvent = (ImplSVEvent*)nUserEvent;
-
-    DBG_ASSERT( !pSVEvent->mpWindow,
-                "Application::RemoveUserEvent(): Event is send to a window" );
-    DBG_ASSERT( pSVEvent->mbCall,
-                "Application::RemoveUserEvent(): Event is already removed" );
-
-    if ( pSVEvent->mpWindow )
+    if(nUserEvent)
     {
-        pSVEvent->mpWindow->ImplRemoveDel( &(pSVEvent->maDelData) );
-        pSVEvent->mpWindow = NULL;
-    }
+        ImplSVEvent* pSVEvent = (ImplSVEvent*)nUserEvent;
 
-    pSVEvent->mbCall = FALSE;
+        DBG_ASSERT( !pSVEvent->mpWindow,
+                    "Application::RemoveUserEvent(): Event is send to a window" );
+        DBG_ASSERT( pSVEvent->mbCall,
+                    "Application::RemoveUserEvent(): Event is already removed" );
+
+        if ( pSVEvent->mpWindow )
+        {
+            pSVEvent->mpWindow->ImplRemoveDel( &(pSVEvent->maDelData) );
+            pSVEvent->mpWindow = NULL;
+        }
+
+        pSVEvent->mbCall = FALSE;
+    }
 }
 
 // -----------------------------------------------------------------------
