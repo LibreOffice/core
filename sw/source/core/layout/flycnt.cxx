@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2002-08-23 10:32:28 $
+ *  last change: $Author: ama $ $Date: 2002-08-26 08:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2097,17 +2097,16 @@ void SwFlyAtCntFrm::MakeFlyPos()
                 // kein break;
             case REL_PG_RIGHT:
             {
-                if ( bTmpToggle )    // linker Seitenrand
-                {
-                    nAdd = (*fnRect->fnXDiff)((pPage->Frm().*fnRect->fnGetLeft)(),
+                nAdd = (*fnRect->fnXDiff)((pPage->Frm().*fnRect->fnGetLeft)(),
                                          (pOrient->Frm().*fnRect->fnGetLeft)());
+                if ( bTmpToggle )    // linker Seitenrand
                     nWidth = (pPage->*fnRect->fnGetLeftMargin)();
-                }
                 else            // rechter Seitenrand
                 {
-                    nAdd = (*fnRect->fnXDiff)((pPage->*fnRect->fnGetPrtRight)(),
-                                         (pOrient->Frm().*fnRect->fnGetLeft)());
-                    nWidth = (pPage->*fnRect->fnGetRightMargin)();
+                    nWidth = (pPage->Frm().*fnRect->fnGetWidth)();
+                    SwTwips nTmp = (pPage->*fnRect->fnGetRightMargin)();
+                    nWidth -= nTmp;
+                    nAdd += nTmp;
                 }
                 bPageRel = TRUE;
                 break;
@@ -2124,8 +2123,9 @@ void SwFlyAtCntFrm::MakeFlyPos()
                 }
                 else            // rechter Absatzrand
                 {
-                    nWidth = (pOrient->*fnRect->fnGetRightMargin)();
-                    nAdd = (pOrient->Frm().*fnRect->fnGetWidth)()-nWidth;
+                    nWidth = (pOrient->Frm().*fnRect->fnGetWidth)();
+                    nAdd = (pOrient->*fnRect->fnGetRightMargin)();
+                    nWidth -= nAdd;
                 }
                 break;
             }
@@ -2303,7 +2303,8 @@ void SwFlyAtCntFrm::MakeFlyPos()
                 }
                 SwRect aTmpFrm( aTmpPos, Frm().SSize() );
                 const UINT32 nMyOrd = GetVirtDrawObj()->GetOrdNum();
-                SwOrderIter aIter( FindPageFrm(), TRUE );
+                const SwPageFrm *pPage = FindPageFrm();
+                SwOrderIter aIter( pPage, TRUE );
                 const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)aIter.Bottom())->GetFlyFrm();
                 const SwFrm *pKontext = ::FindKontext( GetAnchor(), FRM_COLUMN );
                 ULONG nMyIndex = ((SwTxtFrm*)GetAnchor())->GetTxtNode()->GetIndex();
@@ -2355,11 +2356,34 @@ void SwFlyAtCntFrm::MakeFlyPos()
                                             nFlyBot >= aTmpFrm.Top() - rUL.GetUpper() )
                                         {
                                             if ( eHOri == HORI_LEFT )
-                                                nRelPosX = Max( nRelPosX, nFlyBot+1
-                                                    +rULI.GetLower() -GetAnchor()->Frm().Top());
+                                            {
+                                                SwTwips nTmp = nFlyBot + 1
+                                                    + rUL.GetUpper()
+                                                    - GetAnchor()->Frm().Top();
+                                                if( nTmp > nRelPosX &&
+                                                    nTmp + Frm().Height() +
+                                                    GetAnchor()->Frm().Top() +
+                                                    rUL.GetLower() <=
+                                                    pPage->Frm().Height() +
+                                                    pPage->Frm().Top() )
+                                                {
+                                                    nRelPosX = nTmp;
+                                                }
+                                            }
                                             else if ( eHOri == HORI_RIGHT )
-                                                nRelPosX = Min( nRelPosX, nFlyTop-1
-                                                    -rULI.GetUpper() - Frm().Height() - GetAnchor()->Frm().Top());
+                                            {
+                                                SwTwips nTmp = nFlyTop - 1
+                                                    - rUL.GetLower()
+                                                    - Frm().Height()
+                                                    - GetAnchor()->Frm().Top();
+                                                if( nTmp < nRelPosX &&
+                                                    nTmp - rUL.GetUpper() +
+                                                    GetAnchor()->Frm().Top()
+                                                    >= pPage->Frm().Top() )
+                                                {
+                                                    nRelPosX = nTmp;
+                                                }
+                                            }
                                             aTmpFrm.Pos().Y() = GetAnchor()->Frm().Top() + nRelPosX;
                                         }
                                     }
@@ -2372,11 +2396,34 @@ void SwFlyAtCntFrm::MakeFlyPos()
                                             nFlyRight >= aTmpFrm.Left() - rLR.GetLeft() )
                                         {
                                             if ( eHOri == HORI_LEFT )
-                                                nRelPosX = Max( nRelPosX, nFlyRight+1
-                                                    +rLRI.GetRight() -GetAnchor()->Frm().Left());
+                                            {
+                                                SwTwips nTmp = nFlyRight + 1
+                                                    + rLR.GetLeft()
+                                                    - GetAnchor()->Frm().Left();
+                                                if( nTmp > nRelPosX &&
+                                                    nTmp + Frm().Width() +
+                                                    GetAnchor()->Frm().Left() +
+                                                    rLR.GetRight() <=
+                                                    pPage->Frm().Width() +
+                                                    pPage->Frm().Left() )
+                                                {
+                                                    nRelPosX = nTmp;
+                                                }
+                                            }
                                             else if ( eHOri == HORI_RIGHT )
-                                                nRelPosX = Min( nRelPosX, nFlyLeft-1
-                                                    -rLRI.GetLeft() - Frm().Width() - GetAnchor()->Frm().Left());
+                                            {
+                                                SwTwips nTmp = nFlyLeft - 1
+                                                    - rLR.GetRight()
+                                                    - Frm().Width()
+                                                    - GetAnchor()->Frm().Left();
+                                                if( nTmp < nRelPosX &&
+                                                    nTmp - rLR.GetLeft() +
+                                                    GetAnchor()->Frm().Left()
+                                                    >= pPage->Frm().Left() )
+                                                {
+                                                    nRelPosX = nTmp;
+                                                }
+                                            }
                                             aTmpFrm.Pos().X() = GetAnchor()->Frm().Left() + nRelPosX;
                                         }
                                     }
