@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2001-04-04 13:28:34 $
+ *  last change: $Author: mba $ $Date: 2001-04-12 13:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,14 +190,26 @@ void FrameContainer::remove( const Reference< XFrame >& xFrame )
         if( aSearchedItem != m_aContainer.end() )
         {
             m_aContainer.erase( aSearchedItem );
+
             // If removed frame the current active frame - reset state variable.
             if( m_xActiveFrame == xFrame )
             {
                 m_xActiveFrame = Reference< XFrame >();
             }
+
+            // looking for zombies ...
+            for( sal_uInt32 nIndex=0; nIndex < m_aContainer.size();  )
+            {
+                if ( !m_aContainer.at(nIndex)->getComponentWindow().is() )
+                    m_aContainer.erase( m_aContainer.begin() + nIndex );
+                else
+                    nIndex++;
+            }
+
             // We don't need the write lock any longer ...
             // downgrade to read access.
             aWriteLock.downgrade();
+
             // If last frame was removed and special quit timer is enabled by the desktop
             // we must terminate the desktop by using this timer!
             if  (
