@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:37 $
+ *  last change: $Author: mba $ $Date: 2000-09-22 14:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3427,15 +3427,17 @@ void SfxViewFrame::ToolboxState_Impl( SfxItemSet &rSet )
 //--------------------------------------------------------------------
 SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( USHORT nId )
 {
-    SfxWorkWindow* pWork = GetFrame()->GetWorkWindow_Impl();
+    SfxWorkWindow* pWork = 0;
     if ( IsA( TYPE(SfxInPlaceFrame) ) )
     {
         SfxShell* pShell;
         const SfxSlot* pSlot;
-        if( !GetDispatcher()->GetShellAndSlot_Impl( nId, &pShell, &pSlot, FALSE, TRUE ) )
+        if( !GetDispatcher()->GetShellAndSlot_Impl( nId, &pShell, &pSlot, FALSE, TRUE ) && GetParentViewFrame_Impl() )
             // Containerslot !
             pWork = GetParentViewFrame_Impl()->GetFrame()->GetWorkWindow_Impl();
     }
+    else
+        pWork = GetFrame()->GetWorkWindow_Impl();
 
     return pWork;
 }
@@ -3443,7 +3445,8 @@ SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( USHORT nId )
 void SfxViewFrame::SetChildWindow(USHORT nId, BOOL bOn)
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
-    pWork->SetChildWindow_Impl( nId, bOn );
+    if ( pWork )
+        pWork->SetChildWindow_Impl( nId, bOn );
 }
 
 //--------------------------------------------------------------------
@@ -3451,7 +3454,8 @@ void SfxViewFrame::SetChildWindow(USHORT nId, BOOL bOn)
 void SfxViewFrame::ToggleChildWindow(USHORT nId)
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
-    pWork->ToggleChildWindow_Impl( nId );
+    if ( pWork )
+        pWork->ToggleChildWindow_Impl( nId );
 }
 
 //--------------------------------------------------------------------
@@ -3459,7 +3463,8 @@ void SfxViewFrame::ToggleChildWindow(USHORT nId)
 BOOL SfxViewFrame::HasChildWindow( USHORT nId )
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
-    return pWork->HasChildWindow_Impl(nId);
+    if ( pWork )
+        return pWork->HasChildWindow_Impl(nId);
 }
 
 //--------------------------------------------------------------------
@@ -3467,7 +3472,8 @@ BOOL SfxViewFrame::HasChildWindow( USHORT nId )
 BOOL SfxViewFrame::KnowsChildWindow( USHORT nId )
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
-    return pWork->KnowsChildWindow_Impl(nId);
+    if ( pWork )
+        return pWork->KnowsChildWindow_Impl(nId);
 }
 
 //--------------------------------------------------------------------
@@ -3475,7 +3481,8 @@ BOOL SfxViewFrame::KnowsChildWindow( USHORT nId )
 void SfxViewFrame::ShowChildWindow( USHORT nId, BOOL bVisible )
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
-    pWork->ShowChildWindow_Impl(nId, bVisible);
+    if ( pWork )
+        pWork->ShowChildWindow_Impl(nId, bVisible);
 }
 
 //--------------------------------------------------------------------
@@ -3483,7 +3490,8 @@ void SfxViewFrame::ShowChildWindow( USHORT nId, BOOL bVisible )
 SfxChildWindow* SfxViewFrame::GetChildWindow(USHORT nId)
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
-    return pWork->GetChildWindow_Impl(nId);
+    if ( pWork )
+        return pWork->GetChildWindow_Impl(nId);
 }
 
 
