@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 19:19:53 $
+ *  last change: $Author: aw $ $Date: 2000-12-05 11:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1445,9 +1445,9 @@ void SdXMLExport::ImpWritePageMasterInfos()
             AddAttribute(XML_NAMESPACE_FO, sXML_page_height, sString);
 
             if(pInfo->GetOrientation() == view::PaperOrientation_PORTRAIT)
-                AddAttributeASCII(XML_NAMESPACE_FO, sXML_page_orientation, sXML_orientation_portrait);
+                AddAttributeASCII(XML_NAMESPACE_STYLE, sXML_print_orientation, sXML_orientation_portrait);
             else
-                AddAttributeASCII(XML_NAMESPACE_FO, sXML_page_orientation, sXML_orientation_landscape);
+                AddAttributeASCII(XML_NAMESPACE_STYLE, sXML_print_orientation, sXML_orientation_landscape);
 
             // write style:properties
             SvXMLElementExport aPMF(*this, XML_NAMESPACE_STYLE, sXML_properties, sal_True, sal_True);

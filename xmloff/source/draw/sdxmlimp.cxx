@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 11:10:35 $
+ *  last change: $Author: aw $ $Date: 2000-12-05 11:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ static __FAR_DATA SvXMLTokenMapEntry aPageMasterStyleAttrTokenMap[] =
     { XML_NAMESPACE_FO,             sXML_margin_right,      XML_TOK_PAGEMASTERSTYLE_MARGIN_RIGHT        },
     { XML_NAMESPACE_FO,             sXML_page_width,        XML_TOK_PAGEMASTERSTYLE_PAGE_WIDTH          },
     { XML_NAMESPACE_FO,             sXML_page_height,       XML_TOK_PAGEMASTERSTYLE_PAGE_HEIGHT         },
-    { XML_NAMESPACE_FO,             sXML_page_orientation,  XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION    },
+    { XML_NAMESPACE_STYLE,          sXML_print_orientation, XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION    },
     XML_TOKEN_MAP_END
 };
 
