@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProcessHandler.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2004-03-19 14:29:29 $
+ *  last change: $Date: 2004-12-10 17:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ class Pump extends Thread {
  */
 public class ProcessHandler {
     private String cmdLine;
+    private String[] cmdLineArray;
     private String[] envVars = null;
     private File workDir = null;
     private PrintWriter log;
@@ -162,6 +163,12 @@ public class ProcessHandler {
     public ProcessHandler(String cmdLine) {
         this(cmdLine, null, null, null, 0);
     }
+
+    public ProcessHandler(String[] cmdLines)
+        {
+            this(null, null, null, null, 0);
+            cmdLineArray = cmdLines;
+        }
 
     /**
      * Creates instance with specified external command and
@@ -303,16 +310,37 @@ public class ProcessHandler {
         }
         Runtime runtime = Runtime.getRuntime() ;
         try {
-            log.println("Starting command: " + cmdLine) ;
-            if (workDir != null) {
-                proc = runtime.exec(cmdLine, envVars, workDir) ;
-            } else {
-                proc = runtime.exec(cmdLine, envVars) ;
+            if (cmdLine == null)
+            {
+                log.print("Starting command from array: " );
+                for(int i = 0;i<cmdLineArray.length;i++)
+                {
+                    log.print(cmdLineArray[i]);
+                    log.print(" ");
+                }
+                log.println();
+                proc = runtime.exec(cmdLineArray, envVars);
             }
-
+            else
+            {
+                log.println("Starting command: " + cmdLine) ;
+                if (workDir != null) {
+                    proc = runtime.exec(cmdLine, envVars, workDir) ;
+                } else {
+                    proc = runtime.exec(cmdLine, envVars) ;
+                }
+            }
             isStarted = true ;
-        } catch (java.io.IOException e) {
-            log.println("The command "+cmdLine+" can't be started: " + e);
+        } catch (java.io.IOException e)
+        {
+            if (cmdLine == null)
+            {
+                log.println("The command array can't be started: " + e);
+            }
+            else
+            {
+                log.println("The command " + cmdLine + " can't be started: " + e);
+            }
             return;
         }
         stdout = new Pump(proc.getInputStream(), log, "out > ");
