@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:45:14 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <vcl/svapp.hxx>
 #endif
 
+
 using namespace ::rtl;
 using namespace ::com::sun::star::registry;
 
@@ -87,8 +88,8 @@ namespace desktop
 {
 
 SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
-        :
-        IntroWindow()
+    : IntroWindow()
+    , _vdev(*((IntroWindow*)this))
     , _iProgress(0)
     , _iMax(100)
     , _bPaintBitmap(sal_True)
@@ -103,6 +104,7 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     initBitmap();
     Size aSize = _aIntroBmp.GetSizePixel();
     SetOutputSizePixel( aSize );
+    _vdev.SetOutputSizePixel( aSize );
     _height = aSize.Height();
     _width = aSize.Width();
     _tlx = _xoffset;              // top-left x
@@ -140,22 +142,28 @@ void SAL_CALL SplashScreen::reset()
     throw (RuntimeException)
 {
     _iProgress = 0;
+    Show();
     updateStatus();
 }
 
 void SAL_CALL SplashScreen::setText(const OUString& aText)
     throw (RuntimeException)
 {
+    if (_bVisible) {
+        Show();
+    }
 }
 
 void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
     throw (RuntimeException)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-
-    if (nValue >= _iMax) _iProgress = _iMax;
-    else _iProgress = nValue;
-    updateStatus();
+    if (_bVisible) {
+        Show();
+        if (nValue >= _iMax) _iProgress = _iMax;
+        else _iProgress = nValue;
+        updateStatus();
+    }
 }
 
 // XInitialize
@@ -172,9 +180,9 @@ void SplashScreen::updateStatus()
 {
     if (!_bVisible) return;
     if (!_bPaintProgress) _bPaintProgress = sal_True;
-    _bPaintBitmap=sal_False;
+    //_bPaintBitmap=sal_False;
     Paint(Rectangle());
-    _bPaintBitmap=sal_True;
+    //_bPaintBitmap=sal_True;
 }
 
 // internal private methods
@@ -182,9 +190,10 @@ IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
 {
     if ( inEvent != 0 )
     {
+        // Paint( Rectangle() );
         switch ( inEvent->GetId() )
         {
-            case VCLEVENT_WINDOW_HIDE:
+            case VCLEVENT_WINDOW_SHOW:
                 Paint( Rectangle() );
                 break;
             default:
@@ -228,22 +237,33 @@ void SplashScreen::initBitmap()
             // file. The bitmap resource is language independent.
             const USHORT nResId = RID_DEFAULTINTRO;
             LanguageType aLanguageType = LANGUAGE_DONTKNOW;
-            String       aMgrName = String::CreateFromAscii( "iso" );
+            String aMgrName = String::CreateFromAscii( "iso" );
             aMgrName += String::CreateFromInt32(SUPD); // current build version
             ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
-            ResId aIntroBmpRes( nResId, pLabelResMgr );
-            _aIntroBmp = Bitmap( aIntroBmpRes );
+            if ( !pLabelResMgr )
+            {
+                // no "iso" resource -> search for "ooo" resource
+                aMgrName = String::CreateFromAscii( "ooo" );
+                aMgrName += String::CreateFromInt32(SUPD); // current build version
+                pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+            }
+            if ( pLabelResMgr )
+            {
+                ResId aIntroBmpRes( nResId, pLabelResMgr );
+                _aIntroBmp = Bitmap( aIntroBmpRes );
+            }
             delete pLabelResMgr;
         }
     }
 }
 
-void SplashScreen::Paint( const Rectangle& )
+void SplashScreen::Paint( const Rectangle& r)
 {
     if(!_bVisible) return;
+
     // draw bitmap
     if (_bPaintBitmap)
-        DrawBitmap( Point(), _aIntroBmp );
+        _vdev.DrawBitmap( Point(), _aIntroBmp );
 
     if (_bPaintProgress) {
         // draw progress...
@@ -253,18 +273,23 @@ void SplashScreen::Paint( const Rectangle& )
         const Color cGray(COL_LIGHTGRAY);
 
         // border
-        SetFillColor();
-        SetLineColor(cGray);
-        DrawRect(Rectangle(_tlx, _tly, _tlx+_barwidth,
+        _vdev.SetFillColor();
+        _vdev.SetLineColor(cGray);
+        _vdev.DrawRect(Rectangle(_tlx, _tly, _tlx+_barwidth,
             _tly+_barheight));
 
         // progress bar
-        SetFillColor(cBlue);
-        SetLineColor();
-        DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace,
+        _vdev.SetFillColor(cBlue);
+        _vdev.SetLineColor();
+        _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace,
             _tlx+_barspace+length, _tly+_barheight-_barspace));
     }
-    Flush();
+    Size aSize =  GetOutputSizePixel();
+    Size bSize =  _vdev.GetOutputSizePixel();
+    //_vdev.Flush();
+    //_vdev.DrawOutDev(Point(), GetOutputSize(), Point(), GetOutputSize(), *((IntroWindow*)this) );
+    DrawOutDev(Point(), GetOutputSizePixel(), Point(), _vdev.GetOutputSizePixel(), _vdev );
+    //Flush();
 }
 
 
