@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_draw.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:58:19 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 21:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,5 +82,5 @@ Module gid_Module_Prg_Draw_Help
     MOD_NAME_DESC ( MODULE_PRG_DRAW_HELP );
     ParentID = gid_Module_Prg_Draw;
     Default = YES;
-    Files = (gid_File_Help_Sdraw_Zip,gid_File_Help_Simpress_Zip, gid_File_Help_Smath_Zip);
+    Files = (gid_File_Help_Sdraw_Zip);
 End
