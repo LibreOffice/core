@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:15:42 $
+ *  last change: $Author: rt $ $Date: 2003-05-27 16:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,6 +482,12 @@ service ParagraphProperties
             <p>If the paragraph is not part of a numbering the property is void.</p>
          */
         [optional, property, maybevoid] boolean NumberingIsNumber;
+        //-------------------------------------------------------------------------
+        /** the property determines if borders set at a paragraph are merged with the
+         previous paragraph.
+         <p>Borders are only merged if they are identical.</p>
+         */
+        [optional, property, maybevoid] boolean ParaIsConnectBorder;
 
 };
 
