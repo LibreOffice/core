@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSlideView.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-09-08 12:25:16 $
+ *  last change:$Date: 2004-01-05 19:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ public class AccessibleSlideView extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log ) {
         log.println("disposing impress document");
-        xImpressDoc.dispose();
+        util.DesktopTools.closeDoc(xImpressDoc);;
     }
 
     /**
