@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:20:43 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,7 +602,7 @@ const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
 //   Hilfroutinen fuer Kapitelnummerierung und Aufzaehlung / Gliederung
 //---------------------------------------------------------------------
 
-static void SetBaseAnlv( SwNumFmt* pNum, WW8_ANLV* pAV )
+static void SetBaseAnlv( SwNumFmt* pNum, WW8_ANLV* pAV, BYTE nSwLevel )
 {
     static SvxExtNumType eNumA[8] = { SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
         SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N, SVX_NUM_ARABIC,
@@ -615,8 +615,8 @@ static void SetBaseAnlv( SwNumFmt* pNum, WW8_ANLV* pAV )
 
     pNum->SetNumberingType(( SVBT8ToByte( pAV->nfc ) < 8 ) ?
                     eNumA[SVBT8ToByte( pAV->nfc ) ] : SVX_NUM_NUMBER_NONE);
-//  pNum->bInclUpperLevel = pAV->fPrev;
-    pNum->SetIncludeUpperLevels( ( SVBT8ToByte( pAV->aBits1 ) & 0x4 ) >> 2 );
+    if ((SVBT8ToByte(pAV->aBits1 ) & 0x4) >> 2)
+        pNum->SetIncludeUpperLevels(nSwLevel + 1);
     pNum->SetStart( SVBT16ToShort( pAV->iStartAt ) );
 //  pNum->eNumAdjust = eAdjA[pAV->jc];
     pNum->SetNumAdjust( eAdjA[SVBT8ToByte( pAV->aBits1 ) & 0x3] );
@@ -743,7 +743,7 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD* pAD, BYTE nSwLevel,
     {                                   // Es gibt einen Anld-Sprm
         bAktAND_fNumberAcross = 0 != SVBT8ToByte( pAD->fNumberAcross );
         WW8_ANLV* pAV = &pAD->eAnlv;
-        SetBaseAnlv( &aNF, pAV );       // Setze Basis-Format
+        SetBaseAnlv( &aNF, pAV, nSwLevel );     // Setze Basis-Format
         SetAnlvStrings( &aNF, pAV, pAD->rgchAnld, bOutLine );// und Rest
     }
     pNumR->Set( nSwLevel, aNF );
@@ -862,7 +862,7 @@ void SwWW8ImplReader::SetNumOlst( SwNumRule* pNumR, WW8_OLST* pO, BYTE nSwLevel 
 {
     SwNumFmt aNF;
     WW8_ANLV* pAV = &pO->rganlv[nSwLevel];
-    SetBaseAnlv( &aNF, pAV );               // Setze Basis-Format
+    SetBaseAnlv( &aNF, pAV, nSwLevel );             // Setze Basis-Format
                                             // ... und nun die Strings
     int i, nTxtOfs = 0;
     register WW8_ANLV* pAV1;                 // suche String-Positionen
