@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-10 15:08:22 $
+ *  last change: $Author: gt $ $Date: 2002-09-02 07:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,9 @@ ImageList LOGO_IMAGELIST
     ImageBitmap = Bitmap { File = "an_i_logo.bmp" ; };
     MaskColor = Color
     {
-        Red = 0xC000 ;
-        Green = 0xC000 ;
-        Blue = 0xC000 ;
+        Red = 0xFFFF ;
+        Green = 0x0000 ;
+        Blue = 0xFFFF ;
     };
     IdList =
     {
@@ -114,7 +114,7 @@ String STR_RESET
     TEXT[ korean ] = "원래대로(~R)";
     TEXT[ turkish ] = "~Geri";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "~Restablecer";
+    TEXT[ catalan ] = "~Reinicialitza";
     TEXT[ thai ] = "~ตั้งค่าใหม่";
 };
 String STR_APPLY
@@ -129,7 +129,7 @@ String STR_APPLY
     Text[ french ] = "Appliquer";
     Text[ spanish ] = "Aplicar";
     Text[ italian ] = "Applica";
-    Text[ danish ] = "Apply";
+    Text[ danish ] = "Anvend";
     Text[ swedish ] = "Anv�nd";
     Text[ polish ] = "Zastosuj";
     Text[ portuguese_brazilian ] = "Apply";
@@ -139,7 +139,7 @@ String STR_APPLY
     Text[ chinese_traditional ] = "套用";
     Text[ turkish ] = "Apply";
     Text[ arabic ] = "�����";
-    Text[ catalan ] = "Aplicar";
+    Text[ catalan ] = "Aplica";
     Text[ finnish ] = "K�yt�";
     Text[ thai ] = "ใช้";
 };
@@ -195,7 +195,7 @@ String STR_BASEFMT
     Text[ korean ] = "기본서식";
     Text[ turkish ] = "Temel format";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Formato ~base";
+    Text[ catalan ] = "Format de la base";
     Text[ thai ] = "รูปแบบฐาน";
 };
 CheckBox CB_USE_PASSWD
@@ -224,7 +224,7 @@ CheckBox CB_USE_PASSWD
     Text[ korean ] = "패스워드(~P)";
     Text[ turkish ] = "~�ifre";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Contrase�a";
+    Text[ catalan ] = "~Contrasenya";
     Text[ thai ] = "~รหัสผ่าน";
 };
 CheckBox CB_READ_ONLY
@@ -253,7 +253,7 @@ CheckBox CB_READ_ONLY
     Text[ korean ] = "읽기 전용(~R)";
     Text[ turkish ] = "Salt okunur";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Solo lectura";
+    Text[ catalan ] = "~Nom�s lectura";
     Text[ thai ] = "~อ่านอย่างเดียว";
 };
 PushButton CB_FILE
@@ -280,7 +280,7 @@ PushButton CB_FILE
     Text[ korean ] = "파일 시스템(~F)";
     Text[ turkish ] = "Dosya sistemi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sistema de ~archivos";
+    Text[ catalan ] = "Sistema de ~fitxers";
     Text[ finnish ] = "~Tiedostoj�rjestelm�";
     Text[ thai ] = "ระบบแ~ฟ้ม";
 };
@@ -308,7 +308,7 @@ PushButton CB_URL
     Text[ korean ] = "인터넷(~E)";
     Text[ turkish ] = "Internet";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Internet";
+    Text[ catalan ] = "Int~ernet";
     Text[ finnish ] = "Int~ernet";
     Text[ thai ] = "อินเต~อร์เน็ต";
 };
@@ -338,7 +338,7 @@ PushButton BTN_MANAGER
     Text[ korean ] = "관리자(~M)...";
     Text[ turkish ] = "~Y�netici...";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Administrador...";
+    Text[ catalan ] = "~Gestor...";
     Text[ thai ] = "~ตัวจัดการ...";
 };
 PushButton BTN_STANDARD
@@ -367,7 +367,7 @@ PushButton BTN_STANDARD
     Text[ korean ] = "기준(~H)";
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Predeterminado";
+    Text[ catalan ] = "~Inici";
     Text[ thai ] = "โ~ฮม";
 };
 String STR_PATH_NOT_FOUND1
@@ -395,7 +395,7 @@ String STR_PATH_NOT_FOUND1
     Text[ korean ] = "디렉토리'";
     Text[ turkish ] = "Dizin '";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El directorio '";
+    Text[ catalan ] = "El directori '";
     Text[ thai ] = "ไดเร็กทอรี่ '";
 };
 String STR_PATH_NOT_FOUND2
@@ -423,7 +423,7 @@ String STR_PATH_NOT_FOUND2
     Text[ korean ] = "' 없습니다.";
     Text[ turkish ] = "' mevcut de�il.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "' no existe.";
+    Text[ catalan ] = "' no existeix.";
     Text[ thai ] = "' ไม่มีอยู่";
 };
 InfoBox MSG_ERROR_PASSWD
@@ -453,7 +453,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE[ korean ] = "패스워드가 틀립니다.";
     MESSAGE[ turkish ] = "Yanl�� �ifre";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "Contrase�a no v�lida.";
+    MESSAGE[ catalan ] = "Contrasenya incorrecta.";
     MESSAGE[ thai ] = "รหัสผ่านไม่ถูกต้อง";
 };
 String STR_FILEDLG_INSERT
@@ -481,7 +481,7 @@ String STR_FILEDLG_INSERT
     Text[ korean ] = "파일 삽입";
     Text[ turkish ] = "Dosya ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar archivo";
+    Text[ catalan ] = "Insereix un fitxer";
     Text[ thai ] = "แทรกแฟ้ม";
 };
 String STR_TABPAGE_MANAGESTYLES
@@ -509,7 +509,7 @@ String STR_TABPAGE_MANAGESTYLES
     Text[ korean ] = "관리";
     Text[ turkish ] = "Y�net";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Administrar";
+    Text[ catalan ] = "Organitzador";
     Text[ thai ] = "ตัวจัดระเบียบ";
 };
 InfoBox MSG_TABPAGE_INVALIDNAME
@@ -539,7 +539,7 @@ InfoBox MSG_TABPAGE_INVALIDNAME
     Message[ korean ] = "이 이름은 이미 템플릿에 사용되고 있습니다.";
     Message[ turkish ] = "Bu ad bir �ablon ad� olarak kullan�l�yor.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Este nombre ya es usado para una plantilla.";
+    Message[ catalan ] = "Aquest nom ja s'utilitza per a una plantilla.";
     Message[ thai ] = "ชื่อนี้ถูกใช้อยู่แล้ว";
 };
 InfoBox MSG_TABPAGE_INVALIDSTYLE
@@ -569,7 +569,7 @@ InfoBox MSG_TABPAGE_INVALIDSTYLE
     Message[ korean ] = "이 템플릿은 없습니다.";
     Message[ turkish ] = "Bu �ablon mevcut de�il.";
     Message[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
-    Message[ catalan ] = "Este estilo no existe.";
+    Message[ catalan ] = "Aquest estil no existeix.";
     Message[ thai ] = "ลักษณะนี้ไม่มีอยู่";
 };
 InfoBox MSG_TABPAGE_INVALIDPARENT
@@ -599,7 +599,7 @@ InfoBox MSG_TABPAGE_INVALIDPARENT
     Message[ korean ] = "이 템플릿은 기본 템플릿으로 사용할 수 없습니다.\n재귀 호출이 발생할 수도 있기 때문입니다.";
     Message[ turkish ] = "Bu �ablon (�zyineleme nedeniyle)\n temel �ablon olarak kullan�lamaz.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Esta plantilla no se puede utilizar como plantilla base,\nya que podr�a provocar una referencia recursiva.";
+    Message[ catalan ] = "Aquesta plantilla no es pot utilitzar com a plantilla base,\nja que podria provocar una refer�ncia recursiva.";
     Message[ thai ] = "ไม่สามารถใช้แม่แบบเป็นแม่แบบฐานได้;\nการอ้างอิงแบบเรียกซ้ำจะเป็นผลลัพธ์";
 };
 InfoBox MSG_POOL_STYLE_NAME
@@ -627,7 +627,7 @@ InfoBox MSG_POOL_STYLE_NAME
     MESSAGE[ korean ] = "이 이름은 기본 템플릿의 이름입니다.\n다른 이름을 선택하십시오.";
     MESSAGE[ turkish ] = "Bu ad bir standart �ablon ad� olarak kullan�l�yor.\nBa�ka bir ad se�in.";
     MESSAGE[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
-    MESSAGE[ catalan ] = "El nombre ya est� usado por un estilo predeterminado.\nElija otro nombre por favor.";
+    MESSAGE[ catalan ] = "El nom ja existeix com a estil per defecte.\nTrieu un altre nom.";
     MESSAGE[ thai ] = "ชื่อมีอยู่แล้วเป็นค่าเริ่มต้นลักษณะ\nกรุณาเลือกชื่ออื่น";
 };
 QueryBox MSG_OVERWRITE_STYLE
@@ -657,7 +657,7 @@ QueryBox MSG_OVERWRITE_STYLE
     Message[ korean ] = "템플릿이 이미 존재합니다. 덮어쓰겠습니까?";
     Message[ turkish ] = "�ablon mevcut durumda. �zerine yaz�ls�n m�?";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "El estilo ya existe. �Desea sobrescribirlo?";
+    Message[ catalan ] = "L'estil ja exiteix. Voleu sobreescriure'l?";
     Message[ thai ] = "ลักษณะมีอยู่แล้ว  เขียนทับหรือไม่?";
 };
 String STR_DELETE_STYLE
@@ -683,7 +683,7 @@ String STR_DELETE_STYLE
     Text[ korean ] = "템플릿 $1을(를) 정말 삭제하겠습니까?";
     Text[ turkish ] = "$1 �ablonlar�n� ger�ekten silmek istiyor musunuz?";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
-    Text[ catalan ] = "�Desea realmente eliminar el estilo $1?";
+    Text[ catalan ] = "Voleu suprimir realment l'estil $1?";
     Text[ finnish ] = "Haluatko varmasti poistaa tyylin $1?";
     Text[ thai ] = "คุณต้องการลบลักษณะ $1 หรือไม่?";
 };
@@ -710,7 +710,7 @@ String STR_DELETE_STYLE_USED
     Text[ korean ] = "사용된 스타일을 삭제하고 있습니다.\n";
     Text[ turkish ] = "Kullan�lan bir �ablonu siliyorsunuz!\n";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
-    Text[ catalan ] = "�Usted est� borrando un estilo que ha sido aplicado!\n";
+    Text[ catalan ] = "Esteu suprimint un estil ja aplicat!\n";
     Text[ finnish ] = "Olet poistamassa k�yt�ss� olevaa tyyli�!\n";
     Text[ thai ] = "คุณกำลังลบลักษณะประยุกต์!\n";
 };
@@ -775,7 +775,7 @@ Menu MN_CONTEXT_TEMPLDLG
             Text[ korean ] = "새로...";
             Text[ turkish ] = "Yeni...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Nuevo...";
+            Text[ catalan ] = "Nou...";
             Text[ thai ] = "ใหม่...";
         };
         MenuItem
@@ -805,7 +805,7 @@ Menu MN_CONTEXT_TEMPLDLG
             Text[ korean ] = "변경...";
             Text[ turkish ] = "De�i�tir...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Modificar...";
+            Text[ catalan ] = "Modifica...";
             Text[ thai ] = "ดัดแปลงแก้ไข...";
         };
         MenuItem
@@ -835,7 +835,7 @@ Menu MN_CONTEXT_TEMPLDLG
             Text[ korean ] = "삭제...";
             Text[ turkish ] = "Sil...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Eliminar...";
+            Text[ catalan ] = "Suprimeix...";
             Text[ thai ] = "ลบ...";
         };
     };
@@ -865,7 +865,7 @@ String STR_BASICMACROS
     TEXT[ korean ] = "BASIC  매크로";
     TEXT[ turkish ] = "BASIC makrolar�";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Macros BASIC";
+    TEXT[ catalan ] = "Macros del BASIC";
     TEXT[ thai ] = "BASIC มาโคร";
 };
 InfoBox MSG_LAYOUT_NOT_LOADING
@@ -895,7 +895,7 @@ InfoBox MSG_LAYOUT_NOT_LOADING
     MESSAGE[ korean ] = "문서를 레이아웃 없이 로드하고 있습니다.";
     MESSAGE[ turkish ] = "Belge sayfa d�zeni olmadan y�kleniyor.";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "Cargando el documento sin dise�o.";
+    MESSAGE[ catalan ] = "Carregant un document sense format.";
     MESSAGE[ thai ] = "กำลังโหลดเอกสารโดยไม่มีเค้าโครง";
 };
 Accelerator ACC_LAYOUT_NOT_LOADING
@@ -937,7 +937,7 @@ ErrorBox MSG_ERR_CANT_EDIT_OLD_FORMAT
     Message[ korean ] = "이 \n파일 형식으로 된 문서의 문서 정보는 편집할 수 없습니다.";
     Message[ turkish ] = "Bu dosya format�ndaki belgelerin belge bilgileri i�lenemez";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "La informaci�n de documentos no se puede editar en este\nformato de archivo.";
+    Message[ catalan ] = "La informaci� de documents no es pot editar en aquest\nformat de fitxer.";
     Message[ finnish ] = "T�m�n tiedostomuodon asiakirjatietoja\n ei voi muokata.";
     Message[ thai ] = "ไม่สามารถแก้ไขข้อมูลเอกสารสำหรับเอกสาร\n ในรูปแบบแฟ้มนี้ได้";
 };
@@ -965,7 +965,7 @@ ErrorBox MSG_ERR_CANT_EDIT_OPEN_DOCS
     Message[ korean ] = "현재 편집중인 \n문서의 문서정보는 문서관리자에 의해 편집될 수 없습니다.";
     Message[ turkish ] = "�u an kullan�lan belgelerin belge bilgileri belge y�neticisi taraf�ndan i�lenemez.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "La informaci�n acerca de los documentos que se est�n editando\nno puede ser editada por el administrador de documentos.";
+    Message[ catalan ] = "La informaci� sobre els documents que s'estan editant\nno pot ser editada per l'administrador de documents.";
     Message[ finnish ] = "Nyt muokattavien asiakirjojen\n asiakirjatietoja ei voi muokata asiakirjojen hallinnassa.";
     Message[ thai ] = "ข้อมูลเอกสารของเอกสาร\n ที่กำลังถูกแก้ไขปัจจุบันไม่สามารถดัดแปลงแก้ไขจากภายในตัวจัดการเอกสาร";
 };
@@ -1051,7 +1051,7 @@ Menu RID_AUTOHIDE
             Text[ korean ] = "숨기기";
             Text[ turkish ] = "Gizle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Ocultar";
+            Text[ catalan ] = "Oculta";
             Text[ finnish ] = "Piilota";
             Text[ thai ] = "ซ่อน";
         };
@@ -1080,7 +1080,7 @@ String RID_AUTOHIDE
     Text[ korean ] = "표시";
     Text[ turkish ] = "Gizleme";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No ocultar";
+    Text[ catalan ] = "No amaguis";
     Text[ finnish ] = "�l� piilota";
     Text[ thai ] = "ห้ามซ่อน";
 };
@@ -1141,16 +1141,9 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
     MESSAGE[ arabic ] = "����� ��� ���� ����� ����";
     MESSAGE[ turkish ] = "�ifre onay� hatal�";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "Confirmaci�n err�nea de la contrase�a";
+    MESSAGE[ catalan ] = "Confirmaci� incorrecta de la contrasenya";
     MESSAGE[ finnish ] = "Salasanan vahvistus ei t�sm��";
     MESSAGE[ thai ] = "ยืนยันรหัสผ่านไม่ถูกต้อง";
 };
 
 // ******************************************************************* EOF
-
-
-
-
-
-
-
