@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-30 18:35:25 $
+ *  last change: $Author: pl $ $Date: 2002-10-01 07:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5969,7 +5969,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
                                                 nIndex, nLineLen);
                         long lc_x1 = pCaretXArray[2*(nIndex + nMnemonicPos)];
                         long lc_x2 = pCaretXArray[2*(nIndex + nMnemonicPos)+1];
-                        nMnemonicWidth = std::abs((int)(lc_x1 - lc_x2));
+                        nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
 
                         Point       aTempPos = LogicToPixel( aPos );
                         nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( std::min( lc_x1, lc_x2 ) );
@@ -6039,7 +6039,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
             BOOL bRet = GetCaretPositions( aStr, pCaretXArray, 0, aStr.Len() );
             long lc_x1 = pCaretXArray[2*(nMnemonicPos)];
             long lc_x2 = pCaretXArray[2*(nMnemonicPos)+1];
-            nMnemonicWidth = std::abs((int)(lc_x1 - lc_x2));
+            nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
 
             Point aTempPos = LogicToPixel( aPos );
             nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( std::min(lc_x1, lc_x2) );
@@ -6374,7 +6374,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
                                       nIndex, nLen);
             long lc_x1 = pCaretXArray[2*(nIndex + nMnemonicPos)];
             long lc_x2 = pCaretXArray[2*(nIndex + nMnemonicPos)+1];
-            nMnemonicWidth = std::abs((int)(lc_x1 - lc_x2));
+            nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
 
             Point aTempPos = LogicToPixel( rPos );
             nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( std::min(lc_x1,lc_x2) );
