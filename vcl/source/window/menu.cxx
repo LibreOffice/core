@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-20 14:36:15 $
+ *  last change: $Author: mt $ $Date: 2002-08-20 17:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,6 +696,16 @@ void Menu::ImplLoadRes( const ResId& rResId )
     }
     if( nObjMask & RSC_MENU_DEFAULTITEMID )
         SetDefaultItem( ReadShortRes() );
+}
+
+void Menu::CreateAutoMnemonics()
+{
+    MnemonicGenerator aMnemonicGenerator;
+    ULONG n;
+    for ( n = 0; n < pItemList->Count(); n++ )
+        aMnemonicGenerator.RegisterMnemonic( pItemList->GetDataFromPos(n)->aText );
+    for ( n = 0; n < pItemList->Count(); n++ )
+        aMnemonicGenerator.CreateMnemonic( pItemList->GetDataFromPos(n)->aText );
 }
 
 void Menu::Activate()
@@ -2587,12 +2597,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     }
     else if ( pSVData->maAppData.mbAutoMnemonics && !( nMenuFlags & MENU_FLAG_NOAUTOMNEMONICS ) )
     {
-        MnemonicGenerator aMnemonicGenerator;
-        ULONG n;
-        for ( n = 0; n < pItemList->Count(); n++ )
-            aMnemonicGenerator.RegisterMnemonic( pItemList->GetDataFromPos(n)->aText );
-        for ( n = 0; n < pItemList->Count(); n++ )
-            aMnemonicGenerator.CreateMnemonic( pItemList->GetDataFromPos(n)->aText );
+        CreateAutoMnemonics();
     }
 
     MenuFloatingWindow* pWin = new MenuFloatingWindow( this, pW, nStyle | WB_SYSTEMWINDOW );
