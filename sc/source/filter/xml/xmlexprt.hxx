@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 09:31:18 $
+ *  last change: $Author: dr $ $Date: 2000-10-24 08:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_CONDITIONOPERATOR_HPP_
 #include <com/sun/star/sheet/ConditionOperator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XLABELRANGES_HPP_
+#include <com/sun/star/sheet/XLabelRanges.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -443,6 +446,8 @@ class ScXMLExport : public SvXMLExport
 
     void GetStringOfFunction(const sal_Int32 nFunction, rtl::OUString& rString) const;
     void WriteScenario();
+    void WriteTheLabelRanges(const com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument >& xSpreadDoc);
+    void WriteLabelRanges( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xRangesIAccess, sal_Bool bColumn );
     void WriteNamedExpressions(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
     void WriteImportDescriptor(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aImportDescriptor);
     rtl::OUString getOperatorXML(const com::sun::star::sheet::FilterOperator aFilterOperator, const sal_Bool bUseRegularExpressions) const;

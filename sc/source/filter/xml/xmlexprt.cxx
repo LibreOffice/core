@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 15:34:14 $
+ *  last change: $Author: dr $ $Date: 2000-10-24 08:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,12 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+
 #ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITION_HPP_
 #include <com/sun/star/sheet/XSheetCondition.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XLABELRANGE_HPP_
+#include <com/sun/star/sheet/XLabelRange.hpp>
 #endif
 
 #include "cellsuno.hxx"
@@ -2236,6 +2240,7 @@ void ScXMLExport::_ExportContent()
                 pValidations->Sort();
                 pValidations->WriteValidations(*this);
             }
+            WriteTheLabelRanges( xSpreadDoc );
             for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
             {
                 uno::Any aTable = xIndex->getByIndex(nTable);
@@ -3414,6 +3419,59 @@ void ScXMLExport::WriteScenario()
         if (sComment.Len())
             AddAttribute(XML_NAMESPACE_TABLE, sXML_comment, rtl::OUString(sComment));
         SvXMLElementExport aElem(*this, XML_NAMESPACE_TABLE, sXML_scenario, sal_True, sal_True);
+    }
+}
+
+void ScXMLExport::WriteTheLabelRanges( const uno::Reference< sheet::XSpreadsheetDocument >& xSpreadDoc )
+{
+    uno::Reference< beans::XPropertySet > xDocProp( xSpreadDoc, uno::UNO_QUERY );
+    if( !xDocProp.is() ) return;
+
+    sal_Int32 nCount = 0;
+    uno::Any aAny = xDocProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_COLLABELRNG ) ) );
+    uno::Reference< sheet::XLabelRanges > xLabelRanges;
+    uno::Reference< container::XIndexAccess > xColRangesIAccess;
+    if( aAny >>= xLabelRanges )
+        xColRangesIAccess = uno::Reference< container::XIndexAccess >( xLabelRanges, uno::UNO_QUERY );
+    if( xColRangesIAccess.is() )
+        nCount += xColRangesIAccess->getCount();
+
+    aAny = xDocProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_ROWLABELRNG ) ) );
+    uno::Reference< container::XIndexAccess > xRowRangesIAccess;
+    if( aAny >>= xLabelRanges )
+        xRowRangesIAccess = uno::Reference< container::XIndexAccess >( xLabelRanges, uno::UNO_QUERY );
+    if( xRowRangesIAccess.is() )
+        nCount += xRowRangesIAccess->getCount();
+
+    if( nCount )
+    {
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, sXML_label_ranges, sal_True, sal_True );
+        WriteLabelRanges( xColRangesIAccess, sal_True );
+        WriteLabelRanges( xRowRangesIAccess, sal_False );
+    }
+}
+
+void ScXMLExport::WriteLabelRanges( const uno::Reference< container::XIndexAccess >& xRangesIAccess, sal_Bool bColumn )
+{
+    if( !xRangesIAccess.is() ) return;
+
+    sal_Int32 nCount = xRangesIAccess->getCount();
+    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        uno::Any aRangeAny = xRangesIAccess->getByIndex( nIndex );
+        uno::Reference< sheet::XLabelRange > xRange;
+        if( aRangeAny >>= xRange )
+        {
+            OUString sRangeStr;
+            table::CellRangeAddress aCellRange( xRange->getLabelArea() );
+            GetStringFromRange( aCellRange, sRangeStr );
+            AddAttribute( XML_NAMESPACE_TABLE, sXML_label_cell_range_address, sRangeStr );
+            aCellRange = xRange->getDataArea();
+            GetStringFromRange( aCellRange, sRangeStr );
+            AddAttribute( XML_NAMESPACE_TABLE, sXML_data_cell_range_address, sRangeStr );
+            AddAttribute( XML_NAMESPACE_TABLE, sXML_orientation, OUString::createFromAscii( bColumn ? sXML_column : sXML_row ) );
+            SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, sXML_label_range, sal_True, sal_True );
+        }
     }
 }
 
