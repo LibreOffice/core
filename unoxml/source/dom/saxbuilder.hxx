@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxbuilder.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace DOM
     typedef std::map< OUString, OUString > NSMap;
     typedef std::map< OUString, OUString > AttrMap;
     typedef std::stack< NSMap > NSStack;
-    
+
     class  CSAXDocumentBuilder
         : public ::cppu::WeakImplHelper3< XDocumentHandler, XSAXDocumentBuilder, XServiceInfo >
     {
@@ -114,7 +114,7 @@ namespace DOM
         Reference< XDocumentFragment > m_aFragment;
         Reference< XLocator > m_aLocator;
         const Reference< XMultiServiceFactory > m_aServiceManager;
-        
+
     public:
 
         // call for factory
@@ -128,7 +128,7 @@ namespace DOM
         static Reference< XInterface > _getInstance(const Reference< XMultiServiceFactory >& rSMgr);
 
         CSAXDocumentBuilder(const Reference< XMultiServiceFactory >& mgr);
-        
+
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
             throw (RuntimeException);
@@ -156,12 +156,12 @@ namespace DOM
             throw( com::sun::star::xml::sax::SAXException );
         virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator )
             throw( com::sun::star::xml::sax::SAXException );
-    
-    
+
+
         // XSAXDocumentBuilder
-        virtual SAXDocumentBuilderState SAL_CALL getState() 
+        virtual SAXDocumentBuilderState SAL_CALL getState()
             throw (RuntimeException);
-        virtual void SAL_CALL reset() 
+        virtual void SAL_CALL reset()
             throw (RuntimeException);
         virtual Reference< XDocument > SAL_CALL getDocument()
             throw (RuntimeException);
@@ -171,7 +171,7 @@ namespace DOM
             throw (RuntimeException);
         virtual void SAL_CALL endDocumentFragment()
             throw (RuntimeException);
-            
+
 
     };
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxbuilder.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:43 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,17 +127,17 @@ namespace DOM
     {
         return m_aState;
     }
-    
+
     void SAL_CALL CSAXDocumentBuilder::reset()
         throw (RuntimeException)
-    {        
+    {
         m_aDocument = Reference< XDocument >();
         m_aFragment = Reference< XDocumentFragment >();
         while (!m_aNodeStack.empty()) m_aNodeStack.pop();
         while (!m_aNSStack.empty()) m_aNSStack.pop();
         m_aState = SAXDocumentBuilderState_READY;
     }
-    
+
     Reference< XDocument > SAL_CALL CSAXDocumentBuilder::getDocument()
         throw (RuntimeException)
     {
@@ -145,7 +145,7 @@ namespace DOM
             throw RuntimeException();
 
         // some debugging...
-        
+
         Reference< XUnoTunnel > aTun(m_aDocument, UNO_QUERY);
         xmlNodePtr pNode = (xmlNodePtr) aTun->getSomething(Sequence< sal_Int8 >());
         if( pNode->type == XML_DOCUMENT_NODE )
@@ -155,10 +155,10 @@ namespace DOM
             xmlDocDump(f, pDoc);
             fclose(f);
         }
-        
+
         return m_aDocument;
     }
-    
+
     Reference< XDocumentFragment > SAL_CALL CSAXDocumentBuilder::getDocumentFragment()
          throw (RuntimeException)
     {
@@ -166,7 +166,7 @@ namespace DOM
             throw RuntimeException();
         return m_aFragment;
     }
-    
+
     void SAL_CALL CSAXDocumentBuilder::startDocumentFragment(const Reference< XDocument >& ownerDoc)
         throw (RuntimeException)
     {
@@ -176,12 +176,12 @@ namespace DOM
             throw RuntimeException();
 
         m_aDocument = ownerDoc;
-        Reference< XDocumentFragment > aFragment = m_aDocument->createDocumentFragment(); 
+        Reference< XDocumentFragment > aFragment = m_aDocument->createDocumentFragment();
         m_aNodeStack.push(Reference< XNode >(aFragment, UNO_QUERY));
         m_aFragment = aFragment;
         m_aState = SAXDocumentBuilderState_BUILDING_FRAGMENT;
     }
-        
+
     void SAL_CALL CSAXDocumentBuilder::endDocumentFragment()
         throw (RuntimeException)
     {
@@ -195,7 +195,7 @@ namespace DOM
         m_aNodeStack.pop();
         m_aState = SAXDocumentBuilderState_FRAGMENT_FINISHED;
     }
-    
+
     // document handler
 
     void SAL_CALL  CSAXDocumentBuilder::startDocument() throw (SAXException)
@@ -211,7 +211,7 @@ namespace DOM
                 OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")), UNO_QUERY_THROW);
         Reference< XDocument > aDocument = aBuilder->newDocument();
         m_aNodeStack.push(Reference< XNode >(aDocument, UNO_QUERY));
-        m_aDocument = aDocument;        
+        m_aDocument = aDocument;
         m_aState = SAXDocumentBuilderState_BUILDING_DOCUMENT;
     }
 
@@ -230,7 +230,7 @@ namespace DOM
     }
 
     void SAL_CALL CSAXDocumentBuilder::startElement(const OUString& aName, const Reference< XAttributeList>& attribs)
-        throw (SAXException)    
+        throw (SAXException)
     {
         fprintf(stderr, "startElement <%s>\n", OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
 
@@ -240,12 +240,12 @@ namespace DOM
             fprintf(stderr, "illegal state in startElement()\n");
             throw SAXException();
         }
-        
+
         // start with mappings in effect for last level
         NSMap aNSMap;
         if (!m_aNSStack.empty())
             aNSMap = NSMap(m_aNSStack.top());
-        
+
         // handle xmlns: attributes and add to mappings
         OUString attr_qname;
         OUString attr_value;
@@ -273,12 +273,12 @@ namespace DOM
                     OUStringToOString(attr_value, RTL_TEXTENCODING_UTF8).getStr());
                 aNSMap.insert(NSMap::value_type(OUString(), attr_value));
             }
-            else 
+            else
             {
                 aAttrMap.insert(AttrMap::value_type(attr_qname, attr_value));
             }
         }
-                        
+
         // does the element have a prefix?
         OUString aPrefix;
         OUString aURI;
@@ -290,12 +290,12 @@ namespace DOM
         }
         else
             aPrefix = OUString();
-        
+
         NSMap::const_iterator result = aNSMap.find(aPrefix);
         if ( result != aNSMap.end())
         {
             // found a URI for prefix
-            aElement = m_aDocument->createElementNS( result->second, aName); // qualified name 
+            aElement = m_aDocument->createElementNS( result->second, aName); // qualified name
         }
         else
         {
@@ -316,17 +316,17 @@ namespace DOM
             attr_qname = a->first;
             attr_value = a->second;
             idx = attr_qname.indexOf(':');
-            if(idx != -1)            
+            if(idx != -1)
             {
                 aPrefix = attr_qname.copy(0, idx);
             }
             else
                 aPrefix = OUString();
 
-             fprintf(stderr, "set attribute: %s=\"%s\"\n",        
+             fprintf(stderr, "set attribute: %s=\"%s\"\n",
                 OUStringToOString(attr_qname, RTL_TEXTENCODING_UTF8).getStr(),
                 OUStringToOString(attr_value, RTL_TEXTENCODING_UTF8).getStr());
-             
+
             result = aNSMap.find(aPrefix);
             if (result != aNSMap.end())
             {
@@ -335,13 +335,13 @@ namespace DOM
             } else {
                 // set attribute without namespace
                 aElement->setAttribute(attr_qname, attr_value);
-           }        
+           }
             a++;
         }
         m_aNSStack.push(aNSMap);
     }
 
-    void SAL_CALL CSAXDocumentBuilder::endElement(const OUString& aName) 
+    void SAL_CALL CSAXDocumentBuilder::endElement(const OUString& aName)
         throw (SAXException)
     {
         fprintf(stderr, "endElement </%s>\n", OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
@@ -377,14 +377,14 @@ namespace DOM
          if (m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
             throw SAXException();
-    
+
          Reference< XText > aText = m_aDocument->createTextNode(aChars);
          m_aNodeStack.top()->appendChild(Reference< XNode >(aText, UNO_QUERY));
     }
 
     void SAL_CALL CSAXDocumentBuilder::ignorableWhitespace(const OUString& aSpaces)
         throw (SAXException)
-    { 
+    {
         fprintf(stderr, "whitespace: [%s]\n", OUStringToOString(aSpaces, RTL_TEXTENCODING_UTF8).getStr());
         //  ignore ignorable whitespace
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
@@ -401,7 +401,7 @@ namespace DOM
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
             throw SAXException();
-        
+
         Reference< XProcessingInstruction > aInstruction = m_aDocument->createProcessingInstruction(
                 aTarget, aData);
         m_aNodeStack.top()->appendChild(Reference< XNode >(aInstruction, UNO_QUERY));
@@ -413,5 +413,5 @@ namespace DOM
         fprintf(stderr, "setdocumentlocator\n");
         // set the document locator...
         m_aLocator = aLocator;
-    }    
+    }
 }

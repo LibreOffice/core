@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notationsmap.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ namespace DOM
         virtual sal_Int32 SAL_CALL getLength() throw (RuntimeException);
 
         /**
-        Retrieves a node specified by local name        
+        Retrieves a node specified by local name
         */
         virtual Reference< XNode > SAL_CALL getNamedItem(const OUString& name) throw (RuntimeException);
 
