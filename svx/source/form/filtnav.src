@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:40:13 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ Menu RID_FM_FILTER_MENU
             Text[ czech ] = "Smazat";
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "~मिटाओ";
+            Text[ slovak ] = "~Zmazať";
         };
         MenuItem
         {
@@ -127,6 +128,7 @@ Menu RID_FM_FILTER_MENU
             Text[ czech ] = "Upravit";
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "~संपादन";
+            Text[ slovak ] = "~Upraviť";
         };
         MenuItem
         {
@@ -158,6 +160,7 @@ Menu RID_FM_FILTER_MENU
             Text[ czech ] = "Je null";
             Text[ hebrew ] = "‮ריק‬";
             Text[ hindi ] = "Null है ~क्या";
+            Text[ slovak ] = "~Je Null";
         };
         MenuItem
         {
@@ -189,9 +192,12 @@ Menu RID_FM_FILTER_MENU
             Text[ czech ] = "Není null";
             Text[ hebrew ] = "‮לא ריק‬";
             Text[ hindi ] = "Null ~नहीं है क्या";
+            Text[ slovak ] = "~Nie je null";
         };
     };
 };
+
+
 
 
 
