@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTPDialog.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:11:58 $
+ *  last change: $Author: vg $  $Date: 2005-03-08 15:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,13 +440,6 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
         return getAcountUrl() + dir;
     }
 
-    public void connect() {
-        new Thread() {
-            public void run() {
-                connect1();
-            }
-        }.start();
-    }
 
     /**
      * First I try to connect to the full url, including directory.
@@ -455,7 +448,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * to "/", if not I say to the user its his problem...
      *
      */
-    private void connect1() {
+    public void connect() {
         setEnabled(btnTestConnection, false);
         setLabel(STATUS_CONNECTING);
         boolean success = false;
