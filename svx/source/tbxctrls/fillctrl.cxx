@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: ka $ $Date: 2000-12-19 14:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,11 +353,18 @@ void SvxFillToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
                         aTmpStr += TMP_STR_END;
 
                         XGradientEntry* pEntry = new XGradientEntry( pGradientItem->GetValue(), aTmpStr );
-                        XGradientList aGradientList( String::CreateFromAscii("TmpList") );
+                         XGradientList aGradientList( String() );
                         aGradientList.Insert( pEntry );
-                        Bitmap* pBmp = aGradientList.GetBitmap( 0 );
-                        ( (ListBox*)pFillAttrLB )->InsertEntry( pEntry->GetName(), *pBmp );
-                        pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
+                        aGradientList.SetDirty( FALSE );
+                        Bitmap* pBmp = aGradientList.CreateBitmapForUI( 0 );
+
+                        if( pBmp )
+                        {
+                            ( (ListBox*)pFillAttrLB )->InsertEntry( pEntry->GetName(), *pBmp );
+                            pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
+                            delete pBmp;
+                        }
+
                         aGradientList.Remove( 0 );
                         delete pEntry;
                     }
@@ -395,11 +402,18 @@ void SvxFillToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
                         aTmpStr += TMP_STR_END;
 
                         XHatchEntry* pEntry = new XHatchEntry( pHatchItem->GetValue(), aTmpStr );
-                        XHatchList aHatchList( String::CreateFromAscii("TmpList" ));
+                        XHatchList aHatchList( String() );
                         aHatchList.Insert( pEntry );
-                        Bitmap* pBmp = aHatchList.GetBitmap( 0 );
-                        ( (ListBox*)pFillAttrLB )->InsertEntry( pEntry->GetName(), *pBmp );
-                        pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
+                        aHatchList.SetDirty( FALSE );
+                        Bitmap* pBmp = aHatchList.CreateBitmapForUI( 0 );
+
+                        if( pBmp )
+                        {
+                            ( (ListBox*)pFillAttrLB )->InsertEntry( pEntry->GetName(), *pBmp );
+                            pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
+                            delete pBmp;
+                        }
+
                         aHatchList.Remove( 0 );
                         delete pEntry;
                     }
