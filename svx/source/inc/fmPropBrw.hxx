@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:21:55 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@ class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
                     m_xBrowserController;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
                     m_xBrowserComponentWindow;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
+                    m_xFrameContainerWindow;
 
 protected:
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
@@ -132,5 +134,8 @@ public:
         const SfxChildWinInfo* _pInfo
     );
     virtual ~FmPropBrw();
+
+protected:
+    virtual void        Resize();
 };
 #endif //SVX_FMPROPBRW_HXX
