@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 03:14:55 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,8 @@ sal_Int32 ZipFile::findEND( )
     sal_uInt32 nLength=0, nPos=0;
     uno::Sequence < sal_Int8 > aByteSeq;
     nLength = nPos = aGrabber.getLength();
+    if (nLength == 0)
+        return -1;
     aGrabber.seek( nLength );
 
     while (nLength - nPos < 0xFFFF)
@@ -322,6 +324,8 @@ sal_Int32 ZipFile::readCEN()
     sal_uInt32 nCenLen, nCenPos, nCenOff;
 
     nEndPos = findEND();
+    if (nEndPos == -1)
+        return -1;
     aGrabber.seek(nEndPos + ENDTOT);
     aGrabber >> nTotal;
     aGrabber >> nCenLen;

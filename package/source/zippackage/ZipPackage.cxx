@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 05:19:35 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,17 +76,17 @@ ZipPackage::ZipPackage (Reference < XInputStream > &xNewInput,
                         const Reference < XMultiServiceFactory > &xNewFactory)
 : pContent(NULL)
 , pZipFile(NULL)
+, xZipFile (NULL)
 , pRootFolder(NULL)
+, xRootFolder (NULL)
 , xContentStream (xNewInput)
 , xContentSeek (xNewInput, UNO_QUERY)
-, xRootFolder (NULL)
-, xZipFile (NULL)
-, xBuffer (NULL)
 , xFactory(xNewFactory)
 {
     pZipFile    = new ZipFile(xContentStream);
+    xZipFile    = Reference < XZipFile > ( pZipFile );
     pRootFolder = new ZipPackageFolder( );
-    xRootFolder = Reference < XUnoTunnel >   (pRootFolder );
+    xRootFolder = Reference < XUnoTunnel > ( pRootFolder );
     getZipFileContents();
 }
 
@@ -273,7 +273,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
 
     xContentSeek = Reference < XSeekable > (xContentStream, UNO_QUERY);
     pZipFile    = new ZipFile(xContentStream);
-    //xZipFile  = Reference < XZipFile >         (pZipFile);
+    xZipFile    = Reference < XZipFile > ( pZipFile );
     getZipFileContents();
 }
 // XHierarchicalNameAccess

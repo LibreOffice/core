@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteGrabber.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-13 13:37:57 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,6 @@ public:
     virtual sal_Int64 SAL_CALL getLength(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-    sal_Int8 getInt8();
-    sal_Int16 getInt16();
-    sal_Int32 getInt32();
     ByteGrabber& operator >> (sal_Int8& rInt8);
     ByteGrabber& operator >> (sal_Int16& rInt16);
     ByteGrabber& operator >> (sal_Int32& rInt32);

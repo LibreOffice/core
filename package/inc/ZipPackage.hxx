@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 03:18:48 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,6 @@ private:
     ::ucb::Content   *pContent;
     ::std::vector < com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > > aContainedZips;
     ::com::sun::star::uno::Reference < com::sun::star::package::XZipFile > xZipFile;
-    ::com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xBuffer;
     ::com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel > xRootFolder;
     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xContentStream;
     ::com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xContentSeek;

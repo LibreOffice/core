@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-13 13:37:57 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,6 @@ public:
     virtual sal_Int64 SAL_CALL getLength(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-    void putInt8 ( sal_Int8 nInt8 );
-    void putInt16( sal_Int16 nInt16 );
-    void putInt32( sal_Int32 nInt32 );
     ByteChucker& operator << (sal_Int8 nInt8);
     ByteChucker& operator << (sal_Int16 nInt16);
     ByteChucker& operator << (sal_Int32 nInt32);

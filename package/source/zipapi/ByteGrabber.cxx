@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteGrabber.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-22 14:57:44 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,36 +139,25 @@ sal_Int64 SAL_CALL ByteGrabber::getLength(  )
     else
         throw io::IOException();
 }
-
-sal_Int8 ByteGrabber::getInt8()
-{
-    uno::Sequence< sal_Int8 > aSequence (1);
-    xStream->readBytes(aSequence,1);
-    return aSequence[0];
-}
-sal_Int16 ByteGrabber::getInt16()
-{
-    uno::Sequence< sal_Int8 > aSequence (2);
-    xStream->readBytes(aSequence, 2);
-    return (aSequence[0] | aSequence[1] << 8);
-}
-sal_Int32 ByteGrabber::getInt32()
-{
-    uno::Sequence< sal_Int8 > aSequence (4);
-    xStream->readBytes(aSequence, 4);
-    return (aSequence [0]| aSequence[1] << 8 | (sal_Int32) (aSequence[2] | aSequence[3] <<8) << 16);
-}
 ByteGrabber& ByteGrabber::operator >> (sal_Int8& rInt8)
 {
     uno::Sequence< sal_Int8 > aSequence (1);
-    xStream->readBytes(aSequence,1);
+    if (xStream->readBytes(aSequence,1) != 1)
+    {
+        rInt8 = 0;
+        return *this;
+    }
     rInt8 = aSequence[0]& 0xFF;
     return *this;
 }
 ByteGrabber& ByteGrabber::operator >> (sal_Int16& rInt16)
 {
     uno::Sequence< sal_Int8 > aSequence (2);
-    xStream->readBytes(aSequence, 2);
+    if (xStream->readBytes(aSequence, 2) != 2)
+    {
+        rInt16 = 0;
+        return *this;
+    }
     rInt16 = static_cast <sal_Int16>
             (static_cast <sal_uInt8> (aSequence[0]& 0xFF)
            | static_cast <sal_uInt8> (aSequence[1]& 0xFF) << 8);
@@ -177,7 +166,11 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int16& rInt16)
 ByteGrabber& ByteGrabber::operator >> (sal_Int32& rInt32)
 {
     uno::Sequence< sal_Int8 > aSequence (4);
-    xStream->readBytes(aSequence, 4);
+    if (xStream->readBytes(aSequence, 4) != 4)
+    {
+        rInt32 = 0;
+        return *this;
+    }
     rInt32 = static_cast < sal_Int32 >
             (static_cast < sal_uInt8> (aSequence[0]& 0xFF)
            | static_cast < sal_uInt8> (aSequence[1]& 0xFF) << 8
@@ -189,14 +182,22 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int32& rInt32)
 ByteGrabber& ByteGrabber::operator >> (sal_uInt8& ruInt8)
 {
     uno::Sequence< sal_Int8 > aSequence (1);
-    xStream->readBytes(aSequence,1);
+    if (xStream->readBytes(aSequence,1) != 1)
+    {
+        ruInt8 = 0;
+        return *this;
+    }
     ruInt8 = static_cast <sal_uInt8> (aSequence[0]& 0xFF);
     return *this;
 }
 ByteGrabber& ByteGrabber::operator >> (sal_uInt16& ruInt16)
 {
     uno::Sequence< sal_Int8 > aSequence (2);
-    xStream->readBytes(aSequence, 2);
+    if (xStream->readBytes(aSequence, 2) != 2)
+    {
+        ruInt16 = 0;
+        return *this;
+    }
     ruInt16 = static_cast <sal_uInt16>
              (static_cast < sal_uInt8 > (aSequence[0]& 0xFF)
             | static_cast < sal_uInt8 > (aSequence[1]& 0xFF) << 8);
@@ -205,7 +206,11 @@ ByteGrabber& ByteGrabber::operator >> (sal_uInt16& ruInt16)
 ByteGrabber& ByteGrabber::operator >> (sal_uInt32& ruInt32)
 {
     uno::Sequence< sal_Int8 > aSequence (4);
-    xStream->readBytes(aSequence, 4);
+    if (xStream->readBytes(aSequence, 4) != 4)
+    {
+        ruInt32 = 0;
+        return *this;
+    }
     ruInt32 = static_cast < sal_uInt32 >
             (static_cast < sal_uInt8> (aSequence[0]& 0xFF)
            | static_cast < sal_uInt8> (aSequence[1]& 0xFF) << 8

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 03:14:55 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,28 +126,6 @@ sal_Int64 SAL_CALL ByteChucker::getLength(  )
         return xSeek->getLength();
     else
         throw io::IOException();
-}
-void ByteChucker::putInt8( sal_Int8 nInt8)
-{
-    uno::Sequence< sal_Int8 > aSequence (1);
-    aSequence[0]=nInt8 & 0xFF;
-    xStream->writeBytes(aSequence);
-}
-void ByteChucker::putInt16(sal_Int16 nInt16)
-{
-    uno::Sequence< sal_Int8 > aSequence (2);
-    aSequence[0] = (nInt16 >>0 ) & 0xFF;
-    aSequence[1] = (nInt16 >>8 ) & 0xFF;
-    xStream->writeBytes(aSequence);
-}
-void ByteChucker::putInt32(sal_Int32 nInt32)
-{
-    uno::Sequence< sal_Int8 > aSequence (4);
-    aSequence[0] = (nInt32 >>  0 ) & 0xFF;
-    aSequence[1] = (nInt32 >>  8 ) & 0xFF;
-    aSequence[2] = (nInt32 >> 16 ) & 0xFF;
-    aSequence[3] = (nInt32 >> 24 ) & 0xFF;
-    xStream->writeBytes(aSequence);
 }
 ByteChucker& ByteChucker::operator << (sal_Int8 nInt8)
 {
