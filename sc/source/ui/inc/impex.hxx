@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-14 20:27:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 class ScDocShell;
