@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editundo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-23 13:05:25 $
+ *  last change: $Author: mt $ $Date: 2001-12-07 13:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -766,16 +766,28 @@ void __EXPORT EditUndoTransliteration::Undo()
     aSel = pImpEE->InsertParaBreak( aSel );
     aDelSel.Max() = aSel.Min();
     aDelSel.Max().GetNode()->GetCharAttribs().DeleteEmptyAttribs( pImpEE->GetEditDoc().GetItemPool() );
+    EditSelection aNewSel;
     if ( pTxtObj )
     {
-        pImpEE->InsertText( *pTxtObj, aSel );
+        aNewSel = pImpEE->InsertText( *pTxtObj, aSel );
     }
     else
     {
-        pImpEE->InsertText( aSel, aText );
+        aNewSel = pImpEE->InsertText( aSel, aText );
+    }
+    if ( aNewSel.Min().GetNode() == aDelSel.Max().GetNode() )
+    {
+        aNewSel.Min().SetNode( aDelSel.Min().GetNode() );
+        aNewSel.Min().GetIndex() += aDelSel.Min().GetIndex();
+    }
+    if ( aNewSel.Max().GetNode() == aDelSel.Max().GetNode() )
+    {
+        aNewSel.Max().SetNode( aDelSel.Min().GetNode() );
+        aNewSel.Max().GetIndex() += aDelSel.Min().GetIndex();
     }
     pImpEE->DeleteSelected( aDelSel );
 
+    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
 void __EXPORT EditUndoTransliteration::Redo()
@@ -784,7 +796,8 @@ void __EXPORT EditUndoTransliteration::Redo()
     ImpEditEngine* pImpEE = GetImpEditEngine();
 
     EditSelection aSel( pImpEE->CreateSel( aOldESel ) );
-    pImpEE->TransliterateText( aSel, nMode );
+    EditSelection aNewSel = pImpEE->TransliterateText( aSel, nMode );
+    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
 void __EXPORT EditUndoTransliteration::Repeat()

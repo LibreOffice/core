@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-06 12:52:39 $
+ *  last change: $Author: mt $ $Date: 2001-12-07 13:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,7 +779,14 @@ EVAnchorMode EditView::GetAnchorMode() const
 void EditView::TransliterateText( sal_Int32 nTransliterationMode )
 {
     DBG_CHKTHIS( EditView, 0 );
-    PIMPEE->TransliterateText( pImpEditView->GetEditSelection(), nTransliterationMode );
+    EditSelection aOldSel( pImpEditView->GetEditSelection() );
+    EditSelection aNewSel = PIMPEE->TransliterateText( pImpEditView->GetEditSelection(), nTransliterationMode );
+    if ( aNewSel != aOldSel )
+    {
+        pImpEditView->DrawSelection();  // alte Selektion 'weg-zeichnen'
+        pImpEditView->SetEditSelection( aNewSel );
+        pImpEditView->DrawSelection();
+    }
 }
 
 
