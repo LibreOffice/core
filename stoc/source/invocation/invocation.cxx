@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invocation.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ganaya $ $Date: 2000-10-10 05:40:16 $
+ *  last change: $Author: dbo $ $Date: 2000-12-12 09:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,6 +1064,7 @@ class InvocationService
     : public OWeakObject
     , public XSingleServiceFactory
     , public XServiceInfo
+    , public XTypeProvider
 {
 public:
             InvocationService( const Reference<XMultiServiceFactory> & rSMgr )
@@ -1115,8 +1116,9 @@ Any SAL_CALL InvocationService::queryInterface( const Type & aType )
 {
     // PropertySet-Implementation
     Any a =  cppu::queryInterface( aType,
-                                             SAL_STATIC_CAST(XSingleServiceFactory*, this),
-                                             SAL_STATIC_CAST(XServiceInfo*, this) );
+                                   SAL_STATIC_CAST(XSingleServiceFactory*, this),
+                                   SAL_STATIC_CAST(XTypeProvider*, this),
+                                   SAL_STATIC_CAST(XServiceInfo*, this) );
     if( a.hasValue() )
     {
       return a;
