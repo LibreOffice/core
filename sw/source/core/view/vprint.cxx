@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:47:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,34 +813,30 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
     if( pProgress )
     {
         // HACK, damit die Anzeige sich nicht verschluckt.
-        const XubString aTmp( SW_RES( STR_STATSTR_PRINT ) );
+        const XubString aTmp( SW_RES( STR_STATSTR_FORMAT ) );
         pProgress->SetText( aTmp );
-        lcl_SetState( *pProgress, 1, nStatMax, pStr, nMergeAct, nMergeCnt, 0,
-                      1 );
+        lcl_SetState( *pProgress, 1, nStatMax, pStr, nMergeAct, nMergeCnt, 0, 1 );
         pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
-
         aAction.SetProgress(pProgress);
     }
 
     pLayout->StartAllAction();
     for ( USHORT i = 1; pPage && i <= nMax; pPage = pPage->GetNext(), ++i )
     {
-        if ( (bPrtJob && !pPrt->IsJobActive()) || Imp()->IsStopPrt())
+        if ( ( bPrtJob && !pPrt->IsJobActive() ) || Imp()->IsStopPrt() )
             break;
-
 
         if( pProgress )
         {
             //HACK, damit die Anzeige sich nicht verschluckt.
-            if ( i > nStatMax )
-                nStatMax = i;
+            if ( i > nStatMax ) nStatMax = i;
             lcl_SetState( *pProgress, i, nStatMax, pStr, nMergeAct, nMergeCnt, 0, i );
             pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
         }
 
-        if ( bPrtJob && !pPrt->IsJobActive() ||
-             Imp()->IsStopPrt())
+        if ( ( bPrtJob && !pPrt->IsJobActive() ) || Imp()->IsStopPrt() )
             break;
+
         pPage->Calc();
         SwRect aOldVis( VisArea() );
         aVisArea = pPage->Frm();
@@ -855,11 +851,13 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
         aVisArea = aOldVis;             //Zuruecksetzen wg. der Paints!
         Imp()->SetFirstVisPageInvalid();
         SwPaintQueue::Repaint();
+
+        if ( pProgress )
+            pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
     }
+
     if (pProgress)
-    {
-        aAction.SetProgress(NULL);
-    }
+        aAction.SetProgress( NULL );
 
     pLayout->EndAllAction();
 }
@@ -1042,20 +1040,22 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 }
 
 /******************************************************************************
- *  Methode     :   void ViewShell::Prt( const SwPrtOptions& rOptions, SfxProgress& rProgress,
- *                                       OutputDevice *pPDFOut )
+ *  Methode     :   void ViewShell::Prt( const SwPrtOptions& rOptions,
+ *                                       SfxProgress* pProgress,
+ *                                       OutputDevice* pPDFOut )
  *  Beschreibung:
  *  Erstellt    :   OK 04.11.94 15:33
  *  Aenderung   :   MA 10. May. 95
  ******************************************************************************/
 
 
-BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
-                     OutputDevice *pPDFOut )
+BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
+                     OutputDevice* pPDFOut )
 {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //Immer die Druckroutine in viewpg.cxx (fuer Seitenvorschau) mitpflegen!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    ASSERT( pPDFOut || pProgress, "Printing without progress bar!" )
 
     BOOL bStartJob = FALSE;
 
@@ -1117,7 +1117,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
     // Is is implemented this way because PDF export calls this Prt function
     // once per page and we do not like to always have the temporary document
     // to be created that often here in the 'then' part.
-    if (bSelection )
+    if ( bSelection )
     {
         pPrtDoc = CreatePrtDoc( pPrt, aDocShellRef );
 
@@ -1138,12 +1138,11 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
 
     SET_CURR_SHELL( pShell );
 
-    if (!pPDFOut)
+    if ( pProgress )
     {
         Link aLnk = LINK(pShell->Imp(), SwViewImp, SetStopPrt);
-        ((SfxPrintProgress &) rProgress).SetCancelHdl(aLnk);
+        ((SfxPrintProgress *)pProgress)->SetCancelHdl(aLnk);
     }
-
 
     //JP 01.02.99: das ReadOnly Flag wird NIE mitkopiert; Bug 61335
     if( pOpt->IsReadonly() )
@@ -1154,27 +1153,29 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
 
     pShell->PrepareForPrint( rOptions );
 
-    XubString *pStr;
+    XubString* pStr = 0;
     ULONG nMergeAct = rOptions.nMergeAct, nMergeCnt = rOptions.nMergeCnt;
-    if( nMergeAct )
+    if ( pProgress )
     {
-        pStr = new SW_RESSTR(STR_STATSTR_LETTER);
-        *pStr += ' ';
-        *pStr += XubString::CreateFromInt64( nMergeAct );
-        if( nMergeCnt )
+        if( nMergeAct )
         {
-            *pStr += '/';
-            *pStr += XubString::CreateFromInt64( nMergeCnt );
+            pStr = new SW_RESSTR(STR_STATSTR_LETTER);
+            *pStr += ' ';
+            *pStr += XubString::CreateFromInt64( nMergeAct );
+            if( nMergeCnt )
+            {
+                *pStr += '/';
+                *pStr += XubString::CreateFromInt64( nMergeCnt );
+            }
         }
-    }
-    else
-    {
-        pStr = 0;
-        ++nMergeAct;
+        else
+        {
+            ++nMergeAct;
+        }
     }
 
     // Seiten fuers Drucken formatieren
-    pShell->CalcPagesForPrint( (USHORT)aPages.Max(), &rProgress, pStr,
+    pShell->CalcPagesForPrint( (USHORT)aPages.Max(), pProgress, pStr,
                                 nMergeAct, nMergeCnt );
 
     // Some field types, can require a valid layout
@@ -1186,8 +1187,8 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
     // <--
         pShell->UpdateFlds(TRUE);
 
-    if( !  pShell->Imp()->IsStopPrt() &&
-        (pPDFOut || rOptions.GetJobName().Len() || pPrt->IsJobActive()) )
+    if( !pShell->Imp()->IsStopPrt() &&
+        ( pPDFOut || rOptions.GetJobName().Len() || pPrt->IsJobActive()) )
     {
         BOOL bStop = FALSE;
         int nJobStartError = JOBSET_ERR_DEFAULT;
@@ -1217,8 +1218,8 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
 
                     // Reschedule statt Yield, da Yield keine Events abarbeitet
                     // und es sonst eine Endlosschleife gibt.
-                    while( pPrt->IsPrinting() )
-                            rProgress.Reschedule();
+                    while( pPrt->IsPrinting() && pProgress )
+                            pProgress->Reschedule();
 
                     sJobName = rOptions.MakeNextJobName();
                     nJobStartError = JOBSET_ERR_DEFAULT;
@@ -1275,9 +1276,12 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
             const USHORT nSelCount = USHORT(aMulti.GetSelectCount()
                             /* * nCopyCnt*/);
 
-            rProgress.SetText( SW_RESSTR(STR_STATSTR_PRINT) );
-            lcl_SetState( rProgress, 1, nSelCount, pStr,
-                                nMergeAct, nMergeCnt, nSelCount, 1 );
+            if ( pProgress )
+            {
+                pProgress->SetText( SW_RESSTR(STR_STATSTR_PRINT) );
+                lcl_SetState( *pProgress, 1, nSelCount, pStr,
+                              nMergeAct, nMergeCnt, nSelCount, 1 );
+            }
 
             if ( rOptions.bPrintReverse )
             {
@@ -1342,22 +1346,18 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                 while( pStPage && !bStop )
                 {
                     // Mag der Anwender noch ?
-                    rProgress.Reschedule();
+                    if ( pProgress )
+                        pProgress->Reschedule();
 
                     if (pPrt)
                     {
-                        if( ( JOBSET_ERR_ERROR == nJobStartError )
-                            || ( !pPrt->IsJobActive() &&
-                                ( !sJobName.Len() || bStartJob ) ) )
+                        if (    JOBSET_ERR_ERROR == nJobStartError ||
+                             ( !pPrt->IsJobActive() && ( !sJobName.Len() || bStartJob ) ) ||
+                                pShell->Imp()->IsStopPrt() )
                         {
                             bStop = TRUE;
                             break;
                         }
-                    }
-                    else if (pShell->Imp()->IsStopPrt())
-                    {
-                        bStop = TRUE;
-                        break;
                     }
 
                     ::SetSwVisArea( pShell, pStPage->Frm(), 0 != pPDFOut );
@@ -1447,9 +1447,10 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                                     rOptions.bPrintRightPage, rOptions.bPrintLeftPage,
                                     rOptions.bPrintReverse );
 
-                        lcl_SetState( rProgress, nPrintCount++, nSelCount,
-                                            pStr, nMergeAct, nMergeCnt,
-                                            nSelCount, nPageNo );
+                        if ( pProgress )
+                            lcl_SetState( *pProgress, nPrintCount++, nSelCount,
+                                          pStr, nMergeAct, nMergeCnt,
+                                          nSelCount, nPageNo );
 
                         if( !bStartJob && JOBSET_ERR_DEFAULT == nJobStartError
                             && sJobName.Len() )
