@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: hr $ $Date: 2000-10-26 16:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,7 @@ BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
                             rValue = ((ScValueCell*)pCell)->GetValue();
                             if ( bCalcAsShown )
                             {
-#if ! ( defined WTC || defined IRIX || defined ICC || defined HPUX || defined C50 )
+#if ! ( defined WTC || defined IRIX || defined ICC || defined HPUX || defined C50 || defined C52 )
                                 lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
 #else
                                 lcl_IterGetNumberFormat( nNumFormat,
@@ -889,7 +889,7 @@ ScBaseCell* ScQueryCellIterator::GetNext()
 ULONG ScQueryCellIterator::GetNumberFormat()
 {
     ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
-#if ! ( defined WTC || defined IRIX  || defined ICC || defined HPUX || defined C50 )
+#if ! ( defined WTC || defined IRIX  || defined ICC || defined HPUX || defined C50 || defined C52 )
     lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
 #else
     lcl_IterGetNumberFormat( nNumFormat,
