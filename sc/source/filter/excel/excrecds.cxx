@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-11 09:37:11 $
+ *  last change: $Author: dr $ $Date: 2001-01-12 12:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4335,7 +4335,7 @@ void ExcAutoFilterRecs::Save( SvStream& rStrm )
 }
 
 
-
+//___________________________________________________________________
 
 void ExcMargin::SaveCont( SvStream& r )
 {
@@ -4373,4 +4373,57 @@ UINT16 ExcMargin::GetLen() const
     return 8;
 }
 
+
+//___________________________________________________________________
+
+ExcPageBreaks::ExcPageBreaks( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient ) :
+    nRecNum( (eOrient == pbHorizontal) ? 0x001B : 0x001A )
+{
+    BYTE nFlags;
+    if( eOrient == pbHorizontal )
+    {
+        for( USHORT nIndex = 0; nIndex <= MAXROW; nIndex++ )
+        {
+            nFlags = rRootData.pDoc->GetRowFlags( nIndex, nScTab );
+            if( nFlags & CR_MANUALBREAK )
+                aPageBreaks.Append( nIndex );
+        }
+    }
+    else
+    {
+        for( USHORT nIndex = 0; nIndex <= MAXCOL; nIndex++ )
+        {
+            nFlags = rRootData.pDoc->GetColFlags( nIndex, nScTab );
+            if( nFlags & CR_MANUALBREAK )
+                aPageBreaks.Append( nIndex );
+        }
+    }
+}
+
+ExcPageBreaks::~ExcPageBreaks()
+{
+}
+
+void ExcPageBreaks::Save( SvStream& rStrm )
+{
+    if( aPageBreaks.Count() )
+        ExcRecord::Save( rStrm );
+}
+
+void ExcPageBreaks::SaveCont( SvStream& rStrm )
+{
+    rStrm << (UINT16) aPageBreaks.Count();
+    for( UINT32 nIndex = 0; nIndex < aPageBreaks.Count(); nIndex++ )
+        rStrm << aPageBreaks.Get( nIndex );
+}
+
+UINT16 ExcPageBreaks::GetNum() const
+{
+    return nRecNum;
+}
+
+UINT16 ExcPageBreaks::GetLen() const
+{
+    return (UINT16)(2 + aPageBreaks.Count() * 2);
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-11 09:35:17 $
+ *  last change: $Author: dr $ $Date: 2001-01-12 12:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,6 +609,18 @@ void ExcTable::FillAsTable( void )
 
     // GUTS (count & size of outline icons)
     Add( new ExcEGuts( pOLColArray, pOLRowArray ) );
+
+    // HORIZONTALPAGEBREAKS & VERTICALPAGEBREAKS
+    if( eDateiTyp < Biff8 )
+    {
+        Add( new ExcPageBreaks( rR, nScTab, ExcPageBreaks::pbHorizontal ) );
+        Add( new ExcPageBreaks( rR, nScTab, ExcPageBreaks::pbVertical ) );
+    }
+    else
+    {
+        Add( new XclExpPageBreaks( rR, nScTab, ExcPageBreaks::pbHorizontal ) );
+        Add( new XclExpPageBreaks( rR, nScTab, ExcPageBreaks::pbVertical ) );
+    }
 
     const SvxLRSpaceItem&   rLRSpaceItem = ( const SvxLRSpaceItem& ) pStyleSheetItemSet->Get( ATTR_LRSPACE );
     Add( new ExcMargin( rLRSpaceItem.GetLeft(), IMPEXC_MARGINSIDE_LEFT ) );

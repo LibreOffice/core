@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:20:29 $
+ *  last change: $Author: dr $ $Date: 2001-01-12 12:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1684,6 +1684,8 @@ public:
 
 
 
+//___________________________________________________________________
+// Margins
 
 class ExcMargin : public ExcRecord
 {
@@ -1701,6 +1703,28 @@ public:
 };
 
 
+//___________________________________________________________________
+// Page breaks
+
+class ExcPageBreaks : public ExcRecord
+{
+private:
+    virtual void            SaveCont( SvStream& rStrm );
+
+protected:
+    UINT16List              aPageBreaks;
+    UINT16                  nRecNum;
+
+public:
+    enum ExcPBOrientation   { pbHorizontal, pbVertical };
+
+                            ExcPageBreaks( RootData& rRootData, UINT16 nScNum, ExcPBOrientation eOrient );
+    virtual                 ~ExcPageBreaks();
+
+    virtual void            Save( SvStream& rStrm );
+    virtual UINT16          GetNum() const;
+    virtual UINT16          GetLen() const;
+};
 
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-11 09:39:16 $
+ *  last change: $Author: dr $ $Date: 2001-01-12 12:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2972,4 +2972,27 @@ UINT16 XclBGPic::GetLen() const
 }
 
 
+//___________________________________________________________________
+
+XclExpPageBreaks::XclExpPageBreaks( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient ) :
+    ExcPageBreaks( rRootData, nScTab, eOrient ),
+    nRangeMax( (eOrient == pbHorizontal) ? rRootData.nColMax : rRootData.nRowMax )
+{
+}
+
+XclExpPageBreaks::~XclExpPageBreaks()
+{
+}
+
+void XclExpPageBreaks::SaveCont( SvStream& rStrm )
+{
+    rStrm << (UINT16) aPageBreaks.Count();
+    for( UINT32 nIndex = 0; nIndex < aPageBreaks.Count(); nIndex++ )
+        rStrm << aPageBreaks.Get( nIndex ) << (UINT16) 0x0000 << nRangeMax;
+}
+
+UINT16 XclExpPageBreaks::GetLen() const
+{
+    return (UINT16)(2 + aPageBreaks.Count() * 6);
+}
 

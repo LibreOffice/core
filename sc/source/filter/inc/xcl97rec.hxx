@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-11 09:38:47 $
+ *  last change: $Author: dr $ $Date: 2001-01-12 12:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1199,6 +1199,7 @@ public:
 
 
 
+//___________________________________________________________________
 
 class SvMemoryStream;
 class SvxURLField;
@@ -1238,6 +1239,7 @@ inline void XclHlink::SetPosition( const ScAddress& rPos )
 }
 
 
+//___________________________________________________________________
 
 class XclProtection : public ExcDummyRec
 {
@@ -1266,5 +1268,22 @@ public:
     virtual UINT16              GetLen() const;
 };
 
+
+//___________________________________________________________________
+// page breaks
+
+class XclExpPageBreaks : public ExcPageBreaks
+{
+private:
+    UINT16                  nRangeMax;
+
+    virtual void            SaveCont( SvStream& rStrm );
+
+public:
+                            XclExpPageBreaks( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient );
+    virtual                 ~XclExpPageBreaks();
+
+    virtual UINT16          GetLen() const;
+};
 
 #endif // _XCL97REC_HXX
