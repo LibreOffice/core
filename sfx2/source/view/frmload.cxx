@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-25 13:27:38 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 16:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ using namespace ::rtl;
 #include "fcontnr.hxx"
 #include "loadenv.hxx"
 #include "docfile.hxx"
+#include "docfilt.hxx"
 
 Reference< XInterface > SAL_CALL SfxFrameLoaderFactory::createInstance(void) throw(Exception, RuntimeException)
 {
@@ -412,8 +413,13 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                     // try simplest file lookup: clipboard format in storage
                     pFilter = NULL;
                     SvStorageRef aStor = aMedium.GetStorage();
+                    SfxFilterFlags nFlags = SFX_FILTER_IMPORT | SFX_FILTER_PREFERED;
                     if ( aStor.Is() )
-                        pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
+                    {
+                        pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat(), nFlags );
+                        if ( !pFilter || ( (pFilter)->GetFilterFlags() & nMust ) != nMust || ( (pFilter)->GetFilterFlags() & nDont ) != 0 )
+                            pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
+                    }
                     if ( pFilter )
                         nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
                 }
