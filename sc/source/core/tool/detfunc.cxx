@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:19:34 $
+ *  last change: $Author: nn $ $Date: 2000-11-06 18:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,15 @@ public:
 
     SfxItemSet& GetCaptionSet() { return aCaptionSet; }
 };
+
+//------------------------------------------------------------------------
+
+BOOL lcl_HasThickLine( SdrObject& rObj )
+{
+    // thin lines get width 0 -> everything greater 0 is a thick line
+
+    return ( ((const XLineWidthItem&)rObj.GetItem(XATTR_LINEWIDTH)).GetValue() > 0 );
+}
 
 //------------------------------------------------------------------------
 
@@ -458,6 +467,8 @@ BOOL ScDetectiveFunc::DrawEntry( USHORT nCol, USHORT nRow,
     BOOL bAlien = ( rRefEnd.GetTab() < nTab || rRefStart.GetTab() > nTab );
     if (bArea && !bAlien)
     {
+        // insert the rectangle before the arrow - this is relied on in FindFrameForObject
+
         Point aStartCorner = GetDrawPos( rRefStart.GetCol(), rRefStart.GetRow(), FALSE );
         Point aEndCorner = GetDrawPos( rRefEnd.GetCol()+1, rRefEnd.GetRow()+1, FALSE );
 
@@ -1626,4 +1637,88 @@ void ScDetectiveFunc::UpdateAllComments()
     }
 }
 
+BOOL ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
+{
+    //  find the rectangle for an arrow (always the object directly before the arrow)
+    //  rRange must be initialized to the source cell of the arrow (start of area)
+
+    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    if (!pModel) return FALSE;
+
+    SdrPage* pPage = pModel->GetPage(nTab);
+    DBG_ASSERT(pPage,"Page ?");
+    if (!pPage) return FALSE;
+
+    ULONG nPos = pPage->GetContainer().GetPos( pObject );
+    if ( nPos != CONTAINER_ENTRY_NOTFOUND && nPos > 0 )
+    {
+        SdrObject* pPrevObj = pPage->GetObj( nPos - 1 );
+        if ( pPrevObj && pPrevObj->GetLayer() == SC_LAYER_INTERN && pPrevObj->ISA(SdrRectObj) )
+        {
+            ScDrawObjData* pPrevData = ScDrawLayer::GetObjData( pPrevObj );
+            if ( pPrevData && pPrevData->bValidStart && pPrevData->bValidEnd )
+            {
+                if ( pPrevData->aStt.nCol == rRange.aStart.Col() &&
+                     pPrevData->aStt.nRow == rRange.aStart.Row() &&
+                     pPrevData->aStt.nTab == rRange.aStart.Tab() )
+                {
+                    rRange.aEnd.Set( pPrevData->aEnd.nCol,
+                                     pPrevData->aEnd.nRow,
+                                     pPrevData->aEnd.nTab );
+                    return TRUE;
+                }
+            }
+        }
+    }
+    return FALSE;
+}
+
+ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject,
+                                ScAddress& rPosition, ScRange& rSource, BOOL& rRedLine )
+{
+    rRedLine = FALSE;
+    ScDetectiveObjType eType = SC_DETOBJ_NONE;
+
+    if ( pObject && pObject->GetLayer() == SC_LAYER_INTERN )
+    {
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
+        if ( pObject->IsPolyObj() && pObject->GetPointCount() == 2 )
+        {
+            // line object -> arrow
+
+            if ( pData->bValidStart )
+                eType = ( pData->bValidEnd ) ? SC_DETOBJ_ARROW : SC_DETOBJ_TOOTHERTAB;
+            else if ( pData->bValidEnd )
+                eType = SC_DETOBJ_FROMOTHERTAB;
+
+            if ( pData->bValidStart )
+                rSource = ScRange( pData->aStt.nCol, pData->aStt.nRow, pData->aStt.nTab );
+            if ( pData->bValidEnd )
+                rPosition = ScAddress( pData->aEnd.nCol, pData->aEnd.nRow, pData->aEnd.nTab );
+
+            if ( pData->bValidStart && lcl_HasThickLine( *pObject ) )
+            {
+                // thick line -> look for frame before this object
+
+                FindFrameForObject( pObject, rSource );     // modifies rSource
+            }
+
+            if ( ((const XLineColorItem&)pObject->GetItem(XATTR_LINECOLOR)).
+                                            GetValue().GetColor() == COL_LIGHTRED )
+                rRedLine = TRUE;
+        }
+        else if ( pObject->ISA(SdrCircObj) )
+        {
+            if ( pData->bValidStart )
+            {
+                // cell position is returned in rPosition
+
+                rPosition = ScAddress( pData->aStt.nCol, pData->aStt.nRow, pData->aStt.nTab );
+                eType = SC_DETOBJ_CIRCLE;
+            }
+        }
+    }
+
+    return eType;
+}
 

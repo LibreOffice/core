@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-25 11:42:56 $
+ *  last change: $Author: nn $ $Date: 2000-11-06 18:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,21 @@ class ScCommentData;
 class ScDetectiveData;
 class ScDocument;
 class ScTripel;
+class ScAddress;
+class ScRange;
 
 #define SC_DET_MAXCIRCLE    1000
 
 enum ScDetectiveDelete { SC_DET_ALL, SC_DET_DETECTIVE, SC_DET_CIRCLES, SC_DET_COMMENTS };
+
+enum ScDetectiveObjType
+{
+    SC_DETOBJ_NONE,
+    SC_DETOBJ_ARROW,
+    SC_DETOBJ_FROMOTHERTAB,
+    SC_DETOBJ_TOOTHERTAB,
+    SC_DETOBJ_CIRCLE
+};
 
 class ScDetectiveFunc
 {
@@ -120,6 +131,8 @@ class ScDetectiveFunc
     USHORT      FindSuccLevel( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
                                 USHORT nLevel, USHORT nDeleteLevel );
 
+    BOOL        FindFrameForObject( SdrObject* pObject, ScRange& rRange );
+
 
 public:
                 ScDetectiveFunc(ScDocument* pDocument, USHORT nTable) : pDoc(pDocument),nTab(nTable) {}
@@ -143,6 +156,9 @@ public:
     void        UpdateAllComments();        // on all tables
 
     static BOOL IsNonAlienArrow( SdrObject* pObject );
+
+    ScDetectiveObjType GetDetectiveObjectType( SdrObject* pObject,
+                                ScAddress& rPosition, ScRange& rSource, BOOL& rRedLine );
 };
 
 
