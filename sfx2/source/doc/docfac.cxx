@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2001-11-19 16:06:26 $
+ *  last change: $Author: mba $ $Date: 2001-12-03 17:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,4 +645,11 @@ SfxObjectFactoryArr_Impl&   SfxObjectFactory::GetObjFacArray_Impl()
     return *pObjFac;
 }
 
-
+String SfxObjectFactory::GetModuleName() const
+{
+    SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
+    if ( SvtModuleOptions::ClassifyFactoryByName( GetDocumentServiceName(), eFac ) )
+        return SvtModuleOptions().GetModuleName( eFac );
+    else
+        return String();
+}
