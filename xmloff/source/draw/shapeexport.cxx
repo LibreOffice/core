@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:15:01 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,6 +772,12 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
 
+        case XmlShapeTypeDrawCustomShape:
+        {
+            ImpExportCustomShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
         case XmlShapeTypePresOrgChartShape:
         case XmlShapeTypeUnknown:
         case XmlShapeTypeNotYetSet:
@@ -956,6 +962,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
             {
                 // drawing shapes
                 if     (aType.EqualsAscii("Rectangle", 21, 9)) { eShapeType = XmlShapeTypeDrawRectangleShape; }
+                else if(aType.EqualsAscii("CustomShape", 21, 9)) { eShapeType = XmlShapeTypeDrawCustomShape; }
                 else if(aType.EqualsAscii("Ellipse", 21, 7)) { eShapeType = XmlShapeTypeDrawEllipseShape; }
                 else if(aType.EqualsAscii("Control", 21, 7)) { eShapeType = XmlShapeTypeDrawControlShape; }
                 else if(aType.EqualsAscii("Connector", 21, 9)) { eShapeType = XmlShapeTypeDrawConnectorShape; }
